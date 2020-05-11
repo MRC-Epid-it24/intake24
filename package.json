@@ -9,7 +9,16 @@
   "engines": {
     "node": ">=10.20.1"
   },
+  "development": "nodemon src/index.ts",
+  "dev": "npm run development",
+  "clean": "rimraf dist",
+  "build": "tsc",
+  "production": "npm run clean && npm run build",
+  "prod": "npm run production",
+  "start": "node dist/index.js",
   "devDependencies": {
+    "nodemon": "^2.0.3",
+    "rimraf": "^3.0.2",
     "ts-node": "^8.10.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.8.3"
