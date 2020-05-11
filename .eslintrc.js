@@ -15,6 +15,20 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 2020,
   },
+  settings: {
+    'import/extensions': ['.ts'],
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      node: {
+        extensions: ['.ts'],
+      },
+      typescript: {
+        alwaysTryTypes: true,
+      },
+    },
+  },
   extends: [
     'airbnb-base',
     'plugin:@typescript-eslint/recommended',
@@ -26,5 +40,12 @@ module.exports = {
     'prettier/prettier': 'error',
     'no-console': 'warn',
     'no-debugger': 'warn',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        ts: 'never',
+      },
+    ],
   },
 };
