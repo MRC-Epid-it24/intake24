@@ -1,6 +1,7 @@
 import appConfig from '@/config/app';
 import logger from '@/services/logger';
 import expressLoader from './express';
+import routesLoader from './routes';
 import securityLoader from './security';
 import { AppLoader } from './loader';
 
@@ -12,4 +13,7 @@ export default async ({ app }: AppLoader): Promise<void> => {
 
   await expressLoader({ app, env });
   logger.info('Express defaults intialized.');
+
+  await routesLoader({ app, env });
+  logger.info('Routes intialized.');
 };
