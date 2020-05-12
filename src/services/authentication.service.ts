@@ -1,6 +1,6 @@
 import { PassportStatic } from 'passport';
 import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
-import config from '@/config/auth';
+import config from '@/config/security';
 import User from '@/db/models/system/user';
 import UnauthorizedError from '@/http/errors/unauthorized.error';
 import jwtSvc from './jwt.service';

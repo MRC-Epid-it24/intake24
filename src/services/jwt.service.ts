@@ -1,8 +1,8 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
-import auth from '@/config/auth';
+import security from '@/config/security';
 import InternalServerError from '@/http/errors/internal-server.error';
 
-const { jwt: config } = auth;
+const { jwt: config } = security;
 
 export interface Tokens {
   accessToken: string;

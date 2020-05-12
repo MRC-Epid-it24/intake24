@@ -1,4 +1,7 @@
-export interface AuthenticationConfig {
+export interface SecurityConfig {
+  cors: {
+    origin: boolean | string | string[];
+  };
   jwt: {
     access: {
       secret: string;
@@ -19,7 +22,13 @@ export interface AuthenticationConfig {
   };
 }
 
-const authenticationConfig: AuthenticationConfig = {
+const securityConfig: SecurityConfig = {
+  cors: {
+    origin:
+      process.env.CORS_ORIGIN && process.env.CORS_ORIGIN.length
+        ? process.env.CORS_ORIGIN.split(',')
+        : false,
+  },
   jwt: {
     access: {
       secret: process.env.JWT_ACCESS_SECRET ?? '',
@@ -40,4 +49,4 @@ const authenticationConfig: AuthenticationConfig = {
   },
 };
 
-export default authenticationConfig;
+export default securityConfig;

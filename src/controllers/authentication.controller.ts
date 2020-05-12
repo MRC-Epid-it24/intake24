@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { Request, Response, NextFunction } from 'express';
 import ms from 'ms';
-import config from '@/config/auth';
+import config from '@/config/security';
 import User from '@/db/models/system/user';
 import UserSurveyAliases from '@/db/models/system/user-survey-alias';
 import UserPassword from '@/db/models/system/user-password';
