@@ -32,6 +32,9 @@ export default class User extends BaseModel<User> {
   @Column
   public simpleName!: string;
 
+  @Column
+  public password!: string;
+
   @Column({
     allowNull: false,
   })
@@ -43,7 +46,7 @@ export default class User extends BaseModel<User> {
   public smsNotifications!: boolean;
 
   @HasOne(() => UserPassword, 'userId')
-  public password?: UserPassword;
+  public legacyPassword?: UserPassword;
 
   @HasMany(() => UserRole, 'userId')
   public roles?: UserRole[];

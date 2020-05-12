@@ -12,8 +12,11 @@ export interface Tokens {
 export interface TokenPayload {
   userId: number;
   roles: string[];
+  iss?: string;
   type?: string;
 }
+
+// TODO - extract JWT payload defaults (like type, iss) from methods
 
 export default {
   /**
@@ -42,9 +45,12 @@ export default {
   async signAccessToken(payload: TokenPayload, options: SignOptions = {}): Promise<string> {
     const { secret, lifetime } = config.access;
 
-    if (!secret.length) throw new InternalServerError('No access token secret defined');
+    if (!secret) throw new InternalServerError('No access token secret defined');
 
-    return this.sign(payload, secret, { expiresIn: lifetime, ...options });
+    return this.sign({ iss: 'intake24', type: 'access', ...payload }, secret, {
+      expiresIn: lifetime,
+      ...options,
+    });
   },
 
   /**
@@ -57,9 +63,12 @@ export default {
   async signRefreshToken(payload: TokenPayload, options: SignOptions = {}): Promise<string> {
     const { secret, lifetime } = config.refresh;
 
-    if (!secret.length) throw new InternalServerError('No refresh token secret defined');
+    if (!secret) throw new InternalServerError('No refresh token secret defined');
 
-    return this.sign(payload, secret, { expiresIn: lifetime, ...options });
+    return this.sign({ iss: 'intake24', type: 'refresh', ...payload }, secret, {
+      expiresIn: lifetime,
+      ...options,
+    });
   },
 
   /**
