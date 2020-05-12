@@ -3,6 +3,7 @@ import logger from '@/services/logger';
 import expressLoader from './express';
 import routesLoader from './routes';
 import securityLoader from './security';
+import servicesLoader from './services';
 import { AppLoader } from './loader';
 
 export default async ({ app }: AppLoader): Promise<void> => {
@@ -16,4 +17,7 @@ export default async ({ app }: AppLoader): Promise<void> => {
 
   await routesLoader({ app, env });
   logger.info('Routes intialized.');
+
+  await servicesLoader();
+  logger.info('Services intialized.');
 };

@@ -11,8 +11,8 @@ export interface Tokens {
 
 export interface TokenPayload {
   userId: number;
-  type: string;
   roles: string[];
+  type?: string;
 }
 
 export default {

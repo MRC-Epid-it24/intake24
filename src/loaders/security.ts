@@ -1,6 +1,6 @@
 import helmet from 'helmet';
 import { AppLoader } from './loader';
 
-export default async ({ app, env }: AppLoader): Promise<void> => {
+export default async ({ app }: AppLoader): Promise<void> => {
   app.use(helmet());
 };
