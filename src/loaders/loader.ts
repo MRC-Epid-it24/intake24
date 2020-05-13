@@ -1,6 +1,6 @@
-import { Application } from 'express';
+import { Express } from 'express';
 
 export interface AppLoader {
-  app: Application;
+  app: Express;
   env?: string;
 }

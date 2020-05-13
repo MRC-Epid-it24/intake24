@@ -1,5 +1,5 @@
 import { isObject } from 'lodash';
-import { FindOptions, Op } from 'sequelize';
+import { FindOptions as BaseFindOptions, Op, CountOptions as BaseCountOptions } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Request } from 'express';
 
@@ -31,6 +31,15 @@ export interface Pagination {
   links: PaginationLinks;
 }
 
+// Sequelize options not indexable
+export interface CountOptions extends BaseCountOptions {
+  [key: string]: any;
+}
+
+export interface FindOptions extends BaseFindOptions {
+  [key: string]: any;
+}
+
 export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
   public static async paginate({ req, columns = [], ...params }: Paginate): Promise<Pagination> {
     // TODO: augment new core.Query interface in express subpackage
@@ -40,10 +49,8 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     limit = limit as number;
 
     const options = {
-      ...{
-        limit,
-        offset: limit * (page - 1),
-      },
+      limit,
+      offset: limit * (page - 1),
       ...params,
     } as FindOptions;
 
@@ -57,7 +64,7 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
         acc[key] = options[key];
       }
       return acc;
-    }, {});
+    }, {} as CountOptions);
 
     let total = await this.unscoped().count(countOptions);
 

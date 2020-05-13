@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import logger from '@/services/logger';
+import { AppLoader } from '@/loaders/loader';
 import ApplicationError from './application.error';
 import ForbiddenError from './forbidden.error';
 import InternalError from './internal-server.error';
 import NotFoundError from './not-found.error';
 import UnauthorizedError from './unauthorized.error';
 
-export default ({ app }): void => {
+export default ({ app }: AppLoader): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ApplicationError) {
       const { message } = err;
