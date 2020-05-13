@@ -15,14 +15,19 @@ import jwtSvc, { TokenPayload } from '@/services/jwt.service';
  * - attach refresh token as secure cookie
  * - return access token in response body
  *
- * @param {TokenPayload} payload
+ * @param {User} user
  * @param {Response} res
  * @returns {Promise<void>}
  */
-const sendTokenResponse = async (payload: TokenPayload, res: Response): Promise<void> => {
-  const { name, httpOnly, maxAge, path, secure, sameSite } = config.jwt.cookie;
+const sendTokenResponse = async (user: User, res: Response): Promise<void> => {
+  const payload: TokenPayload = {
+    userId: user.id,
+    roles: user.roleList(),
+  };
 
   const { accessToken, refreshToken } = await jwtSvc.signTokens(payload);
+
+  const { name, httpOnly, maxAge, path, secure, sameSite } = config.jwt.cookie;
 
   res
     .cookie(name, refreshToken, {
@@ -41,28 +46,27 @@ const sendTokenResponse = async (payload: TokenPayload, res: Response): Promise<
  *
  * @param {string} password
  * @param {User} user
- * @returns {boolean}
+ * @returns {Promise<boolean>}
  */
-const checkPassword = (password: string, user: User): boolean => {
-  if (user.password) return bcrypt.compareSync(password, user.password);
+const verifyPassword = async (password: string, user: User): Promise<boolean> => {
+  if (user.password) return bcrypt.compare(password, user.password);
 
   // TODO: verify user.legacyPassword
   return false;
 };
 
 export default {
-  async login(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async emailLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { email, password } = req.body;
 
     const user = await User.scope(['legacyPassword', 'roles']).findOne({ where: { email } });
 
-    if (!user || !checkPassword(password, user)) {
+    if (!user || !(await verifyPassword(password, user))) {
       next(new ApplicationError(`Provided credentials doesn't match with our records.`));
       return;
     }
 
-    const roles = user.roleList();
-    sendTokenResponse({ userId: user.id, roles }, res);
+    await sendTokenResponse(user, res);
   },
 
   async aliasLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -78,13 +82,12 @@ export default {
       ],
     });
 
-    if (!user || !checkPassword(password, user)) {
+    if (!user || !(await verifyPassword(password, user))) {
       next(new ApplicationError(`Provided credentials doesn't match with our records.`));
       return;
     }
 
-    const roles = user.roleList();
-    sendTokenResponse({ userId: user.id, roles }, res);
+    await sendTokenResponse(user, res);
   },
 
   async tokenLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -105,8 +108,7 @@ export default {
       return;
     }
 
-    const roles = user.roleList();
-    await sendTokenResponse({ userId: user.id, roles }, res);
+    await sendTokenResponse(user, res);
   },
 
   async refresh(req: Request, res: Response): Promise<void> {
