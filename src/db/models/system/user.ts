@@ -5,7 +5,7 @@ import UserRole from './user-role';
 import UserSurveyAlias from './user-survey-alias';
 
 @Scopes(() => ({
-  password: { include: [{ model: UserPassword }] },
+  legacyPassword: { include: [{ model: UserPassword }] },
   roles: { include: [{ model: UserRole }] },
   aliases: { include: [{ model: UserSurveyAlias }] },
 }))
