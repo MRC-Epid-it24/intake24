@@ -54,13 +54,17 @@ export default class User extends BaseModel<User> {
   @HasMany(() => UserSurveyAlias, 'userId')
   public aliases?: UserSurveyAlias[];
 
-  public can(role: string): boolean {
+  public hasRole(role: string): boolean {
     if (!this.roles) {
       return false;
     }
 
     const match = this.roles.find((item) => item.role === role);
     return !!match;
+  }
+
+  public can(role: string): boolean {
+    return this.hasRole(role);
   }
 
   public roleList(): string[] {

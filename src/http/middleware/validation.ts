@@ -3,9 +3,10 @@ import { validationResult } from 'express-validator';
 
 export default (req: Request, res: Response, next: NextFunction): void => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(422).json({ success: false, errors: errors.mapped() });
+  if (errors.isEmpty()) {
+    next();
     return;
   }
-  next();
+
+  res.status(422).json({ success: false, errors: errors.mapped() });
 };
