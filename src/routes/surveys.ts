@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import passport from 'passport';
-import surveyController from '@/controllers/survey.controller';
+import surveyController from '@/http/controllers/survey.controller';
 
 const router = Router();
 
