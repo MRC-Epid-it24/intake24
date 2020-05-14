@@ -1,6 +1,7 @@
 import { Column, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 import UserSurveyAlias from './user-survey-alias';
+import SurveySubmission from './survey-submission';
 
 @Scopes(() => ({
   public: {
@@ -20,6 +21,7 @@ import UserSurveyAlias from './user-survey-alias';
     ],
   },
   respodents: { include: [{ model: UserSurveyAlias }] },
+  submissions: { include: [{ model: SurveySubmission }] },
 }))
 @Table({
   timestamps: false,
@@ -103,4 +105,7 @@ export default class Survey extends BaseModel<Survey> {
 
   @HasMany(() => UserSurveyAlias, 'surveyId')
   public respodents?: UserSurveyAlias[];
+
+  @HasMany(() => SurveySubmission, 'surveyId')
+  public submissions?: SurveySubmission[];
 }

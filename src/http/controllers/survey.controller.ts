@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import Survey from '@/db/models/system/survey';
+import User from '@/db/models/system/user';
 import NotFoundError from '@/http/errors/not-found.error';
+import SurveySubmission from '@/db/models/system/survey-submission';
 
 export default {
   async list(req: Request, res: Response): Promise<void> {
@@ -33,7 +35,26 @@ export default {
     res.json(survey);
   },
 
+  // TODO: review for new frontend - include user data - submissions, feedback data etc for user's dashboard?
   async userInfo(req: Request, res: Response, next: NextFunction): Promise<void> {
-    res.json();
+    const { surveyId } = req.params;
+    const { id: userId, name } = req.user as User;
+
+    const survey = await Survey.findByPk(surveyId);
+    const submissions = await SurveySubmission.count({ where: { surveyId, userId } });
+
+    if (!survey) {
+      next(new NotFoundError());
+      return;
+    }
+
+    const userInfo = {
+      userId,
+      name,
+      recallNumber: submissions + 1,
+      redirectToFeedback: submissions >= survey.numberOfSubmissionsForFeedback,
+    };
+
+    res.json(userInfo);
   },
 };

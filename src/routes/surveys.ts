@@ -17,8 +17,8 @@ router.get(
 
 router.get(
   '/:surveyId/user-info',
-  isSurveyRespondent(),
   passport.authenticate('jwt', { session: false }),
+  isSurveyRespondent(),
   surveyController.userInfo
 );
 

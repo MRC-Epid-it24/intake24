@@ -1,5 +1,6 @@
 import { Table, Column, HasOne, HasMany, Scopes } from 'sequelize-typescript';
 import BaseModel from '../model';
+import SurveySubmission from './survey-submission';
 import UserPassword from './user-password';
 import UserRole from './user-role';
 import UserSurveyAlias from './user-survey-alias';
@@ -8,6 +9,7 @@ import UserSurveyAlias from './user-survey-alias';
   legacyPassword: { include: [{ model: UserPassword }] },
   roles: { include: [{ model: UserRole }] },
   aliases: { include: [{ model: UserSurveyAlias }] },
+  submissions: { include: [{ model: SurveySubmission }] },
 }))
 @Table({
   timestamps: false,
@@ -53,6 +55,9 @@ export default class User extends BaseModel<User> {
 
   @HasMany(() => UserSurveyAlias, 'userId')
   public aliases?: UserSurveyAlias[];
+
+  @HasMany(() => SurveySubmission, 'userId')
+  public submissions?: SurveySubmission[];
 
   public hasRole(role: string): boolean {
     if (!this.roles) {
