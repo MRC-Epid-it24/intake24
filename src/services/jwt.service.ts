@@ -1,8 +1,11 @@
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
+import { PassportStatic } from 'passport';
+import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
 import security from '@/config/security';
+import User from '@/db/models/system/user';
 import InternalServerError from '@/http/errors/internal-server.error';
 
-const { jwt: config } = security;
+const { issuer, access, refresh } = security.jwt;
 
 export interface Tokens {
   accessToken: string;
@@ -12,11 +15,39 @@ export interface Tokens {
 export interface TokenPayload {
   userId: number;
   roles: string[];
-  iss?: string;
   type?: string;
 }
 
-// TODO - extract JWT payload defaults (like type, iss) from methods
+const signOptions: SignOptions = { issuer };
+
+const verifyOptions: VerifyOptions = { issuer };
+
+const opts: StrategyOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  // TODO: compatibility fallback -> combine Bearer & x-auth-token extraction strategy?
+  // jwtFromRequest: ExtractJwt.fromHeader('x-auth-token'),
+  secretOrKey: access.secret,
+  issuer,
+};
+
+export const jwtStrategy = (passport: PassportStatic): void => {
+  passport.use(
+    new Strategy(opts, ({ userId }, done) => {
+      User.scope('roles')
+        .findByPk(userId)
+        .then((user) => {
+          if (user) done(null, user);
+          else done(null, false);
+
+          // returning callback gives Bluebird promise warning
+          return null;
+        })
+        .catch((err) => {
+          return done(err);
+        });
+    })
+  );
+};
 
 export default {
   /**
@@ -29,7 +60,7 @@ export default {
    */
   async sign(payload: TokenPayload, secret: string, options: SignOptions = {}): Promise<string> {
     return new Promise((resolve, reject) => {
-      jwt.sign(payload, secret, options, (err, encoded) =>
+      jwt.sign(payload, secret, { ...signOptions, ...options }, (err, encoded) =>
         err || !encoded ? reject(err ?? new Error(`Unable to sign token`)) : resolve(encoded)
       );
     });
@@ -43,14 +74,11 @@ export default {
    * @returns {string}
    */
   async signAccessToken(payload: TokenPayload, options: SignOptions = {}): Promise<string> {
-    const { secret, lifetime } = config.access;
+    const { secret, lifetime } = access;
 
     if (!secret) throw new InternalServerError('No access token secret defined');
 
-    return this.sign({ iss: 'intake24', type: 'access', ...payload }, secret, {
-      expiresIn: lifetime,
-      ...options,
-    });
+    return this.sign({ type: 'access', ...payload }, secret, { expiresIn: lifetime, ...options });
   },
 
   /**
@@ -61,14 +89,11 @@ export default {
    * @returns {string}
    */
   async signRefreshToken(payload: TokenPayload, options: SignOptions = {}): Promise<string> {
-    const { secret, lifetime } = config.refresh;
+    const { secret, lifetime } = refresh;
 
     if (!secret) throw new InternalServerError('No refresh token secret defined');
 
-    return this.sign({ iss: 'intake24', type: 'refresh', ...payload }, secret, {
-      expiresIn: lifetime,
-      ...options,
-    });
+    return this.sign({ type: 'refresh', ...payload }, secret, { expiresIn: lifetime, ...options });
   },
 
   /**
@@ -93,7 +118,7 @@ export default {
    */
   verifyRefreshToken(token: string): Promise<TokenPayload> {
     return new Promise((resolve, reject) => {
-      jwt.verify(token, config.refresh.secret, (err, decoded) =>
+      jwt.verify(token, refresh.secret, verifyOptions, (err, decoded) =>
         err || !decoded
           ? reject(err ?? new Error(`Unable to verify refresh token`))
           : resolve(decoded as TokenPayload)

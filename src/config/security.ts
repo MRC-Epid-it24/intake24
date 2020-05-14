@@ -3,6 +3,7 @@ export interface SecurityConfig {
     origin: boolean | string | string[];
   };
   jwt: {
+    issuer: string;
     access: {
       secret: string;
       lifetime: string;
@@ -30,6 +31,7 @@ const securityConfig: SecurityConfig = {
         : false,
   },
   jwt: {
+    issuer: 'intake24',
     access: {
       secret: process.env.JWT_ACCESS_SECRET ?? '',
       lifetime: process.env.JWT_LIFETIME ?? '15m',
