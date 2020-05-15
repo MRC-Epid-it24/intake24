@@ -1,62 +1,66 @@
-export default {
+import { Dialect, Options } from 'sequelize';
+import { Environment } from './app';
+
+export type Database = 'foods' | 'system';
+
+export type ServerConnectionInfo = Record<Environment, DBConnectionInfo>;
+export type DBConnectionInfo = Record<Database, Options>;
+
+const databaseConfig: ServerConnectionInfo = {
   development: {
-    databases: {
-      system: {
-        host: process.env.DB_SYSTEM_HOST,
-        port: process.env.DB_SYSTEM_PORT,
-        database: process.env.DB_SYSTEM_DATABASE,
-        username: process.env.DB_SYSTEM_USERNAME,
-        password: process.env.DB_SYSTEM_PASSWORD,
-        dialect: process.env.DB_SYSTEM_DRIVER,
-      },
-      foods: {
-        host: process.env.DB_FOODS_HOST,
-        port: process.env.DB_FOODS_PORT,
-        database: process.env.DB_FOODS_DATABASE,
-        username: process.env.DB_FOODS_USERNAME,
-        password: process.env.DB_FOODS_PASSWORD,
-        dialect: process.env.DB_FOODS_DRIVER,
-      },
+    foods: {
+      host: process.env.DB_FOODS_HOST ?? 'localhost',
+      port: parseInt(process.env.DB_FOODS_PORT ?? '5432', 10),
+      database: process.env.DB_FOODS_DATABASE ?? 'intake24_foods',
+      username: process.env.DB_FOODS_USERNAME ?? 'intake24',
+      password: process.env.DB_FOODS_PASSWORD ?? '',
+      dialect: (process.env.DB_FOODS_DRIVER ?? 'postgres') as Dialect,
+    },
+    system: {
+      host: process.env.DB_SYSTEM_HOST ?? 'localhost',
+      port: parseInt(process.env.DB_SYSTEM_PORT ?? '5432', 10),
+      database: process.env.DB_SYSTEM_DATABASE ?? 'intake24_system',
+      username: process.env.DB_SYSTEM_USERNAME ?? 'intake24',
+      password: process.env.DB_SYSTEM_PASSWORD ?? '',
+      dialect: (process.env.DB_SYSTEM_DRIVER ?? 'postgres') as Dialect,
     },
   },
   test: {
-    databases: {
-      system: {
-        host: process.env.DB_SYSTEM_HOST,
-        port: process.env.DB_SYSTEM_PORT,
-        database: process.env.DB_SYSTEM_DATABASE,
-        username: process.env.DB_SYSTEM_USERNAME,
-        password: process.env.DB_SYSTEM_PASSWORD,
-        dialect: process.env.DB_SYSTEM_DRIVER,
-      },
-      foods: {
-        host: process.env.DB_FOODS_HOST,
-        port: process.env.DB_FOODS_PORT,
-        database: process.env.DB_FOODS_DATABASE,
-        username: process.env.DB_FOODS_USERNAME,
-        password: process.env.DB_FOODS_PASSWORD,
-        dialect: process.env.DB_FOODS_DRIVER,
-      },
+    foods: {
+      host: process.env.DB_FOODS_HOST ?? 'localhost',
+      port: parseInt(process.env.DB_FOODS_PORT ?? '5432', 10),
+      database: process.env.DB_FOODS_DATABASE ?? 'intake24_foods',
+      username: process.env.DB_FOODS_USERNAME ?? 'intake24',
+      password: process.env.DB_FOODS_PASSWORD ?? '',
+      dialect: (process.env.DB_FOODS_DRIVER ?? 'postgres') as Dialect,
+    },
+    system: {
+      host: process.env.DB_SYSTEM_HOST ?? 'localhost',
+      port: parseInt(process.env.DB_SYSTEM_PORT ?? '5432', 10),
+      database: process.env.DB_SYSTEM_DATABASE ?? 'intake24_system',
+      username: process.env.DB_SYSTEM_USERNAME ?? 'intake24',
+      password: process.env.DB_SYSTEM_PASSWORD ?? '',
+      dialect: (process.env.DB_SYSTEM_DRIVER ?? 'postgres') as Dialect,
     },
   },
   production: {
-    databases: {
-      system: {
-        host: process.env.DB_SYSTEM_HOST,
-        port: process.env.DB_SYSTEM_PORT,
-        database: process.env.DB_SYSTEM_DATABASE,
-        username: process.env.DB_SYSTEM_USERNAME,
-        password: process.env.DB_SYSTEM_PASSWORD,
-        dialect: process.env.DB_SYSTEM_DRIVER,
-      },
-      foods: {
-        host: process.env.DB_FOODS_HOST,
-        port: process.env.DB_FOODS_PORT,
-        database: process.env.DB_FOODS_DATABASE,
-        username: process.env.DB_FOODS_USERNAME,
-        password: process.env.DB_FOODS_PASSWORD,
-        dialect: process.env.DB_FOODS_DRIVER,
-      },
+    foods: {
+      host: process.env.DB_FOODS_HOST ?? 'localhost',
+      port: parseInt(process.env.DB_FOODS_PORT ?? '5432', 10),
+      database: process.env.DB_FOODS_DATABASE ?? 'intake24_foods',
+      username: process.env.DB_FOODS_USERNAME ?? 'intake24',
+      password: process.env.DB_FOODS_PASSWORD ?? '',
+      dialect: (process.env.DB_FOODS_DRIVER ?? 'postgres') as Dialect,
+    },
+    system: {
+      host: process.env.DB_SYSTEM_HOST ?? 'localhost',
+      port: parseInt(process.env.DB_SYSTEM_PORT ?? '5432', 10),
+      database: process.env.DB_SYSTEM_DATABASE ?? 'intake24_system',
+      username: process.env.DB_SYSTEM_USERNAME ?? 'intake24',
+      password: process.env.DB_SYSTEM_PASSWORD ?? '',
+      dialect: (process.env.DB_SYSTEM_DRIVER ?? 'postgres') as Dialect,
     },
   },
 };
+
+export default databaseConfig;

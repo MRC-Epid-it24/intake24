@@ -1,31 +1,21 @@
 import { Sequelize } from 'sequelize-typescript';
 import appConfig from '@/config/app';
-import dbConfig from '@/config/database';
+import dbConfig, { Database } from '@/config/database';
 import foods from './models/foods';
 import system from './models/system';
 
-interface DbInterface {
-  system: Sequelize;
-  foods: Sequelize;
+export type BaseDbInterface = Record<Database, Sequelize>;
+
+export interface DbInterface extends BaseDbInterface {
   init(): Promise<void>;
 }
 
 const { env } = appConfig;
 
-const models = {
-  system: Object.values(system),
-  foods: Object.values(foods),
-};
-
 const db = {
   async init() {
-    Object.keys(dbConfig[env].databases).forEach((database: string) => {
-      const dbConf = dbConfig[env].databases[database];
-      this[database] = new Sequelize({
-        ...dbConf,
-        models: models[database],
-      });
-    });
+    this.foods = new Sequelize({ ...dbConfig[env].foods, models: Object.values(foods) });
+    this.system = new Sequelize({ ...dbConfig[env].system, models: Object.values(system) });
   },
 } as DbInterface;
 
