@@ -5,7 +5,9 @@ import security from '@/config/security';
 import User from '@/db/models/system/user';
 import InternalServerError from '@/http/errors/internal-server.error';
 
-const { issuer, access, refresh } = security.jwt;
+export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken';
+
+export type Subject = { providerID: SubjectProvider; providerKey: string };
 
 export interface Tokens {
   accessToken: string;
@@ -16,7 +18,11 @@ export interface TokenPayload {
   userId: number;
   roles: string[];
   type?: string;
+  iss?: string;
+  sub?: string;
 }
+
+const { issuer, access, refresh } = security.jwt;
 
 const signOptions: SignOptions = { issuer };
 
@@ -32,19 +38,13 @@ const opts: StrategyOptions = {
 
 export const jwtStrategy = (passport: PassportStatic): void => {
   passport.use(
-    new Strategy(opts, ({ userId }, done) => {
-      User.scope('roles')
-        .findByPk(userId)
-        .then((user) => {
-          if (user) done(null, user);
-          else done(null, false);
-
-          // returning callback gives Bluebird promise warning
-          return null;
-        })
-        .catch((err) => {
-          return done(err);
-        });
+    new Strategy(opts, async ({ userId }, done) => {
+      try {
+        const user = await User.scope('roles').findByPk(userId);
+        done(null, user ?? false);
+      } catch (err) {
+        done(err, false);
+      }
     })
   );
 };
