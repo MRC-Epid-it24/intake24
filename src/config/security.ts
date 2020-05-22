@@ -17,11 +17,13 @@ export interface SecurityConfig {
       maxAge: number | string;
       httpOnly: boolean;
       path: string;
-      sameSite: boolean | 'lax' | 'strict' | 'none';
+      sameSite: SameSiteCookieOptions;
       secure: boolean;
     };
   };
 }
+
+export type SameSiteCookieOptions = boolean | 'lax' | 'strict' | 'none';
 
 const securityConfig: SecurityConfig = {
   cors: {
@@ -44,9 +46,9 @@ const securityConfig: SecurityConfig = {
       name: 'it24_refresh_token',
       maxAge: process.env.JWT_REFRESH_LIFETIME ?? '1d',
       httpOnly: true,
-      path: '/refresh',
-      sameSite: 'lax',
-      secure: process.env.JWT_SECURE_COOKIE === 'true',
+      path: process.env.JWT_COOKIE_PATH ?? '/refresh',
+      sameSite: (process.env.JWT_COOKIE_SAMESITE ?? 'lax') as SameSiteCookieOptions,
+      secure: process.env.JWT_COOKIE_SECURE === 'true',
     },
   },
 };
