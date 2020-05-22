@@ -57,4 +57,12 @@ export default {
 
     res.json(userInfo);
   },
+
+  async generateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { surveyId } = req.params;
+
+    /* const { userName, password } = surveySvc.generateUser(surveyId);
+
+    res.json({ userName, password }); */
+  },
 };

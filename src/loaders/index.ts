@@ -10,14 +10,14 @@ export default async ({ app }: AppLoader): Promise<void> => {
   const { env } = appConfig;
 
   await securityLoader({ app, env });
-  logger.info('Security settings intialized.');
+  logger.info('Security settings loaded.');
 
   await expressLoader({ app, env });
-  logger.info('Express defaults intialized.');
+  logger.info('Express defaults loaded.');
 
   await routesLoader({ app, env });
-  logger.info('Routes intialized.');
+  logger.info('Routes loaded.');
 
   await servicesLoader();
-  logger.info('Services intialized.');
+  logger.info('Services loaded.');
 };

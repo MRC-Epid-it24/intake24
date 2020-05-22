@@ -7,6 +7,7 @@ const router = Router();
 
 router.get('', surveyController.list);
 router.get('/:surveyId', surveyController.publicEntry);
+router.get('/:surveyId/generate-user', surveyController.generateUser);
 
 router.get(
   '/:surveyId/parameters',

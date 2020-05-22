@@ -60,12 +60,16 @@ export default class User extends BaseModel<User> {
   public submissions?: SurveySubmission[];
 
   public hasRole(role: string): boolean {
-    if (!this.roles) {
-      return false;
-    }
+    if (!this.roles) return false;
 
     const match = this.roles.find((item) => item.role === role);
     return !!match;
+  }
+
+  public hasAnyRole(roles: string[]): boolean {
+    if (!this.roles) return false;
+
+    return this.roles.some((item) => roles.includes(item.role));
   }
 
   public can(role: string): boolean {

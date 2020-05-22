@@ -1,7 +1,7 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import User from './user';
 import Survey from './survey';
+import User from './user';
 
 @Scopes(() => ({
   survey: { include: [{ model: Survey }] },
