@@ -48,3 +48,22 @@ Optional
 
 - install as service
 - use node.js process manager like `pm2`
+
+## 3. Migrations
+
+- project is using [sequelize-cli](https://github.com/sequelize/cli)
+- config / migration files (per database) are store in respective `sequelize/{database}` folders
+
+```sh
+npx sequelize --options sequelize/{database}/options.js
+```
+
+### 3.1 Foods database migrations 
+```sh
+npx sequelize db:migrate --options sequelize/foods/options.js
+```
+
+### 3.2 System database migrations 
+```sh
+npx sequelize db:migrate --options sequelize/system/options.js
+```
