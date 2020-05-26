@@ -1,11 +1,15 @@
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 import Survey from './survey';
+import SurveySubmissionCustomField from './survey-submission-custom-field';
+import SurveySubmissionMeal from './survey-submission-meal';
 import User from './user';
 
 @Scopes(() => ({
   survey: { include: [{ model: Survey }] },
   user: { include: [{ model: User }] },
+  customFields: { include: [{ model: SurveySubmissionCustomField }] },
+  meals: { include: [{ model: SurveySubmissionMeal }] },
 }))
 @Table({
   timestamps: false,
@@ -45,11 +49,17 @@ export default class SurveySubmission extends BaseModel<SurveySubmission> {
     allowNull: false,
     type: DataType.UUID,
   })
-  public ux_session_id!: string;
+  public uxSessionId!: string;
 
   @BelongsTo(() => Survey, 'surveyId')
-  public survey?: Survey[];
+  public survey?: Survey;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User[];
+  public user?: User;
+
+  @HasMany(() => SurveySubmissionCustomField, 'surveySubmissionId')
+  public customFields?: SurveySubmissionCustomField[];
+
+  @HasMany(() => SurveySubmissionMeal, 'surveySubmissionId')
+  public meals?: SurveySubmissionMeal[];
 }
