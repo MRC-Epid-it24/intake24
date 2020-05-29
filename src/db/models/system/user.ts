@@ -39,6 +39,12 @@ export default class User extends BaseModel<User> {
 
   @Column({
     allowNull: false,
+    defaultValue: false,
+  })
+  public multiFactorAuthentication!: boolean;
+
+  @Column({
+    allowNull: false,
   })
   public emailNotifications!: boolean;
 

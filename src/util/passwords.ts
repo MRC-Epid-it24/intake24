@@ -24,10 +24,11 @@ export const hashSync = (password: string, rounds = 10): string =>
 /**
  * Generate random token
  *
- * @param {*} [{ encoding = 'base64', size = 48 }={}]
+ * @param {number} [size=48]
+ * @param {BufferEncoding} encoding
  * @returns {Promise<string>}
  */
-export const generateToken = ({ encoding = 'base64', size = 48 } = {}): Promise<string> => {
+export const generateToken = (size = 48, encoding: BufferEncoding): Promise<string> => {
   return new Promise((resolve, reject) =>
     crypto.randomBytes(size, (err, buffer) =>
       err ? reject(err) : resolve(buffer.toString(encoding))

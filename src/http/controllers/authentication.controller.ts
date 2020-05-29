@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import ms from 'ms';
 import config from '@/config/security';
 import authSvc from '@/services/authentication.service';
 import { Tokens } from '@/services/jwt.service';
+import UnauthorizedError from '../errors/unauthorized.error';
 
 /**
  * Sucessfull login response helper
@@ -34,8 +35,23 @@ export default {
   async emailLogin(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
 
-    const tokens = await authSvc.emailLogin(email, password);
+    const result = await authSvc.emailLogin(email, password);
+    if ('mfa' in result) {
+      res.json(result);
+      return;
+    }
 
+    await sendTokenResponse(result, res);
+  },
+
+  async verify(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { sigResponse } = req.body;
+    if (!sigResponse) {
+      next(new UnauthorizedError());
+      return;
+    }
+
+    const tokens = await authSvc.verifyMfa(sigResponse);
     await sendTokenResponse(tokens, res);
   },
 
@@ -47,17 +63,28 @@ export default {
     await sendTokenResponse(tokens, res);
   },
 
-  async tokenLogin(req: Request, res: Response): Promise<void> {
+  async tokenLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { token } = req.params;
+    if (!token) {
+      next(new UnauthorizedError());
+      return;
+    }
 
     const tokens = await authSvc.tokenLogin(token);
 
     await sendTokenResponse(tokens, res);
   },
 
-  async refresh(req: Request, res: Response): Promise<void> {
+  async refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { name } = config.jwt.cookie;
-    const accessToken = await authSvc.refresh(req.cookies[name]);
+    const refreshToken = req.cookies[name];
+    if (!refreshToken) {
+      next(new UnauthorizedError());
+      return;
+    }
+
+    const accessToken = await authSvc.refresh(refreshToken);
+
     res.json({ accessToken });
   },
 

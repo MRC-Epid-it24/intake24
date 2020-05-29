@@ -12,6 +12,7 @@ export default ({ app }: AppLoader): void => {
   app.post('/login', validation.emaiLogin, wrapAsync(authController.emailLogin));
   app.post('/login/alias', validation.aliasLogin, wrapAsync(authController.aliasLogin));
   app.post('/login/token/:token', wrapAsync(authController.tokenLogin));
+  app.post('/login/verify', wrapAsync(authController.verify));
   app.post('/refresh', wrapAsync(authController.refresh));
   app.post('/logout', wrapAsync(authController.logout));
 
