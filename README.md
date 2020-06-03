@@ -60,10 +60,10 @@ npx sequelize --options sequelize/{database}/options.js
 
 ### 3.1 Foods database migrations 
 ```sh
-npx sequelize db:migrate --options sequelize/foods/options.js
+npx sequelize db:migrate --options-path sequelize/foods/options.js
 ```
 
 ### 3.2 System database migrations 
 ```sh
-npx sequelize db:migrate --options sequelize/system/options.js
+npx sequelize db:migrate --options-path sequelize/system/options.js
 ```
