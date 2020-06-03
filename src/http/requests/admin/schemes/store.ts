@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 import slugify from 'slugify';
-import Survey from '@/db/models/system/survey';
+import Scheme from '@/db/models/system/scheme';
 import validate from '@/http/requests/validate';
 import unique from '@/http/rules/unique';
 import defaults from './defaults';
@@ -10,12 +10,12 @@ export default validate(
     ...defaults,
     id: {
       in: ['body'],
-      errorMessage: 'Survey name must be unique string.',
+      errorMessage: 'Scheme ID must be unique string',
       isString: true,
       isEmpty: { negated: true },
       custom: {
         options: async (value, meta): Promise<void> => {
-          return unique({ model: Survey, field: 'id', value: slugify(value) }, meta);
+          return unique({ model: Scheme, field: 'id', value: slugify(value) }, meta);
         },
       },
       customSanitizer: {

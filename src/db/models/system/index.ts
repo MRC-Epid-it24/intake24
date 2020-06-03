@@ -1,5 +1,6 @@
 import Locale from './locale';
 import SigninLog from './signin-log';
+import Scheme from './scheme';
 import Survey from './survey';
 import SurveySubmission from './survey-submission';
 import SurveySubmissionCustomField from './survey-submission-custom-field';
@@ -18,6 +19,7 @@ import UserRoles from './user-role';
 export default {
   Locale,
   SigninLog,
+  Scheme,
   Survey,
   SurveySubmission,
   SurveySubmissionCustomField,

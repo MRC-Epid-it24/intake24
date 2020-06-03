@@ -1,6 +1,7 @@
 import { BelongsTo, Column, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 import Locale from './locale';
+import Scheme from './scheme';
 import SurveySubmission from './survey-submission';
 import UserSurveyAlias from './user-survey-alias';
 
@@ -8,15 +9,6 @@ export enum SurveyState {
   NOT_STARTED = 0,
   ACTIVE = 1,
   SUSPENDED = 2,
-}
-
-export enum SurveyScheme {
-  DEFAULT = 'default',
-  NDNS_DEFAULT = 'ndns_default',
-  NDNS_419 = 'ndns419',
-  NDNS_1019 = 'ndns1019',
-  SAB = 'sab',
-  BIRMINGHAM_1119 = 'bham1119',
 }
 
 @Scopes(() => ({
@@ -37,6 +29,7 @@ export enum SurveyScheme {
     ],
   },
   localeModel: { include: [{ model: Locale }] },
+  scheme: { include: [{ model: Scheme }] },
   respodents: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
 }))
@@ -68,7 +61,7 @@ export default class Survey extends BaseModel<Survey> {
   @Column({
     allowNull: false,
   })
-  public schemeId!: SurveyScheme;
+  public schemeId!: string;
 
   @Column({
     allowNull: false,
@@ -126,6 +119,9 @@ export default class Survey extends BaseModel<Survey> {
 
   @BelongsTo(() => Locale, 'locale')
   public localeModel?: Locale;
+
+  @BelongsTo(() => Scheme, 'schemeId')
+  public scheme?: Scheme;
 
   @HasMany(() => UserSurveyAlias, 'surveyId')
   public respodents?: UserSurveyAlias[];

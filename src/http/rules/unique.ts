@@ -10,12 +10,20 @@ export type RuleOptions = {
 };
 
 export default async ({ model, field, value }: RuleOptions, { req }: Meta): Promise<void> => {
-  const where: WhereOptions = {};
-  where[field] = value;
-
   const { id } = (req as Request).params;
-  if (id) {
-    where.id = { [Op.ne]: id };
+  const where: WhereOptions = {};
+
+  switch (true) {
+    case id && field === 'id':
+      where[field] = { [Op.eq]: value, [Op.ne]: id };
+      break;
+    case !!id:
+      where[field] = { [Op.eq]: value };
+      where.id = { [Op.ne]: id };
+      break;
+    default:
+      where[field] = { [Op.eq]: value };
+      break;
   }
 
   const entry = await model.findOne({ where });

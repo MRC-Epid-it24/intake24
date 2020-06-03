@@ -1,8 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
 import Locale from '@/db/models/system/locale';
-import Survey, { SurveyScheme, SurveyState } from '@/db/models/system/survey';
+import Scheme from '@/db/models/system/scheme';
+import Survey from '@/db/models/system/survey';
+import ForbiddenError from '@/http/errors/forbidden.error';
 import NotFoundError from '@/http/errors/not-found.error';
+import surveyResponse from '@/http/responses/admin/survey-response';
+
+type SurveyReferences = { locales: Locale[]; schemes: Scheme[] };
+
+const refs = async (): Promise<SurveyReferences> => {
+  const locales = await Locale.findAll({ attributes: ['id', 'englishName'] });
+  const schemes = await Scheme.findAll({ attributes: ['id', 'name'] });
+
+  return { locales, schemes };
+};
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { id } = req.params;
@@ -13,23 +25,18 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
     return;
   }
 
-  const locales = await Locale.findAll({ attributes: ['id', 'englishName'] });
-
-  res.json({ data: survey, refs: { locales, schemes: SurveyScheme, states: SurveyState } });
+  res.json({ data: surveyResponse(survey), refs: await refs() });
 };
 
 export default {
   async list(req: Request, res: Response): Promise<void> {
-    const { data, meta } = await Survey.paginate({
-      req,
-      columns: ['id'],
-    });
+    const { data, meta } = await Survey.paginate({ req, columns: ['id'] });
 
     res.json({ data, meta });
   },
 
   async create(req: Request, res: Response): Promise<void> {
-    res.json({ data: { id: null }, refs: {} });
+    res.json({ data: { id: null }, refs: await refs() });
   },
 
   async store(req: Request, res: Response): Promise<void> {
@@ -56,7 +63,7 @@ export default {
       ])
     );
 
-    res.status(201).json({ data: survey });
+    res.status(201).json({ data: surveyResponse(survey) });
   },
 
   async show(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -98,15 +105,20 @@ export default {
       ])
     );
 
-    res.json({ data: survey, refs: {} });
+    res.json({ data: surveyResponse(survey), refs: await refs() });
   },
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;
-    const survey = await Survey.findByPk(id);
+    const survey = await Survey.scope('submissions').findByPk(id);
 
     if (!survey) {
       next(new NotFoundError());
+      return;
+    }
+
+    if (survey.submissions?.length) {
+      next(new ForbiddenError('Survey cannot be deleted. It already contains submission data.'));
       return;
     }
 

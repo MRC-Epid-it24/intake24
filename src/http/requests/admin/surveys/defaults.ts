@@ -1,6 +1,7 @@
 import { Schema } from 'express-validator';
-import { SurveyState, SurveyScheme } from '@/db/models/system/survey';
+import { SurveyState } from '@/db/models/system/survey';
 import Locale from '@/db/models/system/locale';
+import Scheme from '@/db/models/system/scheme';
 
 export default {
   state: {
@@ -10,7 +11,7 @@ export default {
     toInt: true,
     custom: {
       options: async (value): Promise<void> => {
-        return value in SurveyState
+        return Object.values(SurveyState).includes(value)
           ? Promise.resolve()
           : Promise.reject(new Error('Enter valid survey state.'));
       },
@@ -37,25 +38,24 @@ export default {
     isEmpty: { negated: true },
     custom: {
       options: async (value): Promise<void> => {
-        return value in SurveyScheme
-          ? Promise.resolve()
-          : Promise.reject(new Error('Enter valid survey scheme.'));
+        const schemes = await Scheme.findAll({ attributes: ['id'] });
+        const match = schemes.find((scheme) => value === scheme.id);
+
+        return match ? Promise.resolve() : Promise.reject(new Error('Enter valid scheme.'));
       },
     },
   },
   locale: {
     in: ['body'],
-    errorMessage: 'Enter valid locale Id.',
+    errorMessage: 'Enter valid locale.',
     isString: true,
     isEmpty: { negated: true },
     custom: {
       options: async (value): Promise<void> => {
-        const locales = await Locale.findAll();
-        const localeIds = locales.map((locale) => locale.id);
+        const locales = await Locale.findAll({ attributes: ['id'] });
+        const match = locales.find((locale) => value === locale.id);
 
-        return localeIds.includes(value)
-          ? Promise.resolve()
-          : Promise.reject(new Error('Enter valid locale Id.'));
+        return match ? Promise.resolve() : Promise.reject(new Error('Enter valid locale.'));
       },
     },
   },
@@ -79,8 +79,10 @@ export default {
   supportEmail: {
     in: ['body'],
     errorMessage: 'Enter valid email address.',
-    isEmail: true,
-    optional: { options: { nullable: true } },
+    // TODO: contains other values than emails now, haven't been validated before
+    // isEmail: true,
+    isString: true,
+    isEmpty: { negated: true },
   },
   originatingUrl: {
     in: ['body'],

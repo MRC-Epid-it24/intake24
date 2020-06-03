@@ -13,6 +13,7 @@ export default {
     in: ['body'],
     errorMessage: 'Enter valid unique email address.',
     isEmail: true,
+    optional: { options: { nullable: true } },
     custom: {
       options: async (value, meta): Promise<void> => {
         return unique({ model: User, field: 'email', value }, meta);

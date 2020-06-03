@@ -1,29 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import User from '@/db/models/system/user';
 import ForbiddenError from '@/http/errors/forbidden.error';
+import {
+  foodDatabaseMaintainer,
+  foodDatabaseMaintainerPrefix,
+  Roles,
+  staffSuffix,
+  surveyRespondent,
+  surveyStaff,
+} from '@/services/acl.service';
 
 // TODO: augment Express request user property with our model - must match with passport-jwt
-
-enum Roles {
-  FOODSADMIN = 'foodsadmin',
-  IMAGESADMIN = 'imagesadmin',
-  GLOBALSUPPORT = 'globalsupport',
-  SURVEYADMIN = 'surveyadmin',
-  SUPERUSER = 'superuser',
-}
-
-const respondentSuffix = '/respondent';
-const staffSuffix = '/staff';
-const supportSuffix = '/support';
-const foodDatabaseMaintainerPrefix = 'fdbm/';
-
-const surveyStaff = (surveyId: string): string => `${surveyId}${staffSuffix}`;
-
-const surveySupport = (surveyId: string): string => `${surveyId}${supportSuffix}`;
-
-const surveyRespondent = (surveyId: string): string => `${surveyId}${respondentSuffix}`;
-
-const foodDatabaseMaintainer = (fdbId: string): string => `${foodDatabaseMaintainerPrefix}${fdbId}`;
 
 export const canManageFoodDatabase = () => {
   return (req: Request, res: Response, next: NextFunction): void => {
@@ -35,6 +22,16 @@ export const canManageFoodDatabase = () => {
       (!fdbId && user.roles?.some((role) => role.role.startsWith(foodDatabaseMaintainerPrefix)));
 
     return check ? next() : next(new ForbiddenError());
+  };
+};
+
+export const canCreateSurvey = () => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const user = req.user as User;
+
+    return user.hasAnyRole([Roles.SUPERUSER, Roles.SURVEYADMIN])
+      ? next()
+      : next(new ForbiddenError());
   };
 };
 

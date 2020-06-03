@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
 import User from '@/db/models/system/user';
 import NotFoundError from '@/http/errors/not-found.error';
+import userResponse from '@/http/responses/admin/user-response';
+import { roleList } from '@/services/acl.service';
 import { hash } from '@/util/passwords';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -13,7 +15,7 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
     return;
   }
 
-  res.json({ data: user, refs: {} });
+  res.json({ data: userResponse(user), refs: { roles: await roleList() } });
 };
 
 export default {
@@ -45,7 +47,7 @@ export default {
       password: await hash(password),
     });
 
-    res.status(201).json({ data: user });
+    res.status(201).json({ data: userResponse(user) });
   },
 
   async show(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -76,7 +78,7 @@ export default {
       ])
     );
 
-    res.json({ data: user, refs: {} });
+    res.json({ data: userResponse(user), refs: { roles: await roleList() } });
   },
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
