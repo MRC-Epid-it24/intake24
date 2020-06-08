@@ -55,7 +55,7 @@ Optional
 - config / migration files (per database) are store in respective `sequelize/{database}` folders
 
 ```sh
-npx sequelize --options sequelize/{database}/options.js
+npx sequelize --options-path sequelize/{database}/options.js
 ```
 
 ### 3.1 Foods database migrations 
