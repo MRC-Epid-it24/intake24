@@ -87,10 +87,15 @@ export default {
       ])
     );
 
-    const { roles } = req.body;
-    await UserRole.destroy({ where: { userId: id, role: { [Op.notIn]: roles } } });
-    const newRoles = roles.map((role: string) => ({ userId: id, role }));
-    await UserRole.bulkCreate(newRoles);
+    const currentRoles = user.roles?.map((item) => item.role) ?? [];
+    const { roles: newRoles } = req.body;
+    await UserRole.destroy({ where: { userId: id, role: { [Op.notIn]: newRoles } } });
+
+    const roleRecords = newRoles
+      .filter((role: string) => !currentRoles.includes(role))
+      .map((role: string) => ({ userId: id, role }));
+
+    if (roleRecords.length) await UserRole.bulkCreate(roleRecords);
 
     res.json({
       data: userResponse((await User.scope('roles').findByPk(id)) as User),
