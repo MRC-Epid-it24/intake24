@@ -123,7 +123,7 @@ export default {
       !user ||
       (subject.providerID !== 'URLToken' && !(await this.verifyPassword(password, user)))
     )
-      throw new UnauthorizedError(`Provided credentials doesn't match with our records.`);
+      throw new UnauthorizedError(`Provided credentials do not match our records.`);
 
     const payload: TokenPayload = {userId: user.id, roles: user.roleList()};
 
@@ -150,7 +150,7 @@ export default {
           hash: user.password.passwordHash
         });
       } else {
-       return Promise.reject(`Password algorithm ${user.password.passwordHasher} not supported.`)
+        return Promise.reject(`Password algorithm '${user.password.passwordHasher}' not supported.`)
       }
     } else {
       return Promise.reject('Password login not enabled for this user.')

@@ -18,8 +18,6 @@ export class PasswordBcrypt implements PasswordAlgorithm {
   }
 
   async verify(input: string, hashedPassword: HashedPassword): Promise<boolean> {
-    const hash = await bcrypt.hash(input, hashedPassword.salt);
-
-    return Promise.resolve(hash == hashedPassword.hash);
+    return bcrypt.compare(input, hashedPassword.hash);
   }
 }
