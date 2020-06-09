@@ -6,7 +6,7 @@ import UserRole from './user-role';
 import UserSurveyAlias from './user-survey-alias';
 
 @Scopes(() => ({
-  legacyPassword: { include: [{ model: UserPassword }] },
+  password: { include: [{ model: UserPassword }] },
   roles: { include: [{ model: UserRole }] },
   aliases: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
@@ -34,9 +34,6 @@ export default class User extends BaseModel<User> {
   @Column
   public simpleName!: string;
 
-  @Column
-  public password!: string;
-
   @Column({
     allowNull: false,
     defaultValue: false,
@@ -54,7 +51,7 @@ export default class User extends BaseModel<User> {
   public smsNotifications!: boolean;
 
   @HasOne(() => UserPassword, 'userId')
-  public legacyPassword?: UserPassword;
+  public password?: UserPassword;
 
   @HasMany(() => UserRole, 'userId')
   public roles?: UserRole[];

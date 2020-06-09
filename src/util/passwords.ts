@@ -1,25 +1,19 @@
-import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import {PasswordBcrypt} from "@/util/password-bcrypt";
+import {PasswordShiro} from "@/util/password-shiro";
 
-/**
- * Hash password for storage
- *
- * @param {string} password
- * @param {number} [rounds=10]
- * @returns {Promise<string>}
- */
-export const hash = async (password: string, rounds = 10): Promise<string> =>
-  bcrypt.hash(password, await bcrypt.genSalt(rounds));
+export interface HashedPassword {
+  hash: string;
+  salt: string;
+}
 
-/**
- * Hash password for storage (sync)
- *
- * @param {string} password
- * @param {number} [rounds=10]
- * @returns {string}
- */
-export const hashSync = (password: string, rounds = 10): string =>
-  bcrypt.hashSync(password, bcrypt.genSaltSync(rounds));
+export interface PasswordAlgorithm {
+  readonly id: string;
+
+  hash(password: string): Promise<HashedPassword>;
+
+  verify(input: string, hashedPassword: HashedPassword): Promise<boolean>;
+}
 
 /**
  * Generate random token
@@ -35,3 +29,10 @@ export const generateToken = (size = 48, encoding: BufferEncoding): Promise<stri
     )
   );
 };
+
+// FIXME: Should be configurable using dependency injection, not sure how to do that properly
+//        yet -- Ivan
+
+export const supportedAlgorithms = [new PasswordBcrypt(), new PasswordShiro()];
+
+export const defaultAlgorithm = new PasswordBcrypt();
