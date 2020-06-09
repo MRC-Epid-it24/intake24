@@ -64,7 +64,7 @@ export default {
   },
 
   async tokenLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { token } = req.params;
+    const { token } = req.body;
     if (!token) {
       next(new UnauthorizedError());
       return;
