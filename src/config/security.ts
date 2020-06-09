@@ -38,12 +38,18 @@ export type MultiFactorAuthentication = {
   };
 };
 
+export type RecaptchaConfig = {
+  enabled: boolean;
+  secret: string;
+};
+
 export interface SecurityConfig {
   cors: {
     origin: boolean | string | string[];
   };
   jwt: JwtAuthentication;
   mfa: MultiFactorAuthentication;
+  recaptcha: RecaptchaConfig;
 }
 
 const securityConfig: SecurityConfig = {
@@ -80,6 +86,10 @@ const securityConfig: SecurityConfig = {
         host: process.env.DUO_HOST ?? '',
       },
     },
+  },
+  recaptcha: {
+    enabled: process.env.RECAPTCHA_ENABLED === 'true',
+    secret: process.env.RECAPTCHA_SECRET ?? '',
   },
 };
 

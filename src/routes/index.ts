@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { AppLoader } from '@/loaders/loader';
 import authentication from './authentication';
 import admin from './admin';
+import password from './password';
 import feedback from './feedback';
 import foods from './foods';
 import surveys from './surveys';
@@ -10,6 +11,7 @@ export default ({ app }: AppLoader): void => {
   app.use(authentication);
 
   app.use('/admin', admin);
+  app.use('/password', password);
 
   app.use('/feedback', feedback);
   app.use('/foods', foods);
