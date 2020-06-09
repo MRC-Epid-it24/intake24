@@ -9,9 +9,9 @@ import surveys from './surveys';
 
 export default ({ app }: AppLoader): void => {
   app.use(authentication);
+  app.use('/password', password);
 
   app.use('/admin', admin);
-  app.use('/password', password);
 
   app.use('/feedback', feedback);
   app.use('/foods', foods);
