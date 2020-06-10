@@ -6,8 +6,8 @@ import NotFoundError from '@/http/errors/not-found.error';
 import userResponse from '@/http/responses/admin/user-response';
 import { roleList } from '@/services/acl.service';
 import UserRole from '@/db/models/system/user-role';
-import {defaultAlgorithm} from "@/util/passwords";
-import UserPassword from "@/db/models/system/user-password";
+import { defaultAlgorithm } from '@/util/passwords';
+import UserPassword from '@/db/models/system/user-password';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { id } = req.params;
@@ -47,7 +47,7 @@ export default {
         'emailNotifications',
         'smsNotifications',
         'multiFactorAuthentication',
-      ])
+      ]),
     });
 
     const { id } = user;
@@ -56,7 +56,12 @@ export default {
     await UserRole.bulkCreate(newRoles);
 
     const hashedPassword = await defaultAlgorithm.hash(password);
-    UserPassword.create({ userId: id, passwordSalt: hashedPassword.salt, passwordHash: hashedPassword.hash, passwordHasher: defaultAlgorithm.id } );
+    UserPassword.create({
+      userId: id,
+      passwordSalt: hashedPassword.salt,
+      passwordHash: hashedPassword.hash,
+      passwordHasher: defaultAlgorithm.id,
+    });
 
     res.status(201).json({ data: userResponse((await User.scope('roles').findByPk(id)) as User) });
   },

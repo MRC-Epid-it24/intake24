@@ -1,18 +1,18 @@
-import {PasswordAlgorithm, HashedPassword} from "@/util/passwords";
+import { PasswordAlgorithm, HashedPassword } from '@/util/passwords';
 import crypto from 'crypto';
 
+class PasswordShiro implements PasswordAlgorithm {
+  id = 'shiro-sha256';
 
-export class PasswordShiro implements PasswordAlgorithm {
-  id = "shiro-sha256";
+  private readonly iterations: number;
 
-  private _iterations: number;
-
-  constructor(iterations: number = 1024) {
-    this._iterations = iterations;
+  constructor(iterations = 1024) {
+    this.iterations = iterations;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async hash(password: string): Promise<HashedPassword> {
-    return Promise.reject('Creating new SHA-256 hashed passwords is not allowed');
+    return Promise.reject(new Error('Creating new SHA-256 hashed passwords is not allowed'));
   }
 
   async verify(input: string, hashedPassword: HashedPassword): Promise<boolean> {
@@ -24,13 +24,15 @@ export class PasswordShiro implements PasswordAlgorithm {
 
       let digest = hash.digest();
 
-      for (let i = 0; i < this._iterations - 1; ++i) {
-        let hash = crypto.createHash('sha256');
-        hash.update(digest);
-        digest = hash.digest();
+      for (let i = 0; i < this.iterations - 1; i += 1) {
+        const hashInner = crypto.createHash('sha256');
+        hashInner.update(digest);
+        digest = hashInner.digest();
       }
 
-      resolve(digest.compare(Buffer.from(hashedPassword.hash, 'base64')) == 0)
+      resolve(digest.compare(Buffer.from(hashedPassword.hash, 'base64')) === 0);
     });
   }
 }
+
+export default PasswordShiro;

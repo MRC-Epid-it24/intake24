@@ -1,23 +1,26 @@
 import bcrypt from 'bcryptjs';
-import {PasswordAlgorithm, HashedPassword} from "@/util/passwords";
+import { PasswordAlgorithm, HashedPassword } from '@/util/passwords';
 
-export class PasswordBcrypt implements PasswordAlgorithm {
-  id = "bcrypt";
+class PasswordBcrypt implements PasswordAlgorithm {
+  id = 'bcrypt';
 
-  private _rounds: number;
+  private readonly rounds: number;
 
-  constructor(rounds: number = 10) {
-    this._rounds = rounds;
+  constructor(rounds = 10) {
+    this.rounds = rounds;
   }
 
   async hash(password: string): Promise<HashedPassword> {
-    const salt = await bcrypt.genSalt(this._rounds);
+    const salt = await bcrypt.genSalt(this.rounds);
     const hash = await bcrypt.hash(password, salt);
 
-    return Promise.resolve({hash, salt});
+    return Promise.resolve({ hash, salt });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async verify(input: string, hashedPassword: HashedPassword): Promise<boolean> {
     return bcrypt.compare(input, hashedPassword.hash);
   }
 }
+
+export default PasswordBcrypt;
