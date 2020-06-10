@@ -20,7 +20,7 @@ export default {
    * @returns {Promise<Tokens>}
    */
   async emailLogin(email: string, password: string): Promise<Tokens | MfaRequest> {
-    const user = await User.scope(['password']).findOne({ where: { email } });
+    const user = await User.scope(['password', 'roles']).findOne({ where: { email } });
 
     if (config.mfa.enabled && user?.multiFactorAuthentication) {
       return this.signMfaRequest(email);
@@ -71,7 +71,7 @@ export default {
    * @returns {Promise<Tokens>}
    */
   async aliasLogin(userName: string, password: string, surveyId: string): Promise<Tokens> {
-    const user = await User.scope(['legacyPassword', 'roles']).findOne({
+    const user = await User.scope(['password', 'roles']).findOne({
       include: [
         {
           model: UserSurveyAlias,
