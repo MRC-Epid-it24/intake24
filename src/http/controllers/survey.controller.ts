@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import Survey from '@/db/models/system/survey';
+import SurveySubmission from '@/db/models/system/survey-submission';
 import User from '@/db/models/system/user';
 import NotFoundError from '@/http/errors/not-found.error';
-import SurveySubmission from '@/db/models/system/survey-submission';
+import surveySvc from '@/services/survey.service';
 
 export default {
   async list(req: Request, res: Response): Promise<void> {
@@ -25,7 +26,7 @@ export default {
 
   async entry(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { surveyId } = req.params;
-    const survey = await Survey.scope('respodent').findByPk(surveyId);
+    const survey = await Survey.scope(['respodent', 'scheme']).findByPk(surveyId);
 
     if (!survey) {
       next(new NotFoundError());
@@ -58,11 +59,11 @@ export default {
     res.json(userInfo);
   },
 
-  async generateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async generateUser(req: Request, res: Response): Promise<void> {
     const { surveyId } = req.params;
 
-    /* const { userName, password } = surveySvc.generateUser(surveyId);
+    const { userName, password } = await surveySvc.generateRespondent(surveyId);
 
-    res.json({ userName, password }); */
+    res.json({ userName, password });
   },
 };

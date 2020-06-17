@@ -18,13 +18,13 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
 
 export default {
   async list(req: Request, res: Response): Promise<void> {
-    const { data, meta } = await Scheme.paginate({ req, columns: ['id'] });
+    const { data, meta } = await Scheme.paginate({ req, columns: ['id', 'name'] });
 
     res.json({ data, meta });
   },
 
   async create(req: Request, res: Response): Promise<void> {
-    res.json({ data: { id: null }, refs: {} });
+    res.json({ data: { id: null }, refs: { meals } });
   },
 
   async store(req: Request, res: Response): Promise<void> {
@@ -54,7 +54,7 @@ export default {
 
     await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals']));
 
-    res.json({ data: scheme, refs: {} });
+    res.json({ data: scheme, refs: { meals } });
   },
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
