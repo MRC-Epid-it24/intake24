@@ -2,6 +2,7 @@ import duo from '@duosecurity/duo_web';
 import config from '@/config/security';
 import User from '@/db/models/system/user';
 import UserPassword from '@/db/models/system/user-password';
+import UserRole from '@/db/models/system/user-role';
 import UserSurveyAlias from '@/db/models/system/user-survey-alias';
 import UnauthorizedError from '@/http/errors/unauthorized.error';
 import { btoa } from '@/util';
@@ -73,6 +74,10 @@ export default {
   async aliasLogin(userName: string, password: string, surveyId: string): Promise<Tokens> {
     const user = await User.scope(['password', 'roles']).findOne({
       include: [
+        {
+          model: UserRole,
+          where: { role: `${surveyId}/respondent` },
+        },
         {
           model: UserSurveyAlias,
           where: { userName, surveyId },
