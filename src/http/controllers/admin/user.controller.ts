@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
 import { Op } from 'sequelize';
 import User from '@/db/models/system/user';
+import UserPassword from '@/db/models/system/user-password';
+import UserRole from '@/db/models/system/user-role';
 import NotFoundError from '@/http/errors/not-found.error';
 import userResponse from '@/http/responses/admin/user-response';
 import { roleList } from '@/services/acl.service';
-import UserRole from '@/db/models/system/user-role';
 import { defaultAlgorithm } from '@/util/passwords';
-import UserPassword from '@/db/models/system/user-password';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { id } = req.params;
@@ -55,11 +55,11 @@ export default {
     const newRoles = roles.map((role: string) => ({ userId: id, role }));
     await UserRole.bulkCreate(newRoles);
 
-    const hashedPassword = await defaultAlgorithm.hash(password);
-    UserPassword.create({
+    const { salt, hash } = await defaultAlgorithm.hash(password);
+    await UserPassword.create({
       userId: id,
-      passwordSalt: hashedPassword.salt,
-      passwordHash: hashedPassword.hash,
+      passwordSalt: salt,
+      passwordHash: hash,
       passwordHasher: defaultAlgorithm.id,
     });
 
