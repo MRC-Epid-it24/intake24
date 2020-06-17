@@ -1,5 +1,6 @@
-import { BelongsTo, Column, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, HasOne, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
+import GenUserCounter from './gen-user-counter';
 import Locale from './locale';
 import Scheme from './scheme';
 import SurveySubmission from './survey-submission';
@@ -28,6 +29,7 @@ export enum SurveyState {
       'suspensionReason',
     ],
   },
+  counter: { include: [{ model: GenUserCounter }] },
   localeModel: { include: [{ model: Locale }] },
   scheme: { include: [{ model: Scheme }] },
   respodents: { include: [{ model: UserSurveyAlias }] },
@@ -116,6 +118,9 @@ export default class Survey extends BaseModel<Survey> {
 
   @Column
   public finalPageHtml!: string;
+
+  @HasOne(() => GenUserCounter, 'surveyId')
+  public counter?: GenUserCounter;
 
   @BelongsTo(() => Locale, 'locale')
   public localeModel?: Locale;

@@ -1,3 +1,4 @@
+import GenUserCounter from './gen-user-counter';
 import Locale from './locale';
 import SigninLog from './signin-log';
 import Scheme from './scheme';
@@ -17,6 +18,7 @@ import UserSurveyAlias from './user-survey-alias';
 import UserRoles from './user-role';
 
 export default {
+  GenUserCounter,
   Locale,
   SigninLog,
   Scheme,
