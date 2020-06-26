@@ -45,7 +45,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { DataOptions } from 'vuetify';
-import { AnyDictionary } from '@/types/common';
+import { AnyDictionary } from '@common/types/common';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
 import handlesLoading from '@/mixins/handlesLoading';

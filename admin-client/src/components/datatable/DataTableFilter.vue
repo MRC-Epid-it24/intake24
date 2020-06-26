@@ -34,7 +34,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import isEmpty from 'lodash/isEmpty';
-import { AnyDictionary } from '@/types/common';
+import { AnyDictionary } from '@common/types/common';
 
 export default Vue.extend({
   name: 'DataTableFilter',

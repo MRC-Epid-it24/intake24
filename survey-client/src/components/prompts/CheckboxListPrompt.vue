@@ -34,7 +34,8 @@
 <script lang="ts">
 import Vue, { PropType, VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { ChechboxListProps, PromptRefs } from '@/types/prompts';
+import { PromptRefs } from '@common/types/prompts';
+import { ChechboxListProps } from '@common/types/promptProps';
 import BasePrompt from './BasePrompt';
 import { checkboxListDefaults } from './promptDefaults';
 

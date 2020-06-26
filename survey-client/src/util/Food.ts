@@ -1,4 +1,4 @@
-import { Prompt, PromptQuestion, PromptStatuses } from '@/types/recall';
+import { Prompt, PromptQuestion, PromptStatuses } from '@common/types/prompts';
 
 export default class Food {
   questions: Prompt[] = [];

@@ -125,8 +125,8 @@
 import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { FormRefs } from '@/types/common';
-import { PromptQuestion } from '@/types/prompts';
+import { FormRefs } from '@common/types/common';
+import { PromptQuestion } from '@common/types/prompts';
 import prompts from './prompts';
 import promptQuestions from './prompts/promptDefaults';
 

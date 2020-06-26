@@ -19,7 +19,8 @@
 <script lang="ts">
 import Vue, { PropType, VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { TextareaProps, PromptRefs } from '@/types/prompts';
+import { PromptRefs } from '@common/types/prompts';
+import { TextareaProps } from '@common/types/promptProps';
 import BasePrompt from './BasePrompt';
 import { textareaDefaults } from './promptDefaults';
 

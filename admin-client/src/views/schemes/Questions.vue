@@ -47,9 +47,9 @@
 import Vue, { VueConstructor } from 'vue';
 import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';
-import { AnyDictionary } from '@/types/common';
-import { PromptQuestion } from '@/types/prompts';
-import { QuestionSection, MealSection, RecallQuestions } from '@/types/recall';
+import { AnyDictionary } from '@common/types/common';
+import { PromptQuestion } from '@common/types/prompts';
+import { QuestionSection, MealSection, RecallQuestions } from '@common/types/recall';
 import { FormMixin } from '@/types/vue';
 import QuestionList from './QuestionList.vue';
 

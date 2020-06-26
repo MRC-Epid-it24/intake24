@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import { AnyDictionary } from '@/types/common';
+import { AnyDictionary } from '@common/types/common';
 import { FormMixin } from '@/types/vue';
 import Form from '@/helpers/Form';
 import SubmitFooter from '@/components/forms/SubmitFooter.vue';

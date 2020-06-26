@@ -19,7 +19,8 @@
 <script lang="ts">
 import Vue, { PropType, VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { TimePickerProps, PromptRefs } from '@/types/prompts';
+import { PromptRefs } from '@common/types/prompts';
+import { TimePickerProps } from '@common/types/promptProps';
 import BasePrompt from './BasePrompt';
 import { timePickerDefaults } from './promptDefaults';
 

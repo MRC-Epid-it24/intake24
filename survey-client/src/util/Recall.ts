@@ -1,14 +1,12 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Prompt,
-  PromptStatuses,
+  MealDefinition,
+  MealQuestions,
   QuestionSection,
   Scheme,
   Selection,
-  PromptQuestion,
-  MealDefinition,
-  MealQuestions,
-} from '@/types/recall';
+} from '@common/types/recall';
+import { Prompt, PromptStatuses, PromptQuestion } from '@common/types/prompts';
 import Meal from './Meal';
 
 export default class Recall {

@@ -1,7 +1,7 @@
 import { Method } from 'axios';
 import cloneDeep from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
-import { AnyDictionary } from '@/types/common';
+import { AnyDictionary } from '@common/types/common';
 import { HttpRequestConfig, HttpError } from '@/types/http';
 import http from '@/services/http.service';
 import store from '@/store';

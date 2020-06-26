@@ -1,5 +1,5 @@
+import { AnyDictionary } from '@common/types/common';
 import Form from '@/helpers/Form';
-import { AnyDictionary } from './common';
 
 export interface FetchEntryMixin {
   fetch: () => Promise<void>;

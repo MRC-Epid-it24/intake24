@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import { AnyDictionary } from '@/types/common';
+import { AnyDictionary } from '@common/types/common';
 import { MapEntryMixin } from '@/types/vue';
 
 export default (Vue as VueConstructor<Vue & MapEntryMixin>).extend({

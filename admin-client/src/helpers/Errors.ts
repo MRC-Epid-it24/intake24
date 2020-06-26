@@ -1,4 +1,4 @@
-import { ValidationError } from '@/types/common';
+import { ValidationError } from '@common/types/common';
 
 export default class Errors {
   private errors: ValidationError;

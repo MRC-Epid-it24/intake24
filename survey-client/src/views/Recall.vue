@@ -22,7 +22,7 @@ import Vue from 'vue';
 import prompts from '@/components/prompts/';
 import surveySvc from '@/services/survey.service';
 import Recall from '@/util/Recall';
-import { Selection, Scheme } from '@/types/recall';
+import { Selection, Scheme } from '@common/types/recall';
 
 export default Vue.extend({
   name: 'Recall',

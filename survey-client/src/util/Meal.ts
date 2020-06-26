@@ -1,11 +1,5 @@
-import {
-  MealDefinition,
-  MealQuestionSection,
-  MealQuestions,
-  Prompt,
-  PromptQuestion,
-  PromptStatuses,
-} from '@/types/recall';
+import { MealDefinition, MealQuestionSection, MealQuestions } from '@common/types/recall';
+import { Prompt, PromptStatuses, PromptQuestion } from '@common/types/prompts';
 import Food from './Food';
 
 export default class Meal {

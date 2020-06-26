@@ -1,30 +1,21 @@
-import { AnyDictionary } from '@/types/common';
-
-export enum PromptStatuses {
-  INITIAL = 'initial',
-  IN_PROGRESS = 'in_progress',
-  DONE = 'done',
-  ERROR = 'error',
-}
-
-export type PromptStatus = PromptStatuses;
+import { Prompt, PromptQuestion } from './prompts';
 
 /* export enum RecallSections {
   PRE_MEALS = 'preMeals',
   MEALS = 'meals',
   POST_MEALS = 'postMeals',
   SUBMISSION = 'submission',
+}
+
+export enum MealSections {
+  PRE_FOODS = 'preFoods',
+  FOODS = 'foods',
+  POST_FOODS = 'postFoods',
 } */
 
 export type QuestionSection = 'preMeals' | 'postMeals' | 'submission';
 
 export type RecallSection = QuestionSection | 'meals';
-
-/* export enum MealSections {
-  PRE_FOODS = 'preFoods',
-  FOODS = 'foods',
-  POST_FOODS = 'postFoods',
-} */
 
 export type MealSection = 'preFoods' | 'foods' | 'postFoods';
 
@@ -56,21 +47,6 @@ export interface MealDefinition {
   data: AnyDictionary;
   searchTerm: string;
 } */
-
-export interface Prompt<T = AnyDictionary> {
-  question: PromptQuestion<T>;
-  answer: PromptAnswer;
-  status: PromptStatus;
-}
-
-export interface PromptQuestion<T = AnyDictionary> {
-  id: string;
-  name: string;
-  component: string;
-  props: T;
-}
-
-export type PromptAnswer = string | string[] | null;
 
 export interface Selection {
   section: RecallSection;

@@ -1,4 +1,4 @@
-import { PromptQuestion } from '@/types/prompts';
+import { PromptQuestion } from '@common/types/prompts';
 
 const promptQuestionTypes: PromptQuestion[] = [
   {

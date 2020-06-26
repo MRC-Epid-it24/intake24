@@ -95,7 +95,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { FormRefs } from '@/types/common';
+import { FormRefs } from '@common/types/common';
 
 export type Meal = { name: string | null; time: string };
 

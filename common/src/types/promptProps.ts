@@ -1,8 +1,4 @@
-export interface PromptRefs {
-  $refs: {
-    form: HTMLFormElement;
-  };
-}
+import { AnyDictionary } from './common';
 
 export interface BasePromptProps {
   text: string;
@@ -28,6 +24,7 @@ export interface TextareaProps extends ValidatedPromptProps {
 }
 
 export type ListOption = {
+  id?: number;
   label: string;
   value: string;
 };
@@ -46,3 +43,19 @@ export interface ChechboxListProps extends ValidatedPromptProps {
   options: ListOption[];
   other: boolean;
 }
+
+export interface PromptQuestion<T = AnyDictionary> {
+  id: string;
+  name: string;
+  component: ComponentType;
+  props: T;
+}
+
+export type ComponentType =
+  | 'info-prompt'
+  | 'date-picker-prompt'
+  | 'time-picker-prompt'
+  | 'checkbox-list-prompt'
+  | 'radio-list-prompt'
+  | 'textarea-prompt'
+  | 'submit-prompt';

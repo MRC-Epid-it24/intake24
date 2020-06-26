@@ -1,6 +1,6 @@
 import Vue, { VueConstructor } from 'vue';
 import { MapRefsMixin } from '@/types/vue';
-import { AnyDictionary } from '@/types/common';
+import { AnyDictionary } from '@common/types/common';
 
 export default (Vue as VueConstructor<Vue & MapRefsMixin>).extend({
   computed: {

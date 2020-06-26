@@ -1,5 +1,5 @@
-import { AnyDictionary } from '@/types/common';
-import { Scheme } from '@/types/recall';
+import { AnyDictionary } from '@common/types/common';
+import { Scheme } from '@common/types/recall';
 import http from './http.service';
 
 export interface GenerateUserResponse {

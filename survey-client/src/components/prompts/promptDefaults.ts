@@ -6,7 +6,7 @@ import {
   RadioListProps,
   TextareaProps,
   TimePickerProps,
-} from '@/types/prompts';
+} from '@common/types/promptProps';
 
 export const baseDefaults: BasePromptProps = {
   text: 'Placeholder',
