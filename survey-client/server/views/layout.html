@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Intake24 is a web-based 24 hour dietary recall system"/>
+    <meta
+      name="keywords"
+      content="intake24, diet, dietary, recall, nutrition, calories, food, 24 hour, twenty four hour"
+/>
+    <meta name="author" content="Newcastle University & University of Cambridge"/>
+    <link rel="stylesheet" href="/site.css">
+    <title>Intake24</title>
+  </head>
+
+  <body>
+    <nav id="navbar" class="navbar navbar-expand-md navbar-fixed-top navbar-dark">
+      <a class="navbar-brand" href="/">Intake24</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto p-3">
+          <li class="nav-item">
+            <a class="nav-link" href="/recall">Dietary recall</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Features
+              </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/features">System features</a>
+              <a class="dropdown-item" href="/open-source">Open Source</a>
+              <a class="dropdown-item" href="/output">System output</a>
+              <a class="dropdown-item" href="/validation">Validation</a>
+              <a class="dropdown-item" href="/localisation">Localisation</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/feedback">Feedback</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/publications">Publications</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contacts">Contacts</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="jumbotron home-banner">
+      <div class="container">
+        <h1>Welcome to Intake24</h1>
+        <p>
+          Intake24 is an open-source self-completed computerised dietary recall system based on
+          multiple-pass 24-hour recall. The online system offers similar data quality to
+          interviewer-led recalls at a significantly lower cost.
+        </p>
+        <p>
+          <a class="btn btn-success btn-lg" href="{{ demoURL }}" role="button">Try a demo &raquo;</a>
+          <a class="btn btn-success btn-lg" href="{{ videoURL }}" role="button" target="_blank">
+            Watch a video &raquo;
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <div id="content" class="container">
+      {% block body %}{% endblock %}
+      <hr>
+      <footer class="small">
+        {% include content + "/footer.html" %}
+      </footer>
+    </div>
+
+    <script src="/site.js"></script>
+  </body>
+</html>
