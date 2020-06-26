@@ -19,13 +19,6 @@
     "start": "node dist/index.js",
     "lint": "eslint --ext .js,.ts src/ --quiet --fix"
   },
-  "development": "nodemon src/index.ts",
-  "dev": "npm run development",
-  "clean": "rimraf dist",
-  "build": "tsc",
-  "production": "npm run clean && npm run build",
-  "prod": "npm run production",
-  "start": "node dist/index.js",
   "dependencies": {
     "@duosecurity/duo_web": "^1.0.5",
     "axios": "^0.19.2",
