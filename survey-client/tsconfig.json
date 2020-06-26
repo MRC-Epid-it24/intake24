@@ -16,9 +16,8 @@
       "jest"
     ],
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"],
+      "@common/*": ["../common/src/*"],
     },
     "lib": [
       "esnext",
