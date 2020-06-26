@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600&subset=latin-ext');
+@import '~vuetify/src/styles/styles.sass';
+
+$fa-font-path: '../public/vendor/fontawesome-free';
+
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+
+// Drag & drop lists
+.drag-and-drop__item {
+  cursor: move;
+  border-bottom: 1px solid map-get($grey, 'lighten-3');
+}
+
+.drag-and-drop-move,
+.drag-and-drop-enter-active,
+.drag-and-drop-leave-active {
+  transition: all 0.5s;
+}
+
+.drag-and-drop-enter,
+.drag-and-drop-leave-to {
+  opacity: 0;
+  transform: translateX(200px);
+}
