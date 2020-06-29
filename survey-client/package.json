@@ -1,7 +1,13 @@
 {
-  "name": "survey-frontend-ng",
+  "name": "@intake24/survey-client",
   "version": "0.1.0",
   "private": true,
+  "license": "Apache-2.0",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/MRC-Epid-it24/intake24.git",
+    "directory": "survey-client"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

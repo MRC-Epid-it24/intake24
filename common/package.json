@@ -5,6 +5,11 @@
   "description": "Intake24 common code",
   "author": "",
   "license": "Apache-2.0",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/MRC-Epid-it24/intake24.git",
+    "directory": "common"
+  },
   "main": "src/index.ts",
   "engines": {
     "node": ">=10.20.1"
