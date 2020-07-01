@@ -39,7 +39,7 @@
         </v-row>
       </v-item-group>
     </v-container>
-    <question-list :section="section" :items.sync="selected"></question-list>
+    <question-list :refScheme="refScheme" :section="section" :items.sync="selected"></question-list>
   </layout>
 </template>
 
@@ -62,6 +62,12 @@ const defaultQuestions: RecallQuestions = {
   },
   postMeals: [],
   submission: [],
+};
+
+const flattenScheme = (collection: Record<string, PromptQuestion[]>): PromptQuestion[] => {
+  return Object.values(collection).reduce((acc, item) => {
+    return Array.isArray(item) ? acc.concat(item) : acc.concat(flattenScheme(item));
+  }, []);
 };
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
@@ -107,6 +113,9 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
         this.form.questions[section] = value;
       },
+    },
+    refScheme(): PromptQuestion[] {
+      return flattenScheme(this.form.questions);
     },
   },
 
