@@ -104,6 +104,7 @@
                 <v-text-field
                   v-model="option.value"
                   :label="$t('schemes.questions.options.value')"
+                  :rules="optionValueRules"
                   dense
                   hide-details="auto"
                   outlined
@@ -123,13 +124,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
+import { FormRefs } from '@common/types/common';
+import { ListOption } from '@common/types/promptProps';
 import prompt from './prompt';
 
-type Option = { id?: number; label: string; value: string };
-
-export default Vue.extend({
+export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   name: 'RadioListPrompt',
 
   components: { draggable },
@@ -138,7 +139,7 @@ export default Vue.extend({
 
   props: {
     options: {
-      type: Array as () => Option[],
+      type: Array as () => ListOption[],
       default: [],
     },
     label: {
@@ -156,16 +157,27 @@ export default Vue.extend({
 
   data() {
     return {
-      currentOptions: this.options.map((option, idx) => ({ id: idx + 1, ...option })) as Option[],
+      currentOptions: this.options.map((option, idx) => ({
+        id: idx + 1,
+        ...option,
+      })) as ListOption[],
     };
   },
 
   computed: {
-    outputOptions(): Option[] {
+    outputOptions(): ListOption[] {
       return this.currentOptions.map((item) => {
         const { label, value } = item;
         return { label, value };
       });
+    },
+    optionValueRules() {
+      return [
+        (value: string | null): boolean | string => {
+          const values = this.currentOptions.filter((item) => item.value === value);
+          return values.length < 2 || 'Value is already used.';
+        },
+      ];
     },
   },
 
@@ -190,6 +202,7 @@ export default Vue.extend({
 
     update() {
       this.$emit('update:options', this.outputOptions);
+      this.$emit('validate');
     },
   },
 });

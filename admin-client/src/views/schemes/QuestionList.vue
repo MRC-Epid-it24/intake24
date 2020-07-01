@@ -105,6 +105,7 @@
             <component
               :is="dialog.question.component"
               v-bind.sync="dialog.question.props"
+              @validate="onValidate"
             ></component>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -247,6 +248,10 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
     update() {
       this.$emit('update:items', this.questions);
+    },
+
+    onValidate() {
+      this.$refs.form.validate();
     },
   },
 });
