@@ -55,8 +55,13 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     } as FindOptions;
 
     if (search && columns.length) {
-      const conds = columns.map((column) => ({ [column]: { [Op.substring]: search } }));
-      options.where = { [Op.or]: conds };
+      const operation =
+        this.sequelize?.getDialect() === 'postgres'
+          ? { [Op.iLike]: `%${search}%` }
+          : { [Op.substring]: search };
+
+      const operations = columns.map((column) => ({ [column]: operation }));
+      options.where = { [Op.or]: operations };
     }
 
     const countOptions = Object.keys(options).reduce((acc, key) => {
@@ -68,10 +73,12 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
 
     let total = await this.unscoped().count(countOptions);
 
+    // FIXME: improve type-check
     if (isObject(total) && 'group' in options) {
       total = (total as any).length;
     }
 
+    // TODO: implement server-side sorting
     // if (params.order) options.order = params.order;
 
     const data = await this.findAll(options);
