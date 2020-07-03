@@ -14,7 +14,7 @@ export default validate(
       isString: true,
       custom: {
         options: async (value, { req }): Promise<void> => {
-          const { id: surveyId } = (req as Request).params;
+          const { surveyId } = (req as Request).params;
           const entry = await UserSurveyAlias.findOne({ where: { surveyId, userName: value } });
           return entry
             ? Promise.reject(new Error('Current value is already in use.'))

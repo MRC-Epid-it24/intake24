@@ -4,8 +4,8 @@ import Survey from '@/db/models/system/survey';
 import User from '@/db/models/system/user';
 import UserRole from '@/db/models/system/user-role';
 import NotFoundError from '@/http/errors/not-found.error';
-import { surveyStaff, surveySupport } from '@/services/acl.service';
 import userResponse from '@/http/responses/admin/user.response';
+import { surveyStaff, surveySupport } from '@/services/acl.service';
 
 export default {
   async list(req: Request, res: Response, next: NextFunction): Promise<void> {

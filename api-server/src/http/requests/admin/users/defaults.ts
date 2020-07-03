@@ -2,8 +2,8 @@ import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
 import User from '@/db/models/system/user';
-import { roleList } from '@/services/acl.service';
 import unique from '@/http/rules/unique';
+import { roleList } from '@/services/acl.service';
 
 export const identifiers: Schema = {
   name: {
