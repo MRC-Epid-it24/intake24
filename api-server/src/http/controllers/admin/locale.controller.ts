@@ -3,8 +3,8 @@ import Locale from '@/db/models/system/locale';
 import NotFoundError from '@/http/errors/not-found.error';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { id } = req.params;
-  const locale = await Locale.findByPk(id);
+  const { localeId } = req.params;
+  const locale = await Locale.findByPk(localeId);
 
   if (!locale) {
     next(new NotFoundError());

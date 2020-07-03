@@ -9,8 +9,8 @@ import userResponse from '@/http/responses/admin/user.response';
 
 export default {
   async list(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-    const survey = await Survey.findByPk(id);
+    const { surveyId } = req.params;
+    const survey = await Survey.findByPk(surveyId);
 
     if (!survey) {
       next(new NotFoundError());
@@ -20,7 +20,9 @@ export default {
     const staff = await User.paginate({
       req,
       columns: ['name', 'email', 'simpleName'],
-      include: [{ model: UserRole, where: { role: [surveyStaff(id), surveySupport(id)] } }],
+      include: [
+        { model: UserRole, where: { role: [surveyStaff(surveyId), surveySupport(surveyId)] } },
+      ],
       transform: userResponse,
     });
 
@@ -30,8 +32,8 @@ export default {
   },
 
   async store(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-    const survey = await Survey.findByPk(id);
+    const { surveyId } = req.params;
+    const survey = await Survey.findByPk(surveyId);
 
     if (!survey) {
       next(new NotFoundError());
@@ -40,7 +42,9 @@ export default {
 
     const { userId } = req.body;
 
-    await UserRole.destroy({ where: { userId, role: [surveyStaff(id), surveySupport(id)] } });
+    await UserRole.destroy({
+      where: { userId, role: [surveyStaff(surveyId), surveySupport(surveyId)] },
+    });
 
     const roles = req.body.roles as string[];
     if (roles.length) {

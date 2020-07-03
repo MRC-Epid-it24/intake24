@@ -7,8 +7,8 @@ import { roleList } from '@/services/acl.service';
 import userSvc from '@/services/user.service';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { id } = req.params;
-  const user = await User.scope('roles').findByPk(id);
+  const { userId } = req.params;
+  const user = await User.scope('roles').findByPk(userId);
 
   if (!user) {
     next(new NotFoundError());
@@ -60,10 +60,10 @@ export default {
   },
 
   async update(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
+    const { userId } = req.params;
 
     await userSvc.update(
-      id,
+      userId,
       pick(req.body, [
         'name',
         'email',
@@ -76,15 +76,15 @@ export default {
     );
 
     res.json({
-      data: userResponse((await User.scope('roles').findByPk(id)) as User),
+      data: userResponse((await User.scope('roles').findByPk(userId)) as User),
       refs: { roles: await roleList() },
     });
   },
 
   async delete(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
+    const { userId } = req.params;
 
-    await userSvc.delete(id);
+    await userSvc.delete(userId);
     res.status(204).json();
   },
 };

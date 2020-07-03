@@ -5,8 +5,8 @@ import ForbiddenError from '@/http/errors/forbidden.error';
 import NotFoundError from '@/http/errors/not-found.error';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { id } = req.params;
-  const scheme = await Scheme.findByPk(id);
+  const { schemeId } = req.params;
+  const scheme = await Scheme.findByPk(schemeId);
 
   if (!scheme) {
     next(new NotFoundError());
@@ -44,8 +44,8 @@ export default {
   },
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-    const scheme = await Scheme.findByPk(id);
+    const { schemeId } = req.params;
+    const scheme = await Scheme.findByPk(schemeId);
 
     if (!scheme) {
       next(new NotFoundError());
@@ -58,8 +58,8 @@ export default {
   },
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-    const scheme = await Scheme.scope('surveys').findByPk(id);
+    const { schemeId } = req.params;
+    const scheme = await Scheme.scope('surveys').findByPk(schemeId);
 
     if (!scheme) {
       next(new NotFoundError());

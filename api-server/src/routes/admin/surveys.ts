@@ -16,14 +16,14 @@ router
 router.get('/create', canCreateSurvey(), wrapAsync(controller.create));
 
 router
-  .route('/:id')
+  .route('/:surveyId')
   .get(canManageSurvey(), wrapAsync(controller.show))
   .put(canManageSurvey(), validation.update, wrapAsync(controller.update))
   .delete(canManageSurvey(), wrapAsync(controller.delete));
 
-router.get('/:id/edit', canManageSurvey(), wrapAsync(controller.edit));
+router.get('/:surveyId/edit', canManageSurvey(), wrapAsync(controller.edit));
 
-router.use('/:id/respondents', respondents);
-router.use('/:id/mgmt', mgmt);
+router.use('/:surveyId/respondents', respondents);
+router.use('/:surveyId/mgmt', mgmt);
 
 export default router;

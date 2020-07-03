@@ -8,6 +8,8 @@ const router = Router();
 
 router.route('').get(validation.list, canManageFoodDatabase(), wrapAsync(controller.list));
 
-router.route('/:id').get(validation.entry, canManageFoodDatabase(), wrapAsync(controller.show));
+router
+  .route('/:localeId')
+  .get(validation.entry, canManageFoodDatabase(), wrapAsync(controller.show));
 
 export default router;

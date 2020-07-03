@@ -9,8 +9,8 @@ import userSvc from '@/services/user.service';
 
 export default {
   async list(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-    const survey = await Survey.findByPk(id);
+    const { surveyId } = req.params;
+    const survey = await Survey.findByPk(surveyId);
 
     if (!survey) {
       next(new NotFoundError());
@@ -20,7 +20,7 @@ export default {
     const respondents = await UserSurveyAlias.scope('user').paginate<RespondentResponse>({
       req,
       columns: ['userName'],
-      where: { surveyId: id },
+      where: { surveyId },
       transform: userRespondentResponse,
     });
 
@@ -28,10 +28,10 @@ export default {
   },
 
   async store(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
+    const { surveyId } = req.params;
 
     const { respondent } = await userSvc.createRespondent(
-      id,
+      surveyId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
     );
 
@@ -39,13 +39,10 @@ export default {
   },
 
   async update(req: Request, res: Response): Promise<void> {
-    const { id, userId } = req.params;
-
-    console.log('id', id);
-    console.log('userId', userId);
+    const { surveyId, userId } = req.params;
 
     const respondent = await userSvc.updateRespondent(
-      id,
+      surveyId,
       userId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
     );
@@ -54,9 +51,9 @@ export default {
   },
 
   async delete(req: Request, res: Response): Promise<void> {
-    const { id, userId } = req.params;
+    const { surveyId, userId } = req.params;
 
-    await userSvc.deleteRespondent(id, userId);
+    await userSvc.deleteRespondent(surveyId, userId);
     res.status(204).json();
   },
 };
