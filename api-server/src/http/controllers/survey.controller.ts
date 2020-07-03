@@ -3,7 +3,7 @@ import Survey from '@/db/models/system/survey';
 import SurveySubmission from '@/db/models/system/survey-submission';
 import User from '@/db/models/system/user';
 import NotFoundError from '@/http/errors/not-found.error';
-import surveySvc from '@/services/survey.service';
+import surveySvc from '@/services/user.service';
 
 export default {
   async list(req: Request, res: Response): Promise<void> {
@@ -62,7 +62,10 @@ export default {
   async generateUser(req: Request, res: Response): Promise<void> {
     const { surveyId } = req.params;
 
-    const { userName, password } = await surveySvc.generateRespondent(surveyId);
+    const {
+      respondent: { userName },
+      password,
+    } = await surveySvc.generateRespondent(surveyId);
 
     res.json({ userName, password });
   },

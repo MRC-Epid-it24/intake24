@@ -3,7 +3,7 @@ import User from '@/db/models/system/user';
 import unique from '@/http/rules/unique';
 import { roleList } from '@/services/acl.service';
 
-export default {
+export const identifiers: Schema = {
   name: {
     in: ['body'],
     errorMessage: 'Name must be a string.',
@@ -27,6 +27,33 @@ export default {
     isString: true,
     optional: { options: { nullable: true } },
   },
+};
+
+export const password: Schema = {
+  password: {
+    in: ['body'],
+    errorMessage: 'Enter a valid password, at least 8 chars length.',
+    isString: true,
+    isEmpty: { negated: true },
+    isLength: { options: { min: 8 } },
+  },
+  passwordConfirm: {
+    in: ['body'],
+    errorMessage: 'Enter a valid password, at least 8 chars length.',
+    isString: true,
+    isEmpty: { negated: true },
+    isLength: { options: { min: 8 } },
+    custom: {
+      options: async (value, { req }): Promise<void> => {
+        return value === req.body.password
+          ? Promise.resolve()
+          : Promise.reject(new Error(`Passwords don't match.`));
+      },
+    },
+  },
+};
+
+export const user: Schema = {
   roles: {
     in: ['body'],
     custom: {
@@ -35,7 +62,7 @@ export default {
         return Array.isArray(value) &&
           value.every((item) => typeof item === 'string' && roles.includes(item))
           ? Promise.resolve()
-          : Promise.reject(new Error('Enter a valid list of strings.'));
+          : Promise.reject(new Error('Enter a valid list of roles.'));
       },
     },
   },
@@ -43,15 +70,18 @@ export default {
     in: ['body'],
     errorMessage: 'Enter true/false value.',
     isBoolean: true,
+    optional: { options: { nullable: true } },
   },
   smsNotifications: {
     in: ['body'],
     errorMessage: 'Enter true/false value.',
     isBoolean: true,
+    optional: { options: { nullable: true } },
   },
   multiFactorAuthentication: {
     in: ['body'],
     errorMessage: 'Enter true/false value.',
     isBoolean: true,
+    optional: { options: { nullable: true } },
   },
-} as Schema;
+};

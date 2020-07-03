@@ -3,9 +3,10 @@ import { FindOptions as BaseFindOptions, Op, CountOptions as BaseCountOptions } 
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Request } from 'express';
 
-export interface Paginate {
+export interface Paginate extends BaseFindOptions {
   req: Request;
   columns?: string[];
+  transform?: (item: any) => any;
   [key: string]: any;
 }
 
@@ -25,8 +26,8 @@ export interface PaginationLinks {
   prevPageUrl: string;
 }
 
-export interface Pagination {
-  data: Model[];
+export interface Pagination<R> {
+  data: Array<R>;
   meta: PaginationMeta;
   links: PaginationLinks;
 }
@@ -41,7 +42,12 @@ export interface FindOptions extends BaseFindOptions {
 }
 
 export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
-  public static async paginate({ req, columns = [], ...params }: Paginate): Promise<Pagination> {
+  public static async paginate<R>({
+    req,
+    columns = [],
+    transform,
+    ...params
+  }: Paginate): Promise<Pagination<R>> {
     // TODO: augment new core.Query interface in express subpackage
     const { search, sort, ...query } = req.query;
     let { page = 1, limit = 50 } = req.query;
@@ -65,7 +71,7 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     }
 
     const countOptions = Object.keys(options).reduce((acc, key) => {
-      if (!['order', 'attributes', 'include', 'limit', 'offset'].includes(key)) {
+      if (!['order', 'attributes', 'limit', 'offset'].includes(key)) {
         acc[key] = options[key];
       }
       return acc;
@@ -81,7 +87,9 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     // TODO: implement server-side sorting
     // if (params.order) options.order = params.order;
 
-    const data = await this.findAll(options);
+    const records = await this.findAll(options);
+
+    const data = (transform ? records.map(transform) : records) as R[];
 
     const meta: PaginationMeta = {
       from: (options.offset as number) + 1,
@@ -99,7 +107,13 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
       prevPageUrl: '',
     };
 
-    return { data, meta, links };
+    const pagination: Pagination<R> = {
+      data,
+      meta,
+      links,
+    };
+
+    return pagination;
   }
 }
 

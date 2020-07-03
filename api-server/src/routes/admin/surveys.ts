@@ -3,6 +3,8 @@ import { wrapAsync } from '@/util';
 import controller from '@/http/controllers/admin/survey.controller';
 import { canCreateSurvey, canManageSurvey } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/surveys';
+import respondents from './survey-respondents';
+import mgmt from './survey-mgmt';
 
 const router = Router();
 
@@ -20,5 +22,8 @@ router
   .delete(canManageSurvey(), wrapAsync(controller.delete));
 
 router.get('/:id/edit', canManageSurvey(), wrapAsync(controller.edit));
+
+router.use('/:id/respondents', respondents);
+router.use('/:id/mgmt', mgmt);
 
 export default router;

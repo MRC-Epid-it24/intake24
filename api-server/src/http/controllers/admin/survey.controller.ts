@@ -5,7 +5,7 @@ import Scheme from '@/db/models/system/scheme';
 import Survey from '@/db/models/system/survey';
 import ForbiddenError from '@/http/errors/forbidden.error';
 import NotFoundError from '@/http/errors/not-found.error';
-import surveyResponse from '@/http/responses/admin/survey-response';
+import surveyResponse from '@/http/responses/admin/survey.response';
 
 type SurveyReferences = { locales: Locale[]; schemes: Scheme[] };
 

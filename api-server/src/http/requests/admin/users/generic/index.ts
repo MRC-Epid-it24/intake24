@@ -1,5 +1,5 @@
-import entry from '../../generic/entry';
-import list from '../../generic/list';
+import entry from '@/http/requests/generic/entry';
+import list from '@/http/requests/generic/list';
 import store from './store';
 import update from './update';
 

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { wrapAsync } from '@/util';
 import controller from '@/http/controllers/admin/user.controller';
 import { isSuperUser } from '@/http/middleware/acl';
-import validation from '@/http/requests/admin/users';
+import validation from '@/http/requests/admin/users/generic';
 
 const router = Router();
 
