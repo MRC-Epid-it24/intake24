@@ -1,7 +1,9 @@
+import { Request } from 'express';
 import { Schema } from 'express-validator';
+import { Op, WhereOptions } from 'sequelize';
 import User from '@/db/models/system/user';
-import unique from '@/http/rules/unique';
 import { roleList } from '@/services/acl.service';
+import unique from '@/http/rules/unique';
 
 export const identifiers: Schema = {
   name: {
@@ -16,8 +18,11 @@ export const identifiers: Schema = {
     isEmail: true,
     optional: { options: { nullable: true } },
     custom: {
-      options: async (value, meta): Promise<void> => {
-        return unique({ model: User, field: 'email', value }, meta);
+      options: async (value, { req }): Promise<void> => {
+        const { userId } = (req as Request).params;
+        const except: WhereOptions = userId ? { id: { [Op.ne]: userId } } : {};
+
+        return unique({ model: User, condition: { field: 'email', value, ci: true }, except });
       },
     },
   },
