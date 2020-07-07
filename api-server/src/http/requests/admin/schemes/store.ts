@@ -1,4 +1,5 @@
 import { checkSchema } from 'express-validator';
+import { Op } from 'sequelize';
 import slugify from 'slugify';
 import Scheme from '@/db/models/system/scheme';
 import validate from '@/http/requests/validate';
@@ -10,13 +11,12 @@ export default validate(
     ...defaults,
     id: {
       in: ['body'],
-      errorMessage: 'Scheme ID must be unique string',
+      errorMessage: 'Scheme ID must be unique string.',
       isString: true,
       isEmpty: { negated: true },
       custom: {
-        options: async (value, meta): Promise<void> => {
-          return unique({ model: Scheme, field: 'id', value: slugify(value) }, meta);
-        },
+        options: async (value): Promise<void> =>
+          unique({ model: Scheme, condition: { field: 'id', value: slugify(value), ci: true } }),
       },
       customSanitizer: {
         options: (value) => (typeof value === 'string' ? slugify(value) : value),

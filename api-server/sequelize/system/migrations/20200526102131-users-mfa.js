@@ -6,6 +6,7 @@ module.exports = {
         'multi_factor_authentication',
         {
           type: Sequelize.DataTypes.BOOLEAN,
+          allowNull: false,
           defaultValue: false,
         },
         { transaction }

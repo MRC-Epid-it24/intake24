@@ -86,8 +86,9 @@
                 <v-text-field
                   v-model="dialog.question.id"
                   :label="$t('schemes.questions.id')"
+                  :rules="questionIdRules"
                   hide-details="auto"
-                  messages="Unique identifier, used e.g. in data-exports as header"
+                  hint="Unique identifier, used e.g. in data-exports as header"
                   outlined
                 ></v-text-field>
               </v-col>
@@ -104,6 +105,7 @@
             <component
               :is="dialog.question.component"
               v-bind.sync="dialog.question.props"
+              @validate="onValidate"
             ></component>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -130,10 +132,14 @@ import { PromptQuestion } from '@common/types/prompts';
 import prompts from './prompts';
 import promptQuestions from './prompts/promptDefaults';
 
+export interface EditPromptQuestion extends PromptQuestion {
+  origId?: string;
+}
+
 export type PromptQuestionDialog = {
   show: boolean;
   index: number;
-  question: PromptQuestion;
+  question: EditPromptQuestion;
 };
 
 export default (Vue as VueConstructor<Vue & FormRefs>).extend({
@@ -142,6 +148,10 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   props: {
     section: {
       type: String,
+    },
+    refScheme: {
+      type: Array as () => PromptQuestion[],
+      default: [],
     },
     items: {
       type: Array as () => PromptQuestion[],
@@ -173,6 +183,16 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     isEdit(): boolean {
       return !this.isCreate;
     },
+    questionIdRules() {
+      return [
+        (value: string | null): boolean | string => {
+          const { origId } = this.dialog.question;
+          const match = this.refScheme.find((item) => item.id === value && item.id !== origId);
+
+          return !match || 'Question ID is already used.';
+        },
+      ];
+    },
   },
 
   watch: {
@@ -186,13 +206,13 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       const {
         show,
         index,
-        question: { component },
+        question: { id, component },
       } = this.dialog;
 
       const question = this.promptQuestions.find((item) => item.component === component);
       if (!question) return;
 
-      this.dialog = { show, index, question: clone(question) };
+      this.dialog = { show, index, question: { origId: id, ...clone(question) } };
     },
 
     add() {
@@ -200,7 +220,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
 
     edit(index: number, question: PromptQuestion) {
-      this.dialog = { show: true, index, question: clone(question) };
+      this.dialog = { show: true, index, question: { origId: question.id, ...clone(question) } };
     },
 
     save() {
@@ -228,6 +248,10 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
     update() {
       this.$emit('update:items', this.questions);
+    },
+
+    onValidate() {
+      this.$refs.form.validate();
     },
   },
 });

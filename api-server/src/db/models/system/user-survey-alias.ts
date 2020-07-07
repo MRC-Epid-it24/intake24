@@ -1,8 +1,11 @@
-import { BelongsTo, Column, ForeignKey, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 import Survey from './survey';
 import User from './user';
 
+@Scopes(() => ({
+  user: { include: [{ model: User }] },
+}))
 @Table({
   timestamps: false,
   underscored: true,
@@ -33,7 +36,7 @@ export default class UserSurveyAlias extends BaseModel<UserSurveyAlias> {
   public urlAuthToken!: string;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User[];
+  public user?: User;
 
   @BelongsTo(() => Survey, 'surveyId')
   public survey?: Survey[];

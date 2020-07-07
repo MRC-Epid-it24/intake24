@@ -5,7 +5,7 @@ import Scheme from '@/db/models/system/scheme';
 import Survey from '@/db/models/system/survey';
 import ForbiddenError from '@/http/errors/forbidden.error';
 import NotFoundError from '@/http/errors/not-found.error';
-import surveyResponse from '@/http/responses/admin/survey-response';
+import surveyResponse from '@/http/responses/admin/survey.response';
 
 type SurveyReferences = { locales: Locale[]; schemes: Scheme[] };
 
@@ -17,8 +17,8 @@ const refs = async (): Promise<SurveyReferences> => {
 };
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { id } = req.params;
-  const survey = await Survey.findByPk(id);
+  const { surveyId } = req.params;
+  const survey = await Survey.findByPk(surveyId);
 
   if (!survey) {
     next(new NotFoundError());
@@ -75,8 +75,8 @@ export default {
   },
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-    const survey = await Survey.findByPk(id);
+    const { surveyId } = req.params;
+    const survey = await Survey.findByPk(surveyId);
 
     if (!survey) {
       next(new NotFoundError());
@@ -109,8 +109,8 @@ export default {
   },
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-    const survey = await Survey.scope('submissions').findByPk(id);
+    const { surveyId } = req.params;
+    const survey = await Survey.scope('submissions').findByPk(surveyId);
 
     if (!survey) {
       next(new NotFoundError());

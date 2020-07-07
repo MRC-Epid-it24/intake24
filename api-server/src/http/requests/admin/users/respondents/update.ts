@@ -1,5 +1,5 @@
 import { checkSchema } from 'express-validator';
 import validate from '@/http/requests/validate';
-import defaults from './defaults';
+import { identifiers } from '../defaults';
 
-export default validate(checkSchema(defaults));
+export default validate(checkSchema(identifiers));

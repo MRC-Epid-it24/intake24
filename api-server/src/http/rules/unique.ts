@@ -1,30 +1,23 @@
 import { Op, WhereOptions } from 'sequelize';
-import { Request } from 'express';
-import { Meta } from 'express-validator';
 import { Model } from '@/db/models/model';
 
-export type RuleOptions = {
-  model: typeof Model;
+export type UniqueCondition = {
   field: string;
   value: any;
+  ci?: boolean;
 };
 
-export default async ({ model, field, value }: RuleOptions, { req }: Meta): Promise<void> => {
-  const { id } = (req as Request).params;
-  const where: WhereOptions = {};
+export type UniqueOptions = {
+  model: typeof Model;
+  condition: UniqueCondition;
+  except?: WhereOptions;
+};
 
-  switch (true) {
-    case id && field === 'id':
-      where[field] = { [Op.eq]: value, [Op.ne]: id };
-      break;
-    case !!id:
-      where[field] = { [Op.eq]: value };
-      where.id = { [Op.ne]: id };
-      break;
-    default:
-      where[field] = { [Op.eq]: value };
-      break;
-  }
+export default async ({ model, condition, except = {} }: UniqueOptions): Promise<void> => {
+  const { field, value, ci } = condition;
+  const op = ci && model.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
+
+  const where = { [field]: { [op]: value }, ...except };
 
   const entry = await model.findOne({ where });
   return entry ? Promise.reject(new Error('Current value is already in use.')) : Promise.resolve();

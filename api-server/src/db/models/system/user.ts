@@ -42,13 +42,13 @@ export default class User extends BaseModel<User> {
 
   @Column({
     allowNull: false,
-    defaultValue: false,
+    defaultValue: true,
   })
   public emailNotifications!: boolean;
 
   @Column({
     allowNull: false,
-    defaultValue: false,
+    defaultValue: true,
   })
   public smsNotifications!: boolean;
 

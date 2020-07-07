@@ -16,11 +16,11 @@ router
 router.get('/create', wrapAsync(controller.create));
 
 router
-  .route('/:id')
+  .route('/:schemeId')
   .get(wrapAsync(controller.show))
   .put(validation.update, wrapAsync(controller.update))
   .delete(wrapAsync(controller.delete));
 
-router.get('/:id/edit', wrapAsync(controller.edit));
+router.get('/:schemeId/edit', wrapAsync(controller.edit));
 
 export default router;

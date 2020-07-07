@@ -1,17 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
-import { Op } from 'sequelize';
 import User from '@/db/models/system/user';
-import UserPassword from '@/db/models/system/user-password';
-import UserRole from '@/db/models/system/user-role';
 import NotFoundError from '@/http/errors/not-found.error';
-import userResponse from '@/http/responses/admin/user-response';
+import userResponse from '@/http/responses/admin/user.response';
 import { roleList } from '@/services/acl.service';
-import { defaultAlgorithm } from '@/util/passwords';
+import userSvc from '@/services/user.service';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { id } = req.params;
-  const user = await User.scope('roles').findByPk(id);
+  const { userId } = req.params;
+  const user = await User.scope('roles').findByPk(userId);
 
   if (!user) {
     next(new NotFoundError());
@@ -36,34 +33,22 @@ export default {
   },
 
   async store(req: Request, res: Response): Promise<void> {
-    const { password } = req.body;
-
-    const user = await User.create({
-      ...pick(req.body, [
+    const user = await userSvc.create(
+      pick(req.body, [
         'name',
         'email',
         'phone',
-        'simpleName',
         'emailNotifications',
         'smsNotifications',
         'multiFactorAuthentication',
-      ]),
+        'password',
+        'roles',
+      ])
+    );
+
+    res.status(201).json({
+      data: userResponse((await User.scope('roles').findByPk(user.id)) as User),
     });
-
-    const { id } = user;
-    const { roles } = req.body;
-    const newRoles = roles.map((role: string) => ({ userId: id, role }));
-    await UserRole.bulkCreate(newRoles);
-
-    const { salt, hash } = await defaultAlgorithm.hash(password);
-    await UserPassword.create({
-      userId: id,
-      passwordSalt: salt,
-      passwordHash: hash,
-      passwordHasher: defaultAlgorithm.id,
-    });
-
-    res.status(201).json({ data: userResponse((await User.scope('roles').findByPk(id)) as User) });
   },
 
   async show(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -74,53 +59,32 @@ export default {
     entry(req, res, next);
   },
 
-  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-    const user = await User.scope('roles').findByPk(id);
+  async update(req: Request, res: Response): Promise<void> {
+    const { userId } = req.params;
 
-    if (!user) {
-      next(new NotFoundError());
-      return;
-    }
-
-    await user.update(
+    await userSvc.update(
+      userId,
       pick(req.body, [
         'name',
         'email',
         'phone',
-        'simpleName',
         'emailNotifications',
         'smsNotifications',
         'multiFactorAuthentication',
+        'roles',
       ])
     );
 
-    const currentRoles = user.roles?.map((item) => item.role) ?? [];
-    const { roles: newRoles } = req.body;
-    await UserRole.destroy({ where: { userId: id, role: { [Op.notIn]: newRoles } } });
-
-    const roleRecords = newRoles
-      .filter((role: string) => !currentRoles.includes(role))
-      .map((role: string) => ({ userId: id, role }));
-
-    if (roleRecords.length) await UserRole.bulkCreate(roleRecords);
-
     res.json({
-      data: userResponse((await User.scope('roles').findByPk(id)) as User),
+      data: userResponse((await User.scope('roles').findByPk(userId)) as User),
       refs: { roles: await roleList() },
     });
   },
 
-  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-    const user = await User.findByPk(id);
+  async delete(req: Request, res: Response): Promise<void> {
+    const { userId } = req.params;
 
-    if (!user) {
-      next(new NotFoundError());
-      return;
-    }
-
-    await user.destroy();
+    await userSvc.delete(userId);
     res.status(204).json();
   },
 };

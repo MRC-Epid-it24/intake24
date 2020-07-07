@@ -10,13 +10,12 @@ export default validate(
     ...defaults,
     id: {
       in: ['body'],
-      errorMessage: 'Survey name must be unique string.',
+      errorMessage: 'Survey ID must be unique string.',
       isString: true,
       isEmpty: { negated: true },
       custom: {
-        options: async (value, meta): Promise<void> => {
-          return unique({ model: Survey, field: 'id', value: slugify(value) }, meta);
-        },
+        options: async (value): Promise<void> =>
+          unique({ model: Survey, condition: { field: 'id', value: slugify(value), ci: true } }),
       },
       customSanitizer: {
         options: (value) => (typeof value === 'string' ? slugify(value) : value),
