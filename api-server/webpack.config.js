@@ -4,12 +4,19 @@ const nodeExternals = require('webpack-node-externals');
 const ShellPlugin = require('webpack-shell-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
-const { NODE_ENV = 'development' } = process.env;
+const {NODE_ENV = 'development'} = process.env;
 const isDev = NODE_ENV === 'development';
+
+const plugins = [];
+
+if (isDev) {
+  plugins.push(new ShellPlugin({onBuildEnd: ['npm run development:start']}));
+}
 
 module.exports = {
   entry: {
     server: path.resolve('./src/index.ts'),
+    foodIndexBuilder: path.resolve('./src/food-index/workers/index-builder.ts')
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -40,14 +47,8 @@ module.exports = {
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/,
-      },
+      }
     ],
   },
-  plugins: isDev
-    ? [
-        new ShellPlugin({
-          onBuildEnd: ['npm run development:start'],
-        }),
-      ]
-    : [],
+  plugins: plugins
 };

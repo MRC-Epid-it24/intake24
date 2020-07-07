@@ -6,8 +6,8 @@
   "author": "",
   "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/MRC-Epid-it24/intake24.git",
+    "type": "git",
+    "url": "https://github.com/MRC-Epid-it24/intake24.git",
     "directory": "api-server"
   },
   "main": "src/index.ts",
@@ -37,6 +37,7 @@
     "express-validator": "^6.6.0",
     "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
+    "liblevenshtein": "^2.0.4",
     "lodash": "^4.17.15",
     "morgan": "^1.10.0",
     "ms": "^2.1.2",
