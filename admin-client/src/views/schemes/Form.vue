@@ -1,6 +1,6 @@
 <template>
   <layout :id="id" :entry="entry" v-if="entryLoaded" @save="onSubmit">
-    <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="onSubmit">
+    <v-form @keydown.native="clearError" @submit.prevent="onSubmit">
       <v-container>
         <v-card-text>
           <v-row>
@@ -11,6 +11,7 @@
                 :error-messages="form.errors.get('id')"
                 :label="$t('schemes.id')"
                 hide-details="auto"
+                name="id"
                 outlined
               ></v-text-field>
             </v-col>
@@ -20,6 +21,7 @@
                 :error-messages="form.errors.get('name')"
                 :label="$t('schemes.name')"
                 hide-details="auto"
+                name="name"
                 outlined
               ></v-text-field>
             </v-col>
@@ -30,6 +32,7 @@
                 :error-messages="form.errors.get('type')"
                 :label="$t('schemes.types._')"
                 hide-details="auto"
+                name="type"
                 outlined
                 @change="form.errors.clear('type')"
               ></v-select>

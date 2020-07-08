@@ -72,7 +72,7 @@ export default Vue.extend({
 
   methods: {
     async onDelete(): Promise<void> {
-      const { name } = this.entry;
+      const name = this.entry.name ?? this.entry.id;
       if (!confirm(this.$t('common.action.confirm.delete', { name }) as string)) return;
 
       await this.$http.delete(`${this.resource.api}/${this.id}`);

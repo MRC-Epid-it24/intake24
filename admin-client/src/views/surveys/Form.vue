@@ -1,6 +1,6 @@
 <template>
   <layout :id="id" :entry="entry" v-if="entryLoaded" @save="onSubmit">
-    <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="onSubmit">
+    <v-form @keydown.native="clearError" @submit.prevent="onSubmit">
       <v-container>
         <v-card-text>
           <v-row>
@@ -11,6 +11,7 @@
                 :error-messages="form.errors.get('id')"
                 :label="$t('surveys._')"
                 hide-details="auto"
+                name="id"
                 outlined
               ></v-text-field>
             </v-col>
@@ -23,6 +24,7 @@
                 hide-details="auto"
                 item-value="id"
                 item-text="englishName"
+                name="locale"
                 outlined
                 @change="form.errors.clear('locale')"
               ></v-select>
@@ -36,6 +38,7 @@
                 hide-details="auto"
                 item-value="id"
                 item-text="name"
+                name="schemeId"
                 outlined
                 @change="form.errors.clear('schemeId')"
               ></v-select>
@@ -55,14 +58,16 @@
                     v-model="form.startDate"
                     :error-messages="form.errors.get('startDate')"
                     :label="$t('surveys.startDate')"
-                    outlined
                     hide-details="auto"
+                    name="startDate"
+                    outlined
                     readonly
                     v-on="on"
                   ></v-text-field>
                 </template>
                 <v-date-picker
                   v-model="form.startDate"
+                  name="startDate"
                   no-title
                   scrollable
                   @input="form.errors.clear('startDate')"
@@ -97,6 +102,7 @@
                 </template>
                 <v-date-picker
                   v-model="form.endDate"
+                  name="endDate"
                   no-title
                   scrollable
                   @input="form.errors.clear('endDate')"
@@ -113,6 +119,7 @@
                 :error-messages="form.errors.get('supportEmail')"
                 :label="$t('surveys.supportEmail')"
                 hide-details="auto"
+                name="supportEmail"
                 outlined
               ></v-text-field>
             </v-col>
@@ -123,6 +130,7 @@
                 :items="states"
                 :label="$t('surveys.state._')"
                 hide-details="auto"
+                name="state"
                 outlined
                 @change="form.errors.clear('state')"
               ></v-select>
@@ -134,6 +142,7 @@
                 :label="$t('surveys.allowGenUsers')"
                 class="mt-0"
                 hide-details="auto"
+                name="allowGenUsers"
                 @change="form.errors.clear('allowGenUsers')"
               ></v-switch>
             </v-col>
@@ -144,6 +153,7 @@
                 :label="$t('surveys.storeUserSessionOnServer')"
                 class="mt-0"
                 hide-details="auto"
+                name="storeUserSessionOnServer"
                 @change="form.errors.clear('storeUserSessionOnServer')"
               ></v-switch>
             </v-col>
@@ -157,6 +167,7 @@
                 :error-messages="form.errors.get('feedbackEnabled')"
                 :label="$t('surveys.feedback.enabled')"
                 hide-details="auto"
+                name="feedbackEnabled"
                 @change="form.errors.clear('feedbackEnabled')"
               ></v-switch>
             </v-col>
@@ -167,6 +178,7 @@
                 :disabled="!form.feedbackEnabled"
                 :error-messages="form.errors.get('numberOfSubmissionsForFeedback')"
                 :label="$t('surveys.feedback.numberOfSubmissions')"
+                name="numberOfSubmissionsForFeedback"
                 hide-details="auto"
               ></v-text-field>
             </v-col>

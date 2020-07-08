@@ -33,6 +33,7 @@ export default Vue.extend({
           text: this.$t('common.action._'),
           sortable: false,
           value: 'action',
+          align: 'right',
         },
       ],
     };

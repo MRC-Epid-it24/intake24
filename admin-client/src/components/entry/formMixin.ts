@@ -55,16 +55,23 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       if (this.isEdit) {
         const { data } = await this.form.put(`v3/admin/${this.apiUrl}/${this.id}`);
         this.toForm(data);
-        this.$toasted.success(
-          this.$t('common.msg.updated', { name: data.name ?? data.id }) as string
-        );
+
+        const { id, name } = data;
+        this.$toasted.success(this.$t('common.msg.updated', { name: name ?? id }) as string);
       } else {
         const {
           data: { id, name },
         } = await this.form.post(`v3/admin/${this.apiUrl}`);
         this.$router.push({ name: `${this.module}-edit`, params: { id } });
+
         this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }) as string);
       }
+    },
+
+    clearError(event: KeyboardEvent) {
+      const { name } = event.target as HTMLInputElement;
+
+      if (name) this.form.errors.clear(name);
     },
   },
 });
