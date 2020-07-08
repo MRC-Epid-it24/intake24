@@ -1,5 +1,4 @@
 import { checkSchema } from 'express-validator';
-import { Op } from 'sequelize';
 import slugify from 'slugify';
 import Scheme from '@/db/models/system/scheme';
 import validate from '@/http/requests/validate';

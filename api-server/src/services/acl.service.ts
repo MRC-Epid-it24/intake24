@@ -18,6 +18,11 @@ export const surveyStaff = (surveyId: string): string => `${surveyId}${staffSuff
 
 export const surveySupport = (surveyId: string): string => `${surveyId}${supportSuffix}`;
 
+export const surveyMgmt = (surveyId: string): string[] => [
+  surveyStaff(surveyId),
+  surveySupport(surveyId),
+];
+
 export const surveyRespondent = (surveyId: string): string => `${surveyId}${respondentSuffix}`;
 
 export const foodDatabaseMaintainer = (fdbId: string): string =>

@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { wrapAsync } from '@/util';
 import controller from '@/http/controllers/admin/survey-respondent.controller';
 import { canManageSurvey } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/users/respondents';
+import { wrapAsync } from '@/util';
 
 const router = Router({ mergeParams: true });
 
