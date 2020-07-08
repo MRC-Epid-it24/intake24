@@ -29,6 +29,17 @@ const surveys: LocaleMessage = {
     enabled: 'Enabled',
     numberOfSubmissions: 'Number of submissions',
   },
+
+  respondents: {
+    _: 'Survey respondents',
+    add: 'New respondent',
+    edit: 'Edit respondent',
+  },
+  mgmt: {
+    _: 'Survey management',
+    add: 'New staff/support',
+    edit: 'Edit staff',
+  },
 };
 
 export default surveys;

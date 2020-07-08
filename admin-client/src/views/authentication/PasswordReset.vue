@@ -36,7 +36,7 @@
                   <v-text-field
                     v-model="passwordConfirmation"
                     :error-messages="form.errors.get('passwordConfirmation')"
-                    :label="$t('users.password.confirmation')"
+                    :label="$t('users.password.confirm')"
                     hide-details="auto"
                     required
                     outlined

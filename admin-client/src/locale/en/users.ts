@@ -17,7 +17,7 @@ const users: LocaleMessage = {
     _: 'Password',
     current: 'Current password',
     new: 'New password',
-    confirmation: 'Confirm new password',
+    confirm: 'Confirm password',
     forgot: 'Forgotten password?',
     change: 'Change current password',
     changed: 'Password has been changed',

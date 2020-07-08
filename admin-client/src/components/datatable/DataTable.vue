@@ -114,14 +114,18 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
     async fetch() {
       const { page, itemsPerPage: limit } = this.options;
 
-      const {
-        data: { data, meta },
-      } = await this.withLoading(
-        this.$http.get(this.api, { params: { limit, page, ...this.filter } })
-      );
+      try {
+        const {
+          data: { data, meta },
+        } = await this.withLoading(
+          this.$http.get(this.api, { params: { limit, page, ...this.filter } })
+        );
 
-      this.items = data;
-      this.meta = { ...meta };
+        this.items = data;
+        this.meta = { ...meta };
+      } catch {
+        // continue
+      }
     },
 
     updateTracked() {

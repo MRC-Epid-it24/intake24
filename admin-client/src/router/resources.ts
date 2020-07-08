@@ -18,7 +18,7 @@ const resources: Resource[] = [
     icon: 'fas fa-poll',
     api: 'v3/admin/surveys',
     generateRoutes: true,
-    routes: [...routes],
+    routes: [...routes, 'respondents', 'mgmt'],
   },
   // ACL
   {

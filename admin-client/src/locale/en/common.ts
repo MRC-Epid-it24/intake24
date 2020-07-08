@@ -35,8 +35,10 @@ const common: LocaleMessage = {
     print: 'Print',
     questions: 'Questions',
     restore: 'Restore',
-    show: 'Info',
+    respondents: 'Respondents',
     save: 'Save',
+    show: 'Info',
+    mgmt: 'Management',
     transfer: 'Transfer',
     multi: {
       delete: 'Delete selected items',
