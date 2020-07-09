@@ -3,7 +3,7 @@ import {CaseInsensitiveString} from "@/food-index/strings";
 const levenshtein = require('liblevenshtein');
 
 export interface EditDistanceMatch {
-  word: CaseInsensitiveString;
+  word: string;
   distance: number;
 }
 
@@ -11,10 +11,15 @@ export class LevenshteinTransducer {
 
   private readonly transducer: any;
 
-  constructor(dictionary: Array<CaseInsensitiveString>) {
+  constructor(dictionary: Set<string>) {
+
+    const array = new Array<string>();
+
+    for (let word of dictionary)
+      array.push(word);
 
     const builder = new levenshtein.Builder()
-      .dictionary(dictionary.map(w => w.lowerCase), false) // generate spelling candidates from unsorted completion_list
+      .dictionary(array, false) // generate spelling candidates from unsorted completion_list
       .algorithm('transposition') // use Levenshtein distance extended with transposition
       .sort_candidates(false)
       .include_distance(true);
@@ -22,9 +27,9 @@ export class LevenshteinTransducer {
     this.transducer = builder.build();
   }
 
-  match(input: CaseInsensitiveString, maxDistance: number): Array<EditDistanceMatch> {
-    return this.transducer.transduce(input.lowerCase, maxDistance).map((a: Array<any>) => {
-      return {word: new CaseInsensitiveString(a[0]), distance: a[1]}
+  match(input: string, maxDistance: number): Array<EditDistanceMatch> {
+    return this.transducer.transduce(input, maxDistance).map((a: Array<any>) => {
+      return {word: a[0], distance: a[1]}
     });
   }
 }

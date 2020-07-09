@@ -1,14 +1,11 @@
 import {workerData} from "worker_threads";
 import FoodLocalList from "@/db/models/foods/food-local-list";
-
 import {Sequelize} from "sequelize-typescript";
-import dbConfig from "@/config/database";
 import foods from "@/db/models/foods";
 import FoodLocal from "@/db/models/foods/food-local";
-import {LevenshteinTransducer} from "@/food-index/levenshtein";
-import {CaseInsensitiveString} from "@/food-index/strings";
-import {RichDictionary} from "@/food-index/dictionary";
 import {Metaphone3Encoder} from "@/food-index/metaphone-encoder";
+import {PhraseIndex, PhraseWithKey} from "@/food-index/phrase-index";
+import {EnglishWordOps} from "@/food-index/english-word-ops";
 
 const db = new Sequelize({...workerData.dbConnectionInfo, models: Object.values(foods)});
 
@@ -25,24 +22,25 @@ FoodLocalList.findAll({
   }]
 }).then(foodLocal => {
 
-    const dictionary = new Array<string>();
+    const foodDescriptions = new Array<PhraseWithKey<string>>();
 
     console.log('Building dictionary');
 
     for (let f of foodLocal) {
       if (f.foodLocal) {
-        dictionary.push(...f.foodLocal.localDescription.split(' '));
+        foodDescriptions.push({phrase: f.foodLocal.localDescription, key: f.foodCode});
       }
     }
 
-    console.log('Dictonary length: ' + dictionary.length);
+    const phraseIndex = new PhraseIndex<string>(foodDescriptions, new Array<string>(), new Metaphone3Encoder(),  new EnglishWordOps(),
+      new Array(new Set<string>(['banana', 'dog', 'helicopter'])));
 
-    console.log('Building rich dictionary');
 
-    const rd = new RichDictionary(dictionary.map(w => new CaseInsensitiveString(w)), new Metaphone3Encoder(), new Array<Set<CaseInsensitiveString>>(new Set<CaseInsensitiveString>([new CaseInsensitiveString('banana'), new CaseInsensitiveString('dog'), new CaseInsensitiveString('helicopter')])));
+    let test = phraseIndex.interpretPhrase('banana with helicopter meat sausage', 'match-fewer');
 
-    console.log('Rich dictionary done!');
+    console.log('Interpreted phrase: ' + JSON.stringify(test));
 
-    console.log(JSON.stringify(rd.interpretWord('bAnaNa', 10, 'match-fewer')));
+    console.log('Combinations: ' + JSON.stringify(test.generateCombinations(10)));
+
   }
 );

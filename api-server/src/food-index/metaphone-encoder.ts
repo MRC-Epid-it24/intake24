@@ -1,6 +1,5 @@
 import {PhoneticEncoder} from "@/food-index/dictionary";
 import {Metaphone3} from "@/food-index/metaphone3";
-import {CaseInsensitiveString} from "@/food-index/strings";
 
 export class Metaphone3Encoder implements PhoneticEncoder {
 
@@ -8,18 +7,21 @@ export class Metaphone3Encoder implements PhoneticEncoder {
 
   constructor() {
     this.metaphone3 = new Metaphone3();
+    this.metaphone3.SetKeyLength(5);
+    this.metaphone3.SetEncodeExact(true);
+    this.metaphone3.SetEncodeVowels(true);
   }
 
-  encode(input: CaseInsensitiveString): Array<CaseInsensitiveString> {
-    this.metaphone3.SetWord(input.lowerCase);
+  encode(input: string): Array<string> {
+    this.metaphone3.SetWord(input);
     this.metaphone3.Encode();
 
-    const result = new Array<CaseInsensitiveString>();
+    const result = new Array<string>();
 
-    result.push(new CaseInsensitiveString(this.metaphone3.GetMetaph()));
+    result.push(this.metaphone3.GetMetaph());
 
     if (this.metaphone3.GetAlternateMetaph())
-      result.push(new CaseInsensitiveString(this.metaphone3.GetAlternateMetaph()));
+      result.push(this.metaphone3.GetAlternateMetaph());
 
     return result;
   }

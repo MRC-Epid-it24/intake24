@@ -1,32 +1,36 @@
-import {CaseInsensitiveString} from "@/food-index/strings";
-
 export type CorrectionMethod = "phonetic" | "lev1" | "lev2";
 
-export class ExactMatch {
-  kind: 'exact-match';
+interface InterpretationBase {
+  dictionaryWord: string;
+}
 
-  constructor() {
+export class ExactMatch implements InterpretationBase {
+  kind: 'exact-match';
+  readonly dictionaryWord: string;
+
+  constructor(dictionaryWord: string) {
     this.kind = 'exact-match';
+    this.dictionaryWord = dictionaryWord;
   }
 }
 
-export class AltSpelling {
+export class AltSpelling implements InterpretationBase {
   kind: 'alt-spelling';
-  readonly dictionaryWord: CaseInsensitiveString;
+  readonly dictionaryWord: string;
   readonly method: CorrectionMethod;
 
-  constructor(dictionaryWord: CaseInsensitiveString, method: CorrectionMethod) {
+  constructor(dictionaryWord: string, method: CorrectionMethod) {
     this.kind = 'alt-spelling';
     this.dictionaryWord = dictionaryWord;
     this.method = method;
   }
 }
 
-export class Synonym {
+export class Synonym implements InterpretationBase {
   kind: 'synonym';
-  readonly dictionaryWord: CaseInsensitiveString;
+  readonly dictionaryWord: string;
 
-  constructor(dictionaryWord: CaseInsensitiveString) {
+  constructor(dictionaryWord: string) {
     this.kind = 'synonym';
     this.dictionaryWord = dictionaryWord;
   }
