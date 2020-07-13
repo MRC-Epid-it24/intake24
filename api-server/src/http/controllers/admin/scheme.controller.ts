@@ -18,9 +18,9 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
 
 export default {
   async list(req: Request, res: Response): Promise<void> {
-    const { data, meta } = await Scheme.paginate({ req, columns: ['id', 'name'] });
+    const schemes = await Scheme.paginate({ req, columns: ['id', 'name'] });
 
-    res.json({ data, meta });
+    res.json(schemes);
   },
 
   async create(req: Request, res: Response): Promise<void> {

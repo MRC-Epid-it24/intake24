@@ -30,9 +30,9 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
 
 export default {
   async list(req: Request, res: Response): Promise<void> {
-    const { data, meta } = await Survey.paginate({ req, columns: ['id'] });
+    const surveys = await Survey.paginate({ req, columns: ['id'] });
 
-    res.json({ data, meta });
+    res.json(surveys);
   },
 
   async create(req: Request, res: Response): Promise<void> {

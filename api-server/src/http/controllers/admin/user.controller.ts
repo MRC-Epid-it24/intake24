@@ -20,12 +20,12 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
 
 export default {
   async list(req: Request, res: Response): Promise<void> {
-    const { data, meta } = await User.scope('roles').paginate({
+    const users = await User.scope('roles').paginate({
       req,
       columns: ['name', 'email', 'simpleName'],
     });
 
-    res.json({ data, meta });
+    res.json(users);
   },
 
   async create(req: Request, res: Response): Promise<void> {

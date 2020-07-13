@@ -16,12 +16,12 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
 
 export default {
   async list(req: Request, res: Response): Promise<void> {
-    const { data, meta } = await Locale.paginate({
+    const locales = await Locale.paginate({
       req,
       columns: ['id', 'englishName', 'localName'],
     });
 
-    res.json({ data, meta });
+    res.json(locales);
   },
 
   async show(req: Request, res: Response, next: NextFunction): Promise<void> {

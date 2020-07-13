@@ -10,6 +10,11 @@ export interface Paginate extends BaseFindOptions {
   [key: string]: any;
 }
 
+export interface Pagination<R = Model> {
+  data: R[];
+  meta: PaginationMeta;
+}
+
 export interface PaginationMeta {
   from: number;
   lastPage: number;
@@ -18,18 +23,6 @@ export interface PaginationMeta {
   limit: number;
   to: number;
   total: number;
-}
-
-export interface PaginationLinks {
-  lastPageUrl: string;
-  nextPageUrl: string;
-  prevPageUrl: string;
-}
-
-export interface Pagination<R> {
-  data: Array<R>;
-  meta: PaginationMeta;
-  links: PaginationLinks;
 }
 
 // Sequelize options not indexable
@@ -101,16 +94,9 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
       total,
     };
 
-    const links: PaginationLinks = {
-      lastPageUrl: '',
-      nextPageUrl: '',
-      prevPageUrl: '',
-    };
-
     const pagination: Pagination<R> = {
       data,
       meta,
-      links,
     };
 
     return pagination;
