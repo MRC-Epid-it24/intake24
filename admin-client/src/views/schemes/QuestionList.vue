@@ -227,10 +227,14 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       const isValid = this.$refs.form.validate();
       if (!isValid) return;
 
-      const { index, question } = this.dialog;
+      const {
+        index,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        question: { origId, ...rest },
+      } = this.dialog;
 
-      if (index === -1) this.questions.push(question);
-      else this.questions.splice(index, 1, question);
+      if (index === -1) this.questions.push(rest);
+      else this.questions.splice(index, 1, rest);
 
       this.update();
       this.reset();

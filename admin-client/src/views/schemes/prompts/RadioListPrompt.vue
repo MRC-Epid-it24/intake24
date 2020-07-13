@@ -156,12 +156,12 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   },
 
   data() {
-    return {
-      currentOptions: this.options.map((option, idx) => ({
-        id: idx + 1,
-        ...option,
-      })) as ListOption[],
-    };
+    const currentOptions: ListOption[] = this.options.map((option, idx) => ({
+      id: idx + 1,
+      ...option,
+    }));
+
+    return { currentOptions };
   },
 
   computed: {
