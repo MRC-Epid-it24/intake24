@@ -5,7 +5,7 @@ import { wrapAsync } from '@/util';
 
 const router = Router();
 
-router.post('/login', validation.emaiLogin, wrapAsync(controller.emailLogin));
+router.post('/login', validation.emailLogin, wrapAsync(controller.emailLogin));
 router.post('/login/alias', validation.aliasLogin, wrapAsync(controller.aliasLogin));
 router.post('/login/token', wrapAsync(controller.tokenLogin));
 router.post('/login/verify', wrapAsync(controller.verify));

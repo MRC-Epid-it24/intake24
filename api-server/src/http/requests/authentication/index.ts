@@ -1,4 +1,4 @@
-import aliasLogin from './aliasLogin';
-import emaiLogin from './emaiLogin';
+import aliasLogin from './alias-login';
+import emailLogin from './email-login';
 
-export default { aliasLogin, emaiLogin };
+export default { aliasLogin, emailLogin };
