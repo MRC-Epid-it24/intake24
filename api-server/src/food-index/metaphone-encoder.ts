@@ -1,8 +1,7 @@
-import {PhoneticEncoder} from "@/food-index/dictionary";
-import {Metaphone3} from "@/food-index/metaphone3";
+import { PhoneticEncoder } from '@/food-index/dictionary';
+import { Metaphone3 } from '@/food-index/metaphone3';
 
-export class Metaphone3Encoder implements PhoneticEncoder {
-
+export default class Metaphone3Encoder implements PhoneticEncoder {
   private readonly metaphone3: Metaphone3;
 
   constructor() {
@@ -20,8 +19,7 @@ export class Metaphone3Encoder implements PhoneticEncoder {
 
     result.push(this.metaphone3.GetMetaph());
 
-    if (this.metaphone3.GetAlternateMetaph())
-      result.push(this.metaphone3.GetAlternateMetaph());
+    if (this.metaphone3.GetAlternateMetaph()) result.push(this.metaphone3.GetAlternateMetaph());
 
     return result;
   }

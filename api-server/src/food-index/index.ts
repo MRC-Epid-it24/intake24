@@ -1,14 +1,16 @@
-import {Worker} from 'worker_threads'
-import databaseConfig from "@/config/database";
-import appConfig from "@/config/app";
+import { Worker } from 'worker_threads';
+import databaseConfig from '@/config/database';
+import appConfig from '@/config/app';
 
 export default {
-
   async init() {
-    new Worker('./dist/foodIndexBuilder.js', {workerData: {dbConnectionInfo: databaseConfig[appConfig.env].foods}});
+    // eslint-disable-next-line no-new
+    new Worker('./dist/foodIndexBuilder.js', {
+      workerData: { dbConnectionInfo: databaseConfig[appConfig.env].foods },
+    });
   },
 
   async search(query: string): Promise<string> {
-    return Promise.reject(new Error("Not implemented"));
+    return Promise.reject(new Error('Not implemented'));
   },
 };

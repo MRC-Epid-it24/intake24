@@ -3,9 +3,9 @@ import {
   ExactMatch,
   InterpretedWord,
   Synonym,
-  WordInterpretation
-} from "@/food-index/interpreted-word";
-import {LevenshteinTransducer} from "@/food-index/levenshtein";
+  WordInterpretation,
+} from '@/food-index/interpreted-word';
+import { LevenshteinTransducer } from '@/food-index/levenshtein';
 
 export type MatchStrategy = 'match-fewer' | 'match-more';
 
@@ -14,31 +14,36 @@ export interface PhoneticEncoder {
 }
 
 export class RichDictionary {
-
   private readonly words: Set<string>;
+
   private readonly phoneticMap: Map<string, Set<string>> | undefined;
+
   private readonly synonymMap: Map<string, Set<string>>;
+
   private readonly phoneticEncoder: PhoneticEncoder | undefined;
+
   private readonly transducer: LevenshteinTransducer;
 
-  constructor(words: Set<string>, phoneticEncoder: PhoneticEncoder | undefined, synSets: Array<Set<string>>) {
+  constructor(
+    words: Set<string>,
+    phoneticEncoder: PhoneticEncoder | undefined,
+    synSets: Array<Set<string>>
+  ) {
     this.words = new Set<string>();
 
-    for (let word of words)
-      this.words.add(word.toLocaleLowerCase());
+    for (const word of words) this.words.add(word.toLocaleLowerCase());
     this.phoneticEncoder = phoneticEncoder;
 
     if (phoneticEncoder) {
       this.phoneticMap = new Map<string, Set<string>>();
 
-      for (let word of this.words) {
+      for (const word of this.words) {
         const encodedVariants = phoneticEncoder.encode(word);
 
-        for (let encoded of encodedVariants) {
+        for (const encoded of encodedVariants) {
           let set = this.phoneticMap.get(encoded);
 
-          if (!set)
-            set = new Set<string>();
+          if (!set) set = new Set<string>();
 
           set.add(word);
 
@@ -51,20 +56,17 @@ export class RichDictionary {
 
     this.synonymMap = new Map<string, Set<string>>();
 
-    for (let synSet of synSets) {
-      for (let word of synSet) {
-
-        let lowerCaseWord = word.toLocaleLowerCase();
+    for (const synSet of synSets) {
+      for (const word of synSet) {
+        const lowerCaseWord = word.toLocaleLowerCase();
 
         let synList = this.synonymMap.get(lowerCaseWord);
 
-        if (!synList)
-          synList = new Set<string>();
+        if (!synList) synList = new Set<string>();
 
-        for (let word2 of synSet) {
-          let lowerCaseWord2 = word2.toLocaleLowerCase();
-          if (lowerCaseWord != lowerCaseWord2)
-            synList.add(lowerCaseWord2);
+        for (const word2 of synSet) {
+          const lowerCaseWord2 = word2.toLocaleLowerCase();
+          if (lowerCaseWord !== lowerCaseWord2) synList.add(lowerCaseWord2);
         }
 
         this.synonymMap.set(lowerCaseWord, synList);
@@ -77,25 +79,21 @@ export class RichDictionary {
   }
 
   synonyms(lowerCaseWord: string): Array<string> {
-    let result = this.synonymMap.get(lowerCaseWord);
+    const result = this.synonymMap.get(lowerCaseWord);
 
-    if (!result)
-      return new Array<string>();
-    else
-      return new Array(...result);
+    if (!result) return new Array<string>();
+    return new Array(...result);
   }
 
   phoneticMatch(word: string): Array<string> {
-    let result = new Array<string>();
+    const result = new Array<string>();
 
     if (this.phoneticEncoder && this.phoneticMap) {
-
-      for (let phoneticEncoding of this.phoneticEncoder.encode(word)) {
+      for (const phoneticEncoding of this.phoneticEncoder.encode(word)) {
         const matchedWords = this.phoneticMap.get(phoneticEncoding);
 
         if (matchedWords) {
-          for (let word of matchedWords)
-            result.push(word);
+          for (const matched of matchedWords) result.push(matched);
         }
       }
     }
@@ -103,28 +101,46 @@ export class RichDictionary {
     return result;
   }
 
-  fewerSpellingInterpretations(lowerCaseWord: string, maxInterpretations: number): Array<AltSpelling> {
+  fewerSpellingInterpretations(
+    lowerCaseWord: string,
+    maxInterpretations: number
+  ): Array<AltSpelling> {
     const phoneticMatches = this.phoneticMatch(lowerCaseWord);
     if (phoneticMatches.length > 0) {
-      return phoneticMatches.slice(0, maxInterpretations).map(w => new AltSpelling(w, 'phonetic'));
-    } else {
-      const lev1matches = this.transducer.match(lowerCaseWord, 1);
-      if (lev1matches.length > 0)
-        return lev1matches.slice(0, maxInterpretations).map(match => new AltSpelling(match.word, 'lev1'));
-      else
-        return this.transducer.match(lowerCaseWord, 2).slice(0, maxInterpretations).map(match => new AltSpelling(match.word, 'lev2'));
+      return phoneticMatches
+        .slice(0, maxInterpretations)
+        .map((w) => new AltSpelling(w, 'phonetic'));
     }
+    const lev1matches = this.transducer.match(lowerCaseWord, 1);
+    if (lev1matches.length > 0)
+      return lev1matches
+        .slice(0, maxInterpretations)
+        .map((match) => new AltSpelling(match.word, 'lev1'));
+    return this.transducer
+      .match(lowerCaseWord, 2)
+      .slice(0, maxInterpretations)
+      .map((match) => new AltSpelling(match.word, 'lev2'));
   }
 
-  moreSpellingInterpretations(lowerCaseWord: string, maxInterpretations: number): Array<AltSpelling> {
-    const phoneticMatches = this.phoneticMatch(lowerCaseWord).map(w => new AltSpelling(w, 'phonetic'));
-    const lev2matches = this.transducer.match(lowerCaseWord, 2).map(match => new AltSpelling(match.word, 'lev2'));
+  moreSpellingInterpretations(
+    lowerCaseWord: string,
+    maxInterpretations: number
+  ): Array<AltSpelling> {
+    const phoneticMatches = this.phoneticMatch(lowerCaseWord).map(
+      (w) => new AltSpelling(w, 'phonetic')
+    );
+    const lev2matches = this.transducer
+      .match(lowerCaseWord, 2)
+      .map((match) => new AltSpelling(match.word, 'lev2'));
 
     return new Array<AltSpelling>(...phoneticMatches, ...lev2matches).slice(0, maxInterpretations);
   }
 
-  interpretWord(word: string, maxInterpretations: number, strategy: MatchStrategy): InterpretedWord {
-
+  interpretWord(
+    word: string,
+    maxInterpretations: number,
+    strategy: MatchStrategy
+  ): InterpretedWord {
     const lowerCaseWord = word.toLocaleLowerCase();
     const interpretations = new Array<WordInterpretation>();
 
@@ -133,18 +149,22 @@ export class RichDictionary {
     } else {
       let spellingCorrected = new Array<AltSpelling>();
 
-      if (strategy == 'match-fewer') {
+      if (strategy === 'match-fewer') {
         spellingCorrected = this.fewerSpellingInterpretations(lowerCaseWord, maxInterpretations);
-      } else if (strategy == 'match-more') {
+      } else if (strategy === 'match-more') {
         spellingCorrected = this.moreSpellingInterpretations(lowerCaseWord, maxInterpretations);
       }
 
       interpretations.push(...spellingCorrected);
     }
 
-    const synonyms: Array<string> = interpretations.flatMap(sp => this.synonyms(sp.dictionaryWord));
+    const synonyms: Array<string> = interpretations.flatMap((sp) =>
+      this.synonyms(sp.dictionaryWord)
+    );
 
-    interpretations.push(...synonyms.slice(0, maxInterpretations - interpretations.length).map(s => new Synonym(s)));
+    interpretations.push(
+      ...synonyms.slice(0, maxInterpretations - interpretations.length).map((s) => new Synonym(s))
+    );
 
     return new InterpretedWord(word, interpretations);
   }

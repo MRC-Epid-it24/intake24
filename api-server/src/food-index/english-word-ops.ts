@@ -1,10 +1,12 @@
-import {WordOps} from "@/food-index/phrase-index";
+import { WordOps } from '@/food-index/phrase-index';
 
-export class EnglishWordOps implements WordOps {
+export default class EnglishWordOps implements WordOps {
+  // eslint-disable-next-line class-methods-use-this
   splitCompound(word: string): Array<string> {
     return new Array<string>(word);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   stem(word: string): string {
     return word;
   }

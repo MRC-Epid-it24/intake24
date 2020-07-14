@@ -11,7 +11,7 @@ import Locale from './locale';
   timestamps: false,
   underscored: true,
   freezeTableName: true,
-  tableName: 'foods_local'
+  tableName: 'foods_local',
 })
 export default class FoodLocal extends BaseModel<FoodLocal> {
   @Column({

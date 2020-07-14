@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /* Generated from Java with JSweet 3.0.0-RC3 - http://www.jsweet.org */
 
 // @ts-nocheck

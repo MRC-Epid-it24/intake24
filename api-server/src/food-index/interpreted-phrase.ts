@@ -1,20 +1,14 @@
-import {InterpretedWord} from "@/food-index/interpreted-word";
+import { InterpretedWord } from '@/food-index/interpreted-word';
 
 function countCombinations(words: Array<InterpretedWord>): number {
-  let n = 1;
-
-  for (let w of words) {
-    n *= w.interpretations.length
-  }
-
-  return n;
+  return words.reduce((acc, next) => acc * next.interpretations.length, 1);
 }
 
 function maxInterpretationsIndex(words: Array<InterpretedWord>): number {
   let max = 0;
   let maxIndex = -1;
 
-  for (let i = 0; i < words.length; i++) {
+  for (let i = 0; i < words.length; i += 1) {
     if (words[i].interpretations.length > max) {
       max = words[i].interpretations.length;
       maxIndex = i;
@@ -24,15 +18,21 @@ function maxInterpretationsIndex(words: Array<InterpretedWord>): number {
   return maxIndex;
 }
 
-function cutCombinations(words: Array<InterpretedWord>, maxCombinations: number): Array<InterpretedWord> {
+/*
+  Reduces the total number of possible interpretation combinations to under maxCombinations by
+  repeatedly dropping an arbitrary interpretation from the word that has the longest list of
+  interpretations.
+ */
+function cutCombinations(
+  words: Array<InterpretedWord>,
+  maxCombinations: number
+): Array<InterpretedWord> {
+  const max = Math.max(1, maxCombinations);
+  const cutWords = new Array<InterpretedWord>(...words);
   let combinations = countCombinations(words);
-  let cutWords = new Array<InterpretedWord>(...words);
 
-  if (maxCombinations < 1)
-    maxCombinations = 1;
-
-  while (combinations > maxCombinations) {
-    let i = maxInterpretationsIndex(cutWords);
+  while (combinations > max) {
+    const i = maxInterpretationsIndex(cutWords);
     cutWords[i].dropInterpretation();
     combinations = countCombinations(cutWords);
   }
@@ -40,17 +40,13 @@ function cutCombinations(words: Array<InterpretedWord>, maxCombinations: number)
   return cutWords;
 }
 
-
 /*
   Returns an array containing every valid index for the given array, e.g.:
 
   indices(['a','b','c']) = [0,1,2]
  */
-function indices<T>(a: Array<T>): Array<number> {
-  let result = new Array<number>();
-  for (let i=0; i<a.length; i++)
-    result.push(i);
-  return result;
+function indices<T>(array: Array<T>): Array<number> {
+  return array.map((_, index) => index);
 }
 
 /*
@@ -65,23 +61,20 @@ function indices<T>(a: Array<T>): Array<number> {
      [c,d,f]]
  */
 function product<T>(tuples: Array<Array<T>>, values: Array<T>): Array<Array<T>> {
-  let result = new Array<Array<T>>();
+  const result = new Array<Array<T>>();
 
-  for (let tuple of tuples) {
-    for (let value of values) {
-      let newTuple = new Array<T>();
-      newTuple.push(...tuple);
-      newTuple.push(value);
-      result.push(newTuple);
+  for (const tuple of tuples) {
+    for (const value of values) {
+      result.push(tuple.concat(value));
     }
   }
 
   return result;
 }
 
-export class InterpretedPhrase {
-
+export default class InterpretedPhrase {
   readonly asTyped: string;
+
   readonly words: Array<InterpretedWord>;
 
   constructor(asTyped: string, words: Array<InterpretedWord>) {
@@ -90,20 +83,13 @@ export class InterpretedPhrase {
   }
 
   generateCombinations(maxCombinations: number): Array<Array<number>> {
-    let workingSet = cutCombinations(this.words, maxCombinations);
+    const workingSet = cutCombinations(this.words, maxCombinations);
 
-    let combinations = new Array<Array<number>>();
+    const combinations = indices(workingSet[0].interpretations).map((i) => [i]);
 
-    for (let i of indices(workingSet[0].interpretations)) {
-      let a = new Array<number>();
-      a.push(i);
-      combinations.push(a);
-    }
-
-    for (let i = 1; i<workingSet.length; i++) {
-      combinations = product(combinations, indices(workingSet[i].interpretations));
-    }
-
-    return combinations;
+    return workingSet.reduce(
+      (acc, next) => product(acc, indices(next.interpretations)),
+      combinations
+    );
   }
 }

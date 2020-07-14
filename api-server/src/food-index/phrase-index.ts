@@ -1,5 +1,5 @@
-import {MatchStrategy, PhoneticEncoder, RichDictionary} from "@/food-index/dictionary";
-import {InterpretedPhrase} from "@/food-index/interpreted-phrase";
+import { MatchStrategy, PhoneticEncoder, RichDictionary } from '@/food-index/dictionary';
+import InterpretedPhrase from '@/food-index/interpreted-phrase';
 
 const MAX_WORDS_PER_PHRASE = 10;
 const MAX_WORD_INTERPRETATIONS = 4;
@@ -12,13 +12,13 @@ const UNMATCHED_WORD_COST = 8;
 
 export interface PhraseWithKey<K> {
   phrase: string;
-  key: K
+  key: K;
 }
 
 export interface WordOps {
-  stem(word: string): string
+  stem(word: string): string;
 
-  splitCompound(word: string): Array<string>
+  splitCompound(word: string): Array<string>;
 }
 
 export interface DictionaryPhrase {
@@ -27,23 +27,27 @@ export interface DictionaryPhrase {
 }
 
 export class PhraseIndex<K> {
-
   readonly indexFilter: Array<string>;
+
   readonly wordOps: WordOps;
+
   readonly dictionary: RichDictionary;
 
-  getWordList(phrase: String): Array<string> {
+  getWordList(phrase: string): Array<string> {
     let p = phrase.toLocaleLowerCase();
 
-    for (let filterWord of this.indexFilter) {
+    for (const filterWord of this.indexFilter) {
       p = p.replace(filterWord, ' ');
     }
 
-    return p.split(/\s+/)
-      .filter(s => s.length > 1)
-      // split compound words (e.g. for German and Nordic languages)
-      .flatMap(s => this.wordOps.splitCompound(s))
-      .map(s => this.wordOps.stem(s))
+    return (
+      p
+        .split(/\s+/)
+        .filter((s) => s.length > 1)
+        // split compound words (e.g. for German and Nordic languages)
+        .flatMap((s) => this.wordOps.splitCompound(s))
+        .map((s) => this.wordOps.stem(s))
+    );
   }
 
   interpretPhrase(phrase: string, strategy: MatchStrategy): InterpretedPhrase {
@@ -51,36 +55,38 @@ export class PhraseIndex<K> {
 
     // FIXME: Not sure if unmatched words are being completely ignored?
     //        Check that the unmatched word penalty is correctly applied
-    const interpretedWords = words.map( w => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy))
-      .filter(w => w.interpretations.length > 0);
+    const interpretedWords = words
+      .map((w) => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy))
+      .filter((w) => w.interpretations.length > 0);
 
     return new InterpretedPhrase(phrase, interpretedWords);
   }
 
-
-  constructor(phrases: Array<PhraseWithKey<K>>, indexFilter: Array<string>,
-              phoneticEncoder: PhoneticEncoder | undefined,
-              wordOps: WordOps, synonymSets: Array<Set<string>>) {
-
-    this.indexFilter = indexFilter.map(s => s.toLocaleLowerCase());
+  constructor(
+    phrases: Array<PhraseWithKey<K>>,
+    indexFilter: Array<string>,
+    phoneticEncoder: PhoneticEncoder | undefined,
+    wordOps: WordOps,
+    synonymSets: Array<Set<string>>
+  ) {
+    this.indexFilter = indexFilter.map((s) => s.toLocaleLowerCase());
     this.wordOps = wordOps;
 
-    const descriptions = phrases.map(p => p.phrase);
-    const keys = phrases.map(p => p.key);
+    const descriptions = phrases.map((p) => p.phrase);
+    const keys = phrases.map((p) => p.key);
 
     const phraseList = new Array<DictionaryPhrase>();
     const dictionaryWords = new Set<string>();
 
-    for (let desc of descriptions) {
+    for (const desc of descriptions) {
       const words = this.getWordList(desc);
-      phraseList.push({asTyped: desc, words: words});
-      for (let word of words) {
+      phraseList.push({ asTyped: desc, words });
+      for (const word of words) {
         dictionaryWords.add(word);
       }
     }
 
     this.dictionary = new RichDictionary(dictionaryWords, phoneticEncoder, synonymSets);
-
   }
 }
 
