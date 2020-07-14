@@ -5,7 +5,7 @@
         <v-row>
           <v-col v-for="item in sections.survey" :key="item" cols="12" md="4">
             <v-item v-slot:default="{ active, toggle }" @change="swap(item)">
-              <v-card :color="active ? 'primary' : ''" dark height="160" @click="toggle">
+              <v-card :color="active ? 'primary' : ''" dark height="160" @click.stop="toggle">
                 <v-card-title class="justify-center">
                   {{ $t(`schemes.questions.${item}.title`) }}
                 </v-card-title>
@@ -23,7 +23,7 @@
         <v-row>
           <v-col v-for="item in sections.meal" :key="item" cols="12" md="4">
             <v-item v-slot:default="{ active, toggle }" @change="swap(item)">
-              <v-card :color="active ? 'primary' : ''" dark height="160" @click="toggle">
+              <v-card :color="active ? 'primary' : ''" dark height="160" @click.stop="toggle">
                 <v-card-title class="justify-center">
                   {{ $t(`schemes.questions.${item}.title`) }}
                 </v-card-title>

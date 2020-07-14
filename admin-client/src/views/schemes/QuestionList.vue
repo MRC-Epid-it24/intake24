@@ -12,7 +12,7 @@
         class="mr-3"
         color="secondary"
         :title="$t('schemes.questions.add')"
-        @click="add"
+        @click.stop="add"
       >
         <v-icon small>fa-plus</v-icon>
       </v-btn>
@@ -37,12 +37,12 @@
               </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn icon :title="$t('schemes.questions.edit')" @click="edit(idx, question)">
+              <v-btn icon :title="$t('schemes.questions.edit')" @click.stop="edit(idx, question)">
                 <v-icon color="primary lighten-2">fa-ellipsis-v</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn icon :title="$t('schemes.questions.remove')" @click="remove(idx)">
+              <v-btn icon :title="$t('schemes.questions.remove')" @click.stop="remove(idx)">
                 <v-icon color="error">fa-trash</v-icon>
               </v-btn>
             </v-list-item-action>
@@ -53,7 +53,7 @@
     <v-dialog v-model="dialog.show" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card tile>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click="reset">
+          <v-btn icon dark @click.stop="reset">
             <v-icon>$cancel</v-icon>
           </v-btn>
           <v-toolbar-title>
@@ -61,55 +61,70 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark text :title="$t('common.action.save')" @click="save">
+            <v-btn dark text :title="$t('common.action.save')" @click.stop="save">
               <v-icon left>$save</v-icon>
               {{ $t('common.action.save') }}
             </v-btn>
           </v-toolbar-items>
+
+          <template v-slot:extension>
+            <v-container>
+              <v-tabs v-model="tab" background-color="primary" dark>
+                <v-tab v-for="item in promptTypeTabs[dialog.question.component]" :key="item">
+                  {{ item }}
+                </v-tab>
+              </v-tabs>
+            </v-container>
+          </template>
         </v-toolbar>
+
         <v-form ref="form" @submit.prevent="save">
           <v-container>
-            <v-row justify="center">
-              <v-col cols="12">
-                <v-select
-                  v-model="dialog.question.component"
-                  :items="promptQuestions"
-                  :label="$t('schemes.questions.component')"
-                  hide-details="auto"
-                  item-value="component"
-                  item-text="name"
-                  outlined
-                  @change="updatePromptProps"
-                ></v-select>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="dialog.question.id"
-                  :label="$t('schemes.questions.id')"
-                  :rules="questionIdRules"
-                  hide-details="auto"
-                  hint="Unique identifier, used e.g. in data-exports as header"
-                  outlined
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="dialog.question.name"
-                  :label="$t('schemes.questions.name')"
-                  hide-details="auto"
-                  messages="Descriptive name for better orientation"
-                  outlined
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <component
-              :is="dialog.question.component"
-              v-bind.sync="dialog.question.props"
-              @validate="validate"
-            ></component>
+            <v-tabs-items v-model="tab">
+              <v-tab-item key="general">
+                <v-row>
+                  <v-col cols="12">
+                    <v-select
+                      v-model="dialog.question.component"
+                      :items="promptQuestions"
+                      :label="$t('schemes.questions.component')"
+                      hide-details="auto"
+                      item-value="component"
+                      item-text="name"
+                      outlined
+                      @change="updatePromptProps"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-text-field
+                      v-model="dialog.question.id"
+                      :label="$t('schemes.questions.id')"
+                      :rules="questionIdRules"
+                      hide-details="auto"
+                      hint="Unique identifier, used e.g. in data-exports as header"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-text-field
+                      v-model="dialog.question.name"
+                      :label="$t('schemes.questions.name')"
+                      hide-details="auto"
+                      messages="Descriptive name for better orientation"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-tab-item>
+              <component
+                :is="dialog.question.component"
+                v-bind.sync="dialog.question.props"
+                @validate="validate"
+              ></component>
+            </v-tabs-items>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn class="font-weight-bold" color="blue darken-3" text @click="reset">
+              <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="reset">
                 {{ $t('common.action.cancel') }}
               </v-btn>
               <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
@@ -128,9 +143,9 @@ import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import { FormRefs } from '@common/types/common';
-import { PromptQuestion } from '@common/types/prompts';
-import prompts from './prompts';
-import promptQuestions from './prompts/promptDefaults';
+import { ComponentType, PromptQuestion } from '@common/types/prompts';
+import prompts from '@/components/prompts';
+import promptQuestions from '@/components/prompts/promptDefaults';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;
@@ -140,6 +155,18 @@ export type PromptQuestionDialog = {
   show: boolean;
   index: number;
   question: EditPromptQuestion;
+};
+
+export type PromptTypeTabs = Record<ComponentType, string[]>;
+
+const promptTypeTabs: PromptTypeTabs = {
+  'info-prompt': ['general', 'content'],
+  'date-picker-prompt': ['general', 'content', 'validation'],
+  'time-picker-prompt': ['general', 'content', 'validation'],
+  'checkbox-list-prompt': ['general', 'content', 'validation', 'options'],
+  'radio-list-prompt': ['general', 'content', 'validation', 'options'],
+  'textarea-prompt': ['general', 'content', 'validation'],
+  'submit-prompt': ['general', 'content'],
 };
 
 export default (Vue as VueConstructor<Vue & FormRefs>).extend({
@@ -173,6 +200,8 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       newDialog: defaultDialog,
       questions: this.items,
       promptQuestions,
+      promptTypeTabs,
+      tab: null,
     };
   },
 
@@ -246,6 +275,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
 
     reset() {
+      this.tab = null;
       this.dialog = this.newDialog();
       this.$refs.form.resetValidation();
     },

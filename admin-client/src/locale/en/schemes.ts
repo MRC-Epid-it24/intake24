@@ -65,6 +65,11 @@ const scheme: LocaleMessage = {
     description: 'Question description',
     label: 'Options list label',
     other: 'Allow custom other option',
+    orientation: {
+      _: 'Orientation',
+      column: 'Column-wise',
+      row: 'Row-wise',
+    },
     options: {
       _: 'Options',
       title: 'Options list',

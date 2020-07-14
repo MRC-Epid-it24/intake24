@@ -6,10 +6,17 @@
         {{ $t('schemes.meals.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn fab small class="mr-3" color="secondary" :title="$t('schemes.meals.add')" @click="add">
+      <v-btn
+        fab
+        small
+        class="mr-3"
+        color="secondary"
+        :title="$t('schemes.meals.add')"
+        @click.stop="add"
+      >
         <v-icon small>fa-plus</v-icon>
       </v-btn>
-      <v-btn fab small color="error" :title="$t('schemes.meals.reset')" @click="resetMealList">
+      <v-btn fab small color="error" :title="$t('schemes.meals.reset')" @click.stop="resetMealList">
         <v-icon small>fa-sync</v-icon>
       </v-btn>
     </v-toolbar>
@@ -31,12 +38,12 @@
               <v-list-item-subtitle v-text="meal.time"></v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn icon :title="$t('schemes.meals.edit')" @click="edit(idx, meal)">
+              <v-btn icon :title="$t('schemes.meals.edit')" @click.stop="edit(idx, meal)">
                 <v-icon color="primary lighten-2">fa-ellipsis-v</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn icon :title="$t('schemes.meals.remove')" @click="remove(idx)"
+              <v-btn icon :title="$t('schemes.meals.remove')" @click.stop="remove(idx)"
                 ><v-icon color="error">fa-trash</v-icon></v-btn
               >
             </v-list-item-action>
@@ -79,7 +86,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="font-weight-bold" color="blue darken-3" text @click="reset">
+            <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="reset">
               {{ $t('common.action.cancel') }}
             </v-btn>
             <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
