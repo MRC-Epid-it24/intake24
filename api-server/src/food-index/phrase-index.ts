@@ -21,9 +21,32 @@ export interface WordOps {
   splitCompound(word: string): Array<string>;
 }
 
-export interface DictionaryPhrase {
+export interface DictionaryPhrase<K> {
   asTyped: string;
   words: Array<string>;
+  key: K;
+}
+
+export interface WordMatch {
+  word: {
+    index: number;
+    interpretationIndex: number;
+  };
+  matched: {
+    phraseIndex: number;
+    wordIndex: number;
+  };
+}
+
+interface PhraseMatch {
+  phraseIndex: number;
+  quality: number;
+  matchedWords: Array<WordMatch>;
+}
+
+export interface PhraseMatchResult<K> {
+  key: K;
+  quality: number;
 }
 
 export class PhraseIndex<K> {
@@ -32,6 +55,10 @@ export class PhraseIndex<K> {
   readonly wordOps: WordOps;
 
   readonly dictionary: RichDictionary;
+
+  readonly phraseIndex: Array<DictionaryPhrase<K>>;
+
+  readonly wordIndex: Map<string, Array<[number, number]>>;
 
   getWordList(phrase: string): Array<string> {
     let p = phrase.toLocaleLowerCase();
@@ -62,6 +89,169 @@ export class PhraseIndex<K> {
     return new InterpretedPhrase(phrase, interpretedWords);
   }
 
+  // Avoid matching a single input word with many phrase words at once,
+  // but still match the same word multiple times in correct sequence if it is
+  // indeed seen several times in the input
+  //
+  // E.g., for the dictionary phrase "a black dog and a black cat"
+  // given the input "black" we should only match "black" once
+  // but for input "black black" we need to match both instances of "black"
+  // and in the same order as they appear in the dictionary phrase
+  //
+  // Assumes that values in groupedMatches are sorted by input word index.
+  // eslint-disable-next-line class-methods-use-this
+  private ensureUniqueMatches(
+    groupedMatches: Map<number, Array<WordMatch>>
+  ): Map<number, Array<WordMatch>> {
+    const result = new Map<number, Array<WordMatch>>();
+
+    for (const key of groupedMatches.keys()) {
+      const matches = groupedMatches.get(key)!;
+      const uniqueMatches = new Array<WordMatch>();
+
+      const usedInputIndices = new Set<number>();
+      const usedDictionaryIndices = new Set<number>();
+
+      for (const match of matches) {
+        if (!usedInputIndices.has(match.word.index)) {
+          let minDictIndex = -1;
+
+          for (const match2 of matches) {
+            if (
+              match.word.index === match2.word.index &&
+              minDictIndex > match2.matched.wordIndex &&
+              !usedDictionaryIndices.has(match2.matched.wordIndex)
+            )
+              minDictIndex = match2.matched.wordIndex;
+          }
+
+          if (minDictIndex !== -1) {
+            uniqueMatches.push(match);
+            usedInputIndices.add(match.word.index);
+            usedDictionaryIndices.add(minDictIndex);
+          }
+        }
+      }
+    }
+
+    return result;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private evaluateMatchQuality(input: InterpretedPhrase, matchedWords: Array<WordMatch>): number {
+    return 1;
+  }
+
+  private matchCombination(
+    phrase: InterpretedPhrase,
+    combination: Array<number>
+  ): Array<PhraseMatch> {
+    // First step is to build a flat list of matched words from the word index, where every match is
+    // a reference to a specific word in a dictionary phrase in the form of a
+    // (phrase index, word index) pair combined with the index of the word in the input phrase and
+    // its interpretation index (given by the current interpretations combination).
+
+    const wordMatches = new Array<WordMatch>();
+
+    for (let wi = 0; wi < phrase.words.length; wi += 1) {
+      const interpretationIndex = combination[wi];
+
+      const indexMatches =
+        this.wordIndex.get(phrase.words[wi].interpretations[interpretationIndex].dictionaryWord) ||
+        [];
+
+      const matchedWords: Array<WordMatch> = indexMatches.map((m) => ({
+        word: {
+          index: wi,
+          interpretationIndex,
+        },
+        matched: {
+          phraseIndex: m[0],
+          wordIndex: m[1],
+        },
+      }));
+
+      wordMatches.push(...matchedWords);
+    }
+
+    // Next step is to group the word matches by the phrase index so we can give each potential
+    // matched phrase a match quality score
+
+    const groupedMatches = new Map<number, Array<WordMatch>>();
+
+    for (const match of wordMatches) {
+      const { phraseIndex } = match.matched;
+      const array: Array<WordMatch> = groupedMatches.get(phraseIndex) || [];
+      array.push(match);
+      groupedMatches.set(phraseIndex, array);
+    }
+
+    // Sort the grouped matches by the input word index so we can apply word order violation cost
+    // later
+
+    for (const key of groupedMatches.keys()) {
+      // cannot be undefined because we're iterating over known keys
+      const array = groupedMatches.get(key)!;
+      array.sort((m1, m2) => m1.word.index - m2.word.index);
+    }
+
+    // Clean up duplicate word matches
+
+    const uniqueGroupedMatches = this.ensureUniqueMatches(groupedMatches);
+
+    const phraseMatches = new Array<PhraseMatch>();
+
+    for (const key of uniqueGroupedMatches.keys()) {
+      const matchedWords = uniqueGroupedMatches.get(key)!;
+
+      const quality = this.evaluateMatchQuality(phrase, matchedWords);
+
+      phraseMatches.push({
+        phraseIndex: key,
+        quality,
+        matchedWords,
+      });
+    }
+
+    return phraseMatches;
+  }
+
+  findMatches(
+    phrase: InterpretedPhrase,
+    maxMatches: number,
+    maxCombinations: number
+  ): Array<PhraseMatchResult<K>> {
+    const matchedPhrases = phrase
+      .generateCombinations(maxCombinations)
+      .flatMap((c) => this.matchCombination(phrase, c));
+
+    if (matchedPhrases.length === 0) return [];
+
+    let bestMatchWordCount = matchedPhrases[0].matchedWords.length;
+
+    for (let i = 1; i < matchedPhrases.length; i += 1) {
+      if (matchedPhrases[i].matchedWords.length > bestMatchWordCount) {
+        bestMatchWordCount = matchedPhrases[i].matchedWords.length;
+      }
+    }
+
+    const bestMatches = matchedPhrases.filter((m) => m.matchedWords.length === bestMatchWordCount);
+    bestMatches.sort((m1, m2) => m2.quality - m1.quality);
+
+    // TODO:
+    // exclude duplicates which could have appeared due to different
+    // variants of spelling correction on the same word matching
+    // different words in the same phrase
+    // e.g. the word "cat" is not in the dictionary and is corrected
+    // to "oat" and "eat"
+    // then it will match the phrase "eat oats" twice
+
+    return bestMatches.slice(0, maxMatches).map((m) => ({
+      key: this.phraseIndex[m.phraseIndex].key,
+      quality: m.quality,
+    }));
+  }
+
   constructor(
     phrases: Array<PhraseWithKey<K>>,
     indexFilter: Array<string>,
@@ -71,132 +261,23 @@ export class PhraseIndex<K> {
   ) {
     this.indexFilter = indexFilter.map((s) => s.toLocaleLowerCase());
     this.wordOps = wordOps;
+    this.phraseIndex = new Array<DictionaryPhrase<K>>(phrases.length);
+    this.wordIndex = new Map<string, Array<[number, number]>>();
 
-    const descriptions = phrases.map((p) => p.phrase);
-    const keys = phrases.map((p) => p.key);
-
-    const phraseList = new Array<DictionaryPhrase>();
     const dictionaryWords = new Set<string>();
 
-    for (const desc of descriptions) {
-      const words = this.getWordList(desc);
-      phraseList.push({ asTyped: desc, words });
-      for (const word of words) {
-        dictionaryWords.add(word);
+    for (let pi = 0; pi < phrases.length; pi += 1) {
+      const words = this.getWordList(phrases[pi].phrase);
+      this.phraseIndex.push({ asTyped: phrases[pi].phrase, words, key: phrases[pi].key });
+
+      for (let wi = 0; wi < words.length; wi += 1) {
+        const occurrences = this.wordIndex.get(words[wi]) || new Array<[number, number]>();
+        occurrences.push([pi, wi]);
+        this.wordIndex.set(words[wi], occurrences);
+        dictionaryWords.add(words[wi]);
       }
     }
 
     this.dictionary = new RichDictionary(dictionaryWords, phoneticEncoder, synonymSets);
   }
 }
-
-/*
-class PhraseIndex[T](phrases: Seq[(String, T), indexFilter: Seq[CaseInsensitiveString], nonIndexedWords: Seq[CaseInsensitiveString], val phoneticEncoder: Option[PhoneticEncoder], val stemmer: WordOps, synsets: Seq[Set[CaseInsensitiveString]]) {
-
-  val (desc, values) = phrases.unzip
-
-  val (phraseList, dictionaryWords) = desc.foldLeft((List[DictionaryPhrase](), Set[CaseInsensitiveString]())) {
-  case ((phrases, dict), phrase) =>
-    val words = mkWordList(phrase)
-    (DictionaryPhrase(phrase, words) :: phrases, dict ++ words)
-  }
-
-  val dictionary = new RichDictionary(dictionaryWords ++ synsets.flatten, phoneticEncoder, synsets)
-
-  val phraseIndex = phraseList.reverse.zipWithIndex.map(_.swap).toMap
-
-  val valueIndex = values.zipWithIndex.map(_.swap).toMap
-
-  val wordIndex = phraseIndex.foldLeft(Map[CaseInsensitiveString, List[(Int, Int)]]().withDefaultValue(List[(Int, Int)]())) {
-  case (map, (id, DictionaryPhrase(_, words))) =>
-    words.zipWithIndex.foldLeft(map) {
-    case (map, (word, pos)) =>
-      map + (word -> ((id, pos) :: map(word)))
-    }
-  }
-
-  def orderViolations(order: List[Int]) =
-    order.indices.map(i => {
-      val (left, right) = order.splitAt(i)
-      val ref = right.head
-      left.count(_ > ref) + right.count(_ < ref)
-    }).foldLeft(0)(_ + _)
-
-  def distanceViolations(order: List[Int]) =
-    order.zip(order.drop(1)).map(x => math.abs(x._1 - x._2) - 1).foldLeft(0)(_ + _)
-
-
-  def matchQuality(order: List[Int], orderViolationCost: Int, distanceCost: Int) =
-    orderViolations(order) * orderViolationCost + distanceViolations(order) * distanceCost
-
-
-  def findMatches(phrase: InterpretedPhrase, maxMatches: Int, maxCombinations: Int) = {
-    def matchCombination(combination: List[Int]) = {
-    // need to avoid matching a single input word with many phrase words at once,
-    // but still match the same word multiple times in correct sequence if it is
-    // indeed seen several times in the input
-    //
-    // e.g. for dictionary phrase "a black dog and a black cat"
-    // for input "black" we should only match "black" once
-    // but for input "black black" we need to match both instances of "black"
-    // and in the same order as they appear in the dictionary phrase
-
-    val z = (List[WordMatch](), Set[(Int, Int)]())
-
-    val wordMatches = {
-      combination.zipWithIndex.foldLeft(z) {
-  case ((wordMatches, usedMatches), (int_id, word_id)) => {
-      val indexMatches = wordIndex(phrase.words(word_id).interpretations(int_id).image)
-
-      // exclude words that have already been matched and take the first
-      // (position-wise, from left to right) matching word
-      val newMatches = indexMatches.filterNot(usedMatches.contains(_)).groupBy(_._1).mapValues(_.map(_._2).min)
-
-      (wordMatches ++ newMatches.map { case (phrase_id, pos_id) => WordMatch(phrase_id, word_id, int_id, pos_id) }, usedMatches ++ newMatches)
-    }
-  }._1
-}
-
-  wordMatches.groupBy(_.phrase_id).toList.map {
-  case (phrase_id, words) =>
-      PhraseMatch(phrase_id, valueIndex(phrase_id), words.length,
-        matchQuality(words.map(_.pos),
-          DefaultPhraseIndexConstants.orderCost,
-          DefaultPhraseIndexConstants.distanceCost) + (phraseIndex(phrase_id).words.length - words.length) * DefaultPhraseIndexConstants.unmatchedWordCost,
-        words)
-  }
-}
-
-  phrase.generateCombinations(maxCombinations).flatMap(matchCombination(_)) match {
-  case Nil => Nil
-  case phraseMatches => {
-      val bestMatch = phraseMatches.maxBy(_.wordCount).wordCount
-      phraseMatches.filter(_.wordCount == bestMatch)
-      // exclude duplicates which could have appeared due to different
-      // variants of spelling correction on the same word matching
-      // different words in the same phrase
-      // e.g. the word "cat" is not in the dictionary and is corrected
-      // to "oat" and "eat"
-      // then it will match the phrase "eat oats" twice
-        .map(phr => (phr.index, phr)).toMap.toList.map(_._2)
-        .sortBy(_.quality)
-        .take(maxMatches)
-    }
-  }
-}
-
-  def interpretPhrase(phrase: String, strategy: MatchStrategy) =
-    InterpretedPhrase(phrase, mkWordList(phrase).take(DefaultPhraseIndexConstants.maxWordsPerPhrase).map(dictionary.interpretWord(_, DefaultPhraseIndexConstants.maxWordInterpretations, strategy)).filterNot(_.interpretations.isEmpty))
-
-  def lookup(phrase: String, maxResults: Int): Seq[(T, Int)] = {
-    val stage1interpretation = interpretPhrase(phrase, MatchFewer)
-    val stage1result = findMatches(stage1interpretation, maxResults, DefaultPhraseIndexConstants.maxPhraseCombinations).map(m => (m.value, m.quality))
-    if (stage1result.size <= DefaultPhraseIndexConstants.maxMatchesForMatchMore) {
-    if (stage1interpretation.words.exists(_.interpretations.exists { case AltSpelling(_, _) => true; case _ => false }))
-    findMatches(interpretPhrase(phrase, MatchMore), maxResults, DefaultPhraseIndexConstants.maxPhraseCombinations).map(m => (m.value, m.quality))
-  else stage1result
-  }
-else stage1result
-}
-}
-*/

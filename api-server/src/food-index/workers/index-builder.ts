@@ -46,5 +46,5 @@ FoodLocalList.findAll({
 
   console.log(`Interpreted phrase: ${JSON.stringify(test)}`);
 
-  console.log(`Combinations: ${JSON.stringify(test.generateCombinations(10))}`);
+  console.log(phraseIndex.findMatches(test, 10, 100));
 });

@@ -87,7 +87,7 @@ export default class InterpretedPhrase {
 
     const combinations = indices(workingSet[0].interpretations).map((i) => [i]);
 
-    return workingSet.reduce(
+    return workingSet.splice(1).reduce(
       (acc, next) => product(acc, indices(next.interpretations)),
       combinations
     );
