@@ -23,10 +23,12 @@ function maxInterpretationsIndex(words: Array<InterpretedWord>): number {
   repeatedly dropping an arbitrary interpretation from the word that has the longest list of
   interpretations.
  */
-function cutCombinations(
+export function cutCombinations(
   words: Array<InterpretedWord>,
   maxCombinations: number
 ): Array<InterpretedWord> {
+  if (words.length === 0) return [];
+
   const max = Math.max(1, maxCombinations);
   const cutWords = new Array<InterpretedWord>(...words);
   let combinations = countCombinations(words);
@@ -83,13 +85,14 @@ export default class InterpretedPhrase {
   }
 
   generateCombinations(maxCombinations: number): Array<Array<number>> {
+    if (this.words.length === 0) return [];
+
     const workingSet = cutCombinations(this.words, maxCombinations);
 
     const combinations = indices(workingSet[0].interpretations).map((i) => [i]);
 
-    return workingSet.splice(1).reduce(
-      (acc, next) => product(acc, indices(next.interpretations)),
-      combinations
-    );
+    return workingSet
+      .splice(1)
+      .reduce((acc, next) => product(acc, indices(next.interpretations)), combinations);
   }
 }

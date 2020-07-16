@@ -17,19 +17,24 @@
   "scripts": {
     "development": "cross-env NODE_ENV=development webpack",
     "development:start": "cross-env NODE_ENV=development nodemon --inspect=5959 dist/server.js",
+    "test:run": "mocha -c dist-tests/tests.js",
     "dev": "npm run development",
     "clean": "rimraf dist",
     "build": "cross-env NODE_ENV=production webpack",
     "production": "npm run clean && npm run build",
     "prod": "npm run production",
     "start": "node dist/server.js",
-    "lint": "eslint --ext .js,.ts src/ --quiet --fix"
+    "lint": "eslint --ext .js,.ts src/ --quiet --fix",
+    "test": "cross-env NODE_ENV=development --inspect=5959 webpack --config webpack.test.config.js"
   },
   "dependencies": {
     "@duosecurity/duo_web": "^1.0.5",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^8.0.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -78,6 +83,7 @@
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "mocha": "^8.0.1",
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",

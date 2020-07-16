@@ -1,31 +1,34 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const ShellPlugin = require('webpack-shell-plugin');
+const { exec } = require('child_process');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const {NODE_ENV = 'development'} = process.env;
 const isDev = NODE_ENV === 'development';
 
-const plugins = [];
-
-if (isDev) {
-  plugins.push(new ShellPlugin({onBuildEnd: ['npm run development:start']}));
-}
+const plugins = [
+  {
+    apply: (compiler) => {
+      compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+        exec('npm run --silent test:run', (err, stdout, stderr) => {
+          if (stdout) process.stdout.write(stdout);
+          if (stderr) process.stderr.write(stderr);
+        });
+      });
+    },
+  },
+];
 
 module.exports = {
-  entry: {
-    server: path.resolve('./src/index.ts'),
-    foodIndexBuilder: path.resolve('./src/food-index/workers/index-builder.ts'),
-    tests: path.resolve('./src/tests/index.ts')
-  },
+  entry: path.resolve('./src/tests/index.ts'),
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
+    path: path.resolve(__dirname, 'dist-tests'),
+    filename: 'tests.js',
   },
   mode: NODE_ENV,
   target: 'node',
-  watch: isDev,
+  watch: true,
   devtool: isDev ? 'source-map' : undefined,
   optimization: {
     minimize: false,

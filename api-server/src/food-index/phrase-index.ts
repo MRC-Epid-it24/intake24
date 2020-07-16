@@ -119,7 +119,7 @@ export class PhraseIndex<K> {
           for (const match2 of matches) {
             if (
               match.word.index === match2.word.index &&
-              minDictIndex > match2.matched.wordIndex &&
+              minDictIndex < match2.matched.wordIndex &&
               !usedDictionaryIndices.has(match2.matched.wordIndex)
             )
               minDictIndex = match2.matched.wordIndex;
@@ -132,6 +132,8 @@ export class PhraseIndex<K> {
           }
         }
       }
+
+      result.set(key, uniqueMatches);
     }
 
     return result;
@@ -147,7 +149,7 @@ export class PhraseIndex<K> {
     combination: Array<number>
   ): Array<PhraseMatch> {
     // First step is to build a flat list of matched words from the word index, where every match is
-    // a reference to a specific word in a dictionary phrase in the form of a
+    // a reference to a specific word in a dictionary phrase in the form of a s
     // (phrase index, word index) pair combined with the index of the word in the input phrase and
     // its interpretation index (given by the current interpretations combination).
 
