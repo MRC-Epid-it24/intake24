@@ -270,7 +270,7 @@ export class PhraseIndex<K> {
 
     for (let pi = 0; pi < phrases.length; pi += 1) {
       const words = this.getWordList(phrases[pi].phrase);
-      this.phraseIndex.push({ asTyped: phrases[pi].phrase, words, key: phrases[pi].key });
+      this.phraseIndex[pi] = { asTyped: phrases[pi].phrase, words, key: phrases[pi].key };
 
       for (let wi = 0; wi < words.length; wi += 1) {
         const occurrences = this.wordIndex.get(words[wi]) || new Array<[number, number]>();

@@ -25,7 +25,7 @@
     "prod": "npm run production",
     "start": "node dist/server.js",
     "lint": "eslint --ext .js,.ts src/ --quiet --fix",
-    "test": "cross-env NODE_ENV=development --inspect=5959 webpack --config webpack.test.config.js"
+    "test": "cross-env NODE_ENV=development webpack --inspect=5959 --config webpack.test.config.js"
   },
   "dependencies": {
     "@duosecurity/duo_web": "^1.0.5",

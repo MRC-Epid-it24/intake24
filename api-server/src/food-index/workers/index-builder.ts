@@ -34,7 +34,7 @@ FoodLocalList.findAll({
 
   const phraseIndex = new PhraseIndex<string>(
     foodDescriptions,
-    new Array<string>(),
+    ['with'],
     new Metaphone3Encoder(),
     new EnglishWordOps(),
     new Array(
@@ -46,5 +46,9 @@ FoodLocalList.findAll({
 
   console.log(`Interpreted phrase: ${JSON.stringify(test)}`);
 
-  console.log(phraseIndex.findMatches(test, 10, 100));
+  const matches = phraseIndex.findMatches(test, 10, 100);
+
+  for (const m of matches) {
+    console.log(foodDescriptions.find((f) => f.key === m.key));
+  }
 });
