@@ -134,7 +134,6 @@ describe('Phrase index', function () {
       const t = index.interpretPhrase('banana with coffee', 'match-fewer');
 
       console.log(JSON.stringify(index.findMatches(t, 10, 100)));
-
     });
   });
 });

@@ -45,6 +45,7 @@ interface PhraseMatch {
 }
 
 export interface PhraseMatchResult<K> {
+  phrase: string;
   key: K;
   quality: number;
 }
@@ -249,6 +250,7 @@ export class PhraseIndex<K> {
     // then it will match the phrase "eat oats" twice
 
     return bestMatches.slice(0, maxMatches).map((m) => ({
+      phrase: this.phraseIndex[m.phraseIndex].asTyped,
       key: this.phraseIndex[m.phraseIndex].key,
       quality: m.quality,
     }));

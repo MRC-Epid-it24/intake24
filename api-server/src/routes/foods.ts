@@ -3,12 +3,12 @@ import passport from 'passport';
 import { wrapAsync } from '@/util';
 import foodController from '@/http/controllers/food.controller';
 import foodSearchController from '@/http/controllers/food-search.controller';
-import { isSurveyRespondent } from '@/http/middleware/acl';
+import { isSuperUser, isSurveyRespondent } from '@/http/middleware/acl';
 
 const router = Router();
 
 router.use(passport.authenticate('jwt', { session: false }));
-router.use(isSurveyRespondent());
+router.use(isSuperUser());
 
 // Food search
 router.get('/:locale', wrapAsync(foodSearchController.lookup));
