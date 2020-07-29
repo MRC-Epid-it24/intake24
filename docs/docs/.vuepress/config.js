@@ -4,7 +4,7 @@ module.exports = {
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
-  title: 'Vuepress Docs Boilerplate',
+  title: 'Intake24 NG Documentation',
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
@@ -34,6 +34,10 @@ module.exports = {
     lastUpdated: false,
     nav: [
       {
+        text: 'Overview',
+        link: '/overview/',
+      },
+      {
         text: 'Survey',
         link: '/survey/',
       },
@@ -51,6 +55,15 @@ module.exports = {
       }
     ],
     sidebar: {
+      '/survey/': [
+        {
+          title: 'Survey',
+          collapsable: false,
+          children: [
+            '',
+          ]
+        }
+      ],
       '/admin/': [
         {
           title: 'Admin',

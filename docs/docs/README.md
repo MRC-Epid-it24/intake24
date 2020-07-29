@@ -2,8 +2,8 @@
 home: true
 # heroImage: https://v1.vuepress.vuejs.org/hero.png
 tagline: Intake24 dietary recall system
-actionText: Quick Start →
-actionLink: /guide/
+actionText: Overview →
+actionLink: /overview/
 features:
 - title: Front End (Recall)
   details: Description
