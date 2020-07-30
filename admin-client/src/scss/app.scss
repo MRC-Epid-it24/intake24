@@ -1,12 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,900&subset=latin-ext');
 @import '~vuetify/src/styles/styles.sass';
 
-$fa-font-path: '../public/vendor/fontawesome-free';
-
-@import '~@fortawesome/fontawesome-free/scss/fontawesome';
-@import '~@fortawesome/fontawesome-free/scss/solid';
-@import '~@fortawesome/fontawesome-free/scss/regular';
-@import '~@fortawesome/fontawesome-free/scss/brands';
+@import "fontawesome";
 
 // Drag & drop lists
 .drag-and-drop__item {
