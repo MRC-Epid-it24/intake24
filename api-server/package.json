@@ -42,7 +42,7 @@
     "express-validator": "^6.6.0",
     "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.17",
+    "lodash": "^4.17.19",
     "liblevenshtein": "^2.0.4",
     "morgan": "^1.10.0",
     "ms": "^2.1.2",
