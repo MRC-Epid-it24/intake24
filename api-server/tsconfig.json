@@ -4,20 +4,21 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@common/*": ["../common/src/*"],
+      "@common/*": ["../common/src/*"]
     },
     "typeRoots": [
       "node_modules/@types"
     ],
     "types": [
-      "node"
+      "node",
+      "mocha"
     ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*.ts",
+    "src/**/*.ts"
   ],
   "exclude": [
     "dist",

@@ -37,6 +37,7 @@ module.exports = {
     'import/no-cycle': 'warn',
     'no-console': 'warn',
     'no-debugger': 'warn',
+    'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     'import/extensions': [
       'error',
       'ignorePackages',
