@@ -55,12 +55,22 @@ module.exports = {
       }
     ],
     sidebar: {
+      '/overview/': [
+        {
+          title: 'Overview',
+          collapsable: false,
+          children: [
+            '',
+            'get-started'
+          ]
+        }
+      ],
       '/survey/': [
         {
           title: 'Survey',
           collapsable: false,
           children: [
-            '',
+            ''
           ]
         }
       ],
@@ -70,6 +80,7 @@ module.exports = {
           collapsable: false,
           children: [
             '',
+            'nutritionist-dictionary',
           ]
         }
       ],
@@ -79,6 +90,8 @@ module.exports = {
           collapsable: false,
           children: [
             '',
+            'endpoints',
+            'authentication'
           ]
         }
       ],
@@ -87,6 +100,7 @@ module.exports = {
           title: 'Data Dictionary',
           collapsable: false,
           children: [
+            '',
             'survey',
             'admin'
           ]

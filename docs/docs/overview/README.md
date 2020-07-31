@@ -1,15 +1,10 @@
---- 
-sidebar: auto
----
-
 # Overview
-
 Intake24 [description]
 
 It is comprised of four key parts:
-* Survey/Recall interface: 
-* Admin interface:
-* API Service: 
+* Survey/Recall interface
+* Admin interface
+* API Service
 * Database containing: system data, and food data
 
 ## Survey/Recall interface
