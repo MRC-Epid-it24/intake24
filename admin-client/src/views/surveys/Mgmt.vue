@@ -4,7 +4,7 @@
       <template v-slot:header-add>
         <v-dialog v-model="dialog" persistent max-width="600px">
           <template v-slot:activator="{ on }">
-            <v-btn top right color="secondary" v-on="on" @click="add">
+            <v-btn top right color="secondary" v-on="on" @click.stop="add">
               <v-icon class="mr-2">fa-plus</v-icon> {{ $t('surveys.mgmt.add') }}
             </v-btn>
           </template>
@@ -70,7 +70,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn class="font-weight-bold" color="blue darken-3" text @click="reset">
+                <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="reset">
                   {{ $t('common.action.cancel') }}
                 </v-btn>
                 <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
@@ -82,7 +82,7 @@
         </v-dialog>
       </template>
       <template v-slot:item.action="{ item }" class="text-right">
-        <v-btn color="primary" icon :title="$t('common.action.edit')" @click="edit(item)">
+        <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
           <v-icon dark>$edit</v-icon>
         </v-btn>
       </template>

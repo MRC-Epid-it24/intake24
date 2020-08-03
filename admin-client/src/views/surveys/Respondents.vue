@@ -15,9 +15,9 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="text-h5">{{
-                $t(`surveys.respondents.${isCreate ? 'add' : 'edit'}`)
-              }}</span>
+              <span class="text-h5">
+                {{ $t(`surveys.respondents.${isCreate ? 'add' : 'edit'}`) }}
+              </span>
             </v-card-title>
             <v-form ref="form" @keydown.native="clearError" @submit.prevent="save">
               <v-card-text>
@@ -45,6 +45,7 @@
                           name="password"
                           outlined
                           prepend-icon="fas fa-unlock"
+                          type="password"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
@@ -56,6 +57,7 @@
                           name="passwordConfirm"
                           outlined
                           prepend-icon="fas fa-unlock"
+                          type="password"
                         ></v-text-field>
                       </v-col>
                     </template>
@@ -97,7 +99,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn class="font-weight-bold" color="blue darken-3" text @click="reset">
+                <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="reset">
                   {{ $t('common.action.cancel') }}
                 </v-btn>
                 <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
@@ -109,10 +111,10 @@
         </v-dialog>
       </template>
       <template v-slot:item.action="{ item }" class="text-right">
-        <v-btn color="primary" icon :title="$t('common.action.edit')" @click="edit(item)">
+        <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
           <v-icon dark>$edit</v-icon>
         </v-btn>
-        <v-btn color="error" icon :title="$t('common.action.delete')" @click="remove(item)">
+        <v-btn color="error" icon :title="$t('common.action.delete')" @click.stop="remove(item)">
           <v-icon dark>$delete</v-icon>
         </v-btn>
       </template>
