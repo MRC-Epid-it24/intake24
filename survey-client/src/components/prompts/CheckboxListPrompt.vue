@@ -32,12 +32,12 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType, VueConstructor } from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PromptRefs } from '@common/types/prompts';
-import { ChechboxListProps } from '@common/types/promptProps';
+import { ChechboxListPromptProps } from '@common/types/promptProps';
+import { checkboxListPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt from './BasePrompt';
-import { checkboxListDefaults } from './promptDefaults';
 
 export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
   name: 'CheckboxListPrompt',
@@ -46,17 +46,17 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
   props: {
     props: {
-      type: Object as PropType<ChechboxListProps>,
+      type: Object as () => ChechboxListPromptProps,
     },
     value: {
-      type: Array as PropType<string[]>,
+      type: Array as () => string[],
       default: () => [] as string[],
     },
   },
 
   data() {
     return {
-      ...merge(checkboxListDefaults, this.props),
+      ...merge(checkboxListPromptProps, this.props),
       errors: [] as string[],
       otherEnabled: false,
       otherValue: '',
@@ -86,7 +86,10 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
     onSubmit() {
       if (this.validation.required && !this.currentValue.length) {
-        this.errors = [this.validation.message];
+        this.errors = [
+          this.validation.message[this.$i18n.locale] ??
+            (this.$t('prompts.checkbox.validation.required') as string),
+        ];
         return;
       }
 

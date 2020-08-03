@@ -9,11 +9,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue from 'vue';
 import merge from 'deepmerge';
 import { BasePromptProps } from '@common/types/promptProps';
+import { infoPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt from './BasePrompt';
-import { baseDefaults } from './promptDefaults';
 
 export default Vue.extend({
   name: 'InfoPage',
@@ -22,13 +22,13 @@ export default Vue.extend({
 
   props: {
     props: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as () => BasePromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(baseDefaults, this.props),
+      ...merge(infoPromptProps, this.props),
       currentValue: 'ok',
     };
   },

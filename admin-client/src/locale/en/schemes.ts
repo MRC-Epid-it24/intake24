@@ -67,12 +67,12 @@ const scheme: LocaleMessage = {
     other: 'Allow custom other option',
     orientation: {
       _: 'Orientation',
-      column: 'Column-wise',
-      row: 'Row-wise',
+      column: 'Column',
+      row: 'Row',
     },
     options: {
       _: 'Options',
-      title: 'Options list',
+      title: 'Option list',
       add: 'New option',
       remove: 'Remove option',
       label: 'Label',

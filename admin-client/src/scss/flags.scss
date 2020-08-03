@@ -1,0 +1,7 @@
+$flag-icon-css-path: "../node_modules/flag-icon-css/flags" !default;
+$flag-icon-rect-path: "/4x3" !default;
+$flag-icon-square-path: "/1x1" !default;
+$include: 'dk', 'gb', 'es', 'pt';
+
+@import "~flag-icon-css/sass/flag-icon-base";
+@import "~flag-icon-css/sass/flag-icon-list";

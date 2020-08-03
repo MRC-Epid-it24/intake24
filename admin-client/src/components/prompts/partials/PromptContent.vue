@@ -1,39 +1,58 @@
 <template>
   <v-tab-item key="content">
-    <v-row>
-      <v-col cols="12">
+    <select-locale
+      :label="$t('schemes.questions.text')"
+      :value="text"
+      @input="update('text', $event)"
+    >
+      <template v-for="locale in Object.keys(text)" v-slot:[`locale.${locale}`]>
         <v-text-field
+          :key="locale"
           :label="$t('schemes.questions.text')"
           :rules="textRules"
-          :value="text"
+          :value="text[locale]"
           hide-details="auto"
           outlined
-          @input="update('text', $event)"
+          @input="updateLocale('text', locale, $event)"
         ></v-text-field>
-      </v-col>
-      <v-col cols="12">
-        <v-label class="mt-4 mb-2">{{ $t('schemes.questions.description') }}</v-label>
-        <editor :init="tinymceInit" :value="description" @input="update('description', $event)" />
-      </v-col>
-    </v-row>
+      </template>
+    </select-locale>
+    <select-locale
+      :label="$t('schemes.questions.description')"
+      :value="description"
+      @input="update('description', $event)"
+    >
+      <template v-for="locale in Object.keys(description)" v-slot:[`locale.${locale}`]>
+        <editor
+          :init="tinymceInit"
+          :key="locale"
+          :value="description[locale]"
+          @input="updateLocale('description', locale, $event)"
+        />
+      </template>
+    </select-locale>
   </v-tab-item>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import tinymce from '@/components/tinymce/tinymce';
+import { LocaleTranslation } from '@common/types/common';
+import SelectLocale from './SelectLocale.vue';
 
 export default Vue.extend({
   name: 'PromptContent',
+
+  components: { SelectLocale },
 
   mixins: [tinymce],
 
   props: {
     text: {
-      type: String,
+      type: Object as () => LocaleTranslation,
     },
     description: {
-      type: String,
+      type: Object as () => LocaleTranslation,
     },
   },
 
@@ -46,6 +65,9 @@ export default Vue.extend({
   methods: {
     update(field: string, value: any) {
       this.$emit(`update:${field}`, value);
+    },
+    updateLocale(field: string, locale: string, value: any) {
+      this.$emit(`update:${field}`, { ...this.$props[field], [locale]: value });
     },
   },
 });

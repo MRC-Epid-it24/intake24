@@ -16,12 +16,12 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType, VueConstructor } from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PromptRefs } from '@common/types/prompts';
-import { DatePickerProps } from '@common/types/promptProps';
+import { DatePickerPromptProps } from '@common/types/promptProps';
+import { datePickerPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt from './BasePrompt';
-import { datePickerDefaults } from './promptDefaults';
 
 export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
   name: 'DatePickerPrompt',
@@ -30,7 +30,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
   props: {
     props: {
-      type: Object as PropType<DatePickerProps>,
+      type: Object as () => DatePickerPromptProps,
     },
     value: {
       type: String,
@@ -40,7 +40,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
   data() {
     return {
-      ...merge(datePickerDefaults, this.props),
+      ...merge(datePickerPromptProps, this.props),
       currentValue: this.value,
       errors: [] as string[],
     };
@@ -59,7 +59,10 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
     onSubmit() {
       if (this.validation.required && !this.currentValue) {
-        this.errors = [this.validation.message];
+        this.errors = [
+          this.validation.message[this.$i18n.locale] ??
+            (this.$t('prompts.datepicker.validation.required') as string),
+        ];
         return;
       }
 

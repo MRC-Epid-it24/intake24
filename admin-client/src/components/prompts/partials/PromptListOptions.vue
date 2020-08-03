@@ -23,6 +23,7 @@
             <v-list-item
               v-for="(option, idx) in currentOptions"
               :key="option.id"
+              :ripple="false"
               class="drag-and-drop__item"
               draggable
               link

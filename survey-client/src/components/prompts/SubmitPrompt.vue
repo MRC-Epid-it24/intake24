@@ -19,11 +19,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue from 'vue';
 import merge from 'deepmerge';
 import { BasePromptProps } from '@common/types/promptProps';
+import { submitPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt from './BasePrompt';
-import { baseDefaults } from './promptDefaults';
 
 export default Vue.extend({
   name: 'SubmitPrompt',
@@ -32,12 +32,12 @@ export default Vue.extend({
 
   props: {
     props: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as () => BasePromptProps,
     },
   },
 
   data() {
-    return { ...merge(baseDefaults, this.props) };
+    return { ...merge(submitPromptProps, this.props) };
   },
 
   methods: {

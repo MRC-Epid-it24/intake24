@@ -1,4 +1,6 @@
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { Meal } from '@common/types/meals';
+import { RecallQuestions } from '@common/types/recall';
 import BaseModel from '../model';
 import Survey from './survey';
 
@@ -9,20 +11,14 @@ export enum SchemeTypes {
 
 export type SchemeType = SchemeTypes;
 
-export type Meal = { name: string; time: string };
-
-// TODO: define Questions type / interface
-export type Dictionary = { [key: string]: any };
-export type Questions = Dictionary;
-
 // TODO: move this to DB-managed list / localisations
 export const defaultMeals: Meal[] = [
-  { name: 'Breakfast', time: '8:10' },
-  { name: 'Morning snack', time: '10:00' },
-  { name: 'Lunch', time: '13:00' },
-  { name: 'Afternoon snack', time: '16:00' },
-  { name: 'Dinner', time: '18:00' },
-  { name: 'Evening snack', time: '20:00' },
+  { name: { en: 'Breakfast' }, time: '8:10' },
+  { name: { en: 'Morning snack' }, time: '10:00' },
+  { name: { en: 'Lunch' }, time: '13:00' },
+  { name: { en: 'Afternoon snack' }, time: '16:00' },
+  { name: { en: 'Dinner' }, time: '18:00' },
+  { name: { en: 'Evening snack' }, time: '20:00' },
 ];
 
 @Scopes(() => ({
@@ -59,12 +55,12 @@ export default class Scheme extends BaseModel<Scheme> {
   @Column({
     type: DataType.TEXT({ length: 'long' }),
   })
-  get questions(): Questions {
+  get questions(): RecallQuestions {
     const val = this.getDataValue('questions') as unknown;
     return val ? JSON.parse(val as string) : {};
   }
 
-  set questions(value: Questions) {
+  set questions(value: RecallQuestions) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     this.setDataValue('questions', JSON.stringify(value ?? {}));

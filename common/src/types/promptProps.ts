@@ -1,26 +1,26 @@
-import { AnyDictionary } from './common';
+import { AnyDictionary, LocaleTranslation } from './common';
 
 export interface BasePromptProps {
-  text: string;
-  description: string | null;
+  text: LocaleTranslation;
+  description: LocaleTranslation;
 }
 
 export interface ValidatedPromptProps extends BasePromptProps {
   validation: {
     required: boolean;
-    message: string;
+    message: LocaleTranslation;
   };
 }
 
-export type DatePickerProps = ValidatedPromptProps;
+export type DatePickerPromptProps = ValidatedPromptProps;
 
-export interface TimePickerProps extends ValidatedPromptProps {
+export interface TimePickerPromptProps extends ValidatedPromptProps {
   format: 'ampm' | '24hr';
 }
 
-export interface TextareaProps extends ValidatedPromptProps {
-  label: string | null;
-  hint: string | null;
+export interface TextareaPromptProps extends ValidatedPromptProps {
+  label: LocaleTranslation;
+  hint: LocaleTranslation;
 }
 
 export type ListOption = {
@@ -29,18 +29,20 @@ export type ListOption = {
   value: string;
 };
 
+export type LocaleOptionList = { [locale: string]: ListOption[] };
+
 export type RadioOrientation = 'column' | 'row';
 
-export interface RadioListProps extends ValidatedPromptProps {
-  label: string | null;
+export interface RadioListPromptProps extends ValidatedPromptProps {
+  label: LocaleTranslation;
   options: ListOption[];
   orientation: RadioOrientation;
   other: boolean;
 }
 
-export interface ChechboxListProps extends ValidatedPromptProps {
-  label: string | null;
-  options: ListOption[];
+export interface ChechboxListPromptProps extends ValidatedPromptProps {
+  label: LocaleTranslation;
+  options: LocaleOptionList;
   other: boolean;
 }
 

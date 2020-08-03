@@ -5,14 +5,14 @@
         <v-radio-group
           v-model="selected"
           :error="hasErrors"
-          :label="label"
+          :label="label[$i18n.locale]"
           hide-details="auto"
           :column="orientation === 'column'"
           :row="orientation === 'row'"
           @change="clearErrors"
         >
           <v-radio
-            v-for="option in options"
+            v-for="option in options[$i18n.locale]"
             :key="option.value"
             :label="option.label"
             :value="option.value"
@@ -35,12 +35,12 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType, VueConstructor } from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PromptRefs } from '@common/types/prompts';
-import { RadioListProps } from '@common/types/promptProps';
+import { RadioListPromptProps } from '@common/types/promptProps';
+import { radioListPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt from './BasePrompt';
-import { radioListDefaults } from './promptDefaults';
 
 export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
   name: 'RadioListPrompt',
@@ -49,7 +49,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
   props: {
     props: {
-      type: Object as PropType<RadioListProps>,
+      type: Object as () => RadioListPromptProps,
     },
     value: {
       type: String,
@@ -59,9 +59,8 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
   data() {
     return {
-      ...merge(radioListDefaults, this.props),
+      ...merge(radioListPromptProps, this.props),
       errors: [] as string[],
-      otherEnabled: false,
       otherValue: '',
       selected: this.value,
     };
@@ -83,7 +82,10 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
     onSubmit() {
       if (this.validation.required && !this.currentValue) {
-        this.errors = [this.validation.message];
+        this.errors = [
+          this.validation.message[this.$i18n.locale] ??
+            (this.$t('prompts.radio.validation.required') as string),
+        ];
         return;
       }
 

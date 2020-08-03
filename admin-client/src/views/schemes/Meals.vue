@@ -25,7 +25,7 @@
         <transition-group type="transition" name="drag-and-drop">
           <v-list-item
             v-for="(meal, idx) in meals"
-            :key="meal.name"
+            :key="meal.name.en"
             link
             draggable
             class="drag-and-drop__item"
@@ -34,7 +34,7 @@
               <v-icon>fa-grip-vertical</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title v-text="meal.name"></v-list-item-title>
+              <v-list-item-title v-text="meal.name.en"></v-list-item-title>
               <v-list-item-subtitle v-text="meal.time"></v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
@@ -61,28 +61,30 @@
         </v-card-title>
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
+          <select-locale
+            :label="$t('schemes.questions.text')"
+            v-model="dialog.meal.name"
+            flat
+            :outlined="false"
+          >
+            <template v-for="locale in Object.keys(dialog.meal.name)" v-slot:[`locale.${locale}`]>
+              <v-text-field
+                v-model="dialog.meal.name[locale]"
+                :key="locale"
+                :label="$t('schemes.meals._')"
+                :rules="rules(locale)"
+                hide-details="auto"
+                outlined
+              ></v-text-field>
+            </template>
+          </select-locale>
           <v-card-text>
-            <v-container>
-              <v-row justify="center">
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="dialog.meal.name"
-                    :label="$t('schemes.meals._')"
-                    :rules="rules"
-                    hide-details="auto"
-                    outlined
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-time-picker
-                    v-model="dialog.meal.time"
-                    :landscape="$vuetify.breakpoint.smAndUp"
-                    format="24hr"
-                    full-width
-                  ></v-time-picker>
-                </v-col>
-              </v-row>
-            </v-container>
+            <v-time-picker
+              v-model="dialog.meal.time"
+              :landscape="$vuetify.breakpoint.smAndUp"
+              format="24hr"
+              full-width
+            ></v-time-picker>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -100,17 +102,14 @@
 </template>
 
 <script lang="ts">
+import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import { FormRefs } from '@common/types/common';
+import { Meal } from '@common/types/meals';
+import SelectLocale from '@/components/prompts/partials/SelectLocale.vue';
 
-export type Meal = { name: string | null; time: string };
-
-export type MealDialog = {
-  show: boolean;
-  index: number;
-  meal: Meal;
-};
+export type MealDialog = { show: boolean; index: number; meal: Meal };
 
 export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   name: 'SchemeMeals',
@@ -124,35 +123,20 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
   },
 
-  components: { draggable },
+  components: { draggable, SelectLocale },
 
   data() {
-    const defaultDialog = (show = false): MealDialog => ({
+    const dialog = (show = false): MealDialog => ({
       show,
       index: -1,
-      meal: { name: null, time: '8:00' },
+      meal: { name: { en: null }, time: '8:00' },
     });
 
     return {
-      dialog: defaultDialog(),
-      newDialog: defaultDialog,
+      dialog: dialog(),
+      newDialog: dialog,
       meals: [...this.value],
     };
-  },
-
-  computed: {
-    rules() {
-      return [
-        (value: string | null): boolean | string => {
-          if (!value) return this.$t('schemes.meals.validation.required') as string;
-
-          const { index } = this.dialog;
-          const match = this.meals.find((meal, idx) => value === meal.name && index !== idx);
-
-          return match ? (this.$t('schemes.meals.validation.unique') as string) : true;
-        },
-      ];
-    },
   },
 
   watch: {
@@ -162,12 +146,29 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   },
 
   methods: {
+    rules(locale: string) {
+      return [
+        (value: string | null): boolean | string => {
+          if (!value) return this.$t('schemes.meals.validation.required') as string;
+
+          const { index } = this.dialog;
+          const match = this.meals.find(
+            (meal, idx) => value === meal.name[locale] && index !== idx
+          );
+
+          return match ? (this.$t('schemes.meals.validation.unique') as string) : true;
+        },
+      ];
+    },
+
     add() {
       this.dialog = this.newDialog(true);
     },
+
     edit(index: number, meal: Meal) {
-      this.dialog = { show: true, index, meal: { ...meal } };
+      this.dialog = { show: true, index, meal: clone(meal) };
     },
+
     save() {
       const isValid = this.$refs.form.validate();
       if (!isValid) return;
@@ -179,13 +180,16 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
       this.reset();
     },
+
     remove(index: number) {
       this.meals.splice(index, 1);
     },
+
     reset() {
       this.dialog = this.newDialog();
       this.$refs.form.resetValidation();
     },
+
     resetMealList() {
       this.meals = [...this.defaults];
     },

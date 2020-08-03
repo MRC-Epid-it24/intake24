@@ -17,12 +17,12 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType, VueConstructor } from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PromptRefs } from '@common/types/prompts';
-import { TextareaProps } from '@common/types/promptProps';
+import { TextareaPromptProps } from '@common/types/promptProps';
+import { textareaPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt from './BasePrompt';
-import { textareaDefaults } from './promptDefaults';
 
 export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
   name: 'TextareaPrompt',
@@ -31,7 +31,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
   props: {
     props: {
-      type: Object as PropType<TextareaProps>,
+      type: Object as () => TextareaPromptProps,
     },
     value: {
       type: String,
@@ -40,13 +40,18 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
   },
 
   data() {
-    const props: TextareaProps = merge(textareaDefaults, this.props);
+    const props: TextareaPromptProps = merge(textareaPromptProps, this.props);
 
     return {
       ...props,
       currentValue: this.value,
       rules: props.validation.required
-        ? [(v: string | null) => !!v || props.validation.message]
+        ? [
+            (v: string | null) =>
+              !!v ||
+              (props.validation.message[this.$i18n.locale] ??
+                this.$t('prompts.textarea.validation.required')),
+          ]
         : [],
     };
   },

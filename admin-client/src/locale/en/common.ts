@@ -17,6 +17,13 @@ const common: LocaleMessage = {
   no: 'No',
   false: 'No',
 
+  locales: {
+    dk: 'Danish',
+    en: 'English',
+    es: 'Spanish',
+    pt: 'Portuguese',
+  },
+
   action: {
     _: 'Action',
     audit: 'Audit',

@@ -66,7 +66,6 @@
               {{ $t('common.action.save') }}
             </v-btn>
           </v-toolbar-items>
-
           <template v-slot:extension>
             <v-container>
               <v-tabs v-model="tab" background-color="primary" dark>
@@ -144,8 +143,8 @@ import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import { FormRefs } from '@common/types/common';
 import { ComponentType, PromptQuestion } from '@common/types/prompts';
+import { promptQuestions } from '@common/prompts/promptDefaults';
 import prompts from '@/components/prompts';
-import promptQuestions from '@/components/prompts/promptDefaults';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;
@@ -189,15 +188,15 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   components: { draggable, ...prompts },
 
   data() {
-    const defaultDialog = (show = false): PromptQuestionDialog => ({
+    const dialog = (show = false): PromptQuestionDialog => ({
       show,
       index: -1,
       question: clone(promptQuestions[0]),
     });
 
     return {
-      dialog: defaultDialog(),
-      newDialog: defaultDialog,
+      dialog: dialog(),
+      newDialog: dialog,
       questions: this.items,
       promptQuestions,
       promptTypeTabs,

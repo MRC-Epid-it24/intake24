@@ -1,28 +1,27 @@
 import Vue from 'vue';
-import { ListOption } from '@common/types/promptProps';
+import { LocaleTranslation } from '@common/types/common';
+import { LocaleOptionList } from '@common/types/promptProps';
 import prompt from './Prompt';
 import PromptListOptions from './PromptListOptions.vue';
+import SelectLocale from './SelectLocale.vue';
 
 export default Vue.extend({
   name: 'SelectListPrompt',
 
-  components: { PromptListOptions },
+  components: { PromptListOptions, SelectLocale },
 
   mixins: [prompt],
 
   props: {
     options: {
-      type: Array as () => ListOption[],
-      default: [],
+      type: Object as () => LocaleOptionList,
     },
     label: {
-      type: String,
+      type: Object as () => LocaleTranslation,
     },
     other: {
       type: Boolean,
       default: true,
     },
   },
-
-  methods: {},
 });

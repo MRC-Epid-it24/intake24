@@ -9,10 +9,10 @@ export default Vue.extend({
 
   props: {
     text: {
-      type: String,
+      type: Object,
     },
     description: {
-      type: String,
+      type: Object,
     },
     validation: {
       type: Object,
@@ -22,6 +22,9 @@ export default Vue.extend({
   methods: {
     update(field: string, value: any) {
       this.$emit(`update:${field}`, value);
+    },
+    updateLocale(field: string, locale: string, value: any) {
+      this.$emit(`update:${field}`, { ...this.$props[field], [locale]: value });
     },
   },
 });

@@ -17,12 +17,12 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType, VueConstructor } from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PromptRefs } from '@common/types/prompts';
-import { TimePickerProps } from '@common/types/promptProps';
+import { TimePickerPromptProps } from '@common/types/promptProps';
+import { timePickerPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt from './BasePrompt';
-import { timePickerDefaults } from './promptDefaults';
 
 export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
   name: 'TimePickerPrompt',
@@ -31,7 +31,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
   props: {
     props: {
-      type: Object as PropType<TimePickerProps>,
+      type: Object as () => TimePickerPromptProps,
     },
     value: {
       type: String,
@@ -41,7 +41,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
   data() {
     return {
-      ...merge(timePickerDefaults, this.props),
+      ...merge(timePickerPromptProps, this.props),
       currentValue: this.value,
       errors: [] as string[],
     };
@@ -60,7 +60,10 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
     onSubmit() {
       if (this.validation.required && !this.currentValue) {
-        this.errors = [this.validation.message];
+        this.errors = [
+          this.validation.message[this.$i18n.locale] ??
+            (this.$t('prompts.timepicker.validation.required') as string),
+        ];
         return;
       }
 

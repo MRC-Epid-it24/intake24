@@ -10,18 +10,6 @@
     <v-tab-item key="options">
       <v-row>
         <v-col cols="12">
-          <div class="text-h6">{{ $t('schemes.questions.options.title') }}</div>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            :value="label"
-            :label="$t('schemes.questions.label')"
-            hide-details="auto"
-            outlined
-            @input="update('label', $event)"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
           <v-select
             :value="orientation"
             :items="orientations"
@@ -31,7 +19,7 @@
             @change="update('orientation', $event)"
           ></v-select>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12">
           <v-switch
             :input-value="other"
             :label="$t('schemes.questions.other')"
@@ -39,11 +27,40 @@
             @change="update('other', $event)"
           ></v-switch>
         </v-col>
+        <v-col cols="12">
+          <select-locale
+            :default="[]"
+            :label="$t('schemes.questions.label')"
+            :value="label"
+            @input="update('label', $event)"
+          >
+            <template v-for="locale in Object.keys(label)" v-slot:[`locale.${locale}`]>
+              <v-text-field
+                :label="$t('schemes.questions.label')"
+                :key="locale"
+                :value="label[locale]"
+                hide-details="auto"
+                outlined
+                @input="updateLocale('label', locale, $event)"
+              ></v-text-field>
+            </template>
+          </select-locale>
+        </v-col>
       </v-row>
-      <prompt-list-options
-        :options="options"
-        @update:options="update('options', $event)"
-      ></prompt-list-options>
+      <select-locale
+        :default="[]"
+        :label="$t('schemes.questions.options.title')"
+        :value="options"
+        @input="update('options', $event)"
+      >
+        <template v-for="locale in Object.keys(options)" v-slot:[`locale.${locale}`]>
+          <prompt-list-options
+            :key="locale"
+            :options="options[locale]"
+            @update:options="updateLocale('options', locale, $event)"
+          ></prompt-list-options>
+        </template>
+      </select-locale>
     </v-tab-item>
   </div>
 </template>
