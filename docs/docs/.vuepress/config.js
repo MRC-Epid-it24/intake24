@@ -86,12 +86,26 @@ module.exports = {
       ],
       '/api/': [
         {
-          title: 'API',
+          title: 'Global',
           collapsable: false,
           children: [
             '',
-            'endpoints',
             'authentication'
+          ]
+        },
+        {
+          title: 'Admin',
+          collapsable: false,
+          children: [
+            'admin-schemes',
+            'admin-surveys',
+            'admin-users'
+          ]
+        },
+        {
+          title: 'Survey',
+          collapsable: false,
+          children: [
           ]
         }
       ],

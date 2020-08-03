@@ -1,0 +1,142 @@
+# Users
+
+## List users
+
+Get user list
+
+### Request
+
+```http
+GET /admin/users
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```
+
+## Create user
+
+Create new user entry
+
+### Request
+
+```http
+POST /admin/users
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+    "name": string,
+    "email": string,
+    "phone": string,
+    "emailNotifications": boolean,
+    "smsNotifications": boolean,
+    "multiFactorAuthentication": boolean,
+    "password": string,
+    "passwordConfirm": string,
+    "roles": string[],
+}
+```
+
+### Response
+
+```json
+201 Created
+
+{
+    "data": {...},
+}
+```
+
+## Get user
+
+Get user entry
+
+### Request
+
+```http
+GET /admin/users/:userId
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": {...},
+    "refs": {
+        "roles": [{...}]
+    }
+}
+```
+
+## Update user
+
+Update existing user entry
+
+### Request
+
+```http
+PUT /admin/users/:userId
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+    "name": string,
+    "email": string,
+    "phone": string,
+    "emailNotifications": boolean,
+    "smsNotifications": boolean,
+    "multiFactorAuthentication": boolean,
+    "roles": string[],
+}
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": {...},
+    "refs": {...}
+}
+```
+
+## Delete user
+
+Delete existing user entry
+
+### Request
+
+```http
+DELETE /admin/users/:userId
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+204 No Content
+```
