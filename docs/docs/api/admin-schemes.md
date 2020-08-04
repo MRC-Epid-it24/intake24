@@ -84,7 +84,7 @@ Content-Type: application/json
 
 ## Update scheme
 
-Update existing scheme entry
+Update scheme entry
 
 ### Request
 
@@ -115,7 +115,7 @@ Content-Type: application/json
 
 ## Delete scheme
 
-Delete existing scheme entry
+Delete scheme entry
 
 ### Request
 

@@ -37,7 +37,7 @@ Content-Type: application/json
 
 ### Response
 
-Response can differ based on whether multi-factor autnetication is enabled or not.
+Response can differ based on whether multi-factor authentication is enabled or not.
 
 #### Successful login without MFA challenge
 
@@ -49,7 +49,7 @@ Response can differ based on whether multi-factor autnetication is enabled or no
 }
 ```
 
-#### Successfull login with MFA challenge
+#### Successful login with MFA challenge
 
 ```json
 200 OK
@@ -146,7 +146,7 @@ Content-Type: application/json
 
 Refresh access token using refresh token
 
-API server expects `refresh token` send as cookie. Cookie name can differn based on API server configuration. Default (`it24_refresh_token`)
+API server expects `refresh token` sent as cookie. Cookie name can differ based on API server configuration. Default (`it24_refresh_token`)
 
 ### Request
 
@@ -171,8 +171,6 @@ Cookie: {name}: {refreshToken}
 ## Logout
 
 Clears `http-only` cookie which stores `refresh token` and revokes `refresh token`.
-
-API server expects `refresh token` send as cookie. Cookie name can differn based on API server configuration. Default (`it24_refresh_token`)
 
 ### Request
 

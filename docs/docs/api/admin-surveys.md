@@ -97,7 +97,7 @@ Content-Type: application/json
 
 ## Update survey
 
-Update existing survey entry
+Update survey entry
 
 ### Request url
 
@@ -141,7 +141,7 @@ Content-Type: application/json
 
 ## Delete survey
 
-Delete existing survey entry
+Delete survey entry
 
 ### Request
 
@@ -160,7 +160,11 @@ Content-Type: application/json
 
 ## List management users
 
-Get list of survey management users. This includes usurs with `staff` and `support` roles.
+Get list of survey management users.
+
+::: tip Roles
+This includes users with `{surveyId}/staff` and `{surveyId}/support` roles.
+:::
 
 ### Request
 
@@ -185,12 +189,12 @@ Content-Type: application/json
 }
 ```
 
-## List available users
+## List available management users
 
 Get list of users, which can be assigned as survey management.
 
-::: tip Requirements
-User has to have system account and no `staff` or `support` role.
+::: tip Roles
+User has to have system account and no `{surveyId}/staff` or `{surveyId}/support` role.
 :::
 
 ### Request
@@ -236,4 +240,118 @@ Content-Type: application/json
 
 ```json
 200 OK
+```
+
+## List respondents
+
+Get list of survey respondents.
+
+::: tip Roles
+This includes users with `{surveyId}/respondent` role.
+:::
+
+### Request
+
+```http
+GET /admin/surveys/:surveyId/respondents
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```
+
+## Create respondent
+
+Create new survey respondent
+
+### Request
+
+```http
+POST /admin/surveys/:surveyId/respondents
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+    "userName": string,
+    "name": string,
+    "email": string,
+    "phone": string,
+    "password": string,
+    "passwordConfirm": string,
+}
+```
+
+### Response
+
+```json
+201 Created
+
+{
+    "data": {...},
+}
+```
+
+## Update respondent
+
+Update survey respondent
+
+### Request
+
+```http
+PUT /admin/surveys/:surveyId/respondents/:userId
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+    "userName": string,
+    "name": string,
+    "email": string,
+    "phone": string,
+    "password": string,
+    "passwordConfirm": string,
+}
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": {...},
+}
+```
+
+## Delete respondent
+
+Delete respondent
+
+### Request
+
+```http
+DELETE /admin/surveys/:surveyId/respondents/:userId
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+204 No Content
 ```

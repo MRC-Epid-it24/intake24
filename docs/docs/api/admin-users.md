@@ -90,7 +90,7 @@ Content-Type: application/json
 
 ## Update user
 
-Update existing user entry
+Update user entry
 
 ### Request
 
@@ -124,7 +124,7 @@ Content-Type: application/json
 
 ## Delete user
 
-Delete existing user entry
+Delete user entry
 
 ### Request
 
