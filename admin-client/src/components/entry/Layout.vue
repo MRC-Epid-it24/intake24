@@ -10,12 +10,21 @@
         >
           <v-icon left>$back</v-icon> {{ $t(`common.action.back`) }}
         </v-btn>
-        <v-btn color="primary" :title="$t(`common.action.save`)" @click="$emit('save')">
+        <v-btn
+          v-if="$route.name !== `${module}-detail`"
+          color="primary"
+          :title="$t(`common.action.save`)"
+          @click="$emit('save')"
+        >
           <v-icon left>$save</v-icon> {{ $t(`common.action.save`) }}
         </v-btn>
         <slot name="actions"></slot>
         <v-spacer></v-spacer>
-        <delete v-if="!isCreate" action="delete" @action="onDelete"></delete>
+        <delete
+          v-if="!isCreate && can({ action: 'delete' })"
+          action="delete"
+          @action="onDelete"
+        ></delete>
       </v-toolbar>
     </v-card>
     <v-card>
@@ -66,7 +75,7 @@ export default Vue.extend({
     tabs(): string[] {
       if (this.isCreate) return ['create'];
 
-      return this.resource.routes.filter((item) => item !== 'create');
+      return this.resource.routes.filter((item) => item !== 'create' && this.can({ action: item }));
     },
   },
 

@@ -64,7 +64,7 @@ export default Vue.extend({
     };
   },
 
-  computed: mapGetters({ mfaChallenge: 'auth/mfaChallenge', loggedIn: 'user/loggedIn' }),
+  computed: mapGetters('auth', ['loggedIn', 'mfaChallenge']),
 
   methods: {
     ...mapActions('auth', ['login', 'verify']),

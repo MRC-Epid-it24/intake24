@@ -1,11 +1,27 @@
 import { GetterTree } from 'vuex';
-import { RootState, UserState } from '@/types/vuex';
+import { Permission, RootState, UserState } from '@/types/vuex';
 
 const getters: GetterTree<UserState, RootState> = {
-  can: (state) => (role: string): boolean => state.profile.roles?.includes(role),
-  loggedIn: (state) => !!Object.keys(state.profile).length,
+  // eslint-disable-next-line no-shadow
+  can: (state, getters, rootState) => (
+    permission: string | string[] | Permission,
+    strict = false
+  ) => {
+    if (typeof permission === 'string') return getters.permissions.includes(permission);
+
+    if (Array.isArray(permission)) {
+      return strict
+        ? permission.every((item) => getters.permissions.includes(item))
+        : permission.some((item) => getters.permissions.includes(item));
+    }
+
+    const { module, action } = permission;
+    return getters.permissions.includes(`${module ?? rootState.module}-${action}`);
+  },
+  loaded: (state) => !!Object.keys(state.profile).length,
   profile: (state) => state.profile,
-  roles: (state) => state.profile.roles ?? [],
+  permissions: (state) => state.permissions,
+  roles: (state) => state.roles,
 };
 
 export default getters;

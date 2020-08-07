@@ -4,7 +4,10 @@ import { UserState } from '@/types/vuex';
 
 const state = (): UserState => ({
   status: '',
-  profile: tokenSvc.decodeAccessToken() ?? ({} as UserPayload),
+  payload: tokenSvc.decodeAccessToken() ?? ({} as UserPayload),
+  profile: {},
+  permissions: [],
+  roles: [],
 });
 
 export default state;

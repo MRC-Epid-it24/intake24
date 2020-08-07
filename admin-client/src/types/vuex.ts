@@ -12,7 +12,15 @@ export interface LoadingState {
 
 export interface UserState {
   status: string;
-  profile: UserPayload;
+  payload: UserPayload;
+  profile: any;
+  permissions: string[];
+  roles: string[];
+}
+
+export interface Permission {
+  module?: string;
+  action?: string;
 }
 
 export interface AuthState {

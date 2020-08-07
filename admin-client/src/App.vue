@@ -21,11 +21,17 @@
         </v-list-item-group>
       </v-list>
       <menu-tree
+        v-if="can(['schemes-list', 'surveys-list'])"
         icon="fas fa-fw fa-tools"
         name="surveyMgmt"
         :resources="resources.surveyMgmt"
       ></menu-tree>
-      <menu-tree icon="fas fa-fw fa-tools" name="acl" :resources="resources.acl"></menu-tree>
+      <menu-tree
+        v-if="can('acl')"
+        icon="fas fa-fw fa-tools"
+        name="acl"
+        :resources="resources.acl"
+      ></menu-tree>
     </v-navigation-drawer>
 
     <v-app-bar app dark color="secondary" fixed>
@@ -83,7 +89,7 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
   },
 
   computed: {
-    ...mapGetters('user', ['loggedIn']),
+    ...mapGetters({ loggedIn: 'auth/loggedIn' }),
     title() {
       if (this.$route.meta.title) return this.$t(this.$route.meta.title);
 

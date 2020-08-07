@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import { HttpClient } from '@/types/http';
+import { Permission } from '@/types/vuex';
 
 declare module 'vue/types/vue' {
   interface Vue {
     $http: HttpClient;
 
     // authMixin
-    can: (role: string) => boolean;
+    can: (permission: string | string[] | Permission) => boolean;
 
     // loadingMixin
     isLoading: () => boolean;

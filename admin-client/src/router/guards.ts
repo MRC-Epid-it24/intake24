@@ -6,25 +6,27 @@ export default (router: Router, store: Store<RootState>): void => {
   router.beforeEach(async (to, from, next) => {
     // Login page
     if (to.meta.public) {
-      if (store.getters['user/loggedIn']) next({ name: 'dashboard' });
+      if (store.getters['auth/loggedIn']) next({ name: 'dashboard' });
       else next();
       return;
     }
 
     // Get logged-in user information if not yet loaded
-    if (!store.getters['user/loggedIn']) await store.dispatch('auth/refresh', { withErr: false });
+    // TODO: when token not stored just refresh to get fresh one
+    // if (!store.getters['auth/loggedIn']) await store.dispatch('auth/refresh', { withErr: false });
+    if (!store.getters['user/loaded']) await store.dispatch('user/request', { withErr: false });
 
     // Any other page (requires to be logged in)
-    if (!store.getters['user/loggedIn']) {
+    if (!store.getters['auth/loggedIn']) {
       next({ name: 'login' });
       return;
     }
 
-    // Check correct roles/permissions if any
-    /* if (to.meta.perm && !store.getters['user/can'](to.meta.perm)) {
+    // Check correct permissions if any
+    if (to.meta.perm && !store.getters['user/can'](to.meta.perm)) {
       next({ name: 'dashboard' });
       return;
-    } */
+    }
 
     next();
   });

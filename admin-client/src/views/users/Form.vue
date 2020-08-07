@@ -64,6 +64,8 @@
                 :items="refs.roles"
                 :label="$t('users.roles')"
                 :error-messages="form.errors.get('roles')"
+                item-value="id"
+                item-text="displayName"
                 hide-details="auto"
                 multiple
                 name="roles"
@@ -72,8 +74,33 @@
               >
                 <template v-slot:selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="form.roles.length === 1">{{ item }}</span>
+                    <span v-if="form.roles.length === 1">{{ item.displayName }}</span>
                     <span v-if="form.roles.length > 1">{{ form.roles.length }} selected </span>
+                  </template>
+                </template>
+              </v-select>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.permissions"
+                :items="refs.permissions"
+                :label="$t('users.permissions._')"
+                :messages="$t('users.permissions.hint')"
+                :error-messages="form.errors.get('permissions')"
+                item-value="id"
+                item-text="displayName"
+                hide-details="auto"
+                multiple
+                name="permissions"
+                outlined
+                @change="form.errors.clear('permissions')"
+              >
+                <template v-slot:selection="{ item, index }">
+                  <template v-if="index === 0">
+                    <span v-if="form.permissions.length === 1">{{ item.displayName }}</span>
+                    <span v-if="form.permissions.length > 1"
+                      >{{ form.permissions.length }} selected
+                    </span>
                   </template>
                 </template>
               </v-select>
@@ -118,6 +145,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { AnyDictionary } from '@common/types/common';
 import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';
 
@@ -138,9 +166,22 @@ export default Vue.extend({
         multiFactorAuthentication: false,
         emailNotifications: false,
         smsNotifications: false,
+        permissions: [],
         roles: [],
       }),
     };
+  },
+
+  methods: {
+    toForm(data: AnyDictionary) {
+      const { permissions = [], roles = [], ...rest } = data;
+      const form = {
+        ...rest,
+        permissions: permissions.map((item: any) => item.id),
+        roles: roles.map((item: any) => item.id),
+      };
+      this.form.load(form);
+    },
   },
 });
 </script>

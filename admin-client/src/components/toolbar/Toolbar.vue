@@ -4,7 +4,7 @@
       <template v-for="action in ['create', 'detail', 'edit']">
         <component
           :is="action"
-          v-if="actions.includes(action)"
+          v-if="currentActions.includes(action)"
           :action="action"
           :key="action"
           :disabled="selected.length !== 1"
@@ -16,7 +16,7 @@
       <template v-for="action in ['delete']">
         <component
           :is="action"
-          v-if="actions.includes(action)"
+          v-if="currentActions.includes(action)"
           :action="action"
           :key="action"
           :disabled="!selected.length"
@@ -70,6 +70,9 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
   },
 
   computed: {
+    currentActions(): string[] {
+      return this.actions.filter((action) => this.can({ action }));
+    },
     route(): string {
       return this.routePrefix ?? this.$route.name;
     },

@@ -3,9 +3,14 @@ import { UserState } from '@/types/vuex';
 import defaultState from './state';
 
 const mutations: MutationTree<UserState> = {
+  request(state) {
+    state.status = 'loading';
+  },
   success(state, data) {
-    state.status = 'success';
-    state.profile = { ...state.profile, ...data };
+    Object.assign(state, data, { status: 'success' });
+  },
+  payload(state, data) {
+    state.payload = { ...data };
   },
   error(state) {
     Object.assign(state, defaultState(), { status: 'error' });

@@ -19,8 +19,6 @@ export interface Subject {
 export interface UserPayload {
   userId: number;
   provider: Subject;
-  roles: string[];
-  surveyId: string;
 }
 
 export const ACCESS_TOKEN = 'access_token';

@@ -3,7 +3,6 @@ export interface JwtPayload {
   iat: number;
   iss: string;
   jti: string;
-  roles: string[];
   sub: string;
   type: string;
   userId: number;
@@ -19,7 +18,6 @@ export interface Subject {
 export interface UserPayload {
   userId: number;
   provider: Subject;
-  roles: string[];
 }
 
 export const ACCESS_TOKEN = 'access_token';

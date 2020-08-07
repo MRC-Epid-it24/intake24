@@ -11,7 +11,7 @@ const actions: ActionTree<AuthState, RootState> = {
       const { accessToken, mfa } = await authSvc.login(payload);
       if (accessToken) {
         commit('login', accessToken);
-        await dispatch('user/load', {}, { root: true });
+        await dispatch('user/request', {}, { root: true });
       }
       if (mfa) commit('mfa', mfa);
 
@@ -31,7 +31,7 @@ const actions: ActionTree<AuthState, RootState> = {
     try {
       const accessToken = await authSvc.verify(sigResponse);
       commit('login', accessToken);
-      await dispatch('user/load', {}, { root: true });
+      await dispatch('user/request', {}, { root: true });
       return Promise.resolve();
     } catch (err) {
       commit('error', err);
@@ -41,11 +41,13 @@ const actions: ActionTree<AuthState, RootState> = {
     }
   },
 
-  async refresh({ commit, dispatch }, { withErr = true } = {}) {
+  async refresh({ commit, dispatch, rootGetters }, { withErr = true } = {}) {
     try {
       const accessToken = await authSvc.refresh();
       commit('refresh', accessToken);
-      await dispatch('user/load', {}, { root: true });
+
+      if (!rootGetters['user/loaded']) await dispatch('user/request', {}, { root: true });
+
       return Promise.resolve();
     } catch (err) {
       commit('error', err);

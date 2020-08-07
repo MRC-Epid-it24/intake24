@@ -52,7 +52,7 @@ resources.forEach((item) => {
     path: `/${name}`,
     name,
     component: resourceViews.list,
-    meta: { ...meta, title: `${name}.index` },
+    meta: { ...meta, title: `${name}.index`, perm: `${name}-list` },
   });
 
   item.routes.forEach((route) => {
@@ -61,7 +61,7 @@ resources.forEach((item) => {
         path: `/${name}/${route}`,
         name: `${name}-${route}`,
         component: resourceViews[route],
-        meta: { ...meta, title: `${name}.new` },
+        meta: { ...meta, title: `${name}.new`, perm: `${name}-${route}` },
       });
       return;
     }
@@ -70,7 +70,7 @@ resources.forEach((item) => {
       path: `/${name}/:id/${route === 'detail' ? '' : route}`,
       name: `${name}-${route}`,
       component: resourceViews[route],
-      meta: { ...meta },
+      meta: { ...meta, perm: `${name}-${route}` },
       props: true,
     });
   });

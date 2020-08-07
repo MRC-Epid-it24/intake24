@@ -30,6 +30,10 @@ const users: LocaleMessage = {
   },
   email: 'Email',
   phone: 'Phone',
+  permissions: {
+    _: 'Assigned permissions',
+    hint: 'Prefer permission assignment through role rather than direct permission assignment.',
+  },
   roles: 'Assigned roles',
 
   mfa: {

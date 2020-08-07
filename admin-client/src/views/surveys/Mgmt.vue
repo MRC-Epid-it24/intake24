@@ -21,7 +21,7 @@
                         <v-autocomplete
                           v-model="form.id"
                           :error-messages="form.errors.get('userId')"
-                          :items="options.items"
+                          :items="options.users"
                           :label="$t('users.name')"
                           :loading="options.isLoading"
                           hide-no-data
@@ -47,20 +47,16 @@
                         ></v-text-field>
                       </template>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col
+                      v-for="permission in options.permissions"
+                      :key="permission.id"
+                      cols="12"
+                      sm="6"
+                    >
                       <v-checkbox
-                        v-model="form.roles"
-                        :label="$t('roles.survey.staff')"
-                        :value="`${id}/staff`"
-                        prepend-icon="fas fa-user-clock"
-                      >
-                      </v-checkbox>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-checkbox
-                        v-model="form.roles"
-                        :label="$t('roles.survey.support')"
-                        :value="`${id}/support`"
+                        v-model="form.permissions"
+                        :label="permission.name"
+                        :value="permission.id"
                         prepend-icon="fas fa-user-nurse"
                       >
                       </v-checkbox>
@@ -137,11 +133,12 @@ export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
       selected: {},
       form: new Form({
         id: null,
-        roles: [],
+        permissions: [],
       }),
       options: {
         isLoading: false,
-        items: [],
+        users: [],
+        permissions: [],
       },
     };
   },
@@ -149,10 +146,6 @@ export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
   computed: {
     isCreate(): boolean {
       return !Object.keys(this.selected).length;
-    },
-    roles(): string[] {
-      const surveyId = this.id;
-      return [`${surveyId}/staff`, `${surveyId}/support`];
     },
   },
 
@@ -164,10 +157,12 @@ export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
       await this.fetchOptions();
     },
 
-    edit(item: AnyDictionary) {
-      this.form.load(item);
+    async edit(item: AnyDictionary) {
+      const { permissions, ...rest } = item;
+      this.form.load({ ...rest, permissions: permissions.map((permission: any) => permission.id) });
       this.selected = item;
       this.dialog = true;
+      await this.fetchOptions();
     },
 
     reset() {
@@ -183,15 +178,18 @@ export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
     },
 
     async fetchOptions() {
-      if (this.options.items.length > 0) return;
+      if (this.options.permissions.length > 0) return;
 
       if (this.options.isLoading) return;
 
       this.options.isLoading = true;
 
       try {
-        const { data } = await this.$http.get(`v3/admin/surveys/${this.id}/mgmt/available`);
-        this.options.items = data.data;
+        const {
+          data: { data, permissions },
+        } = await this.$http.get(`v3/admin/surveys/${this.id}/mgmt/available`);
+        this.options.users = data;
+        this.options.permissions = permissions;
       } catch {
         // continue
       } finally {

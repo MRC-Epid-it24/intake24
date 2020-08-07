@@ -47,8 +47,7 @@ export default Vue.extend({
 
   computed: {
     items(): Resource[] {
-      return this.resources;
-      // return this.resources.filter((item) => this.can());
+      return this.resources.filter((item) => this.can(`${item.name}-list`));
     },
   },
 });

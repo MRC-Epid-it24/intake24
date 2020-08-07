@@ -12,14 +12,12 @@ export default {
       const content = this.getAccessToken();
       if (!content) return null;
 
-      const { userId, roles = [], exp, sub } = jwtDecode<JwtPayload>(content);
+      const { userId, exp, sub } = jwtDecode<JwtPayload>(content);
       const provider = JSON.parse(atob(sub)) as Subject;
 
-      if (!userId || !roles.length || new Date().getTime() > exp * 1000) return null;
+      if (!userId || new Date().getTime() > exp * 1000) return null;
 
-      const surveyId = roles[0].split('/')[0];
-
-      return { userId, provider, roles, surveyId } as UserPayload;
+      return { userId, provider } as UserPayload;
     } catch {
       return null;
     }
