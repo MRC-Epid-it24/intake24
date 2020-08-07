@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import acl from '@/config/acl';
-import Permission from '@/db/models/system/permission';
-import Role from '@/db/models/system/role';
-import NotFoundError from '@/http/errors/not-found.error';
+import { Permission, Role } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { roleId } = req.params;

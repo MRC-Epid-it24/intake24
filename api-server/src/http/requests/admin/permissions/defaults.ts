@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
-import Permission from '@/db/models/system/permission';
+import { Permission } from '@/db/models/system';
 import unique from '@/http/rules/unique';
 
 export default {

@@ -1,12 +1,7 @@
 import { nanoid } from 'nanoid';
 import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/api/admin/users';
-import GenUserCounter from '@/db/models/system/gen-user-counter';
-import Permission from '@/db/models/system/permission';
-import Survey from '@/db/models/system/survey';
-import User from '@/db/models/system/user';
-import UserSurveyAlias from '@/db/models/system/user-survey-alias';
-import ForbiddenError from '@/http/errors/forbidden.error';
-import NotFoundError from '@/http/errors/not-found.error';
+import { GenUserCounter, Permission, Survey, User, UserSurveyAlias } from '@/db/models/system';
+import { ForbiddenError, NotFoundError } from '@/http/errors';
 import { surveyMgmt, surveyRespondent } from './acl.service';
 import userSvc, { toSimpleName } from './user.service';
 

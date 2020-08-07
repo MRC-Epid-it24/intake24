@@ -1,5 +1,5 @@
 import { RespondentResponse } from '@common/types/api/admin/users';
-import UserSurveyAlias from '@/db/models/system/user-survey-alias';
+import { UserSurveyAlias } from '@/db/models/system';
 
 export default (alias: UserSurveyAlias): RespondentResponse => {
   const {

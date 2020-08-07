@@ -2,10 +2,8 @@ import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { isNaN, toNumber } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
-import Role from '@/db/models/system/role';
-import User from '@/db/models/system/user';
+import { Permission, Role, User } from '@/db/models/system';
 import unique from '@/http/rules/unique';
-import Permission from '@/db/models/system/permission';
 
 export const identifiers: Schema = {
   name: {

@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { Op } from 'sequelize';
 import { UserResponse } from '@common/types/api/admin/users';
-import Permission from '@/db/models/system/permission';
-import Survey from '@/db/models/system/survey';
-import User from '@/db/models/system/user';
-import NotFoundError from '@/http/errors/not-found.error';
+import { Permission, Survey, User } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
 import userResponse from '@/http/responses/admin/user.response';
 import { surveyMgmt } from '@/services/acl.service';
 import surveySvc from '@/services/survey.service';

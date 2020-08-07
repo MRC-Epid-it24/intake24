@@ -1,5 +1,5 @@
 import { UserResponse } from '@common/types/api/admin/users';
-import User from '@/db/models/system/user';
+import { User } from '@/db/models/system';
 
 export default (user: User): UserResponse => {
   return {

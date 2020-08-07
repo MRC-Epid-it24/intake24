@@ -1,13 +1,5 @@
-import Food from './food';
-import FoodAttribute from './food-attribute';
-import FoodLocal from './food-local';
-import Locale from './locale';
-import FoodLocalList from './food-local-list';
-
-export default {
-  Food,
-  FoodAttribute,
-  FoodLocal,
-  FoodLocalLists: FoodLocalList,
-  Locale,
-};
+export { default as Food } from './food';
+export { default as FoodAttribute } from './food-attribute';
+export { default as FoodLocal } from './food-local';
+export { default as FoodLocalList } from './food-local-list';
+export { default as Locale } from './locale';

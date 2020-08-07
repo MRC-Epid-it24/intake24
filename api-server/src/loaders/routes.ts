@@ -1,4 +1,4 @@
-import errors from '@/http/errors';
+import errors from '@/http/middleware/errors';
 import routes from '@/routes';
 import authentication from './authentication';
 import { AppLoader } from './loader';
@@ -10,6 +10,6 @@ export default async ({ app }: AppLoader): Promise<void> => {
   // Mount routes
   routes({ app });
 
-  // Mount error middlewares
+  // Mount error middleware
   errors({ app });
 };

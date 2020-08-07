@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from '@/db/models/system/user';
+import { User } from '@/db/models/system';
 
 export default {
   async index(req: Request, res: Response): Promise<void> {

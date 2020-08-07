@@ -2,8 +2,8 @@ import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
 import { PassportStatic } from 'passport';
 import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
 import security from '@/config/security';
-import User from '@/db/models/system/user';
-import InternalServerError from '@/http/errors/internal-server.error';
+import { User } from '@/db/models/system';
+import { InternalServerError } from '@/http/errors';
 
 export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken';
 

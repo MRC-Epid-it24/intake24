@@ -1,5 +1,5 @@
 import { checkSchema } from 'express-validator';
-import User from '@/db/models/system/user';
+import { User } from '@/db/models/system';
 import validate from '@/http/requests/validate';
 import recaptcha from '@/http/rules/recaptcha';
 

@@ -1,12 +1,9 @@
 import duo from '@duosecurity/duo_web';
 import config from '@/config/security';
-import User from '@/db/models/system/user';
-import UserPassword from '@/db/models/system/user-password';
-import UserSurveyAlias from '@/db/models/system/user-survey-alias';
-import UnauthorizedError from '@/http/errors/unauthorized.error';
+import { Permission, User, UserPassword, UserSurveyAlias } from '@/db/models/system';
+import { UnauthorizedError } from '@/http/errors';
 import { btoa } from '@/util';
 import { supportedAlgorithms } from '@/util/passwords';
-import Permission from '@/db/models/system/permission';
 import jwtSvc, { Subject, TokenPayload, Tokens } from './jwt.service';
 import logger from './logger';
 

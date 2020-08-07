@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import Locale from '@/db/models/system/locale';
-import NotFoundError from '@/http/errors/not-found.error';
+import { Locale } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { localeId } = req.params;

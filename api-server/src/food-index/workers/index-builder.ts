@@ -1,12 +1,10 @@
 import { parentPort, workerData } from 'worker_threads';
-import FoodLocalList from '@/db/models/foods/food-local-list';
+import { FoodLocal, FoodLocalList } from '@/db/models/foods';
 import { Sequelize } from 'sequelize-typescript';
-import foods from '@/db/models/foods';
-import FoodLocal from '@/db/models/foods/food-local';
+import * as foods from '@/db/models/foods';
 import Metaphone3Encoder from '@/food-index/metaphone-encoder';
 import { PhraseIndex, PhraseWithKey } from '@/food-index/phrase-index';
 import EnglishWordOps from '@/food-index/english-word-ops';
-import food from '@/db/models/foods/food';
 
 const db = new Sequelize({ ...workerData.dbConnectionInfo, models: Object.values(foods) });
 

@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
 import Scheme, { defaultMeals as meals } from '@/db/models/system/scheme';
-import ForbiddenError from '@/http/errors/forbidden.error';
-import NotFoundError from '@/http/errors/not-found.error';
+import { ForbiddenError, NotFoundError } from '@/http/errors';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { schemeId } = req.params;

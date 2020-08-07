@@ -1,4 +1,4 @@
-import Survey from '@/db/models/system/survey';
+import { Survey } from '@/db/models/system';
 
 export default (survey: Survey) => {
   return {

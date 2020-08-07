@@ -1,8 +1,8 @@
 /* eslint-disable no-shadow */
 import { Request, Response, NextFunction } from 'express';
 import config from '@/config/acl';
-import User from '@/db/models/system/user';
-import ForbiddenError from '@/http/errors/forbidden.error';
+import { User } from '@/db/models/system';
+import { ForbiddenError } from '@/http/errors';
 import { foodDatabaseMaintainer, surveyRespondent, surveyStaff } from '@/services/acl.service';
 
 export const permission = (permission: string) => {

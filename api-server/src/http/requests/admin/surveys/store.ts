@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 import slugify from 'slugify';
-import Survey from '@/db/models/system/survey';
+import { Survey } from '@/db/models/system';
 import validate from '@/http/requests/validate';
 import unique from '@/http/rules/unique';
 import defaults from './defaults';

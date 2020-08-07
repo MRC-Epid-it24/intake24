@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
-import Permission from '@/db/models/system/permission';
-import Role from '@/db/models/system/role';
-import User from '@/db/models/system/user';
-import NotFoundError from '@/http/errors/not-found.error';
+import { Permission, Role, User } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
 import userResponse from '@/http/responses/admin/user.response';
 import userSvc from '@/services/user.service';
 

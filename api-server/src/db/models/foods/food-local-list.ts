@@ -1,7 +1,6 @@
-import { BelongsTo, Column, DataType, HasOne, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, HasOne, Table } from 'sequelize-typescript';
 import BaseModel from '@/db/models/model';
-import Locale from '@/db/models/foods/locale';
-import FoodLocal from '@/db/models/foods/food-local';
+import { Locale, FoodLocal } from '@/db/models/foods';
 
 @Table({
   timestamps: false,

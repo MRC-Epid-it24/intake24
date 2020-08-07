@@ -2,13 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
 import { WhereOptions } from 'sequelize';
 import config from '@/config/acl';
-import Locale from '@/db/models/system/locale';
-import Scheme from '@/db/models/system/scheme';
-import Survey from '@/db/models/system/survey';
-import ForbiddenError from '@/http/errors/forbidden.error';
-import NotFoundError from '@/http/errors/not-found.error';
+import { Locale, Scheme, Survey, User } from '@/db/models/system';
+import { ForbiddenError, NotFoundError } from '@/http/errors';
 import surveyResponse from '@/http/responses/admin/survey.response';
-import User from '@/db/models/system/user';
 import { staffSuffix } from '@/services/acl.service';
 
 type SurveyReferences = { locales: Locale[]; schemes: Scheme[] };

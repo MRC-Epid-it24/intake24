@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
 import appConfig from '@/config/app';
 import dbConfig, { Database } from '@/config/database';
-import foods from './models/foods';
-import system from './models/system';
+import * as foods from './models/foods';
+import * as system from './models/system';
 
 export type BaseDbInterface = Record<Database, Sequelize>;
 

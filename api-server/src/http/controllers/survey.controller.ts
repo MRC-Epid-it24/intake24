@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import Survey from '@/db/models/system/survey';
-import SurveySubmission from '@/db/models/system/survey-submission';
-import User from '@/db/models/system/user';
-import NotFoundError from '@/http/errors/not-found.error';
+import { Survey, SurveySubmission, User } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
 import surveySvc from '@/services/survey.service';
 
 export default {
