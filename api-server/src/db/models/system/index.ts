@@ -1,5 +1,10 @@
 import GenUserCounter from './gen-user-counter';
 import Locale from './locale';
+import Permission from './permission';
+import PermissionRole from './permission-role';
+import PermissionUser from './permission-user';
+import Role from './role';
+import RoleUser from './role-user';
 import SigninLog from './signin-log';
 import Scheme from './scheme';
 import Survey from './survey';
@@ -15,11 +20,15 @@ import SurveySubmissionPortionSizeField from './survey-submission-portion-size-f
 import User from './user';
 import UserPassword from './user-password';
 import UserSurveyAlias from './user-survey-alias';
-import UserRoles from './user-role';
 
 export default {
   GenUserCounter,
   Locale,
+  Permission,
+  PermissionRole,
+  PermissionUser,
+  Role,
+  RoleUser,
   SigninLog,
   Scheme,
   Survey,
@@ -35,5 +44,4 @@ export default {
   User,
   UserPassword,
   UserSurveyAlias,
-  UserRoles,
 };

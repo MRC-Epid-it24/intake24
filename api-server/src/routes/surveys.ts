@@ -12,14 +12,14 @@ router.post('/:surveyId/generate-user', wrapAsync(surveyController.generateUser)
 
 router.get(
   '/:surveyId/parameters',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('user', { session: false }),
   isSurveyRespondent(),
   wrapAsync(surveyController.entry)
 );
 
 router.get(
   '/:surveyId/user-info',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('user', { session: false }),
   isSurveyRespondent(),
   wrapAsync(surveyController.userInfo)
 );

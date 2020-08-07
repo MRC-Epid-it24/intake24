@@ -1,9 +1,11 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
+import { isNaN, toNumber } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
+import Role from '@/db/models/system/role';
 import User from '@/db/models/system/user';
 import unique from '@/http/rules/unique';
-import { roleList } from '@/services/acl.service';
+import Permission from '@/db/models/system/permission';
 
 export const identifiers: Schema = {
   name: {
@@ -59,15 +61,35 @@ export const password: Schema = {
 };
 
 export const user: Schema = {
+  permissions: {
+    in: ['body'],
+    custom: {
+      options: async (value): Promise<void> => {
+        if (!Array.isArray(value) || value.some((item) => isNaN(toNumber(item))))
+          throw new Error('Please enter a list of permission IDs.');
+
+        if (!value.length) Promise.resolve();
+
+        const permissions = await Permission.count({ where: { id: value } });
+        if (permissions !== value.length) throw new Error('Invalid permissions.');
+
+        return Promise.resolve();
+      },
+    },
+  },
   roles: {
     in: ['body'],
     custom: {
       options: async (value): Promise<void> => {
-        const roles = await roleList();
-        return Array.isArray(value) &&
-          value.every((item) => typeof item === 'string' && roles.includes(item))
-          ? Promise.resolve()
-          : Promise.reject(new Error('Enter a valid list of roles.'));
+        if (!Array.isArray(value) || value.some((item) => isNaN(toNumber(item))))
+          throw new Error('Please enter a list of role IDs.');
+
+        if (!value.length) Promise.resolve();
+
+        const roles = await Role.count({ where: { id: value } });
+        if (roles !== value.length) throw new Error('Invalid roles.');
+
+        return Promise.resolve();
       },
     },
   },

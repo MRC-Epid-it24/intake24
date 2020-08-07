@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { checkSchema } from 'express-validator';
 import validate from '@/http/requests/validate';
-import { surveyMgmt } from '@/services/acl.service';
+import surveySvc from '@/services/survey.service';
 
 export default validate(
   checkSchema({
@@ -17,18 +17,17 @@ export default validate(
       isInt: true,
       toInt: true,
     },
-    roles: {
+    permissions: {
       in: ['body'],
       custom: {
         options: async (value, { req }): Promise<void> => {
           const { surveyId } = (req as Request).params;
-          const allowedRoles = surveyMgmt(surveyId);
 
-          if (
-            !Array.isArray(value) ||
-            value.some((item) => typeof item !== 'string' || !allowedRoles.includes(item))
-          )
-            throw new Error('Enter a valid list of roles.');
+          const permissions = await surveySvc.getSurveyMgmtPermissions(surveyId);
+          const allowedPermissions = permissions.map((permission) => permission.id);
+
+          if (!Array.isArray(value) || value.some((item) => !allowedPermissions.includes(item)))
+            throw new Error('Enter a valid list of survey management permissions.');
 
           Promise.resolve();
         },

@@ -1,18 +1,43 @@
-import { Table, Column, HasOne, HasMany, Scopes } from 'sequelize-typescript';
+import { uniqBy } from 'lodash';
+import {
+  BelongsToMany,
+  Column,
+  HasOne,
+  HasMany,
+  Scopes,
+  Table,
+  CreatedAt,
+  UpdatedAt,
+} from 'sequelize-typescript';
 import BaseModel from '../model';
+import Permission from './permission';
+import PermissionUser from './permission-user';
+import Role from './role';
+import RoleUser from './role-user';
 import SurveySubmission from './survey-submission';
 import UserPassword from './user-password';
-import UserRole from './user-role';
 import UserSurveyAlias from './user-survey-alias';
 
 @Scopes(() => ({
   password: { include: [{ model: UserPassword }] },
-  roles: { include: [{ model: UserRole }] },
+  permissions: { include: [{ model: Permission, through: { attributes: [] } }] },
+  roles: { include: [{ model: Role, through: { attributes: [] } }] },
+  rolesPerms: {
+    include: [
+      {
+        model: Role,
+        through: { attributes: [] },
+        include: [{ model: Permission, through: { attributes: [] } }],
+      },
+    ],
+  },
   aliases: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
 }))
 @Table({
-  timestamps: false,
+  modelName: 'User',
+  tableName: 'users',
+  freezeTableName: true,
   underscored: true,
 })
 export default class User extends BaseModel<User> {
@@ -52,11 +77,22 @@ export default class User extends BaseModel<User> {
   })
   public smsNotifications!: boolean;
 
+  @CreatedAt
+  @Column
+  public readonly createdAt!: Date;
+
+  @UpdatedAt
+  @Column
+  public readonly updatedAt!: Date;
+
   @HasOne(() => UserPassword, 'userId')
   public password?: UserPassword;
 
-  @HasMany(() => UserRole, 'userId')
-  public roles?: UserRole[];
+  @BelongsToMany(() => Permission, () => PermissionUser)
+  public permissions?: Permission[];
+
+  @BelongsToMany(() => Role, () => RoleUser)
+  public roles?: Role[];
 
   @HasMany(() => UserSurveyAlias, 'userId')
   public aliases?: UserSurveyAlias[];
@@ -64,26 +100,49 @@ export default class User extends BaseModel<User> {
   @HasMany(() => SurveySubmission, 'userId')
   public submissions?: SurveySubmission[];
 
-  public hasRole(role: string): boolean {
+  public allRoles(): Role[] {
+    return uniqBy(this.roles, 'name');
+  }
+
+  public hasRoleByName(role: string): boolean {
     if (!this.roles) return false;
 
-    const match = this.roles.find((item) => item.role === role);
+    const match = this.roles.find((item) => item.name === role);
     return !!match;
   }
 
   public hasAnyRole(roles: string[]): boolean {
     if (!this.roles) return false;
 
-    return this.roles.some((item) => roles.includes(item.role));
+    return this.roles.some((item) => roles.includes(item.name));
   }
 
-  public can(role: string): boolean {
-    return this.hasRole(role);
+  public allPermissions(): Permission[] {
+    const permissions = this.permissions ?? [];
+
+    const rolePermissions = this.roles
+      ? this.roles.reduce((acc, item) => {
+          return item.permissions ? acc.concat(item.permissions) : acc;
+        }, [] as Permission[])
+      : [];
+
+    return uniqBy(permissions.concat(rolePermissions), 'name');
   }
 
-  public roleList(): string[] {
-    if (!this.roles) return [];
+  public hasPermissionByName(permission: string): boolean {
+    const permissions = this.allPermissions();
 
-    return this.roles.map((item) => item.role);
+    const match = permissions.find((item) => item.name === permission);
+    return !!match;
+  }
+
+  public can(permission: string): boolean {
+    return this.hasPermissionByName(permission);
+  }
+
+  public hasAnyPermission(permission: string[]): boolean {
+    const permissions = this.allPermissions();
+
+    return permissions.some((item) => permission.includes(item.name));
   }
 }

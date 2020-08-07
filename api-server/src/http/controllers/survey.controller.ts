@@ -3,7 +3,7 @@ import Survey from '@/db/models/system/survey';
 import SurveySubmission from '@/db/models/system/survey-submission';
 import User from '@/db/models/system/user';
 import NotFoundError from '@/http/errors/not-found.error';
-import surveySvc from '@/services/user.service';
+import surveySvc from '@/services/survey.service';
 
 export default {
   async list(req: Request, res: Response): Promise<void> {

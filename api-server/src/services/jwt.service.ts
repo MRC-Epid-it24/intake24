@@ -9,18 +9,17 @@ export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken';
 
 export type Subject = { providerID: SubjectProvider; providerKey: string };
 
-export interface Tokens {
+export type Tokens = {
   accessToken: string;
   refreshToken: string;
-}
+};
 
-export interface TokenPayload {
+export type TokenPayload = {
   userId: number;
-  roles: string[];
   type?: string;
   iss?: string;
   sub?: string;
-}
+};
 
 const { issuer, access, refresh } = security.jwt;
 
@@ -30,23 +29,23 @@ const verifyOptions: VerifyOptions = { issuer };
 
 const opts: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  // TODO: compatibility fallback -> combine Bearer & x-auth-token extraction strategy?
-  // jwtFromRequest: ExtractJwt.fromHeader('x-auth-token'),
   secretOrKey: access.secret,
   issuer,
 };
 
+const buildJwtStrategy = (scopes: string[] = []) =>
+  new Strategy(opts, async ({ userId }, done) => {
+    try {
+      const user = await User.scope(scopes).findByPk(userId);
+      done(null, user ?? false);
+    } catch (err) {
+      done(err, false);
+    }
+  });
+
 export const jwtStrategy = (passport: PassportStatic): void => {
-  passport.use(
-    new Strategy(opts, async ({ userId }, done) => {
-      try {
-        const user = await User.scope('roles').findByPk(userId);
-        done(null, user ?? false);
-      } catch (err) {
-        done(err, false);
-      }
-    })
-  );
+  passport.use('user', buildJwtStrategy(['permissions']));
+  passport.use('admin', buildJwtStrategy(['permissions', 'rolesPerms']));
 };
 
 export default {

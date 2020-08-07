@@ -5,7 +5,7 @@ import Survey from '@/db/models/system/survey';
 import UserSurveyAlias from '@/db/models/system/user-survey-alias';
 import NotFoundError from '@/http/errors/not-found.error';
 import userRespondentResponse from '@/http/responses/admin/user-respondent.response';
-import userSvc from '@/services/user.service';
+import surveySvc from '@/services/survey.service';
 
 export default {
   async list(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -30,7 +30,7 @@ export default {
   async store(req: Request, res: Response): Promise<void> {
     const { surveyId } = req.params;
 
-    const { respondent } = await userSvc.createRespondent(
+    const { respondent } = await surveySvc.createRespondent(
       surveyId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
     );
@@ -41,7 +41,7 @@ export default {
   async update(req: Request, res: Response): Promise<void> {
     const { surveyId, userId } = req.params;
 
-    const respondent = await userSvc.updateRespondent(
+    const respondent = await surveySvc.updateRespondent(
       surveyId,
       userId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
@@ -53,7 +53,7 @@ export default {
   async delete(req: Request, res: Response): Promise<void> {
     const { surveyId, userId } = req.params;
 
-    await userSvc.deleteRespondent(surveyId, userId);
+    await surveySvc.deleteRespondent(surveyId, userId);
     res.status(204).json();
   },
 };

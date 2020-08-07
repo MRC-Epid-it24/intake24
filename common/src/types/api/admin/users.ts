@@ -24,6 +24,7 @@ export type UserResponse = {
   emailNotifications: boolean;
   smsNotifications: boolean;
   multiFactorAuthentication: boolean;
+  permissions?: string[];
   roles?: string[];
 };
 

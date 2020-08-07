@@ -1,21 +1,34 @@
 import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
+import Permission from '@/db/models/system/permission';
+import Role from '@/db/models/system/role';
 import User from '@/db/models/system/user';
 import NotFoundError from '@/http/errors/not-found.error';
 import userResponse from '@/http/responses/admin/user.response';
-import { roleList } from '@/services/acl.service';
 import userSvc from '@/services/user.service';
+
+type UserEntryRefs = { permissions: Permission[]; roles: Role[] };
+
+const entryRefs = async (): Promise<UserEntryRefs> => {
+  const permissions = await Permission.scope('list').findAll();
+  const roles = await Role.scope('list').findAll();
+
+  return { permissions, roles };
+};
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { userId } = req.params;
-  const user = await User.scope('roles').findByPk(userId);
+  const user = await User.scope(['permissions', 'roles']).findByPk(userId);
 
   if (!user) {
     next(new NotFoundError());
     return;
   }
 
-  res.json({ data: userResponse(user), refs: { roles: await roleList() } });
+  const data = userResponse(user);
+  const refs = await entryRefs();
+
+  res.json({ data, refs });
 };
 
 export default {
@@ -29,7 +42,9 @@ export default {
   },
 
   async create(req: Request, res: Response): Promise<void> {
-    res.json({ data: { id: null }, refs: { roles: await roleList() } });
+    const refs = await entryRefs();
+
+    res.json({ data: { id: null }, refs });
   },
 
   async store(req: Request, res: Response): Promise<void> {
@@ -42,13 +57,16 @@ export default {
         'smsNotifications',
         'multiFactorAuthentication',
         'password',
+        'permissions',
         'roles',
       ])
     );
 
-    res.status(201).json({
-      data: userResponse((await User.scope('roles').findByPk(user.id)) as User),
-    });
+    const data = userResponse(
+      (await User.scope(['permissions', 'roles']).findByPk(user.id)) as User
+    );
+
+    res.status(201).json({ data });
   },
 
   async show(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -71,14 +89,17 @@ export default {
         'emailNotifications',
         'smsNotifications',
         'multiFactorAuthentication',
+        'permissions',
         'roles',
       ])
     );
 
-    res.json({
-      data: userResponse((await User.scope('roles').findByPk(userId)) as User),
-      refs: { roles: await roleList() },
-    });
+    const data = userResponse(
+      (await User.scope(['permissions', 'roles']).findByPk(userId)) as User
+    );
+    const refs = await entryRefs();
+
+    res.json({ data, refs });
   },
 
   async delete(req: Request, res: Response): Promise<void> {

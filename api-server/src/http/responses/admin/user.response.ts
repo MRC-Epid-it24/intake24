@@ -4,6 +4,7 @@ import User from '@/db/models/system/user';
 export default (user: User): UserResponse => {
   return {
     ...user.get(),
-    roles: user.roles?.map((role) => role.role) ?? [],
+    permissions: user.permissions,
+    roles: user.roles,
   } as UserResponse;
 };

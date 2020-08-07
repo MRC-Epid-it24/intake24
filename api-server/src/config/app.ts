@@ -1,11 +1,11 @@
 export type Environment = 'development' | 'test' | 'production';
 
-export interface AppConfig {
+export type AppConfig = {
   env: Environment;
   name: string;
   port: number;
   url: string;
-}
+};
 
 const appConfig: AppConfig = {
   env: (process.env.NODE_ENV ?? 'development') as Environment,

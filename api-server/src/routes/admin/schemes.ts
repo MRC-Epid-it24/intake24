@@ -1,26 +1,26 @@
 import { Router } from 'express';
 import { wrapAsync } from '@/util';
 import controller from '@/http/controllers/admin/scheme.controller';
-import { canManageSurvey } from '@/http/middleware/acl';
+import { permission } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/schemes';
 
 const router = Router();
 
-router.use(canManageSurvey());
+router.use(permission('acl'));
 
 router
   .route('')
-  .post(validation.store, wrapAsync(controller.store))
-  .get(validation.list, wrapAsync(controller.list));
+  .post(permission('schemes-create'), validation.store, wrapAsync(controller.store))
+  .get(permission('schemes-list'), validation.list, wrapAsync(controller.list));
 
-router.get('/create', wrapAsync(controller.create));
+router.get('/create', permission('schemes-create'), wrapAsync(controller.create));
 
 router
   .route('/:schemeId')
-  .get(wrapAsync(controller.show))
-  .put(validation.update, wrapAsync(controller.update))
-  .delete(wrapAsync(controller.delete));
+  .get(permission('schemes-detail'), wrapAsync(controller.show))
+  .put(permission('schemes-edit'), validation.update, wrapAsync(controller.update))
+  .delete(permission('schemes-delete'), wrapAsync(controller.delete));
 
-router.get('/:schemeId/edit', wrapAsync(controller.edit));
+router.get('/:schemeId/edit', permission('schemes-edit'), wrapAsync(controller.edit));
 
 export default router;

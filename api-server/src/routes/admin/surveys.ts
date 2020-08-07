@@ -1,29 +1,39 @@
 import { Router } from 'express';
 import { wrapAsync } from '@/util';
 import controller from '@/http/controllers/admin/survey.controller';
-import { canCreateSurvey, canManageSurvey } from '@/http/middleware/acl';
+import { permission, canManageSurvey } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/surveys';
-import respondents from './survey-respondents';
 import mgmt from './survey-mgmt';
+import respondents from './survey-respondents';
 
 const router = Router();
 
 router
   .route('')
-  .post(validation.store, canCreateSurvey(), wrapAsync(controller.store))
-  .get(validation.list, canManageSurvey(), wrapAsync(controller.list));
+  .post(permission('surveys-create'), validation.store, wrapAsync(controller.store))
+  .get(permission('surveys-list'), validation.list, wrapAsync(controller.list));
 
-router.get('/create', canCreateSurvey(), wrapAsync(controller.create));
+router.get('/create', permission('surveys-create'), wrapAsync(controller.create));
 
 router
   .route('/:surveyId')
-  .get(canManageSurvey(), wrapAsync(controller.show))
-  .put(canManageSurvey(), validation.update, wrapAsync(controller.update))
-  .delete(canManageSurvey(), wrapAsync(controller.delete));
+  .get(permission('surveys-detail'), canManageSurvey(), wrapAsync(controller.show))
+  .put(
+    permission('surveys-edit'),
+    canManageSurvey(),
+    validation.update,
+    wrapAsync(controller.update)
+  )
+  .delete(permission('surveys-delete'), canManageSurvey(), wrapAsync(controller.delete));
 
-router.get('/:surveyId/edit', canManageSurvey(), wrapAsync(controller.edit));
+router.get(
+  '/:surveyId/edit',
+  permission('surveys-edit'),
+  canManageSurvey(),
+  wrapAsync(controller.edit)
+);
 
-router.use('/:surveyId/respondents', respondents);
-router.use('/:surveyId/mgmt', mgmt);
+router.use('/:surveyId/mgmt', canManageSurvey(), mgmt);
+router.use('/:surveyId/respondents', canManageSurvey(), respondents);
 
 export default router;
