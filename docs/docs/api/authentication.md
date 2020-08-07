@@ -31,7 +31,7 @@ Content-Type: application/json
 
 {
     "email": string,
-    "password": string,
+    "password": string
 }
 ```
 
@@ -45,7 +45,7 @@ Response can differ based on whether multi-factor authentication is enabled or n
 200 OK
 
 {
-    "accessToken": string,
+    "accessToken": string
 }
 ```
 
@@ -76,7 +76,7 @@ Content-Type: application/json
 {
     "userName": string,
     "password": string,
-    "surveyId": string,
+    "surveyId": string
 }
 ```
 
@@ -86,7 +86,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "accessToken": string,
+    "accessToken": string
 }
 ```
 
@@ -102,7 +102,7 @@ POST /login/token
 Content-Type: application/json
 
 {
-    "token": string,
+    "token": string
 }
 ```
 
@@ -112,7 +112,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "accessToken": string,
+    "accessToken": string
 }
 ```
 
@@ -138,7 +138,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "accessToken": string,
+    "accessToken": string
 }
 ```
 
@@ -155,7 +155,7 @@ POST /refresh
 
 Content-Type: application/json
 
-Cookie: {name}: {refreshToken}
+Cookie: {name}={refreshToken}
 ```
 
 ### Response
@@ -164,7 +164,7 @@ Cookie: {name}: {refreshToken}
 200 OK
 
 {
-    "accessToken": string,
+    "accessToken": string
 }
 ```
 

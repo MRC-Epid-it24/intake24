@@ -97,9 +97,11 @@ module.exports = {
           title: 'Admin',
           collapsable: false,
           children: [
-            'admin-schemes',
-            'admin-surveys',
-            'admin-users'
+            'admin/schemes',
+            'admin/surveys',
+            'admin/users',
+            'admin/roles',
+            'admin/permissions',
           ]
         },
         {

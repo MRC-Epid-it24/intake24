@@ -1,13 +1,13 @@
-# Users
+# Permissions
 
-## List users
+## List permissions
 
-Get user list
+Get permission list
 
 ### Request
 
 ```http
-GET /admin/users
+GET /admin/permissions
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -27,28 +27,22 @@ Content-Type: application/json
 }
 ```
 
-## Create user
+## Create permission
 
-Create new user entry
+Create new permission entry
 
 ### Request
 
 ```http
-POST /admin/users
+POST /admin/permissions
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
     "name": string,
-    "email": string,
-    "phone": string,
-    "emailNotifications": boolean,
-    "smsNotifications": boolean,
-    "multiFactorAuthentication": boolean,
-    "password": string,
-    "passwordConfirm": string,
-    "roles": string[],
+    "displayName": string,
+    "description": string
 }
 ```
 
@@ -58,18 +52,18 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...},
+    "data": {...}
 }
 ```
 
-## Get user
+## Get permission
 
-Get user entry
+Get permission entry
 
 ### Request
 
 ```http
-GET /admin/users/:userId
+GET /admin/permissions/:permissionId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -82,32 +76,26 @@ Content-Type: application/json
 
 {
     "data": {...},
-    "refs": {
-        "roles": [{...}]
-    }
+    "refs": {...}
 }
 ```
 
-## Update user
+## Update permission
 
-Update user entry
+Update permission entry
 
 ### Request
 
 ```http
-PUT /admin/users/:userId
+PUT /admin/permissions/:permissionId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
     "name": string,
-    "email": string,
-    "phone": string,
-    "emailNotifications": boolean,
-    "smsNotifications": boolean,
-    "multiFactorAuthentication": boolean,
-    "roles": string[],
+    "displayName": string,
+    "description": string
 }
 ```
 
@@ -122,14 +110,14 @@ Content-Type: application/json
 }
 ```
 
-## Delete user
+## Delete permission
 
-Delete user entry
+Delete permission entry
 
 ### Request
 
 ```http
-DELETE /admin/users/:userId
+DELETE /admin/permissions/:permissionId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
