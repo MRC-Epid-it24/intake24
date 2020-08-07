@@ -29,6 +29,22 @@ const resources: Resource[] = [
     generateRoutes: true,
     routes: [...routes],
   },
+  {
+    group: 'acl',
+    name: 'roles',
+    icon: 'far fa-fw fa-id-badge',
+    api: 'v3/admin/roles',
+    generateRoutes: true,
+    routes: [...routes],
+  },
+  {
+    group: 'acl',
+    name: 'permissions',
+    icon: 'far fa-fw fa-eye-slash',
+    api: 'v3/admin/permissions',
+    generateRoutes: true,
+    routes: [...routes],
+  },
 ];
 
 export default resources;

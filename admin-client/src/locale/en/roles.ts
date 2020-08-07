@@ -9,12 +9,6 @@ const roles: LocaleMessage = {
   create: 'Add role',
   edit: 'Edit role',
   delete: 'Delete role',
-
-  survey: {
-    admin: 'Survey admin',
-    staff: 'Survey staff',
-    support: 'Survey support',
-  },
 };
 
 export default roles;

@@ -8,14 +8,21 @@ const common: LocaleMessage = {
   logout: 'Sign out',
   profile: 'Profile',
 
-  acl: 'ACL',
   admin: 'Admin',
   surveyMgmt: 'Surveys MGMT',
+  acl: 'ACL',
 
   yes: 'Yes',
   true: 'Yes',
   no: 'No',
   false: 'No',
+
+  name: 'Name',
+  displayName: 'Label',
+  description: 'Description',
+
+  createdAt: 'Created at',
+  updatedAt: 'Updated at',
 
   locales: {
     dk: 'Danish',

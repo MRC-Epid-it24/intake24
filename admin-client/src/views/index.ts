@@ -4,6 +4,8 @@ import dashboard from './Dashboard.vue';
 import profile from './Profile.vue';
 import schemes from './schemes';
 import surveys from './surveys';
+import permissions from './permissions';
+import roles from './roles';
 import users from './users';
 
 const views: ViewsCollection = {
@@ -12,6 +14,8 @@ const views: ViewsCollection = {
   profile,
   schemes,
   surveys,
+  permissions,
+  roles,
   users,
 };
 
