@@ -60,7 +60,7 @@ const securityConfig: SecurityConfig = {
     issuer: 'intake24',
     access: {
       secret: process.env.JWT_ACCESS_SECRET ?? '',
-      lifetime: process.env.JWT_LIFETIME ?? '15m',
+      lifetime: process.env.JWT_ACCESS_LIFETIME ?? '15m',
     },
     refresh: {
       secret: process.env.JWT_REFRESH_SECRET ?? '',

@@ -61,9 +61,20 @@ module.exports = {
           collapsable: false,
           children: [
             '',
-            'get-started'
+            'get-started',
           ]
-        }
+        },
+        {
+          title: 'Configuration',
+          collapsable: false,
+          sidebarDepth: 2,
+          children: [
+            'config/introduction',
+            'config/api-server',
+            /* 'config/admin',
+            'config/survey' */
+          ]
+        },
       ],
       '/survey/': [
         {

@@ -12,12 +12,12 @@ const startApp = async (): Promise<void> => {
   await loaders({ app });
 
   // Start listening
-  app.listen(config.port, config.url, (err) => {
+  app.listen(config.port, config.host, (err) => {
     if (err) {
       logger.error(err);
       return;
     }
-    logger.info(`${config.name} is listening on port ${config.port}!`);
+    logger.info(`${config.name} is listening on ${config.host}:${config.port}!`);
   });
 };
 
