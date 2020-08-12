@@ -5,6 +5,7 @@ Configuration is structured to following sections:
 * [Application](#application)
 * [Access Control List (ACL)](#access-control-list-acl)
 * [Database](#database)
+* [Mail](#mail)
 * [Security](#security)
 
 ## Application
@@ -17,9 +18,8 @@ Node environment to start the application in.
 
 * object-path: `env`
 * dotenv var: `NODE_ENV`
-* type: `string`
+* type: `'development' | 'test' | 'production'`
 * default: `'development'`
-* values: `'development' | 'test' | 'production'`
 
 ### Name
 
@@ -163,9 +163,88 @@ Path: `src/config/database.ts`
 
 * object-path: `[environment][database].dialect`
 * dotenv var: `DB_FOODS_DRIVER` and `DB_SYSTEM_DRIVER`
-* type: `string`
+* type: `'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql'`
 * default: `'postgres'`
-* values: `'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql'`
+
+## Mail
+
+Mail implementation supports following transports:
+
+* `SMTP` - SMTP protocol
+* `Log` - logs messages to `stdout` (for debugging purposes)
+
+Implementation is using [nodemailer](https://nodemailer.com).
+
+Path: `src/config/mail.ts`
+
+### Mailer
+
+Selected mailer transport
+
+* object-path: `mailer`
+* dotenv var: `MAIL_MAILER`
+* type: `'smtp' | 'log'`
+* default: `'log'`
+
+### SMTP transport
+
+#### Host
+
+* object-path: `mailers.smtp.host`
+* dotenv var: `MAIL_HOST`
+* type: `string`
+* default: `'localhost'`
+
+#### Port
+
+* object-path: `mailers.smtp.port`
+* dotenv var: `MAIL_PORT`
+* type: `number`
+* default: `25`
+
+#### Secure
+
+* object-path: `mailers.smtp.secure`
+* dotenv var: `MAIL_SECURE`
+* type: `boolean`
+* default: `false`
+
+#### ignoreTLS
+
+* object-path: `mailers.smtp.ignoreTLS`
+* dotenv var: `MAIL_IGNORE_TLS`
+* type: `boolean`
+* default: `false`
+
+#### Authentication
+
+* object-path: `mailers.smtp.auth.username`
+* dotenv var: `MAIL_USERNAME`
+* type: `string | null`
+* default: `null`
+
+* object-path: `mailers.smtp.auth.pass`
+* dotenv var: `MAIL_PASSWORD`
+* type: `string | null`
+* default: `null`
+
+### From
+
+* object-path: `from`
+
+#### Address
+
+* object-path: `from.address`
+* dotenv var: `MAIL_FROM_ADDRESS`
+* type: `string`
+* default: `'example@domain.com'`
+
+#### Name
+
+* object-path: `from.name`
+* dotenv var: `MAIL_FROM_NAME`
+* type: `string`
+* default: `'Intake24'`
 
 ## Security
 
@@ -261,9 +340,8 @@ Refresh token is stored in `http-only` cookie in client's browser. There are sev
 
 * object-path: `jwt.cookie.sameSite`
 * dotenv var: `JWT_COOKIE_SAMESITE`
-* type: `string`
-* default: `lax`
-* values: `boolean | 'lax' | 'strict' | 'none'`
+* type: `boolean | 'lax' | 'strict' | 'none'`
+* default: `'lax'`
 
 #### Cookie secure
 
@@ -297,9 +375,8 @@ Selected provider for MFA
 
 * object-path: `mfa.provider`
 * dotenv var: `MFA_PROVIDER`
-* type: `string`
+* type: `'duo'`
 * default: `'duo'`
-* values: `'duo'`
 
 ### Duo provider settings
 

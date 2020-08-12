@@ -38,6 +38,10 @@ module.exports = {
         link: '/overview/',
       },
       {
+        text: 'Configuration',
+        link: '/config/',
+      },
+      {
         text: 'Survey',
         link: '/survey/',
       },
@@ -52,6 +56,10 @@ module.exports = {
       {
         text: 'Data Dictionary',
         link: '/data-dictionary/',
+      },
+      {
+        text: 'GitHub',
+        link: 'https://github.com/MRC-Epid-it24/intake24',
       }
     ],
     sidebar: {
@@ -64,15 +72,17 @@ module.exports = {
             'get-started',
           ]
         },
+      ],
+      '/config/': [
         {
           title: 'Configuration',
           collapsable: false,
           sidebarDepth: 2,
           children: [
-            'config/introduction',
-            'config/api-server',
-            /* 'config/admin',
-            'config/survey' */
+            '',
+            'api-server',
+            'admin',
+            'survey',
           ]
         },
       ],
