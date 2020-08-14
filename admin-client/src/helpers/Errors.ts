@@ -1,7 +1,7 @@
-import { ValidationError } from '@common/types/common';
+import { ValidationErrorResult } from '@common/types/common';
 
 export default class Errors {
-  private errors: ValidationError;
+  public errors: ValidationErrorResult;
 
   constructor() {
     this.errors = {};
@@ -15,7 +15,7 @@ export default class Errors {
     return Object.prototype.hasOwnProperty.call(this.errors, field);
   }
 
-  record(errors?: ValidationError): void {
+  record(errors?: ValidationErrorResult): void {
     if (typeof errors !== 'undefined') this.errors = errors;
   }
 

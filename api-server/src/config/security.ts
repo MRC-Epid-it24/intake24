@@ -43,6 +43,11 @@ export type RecaptchaConfig = {
   secret: string;
 };
 
+export type PasswordsConfig = {
+  expire: number;
+  throttle: number;
+};
+
 export interface SecurityConfig {
   cors: {
     origin: boolean | string | string[];
@@ -50,6 +55,7 @@ export interface SecurityConfig {
   jwt: JwtAuthentication;
   mfa: MultiFactorAuthentication;
   recaptcha: RecaptchaConfig;
+  passwords: PasswordsConfig;
 }
 
 const securityConfig: SecurityConfig = {
@@ -90,6 +96,10 @@ const securityConfig: SecurityConfig = {
   recaptcha: {
     enabled: process.env.RECAPTCHA_ENABLED === 'true',
     secret: process.env.RECAPTCHA_SECRET ?? '',
+  },
+  passwords: {
+    expire: 60,
+    throttle: 60,
   },
 };
 

@@ -18,13 +18,13 @@ const routes: RouteConfig[] = [
   {
     path: '/password',
     name: 'password-request',
-    component: authViews.request,
+    component: authViews.passwordRequest,
     meta: { module: 'password', public: true, title: 'users.password.reset._' },
   },
   {
     path: '/password/reset/:token',
     name: 'password-reset',
-    component: authViews.reset,
+    component: authViews.passwordReset,
     meta: { module: 'password', public: true, title: 'users.password.reset._' },
   },
   {

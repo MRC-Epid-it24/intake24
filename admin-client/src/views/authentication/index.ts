@@ -5,6 +5,6 @@ import PasswordReset from './PasswordReset.vue';
 
 export default {
   login: Login,
-  request: PasswordRequest,
-  reset: PasswordReset,
+  passwordRequest: PasswordRequest,
+  passwordReset: PasswordReset,
 } as Views;

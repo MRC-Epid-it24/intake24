@@ -1,64 +1,74 @@
 <template>
-  <v-container fluid>
-    <v-row justify="center">
-      <v-col cols="auto">
-        <v-card class="mt-10" outlined raised width="30rem">
-          <v-card-title class="justify-center">
-            <h2>{{ $t('users.password.reset._') }}</h2>
-          </v-card-title>
-          <v-form
-            @keydown.native="form.errors.clear($event.target.name)"
-            @submit.prevent="onSubmit"
-          >
-            <v-card-text>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="email"
-                    :error-messages="form.errors.get('email')"
-                    :label="$t('users.email')"
-                    hide-details="auto"
-                    required
-                    outlined
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="password"
-                    :error-messages="form.errors.get('password')"
-                    :label="$t('users.password._')"
-                    hide-details="auto"
-                    required
-                    outlined
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="passwordConfirmation"
-                    :error-messages="form.errors.get('passwordConfirmation')"
-                    :label="$t('users.password.confirm')"
-                    hide-details="auto"
-                    required
-                    outlined
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-card-actions class="px-0">
-                <v-btn type="submit" color="secondary" xLarge width="100%">
-                  {{ $t('users.password.reset._') }}
-                </v-btn>
-              </v-card-actions>
-            </v-card-text>
-          </v-form>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row justify="center">
+    <v-col cols="auto">
+      <v-card class="mt-10" outlined raised width="30rem">
+        <v-card-title class="justify-center pt-6">
+          <h2>{{ $t('users.password.reset._') }}</h2>
+        </v-card-title>
+        <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="onSubmit">
+          <v-card-text class="pa-6">
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="form.email"
+                  :error-messages="form.errors.get('email')"
+                  :label="$t('users.email')"
+                  hide-details="auto"
+                  required
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="form.password"
+                  :error-messages="form.errors.get('password')"
+                  :label="$t('users.password._')"
+                  hide-details="auto"
+                  required
+                  outlined
+                  type="password"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="form.passwordConfirm"
+                  :error-messages="form.errors.get('passwordConfirm')"
+                  :label="$t('users.password.confirm')"
+                  hide-details="auto"
+                  required
+                  outlined
+                  type="password"
+                ></v-text-field>
+              </v-col>
+              <v-col v-if="nonInputErrors.length">
+                <v-alert
+                  v-for="error in nonInputErrors"
+                  :key="error.param"
+                  :icon="false"
+                  border="left"
+                  text
+                  type="error"
+                >
+                  {{ error.msg }}
+                </v-alert>
+              </v-col>
+            </v-row>
+            <v-card-actions class="px-0">
+              <v-btn type="submit" color="secondary" xLarge width="100%">
+                {{ $t('users.password.reset._') }}
+              </v-btn>
+            </v-card-actions>
+          </v-card-text>
+        </v-form>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import Form from '@/helpers/Form';
+import { ValidationError } from '@common/types/common';
 
 export default Vue.extend({
   name: 'PasswordReset',
@@ -69,14 +79,31 @@ export default Vue.extend({
         token: this.$route.params.token,
         email: null,
         password: null,
-        passwordConfirmation: null,
+        passwordConfirm: null,
       }),
     };
+  },
+
+  computed: {
+    nonInputErrors(): ValidationError[] {
+      const keys = this.form.originalKeys;
+
+      const errors = Object.keys(this.form.errors.errors).reduce((acc, error) => {
+        if (!keys.includes(error) || error === 'token')
+          acc.push({ ...this.form.errors.errors[error] });
+
+        return acc;
+      }, [] as ValidationError[]);
+
+      return errors;
+    },
   },
 
   methods: {
     async onSubmit() {
       await this.form.post('v3/password/reset');
+      this.$toasted.success(this.$t('users.password.changed') as string);
+      this.$router.push({ name: 'login' });
     },
   },
 });

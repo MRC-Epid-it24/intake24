@@ -10,16 +10,20 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import BaseModel from '../model';
-import Permission from './permission';
-import PermissionUser from './permission-user';
-import Role from './role';
-import RoleUser from './role-user';
-import SurveySubmission from './survey-submission';
-import UserPassword from './user-password';
-import UserSurveyAlias from './user-survey-alias';
+import {
+  Permission,
+  PermissionUser,
+  Role,
+  RoleUser,
+  SurveySubmission,
+  UserPassword,
+  UserPasswordReset,
+  UserSurveyAlias,
+} from '.';
 
 @Scopes(() => ({
   password: { include: [{ model: UserPassword }] },
+  passwordResets: { include: [{ model: UserPasswordReset }] },
   permissions: { include: [{ model: Permission, through: { attributes: [] } }] },
   roles: { include: [{ model: Role, through: { attributes: [] } }] },
   rolesPerms: {
@@ -87,6 +91,9 @@ export default class User extends BaseModel<User> {
 
   @HasOne(() => UserPassword, 'userId')
   public password?: UserPassword;
+
+  @HasMany(() => UserPasswordReset, 'userId')
+  public passwordResets?: UserPasswordReset[];
 
   @BelongsToMany(() => Permission, () => PermissionUser)
   public permissions?: Permission[];

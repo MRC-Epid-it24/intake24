@@ -1,50 +1,54 @@
 <template>
-  <v-container fluid>
-    <v-row justify="center">
-      <v-col cols="auto">
-        <v-card v-if="mfaChallenge" class="mt-10" outlined raised width="30rem" height="25rem">
-          <iframe id="duo_iframe"></iframe>
-        </v-card>
-        <v-card v-else class="mt-10" outlined raised max-width="30rem">
-          <v-card-title class="justify-center">
-            <h2>{{ $t('common._') }}</h2>
-          </v-card-title>
-          <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="onLogin">
-            <v-card-text>
-              <v-row>
-                <v-col cols="12" class="mb-3">
-                  <v-text-field
-                    v-model="email"
-                    :error-messages="errors.get('email')"
-                    :label="$t('users.email')"
-                    hide-details="auto"
-                    required
-                    outlined
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" class="mb-3">
-                  <v-text-field
-                    v-model="password"
-                    :error-messages="errors.get('password')"
-                    :label="$t('users.password._')"
-                    hide-details="auto"
-                    type="password"
-                    required
-                    outlined
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-card-actions class="px-0">
-                <v-btn type="submit" color="secondary" xLarge width="100%">
-                  {{ $t('common.login') }}
-                </v-btn>
-              </v-card-actions>
-            </v-card-text>
-          </v-form>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row justify="center">
+    <v-col cols="auto">
+      <v-card v-if="mfaChallenge" class="mt-10" outlined raised width="30rem" height="25rem">
+        <iframe id="duo_iframe"></iframe>
+      </v-card>
+      <v-card v-else class="mt-10" outlined raised max-width="30rem">
+        <v-card-title class="justify-center pt-6">
+          <h2>{{ $t('common._') }}</h2>
+        </v-card-title>
+        <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="onLogin">
+          <v-card-text class="pa-6">
+            <v-row>
+              <v-col cols="12" class="mb-3">
+                <v-text-field
+                  v-model="email"
+                  :error-messages="errors.get('email')"
+                  :label="$t('users.email')"
+                  hide-details="auto"
+                  required
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" class="mb-3">
+                <v-text-field
+                  v-model="password"
+                  :error-messages="errors.get('password')"
+                  :label="$t('users.password._')"
+                  hide-details="auto"
+                  type="password"
+                  required
+                  outlined
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-card-actions class="px-0">
+              <v-btn type="submit" color="secondary" xLarge width="100%">
+                {{ $t('common.login') }}
+              </v-btn>
+            </v-card-actions>
+            <v-divider class="mt-6"></v-divider>
+            <v-card-actions class="d-flex justify-end">
+              <v-btn :to="{ name: 'password-request' }" color="blue darken-3" text>
+                {{ $t('users.password.forgot') }}
+              </v-btn>
+            </v-card-actions>
+          </v-card-text>
+        </v-form>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">

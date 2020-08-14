@@ -1,34 +1,21 @@
 import { checkSchema } from 'express-validator';
+import { password } from '@/http/requests/admin/users/defaults';
 import validate from '@/http/requests/validate';
 
 export default validate(
   checkSchema({
+    ...password,
+    email: {
+      in: ['body'],
+      errorMessage: 'Email must be filled in.',
+      isEmail: true,
+      isEmpty: { negated: true },
+    },
     token: {
       in: ['body'],
-      errorMessage: 'Missing token.',
+      errorMessage: 'Verification token must be provided.',
       isString: true,
       isEmpty: { negated: true },
-    },
-    password: {
-      in: ['body'],
-      errorMessage: 'Enter a valid password, at least 8 chars length.',
-      isString: true,
-      isEmpty: { negated: true },
-      isLength: { options: { min: 8 } },
-    },
-    passwordConfirm: {
-      in: ['body'],
-      errorMessage: 'Enter a valid password, at least 8 chars length.',
-      isString: true,
-      isEmpty: { negated: true },
-      isLength: { options: { min: 8 } },
-      custom: {
-        options: async (value, { req }): Promise<void> => {
-          return value === req.body.password
-            ? Promise.resolve()
-            : Promise.reject(new Error(`Passwords don't match.`));
-        },
-      },
     },
   })
 );

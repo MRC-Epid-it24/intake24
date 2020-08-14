@@ -1,61 +1,65 @@
 <template>
-  <v-container fluid>
-    <v-row justify="center">
-      <v-col cols="auto">
-        <v-card class="mt-10" outlined raised width="30rem">
-          <v-card-title class="justify-center">
-            <h2>{{ $t('users.password.reset._') }}</h2>
-          </v-card-title>
-          <v-card-text v-if="submitted">
-            <p class="text-h6 ma-4">Password reset link has been sent to your email address.</p>
-            <p class="text-subtitle-2 ma-4">Please check your inbox (including Junk folder).</p>
-          </v-card-text>
-          <v-form
-            v-else
-            @keydown.native="form.errors.clear($event.target.name)"
-            @submit.prevent="onSubmit"
-          >
-            <v-card-text>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="form.email"
-                    :error-messages="form.errors.get('email')"
-                    :label="$t('users.email')"
-                    hide-details="auto"
-                    required
-                    outlined
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <vue-recaptcha
-                    ref="recaptcha"
-                    size="invisible"
-                    :sitekey="recaptcha.sitekey"
-                    @verify="onCaptchaVerified"
-                    @expired="onCaptchaExpired"
-                  >
-                  </vue-recaptcha>
-                </v-col>
-              </v-row>
-              <v-card-actions class="px-0">
-                <v-btn type="submit" color="secondary" xLarge width="100%">
-                  {{ $t('users.password.reset.send') }}
-                </v-btn>
-              </v-card-actions>
-              <v-divider class="mt-6"></v-divider>
-              <v-card-text class="pa-2 text-caption">
-                This site is protected by reCAPTCHA and the Google
-                <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
-                <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a>
-                apply.
-              </v-card-text>
+  <v-row justify="center">
+    <v-col cols="auto">
+      <v-card class="mt-10" outlined raised width="30rem">
+        <v-card-title class="justify-center pt-6">
+          <h2>{{ $t('users.password.reset._') }}</h2>
+        </v-card-title>
+        <v-card-text v-if="submitted">
+          <p class="text-h6 ma-4">{{ $t('users.password.reset.sent') }}</p>
+          <p class="text-subtitle-2 ma-4">
+            Please check your inbox (including spam / junk folder).
+          </p>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn :to="{ name: 'login' }" color="blue darken-3" exact text>
+              Back to login screen
+            </v-btn>
+          </v-card-actions>
+        </v-card-text>
+        <v-form
+          v-else
+          @keydown.native="form.errors.clear($event.target.name)"
+          @submit.prevent="onSubmit"
+        >
+          <v-card-text class="pa-6">
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="form.email"
+                  :error-messages="form.errors.get('email')"
+                  :label="$t('users.email')"
+                  hide-details="auto"
+                  required
+                  outlined
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-card-actions class="px-0">
+              <v-btn type="submit" color="secondary" xLarge width="100%">
+                {{ $t('users.password.reset.send') }}
+              </v-btn>
+            </v-card-actions>
+            <v-divider class="mt-6"></v-divider>
+            <v-card-text class="pa-2 text-caption">
+              <vue-recaptcha
+                v-if="recaptcha.enabled"
+                ref="recaptcha"
+                size="invisible"
+                :sitekey="recaptcha.sitekey"
+                @verify="onCaptchaVerified"
+                @expired="onCaptchaExpired"
+              >
+              </vue-recaptcha>
+              This site is protected by reCAPTCHA and the Google
+              <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
+              <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a>
+              apply.
             </v-card-text>
-          </v-form>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+          </v-card-text>
+        </v-form>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
