@@ -45,6 +45,7 @@
     "@types/jest": "^25.2.3",
     "@types/jwt-decode": "^2.2.1",
     "@types/lodash": "^4.14.159",
+    "@types/tinymce": "^4.5.24",
     "@types/vue-ls": "^3.2.1",
     "@types/vuedraggable": "^2.23.1",
     "@typescript-eslint/eslint-plugin": "^3.9.0",
