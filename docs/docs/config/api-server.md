@@ -431,3 +431,23 @@ Determines whether the reCAPTCHA is enabled or not.
 * dotenv var: `RECAPTCHA_SECRET`
 * type: `string`
 * default: `''`
+
+## Passwords
+
+Settings for password restore functionality.
+
+### Expire
+
+Password reset link expiration in **minutes**.
+
+* object-path: `passwords.expire`
+* type: `number`
+* default: `60`
+
+### Throttle
+
+Rate limit setting for password request. It allows 1 request per `throttle` value. Value is set in **seconds**.
+
+* object-path: `passwords.throttle`
+* type: `number`
+* default: `60`
