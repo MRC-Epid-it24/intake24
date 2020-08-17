@@ -1,6 +1,9 @@
 import path from 'path';
 import { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
+import config from '@/config/app';
+
+const silent = config.env === 'test';
 
 const logFormat = format.printf(
   ({ level, message, timestamp }) => `${timestamp} ${level}: ${message}`
@@ -22,6 +25,7 @@ const logger = createLogger({
       zippedArchive: true,
       maxSize: '10m',
       maxFiles: '30d',
+      silent,
     }),
     new transports.DailyRotateFile({
       level: 'error',
@@ -31,6 +35,7 @@ const logger = createLogger({
       zippedArchive: true,
       maxSize: '10m',
       maxFiles: '30d',
+      silent,
     }),
     new transports.Console({
       level: 'debug',
@@ -41,15 +46,20 @@ const logger = createLogger({
         }),
         logFormat
       ),
+      silent,
     }),
   ],
   exitOnError: false,
 });
 
-export const stream = {
+export const httpLogger = {
   write: (message: string): void => {
-    logger.info(message);
+    logger.info(message.trim());
   },
+};
+
+export const dbLogger = (sql: string, timing?: number): void => {
+  logger.debug(sql);
 };
 
 export default logger;

@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import nunjucks from 'nunjucks';
 import path from 'path';
-import { stream } from '@/services/logger';
+import { httpLogger as stream } from '@/services/logger';
 import { AppLoader } from './loader';
 
 export default async ({ app, env }: AppLoader): Promise<void> => {
@@ -11,8 +11,7 @@ export default async ({ app, env }: AppLoader): Promise<void> => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
 
-  app.use(morgan('combined', { stream }));
-  if (env !== 'production') app.use(morgan('dev'));
+  app.use(morgan(env === 'production' ? 'combined' : 'dev', { stream }));
 
   nunjucks.configure(path.resolve('resources/views'), {
     autoescape: true,

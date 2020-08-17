@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 import appConfig from '@/config/app';
 import dbConfig, { Database } from '@/config/database';
+import { dbLogger } from '@/services/logger';
 import * as foods from './models/foods';
 import * as system from './models/system';
 
@@ -12,10 +13,20 @@ export interface DbInterface extends BaseDbInterface {
 
 const { env } = appConfig;
 
+const logging = env === 'development' ? dbLogger : false;
+
 const db = {
   async init() {
-    this.foods = new Sequelize({ ...dbConfig[env].foods, models: Object.values(foods) });
-    this.system = new Sequelize({ ...dbConfig[env].system, models: Object.values(system) });
+    this.foods = new Sequelize({
+      ...dbConfig[env].foods,
+      models: Object.values(foods),
+      logging,
+    });
+    this.system = new Sequelize({
+      ...dbConfig[env].system,
+      models: Object.values(system),
+      logging,
+    });
   },
 } as DbInterface;
 
