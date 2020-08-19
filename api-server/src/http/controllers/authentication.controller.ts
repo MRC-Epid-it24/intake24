@@ -6,7 +6,7 @@ import { Tokens } from '@/services/jwt.service';
 import UnauthorizedError from '../errors/unauthorized.error';
 
 /**
- * Sucessfull login response helper
+ * Successful login response helper
  * - attach refresh token as secure cookie
  * - return access token in response body
  *

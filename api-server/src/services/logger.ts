@@ -17,6 +17,7 @@ const logger = createLogger({
     }),
     logFormat
   ),
+  silent,
   transports: [
     new transports.DailyRotateFile({
       dirname: path.resolve('storage/logs'),
@@ -25,7 +26,6 @@ const logger = createLogger({
       zippedArchive: true,
       maxSize: '10m',
       maxFiles: '30d',
-      silent,
     }),
     new transports.DailyRotateFile({
       level: 'error',
@@ -35,7 +35,6 @@ const logger = createLogger({
       zippedArchive: true,
       maxSize: '10m',
       maxFiles: '30d',
-      silent,
     }),
     new transports.Console({
       level: 'debug',
@@ -46,7 +45,6 @@ const logger = createLogger({
         }),
         logFormat
       ),
-      silent,
     }),
   ],
   exitOnError: false,

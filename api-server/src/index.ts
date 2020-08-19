@@ -1,18 +1,13 @@
 import './bootstrap';
-import express from 'express';
 import config from '@/config/app';
-import loaders from '@/loaders';
 import logger from '@/services/logger';
+import app from './app';
 
 const startApp = async (): Promise<void> => {
-  // Init express
-  const app = express();
-
-  // Load dependencies
-  await loaders({ app });
+  const server = await app();
 
   // Start listening
-  app.listen(config.port, config.host, (err) => {
+  server.listen(config.port, config.host, (err) => {
     if (err) {
       logger.error(err);
       return;
