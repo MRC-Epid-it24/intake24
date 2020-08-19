@@ -27,16 +27,21 @@ module.exports = {
   },
   extends: [
     'airbnb-base',
+    'plugin:mocha/recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
   ],
-  plugins: ['import', 'prettier', '@typescript-eslint'],
+  plugins: ['import', 'prettier', '@typescript-eslint', 'mocha'],
   rules: {
     'prettier/prettier': 'error',
     'import/no-cycle': 'warn',
     'no-console': 'warn',
     'no-debugger': 'warn',
+    'import/no-extraneous-dependencies': [
+      'error',
+      { devDependencies: ['**/*.test.ts', '**/*.spec.ts'] },
+    ],
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     'import/extensions': [
       'error',
@@ -46,4 +51,13 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ['**/*.test.ts'],
+      rules: {
+        'func-names': 'off',
+        'mocha/no-exports': 'off',
+      },
+    },
+  ],
 };

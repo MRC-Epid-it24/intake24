@@ -1,23 +1,22 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const ShellPlugin = require('webpack-shell-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
-const {NODE_ENV = 'development'} = process.env;
+const { NODE_ENV = 'development' } = process.env;
 const isDev = NODE_ENV === 'development';
 
 const plugins = [];
 
-if (isDev) {
-  plugins.push(new ShellPlugin({onBuildEnd: ['npm run development:start']}));
-}
+if (isDev) plugins.push(new ShellPlugin({ onBuildEnd: ['npm run development:start'] }));
 
 module.exports = {
+  context: __dirname,
   entry: {
     server: path.resolve('./src/index.ts'),
     foodIndexBuilder: path.resolve('./src/food-index/workers/index-builder.ts'),
-    tests: path.resolve('./src/tests/index.ts')
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -35,7 +34,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js', '.json'],
     plugins: [
       new TsconfigPathsPlugin({
-        configFile: './tsconfig.json',
+        configFile: './tsconfig.build.json',
         logLevel: 'info',
         logInfoToStdOut: true,
         extensions: ['.ts'],
@@ -46,10 +45,17 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: path.resolve(__dirname, 'tsconfig.build.json'),
+            },
+          },
+        ],
         exclude: /node_modules/,
-      }
+      },
     ],
   },
-  plugins: plugins
+  plugins,
 };

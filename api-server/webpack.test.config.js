@@ -1,10 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const { exec } = require('child_process');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
-const {NODE_ENV = 'development'} = process.env;
+const { NODE_ENV = 'development' } = process.env;
 const isDev = NODE_ENV === 'development';
 
 const plugins = [
@@ -21,7 +22,7 @@ const plugins = [
 ];
 
 module.exports = {
-  entry: path.resolve('./src/tests/index.ts'),
+  entry: path.resolve('./tests/index.ts'),
   output: {
     path: path.resolve(__dirname, 'dist-tests'),
     filename: 'tests.js',
@@ -51,8 +52,8 @@ module.exports = {
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/,
-      }
+      },
     ],
   },
-  plugins: plugins
+  plugins,
 };
