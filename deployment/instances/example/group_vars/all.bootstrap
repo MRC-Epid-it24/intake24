@@ -1,0 +1,14 @@
+# Default ssh port
+ansible_port: 22
+
+ansible_user: user
+ansible_password: password
+
+# sudo password, required if the above user does not have passwordless sudo enabled
+ansible_become_pass: password
+
+deploy_user:
+  ssh_public_key: "../instances/{{ instance }}/ssh/deploy.pub"
+
+# Change this if Python 3 is not installed by default on the target server
+ansible_python_interpreter: /usr/bin/python3

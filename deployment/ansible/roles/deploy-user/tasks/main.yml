@@ -1,0 +1,31 @@
+---
+  - name: Create deploy user
+    user:
+      name: deploy
+      state: present
+      group: sudo
+      shell: /bin/bash
+
+  - name: Add deploy key
+    authorized_key:
+      user: deploy
+      key: "{{ lookup('file', deploy_user.ssh_public_key) }}"
+
+  - name: Add deploy users to sudoers
+    lineinfile:
+      dest: /etc/sudoers
+      line: 'deploy ALL=(ALL:ALL) NOPASSWD:ALL'
+      regexp: '^deploy ALL='
+      state: present
+
+  - name: Disable root login
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      line: 'PermitRootLogin no'
+      regexp: '^PermitRootLogin'
+      state: present
+  
+  - name: Restart sshd
+    service:
+      name: ssh
+      state: restarted

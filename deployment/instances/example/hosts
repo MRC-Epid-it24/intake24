@@ -1,0 +1,14 @@
+[webservers]
+localhost
+
+[dbservers]
+localhost
+
+[api-server]
+localhost
+
+[admin-site]
+localhost
+
+[survey-site]
+localhost
