@@ -1,0 +1,11 @@
+{
+  "site": {
+     "name": "survey-site",
+     "config_file": "../instances/{{ instance }}/survey-site/nginx-site",
+     "ssl": {
+       "enabled": false,
+       "public_cert": "../instances/{{ instance }}/survey-site/example.com.crt",
+       "private_key": "../instances/{{ instance }}/survey-site/example.com.key"
+      }
+  }
+}

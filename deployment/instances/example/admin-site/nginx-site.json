@@ -1,0 +1,11 @@
+{
+  "site": {
+     "name": "admin-site",
+     "config_file": "../instances/{{ instance }}/admin-site/nginx-site",
+     "ssl": {
+       "enabled": false,
+       "public_cert": "../instances/{{ instance }}/admin-site/example.com.crt",
+       "private_key": "../instances/{{ instance }}/admin-site/example.com.key"
+      }
+  }
+}

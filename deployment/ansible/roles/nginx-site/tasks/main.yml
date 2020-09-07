@@ -1,0 +1,36 @@
+- name: Copy {{ site.name }} certificate
+  copy:
+    src: '{{ site.ssl.public_cert }}'
+    dest: '/etc/ssl/certs/{{ site.name }}.crt'
+    owner: root
+    group: root
+    mode: '644'
+  when: site.ssl.enabled
+
+- name: Copy {{ site.name }} private key
+  copy:
+    src: '{{ site.ssl.private_key }}'
+    dest: '/etc/ssl/private/{{ site.name }}.key'
+    owner: root
+    group: root
+    mode: '600'
+  when: site.ssl.enabled
+
+- name: Copy {{ site.name }} nginx site config
+  copy:
+    src: '{{ site.config_file }}'
+    dest: '/etc/nginx/sites-available/{{ site.name }}'
+    owner: root
+    group: root
+    mode: '644'
+
+- name: Enable {{ site.name }} site
+  file:
+    src: '/etc/nginx/sites-available/{{ site.name }}'
+    dest: '/etc/nginx/sites-enabled/{{ site.name }}'
+    state: link
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted
