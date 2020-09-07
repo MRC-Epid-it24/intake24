@@ -1,0 +1,7 @@
+---
+- name: Install OS dependencies
+  apt:
+    name: [git, curl, ssl-cert]
+    state: latest
+    update_cache: yes
+  
