@@ -1,0 +1,66 @@
+---
+- name: Add NGINX signing key
+  apt_key:
+    url: http://nginx.org/keys/nginx_signing.key
+    state: present
+
+- name: Add NGINX repository for {{ ansible_distribution_release }}
+  apt_repository:
+    repo: deb https://nginx.org/packages/mainline/ubuntu/ {{ ansible_distribution_release }} nginx
+    state: present
+    filename: nginx
+    mode: '644'
+
+- name: Add NGINX repository for {{ ansible_distribution_release }}
+  apt_repository:
+    repo: deb-src https://nginx.org/packages/mainline/ubuntu/ {{ ansible_distribution_release }} nginx
+    state: present
+    filename: nginx
+    mode: '644'
+
+- name: Install NGINX
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+
+- name: Check if Diffie-Hellman parameters file exists
+  stat:
+    path: /etc/ssl/certs/dhparam.pem
+  register: dh_result
+
+- name: Generate Diffie-Hellman parameters, if it doesn't exist
+  command: /usr/bin/openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
+  when: not dh_result.stat.exists
+
+- name: Copy NGINX config
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    backup: yes
+
+- name: Ensure sites-available dir exists
+  file:
+    path: /etc/nginx/sites-available
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+- name: Ensure sites-enabled dir exists
+  file:
+    path: /etc/nginx/sites-enabled
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+- name: Disable default NGINX site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Restart NGINX service
+  service:
+    name: nginx
+    state: restarted

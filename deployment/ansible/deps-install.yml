@@ -1,0 +1,8 @@
+---
+- hosts: webservers
+  remote_user: deploy
+  become: true
+  roles:
+    - deps-os
+    - deps-nodejs
+    - deps-nginx
