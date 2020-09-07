@@ -6,3 +6,9 @@
     - deps-os
     - deps-nodejs
     - deps-nginx
+
+- hosts: api-server
+  remote_user: deploy
+  become: true
+  roles:
+    - deps-redis

@@ -1,0 +1,24 @@
+---
+- name: Add redis-server repository
+  apt_repository:
+    repo: ppa:chris-lea/redis-server
+    state: present
+    mode: '644'
+
+- name: Install redis-server
+  apt:
+    name: redis-server
+    state: latest
+    update_cache: yes
+
+- name: Allow interaction with systemd
+  lineinfile:
+    dest: /etc/redis/redis.conf
+    line: 'supervised systemd'
+    regexp: '^supervised'
+    state: present
+
+- name: Restart redis-server service
+  service:
+    name: redis-server
+    state: restarted
