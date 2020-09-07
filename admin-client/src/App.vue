@@ -58,6 +58,12 @@
         <router-view></router-view>
       </v-container>
     </v-main>
+    <v-snackbar :value="updateExists" :timeout="-1" color="primary">
+      {{ $t('common.sw.check') }}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="refreshApp">{{ $t('common.sw.update') }}</v-btn>
+      </template>
+    </v-snackbar>
 
     <!-- <v-footer app> </v-footer> -->
   </v-app>
@@ -69,6 +75,7 @@ import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import Loader from './components/Loader.vue';
 import MenuTree from './components/sidebar/MenuTree.vue';
+import pwaUpdate from './mixins/pwaUpdateMixin';
 import resources from './router/resources';
 
 export interface AppComponent {
@@ -80,6 +87,8 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
   name: 'App',
 
   components: { Loader, MenuTree },
+
+  mixins: [pwaUpdate],
 
   data() {
     return {

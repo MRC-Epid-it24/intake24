@@ -24,6 +24,11 @@ const common: LocaleMessage = {
   createdAt: 'Created at',
   updatedAt: 'Updated at',
 
+  sw: {
+    check: 'Content update is available',
+    update: 'Update',
+  },
+
   locales: {
     dk: 'Danish',
     en: 'English',

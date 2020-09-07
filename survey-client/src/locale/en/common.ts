@@ -13,6 +13,11 @@ const common: LocaleMessage = {
   password: 'Password',
 
   continue: 'Continue',
+
+  sw: {
+    check: 'Content update is available',
+    update: 'Update',
+  },
 };
 
 export default common;

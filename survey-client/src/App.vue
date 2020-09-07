@@ -40,6 +40,12 @@
       <!-- <h1 v-if="loggedIn" class="m-0 text-dark">{{ title }}</h1> -->
       <router-view></router-view>
     </v-main>
+    <v-snackbar :value="updateExists" :timeout="-1" color="primary">
+      {{ $t('common.sw.check') }}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="refreshApp">{{ $t('common.sw.update') }}</v-btn>
+      </template>
+    </v-snackbar>
 
     <!-- <v-footer app> </v-footer> -->
   </v-app>
@@ -50,6 +56,7 @@ import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { TranslateResult } from 'vue-i18n';
 import Loader from './components/Loader.vue';
+import pwaUpdate from './mixins/pwaUpdateMixin';
 
 export interface AppComponent {
   sidebar: boolean;
@@ -60,6 +67,8 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
   name: 'App',
 
   components: { Loader },
+
+  mixins: [pwaUpdate],
 
   data() {
     return {
