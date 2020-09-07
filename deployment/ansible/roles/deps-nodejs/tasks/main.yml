@@ -1,0 +1,11 @@
+---
+- name: Add Node.js 12 LTS repository
+  shell: 'curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -'
+  args:
+    warn: no
+
+- name: Install Node.js 12 LTS
+  apt:
+    name: nodejs
+    state: latest
+    update_cache: yes
