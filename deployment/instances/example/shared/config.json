@@ -1,0 +1,11 @@
+{
+  "git": {
+    "repository": "https://github.com/MRC-Epid-it24/intake24.git",
+    "branch": "master"
+  },
+  "app": {
+    "directory": "/opt/intake24",
+    "user": "intake24",
+    "group": "intake24"
+  }
+}

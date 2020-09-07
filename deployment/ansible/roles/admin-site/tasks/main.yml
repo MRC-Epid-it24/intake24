@@ -1,0 +1,18 @@
+- name: Install npm package dependencies
+  become_user: '{{ app.user }}'
+  command: npm install
+  args:
+    chdir: '{{ app.directory }}/admin-client'
+
+- name: Copy .env config file
+  become_user: '{{ app.user }}'
+  copy:
+    src: '{{ env_file }}'
+    dest: '{{ app.directory }}/admin-client/.env'
+    mode: '644'
+
+- name: Build client application
+  become_user: '{{ app.user }}'
+  command: npm run build
+  args:
+    chdir: '{{ app.directory }}/admin-client'

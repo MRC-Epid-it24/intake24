@@ -1,0 +1,4 @@
+{
+  "service": "api-server",
+  "env_file": "../instances/{{ instance }}/api-server/.env"
+}

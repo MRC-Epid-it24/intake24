@@ -1,0 +1,4 @@
+{
+  "service": "survey-site",
+  "env_file": "../instances/{{ instance }}/survey-site/.env"
+}

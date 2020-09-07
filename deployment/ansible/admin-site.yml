@@ -1,0 +1,8 @@
+---
+- hosts: admin-site
+  remote_user: deploy
+  become: true
+  roles:
+    - app-init
+    - admin-site
+    - app-service

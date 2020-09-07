@@ -1,0 +1,31 @@
+- name: Include shared vars
+  include_vars: '../instances/{{ instance }}/shared/config.json'
+
+- name: Set full service name
+  set_fact: 
+    service_name: '{{ app.user }}-{{ service }}'
+
+- name: Check if service is already running
+  shell: systemctl is-active {{ service_name }}
+  register: service_active
+  failed_when: false
+
+- name: Stop service if already running
+  service:
+    name: '{{ service_name }}'
+    state: stopped
+  when: service_active.rc == 0
+
+- name: Copy systemd service file
+  template:
+    src: '{{ service }}.service.j2'
+    dest: '/lib/systemd/system/{{ service_name }}.service'
+    owner: root
+    group: root
+    mode: '644'
+
+- name: Restart service to apply configuration changes
+  service:
+    name: '{{ service_name }}'
+    state: restarted
+    enabled: yes

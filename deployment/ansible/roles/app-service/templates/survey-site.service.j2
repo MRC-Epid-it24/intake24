@@ -1,0 +1,14 @@
+[Unit]
+Description=Intake24 Survey site
+After=network.target
+
+[Service]
+Type=simple
+User={{ app.user }}
+Group={{ app.group }}
+Restart=on-failure
+WorkingDirectory={{ app.directory }}/survey-client
+ExecStart=/usr/bin/node server/index.js
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,4 @@
+{
+  "service": "admin-site",
+  "env_file": "../instances/{{ instance }}/admin-site/.env"
+}

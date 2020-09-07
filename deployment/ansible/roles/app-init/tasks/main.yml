@@ -1,0 +1,37 @@
+- name: Include shared vars
+  include_vars: '../instances/{{ instance }}/shared/config.json'
+
+- name: Create / check group
+  group:
+    name: '{{ app.group }}'
+    state: present
+
+- name: Create / check user
+  user:
+    name: '{{ app.user }}'
+    group: '{{ app.group }}'
+
+- name: Update npm to latest
+  command: npm install -g npm
+
+- name: Create / check application directory
+  file:
+    path: '{{ app.directory }}'
+    state: directory
+    owner: '{{ app.user }}'
+    group: '{{ app.group }}'
+
+- name: Checkout source from git repository
+  become_user: '{{ app.user }}'
+  git:
+    dest: '{{ app.directory }}'
+    repo: '{{ git.repository }}'
+    version: '{{ git.branch }}'
+    force: yes
+    accept_hostkey: true
+
+- name: Install common npm package dependencies
+  become_user: '{{ app.user }}'
+  command: npm install
+  args:
+    chdir: '{{ app.directory }}/common'

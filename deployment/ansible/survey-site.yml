@@ -1,0 +1,8 @@
+---
+- hosts: survey-site
+  remote_user: deploy
+  become: true
+  roles:
+    - app-init
+    - survey-site
+    - app-service

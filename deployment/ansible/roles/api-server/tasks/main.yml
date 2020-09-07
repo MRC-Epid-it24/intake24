@@ -1,0 +1,21 @@
+- name: Include shared vars
+  include_vars: '../instances/{{ instance }}/shared/config.json'
+
+- name: Install npm package dependencies
+  become_user: '{{ app.user }}'
+  command: npm install
+  args:
+    chdir: '{{ app.directory }}/api-server'
+
+- name: Copy .env config file
+  become_user: '{{ app.user }}'
+  copy:
+    src: '{{ env_file }}'
+    dest: '{{ app.directory }}/api-server/.env'
+    mode: '644'
+
+- name: Build API server
+  become_user: '{{ app.user }}'
+  command: npm run production
+  args:
+    chdir: '{{ app.directory }}/api-server'
