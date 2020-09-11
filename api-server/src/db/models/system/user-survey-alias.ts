@@ -7,6 +7,9 @@ import User from './user';
   user: { include: [{ model: User }] },
 }))
 @Table({
+  modelName: 'UserSurveyAlias',
+  tableName: 'user_survey_aliases',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })

@@ -12,6 +12,9 @@ import User from './user';
   meals: { include: [{ model: SurveySubmissionMeal }] },
 }))
 @Table({
+  modelName: 'SurveySubmission',
+  tableName: 'survey_submissions',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })

@@ -6,6 +6,9 @@ import SurveySubmission from './survey-submission';
   submission: { include: [{ model: SurveySubmission }] },
 }))
 @Table({
+  modelName: 'SurveySubmissionCustomField',
+  tableName: 'survey_submission_custom_fields',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })

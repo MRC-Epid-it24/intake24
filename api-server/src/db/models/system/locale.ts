@@ -6,6 +6,9 @@ import Survey from './survey';
   surveys: { include: [{ model: Survey }] },
 }))
 @Table({
+  modelName: 'Locale',
+  tableName: 'locales',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })

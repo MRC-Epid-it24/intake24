@@ -12,6 +12,9 @@ import SurveySubmissionMissingFood from './survey-submission-missing-food';
   misingFoods: { include: [{ model: SurveySubmissionMissingFood }] },
 }))
 @Table({
+  modelName: 'SurveySubmissionMeal',
+  tableName: 'survey_submission_meals',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })

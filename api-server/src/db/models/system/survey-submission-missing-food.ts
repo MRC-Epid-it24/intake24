@@ -6,6 +6,9 @@ import SurveySubmissionMeal from './survey-submission-meal';
   meal: { include: [{ model: SurveySubmissionMeal }] },
 }))
 @Table({
+  modelName: 'SurveySubmissionMissingFood',
+  tableName: 'survey_submission_missing_foods',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })

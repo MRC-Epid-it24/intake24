@@ -3,6 +3,9 @@ import BaseModel from '../model';
 import User from './user';
 
 @Table({
+  modelName: 'UserPassword',
+  tableName: 'user_passwords',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })

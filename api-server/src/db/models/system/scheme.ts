@@ -25,6 +25,9 @@ export const defaultMeals: Meal[] = [
   surveys: { include: [{ model: Survey }] },
 }))
 @Table({
+  modelName: 'Scheme',
+  tableName: 'schemes',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })

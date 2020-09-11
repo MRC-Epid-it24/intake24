@@ -36,6 +36,9 @@ export enum SurveyState {
   submissions: { include: [{ model: SurveySubmission }] },
 }))
 @Table({
+  modelName: 'Survey',
+  tableName: 'surveys',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })
