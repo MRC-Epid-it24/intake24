@@ -6,6 +6,9 @@ import User from './user';
   user: { include: [{ model: User }] },
 }))
 @Table({
+  modelName: 'SigninLog',
+  tableName: 'signin_log',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })

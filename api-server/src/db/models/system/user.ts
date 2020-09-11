@@ -15,6 +15,7 @@ import {
   PermissionUser,
   Role,
   RoleUser,
+  SigninLog,
   SurveySubmission,
   UserPassword,
   UserPasswordReset,
@@ -35,6 +36,7 @@ import {
       },
     ],
   },
+  signinLog: { include: [{ model: SigninLog }] },
   aliases: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
 }))
@@ -100,6 +102,9 @@ export default class User extends BaseModel<User> {
 
   @BelongsToMany(() => Role, () => RoleUser)
   public roles?: Role[];
+
+  @HasMany(() => SigninLog, 'userId')
+  public signinLog?: SigninLog[];
 
   @HasMany(() => UserSurveyAlias, 'userId')
   public aliases?: UserSurveyAlias[];
