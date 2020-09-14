@@ -2,6 +2,7 @@ import { uniqBy } from 'lodash';
 import {
   BelongsToMany,
   Column,
+  DataType,
   HasOne,
   HasMany,
   Scopes,
@@ -50,6 +51,7 @@ export default class User extends BaseModel<User> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
   public id!: number;
 

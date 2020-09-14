@@ -6,7 +6,7 @@ export type UserRequest = {
   emailNotifications?: boolean;
   smsNotifications?: boolean;
   multiFactorAuthentication?: boolean;
-  roles: string[];
+  roles: number[] | string[];
 };
 
 export interface CreateUserRequest extends UserRequest {
