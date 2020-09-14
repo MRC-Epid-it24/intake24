@@ -17,7 +17,7 @@ router.get('/create', permission('schemes-create'), wrapAsync(controller.create)
 
 router
   .route('/:schemeId')
-  .get(permission('schemes-detail'), wrapAsync(controller.show))
+  .get(permission('schemes-detail'), wrapAsync(controller.detail))
   .put(permission('schemes-edit'), validation.update, wrapAsync(controller.update))
   .delete(permission('schemes-delete'), wrapAsync(controller.delete));
 

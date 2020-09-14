@@ -17,7 +17,7 @@ router.get('/create', permission('surveys-create'), wrapAsync(controller.create)
 
 router
   .route('/:surveyId')
-  .get(permission('surveys-detail'), canManageSurvey(), wrapAsync(controller.show))
+  .get(permission('surveys-detail'), canManageSurvey(), wrapAsync(controller.detail))
   .put(
     permission('surveys-edit'),
     canManageSurvey(),

@@ -20,7 +20,7 @@ router
   .get(
     permission('permissions-detail'),
     validation.entry('permissionId'),
-    wrapAsync(controller.show)
+    wrapAsync(controller.detail)
   )
   .put(
     permission('permissions-edit'),

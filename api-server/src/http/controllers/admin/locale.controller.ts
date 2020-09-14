@@ -24,7 +24,7 @@ export default {
     res.json(locales);
   },
 
-  async show(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async detail(req: Request, res: Response, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 };

@@ -17,7 +17,7 @@ router.get('/create', permission('roles-create'), wrapAsync(controller.create));
 
 router
   .route('/:roleId')
-  .get(permission('roles-detail'), validation.entry('roleId'), wrapAsync(controller.show))
+  .get(permission('roles-detail'), validation.entry('roleId'), wrapAsync(controller.detail))
   .put(
     permission('roles-edit'),
     validation.entry('roleId'),

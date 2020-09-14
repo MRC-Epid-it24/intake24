@@ -10,6 +10,6 @@ router.route('').get(validation.list, permission('locales-list'), wrapAsync(cont
 
 router
   .route('/:localeId')
-  .get(validation.entry, permission('locales-detail'), wrapAsync(controller.show));
+  .get(validation.entry, permission('locales-detail'), wrapAsync(controller.detail));
 
 export default router;

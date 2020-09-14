@@ -77,7 +77,7 @@ export default {
     res.status(201).json({ data: surveyResponse(survey) });
   },
 
-  async show(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async detail(req: Request, res: Response, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
