@@ -12,7 +12,7 @@ const plugins = [
   {
     apply: (compiler) => {
       compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
-        exec('npm run --silent test:run', (err, stdout, stderr) => {
+        exec('npm run --silent test:unit:run', (err, stdout, stderr) => {
           if (stdout) process.stdout.write(stdout);
           if (stderr) process.stderr.write(stderr);
         });
@@ -22,7 +22,7 @@ const plugins = [
 ];
 
 module.exports = {
-  entry: path.resolve('./tests/index.ts'),
+  entry: path.resolve('./tests/unit/index.ts'),
   output: {
     path: path.resolve(__dirname, 'dist-tests'),
     filename: 'tests.js',

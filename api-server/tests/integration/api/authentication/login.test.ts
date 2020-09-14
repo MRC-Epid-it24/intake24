@@ -17,7 +17,7 @@ export default (): void => {
     const res = await request(this.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ email: 'invalidEmail', password: 'invalidPassword' });
+      .send({ email: 'testUser@example.com', password: 'invalidPassword' });
 
     expect(res.status).to.equal(401);
   });
@@ -26,7 +26,7 @@ export default (): void => {
     const res = await request(this.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ email: 'validEmail', password: 'validPassword' });
+      .send({ email: 'testUser@example.com', password: 'testUserPassword' });
 
     expect(res.status).to.equal(200);
     expect(res.body).to.be.an('object').to.have.keys('accessToken');

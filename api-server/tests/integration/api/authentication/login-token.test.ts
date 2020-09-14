@@ -24,7 +24,7 @@ export default (): void => {
     const res = await request(this.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ token: 'validToken' });
+      .send({ token: this.data.respondent.urlAuthToken });
 
     expect(res.status).to.equal(200);
     expect(res.body).to.be.an('object').to.have.keys('accessToken');

@@ -1,4 +1,3 @@
-/* eslint-disable mocha/no-exports */
 import { expect } from 'chai';
 import request from 'supertest';
 

@@ -15,9 +15,9 @@ export default (): void => {
 
   it('Invalid credentials should return 401', async function () {
     const res = await request(this.app).post(url).set('Accept', 'application/json').send({
-      userName: 'invalidUsername',
+      userName: 'testRespondent',
       password: 'invalidPassword',
-      surveyId: 'invalidSurvey',
+      surveyId: 'test-survey',
     });
 
     expect(res.status).to.equal(401);
@@ -25,9 +25,9 @@ export default (): void => {
 
   it('Valid credentials should return 200, access token & refresh cookie', async function () {
     const res = await request(this.app).post(url).set('Accept', 'application/json').send({
-      userName: 'validUsername',
-      password: 'validPassword',
-      surveyId: 'validSurvey',
+      userName: 'testRespondent',
+      password: 'testRespondentPassword',
+      surveyId: 'test-survey',
     });
 
     expect(res.status).to.equal(200);

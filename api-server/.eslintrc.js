@@ -42,6 +42,8 @@ module.exports = {
       'error',
       { devDependencies: ['**/*.test.ts', '**/*.spec.ts'] },
     ],
+    'no-continue': 'off',
+    'no-await-in-loop': 'off',
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     'import/extensions': [
       'error',
