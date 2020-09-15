@@ -1,28 +1,19 @@
 import { expect } from 'chai';
-import { pick } from 'lodash';
+import { pick, omit } from 'lodash';
 import request from 'supertest';
-import { Permission } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.permission();
-    this.updateInput = mocker.permission();
+    this.input = mocker.role();
+    this.output = omit(this.input, 'permissions');
 
-    const { name } = this.input;
-    const { displayName, description } = this.updateInput;
-    this.output = { name, displayName, description };
-
-    this.permission = await Permission.create(this.input);
-
-    const baseUrl = '/admin/permissions';
-    this.url = `${baseUrl}/${this.permission.id}`;
-    this.invalidUrl = `${baseUrl}/999999`;
+    this.url = '/admin/roles';
   });
 
   it('should return 401 when no / invalid token', async function () {
-    const { status } = await request(this.app).put(this.url).set('Accept', 'application/json');
+    const { status } = await request(this.app).post(this.url).set('Accept', 'application/json');
 
     expect(status).to.equal(401);
   });
@@ -31,7 +22,7 @@ export default function (): void {
     await setPermission('acl');
 
     const { status } = await request(this.app)
-      .put(this.url)
+      .post(this.url)
       .set('Accept', 'application/json')
       .set('Authorization', this.bearer);
 
@@ -40,52 +31,54 @@ export default function (): void {
 
   describe('resource input/data tests', function () {
     before(async function () {
-      await setPermission(['acl', 'permissions-edit']);
+      await setPermission(['acl', 'roles-create']);
     });
 
     it('should return 422 when missing input data', async function () {
       const { status, body } = await request(this.app)
-        .put(this.url)
+        .post(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer);
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('name', 'displayName');
+      expect(body.errors).to.have.keys('name', 'displayName', 'permissions');
     });
 
     it('should return 422 when invalid input data', async function () {
       const { status, body } = await request(this.app)
-        .put(this.url)
+        .post(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
-        .send({ name: '', displayName: '' });
+        .send({ name: '', displayName: '', permissions: 'invalidId' });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('name', 'displayName');
+      expect(body.errors).to.have.keys('name', 'displayName', 'permissions');
     });
 
-    it(`should return 404 when record doesn't exist`, async function () {
-      const { status } = await request(this.app)
-        .put(this.invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', this.bearer)
-        .send(this.updateInput);
-
-      expect(status).to.equal(404);
-    });
-
-    it('should return 200 and data/refs', async function () {
+    it('should return 201 and new resource', async function () {
       const { status, body } = await request(this.app)
-        .put(this.url)
+        .post(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
-        .send(this.updateInput);
+        .send(this.input);
 
-      expect(status).to.equal(200);
-      expect(body).to.be.an('object').to.have.keys('data', 'refs');
+      expect(status).to.equal(201);
+      expect(body).to.be.an('object').to.have.key('data');
       expect(pick(body.data, Object.keys(this.output))).to.deep.equal(this.output);
+    });
+
+    it('should return 422 when duplicate name', async function () {
+      const { status, body } = await request(this.app)
+        .post(this.url)
+        .set('Accept', 'application/json')
+        .set('Authorization', this.bearer)
+        .send(this.input);
+
+      expect(status).to.equal(422);
+      expect(body).to.be.an('object').to.have.keys('errors', 'success');
+      expect(body.errors).to.have.keys('name');
     });
   });
 }

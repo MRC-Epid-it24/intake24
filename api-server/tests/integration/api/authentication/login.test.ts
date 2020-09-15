@@ -6,20 +6,20 @@ export default (): void => {
   const url = '/login';
 
   it('Missing credentials should return 422 with errors', async function () {
-    const res = await request(this.app).post(url).set('Accept', 'application/json');
+    const { status, body } = await request(this.app).post(url).set('Accept', 'application/json');
 
-    expect(res.status).to.equal(422);
-    expect(res.body).to.be.an('object').to.have.keys('errors', 'success');
-    expect(res.body.errors).to.have.keys('email', 'password');
+    expect(status).to.equal(422);
+    expect(body).to.be.an('object').to.have.keys('errors', 'success');
+    expect(body.errors).to.have.keys('email', 'password');
   });
 
   it('Invalid credentials should return 401', async function () {
-    const res = await request(this.app)
+    const { status } = await request(this.app)
       .post(url)
       .set('Accept', 'application/json')
       .send({ email: 'testUser@example.com', password: 'invalidPassword' });
 
-    expect(res.status).to.equal(401);
+    expect(status).to.equal(401);
   });
 
   it('Valid credentials should return 200, access token & refresh cookie', async function () {

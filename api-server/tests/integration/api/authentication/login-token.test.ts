@@ -6,18 +6,18 @@ export default (): void => {
   const url = '/login/token';
 
   it('Missing token should return 401 with errors', async function () {
-    const res = await request(this.app).post(url).set('Accept', 'application/json');
+    const { status } = await request(this.app).post(url).set('Accept', 'application/json');
 
-    expect(res.status).to.equal(401);
+    expect(status).to.equal(401);
   });
 
   it('Invalid token should return 401', async function () {
-    const res = await request(this.app)
+    const { status } = await request(this.app)
       .post(url)
       .set('Accept', 'application/json')
       .send({ token: 'invalidToken' });
 
-    expect(res.status).to.equal(401);
+    expect(status).to.equal(401);
   });
 
   it('Valid token should return 200, access token & refresh cookie', async function () {

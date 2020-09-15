@@ -1,23 +1,27 @@
 import { expect } from 'chai';
-import { pick } from 'lodash';
+import { pick, times } from 'lodash';
 import request from 'supertest';
-import { Permission } from '@/db/models/system';
+import { Role, Permission } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.permission();
-    this.updateInput = mocker.permission();
+    this.input = mocker.role();
+    this.updateInput = mocker.role();
+
+    const permissionInput = times(3, () => mocker.permission());
+    this.permissions = await Permission.bulkCreate(permissionInput);
+    this.updateInput.permissions = this.permissions.map((item: Permission) => item.id);
 
     const { name } = this.input;
-    const { displayName, description } = this.updateInput;
-    this.output = { name, displayName, description };
+    const { displayName, description, permissions } = this.updateInput;
+    this.output = { name, displayName, description, permissions };
 
-    this.permission = await Permission.create(this.input);
+    this.role = await Role.create(this.input);
 
-    const baseUrl = '/admin/permissions';
-    this.url = `${baseUrl}/${this.permission.id}`;
+    const baseUrl = '/admin/roles';
+    this.url = `${baseUrl}/${this.role.id}`;
     this.invalidUrl = `${baseUrl}/999999`;
   });
 
@@ -40,7 +44,7 @@ export default function (): void {
 
   describe('resource input/data tests', function () {
     before(async function () {
-      await setPermission(['acl', 'permissions-edit']);
+      await setPermission(['acl', 'roles-edit']);
     });
 
     it('should return 422 when missing input data', async function () {
@@ -51,7 +55,7 @@ export default function (): void {
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('name', 'displayName');
+      expect(body.errors).to.have.keys('name', 'displayName', 'permissions');
     });
 
     it('should return 422 when invalid input data', async function () {
@@ -59,15 +63,15 @@ export default function (): void {
         .put(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
-        .send({ name: '', displayName: '' });
+        .send({ name: '', displayName: '', permissions: 'invalidId' });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('name', 'displayName');
+      expect(body.errors).to.have.keys('name', 'displayName', 'permissions');
     });
 
     it(`should return 404 when record doesn't exist`, async function () {
-      const { status } = await request(this.app)
+      const { status, body } = await request(this.app)
         .put(this.invalidUrl)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
@@ -85,7 +89,13 @@ export default function (): void {
 
       expect(status).to.equal(200);
       expect(body).to.be.an('object').to.have.keys('data', 'refs');
-      expect(pick(body.data, Object.keys(this.output))).to.deep.equal(this.output);
+
+      const data = {
+        ...body.data,
+        permissions: body.data.permissions.map((item: Permission) => item.id),
+      };
+
+      expect(pick(data, Object.keys(this.output))).to.deep.equal(this.output);
     });
   });
 }

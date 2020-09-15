@@ -1,18 +1,18 @@
 import { expect } from 'chai';
 import { pick } from 'lodash';
 import request from 'supertest';
-import { Permission } from '@/db/models/system';
+import { Role } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
     this.input = mocker.permission();
-    this.permission = await Permission.create(this.input);
+    this.role = await Role.create(this.input);
 
-    const baseUrl = '/admin/permissions';
-    this.url = `${baseUrl}/${this.permission.id}`;
-    this.invalidUrl = `${baseUrl}/999999`;
+    const baseUrl = '/admin/roles';
+    this.url = `${baseUrl}/${this.role.id}/edit`;
+    this.invalidUrl = `${baseUrl}/999999/edit`;
   });
 
   it('should return 401 when no / invalid token', async function () {
@@ -34,7 +34,7 @@ export default function (): void {
 
   describe('resource input/data tests', function () {
     before(async function () {
-      await setPermission(['acl', 'permissions-detail']);
+      await setPermission(['acl', 'roles-edit']);
     });
 
     it(`should return 404 when record doesn't exist`, async function () {

@@ -45,6 +45,7 @@ module.exports = {
     ],
     'no-continue': 'off',
     'no-await-in-loop': 'off',
+    'no-plusplus': 'off',
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     'import/extensions': [
       'error',
