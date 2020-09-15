@@ -35,12 +35,10 @@ export interface FindOptions extends BaseFindOptions {
 }
 
 export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
-  public static async paginate<R>({
-    req,
-    columns = [],
-    transform,
-    ...params
-  }: Paginate): Promise<Pagination<R>> {
+  public static async paginate<R = Model>(
+    this: { new (): R extends Model ? R : Model } & typeof Model,
+    { req, columns = [], transform, ...params }: Paginate
+  ): Promise<Pagination<R>> {
     // TODO: augment new core.Query interface in express subpackage
     const { search, sort, ...query } = req.query;
     let { page = 1, limit = 50 } = req.query;
