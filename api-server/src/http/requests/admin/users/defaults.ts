@@ -1,9 +1,9 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
-import { isNaN, toNumber } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
-import { Permission, Role, User } from '@/db/models/system';
+import { User } from '@/db/models/system';
 import unique from '@/http/rules/unique';
+import { permissions, roles } from '../acl';
 
 export const identifiers: Schema = {
   name: {
@@ -59,38 +59,8 @@ export const password: Schema = {
 };
 
 export const user: Schema = {
-  permissions: {
-    in: ['body'],
-    custom: {
-      options: async (value): Promise<void> => {
-        if (!Array.isArray(value) || value.some((item) => isNaN(toNumber(item))))
-          throw new Error('Please enter a list of permission IDs.');
-
-        if (!value.length) Promise.resolve();
-
-        const permissions = await Permission.count({ where: { id: value } });
-        if (permissions !== value.length) throw new Error('Invalid permissions.');
-
-        return Promise.resolve();
-      },
-    },
-  },
-  roles: {
-    in: ['body'],
-    custom: {
-      options: async (value): Promise<void> => {
-        if (!Array.isArray(value) || value.some((item) => isNaN(toNumber(item))))
-          throw new Error('Please enter a list of role IDs.');
-
-        if (!value.length) Promise.resolve();
-
-        const roles = await Role.count({ where: { id: value } });
-        if (roles !== value.length) throw new Error('Invalid roles.');
-
-        return Promise.resolve();
-      },
-    },
-  },
+  permissions,
+  roles,
   emailNotifications: {
     in: ['body'],
     errorMessage: 'Enter true/false value.',
