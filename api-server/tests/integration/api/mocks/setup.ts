@@ -2,7 +2,7 @@ import db from '@/db';
 import { Locale, Scheme, Survey, User, UserSurveyAlias, Role } from '@/db/models/system';
 import userSvc from '@/services/user.service';
 import surveySvc from '@/services/survey.service';
-import { setupPermissions } from './permissions.mock';
+import { setupPermissions } from './helpers';
 
 export type MockData = {
   locale: Locale;

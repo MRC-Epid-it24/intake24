@@ -28,6 +28,7 @@ module.exports = {
   extends: [
     'airbnb-base',
     'plugin:mocha/recommended',
+    'plugin:chai-friendly/recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
@@ -40,7 +41,7 @@ module.exports = {
     'no-debugger': 'warn',
     'import/no-extraneous-dependencies': [
       'error',
-      { devDependencies: ['**/*.test.ts', '**/*.spec.ts'] },
+      { devDependencies: ['**/*.ts', '**/*.ts', '**/*.ts'] },
     ],
     'no-continue': 'off',
     'no-await-in-loop': 'off',
@@ -55,7 +56,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/*.test.ts'],
+      files: ['**/*.test.ts', '**/*.spec.ts', '**/*.mock.ts'],
       rules: {
         'func-names': 'off',
         'mocha/no-exports': 'off',

@@ -1,0 +1,74 @@
+import { Locale, Survey, Permission, Role } from '@/db/models/system';
+
+export const setPermission = async (perm: string | string[]): Promise<void> => {
+  const role = await Role.findOne({ where: { name: 'test-role' } });
+
+  if (!role) throw new Error('Missing mock role.');
+
+  const name = Array.isArray(perm) ? perm : [perm];
+
+  const permissions = await Permission.findAll({ where: { name } });
+
+  if (name.length && name.length !== permissions.length)
+    throw new Error('Missing mock permissions.');
+
+  await role.$set('permissions', permissions);
+};
+
+export const setupPermissions = async (): Promise<void> => {
+  const surveys = await Survey.findAll();
+
+  const surveyPerms = surveys.reduce((acc, survey) => {
+    ['respondent', 'staff', 'support'].forEach((item) => {
+      acc.push({
+        name: `${survey.id}/${item}`,
+        display_name: `${survey.id}/${item}`,
+      });
+    });
+    return acc;
+  }, [] as any);
+
+  const locales = await Locale.findAll();
+
+  const fdbPerms = locales.reduce((acc, fdb) => {
+    acc.push({ name: `fdbm/${fdb.id}`, display_name: `fdbm/${fdb.id}` });
+    return acc;
+  }, [] as any);
+
+  const resourcePerms = [
+    { name: 'acl', display_name: 'Access Control List' },
+    { name: 'globalsupport', display_name: 'Global Support' },
+    { name: 'surveyadmin', display_name: 'Survey Admin' },
+    { name: 'foodsadmin', display_name: 'Food DB Admin' },
+    { name: 'users-list', display_name: 'List users' },
+    { name: 'users-detail', display_name: 'Browse users' },
+    { name: 'users-create', display_name: 'Create users' },
+    { name: 'users-edit', display_name: 'Edit users' },
+    { name: 'users-delete', display_name: 'Delete users' },
+    { name: 'roles-list', display_name: 'List roles' },
+    { name: 'roles-detail', display_name: 'Browse roles' },
+    { name: 'roles-create', display_name: 'Create roles' },
+    { name: 'roles-edit', display_name: 'Edit roles' },
+    { name: 'roles-delete', display_name: 'Delete roles' },
+    { name: 'permissions-list', display_name: 'List permissions' },
+    { name: 'permissions-detail', display_name: 'Browse permissions' },
+    { name: 'permissions-create', display_name: 'Create permissions' },
+    { name: 'permissions-edit', display_name: 'Edit permissions' },
+    { name: 'permissions-delete', display_name: 'Delete permissions' },
+    { name: 'schemes-list', display_name: 'List schemes' },
+    { name: 'schemes-detail', display_name: 'Browse schemes' },
+    { name: 'schemes-create', display_name: 'Create schemes' },
+    { name: 'schemes-edit', display_name: 'Edit schemes' },
+    { name: 'schemes-delete', display_name: 'Delete schemes' },
+    { name: 'schemes-questions', display_name: 'Scheme questions' },
+    { name: 'surveys-list', display_name: 'List surveys' },
+    { name: 'surveys-detail', display_name: 'Browse surveys' },
+    { name: 'surveys-create', display_name: 'Create surveys' },
+    { name: 'surveys-edit', display_name: 'Edit surveys' },
+    { name: 'surveys-delete', display_name: 'Delete surveys' },
+    { name: 'surveys-mgmt', display_name: 'Survey management' },
+    { name: 'surveys-respondents', display_name: 'Survey respondents' },
+  ];
+
+  await Permission.bulkCreate(resourcePerms.concat(surveyPerms, fdbPerms));
+};
