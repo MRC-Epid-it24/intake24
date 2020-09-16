@@ -51,9 +51,19 @@ describe('API', function () {
     describe('GET /admin/roles', roles.list);
     describe('GET /admin/roles/create', roles.create);
     describe('POST /admin/roles', roles.store);
-    describe('GET /admin/roles/:rolesId', roles.detail);
-    describe('GET /admin/roles/:rolesId/edit', roles.edit);
-    describe('PUT /admin/roles/:rolesId', roles.update);
-    describe('DELETE /admin/roles/:rolesId', roles.destroy);
+    describe('GET /admin/roles/:roleId', roles.detail);
+    describe('GET /admin/roles/:roleId/edit', roles.edit);
+    describe('PUT /admin/roles/:roleId', roles.update);
+    describe('DELETE /admin/roles/:roleId', roles.destroy);
+
+    // Users
+    const { users } = admin;
+    describe('GET /admin/users', users.list);
+    describe('GET /admin/users/create', users.create);
+    describe('POST /admin/users', users.store);
+    describe('GET /admin/users/:userId', users.detail);
+    describe('GET /admin/users/:userId/edit', users.edit);
+    describe('PUT /admin/users/:userId', users.update);
+    describe('DELETE /admin/users/:userId', users.destroy);
   });
 });

@@ -1,16 +1,16 @@
 import { expect } from 'chai';
 import request from 'supertest';
-import { Permission } from '@/db/models/system';
+import userSvc from '@/services/user.service';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.permission();
-    this.permission = await Permission.create(this.input);
+    this.input = mocker.user();
+    this.user = await userSvc.create(this.input);
 
-    const baseUrl = '/admin/permissions';
-    this.url = `${baseUrl}/${this.permission.id}`;
+    const baseUrl = '/admin/users';
+    this.url = `${baseUrl}/${this.user.id}`;
     this.invalidUrl = `${baseUrl}/999999`;
   });
 
@@ -33,7 +33,7 @@ export default function (): void {
 
   describe('with correct permissions', function () {
     before(async function () {
-      await setPermission(['acl', 'permissions-delete']);
+      await setPermission(['acl', 'users-delete']);
     });
 
     it(`should return 404 when record doesn't exist`, async function () {

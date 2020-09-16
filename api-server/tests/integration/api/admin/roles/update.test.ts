@@ -42,7 +42,7 @@ export default function (): void {
     expect(status).to.equal(403);
   });
 
-  describe('resource input/data tests', function () {
+  describe('with correct permissions', function () {
     before(async function () {
       await setPermission(['acl', 'roles-edit']);
     });
@@ -63,7 +63,7 @@ export default function (): void {
         .put(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
-        .send({ name: '', displayName: '', permissions: 'invalidId' });
+        .send({ name: '', displayName: '', permissions: [1, 'invalidId', 2] });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
@@ -71,7 +71,7 @@ export default function (): void {
     });
 
     it(`should return 404 when record doesn't exist`, async function () {
-      const { status, body } = await request(this.app)
+      const { status } = await request(this.app)
         .put(this.invalidUrl)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)

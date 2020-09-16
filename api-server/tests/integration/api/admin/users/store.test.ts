@@ -6,10 +6,10 @@ import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.role();
-    this.output = omit(this.input, 'permissions');
+    this.input = mocker.user();
+    this.output = omit(this.input, ['password', 'passwordConfirm', 'permissions', 'roles']);
 
-    this.url = '/admin/roles';
+    this.url = '/admin/users';
   });
 
   it('should return 401 when no / invalid token', async function () {
@@ -31,7 +31,7 @@ export default function (): void {
 
   describe('with correct permissions', function () {
     before(async function () {
-      await setPermission(['acl', 'roles-create']);
+      await setPermission(['acl', 'users-create']);
     });
 
     it('should return 422 when missing input data', async function () {
@@ -42,7 +42,7 @@ export default function (): void {
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('name', 'displayName', 'permissions');
+      expect(body.errors).to.have.keys('password', 'passwordConfirm', 'permissions', 'roles');
     });
 
     it('should return 422 when invalid input data', async function () {
@@ -50,11 +50,27 @@ export default function (): void {
         .post(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
-        .send({ name: '', displayName: '', permissions: [1, 'invalidId', 2] });
+        .send({
+          email: 'invalidEmailFormat',
+          multiFactorAuthentication: 10,
+          emailNotifications: 'string',
+          smsNotifications: [100],
+          permissions: [1, 'invalidId', 2],
+          roles: [1, 'invalidId', 2],
+        });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('name', 'displayName', 'permissions');
+      expect(body.errors).to.have.keys(
+        'email',
+        'password',
+        'passwordConfirm',
+        'multiFactorAuthentication',
+        'emailNotifications',
+        'smsNotifications',
+        'permissions',
+        'roles'
+      );
     });
 
     it('should return 201 and new resource', async function () {
@@ -69,16 +85,16 @@ export default function (): void {
       expect(pick(body.data, Object.keys(this.output))).to.deep.equal(this.output);
     });
 
-    it('should return 422 when duplicate name', async function () {
+    it('should return 422 when duplicate email', async function () {
       const { status, body } = await request(this.app)
         .post(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
-        .send(this.input);
+        .send({ ...mocker.user(), email: this.input.email });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('name');
+      expect(body.errors).to.have.keys('email');
     });
   });
 }

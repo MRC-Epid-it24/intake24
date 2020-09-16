@@ -1,21 +1,23 @@
 import { expect } from 'chai';
+import { pick, omit } from 'lodash';
 import request from 'supertest';
-import { Permission } from '@/db/models/system';
+import userSvc from '@/services/user.service';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.permission();
-    this.permission = await Permission.create(this.input);
+    this.input = mocker.user();
+    this.user = await userSvc.create(this.input);
+    this.output = omit(this.input, ['password', 'passwordConfirm']);
 
-    const baseUrl = '/admin/permissions';
-    this.url = `${baseUrl}/${this.permission.id}`;
+    const baseUrl = '/admin/users';
+    this.url = `${baseUrl}/${this.user.id}`;
     this.invalidUrl = `${baseUrl}/999999`;
   });
 
   it('should return 401 when no / invalid token', async function () {
-    const { status } = await request(this.app).delete(this.url).set('Accept', 'application/json');
+    const { status } = await request(this.app).get(this.url).set('Accept', 'application/json');
 
     expect(status).to.equal(401);
   });
@@ -24,7 +26,7 @@ export default function (): void {
     await setPermission('acl');
 
     const { status } = await request(this.app)
-      .delete(this.url)
+      .get(this.url)
       .set('Accept', 'application/json')
       .set('Authorization', this.bearer);
 
@@ -33,26 +35,27 @@ export default function (): void {
 
   describe('with correct permissions', function () {
     before(async function () {
-      await setPermission(['acl', 'permissions-delete']);
+      await setPermission(['acl', 'users-detail']);
     });
 
     it(`should return 404 when record doesn't exist`, async function () {
       const { status } = await request(this.app)
-        .delete(this.invalidUrl)
+        .get(this.invalidUrl)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer);
 
       expect(status).to.equal(404);
     });
 
-    it('should return 204 and no content', async function () {
+    it('should return 200 and data/refs', async function () {
       const { status, body } = await request(this.app)
-        .delete(this.url)
+        .get(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer);
 
-      expect(status).to.equal(204);
-      expect(body).to.be.empty;
+      expect(status).to.equal(200);
+      expect(body).to.be.an('object').to.have.keys('data', 'refs');
+      expect(pick(body.data, Object.keys(this.output))).to.deep.equal(this.output);
     });
   });
 }

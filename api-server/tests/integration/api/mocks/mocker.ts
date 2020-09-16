@@ -1,3 +1,4 @@
+import { CreateUserRequest } from '@common/types/api/admin/users';
 import faker from 'faker';
 
 export type PermissionInput = {
@@ -28,4 +29,31 @@ export const role = (): RoleInput => {
   const permissions: number[] = [];
 
   return { name, displayName, description, permissions };
+};
+
+export const user = (): CreateUserRequest => {
+  const name = faker.name.firstName();
+  const email = faker.internet.email();
+  const password = faker.internet.password();
+  const passwordConfirm = password;
+  const phone = faker.phone.phoneNumber();
+  const multiFactorAuthentication = false;
+  const emailNotifications = faker.random.boolean();
+  const smsNotifications = faker.random.boolean();
+
+  const permissions: number[] = [];
+  const roles: number[] = [];
+
+  return {
+    name,
+    email,
+    password,
+    passwordConfirm,
+    phone,
+    multiFactorAuthentication,
+    emailNotifications,
+    smsNotifications,
+    permissions,
+    roles,
+  };
 };

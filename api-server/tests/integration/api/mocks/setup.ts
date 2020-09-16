@@ -53,6 +53,7 @@ export const prepare = async (): Promise<MockData> => {
   const user = await userSvc.create({
     email: 'testUser@example.com',
     password: 'testUserPassword',
+    permissions: [],
     roles: [role.id],
   });
 

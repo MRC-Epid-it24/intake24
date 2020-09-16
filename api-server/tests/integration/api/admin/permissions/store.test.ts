@@ -27,7 +27,7 @@ export default function (): void {
     expect(status).to.equal(403);
   });
 
-  describe('resource input/data tests', function () {
+  describe('with correct permissions', function () {
     before(async function () {
       await setPermission(['acl', 'permissions-create']);
     });
