@@ -9,10 +9,11 @@ export const toSimpleName = (name?: string | null): string | null =>
 
 export default {
   async create(request: CreateUserRequest): Promise<User> {
-    const { password, roles, ...rest } = request;
+    const { password, permissions, roles, ...rest } = request;
 
     const user = await User.create({ ...rest, simpleName: toSimpleName(rest.name) });
 
+    await user.$set('permissions', permissions);
     await user.$set('roles', roles);
     await this.createPassword(user.id, password);
 
@@ -20,13 +21,14 @@ export default {
   },
 
   async update(userId: string | number, request: UpdateUserRequest): Promise<User> {
-    const user = await User.scope('roles').findByPk(userId);
+    const user = await User.findByPk(userId);
 
     if (!user) throw new NotFoundError();
 
-    const { roles, ...rest } = request;
+    const { permissions, roles, ...rest } = request;
 
     await user.update({ ...rest, simpleName: toSimpleName(rest.name) });
+    await user.$set('permissions', permissions);
     await user.$set('roles', roles);
 
     return user;

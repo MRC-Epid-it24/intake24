@@ -1,16 +1,17 @@
 export type UserRequest = {
-  name?: string;
-  email?: string;
-  phone?: string;
-  simpleName?: string;
+  name?: string | null;
+  email?: string | null;
+  phone?: string | null;
   emailNotifications?: boolean;
   smsNotifications?: boolean;
   multiFactorAuthentication?: boolean;
-  roles: number[] | string[];
+  permissions: number[];
+  roles: number[];
 };
 
 export interface CreateUserRequest extends UserRequest {
   password: string;
+  passwordConfirm?: string;
 }
 
 export type UpdateUserRequest = UserRequest;
@@ -37,10 +38,12 @@ export type RespondentRequest = {
 export interface CreateRespondentRequest extends RespondentRequest {
   userName: string;
   password: string;
+  passwordConfirm?: string;
 }
 
 export interface UpdateRespondentRequest extends RespondentRequest {
   password?: string;
+  passwordConfirm?: string;
 }
 
 export type RespondentResponse = {
