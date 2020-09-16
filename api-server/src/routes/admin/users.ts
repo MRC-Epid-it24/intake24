@@ -28,7 +28,7 @@ router
 
 router.get(
   '/:userId/edit',
-  permission('roles-edit'),
+  permission('users-edit'),
   validation.entry('userId'),
   wrapAsync(controller.edit)
 );
