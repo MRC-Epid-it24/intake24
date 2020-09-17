@@ -16,7 +16,7 @@ export enum SurveyState {
   public: {
     attributes: ['id', 'locale', 'originatingUrl', 'supportEmail'],
   },
-  respodent: {
+  respondent: {
     attributes: [
       'id',
       'locale',
@@ -32,7 +32,7 @@ export enum SurveyState {
   counter: { include: [{ model: GenUserCounter }] },
   localeModel: { include: [{ model: Locale }] },
   scheme: { include: [{ model: Scheme }] },
-  respodents: { include: [{ model: UserSurveyAlias }] },
+  respondents: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
 }))
 @Table({
@@ -132,7 +132,7 @@ export default class Survey extends BaseModel<Survey> {
   public scheme?: Scheme;
 
   @HasMany(() => UserSurveyAlias, 'surveyId')
-  public respodents?: UserSurveyAlias[];
+  public respondents?: UserSurveyAlias[];
 
   @HasMany(() => SurveySubmission, 'surveyId')
   public submissions?: SurveySubmission[];

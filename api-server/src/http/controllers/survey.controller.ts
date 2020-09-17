@@ -24,7 +24,7 @@ export default {
 
   async entry(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { surveyId } = req.params;
-    const survey = await Survey.scope(['respodent', 'scheme']).findByPk(surveyId);
+    const survey = await Survey.scope(['respondent', 'scheme']).findByPk(surveyId);
 
     if (!survey) {
       next(new NotFoundError());
