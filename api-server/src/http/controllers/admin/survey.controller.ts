@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
 import { WhereOptions } from 'sequelize';
 import config from '@/config/acl';
-import { Locale, Scheme, Survey, User } from '@/db/models/system';
+import { Locale, Role, Scheme, Survey, User, Permission } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import surveyResponse from '@/http/responses/admin/survey.response';
-import { staffSuffix } from '@/services/acl.service';
+import { staffSuffix, surveyPermissions } from '@/services/acl.service';
 
 type SurveyReferences = { locales: Locale[]; schemes: Scheme[] };
 
@@ -74,6 +74,18 @@ export default {
       ])
     );
 
+    const newPermissions = surveyPermissions(survey.id).map((item) => ({
+      name: item,
+      displayName: item,
+      description: `Survey-specific permission (${item})`,
+    }));
+
+    const permissions = await Permission.bulkCreate(newPermissions);
+
+    // Always attach new permission to main admin role
+    const superuser = await Role.findOne({ where: { name: config.roles.superuser } });
+    if (superuser) await superuser.$add('permissions', permissions);
+
     res.status(201).json({ data: surveyResponse(survey) });
   },
 
@@ -134,6 +146,8 @@ export default {
     }
 
     await survey.destroy();
+    await Permission.destroy({ where: { name: surveyPermissions(survey.id) } });
+
     res.status(204).json();
   },
 };

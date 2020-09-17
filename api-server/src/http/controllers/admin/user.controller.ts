@@ -55,7 +55,6 @@ export default {
         'smsNotifications',
         'multiFactorAuthentication',
         'password',
-        'passwordConfirm',
         'permissions',
         'roles',
       ])
