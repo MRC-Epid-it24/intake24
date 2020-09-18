@@ -33,7 +33,7 @@ router.get(
   wrapAsync(controller.edit)
 );
 
-router.use('/:surveyId/mgmt', canManageSurvey(), mgmt);
-router.use('/:surveyId/respondents', canManageSurvey(), respondents);
+router.use('/:surveyId/mgmt', mgmt);
+router.use('/:surveyId/respondents', respondents);
 
 export default router;

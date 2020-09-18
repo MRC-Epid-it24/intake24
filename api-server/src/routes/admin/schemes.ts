@@ -6,8 +6,6 @@ import validation from '@/http/requests/admin/schemes';
 
 const router = Router();
 
-router.use(permission('acl'));
-
 router
   .route('')
   .post(permission('schemes-create'), validation.store, wrapAsync(controller.store))
