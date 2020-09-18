@@ -69,6 +69,7 @@ module.exports = {
       { name: 'surveys-delete', display_name: 'Delete surveys' },
       { name: 'surveys-mgmt', display_name: 'Survey management' },
       { name: 'surveys-respondents', display_name: 'Survey respondents' },
+      { name: 'surveys-submissions', display_name: 'Survey submissions' },
     ].map((permission) => ({ ...permission, created_at, updated_at }));
 
     await queryInterface.bulkInsert('permissions', resourcePerms.concat(surveyPerms, fdbPerms));
