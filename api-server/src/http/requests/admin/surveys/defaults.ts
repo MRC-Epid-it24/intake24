@@ -19,14 +19,14 @@ export default {
   startDate: {
     in: ['body'],
     errorMessage: 'Enter valid survey start date.',
-    isString: true,
+    isDate: true,
     isEmpty: { negated: true },
     toDate: true,
   },
   endDate: {
     in: ['body'],
     errorMessage: 'Enter valid survey end date.',
-    isString: true,
+    isDate: true,
     isEmpty: { negated: true },
     toDate: true,
   },
@@ -78,9 +78,7 @@ export default {
   supportEmail: {
     in: ['body'],
     errorMessage: 'Enter valid email address.',
-    // TODO: contains other values than emails now, haven't been validated before
-    // isEmail: true,
-    isString: true,
+    isEmail: true,
     isEmpty: { negated: true },
   },
   originatingUrl: {
