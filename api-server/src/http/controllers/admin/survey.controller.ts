@@ -74,18 +74,6 @@ export default {
       ])
     );
 
-    const newPermissions = surveyPermissions(survey.id).map((item) => ({
-      name: item,
-      displayName: item,
-      description: `Survey-specific permission (${item})`,
-    }));
-
-    const permissions = await Permission.bulkCreate(newPermissions);
-
-    // Always attach new permission to main admin role
-    const superuser = await Role.findOne({ where: { name: config.roles.superuser } });
-    if (superuser) await superuser.$add('permissions', permissions);
-
     res.status(201).json({ data: surveyResponse(survey) });
   },
 
@@ -146,7 +134,6 @@ export default {
     }
 
     await survey.destroy();
-    await Permission.destroy({ where: { name: surveyPermissions(survey.id) } });
 
     res.status(204).json();
   },

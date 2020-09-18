@@ -1,4 +1,6 @@
 import {
+  AfterCreate,
+  AfterBulkCreate,
   BelongsToMany,
   Column,
   DataType,
@@ -8,10 +10,16 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import BaseModel from '@/db/models/model';
+import config from '@/config/acl';
 import PermissionRole from './permission-role';
 import PermissionUser from './permission-user';
 import Role from './role';
 import User from './user';
+
+export const addPermissionsToAdmin = async (permissions: Permission[]): Promise<void> => {
+  const admin = await Role.findOne({ where: { name: config.roles.superuser } });
+  if (admin) await admin.$add('permissions', permissions);
+};
 
 @Scopes(() => ({
   list: { attributes: ['id', 'name', 'displayName'] },
@@ -58,4 +66,15 @@ export default class Permission extends BaseModel<Permission> {
 
   @BelongsToMany(() => User, () => PermissionUser)
   public users?: User[];
+
+  // Always attach new permission(s) to main admin/superuser role
+  @AfterCreate
+  static async handleAdminPermission(permission: Permission): Promise<void> {
+    await addPermissionsToAdmin([permission]);
+  }
+
+  @AfterBulkCreate
+  static async handleAdminPermissions(permissions: Permission[]): Promise<void> {
+    await addPermissionsToAdmin(permissions);
+  }
 }

@@ -1,10 +1,16 @@
-import { BelongsTo, Column, HasOne, HasMany, Scopes, Table } from 'sequelize-typescript';
+import {
+  AfterCreate,
+  AfterDestroy,
+  BelongsTo,
+  Column,
+  HasOne,
+  HasMany,
+  Scopes,
+  Table,
+} from 'sequelize-typescript';
+import { surveyPermissions } from '@/services/acl.service';
 import BaseModel from '../model';
-import GenUserCounter from './gen-user-counter';
-import Locale from './locale';
-import Scheme from './scheme';
-import SurveySubmission from './survey-submission';
-import UserSurveyAlias from './user-survey-alias';
+import { GenUserCounter, Locale, Permission, Scheme, SurveySubmission, UserSurveyAlias } from '.';
 
 export enum SurveyState {
   NOT_STARTED = 0,
@@ -136,4 +142,22 @@ export default class Survey extends BaseModel<Survey> {
 
   @HasMany(() => SurveySubmission, 'surveyId')
   public submissions?: SurveySubmission[];
+
+  @AfterCreate
+  static async createSurveyPermissions(instance: Survey): Promise<void> {
+    const permissions = surveyPermissions(instance.id).map((item) => ({
+      name: item,
+      displayName: item,
+      description: `Survey-specific permission (${item})`,
+    }));
+
+    await Permission.bulkCreate(permissions);
+  }
+
+  @AfterDestroy
+  static async destroySurveyPermissions(instance: Survey): Promise<void> {
+    await Permission.destroy({ where: { name: surveyPermissions(instance.id) } });
+  }
+
+  // TODO: add BulkAfterCreate & BulkAfterDestroy when implemented in system
 }

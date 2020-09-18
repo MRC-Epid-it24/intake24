@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import acl from '@/config/acl';
-import { Permission, Role } from '@/db/models/system';
+import { Permission } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -29,10 +28,6 @@ export default {
   async store(req: Request, res: Response): Promise<void> {
     const { name, displayName, description } = req.body;
     const permission = await Permission.create({ name, displayName, description });
-
-    // Always attach new permission to main admin role
-    const superuser = await Role.findOne({ where: { name: acl.roles.superuser } });
-    if (superuser) permission.$add('role', superuser);
 
     res.status(201).json({ data: permission });
   },
