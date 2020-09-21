@@ -37,6 +37,8 @@ module.exports = {
     'import/no-cycle': 'warn',
     'no-console': 'warn',
     'no-debugger': 'warn',
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'error',
     'import/extensions': [
       'error',
       'ignorePackages',

@@ -20,6 +20,8 @@ module.exports = {
     'import/no-cycle': 'warn',
     'no-param-reassign': 'warn',
     'no-restricted-globals': 'warn',
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'error',
   },
   overrides: [
     {

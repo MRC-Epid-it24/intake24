@@ -7,13 +7,11 @@ const startApp = async (): Promise<void> => {
   const server = await app();
 
   // Start listening
-  server.listen(config.port, config.host, (err) => {
-    if (err) {
-      logger.error(err);
-      return;
-    }
+  server.listen(config.port, config.host, () => {
     logger.info(`${config.name} is listening on ${config.host}:${config.port}!`);
   });
 };
 
-startApp();
+(async () => {
+  await startApp();
+})();

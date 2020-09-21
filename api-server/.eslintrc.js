@@ -47,6 +47,8 @@ module.exports = {
     'no-await-in-loop': 'off',
     'no-plusplus': 'off',
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'error',
     'import/extensions': [
       'error',
       'ignorePackages',
