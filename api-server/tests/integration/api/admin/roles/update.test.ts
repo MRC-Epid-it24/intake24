@@ -15,8 +15,7 @@ export default function (): void {
     this.updateInput.permissions = this.permissions.map((item: Permission) => item.id);
 
     const { name } = this.input;
-    const { displayName, description, permissions } = this.updateInput;
-    this.output = { name, displayName, description, permissions };
+    this.output = { ...this.updateInput, name };
 
     this.role = await Role.create(this.input);
 

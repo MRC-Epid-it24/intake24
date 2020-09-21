@@ -11,8 +11,7 @@ export default function (): void {
     this.updateInput = mocker.permission();
 
     const { name } = this.input;
-    const { displayName, description } = this.updateInput;
-    this.output = { name, displayName, description };
+    this.output = { ...this.updateInput, name };
 
     this.permission = await Permission.create(this.input);
 

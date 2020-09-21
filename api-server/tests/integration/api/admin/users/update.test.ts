@@ -19,8 +19,6 @@ export default function (): void {
     this.roles = await Role.bulkCreate(roleInput);
     this.updateInput.roles = this.roles.map((item: Role) => item.id);
 
-    this.output = { ...this.input };
-
     this.user = await userSvc.create(this.input);
 
     const baseUrl = '/admin/users';

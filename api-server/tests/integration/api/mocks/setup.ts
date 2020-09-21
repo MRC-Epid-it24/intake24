@@ -16,8 +16,8 @@ export type MockData = {
 export const prepare = async (): Promise<MockData> => {
   const locale = await Locale.create({
     id: 'en_GB',
-    englishName: 'UK',
-    localName: 'UK',
+    englishName: 'United Kingdom',
+    localName: 'United Kingdom',
     respondentLanguageId: 'en_GB',
     adminLanguageId: 'en',
     countryFlagCode: 'gb',
@@ -26,8 +26,8 @@ export const prepare = async (): Promise<MockData> => {
   });
 
   const scheme = await Scheme.create({
-    id: 'test-scheme',
-    name: 'Test Scheme',
+    id: 'default',
+    name: 'Default',
     type: 'data-driven',
     questions: {},
     meals: [],
@@ -40,8 +40,8 @@ export const prepare = async (): Promise<MockData> => {
     state: 0,
     startDate: today,
     endDate: new Date().setDate(today.getDate() + 7),
-    schemeId: 'test-scheme',
-    locale: 'en_GB',
+    schemeId: scheme.id,
+    locale: locale.id,
     allowGenUsers: false,
     supportEmail: 'testSupportEmail@example.com',
   });

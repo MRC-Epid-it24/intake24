@@ -65,5 +65,15 @@ describe('API', function () {
     describe('GET /admin/users/:userId/edit', users.edit);
     describe('PUT /admin/users/:userId', users.update);
     describe('DELETE /admin/users/:userId', users.destroy);
+
+    // Surveys
+    const { surveys } = admin;
+    describe('GET /admin/surveys', surveys.list);
+    describe('GET /admin/surveys/create', surveys.create);
+    describe('POST /admin/surveys', surveys.store);
+    describe('GET /admin/surveys/:surveyId', surveys.detail);
+    describe('GET /admin/surveys/:surveyId/edit', surveys.edit);
+    describe('PUT /admin/surveys/:surveyId', surveys.update);
+    describe('DELETE /admin/surveys/:surveyId', surveys.destroy);
   });
 });

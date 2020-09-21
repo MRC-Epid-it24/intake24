@@ -1,4 +1,4 @@
-import { Locale, Survey, Permission, Role } from '@/db/models/system';
+import { Locale, Permission, Role } from '@/db/models/system';
 
 export const setPermission = async (perm: string | string[]): Promise<void> => {
   const role = await Role.findOne({ where: { name: 'test-role' } });
@@ -16,18 +16,6 @@ export const setPermission = async (perm: string | string[]): Promise<void> => {
 };
 
 export const setupPermissions = async (): Promise<void> => {
-  const surveys = await Survey.findAll();
-
-  const surveyPerms = surveys.reduce((acc, survey) => {
-    ['respondent', 'staff', 'support'].forEach((item) => {
-      acc.push({
-        name: `${survey.id}/${item}`,
-        display_name: `${survey.id}/${item}`,
-      });
-    });
-    return acc;
-  }, [] as any);
-
   const locales = await Locale.findAll();
 
   const fdbPerms = locales.reduce((acc, fdb) => {
@@ -68,7 +56,8 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'surveys-delete', display_name: 'Delete surveys' },
     { name: 'surveys-mgmt', display_name: 'Survey management' },
     { name: 'surveys-respondents', display_name: 'Survey respondents' },
+    { name: 'surveys-submissions', display_name: 'Survey submissions' },
   ];
 
-  await Permission.bulkCreate(resourcePerms.concat(surveyPerms, fdbPerms));
+  await Permission.bulkCreate(resourcePerms.concat(fdbPerms));
 };
