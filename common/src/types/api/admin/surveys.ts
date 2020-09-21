@@ -8,14 +8,14 @@ export interface SurveyResponse extends Omit<Survey, 'startDate' | 'endDate'> {
   endDate: string;
 }
 
-export type SurveyEntryResponse = {
-  data: SurveyResponse;
-  refs: SurveyEntryRefs;
-};
-
 export type SurveyEntryRefs = {
   locales: Locale[];
   schemes: Scheme[];
+};
+
+export type SurveyEntryResponse = {
+  data: SurveyResponse;
+  refs: SurveyEntryRefs;
 };
 
 export type SurveyCreateResponse = Pick<SurveyEntryResponse, 'refs'>;

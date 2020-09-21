@@ -8,8 +8,8 @@ export type UserRequest = {
   emailNotifications?: boolean;
   smsNotifications?: boolean;
   multiFactorAuthentication?: boolean;
-  permissions: string[];
-  roles: string[];
+  permissions: number[];
+  roles: number[];
 };
 
 export interface CreateUserRequest extends UserRequest {
@@ -26,6 +26,11 @@ export interface UserResponse extends User {
 
 export type UserListResponse = Pagination<User>;
 
+export type UserEntryRefs = {
+  permissions: Permission[];
+  roles: Role[];
+};
+
 export type UserEntryResponse = {
   data: UserResponse;
   refs: UserEntryRefs;
@@ -34,11 +39,6 @@ export type UserEntryResponse = {
 export type UserCreateResponse = Pick<UserEntryResponse, 'refs'>;
 
 export type UserStoreResponse = Pick<UserEntryResponse, 'data'>;
-
-export type UserEntryRefs = {
-  permissions: Permission[];
-  roles: Role[];
-};
 
 export type RespondentRequest = {
   name?: string;

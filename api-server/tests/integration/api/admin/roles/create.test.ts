@@ -33,6 +33,6 @@ export default function (): void {
       .set('Authorization', this.bearer);
 
     expect(status).to.equal(200);
-    expect(body).to.be.an('object').to.have.keys('data', 'refs');
+    expect(body).to.be.an('object').to.have.keys('refs');
   });
 }
