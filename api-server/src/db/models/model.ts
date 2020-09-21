@@ -2,27 +2,13 @@ import { isObject } from 'lodash';
 import { FindOptions as BaseFindOptions, Op, CountOptions as BaseCountOptions } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Request } from 'express';
+import { Pagination, PaginationMeta } from '@common/types/models/pagination';
 
 export interface Paginate extends BaseFindOptions {
   req: Request;
   columns?: string[];
   transform?: (item: any) => any;
   [key: string]: any;
-}
-
-export interface Pagination<R = Model> {
-  data: R[];
-  meta: PaginationMeta;
-}
-
-export interface PaginationMeta {
-  from: number;
-  lastPage: number;
-  page: number;
-  path: string;
-  limit: number;
-  to: number;
-  total: number;
 }
 
 // Sequelize options not indexable

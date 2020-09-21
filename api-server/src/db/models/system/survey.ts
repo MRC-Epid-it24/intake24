@@ -9,14 +9,9 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { surveyPermissions } from '@/services/acl.service';
+import { Survey as SurveyAttributes, SurveyState } from '@common/types/models/system';
 import BaseModel from '../model';
 import { GenUserCounter, Locale, Permission, Scheme, SurveySubmission, UserSurveyAlias } from '.';
-
-export enum SurveyState {
-  NOT_STARTED = 0,
-  ACTIVE = 1,
-  SUSPENDED = 2,
-}
 
 @Scopes(() => ({
   public: {
@@ -48,7 +43,7 @@ export enum SurveyState {
   timestamps: false,
   underscored: true,
 })
-export default class Survey extends BaseModel<Survey> {
+export default class Survey extends BaseModel<Survey> implements SurveyAttributes {
   @Column({
     primaryKey: true,
   })

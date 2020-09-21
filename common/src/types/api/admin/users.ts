@@ -1,3 +1,6 @@
+import { Permission, Role, User } from '../../models/system';
+import { Pagination } from '../../models/pagination';
+
 export type UserRequest = {
   name?: string | null;
   email?: string | null;
@@ -5,8 +8,8 @@ export type UserRequest = {
   emailNotifications?: boolean;
   smsNotifications?: boolean;
   multiFactorAuthentication?: boolean;
-  permissions: number[];
-  roles: number[];
+  permissions: string[];
+  roles: string[];
 };
 
 export interface CreateUserRequest extends UserRequest {
@@ -16,17 +19,25 @@ export interface CreateUserRequest extends UserRequest {
 
 export type UpdateUserRequest = UserRequest;
 
-export type UserResponse = {
-  id: number;
-  name: string | null;
-  email: string | null;
-  phone: string | null;
-  simpleName: string | null;
-  emailNotifications: boolean;
-  smsNotifications: boolean;
-  multiFactorAuthentication: boolean;
-  permissions?: string[];
-  roles?: string[];
+export interface UserResponse extends User {
+  permissions?: Permission[];
+  roles?: Role[];
+}
+
+export type UserListResponse = Pagination<User>;
+
+export type UserEntryResponse = {
+  data: UserResponse;
+  refs: UserEntryRefs;
+};
+
+export type UserCreateResponse = Pick<UserEntryResponse, 'refs'>;
+
+export type UserStoreResponse = Pick<UserEntryResponse, 'data'>;
+
+export type UserEntryRefs = {
+  permissions: Permission[];
+  roles: Role[];
 };
 
 export type RespondentRequest = {

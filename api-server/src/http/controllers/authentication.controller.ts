@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import ms from 'ms';
 import config from '@/config/security';
+import UnauthorizedError from '@/http/errors/unauthorized.error';
 import authSvc from '@/services/authentication.service';
 import { Tokens } from '@/services/jwt.service';
-import UnauthorizedError from '../errors/unauthorized.error';
+import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/api/authentication';
 
 /**
  * Successful login response helper
@@ -16,7 +17,7 @@ import UnauthorizedError from '../errors/unauthorized.error';
  */
 const sendTokenResponse = async (
   { accessToken, refreshToken }: Tokens,
-  res: Response
+  res: Response<LoginResponse>
 ): Promise<void> => {
   const { name, httpOnly, maxAge, path, secure, sameSite } = config.jwt.cookie;
 
@@ -32,7 +33,7 @@ const sendTokenResponse = async (
 };
 
 export default {
-  async emailLogin(req: Request, res: Response): Promise<void> {
+  async emailLogin(req: Request, res: Response<LoginResponse | MfaResponse>): Promise<void> {
     const { email, password } = req.body;
 
     const result = await authSvc.emailLogin(email, password);
@@ -44,7 +45,7 @@ export default {
     await sendTokenResponse(result, res);
   },
 
-  async verify(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async verify(req: Request, res: Response<LoginResponse>, next: NextFunction): Promise<void> {
     const { sigResponse } = req.body;
     if (!sigResponse) {
       next(new UnauthorizedError());
@@ -55,7 +56,7 @@ export default {
     await sendTokenResponse(tokens, res);
   },
 
-  async aliasLogin(req: Request, res: Response): Promise<void> {
+  async aliasLogin(req: Request, res: Response<LoginResponse>): Promise<void> {
     const { userName, password, surveyId } = req.body;
 
     const tokens = await authSvc.aliasLogin(userName, password, surveyId);
@@ -63,7 +64,7 @@ export default {
     await sendTokenResponse(tokens, res);
   },
 
-  async tokenLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async tokenLogin(req: Request, res: Response<LoginResponse>, next: NextFunction): Promise<void> {
     const { token } = req.body;
     if (!token) {
       next(new UnauthorizedError());
@@ -75,7 +76,7 @@ export default {
     await sendTokenResponse(tokens, res);
   },
 
-  async refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async refresh(req: Request, res: Response<RefreshResponse>, next: NextFunction): Promise<void> {
     const { name } = config.jwt.cookie;
     const refreshToken = req.cookies[name];
     if (!refreshToken) {
@@ -88,8 +89,9 @@ export default {
     res.json({ accessToken });
   },
 
-  async logout(req: Request, res: Response): Promise<void> {
+  async logout(req: Request, res: Response<undefined>): Promise<void> {
     const { name, httpOnly, path, secure, sameSite } = config.jwt.cookie;
+
     res.cookie(name, '', { maxAge: -1, httpOnly, path, secure, sameSite }).json();
   },
 };

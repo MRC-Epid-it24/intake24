@@ -10,7 +10,7 @@ import mailer from '@/services/mailer';
 import userSvc from '@/services/user.service';
 
 export default {
-  async request(req: Request, res: Response): Promise<void> {
+  async request(req: Request, res: Response<undefined>): Promise<void> {
     const { email } = req.body;
 
     const user = await User.findOne({ where: { email } });
@@ -41,7 +41,7 @@ export default {
     res.json();
   },
 
-  async reset(req: Request, res: Response): Promise<void> {
+  async reset(req: Request, res: Response<undefined>): Promise<void> {
     const { email, password, token } = req.body;
 
     const expiredAt = new Date();

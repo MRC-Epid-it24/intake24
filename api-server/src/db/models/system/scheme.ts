@@ -1,17 +1,11 @@
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { Scheme as SchemeAttributes, SchemeType } from '@common/types/models/system';
 import { Meal } from '@common/types/meals';
 import { RecallQuestions } from '@common/types/recall';
 import BaseModel from '../model';
 import Survey from './survey';
 
-export enum SchemeTypes {
-  LEGACY = 'legacy',
-  DATA_DRIVEN = 'data-driven',
-}
-
-export type SchemeType = SchemeTypes;
-
-// TODO: move this to DB-managed list / localisations
+// TODO: move this to DB-managed list / localizations
 export const defaultMeals: Meal[] = [
   { name: { en: 'Breakfast' }, time: '8:10' },
   { name: { en: 'Morning snack' }, time: '10:00' },
@@ -31,7 +25,7 @@ export const defaultMeals: Meal[] = [
   timestamps: false,
   underscored: true,
 })
-export default class Scheme extends BaseModel<Scheme> {
+export default class Scheme extends BaseModel<Scheme> implements SchemeAttributes {
   @Column({
     primaryKey: true,
   })

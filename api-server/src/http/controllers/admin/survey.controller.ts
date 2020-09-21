@@ -2,21 +2,30 @@ import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
 import { WhereOptions } from 'sequelize';
 import config from '@/config/acl';
-import { Locale, Role, Scheme, Survey, User, Permission } from '@/db/models/system';
+import { Locale, Scheme, Survey, User } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import surveyResponse from '@/http/responses/admin/survey.response';
-import { staffSuffix, surveyPermissions } from '@/services/acl.service';
+import { staffSuffix } from '@/services/acl.service';
+import {
+  SurveyCreateResponse,
+  SurveyEntryResponse,
+  SurveyEntryRefs,
+  SurveyListResponse,
+  SurveyStoreResponse,
+} from '@common/types/api/admin/surveys';
 
-type SurveyReferences = { locales: Locale[]; schemes: Scheme[] };
-
-const refs = async (): Promise<SurveyReferences> => {
+const refs = async (): Promise<SurveyEntryRefs> => {
   const locales = await Locale.findAll({ attributes: ['id', 'englishName'] });
   const schemes = await Scheme.findAll({ attributes: ['id', 'name'] });
 
   return { locales, schemes };
 };
 
-const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const entry = async (
+  req: Request,
+  res: Response<SurveyEntryResponse>,
+  next: NextFunction
+): Promise<void> => {
   const { surveyId } = req.params;
   const survey = await Survey.findByPk(surveyId);
 
@@ -29,7 +38,7 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
 };
 
 export default {
-  async list(req: Request, res: Response): Promise<void> {
+  async list(req: Request, res: Response<SurveyListResponse>): Promise<void> {
     const permissions = (req.user as User).allPermissions().map((permission) => permission.name);
 
     const where: WhereOptions = {};
@@ -46,11 +55,11 @@ export default {
     res.json(surveys);
   },
 
-  async create(req: Request, res: Response): Promise<void> {
-    res.json({ data: { id: null }, refs: await refs() });
+  async create(req: Request, res: Response<SurveyCreateResponse>): Promise<void> {
+    res.json({ refs: await refs() });
   },
 
-  async store(req: Request, res: Response): Promise<void> {
+  async store(req: Request, res: Response<SurveyStoreResponse>): Promise<void> {
     const survey = await Survey.create(
       pick(req.body, [
         'id',
@@ -77,15 +86,23 @@ export default {
     res.status(201).json({ data: surveyResponse(survey) });
   },
 
-  async detail(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async detail(
+    req: Request,
+    res: Response<SurveyEntryResponse>,
+    next: NextFunction
+  ): Promise<void> {
     entry(req, res, next);
   },
 
-  async edit(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async edit(req: Request, res: Response<SurveyEntryResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async update(
+    req: Request,
+    res: Response<SurveyEntryResponse>,
+    next: NextFunction
+  ): Promise<void> {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
@@ -119,7 +136,7 @@ export default {
     res.json({ data: surveyResponse(survey), refs: await refs() });
   },
 
-  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async delete(req: Request, res: Response<undefined>, next: NextFunction): Promise<void> {
     const { surveyId } = req.params;
     const survey = await Survey.scope('submissions').findByPk(surveyId);
 

@@ -1,6 +1,6 @@
 import { Schema } from 'express-validator';
-import { SurveyState } from '@/db/models/system/survey';
 import { Locale, Scheme } from '@/db/models/system';
+import { SurveyState } from '@common/types/models/system';
 
 export default {
   state: {

@@ -35,7 +35,7 @@
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PromptRefs } from '@common/types/prompts';
-import { ChechboxListPromptProps } from '@common/types/promptProps';
+import { CheckboxListPromptProps } from '@common/types/promptProps';
 import { checkboxListPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt from './BasePrompt';
 
@@ -46,7 +46,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
 
   props: {
     props: {
-      type: Object as () => ChechboxListPromptProps,
+      type: Object as () => CheckboxListPromptProps,
     },
     value: {
       type: Array as () => string[],

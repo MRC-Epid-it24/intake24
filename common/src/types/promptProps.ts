@@ -40,7 +40,7 @@ export interface RadioListPromptProps extends ValidatedPromptProps {
   other: boolean;
 }
 
-export interface ChechboxListPromptProps extends ValidatedPromptProps {
+export interface CheckboxListPromptProps extends ValidatedPromptProps {
   label: LocaleTranslation;
   options: LocaleOptionList;
   other: boolean;

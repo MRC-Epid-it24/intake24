@@ -1,5 +1,5 @@
 import { Schema } from 'express-validator';
-import { SchemeTypes } from '@/db/models/system/scheme';
+import { SchemeTypes } from '@common/types/models/system';
 
 export default {
   name: {

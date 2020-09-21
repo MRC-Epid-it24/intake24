@@ -2,7 +2,7 @@ import clone from 'lodash/cloneDeep';
 import { PromptQuestion } from '../types/prompts';
 import {
   BasePromptProps,
-  ChechboxListPromptProps,
+  CheckboxListPromptProps,
   DatePickerPromptProps,
   RadioListPromptProps,
   TextareaPromptProps,
@@ -37,7 +37,7 @@ export const timePickerPromptProps: TimePickerPromptProps = {
   },
 };
 
-export const checkboxListPromptProps: ChechboxListPromptProps = {
+export const checkboxListPromptProps: CheckboxListPromptProps = {
   text: { en: null },
   description: { en: null },
   label: { en: null },

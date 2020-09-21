@@ -8,7 +8,7 @@ const mutations: MutationTree<EntryState> = {
   },
   success(state, res) {
     state.status = 'success';
-    const { data = {}, refs = {}, ...addons } = res.data;
+    const { data = { id: null }, refs = {}, ...addons } = res.data;
     state.data = { ...data };
     state.refs = { ...refs };
     state.addons = { ...addons };

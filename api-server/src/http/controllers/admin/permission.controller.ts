@@ -1,8 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import { Permission } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
+import {
+  PermissionCreateResponse,
+  PermissionEntryResponse,
+  PermissionListResponse,
+  PermissionStoreResponse,
+} from '@common/types/api/admin/permissions';
 
-const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const entry = async (
+  req: Request,
+  res: Response<PermissionEntryResponse>,
+  next: NextFunction
+): Promise<void> => {
   const { permissionId } = req.params;
   const permission = await Permission.findByPk(permissionId);
 
@@ -15,32 +25,44 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
 };
 
 export default {
-  async list(req: Request, res: Response): Promise<void> {
+  async list(req: Request, res: Response<PermissionListResponse>): Promise<void> {
     const permissions = await Permission.paginate({ req, columns: ['name', 'displayName'] });
 
     res.json(permissions);
   },
 
-  async create(req: Request, res: Response): Promise<void> {
-    res.json({ data: { id: null }, refs: {} });
+  async create(req: Request, res: Response<PermissionCreateResponse>): Promise<void> {
+    res.json({ refs: {} });
   },
 
-  async store(req: Request, res: Response): Promise<void> {
+  async store(req: Request, res: Response<PermissionStoreResponse>): Promise<void> {
     const { name, displayName, description } = req.body;
     const permission = await Permission.create({ name, displayName, description });
 
     res.status(201).json({ data: permission });
   },
 
-  async detail(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async detail(
+    req: Request,
+    res: Response<PermissionEntryResponse>,
+    next: NextFunction
+  ): Promise<void> {
     entry(req, res, next);
   },
 
-  async edit(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async edit(
+    req: Request,
+    res: Response<PermissionEntryResponse>,
+    next: NextFunction
+  ): Promise<void> {
     entry(req, res, next);
   },
 
-  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async update(
+    req: Request,
+    res: Response<PermissionEntryResponse>,
+    next: NextFunction
+  ): Promise<void> {
     const { permissionId } = req.params;
     const permission = await Permission.findByPk(permissionId);
 
@@ -55,7 +77,7 @@ export default {
     res.json({ data: permission, refs: {} });
   },
 
-  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async delete(req: Request, res: Response<undefined>, next: NextFunction): Promise<void> {
     const { permissionId } = req.params;
     const permission = await Permission.findByPk(permissionId);
 
