@@ -1,4 +1,5 @@
 import { Schema } from 'express-validator';
+import { isPlainObject, has } from 'lodash';
 import { SchemeTypes } from '@common/types/models/system';
 
 export default {
@@ -23,11 +24,28 @@ export default {
   questions: {
     in: ['body'],
     errorMessage: 'Enter valid scheme questions.',
-    optional: { options: { nullable: true } },
+    custom: {
+      options: async (value): Promise<void> => {
+        if (!isPlainObject(value) || Object.keys(value).some((item) => !Array.isArray(item)))
+          throw new Error('Enter valid scheme questions.');
+
+        Promise.resolve();
+      },
+    },
   },
   meals: {
     in: ['body'],
-    errorMessage: 'Enter valid scheme meals.',
-    optional: { options: { nullable: true } },
+    errorMessage: 'Enter valid meal list.',
+    custom: {
+      options: async (value): Promise<void> => {
+        if (
+          !Array.isArray(value) ||
+          value.some((item) => !isPlainObject(item) || !has(item, ['a', 'b']))
+        )
+          throw new Error('Enter valid meal list.');
+
+        Promise.resolve();
+      },
+    },
   },
 } as Schema;
