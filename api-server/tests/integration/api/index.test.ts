@@ -75,5 +75,15 @@ describe('API', function () {
     describe('GET /admin/surveys/:surveyId/edit', surveys.edit);
     describe('PUT /admin/surveys/:surveyId', surveys.update);
     describe('DELETE /admin/surveys/:surveyId', surveys.destroy);
+
+    // Schemes
+    const { schemes } = admin;
+    describe('GET /admin/schemes', schemes.list);
+    describe('GET /admin/schemes/create', schemes.create);
+    describe('POST /admin/schemes', schemes.store);
+    describe('GET /admin/schemes/:schemeId', schemes.detail);
+    describe('GET /admin/schemes/:schemeId/edit', schemes.edit);
+    describe('PUT /admin/schemes/:schemeId', schemes.update);
+    describe('DELETE /admin/schemes/:schemeId', schemes.destroy);
   });
 });
