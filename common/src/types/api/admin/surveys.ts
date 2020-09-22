@@ -1,6 +1,32 @@
 import { Locale, Scheme, Survey } from '../../models/system';
 import { Pagination } from '../../models/pagination';
 
+export type SurveyRequest = {
+  id: string;
+  state: number;
+  startDate: string;
+  endDate: string;
+  schemeId: string;
+  locale: string;
+  allowGenUsers: boolean;
+  supportEmail: string;
+  feedbackEnabled: boolean;
+  numberOfSubmissionsForFeedback: number;
+  storeUserSessionOnServer: boolean;
+
+  suspensionReason?: string | null;
+  surveyMonkeyUrl?: string | null;
+  originatingUrl?: string | null;
+  description?: string | null;
+  feedbackStyle?: string;
+  submissionNotificationUrl?: string | null;
+  finalPageHtml?: string | null;
+};
+
+export type CreateSurveyRequest = SurveyRequest;
+
+export type UpdateSurveyRequest = Omit<SurveyRequest, 'id'>;
+
 export type SurveyListResponse = Pagination<Survey>;
 
 export interface SurveyResponse extends Omit<Survey, 'startDate' | 'endDate'> {

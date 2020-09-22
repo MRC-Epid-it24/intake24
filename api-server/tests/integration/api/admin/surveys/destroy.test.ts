@@ -2,10 +2,11 @@ import { expect } from 'chai';
 import request from 'supertest';
 import { Survey } from '@/db/models/system';
 import { surveyStaff } from '@/services/acl.service';
+import { CreateSurveyRequest } from '@common/types/api/admin/surveys';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
-const refreshSurveyRecord = async (input: mocker.SurveyInput): Promise<Survey> => {
+const refreshSurveyRecord = async (input: CreateSurveyRequest): Promise<Survey> => {
   const { id } = input;
   const [survey] = await Survey.findOrCreate({ where: { id }, defaults: input });
 

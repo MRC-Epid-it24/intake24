@@ -1,15 +1,13 @@
+import faker from 'faker';
+import { CreateUserRequest } from '@common/types/api/admin/users';
+import { PermissionRequest } from '@common/types/api/admin/permissions';
+import { RoleRequest } from '@common/types/api/admin/roles';
+import { CreateSchemeRequest } from '@common/types/api/admin/schemes';
+import { CreateSurveyRequest } from '@common/types/api/admin/surveys';
 import { Meal } from '@common/types/meals';
 import { RecallQuestions } from '@common/types/recall';
-import { CreateUserRequest } from '@common/types/api/admin/users';
-import faker from 'faker';
 
-export type PermissionInput = {
-  name: string;
-  displayName: string;
-  description: string;
-};
-
-export const permission = (): PermissionInput => {
+export const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
   const name = faker.helpers.slugify(displayName);
   const description = faker.lorem.words(10);
@@ -17,14 +15,7 @@ export const permission = (): PermissionInput => {
   return { name, displayName, description };
 };
 
-export type RoleInput = {
-  name: string;
-  displayName: string;
-  description: string;
-  permissions: number[] | string[];
-};
-
-export const role = (): RoleInput => {
+export const role = (): RoleRequest => {
   const displayName = faker.random.words(2);
   const name = faker.helpers.slugify(displayName);
   const description = faker.lorem.words(10);
@@ -60,15 +51,7 @@ export const user = (): CreateUserRequest => {
   };
 };
 
-type SchemeInput = {
-  id: string;
-  name: string;
-  type: string;
-  questions: RecallQuestions;
-  meals: Meal[];
-};
-
-export const scheme = (): SchemeInput => {
+export const scheme = (): CreateSchemeRequest => {
   const id = faker.random.words(1);
   const name = faker.random.words(3);
   const type = 'data-driven';
@@ -84,21 +67,7 @@ export const scheme = (): SchemeInput => {
   };
 };
 
-export type SurveyInput = {
-  id: string;
-  state: number;
-  startDate: string;
-  endDate: string;
-  schemeId: string;
-  locale: string;
-  allowGenUsers: boolean;
-  supportEmail: string;
-  feedbackEnabled: boolean;
-  numberOfSubmissionsForFeedback: number;
-  storeUserSessionOnServer: boolean;
-};
-
-export const survey = (schemeId = 'default', locale = 'en_GB'): SurveyInput => {
+export const survey = (schemeId = 'default', locale = 'en_GB'): CreateSurveyRequest => {
   const id = faker.helpers.slugify(faker.random.words(2));
   const state = faker.random.number(2);
   const startDate = new Date().toISOString().split('T')[0];
