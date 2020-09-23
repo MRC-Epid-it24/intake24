@@ -24,12 +24,14 @@
               <v-col cols="12" class="mb-3">
                 <v-text-field
                   v-model="password"
+                  :append-icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
                   :error-messages="errors.get('password')"
                   :label="$t('users.password._')"
+                  :type="showPassword ? 'text' : 'password'"
                   hide-details="auto"
-                  type="password"
                   required
                   outlined
+                  @click:append="showPassword = !showPassword"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -64,6 +66,7 @@ export default Vue.extend({
     return {
       email: '',
       password: '',
+      showPassword: false,
       errors: new Errors(),
     };
   },
