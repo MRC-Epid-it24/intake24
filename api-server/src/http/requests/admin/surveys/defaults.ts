@@ -37,24 +37,22 @@ export default {
     isEmpty: { negated: true },
     custom: {
       options: async (value): Promise<void> => {
-        const schemes = await Scheme.findAll({ attributes: ['id'] });
-        const match = schemes.find((scheme) => value === scheme.id);
+        const scheme = await Scheme.findOne({ where: { id: value } });
 
-        return match ? Promise.resolve() : Promise.reject(new Error('Enter valid scheme.'));
+        return scheme ? Promise.resolve() : Promise.reject(new Error('Enter valid scheme.'));
       },
     },
   },
-  locale: {
+  localeId: {
     in: ['body'],
     errorMessage: 'Enter valid locale.',
     isString: true,
     isEmpty: { negated: true },
     custom: {
       options: async (value): Promise<void> => {
-        const locales = await Locale.findAll({ attributes: ['id'] });
-        const match = locales.find((locale) => value === locale.id);
+        const locale = await Locale.findOne({ where: { id: value } });
 
-        return match ? Promise.resolve() : Promise.reject(new Error('Enter valid locale.'));
+        return locale ? Promise.resolve() : Promise.reject(new Error('Enter valid locale.'));
       },
     },
   },
