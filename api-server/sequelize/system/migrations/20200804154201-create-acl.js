@@ -42,9 +42,11 @@ module.exports = {
             type: Sequelize.TEXT,
           },
           created_at: {
+            allowNull: false,
             type: Sequelize.DATE,
           },
           updated_at: {
+            allowNull: false,
             type: Sequelize.DATE,
           },
         },
@@ -70,9 +72,11 @@ module.exports = {
           type: Sequelize.TEXT,
         },
         created_at: {
+          allowNull: false,
           type: Sequelize.DATE,
         },
         updated_at: {
+          allowNull: false,
           type: Sequelize.DATE,
         },
       });
@@ -89,9 +93,11 @@ module.exports = {
             type: Sequelize.BIGINT,
           },
           created_at: {
+            allowNull: false,
             type: Sequelize.DATE,
           },
           updated_at: {
+            allowNull: false,
             type: Sequelize.DATE,
           },
         },
@@ -137,9 +143,11 @@ module.exports = {
             type: Sequelize.BIGINT,
           },
           created_at: {
+            allowNull: false,
             type: Sequelize.DATE,
           },
           updated_at: {
+            allowNull: false,
             type: Sequelize.DATE,
           },
         },
@@ -185,9 +193,11 @@ module.exports = {
             type: Sequelize.BIGINT,
           },
           created_at: {
+            allowNull: false,
             type: Sequelize.DATE,
           },
           updated_at: {
+            allowNull: false,
             type: Sequelize.DATE,
           },
         },
