@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import { pick } from 'lodash';
 import request from 'supertest';
 import { Scheme } from '@/db/models/system';
-import { surveyStaff } from '@/services/acl.service';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 

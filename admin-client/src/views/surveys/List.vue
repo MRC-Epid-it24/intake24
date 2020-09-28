@@ -26,7 +26,7 @@ export default Vue.extend({
         {
           text: this.$t('surveys.locale'),
           sortable: true,
-          value: 'locale',
+          value: 'localeId',
         },
         {
           text: this.$t('surveys.scheme'),

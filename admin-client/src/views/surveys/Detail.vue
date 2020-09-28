@@ -8,7 +8,7 @@
         </tr>
         <tr>
           <th>{{ $t('surveys.locale') }}</th>
-          <td>{{ entry.locale }}</td>
+          <td>{{ entry.localeId }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.scheme') }}</th>

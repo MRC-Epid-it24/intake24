@@ -2,6 +2,7 @@ import db from '@/db';
 import { Locale, Scheme, Survey, User, UserSurveyAlias, Role } from '@/db/models/system';
 import userSvc from '@/services/user.service';
 import surveySvc from '@/services/survey.service';
+import { defaultMeals } from '@/db/models/system/scheme';
 import { setupPermissions } from './helpers';
 
 export type MockData = {
@@ -30,7 +31,7 @@ export const prepare = async (): Promise<MockData> => {
     name: 'Default',
     type: 'data-driven',
     questions: {},
-    meals: [],
+    meals: [...defaultMeals],
   });
 
   const today = new Date();
@@ -41,7 +42,7 @@ export const prepare = async (): Promise<MockData> => {
     startDate: today,
     endDate: new Date().setDate(today.getDate() + 7),
     schemeId: scheme.id,
-    locale: locale.id,
+    localeId: locale.id,
     allowGenUsers: false,
     supportEmail: 'testSupportEmail@example.com',
   });

@@ -17,16 +17,16 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.locale"
+                v-model="form.localeId"
                 :items="refs.locales"
-                :error-messages="form.errors.get('locale')"
+                :error-messages="form.errors.get('localeId')"
                 :label="$t('surveys.locale')"
                 hide-details="auto"
                 item-value="id"
                 item-text="englishName"
-                name="locale"
+                name="localeId"
                 outlined
-                @change="form.errors.clear('locale')"
+                @change="form.errors.clear('localeId')"
               ></v-select>
             </v-col>
             <v-col cols="12" md="6">
@@ -206,7 +206,7 @@ export default Vue.extend({
       form: new Form({
         id: null,
         state: 0,
-        locale: null,
+        localeId: null,
         schemeId: null,
         startDate: null,
         endDate: null,

@@ -7,7 +7,7 @@ export type SurveyRequest = {
   startDate: string;
   endDate: string;
   schemeId: string;
-  locale: string;
+  localeId: string;
   allowGenUsers: boolean;
   supportEmail: string;
   feedbackEnabled: boolean;

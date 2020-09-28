@@ -15,12 +15,12 @@ import { GenUserCounter, Locale, Permission, Scheme, SurveySubmission, UserSurve
 
 @Scopes(() => ({
   public: {
-    attributes: ['id', 'locale', 'originatingUrl', 'supportEmail'],
+    attributes: ['id', 'localeId', 'originatingUrl', 'supportEmail'],
   },
   respondent: {
     attributes: [
       'id',
-      'locale',
+      'localeId',
       'description',
       'finalPageHtml',
       'numberOfSubmissionsForFeedback',
@@ -31,7 +31,7 @@ import { GenUserCounter, Locale, Permission, Scheme, SurveySubmission, UserSurve
     ],
   },
   counter: { include: [{ model: GenUserCounter }] },
-  localeModel: { include: [{ model: Locale }] },
+  locale: { include: [{ model: Locale }] },
   scheme: { include: [{ model: Scheme }] },
   respondents: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
@@ -72,7 +72,7 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
   @Column({
     allowNull: false,
   })
-  public locale!: string;
+  public localeId!: string;
 
   @Column({
     allowNull: false,
@@ -126,8 +126,8 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
   @HasOne(() => GenUserCounter, 'surveyId')
   public counter?: GenUserCounter;
 
-  @BelongsTo(() => Locale, 'locale')
-  public localeModel?: Locale;
+  @BelongsTo(() => Locale, 'localeId')
+  public locale?: Locale;
 
   @BelongsTo(() => Scheme, 'schemeId')
   public scheme?: Scheme;

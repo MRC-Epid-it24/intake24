@@ -39,7 +39,7 @@ export type Survey = {
   startDate: Date;
   endDate: Date;
   schemeId: string;
-  locale: string;
+  localeId: string;
   allowGenUsers: boolean;
   suspensionReason: string | null;
   surveyMonkeyUrl: string | null;

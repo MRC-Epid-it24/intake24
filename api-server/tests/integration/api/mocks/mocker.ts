@@ -67,7 +67,7 @@ export const scheme = (): CreateSchemeRequest => {
   };
 };
 
-export const survey = (schemeId = 'default', locale = 'en_GB'): CreateSurveyRequest => {
+export const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest => {
   const id = faker.helpers.slugify(faker.random.words(2));
   const state = faker.random.number(2);
   const startDate = new Date().toISOString().split('T')[0];
@@ -85,7 +85,7 @@ export const survey = (schemeId = 'default', locale = 'en_GB'): CreateSurveyRequ
     startDate,
     endDate,
     schemeId,
-    locale,
+    localeId,
     allowGenUsers,
     supportEmail,
     feedbackEnabled,

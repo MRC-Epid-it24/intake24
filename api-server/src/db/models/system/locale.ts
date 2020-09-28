@@ -1,4 +1,5 @@
 import { Column, HasMany, Scopes, Table, BelongsTo } from 'sequelize-typescript';
+import { Locale as LocaleAttributes } from '@common/types/models/system';
 import BaseModel from '../model';
 import Survey from './survey';
 
@@ -12,7 +13,7 @@ import Survey from './survey';
   timestamps: false,
   underscored: true,
 })
-export default class Locale extends BaseModel<Locale> {
+export default class Locale extends BaseModel<Locale> implements LocaleAttributes {
   @Column({
     primaryKey: true,
   })
@@ -60,6 +61,6 @@ export default class Locale extends BaseModel<Locale> {
   @HasMany(() => Locale, 'prototypeLocaleId')
   public children?: Locale[];
 
-  @HasMany(() => Survey, 'locale')
+  @HasMany(() => Survey, 'localeId')
   public surveys?: Survey[];
 }
