@@ -40,7 +40,7 @@ export default {
       options: async (value): Promise<void> => {
         if (
           !Array.isArray(value) ||
-          value.some((item) => !isPlainObject(item) || !has(item, ['a', 'b']))
+          value.some((item) => !isPlainObject(item) || !has(item, 'name.en') || !has(item, 'time'))
         )
           throw new Error('Enter valid meal list.');
 
