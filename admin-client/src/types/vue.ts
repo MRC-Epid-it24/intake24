@@ -9,23 +9,26 @@ export interface HasEntryMixin {
   id: number | string;
 }
 
-export interface MapEntryMixin {
-  entry: AnyDictionary;
+export interface MapEntryMixin<E = AnyDictionary> {
+  entry: E;
   entryLoaded: boolean;
 }
 
-export interface MapRefsMixin {
-  refs: AnyDictionary;
+export interface MapRefsMixin<R = AnyDictionary> {
+  refs: R;
   refsLoaded: boolean;
 }
 
-export type EntryMixin = FetchEntryMixin & HasEntryMixin & MapEntryMixin & MapRefsMixin;
+export type EntryMixin<E = AnyDictionary, R = AnyDictionary> = FetchEntryMixin &
+  HasEntryMixin &
+  MapEntryMixin<E> &
+  MapRefsMixin<R>;
 
-export interface FormMixin extends EntryMixin {
+export interface FormMixin<E = AnyDictionary, R = AnyDictionary> extends EntryMixin<E, R> {
   form: typeof Form;
   toForm: (data: AnyDictionary) => void;
   isEdit: () => boolean;
   isCreate: () => boolean;
 }
 
-export type DetailMixin = EntryMixin;
+export type DetailMixin<E = AnyDictionary, R = AnyDictionary> = EntryMixin<E, R>;
