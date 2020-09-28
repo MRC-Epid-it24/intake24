@@ -6,10 +6,19 @@ import validation from '@/http/requests/admin/locales';
 
 const router = Router();
 
-router.route('').get(validation.list, permission('locales-list'), wrapAsync(controller.list));
+router
+  .route('')
+  .post(permission('locales-create'), validation.store, wrapAsync(controller.store))
+  .get(permission('locales-list'), validation.list, wrapAsync(controller.list));
+
+router.get('/create', permission('locales-create'), wrapAsync(controller.create));
 
 router
   .route('/:localeId')
-  .get(validation.entry, permission('locales-detail'), wrapAsync(controller.detail));
+  .get(permission('locales-detail'), wrapAsync(controller.detail))
+  .put(permission('locales-edit'), validation.update, wrapAsync(controller.update))
+  .delete(permission('locales-delete'), wrapAsync(controller.delete));
+
+router.get('/:localeId/edit', permission('locales-edit'), wrapAsync(controller.edit));
 
 export default router;

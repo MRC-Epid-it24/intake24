@@ -1,4 +1,4 @@
-/* eslint-disable no-shadow */
+/* eslint-disable @typescript-eslint/no-shadow */
 import { Request, Response, NextFunction } from 'express';
 import config from '@/config/acl';
 import { User } from '@/db/models/system';
