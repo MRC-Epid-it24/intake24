@@ -24,9 +24,40 @@ module.exports = {
           meals: {
             type: Sequelize.TEXT({ length: 'long' }),
           },
+          created_at: {
+            allowNull: false,
+            type: Sequelize.DATE,
+          },
+          updated_at: {
+            allowNull: false,
+            type: Sequelize.DATE,
+          },
         },
         { transaction }
       );
+
+      const created_at = new Date();
+      const updated_at = created_at;
+
+      await queryInterface.bulkInsert(
+        'schemes',
+        [
+          {
+            id: 'default',
+            name: 'Default',
+            type: 'data-driven',
+            questions: null,
+            meals: null,
+            created_at,
+            updated_at,
+          },
+        ],
+        { transaction }
+      );
+
+      await queryInterface.sequelize.query(`UPDATE surveys SET scheme_id = 'default'`, {
+        transaction,
+      });
 
       await queryInterface.addConstraint('surveys', ['scheme_id'], {
         name: 'surveys_scheme_id_schemes_fk',
@@ -46,6 +77,7 @@ module.exports = {
       await queryInterface.removeConstraint('surveys', 'surveys_scheme_id_schemes_fk', {
         transaction,
       });
+
       await queryInterface.dropTable('schemes', { transaction });
     }),
 };
