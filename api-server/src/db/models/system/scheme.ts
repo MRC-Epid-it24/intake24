@@ -1,4 +1,12 @@
-import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import {
+  Column,
+  DataType,
+  HasMany,
+  Scopes,
+  Table,
+  CreatedAt,
+  UpdatedAt,
+} from 'sequelize-typescript';
 import { Scheme as SchemeAttributes, SchemeType } from '@common/types/models/system';
 import { Meal } from '@common/types/meals';
 import { RecallQuestions } from '@common/types/recall';
@@ -22,7 +30,6 @@ export const defaultMeals: Meal[] = [
   modelName: 'Scheme',
   tableName: 'schemes',
   freezeTableName: true,
-  timestamps: false,
   underscored: true,
 })
 export default class Scheme extends BaseModel<Scheme> implements SchemeAttributes {
@@ -76,6 +83,14 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
     // @ts-expect-error
     this.setDataValue('meals', JSON.stringify(value ?? []));
   }
+
+  @CreatedAt
+  @Column
+  public readonly createdAt!: Date;
+
+  @UpdatedAt
+  @Column
+  public readonly updatedAt!: Date;
 
   @HasMany(() => Survey, 'schemeId')
   public surveys?: Survey[];
