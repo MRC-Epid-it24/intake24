@@ -2,7 +2,7 @@ import { GetterTree } from 'vuex';
 import { Permission, RootState, UserState } from '@/types/vuex';
 
 const getters: GetterTree<UserState, RootState> = {
-  // eslint-disable-next-line no-shadow
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   can: (state, getters, rootState) => (
     permission: string | string[] | Permission,
     strict = false
