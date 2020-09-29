@@ -16,6 +16,7 @@ const common: LocaleMessage = {
   true: 'Yes',
   no: 'No',
   false: 'No',
+  none: 'None',
 
   name: 'Name',
   displayName: 'Label',

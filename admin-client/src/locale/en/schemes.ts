@@ -1,6 +1,6 @@
 import { LocaleMessage } from 'vue-i18n';
 
-const scheme: LocaleMessage = {
+const schemes: LocaleMessage = {
   _: 'Scheme',
   id: 'Scheme ID',
   index: 'Schemes',
@@ -85,4 +85,4 @@ const scheme: LocaleMessage = {
   },
 };
 
-export default scheme;
+export default schemes;

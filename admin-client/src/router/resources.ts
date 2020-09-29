@@ -6,6 +6,14 @@ const resources: Resource[] = [
   // Admin
   {
     group: 'surveyMgmt',
+    name: 'locales',
+    icon: 'fas fa-globe',
+    api: 'v3/admin/locales',
+    generateRoutes: true,
+    routes: [...routes],
+  },
+  {
+    group: 'surveyMgmt',
     name: 'schemes',
     icon: 'fas fa-route',
     api: 'v3/admin/schemes',
