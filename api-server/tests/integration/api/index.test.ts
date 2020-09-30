@@ -66,15 +66,15 @@ describe('API', function () {
     describe('PUT /admin/users/:userId', users.update);
     describe('DELETE /admin/users/:userId', users.destroy);
 
-    // Surveys
-    const { surveys } = admin;
-    describe('GET /admin/surveys', surveys.list);
-    describe('GET /admin/surveys/create', surveys.create);
-    describe('POST /admin/surveys', surveys.store);
-    describe('GET /admin/surveys/:surveyId', surveys.detail);
-    describe('GET /admin/surveys/:surveyId/edit', surveys.edit);
-    describe('PUT /admin/surveys/:surveyId', surveys.update);
-    describe('DELETE /admin/surveys/:surveyId', surveys.destroy);
+    // Locales
+    const { locales } = admin;
+    describe('GET /admin/locales', locales.list);
+    describe('GET /admin/locales/create', locales.create);
+    describe('POST /admin/locales', locales.store);
+    describe('GET /admin/locales/:localeId', locales.detail);
+    describe('GET /admin/locales/:localeId/edit', locales.edit);
+    describe('PUT /admin/locales/:localeId', locales.update);
+    describe('DELETE /admin/locales/:localeId', locales.destroy);
 
     // Schemes
     const { schemes } = admin;
@@ -85,5 +85,27 @@ describe('API', function () {
     describe('GET /admin/schemes/:schemeId/edit', schemes.edit);
     describe('PUT /admin/schemes/:schemeId', schemes.update);
     describe('DELETE /admin/schemes/:schemeId', schemes.destroy);
+
+    // Surveys
+    const { surveys } = admin;
+    describe('GET /admin/surveys', surveys.list);
+    describe('GET /admin/surveys/create', surveys.create);
+    describe('POST /admin/surveys', surveys.store);
+    describe('GET /admin/surveys/:surveyId', surveys.detail);
+    describe('GET /admin/surveys/:surveyId/edit', surveys.edit);
+    describe('PUT /admin/surveys/:surveyId', surveys.update);
+    describe('DELETE /admin/surveys/:surveyId', surveys.destroy);
+
+    // Surveys user management
+    const { mgmt } = surveys;
+    describe('GET /admin/surveys/:surveyId/mgmt', mgmt.list);
+    describe('GET /admin/surveys/:surveyId/mgmt/available', mgmt.available);
+    // describe('PUT /admin/surveys/:surveyId/mgmt/:userId', surveys.mgmt.update);
+
+    // Surveys respondents
+    // describe('GET /admin/surveys/:surveyId/respondents', surveys.respondents.list);
+    // describe('POST /admin/surveys/:surveyId/respondents', surveys.respondents.store);
+    // describe('PUT /admin/surveys/:surveyId/respondents/:userId', surveys.respondents.update);
+    // describe('DELETE /admin/surveys/:surveyId/respondents/:userId', surveys.respondents.destroy);
   });
 });
