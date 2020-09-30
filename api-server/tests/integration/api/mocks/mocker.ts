@@ -1,9 +1,10 @@
 import faker from 'faker';
-import { CreateUserRequest } from '@common/types/api/admin/users';
 import { PermissionRequest } from '@common/types/api/admin/permissions';
 import { RoleRequest } from '@common/types/api/admin/roles';
+import { CreateLocaleRequest } from '@common/types/api/admin/locales';
 import { CreateSchemeRequest } from '@common/types/api/admin/schemes';
 import { CreateSurveyRequest } from '@common/types/api/admin/surveys';
+import { CreateUserRequest } from '@common/types/api/admin/users';
 import { Meal } from '@common/types/meals';
 import { RecallQuestions } from '@common/types/recall';
 
@@ -48,6 +49,28 @@ export const user = (): CreateUserRequest => {
     smsNotifications,
     permissions,
     roles,
+  };
+};
+
+export const locale = (): CreateLocaleRequest => {
+  const id = faker.address.countryCode();
+  const englishName = faker.address.country();
+  const localName = faker.address.country();
+  const respondentLanguageId = faker.address.countryCode();
+  const adminLanguageId = faker.address.countryCode();
+  const countryFlagCode = faker.address.countryCode();
+  const prototypeLocaleId = null;
+  const textDirection = 'ltr';
+
+  return {
+    id,
+    englishName,
+    localName,
+    respondentLanguageId,
+    adminLanguageId,
+    countryFlagCode,
+    prototypeLocaleId,
+    textDirection,
   };
 };
 

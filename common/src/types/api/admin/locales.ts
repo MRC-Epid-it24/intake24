@@ -8,7 +8,7 @@ export type LocaleRequest = {
   respondentLanguageId: string;
   adminLanguageId: string;
   countryFlagCode: string;
-  prototypeLocaleId: string;
+  prototypeLocaleId: string | null;
   textDirection: string;
 };
 
