@@ -1,9 +1,11 @@
 import { Column, HasMany, Scopes, Table, BelongsTo } from 'sequelize-typescript';
 import { Locale as LocaleAttributes } from '@common/types/models/system';
 import BaseModel from '../model';
-import { Survey } from '.';
+import { Language, Survey } from '.';
 
 @Scopes(() => ({
+  adminLanguage: { include: [{ model: Language, as: 'adminLanguage' }] },
+  surveyLanguage: { include: [{ model: Language, as: 'surveyLanguage' }] },
   surveys: { include: [{ model: Survey }] },
 }))
 @Table({
@@ -54,6 +56,12 @@ export default class Locale extends BaseModel<Locale> implements LocaleAttribute
     defaultValue: 'ltr',
   })
   public textDirection!: string;
+
+  @BelongsTo(() => Language, 'respondentLanguageId')
+  public surveyLanguage?: Language;
+
+  @BelongsTo(() => Language, 'adminLanguageId')
+  public adminLanguage?: Language;
 
   @BelongsTo(() => Locale, 'prototypeLocaleId')
   public parent?: Locale;

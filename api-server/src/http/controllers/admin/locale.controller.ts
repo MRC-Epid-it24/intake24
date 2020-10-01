@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
-import { Locale } from '@/db/models/system';
+import { Op } from 'sequelize';
+import { Language, Locale } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import {
   LocaleCreateResponse,
@@ -10,10 +11,16 @@ import {
   LocaleStoreResponse,
 } from '@common/types/api/admin/locales';
 
-const refs = async (): Promise<LocaleEntryRefs> => {
-  const locales = await Locale.findAll({ attributes: ['id', 'englishName'] });
+const refs = async (localeId: string | undefined = undefined): Promise<LocaleEntryRefs> => {
+  const languages = await Language.findAll({
+    attributes: ['id', 'englishName', 'localName', 'countryFlagCode'],
+  });
+  const locales = await Locale.findAll({
+    attributes: ['id', 'englishName', 'localName', 'countryFlagCode'],
+    where: localeId ? { id: { [Op.ne]: localeId } } : {},
+  });
 
-  return { locales };
+  return { languages, locales };
 };
 
 const entry = async (
@@ -29,7 +36,7 @@ const entry = async (
     return;
   }
 
-  res.json({ data: locale, refs: await refs() });
+  res.json({ data: locale, refs: await refs(locale.id) });
 };
 
 export default {
@@ -47,7 +54,7 @@ export default {
   },
 
   async store(req: Request, res: Response<LocaleStoreResponse>): Promise<void> {
-    const scheme = await Locale.create(
+    const locale = await Locale.create(
       pick(req.body, [
         'id',
         'englishName',
@@ -60,7 +67,7 @@ export default {
       ])
     );
 
-    res.status(201).json({ data: scheme });
+    res.status(201).json({ data: locale });
   },
 
   async detail(
@@ -100,7 +107,7 @@ export default {
       ])
     );
 
-    res.json({ data: locale, refs: await refs() });
+    res.json({ data: locale, refs: await refs(locale.id) });
   },
 
   async delete(req: Request, res: Response<undefined>, next: NextFunction): Promise<void> {

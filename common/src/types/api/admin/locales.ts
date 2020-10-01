@@ -1,4 +1,4 @@
-import { Locale } from '../../models/system';
+import { Language, Locale } from '../../models/system';
 import { Pagination } from '../../models/pagination';
 
 export type LocaleRequest = {
@@ -19,7 +19,8 @@ export type UpdateLocaleRequest = Omit<LocaleRequest, 'id'>;
 export type LocaleListResponse = Pagination<Locale>;
 
 export type LocaleEntryRefs = {
-  locales: Pick<Locale, 'id' | 'englishName'>[];
+  languages: Pick<Language, 'id' | 'englishName' | 'localName' | 'countryFlagCode'>[];
+  locales: Pick<Locale, 'id' | 'englishName' | 'localName' | 'countryFlagCode'>[];
 };
 
 export type LocaleEntryResponse = {
