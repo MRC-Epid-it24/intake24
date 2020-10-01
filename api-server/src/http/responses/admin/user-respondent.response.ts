@@ -1,4 +1,4 @@
-import { RespondentResponse } from '@common/types/api/admin/users';
+import { RespondentResponse } from '@common/types/http/admin/users';
 import { UserSurveyAlias } from '@/db/models/system';
 
 export default (alias: UserSurveyAlias): RespondentResponse => {

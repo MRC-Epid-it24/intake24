@@ -1,10 +1,10 @@
 import { Survey } from '@/db/models/system';
-import { SurveyResponse } from '@common/types/api/admin/surveys';
+import { SurveyEntry } from '@common/types/http/admin/surveys';
 
-export default (survey: Survey): SurveyResponse => {
+export default (survey: Survey): SurveyEntry => {
   return {
     ...survey.get(),
     startDate: survey.startDate.toISOString().split('T')[0],
     endDate: survey.endDate.toISOString().split('T')[0],
-  } as SurveyResponse;
+  } as SurveyEntry;
 };

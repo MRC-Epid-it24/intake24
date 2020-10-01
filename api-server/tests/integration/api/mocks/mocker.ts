@@ -1,13 +1,13 @@
 import faker from 'faker';
-import { PermissionRequest } from '@common/types/api/admin/permissions';
-import { RoleRequest } from '@common/types/api/admin/roles';
-import { CreateLocaleRequest } from '@common/types/api/admin/locales';
-import { CreateSchemeRequest } from '@common/types/api/admin/schemes';
-import { CreateSurveyRequest } from '@common/types/api/admin/surveys';
-import { CreateUserRequest } from '@common/types/api/admin/users';
+import { PermissionRequest } from '@common/types/http/admin/permissions';
+import { RoleRequest } from '@common/types/http/admin/roles';
+import { CreateLocaleRequest } from '@common/types/http/admin/locales';
+import { CreateSchemeRequest } from '@common/types/http/admin/schemes';
+import { CreateSurveyRequest } from '@common/types/http/admin/surveys';
+import { CreateUserRequest } from '@common/types/http/admin/users';
 import { Meal } from '@common/types/meals';
 import { RecallQuestions } from '@common/types/recall';
-import { CreateLanguageRequest } from '@common/types/api/admin/languages';
+import { CreateLanguageRequest } from '@common/types/http/admin/languages';
 
 export const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);

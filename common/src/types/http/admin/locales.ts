@@ -16,18 +16,20 @@ export type CreateLocaleRequest = LocaleRequest;
 
 export type UpdateLocaleRequest = Omit<LocaleRequest, 'id'>;
 
-export type LocaleListResponse = Pagination<Locale>;
+export type LocalesResponse = Pagination<Language>;
 
-export type LocaleEntryRefs = {
+export type LocaleEntry = Locale;
+
+export type LocaleRefs = {
   languages: Language[];
   locales: Locale[];
 };
 
-export type LocaleEntryResponse = {
-  data: Locale;
-  refs: LocaleEntryRefs;
+export type LocaleResponse = {
+  data: LocaleEntry;
+  refs: LocaleRefs;
 };
 
-export type LocaleCreateResponse = Pick<LocaleEntryResponse, 'refs'>;
+export type CreateLocaleResponse = Pick<LocaleResponse, 'refs'>;
 
-export type LocaleStoreResponse = Pick<LocaleEntryResponse, 'data'>;
+export type StoreLocaleResponse = Pick<LocaleResponse, 'data'>;

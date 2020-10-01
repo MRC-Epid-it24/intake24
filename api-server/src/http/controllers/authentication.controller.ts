@@ -4,7 +4,7 @@ import config from '@/config/security';
 import UnauthorizedError from '@/http/errors/unauthorized.error';
 import authSvc from '@/services/authentication.service';
 import { Tokens } from '@/services/jwt.service';
-import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/api/authentication';
+import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http/authentication';
 
 /**
  * Successful login response helper

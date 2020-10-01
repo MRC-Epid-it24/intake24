@@ -27,23 +27,23 @@ export type CreateSurveyRequest = SurveyRequest;
 
 export type UpdateSurveyRequest = Omit<SurveyRequest, 'id'>;
 
-export type SurveyListResponse = Pagination<Survey>;
+export type SurveysResponse = Pagination<Survey>;
 
-export interface SurveyResponse extends Omit<Survey, 'startDate' | 'endDate'> {
+export interface SurveyEntry extends Omit<Survey, 'startDate' | 'endDate'> {
   startDate: string;
   endDate: string;
 }
 
-export type SurveyEntryRefs = {
+export type SurveyRefs = {
   locales: Locale[];
   schemes: Scheme[];
 };
 
-export type SurveyEntryResponse = {
-  data: SurveyResponse;
-  refs: SurveyEntryRefs;
+export type SurveyResponse = {
+  data: SurveyEntry;
+  refs: SurveyRefs;
 };
 
-export type SurveyCreateResponse = Pick<SurveyEntryResponse, 'refs'>;
+export type CreateSurveyResponse = Pick<SurveyResponse, 'refs'>;
 
-export type SurveyStoreResponse = Pick<SurveyEntryResponse, 'data'>;
+export type StoreSurveyResponse = Pick<SurveyResponse, 'data'>;

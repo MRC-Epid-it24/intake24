@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Op } from 'sequelize';
-import { UserResponse } from '@common/types/api/admin/users';
+import { UserResponse } from '@common/types/http/admin/users';
 import { Permission, Survey, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import userResponse from '@/http/responses/admin/user.response';

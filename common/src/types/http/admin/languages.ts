@@ -13,13 +13,17 @@ export type CreateLanguageRequest = LanguageRequest;
 
 export type UpdateLanguageRequest = Omit<LanguageRequest, 'id'>;
 
-export type LanguageListResponse = Pagination<Language>;
+export type LanguagesResponse = Pagination<Language>;
 
-export type LanguageEntryResponse = {
-  data: Language;
-  refs: AnyDictionary;
+export type LanguageEntry = Language;
+
+export type LanguageRefs = AnyDictionary;
+
+export type LanguageResponse = {
+  data: LanguageEntry;
+  refs: LanguageRefs;
 };
 
-export type LanguageCreateResponse = Pick<LanguageEntryResponse, 'refs'>;
+export type CreateLanguageResponse = Pick<LanguageResponse, 'refs'>;
 
-export type LanguageStoreResponse = Pick<LanguageEntryResponse, 'data'>;
+export type StoreLanguageResponse = Pick<LanguageResponse, 'data'>;

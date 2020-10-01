@@ -7,14 +7,14 @@ import { ForbiddenError, NotFoundError } from '@/http/errors';
 import surveyResponse from '@/http/responses/admin/survey.response';
 import { staffSuffix } from '@/services/acl.service';
 import {
-  SurveyCreateResponse,
-  SurveyEntryResponse,
-  SurveyEntryRefs,
-  SurveyListResponse,
-  SurveyStoreResponse,
-} from '@common/types/api/admin/surveys';
+  CreateSurveyResponse,
+  SurveyResponse,
+  SurveyRefs,
+  SurveysResponse,
+  StoreSurveyResponse,
+} from '@common/types/http/admin/surveys';
 
-const refs = async (): Promise<SurveyEntryRefs> => {
+const refs = async (): Promise<SurveyRefs> => {
   const locales = await Locale.findAll({ attributes: ['id', 'englishName'] });
   const schemes = await Scheme.findAll({ attributes: ['id', 'name'] });
 
@@ -23,7 +23,7 @@ const refs = async (): Promise<SurveyEntryRefs> => {
 
 const entry = async (
   req: Request,
-  res: Response<SurveyEntryResponse>,
+  res: Response<SurveyResponse>,
   next: NextFunction
 ): Promise<void> => {
   const { surveyId } = req.params;
@@ -38,7 +38,7 @@ const entry = async (
 };
 
 export default {
-  async list(req: Request, res: Response<SurveyListResponse>): Promise<void> {
+  async list(req: Request, res: Response<SurveysResponse>): Promise<void> {
     const permissions = (req.user as User).allPermissions().map((permission) => permission.name);
 
     const where: WhereOptions = {};
@@ -55,11 +55,11 @@ export default {
     res.json(surveys);
   },
 
-  async create(req: Request, res: Response<SurveyCreateResponse>): Promise<void> {
+  async create(req: Request, res: Response<CreateSurveyResponse>): Promise<void> {
     res.json({ refs: await refs() });
   },
 
-  async store(req: Request, res: Response<SurveyStoreResponse>): Promise<void> {
+  async store(req: Request, res: Response<StoreSurveyResponse>): Promise<void> {
     const survey = await Survey.create(
       pick(req.body, [
         'id',
@@ -86,23 +86,15 @@ export default {
     res.status(201).json({ data: surveyResponse(survey) });
   },
 
-  async detail(
-    req: Request,
-    res: Response<SurveyEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async detail(req: Request, res: Response<SurveyResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async edit(req: Request, res: Response<SurveyEntryResponse>, next: NextFunction): Promise<void> {
+  async edit(req: Request, res: Response<SurveyResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async update(
-    req: Request,
-    res: Response<SurveyEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async update(req: Request, res: Response<SurveyResponse>, next: NextFunction): Promise<void> {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 

@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/api/admin/users';
+import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/http/admin/users';
 import { GenUserCounter, Permission, Survey, User, UserSurveyAlias } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import { surveyMgmt, surveyRespondent } from './acl.service';

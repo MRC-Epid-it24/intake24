@@ -5,14 +5,14 @@ import { NotFoundError } from '@/http/errors';
 import userResponse from '@/http/responses/admin/user.response';
 import userSvc from '@/services/user.service';
 import {
-  UserCreateResponse,
-  UserEntryResponse,
-  UserEntryRefs,
-  UserListResponse,
-  UserStoreResponse,
-} from '@common/types/api/admin/users';
+  CreateUserResponse,
+  UserResponse,
+  UserRefs,
+  UsersResponse,
+  StoreUserResponse,
+} from '@common/types/http/admin/users';
 
-const entryRefs = async (): Promise<UserEntryRefs> => {
+const entryRefs = async (): Promise<UserRefs> => {
   const permissions = await Permission.scope('list').findAll();
   const roles = await Role.scope('list').findAll();
 
@@ -21,7 +21,7 @@ const entryRefs = async (): Promise<UserEntryRefs> => {
 
 const entry = async (
   req: Request,
-  res: Response<UserEntryResponse>,
+  res: Response<UserResponse>,
   next: NextFunction
 ): Promise<void> => {
   const { userId } = req.params;
@@ -39,7 +39,7 @@ const entry = async (
 };
 
 export default {
-  async list(req: Request, res: Response<UserListResponse>): Promise<void> {
+  async list(req: Request, res: Response<UsersResponse>): Promise<void> {
     const users = await User.scope('roles').paginate({
       req,
       columns: ['name', 'email', 'simpleName'],
@@ -48,13 +48,13 @@ export default {
     res.json(users);
   },
 
-  async create(req: Request, res: Response<UserCreateResponse>): Promise<void> {
+  async create(req: Request, res: Response<CreateUserResponse>): Promise<void> {
     const refs = await entryRefs();
 
     res.json({ refs });
   },
 
-  async store(req: Request, res: Response<UserStoreResponse>): Promise<void> {
+  async store(req: Request, res: Response<StoreUserResponse>): Promise<void> {
     const user = await userSvc.create(
       pick(req.body, [
         'name',
@@ -76,15 +76,15 @@ export default {
     res.status(201).json({ data });
   },
 
-  async detail(req: Request, res: Response<UserEntryResponse>, next: NextFunction): Promise<void> {
+  async detail(req: Request, res: Response<UserResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async edit(req: Request, res: Response<UserEntryResponse>, next: NextFunction): Promise<void> {
+  async edit(req: Request, res: Response<UserResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async update(req: Request, res: Response<UserEntryResponse>): Promise<void> {
+  async update(req: Request, res: Response<UserResponse>): Promise<void> {
     const { userId } = req.params;
 
     await userSvc.update(

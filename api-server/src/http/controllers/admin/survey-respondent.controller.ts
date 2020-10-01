@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
-import { RespondentResponse } from '@common/types/api/admin/users';
+import { RespondentResponse } from '@common/types/http/admin/users';
 import { Survey, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import userRespondentResponse from '@/http/responses/admin/user-respondent.response';

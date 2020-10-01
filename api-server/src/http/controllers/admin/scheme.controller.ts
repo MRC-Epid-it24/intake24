@@ -4,14 +4,14 @@ import { Language, Scheme } from '@/db/models/system';
 import { defaultMeals as meals } from '@/db/models/system/scheme';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import {
-  SchemeCreateResponse,
-  SchemeEntryRefs,
-  SchemeEntryResponse,
-  SchemeListResponse,
-  SchemeStoreResponse,
-} from '@common/types/api/admin/schemes';
+  CreateSchemeResponse,
+  SchemeRefs,
+  SchemeResponse,
+  SchemesResponse,
+  StoreSchemeResponse,
+} from '@common/types/http/admin/schemes';
 
-const refs = async (): Promise<SchemeEntryRefs> => {
+const refs = async (): Promise<SchemeRefs> => {
   const languages = await Language.findAll();
 
   return { languages, meals };
@@ -30,17 +30,17 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
 };
 
 export default {
-  async list(req: Request, res: Response<SchemeListResponse>): Promise<void> {
+  async list(req: Request, res: Response<SchemesResponse>): Promise<void> {
     const schemes = await Scheme.paginate({ req, columns: ['id', 'name'] });
 
     res.json(schemes);
   },
 
-  async create(req: Request, res: Response<SchemeCreateResponse>): Promise<void> {
+  async create(req: Request, res: Response<CreateSchemeResponse>): Promise<void> {
     res.json({ refs: await refs() });
   },
 
-  async store(req: Request, res: Response<SchemeStoreResponse>): Promise<void> {
+  async store(req: Request, res: Response<StoreSchemeResponse>): Promise<void> {
     const scheme = await Scheme.create(
       pick(req.body, ['id', 'name', 'type', 'questions', 'meals'])
     );
@@ -48,23 +48,15 @@ export default {
     res.status(201).json({ data: scheme });
   },
 
-  async detail(
-    req: Request,
-    res: Response<SchemeEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async detail(req: Request, res: Response<SchemeResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async edit(req: Request, res: Response<SchemeEntryResponse>, next: NextFunction): Promise<void> {
+  async edit(req: Request, res: Response<SchemeResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async update(
-    req: Request,
-    res: Response<SchemeEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async update(req: Request, res: Response<SchemeResponse>, next: NextFunction): Promise<void> {
     const { schemeId } = req.params;
     const scheme = await Scheme.findByPk(schemeId);
 

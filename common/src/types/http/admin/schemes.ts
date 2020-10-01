@@ -15,18 +15,20 @@ export type CreateSchemeRequest = SchemeRequest;
 
 export type UpdateSchemeRequest = Omit<SchemeRequest, 'id'>;
 
-export type SchemeListResponse = Pagination<Scheme>;
+export type SchemesResponse = Pagination<Scheme>;
 
-export type SchemeEntryRefs = {
+export type SchemeEntry = Scheme;
+
+export type SchemeRefs = {
   languages: Language[];
   meals: Meal[];
 };
 
-export type SchemeEntryResponse = {
-  data: Scheme;
-  refs: SchemeEntryRefs;
+export type SchemeResponse = {
+  data: SchemeEntry;
+  refs: SchemeRefs;
 };
 
-export type SchemeCreateResponse = Pick<SchemeEntryResponse, 'refs'>;
+export type CreateSchemeResponse = Pick<SchemeResponse, 'refs'>;
 
-export type SchemeStoreResponse = Pick<SchemeEntryResponse, 'data'>;
+export type StoreSchemeResponse = Pick<SchemeResponse, 'data'>;

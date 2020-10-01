@@ -4,14 +4,14 @@ import { Op } from 'sequelize';
 import { Language, Locale } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import {
-  LocaleCreateResponse,
-  LocaleEntryResponse,
-  LocaleEntryRefs,
-  LocaleListResponse,
-  LocaleStoreResponse,
-} from '@common/types/api/admin/locales';
+  CreateLocaleResponse,
+  LocaleRefs,
+  LocaleResponse,
+  LocalesResponse,
+  StoreLocaleResponse,
+} from '@common/types/http/admin/locales';
 
-const refs = async (localeId: string | undefined = undefined): Promise<LocaleEntryRefs> => {
+const refs = async (localeId: string | undefined = undefined): Promise<LocaleRefs> => {
   const languages = await Language.findAll();
   const locales = await Locale.findAll({ where: localeId ? { id: { [Op.ne]: localeId } } : {} });
 
@@ -20,7 +20,7 @@ const refs = async (localeId: string | undefined = undefined): Promise<LocaleEnt
 
 const entry = async (
   req: Request,
-  res: Response<LocaleEntryResponse>,
+  res: Response<LocaleResponse>,
   next: NextFunction
 ): Promise<void> => {
   const { localeId } = req.params;
@@ -35,7 +35,7 @@ const entry = async (
 };
 
 export default {
-  async list(req: Request, res: Response<LocaleListResponse>): Promise<void> {
+  async list(req: Request, res: Response<LocalesResponse>): Promise<void> {
     const locales = await Locale.paginate({
       req,
       columns: ['id', 'englishName', 'localName'],
@@ -44,11 +44,11 @@ export default {
     res.json(locales);
   },
 
-  async create(req: Request, res: Response<LocaleCreateResponse>): Promise<void> {
+  async create(req: Request, res: Response<CreateLocaleResponse>): Promise<void> {
     res.json({ refs: await refs() });
   },
 
-  async store(req: Request, res: Response<LocaleStoreResponse>): Promise<void> {
+  async store(req: Request, res: Response<StoreLocaleResponse>): Promise<void> {
     const locale = await Locale.create(
       pick(req.body, [
         'id',
@@ -65,23 +65,15 @@ export default {
     res.status(201).json({ data: locale });
   },
 
-  async detail(
-    req: Request,
-    res: Response<LocaleEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async detail(req: Request, res: Response<LocaleResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async edit(req: Request, res: Response<LocaleEntryResponse>, next: NextFunction): Promise<void> {
+  async edit(req: Request, res: Response<LocaleResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async update(
-    req: Request,
-    res: Response<LocaleEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async update(req: Request, res: Response<LocaleResponse>, next: NextFunction): Promise<void> {
     const { localeId } = req.params;
     const locale = await Locale.findByPk(localeId);
 

@@ -2,15 +2,15 @@ import { Request, Response, NextFunction } from 'express';
 import { Permission } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import {
-  PermissionCreateResponse,
-  PermissionEntryResponse,
-  PermissionListResponse,
-  PermissionStoreResponse,
-} from '@common/types/api/admin/permissions';
+  CreatePermissionResponse,
+  PermissionResponse,
+  PermissionsResponse,
+  StorePermissionResponse,
+} from '@common/types/http/admin/permissions';
 
 const entry = async (
   req: Request,
-  res: Response<PermissionEntryResponse>,
+  res: Response<PermissionResponse>,
   next: NextFunction
 ): Promise<void> => {
   const { permissionId } = req.params;
@@ -25,44 +25,32 @@ const entry = async (
 };
 
 export default {
-  async list(req: Request, res: Response<PermissionListResponse>): Promise<void> {
+  async list(req: Request, res: Response<PermissionsResponse>): Promise<void> {
     const permissions = await Permission.paginate({ req, columns: ['name', 'displayName'] });
 
     res.json(permissions);
   },
 
-  async create(req: Request, res: Response<PermissionCreateResponse>): Promise<void> {
+  async create(req: Request, res: Response<CreatePermissionResponse>): Promise<void> {
     res.json({ refs: {} });
   },
 
-  async store(req: Request, res: Response<PermissionStoreResponse>): Promise<void> {
+  async store(req: Request, res: Response<StorePermissionResponse>): Promise<void> {
     const { name, displayName, description } = req.body;
     const permission = await Permission.create({ name, displayName, description });
 
     res.status(201).json({ data: permission });
   },
 
-  async detail(
-    req: Request,
-    res: Response<PermissionEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async detail(req: Request, res: Response<PermissionResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async edit(
-    req: Request,
-    res: Response<PermissionEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async edit(req: Request, res: Response<PermissionResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async update(
-    req: Request,
-    res: Response<PermissionEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async update(req: Request, res: Response<PermissionResponse>, next: NextFunction): Promise<void> {
     const { permissionId } = req.params;
     const permission = await Permission.findByPk(permissionId);
 

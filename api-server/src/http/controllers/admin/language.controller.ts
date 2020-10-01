@@ -3,15 +3,15 @@ import { pick } from 'lodash';
 import { Language } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import {
-  LanguageCreateResponse,
-  LanguageEntryResponse,
-  LanguageListResponse,
-  LanguageStoreResponse,
-} from '@common/types/api/admin/languages';
+  CreateLanguageResponse,
+  LanguageResponse,
+  LanguagesResponse,
+  StoreLanguageResponse,
+} from '@common/types/http/admin/languages';
 
 const entry = async (
   req: Request,
-  res: Response<LanguageEntryResponse>,
+  res: Response<LanguageResponse>,
   next: NextFunction
 ): Promise<void> => {
   const { languageId } = req.params;
@@ -26,7 +26,7 @@ const entry = async (
 };
 
 export default {
-  async list(req: Request, res: Response<LanguageListResponse>): Promise<void> {
+  async list(req: Request, res: Response<LanguagesResponse>): Promise<void> {
     const languages = await Language.paginate({
       req,
       columns: ['id', 'englishName', 'localName'],
@@ -35,11 +35,11 @@ export default {
     res.json(languages);
   },
 
-  async create(req: Request, res: Response<LanguageCreateResponse>): Promise<void> {
+  async create(req: Request, res: Response<CreateLanguageResponse>): Promise<void> {
     res.json({ refs: {} });
   },
 
-  async store(req: Request, res: Response<LanguageStoreResponse>): Promise<void> {
+  async store(req: Request, res: Response<StoreLanguageResponse>): Promise<void> {
     const scheme = await Language.create(
       pick(req.body, ['id', 'englishName', 'localName', 'countryFlagCode'])
     );
@@ -47,27 +47,15 @@ export default {
     res.status(201).json({ data: scheme });
   },
 
-  async detail(
-    req: Request,
-    res: Response<LanguageEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async detail(req: Request, res: Response<LanguageResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async edit(
-    req: Request,
-    res: Response<LanguageEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async edit(req: Request, res: Response<LanguageResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async update(
-    req: Request,
-    res: Response<LanguageEntryResponse>,
-    next: NextFunction
-  ): Promise<void> {
+  async update(req: Request, res: Response<LanguageResponse>, next: NextFunction): Promise<void> {
     const { languageId } = req.params;
     const language = await Language.findByPk(languageId);
 

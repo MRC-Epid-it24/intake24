@@ -3,15 +3,15 @@ import acl from '@/config/acl';
 import { Permission, Role } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import {
-  RoleCreateResponse,
-  RoleEntryResponse,
-  RoleListResponse,
-  RoleStoreResponse,
-} from '@common/types/api/admin/roles';
+  CreateRoleResponse,
+  RoleResponse,
+  RolesResponse,
+  StoreRoleResponse,
+} from '@common/types/http/admin/roles';
 
 const entry = async (
   req: Request,
-  res: Response<RoleEntryResponse>,
+  res: Response<RoleResponse>,
   next: NextFunction
 ): Promise<void> => {
   const { roleId } = req.params;
@@ -28,19 +28,19 @@ const entry = async (
 };
 
 export default {
-  async list(req: Request, res: Response<RoleListResponse>): Promise<void> {
+  async list(req: Request, res: Response<RolesResponse>): Promise<void> {
     const roles = await Role.paginate({ req, columns: ['name', 'displayName'] });
 
     res.json(roles);
   },
 
-  async create(req: Request, res: Response<RoleCreateResponse>): Promise<void> {
+  async create(req: Request, res: Response<CreateRoleResponse>): Promise<void> {
     const permissions = await Permission.scope('list').findAll();
 
     res.json({ refs: { permissions } });
   },
 
-  async store(req: Request, res: Response<RoleStoreResponse>): Promise<void> {
+  async store(req: Request, res: Response<StoreRoleResponse>): Promise<void> {
     const { name, displayName, description, permissions } = req.body;
     const role = await Role.create({ name, displayName, description });
     await role.$set('permissions', permissions);
@@ -48,15 +48,15 @@ export default {
     res.status(201).json({ data: role });
   },
 
-  async detail(req: Request, res: Response<RoleEntryResponse>, next: NextFunction): Promise<void> {
+  async detail(req: Request, res: Response<RoleResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async edit(req: Request, res: Response<RoleEntryResponse>, next: NextFunction): Promise<void> {
+  async edit(req: Request, res: Response<RoleResponse>, next: NextFunction): Promise<void> {
     entry(req, res, next);
   },
 
-  async update(req: Request, res: Response<RoleEntryResponse>, next: NextFunction): Promise<void> {
+  async update(req: Request, res: Response<RoleResponse>, next: NextFunction): Promise<void> {
     const { roleId } = req.params;
     let role = await Role.scope('permissions').findByPk(roleId);
 

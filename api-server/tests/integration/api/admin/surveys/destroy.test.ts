@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import request from 'supertest';
 import { Survey } from '@/db/models/system';
 import { surveyStaff } from '@/services/acl.service';
-import { CreateSurveyRequest } from '@common/types/api/admin/surveys';
+import { CreateSurveyRequest } from '@common/types/http/admin/surveys';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 

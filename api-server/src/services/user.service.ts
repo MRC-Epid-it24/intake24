@@ -1,5 +1,5 @@
 import slugify from 'slugify';
-import { CreateUserRequest, UpdateUserRequest } from '@common/types/api/admin/users';
+import { CreateUserRequest, UpdateUserRequest } from '@common/types/http/admin/users';
 import { User, UserPassword } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import { defaultAlgorithm } from '@/util/passwords';

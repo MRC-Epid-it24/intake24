@@ -1,10 +1,10 @@
-import { UserResponse } from '@common/types/api/admin/users';
+import { UserEntry } from '@common/types/http/admin/users';
 import { User } from '@/db/models/system';
 
-export default (user: User): UserResponse => {
+export default (user: User): UserEntry => {
   return {
     ...user.get(),
     permissions: user.permissions,
     roles: user.roles,
-  } as UserResponse;
+  } as UserEntry;
 };

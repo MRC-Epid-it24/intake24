@@ -19,26 +19,26 @@ export interface CreateUserRequest extends UserRequest {
 
 export type UpdateUserRequest = UserRequest;
 
-export interface UserResponse extends User {
+export type UsersResponse = Pagination<User>;
+
+export interface UserEntry extends User {
   permissions?: Permission[];
   roles?: Role[];
 }
 
-export type UserListResponse = Pagination<User>;
-
-export type UserEntryRefs = {
+export type UserRefs = {
   permissions: Permission[];
   roles: Role[];
 };
 
-export type UserEntryResponse = {
-  data: UserResponse;
-  refs: UserEntryRefs;
+export type UserResponse = {
+  data: UserEntry;
+  refs: UserRefs;
 };
 
-export type UserCreateResponse = Pick<UserEntryResponse, 'refs'>;
+export type CreateUserResponse = Pick<UserResponse, 'refs'>;
 
-export type UserStoreResponse = Pick<UserEntryResponse, 'data'>;
+export type StoreUserResponse = Pick<UserResponse, 'data'>;
 
 export type RespondentRequest = {
   name?: string;
