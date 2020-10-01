@@ -27,7 +27,16 @@
                 name="locale"
                 outlined
                 @change="form.errors.clear('prototypeLocaleId')"
-              ></v-select>
+              >
+                <template v-slot:item="{ item }">
+                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  {{ item.englishName }}
+                </template>
+                <template v-slot:selection="{ item }">
+                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  {{ item.englishName }}
+                </template>
+              </v-select>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -50,24 +59,50 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field
+              <v-select
                 v-model="form.respondentLanguageId"
                 :error-messages="form.errors.get('respondentLanguageId')"
+                :items="refs.languages"
                 :label="$t('locales.respondentLanguageId')"
                 hide-details="auto"
+                item-value="id"
+                item-text="englishName"
                 name="respondentLanguageId"
                 outlined
-              ></v-text-field>
+                @change="form.errors.clear('respondentLanguageId')"
+              >
+                <template v-slot:item="{ item }">
+                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  {{ item.englishName }}
+                </template>
+                <template v-slot:selection="{ item }">
+                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  {{ item.englishName }}
+                </template>
+              </v-select>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field
+              <v-select
                 v-model="form.adminLanguageId"
                 :error-messages="form.errors.get('adminLanguageId')"
+                :items="refs.languages"
                 :label="$t('locales.adminLanguageId')"
                 hide-details="auto"
+                item-value="id"
+                item-text="englishName"
                 name="adminLanguageId"
                 outlined
-              ></v-text-field>
+                @change="form.errors.clear('adminLanguageId')"
+              >
+                <template v-slot:item="{ item }">
+                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  {{ item.englishName }}
+                </template>
+                <template v-slot:selection="{ item }">
+                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  {{ item.englishName }}
+                </template>
+              </v-select>
             </v-col>
             <v-col cols="12" md="6">
               <v-select
@@ -81,6 +116,10 @@
                 @change="form.errors.clear('countryFlagCode')"
               >
                 <template v-slot:item="{ item }">
+                  <span :class="`flag-icon flag-icon-${item.value} mr-3`"></span>
+                  {{ item.text }}
+                </template>
+                <template v-slot:selection="{ item }">
                   <span :class="`flag-icon flag-icon-${item.value} mr-3`"></span>
                   {{ item.text }}
                 </template>
@@ -114,10 +153,10 @@ import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';
 import flags from '@/locale/en/flags';
 import { FormMixin } from '@/types/vue';
-import { LocaleEntryRefs } from '@common/types/api/admin/locales';
+import { LocaleRefs } from '@common/types/http/admin/locales';
 import { Locale } from '@common/types/models/system';
 
-export default (Vue as VueConstructor<Vue & FormMixin<Locale, LocaleEntryRefs>>).extend({
+export default (Vue as VueConstructor<Vue & FormMixin<Locale, LocaleRefs>>).extend({
   name: 'LocaleForm',
 
   mixins: [formMixin],
@@ -147,9 +186,7 @@ export default (Vue as VueConstructor<Vue & FormMixin<Locale, LocaleEntryRefs>>)
 
   computed: {
     locales() {
-      const locales = this.refs.locales.filter((item) => item.id !== this.entry.id);
-
-      return [{ id: null, englishName: this.$t('common.none') as string }, ...locales];
+      return [{ id: null, englishName: this.$t('common.none') as string }, ...this.refs.locales];
     },
   },
 });
