@@ -1,4 +1,5 @@
 export { default as GenUserCounter } from './gen-user-counter';
+export { default as Language } from './language';
 export { default as Locale } from './locale';
 export { default as UserPasswordReset } from './user-password-reset';
 export { default as Permission } from './permission';

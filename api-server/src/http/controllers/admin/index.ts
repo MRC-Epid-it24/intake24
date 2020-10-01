@@ -1,3 +1,4 @@
+import language from './language.controller';
 import locale from './locale.controller';
 import permission from './permission.controller';
 import profile from './profile.controller';
@@ -9,6 +10,7 @@ import survey from './survey.controller';
 import user from './user.controller';
 
 export default {
+  language,
   locale,
   permission,
   profile,
