@@ -26,7 +26,10 @@ export default {
     errorMessage: 'Enter valid scheme questions.',
     custom: {
       options: async (value): Promise<void> => {
-        if (!isPlainObject(value) || Object.keys(value).some((item) => !Array.isArray(item)))
+        if (
+          !isPlainObject(value) ||
+          Object.values(value).some((item) => !Array.isArray(item) && !isPlainObject(item))
+        )
           throw new Error('Enter valid scheme questions.');
 
         Promise.resolve();
