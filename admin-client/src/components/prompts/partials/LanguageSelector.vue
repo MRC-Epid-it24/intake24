@@ -6,7 +6,7 @@
       <v-menu bottom left>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            :disabled="!availableLocales.length"
+            :disabled="!availableLanguages.length"
             color="secondary"
             fab
             small
@@ -17,34 +17,34 @@
           </v-btn>
         </template>
         <v-list class="grey lighten-3">
-          <v-list-item v-for="locale in availableLocales" :key="locale" @click="add(locale)">
-            <span :class="`flag-icon flag-icon-${localeToFlag(locale)} mr-3`"></span>
-            <span class="font-weight-medium">{{ $t(`common.locales.${locale}`) }}</span>
+          <v-list-item v-for="lang in availableLanguages" :key="lang.id" @click="add(lang.id)">
+            <span :class="`flag-icon flag-icon-${lang.countryFlagCode} mr-3`"></span>
+            <span class="font-weight-medium">{{ lang.englishName }}</span>
           </v-list-item>
         </v-list>
       </v-menu>
       <template v-slot:extension>
         <v-tabs v-model="selected" background-color="grey lighten-4">
           <v-tabs-slider></v-tabs-slider>
-          <v-tab v-for="locale in locales" :key="locale">
-            <span :class="`flag-icon flag-icon-${localeToFlag(locale)} mr-3`"></span>
-            <span class="font-weight-medium">{{ $t(`common.locales.${locale}`) }}</span>
+          <v-tab v-for="lang in languages" :key="lang">
+            <span :class="`flag-icon flag-icon-${getLanguageFlag(lang)} mr-3`"></span>
+            <span class="font-weight-medium">{{ getLanguageName(lang) }}</span>
           </v-tab>
         </v-tabs>
       </template>
     </v-toolbar>
     <v-tabs-items v-model="selected">
-      <v-tab-item v-for="locale in locales" :key="locale">
+      <v-tab-item v-for="lang in languages" :key="lang">
         <v-card-text>
-          <slot :name="`locale.${locale}`" v-bind:locale="locale"></slot>
+          <slot :name="`lang.${lang}`" v-bind:lang="lang"></slot>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            :disabled="doNotRemove.includes(locales[selected])"
+            :disabled="doNotRemove.includes(languages[selected])"
             color="error"
             text
-            @click.stop="remove(locales[selected])"
+            @click.stop="remove(languages[selected])"
           >
             <v-icon class="mr-2">fa-trash</v-icon> {{ $t('common.action.delete') }}
           </v-btn>
@@ -55,13 +55,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import tinymce from '@/components/tinymce/tinymce';
+import mapRefs from '@/components/entry/mapRefs';
+import { MapRefsMixin } from '@/types/vue';
+import { SchemeRefs } from '@common/types/http/admin/schemes';
+import { Language } from '@common/types/models/system';
 
-export default Vue.extend({
-  name: 'SelectLocale',
+export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
+  name: 'LanguageSelector',
 
-  mixins: [tinymce],
+  mixins: [mapRefs, tinymce],
 
   props: {
     label: {
@@ -95,34 +99,37 @@ export default Vue.extend({
   },
 
   computed: {
-    locales(): string[] {
+    languages(): string[] {
       return Object.keys(this.value);
     },
-    availableLocales(): string[] {
-      // TODO: this should return available langs in frontend apps - once implemented
-      // return this.$i18n.availableLocales.filter((locale) => !this.locales.includes(locale));
-      return ['en', 'es', 'dk', 'pt'].filter((locale) => !this.locales.includes(locale));
+    availableLanguages(): Language[] {
+      if (!this.refsLoaded) return [];
+
+      return this.refs.languages.filter((lang) => !this.languages.includes(lang.id));
     },
   },
 
   methods: {
-    localeToFlag(locale: string): string {
-      switch (locale) {
-        case 'en':
-          return 'gb';
-        default:
-          return locale;
-      }
+    getLanguageFlag(langId: string) {
+      const language = this.refs.languages.find((lang) => lang.id === langId);
+
+      return language?.countryFlagCode ?? 'gb';
     },
 
-    async add(locale: string) {
-      await this.$emit('input', { ...this.value, [locale]: this.default });
-      this.selected = this.locales.length - 1;
+    getLanguageName(langId: string) {
+      const language = this.refs.languages.find((lang) => lang.id === langId);
+
+      return language?.englishName ?? 'English';
     },
 
-    remove(locale: string) {
+    async add(langId: string) {
+      await this.$emit('input', { ...this.value, [langId]: this.default });
+      this.selected = this.languages.length - 1;
+    },
+
+    remove(langId: string) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { [locale]: remove, ...rest } = this.value;
+      const { [langId]: remove, ...rest } = this.value;
       this.$emit('input', { ...rest });
     },
   },

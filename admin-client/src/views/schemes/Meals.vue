@@ -61,23 +61,23 @@
         </v-card-title>
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
-          <select-locale
+          <language-selector
             :label="$t('schemes.questions.text')"
             v-model="dialog.meal.name"
             flat
             :outlined="false"
           >
-            <template v-for="locale in Object.keys(dialog.meal.name)" v-slot:[`locale.${locale}`]>
+            <template v-for="lang in Object.keys(dialog.meal.name)" v-slot:[`lang.${lang}`]>
               <v-text-field
-                v-model="dialog.meal.name[locale]"
-                :key="locale"
+                v-model="dialog.meal.name[lang]"
+                :key="lang"
                 :label="$t('schemes.meals._')"
-                :rules="rules(locale)"
+                :rules="rules(lang)"
                 hide-details="auto"
                 outlined
               ></v-text-field>
             </template>
-          </select-locale>
+          </language-selector>
           <v-card-text>
             <v-time-picker
               v-model="dialog.meal.time"
@@ -107,7 +107,7 @@ import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import { FormRefs } from '@common/types/common';
 import { Meal } from '@common/types/meals';
-import SelectLocale from '@/components/prompts/partials/SelectLocale.vue';
+import LanguageSelector from '@/components/prompts/partials/LanguageSelector.vue';
 
 export type MealDialog = { show: boolean; index: number; meal: Meal };
 
@@ -123,7 +123,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
   },
 
-  components: { draggable, SelectLocale },
+  components: { draggable, LanguageSelector },
 
   data() {
     const dialog = (show = false): MealDialog => ({
@@ -146,14 +146,14 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   },
 
   methods: {
-    rules(locale: string) {
+    rules(langId: string) {
       return [
         (value: string | null): boolean | string => {
           if (!value) return this.$t('schemes.meals.validation.required') as string;
 
           const { index } = this.dialog;
           const match = this.meals.find(
-            (meal, idx) => value === meal.name[locale] && index !== idx
+            (meal, idx) => value === meal.name[langId] && index !== idx
           );
 
           return match ? (this.$t('schemes.meals.validation.unique') as string) : true;

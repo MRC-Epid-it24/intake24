@@ -1,36 +1,36 @@
 <template>
   <v-tab-item key="content">
-    <select-locale
+    <language-selector
       :label="$t('schemes.questions.text')"
       :value="text"
       @input="update('text', $event)"
     >
-      <template v-for="locale in Object.keys(text)" v-slot:[`locale.${locale}`]>
+      <template v-for="lang in Object.keys(text)" v-slot:[`lang.${lang}`]>
         <v-text-field
-          :key="locale"
+          :key="lang"
           :label="$t('schemes.questions.text')"
           :rules="textRules"
-          :value="text[locale]"
+          :value="text[lang]"
           hide-details="auto"
           outlined
-          @input="updateLocale('text', locale, $event)"
+          @input="updateLanguage('text', lang, $event)"
         ></v-text-field>
       </template>
-    </select-locale>
-    <select-locale
+    </language-selector>
+    <language-selector
       :label="$t('schemes.questions.description')"
       :value="description"
       @input="update('description', $event)"
     >
-      <template v-for="locale in Object.keys(description)" v-slot:[`locale.${locale}`]>
+      <template v-for="lang in Object.keys(description)" v-slot:[`lang.${lang}`]>
         <editor
           :init="tinymceInit"
-          :key="locale"
-          :value="description[locale]"
-          @input="updateLocale('description', locale, $event)"
+          :key="lang"
+          :value="description[lang]"
+          @input="updateLanguage('description', lang, $event)"
         />
       </template>
-    </select-locale>
+    </language-selector>
   </v-tab-item>
 </template>
 
@@ -38,12 +38,12 @@
 import Vue from 'vue';
 import tinymce from '@/components/tinymce/tinymce';
 import { LocaleTranslation } from '@common/types/common';
-import SelectLocale from './SelectLocale.vue';
+import LanguageSelector from './LanguageSelector.vue';
 
 export default Vue.extend({
   name: 'PromptContent',
 
-  components: { SelectLocale },
+  components: { LanguageSelector },
 
   mixins: [tinymce],
 
@@ -66,7 +66,7 @@ export default Vue.extend({
     update(field: string, value: any) {
       this.$emit(`update:${field}`, value);
     },
-    updateLocale(field: string, locale: string, value: any) {
+    updateLanguage(field: string, locale: string, value: any) {
       this.$emit(`update:${field}`, { ...this.$props[field], [locale]: value });
     },
   },

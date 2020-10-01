@@ -10,24 +10,24 @@
         ></v-switch>
       </v-col>
       <v-col cols="12">
-        <select-locale
+        <language-selector
           :disabled="!required"
           :label="$t('schemes.questions.validation.message')"
           :value="message"
           @input="update('message', $event)"
         >
-          <template v-for="locale in Object.keys(message)" v-slot:[`locale.${locale}`]>
+          <template v-for="lang in Object.keys(message)" v-slot:[`lang.${lang}`]>
             <v-text-field
               :disabled="!required"
-              :key="locale"
+              :key="lang"
               :label="$t('schemes.questions.validation.message')"
-              :value="message[locale]"
+              :value="message[lang]"
               hide-details="auto"
               outlined
-              @input="updateLocale('message', locale, $event)"
+              @input="updateLanguage('message', lang, $event)"
             ></v-text-field>
           </template>
-        </select-locale>
+        </language-selector>
       </v-col>
     </v-row>
   </v-tab-item>
@@ -36,12 +36,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import { LocaleTranslation } from '@common/types/common';
-import SelectLocale from './SelectLocale.vue';
+import LanguageSelector from './LanguageSelector.vue';
 
 export default Vue.extend({
   name: 'PromptValidation',
 
-  components: { SelectLocale },
+  components: { LanguageSelector },
 
   props: {
     required: {
@@ -56,7 +56,7 @@ export default Vue.extend({
     update(field: string, value: any) {
       this.$emit(`update:${field}`, value);
     },
-    updateLocale(field: string, locale: string, value: any) {
+    updateLanguage(field: string, locale: string, value: any) {
       this.$emit(`update:${field}`, { ...this.$props[field], [locale]: value });
     },
   },

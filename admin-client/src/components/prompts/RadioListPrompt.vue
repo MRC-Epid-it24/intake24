@@ -28,39 +28,39 @@
           ></v-switch>
         </v-col>
         <v-col cols="12">
-          <select-locale
+          <language-selector
             :default="[]"
             :label="$t('schemes.questions.label')"
             :value="label"
             @input="update('label', $event)"
           >
-            <template v-for="locale in Object.keys(label)" v-slot:[`locale.${locale}`]>
+            <template v-for="lang in Object.keys(label)" v-slot:[`lang.${lang}`]>
               <v-text-field
                 :label="$t('schemes.questions.label')"
-                :key="locale"
-                :value="label[locale]"
+                :key="lang"
+                :value="label[lang]"
                 hide-details="auto"
                 outlined
-                @input="updateLocale('label', locale, $event)"
+                @input="updateLanguage('label', lang, $event)"
               ></v-text-field>
             </template>
-          </select-locale>
+          </language-selector>
         </v-col>
       </v-row>
-      <select-locale
+      <language-selector
         :default="[]"
         :label="$t('schemes.questions.options.title')"
         :value="options"
         @input="update('options', $event)"
       >
-        <template v-for="locale in Object.keys(options)" v-slot:[`locale.${locale}`]>
+        <template v-for="lang in Object.keys(options)" v-slot:[`lang.${lang}`]>
           <prompt-list-options
-            :key="locale"
-            :options="options[locale]"
-            @update:options="updateLocale('options', locale, $event)"
+            :key="lang"
+            :options="options[lang]"
+            @update:options="updateLanguage('options', lang, $event)"
           ></prompt-list-options>
         </template>
-      </select-locale>
+      </language-selector>
     </v-tab-item>
   </div>
 </template>

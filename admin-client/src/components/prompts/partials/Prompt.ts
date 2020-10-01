@@ -23,8 +23,8 @@ export default Vue.extend({
     update(field: string, value: any) {
       this.$emit(`update:${field}`, value);
     },
-    updateLocale(field: string, locale: string, value: any) {
-      this.$emit(`update:${field}`, { ...this.$props[field], [locale]: value });
+    updateLanguage(field: string, lang: string, value: any) {
+      this.$emit(`update:${field}`, { ...this.$props[field], [lang]: value });
     },
   },
 });

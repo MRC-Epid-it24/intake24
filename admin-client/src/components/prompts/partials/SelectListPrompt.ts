@@ -3,12 +3,12 @@ import { LocaleTranslation } from '@common/types/common';
 import { LocaleOptionList } from '@common/types/promptProps';
 import prompt from './Prompt';
 import PromptListOptions from './PromptListOptions.vue';
-import SelectLocale from './SelectLocale.vue';
+import LanguageSelector from './LanguageSelector.vue';
 
 export default Vue.extend({
   name: 'SelectListPrompt',
 
-  components: { PromptListOptions, SelectLocale },
+  components: { PromptListOptions, LanguageSelector },
 
   mixins: [prompt],
 
