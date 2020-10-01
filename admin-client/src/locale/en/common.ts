@@ -9,8 +9,9 @@ const common: LocaleMessage = {
   profile: 'Profile',
 
   admin: 'Admin',
+  local: 'Local settings',
   surveyMgmt: 'Surveys MGMT',
-  acl: 'ACL',
+  acl: 'Access Control',
 
   yes: 'Yes',
   true: 'Yes',

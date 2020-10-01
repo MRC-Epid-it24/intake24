@@ -21,6 +21,12 @@
         </v-list-item-group>
       </v-list>
       <menu-tree
+        v-if="can(['languages-list', 'locales-list'])"
+        icon="fas fa-fw fa-globe"
+        name="local"
+        :resources="resources.local"
+      ></menu-tree>
+      <menu-tree
         v-if="can(['schemes-list', 'surveys-list'])"
         icon="fas fa-fw fa-tools"
         name="surveyMgmt"

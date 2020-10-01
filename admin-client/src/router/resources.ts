@@ -5,9 +5,17 @@ const routes: string[] = ['create', 'detail', 'edit'];
 const resources: Resource[] = [
   // Admin
   {
-    group: 'surveyMgmt',
+    group: 'local',
+    name: 'languages',
+    icon: 'fas fa-language',
+    api: 'v3/admin/languages',
+    generateRoutes: true,
+    routes: [...routes],
+  },
+  {
+    group: 'local',
     name: 'locales',
-    icon: 'fas fa-globe',
+    icon: 'fas fa-map-marked-alt',
     api: 'v3/admin/locales',
     generateRoutes: true,
     routes: [...routes],
