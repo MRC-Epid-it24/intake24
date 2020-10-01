@@ -4,7 +4,7 @@ import { Pagination } from '../../models/pagination';
 
 export type LanguageRequest = {
   id: string;
-  name: string;
+  englishName: string;
   localName: string;
   countryFlagCode: string;
 };
