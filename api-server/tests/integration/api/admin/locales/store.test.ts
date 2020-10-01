@@ -6,7 +6,7 @@ import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.locale();
+    this.input = mocker.locale(this.data.language.id);
     this.output = { ...this.input };
 
     this.url = '/admin/locales';
@@ -100,7 +100,7 @@ export default function (): void {
         .post(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
-        .send({ ...mocker.locale(), id: this.input.id });
+        .send({ ...mocker.locale(this.data.language.id), id: this.input.id });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');

@@ -1,11 +1,12 @@
 import db from '@/db';
-import { Locale, Scheme, Survey, User, UserSurveyAlias, Role } from '@/db/models/system';
+import { Language, Locale, Scheme, Survey, User, UserSurveyAlias, Role } from '@/db/models/system';
 import userSvc from '@/services/user.service';
 import surveySvc from '@/services/survey.service';
 import { defaultMeals } from '@/db/models/system/scheme';
 import { setupPermissions } from './helpers';
 
 export type MockData = {
+  language: Language;
   locale: Locale;
   scheme: Scheme;
   survey: Survey;
@@ -15,12 +16,19 @@ export type MockData = {
 };
 
 export const prepare = async (): Promise<MockData> => {
+  const language = await Language.create({
+    id: 'en',
+    englishName: 'United Kingdom',
+    localName: 'United Kingdom',
+    countryFlagCode: 'gb',
+  });
+
   const locale = await Locale.create({
     id: 'en_GB',
     englishName: 'United Kingdom',
     localName: 'United Kingdom',
-    respondentLanguageId: 'en_GB',
-    adminLanguageId: 'en',
+    respondentLanguageId: language.id,
+    adminLanguageId: language.id,
     countryFlagCode: 'gb',
     prototypeLocaleId: null,
     textDirection: 'ltr',
@@ -63,7 +71,7 @@ export const prepare = async (): Promise<MockData> => {
     password: 'testRespondentPassword',
   });
 
-  return { locale, scheme, survey, role, user, respondent };
+  return { language, locale, scheme, survey, role, user, respondent };
 };
 
 export const cleanup = async (): Promise<void> => {

@@ -6,7 +6,7 @@ import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.locale();
+    this.input = mocker.locale(this.data.language.id);
     this.locale = await Locale.create(this.input);
 
     const baseUrl = '/admin/locales';

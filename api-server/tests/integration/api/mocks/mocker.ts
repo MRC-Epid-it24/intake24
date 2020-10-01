@@ -7,6 +7,7 @@ import { CreateSurveyRequest } from '@common/types/api/admin/surveys';
 import { CreateUserRequest } from '@common/types/api/admin/users';
 import { Meal } from '@common/types/meals';
 import { RecallQuestions } from '@common/types/recall';
+import { CreateLanguageRequest } from '@common/types/api/admin/languages';
 
 export const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
@@ -52,12 +53,26 @@ export const user = (): CreateUserRequest => {
   };
 };
 
-export const locale = (): CreateLocaleRequest => {
+export const language = (): CreateLanguageRequest => {
   const id = faker.address.countryCode();
   const englishName = faker.address.country();
   const localName = faker.address.country();
-  const respondentLanguageId = faker.address.countryCode();
-  const adminLanguageId = faker.address.countryCode();
+  const countryFlagCode = faker.address.countryCode();
+
+  return {
+    id,
+    englishName,
+    localName,
+    countryFlagCode,
+  };
+};
+
+export const locale = (languageId: string | undefined): CreateLocaleRequest => {
+  const id = faker.address.countryCode();
+  const englishName = faker.address.country();
+  const localName = faker.address.country();
+  const respondentLanguageId = languageId ?? faker.address.countryCode();
+  const adminLanguageId = languageId ?? faker.address.countryCode();
   const countryFlagCode = faker.address.countryCode();
   const prototypeLocaleId = null;
   const textDirection = 'ltr';
