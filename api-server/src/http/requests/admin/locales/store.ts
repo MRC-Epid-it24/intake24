@@ -1,5 +1,4 @@
 import { checkSchema } from 'express-validator';
-import slugify from 'slugify';
 import { Locale } from '@/db/models/system';
 import validate from '@/http/requests/validate';
 import unique from '@/http/rules/unique';
@@ -10,7 +9,7 @@ export default validate(
     ...defaults,
     id: {
       in: ['body'],
-      errorMessage: 'Locale ID must be unique string.',
+      errorMessage: 'Locale ID must be unique locale code.',
       isLocale: true,
       isEmpty: { negated: true },
       custom: {

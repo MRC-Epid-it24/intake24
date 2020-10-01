@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
-import { Locale } from '@/db/models/system';
+import { Language, Locale } from '@/db/models/system';
 import unique from '@/http/rules/unique';
 
 const defaults: Schema = {
@@ -35,13 +35,29 @@ const defaults: Schema = {
   },
   respondentLanguageId: {
     in: ['body'],
-    errorMessage: 'Enter valid locale code.',
-    isLocale: true,
+    errorMessage: 'Enter valid language id.',
+    isString: true,
+    isEmpty: { negated: true },
+    custom: {
+      options: async (value): Promise<void> => {
+        const language = await Language.findOne({ where: { id: value } });
+
+        return language ? Promise.resolve() : Promise.reject(new Error('Enter valid language id.'));
+      },
+    },
   },
   adminLanguageId: {
     in: ['body'],
-    errorMessage: 'Enter valid locale code.',
-    isLocale: true,
+    errorMessage: 'Enter valid language id.',
+    isString: true,
+    isEmpty: { negated: true },
+    custom: {
+      options: async (value): Promise<void> => {
+        const language = await Language.findOne({ where: { id: value } });
+
+        return language ? Promise.resolve() : Promise.reject(new Error('Enter valid language id.'));
+      },
+    },
   },
   countryFlagCode: {
     in: ['body'],
