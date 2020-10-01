@@ -12,13 +12,8 @@ import {
 } from '@common/types/api/admin/locales';
 
 const refs = async (localeId: string | undefined = undefined): Promise<LocaleEntryRefs> => {
-  const languages = await Language.findAll({
-    attributes: ['id', 'englishName', 'localName', 'countryFlagCode'],
-  });
-  const locales = await Locale.findAll({
-    attributes: ['id', 'englishName', 'localName', 'countryFlagCode'],
-    where: localeId ? { id: { [Op.ne]: localeId } } : {},
-  });
+  const languages = await Language.findAll();
+  const locales = await Locale.findAll({ where: localeId ? { id: { [Op.ne]: localeId } } : {} });
 
   return { languages, locales };
 };

@@ -1,6 +1,6 @@
 import { Meal } from '../../meals';
 import { RecallQuestions } from '../../recall';
-import { Scheme } from '../../models/system';
+import { Language, Scheme } from '../../models/system';
 import { Pagination } from '../../models/pagination';
 
 export type SchemeRequest = {
@@ -17,11 +17,14 @@ export type UpdateSchemeRequest = Omit<SchemeRequest, 'id'>;
 
 export type SchemeListResponse = Pagination<Scheme>;
 
+export type SchemeEntryRefs = {
+  languages: Language[];
+  meals: Meal[];
+};
+
 export type SchemeEntryResponse = {
   data: Scheme;
-  refs: {
-    meals: Meal[];
-  };
+  refs: SchemeEntryRefs;
 };
 
 export type SchemeCreateResponse = Pick<SchemeEntryResponse, 'refs'>;

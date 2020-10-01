@@ -1,13 +1,21 @@
 import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
-import Scheme, { defaultMeals as meals } from '@/db/models/system/scheme';
+import { Language, Scheme } from '@/db/models/system';
+import { defaultMeals as meals } from '@/db/models/system/scheme';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import {
   SchemeCreateResponse,
+  SchemeEntryRefs,
   SchemeEntryResponse,
   SchemeListResponse,
   SchemeStoreResponse,
 } from '@common/types/api/admin/schemes';
+
+const refs = async (): Promise<SchemeEntryRefs> => {
+  const languages = await Language.findAll();
+
+  return { languages, meals };
+};
 
 const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { schemeId } = req.params;
@@ -18,7 +26,7 @@ const entry = async (req: Request, res: Response, next: NextFunction): Promise<v
     return;
   }
 
-  res.json({ data: scheme, refs: { meals } });
+  res.json({ data: scheme, refs: await refs() });
 };
 
 export default {
@@ -29,7 +37,7 @@ export default {
   },
 
   async create(req: Request, res: Response<SchemeCreateResponse>): Promise<void> {
-    res.json({ refs: { meals } });
+    res.json({ refs: await refs() });
   },
 
   async store(req: Request, res: Response<SchemeStoreResponse>): Promise<void> {
@@ -67,7 +75,7 @@ export default {
 
     await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals']));
 
-    res.json({ data: scheme, refs: { meals } });
+    res.json({ data: scheme, refs: await refs() });
   },
 
   async delete(req: Request, res: Response<undefined>, next: NextFunction): Promise<void> {

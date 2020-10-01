@@ -19,8 +19,8 @@ export type UpdateLocaleRequest = Omit<LocaleRequest, 'id'>;
 export type LocaleListResponse = Pagination<Locale>;
 
 export type LocaleEntryRefs = {
-  languages: Pick<Language, 'id' | 'englishName' | 'localName' | 'countryFlagCode'>[];
-  locales: Pick<Locale, 'id' | 'englishName' | 'localName' | 'countryFlagCode'>[];
+  languages: Language[];
+  locales: Locale[];
 };
 
 export type LocaleEntryResponse = {
