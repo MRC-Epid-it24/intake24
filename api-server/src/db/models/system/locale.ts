@@ -1,7 +1,7 @@
 import { Column, HasMany, Scopes, Table, BelongsTo } from 'sequelize-typescript';
 import { Locale as LocaleAttributes } from '@common/types/models/system';
 import BaseModel from '../model';
-import Survey from './survey';
+import { Survey } from '.';
 
 @Scopes(() => ({
   surveys: { include: [{ model: Survey }] },

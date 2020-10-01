@@ -7,8 +7,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import Role from './role';
-import User from './user';
+import { Role, User } from '.';
 
 @Table({
   modelName: 'RoleUser',

@@ -11,7 +11,7 @@ import { Scheme as SchemeAttributes, SchemeType } from '@common/types/models/sys
 import { Meal } from '@common/types/meals';
 import { RecallQuestions } from '@common/types/recall';
 import BaseModel from '../model';
-import Survey from './survey';
+import { Survey } from '.';
 
 // TODO: move this to DB-managed list / localizations
 export const defaultMeals: Meal[] = [

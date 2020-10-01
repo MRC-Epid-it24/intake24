@@ -12,11 +12,9 @@ import {
 import BaseModel from '@/db/models/model';
 import config from '@/config/acl';
 import { Permission as PermissionAttributes } from '@common/types/models/system';
-import PermissionRole from './permission-role';
-import PermissionUser from './permission-user';
-import Role from './role';
-import User from './user';
+import { PermissionRole, PermissionUser, Role, User } from '.';
 
+// eslint-disable-next-line no-use-before-define
 export const addPermissionsToAdmin = async (permissions: Permission[]): Promise<void> => {
   const admin = await Role.findOne({ where: { name: config.roles.superuser } });
   if (admin) await admin.$add('permissions', permissions);

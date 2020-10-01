@@ -9,10 +9,7 @@ import {
 } from 'sequelize-typescript';
 import BaseModel from '@/db/models/model';
 import { Role as RoleAttributes } from '@common/types/models/system';
-import Permission from './permission';
-import PermissionRole from './permission-role';
-import RoleUser from './role-user';
-import User from './user';
+import { Permission, PermissionRole, RoleUser, User } from '.';
 
 @Scopes(() => ({
   list: { attributes: ['id', 'name', 'displayName'] },
