@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import passport from 'passport';
+import languages from './languages';
 import locales from './locales';
 import permissions from './permissions';
 import profile from './profile';
@@ -13,6 +14,7 @@ const router = Router();
 router.use(passport.authenticate('admin', { session: false }));
 
 router.use('/profile', profile);
+router.use('/languages', languages);
 router.use('/locales', locales);
 router.use('/permissions', permissions);
 router.use('/roles', roles);

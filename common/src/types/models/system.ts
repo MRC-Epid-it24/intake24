@@ -1,6 +1,13 @@
 import { Meal } from '../meals';
 import { RecallQuestions } from '../recall';
 
+export type Language = {
+  id: string;
+  englishName: string;
+  localName: string;
+  countryFlagCode: string;
+};
+
 export type Locale = {
   id: string;
   englishName: string;
@@ -13,7 +20,6 @@ export type Locale = {
 };
 
 export enum SchemeTypes {
-  LEGACY = 'legacy',
   DATA_DRIVEN = 'data-driven',
 }
 
