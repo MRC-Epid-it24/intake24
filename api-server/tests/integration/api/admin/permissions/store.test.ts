@@ -7,7 +7,7 @@ import * as mocker from '../../mocks/mocker';
 export default function (): void {
   before(async function () {
     this.input = mocker.permission();
-    this.url = '/admin/permissions';
+    this.url = '/api/admin/permissions';
   });
 
   it('should return 401 when no / invalid token', async function () {

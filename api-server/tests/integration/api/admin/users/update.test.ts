@@ -21,7 +21,7 @@ export default function (): void {
 
     this.user = await userSvc.create(this.input);
 
-    const baseUrl = '/admin/users';
+    const baseUrl = '/api/admin/users';
     this.url = `${baseUrl}/${this.user.id}`;
     this.invalidUrl = `${baseUrl}/999999`;
   });

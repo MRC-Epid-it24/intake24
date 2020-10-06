@@ -4,7 +4,7 @@ import { setPermission } from '../../mocks/helpers';
 
 export default function (): void {
   before(async function () {
-    this.url = '/admin/surveys';
+    this.url = '/api/admin/surveys';
   });
 
   it('should return 401 when no / invalid token', async function () {

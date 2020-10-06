@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import request from 'supertest';
 
 export default (): void => {
-  const url = '/admin/profile';
+  const url = '/api/admin/profile';
 
   it('should return 401 when no / invalid token', async function () {
     const { status } = await request(this.app).get(url).set('Accept', 'application/json');

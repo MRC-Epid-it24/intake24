@@ -3,7 +3,7 @@ import request from 'supertest';
 import securityConfig from '@/config/security';
 
 export default (): void => {
-  const url = '/login/token';
+  const url = '/api/login/token';
 
   it('Missing token should return 401 with errors', async function () {
     const { status } = await request(this.app).post(url).set('Accept', 'application/json');

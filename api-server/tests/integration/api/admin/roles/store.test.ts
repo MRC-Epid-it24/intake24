@@ -9,7 +9,7 @@ export default function (): void {
     this.input = mocker.role();
     this.output = omit(this.input, 'permissions');
 
-    this.url = '/admin/roles';
+    this.url = '/api/admin/roles';
   });
 
   it('should return 401 when no / invalid token', async function () {

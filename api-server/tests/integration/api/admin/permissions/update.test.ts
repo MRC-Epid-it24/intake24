@@ -15,7 +15,7 @@ export default function (): void {
 
     this.permission = await Permission.create(this.input);
 
-    const baseUrl = '/admin/permissions';
+    const baseUrl = '/api/admin/permissions';
     this.url = `${baseUrl}/${this.permission.id}`;
     this.invalidUrl = `${baseUrl}/999999`;
   });

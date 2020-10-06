@@ -9,7 +9,7 @@ export default function (): void {
     this.input = mocker.locale(this.data.language.id);
     this.output = { ...this.input };
 
-    this.url = '/admin/locales';
+    this.url = '/api/admin/locales';
   });
 
   it('should return 401 when no / invalid token', async function () {

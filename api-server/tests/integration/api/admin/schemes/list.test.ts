@@ -4,7 +4,7 @@ import { setPermission } from '../../mocks/helpers';
 
 export default function (): void {
   before(async function () {
-    this.url = '/admin/schemes';
+    this.url = '/api/admin/schemes';
   });
 
   it('should return 401 when no / invalid token', async function () {

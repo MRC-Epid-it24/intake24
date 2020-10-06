@@ -11,7 +11,7 @@ export default function (): void {
     this.user = await userSvc.create(this.input);
     this.output = omit(this.input, ['password', 'passwordConfirm']);
 
-    const baseUrl = '/admin/users';
+    const baseUrl = '/api/admin/users';
     this.url = `${baseUrl}/${this.user.id}`;
     this.invalidUrl = `${baseUrl}/999999`;
   });

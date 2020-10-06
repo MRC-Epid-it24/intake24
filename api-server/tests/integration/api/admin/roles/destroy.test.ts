@@ -9,7 +9,7 @@ export default function (): void {
     this.input = mocker.role();
     this.role = await Role.create(this.input);
 
-    const baseUrl = '/admin/roles';
+    const baseUrl = '/api/admin/roles';
     this.url = `${baseUrl}/${this.role.id}`;
     this.invalidUrl = `${baseUrl}/999999`;
   });

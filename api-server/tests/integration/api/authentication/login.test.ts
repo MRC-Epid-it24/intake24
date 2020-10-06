@@ -3,7 +3,7 @@ import request from 'supertest';
 import securityConfig from '@/config/security';
 
 export default (): void => {
-  const url = '/login';
+  const url = '/api/login';
 
   it('Missing credentials should return 422 with errors', async function () {
     const { status, body } = await request(this.app).post(url).set('Accept', 'application/json');

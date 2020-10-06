@@ -18,7 +18,7 @@ export default function (): void {
     this.input = mocker.survey();
     this.survey = await refreshSurveyRecord(this.input);
 
-    const baseUrl = '/admin/surveys';
+    const baseUrl = '/api/admin/surveys';
     this.url = `${baseUrl}/${this.survey.id}`;
     this.invalidUrl = `${baseUrl}/999999`;
   });

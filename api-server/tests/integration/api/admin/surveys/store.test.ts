@@ -9,7 +9,7 @@ export default function (): void {
     this.input = mocker.survey();
     this.output = { ...this.input };
 
-    this.url = '/admin/surveys';
+    this.url = '/api/admin/surveys';
   });
 
   it('should return 401 when no / invalid token', async function () {

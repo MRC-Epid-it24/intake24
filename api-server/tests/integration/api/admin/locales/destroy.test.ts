@@ -9,7 +9,7 @@ export default function (): void {
     this.input = mocker.locale(this.data.language.id);
     this.locale = await Locale.create(this.input);
 
-    const baseUrl = '/admin/locales';
+    const baseUrl = '/api/admin/locales';
     this.url = `${baseUrl}/${this.locale.id}`;
     this.invalidUrl = `${baseUrl}/999999`;
   });

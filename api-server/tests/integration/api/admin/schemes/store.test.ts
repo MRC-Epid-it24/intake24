@@ -9,7 +9,7 @@ export default function (): void {
     this.input = mocker.scheme();
     this.output = { ...this.input };
 
-    this.url = '/admin/schemes';
+    this.url = '/api/admin/schemes';
   });
 
   it('should return 401 when no / invalid token', async function () {

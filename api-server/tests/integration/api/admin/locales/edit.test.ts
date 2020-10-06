@@ -11,7 +11,7 @@ export default function (): void {
     this.locale = await Locale.create(this.input);
     this.output = { ...this.input };
 
-    const baseUrl = '/admin/locales';
+    const baseUrl = '/api/admin/locales';
     this.url = `${baseUrl}/${this.locale.id}/edit`;
     this.invalidUrl = `${baseUrl}/999999/edit`;
   });

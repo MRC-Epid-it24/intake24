@@ -11,7 +11,7 @@ export default function (): void {
     this.scheme = await Scheme.create(this.input);
     this.output = { ...this.input };
 
-    const baseUrl = '/admin/schemes';
+    const baseUrl = '/api/admin/schemes';
     this.url = `${baseUrl}/${this.scheme.id}/edit`;
     this.invalidUrl = `${baseUrl}/999999/edit`;
   });
