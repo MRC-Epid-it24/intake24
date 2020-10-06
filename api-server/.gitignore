@@ -1,6 +1,7 @@
 /dist
 /dist-tests
 /node_modules
+/public
 
 # Local env files
 .env*
