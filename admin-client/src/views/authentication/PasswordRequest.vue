@@ -113,7 +113,7 @@ export default (Vue as VueConstructor<Vue & RecaptchaRef>).extend({
 
     async sendRequest() {
       try {
-        await this.form.post('v3/password', { withErr: true });
+        await this.form.post('password', { withErr: true });
         this.submitted = true;
       } catch (err) {
         if (this.form.errors.has('recaptcha')) {

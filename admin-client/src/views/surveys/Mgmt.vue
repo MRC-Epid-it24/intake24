@@ -1,6 +1,6 @@
 <template>
   <layout :id="id" :entry="entry" v-if="entryLoaded">
-    <user-list-table :headers="headers" :api="`v3/admin/surveys/${id}/mgmt`" ref="table">
+    <user-list-table :headers="headers" :api="`admin/surveys/${id}/mgmt`" ref="table">
       <template v-slot:header-add>
         <v-dialog v-model="dialog" persistent max-width="600px">
           <template v-slot:activator="{ on }">
@@ -187,7 +187,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
       try {
         const {
           data: { data, permissions },
-        } = await this.$http.get(`v3/admin/surveys/${this.id}/mgmt/available`);
+        } = await this.$http.get(`admin/surveys/${this.id}/mgmt/available`);
         this.options.users = data;
         this.options.permissions = permissions;
       } catch {
@@ -198,7 +198,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
     },
 
     async save() {
-      await this.form.put(`v3/admin/surveys/${this.id}/mgmt/${this.form.id}`);
+      await this.form.put(`admin/surveys/${this.id}/mgmt/${this.form.id}`);
       // this.$toasted.success(this.$t('common.msg.updated', { name }) as string);
 
       this.$refs.table.fetch();

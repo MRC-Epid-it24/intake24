@@ -2,7 +2,7 @@
   <layout :id="id" :entry="entry" v-if="entryLoaded">
     <user-list-table
       :headers="headers"
-      :api="`v3/admin/surveys/${id}/respondents`"
+      :api="`admin/surveys/${id}/respondents`"
       ref="table"
       track-by="userId"
     >
@@ -204,13 +204,13 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       if (this.form.userId) {
         const {
           data: { userName: name },
-        } = await this.form.put(`v3/admin/surveys/${this.id}/respondents/${this.form.userId}`);
+        } = await this.form.put(`admin/surveys/${this.id}/respondents/${this.form.userId}`);
 
         this.$toasted.success(this.$t('common.msg.updated', { name }) as string);
       } else {
         const {
           data: { userName: name },
-        } = await this.form.post(`v3/admin/surveys/${this.id}/respondents`);
+        } = await this.form.post(`admin/surveys/${this.id}/respondents`);
 
         this.$toasted.success(this.$t('common.msg.stored', { name }) as string);
       }
@@ -222,7 +222,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
     async remove({ userName: name, userId }: AnyDictionary) {
       if (!confirm(this.$t('common.action.confirm.delete', { name }) as string)) return;
 
-      await this.$http.delete(`v3/admin/surveys/${this.id}/respondents/${userId}`);
+      await this.$http.delete(`admin/surveys/${this.id}/respondents/${userId}`);
       this.$toasted.success(this.$t('common.msg.deleted', { name }) as string);
 
       this.$refs.table.fetch();

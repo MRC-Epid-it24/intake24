@@ -53,7 +53,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       if (this.isEdit) {
-        const { data } = await this.form.put(`v3/admin/${this.apiUrl}/${this.id}`);
+        const { data } = await this.form.put(`admin/${this.apiUrl}/${this.id}`);
         this.toForm(data);
 
         const { id, name } = data;
@@ -61,7 +61,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       } else {
         const {
           data: { id, name },
-        } = await this.form.post(`v3/admin/${this.apiUrl}`);
+        } = await this.form.post(`admin/${this.apiUrl}`);
         this.$router.push({ name: `${this.module}-edit`, params: { id } });
 
         this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }) as string);

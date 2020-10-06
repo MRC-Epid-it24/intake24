@@ -19,7 +19,7 @@ export default {
   async login(request: LoginRequest): Promise<AuthResponseOrMfaChallenge> {
     const {
       data: { accessToken, mfa },
-    } = await http.post<AuthResponseOrMfaChallenge>('v3/login', request);
+    } = await http.post<AuthResponseOrMfaChallenge>('login', request);
 
     if (accessToken) tokenSvc.saveAccessToken(accessToken);
     return { accessToken, mfa };
@@ -34,7 +34,7 @@ export default {
   async verify(sigResponse: string): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('v3/login/verify', { sigResponse });
+    } = await http.post<AuthResponse>('login/verify', { sigResponse });
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
@@ -52,7 +52,7 @@ export default {
   async refresh(): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('v3/refresh');
+    } = await http.post<AuthResponse>('refresh');
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
@@ -64,7 +64,7 @@ export default {
    * @returns {Promise<void>}
    */
   async logout(): Promise<void> {
-    await http.post('v3/logout');
+    await http.post('logout');
     tokenSvc.clearTokens();
   },
 };

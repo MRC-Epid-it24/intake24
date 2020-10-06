@@ -9,7 +9,7 @@ const actions: ActionTree<EntryState, RootState> = {
     commit('loading/add', `${name}/entry`, { root: true });
 
     try {
-      let url = `v3/admin/${name}/${id}`;
+      let url = `admin/${name}/${id}`;
       if (path) url += `/${path}`;
 
       const res = await http.get(url, { params: query });

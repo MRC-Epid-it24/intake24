@@ -1,5 +1,5 @@
 <template>
-  <data-table :headers="headers" api="v3/admin/users"></data-table>
+  <data-table :headers="headers" api="admin/users"></data-table>
 </template>
 
 <script lang="ts">

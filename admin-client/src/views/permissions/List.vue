@@ -1,5 +1,5 @@
 <template>
-  <data-table :headers="headers" api="v3/admin/permissions">
+  <data-table :headers="headers" api="admin/permissions">
     <template v-slot:item.createdAt="{ item }">
       {{ new Date(item.createdAt).toLocaleString() }}
     </template>

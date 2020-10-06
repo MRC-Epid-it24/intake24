@@ -101,7 +101,7 @@ export default Vue.extend({
 
   methods: {
     async onSubmit() {
-      await this.form.post('v3/password/reset');
+      await this.form.post('password/reset');
       this.$toasted.success(this.$t('users.password.changed') as string);
       this.$router.push({ name: 'login' });
     },

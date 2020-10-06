@@ -19,7 +19,7 @@ const actions: ActionTree<UserState, RootState> = {
       commit('loading/add', 'profile', { root: true });
 
       http
-        .get('v3/admin/profile')
+        .get('admin/profile')
         .then((res) => {
           commit('success', res.data);
           resolve(res);
