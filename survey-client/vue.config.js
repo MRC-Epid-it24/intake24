@@ -14,19 +14,9 @@ module.exports = {
   devServer: {
     port: 8200,
     proxy: {
-      '/v1': {
-        target: 'http://localhost:8001',
-        changeOrigin: true,
-        pathRewrite: { '^/v1': '' },
-      },
-      '/v2': {
-        target: 'http://localhost:8001',
-        changeOrigin: true,
-      },
-      '/v3': {
+      '/api': {
         target: 'http://localhost:3100',
         changeOrigin: true,
-        pathRewrite: { '^/v3': '' },
       },
     },
   },

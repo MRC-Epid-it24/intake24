@@ -75,12 +75,9 @@ const httpClient: HttpClient = {
   mountBearerInterceptor() {
     this.axios.interceptors.request.use((request) => {
       const accessToken = tokenSvc.getAccessToken();
-      if (!accessToken) return request;
 
       // eslint-disable-next-line no-param-reassign
-      if (request.url?.includes('v3')) request.headers.Authorization = `Bearer ${accessToken}`;
-      // eslint-disable-next-line no-param-reassign
-      else request.headers['X-Auth-Token'] = accessToken;
+      if (accessToken) request.headers.Authorization = `Bearer ${accessToken}`;
 
       return request;
     });
