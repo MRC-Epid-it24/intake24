@@ -1,9 +1,10 @@
 import path from 'path';
 import { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
-import config from '@/config/app';
+import config from '@/config';
 
-const silent = config.env === 'test';
+const silent = config.app.env === 'test';
+const dirname = path.resolve(config.filesystem.local.logs);
 
 const logFormat = format.printf(
   ({ level, message, timestamp }) => `${timestamp} ${level}: ${message}`
@@ -20,7 +21,7 @@ const logger = createLogger({
   silent,
   transports: [
     new transports.DailyRotateFile({
-      dirname: path.resolve('storage/logs'),
+      dirname,
       filename: 'application-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
       zippedArchive: true,
@@ -29,7 +30,7 @@ const logger = createLogger({
     }),
     new transports.DailyRotateFile({
       level: 'error',
-      dirname: path.resolve('storage/logs'),
+      dirname,
       filename: 'error-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
       zippedArchive: true,
