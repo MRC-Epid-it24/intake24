@@ -15,7 +15,7 @@ export default {
   async login(request: LoginRequest): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('api/login/alias', request);
+    } = await http.post<AuthResponse>('login/alias', request);
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
@@ -33,14 +33,14 @@ export default {
   async refresh(): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('api/refresh');
+    } = await http.post<AuthResponse>('refresh');
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
   },
 
   async logout(): Promise<void> {
-    await http.post('api/logout');
+    await http.post('logout');
     tokenSvc.clearTokens();
   },
 };
