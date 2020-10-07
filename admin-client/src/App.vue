@@ -145,7 +145,7 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
     },
 
     async onLogout() {
-      await this.$store.dispatch('auth/logout');
+      await this.$store.dispatch('auth/logout', { invalidate: true });
       await this.$router.push({ name: 'login' });
     },
   },
