@@ -53,7 +53,7 @@ export const radioListPromptProps: RadioListPromptProps = {
   text: { en: null },
   description: { en: null },
   label: { en: null },
-  options: [],
+  options: { en: [] },
   orientation: 'column',
   other: false,
   validation: {

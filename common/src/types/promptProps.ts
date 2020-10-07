@@ -35,7 +35,7 @@ export type RadioOrientation = 'column' | 'row';
 
 export interface RadioListPromptProps extends ValidatedPromptProps {
   label: LocaleTranslation;
-  options: ListOption[];
+  options: LocaleOptionList;
   orientation: RadioOrientation;
   other: boolean;
 }
@@ -46,13 +46,6 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
   other: boolean;
 }
 
-export interface PromptQuestion<T = AnyDictionary> {
-  id: string;
-  name: string;
-  component: ComponentType;
-  props: T;
-}
-
 export type ComponentType =
   | 'info-prompt'
   | 'date-picker-prompt'
@@ -61,3 +54,10 @@ export type ComponentType =
   | 'radio-list-prompt'
   | 'textarea-prompt'
   | 'submit-prompt';
+
+export interface PromptQuestion<T = AnyDictionary> {
+  id: string;
+  name: string;
+  component: ComponentType;
+  props: T;
+}
