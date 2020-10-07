@@ -25,7 +25,7 @@ Login with email / password
 ### Request
 
 ```http
-POST /login
+POST /api/login
 
 Content-Type: application/json
 
@@ -69,7 +69,7 @@ Login with username / password
 ### Request
 
 ```http
-POST /login/alias
+POST /api/login/alias
 
 Content-Type: application/json
 
@@ -97,7 +97,7 @@ Login with token
 ### Request
 
 ```http
-POST /login/token
+POST /api/login/token
 
 Content-Type: application/json
 
@@ -123,7 +123,7 @@ Verify multi-factor authentication challenge
 ### Request
 
 ```http
-POST /login/verify
+POST /api/login/verify
 
 Content-Type: application/json
 
@@ -151,7 +151,7 @@ API server expects `refresh token` sent as cookie. Cookie name can differ based 
 ### Request
 
 ```http
-POST /refresh
+POST /api/refresh
 
 Content-Type: application/json
 
@@ -175,7 +175,7 @@ Clears `http-only` cookie which stores `refresh token` and revokes `refresh toke
 ### Request
 
 ```http
-POST /logout
+POST /api/logout
 
 Content-Type: application/json
 ```

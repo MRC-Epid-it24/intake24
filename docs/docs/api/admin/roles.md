@@ -7,7 +7,7 @@ Get role list
 ### Request
 
 ```http
-GET /admin/roles
+GET /api/admin/roles
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -34,7 +34,7 @@ Create new role entry
 ### Request
 
 ```http
-POST /admin/roles
+POST /api/admin/roles
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -64,7 +64,7 @@ Get role entry
 ### Request
 
 ```http
-GET /admin/roles/:roleId
+GET /api/admin/roles/:roleId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -90,7 +90,7 @@ Update role entry
 ### Request
 
 ```http
-PUT /admin/roles/:roleId
+PUT /api/admin/roles/:roleId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -123,7 +123,7 @@ Delete role entry
 ### Request
 
 ```http
-DELETE /admin/roles/:roleId
+DELETE /api/admin/roles/:roleId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

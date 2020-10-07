@@ -334,7 +334,7 @@ Refresh token is stored in `http-only` cookie in client's browser. There are sev
 * object-path: `jwt.cookie.path`
 * dotenv var: `JWT_COOKIE_PATH`
 * type: `string`
-* default: `'/refresh'`
+* default: `'/api/refresh'`
 
 #### Cookie sameSite
 

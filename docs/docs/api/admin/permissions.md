@@ -7,7 +7,7 @@ Get permission list
 ### Request
 
 ```http
-GET /admin/permissions
+GET /api/admin/permissions
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -34,7 +34,7 @@ Create new permission entry
 ### Request
 
 ```http
-POST /admin/permissions
+POST /api/admin/permissions
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -63,7 +63,7 @@ Get permission entry
 ### Request
 
 ```http
-GET /admin/permissions/:permissionId
+GET /api/admin/permissions/:permissionId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -87,7 +87,7 @@ Update permission entry
 ### Request
 
 ```http
-PUT /admin/permissions/:permissionId
+PUT /api/admin/permissions/:permissionId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -117,7 +117,7 @@ Delete permission entry
 ### Request
 
 ```http
-DELETE /admin/permissions/:permissionId
+DELETE /api/admin/permissions/:permissionId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

@@ -7,7 +7,7 @@ Get user list
 ### Request
 
 ```http
-GET /admin/users
+GET /api/admin/users
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -34,7 +34,7 @@ Create new user entry
 ### Request
 
 ```http
-POST /admin/users
+POST /api/admin/users
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -70,7 +70,7 @@ Get user entry
 ### Request
 
 ```http
-GET /admin/users/:userId
+GET /api/admin/users/:userId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -97,7 +97,7 @@ Update user entry
 ### Request
 
 ```http
-PUT /admin/users/:userId
+PUT /api/admin/users/:userId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -135,7 +135,7 @@ Delete user entry
 ### Request
 
 ```http
-DELETE /admin/users/:userId
+DELETE /api/admin/users/:userId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

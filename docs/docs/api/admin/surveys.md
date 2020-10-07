@@ -7,7 +7,7 @@ Get survey list
 ### Request
 
 ```http
-GET /admin/surveys
+GET /api/admin/surveys
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -34,7 +34,7 @@ Create new survey entry
 ### Request
 
 ```http
-POST /admin/surveys
+POST /api/admin/surveys
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -78,7 +78,7 @@ Get survey entry
 ### Request url
 
 ```http
-GET /admin/surveys/:surveyId
+GET /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -102,7 +102,7 @@ Update survey entry
 ### Request url
 
 ```http
-PUT /admin/surveys/:surveyId
+PUT /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -146,7 +146,7 @@ Delete survey entry
 ### Request
 
 ```http
-DELETE /admin/surveys/:surveyId
+DELETE /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -169,7 +169,7 @@ This includes users with `{surveyId}/staff` and `{surveyId}/support` roles.
 ### Request
 
 ```http
-GET /admin/surveys/:surveyId/mgmt
+GET /api/admin/surveys/:surveyId/mgmt
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -200,7 +200,7 @@ User has to have system account and no `{surveyId}/staff` or `{surveyId}/support
 ### Request
 
 ```http
-GET /admin/surveys/:surveyId/mgmt/available
+GET /api/admin/surveys/:surveyId/mgmt/available
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -226,7 +226,7 @@ Assign list of survey management roles to specified user
 ### Request
 
 ```http
-PUT /admin/surveys/:surveyId/mgmt/:userId
+PUT /api/admin/surveys/:surveyId/mgmt/:userId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -253,7 +253,7 @@ This includes users with `{surveyId}/respondent` role.
 ### Request
 
 ```http
-GET /admin/surveys/:surveyId/respondents
+GET /api/admin/surveys/:surveyId/respondents
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -280,7 +280,7 @@ Create new survey respondent
 ### Request
 
 ```http
-POST /admin/surveys/:surveyId/respondents
+POST /api/admin/surveys/:surveyId/respondents
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -312,7 +312,7 @@ Update survey respondent
 ### Request
 
 ```http
-PUT /admin/surveys/:surveyId/respondents/:userId
+PUT /api/admin/surveys/:surveyId/respondents/:userId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -344,7 +344,7 @@ Delete respondent
 ### Request
 
 ```http
-DELETE /admin/surveys/:surveyId/respondents/:userId
+DELETE /api/admin/surveys/:surveyId/respondents/:userId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

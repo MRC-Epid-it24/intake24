@@ -7,7 +7,7 @@ Get scheme list
 ### Request
 
 ```http
-GET /admin/schemes
+GET /api/admin/schemes
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -34,7 +34,7 @@ Create new scheme entry
 ### Request
 
 ```http
-POST /admin/schemes
+POST /api/admin/schemes
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -65,7 +65,7 @@ Get scheme entry
 ### Request
 
 ```http
-GET /admin/schemes/:schemeId
+GET /api/admin/schemes/:schemeId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -89,7 +89,7 @@ Update scheme entry
 ### Request
 
 ```http
-PUT /admin/schemes/:schemeId
+PUT /api/admin/schemes/:schemeId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -120,7 +120,7 @@ Delete scheme entry
 ### Request
 
 ```http
-DELETE /admin/schemes/:schemeId
+DELETE /api/admin/schemes/:schemeId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
