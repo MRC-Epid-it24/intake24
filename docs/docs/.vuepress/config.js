@@ -1,6 +1,12 @@
+require('dotenv').config();
 const { description } = require('../../package')
 
 module.exports = {
+
+  base: process.env.BASE_URL || '/',
+
+  dest: process.env.OUTPUT_DIR || 'dist',
+
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */

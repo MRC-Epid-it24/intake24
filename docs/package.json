@@ -21,5 +21,8 @@
     "@vuepress/plugin-back-to-top": "^1.5.4",
     "@vuepress/plugin-medium-zoom": "^1.5.4",
     "vuepress": "^1.5.4"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0"
   }
 }
