@@ -3,6 +3,7 @@
   remote_user: deploy
   become: true
   roles:
-    - app-init
-    - survey-site
-    - app-service
+    - role: app-init
+    - role: survey-site
+    - role: app-service
+      when: service.deploy | bool

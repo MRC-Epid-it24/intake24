@@ -1,4 +1,8 @@
 {
-  "service": "admin-site",
-  "env_file": "../instances/{{ instance }}/admin-site/.env"
+  "env_file": "../instances/{{ instance }}/admin-site/.env",
+  "service": {
+    "deploy": false,
+    "template": "admin-site",
+    "name": "admin-site"
+  }
 }

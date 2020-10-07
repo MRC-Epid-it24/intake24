@@ -4,5 +4,4 @@
   become: true
   roles:
     - role: app-init
-    - role: api-server
-    - role: app-service
+    - role: docs

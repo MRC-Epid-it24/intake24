@@ -3,7 +3,7 @@
 
 - name: Set full service name
   set_fact: 
-    service_name: '{{ app.user }}-{{ service }}'
+    service_name: '{{ app.user }}-{{ service.name }}'
 
 - name: Check if service is already running
   shell: systemctl is-active {{ service_name }}
@@ -18,7 +18,7 @@
 
 - name: Copy systemd service file
   template:
-    src: '{{ service }}.service.j2'
+    src: '{{ service.template }}.service.j2'
     dest: '/lib/systemd/system/{{ service_name }}.service'
     owner: root
     group: root
