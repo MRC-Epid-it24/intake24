@@ -5,7 +5,10 @@ declare module 'vue/types/vue' {
   interface Vue {
     $http: HttpClient;
 
-    // loadingMixin
+    // loading mixin
     isLoading: () => boolean;
+
+    // isMobile mixin
+    isMobile: () => boolean;
   }
 }

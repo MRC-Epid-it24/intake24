@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container :class="{ 'pa-0': isMobile }">
     <v-row justify-md="center" no-gutters>
       <v-col cols="12" md="10">
         <transition name="component-fade" mode="out-in">

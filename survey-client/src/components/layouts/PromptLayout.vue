@@ -1,9 +1,9 @@
 <template>
-  <v-card>
+  <v-card :flat="isMobile" :tile="isMobile">
     <slot name="header">
       <v-sheet class="pt-5 px-5">
-        <h3>{{ localeText }}</h3>
-        <p v-if="localeDescription" class="mb-0" v-html="localeDescription"></p>
+        <h3 class="my-3">{{ localeText }}</h3>
+        <p v-if="localeDescription" class="my-3" v-html="localeDescription"></p>
       </v-sheet>
     </slot>
     <slot></slot>
@@ -11,11 +11,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import { LocaleTranslation } from '@common/types/common';
+import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
 
-export default Vue.extend({
+export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
   name: 'PromptLayout',
+
+  mixins: [localeContent],
 
   props: {
     text: {
@@ -30,11 +33,11 @@ export default Vue.extend({
 
   computed: {
     localeText(): string {
-      return this.text[this.$i18n.locale];
+      return this.getLocaleContent(this.text);
     },
 
     localeDescription(): string | null {
-      return this.description[this.$i18n.locale];
+      return this.getLocaleContent(this.description);
     },
   },
 });

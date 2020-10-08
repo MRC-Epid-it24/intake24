@@ -1,20 +1,10 @@
 <template>
   <prompt-layout :text="text" :description="description">
-    <v-row justify="center">
+    <v-card-text>
       <v-form ref="form" @submit.prevent="onSubmit">
-        <v-card-actions class="mt-3">
-          <v-btn
-            color="success"
-            type="submit"
-            class="px-5"
-            :block="$vuetify.breakpoint.xsOnly"
-            x-large
-          >
-            {{ $t('recall.submit') }}
-          </v-btn>
-        </v-card-actions>
+        <submit></submit>
       </v-form>
-    </v-row>
+    </v-card-text>
   </prompt-layout>
 </template>
 
@@ -23,12 +13,13 @@ import Vue from 'vue';
 import merge from 'deepmerge';
 import { BasePromptProps } from '@common/types/promptProps';
 import { submitPromptProps } from '@common/prompts/promptDefaults';
+import Submit from '@/components/Submit.vue';
 import BasePrompt from './BasePrompt';
 
 export default Vue.extend({
   name: 'SubmitPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [BasePrompt, Submit],
 
   props: {
     props: {

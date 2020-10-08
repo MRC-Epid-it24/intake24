@@ -55,8 +55,8 @@
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { TranslateResult } from 'vue-i18n';
-import Loader from './components/Loader.vue';
-import pwaUpdate from './mixins/pwaUpdateMixin';
+import Loader from '@/components/Loader.vue';
+import pwaUpdate from '@/components/mixins/pwaUpdate';
 
 export interface AppComponent {
   sidebar: boolean;

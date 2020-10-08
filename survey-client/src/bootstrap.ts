@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Storage from 'vue-ls';
 import Toasted from 'vue-toasted';
 
-import loadingMixin from './mixins/loadingMixin';
+import isMobile from './mixins/isMobile';
+import loading from './mixins/loading';
 
 const options = { namespace: process.env.VUE_APP_PREFIX };
 Vue.use(Storage, options);
@@ -15,4 +16,5 @@ Vue.use(Toasted, {
   position: 'bottom-center',
 });
 
-Vue.mixin(loadingMixin);
+Vue.mixin(isMobile);
+Vue.mixin(loading);

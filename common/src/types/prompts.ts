@@ -1,11 +1,5 @@
 import { AnyDictionary } from './common';
 
-export interface PromptRefs {
-  $refs: {
-    form: HTMLFormElement;
-  };
-}
-
 export type ComponentType =
   | 'info-prompt'
   | 'date-picker-prompt'

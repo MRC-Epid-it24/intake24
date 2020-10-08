@@ -4,7 +4,7 @@
       <v-form ref="form" @submit.prevent="onSubmit">
         <v-date-picker
           v-model="currentValue"
-          :landscape="$vuetify.breakpoint.smAndUp"
+          :landscape="!isMobile"
           full-width
           @input="clearErrors"
         ></v-date-picker>
@@ -18,12 +18,11 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { PromptRefs } from '@common/types/prompts';
 import { DatePickerPromptProps } from '@common/types/promptProps';
 import { datePickerPromptProps } from '@common/prompts/promptDefaults';
-import BasePrompt from './BasePrompt';
+import BasePrompt, { Prompt } from './BasePrompt';
 
-export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
+export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'DatePickerPrompt',
 
   mixins: [BasePrompt],
@@ -60,7 +59,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
     onSubmit() {
       if (this.validation.required && !this.currentValue) {
         this.errors = [
-          this.validation.message[this.$i18n.locale] ??
+          this.getLocaleContent(this.validation.message) ??
             (this.$t('prompts.datepicker.validation.required') as string),
         ];
         return;

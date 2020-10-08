@@ -4,8 +4,8 @@
       <v-form ref="form" @submit.prevent="onSubmit">
         <v-textarea
           v-model="currentValue"
-          :hint="hint"
-          :label="label"
+          :hint="getLocaleContent(hint)"
+          :label="getLocaleContent(label)"
           :rules="rules"
           hide-details="auto"
           outlined
@@ -19,12 +19,11 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { PromptRefs } from '@common/types/prompts';
 import { TextareaPromptProps } from '@common/types/promptProps';
 import { textareaPromptProps } from '@common/prompts/promptDefaults';
-import BasePrompt from './BasePrompt';
+import BasePrompt, { Prompt } from './BasePrompt';
 
-export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
+export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'TextareaPrompt',
 
   mixins: [BasePrompt],
@@ -49,7 +48,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
         ? [
             (v: string | null) =>
               !!v ||
-              (props.validation.message[this.$i18n.locale] ??
+              (this.getLocaleContent(props.validation.message) ??
                 this.$t('prompts.textarea.validation.required')),
           ]
         : [],

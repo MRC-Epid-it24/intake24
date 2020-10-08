@@ -5,7 +5,7 @@
         <v-time-picker
           v-model="currentValue"
           format="24hr"
-          :landscape="$vuetify.breakpoint.smAndUp"
+          :landscape="!isMobile"
           full-width
           @input="clearErrors"
         ></v-time-picker>
@@ -19,12 +19,11 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { PromptRefs } from '@common/types/prompts';
 import { TimePickerPromptProps } from '@common/types/promptProps';
 import { timePickerPromptProps } from '@common/prompts/promptDefaults';
-import BasePrompt from './BasePrompt';
+import BasePrompt, { Prompt } from './BasePrompt';
 
-export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
+export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'TimePickerPrompt',
 
   mixins: [BasePrompt],
@@ -61,7 +60,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
     onSubmit() {
       if (this.validation.required && !this.currentValue) {
         this.errors = [
-          this.validation.message[this.$i18n.locale] ??
+          this.getLocaleContent(this.validation.message) ??
             (this.$t('prompts.timepicker.validation.required') as string),
         ];
         return;

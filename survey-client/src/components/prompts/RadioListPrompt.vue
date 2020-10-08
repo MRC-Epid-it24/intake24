@@ -5,14 +5,14 @@
         <v-radio-group
           v-model="selected"
           :error="hasErrors"
-          :label="label[$i18n.locale]"
+          :label="getLocaleContent(label)"
           hide-details="auto"
           :column="orientation === 'column'"
           :row="orientation === 'row'"
           @change="clearErrors"
         >
           <v-radio
-            v-for="option in options[$i18n.locale]"
+            v-for="option in getLocaleContent(options)"
             :key="option.value"
             :label="option.label"
             :value="option.value"
@@ -37,12 +37,11 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { PromptRefs } from '@common/types/prompts';
 import { RadioListPromptProps } from '@common/types/promptProps';
 import { radioListPromptProps } from '@common/prompts/promptDefaults';
-import BasePrompt from './BasePrompt';
+import BasePrompt, { Prompt } from './BasePrompt';
 
-export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
+export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'RadioListPrompt',
 
   mixins: [BasePrompt],
@@ -83,7 +82,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
     onSubmit() {
       if (this.validation.required && !this.currentValue) {
         this.errors = [
-          this.validation.message[this.$i18n.locale] ??
+          this.getLocaleContent(this.validation.message) ??
             (this.$t('prompts.radio.validation.required') as string),
         ];
         return;

@@ -2,10 +2,10 @@
   <prompt-layout :text="text" :description="description">
     <v-card-text>
       <v-form ref="form" @submit.prevent="onSubmit">
-        <v-label>{{ label }}</v-label>
+        <v-label>{{ getLocaleContent(label) }}</v-label>
         <v-checkbox
           v-model="selected"
-          v-for="option in options"
+          v-for="option in getLocaleContent(options)"
           :key="option.value"
           :error="hasErrors"
           :label="option.label"
@@ -34,12 +34,11 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { PromptRefs } from '@common/types/prompts';
 import { CheckboxListPromptProps } from '@common/types/promptProps';
 import { checkboxListPromptProps } from '@common/prompts/promptDefaults';
-import BasePrompt from './BasePrompt';
+import BasePrompt, { Prompt } from './BasePrompt';
 
-export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
+export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'CheckboxListPrompt',
 
   mixins: [BasePrompt],
@@ -87,7 +86,7 @@ export default (Vue as VueConstructor<Vue & PromptRefs>).extend({
     onSubmit() {
       if (this.validation.required && !this.currentValue.length) {
         this.errors = [
-          this.validation.message[this.$i18n.locale] ??
+          this.getLocaleContent(this.validation.message) ??
             (this.$t('prompts.checkbox.validation.required') as string),
         ];
         return;
