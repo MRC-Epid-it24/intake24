@@ -15,7 +15,7 @@ import {
 } from '@common/types/http/admin/surveys';
 
 const refs = async (): Promise<SurveyRefs> => {
-  const locales = await Locale.findAll({ attributes: ['id', 'englishName'] });
+  const locales = await Locale.findAll();
   const schemes = await Scheme.findAll({ attributes: ['id', 'name'] });
 
   return { locales, schemes };

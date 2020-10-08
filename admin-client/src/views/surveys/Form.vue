@@ -27,7 +27,16 @@
                 name="localeId"
                 outlined
                 @change="form.errors.clear('localeId')"
-              ></v-select>
+              >
+                <template v-slot:item="{ item }">
+                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  {{ item.englishName }}
+                </template>
+                <template v-slot:selection="{ item }">
+                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  {{ item.englishName }}
+                </template>
+              </v-select>
             </v-col>
             <v-col cols="12" md="6">
               <v-select
