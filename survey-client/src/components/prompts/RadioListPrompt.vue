@@ -28,6 +28,7 @@
             ></v-text-field>
           </v-row>
         </v-radio-group>
+        <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
         <continue></continue>
       </v-form>
     </v-card-text>
