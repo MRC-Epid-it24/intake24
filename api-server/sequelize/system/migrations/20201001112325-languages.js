@@ -23,6 +23,11 @@ module.exports = {
             allowNull: false,
             type: Sequelize.STRING(16),
           },
+          text_direction: {
+            allowNull: false,
+            defaultValue: 'ltr',
+            type: Sequelize.STRING(16),
+          },
           created_at: {
             allowNull: false,
             type: Sequelize.DATE,

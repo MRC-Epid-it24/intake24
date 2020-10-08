@@ -21,6 +21,10 @@
             {{ entry.countryFlagCode }}
           </td>
         </tr>
+        <tr>
+          <th>{{ $t('languages.textDirections._') }}</th>
+          <td>{{ entry.textDirection }}</td>
+        </tr>
       </tbody>
     </v-simple-table>
   </layout>

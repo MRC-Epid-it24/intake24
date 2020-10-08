@@ -130,7 +130,7 @@
                 v-model="form.textDirection"
                 :error-messages="form.errors.get('textDirection')"
                 :items="textDirections"
-                :label="$t('locales.textDirections._')"
+                :label="$t('languages.textDirections._')"
                 hide-details="auto"
                 name="textDirection"
                 outlined
@@ -173,14 +173,14 @@ export default (Vue as VueConstructor<Vue & FormMixin<Locale, LocaleRefs>>).exte
         countryFlagCode: null,
         textDirection: 'ltr',
       }),
-      textDirections: [
-        { value: 'ltr', text: this.$t('locales.textDirections.ltr') },
-        { value: 'rtl', text: this.$t('locales.textDirections.rtl') },
-      ],
       flags: orderBy(
         Object.entries(flags).map(([key, value]) => ({ value: key, text: value })),
         'text'
       ),
+      textDirections: [
+        { value: 'ltr', text: this.$t('languages.textDirections.ltr') },
+        { value: 'rtl', text: this.$t('languages.textDirections.rtl') },
+      ],
     };
   },
 

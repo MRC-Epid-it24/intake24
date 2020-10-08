@@ -38,6 +38,13 @@ const defaults: Schema = {
     errorMessage: 'Enter valid locale code.',
     isLocale: true,
   },
+  textDirection: {
+    in: ['body'],
+    errorMessage: `Enter 'ltr' ot 'rlt' values.`,
+    isString: true,
+    isEmpty: { negated: true },
+    isIn: { options: [['rtl', 'ltr']] },
+  },
 };
 
 export default defaults;

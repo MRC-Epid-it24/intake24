@@ -34,6 +34,12 @@ export default class Language extends BaseModel<Language> implements LanguageAtt
   })
   public countryFlagCode!: string;
 
+  @Column({
+    allowNull: false,
+    defaultValue: 'ltr',
+  })
+  public textDirection!: string;
+
   @CreatedAt
   @Column
   public readonly createdAt!: Date;

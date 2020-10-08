@@ -56,6 +56,19 @@
                 outlined
               ></v-text-field>
             </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.textDirection"
+                :error-messages="form.errors.get('textDirection')"
+                :items="textDirections"
+                :label="$t('languages.textDirections._')"
+                hide-details="auto"
+                name="textDirection"
+                outlined
+                @change="form.errors.clear('textDirection')"
+              >
+              </v-select>
+            </v-col>
           </v-row>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
@@ -84,11 +97,16 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         englishName: null,
         localName: null,
         countryFlagCode: 'en',
+        textDirection: 'ltr',
       }),
       flags: orderBy(
         Object.entries(flags).map(([key, value]) => ({ value: key, text: value })),
         'text'
       ),
+      textDirections: [
+        { value: 'ltr', text: this.$t('languages.textDirections.ltr') },
+        { value: 'rtl', text: this.$t('languages.textDirections.rtl') },
+      ],
     };
   },
 });

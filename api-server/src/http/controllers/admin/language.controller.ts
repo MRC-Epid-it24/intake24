@@ -41,7 +41,7 @@ export default {
 
   async store(req: Request, res: Response<StoreLanguageResponse>): Promise<void> {
     const scheme = await Language.create(
-      pick(req.body, ['id', 'englishName', 'localName', 'countryFlagCode'])
+      pick(req.body, ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection'])
     );
 
     res.status(201).json({ data: scheme });
@@ -64,7 +64,9 @@ export default {
       return;
     }
 
-    await language.update(pick(req.body, ['englishName', 'localName', 'countryFlagCode']));
+    await language.update(
+      pick(req.body, ['englishName', 'localName', 'countryFlagCode', 'textDirection'])
+    );
 
     res.json({ data: language, refs: {} });
   },

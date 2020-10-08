@@ -17,7 +17,7 @@ export default validate(
           const { surveyId } = (req as Request).params;
           const entry = await UserSurveyAlias.findOne({ where: { surveyId, userName: value } });
           return entry
-            ? Promise.reject(new Error('Current value is already in use.'))
+            ? Promise.reject(new Error('Current username is already in use within this study.'))
             : Promise.resolve();
         },
       },

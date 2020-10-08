@@ -14,6 +14,11 @@ const languages: LocaleMessage = {
   englishName: 'English name',
   localName: 'Local name',
   countryFlagCode: 'Country flag code',
+  textDirections: {
+    _: 'Text direction',
+    ltr: 'Left to right',
+    rtl: 'Right to left',
+  },
 };
 
 export default languages;

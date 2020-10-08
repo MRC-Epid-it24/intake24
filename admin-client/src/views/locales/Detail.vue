@@ -34,7 +34,7 @@
           </td>
         </tr>
         <tr>
-          <th>{{ $t('locales.textDirections._') }}</th>
+          <th>{{ $t('languages.textDirections._') }}</th>
           <td>{{ entry.textDirection }}</td>
         </tr>
       </tbody>
