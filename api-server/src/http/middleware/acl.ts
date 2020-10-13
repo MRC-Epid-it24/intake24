@@ -51,12 +51,3 @@ export const isSurveyRespondent = () => {
       : next(new ForbiddenError());
   };
 };
-
-// TODO: temp - to remove
-export const isSuperUser = () => {
-  return (req: Request, res: Response, next: NextFunction): void => {
-    return (req.user as User).hasRoleByName(config.roles.superuser)
-      ? next()
-      : next(new ForbiddenError());
-  };
-};

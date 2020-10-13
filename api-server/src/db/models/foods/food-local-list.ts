@@ -1,6 +1,6 @@
-import { BelongsTo, Column, HasOne, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, Table } from 'sequelize-typescript';
 import BaseModel from '@/db/models/model';
-import { Locale, FoodLocal } from '@/db/models/foods';
+import { FoodLocal, Locale } from '@/db/models/foods';
 
 @Table({
   timestamps: false,
@@ -24,6 +24,6 @@ export default class FoodLocalList extends BaseModel<FoodLocalList> {
   @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;
 
-  @HasOne(() => FoodLocal, { sourceKey: 'foodCode', foreignKey: 'foodCode' })
+  @BelongsTo(() => FoodLocal, 'foodCode')
   public foodLocal?: FoodLocal;
 }

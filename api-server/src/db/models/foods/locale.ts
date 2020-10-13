@@ -2,6 +2,9 @@ import { Column, HasMany, Table, BelongsTo } from 'sequelize-typescript';
 import BaseModel from '../model';
 
 @Table({
+  modelName: 'Locale',
+  tableName: 'locales',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })

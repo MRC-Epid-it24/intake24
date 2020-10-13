@@ -1,11 +1,11 @@
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import Food from './food';
-import Locale from './locale';
+import { Food, FoodLocalList, Locale } from '.';
 
 @Scopes(() => ({
   food: { include: [{ model: Food }] },
   locale: { include: [{ model: Locale }] },
+  localeLists: { include: [{ model: FoodLocalList }] },
 }))
 @Table({
   timestamps: false,
@@ -43,4 +43,7 @@ export default class FoodLocal extends BaseModel<FoodLocal> {
 
   @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;
+
+  @HasMany(() => FoodLocalList, 'foodCode')
+  public localeLists?: FoodLocalList[];
 }

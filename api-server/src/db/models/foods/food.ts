@@ -1,9 +1,10 @@
-import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { Column, DataType, HasOne, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import FoodAttribute from './food-attribute';
+import { FoodAttribute, FoodLocal } from '.';
 
 @Scopes(() => ({
-  attribues: { include: [{ model: FoodAttribute }] },
+  attributes: { include: [{ model: FoodAttribute }] },
+  localFoods: { include: [{ model: FoodLocal }] },
 }))
 @Table({
   timestamps: false,
@@ -27,6 +28,9 @@ export default class Food extends BaseModel<Food> {
   })
   public version!: string;
 
-  @HasMany(() => FoodAttribute, 'foodCode')
-  public attribues?: FoodAttribute[];
+  @HasOne(() => FoodAttribute, 'foodCode')
+  public attributes?: FoodAttribute[];
+
+  @HasMany(() => FoodLocal, 'foodCode')
+  public localFoods?: FoodLocal[];
 }
