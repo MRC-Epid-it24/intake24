@@ -12,13 +12,15 @@ export default async ({ app, env }: AppLoader): Promise<void> => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(express.static(fsConfig.local.public));
+  app.use(express.static(fsConfig.local.public, { index: false }));
 
-  app.use(morgan(env === 'production' ? 'combined' : 'dev', { stream }));
+  const isDev = env === 'development';
 
-  nunjucks.configure(path.resolve('resources/views'), {
+  app.use(morgan(isDev ? 'dev' : 'combined', { stream }));
+
+  nunjucks.configure([path.resolve('public'), path.resolve('resources/views')], {
     autoescape: true,
     express: app,
-    noCache: env === 'development',
+    noCache: isDev,
   });
 };

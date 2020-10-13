@@ -20,6 +20,7 @@ module.exports = {
       },
     },
   },
-  outputDir: process.env.SERVER_STATIC || 'dist',
+  outputDir: process.env.OUTPUT_DIR || 'dist',
+  publicPath: process.env.PUBLIC_PATH || '/',
   transpileDependencies: ['vuetify'],
 };
