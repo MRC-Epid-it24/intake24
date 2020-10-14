@@ -6,11 +6,10 @@ import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    const { id: langId } = this.data.language;
-    this.input = mocker.locale(langId, langId);
+    this.input = mocker.language();
     this.output = { ...this.input };
 
-    this.url = '/api/admin/locales';
+    this.url = '/api/admin/languages';
   });
 
   it('should return 401 when no / invalid token', async function () {
@@ -32,7 +31,7 @@ export default function (): void {
 
   describe('with correct permissions', function () {
     before(async function () {
-      await setPermission('locales-create');
+      await setPermission('languages-create');
     });
 
     it('should return 422 when missing input data', async function () {
@@ -47,8 +46,6 @@ export default function (): void {
         'id',
         'englishName',
         'localName',
-        'respondentLanguageId',
-        'adminLanguageId',
         'countryFlagCode',
         'textDirection'
       );
@@ -61,12 +58,9 @@ export default function (): void {
         .set('Authorization', this.bearer)
         .send({
           id: null,
-          englishName: [],
+          englishName: { key: 'name' },
           localName: ['dddsds', 'dffd'],
-          respondentLanguageId: 'nonLocaleString',
-          adminLanguageId: 5,
-          countryFlagCode: 5,
-          prototypeLocaleId: 'nonExistingLocale',
+          countryFlagCode: 10,
           textDirection: 'wrongDirection',
         });
 
@@ -76,10 +70,7 @@ export default function (): void {
         'id',
         'englishName',
         'localName',
-        'respondentLanguageId',
-        'adminLanguageId',
         'countryFlagCode',
-        'prototypeLocaleId',
         'textDirection'
       );
     });
@@ -97,13 +88,11 @@ export default function (): void {
     });
 
     it('should return 422 when duplicate id', async function () {
-      const { id: langId } = this.data.language;
-
       const { status, body } = await request(this.app)
         .post(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
-        .send({ ...mocker.locale(langId, langId), id: this.input.id });
+        .send({ ...mocker.language(), id: this.input.id });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');

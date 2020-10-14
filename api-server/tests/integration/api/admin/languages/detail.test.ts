@@ -1,20 +1,19 @@
 import { expect } from 'chai';
 import { pick } from 'lodash';
 import request from 'supertest';
-import { Locale } from '@/db/models/system';
+import { Language } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    const { id: langId } = this.data.language;
-    this.input = mocker.locale(langId, langId);
-    this.locale = await Locale.create(this.input);
+    this.input = mocker.language();
+    this.language = await Language.create(this.input);
     this.output = { ...this.input };
 
-    const baseUrl = '/api/admin/locales';
-    this.url = `${baseUrl}/${this.locale.id}/edit`;
-    this.invalidUrl = `${baseUrl}/999999/edit`;
+    const baseUrl = '/api/admin/languages';
+    this.url = `${baseUrl}/${this.language.id}`;
+    this.invalidUrl = `${baseUrl}/999999`;
   });
 
   it('should return 401 when no / invalid token', async function () {
@@ -36,7 +35,7 @@ export default function (): void {
 
   describe('with correct permissions', function () {
     before(async function () {
-      await setPermission('locales-edit');
+      await setPermission('languages-detail');
     });
 
     it(`should return 404 when record doesn't exist`, async function () {

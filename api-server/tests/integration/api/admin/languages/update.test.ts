@@ -1,20 +1,27 @@
 import { expect } from 'chai';
 import { pick } from 'lodash';
 import request from 'supertest';
+import { Language } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    const { id: langId } = this.data.language;
-    this.input = mocker.locale(langId, langId);
-    this.output = { ...this.input };
+    this.input = mocker.language();
+    this.updateInput = mocker.language();
 
-    this.url = '/api/admin/locales';
+    const { id } = this.input;
+    this.output = { ...this.updateInput, id };
+
+    this.language = await Language.create(this.input);
+
+    const baseUrl = '/api/admin/languages';
+    this.url = `${baseUrl}/${this.language.id}`;
+    this.invalidUrl = `${baseUrl}/999999`;
   });
 
   it('should return 401 when no / invalid token', async function () {
-    const { status } = await request(this.app).post(this.url).set('Accept', 'application/json');
+    const { status } = await request(this.app).put(this.url).set('Accept', 'application/json');
 
     expect(status).to.equal(401);
   });
@@ -23,7 +30,7 @@ export default function (): void {
     await setPermission([]);
 
     const { status } = await request(this.app)
-      .post(this.url)
+      .put(this.url)
       .set('Accept', 'application/json')
       .set('Authorization', this.bearer);
 
@@ -32,23 +39,20 @@ export default function (): void {
 
   describe('with correct permissions', function () {
     before(async function () {
-      await setPermission('locales-create');
+      await setPermission('languages-edit');
     });
 
     it('should return 422 when missing input data', async function () {
       const { status, body } = await request(this.app)
-        .post(this.url)
+        .put(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer);
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
       expect(body.errors).to.have.keys(
-        'id',
         'englishName',
         'localName',
-        'respondentLanguageId',
-        'adminLanguageId',
         'countryFlagCode',
         'textDirection'
       );
@@ -56,58 +60,46 @@ export default function (): void {
 
     it('should return 422 when invalid input data', async function () {
       const { status, body } = await request(this.app)
-        .post(this.url)
+        .put(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
         .send({
-          id: null,
-          englishName: [],
-          localName: ['dddsds', 'dffd'],
-          respondentLanguageId: 'nonLocaleString',
-          adminLanguageId: 5,
-          countryFlagCode: 5,
-          prototypeLocaleId: 'nonExistingLocale',
+          englishName: { name: 'United Kingdom' },
+          localName: ['United Kingdom'],
+          countryFlagCode: false,
           textDirection: 'wrongDirection',
         });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
       expect(body.errors).to.have.keys(
-        'id',
         'englishName',
         'localName',
-        'respondentLanguageId',
-        'adminLanguageId',
         'countryFlagCode',
-        'prototypeLocaleId',
         'textDirection'
       );
     });
 
-    it('should return 201 and new resource', async function () {
-      const { status, body } = await request(this.app)
-        .post(this.url)
+    it(`should return 404 when record doesn't exist`, async function () {
+      const { status } = await request(this.app)
+        .put(this.invalidUrl)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
-        .send(this.input);
+        .send(this.updateInput);
 
-      expect(status).to.equal(201);
-      expect(body).to.be.an('object').to.have.key('data');
-      expect(pick(body.data, Object.keys(this.output))).to.deep.equal(this.output);
+      expect(status).to.equal(404);
     });
 
-    it('should return 422 when duplicate id', async function () {
-      const { id: langId } = this.data.language;
-
+    it('should return 200 and data/refs', async function () {
       const { status, body } = await request(this.app)
-        .post(this.url)
+        .put(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer)
-        .send({ ...mocker.locale(langId, langId), id: this.input.id });
+        .send(this.updateInput);
 
-      expect(status).to.equal(422);
-      expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('id');
+      expect(status).to.equal(200);
+      expect(body).to.be.an('object').to.have.keys('data', 'refs');
+      expect(pick(body.data, Object.keys(this.output))).to.deep.equal(this.output);
     });
   });
 }

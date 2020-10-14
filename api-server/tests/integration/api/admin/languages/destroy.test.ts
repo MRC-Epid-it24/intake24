@@ -1,24 +1,21 @@
 import { expect } from 'chai';
-import { pick } from 'lodash';
 import request from 'supertest';
-import { Locale } from '@/db/models/system';
+import { Language, Locale } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    const { id: langId } = this.data.language;
-    this.input = mocker.locale(langId, langId);
-    this.locale = await Locale.create(this.input);
-    this.output = { ...this.input };
+    this.input = mocker.language();
+    this.language = await Language.create(this.input);
 
-    const baseUrl = '/api/admin/locales';
-    this.url = `${baseUrl}/${this.locale.id}/edit`;
-    this.invalidUrl = `${baseUrl}/999999/edit`;
+    const baseUrl = '/api/admin/languages';
+    this.url = `${baseUrl}/${this.language.id}`;
+    this.invalidUrl = `${baseUrl}/999999`;
   });
 
   it('should return 401 when no / invalid token', async function () {
-    const { status } = await request(this.app).get(this.url).set('Accept', 'application/json');
+    const { status } = await request(this.app).delete(this.url).set('Accept', 'application/json');
 
     expect(status).to.equal(401);
   });
@@ -27,7 +24,7 @@ export default function (): void {
     await setPermission([]);
 
     const { status } = await request(this.app)
-      .get(this.url)
+      .delete(this.url)
       .set('Accept', 'application/json')
       .set('Authorization', this.bearer);
 
@@ -36,27 +33,40 @@ export default function (): void {
 
   describe('with correct permissions', function () {
     before(async function () {
-      await setPermission('locales-edit');
+      await setPermission('languages-delete');
     });
 
     it(`should return 404 when record doesn't exist`, async function () {
       const { status } = await request(this.app)
-        .get(this.invalidUrl)
+        .delete(this.invalidUrl)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer);
 
       expect(status).to.equal(404);
     });
 
-    it('should return 200 and data/refs', async function () {
+    it('should return 204 and no content', async function () {
       const { status, body } = await request(this.app)
-        .get(this.url)
+        .delete(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer);
 
-      expect(status).to.equal(200);
-      expect(body).to.be.an('object').to.have.keys('data', 'refs');
-      expect(pick(body.data, Object.keys(this.output))).to.deep.equal(this.output);
+      expect(status).to.equal(204);
+      expect(body).to.be.empty;
+    });
+
+    it(`should return 403 when language is assigned to locales`, async function () {
+      const { id } = await Language.create(mocker.language());
+      await Locale.create(mocker.locale(id, id));
+
+      const url = `/api/admin/languages/${id}`;
+
+      const { status } = await request(this.app)
+        .delete(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', this.bearer);
+
+      expect(status).to.equal(403);
     });
   });
 }

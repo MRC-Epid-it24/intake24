@@ -21,6 +21,7 @@ export const prepare = async (): Promise<MockData> => {
     englishName: 'United Kingdom',
     localName: 'United Kingdom',
     countryFlagCode: 'gb',
+    textDirection: 'ltr',
   });
 
   const locale = await Locale.create({

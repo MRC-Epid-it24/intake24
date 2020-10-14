@@ -66,6 +66,16 @@ describe('API', function () {
     describe('PUT /api/admin/users/:userId', users.update);
     describe('DELETE /api/admin/users/:userId', users.destroy);
 
+    // Languages
+    const { languages } = admin;
+    describe('GET /api/admin/languages', languages.list);
+    describe('GET /api/admin/languages/create', languages.create);
+    describe('POST /admin/languages', languages.store);
+    describe('GET /api/admin/languages/:languageId', languages.detail);
+    describe('GET /api/admin/languages/:languageId/edit', languages.edit);
+    describe('PUT /api/admin/languages/:languageId', languages.update);
+    describe('DELETE /api/admin/languages/:languageId', languages.destroy);
+
     // Locales
     const { locales } = admin;
     describe('GET /api/admin/locales', locales.list);

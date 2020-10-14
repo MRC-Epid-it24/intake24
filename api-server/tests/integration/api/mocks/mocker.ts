@@ -58,21 +58,26 @@ export const language = (): CreateLanguageRequest => {
   const englishName = faker.address.country();
   const localName = faker.address.country();
   const countryFlagCode = faker.address.countryCode();
+  const textDirection = 'ltr';
 
   return {
     id,
     englishName,
     localName,
     countryFlagCode,
+    textDirection,
   };
 };
 
-export const locale = (languageId: string | undefined): CreateLocaleRequest => {
+export const locale = (
+  respLangId: string | undefined,
+  adminLangId: string | undefined
+): CreateLocaleRequest => {
   const id = faker.address.countryCode();
   const englishName = faker.address.country();
   const localName = faker.address.country();
-  const respondentLanguageId = languageId ?? faker.address.countryCode();
-  const adminLanguageId = languageId ?? faker.address.countryCode();
+  const respondentLanguageId = respLangId ?? faker.address.countryCode();
+  const adminLanguageId = adminLangId ?? faker.address.countryCode();
   const countryFlagCode = faker.address.countryCode();
   const prototypeLocaleId = null;
   const textDirection = 'ltr';

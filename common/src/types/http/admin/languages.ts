@@ -7,6 +7,7 @@ export type LanguageRequest = {
   englishName: string;
   localName: string;
   countryFlagCode: string;
+  textDirection: string;
 };
 
 export type CreateLanguageRequest = LanguageRequest;

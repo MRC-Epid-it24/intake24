@@ -7,8 +7,9 @@ import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.locale(this.data.language.id);
-    this.updateInput = mocker.locale(this.data.language.id);
+    const { id: langId } = this.data.language;
+    this.input = mocker.locale(langId, langId);
+    this.updateInput = mocker.locale(langId, langId);
 
     const { id } = this.input;
     this.output = { ...this.updateInput, id };
