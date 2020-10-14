@@ -7,6 +7,8 @@ module.exports = {
 
   dest: process.env.OUTPUT_DIR || 'dist',
 
+  port: 8300,
+
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
