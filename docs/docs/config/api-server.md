@@ -5,6 +5,7 @@ Configuration is structured to following sections:
 * [Application](#application)
 * [Access Control List (ACL)](#access-control-list-acl)
 * [Database](#database)
+* [Filesystem](#filesystem)
 * [Mail](#mail)
 * [Security](#security)
 
@@ -165,6 +166,28 @@ Path: `src/config/database.ts`
 * dotenv var: `DB_FOODS_DRIVER` and `DB_SYSTEM_DRIVER`
 * type: `'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql'`
 * default: `'postgres'`
+
+## Filesystem
+
+Path: `src/config/filesystem.ts`
+
+### Logs dir
+
+Logs directory where all application logs are stored.
+
+* object-path: `local.logs`
+* dotenv var: `FS_LOGS`
+* type: `string`
+* default: `'storage/logs'`
+
+### Public dir
+
+Public directory for serving static files.
+
+* object-path: `local.public`
+* dotenv var: `FS_PUBLIC`
+* type: `string`
+* default: `'public'`
 
 ## Mail
 
