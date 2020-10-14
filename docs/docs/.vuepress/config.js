@@ -124,6 +124,7 @@ module.exports = {
           title: 'Admin',
           collapsable: false,
           children: [
+            'admin/languages',
             'admin/locales',
             'admin/schemes',
             'admin/surveys',
