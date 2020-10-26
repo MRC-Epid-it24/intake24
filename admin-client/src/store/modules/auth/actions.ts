@@ -55,7 +55,7 @@ const actions: ActionTree<AuthState, RootState> = {
     }
   },
 
-  async logout({ commit }, { invalidate }) {
+  async logout({ commit }, { invalidate } = {}) {
     if (invalidate) await authSvc.logout();
 
     commit('loading/reset', {}, { root: true });
