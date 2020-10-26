@@ -25,6 +25,7 @@ module.exports = {
   mode: NODE_ENV,
   target: 'node',
   watch: isDev,
+  watchOptions: { ignored: ['node_modules/**', 'public/**'] },
   devtool: isDev ? 'source-map' : undefined,
   optimization: {
     minimize: false,

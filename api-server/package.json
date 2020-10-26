@@ -16,7 +16,7 @@
   },
   "scripts": {
     "development": "cross-env NODE_ENV=development webpack",
-    "development:start": "cross-env NODE_ENV=development nodemon --inspect=6060 dist/server.js",
+    "development:start": "cross-env NODE_ENV=development nodemon --inspect=6060 --watch dist dist/server.js",
     "dev": "npm run development",
     "clean": "rimraf dist",
     "build": "cross-env NODE_ENV=production webpack",
