@@ -1,5 +1,5 @@
 import { Table, Column, CreatedAt, DataType, UpdatedAt } from 'sequelize-typescript';
-// import { JobType } from '@/jobs/job';
+import { JobType } from '@/jobs/job';
 import { Task as TaskAttributes } from '@common/types/models/system';
 import BaseModel from '../model';
 
@@ -25,7 +25,7 @@ export default class Task extends BaseModel<Task> implements TaskAttributes {
   @Column({
     allowNull: false,
   })
-  public job!: string;
+  public job!: JobType;
 
   @Column({
     allowNull: false,
