@@ -2,7 +2,7 @@ import '../../bootstrap';
 import request from 'supertest';
 import app from '@/app';
 import { prepare, cleanup } from './mocks/setup';
-import root from './root.test';
+// import root from './root.test';
 import authentication from './authentication/index.test';
 import admin from './admin/index.test';
 
@@ -16,7 +16,7 @@ describe('API', function () {
     await cleanup();
   });
 
-  describe('Root', root);
+  // describe('Root', root);
 
   describe('Authentication', function () {
     describe('POST /api/login', authentication.login);
@@ -117,5 +117,15 @@ describe('API', function () {
     // describe('POST /api/admin/surveys/:surveyId/respondents', surveys.respondents.store);
     // describe('PUT /api/admin/surveys/:surveyId/respondents/:userId', surveys.respondents.update);
     // describe('DELETE /api/admin/surveys/:surveyId/respondents/:userId', surveys.respondents.destroy);
+
+    // Tasks
+    const { tasks } = admin;
+    describe('GET /api/admin/tasks', tasks.list);
+    describe('GET /api/admin/tasks/create', tasks.create);
+    describe('POST /api/admin/tasks', tasks.store);
+    describe('GET /api/admin/tasks/:taskId', tasks.detail);
+    describe('GET /api/admin/tasks/:taskId/edit', tasks.edit);
+    describe('PUT /api/admin/tasks/:taskId', tasks.update);
+    describe('DELETE /api/admin/tasks/:taskId', tasks.destroy);
   });
 });

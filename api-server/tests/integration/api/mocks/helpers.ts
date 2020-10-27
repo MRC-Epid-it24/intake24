@@ -67,6 +67,11 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'surveys-mgmt', display_name: 'Survey management' },
     { name: 'surveys-respondents', display_name: 'Survey respondents' },
     { name: 'surveys-submissions', display_name: 'Survey submissions' },
+    { name: 'tasks-list', display_name: 'List tasks' },
+    { name: 'tasks-detail', display_name: 'Browse tasks' },
+    { name: 'tasks-create', display_name: 'Create tasks' },
+    { name: 'tasks-edit', display_name: 'Edit tasks' },
+    { name: 'tasks-delete', display_name: 'Delete tasks' },
   ];
 
   await Permission.bulkCreate(resourcePerms.concat(fdbPerms));

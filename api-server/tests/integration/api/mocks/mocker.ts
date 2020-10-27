@@ -1,9 +1,11 @@
 import faker from 'faker';
+import jobs from '@/jobs';
 import { PermissionRequest } from '@common/types/http/admin/permissions';
 import { RoleRequest } from '@common/types/http/admin/roles';
 import { CreateLocaleRequest } from '@common/types/http/admin/locales';
 import { CreateSchemeRequest } from '@common/types/http/admin/schemes';
 import { CreateSurveyRequest } from '@common/types/http/admin/surveys';
+import { CreateTaskRequest } from '@common/types/http/admin/tasks';
 import { CreateUserRequest } from '@common/types/http/admin/users';
 import { Meal } from '@common/types/meals';
 import { RecallQuestions } from '@common/types/recall';
@@ -134,5 +136,21 @@ export const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRe
     feedbackEnabled,
     numberOfSubmissionsForFeedback,
     storeUserSessionOnServer,
+  };
+};
+
+export const task = (): CreateTaskRequest => {
+  const name = faker.random.words(3);
+  const job = Object.keys(jobs)[0];
+  const cron = '0 * * * *';
+  const active = true;
+  const description = faker.random.words(10);
+
+  return {
+    name,
+    job,
+    cron,
+    active,
+    description,
   };
 };

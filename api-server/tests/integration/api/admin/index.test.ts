@@ -6,6 +6,7 @@ import roles from './roles/index.test';
 import users from './users/index.test';
 import schemes from './schemes/index.test';
 import surveys from './surveys/index.test';
+import tasks from './tasks/index.test';
 
 export default {
   profile,
@@ -16,4 +17,5 @@ export default {
   users,
   schemes,
   surveys,
+  tasks,
 };
