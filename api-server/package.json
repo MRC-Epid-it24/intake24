@@ -23,6 +23,8 @@
     "production": "npm run clean && npm run build",
     "prod": "npm run production",
     "start": "node dist/server.js",
+    "migrate:foods":  "npx sequelize db:migrate --options-path sequelize/foods/options.js",
+    "migrate:system":  "npx sequelize db:migrate --options-path sequelize/system/options.js",
     "lint": "eslint --ext .js,.ts src/ --quiet --fix",
     "test:unit": "cross-env NODE_ENV=development webpack --inspect=5959 --config webpack.test.config.js",
     "test:unit:run": "mocha -c dist-tests/tests.js",
