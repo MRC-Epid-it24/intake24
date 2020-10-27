@@ -7,6 +7,7 @@ import scheme from './scheme.controller';
 import surveyMgmt from './survey-mgmt.controller';
 import surveyRespondent from './survey-respondent.controller';
 import survey from './survey.controller';
+import task from './task.controller';
 import user from './user.controller';
 
 export default {
@@ -19,5 +20,6 @@ export default {
   surveyMgmt,
   surveyRespondent,
   survey,
+  task,
   user,
 };

@@ -61,6 +61,15 @@ export type Survey = {
   finalPageHtml: string | null;
 };
 
+export type Task = {
+  id: number;
+  name: string;
+  job: string;
+  cron: string;
+  active: boolean;
+  description: string | null;
+};
+
 export type Permission = {
   id: number;
   name: string;

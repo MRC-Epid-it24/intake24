@@ -21,6 +21,7 @@ export { default as SurveySubmissionMealCustomField } from './survey-submission-
 export { default as SurveySubmissionMissingFood } from './survey-submission-missing-food';
 export { default as SurveySubmissionNutrient } from './survey-submission-nutrient';
 export { default as SurveySubmissionPortionSizeField } from './survey-submission-portion-size-field';
+export { default as Task } from './task';
 export { default as User } from './user';
 export { default as UserPassword } from './user-password';
 export { default as UserSurveyAlias } from './user-survey-alias';
