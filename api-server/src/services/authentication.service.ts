@@ -4,7 +4,8 @@ import { Permission, User, UserPassword, UserSurveyAlias } from '@/db/models/sys
 import { UnauthorizedError } from '@/http/errors';
 import { btoa } from '@/util';
 import { supportedAlgorithms } from '@/util/passwords';
-import jwtSvc, { Subject, TokenPayload, Tokens } from './jwt.service';
+import jwtSvc, { SignPayload, Subject, Tokens } from './jwt.service';
+import jwtRotationSvc from './jwt-rotation.service';
 import logger from './logger';
 
 export type MfaRequest = { mfa: { request: string; host: string } };
@@ -27,37 +28,6 @@ export default {
     const subject: Subject = { providerID: 'email', providerKey: email };
 
     return this.login(user, password, subject);
-  },
-
-  async signMfaRequest(email: string): Promise<MfaRequest> {
-    const { provider } = config.mfa;
-    const { ikey, skey, akey, host } = config.mfa.providers[provider];
-
-    const request = duo.sign_request(ikey, skey, akey, email);
-
-    return { mfa: { request, host } };
-  },
-
-  /**
-   * Verify multi-factor authentication response
-   *
-   * @param {string} sigResponse
-   * @returns {Promise<Tokens>}
-   */
-  async verifyMfa(sigResponse: string): Promise<Tokens> {
-    const { provider } = config.mfa;
-    const { ikey, skey, akey } = config.mfa.providers[provider];
-
-    const email = duo.verify_response(ikey, skey, akey, sigResponse);
-    if (!email) throw new UnauthorizedError();
-
-    const user = await User.findOne({ where: { email } });
-    if (!user) throw new UnauthorizedError();
-
-    const payload: TokenPayload = { userId: user.id };
-    const subject: Subject = { providerID: 'email', providerKey: email };
-
-    return jwtSvc.signTokens(payload, { subject: btoa(subject) });
   },
 
   /**
@@ -125,9 +95,7 @@ export default {
     )
       throw new UnauthorizedError(`Provided credentials do not match our records.`);
 
-    const payload: TokenPayload = { userId: user.id };
-
-    return jwtSvc.signTokens(payload, { subject: btoa(subject) });
+    return this.issueTokens(user.id, subject);
   },
 
   /**
@@ -160,18 +128,75 @@ export default {
   },
 
   /**
+   * Sign MFA request
+   *
+   * @param {string} email
+   * @returns {Promise<MfaRequest>}
+   */
+  async signMfaRequest(email: string): Promise<MfaRequest> {
+    const { provider } = config.mfa;
+    const { ikey, skey, akey, host } = config.mfa.providers[provider];
+
+    const request = duo.sign_request(ikey, skey, akey, email);
+
+    return { mfa: { request, host } };
+  },
+
+  /**
+   * Verify multi-factor authentication response
+   *
+   * @param {string} sigResponse
+   * @returns {Promise<Tokens>}
+   */
+  async verifyMfa(sigResponse: string): Promise<Tokens> {
+    const { provider } = config.mfa;
+    const { ikey, skey, akey } = config.mfa.providers[provider];
+
+    const email = duo.verify_response(ikey, skey, akey, sigResponse);
+    if (!email) throw new UnauthorizedError();
+
+    const user = await User.findOne({ where: { email } });
+    if (!user) throw new UnauthorizedError();
+
+    const subject: Subject = { providerID: 'email', providerKey: email };
+
+    return this.issueTokens(user.id, subject);
+  },
+
+  /**
+   * Issue JWT tokens and log for rotation
+   *
+   * @param {User} user
+   * @returns {Promise<Tokens>}
+   */
+  async issueTokens(userId: number, subject: Subject | string): Promise<Tokens> {
+    const payload: SignPayload = { userId };
+
+    const { accessToken, refreshToken } = await jwtSvc.signTokens(payload, {
+      subject: typeof subject === 'string' ? subject : btoa(subject),
+    });
+    await jwtRotationSvc.save(userId, refreshToken);
+
+    return { accessToken, refreshToken };
+  },
+
+  /**
    * Issue new access token using refresh token
    *
    * @param {string} token
-   * @returns {Promise<string>}
+   * @returns {Promise<Tokens>}
    */
-  async refresh(token: string): Promise<string> {
+  async refresh(token: string): Promise<Tokens> {
     try {
       const { userId, sub: subject } = await jwtSvc.verifyRefreshToken(token);
+
       const user = await User.findByPk(userId);
       if (!user) throw new UnauthorizedError();
 
-      return await jwtSvc.signAccessToken({ userId }, { subject });
+      const valid = await jwtRotationSvc.verifyAndRevoke(token);
+      if (!valid) throw new UnauthorizedError();
+
+      return await this.issueTokens(userId, subject);
     } catch (err) {
       const { message, name, stack } = err;
       logger.error(stack ?? `${name}: ${message}`);

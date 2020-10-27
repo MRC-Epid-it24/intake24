@@ -15,6 +15,7 @@ import BaseModel from '../model';
 import {
   Permission,
   PermissionUser,
+  RefreshToken,
   Role,
   RoleUser,
   SigninLog,
@@ -41,6 +42,7 @@ import {
   signinLog: { include: [{ model: SigninLog }] },
   aliases: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
+  tokens: { include: [{ model: RefreshToken }] },
 }))
 @Table({
   modelName: 'User',
@@ -94,26 +96,29 @@ export default class User extends BaseModel<User> implements UserAttributes {
   @Column
   public readonly updatedAt!: Date;
 
-  @HasOne(() => UserPassword, 'userId')
-  public password?: UserPassword;
-
-  @HasMany(() => UserPasswordReset, 'userId')
-  public passwordResets?: UserPasswordReset[];
-
   @BelongsToMany(() => Permission, () => PermissionUser)
   public permissions?: Permission[];
 
   @BelongsToMany(() => Role, () => RoleUser)
   public roles?: Role[];
 
+  @HasMany(() => RefreshToken)
+  public tokens?: RefreshToken[];
+
   @HasMany(() => SigninLog, 'userId')
   public signinLog?: SigninLog[];
 
-  @HasMany(() => UserSurveyAlias, 'userId')
-  public aliases?: UserSurveyAlias[];
-
   @HasMany(() => SurveySubmission, 'userId')
   public submissions?: SurveySubmission[];
+
+  @HasOne(() => UserPassword, 'userId')
+  public password?: UserPassword;
+
+  @HasMany(() => UserPasswordReset, 'userId')
+  public passwordResets?: UserPasswordReset[];
+
+  @HasMany(() => UserSurveyAlias, 'userId')
+  public aliases?: UserSurveyAlias[];
 
   public allRoles(): Role[] {
     return uniqBy(this.roles, 'name');

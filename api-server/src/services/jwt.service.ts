@@ -1,4 +1,5 @@
 import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
+import { nanoid } from 'nanoid';
 import { PassportStatic } from 'passport';
 import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
 import security from '@/config/security';
@@ -14,18 +15,24 @@ export type Tokens = {
   refreshToken: string;
 };
 
-export type TokenPayload = {
+export interface SignPayload {
   userId: number;
-  type?: string;
-  iss?: string;
-  sub?: string;
-};
+}
+
+export interface TokenPayload extends SignPayload {
+  sub: string;
+  jti: string;
+  aud: string;
+  iss: string;
+  iat: number;
+  exp: number;
+}
 
 const { issuer, access, refresh } = security.jwt;
 
 const signOptions: SignOptions = { issuer };
 
-const verifyOptions: VerifyOptions = { issuer };
+const verifyOptions: VerifyOptions = { audience: 'refresh', issuer };
 
 const opts: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -52,15 +59,16 @@ export default {
   /**
    * Sign a token
    *
-   * @param {TokenPayload} payload
+   * @param {SignPayload} payload
    * @param {string} secret
    * @param {SignOptions} [options={}]
    * @returns {Promise<string>}
    */
-  async sign(payload: TokenPayload, secret: string, options: SignOptions = {}): Promise<string> {
+  async sign(payload: SignPayload, secret: string, options: SignOptions = {}): Promise<string> {
     return new Promise((resolve, reject) => {
-      jwt.sign(payload, secret, { ...signOptions, ...options }, (err, encoded) =>
-        err || !encoded ? reject(err ?? new Error(`Unable to sign token`)) : resolve(encoded)
+      const jwtid = nanoid(64);
+      jwt.sign(payload, secret, { jwtid, ...signOptions, ...options }, (err, encoded) =>
+        err || !encoded ? reject(err ?? new Error('Unable to sign token.')) : resolve(encoded)
       );
     });
   },
@@ -68,41 +76,41 @@ export default {
   /**
    * Sign access token
    *
-   * @param {TokenPayload} payload
+   * @param {SignPayload} payload
    * @param {SignOptions} [options={}]
    * @returns {string}
    */
-  async signAccessToken(payload: TokenPayload, options: SignOptions = {}): Promise<string> {
+  async signAccessToken(payload: SignPayload, options: SignOptions = {}): Promise<string> {
     const { secret, lifetime } = access;
 
-    if (!secret) throw new InternalServerError('No access token secret defined');
+    if (!secret) throw new InternalServerError('No access token secret defined.');
 
-    return this.sign({ type: 'access', ...payload }, secret, { expiresIn: lifetime, ...options });
+    return this.sign(payload, secret, { audience: 'access', expiresIn: lifetime, ...options });
   },
 
   /**
    * Sign refresh token
    *
-   * @param {TokenPayload} payload
+   * @param {SignPayload} payload
    * @param {SignOptions} [options={}]
    * @returns {string}
    */
-  async signRefreshToken(payload: TokenPayload, options: SignOptions = {}): Promise<string> {
+  async signRefreshToken(payload: SignPayload, options: SignOptions = {}): Promise<string> {
     const { secret, lifetime } = refresh;
 
-    if (!secret) throw new InternalServerError('No refresh token secret defined');
+    if (!secret) throw new InternalServerError('No refresh token secret defined.');
 
-    return this.sign({ type: 'refresh', ...payload }, secret, { expiresIn: lifetime, ...options });
+    return this.sign(payload, secret, { audience: 'refresh', expiresIn: lifetime, ...options });
   },
 
   /**
    * Sign both access and refresh tokens
    *
-   * @param {TokenPayload} payload
+   * @param {SignPayload} payload
    * @param {SignOptions} [options={}]
    * @returns {Tokens}
    */
-  async signTokens(payload: TokenPayload, options: SignOptions = {}): Promise<Tokens> {
+  async signTokens(payload: SignPayload, options: SignOptions = {}): Promise<Tokens> {
     const accessToken = await this.signAccessToken(payload, options);
     const refreshToken = await this.signRefreshToken(payload, options);
 
@@ -119,7 +127,7 @@ export default {
     return new Promise((resolve, reject) => {
       jwt.verify(token, refresh.secret, verifyOptions, (err, decoded) =>
         err || !decoded
-          ? reject(err ?? new Error(`Unable to verify refresh token`))
+          ? reject(err ?? new Error('Unable to verify refresh token.'))
           : resolve(decoded as TokenPayload)
       );
     });

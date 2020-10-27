@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import ms from 'ms';
 import config from '@/config/security';
-import UnauthorizedError from '@/http/errors/unauthorized.error';
+import { UnauthorizedError } from '@/http/errors';
 import authSvc from '@/services/authentication.service';
 import { Tokens } from '@/services/jwt.service';
+import jwtRotationSvc from '@/services/jwt-rotation.service';
 import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http/authentication';
 
 /**
@@ -45,17 +46,6 @@ export default {
     await sendTokenResponse(result, res);
   },
 
-  async verify(req: Request, res: Response<LoginResponse>, next: NextFunction): Promise<void> {
-    const { sigResponse } = req.body;
-    if (!sigResponse) {
-      next(new UnauthorizedError());
-      return;
-    }
-
-    const tokens = await authSvc.verifyMfa(sigResponse);
-    await sendTokenResponse(tokens, res);
-  },
-
   async aliasLogin(req: Request, res: Response<LoginResponse>): Promise<void> {
     const { userName, password, surveyId } = req.body;
 
@@ -76,6 +66,17 @@ export default {
     await sendTokenResponse(tokens, res);
   },
 
+  async verify(req: Request, res: Response<LoginResponse>, next: NextFunction): Promise<void> {
+    const { sigResponse } = req.body;
+    if (!sigResponse) {
+      next(new UnauthorizedError());
+      return;
+    }
+
+    const tokens = await authSvc.verifyMfa(sigResponse);
+    await sendTokenResponse(tokens, res);
+  },
+
   async refresh(req: Request, res: Response<RefreshResponse>, next: NextFunction): Promise<void> {
     const { name } = config.jwt.cookie;
     const refreshToken = req.cookies[name];
@@ -84,13 +85,15 @@ export default {
       return;
     }
 
-    const accessToken = await authSvc.refresh(refreshToken);
-
-    res.json({ accessToken });
+    const tokens = await authSvc.refresh(refreshToken);
+    await sendTokenResponse(tokens, res);
   },
 
-  async logout(req: Request, res: Response<undefined>): Promise<void> {
+  async logout(req: Request, res: Response): Promise<void> {
     const { name, httpOnly, path, secure, sameSite } = config.jwt.cookie;
+
+    const refreshToken = req.cookies[name];
+    if (refreshToken) await jwtRotationSvc.revoke(refreshToken);
 
     res.cookie(name, '', { maxAge: -1, httpOnly, path, secure, sameSite }).json();
   },
