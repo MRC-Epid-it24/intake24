@@ -6,6 +6,7 @@ import permissions from './permissions';
 import roles from './roles';
 import schemes from './schemes';
 import surveys from './surveys';
+import tasks from './tasks';
 import users from './users';
 
 const messages: LocaleMessageObject = {
@@ -16,6 +17,7 @@ const messages: LocaleMessageObject = {
   roles,
   schemes,
   surveys,
+  tasks,
   users,
 };
 

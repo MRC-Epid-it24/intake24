@@ -36,6 +36,15 @@ const resources: Resource[] = [
     generateRoutes: true,
     routes: [...routes, 'respondents', 'mgmt'],
   },
+  // System
+  {
+    group: 'system',
+    name: 'tasks',
+    icon: 'fas fa-tasks',
+    api: 'admin/tasks',
+    generateRoutes: true,
+    routes: [...routes],
+  },
   // ACL
   {
     group: 'acl',

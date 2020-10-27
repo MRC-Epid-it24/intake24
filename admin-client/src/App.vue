@@ -34,10 +34,11 @@
       ></menu-tree>
       <menu-tree
         v-if="can('acl')"
-        icon="fas fa-fw fa-tools"
+        icon="fas fa-fw fa-low-vision"
         name="acl"
         :resources="resources.acl"
       ></menu-tree>
+      <menu-tree icon="fas fa-fw fa-tools" name="system" :resources="resources.system"></menu-tree>
     </v-navigation-drawer>
 
     <v-app-bar app dark color="secondary" fixed>

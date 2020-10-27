@@ -8,6 +8,7 @@ import schemes from './schemes';
 import surveys from './surveys';
 import permissions from './permissions';
 import roles from './roles';
+import tasks from './tasks';
 import users from './users';
 
 const views: ViewsCollection = {
@@ -20,6 +21,7 @@ const views: ViewsCollection = {
   surveys,
   permissions,
   roles,
+  tasks,
   users,
 };
 

@@ -12,6 +12,7 @@ const common: LocaleMessage = {
   local: 'Local settings',
   surveyMgmt: 'Surveys MGMT',
   acl: 'Access Control',
+  system: 'System',
 
   yes: 'Yes',
   true: 'Yes',
@@ -40,6 +41,7 @@ const common: LocaleMessage = {
 
   action: {
     _: 'Action',
+    active: 'Active',
     audit: 'Audit',
     back: 'Back',
     cancel: 'Cancel',
