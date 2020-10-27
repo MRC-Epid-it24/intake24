@@ -49,6 +49,40 @@ Internal port application listens on.
 * type: `number`
 * default: `3100`
 
+### Sites URLs
+
+List of sites URLs. These can either be relative or absolute URLs.
+
+* absolute URL -> site is hosted on different domain
+* relative URL -> site is hosted on same domain. URL gets registered as route.
+
+#### Admin URL
+
+URL of admin site.
+
+* object-path: `url.admin`
+* dotenv var: `APP_URL_ADMIN`
+* type: `string`
+* default: `'/admin'`
+
+#### Documentation URL
+
+URL of documentation site.
+
+* object-path: `url.docs`
+* dotenv var: `APP_URL_DOCS`
+* type: `string`
+* default: `'/docs'`
+
+#### Survey URL
+
+URL of survey site.
+
+* object-path: `url.survey`
+* dotenv var: `APP_URL_SURVEY`
+* type: `string`
+* default: `'/survey'`
+
 ## Access control list (ACL)
 
 Access control list (`ACL`) implementation is based on three models:
