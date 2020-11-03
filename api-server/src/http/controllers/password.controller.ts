@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import { nanoid } from 'nanoid';
 import nunjucks from 'nunjucks';
 import { Op } from 'sequelize';
-import config from '@/config/security';
+import config from '@/config';
 import { User, UserPasswordReset } from '@/db/models/system';
 import { ValidationError } from '@/http/errors';
 import logger from '@/services/logger';
-import mailer from '@/services/mailer';
+import scheduler from '@/services/scheduler';
 import userSvc from '@/services/user.service';
 
 export default {
@@ -25,10 +25,8 @@ export default {
     const token = nanoid(64);
     await UserPasswordReset.create({ userId: user.id, token });
 
-    // TODO: queue sending emails
-    const { hostname, protocol } = req;
-    const url = `${protocol}://${hostname}/password/reset/${token}`;
-    const { expire: expiresAt } = config.passwords;
+    const url = `${config.app.urls.admin}/password/reset/${token}`;
+    const { expire: expiresAt } = config.security.passwords;
 
     const html = nunjucks.render('mail/password-reset.html', {
       title: 'Password reset',
@@ -36,7 +34,11 @@ export default {
       action: { url, text: 'Reset password' },
     });
 
-    await mailer.sendMail({ to: user.email, subject: 'Password reset', html });
+    scheduler.mail.send(
+      'password-reset',
+      { to: user.email, subject: 'Password reset', html },
+      { delay: 1000, removeOnComplete: true }
+    );
 
     res.json();
   },
@@ -45,7 +47,7 @@ export default {
     const { email, password, token } = req.body;
 
     const expiredAt = new Date();
-    expiredAt.setMinutes(expiredAt.getMinutes() - config.passwords.expire);
+    expiredAt.setMinutes(expiredAt.getMinutes() - config.security.passwords.expire);
 
     const passwordReset = await UserPasswordReset.findOne({
       where: { token, createdAt: { [Op.gt]: expiredAt } },
