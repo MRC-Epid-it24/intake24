@@ -1,6 +1,7 @@
 import { ActionTree } from 'vuex';
 import { AuthState, RootState } from '@/types/vuex';
 import authSvc, { LoginRequest, TokenRequest } from '@/services/auth.service';
+import tokenSvc from '@/services/token.service';
 
 type AuthenticatePayload = {
   type: 'login' | 'token';
@@ -45,8 +46,10 @@ const actions: ActionTree<AuthState, RootState> = {
     }
   },
 
-  async logout({ commit }, { invalidate }) {
+  async logout({ commit }, { invalidate } = {}) {
     if (invalidate) await authSvc.logout();
+
+    tokenSvc.clearTokens();
 
     commit('loading/reset', {}, { root: true });
     commit('user/reset', {}, { root: true });
