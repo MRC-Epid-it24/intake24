@@ -1,4 +1,4 @@
-import jwtRotationSvc from '@/services/jwt-rotation.service';
+import jwtRotationSvc from '@/services/auth/jwt-rotation.service';
 import logger from '@/services/logger';
 import { Job, JobType } from './job';
 

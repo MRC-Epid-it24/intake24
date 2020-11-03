@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import ms from 'ms';
 import config from '@/config/security';
 import { UnauthorizedError } from '@/http/errors';
-import authSvc from '@/services/authentication.service';
-import { Tokens } from '@/services/jwt.service';
-import jwtRotationSvc from '@/services/jwt-rotation.service';
+import authSvc from '@/services/auth/authentication.service';
+import { Tokens } from '@/services/auth/jwt.service';
+import jwtRotationSvc from '@/services/auth/jwt-rotation.service';
 import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http/authentication';
 
 /**

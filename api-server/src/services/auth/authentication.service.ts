@@ -4,9 +4,9 @@ import { Permission, User, UserPassword, UserSurveyAlias } from '@/db/models/sys
 import { UnauthorizedError } from '@/http/errors';
 import { btoa } from '@/util';
 import { supportedAlgorithms } from '@/util/passwords';
+import logger from '@/services/logger';
 import jwtSvc, { SignPayload, Subject, Tokens } from './jwt.service';
 import jwtRotationSvc from './jwt-rotation.service';
-import logger from './logger';
 
 export type MfaRequest = { mfa: { request: string; host: string } };
 
