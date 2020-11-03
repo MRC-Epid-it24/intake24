@@ -1,6 +1,7 @@
 import db from '@/db';
 import foodIndex from '@/food-index';
 import mailer from '@/services/mailer';
+import scheduler from '@/services/scheduler';
 
 export default async (): Promise<void> => {
   // Databases
@@ -8,6 +9,9 @@ export default async (): Promise<void> => {
 
   // Mailer
   mailer.init();
+
+  // Scheduler
+  await scheduler.init();
 
   // Food indexing and searching
   await foodIndex.init();

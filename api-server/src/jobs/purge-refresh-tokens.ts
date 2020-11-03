@@ -1,13 +1,9 @@
 import jwtRotationSvc from '@/services/jwt-rotation.service';
 import logger from '@/services/logger';
-import { Job } from './job';
+import { Job, JobType } from './job';
 
-export default class implements Job {
-  public readonly name: string;
-
-  constructor() {
-    this.name = 'PurgeRefreshTokens';
-  }
+export default class PurgeRefreshTokens implements Job {
+  public readonly name: JobType = 'PurgeRefreshTokens';
 
   /**
    * Run the task
