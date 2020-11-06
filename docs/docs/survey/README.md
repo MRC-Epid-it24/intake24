@@ -5,7 +5,7 @@ Built with Vue.js.
 ## User flow
 
 ![User Flow](../assets/img/i24-recall-user-flow.png)
-[To do: decent version of this]
+This is currently hosted on Miro (TF's account), will migrate here if useful: [view interactive user flow](https://miro.com/app/board/o9J_kpEZdcc=/)
 
 ## Custom recall flow
 
