@@ -99,7 +99,8 @@ module.exports = {
           title: 'Survey',
           collapsable: false,
           children: [
-            ''
+            '',
+            'v3-survey'
           ]
         }
       ],
