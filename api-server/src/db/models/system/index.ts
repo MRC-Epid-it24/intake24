@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 export { default as GenUserCounter } from './gen-user-counter';
+export { default as Job } from './job';
 export { default as Language } from './language';
 export { default as Locale } from './locale';
 export { default as UserPasswordReset } from './user-password-reset';

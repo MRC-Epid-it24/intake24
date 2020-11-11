@@ -1,12 +1,28 @@
 import { Meal } from '../meals';
 import { RecallQuestions } from '../recall';
 
+export type Job = {
+  id: number;
+  type: string;
+  userId: number;
+  startedAt: Date;
+  completedAt: Date;
+  downloadUrl: string;
+  downloadUrlExpiresAt: Date;
+  progress: number;
+  successful: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type Language = {
   id: string;
   englishName: string;
   localName: string;
   countryFlagCode: string;
   textDirection: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type Locale = {
@@ -32,6 +48,8 @@ export type Scheme = {
   type: SchemeType;
   questions: RecallQuestions;
   meals: Meal[];
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export enum SurveyState {
@@ -68,6 +86,8 @@ export type Task = {
   cron: string;
   active: boolean;
   description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type Permission = {
