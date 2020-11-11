@@ -1,21 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
-import { WhereOptions } from 'sequelize';
 import { Job, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
+import { JobResponse, JobsResponse } from '@common/types/http/admin/jobs';
 
 export default {
-  async list(req: Request, res: Response): Promise<void> {
+  async list(req: Request, res: Response<JobsResponse>): Promise<void> {
     const user = req.user as User;
     const type = req.query.type as string | string[];
 
-    const where: WhereOptions = { userId: user.id, type };
-
-    const jobs = await Job.findAll({ where });
+    const jobs = await Job.paginate({ req, where: { userId: user.id, type } });
 
     res.json(jobs);
   },
 
-  async detail(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async detail(req: Request, res: Response<JobResponse>, next: NextFunction): Promise<void> {
     const { jobId: id } = req.params;
     const { id: userId } = req.user as User;
 
@@ -26,6 +24,6 @@ export default {
       return;
     }
 
-    res.json(job);
+    res.json({ data: job });
   },
 };
