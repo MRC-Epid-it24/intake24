@@ -1,3 +1,4 @@
+import job from './job.controller';
 import language from './language.controller';
 import locale from './locale.controller';
 import permission from './permission.controller';
@@ -11,6 +12,7 @@ import task from './task.controller';
 import user from './user.controller';
 
 export default {
+  job,
   language,
   locale,
   permission,
