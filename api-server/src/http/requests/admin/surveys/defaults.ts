@@ -2,7 +2,7 @@ import { Schema } from 'express-validator';
 import { Locale, Scheme } from '@/db/models/system';
 import { SurveyState } from '@common/types/models/system';
 
-export default {
+const defaults: Schema = {
   state: {
     in: ['body'],
     errorMessage: 'Enter valid survey state.',
@@ -119,4 +119,6 @@ export default {
     isString: true,
     optional: { options: { nullable: true } },
   },
-} as Schema;
+};
+
+export default defaults;

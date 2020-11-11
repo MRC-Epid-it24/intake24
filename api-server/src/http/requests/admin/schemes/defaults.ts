@@ -2,7 +2,7 @@ import { Schema } from 'express-validator';
 import { isPlainObject, has } from 'lodash';
 import { SchemeTypes } from '@common/types/models/system';
 
-export default {
+const defaults: Schema = {
   name: {
     in: ['body'],
     errorMessage: 'Scheme name must be a string.',
@@ -51,4 +51,6 @@ export default {
       },
     },
   },
-} as Schema;
+};
+
+export default defaults;

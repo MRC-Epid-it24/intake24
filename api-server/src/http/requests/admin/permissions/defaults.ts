@@ -4,7 +4,7 @@ import { Op, WhereOptions } from 'sequelize';
 import { Permission } from '@/db/models/system';
 import unique from '@/http/rules/unique';
 
-export default {
+const defaults: Schema = {
   name: {
     in: ['body'],
     errorMessage: 'Name must be filled in.',
@@ -31,4 +31,6 @@ export default {
     isString: true,
     optional: { options: { nullable: true } },
   },
-} as Schema;
+};
+
+export default defaults;
