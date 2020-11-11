@@ -7,6 +7,7 @@ Configuration is structured to following sections:
 * [Database](#database)
 * [Filesystem](#filesystem)
 * [Mail](#mail)
+* [Queue](#queue)
 * [Security](#security)
 
 ## Application
@@ -302,6 +303,26 @@ Selected mailer transport
 * dotenv var: `MAIL_FROM_NAME`
 * type: `string`
 * default: `'Intake24'`
+
+## Queue
+
+Queueing system is handled by [Redis](https://redis.io) & [bullmq](https://github.com/taskforcesh/bullmq)
+
+### Redis instance connection
+
+#### Host
+
+* object-path: `redis.host`
+* dotenv var: `QUEUE_REDIS_HOST`
+* type: `string`
+* default: `'localhost'`
+
+#### Port
+
+* object-path: `redis.port`
+* dotenv var: `QUEUE_REDIS_PORT`
+* type: `number`
+* default: `6379`
 
 ## Security
 
