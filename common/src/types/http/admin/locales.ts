@@ -16,7 +16,7 @@ export type CreateLocaleRequest = LocaleRequest;
 
 export type UpdateLocaleRequest = Omit<LocaleRequest, 'id'>;
 
-export type LocalesResponse = Pagination<Language>;
+export type LocalesResponse = Pagination<Locale>;
 
 export type LocaleEntry = Locale;
 
