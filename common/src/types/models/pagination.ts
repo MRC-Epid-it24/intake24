@@ -1,8 +1,3 @@
-export interface Pagination<R> {
-  data: R[];
-  meta: PaginationMeta;
-}
-
 export interface PaginationMeta {
   from: number;
   lastPage: number;
@@ -11,4 +6,9 @@ export interface PaginationMeta {
   limit: number;
   to: number;
   total: number;
+}
+
+export interface Pagination<R> {
+  data: R[];
+  meta: PaginationMeta;
 }

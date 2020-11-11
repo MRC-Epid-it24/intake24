@@ -3,8 +3,9 @@ import { Environment } from './app';
 
 export type Database = 'foods' | 'system';
 
-export type ServerConnectionInfo = Record<Environment, DBConnectionInfo>;
 export type DBConnectionInfo = Record<Database, Options>;
+
+export type ServerConnectionInfo = Record<Environment, DBConnectionInfo>;
 
 const databaseConfig: ServerConnectionInfo = {
   development: {
