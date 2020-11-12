@@ -7,8 +7,9 @@ import {
   QueueScheduler,
   Worker,
 } from 'bullmq';
+import config from '@/config/queue';
 import { Job } from '@/db/models/system';
-import jobs, { validate } from '@/jobs';
+import jobs from '@/jobs';
 import logger from '@/services/logger';
 import { JobType } from '@/jobs/job';
 import { QueueHandler } from './queue-handler';
@@ -52,8 +53,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
 
     this.registerQueueEvents();
 
-    // TODO: extract number of workers to config
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < config.workers; i++) {
       this.workers.push(new Worker(this.name, this.processor, { connection }));
     }
 
