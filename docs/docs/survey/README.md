@@ -27,3 +27,6 @@ These are defined as types, loaded as components (mapped into `Recall.vue`). Ren
 ### Source
 
 [Github](https://github.com/MRC-Epid-it24/intake24/tree/master/survey-client)
+
+### Layout
+Grid system uses [Vuetify](https://dev.vuetifyjs.com)
