@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator';
-import validate, { ValidationMiddlerware } from '@/http/requests/validate';
+import validate, { ValidationMiddleware } from '@/http/requests/validate';
 
-export default (param: string): ValidationMiddlerware[] => {
+export default (param: string): ValidationMiddleware[] => {
   return validate(
     checkSchema({
       [param]: {
