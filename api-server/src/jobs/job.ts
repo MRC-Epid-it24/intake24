@@ -4,9 +4,9 @@ export interface Job {
 }
 
 export interface JobConstructor {
-  new (): Job;
+  new (...args: any[]): Job;
 }
 
-export type JobType = 'PurgeRefreshTokens';
+export type JobType = 'PurgeRefreshTokens' | 'SendPasswordReset';
 
 export type Jobs = Record<JobType, JobConstructor>;

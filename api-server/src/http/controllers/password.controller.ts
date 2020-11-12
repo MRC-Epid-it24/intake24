@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { nanoid } from 'nanoid';
-import nunjucks from 'nunjucks';
 import { Op } from 'sequelize';
 import config from '@/config';
 import { User, UserPasswordReset } from '@/db/models/system';
@@ -22,22 +21,14 @@ export default {
       return;
     }
 
+    const { id: userId } = user;
     const token = nanoid(64);
-    await UserPasswordReset.create({ userId: user.id, token });
+    await UserPasswordReset.create({ userId, token });
 
-    const url = `${config.app.urls.admin}/password/reset/${token}`;
-    const { expire: expiresAt } = config.security.passwords;
-
-    const html = nunjucks.render('mail/password-reset.html', {
-      title: 'Password reset',
-      expiresAt,
-      action: { url, text: 'Reset password' },
-    });
-
-    scheduler.mail.send(
-      'password-reset',
-      { to: user.email, subject: 'Password reset', html },
-      { delay: 1000, removeOnComplete: true }
+    await scheduler.jobs.addJob(
+      { type: 'SendPasswordReset', userId },
+      { email, token },
+      { removeOnComplete: true }
     );
 
     res.json();

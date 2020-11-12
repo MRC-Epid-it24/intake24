@@ -1,4 +1,4 @@
-import { ConnectionOptions, Job, Queue, QueueScheduler, Worker } from 'bullmq';
+import { ConnectionOptions, Job as BullJob, Queue, QueueScheduler, Worker } from 'bullmq';
 import Task from '@/db/models/system/task';
 import jobs, { validate } from '@/jobs';
 import logger from '@/services/logger';
@@ -40,24 +40,24 @@ export default class TasksQueueHandler implements QueueHandler {
 
     this.worker = new Worker(this.name, this.processor, { connection });
 
-    this.worker.on('completed', (job) => {
+    this.worker.on('completed', (job: BullJob<TaskData>) => {
       logger.info(`${this.name}: ${job.id} has completed.`);
     });
 
-    this.worker.on('failed', (job, err) => {
+    this.worker.on('failed', (job: BullJob<TaskData>, err) => {
       logger.error(`${this.name}: ${job.id} has failed with ${err.message}`);
     });
 
     await this.clearRepeatableJobs();
     await this.loadRepeatableJobs();
 
-    logger.info(`${this.constructor.name} has been loaded.`);
+    logger.info(`${this.name} has been loaded.`);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async processor(job: Job<TaskData>): Promise<void> {
-    const task = new jobs[job.data.jobType]();
-    await task.run();
+  async processor({ data }: BullJob<TaskData>): Promise<void> {
+    const newJob = new jobs[data.jobType](data);
+    await newJob.run();
   }
 
   /**
@@ -128,18 +128,18 @@ export default class TasksQueueHandler implements QueueHandler {
     const { id, name, job, active } = task;
 
     if (!validate(job)) {
-      logger.warn(`${this.constructor.name}: Job "${job}" not found in job definitions.`);
+      logger.warn(`${this.name}: Job "${job}" not found in job definitions.`);
       return;
     }
 
     if (!active) {
-      logger.warn(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) not set as active.`);
+      logger.warn(`${this.name}: Task (ID: ${id}, Name: ${name}) not set as active.`);
       return;
     }
 
     await this.queueJob(task);
 
-    logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) added.`);
+    logger.debug(`${this.name}: Task (ID: ${id}, Name: ${name}) added.`);
   }
 
   /**
@@ -153,7 +153,7 @@ export default class TasksQueueHandler implements QueueHandler {
     const { id, name, job } = task;
 
     if (!validate(job)) {
-      logger.warn(`${this.constructor.name}: Job "${job}" not found in job definitions.`);
+      logger.warn(`${this.name}: Job "${job}" not found in job definitions.`);
       return;
     }
 
@@ -161,7 +161,7 @@ export default class TasksQueueHandler implements QueueHandler {
 
     if (task.active) await this.queueJob(task);
 
-    logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) updated.`);
+    logger.debug(`${this.name}: Task (ID: ${id}, Name: ${name}) updated.`);
   }
 
   /**
@@ -176,7 +176,7 @@ export default class TasksQueueHandler implements QueueHandler {
 
     await this.dequeueJob(task);
 
-    logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) removed.`);
+    logger.debug(`${this.name}: Task (ID: ${id}, Name: ${name}) removed.`);
   }
 
   /**
@@ -190,13 +190,13 @@ export default class TasksQueueHandler implements QueueHandler {
     const { id, name, job: jobType } = task;
 
     if (!validate(jobType)) {
-      logger.warn(`${this.constructor.name}: Job "${jobType}" not found in job definitions.`);
+      logger.warn(`${this.name}: Job "${jobType}" not found in job definitions.`);
       return;
     }
 
-    await this.queue.add(name, { jobType }, { delay: 1000 });
+    await this.queue.add(name, { jobType }, { delay: 500 });
 
-    logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) queued.`);
+    logger.debug(`${this.name}: Task (ID: ${id}, Name: ${name}) queued.`);
   }
 
   /**
