@@ -1,0 +1,82 @@
+# See https://github.com/ANXS/postgresql/blob/master/defaults/main.yml for more options
+
+intake24:
+  # This must be valid e-mail to change the initial password
+  admin_user_email: admin@some.domain
+  system_database:
+    user: intake24
+    name: intake24_system
+    schema_snapshot_path: /path/to/system_schema.pgcustom
+    data_snapshot_path: /path/to/system_data.pgcustom
+  ## Delete the food_database section below if not using local food database
+  food_database:
+    user: intake24
+    name: intake24_foods
+    snapshot_path: /path/to/foods.pgcustom
+
+# Basic settings
+postgresql_version: 13.1
+postgresql_encoding: 'UTF-8'
+postgres_admin_user: postgres
+
+postgresql_locale_parts:
+  - 'en_GB' # Locale
+  - 'UTF-8' # Encoding
+
+postgresql_users:
+  - name: "{{intake24.system_database.user}}"
+  ## Delete this if not using local food datbase
+  - name: "{{intake24.food_database.user}}"
+
+postgresql_pg_hba_default: []
+
+# pg_hba.conf
+postgresql_pg_hba_custom:
+  - comment: "Allow Unix socket connections for '{{postgresql_service_user}}' and 'deploy'"
+    type: local
+    database: all
+    user: "{{postgresql_admin_user}}"
+    address: ''
+    method: 'peer map=postgres'
+  - comment: "Allow local IPv4 connections to system DB"
+    type: host
+    database: "{{intake24.system_database.name}}"
+    user: "{{intake24.system_database.user}}"
+    address: '127.0.0.1/32'
+    method: 'trust'
+  - comment: "Allow local IPv6 connections to system DB"
+    type: host
+    database: "{{intake24.system_database.name}}"
+    user: "{{intake24.system_database.user}}"
+    address: '::1/128'
+    method: 'trust'
+  ## Delete the two entries below if not using local food database
+  - comment: "Allow IPv4 connections to food DB from localhost as intake24"
+    type: host
+    database: "{{intake24.food_database.name}}"
+    user: "{{intake24.food_database.user}}"
+    address: '127.0.0.1/32'
+    method: 'trust'
+  - comment: "Allow local IPv6 connections to food DB"
+    type: host
+    database: "{{intake24.food_database.name}}"
+    user: "{{intake24.food_database.user}}"
+    address: '::1/128'
+    method: 'trust'
+
+# pg_ident.conf
+postgresql_pg_ident:
+    - comment: "Map deploy user to postgresql admin"
+      mapname: "postgres"
+      system_username: "deploy"
+      pg_username: "{{postgresql_admin_user}}"
+    - comment: "Map system postgresql user to postgresql admin"
+      mapname: "postgres"
+      system_username: "{{postgresql_service_user}}"
+      pg_username: "{{postgresql_admin_user}}"
+
+# postgresql.conf
+postgresql_listen_addresses:
+  - 'localhost'
+
+postgresql_ssl: off

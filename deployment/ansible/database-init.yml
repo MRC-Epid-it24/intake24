@@ -1,0 +1,5 @@
+---
+- hosts: dbservers
+  roles:
+    - { role: ANXS.postgresql,  become: true }
+    - database-init

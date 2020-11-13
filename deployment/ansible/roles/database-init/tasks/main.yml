@@ -1,0 +1,85 @@
+- name: Check that system database snapshot (schema) exists
+  local_action: stat path="{{intake24.system_database.schema_snapshot_path}}"
+  register: system_snapshot_1
+
+- name: Check that system database snapshot (data) exists
+  local_action: stat path="{{intake24.system_database.data_snapshot_path}}"
+  register: system_snapshot_2
+
+- fail:
+    msg: "One of the system database snapshot files does not exist. Check paths in postgres-configuration.yml."
+  when: not system_snapshot_1.stat.exists or not system_snapshot_2.stat.exists
+
+- name: Create system database
+  command: /usr/bin/createdb -U {{postgres_admin_user}} --owner={{intake24.system_database.user}} {{intake24.system_database.name}}
+
+- name: Create system database extensions
+  command: /usr/bin/psql -U {{postgres_admin_user}} -d {{intake24.system_database.name}} -c "create extension if not exists \"{{item}}\";"
+  with_items:
+   - uuid-ossp
+
+- name: Upload system database snapshot (schema)
+  copy: src={{intake24.system_database.schema_snapshot_path}} dest=/home/deploy/intake24_system_schema.pgcustom
+
+- name: Upload system database snapshot (constants)
+  copy: src={{intake24.system_database.data_snapshot_path}} dest=/home/deploy/intake24_system_data.pgcustom
+
+- name: Restore database snapshot (schema)
+  command: /usr/bin/pg_restore -U {{postgres_admin_user}} -n public --no-owner --no-acl --role={{intake24.system_database.user}} --dbname {{intake24.system_database.name}} /home/deploy/intake24_system_schema.pgcustom
+
+- name: Restore database snapshot (constants)
+  command: /usr/bin/pg_restore -U {{postgres_admin_user}} -n public --no-owner --no-acl --role={{intake24.system_database.user}} --dbname {{intake24.system_database.name}} /home/deploy/intake24_system_data.pgcustom
+
+- name: Create default Intake24 admin user
+  command: /usr/bin/psql -U {{postgres_admin_user}} -d {{intake24.system_database.name}} -c "{{item}}"
+  with_items:
+  - >
+     INSERT INTO users(name, email, phone, simple_name, email_notifications, sms_notifications) VALUES ('Intake24 Admin', '{{intake24.admin_user_email}}', null, 'intake24 admin', true, true);
+     INSERT INTO user_passwords (user_id, password_hash, password_salt, password_hasher) VALUES (1, 'hU+SnrQ/+uAxfPyvpqCw9vixHzwC2Ph/Zqasd6CLgrE=', 'DWXIWvxIVfX1vBYfASmy0A==','shiro-sha256');
+     INSERT INTO user_roles(user_id, role) VALUES (1, 'superuser');
+
+- name: Delete snapshots
+  file:
+    path: "{{item}}"
+  with_items:
+    - /home/deploy/intake24_system_schema.pgcustom
+    - /home/deploy/intake24_system_data.pgcustom
+
+
+###
+
+- name: Check that food database snapshot exists
+  local_action: stat path="{{intake24.food_database.snapshot_path}}"
+  register: food_snapshot_s
+  when: intake24.food_database.name is defined
+
+- fail:
+    msg: "Food database snapshot file does not exist. Check paths in postgres-configuration.yml."
+  when: (intake24.food_database.name is defined) and (not food_snapshot_s.stat.exists)
+
+- name: Create food database
+  command: /usr/bin/createdb -U {{postgres_admin_user}} --owner={{intake24.food_database.user}} {{intake24.food_database.name}}
+  when: intake24.food_database.name is defined
+
+- name: Create food database extensions
+  command: /usr/bin/psql -U {{postgres_admin_user}} -d {{intake24.food_database.name}} -c "create extension if not exists \"{{item}}\";"
+  with_items:
+   - uuid-ossp
+   - btree_gist
+  when: intake24.food_database.name is defined
+
+- name: Upload food database snapshot
+  copy: src={{intake24.food_database.snapshot_path}} dest=/home/deploy/intake24_foods_snapshot.pgcustom
+  when: intake24.food_database.name is defined
+
+- name: Restore food database snapshot
+  command: /usr/bin/pg_restore -U {{postgres_admin_user}} -n public --no-owner --no-acl --role={{intake24.food_database.user}} --dbname {{intake24.food_database.name}} /home/deploy/intake24_foods_snapshot.pgcustom
+  when: intake24.food_database.name is defined
+  
+- name: Delete snapshots
+  file:
+    path: "{{item}}"
+  with_items:
+    - /home/deploy/intake24_foods_snapshot.pgcustom
+  when: intake24.food_database.name is defined
+
