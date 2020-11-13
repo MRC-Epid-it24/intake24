@@ -1,4 +1,8 @@
 ---
+  - name: Wait up to 120 seconds for host to become reachable
+    wait_for_connection:
+      timeout: 120
+
   - name: Create deploy user
     user:
       name: deploy
