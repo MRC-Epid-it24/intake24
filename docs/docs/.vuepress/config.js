@@ -66,6 +66,10 @@ module.exports = {
         link: '/data-dictionary/',
       },
       {
+        text: 'Developer resources',
+        link: '/developer/',
+      },
+      {
         text: 'GitHub',
         link: 'https://github.com/MRC-Epid-it24/intake24',
       }
@@ -151,6 +155,18 @@ module.exports = {
             '',
             'survey',
             'admin'
+          ]
+        }
+      ],
+      '/developer/': [
+        {
+          title: 'Developer resources',
+          collapsable: false,
+          children: [
+            '',
+            'getting-started',
+            'vm',
+            'v3-survey'
           ]
         }
       ],
