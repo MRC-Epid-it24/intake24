@@ -18,6 +18,33 @@
     regexp: '^supervised'
     state: present
 
+# This will not work if the bind directive is commented out
+# but since we can assume we're working with the default
+# redis.conf this should be OK
+
+- name: Set bind addresses
+  lineinfile:
+    dest: /etc/redis/redis.conf
+    line: 'bind {{ redis.bindAddresses }}'
+    regexp: '^bind'
+    state: present
+  when: redis.bindAddresses is defined
+
+- name: Comment out bind directive (listen on all interfaces) 
+  lineinfile:
+    dest: /etc/redis/redis.conf
+    line: '# bind 127.0.0.1 ::1'
+    regexp: '^bind'
+    state: present
+  when: redis.bindAddresses is undefined
+
+- name: Set protected mode
+  lineinfile:
+    dest: /etc/redis/redis.conf
+    line: 'protected-mode {{ redis.protectedMode }}'
+    regexp: '^protected-mode'
+    state: present
+
 - name: Restart redis-server service
   service:
     name: redis-server
