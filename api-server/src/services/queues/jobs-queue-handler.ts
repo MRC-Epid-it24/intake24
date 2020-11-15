@@ -49,7 +49,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
 
     this.queue = new Queue(this.name, { connection });
 
-    this.queueEvents = new QueueEvents(this.name);
+    this.queueEvents = new QueueEvents(this.name, { connection });
 
     this.registerQueueEvents();
 
