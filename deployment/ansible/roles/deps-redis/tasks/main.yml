@@ -49,3 +49,4 @@
   service:
     name: redis-server
     state: restarted
+    enabled: yes
