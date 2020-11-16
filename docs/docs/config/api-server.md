@@ -324,6 +324,15 @@ Queueing system is handled by [Redis](https://redis.io) & [bullmq](https://githu
 * type: `number`
 * default: `6379`
 
+#### Workers
+
+Number of workers to spawn for job queue
+
+* object-path: `workers`
+* dotenv var: `QUEUE_WORKERS`
+* type: `number`
+* default: `3`
+
 ## Security
 
 Path: `src/config/security.ts`
