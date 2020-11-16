@@ -4,41 +4,49 @@
       <tbody>
         <tr>
           <th>{{ $t('surveys._') }}</th>
-          <td>{{ entry.id }}</td>
+          <td colspan="3">{{ entry.id }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.locale') }}</th>
           <td>{{ entry.localeId }}</td>
-        </tr>
-        <tr>
           <th>{{ $t('surveys.scheme') }}</th>
           <td>{{ entry.schemeId }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.startDate') }}</th>
           <td>{{ entry.startDate }}</td>
-        </tr>
-        <tr>
           <th>{{ $t('surveys.endDate') }}</th>
           <td>{{ entry.endDate }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.supportEmail') }}</th>
           <td>{{ entry.supportEmail }}</td>
-        </tr>
-        <tr>
           <th>{{ $t('surveys.state._') }}</th>
           <td>{{ $t(`surveys.state.${entry.state}`) }}</td>
         </tr>
         <tr>
-          <th>{{ $t('surveys.allowGenUsers') }}</th>
+          <th>{{ $t('surveys.genUsers.allow') }}</th>
           <td>{{ entry.allowGenUsers }}</td>
+          <th>{{ $t('surveys.genUsers.secret') }}</th>
+          <td>{{ entry.genUserKey }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('surveys.submissionLimits.maxDaily') }}</th>
+          <td>{{ entry.maximumDailySubmissions }}</td>
+          <th>{{ $t('surveys.submissionLimits.maxTotal') }}</th>
+          <td>{{ entry.maximumTotalSubmissions }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('surveys.submissionLimits.minInterval') }}</th>
+          <td colspan="3">{{ entry.minimumSubmissionInterval }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('surveys.storeUserSessionOnServer') }}</th>
+          <td colspan="3">{{ entry.storeUserSessionOnServer }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.feedback.enabled') }}</th>
           <td>{{ entry.feedbackEnabled }}</td>
-        </tr>
-        <tr>
           <th>{{ $t('surveys.feedback.numberOfSubmissions') }}</th>
           <td>{{ entry.numberOfSubmissionsForFeedback }}</td>
         </tr>

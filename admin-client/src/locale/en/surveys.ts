@@ -22,12 +22,21 @@ const surveys: LocaleMessage = {
   startDate: 'Start date',
   endDate: 'End date',
   supportEmail: 'Support Email',
-  allowGenUsers: 'Allow generation of users',
+  genUsers: {
+    allow: 'Allow user generation',
+    secret: 'JWT secret for user generation',
+  },
+  submissionLimits: {
+    _: 'Submission limits',
+    maxDaily: 'Maximum allowed submissions per calendar day',
+    maxTotal: 'Maximum allowed total submissions',
+    minInterval: 'Minimum interval between submissions (seconds)',
+  },
   storeUserSessionOnServer: 'Store user session on server',
   feedback: {
-    _: 'Feedback',
-    enabled: 'Enabled',
-    numberOfSubmissions: 'Number of submissions',
+    _: 'Feedback settings',
+    enabled: 'Feedback Enabled',
+    numberOfSubmissions: 'Number of submissions for feedback',
   },
 
   respondents: {

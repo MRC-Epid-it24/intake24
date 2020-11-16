@@ -144,16 +144,27 @@
                 @change="form.errors.clear('state')"
               ></v-select>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="6" align-self="center">
               <v-switch
                 v-model="form.allowGenUsers"
                 :error-messages="form.errors.get('allowGenUsers')"
-                :label="$t('surveys.allowGenUsers')"
+                :label="$t('surveys.genUsers.allow')"
                 class="mt-0"
                 hide-details="auto"
                 name="allowGenUsers"
                 @change="form.errors.clear('allowGenUsers')"
               ></v-switch>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.genUserKey"
+                :disabled="!form.allowGenUsers"
+                :error-messages="form.errors.get('genUserKey')"
+                :label="$t('surveys.genUsers.secret')"
+                hide-details="auto"
+                name="genUserKey"
+                outlined
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-switch
@@ -165,6 +176,40 @@
                 name="storeUserSessionOnServer"
                 @change="form.errors.clear('storeUserSessionOnServer')"
               ></v-switch>
+            </v-col>
+            <v-col cols="12">
+              <hr class="my-5" />
+              <div class="text-h6">{{ $t('surveys.submissionLimits._') }}</div>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model.number="form.maximumDailySubmissions"
+                outlined
+                :error-messages="form.errors.get('maximumDailySubmissions')"
+                :label="$t('surveys.submissionLimits.maxDaily')"
+                name="maximumDailySubmissions"
+                hide-details="auto"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model.number="form.maximumTotalSubmissions"
+                outlined
+                :error-messages="form.errors.get('maximumTotalSubmissions')"
+                :label="$t('surveys.submissionLimits.maxTotal')"
+                name="maximumTotalSubmissions"
+                hide-details="auto"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model.number="form.minimumSubmissionInterval"
+                outlined
+                :error-messages="form.errors.get('minimumSubmissionInterval')"
+                :label="$t('surveys.submissionLimits.minInterval')"
+                name="minimumSubmissionInterval"
+                hide-details="auto"
+              ></v-text-field>
             </v-col>
             <v-col cols="12">
               <hr class="my-5" />
@@ -182,7 +227,7 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.numberOfSubmissionsForFeedback"
+                v-model.number="form.numberOfSubmissionsForFeedback"
                 outlined
                 :disabled="!form.feedbackEnabled"
                 :error-messages="form.errors.get('numberOfSubmissionsForFeedback')"
@@ -221,11 +266,15 @@ export default Vue.extend({
         endDate: null,
         supportEmail: null,
         allowGenUsers: false,
+        genUserKey: null,
         feedbackEnabled: false,
         numberOfSubmissionsForFeedback: 1,
         storeUserSessionOnServer: false,
         description: null,
         finalPageHtml: null,
+        maximumDailySubmissions: 3,
+        maximumTotalSubmissions: null,
+        minimumSubmissionInterval: 600,
       }),
       states: [
         { value: 0, text: this.$t('surveys.state.0') },
