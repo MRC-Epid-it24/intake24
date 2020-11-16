@@ -13,7 +13,7 @@ export interface SendPasswordResetData {
 export default class SendPasswordReset implements Job {
   public readonly name: JobType = 'SendPasswordReset';
 
-  data: SendPasswordResetData;
+  private data: SendPasswordResetData;
 
   constructor({ data }: JobData<SendPasswordResetData>) {
     this.data = data;

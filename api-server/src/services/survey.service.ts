@@ -1,8 +1,9 @@
 import { nanoid } from 'nanoid';
 import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/http/admin/users';
-import { GenUserCounter, Permission, Survey, User, UserSurveyAlias } from '@/db/models/system';
+import { GenUserCounter, Job, Permission, Survey, User, UserSurveyAlias } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import { surveyMgmt, surveyRespondent } from './acl.service';
+import scheduler from './scheduler';
 import userSvc, { toSimpleName } from './user.service';
 
 export type RespondentWithPassword = {
@@ -112,5 +113,22 @@ export default {
     const password = nanoid(8);
 
     return this.createRespondent(surveyId, { userName, password });
+  },
+
+  async uploadSurveyRespondents(
+    surveyId: string,
+    userId: number,
+    file: Express.Multer.File
+  ): Promise<Job> {
+    const survey = await Survey.findByPk(surveyId);
+
+    if (!survey) throw new NotFoundError();
+
+    const job = await scheduler.jobs.addJob(
+      { type: 'UploadSurveyRespondents', userId },
+      { surveyId, file }
+    );
+
+    return job;
   },
 };
