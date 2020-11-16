@@ -3,6 +3,7 @@ import {
   AfterDestroy,
   BelongsTo,
   Column,
+  DataType,
   HasOne,
   HasMany,
   Scopes,
@@ -79,24 +80,39 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
   })
   public allowGenUsers!: boolean;
 
-  @Column
-  public genUserKey!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public genUserKey!: string | null;
 
-  @Column
-  public suspensionReason!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public suspensionReason!: string | null;
 
-  @Column
-  public surveyMonkeyUrl!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public surveyMonkeyUrl!: string | null;
 
   @Column({
     allowNull: false,
   })
   public supportEmail!: string;
 
-  @Column
-  public originatingUrl!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public originatingUrl!: string | null;
 
-  @Column
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT,
+  })
   public description!: string;
 
   @Column({
@@ -111,8 +127,11 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
   })
   public feedbackStyle!: string;
 
-  @Column
-  public submissionNotificationUrl!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public submissionNotificationUrl!: string | null;
 
   @Column
   public storeUserSessionOnServer!: boolean;
@@ -132,8 +151,11 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
   })
   public maximumDailySubmissions!: number;
 
-  @Column
-  public maximumTotalSubmissions!: number;
+  @Column({
+    allowNull: true,
+    type: DataType.INTEGER,
+  })
+  public maximumTotalSubmissions!: number | null;
 
   @Column({
     allowNull: false,

@@ -36,9 +36,11 @@ module.exports = {
             unique: true,
           },
           display_name: {
+            allowNull: false,
             type: Sequelize.STRING,
           },
           description: {
+            allowNull: true,
             type: Sequelize.TEXT,
           },
           created_at: {
@@ -66,9 +68,11 @@ module.exports = {
           unique: true,
         },
         display_name: {
+          allowNull: false,
           type: Sequelize.STRING,
         },
         description: {
+          allowNull: true,
           type: Sequelize.TEXT,
         },
         created_at: {

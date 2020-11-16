@@ -49,8 +49,11 @@ export default class Permission extends BaseModel<Permission> implements Permiss
   @Column
   public displayName!: string;
 
-  @Column
-  public description!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT,
+  })
+  public description!: string | null;
 
   @CreatedAt
   @Column
