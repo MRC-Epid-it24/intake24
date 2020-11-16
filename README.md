@@ -1,5 +1,9 @@
 # Intake24 NG
 
+## Node.js
+
+Intake24 **requires node.js version 12 or newer**, please make sure to check your node.js version before continuing.
+
 ## Project setup
 
 1. Install common dependencies
