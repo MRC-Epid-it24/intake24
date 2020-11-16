@@ -14,7 +14,7 @@ Note that the VM currently does not include the portion size image database. The
  
 An image of the latest version of the development VM is available for download here:
  
-[https://intake24.s3-eu-west-1.amazonaws.com/vm/intake24_v4_dev_15112020.ova](https://intake24.s3-eu-west-1.amazonaws.com/vm/intake24_v4_dev_15112020.ova)
+[https://intake24.s3-eu-west-1.amazonaws.com/vm/intake24_v4_dev_16112020.ova](https://intake24.s3-eu-west-1.amazonaws.com/vm/intake24_v4_dev_16112020.ova)
 
 ## Prerequisites
 

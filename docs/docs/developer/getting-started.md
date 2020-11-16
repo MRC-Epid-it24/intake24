@@ -1,5 +1,9 @@
 # Getting started
 
+::: tip
+Intake24 requires node.js version 12 or newer, please make sure to check your node.js version before continuing.
+:::
+
 Clone the [Intake24 version 4 repository on GitHub](https://github.com/MRC-Epid-it24/intake24).
 
 Follow the readme instructions in the root of the repository.
@@ -33,3 +37,7 @@ Check that the settings are correct by starting the server with `npm run dev`.
 
 The default user with superuser rights is `admin` and the password is `intake24`. Refer to the [API docs](/api/) for 
 further details.
+
+::: tip
+Use the e-mail log in endpoint (`/api/login`) for the admin user even though "admin" is not a valid e-mail address.
+:::
