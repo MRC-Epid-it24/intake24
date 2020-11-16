@@ -6,6 +6,9 @@ import authentication from './authentication';
 import { AppLoader } from './loader';
 
 export default async ({ app }: AppLoader): Promise<void> => {
+  // Request sanitizers
+  app.use(body('*').customSanitizer(trimStrings));
+
   // Mount authentication middleware
   authentication({ app });
 
@@ -14,7 +17,4 @@ export default async ({ app }: AppLoader): Promise<void> => {
 
   // Mount error middleware
   errors({ app });
-
-  // Request sanitizers
-  app.use(body('*').customSanitizer(trimStrings));
 };
