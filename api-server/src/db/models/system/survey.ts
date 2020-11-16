@@ -80,6 +80,9 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
   public allowGenUsers!: boolean;
 
   @Column
+  public genUserKey!: string;
+
+  @Column
   public suspensionReason!: string;
 
   @Column
@@ -122,6 +125,21 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
 
   @Column
   public finalPageHtml!: string;
+
+  @Column({
+    allowNull: false,
+    defaultValue: 3,
+  })
+  public maximumDailySubmissions!: number;
+
+  @Column
+  public maximumTotalSubmissions!: number;
+
+  @Column({
+    allowNull: false,
+    defaultValue: 600,
+  })
+  public minimumSubmissionInterval!: number;
 
   @HasOne(() => GenUserCounter, 'surveyId')
   public counter?: GenUserCounter;

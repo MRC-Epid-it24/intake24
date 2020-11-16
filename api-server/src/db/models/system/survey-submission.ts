@@ -1,9 +1,6 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import Survey from './survey';
-import SurveySubmissionCustomField from './survey-submission-custom-field';
-import SurveySubmissionMeal from './survey-submission-meal';
-import User from './user';
+import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from '.';
 
 @Scopes(() => ({
   survey: { include: [{ model: Survey }] },
@@ -44,6 +41,11 @@ export default class SurveySubmission extends BaseModel<SurveySubmission> {
     allowNull: false,
   })
   public endTime!: Date;
+
+  @Column({
+    allowNull: false,
+  })
+  public submissionTime!: Date;
 
   @Column
   public log!: string;

@@ -61,6 +61,12 @@ const defaults: Schema = {
     errorMessage: 'Enter true/false value.',
     isBoolean: true,
   },
+  genUserKey: {
+    in: ['body'],
+    errorMessage: 'JWT token/secret must be a string.',
+    isString: true,
+    optional: { options: { nullable: true } },
+  },
   suspensionReason: {
     in: ['body'],
     errorMessage: 'Suspension reason must be a string.',
@@ -118,6 +124,22 @@ const defaults: Schema = {
     errorMessage: 'Final page html must be a string.',
     isString: true,
     optional: { options: { nullable: true } },
+  },
+  maximumDailySubmissions: {
+    errorMessage: 'Value has to be a number.',
+    isInt: true,
+    toInt: true,
+  },
+  maximumTotalSubmissions: {
+    errorMessage: 'Value has to be a number.',
+    isInt: true,
+    toInt: true,
+    optional: { options: { nullable: true } },
+  },
+  minimumSubmissionInterval: {
+    errorMessage: 'Value has to be a number.',
+    isInt: true,
+    toInt: true,
   },
 };
 
