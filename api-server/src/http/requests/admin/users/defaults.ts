@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
 import { User } from '@/db/models/system';
-import unique from '@/http/rules/unique';
+import { unique } from '@/http/rules';
 import { permissions, roles } from '../acl';
 
 export const identifiers: Schema = {
