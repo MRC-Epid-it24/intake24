@@ -168,7 +168,8 @@ module.exports = {
             '',
             'getting-started',
             'vm',
-            'v3-survey'
+            'v3-survey',
+            'portion-size'
           ]
         }
       ],
