@@ -140,9 +140,12 @@ module.exports = {
           ]
         },
         {
-          title: 'Survey',
+          title: 'Respondent',
           collapsable: false,
           children: [
+              'respondent/survey',
+              'respondent/food-lookup',
+              'respondent/food-data'
           ]
         }
       ],
