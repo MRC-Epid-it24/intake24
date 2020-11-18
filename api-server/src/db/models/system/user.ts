@@ -58,17 +58,29 @@ export default class User extends BaseModel<User> implements UserAttributes {
   })
   public id!: number;
 
-  @Column
-  public name!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public name!: string | null;
 
-  @Column
-  public email!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public email!: string | null;
 
-  @Column
-  public phone!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public phone!: string | null;
 
-  @Column
-  public simpleName!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public simpleName!: string | null;
 
   @Column({
     allowNull: false,

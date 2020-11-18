@@ -16,6 +16,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       cron: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       active: {
@@ -24,6 +25,7 @@ module.exports = {
         type: Sequelize.BOOLEAN,
       },
       description: {
+        allowNull: true,
         type: Sequelize.TEXT,
       },
       created_at: {

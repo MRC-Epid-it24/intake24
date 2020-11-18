@@ -32,7 +32,7 @@ export type Locale = {
   respondentLanguageId: string;
   adminLanguageId: string;
   countryFlagCode: string;
-  prototypeLocaleId: string;
+  prototypeLocaleId: string | null;
   textDirection: string;
 };
 
@@ -66,6 +66,7 @@ export type Survey = {
   schemeId: string;
   localeId: string;
   allowGenUsers: boolean;
+  genUserKey: string | null;
   suspensionReason: string | null;
   surveyMonkeyUrl: string | null;
   supportEmail: string;
@@ -77,6 +78,9 @@ export type Survey = {
   storeUserSessionOnServer: boolean;
   numberOfSubmissionsForFeedback: number;
   finalPageHtml: string | null;
+  maximumDailySubmissions: number;
+  maximumTotalSubmissions: number | null;
+  minimumSubmissionInterval: number;
 };
 
 export type Task = {

@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 import validate from '@/http/requests/validate';
-import recaptcha from '@/http/rules/recaptcha';
+import { recaptcha } from '@/http/rules';
 
 export default validate(
   checkSchema({

@@ -39,8 +39,11 @@ export default class Task extends BaseModel<Task> implements TaskAttributes {
   })
   public active!: boolean;
 
-  @Column
-  public description!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT,
+  })
+  public description!: string | null;
 
   @CreatedAt
   @Column

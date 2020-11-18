@@ -1,4 +1,4 @@
-import { Column, HasMany, Scopes, Table, BelongsTo } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Scopes, Table, BelongsTo } from 'sequelize-typescript';
 import { Locale as LocaleAttributes } from '@common/types/models/system';
 import BaseModel from '../model';
 import { Language, Survey } from '.';
@@ -48,8 +48,9 @@ export default class Locale extends BaseModel<Locale> implements LocaleAttribute
 
   @Column({
     allowNull: true,
+    type: DataType.STRING,
   })
-  public prototypeLocaleId!: string;
+  public prototypeLocaleId!: string | null;
 
   @Column({
     allowNull: false,

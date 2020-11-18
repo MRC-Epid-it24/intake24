@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { pick } from 'lodash';
 import { RespondentResponse } from '@common/types/http/admin/users';
-import { Survey, UserSurveyAlias } from '@/db/models/system';
+import { Survey, User, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import userRespondentResponse from '@/http/responses/admin/user-respondent.response';
 import surveySvc from '@/services/survey.service';
@@ -54,5 +54,15 @@ export default {
 
     await surveySvc.deleteRespondent(surveyId, userId);
     res.status(204).json();
+  },
+
+  async upload(req: Request, res: Response): Promise<void> {
+    const { surveyId } = req.params;
+    const { file } = req;
+    const { id: userId } = req.user as User;
+
+    const job = await surveySvc.uploadSurveyRespondents(surveyId, userId, file);
+
+    res.json({ data: job });
   },
 };

@@ -35,7 +35,7 @@ export default Vue.extend({
           value: 'active',
         },
         {
-          text: this.$t('common.action'),
+          text: this.$t('common.action._'),
           sortable: false,
           value: 'action',
           align: 'right',

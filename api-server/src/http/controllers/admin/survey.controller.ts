@@ -69,6 +69,7 @@ export default {
         'schemeId',
         'localeId',
         'allowGenUsers',
+        'genUserKey',
         'suspensionReason',
         'surveyMonkeyUrl',
         'supportEmail',
@@ -80,6 +81,9 @@ export default {
         'storeUserSessionOnServer',
         'numberOfSubmissionsForFeedback',
         'finalPageHtml',
+        'maximumDailySubmissions',
+        'maximumTotalSubmissions',
+        'minimumSubmissionInterval',
       ])
     );
 
@@ -111,6 +115,7 @@ export default {
         'schemeId',
         'localeId',
         'allowGenUsers',
+        'genUserKey',
         'suspensionReason',
         'surveyMonkeyUrl',
         'supportEmail',
@@ -122,6 +127,9 @@ export default {
         'storeUserSessionOnServer',
         'numberOfSubmissionsForFeedback',
         'finalPageHtml',
+        'maximumDailySubmissions',
+        'maximumTotalSubmissions',
+        'minimumSubmissionInterval',
       ])
     );
 

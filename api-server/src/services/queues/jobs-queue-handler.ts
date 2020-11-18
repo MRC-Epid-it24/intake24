@@ -10,8 +10,8 @@ import {
 import config from '@/config/queue';
 import { Job } from '@/db/models/system';
 import jobs from '@/jobs';
-import logger from '@/services/logger';
 import { JobType } from '@/jobs/job';
+import logger from '@/services/logger';
 import { QueueHandler } from './queue-handler';
 
 export type JobData<T = any> = { job: Job; data: T };
