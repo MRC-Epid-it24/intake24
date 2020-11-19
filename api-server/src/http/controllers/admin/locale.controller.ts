@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { Op } from 'sequelize';
 import { Language, Locale } from '@/db/models/system';
@@ -18,18 +18,11 @@ const refs = async (localeId: string | undefined = undefined): Promise<LocaleRef
   return { languages, locales };
 };
 
-const entry = async (
-  req: Request,
-  res: Response<LocaleResponse>,
-  next: NextFunction
-): Promise<void> => {
+const entry = async (req: Request, res: Response<LocaleResponse>): Promise<void> => {
   const { localeId } = req.params;
   const locale = await Locale.findByPk(localeId);
 
-  if (!locale) {
-    next(new NotFoundError());
-    return;
-  }
+  if (!locale) throw new NotFoundError();
 
   res.json({ data: locale, refs: await refs(locale.id) });
 };
@@ -65,22 +58,19 @@ export default {
     res.status(201).json({ data: locale });
   },
 
-  async detail(req: Request, res: Response<LocaleResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async detail(req: Request, res: Response<LocaleResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async edit(req: Request, res: Response<LocaleResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async edit(req: Request, res: Response<LocaleResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async update(req: Request, res: Response<LocaleResponse>, next: NextFunction): Promise<void> {
+  async update(req: Request, res: Response<LocaleResponse>): Promise<void> {
     const { localeId } = req.params;
     const locale = await Locale.findByPk(localeId);
 
-    if (!locale) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!locale) throw new NotFoundError();
 
     await locale.update(
       pick(req.body, [
@@ -97,23 +87,18 @@ export default {
     res.json({ data: locale, refs: await refs(locale.id) });
   },
 
-  async delete(req: Request, res: Response<undefined>, next: NextFunction): Promise<void> {
+  async delete(req: Request, res: Response<undefined>): Promise<void> {
     const { localeId } = req.params;
     const locale = await Locale.scope('surveys').findByPk(localeId);
 
-    if (!locale) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!locale) throw new NotFoundError();
 
-    if (locale.surveys?.length) {
-      next(new ForbiddenError('Locale cannot be deleted. There are surveys using this locale.'));
-      return;
-    }
+    if (locale.surveys?.length)
+      throw new ForbiddenError('Locale cannot be deleted. There are surveys using this locale.');
 
     // TODO: implement locale deletion -> check what needs to be deleted in food DB
     // Food DB locale record + all local food records
-    next(new ForbiddenError('Locale cannot be deleted.'));
+    throw new ForbiddenError('Locale cannot be deleted.');
 
     // await locale.destroy();
     // res.status(204).json();

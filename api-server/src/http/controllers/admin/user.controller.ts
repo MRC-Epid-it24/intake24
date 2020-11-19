@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { Permission, Role, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
@@ -19,18 +19,11 @@ const entryRefs = async (): Promise<UserRefs> => {
   return { permissions, roles };
 };
 
-const entry = async (
-  req: Request,
-  res: Response<UserResponse>,
-  next: NextFunction
-): Promise<void> => {
+const entry = async (req: Request, res: Response<UserResponse>): Promise<void> => {
   const { userId } = req.params;
   const user = await User.scope(['permissions', 'roles']).findByPk(userId);
 
-  if (!user) {
-    next(new NotFoundError());
-    return;
-  }
+  if (!user) throw new NotFoundError();
 
   const data = userResponse(user);
   const refs = await entryRefs();
@@ -76,12 +69,12 @@ export default {
     res.status(201).json({ data });
   },
 
-  async detail(req: Request, res: Response<UserResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async detail(req: Request, res: Response<UserResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async edit(req: Request, res: Response<UserResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async edit(req: Request, res: Response<UserResponse>): Promise<void> {
+    entry(req, res);
   },
 
   async update(req: Request, res: Response<UserResponse>): Promise<void> {

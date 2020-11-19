@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { Language } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
@@ -9,18 +9,11 @@ import {
   StoreLanguageResponse,
 } from '@common/types/http/admin/languages';
 
-const entry = async (
-  req: Request,
-  res: Response<LanguageResponse>,
-  next: NextFunction
-): Promise<void> => {
+const entry = async (req: Request, res: Response<LanguageResponse>): Promise<void> => {
   const { languageId } = req.params;
   const language = await Language.findByPk(languageId);
 
-  if (!language) {
-    next(new NotFoundError());
-    return;
-  }
+  if (!language) throw new NotFoundError();
 
   res.json({ data: language, refs: {} });
 };
@@ -47,22 +40,19 @@ export default {
     res.status(201).json({ data: scheme });
   },
 
-  async detail(req: Request, res: Response<LanguageResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async detail(req: Request, res: Response<LanguageResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async edit(req: Request, res: Response<LanguageResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async edit(req: Request, res: Response<LanguageResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async update(req: Request, res: Response<LanguageResponse>, next: NextFunction): Promise<void> {
+  async update(req: Request, res: Response<LanguageResponse>): Promise<void> {
     const { languageId } = req.params;
     const language = await Language.findByPk(languageId);
 
-    if (!language) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!language) throw new NotFoundError();
 
     await language.update(
       pick(req.body, ['englishName', 'localName', 'countryFlagCode', 'textDirection'])
@@ -71,21 +61,16 @@ export default {
     res.json({ data: language, refs: {} });
   },
 
-  async delete(req: Request, res: Response<undefined>, next: NextFunction): Promise<void> {
+  async delete(req: Request, res: Response<undefined>): Promise<void> {
     const { languageId } = req.params;
     const language = await Language.scope(['adminLocales', 'surveyLocales']).findByPk(languageId);
 
-    if (!language) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!language) throw new NotFoundError();
 
-    if (language.adminLocales?.length || language.surveyLocales?.length) {
-      next(
-        new ForbiddenError('Language cannot be deleted. There are locales using this language.')
+    if (language.adminLocales?.length || language.surveyLocales?.length)
+      throw new ForbiddenError(
+        'Language cannot be deleted. There are locales using this language.'
       );
-      return;
-    }
 
     await language.destroy();
     res.status(204).json();

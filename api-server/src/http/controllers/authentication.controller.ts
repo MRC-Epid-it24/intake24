@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import ms from 'ms';
 import config from '@/config/security';
 import { UnauthorizedError } from '@/http/errors';
@@ -54,36 +54,27 @@ export default {
     await sendTokenResponse(tokens, res);
   },
 
-  async tokenLogin(req: Request, res: Response<LoginResponse>, next: NextFunction): Promise<void> {
+  async tokenLogin(req: Request, res: Response<LoginResponse>): Promise<void> {
     const { token } = req.body;
-    if (!token) {
-      next(new UnauthorizedError());
-      return;
-    }
+    if (!token) throw new UnauthorizedError();
 
     const tokens = await authSvc.tokenLogin(token);
 
     await sendTokenResponse(tokens, res);
   },
 
-  async verify(req: Request, res: Response<LoginResponse>, next: NextFunction): Promise<void> {
+  async verify(req: Request, res: Response<LoginResponse>): Promise<void> {
     const { sigResponse } = req.body;
-    if (!sigResponse) {
-      next(new UnauthorizedError());
-      return;
-    }
+    if (!sigResponse) throw new UnauthorizedError();
 
     const tokens = await authSvc.verifyMfa(sigResponse);
     await sendTokenResponse(tokens, res);
   },
 
-  async refresh(req: Request, res: Response<RefreshResponse>, next: NextFunction): Promise<void> {
+  async refresh(req: Request, res: Response<RefreshResponse>): Promise<void> {
     const { name } = config.jwt.cookie;
     const refreshToken = req.cookies[name];
-    if (!refreshToken) {
-      next(new UnauthorizedError());
-      return;
-    }
+    if (!refreshToken) throw new UnauthorizedError();
 
     const tokens = await authSvc.refresh(refreshToken);
     await sendTokenResponse(tokens, res);

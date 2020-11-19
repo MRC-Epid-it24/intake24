@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { Language, Scheme } from '@/db/models/system';
 import { defaultMeals as meals } from '@/db/models/system/scheme';
@@ -17,14 +17,11 @@ const refs = async (): Promise<SchemeRefs> => {
   return { languages, meals };
 };
 
-const entry = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const entry = async (req: Request, res: Response): Promise<void> => {
   const { schemeId } = req.params;
   const scheme = await Scheme.findByPk(schemeId);
 
-  if (!scheme) {
-    next(new NotFoundError());
-    return;
-  }
+  if (!scheme) throw new NotFoundError();
 
   res.json({ data: scheme, refs: await refs() });
 };
@@ -48,41 +45,33 @@ export default {
     res.status(201).json({ data: scheme });
   },
 
-  async detail(req: Request, res: Response<SchemeResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async detail(req: Request, res: Response<SchemeResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async edit(req: Request, res: Response<SchemeResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async edit(req: Request, res: Response<SchemeResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async update(req: Request, res: Response<SchemeResponse>, next: NextFunction): Promise<void> {
+  async update(req: Request, res: Response<SchemeResponse>): Promise<void> {
     const { schemeId } = req.params;
     const scheme = await Scheme.findByPk(schemeId);
 
-    if (!scheme) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!scheme) throw new NotFoundError();
 
     await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals']));
 
     res.json({ data: scheme, refs: await refs() });
   },
 
-  async delete(req: Request, res: Response<undefined>, next: NextFunction): Promise<void> {
+  async delete(req: Request, res: Response<undefined>): Promise<void> {
     const { schemeId } = req.params;
     const scheme = await Scheme.scope('surveys').findByPk(schemeId);
 
-    if (!scheme) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!scheme) throw new NotFoundError();
 
-    if (scheme.surveys?.length) {
-      next(new ForbiddenError('Scheme cannot be deleted. There are surveys using this scheme.'));
-      return;
-    }
+    if (scheme.surveys?.length)
+      throw new ForbiddenError('Scheme cannot be deleted. There are surveys using this scheme.');
 
     await scheme.destroy();
     res.status(204).json();

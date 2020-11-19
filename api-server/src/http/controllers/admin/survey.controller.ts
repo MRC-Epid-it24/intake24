@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { WhereOptions } from 'sequelize';
 import config from '@/config/acl';
@@ -21,18 +21,11 @@ const refs = async (): Promise<SurveyRefs> => {
   return { locales, schemes };
 };
 
-const entry = async (
-  req: Request,
-  res: Response<SurveyResponse>,
-  next: NextFunction
-): Promise<void> => {
+const entry = async (req: Request, res: Response<SurveyResponse>): Promise<void> => {
   const { surveyId } = req.params;
   const survey = await Survey.findByPk(surveyId);
 
-  if (!survey) {
-    next(new NotFoundError());
-    return;
-  }
+  if (!survey) throw new NotFoundError();
 
   res.json({ data: surveyResponse(survey), refs: await refs() });
 };
@@ -90,22 +83,19 @@ export default {
     res.status(201).json({ data: surveyResponse(survey) });
   },
 
-  async detail(req: Request, res: Response<SurveyResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async detail(req: Request, res: Response<SurveyResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async edit(req: Request, res: Response<SurveyResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async edit(req: Request, res: Response<SurveyResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async update(req: Request, res: Response<SurveyResponse>, next: NextFunction): Promise<void> {
+  async update(req: Request, res: Response<SurveyResponse>): Promise<void> {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
-    if (!survey) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!survey) throw new NotFoundError();
 
     await survey.update(
       pick(req.body, [
@@ -136,19 +126,14 @@ export default {
     res.json({ data: surveyResponse(survey), refs: await refs() });
   },
 
-  async delete(req: Request, res: Response<undefined>, next: NextFunction): Promise<void> {
+  async delete(req: Request, res: Response<undefined>): Promise<void> {
     const { surveyId } = req.params;
     const survey = await Survey.scope('submissions').findByPk(surveyId);
 
-    if (!survey) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!survey) throw new NotFoundError();
 
-    if (survey.submissions?.length) {
-      next(new ForbiddenError('Survey cannot be deleted. It already contains submission data.'));
-      return;
-    }
+    if (survey.submissions?.length)
+      throw new ForbiddenError('Survey cannot be deleted. It already contains submission data.');
 
     await survey.destroy();
 

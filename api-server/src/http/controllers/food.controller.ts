@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { FoodLocal, FoodLocalList } from '@/db/models/foods';
 import { NotFoundError } from '../errors';
 
 export default {
-  async entry(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async entry(req: Request, res: Response): Promise<void> {
     const { code, localeId } = req.params;
 
     const food = await FoodLocal.findOne({
@@ -11,10 +11,7 @@ export default {
       where: { foodCode: code },
     });
 
-    if (!food) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!food) throw new NotFoundError();
 
     res.json(food);
   },

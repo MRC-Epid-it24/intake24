@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { Op } from 'sequelize';
 import { UserResponse } from '@common/types/http/admin/users';
 import { Permission, Survey, User } from '@/db/models/system';
@@ -8,14 +8,11 @@ import { surveyMgmt } from '@/services/acl.service';
 import surveySvc from '@/services/survey.service';
 
 export default {
-  async list(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async list(req: Request, res: Response): Promise<void> {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
-    if (!survey) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!survey) throw new NotFoundError();
 
     const users = await User.paginate<UserResponse>({
       req,
@@ -27,14 +24,11 @@ export default {
     res.json(users);
   },
 
-  async available(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async available(req: Request, res: Response): Promise<void> {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
-    if (!survey) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!survey) throw new NotFoundError();
 
     const users = await User.findAll({
       where: {
@@ -49,7 +43,7 @@ export default {
     res.json({ data: users.map(userResponse), permissions });
   },
 
-  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async update(req: Request, res: Response): Promise<void> {
     const {
       params: { surveyId, userId },
       body: { permissions },
@@ -58,10 +52,7 @@ export default {
     const survey = await Survey.findByPk(surveyId);
     const user = await User.findOne({ where: { id: userId, email: { [Op.ne]: null } } });
 
-    if (!survey || !user) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!survey || !user) throw new NotFoundError();
 
     const surveyMgmtPermissions = await surveySvc.getSurveyMgmtPermissions(surveyId, 'list');
 

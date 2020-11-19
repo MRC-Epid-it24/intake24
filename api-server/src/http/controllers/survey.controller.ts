@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { Survey, SurveySubmission, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import surveySvc from '@/services/survey.service';
@@ -10,42 +10,33 @@ export default {
     res.json(surveys);
   },
 
-  async publicEntry(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async publicEntry(req: Request, res: Response): Promise<void> {
     const { surveyId } = req.params;
     const survey = await Survey.scope('public').findByPk(surveyId);
 
-    if (!survey) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!survey) throw new NotFoundError();
 
     res.json(survey);
   },
 
-  async entry(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async entry(req: Request, res: Response): Promise<void> {
     const { surveyId } = req.params;
     const survey = await Survey.scope(['respondent', 'scheme']).findByPk(surveyId);
 
-    if (!survey) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!survey) throw new NotFoundError();
 
     res.json(survey);
   },
 
   // TODO: review for new frontend - include user data - submissions, feedback data etc for user's dashboard?
-  async userInfo(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async userInfo(req: Request, res: Response): Promise<void> {
     const { surveyId } = req.params;
     const { id: userId, name } = req.user as User;
 
     const survey = await Survey.findByPk(surveyId);
     const submissions = await SurveySubmission.count({ where: { surveyId, userId } });
 
-    if (!survey) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!survey) throw new NotFoundError();
 
     const userInfo = {
       userId,

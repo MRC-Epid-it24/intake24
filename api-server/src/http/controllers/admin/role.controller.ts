@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import acl from '@/config/acl';
 import { Permission, Role } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
@@ -9,18 +9,11 @@ import {
   StoreRoleResponse,
 } from '@common/types/http/admin/roles';
 
-const entry = async (
-  req: Request,
-  res: Response<RoleResponse>,
-  next: NextFunction
-): Promise<void> => {
+const entry = async (req: Request, res: Response<RoleResponse>): Promise<void> => {
   const { roleId } = req.params;
   const role = await Role.scope('permissions').findByPk(roleId);
 
-  if (!role) {
-    next(new NotFoundError());
-    return;
-  }
+  if (!role) throw new NotFoundError();
 
   const permissions = await Permission.scope('list').findAll();
 
@@ -48,22 +41,19 @@ export default {
     res.status(201).json({ data: role });
   },
 
-  async detail(req: Request, res: Response<RoleResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async detail(req: Request, res: Response<RoleResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async edit(req: Request, res: Response<RoleResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async edit(req: Request, res: Response<RoleResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async update(req: Request, res: Response<RoleResponse>, next: NextFunction): Promise<void> {
+  async update(req: Request, res: Response<RoleResponse>): Promise<void> {
     const { roleId } = req.params;
     let role = await Role.scope('permissions').findByPk(roleId);
 
-    if (!role) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!role) throw new NotFoundError();
 
     const { displayName, description } = req.body;
     await role.update({ displayName, description });
@@ -80,14 +70,11 @@ export default {
     res.json({ data: role, refs: { permissions } });
   },
 
-  async delete(req: Request, res: Response<undefined>, next: NextFunction): Promise<void> {
+  async delete(req: Request, res: Response<undefined>): Promise<void> {
     const { roleId } = req.params;
     const role = await Role.findByPk(roleId);
 
-    if (!role) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!role) throw new NotFoundError();
 
     await role.destroy();
     res.status(204).json();

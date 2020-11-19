@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { Permission } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import {
@@ -8,18 +8,11 @@ import {
   StorePermissionResponse,
 } from '@common/types/http/admin/permissions';
 
-const entry = async (
-  req: Request,
-  res: Response<PermissionResponse>,
-  next: NextFunction
-): Promise<void> => {
+const entry = async (req: Request, res: Response<PermissionResponse>): Promise<void> => {
   const { permissionId } = req.params;
   const permission = await Permission.findByPk(permissionId);
 
-  if (!permission) {
-    next(new NotFoundError());
-    return;
-  }
+  if (!permission) throw new NotFoundError();
 
   res.json({ data: permission, refs: {} });
 };
@@ -42,22 +35,19 @@ export default {
     res.status(201).json({ data: permission });
   },
 
-  async detail(req: Request, res: Response<PermissionResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async detail(req: Request, res: Response<PermissionResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async edit(req: Request, res: Response<PermissionResponse>, next: NextFunction): Promise<void> {
-    entry(req, res, next);
+  async edit(req: Request, res: Response<PermissionResponse>): Promise<void> {
+    entry(req, res);
   },
 
-  async update(req: Request, res: Response<PermissionResponse>, next: NextFunction): Promise<void> {
+  async update(req: Request, res: Response<PermissionResponse>): Promise<void> {
     const { permissionId } = req.params;
     const permission = await Permission.findByPk(permissionId);
 
-    if (!permission) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!permission) throw new NotFoundError();
 
     const { displayName, description } = req.body;
     await permission.update({ displayName, description });
@@ -65,14 +55,11 @@ export default {
     res.json({ data: permission, refs: {} });
   },
 
-  async delete(req: Request, res: Response<undefined>, next: NextFunction): Promise<void> {
+  async delete(req: Request, res: Response<undefined>): Promise<void> {
     const { permissionId } = req.params;
     const permission = await Permission.findByPk(permissionId);
 
-    if (!permission) {
-      next(new NotFoundError());
-      return;
-    }
+    if (!permission) throw new NotFoundError();
 
     await permission.destroy();
     res.status(204).json();
