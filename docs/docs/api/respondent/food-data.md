@@ -95,7 +95,8 @@ element is a category code,
 
 <div class="nested-description">
 
-**method** is ID of the portion size estimation method to use,
+**method** is ID of the portion size estimation method to use. See the 
+[portion size methods](../../developer/portion-size.html) guide for the list of currently supported methods.
 
 **description** is the description of this portion size estimation option for the selection screen (localised 
 string key),
@@ -107,7 +108,8 @@ string key),
 **conversionFactor** is the multiplier for the final potion weight calculation (e.g. when portion size images 
 do not represent the exact food but something similar that could have different density),
 
-**parameters** is the object with fields specific to the portion size method.
+**parameters** is the object with fields specific to the portion size method. See the 
+[portion size methods](../../developer/portion-size.html) guide for details.
 
 </div>
 
