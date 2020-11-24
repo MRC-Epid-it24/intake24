@@ -127,3 +127,104 @@ Query parameters are the same as regular food lookup plus
 ### Response
 
 See regular food lookup response.
+
+## Get root category list for browsing
+
+Get the list of root categories in the current locale for the "browse all foods" options.
+
+[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/FoodDataSQL/src/main/scala/uk/ac/ncl/openlab/intake24/foodsql/user/FoodBrowsingServiceImpl.scala#L28-L37)
+
+### Request
+
+```html
+GET /user/categories/{locale}
+
+Authorization: Bearer {accessToken}
+```
+
+where **locale** is the current survey's locale ID.
+
+### Response
+```json
+[
+  {
+    "code": string,
+    "localDescription": string
+  },
+  ...
+]
+```
+
+where
+
+**code** is the Intake24 category code,
+
+**localDescription** is the description of the category in the local language.
+
+## List category contents
+
+Get the category contents, i.e. foods and subcategories listed under the given category.
+
+[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/FoodDataSQL/src/main/scala/uk/ac/ncl/openlab/intake24/foodsql/user/FoodBrowsingServiceImpl.scala#L81-L89)
+
+### Request
+
+```html
+GET /user/categories/{locale}/{code}?alg={algorithmId}&existing={existingFoodCode}
+
+Authorization: Bearer {accessToken}
+```
+
+where 
+
+**locale** is the current survey's locale ID,
+
+**code** is the Intake24 category code,
+
+**algorithmId** (optional) is the algorithm to use for sorting the food/subcategory listings, can be `popularity` or 
+`paRules`,
+
+**existing** (optional) is the list of foods in the same meal for `paRules` based ranking.
+
+### Response
+
+```json
+{
+  "foods": [
+    {
+      "code": string,
+      "localDescription": string
+    },
+    ...
+  ],
+  "categories": [
+    {
+      "code": string,
+      "localDescription": string  
+    },
+    ...
+  ]
+}
+```
+
+where
+
+**foods** is the list of foods contained in the category:
+
+<div class="nested-description">
+
+**code** is the Intake24 food code,
+
+**localDescription** is the name of the food in the local language, 
+
+</div>
+
+**categories** is the list of subcategories contained in the category:
+
+<div class="nested-description">
+
+**code** is the Intake24 category code,
+
+**localDescription** is the name of the category in the local language, 
+
+</div>
