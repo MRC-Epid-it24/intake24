@@ -67,6 +67,7 @@ export type Survey = {
   localeId: string;
   allowGenUsers: boolean;
   genUserKey: string | null;
+  authUrlDomainOverride: string | null;
   suspensionReason: string | null;
   surveyMonkeyUrl: string | null;
   supportEmail: string;

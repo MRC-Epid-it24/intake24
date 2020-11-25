@@ -22,6 +22,7 @@ const surveys: LocaleMessage = {
   startDate: 'Start date',
   endDate: 'End date',
   supportEmail: 'Support Email',
+  authUrlDomainOverride: 'Authentication URL domain override',
   genUsers: {
     allow: 'Allow user generation',
     secret: 'JWT secret for user generation',

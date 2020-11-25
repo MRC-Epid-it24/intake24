@@ -88,6 +88,12 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
     allowNull: true,
     type: DataType.STRING,
   })
+  public authUrlDomainOverride!: string | null;
+
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
   public suspensionReason!: string | null;
 
   @Column({

@@ -67,6 +67,12 @@ const defaults: Schema = {
     isString: true,
     optional: { options: { nullable: true } },
   },
+  authUrlDomainOverride: {
+    in: ['body'],
+    errorMessage: 'Authentication URL domain must be a string.',
+    isString: true,
+    optional: { options: { nullable: true } },
+  },
   suspensionReason: {
     in: ['body'],
     errorMessage: 'Suspension reason must be a string.',
