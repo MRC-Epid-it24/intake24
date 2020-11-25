@@ -22,8 +22,6 @@ import { GenUserCounter, Locale, Permission, Scheme, SurveySubmission, UserSurve
     attributes: [
       'id',
       'localeId',
-      'description',
-      'finalPageHtml',
       'numberOfSubmissionsForFeedback',
       'schemeId',
       'state',
@@ -109,6 +107,9 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
   })
   public originatingUrl!: string | null;
 
+  // V4 Deprecated
+  // description was used to hold content of "welcome page"
+  // "welcome page" will be a customizable question in scheme
   @Column({
     allowNull: true,
     type: DataType.TEXT,
@@ -142,6 +143,9 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
   })
   public numberOfSubmissionsForFeedback!: number;
 
+  // V4 Deprecated
+  // finalPageHtml was used to hold content of "final page"
+  // "final page" will be a customizable question in scheme
   @Column
   public finalPageHtml!: string;
 

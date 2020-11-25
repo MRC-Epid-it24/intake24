@@ -1,27 +1,15 @@
 import { Router } from 'express';
-import passport from 'passport';
 import surveyController from '@/http/controllers/survey.controller';
-import { isSurveyRespondent } from '@/http/middleware/acl';
-import wrapAsync from '@/util/wrap-async';
+import { wrapAsync } from '@/util';
+import surveyRespondent from './survey-respondent';
 
 const router = Router();
 
 router.get('', wrapAsync(surveyController.list));
-router.get('/:surveyId', wrapAsync(surveyController.publicEntry));
+router.get('/:surveyId', wrapAsync(surveyController.entry));
 router.post('/:surveyId/generate-user', wrapAsync(surveyController.generateUser));
+router.post('/:surveyId/create-user', wrapAsync(surveyController.createUser));
 
-router.get(
-  '/:surveyId/parameters',
-  passport.authenticate('user', { session: false }),
-  isSurveyRespondent(),
-  wrapAsync(surveyController.entry)
-);
-
-router.get(
-  '/:surveyId/user-info',
-  passport.authenticate('user', { session: false }),
-  isSurveyRespondent(),
-  wrapAsync(surveyController.userInfo)
-);
+router.use('/:surveyId', surveyRespondent);
 
 export default router;
