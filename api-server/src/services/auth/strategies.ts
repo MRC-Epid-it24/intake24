@@ -22,6 +22,8 @@ export const buildJwtStrategy = (scopes: string[] = []): Strategy =>
   });
 
 export default (passport: PassportStatic): void => {
-  passport.use('user', buildJwtStrategy(['permissions']));
-  passport.use('admin', buildJwtStrategy(['permissions', 'rolesPerms']));
+  const scopes = ['permissions', 'rolesPerms'];
+
+  passport.use('user', buildJwtStrategy(scopes));
+  passport.use('admin', buildJwtStrategy(scopes));
 };
