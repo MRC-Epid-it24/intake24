@@ -62,9 +62,9 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
 
   private registerQueueEvents(): void {
     this.queueEvents.on('completed', async ({ jobId }) => {
-      const bullJob: BullJob | undefined = await BullJob.fromId(this.queue, jobId);
+      const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
       if (!bullJob) {
-        logger.warning(`Queue ${this.name}: BullJob (${jobId}) not found.`);
+        logger.warn(`Queue ${this.name}: BullJob (${jobId}) not found.`);
         return;
       }
 
@@ -83,10 +83,10 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     });
 
     this.queueEvents.on('failed', async ({ jobId }) => {
-      const bullJob: BullJob | undefined = await BullJob.fromId(this.queue, jobId);
+      const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
 
       if (!bullJob) {
-        logger.warning(`Queue ${this.name}: BullJob (${jobId}) not found.`);
+        logger.warn(`Queue ${this.name}: BullJob (${jobId}) not found.`);
         return;
       }
 
@@ -110,6 +110,15 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
         successful: false,
         stackTrace: stacktrace.join('\n'),
       });
+    });
+
+    /*
+     * Clean old jobs when queue is drained
+     * - do not use removeOnComplete / removeOnFail -> can't look up the job details
+     *
+     */
+    this.queueEvents.on('drained', async () => {
+      await this.queue.clean(60 * 1000, 0);
     });
   }
 

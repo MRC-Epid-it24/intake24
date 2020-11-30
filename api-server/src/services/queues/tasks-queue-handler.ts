@@ -102,7 +102,11 @@ export default class TasksQueueHandler implements QueueHandler {
   private async queueJob(task: Task): Promise<void> {
     const { name, job: jobType, cron } = task;
 
-    await this.queue.add(name, { jobType }, { repeat: { cron } });
+    await this.queue.add(
+      name,
+      { jobType },
+      { removeOnComplete: true, removeOnFail: true, repeat: { cron } }
+    );
   }
 
   /**
