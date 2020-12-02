@@ -64,6 +64,11 @@ export default class Job extends BaseModel<Job> implements JobAttributes {
   @Column({
     allowNull: true,
   })
+  public message!: string;
+
+  @Column({
+    allowNull: true,
+  })
   public stackTrace!: string;
 
   @CreatedAt

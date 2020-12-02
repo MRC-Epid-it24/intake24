@@ -82,7 +82,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
       await job.update({ completedAt: new Date(), progress: 1, successful: true });
     });
 
-    this.queueEvents.on('failed', async ({ jobId }) => {
+    this.queueEvents.on('failed', async ({ jobId, failedReason }) => {
       const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
 
       if (!bullJob) {
@@ -108,6 +108,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
         completedAt: new Date(),
         progress: 1,
         successful: false,
+        message: failedReason,
         stackTrace: stacktrace.join('\n'),
       });
     });

@@ -14,12 +14,12 @@ export type RespondentWithPassword = {
 export default {
   async getSurveyRespondentPermission(surveyId: string): Promise<Permission> {
     const name = surveyRespondent(surveyId);
-    const permission = await Permission.findOrCreate({
+    const [permission] = await Permission.findOrCreate({
       where: { name },
       defaults: { name, displayName: name },
     });
 
-    return permission[0];
+    return permission;
   },
 
   async getSurveyMgmtPermissions(
@@ -121,14 +121,11 @@ export default {
     file: Express.Multer.File
   ): Promise<Job> {
     const survey = await Survey.findByPk(surveyId);
-
     if (!survey) throw new NotFoundError();
 
-    const job = await scheduler.jobs.addJob(
+    return scheduler.jobs.addJob(
       { type: 'UploadSurveyRespondents', userId },
-      { surveyId, file }
+      { surveyId, file: file.path }
     );
-
-    return job;
   },
 };
