@@ -118,23 +118,23 @@ class Form {
     this.errors.clear();
   }
 
-  async post(url: string, config: HttpRequestConfig = {}): Promise<any> {
-    return this.submit(url, 'post', config);
+  async post<T>(url: string, config: HttpRequestConfig = {}): Promise<T> {
+    return this.submit<T>(url, 'post', config);
   }
 
-  async get(url: string): Promise<any> {
-    return this.submit(url, 'get');
+  async get<T>(url: string): Promise<T> {
+    return this.submit<T>(url, 'get');
   }
 
-  async patch(url: string): Promise<any> {
-    return this.submit(url, 'patch');
+  async patch<T>(url: string): Promise<T> {
+    return this.submit<T>(url, 'patch');
   }
 
-  async put(url: string): Promise<any> {
-    return this.submit(url, 'put');
+  async put<T>(url: string): Promise<T> {
+    return this.submit<T>(url, 'put');
   }
 
-  async submit(url: string, method: Method, config: HttpRequestConfig = {}): Promise<any> {
+  async submit<T>(url: string, method: Method, config: HttpRequestConfig = {}): Promise<T> {
     const { withErr, ...rest } = config;
     const loadStr = `form-${url}`;
     store.commit('loading/add', loadStr);
@@ -143,7 +143,7 @@ class Form {
       const formData = this.data();
 
       http
-        .request(url, method, formData, { withErr: true, ...rest })
+        .request<T>(url, method, formData, { withErr: true, ...rest })
         .then((res) => {
           const { data } = res;
           this.onSuccess();
