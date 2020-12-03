@@ -144,6 +144,27 @@
                 @change="form.errors.clear('state')"
               ></v-select>
             </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.authUrlDomainOverride"
+                :error-messages="form.errors.get('authUrlDomainOverride')"
+                :label="$t('surveys.authUrlDomainOverride')"
+                hide-details="auto"
+                name="authUrlDomainOverride"
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6" align-self="center">
+              <v-switch
+                v-model="form.storeUserSessionOnServer"
+                :error-messages="form.errors.get('storeUserSessionOnServer')"
+                :label="$t('surveys.storeUserSessionOnServer')"
+                class="mt-0"
+                hide-details="auto"
+                name="storeUserSessionOnServer"
+                @change="form.errors.clear('storeUserSessionOnServer')"
+              ></v-switch>
+            </v-col>
             <v-col cols="12" md="6" align-self="center">
               <v-switch
                 v-model="form.allowGenUsers"
@@ -166,17 +187,7 @@
                 outlined
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
-              <v-switch
-                v-model="form.storeUserSessionOnServer"
-                :error-messages="form.errors.get('storeUserSessionOnServer')"
-                :label="$t('surveys.storeUserSessionOnServer')"
-                class="mt-0"
-                hide-details="auto"
-                name="storeUserSessionOnServer"
-                @change="form.errors.clear('storeUserSessionOnServer')"
-              ></v-switch>
-            </v-col>
+
             <v-col cols="12">
               <hr class="my-5" />
               <div class="text-h6">{{ $t('surveys.submissionLimits._') }}</div>
@@ -267,11 +278,10 @@ export default Vue.extend({
         supportEmail: null,
         allowGenUsers: false,
         genUserKey: null,
+        authUrlDomainOverride: null,
+        storeUserSessionOnServer: false,
         feedbackEnabled: false,
         numberOfSubmissionsForFeedback: 1,
-        storeUserSessionOnServer: false,
-        description: null,
-        finalPageHtml: null,
         maximumDailySubmissions: 3,
         maximumTotalSubmissions: null,
         minimumSubmissionInterval: 600,
