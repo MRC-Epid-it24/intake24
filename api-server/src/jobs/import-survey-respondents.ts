@@ -7,7 +7,7 @@ import type { JobData } from '@/services/queues/jobs-queue-handler';
 import surveyService from '@/services/survey.service';
 import { Job, JobType } from './job';
 
-export type UploadSurveyRespondentsData = {
+export type ImportSurveyRespondentsData = {
   surveyId: string;
   file: string;
 };
@@ -22,16 +22,16 @@ export type CSVRow = {
 
 const requiredFields = ['username', 'password'];
 
-export default class UploadSurveyRespondents implements Job {
-  public readonly name: JobType = 'UploadSurveyRespondents';
+export default class ImportSurveyRespondents implements Job {
+  public readonly name: JobType = 'ImportSurveyRespondents';
 
-  private data: UploadSurveyRespondentsData;
+  private data: ImportSurveyRespondentsData;
 
   private file: string;
 
   private content: CSVRow[] = [];
 
-  constructor({ data }: JobData<UploadSurveyRespondentsData>) {
+  constructor({ data }: JobData<ImportSurveyRespondentsData>) {
     this.data = data;
     this.file = path.resolve(data.file);
   }

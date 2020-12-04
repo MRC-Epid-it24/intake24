@@ -58,7 +58,16 @@ export default {
     const { file } = req;
     const { id: userId } = req.user as User;
 
-    const job = await surveySvc.uploadSurveyRespondents(surveyId, userId, file);
+    const job = await surveySvc.importRespondents(surveyId, userId, file);
+
+    res.json({ data: job });
+  },
+
+  async exportAuthUrls(req: Request, res: Response): Promise<void> {
+    const { surveyId } = req.params;
+    const { id: userId } = req.user as User;
+
+    const job = await surveySvc.exportAuthenticationUrls(surveyId, userId);
 
     res.json({ data: job });
   },

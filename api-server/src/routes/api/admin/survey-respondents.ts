@@ -17,6 +17,7 @@ router
   .get(validation.list, wrapAsync(controller.list));
 
 router.post('/upload', upload.single('file'), validation.upload, wrapAsync(controller.upload));
+router.post('/export-auth-urls', wrapAsync(controller.exportAuthUrls));
 
 router
   .route('/:userId')

@@ -115,7 +115,7 @@ export default {
     return this.createRespondent(surveyId, { userName, password });
   },
 
-  async uploadSurveyRespondents(
+  async importRespondents(
     surveyId: string,
     userId: number,
     file: Express.Multer.File
@@ -124,8 +124,15 @@ export default {
     if (!survey) throw new NotFoundError();
 
     return scheduler.jobs.addJob(
-      { type: 'UploadSurveyRespondents', userId },
+      { type: 'ImportSurveyRespondents', userId },
       { surveyId, file: file.path }
     );
+  },
+
+  async exportAuthenticationUrls(surveyId: string, userId: number): Promise<Job> {
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
+    return scheduler.jobs.addJob({ type: 'ExportSurveyRespondentAuthUrls', userId }, { surveyId });
   },
 };
