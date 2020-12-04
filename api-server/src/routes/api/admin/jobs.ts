@@ -7,5 +7,6 @@ const router = Router();
 
 router.route('').get(validation.list, wrapAsync(controller.list));
 router.route('/:jobId').get(wrapAsync(controller.detail));
+router.get('/:jobId/download', wrapAsync(controller.download));
 
 export default router;
