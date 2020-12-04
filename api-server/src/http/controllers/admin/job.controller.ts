@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import fs from 'fs-extra';
 import path from 'path';
-import { Op } from 'sequelize';
+import { Op, WhereOptions } from 'sequelize';
 import config from '@/config/filesystem';
 import { Job, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
@@ -10,18 +10,16 @@ import { JobResponse, JobsResponse } from '@common/types/http/admin/jobs';
 export default {
   async list(req: Request, res: Response<JobsResponse>): Promise<void> {
     const user = req.user as User;
-    // TODO: validate type
-    const type = req.query.type as string | string[];
+    const { type } = req.query;
 
-    const jobs = await Job.paginate({
-      req,
-      where: {
-        userId: user.id,
-        type,
-        downloadUrlExpiresAt: { [Op.or]: { [Op.eq]: null, [Op.gt]: new Date() } },
-      },
-      order: [['started_at', 'DESC']],
-    });
+    const where: WhereOptions = {
+      userId: user.id,
+      downloadUrlExpiresAt: { [Op.or]: { [Op.eq]: null, [Op.gt]: new Date() } },
+    };
+
+    if (type) where.type = type as string | string[];
+
+    const jobs = await Job.paginate({ req, where, order: [['started_at', 'DESC']] });
 
     res.json(jobs);
   },
