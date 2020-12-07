@@ -4,10 +4,9 @@ import { Environment } from './app';
 export type Database = 'foods' | 'system';
 
 export type DBConnectionInfo = Record<Database, Options>;
+export type DatabaseConfig = Record<Environment, DBConnectionInfo>;
 
-export type ServerConnectionInfo = Record<Environment, DBConnectionInfo>;
-
-const databaseConfig: ServerConnectionInfo = {
+const databaseConfig: DatabaseConfig = {
   development: {
     foods: {
       host: process.env.DB_FOODS_HOST ?? 'localhost',
