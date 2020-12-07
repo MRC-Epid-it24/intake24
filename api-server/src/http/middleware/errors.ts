@@ -1,6 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { AppLoader } from '@/loaders/loader';
-import logger from '@/services/logger';
+import { Express, Request, Response, NextFunction } from 'express';
+import type { Ops } from '@/app';
 import {
   ApplicationError,
   ForbiddenError,
@@ -10,7 +9,7 @@ import {
   ValidationError,
 } from '../errors';
 
-export default ({ app }: AppLoader): void => {
+export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ApplicationError) {
       const { message } = err;

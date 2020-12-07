@@ -1,13 +1,12 @@
 import cors from 'cors';
-import { Response } from 'express';
+import { Express, Response } from 'express';
 import helmet from 'helmet';
 import { nanoid } from 'nanoid';
-import config from '@/config/security';
-import { AppLoader } from './loader';
+import type { Ops } from '@/app';
 
-const { origin } = config.cors;
+export default async (app: Express, { config }: Ops): Promise<void> => {
+  const { origin } = config.security.cors;
 
-export default async ({ app }: AppLoader): Promise<void> => {
   app.set('trust proxy', 1);
 
   app.use(cors({ origin, credentials: true }));

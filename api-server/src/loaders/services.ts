@@ -1,21 +1,18 @@
-import db from '@/db';
-import filesystem from '@/services/filesystem';
 import foodIndex from '@/food-index';
-import mailer from '@/services/mailer';
-import scheduler from '@/services/scheduler';
+import ioc from '@/ioc';
 
 export default async (): Promise<void> => {
   // Databases
-  await db.init();
+  await ioc.cradle.db.init();
 
   // Local filesystem
-  await filesystem.init();
+  await ioc.cradle.filesystem.init();
 
   // Mailer
-  mailer.init();
+  ioc.cradle.mailer.init();
 
   // Scheduler
-  await scheduler.init();
+  await ioc.cradle.scheduler.init();
 
   // Food indexing and searching
   await foodIndex.init();

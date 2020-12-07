@@ -1,20 +1,21 @@
+import type { Express } from 'express';
 import { body } from 'express-validator';
+import type { Ops } from '@/app';
 import errors from '@/http/middleware/errors';
 import { trimStrings } from '@/http/rules';
 import routes from '@/routes';
 import authentication from './authentication';
-import { AppLoader } from './loader';
 
-export default async ({ app }: AppLoader): Promise<void> => {
+export default async (app: Express, ops: Ops): Promise<void> => {
   // Request sanitizers
   app.use(body('*').customSanitizer(trimStrings));
 
   // Mount authentication middleware
-  authentication({ app });
+  authentication(app);
 
   // Mount routes
-  routes({ app });
+  routes(app, ops);
 
   // Mount error middleware
-  errors({ app });
+  errors(app, ops);
 };

@@ -1,8 +1,8 @@
+import type { Express } from 'express';
 import passport from 'passport';
-import { AppLoader } from '@/loaders/loader';
 import jwtStrategies from '@/services/auth/strategies';
 
-export default ({ app }: AppLoader): void => {
+export default (app: Express): void => {
   app.use(passport.initialize());
   jwtStrategies(passport);
 };
