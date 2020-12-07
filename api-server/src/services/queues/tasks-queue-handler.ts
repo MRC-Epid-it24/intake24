@@ -1,29 +1,30 @@
 import { ConnectionOptions, Job as BullJob, Queue, QueueScheduler, Worker } from 'bullmq';
-import Task from '@/db/models/system/task';
-import jobs, { validate } from '@/jobs';
-import logger from '@/services/logger';
-import { JobType } from '@/jobs/job';
+import { Task } from '@/db/models/system';
+import ioc, { IoC } from '@/ioc';
+import { validate } from '@/jobs';
+import { Job, JobType } from '@/jobs/job';
 import { QueueHandler } from './queue-handler';
 
 export type TaskData = { jobType: JobType };
 
-export default class TasksQueueHandler implements QueueHandler {
-  readonly name: string;
+export default class TasksQueueHandler implements QueueHandler<TaskData> {
+  readonly name = 'it24-tasks';
+
+  private logger;
 
   queue!: Queue<TaskData>;
 
   scheduler!: QueueScheduler;
 
-  worker!: Worker<TaskData>;
+  workers: Worker<TaskData>[] = [];
 
   /**
-   * Creates an instance of TasksQueueHandler
-   *
-   * @param {string} name
+   * Creates an instance of TasksQueueHandler.
+   * @param {IoC} { logger }
    * @memberof TasksQueueHandler
    */
-  constructor(name: string) {
-    this.name = name;
+  constructor({ logger }: IoC) {
+    this.logger = logger;
   }
 
   /**
@@ -38,26 +39,28 @@ export default class TasksQueueHandler implements QueueHandler {
 
     this.queue = new Queue(this.name, { connection });
 
-    this.worker = new Worker(this.name, this.processor, { connection });
+    const worker = new Worker(this.name, this.processor, { connection });
 
-    this.worker.on('completed', (job: BullJob<TaskData>) => {
-      logger.info(`${this.name}: ${job.id} has completed.`);
+    worker.on('completed', (job) => {
+      this.logger.info(`${this.name}: ${job.id} has completed.`);
     });
 
-    this.worker.on('failed', (job: BullJob<TaskData>, err) => {
-      logger.error(`${this.name}: ${job.id} has failed with ${err.message}`);
+    worker.on('failed', (job, err) => {
+      this.logger.error(`${this.name}: ${job.id} has failed with ${err.message}`);
     });
+
+    this.workers.push(worker);
 
     await this.clearRepeatableJobs();
     await this.loadRepeatableJobs();
 
-    logger.info(`${this.name} has been loaded.`);
+    this.logger.info(`${this.constructor.name} has been loaded.`);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async processor({ data }: BullJob<TaskData>): Promise<void> {
-    const newJob = new jobs[data.jobType](data);
-    await newJob.run();
+  async processor(job: BullJob<TaskData>): Promise<void> {
+    const task = ioc.resolve<Job>(job.data.jobType);
+    await task.run();
   }
 
   /**
@@ -105,7 +108,7 @@ export default class TasksQueueHandler implements QueueHandler {
     await this.queue.add(
       name,
       { jobType },
-      { removeOnComplete: true, removeOnFail: true, repeat: { cron } }
+      { repeat: { cron }, removeOnComplete: true, removeOnFail: true }
     );
   }
 
@@ -132,18 +135,20 @@ export default class TasksQueueHandler implements QueueHandler {
     const { id, name, job, active } = task;
 
     if (!validate(job)) {
-      logger.warn(`${this.name}: Job "${job}" not found in job definitions.`);
+      this.logger.warn(`${this.constructor.name}: Job "${job}" not found in job definitions.`);
       return;
     }
 
     if (!active) {
-      logger.warn(`${this.name}: Task (ID: ${id}, Name: ${name}) not set as active.`);
+      this.logger.warn(
+        `${this.constructor.name}: Task (ID: ${id}, Name: ${name}) not set as active.`
+      );
       return;
     }
 
     await this.queueJob(task);
 
-    logger.debug(`${this.name}: Task (ID: ${id}, Name: ${name}) added.`);
+    this.logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) added.`);
   }
 
   /**
@@ -157,7 +162,7 @@ export default class TasksQueueHandler implements QueueHandler {
     const { id, name, job } = task;
 
     if (!validate(job)) {
-      logger.warn(`${this.name}: Job "${job}" not found in job definitions.`);
+      this.logger.warn(`${this.constructor.name}: Job "${job}" not found in job definitions.`);
       return;
     }
 
@@ -165,7 +170,7 @@ export default class TasksQueueHandler implements QueueHandler {
 
     if (task.active) await this.queueJob(task);
 
-    logger.debug(`${this.name}: Task (ID: ${id}, Name: ${name}) updated.`);
+    this.logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) updated.`);
   }
 
   /**
@@ -180,7 +185,7 @@ export default class TasksQueueHandler implements QueueHandler {
 
     await this.dequeueJob(task);
 
-    logger.debug(`${this.name}: Task (ID: ${id}, Name: ${name}) removed.`);
+    this.logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) removed.`);
   }
 
   /**
@@ -194,13 +199,13 @@ export default class TasksQueueHandler implements QueueHandler {
     const { id, name, job: jobType } = task;
 
     if (!validate(jobType)) {
-      logger.warn(`${this.name}: Job "${jobType}" not found in job definitions.`);
+      this.logger.warn(`${this.constructor.name}: Job "${jobType}" not found in job definitions.`);
       return;
     }
 
-    await this.queue.add(name, { jobType }, { delay: 500 });
+    await this.queue.add(name, { jobType }, { delay: 1000 });
 
-    logger.debug(`${this.name}: Task (ID: ${id}, Name: ${name}) queued.`);
+    this.logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) queued.`);
   }
 
   /**
