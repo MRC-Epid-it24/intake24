@@ -1,6 +1,10 @@
-/* eslint-disable import/prefer-default-export */
-
+import slugify from 'slugify';
 import validator from 'validator';
+
+export const btoa = (object: any): string => Buffer.from(JSON.stringify(object)).toString('base64');
+
+export const toSimpleName = (name?: string | null): string | null =>
+  name ? slugify(name, { replacement: ' ', lower: true }) : null;
 
 /**
  * Determine if URL is external (not relative)
