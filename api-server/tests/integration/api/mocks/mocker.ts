@@ -124,6 +124,9 @@ export const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRe
   const numberOfSubmissionsForFeedback = faker.random.number(10);
   const storeUserSessionOnServer = faker.random.boolean();
 
+  const maximumDailySubmissions = faker.random.number({ min: 1, max: 5 });
+  const minimumSubmissionInterval = faker.random.number(5);
+
   return {
     id,
     state,
@@ -136,6 +139,8 @@ export const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRe
     feedbackEnabled,
     numberOfSubmissionsForFeedback,
     storeUserSessionOnServer,
+    maximumDailySubmissions,
+    minimumSubmissionInterval,
   };
 };
 

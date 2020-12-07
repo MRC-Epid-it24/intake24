@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { omit, pick, times } from 'lodash';
 import request from 'supertest';
 import { Role, Permission } from '@/db/models/system';
-import userSvc from '@/services/user.service';
+import ioc from '@/ioc';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
@@ -19,7 +19,7 @@ export default function (): void {
     this.roles = await Role.bulkCreate(roleInput);
     this.updateInput.roles = this.roles.map((item: Role) => item.id);
 
-    this.user = await userSvc.create(this.input);
+    this.user = await ioc.cradle.userService.create(this.input);
 
     const baseUrl = '/api/admin/users';
     this.url = `${baseUrl}/${this.user.id}`;

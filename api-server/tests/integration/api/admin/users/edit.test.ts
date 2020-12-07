@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import { pick, omit } from 'lodash';
 import request from 'supertest';
-import userSvc from '@/services/user.service';
+import ioc from '@/ioc';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
     this.input = mocker.user();
-    this.user = await userSvc.create(this.input);
+    this.user = await ioc.cradle.userService.create(this.input);
     this.output = omit(this.input, ['password', 'passwordConfirm']);
 
     const baseUrl = '/api/admin/users';

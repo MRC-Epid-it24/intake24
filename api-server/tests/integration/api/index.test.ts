@@ -1,6 +1,7 @@
 import '../../bootstrap';
 import request from 'supertest';
 import app from '@/app';
+import ioc from '@/ioc';
 import { prepare, cleanup } from './mocks/setup';
 // import root from './root.test';
 import authentication from './authentication/index.test';
@@ -8,7 +9,7 @@ import admin from './admin/index.test';
 
 describe('API', function () {
   before(async function () {
-    this.app = await app();
+    this.app = await app({ config: ioc.cradle.config, logger: ioc.cradle.logger });
     this.data = await prepare();
   });
 

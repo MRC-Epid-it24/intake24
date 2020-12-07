@@ -94,7 +94,9 @@ export default function (): void {
         'allowGenUsers',
         'feedbackEnabled',
         'numberOfSubmissionsForFeedback',
-        'storeUserSessionOnServer'
+        'storeUserSessionOnServer',
+        'maximumDailySubmissions',
+        'minimumSubmissionInterval'
       );
     });
 
@@ -114,6 +116,8 @@ export default function (): void {
           feedbackEnabled: 10,
           numberOfSubmissionsForFeedback: 'number',
           storeUserSessionOnServer: 'yes',
+          maximumDailySubmissions: 'NaN',
+          minimumSubmissionInterval: { nan: 5 },
         });
 
       expect(status).to.equal(422);
@@ -128,7 +132,9 @@ export default function (): void {
         'allowGenUsers',
         'feedbackEnabled',
         'numberOfSubmissionsForFeedback',
-        'storeUserSessionOnServer'
+        'storeUserSessionOnServer',
+        'maximumDailySubmissions',
+        'minimumSubmissionInterval'
       );
     });
 

@@ -9,10 +9,15 @@ export type SurveyRequest = {
   schemeId: string;
   localeId: string;
   allowGenUsers: boolean;
+  genUserKey?: string | null;
   supportEmail: string;
   feedbackEnabled: boolean;
   numberOfSubmissionsForFeedback: number;
   storeUserSessionOnServer: boolean;
+  maximumDailySubmissions: number;
+  minimumSubmissionInterval: number;
+  maximumTotalSubmissions?: number | null;
+  authUrlDomainOverride?: string | null;
 
   suspensionReason?: string | null;
   surveyMonkeyUrl?: string | null;
