@@ -224,6 +224,24 @@ Public directory for serving static files.
 * type: `string`
 * default: `'public'`
 
+### Upload dir
+
+Upload directory for storing temporarily uploaded files.
+
+* object-path: `local.upload`
+* dotenv var: `FS_UPLOAD`
+* type: `string`
+* default: `'storage/upload'`
+
+### Download dir
+
+Download directory for storing temporarily downloaded files.
+
+* object-path: `local.download`
+* dotenv var: `FS_DOWNLOAD`
+* type: `string`
+* default: `'storage/download'`
+
 ## Mail
 
 Mail implementation supports following transports:
