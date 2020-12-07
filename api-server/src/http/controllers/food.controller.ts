@@ -1,9 +1,14 @@
 import { Request, Response } from 'express';
 import { FoodLocal, FoodLocalList } from '@/db/models/foods';
 import { NotFoundError } from '../errors';
+import { Controller } from './controller';
 
-export default {
-  async entry(req: Request, res: Response): Promise<void> {
+export type FoodController = Controller<
+  'entry' | 'entryWithSource' | 'brands' | 'associatedFoods' | 'composition'
+>;
+
+export default (): FoodController => {
+  const entry = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
 
     const food = await FoodLocal.findOne({
@@ -14,25 +19,33 @@ export default {
     if (!food) throw new NotFoundError();
 
     res.json(food);
-  },
+  };
 
-  async entryWithSource(req: Request, res: Response): Promise<void> {
+  const entryWithSource = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
     res.json();
-  },
+  };
 
-  async brands(req: Request, res: Response): Promise<void> {
+  const brands = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
     res.json();
-  },
+  };
 
-  async associatedFoods(req: Request, res: Response): Promise<void> {
+  const associatedFoods = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
     res.json();
-  },
+  };
 
-  async composition(req: Request, res: Response): Promise<void> {
+  const composition = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
     res.json();
-  },
+  };
+
+  return {
+    entry,
+    entryWithSource,
+    brands,
+    associatedFoods,
+    composition,
+  };
 };

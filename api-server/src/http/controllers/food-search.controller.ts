@@ -1,8 +1,13 @@
 import { Request, Response } from 'express';
 import foodIndex, { IndexNotReadyError } from '@/food-index';
+import { Controller } from './controller';
 
-export default {
-  async lookup(req: Request, res: Response): Promise<void> {
+export type FoodSearchController = Controller<
+  'lookup' | 'recipe' | 'category' | 'splitDescription'
+>;
+
+export default (): FoodSearchController => {
+  const lookup = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
 
     if (typeof req.query.description !== 'string' || req.query.description.length === 0) {
@@ -22,20 +27,27 @@ export default {
         return Promise.reject(error);
       }
     );
-  },
+  };
 
-  async recipe(req: Request, res: Response): Promise<void> {
+  const recipe = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
     res.json();
-  },
+  };
 
-  async category(req: Request, res: Response): Promise<void> {
+  const category = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
     res.json();
-  },
+  };
 
-  async splitDescription(req: Request, res: Response): Promise<void> {
+  const splitDescription = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
     res.json();
-  },
+  };
+
+  return {
+    lookup,
+    recipe,
+    category,
+    splitDescription,
+  };
 };

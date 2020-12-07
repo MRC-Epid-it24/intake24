@@ -1,32 +1,45 @@
 import { Request, Response } from 'express';
 import { Survey, SurveySubmission, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
-import surveySvc from '@/services/survey.service';
+import type { IoC } from '@/ioc';
+import { Controller } from './controller';
 
-export default {
-  async list(req: Request, res: Response): Promise<void> {
+export type SurveyController = Controller<
+  | 'list'
+  | 'entry'
+  | 'parameters'
+  | 'userInfo'
+  | 'generateUser'
+  | 'createUser'
+  | 'requestHelp'
+  | 'submission'
+  | 'followUp'
+>;
+
+export default ({ surveyService }: IoC): SurveyController => {
+  const list = async (req: Request, res: Response): Promise<void> => {
     const surveys = await Survey.scope('public').findAll();
 
     res.json(surveys);
-  },
+  };
 
-  async entry(req: Request, res: Response): Promise<void> {
+  const entry = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.scope('public').findByPk(surveyId);
 
     if (!survey) throw new NotFoundError();
 
     res.json(survey);
-  },
+  };
 
-  async parameters(req: Request, res: Response): Promise<void> {
+  const parameters = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.scope(['respondent', 'scheme']).findByPk(surveyId);
 
     if (!survey) throw new NotFoundError();
 
     res.json(survey);
-  },
+  };
 
   /*
    * TODO:
@@ -34,7 +47,7 @@ export default {
    * - Implement submission limits
    *
    */
-  async userInfo(req: Request, res: Response): Promise<void> {
+  const userInfo = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const { tz } = req.query;
     const { id: userId, name } = req.user as User;
@@ -44,49 +57,47 @@ export default {
 
     if (!survey) throw new NotFoundError();
 
-    const userInfo = {
+    res.json({
       userId,
       name,
       recallNumber: submissions + 1,
       redirectToFeedback: submissions >= survey.numberOfSubmissionsForFeedback,
       maximumTotalSubmissionsReached: false,
       maximumDailySubmissionsReached: false,
-    };
+    });
+  };
 
-    res.json(userInfo);
-  },
-
-  async generateUser(req: Request, res: Response): Promise<void> {
+  const generateUser = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
 
     const {
       respondent: { userName },
       password,
-    } = await surveySvc.generateRespondent(surveyId);
+    } = await surveyService.generateRespondent(surveyId);
 
     res.json({ userName, password });
-  },
+  };
 
   // TODO: implement
-  async createUser(req: Request, res: Response): Promise<void> {
+  const createUser = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
 
     res.json();
-  },
+  };
 
   // TODO: implement
-  async requestHelp(req: Request, res: Response): Promise<void> {
+  const requestHelp = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
 
     res.json();
-  },
+  };
 
   // TODO: implement
-  async submission(req: Request, res: Response): Promise<void> {
+  const submission = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
 
     res.json();
-  },
+  };
 
   /*
    * TODO:
@@ -94,9 +105,21 @@ export default {
    * - Feedback will probably be component of Survey app
    * - We will only need some user/survey info, which can be included comes from above "parameters" & "user-info" endpoints
    */
-  async followUp(req: Request, res: Response): Promise<void> {
+  const followUp = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
 
     res.json();
-  },
+  };
+
+  return {
+    list,
+    entry,
+    parameters,
+    userInfo,
+    generateUser,
+    createUser,
+    requestHelp,
+    submission,
+    followUp,
+  };
 };

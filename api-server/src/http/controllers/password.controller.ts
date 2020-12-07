@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
 import { nanoid } from 'nanoid';
 import { Op } from 'sequelize';
-import config from '@/config';
 import { User, UserPasswordReset } from '@/db/models/system';
 import { ValidationError } from '@/http/errors';
-import logger from '@/services/logger';
-import scheduler from '@/services/scheduler';
-import userSvc from '@/services/user.service';
+import type { IoC } from '@/ioc';
+import { Controller } from './controller';
 
-export default {
-  async request(req: Request, res: Response<undefined>): Promise<void> {
+export type PasswordController = Controller<'request' | 'reset'>;
+
+export default ({ config, logger, scheduler, userService }: IoC): PasswordController => {
+  const request = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { email } = req.body;
 
     const user = await User.findOne({ where: { email } });
@@ -32,9 +32,9 @@ export default {
     );
 
     res.json();
-  },
+  };
 
-  async reset(req: Request, res: Response<undefined>): Promise<void> {
+  const reset = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { email, password, token } = req.body;
 
     const expiredAt = new Date();
@@ -51,10 +51,12 @@ export default {
         `It looks like this link is invalid / expired. Please check your email or request another link.`
       );
 
-    await userSvc.updatePassword(passwordReset.userId, password);
+    await userService.updatePassword(passwordReset.userId, password);
 
     await passwordReset.destroy();
 
     res.json();
-  },
+  };
+
+  return { request, reset };
 };
