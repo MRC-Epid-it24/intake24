@@ -1,27 +1,32 @@
 import { Router } from 'express';
 import multer from 'multer';
-import config from '@/config/filesystem';
-import controller from '@/http/controllers/admin/survey-respondent.controller';
 import { permission, canManageSurvey } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/users/respondents';
+import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
 
+const { config, adminSurveyRespondentController } = ioc.cradle;
 const router = Router({ mergeParams: true });
-const upload = multer({ dest: config.local.uploads });
+const upload = multer({ dest: config.filesystem.local.uploads });
 
 router.use(permission('surveys-respondents'), canManageSurvey());
 
 router
   .route('')
-  .post(validation.store, wrapAsync(controller.store))
-  .get(validation.list, wrapAsync(controller.list));
+  .post(validation.store, wrapAsync(adminSurveyRespondentController.store))
+  .get(validation.list, wrapAsync(adminSurveyRespondentController.list));
 
-router.post('/upload', upload.single('file'), validation.upload, wrapAsync(controller.upload));
-router.post('/export-auth-urls', wrapAsync(controller.exportAuthUrls));
+router.post(
+  '/upload',
+  upload.single('file'),
+  validation.upload,
+  wrapAsync(adminSurveyRespondentController.upload)
+);
+router.post('/export-auth-urls', wrapAsync(adminSurveyRespondentController.exportAuthUrls));
 
 router
   .route('/:userId')
-  .put(validation.update, wrapAsync(controller.update))
-  .delete(wrapAsync(controller.delete));
+  .put(validation.update, wrapAsync(adminSurveyRespondentController.update))
+  .delete(wrapAsync(adminSurveyRespondentController.destroy));
 
 export default router;

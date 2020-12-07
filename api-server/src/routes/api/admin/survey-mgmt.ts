@@ -1,15 +1,16 @@
 import { Router } from 'express';
-import controller from '@/http/controllers/admin/survey-mgmt.controller';
 import { permission, canManageSurvey } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/users/mgmt';
+import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
 
+const { adminSurveyMgmtController } = ioc.cradle;
 const router = Router({ mergeParams: true });
 
 router.use(permission('surveys-mgmt'), canManageSurvey());
 
-router.get('', validation.list, wrapAsync(controller.list));
-router.get('/available', wrapAsync(controller.available));
-router.put('/:userId', validation.update, wrapAsync(controller.update));
+router.get('', validation.list, wrapAsync(adminSurveyMgmtController.list));
+router.get('/available', wrapAsync(adminSurveyMgmtController.available));
+router.put('/:userId', validation.update, wrapAsync(adminSurveyMgmtController.update));
 
 export default router;

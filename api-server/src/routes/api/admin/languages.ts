@@ -1,24 +1,25 @@
 import { Router } from 'express';
-import { wrapAsync } from '@/util';
-import controller from '@/http/controllers/admin/language.controller';
 import { permission } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/languages';
+import ioc from '@/ioc';
+import { wrapAsync } from '@/util';
 
+const { languageController } = ioc.cradle;
 const router = Router();
 
 router
   .route('')
-  .post(permission('languages-create'), validation.store, wrapAsync(controller.store))
-  .get(permission('languages-list'), validation.list, wrapAsync(controller.list));
+  .post(permission('languages-create'), validation.store, wrapAsync(languageController.store))
+  .get(permission('languages-list'), validation.list, wrapAsync(languageController.list));
 
-router.get('/create', permission('languages-create'), wrapAsync(controller.create));
+router.get('/create', permission('languages-create'), wrapAsync(languageController.create));
 
 router
   .route('/:languageId')
-  .get(permission('languages-detail'), wrapAsync(controller.detail))
-  .put(permission('languages-edit'), validation.update, wrapAsync(controller.update))
-  .delete(permission('languages-delete'), wrapAsync(controller.delete));
+  .get(permission('languages-detail'), wrapAsync(languageController.detail))
+  .put(permission('languages-edit'), validation.update, wrapAsync(languageController.update))
+  .delete(permission('languages-delete'), wrapAsync(languageController.destroy));
 
-router.get('/:languageId/edit', permission('languages-edit'), wrapAsync(controller.edit));
+router.get('/:languageId/edit', permission('languages-edit'), wrapAsync(languageController.edit));
 
 export default router;

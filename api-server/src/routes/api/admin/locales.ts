@@ -1,24 +1,25 @@
 import { Router } from 'express';
-import { wrapAsync } from '@/util';
-import controller from '@/http/controllers/admin/locale.controller';
 import { permission } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/locales';
+import ioc from '@/ioc';
+import { wrapAsync } from '@/util';
 
+const { localeController } = ioc.cradle;
 const router = Router();
 
 router
   .route('')
-  .post(permission('locales-create'), validation.store, wrapAsync(controller.store))
-  .get(permission('locales-list'), validation.list, wrapAsync(controller.list));
+  .post(permission('locales-create'), validation.store, wrapAsync(localeController.store))
+  .get(permission('locales-list'), validation.list, wrapAsync(localeController.list));
 
-router.get('/create', permission('locales-create'), wrapAsync(controller.create));
+router.get('/create', permission('locales-create'), wrapAsync(localeController.create));
 
 router
   .route('/:localeId')
-  .get(permission('locales-detail'), wrapAsync(controller.detail))
-  .put(permission('locales-edit'), validation.update, wrapAsync(controller.update))
-  .delete(permission('locales-delete'), wrapAsync(controller.delete));
+  .get(permission('locales-detail'), wrapAsync(localeController.detail))
+  .put(permission('locales-edit'), validation.update, wrapAsync(localeController.update))
+  .delete(permission('locales-delete'), wrapAsync(localeController.destroy));
 
-router.get('/:localeId/edit', permission('locales-edit'), wrapAsync(controller.edit));
+router.get('/:localeId/edit', permission('locales-edit'), wrapAsync(localeController.edit));
 
 export default router;

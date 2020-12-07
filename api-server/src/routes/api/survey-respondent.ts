@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import passport from 'passport';
-import surveyController from '@/http/controllers/survey.controller';
 import { isSurveyRespondent } from '@/http/middleware/acl';
+import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
+
+const { surveyController } = ioc.cradle;
 
 const router = Router({ mergeParams: true });
 

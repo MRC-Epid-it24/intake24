@@ -1,24 +1,25 @@
 import { Router } from 'express';
-import { wrapAsync } from '@/util';
-import controller from '@/http/controllers/admin/scheme.controller';
 import { permission } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/schemes';
+import ioc from '@/ioc';
+import { wrapAsync } from '@/util';
 
+const { schemeController } = ioc.cradle;
 const router = Router();
 
 router
   .route('')
-  .post(permission('schemes-create'), validation.store, wrapAsync(controller.store))
-  .get(permission('schemes-list'), validation.list, wrapAsync(controller.list));
+  .post(permission('schemes-create'), validation.store, wrapAsync(schemeController.store))
+  .get(permission('schemes-list'), validation.list, wrapAsync(schemeController.list));
 
-router.get('/create', permission('schemes-create'), wrapAsync(controller.create));
+router.get('/create', permission('schemes-create'), wrapAsync(schemeController.create));
 
 router
   .route('/:schemeId')
-  .get(permission('schemes-detail'), wrapAsync(controller.detail))
-  .put(permission('schemes-edit'), validation.update, wrapAsync(controller.update))
-  .delete(permission('schemes-delete'), wrapAsync(controller.delete));
+  .get(permission('schemes-detail'), wrapAsync(schemeController.detail))
+  .put(permission('schemes-edit'), validation.update, wrapAsync(schemeController.update))
+  .delete(permission('schemes-delete'), wrapAsync(schemeController.destroy));
 
-router.get('/:schemeId/edit', permission('schemes-edit'), wrapAsync(controller.edit));
+router.get('/:schemeId/edit', permission('schemes-edit'), wrapAsync(schemeController.edit));
 
 export default router;

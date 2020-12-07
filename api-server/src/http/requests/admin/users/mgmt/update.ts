@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { checkSchema } from 'express-validator';
 import validate from '@/http/requests/validate';
-import surveySvc from '@/services/survey.service';
+import ioc from '@/ioc';
 
 export default validate(
   checkSchema({
@@ -23,7 +23,7 @@ export default validate(
         options: async (value, { req }): Promise<void> => {
           const { surveyId } = (req as Request).params;
 
-          const permissions = await surveySvc.getSurveyMgmtPermissions(surveyId);
+          const permissions = await ioc.cradle.surveyService.getSurveyMgmtPermissions(surveyId);
           const allowedPermissions = permissions.map((permission) => permission.id);
 
           if (!Array.isArray(value) || value.some((item) => !allowedPermissions.includes(item)))

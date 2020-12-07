@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import passport from 'passport';
 import { wrapAsync } from '@/util';
-import foodController from '@/http/controllers/food.controller';
-import foodSearchController from '@/http/controllers/food-search.controller';
+import ioc from '@/ioc';
+
+const { foodController, foodSearchController } = ioc.cradle;
 
 const router = Router();
 

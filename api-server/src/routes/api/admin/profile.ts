@@ -1,9 +1,10 @@
 import { Router } from 'express';
+import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
-import controller from '@/http/controllers/admin/profile.controller';
 
+const { profileController } = ioc.cradle;
 const router = Router();
 
-router.get('', wrapAsync(controller.index));
+router.get('', wrapAsync(profileController.index));
 
 export default router;

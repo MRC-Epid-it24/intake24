@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import surveyController from '@/http/controllers/survey.controller';
+import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
 import surveyRespondent from './survey-respondent';
+
+const { surveyController } = ioc.cradle;
 
 const router = Router();
 
