@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { WhereOptions } from 'sequelize';
-import config from '@/config/acl';
 import { Locale, Scheme, Survey, User } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
+import type { IoC } from '@/ioc';
 import surveyResponse from '@/http/responses/admin/survey.response';
 import { staffSuffix } from '@/services/acl.service';
 import {
@@ -13,29 +13,32 @@ import {
   SurveysResponse,
   StoreSurveyResponse,
 } from '@common/types/http/admin/surveys';
+import { Controller, CrudActions } from '../controller';
 
-const refs = async (): Promise<SurveyRefs> => {
-  const locales = await Locale.findAll();
-  const schemes = await Scheme.findAll({ attributes: ['id', 'name'] });
+export type AdminSurveyController = Controller<CrudActions>;
 
-  return { locales, schemes };
-};
+export default ({ config }: IoC): AdminSurveyController => {
+  const refs = async (): Promise<SurveyRefs> => {
+    const locales = await Locale.findAll();
+    const schemes = await Scheme.findAll({ attributes: ['id', 'name'] });
 
-const entry = async (req: Request, res: Response<SurveyResponse>): Promise<void> => {
-  const { surveyId } = req.params;
-  const survey = await Survey.findByPk(surveyId);
+    return { locales, schemes };
+  };
 
-  if (!survey) throw new NotFoundError();
+  const entry = async (req: Request, res: Response<SurveyResponse>): Promise<void> => {
+    const { surveyId } = req.params;
+    const survey = await Survey.findByPk(surveyId);
 
-  res.json({ data: surveyResponse(survey), refs: await refs() });
-};
+    if (!survey) throw new NotFoundError();
 
-export default {
-  async list(req: Request, res: Response<SurveysResponse>): Promise<void> {
+    res.json({ data: surveyResponse(survey), refs: await refs() });
+  };
+
+  const list = async (req: Request, res: Response<SurveysResponse>): Promise<void> => {
     const permissions = (req.user as User).allPermissions().map((permission) => permission.name);
 
     const where: WhereOptions = {};
-    if (!permissions.includes(config.permissions.surveyadmin)) {
+    if (!permissions.includes(config.acl.permissions.surveyadmin)) {
       const surveys = permissions
         .filter((permission) => permission.endsWith(staffSuffix))
         .map((permission) => permission.replace(staffSuffix, ''));
@@ -46,13 +49,13 @@ export default {
     const surveys = await Survey.paginate({ req, columns: ['id'], where });
 
     res.json(surveys);
-  },
+  };
 
-  async create(req: Request, res: Response<CreateSurveyResponse>): Promise<void> {
+  const create = async (req: Request, res: Response<CreateSurveyResponse>): Promise<void> => {
     res.json({ refs: await refs() });
-  },
+  };
 
-  async store(req: Request, res: Response<StoreSurveyResponse>): Promise<void> {
+  const store = async (req: Request, res: Response<StoreSurveyResponse>): Promise<void> => {
     const survey = await Survey.create(
       pick(req.body, [
         'id',
@@ -82,17 +85,15 @@ export default {
     );
 
     res.status(201).json({ data: surveyResponse(survey) });
-  },
+  };
 
-  async detail(req: Request, res: Response<SurveyResponse>): Promise<void> {
+  const detail = async (req: Request, res: Response<SurveyResponse>): Promise<void> =>
     entry(req, res);
-  },
 
-  async edit(req: Request, res: Response<SurveyResponse>): Promise<void> {
+  const edit = async (req: Request, res: Response<SurveyResponse>): Promise<void> =>
     entry(req, res);
-  },
 
-  async update(req: Request, res: Response<SurveyResponse>): Promise<void> {
+  const update = async (req: Request, res: Response<SurveyResponse>): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
@@ -126,9 +127,9 @@ export default {
     );
 
     res.json({ data: surveyResponse(survey), refs: await refs() });
-  },
+  };
 
-  async delete(req: Request, res: Response<undefined>): Promise<void> {
+  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.scope('submissions').findByPk(surveyId);
 
@@ -140,5 +141,15 @@ export default {
     await survey.destroy();
 
     res.status(204).json();
-  },
+  };
+
+  return {
+    list,
+    create,
+    store,
+    detail,
+    edit,
+    update,
+    destroy,
+  };
 };

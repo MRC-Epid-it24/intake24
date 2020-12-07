@@ -10,50 +10,51 @@ import {
   SchemesResponse,
   StoreSchemeResponse,
 } from '@common/types/http/admin/schemes';
+import { Controller, CrudActions } from '../controller';
 
-const refs = async (): Promise<SchemeRefs> => {
-  const languages = await Language.findAll();
+export type SchemeController = Controller<CrudActions>;
 
-  return { languages, meals };
-};
+export default (): SchemeController => {
+  const refs = async (): Promise<SchemeRefs> => {
+    const languages = await Language.findAll();
 
-const entry = async (req: Request, res: Response): Promise<void> => {
-  const { schemeId } = req.params;
-  const scheme = await Scheme.findByPk(schemeId);
+    return { languages, meals };
+  };
 
-  if (!scheme) throw new NotFoundError();
+  const entry = async (req: Request, res: Response): Promise<void> => {
+    const { schemeId } = req.params;
+    const scheme = await Scheme.findByPk(schemeId);
 
-  res.json({ data: scheme, refs: await refs() });
-};
+    if (!scheme) throw new NotFoundError();
 
-export default {
-  async list(req: Request, res: Response<SchemesResponse>): Promise<void> {
+    res.json({ data: scheme, refs: await refs() });
+  };
+
+  const list = async (req: Request, res: Response<SchemesResponse>): Promise<void> => {
     const schemes = await Scheme.paginate({ req, columns: ['id', 'name'] });
 
     res.json(schemes);
-  },
+  };
 
-  async create(req: Request, res: Response<CreateSchemeResponse>): Promise<void> {
+  const create = async (req: Request, res: Response<CreateSchemeResponse>): Promise<void> => {
     res.json({ refs: await refs() });
-  },
+  };
 
-  async store(req: Request, res: Response<StoreSchemeResponse>): Promise<void> {
+  const store = async (req: Request, res: Response<StoreSchemeResponse>): Promise<void> => {
     const scheme = await Scheme.create(
       pick(req.body, ['id', 'name', 'type', 'questions', 'meals'])
     );
 
     res.status(201).json({ data: scheme });
-  },
+  };
 
-  async detail(req: Request, res: Response<SchemeResponse>): Promise<void> {
+  const detail = async (req: Request, res: Response<SchemeResponse>): Promise<void> =>
     entry(req, res);
-  },
 
-  async edit(req: Request, res: Response<SchemeResponse>): Promise<void> {
+  const edit = async (req: Request, res: Response<SchemeResponse>): Promise<void> =>
     entry(req, res);
-  },
 
-  async update(req: Request, res: Response<SchemeResponse>): Promise<void> {
+  const update = async (req: Request, res: Response<SchemeResponse>): Promise<void> => {
     const { schemeId } = req.params;
     const scheme = await Scheme.findByPk(schemeId);
 
@@ -62,9 +63,9 @@ export default {
     await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals']));
 
     res.json({ data: scheme, refs: await refs() });
-  },
+  };
 
-  async delete(req: Request, res: Response<undefined>): Promise<void> {
+  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { schemeId } = req.params;
     const scheme = await Scheme.scope('surveys').findByPk(schemeId);
 
@@ -75,5 +76,15 @@ export default {
 
     await scheme.destroy();
     res.status(204).json();
-  },
+  };
+
+  return {
+    list,
+    create,
+    store,
+    detail,
+    edit,
+    update,
+    destroy,
+  };
 };

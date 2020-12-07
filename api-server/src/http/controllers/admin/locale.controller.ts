@@ -10,38 +10,41 @@ import {
   LocalesResponse,
   StoreLocaleResponse,
 } from '@common/types/http/admin/locales';
+import { Controller, CrudActions } from '../controller';
 
-const refs = async (localeId: string | undefined = undefined): Promise<LocaleRefs> => {
-  const languages = await Language.findAll();
-  const locales = await Locale.findAll({ where: localeId ? { id: { [Op.ne]: localeId } } : {} });
+export type LocaleController = Controller<CrudActions>;
 
-  return { languages, locales };
-};
+export default (): LocaleController => {
+  const refs = async (localeId: string | undefined = undefined): Promise<LocaleRefs> => {
+    const languages = await Language.findAll();
+    const locales = await Locale.findAll({ where: localeId ? { id: { [Op.ne]: localeId } } : {} });
 
-const entry = async (req: Request, res: Response<LocaleResponse>): Promise<void> => {
-  const { localeId } = req.params;
-  const locale = await Locale.findByPk(localeId);
+    return { languages, locales };
+  };
 
-  if (!locale) throw new NotFoundError();
+  const entry = async (req: Request, res: Response<LocaleResponse>): Promise<void> => {
+    const { localeId } = req.params;
+    const locale = await Locale.findByPk(localeId);
 
-  res.json({ data: locale, refs: await refs(locale.id) });
-};
+    if (!locale) throw new NotFoundError();
 
-export default {
-  async list(req: Request, res: Response<LocalesResponse>): Promise<void> {
+    res.json({ data: locale, refs: await refs(locale.id) });
+  };
+
+  const list = async (req: Request, res: Response<LocalesResponse>): Promise<void> => {
     const locales = await Locale.paginate({
       req,
       columns: ['id', 'englishName', 'localName'],
     });
 
     res.json(locales);
-  },
+  };
 
-  async create(req: Request, res: Response<CreateLocaleResponse>): Promise<void> {
+  const create = async (req: Request, res: Response<CreateLocaleResponse>): Promise<void> => {
     res.json({ refs: await refs() });
-  },
+  };
 
-  async store(req: Request, res: Response<StoreLocaleResponse>): Promise<void> {
+  const store = async (req: Request, res: Response<StoreLocaleResponse>): Promise<void> => {
     const locale = await Locale.create(
       pick(req.body, [
         'id',
@@ -56,17 +59,15 @@ export default {
     );
 
     res.status(201).json({ data: locale });
-  },
+  };
 
-  async detail(req: Request, res: Response<LocaleResponse>): Promise<void> {
+  const detail = async (req: Request, res: Response<LocaleResponse>): Promise<void> =>
     entry(req, res);
-  },
 
-  async edit(req: Request, res: Response<LocaleResponse>): Promise<void> {
+  const edit = async (req: Request, res: Response<LocaleResponse>): Promise<void> =>
     entry(req, res);
-  },
 
-  async update(req: Request, res: Response<LocaleResponse>): Promise<void> {
+  const update = async (req: Request, res: Response<LocaleResponse>): Promise<void> => {
     const { localeId } = req.params;
     const locale = await Locale.findByPk(localeId);
 
@@ -85,9 +86,9 @@ export default {
     );
 
     res.json({ data: locale, refs: await refs(locale.id) });
-  },
+  };
 
-  async delete(req: Request, res: Response<undefined>): Promise<void> {
+  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { localeId } = req.params;
     const locale = await Locale.scope('surveys').findByPk(localeId);
 
@@ -102,5 +103,15 @@ export default {
 
     // await locale.destroy();
     // res.status(204).json();
-  },
+  };
+
+  return {
+    list,
+    create,
+    store,
+    detail,
+    edit,
+    update,
+    destroy,
+  };
 };

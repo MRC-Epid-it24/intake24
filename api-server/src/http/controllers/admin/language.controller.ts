@@ -8,47 +8,48 @@ import {
   LanguagesResponse,
   StoreLanguageResponse,
 } from '@common/types/http/admin/languages';
+import { Controller, CrudActions } from '../controller';
 
-const entry = async (req: Request, res: Response<LanguageResponse>): Promise<void> => {
-  const { languageId } = req.params;
-  const language = await Language.findByPk(languageId);
+export type LanguageController = Controller<CrudActions>;
 
-  if (!language) throw new NotFoundError();
+export default (): LanguageController => {
+  const entry = async (req: Request, res: Response<LanguageResponse>): Promise<void> => {
+    const { languageId } = req.params;
+    const language = await Language.findByPk(languageId);
 
-  res.json({ data: language, refs: {} });
-};
+    if (!language) throw new NotFoundError();
 
-export default {
-  async list(req: Request, res: Response<LanguagesResponse>): Promise<void> {
+    res.json({ data: language, refs: {} });
+  };
+
+  const list = async (req: Request, res: Response<LanguagesResponse>): Promise<void> => {
     const languages = await Language.paginate({
       req,
       columns: ['id', 'englishName', 'localName'],
     });
 
     res.json(languages);
-  },
+  };
 
-  async create(req: Request, res: Response<CreateLanguageResponse>): Promise<void> {
+  const create = async (req: Request, res: Response<CreateLanguageResponse>): Promise<void> => {
     res.json({ refs: {} });
-  },
+  };
 
-  async store(req: Request, res: Response<StoreLanguageResponse>): Promise<void> {
+  const store = async (req: Request, res: Response<StoreLanguageResponse>): Promise<void> => {
     const scheme = await Language.create(
       pick(req.body, ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection'])
     );
 
     res.status(201).json({ data: scheme });
-  },
+  };
 
-  async detail(req: Request, res: Response<LanguageResponse>): Promise<void> {
+  const detail = async (req: Request, res: Response<LanguageResponse>): Promise<void> =>
     entry(req, res);
-  },
 
-  async edit(req: Request, res: Response<LanguageResponse>): Promise<void> {
+  const edit = async (req: Request, res: Response<LanguageResponse>): Promise<void> =>
     entry(req, res);
-  },
 
-  async update(req: Request, res: Response<LanguageResponse>): Promise<void> {
+  const update = async (req: Request, res: Response<LanguageResponse>): Promise<void> => {
     const { languageId } = req.params;
     const language = await Language.findByPk(languageId);
 
@@ -59,9 +60,9 @@ export default {
     );
 
     res.json({ data: language, refs: {} });
-  },
+  };
 
-  async delete(req: Request, res: Response<undefined>): Promise<void> {
+  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { languageId } = req.params;
     const language = await Language.scope(['adminLocales', 'surveyLocales']).findByPk(languageId);
 
@@ -74,5 +75,15 @@ export default {
 
     await language.destroy();
     res.status(204).json();
-  },
+  };
+
+  return {
+    list,
+    create,
+    store,
+    detail,
+    edit,
+    update,
+    destroy,
+  };
 };

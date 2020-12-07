@@ -4,11 +4,14 @@ import { UserResponse } from '@common/types/http/admin/users';
 import { Permission, Survey, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import userResponse from '@/http/responses/admin/user.response';
+import type { IoC } from '@/ioc';
 import { surveyMgmt } from '@/services/acl.service';
-import surveySvc from '@/services/survey.service';
+import { Controller } from '../controller';
 
-export default {
-  async list(req: Request, res: Response): Promise<void> {
+export type AdminSurveyMgmtController = Controller<'list' | 'available' | 'update'>;
+
+export default ({ surveyService }: IoC): AdminSurveyMgmtController => {
+  const list = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
@@ -22,9 +25,9 @@ export default {
     });
 
     res.json(users);
-  },
+  };
 
-  async available(req: Request, res: Response): Promise<void> {
+  const available = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
@@ -38,12 +41,12 @@ export default {
       include: [{ model: Permission, through: { attributes: [] }, required: false }],
     });
 
-    const permissions = await surveySvc.getSurveyMgmtPermissions(surveyId, 'list');
+    const permissions = await surveyService.getSurveyMgmtPermissions(surveyId, 'list');
 
     res.json({ data: users.map(userResponse), permissions });
-  },
+  };
 
-  async update(req: Request, res: Response): Promise<void> {
+  const update = async (req: Request, res: Response): Promise<void> => {
     const {
       params: { surveyId, userId },
       body: { permissions },
@@ -54,7 +57,7 @@ export default {
 
     if (!survey || !user) throw new NotFoundError();
 
-    const surveyMgmtPermissions = await surveySvc.getSurveyMgmtPermissions(surveyId, 'list');
+    const surveyMgmtPermissions = await surveyService.getSurveyMgmtPermissions(surveyId, 'list');
 
     await user.$remove('permissions', surveyMgmtPermissions);
 
@@ -62,5 +65,11 @@ export default {
       await user.$add('permissions', permissions);
 
     res.json();
-  },
+  };
+
+  return {
+    list,
+    available,
+    update,
+  };
 };

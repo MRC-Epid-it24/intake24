@@ -1,13 +1,18 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { RespondentResponse } from '@common/types/http/admin/users';
 import { Survey, User, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import userRespondentResponse from '@/http/responses/admin/user-respondent.response';
-import surveySvc from '@/services/survey.service';
+import { RespondentResponse } from '@common/types/http/admin/users';
+import type { IoC } from '@/ioc';
+import { Controller } from '../controller';
 
-export default {
-  async list(req: Request, res: Response): Promise<void> {
+export type AdminSurveyRespondentController = Controller<
+  'list' | 'store' | 'update' | 'destroy' | 'upload' | 'exportAuthUrls'
+>;
+
+export default ({ surveyService }: IoC): AdminSurveyRespondentController => {
+  const list = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
@@ -21,54 +26,63 @@ export default {
     });
 
     res.json(respondents);
-  },
+  };
 
-  async store(req: Request, res: Response): Promise<void> {
+  const store = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
 
-    const { respondent } = await surveySvc.createRespondent(
+    const { respondent } = await surveyService.createRespondent(
       surveyId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
     );
 
     res.status(201).json({ data: respondent });
-  },
+  };
 
-  async update(req: Request, res: Response): Promise<void> {
+  const update = async (req: Request, res: Response): Promise<void> => {
     const { surveyId, userId } = req.params;
 
-    const respondent = await surveySvc.updateRespondent(
+    const respondent = await surveyService.updateRespondent(
       surveyId,
       userId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
     );
 
     res.json({ data: respondent });
-  },
+  };
 
-  async delete(req: Request, res: Response): Promise<void> {
+  const destroy = async (req: Request, res: Response): Promise<void> => {
     const { surveyId, userId } = req.params;
 
-    await surveySvc.deleteRespondent(surveyId, userId);
+    await surveyService.deleteRespondent(surveyId, userId);
     res.status(204).json();
-  },
+  };
 
-  async upload(req: Request, res: Response): Promise<void> {
+  const upload = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const { file } = req;
     const { id: userId } = req.user as User;
 
-    const job = await surveySvc.importRespondents(surveyId, userId, file);
+    const job = await surveyService.importRespondents(surveyId, userId, file);
 
     res.json({ data: job });
-  },
+  };
 
-  async exportAuthUrls(req: Request, res: Response): Promise<void> {
+  const exportAuthUrls = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const { id: userId } = req.user as User;
 
-    const job = await surveySvc.exportAuthenticationUrls(surveyId, userId);
+    const job = await surveyService.exportAuthenticationUrls(surveyId, userId);
 
     res.json({ data: job });
-  },
+  };
+
+  return {
+    list,
+    store,
+    update,
+    destroy,
+    upload,
+    exportAuthUrls,
+  };
 };

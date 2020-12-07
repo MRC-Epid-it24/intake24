@@ -3,7 +3,7 @@ import { pick } from 'lodash';
 import { Permission, Role, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import userResponse from '@/http/responses/admin/user.response';
-import userSvc from '@/services/user.service';
+import type { IoC } from '@/ioc';
 import {
   CreateUserResponse,
   UserResponse,
@@ -11,44 +11,47 @@ import {
   UsersResponse,
   StoreUserResponse,
 } from '@common/types/http/admin/users';
+import { Controller, CrudActions } from '../controller';
 
-const entryRefs = async (): Promise<UserRefs> => {
-  const permissions = await Permission.scope('list').findAll();
-  const roles = await Role.scope('list').findAll();
+export type UserController = Controller<CrudActions>;
 
-  return { permissions, roles };
-};
+export default ({ userService }: IoC): UserController => {
+  const entryRefs = async (): Promise<UserRefs> => {
+    const permissions = await Permission.scope('list').findAll();
+    const roles = await Role.scope('list').findAll();
 
-const entry = async (req: Request, res: Response<UserResponse>): Promise<void> => {
-  const { userId } = req.params;
-  const user = await User.scope(['permissions', 'roles']).findByPk(userId);
+    return { permissions, roles };
+  };
 
-  if (!user) throw new NotFoundError();
+  const entry = async (req: Request, res: Response<UserResponse>): Promise<void> => {
+    const { userId } = req.params;
+    const user = await User.scope(['permissions', 'roles']).findByPk(userId);
 
-  const data = userResponse(user);
-  const refs = await entryRefs();
+    if (!user) throw new NotFoundError();
 
-  res.json({ data, refs });
-};
+    const data = userResponse(user);
+    const refs = await entryRefs();
 
-export default {
-  async list(req: Request, res: Response<UsersResponse>): Promise<void> {
+    res.json({ data, refs });
+  };
+
+  const list = async (req: Request, res: Response<UsersResponse>): Promise<void> => {
     const users = await User.scope('roles').paginate({
       req,
       columns: ['name', 'email', 'simpleName'],
     });
 
     res.json(users);
-  },
+  };
 
-  async create(req: Request, res: Response<CreateUserResponse>): Promise<void> {
+  const create = async (req: Request, res: Response<CreateUserResponse>): Promise<void> => {
     const refs = await entryRefs();
 
     res.json({ refs });
-  },
+  };
 
-  async store(req: Request, res: Response<StoreUserResponse>): Promise<void> {
-    const user = await userSvc.create(
+  const store = async (req: Request, res: Response<StoreUserResponse>): Promise<void> => {
+    const user = await userService.create(
       pick(req.body, [
         'name',
         'email',
@@ -67,20 +70,17 @@ export default {
     );
 
     res.status(201).json({ data });
-  },
+  };
 
-  async detail(req: Request, res: Response<UserResponse>): Promise<void> {
+  const detail = async (req: Request, res: Response<UserResponse>): Promise<void> =>
     entry(req, res);
-  },
 
-  async edit(req: Request, res: Response<UserResponse>): Promise<void> {
-    entry(req, res);
-  },
+  const edit = async (req: Request, res: Response<UserResponse>): Promise<void> => entry(req, res);
 
-  async update(req: Request, res: Response<UserResponse>): Promise<void> {
+  const update = async (req: Request, res: Response<UserResponse>): Promise<void> => {
     const { userId } = req.params;
 
-    await userSvc.update(
+    await userService.update(
       userId,
       pick(req.body, [
         'name',
@@ -100,12 +100,22 @@ export default {
     const refs = await entryRefs();
 
     res.json({ data, refs });
-  },
+  };
 
-  async delete(req: Request, res: Response<undefined>): Promise<void> {
+  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { userId } = req.params;
 
-    await userSvc.delete(userId);
+    await userService.destroy(userId);
     res.status(204).json();
-  },
+  };
+
+  return {
+    list,
+    create,
+    store,
+    detail,
+    edit,
+    update,
+    destroy,
+  };
 };
