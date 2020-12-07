@@ -1,7 +1,7 @@
 import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
-import security from '@/config/security';
 import { InternalServerError } from '@/http/errors';
+import type { IoC } from '@/ioc';
 
 export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken';
 
@@ -25,13 +25,19 @@ export interface TokenPayload extends SignPayload {
   exp: number;
 }
 
-const { issuer, access, refresh } = security.jwt;
+export interface JwtService {
+  sign: (payload: SignPayload, secret: string, options?: SignOptions) => Promise<string>;
+  signAccessToken: (payload: SignPayload, options?: SignOptions) => Promise<string>;
+  signRefreshToken: (payload: SignPayload, options?: SignOptions) => Promise<string>;
+  signTokens: (payload: SignPayload, options?: SignOptions) => Promise<Tokens>;
+  verifyRefreshToken: (token: string) => Promise<TokenPayload>;
+}
 
-const signOptions: SignOptions = { issuer };
+export default ({ config }: IoC): JwtService => {
+  const { issuer, access, refresh } = config.security.jwt;
+  const signOptions: SignOptions = { issuer };
+  const verifyOptions: VerifyOptions = { audience: 'refresh', issuer };
 
-const verifyOptions: VerifyOptions = { audience: 'refresh', issuer };
-
-export default {
   /**
    * Sign a token
    *
@@ -40,14 +46,18 @@ export default {
    * @param {SignOptions} [options={}]
    * @returns {Promise<string>}
    */
-  async sign(payload: SignPayload, secret: string, options: SignOptions = {}): Promise<string> {
+  const sign = async (
+    payload: SignPayload,
+    secret: string,
+    options: SignOptions = {}
+  ): Promise<string> => {
     return new Promise((resolve, reject) => {
       const jwtid = nanoid(64);
       jwt.sign(payload, secret, { jwtid, ...signOptions, ...options }, (err, encoded) =>
         err || !encoded ? reject(err ?? new Error('Unable to sign token.')) : resolve(encoded)
       );
     });
-  },
+  };
 
   /**
    * Sign access token
@@ -56,13 +66,16 @@ export default {
    * @param {SignOptions} [options={}]
    * @returns {string}
    */
-  async signAccessToken(payload: SignPayload, options: SignOptions = {}): Promise<string> {
+  const signAccessToken = async (
+    payload: SignPayload,
+    options: SignOptions = {}
+  ): Promise<string> => {
     const { secret, lifetime } = access;
 
     if (!secret) throw new InternalServerError('No access token secret defined.');
 
-    return this.sign(payload, secret, { audience: 'access', expiresIn: lifetime, ...options });
-  },
+    return sign(payload, secret, { audience: 'access', expiresIn: lifetime, ...options });
+  };
 
   /**
    * Sign refresh token
@@ -71,13 +84,16 @@ export default {
    * @param {SignOptions} [options={}]
    * @returns {string}
    */
-  async signRefreshToken(payload: SignPayload, options: SignOptions = {}): Promise<string> {
+  const signRefreshToken = async (
+    payload: SignPayload,
+    options: SignOptions = {}
+  ): Promise<string> => {
     const { secret, lifetime } = refresh;
 
     if (!secret) throw new InternalServerError('No refresh token secret defined.');
 
-    return this.sign(payload, secret, { audience: 'refresh', expiresIn: lifetime, ...options });
-  },
+    return sign(payload, secret, { audience: 'refresh', expiresIn: lifetime, ...options });
+  };
 
   /**
    * Sign both access and refresh tokens
@@ -86,12 +102,12 @@ export default {
    * @param {SignOptions} [options={}]
    * @returns {Tokens}
    */
-  async signTokens(payload: SignPayload, options: SignOptions = {}): Promise<Tokens> {
-    const accessToken = await this.signAccessToken(payload, options);
-    const refreshToken = await this.signRefreshToken(payload, options);
+  const signTokens = async (payload: SignPayload, options: SignOptions = {}): Promise<Tokens> => {
+    const accessToken = await signAccessToken(payload, options);
+    const refreshToken = await signRefreshToken(payload, options);
 
     return { accessToken, refreshToken };
-  },
+  };
 
   /**
    * Verify validity of refresh token
@@ -99,7 +115,7 @@ export default {
    * @param {string} token
    * @returns {TokenPayload}
    */
-  verifyRefreshToken(token: string): Promise<TokenPayload> {
+  const verifyRefreshToken = async (token: string): Promise<TokenPayload> => {
     return new Promise((resolve, reject) => {
       jwt.verify(token, refresh.secret, verifyOptions, (err, decoded) =>
         err || !decoded
@@ -107,5 +123,13 @@ export default {
           : resolve(decoded as TokenPayload)
       );
     });
-  },
+  };
+
+  return {
+    sign,
+    signAccessToken,
+    signRefreshToken,
+    signTokens,
+    verifyRefreshToken,
+  };
 };
