@@ -1,13 +1,17 @@
 import pg from 'pg';
 import { Sequelize } from 'sequelize-typescript';
-import appConfig from '@/config/app';
-import dbConfig, { Database } from '@/config/database';
-import { dbLogger } from '@/services/logger';
+import { Database } from '@/config/database';
+import type { IoC } from '@/ioc';
 import * as foods from './models/foods';
 import * as system from './models/system';
 
 // Parse int8 as number
 pg.defaults.parseInt8 = true;
+
+const models = {
+  foods: Object.values(foods),
+  system: Object.values(system),
+};
 
 export type BaseDbInterface = Record<Database, Sequelize>;
 
@@ -15,23 +19,38 @@ export interface DbInterface extends BaseDbInterface {
   init(): Promise<void>;
 }
 
-const { env } = appConfig;
+export default class DB implements DbInterface {
+  private config;
 
-const logging = env === 'development' ? dbLogger : false;
+  private logger;
 
-const db = {
-  async init() {
-    this.foods = new Sequelize({
-      ...dbConfig[env].foods,
-      models: Object.values(foods),
-      logging,
+  public foods!: Sequelize;
+
+  public system!: Sequelize;
+
+  constructor({ config, logger }: IoC) {
+    this.config = config;
+    this.logger = logger;
+  }
+
+  async init(): Promise<void> {
+    const { env } = this.config.app;
+    const isDev = env === 'development';
+
+    (Object.keys(this.config.database[env]) as Database[]).forEach((database) => {
+      const dbConf = this.config.database[env][database];
+      this[database] = new Sequelize({
+        ...dbConf,
+        models: models[database],
+        logging: isDev
+          ? (sql: string, timing?: number): void => {
+              this.logger.debug(sql);
+            }
+          : false,
+      });
     });
-    this.system = new Sequelize({
-      ...dbConfig[env].system,
-      models: Object.values(system),
-      logging,
-    });
-  },
-} as DbInterface;
 
-export default db;
+    // Soft-sync for DEV environment
+    // if (isDev) await this.system.sync();
+  }
+}
