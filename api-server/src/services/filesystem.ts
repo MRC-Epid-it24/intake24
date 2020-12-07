@@ -1,11 +1,11 @@
 import fs from 'fs-extra';
-import config, { FileSystemConfig } from '@/config/filesystem';
+import type { IoC } from '@/ioc';
 
-class Filesystem {
-  config: FileSystemConfig;
+export default class Filesystem {
+  config;
 
-  constructor(config: FileSystemConfig) {
-    this.config = config;
+  constructor({ config }: IoC) {
+    this.config = config.filesystem;
   }
 
   /**
@@ -18,5 +18,3 @@ class Filesystem {
     Object.values(this.config.local).forEach((value) => fs.ensureDir(value));
   }
 }
-
-export default new Filesystem(config);

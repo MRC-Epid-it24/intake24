@@ -1,25 +1,28 @@
 import nodemailer, { SendMailOptions, Transporter } from 'nodemailer';
-import appConfig from '@/config/app';
-import config, { MailerType } from '@/config/mail';
-import logger from '@/services/logger';
+import type { IoC } from '@/ioc';
 
-class Mailer {
-  mailer!: MailerType;
+export default class Mailer {
+  private config;
 
-  transporter!: Transporter;
+  private logger;
+
+  private transporter!: Transporter;
+
+  constructor({ config, logger }: IoC) {
+    this.config = config;
+    this.logger = logger;
+  }
 
   init(): void {
-    const { mailer } = config;
-    this.mailer = mailer;
-
+    const { mailer } = this.config.mail;
     let options = {};
 
-    const isDev = appConfig.env === 'development';
+    const isDev = this.config.app.env === 'development';
 
     switch (mailer) {
       case 'smtp':
         options = {
-          ...config.mailers[mailer],
+          ...this.config.mail.mailers[mailer],
           pool: true,
           debug: isDev,
           logger: isDev,
@@ -36,20 +39,18 @@ class Mailer {
 
   async sendMail(options: SendMailOptions): Promise<void> {
     try {
-      const { from } = config;
+      const { from } = this.config.mail;
       const defaults: SendMailOptions = { from };
 
       const info = await this.transporter.sendMail({ ...defaults, ...options });
 
-      logger.info(info.messageId);
+      this.logger.info(info.messageId);
 
       // TODO: pipe it to winston logger
-      if (this.mailer === 'log') info.message.pipe(process.stdout);
+      if (this.config.mail.mailer === 'log') info.message.pipe(process.stdout);
     } catch (err) {
       const { message, name, stack } = err;
-      logger.error(stack ?? `${name}: ${message}`);
+      this.logger.error(stack ?? `${name}: ${message}`);
     }
   }
 }
-
-export default new Mailer();

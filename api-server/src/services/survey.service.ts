@@ -2,17 +2,35 @@ import { nanoid } from 'nanoid';
 import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/http/admin/users';
 import { GenUserCounter, Job, Permission, Survey, User, UserSurveyAlias } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
+import type { IoC } from '@/ioc';
+import { toSimpleName } from '@/util';
 import { surveyMgmt, surveyRespondent } from './acl.service';
-import scheduler from './scheduler';
-import userSvc, { toSimpleName } from './user.service';
 
 export type RespondentWithPassword = {
   respondent: UserSurveyAlias;
   password: string;
 };
 
-export default {
-  async getSurveyRespondentPermission(surveyId: string): Promise<Permission> {
+export interface SurveyService {
+  getSurveyRespondentPermission: (surveyId: string) => Promise<Permission>;
+  getSurveyMgmtPermissions: (surveyId: string, scope?: string | string[]) => Promise<Permission[]>;
+  createRespondent: (
+    surveyId: string,
+    request: CreateRespondentRequest
+  ) => Promise<RespondentWithPassword>;
+  updateRespondent: (
+    surveyId: string,
+    userId: string | number,
+    request: UpdateRespondentRequest
+  ) => Promise<UserSurveyAlias>;
+  deleteRespondent: (surveyId: string, userId: string | number) => Promise<void>;
+  generateRespondent: (surveyId: string) => Promise<RespondentWithPassword>;
+  importRespondents: (surveyId: string, userId: number, file: Express.Multer.File) => Promise<Job>;
+  exportAuthenticationUrls: (surveyId: string, userId: number) => Promise<Job>;
+}
+
+export default ({ scheduler, userService }: IoC): SurveyService => {
+  const getSurveyRespondentPermission = async (surveyId: string): Promise<Permission> => {
     const name = surveyRespondent(surveyId);
     const [permission] = await Permission.findOrCreate({
       where: { name },
@@ -20,26 +38,26 @@ export default {
     });
 
     return permission;
-  },
+  };
 
-  async getSurveyMgmtPermissions(
+  const getSurveyMgmtPermissions = async (
     surveyId: string,
     scope: string | string[] = []
-  ): Promise<Permission[]> {
+  ): Promise<Permission[]> => {
     return Permission.scope(scope).findAll({ where: { name: surveyMgmt(surveyId) } });
-  },
+  };
 
-  async createRespondent(
+  const createRespondent = async (
     surveyId: string,
     request: CreateRespondentRequest
-  ): Promise<RespondentWithPassword> {
+  ): Promise<RespondentWithPassword> => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
     const { password, userName, ...rest } = request;
     const user = await User.create({ ...rest, simpleName: toSimpleName(rest.name) });
 
-    await user.$add('permissions', await this.getSurveyRespondentPermission(surveyId));
+    await user.$add('permissions', await getSurveyRespondentPermission(surveyId));
 
     const { id: userId } = user;
     const respondent = await UserSurveyAlias.create({
@@ -50,16 +68,16 @@ export default {
       urlAuthToken: nanoid(),
     });
 
-    userSvc.createPassword(userId, password);
+    userService.createPassword(userId, password);
 
     return { respondent, password };
-  },
+  };
 
-  async updateRespondent(
+  const updateRespondent = async (
     surveyId: string,
     userId: string | number,
     request: UpdateRespondentRequest
-  ): Promise<UserSurveyAlias> {
+  ): Promise<UserSurveyAlias> => {
     const survey = await Survey.findByPk(surveyId);
     const user = await User.findOne({
       include: [{ model: UserSurveyAlias, where: { userId, surveyId } }],
@@ -70,14 +88,14 @@ export default {
     const { password, ...rest } = request;
 
     await user.update({ ...rest, simpleName: toSimpleName(rest.name) });
-    if (password) userSvc.updatePassword(user.id, password);
+    if (password) userService.updatePassword(user.id, password);
 
     // Query ensures alias is loaded
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return user.aliases![0];
-  },
+  };
 
-  async deleteRespondent(surveyId: string, userId: string | number): Promise<void> {
+  const deleteRespondent = async (surveyId: string, userId: string | number): Promise<void> => {
     const user = await User.scope('submissions').findOne({
       where: { id: userId },
       include: [{ model: UserSurveyAlias, where: { surveyId } }],
@@ -91,14 +109,14 @@ export default {
     // System-wide account - delete only access to study
     if (user.email) {
       await UserSurveyAlias.destroy({ where: { surveyId, userId } });
-      await user.$remove('permissions', await this.getSurveyRespondentPermission(surveyId));
+      await user.$remove('permissions', await getSurveyRespondentPermission(surveyId));
     } else {
       // Wipe the whole user records
       await user.destroy();
     }
-  },
+  };
 
-  async generateRespondent(surveyId: string): Promise<RespondentWithPassword> {
+  const generateRespondent = async (surveyId: string): Promise<RespondentWithPassword> => {
     const survey = await Survey.scope('counter').findByPk(surveyId);
 
     if (!survey) throw new NotFoundError();
@@ -112,14 +130,14 @@ export default {
     const userName = `${surveyId}${counter.count}`;
     const password = nanoid(8);
 
-    return this.createRespondent(surveyId, { userName, password });
-  },
+    return createRespondent(surveyId, { userName, password });
+  };
 
-  async importRespondents(
+  const importRespondents = async (
     surveyId: string,
     userId: number,
     file: Express.Multer.File
-  ): Promise<Job> {
+  ): Promise<Job> => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
@@ -127,12 +145,23 @@ export default {
       { type: 'ImportSurveyRespondents', userId },
       { surveyId, file: file.path }
     );
-  },
+  };
 
-  async exportAuthenticationUrls(surveyId: string, userId: number): Promise<Job> {
+  const exportAuthenticationUrls = async (surveyId: string, userId: number): Promise<Job> => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
     return scheduler.jobs.addJob({ type: 'ExportSurveyRespondentAuthUrls', userId }, { surveyId });
-  },
+  };
+
+  return {
+    getSurveyRespondentPermission,
+    getSurveyMgmtPermissions,
+    createRespondent,
+    updateRespondent,
+    deleteRespondent,
+    generateRespondent,
+    importRespondents,
+    exportAuthenticationUrls,
+  };
 };
