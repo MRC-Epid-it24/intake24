@@ -1,9 +1,17 @@
-import jwtRotationSvc from '@/services/auth/jwt-rotation.service';
-import logger from '@/services/logger';
+import type { IoC } from '@/ioc';
 import { Job, JobType } from './job';
 
 export default class PurgeRefreshTokens implements Job {
   public readonly name: JobType = 'PurgeRefreshTokens';
+
+  private jwtRotationService;
+
+  private logger;
+
+  constructor({ jwtRotationService, logger }: IoC) {
+    this.jwtRotationService = jwtRotationService;
+    this.logger = logger;
+  }
 
   /**
    * Run the task
@@ -11,11 +19,11 @@ export default class PurgeRefreshTokens implements Job {
    * @return Promise<void>
    */
   public async run(): Promise<void> {
-    logger.debug(`Job ${this.name} started.`);
+    this.logger.debug(`Job ${this.name} started.`);
 
     await this.purgeTokens();
 
-    logger.debug(`Job ${this.name} finished.`);
+    this.logger.debug(`Job ${this.name} finished.`);
   }
 
   /**
@@ -25,10 +33,10 @@ export default class PurgeRefreshTokens implements Job {
    * @returns {Promise<void>}
    */
   private async purgeTokens(): Promise<void> {
-    logger.debug(`Job ${this.name}: refresh tokens purge started.`);
+    this.logger.debug(`Job ${this.name}: refresh tokens purge started.`);
 
-    await jwtRotationSvc.purge();
+    await this.jwtRotationService.purge();
 
-    logger.debug(`Job ${this.name}: refresh tokens purge finished.`);
+    this.logger.debug(`Job ${this.name}: refresh tokens purge finished.`);
   }
 }

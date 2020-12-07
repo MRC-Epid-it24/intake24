@@ -3,12 +3,10 @@ import fs from 'fs-extra';
 import json2csv, { parseAsync } from 'json2csv';
 import { trimEnd } from 'lodash';
 import path from 'path';
-import config from '@/config';
 import { Job, Survey, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
-import logger from '@/services/logger';
-import type { JobData } from '@/services/queues/jobs-queue-handler';
-import { Job as BaseJob, JobType } from './job';
+import type { IoC } from '@/ioc';
+import { Job as BaseJob, JobData, JobType } from './job';
 
 export type ExportSurveyRespondentAuthUrlsData = {
   surveyId: string;
@@ -17,13 +15,17 @@ export type ExportSurveyRespondentAuthUrlsData = {
 export default class ExportSurveyRespondentAuthUrls implements BaseJob {
   public readonly name: JobType = 'ExportSurveyRespondentAuthUrls';
 
-  private jobId: number;
+  private config;
 
-  private data: ExportSurveyRespondentAuthUrlsData;
+  private logger;
 
-  constructor({ job, data }: JobData<ExportSurveyRespondentAuthUrlsData>) {
-    this.data = data;
-    this.jobId = job.id;
+  private jobId!: number;
+
+  private data!: ExportSurveyRespondentAuthUrlsData;
+
+  constructor({ config, logger }: IoC) {
+    this.config = config;
+    this.logger = logger;
   }
 
   /**
@@ -31,12 +33,15 @@ export default class ExportSurveyRespondentAuthUrls implements BaseJob {
    *
    * @return Promise<void>
    */
-  public async run(): Promise<void> {
-    logger.debug(`Job ${this.name} started.`);
+  public async run({ job, data }: JobData<ExportSurveyRespondentAuthUrlsData>): Promise<void> {
+    this.data = data;
+    this.jobId = job.id;
+
+    this.logger.debug(`Job ${this.name} started.`);
 
     await this.download();
 
-    logger.debug(`Job ${this.name} finished.`);
+    this.logger.debug(`Job ${this.name} finished.`);
   }
 
   private async download(): Promise<void> {
@@ -50,7 +55,10 @@ export default class ExportSurveyRespondentAuthUrls implements BaseJob {
     if (!job) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.jobId}).`);
 
     const timestamp = fecha.format(new Date(), 'YYYYMMDD-HHmmss');
-    const baseFrontendURL = trimEnd(survey.authUrlDomainOverride ?? config.app.urls.survey, '/');
+    const baseFrontendURL = trimEnd(
+      survey.authUrlDomainOverride ?? this.config.app.urls.survey,
+      '/'
+    );
 
     const fields: json2csv.FieldInfo<UserSurveyAlias>[] = [
       { label: 'UserID', value: 'userId' },
@@ -68,7 +76,7 @@ export default class ExportSurveyRespondentAuthUrls implements BaseJob {
     const csv = await parseAsync(aliases, { fields });
     const filename = `intake24-${surveyId}-auth-urls-${timestamp}.csv`;
 
-    await fs.writeFile(path.resolve(config.filesystem.local.downloads, filename), csv, {
+    await fs.writeFile(path.resolve(this.config.filesystem.local.downloads, filename), csv, {
       encoding: 'utf8',
       flag: 'w+',
     });

@@ -2,10 +2,8 @@ import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import path from 'path';
 import { User, UserSurveyAlias } from '@/db/models/system';
-import logger from '@/services/logger';
-import type { JobData } from '@/services/queues/jobs-queue-handler';
-import surveyService from '@/services/survey.service';
-import { Job, JobType } from './job';
+import type { IoC } from '@/ioc';
+import { Job, JobData, JobType } from './job';
 
 export type ImportSurveyRespondentsData = {
   surveyId: string;
@@ -25,15 +23,19 @@ const requiredFields = ['username', 'password'];
 export default class ImportSurveyRespondents implements Job {
   public readonly name: JobType = 'ImportSurveyRespondents';
 
-  private data: ImportSurveyRespondentsData;
+  private data!: ImportSurveyRespondentsData;
 
-  private file: string;
+  private logger;
+
+  private surveyService;
+
+  private file!: string;
 
   private content: CSVRow[] = [];
 
-  constructor({ data }: JobData<ImportSurveyRespondentsData>) {
-    this.data = data;
-    this.file = path.resolve(data.file);
+  constructor({ logger, surveyService }: IoC) {
+    this.logger = logger;
+    this.surveyService = surveyService;
   }
 
   /**
@@ -41,8 +43,11 @@ export default class ImportSurveyRespondents implements Job {
    *
    * @return Promise<void>
    */
-  public async run(): Promise<void> {
-    logger.debug(`Job ${this.name} started.`);
+  public async run({ data }: JobData<ImportSurveyRespondentsData>): Promise<void> {
+    this.data = data;
+    this.file = path.resolve(data.file);
+
+    this.logger.debug(`Job ${this.name} started.`);
 
     const fileExists = await fs.pathExists(this.file);
     if (!fileExists) throw new Error(`Missing file (${this.file}).`);
@@ -51,7 +56,7 @@ export default class ImportSurveyRespondents implements Job {
 
     await this.import();
 
-    logger.debug(`Job ${this.name} finished.`);
+    this.logger.debug(`Job ${this.name} finished.`);
   }
 
   private async validate(chunk = 100): Promise<void> {
@@ -160,7 +165,10 @@ export default class ImportSurveyRespondents implements Job {
 
     for (const record of this.content) {
       const { username, ...rest } = record;
-      await surveyService.createRespondent(this.data.surveyId, { userName: username, ...rest });
+      await this.surveyService.createRespondent(this.data.surveyId, {
+        userName: username,
+        ...rest,
+      });
     }
 
     this.content = [];

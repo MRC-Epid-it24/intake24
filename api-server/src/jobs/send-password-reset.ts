@@ -1,9 +1,6 @@
 import nunjucks from 'nunjucks';
-import config from '@/config';
-import logger from '@/services/logger';
-import mailer from '@/services/mailer';
-import type { JobData } from '@/services/queues/jobs-queue-handler';
-import { Job, JobType } from './job';
+import type { IoC } from '@/ioc';
+import { Job, JobData, JobType } from './job';
 
 export interface SendPasswordResetData {
   email: string;
@@ -13,10 +10,18 @@ export interface SendPasswordResetData {
 export default class SendPasswordReset implements Job {
   public readonly name: JobType = 'SendPasswordReset';
 
-  private data: SendPasswordResetData;
+  private data!: SendPasswordResetData;
 
-  constructor({ data }: JobData<SendPasswordResetData>) {
-    this.data = data;
+  private config;
+
+  private logger;
+
+  private mailer;
+
+  constructor({ config, logger, mailer }: IoC) {
+    this.config = config;
+    this.logger = logger;
+    this.mailer = mailer;
   }
 
   /**
@@ -24,11 +29,13 @@ export default class SendPasswordReset implements Job {
    *
    * @return Promise<void>
    */
-  public async run(): Promise<void> {
-    logger.debug(`Job ${this.name} started.`);
+  public async run({ data }: JobData<SendPasswordResetData>): Promise<void> {
+    this.data = data;
 
-    const url = `${config.app.urls.admin}/password/reset/${this.data.token}`;
-    const { expire: expiresAt } = config.security.passwords;
+    this.logger.debug(`Job ${this.name} started.`);
+
+    const url = `${this.config.app.urls.admin}/password/reset/${this.data.token}`;
+    const { expire: expiresAt } = this.config.security.passwords;
 
     const html = nunjucks.render('mail/password-reset.html', {
       title: 'Password reset',
@@ -36,8 +43,8 @@ export default class SendPasswordReset implements Job {
       action: { url, text: 'Reset password' },
     });
 
-    await mailer.sendMail({ to: this.data.email, subject: 'Password reset', html });
+    await this.mailer.sendMail({ to: this.data.email, subject: 'Password reset', html });
 
-    logger.debug(`Job ${this.name} finished.`);
+    this.logger.debug(`Job ${this.name} finished.`);
   }
 }
