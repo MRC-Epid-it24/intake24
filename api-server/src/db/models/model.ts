@@ -1,7 +1,8 @@
+import { Request } from 'express';
 import { isObject } from 'lodash';
 import { FindOptions as BaseFindOptions, Op, CountOptions as BaseCountOptions } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
-import { Request } from 'express';
+import { Readable } from 'stream';
 import { Pagination, PaginationMeta } from '@common/types/models/pagination';
 
 export interface Paginate extends BaseFindOptions {
@@ -20,7 +21,24 @@ export interface FindOptions extends BaseFindOptions {
   [key: string]: any;
 }
 
+export interface StreamFindOptions extends FindOptions {
+  batchSize?: number;
+}
+
+// eslint-disable-next-line no-use-before-define
+export type ModelCtor<M extends Model = Model> = { new (): M } & typeof Model;
+
 export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
+  /**
+   * Paginate results of Model.findAll
+   *
+   * @static
+   * @template R
+   * @param {({ new (): R extends Model ? R : Model } & typeof Model)} this
+   * @param {Paginate} { req, columns = [], transform, ...params }
+   * @returns {Promise<Pagination<R>>}
+   * @memberof Model
+   */
   public static async paginate<R = Model>(
     this: { new (): R extends Model ? R : Model } & typeof Model,
     { req, columns = [], transform, ...params }: Paginate
@@ -78,12 +96,83 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
       total,
     };
 
-    const pagination: Pagination<R> = {
-      data,
-      meta,
-    };
+    return { data, meta };
+  }
 
-    return pagination;
+  /**
+   * Batch-like stream helpers
+   * based on https://github.com/nkovalenko93/sequelize-stream
+   * and adopted for TS codebase
+   */
+
+  /**
+   * Helper for streamed Model.findAll
+   *
+   * @static
+   * @template M
+   * @param {ModelCtor<M>} this
+   * @param {Readable} inputStream
+   * @param {StreamFindOptions} {}
+   * @returns {Promise<void>}
+   * @memberof Model
+   */
+  public static async performSearch<M extends Model<M>>(
+    this: ModelCtor<M>,
+    inputStream: Readable,
+    { batchSize = 100, limit, offset: startOffset = 0, ...params }: StreamFindOptions
+  ): Promise<void> {
+    try {
+      let max = limit;
+      if (!max) {
+        max = await this.count(params);
+      }
+
+      const offsets = [];
+      let start = startOffset;
+
+      while (start < max) {
+        offsets.push(start);
+        start += batchSize;
+      }
+
+      for (const offset of offsets) {
+        const difference = batchSize + offset - max;
+        const items = await this.findAll<M>({
+          ...params,
+          offset,
+          limit: difference > 0 ? batchSize - difference : batchSize,
+        });
+        inputStream.push(JSON.stringify(items));
+      }
+
+      inputStream.push(null);
+    } catch (err) {
+      inputStream.destroy(err);
+    }
+  }
+
+  /**
+   * Streamed Model.findAll
+   *
+   * @static
+   * @template M
+   * @param {ModelCtor<M>} this
+   * @param {StreamFindOptions} [options={}]
+   * @returns {Readable}
+   * @memberof Model
+   */
+  public static findAllWithStream<M extends Model<M>>(
+    this: ModelCtor<M>,
+    options: StreamFindOptions = {}
+  ): Readable {
+    const inputStream = new Readable({
+      // objectMode: true,
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      read() {},
+    });
+    this.performSearch(inputStream, options);
+
+    return inputStream;
   }
 }
 
