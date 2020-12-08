@@ -44,6 +44,18 @@ const surveys: LocaleMessage = {
     _: 'Survey respondents',
     add: 'New respondent',
     edit: 'Edit respondent',
+    upload: {
+      _: 'Respondents upload',
+      title: 'Survey respondents bulk upload',
+      file: 'Browse CSV File',
+      submit: 'Upload',
+    },
+    authUrls: {
+      _: 'Authentication URLs',
+      title: 'Survey respondents authentication URLs',
+      submit: 'Generate file',
+      download: 'Download',
+    },
   },
   mgmt: {
     _: 'Survey management',

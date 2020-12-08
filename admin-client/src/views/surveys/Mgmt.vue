@@ -2,10 +2,17 @@
   <layout :id="id" :entry="entry" v-if="entryLoaded">
     <user-list-table :headers="headers" :api="`admin/surveys/${id}/mgmt`" ref="table">
       <template v-slot:header-add>
-        <v-dialog v-model="dialog" persistent max-width="600px">
-          <template v-slot:activator="{ on }">
-            <v-btn top right color="secondary" v-on="on" @click.stop="add">
-              <v-icon class="mr-2">fa-plus</v-icon> {{ $t('surveys.mgmt.add') }}
+        <v-dialog v-model="dialog" max-width="600px">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="font-weight-bold"
+              color="primary"
+              text
+              v-bind="attrs"
+              v-on="on"
+              @click.stop="add"
+            >
+              <v-icon class="mr-2">fa-user-plus</v-icon> {{ $t('surveys.mgmt.add') }}
             </v-btn>
           </template>
           <v-card :loading="options.isLoading">

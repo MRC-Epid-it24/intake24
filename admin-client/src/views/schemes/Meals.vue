@@ -51,7 +51,7 @@
         </transition-group>
       </draggable>
     </v-list>
-    <v-dialog v-model="dialog.show" persistent max-width="600px">
+    <v-dialog v-model="dialog.show" max-width="600px">
       <v-card>
         <v-card-title>
           <v-icon class="mr-3" color="primary">fa-hamburger</v-icon>

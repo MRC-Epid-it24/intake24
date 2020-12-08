@@ -7,10 +7,10 @@
       track-by="userId"
     >
       <template v-slot:header-add>
-        <v-dialog v-model="dialog" persistent max-width="600px">
-          <template v-slot:activator="{ on }">
-            <v-btn top right color="secondary" v-on="on">
-              <v-icon class="mr-2">fa-plus</v-icon> {{ $t('surveys.respondents.add') }}
+        <v-dialog v-model="dialog" max-width="600px">
+          <template v-slot:activator="{ attrs, on }">
+            <v-btn class="font-weight-bold" color="primary" text v-bind="attrs" v-on="on">
+              <v-icon class="mr-2">fa-user-plus</v-icon> {{ $t('surveys.respondents.add') }}
             </v-btn>
           </template>
           <v-card>
@@ -109,6 +109,17 @@
             </v-form>
           </v-card>
         </v-dialog>
+        <v-menu :close-on-content-click="true" :close-on-click="true" offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn class="font-weight-bold" color="primary" v-bind="attrs" v-on="on" icon>
+              <v-icon>fa-ellipsis-v</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <respondents-upload></respondents-upload>
+            <respondents-auth-url-export></respondents-auth-url-export>
+          </v-list>
+        </v-menu>
       </template>
       <template v-slot:item.action="{ item }" class="text-right">
         <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
@@ -129,6 +140,8 @@ import detailMixin from '@/components/entry/detailMixin';
 import Form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
 import UserListTable from './UserListTable.vue';
+import RespondentsUpload from './RespondentsUpload.vue';
+import RespondentsAuthUrlExport from './RespondentsAuthUrlExport.vue';
 
 export type RespondentsRefs = {
   $refs: {
@@ -139,7 +152,7 @@ export type RespondentsRefs = {
 export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).extend({
   name: 'SurveyRespondents',
 
-  components: { UserListTable },
+  components: { UserListTable, RespondentsAuthUrlExport, RespondentsUpload },
 
   mixins: [detailMixin],
 
@@ -200,6 +213,10 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       if (name) this.form.errors.clear(name);
     },
 
+    async updateTable() {
+      await this.$refs.table.fetch();
+    },
+
     async save() {
       if (this.form.userId) {
         const {
@@ -215,8 +232,8 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
         this.$toasted.success(this.$t('common.msg.stored', { name }) as string);
       }
 
-      this.$refs.table.fetch();
       this.dialog = false;
+      await this.updateTable();
     },
 
     async remove({ userName: name, userId }: AnyDictionary) {
@@ -225,7 +242,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       await this.$http.delete(`admin/surveys/${this.id}/respondents/${userId}`);
       this.$toasted.success(this.$t('common.msg.deleted', { name }) as string);
 
-      this.$refs.table.fetch();
+      await this.updateTable();
     },
   },
 });
