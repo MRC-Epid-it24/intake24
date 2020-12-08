@@ -68,7 +68,7 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
       urlAuthToken: nanoid(),
     });
 
-    userService.createPassword(userId, password);
+    await userService.createPassword(userId, password);
 
     return { respondent, password };
   };
