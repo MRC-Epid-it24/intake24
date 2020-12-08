@@ -1,7 +1,7 @@
-import { PasswordAlgorithm, HashedPassword } from '@/util/passwords';
 import crypto from 'crypto';
+import type { PasswordAlgorithm, HashedPassword } from '@/util/passwords';
 
-class PasswordShiro implements PasswordAlgorithm {
+export default class PasswordShiro implements PasswordAlgorithm {
   id = 'shiro-sha256';
 
   private readonly iterations: number;
@@ -34,5 +34,3 @@ class PasswordShiro implements PasswordAlgorithm {
     });
   }
 }
-
-export default PasswordShiro;

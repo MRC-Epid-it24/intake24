@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
-import { PasswordAlgorithm, HashedPassword } from '@/util/passwords';
+import type { PasswordAlgorithm, HashedPassword } from '@/util/passwords';
 
-class PasswordBcrypt implements PasswordAlgorithm {
+export default class PasswordBcrypt implements PasswordAlgorithm {
   id = 'bcrypt';
 
   private readonly rounds: number;
@@ -22,5 +22,3 @@ class PasswordBcrypt implements PasswordAlgorithm {
     return bcrypt.compare(input, hashedPassword.hash);
   }
 }
-
-export default PasswordBcrypt;
