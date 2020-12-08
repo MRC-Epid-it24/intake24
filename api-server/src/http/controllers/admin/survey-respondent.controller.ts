@@ -31,7 +31,7 @@ export default ({ surveyService }: IoC): AdminSurveyRespondentController => {
   const store = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
 
-    const { respondent } = await surveyService.createRespondent(
+    const respondent = await surveyService.createRespondent(
       surveyId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
     );

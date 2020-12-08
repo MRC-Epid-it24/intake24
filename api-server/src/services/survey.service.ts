@@ -1,6 +1,14 @@
 import { nanoid } from 'nanoid';
 import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/http/admin/users';
-import { GenUserCounter, Job, Permission, Survey, User, UserSurveyAlias } from '@/db/models/system';
+import {
+  GenUserCounter,
+  Job,
+  Permission,
+  PermissionUser,
+  Survey,
+  User,
+  UserSurveyAlias,
+} from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { toSimpleName } from '@/util';
@@ -14,14 +22,15 @@ export type RespondentWithPassword = {
 export interface SurveyService {
   getSurveyRespondentPermission: (surveyId: string) => Promise<Permission>;
   getSurveyMgmtPermissions: (surveyId: string, scope?: string | string[]) => Promise<Permission[]>;
-  createRespondent: (
+  createRespondent: (surveyId: string, input: CreateRespondentRequest) => Promise<UserSurveyAlias>;
+  createRespondents: (
     surveyId: string,
-    request: CreateRespondentRequest
-  ) => Promise<RespondentWithPassword>;
+    inputs: CreateRespondentRequest[]
+  ) => Promise<UserSurveyAlias[]>;
   updateRespondent: (
     surveyId: string,
     userId: string | number,
-    request: UpdateRespondentRequest
+    input: UpdateRespondentRequest
   ) => Promise<UserSurveyAlias>;
   deleteRespondent: (surveyId: string, userId: string | number) => Promise<void>;
   generateRespondent: (surveyId: string) => Promise<RespondentWithPassword>;
@@ -30,6 +39,12 @@ export interface SurveyService {
 }
 
 export default ({ scheduler, userService }: IoC): SurveyService => {
+  /**
+   * Fetch survey-specific respondent permission instance
+   *
+   * @param {string} surveyId
+   * @returns {Promise<Permission>}
+   */
   const getSurveyRespondentPermission = async (surveyId: string): Promise<Permission> => {
     const name = surveyRespondent(surveyId);
     const [permission] = await Permission.findOrCreate({
@@ -40,6 +55,13 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     return permission;
   };
 
+  /**
+   * Fetch survey-specific management permission instances
+   *
+   * @param {string} surveyId
+   * @param {(string | string[])} [scope=[]]
+   * @returns {Promise<Permission[]>}
+   */
   const getSurveyMgmtPermissions = async (
     surveyId: string,
     scope: string | string[] = []
@@ -47,14 +69,21 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     return Permission.scope(scope).findAll({ where: { name: surveyMgmt(surveyId) } });
   };
 
+  /**
+   * Create respondent record
+   *
+   * @param {string} surveyId
+   * @param {CreateRespondentRequest} input
+   * @returns {Promise<UserSurveyAlias>}
+   */
   const createRespondent = async (
     surveyId: string,
-    request: CreateRespondentRequest
-  ): Promise<RespondentWithPassword> => {
+    input: CreateRespondentRequest
+  ): Promise<UserSurveyAlias> => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    const { password, userName, ...rest } = request;
+    const { password, userName, ...rest } = input;
     const user = await User.create({ ...rest, simpleName: toSimpleName(rest.name) });
 
     await user.$add('permissions', await getSurveyRespondentPermission(surveyId));
@@ -70,13 +99,59 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
 
     await userService.createPassword(userId, password);
 
-    return { respondent, password };
+    return respondent;
   };
 
+  /**
+   * Bulk create survey respondents
+   *
+   * @param {string} surveyId
+   * @param {CreateRespondentRequest[]} inputs
+   * @returns {Promise<void>}
+   */
+  const createRespondents = async (
+    surveyId: string,
+    inputs: CreateRespondentRequest[]
+  ): Promise<UserSurveyAlias[]> => {
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
+    const { id: permissionId } = await getSurveyRespondentPermission(surveyId);
+
+    const userAliases = [];
+    const userPasswords = [];
+    const userPermissions = [];
+
+    for (const input of inputs) {
+      const { password, userName, ...rest } = input;
+      // User records are created one-by-one
+      // This is to keep it MySQL others-like compatible, where bulk operation doesn't return generated IDs
+      const { id: userId } = await User.create({ ...rest, simpleName: toSimpleName(rest.name) });
+
+      // TODO: implement configurable length of token
+      userAliases.push({ userId, surveyId, userName, urlAuthToken: nanoid() });
+      userPermissions.push({ userId, permissionId });
+      userPasswords.push({ userId, password });
+    }
+
+    await PermissionUser.bulkCreate(userPermissions);
+    await userService.createPasswords(userPasswords);
+
+    return UserSurveyAlias.bulkCreate(userAliases);
+  };
+
+  /**
+   * Update respondent record
+   *
+   * @param {string} surveyId
+   * @param {(string | number)} userId
+   * @param {UpdateRespondentRequest} input
+   * @returns {Promise<UserSurveyAlias>}
+   */
   const updateRespondent = async (
     surveyId: string,
     userId: string | number,
-    request: UpdateRespondentRequest
+    input: UpdateRespondentRequest
   ): Promise<UserSurveyAlias> => {
     const survey = await Survey.findByPk(surveyId);
     const user = await User.findOne({
@@ -85,7 +160,7 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
 
     if (!survey || !user) throw new NotFoundError();
 
-    const { password, ...rest } = request;
+    const { password, ...rest } = input;
 
     await user.update({ ...rest, simpleName: toSimpleName(rest.name) });
     if (password) userService.updatePassword(user.id, password);
@@ -95,6 +170,13 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     return user.aliases![0];
   };
 
+  /**
+   * Delete respondent record
+   *
+   * @param {string} surveyId
+   * @param {(string | number)} userId
+   * @returns {Promise<void>}
+   */
   const deleteRespondent = async (surveyId: string, userId: string | number): Promise<void> => {
     const user = await User.scope('submissions').findOne({
       where: { id: userId },
@@ -116,6 +198,12 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     }
   };
 
+  /**
+   * Generate survey new random survey respondent
+   *
+   * @param {string} surveyId
+   * @returns {Promise<RespondentWithPassword>}
+   */
   const generateRespondent = async (surveyId: string): Promise<RespondentWithPassword> => {
     const survey = await Survey.scope('counter').findByPk(surveyId);
 
@@ -130,9 +218,21 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     const userName = `${surveyId}${counter.count}`;
     const password = nanoid(8);
 
-    return createRespondent(surveyId, { userName, password });
+    const respondent = await createRespondent(surveyId, { userName, password });
+
+    return { respondent, password };
   };
 
+  /**
+   * Bulk import of survey respondents
+   * - runs as a job
+   * - temporarily stores CSV file
+   *
+   * @param {string} surveyId
+   * @param {number} userId
+   * @param {Express.Multer.File} file
+   * @returns {Promise<Job>}
+   */
   const importRespondents = async (
     surveyId: string,
     userId: number,
@@ -147,6 +247,14 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     );
   };
 
+  /**
+   * Export survey respondents authentication URLs
+   * - runs as a job and creates downloadable file
+   *
+   * @param {string} surveyId
+   * @param {number} userId
+   * @returns {Promise<Job>}
+   */
   const exportAuthenticationUrls = async (surveyId: string, userId: number): Promise<Job> => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
@@ -158,6 +266,7 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     getSurveyRespondentPermission,
     getSurveyMgmtPermissions,
     createRespondent,
+    createRespondents,
     updateRespondent,
     deleteRespondent,
     generateRespondent,

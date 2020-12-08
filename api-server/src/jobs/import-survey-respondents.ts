@@ -163,13 +163,12 @@ export default class ImportSurveyRespondents implements Job {
   private async importChunk(): Promise<void> {
     if (!this.content.length) return;
 
-    for (const record of this.content) {
-      const { username, ...rest } = record;
-      await this.surveyService.createRespondent(this.data.surveyId, {
-        userName: username,
-        ...rest,
-      });
-    }
+    const records = this.content.map((item) => {
+      const { username, ...rest } = item;
+      return { userName: username, ...rest };
+    });
+
+    await this.surveyService.createRespondents(this.data.surveyId, records);
 
     this.content = [];
   }

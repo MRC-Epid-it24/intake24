@@ -1,6 +1,6 @@
 import fecha from 'fecha';
 import fs from 'fs-extra';
-import json2csv, { parseAsync } from 'json2csv';
+import json2csv, { Transform } from 'json2csv';
 import { trimEnd } from 'lodash';
 import path from 'path';
 import { Job, Survey, UserSurveyAlias } from '@/db/models/system';
@@ -70,21 +70,32 @@ export default class ExportSurveyRespondentAuthUrls implements BaseJob {
       },
     ];
 
-    // TODO: stream from DB to file for large data sets
-    const aliases = await UserSurveyAlias.findAll({ where: { surveyId } });
-
-    const csv = await parseAsync(aliases, { fields });
     const filename = `intake24-${surveyId}-auth-urls-${timestamp}.csv`;
 
-    await fs.writeFile(path.resolve(this.config.filesystem.local.downloads, filename), csv, {
-      encoding: 'utf8',
-      flag: 'w+',
+    return new Promise((resolve, reject) => {
+      const opts = { fields, withBOM: true };
+      const transform = new Transform(opts);
+      const output = fs.createWriteStream(
+        path.resolve(this.config.filesystem.local.downloads, filename),
+        { encoding: 'utf8', flags: 'w+' }
+      );
+
+      const aliases = UserSurveyAlias.findAllWithStream({ where: { surveyId } });
+
+      aliases.on('error', (err) => reject(err));
+
+      transform
+        .on('error', (err) => reject(err))
+        .on('end', async () => {
+          // TODO: make it configurable
+          const downloadUrlExpiresAt = new Date();
+          downloadUrlExpiresAt.setDate(downloadUrlExpiresAt.getDate() + 1);
+
+          await job.update({ downloadUrl: filename, downloadUrlExpiresAt });
+          resolve();
+        });
+
+      aliases.pipe(transform).pipe(output);
     });
-
-    // TODO: make it configurable
-    const downloadUrlExpiresAt = new Date();
-    downloadUrlExpiresAt.setDate(downloadUrlExpiresAt.getDate() + 1);
-
-    await job.update({ downloadUrl: filename, downloadUrlExpiresAt });
   }
 }

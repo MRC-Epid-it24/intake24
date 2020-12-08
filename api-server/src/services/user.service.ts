@@ -1,19 +1,24 @@
 import { CreateUserRequest, UpdateUserRequest } from '@common/types/http/admin/users';
 import { User, UserPassword } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
-// import type { IoC } from '@/ioc';
 import { defaultAlgorithm } from '@/util/passwords';
 import { toSimpleName } from '@/util';
+
+export type UserPasswordInput = {
+  userId: number;
+  password: string;
+};
 
 export interface UserService {
   create: (request: CreateUserRequest) => Promise<User>;
   update: (userId: string | number, request: UpdateUserRequest) => Promise<User>;
   destroy: (userId: string | number) => Promise<void>;
   createPassword: (userId: number, password: string) => Promise<UserPassword>;
+  createPasswords: (records: UserPasswordInput[]) => Promise<UserPassword[]>;
   updatePassword: (userId: number, password: string) => Promise<UserPassword>;
 }
 
-export default (/* {}: IoC */): UserService => {
+export default (): UserService => {
   const createPassword = async (userId: number, password: string): Promise<UserPassword> => {
     const { salt, hash } = await defaultAlgorithm.hash(password);
 
@@ -23,6 +28,24 @@ export default (/* {}: IoC */): UserService => {
       passwordHash: hash,
       passwordHasher: defaultAlgorithm.id,
     });
+  };
+
+  const createPasswords = async (passwordInput: UserPasswordInput[]): Promise<UserPassword[]> => {
+    const records = [];
+
+    for (const input of passwordInput) {
+      const { userId, password } = input;
+      const { salt, hash } = await defaultAlgorithm.hash(password);
+
+      records.push({
+        userId,
+        passwordSalt: salt,
+        passwordHash: hash,
+        passwordHasher: defaultAlgorithm.id,
+      });
+    }
+
+    return UserPassword.bulkCreate(records);
   };
 
   const updatePassword = async (userId: number, password: string): Promise<UserPassword> => {
@@ -77,6 +100,7 @@ export default (/* {}: IoC */): UserService => {
 
   return {
     createPassword,
+    createPasswords,
     updatePassword,
     create,
     update,
