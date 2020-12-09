@@ -9,6 +9,7 @@ import type {
   PasswordController,
   FoodController,
   FoodSearchController,
+  PortionSizeController,
   SurveyController,
   JobController,
   LanguageController,
@@ -58,6 +59,7 @@ export interface IoC extends Jobs {
   // Public controllers
   foodController: FoodController;
   foodSearchController: FoodSearchController;
+  portionSizeController: PortionSizeController;
   surveyController: SurveyController;
 
   // Admin controllers
