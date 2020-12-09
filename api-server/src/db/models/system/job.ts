@@ -1,5 +1,5 @@
 import { Table, Column, CreatedAt, DataType, ForeignKey, UpdatedAt } from 'sequelize-typescript';
-import { JobType } from '@/jobs/job';
+import { JobType } from '@api-server/jobs/job';
 import { Job as JobAttributes } from '@common/types/models/system';
 import BaseModel from '../model';
 import { User } from '.';

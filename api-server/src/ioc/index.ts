@@ -42,12 +42,16 @@ import type TasksQueueHandler from '@/services/queues/tasks-queue-handler';
 
 import type { Jobs } from '@/jobs/job';
 
+import { DatabaseConfig } from '@/config/database';
+import { Environment } from '@/config/app';
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';
 
-export interface IoC extends Jobs {
+export interface IoC {
+  environment: Environment;
   config: Config;
+  databaseConfig: DatabaseConfig;
   db: DbInterface;
   filesystem: Filesystem;
   logger: Logger;
@@ -102,6 +106,8 @@ const configureContainer = () => {
 
   container.register({
     config: asValue(config),
+    environment: asValue(config.app.env),
+    databaseConfig: asValue(config.database),
     db: asClass(db).singleton(),
   });
 

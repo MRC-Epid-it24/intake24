@@ -9,7 +9,7 @@ import {
   Scopes,
   Table,
 } from 'sequelize-typescript';
-import { surveyPermissions } from '@/services/acl.service';
+import { surveyPermissions } from '@api-server/services/acl.service';
 import { Survey as SurveyAttributes, SurveyState } from '@common/types/models/system';
 import BaseModel from '../model';
 import { GenUserCounter, Locale, Permission, Scheme, SurveySubmission, UserSurveyAlias } from '.';

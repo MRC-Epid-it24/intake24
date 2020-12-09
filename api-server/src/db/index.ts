@@ -1,7 +1,8 @@
 import pg from 'pg';
 import { Sequelize } from 'sequelize-typescript';
-import { Database } from '@/config/database';
-import type { IoC } from '@/ioc';
+import { Database, DatabaseConfig } from '@api-server/config/database';
+import { Logger } from 'winston';
+import { Environment } from '@api-server/config/app';
 import * as foods from './models/foods';
 import * as system from './models/system';
 
@@ -20,25 +21,28 @@ export interface DbInterface extends BaseDbInterface {
 }
 
 export default class DB implements DbInterface {
-  private config;
+  private readonly config: DatabaseConfig;
 
-  private logger;
+  private readonly env: Environment;
+
+  private readonly logger: Logger;
 
   public foods!: Sequelize;
 
   public system!: Sequelize;
 
-  constructor({ config, logger }: IoC) {
-    this.config = config;
-    this.logger = logger;
+  constructor(opts: { environment: Environment; databaseConfig: DatabaseConfig; logger: Logger }) {
+    this.env = opts.environment;
+    this.config = opts.databaseConfig;
+    this.logger = opts.logger;
   }
 
   async init(): Promise<void> {
-    const { env } = this.config.app;
-    const isDev = env === 'development';
+    const isDev = this.env === 'development';
 
-    (Object.keys(this.config.database[env]) as Database[]).forEach((database) => {
-      const dbConf = this.config.database[env][database];
+    (Object.keys(this.config[this.env]) as Database[]).forEach((database) => {
+      const dbConf = this.config[this.env][database];
+
       this[database] = new Sequelize({
         ...dbConf,
         models: models[database],

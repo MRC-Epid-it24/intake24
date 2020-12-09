@@ -7,7 +7,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import BaseModel from '@/db/models/model';
+import BaseModel from '@api-server/db/models/model';
 import { Role as RoleAttributes } from '@common/types/models/system';
 import { Permission, PermissionRole, RoleUser, User } from '.';
 
