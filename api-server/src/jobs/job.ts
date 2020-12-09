@@ -1,4 +1,4 @@
-import { Job as DbJob } from '@/db/models/system';
+import { Job as DbJob } from '@api-server/db/models/system';
 
 export type JobData<T = any> = { job: DbJob; data: T };
 

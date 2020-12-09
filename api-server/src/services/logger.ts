@@ -1,7 +1,7 @@
 import path from 'path';
 import { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
-import config from '@/config';
+import config from '@api-server/config';
 
 const silent = config.app.env === 'test';
 const dirname = path.resolve(config.filesystem.local.logs);

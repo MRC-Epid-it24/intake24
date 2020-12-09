@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
+      "@api-server/*": ["src/*"],
       "@common/*": ["../common/src/*"]
     },
     "typeRoots": [
@@ -16,5 +17,5 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true
-  },
+  }
 }

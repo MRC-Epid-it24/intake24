@@ -9,8 +9,8 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import BaseModel from '@/db/models/model';
-import config from '@/config/acl';
+import BaseModel from '@api-server/db/models/model';
+import config from '@api-server/config/acl';
 import { Permission as PermissionAttributes } from '@common/types/models/system';
 import { PermissionRole, PermissionUser, Role, User } from '.';
 

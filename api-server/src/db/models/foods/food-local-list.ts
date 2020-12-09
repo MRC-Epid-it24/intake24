@@ -1,6 +1,6 @@
 import { BelongsTo, Column, Table } from 'sequelize-typescript';
-import BaseModel from '@/db/models/model';
-import { FoodLocal, Locale } from '@/db/models/foods';
+import BaseModel from '../model';
+import { FoodLocal, Locale } from '.';
 
 @Table({
   timestamps: false,
