@@ -1,3 +1,5 @@
+export { default as AsServedImage } from './as-served-image';
+export { default as AsServedSet } from './as-served-set';
 export { default as Food } from './food';
 export { default as FoodAttribute } from './food-attribute';
 export { default as FoodLocal } from './food-local';

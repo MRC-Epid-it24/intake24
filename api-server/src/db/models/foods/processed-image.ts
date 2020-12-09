@@ -1,8 +1,11 @@
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import { ImageMap } from '.';
+import { AsServedImage, AsServedSet, ImageMap } from '.';
 
 @Scopes(() => ({
+  asServedSets: { include: [{ model: AsServedSet }] },
+  asServedImages: { include: [{ model: AsServedImage, as: 'asServedImages' }] },
+  asServedThumbnailImages: { include: [{ model: AsServedImage, as: 'asServedThumbnailImages' }] },
   imageMaps: { include: [{ model: ImageMap }] },
 }))
 @Table({
@@ -34,6 +37,20 @@ export default class ProcessedImage extends BaseModel<ProcessedImage> {
     allowNull: false,
   })
   public purpose!: number;
+
+  @Column({
+    allowNull: false,
+  })
+  public createdAt!: Date;
+
+  @HasMany(() => AsServedSet, 'selectionImageId')
+  public asServedSets?: AsServedSet[];
+
+  @HasMany(() => AsServedImage, 'imageId')
+  public asServedImages?: AsServedImage[];
+
+  @HasMany(() => AsServedImage, 'thumbnailImageId')
+  public asServedThumbnailImages?: AsServedImage[];
 
   @HasMany(() => ImageMap, 'imageMapId')
   public imageMaps?: ImageMap[];
