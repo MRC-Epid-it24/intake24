@@ -1,9 +1,10 @@
-import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import { ProcessedImage } from '.';
+import { AsServedImage, ProcessedImage } from '.';
 
 @Scopes(() => ({
   selectionImage: { include: [{ model: ProcessedImage }] },
+  asServedImages: { include: [{ model: AsServedImage }] },
 }))
 @Table({
   modelName: 'AsServedSet',
@@ -31,4 +32,7 @@ export default class AsServedSet extends BaseModel<AsServedSet> {
 
   @BelongsTo(() => ProcessedImage, 'selectionImageId')
   public selectionImage?: ProcessedImage;
+
+  @HasMany(() => AsServedImage, 'asServedSetId')
+  public asServedImages?: AsServedImage[];
 }
