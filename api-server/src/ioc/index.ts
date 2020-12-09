@@ -48,7 +48,7 @@ import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';
 
-export interface IoC {
+export interface IoC extends Jobs {
   environment: Environment;
   config: Config;
   databaseConfig: DatabaseConfig;
