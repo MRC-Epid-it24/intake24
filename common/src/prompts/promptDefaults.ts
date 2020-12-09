@@ -74,8 +74,8 @@ export const textareaPromptProps: TextareaPromptProps = {
   },
 };
 
-// export const portionSizeOptionPromptProps: BasePromptProps = clone(basePromptProps);
 export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
+  foodName: { en: null },
   methods: '',
 };
 

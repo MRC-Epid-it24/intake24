@@ -66,6 +66,10 @@ export default class Recall {
 
     // TODO: Foods questions
 
+    // If food is not .done, ask the relevant portion questions
+    // Portion estimation method (if there are multiple methods available)
+    // Otherwise display prompt for relevant method
+
     // TODO: Post-foods questions
   }
 

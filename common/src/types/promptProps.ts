@@ -49,6 +49,7 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
 export interface PortionSizeOptionPromptProps {
   // Prop for which methods to display
   // Get list of method types that are allowed
+  foodName: LocaleTranslation;
   methods: string;  // Temporary
 };
 

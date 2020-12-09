@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout :text="text" :description="description">
+  <prompt-layout :foodName="text" :description="description">
     <v-card-text>
       <v-form ref="form" @submit.prevent="onSubmit">
         <continue></continue>
@@ -13,13 +13,13 @@ import Vue from 'vue';
 import merge from 'deepmerge';
 import { PortionSizeOptionPromptProps  } from '@common/types/promptProps';
 import { portionSizeOptionPromptProps } from '@common/prompts/promptDefaults';
-import BasePrompt from './BasePrompt';
+import BasePortion from './BasePortion';
 
 export default Vue.extend({
   // For user to select which portion size estimation method they want to use
   name: 'PortionSizeOptionPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [BasePortion],
 
   props: {
     props: {
