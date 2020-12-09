@@ -1,0 +1,9 @@
+dist
+node_modules
+.env
+storage
+
+# Editor directories and files
+.idea
+.vscode
+*.iml
