@@ -52,13 +52,21 @@ export default class Recall {
   }
 
   currentSelection(): Selection | null {
+    // Iterate pre and post meal custom questions
     for (const section of ['preMeals', 'postMeals'] as QuestionSection[]) {
       const selection = this.getNextSectionQuestion(section);
       if (selection) return selection;
     }
 
+    // TO DO: Pre-submission questions - this only gets first submission question
     const prompt = this.submission[0];
     return { section: 'submission', index: 0, prompt };
+
+    // TODO: Pre foods questions
+
+    // TODO: Foods questions
+
+    // TODO: Post-foods questions
   }
 
   getNextQuestion(): Selection | null {
@@ -77,6 +85,12 @@ export default class Recall {
     // submission
     const submission = this.getNextSectionQuestion('submission');
     if (submission) return submission;
+
+    // TODO: Pre foods questions
+
+    // TODO: Foods questions
+
+    // TODO: Post-foods questions
 
     return null;
   }

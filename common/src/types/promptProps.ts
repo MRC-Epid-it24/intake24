@@ -46,6 +46,12 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
   other: boolean;
 }
 
+export interface PortionSizeOptionPromptProps {
+  // Prop for which methods to display
+  // Get list of method types that are allowed
+  methods: string;  // Temporary
+};
+
 export type ComponentType =
   | 'info-prompt'
   | 'date-picker-prompt'

@@ -7,6 +7,7 @@ import {
   RadioListPromptProps,
   TextareaPromptProps,
   TimePickerPromptProps,
+  PortionSizeOptionPromptProps,
 } from '../types/promptProps';
 
 export const basePromptProps: BasePromptProps = {
@@ -71,6 +72,11 @@ export const textareaPromptProps: TextareaPromptProps = {
     required: false,
     message: { en: null },
   },
+};
+
+// export const portionSizeOptionPromptProps: BasePromptProps = clone(basePromptProps);
+export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
+  methods: '',
 };
 
 export const promptQuestions: PromptQuestion[] = [
