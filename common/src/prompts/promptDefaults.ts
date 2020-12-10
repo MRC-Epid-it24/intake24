@@ -75,8 +75,13 @@ export const textareaPromptProps: TextareaPromptProps = {
 };
 
 export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
-  foodName: { en: null },
+  text: { en: null },
+  description: { en: null },
   methods: '',
+  validation: {
+    required: false,
+    message: { en: null },
+  }
 };
 
 export const promptQuestions: PromptQuestion[] = [
