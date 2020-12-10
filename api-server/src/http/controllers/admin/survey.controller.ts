@@ -12,7 +12,7 @@ import {
   SurveyRefs,
   SurveysResponse,
   StoreSurveyResponse,
-} from '@common/types/http/admin/surveys';
+} from '@common/types/http';
 import { Controller, CrudActions } from '../controller';
 
 export type AdminSurveyController = Controller<CrudActions>;

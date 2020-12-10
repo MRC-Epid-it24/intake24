@@ -6,7 +6,7 @@ import {
   PermissionResponse,
   PermissionsResponse,
   StorePermissionResponse,
-} from '@common/types/http/admin/permissions';
+} from '@common/types/http';
 import { Controller, CrudActions } from '../controller';
 
 export type PermissionController = Controller<CrudActions>;

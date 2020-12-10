@@ -3,7 +3,7 @@ import { pick } from 'lodash';
 import { Survey, User, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import userRespondentResponse from '@/http/responses/admin/user-respondent.response';
-import { RespondentResponse } from '@common/types/http/admin/users';
+import { RespondentResponse } from '@common/types/http';
 import type { IoC } from '@/ioc';
 import { Controller } from '../controller';
 

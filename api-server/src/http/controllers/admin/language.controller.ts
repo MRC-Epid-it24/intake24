@@ -7,7 +7,7 @@ import {
   LanguageResponse,
   LanguagesResponse,
   StoreLanguageResponse,
-} from '@common/types/http/admin/languages';
+} from '@common/types/http';
 import { Controller, CrudActions } from '../controller';
 
 export type LanguageController = Controller<CrudActions>;

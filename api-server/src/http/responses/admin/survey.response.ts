@@ -1,5 +1,5 @@
 import { Survey } from '@/db/models/system';
-import { SurveyEntry } from '@common/types/http/admin/surveys';
+import { SurveyEntry } from '@common/types/http';
 
 export default (survey: Survey): SurveyEntry => {
   return {

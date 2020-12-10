@@ -9,7 +9,7 @@ import {
   StoreTaskResponse,
   TaskResponse,
   TasksResponse,
-} from '@common/types/http/admin/tasks';
+} from '@common/types/http';
 import { Controller, CrudActions } from '../controller';
 
 export type TaskController = Controller<CrudActions | 'run'>;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import type { IoC } from '@/ioc';
 import { asServedResponse } from '@/http/responses/foods';
-import { AsServedSetResponse } from '@common/types/http/foods';
+import { AsServedSetResponse } from '@common/types/http';
 import { Controller } from './controller';
 
 export type PortionSizeController = Controller<
