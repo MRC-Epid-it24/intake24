@@ -12,11 +12,11 @@ export default class SendPasswordReset implements Job {
 
   private data!: SendPasswordResetData;
 
-  private config;
+  private readonly config;
 
-  private logger;
+  private readonly logger;
 
-  private mailer;
+  private readonly mailer;
 
   constructor({ config, logger, mailer }: IoC) {
     this.config = config;

@@ -15,9 +15,9 @@ export type ExportSurveyRespondentAuthUrlsData = {
 export default class ExportSurveyRespondentAuthUrls implements BaseJob {
   public readonly name: JobType = 'ExportSurveyRespondentAuthUrls';
 
-  private config;
+  private readonly config;
 
-  private logger;
+  private readonly logger;
 
   private jobId!: number;
 

@@ -15,9 +15,9 @@ import { QueueHandler } from './queue-handler';
 export default class JobsQueueHandler implements QueueHandler<JobData> {
   readonly name = 'it24-jobs';
 
-  private config;
+  private readonly config;
 
-  private logger;
+  private readonly logger;
 
   queue!: Queue<JobData>;
 

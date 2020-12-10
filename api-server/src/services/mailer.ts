@@ -2,9 +2,9 @@ import nodemailer, { SendMailOptions, Transporter } from 'nodemailer';
 import type { IoC } from '@/ioc';
 
 export default class Mailer {
-  private config;
+  private readonly config;
 
-  private logger;
+  private readonly logger;
 
   private transporter!: Transporter;
 

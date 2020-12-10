@@ -1,13 +1,13 @@
 import type { IoC } from '@/ioc';
 
 export default class Scheduler {
-  private config;
+  private readonly config;
 
-  private logger;
+  private readonly logger;
 
-  public jobs;
+  public readonly jobs;
 
-  public tasks;
+  public readonly tasks;
 
   constructor({ config, logger, jobsQueueHandler, tasksQueueHandler }: IoC) {
     this.config = config;
