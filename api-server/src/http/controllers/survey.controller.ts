@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Survey, SurveySubmission, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
+import { UserInfoResponse, GenerateUserResponse } from '@common/types/http';
 import { Controller } from './controller';
 
 export type SurveyController = Controller<
@@ -47,7 +48,7 @@ export default ({ surveyService }: IoC): SurveyController => {
    * - Implement submission limits
    *
    */
-  const userInfo = async (req: Request, res: Response): Promise<void> => {
+  const userInfo = async (req: Request, res: Response<UserInfoResponse>): Promise<void> => {
     const { surveyId } = req.params;
     const { tz } = req.query;
     const { id: userId, name } = req.user as User;
@@ -67,7 +68,7 @@ export default ({ surveyService }: IoC): SurveyController => {
     });
   };
 
-  const generateUser = async (req: Request, res: Response): Promise<void> => {
+  const generateUser = async (req: Request, res: Response<GenerateUserResponse>): Promise<void> => {
     const { surveyId } = req.params;
 
     const {
