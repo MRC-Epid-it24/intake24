@@ -1,0 +1,97 @@
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.sequelize.transaction(async (transaction) => {
+      await queryInterface.renameTable('foods_local', 'old_foods_local', { transaction });
+
+      await queryInterface.createTable(
+        'food_locals',
+        {
+          id: {
+            type: Sequelize.DataTypes.BIGINT,
+            autoIncrement: true,
+            primaryKey: true,
+          },
+          food_code: {
+            type: new Sequelize.DataTypes.STRING(32),
+            allowNull: false,
+          },
+          locale_id: {
+            type: new Sequelize.DataTypes.STRING(16),
+            allowNull: false,
+          },
+          name: new Sequelize.DataTypes.STRING(256),
+          simple_name: new Sequelize.DataTypes.STRING(256),
+          version: {
+            type: Sequelize.DataTypes.UUID,
+            allowNull: false,
+          },
+        },
+        { transaction }
+      );
+
+      await queryInterface.addIndex('food_locals', ['food_code'], {
+        indexName: 'food_locals_food_code_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
+      await queryInterface.addIndex('food_locals', ['locale_id'], {
+        indexName: 'food_locals_locale_id_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
+      await queryInterface.addConstraint('food_locals', {
+        fields: ['food_code'],
+        type: 'foreign key',
+        references: {
+          table: 'foods',
+          field: 'code',
+        },
+        name: 'food_locals_food_code_fk',
+        transaction,
+      });
+
+      await queryInterface.addConstraint('food_locals', {
+        fields: ['locale_id'],
+        type: 'foreign key',
+        references: {
+          table: 'locales',
+          field: 'id',
+        },
+        name: 'food_locals_locale_id_fk',
+        transaction,
+      });
+
+      await queryInterface.addConstraint('food_locals', {
+        fields: ['food_code', 'locale_id'],
+        type: 'unique',
+        name: 'food_locals_unique',
+        transaction,
+      });
+
+      await queryInterface.sequelize.query(
+        'INSERT INTO food_locals (food_code, locale_id, "name", simple_name, "version") SELECT food_code, locale_id, local_description, simple_local_description, "version" FROM old_foods_local',
+        { transaction }
+      );
+
+      await queryInterface.changeColumn(
+        'food_locals',
+        'food_code',
+        {
+          type: new Sequelize.DataTypes.STRING(32),
+          allowNull: false,
+        },
+        {
+          transaction,
+        }
+      );
+
+      await queryInterface.dropTable('old_foods_local');
+    });
+  },
+
+  down: (queryInterface, Sequelize) => {
+    throw new Error('This migration cannot be undone');
+  },
+};

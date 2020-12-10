@@ -9,6 +9,7 @@ import { FoodAttribute, FoodLocal } from '.';
 @Table({
   timestamps: false,
   underscored: true,
+  tableName: 'foods',
 })
 export default class Food extends BaseModel<Food> {
   @Column({

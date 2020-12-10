@@ -23,7 +23,4 @@ export default class FoodLocalList extends BaseModel<FoodLocalList> {
 
   @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;
-
-  @BelongsTo(() => FoodLocal, 'foodCode')
-  public foodLocal?: FoodLocal;
 }

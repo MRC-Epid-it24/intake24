@@ -1,4 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import PortionSizeMethod from '@api-server/db/models/foods/portion-size-method';
 import BaseModel from '../model';
 import { Food, FoodLocalList, Locale } from '.';
 
@@ -11,26 +12,29 @@ import { Food, FoodLocalList, Locale } from '.';
   timestamps: false,
   underscored: true,
   freezeTableName: true,
-  tableName: 'foods_local',
+  tableName: 'food_locals',
 })
 export default class FoodLocal extends BaseModel<FoodLocal> {
   @Column({
-    allowNull: false,
     primaryKey: true,
+  })
+  public id!: number;
+
+  @Column({
+    allowNull: false,
   })
   public foodCode!: string;
 
   @Column({
     allowNull: false,
-    primaryKey: true,
   })
   public localeId!: string;
 
   @Column
-  public localDescription!: string;
+  public name!: string;
 
   @Column
-  public simpleLocalDescription!: string;
+  public simpleName!: string;
 
   @Column({
     allowNull: false,
@@ -38,12 +42,12 @@ export default class FoodLocal extends BaseModel<FoodLocal> {
   })
   public version!: string;
 
-  @BelongsTo(() => Food, 'foodCode')
+  @BelongsTo(() => Food, 'food_code')
   public food?: Food;
 
-  @BelongsTo(() => Locale, 'localeId')
+  @BelongsTo(() => Locale, 'locale_id')
   public locale?: Locale;
 
-  @HasMany(() => FoodLocalList, 'foodCode')
-  public localeLists?: FoodLocalList[];
+  @HasMany(() => PortionSizeMethod, 'food_local_id')
+  public portionSizeMethods?: PortionSizeMethod[];
 }

@@ -16,52 +16,54 @@ const db = new Sequelize({
 
 let foodIndex: PhraseIndex<string>;
 
-FoodLocalList.findAll({
-  where: {
-    localeId: 'en_GB',
-  },
-  include: [
-    {
-      model: FoodLocal,
-      where: {
-        localeId: 'en_GB',
-      },
+async function buildIndex() {
+  const foodList = await FoodLocalList.findAll({
+    attributes: ['foodCode'],
+    where: {
+      localeId: 'en_GB',
     },
-  ],
-})
-  .then((foodLocal) => {
-    const foodDescriptions = new Array<PhraseWithKey<string>>();
+  });
 
-    for (const f of foodLocal) {
-      if (f.foodLocal) {
-        foodDescriptions.push({ phrase: f.foodLocal.localDescription, key: f.foodCode });
-      }
-    }
+  const foodCodes = foodList.map((row) => row.foodCode);
 
-    foodIndex = new PhraseIndex<string>(
-      foodDescriptions,
-      ['with'],
-      new Metaphone3Encoder(),
-      new EnglishWordOps(),
-      new Array(
-        new Set<string>(['banana', 'dog', 'helicopter'])
-      )
-    );
-  })
-  .then(() => {
-    parentPort!.postMessage('ready');
+  const localFoods = await FoodLocal.findAll({
+    where: {
+      foodCode: foodCodes,
+      localeId: 'en_GB',
+    },
+  });
 
-    parentPort!.on('message', (msg) => {
-      const interpreted = foodIndex.interpretPhrase(msg.query, 'match-fewer');
+  const foodDescriptions = new Array<PhraseWithKey<string>>();
 
-      const results = foodIndex.findMatches(interpreted, 100, 100).map((m) => ({
-        code: m.key,
-        description: m.phrase,
-      }));
+  for (const food of localFoods) {
+    foodDescriptions.push({ phrase: food.name, key: food.foodCode });
+  }
 
-      parentPort!.postMessage({
-        queryId: msg.queryId,
-        results,
-      });
+  foodIndex = new PhraseIndex<string>(
+    foodDescriptions,
+    ['with'],
+    new Metaphone3Encoder(),
+    new EnglishWordOps(),
+    new Array(
+      new Set<string>(['banana', 'dog', 'helicopter'])
+    )
+  );
+
+  parentPort!.postMessage('ready');
+
+  parentPort!.on('message', (msg) => {
+    const interpreted = foodIndex.interpretPhrase(msg.query, 'match-fewer');
+
+    const results = foodIndex.findMatches(interpreted, 100, 100).map((m) => ({
+      code: m.key,
+      description: m.phrase,
+    }));
+
+    parentPort!.postMessage({
+      queryId: msg.queryId,
+      results,
     });
   });
+}
+
+buildIndex();
