@@ -1,4 +1,4 @@
-import { Schema, ParamSchema } from 'express-validator';
+import { ParamSchema } from 'express-validator';
 import { isNaN, toNumber } from 'lodash';
 import { Permission, Role } from '@/db/models/system';
 

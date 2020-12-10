@@ -9,7 +9,7 @@ import {
   LocaleResponse,
   LocalesResponse,
   StoreLocaleResponse,
-} from '@common/types/http/admin/locales';
+} from '@common/types/http';
 import { Controller, CrudActions } from '../controller';
 
 export type LocaleController = Controller<CrudActions>;

@@ -1,3 +1,5 @@
+import admin from './admin';
 import authentication from './authentication';
+import password from './password';
 
-export default { authentication };
+export default { admin, authentication, password };

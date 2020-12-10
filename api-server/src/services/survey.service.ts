@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/http/admin/users';
+import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/http';
 import {
   GenUserCounter,
   Job,

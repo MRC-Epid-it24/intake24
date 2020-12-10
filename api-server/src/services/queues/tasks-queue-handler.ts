@@ -10,7 +10,7 @@ export type TaskData = { jobType: JobType };
 export default class TasksQueueHandler implements QueueHandler<TaskData> {
   readonly name = 'it24-tasks';
 
-  private logger;
+  private readonly logger;
 
   queue!: Queue<TaskData>;
 

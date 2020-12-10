@@ -83,6 +83,19 @@ URL of survey site.
 * dotenv var: `APP_URL_SURVEY`
 * type: `string`
 * default: `'/survey'`
+  
+#### Images URL
+
+URL of images.
+
+* object-path: `url.images`
+* dotenv var: `APP_URL_IMAGES`
+* type: `string`
+* default: `'localhost:3100/images'`
+
+::: tip
+Default setup allows local images serving - ideal for development purposes. For production, use reverse proxy, CDN etc.
+:::
 
 ## Access control list (ACL)
 
@@ -241,6 +254,15 @@ Download directory for storing temporarily downloaded files.
 * dotenv var: `FS_DOWNLOAD`
 * type: `string`
 * default: `'storage/download'`
+
+### Images dir
+
+Images directory for locally hosted images.
+
+* object-path: `local.images`
+* dotenv var: `FS_IMAGES`
+* type: `string`
+* default: `'storage/images'`
 
 ## Mail
 

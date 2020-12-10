@@ -10,7 +10,7 @@ import {
   UserRefs,
   UsersResponse,
   StoreUserResponse,
-} from '@common/types/http/admin/users';
+} from '@common/types/http';
 import { Controller, CrudActions } from '../controller';
 
 export type UserController = Controller<CrudActions>;

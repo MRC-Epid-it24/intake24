@@ -9,7 +9,7 @@ import {
   SchemeResponse,
   SchemesResponse,
   StoreSchemeResponse,
-} from '@common/types/http/admin/schemes';
+} from '@common/types/http';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions>;

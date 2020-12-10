@@ -4,9 +4,9 @@ import { Job, JobType } from './job';
 export default class PurgeRefreshTokens implements Job {
   public readonly name: JobType = 'PurgeRefreshTokens';
 
-  private jwtRotationService;
+  private readonly jwtRotationService;
 
-  private logger;
+  private readonly logger;
 
   constructor({ jwtRotationService, logger }: IoC) {
     this.jwtRotationService = jwtRotationService;

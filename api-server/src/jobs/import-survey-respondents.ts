@@ -25,9 +25,9 @@ export default class ImportSurveyRespondents implements Job {
 
   private data!: ImportSurveyRespondentsData;
 
-  private logger;
+  private readonly logger;
 
-  private surveyService;
+  private readonly surveyService;
 
   private file!: string;
 

@@ -3,7 +3,7 @@ import ms from 'ms';
 import { UnauthorizedError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import type { Tokens } from '@/services/auth/jwt.service';
-import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http/authentication';
+import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http';
 import { Controller } from './controller';
 
 export type AuthenticationController = Controller<
