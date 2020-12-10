@@ -16,7 +16,6 @@ export type PortionSizeController = Controller<
 
 export default ({ portionSizeService }: IoC): PortionSizeController => {
   const asServed = async (req: Request, res: Response): Promise<void> => {
-    // TODO: validate id input to be string | string[]
     const id = req.query.id as string | string[];
 
     const asServedSets = await portionSizeService.getAsServedSets(id);
@@ -33,7 +32,7 @@ export default ({ portionSizeService }: IoC): PortionSizeController => {
   };
 
   const guideImage = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.query;
+    const id = req.query.id as string | string[];
     res.json();
   };
 
@@ -43,7 +42,7 @@ export default ({ portionSizeService }: IoC): PortionSizeController => {
   };
 
   const imageMaps = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.query;
+    const id = req.query.id as string | string[];
     res.json();
   };
 

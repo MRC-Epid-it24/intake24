@@ -11,7 +11,7 @@ export default (): PortionSizeService => {
    * Get multiple records of as-served-set with images
    *
    * @param {(string | string[])} id
-   * @returns
+   * @returns {Promise<AsServedSet[]>}
    */
   const getAsServedSets = async (id: string | string[]): Promise<AsServedSet[]> => {
     const asServedSets = await AsServedSet.findAll({
@@ -38,7 +38,7 @@ export default (): PortionSizeService => {
    * Get single record of as-served-set with images
    *
    * @param {string} id
-   * @returns
+   * @returns {Promise<AsServedSet>}
    */
   const getAsServedSet = async (id: string): Promise<AsServedSet> => {
     const [asServedSet] = await getAsServedSets(id);
