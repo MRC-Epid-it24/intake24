@@ -11,10 +11,17 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
+
+  // Register global public folder
   app.use(express.static(config.filesystem.local.public, { index: false }));
+
+  // Register images folder
+  // TODO: this should only be registered when hosted locally
+  app.use('/images', express.static(config.filesystem.local.images, { index: false }));
 
   const isDev = config.app.env === 'development';
 
+  // Register access-log logger
   app.use(morgan(isDev ? 'dev' : 'combined', { stream }));
 
   nunjucks.configure([path.resolve('public'), path.resolve('resources/views')], {

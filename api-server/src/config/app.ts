@@ -1,16 +1,15 @@
 export type Environment = 'development' | 'test' | 'production';
 
+export type Site = 'admin' | 'survey' | 'images' | 'docs';
+export type SiteUrls = Record<Site, string>;
+
 export type AppConfig = {
   env: Environment;
   name: string;
   host: string;
   port: number;
 
-  urls: {
-    admin: string;
-    docs: string;
-    survey: string;
-  };
+  urls: SiteUrls;
 };
 
 const appConfig: AppConfig = {
@@ -21,8 +20,9 @@ const appConfig: AppConfig = {
 
   urls: {
     admin: process.env.APP_URL_ADMIN ?? '/admin',
-    docs: process.env.APP_URL_DOCS ?? '/docs',
     survey: process.env.APP_URL_SURVEY ?? '/survey',
+    images: process.env.APP_URL_IMAGES ?? 'localhost:3100/images',
+    docs: process.env.APP_URL_DOCS ?? '/docs',
   },
 };
 

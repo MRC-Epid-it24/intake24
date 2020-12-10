@@ -8,10 +8,12 @@ Get portion size estimation options, associated foods and related data for a foo
 
 [v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/food/user/FoodDataController.scala#L96-L112)
 
+[v4 food boilerplate](https://github.com/MRC-Epid-it24/intake24/blob/master/api-server/src/http/controllers/food.controller.ts)
+
 ### Request
 
 ```html
-GET /api/user/foods/{locale}/{code}    
+GET /api/foods/{locale}/{code}    
 
 Authorization: Bearer {accessToken}
 ```
@@ -117,12 +119,10 @@ do not represent the exact food but something similar that could have different 
 
 Get as served image definitions for the given as served set.
 
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/FoodDataSQL/src/main/scala/uk/ac/ncl/openlab/intake24/foodsql/user/AsServedSetsServiceImpl.scala)
-
 ### Request
 
 ```html
-GET /user/portion-size/as-served/{id}
+GET /portion-size/as-served/{id}
 
 Authorization: Bearer {accessToken}
 ```
@@ -136,6 +136,8 @@ where
 ```json
 
 {
+    "id": string,
+    "description": string,
     "selectionImageUrl": string,
     "images": [
       {
@@ -168,12 +170,10 @@ where
 
 Same as above, but fetches data for multiple as served image sets at once.
 
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/food/user/FoodDataController.scala#L211-L216)
-
 ### Request
 
 ```html
-POST /user/portion-size/as-served    
+POST /portion-size/as-served    
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -197,6 +197,8 @@ Same as the regular as served data response, but returns an array of as served s
 ```json
 [
   {
+    "id": string,
+    "description": string,
     "selectionImageUrl": string,
     "images": [
       {
@@ -221,7 +223,7 @@ has an associated weight that is used for portion size weight calculations.
 ### Request
 
 ```html
-GET /user/portion-size/guide-image/{id}
+GET /portion-size/guide-image/{id}
 
 Authorization: Bearer {accessToken}
 ```
@@ -293,10 +295,12 @@ whose final weight also depends on pizza thickness and type.
 
 [v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/FoodDataSQL/src/main/scala/uk/ac/ncl/openlab/intake24/foodsql/user/ImageMapServiceImpl.scala)
 
+[v4 portion-size boilerplate](https://github.com/MRC-Epid-it24/intake24/blob/master/api-server/src/http/controllers/portion-size.controller.ts)
+
 ### Request
 
 ```html
-GET /user/portion-size/image-maps/{id}
+GET /portion-size/image-maps/{id}
 
 Authorization: Bearer {accessToken}
 ```
@@ -328,10 +332,12 @@ Same as above, but returns several image maps at once.
 
 [v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/food/user/FoodDataController.scala#L264-L269)
 
+[v4 portion-size boilerplate](https://github.com/MRC-Epid-it24/intake24/blob/master/api-server/src/http/controllers/portion-size.controller.ts)
+
 ### Request
 
 ```html
-POST /user/portion-size/image-maps
+POST /portion-size/image-maps
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -357,10 +363,12 @@ Get the definition of "sliding scale" which is the portion size estimation for h
 
 [v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/FoodDataSQL/src/main/scala/uk/ac/ncl/openlab/intake24/foodsql/user/DrinkwareServiceImpl.scala)
 
+[v4 portion-size boilerplate](https://github.com/MRC-Epid-it24/intake24/blob/master/api-server/src/http/controllers/portion-size.controller.ts)
+
 ### Request
 
 ```html
-GET /user/portion-size/drinkware/{id}
+GET /portion-size/drinkware/{id}
 
 Authorization: Bearer {accessToken}
 ```
@@ -450,9 +458,11 @@ get the image URL for the portion size option selection screen.
 
 [v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/food/user/FoodDataController.scala#L271-L276)
 
+[v4 portion-size boilerplate](https://github.com/MRC-Epid-it24/intake24/blob/master/api-server/src/http/controllers/portion-size.controller.ts)
+
 ## Request  
 ```html
-GET /user/portion-size/weight
+GET /portion-size/weight
 
 Authorization: Bearer {accessToken}
 ```
@@ -483,7 +493,7 @@ well as categories).
 ### Request
 
 ```html
-GET /user/foods/associated/{locale}?f={foodCode}&f={foodCode}...
+GET /foods/associated/{locale}?f={foodCode}&f={foodCode}...
     
 Authorization: Bearer {accessToken}
 ```

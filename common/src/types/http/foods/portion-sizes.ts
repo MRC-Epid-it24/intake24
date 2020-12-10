@@ -1,5 +1,5 @@
 export type AsServedImageResponse = {
-  imageUrl: string;
+  mainImageUrl: string;
   thumbnailUrl: string;
   weight: number;
 };
@@ -7,6 +7,6 @@ export type AsServedImageResponse = {
 export type AsServedSetResponse = {
   id: string;
   description: string;
-  selectionImagePath: string;
+  selectionImageUrl: string;
   images: AsServedImageResponse[];
 };

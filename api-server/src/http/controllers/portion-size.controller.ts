@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import type { IoC } from '@/ioc';
-import { asServedSetResponse } from '@/http/responses/foods';
+import { asServedResponse } from '@/http/responses/foods';
 import { Controller } from './controller';
 
 export type PortionSizeController = Controller<
@@ -14,13 +14,15 @@ export type PortionSizeController = Controller<
   | 'weight'
 >;
 
-export default ({ portionSizeService }: IoC): PortionSizeController => {
+export default ({ config, portionSizeService }: IoC): PortionSizeController => {
+  const baseUrl = config.app.urls.images;
+
   const asServed = async (req: Request, res: Response): Promise<void> => {
     const id = req.query.id as string | string[];
 
     const asServedSets = await portionSizeService.getAsServedSets(id);
 
-    res.json(asServedSets.map(asServedSetResponse));
+    res.json(asServedSets.map(asServedResponse(baseUrl).setResponse));
   };
 
   const asServedEntry = async (req: Request, res: Response): Promise<void> => {
@@ -28,7 +30,7 @@ export default ({ portionSizeService }: IoC): PortionSizeController => {
 
     const asServedSet = await portionSizeService.getAsServedSet(id);
 
-    res.json(asServedSetResponse(asServedSet));
+    res.json(asServedResponse(baseUrl).setResponse(asServedSet));
   };
 
   const guideImage = async (req: Request, res: Response): Promise<void> => {
