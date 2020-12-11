@@ -81,7 +81,7 @@ export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
   validation: {
     required: false,
     message: { en: null },
-  }
+  },
 };
 
 export const promptQuestions: PromptQuestion[] = [
