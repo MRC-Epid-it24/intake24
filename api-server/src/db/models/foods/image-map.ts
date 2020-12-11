@@ -1,13 +1,13 @@
 import { BelongsTo, Column, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import { GuideImage, ProcessedImage } from '.';
+import { GuideImage, ImageMapObject, ProcessedImage } from '.';
 
 @Scopes(() => ({
   guideImages: { include: [{ model: GuideImage }] },
   baseImage: { include: [{ model: ProcessedImage }] },
+  objects: { include: [{ model: ImageMapObject }] },
 }))
 @Table({
-  modelName: 'ImageMap',
   tableName: 'image_maps',
   freezeTableName: true,
   timestamps: false,
@@ -32,6 +32,9 @@ export default class ImageMap extends BaseModel<ImageMap> {
 
   @HasMany(() => GuideImage, 'imageMapId')
   public guideImages?: GuideImage[];
+
+  @HasMany(() => ImageMapObject, 'imageMapId')
+  public objects?: ImageMapObject[];
 
   @BelongsTo(() => ProcessedImage, 'baseImageId')
   public baseImage?: ProcessedImage;

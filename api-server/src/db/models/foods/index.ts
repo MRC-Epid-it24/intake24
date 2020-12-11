@@ -14,6 +14,8 @@ export { default as NutrientTableRecordNutrient } from './nutrient-table-record-
 export { default as NutrientTableRecordField } from './nutrient-table-record-field';
 export { default as FoodLocalList } from './food-local-list';
 export { default as GuideImage } from './guide-image';
+export { default as GuideImageObject } from './guide-image-object';
 export { default as ImageMap } from './image-map';
+export { default as ImageMapObject } from './image-map-object';
 export { default as ProcessedImage } from './processed-image';
 export { default as Locale } from './locale';

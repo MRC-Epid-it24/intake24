@@ -52,6 +52,6 @@ export default class ProcessedImage extends BaseModel<ProcessedImage> {
   @HasMany(() => AsServedImage, 'thumbnailImageId')
   public asServedThumbnailImages?: AsServedImage[];
 
-  @HasMany(() => ImageMap, 'imageMapId')
+  @HasMany(() => ImageMap, 'baseImageId')
   public imageMaps?: ImageMap[];
 }

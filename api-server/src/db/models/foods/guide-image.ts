@@ -1,10 +1,12 @@
-import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, HasMany, Scopes, Table } from 'sequelize-typescript';
+import GuideImageObject from '@api-server/db/models/foods/guide-image-object';
 import BaseModel from '../model';
 import { ImageMap, ProcessedImage } from '.';
 
 @Scopes(() => ({
   imageMap: { include: [{ model: ImageMap }] },
   selectionImage: { include: [{ model: ProcessedImage }] },
+  objects: { include: [{ model: GuideImageObject }] },
 }))
 @Table({
   modelName: 'GuideImage',
@@ -40,4 +42,7 @@ export default class GuideImage extends BaseModel<GuideImage> {
 
   @BelongsTo(() => ProcessedImage, 'selectionImageId')
   public selectionImage?: ProcessedImage;
+
+  @HasMany(() => GuideImageObject, 'guideImageId')
+  public objects?: GuideImageObject[];
 }
