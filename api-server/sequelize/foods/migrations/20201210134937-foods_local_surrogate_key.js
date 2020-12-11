@@ -1,7 +1,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.transaction(async (transaction) => {
-      await queryInterface.renameTable('foods_local', 'old_foods_local', { transaction });
+      await queryInterface.renameTable('foods_local', 'v3_foods_local', { transaction });
 
       await queryInterface.createTable(
         'food_locals',
@@ -49,6 +49,8 @@ module.exports = {
           field: 'code',
         },
         name: 'food_locals_food_code_fk',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         transaction,
       });
 
@@ -60,6 +62,8 @@ module.exports = {
           field: 'id',
         },
         name: 'food_locals_locale_id_fk',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         transaction,
       });
 
@@ -71,7 +75,7 @@ module.exports = {
       });
 
       await queryInterface.sequelize.query(
-        'INSERT INTO food_locals (food_code, locale_id, "name", simple_name, "version") SELECT food_code, locale_id, local_description, simple_local_description, "version" FROM old_foods_local',
+        'INSERT INTO food_locals (food_code, locale_id, "name", simple_name, "version") SELECT food_code, locale_id, local_description, simple_local_description, "version" FROM v3_foods_local',
         { transaction }
       );
 
@@ -86,8 +90,6 @@ module.exports = {
           transaction,
         }
       );
-
-      await queryInterface.dropTable('old_foods_local');
     });
   },
 

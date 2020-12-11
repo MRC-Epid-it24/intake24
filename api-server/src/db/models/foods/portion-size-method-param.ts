@@ -6,7 +6,7 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
   freezeTableName: true,
-  tableName: 'foods_portion_size_method_params',
+  tableName: 'food_portion_size_method_params',
 })
 export default class PortionSizeMethodParameter extends BaseModel<PortionSizeMethodParameter> {
   @Column({

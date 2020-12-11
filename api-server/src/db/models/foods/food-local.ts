@@ -1,5 +1,6 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import PortionSizeMethod from '@api-server/db/models/foods/portion-size-method';
+import NutrientMapping from '@/db/models/foods/nutrient-mapping';
 import BaseModel from '../model';
 import { Food, FoodLocalList, Locale } from '.';
 
@@ -50,4 +51,7 @@ export default class FoodLocal extends BaseModel<FoodLocal> {
 
   @HasMany(() => PortionSizeMethod, 'food_local_id')
   public portionSizeMethods?: PortionSizeMethod[];
+
+  @HasMany(() => NutrientMapping, 'food_local_id')
+  public nutrientMappings?: NutrientMapping[];
 }

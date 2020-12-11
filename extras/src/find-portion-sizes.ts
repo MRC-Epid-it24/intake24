@@ -58,8 +58,6 @@ async function main() {
                                 console.log(params[p].name, params[p].value);
                             }
                         }
-
-
                     }
                 }
             }

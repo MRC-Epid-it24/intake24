@@ -3,7 +3,7 @@ module.exports = {
     return queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameTable(
         'foods_portion_size_methods',
-        'old_foods_portion_size_methods',
+        'v3_foods_portion_size_methods',
         { transaction }
       );
 
@@ -63,12 +63,14 @@ module.exports = {
           table: 'food_locals',
           field: 'id',
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         name: 'food_portion_size_methods_food_local_id_fk',
         transaction,
       });
 
       await queryInterface.sequelize.query(
-        'INSERT INTO food_portion_size_methods (id, food_code, locale_id, "method", description, image_url, use_for_recipes, conversion_factor) SELECT id, food_code, locale_id, "method", description, image_url, use_for_recipes, conversion_factor FROM old_foods_portion_size_methods',
+        'INSERT INTO food_portion_size_methods (id, food_code, locale_id, "method", description, image_url, use_for_recipes, conversion_factor) SELECT id, food_code, locale_id, "method", description, image_url, use_for_recipes, conversion_factor FROM v3_foods_portion_size_methods',
         { transaction }
       );
 
@@ -106,11 +108,11 @@ module.exports = {
           table: 'food_portion_size_methods',
           field: 'id',
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         name: 'foods_portion_size_method_params_portion_size_method_id_fk',
         transaction,
       });
-
-      await queryInterface.dropTable('old_foods_portion_size_methods');
     });
   },
 
