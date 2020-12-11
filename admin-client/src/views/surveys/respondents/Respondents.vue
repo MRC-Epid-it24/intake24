@@ -139,7 +139,7 @@ import { AnyDictionary } from '@common/types/common';
 import detailMixin from '@/components/entry/detailMixin';
 import Form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
-import UserListTable from './UserListTable.vue';
+import UserListTable from '../UserListTable.vue';
 import RespondentsUpload from './RespondentsUpload.vue';
 import RespondentsAuthUrlExport from './RespondentsAuthUrlExport.vue';
 
