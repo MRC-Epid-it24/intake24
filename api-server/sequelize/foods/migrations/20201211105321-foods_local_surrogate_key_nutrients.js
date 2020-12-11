@@ -1,13 +1,12 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.transaction(async (transaction) => {
-      await queryInterface.renameTable('foods_nutrient_mapping', 'v3_foods_portion_size_methods', {
+      await queryInterface.renameTable('foods_nutrient_mapping', 'v3_foods_nutrient_mapping', {
         transaction,
       });
 
       await queryInterface.createTable(
         'food_nutrient_mapping',
-
         {
           id: {
             type: Sequelize.DataTypes.BIGINT,
@@ -38,7 +37,7 @@ module.exports = {
       );
 
       queryInterface.sequelize.query(
-        'INSERT INTO food_nutrient_mapping (food_code, locale_id, nutrient_table_id, nutrient_table_record_id) SELECT food_code, locale_id, nutrient_table_id, nutrient_table_record_id FROM v3_foods_portion_size_methods',
+        'INSERT INTO food_nutrient_mapping (food_code, locale_id, nutrient_table_id, nutrient_table_record_id) SELECT food_code, locale_id, nutrient_table_id, nutrient_table_record_id FROM v3_foods_nutrient_mapping',
         { transaction }
       );
 
