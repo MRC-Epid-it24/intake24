@@ -1,6 +1,6 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import PortionSizeMethod from '@api-server/db/models/foods/portion-size-method';
-import NutrientMapping from '@/db/models/foods/nutrient-mapping';
+import NutrientMapping from '@api-server/db/models/foods/nutrient-mapping';
 import BaseModel from '../model';
 import { Food, FoodLocalList, Locale } from '.';
 

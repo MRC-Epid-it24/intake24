@@ -1,8 +1,12 @@
-import { config } from 'dotenv';
+require('dotenv').config();
 
-config();
-
-import { Food, FoodLocal, PortionSizeMethodParameter } from '@api-server/db/models/foods';
+import {
+    Food,
+    FoodLocal,
+    NutrientMapping,
+    NutrientTableRecord,
+    PortionSizeMethodParameter
+} from '@api-server/db/models/foods';
 
 import DB from '@api-server/db';
 
@@ -10,10 +14,12 @@ import databaseConfig from '@api-server/config/database'
 
 import logger from '@api-server/services/logger'
 import PortionSizeMethod from '@api-server/db/models/foods/portion-size-method';
+import NutrientTableRecordNutrient from '../../api-server/src/db/models/foods/nutrient-table-record-nutrient';
 
 
-const batchSize = 500
-const locale = 'en_GB'
+const batchSize = 500;
+const locale = 'en_GB';
+const energyKcalNutrientType = 1;
 
 async function main() {
 
@@ -29,13 +35,24 @@ async function main() {
                 include: [{
                     model: FoodLocal,
                     where: { localeId: locale },
-                    required: false,
                     include: [{
                         model: PortionSizeMethod,
+                        separate: true,
                         include: [PortionSizeMethodParameter],
                         required: false
-                    }]
+                    },
+                        {
+                            model: NutrientMapping,
+                            separate: true,
+                            include: [{
+                                model: NutrientTableRecord,
+                                include: [NutrientTableRecordNutrient]
+                            }]
+                        }]
                 }],
+                where: {
+                    code: 'BGMA'
+                },
                 order: ['code'],
                 limit: batchSize,
                 offset: offset
@@ -47,6 +64,21 @@ async function main() {
 
             if (local) {
                 console.log(currentBatch[i].code, local.name);
+
+                let nutrientMapping = local.nutrientMappings?.[0];
+
+                if (nutrientMapping) {
+                    console.log('Nutrient mapping: ', nutrientMapping.nutrientTableRecord?.nutrientTableId, nutrientMapping.nutrientTableRecord?.nutrientTableRecordId);
+                    let energyKcalRecord = nutrientMapping.nutrientTableRecord?.getNutrientByType(energyKcalNutrientType);
+
+                    if (energyKcalRecord) {
+                        console.log(nutrientMapping.nutrientTableRecord?.nutrientTableId, nutrientMapping.nutrientTableRecord?.nutrientTableRecordId);
+                        console.log(energyKcalRecord.unitsPer100g + ' calories per 100g');
+                    } else {
+                        console.log('No kcal??');
+                    }
+                }
+
                 if (local.portionSizeMethods) {
                     for (let m = 0; m < local.portionSizeMethods.length; ++m) {
                         console.log(local.portionSizeMethods[m].method);

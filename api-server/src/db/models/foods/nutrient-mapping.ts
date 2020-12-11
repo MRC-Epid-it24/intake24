@@ -1,7 +1,6 @@
-import { BelongsTo, Column, HasMany, Table } from 'sequelize-typescript';
-import PortionSizeMethodParameter from '@api-server/db/models/foods/portion-size-method-param';
+import { BelongsTo, Column, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import { FoodLocal } from '.';
+import { FoodLocal, NutrientTableRecord } from '.';
 
 @Table({
   timestamps: false,
@@ -16,12 +15,9 @@ export default class NutrientMapping extends BaseModel<NutrientMapping> {
   })
   public id!: number;
 
-  @Column
-  public nutrientTableId!: string;
-
-  @Column
-  public nutrientTableRecordId!: string;
-
   @BelongsTo(() => FoodLocal, 'food_local_id')
   public foodLocal?: FoodLocal;
+
+  @BelongsTo(() => NutrientTableRecord, 'nutrient_table_record_id')
+  public nutrientTableRecord?: NutrientTableRecord;
 }
