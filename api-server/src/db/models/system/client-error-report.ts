@@ -1,9 +1,13 @@
-import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 import { ClientErrorReport as ClientErrorReportAttributes } from '@common/types/models/system';
 import { AnyDictionary } from '@common/types/common';
 import BaseModel from '../model';
 import { Survey, User } from '.';
 
+@Scopes(() => ({
+  survey: { include: [{ model: Survey }] },
+  user: { include: [{ model: User }] },
+}))
 @Table({
   modelName: 'ClientErrorReport',
   tableName: 'client_error_reports',
@@ -22,12 +26,14 @@ export default class ClientErrorReport
 
   @Column({
     allowNull: true,
+    type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
   public userId!: number | null;
 
   @Column({
     allowNull: true,
+    type: DataType.STRING,
   })
   @ForeignKey(() => Survey)
   public surveyId!: string | null;

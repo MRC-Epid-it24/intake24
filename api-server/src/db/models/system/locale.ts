@@ -1,12 +1,14 @@
 import { Column, DataType, HasMany, Scopes, Table, BelongsTo } from 'sequelize-typescript';
 import { Locale as LocaleAttributes } from '@common/types/models/system';
 import BaseModel from '../model';
-import { Language, Survey } from '.';
+import { Language, LocalField, LocalNutrientType, Survey } from '.';
 
 @Scopes(() => ({
   adminLanguage: { include: [{ model: Language, as: 'adminLanguage' }] },
   surveyLanguage: { include: [{ model: Language, as: 'surveyLanguage' }] },
   surveys: { include: [{ model: Survey }] },
+  localFields: { include: [{ model: LocalField }] },
+  localNutrientTypes: { include: [{ model: LocalNutrientType }] },
 }))
 @Table({
   modelName: 'Locale',
@@ -72,4 +74,10 @@ export default class Locale extends BaseModel<Locale> implements LocaleAttribute
 
   @HasMany(() => Survey, 'localeId')
   public surveys?: Survey[];
+
+  @HasMany(() => LocalField, 'localeId')
+  public localFields?: LocalField[];
+
+  @HasMany(() => LocalNutrientType, 'localeId')
+  public localNutrientTypes?: LocalNutrientType[];
 }

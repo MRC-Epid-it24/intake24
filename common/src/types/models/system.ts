@@ -12,6 +12,31 @@ export type ClientErrorReport = {
   new: boolean;
 };
 
+export type LocalField = {
+  id: number;
+  localeId: string;
+  fieldName: string;
+  description: string;
+};
+
+export type LocalNutrientType = {
+  id: number;
+  localeId: string;
+  nutrientTypeId: number;
+};
+
+export type NutrientType = {
+  id: number;
+  description: string;
+  unitId: number;
+};
+
+export type NutrientUnit = {
+  id: number;
+  description: string;
+  symbol: string;
+};
+
 export type Job = {
   id: number;
   type: string;
