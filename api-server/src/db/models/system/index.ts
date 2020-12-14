@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+export { default as ClientErrorReport } from './client-error-report';
 export { default as GenUserCounter } from './gen-user-counter';
 export { default as Job } from './job';
 export { default as Language } from './language';

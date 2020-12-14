@@ -1,5 +1,16 @@
+import { AnyDictionary } from '../common';
 import { Meal } from '../meals';
 import { RecallQuestions } from '../recall';
+
+export type ClientErrorReport = {
+  id: number;
+  userId: number | null;
+  surveyId: string | null;
+  reportedAt: Date;
+  stackTrace: string;
+  surveyStateJson: AnyDictionary;
+  new: boolean;
+};
 
 export type Job = {
   id: number;

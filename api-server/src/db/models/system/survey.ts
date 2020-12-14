@@ -12,7 +12,15 @@ import {
 import { surveyPermissions } from '@api-server/services/acl.service';
 import { Survey as SurveyAttributes, SurveyState } from '@common/types/models/system';
 import BaseModel from '../model';
-import { GenUserCounter, Locale, Permission, Scheme, SurveySubmission, UserSurveyAlias } from '.';
+import {
+  ClientErrorReport,
+  GenUserCounter,
+  Locale,
+  Permission,
+  Scheme,
+  SurveySubmission,
+  UserSurveyAlias,
+} from '.';
 
 @Scopes(() => ({
   public: {
@@ -34,6 +42,7 @@ import { GenUserCounter, Locale, Permission, Scheme, SurveySubmission, UserSurve
   scheme: { include: [{ model: Scheme }] },
   respondents: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
+  clientErrors: { include: [{ model: ClientErrorReport }] },
 }))
 @Table({
   modelName: 'Survey',
@@ -187,6 +196,9 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
 
   @HasMany(() => SurveySubmission, 'surveyId')
   public submissions?: SurveySubmission[];
+
+  @HasMany(() => ClientErrorReport, 'surveyId')
+  public clientErrors?: ClientErrorReport[];
 
   @AfterCreate
   static async createSurveyPermissions(instance: Survey): Promise<void> {

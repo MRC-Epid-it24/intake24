@@ -13,6 +13,7 @@ import {
 import { User as UserAttributes } from '@common/types/models/system';
 import BaseModel from '../model';
 import {
+  ClientErrorReport,
   Permission,
   PermissionUser,
   RefreshToken,
@@ -43,6 +44,7 @@ import {
   aliases: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
   tokens: { include: [{ model: RefreshToken }] },
+  clientErrors: { include: [{ model: ClientErrorReport }] },
 }))
 @Table({
   modelName: 'User',
@@ -131,6 +133,9 @@ export default class User extends BaseModel<User> implements UserAttributes {
 
   @HasMany(() => UserSurveyAlias, 'userId')
   public aliases?: UserSurveyAlias[];
+
+  @HasMany(() => ClientErrorReport, 'userId')
+  public clientErrors?: ClientErrorReport[];
 
   public allRoles(): Role[] {
     return uniqBy(this.roles, 'name');
