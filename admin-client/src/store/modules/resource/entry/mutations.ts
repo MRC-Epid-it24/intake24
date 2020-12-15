@@ -4,6 +4,9 @@ import { EntryState } from '@/types/vuex';
 
 const mutations: MutationTree<EntryState> = {
   request(state) {
+    state.data = {};
+    state.refs = {};
+    state.addons = {};
     state.status = 'loading';
   },
   success(state, res) {
