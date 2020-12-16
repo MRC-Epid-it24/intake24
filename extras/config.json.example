@@ -1,0 +1,8 @@
+{
+  "locale": "NDNSv1",
+  "energyValueKcal": 240,
+  "foodFilter": [],
+  "portionSizeFilter": [],
+  "batchSize": 500,
+  "guideImageWidth": 654
+}

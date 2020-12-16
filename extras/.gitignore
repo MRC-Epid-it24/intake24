@@ -2,6 +2,7 @@ dist
 node_modules
 .env
 storage
+config.json
 
 # Editor directories and files
 .idea

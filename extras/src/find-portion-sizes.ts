@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+import commandLineArgs from 'command-line-args';
 import { createArrayCsvWriter } from 'csv-writer';
 
 import {
@@ -13,7 +14,9 @@ import {
     ImageMapObject,
     NutrientMapping,
     NutrientTableRecord,
-    NutrientTableRecordNutrient, NutrientType, NutrientUnit,
+    NutrientTableRecordNutrient,
+    NutrientType,
+    NutrientUnit,
     PortionSizeMethod,
     PortionSizeMethodParameter,
     ProcessedImage
@@ -24,12 +27,12 @@ import DB from '@api-server/db';
 import databaseConfig from '@api-server/config/database'
 
 import logger from '@api-server/services/logger'
+import * as fs from 'fs';
+import validate from './config.validator';
+import Config from './config';
+import { LocalNutrientType } from '@api-server/db/models/system';
 
-const batchSize = 500;
-const portionSizeKcal = 240;
-const locale = 'NDNSv1';
 const energyKcalNutrientType = 1;
-const guideImageWidth = 654;
 
 interface AsServedImageData {
     asServedSetId: string,
@@ -97,6 +100,11 @@ interface GuideImageData {
 class GuideImageHelper {
 
     private guideImages?: GuideImage[];
+    private readonly guideImageWidth: number;
+
+    constructor(guideImageWidth: number) {
+        this.guideImageWidth = guideImageWidth;
+    }
 
     async init() {
         this.guideImages = await GuideImage.findAll({
@@ -147,12 +155,31 @@ class GuideImageHelper {
                     guideImagePath: guideImage.imageMap.baseImage?.path,
                     objectId: guideImageObject.imageMapObjectId,
                     overlayImagePath: imageMapObject.overlayImage?.path,
-                    coordinates: calculateGuideObjectRect(imageMapObject.outlineCoordinates, guideImageWidth)
+                    coordinates: this.calculateObjectRect(imageMapObject.outlineCoordinates, this.guideImageWidth)
                 }
             }
         }
 
         return undefined;
+    }
+
+    private calculateObjectRect(coordinates: number[], width: number): [number, number, number, number] {
+        let maxX = coordinates[0];
+        let maxY = coordinates[1];
+        let minX = coordinates[0];
+        let minY = coordinates[1];
+
+        for (let i = 2; i < coordinates.length; i += 2) {
+            minX = Math.min(coordinates[i], minX);
+            maxX = Math.max(coordinates[i], maxX);
+            minY = Math.min(coordinates[i + 1], minY);
+            maxY = Math.max(coordinates[i + 1], maxY);
+        }
+
+        return [Math.round(minX * width),
+            Math.round(minY * width),
+            Math.round(maxX * width),
+            Math.round(maxY * width)];
     }
 }
 
@@ -202,24 +229,6 @@ async function getNutrientLabels(ids: number[]): Promise<Map<number, string>> {
     return nutrientLabels;
 }
 
-function calculateGuideObjectRect(coordinates: number[], width: number): [number, number, number, number] {
-    let maxX = coordinates[0];
-    let maxY = coordinates[1];
-    let minX = coordinates[0];
-    let minY = coordinates[1];
-
-    for (let i = 2; i < coordinates.length; i += 2) {
-        minX = Math.min(coordinates[i], minX);
-        maxX = Math.max(coordinates[i], maxX);
-        minY = Math.min(coordinates[i + 1], minY);
-        maxY = Math.max(coordinates[i + 1], maxY);
-    }
-
-    return [Math.round(minX * width),
-        Math.round(minY * width),
-        Math.round(maxX * width),
-        Math.round(maxY * width)];
-}
 
 function calculateNutrients(weight: number, nutrientIds: number[], databaseRecord: NutrientTableRecord): (number | undefined)[] {
     return nutrientIds.map(id => {
@@ -233,12 +242,12 @@ function calculateNutrients(weight: number, nutrientIds: number[], databaseRecor
     });
 }
 
-async function findPortionSizeImages(kcalValue: number, nutrientIds: number[], foodCodes?: string[]): Promise<PortionSizeImages[]> {
+async function findPortionSizeImages(config: Config, nutrientIds: number[]): Promise<PortionSizeImages[]> {
 
     const asServedHelper = new AsServedHelper();
     await asServedHelper.init();
 
-    const guideHelper = new GuideImageHelper();
+    const guideHelper = new GuideImageHelper(config.guideImageWidth);
     await guideHelper.init();
 
     const portionSizeImages: PortionSizeImages[] = [];
@@ -250,7 +259,7 @@ async function findPortionSizeImages(kcalValue: number, nutrientIds: number[], f
             {
                 include: [{
                     model: FoodLocal,
-                    where: { localeId: locale },
+                    where: { localeId: config.locale },
                     include: [{
                         model: PortionSizeMethod,
                         separate: true,
@@ -266,11 +275,11 @@ async function findPortionSizeImages(kcalValue: number, nutrientIds: number[], f
                             }]
                         }]
                 }],
-                where: foodCodes ? {
-                    code: foodCodes
+                where: config.foodFilter.length > 0 ? {
+                    code: config.foodFilter
                 } : undefined,
                 order: ['code'],
-                limit: batchSize,
+                limit: config.batchSize,
                 offset: offset
             });
 
@@ -308,7 +317,7 @@ async function findPortionSizeImages(kcalValue: number, nutrientIds: number[], f
 
                 for (let psm of local.portionSizeMethods) {
 
-                    const targetWeight = kcalValue * 100.0 / energyKcalRecord.unitsPer100g;
+                    const targetWeight = config.energyValueKcal * 100.0 / energyKcalRecord.unitsPer100g;
 
                     if (psm.method === 'as-served') {
                         const asServedSetId = psm.parameters?.find(p => p.name === 'serving-image-set')?.value;
@@ -317,6 +326,9 @@ async function findPortionSizeImages(kcalValue: number, nutrientIds: number[], f
                             console.log(`Portion size method ${psm.id} for ${local.foodCode} has no "serving-image-set" parameter`);
                             continue;
                         }
+
+                        if (config.portionSizeFilter.length > 0 && !config.portionSizeFilter.includes(asServedSetId))
+                            continue;
 
                         const asServedImageData = asServedHelper.findClosestPortionSize(asServedSetId, targetWeight / psm.conversionFactor);
 
@@ -335,6 +347,9 @@ async function findPortionSizeImages(kcalValue: number, nutrientIds: number[], f
                             console.log(`Portion size method ${psm.id} for ${local.foodCode} has no "guide-image-id" parameter`);
                             continue;
                         }
+
+                        if (config.portionSizeFilter.length > 0 && !config.portionSizeFilter.includes(guideImageId))
+                            continue;
 
                         const guideImageData = guideHelper.findClosestPortionSize(guideImageId, targetWeight / psm.conversionFactor);
 
@@ -373,29 +388,30 @@ async function findPortionSizeImages(kcalValue: number, nutrientIds: number[], f
     return portionSizeImages;
 }
 
-async function main() {
+async function main(config: Config, outputFilePath: string) {
     const db = new DB({ databaseConfig: databaseConfig, logger: logger, environment: 'development' });
+
     await db.init();
 
-    const nutrientTypeIds = [8, 9, 10, 11, 49, 13, 1, 2, 20, 15, 21, 22, 242, 23, 24, 25, 26,
-        28, 29, 27, 30, 243, 244, 245, 246, 247, 248, 249, 250, 50, 55, 56, 57, 58, 59,
-        114, 115, 116, 117, 119, 120, 122, 123, 124, 125, 126, 128, 129, 130, 132, 133,
-        134, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 151,
-        152, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265,
-        266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280];
+    const nutrientIds = (await LocalNutrientType.findAll({
+        where: {
+            localeId: config.locale
+        },
+        order: ['id']
+    })).map(r => r.nutrientTypeId);
 
-    const nutrientLabels = await getNutrientLabels(nutrientTypeIds);
+    const nutrientLabels = await getNutrientLabels(nutrientIds);
 
-    const portionSizeImages = await findPortionSizeImages(portionSizeKcal, nutrientTypeIds);
+    const portionSizeImages = await findPortionSizeImages(config, nutrientIds);
 
     const writer = createArrayCsvWriter({
-        path: `portionSizes-${locale}.csv`
+        path: outputFilePath
     });
 
     const header = ['Intake24 food code', 'Intake24 food name', 'Portion size method', 'As serving set/guide image ID', 'Weight (image), g', 'Weight (adjusted), g', 'As served image path',
         'Guide image path', 'Guide object id', 'Guide overlay path', 'Guide object area', 'FCT', 'FCT record id', 'FCT food name'];
 
-    for (let nutrientId of nutrientTypeIds)
+    for (let nutrientId of nutrientIds)
         header.push(nutrientLabels.get(nutrientId)!);
 
     await writer.writeRecords([header]);
@@ -457,6 +473,25 @@ async function main() {
     }
 }
 
-main().catch(err => {
-    throw err
-});
+const optionDefinitions = [
+    { name: 'output', alias: 'o', type: String },
+    { name: 'config', alias: 'c', type: String }
+]
+
+const options = commandLineArgs(optionDefinitions)
+
+if (!options.config) {
+    process.stderr.write('Configuration file argument (--config <path>, -c <path>) is required.');
+} else {
+    const fileContents = fs.readFileSync(options.config, { encoding: 'utf8' });
+    const config = validate(JSON.parse(fileContents));
+
+    const now = new Date();
+    const timeStamp = `${now.getDate().toString().padStart(2, '0')}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getFullYear()}`;
+    const outputFilePath = options.output || `${config.energyValueKcal}kcal-${config.locale}-${timeStamp}.csv`;
+
+
+    main(config, outputFilePath).catch(err => {
+        throw err
+    });
+}
