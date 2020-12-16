@@ -28,7 +28,7 @@ module.exports = {
     minimize: false,
   },
   externals: [nodeExternals({
-    additionalModuleDirs: ['../api-server/node_modules']
+    additionalModuleDirs: ['../../api-server/node_modules']
   })],
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],

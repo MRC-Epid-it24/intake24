@@ -13,7 +13,7 @@
   "scripts": {
     "development": "cross-env NODE_ENV=development webpack",
     "dev": "npm run development",
-    "find": "cross-env NODE_PATH=../api-server/node_modules node dist/findPortionSizes.js"
+    "find": "cross-env NODE_PATH=../../api-server/node_modules node dist/findPortionSizes.js"
   },
   "engines": {
     "node": ">=10.20.1"
