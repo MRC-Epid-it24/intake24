@@ -1,9 +1,10 @@
 import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
+import { NutrientType, SurveySubmissionFood } from '.';
 import BaseModel from '../model';
-import SurveySubmissionFood from './survey-submission-food';
 
 @Scopes(() => ({
   food: { include: [{ model: SurveySubmissionFood }] },
+  nutrientType: { include: [{ model: NutrientType }] },
 }))
 @Table({
   modelName: 'SurveySubmissionNutrient',
@@ -36,4 +37,7 @@ export default class SurveySubmissionNutrient extends BaseModel<SurveySubmission
 
   @BelongsTo(() => SurveySubmissionFood, 'foodId')
   public food?: SurveySubmissionFood;
+
+  @BelongsTo(() => NutrientType, 'nutrientTypeId')
+  public nutrientType?: NutrientType;
 }
