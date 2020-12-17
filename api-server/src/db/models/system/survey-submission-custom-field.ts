@@ -1,6 +1,6 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import SurveySubmission from './survey-submission';
+import { SurveySubmission } from '.';
 
 @Scopes(() => ({
   submission: { include: [{ model: SurveySubmission }] },

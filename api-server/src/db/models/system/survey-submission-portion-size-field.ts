@@ -1,6 +1,6 @@
 import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import SurveySubmissionFood from './survey-submission-food';
+import { SurveySubmissionFood } from '.';
 
 @Scopes(() => ({
   food: { include: [{ model: SurveySubmissionFood }] },
@@ -12,9 +12,7 @@ import SurveySubmissionFood from './survey-submission-food';
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionPortionSizeField extends BaseModel<
-  SurveySubmissionPortionSizeField
-> {
+export default class SurveySubmissionPortionSizeField extends BaseModel<SurveySubmissionPortionSizeField> {
   @Column({
     autoIncrement: true,
     primaryKey: true,

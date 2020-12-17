@@ -1,9 +1,11 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import SurveySubmission from './survey-submission';
-import SurveySubmissionFood from './survey-submission-food';
-import SurveySubmissionMealCustomField from './survey-submission-food-custom-field';
-import SurveySubmissionMissingFood from './survey-submission-missing-food';
+import {
+  SurveySubmission,
+  SurveySubmissionFood,
+  SurveySubmissionMealCustomField,
+  SurveySubmissionMissingFood,
+} from '.';
 
 @Scopes(() => ({
   submission: { include: [{ model: SurveySubmission }] },
