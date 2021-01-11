@@ -19,7 +19,7 @@ import {
   RefreshToken,
   Role,
   RoleUser,
-  SigninLog,
+  SignInLog,
   SurveySubmission,
   UserPassword,
   UserPasswordReset,
@@ -40,7 +40,7 @@ import {
       },
     ],
   },
-  signinLog: { include: [{ model: SigninLog }] },
+  signInLog: { include: [{ model: SignInLog }] },
   aliases: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
   tokens: { include: [{ model: RefreshToken }] },
@@ -119,8 +119,8 @@ export default class User extends BaseModel<User> implements UserAttributes {
   @HasMany(() => RefreshToken)
   public tokens?: RefreshToken[];
 
-  @HasMany(() => SigninLog, 'userId')
-  public signinLog?: SigninLog[];
+  @HasMany(() => SignInLog, 'userId')
+  public signInLog?: SignInLog[];
 
   @HasMany(() => SurveySubmission, 'userId')
   public submissions?: SurveySubmission[];

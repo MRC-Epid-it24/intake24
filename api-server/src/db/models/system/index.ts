@@ -15,7 +15,7 @@ export { default as PermissionUser } from './permission-user';
 export { default as RefreshToken } from './refresh-token';
 export { default as Role } from './role';
 export { default as RoleUser } from './role-user';
-export { default as SigninLog } from './signin-log';
+export { default as SignInLog } from './sign-in-log';
 export { default as Scheme } from './scheme';
 export { default as Survey } from './survey';
 export { default as SurveySubmission } from './survey-submission';

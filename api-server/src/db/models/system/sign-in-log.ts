@@ -12,7 +12,7 @@ import { User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SigninLog extends BaseModel<SigninLog> {
+export default class SignInLog extends BaseModel<SignInLog> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -21,12 +21,15 @@ export default class SigninLog extends BaseModel<SigninLog> {
 
   @Column({
     allowNull: false,
-    defaultValue: new Date(),
+    defaultValue: () => new Date(),
   })
   public date!: Date;
 
-  @Column
-  public remoteAddress!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public remoteAddress!: string | null;
 
   @Column({
     allowNull: false,
@@ -43,16 +46,22 @@ export default class SigninLog extends BaseModel<SigninLog> {
   })
   public successful!: boolean;
 
-  @Column
-  public userId!: number;
+  @Column({
+    allowNull: true,
+    type: DataType.BIGINT,
+  })
+  public userId!: number | null;
 
   @Column({
     type: DataType.TEXT,
   })
-  public message!: boolean;
+  public message!: string | null;
 
-  @Column
-  public userAgent!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public userAgent!: string | null;
 
   @BelongsTo(() => User, 'userId')
   public user?: User;
