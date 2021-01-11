@@ -40,7 +40,7 @@ export type NutrientUnit = {
 export type Job = {
   id: number;
   type: string;
-  userId: number;
+  userId: number | null;
   startedAt: Date;
   completedAt: Date;
   downloadUrl: string;

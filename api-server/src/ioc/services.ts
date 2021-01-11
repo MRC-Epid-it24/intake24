@@ -6,6 +6,7 @@ import signInService from '@/services/auth/sign-in.service';
 
 import portionSizeService from '@/services/foods/portion-size.service';
 import surveyService from '@/services/survey.service';
+import dataExportService from '@/services/data-export/data-export.service';
 import userService from '@/services/user.service';
 
 import filesystem from '@/services/filesystem';
@@ -25,6 +26,7 @@ export default (container: AwilixContainer): void => {
 
     portionSizeService: asFunction(portionSizeService).singleton(),
     surveyService: asFunction(surveyService).singleton(),
+    dataExportService: asFunction(dataExportService).singleton(),
     userService: asFunction(userService).singleton(),
 
     filesystem: asClass(filesystem).singleton(),

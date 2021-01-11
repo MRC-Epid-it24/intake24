@@ -8,12 +8,12 @@ import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { Job as BaseJob, JobData, JobType } from './job';
 
-export type ExportSurveyRespondentAuthUrlsData = {
+export type SurveyExportRespondentAuthUrlsData = {
   surveyId: string;
 };
 
-export default class ExportSurveyRespondentAuthUrls implements BaseJob {
-  public readonly name: JobType = 'ExportSurveyRespondentAuthUrls';
+export default class SurveyExportRespondentAuthUrls implements BaseJob {
+  public readonly name: JobType = 'SurveyExportRespondentAuthUrls';
 
   private readonly config;
 
@@ -21,7 +21,7 @@ export default class ExportSurveyRespondentAuthUrls implements BaseJob {
 
   private jobId!: number;
 
-  private data!: ExportSurveyRespondentAuthUrlsData;
+  private data!: SurveyExportRespondentAuthUrlsData;
 
   constructor({ config, logger }: IoC) {
     this.config = config;
@@ -31,9 +31,11 @@ export default class ExportSurveyRespondentAuthUrls implements BaseJob {
   /**
    * Run the job
    *
-   * @return Promise<void>
+   * @param {JobData<SurveyExportRespondentAuthUrlsData>} jobData
+   * @returns {Promise<void>}
+   * @memberof SurveyExportRespondentAuthUrls
    */
-  public async run({ job, data }: JobData<ExportSurveyRespondentAuthUrlsData>): Promise<void> {
+  public async run({ job, data }: JobData<SurveyExportRespondentAuthUrlsData>): Promise<void> {
     this.data = data;
     this.jobId = job.id;
 
@@ -73,8 +75,7 @@ export default class ExportSurveyRespondentAuthUrls implements BaseJob {
     const filename = `intake24-${surveyId}-auth-urls-${timestamp}.csv`;
 
     return new Promise((resolve, reject) => {
-      const opts = { fields, withBOM: true };
-      const transform = new Transform(opts);
+      const transform = new Transform({ fields, withBOM: true });
       const output = fs.createWriteStream(
         path.resolve(this.config.filesystem.local.downloads, filename),
         { encoding: 'utf8', flags: 'w+' }

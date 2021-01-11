@@ -17,6 +17,7 @@ import type {
   ProfileController,
   SchemeController,
   AdminSurveyController,
+  AdminSurveyDataExportController,
   AdminSurveyRespondentController,
   AdminSurveyMgmtController,
   TaskController,
@@ -31,6 +32,7 @@ import type { JwtRotationService } from '@/services/auth/jwt-rotation.service';
 import type { SignInService } from '@/services/auth/sign-in.service';
 
 import type { PortionSizeService } from '@/services/foods/portion-size.service';
+import type { DataExportService } from '@/services/data-export/data-export.service';
 import type { SurveyService } from '@/services/survey.service';
 import type { UserService } from '@/services/user.service';
 
@@ -77,6 +79,7 @@ export interface IoC extends Jobs {
   localeController: LocaleController;
   schemeController: SchemeController;
   adminSurveyController: AdminSurveyController;
+  adminSurveyDataExportController: AdminSurveyDataExportController;
   adminSurveyRespondentController: AdminSurveyRespondentController;
   adminSurveyMgmtController: AdminSurveyMgmtController;
 
@@ -96,6 +99,7 @@ export interface IoC extends Jobs {
 
   portionSizeService: PortionSizeService;
   surveyService: SurveyService;
+  dataExportService: DataExportService;
   userService: UserService;
 
   // Queues

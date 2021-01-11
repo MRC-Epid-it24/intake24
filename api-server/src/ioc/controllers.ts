@@ -18,7 +18,9 @@ export default (container: AwilixContainer): void => {
     languageController: asFunction(controllers.admin.language),
     localeController: asFunction(controllers.admin.locale),
     schemeController: asFunction(controllers.admin.scheme),
+
     adminSurveyController: asFunction(controllers.admin.survey),
+    adminSurveyDataExportController: asFunction(controllers.admin.surveyDataExport),
     adminSurveyRespondentController: asFunction(controllers.admin.surveyRespondent),
     adminSurveyMgmtController: asFunction(controllers.admin.surveyMgmt),
 

@@ -175,7 +175,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   public async addJob(
-    input: { type: JobType; userId: number },
+    input: { type: JobType; userId?: number | null },
     data = {},
     options: JobsOptions = {}
   ): Promise<DbJob> {

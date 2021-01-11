@@ -14,7 +14,8 @@ export interface JobConstructor {
 export type JobType =
   | 'PurgeRefreshTokens'
   | 'SendPasswordReset'
-  | 'ExportSurveyRespondentAuthUrls'
-  | 'ImportSurveyRespondents';
+  | 'SurveyDataExport'
+  | 'SurveyExportRespondentAuthUrls'
+  | 'SurveyImportRespondents';
 
 export type Jobs = Record<JobType, JobConstructor>;

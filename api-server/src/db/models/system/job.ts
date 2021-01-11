@@ -25,10 +25,11 @@ export default class Job extends BaseModel<Job> implements JobAttributes {
   public type!: JobType;
 
   @Column({
-    primaryKey: true,
+    allowNull: true,
+    type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
-  public userId!: number;
+  public userId!: number | null;
 
   @Column({
     allowNull: true,

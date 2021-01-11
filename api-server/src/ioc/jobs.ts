@@ -1,14 +1,16 @@
 import { asClass, AwilixContainer } from 'awilix';
 import PurgeRefreshTokens from '@/jobs/purge-refresh-tokens';
 import SendPasswordReset from '@/jobs/send-password-reset';
-import ExportSurveyRespondentAuthUrls from '@/jobs/export-survey-respondent-auth-urls';
-import ImportSurveyRespondents from '@/jobs/import-survey-respondents';
+import SurveyDataExport from '@/jobs/survey-data-export';
+import SurveyExportRespondentAuthUrls from '@/jobs/survey-export-respondent-auth-urls';
+import SurveyImportRespondents from '@/jobs/survey-import-respondents';
 
 export default (container: AwilixContainer): void => {
   container.register({
     PurgeRefreshTokens: asClass(PurgeRefreshTokens),
     SendPasswordReset: asClass(SendPasswordReset),
-    ExportSurveyRespondentAuthUrls: asClass(ExportSurveyRespondentAuthUrls),
-    ImportSurveyRespondents: asClass(ImportSurveyRespondents),
+    SurveyDataExport: asClass(SurveyDataExport),
+    SurveyExportRespondentAuthUrls: asClass(SurveyExportRespondentAuthUrls),
+    SurveyImportRespondents: asClass(SurveyImportRespondents),
   });
 };

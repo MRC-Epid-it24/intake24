@@ -3,8 +3,9 @@ import { permission, canManageSurvey } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/surveys';
 import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
-import mgmt from './survey-mgmt';
-import respondents from './survey-respondents';
+import surveyDataExport from './survey-data-export';
+import surveyMgmt from './survey-mgmt';
+import surveyRespondents from './survey-respondents';
 
 const { adminSurveyController } = ioc.cradle;
 const router = Router();
@@ -38,7 +39,8 @@ router.get(
   wrapAsync(adminSurveyController.edit)
 );
 
-router.use('/:surveyId/mgmt', mgmt);
-router.use('/:surveyId/respondents', respondents);
+router.use('/:surveyId/data-export', surveyDataExport);
+router.use('/:surveyId/mgmt', surveyMgmt);
+router.use('/:surveyId/respondents', surveyRespondents);
 
 export default router;

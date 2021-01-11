@@ -3,6 +3,7 @@ import language from './language.controller';
 import locale from './locale.controller';
 import profile from './profile.controller';
 import scheme from './scheme.controller';
+import surveyDataExport from './survey-data-export.controller';
 import surveyMgmt from './survey-mgmt.controller';
 import surveyRespondent from './survey-respondent.controller';
 import survey from './survey.controller';
@@ -17,6 +18,7 @@ export * from './language.controller';
 export * from './locale.controller';
 export * from './profile.controller';
 export * from './scheme.controller';
+export * from './survey-data-export.controller';
 export * from './survey-mgmt.controller';
 export * from './survey-respondent.controller';
 export * from './survey.controller';
@@ -34,6 +36,7 @@ export default {
   profile,
   role,
   scheme,
+  surveyDataExport,
   surveyMgmt,
   surveyRespondent,
   survey,
