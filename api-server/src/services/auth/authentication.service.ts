@@ -4,23 +4,68 @@ import { UnauthorizedError } from '@/http/errors';
 import { btoa } from '@/util';
 import { supportedAlgorithms } from '@/util/passwords';
 import type { IoC } from '@/ioc';
-import { SignPayload, Subject, Tokens } from './jwt.service';
+import type { SignPayload, Subject, Tokens } from '.';
+
+export type EmailLoginCredentials = {
+  email: string;
+  password: string;
+};
+
+export type AliasLoginCredentials = {
+  userName: string;
+  password: string;
+  surveyId: string;
+};
+
+export type TokenLoginCredentials = {
+  token: string;
+};
+
+export type MFALoginCredentials = {
+  email: string;
+  userId: number;
+};
+
+export type LoginCredentials = {
+  user: User | null;
+  password: string;
+  subject: Subject;
+};
+
+export type LoginMeta = {
+  remoteAddress?: string;
+  userAgent?: string;
+};
+
+export interface SignInAttempt extends LoginMeta, Subject {
+  userId?: number;
+  successful: boolean;
+  message?: string;
+}
 
 export type MfaRequest = { mfa: { request: string; host: string } };
 
 export interface AuthenticationService {
   issueTokens: (userId: number, subject: Subject | string) => Promise<Tokens>;
   verifyPassword: (password: string, user: User) => Promise<boolean>;
-  signMfaRequest: (email: string) => Promise<MfaRequest>;
-  login: (user: User | null, password: string, subject: Subject) => Promise<Tokens>;
-  emailLogin: (email: string, password: string) => Promise<Tokens | MfaRequest>;
-  aliasLogin: (userName: string, password: string, surveyId: string) => Promise<Tokens>;
-  tokenLogin: (token: string) => Promise<Tokens>;
+  signMfaRequest: (credentials: MFALoginCredentials, meta: LoginMeta) => Promise<MfaRequest>;
+  login: (credentials: LoginCredentials, meta: LoginMeta) => Promise<Tokens>;
+  emailLogin: (credentials: EmailLoginCredentials, meta: LoginMeta) => Promise<Tokens | MfaRequest>;
+  aliasLogin: (credentials: AliasLoginCredentials, meta: LoginMeta) => Promise<Tokens>;
+  tokenLogin: (credentials: TokenLoginCredentials, meta: LoginMeta) => Promise<Tokens>;
   verifyMfa: (sigResponse: string) => Promise<Tokens>;
   refresh: (token: string) => Promise<Tokens>;
 }
 
-export default ({ config, logger, jwtService, jwtRotationService }: IoC): AuthenticationService => {
+export default ({
+  config,
+  logger,
+  jwtService,
+  jwtRotationService,
+  signInService,
+}: IoC): AuthenticationService => {
+  const { mfa: mfaConfig } = config.security;
+
   /**
    * Issue JWT tokens and log for rotation
    *
@@ -68,16 +113,28 @@ export default ({ config, logger, jwtService, jwtRotationService }: IoC): Authen
   };
 
   /**
-   * Sign MFA request
+   * Sign Multi-factor authentication request
    *
-   * @param {string} email
+   * @param {MFALoginCredentials} credentials
    * @returns {Promise<MfaRequest>}
    */
-  const signMfaRequest = async (email: string): Promise<MfaRequest> => {
-    const { provider } = config.security.mfa;
-    const { ikey, skey, akey, host } = config.security.mfa.providers[provider];
+  const signMfaRequest = async (
+    credentials: MFALoginCredentials,
+    meta: LoginMeta
+  ): Promise<MfaRequest> => {
+    const { provider } = mfaConfig;
+    const { ikey, skey, akey, host } = mfaConfig.providers[provider];
+    const { email, userId } = credentials;
 
     const request = duo.sign_request(ikey, skey, akey, email);
+
+    await signInService.log({
+      ...meta,
+      provider,
+      providerKey: email,
+      userId,
+      successful: true,
+    });
 
     return { mfa: { request, host } };
   };
@@ -90,9 +147,27 @@ export default ({ config, logger, jwtService, jwtRotationService }: IoC): Authen
    * @param {Subject} subject
    * @returns {Promise<Tokens>}
    */
-  const login = async (user: User | null, password: string, subject: Subject): Promise<Tokens> => {
-    if (!user || (subject.providerID !== 'URLToken' && !(await verifyPassword(password, user))))
+  const login = async (credentials: LoginCredentials, meta: LoginMeta): Promise<Tokens> => {
+    const { user, password, subject } = credentials;
+
+    const signInLog: SignInAttempt = { ...meta, ...subject, userId: user?.id, successful: false };
+
+    if (!user) {
+      await signInService.log({
+        ...signInLog,
+        message: 'Credentials not found in database.',
+      });
+
       throw new UnauthorizedError(`Provided credentials do not match our records.`);
+    }
+
+    if (subject.provider !== 'URLToken' && !(await verifyPassword(password, user))) {
+      await signInService.log({ ...signInLog, message: 'Credentials do not match.' });
+
+      throw new UnauthorizedError(`Provided credentials do not match our records.`);
+    }
+
+    await signInService.log({ ...signInLog, successful: true });
 
     return issueTokens(user.id, subject);
   };
@@ -104,32 +179,39 @@ export default ({ config, logger, jwtService, jwtRotationService }: IoC): Authen
    * @param {string} password
    * @returns {Promise<Tokens>}
    */
-  const emailLogin = async (email: string, password: string): Promise<Tokens | MfaRequest> => {
-    const user = await User.scope('password').findOne({ where: { email } });
+  const emailLogin = async (
+    credentials: EmailLoginCredentials,
+    meta: LoginMeta
+  ): Promise<Tokens | MfaRequest> => {
+    const { email, password } = credentials;
+
+    const user = await User.findOne({
+      where: { email },
+      include: [{ model: UserPassword, required: true }],
+    });
 
     if (config.security.mfa.enabled && user?.multiFactorAuthentication) {
-      return signMfaRequest(email);
+      return signMfaRequest({ email, userId: user.id }, meta);
     }
 
-    const subject: Subject = { providerID: 'email', providerKey: email };
+    const subject: Subject = { provider: 'email', providerKey: email };
 
-    return login(user, password, subject);
+    return login({ user, password, subject }, meta);
   };
 
   /**
    * Survey alias login to respondent applications
    *
-   * @param {string} userName
-   * @param {string} password
-   * @param {string} surveyId
+   * @param {AliasLoginCredentials} credentials
    * @returns {Promise<Tokens>}
    */
   const aliasLogin = async (
-    userName: string,
-    password: string,
-    surveyId: string
+    credentials: AliasLoginCredentials,
+    meta: LoginMeta
   ): Promise<Tokens> => {
-    const user = await User.scope('password').findOne({
+    const { userName, password, surveyId } = credentials;
+
+    const user = await User.findOne({
       include: [
         {
           model: Permission,
@@ -143,19 +225,19 @@ export default ({ config, logger, jwtService, jwtRotationService }: IoC): Authen
       ],
     });
 
-    const subject: Subject = { providerID: 'surveyAlias', providerKey: `${surveyId}#${userName}` };
+    const subject: Subject = { provider: 'surveyAlias', providerKey: `${surveyId}#${userName}` };
 
-    return login(user, password, subject);
+    return login({ user, password, subject }, meta);
   };
 
   /**
    * URL-embedded token login to respondent applications
    *
-   * @param {string} token
+   * @param {TokenLoginCredentials} credentials
    * @returns {Promise<Tokens>}
    */
-  const tokenLogin = async (token: string): Promise<Tokens> => {
-    const user = await User.scope('roles').findOne({
+  const tokenLogin = async ({ token }: TokenLoginCredentials, meta: LoginMeta): Promise<Tokens> => {
+    const user = await User.findOne({
       include: [
         {
           model: UserSurveyAlias,
@@ -165,9 +247,9 @@ export default ({ config, logger, jwtService, jwtRotationService }: IoC): Authen
       ],
     });
 
-    const subject: Subject = { providerID: 'URLToken', providerKey: token };
+    const subject: Subject = { provider: 'URLToken', providerKey: token };
 
-    return login(user, '', subject);
+    return login({ user, password: '', subject }, meta);
   };
 
   /**
@@ -177,8 +259,8 @@ export default ({ config, logger, jwtService, jwtRotationService }: IoC): Authen
    * @returns {Promise<Tokens>}
    */
   const verifyMfa = async (sigResponse: string): Promise<Tokens> => {
-    const { provider } = config.security.mfa;
-    const { ikey, skey, akey } = config.security.mfa.providers[provider];
+    const { provider } = mfaConfig;
+    const { ikey, skey, akey } = mfaConfig.providers[provider];
 
     const email = duo.verify_response(ikey, skey, akey, sigResponse);
     if (!email) throw new UnauthorizedError();
@@ -186,7 +268,7 @@ export default ({ config, logger, jwtService, jwtRotationService }: IoC): Authen
     const user = await User.findOne({ where: { email } });
     if (!user) throw new UnauthorizedError();
 
-    const subject: Subject = { providerID: 'email', providerKey: email };
+    const subject: Subject = { provider: 'email', providerKey: email };
 
     return issueTokens(user.id, subject);
   };

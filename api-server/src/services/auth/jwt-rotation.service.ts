@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { Op } from 'sequelize';
 import { RefreshToken } from '@/db/models/system';
 import type { IoC } from '@/ioc';
-import type { TokenPayload } from './jwt.service';
+import type { TokenPayload } from '.';
 
 export const decode = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;
 

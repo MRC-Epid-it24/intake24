@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import ms from 'ms';
 import { UnauthorizedError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import type { Tokens } from '@/services/auth/jwt.service';
+import type { Tokens, LoginMeta } from '@/services/auth';
 import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http';
 import { Controller } from './controller';
 
@@ -46,8 +46,9 @@ export default ({
     res: Response<LoginResponse | MfaResponse>
   ): Promise<void> => {
     const { email, password } = req.body;
+    const meta: LoginMeta = { remoteAddress: req.ip, userAgent: req.headers['user-agent'] };
 
-    const result = await authenticationService.emailLogin(email, password);
+    const result = await authenticationService.emailLogin({ email, password }, meta);
     if ('mfa' in result) {
       res.json(result);
       return;
@@ -58,17 +59,20 @@ export default ({
 
   const aliasLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
     const { userName, password, surveyId } = req.body;
+    const meta: LoginMeta = { remoteAddress: req.ip, userAgent: req.headers['user-agent'] };
 
-    const tokens = await authenticationService.aliasLogin(userName, password, surveyId);
+    const tokens = await authenticationService.aliasLogin({ userName, password, surveyId }, meta);
 
     await sendTokenResponse(tokens, res);
   };
 
   const tokenLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
     const { token } = req.body;
+    const meta: LoginMeta = { remoteAddress: req.ip, userAgent: req.headers['user-agent'] };
+
     if (!token) throw new UnauthorizedError();
 
-    const tokens = await authenticationService.tokenLogin(token);
+    const tokens = await authenticationService.tokenLogin({ token }, meta);
 
     await sendTokenResponse(tokens, res);
   };
