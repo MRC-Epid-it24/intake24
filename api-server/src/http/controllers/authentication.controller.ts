@@ -79,9 +79,11 @@ export default ({
 
   const verify = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
     const { sigResponse } = req.body;
+    const meta: LoginMeta = { remoteAddress: req.ip, userAgent: req.headers['user-agent'] };
+
     if (!sigResponse) throw new UnauthorizedError();
 
-    const tokens = await authenticationService.verifyMfa(sigResponse);
+    const tokens = await authenticationService.verifyMfa({ sigResponse }, meta);
     await sendTokenResponse(tokens, res);
   };
 

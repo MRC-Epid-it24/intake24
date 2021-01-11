@@ -26,6 +26,10 @@ export type MFALoginCredentials = {
   userId: number;
 };
 
+export type MFAVerifyCredentials = {
+  sigResponse: string;
+};
+
 export type LoginCredentials = {
   user: User | null;
   password: string;
@@ -53,7 +57,7 @@ export interface AuthenticationService {
   emailLogin: (credentials: EmailLoginCredentials, meta: LoginMeta) => Promise<Tokens | MfaRequest>;
   aliasLogin: (credentials: AliasLoginCredentials, meta: LoginMeta) => Promise<Tokens>;
   tokenLogin: (credentials: TokenLoginCredentials, meta: LoginMeta) => Promise<Tokens>;
-  verifyMfa: (sigResponse: string) => Promise<Tokens>;
+  verifyMfa: (credentials: MFAVerifyCredentials, meta: LoginMeta) => Promise<Tokens>;
   refresh: (token: string) => Promise<Tokens>;
 }
 
@@ -95,25 +99,19 @@ export default ({
    * @returns {Promise<boolean>}
    */
   const verifyPassword = async (password: string, user: User): Promise<boolean> => {
-    if (user.password) {
-      const { passwordHasher } = user.password;
-      const algorithm = supportedAlgorithms.find((a) => a.id === passwordHasher);
+    const { password: dbPassword } = user;
+    if (!dbPassword) throw new Error('Password login not enabled for this user.');
 
-      if (algorithm) {
-        return algorithm.verify(password, {
-          salt: user.password.passwordSalt,
-          hash: user.password.passwordHash,
-        });
-      }
-      return Promise.reject(
-        new Error(`Password algorithm '${user.password.passwordHasher}' not supported.`)
-      );
-    }
-    return Promise.reject(new Error('Password login not enabled for this user.'));
+    const { passwordHasher, passwordSalt, passwordHash } = dbPassword;
+
+    const algorithm = supportedAlgorithms.find((a) => a.id === passwordHasher);
+    if (!algorithm) throw new Error(`Password algorithm '${passwordHasher}' not supported.`);
+
+    return algorithm.verify(password, { salt: passwordSalt, hash: passwordHash });
   };
 
   /**
-   * Sign Multi-factor authentication request
+   * Sign multi-factor authentication request
    *
    * @param {MFALoginCredentials} credentials
    * @returns {Promise<MfaRequest>}
@@ -130,7 +128,7 @@ export default ({
 
     await signInService.log({
       ...meta,
-      provider,
+      provider: 'email',
       providerKey: email,
       userId,
       successful: true,
@@ -255,18 +253,41 @@ export default ({
   /**
    * Verify multi-factor authentication response
    *
-   * @param {string} sigResponse
+   * @param {MFAVerifyCredentials} credentials
+   * @param {LoginMeta} meta
    * @returns {Promise<Tokens>}
    */
-  const verifyMfa = async (sigResponse: string): Promise<Tokens> => {
+  const verifyMfa = async (
+    { sigResponse }: MFAVerifyCredentials,
+    meta: LoginMeta
+  ): Promise<Tokens> => {
     const { provider } = mfaConfig;
     const { ikey, skey, akey } = mfaConfig.providers[provider];
 
+    const signInAttempt: SignInAttempt = {
+      ...meta,
+      provider,
+      providerKey: sigResponse,
+      successful: false,
+    };
+
     const email = duo.verify_response(ikey, skey, akey, sigResponse);
-    if (!email) throw new UnauthorizedError();
+    if (!email) {
+      await signInService.log(signInAttempt);
+      throw new UnauthorizedError();
+    }
 
     const user = await User.findOne({ where: { email } });
-    if (!user) throw new UnauthorizedError();
+    if (!user) {
+      await signInService.log({
+        ...signInAttempt,
+        providerKey: email,
+        message: 'Credentials not found in database.',
+      });
+      throw new UnauthorizedError();
+    }
+
+    signInService.log({ ...signInAttempt, providerKey: email, userId: user.id, successful: true });
 
     const subject: Subject = { provider: 'email', providerKey: email };
 
