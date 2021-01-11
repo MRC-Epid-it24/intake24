@@ -28,6 +28,7 @@ import type {
 import type { AuthenticationService } from '@/services/auth/authentication.service';
 import type { JwtService } from '@/services/auth/jwt.service';
 import type { JwtRotationService } from '@/services/auth/jwt-rotation.service';
+import type { SignInService } from '@/services/auth/sign-in.service';
 
 import type { PortionSizeService } from '@/services/foods/portion-size.service';
 import type { SurveyService } from '@/services/survey.service';
@@ -91,6 +92,7 @@ export interface IoC extends Jobs {
   authenticationService: AuthenticationService;
   jwtService: JwtService;
   jwtRotationService: JwtRotationService;
+  signInService: SignInService;
 
   portionSizeService: PortionSizeService;
   surveyService: SurveyService;

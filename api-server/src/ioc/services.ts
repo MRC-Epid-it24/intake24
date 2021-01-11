@@ -2,6 +2,7 @@ import { asClass, asFunction, asValue, AwilixContainer } from 'awilix';
 import authenticationService from '@/services/auth/authentication.service';
 import jwtService from '@/services/auth/jwt.service';
 import jwtRotationService from '@/services/auth/jwt-rotation.service';
+import signInService from '@/services/auth/sign-in.service';
 
 import portionSizeService from '@/services/foods/portion-size.service';
 import surveyService from '@/services/survey.service';
@@ -20,6 +21,7 @@ export default (container: AwilixContainer): void => {
     authenticationService: asFunction(authenticationService).singleton(),
     jwtService: asFunction(jwtService).singleton(),
     jwtRotationService: asFunction(jwtRotationService).singleton(),
+    signInService: asFunction(signInService).singleton(),
 
     portionSizeService: asFunction(portionSizeService).singleton(),
     surveyService: asFunction(surveyService).singleton(),
