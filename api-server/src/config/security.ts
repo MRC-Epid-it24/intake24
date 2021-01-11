@@ -48,6 +48,10 @@ export type PasswordsConfig = {
   throttle: number;
 };
 
+export type SignInLogConfig = {
+  enabled: boolean;
+};
+
 export interface SecurityConfig {
   cors: {
     origin: boolean | string | string[];
@@ -56,6 +60,7 @@ export interface SecurityConfig {
   mfa: MultiFactorAuthentication;
   recaptcha: RecaptchaConfig;
   passwords: PasswordsConfig;
+  signInLog: SignInLogConfig;
 }
 
 const securityConfig: SecurityConfig = {
@@ -100,6 +105,9 @@ const securityConfig: SecurityConfig = {
   passwords: {
     expire: 60,
     throttle: 60,
+  },
+  signInLog: {
+    enabled: true,
   },
 };
 

@@ -6,11 +6,13 @@ export interface SignInService {
   log: (input: SignInAttempt) => Promise<void>;
 }
 
-export default ({ logger }: IoC): SignInService => {
+export default ({ config, logger }: IoC): SignInService => {
   const log = async (input: SignInAttempt): Promise<void> => {
     logger.debug(
       `SignInService: Login attempt, Provider: ${input.provider}, ProviderKey: ${input.providerKey}`
     );
+
+    if (!config.security.signInLog.enabled) return;
 
     await SignInLog.create(input);
   };

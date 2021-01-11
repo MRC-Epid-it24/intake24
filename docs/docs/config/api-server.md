@@ -578,3 +578,15 @@ Rate limit setting for password request. It allows 1 request per `throttle` valu
 * object-path: `passwords.throttle`
 * type: `number`
 * default: `60`
+
+## Sign-in logging
+
+Settings for sign-in logging.
+
+### Enabled
+
+Enable/disable database logging of sign-in attempts.
+
+* object-path: `signInLog.enabled`
+* type: `boolean`
+* default: `true`
