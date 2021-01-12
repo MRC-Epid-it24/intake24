@@ -3,8 +3,9 @@ import path from 'path';
 import { Transform } from 'json2csv';
 import { Job, SurveySubmissionFood } from '@/db/models/system';
 import type { IoC } from '@/ioc';
-import type { DataExportInput } from '@/services/data-export';
 import { NotFoundError } from '@/http/errors';
+import type { DataExportInput } from '@/services/data-export';
+import { getUrlExpireDate } from '@/util';
 import { Job as BaseJob, JobData, JobType } from './job';
 
 export type SurveyDataExportData = DataExportInput;
@@ -64,10 +65,7 @@ export default class SurveyDataExport implements BaseJob {
       transform
         .on('error', (err) => reject(err))
         .on('end', async () => {
-          // TODO: make it configurable
-          const downloadUrlExpiresAt = new Date();
-          downloadUrlExpiresAt.setDate(downloadUrlExpiresAt.getDate() + 1);
-
+          const downloadUrlExpiresAt = getUrlExpireDate(this.config.filesystem.urlExpiresAt);
           await job.update({ downloadUrl: filename, downloadUrlExpiresAt });
           resolve();
         });
