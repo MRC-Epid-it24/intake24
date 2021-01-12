@@ -69,6 +69,7 @@ export default class Job extends BaseModel<Job> implements JobAttributes {
 
   @Column({
     allowNull: true,
+    type: DataType.TEXT({ length: 'long' }),
   })
   public stackTrace!: string;
 
