@@ -120,6 +120,17 @@ export type Survey = {
   minimumSubmissionInterval: number;
 };
 
+export type SurveySubmission = {
+  id: string;
+  surveyId: string;
+  userId: number;
+  startTime: Date;
+  endTime: Date;
+  submissionTime: Date;
+  log: string[] | null;
+  uxSessionId: string;
+};
+
 export type Task = {
   id: number;
   name: string;
