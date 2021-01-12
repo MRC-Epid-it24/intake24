@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const users: LocaleMessage = {
+const users: LocaleMessageObject = {
   _: 'User',
   index: 'Users',
   all: 'All users',

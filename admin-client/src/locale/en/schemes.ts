@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const schemes: LocaleMessage = {
+const schemes: LocaleMessageObject = {
   _: 'Scheme',
   id: 'Scheme ID',
   index: 'Schemes',
@@ -28,6 +28,9 @@ const schemes: LocaleMessage = {
       required: 'Meal name must be filled in.',
       unique: 'Meal name already exists in current list.',
     },
+  },
+  'data-export': {
+    edit: 'Edit fields',
   },
   questions: {
     title: 'Scheme questions',

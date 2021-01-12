@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const tasks: LocaleMessage = {
+const tasks: LocaleMessageObject = {
   _: 'Task',
   index: 'Tasks',
   show: 'Task detail',

@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const languages: LocaleMessage = {
+const languages: LocaleMessageObject = {
   _: 'Languages',
   id: 'Language ID',
   index: 'Languages',

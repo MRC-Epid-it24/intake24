@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const surveys: LocaleMessage = {
+const surveys: LocaleMessageObject = {
   _: 'Survey',
   id: 'Survey ID',
   index: 'Surveys',
@@ -39,9 +39,18 @@ const surveys: LocaleMessage = {
     enabled: 'Feedback Enabled',
     numberOfSubmissions: 'Number of submissions for feedback',
   },
-
+  'data-export': {
+    _: 'Data export',
+  },
+  mgmt: {
+    _: 'Management',
+    title: 'Survey management',
+    add: 'New staff/support',
+    edit: 'Edit staff',
+  },
   respondents: {
-    _: 'Survey respondents',
+    _: 'Respondents',
+    title: 'Survey respondents',
     add: 'New respondent',
     edit: 'Edit respondent',
     upload: {
@@ -57,10 +66,14 @@ const surveys: LocaleMessage = {
       download: 'Download',
     },
   },
-  mgmt: {
-    _: 'Survey management',
-    add: 'New staff/support',
-    edit: 'Edit staff',
+  submissions: {
+    _: 'Submissions',
+    title: 'Survey submissions',
+    id: 'Submission ID',
+    userId: 'User ID',
+    startTime: 'Start Time',
+    endTime: 'End Time',
+    submissionTime: 'Submission Time',
   },
 };
 

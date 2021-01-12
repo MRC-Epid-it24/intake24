@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const common: LocaleMessage = {
+const common: LocaleMessageObject = {
   _: 'Intake24 Admin Tool',
   dashboard: 'Dashboard',
   register: 'Registration',
@@ -58,10 +58,8 @@ const common: LocaleMessage = {
     print: 'Print',
     questions: 'Questions',
     restore: 'Restore',
-    respondents: 'Respondents',
     save: 'Save',
     show: 'Info',
-    mgmt: 'Management',
     transfer: 'Transfer',
     multi: {
       delete: 'Delete selected items',

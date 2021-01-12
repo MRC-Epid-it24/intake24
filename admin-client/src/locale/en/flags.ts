@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const flags: LocaleMessage = {
+const flags: LocaleMessageObject = {
   ad: 'Andorra',
   ae: 'United Arab Emirates',
   af: 'Afghanistan',
