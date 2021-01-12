@@ -28,6 +28,7 @@
       :headers="headers"
       :items="items"
       :item-key="trackBy"
+      :items-per-page="50"
       :options.sync="options"
       :show-select="showSelect"
       :loading="isLoading"
@@ -38,22 +39,13 @@
         <slot :name="scopedSlotName" v-bind="slotData" />
       </template>
     </v-data-table>
-    <v-container fluid>
-      <div class="text-center">
-        <v-pagination
-          v-model="options.page"
-          :length="meta.lastPage"
-          :total-visible="10"
-          @input="fetch"
-        ></v-pagination>
-      </div>
-    </v-container>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { DataOptions } from 'vuetify';
+import isEqual from 'lodash/isEqual';
 import { AnyDictionary } from '@common/types/common';
 import handlesLoading from '@/mixins/handlesLoading';
 
@@ -77,12 +69,6 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
       type: Boolean,
       default: false,
     },
-    sortOrder: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
     trackBy: {
       type: String,
       default: 'id',
@@ -102,10 +88,10 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
   watch: {
     options: {
-      deep: true,
-      handler() {
-        this.fetch();
+      handler(val, oldVal) {
+        if (!isEqual(val, oldVal)) this.fetch();
       },
+      deep: true,
     },
     selected() {
       this.updateTracked();

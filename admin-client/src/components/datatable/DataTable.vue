@@ -16,6 +16,7 @@
           :headers="headers"
           :items="items"
           item-key="id"
+          :items-per-page="50"
           :options.sync="options"
           show-select
           :loading="isLoading"
@@ -29,14 +30,6 @@
             <actionbar :api="api" :item="item" class="text-right" @refresh="onRefresh"></actionbar>
           </template>
         </v-data-table>
-        <div class="text-center">
-          <v-pagination
-            v-model="options.page"
-            :length="meta.lastPage"
-            :total-visible="10"
-            @input="fetch"
-          ></v-pagination>
-        </div>
       </v-card-text>
     </v-card>
   </div>
@@ -45,6 +38,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { DataOptions } from 'vuetify';
+import isEqual from 'lodash/isEqual';
 import { AnyDictionary } from '@common/types/common';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
@@ -68,12 +62,6 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
     headers: {
       type: Array,
       required: true,
-    },
-    sortOrder: {
-      type: Array,
-      default() {
-        return [];
-      },
     },
     trackBy: {
       type: String,
@@ -99,9 +87,8 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
   watch: {
     options: {
-      handler() {
-        // this.$store.dispatch(`${this.module}/request`);
-        this.fetch();
+      handler(val, oldVal) {
+        if (!isEqual(val, oldVal)) this.fetch();
       },
       deep: true,
     },
