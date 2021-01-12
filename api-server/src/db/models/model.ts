@@ -1,6 +1,11 @@
 import { Request } from 'express';
 import { isObject } from 'lodash';
-import { FindOptions as BaseFindOptions, Op, CountOptions as BaseCountOptions } from 'sequelize';
+import {
+  FindOptions as BaseFindOptions,
+  Op,
+  CountOptions as BaseCountOptions,
+  OrderItem,
+} from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Readable } from 'stream';
 import { Pagination, PaginationMeta } from '@common/types/models/pagination';
@@ -79,8 +84,10 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
       total = (total as any).length;
     }
 
-    // TODO: implement server-side sorting
-    // if (params.order) options.order = params.order;
+    if (sort && typeof sort === 'string') {
+      const order = sort.split('|') as OrderItem;
+      options.order = [order];
+    }
 
     const records = await this.findAll(options);
 

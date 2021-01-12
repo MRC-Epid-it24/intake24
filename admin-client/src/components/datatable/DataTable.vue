@@ -112,13 +112,20 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
   methods: {
     async fetch() {
-      const { page, itemsPerPage: limit } = this.options;
+      const {
+        page,
+        itemsPerPage: limit,
+        sortBy: [column],
+        sortDesc: [desc],
+      } = this.options;
+
+      const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : null;
 
       try {
         const {
           data: { data, meta },
         } = await this.withLoading(
-          this.$http.get(this.api, { params: { limit, page, ...this.filter } })
+          this.$http.get(this.api, { params: { limit, page, sort, ...this.filter } })
         );
 
         this.items = data;

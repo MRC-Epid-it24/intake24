@@ -1,25 +1,27 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="12" sm="auto">
-        <slot name="header-add"></slot>
-      </v-col>
-      <v-col cols="12" sm>
-        <v-text-field
-          v-model="search"
-          :label="$t('common.search._')"
-          append-icon="fas fa-search"
-          clearable
-          dense
-          hide-details="auto"
-          outlined
-          @click:append="setFilter"
-          @click:clear="resetFilter"
-          @keyup.enter="setFilter"
-        >
-        </v-text-field>
-      </v-col>
-    </v-row>
+  <div>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="12" sm="auto">
+          <slot name="header-add"></slot>
+        </v-col>
+        <v-col cols="12" sm>
+          <v-text-field
+            v-model="search"
+            :label="$t('common.search._')"
+            append-icon="fas fa-search"
+            clearable
+            dense
+            hide-details="auto"
+            outlined
+            @click:append="setFilter"
+            @click:clear="resetFilter"
+            @keyup.enter="setFilter"
+          >
+          </v-text-field>
+        </v-col>
+      </v-row>
+    </v-container>
     <v-data-table
       v-model="selected"
       :footer-props="{ 'items-per-page-options': [25, 50, 100] }"
@@ -36,15 +38,17 @@
         <slot :name="scopedSlotName" v-bind="slotData" />
       </template>
     </v-data-table>
-    <div class="text-center">
-      <v-pagination
-        v-model="options.page"
-        :length="meta.lastPage"
-        :total-visible="10"
-        @input="fetch"
-      ></v-pagination>
-    </div>
-  </v-container>
+    <v-container fluid>
+      <div class="text-center">
+        <v-pagination
+          v-model="options.page"
+          :length="meta.lastPage"
+          :total-visible="10"
+          @input="fetch"
+        ></v-pagination>
+      </div>
+    </v-container>
+  </div>
 </template>
 
 <script lang="ts">
@@ -110,13 +114,22 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
   methods: {
     async fetch() {
-      const { page, itemsPerPage: limit } = this.options;
+      const {
+        page,
+        itemsPerPage: limit,
+        sortBy: [column],
+        sortDesc: [desc],
+      } = this.options;
       const { search } = this;
+
+      const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : null;
 
       try {
         const {
           data: { data, meta },
-        } = await this.withLoading(this.$http.get(this.api, { params: { limit, page, search } }));
+        } = await this.withLoading(
+          this.$http.get(this.api, { params: { limit, page, search, sort } })
+        );
 
         this.items = data;
         this.meta = { ...meta };
