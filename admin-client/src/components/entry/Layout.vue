@@ -33,8 +33,9 @@
           v-for="tab in tabs"
           :key="tab"
           :to="{ name: `${resource.name}-${tab}`, params: { id } }"
+          :title="tabTitle(tab)"
         >
-          {{ $t(`common.action.${tab}`) }}
+          {{ tabTitle(tab) }}
         </v-tab>
       </v-tabs>
       <slot></slot>
@@ -45,6 +46,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import has from 'lodash/has';
 import Delete from '@/components/toolbar/Delete.vue';
 import resources from '@/router/resources';
 import { Resource } from '@/types/vue-router';
@@ -80,6 +82,11 @@ export default Vue.extend({
   },
 
   methods: {
+    tabTitle(tab: string) {
+      const check = has(this.$i18n.messages[this.$i18n.locale], `${this.module}.${tab}._`);
+      return this.$t(check ? `${this.module}.${tab}._` : `common.action.${tab}`);
+    },
+
     async onDelete(): Promise<void> {
       const name = this.entry.name ?? this.entry.id;
       if (!confirm(this.$t('common.action.confirm.delete', { name }) as string)) return;
