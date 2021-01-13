@@ -18,8 +18,9 @@ import type {
   SchemeController,
   AdminSurveyController,
   AdminSurveyDataExportController,
-  AdminSurveyRespondentController,
   AdminSurveyMgmtController,
+  AdminSurveyRespondentController,
+  AdminSurveySubmissionController,
   TaskController,
   PermissionController,
   RoleController,
@@ -80,8 +81,9 @@ export interface IoC extends Jobs {
   schemeController: SchemeController;
   adminSurveyController: AdminSurveyController;
   adminSurveyDataExportController: AdminSurveyDataExportController;
-  adminSurveyRespondentController: AdminSurveyRespondentController;
   adminSurveyMgmtController: AdminSurveyMgmtController;
+  adminSurveyRespondentController: AdminSurveyRespondentController;
+  adminSurveySubmissionController: AdminSurveySubmissionController;
 
   // System controllers
   taskController: TaskController;

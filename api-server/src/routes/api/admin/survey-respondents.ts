@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { permission, canManageSurvey } from '@/http/middleware/acl';
+import { permission } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/users/respondents';
 import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
@@ -9,7 +9,7 @@ const { config, adminSurveyRespondentController } = ioc.cradle;
 const router = Router({ mergeParams: true });
 const upload = multer({ dest: config.filesystem.local.uploads });
 
-router.use(permission('surveys-respondents'), canManageSurvey());
+router.use(permission('surveys-respondents'));
 
 router
   .route('')
