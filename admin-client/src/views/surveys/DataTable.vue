@@ -52,7 +52,7 @@ import handlesLoading from '@/mixins/handlesLoading';
 type mixins = InstanceType<typeof handlesLoading>;
 
 export default (Vue as VueConstructor<Vue & mixins>).extend({
-  name: 'SimpleDataTable',
+  name: 'SurveyDataTable',
 
   mixins: [handlesLoading],
 

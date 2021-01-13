@@ -1,6 +1,6 @@
 <template>
   <layout :id="id" :entry="entry" v-if="entryLoaded">
-    <user-list-table
+    <data-table
       :headers="headers"
       :api="`admin/surveys/${id}/respondents`"
       ref="table"
@@ -129,7 +129,7 @@
           <v-icon dark>$delete</v-icon>
         </v-btn>
       </template>
-    </user-list-table>
+    </data-table>
   </layout>
 </template>
 
@@ -139,20 +139,20 @@ import { AnyDictionary } from '@common/types/common';
 import detailMixin from '@/components/entry/detailMixin';
 import Form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
-import UserListTable from '../UserListTable.vue';
+import DataTable from '../DataTable.vue';
 import RespondentsUpload from './RespondentsUpload.vue';
 import RespondentsAuthUrlExport from './RespondentsAuthUrlExport.vue';
 
 export type RespondentsRefs = {
   $refs: {
-    table: InstanceType<typeof UserListTable>;
+    table: InstanceType<typeof DataTable>;
   };
 };
 
 export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).extend({
   name: 'SurveyRespondents',
 
-  components: { UserListTable, RespondentsAuthUrlExport, RespondentsUpload },
+  components: { DataTable, RespondentsAuthUrlExport, RespondentsUpload },
 
   mixins: [detailMixin],
 

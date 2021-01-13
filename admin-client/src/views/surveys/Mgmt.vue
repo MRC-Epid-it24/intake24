@@ -1,6 +1,6 @@
 <template>
   <layout :id="id" :entry="entry" v-if="entryLoaded">
-    <user-list-table :headers="headers" :api="`admin/surveys/${id}/mgmt`" ref="table">
+    <data-table :headers="headers" :api="`admin/surveys/${id}/mgmt`" ref="table">
       <template v-slot:header-add>
         <v-dialog v-model="dialog" max-width="600px">
           <template v-slot:activator="{ on, attrs }">
@@ -89,7 +89,7 @@
           <v-icon dark>$edit</v-icon>
         </v-btn>
       </template>
-    </user-list-table>
+    </data-table>
   </layout>
 </template>
 
@@ -99,18 +99,18 @@ import { AnyDictionary } from '@common/types/common';
 import detailMixin from '@/components/entry/detailMixin';
 import Form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
-import UserListTable from './UserListTable.vue';
+import DataTable from './DataTable.vue';
 
 export type MgmtRefs = {
   $refs: {
-    table: InstanceType<typeof UserListTable>;
+    table: InstanceType<typeof DataTable>;
   };
 };
 
 export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
   name: 'SurveyMgmt',
 
-  components: { UserListTable },
+  components: { DataTable },
 
   mixins: [detailMixin],
 

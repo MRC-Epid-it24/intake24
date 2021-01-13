@@ -53,52 +53,43 @@
               ></v-select>
             </v-col>
             <v-col cols="12" md="6">
-              <v-menu
+              <v-dialog
                 ref="startDate"
                 v-model="menus.startDate"
-                :close-on-content-click="false"
                 :return-value.sync="form.startDate"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
+                persistent
+                width="290px"
               >
-                <template v-slot:activator="{ on }">
+                <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="form.startDate"
                     :error-messages="form.errors.get('startDate')"
                     :label="$t('surveys.startDate')"
                     hide-details="auto"
-                    name="startDate"
                     outlined
                     readonly
+                    v-bind="attrs"
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker
-                  v-model="form.startDate"
-                  name="startDate"
-                  no-title
-                  scrollable
-                  @input="form.errors.clear('startDate')"
-                >
+                <v-date-picker v-model="form.startDate" scrollable>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="menus.startDate = false">Cancel</v-btn>
                   <v-btn text color="primary" @click="$refs.startDate.save(form.startDate)">
                     OK
                   </v-btn>
                 </v-date-picker>
-              </v-menu> </v-col
-            ><v-col cols="12" md="6">
-              <v-menu
+              </v-dialog>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-dialog
                 ref="endDate"
                 v-model="menus.endDate"
-                :close-on-content-click="false"
                 :return-value.sync="form.endDate"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
+                persistent
+                width="290px"
               >
-                <template v-slot:activator="{ on }">
+                <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="form.endDate"
                     :error-messages="form.errors.get('endDate')"
@@ -106,21 +97,16 @@
                     hide-details="auto"
                     outlined
                     readonly
+                    v-bind="attrs"
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker
-                  v-model="form.endDate"
-                  name="endDate"
-                  no-title
-                  scrollable
-                  @input="form.errors.clear('endDate')"
-                >
+                <v-date-picker v-model="form.endDate" scrollable>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="menus.endDate = false">Cancel</v-btn>
                   <v-btn text color="primary" @click="$refs.endDate.save(form.endDate)">OK</v-btn>
                 </v-date-picker>
-              </v-menu>
+              </v-dialog>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field

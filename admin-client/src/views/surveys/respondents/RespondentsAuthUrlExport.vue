@@ -91,7 +91,7 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
   data() {
     return {
-      jobType: 'ExportSurveyRespondentAuthUrls',
+      jobType: 'SurveyExportRespondentAuthUrls',
     };
   },
 

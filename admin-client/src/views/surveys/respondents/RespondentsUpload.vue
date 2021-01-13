@@ -100,7 +100,7 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
   data() {
     return {
       form: new Form({ file: null }, { multipart: true }),
-      jobType: 'ImportSurveyRespondents',
+      jobType: 'SurveyImportRespondents',
     };
   },
 
