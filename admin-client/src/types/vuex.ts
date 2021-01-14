@@ -4,6 +4,16 @@ import { UserPayload } from './auth';
 export interface RootState {
   lang: string;
   module?: string | null;
+  app: {
+    api: string;
+    host: string;
+    name: string;
+    build: {
+      version: string;
+      revision: string;
+      date: string;
+    };
+  };
 }
 
 export interface LoadingState {

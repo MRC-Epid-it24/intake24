@@ -1,6 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const childProcess = require('child_process');
 const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const pkg = require('./package.json');
+
+// Set build info for application
+process.env.VUE_APP_BUILD_VERSION = pkg.version;
+process.env.VUE_APP_BUILD_REVISION = childProcess
+  .execSync('git rev-parse --short HEAD', { cwd: path.resolve(__dirname, '..') })
+  .toString()
+  .trim();
+process.env.VUE_APP_BUILD_DATE = new Date().toISOString();
 
 module.exports = {
   configureWebpack: {
