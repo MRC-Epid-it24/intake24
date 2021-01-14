@@ -49,9 +49,6 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
     },
 
     async onSubmit() {
-      // TODO: TS 3.9 throws error here. Watch out for this - calling vue.js computed props
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       if (this.isEdit) {
         const { data } = await this.form.put(`admin/${this.apiUrl}/${this.id}`);
         this.toForm(data);

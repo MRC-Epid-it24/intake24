@@ -27,8 +27,8 @@ export type EntryMixin<E = AnyDictionary, R = AnyDictionary> = FetchEntryMixin &
 export interface FormMixin<E = AnyDictionary, R = AnyDictionary> extends EntryMixin<E, R> {
   form: typeof Form;
   toForm: (data: AnyDictionary) => void;
-  isEdit: () => boolean;
-  isCreate: () => boolean;
+  isEdit: boolean;
+  isCreate: boolean;
 }
 
 export type DetailMixin<E = AnyDictionary, R = AnyDictionary> = EntryMixin<E, R>;
