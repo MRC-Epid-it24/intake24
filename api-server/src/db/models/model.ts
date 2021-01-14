@@ -54,11 +54,11 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     page = page as number;
     limit = limit as number;
 
-    const options = {
+    const options: FindOptions = {
       limit,
       offset: limit * (page - 1),
       ...params,
-    } as FindOptions;
+    };
 
     if (search && columns.length) {
       const operation =
