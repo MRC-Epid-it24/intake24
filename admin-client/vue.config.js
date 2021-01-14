@@ -22,5 +22,18 @@ module.exports = {
   },
   outputDir: process.env.OUTPUT_DIR || 'dist',
   publicPath: process.env.PUBLIC_PATH || '/',
+  pwa: {
+    name: process.env.VUE_APP_NAME,
+    themeColor: '#263238',
+    msTileColor: '#FFFFFF',
+    manifestOptions: {
+      name: process.env.VUE_APP_NAME,
+      short_name: process.env.VUE_APP_NAME,
+      start_url: '.',
+      display: 'standalone',
+      theme_color: '#263238',
+      background_color: '#FFFFFF',
+    },
+  },
   transpileDependencies: ['vuetify'],
 };
