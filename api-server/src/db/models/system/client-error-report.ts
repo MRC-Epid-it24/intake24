@@ -1,6 +1,6 @@
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 import { ClientErrorReport as ClientErrorReportAttributes } from '@common/types/models/system';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types/common';
 import BaseModel from '../model';
 import { Survey, User } from '.';
 
@@ -52,12 +52,12 @@ export default class ClientErrorReport
     allowNull: false,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get surveyStateJson(): AnyDictionary {
+  get surveyStateJson(): Dictionary {
     const val = this.getDataValue('surveyStateJson') as unknown;
     return val ? JSON.parse(val as string) : {};
   }
 
-  set surveyStateJson(value: AnyDictionary) {
+  set surveyStateJson(value: Dictionary) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     this.setDataValue('surveyStateJson', JSON.stringify(value ?? {}));

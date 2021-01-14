@@ -1,7 +1,7 @@
 import { Method } from 'axios';
 import cloneDeep from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types/common';
 import { HttpRequestConfig, HttpError } from '@/types/http';
 import http from '@/services/http.service';
 import store from '@/store';
@@ -15,7 +15,7 @@ export interface FormConfig {
 }
 
 class Form {
-  originalData: AnyDictionary;
+  originalData: Dictionary;
 
   originalKeys: string[];
 
@@ -25,7 +25,7 @@ class Form {
 
   [key: string]: any;
 
-  constructor(data: AnyDictionary, config: FormConfig = {}) {
+  constructor(data: Dictionary, config: FormConfig = {}) {
     this.originalData = cloneDeep(data);
     this.originalKeys = Object.keys(data);
 
@@ -40,11 +40,11 @@ class Form {
     this.assign(data);
   }
 
-  assign(source: AnyDictionary): AnyDictionary {
+  assign(source: Dictionary): Dictionary {
     return this.assignTo(this, source);
   }
 
-  assignTo(target: AnyDictionary, source: AnyDictionary): AnyDictionary {
+  assignTo(target: Dictionary, source: Dictionary): Dictionary {
     const obj = target;
 
     this.originalKeys.forEach((key) => {
@@ -69,7 +69,7 @@ class Form {
     return obj;
   }
 
-  update(source: AnyDictionary): void {
+  update(source: Dictionary): void {
     this.originalKeys.forEach((key) => {
       if (!(key in source)) return;
 
@@ -90,7 +90,7 @@ class Form {
     this.config[field] = value;
   }
 
-  data(): AnyDictionary | FormData {
+  data(): Dictionary | FormData {
     if (this.settings('multipart') === false) return this.assignTo({}, this);
 
     const data = new FormData();
@@ -104,7 +104,7 @@ class Form {
     return data;
   }
 
-  load(data: AnyDictionary): void {
+  load(data: Dictionary): void {
     this.reset();
     this.assign(cloneDeep(data));
   }

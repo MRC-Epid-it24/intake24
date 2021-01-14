@@ -135,7 +135,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types/common';
 import detailMixin from '@/components/entry/detailMixin';
 import Form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
@@ -197,7 +197,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       this.dialog = true;
     },
 
-    edit(item: AnyDictionary) {
+    edit(item: Dictionary) {
       this.form.load(item);
       this.dialog = true;
     },
@@ -236,7 +236,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       await this.updateTable();
     },
 
-    async remove({ userName: name, userId }: AnyDictionary) {
+    async remove({ userName: name, userId }: Dictionary) {
       if (!confirm(this.$t('common.action.confirm.delete', { name }) as string)) return;
 
       await this.$http.delete(`admin/surveys/${this.id}/respondents/${userId}`);

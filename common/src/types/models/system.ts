@@ -1,4 +1,4 @@
-import { AnyDictionary } from '../common';
+import { Dictionary } from '../common';
 import { Meal } from '../meals';
 import { RecallQuestions } from '../recall';
 
@@ -8,7 +8,7 @@ export type ClientErrorReport = {
   surveyId: string | null;
   reportedAt: Date;
   stackTrace: string;
-  surveyStateJson: AnyDictionary;
+  surveyStateJson: Dictionary;
   new: boolean;
 };
 

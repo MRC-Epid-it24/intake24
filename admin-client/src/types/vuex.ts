@@ -1,4 +1,4 @@
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types/common';
 import { UserPayload } from './auth';
 
 export interface RootState {
@@ -43,22 +43,22 @@ export interface AuthState {
 export interface EntryState {
   name: string;
   status: string;
-  data: AnyDictionary;
-  refs: AnyDictionary;
-  addons: AnyDictionary;
-  error: AnyDictionary;
+  data: Dictionary;
+  refs: Dictionary;
+  addons: Dictionary;
+  error: Dictionary;
 }
 
 export interface ListState {
   name: string;
   status: string;
-  data: AnyDictionary[];
-  refs: AnyDictionary;
-  error: AnyDictionary;
+  data: Dictionary[];
+  refs: Dictionary;
+  error: Dictionary;
 }
 
 export interface FilterState {
   name: string;
   key: string;
-  data: AnyDictionary;
+  data: Dictionary;
 }

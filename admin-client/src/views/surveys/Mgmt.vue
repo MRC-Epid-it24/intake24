@@ -95,7 +95,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types/common';
 import detailMixin from '@/components/entry/detailMixin';
 import Form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
@@ -164,7 +164,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
       await this.fetchOptions();
     },
 
-    async edit(item: AnyDictionary) {
+    async edit(item: Dictionary) {
       const { permissions, ...rest } = item;
       this.form.load({ ...rest, permissions: permissions.map((permission: any) => permission.id) });
       this.selected = item;

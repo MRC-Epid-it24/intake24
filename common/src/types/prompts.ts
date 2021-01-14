@@ -1,4 +1,4 @@
-import { AnyDictionary } from './common';
+import { Dictionary } from './common';
 
 export type ComponentType =
   | 'info-prompt'
@@ -18,7 +18,7 @@ export enum PromptStatuses {
 
 export type PromptStatus = PromptStatuses;
 
-export interface PromptQuestion<T = AnyDictionary> {
+export interface PromptQuestion<T = Dictionary> {
   id: string;
   name: string;
   component: ComponentType;
@@ -27,7 +27,7 @@ export interface PromptQuestion<T = AnyDictionary> {
 
 export type PromptAnswer = string | string[] | null;
 
-export interface Prompt<T = AnyDictionary> {
+export interface Prompt<T = Dictionary> {
   question: PromptQuestion<T>;
   answer: PromptAnswer;
   status: PromptStatus;

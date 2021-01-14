@@ -1,4 +1,4 @@
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types/common';
 import Form from '@/helpers/Form';
 
 export interface FetchEntryMixin {
@@ -9,26 +9,26 @@ export interface HasEntryMixin {
   id: number | string;
 }
 
-export interface MapEntryMixin<E = AnyDictionary> {
+export interface MapEntryMixin<E = Dictionary> {
   entry: E;
   entryLoaded: boolean;
 }
 
-export interface MapRefsMixin<R = AnyDictionary> {
+export interface MapRefsMixin<R = Dictionary> {
   refs: R;
   refsLoaded: boolean;
 }
 
-export type EntryMixin<E = AnyDictionary, R = AnyDictionary> = FetchEntryMixin &
+export type EntryMixin<E = Dictionary, R = Dictionary> = FetchEntryMixin &
   HasEntryMixin &
   MapEntryMixin<E> &
   MapRefsMixin<R>;
 
-export interface FormMixin<E = AnyDictionary, R = AnyDictionary> extends EntryMixin<E, R> {
+export interface FormMixin<E = Dictionary, R = Dictionary> extends EntryMixin<E, R> {
   form: typeof Form;
-  toForm: (data: AnyDictionary) => void;
+  toForm: (data: Dictionary) => void;
   isEdit: boolean;
   isCreate: boolean;
 }
 
-export type DetailMixin<E = AnyDictionary, R = AnyDictionary> = EntryMixin<E, R>;
+export type DetailMixin<E = Dictionary, R = Dictionary> = EntryMixin<E, R>;

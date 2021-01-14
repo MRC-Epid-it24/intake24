@@ -46,7 +46,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types/common';
 import handlesLoading from '@/mixins/handlesLoading';
 
 type mixins = InstanceType<typeof handlesLoading>;
@@ -78,10 +78,10 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
   data() {
     return {
       search: '',
-      items: [] as AnyDictionary[],
+      items: [] as Dictionary[],
       meta: {},
       options: {} as DataOptions,
-      selected: [] as AnyDictionary[],
+      selected: [] as Dictionary[],
       tracked: [] as string[] | number[],
     };
   },

@@ -1,6 +1,4 @@
-export type Dictionary<T> = { [key: string]: T };
-
-export type AnyDictionary = Dictionary<any>;
+export type Dictionary<T = any> = { [key: string]: T };
 
 export type LocaleTranslation<T = string | null> = {
   en: T;

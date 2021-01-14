@@ -39,7 +39,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types/common';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
 import handlesLoading from '@/mixins/handlesLoading';
@@ -71,16 +71,16 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
   data() {
     return {
-      items: [] as AnyDictionary[],
+      items: [] as Dictionary[],
       meta: {},
       options: {} as DataOptions,
-      selected: [] as AnyDictionary[],
+      selected: [] as Dictionary[],
       tracked: [] as string[] | number[],
     };
   },
 
   computed: {
-    filter(): AnyDictionary {
+    filter(): Dictionary {
       return this.$store.state[this.module].filter.data;
     },
   },
@@ -126,7 +126,7 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
       this.tracked = this.selected.map((item) => item[this.trackBy]);
     },
 
-    async onFilterSet(data: AnyDictionary) {
+    async onFilterSet(data: Dictionary) {
       // this.clearSelected();
       await this.$store.dispatch(`${this.module}/filter/add`, data);
       this.fetch();

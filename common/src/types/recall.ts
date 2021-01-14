@@ -44,7 +44,7 @@ export interface MealDefinition {
 
 /* export interface Food {
   brand: string;
-  data: AnyDictionary;
+  data: Dictionary;
   searchTerm: string;
 } */
 

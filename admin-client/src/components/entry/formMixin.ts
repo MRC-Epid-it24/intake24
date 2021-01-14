@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types/common';
 import { FormMixin } from '@/types/vue';
 import Form from '@/helpers/Form';
 import SubmitFooter from '@/components/forms/SubmitFooter.vue';
@@ -44,7 +44,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   },
 
   methods: {
-    toForm(data: AnyDictionary) {
+    toForm(data: Dictionary) {
       this.form.load(data);
     },
 

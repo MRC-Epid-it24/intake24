@@ -34,7 +34,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import isEmpty from 'lodash/isEmpty';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types/common';
 
 export default Vue.extend({
   name: 'DataTableFilter',
@@ -50,7 +50,7 @@ export default Vue.extend({
     return {
       items: [] as string[],
       defaults: { search: '' },
-      filter: {} as AnyDictionary,
+      filter: {} as Dictionary,
     };
   },
 
@@ -58,10 +58,10 @@ export default Vue.extend({
     refsLoaded(): boolean {
       return !!Object.keys(this.$store.state[this.module].refs).length;
     },
-    filterRefs(): AnyDictionary {
+    filterRefs(): Dictionary {
       return this.$store.state[this.module].refs?.filter ?? {};
     },
-    activeFilter(): AnyDictionary {
+    activeFilter(): Dictionary {
       return this.$store.state[this.module].filter.data;
     },
   },
@@ -91,7 +91,7 @@ export default Vue.extend({
       this.items = [];
       Object.keys(this.filter).forEach((key) => {
         if (Array.isArray(this.filter[key]) && this.filterRefs) {
-          const stores = this.filterRefs[key].reduce((acc: string[], item: AnyDictionary) => {
+          const stores = this.filterRefs[key].reduce((acc: string[], item: Dictionary) => {
             if (this.filter[key].includes(item.id)) acc.push(item.name);
             return acc;
           }, []);
