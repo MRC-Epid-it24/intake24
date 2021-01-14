@@ -155,15 +155,13 @@ export default class User extends BaseModel<User> implements UserAttributes {
   }
 
   public allPermissions(): Permission[] {
-    const permissions = this.permissions ?? [];
+    const { permissions = [], roles = [] } = this;
 
-    const rolePermissions = this.roles
-      ? this.roles.reduce((acc, item) => {
-          return item.permissions ? acc.concat(item.permissions) : acc;
-        }, [] as Permission[])
-      : [];
+    roles.forEach((item) => {
+      if (item.permissions) permissions.push(...item.permissions);
+    });
 
-    return uniqBy(permissions.concat(rolePermissions), 'name');
+    return uniqBy(permissions, 'name');
   }
 
   public hasPermissionByName(permission: string): boolean {

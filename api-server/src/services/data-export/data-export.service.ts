@@ -119,12 +119,11 @@ export default ({ scheduler }: IoC): DataExportService => {
       'nutrientTypes',
     ];
 
-    let fields: ExportFieldInfo[] = [];
-
+    const fields: ExportFieldInfo[] = [];
     const fieldMapper = exportSectionFields();
 
     for (const section of sections) {
-      fields = fields.concat(await fieldMapper[section]());
+      fields.push(...(await fieldMapper[section]()));
     }
 
     return fields;
