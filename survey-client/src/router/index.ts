@@ -6,6 +6,9 @@ import Login from '@/views/Login.vue';
 import Recall from '@/views/Recall.vue';
 import Feedback from '@/views/Feedback.vue';
 
+// Temporary route for testing portion size code before foods & meals are loaded
+import PortionTest from '@/views/PortionTest.vue';
+
 Vue.use(VueRouter);
 
 const routes: RouteConfig[] = [
@@ -44,6 +47,13 @@ const routes: RouteConfig[] = [
     name: 'token',
     component: Login,
     meta: { module: 'login', title: 'login._' },
+  },
+  
+  // Temporary route for testing portion size code before foods & meals are loaded
+  {
+    path: '/portionTest',
+    name: 'portion-test',
+    component: PortionTest,
   },
   // Catch any unmatched routes
   {
