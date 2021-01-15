@@ -1,4 +1,4 @@
-import { LocaleTranslation } from './common';
+import type { LocaleTranslation } from '.';
 
 export interface BasePromptProps {
   text: LocaleTranslation;

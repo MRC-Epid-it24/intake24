@@ -1,4 +1,4 @@
-import { Prompt, PromptQuestion } from './prompts';
+import type { Prompt, PromptQuestion } from '.';
 
 /* export enum RecallSections {
   PRE_MEALS = 'preMeals',
@@ -32,14 +32,6 @@ export interface RecallQuestions extends GenericQuestions {
 export interface MealDefinition {
   name: string;
   time: string;
-}
-
-export interface Scheme {
-  id: string;
-  name: string;
-  type: string;
-  questions: RecallQuestions;
-  meals: MealDefinition[];
 }
 
 /* export interface Food {

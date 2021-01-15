@@ -1,5 +1,4 @@
-import { SurveySubmission } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { SurveySubmission, Pagination } from '../../models';
 
 export type SurveySubmissionEntry = SurveySubmission;
 

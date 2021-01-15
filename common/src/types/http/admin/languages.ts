@@ -1,6 +1,5 @@
-import { Dictionary } from '../../common';
-import { Language } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { Dictionary } from '../..';
+import { Language, Pagination } from '../../models';
 
 export type LanguageRequest = {
   id: string;

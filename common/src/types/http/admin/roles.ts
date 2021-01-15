@@ -1,5 +1,4 @@
-import { Permission, Role } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { Permission, Role, Pagination } from '../../models';
 
 export type RoleRequest = {
   name: string;

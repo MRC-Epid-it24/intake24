@@ -1,4 +1,4 @@
-import { Dictionary } from './common';
+import type { Dictionary } from '.';
 
 export type ComponentType =
   | 'info-prompt'

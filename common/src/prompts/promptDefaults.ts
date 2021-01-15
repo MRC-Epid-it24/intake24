@@ -1,6 +1,6 @@
 import clone from 'lodash/cloneDeep';
-import { PromptQuestion } from '../types/prompts';
 import {
+  PromptQuestion,
   BasePromptProps,
   CheckboxListPromptProps,
   DatePickerPromptProps,
@@ -8,7 +8,7 @@ import {
   TextareaPromptProps,
   TimePickerPromptProps,
   PortionSizeOptionPromptProps,
-} from '../types/promptProps';
+} from '../types';
 
 export const basePromptProps: BasePromptProps = {
   text: { en: null },

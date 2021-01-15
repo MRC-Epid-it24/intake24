@@ -1,7 +1,5 @@
-import { Meal } from '../../meals';
-import { RecallQuestions } from '../../recall';
-import { Language, Scheme } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { Meal, RecallQuestions } from '../..';
+import { Language, Scheme, Pagination } from '../../models';
 
 export type SchemeRequest = {
   id: string;

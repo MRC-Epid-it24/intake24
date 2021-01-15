@@ -1,5 +1,4 @@
-import { Locale, Scheme, Survey } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { Locale, Scheme, Survey, Pagination } from '../../models';
 
 export type SurveyRequest = {
   id: string;

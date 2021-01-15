@@ -1,5 +1,4 @@
-import { Language, Locale } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { Language, Locale, Pagination } from '../../models';
 
 export type LocaleRequest = {
   id: string;
