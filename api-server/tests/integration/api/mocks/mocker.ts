@@ -10,8 +10,7 @@ import {
   CreateUserRequest,
   CreateLanguageRequest,
 } from '@common/types/http';
-import { Meal } from '@common/types/meals';
-import { RecallQuestions } from '@common/types/recall';
+import { Meal, RecallQuestions } from '@common/types';
 
 export const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { JobEntry } from '@common/types/http/admin/jobs';
+import { JobEntry } from '@common/types/http';
 
 export default Vue.extend({
   data() {

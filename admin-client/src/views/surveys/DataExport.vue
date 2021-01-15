@@ -137,7 +137,7 @@ import { downloadFile } from '@/util/fs';
 import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
-import { JobResponse } from '@common/types/http/admin/jobs';
+import { JobResponse } from '@common/types/http';
 import PollsForJobsMixin from './PollsForJobsMixin';
 
 type mixins = InstanceType<typeof PollsForJobsMixin>;

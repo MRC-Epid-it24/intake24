@@ -105,8 +105,7 @@
 import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { FormRefs } from '@common/types/common';
-import { Meal } from '@common/types/meals';
+import { FormRefs, Meal } from '@common/types';
 import LanguageSelector from '@/components/prompts/partials/LanguageSelector.vue';
 
 export type MealDialog = { show: boolean; index: number; meal: Meal };

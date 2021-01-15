@@ -11,7 +11,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import merge from 'deepmerge';
-import { BasePromptProps } from '@common/types/promptProps';
+import { BasePromptProps } from '@common/types';
 import { infoPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt from './BasePrompt';
 

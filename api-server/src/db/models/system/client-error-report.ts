@@ -1,6 +1,6 @@
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 import { ClientErrorReport as ClientErrorReportAttributes } from '@common/types/models/system';
-import { Dictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import BaseModel from '../model';
 import { Survey, User } from '.';
 

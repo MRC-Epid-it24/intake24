@@ -1,4 +1,4 @@
-import { Dictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import Form from '@/helpers/Form';
 
 export interface FetchEntryMixin {

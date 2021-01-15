@@ -39,7 +39,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
-import { Dictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
 import handlesLoading from '@/mixins/handlesLoading';

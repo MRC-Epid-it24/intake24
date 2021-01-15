@@ -1,4 +1,4 @@
-import { Dictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import { UserPayload } from './auth';
 
 export interface RootState {

@@ -1,4 +1,4 @@
-import { Dictionary, LocaleTranslation } from './common';
+import { LocaleTranslation } from './common';
 
 export interface BasePromptProps {
   text: LocaleTranslation;
@@ -49,20 +49,4 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
 export interface PortionSizeOptionPromptProps extends ValidatedPromptProps {
   // Prop for which methods to display
   methods: string; // Temporary
-}
-
-export type ComponentType =
-  | 'info-prompt'
-  | 'date-picker-prompt'
-  | 'time-picker-prompt'
-  | 'checkbox-list-prompt'
-  | 'radio-list-prompt'
-  | 'textarea-prompt'
-  | 'submit-prompt';
-
-export interface PromptQuestion<T = Dictionary> {
-  id: string;
-  name: string;
-  component: ComponentType;
-  props: T;
 }

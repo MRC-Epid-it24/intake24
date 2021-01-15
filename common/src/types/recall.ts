@@ -23,11 +23,16 @@ export type MealQuestionSection = 'preFoods' | 'postFoods';
 
 export type GenericQuestions = Record<QuestionSection, PromptQuestion[]>;
 
+export type MealQuestions = Record<MealSection, PromptQuestion[]>;
+
 export interface RecallQuestions extends GenericQuestions {
   meals: MealQuestions;
 }
 
-export type MealQuestions = Record<MealSection, PromptQuestion[]>;
+export interface MealDefinition {
+  name: string;
+  time: string;
+}
 
 export interface Scheme {
   id: string;
@@ -35,11 +40,6 @@ export interface Scheme {
   type: string;
   questions: RecallQuestions;
   meals: MealDefinition[];
-}
-
-export interface MealDefinition {
-  name: string;
-  time: string;
 }
 
 /* export interface Food {

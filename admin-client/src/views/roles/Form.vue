@@ -66,7 +66,7 @@
 <script lang="ts">
 import groupBy from 'lodash/groupBy';
 import Vue, { VueConstructor } from 'vue';
-import { Dictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import { FormMixin } from '@/types/vue';
 import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';

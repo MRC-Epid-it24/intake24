@@ -2,8 +2,8 @@
   <prompt-layout :foodName="text" :description="description">
     <v-card-text>
       <v-row>
-        <v-col 
-          v-for="method in methods" 
+        <v-col
+          v-for="method in methods"
           :key="method.foodCode"
           :click="selectMethod(method.method)"
           :error="hasErrors"
@@ -23,7 +23,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import merge from 'deepmerge';
-import { PortionSizeOptionPromptProps  } from '@common/types/promptProps';
+import { PortionSizeOptionPromptProps } from '@common/types';
 import { portionSizeOptionPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt from './BasePrompt';
 
@@ -45,24 +45,24 @@ export default Vue.extend({
       errors: [] as string[],
       // Temporary until API exists
       // TO DO structure data correctly
-      currentValue: null, 
+      currentValue: null,
       methods: [
         {
           method: 'as-served',
           foodCode: 'ABC',
-          description: 'in straight cut chips'
-        }, 
+          description: 'in straight cut chips',
+        },
         {
           method: 'as-served',
           foodCode: 'ABD',
-          description: 'in thick cut chips'
+          description: 'in thick cut chips',
         },
         {
           method: 'as-served',
           foodCode: 'ABE',
-          description: 'in crinkle cut chips'
+          description: 'in crinkle cut chips',
         },
-      ]  
+      ],
     };
   },
 
@@ -79,7 +79,7 @@ export default Vue.extend({
 
     selectMethod(method: string) {
       this.currentValue = method;
-      console.log(`Selected ${method} portion size estimation`)
+      console.log(`Selected ${method} portion size estimation`);
     },
 
     onSubmit() {

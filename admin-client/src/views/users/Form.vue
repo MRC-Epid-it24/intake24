@@ -145,7 +145,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Dictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';
 
