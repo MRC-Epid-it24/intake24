@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-import { SurveySubmission as SurveySubmissionAttributes } from '@common/types/models/system';
+import { SurveySubmission as SurveySubmissionAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from '.';
 

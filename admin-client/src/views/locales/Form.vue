@@ -154,7 +154,7 @@ import Form from '@/helpers/Form';
 import flags from '@/locale/en/flags';
 import { FormMixin } from '@/types/vue';
 import { LocaleRefs } from '@common/types/http';
-import { Locale } from '@common/types/models/system';
+import { Locale } from '@common/types/models';
 
 export default (Vue as VueConstructor<Vue & FormMixin<Locale, LocaleRefs>>).extend({
   name: 'LocaleForm',

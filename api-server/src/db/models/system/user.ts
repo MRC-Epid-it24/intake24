@@ -10,7 +10,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { User as UserAttributes } from '@common/types/models/system';
+import { User as UserAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import {
   ClientErrorReport,

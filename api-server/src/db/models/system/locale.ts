@@ -1,5 +1,5 @@
 import { Column, DataType, HasMany, Scopes, Table, BelongsTo } from 'sequelize-typescript';
-import { Locale as LocaleAttributes } from '@common/types/models/system';
+import { Locale as LocaleAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Language, LocalField, LocalNutrientType, Survey } from '.';
 

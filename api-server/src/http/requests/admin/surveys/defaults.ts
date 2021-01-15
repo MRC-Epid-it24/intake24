@@ -1,6 +1,6 @@
 import { Schema } from 'express-validator';
 import { Locale, Scheme } from '@/db/models/system';
-import { SurveyState } from '@common/types/models/system';
+import { SurveyState } from '@common/types/models';
 
 const defaults: Schema = {
   state: {

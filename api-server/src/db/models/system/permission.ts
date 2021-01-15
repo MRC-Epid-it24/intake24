@@ -11,7 +11,7 @@ import {
 } from 'sequelize-typescript';
 import BaseModel from '@api-server/db/models/model';
 import config from '@api-server/config/acl';
-import { Permission as PermissionAttributes } from '@common/types/models/system';
+import { Permission as PermissionAttributes } from '@common/types/models';
 import { PermissionRole, PermissionUser, Role, User } from '.';
 
 // eslint-disable-next-line no-use-before-define

@@ -1,6 +1,6 @@
 import { Schema } from 'express-validator';
 import { isPlainObject, has } from 'lodash';
-import { SchemeTypes } from '@common/types/models/system';
+import { SchemeTypes } from '@common/types/models';
 
 const defaults: Schema = {
   name: {

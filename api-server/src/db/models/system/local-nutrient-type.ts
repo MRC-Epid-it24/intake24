@@ -1,5 +1,5 @@
 import { BelongsTo, Column, ForeignKey, Scopes, Table } from 'sequelize-typescript';
-import { LocalNutrientType as LocalNutrientTypeAttributes } from '@common/types/models/system';
+import { LocalNutrientType as LocalNutrientTypeAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Locale, NutrientType } from '.';
 
