@@ -1,17 +1,12 @@
 import json2csv from 'json2csv';
 import { LocalNutrientType, NutrientType, SurveySubmissionFood } from '@/db/models/system';
-
-export type ExportSection =
-  | 'survey'
-  | 'surveyCustom'
-  | 'meal'
-  | 'mealCustom'
-  | 'food'
-  | 'foodCustom'
-  | 'nutrientTypes'
-  | 'portionSizes';
+import { ExportField as BaseExportField, ExportSection } from '@common/types/models';
 
 export type ExportFieldTransform<T = SurveySubmissionFood> = (food: T) => string | number;
+
+export interface ExportField extends BaseExportField {
+  value?: string | ExportFieldTransform;
+}
 
 export type ExportFieldInfo = json2csv.FieldInfo<SurveySubmissionFood>;
 
@@ -19,12 +14,6 @@ export type ExportSectionFields = Record<
   ExportSection,
   (...arg: any[]) => Promise<ExportFieldInfo[]>
 >;
-
-export type ExportField = {
-  id: string;
-  label: string;
-  value?: string | ExportFieldTransform;
-};
 
 export type ExportFieldTransformCallback<T = SurveySubmissionFood> = (
   field: ExportField
@@ -52,7 +41,7 @@ export const surveyFields: ExportField[] = [
     value: (food) => food.meal?.submission?.userId ?? EMPTY,
   },
   {
-    id: 'user.name',
+    id: 'userName',
     label: 'Username',
     value: (food) => {
       const aliases = food.meal?.submission?.user?.aliases;

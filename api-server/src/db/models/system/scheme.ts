@@ -7,20 +7,28 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Scheme as SchemeAttributes, SchemeType } from '@common/types/models/system';
-import { Meal } from '@common/types/meals';
-import { RecallQuestions } from '@common/types/recall';
+import { Meal, RecallQuestions } from '@common/types';
+import { Scheme as SchemeAttributes, SchemeType, ExportSectionInfo } from '@common/types/models';
 import BaseModel from '../model';
 import { Survey } from '.';
 
 // TODO: move this to DB-managed list / localizations
 export const defaultMeals: Meal[] = [
-  { name: { en: 'Breakfast' }, time: '8:10' },
+  { name: { en: 'Breakfast' }, time: '8:00' },
   { name: { en: 'Morning snack' }, time: '10:00' },
   { name: { en: 'Lunch' }, time: '13:00' },
   { name: { en: 'Afternoon snack' }, time: '16:00' },
   { name: { en: 'Dinner' }, time: '18:00' },
   { name: { en: 'Evening snack' }, time: '20:00' },
+];
+
+export const defaultExport: ExportSectionInfo[] = [
+  { id: 'survey', fields: [] },
+  { id: 'surveyCustom', fields: [] },
+  { id: 'meal', fields: [] },
+  { id: 'mealCustom', fields: [] },
+  { id: 'food', fields: [] },
+  { id: 'foodCustom', fields: [] },
 ];
 
 @Scopes(() => ({
@@ -57,6 +65,7 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
    *
    * */
   @Column({
+    allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
   get questions(): RecallQuestions {
@@ -71,6 +80,7 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
   }
 
   @Column({
+    allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
   get meals(): Meal[] {
@@ -82,6 +92,21 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     this.setDataValue('meals', JSON.stringify(value ?? []));
+  }
+
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  get export(): ExportSectionInfo[] {
+    const val = this.getDataValue('export') as unknown;
+    return val ? JSON.parse(val as string) : defaultExport;
+  }
+
+  set export(value: ExportSectionInfo[]) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    this.setDataValue('export', JSON.stringify(value ?? []));
   }
 
   @CreatedAt

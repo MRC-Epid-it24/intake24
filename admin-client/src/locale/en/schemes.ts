@@ -30,7 +30,17 @@ const schemes: LocaleMessageObject = {
     },
   },
   'data-export': {
+    _: 'Data export',
+    title: 'Data export fields',
     edit: 'Edit fields',
+    sections: {
+      survey: 'Survey record data',
+      surveyCustom: 'Survey custom fields data',
+      meal: 'Meal record data',
+      mealCustom: 'Meal custom fields data',
+      food: 'Food record data',
+      foodCustom: 'Food custom fields data',
+    },
   },
   questions: {
     title: 'Scheme questions',

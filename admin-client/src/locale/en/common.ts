@@ -42,6 +42,7 @@ const common: LocaleMessageObject = {
   action: {
     _: 'Action',
     active: 'Active',
+    add: 'Add',
     audit: 'Audit',
     back: 'Back',
     cancel: 'Cancel',
@@ -57,6 +58,7 @@ const common: LocaleMessageObject = {
     load: 'Load',
     print: 'Print',
     questions: 'Questions',
+    remove: 'Remove',
     restore: 'Restore',
     save: 'Save',
     show: 'Info',

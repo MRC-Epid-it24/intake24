@@ -66,14 +66,12 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       form: new Form({
         id: null,
         name: null,
-        type: 'legacy',
+        type: 'data-driven',
         questions: {},
         meals: [],
+        export: {},
       }),
-      types: [
-        { value: 'legacy', text: this.$t('schemes.types.legacy') },
-        { value: 'data-driven', text: this.$t('schemes.types.data-driven') },
-      ],
+      types: [{ value: 'data-driven', text: this.$t('schemes.types.data-driven') }],
     };
   },
 

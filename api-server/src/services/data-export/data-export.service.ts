@@ -19,7 +19,8 @@ import {
 } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
-import exportSectionFields, { ExportFieldInfo, ExportSection } from './data-export-fields';
+import { ExportSection } from '@common/types/models';
+import exportSectionFields, { ExportFieldInfo } from './data-export-fields';
 
 export type DataExportInput = {
   surveyId: string;
@@ -152,12 +153,24 @@ export default ({ scheduler }: IoC): DataExportService => {
     return { scope, fields, filename };
   };
 
+  /**
+   * Push data export job to queue
+   *
+   * @param {DataExportInput} input
+   * @returns {Promise<Job>}
+   */
   const queueExportJob = async (input: DataExportInput): Promise<Job> => {
     const { userId, ...rest } = input;
 
     return scheduler.jobs.addJob({ type: 'SurveyDataExport', userId }, rest);
   };
 
+  /**
+   * Generate CSV stream for http response
+   *
+   * @param {DataExportInput} input
+   * @returns {Promise<SyncStreamOutput>}
+   */
   const syncStream = async (input: DataExportInput): Promise<SyncStreamOutput> => {
     const { scope, fields, filename } = await prepareExportInfo(input);
 

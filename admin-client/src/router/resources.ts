@@ -26,7 +26,7 @@ const resources: Resource[] = [
     icon: 'fas fa-route',
     api: 'admin/schemes',
     generateRoutes: true,
-    routes: [...routes, 'questions'],
+    routes: [...routes, 'questions', 'data-export'],
   },
   {
     group: 'surveyMgmt',

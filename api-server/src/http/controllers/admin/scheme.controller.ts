@@ -9,10 +9,13 @@ import {
   SchemeResponse,
   SchemesResponse,
   StoreSchemeResponse,
+  SchemeExportRefsResponse,
 } from '@common/types/http';
+import { surveyFields, mealFields, foodFields } from '@/services/data-export/data-export-fields';
+import { ExportField } from '@common/types/models';
 import { Controller, CrudActions } from '../controller';
 
-export type SchemeController = Controller<CrudActions>;
+export type SchemeController = Controller<CrudActions | 'dataExportRefs'>;
 
 export default (): SchemeController => {
   const refs = async (): Promise<SchemeRefs> => {
@@ -42,7 +45,7 @@ export default (): SchemeController => {
 
   const store = async (req: Request, res: Response<StoreSchemeResponse>): Promise<void> => {
     const scheme = await Scheme.create(
-      pick(req.body, ['id', 'name', 'type', 'questions', 'meals'])
+      pick(req.body, ['id', 'name', 'type', 'questions', 'meals', 'export'])
     );
 
     res.status(201).json({ data: scheme });
@@ -60,7 +63,7 @@ export default (): SchemeController => {
 
     if (!scheme) throw new NotFoundError();
 
-    await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals']));
+    await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals', 'export']));
 
     res.json({ data: scheme, refs: await refs() });
   };
@@ -78,6 +81,24 @@ export default (): SchemeController => {
     res.status(204).json();
   };
 
+  const dataExportRefs = async (
+    req: Request,
+    res: Response<SchemeExportRefsResponse>
+  ): Promise<void> => {
+    const { schemeId } = req.params;
+    const scheme = await Scheme.scope('surveys').findByPk(schemeId);
+
+    if (!scheme) throw new NotFoundError();
+
+    const fieldMapper = ({ id, label }: ExportField) => ({ id, label });
+
+    res.json({
+      food: foodFields.map(fieldMapper),
+      meal: mealFields.map(fieldMapper),
+      survey: surveyFields.map(fieldMapper),
+    });
+  };
+
   return {
     list,
     create,
@@ -86,5 +107,6 @@ export default (): SchemeController => {
     edit,
     update,
     destroy,
+    dataExportRefs,
   };
 };
