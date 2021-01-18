@@ -8,7 +8,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { Meal, RecallQuestions } from '@common/types';
-import { Scheme as SchemeAttributes, SchemeType, ExportSectionInfo } from '@common/types/models';
+import { Scheme as SchemeAttributes, SchemeType, ExportScheme } from '@common/types/models';
 import BaseModel from '../model';
 import { Survey } from '.';
 
@@ -22,13 +22,15 @@ export const defaultMeals: Meal[] = [
   { name: { en: 'Evening snack' }, time: '20:00' },
 ];
 
-export const defaultExport: ExportSectionInfo[] = [
+export const defaultExport: ExportScheme = [
   { id: 'survey', fields: [] },
   { id: 'surveyCustom', fields: [] },
   { id: 'meal', fields: [] },
   { id: 'mealCustom', fields: [] },
   { id: 'food', fields: [] },
   { id: 'foodCustom', fields: [] },
+  { id: 'nutrientTypes', fields: [] },
+  { id: 'portionSizes', fields: [] },
 ];
 
 @Scopes(() => ({
@@ -98,12 +100,12 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get export(): ExportSectionInfo[] {
+  get export(): ExportScheme {
     const val = this.getDataValue('export') as unknown;
     return val ? JSON.parse(val as string) : defaultExport;
   }
 
-  set export(value: ExportSectionInfo[]) {
+  set export(value: ExportScheme) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     this.setDataValue('export', JSON.stringify(value ?? []));

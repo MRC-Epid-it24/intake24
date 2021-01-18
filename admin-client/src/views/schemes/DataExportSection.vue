@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
     <v-card tile v-if="dialog">
       <v-toolbar dark color="primary">
-        <v-btn icon dark @click.stop="cancel">
+        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -10,7 +10,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-btn dark text :title="$t('common.action.save')" @click.stop="save">
+          <v-btn :title="$t('common.action.save')" dark text @click.stop="save">
             <v-icon left>$save</v-icon> {{ $t('common.action.save') }}
           </v-btn>
         </v-toolbar-items>
@@ -54,22 +54,24 @@
           <v-col cols="12" md="6">
             <v-card-title>Available fields</v-card-title>
             <v-list two-line>
-              <v-list-item
-                v-for="field in availableFields"
-                :key="field.id"
-                class="list-item-border"
-                link
-              >
-                <v-list-item-content>
-                  <v-list-item-title>ID: {{ field.id }}</v-list-item-title>
-                  <v-list-item-subtitle>Label: {{ field.label }}</v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn icon :title="$t('common.action.add')" @click.stop="add(field)">
-                    <v-icon color="blue darken-3">fa-plus</v-icon>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
+              <transition-group type="transition" name="drag-and-drop">
+                <v-list-item
+                  v-for="field in availableFields"
+                  :key="field.id"
+                  class="list-item-border"
+                  link
+                >
+                  <v-list-item-content>
+                    <v-list-item-title>ID: {{ field.id }}</v-list-item-title>
+                    <v-list-item-subtitle>Label: {{ field.label }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn icon :title="$t('common.action.add')" @click.stop="add(field)">
+                      <v-icon color="blue darken-3">fa-plus</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </transition-group>
             </v-list>
           </v-col>
         </v-row>
@@ -81,17 +83,17 @@
 <script lang="ts">
 import Vue from 'vue';
 import draggable from 'vuedraggable';
-import { ExportSectionInfo, ExportField } from '@common/types/models';
+import { ExportSchemeSection, ExportField } from '@common/types/models';
 
 export default Vue.extend({
   name: 'DataExportSection',
 
   props: {
     section: {
-      type: Object as () => ExportSectionInfo | null,
+      type: Object as () => ExportSchemeSection | null,
     },
     refFields: {
-      type: Array as () => ExportField[] | undefined,
+      type: Array as () => ExportField[],
     },
   },
 

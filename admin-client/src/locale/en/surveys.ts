@@ -41,6 +41,7 @@ const surveys: LocaleMessageObject = {
   },
   'data-export': {
     _: 'Data export',
+    title: 'Data Export options',
   },
   mgmt: {
     _: 'Management',

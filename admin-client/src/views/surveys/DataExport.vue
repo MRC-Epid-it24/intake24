@@ -2,7 +2,7 @@
   <layout :id="id" :entry="entry" v-if="entryLoaded">
     <v-form @keydown.native="clearError" @submit.prevent="onSubmit">
       <v-container>
-        <v-card-title>Data Export settings</v-card-title>
+        <v-card-title>{{ $t('surveys.data-export.title') }}</v-card-title>
         <v-card-text>
           <v-row>
             <v-col cols="6">
@@ -29,7 +29,9 @@
                     </template>
                     <v-date-picker v-model="form.startDate" scrollable>
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menus.startDate = false">Cancel</v-btn>
+                      <v-btn text color="primary" @click="menus.startDate = false">
+                        {{ $t('common.action.cancel') }}
+                      </v-btn>
                       <v-btn text color="primary" @click="$refs.startDate.save(form.startDate)">
                         OK
                       </v-btn>
@@ -92,7 +94,8 @@
                   <v-list-item-content>
                     <v-list-item-title>{{ item.type }}</v-list-item-title>
                     <v-list-item-subtitle>
-                      Started: {{ new Date(item.startedAt).toLocaleString() }}
+                      Started:
+                      {{ item.completedAt ? new Date(item.startedAt).toLocaleString() : '' }}
                     </v-list-item-subtitle>
                     <v-list-item-subtitle>
                       Completed:

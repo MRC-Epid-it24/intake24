@@ -8,6 +8,11 @@
         <li>Each section can be modified to define specific fields and order for export</li>
       </ul>
     </v-card-text>
+    <v-toolbar flat tile color="grey lighten-2">
+      <v-toolbar-title class="font-weight-medium">
+        {{ $t(`schemes.data-export.sections._`) }}
+      </v-toolbar-title>
+    </v-toolbar>
     <data-export-section
       :section="section"
       :refFields="sectionRefFields"
@@ -28,10 +33,9 @@
               <v-icon>fa-grip-vertical</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title v-text="section.id"></v-list-item-title>
-              <v-list-item-subtitle
+              <v-list-item-title
                 v-text="$t(`schemes.data-export.sections.${section.id}`)"
-              ></v-list-item-subtitle>
+              ></v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon :title="$t('schemes.data-export.edit')" @click.stop="edit(idx, section)">
@@ -51,7 +55,7 @@ import draggable from 'vuedraggable';
 import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
-import { ExportField, ExportSectionInfo } from '@common/types/models';
+import { ExportField, ExportSchemeSection } from '@common/types/models';
 import { SchemeExportRefsResponse } from '@common/types/http';
 import DataExportSection from './DataExportSection.vue';
 
@@ -72,7 +76,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         meals: [],
         export: [],
       }),
-      section: null as ExportSectionInfo | null,
+      section: null as ExportSchemeSection | null,
       exportRefs: {} as SchemeExportRefsResponse,
     };
   },
@@ -103,12 +107,12 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       this.exportRefs = data;
     },
 
-    edit(idx: number, section: ExportSectionInfo) {
+    edit(idx: number, section: ExportSchemeSection) {
       this.section = section;
     },
 
-    update(section: ExportSectionInfo) {
-      const match = (this.form.export as ExportSectionInfo[]).find(
+    update(section: ExportSchemeSection) {
+      const match = (this.form.export as ExportSchemeSection[]).find(
         (field) => field.id === section.id
       );
 

@@ -53,7 +53,7 @@
     <v-dialog v-model="dialog.show" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card tile>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click.stop="reset">
+          <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
             <v-icon>$cancel</v-icon>
           </v-btn>
           <v-toolbar-title>
@@ -61,9 +61,8 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark text :title="$t('common.action.save')" @click.stop="save">
-              <v-icon left>$save</v-icon>
-              {{ $t('common.action.save') }}
+            <v-btn :title="$t('common.action.save')" dark text @click.stop="save">
+              <v-icon left>$save</v-icon> {{ $t('common.action.save') }}
             </v-btn>
           </v-toolbar-items>
           <template v-slot:extension>

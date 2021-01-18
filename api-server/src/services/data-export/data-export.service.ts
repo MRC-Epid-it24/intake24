@@ -19,8 +19,8 @@ import {
 } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
-import { ExportSection } from '@common/types/models';
-import exportSectionFields, { ExportFieldInfo } from './data-export-fields';
+import type { ExportScheme } from '@common/types/models';
+import type { ExportFieldInfo } from './data-export-mapper';
 
 export type DataExportInput = {
   surveyId: string;
@@ -42,13 +42,13 @@ export type SyncStreamOutput = {
 
 export type DataExportService = {
   getSubmissionScope: (input: DataExportInput) => FindOptions;
-  getExportFields: (survey: Survey) => Promise<ExportFieldInfo[]>;
+  getExportFields: (exportScheme: ExportScheme) => Promise<ExportFieldInfo[]>;
   prepareExportInfo: (input: DataExportInput) => Promise<DataExportOptions>;
   queueExportJob: (input: DataExportInput) => Promise<Job>;
   syncStream: (input: DataExportInput) => Promise<SyncStreamOutput>;
 };
 
-export default ({ scheduler }: IoC): DataExportService => {
+export default ({ dataExportMapper, scheduler }: IoC): DataExportService => {
   /**
    * Scope to query full survey submission
    *
@@ -97,34 +97,14 @@ export default ({ scheduler }: IoC): DataExportService => {
   /**
    * Sort and prepare export fields
    *
-   * @param {Survey} survey
+   * @param {ExportScheme} exportScheme
    * @returns {Promise<ExportFieldInfo[]>}
    */
-  const getExportFields = async (survey: Survey): Promise<ExportFieldInfo[]> => {
-    const { scheme } = survey;
-
-    if (!scheme)
-      throw new NotFoundError(
-        `Survey scheme not found for surveyId: ${survey.id}, schemeId: ${survey.schemeId}`
-      );
-
-    // Get this from scheme
-    const sections: ExportSection[] = [
-      'survey',
-      'surveyCustom',
-      'meal',
-      'mealCustom',
-      'food',
-      'foodCustom',
-      'portionSizes',
-      'nutrientTypes',
-    ];
-
+  const getExportFields = async (exportScheme: ExportScheme): Promise<ExportFieldInfo[]> => {
     const fields: ExportFieldInfo[] = [];
-    const fieldMapper = exportSectionFields();
 
-    for (const section of sections) {
-      fields.push(...(await fieldMapper[section]()));
+    for (const section of exportScheme) {
+      fields.push(...(await dataExportMapper[section.id](section.fields)));
     }
 
     return fields;
@@ -137,16 +117,16 @@ export default ({ scheduler }: IoC): DataExportService => {
    * @returns {Promise<DataExportOptions>}
    */
   const prepareExportInfo = async (input: DataExportInput): Promise<DataExportOptions> => {
-    const survey = await Survey.findByPk(input.surveyId, {
+    const { surveyId } = input;
+
+    const survey = await Survey.findByPk(surveyId, {
       include: [{ model: Scheme, required: true }],
     });
-    if (!survey) throw new NotFoundError();
-
-    const { surveyId } = input;
+    if (!survey || !survey.scheme) throw new NotFoundError();
 
     const scope = getSubmissionScope(input);
 
-    const fields = await getExportFields(survey);
+    const fields = await getExportFields(survey.scheme.export);
     const timestamp = fecha.format(new Date(), 'YYYY-MM-DD-HH-mm-ss');
     const filename = `intake24-data-export-${surveyId}-${timestamp}.csv`;
 

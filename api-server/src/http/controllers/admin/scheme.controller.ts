@@ -3,6 +3,7 @@ import { pick } from 'lodash';
 import { Language, Scheme } from '@/db/models/system';
 import { defaultMeals as meals } from '@/db/models/system/scheme';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
+import type { IoC } from '@/ioc';
 import {
   CreateSchemeResponse,
   SchemeRefs,
@@ -11,13 +12,12 @@ import {
   StoreSchemeResponse,
   SchemeExportRefsResponse,
 } from '@common/types/http';
-import { surveyFields, mealFields, foodFields } from '@/services/data-export/data-export-fields';
-import { ExportField } from '@common/types/models';
+import { ExportField, ExportSection } from '@common/types/models';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions | 'dataExportRefs'>;
 
-export default (): SchemeController => {
+export default ({ dataExportFields }: IoC): SchemeController => {
   const refs = async (): Promise<SchemeRefs> => {
     const languages = await Language.findAll();
 
@@ -92,11 +92,13 @@ export default (): SchemeController => {
 
     const fieldMapper = ({ id, label }: ExportField) => ({ id, label });
 
-    res.json({
-      food: foodFields.map(fieldMapper),
-      meal: mealFields.map(fieldMapper),
-      survey: surveyFields.map(fieldMapper),
-    });
+    const fields: any = {};
+    for (const [section, callback] of Object.entries(dataExportFields)) {
+      const sectionFields = await callback();
+      fields[section as ExportSection] = sectionFields.map(fieldMapper);
+    }
+
+    res.json(fields);
   };
 
   return {

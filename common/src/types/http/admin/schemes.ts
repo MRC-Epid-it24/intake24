@@ -1,5 +1,5 @@
-import { PartialRecord, Meal, RecallQuestions } from '../..';
-import { Language, Scheme, Pagination, ExportField, ExportSection } from '../../models';
+import { Meal, RecallQuestions } from '../..';
+import { ExportField, ExportSection, Language, Pagination, Scheme } from '../../models';
 
 export type SchemeRequest = {
   id: string;
@@ -31,4 +31,4 @@ export type CreateSchemeResponse = Pick<SchemeResponse, 'refs'>;
 
 export type StoreSchemeResponse = Pick<SchemeResponse, 'data'>;
 
-export type SchemeExportRefsResponse = PartialRecord<ExportSection, ExportField[]>;
+export type SchemeExportRefsResponse = Record<ExportSection, ExportField[]>;

@@ -21,10 +21,12 @@ export type ExportField = {
   label: string;
 };
 
-export type ExportSectionInfo = {
+export type ExportSchemeSection = {
   id: ExportSection;
   fields: ExportField[];
 };
+
+export type ExportScheme = ExportSchemeSection[];
 
 export type Scheme = {
   id: string;
@@ -32,7 +34,7 @@ export type Scheme = {
   type: SchemeType;
   questions: RecallQuestions;
   meals: Meal[];
-  export: ExportSectionInfo[];
+  export: ExportScheme;
   createdAt: Date;
   updatedAt: Date;
 };
