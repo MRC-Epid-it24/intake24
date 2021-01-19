@@ -1,18 +1,20 @@
 import { asClass, asFunction, asValue, AwilixContainer } from 'awilix';
-import authenticationService from '@/services/auth/authentication.service';
-import jwtService from '@/services/auth/jwt.service';
-import jwtRotationService from '@/services/auth/jwt-rotation.service';
-import signInService from '@/services/auth/sign-in.service';
-
-import portionSizeService from '@/services/foods/portion-size.service';
-import surveyService from '@/services/survey.service';
-import { dataExportFields, dataExportMapper, dataExportService } from '@/services/data-export';
-import userService from '@/services/user.service';
-
-import filesystem from '@/services/filesystem';
-import logger from '@/services/logger';
-import mailer from '@/services/mailer';
-import scheduler from '@/services/scheduler';
+import {
+  authenticationService,
+  jwtService,
+  jwtRotationService,
+  signInService,
+  dataExportFields,
+  dataExportMapper,
+  dataExportService,
+  filesystem,
+  logger,
+  mailer,
+  scheduler,
+  portionSizeService,
+  surveyService,
+  userService,
+} from '@/services';
 
 import jobsQueueHandler from '@/services/queues/jobs-queue-handler';
 import tasksQueueHandler from '@/services/queues/tasks-queue-handler';
