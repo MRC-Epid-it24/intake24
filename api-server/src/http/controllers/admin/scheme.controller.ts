@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { Language, Scheme } from '@/db/models/system';
-import { defaultMeals as meals } from '@/db/models/system/scheme';
+import { defaultMeals } from '@/db/models/system/scheme';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import {
@@ -13,6 +13,7 @@ import {
   SchemeExportRefsResponse,
 } from '@common/types/http';
 import { ExportField, ExportSection } from '@common/types/models';
+import { PromptQuestion } from '@common/types';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions | 'dataExportRefs'>;
@@ -21,7 +22,7 @@ export default ({ dataExportFields }: IoC): SchemeController => {
   const refs = async (): Promise<SchemeRefs> => {
     const languages = await Language.findAll();
 
-    return { languages, meals };
+    return { languages, meals: defaultMeals };
   };
 
   const entry = async (req: Request, res: Response): Promise<void> => {
@@ -94,7 +95,7 @@ export default ({ dataExportFields }: IoC): SchemeController => {
 
     const fields: any = {};
     for (const [section, callback] of Object.entries(dataExportFields)) {
-      const sectionFields = await callback();
+      const sectionFields = await callback(scheme);
       fields[section as ExportSection] = sectionFields.map(fieldMapper);
     }
 

@@ -1,4 +1,5 @@
-import { NutrientType, SurveySubmissionFood } from '@/db/models/system';
+import { NutrientType, Scheme, SurveySubmissionFood } from '@/db/models/system';
+import { PromptQuestion } from '@common/types';
 import { ExportSection, ExportField as BaseExportField } from '@common/types/models';
 
 export type ExportFieldTransform<T = SurveySubmissionFood> = (food: T) => string | number;
@@ -7,7 +8,7 @@ export interface ExportField extends BaseExportField {
   value?: string | ExportFieldTransform;
 }
 
-export type DataExportFields = Record<ExportSection, () => Promise<ExportField[]>>;
+export type DataExportFields = Record<ExportSection, (...arg: any[]) => Promise<ExportField[]>>;
 
 export const EMPTY = 'N/A';
 
@@ -59,11 +60,25 @@ export default (): DataExportFields => {
   ];
 
   /**
+   * Helper to map custom PromptQuestion to ExportField
+   *
+   * @param {PromptQuestion} question
+   * @returns {ExportField}
+   */
+  const customQuestionMapper = ({ id, name: label }: PromptQuestion): ExportField => ({
+    id,
+    label,
+  });
+
+  /**
    * Survey custom fields
    *
    * @returns {Promise<ExportField[]>}
    */
-  const surveyCustom = async (): Promise<ExportField[]> => [];
+  const surveyCustom = async (scheme: Scheme): Promise<ExportField[]> => {
+    const { preMeals, postMeals, submission } = scheme.questions;
+    return [...preMeals, ...postMeals, ...submission].map(customQuestionMapper);
+  };
 
   /**
    * Default meal fields
@@ -84,7 +99,12 @@ export default (): DataExportFields => {
    *
    * @returns {Promise<ExportField[]>}
    */
-  const mealCustom = async (): Promise<ExportField[]> => [];
+  const mealCustom = async (scheme: Scheme): Promise<ExportField[]> => {
+    const {
+      meals: { preFoods, postFoods },
+    } = scheme.questions;
+    return [...preFoods, ...postFoods].map(customQuestionMapper);
+  };
 
   /**
    * Default food fields
@@ -119,7 +139,8 @@ export default (): DataExportFields => {
    *
    * @returns {Promise<ExportField[]>}
    */
-  const foodCustom = async (): Promise<ExportField[]> => [];
+  const foodCustom = async (scheme: Scheme): Promise<ExportField[]> =>
+    scheme.questions.meals.foods.map(customQuestionMapper);
 
   /**
    * Default nutrient type fields
