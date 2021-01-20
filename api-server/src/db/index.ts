@@ -1,8 +1,7 @@
 import pg from 'pg';
 import { Sequelize } from 'sequelize-typescript';
-import { Database, DatabaseConfig } from '@api-server/config/database';
+import { Database, DatabaseConfig, Environment } from '@api-server/config';
 import { Logger } from 'winston';
-import { Environment } from '@api-server/config/app';
 import * as foods from './models/foods';
 import * as system from './models/system';
 

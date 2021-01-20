@@ -1,6 +1,6 @@
 import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
-import type { MFAProvider } from '@/config/security';
+import type { MFAProvider } from '@/config';
 import { InternalServerError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 

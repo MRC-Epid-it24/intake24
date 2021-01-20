@@ -6,6 +6,14 @@ import mail, { MailConfig } from './mail';
 import queue, { QueueConfig } from './queue';
 import security, { SecurityConfig } from './security';
 
+export * from './acl';
+export * from './app';
+export * from './database';
+export * from './filesystem';
+export * from './mail';
+export * from './queue';
+export * from './security';
+
 export type Config = {
   acl: ACLConfig;
   app: AppConfig;

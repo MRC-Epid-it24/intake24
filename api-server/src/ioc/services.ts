@@ -7,39 +7,38 @@ import {
   dataExportFields,
   dataExportMapper,
   dataExportService,
-  filesystem,
+  Filesystem,
   logger,
-  mailer,
-  scheduler,
+  Mailer,
+  Scheduler,
   portionSizeService,
   surveyService,
   userService,
 } from '@/services';
 
-import jobsQueueHandler from '@/services/queues/jobs-queue-handler';
-import tasksQueueHandler from '@/services/queues/tasks-queue-handler';
+import { JobsQueueHandler, TasksQueueHandler } from '@/services/queues';
 
 export default (container: AwilixContainer): void => {
   container.register({
-    authenticationService: asFunction(authenticationService).singleton(),
-    jwtService: asFunction(jwtService).singleton(),
-    jwtRotationService: asFunction(jwtRotationService).singleton(),
-    signInService: asFunction(signInService).singleton(),
+    authenticationService: asFunction(authenticationService),
+    jwtService: asFunction(jwtService),
+    jwtRotationService: asFunction(jwtRotationService),
+    signInService: asFunction(signInService),
 
-    portionSizeService: asFunction(portionSizeService).singleton(),
-    surveyService: asFunction(surveyService).singleton(),
-    userService: asFunction(userService).singleton(),
+    portionSizeService: asFunction(portionSizeService),
+    surveyService: asFunction(surveyService),
+    userService: asFunction(userService),
 
-    dataExportFields: asFunction(dataExportFields).singleton(),
-    dataExportMapper: asFunction(dataExportMapper).singleton(),
-    dataExportService: asFunction(dataExportService).singleton(),
+    dataExportFields: asFunction(dataExportFields),
+    dataExportMapper: asFunction(dataExportMapper),
+    dataExportService: asFunction(dataExportService),
 
-    filesystem: asClass(filesystem).singleton(),
+    filesystem: asClass(Filesystem).singleton(),
     logger: asValue(logger),
-    mailer: asClass(mailer).singleton(),
-    scheduler: asClass(scheduler).singleton(),
+    mailer: asClass(Mailer).singleton(),
+    scheduler: asClass(Scheduler).singleton(),
 
-    jobsQueueHandler: asClass(jobsQueueHandler).singleton(),
-    tasksQueueHandler: asClass(tasksQueueHandler).singleton(),
+    jobsQueueHandler: asClass(JobsQueueHandler).singleton(),
+    tasksQueueHandler: asClass(TasksQueueHandler).singleton(),
   });
 };
