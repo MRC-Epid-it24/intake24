@@ -50,7 +50,7 @@ export default function (): void {
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('name', 'type', 'meals', 'questions');
+      expect(body.errors).to.have.keys('name', 'type', 'meals', 'questions', 'export');
     });
 
     it('should return 422 when invalid input data', async function () {
@@ -63,11 +63,12 @@ export default function (): void {
           type: {},
           meals: 10,
           questions: 'invalidQuestions',
+          export: 5,
         });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('name', 'type', 'meals', 'questions');
+      expect(body.errors).to.have.keys('name', 'type', 'meals', 'questions', 'export');
     });
 
     it(`should return 404 when record doesn't exist`, async function () {

@@ -42,7 +42,7 @@ export default function (): void {
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('id', 'name', 'type', 'meals', 'questions');
+      expect(body.errors).to.have.keys('id', 'name', 'type', 'meals', 'questions', 'export');
     });
 
     it('should return 422 when invalid input data', async function () {
@@ -56,11 +56,12 @@ export default function (): void {
           type: 'invalidType',
           meals: 5,
           questions: [],
+          export: 'notExportScheme',
         });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
-      expect(body.errors).to.have.keys('id', 'name', 'type', 'meals', 'questions');
+      expect(body.errors).to.have.keys('id', 'name', 'type', 'meals', 'questions', 'export');
     });
 
     it('should return 201 and new resource', async function () {
@@ -70,9 +71,9 @@ export default function (): void {
         .set('Authorization', this.bearer)
         .send(this.input);
 
-      expect(status).to.equal(201);
       expect(body).to.be.an('object').to.have.key('data');
       expect(pick(body.data, Object.keys(this.output))).to.deep.equal(this.output);
+      expect(status).to.equal(201);
     });
 
     it('should return 422 when duplicate id', async function () {

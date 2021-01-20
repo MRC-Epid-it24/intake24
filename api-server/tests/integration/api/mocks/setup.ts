@@ -66,7 +66,7 @@ export const prepare = async (): Promise<MockData> => {
     roles: [role.id],
   });
 
-  const { respondent } = await ioc.cradle.surveyService.createRespondent('test-survey', {
+  const respondent = await ioc.cradle.surveyService.createRespondent('test-survey', {
     userName: 'testRespondent',
     password: 'testRespondentPassword',
   });

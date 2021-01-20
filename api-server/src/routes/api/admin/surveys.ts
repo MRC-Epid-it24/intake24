@@ -18,7 +18,7 @@ router
 
 router.get('/create', permission('surveys-create'), wrapAsync(adminSurveyController.create));
 
-router.use(canManageSurvey());
+router.use('/:surveyId', canManageSurvey());
 
 router
   .route('/:surveyId')
