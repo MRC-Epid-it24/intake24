@@ -33,6 +33,11 @@ const schemes: LocaleMessageObject = {
     _: 'Data export',
     title: 'Data export fields',
     edit: 'Edit fields',
+    field: {
+      _: 'Edit field label',
+      id: 'Field ID',
+      label: 'Field label',
+    },
     sections: {
       _: 'Data export sections',
       survey: 'Survey record fields',

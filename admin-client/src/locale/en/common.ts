@@ -56,6 +56,7 @@ const common: LocaleMessageObject = {
     edit: 'Edit',
     export: 'Export',
     load: 'Load',
+    ok: 'Confirm',
     print: 'Print',
     questions: 'Questions',
     remove: 'Remove',

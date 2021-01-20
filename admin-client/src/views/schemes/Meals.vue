@@ -87,12 +87,12 @@
             ></v-time-picker>
           </v-card-text>
           <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="reset">
-              {{ $t('common.action.cancel') }}
+            <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
+              <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
             </v-btn>
+            <v-spacer></v-spacer>
             <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
-              {{ $t('common.action.save') }}
+              <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-form>
