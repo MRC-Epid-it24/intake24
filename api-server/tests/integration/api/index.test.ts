@@ -9,7 +9,8 @@ import admin from './admin/index.test';
 
 describe('API', function () {
   before(async function () {
-    this.app = await app({ config: ioc.cradle.config, logger: ioc.cradle.logger });
+    const { config, logger } = ioc.cradle;
+    this.app = await app({ config, logger });
     this.data = await prepare();
   });
 
@@ -67,6 +68,12 @@ describe('API', function () {
     describe('PUT /api/admin/users/:userId', users.update);
     describe('DELETE /api/admin/users/:userId', users.destroy);
 
+    // Jobs
+    // const { jobs } = admin;
+    // describe('GET /api/admin/jobs', jobs.list);
+    // describe('GET /api/admin/languages/:jobId', jobs.detail);
+    // describe('GET /api/admin/languages/:jobId/download', jobs.download);
+
     // Languages
     const { languages } = admin;
     describe('GET /api/admin/languages', languages.list);
@@ -116,8 +123,19 @@ describe('API', function () {
     // Surveys respondents
     // describe('GET /api/admin/surveys/:surveyId/respondents', surveys.respondents.list);
     // describe('POST /api/admin/surveys/:surveyId/respondents', surveys.respondents.store);
+    // describe('POST /api/admin/surveys/:surveyId/upload', surveys.respondents.upload);
+    // describe('POST /api/admin/surveys/:surveyId/export-auth-urls', surveys.respondents.exportAuthUrls);
     // describe('PUT /api/admin/surveys/:surveyId/respondents/:userId', surveys.respondents.update);
     // describe('DELETE /api/admin/surveys/:surveyId/respondents/:userId', surveys.respondents.destroy);
+
+    // Surveys submissions
+    // describe('GET /api/admin/surveys/:surveyId/submissions', surveys.respondents.submissions.list);
+    // describe('GET /api/admin/surveys/:surveyId/submissions/:submissionId', surveys.respondents.submissions.detail);
+    // describe('DELETE /api/admin/surveys/:surveyId/submissions/:submissionId', surveys.respondents.submissions.destroy);
+
+    // Surveys data-export
+    // describe('POST /api/admin/surveys/:surveyId/data-export', surveys.respondents.dataExport.queue);
+    // describe('POST /api/admin/surveys/:surveyId/data-export/sync', surveys.respondents.dataExport.sync);
 
     // Tasks
     const { tasks } = admin;
