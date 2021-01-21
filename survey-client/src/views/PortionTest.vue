@@ -39,12 +39,12 @@ export default Vue.extend({
   data() {
     return {
       testProps: {
-        text: { en: null },
+        text: { en: "test text" },
         description: { en: "hello world" },
-        methods: '',
+        methods: 'testMethod',
         validation: {
           required: false,
-          message: { en: null },
+          message: { en: "Validation fail" },
         },
       }
 

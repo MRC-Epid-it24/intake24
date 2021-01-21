@@ -76,11 +76,11 @@ export const textareaPromptProps: TextareaPromptProps = {
 
 export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
   text: { en: 'test imported' },
-  description: { en: null },
+  description: { en: 'test imported' },
   methods: '',
   validation: {
     required: false,
-    message: { en: null },
+    message: { en: 'test imported' },
   },
 };
 

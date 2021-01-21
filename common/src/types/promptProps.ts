@@ -58,7 +58,8 @@ export type ComponentType =
   | 'checkbox-list-prompt'
   | 'radio-list-prompt'
   | 'textarea-prompt'
-  | 'submit-prompt';
+  | 'submit-prompt'
+  | 'portion-size-option-prompt';
 
 export interface PromptQuestion<T = AnyDictionary> {
   id: string;

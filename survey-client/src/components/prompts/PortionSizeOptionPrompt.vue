@@ -25,8 +25,8 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { PortionSizeOptionPromptProps, TextareaPromptProps  } from '@common/types/promptProps';
-import { portionSizeOptionPromptProps, textareaPromptProps } from '@common/prompts/promptDefaults';
+import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
+import { portionSizeOptionPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt, { Prompt } from './BasePrompt';
 
 export default Vue.extend({
@@ -42,12 +42,11 @@ export default Vue.extend({
   },
 
   data() {
-    const props: PortionSizeOptionPromptProps = merge(portionSizeOptionPromptProps, this.props);
+    // const props: PortionSizeOptionPromptProps = merge(portionSizeOptionPromptProps, this.props);
     return {
-      // ...merge(portionSizeOptionPromptProps, this.props),
-      ...props,
+      // ...props,
+      ...merge(portionSizeOptionPromptProps, this.props),
       currentValue: 'ok', 
-      errors: [] as string[],
 
     };
   },
