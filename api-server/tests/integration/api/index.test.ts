@@ -134,8 +134,9 @@ describe('API', function () {
     // describe('DELETE /api/admin/surveys/:surveyId/submissions/:submissionId', surveys.respondents.submissions.destroy);
 
     // Surveys data-export
-    // describe('POST /api/admin/surveys/:surveyId/data-export', surveys.respondents.dataExport.queue);
-    // describe('POST /api/admin/surveys/:surveyId/data-export/sync', surveys.respondents.dataExport.sync);
+    const { dataExport } = surveys;
+    describe('POST /api/admin/surveys/:surveyId/data-export', dataExport.queue);
+    describe('POST /api/admin/surveys/:surveyId/data-export/sync', dataExport.sync);
 
     // Tasks
     const { tasks } = admin;

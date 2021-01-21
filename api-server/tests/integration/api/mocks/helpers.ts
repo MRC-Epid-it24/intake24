@@ -57,6 +57,7 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'surveys-create', display_name: 'Create surveys' },
     { name: 'surveys-edit', display_name: 'Edit surveys' },
     { name: 'surveys-delete', display_name: 'Delete surveys' },
+    { name: 'surveys-data-export', display_name: 'Survey data-export' },
     { name: 'surveys-mgmt', display_name: 'Survey management' },
     { name: 'surveys-respondents', display_name: 'Survey respondents' },
     { name: 'surveys-submissions', display_name: 'Survey submissions' },
