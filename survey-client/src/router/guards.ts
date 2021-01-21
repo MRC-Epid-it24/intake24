@@ -9,6 +9,12 @@ export default (router: Router, store: Store<RootState>) => {
       params: { surveyId },
     } = to;
 
+    // Temporary route for portion testing
+    if (module === 'portionTest') {
+      next({name: 'portion-test'});
+      return;
+    }
+
     // Public pages
     if (module === 'public') {
       next();
