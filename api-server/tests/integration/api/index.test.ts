@@ -28,12 +28,20 @@ describe('API', function () {
 
   describe('Admin', function () {
     before(async function () {
-      const res = await request(this.app)
+      const adminRes = await request(this.app)
+        .post('/api/login')
+        .set('Accept', 'application/json')
+        .send({ email: 'testAdmin@example.com', password: 'testAdminPassword' });
+
+      const userRes = await request(this.app)
         .post('/api/login')
         .set('Accept', 'application/json')
         .send({ email: 'testUser@example.com', password: 'testUserPassword' });
 
-      this.bearer = `Bearer ${res.body.accessToken}`;
+      this.bearer = {
+        admin: `Bearer ${adminRes.body.accessToken}`,
+        user: `Bearer ${userRes.body.accessToken}`,
+      };
     });
 
     describe('GET /admin/profile', admin.profile);

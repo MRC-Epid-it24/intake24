@@ -29,7 +29,7 @@ export default function (): void {
     const { status } = await request(this.app)
       .put(this.url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(403);
   });
@@ -43,7 +43,7 @@ export default function (): void {
       const { status, body } = await request(this.app)
         .put(this.url)
         .set('Accept', 'application/json')
-        .set('Authorization', this.bearer);
+        .set('Authorization', this.bearer.user);
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');
@@ -54,7 +54,7 @@ export default function (): void {
       const { status, body } = await request(this.app)
         .put(this.url)
         .set('Accept', 'application/json')
-        .set('Authorization', this.bearer)
+        .set('Authorization', this.bearer.user)
         .send({
           name: null,
           job: true,
@@ -72,7 +72,7 @@ export default function (): void {
       const { status } = await request(this.app)
         .put(this.invalidUrl)
         .set('Accept', 'application/json')
-        .set('Authorization', this.bearer)
+        .set('Authorization', this.bearer.user)
         .send(this.updateInput);
 
       expect(status).to.equal(404);
@@ -82,7 +82,7 @@ export default function (): void {
       const { status, body } = await request(this.app)
         .put(this.url)
         .set('Accept', 'application/json')
-        .set('Authorization', this.bearer)
+        .set('Authorization', this.bearer.user)
         .send(this.updateInput);
 
       expect(status).to.equal(200);

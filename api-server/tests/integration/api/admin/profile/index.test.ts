@@ -14,7 +14,7 @@ export default (): void => {
     const { status, body } = await request(this.app)
       .get(url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(200);
     expect(body).to.be.an('object').to.have.keys('profile', 'permissions', 'roles');
