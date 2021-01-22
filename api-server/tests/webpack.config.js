@@ -22,9 +22,9 @@ const plugins = [
 ];
 
 module.exports = {
-  entry: path.resolve('./tests/unit/index.ts'),
+  entry: path.resolve(__dirname, 'unit/index.ts'),
   output: {
-    path: path.resolve(__dirname, 'dist-tests'),
+    path: path.resolve(__dirname, '../dist-tests'),
     filename: 'tests.js',
   },
   mode: NODE_ENV,
@@ -39,7 +39,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js', '.json'],
     plugins: [
       new TsconfigPathsPlugin({
-        configFile: './tsconfig.json',
+        configFile: path.resolve(__dirname, 'tsconfig.json'),
         logLevel: 'info',
         logInfoToStdOut: true,
         extensions: ['.ts'],
@@ -50,7 +50,14 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: path.resolve(__dirname, 'tsconfig.json'),
+            },
+          },
+        ],
         exclude: /node_modules/,
       },
     ],
