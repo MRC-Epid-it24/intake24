@@ -45,7 +45,31 @@ export default Vue.extend({
   data() {
     return {
       ...merge(portionSizeOptionPromptProps, this.props),
+<<<<<<< HEAD
       currentValue: 'ok', 
+=======
+      errors: [] as string[],
+      // Temporary until API exists
+      // TO DO structure data correctly
+      currentValue: null as string | null,
+      methods: [
+        {
+          method: 'as-served',
+          foodCode: 'ABC',
+          description: 'in straight cut chips',
+        },
+        {
+          method: 'as-served',
+          foodCode: 'ABD',
+          description: 'in thick cut chips',
+        },
+        {
+          method: 'as-served',
+          foodCode: 'ABE',
+          description: 'in crinkle cut chips',
+        },
+      ],
+>>>>>>> master
     };
   },
 

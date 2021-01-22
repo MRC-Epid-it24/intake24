@@ -5,9 +5,9 @@
         <transition name="component-fade" mode="out-in">
           <component
             v-if="loaded"
-            :is="currectSelection.prompt.question.component"
-            :key="currectSelection.prompt.question.id"
-            :props="currectSelection.prompt.question.props"
+            :is="currentSelection.prompt.question.component"
+            :key="currentSelection.prompt.question.id"
+            :props="currentSelection.prompt.question.props"
             @answer="onAnswer"
             @submit="onSubmit"
           ></component>
@@ -22,7 +22,8 @@ import Vue from 'vue';
 import prompts from '@/components/prompts/';
 import surveySvc from '@/services/survey.service';
 import Recall from '@/util/Recall';
-import { Selection, Scheme } from '@common/types';
+import { Selection } from '@common/types';
+import { Scheme } from '@common/types/models';
 
 export default Vue.extend({
   name: 'Recall',
@@ -40,7 +41,7 @@ export default Vue.extend({
     loaded(): boolean {
       return !!Object.keys(this.recall).length;
     },
-    currectSelection(): Selection | null {
+    currentSelection(): Selection | null {
       return this.loaded ? this.recall.currentSelection() : null;
     },
   },

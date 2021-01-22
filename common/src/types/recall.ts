@@ -29,11 +29,6 @@ export interface RecallQuestions extends GenericQuestions {
   meals: MealQuestions;
 }
 
-export interface MealDefinition {
-  name: string;
-  time: string;
-}
-
 /* export interface Food {
   brand: string;
   data: Dictionary;
