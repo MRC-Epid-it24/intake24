@@ -1,6 +1,5 @@
-import { AnyDictionary } from '../../common';
-import { Language } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { Dictionary } from '../..';
+import { Language, Pagination } from '../../models';
 
 export type LanguageRequest = {
   id: string;
@@ -18,7 +17,7 @@ export type LanguagesResponse = Pagination<Language>;
 
 export type LanguageEntry = Language;
 
-export type LanguageRefs = AnyDictionary;
+export type LanguageRefs = Dictionary;
 
 export type LanguageResponse = {
   data: LanguageEntry;

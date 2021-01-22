@@ -10,8 +10,8 @@ import {
   CreateUserRequest,
   CreateLanguageRequest,
 } from '@common/types/http';
-import { Meal } from '@common/types/meals';
-import { RecallQuestions } from '@common/types/recall';
+import { Meal, RecallQuestions } from '@common/types';
+import { defaultExport } from '@/db/models/system/scheme';
 
 export const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
@@ -111,6 +111,7 @@ export const scheme = (): CreateSchemeRequest => {
     type,
     questions,
     meals,
+    export: defaultExport,
   };
 };
 

@@ -1,6 +1,5 @@
-import { Permission } from '../../models/system';
-import { Pagination } from '../../models/pagination';
-import { AnyDictionary } from '../../common';
+import { Dictionary } from '../..';
+import { Permission, Pagination } from '../../models';
 
 export type PermissionRequest = {
   name: string;
@@ -12,7 +11,7 @@ export type PermissionsResponse = Pagination<Permission>;
 
 export type PermissionEntry = Permission;
 
-export type PermissionRefs = AnyDictionary;
+export type PermissionRefs = Dictionary;
 
 export type PermissionResponse = {
   data: PermissionEntry;

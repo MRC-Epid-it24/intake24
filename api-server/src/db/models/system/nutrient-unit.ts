@@ -1,5 +1,5 @@
 import { Column, HasMany, Scopes, Table } from 'sequelize-typescript';
-import { NutrientUnit as NutrientUnitAttributes } from '@common/types/models/system';
+import { NutrientUnit as NutrientUnitAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { NutrientType } from '.';
 

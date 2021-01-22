@@ -1,5 +1,4 @@
-import { Task } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { Task, Pagination } from '../../models';
 
 export type TaskRequest = {
   name: string;

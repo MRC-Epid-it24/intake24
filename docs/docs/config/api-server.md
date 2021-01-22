@@ -264,6 +264,14 @@ Images directory for locally hosted images.
 * type: `string`
 * default: `'storage/images'`
 
+### URL Expiration
+
+Expiration of URLs for generated files. Defined as ms-formatted string, see [ms](https://github.com/vercel/ms) for more information.
+
+* object-path: `urlExpiresAt`
+* type: `string`
+* default: `'2d'`
+
 ## Mail
 
 Mail implementation supports following transports:
@@ -410,7 +418,7 @@ Secret to sign JWT access token
 
 #### Access token lifetime
 
-Lifetime of JWT access token. Define as ms-formatted string, see [ms](https://github.com/vercel/ms) for more information.
+Lifetime of JWT access token. Defined as ms-formatted string, see [ms](https://github.com/vercel/ms) for more information.
 
 * object-path: `jwt.access.lifetime`
 * dotenv var: `JWT_ACCESS_LIFETIME`
@@ -427,7 +435,7 @@ Secret to sign JWT refresh token
 
 #### Refresh token lifetime
 
-Lifetime of JWT refresh token. Define as ms-formatted string, see [ms](https://github.com/vercel/ms) for more information.
+Lifetime of JWT refresh token. Defined as ms-formatted string, see [ms](https://github.com/vercel/ms) for more information.
 
 * object-path: `jwt.refresh.lifetime`
 * dotenv var: `JWT_REFRESH_LIFETIME`
@@ -578,3 +586,15 @@ Rate limit setting for password request. It allows 1 request per `throttle` valu
 * object-path: `passwords.throttle`
 * type: `number`
 * default: `60`
+
+## Sign-in logging
+
+Settings for sign-in logging.
+
+### Enabled
+
+Enable/disable database logging of sign-in attempts.
+
+* object-path: `signInLog.enabled`
+* type: `boolean`
+* default: `true`

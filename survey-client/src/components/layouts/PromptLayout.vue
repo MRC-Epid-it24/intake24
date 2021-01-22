@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { LocaleTranslation } from '@common/types/common';
+import { LocaleTranslation } from '@common/types';
 import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
 
 export default (Vue as VueConstructor<Vue & LocaleContent>).extend({

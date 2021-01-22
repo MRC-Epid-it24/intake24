@@ -242,7 +242,7 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     if (!survey) throw new NotFoundError();
 
     return scheduler.jobs.addJob(
-      { type: 'ImportSurveyRespondents', userId },
+      { type: 'SurveyImportRespondents', userId },
       { surveyId, file: file.path }
     );
   };
@@ -259,7 +259,7 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    return scheduler.jobs.addJob({ type: 'ExportSurveyRespondentAuthUrls', userId }, { surveyId });
+    return scheduler.jobs.addJob({ type: 'SurveyExportRespondentAuthUrls', userId }, { surveyId });
   };
 
   return {

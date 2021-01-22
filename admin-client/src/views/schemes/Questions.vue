@@ -47,9 +47,14 @@
 import Vue, { VueConstructor } from 'vue';
 import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';
-import { AnyDictionary } from '@common/types/common';
-import { PromptQuestion } from '@common/types/prompts';
-import { QuestionSection, MealSection, RecallQuestions } from '@common/types/recall';
+import {
+  Dictionary,
+  PromptQuestion,
+  QuestionSection,
+  MealSection,
+  RecallQuestions,
+} from '@common/types';
+
 import { FormMixin } from '@/types/vue';
 import QuestionList from './QuestionList.vue';
 
@@ -123,7 +128,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
     /*
      * formMixin override
      */
-    toForm(data: AnyDictionary) {
+    toForm(data: Dictionary) {
       const { questions, ...rest } = data;
       this.form.load({ ...rest, questions: { ...defaultQuestions, ...questions } });
     },

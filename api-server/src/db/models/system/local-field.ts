@@ -1,5 +1,5 @@
 import { BelongsTo, Column, ForeignKey, Scopes, Table } from 'sequelize-typescript';
-import { LocalField as LocalFieldAttributes } from '@common/types/models/system';
+import { LocalField as LocalFieldAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Locale } from '.';
 

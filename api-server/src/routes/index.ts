@@ -1,5 +1,5 @@
 import type { Express } from 'express';
-import type { Site } from '@/config/app';
+import type { Site } from '@/config';
 import type { Ops } from '@/app';
 import { isUrlAbsolute } from '@/util';
 import api from './api';

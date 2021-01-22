@@ -1,5 +1,4 @@
-import { Permission, Role, User } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { Permission, Role, User, Pagination } from '../../models';
 
 export type UserRequest = {
   name?: string | null;

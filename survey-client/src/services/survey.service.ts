@@ -1,5 +1,4 @@
-import { AnyDictionary } from '@common/types/common';
-import { Scheme } from '@common/types/recall';
+import { Dictionary, Scheme } from '@common/types';
 import http from './http.service';
 
 export interface GenerateUserResponse {
@@ -18,7 +17,7 @@ export interface SurveyParametersResponse {
   state: string;
   storeUserSessionOnServer: boolean;
   suspensionReason: string | null;
-  uxEventsSettings: AnyDictionary;
+  uxEventsSettings: Dictionary;
 }
 
 export interface SurveyPublicParametersResponse {

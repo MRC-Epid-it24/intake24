@@ -16,14 +16,7 @@ export const setPermission = async (perm: string | string[]): Promise<void> => {
 };
 
 export const setupPermissions = async (): Promise<void> => {
-  const locales = await Locale.findAll();
-
-  const fdbPerms = locales.reduce((acc, fdb) => {
-    acc.push({ name: `fdbm/${fdb.id}`, display_name: `fdbm/${fdb.id}` });
-    return acc;
-  }, [] as any);
-
-  const resourcePerms = [
+  const permissions = [
     { name: 'acl', display_name: 'Access Control List' },
     { name: 'globalsupport', display_name: 'Global Support' },
     { name: 'surveyadmin', display_name: 'Survey Admin' },
@@ -64,6 +57,7 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'surveys-create', display_name: 'Create surveys' },
     { name: 'surveys-edit', display_name: 'Edit surveys' },
     { name: 'surveys-delete', display_name: 'Delete surveys' },
+    { name: 'surveys-data-export', display_name: 'Survey data-export' },
     { name: 'surveys-mgmt', display_name: 'Survey management' },
     { name: 'surveys-respondents', display_name: 'Survey respondents' },
     { name: 'surveys-submissions', display_name: 'Survey submissions' },
@@ -74,5 +68,10 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'tasks-delete', display_name: 'Delete tasks' },
   ];
 
-  await Permission.bulkCreate(resourcePerms.concat(fdbPerms));
+  const locales = await Locale.findAll();
+  locales.forEach((locale) => {
+    permissions.push({ name: `fdbm/${locale.id}`, display_name: `fdbm/${locale.id}` });
+  });
+
+  await Permission.bulkCreate(permissions);
 };

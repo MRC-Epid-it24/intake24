@@ -1,5 +1,5 @@
 import { Column, HasMany, Scopes, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
-import { Language as LanguageAttributes } from '@common/types/models/system';
+import { Language as LanguageAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Locale } from '.';
 

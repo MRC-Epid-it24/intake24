@@ -86,7 +86,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { JobResponse } from '@common/types/http/admin/jobs';
+import { JobResponse } from '@common/types/http';
 import Form from '@/helpers/Form';
 import RespondentsJobMixin from './RespondentsJobMixin';
 
@@ -100,7 +100,7 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
   data() {
     return {
       form: new Form({ file: null }, { multipart: true }),
-      jobType: 'ImportSurveyRespondents',
+      jobType: 'SurveyImportRespondents',
     };
   },
 

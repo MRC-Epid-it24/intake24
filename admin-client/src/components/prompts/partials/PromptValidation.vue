@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { LocaleTranslation } from '@common/types/common';
+import { LocaleTranslation } from '@common/types';
 import LanguageSelector from './LanguageSelector.vue';
 
 export default Vue.extend({

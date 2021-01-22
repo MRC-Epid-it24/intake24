@@ -21,5 +21,10 @@ router
   .delete(permission('schemes-delete'), wrapAsync(schemeController.destroy));
 
 router.get('/:schemeId/edit', permission('schemes-edit'), wrapAsync(schemeController.edit));
+router.get(
+  '/:schemeId/data-export',
+  permission('schemes-edit'),
+  wrapAsync(schemeController.dataExportRefs)
+);
 
 export default router;

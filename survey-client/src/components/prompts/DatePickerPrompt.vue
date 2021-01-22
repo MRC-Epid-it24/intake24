@@ -18,7 +18,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { DatePickerPromptProps } from '@common/types/promptProps';
+import { DatePickerPromptProps } from '@common/types';
 import { datePickerPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt, { Prompt } from './BasePrompt';
 

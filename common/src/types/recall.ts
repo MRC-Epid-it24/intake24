@@ -1,4 +1,4 @@
-import { Prompt, PromptQuestion } from './prompts';
+import type { Prompt, PromptQuestion } from '.';
 
 /* export enum RecallSections {
   PRE_MEALS = 'preMeals',
@@ -23,18 +23,10 @@ export type MealQuestionSection = 'preFoods' | 'postFoods';
 
 export type GenericQuestions = Record<QuestionSection, PromptQuestion[]>;
 
-export interface RecallQuestions extends GenericQuestions {
-  meals: MealQuestions;
-}
-
 export type MealQuestions = Record<MealSection, PromptQuestion[]>;
 
-export interface Scheme {
-  id: string;
-  name: string;
-  type: string;
-  questions: RecallQuestions;
-  meals: MealDefinition[];
+export interface RecallQuestions extends GenericQuestions {
+  meals: MealQuestions;
 }
 
 export interface MealDefinition {
@@ -44,7 +36,7 @@ export interface MealDefinition {
 
 /* export interface Food {
   brand: string;
-  data: AnyDictionary;
+  data: Dictionary;
   searchTerm: string;
 } */
 

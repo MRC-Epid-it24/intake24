@@ -1,7 +1,12 @@
-import { Meal } from '../../meals';
-import { RecallQuestions } from '../../recall';
-import { Language, Scheme } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { Meal, RecallQuestions } from '../..';
+import {
+  ExportField,
+  ExportSection,
+  Language,
+  Pagination,
+  Scheme,
+  ExportScheme,
+} from '../../models';
 
 export type SchemeRequest = {
   id: string;
@@ -9,6 +14,7 @@ export type SchemeRequest = {
   type: string;
   questions: RecallQuestions;
   meals: Meal[];
+  export: ExportScheme;
 };
 
 export type CreateSchemeRequest = SchemeRequest;
@@ -32,3 +38,5 @@ export type SchemeResponse = {
 export type CreateSchemeResponse = Pick<SchemeResponse, 'refs'>;
 
 export type StoreSchemeResponse = Pick<SchemeResponse, 'data'>;
+
+export type SchemeExportRefsResponse = Record<ExportSection, ExportField[]>;

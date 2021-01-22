@@ -68,7 +68,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Form from '@/helpers/Form';
-import { ValidationError } from '@common/types/common';
+import { ValidationError } from '@common/types';
 
 export default Vue.extend({
   name: 'PasswordReset',

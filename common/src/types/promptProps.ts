@@ -1,5 +1,5 @@
 import { AnyDictionary, LocaleTranslation } from './common';
-import { PortionSizeMethod } from './models/foods'
+import { PortionSizeMethod } from './models/foods/index'
 
 export interface BasePromptProps {
   text: LocaleTranslation;

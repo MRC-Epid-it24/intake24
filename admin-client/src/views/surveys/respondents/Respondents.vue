@@ -1,6 +1,6 @@
 <template>
   <layout :id="id" :entry="entry" v-if="entryLoaded">
-    <user-list-table
+    <data-table
       :headers="headers"
       :api="`admin/surveys/${id}/respondents`"
       ref="table"
@@ -98,12 +98,12 @@
                 </v-container>
               </v-card-text>
               <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="reset">
-                  {{ $t('common.action.cancel') }}
+                <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
+                  <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
                 </v-btn>
+                <v-spacer></v-spacer>
                 <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
-                  {{ $t('common.action.save') }}
+                  <v-icon left>$save</v-icon> {{ $t('common.action.save') }}
                 </v-btn>
               </v-card-actions>
             </v-form>
@@ -129,30 +129,30 @@
           <v-icon dark>$delete</v-icon>
         </v-btn>
       </template>
-    </user-list-table>
+    </data-table>
   </layout>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import detailMixin from '@/components/entry/detailMixin';
 import Form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
-import UserListTable from '../UserListTable.vue';
+import DataTable from '../DataTable.vue';
 import RespondentsUpload from './RespondentsUpload.vue';
 import RespondentsAuthUrlExport from './RespondentsAuthUrlExport.vue';
 
 export type RespondentsRefs = {
   $refs: {
-    table: InstanceType<typeof UserListTable>;
+    table: InstanceType<typeof DataTable>;
   };
 };
 
 export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).extend({
   name: 'SurveyRespondents',
 
-  components: { UserListTable, RespondentsAuthUrlExport, RespondentsUpload },
+  components: { DataTable, RespondentsAuthUrlExport, RespondentsUpload },
 
   mixins: [detailMixin],
 
@@ -197,7 +197,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       this.dialog = true;
     },
 
-    edit(item: AnyDictionary) {
+    edit(item: Dictionary) {
       this.form.load(item);
       this.dialog = true;
     },
@@ -236,7 +236,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       await this.updateTable();
     },
 
-    async remove({ userName: name, userId }: AnyDictionary) {
+    async remove({ userName: name, userId }: Dictionary) {
       if (!confirm(this.$t('common.action.confirm.delete', { name }) as string)) return;
 
       await this.$http.delete(`admin/surveys/${this.id}/respondents/${userId}`);

@@ -1,24 +1,28 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { Language, Scheme } from '@/db/models/system';
-import { defaultMeals as meals } from '@/db/models/system/scheme';
+import { defaultMeals } from '@/db/models/system/scheme';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
+import type { IoC } from '@/ioc';
 import {
   CreateSchemeResponse,
   SchemeRefs,
   SchemeResponse,
   SchemesResponse,
   StoreSchemeResponse,
+  SchemeExportRefsResponse,
 } from '@common/types/http';
+import { ExportField, ExportSection } from '@common/types/models';
+import { PromptQuestion } from '@common/types';
 import { Controller, CrudActions } from '../controller';
 
-export type SchemeController = Controller<CrudActions>;
+export type SchemeController = Controller<CrudActions | 'dataExportRefs'>;
 
-export default (): SchemeController => {
+export default ({ dataExportFields }: IoC): SchemeController => {
   const refs = async (): Promise<SchemeRefs> => {
     const languages = await Language.findAll();
 
-    return { languages, meals };
+    return { languages, meals: defaultMeals };
   };
 
   const entry = async (req: Request, res: Response): Promise<void> => {
@@ -42,7 +46,7 @@ export default (): SchemeController => {
 
   const store = async (req: Request, res: Response<StoreSchemeResponse>): Promise<void> => {
     const scheme = await Scheme.create(
-      pick(req.body, ['id', 'name', 'type', 'questions', 'meals'])
+      pick(req.body, ['id', 'name', 'type', 'questions', 'meals', 'export'])
     );
 
     res.status(201).json({ data: scheme });
@@ -60,7 +64,7 @@ export default (): SchemeController => {
 
     if (!scheme) throw new NotFoundError();
 
-    await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals']));
+    await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals', 'export']));
 
     res.json({ data: scheme, refs: await refs() });
   };
@@ -78,6 +82,26 @@ export default (): SchemeController => {
     res.status(204).json();
   };
 
+  const dataExportRefs = async (
+    req: Request,
+    res: Response<SchemeExportRefsResponse>
+  ): Promise<void> => {
+    const { schemeId } = req.params;
+    const scheme = await Scheme.scope('surveys').findByPk(schemeId);
+
+    if (!scheme) throw new NotFoundError();
+
+    const fieldMapper = ({ id, label }: ExportField) => ({ id, label });
+
+    const fields: any = {};
+    for (const [section, callback] of Object.entries(dataExportFields)) {
+      const sectionFields = await callback(scheme);
+      fields[section as ExportSection] = sectionFields.map(fieldMapper);
+    }
+
+    res.json(fields);
+  };
+
   return {
     list,
     create,
@@ -86,5 +110,6 @@ export default (): SchemeController => {
     edit,
     update,
     destroy,
+    dataExportRefs,
   };
 };

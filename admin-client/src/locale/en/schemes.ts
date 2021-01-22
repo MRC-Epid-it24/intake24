@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const schemes: LocaleMessage = {
+const schemes: LocaleMessageObject = {
   _: 'Scheme',
   id: 'Scheme ID',
   index: 'Schemes',
@@ -27,6 +27,27 @@ const schemes: LocaleMessage = {
     validation: {
       required: 'Meal name must be filled in.',
       unique: 'Meal name already exists in current list.',
+    },
+  },
+  'data-export': {
+    _: 'Data export',
+    title: 'Data export fields',
+    edit: 'Edit fields',
+    field: {
+      _: 'Edit field label',
+      id: 'Field ID',
+      label: 'Field label',
+    },
+    sections: {
+      _: 'Data export sections',
+      survey: 'Survey record fields',
+      surveyCustom: 'Survey custom fields',
+      meal: 'Meal record fields',
+      mealCustom: 'Meal custom fields',
+      food: 'Food record fields',
+      foodCustom: 'Food custom fields',
+      nutrientTypes: 'Nutrient types fields',
+      portionSizes: 'Portion size fields',
     },
   },
   questions: {

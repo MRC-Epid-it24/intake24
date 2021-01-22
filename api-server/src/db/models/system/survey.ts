@@ -10,7 +10,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { surveyPermissions } from '@api-server/services/acl.service';
-import { Survey as SurveyAttributes, SurveyState } from '@common/types/models/system';
+import { Survey as SurveyAttributes, SurveyState } from '@common/types/models';
 import BaseModel from '../model';
 import {
   ClientErrorReport,

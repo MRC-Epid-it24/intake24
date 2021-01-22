@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import { FormMixin } from '@/types/vue';
 import Form from '@/helpers/Form';
 import SubmitFooter from '@/components/forms/SubmitFooter.vue';
@@ -44,14 +44,11 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   },
 
   methods: {
-    toForm(data: AnyDictionary) {
+    toForm(data: Dictionary) {
       this.form.load(data);
     },
 
     async onSubmit() {
-      // TODO: TS 3.9 throws error here. Watch out for this - calling vue.js computed props
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       if (this.isEdit) {
         const { data } = await this.form.put(`admin/${this.apiUrl}/${this.id}`);
         this.toForm(data);

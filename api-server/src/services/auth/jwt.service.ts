@@ -1,11 +1,12 @@
 import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
+import type { MFAProvider } from '@/config';
 import { InternalServerError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 
 export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken';
 
-export type Subject = { providerID: SubjectProvider; providerKey: string };
+export type Subject = { provider: SubjectProvider | MFAProvider; providerKey: string };
 
 export type Tokens = {
   accessToken: string;

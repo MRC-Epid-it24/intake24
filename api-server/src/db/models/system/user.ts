@@ -10,7 +10,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { User as UserAttributes } from '@common/types/models/system';
+import { User as UserAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import {
   ClientErrorReport,
@@ -19,7 +19,7 @@ import {
   RefreshToken,
   Role,
   RoleUser,
-  SigninLog,
+  SignInLog,
   SurveySubmission,
   UserPassword,
   UserPasswordReset,
@@ -40,7 +40,7 @@ import {
       },
     ],
   },
-  signinLog: { include: [{ model: SigninLog }] },
+  signInLog: { include: [{ model: SignInLog }] },
   aliases: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
   tokens: { include: [{ model: RefreshToken }] },
@@ -119,8 +119,8 @@ export default class User extends BaseModel<User> implements UserAttributes {
   @HasMany(() => RefreshToken)
   public tokens?: RefreshToken[];
 
-  @HasMany(() => SigninLog, 'userId')
-  public signinLog?: SigninLog[];
+  @HasMany(() => SignInLog, 'userId')
+  public signInLog?: SignInLog[];
 
   @HasMany(() => SurveySubmission, 'userId')
   public submissions?: SurveySubmission[];
@@ -155,15 +155,13 @@ export default class User extends BaseModel<User> implements UserAttributes {
   }
 
   public allPermissions(): Permission[] {
-    const permissions = this.permissions ?? [];
+    const { permissions = [], roles = [] } = this;
 
-    const rolePermissions = this.roles
-      ? this.roles.reduce((acc, item) => {
-          return item.permissions ? acc.concat(item.permissions) : acc;
-        }, [] as Permission[])
-      : [];
+    roles.forEach((item) => {
+      if (item.permissions) permissions.push(...item.permissions);
+    });
 
-    return uniqBy(permissions.concat(rolePermissions), 'name');
+    return uniqBy(permissions, 'name');
   }
 
   public hasPermissionByName(permission: string): boolean {

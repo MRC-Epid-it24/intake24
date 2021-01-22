@@ -12,6 +12,11 @@ import ioc, { IoC } from '@/ioc';
 import { Job, JobData, JobType } from '@/jobs/job';
 import { QueueHandler } from './queue-handler';
 
+export type JobInput = {
+  type: JobType;
+  userId?: number | null;
+};
+
 export default class JobsQueueHandler implements QueueHandler<JobData> {
   readonly name = 'it24-jobs';
 
@@ -48,7 +53,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   public async init(connection: ConnectionOptions): Promise<void> {
     this.scheduler = new QueueScheduler(this.name, { connection });
 
-    this.queue = new Queue(this.name, { connection });
+    this.queue = new Queue(this.name, { connection, defaultJobOptions: { delay: 500 } });
 
     this.queueEvents = new QueueEvents(this.name, { connection });
 
@@ -160,7 +165,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   private async queueJob(job: DbJob, data = {}, options: JobsOptions = {}): Promise<void> {
     const { id, type } = job;
 
-    await this.queue.add(type, { job, data }, { delay: 500, ...options });
+    await this.queue.add(type, { job, data }, options);
 
     this.logger.debug(`Queue ${this.name}: Job ${id} | ${type} queued.`);
   }
@@ -168,20 +173,14 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   /**
    * Add job to queue
    *
-   * @param {{ type: JobType; userId: number }} input
+   * @param {JobInput} input
    * @param {*} [data={}]
    * @param {JobsOptions} [options={}]
-   * @returns {(Promise<Job>)}
+   * @returns {Promise<DbJob>}
    * @memberof JobsQueueHandler
    */
-  public async addJob(
-    input: { type: JobType; userId: number },
-    data = {},
-    options: JobsOptions = {}
-  ): Promise<DbJob> {
-    const { type, userId } = input;
-
-    const job = await DbJob.create({ type, userId });
+  public async addJob(input: JobInput, data = {}, options: JobsOptions = {}): Promise<DbJob> {
+    const job = await DbJob.create(input);
     await this.queueJob(job, data, options);
 
     return job;

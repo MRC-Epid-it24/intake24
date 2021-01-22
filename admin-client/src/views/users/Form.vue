@@ -145,7 +145,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';
 
@@ -173,7 +173,7 @@ export default Vue.extend({
   },
 
   methods: {
-    toForm(data: AnyDictionary) {
+    toForm(data: Dictionary) {
       const { permissions = [], roles = [], ...rest } = data;
       const form = {
         ...rest,

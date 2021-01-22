@@ -1,9 +1,14 @@
 import { Request } from 'express';
 import { isObject } from 'lodash';
-import { FindOptions as BaseFindOptions, Op, CountOptions as BaseCountOptions } from 'sequelize';
+import {
+  FindOptions as BaseFindOptions,
+  Op,
+  CountOptions as BaseCountOptions,
+  OrderItem,
+} from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Readable } from 'stream';
-import { Pagination, PaginationMeta } from '@common/types/models/pagination';
+import { Pagination, PaginationMeta } from '@common/types/models';
 
 export interface Paginate extends BaseFindOptions {
   req: Request;
@@ -49,11 +54,11 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     page = page as number;
     limit = limit as number;
 
-    const options = {
+    const options: FindOptions = {
       limit,
       offset: limit * (page - 1),
       ...params,
-    } as FindOptions;
+    };
 
     if (search && columns.length) {
       const operation =
@@ -79,8 +84,10 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
       total = (total as any).length;
     }
 
-    // TODO: implement server-side sorting
-    // if (params.order) options.order = params.order;
+    if (sort && typeof sort === 'string') {
+      const order = sort.split('|') as OrderItem;
+      options.order = [order];
+    }
 
     const records = await this.findAll(options);
 

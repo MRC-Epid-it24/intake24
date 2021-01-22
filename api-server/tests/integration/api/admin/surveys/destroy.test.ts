@@ -35,7 +35,7 @@ export default function (): void {
     const { status } = await request(this.app)
       .delete(this.url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(403);
   });
@@ -46,7 +46,7 @@ export default function (): void {
     const { status } = await request(this.app)
       .delete(this.url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(403);
   });
@@ -57,7 +57,7 @@ export default function (): void {
     const { status } = await request(this.app)
       .delete(this.url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(403);
   });
@@ -68,7 +68,7 @@ export default function (): void {
     const { status } = await request(this.app)
       .delete(this.url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(403);
   });
@@ -79,7 +79,7 @@ export default function (): void {
     const { status } = await request(this.app)
       .delete(this.invalidUrl)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(404);
   });
@@ -91,7 +91,7 @@ export default function (): void {
     const { status, body } = await request(this.app)
       .delete(this.url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(204);
     expect(body).to.be.empty;
@@ -104,7 +104,7 @@ export default function (): void {
     const { status, body } = await request(this.app)
       .delete(this.url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(204);
     expect(body).to.be.empty;

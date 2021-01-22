@@ -19,7 +19,7 @@ export default function (): void {
     const { status } = await request(this.app)
       .get(this.url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(403);
   });
@@ -30,7 +30,7 @@ export default function (): void {
     const { status } = await request(this.app)
       .get(this.url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(403);
   });
@@ -41,7 +41,7 @@ export default function (): void {
     const { status, body } = await request(this.app)
       .get(this.url)
       .set('Accept', 'application/json')
-      .set('Authorization', this.bearer);
+      .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(200);
     expect(body).to.be.an('object').to.have.keys('data', 'meta');

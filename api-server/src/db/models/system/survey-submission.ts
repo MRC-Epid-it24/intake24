@@ -1,4 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { SurveySubmission as SurveySubmissionAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from '.';
 
@@ -15,7 +16,9 @@ import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from 
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmission extends BaseModel<SurveySubmission> {
+export default class SurveySubmission
+  extends BaseModel<SurveySubmission>
+  implements SurveySubmissionAttributes {
   @Column({
     primaryKey: true,
     type: DataType.UUID,
@@ -47,8 +50,11 @@ export default class SurveySubmission extends BaseModel<SurveySubmission> {
   })
   public submissionTime!: Date;
 
-  @Column
-  public log!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.ARRAY(DataType.TEXT),
+  })
+  public log!: string[] | null;
 
   @Column({
     allowNull: false,

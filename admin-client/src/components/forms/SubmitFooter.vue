@@ -1,15 +1,15 @@
 <template>
-  <v-row justify="center" class="mt-3">
+  <v-row :justify="justify" class="mt-3">
     <v-col cols="12" sm="6" md="4" lg="3">
       <v-btn
         x-large
         type="submit"
         :color="color"
+        block
         :title="label"
         :disabled="disabled || isLoading"
-        width="100%"
       >
-        <v-icon left class="mr-3">{{ icon }}</v-icon> {{ label }}
+        <v-icon left>{{ icon }}</v-icon> {{ label }}
       </v-btn>
     </v-col>
   </v-row>
@@ -29,6 +29,10 @@ export default Vue.extend({
     icon: {
       type: String,
       default: '$save',
+    },
+    justify: {
+      type: String,
+      default: 'center',
     },
     label: {
       type: String,

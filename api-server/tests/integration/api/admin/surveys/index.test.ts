@@ -6,6 +6,7 @@ import edit from './edit.test';
 import update from './update.test';
 import destroy from './destroy.test';
 import mgmt from './mgmt/index.test';
+import dataExport from './data-export/index.test';
 
 export default {
   list,
@@ -16,4 +17,5 @@ export default {
   update,
   destroy,
   mgmt,
+  dataExport,
 };

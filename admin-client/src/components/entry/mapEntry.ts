@@ -1,10 +1,10 @@
 import Vue, { VueConstructor } from 'vue';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import { MapEntryMixin } from '@/types/vue';
 
 export default (Vue as VueConstructor<Vue & MapEntryMixin>).extend({
   computed: {
-    entry(): AnyDictionary {
+    entry(): Dictionary {
       return this.$store.state[this.module].entry.data;
     },
     entryLoaded() {

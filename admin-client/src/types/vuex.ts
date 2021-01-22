@@ -1,9 +1,19 @@
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import { UserPayload } from './auth';
 
 export interface RootState {
   lang: string;
   module?: string | null;
+  app: {
+    api: string;
+    host: string;
+    name: string;
+    build: {
+      version: string;
+      revision: string;
+      date: string;
+    };
+  };
 }
 
 export interface LoadingState {
@@ -33,22 +43,22 @@ export interface AuthState {
 export interface EntryState {
   name: string;
   status: string;
-  data: AnyDictionary;
-  refs: AnyDictionary;
-  addons: AnyDictionary;
-  error: AnyDictionary;
+  data: Dictionary;
+  refs: Dictionary;
+  addons: Dictionary;
+  error: Dictionary;
 }
 
 export interface ListState {
   name: string;
   status: string;
-  data: AnyDictionary[];
-  refs: AnyDictionary;
-  error: AnyDictionary;
+  data: Dictionary[];
+  refs: Dictionary;
+  error: Dictionary;
 }
 
 export interface FilterState {
   name: string;
   key: string;
-  data: AnyDictionary;
+  data: Dictionary;
 }

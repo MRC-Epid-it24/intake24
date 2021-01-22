@@ -42,7 +42,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js', '.json'],
     plugins: [
       new TsconfigPathsPlugin({
-        configFile: './tsconfig.build.json',
+        configFile: './tsconfig.json',
         logLevel: 'info',
         logInfoToStdOut: true,
         extensions: ['.ts'],
@@ -53,14 +53,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              configFile: path.resolve(__dirname, 'tsconfig.build.json'),
-            },
-          },
-        ],
+        use: 'ts-loader',
         exclude: /node_modules/,
       },
     ],

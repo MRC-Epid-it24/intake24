@@ -16,6 +16,7 @@
           :headers="headers"
           :items="items"
           item-key="id"
+          :items-per-page="50"
           :options.sync="options"
           show-select
           :loading="isLoading"
@@ -29,14 +30,6 @@
             <actionbar :api="api" :item="item" class="text-right" @refresh="onRefresh"></actionbar>
           </template>
         </v-data-table>
-        <div class="text-center">
-          <v-pagination
-            v-model="options.page"
-            :length="meta.lastPage"
-            :total-visible="10"
-            @input="fetch"
-          ></v-pagination>
-        </div>
       </v-card-text>
     </v-card>
   </div>
@@ -45,7 +38,8 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { DataOptions } from 'vuetify';
-import { AnyDictionary } from '@common/types/common';
+import isEqual from 'lodash/isEqual';
+import { Dictionary } from '@common/types';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
 import handlesLoading from '@/mixins/handlesLoading';
@@ -69,12 +63,6 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
       type: Array,
       required: true,
     },
-    sortOrder: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
     trackBy: {
       type: String,
       default: 'id',
@@ -83,25 +71,24 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
   data() {
     return {
-      items: [] as AnyDictionary[],
+      items: [] as Dictionary[],
       meta: {},
       options: {} as DataOptions,
-      selected: [] as AnyDictionary[],
+      selected: [] as Dictionary[],
       tracked: [] as string[] | number[],
     };
   },
 
   computed: {
-    filter(): AnyDictionary {
+    filter(): Dictionary {
       return this.$store.state[this.module].filter.data;
     },
   },
 
   watch: {
     options: {
-      handler() {
-        // this.$store.dispatch(`${this.module}/request`);
-        this.fetch();
+      handler(val, oldVal) {
+        if (!isEqual(val, oldVal)) this.fetch();
       },
       deep: true,
     },
@@ -112,13 +99,20 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
   methods: {
     async fetch() {
-      const { page, itemsPerPage: limit } = this.options;
+      const {
+        page,
+        itemsPerPage: limit,
+        sortBy: [column],
+        sortDesc: [desc],
+      } = this.options;
+
+      const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : null;
 
       try {
         const {
           data: { data, meta },
         } = await this.withLoading(
-          this.$http.get(this.api, { params: { limit, page, ...this.filter } })
+          this.$http.get(this.api, { params: { limit, page, sort, ...this.filter } })
         );
 
         this.items = data;
@@ -132,7 +126,7 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
       this.tracked = this.selected.map((item) => item[this.trackBy]);
     },
 
-    async onFilterSet(data: AnyDictionary) {
+    async onFilterSet(data: Dictionary) {
       // this.clearSelected();
       await this.$store.dispatch(`${this.module}/filter/add`, data);
       this.fetch();

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { LocaleTranslation } from '@common/types/common';
+import { LocaleTranslation } from '@common/types';
 
 export type LocaleContent = {
   getLocaleContent<T>(content: LocaleTranslation<T>): T;

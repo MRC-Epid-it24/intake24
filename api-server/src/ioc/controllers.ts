@@ -1,5 +1,4 @@
 import { asFunction, AwilixContainer } from 'awilix';
-
 import controllers from '@/http/controllers';
 
 export default (container: AwilixContainer): void => {
@@ -18,9 +17,12 @@ export default (container: AwilixContainer): void => {
     languageController: asFunction(controllers.admin.language),
     localeController: asFunction(controllers.admin.locale),
     schemeController: asFunction(controllers.admin.scheme),
+
     adminSurveyController: asFunction(controllers.admin.survey),
-    adminSurveyRespondentController: asFunction(controllers.admin.surveyRespondent),
+    adminSurveyDataExportController: asFunction(controllers.admin.surveyDataExport),
     adminSurveyMgmtController: asFunction(controllers.admin.surveyMgmt),
+    adminSurveyRespondentController: asFunction(controllers.admin.surveyRespondent),
+    adminSurveySubmissionController: asFunction(controllers.admin.surveySubmission),
 
     taskController: asFunction(controllers.admin.task),
 

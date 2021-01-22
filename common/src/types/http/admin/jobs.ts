@@ -1,5 +1,4 @@
-import { Job } from '../../models/system';
-import { Pagination } from '../../models/pagination';
+import { Job, Pagination } from '../../models';
 
 export type JobsResponse = Pagination<Job>;
 

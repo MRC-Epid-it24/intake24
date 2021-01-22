@@ -1,6 +1,6 @@
 <template>
   <layout :id="id" :entry="entry" v-if="entryLoaded">
-    <user-list-table :headers="headers" :api="`admin/surveys/${id}/mgmt`" ref="table">
+    <data-table :headers="headers" :api="`admin/surveys/${id}/mgmt`" ref="table">
       <template v-slot:header-add>
         <v-dialog v-model="dialog" max-width="600px">
           <template v-slot:activator="{ on, attrs }">
@@ -72,12 +72,12 @@
                 </v-container>
               </v-card-text>
               <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="reset">
-                  {{ $t('common.action.cancel') }}
+                <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
+                  <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
                 </v-btn>
+                <v-spacer></v-spacer>
                 <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
-                  {{ $t('common.action.save') }}
+                  <v-icon left>$save</v-icon> {{ $t('common.action.save') }}
                 </v-btn>
               </v-card-actions>
             </v-form>
@@ -89,28 +89,28 @@
           <v-icon dark>$edit</v-icon>
         </v-btn>
       </template>
-    </user-list-table>
+    </data-table>
   </layout>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { AnyDictionary } from '@common/types/common';
+import { Dictionary } from '@common/types';
 import detailMixin from '@/components/entry/detailMixin';
 import Form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
-import UserListTable from './UserListTable.vue';
+import DataTable from './DataTable.vue';
 
 export type MgmtRefs = {
   $refs: {
-    table: InstanceType<typeof UserListTable>;
+    table: InstanceType<typeof DataTable>;
   };
 };
 
 export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
   name: 'SurveyMgmt',
 
-  components: { UserListTable },
+  components: { DataTable },
 
   mixins: [detailMixin],
 
@@ -164,7 +164,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
       await this.fetchOptions();
     },
 
-    async edit(item: AnyDictionary) {
+    async edit(item: Dictionary) {
       const { permissions, ...rest } = item;
       this.form.load({ ...rest, permissions: permissions.map((permission: any) => permission.id) });
       this.selected = item;

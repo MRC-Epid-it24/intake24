@@ -1,14 +1,16 @@
 import { JobType, Jobs } from './job';
 import PurgeRefreshTokens from './purge-refresh-tokens';
 import SendPasswordReset from './send-password-reset';
-import ExportSurveyRespondentAuthUrls from './export-survey-respondent-auth-urls';
-import ImportSurveyRespondents from './import-survey-respondents';
+import SurveyDataExport from './survey-data-export';
+import SurveyExportRespondentAuthUrls from './survey-export-respondent-auth-urls';
+import SurveyImportRespondents from './survey-import-respondents';
 
 const jobs: Jobs = {
   PurgeRefreshTokens,
   SendPasswordReset,
-  ExportSurveyRespondentAuthUrls,
-  ImportSurveyRespondents,
+  SurveyDataExport,
+  SurveyExportRespondentAuthUrls,
+  SurveyImportRespondents,
 };
 
 export const validate = (job: JobType): boolean => Object.keys(jobs).includes(job);

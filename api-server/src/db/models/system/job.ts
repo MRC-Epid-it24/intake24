@@ -1,6 +1,6 @@
 import { Table, Column, CreatedAt, DataType, ForeignKey, UpdatedAt } from 'sequelize-typescript';
 import { JobType } from '@api-server/jobs/job';
-import { Job as JobAttributes } from '@common/types/models/system';
+import { Job as JobAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 
@@ -25,10 +25,11 @@ export default class Job extends BaseModel<Job> implements JobAttributes {
   public type!: JobType;
 
   @Column({
-    primaryKey: true,
+    allowNull: true,
+    type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
-  public userId!: number;
+  public userId!: number | null;
 
   @Column({
     allowNull: true,
@@ -68,6 +69,7 @@ export default class Job extends BaseModel<Job> implements JobAttributes {
 
   @Column({
     allowNull: true,
+    type: DataType.TEXT({ length: 'long' }),
   })
   public stackTrace!: string;
 

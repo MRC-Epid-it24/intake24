@@ -53,7 +53,7 @@
     <v-dialog v-model="dialog.show" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card tile>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click.stop="reset">
+          <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
             <v-icon>$cancel</v-icon>
           </v-btn>
           <v-toolbar-title>
@@ -61,9 +61,8 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark text :title="$t('common.action.save')" @click.stop="save">
-              <v-icon left>$save</v-icon>
-              {{ $t('common.action.save') }}
+            <v-btn :title="$t('common.action.ok')" dark text @click.stop="save">
+              <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
           <template v-slot:extension>
@@ -100,7 +99,7 @@
                       :label="$t('schemes.questions.id')"
                       :rules="questionIdRules"
                       hide-details="auto"
-                      hint="Unique identifier, used e.g. in data-exports as header"
+                      messages="Unique identifier, used e.g. in data-exports as header"
                       outlined
                     ></v-text-field>
                   </v-col>
@@ -122,12 +121,12 @@
               ></component>
             </v-tabs-items>
             <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="reset">
-                {{ $t('common.action.cancel') }}
+              <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
+                <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
               </v-btn>
+              <v-spacer></v-spacer>
               <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
-                {{ $t('common.action.save') }}
+                <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
               </v-btn>
             </v-card-actions>
           </v-container>
@@ -141,8 +140,7 @@
 import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { FormRefs } from '@common/types/common';
-import { ComponentType, PromptQuestion } from '@common/types/prompts';
+import { FormRefs, ComponentType, PromptQuestion } from '@common/types';
 import { promptQuestions } from '@common/prompts/promptDefaults';
 import prompts from '@/components/prompts';
 

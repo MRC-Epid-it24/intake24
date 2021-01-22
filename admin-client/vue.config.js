@@ -1,6 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const childProcess = require('child_process');
 const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const pkg = require('./package.json');
+
+// Set build info for application
+process.env.VUE_APP_BUILD_VERSION = pkg.version;
+process.env.VUE_APP_BUILD_REVISION = childProcess
+  .execSync('git rev-parse --short HEAD', { cwd: path.resolve(__dirname, '..') })
+  .toString()
+  .trim();
+process.env.VUE_APP_BUILD_DATE = new Date().toISOString();
 
 module.exports = {
   configureWebpack: {
@@ -22,5 +32,18 @@ module.exports = {
   },
   outputDir: process.env.OUTPUT_DIR || 'dist',
   publicPath: process.env.PUBLIC_PATH || '/',
+  pwa: {
+    name: process.env.VUE_APP_NAME,
+    themeColor: '#263238',
+    msTileColor: '#FFFFFF',
+    manifestOptions: {
+      name: process.env.VUE_APP_NAME,
+      short_name: process.env.VUE_APP_NAME,
+      start_url: '.',
+      display: 'standalone',
+      theme_color: '#263238',
+      background_color: '#FFFFFF',
+    },
+  },
   transpileDependencies: ['vuetify'],
 };

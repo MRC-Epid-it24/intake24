@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const permissions: LocaleMessage = {
+const permissions: LocaleMessageObject = {
   _: 'Permission',
   index: 'Permissions',
   all: 'All permissions',

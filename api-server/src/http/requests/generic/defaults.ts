@@ -23,6 +23,7 @@ export const paginate: Schema = {
     in: ['query'],
     isString: true,
     optional: { options: { nullable: true } },
+    matches: { options: /^\w+\|(asc|desc)$/ },
     escape: true,
   },
   search: {

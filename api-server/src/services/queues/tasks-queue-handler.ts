@@ -37,7 +37,10 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
   public async init(connection: ConnectionOptions): Promise<void> {
     this.scheduler = new QueueScheduler(this.name, { connection });
 
-    this.queue = new Queue(this.name, { connection });
+    this.queue = new Queue(this.name, {
+      connection,
+      defaultJobOptions: { removeOnComplete: true, removeOnFail: true },
+    });
 
     const worker = new Worker(this.name, this.processor, { connection });
 
@@ -105,11 +108,7 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
   private async queueJob(task: Task): Promise<void> {
     const { name, job: jobType, cron } = task;
 
-    await this.queue.add(
-      name,
-      { jobType },
-      { repeat: { cron }, removeOnComplete: true, removeOnFail: true }
-    );
+    await this.queue.add(name, { jobType }, { repeat: { cron } });
   }
 
   /**

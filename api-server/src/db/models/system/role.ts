@@ -8,7 +8,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import BaseModel from '@api-server/db/models/model';
-import { Role as RoleAttributes } from '@common/types/models/system';
+import { Role as RoleAttributes } from '@common/types/models';
 import { Permission, PermissionRole, RoleUser, User } from '.';
 
 @Scopes(() => ({

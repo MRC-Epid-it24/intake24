@@ -2,6 +2,7 @@ export type LocalLocation = 'logs' | 'public' | 'downloads' | 'uploads' | 'image
 
 export type FileSystemConfig = {
   local: Record<LocalLocation, string>;
+  urlExpiresAt: string;
 };
 
 const fsConfig: FileSystemConfig = {
@@ -12,6 +13,7 @@ const fsConfig: FileSystemConfig = {
     uploads: process.env.FS_UPLOADS ?? 'storage/uploads',
     images: process.env.FS_IMAGES ?? 'storage/images',
   },
+  urlExpiresAt: '2d',
 };
 
 export default fsConfig;

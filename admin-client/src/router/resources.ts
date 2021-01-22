@@ -26,7 +26,7 @@ const resources: Resource[] = [
     icon: 'fas fa-route',
     api: 'admin/schemes',
     generateRoutes: true,
-    routes: [...routes, 'questions'],
+    routes: [...routes, 'questions', 'data-export'],
   },
   {
     group: 'surveyMgmt',
@@ -34,7 +34,7 @@ const resources: Resource[] = [
     icon: 'fas fa-poll',
     api: 'admin/surveys',
     generateRoutes: true,
-    routes: [...routes, 'respondents', 'mgmt'],
+    routes: [...routes, 'respondents', 'mgmt', 'submissions', 'data-export'],
   },
   // System
   {

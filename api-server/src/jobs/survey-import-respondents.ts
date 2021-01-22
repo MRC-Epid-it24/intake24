@@ -5,7 +5,7 @@ import { User, UserSurveyAlias } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import { Job, JobData, JobType } from './job';
 
-export type ImportSurveyRespondentsData = {
+export type SurveyImportRespondentsData = {
   surveyId: string;
   file: string;
 };
@@ -20,10 +20,10 @@ export type CSVRow = {
 
 const requiredFields = ['username', 'password'];
 
-export default class ImportSurveyRespondents implements Job {
-  public readonly name: JobType = 'ImportSurveyRespondents';
+export default class SurveyImportRespondents implements Job {
+  public readonly name: JobType = 'SurveyImportRespondents';
 
-  private data!: ImportSurveyRespondentsData;
+  private data!: SurveyImportRespondentsData;
 
   private readonly logger;
 
@@ -43,7 +43,7 @@ export default class ImportSurveyRespondents implements Job {
    *
    * @return Promise<void>
    */
-  public async run({ data }: JobData<ImportSurveyRespondentsData>): Promise<void> {
+  public async run({ data }: JobData<SurveyImportRespondentsData>): Promise<void> {
     this.data = data;
     this.file = path.resolve(data.file);
 
