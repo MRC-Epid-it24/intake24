@@ -8,7 +8,7 @@ import {
 } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Readable } from 'stream';
-import { Pagination, PaginationMeta } from '@common/types/models/pagination';
+import { Pagination, PaginationMeta } from '@common/types/models';
 
 export interface Paginate extends BaseFindOptions {
   req: Request;

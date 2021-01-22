@@ -1,4 +1,4 @@
-import { Meal, RecallQuestions } from '..';
+import { Meal, RecallQuestions } from '../..';
 
 export enum SchemeTypes {
   DATA_DRIVEN = 'data-driven',
