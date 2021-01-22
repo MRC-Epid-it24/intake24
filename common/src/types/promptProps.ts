@@ -1,5 +1,5 @@
-import { AnyDictionary, LocaleTranslation } from './common';
-import { PortionSizeMethod } from './models/foods/index'
+import { LocaleTranslation } from '.';
+import { PortionSizeMethod } from './models'
 
 export interface BasePromptProps {
   text: LocaleTranslation;
@@ -51,20 +51,3 @@ export interface PortionSizeOptionPromptProps extends ValidatedPromptProps {
   // Prop for which methods to display
   methods: PortionSizeMethod;  // Temporary
 };
-
-export type ComponentType =
-  | 'info-prompt'
-  | 'date-picker-prompt'
-  | 'time-picker-prompt'
-  | 'checkbox-list-prompt'
-  | 'radio-list-prompt'
-  | 'textarea-prompt'
-  | 'submit-prompt'
-  | 'portion-size-option-prompt';
-
-export interface PromptQuestion<T = AnyDictionary> {
-  id: string;
-  name: string;
-  component: ComponentType;
-  props: T;
-}

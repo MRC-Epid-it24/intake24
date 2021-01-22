@@ -1,1 +1,1 @@
-export * from './portion-methods.ts'
+export * from './portion-methods'

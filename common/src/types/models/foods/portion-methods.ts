@@ -3,7 +3,7 @@ export interface PortionMethodParameters {
   "leftovers-image-set": string,
 }
 
-export type PortionSizeMethod {
+export interface PortionSizeMethod {
   // These should all be types themselves
   method: PortionSizeMethodId;
   description: string | null;
