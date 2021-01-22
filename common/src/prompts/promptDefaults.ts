@@ -77,7 +77,17 @@ export const textareaPromptProps: TextareaPromptProps = {
 export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
   text: { en: 'test imported' },
   description: { en: 'test imported' },
-  methods: '',
+  methods: {
+    method: "as-served",
+    description: "",
+    imageUrl: "",
+    useForRecipes: false,
+    conversionFactor: 0.0,
+    parameters: {
+      "serving-image-set": "",
+      "leftovers-image-set": "",
+    }
+  },
   validation: {
     required: false,
     message: { en: 'test imported' },

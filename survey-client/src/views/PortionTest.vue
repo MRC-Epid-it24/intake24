@@ -6,16 +6,11 @@
           :is="portionSizeOptionPrompt"
           :props="testProps"
         ></component> -->
-        <portionSizeOptionPrompt
-          :text="testProps.text"
-          :description="testProps.description"
-          :methods="testProps.methods"
-          :validation="testProps.validation"
-          class="test"
+        <!-- Above requires a computed variable to return :is part unless loading from list -->
+        
+        <portionSizeOptionPrompt :props="testProps"
         ></portionSizeOptionPrompt>
-        <div>
-          Some other content here
-        </div>
+        
       </v-col>
     </v-row>
   </v-container>
@@ -24,8 +19,8 @@
 <script lang="ts">
 import Vue from 'vue';
 // // import prompts from '@/components/prompts/';
-// import { portionSizeOptionPromptProps } from '@/common/prompts/promptDefaults';
-import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
+// import { portionSizeOptionPromptDefaultProps } from '@/common/prompts/promptDefaults';
+// import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
 import portionSizeOptionPrompt from '@/components/prompts/PortionSizeOptionPrompt.vue';
 
 export default Vue.extend({
@@ -39,8 +34,8 @@ export default Vue.extend({
   data() {
     return {
       testProps: {
-        text: { en: "test text" },
-        description: { en: "hello world" },
+        text: { en: "Portion Size Options"},
+        description: { en: "Select portion size options here" },
         methods: 'testMethod',
         validation: {
           required: false,

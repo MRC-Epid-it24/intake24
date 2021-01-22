@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout :foodName="text" :description="description">
+  <prompt-layout :text="text" :description="description">
     <v-card-text>
       <v-row>
         <v-col>
@@ -11,7 +11,7 @@
         > -->
           <!-- <img src="" alt=""> -->
           <!-- {{ method.description }} -->
-          Testing
+          Any other content inside the prompt
         </v-col>
       </v-row>
       <!-- <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import merge from 'deepmerge';
 import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
 import { portionSizeOptionPromptProps } from '@common/prompts/promptDefaults';
@@ -36,18 +36,16 @@ export default Vue.extend({
   mixins: [BasePrompt],
 
   props: {
+    // Generic object 'props' used to store all props for each prompt
     props: {
       type: Object as () => PortionSizeOptionPromptProps,
     },
   },
 
   data() {
-    // const props: PortionSizeOptionPromptProps = merge(portionSizeOptionPromptProps, this.props);
     return {
-      // ...props,
       ...merge(portionSizeOptionPromptProps, this.props),
       currentValue: 'ok', 
-
     };
   },
 
