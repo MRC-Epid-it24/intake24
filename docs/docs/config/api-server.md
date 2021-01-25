@@ -587,6 +587,26 @@ Rate limit setting for password request. It allows 1 request per `throttle` valu
 * type: `number`
 * default: `60`
 
+## Authentication tokens
+
+Settings for generation of random authentication tokens.
+
+### Size
+
+Size of the tokens - string's length.
+
+* object-path: `authTokens.size`
+* type: `number`
+* default: `21`
+
+### Alphabet
+
+String of custom alphabet - character set to be used for token generation.
+
+* object-path: `authTokens.alphabet`
+* type: `string | null`
+* default: `null`
+
 ## Sign-in logging
 
 Settings for sign-in logging.
