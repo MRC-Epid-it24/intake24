@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import type { PasswordAlgorithm, HashedPassword } from '@/util/passwords';
+import type { PasswordAlgorithm, HashedPassword } from '.';
 
 export default class PasswordShiro implements PasswordAlgorithm {
   id = 'shiro-sha256';

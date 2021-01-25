@@ -1,5 +1,5 @@
-import PasswordBcrypt from '@/util/password-bcrypt';
-import PasswordShiro from '@/util/password-shiro';
+import PasswordBcrypt from './password-bcrypt';
+import PasswordShiro from './password-shiro';
 
 export interface HashedPassword {
   hash: string;
