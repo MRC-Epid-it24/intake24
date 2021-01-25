@@ -15,7 +15,7 @@ if (isDev)
     new NodemonPlugin({
       script: './dist/server.js',
       watch: path.resolve('./dist'),
-      nodeArgs: ['--trace-warnings', '--inspect=5858'],
+      nodeArgs: ['--trace-warnings', '--inspect=5959'],
     })
   );
 
