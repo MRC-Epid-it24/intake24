@@ -21,6 +21,7 @@ import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
 import type { ExportScheme } from '@common/types/models';
 import type { ExportFieldInfo } from './data-export-mapper';
+import { EMPTY } from './data-export-fields';
 
 export type DataExportInput = {
   surveyId: string;
@@ -155,7 +156,7 @@ export default ({ dataExportMapper, scheduler }: IoC): DataExportService => {
     const { scope, fields, filename } = await prepareExportInfo(input);
 
     const foods = SurveySubmissionFood.findAllWithStream(scope);
-    const transform = new Transform({ fields, withBOM: true });
+    const transform = new Transform({ fields, defaultValue: EMPTY, withBOM: true });
 
     foods.on('error', (err) => {
       throw err;

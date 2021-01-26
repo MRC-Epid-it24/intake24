@@ -4,7 +4,7 @@ import { Transform } from 'json2csv';
 import { Job, SurveySubmissionFood } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
-import type { DataExportInput } from '@/services/data-export';
+import { DataExportInput, EMPTY } from '@/services/data-export';
 import { getUrlExpireDate } from '@/util';
 import { Job as BaseJob, JobData, JobType } from './job';
 
@@ -58,7 +58,7 @@ export default class SurveyDataExport implements BaseJob {
       const output = fs.createWriteStream(filepath, { encoding: 'utf8', flags: 'w+' });
 
       const foods = SurveySubmissionFood.findAllWithStream(scope);
-      const transform = new Transform({ fields, withBOM: true });
+      const transform = new Transform({ fields, defaultValue: EMPTY, withBOM: true });
 
       foods.on('error', (err) => reject(err));
 

@@ -2,7 +2,7 @@ import json2csv from 'json2csv';
 import { SurveySubmissionFood } from '@/db/models/system';
 import { ExportSection } from '@common/types/models';
 import type { IoC } from '@/ioc';
-import { EMPTY, ExportField, ExportFieldTransform } from './data-export-fields';
+import { ExportField, ExportFieldTransform } from './data-export-fields';
 
 export type ExportFieldInfo = json2csv.FieldInfo<SurveySubmissionFood>;
 
@@ -19,33 +19,33 @@ export const surveyCustomFieldValue: ExportFieldTransformCallback = (
   field: ExportField
 ): ExportFieldTransform => (food) => {
   const match = food.meal?.submission?.customFields?.find((item) => field.id === item.name);
-  return match?.value ?? EMPTY;
+  return match?.value;
 };
 
 export const mealCustomFieldValue: ExportFieldTransformCallback = (
   field: ExportField
 ): ExportFieldTransform => (food) => {
   const match = food.meal?.customFields?.find((item) => field.id === item.name);
-  return match?.value ?? EMPTY;
+  return match?.value;
 };
 
 export const foodCustomFieldValue: ExportFieldTransformCallback = (
   field: ExportField
 ): ExportFieldTransform => (food) => {
   const match = food.customFields?.find((item) => field.id === item.name);
-  return match?.value ?? EMPTY;
+  return match?.value;
 };
 
 export const portionSizeValue = (field: ExportField): ExportFieldTransform => (food) => {
   const match = food.portionSizes?.find((item) => field.id === item.name);
-  return match?.value ?? EMPTY;
+  return match?.value;
 };
 
 export const nutrientTypeValue = (field: ExportField): ExportFieldTransform => (
   food: SurveySubmissionFood
 ) => {
   const match = food.nutrients?.find((item) => field.id === item.nutrientTypeId.toString());
-  return match?.amount ?? EMPTY;
+  return match?.amount;
 };
 
 export default ({ dataExportFields }: IoC): DataExportMapper => {
