@@ -134,6 +134,16 @@ export default (): DataExportFields => {
     { id: 'brand', label: 'Brand', value: 'brand' },
     { id: 'nutrientTableId', label: 'Nutrient table name', value: 'nutrientTableId' },
     { id: 'nutrientTableCode', label: 'Nutrient table code', value: 'nutrientTableCode' },
+
+    /*
+     * Missing food fields
+     * - this is actually different record / table
+     *
+     */
+    { id: 'missingName', label: 'Missing name', value: 'name' },
+    { id: 'missingDescription', label: 'Missing description', value: 'description' },
+    { id: 'missingPortionSize', label: 'Missing portion size', value: 'portionSize' },
+    { id: 'missingLeftovers', label: 'Missing leftovers', value: 'leftovers' },
   ];
 
   /**
