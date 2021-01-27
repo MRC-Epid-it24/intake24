@@ -1,4 +1,4 @@
-import { Column, HasMany, Table, BelongsTo } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Table, BelongsTo } from 'sequelize-typescript';
 import BaseModel from '../model';
 
 @Table({
@@ -41,8 +41,9 @@ export default class Locale extends BaseModel<Locale> {
 
   @Column({
     allowNull: true,
+    type: DataType.STRING,
   })
-  public prototypeLocaleId!: string;
+  public prototypeLocaleId!: string | null;
 
   @Column({
     allowNull: false,

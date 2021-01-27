@@ -21,7 +21,7 @@ export type SurveySubmissionMeal = {
   surveySubmissionId: string;
   hours: number;
   minutes: number;
-  name: string;
+  name: string | null;
 };
 
 export type SurveySubmissionMealCustomField = {
@@ -43,10 +43,17 @@ export type SurveySubmissionFood = {
   reasonableAmount: boolean;
   foodGroupId: number;
   foodGroupEnglishDescription: string;
-  foodGroupLocalDescription: string;
+  foodGroupLocalDescription: string | null;
   brand: string;
   nutrientTableId: string;
   nutrientTableCode: string;
+};
+
+export type SurveySubmissionFoodField = {
+  id: number;
+  foodId: number;
+  fieldName: string;
+  value: string;
 };
 
 export type SurveySubmissionFoodCustomField = {

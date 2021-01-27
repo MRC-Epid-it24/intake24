@@ -46,8 +46,11 @@ export default class SurveySubmissionMeal
   })
   public minutes!: number;
 
-  @Column
-  public name!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public name!: string | null;
 
   @BelongsTo(() => SurveySubmission, 'surveySubmissionId')
   public submission?: SurveySubmission;

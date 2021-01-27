@@ -21,10 +21,14 @@ export default class PortionSizeMethodParameter extends BaseModel<PortionSizeMet
   })
   public portionSizeMethodId!: number;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public name!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public value!: string;
 
   @BelongsTo(() => PortionSizeMethod, 'portionSizeMethodId')

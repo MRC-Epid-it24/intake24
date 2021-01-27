@@ -4,7 +4,7 @@ import { ExportSection, ExportField as BaseExportField } from '@common/types/mod
 
 export type ExportFieldTransform<T = SurveySubmissionFood> = (
   food: T
-) => string | number | undefined;
+) => string | number | null | undefined;
 
 export interface ExportField extends BaseExportField {
   value?: string | ExportFieldTransform;

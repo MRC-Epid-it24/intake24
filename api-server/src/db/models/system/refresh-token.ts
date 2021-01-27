@@ -43,7 +43,9 @@ export default class RefreshToken
   })
   public revoked!: boolean;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public expiresAt!: Date;
 
   @CreatedAt

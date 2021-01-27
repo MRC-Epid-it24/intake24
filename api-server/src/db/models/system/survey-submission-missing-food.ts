@@ -37,7 +37,9 @@ export default class SurveySubmissionMissingFood
   })
   public brand!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public description!: string;
 
   @Column({

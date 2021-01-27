@@ -23,7 +23,9 @@ export default class UserPasswordReset
   })
   public userId!: number;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public token!: string;
 
   @CreatedAt

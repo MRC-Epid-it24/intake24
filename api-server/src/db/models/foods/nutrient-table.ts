@@ -16,7 +16,9 @@ export default class NutrientTable extends BaseModel<NutrientTable> {
   })
   public id!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public description!: string;
 
   @HasMany(() => NutrientTableRecord, 'nutrientTableId')

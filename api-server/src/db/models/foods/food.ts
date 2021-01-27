@@ -20,13 +20,18 @@ export default class Food extends BaseModel<Food> {
   })
   public code!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public description!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public foodGroupId!: number;
 
   @Column({
+    allowNull: false,
     type: DataType.UUID,
   })
   public version!: string;

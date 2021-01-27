@@ -19,6 +19,7 @@ export { default as SignInLog } from './sign-in-log';
 export { default as Scheme } from './scheme';
 export { default as Survey } from './survey';
 export { default as SurveySubmission } from './survey-submission';
+export { default as SurveySubmissionFoodField } from './survey-submission-food-field';
 export { default as SurveySubmissionCustomField } from './survey-submission-custom-field';
 export { default as SurveySubmissionFood } from './survey-submission-food';
 export { default as SurveySubmissionFoodCustomField } from './survey-submission-food-custom-field';

@@ -24,10 +24,10 @@ export default class NutrientTableRecord extends BaseModel<NutrientTableRecord> 
   })
   public nutrientTableId!: string;
 
-  /* @Column({
+  @Column({
     allowNull: false,
   })
-  public nutrientTableRecordId!: string; */
+  public nutrientTableRecordId!: string;
 
   @Column({
     allowNull: false,
