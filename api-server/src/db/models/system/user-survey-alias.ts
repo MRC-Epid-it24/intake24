@@ -1,4 +1,5 @@
 import { BelongsTo, Column, ForeignKey, Scopes, Table } from 'sequelize-typescript';
+import { UserSurveyAlias as UserSurveyAliasAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Survey, User } from '.';
 
@@ -12,7 +13,9 @@ import { Survey, User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class UserSurveyAlias extends BaseModel<UserSurveyAlias> {
+export default class UserSurveyAlias
+  extends BaseModel<UserSurveyAlias>
+  implements UserSurveyAliasAttributes {
   @Column({
     allowNull: false,
   })

@@ -1,4 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { SurveySubmissionMeal as SurveySubmissionMealAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import {
   SurveySubmission,
@@ -11,7 +12,7 @@ import {
   submission: { include: [{ model: SurveySubmission }] },
   customFields: { include: [{ model: SurveySubmissionMealCustomField }] },
   foods: { include: [{ model: SurveySubmissionFood }] },
-  misingFoods: { include: [{ model: SurveySubmissionMissingFood }] },
+  missingFoods: { include: [{ model: SurveySubmissionMissingFood }] },
 }))
 @Table({
   modelName: 'SurveySubmissionMeal',
@@ -20,7 +21,9 @@ import {
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionMeal extends BaseModel<SurveySubmissionMeal> {
+export default class SurveySubmissionMeal
+  extends BaseModel<SurveySubmissionMeal>
+  implements SurveySubmissionMealAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -56,5 +59,5 @@ export default class SurveySubmissionMeal extends BaseModel<SurveySubmissionMeal
   public foods?: SurveySubmissionFood[];
 
   @HasMany(() => SurveySubmissionMissingFood, 'mealId')
-  public misingFoods?: SurveySubmissionMissingFood[];
+  public missingFoods?: SurveySubmissionMissingFood[];
 }
