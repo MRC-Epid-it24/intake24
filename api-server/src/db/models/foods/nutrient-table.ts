@@ -3,10 +3,11 @@ import NutrientTableRecord from '@api-server/db/models/foods/nutrient-table-reco
 import BaseModel from '../model';
 
 @Table({
+  modelName: 'NutrientTable',
+  tableName: 'nutrient_tables',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  freezeTableName: true,
-  tableName: 'food_nutrient_mapping',
 })
 export default class NutrientTable extends BaseModel<NutrientTable> {
   @Column({
@@ -18,6 +19,6 @@ export default class NutrientTable extends BaseModel<NutrientTable> {
   @Column
   public description!: string;
 
-  @HasMany(() => NutrientTableRecord, 'nutrient_table_id')
+  @HasMany(() => NutrientTableRecord, 'nutrientTableId')
   records?: NutrientTableRecord[];
 }

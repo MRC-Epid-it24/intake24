@@ -1,19 +1,27 @@
-import { BelongsTo, Column, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import NutrientTableRecord from '@api-server/db/models/foods/nutrient-table-record';
 import BaseModel from '../model';
 
 @Table({
+  modelName: 'NutrientTableRecordField',
+  tableName: 'nutrient_table_record_fields',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  freezeTableName: true,
-  tableName: 'nutrient_table_record_fields',
 })
 export default class NutrientTableRecordField extends BaseModel<NutrientTableRecordField> {
   @Column({
-    allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
   public id!: number;
+
+  @Column({
+    allowNull: false,
+    type: DataType.BIGINT,
+  })
+  public nutrientTableRecordId!: number;
 
   @Column({
     allowNull: false,
@@ -25,6 +33,6 @@ export default class NutrientTableRecordField extends BaseModel<NutrientTableRec
   })
   public value!: string;
 
-  @BelongsTo(() => NutrientTableRecord, 'nutrient_table_record_id')
+  @BelongsTo(() => NutrientTableRecord, 'nutrientTableRecordId')
   public record?: NutrientTableRecord;
 }

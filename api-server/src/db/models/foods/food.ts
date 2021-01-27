@@ -7,9 +7,11 @@ import { FoodAttribute, FoodLocal } from '.';
   localFoods: { include: [{ model: FoodLocal }] },
 }))
 @Table({
+  modelName: 'Food',
+  tableName: 'foods',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  tableName: 'foods',
 })
 export default class Food extends BaseModel<Food> {
   @Column({

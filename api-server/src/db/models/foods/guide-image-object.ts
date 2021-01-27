@@ -1,8 +1,9 @@
 import { BelongsTo, Column, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import { GuideImage, ImageMap, ProcessedImage } from '.';
+import { GuideImage } from '.';
 
 @Table({
+  modelName: 'GuideImageObject',
   tableName: 'guide_image_objects',
   freezeTableName: true,
   timestamps: false,
@@ -18,6 +19,11 @@ export default class GuideImageObject extends BaseModel<GuideImageObject> {
   @Column({
     allowNull: false,
   })
+  public guideImageId!: string;
+
+  @Column({
+    allowNull: false,
+  })
   public weight!: number;
 
   @Column({
@@ -25,6 +31,6 @@ export default class GuideImageObject extends BaseModel<GuideImageObject> {
   })
   public imageMapObjectId!: number;
 
-  @BelongsTo(() => GuideImage, 'guide_image_id')
+  @BelongsTo(() => GuideImage, 'guideImageId')
   public guideImage?: GuideImage;
 }

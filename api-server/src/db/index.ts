@@ -46,14 +46,17 @@ export default class DB implements DbInterface {
         ...dbConf,
         models: models[database],
         logging: isDev
-          ? (sql: string, timing?: number): void => {
+          ? (sql: string): void => {
               this.logger.debug(sql);
             }
           : false,
       });
     });
 
-    // Soft-sync for DEV environment
-    // if (isDev) await this.system.sync();
+    // Force sync for TEST environment
+    if (this.env === 'test') {
+      await this.foods.sync({ force: true });
+      await this.system.sync({ force: true });
+    }
   }
 }
