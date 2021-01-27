@@ -69,7 +69,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         type: 'data-driven',
         questions: {},
         meals: [],
-        export: {},
+        export: [],
       }),
       types: [{ value: 'data-driven', text: this.$t('schemes.types.data-driven') }],
     };
