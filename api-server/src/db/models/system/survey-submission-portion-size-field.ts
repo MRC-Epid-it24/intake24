@@ -1,4 +1,5 @@
 import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
+import { SurveySubmissionPortionSizeField as SurveySubmissionPortionSizeFieldAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { SurveySubmissionFood } from '.';
 
@@ -12,7 +13,9 @@ import { SurveySubmissionFood } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionPortionSizeField extends BaseModel<SurveySubmissionPortionSizeField> {
+export default class SurveySubmissionPortionSizeField
+  extends BaseModel<SurveySubmissionPortionSizeField>
+  implements SurveySubmissionPortionSizeFieldAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

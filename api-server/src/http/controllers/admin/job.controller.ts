@@ -51,15 +51,16 @@ export default ({ config }: IoC): JobController => {
       },
     });
 
-    if (!job) throw new NotFoundError();
+    if (!job?.downloadUrl) throw new NotFoundError();
+    const { downloadUrl } = job;
 
-    const file = path.resolve(config.filesystem.local.downloads, job.downloadUrl);
+    const file = path.resolve(config.filesystem.local.downloads, downloadUrl);
     if (!(await fs.pathExists(file))) throw new NotFoundError();
 
     const { size } = await fs.stat(file);
 
     res.set('Content-Type', 'application/octet-stream');
-    res.set('Content-Disposition', `attachment; filename=${job.downloadUrl}`);
+    res.set('Content-Disposition', `attachment; filename=${downloadUrl}`);
     res.set('Content-Length', size.toString());
     fs.createReadStream(file).pipe(res);
   };

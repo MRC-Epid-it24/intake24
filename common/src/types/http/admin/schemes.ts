@@ -1,5 +1,12 @@
 import { Meal, RecallQuestions } from '../..';
-import { ExportField, ExportSection, Language, Pagination, Scheme } from '../../models';
+import {
+  ExportField,
+  ExportSection,
+  Language,
+  Pagination,
+  Scheme,
+  ExportScheme,
+} from '../../models';
 
 export type SchemeRequest = {
   id: string;
@@ -7,6 +14,7 @@ export type SchemeRequest = {
   type: string;
   questions: RecallQuestions;
   meals: Meal[];
+  export: ExportScheme;
 };
 
 export type CreateSchemeRequest = SchemeRequest;

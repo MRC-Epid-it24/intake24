@@ -1,5 +1,5 @@
 import {
-  MealDefinition,
+  Meal as MealDefinition,
   MealQuestionSection,
   MealQuestions,
   Prompt,
@@ -26,7 +26,8 @@ export default class Meal {
 
   constructor(meal: MealDefinition, questions: MealQuestions) {
     const { name, time } = meal;
-    this.name = name;
+    // !!! TODO: FIX THIS !!! load some default translation
+    this.name = name.en ?? 'Default';
     this.time = time;
 
     (['preFoods', 'postFoods'] as MealQuestionSection[]).forEach((item) => {

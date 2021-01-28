@@ -2,7 +2,9 @@ import { NutrientType, Scheme, SurveySubmissionFood } from '@/db/models/system';
 import { PromptQuestion } from '@common/types';
 import { ExportSection, ExportField as BaseExportField } from '@common/types/models';
 
-export type ExportFieldTransform<T = SurveySubmissionFood> = (food: T) => string | number;
+export type ExportFieldTransform<T = SurveySubmissionFood> = (
+  food: T
+) => string | number | null | undefined;
 
 export interface ExportField extends BaseExportField {
   value?: string | ExportFieldTransform;
@@ -22,40 +24,40 @@ export default (): DataExportFields => {
     {
       id: 'id',
       label: 'Submission ID',
-      value: (food) => food.meal?.submission?.id ?? EMPTY,
+      value: (food) => food.meal?.submission?.id,
     },
     {
       id: 'surveyId',
       label: 'Survey ID',
-      value: (food) => food.meal?.submission?.surveyId ?? EMPTY,
+      value: (food) => food.meal?.submission?.surveyId,
     },
     {
       id: 'userId',
       label: 'User ID',
-      value: (food) => food.meal?.submission?.userId ?? EMPTY,
+      value: (food) => food.meal?.submission?.userId,
     },
     {
       id: 'userName',
       label: 'Username',
       value: (food) => {
         const aliases = food.meal?.submission?.user?.aliases;
-        return aliases && aliases.length ? aliases[0].userName : EMPTY;
+        return aliases && aliases.length ? aliases[0].userName : undefined;
       },
     },
     {
       id: 'startTime',
       label: 'Start DateTime',
-      value: (food) => food.meal?.submission?.startTime?.toString() ?? EMPTY,
+      value: (food) => food.meal?.submission?.startTime?.toString(),
     },
     {
       id: 'endTime',
       label: 'End DateTime',
-      value: (food) => food.meal?.submission?.endTime?.toString() ?? EMPTY,
+      value: (food) => food.meal?.submission?.endTime?.toString(),
     },
     {
       id: 'submissionTime',
       label: 'Submission DateTime',
-      value: (food) => food.meal?.submission?.submissionTime?.toString() ?? EMPTY,
+      value: (food) => food.meal?.submission?.submissionTime?.toString(),
     },
   ];
 
@@ -86,11 +88,11 @@ export default (): DataExportFields => {
    * @returns {Promise<ExportField[]>}
    */
   const meal = async (): Promise<ExportField[]> => [
-    { id: 'name', label: 'Meal name', value: (food) => food.meal?.name ?? EMPTY },
+    { id: 'name', label: 'Meal name', value: (food) => food.meal?.name },
     {
       id: 'time',
       label: 'Meal time',
-      value: (food) => (food.meal ? `${food.meal.hours}:${food.meal.minutes}` : EMPTY),
+      value: (food) => (food.meal ? `${food.meal.hours}:${food.meal.minutes}` : undefined),
     },
   ];
 
@@ -132,6 +134,16 @@ export default (): DataExportFields => {
     { id: 'brand', label: 'Brand', value: 'brand' },
     { id: 'nutrientTableId', label: 'Nutrient table name', value: 'nutrientTableId' },
     { id: 'nutrientTableCode', label: 'Nutrient table code', value: 'nutrientTableCode' },
+
+    /*
+     * Missing food fields
+     * - this is actually different record / table
+     *
+     */
+    { id: 'missingName', label: 'Missing name', value: 'name' },
+    { id: 'missingDescription', label: 'Missing description', value: 'description' },
+    { id: 'missingPortionSize', label: 'Missing portion size', value: 'portionSize' },
+    { id: 'missingLeftovers', label: 'Missing leftovers', value: 'leftovers' },
   ];
 
   /**

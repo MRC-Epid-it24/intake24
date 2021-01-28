@@ -1,4 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import { SignInLog as SignInLogAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 
@@ -12,7 +13,7 @@ import { User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SignInLog extends BaseModel<SignInLog> {
+export default class SignInLog extends BaseModel<SignInLog> implements SignInLogAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

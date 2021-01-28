@@ -1,5 +1,4 @@
 import { asFunction, AwilixContainer } from 'awilix';
-
 import controllers from '@/http/controllers';
 
 export default (container: AwilixContainer): void => {

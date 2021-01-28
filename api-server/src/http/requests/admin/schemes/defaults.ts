@@ -21,6 +21,7 @@ const defaults: Schema = {
       },
     },
   },
+  // TODO: use some JSON Schema Validator for questions/meals/export, like ajv
   questions: {
     in: ['body'],
     errorMessage: 'Enter valid scheme questions.',
@@ -46,6 +47,21 @@ const defaults: Schema = {
           value.some((item) => !isPlainObject(item) || !has(item, 'name.en') || !has(item, 'time'))
         )
           throw new Error('Enter valid meal list.');
+
+        Promise.resolve();
+      },
+    },
+  },
+  export: {
+    in: ['body'],
+    errorMessage: 'Enter valid data export field list.',
+    custom: {
+      options: async (value): Promise<void> => {
+        if (
+          !Array.isArray(value) ||
+          value.some((item) => !isPlainObject(item) || !has(item, 'id') || !has(item, 'fields'))
+        )
+          throw new Error('Enter valid data export field list.');
 
         Promise.resolve();
       },

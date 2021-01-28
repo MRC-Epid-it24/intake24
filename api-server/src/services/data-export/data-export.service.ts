@@ -1,6 +1,8 @@
 import fecha from 'fecha';
 import { Transform } from 'json2csv';
-import { FindOptions, Op, WhereOptions } from 'sequelize';
+import { groupBy } from 'lodash';
+import { Op, Order, WhereOptions } from 'sequelize';
+import { Readable } from 'stream';
 import {
   Job,
   NutrientType,
@@ -12,25 +14,31 @@ import {
   SurveySubmissionFoodCustomField,
   SurveySubmissionMeal,
   SurveySubmissionMealCustomField,
+  SurveySubmissionMissingFood,
   SurveySubmissionNutrient,
   SurveySubmissionPortionSizeField,
   User,
   UserSurveyAlias,
 } from '@/db/models/system';
+import type { StreamFindOptions } from '@/db/models/model';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
 import type { ExportScheme } from '@common/types/models';
 import type { ExportFieldInfo } from './data-export-mapper';
+import { EMPTY } from './data-export-fields';
 
 export type DataExportInput = {
+  id?: string | string[];
   surveyId: string;
   startDate?: Date;
   endDate?: Date;
   userId?: number;
 };
 
+export type SubmissionFindOptions = Record<'foods' | 'missingFoods', StreamFindOptions>;
+
 export type DataExportOptions = {
-  scope: FindOptions;
+  options: SubmissionFindOptions;
   fields: ExportFieldInfo[];
   filename: string;
 };
@@ -41,7 +49,8 @@ export type SyncStreamOutput = {
 };
 
 export type DataExportService = {
-  getSubmissionScope: (input: DataExportInput) => FindOptions;
+  getSubmissionOptions: (input: DataExportInput) => SubmissionFindOptions;
+  getSubmissionsWithStream: (options: SubmissionFindOptions) => Readable;
   getExportFields: (exportScheme: ExportScheme) => Promise<ExportFieldInfo[]>;
   prepareExportInfo: (input: DataExportInput) => Promise<DataExportOptions>;
   queueExportJob: (input: DataExportInput) => Promise<Job>;
@@ -50,39 +59,48 @@ export type DataExportService = {
 
 export default ({ dataExportMapper, scheduler }: IoC): DataExportService => {
   /**
-   * Scope to query full survey submission
+   * Scope to query submission foods and missing foods records
    *
    * @param {DataExportInput} options
-   * @returns {FindOptions}
+   * @returns {SubmissionScopes}
    */
-  const getSubmissionScope = ({ surveyId, startDate, endDate }: DataExportInput): FindOptions => {
+  const getSubmissionOptions = ({
+    surveyId,
+    id,
+    startDate,
+    endDate,
+  }: DataExportInput): SubmissionFindOptions => {
     const surveySubmissionConditions: WhereOptions = { surveyId };
+    if (id) surveySubmissionConditions.id = id;
     if (startDate) surveySubmissionConditions.startTime = { [Op.gte]: startDate };
     if (endDate) surveySubmissionConditions.endTime = { [Op.lte]: endDate };
 
-    return {
+    const include = {
+      model: SurveySubmissionMeal,
+      required: true,
       include: [
         {
-          model: SurveySubmissionMeal,
+          model: SurveySubmission,
           required: true,
+          where: surveySubmissionConditions,
           include: [
+            { model: Survey, required: true },
+            { model: SurveySubmissionCustomField, separate: true },
             {
-              model: SurveySubmission,
+              model: User,
               required: true,
-              where: surveySubmissionConditions,
-              include: [
-                { model: Survey, required: true },
-                { model: SurveySubmissionCustomField, separate: true },
-                {
-                  model: User,
-                  required: true,
-                  include: [{ model: UserSurveyAlias, where: { surveyId }, separate: true }],
-                },
-              ],
+              include: [{ model: UserSurveyAlias, where: { surveyId }, separate: true }],
             },
-            { model: SurveySubmissionMealCustomField, separate: true },
           ],
         },
+        { model: SurveySubmissionMealCustomField, separate: true },
+      ],
+    };
+    const order: Order = [['id', 'ASC']];
+
+    const foods = {
+      include: [
+        include,
         { model: SurveySubmissionFoodCustomField, separate: true },
         {
           model: SurveySubmissionNutrient,
@@ -91,7 +109,81 @@ export default ({ dataExportMapper, scheduler }: IoC): DataExportService => {
         },
         { model: SurveySubmissionPortionSizeField, separate: true },
       ],
+      order,
     };
+
+    const missingFoods = { include: [include], order };
+
+    return { foods, missingFoods };
+  };
+
+  /**
+   * Query the foods | missing foods and push to stream
+   *
+   * @param {Readable} inputStream
+   * @param {SubmissionFindOptions} options
+   * @returns {Promise<void>}
+   */
+  const performSubmissionsSearch = async (
+    inputStream: Readable,
+    options: SubmissionFindOptions
+  ): Promise<void> => {
+    const { batchSize = 100, limit, offset: startOffset = 0, ...params } = options.foods;
+
+    try {
+      const max = limit ?? (await SurveySubmissionFood.count(params));
+
+      const offsets = [];
+      let start = startOffset;
+
+      while (start < max) {
+        offsets.push(start);
+        start += batchSize;
+      }
+
+      for (const offset of offsets) {
+        const difference = batchSize + offset - max;
+        const foods = await SurveySubmissionFood.findAll({
+          ...params,
+          offset,
+          limit: difference > 0 ? batchSize - difference : batchSize,
+        });
+
+        const mealId = foods.map((food) => food.mealId);
+        const missingFoods = await SurveySubmissionMissingFood.findAll({
+          ...options.missingFoods,
+          where: { mealId },
+        });
+
+        const groupedFoods = groupBy(foods, 'mealId');
+        const groupedMissingFoods = groupBy(missingFoods, 'mealId');
+
+        for (const [id, records] of Object.entries(groupedFoods)) {
+          inputStream.push(JSON.stringify([...records, ...(groupedMissingFoods[id] ?? [])]));
+        }
+      }
+
+      inputStream.push(null);
+    } catch (err) {
+      inputStream.destroy(err);
+    }
+  };
+
+  /**
+   * Get streamed submissions
+   *
+   * @param {SubmissionFindOptions} options
+   * @returns {Readable}
+   */
+  const getSubmissionsWithStream = (options: SubmissionFindOptions): Readable => {
+    const inputStream = new Readable({
+      // objectMode: true,
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      read() {},
+    });
+    performSubmissionsSearch(inputStream, options);
+
+    return inputStream;
   };
 
   /**
@@ -124,13 +216,13 @@ export default ({ dataExportMapper, scheduler }: IoC): DataExportService => {
     });
     if (!survey || !survey.scheme) throw new NotFoundError();
 
-    const scope = getSubmissionScope(input);
+    const options = getSubmissionOptions(input);
 
     const fields = await getExportFields(survey.scheme.export);
     const timestamp = fecha.format(new Date(), 'YYYY-MM-DD-HH-mm-ss');
     const filename = `intake24-data-export-${surveyId}-${timestamp}.csv`;
 
-    return { scope, fields, filename };
+    return { options, fields, filename };
   };
 
   /**
@@ -152,10 +244,10 @@ export default ({ dataExportMapper, scheduler }: IoC): DataExportService => {
    * @returns {Promise<SyncStreamOutput>}
    */
   const syncStream = async (input: DataExportInput): Promise<SyncStreamOutput> => {
-    const { scope, fields, filename } = await prepareExportInfo(input);
+    const { options, fields, filename } = await prepareExportInfo(input);
 
-    const foods = SurveySubmissionFood.findAllWithStream(scope);
-    const transform = new Transform({ fields, withBOM: true });
+    const foods = SurveySubmissionFood.findAllWithStream(options);
+    const transform = new Transform({ fields, defaultValue: EMPTY, withBOM: true });
 
     foods.on('error', (err) => {
       throw err;
@@ -170,5 +262,12 @@ export default ({ dataExportMapper, scheduler }: IoC): DataExportService => {
     return { filename, stream };
   };
 
-  return { getSubmissionScope, getExportFields, prepareExportInfo, queueExportJob, syncStream };
+  return {
+    getSubmissionOptions,
+    getSubmissionsWithStream,
+    getExportFields,
+    prepareExportInfo,
+    queueExportJob,
+    syncStream,
+  };
 };

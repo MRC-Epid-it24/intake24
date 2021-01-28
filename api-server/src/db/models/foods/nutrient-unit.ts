@@ -2,10 +2,11 @@ import { Column, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 
 @Table({
+  modelName: 'NutrientUnit',
+  tableName: 'nutrient_units',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  freezeTableName: true,
-  tableName: 'nutrient_units',
 })
 export default class NutrientUnit extends BaseModel<NutrientUnit> {
   @Column({

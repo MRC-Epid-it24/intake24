@@ -8,7 +8,7 @@ import {
 } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Readable } from 'stream';
-import { Pagination, PaginationMeta } from '@common/types/models/pagination';
+import { Pagination, PaginationMeta } from '@common/types/models';
 
 export interface Paginate extends BaseFindOptions {
   req: Request;
@@ -129,10 +129,7 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     { batchSize = 100, limit, offset: startOffset = 0, ...params }: StreamFindOptions
   ): Promise<void> {
     try {
-      let max = limit;
-      if (!max) {
-        max = await this.count(params);
-      }
+      const max = limit ?? (await this.count(params));
 
       const offsets = [];
       let start = startOffset;

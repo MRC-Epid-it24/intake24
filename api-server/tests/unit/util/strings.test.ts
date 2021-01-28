@@ -1,4 +1,4 @@
-import { isUrlAbsolute } from '@/util/url';
+import { isUrlAbsolute } from '@/util';
 import { expect } from 'chai';
 
 describe('URL utilities', function () {

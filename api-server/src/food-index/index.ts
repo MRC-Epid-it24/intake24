@@ -1,6 +1,5 @@
 import { Worker } from 'worker_threads';
-import databaseConfig from '@/config/database';
-import appConfig from '@/config/app';
+import config from '@/config';
 
 let indexReady = false;
 let queryIdCounter = 0;
@@ -17,7 +16,7 @@ export default {
   async init() {
     // eslint-disable-next-line no-new
     indexWorker = new Worker('./dist/foodIndexBuilder.js', {
-      workerData: { dbConnectionInfo: databaseConfig[appConfig.env].foods },
+      workerData: { dbConnectionInfo: config.database[config.app.env].foods },
     });
 
     const readyListener = (msg: any) => {

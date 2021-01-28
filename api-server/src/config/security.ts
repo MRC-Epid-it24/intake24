@@ -48,6 +48,11 @@ export type PasswordsConfig = {
   throttle: number;
 };
 
+export type AuthTokensConfig = {
+  size: number;
+  alphabet: string | null;
+};
+
 export type SignInLogConfig = {
   enabled: boolean;
 };
@@ -60,6 +65,7 @@ export interface SecurityConfig {
   mfa: MultiFactorAuthentication;
   recaptcha: RecaptchaConfig;
   passwords: PasswordsConfig;
+  authTokens: AuthTokensConfig;
   signInLog: SignInLogConfig;
 }
 
@@ -105,6 +111,11 @@ const securityConfig: SecurityConfig = {
   passwords: {
     expire: 60,
     throttle: 60,
+  },
+  // TODO: possibly move this do DB on survey / scheme level
+  authTokens: {
+    size: 21,
+    alphabet: null,
   },
   signInLog: {
     enabled: true,

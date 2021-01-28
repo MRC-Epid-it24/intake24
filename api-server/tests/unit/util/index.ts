@@ -1,1 +1,1 @@
-import './url.test';
+import './strings.test';

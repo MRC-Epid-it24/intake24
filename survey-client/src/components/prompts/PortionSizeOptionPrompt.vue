@@ -45,7 +45,7 @@ export default Vue.extend({
       errors: [] as string[],
       // Temporary until API exists
       // TO DO structure data correctly
-      currentValue: null,
+      currentValue: null as string | null,
       methods: [
         {
           method: 'as-served',

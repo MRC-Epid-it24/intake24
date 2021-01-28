@@ -1,4 +1,4 @@
-import { Dictionary } from '../common';
+import { Dictionary } from '../../common';
 
 export type ClientErrorReport = {
   id: number;

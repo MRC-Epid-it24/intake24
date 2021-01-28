@@ -1,9 +1,9 @@
 import { createContainer, asClass, asValue } from 'awilix';
 import type { Logger } from 'winston';
 
-import config, { Config } from '@/config';
+import config from '@/config';
+import type { Config, DatabaseConfig, Environment } from '@/config';
 import db, { DbInterface } from '@/db';
-
 import type {
   AuthenticationController,
   PasswordController,
@@ -26,28 +26,24 @@ import type {
   RoleController,
   UserController,
 } from '@/http/controllers';
-
-import type { AuthenticationService } from '@/services/auth/authentication.service';
-import type { JwtService } from '@/services/auth/jwt.service';
-import type { JwtRotationService } from '@/services/auth/jwt-rotation.service';
-import type { SignInService } from '@/services/auth/sign-in.service';
-
-import type { PortionSizeService } from '@/services/foods/portion-size.service';
-import type { DataExportFields, DataExportMapper, DataExportService } from '@/services/data-export';
-import type { SurveyService } from '@/services/survey.service';
-import type { UserService } from '@/services/user.service';
-
-import type Filesystem from '@/services/filesystem';
-import type Mailer from '@/services/mailer';
-import type Scheduler from '@/services/scheduler';
-
-import type JobsQueueHandler from '@/services/queues/jobs-queue-handler';
-import type TasksQueueHandler from '@/services/queues/tasks-queue-handler';
-
+import type {
+  AuthenticationService,
+  JwtService,
+  JwtRotationService,
+  SignInService,
+  PortionSizeService,
+  DataExportFields,
+  DataExportMapper,
+  DataExportService,
+  SurveyService,
+  UserService,
+  Filesystem,
+  Mailer,
+  Scheduler,
+} from '@/services';
+import type { JobsQueueHandler, TasksQueueHandler } from '@/services/queues';
 import type { Jobs } from '@/jobs/job';
 
-import { DatabaseConfig } from '@/config/database';
-import { Environment } from '@/config/app';
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';

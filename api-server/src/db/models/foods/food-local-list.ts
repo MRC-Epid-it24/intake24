@@ -3,10 +3,11 @@ import BaseModel from '../model';
 import { Locale } from '.';
 
 @Table({
+  modelName: 'FoodLocalList',
+  tableName: 'foods_local_lists',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  freezeTableName: true,
-  tableName: 'foods_local_lists',
 })
 export default class FoodLocalList extends BaseModel<FoodLocalList> {
   @Column({

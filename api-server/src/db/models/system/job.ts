@@ -6,8 +6,7 @@ import { User } from '.';
 
 @Table({
   modelName: 'Job',
-  // TODO rename appropriately once all tasks / jobs is implemented / consolidated
-  tableName: 'tools_tasks',
+  tableName: 'jobs',
   freezeTableName: true,
   underscored: true,
 })
@@ -33,39 +32,45 @@ export default class Job extends BaseModel<Job> implements JobAttributes {
 
   @Column({
     allowNull: true,
+    type: DataType.DATE,
   })
-  public startedAt!: Date;
+  public startedAt!: Date | null;
 
   @Column({
     allowNull: true,
+    type: DataType.DATE,
   })
-  public completedAt!: Date;
+  public completedAt!: Date | null;
 
   @Column({
     allowNull: true,
+    type: DataType.STRING,
   })
-  public downloadUrl!: string;
+  public downloadUrl!: string | null;
 
   @Column({
     allowNull: true,
+    type: DataType.DATE,
   })
-  public downloadUrlExpiresAt!: Date;
+  public downloadUrlExpiresAt!: Date | null;
 
   @Column({
     allowNull: true,
     type: DataType.DOUBLE,
   })
-  public progress!: number;
+  public progress!: number | null;
 
   @Column({
     allowNull: true,
+    type: DataType.BOOLEAN,
   })
-  public successful!: boolean;
+  public successful!: boolean | null;
 
   @Column({
     allowNull: true,
+    type: DataType.STRING,
   })
-  public message!: string;
+  public message!: string | null;
 
   @Column({
     allowNull: true,

@@ -10,14 +10,17 @@ import { Food, FoodLocalList, Locale } from '.';
   localeLists: { include: [{ model: FoodLocalList }] },
 }))
 @Table({
+  modelName: 'FoodLocal',
+  tableName: 'food_locals',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  freezeTableName: true,
-  tableName: 'food_locals',
 })
 export default class FoodLocal extends BaseModel<FoodLocal> {
   @Column({
+    autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
   public id!: number;
 
@@ -31,11 +34,17 @@ export default class FoodLocal extends BaseModel<FoodLocal> {
   })
   public localeId!: string;
 
-  @Column
-  public name!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public name!: string | null;
 
-  @Column
-  public simpleName!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public simpleName!: string | null;
 
   @Column({
     allowNull: false,
@@ -43,15 +52,15 @@ export default class FoodLocal extends BaseModel<FoodLocal> {
   })
   public version!: string;
 
-  @BelongsTo(() => Food, 'food_code')
+  @BelongsTo(() => Food, 'foodCode')
   public food?: Food;
 
-  @BelongsTo(() => Locale, 'locale_id')
+  @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;
 
-  @HasMany(() => PortionSizeMethod, 'food_local_id')
+  @HasMany(() => PortionSizeMethod, 'foodLocalId')
   public portionSizeMethods?: PortionSizeMethod[];
 
-  @HasMany(() => NutrientMapping, 'food_local_id')
+  @HasMany(() => NutrientMapping, 'foodLocalId')
   public nutrientMappings?: NutrientMapping[];
 }

@@ -1,39 +1,57 @@
-import { BelongsTo, Column, HasMany, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 import PortionSizeMethodParameter from '@api-server/db/models/foods/portion-size-method-param';
 import BaseModel from '../model';
 import { FoodLocal } from '.';
 
 @Table({
+  modelName: 'PortionSizeMethod',
+  tableName: 'food_portion_size_methods',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  freezeTableName: true,
-  tableName: 'food_portion_size_methods',
 })
 export default class PortionSizeMethod extends BaseModel<PortionSizeMethod> {
   @Column({
-    allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
   public id!: number;
 
-  @Column
+  @Column({
+    allowNull: false,
+    type: DataType.BIGINT,
+  })
+  public foodLocalId!: number;
+
+  @Column({
+    allowNull: false,
+  })
   public method!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public description!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public imageUrl!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public useForRecipes!: boolean;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public conversionFactor!: number;
 
-  @BelongsTo(() => FoodLocal, 'food_local_id')
+  @BelongsTo(() => FoodLocal, 'foodLocalId')
   public foodLocal?: FoodLocal;
 
-  @HasMany(() => PortionSizeMethodParameter, 'portion_size_method_id')
+  @HasMany(() => PortionSizeMethodParameter, 'portionSizeMethodId')
   public parameters?: PortionSizeMethodParameter[];
 }

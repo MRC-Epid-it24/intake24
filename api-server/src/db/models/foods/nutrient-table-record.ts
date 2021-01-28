@@ -1,19 +1,21 @@
-import { BelongsTo, Column, HasMany, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 import NutrientTable from '@api-server/db/models/foods/nutrient-table';
 import NutrientTableRecordNutrient from '@api-server/db/models/foods/nutrient-table-record-nutrient';
-import { NutrientTableRecordField } from '@api-server/db/models/foods/index';
+import { NutrientMapping, NutrientTableRecordField } from '@api-server/db/models/foods/index';
 import BaseModel from '../model';
 
 @Table({
+  modelName: 'NutrientTableRecord',
+  tableName: 'nutrient_table_records',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  freezeTableName: true,
-  tableName: 'nutrient_table_records',
 })
 export default class NutrientTableRecord extends BaseModel<NutrientTableRecord> {
   @Column({
-    allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
   public id!: number;
 
@@ -32,17 +34,23 @@ export default class NutrientTableRecord extends BaseModel<NutrientTableRecord> 
   })
   public name!: string;
 
-  @Column
-  public localName!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  public localName!: string | null;
 
-  @BelongsTo(() => NutrientTable, 'nutrient_table_id')
+  @BelongsTo(() => NutrientTable, 'nutrientTableId')
   public nutrientTable?: NutrientTable;
 
-  @HasMany(() => NutrientTableRecordNutrient, 'nutrient_table_record_id')
+  @HasMany(() => NutrientMapping, 'nutrientTableRecordId')
+  public mappings?: NutrientMapping[];
+
+  @HasMany(() => NutrientTableRecordNutrient, 'nutrientTableRecordId')
   public nutrients?: NutrientTableRecordNutrient[];
 
-  @HasMany(() => NutrientTableRecordField, 'nutrient_table_record_id')
-  public fields?: NutrientTableRecordNutrient[];
+  @HasMany(() => NutrientTableRecordField, 'nutrientTableRecordId')
+  public fields?: NutrientTableRecordField[];
 
   getNutrientByType(nutrientTypeId: number): NutrientTableRecordNutrient | undefined {
     if (this.nutrients) {

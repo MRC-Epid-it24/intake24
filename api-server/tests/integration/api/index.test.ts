@@ -9,7 +9,8 @@ import admin from './admin/index.test';
 
 describe('API', function () {
   before(async function () {
-    this.app = await app({ config: ioc.cradle.config, logger: ioc.cradle.logger });
+    const { config, logger } = ioc.cradle;
+    this.app = await app({ config, logger });
     this.data = await prepare();
   });
 
@@ -27,12 +28,20 @@ describe('API', function () {
 
   describe('Admin', function () {
     before(async function () {
-      const res = await request(this.app)
+      const adminRes = await request(this.app)
+        .post('/api/login')
+        .set('Accept', 'application/json')
+        .send({ email: 'testAdmin@example.com', password: 'testAdminPassword' });
+
+      const userRes = await request(this.app)
         .post('/api/login')
         .set('Accept', 'application/json')
         .send({ email: 'testUser@example.com', password: 'testUserPassword' });
 
-      this.bearer = `Bearer ${res.body.accessToken}`;
+      this.bearer = {
+        admin: `Bearer ${adminRes.body.accessToken}`,
+        user: `Bearer ${userRes.body.accessToken}`,
+      };
     });
 
     describe('GET /admin/profile', admin.profile);
@@ -66,6 +75,12 @@ describe('API', function () {
     describe('GET /api/admin/users/:userId/edit', users.edit);
     describe('PUT /api/admin/users/:userId', users.update);
     describe('DELETE /api/admin/users/:userId', users.destroy);
+
+    // Jobs
+    const { jobs } = admin;
+    describe('GET /api/admin/jobs', jobs.list);
+    describe('GET /api/admin/languages/:jobId', jobs.detail);
+    describe('GET /api/admin/languages/:jobId/download', jobs.download);
 
     // Languages
     const { languages } = admin;
@@ -116,8 +131,20 @@ describe('API', function () {
     // Surveys respondents
     // describe('GET /api/admin/surveys/:surveyId/respondents', surveys.respondents.list);
     // describe('POST /api/admin/surveys/:surveyId/respondents', surveys.respondents.store);
+    // describe('POST /api/admin/surveys/:surveyId/upload', surveys.respondents.upload);
+    // describe('POST /api/admin/surveys/:surveyId/export-auth-urls', surveys.respondents.exportAuthUrls);
     // describe('PUT /api/admin/surveys/:surveyId/respondents/:userId', surveys.respondents.update);
     // describe('DELETE /api/admin/surveys/:surveyId/respondents/:userId', surveys.respondents.destroy);
+
+    // Surveys submissions
+    // describe('GET /api/admin/surveys/:surveyId/submissions', surveys.respondents.submissions.list);
+    // describe('GET /api/admin/surveys/:surveyId/submissions/:submissionId', surveys.respondents.submissions.detail);
+    // describe('DELETE /api/admin/surveys/:surveyId/submissions/:submissionId', surveys.respondents.submissions.destroy);
+
+    // Surveys data-export
+    const { dataExport } = surveys;
+    describe('POST /api/admin/surveys/:surveyId/data-export', dataExport.queue);
+    describe('POST /api/admin/surveys/:surveyId/data-export/sync', dataExport.sync);
 
     // Tasks
     const { tasks } = admin;

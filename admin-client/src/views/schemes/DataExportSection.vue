@@ -10,8 +10,8 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-btn :title="$t('common.action.save')" dark text @click.stop="save">
-            <v-icon left>$save</v-icon> {{ $t('common.action.save') }}
+          <v-btn :title="$t('common.action.ok')" dark text @click.stop="save">
+            <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
@@ -33,11 +33,19 @@
                       <v-icon>fa-grip-vertical</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title>ID: {{ field.id }}</v-list-item-title>
-                      <v-list-item-subtitle>Label: {{ field.label }}</v-list-item-subtitle>
+                      <v-list-item-subtitle class="mb-1">
+                        <span class="text--primary">{{ $t('schemes.data-export.field.id') }}:</span>
+                        {{ field.id }}
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle>
+                        <span class="text--primary">
+                          {{ $t('schemes.data-export.field.label') }}:
+                        </span>
+                        {{ field.label }}
+                      </v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-btn icon :title="$t('common.action.edit')" @click.stop="edit(idx, field)">
+                      <v-btn icon :title="$t('common.action.edit')" @click.stop="edit(field)">
                         <v-icon color="primary lighten-2">$edit</v-icon>
                       </v-btn>
                     </v-list-item-action>
@@ -62,8 +70,16 @@
                   link
                 >
                   <v-list-item-content>
-                    <v-list-item-title>ID: {{ field.id }}</v-list-item-title>
-                    <v-list-item-subtitle>Label: {{ field.label }}</v-list-item-subtitle>
+                    <v-list-item-subtitle class="mb-1">
+                      <span class="text--primary">{{ $t('schemes.data-export.field.id') }}:</span>
+                      {{ field.id }}
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle>
+                      <span class="text--primary">
+                        {{ $t('schemes.data-export.field.label') }}:
+                      </span>
+                      {{ field.label }}
+                    </v-list-item-subtitle>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-btn icon :title="$t('common.action.add')" @click.stop="add(field)">
@@ -76,6 +92,39 @@
           </v-col>
         </v-row>
       </v-container>
+      <v-dialog v-model="editDialog.show" max-width="500px">
+        <v-card>
+          <v-card-title>{{ $t('schemes.data-export.field._') }}</v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="editDialog.field.id"
+                  :label="$t('schemes.data-export.field.id')"
+                  disabled
+                  hide-details="auto"
+                  name="id"
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="editDialog.field.label"
+                  :label="$t('schemes.data-export.field.label')"
+                  hide-details="auto"
+                  name="label"
+                  outlined
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn class="font-weight-bold" color="blue darken-3" text @click="confirm">
+              {{ $t('common.action.ok') }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
   </v-dialog>
 </template>
@@ -100,13 +149,13 @@ export default Vue.extend({
   components: { draggable },
 
   data() {
+    const newEditDialog = () => ({ show: false, field: { id: '', label: '' } });
+
     return {
       dialog: false,
       fields: [] as ExportField[],
-      editDialog: {
-        show: false,
-        field: {} as ExportField,
-      },
+      newEditDialog,
+      editDialog: newEditDialog(),
     };
   },
 
@@ -133,8 +182,12 @@ export default Vue.extend({
       this.fields.push(field);
     },
 
-    edit(index: number, field: ExportField) {
+    edit(field: ExportField) {
       this.editDialog = { show: true, field };
+    },
+
+    confirm() {
+      this.editDialog = this.newEditDialog();
     },
 
     remove(index: number) {

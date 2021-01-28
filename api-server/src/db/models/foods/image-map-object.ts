@@ -4,6 +4,7 @@ import BaseModel from '../model';
 import { ImageMap, ProcessedImage } from '.';
 
 @Table({
+  modelName: 'ImageMapObject',
   tableName: 'image_map_objects',
   freezeTableName: true,
   timestamps: false,
@@ -15,6 +16,11 @@ export default class ImageMapObject extends BaseModel<ImageMapObject> {
     primaryKey: true,
   })
   public id!: number;
+
+  @Column({
+    allowNull: false,
+  })
+  public imageMapId!: string;
 
   @Column({
     allowNull: false,
@@ -32,9 +38,14 @@ export default class ImageMapObject extends BaseModel<ImageMapObject> {
   })
   public outlineCoordinates!: number[];
 
-  @BelongsTo(() => ImageMap, 'image_map_id')
+  @Column({
+    allowNull: false,
+  })
+  public overlayImageId!: number;
+
+  @BelongsTo(() => ImageMap, 'imageMapId')
   public imageMap?: ImageMap;
 
-  @BelongsTo(() => ProcessedImage, 'overlay_image_id')
+  @BelongsTo(() => ProcessedImage, 'overlayImageId')
   public overlayImage?: ProcessedImage;
 }
