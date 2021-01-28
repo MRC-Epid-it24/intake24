@@ -36,7 +36,20 @@ export default Vue.extend({
       testProps: {
         text: { en: "Portion Size Options"},
         description: { en: "Select portion size options here" },
-        methods: 'testMethod',
+        methods: [
+          {
+            // Double check this
+            method: 'as-served',
+            description: 'test-test',
+            imageUrl: 'localhost:8200/image.jpg',
+            useForRecipes: false,
+            conversionFactor: 0.0,
+            parameters: {
+              'serving-image-set': 'test',
+              'leftovers-image-set': 'test',
+            }
+          }
+        ],
         validation: {
           required: false,
           message: { en: "Validation fail" },
