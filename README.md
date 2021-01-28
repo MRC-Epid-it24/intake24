@@ -1,3 +1,5 @@
+![Build Status](https://github.com/MRC-Epid-it24/intake24/workflows/CI/badge.svg)
+
 # Intake24 NG
 
 ## Node.js
