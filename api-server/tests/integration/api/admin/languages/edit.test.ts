@@ -3,11 +3,16 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { Language } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
-import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.language();
+    this.input = {
+      id: 'es-co',
+      englishName: 'Spanish - Colombia',
+      localName: 'Spanish - Colombia',
+      countryFlagCode: 'es-co',
+      textDirection: 'ltr',
+    };
     this.language = await Language.create(this.input);
     this.output = { ...this.input };
 

@@ -2,12 +2,20 @@ import { expect } from 'chai';
 import request from 'supertest';
 import { Locale } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
-import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
     const { id: langId } = this.data.language;
-    this.input = mocker.locale(langId, langId);
+    this.input = {
+      id: 'en-au',
+      englishName: 'English - Australia',
+      localName: 'English - Australia',
+      respondentLanguageId: langId,
+      adminLanguageId: langId,
+      countryFlagCode: 'en-au',
+      prototypeLocaleId: null,
+      textDirection: 'ltr',
+    };
     this.locale = await Locale.create(this.input);
 
     const baseUrl = '/api/admin/locales';

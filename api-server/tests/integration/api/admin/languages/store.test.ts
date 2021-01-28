@@ -2,11 +2,16 @@ import { expect } from 'chai';
 import { pick } from 'lodash';
 import request from 'supertest';
 import { setPermission } from '../../mocks/helpers';
-import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.language();
+    this.input = {
+      id: 'es-cr',
+      englishName: 'Spanish - Costa Rica',
+      localName: 'Spanish - Costa Rica',
+      countryFlagCode: 'es-cr',
+      textDirection: 'ltr',
+    };
     this.output = { ...this.input };
 
     this.url = '/api/admin/languages';
@@ -92,7 +97,13 @@ export default function (): void {
         .post(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer.user)
-        .send({ ...mocker.language(), id: this.input.id });
+        .send({
+          id: this.input.id,
+          englishName: 'Spanish - Dominican Republic',
+          localName: 'Spanish - Dominican Republic',
+          countryFlagCode: 'es-do',
+          textDirection: 'ltr',
+        });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');

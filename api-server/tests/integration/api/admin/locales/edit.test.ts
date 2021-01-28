@@ -3,12 +3,20 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { Locale } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
-import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
     const { id: langId } = this.data.language;
-    this.input = mocker.locale(langId, langId);
+    this.input = {
+      id: 'en-ca',
+      englishName: 'English - Canada',
+      localName: 'English - Canada',
+      respondentLanguageId: langId,
+      adminLanguageId: langId,
+      countryFlagCode: 'en-ca',
+      prototypeLocaleId: null,
+      textDirection: 'ltr',
+    };
     this.locale = await Locale.create(this.input);
     this.output = { ...this.input };
 
