@@ -16,6 +16,7 @@ export default Vue.extend({
     label: {
       type: String,
       default() {
+        // Display translated text on button
         return this.$t('common.continue');
       },
     },

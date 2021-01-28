@@ -1,15 +1,39 @@
 <template>
   <v-container fluid>
+    <v-row>
+      <v-col>
+        <h2>{{ localDescription }}</h2>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="11">
+        <!-- Requires handling of the translation -->
+        How would you like to estimate the portion size of your <i>{{ localDescription }}</i>?
+      </v-col>
+      <v-col cols="1">
+        <v-btn justify="end">Help</v-btn>
+      </v-col>
+    </v-row>
+
     <v-row dense>
       <v-col
         v-for="(method, index) in methods"
         :key="index"
         cols="6"
         @click="selectMethod(index)"
+        class="mx-auto"
       >
         <v-card>
           <v-card-title>
-            {{ text }} {{ method.method }}
+            {{ text }} {{ method.method }} 
+            <v-icon 
+              class="mr-1"
+              v-show="isSelected(index)"
+              color="green"
+            >
+              fas fa-fw fa-check
+            </v-icon>
           </v-card-title>
 
           <v-img 
@@ -20,14 +44,16 @@
             v-text="method.description"
           ></v-card-text>
 
-          <v-spacer></v-spacer>
-
-          <v-icon v-show="highlightCard(index)" large color="green">fas fa-fw fa-check</v-icon>
+          <v-card-actions>
+          </v-card-actions>
 
         </v-card>
       <!-- :error="hasErrors" -->
-      <!-- :click="selectMethod(method.method)" -->
-      
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <continue @click="onSubmit()"></continue>
       </v-col>
     </v-row>
   </v-container>
@@ -80,8 +106,16 @@ export default Vue.extend({
       console.log(`Selected ${index} portion size estimation`)
     },
 
-    highlightCard(index: number) {
+    isSelected(index: number) {
       if (this.currentValue === index) {
+        return true;
+      }
+      return false;
+    },
+
+    isValid() {
+      // Check user has selected a method
+      if (this.currentValue !== -1) {
         return true;
       }
       return false;
@@ -97,7 +131,7 @@ export default Vue.extend({
       //   return;
       // }
 
-      this.$emit('portion size option answer', this.currentValue);
+      this.$emit('portion size option answer', this.methods[this.currentValue]);
     },
   },
 });
