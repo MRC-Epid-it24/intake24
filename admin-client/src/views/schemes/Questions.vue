@@ -90,6 +90,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         type: 'legacy',
         questions: defaultQuestions,
         meals: [],
+        export: [],
       }),
       sections: {
         survey: ['preMeals', 'postMeals', 'submission'] as QuestionSection[],

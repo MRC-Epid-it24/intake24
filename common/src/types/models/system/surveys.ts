@@ -29,14 +29,3 @@ export type Survey = {
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
 };
-
-export type SurveySubmission = {
-  id: string;
-  surveyId: string;
-  userId: number;
-  startTime: Date;
-  endTime: Date;
-  submissionTime: Date;
-  log: string[] | null;
-  uxSessionId: string;
-};

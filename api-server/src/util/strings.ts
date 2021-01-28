@@ -1,3 +1,4 @@
+import { nanoid, customAlphabet } from 'nanoid';
 import slugify from 'slugify';
 import validator from 'validator';
 
@@ -16,3 +17,16 @@ export const toSimpleName = (name?: string | null): string | null =>
  */
 export const isUrlAbsolute = (url: string, options?: validator.IsURLOptions): boolean =>
   validator.isURL(url, options);
+
+/**
+ * Generate random token with optional custom size / alphabet
+ *
+ * @param {number} [size=21]
+ * @param {(string | null)} [alphabet]
+ * @returns {string}
+ */
+export const generateToken = (size = 21, alphabet?: string | null): string => {
+  if (!alphabet) return nanoid(size);
+
+  return customAlphabet(alphabet, size)();
+};

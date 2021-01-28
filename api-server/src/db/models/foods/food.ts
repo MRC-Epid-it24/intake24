@@ -7,9 +7,11 @@ import { FoodAttribute, FoodLocal } from '.';
   localFoods: { include: [{ model: FoodLocal }] },
 }))
 @Table({
+  modelName: 'Food',
+  tableName: 'foods',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  tableName: 'foods',
 })
 export default class Food extends BaseModel<Food> {
   @Column({
@@ -18,13 +20,18 @@ export default class Food extends BaseModel<Food> {
   })
   public code!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public description!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public foodGroupId!: number;
 
   @Column({
+    allowNull: false,
     type: DataType.UUID,
   })
   public version!: string;

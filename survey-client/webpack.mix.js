@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const mix = require('laravel-mix');
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');

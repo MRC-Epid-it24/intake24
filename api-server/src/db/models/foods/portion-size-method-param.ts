@@ -1,12 +1,13 @@
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, Table } from 'sequelize-typescript';
 import PortionSizeMethod from '@api-server/db/models/foods/portion-size-method';
 import BaseModel from '../model';
 
 @Table({
+  modelName: 'PortionSizeMethodParameter',
+  tableName: 'food_portion_size_method_params',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  freezeTableName: true,
-  tableName: 'food_portion_size_method_params',
 })
 export default class PortionSizeMethodParameter extends BaseModel<PortionSizeMethodParameter> {
   @Column({
@@ -15,12 +16,21 @@ export default class PortionSizeMethodParameter extends BaseModel<PortionSizeMet
   })
   public id!: number;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
+  public portionSizeMethodId!: number;
+
+  @Column({
+    allowNull: false,
+  })
   public name!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public value!: string;
 
-  @BelongsTo(() => PortionSizeMethod, 'portion_size_method_id')
+  @BelongsTo(() => PortionSizeMethod, 'portionSizeMethodId')
   public portionSizeMethod?: PortionSizeMethod;
 }

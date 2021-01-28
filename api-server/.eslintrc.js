@@ -36,19 +36,6 @@ module.exports = {
   plugins: ['import', 'prettier', '@typescript-eslint', 'mocha'],
   rules: {
     'prettier/prettier': 'error',
-    'import/no-cycle': 'warn',
-    'no-console': 'warn',
-    'no-debugger': 'warn',
-    'import/no-extraneous-dependencies': [
-      'error',
-      { devDependencies: ['**/*.ts', '**/*.ts', '**/*.ts'] },
-    ],
-    'no-continue': 'off',
-    'no-await-in-loop': 'off',
-    'no-plusplus': 'off',
-    'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
-    'no-shadow': 'off',
-    '@typescript-eslint/no-shadow': 'error',
     'import/extensions': [
       'error',
       'ignorePackages',
@@ -56,13 +43,34 @@ module.exports = {
         ts: 'never',
       },
     ],
+    'import/no-cycle': 'warn',
+    'import/no-extraneous-dependencies': [
+      'error',
+      { devDependencies: ['**/*.config.js', '**/*.mocha.js', 'tests/**/*.ts', 'tests/**/*.js'] },
+    ],
+    'no-await-in-loop': 'off',
+    'no-continue': 'off',
+    'no-console': 'warn',
+    'no-debugger': 'warn',
+    'no-plusplus': 'off',
+    'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-shadow': 'error',
   },
   overrides: [
     {
-      files: ['**/*.test.ts', '**/*.spec.ts', '**/*.mock.ts'],
+      files: ['tests/**/*.ts', 'tests/**/*.js'],
       rules: {
         'func-names': 'off',
         'mocha/no-exports': 'off',
+        'mocha/no-top-level-hooks': 'off',
+      },
+    },
+    {
+      files: ['**/*.js'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
       },
     },
   ],

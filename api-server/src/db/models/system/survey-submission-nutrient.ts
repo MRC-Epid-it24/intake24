@@ -1,4 +1,5 @@
 import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
+import { SurveySubmissionNutrient as SurveySubmissionNutrientAttributes } from '@common/types/models';
 import { NutrientType, SurveySubmissionFood } from '.';
 import BaseModel from '../model';
 
@@ -13,7 +14,9 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionNutrient extends BaseModel<SurveySubmissionNutrient> {
+export default class SurveySubmissionNutrient
+  extends BaseModel<SurveySubmissionNutrient>
+  implements SurveySubmissionNutrientAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

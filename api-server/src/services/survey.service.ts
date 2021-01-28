@@ -11,7 +11,7 @@ import {
 } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import { toSimpleName } from '@/util';
+import { toSimpleName, generateToken } from '@/util';
 import { surveyMgmt, surveyRespondent } from './acl.service';
 
 export type RespondentWithPassword = {
@@ -38,7 +38,7 @@ export interface SurveyService {
   exportAuthenticationUrls: (surveyId: string, userId: number) => Promise<Job>;
 }
 
-export default ({ scheduler, userService }: IoC): SurveyService => {
+export default ({ config, scheduler, userService }: IoC): SurveyService => {
   /**
    * Fetch survey-specific respondent permission instance
    *
@@ -89,12 +89,13 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     await user.$add('permissions', await getSurveyRespondentPermission(surveyId));
 
     const { id: userId } = user;
+    const { size, alphabet } = config.security.authTokens;
+
     const respondent = await UserSurveyAlias.create({
       userId,
       surveyId,
       userName,
-      // TODO: implement configurable length of token
-      urlAuthToken: nanoid(),
+      urlAuthToken: generateToken(size, alphabet),
     });
 
     await userService.createPassword(userId, password);
@@ -117,6 +118,7 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
     if (!survey) throw new NotFoundError();
 
     const { id: permissionId } = await getSurveyRespondentPermission(surveyId);
+    const { size, alphabet } = config.security.authTokens;
 
     const userAliases = [];
     const userPasswords = [];
@@ -128,8 +130,7 @@ export default ({ scheduler, userService }: IoC): SurveyService => {
       // This is to keep it MySQL others-like compatible, where bulk operation doesn't return generated IDs
       const { id: userId } = await User.create({ ...rest, simpleName: toSimpleName(rest.name) });
 
-      // TODO: implement configurable length of token
-      userAliases.push({ userId, surveyId, userName, urlAuthToken: nanoid() });
+      userAliases.push({ userId, surveyId, userName, urlAuthToken: generateToken(size, alphabet) });
       userPermissions.push({ userId, permissionId });
       userPasswords.push({ userId, password });
     }

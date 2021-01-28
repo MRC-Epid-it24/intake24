@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '@/config/security';
 
-export type RecaptchaResponse = {
+export type ReCaptchaResponse = {
   success: boolean;
   // eslint-disable-next-line camelcase
   challenge_ts: string;
@@ -15,15 +15,15 @@ export default async (token?: string | null): Promise<void> => {
   const { enabled, secret } = config.recaptcha;
   if (!enabled) return Promise.resolve();
 
-  if (typeof token !== 'string' || !token)
-    return Promise.reject(new Error('Invalid reCAPTCHA challenge.'));
+  if (typeof token !== 'string' || !token) throw new Error('Invalid reCAPTCHA challenge.');
 
   const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`;
 
   try {
-    const { data: { success } = {} } = await axios.post<RecaptchaResponse>(url);
-    return success ? Promise.resolve() : Promise.reject(new Error('Invalid reCAPTCHA challenge.'));
+    const { data: { success } = {} } = await axios.post<ReCaptchaResponse>(url);
+    if (!success) throw new Error('Invalid reCAPTCHA challenge.');
+    return Promise.resolve();
   } catch (err) {
-    return Promise.reject(new Error('Invalid reCAPTCHA challenge.'));
+    throw new Error('Invalid reCAPTCHA challenge.');
   }
 };

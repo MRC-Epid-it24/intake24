@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import type { PasswordAlgorithm, HashedPassword } from '@/util/passwords';
+import type { PasswordAlgorithm, HashedPassword } from '.';
 
 export default class PasswordBcrypt implements PasswordAlgorithm {
   id = 'bcrypt';

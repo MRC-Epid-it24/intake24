@@ -77,10 +77,10 @@ describe('API', function () {
     describe('DELETE /api/admin/users/:userId', users.destroy);
 
     // Jobs
-    // const { jobs } = admin;
-    // describe('GET /api/admin/jobs', jobs.list);
-    // describe('GET /api/admin/languages/:jobId', jobs.detail);
-    // describe('GET /api/admin/languages/:jobId/download', jobs.download);
+    const { jobs } = admin;
+    describe('GET /api/admin/jobs', jobs.list);
+    describe('GET /api/admin/languages/:jobId', jobs.detail);
+    describe('GET /api/admin/languages/:jobId/download', jobs.download);
 
     // Languages
     const { languages } = admin;

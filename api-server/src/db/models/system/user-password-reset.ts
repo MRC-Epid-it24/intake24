@@ -1,4 +1,5 @@
 import { BelongsTo, Column, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { UserPasswordReset as UserPasswordResetAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 
@@ -8,7 +9,9 @@ import { User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class UserPasswordReset extends BaseModel<UserPasswordReset> {
+export default class UserPasswordReset
+  extends BaseModel<UserPasswordReset>
+  implements UserPasswordResetAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -20,7 +23,9 @@ export default class UserPasswordReset extends BaseModel<UserPasswordReset> {
   })
   public userId!: number;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public token!: string;
 
   @CreatedAt

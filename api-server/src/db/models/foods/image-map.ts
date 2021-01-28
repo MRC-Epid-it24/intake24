@@ -8,6 +8,7 @@ import { GuideImage, ImageMapObject, ProcessedImage } from '.';
   objects: { include: [{ model: ImageMapObject }] },
 }))
 @Table({
+  modelName: 'ImageMap',
   tableName: 'image_maps',
   freezeTableName: true,
   timestamps: false,

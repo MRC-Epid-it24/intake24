@@ -1,3 +1,4 @@
+import { Dictionary } from '@common/types';
 import { UserPayload } from './auth';
 
 export interface RootState {
@@ -26,5 +27,5 @@ export interface UserState {
 export interface AuthState {
   status: string;
   accessToken: string | null;
-  error: object;
+  error: Dictionary;
 }

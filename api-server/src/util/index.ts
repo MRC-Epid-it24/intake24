@@ -1,5 +1,4 @@
-export { default as wrapAsync } from './wrap-async';
-
+export * from './express';
 export * from './date-time';
-export * from './strings';
 export * from './memory';
+export * from './strings';

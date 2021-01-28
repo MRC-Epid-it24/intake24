@@ -46,7 +46,9 @@ export default class Permission extends BaseModel<Permission> implements Permiss
   })
   public name!: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public displayName!: string;
 
   @Column({

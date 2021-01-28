@@ -129,10 +129,7 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     { batchSize = 100, limit, offset: startOffset = 0, ...params }: StreamFindOptions
   ): Promise<void> {
     try {
-      let max = limit;
-      if (!max) {
-        max = await this.count(params);
-      }
+      const max = limit ?? (await this.count(params));
 
       const offsets = [];
       let start = startOffset;

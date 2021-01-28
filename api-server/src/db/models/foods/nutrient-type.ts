@@ -3,10 +3,11 @@ import NutrientUnit from '@api-server/db/models/foods/nutrient-unit';
 import BaseModel from '../model';
 
 @Table({
+  modelName: 'NutrientType',
+  tableName: 'nutrient_types',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  freezeTableName: true,
-  tableName: 'nutrient_types',
 })
 export default class NutrientType extends BaseModel<NutrientType> {
   @Column({
@@ -15,9 +16,14 @@ export default class NutrientType extends BaseModel<NutrientType> {
   })
   public id!: number;
 
+  @Column({
+    allowNull: false,
+  })
+  public unitId!: number;
+
   @Column({ allowNull: false })
   public description!: string;
 
-  @BelongsTo(() => NutrientUnit, 'unit_id')
+  @BelongsTo(() => NutrientUnit, 'unitId')
   public unit?: NutrientUnit;
 }

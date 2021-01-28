@@ -1,23 +1,37 @@
-import { BelongsTo, Column, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 import { FoodLocal, NutrientTableRecord } from '.';
 
 @Table({
+  modelName: 'NutrientMapping',
+  tableName: 'food_nutrient_mapping',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  freezeTableName: true,
-  tableName: 'food_nutrient_mapping',
 })
 export default class NutrientMapping extends BaseModel<NutrientMapping> {
   @Column({
-    allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
   public id!: number;
 
-  @BelongsTo(() => FoodLocal, 'food_local_id')
+  @Column({
+    allowNull: false,
+    type: DataType.BIGINT,
+  })
+  public nutrientTableRecordId!: number;
+
+  @Column({
+    allowNull: false,
+    type: DataType.BIGINT,
+  })
+  public foodLocalId!: number;
+
+  @BelongsTo(() => FoodLocal, 'foodLocalId')
   public foodLocal?: FoodLocal;
 
-  @BelongsTo(() => NutrientTableRecord, 'nutrient_table_record_id')
+  @BelongsTo(() => NutrientTableRecord, 'nutrientTableRecordId')
   public nutrientTableRecord?: NutrientTableRecord;
 }

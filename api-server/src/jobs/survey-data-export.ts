@@ -1,10 +1,10 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { Transform } from 'json2csv';
-import { Job, SurveySubmissionFood } from '@/db/models/system';
+import { Job } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
-import type { DataExportInput } from '@/services/data-export';
+import { DataExportInput, EMPTY } from '@/services/data-export';
 import { getUrlExpireDate } from '@/util';
 import { Job as BaseJob, JobData, JobType } from './job';
 
@@ -47,8 +47,15 @@ export default class SurveyDataExport implements BaseJob {
     this.logger.debug(`Job ${this.name} finished.`);
   }
 
+  /**
+   *
+   *
+   * @private
+   * @returns {Promise<void>}
+   * @memberof SurveyDataExport
+   */
   private async exportData(): Promise<void> {
-    const { scope, fields, filename } = await this.dataExportService.prepareExportInfo(this.data);
+    const { options, fields, filename } = await this.dataExportService.prepareExportInfo(this.data);
 
     const job = await Job.findByPk(this.jobId);
     if (!job) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.jobId}).`);
@@ -57,8 +64,8 @@ export default class SurveyDataExport implements BaseJob {
       const filepath = path.resolve(this.config.filesystem.local.downloads, filename);
       const output = fs.createWriteStream(filepath, { encoding: 'utf8', flags: 'w+' });
 
-      const foods = SurveySubmissionFood.findAllWithStream(scope);
-      const transform = new Transform({ fields, withBOM: true });
+      const foods = this.dataExportService.getSubmissionsWithStream(options);
+      const transform = new Transform({ fields, defaultValue: EMPTY, withBOM: true });
 
       foods.on('error', (err) => reject(err));
 

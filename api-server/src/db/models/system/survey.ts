@@ -129,7 +129,7 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
     allowNull: true,
     type: DataType.TEXT,
   })
-  public description!: string;
+  public description!: string | null;
 
   @Column({
     allowNull: false,
@@ -161,8 +161,11 @@ export default class Survey extends BaseModel<Survey> implements SurveyAttribute
   // V4 Deprecated
   // finalPageHtml was used to hold content of "final page"
   // "final page" will be a customizable question in scheme
-  @Column
-  public finalPageHtml!: string;
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT,
+  })
+  public finalPageHtml!: string | null;
 
   @Column({
     allowNull: false,

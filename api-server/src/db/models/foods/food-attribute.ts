@@ -1,4 +1,4 @@
-import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 import Food from './food';
 
@@ -6,6 +6,9 @@ import Food from './food';
   food: { include: [{ model: Food }] },
 }))
 @Table({
+  modelName: 'FoodAttribute',
+  tableName: 'foods_attributes',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
 })
@@ -14,24 +17,36 @@ export default class FoodAttribute extends BaseModel<FoodAttribute> {
     autoIncrement: true,
     primaryKey: true,
   })
-  public id!: string;
+  public id!: number;
 
   @Column({
     primaryKey: true,
   })
   public foodCode!: string;
 
-  @Column
-  public sameAsBeforeOption!: boolean;
+  @Column({
+    allowNull: true,
+    type: DataType.BOOLEAN,
+  })
+  public sameAsBeforeOption!: boolean | null;
 
-  @Column
-  public readyMealOption!: boolean;
+  @Column({
+    allowNull: true,
+    type: DataType.BOOLEAN,
+  })
+  public readyMealOption!: boolean | null;
 
-  @Column
-  public reasonableAmount!: number;
+  @Column({
+    allowNull: true,
+    type: DataType.INTEGER,
+  })
+  public reasonableAmount!: number | null;
 
-  @Column
-  public useInRecipes!: number;
+  @Column({
+    allowNull: true,
+    type: DataType.INTEGER,
+  })
+  public useInRecipes!: number | null;
 
   @BelongsTo(() => Food, 'foodCode')
   public food?: Food;

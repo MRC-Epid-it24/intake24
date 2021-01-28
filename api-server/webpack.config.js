@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require('nodemon-webpack-plugin');
@@ -15,7 +13,7 @@ if (isDev)
     new NodemonPlugin({
       script: './dist/server.js',
       watch: path.resolve('./dist'),
-      nodeArgs: ['--trace-warnings', '--inspect=5858'],
+      nodeArgs: ['--trace-warnings', '--inspect=5959'],
     })
   );
 

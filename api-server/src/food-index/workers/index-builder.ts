@@ -36,6 +36,8 @@ async function buildIndex() {
   const foodDescriptions = new Array<PhraseWithKey<string>>();
 
   for (const food of localFoods) {
+    if (!food.name) continue;
+
     foodDescriptions.push({ phrase: food.name, key: food.foodCode });
   }
 
