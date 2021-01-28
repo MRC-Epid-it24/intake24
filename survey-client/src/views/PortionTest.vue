@@ -40,8 +40,8 @@ export default Vue.extend({
           {
             // Double check this
             method: 'as-served',
-            description: 'test-test',
-            imageUrl: 'localhost:8200/image.jpg',
+            description: 'test data description',
+            imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Fries_2.jpg/800px-Fries_2.jpg',
             useForRecipes: false,
             conversionFactor: 0.0,
             parameters: {

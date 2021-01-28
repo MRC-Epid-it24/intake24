@@ -1,25 +1,46 @@
 <template>
-  <prompt-layout :text="text" :description="description">
+  <v-container fluid>
+    <v-row dense>
+      <v-col
+        v-for="(method, index) in methods"
+        :key="index"
+        cols="6"
+        @click="selectMethod(index)"
+      >
+        <v-card>
+          <v-card-title>
+            {{ text }} {{ method.method }}
+          </v-card-title>
+
+          <v-img 
+            :src="method.imageUrl"
+          ></v-img>
+
+          <v-card-text 
+            v-text="method.description"
+          ></v-card-text>
+
+          <v-spacer></v-spacer>
+
+          <v-icon v-show="highlightCard(index)" large color="green">fas fa-fw fa-check</v-icon>
+
+        </v-card>
+      <!-- :error="hasErrors" -->
+      <!-- :click="selectMethod(method.method)" -->
+      
+      </v-col>
+    </v-row>
+  </v-container>
+
+  <!-- <prompt-layout :text="text" :description="description">
     <v-card-text>
-      <v-row>
-        <v-col>
-        <!-- <v-col 
-          v-for="method in methods" 
-          :key="method.foodCode"
-          :click="selectMethod(method.method)"
-          :error="hasErrors"
-        > -->
-          <!-- <img src="" alt=""> -->
-          <!-- {{ method.description }} -->
-          Any other content inside the prompt
-        </v-col>
-      </v-row>
-      <!-- <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+      
+      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
       <v-form ref="form" @submit.prevent="onSubmit">
         <continue></continue>
-      </v-form> -->
+      </v-form>
     </v-card-text>
-  </prompt-layout>
+  </prompt-layout> -->
 </template>
 
 <script lang="ts">
@@ -45,7 +66,7 @@ export default Vue.extend({
   data() {
     return {
       ...merge(portionSizeOptionPromptProps, this.props),
-      currentValue: 'ok', 
+      currentValue: -1, 
     };
   },
 
@@ -54,10 +75,17 @@ export default Vue.extend({
     //   this.errors = [];
     // },
 
-    // selectMethod(method: string) {
-    //   this.currentValue = method;
-    //   console.log(`Selected ${method} portion size estimation`)
-    // },
+    selectMethod(index: number) {
+      this.currentValue = index;
+      console.log(`Selected ${index} portion size estimation`)
+    },
+
+    highlightCard(index: number) {
+      if (this.currentValue === index) {
+        return true;
+      }
+      return false;
+    },
 
     onSubmit() {
       // TO DO implement validation - checking at least one method has been selected
