@@ -7,10 +7,8 @@ const { QueryTypes } = require('sequelize');
 
 
 type FoodData = {
-  [key: string]: any // FIXME: use more specific types
+  [key: string]: any // FIXME: use more specific type
 }
-
-type ParentCategories = undefined | [null | { category_code: string }]
 
 export type FoodController = Controller<
   'entry' | 'entryWithSource' | 'brands' | 'associatedFoods' | 'composition'
@@ -20,7 +18,9 @@ export default (): FoodController => {
   const entry = async (req: Request, res: Response): Promise<void> => {
 
   /* Constructing response object */
-    const result: FoodData = {};
+    const result: FoodData = {
+      categories: []
+    };
     const { code, localeId } = req.params;
 
     //1.Food data (Food Local)
@@ -41,22 +41,23 @@ export default (): FoodController => {
       })
       result.categories = foodCategories.reduce<string[]>((acc, currentFoodCategory) => [...acc, currentFoodCategory.categoryCode], []);
 
+
       //3. Retrieving all parent categories of categories
       if (result.categories != null && result.categories.length !== 0) {
         const parentCat = await FoodCategory.sequelize?.query(
           getAllParentCategories,
           {
             replacements: { subcategory_code: result.categories },
-            raw: false,
             type: QueryTypes.SELECT
           }
         );
-        if (parentCat !== undefined && parentCat[0]! == undefined) {
-          console.log("Found some parent categories! ");
-          console.log(parentCat[0]);
-          //const caties = parentCat.reduce<string[]>((acc, currentFoodCategory) => [...acc, currentFoodCategory.categoryCode], []);
-          //result.categories = [...result.categories, ...parentCat.category_code];
-        } else { console.log("parent undefined"); }
+        if (parentCat !== undefined && parentCat.length > 0) {
+          const additionalCats = parentCat.reduce<string[]>((acc, currentCategory) => {
+            // FIXME: TypeScript Error due to returned values.
+            return currentCategory ? [...acc, currentCategory.category_code] : acc;
+          }, [])
+          result.categories = [...result.categories, ...additionalCats];
+        } else { console.log('No parent categories were found! ') }
       }
       //4. Retrieving readyMealOption, sameAsBeforeOption, portionSizeMethods
 
