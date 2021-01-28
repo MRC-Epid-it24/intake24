@@ -12,7 +12,7 @@
   },
   "main": "src/index.ts",
   "engines": {
-    "node": ">=10.20.1"
+    "node": ">=12.20.1"
   },
   "dependencies": {
     "lodash": "^4.17.20"

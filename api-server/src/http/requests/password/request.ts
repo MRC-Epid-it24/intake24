@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 import validate from '@/http/requests/validate';
-import { recaptcha } from '@/http/rules';
+import { reCaptcha } from '@/http/rules';
 
 export default validate(
   checkSchema({
@@ -13,7 +13,7 @@ export default validate(
     recaptcha: {
       in: ['body'],
       custom: {
-        options: async (value): Promise<void> => recaptcha(value),
+        options: async (value): Promise<void> => reCaptcha(value),
       },
     },
   })

@@ -57,7 +57,7 @@ export const httpLogger = {
   },
 };
 
-export const dbLogger = (sql: string, timing?: number): void => {
+export const dbLogger = (sql: string): void => {
   logger.debug(sql);
 };
 

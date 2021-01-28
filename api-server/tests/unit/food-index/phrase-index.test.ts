@@ -35,13 +35,13 @@ describe('Phrase index', function () {
     synonyms
   );
 
-  describe('Interpretation combinations', () => {
-    it('Empty interpretations list', () => {
+  describe('Interpretation combinations', function () {
+    it('Empty interpretations list', function () {
       const t = new InterpretedPhrase('bleh', []);
       expect(t.generateCombinations(100)).to.be.empty;
     });
 
-    it('Cut combinations', () => {
+    it('Cut combinations', function () {
       const t = new InterpretedPhrase('bleh', [
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
@@ -60,7 +60,7 @@ describe('Phrase index', function () {
       expect(cut[2].interpretations[0].kind).eq('alt-spelling');
     });
 
-    it('Generate combinations', () => {
+    it('Generate combinations', function () {
       const t1 = new InterpretedPhrase('bleh', [
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
@@ -129,8 +129,7 @@ describe('Phrase index', function () {
       ]);
     });
 
-    it('Match', () => {
-
+    it('Match', function () {
       const t = index.interpretPhrase('banana with coffee', 'match-fewer');
 
       console.log(JSON.stringify(index.findMatches(t, 10, 100)));

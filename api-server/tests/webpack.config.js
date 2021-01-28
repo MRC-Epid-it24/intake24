@@ -1,5 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-var-requires */
+const dotenv = require('dotenv');
+const dotenvExpand = require('dotenv-expand');
+
+const env = dotenv.config({ path: `${__dirname}/.env-test` });
+dotenvExpand(env);
+
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const { exec } = require('child_process');
@@ -11,7 +15,7 @@ const isDev = NODE_ENV === 'development';
 const plugins = [
   {
     apply: (compiler) => {
-      compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+      compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
         exec('npm run --silent test:unit:run', (err, stdout, stderr) => {
           if (stdout) process.stdout.write(stdout);
           if (stderr) process.stderr.write(stderr);
@@ -27,9 +31,9 @@ module.exports = {
     path: path.resolve(__dirname, '../dist-tests'),
     filename: 'tests.js',
   },
-  mode: NODE_ENV,
+  mode: ['production', 'development'].includes(NODE_ENV) ? NODE_ENV : 'none',
   target: 'node',
-  watch: true,
+  watch: isDev,
   devtool: isDev ? 'source-map' : undefined,
   optimization: {
     minimize: false,

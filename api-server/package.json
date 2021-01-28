@@ -12,7 +12,7 @@
   },
   "main": "src/index.ts",
   "engines": {
-    "node": ">=10.20.1"
+    "node": ">=12.20.1"
   },
   "scripts": {
     "development": "cross-env NODE_ENV=development webpack",
@@ -24,10 +24,13 @@
     "start": "node dist/server.js",
     "migrate:foods": "npx sequelize db:migrate --options-path sequelize/foods/options.js",
     "migrate:system": "npx sequelize db:migrate --options-path sequelize/system/options.js",
-    "lint": "eslint --ext .js,.ts src/ --quiet --fix",
-    "test:unit": "cross-env NODE_ENV=development webpack --config tests/webpack.config.js",
+    "lint": "eslint --ext .js,.ts src/ tests/",
+    "lint:fix": "eslint --ext .js,.ts src/ tests/ --quiet --fix",
+    "test:unit": "webpack --config tests/webpack.config.js",
+    "test:unit:watch": "cross-env NODE_ENV=development webpack --config tests/webpack.config.js",
     "test:unit:run": "mocha -c dist-tests/tests.js",
-    "test:integration:api": "mocha --watch tests/integration/api/index.test.ts"
+    "test:integration": "mocha tests/integration/api/index.test.ts",
+    "test:integration:watch": "mocha --watch tests/integration/api/index.test.ts"
   },
   "dependencies": {
     "@duosecurity/duo_web": "^1.0.5",

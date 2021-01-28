@@ -88,7 +88,7 @@ export default (): LocaleController => {
     res.json({ data: locale, refs: await refs(locale.id) });
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (req: Request /* , res: Response<undefined> */): Promise<void> => {
     const { localeId } = req.params;
     const locale = await Locale.scope('surveys').findByPk(localeId);
 

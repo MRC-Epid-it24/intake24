@@ -21,6 +21,7 @@ module.exports = {
     'no-param-reassign': 'warn',
     'no-restricted-globals': 'warn',
     'no-shadow': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-shadow': 'error',
   },
   overrides: [
