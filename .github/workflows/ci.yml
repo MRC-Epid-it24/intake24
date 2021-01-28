@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - 'deployment/**'
+      - 'docs/**'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - 'deployment/**'
+      - 'docs/**'
+
+jobs:
+  # API Server
+  api-server:
+    name: API Server
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+
+    defaults:
+      run:
+        working-directory: api-server
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2.3.4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Common - install dependencies
+        working-directory: common
+        run: npm ci
+      - name: API Server - install dependencies
+        run: npm ci
+      - name: API Server - lint
+        run: npm run lint
+      - name: API Server - build
+        run: npm run build
+      - name: API Server - unit tests
+        run: npm run test:unit
+
+  # Admin client
+  admin-client:
+    name: Admin client
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+
+    defaults:
+      run:
+        working-directory: admin-client
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2.3.4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Common - install dependencies
+        working-directory: common
+        run: npm ci
+      - name: Admin client - install dependencies
+        run: npm ci
+      - name: Admin client - lint
+        run: npm run lint
+      - name: Admin client - build
+        run: npm run build
+
+  # Survey client
+  survey-client:
+    name: Survey client
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+
+    defaults:
+      run:
+        working-directory: survey-client
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2.3.4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Common - install dependencies
+        working-directory: common
+        run: npm ci
+      - name: Admin client - install dependencies
+        run: npm ci
+      - name: Admin client - lint
+        run: npm run lint
+      - name: Admin client - build
+        run: npm run build
