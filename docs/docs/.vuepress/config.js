@@ -169,7 +169,8 @@ module.exports = {
             'getting-started',
             'vm',
             'v3-survey',
-            'portion-size'
+            'portion-size',
+            'technology-stack',
           ]
         }
       ],
