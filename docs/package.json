@@ -18,9 +18,9 @@
     "build": "vuepress build docs"
   },
   "devDependencies": {
-    "@vuepress/plugin-back-to-top": "^1.7.1",
-    "@vuepress/plugin-medium-zoom": "^1.7.1",
-    "vuepress": "^1.7.1"
+    "@vuepress/plugin-back-to-top": "^1.8.0",
+    "@vuepress/plugin-medium-zoom": "^1.8.0",
+    "vuepress": "^1.8.0"
   },
   "dependencies": {
     "dotenv": "^8.2.0"
