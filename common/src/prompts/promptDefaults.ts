@@ -75,9 +75,9 @@ export const textareaPromptProps: TextareaPromptProps = {
 };
 
 export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
-  text: { en: 'default prompt title' },
-  description: { en: 'default prompt description' },
-  localDescription: 'default prompt localDescription - lasagne (includes homemade)',
+  text: { en: null },
+  description: { en: null },
+  localDescription: '',
   methods: [
     {
       method: 'as-served',

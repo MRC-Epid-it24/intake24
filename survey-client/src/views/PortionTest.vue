@@ -7,10 +7,8 @@
           :props="testProps"
         ></component> -->
         <!-- Above requires a computed variable to return :is part unless loading from list -->
-        
-        <portionSizeOptionPrompt :props="testProps"
-        ></portionSizeOptionPrompt>
-        
+
+        <portionSizeOptionPrompt :props="testProps"></portionSizeOptionPrompt>
       </v-col>
     </v-row>
   </v-container>
@@ -27,15 +25,15 @@ export default Vue.extend({
   name: 'PortionTest',
 
   // components: { ...prompts, portionSizeOption },
-  components: { 
-    portionSizeOptionPrompt 
+  components: {
+    portionSizeOptionPrompt,
   },
 
   data() {
     return {
       testProps: {
-        text: { en: "Portion Size Options"},
-        description: { en: "Select portion size options here" },
+        text: { en: 'Portion Size Options' },
+        description: { en: 'Select portion size options here' },
         methods: [
           {
             // Double check this
@@ -47,22 +45,20 @@ export default Vue.extend({
             parameters: {
               'serving-image-set': 'test',
               'leftovers-image-set': 'test',
-            }
-          }
+            },
+          },
         ],
         validation: {
           required: false,
-          message: { en: "Validation fail" },
+          message: { en: null },
         },
-      }
-
+      },
     };
   },
 });
 </script>
 
 <style>
-
 .test {
   border: 1px solid black;
 }

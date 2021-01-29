@@ -29,6 +29,11 @@ const prompts: LocaleMessage = {
       required: 'This field is required to be filled in.',
     },
   },
+  portionoption: {
+    validation: {
+      required: 'Please select how the portion will be measured.'
+    }
+  }
 };
 
 export default prompts;

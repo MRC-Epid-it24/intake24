@@ -8,8 +8,8 @@
 
     <v-row>
       <v-col cols="11">
-        <!-- Requires handling of the translation -->
-        How would you like to estimate the portion size of your <i>{{ localDescription }}</i>?
+        <!-- TO DO Requires handling of the translation -->
+        How would you like to estimate the portion size of your <i>{{ localDescription }}</i> ?
       </v-col>
       <v-col cols="1">
         <v-btn justify="end">Help</v-btn>
@@ -25,58 +25,40 @@
         class="mx-auto"
       >
         <v-card>
-          <v-card-title>
-            {{ text }} {{ method.method }} 
-            <v-icon 
-              class="mr-1"
-              v-show="isSelected(index)"
-              color="green"
-            >
-              fas fa-fw fa-check
-            </v-icon>
-          </v-card-title>
-
-          <v-img 
-            :src="method.imageUrl"
-          ></v-img>
-
-          <v-card-text 
-            v-text="method.description"
-          ></v-card-text>
-
-          <v-card-actions>
-          </v-card-actions>
-
+          <v-img class="align-end" :src="method.imageUrl">
+            <v-chip class="ma-2" :color="returnSelectedStyle(index)">
+              {{ method.description }}
+            </v-chip>
+          </v-img>
         </v-card>
-      <!-- :error="hasErrors" -->
       </v-col>
     </v-row>
+
     <v-row>
       <v-col>
-        <continue @click="onSubmit()"></continue>
+        <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col>
+        <v-form ref="form" @submit.prevent="onSubmit">
+          <!-- Should be disabled if nothing selected? -->
+          <continue></continue>
+        </v-form>
       </v-col>
     </v-row>
   </v-container>
-
-  <!-- <prompt-layout :text="text" :description="description">
-    <v-card-text>
-      
-      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
-      <v-form ref="form" @submit.prevent="onSubmit">
-        <continue></continue>
-      </v-form>
-    </v-card-text>
-  </prompt-layout> -->
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
+import { PortionSizeOptionPromptProps } from '@common/types';
 import { portionSizeOptionPromptProps } from '@common/prompts/promptDefaults';
 import BasePrompt, { Prompt } from './BasePrompt';
 
-export default Vue.extend({
+export default (Vue as VueConstructor<Vue & Prompt>).extend({
   // For user to select which portion size estimation method they want to use
   name: 'PortionSizeOptionPrompt',
 
@@ -91,26 +73,27 @@ export default Vue.extend({
 
   data() {
     return {
+      // TO DO why are we including the defaults as well?
       ...merge(portionSizeOptionPromptProps, this.props),
-      currentValue: -1, 
+      errors: [] as string[],
+      currentValue: -1,
     };
   },
 
-  methods: {
-    // clearErrors() {
-    //   this.errors = [];
-    // },
+  computed: {
+    hasErrors(): boolean {
+      return !!this.errors.length;
+    },
+  },
 
+  methods: {
     selectMethod(index: number) {
       this.currentValue = index;
-      console.log(`Selected ${index} portion size estimation`)
+      console.log(`Selected ${index} portion size estimation`);
     },
 
-    isSelected(index: number) {
-      if (this.currentValue === index) {
-        return true;
-      }
-      return false;
+    clearErrors() {
+      this.errors = [];
     },
 
     isValid() {
@@ -121,17 +104,25 @@ export default Vue.extend({
       return false;
     },
 
-    onSubmit() {
-      // TO DO implement validation - checking at least one method has been selected
-      // if (this.validation.required && !this.currentValue) {
-      //   this.errors = [
-      //     this.getLocaleContent(this.validation.message) ??
-      //       (this.$t('prompts.radio.validation.required') as string),
-      //   ];
-      //   return;
-      // }
+    // Styling for chip to denote selected
+    returnSelectedStyle(index: number) {
+      if (this.currentValue === index) {
+        return 'green';
+      }
+      return 'false';
+    },
 
-      this.$emit('portion size option answer', this.methods[this.currentValue]);
+    onSubmit() {
+      if (!this.isValid()) {
+        // Get either validation message passed in, or the default for the locale
+        this.errors = [
+          this.getLocaleContent(this.validation.message) ??
+            (this.$t('prompts.portionoption.validation.required') as string),
+        ];
+        return;
+      }
+
+      this.$emit('portion size option selection', this.methods[this.currentValue]);
     },
   },
 });
