@@ -51,7 +51,7 @@ import {
   timestamps: false,
   underscored: true,
 })
-export default class Survey extends BaseModel<Survey> implements SurveyAttributes {
+export default class Survey extends BaseModel implements SurveyAttributes {
   @Column({
     primaryKey: true,
   })

@@ -1,64 +1,60 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable @typescript-eslint/ban-types */
 import { Request } from 'express';
 import { isObject } from 'lodash';
-import {
-  FindOptions as BaseFindOptions,
-  Op,
-  CountOptions as BaseCountOptions,
-  OrderItem,
-} from 'sequelize';
+import { FindOptions as BaseFindOptions, Op, CountOptions as BaseCountOptions } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Readable } from 'stream';
 import { Pagination, PaginationMeta } from '@common/types/models';
 
-export interface Paginate extends BaseFindOptions {
+export interface Paginate<TAttributes = any> extends BaseFindOptions<TAttributes> {
   req: Request;
   columns?: string[];
   transform?: (item: any) => any;
-  [key: string]: any;
 }
 
 // Sequelize options not indexable
-export interface CountOptions extends BaseCountOptions {
+export interface CountOptions<TAttributes = any> extends BaseCountOptions<TAttributes> {
   [key: string]: any;
 }
 
-export interface FindOptions extends BaseFindOptions {
+export interface FindOptions<TAttributes = any> extends BaseFindOptions<TAttributes> {
   [key: string]: any;
 }
 
-export interface StreamFindOptions extends FindOptions {
+export interface StreamFindOptions<TAttributes = any> extends FindOptions<TAttributes> {
   batchSize?: number;
 }
 
-// eslint-disable-next-line no-use-before-define
-export type ModelCtor<M extends Model = Model> = { new (): M } & typeof Model;
+export type ModelCtor<M extends Model = Model> = typeof Model & { new (): M };
+export type ModelStatic<M extends Model = Model> = { new (): M };
 
-export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
+export default abstract class Model<
+  TModelAttributes extends {} = any,
+  TCreationAttributes extends {} = TModelAttributes
+> extends BaseModel<TModelAttributes, TCreationAttributes> {
   /**
    * Paginate results of Model.findAll
    *
    * @static
    * @template R
-   * @param {({ new (): R extends Model ? R : Model } & typeof Model)} this
+   * @template M
+   * @param {ModelCtor<R extends Model ? R : Model>} this
    * @param {Paginate} { req, columns = [], transform, ...params }
    * @returns {Promise<Pagination<R>>}
    * @memberof Model
    */
   public static async paginate<R = Model>(
-    this: { new (): R extends Model ? R : Model } & typeof Model,
+    this: ModelCtor<R extends Model ? R : Model>,
     { req, columns = [], transform, ...params }: Paginate
   ): Promise<Pagination<R>> {
-    // TODO: augment new core.Query interface in express subpackage
-    const { search, sort, ...query } = req.query;
+    const { search, sort } = req.query;
     let { page = 1, limit = 50 } = req.query;
     page = page as number;
     limit = limit as number;
 
-    const options: FindOptions = {
-      limit,
-      offset: limit * (page - 1),
-      ...params,
-    };
+    const offset = limit * (page - 1);
+    const options: FindOptions = { limit, offset, ...params };
 
     if (search && columns.length) {
       const operation =
@@ -85,8 +81,8 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     }
 
     if (sort && typeof sort === 'string') {
-      const order = sort.split('|') as OrderItem;
-      options.order = [order];
+      const [column, order] = sort.split('|');
+      options.order = [[column, order]];
     }
 
     const records = await this.findAll(options);
@@ -94,12 +90,12 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     const data = (transform ? records.map(transform) : records) as R[];
 
     const meta: PaginationMeta = {
-      from: (options.offset as number) + 1,
+      from: offset + 1,
       lastPage: Math.ceil(total / limit),
       page,
       path: '',
       limit,
-      to: (options.offset as number) + limit,
+      to: offset + limit,
       total,
     };
 
@@ -179,5 +175,3 @@ export class Model<T = any, T2 = any> extends BaseModel<T, T2> {
     return inputStream;
   }
 }
-
-export default Model;

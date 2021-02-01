@@ -1,5 +1,5 @@
 import { Op, WhereOptions } from 'sequelize';
-import { Model } from '@/db/models/model';
+import { ModelCtor } from '@/db/models/model';
 
 export type UniqueCondition = {
   field: string;
@@ -8,7 +8,7 @@ export type UniqueCondition = {
 };
 
 export type UniqueOptions = {
-  model: typeof Model;
+  model: ModelCtor;
   condition: UniqueCondition;
   except?: WhereOptions;
 };

@@ -10,7 +10,7 @@ import { User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class Job extends BaseModel<Job> implements JobAttributes {
+export default class Job extends BaseModel implements JobAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

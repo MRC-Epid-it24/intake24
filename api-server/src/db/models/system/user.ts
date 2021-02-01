@@ -52,7 +52,7 @@ import {
   freezeTableName: true,
   underscored: true,
 })
-export default class User extends BaseModel<User> implements UserAttributes {
+export default class User extends BaseModel implements UserAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

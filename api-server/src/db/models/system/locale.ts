@@ -17,7 +17,7 @@ import { Language, LocalField, LocalNutrientType, Survey } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class Locale extends BaseModel<Locale> implements LocaleAttributes {
+export default class Locale extends BaseModel implements LocaleAttributes {
   @Column({
     primaryKey: true,
   })

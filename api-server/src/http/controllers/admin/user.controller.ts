@@ -36,9 +36,10 @@ export default ({ userService }: IoC): UserController => {
   };
 
   const list = async (req: Request, res: Response<UsersResponse>): Promise<void> => {
-    const users = await User.scope('roles').paginate({
+    const users = await User.paginate({
       req,
       columns: ['name', 'email', 'simpleName'],
+      include: [{ model: Role }],
     });
 
     res.json(users);

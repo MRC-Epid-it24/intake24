@@ -10,7 +10,7 @@ import { ImageMap, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ImageMapObject extends BaseModel<ImageMapObject> {
+export default class ImageMapObject extends BaseModel {
   @Column({
     allowNull: false,
     primaryKey: true,

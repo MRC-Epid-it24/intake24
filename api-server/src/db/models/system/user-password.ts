@@ -10,9 +10,7 @@ import { User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class UserPassword
-  extends BaseModel<UserPassword>
-  implements UserPasswordAttributes {
+export default class UserPassword extends BaseModel implements UserPasswordAttributes {
   @Column({
     primaryKey: true,
   })

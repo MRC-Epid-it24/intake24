@@ -8,7 +8,7 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class Locale extends BaseModel<Locale> {
+export default class Locale extends BaseModel {
   @Column({
     primaryKey: true,
   })

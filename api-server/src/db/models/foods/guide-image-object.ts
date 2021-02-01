@@ -9,7 +9,7 @@ import { GuideImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class GuideImageObject extends BaseModel<GuideImageObject> {
+export default class GuideImageObject extends BaseModel {
   @Column({
     allowNull: false,
     primaryKey: true,

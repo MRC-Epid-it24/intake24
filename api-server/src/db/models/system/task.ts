@@ -9,7 +9,7 @@ import BaseModel from '../model';
   freezeTableName: true,
   underscored: true,
 })
-export default class Task extends BaseModel<Task> implements TaskAttributes {
+export default class Task extends BaseModel implements TaskAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

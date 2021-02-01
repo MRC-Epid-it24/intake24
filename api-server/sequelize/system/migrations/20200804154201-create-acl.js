@@ -108,12 +108,14 @@ module.exports = {
         { transaction }
       );
 
-      await queryInterface.addConstraint('permission_role', ['permission_id', 'role_id'], {
+      await queryInterface.addConstraint('permission_role', {
+        fields: ['permission_id', 'role_id'],
         type: 'primary key',
         transaction,
       });
 
-      await queryInterface.addConstraint('permission_role', ['permission_id'], {
+      await queryInterface.addConstraint('permission_role', {
+        fields: ['permission_id'],
         type: 'foreign key',
         references: {
           table: 'permissions',
@@ -124,7 +126,8 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('permission_role', ['role_id'], {
+      await queryInterface.addConstraint('permission_role', {
+        fields: ['role_id'],
         type: 'foreign key',
         references: {
           table: 'roles',
@@ -158,12 +161,14 @@ module.exports = {
         { transaction }
       );
 
-      await queryInterface.addConstraint('permission_user', ['permission_id', 'user_id'], {
+      await queryInterface.addConstraint('permission_user', {
+        fields: ['permission_id', 'user_id'],
         type: 'primary key',
         transaction,
       });
 
-      await queryInterface.addConstraint('permission_user', ['permission_id'], {
+      await queryInterface.addConstraint('permission_user', {
+        fields: ['permission_id'],
         type: 'foreign key',
         references: {
           table: 'permissions',
@@ -174,7 +179,8 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('permission_user', ['user_id'], {
+      await queryInterface.addConstraint('permission_user', {
+        fields: ['user_id'],
         type: 'foreign key',
         references: {
           table: 'users',
@@ -208,12 +214,14 @@ module.exports = {
         { transaction }
       );
 
-      await queryInterface.addConstraint('role_user', ['role_id', 'user_id'], {
+      await queryInterface.addConstraint('role_user', {
+        fields: ['role_id', 'user_id'],
         type: 'primary key',
         transaction,
       });
 
-      await queryInterface.addConstraint('role_user', ['role_id'], {
+      await queryInterface.addConstraint('role_user', {
+        fields: ['role_id'],
         type: 'foreign key',
         references: {
           table: 'roles',
@@ -224,7 +232,8 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('role_user', ['user_id'], {
+      await queryInterface.addConstraint('role_user', {
+        fields: ['user_id'],
         type: 'foreign key',
         references: {
           table: 'users',

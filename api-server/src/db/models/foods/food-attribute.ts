@@ -12,7 +12,7 @@ import Food from './food';
   timestamps: false,
   underscored: true,
 })
-export default class FoodAttribute extends BaseModel<FoodAttribute> {
+export default class FoodAttribute extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,

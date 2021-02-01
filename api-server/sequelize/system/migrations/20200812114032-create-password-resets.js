@@ -28,7 +28,8 @@ module.exports = {
         { transaction }
       );
 
-      await queryInterface.addConstraint('user_password_resets', ['user_id'], {
+      await queryInterface.addConstraint('user_password_resets', {
+        fields: ['user_id'],
         type: 'foreign key',
         references: {
           table: 'users',

@@ -14,7 +14,7 @@ import { GuideImage, ImageMapObject, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ImageMap extends BaseModel<ImageMap> {
+export default class ImageMap extends BaseModel {
   @Column({
     allowNull: false,
     primaryKey: true,

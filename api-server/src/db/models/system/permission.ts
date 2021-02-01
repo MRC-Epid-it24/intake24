@@ -32,7 +32,7 @@ export const addPermissionsToAdmin = async (permissions: Permission[]): Promise<
   freezeTableName: true,
   underscored: true,
 })
-export default class Permission extends BaseModel<Permission> implements PermissionAttributes {
+export default class Permission extends BaseModel implements PermissionAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -9,7 +9,7 @@ import { FoodLocal, NutrientTableRecord } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientMapping extends BaseModel<NutrientMapping> {
+export default class NutrientMapping extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,

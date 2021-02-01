@@ -21,9 +21,7 @@ import { User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class RefreshToken
-  extends BaseModel<RefreshToken>
-  implements RefreshTokenAttributes {
+export default class RefreshToken extends BaseModel implements RefreshTokenAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,

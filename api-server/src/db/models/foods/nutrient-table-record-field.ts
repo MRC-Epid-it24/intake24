@@ -9,7 +9,7 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientTableRecordField extends BaseModel<NutrientTableRecordField> {
+export default class NutrientTableRecordField extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -14,9 +14,7 @@ import { LocalNutrientType, NutrientUnit } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientType
-  extends BaseModel<NutrientType>
-  implements NutrientTypeAttributes {
+export default class NutrientType extends BaseModel implements NutrientTypeAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
