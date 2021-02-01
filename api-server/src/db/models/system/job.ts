@@ -1,4 +1,12 @@
-import { Table, Column, CreatedAt, DataType, ForeignKey, UpdatedAt } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  ForeignKey,
+  UpdatedAt,
+  Table,
+} from 'sequelize-typescript';
 import { JobType } from '@api-server/jobs/job';
 import { Job as JobAttributes } from '@common/types/models';
 import BaseModel from '../model';
@@ -76,7 +84,7 @@ export default class Job extends BaseModel implements JobAttributes {
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  public stackTrace!: string;
+  public stackTrace!: string | null;
 
   @CreatedAt
   @Column
@@ -85,4 +93,7 @@ export default class Job extends BaseModel implements JobAttributes {
   @UpdatedAt
   @Column
   public readonly updatedAt!: Date;
+
+  @BelongsTo(() => User, 'userId')
+  public user?: User;
 }

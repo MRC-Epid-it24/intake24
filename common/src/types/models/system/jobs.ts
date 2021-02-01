@@ -8,6 +8,8 @@ export type Job = {
   downloadUrlExpiresAt: Date | null;
   progress: number | null;
   successful: boolean | null;
+  message: string | null;
+  stackTrace: string | null;
   createdAt: Date;
   updatedAt: Date;
 };

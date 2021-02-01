@@ -14,6 +14,7 @@ import { User as UserAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import {
   ClientErrorReport,
+  Job,
   Permission,
   PermissionUser,
   RefreshToken,
@@ -43,8 +44,9 @@ import {
   signInLog: { include: [{ model: SignInLog }] },
   aliases: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
-  tokens: { include: [{ model: RefreshToken }] },
   clientErrors: { include: [{ model: ClientErrorReport }] },
+  jobs: { include: [{ model: Job }] },
+  tokens: { include: [{ model: RefreshToken }] },
 }))
 @Table({
   modelName: 'User',
@@ -136,6 +138,9 @@ export default class User extends BaseModel implements UserAttributes {
 
   @HasMany(() => ClientErrorReport, 'userId')
   public clientErrors?: ClientErrorReport[];
+
+  @HasMany(() => Job, 'userId')
+  public jobs?: Job[];
 
   public allRoles(): Role[] {
     return uniqBy(this.roles, 'name');
