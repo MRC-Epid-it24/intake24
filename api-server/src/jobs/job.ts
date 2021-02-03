@@ -10,12 +10,3 @@ export interface Job {
 export interface JobConstructor {
   new (...args: any[]): Job;
 }
-
-export type JobType =
-  | 'PurgeRefreshTokens'
-  | 'SendPasswordReset'
-  | 'SurveyDataExport'
-  | 'SurveyExportRespondentAuthUrls'
-  | 'SurveyImportRespondents';
-
-export type Jobs = Record<JobType, JobConstructor>;

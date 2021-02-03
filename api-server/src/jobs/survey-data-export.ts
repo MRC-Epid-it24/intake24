@@ -6,7 +6,7 @@ import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
 import { DataExportInput, EMPTY } from '@/services/data-export';
 import { getUrlExpireDate } from '@/util';
-import { Job as BaseJob, JobData, JobType } from './job';
+import type { Job as BaseJob, JobData, JobType } from '.';
 
 export type SurveyDataExportData = DataExportInput;
 

@@ -7,7 +7,7 @@ import {
   UpdatedAt,
   Table,
 } from 'sequelize-typescript';
-import { JobType } from '@api-server/jobs/job';
+import { JobType } from '@api-server/jobs';
 import { Job as JobAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
@@ -28,6 +28,7 @@ export default class Job extends BaseModel implements JobAttributes {
 
   @Column({
     allowNull: false,
+    type: DataType.STRING,
   })
   public type!: JobType;
 

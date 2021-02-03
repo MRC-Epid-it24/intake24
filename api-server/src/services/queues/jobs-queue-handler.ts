@@ -9,7 +9,7 @@ import {
 } from 'bullmq';
 import { Job as DbJob } from '@/db/models/system';
 import ioc, { IoC } from '@/ioc';
-import { Job, JobData, JobType } from '@/jobs/job';
+import type { Job, JobData, JobType } from '@/jobs';
 import { QueueHandler } from './queue-handler';
 
 export type JobInput = {
