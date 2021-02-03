@@ -1,0 +1,46 @@
+name: Docs deploy
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'docs/**'
+
+jobs:
+  docs-build-deploy:
+    name: Documentation
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    defaults:
+      run:
+        working-directory: docs
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Docs - install dependencies
+        run: npm ci
+      - name: Docs - build
+        run: npm run build
+      - name: Set CNAME
+        run: echo "docs.intake24.co.uk" > dist/CNAME
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ghp-docs
+          FOLDER: docs/dist
+          CLEAN: true

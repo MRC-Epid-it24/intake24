@@ -22,7 +22,7 @@ import { Permission, PermissionRole, RoleUser, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class Role extends BaseModel<Role> implements RoleAttributes {
+export default class Role extends BaseModel implements RoleAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

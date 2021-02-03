@@ -42,7 +42,7 @@ export const defaultExport: ExportScheme = [
   freezeTableName: true,
   underscored: true,
 })
-export default class Scheme extends BaseModel<Scheme> implements SchemeAttributes {
+export default class Scheme extends BaseModel implements SchemeAttributes {
   @Column({
     primaryKey: true,
   })
@@ -76,8 +76,6 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
   }
 
   set questions(value: RecallQuestions) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     this.setDataValue('questions', JSON.stringify(value ?? {}));
   }
 
@@ -91,8 +89,6 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
   }
 
   set meals(value: Meal[]) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     this.setDataValue('meals', JSON.stringify(value ?? []));
   }
 
@@ -106,8 +102,6 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
   }
 
   set export(value: ExportScheme) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     this.setDataValue('export', JSON.stringify(value ?? []));
   }
 

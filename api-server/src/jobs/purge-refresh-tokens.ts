@@ -1,5 +1,5 @@
 import type { IoC } from '@/ioc';
-import { Job, JobType } from './job';
+import type { Job, JobType } from '.';
 
 export default class PurgeRefreshTokens implements Job {
   public readonly name: JobType = 'PurgeRefreshTokens';

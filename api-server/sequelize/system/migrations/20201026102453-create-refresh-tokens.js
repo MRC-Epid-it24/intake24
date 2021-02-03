@@ -34,7 +34,8 @@ module.exports = {
         { transaction }
       );
 
-      await queryInterface.addConstraint('refresh_tokens', ['user_id'], {
+      await queryInterface.addConstraint('refresh_tokens', {
+        fields: ['user_id'],
         type: 'foreign key',
         references: {
           table: 'users',

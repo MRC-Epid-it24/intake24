@@ -72,7 +72,8 @@ module.exports = {
 
       await queryInterface.bulkInsert('languages', languages, { transaction });
 
-      await queryInterface.addConstraint('locales', ['admin_language_id'], {
+      await queryInterface.addConstraint('locales', {
+        fields: ['admin_language_id'],
         name: 'locales_admin_language_id_languages_fk',
         type: 'foreign key',
         references: {
@@ -84,7 +85,8 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('locales', ['respondent_language_id'], {
+      await queryInterface.addConstraint('locales', {
+        fields: ['respondent_language_id'],
         name: 'locales_respondent_language_id_languages_fk',
         type: 'foreign key',
         references: {

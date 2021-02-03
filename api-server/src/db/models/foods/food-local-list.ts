@@ -9,7 +9,7 @@ import { Locale } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class FoodLocalList extends BaseModel<FoodLocalList> {
+export default class FoodLocalList extends BaseModel {
   @Column({
     allowNull: false,
     primaryKey: true,

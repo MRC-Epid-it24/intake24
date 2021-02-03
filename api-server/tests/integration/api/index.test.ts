@@ -15,7 +15,7 @@ describe('API', function () {
   });
 
   after(async function () {
-    await cleanup();
+    // await cleanup();
   });
 
   // describe('Root', root);

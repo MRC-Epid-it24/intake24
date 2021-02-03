@@ -16,7 +16,7 @@ import { Food, FoodLocalList, Locale } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class FoodLocal extends BaseModel<FoodLocal> {
+export default class FoodLocal extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,

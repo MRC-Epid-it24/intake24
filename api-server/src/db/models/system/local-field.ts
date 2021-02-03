@@ -13,7 +13,7 @@ import { Locale } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class LocalField extends BaseModel<LocalField> implements LocalFieldAttributes {
+export default class LocalField extends BaseModel implements LocalFieldAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { User, UserSurveyAlias } from '@/db/models/system';
 import type { IoC } from '@/ioc';
-import { Job, JobData, JobType } from './job';
+import type { Job, JobData, JobType } from '.';
 
 export type SurveyImportRespondentsData = {
   surveyId: string;

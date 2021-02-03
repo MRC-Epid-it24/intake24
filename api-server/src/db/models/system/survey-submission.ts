@@ -16,9 +16,7 @@ import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from 
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmission
-  extends BaseModel<SurveySubmission>
-  implements SurveySubmissionAttributes {
+export default class SurveySubmission extends BaseModel implements SurveySubmissionAttributes {
   @Column({
     primaryKey: true,
     type: DataType.UUID,

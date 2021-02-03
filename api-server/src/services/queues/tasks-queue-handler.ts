@@ -1,8 +1,7 @@
 import { ConnectionOptions, Job as BullJob, Queue, QueueScheduler, Worker } from 'bullmq';
 import { Task } from '@/db/models/system';
 import ioc, { IoC } from '@/ioc';
-import { validate } from '@/jobs';
-import { Job, JobType } from '@/jobs/job';
+import { validate, Job, JobType } from '@/jobs';
 import { QueueHandler } from './queue-handler';
 
 export type TaskData = { jobType: JobType };

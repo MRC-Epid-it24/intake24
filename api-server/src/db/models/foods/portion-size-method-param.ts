@@ -9,7 +9,7 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class PortionSizeMethodParameter extends BaseModel<PortionSizeMethodParameter> {
+export default class PortionSizeMethodParameter extends BaseModel {
   @Column({
     allowNull: false,
     primaryKey: true,

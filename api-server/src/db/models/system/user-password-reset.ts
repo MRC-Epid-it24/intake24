@@ -9,9 +9,7 @@ import { User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class UserPasswordReset
-  extends BaseModel<UserPasswordReset>
-  implements UserPasswordResetAttributes {
+export default class UserPasswordReset extends BaseModel implements UserPasswordResetAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

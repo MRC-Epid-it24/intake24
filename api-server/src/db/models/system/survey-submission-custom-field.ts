@@ -14,7 +14,7 @@ import { SurveySubmission } from '.';
   underscored: true,
 })
 export default class SurveySubmissionCustomField
-  extends BaseModel<SurveySubmissionCustomField>
+  extends BaseModel
   implements SurveySubmissionCustomFieldAttributes {
   @Column({
     autoIncrement: true,

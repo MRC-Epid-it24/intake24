@@ -2,12 +2,20 @@ import { expect } from 'chai';
 import { pick } from 'lodash';
 import request from 'supertest';
 import { setPermission } from '../../mocks/helpers';
-import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
     const { id: langId } = this.data.language;
-    this.input = mocker.locale(langId, langId);
+    this.input = {
+      id: 'en-cb',
+      englishName: 'English - Caribbean',
+      localName: 'English - Caribbean',
+      respondentLanguageId: langId,
+      adminLanguageId: langId,
+      countryFlagCode: 'en-cb',
+      prototypeLocaleId: null,
+      textDirection: 'ltr',
+    };
     this.output = { ...this.input };
 
     this.url = '/api/admin/locales';
@@ -103,7 +111,16 @@ export default function (): void {
         .post(this.url)
         .set('Accept', 'application/json')
         .set('Authorization', this.bearer.user)
-        .send({ ...mocker.locale(langId, langId), id: this.input.id });
+        .send({
+          id: this.input.id,
+          englishName: 'English - India',
+          localName: 'English - India',
+          respondentLanguageId: langId,
+          adminLanguageId: langId,
+          countryFlagCode: 'en-in',
+          prototypeLocaleId: null,
+          textDirection: 'ltr',
+        });
 
       expect(status).to.equal(422);
       expect(body).to.be.an('object').to.have.keys('errors', 'success');

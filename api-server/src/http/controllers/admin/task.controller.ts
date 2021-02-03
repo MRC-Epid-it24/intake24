@@ -2,8 +2,7 @@ import { Request, Response } from 'express';
 import { Task } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import jobsDefs from '@/jobs';
-import { JobType } from '@/jobs/job';
+import jobsDefs, { JobType } from '@/jobs';
 import {
   CreateTaskResponse,
   StoreTaskResponse,

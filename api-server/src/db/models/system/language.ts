@@ -13,7 +13,7 @@ import { Locale } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class Language extends BaseModel<Language> implements LanguageAttributes {
+export default class Language extends BaseModel implements LanguageAttributes {
   @Column({
     primaryKey: true,
   })
