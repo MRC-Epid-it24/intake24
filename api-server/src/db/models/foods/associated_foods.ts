@@ -33,7 +33,7 @@ export default class AssociatedFood extends BaseModel<AssociatedFood> {
     allowNull: false,
     type: DataType.STRING(16)
   })
-  public localId!: string
+  public localeId!: string
 
   @ForeignKey(() => Food)
   @Column({
@@ -67,7 +67,7 @@ export default class AssociatedFood extends BaseModel<AssociatedFood> {
   })
   public genericName!: string
 
-  @BelongsTo(() => Locale, 'localId')
+  @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;
 
   @BelongsTo(() => Category, 'associatedCategoryCode')
