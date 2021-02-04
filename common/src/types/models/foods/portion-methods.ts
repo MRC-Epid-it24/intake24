@@ -1,8 +1,3 @@
-export interface PortionMethodParameters {
-  "serving-image-set": string,
-  "leftovers-image-set": string,
-}
-
 export interface PortionSizeMethod {
   // These should all be types themselves
   method: PortionSizeMethodId;
@@ -11,6 +6,11 @@ export interface PortionSizeMethod {
   useForRecipes: boolean;
   conversionFactor: number;
   parameters: PortionMethodParameters;
+}
+
+export interface PortionMethodParameters {
+  "serving-image-set": string,
+  "leftovers-image-set": string,
 }
 
 export type PortionSizeMethodId = 

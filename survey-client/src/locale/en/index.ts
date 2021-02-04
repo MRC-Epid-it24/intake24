@@ -4,6 +4,7 @@ import feedback from './feedback';
 import login from './login';
 import prompts from './prompts';
 import recall from './recall';
+import portion from './portion';
 
 const messages: LocaleMessageObject = {
   common,
@@ -11,6 +12,7 @@ const messages: LocaleMessageObject = {
   login,
   prompts,
   recall,
+  portion,
 };
 
 export default messages;

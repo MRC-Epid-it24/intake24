@@ -8,11 +8,11 @@
 
     <v-row>
       <v-col cols="11">
-        <!-- TO DO Requires handling of the translation -->
-        How would you like to estimate the portion size of your <i>{{ localDescription }}</i> ?
+        <!-- TO DO this won't handle RTL because of the question mark -->
+        {{ $t('portion.option.label') }}<i>{{ localDescription }}</i> ?
       </v-col>
       <v-col cols="1">
-        <v-btn justify="end">Help</v-btn>
+        <v-btn color="primary" justify="end">{{ $t('common.help') }}</v-btn>
       </v-col>
     </v-row>
 
@@ -90,6 +90,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     selectMethod(index: number) {
       this.currentValue = index;
       console.log(`Selected ${index} portion size estimation`);
+      this.clearErrors();
     },
 
     clearErrors() {

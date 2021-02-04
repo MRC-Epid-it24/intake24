@@ -13,6 +13,7 @@ const common: LocaleMessage = {
   password: 'Password',
 
   continue: 'Continue',
+  help: 'Help',
 
   sw: {
     check: 'Content update is available',
