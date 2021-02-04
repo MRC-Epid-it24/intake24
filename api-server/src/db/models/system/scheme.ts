@@ -29,7 +29,8 @@ export const defaultExport: ExportScheme = [
   { id: 'mealCustom', fields: [] },
   { id: 'food', fields: [] },
   { id: 'foodCustom', fields: [] },
-  { id: 'nutrientTypes', fields: [] },
+  { id: 'foodFields', fields: [] },
+  { id: 'foodNutrients', fields: [] },
   { id: 'portionSizes', fields: [] },
 ];
 
@@ -62,7 +63,7 @@ export default class Scheme extends BaseModel implements SchemeAttributes {
    * Sequelize and TypeScript don't play nice together when using
    * setters/getters with different types
    *
-   * Current workaround - double-cast and suppress ts-error
+   * Current workaround - double-cast
    * TODO: check if fixed later in TS or Sequelize
    *
    * */

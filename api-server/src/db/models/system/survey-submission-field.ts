@@ -1,5 +1,5 @@
 import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
-import { SurveySubmissionFoodField as SurveySubmissionFoodFieldAttributes } from '@common/types/models';
+import { SurveySubmissionField as SurveySubmissionFieldAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { SurveySubmissionFood } from '.';
 
@@ -7,16 +7,15 @@ import { SurveySubmissionFood } from '.';
   food: { include: [{ model: SurveySubmissionFood }] },
 }))
 @Table({
-  modelName: 'SurveySubmissionFoodField',
-  // TODO: rename to follow naming convention? -> survey_submission_food_field
+  modelName: 'SurveySubmissionField',
   tableName: 'survey_submission_fields',
   freezeTableName: true,
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionFoodField
+export default class SurveySubmissionField
   extends BaseModel
-  implements SurveySubmissionFoodFieldAttributes {
+  implements SurveySubmissionFieldAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
