@@ -105,7 +105,10 @@ export default (): FoodController => {
       return newEl;
     })
 
-      //6. Calculating caloriesPer100g
+    //6 Brands
+    //const brands =
+
+    //6. Calculating caloriesPer100g
 
     res.status(200).json(result);
   };
