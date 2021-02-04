@@ -79,7 +79,8 @@ export default (): FoodController => {
       result.readyMealOption = foodMealAndAsBeforeOptions?.readyMealOption;
       result.sameAsBeforeOption = foodMealAndAsBeforeOptions?.sameAsBeforeOption;
 
-      //5. Retrieving associatedFoods and brands
+      //5. Retrieving associatedFoods
+      //const associatedFoods =
 
       //6. Calculating caloriesPer100g
 

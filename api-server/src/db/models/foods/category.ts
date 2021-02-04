@@ -1,8 +1,6 @@
-import { Column, DataType, HasOne, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 
-// @Scopes(() => ({
-// }))
 @Table({
   timestamps: false,
   underscored: true,
