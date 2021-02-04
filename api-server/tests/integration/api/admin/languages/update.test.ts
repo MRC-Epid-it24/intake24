@@ -3,12 +3,23 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { Language } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
-import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.language();
-    this.updateInput = mocker.language();
+    this.input = {
+      id: 'es-ec',
+      englishName: 'Spanish - Ecuador',
+      localName: 'Spanish - Ecuador',
+      countryFlagCode: 'es-ec',
+      textDirection: 'ltr',
+    };
+    this.updateInput = {
+      id: 'es-sv',
+      englishName: 'Spanish - El Salvador',
+      localName: 'Spanish - El Salvador',
+      countryFlagCode: 'es-sv',
+      textDirection: 'ltr',
+    };
 
     const { id } = this.input;
     this.output = { ...this.updateInput, id };

@@ -9,7 +9,7 @@ import {
   Role,
 } from '@/db/models/system';
 import ioc from '@/ioc';
-import { defaultMeals } from '@/db/models/system/scheme';
+import { defaultExport, defaultMeals } from '@/db/models/system/scheme';
 import { setupPermissions } from './helpers';
 
 export type MockData = {
@@ -49,6 +49,7 @@ export const prepare = async (): Promise<MockData> => {
     type: 'data-driven',
     questions: {},
     meals: [...defaultMeals],
+    export: defaultExport,
   });
 
   const today = new Date();

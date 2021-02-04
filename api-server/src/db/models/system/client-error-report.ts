@@ -15,9 +15,7 @@ import { Survey, User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ClientErrorReport
-  extends BaseModel<ClientErrorReport>
-  implements ClientErrorReportAttributes {
+export default class ClientErrorReport extends BaseModel implements ClientErrorReportAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -58,8 +56,6 @@ export default class ClientErrorReport
   }
 
   set surveyStateJson(value: Dictionary) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     this.setDataValue('surveyStateJson', JSON.stringify(value ?? {}));
   }
 

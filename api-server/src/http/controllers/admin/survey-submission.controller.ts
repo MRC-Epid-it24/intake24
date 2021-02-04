@@ -1,23 +1,30 @@
 import { Request, Response } from 'express';
+import { WhereOptions } from 'sequelize';
 import { Survey, SurveySubmission } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import { SurveySubmissionResponse, SurveySubmissionsResponse } from '@common/types/http';
+import { validate } from 'uuid';
 import { Controller } from '../controller';
 
 export type AdminSurveySubmissionController = Controller<'list' | 'entry' | 'destroy'>;
 
 export default (): AdminSurveySubmissionController => {
   const list = async (req: Request, res: Response<SurveySubmissionsResponse>): Promise<void> => {
-    const { surveyId } = req.params;
-    const survey = await Survey.findByPk(surveyId);
+    const {
+      params: { surveyId },
+      query: { search },
+    } = req;
 
+    const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    const submissions = await SurveySubmission.paginate({
-      req,
-      columns: ['id', 'surveyId'],
-      where: { surveyId },
-    });
+    const where: WhereOptions = { surveyId };
+    if (typeof search === 'string' && search) {
+      if (validate(search)) where.id = search;
+      else where.userId = search;
+    }
+
+    const submissions = await SurveySubmission.paginate({ req, where });
 
     res.json(submissions);
   };

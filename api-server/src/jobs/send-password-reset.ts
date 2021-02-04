@@ -1,6 +1,6 @@
 import nunjucks from 'nunjucks';
 import type { IoC } from '@/ioc';
-import { Job, JobData, JobType } from './job';
+import type { Job, JobData, JobType } from '.';
 
 export interface SendPasswordResetData {
   email: string;

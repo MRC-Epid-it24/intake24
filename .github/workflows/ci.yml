@@ -1,0 +1,146 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - 'deployment/**'
+      - 'docs/**'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - 'deployment/**'
+      - 'docs/**'
+
+jobs:
+  # API Server
+  api-server:
+    name: API Server
+
+    runs-on: ubuntu-latest
+
+    env:
+      POSTGRES_USER: it24
+      POSTGRES_PASSWORD: it24
+      POSTGRES_DB: it24
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+        postgres-version: [12, 13]
+        redis-version: [6]
+
+    defaults:
+      run:
+        working-directory: api-server
+
+    services:
+      postgres:
+        image: postgres:${{ matrix.postgres-version }}
+        env:
+          POSTGRES_USER: it24
+          POSTGRES_PASSWORD: it24
+          POSTGRES_DB: it24
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:${{ matrix.redis-version }}
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2.3.4
+      - name: Create foods db
+        run: PGPASSWORD=${{ env.POSTGRES_PASSWORD }} psql -h localhost -p 5432 -U ${{ env.POSTGRES_USER }} -c 'CREATE DATABASE it24_foods_test;'
+      - name: Create system db
+        run: PGPASSWORD=${{ env.POSTGRES_PASSWORD }} psql -h localhost -p 5432 -U ${{ env.POSTGRES_USER }} -c 'CREATE DATABASE it24_system_test;'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Common - install dependencies
+        working-directory: common
+        run: npm ci
+      - name: API Server - install dependencies
+        run: npm ci
+      - name: API Server - lint
+        run: npm run lint
+      - name: API Server - build
+        run: npm run build
+      - name: API Server - unit tests
+        run: npm run test:unit
+      - name: API Server - integration tests
+        run: npm run test:integration
+
+  # Admin client
+  admin-client:
+    name: Admin client
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+
+    defaults:
+      run:
+        working-directory: admin-client
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2.3.4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Common - install dependencies
+        working-directory: common
+        run: npm ci
+      - name: Admin client - install dependencies
+        run: npm ci
+      - name: Admin client - lint
+        run: npm run lint
+      - name: Admin client - build
+        run: npm run build
+
+  # Survey client
+  survey-client:
+    name: Survey client
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+
+    defaults:
+      run:
+        working-directory: survey-client
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2.3.4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Common - install dependencies
+        working-directory: common
+        run: npm ci
+      - name: Admin client - install dependencies
+        run: npm ci
+      - name: Admin client - lint
+        run: npm run lint
+      - name: Admin client - build
+        run: npm run build

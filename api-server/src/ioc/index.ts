@@ -42,7 +42,7 @@ import type {
   Scheduler,
 } from '@/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@/services/queues';
-import type { Jobs } from '@/jobs/job';
+import type { Jobs } from '@/jobs';
 
 import controllers from './controllers';
 import jobs from './jobs';

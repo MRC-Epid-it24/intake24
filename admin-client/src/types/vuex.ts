@@ -37,7 +37,7 @@ export interface AuthState {
   accessToken: string | null;
   mfa: { request: string; host: string } | null;
   status: string;
-  error: object;
+  error: Dictionary;
 }
 
 export interface EntryState {

@@ -14,7 +14,7 @@ import { SurveySubmissionMeal } from '.';
   underscored: true,
 })
 export default class SurveySubmissionMissingFood
-  extends BaseModel<SurveySubmissionMissingFood>
+  extends BaseModel
   implements SurveySubmissionMissingFoodAttributes {
   @Column({
     autoIncrement: true,

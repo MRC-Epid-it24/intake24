@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "common"
+		},
+		{
+			"path": "survey-client"
+		},
+	],
+	"settings": {
+		"eslint.workingDirectories": [
+			{ "directory": "./common", "changeProcessCWD": true },
+			{ "directory": "./survey-client", "changeProcessCWD": true },
+		],
+		"typescript.tsdk": "survey-client\\node_modules\\typescript\\lib"
+	}
+}

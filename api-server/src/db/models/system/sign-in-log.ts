@@ -13,7 +13,7 @@ import { User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SignInLog extends BaseModel<SignInLog> implements SignInLogAttributes {
+export default class SignInLog extends BaseModel implements SignInLogAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -29,7 +29,8 @@ export const defaultExport: ExportScheme = [
   { id: 'mealCustom', fields: [] },
   { id: 'food', fields: [] },
   { id: 'foodCustom', fields: [] },
-  { id: 'nutrientTypes', fields: [] },
+  { id: 'foodFields', fields: [] },
+  { id: 'foodNutrients', fields: [] },
   { id: 'portionSizes', fields: [] },
 ];
 
@@ -42,7 +43,7 @@ export const defaultExport: ExportScheme = [
   freezeTableName: true,
   underscored: true,
 })
-export default class Scheme extends BaseModel<Scheme> implements SchemeAttributes {
+export default class Scheme extends BaseModel implements SchemeAttributes {
   @Column({
     primaryKey: true,
   })
@@ -62,7 +63,7 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
    * Sequelize and TypeScript don't play nice together when using
    * setters/getters with different types
    *
-   * Current workaround - double-cast and suppress ts-error
+   * Current workaround - double-cast
    * TODO: check if fixed later in TS or Sequelize
    *
    * */
@@ -76,8 +77,6 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
   }
 
   set questions(value: RecallQuestions) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     this.setDataValue('questions', JSON.stringify(value ?? {}));
   }
 
@@ -91,8 +90,6 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
   }
 
   set meals(value: Meal[]) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     this.setDataValue('meals', JSON.stringify(value ?? []));
   }
 
@@ -106,8 +103,6 @@ export default class Scheme extends BaseModel<Scheme> implements SchemeAttribute
   }
 
   set export(value: ExportScheme) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     this.setDataValue('export', JSON.stringify(value ?? []));
   }
 

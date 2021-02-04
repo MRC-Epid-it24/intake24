@@ -99,7 +99,7 @@ export const locale = (
 };
 
 export const scheme = (): CreateSchemeRequest => {
-  const id = faker.random.words(1);
+  const id = faker.helpers.slugify(faker.random.words(2));
   const name = faker.random.words(3);
   const type = 'data-driven';
   const questions = {} as RecallQuestions;

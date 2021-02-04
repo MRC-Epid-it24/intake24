@@ -10,7 +10,7 @@ import { FoodLocal } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class PortionSizeMethod extends BaseModel<PortionSizeMethod> {
+export default class PortionSizeMethod extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -7,7 +7,7 @@ import { Job, Survey, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { getUrlExpireDate } from '@/util';
-import { Job as BaseJob, JobData, JobType } from './job';
+import type { Job as BaseJob, JobData, JobType } from '.';
 
 export type SurveyExportRespondentAuthUrlsData = {
   surveyId: string;

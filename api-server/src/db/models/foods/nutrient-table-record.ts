@@ -11,7 +11,7 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientTableRecord extends BaseModel<NutrientTableRecord> {
+export default class NutrientTableRecord extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -53,11 +53,6 @@ export default class NutrientTableRecord extends BaseModel<NutrientTableRecord> 
   public fields?: NutrientTableRecordField[];
 
   getNutrientByType(nutrientTypeId: number): NutrientTableRecordNutrient | undefined {
-    if (this.nutrients) {
-      for (let i = 0; i < this.nutrients.length; ++i) {
-        if (this.nutrients[i].nutrientTypeId === nutrientTypeId) return this.nutrients[i];
-      }
-    }
-    return undefined;
+    return this.nutrients?.find((nutrient) => nutrient.nutrientTypeId === nutrientTypeId);
   }
 }

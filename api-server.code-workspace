@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "common"
+		},
+		{
+			"path": "deployment"
+		},
+		{
+			"path": "api-server"
+		},
+	],
+	"settings": {
+		"eslint.workingDirectories": [
+			{ "directory": "./common", "changeProcessCWD": true },
+			{ "directory": "./api-server", "changeProcessCWD": true },
+		],
+		"typescript.tsdk": "api-server\\node_modules\\typescript\\lib"
+	}
+}

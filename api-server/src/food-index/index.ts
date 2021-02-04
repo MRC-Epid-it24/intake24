@@ -13,7 +13,7 @@ export interface FoodSearchResult {
 export class IndexNotReadyError extends Error {}
 
 export default {
-  async init() {
+  async init(): Promise<void> {
     // eslint-disable-next-line no-new
     indexWorker = new Worker('./dist/foodIndexBuilder.js', {
       workerData: { dbConnectionInfo: config.database[config.app.env].foods },
@@ -29,7 +29,7 @@ export default {
     indexWorker.on('message', readyListener);
   },
 
-  async search(query: string): Promise<Array<FoodSearchResult>> {
+  async search(query: string): Promise<FoodSearchResult[]> {
     if (indexReady) {
       queryIdCounter += 1;
 

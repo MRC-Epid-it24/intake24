@@ -15,7 +15,7 @@ import { Food, FoodLocalList, Locale, PortionSizeMethod } from '@api-server/db/m
   timestamps: false,
   underscored: true,
 })
-export default class FoodLocal extends BaseModel<FoodLocal> {
+export default class FoodLocal extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,

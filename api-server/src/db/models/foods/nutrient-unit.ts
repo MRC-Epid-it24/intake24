@@ -8,7 +8,7 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientUnit extends BaseModel<NutrientUnit> {
+export default class NutrientUnit extends BaseModel {
   @Column({
     allowNull: false,
     primaryKey: true,

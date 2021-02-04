@@ -18,10 +18,11 @@ export default ({ surveyService }: IoC): AdminSurveyRespondentController => {
 
     if (!survey) throw new NotFoundError();
 
-    const respondents = await UserSurveyAlias.scope('user').paginate<RespondentResponse>({
+    const respondents = await UserSurveyAlias.paginate<RespondentResponse>({
       req,
       columns: ['userName'],
       where: { surveyId },
+      include: [{ model: User }],
       transform: userRespondentResponse,
     });
 

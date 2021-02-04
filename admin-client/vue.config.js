@@ -4,6 +4,9 @@ const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const pkg = require('./package.json');
 
+// Set default template's values when variables not loaded from .env file
+process.env.VUE_APP_RECAPTCHA_ENABLED = process.env.VUE_APP_RECAPTCHA_ENABLED || 'false';
+
 // Set build info for application
 process.env.VUE_APP_BUILD_VERSION = pkg.version;
 process.env.VUE_APP_BUILD_REVISION = childProcess

@@ -59,7 +59,8 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('surveys', ['scheme_id'], {
+      await queryInterface.addConstraint('surveys', {
+        fields: ['scheme_id'],
         name: 'surveys_scheme_id_schemes_fk',
         type: 'foreign key',
         references: {

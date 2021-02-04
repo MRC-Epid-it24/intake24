@@ -15,7 +15,7 @@ import { AssociatedFood, FoodAttribute, FoodLocal } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class Food extends BaseModel<Food> {
+export default class Food extends BaseModel {
   @Column({
     allowNull: false,
     primaryKey: true,

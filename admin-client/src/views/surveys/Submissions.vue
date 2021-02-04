@@ -83,11 +83,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>)
 
   methods: {
     async edit(item: SurveySubmissionEntry) {
-      console.log(this.$i18n.messages[this.$i18n.locale].surveys);
-      // await this.$http.delete(`admin/surveys/${this.id}/submissions/${item.id}`);
-      // this.$toasted.success(this.$t('common.msg.updated', { name }) as string);
-
-      // this.$refs.table.fetch();
+      console.log(item);
     },
   },
 });

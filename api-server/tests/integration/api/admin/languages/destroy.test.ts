@@ -2,11 +2,16 @@ import { expect } from 'chai';
 import request from 'supertest';
 import { Language, Locale } from '@/db/models/system';
 import { setPermission } from '../../mocks/helpers';
-import * as mocker from '../../mocks/mocker';
 
 export default function (): void {
   before(async function () {
-    this.input = mocker.language();
+    this.input = {
+      id: 'es-ar',
+      englishName: 'Spanish - Argentina',
+      localName: 'Spanish - Argentina',
+      countryFlagCode: 'es-ar',
+      textDirection: 'ltr',
+    };
     this.language = await Language.create(this.input);
 
     const baseUrl = '/api/admin/languages';
@@ -56,8 +61,23 @@ export default function (): void {
     });
 
     it(`should return 403 when language is assigned to locales`, async function () {
-      const { id } = await Language.create(mocker.language());
-      await Locale.create(mocker.locale(id, id));
+      const { id } = await Language.create({
+        id: 'es-bo',
+        englishName: 'Spanish - Bolivia',
+        localName: 'Spanish - Bolivia',
+        countryFlagCode: 'es-bo',
+        textDirection: 'ltr',
+      });
+      await Locale.create({
+        id,
+        englishName: 'Spanish - Bolivia',
+        localName: 'Spanish - Bolivia',
+        respondentLanguageId: id,
+        adminLanguageId: id,
+        countryFlagCode: id,
+        prototypeLocaleId: null,
+        textDirection: 'ltr',
+      });
 
       const url = `/api/admin/languages/${id}`;
 
