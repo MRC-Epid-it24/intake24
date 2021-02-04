@@ -19,3 +19,6 @@ export { default as ImageMap } from './image-map';
 export { default as ImageMapObject } from './image-map-object';
 export { default as ProcessedImage } from './processed-image';
 export { default as Locale } from './locale';
+export { default as Category } from './category';
+export { default as FoodCategory } from './foods-categories';
+export { default as AssociatedFood } from './associated_foods';
