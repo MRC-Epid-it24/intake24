@@ -12,6 +12,7 @@ import {
   SurveySubmissionCustomField,
   SurveySubmissionFood,
   SurveySubmissionFoodCustomField,
+  SurveySubmissionField,
   SurveySubmissionMeal,
   SurveySubmissionMealCustomField,
   SurveySubmissionMissingFood,
@@ -102,6 +103,7 @@ export default ({ dataExportMapper, scheduler }: IoC): DataExportService => {
       include: [
         include,
         { model: SurveySubmissionFoodCustomField, separate: true },
+        { model: SurveySubmissionField, separate: true },
         {
           model: SurveySubmissionNutrient,
           separate: true,

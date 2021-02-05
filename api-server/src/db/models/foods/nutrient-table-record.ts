@@ -53,11 +53,6 @@ export default class NutrientTableRecord extends BaseModel {
   public fields?: NutrientTableRecordField[];
 
   getNutrientByType(nutrientTypeId: number): NutrientTableRecordNutrient | undefined {
-    if (this.nutrients) {
-      for (let i = 0; i < this.nutrients.length; ++i) {
-        if (this.nutrients[i].nutrientTypeId === nutrientTypeId) return this.nutrients[i];
-      }
-    }
-    return undefined;
+    return this.nutrients?.find((nutrient) => nutrient.nutrientTypeId === nutrientTypeId);
   }
 }

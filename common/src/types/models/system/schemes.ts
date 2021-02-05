@@ -13,7 +13,8 @@ export type ExportSection =
   | 'mealCustom'
   | 'food'
   | 'foodCustom'
-  | 'nutrientTypes'
+  | 'foodNutrients'
+  | 'foodFields'
   | 'portionSizes';
 
 export type ExportField = {

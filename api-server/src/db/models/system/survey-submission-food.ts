@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-t
 import { SurveySubmissionFood as SurveySubmissionFoodAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import {
-  SurveySubmissionFoodField,
+  SurveySubmissionField,
   SurveySubmissionFoodCustomField,
   SurveySubmissionMeal,
   SurveySubmissionNutrient,
@@ -11,8 +11,8 @@ import {
 
 @Scopes(() => ({
   meal: { include: [{ model: SurveySubmissionMeal }] },
-  fields: { include: [{ model: SurveySubmissionFoodField }] },
   customFields: { include: [{ model: SurveySubmissionFoodCustomField }] },
+  fields: { include: [{ model: SurveySubmissionField }] },
   nutrients: { include: [{ model: SurveySubmissionNutrient }] },
   portionSizes: { include: [{ model: SurveySubmissionPortionSizeField }] },
 }))
@@ -107,11 +107,11 @@ export default class SurveySubmissionFood
   @BelongsTo(() => SurveySubmissionMeal, 'mealId')
   public meal?: SurveySubmissionMeal;
 
-  @HasMany(() => SurveySubmissionFoodField, 'foodId')
-  public fields?: SurveySubmissionFoodField[];
-
   @HasMany(() => SurveySubmissionFoodCustomField, 'foodId')
   public customFields?: SurveySubmissionFoodCustomField[];
+
+  @HasMany(() => SurveySubmissionField, 'foodId')
+  public fields?: SurveySubmissionField[];
 
   @HasMany(() => SurveySubmissionNutrient, 'foodId')
   public nutrients?: SurveySubmissionNutrient[];

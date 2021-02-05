@@ -1,3 +1,4 @@
+import { NutrientTableCsvMappingFieldColumn } from '@/db/models/foods';
 import { NutrientType, Scheme, SurveySubmissionFood } from '@/db/models/system';
 import { PromptQuestion } from '@common/types';
 import { ExportSection, ExportField as BaseExportField } from '@common/types/models';
@@ -155,11 +156,24 @@ export default (): DataExportFields => {
     scheme.questions.meals.foods.map(customQuestionMapper);
 
   /**
-   * Default nutrient type fields
+   * Default food composition fields
    *
    * @returns {Promise<ExportField[]>}
    */
-  const nutrientTypes = async (): Promise<ExportField[]> => {
+  const foodFields = async (): Promise<ExportField[]> => {
+    const fields = await NutrientTableCsvMappingFieldColumn.findAll();
+
+    const fieldNames = fields.map((field) => field.fieldName);
+
+    return [...new Set(fieldNames)].map((name) => ({ id: name, label: name }));
+  };
+
+  /**
+   * Default food nutrient fields
+   *
+   * @returns {Promise<ExportField[]>}
+   */
+  const foodNutrients = async (): Promise<ExportField[]> => {
     const types = await NutrientType.findAll();
 
     return types.map((type) => ({ id: type.id.toString(), label: type.description }));
@@ -221,5 +235,15 @@ export default (): DataExportFields => {
     { id: 'units-count', label: 'units-count' },
   ];
 
-  return { survey, surveyCustom, meal, mealCustom, food, foodCustom, nutrientTypes, portionSizes };
+  return {
+    survey,
+    surveyCustom,
+    meal,
+    mealCustom,
+    food,
+    foodCustom,
+    foodFields,
+    foodNutrients,
+    portionSizes,
+  };
 };

@@ -36,16 +36,23 @@ export const foodCustomFieldValue: ExportFieldTransformCallback = (
   return match?.value;
 };
 
-export const portionSizeValue = (field: ExportField): ExportFieldTransform => (food) => {
-  const match = food.portionSizes?.find((item) => field.id === item.name);
+export const foodFieldValue = (field: ExportField): ExportFieldTransform => (
+  food: SurveySubmissionFood
+) => {
+  const match = food.fields?.find((item) => field.id === item.fieldName);
   return match?.value;
 };
 
-export const nutrientTypeValue = (field: ExportField): ExportFieldTransform => (
+export const foodNutrientValue = (field: ExportField): ExportFieldTransform => (
   food: SurveySubmissionFood
 ) => {
   const match = food.nutrients?.find((item) => field.id === item.nutrientTypeId.toString());
   return match?.amount;
+};
+
+export const portionSizeValue = (field: ExportField): ExportFieldTransform => (food) => {
+  const match = food.portionSizes?.find((item) => field.id === item.name);
+  return match?.value;
 };
 
 export default ({ dataExportFields }: IoC): DataExportMapper => {
@@ -93,24 +100,6 @@ export default ({ dataExportFields }: IoC): DataExportMapper => {
     getRecordFields(fields, await dataExportFields.survey());
 
   /**
-   * Meal fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const meal = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getRecordFields(fields, await dataExportFields.meal());
-
-  /**
-   * Food fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const food = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getRecordFields(fields, await dataExportFields.food());
-
-  /**
    * Survey custom fields
    *
    * @param {ExportField[]} fields
@@ -118,6 +107,15 @@ export default ({ dataExportFields }: IoC): DataExportMapper => {
    */
   const surveyCustom = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
     getCustomRecordFields(fields, surveyCustomFieldValue);
+
+  /**
+   * Meal fields
+   *
+   * @param {ExportField[]} fields
+   * @returns {Promise<ExportFieldInfo[]>}
+   */
+  const meal = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getRecordFields(fields, await dataExportFields.meal());
 
   /**
    * Meal custom fields
@@ -129,6 +127,15 @@ export default ({ dataExportFields }: IoC): DataExportMapper => {
     getCustomRecordFields(fields, mealCustomFieldValue);
 
   /**
+   * Food fields
+   *
+   * @param {ExportField[]} fields
+   * @returns {Promise<ExportFieldInfo[]>}
+   */
+  const food = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getRecordFields(fields, await dataExportFields.food());
+
+  /**
    * Food custom fields
    *
    * @param {ExportField[]} fields
@@ -138,13 +145,22 @@ export default ({ dataExportFields }: IoC): DataExportMapper => {
     getCustomRecordFields(fields, foodCustomFieldValue);
 
   /**
-   * Nutrient type fields
+   * Food composition fields
    *
    * @param {ExportField[]} fields
    * @returns {Promise<ExportFieldInfo[]>}
    */
-  const nutrientTypes = (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getCustomRecordFields(fields, nutrientTypeValue);
+  const foodFields = (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(fields, foodFieldValue);
+
+  /**
+   * Food nutrient fields
+   *
+   * @param {ExportField[]} fields
+   * @returns {Promise<ExportFieldInfo[]>}
+   */
+  const foodNutrients = (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(fields, foodNutrientValue);
 
   /**
    * Portion sizes fields
@@ -162,7 +178,8 @@ export default ({ dataExportFields }: IoC): DataExportMapper => {
     mealCustom,
     food,
     foodCustom,
-    nutrientTypes,
+    foodFields,
+    foodNutrients,
     portionSizes,
   };
 };
