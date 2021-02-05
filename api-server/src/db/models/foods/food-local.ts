@@ -1,7 +1,7 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import NutrientMapping from '@api-server/db/models/foods/nutrient-mapping';
-import BaseModel from '../model';
 import { Food, FoodLocalList, Locale, PortionSizeMethod } from '@api-server/db/models/foods';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   food: { include: [{ model: Food }] },
@@ -15,7 +15,7 @@ import { Food, FoodLocalList, Locale, PortionSizeMethod } from '@api-server/db/m
   timestamps: false,
   underscored: true,
 })
-export default class FoodLocal extends BaseModel<FoodLocal> {
+export default class FoodLocal extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,

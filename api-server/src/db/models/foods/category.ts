@@ -2,11 +2,13 @@ import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 
 @Table({
+  modelName: 'Category',
+  tableName: 'categories',
+  freezeTableName: true,
   timestamps: false,
   underscored: true,
-  tableName: 'categories',
 })
-export default class Category extends BaseModel<Category> {
+export default class Category extends BaseModel {
   @Column({
     allowNull: false,
     primaryKey: true,
@@ -14,13 +16,13 @@ export default class Category extends BaseModel<Category> {
   public code!: string;
 
   @Column({
-    allowNull: false
+    allowNull: false,
   })
   public description!: string;
 
   @Column({
     allowNull: false,
-    defaultValue: false
+    defaultValue: false,
   })
   public isHidden!: boolean;
 

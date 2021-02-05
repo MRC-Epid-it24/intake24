@@ -4,7 +4,7 @@ import BaseModel from '@api-server/db/models/model';
 
 @Scopes(() => ({
   locale: { include: [{ model: Locale }] },
-  category: { include: [{ model: Category }] }
+  category: { include: [{ model: Category }] },
 }))
 @Table({
   modelName: 'AssociatedFood',
@@ -13,59 +13,59 @@ import BaseModel from '@api-server/db/models/model';
   timestamps: false,
   underscored: true,
 })
-export default class AssociatedFood extends BaseModel<AssociatedFood> {
+export default class AssociatedFood extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,
-    type: DataType.INTEGER
+    type: DataType.INTEGER,
   })
   public id!: number;
 
   @ForeignKey(() => Food)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8)
+    type: DataType.STRING(8),
   })
-  public foodCode!: string
+  public foodCode!: string;
 
   @ForeignKey(() => Locale)
   @Column({
     allowNull: false,
-    type: DataType.STRING(16)
+    type: DataType.STRING(16),
   })
-  public localeId!: string
+  public localeId!: string;
 
   @ForeignKey(() => Food)
   @Column({
     allowNull: true,
-    type: DataType.STRING(8)
+    type: DataType.STRING(8),
   })
-  public associatedFoodCode!: string | null
+  public associatedFoodCode!: string | null;
 
   @ForeignKey(() => Category)
   @Column({
     allowNull: true,
-    type: DataType.STRING(8)
+    type: DataType.STRING(8),
   })
-  public associatedCategoryCode!: string | null
+  public associatedCategoryCode!: string | null;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(1024)
+    type: DataType.STRING(1024),
   })
-  public text!: string
+  public text!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.BOOLEAN
+    type: DataType.BOOLEAN,
   })
-  public linkAsMain!: boolean
+  public linkAsMain!: boolean;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(128)
+    type: DataType.STRING(128),
   })
-  public genericName!: string
+  public genericName!: string;
 
   @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;
@@ -75,5 +75,4 @@ export default class AssociatedFood extends BaseModel<AssociatedFood> {
 
   @BelongsTo(() => Food, 'foodCode')
   public food?: Food;
-
 }

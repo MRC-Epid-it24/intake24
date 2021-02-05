@@ -1,4 +1,4 @@
-export const getAllParentCategories: string = `\
+const getAllParentCategories = `\
   WITH RECURSIVE parents AS (\
     SELECT cc.category_code \
     FROM public.categories_categories as cc \
@@ -8,5 +8,6 @@ export const getAllParentCategories: string = `\
         ccs.category_code \
       FROM public.categories_categories as ccs \
       INNER JOIN parents p ON p.category_code = ccs.subcategory_code\
-  ) SELECT * FROM parents;`
+  ) SELECT * FROM parents;`;
 
+export default getAllParentCategories;
