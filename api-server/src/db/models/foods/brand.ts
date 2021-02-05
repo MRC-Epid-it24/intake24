@@ -6,7 +6,6 @@ import BaseModel from '@api-server/db/models/model';
   locale: { include: [{ model: Locale }] },
   food: { include: [{ model: Food }] },
 }))
-
 @Table({
   modelName: 'Brand',
   tableName: 'brands',
@@ -14,7 +13,6 @@ import BaseModel from '@api-server/db/models/model';
   timestamps: false,
   underscored: true,
 })
-
 export default class Brand extends BaseModel {
   @Column({
     autoIncrement: true,

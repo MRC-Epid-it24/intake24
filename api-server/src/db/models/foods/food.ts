@@ -48,5 +48,5 @@ export default class Food extends BaseModel {
   public foodAssociations?: AssociatedFood[];
 
   @HasMany(() => Brand, 'foodCode')
-  public brand?: Brand[]
+  public brand?: Brand[];
 }
