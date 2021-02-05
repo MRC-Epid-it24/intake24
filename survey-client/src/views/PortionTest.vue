@@ -33,18 +33,19 @@ export default Vue.extend({
     return {
       testProps: {
         text: { en: 'Portion Size Options' },
-        description: { en: 'Select portion size options here' },
+        description: { en: 'Meat lasagne (includes homemade)' },
+        localDescription: { en: 'Meat lasagne (includes homemade)' },
         methods: [
           {
-            // Double check this
-            method: 'as-served',
-            description: 'test data description',
+            method: "as-served",
+            description: "use_an_image",
             imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Fries_2.jpg/800px-Fries_2.jpg',
+            // imageUrl: 'https://bad.src',
             useForRecipes: false,
             conversionFactor: 0.0,
             parameters: {
-              'serving-image-set': 'test',
-              'leftovers-image-set': 'test',
+                "serving-image-set": "lasagne",
+                "leftovers-image-set": "lasagne_leftovers"
             },
           },
         ],

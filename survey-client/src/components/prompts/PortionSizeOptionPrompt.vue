@@ -2,14 +2,14 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <h2>{{ localDescription }}</h2>
+        <h2>{{ localeDescription }}</h2>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col cols="11">
         <!-- TO DO this won't handle RTL because of the question mark -->
-        {{ $t('portion.option.label') }}<i>{{ localDescription }}</i> ?
+        {{ $t('portion.option.label') }}<i>{{ localeDescription }}</i> ?
       </v-col>
       <v-col cols="1">
         <v-btn color="primary" justify="end">{{ $t('common.help') }}</v-btn>
@@ -25,10 +25,21 @@
         class="mx-auto"
       >
         <v-card>
-          <v-img class="align-end" :src="method.imageUrl">
+          <v-img 
+            class="align-end" 
+            :src="method.imageUrl"
+            :aspect-ratio="16/9"
+          >
             <v-chip class="ma-2" :color="returnSelectedStyle(index)">
-              {{ method.description }}
+              {{ localeDescription }}
             </v-chip>
+
+            <template v-slot:placeholder>
+              <v-alert outlined text>
+                <v-progress-circular indeterminate color="primary" class="mr-2"></v-progress-circular>
+                  {{ $t('portion.option.imageInvalid') }}
+              </v-alert>
+            </template>
           </v-img>
         </v-card>
       </v-col>
@@ -56,13 +67,15 @@ import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PortionSizeOptionPromptProps } from '@common/types';
 import { portionSizeOptionPromptProps } from '@common/prompts/promptDefaults';
+import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
 import BasePrompt, { Prompt } from './BasePrompt';
 
+
+// For user to select which portion size estimation method they want to use
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
-  // For user to select which portion size estimation method they want to use
   name: 'PortionSizeOptionPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [BasePrompt, localeContent],
 
   props: {
     // Generic object 'props' used to store all props for each prompt
@@ -81,6 +94,9 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   computed: {
+    localeDescription(): string | null {
+      return this.getLocaleContent(this.localDescription);
+    },
     hasErrors(): boolean {
       return !!this.errors.length;
     },
@@ -88,9 +104,13 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   methods: {
     selectMethod(index: number) {
-      this.currentValue = index;
-      console.log(`Selected ${index} portion size estimation`);
-      this.clearErrors();
+      if(this.currentValue === index) {
+        this.currentValue = -1
+      } else {
+        this.currentValue = index;
+        console.log(`Selected ${index} portion size estimation`);
+        this.clearErrors();
+      }
     },
 
     clearErrors() {

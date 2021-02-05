@@ -7,6 +7,7 @@ const portion: LocaleMessage = {
     validation: {
       required: 'Please select how the portion will be measured.',
     },
+    imageInvalid: 'Image loading',
   },
 };
 
