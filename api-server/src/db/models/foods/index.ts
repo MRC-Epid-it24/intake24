@@ -25,3 +25,4 @@ export { default as NutrientUnit } from './nutrient-unit';
 export { default as PortionSizeMethod } from './portion-size-method';
 export { default as PortionSizeMethodParameter } from './portion-size-method-param';
 export { default as ProcessedImage } from './processed-image';
+export { default as Brand } from './brand';

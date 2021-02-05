@@ -1,7 +1,7 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import NutrientMapping from '@api-server/db/models/foods/nutrient-mapping';
-import BaseModel from '../model';
 import { Food, FoodLocalList, Locale, PortionSizeMethod } from '@api-server/db/models/foods';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   food: { include: [{ model: Food }] },

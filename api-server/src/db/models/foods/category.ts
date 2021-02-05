@@ -16,13 +16,13 @@ export default class Category extends BaseModel {
   public code!: string;
 
   @Column({
-    allowNull: false
+    allowNull: false,
   })
   public description!: string;
 
   @Column({
     allowNull: false,
-    defaultValue: false
+    defaultValue: false,
   })
   public isHidden!: boolean;
 

@@ -1,44 +1,47 @@
 import { Request, Response } from 'express';
+import { QueryTypes } from 'sequelize';
 import {
   FoodLocal,
   FoodCategory,
   FoodAttribute,
   PortionSizeMethod,
   PortionSizeMethodParameter,
-  AssociatedFood
+  AssociatedFood,
+  Brand,
 } from '@/db/models/foods';
+import getAllParentCategories from '@api-server/db/raw/food-controller-sql';
 import { NotFoundError } from '../errors';
 import { Controller } from './controller';
-import { getAllParentCategories } from '@api-server/db/raw/food-controller-sql';
-const { QueryTypes } = require('sequelize');
-
 
 type FoodData = {
-  [key: string]: any // FIXME: use more specific type
-}
+  [key: string]: any; // FIXME: use more specific type
+};
 
 export type FoodController = Controller<
   'entry' | 'entryWithSource' | 'brands' | 'associatedFoods' | 'composition'
 >;
 
 export default (): FoodController => {
-
   const entry = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
 
-    //1.Food data (Food Local), portionSizeMethod and PortiobSizeMethod Parameters
+    // 1.Food data (Food Local), portionSizeMethod and PortiobSizeMethod Parameters
     const food = await FoodLocal.findOne({
-      where: { localeId: localeId, foodCode: code },
-      include: [{
-        model: PortionSizeMethod,
-        as: 'portionSizeMethods',
-        attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
-        include: [{
-          model: PortionSizeMethodParameter,
-          as: 'parameters',
-          attributes: ['name', 'value']
-        }]
-      }]
+      where: { localeId, foodCode: code },
+      include: [
+        {
+          model: PortionSizeMethod,
+          as: 'portionSizeMethods',
+          attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
+          include: [
+            {
+              model: PortionSizeMethodParameter,
+              as: 'parameters',
+              attributes: ['name', 'value'],
+            },
+          ],
+        },
+      ],
     });
 
     if (!food || food == null) throw new NotFoundError();
@@ -48,67 +51,79 @@ export default (): FoodController => {
       localDescription: food.name,
       portionSizeMethods: food.portionSizeMethods,
       readyMealOption: null,
-      sameAsBeforeOption: null
+      sameAsBeforeOption: null,
     };
 
-  /**
-   * TODO: Decouple everything into seperate methods and put in a seperate helper_utils file.
-   *
-   */
-    //2. Food categories
+    /**
+     * TODO: Decouple everything into seperate methods and put in a seperate helper_utils file.
+     *
+     */
+    // 2. Food categories
     const foodCategories = await FoodCategory.findAll({
       where: { foodCode: code },
-      attributes: ['categoryCode']
-    })
-    result.categories = foodCategories.reduce<string[]>((acc, currentFoodCategory) => [...acc, currentFoodCategory.categoryCode], []);
+      attributes: ['categoryCode'],
+    });
+    result.categories = foodCategories.reduce<string[]>(
+      (acc, currentFoodCategory) => [...acc, currentFoodCategory.categoryCode],
+      []
+    );
 
-    //3. Retrieving all parent categories of categories
+    // 3. Retrieving all parent categories of categories
     if (result.categories != null && result.categories.length !== 0) {
-      const parentCat = await FoodCategory.sequelize?.query(
-        getAllParentCategories,
-        {
-          replacements: { subcategory_code: result.categories },
-          type: QueryTypes.SELECT
-        }
-      );
+      const parentCat = await FoodCategory.sequelize?.query(getAllParentCategories, {
+        replacements: { subcategory_code: result.categories },
+        type: QueryTypes.SELECT,
+      });
       if (parentCat !== undefined && parentCat.length > 0) {
-        const additionalCats = parentCat.reduce<string[]>((acc, currentCategory) => {
-          // FIXME: TypeScript Error due to returned values.
-          // @ts-ignore
-          return currentCategory ? [...acc, currentCategory.category_code] : acc;
-        }, [])
+        const additionalCats = parentCat.reduce<string[]>((acc, currentCategory: FoodData) => {
+          return currentCategory ? [...acc, currentCategory?.category_code] : acc;
+        }, []);
         result.categories = [...result.categories, ...additionalCats];
       }
     }
 
-    //4. Retrieving readyMealOption, sameAsBeforeOption
+    // 4. Retrieving readyMealOption, sameAsBeforeOption
     const foodMealAndAsBeforeOptions = await FoodAttribute.findOne({
       where: { foodCode: code },
-      attributes: ['sameAsBeforeOption', 'readyMealOption']
+      attributes: ['sameAsBeforeOption', 'readyMealOption'],
     });
     result.readyMealOption = foodMealAndAsBeforeOptions?.readyMealOption;
     result.sameAsBeforeOption = foodMealAndAsBeforeOptions?.sameAsBeforeOption;
 
-    //5. Retrieving associatedFoods
+    // 5. Retrieving associatedFoods
     const associatedFoods = await AssociatedFood.findAll({
-      where: { localeId: localeId, foodCode: code },
-      attributes: ['associatedFoodCode', 'associatedCategoryCode', 'text', 'linkAsMain', 'genericName']
-    })
+      where: { localeId, foodCode: code },
+      attributes: [
+        'associatedFoodCode',
+        'associatedCategoryCode',
+        'text',
+        'linkAsMain',
+        'genericName',
+      ],
+    });
     result.associatedFoods = associatedFoods;
-    //FIXME: Change from FoodDataa to the specific type
+    // FIXME: Change from FoodDataa to the specific type
     result.associatedFoods = result.associatedFoods.map((el: FoodData) => {
       const newEl: FoodData = {};
-      newEl.foodOrCategoryCode = [el.associatedCategoryCode ? 1 : 0, el.associatedCategoryCode ? el.associatedCategoryCode : el.associatedFoodCode];
+      newEl.foodOrCategoryCode = [
+        el.associatedCategoryCode ? 1 : 0,
+        el.associatedCategoryCode ? el.associatedCategoryCode : el.associatedFoodCode,
+      ];
       newEl.promptText = el.text;
-      newEl.linkAsMain = el.linkAsMain
-      newEl.genericName = el.genericName
+      newEl.linkAsMain = el.linkAsMain;
+      newEl.genericName = el.genericName;
       return newEl;
-    })
+    });
 
-    //6 Brands
-    //const brands =
+    // 6 Brands
+    const brands = await Brand.findAll({
+      where: { localeId, foodCode: code },
+      attributes: ['name'],
+    });
+    result.brands = brands;
+    result.brands = result.brands ? result.brands.map((brand: FoodData) => brand.name) : []
 
-    //6. Calculating caloriesPer100g
+    // 6. Calculating caloriesPer100g
 
     res.status(200).json(result);
   };
