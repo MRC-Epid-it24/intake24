@@ -24,20 +24,20 @@
         @click="selectMethod(index)"
         class="mx-auto"
       >
-        <v-card>
-          <v-img 
-            class="align-end" 
-            :src="method.imageUrl"
-            :aspect-ratio="16/9"
-          >
+        <v-card :elevation="returnSelectElevation(index)">
+          <v-img class="align-end" :src="method.imageUrl" :aspect-ratio="16 / 9">
             <v-chip class="ma-2" :color="returnSelectedStyle(index)">
               {{ localeDescription }}
             </v-chip>
 
             <template v-slot:placeholder>
               <v-alert outlined text>
-                <v-progress-circular indeterminate color="primary" class="mr-2"></v-progress-circular>
-                  {{ $t('portion.option.imageInvalid') }}
+                <v-progress-circular
+                  indeterminate
+                  color="primary"
+                  class="mr-2"
+                ></v-progress-circular>
+                {{ $t('portion.option.imageInvalid') }}
               </v-alert>
             </template>
           </v-img>
@@ -69,7 +69,6 @@ import { PortionSizeOptionPromptProps } from '@common/types';
 import { portionSizeOptionPromptProps } from '@common/prompts/promptDefaults';
 import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
 import BasePrompt, { Prompt } from './BasePrompt';
-
 
 // For user to select which portion size estimation method they want to use
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
@@ -112,7 +111,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
         this.clearErrors();
       }
     },
-
+    
     clearErrors() {
       this.errors = [];
     },
@@ -132,6 +131,15 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       }
       return 'false';
     },
+
+    returnSelectElevation(index: number) {
+      // Elevation for card based on selected or not
+      if (this.currentValue === index) {
+        return 12;
+      }
+      return 0;
+    },
+
 
     onSubmit() {
       if (!this.isValid()) {
