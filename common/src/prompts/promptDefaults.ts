@@ -77,24 +77,11 @@ export const textareaPromptProps: TextareaPromptProps = {
 export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
   text: { en: null },
   description: { en: null },
-  localDescription: '',
-  methods: [
-    {
-      method: 'as-served',
-      description: 'default method description',
-      imageUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Fries_2.jpg/800px-Fries_2.jpg',
-      useForRecipes: false,
-      conversionFactor: 0.0,
-      parameters: {
-        'serving-image-set': '',
-        'leftovers-image-set': '',
-      },
-    },
-  ],
+  localDescription: { en: null },
+  methods: [],
   validation: {
     required: false,
-    message: { en: 'test imported' },
+    message: { en: null },
   },
 };
 
