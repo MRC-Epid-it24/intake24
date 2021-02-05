@@ -13,7 +13,7 @@ import BaseModel from '@api-server/db/models/model';
   timestamps: false,
   underscored: true,
 })
-export default class AssociatedFood extends BaseModel<AssociatedFood> {
+export default class AssociatedFood extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,

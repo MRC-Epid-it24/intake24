@@ -14,7 +14,7 @@ import BaseModel from '../model';
   tableName: 'foods_categories'
 })
 
-export default class FoodCategory extends BaseModel<FoodCategory>{
+export default class FoodCategory extends BaseModel {
   @Column({
     primaryKey: true
   })

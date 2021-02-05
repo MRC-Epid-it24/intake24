@@ -5,7 +5,7 @@ import { AssociatedFood, FoodAttribute, FoodLocal } from '.';
 @Scopes(() => ({
   attributes: { include: [{ model: FoodAttribute }] },
   localFoods: { include: [{ model: FoodLocal }] },
-  associatedFoods: { include: [{ model: AssociatedFood }] },
+  //associatedFoods: { include: [{ model: AssociatedFood }] },
   foodAssociations: { include: [{ model: AssociatedFood }] }
 }))
 @Table({
