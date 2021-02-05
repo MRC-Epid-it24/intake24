@@ -11,7 +11,7 @@ export { default as ImageMapObject } from './image-map-object';
 export { default as Locale } from './locale';
 export { default as Category } from './category';
 export { default as FoodCategory } from './foods-categories';
-export { default as AssociatedFood } from './associated_foods';
+export { default as AssociatedFood } from './associated-foods';
 export { default as NutrientMapping } from './nutrient-mapping';
 export { default as NutrientTableCsvMappingFieldColumn } from './nutrient-table-csv-mapping-field-columns';
 export { default as NutrientTableCsvMappingNutrientColumn } from './nutrient-table-csv-mapping-nutrient-columns';
