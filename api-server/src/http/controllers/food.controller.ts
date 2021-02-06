@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { IoC } from '@/ioc';
+import { FoodDataEntryResponse } from '@common/types/http';
 import { QueryTypes } from 'sequelize';
 import {
   FoodLocal,
@@ -13,7 +14,6 @@ import {
 import getAllParentCategories from '@api-server/db/raw/food-controller-sql';
 import { NotFoundError } from '../errors';
 import { Controller } from './controller';
-import { FoodDataEntryResponse } from '@common/types/http';
 
 type FoodData = {
   [key: string]: any; // FIXME: use more specific type
@@ -105,7 +105,7 @@ export default ({ foodDataService }: IoC): FoodController => {
       attributes: ['name'],
     });
     result.brands = brands;
-    result.brands = result.brands ? result.brands.map((brand: FoodData) => brand.name) : []
+    result.brands = result.brands ? result.brands.map((brand: FoodData) => brand.name) : [];
 
     // 6. Calculating caloriesPer100g
 

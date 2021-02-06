@@ -39,6 +39,6 @@ export default (): FoodDataService => {
   };
 
   return {
-    getFoodLocal
-  }
-}
+    getFoodLocal,
+  };
+};
