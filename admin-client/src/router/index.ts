@@ -37,7 +37,7 @@ const routes: RouteConfig[] = [
     path: '/profile',
     name: 'profile',
     component: views.profile,
-    meta: { module: 'profile', title: 'common.profile' },
+    meta: { module: 'profile', title: 'profile._' },
   },
 ];
 

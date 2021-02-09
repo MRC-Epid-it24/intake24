@@ -82,7 +82,6 @@ import Vue, { VueConstructor } from 'vue';
 import orderBy from 'lodash/orderBy';
 import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';
-import flags from '@/locale/en/flags';
 import { FormMixin } from '@/types/vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
@@ -100,7 +99,10 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         textDirection: 'ltr',
       }),
       flags: orderBy(
-        Object.entries(flags).map(([key, value]) => ({ value: key, text: value })),
+        Object.entries(this.$i18n.messages[this.$i18n.locale].flags).map(([key, value]) => ({
+          value: key,
+          text: value,
+        })),
         'text'
       ),
       textDirections: [

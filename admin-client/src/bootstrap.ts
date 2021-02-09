@@ -3,6 +3,7 @@ import Storage from 'vue-ls';
 import Toasted from 'vue-toasted';
 
 import authMixin from './mixins/authMixin';
+import isMobile from './mixins/isMobile';
 import loadingMixin from './mixins/loadingMixin';
 import moduleMixin from './mixins/moduleMixin';
 
@@ -18,5 +19,6 @@ Vue.use(Toasted, {
 });
 
 Vue.mixin(authMixin);
+Vue.mixin(isMobile);
 Vue.mixin(loadingMixin);
 Vue.mixin(moduleMixin);

@@ -27,7 +27,7 @@
         ></delete>
       </v-toolbar>
     </v-card>
-    <v-card>
+    <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
       <v-tabs dark background-color="secondary">
         <v-tab
           v-for="tab in tabs"

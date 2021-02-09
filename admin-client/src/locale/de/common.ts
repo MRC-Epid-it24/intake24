@@ -2,33 +2,33 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const common: LocaleMessageObject = {
   _: 'Intake24 Admin Tool',
-  dashboard: 'Dashboard',
-  register: 'Registration',
-  login: 'Sign in',
-  logout: 'Sign out',
+  dashboard: 'Armaturenbrett',
+  register: 'Registrierung',
+  login: 'Einloggen',
+  logout: 'Ausloggen',
 
-  admin: 'Admin',
-  local: 'Localization',
-  surveyMgmt: 'Surveys MGMT',
-  acl: 'Access Control',
+  admin: 'Administratorin',
+  local: 'Lokalisierung',
+  surveyMgmt: 'Umfragen MGMT',
+  acl: 'Zugangskontrolle',
   system: 'System',
 
-  yes: 'Yes',
-  true: 'Yes',
-  no: 'No',
-  false: 'No',
-  none: 'None',
+  yes: 'Ja',
+  true: 'Ja',
+  no: 'Nein',
+  false: 'Nein',
+  none: 'Keiner',
 
   name: 'Name',
-  displayName: 'Label',
-  description: 'Description',
+  displayName: 'Etikette',
+  description: 'Beschreibung',
 
-  createdAt: 'Created at',
-  updatedAt: 'Updated at',
+  createdAt: 'Hergestellt in',
+  updatedAt: 'Aktualisiert am',
 
   sw: {
-    check: 'Content update is available',
-    update: 'Update',
+    check: 'Inhaltsaktualisierung ist verfügbar',
+    update: 'Aktualisieren',
   },
 
   action: {
