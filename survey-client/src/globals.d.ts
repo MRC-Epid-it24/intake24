@@ -12,3 +12,9 @@ declare module 'vue/types/vue' {
     isMobile: () => boolean;
   }
 }
+
+declare global {
+  interface Navigator {
+    userLanguage: string;
+  }
+}

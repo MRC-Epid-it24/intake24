@@ -1,20 +1,18 @@
 <template>
-  <v-container :class="{ 'pa-0': isMobile }">
-    <v-row justify-md="center" no-gutters>
-      <v-col cols="12" md="10">
-        <transition name="component-fade" mode="out-in">
-          <component
-            v-if="loaded"
-            :is="currentSelection.prompt.question.component"
-            :key="currentSelection.prompt.question.id"
-            :props="currentSelection.prompt.question.props"
-            @answer="onAnswer"
-            @submit="onSubmit"
-          ></component>
-        </transition>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row justify-md="center" no-gutters>
+    <v-col cols="12" md="10">
+      <transition name="component-fade" mode="out-in">
+        <component
+          v-if="loaded"
+          :is="currentSelection.prompt.question.component"
+          :key="currentSelection.prompt.question.id"
+          :props="currentSelection.prompt.question.props"
+          @answer="onAnswer"
+          @submit="onSubmit"
+        ></component>
+      </transition>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">

@@ -1,37 +1,15 @@
 <template>
-  <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
+  <v-card :flat="isMobile" :tile="isMobile">
     <v-list two-line subheader>
       <v-subheader>{{ $t('profile.info') }}</v-subheader>
       <v-list-item>
         <v-list-item-avatar>
-          <v-icon class="primary" dark>fa-user</v-icon>
+          <v-icon class="primary" dark>fa-id-badge</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title>{{ $t('profile.name') }}</v-list-item-title>
+          <v-list-item-title>{{ $t('profile.provider') }}</v-list-item-title>
           <v-list-item-subtitle>
-            {{ profile.name || $t('common.not.provided') }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-icon class="primary" dark>fa-envelope</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title>{{ $t('profile.email') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ profile.email || $t('common.not.provided') }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-icon class="primary" dark>fa-phone</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title>{{ $t('profile.phone') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ profile.phone || $t('common.not.provided') }}
+            {{ profile.provider.provider || $t('common.not.provided') }}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -40,9 +18,9 @@
           <v-icon class="primary" dark>fa-key</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title>{{ $t('profile.roles') }}</v-list-item-title>
+          <v-list-item-title>{{ $t('profile.providerId') }}</v-list-item-title>
           <v-list-item-subtitle>
-            {{ roles && roles.length ? roles.join(', ') : '' }}
+            {{ profile.provider.providerKey || $t('common.not.provided') }}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>

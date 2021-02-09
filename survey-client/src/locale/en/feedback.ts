@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const feedback: LocaleMessage = {
+const feedback: LocaleMessageObject = {
   _: 'Feedback',
 };
 
