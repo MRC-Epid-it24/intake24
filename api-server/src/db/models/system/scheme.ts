@@ -34,6 +34,17 @@ export const defaultExport: ExportScheme = [
   { id: 'portionSizes', fields: [] },
 ];
 
+export const defaultScheme: RecallQuestions = {
+  preMeals: [],
+  meals: {
+    preFoods: [],
+    foods: [],
+    postFoods: [],
+  },
+  postMeals: [],
+  submission: [],
+};
+
 @Scopes(() => ({
   surveys: { include: [{ model: Survey }] },
 }))
@@ -73,11 +84,11 @@ export default class Scheme extends BaseModel implements SchemeAttributes {
   })
   get questions(): RecallQuestions {
     const val = this.getDataValue('questions') as unknown;
-    return val ? JSON.parse(val as string) : {};
+    return val ? JSON.parse(val as string) : defaultScheme;
   }
 
   set questions(value: RecallQuestions) {
-    this.setDataValue('questions', JSON.stringify(value ?? {}));
+    this.setDataValue('questions', JSON.stringify(value ?? defaultScheme));
   }
 
   @Column({

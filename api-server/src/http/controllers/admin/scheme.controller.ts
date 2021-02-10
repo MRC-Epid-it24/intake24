@@ -13,7 +13,6 @@ import {
   SchemeExportRefsResponse,
 } from '@common/types/http';
 import { ExportField, ExportSection } from '@common/types/models';
-import { PromptQuestion } from '@common/types';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions | 'dataExportRefs'>;
