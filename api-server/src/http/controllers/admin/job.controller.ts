@@ -10,7 +10,7 @@ import { Controller } from '../controller';
 
 export type JobController = Controller<'list' | 'detail' | 'download'>;
 
-export default ({ config }: IoC): JobController => {
+export default ({ config }: Pick<IoC, 'config'>): JobController => {
   const list = async (req: Request, res: Response<JobsResponse>): Promise<void> => {
     const user = req.user as User;
     const { type } = req.query;

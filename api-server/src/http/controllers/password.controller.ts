@@ -8,7 +8,12 @@ import { Controller } from './controller';
 
 export type PasswordController = Controller<'request' | 'reset'>;
 
-export default ({ config, logger, scheduler, userService }: IoC): PasswordController => {
+export default ({
+  config,
+  logger,
+  scheduler,
+  userService,
+}: Pick<IoC, 'config' | 'logger' | 'scheduler' | 'userService'>): PasswordController => {
   const request = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { email } = req.body;
 

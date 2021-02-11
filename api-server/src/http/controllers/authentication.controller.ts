@@ -14,7 +14,10 @@ export default ({
   config,
   authenticationService,
   jwtRotationService,
-}: IoC): AuthenticationController => {
+}: Pick<
+  IoC,
+  'config' | 'authenticationService' | 'jwtRotationService'
+>): AuthenticationController => {
   /**
    * Successful login response helper
    * - attach refresh token as secure cookie

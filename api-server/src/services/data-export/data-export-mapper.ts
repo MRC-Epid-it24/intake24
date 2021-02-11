@@ -55,7 +55,7 @@ export const portionSizeValue = (field: ExportField): ExportFieldTransform => (f
   return match?.value;
 };
 
-export default ({ dataExportFields }: IoC): DataExportMapper => {
+export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): DataExportMapper => {
   /**
    * Map record based fields (Survey submission / meal / food)
    *

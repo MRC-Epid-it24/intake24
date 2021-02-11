@@ -15,7 +15,10 @@ export type PortionSizeController = Controller<
   | 'weight'
 >;
 
-export default ({ config, portionSizeService }: IoC): PortionSizeController => {
+export default ({
+  config,
+  portionSizeService,
+}: Pick<IoC, 'config' | 'portionSizeService'>): PortionSizeController => {
   const baseUrl = config.app.urls.images;
 
   const asServed = async (req: Request, res: Response<AsServedSetResponse[]>): Promise<void> => {

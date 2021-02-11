@@ -58,7 +58,10 @@ export type DataExportService = {
   syncStream: (input: DataExportInput) => Promise<SyncStreamOutput>;
 };
 
-export default ({ dataExportMapper, scheduler }: IoC): DataExportService => {
+export default ({
+  dataExportMapper,
+  scheduler,
+}: Pick<IoC, 'dataExportMapper' | 'scheduler'>): DataExportService => {
   /**
    * Scope to query submission foods and missing foods records
    *

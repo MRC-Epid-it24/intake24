@@ -8,7 +8,7 @@ export default class Mailer {
 
   private transporter!: Transporter;
 
-  constructor({ config, logger }: IoC) {
+  constructor({ config, logger }: Pick<IoC, 'config' | 'logger'>) {
     this.config = config;
     this.logger = logger;
   }
