@@ -141,7 +141,7 @@ import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import { FormRefs, ComponentType, PromptQuestion } from '@common/types';
-import { promptQuestions } from '@common/prompts/promptDefaults';
+import { promptQuestions } from '@common/defaults';
 import prompts from '@/components/prompts';
 
 export interface EditPromptQuestion extends PromptQuestion {

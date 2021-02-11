@@ -24,7 +24,7 @@
 import Vue from 'vue';
 import merge from 'deepmerge';
 import { PortionSizeOptionPromptProps } from '@common/types';
-import { portionSizeOptionPromptProps } from '@common/prompts/promptDefaults';
+import { portionSizeOptionPromptProps } from '@common/defaults';
 import BasePrompt from './BasePrompt';
 
 export default Vue.extend({

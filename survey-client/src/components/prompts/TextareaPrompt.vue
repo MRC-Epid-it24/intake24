@@ -20,7 +20,7 @@
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { TextareaPromptProps } from '@common/types';
-import { textareaPromptProps } from '@common/prompts/promptDefaults';
+import { textareaPromptProps } from '@common/defaults';
 import BasePrompt, { Prompt } from './BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
