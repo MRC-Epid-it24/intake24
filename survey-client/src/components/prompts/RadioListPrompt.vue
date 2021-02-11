@@ -39,7 +39,7 @@
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { RadioListPromptProps } from '@common/types';
-import { radioListPromptProps } from '@common/prompts/promptDefaults';
+import { radioListPromptProps } from '@common/defaults';
 import BasePrompt, { Prompt } from './BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({

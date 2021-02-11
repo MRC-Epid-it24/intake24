@@ -12,6 +12,9 @@ declare module 'vue/types/vue' {
     // loadingMixin
     isLoading: () => boolean;
 
+    // isMobile mixin
+    isMobile: () => boolean;
+
     // moduleMixin
     module: string;
   }
@@ -20,5 +23,9 @@ declare module 'vue/types/vue' {
 declare global {
   interface Window {
     Duo: any;
+  }
+
+  interface Navigator {
+    userLanguage: string;
   }
 }

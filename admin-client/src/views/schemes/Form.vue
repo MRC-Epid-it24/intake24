@@ -52,6 +52,7 @@ import Vue, { VueConstructor } from 'vue';
 import formMixin from '@/components/entry/formMixin';
 import Form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
+import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
 import Meals from './Meals.vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
@@ -67,9 +68,9 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         id: null,
         name: null,
         type: 'data-driven',
-        questions: {},
-        meals: [],
-        export: [],
+        questions: defaultQuestions,
+        meals: defaultMeals,
+        export: defaultExport,
       }),
       types: [{ value: 'data-driven', text: this.$t('schemes.types.data-driven') }],
     };

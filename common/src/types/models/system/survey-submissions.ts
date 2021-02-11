@@ -49,13 +49,6 @@ export type SurveySubmissionFood = {
   nutrientTableCode: string;
 };
 
-export type SurveySubmissionFoodField = {
-  id: number;
-  foodId: number;
-  fieldName: string;
-  value: string;
-};
-
 export type SurveySubmissionFoodCustomField = {
   id: number;
   foodId: number;
@@ -71,6 +64,13 @@ export type SurveySubmissionMissingFood = {
   description: string;
   portionSize: string;
   leftovers: string;
+};
+
+export type SurveySubmissionField = {
+  id: number;
+  foodId: number;
+  fieldName: string;
+  value: string;
 };
 
 export type SurveySubmissionNutrient = {

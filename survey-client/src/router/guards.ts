@@ -2,7 +2,7 @@ import Router from 'vue-router';
 import { Store } from 'vuex';
 import { RootState } from '@/types/vuex';
 
-export default (router: Router, store: Store<RootState>) => {
+export default (router: Router, store: Store<RootState>): void => {
   router.beforeEach(async (to, from, next) => {
     const {
       meta: { module },

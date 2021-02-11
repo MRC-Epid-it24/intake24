@@ -19,7 +19,7 @@
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { DatePickerPromptProps } from '@common/types';
-import { datePickerPromptProps } from '@common/prompts/promptDefaults';
+import { datePickerPromptProps } from '@common/defaults';
 import BasePrompt, { Prompt } from './BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({

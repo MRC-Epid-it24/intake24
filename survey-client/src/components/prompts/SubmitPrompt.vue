@@ -12,7 +12,7 @@
 import Vue from 'vue';
 import merge from 'deepmerge';
 import { BasePromptProps } from '@common/types';
-import { submitPromptProps } from '@common/prompts/promptDefaults';
+import { submitPromptProps } from '@common/defaults';
 import Submit from '@/components/Submit.vue';
 import BasePrompt from './BasePrompt';
 

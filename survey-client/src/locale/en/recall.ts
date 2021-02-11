@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const recall: LocaleMessage = {
+const recall: LocaleMessageObject = {
   _: 'Recall',
   submit: 'Submit the recall',
 };

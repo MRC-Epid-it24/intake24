@@ -1,7 +1,7 @@
 <template>
   <div>
     <toolbar :api="api" :selected="tracked" @refresh="onRefresh"></toolbar>
-    <v-card outlined>
+    <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
       <v-card-text>
         <data-table-filter
           :count="meta.total"

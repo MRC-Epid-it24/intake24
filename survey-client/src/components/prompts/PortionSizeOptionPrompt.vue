@@ -66,9 +66,9 @@
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PortionSizeOptionPromptProps } from '@common/types';
-import { portionSizeOptionPromptProps } from '@common/prompts/promptDefaults';
-import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
 import BasePrompt, { Prompt } from './BasePrompt';
+import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
+import { portionSizeOptionPromptProps } from '@common/defaults';
 
 // For user to select which portion size estimation method they want to use
 export default (Vue as VueConstructor<Vue & Prompt>).extend({

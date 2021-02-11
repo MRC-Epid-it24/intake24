@@ -6,10 +6,9 @@ const common: LocaleMessageObject = {
   register: 'Registration',
   login: 'Sign in',
   logout: 'Sign out',
-  profile: 'Profile',
 
   admin: 'Admin',
-  local: 'Local settings',
+  local: 'Localization',
   surveyMgmt: 'Surveys MGMT',
   acl: 'Access Control',
   system: 'System',
@@ -30,13 +29,6 @@ const common: LocaleMessageObject = {
   sw: {
     check: 'Content update is available',
     update: 'Update',
-  },
-
-  locales: {
-    dk: 'Danish',
-    en: 'English',
-    es: 'Spanish',
-    pt: 'Portuguese',
   },
 
   action: {
@@ -91,6 +83,10 @@ const common: LocaleMessageObject = {
       deleted: 'Selected items were deleted.',
     },
     sent: 'Your message has been sent.',
+  },
+
+  not: {
+    provided: 'Not provided',
   },
 };
 

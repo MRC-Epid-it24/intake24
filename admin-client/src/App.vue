@@ -46,7 +46,7 @@
         <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-btn text :to="{ name: 'profile' }">
-          <span class="mr-2">{{ $t('common.profile') }}</span>
+          <span class="mr-2">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
         <v-btn text @click.stop="onLogout()">
@@ -60,8 +60,8 @@
     </v-app-bar>
 
     <v-main>
-      <v-container fluid>
-        <h1 v-if="loggedIn" class="m-0 text-dark">{{ title }}</h1>
+      <v-container :class="{ 'pa-0': isMobile }" fluid>
+        <h2 v-if="loggedIn" class="ma-2 text-dark">{{ title }}</h2>
         <router-view></router-view>
       </v-container>
     </v-main>

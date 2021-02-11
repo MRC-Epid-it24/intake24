@@ -7,7 +7,7 @@ import { Model as BaseModel } from 'sequelize-typescript';
 import { Readable } from 'stream';
 import { Pagination, PaginationMeta } from '@common/types/models';
 
-export interface Paginate<TAttributes = any> extends BaseFindOptions<TAttributes> {
+export interface PaginateOptions<TAttributes = any> extends BaseFindOptions<TAttributes> {
   req: Request;
   columns?: string[];
   transform?: (item: any) => any;
@@ -46,7 +46,7 @@ export default abstract class Model<
    */
   public static async paginate<R = Model>(
     this: ModelCtor<R extends Model ? R : Model>,
-    { req, columns = [], transform, ...params }: Paginate
+    { req, columns = [], transform, ...params }: PaginateOptions
   ): Promise<Pagination<R>> {
     const { search, sort } = req.query;
     let { page = 1, limit = 50 } = req.query;

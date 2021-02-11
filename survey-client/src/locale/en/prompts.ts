@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const prompts: LocaleMessage = {
+const prompts: LocaleMessageObject = {
   checkbox: {
     label: 'Select any of the options',
     validation: {

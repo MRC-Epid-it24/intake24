@@ -1,56 +1,54 @@
 <template>
-  <v-container fluid>
-    <v-row justify="center">
-      <v-col cols="auto">
-        <v-card class="mt-10" outlined raised max-width="30rem">
-          <v-sheet class="d-flex justify-center" color="deep-orange lighten-5" tile>
-            <v-card-title>
-              <h2>{{ $t('login.title') }}</h2>
-            </v-card-title>
-          </v-sheet>
-          <v-card-text v-if="status === 404" class="px-5 py-10">
-            <v-alert border="left" color="error" dark>
-              <p>{{ $t('login.err.invalidSurvey', { surveyId }) }}</p>
-              <p>{{ $t('login.err.checkCredentials') }}</p>
-            </v-alert>
-          </v-card-text>
-          <v-card-text v-if="surveyLoaded">
-            <v-card-subtitle class="text-center">
-              {{ $t('login.subtitle') }}
-            </v-card-subtitle>
-            <v-form @submit.prevent="onLogin">
-              <v-row>
-                <v-col cols="12" class="mb-3">
-                  <v-text-field
-                    v-model="userName"
-                    :label="$t('common.username')"
-                    hide-details="auto"
-                    required
-                    outlined
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" class="mb-3">
-                  <v-text-field
-                    v-model="password"
-                    :label="$t('common.password')"
-                    hide-details="auto"
-                    type="password"
-                    required
-                    outlined
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-card-actions class="px-0">
-                <v-btn type="submit" color="secondary" xLarge width="100%">
-                  {{ $t('common.login') }}
-                </v-btn>
-              </v-card-actions>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row justify="center">
+    <v-col cols="auto">
+      <v-card class="mt-10" outlined raised max-width="30rem">
+        <v-sheet class="d-flex justify-center" color="deep-orange lighten-5" tile>
+          <v-card-title>
+            <h2>{{ $t('login.title') }}</h2>
+          </v-card-title>
+        </v-sheet>
+        <v-card-text v-if="status === 404" class="px-5 py-10">
+          <v-alert border="left" color="error" dark>
+            <p>{{ $t('login.err.invalidSurvey', { surveyId }) }}</p>
+            <p>{{ $t('login.err.checkCredentials') }}</p>
+          </v-alert>
+        </v-card-text>
+        <v-card-text v-if="surveyLoaded">
+          <v-card-subtitle class="text-center">
+            {{ $t('login.subtitle') }}
+          </v-card-subtitle>
+          <v-form @submit.prevent="onLogin">
+            <v-row>
+              <v-col cols="12" class="mb-3">
+                <v-text-field
+                  v-model="userName"
+                  :label="$t('common.username')"
+                  hide-details="auto"
+                  required
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" class="mb-3">
+                <v-text-field
+                  v-model="password"
+                  :label="$t('common.password')"
+                  hide-details="auto"
+                  type="password"
+                  required
+                  outlined
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-card-actions class="px-0">
+              <v-btn type="submit" color="secondary" xLarge width="100%">
+                {{ $t('common.login') }}
+              </v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
