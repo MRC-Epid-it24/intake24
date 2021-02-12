@@ -8,6 +8,7 @@ import {
   TextareaPromptProps,
   TimePickerPromptProps,
   PortionSizeOptionPromptProps,
+  AsServedPromptProps,
 } from '../types';
 
 export const basePromptProps: BasePromptProps = {
@@ -79,6 +80,17 @@ export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
   description: { en: null },
   localDescription: { en: null },
   methods: [],
+  validation: {
+    required: false,
+    message: { en: null },
+  },
+};
+
+export const asServedPromptDefaultProps: AsServedPromptProps = {
+  text: { en: null },
+  description: { en: null },
+  localDescription: { en: null },
+  imageUrl: '',
   validation: {
     required: false,
     message: { en: null },

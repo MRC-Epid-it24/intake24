@@ -48,7 +48,12 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
 }
 
 export interface PortionSizeOptionPromptProps extends ValidatedPromptProps {
-  // Prop for which methods to display
+  // Stores which methods to display
   methods: PortionSizeMethod[];
   localDescription: LocaleTranslation;
+}
+
+export interface AsServedPromptProps extends ValidatedPromptProps {
+  localDescription: LocaleTranslation;
+  imageUrl: string;
 }

@@ -66,9 +66,9 @@
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PortionSizeOptionPromptProps } from '@common/types';
-import BasePrompt, { Prompt } from './BasePrompt';
-import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
 import { portionSizeOptionPromptProps } from '@common/defaults';
+import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
+import BasePrompt, { Prompt } from './BasePrompt';
 
 // For user to select which portion size estimation method they want to use
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
@@ -85,7 +85,6 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   data() {
     return {
-      // TO DO why are we including the defaults as well?
       ...merge(portionSizeOptionPromptProps, this.props),
       errors: [] as string[],
       currentValue: -1,

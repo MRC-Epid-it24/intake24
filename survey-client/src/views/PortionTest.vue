@@ -8,7 +8,8 @@
         ></component> -->
         <!-- Above requires a computed variable to return :is part unless loading from list -->
 
-        <portionSizeOptionPrompt :props="testProps"></portionSizeOptionPrompt>
+        <!-- <portionSizeOptionPrompt :props="testProps"></portionSizeOptionPrompt> -->
+        <asServedPrompt :props="asServedProps"></asServedPrompt>
       </v-col>
     </v-row>
   </v-container>
@@ -19,14 +20,16 @@ import Vue from 'vue';
 // // import prompts from '@/components/prompts/';
 // import { portionSizeOptionPromptDefaultProps } from '@/common/prompts/promptDefaults';
 // import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
-import portionSizeOptionPrompt from '@/components/prompts/PortionSizeOptionPrompt.vue';
+// import portionSizeOptionPrompt from '@/components/prompts/PortionSizeOptionPrompt.vue';
+import asServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
 
 export default Vue.extend({
   name: 'PortionTest',
 
   // components: { ...prompts, portionSizeOption },
   components: {
-    portionSizeOptionPrompt,
+    // portionSizeOptionPrompt,
+    asServedPrompt
   },
 
   data() {
@@ -49,6 +52,17 @@ export default Vue.extend({
             },
           },
         ],
+        validation: {
+          required: false,
+          message: { en: null },
+        },
+      },
+      asServedProps: {
+        text: { en: 'Portion Size Options' },
+        description: { en: 'Meat lasagne (includes homemade)' },
+        localDescription: { en: 'Meat lasagne (includes homemade)' },
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Fries_2.jpg/800px-Fries_2.jpg',
+        // imageUrl: 'https://bad.src',
         validation: {
           required: false,
           message: { en: null },

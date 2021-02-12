@@ -14,7 +14,8 @@
     "build-site": "./node_modules/.bin/webpack --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "test": "jest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
