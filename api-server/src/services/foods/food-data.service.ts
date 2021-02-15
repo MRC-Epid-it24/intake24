@@ -1,6 +1,7 @@
 import {
   AssociatedFood,
   Brand,
+  CategoryAttribute,
   FoodAttribute,
   FoodCategory,
   FoodLocal,
@@ -15,9 +16,13 @@ import getAllParentCategories from '@api-server/db/raw/food-controller-sql';
 export interface FoodDataService {
   getFoodLocal: (localId: string, foodCode: string) => Promise<FoodLocal>;
   getFoodCategories: (foodCode: string, parentCategories?: boolean) => Promise<string[] | []>;
-  getFoodReadyMealAndSameAsBeforeAttributes: (foodCode: string) => Promise<FoodDataGeneral>;
+  getFoodReadyMealAndSameAsBeforeAttributes: (
+    foodCode: string,
+    categories: string[] | []
+  ) => Promise<FoodDataGeneral>;
   getAssociatedFoods: (localId: string, foodCode: string) => Promise<AssociatedFoodsResponse[]>;
   getBrands: (localId: string, foodCode: string) => Promise<string[] | []>;
+  getCategoriesAttributes: (categories: string[] | []) => Promise<FoodDataGeneral>;
 }
 
 export default (): FoodDataService => {
@@ -98,6 +103,60 @@ export default (): FoodDataService => {
   };
 
   /**
+   * check readyMealOption & sameAsBeforeOption attributes for food's parent categories
+   *
+   * @param categories all parent categories of the food
+   * @param readyMealOption existing readyMealOption attribute for this food
+   * @param sameAsBeforeOption existing sameAsBeforeOption attribute for this food
+   */
+  const getCategoriesAttributes = async (
+    categories: string[] | [],
+    readyMealOption?: boolean | null,
+    sameAsBeforeOption?: boolean | null
+  ): Promise<FoodDataGeneral> => {
+    let categoriesAttributes: FoodDataGeneral = {
+      readyMealOption: readyMealOption !== undefined ? readyMealOption : null,
+      sameAsBeforeOption: sameAsBeforeOption !== undefined ? sameAsBeforeOption : null,
+    };
+    if (categories && categories.length > 0) {
+      const categoryAtrributeCheck = async (
+        arr: string[],
+        predicate: (code: string) => Promise<FoodDataGeneral>
+      ) => {
+        const res = categoriesAttributes;
+        for (const code of arr) {
+          const result = await predicate(code);
+          if (result.readyMealOption !== null && result.sameAsBeforeOption !== null) return result;
+        }
+        return res;
+      };
+
+      categoriesAttributes = await categoryAtrributeCheck(categories, async (code: string) => {
+        const categoryAttribute = await CategoryAttribute.findOne({
+          where: { categoryCode: code },
+          attributes: ['readyMealOption', 'sameAsBeforeOption'],
+        });
+
+        if (
+          categoriesAttributes.readyMealOption === null &&
+          categoryAttribute?.readyMealOption !== null
+        ) {
+          categoriesAttributes.readyMealOption = categoryAttribute?.readyMealOption;
+        }
+
+        if (
+          categoriesAttributes.sameAsBeforeOption === null &&
+          categoryAttribute?.sameAsBeforeOption !== null
+        ) {
+          categoriesAttributes.sameAsBeforeOption = categoryAttribute?.sameAsBeforeOption;
+        }
+        return categoriesAttributes;
+      });
+    }
+    return categoriesAttributes;
+  };
+
+  /**
    *
    * Get food atributes (ready meal option & same as before) based on the code of the food from the FoodAttributes
    *
@@ -105,19 +164,32 @@ export default (): FoodDataService => {
    * @returns {Promise<FoodDataGeneral>} object with sameAsBeforeOption and readyMealOption boolean fields
    */
   const getFoodReadyMealAndSameAsBeforeAttributes = async (
-    foodCode: string
+    foodCode: string,
+    categories: string[] | []
   ): Promise<FoodDataGeneral> => {
-    const foodAttributes: FoodDataGeneral = {};
-
+    let foodAttributes: FoodDataGeneral = {};
     const foodMealAndAsBeforeOptions = await FoodAttribute.findOne({
       where: { foodCode },
       attributes: ['sameAsBeforeOption', 'readyMealOption'],
     });
-    foodAttributes.readyMealOption = foodMealAndAsBeforeOptions?.readyMealOption
-      ? foodMealAndAsBeforeOptions.readyMealOption
+
+    if (
+      foodMealAndAsBeforeOptions === null ||
+      foodMealAndAsBeforeOptions.readyMealOption === null ||
+      foodMealAndAsBeforeOptions.sameAsBeforeOption === null
+    ) {
+      foodAttributes = await getCategoriesAttributes(
+        categories,
+        foodMealAndAsBeforeOptions?.readyMealOption,
+        foodMealAndAsBeforeOptions?.sameAsBeforeOption
+      );
+    }
+
+    foodAttributes.readyMealOption = foodAttributes.readyMealOption
+      ? foodAttributes.readyMealOption
       : false;
-    foodAttributes.sameAsBeforeOption = foodMealAndAsBeforeOptions?.sameAsBeforeOption
-      ? foodMealAndAsBeforeOptions.sameAsBeforeOption
+    foodAttributes.sameAsBeforeOption = foodAttributes.sameAsBeforeOption
+      ? foodAttributes.sameAsBeforeOption
       : false;
 
     return foodAttributes;
@@ -177,5 +249,6 @@ export default (): FoodDataService => {
     getFoodReadyMealAndSameAsBeforeAttributes,
     getAssociatedFoods,
     getBrands,
+    getCategoriesAttributes,
   };
 };

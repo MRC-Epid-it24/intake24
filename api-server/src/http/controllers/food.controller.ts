@@ -30,7 +30,10 @@ export default ({ foodDataService }: IoC): FoodController => {
     result.categories = await foodDataService.getFoodCategories(code, true);
 
     // 4. Retrieving readyMealOption, sameAsBeforeOption
-    const foodAttributes = await foodDataService.getFoodReadyMealAndSameAsBeforeAttributes(code);
+    const foodAttributes = await foodDataService.getFoodReadyMealAndSameAsBeforeAttributes(
+      code,
+      result.categories
+    );
     result.readyMealOption = foodAttributes.readyMealOption;
     result.sameAsBeforeOption = foodAttributes.sameAsBeforeOption;
 
