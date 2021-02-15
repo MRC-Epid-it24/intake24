@@ -1,5 +1,8 @@
 export { default as AsServedImage } from './as-served-image';
 export { default as AsServedSet } from './as-served-set';
+export { default as DrinkwareScale } from './drinkware-scale';
+export { default as DrinkwareSet } from './drinkware-set';
+export { default as DrinkwareVolumeSample } from './drinkware-volume-sample';
 export { default as Food } from './food';
 export { default as FoodAttribute } from './food-attribute';
 export { default as FoodLocal } from './food-local';

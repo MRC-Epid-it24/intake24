@@ -1,3 +1,5 @@
+import { DrinkwareScale, DrinkwareSet, DrinkwareVolumeSample } from '../../models';
+
 export type AsServedImageResponse = {
   mainImageUrl: string;
   thumbnailUrl: string;
@@ -10,3 +12,13 @@ export type AsServedSetResponse = {
   selectionImageUrl: string;
   images: AsServedImageResponse[];
 };
+
+export type DrinkwareVolumeSampleResponse = Pick<DrinkwareVolumeSample, 'fill' | 'volume'>;
+
+export interface DrinkwareScaleResponse extends Omit<DrinkwareScale, 'id' | 'drinkwareSetId'> {
+  volumeSamples: DrinkwareVolumeSampleResponse[];
+}
+
+export interface DrinkwareSetResponse extends Pick<DrinkwareSet, 'id' | 'guideImageId'> {
+  scales: DrinkwareScaleResponse[];
+}

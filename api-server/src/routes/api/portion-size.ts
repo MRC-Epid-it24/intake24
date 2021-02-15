@@ -19,6 +19,7 @@ router.get('/guide-image/:id', wrapAsync(portionSizeController.guideImageEntry))
 router.get('/image-maps', validation.portionSizeId, wrapAsync(portionSizeController.imageMaps));
 router.get('/image-maps/:id', wrapAsync(portionSizeController.imageMapsEntry));
 
+router.get('/drinkware', validation.portionSizeId, wrapAsync(portionSizeController.drinkware));
 router.get('/drinkware/:id', wrapAsync(portionSizeController.drinkwareEntry));
 
 router.get('/weight', wrapAsync(portionSizeController.weight));

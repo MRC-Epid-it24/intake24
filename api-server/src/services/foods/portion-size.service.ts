@@ -1,14 +1,21 @@
-import { AsServedSet } from '@/db/models/foods';
+import {
+  AsServedSet,
+  DrinkwareScale,
+  DrinkwareSet,
+  DrinkwareVolumeSample,
+} from '@/db/models/foods';
 import { NotFoundError } from '@/http/errors';
 
 export interface PortionSizeService {
   getAsServedSet: (id: string) => Promise<AsServedSet>;
   getAsServedSets: (id: string | string[]) => Promise<AsServedSet[]>;
+  getDrinkwareSet: (id: string) => Promise<DrinkwareSet>;
+  getDrinkwareSets: (id: string | string[]) => Promise<DrinkwareSet[]>;
 }
 
 export default (): PortionSizeService => {
   /**
-   * Get multiple records of as-served-set with images
+   * Get multiple records of as-served-set portion size data
    *
    * @param {(string | string[])} id
    * @returns {Promise<AsServedSet[]>}
@@ -22,20 +29,21 @@ export default (): PortionSizeService => {
         {
           attributes: ['weight'],
           association: 'asServedImages',
+          order: [['weight', 'DESC']],
+          separate: true,
           include: [
             { attributes: ['path'], association: 'image', required: true },
             { attributes: ['path'], association: 'thumbnailImage', required: true },
           ],
         },
       ],
-      order: [['asServedImages', 'weight', 'DESC']],
     });
 
     return asServedSets;
   };
 
   /**
-   * Get single record of as-served-set with images
+   * Get single record of as-served-set portion size data
    *
    * @param {string} id
    * @returns {Promise<AsServedSet>}
@@ -48,8 +56,46 @@ export default (): PortionSizeService => {
     return asServedSet;
   };
 
+  /**
+   * Get multiple records of drinkware portion size data
+   *
+   * @param {(string | string[])} id
+   * @returns {Promise<DrinkwareSet[]>}
+   */
+  const getDrinkwareSets = async (id: string | string[]): Promise<DrinkwareSet[]> => {
+    const drinkwareSets = await DrinkwareSet.findAll({
+      where: { id },
+      include: [
+        {
+          model: DrinkwareScale,
+          order: [['id', 'ASC']],
+          separate: true,
+          include: [{ model: DrinkwareVolumeSample, order: [['fill', 'ASC']], separate: true }],
+        },
+      ],
+    });
+
+    return drinkwareSets;
+  };
+
+  /**
+   * Get single record of drinkware portion size data
+   *
+   * @param {string} id
+   * @returns {Promise<DrinkwareSet>}
+   */
+  const getDrinkwareSet = async (id: string): Promise<DrinkwareSet> => {
+    const [drinkwareSet] = await getDrinkwareSets(id);
+
+    if (!drinkwareSet) throw new NotFoundError('Drinkware set not found.');
+
+    return drinkwareSet;
+  };
+
   return {
     getAsServedSet,
     getAsServedSets,
+    getDrinkwareSet,
+    getDrinkwareSets,
   };
 };
