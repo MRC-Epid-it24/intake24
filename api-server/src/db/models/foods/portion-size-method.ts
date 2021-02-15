@@ -53,5 +53,5 @@ export default class PortionSizeMethod extends BaseModel {
   public foodLocal?: FoodLocal;
 
   @HasMany(() => PortionSizeMethodParameter, 'portionSizeMethodId')
-  public parameters?: PortionSizeMethodParameter[];
+  public parameters!: PortionSizeMethodParameter[];
 }
