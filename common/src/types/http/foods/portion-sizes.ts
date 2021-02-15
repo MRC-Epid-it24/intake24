@@ -1,3 +1,4 @@
+import { Dictionary } from '../..';
 import { DrinkwareScale, DrinkwareSet, DrinkwareVolumeSample } from '../../models';
 
 export type AsServedImageResponse = {
@@ -22,3 +23,12 @@ export interface DrinkwareScaleResponse extends Omit<DrinkwareScale, 'id' | 'dri
 export interface DrinkwareSetResponse extends Pick<DrinkwareSet, 'id' | 'guideImageId'> {
   scales: DrinkwareScaleResponse[];
 }
+
+export type WeightResponse = {
+  method: string;
+  description: string;
+  parameters: Dictionary;
+  imageUrl: string;
+  useForRecipes: boolean;
+  conversionFactor: number;
+};

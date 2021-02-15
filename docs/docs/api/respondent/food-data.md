@@ -16,6 +16,7 @@ Get portion size estimation options, associated foods and related data for a foo
 GET /api/foods/{locale}/{code}    
 
 Authorization: Bearer {accessToken}
+Content-Type: application/json
 ```
 
 where
@@ -27,6 +28,8 @@ where
 ### Response
 
 ```json
+200 OK
+
 {
   "code": string,
   "localDescription": string,
@@ -308,6 +311,8 @@ where **id** is the image map ID.
 Same as a guide image (see above), but without the weights:
 
 ```json
+200 OK
+
 {
   "baseImageUrl": string,
   "objects": [
@@ -494,11 +499,7 @@ Same as the regular drinkware set data response, but returns an array of drinkwa
 Dummy endpoint for manual weight entry estimation method. The method has no parameters and this request is needed to 
 get the image URL for the portion size option selection screen.
 
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/food/user/FoodDataController.scala#L271-L276)
-
-[v4 portion-size boilerplate](https://github.com/MRC-Epid-it24/intake24/blob/master/api-server/src/http/controllers/portion-size.controller.ts)
-
-## Request  
+### Request
 
 ```http
 GET /api/portion-size/weight
@@ -507,7 +508,7 @@ Authorization: Bearer {accessToken}
 Content-Type: application/json
 ```
 
-## Response
+### Response
 
 ```json
 200 OK

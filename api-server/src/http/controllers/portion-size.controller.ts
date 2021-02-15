@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import type { IoC } from '@/ioc';
 import { asServedResponse, drinkwareResponse } from '@/http/responses/foods';
-import { AsServedSetResponse, DrinkwareSetResponse } from '@common/types/http';
+import { AsServedSetResponse, DrinkwareSetResponse, WeightResponse } from '@common/types/http';
 import { Controller } from './controller';
 
 export type PortionSizeController = Controller<
@@ -77,8 +77,15 @@ export default ({
     res.json(drinkwareResponse(baseUrl).setResponse(drinkwareSet));
   };
 
-  const weight = async (req: Request, res: Response): Promise<void> => {
-    res.json();
+  const weight = async (req: Request, res: Response<WeightResponse>): Promise<void> => {
+    res.json({
+      method: 'weight',
+      description: 'weight',
+      parameters: {},
+      imageUrl: `${baseUrl}/portion/weight.png`,
+      useForRecipes: true,
+      conversionFactor: 1.0,
+    });
   };
 
   return {
