@@ -7,9 +7,8 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    parser: '@typescript-eslint/parser',
+    ecmaVersion: 2021,
     sourceType: 'module',
-    ecmaVersion: 2020,
   },
   settings: {
     'import/extensions': ['.ts'],
