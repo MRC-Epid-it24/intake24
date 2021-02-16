@@ -31,11 +31,12 @@ export interface FoodDataService {
   getAssociatedFoods: (localId: string, foodCode: string) => Promise<AssociatedFoodsResponse[]>;
   getBrands: (localId: string, foodCode: string) => Promise<string[] | []>;
   getCategoriesAttributes: (categories: string[] | []) => Promise<FoodDataGeneral>;
-  getParentsLocalDescriptionPortionSizeMethodsAndParameters: (
+  getParentsLocalDescriptionAssociatedFoodsPortionSizeMethodsAndParameters: (
     localId: string,
     foodCode: string,
-    localDescription: string
-  ) => Promise<FoodLocalResponse>;
+    localDescription: string,
+    associatedFoods: AssociatedFoodsResponse[]
+  ) => Promise<[FoodLocalResponse, AssociatedFoodsResponse[]]>;
   getParentLocale: (localeId: string) => Promise<Locale | null>;
   getCategoryPortionSizeMethods: (
     localeId: string,
@@ -86,7 +87,10 @@ export default (): FoodDataService => {
 
   /**
    *
-   * @param localeId Get Prototype locale of the supplied locale
+   *  Get parent locale for the given locale
+   *
+   * @param {string} localeId Get Prototype locale of the supplied locale
+   * @returns {Promise<Locale | null>}
    */
   const getParentLocale = async (localeId: string): Promise<Locale | null> => {
     const parentLocale = await Locale.findOne({
@@ -94,6 +98,44 @@ export default (): FoodDataService => {
       attributes: ['prototypeLocaleId'],
     });
     return parentLocale;
+  };
+
+  /**
+   *
+   * Get all associated Foods that link to this locale and Food Code
+   *
+   * @param {string} localeId
+   * @param {string} foodCode
+   * @returns {Promise<AssociatedFoodsResponse[]>}
+   */
+  const getAssociatedFoods = async (
+    localeId: string,
+    foodCode: string
+  ): Promise<AssociatedFoodsResponse[]> => {
+    const associatedFoods = await AssociatedFood.findAll({
+      where: { localeId, foodCode },
+      attributes: [
+        'associatedFoodCode',
+        'associatedCategoryCode',
+        'text',
+        'linkAsMain',
+        'genericName',
+      ],
+    });
+
+    const associated: AssociatedFoodsResponse[] = associatedFoods.map((el: FoodDataGeneral) => {
+      const newEl: AssociatedFoodsResponse = {
+        foodOrCategoryCode: [
+          el.associatedCategoryCode ? 1 : 0,
+          el.associatedCategoryCode ? el.associatedCategoryCode : el.associatedFoodCode,
+        ],
+        promptText: el.text,
+        linkAsMain: el.linkAsMain,
+        genericName: el.genericName,
+      };
+      return newEl;
+    });
+    return associated;
   };
 
   /**
@@ -259,16 +301,17 @@ export default (): FoodDataService => {
   };
 
   /**
-   * Get Portion Size Methods associated with the parents of the locale id and food code provided
+   * Get Portion Size Methods and Food associated with the parents of the locale id and food code provided
    * @param {string} localeId
    * @param {string} foodCode
-   * @returns {Promise<AssociatedFoodsResponse[]>}
+   * @returns {Promise<[FoodLocalResponse, AssociatedFoodsResponse[]]>}
    */
-  const getParentsLocalDescriptionPortionSizeMethodsAndParameters = async (
+  const getParentsLocalDescriptionAssociatedFoodsPortionSizeMethodsAndParameters = async (
     localeId: string,
     foodCode: string,
-    localDescription: string
-  ): Promise<FoodLocalResponse> => {
+    localDescription: string,
+    associatedFoods: AssociatedFoodsResponse[]
+  ): Promise<[FoodLocalResponse, AssociatedFoodsResponse[]]> => {
     const parentLocale = await getParentLocale(localeId);
 
     let parentLocalDescriptionPortionSizeMethods: FoodLocalResponse = {
@@ -277,23 +320,47 @@ export default (): FoodDataService => {
       portionSizeMethods: [],
     };
 
+    let parentLocaleAssociatedFoods: AssociatedFoodsResponse[] = associatedFoods;
+
     if (!parentLocale || parentLocale.prototypeLocaleId === null)
-      return parentLocalDescriptionPortionSizeMethods;
-    await getFoodLocal(parentLocale.prototypeLocaleId, foodCode).then((data) => {
-      parentLocalDescriptionPortionSizeMethods.portionSizeMethods = data.portionSizeMethods
-        ? data.portionSizeMethods
-        : [];
-      parentLocalDescriptionPortionSizeMethods.localDescription = parentLocalDescriptionPortionSizeMethods.localDescription
-        ? parentLocalDescriptionPortionSizeMethods.localDescription
-        : data.name;
-    });
-    if (parentLocalDescriptionPortionSizeMethods.portionSizeMethods.length === 0)
-      parentLocalDescriptionPortionSizeMethods = await getParentsLocalDescriptionPortionSizeMethodsAndParameters(
+      return [parentLocalDescriptionPortionSizeMethods, parentLocaleAssociatedFoods];
+
+    // searching for PortionSizeMethods and localDescription in parent Locales
+    if (
+      !parentLocalDescriptionPortionSizeMethods.portionSizeMethods.length ||
+      !parentLocalDescriptionPortionSizeMethods.localDescription.length
+    ) {
+      await getFoodLocal(parentLocale.prototypeLocaleId, foodCode).then((data) => {
+        parentLocalDescriptionPortionSizeMethods.portionSizeMethods = data.portionSizeMethods
+          ? data.portionSizeMethods
+          : [];
+        parentLocalDescriptionPortionSizeMethods.localDescription = parentLocalDescriptionPortionSizeMethods.localDescription
+          ? parentLocalDescriptionPortionSizeMethods.localDescription
+          : data.name;
+      });
+    }
+
+    // searching for Associated Foods in parent Locales
+    if (!parentLocaleAssociatedFoods.length) {
+      await getAssociatedFoods(parentLocale.prototypeLocaleId, foodCode).then((data) => {
+        parentLocaleAssociatedFoods = data;
+      });
+    }
+
+    if (
+      !parentLocalDescriptionPortionSizeMethods.portionSizeMethods.length ||
+      !parentLocaleAssociatedFoods.length
+    )
+      [
+        parentLocalDescriptionPortionSizeMethods,
+        parentLocaleAssociatedFoods,
+      ] = await getParentsLocalDescriptionAssociatedFoodsPortionSizeMethodsAndParameters(
         parentLocale.prototypeLocaleId,
         foodCode,
-        parentLocalDescriptionPortionSizeMethods.localDescription
+        parentLocalDescriptionPortionSizeMethods.localDescription,
+        associatedFoods
       );
-    return parentLocalDescriptionPortionSizeMethods;
+    return [parentLocalDescriptionPortionSizeMethods, parentLocaleAssociatedFoods];
   };
 
   /**
@@ -347,42 +414,6 @@ export default (): FoodDataService => {
   };
 
   /**
-   * Get all associated Foods that link to this locale and Food Code
-   * @param {string} localeId
-   * @param {string} foodCode
-   * @returns {Promise<AssociatedFoodsResponse[]>}
-   */
-  const getAssociatedFoods = async (
-    localeId: string,
-    foodCode: string
-  ): Promise<AssociatedFoodsResponse[]> => {
-    const associatedFoods = await AssociatedFood.findAll({
-      where: { localeId, foodCode },
-      attributes: [
-        'associatedFoodCode',
-        'associatedCategoryCode',
-        'text',
-        'linkAsMain',
-        'genericName',
-      ],
-    });
-
-    const associated: AssociatedFoodsResponse[] = associatedFoods.map((el: FoodDataGeneral) => {
-      const newEl: AssociatedFoodsResponse = {
-        foodOrCategoryCode: [
-          el.associatedCategoryCode ? 1 : 0,
-          el.associatedCategoryCode ? el.associatedCategoryCode : el.associatedFoodCode,
-        ],
-        promptText: el.text,
-        linkAsMain: el.linkAsMain,
-        genericName: el.genericName,
-      };
-      return newEl;
-    });
-    return associated;
-  };
-
-  /**
    *
    * Get food brands based on the code of the food and localeId
    *
@@ -407,7 +438,7 @@ export default (): FoodDataService => {
     getAssociatedFoods,
     getBrands,
     getCategoriesAttributes,
-    getParentsLocalDescriptionPortionSizeMethodsAndParameters,
+    getParentsLocalDescriptionAssociatedFoodsPortionSizeMethodsAndParameters,
     getParentLocale,
     getCategoryPortionSizeMethods,
     searchForCategoriesWithPortionMethodsInLocale,

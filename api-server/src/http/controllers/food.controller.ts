@@ -37,31 +37,37 @@ export default ({ foodDataService }: IoC): FoodController => {
     result.readyMealOption = foodAttributes.readyMealOption;
     result.sameAsBeforeOption = foodAttributes.sameAsBeforeOption;
 
-    // 4. Retrieving Local Description, Portion Size Methods and Methods Parameters from the parent locales
-    if (result.portionSizeMethods.length === 0) {
-      console.log('Looking for parent local description and Portion Size Methods');
-      const parentFoodData = await foodDataService.getParentsLocalDescriptionPortionSizeMethodsAndParameters(
+    // 4. Retrieving associatedFoods
+    result.associatedFoods = await foodDataService.getAssociatedFoods(localeId, code);
+
+    // 5. Retrieving Local Description, Portion Size Methods and Methods Parameters from the parent locales
+    if (!result.portionSizeMethods.length || !result.associatedFoods.length) {
+      console.log(
+        'Looking for parent local description, Portion Size Methods and associated foods'
+      );
+      const parentFoodData = await foodDataService.getParentsLocalDescriptionAssociatedFoodsPortionSizeMethodsAndParameters(
         localeId,
         code,
-        result.localDescription
+        result.localDescription,
+        result.associatedFoods
       );
-      result.portionSizeMethods = parentFoodData.portionSizeMethods;
+      result.portionSizeMethods = parentFoodData[0].portionSizeMethods;
       result.localDescription = result.localDescription
         ? result.localDescription
-        : parentFoodData.localDescription;
+        : parentFoodData[0].localDescription;
+      result.associatedFoods = result.associatedFoods.length
+        ? result.associatedFoods
+        : parentFoodData[1];
     }
 
     // 5. Retrieving Portion Size Methods and Methods Parameters from the parent categories
-    if (result.portionSizeMethods.length === 0) {
+    if (!result.portionSizeMethods.length) {
       const categoryPortionSizeMethods = await foodDataService.searchForPortionMethodsAcrossCategoriesAndLocales(
         localeId,
         result.categories
       );
       result.portionSizeMethods = categoryPortionSizeMethods;
     }
-
-    // 5. Retrieving associatedFoods
-    result.associatedFoods = await foodDataService.getAssociatedFoods(localeId, code);
 
     // 6 Brands
     result.brands = await foodDataService.getBrands(localeId, code);
