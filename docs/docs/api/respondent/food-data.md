@@ -125,7 +125,7 @@ Get as served image definitions for the given as served set.
 ### Request
 
 ```http
-GET /api/portion-size/as-served/{id}
+GET /api/portion-size/as-served-sets/{id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -176,7 +176,7 @@ Same as above, but fetches data for multiple as served image sets at once.
 ### Request
 
 ```http
-GET /api/portion-size/as-served/?id[]={id}
+GET /api/portion-size/as-served-sets/?id[]={id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -214,12 +214,10 @@ Same as the regular as served data response, but returns an array of as served s
 Get definition of an image map which is an image of multiple objects from which one can be selected. Every object
 has an associated weight that is used for portion size weight calculations. 
 
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/FoodDataSQL/src/main/scala/uk/ac/ncl/openlab/intake24/foodsql/user/GuideImageServiceImpl.scala)
-
 ### Request
 
 ```http
-GET /api/portion-size/guide-image/{id}
+GET /api/portion-size/guide-images/{id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -286,6 +284,26 @@ coordinates are in the range `[0, image width / image height]`.
 
 **weights** is the map of selectable object indices to weights in grams.
 
+
+## Get multiple guide image data
+
+Same as above, but returns several guide images at once.
+
+### Request
+
+```http
+GET /api/portion-size/guide-images/?id[]={id}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+where **id** is the list of guide image IDs.
+
+### Response
+
+Same as the regular guide image data request (see above), but returns an array of guide image objects.
+
 ## Get image map data
 
 Returns an image map definition similar to guide images, but without the associated weights. Used for selecting
@@ -342,7 +360,7 @@ where **id** is the list of image map IDs.
 
 ### Response
 
-Same as the regular image map data request (see above), but returns an array of image map objects. 
+Same as the regular image map data request (see above), but returns an array of image map objects.
 
 ## Get drink scale data
 
@@ -351,7 +369,7 @@ Get the definition of "sliding scale" which is the portion size estimation for h
 ### Request
 
 ```http
-GET /api/portion-size/drinkware/{id}
+GET /api/portion-size/drinkware-sets/{id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -447,7 +465,7 @@ Same as above, but fetches data for multiple drinkware sets at once.
 ### Request
 
 ```http
-GET /api/portion-size/drinkware/?id[]={id}
+GET /api/portion-size/drinkware-sets/?id[]={id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

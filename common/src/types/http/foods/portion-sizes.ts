@@ -29,6 +29,13 @@ export type ImageMapResponse = {
   objects: ImageMapObjectResponse[];
 };
 
+export type GuideImageResponse = {
+  id: string;
+  description: string;
+  imageMap: ImageMapResponse;
+  weights: { [index: number]: number };
+};
+
 export type DrinkwareVolumeSampleResponse = Pick<DrinkwareVolumeSample, 'fill' | 'volume'>;
 
 export interface DrinkwareScaleResponse extends Omit<DrinkwareScale, 'id' | 'drinkwareSetId'> {

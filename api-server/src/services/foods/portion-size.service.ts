@@ -1,8 +1,10 @@
+import { Includeable } from 'sequelize';
 import {
   AsServedSet,
   DrinkwareScale,
   DrinkwareSet,
   DrinkwareVolumeSample,
+  GuideImage,
   ImageMap,
 } from '@/db/models/foods';
 import { NotFoundError } from '@/http/errors';
@@ -10,6 +12,8 @@ import { NotFoundError } from '@/http/errors';
 export interface PortionSizeService {
   getAsServedSet: (id: string) => Promise<AsServedSet>;
   getAsServedSets: (id: string | string[]) => Promise<AsServedSet[]>;
+  getGuideImage: (id: string) => Promise<GuideImage>;
+  getGuideImages: (id: string | string[]) => Promise<GuideImage[]>;
   getImageMap: (id: string) => Promise<ImageMap>;
   getImageMaps: (id: string | string[]) => Promise<ImageMap[]>;
   getDrinkwareSet: (id: string) => Promise<DrinkwareSet>;
@@ -57,6 +61,49 @@ export default (): PortionSizeService => {
     return asServedSet;
   };
 
+  // Common scope to pull image map for guide image & image map queries
+  const imageMapScope: Includeable[] = [
+    { association: 'baseImage', required: true },
+    {
+      association: 'objects',
+      order: [['navigationIndex', 'ASC']],
+      separate: true,
+      include: [{ association: 'overlayImage', required: true }],
+    },
+  ];
+
+  /**
+   * Get multiple records of guide image data
+   *
+   * @param {(string | string[])} id
+   * @returns {Promise<GuideImage[]>}
+   */
+  const getGuideImages = async (id: string | string[]): Promise<GuideImage[]> => {
+    const guideImages = await GuideImage.findAll({
+      where: { id },
+      include: [
+        { association: 'imageMap', required: true, include: imageMapScope },
+        { association: 'objects', separate: true },
+      ],
+    });
+
+    return guideImages;
+  };
+
+  /**
+   * Get single record of guide image data
+   *
+   * @param {string} id
+   * @returns {Promise<ImageMap>}
+   */
+  const getGuideImage = async (id: string): Promise<GuideImage> => {
+    const [guideImage] = await getGuideImages(id);
+
+    if (!guideImage) throw new NotFoundError('Guide image not found.');
+
+    return guideImage;
+  };
+
   /**
    * Get multiple records of image map data
    *
@@ -66,15 +113,7 @@ export default (): PortionSizeService => {
   const getImageMaps = async (id: string | string[]): Promise<ImageMap[]> => {
     const imageMaps = await ImageMap.findAll({
       where: { id },
-      include: [
-        { association: 'baseImage', required: true },
-        {
-          association: 'objects',
-          order: [['navigationIndex', 'ASC']],
-          separate: true,
-          include: [{ association: 'overlayImage', required: true }],
-        },
-      ],
+      include: imageMapScope,
     });
 
     return imageMaps;
@@ -133,6 +172,8 @@ export default (): PortionSizeService => {
   return {
     getAsServedSet,
     getAsServedSets,
+    getGuideImage,
+    getGuideImages,
     getImageMap,
     getImageMaps,
     getDrinkwareSet,

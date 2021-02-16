@@ -1,7 +1,7 @@
-import { BelongsTo, Column, HasMany, Scopes, Table } from 'sequelize-typescript';
-import GuideImageObject from '@api-server/db/models/foods/guide-image-object';
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { GuideImage as GuideImageAttributes } from '@common/types/models';
 import BaseModel from '../model';
-import { ImageMap, ProcessedImage } from '.';
+import { GuideImageObject, ImageMap, ProcessedImage } from '.';
 
 @Scopes(() => ({
   imageMap: { include: [{ model: ImageMap }] },
@@ -15,20 +15,23 @@ import { ImageMap, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class GuideImage extends BaseModel {
+export default class GuideImage extends BaseModel implements GuideImageAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,
+    type: DataType.STRING(32),
   })
   public id!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
   })
   public description!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(32),
   })
   public imageMapId!: string;
 
