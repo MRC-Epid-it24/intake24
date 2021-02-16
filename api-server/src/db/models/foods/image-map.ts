@@ -1,4 +1,4 @@
-import { BelongsTo, Column, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 import { GuideImage, ImageMapObject, ProcessedImage } from '.';
 
@@ -18,11 +18,13 @@ export default class ImageMap extends BaseModel {
   @Column({
     allowNull: false,
     primaryKey: true,
+    type: DataType.STRING(32),
   })
   public id!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public description!: string;
 

@@ -292,16 +292,13 @@ Returns an image map definition similar to guide images, but without the associa
 objects from images where the object is not directly associated with a weight, e.g. selecting pizza slice sizes
 whose final weight also depends on pizza thickness and type.
 
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/FoodDataSQL/src/main/scala/uk/ac/ncl/openlab/intake24/foodsql/user/ImageMapServiceImpl.scala)
-
-[v4 portion-size boilerplate](https://github.com/MRC-Epid-it24/intake24/blob/master/api-server/src/http/controllers/portion-size.controller.ts)
-
 ### Request
 
 ```http
 GET /api/portion-size/image-maps/{id}
 
 Authorization: Bearer {accessToken}
+Content-Type: application/json
 ```
 
 where **id** is the image map ID.
@@ -319,6 +316,7 @@ Same as a guide image (see above), but without the weights:
     {
       "id": number,
       "description": string,
+      "navigationIndex": number,
       "overlayUrl": string,
       "outline": number[]
     },
@@ -330,10 +328,6 @@ Same as a guide image (see above), but without the weights:
 ## Get multiple image maps data
 
 Same as above, but returns several image maps at once.
-
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/food/user/FoodDataController.scala#L264-L269)
-
-[v4 portion-size boilerplate](https://github.com/MRC-Epid-it24/intake24/blob/master/api-server/src/http/controllers/portion-size.controller.ts)
 
 ### Request
 

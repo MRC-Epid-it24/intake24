@@ -14,6 +14,21 @@ export type AsServedSetResponse = {
   images: AsServedImageResponse[];
 };
 
+export type ImageMapObjectResponse = {
+  id: number;
+  description: string;
+  navigationIndex: number;
+  overlayUrl: string;
+  outline: number[];
+};
+
+export type ImageMapResponse = {
+  id: string;
+  description: string;
+  baseImageUrl: string;
+  objects: ImageMapObjectResponse[];
+};
+
 export type DrinkwareVolumeSampleResponse = Pick<DrinkwareVolumeSample, 'fill' | 'volume'>;
 
 export interface DrinkwareScaleResponse extends Omit<DrinkwareScale, 'id' | 'drinkwareSetId'> {

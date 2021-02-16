@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import type { IoC } from '@/ioc';
-import { asServedResponse, drinkwareResponse } from '@/http/responses/foods';
+import { asServedResponse, drinkwareResponse, imageMapResponse } from '@/http/responses/foods';
 import { AsServedSetResponse, DrinkwareSetResponse, WeightResponse } from '@common/types/http';
 import { Controller } from './controller';
 
@@ -50,12 +50,18 @@ export default ({
 
   const imageMaps = async (req: Request, res: Response): Promise<void> => {
     const id = req.query.id as string | string[];
-    res.json();
+
+    const maps = await portionSizeService.getImageMaps(id);
+
+    res.json(maps.map(imageMapResponse(baseUrl).imageResponse));
   };
 
   const imageMapsEntry = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    res.json();
+
+    const imageMap = await portionSizeService.getImageMap(id);
+
+    res.json(imageMapResponse(baseUrl).imageResponse(imageMap));
   };
 
   const drinkware = async (req: Request, res: Response<DrinkwareSetResponse[]>): Promise<void> => {

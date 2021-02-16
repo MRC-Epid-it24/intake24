@@ -3,37 +3,38 @@ import {
   DrinkwareScale,
   DrinkwareSet,
   DrinkwareVolumeSample,
+  ImageMap,
 } from '@/db/models/foods';
 import { NotFoundError } from '@/http/errors';
 
 export interface PortionSizeService {
   getAsServedSet: (id: string) => Promise<AsServedSet>;
   getAsServedSets: (id: string | string[]) => Promise<AsServedSet[]>;
+  getImageMap: (id: string) => Promise<ImageMap>;
+  getImageMaps: (id: string | string[]) => Promise<ImageMap[]>;
   getDrinkwareSet: (id: string) => Promise<DrinkwareSet>;
   getDrinkwareSets: (id: string | string[]) => Promise<DrinkwareSet[]>;
 }
 
 export default (): PortionSizeService => {
   /**
-   * Get multiple records of as-served-set portion size data
+   * Get multiple records of as-served-set data
    *
    * @param {(string | string[])} id
    * @returns {Promise<AsServedSet[]>}
    */
   const getAsServedSets = async (id: string | string[]): Promise<AsServedSet[]> => {
     const asServedSets = await AsServedSet.findAll({
-      attributes: ['id', 'description'],
       where: { id },
       include: [
         { association: 'selectionImage', required: true },
         {
-          attributes: ['weight'],
           association: 'asServedImages',
           order: [['weight', 'DESC']],
           separate: true,
           include: [
-            { attributes: ['path'], association: 'image', required: true },
-            { attributes: ['path'], association: 'thumbnailImage', required: true },
+            { association: 'image', required: true },
+            { association: 'thumbnailImage', required: true },
           ],
         },
       ],
@@ -43,7 +44,7 @@ export default (): PortionSizeService => {
   };
 
   /**
-   * Get single record of as-served-set portion size data
+   * Get single record of as-served-set data
    *
    * @param {string} id
    * @returns {Promise<AsServedSet>}
@@ -57,7 +58,44 @@ export default (): PortionSizeService => {
   };
 
   /**
-   * Get multiple records of drinkware portion size data
+   * Get multiple records of image map data
+   *
+   * @param {(string | string[])} id
+   * @returns {Promise<ImageMap[]>}
+   */
+  const getImageMaps = async (id: string | string[]): Promise<ImageMap[]> => {
+    const imageMaps = await ImageMap.findAll({
+      where: { id },
+      include: [
+        { association: 'baseImage', required: true },
+        {
+          association: 'objects',
+          order: [['navigationIndex', 'ASC']],
+          separate: true,
+          include: [{ association: 'overlayImage', required: true }],
+        },
+      ],
+    });
+
+    return imageMaps;
+  };
+
+  /**
+   * Get single record of image map data
+   *
+   * @param {string} id
+   * @returns {Promise<ImageMap>}
+   */
+  const getImageMap = async (id: string): Promise<ImageMap> => {
+    const [imageMap] = await getImageMaps(id);
+
+    if (!imageMap) throw new NotFoundError('Image map not found.');
+
+    return imageMap;
+  };
+
+  /**
+   * Get multiple records of drinkware data
    *
    * @param {(string | string[])} id
    * @returns {Promise<DrinkwareSet[]>}
@@ -79,7 +117,7 @@ export default (): PortionSizeService => {
   };
 
   /**
-   * Get single record of drinkware portion size data
+   * Get single record of drinkware data
    *
    * @param {string} id
    * @returns {Promise<DrinkwareSet>}
@@ -95,6 +133,8 @@ export default (): PortionSizeService => {
   return {
     getAsServedSet,
     getAsServedSets,
+    getImageMap,
+    getImageMaps,
     getDrinkwareSet,
     getDrinkwareSets,
   };
