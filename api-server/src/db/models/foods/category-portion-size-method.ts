@@ -34,19 +34,19 @@ export default class CategoryPortionSizeMethod extends BaseModel {
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(32)
+    type: DataType.STRING(32),
   })
   public method!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(128)
+    type: DataType.STRING(128),
   })
   public description!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(512)
+    type: DataType.STRING(512),
   })
   public imageUrl!: string;
 
@@ -57,7 +57,7 @@ export default class CategoryPortionSizeMethod extends BaseModel {
 
   @Column({
     allowNull: false,
-    type: DataType.FLOAT(17)
+    type: DataType.FLOAT(17),
   })
   public conversionFactor!: number;
 

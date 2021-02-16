@@ -51,6 +51,15 @@ export default ({ foodDataService }: IoC): FoodController => {
         : parentFoodData.localDescription;
     }
 
+    // 5. Retrieving Portion Size Methods and Methods Parameters from the parent categories
+    if (result.portionSizeMethods.length === 0) {
+      const categoryPortionSizeMethods = await foodDataService.searchForPortionMethodsAcrossCategoriesAndLocales(
+        localeId,
+        result.categories
+      );
+      result.portionSizeMethods = categoryPortionSizeMethods;
+    }
+
     // 5. Retrieving associatedFoods
     result.associatedFoods = await foodDataService.getAssociatedFoods(localeId, code);
 

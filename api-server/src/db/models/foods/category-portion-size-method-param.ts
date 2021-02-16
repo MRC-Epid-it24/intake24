@@ -23,13 +23,13 @@ export default class CategoryPortionSizeMethodParameter extends BaseModel {
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(32)
+    type: DataType.STRING(32),
   })
   public name!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(128)
+    type: DataType.STRING(128),
   })
   public value!: string;
 
