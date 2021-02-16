@@ -29,13 +29,27 @@ export default ({ foodDataService }: IoC): FoodController => {
     // 2. Food categories & parent categories
     result.categories = await foodDataService.getFoodCategories(code, true);
 
-    // 4. Retrieving readyMealOption, sameAsBeforeOption
+    // 3. Retrieving readyMealOption, sameAsBeforeOption (including traversing over parent categories)
     const foodAttributes = await foodDataService.getFoodReadyMealAndSameAsBeforeAttributes(
       code,
       result.categories
     );
     result.readyMealOption = foodAttributes.readyMealOption;
     result.sameAsBeforeOption = foodAttributes.sameAsBeforeOption;
+
+    // 4. Retrieving Local Description, Portion Size Methods and Methods Parameters from the parent locales
+    if (result.portionSizeMethods.length === 0) {
+      console.log('Looking for parent local description and Portion Size Methods');
+      const parentFoodData = await foodDataService.getParentsLocalDescriptionPortionSizeMethodsAndParameters(
+        localeId,
+        code,
+        result.localDescription
+      );
+      result.portionSizeMethods = parentFoodData.portionSizeMethods;
+      result.localDescription = result.localDescription
+        ? result.localDescription
+        : parentFoodData.localDescription;
+    }
 
     // 5. Retrieving associatedFoods
     result.associatedFoods = await foodDataService.getAssociatedFoods(localeId, code);
