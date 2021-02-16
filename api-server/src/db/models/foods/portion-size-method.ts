@@ -26,16 +26,19 @@ export default class PortionSizeMethod extends BaseModel {
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(32)
   })
   public method!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128)
   })
   public description!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512)
   })
   public imageUrl!: string;
 
@@ -46,6 +49,7 @@ export default class PortionSizeMethod extends BaseModel {
 
   @Column({
     allowNull: false,
+    type: DataType.FLOAT(17)
   })
   public conversionFactor!: number;
 

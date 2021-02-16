@@ -27,3 +27,5 @@ export { default as PortionSizeMethodParameter } from './portion-size-method-par
 export { default as ProcessedImage } from './processed-image';
 export { default as Brand } from './brand';
 export { default as CategoryAttribute } from './category-attributes';
+export { default as CategoryPortionSizeMethod } from './category-portion-size-method';
+export { default as CategoryPortionSizeMethodParameter } from './category-portion-size-method-param';

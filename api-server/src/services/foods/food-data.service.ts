@@ -33,6 +33,7 @@ export interface FoodDataService {
     foodCode: string,
     localDescription: string
   ) => Promise<FoodLocalResponse>;
+  getParentLocale: (localeId: string) => Promise<Locale | null>;
 }
 
 export default (): FoodDataService => {
@@ -67,6 +68,18 @@ export default (): FoodDataService => {
 
     return food;
   };
+
+  /**
+   *
+   * @param localeId Get Prototype locale of the supplied locale
+   */
+  const getParentLocale = async (localeId: string): Promise<Locale | null> => {
+    const parentLocale = await Locale.findOne({
+      where: { id: localeId },
+      attributes: ['prototypeLocaleId'],
+    });
+    return parentLocale
+  }
 
   /**
    *
@@ -216,10 +229,7 @@ export default (): FoodDataService => {
     foodCode: string,
     localDescription: string
   ): Promise<FoodLocalResponse> => {
-    const parentLocale = await Locale.findOne({
-      where: { id: localeId },
-      attributes: ['prototypeLocaleId'],
-    });
+    const parentLocale = await getParentLocale(localeId);
 
     let parentLocalDescriptionPortionSizeMethods: FoodLocalResponse = {
       code: foodCode,
@@ -308,5 +318,6 @@ export default (): FoodDataService => {
     getBrands,
     getCategoriesAttributes,
     getParentsLocalDescriptionPortionSizeMethodsAndParameters,
+    getParentLocale
   };
 };
