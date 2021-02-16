@@ -25,6 +25,7 @@ export default class ProcessedImage extends BaseModel {
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(1024),
   })
   public path!: string;
 

@@ -1,4 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { ImageMap as ImageMapAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { GuideImage, ImageMapObject, ProcessedImage } from '.';
 
@@ -14,7 +15,7 @@ import { GuideImage, ImageMapObject, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ImageMap extends BaseModel {
+export default class ImageMap extends BaseModel implements ImageMapAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,
@@ -33,12 +34,12 @@ export default class ImageMap extends BaseModel {
   })
   public baseImageId!: number;
 
+  @BelongsTo(() => ProcessedImage, 'baseImageId')
+  public baseImage?: ProcessedImage;
+
   @HasMany(() => GuideImage, 'imageMapId')
   public guideImages?: GuideImage[];
 
   @HasMany(() => ImageMapObject, 'imageMapId')
   public objects?: ImageMapObject[];
-
-  @BelongsTo(() => ProcessedImage, 'baseImageId')
-  public baseImage?: ProcessedImage;
 }

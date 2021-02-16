@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import { DataTypes } from 'sequelize';
+import { ImageMapObject as ImageMapObjectAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { ImageMap, ProcessedImage } from '.';
 
@@ -10,7 +10,7 @@ import { ImageMap, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ImageMapObject extends BaseModel {
+export default class ImageMapObject extends BaseModel implements ImageMapObjectAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,
@@ -35,7 +35,7 @@ export default class ImageMapObject extends BaseModel {
   public navigationIndex!: number;
 
   @Column({
-    type: DataTypes.ARRAY(DataTypes.DOUBLE),
+    type: DataType.ARRAY(DataType.DOUBLE),
     allowNull: false,
   })
   public outlineCoordinates!: number[];
