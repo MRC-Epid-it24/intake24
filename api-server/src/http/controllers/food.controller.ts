@@ -73,7 +73,7 @@ export default ({ foodDataService }: IoC): FoodController => {
     result.brands = await foodDataService.getBrands(localeId, code);
 
     // 7. Calculating caloriesPer100g
-
+    // TODO: return calculated caloriesPer100g
     res.status(200).json(result);
   };
 

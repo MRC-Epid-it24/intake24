@@ -24,20 +24,20 @@ import getAllParentCategories from '@api-server/db/raw/food-controller-sql';
 export interface FoodDataService {
   getFoodLocal: (localId: string, foodCode: string) => Promise<FoodLocal>;
   getFoodCategories: (foodCode: string, parentCategories?: boolean) => Promise<string[] | []>;
+  getAssociatedFoods: (localId: string, foodCode: string) => Promise<AssociatedFoodsResponse[]>;
+  getBrands: (localId: string, foodCode: string) => Promise<string[] | []>;
+  getCategoriesAttributes: (categories: string[] | []) => Promise<FoodDataGeneral>;
+  getParentLocale: (localeId: string) => Promise<Locale | null>;
   getFoodReadyMealAndSameAsBeforeAttributes: (
     foodCode: string,
     categories: string[] | []
   ) => Promise<FoodDataGeneral>;
-  getAssociatedFoods: (localId: string, foodCode: string) => Promise<AssociatedFoodsResponse[]>;
-  getBrands: (localId: string, foodCode: string) => Promise<string[] | []>;
-  getCategoriesAttributes: (categories: string[] | []) => Promise<FoodDataGeneral>;
   getParentsLocalDescriptionAssociatedFoodsPortionSizeMethodsAndParameters: (
     localId: string,
     foodCode: string,
     localDescription: string,
     associatedFoods: AssociatedFoodsResponse[]
   ) => Promise<[FoodLocalResponse, AssociatedFoodsResponse[]]>;
-  getParentLocale: (localeId: string) => Promise<Locale | null>;
   getCategoryPortionSizeMethods: (
     localeId: string,
     categoryCode: string
