@@ -125,7 +125,7 @@ Get as served image definitions for the given as served set.
 ### Request
 
 ```http
-GET /api/portion-size/as-served-sets/{id}
+GET /api/portion-sizes/as-served-sets/{id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -176,7 +176,7 @@ Same as above, but fetches data for multiple as served image sets at once.
 ### Request
 
 ```http
-GET /api/portion-size/as-served-sets/?id[]={id}
+GET /api/portion-sizes/as-served-sets/?id[]={id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -217,7 +217,7 @@ has an associated weight that is used for portion size weight calculations.
 ### Request
 
 ```http
-GET /api/portion-size/guide-images/{id}
+GET /api/portion-sizes/guide-images/{id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -292,7 +292,7 @@ Same as above, but returns several guide images at once.
 ### Request
 
 ```http
-GET /api/portion-size/guide-images/?id[]={id}
+GET /api/portion-sizes/guide-images/?id[]={id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -313,7 +313,7 @@ whose final weight also depends on pizza thickness and type.
 ### Request
 
 ```http
-GET /api/portion-size/image-maps/{id}
+GET /api/portion-sizes/image-maps/{id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -350,7 +350,7 @@ Same as above, but returns several image maps at once.
 ### Request
 
 ```http
-GET /api/portion-size/image-maps/?id[]={id}
+GET /api/portion-sizes/image-maps/?id[]={id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -369,7 +369,7 @@ Get the definition of "sliding scale" which is the portion size estimation for h
 ### Request
 
 ```http
-GET /api/portion-size/drinkware-sets/{id}
+GET /api/portion-sizes/drinkware-sets/{id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -465,7 +465,7 @@ Same as above, but fetches data for multiple drinkware sets at once.
 ### Request
 
 ```http
-GET /api/portion-size/drinkware-sets/?id[]={id}
+GET /api/portion-sizes/drinkware-sets/?id[]={id}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -514,7 +514,7 @@ get the image URL for the portion size option selection screen.
 ### Request
 
 ```http
-GET /api/portion-size/weight
+GET /api/portion-sizes/weight
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
