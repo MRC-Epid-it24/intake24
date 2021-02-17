@@ -68,7 +68,16 @@
 import Vue, { VueConstructor } from 'vue';
 import { FormMixin } from '@/types/vue';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
+
+type TaskForm = {
+  id: number | null;
+  name: string | null;
+  job: string | null;
+  cron: string;
+  active: boolean;
+  description: string | null;
+};
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'TaskForm',
@@ -77,11 +86,11 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   data() {
     return {
-      form: new Form({
+      form: form<TaskForm>({
         id: null,
         name: null,
         job: null,
-        cron: null,
+        cron: '0 * * * *',
         active: false,
         description: null,
       }),

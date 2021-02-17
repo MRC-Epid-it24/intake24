@@ -30,6 +30,7 @@
     "lodash": "^4.17.20",
     "nanoid": "^3.1.20",
     "nunjucks": "^3.2.3",
+    "object-to-formdata": "^4.1.0",
     "register-service-worker": "^1.7.2",
     "tinymce": "^5.7.0",
     "vue": "^2.6.12",

@@ -97,17 +97,22 @@
 import Vue, { VueConstructor } from 'vue';
 import { Dictionary } from '@common/types';
 import detailMixin from '@/components/entry/detailMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
 import DataTable from './DataTable.vue';
 
-export type MgmtRefs = {
+type SurveyMgmtRefs = {
   $refs: {
     table: InstanceType<typeof DataTable>;
   };
 };
 
-export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
+type SurveyMgmtForm = {
+  id: number | null;
+  permissions: number[];
+};
+
+export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend({
   name: 'SurveyMgmt',
 
   components: { DataTable },
@@ -138,7 +143,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & MgmtRefs>).extend({
       ],
       dialog: false,
       selected: {},
-      form: new Form({
+      form: form<SurveyMgmtForm>({
         id: null,
         permissions: [],
       }),

@@ -147,7 +147,21 @@
 import Vue from 'vue';
 import { Dictionary } from '@common/types';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
+
+type UserForm = {
+  id: number | null;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  password: string | null;
+  passwordConfirm: string | null;
+  multiFactorAuthentication: boolean;
+  emailNotifications: boolean;
+  smsNotifications: boolean;
+  permissions: number[];
+  roles: number[];
+};
 
 export default Vue.extend({
   name: 'UserForm',
@@ -156,7 +170,7 @@ export default Vue.extend({
 
   data() {
     return {
-      form: new Form({
+      form: form<UserForm>({
         id: null,
         name: null,
         email: null,
@@ -175,12 +189,12 @@ export default Vue.extend({
   methods: {
     toForm(data: Dictionary) {
       const { permissions = [], roles = [], ...rest } = data;
-      const form = {
+      const input = {
         ...rest,
         permissions: permissions.map((item: any) => item.id),
         roles: roles.map((item: any) => item.id),
       };
-      this.form.load(form);
+      this.form.load(input);
     },
   },
 });

@@ -65,22 +65,27 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import VueRecaptcha from 'vue-recaptcha';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 
-export interface RecaptchaRef {
+type ReCaptchaRef = {
   $refs: {
     recaptcha: any;
   };
-}
+};
 
-export default (Vue as VueConstructor<Vue & RecaptchaRef>).extend({
+type PasswordRequestForm = {
+  email: string | null;
+  recaptcha: string | null;
+};
+
+export default (Vue as VueConstructor<Vue & ReCaptchaRef>).extend({
   name: 'PasswordRequest',
 
   components: { VueRecaptcha },
 
   data() {
     return {
-      form: new Form({
+      form: form<PasswordRequestForm>({
         email: null,
         recaptcha: null,
       }),

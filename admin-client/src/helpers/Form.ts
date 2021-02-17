@@ -1,171 +1,143 @@
 import { Method } from 'axios';
 import cloneDeep from 'lodash/cloneDeep';
+import mergeWith from 'lodash/mergeWith';
 import pick from 'lodash/pick';
-import { Dictionary } from '@common/types';
-import { HttpRequestConfig, HttpError } from '@/types/http';
+import { serialize } from 'object-to-formdata';
 import http from '@/services/http.service';
 import store from '@/store';
+import type { Dictionary } from '@common/types';
+import type { HttpRequestConfig, HttpError } from '@/types/http';
 import Errors from './Errors';
 
 export interface FormConfig {
   status?: string;
   multipart?: boolean;
   resetOnSubmit?: boolean;
-  [key: string]: any;
 }
 
-class Form {
-  originalData: Dictionary;
-
-  originalKeys: string[];
-
+export interface FormDef<T = Dictionary> {
+  data: T;
+  initData: T;
+  keys: (keyof T)[];
   errors: Errors;
-
   config: FormConfig;
+  assign(source: Dictionary): void;
+  load(input: Dictionary): void;
+  hasErrors(): boolean;
+  reset(): void;
+  getData(): T | FormData;
+  submit<R>(url: string, method: Method, config?: HttpRequestConfig): Promise<R>;
+  post<R>(url: string, config?: HttpRequestConfig): Promise<R>;
+  get<R>(url: string): Promise<R>;
+  patch<R>(url: string): Promise<R>;
+  put<R>(url: string): Promise<R>;
+  onSuccess(): void;
+  onFail(err: HttpError): void;
+}
 
-  [key: string]: any;
+export type FormFields<T = Dictionary> = { [P in keyof T]: T[P] };
 
-  constructor(data: Dictionary, config: FormConfig = {}) {
-    this.originalData = cloneDeep(data);
-    this.originalKeys = Object.keys(data);
+export type Form<T = Dictionary> = FormDef<T> & FormFields<T>;
 
-    this.errors = new Errors();
+export default <T = Dictionary>(initData: T, formConfig: FormConfig = {}): Form<T> => {
+  const keys = Object.keys(initData) as (keyof T)[];
 
-    this.config = {
+  const formDef: FormDef<T> = {
+    data: cloneDeep(initData),
+    initData,
+    keys,
+    errors: new Errors(),
+    config: {
       multipart: false,
       resetOnSubmit: true,
-      ...config,
-    };
+      ...formConfig,
+    },
+    assign(source: Dictionary): void {
+      const picked = pick(source, this.keys);
 
-    this.assign(data);
-  }
+      mergeWith(this.data, picked, (objValue, srcValue) =>
+        Array.isArray(objValue) ? srcValue : undefined
+      );
+    },
 
-  assign(source: Dictionary): Dictionary {
-    return this.assignTo(this, source);
-  }
+    load(input: Dictionary): void {
+      this.reset();
+      this.assign(input);
+    },
 
-  assignTo(target: Dictionary, source: Dictionary): Dictionary {
-    const obj = target;
+    hasErrors(): boolean {
+      return this.errors.any();
+    },
 
-    this.originalKeys.forEach((key) => {
-      if (typeof source[key] === 'undefined') {
-        obj[key] = this.originalData[key];
-        return;
-      }
+    reset(): void {
+      this.errors.clear();
+      this.data = cloneDeep(this.initData);
+    },
 
-      if (Object.prototype.toString.call(this.originalData[key]) === '[object Object]') {
-        if (source[key] === null) obj[key] = { ...this.originalData[key] };
-        else {
-          const keys = Object.keys(this.originalData[key]);
-          obj[key] = keys.length ? pick(source[key], keys) : { ...source[key] };
-        }
+    getData(): T | FormData {
+      return this.config.multipart ? serialize<T>(this.data) : this.data;
+    },
 
-        return;
-      }
+    async submit<R>(url: string, method: Method, config: HttpRequestConfig = {}): Promise<R> {
+      const { withErr, ...rest } = config;
+      const loadStr = `form-${url}`;
+      store.commit('loading/add', loadStr);
 
-      obj[key] = source[key];
-    });
+      return new Promise((resolve, reject) => {
+        http
+          .request<R>(url, method, this.getData(), { withErr: true, ...rest })
+          .then((res) => {
+            const { data } = res;
+            this.onSuccess();
+            resolve(data);
+          })
+          .catch((err) => {
+            this.onFail(err);
 
-    return obj;
-  }
+            if (withErr) reject(err.response.data);
+          })
+          .finally(() => store.commit('loading/remove', loadStr));
+      });
+    },
 
-  update(source: Dictionary): void {
-    this.originalKeys.forEach((key) => {
-      if (!(key in source)) return;
+    async post<R>(url: string, config: HttpRequestConfig = {}): Promise<R> {
+      return this.submit<R>(url, 'post', config);
+    },
 
-      if (Object.prototype.toString.call(this.originalData[key]) === '[object Object]') {
-        const keys = Object.keys(this.originalData[key]);
-        this[key] = keys.length ? pick(source[key], keys) : { ...source[key] };
-        return;
-      }
+    async get<R>(url: string): Promise<R> {
+      return this.submit<R>(url, 'get');
+    },
 
-      this[key] = source[key];
-    });
-  }
+    async patch<R>(url: string): Promise<R> {
+      return this.submit<R>(url, 'patch');
+    },
 
-  // eslint-disable-next-line consistent-return
-  settings(field: string, value?: any) {
-    if (typeof value === 'undefined') return this.config[field];
+    async put<R>(url: string): Promise<R> {
+      return this.submit<R>(url, 'put');
+    },
 
-    this.config[field] = value;
-  }
+    onSuccess(): void {
+      if (this.config.resetOnSubmit === true) this.reset();
+    },
 
-  data(): Dictionary | FormData {
-    if (this.settings('multipart') === false) return this.assignTo({}, this);
+    onFail(err: HttpError): void {
+      const { response: { status, data = {} } = {} } = err;
+      if (status === 422 && 'errors' in data) this.errors.record(data.errors);
+    },
+  };
 
-    const data = new FormData();
+  const formFields: any = {};
 
-    this.originalKeys.forEach((key) => {
-      if (Array.isArray(this[key])) {
-        this[key].forEach((value: string) => data.append(key, value ?? ''));
-      } else data.append(key, this[key] ?? '');
-    });
+  for (const key of keys) {
+    Object.defineProperty(formFields, key, {
+      get: () => formFields.data[key],
+      set: (value: any) => {
+        if (formFields.data[key] === value) return;
 
-    return data;
-  }
-
-  load(data: Dictionary): void {
-    this.reset();
-    this.assign(cloneDeep(data));
-  }
-
-  hasErrors(): boolean {
-    return this.errors.any();
-  }
-
-  reset(): void {
-    this.assign(this.originalData);
-    this.errors.clear();
-  }
-
-  async post<T>(url: string, config: HttpRequestConfig = {}): Promise<T> {
-    return this.submit<T>(url, 'post', config);
-  }
-
-  async get<T>(url: string): Promise<T> {
-    return this.submit<T>(url, 'get');
-  }
-
-  async patch<T>(url: string): Promise<T> {
-    return this.submit<T>(url, 'patch');
-  }
-
-  async put<T>(url: string): Promise<T> {
-    return this.submit<T>(url, 'put');
-  }
-
-  async submit<T>(url: string, method: Method, config: HttpRequestConfig = {}): Promise<T> {
-    const { withErr, ...rest } = config;
-    const loadStr = `form-${url}`;
-    store.commit('loading/add', loadStr);
-
-    return new Promise((resolve, reject) => {
-      const formData = this.data();
-
-      http
-        .request<T>(url, method, formData, { withErr: true, ...rest })
-        .then((res) => {
-          const { data } = res;
-          this.onSuccess();
-          resolve(data);
-        })
-        .catch((err) => {
-          this.onFail(err);
-
-          if (withErr) reject(err.response.data);
-        })
-        .finally(() => store.commit('loading/remove', loadStr));
+        formFields.data[key] = value;
+      },
     });
   }
 
-  onSuccess(): void {
-    if (this.settings('resetOnSubmit') === true) this.reset();
-  }
-
-  onFail(err: HttpError): void {
-    const { response: { status, data = {} } = {} } = err;
-    if (status === 422 && 'errors' in data) this.errors.record(data.errors);
-  }
-}
-
-export default Form;
+  return Object.assign(formFields, formDef);
+};

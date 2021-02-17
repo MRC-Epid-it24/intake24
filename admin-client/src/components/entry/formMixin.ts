@@ -1,7 +1,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { Dictionary } from '@common/types';
 import { FormMixin } from '@/types/vue';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 import SubmitFooter from '@/components/forms/SubmitFooter.vue';
 import fetchEntry from './fetchEntry';
 import hasEntry from './hasEntry';
@@ -18,7 +18,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   data() {
     return {
-      form: new Form({}),
+      form: form({}),
     };
   },
 
