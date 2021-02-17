@@ -1,5 +1,5 @@
 import { Dictionary } from '@common/types';
-import Form from '@/helpers/Form';
+import type { Form } from '@/helpers/Form';
 
 export interface FetchEntryMixin {
   fetch: () => Promise<void>;
@@ -25,7 +25,7 @@ export type EntryMixin<E = Dictionary, R = Dictionary> = FetchEntryMixin &
   MapRefsMixin<R>;
 
 export interface FormMixin<E = Dictionary, R = Dictionary> extends EntryMixin<E, R> {
-  form: typeof Form;
+  form: Form;
   toForm: (data: Dictionary) => void;
   isEdit: boolean;
   isCreate: boolean;

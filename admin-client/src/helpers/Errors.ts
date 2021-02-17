@@ -16,7 +16,7 @@ export default class Errors {
   }
 
   all(): ValidationErrors {
-    return this.errors
+    return this.errors;
   }
 
   record(errors?: ValidationErrors): void {
