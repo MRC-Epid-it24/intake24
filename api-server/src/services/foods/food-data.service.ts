@@ -70,24 +70,29 @@ export default (): FoodDataService => {
    * @param {string} foodCode
    * @returns {Promise<FoodLocal>}
    */
-  const getFoodLocal = async (localeId: string, foodCode: string, includePortion: boolean = false): Promise<FoodLocal> => {
-
-    const includeWithPortionSize = [{
-      model: PortionSizeMethod,
-      as: 'portionSizeMethods',
-      attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
-      include: [
-        {
-          model: PortionSizeMethodParameter,
-          as: 'parameters',
-          attributes: ['name', 'value'],
-        },
-      ],
-    }];
+  const getFoodLocal = async (
+    localeId: string,
+    foodCode: string,
+    includePortion = false
+  ): Promise<FoodLocal> => {
+    const includeWithPortionSize = [
+      {
+        model: PortionSizeMethod,
+        as: 'portionSizeMethods',
+        attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
+        include: [
+          {
+            model: PortionSizeMethodParameter,
+            as: 'parameters',
+            attributes: ['name', 'value'],
+          },
+        ],
+      },
+    ];
     const includeFoodLocal = includePortion ? includeWithPortionSize : [];
     const food = await FoodLocal.findOne({
       where: { localeId, foodCode },
-      include: includeFoodLocal
+      include: includeFoodLocal,
     });
 
     if (!food || food == null) throw new NotFoundError();
@@ -373,7 +378,7 @@ export default (): FoodDataService => {
       localDescription,
       portionSizeMethods: portionSizeMethod,
     };
-    let includePortionSizeMethods = portionSizeMethod.length ? false : true;
+    const includePortionSizeMethods = !portionSizeMethod.length;
 
     let parentLocaleAssociatedFoods: AssociatedFoodsResponse[] = associatedFoods;
 
@@ -381,16 +386,21 @@ export default (): FoodDataService => {
       return [parentLocalDescriptionPortionSizeMethods, parentLocaleAssociatedFoods];
 
     // searching for PortionSizeMethods and localDescription in parent Locales
-    if (includePortionSizeMethods || !parentLocalDescriptionPortionSizeMethods.localDescription.length) {
-      await getFoodLocal(parentLocale.prototypeLocaleId, foodCode, includePortionSizeMethods).then((data) => {
-        if (includePortionSizeMethods)
-          parentLocalDescriptionPortionSizeMethods.portionSizeMethods = data.portionSizeMethods
-            ? data.portionSizeMethods
-            : [];
-        parentLocalDescriptionPortionSizeMethods.localDescription = parentLocalDescriptionPortionSizeMethods.localDescription
-          ? parentLocalDescriptionPortionSizeMethods.localDescription
-          : data.name;
-      });
+    if (
+      includePortionSizeMethods ||
+      !parentLocalDescriptionPortionSizeMethods.localDescription.length
+    ) {
+      await getFoodLocal(parentLocale.prototypeLocaleId, foodCode, includePortionSizeMethods).then(
+        (data) => {
+          if (includePortionSizeMethods)
+            parentLocalDescriptionPortionSizeMethods.portionSizeMethods = data.portionSizeMethods
+              ? data.portionSizeMethods
+              : [];
+          parentLocalDescriptionPortionSizeMethods.localDescription = parentLocalDescriptionPortionSizeMethods.localDescription
+            ? parentLocalDescriptionPortionSizeMethods.localDescription
+            : data.name;
+        }
+      );
     }
 
     // searching for Associated Foods in parent Locales
