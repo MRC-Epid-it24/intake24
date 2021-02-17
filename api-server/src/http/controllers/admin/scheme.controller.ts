@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { Language, Scheme } from '@/db/models/system';
-import { defaultMeals } from '@/db/models/system/scheme';
+import { defaultMeals } from '@common/defaults';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import {
@@ -13,12 +13,11 @@ import {
   SchemeExportRefsResponse,
 } from '@common/types/http';
 import { ExportField, ExportSection } from '@common/types/models';
-import { PromptQuestion } from '@common/types';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions | 'dataExportRefs'>;
 
-export default ({ dataExportFields }: IoC): SchemeController => {
+export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeController => {
   const refs = async (): Promise<SchemeRefs> => {
     const languages = await Language.findAll();
 

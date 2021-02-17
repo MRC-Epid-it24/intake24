@@ -1,10 +1,6 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import GenerateUser from '@/views/GenerateUser.vue';
-import Home from '@/views/Home.vue';
-import Login from '@/views/Login.vue';
-import Recall from '@/views/Recall.vue';
-import Feedback from '@/views/Feedback.vue';
+import views from '@/views';
 
 Vue.use(VueRouter);
 
@@ -12,44 +8,50 @@ const routes: RouteConfig[] = [
   {
     path: '/',
     name: 'home',
-    component: Home,
+    component: views.home,
     meta: { module: 'public', title: 'common._' },
   },
   {
     path: '/:surveyId',
     name: 'login',
-    component: Login,
+    component: views.login,
     meta: { module: 'login', title: 'login._' },
+  },
+  {
+    path: '/:surveyId/profile',
+    name: 'profile',
+    component: views.profile,
+    meta: { module: 'profile', title: 'profile._' },
   },
   {
     path: '/:surveyId/generate-user',
     name: 'generate-user',
-    component: GenerateUser,
+    component: views.generateUser,
     meta: { module: 'public', title: 'login._' },
   },
   {
     path: '/:surveyId/recall',
     name: 'recall',
-    component: Recall,
+    component: views.recall,
     meta: { module: 'recall', title: 'recall._' },
   },
   {
     path: '/:surveyId/feedback',
     name: 'feedback',
-    component: Feedback,
+    component: views.feedback,
     meta: { module: 'feedback', title: 'feedback._' },
   },
   {
     path: '/:surveyId/:token',
     name: 'token',
-    component: Login,
+    component: views.login,
     meta: { module: 'login', title: 'login._' },
   },
   // Catch any unmatched routes
   {
     path: '*',
     name: '404',
-    component: Home,
+    component: views.home,
     meta: { module: 'public', title: 'common._' },
   },
 ];

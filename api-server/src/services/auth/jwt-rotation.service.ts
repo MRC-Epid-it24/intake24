@@ -15,7 +15,7 @@ export interface JwtRotationService {
   purge: () => Promise<void>;
 }
 
-export default ({ logger }: IoC): JwtRotationService => {
+export default ({ logger }: Pick<IoC, 'logger'>): JwtRotationService => {
   const save = async (userId: number, token: string): Promise<void> => {
     const { jti: id, exp } = decode(token);
 

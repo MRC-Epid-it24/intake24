@@ -1,12 +1,11 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const common: LocaleMessage = {
+const common: LocaleMessageObject = {
   _: 'Intake24 Survey App',
   dashboard: 'Dashboard',
   register: 'Registration',
   login: 'Sign in',
   logout: 'Sign out',
-  profile: 'Profile',
 
   username: 'Username',
   email: 'Email',

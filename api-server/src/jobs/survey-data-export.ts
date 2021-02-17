@@ -23,7 +23,11 @@ export default class SurveyDataExport implements BaseJob {
 
   private data!: SurveyDataExportData;
 
-  constructor({ config, dataExportService, logger }: IoC) {
+  constructor({
+    config,
+    dataExportService,
+    logger,
+  }: Pick<IoC, 'config' | 'dataExportService' | 'logger'>) {
     this.config = config;
     this.dataExportService = dataExportService;
     this.logger = logger;

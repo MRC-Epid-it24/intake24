@@ -31,6 +31,7 @@ export default class AsServedImage extends BaseModel implements AsServedImageAtt
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(32),
   })
   public asServedSetId!: string;
 

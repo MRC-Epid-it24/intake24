@@ -9,27 +9,27 @@ export interface AsServedResponse {
 
 export default (baseUrl: string): AsServedResponse => {
   const imageResponse = (item: AsServedImage): AsServedImageResponse => {
-    const { image, thumbnailImage } = item;
+    const { image, thumbnailImage, weight } = item;
 
     if (!image || !thumbnailImage)
-      throw new InternalServerError('asServedImageResponse: not loaded relationships.');
+      throw new InternalServerError('AsServedImageResponse: not loaded relationships.');
 
     return {
       mainImageUrl: `${baseUrl}/${image.path}`,
       thumbnailUrl: `${baseUrl}/${thumbnailImage.path}`,
-      weight: item.weight,
+      weight,
     };
   };
 
   const setResponse = (item: AsServedSet): AsServedSetResponse => {
-    const { selectionImage, asServedImages } = item;
+    const { id, description, selectionImage, asServedImages } = item;
 
     if (!selectionImage || !asServedImages)
-      throw new InternalServerError('asServedSetResponse: not loaded relationships.');
+      throw new InternalServerError('AsServedSetResponse: not loaded relationships.');
 
     return {
-      id: item.id,
-      description: item.description,
+      id,
+      description,
       selectionImageUrl: `${baseUrl}/${selectionImage.path}`,
       images: asServedImages.map(imageResponse),
     };

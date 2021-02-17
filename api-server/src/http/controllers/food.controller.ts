@@ -12,18 +12,18 @@ export default ({ foodDataService }: IoC): FoodController => {
     const { code, localeId } = req.params;
 
     // 1.Food data (Food Local), portionSizeMethod and PortiobSizeMethod Parameters
-    const food = await foodDataService.getFoodLocal(localeId, code);
+    const food = await foodDataService.getFoodLocal(localeId, code, true);
 
     const result: FoodDataEntryResponse = {
       code: food.foodCode,
       localDescription: food.name,
-      portionSizeMethods: food.portionSizeMethods ? food.portionSizeMethods : [],
       readyMealOption: false,
       sameAsBeforeOption: false,
-      categories: [],
+      caloriesPer100g: 0,
+      portionSizeMethods: food.portionSizeMethods ? food.portionSizeMethods : [],
       associatedFoods: [],
       brands: [],
-      caloriesPer100g: 0,
+      categories: [],
     };
 
     // 2. Food categories & parent categories
@@ -49,7 +49,8 @@ export default ({ foodDataService }: IoC): FoodController => {
         localeId,
         code,
         result.localDescription,
-        result.associatedFoods
+        result.associatedFoods,
+        result.portionSizeMethods
       );
       result.portionSizeMethods = parentFoodData[0].portionSizeMethods;
       result.localDescription = result.localDescription
@@ -60,7 +61,7 @@ export default ({ foodDataService }: IoC): FoodController => {
         : parentFoodData[1];
     }
 
-    // 5. Retrieving Portion Size Methods and Methods Parameters from the parent categories
+    // 6. Retrieving Portion Size Methods and Methods Parameters from the parent categories
     if (!result.portionSizeMethods.length) {
       const categoryPortionSizeMethods = await foodDataService.searchForPortionMethodsAcrossCategoriesAndLocales(
         localeId,
@@ -69,11 +70,11 @@ export default ({ foodDataService }: IoC): FoodController => {
       result.portionSizeMethods = categoryPortionSizeMethods;
     }
 
-    // 6 Brands
+    // 7 Brands
     result.brands = await foodDataService.getBrands(localeId, code);
 
-    // 7. Calculating caloriesPer100g
-    // TODO: return calculated caloriesPer100g
+    // 8. Calculating caloriesPer100g
+    result.caloriesPer100g = await foodDataService.getNutrientKCalPer100G(localeId, code);
     res.status(200).json(result);
   };
 

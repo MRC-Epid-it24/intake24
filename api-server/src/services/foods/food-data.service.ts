@@ -8,6 +8,9 @@ import {
   FoodCategory,
   FoodLocal,
   Locale,
+  NutrientMapping,
+  NutrientTableRecord,
+  NutrientTableRecordNutrient,
   PortionSizeMethod,
   PortionSizeMethodParameter,
 } from '@/db/models/foods';
@@ -21,13 +24,18 @@ import {
 } from '@common/types/http';
 import getAllParentCategories from '@api-server/db/raw/food-controller-sql';
 
+// const for KCAL Nutrient
+const KCAL_NUTRIENT_TYPE_ID = 1;
+
 export interface FoodDataService {
-  getFoodLocal: (localId: string, foodCode: string) => Promise<FoodLocal>;
+  getFoodLocal: (localId: string, foodCode: string, includePortion: boolean) => Promise<FoodLocal>;
   getFoodCategories: (foodCode: string, parentCategories?: boolean) => Promise<string[] | []>;
   getAssociatedFoods: (localId: string, foodCode: string) => Promise<AssociatedFoodsResponse[]>;
   getBrands: (localId: string, foodCode: string) => Promise<string[] | []>;
   getCategoriesAttributes: (categories: string[] | []) => Promise<FoodDataGeneral>;
   getParentLocale: (localeId: string) => Promise<Locale | null>;
+  getNutrientKCalPer100G: (localeId: string, foodCode: string) => Promise<number>;
+
   getFoodReadyMealAndSameAsBeforeAttributes: (
     foodCode: string,
     categories: string[] | []
@@ -36,7 +44,8 @@ export interface FoodDataService {
     localId: string,
     foodCode: string,
     localDescription: string,
-    associatedFoods: AssociatedFoodsResponse[]
+    associatedFoods: AssociatedFoodsResponse[],
+    portionSizeMethod: PortionSizeMethodsResponse[]
   ) => Promise<[FoodLocalResponse, AssociatedFoodsResponse[]]>;
   getCategoryPortionSizeMethods: (
     localeId: string,
@@ -61,23 +70,24 @@ export default (): FoodDataService => {
    * @param {string} foodCode
    * @returns {Promise<FoodLocal>}
    */
-  const getFoodLocal = async (localeId: string, foodCode: string): Promise<FoodLocal> => {
-    const food = await FoodLocal.findOne({
-      where: { localeId, foodCode },
+  const getFoodLocal = async (localeId: string, foodCode: string, includePortion: boolean = false): Promise<FoodLocal> => {
+
+    const includeWithPortionSize = [{
+      model: PortionSizeMethod,
+      as: 'portionSizeMethods',
+      attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
       include: [
         {
-          model: PortionSizeMethod,
-          as: 'portionSizeMethods',
-          attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
-          include: [
-            {
-              model: PortionSizeMethodParameter,
-              as: 'parameters',
-              attributes: ['name', 'value'],
-            },
-          ],
+          model: PortionSizeMethodParameter,
+          as: 'parameters',
+          attributes: ['name', 'value'],
         },
       ],
+    }];
+    const includeFoodLocal = includePortion ? includeWithPortionSize : [];
+    const food = await FoodLocal.findOne({
+      where: { localeId, foodCode },
+      include: includeFoodLocal
     });
 
     if (!food || food == null) throw new NotFoundError();
@@ -98,6 +108,49 @@ export default (): FoodDataService => {
       attributes: ['prototypeLocaleId'],
     });
     return parentLocale;
+  };
+
+  const getNutrientKCalPer100G = async (localeId: string, foodCode: string): Promise<number> => {
+    const foodNutrientData = await FoodLocal.findOne({
+      where: { localeId, foodCode },
+      attributes: ['id'],
+      include: [
+        {
+          model: NutrientMapping,
+          attributes: ['nutrientTableRecordId'],
+          include: [
+            {
+              model: NutrientTableRecord,
+              attributes: ['id'],
+              duplicating: true,
+              include: [
+                {
+                  model: NutrientTableRecordNutrient,
+                  where: { nutrientTypeId: KCAL_NUTRIENT_TYPE_ID },
+                  attributes: ['unitsPer100g'],
+                  limit: 1,
+                  duplicating: true,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    console.log(JSON.stringify(foodNutrientData));
+
+    let kcal = foodNutrientData?.nutrientMappings?.map((el) => {
+      return el.nutrientTableRecord?.nutrients
+        ? el.nutrientTableRecord?.nutrients[0].unitsPer100g
+        : 0;
+    })[0];
+    kcal = kcal || 0;
+    if (!kcal) {
+      const parentLocale = await getParentLocale(localeId);
+      if (parentLocale && parentLocale.prototypeLocaleId)
+        kcal = await getNutrientKCalPer100G(parentLocale.prototypeLocaleId, foodCode);
+    }
+    return kcal;
   };
 
   /**
@@ -310,15 +363,17 @@ export default (): FoodDataService => {
     localeId: string,
     foodCode: string,
     localDescription: string,
-    associatedFoods: AssociatedFoodsResponse[]
+    associatedFoods: AssociatedFoodsResponse[],
+    portionSizeMethod: PortionSizeMethodsResponse[]
   ): Promise<[FoodLocalResponse, AssociatedFoodsResponse[]]> => {
     const parentLocale = await getParentLocale(localeId);
 
     let parentLocalDescriptionPortionSizeMethods: FoodLocalResponse = {
       code: foodCode,
       localDescription,
-      portionSizeMethods: [],
+      portionSizeMethods: portionSizeMethod,
     };
+    let includePortionSizeMethods = portionSizeMethod.length ? false : true;
 
     let parentLocaleAssociatedFoods: AssociatedFoodsResponse[] = associatedFoods;
 
@@ -326,14 +381,12 @@ export default (): FoodDataService => {
       return [parentLocalDescriptionPortionSizeMethods, parentLocaleAssociatedFoods];
 
     // searching for PortionSizeMethods and localDescription in parent Locales
-    if (
-      !parentLocalDescriptionPortionSizeMethods.portionSizeMethods.length ||
-      !parentLocalDescriptionPortionSizeMethods.localDescription.length
-    ) {
-      await getFoodLocal(parentLocale.prototypeLocaleId, foodCode).then((data) => {
-        parentLocalDescriptionPortionSizeMethods.portionSizeMethods = data.portionSizeMethods
-          ? data.portionSizeMethods
-          : [];
+    if (includePortionSizeMethods || !parentLocalDescriptionPortionSizeMethods.localDescription.length) {
+      await getFoodLocal(parentLocale.prototypeLocaleId, foodCode, includePortionSizeMethods).then((data) => {
+        if (includePortionSizeMethods)
+          parentLocalDescriptionPortionSizeMethods.portionSizeMethods = data.portionSizeMethods
+            ? data.portionSizeMethods
+            : [];
         parentLocalDescriptionPortionSizeMethods.localDescription = parentLocalDescriptionPortionSizeMethods.localDescription
           ? parentLocalDescriptionPortionSizeMethods.localDescription
           : data.name;
@@ -358,7 +411,8 @@ export default (): FoodDataService => {
         parentLocale.prototypeLocaleId,
         foodCode,
         parentLocalDescriptionPortionSizeMethods.localDescription,
-        associatedFoods
+        associatedFoods,
+        parentLocalDescriptionPortionSizeMethods.portionSizeMethods
       );
     return [parentLocalDescriptionPortionSizeMethods, parentLocaleAssociatedFoods];
   };
@@ -443,5 +497,6 @@ export default (): FoodDataService => {
     getCategoryPortionSizeMethods,
     searchForCategoriesWithPortionMethodsInLocale,
     searchForPortionMethodsAcrossCategoriesAndLocales,
+    getNutrientKCalPer100G,
   };
 };

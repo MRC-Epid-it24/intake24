@@ -20,7 +20,7 @@
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { TimePickerPromptProps } from '@common/types';
-import { timePickerPromptProps } from '@common/prompts/promptDefaults';
+import { timePickerPromptProps } from '@common/defaults';
 import BasePrompt, { Prompt } from './BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({

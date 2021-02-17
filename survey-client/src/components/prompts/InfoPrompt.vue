@@ -12,7 +12,7 @@
 import Vue from 'vue';
 import merge from 'deepmerge';
 import { BasePromptProps } from '@common/types';
-import { infoPromptProps } from '@common/prompts/promptDefaults';
+import { infoPromptProps } from '@common/defaults';
 import BasePrompt from './BasePrompt';
 
 export default Vue.extend({

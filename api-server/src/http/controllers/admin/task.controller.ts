@@ -13,7 +13,7 @@ import { Controller, CrudActions } from '../controller';
 
 export type TaskController = Controller<CrudActions | 'run'>;
 
-export default ({ scheduler }: IoC): TaskController => {
+export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
   const jobs = Object.keys(jobsDefs) as JobType[];
 
   const entry = async (req: Request, res: Response<TaskResponse>): Promise<void> => {

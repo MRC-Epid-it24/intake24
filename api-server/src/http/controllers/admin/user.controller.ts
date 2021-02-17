@@ -15,7 +15,7 @@ import { Controller, CrudActions } from '../controller';
 
 export type UserController = Controller<CrudActions>;
 
-export default ({ userService }: IoC): UserController => {
+export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
   const entryRefs = async (): Promise<UserRefs> => {
     const permissions = await Permission.scope('list').findAll();
     const roles = await Role.scope('list').findAll();

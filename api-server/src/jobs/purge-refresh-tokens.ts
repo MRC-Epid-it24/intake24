@@ -8,7 +8,7 @@ export default class PurgeRefreshTokens implements Job {
 
   private readonly logger;
 
-  constructor({ jwtRotationService, logger }: IoC) {
+  constructor({ jwtRotationService, logger }: Pick<IoC, 'jwtRotationService' | 'logger'>) {
     this.jwtRotationService = jwtRotationService;
     this.logger = logger;
   }

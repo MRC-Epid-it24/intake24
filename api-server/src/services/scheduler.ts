@@ -9,7 +9,12 @@ export default class Scheduler {
 
   public readonly tasks;
 
-  constructor({ config, logger, jobsQueueHandler, tasksQueueHandler }: IoC) {
+  constructor({
+    config,
+    logger,
+    jobsQueueHandler,
+    tasksQueueHandler,
+  }: Pick<IoC, 'config' | 'logger' | 'jobsQueueHandler' | 'tasksQueueHandler'>) {
     this.config = config;
     this.logger = logger;
 

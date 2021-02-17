@@ -10,7 +10,7 @@ import { Controller } from '../controller';
 
 export type AdminSurveyMgmtController = Controller<'list' | 'available' | 'update'>;
 
-export default ({ surveyService }: IoC): AdminSurveyMgmtController => {
+export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtController => {
   const list = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);

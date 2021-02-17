@@ -33,7 +33,7 @@ export default class SurveyImportRespondents implements Job {
 
   private content: CSVRow[] = [];
 
-  constructor({ logger, surveyService }: IoC) {
+  constructor({ logger, surveyService }: Pick<IoC, 'logger' | 'surveyService'>) {
     this.logger = logger;
     this.surveyService = surveyService;
   }

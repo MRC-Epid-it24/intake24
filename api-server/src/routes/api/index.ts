@@ -4,7 +4,7 @@ import admin from './admin';
 import password from './password';
 import feedback from './feedback';
 import foods from './foods';
-import portionSize from './portion-size';
+import portionSizes from './portion-sizes';
 import surveys from './surveys';
 
 const router = Router();
@@ -16,7 +16,7 @@ router.use('/admin', admin);
 
 router.use('/feedback', feedback);
 router.use('/foods', foods);
-router.use('/portion-size', portionSize);
+router.use('/portion-sizes', portionSizes);
 router.use('/surveys', surveys);
 
 router.all('*', (req: Request, res: Response): void => {
