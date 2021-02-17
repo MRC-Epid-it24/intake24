@@ -4,7 +4,8 @@
 
 ## Node.js
 
-Intake24 **requires node.js version 12 or newer**, please make sure to check your node.js version before continuing.
+- Intake24 **requires node.js version 12 or newer**, please make sure to check your node.js version before continuing.
+- for `npm v7+`, use install/update commands with `--legacy-peer-deps` parameter
 
 ## Project setup
 

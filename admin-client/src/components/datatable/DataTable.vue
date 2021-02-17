@@ -26,7 +26,7 @@
           <template v-for="(_, scopedSlotName) in $scopedSlots" v-slot:[scopedSlotName]="slotData">
             <slot :name="scopedSlotName" v-bind="slotData" />
           </template>
-          <template v-slot:item.action="{ item }">
+          <template v-slot:[`item.action`]="{ item }">
             <actionbar :api="api" :item="item" class="text-right" @refresh="onRefresh"></actionbar>
           </template>
         </v-data-table>

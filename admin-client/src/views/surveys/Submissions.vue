@@ -1,13 +1,13 @@
 <template>
   <layout :id="id" :entry="entry" v-if="entryLoaded">
     <data-table :headers="headers" :api="`admin/surveys/${id}/submissions`" ref="table">
-      <template v-slot:item.startTime="{ item }">
+      <template v-slot:[`item.startTime`]="{ item }">
         {{ new Date(item.startTime).toLocaleString() }}
       </template>
-      <template v-slot:item.endTime="{ item }">
+      <template v-slot:[`item.endTime`]="{ item }">
         {{ new Date(item.endTime).toLocaleString() }}
       </template>
-      <template v-slot:item.action="{ item }" class="text-right">
+      <template v-slot:[`item.action`]="{ item }" class="text-right">
         <v-btn color="error" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
           <v-icon dark>$delete</v-icon>
         </v-btn>
