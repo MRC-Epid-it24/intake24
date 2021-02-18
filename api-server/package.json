@@ -25,12 +25,12 @@
     "migrate:foods": "npx sequelize db:migrate --options-path sequelize/foods/options.js",
     "migrate:system": "npx sequelize db:migrate --options-path sequelize/system/options.js",
     "lint": "eslint --ext .js,.ts src/ tests/",
-    "lint:fix": "eslint --ext .js,.ts src/ tests/ --quiet --fix",
+    "lint:fix": "npm run lint -- --fix",
     "test:unit": "webpack --config tests/webpack.config.js",
     "test:unit:watch": "cross-env NODE_ENV=development webpack --config tests/webpack.config.js",
     "test:unit:run": "mocha -c dist-tests/tests.js",
     "test:integration": "mocha tests/integration/api/index.test.ts",
-    "test:integration:watch": "mocha --watch tests/integration/api/index.test.ts"
+    "test:integration:watch": "npm run test:integration -- --watch"
   },
   "dependencies": {
     "@duosecurity/duo_web": "^1.0.5",
