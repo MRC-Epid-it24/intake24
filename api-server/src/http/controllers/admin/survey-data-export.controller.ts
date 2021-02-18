@@ -7,7 +7,9 @@ import { Controller } from '../controller';
 
 export type AdminSurveyDataExportController = Controller<'sync' | 'queue'>;
 
-export default ({ dataExportService }: IoC): AdminSurveyDataExportController => {
+export default ({
+  dataExportService,
+}: Pick<IoC, 'dataExportService'>): AdminSurveyDataExportController => {
   const sync = async (req: Request, res: Response<Buffer>): Promise<void> => {
     const { surveyId } = req.params;
     const { startDate, endDate } = req.body;

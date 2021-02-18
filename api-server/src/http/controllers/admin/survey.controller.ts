@@ -17,7 +17,7 @@ import { Controller, CrudActions } from '../controller';
 
 export type AdminSurveyController = Controller<CrudActions>;
 
-export default ({ config }: IoC): AdminSurveyController => {
+export default ({ config }: Pick<IoC, 'config'>): AdminSurveyController => {
   const refs = async (): Promise<SurveyRefs> => {
     const locales = await Locale.findAll();
     const schemes = await Scheme.findAll({ attributes: ['id', 'name'] });

@@ -17,7 +17,7 @@ import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions | 'dataExportRefs'>;
 
-export default ({ dataExportFields }: IoC): SchemeController => {
+export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeController => {
   const refs = async (): Promise<SchemeRefs> => {
     const languages = await Language.findAll();
 

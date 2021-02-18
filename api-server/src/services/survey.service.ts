@@ -38,7 +38,11 @@ export interface SurveyService {
   exportAuthenticationUrls: (surveyId: string, userId: number) => Promise<Job>;
 }
 
-export default ({ config, scheduler, userService }: IoC): SurveyService => {
+export default ({
+  config,
+  scheduler,
+  userService,
+}: Pick<IoC, 'config' | 'scheduler' | 'userService'>): SurveyService => {
   /**
    * Fetch survey-specific respondent permission instance
    *

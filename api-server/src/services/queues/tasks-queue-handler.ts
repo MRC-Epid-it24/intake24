@@ -22,7 +22,7 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
    * @param {IoC} { logger }
    * @memberof TasksQueueHandler
    */
-  constructor({ logger }: IoC) {
+  constructor({ logger }: Pick<IoC, 'logger'>) {
     this.logger = logger;
   }
 

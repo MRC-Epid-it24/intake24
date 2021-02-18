@@ -18,7 +18,7 @@ export default class SendPasswordReset implements Job {
 
   private readonly mailer;
 
-  constructor({ config, logger, mailer }: IoC) {
+  constructor({ config, logger, mailer }: Pick<IoC, 'config' | 'logger' | 'mailer'>) {
     this.config = config;
     this.logger = logger;
     this.mailer = mailer;

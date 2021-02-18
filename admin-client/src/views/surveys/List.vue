@@ -1,6 +1,6 @@
 <template>
   <data-table :headers="headers" api="admin/surveys">
-    <template v-slot:item.state="{ item }">
+    <template v-slot:[`item.state`]="{ item }">
       {{ $t(`surveys.state.${item.state}`) }}
     </template>
   </data-table>

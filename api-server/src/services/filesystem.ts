@@ -4,7 +4,7 @@ import type { IoC } from '@/ioc';
 export default class Filesystem {
   private readonly config;
 
-  constructor({ config }: IoC) {
+  constructor({ config }: Pick<IoC, 'config'>) {
     this.config = config.filesystem;
   }
 

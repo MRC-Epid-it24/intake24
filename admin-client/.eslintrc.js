@@ -11,8 +11,7 @@ module.exports = {
     '@vue/prettier/@typescript-eslint',
   ],
   parserOptions: {
-    ecmaVersion: 2020,
-    parser: '@typescript-eslint/parser',
+    ecmaVersion: 2021,
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -20,6 +19,7 @@ module.exports = {
     'import/no-cycle': 'warn',
     'no-param-reassign': 'warn',
     'no-restricted-globals': 'warn',
+    'no-restricted-syntax': 'off',
     'no-shadow': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-shadow': 'error',

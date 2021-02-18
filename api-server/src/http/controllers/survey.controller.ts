@@ -17,7 +17,7 @@ export type SurveyController = Controller<
   | 'followUp'
 >;
 
-export default ({ surveyService }: IoC): SurveyController => {
+export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController => {
   const list = async (req: Request, res: Response): Promise<void> => {
     const surveys = await Survey.scope('public').findAll();
 

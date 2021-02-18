@@ -67,7 +67,10 @@ export default ({
   jwtService,
   jwtRotationService,
   signInService,
-}: IoC): AuthenticationService => {
+}: Pick<
+  IoC,
+  'config' | 'logger' | 'jwtService' | 'jwtRotationService' | 'signInService'
+>): AuthenticationService => {
   const { mfa: mfaConfig } = config.security;
 
   /**

@@ -1,4 +1,5 @@
-import { BelongsTo, Column, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import { GuideImageObject as GuideImageObjectAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { GuideImage } from '.';
 
@@ -9,7 +10,7 @@ import { GuideImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class GuideImageObject extends BaseModel {
+export default class GuideImageObject extends BaseModel implements GuideImageObjectAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,
@@ -18,11 +19,13 @@ export default class GuideImageObject extends BaseModel {
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(32),
   })
   public guideImageId!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.DOUBLE,
   })
   public weight!: number;
 

@@ -50,10 +50,21 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
+import { Meal, RecallQuestions } from '@common/types';
+import { ExportSchemeSection } from '@common/types/models';
 import Meals from './Meals.vue';
+
+export type SchemeForm = {
+  id: string | null;
+  name: string | null;
+  type: string;
+  questions: RecallQuestions;
+  meals: Meal[];
+  export: ExportSchemeSection[];
+};
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeForm',
@@ -64,7 +75,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   data() {
     return {
-      form: new Form({
+      form: form<SchemeForm>({
         id: null,
         name: null,
         type: 'data-driven',

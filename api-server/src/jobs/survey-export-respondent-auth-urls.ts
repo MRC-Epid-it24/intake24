@@ -24,7 +24,7 @@ export default class SurveyExportRespondentAuthUrls implements BaseJob {
 
   private data!: SurveyExportRespondentAuthUrlsData;
 
-  constructor({ config, logger }: IoC) {
+  constructor({ config, logger }: Pick<IoC, 'config' | 'logger'>) {
     this.config = config;
     this.logger = logger;
   }

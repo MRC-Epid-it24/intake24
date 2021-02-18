@@ -87,10 +87,14 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { JobResponse } from '@common/types/http';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 import RespondentsJobMixin from './RespondentsJobMixin';
 
 type mixins = InstanceType<typeof RespondentsJobMixin>;
+
+type RespondentsUploadForm = {
+  file: File | null;
+};
 
 export default (Vue as VueConstructor<Vue & mixins>).extend({
   name: 'RespondentsUpload',
@@ -99,7 +103,7 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
   data() {
     return {
-      form: new Form({ file: null }, { multipart: true }),
+      form: form<RespondentsUploadForm>({ file: null }, { multipart: true }),
       jobType: 'SurveyImportRespondents',
     };
   },

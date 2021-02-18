@@ -12,7 +12,7 @@ import { Controller, CrudActions } from '../controller';
 
 export type RoleController = Controller<CrudActions>;
 
-export default ({ config }: IoC): RoleController => {
+export default ({ config }: Pick<IoC, 'config'>): RoleController => {
   const entry = async (req: Request, res: Response<RoleResponse>): Promise<void> => {
     const { roleId } = req.params;
     const role = await Role.scope('permissions').findByPk(roleId);
