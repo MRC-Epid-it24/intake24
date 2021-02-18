@@ -2,20 +2,42 @@ import '../../bootstrap';
 import request from 'supertest';
 import app from '@/app';
 import ioc from '@/ioc';
-import { prepare, cleanup } from './mocks/setup';
+import { prepare } from './mocks/setup';
 // import root from './root.test';
 import authentication from './authentication/index.test';
 import admin from './admin/index.test';
+import portionSizes from './portion-sizes/index.test';
 
 describe('API', function () {
   before(async function () {
     const { config, logger } = ioc.cradle;
     this.app = await app({ config, logger });
     this.data = await prepare();
-  });
 
-  after(async function () {
-    // await cleanup();
+    const adminRes = await request(this.app)
+      .post('/api/login')
+      .set('Accept', 'application/json')
+      .send({ email: 'testAdmin@example.com', password: 'testAdminPassword' });
+
+    const userRes = await request(this.app)
+      .post('/api/login')
+      .set('Accept', 'application/json')
+      .send({ email: 'testUser@example.com', password: 'testUserPassword' });
+
+    const respondentRes = await request(this.app)
+      .post('/api/login/alias')
+      .set('Accept', 'application/json')
+      .send({
+        surveyId: 'test-survey',
+        userName: 'testRespondent',
+        password: 'testRespondentPassword',
+      });
+
+    this.bearer = {
+      admin: `Bearer ${adminRes.body.accessToken}`,
+      user: `Bearer ${userRes.body.accessToken}`,
+      respondent: `Bearer ${respondentRes.body.accessToken}`,
+    };
   });
 
   // describe('Root', root);
@@ -26,55 +48,20 @@ describe('API', function () {
     describe('POST /api/login/token', authentication.loginToken);
   });
 
+  describe('Portion-sizes', function () {
+    describe('GET /api/portion-sizes/as-served-sets', portionSizes.asServedSets);
+    describe('GET /api/portion-sizes/as-served-sets/:id', portionSizes.asServedSet);
+    describe('GET /api/portion-sizes/drinkware-sets', portionSizes.drinkwareSets);
+    describe('GET /api/portion-sizes/drinkware-sets/:id', portionSizes.drinkwareSet);
+    describe('GET /api/portion-sizes/guide-images', portionSizes.guideImages);
+    describe('GET /api/portion-sizes/guide-images/:id', portionSizes.guideImage);
+    describe('GET /api/portion-sizes/image-maps', portionSizes.imageMaps);
+    describe('GET /api/portion-sizes/image-maps/:id', portionSizes.imageMap);
+    describe('GET /api/portion-sizes/weight', portionSizes.weight);
+  });
+
   describe('Admin', function () {
-    before(async function () {
-      const adminRes = await request(this.app)
-        .post('/api/login')
-        .set('Accept', 'application/json')
-        .send({ email: 'testAdmin@example.com', password: 'testAdminPassword' });
-
-      const userRes = await request(this.app)
-        .post('/api/login')
-        .set('Accept', 'application/json')
-        .send({ email: 'testUser@example.com', password: 'testUserPassword' });
-
-      this.bearer = {
-        admin: `Bearer ${adminRes.body.accessToken}`,
-        user: `Bearer ${userRes.body.accessToken}`,
-      };
-    });
-
     describe('GET /admin/profile', admin.profile);
-
-    // Permissions
-    const { permissions } = admin;
-    describe('GET /api/admin/permissions', permissions.list);
-    describe('GET /api/admin/permissions/create', permissions.create);
-    describe('POST /api/admin/permissions', permissions.store);
-    describe('GET /api/admin/permissions/:permissionId', permissions.detail);
-    describe('GET /api/admin/permissions/:permissionId/edit', permissions.edit);
-    describe('PUT /api/admin/permissions/:permissionId', permissions.update);
-    describe('DELETE /api/admin/permissions/:permissionId', permissions.destroy);
-
-    // Roles
-    const { roles } = admin;
-    describe('GET /api/admin/roles', roles.list);
-    describe('GET /api/admin/roles/create', roles.create);
-    describe('POST /api/admin/roles', roles.store);
-    describe('GET /api/admin/roles/:roleId', roles.detail);
-    describe('GET /api/admin/roles/:roleId/edit', roles.edit);
-    describe('PUT /api/admin/roles/:roleId', roles.update);
-    describe('DELETE /api/admin/roles/:roleId', roles.destroy);
-
-    // Users
-    const { users } = admin;
-    describe('GET /api/admin/users', users.list);
-    describe('GET /api/admin/users/create', users.create);
-    describe('POST /api/admin/users', users.store);
-    describe('GET /api/admin/users/:userId', users.detail);
-    describe('GET /api/admin/users/:userId/edit', users.edit);
-    describe('PUT /api/admin/users/:userId', users.update);
-    describe('DELETE /api/admin/users/:userId', users.destroy);
 
     // Jobs
     const { jobs } = admin;
@@ -101,6 +88,26 @@ describe('API', function () {
     describe('GET /api/admin/locales/:localeId/edit', locales.edit);
     describe('PUT /api/admin/locales/:localeId', locales.update);
     describe('DELETE /api/admin/locales/:localeId', locales.destroy);
+
+    // Permissions
+    const { permissions } = admin;
+    describe('GET /api/admin/permissions', permissions.list);
+    describe('GET /api/admin/permissions/create', permissions.create);
+    describe('POST /api/admin/permissions', permissions.store);
+    describe('GET /api/admin/permissions/:permissionId', permissions.detail);
+    describe('GET /api/admin/permissions/:permissionId/edit', permissions.edit);
+    describe('PUT /api/admin/permissions/:permissionId', permissions.update);
+    describe('DELETE /api/admin/permissions/:permissionId', permissions.destroy);
+
+    // Roles
+    const { roles } = admin;
+    describe('GET /api/admin/roles', roles.list);
+    describe('GET /api/admin/roles/create', roles.create);
+    describe('POST /api/admin/roles', roles.store);
+    describe('GET /api/admin/roles/:roleId', roles.detail);
+    describe('GET /api/admin/roles/:roleId/edit', roles.edit);
+    describe('PUT /api/admin/roles/:roleId', roles.update);
+    describe('DELETE /api/admin/roles/:roleId', roles.destroy);
 
     // Schemes
     const { schemes } = admin;
@@ -155,5 +162,15 @@ describe('API', function () {
     describe('GET /api/admin/tasks/:taskId/edit', tasks.edit);
     describe('PUT /api/admin/tasks/:taskId', tasks.update);
     describe('DELETE /api/admin/tasks/:taskId', tasks.destroy);
+
+    // Users
+    const { users } = admin;
+    describe('GET /api/admin/users', users.list);
+    describe('GET /api/admin/users/create', users.create);
+    describe('POST /api/admin/users', users.store);
+    describe('GET /api/admin/users/:userId', users.detail);
+    describe('GET /api/admin/users/:userId/edit', users.edit);
+    describe('PUT /api/admin/users/:userId', users.update);
+    describe('DELETE /api/admin/users/:userId', users.destroy);
   });
 });
