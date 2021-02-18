@@ -69,7 +69,15 @@ import Vue, { VueConstructor } from 'vue';
 import { Dictionary } from '@common/types';
 import { FormMixin } from '@/types/vue';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
+
+type RoleForm = {
+  id: number | null;
+  name: string | null;
+  displayName: string | null;
+  description: string | null;
+  permissions: number[];
+};
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'RoleForm',
@@ -78,7 +86,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   data() {
     return {
-      form: new Form({
+      form: form<RoleForm>({
         id: null,
         name: null,
         displayName: null,
@@ -102,21 +110,15 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
     },
   },
 
-  mounted() {
-    const est = 't/t';
-
-    console.log(`match`, est.match(/[a-z]+-[a-z]+/g));
-  },
-
   methods: {
     toForm(data: Dictionary) {
       const { permissions, ...rest } = data;
-      const form = {
+      const input = {
         ...rest,
         permissions:
           permissions && Array.isArray(permissions) ? permissions.map((item) => item.id) : [],
       };
-      this.form.load(form);
+      this.form.load(input);
     },
   },
 });

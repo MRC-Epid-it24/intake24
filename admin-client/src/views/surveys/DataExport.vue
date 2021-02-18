@@ -138,12 +138,17 @@
 import Vue, { VueConstructor } from 'vue';
 import { downloadFile } from '@/util/fs';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
 import { JobResponse } from '@common/types/http';
 import PollsForJobsMixin from './PollsForJobsMixin';
 
 type mixins = InstanceType<typeof PollsForJobsMixin>;
+
+type SurveyDataExportForm = {
+  startDate: string | null;
+  endDate: string | null;
+};
 
 export default (Vue as VueConstructor<Vue & FormMixin & mixins>).extend({
   name: 'SurveyDataExport',
@@ -153,7 +158,7 @@ export default (Vue as VueConstructor<Vue & FormMixin & mixins>).extend({
   data() {
     return {
       menus: { startDate: false, endDate: false },
-      form: new Form(
+      form: form<SurveyDataExportForm>(
         {
           startDate: null,
           endDate: null,

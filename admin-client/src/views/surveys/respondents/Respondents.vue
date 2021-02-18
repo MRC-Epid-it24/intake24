@@ -121,7 +121,7 @@
           </v-list>
         </v-menu>
       </template>
-      <template v-slot:item.action="{ item }" class="text-right">
+      <template v-slot:[`item.action`]="{ item }" class="text-right">
         <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
           <v-icon dark>$edit</v-icon>
         </v-btn>
@@ -137,7 +137,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { Dictionary } from '@common/types';
 import detailMixin from '@/components/entry/detailMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
 import DataTable from '../DataTable.vue';
 import RespondentsUpload from './RespondentsUpload.vue';
@@ -147,6 +147,16 @@ export type RespondentsRefs = {
   $refs: {
     table: InstanceType<typeof DataTable>;
   };
+};
+
+export type SurveyRespondentsForm = {
+  userId: string | null;
+  userName: string | null;
+  password: string | null;
+  passwordConfirm: string | null;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
 };
 
 export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).extend({
@@ -173,7 +183,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
         },
       ],
       dialog: false,
-      form: new Form({
+      form: form<SurveyRespondentsForm>({
         userId: null,
         userName: null,
         password: null,

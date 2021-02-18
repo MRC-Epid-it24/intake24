@@ -67,15 +67,22 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 import { ValidationError } from '@common/types';
+
+type PasswordResetForm = {
+  token: string;
+  email: string | null;
+  password: string | null;
+  passwordConfirm: string | null;
+};
 
 export default Vue.extend({
   name: 'PasswordReset',
 
   data() {
     return {
-      form: new Form({
+      form: form<PasswordResetForm>({
         token: this.$route.params.token,
         email: null,
         password: null,
@@ -86,11 +93,12 @@ export default Vue.extend({
 
   computed: {
     nonInputErrors(): ValidationError[] {
-      const keys = this.form.originalKeys;
+      const keys = this.form.keys as string[];
 
-      const errors = Object.keys(this.form.errors.errors).reduce((acc, error) => {
-        if (!keys.includes(error) || error === 'token')
-          acc.push({ ...this.form.errors.errors[error] });
+      const allErrors = this.form.errors.all();
+
+      const errors = Object.keys(allErrors).reduce((acc, error) => {
+        if (!keys.includes(error) || error === 'token') acc.push({ ...allErrors[error] });
 
         return acc;
       }, [] as ValidationError[]);

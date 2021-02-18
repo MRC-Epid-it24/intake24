@@ -46,7 +46,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
+
+type PermissionForm = {
+  id: number | null;
+  name: string | null;
+  displayName: string | null;
+  description: string | null;
+};
 
 export default Vue.extend({
   name: 'PermissionForm',
@@ -55,7 +62,7 @@ export default Vue.extend({
 
   data() {
     return {
-      form: new Form({
+      form: form<PermissionForm>({
         id: null,
         name: null,
         displayName: null,

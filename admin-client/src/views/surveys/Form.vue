@@ -244,7 +244,26 @@
 <script lang="ts">
 import Vue from 'vue';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
+
+export type SurveyForm = {
+  id: string | null;
+  state: number;
+  localeId: string | null;
+  schemeId: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  supportEmail: string | null;
+  allowGenUsers: boolean;
+  genUserKey: string | null;
+  authUrlDomainOverride: string | null;
+  storeUserSessionOnServer: boolean;
+  feedbackEnabled: boolean;
+  numberOfSubmissionsForFeedback: number;
+  maximumDailySubmissions: number;
+  maximumTotalSubmissions: number | null;
+  minimumSubmissionInterval: number;
+};
 
 export default Vue.extend({
   name: 'SurveyForm',
@@ -254,7 +273,7 @@ export default Vue.extend({
   data() {
     return {
       menus: { startDate: false, endDate: false },
-      form: new Form({
+      form: form<SurveyForm>({
         id: null,
         state: 0,
         localeId: null,

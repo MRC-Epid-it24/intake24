@@ -53,11 +53,13 @@
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
+import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
 import { ExportField, ExportSchemeSection } from '@common/types/models';
 import { SchemeExportRefsResponse } from '@common/types/http';
 import DataExportSection from './DataExportSection.vue';
+import { SchemeForm } from './Form.vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeDataExport',
@@ -68,13 +70,13 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   data() {
     return {
-      form: new Form({
+      form: form<SchemeForm>({
         id: null,
         name: null,
         type: 'data-driven',
-        questions: {},
-        meals: [],
-        export: [],
+        questions: defaultQuestions,
+        meals: defaultMeals,
+        export: defaultExport,
       }),
       section: null as ExportSchemeSection | null,
       exportRefs: {} as SchemeExportRefsResponse,

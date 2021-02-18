@@ -81,8 +81,16 @@
 import Vue, { VueConstructor } from 'vue';
 import orderBy from 'lodash/orderBy';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
+
+type LanguageForm = {
+  id: string | null;
+  englishName: string | null;
+  localName: string | null;
+  countryFlagCode: string;
+  textDirection: string;
+};
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'LanguageForm',
@@ -91,7 +99,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   data() {
     return {
-      form: new Form({
+      form: form<LanguageForm>({
         id: null,
         englishName: null,
         localName: null,

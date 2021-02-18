@@ -150,10 +150,21 @@
 import Vue, { VueConstructor } from 'vue';
 import orderBy from 'lodash/orderBy';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
 import { LocaleRefs } from '@common/types/http';
 import { Locale } from '@common/types/models';
+
+type LocaleForm = {
+  id: string | null;
+  prototypeLocaleId: string | null;
+  englishName: string | null;
+  localName: string | null;
+  respondentLanguageId: string;
+  adminLanguageId: string;
+  countryFlagCode: string | null;
+  textDirection: string;
+};
 
 export default (Vue as VueConstructor<Vue & FormMixin<Locale, LocaleRefs>>).extend({
   name: 'LocaleForm',
@@ -162,7 +173,7 @@ export default (Vue as VueConstructor<Vue & FormMixin<Locale, LocaleRefs>>).exte
 
   data() {
     return {
-      form: new Form({
+      form: form<LocaleForm>({
         id: null,
         prototypeLocaleId: null,
         englishName: null,

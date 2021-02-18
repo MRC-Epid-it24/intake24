@@ -46,7 +46,9 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import formMixin from '@/components/entry/formMixin';
-import Form from '@/helpers/Form';
+import form from '@/helpers/Form';
+import { FormMixin } from '@/types/vue';
+import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
 import {
   Dictionary,
   PromptQuestion,
@@ -54,22 +56,10 @@ import {
   MealSection,
   RecallQuestions,
 } from '@common/types';
-
-import { FormMixin } from '@/types/vue';
+import { SchemeForm } from './Form.vue';
 import QuestionList from './QuestionList.vue';
 
-const defaultQuestions: RecallQuestions = {
-  preMeals: [],
-  meals: {
-    preFoods: [],
-    foods: [],
-    postFoods: [],
-  },
-  postMeals: [],
-  submission: [],
-};
-
-const flattenScheme = (collection: Record<string, PromptQuestion[]>): PromptQuestion[] => {
+const flattenScheme = (collection: RecallQuestions): PromptQuestion[] => {
   return Object.values(collection).reduce((acc, item) => {
     return Array.isArray(item) ? acc.concat(item) : acc.concat(flattenScheme(item));
   }, []);
@@ -84,19 +74,19 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   data() {
     return {
-      form: new Form({
+      form: form<SchemeForm>({
         id: null,
         name: null,
-        type: 'legacy',
+        type: 'data-driven',
         questions: defaultQuestions,
-        meals: [],
-        export: [],
+        meals: defaultMeals,
+        export: defaultExport,
       }),
       sections: {
         survey: ['preMeals', 'postMeals', 'submission'] as QuestionSection[],
         meal: ['preFoods', 'foods', 'postFoods'] as MealSection[],
       },
-      section: 'preMeals' as MealSection & QuestionSection,
+      section: 'preMeals' as MealSection | QuestionSection,
     };
   },
 
@@ -105,14 +95,14 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       get(): PromptQuestion[] {
         const { section } = this;
 
-        return this.sections.meal.includes(section)
+        return this.isMealSection(section)
           ? this.form.questions.meals[section]
           : this.form.questions[section];
       },
       set(value: PromptQuestion[]): void {
         const { section } = this;
 
-        if (this.sections.meal.includes(section)) {
+        if (this.isMealSection(section)) {
           this.form.questions.meals[section] = value;
           return;
         }
@@ -126,6 +116,10 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   },
 
   methods: {
+    isMealSection(section: any): section is MealSection {
+      return this.sections.meal.includes(section);
+    },
+
     /*
      * formMixin override
      */
@@ -134,7 +128,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       this.form.load({ ...rest, questions: { ...defaultQuestions, ...questions } });
     },
 
-    swap(section: QuestionSection & MealSection) {
+    swap(section: QuestionSection | MealSection) {
       this.section = section;
     },
   },
