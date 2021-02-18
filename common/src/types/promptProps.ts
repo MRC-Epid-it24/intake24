@@ -55,5 +55,6 @@ export interface PortionSizeOptionPromptProps extends ValidatedPromptProps {
 
 export interface AsServedPromptProps extends ValidatedPromptProps {
   localDescription: LocaleTranslation;
-  imageUrl: string;
+  selectionImageUrl: string;
+  // images: Object[];
 }

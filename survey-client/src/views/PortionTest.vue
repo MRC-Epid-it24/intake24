@@ -61,8 +61,8 @@ export default Vue.extend({
         text: { en: 'Portion Size Options' },
         description: { en: 'Meat lasagne (includes homemade)' },
         localDescription: { en: 'Meat lasagne (includes homemade)' },
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Fries_2.jpg/800px-Fries_2.jpg',
-        // imageUrl: 'https://bad.src',
+        selectionImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Fries_2.jpg/800px-Fries_2.jpg',
+        // selectionImageUrl: 'https://bad.src',
         validation: {
           required: false,
           message: { en: null },

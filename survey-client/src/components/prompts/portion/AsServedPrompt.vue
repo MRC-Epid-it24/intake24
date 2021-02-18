@@ -25,18 +25,59 @@
     <v-row>
       <v-col>
         <v-card>
-          <v-img class="align-end" :src="imageUrl" :aspect-ratio="16 / 9">
+          <v-img class="align-end" :src="selectionImageUrl" :aspect-ratio="16 / 9">
             <template v-slot:placeholder>
               <ImagePlaceholder></ImagePlaceholder>
             </template>
+            <v-message class="align-right">100g</v-message>
           </v-img>
-          <v-card-text>Text here</v-card-text>
+          <v-card-actions>
+            <v-container dense>
+              <v-row>
+                <v-col class="pa-1">
+                  <v-card>
+                    <v-img :src="selectionImageUrl" max-width="5rem">-</v-img>
+                    <v-overlay absolute>
+                        <v-btn icon>
+                          <v-icon>fas fa-fw fa-minus</v-icon>
+                        </v-btn>
+                      </v-overlay>
+                  </v-card>
+                </v-col>
+                <template v-for="index in 7">
+                  <v-col v-bind:key="index" class="pa-1">
+                    <v-card>
+                      <v-img :src="selectionImageUrl" max-width="5rem"></v-img>
+                      <!-- <v-card-text>{{number}}</v-card-text> -->
+                    </v-card>
+                  </v-col>
+                </template>
+                <v-col class="pa-1" align="center">
+                  <v-card>
+                    <v-img :src="selectionImageUrl" max-width="5rem">
+                    </v-img>
+                    <v-overlay absolute>
+                        <v-btn icon>
+                          <v-icon>fas fa-fw fa-plus</v-icon>
+                        </v-btn>
+                      </v-overlay>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col align="center">
+                  <v-btn>I had less</v-btn>
+                </v-col>
+                <v-col align="center">
+                  <v-btn>I had more</v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>Pictures of portions here</v-col>
-    </v-row>
+    
   </v-container>
   
 </template>

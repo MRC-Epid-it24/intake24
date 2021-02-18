@@ -90,7 +90,7 @@ export const asServedPromptDefaultProps: AsServedPromptProps = {
   text: { en: null },
   description: { en: null },
   localDescription: { en: null },
-  imageUrl: '',
+  selectionImageUrl: '',
   validation: {
     required: false,
     message: { en: null },
