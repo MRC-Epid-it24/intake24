@@ -1,8 +1,5 @@
 import { expect } from 'chai';
 
-describe('Food Locale', () => {
-
-  it('', () => {
-
-  });
-});
+// describe('Food Locale', function () {
+//   it('', function () {});
+// });
