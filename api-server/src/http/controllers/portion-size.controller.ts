@@ -7,12 +7,12 @@ import { Controller } from './controller';
 export type PortionSizeController = Controller<
   | 'asServedSet'
   | 'asServedSets'
+  | 'drinkwareSet'
+  | 'drinkwareSets'
   | 'guideImage'
   | 'guideImages'
   | 'imageMap'
   | 'imageMaps'
-  | 'drinkwareSet'
-  | 'drinkwareSets'
   | 'weight'
 >;
 
@@ -39,6 +39,25 @@ export default ({
     const records = await portionSizeService.getAsServedSets(id);
 
     res.json(records.map(asServedResponse(baseUrl).setResponse));
+  };
+
+  const drinkwareSet = async (req: Request, res: Response<DrinkwareSetResponse>): Promise<void> => {
+    const { id } = req.params;
+
+    const record = await portionSizeService.getDrinkwareSet(id);
+
+    res.json(drinkwareResponse(baseUrl).setResponse(record));
+  };
+
+  const drinkwareSets = async (
+    req: Request,
+    res: Response<DrinkwareSetResponse[]>
+  ): Promise<void> => {
+    const id = req.query.id as string | string[];
+
+    const records = await portionSizeService.getDrinkwareSets(id);
+
+    res.json(records.map(drinkwareResponse(baseUrl).setResponse));
   };
 
   const guideImage = async (req: Request, res: Response): Promise<void> => {
@@ -75,25 +94,6 @@ export default ({
     res.json(records.map(imageMapsResponse(baseUrl).imageResponse));
   };
 
-  const drinkwareSet = async (req: Request, res: Response<DrinkwareSetResponse>): Promise<void> => {
-    const { id } = req.params;
-
-    const record = await portionSizeService.getDrinkwareSet(id);
-
-    res.json(drinkwareResponse(baseUrl).setResponse(record));
-  };
-
-  const drinkwareSets = async (
-    req: Request,
-    res: Response<DrinkwareSetResponse[]>
-  ): Promise<void> => {
-    const id = req.query.id as string | string[];
-
-    const records = await portionSizeService.getDrinkwareSets(id);
-
-    res.json(records.map(drinkwareResponse(baseUrl).setResponse));
-  };
-
   const weight = async (req: Request, res: Response<WeightResponse>): Promise<void> => {
     res.json({
       method: 'weight',
@@ -108,12 +108,12 @@ export default ({
   return {
     asServedSet,
     asServedSets,
+    drinkwareSet,
+    drinkwareSets,
     guideImage,
     guideImages,
     imageMap,
     imageMaps,
-    drinkwareSet,
-    drinkwareSets,
     weight,
   };
 };
