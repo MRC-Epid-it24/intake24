@@ -48,7 +48,6 @@
                   <v-col v-bind:key="index" class="pa-1">
                     <v-card>
                       <v-img :src="selectionImageUrl" max-width="5rem"></v-img>
-                      <!-- <v-card-text>{{number}}</v-card-text> -->
                     </v-card>
                   </v-col>
                 </template>
@@ -70,6 +69,9 @@
                 </v-col>
                 <v-col align="center">
                   <v-btn>I had more</v-btn>
+                </v-col>
+                <v-col align="center">
+                  <v-btn color="success">I had this much</v-btn>
                 </v-col>
               </v-row>
             </v-container>
