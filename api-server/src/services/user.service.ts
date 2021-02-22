@@ -1,5 +1,7 @@
-import { CreateUserRequest, UpdateUserRequest } from '@common/types/http';
-import { User, UserPassword } from '@/db/models/system';
+import { Op } from 'sequelize';
+import { UserPassword as UserPasswordAttributes } from '@common/types/models';
+import { CreateUserInput, UpdateUserInput } from '@common/types/http';
+import { User, UserCustomField, UserPassword } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import { defaultAlgorithm } from '@/util/passwords';
 import { toSimpleName } from '@/util';
@@ -10,8 +12,8 @@ export type UserPasswordInput = {
 };
 
 export interface UserService {
-  create: (request: CreateUserRequest) => Promise<User>;
-  update: (userId: string | number, request: UpdateUserRequest) => Promise<User>;
+  create: (request: CreateUserInput) => Promise<User>;
+  update: (userId: string | number, request: UpdateUserInput) => Promise<User>;
   destroy: (userId: string | number) => Promise<void>;
   createPassword: (userId: number, password: string) => Promise<UserPassword>;
   createPasswords: (records: UserPasswordInput[]) => Promise<UserPassword[]>;
@@ -19,6 +21,13 @@ export interface UserService {
 }
 
 export default (): UserService => {
+  /**
+   * Create password record
+   *
+   * @param {number} userId
+   * @param {string} password
+   * @returns {Promise<UserPassword>}
+   */
   const createPassword = async (userId: number, password: string): Promise<UserPassword> => {
     const { salt, hash } = await defaultAlgorithm.hash(password);
 
@@ -30,8 +39,14 @@ export default (): UserService => {
     });
   };
 
+  /**
+   * Bulk-create password records
+   *
+   * @param {UserPasswordInput[]} passwordInput
+   * @returns {Promise<UserPassword[]>}
+   */
   const createPasswords = async (passwordInput: UserPasswordInput[]): Promise<UserPassword[]> => {
-    const records = [];
+    const records: UserPasswordAttributes[] = [];
 
     for (const input of passwordInput) {
       const { userId, password } = input;
@@ -48,6 +63,13 @@ export default (): UserService => {
     return UserPassword.bulkCreate(records);
   };
 
+  /**
+   * Update password
+   *
+   * @param {number} userId
+   * @param {string} password
+   * @returns {Promise<UserPassword>}
+   */
   const updatePassword = async (userId: number, password: string): Promise<UserPassword> => {
     const userPassword = await UserPassword.findByPk(userId);
     if (!userPassword) throw new NotFoundError();
@@ -61,32 +83,86 @@ export default (): UserService => {
     });
   };
 
-  const create = async (request: CreateUserRequest): Promise<User> => {
+  /**
+   * Create new user & other associations. It creates:
+   * - user record
+   * - user password
+   * - user custom fields
+   * - user permissions
+   * - user roles
+   *
+   * @param {CreateUserInput} request
+   * @returns {Promise<User>}
+   */
+  const create = async (request: CreateUserInput): Promise<User> => {
     const { password, permissions, roles, ...rest } = request;
 
-    const user = await User.create({ ...rest, simpleName: toSimpleName(rest.name) });
+    const user = await User.create(
+      { ...rest, simpleName: toSimpleName(rest.name) },
+      { include: [UserCustomField] }
+    );
 
+    await createPassword(user.id, password);
     await user.$set('permissions', permissions);
     await user.$set('roles', roles);
-    await createPassword(user.id, password);
 
     return user;
   };
 
-  const update = async (userId: string | number, request: UpdateUserRequest): Promise<User> => {
-    const user = await User.findByPk(userId);
+  /**
+   * Update existing user and its associations. It updates:
+   * - user record
+   * - user custom fields
+   * - user permissions
+   * - user roles
+   *
+   * @param {(string | number)} userId
+   * @param {UpdateUserInput} request
+   * @returns {Promise<User>}
+   */
+  const update = async (userId: string | number, request: UpdateUserInput): Promise<User> => {
+    const user = await User.scope('customFields').findByPk(userId);
 
     if (!user) throw new NotFoundError();
 
-    const { permissions, roles, ...rest } = request;
+    const { customFields, permissions, roles, ...rest } = request;
 
     await user.update({ ...rest, simpleName: toSimpleName(rest.name) });
+
     await user.$set('permissions', permissions);
     await user.$set('roles', roles);
+
+    // Update custom fields
+    if (customFields && user.customFields) {
+      // 1) remove fields that are not present
+      const customFieldNames = customFields.map((field) => field.name);
+      await UserCustomField.destroy({ where: { userId, name: { [Op.notIn]: customFieldNames } } });
+
+      for (const customField of customFields) {
+        const { name, value } = customField;
+
+        const matchIdx = user.customFields.findIndex((field) => field.name === name);
+
+        // 2) add new field
+        if (matchIdx === -1) {
+          await UserCustomField.create({ ...customField, userId });
+          continue;
+        }
+
+        // 3) update existing fields
+        await user.customFields[matchIdx].update({ value });
+      }
+    }
 
     return user;
   };
 
+  /**
+   * Delete user record and its associations
+   *
+   * @param {(string | number)} userId
+   * @returns {Promise<void>}
+   */
   const destroy = async (userId: string | number): Promise<void> => {
     const user = await User.scope('submissions').findByPk(userId);
 

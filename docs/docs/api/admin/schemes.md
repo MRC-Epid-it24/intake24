@@ -44,7 +44,8 @@ Content-Type: application/json
     "name": string,
     "type": 'legacy' | 'data-driven',
     "meals": [{...}],
-    "questions": {...}
+    "questions": {...},
+    "export": [{...}]
 }
 ```
 
@@ -98,7 +99,8 @@ Content-Type: application/json
     "name": string,
     "type": 'legacy' | 'data-driven',
     "meals": [{...}],
-    "questions": {...}
+    "questions": {...},
+    "export": [{...}]
 }
 ```
 

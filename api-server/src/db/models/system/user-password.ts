@@ -1,4 +1,4 @@
-import { BelongsTo, Column, ForeignKey, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
 import { UserPassword as UserPasswordAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
@@ -19,16 +19,19 @@ export default class UserPassword extends BaseModel implements UserPasswordAttri
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
   })
   public passwordHash!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
   })
   public passwordSalt!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(64),
   })
   public passwordHasher!: string;
 

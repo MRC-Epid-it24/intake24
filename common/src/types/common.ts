@@ -1,5 +1,10 @@
 export type Dictionary<T = any> = { [key: string]: T };
 
+export type CustomField = {
+  name: string;
+  value: string;
+};
+
 export type PartialRecord<K extends keyof any, T> = {
   [P in K]?: T;
 };
