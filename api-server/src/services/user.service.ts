@@ -5,6 +5,7 @@ import { User, UserCustomField, UserPassword } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import { defaultAlgorithm } from '@/util/passwords';
 import { toSimpleName } from '@/util';
+import { CustomField } from '@common/types';
 
 export type UserPasswordInput = {
   userId: number;
@@ -12,23 +13,27 @@ export type UserPasswordInput = {
 };
 
 export interface UserService {
-  create: (request: CreateUserInput) => Promise<User>;
-  update: (userId: string | number, request: UpdateUserInput) => Promise<User>;
-  destroy: (userId: string | number) => Promise<void>;
-  createPassword: (userId: number, password: string) => Promise<UserPassword>;
+  create: (input: CreateUserInput) => Promise<User>;
+  update: (userId: number | string, input: UpdateUserInput) => Promise<User>;
+  destroy: (userId: number | string) => Promise<void>;
+  updateUserCustomFields: (
+    userId: number | string,
+    userCustomFields: UserCustomField[],
+    customFields: CustomField[]
+  ) => Promise<void>;
+  createPassword: (input: UserPasswordInput) => Promise<UserPassword>;
   createPasswords: (records: UserPasswordInput[]) => Promise<UserPassword[]>;
-  updatePassword: (userId: number, password: string) => Promise<UserPassword>;
+  updatePassword: (input: UserPasswordInput) => Promise<UserPassword>;
 }
 
 export default (): UserService => {
   /**
    * Create password record
    *
-   * @param {number} userId
-   * @param {string} password
+   * @param {UserPasswordInput} input
    * @returns {Promise<UserPassword>}
    */
-  const createPassword = async (userId: number, password: string): Promise<UserPassword> => {
+  const createPassword = async ({ userId, password }: UserPasswordInput): Promise<UserPassword> => {
     const { salt, hash } = await defaultAlgorithm.hash(password);
 
     return UserPassword.create({
@@ -42,13 +47,13 @@ export default (): UserService => {
   /**
    * Bulk-create password records
    *
-   * @param {UserPasswordInput[]} passwordInput
+   * @param {UserPasswordInput[]} inputs
    * @returns {Promise<UserPassword[]>}
    */
-  const createPasswords = async (passwordInput: UserPasswordInput[]): Promise<UserPassword[]> => {
+  const createPasswords = async (inputs: UserPasswordInput[]): Promise<UserPassword[]> => {
     const records: UserPasswordAttributes[] = [];
 
-    for (const input of passwordInput) {
+    for (const input of inputs) {
       const { userId, password } = input;
       const { salt, hash } = await defaultAlgorithm.hash(password);
 
@@ -64,13 +69,50 @@ export default (): UserService => {
   };
 
   /**
+   * Update user custom fields
+   * 1) it deletes non missing one
+   * 2) updates existing ones
+   * 3) add new ones
+   *
+   * @param {(number | string)} userId
+   * @param {UserCustomField[]} userCustomFields
+   * @param {CustomField[]} customFields
+   * @returns {Promise<void>}
+   */
+  const updateUserCustomFields = async (
+    userId: number | string,
+    userCustomFields: UserCustomField[],
+    customFields: CustomField[]
+  ): Promise<void> => {
+    // 1) remove fields that are not present
+    const customFieldNames = customFields.map((field) => field.name);
+    await UserCustomField.destroy({ where: { userId, name: { [Op.notIn]: customFieldNames } } });
+
+    if (!customFieldNames.length) return;
+
+    for (const customField of customFields) {
+      const { name, value } = customField;
+
+      const matchIdx = userCustomFields.findIndex((field) => field.name === name);
+
+      // 2) add new field
+      if (matchIdx === -1) {
+        await UserCustomField.create({ ...customField, userId });
+        continue;
+      }
+
+      // 3) update existing fields
+      await userCustomFields[matchIdx].update({ value });
+    }
+  };
+
+  /**
    * Update password
    *
-   * @param {number} userId
-   * @param {string} password
+   * @param {UserPasswordInput} input
    * @returns {Promise<UserPassword>}
    */
-  const updatePassword = async (userId: number, password: string): Promise<UserPassword> => {
+  const updatePassword = async ({ userId, password }: UserPasswordInput): Promise<UserPassword> => {
     const userPassword = await UserPassword.findByPk(userId);
     if (!userPassword) throw new NotFoundError();
 
@@ -91,18 +133,18 @@ export default (): UserService => {
    * - user permissions
    * - user roles
    *
-   * @param {CreateUserInput} request
+   * @param {CreateUserInput} input
    * @returns {Promise<User>}
    */
-  const create = async (request: CreateUserInput): Promise<User> => {
-    const { password, permissions, roles, ...rest } = request;
+  const create = async (input: CreateUserInput): Promise<User> => {
+    const { password, permissions, roles, ...rest } = input;
 
     const user = await User.create(
       { ...rest, simpleName: toSimpleName(rest.name) },
       { include: [UserCustomField] }
     );
 
-    await createPassword(user.id, password);
+    await createPassword({ userId: user.id, password });
     await user.$set('permissions', permissions);
     await user.$set('roles', roles);
 
@@ -117,15 +159,15 @@ export default (): UserService => {
    * - user roles
    *
    * @param {(string | number)} userId
-   * @param {UpdateUserInput} request
+   * @param {UpdateUserInput} input
    * @returns {Promise<User>}
    */
-  const update = async (userId: string | number, request: UpdateUserInput): Promise<User> => {
+  const update = async (userId: number | string, input: UpdateUserInput): Promise<User> => {
     const user = await User.scope('customFields').findByPk(userId);
 
     if (!user) throw new NotFoundError();
 
-    const { customFields, permissions, roles, ...rest } = request;
+    const { customFields, permissions, roles, ...rest } = input;
 
     await user.update({ ...rest, simpleName: toSimpleName(rest.name) });
 
@@ -133,26 +175,8 @@ export default (): UserService => {
     await user.$set('roles', roles);
 
     // Update custom fields
-    if (customFields && user.customFields) {
-      // 1) remove fields that are not present
-      const customFieldNames = customFields.map((field) => field.name);
-      await UserCustomField.destroy({ where: { userId, name: { [Op.notIn]: customFieldNames } } });
-
-      for (const customField of customFields) {
-        const { name, value } = customField;
-
-        const matchIdx = user.customFields.findIndex((field) => field.name === name);
-
-        // 2) add new field
-        if (matchIdx === -1) {
-          await UserCustomField.create({ ...customField, userId });
-          continue;
-        }
-
-        // 3) update existing fields
-        await user.customFields[matchIdx].update({ value });
-      }
-    }
+    if (customFields && user.customFields)
+      await updateUserCustomFields(userId, user.customFields, customFields);
 
     return user;
   };
@@ -163,7 +187,7 @@ export default (): UserService => {
    * @param {(string | number)} userId
    * @returns {Promise<void>}
    */
-  const destroy = async (userId: string | number): Promise<void> => {
+  const destroy = async (userId: number | string): Promise<void> => {
     const user = await User.scope('submissions').findByPk(userId);
 
     if (!user) throw new NotFoundError();
@@ -177,6 +201,7 @@ export default (): UserService => {
   return {
     createPassword,
     createPasswords,
+    updateUserCustomFields,
     updatePassword,
     create,
     update,

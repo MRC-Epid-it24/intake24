@@ -33,6 +33,22 @@ export const identifiers: Schema = {
     isString: true,
     optional: { options: { nullable: true } },
   },
+  customFields: {
+    in: ['body'],
+    errorMessage: 'Enter valid custom field object.',
+    optional: { options: { nullable: true } },
+    custom: {
+      options: async (value: any): Promise<void> => {
+        if (
+          !Array.isArray(value) ||
+          value.some((item) => !isPlainObject(item) || !has(item, 'name') || !has(item, 'value'))
+        )
+          throw new Error('Enter valid custom field object.');
+
+        Promise.resolve();
+      },
+    },
+  },
 };
 
 export const password: Schema = {
@@ -60,22 +76,6 @@ export const password: Schema = {
 };
 
 export const user: Schema = {
-  customFields: {
-    in: ['body'],
-    errorMessage: 'Enter valid custom field object.',
-    optional: { options: { nullable: true } },
-    custom: {
-      options: async (value: any): Promise<void> => {
-        if (
-          !Array.isArray(value) ||
-          value.some((item) => !isPlainObject(item) || !has(item, 'name') || !has(item, 'value'))
-        )
-          throw new Error('Enter valid custom field object.');
-
-        Promise.resolve();
-      },
-    },
-  },
   permissions,
   roles,
   emailNotifications: {

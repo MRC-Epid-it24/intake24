@@ -23,6 +23,8 @@ export interface CreateUserRequest extends CreateUserInput {
 
 export type UpdateUserInput = UserInput;
 
+export type UpdateUserRequest = UpdateUserInput;
+
 /*
  - for use of we want to allow updating password in Admin UI
 export interface UpdateUserInput extends UserInput {
@@ -50,20 +52,27 @@ export type CreateUserResponse = Pick<UserResponse, 'refs'>;
 
 export type StoreUserResponse = Pick<UserResponse, 'data'>;
 
-export type RespondentRequest = {
+export type RespondentInput = {
   name?: string;
   email?: string;
   phone?: string;
+  customFields?: CustomField[];
 };
 
-export interface CreateRespondentRequest extends RespondentRequest {
+export interface CreateRespondentInput extends RespondentInput {
   userName: string;
   password: string;
-  passwordConfirm?: string;
 }
 
-export interface UpdateRespondentRequest extends RespondentRequest {
+export interface CreateRespondentRequest extends CreateRespondentInput {
+  passwordConfirm: string;
+}
+
+export interface UpdateRespondentInput extends RespondentInput {
   password?: string;
+}
+
+export interface UpdateRespondentRequest extends UpdateRespondentInput {
   passwordConfirm?: string;
 }
 

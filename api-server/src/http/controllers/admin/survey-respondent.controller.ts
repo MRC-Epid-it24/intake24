@@ -34,7 +34,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
 
     const respondent = await surveyService.createRespondent(
       surveyId,
-      pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
+      pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
     );
 
     res.status(201).json({ data: respondent });
@@ -46,7 +46,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
     const respondent = await surveyService.updateRespondent(
       surveyId,
       userId,
-      pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
+      pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
     );
 
     res.json({ data: respondent });

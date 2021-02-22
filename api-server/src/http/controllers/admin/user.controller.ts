@@ -25,7 +25,9 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
 
   const entry = async (req: Request, res: Response<UserResponse>): Promise<void> => {
     const { userId } = req.params;
-    const user = await User.scope(['customFields', 'permissions', 'roles']).findByPk(userId);
+    const user = await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
+      userId
+    );
 
     if (!user) throw new NotFoundError();
 
@@ -68,7 +70,9 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
     );
 
     const data = userResponse(
-      (await User.scope(['customFields', 'permissions', 'roles']).findByPk(user.id)) as User
+      (await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
+        user.id
+      )) as User
     );
 
     res.status(201).json({ data });
@@ -98,7 +102,9 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
     );
 
     const data = userResponse(
-      (await User.scope(['customFields', 'permissions', 'roles']).findByPk(userId)) as User
+      (await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
+        userId
+      )) as User
     );
     const refs = await entryRefs();
 

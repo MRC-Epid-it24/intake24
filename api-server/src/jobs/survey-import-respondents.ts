@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { User, UserSurveyAlias } from '@/db/models/system';
 import type { IoC } from '@/ioc';
+import type { CustomField } from '@common/types';
 import type { Job, JobData, JobType } from '.';
 
 export type SurveyImportRespondentsData = {
@@ -16,6 +17,7 @@ export type CSVRow = {
   name?: string;
   email?: string;
   phone?: string;
+  [key: string]: string | undefined;
 };
 
 const requiredFields = ['username', 'password'];
@@ -41,7 +43,9 @@ export default class SurveyImportRespondents implements Job {
   /**
    * Run the job
    *
-   * @return Promise<void>
+   * @param {JobData<SurveyImportRespondentsData>} { data }
+   * @returns {Promise<void>}
+   * @memberof SurveyImportRespondents
    */
   public async run({ data }: JobData<SurveyImportRespondentsData>): Promise<void> {
     this.data = data;
@@ -59,6 +63,14 @@ export default class SurveyImportRespondents implements Job {
     this.logger.debug(`Job ${this.name} finished.`);
   }
 
+  /**
+   * Read CSV file and validate in chunks
+   *
+   * @private
+   * @param {number} [chunk=100]
+   * @returns {Promise<void>}
+   * @memberof SurveyImportRespondents
+   */
   private async validate(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
@@ -94,10 +106,22 @@ export default class SurveyImportRespondents implements Job {
     });
   }
 
+  /**
+   * Chunk validator. It validates:
+   * - presence of required fields
+   * - username / survey alias uniqueness within survey
+   * - email uniqueness within system
+   *
+   * @private
+   * @returns {Promise<void>}
+   * @memberof SurveyImportRespondents
+   */
   private async validateChunk(): Promise<void> {
     if (!this.content.length) return;
 
     const csvFields = Object.keys(this.content[0]);
+
+    // Check for presence of required fields
     if (requiredFields.some((field) => !csvFields.includes(field)))
       throw new Error(`Missing required fields, 'username' or 'password'.`);
 
@@ -125,6 +149,14 @@ export default class SurveyImportRespondents implements Job {
     this.content = [];
   }
 
+  /**
+   * Read CSV file and import in chunks
+   *
+   * @private
+   * @param {number} [chunk=100]
+   * @returns {Promise<void>}
+   * @memberof SurveyImportRespondents
+   */
   private async import(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
@@ -160,12 +192,34 @@ export default class SurveyImportRespondents implements Job {
     });
   }
 
+  /**
+   * Chunk importer
+   *
+   * @private
+   * @returns {Promise<void>}
+   * @memberof SurveyImportRespondents
+   */
   private async importChunk(): Promise<void> {
     if (!this.content.length) return;
 
     const records = this.content.map((item) => {
-      const { username, ...rest } = item;
-      return { userName: username, ...rest };
+      const { username, password, name, email, phone, ...rest } = item;
+
+      const customFields = Object.keys(rest).reduce((acc, key) => {
+        const value = rest[key];
+        if (value) acc.push({ name: key, value });
+
+        return acc;
+      }, [] as CustomField[]);
+
+      return {
+        userName: username,
+        password,
+        name,
+        email,
+        phone,
+        customFields,
+      };
     });
 
     await this.surveyService.createRespondents(this.data.surveyId, records);

@@ -1,4 +1,4 @@
-import type { Permission, Role } from '.';
+import type { Permission, Role, UserSurveyAlias } from '.';
 
 export type User = {
   id: number;
@@ -21,6 +21,7 @@ export type UserCustomField = {
 };
 
 export type UserAssociations = {
+  aliases?: UserSurveyAlias[];
   customFields?: UserCustomField[];
   permissions?: Permission[];
   roles?: Role[];

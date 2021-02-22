@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
-import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/http';
+import { CreateRespondentInput, UpdateRespondentInput } from '@common/types/http';
+import { UserCustomField as UserCustomFieldAttributes } from '@common/types/models';
 import {
   GenUserCounter,
   Job,
@@ -7,6 +8,7 @@ import {
   PermissionUser,
   Survey,
   User,
+  UserCustomField,
   UserSurveyAlias,
 } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
@@ -22,15 +24,15 @@ export type RespondentWithPassword = {
 export interface SurveyService {
   getSurveyRespondentPermission: (surveyId: string) => Promise<Permission>;
   getSurveyMgmtPermissions: (surveyId: string, scope?: string | string[]) => Promise<Permission[]>;
-  createRespondent: (surveyId: string, input: CreateRespondentRequest) => Promise<UserSurveyAlias>;
+  createRespondent: (surveyId: string, input: CreateRespondentInput) => Promise<UserSurveyAlias>;
   createRespondents: (
     surveyId: string,
-    inputs: CreateRespondentRequest[]
+    inputs: CreateRespondentInput[]
   ) => Promise<UserSurveyAlias[]>;
   updateRespondent: (
     surveyId: string,
     userId: string | number,
-    input: UpdateRespondentRequest
+    input: UpdateRespondentInput
   ) => Promise<UserSurveyAlias>;
   deleteRespondent: (surveyId: string, userId: string | number) => Promise<void>;
   generateRespondent: (surveyId: string) => Promise<RespondentWithPassword>;
@@ -82,13 +84,16 @@ export default ({
    */
   const createRespondent = async (
     surveyId: string,
-    input: CreateRespondentRequest
+    input: CreateRespondentInput
   ): Promise<UserSurveyAlias> => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
     const { password, userName, ...rest } = input;
-    const user = await User.create({ ...rest, simpleName: toSimpleName(rest.name) });
+    const user = await User.create(
+      { ...rest, simpleName: toSimpleName(rest.name) },
+      { include: [UserCustomField] }
+    );
 
     await user.$add('permissions', await getSurveyRespondentPermission(surveyId));
 
@@ -102,7 +107,7 @@ export default ({
       urlAuthToken: generateToken(size, alphabet),
     });
 
-    await userService.createPassword(userId, password);
+    await userService.createPassword({ userId, password });
 
     return respondent;
   };
@@ -111,12 +116,12 @@ export default ({
    * Bulk create survey respondents
    *
    * @param {string} surveyId
-   * @param {CreateRespondentRequest[]} inputs
+   * @param {CreateRespondentInput[]} inputs
    * @returns {Promise<void>}
    */
   const createRespondents = async (
     surveyId: string,
-    inputs: CreateRespondentRequest[]
+    inputs: CreateRespondentInput[]
   ): Promise<UserSurveyAlias[]> => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
@@ -125,14 +130,21 @@ export default ({
     const { size, alphabet } = config.security.authTokens;
 
     const userAliases = [];
+    const userCustomFields: Omit<UserCustomFieldAttributes, 'id'>[] = [];
     const userPasswords = [];
     const userPermissions = [];
 
     for (const input of inputs) {
-      const { password, userName, ...rest } = input;
+      const { customFields, password, userName, ...rest } = input;
       // User records are created one-by-one
-      // This is to keep it MySQL others-like compatible, where bulk operation doesn't return generated IDs
+      // This is to keep it MySQL+others-like compatible, where bulk operation doesn't return generated IDs
       const { id: userId } = await User.create({ ...rest, simpleName: toSimpleName(rest.name) });
+
+      if (customFields && customFields.length) {
+        customFields.forEach((field) => {
+          userCustomFields.push({ ...field, userId });
+        });
+      }
 
       userAliases.push({ userId, surveyId, userName, urlAuthToken: generateToken(size, alphabet) });
       userPermissions.push({ userId, permissionId });
@@ -141,6 +153,7 @@ export default ({
 
     await PermissionUser.bulkCreate(userPermissions);
     await userService.createPasswords(userPasswords);
+    await UserCustomField.bulkCreate(userCustomFields);
 
     return UserSurveyAlias.bulkCreate(userAliases);
   };
@@ -150,29 +163,31 @@ export default ({
    *
    * @param {string} surveyId
    * @param {(string | number)} userId
-   * @param {UpdateRespondentRequest} input
+   * @param {UpdateRespondentInput} input
    * @returns {Promise<UserSurveyAlias>}
    */
   const updateRespondent = async (
     surveyId: string,
     userId: string | number,
-    input: UpdateRespondentRequest
+    input: UpdateRespondentInput
   ): Promise<UserSurveyAlias> => {
     const survey = await Survey.findByPk(surveyId);
-    const user = await User.findOne({
+    const user = await User.scope('customFields').findOne({
       include: [{ model: UserSurveyAlias, where: { userId, surveyId } }],
     });
 
-    if (!survey || !user) throw new NotFoundError();
+    if (!survey || !user || !user.aliases) throw new NotFoundError();
 
-    const { password, ...rest } = input;
+    const { customFields, password, ...rest } = input;
 
     await user.update({ ...rest, simpleName: toSimpleName(rest.name) });
-    if (password) userService.updatePassword(user.id, password);
+    if (password) userService.updatePassword({ userId: user.id, password });
 
-    // Query ensures alias is loaded
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return user.aliases![0];
+    // Update custom fields
+    if (customFields && user.customFields)
+      await userService.updateUserCustomFields(userId, user.customFields, customFields);
+
+    return user.aliases[0];
   };
 
   /**
@@ -204,7 +219,7 @@ export default ({
   };
 
   /**
-   * Generate survey new random survey respondent
+   * Generate new random survey respondent
    *
    * @param {string} surveyId
    * @returns {Promise<RespondentWithPassword>}
