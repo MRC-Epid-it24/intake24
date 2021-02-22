@@ -2,7 +2,7 @@
 
 ## List permissions
 
-Get permission list
+Browse paginated permission list
 
 ### Request
 

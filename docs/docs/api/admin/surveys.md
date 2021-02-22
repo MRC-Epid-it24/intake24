@@ -2,7 +2,7 @@
 
 ## List surveys
 
-Get survey list
+Browse paginated survey list
 
 ### Request
 
@@ -57,7 +57,7 @@ Content-Type: application/json
     "submissionNotificationUrl": string,
     "storeUserSessionOnServer": boolean,
     "numberOfSubmissionsForFeedback": number,
-    "finalPageHtml": string,
+    "finalPageHtml": string
 }
 ```
 
@@ -124,7 +124,7 @@ Content-Type: application/json
     "submissionNotificationUrl": string,
     "storeUserSessionOnServer": boolean,
     "numberOfSubmissionsForFeedback": number,
-    "finalPageHtml": string,
+    "finalPageHtml": string
 }
 ```
 
@@ -162,8 +162,8 @@ Content-Type: application/json
 
 Get list of survey management users.
 
-::: tip Roles
-This includes users with `{surveyId}/staff` and `{surveyId}/support` roles.
+::: tip List content
+List includes users with `{surveyId}/staff` and `{surveyId}/support` roles.
 :::
 
 ### Request
@@ -193,8 +193,8 @@ Content-Type: application/json
 
 Get list of users, which can be assigned as survey management.
 
-::: tip Roles
-User has to have system account and no `{surveyId}/staff` or `{surveyId}/support` role.
+::: tip List content
+List includes users with `system account` and no `{surveyId}/staff` or `{surveyId}/support` role.
 :::
 
 ### Request
@@ -246,8 +246,8 @@ Content-Type: application/json
 
 Get list of survey respondents.
 
-::: tip Roles
-This includes users with `{surveyId}/respondent` role.
+::: tip List content
+List includes users with `{surveyId}/respondent` role.
 :::
 
 ### Request
@@ -292,6 +292,10 @@ Content-Type: application/json
     "phone": string,
     "password": string,
     "passwordConfirm": string,
+    "customFields": {
+        "name": string,
+        "value": string
+    }[]
 }
 ```
 
@@ -323,7 +327,7 @@ Content-Type: application/json
     "email": string,
     "phone": string,
     "password": string,
-    "passwordConfirm": string,
+    "passwordConfirm": string
 }
 ```
 

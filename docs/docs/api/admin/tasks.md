@@ -1,13 +1,13 @@
-# Schemes
+# Tasks
 
-## List schemes
+## List tasks
 
-Browse paginated scheme list
+Browse paginated task list
 
 ### Request
 
 ```http
-GET /api/admin/schemes
+GET /api/admin/tasks
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -27,25 +27,24 @@ Content-Type: application/json
 }
 ```
 
-## Create scheme
+## Create task
 
-Create new scheme entry
+Create new task entry
 
 ### Request
 
 ```http
-POST /api/admin/schemes
+POST /api/admin/tasks
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "id": string,
     "name": string,
-    "type": 'legacy' | 'data-driven',
-    "meals": [{...}],
-    "questions": {...},
-    "export": [{...}]
+    "job": string,
+    "cron": '0 * * * *',
+    "active": boolean,
+    "description": string | null
 }
 ```
 
@@ -59,14 +58,14 @@ Content-Type: application/json
 }
 ```
 
-## Get scheme
+## Get task
 
-Get scheme entry
+Get task entry
 
 ### Request
 
 ```http
-GET /api/admin/schemes/:schemeId
+GET /api/admin/tasks/:taskId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -83,24 +82,24 @@ Content-Type: application/json
 }
 ```
 
-## Update scheme
+## Update task
 
-Update scheme entry
+Update task entry
 
 ### Request
 
 ```http
-PUT /api/admin/schemes/:schemeId
+PUT /api/admin/tasks/:taskId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
     "name": string,
-    "type": 'legacy' | 'data-driven',
-    "meals": [{...}],
-    "questions": {...},
-    "export": [{...}]
+    "job": string,
+    "cron": '0 * * * *',
+    "active": boolean,
+    "description": string | null
 }
 ```
 
@@ -115,14 +114,14 @@ Content-Type: application/json
 }
 ```
 
-## Delete scheme
+## Delete task
 
-Delete scheme entry
+Delete task entry
 
 ### Request
 
 ```http
-DELETE /api/admin/schemes/:schemeId
+DELETE /api/admin/tasks/:taskId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

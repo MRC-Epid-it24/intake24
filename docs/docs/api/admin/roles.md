@@ -2,7 +2,7 @@
 
 ## List roles
 
-Get role list
+Browse paginated role list
 
 ### Request
 

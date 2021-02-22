@@ -134,6 +134,7 @@ module.exports = {
             'admin/locales',
             'admin/schemes',
             'admin/surveys',
+            'admin/tasks',
             'admin/users',
             'admin/roles',
             'admin/permissions',

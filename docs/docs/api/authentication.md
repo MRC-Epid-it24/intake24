@@ -128,7 +128,7 @@ POST /api/login/verify
 Content-Type: application/json
 
 {
-    "sigResponse": string,
+    "sigResponse": string
 }
 ```
 
