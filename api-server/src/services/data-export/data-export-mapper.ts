@@ -15,6 +15,13 @@ export type ExportFieldTransformCallback<T = SurveySubmissionFood> = (
   field: ExportField
 ) => ExportFieldTransform<T>;
 
+export const userCustomFieldValue: ExportFieldTransformCallback = (
+  field: ExportField
+): ExportFieldTransform => (food) => {
+  const match = food.meal?.submission?.user?.customFields?.find((item) => field.id === item.name);
+  return match?.value;
+};
+
 export const surveyCustomFieldValue: ExportFieldTransformCallback = (
   field: ExportField
 ): ExportFieldTransform => (food) => {
@@ -89,6 +96,24 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): DataExport
   ): Promise<ExportFieldInfo[]> => {
     return fields.map((field) => ({ label: field.label, value: value(field) }));
   };
+
+  /**
+   * User fields
+   *
+   * @param {ExportField[]} fields
+   * @returns {Promise<ExportFieldInfo[]>}
+   */
+  const user = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getRecordFields(fields, await dataExportFields.user());
+
+  /**
+   * User custom fields
+   *
+   * @param {ExportField[]} fields
+   * @returns {Promise<ExportFieldInfo[]>}
+   */
+  const userCustom = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(fields, userCustomFieldValue);
 
   /**
    * Survey fields
@@ -172,6 +197,8 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): DataExport
     getCustomRecordFields(fields, portionSizeValue);
 
   return {
+    user,
+    userCustom,
     survey,
     surveyCustom,
     meal,

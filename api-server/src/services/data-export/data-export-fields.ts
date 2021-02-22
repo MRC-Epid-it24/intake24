@@ -1,5 +1,6 @@
+import { orderBy } from 'lodash';
 import { NutrientTableCsvMappingFieldColumn } from '@/db/models/foods';
-import { NutrientType, Scheme, SurveySubmissionFood } from '@/db/models/system';
+import { NutrientType, Scheme, SurveySubmissionFood, UserCustomField } from '@/db/models/system';
 import { PromptQuestion } from '@common/types';
 import { ExportSection, ExportField as BaseExportField } from '@common/types/models';
 
@@ -17,13 +18,82 @@ export const EMPTY = 'N/A';
 
 export default (): DataExportFields => {
   /**
+   * Helper to map custom PromptQuestion to ExportField
+   *
+   * @param {PromptQuestion} question
+   * @returns {ExportField}
+   */
+  const customQuestionMapper = ({ id, name: label }: PromptQuestion): ExportField => ({
+    id,
+    label,
+  });
+
+  /**
+   * Default user fields
+   *
+   * @returns {Promise<ExportField[]>}
+   */
+  const user = async (): Promise<ExportField[]> => [
+    {
+      id: 'userId',
+      label: 'User ID',
+      value: (food) => food.meal?.submission?.user?.id,
+    },
+    {
+      id: 'email',
+      label: 'User Email',
+      value: (food) => food.meal?.submission?.user?.email,
+    },
+    {
+      id: 'phone',
+      label: 'User Phone',
+      value: (food) => food.meal?.submission?.user?.phone,
+    },
+    {
+      id: 'name',
+      label: 'User Name',
+      value: (food) => food.meal?.submission?.user?.name,
+    },
+    {
+      id: 'simpleName',
+      label: 'User Simple Name',
+      value: (food) => food.meal?.submission?.user?.simpleName,
+    },
+    {
+      id: 'userName',
+      label: 'Survey Alias / UserName',
+      value: (food) => {
+        const aliases = food.meal?.submission?.user?.aliases;
+        return aliases && aliases.length ? aliases[0].userName : undefined;
+      },
+    },
+  ];
+
+  /**
+   * User custom fields
+   *
+   * @returns {Promise<ExportField[]>}
+   */
+  const userCustom = async (): Promise<ExportField[]> => {
+    type UserCustomFieldDistinctValue = { DISTINCT: string };
+    const records: UserCustomFieldDistinctValue[] = await UserCustomField.aggregate(
+      'name',
+      'DISTINCT',
+      { plain: false }
+    );
+    const fields = records.map(({ DISTINCT }) => ({ id: DISTINCT, label: DISTINCT }));
+
+    return orderBy(fields, 'id');
+  };
+
+  /**
    * Default survey fields
    *
    * @returns {Promise<ExportField[]>}
    */
   const survey = async (): Promise<ExportField[]> => [
     {
-      id: 'id',
+      id: 'submissionId',
       label: 'Submission ID',
       value: (food) => food.meal?.submission?.id,
     },
@@ -31,19 +101,6 @@ export default (): DataExportFields => {
       id: 'surveyId',
       label: 'Survey ID',
       value: (food) => food.meal?.submission?.surveyId,
-    },
-    {
-      id: 'userId',
-      label: 'User ID',
-      value: (food) => food.meal?.submission?.userId,
-    },
-    {
-      id: 'userName',
-      label: 'Username',
-      value: (food) => {
-        const aliases = food.meal?.submission?.user?.aliases;
-        return aliases && aliases.length ? aliases[0].userName : undefined;
-      },
     },
     {
       id: 'startTime',
@@ -61,17 +118,6 @@ export default (): DataExportFields => {
       value: (food) => food.meal?.submission?.submissionTime?.toString(),
     },
   ];
-
-  /**
-   * Helper to map custom PromptQuestion to ExportField
-   *
-   * @param {PromptQuestion} question
-   * @returns {ExportField}
-   */
-  const customQuestionMapper = ({ id, name: label }: PromptQuestion): ExportField => ({
-    id,
-    label,
-  });
 
   /**
    * Survey custom fields
@@ -236,6 +282,8 @@ export default (): DataExportFields => {
   ];
 
   return {
+    user,
+    userCustom,
     survey,
     surveyCustom,
     meal,

@@ -20,6 +20,7 @@ import {
   SurveySubmissionPortionSizeField,
   User,
   UserSurveyAlias,
+  UserCustomField,
 } from '@/db/models/system';
 import type { StreamFindOptions } from '@/db/models/model';
 import type { IoC } from '@/ioc';
@@ -93,7 +94,10 @@ export default ({
             {
               model: User,
               required: true,
-              include: [{ model: UserSurveyAlias, where: { surveyId }, separate: true }],
+              include: [
+                { model: UserSurveyAlias, where: { surveyId }, separate: true },
+                { model: UserCustomField, separate: true },
+              ],
             },
           ],
         },
