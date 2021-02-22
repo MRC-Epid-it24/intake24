@@ -25,7 +25,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   watch: {
     entry: {
       handler() {
-        this.toForm(this.entry);
+        if (Object.keys(this.entry).length) this.toForm(this.entry);
       },
       // immediate: true,
     },
