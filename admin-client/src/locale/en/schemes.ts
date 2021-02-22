@@ -40,6 +40,8 @@ const schemes: LocaleMessageObject = {
     },
     sections: {
       _: 'Data export sections',
+      user: 'User record fields',
+      userCustom: 'User custom fields',
       survey: 'Survey record fields',
       surveyCustom: 'Survey custom fields',
       meal: 'Meal record fields',
