@@ -1,4 +1,4 @@
-import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import { GenUserCounter as GenUserCounterAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Survey } from '.';
@@ -17,6 +17,7 @@ export default class GenUserCounter extends BaseModel implements GenUserCounterA
   @Column({
     allowNull: false,
     primaryKey: true,
+    type: DataType.STRING(32),
   })
   public surveyId!: string;
 
