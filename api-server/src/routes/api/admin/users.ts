@@ -12,7 +12,7 @@ router.use(permission('acl'));
 router
   .route('')
   .post(permission('users-create'), validation.store, wrapAsync(userController.store))
-  .get(permission('users-list'), validation.list, wrapAsync(userController.list));
+  .get(permission('users-browse'), validation.browse, wrapAsync(userController.browse));
 
 router.get('/create', permission('users-create'), wrapAsync(userController.create));
 

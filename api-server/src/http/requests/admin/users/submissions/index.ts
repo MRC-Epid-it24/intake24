@@ -1,3 +1,3 @@
-import list from '@/http/requests/generic/list';
+import { browse } from '@/http/requests/generic';
 
-export default { list };
+export default { browse };

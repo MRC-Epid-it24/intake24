@@ -1,5 +1,4 @@
-import entry from '@/http/requests/generic/entry';
-import list from '@/http/requests/generic/list';
+import { browse, entry } from '@/http/requests/generic';
 import update from './update';
 
-export default { entry, list, update };
+export default { browse, entry, update };

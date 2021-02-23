@@ -10,7 +10,7 @@ const router = Router();
 router
   .route('')
   .post(permission('languages-create'), validation.store, wrapAsync(languageController.store))
-  .get(permission('languages-list'), validation.list, wrapAsync(languageController.list));
+  .get(permission('languages-browse'), validation.browse, wrapAsync(languageController.browse));
 
 router.get('/create', permission('languages-create'), wrapAsync(languageController.create));
 

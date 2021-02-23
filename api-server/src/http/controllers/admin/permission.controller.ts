@@ -21,7 +21,7 @@ export default (): PermissionController => {
     res.json({ data: permission, refs: {} });
   };
 
-  const list = async (req: Request, res: Response<PermissionsResponse>): Promise<void> => {
+  const browse = async (req: Request, res: Response<PermissionsResponse>): Promise<void> => {
     const permissions = await Permission.paginate({ req, columns: ['name', 'displayName'] });
 
     res.json(permissions);
@@ -67,7 +67,7 @@ export default (): PermissionController => {
   };
 
   return {
-    list,
+    browse,
     create,
     store,
     detail,

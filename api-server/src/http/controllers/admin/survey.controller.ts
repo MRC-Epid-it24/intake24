@@ -34,7 +34,7 @@ export default ({ config }: Pick<IoC, 'config'>): AdminSurveyController => {
     res.json({ data: surveyResponse(survey), refs: await refs() });
   };
 
-  const list = async (req: Request, res: Response<SurveysResponse>): Promise<void> => {
+  const browse = async (req: Request, res: Response<SurveysResponse>): Promise<void> => {
     const permissions = (req.user as User).allPermissions().map((permission) => permission.name);
 
     const where: WhereOptions = {};
@@ -144,7 +144,7 @@ export default ({ config }: Pick<IoC, 'config'>): AdminSurveyController => {
   };
 
   return {
-    list,
+    browse,
     create,
     store,
     detail,

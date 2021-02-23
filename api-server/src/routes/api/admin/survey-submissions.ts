@@ -9,7 +9,7 @@ const router = Router({ mergeParams: true });
 
 router.use(permission('surveys-submissions'));
 
-router.get('', validation.list, wrapAsync(adminSurveySubmissionController.list));
+router.get('', validation.browse, wrapAsync(adminSurveySubmissionController.browse));
 
 router
   .route('/:submissionId')

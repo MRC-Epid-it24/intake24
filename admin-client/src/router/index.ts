@@ -52,7 +52,7 @@ resources.forEach((item) => {
     path: `/${name}`,
     name,
     component: resourceViews.list,
-    meta: { ...meta, title: `${name}.index`, perm: `${name}-list` },
+    meta: { ...meta, title: `${name}.index`, perm: `${name}-browse` },
   });
 
   item.routes.forEach((route) => {

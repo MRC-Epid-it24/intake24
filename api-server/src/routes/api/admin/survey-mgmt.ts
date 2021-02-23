@@ -9,7 +9,7 @@ const router = Router({ mergeParams: true });
 
 router.use(permission('surveys-mgmt'));
 
-router.get('', validation.list, wrapAsync(adminSurveyMgmtController.list));
+router.get('', validation.browse, wrapAsync(adminSurveyMgmtController.browse));
 router.get('/available', wrapAsync(adminSurveyMgmtController.available));
 router.put('/:userId', validation.update, wrapAsync(adminSurveyMgmtController.update));
 

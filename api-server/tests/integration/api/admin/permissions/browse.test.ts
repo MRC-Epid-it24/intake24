@@ -4,7 +4,7 @@ import { setPermission } from '../../mocks/helpers';
 
 export default function (): void {
   before(async function () {
-    this.url = '/api/admin/users';
+    this.url = '/api/admin/permissions';
   });
 
   it('should return 401 when no / invalid token', async function () {
@@ -24,7 +24,7 @@ export default function (): void {
     expect(status).to.equal(403);
   });
 
-  it(`should return 403 when user doesn't have 'users-list'`, async function () {
+  it(`should return 403 when user doesn't have 'permissions-browse'`, async function () {
     await setPermission('acl');
 
     const { status } = await request(this.app)
@@ -36,7 +36,7 @@ export default function (): void {
   });
 
   it('should return 200 and data/refs list', async function () {
-    await setPermission(['acl', 'users-list']);
+    await setPermission(['acl', 'permissions-browse']);
 
     const { status, body } = await request(this.app)
       .get(this.url)

@@ -31,7 +31,7 @@ export default (): LocaleController => {
     res.json({ data: locale, refs: await refs(locale.id) });
   };
 
-  const list = async (req: Request, res: Response<LocalesResponse>): Promise<void> => {
+  const browse = async (req: Request, res: Response<LocalesResponse>): Promise<void> => {
     const locales = await Locale.paginate({
       req,
       columns: ['id', 'englishName', 'localName'],
@@ -106,7 +106,7 @@ export default (): LocaleController => {
   };
 
   return {
-    list,
+    browse,
     create,
     store,
     detail,

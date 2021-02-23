@@ -21,13 +21,13 @@
         </v-list-item-group>
       </v-list>
       <menu-tree
-        v-if="can(['languages-list', 'locales-list'])"
+        v-if="can(['languages-browse', 'locales-browse'])"
         icon="fas fa-fw fa-globe"
         name="local"
         :resources="resources.local"
       ></menu-tree>
       <menu-tree
-        v-if="can(['schemes-list', 'surveys-list'])"
+        v-if="can(['schemes-browse', 'surveys-browse'])"
         icon="fas fa-fw fa-tools"
         name="surveyMgmt"
         :resources="resources.surveyMgmt"

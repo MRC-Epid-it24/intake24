@@ -1,3 +1,3 @@
-import list from './list';
+import browse from './browse';
 
-export default { list };
+export default { browse };

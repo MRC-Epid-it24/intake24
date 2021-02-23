@@ -10,7 +10,7 @@ const router = Router();
 router
   .route('')
   .post(permission('locales-create'), validation.store, wrapAsync(localeController.store))
-  .get(permission('locales-list'), validation.list, wrapAsync(localeController.list));
+  .get(permission('locales-browse'), validation.browse, wrapAsync(localeController.browse));
 
 router.get('/create', permission('locales-create'), wrapAsync(localeController.create));
 

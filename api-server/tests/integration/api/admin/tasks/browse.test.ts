@@ -4,7 +4,7 @@ import { setPermission } from '../../mocks/helpers';
 
 export default function (): void {
   before(async function () {
-    this.url = '/api/admin/roles';
+    this.url = '/api/admin/tasks';
   });
 
   it('should return 401 when no / invalid token', async function () {
@@ -13,7 +13,7 @@ export default function (): void {
     expect(status).to.equal(401);
   });
 
-  it(`should return 403 when user doesn't have 'acl' for resource root'`, async function () {
+  it('should return 403 when missing permission', async function () {
     await setPermission([]);
 
     const { status } = await request(this.app)
@@ -24,19 +24,8 @@ export default function (): void {
     expect(status).to.equal(403);
   });
 
-  it(`should return 403 when user doesn't have 'roles-list'`, async function () {
-    await setPermission('acl');
-
-    const { status } = await request(this.app)
-      .get(this.url)
-      .set('Accept', 'application/json')
-      .set('Authorization', this.bearer.user);
-
-    expect(status).to.equal(403);
-  });
-
   it('should return 200 and data/refs list', async function () {
-    await setPermission(['acl', 'roles-list']);
+    await setPermission('tasks-browse');
 
     const { status, body } = await request(this.app)
       .get(this.url)
@@ -45,5 +34,6 @@ export default function (): void {
 
     expect(status).to.equal(200);
     expect(body).to.be.an('object').to.have.keys('data', 'meta');
+    expect(body.data).to.be.an('array');
   });
 }

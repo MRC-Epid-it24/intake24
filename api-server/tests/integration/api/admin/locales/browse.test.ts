@@ -4,7 +4,7 @@ import { setPermission } from '../../mocks/helpers';
 
 export default function (): void {
   before(async function () {
-    this.url = '/api/admin/schemes';
+    this.url = '/api/admin/locales';
   });
 
   it('should return 401 when no / invalid token', async function () {
@@ -25,7 +25,7 @@ export default function (): void {
   });
 
   it('should return 200 and data/refs list', async function () {
-    await setPermission('schemes-list');
+    await setPermission('locales-browse');
 
     const { status, body } = await request(this.app)
       .get(this.url)

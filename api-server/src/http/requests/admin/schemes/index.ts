@@ -1,5 +1,5 @@
-import list from '../../generic/list';
+import { browse } from '@/http/requests/generic';
 import store from './store';
 import update from './update';
 
-export default { list, store, update };
+export default { browse, store, update };

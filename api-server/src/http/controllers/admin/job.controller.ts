@@ -8,10 +8,10 @@ import type { IoC } from '@/ioc';
 import { JobResponse, JobsResponse } from '@common/types/http';
 import { Controller } from '../controller';
 
-export type JobController = Controller<'list' | 'detail' | 'download'>;
+export type JobController = Controller<'browse' | 'detail' | 'download'>;
 
 export default ({ config }: Pick<IoC, 'config'>): JobController => {
-  const list = async (req: Request, res: Response<JobsResponse>): Promise<void> => {
+  const browse = async (req: Request, res: Response<JobsResponse>): Promise<void> => {
     const user = req.user as User;
     const { type } = req.query;
 
@@ -66,7 +66,7 @@ export default ({ config }: Pick<IoC, 'config'>): JobController => {
   };
 
   return {
-    list,
+    browse,
     detail,
     download,
   };

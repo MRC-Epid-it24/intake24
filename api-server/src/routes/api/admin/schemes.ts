@@ -10,7 +10,7 @@ const router = Router();
 router
   .route('')
   .post(permission('schemes-create'), validation.store, wrapAsync(schemeController.store))
-  .get(permission('schemes-list'), validation.list, wrapAsync(schemeController.list));
+  .get(permission('schemes-browse'), validation.browse, wrapAsync(schemeController.browse));
 
 router.get('/create', permission('schemes-create'), wrapAsync(schemeController.create));
 

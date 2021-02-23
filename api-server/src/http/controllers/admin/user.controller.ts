@@ -37,7 +37,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
     res.json({ data, refs });
   };
 
-  const list = async (req: Request, res: Response<UsersResponse>): Promise<void> => {
+  const browse = async (req: Request, res: Response<UsersResponse>): Promise<void> => {
     const users = await User.paginate({
       req,
       columns: ['name', 'email', 'simpleName'],
@@ -119,7 +119,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
   };
 
   return {
-    list,
+    browse,
     create,
     store,
     detail,
