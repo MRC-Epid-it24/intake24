@@ -54,6 +54,7 @@ import {
 export default class Survey extends BaseModel implements SurveyAttributes {
   @Column({
     primaryKey: true,
+    type: DataType.STRING(64),
   })
   public id!: string;
 
@@ -74,11 +75,13 @@ export default class Survey extends BaseModel implements SurveyAttributes {
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(64),
   })
   public schemeId!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(16),
   })
   public localeId!: string;
 
@@ -89,36 +92,37 @@ export default class Survey extends BaseModel implements SurveyAttributes {
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(256),
   })
   public genUserKey!: string | null;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public authUrlDomainOverride!: string | null;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public suspensionReason!: string | null;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public surveyMonkeyUrl!: string | null;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public supportEmail!: string;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public originatingUrl!: string | null;
 
@@ -140,12 +144,13 @@ export default class Survey extends BaseModel implements SurveyAttributes {
   @Column({
     allowNull: false,
     defaultValue: 'default',
+    type: DataType.STRING(50),
   })
   public feedbackStyle!: string;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(2048),
   })
   public submissionNotificationUrl!: string | null;
 

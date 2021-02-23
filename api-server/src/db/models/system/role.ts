@@ -33,11 +33,13 @@ export default class Role extends BaseModel implements RoleAttributes {
   @Column({
     allowNull: false,
     unique: true,
+    type: DataType.STRING(128),
   })
   public name!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
   })
   public displayName!: string;
 

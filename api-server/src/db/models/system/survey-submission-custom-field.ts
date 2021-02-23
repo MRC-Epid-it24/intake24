@@ -30,11 +30,13 @@ export default class SurveySubmissionCustomField
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(64),
   })
   public name!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public value!: string;
 

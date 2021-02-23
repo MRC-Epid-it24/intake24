@@ -5,7 +5,7 @@ module.exports = {
         'tools_tasks',
         'message',
         {
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(512),
           allowNull: true,
         },
         { transaction }

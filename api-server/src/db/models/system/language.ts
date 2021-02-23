@@ -1,4 +1,12 @@
-import { Column, HasMany, Scopes, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import {
+  Column,
+  DataType,
+  HasMany,
+  Scopes,
+  Table,
+  CreatedAt,
+  UpdatedAt,
+} from 'sequelize-typescript';
 import { Language as LanguageAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Locale } from '.';
@@ -16,27 +24,32 @@ import { Locale } from '.';
 export default class Language extends BaseModel implements LanguageAttributes {
   @Column({
     primaryKey: true,
+    type: DataType.STRING(16),
   })
   public id!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public englishName!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public localName!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(16),
   })
   public countryFlagCode!: string;
 
   @Column({
     allowNull: false,
     defaultValue: 'ltr',
+    type: DataType.STRING(16),
   })
   public textDirection!: string;
 

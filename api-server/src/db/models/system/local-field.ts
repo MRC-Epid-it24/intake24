@@ -1,4 +1,4 @@
-import { BelongsTo, Column, ForeignKey, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 import { LocalField as LocalFieldAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Locale } from '.';
@@ -22,17 +22,20 @@ export default class LocalField extends BaseModel implements LocalFieldAttribute
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(16),
   })
   @ForeignKey(() => Locale)
   public localeId!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(32),
   })
   public fieldName!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(256),
   })
   public description!: string;
 

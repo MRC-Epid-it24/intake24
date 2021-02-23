@@ -39,17 +39,19 @@ export default class SurveySubmissionFood
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(8),
   })
   public code!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
   })
   public englishDescription!: string;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(128),
   })
   public localDescription!: string | null;
 
@@ -60,11 +62,13 @@ export default class SurveySubmissionFood
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(256),
   })
   public searchTerm!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(32),
   })
   public portionSizeMethodId!: string;
 
@@ -80,27 +84,31 @@ export default class SurveySubmissionFood
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(256),
   })
   public foodGroupEnglishDescription!: string;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(256),
   })
   public foodGroupLocalDescription!: string | null;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
   })
   public brand!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(64),
   })
   public nutrientTableId!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(64),
   })
   public nutrientTableCode!: string;
 

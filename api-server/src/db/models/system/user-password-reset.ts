@@ -25,6 +25,7 @@ export default class UserPasswordReset extends BaseModel implements UserPassword
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
   })
   public token!: string;
 

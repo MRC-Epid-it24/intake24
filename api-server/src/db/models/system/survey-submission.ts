@@ -25,6 +25,7 @@ export default class SurveySubmission extends BaseModel implements SurveySubmiss
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(64),
   })
   public surveyId!: string;
 

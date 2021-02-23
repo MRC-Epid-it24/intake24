@@ -1,4 +1,4 @@
-import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import { SurveySubmissionMissingFood as SurveySubmissionMissingFoodAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { SurveySubmissionMeal } from '.';
@@ -29,26 +29,31 @@ export default class SurveySubmissionMissingFood
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public name!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public brand!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public description!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public portionSize!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public leftovers!: string;
 
