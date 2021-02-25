@@ -12,6 +12,7 @@ import {
   Mailer,
   Scheduler,
   portionSizeService,
+  foodDataService,
   surveyService,
   userService,
 } from '@/services';
@@ -26,6 +27,7 @@ export default (container: AwilixContainer): void => {
     signInService: asFunction(signInService),
 
     portionSizeService: asFunction(portionSizeService),
+    foodDataService: asFunction(foodDataService),
     surveyService: asFunction(surveyService),
     userService: asFunction(userService),
 
