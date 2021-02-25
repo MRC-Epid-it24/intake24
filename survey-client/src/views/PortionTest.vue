@@ -48,8 +48,8 @@ export default Vue.extend({
       componentView: 0,
       testProps: {
         text: { en: 'Portion Size Options' },
-        description: { en: 'chicken balt, curry' },
-        localDescription: { en: 'chicken balt, curry' },
+        description: { en: 'chicken balti, curry' },
+        localDescription: { en: 'chicken balti, curry' },
         methods: [
           {
             method: "as-served",
@@ -71,8 +71,8 @@ export default Vue.extend({
       },
       asServedProps: {
         text: { en: 'Portion Size Options' },
-        description: { en: 'chicken balt, curry' },
-        localDescription: { en: 'chicken balt, curry' },
+        description: { en: 'chicken balti, curry' },
+        localDescription: { en: 'chicken balti, curry' },
         selectionImageUrl: 'https://api.intake24.org/images/as_served/NDNS_meat_curry/efb03e62-b7e0-4a04-88ef-aa9606ac04d1.jpg',
         // selectionImageUrl: 'https://bad.src',
         asServedSet: {
