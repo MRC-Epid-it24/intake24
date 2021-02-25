@@ -1,5 +1,5 @@
 import { LocaleTranslation } from '.';
-import { PortionSizeMethod } from './models';
+import { PortionSizeMethod, AsServedSet } from './models';
 
 export interface BasePromptProps {
   text: LocaleTranslation;
@@ -47,6 +47,7 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
   other: boolean;
 }
 
+// TODO Migrate these out
 export interface PortionSizeOptionPromptProps extends ValidatedPromptProps {
   // Stores which methods to display
   methods: PortionSizeMethod[];
@@ -56,5 +57,6 @@ export interface PortionSizeOptionPromptProps extends ValidatedPromptProps {
 export interface AsServedPromptProps extends ValidatedPromptProps {
   localDescription: LocaleTranslation;
   selectionImageUrl: string;
+  servingImageSet: AsServedSet;
   // images: Object[];
 }

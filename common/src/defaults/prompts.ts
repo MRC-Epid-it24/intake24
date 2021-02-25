@@ -75,22 +75,12 @@ export const textareaPromptProps: TextareaPromptProps = {
   },
 };
 
+// TO DO: migrate this over to portion.ts
 export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
   text: { en: null },
   description: { en: null },
   localDescription: { en: null },
   methods: [],
-  validation: {
-    required: false,
-    message: { en: null },
-  },
-};
-
-export const asServedPromptDefaultProps: AsServedPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  localDescription: { en: null },
-  selectionImageUrl: '',
   validation: {
     required: false,
     message: { en: null },
