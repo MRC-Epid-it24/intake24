@@ -219,10 +219,11 @@ export default (): FoodDataService => {
       ],
     });
 
-    categoyPortionMethods = categoyPortionMethods.map(method => {
-      method.parameters = !method.parameters ? [] : method.parameters
-      return method
-    })
+    categoyPortionMethods = categoyPortionMethods.map((method) => {
+      const changedMethod = method;
+      changedMethod.parameters = !method.parameters ? [] : method.parameters;
+      return changedMethod;
+    });
 
     return categoyPortionMethods;
   };

@@ -3,7 +3,7 @@ export type FoodDataEntryResponse = FoodLocalResponse & FoodAttributeResponse & 
 export type FoodLocalResponse = {
 	code: string;
 	localDescription: string;
-	portionSizeMethods: PortionSizeMethodsResponse[] | [];
+	portionSizeMethods: PortionSizeMethodsResponse[]
 }
 
 export type FoodAttributeResponse = {
@@ -23,13 +23,13 @@ export type PortionSizeMethodsResponse = {
 	imageUrl: string;
 	useForRecipes: boolean;
 	conversionFactor: number;
-	parameters: PortionSizeMethodsParametrsResponce[] | [];
+	parameters?: PortionSizeMethodsParametrsResponce[];
 } | []
 
 export type PortionSizeMethodsParametrsResponce = {
 	name: string,
 	value: string
-}
+} | []
 
 export type AssociatedFoodsResponse = {
 	foodOrCategoryCode: [number, string];
@@ -43,5 +43,5 @@ export type CaloriesPer100gResponse = {
 }
 
 export type FoodDataGeneral = {
-	[key: string]: any; // FIXME: use more specific type
+	[key: string]: any;
 };
