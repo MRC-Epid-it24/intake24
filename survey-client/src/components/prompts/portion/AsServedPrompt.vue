@@ -11,14 +11,14 @@
           <v-row>
             <v-col cols="11">
               <v-card-text>
-                Using these pictures, please choose how much <strong>{{ localDescription }}</strong> you had.
+                Using these pictures, please choose how much
+                <strong>{{ localDescription }}</strong> you had.
               </v-card-text>
             </v-col>
             <v-col cols="1">
               <v-btn color="primary" justify="end">{{ $t('common.help') }}</v-btn>
             </v-col>
           </v-row>
-          
         </v-card>
       </v-col>
     </v-row>
@@ -38,10 +38,10 @@
                   <v-card>
                     <v-img :src="selectionImageUrl" max-width="5rem">-</v-img>
                     <v-overlay absolute>
-                        <v-btn icon>
-                          <v-icon>fas fa-fw fa-minus</v-icon>
-                        </v-btn>
-                      </v-overlay>
+                      <v-btn icon>
+                        <v-icon>fas fa-fw fa-minus</v-icon>
+                      </v-btn>
+                    </v-overlay>
                   </v-card>
                 </v-col>
                 <template v-for="index in 7">
@@ -53,13 +53,12 @@
                 </template>
                 <v-col class="pa-1" align="center">
                   <v-card>
-                    <v-img :src="selectionImageUrl" max-width="5rem">
-                    </v-img>
+                    <v-img :src="selectionImageUrl" max-width="5rem"></v-img>
                     <v-overlay absolute>
-                        <v-btn icon>
-                          <v-icon>fas fa-fw fa-plus</v-icon>
-                        </v-btn>
-                      </v-overlay>
+                      <v-btn icon>
+                        <v-icon>fas fa-fw fa-plus</v-icon>
+                      </v-btn>
+                    </v-overlay>
                   </v-card>
                 </v-col>
               </v-row>
@@ -79,9 +78,7 @@
         </v-card>
       </v-col>
     </v-row>
-    
   </v-container>
-  
 </template>
 
 <script lang="ts">
@@ -89,15 +86,15 @@ import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { AsServedPromptProps } from '@common/types';
 import { asServedPromptDefaultProps } from '@common/defaults';
-import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
+import localeContent from '@/components/mixins/localeContent';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'AsServedPrompt',
 
-  components: { 
-    ImagePlaceholder 
+  components: {
+    ImagePlaceholder,
   },
 
   mixins: [BasePrompt, localeContent],

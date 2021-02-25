@@ -11,4 +11,4 @@ const portion: LocaleMessage = {
   },
 };
 
-export default  portion;
+export default portion;

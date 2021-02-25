@@ -31,9 +31,9 @@ const prompts: LocaleMessageObject = {
   },
   portionoption: {
     validation: {
-      required: 'Please select how the portion will be measured.'
-    }
-  }
+      required: 'Please select how the portion will be measured.',
+    },
+  },
 };
 
 export default prompts;

@@ -67,7 +67,7 @@ import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PortionSizeOptionPromptProps } from '@common/types';
 import { portionSizeOptionPromptProps } from '@common/defaults';
-import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
+import localeContent from '@/components/mixins/localeContent';
 import BasePrompt, { Prompt } from './BasePrompt';
 
 // For user to select which portion size estimation method they want to use
@@ -102,15 +102,15 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   methods: {
     selectMethod(index: number) {
-      if(this.currentValue === index) {
-        this.currentValue = -1
+      if (this.currentValue === index) {
+        this.currentValue = -1;
       } else {
         this.currentValue = index;
         console.log(`Selected ${index} portion size estimation`);
         this.clearErrors();
       }
     },
-    
+
     clearErrors() {
       this.errors = [];
     },
@@ -138,7 +138,6 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       }
       return 0;
     },
-
 
     onSubmit() {
       if (!this.isValid()) {

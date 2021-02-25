@@ -11,7 +11,7 @@ export default (router: Router, store: Store<RootState>): void => {
 
     // Temporary route for portion testing
     if (module === 'portionTest') {
-      next({name: 'portion-test'});
+      next({ name: 'portion-test' });
       return;
     }
 

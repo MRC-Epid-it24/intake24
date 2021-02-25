@@ -20,8 +20,8 @@ const routes: RouteConfig[] = [
     component: views.login,
     meta: { module: 'login', title: 'login._' },
   },
-  
-  // Temporary route for testing portion size code before foods & meals are loaded
+
+  // TESTING Temporary route for testing portion size code before foods & meals are loaded
   {
     path: '/:surveyId/portionTest',
     name: 'portion-test',
@@ -60,7 +60,6 @@ const routes: RouteConfig[] = [
     meta: { module: 'login', title: 'login._' },
   },
 
-  
   // Catch any unmatched routes
   {
     path: '*',
