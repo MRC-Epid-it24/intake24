@@ -7,5 +7,5 @@ module.exports = {
   extension: ['ts'],
   require: ['tests/tsconfig.mocha.js'],
   timeout: 15000,
-  'watch-files': ['tests/integration/**/*.test.ts'],
+  'watch-files': ['src/**/*.ts', 'tests/integration/**/*.test.ts'],
 };

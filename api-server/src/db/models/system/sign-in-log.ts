@@ -28,17 +28,19 @@ export default class SignInLog extends BaseModel implements SignInLogAttributes 
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(64),
   })
   public remoteAddress!: string | null;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(64),
   })
   public provider!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public providerKey!: string;
 
@@ -60,7 +62,7 @@ export default class SignInLog extends BaseModel implements SignInLogAttributes 
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public userAgent!: string | null;
 

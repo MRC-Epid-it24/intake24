@@ -8,6 +8,6 @@ export type AsyncRequestHandler = (
 
 export type Controller<T extends string | number | symbol> = Record<T, AsyncRequestHandler>;
 
-export type CrudActions = 'list' | 'create' | 'store' | 'detail' | 'edit' | 'update' | 'destroy';
+export type CrudActions = 'browse' | 'create' | 'store' | 'detail' | 'edit' | 'update' | 'destroy';
 
 export type CrudController = Controller<CrudActions>;

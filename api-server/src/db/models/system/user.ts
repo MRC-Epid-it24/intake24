@@ -22,12 +22,17 @@ import {
   RoleUser,
   SignInLog,
   SurveySubmission,
+  UserCustomField,
   UserPassword,
   UserPasswordReset,
   UserSurveyAlias,
 } from '.';
 
 @Scopes(() => ({
+  aliases: { include: [{ model: UserSurveyAlias, separate: true }] },
+  clientErrors: { include: [{ model: ClientErrorReport, separate: true }] },
+  customFields: { include: [{ model: UserCustomField, separate: true }] },
+  jobs: { include: [{ model: Job }] },
   password: { include: [{ model: UserPassword }] },
   passwordResets: { include: [{ model: UserPasswordReset }] },
   permissions: { include: [{ model: Permission, through: { attributes: [] } }] },
@@ -42,10 +47,7 @@ import {
     ],
   },
   signInLog: { include: [{ model: SignInLog }] },
-  aliases: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
-  clientErrors: { include: [{ model: ClientErrorReport }] },
-  jobs: { include: [{ model: Job }] },
   tokens: { include: [{ model: RefreshToken }] },
 }))
 @Table({
@@ -64,25 +66,25 @@ export default class User extends BaseModel implements UserAttributes {
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public name!: string | null;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public email!: string | null;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(32),
   })
   public phone!: string | null;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public simpleName!: string | null;
 
@@ -112,20 +114,17 @@ export default class User extends BaseModel implements UserAttributes {
   @Column
   public readonly updatedAt!: Date;
 
-  @BelongsToMany(() => Permission, () => PermissionUser)
-  public permissions?: Permission[];
+  @HasMany(() => UserSurveyAlias, 'userId')
+  public aliases?: UserSurveyAlias[];
 
-  @BelongsToMany(() => Role, () => RoleUser)
-  public roles?: Role[];
+  @HasMany(() => ClientErrorReport, 'userId')
+  public clientErrors?: ClientErrorReport[];
 
-  @HasMany(() => RefreshToken)
-  public tokens?: RefreshToken[];
+  @HasMany(() => UserCustomField, 'userId')
+  public customFields?: UserCustomField[];
 
-  @HasMany(() => SignInLog, 'userId')
-  public signInLog?: SignInLog[];
-
-  @HasMany(() => SurveySubmission, 'userId')
-  public submissions?: SurveySubmission[];
+  @HasMany(() => Job, 'userId')
+  public jobs?: Job[];
 
   @HasOne(() => UserPassword, 'userId')
   public password?: UserPassword;
@@ -133,14 +132,20 @@ export default class User extends BaseModel implements UserAttributes {
   @HasMany(() => UserPasswordReset, 'userId')
   public passwordResets?: UserPasswordReset[];
 
-  @HasMany(() => UserSurveyAlias, 'userId')
-  public aliases?: UserSurveyAlias[];
+  @BelongsToMany(() => Permission, () => PermissionUser)
+  public permissions?: Permission[];
 
-  @HasMany(() => ClientErrorReport, 'userId')
-  public clientErrors?: ClientErrorReport[];
+  @HasMany(() => SignInLog, 'userId')
+  public signInLog?: SignInLog[];
 
-  @HasMany(() => Job, 'userId')
-  public jobs?: Job[];
+  @HasMany(() => SurveySubmission, 'userId')
+  public submissions?: SurveySubmission[];
+
+  @BelongsToMany(() => Role, () => RoleUser)
+  public roles?: Role[];
+
+  @HasMany(() => RefreshToken)
+  public tokens?: RefreshToken[];
 
   public allRoles(): Role[] {
     return uniqBy(this.roles, 'name');

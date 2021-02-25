@@ -6,7 +6,7 @@ import { UserInfoResponse, GenerateUserResponse } from '@common/types/http';
 import { Controller } from './controller';
 
 export type SurveyController = Controller<
-  | 'list'
+  | 'browse'
   | 'entry'
   | 'parameters'
   | 'userInfo'
@@ -18,7 +18,7 @@ export type SurveyController = Controller<
 >;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController => {
-  const list = async (req: Request, res: Response): Promise<void> => {
+  const browse = async (req: Request, res: Response): Promise<void> => {
     const surveys = await Survey.scope('public').findAll();
 
     res.json(surveys);
@@ -113,7 +113,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
   };
 
   return {
-    list,
+    browse,
     entry,
     parameters,
     userInfo,

@@ -8,10 +8,10 @@ import type { IoC } from '@/ioc';
 import { surveyMgmt } from '@/services/acl.service';
 import { Controller } from '../controller';
 
-export type AdminSurveyMgmtController = Controller<'list' | 'available' | 'update'>;
+export type AdminSurveyMgmtController = Controller<'browse' | 'available' | 'update'>;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtController => {
-  const list = async (req: Request, res: Response): Promise<void> => {
+  const browse = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
@@ -68,7 +68,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtC
   };
 
   return {
-    list,
+    browse,
     available,
     update,
   };

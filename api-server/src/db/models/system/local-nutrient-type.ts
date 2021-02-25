@@ -1,4 +1,4 @@
-import { BelongsTo, Column, ForeignKey, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 import { LocalNutrientType as LocalNutrientTypeAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Locale, NutrientType } from '.';
@@ -23,6 +23,7 @@ export default class LocalNutrientType extends BaseModel implements LocalNutrien
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(16),
   })
   @ForeignKey(() => Locale)
   public localeId!: string;

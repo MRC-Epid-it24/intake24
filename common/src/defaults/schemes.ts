@@ -11,6 +11,8 @@ export const defaultMeals: Meal[] = [
 ];
 
 export const defaultExport: ExportScheme = [
+  { id: 'user', fields: [] },
+  { id: 'userCustom', fields: [] },
   { id: 'survey', fields: [] },
   { id: 'surveyCustom', fields: [] },
   { id: 'meal', fields: [] },

@@ -25,7 +25,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     res.json({ data: task, refs: { jobs } });
   };
 
-  const list = async (req: Request, res: Response<TasksResponse>): Promise<void> => {
+  const browse = async (req: Request, res: Response<TasksResponse>): Promise<void> => {
     const tasks = await Task.paginate({ req, columns: ['name', 'job'] });
 
     res.json(tasks);
@@ -86,7 +86,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
   };
 
   return {
-    list,
+    browse,
     create,
     store,
     detail,

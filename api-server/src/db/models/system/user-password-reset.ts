@@ -1,4 +1,4 @@
-import { BelongsTo, Column, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { UserPasswordReset as UserPasswordResetAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
@@ -13,16 +13,19 @@ export default class UserPasswordReset extends BaseModel implements UserPassword
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
   public id!: number;
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
   public userId!: number;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
   })
   public token!: string;
 

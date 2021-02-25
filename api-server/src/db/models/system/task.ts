@@ -19,18 +19,20 @@ export default class Task extends BaseModel implements TaskAttributes {
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public name!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING,
+    type: DataType.STRING(128),
   })
   public job!: JobType;
 
   @Column({
     allowNull: false,
     defaultValue: '0 * * * *',
+    type: DataType.STRING(16),
   })
   public cron!: string;
 

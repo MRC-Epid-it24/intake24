@@ -1,4 +1,4 @@
-import { BelongsTo, Column, ForeignKey, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 import { UserSurveyAlias as UserSurveyAliasAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Survey, User } from '.';
@@ -23,6 +23,7 @@ export default class UserSurveyAlias extends BaseModel implements UserSurveyAlia
   @Column({
     allowNull: false,
     primaryKey: true,
+    type: DataType.STRING(32),
   })
   @ForeignKey(() => Survey)
   public surveyId!: string;
@@ -30,11 +31,14 @@ export default class UserSurveyAlias extends BaseModel implements UserSurveyAlia
   @Column({
     allowNull: false,
     primaryKey: true,
+    type: DataType.STRING(256),
   })
   public userName!: string;
 
   @Column({
     allowNull: false,
+    unique: true,
+    type: DataType.STRING(32),
   })
   public urlAuthToken!: string;
 

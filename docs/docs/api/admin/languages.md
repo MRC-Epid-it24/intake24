@@ -2,7 +2,7 @@
 
 ## List languages
 
-Get language list
+Browse paginated language list
 
 ### Request
 

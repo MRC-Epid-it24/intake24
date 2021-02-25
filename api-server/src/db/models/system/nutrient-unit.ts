@@ -1,4 +1,4 @@
-import { Column, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import { NutrientUnit as NutrientUnitAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { NutrientType } from '.';
@@ -22,11 +22,13 @@ export default class NutrientUnit extends BaseModel implements NutrientUnitAttri
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public description!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(32),
   })
   public symbol!: string;
 

@@ -14,7 +14,7 @@ const router = Router();
 router
   .route('')
   .post(permission('surveys-create'), validation.store, wrapAsync(adminSurveyController.store))
-  .get(permission('surveys-list'), validation.list, wrapAsync(adminSurveyController.list));
+  .get(permission('surveys-browse'), validation.browse, wrapAsync(adminSurveyController.browse));
 
 router.get('/create', permission('surveys-create'), wrapAsync(adminSurveyController.create));
 

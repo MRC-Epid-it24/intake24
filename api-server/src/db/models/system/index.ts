@@ -30,5 +30,6 @@ export { default as SurveySubmissionNutrient } from './survey-submission-nutrien
 export { default as SurveySubmissionPortionSizeField } from './survey-submission-portion-size-field';
 export { default as Task } from './task';
 export { default as User } from './user';
+export { default as UserCustomField } from './user-custom-field';
 export { default as UserPassword } from './user-password';
 export { default as UserSurveyAlias } from './user-survey-alias';

@@ -4,7 +4,7 @@ import { setPermission } from '../../mocks/helpers';
 
 export default function (): void {
   before(async function () {
-    this.url = '/api/admin/tasks';
+    this.url = '/api/admin/languages';
   });
 
   it('should return 401 when no / invalid token', async function () {
@@ -25,7 +25,7 @@ export default function (): void {
   });
 
   it('should return 200 and data/refs list', async function () {
-    await setPermission('tasks-list');
+    await setPermission('languages-browse');
 
     const { status, body } = await request(this.app)
       .get(this.url)
@@ -34,6 +34,6 @@ export default function (): void {
 
     expect(status).to.equal(200);
     expect(body).to.be.an('object').to.have.keys('data', 'meta');
-    expect(body.data).to.be.an('array');
+    expect(body.data).to.be.an('array').not.to.be.empty;
   });
 }

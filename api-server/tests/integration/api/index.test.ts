@@ -65,13 +65,13 @@ describe('API', function () {
 
     // Jobs
     const { jobs } = admin;
-    describe('GET /api/admin/jobs', jobs.list);
+    describe('GET /api/admin/jobs', jobs.browse);
     describe('GET /api/admin/languages/:jobId', jobs.detail);
     describe('GET /api/admin/languages/:jobId/download', jobs.download);
 
     // Languages
     const { languages } = admin;
-    describe('GET /api/admin/languages', languages.list);
+    describe('GET /api/admin/languages', languages.browse);
     describe('GET /api/admin/languages/create', languages.create);
     describe('POST /admin/languages', languages.store);
     describe('GET /api/admin/languages/:languageId', languages.detail);
@@ -81,7 +81,7 @@ describe('API', function () {
 
     // Locales
     const { locales } = admin;
-    describe('GET /api/admin/locales', locales.list);
+    describe('GET /api/admin/locales', locales.browse);
     describe('GET /api/admin/locales/create', locales.create);
     describe('POST /admin/locales', locales.store);
     describe('GET /api/admin/locales/:localeId', locales.detail);
@@ -91,7 +91,7 @@ describe('API', function () {
 
     // Permissions
     const { permissions } = admin;
-    describe('GET /api/admin/permissions', permissions.list);
+    describe('GET /api/admin/permissions', permissions.browse);
     describe('GET /api/admin/permissions/create', permissions.create);
     describe('POST /api/admin/permissions', permissions.store);
     describe('GET /api/admin/permissions/:permissionId', permissions.detail);
@@ -101,7 +101,7 @@ describe('API', function () {
 
     // Roles
     const { roles } = admin;
-    describe('GET /api/admin/roles', roles.list);
+    describe('GET /api/admin/roles', roles.browse);
     describe('GET /api/admin/roles/create', roles.create);
     describe('POST /api/admin/roles', roles.store);
     describe('GET /api/admin/roles/:roleId', roles.detail);
@@ -111,7 +111,7 @@ describe('API', function () {
 
     // Schemes
     const { schemes } = admin;
-    describe('GET /api/admin/schemes', schemes.list);
+    describe('GET /api/admin/schemes', schemes.browse);
     describe('GET /api/admin/schemes/create', schemes.create);
     describe('POST /api/admin/schemes', schemes.store);
     describe('GET /api/admin/schemes/:schemeId', schemes.detail);
@@ -121,7 +121,7 @@ describe('API', function () {
 
     // Surveys
     const { surveys } = admin;
-    describe('GET /api/admin/surveys', surveys.list);
+    describe('GET /api/admin/surveys', surveys.browse);
     describe('GET /api/admin/surveys/create', surveys.create);
     describe('POST /api/admin/surveys', surveys.store);
     describe('GET /api/admin/surveys/:surveyId', surveys.detail);
@@ -131,12 +131,12 @@ describe('API', function () {
 
     // Surveys user management
     const { mgmt } = surveys;
-    describe('GET /api/admin/surveys/:surveyId/mgmt', mgmt.list);
+    describe('GET /api/admin/surveys/:surveyId/mgmt', mgmt.browse);
     describe('GET /api/admin/surveys/:surveyId/mgmt/available', mgmt.available);
     // describe('PUT /api/admin/surveys/:surveyId/mgmt/:userId', surveys.mgmt.update);
 
     // Surveys respondents
-    // describe('GET /api/admin/surveys/:surveyId/respondents', surveys.respondents.list);
+    // describe('GET /api/admin/surveys/:surveyId/respondents', surveys.respondents.browse);
     // describe('POST /api/admin/surveys/:surveyId/respondents', surveys.respondents.store);
     // describe('POST /api/admin/surveys/:surveyId/upload', surveys.respondents.upload);
     // describe('POST /api/admin/surveys/:surveyId/export-auth-urls', surveys.respondents.exportAuthUrls);
@@ -144,7 +144,7 @@ describe('API', function () {
     // describe('DELETE /api/admin/surveys/:surveyId/respondents/:userId', surveys.respondents.destroy);
 
     // Surveys submissions
-    // describe('GET /api/admin/surveys/:surveyId/submissions', surveys.respondents.submissions.list);
+    // describe('GET /api/admin/surveys/:surveyId/submissions', surveys.respondents.submissions.browse);
     // describe('GET /api/admin/surveys/:surveyId/submissions/:submissionId', surveys.respondents.submissions.detail);
     // describe('DELETE /api/admin/surveys/:surveyId/submissions/:submissionId', surveys.respondents.submissions.destroy);
 
@@ -155,7 +155,7 @@ describe('API', function () {
 
     // Tasks
     const { tasks } = admin;
-    describe('GET /api/admin/tasks', tasks.list);
+    describe('GET /api/admin/tasks', tasks.browse);
     describe('GET /api/admin/tasks/create', tasks.create);
     describe('POST /api/admin/tasks', tasks.store);
     describe('GET /api/admin/tasks/:taskId', tasks.detail);
@@ -165,7 +165,7 @@ describe('API', function () {
 
     // Users
     const { users } = admin;
-    describe('GET /api/admin/users', users.list);
+    describe('GET /api/admin/users', users.browse);
     describe('GET /api/admin/users/create', users.create);
     describe('POST /api/admin/users', users.store);
     describe('GET /api/admin/users/:userId', users.detail);

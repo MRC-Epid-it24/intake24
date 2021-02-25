@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
+import { isPlainObject, has } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
 import { User } from '@/db/models/system';
 import { unique } from '@/http/rules';
@@ -31,6 +32,22 @@ export const identifiers: Schema = {
     errorMessage: 'Phone must be a string.',
     isString: true,
     optional: { options: { nullable: true } },
+  },
+  customFields: {
+    in: ['body'],
+    errorMessage: 'Enter valid custom field object.',
+    optional: { options: { nullable: true } },
+    custom: {
+      options: async (value: any): Promise<void> => {
+        if (
+          !Array.isArray(value) ||
+          value.some((item) => !isPlainObject(item) || !has(item, 'name') || !has(item, 'value'))
+        )
+          throw new Error('Enter valid custom field object.');
+
+        Promise.resolve();
+      },
+    },
   },
 };
 

@@ -14,7 +14,7 @@ router.use(permission('surveys-respondents'));
 router
   .route('')
   .post(validation.store, wrapAsync(adminSurveyRespondentController.store))
-  .get(validation.list, wrapAsync(adminSurveyRespondentController.list));
+  .get(validation.browse, wrapAsync(adminSurveyRespondentController.browse));
 
 router.post(
   '/upload',

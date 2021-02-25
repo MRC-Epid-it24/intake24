@@ -31,7 +31,7 @@ export default class ClientErrorReport extends BaseModel implements ClientErrorR
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(64),
   })
   @ForeignKey(() => Survey)
   public surveyId!: string | null;

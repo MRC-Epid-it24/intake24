@@ -22,7 +22,7 @@ export default (): LanguageController => {
     res.json({ data: language, refs: {} });
   };
 
-  const list = async (req: Request, res: Response<LanguagesResponse>): Promise<void> => {
+  const browse = async (req: Request, res: Response<LanguagesResponse>): Promise<void> => {
     const languages = await Language.paginate({
       req,
       columns: ['id', 'englishName', 'localName'],
@@ -78,7 +78,7 @@ export default (): LanguageController => {
   };
 
   return {
-    list,
+    browse,
     create,
     store,
     detail,

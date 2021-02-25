@@ -9,15 +9,15 @@ module.exports = {
       },
       name: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(512),
       },
       job: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(128),
       },
       cron: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(16),
       },
       active: {
         allowNull: false,

@@ -12,7 +12,7 @@ router.use(permission('acl'));
 router
   .route('')
   .post(permission('permissions-create'), validation.store, wrapAsync(permissionController.store))
-  .get(permission('permissions-list'), validation.list, wrapAsync(permissionController.list));
+  .get(permission('permissions-browse'), validation.browse, wrapAsync(permissionController.browse));
 
 router.get('/create', permission('permissions-create'), wrapAsync(permissionController.create));
 

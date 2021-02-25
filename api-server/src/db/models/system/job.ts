@@ -28,7 +28,7 @@ export default class Job extends BaseModel implements JobAttributes {
 
   @Column({
     allowNull: false,
-    type: DataType.STRING,
+    type: DataType.STRING(64),
   })
   public type!: JobType;
 
@@ -53,7 +53,7 @@ export default class Job extends BaseModel implements JobAttributes {
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(1024),
   })
   public downloadUrl!: string | null;
 
@@ -77,7 +77,7 @@ export default class Job extends BaseModel implements JobAttributes {
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public message!: string | null;
 

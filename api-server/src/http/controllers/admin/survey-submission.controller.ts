@@ -6,10 +6,10 @@ import { SurveySubmissionResponse, SurveySubmissionsResponse } from '@common/typ
 import { validate } from 'uuid';
 import { Controller } from '../controller';
 
-export type AdminSurveySubmissionController = Controller<'list' | 'entry' | 'destroy'>;
+export type AdminSurveySubmissionController = Controller<'browse' | 'entry' | 'destroy'>;
 
 export default (): AdminSurveySubmissionController => {
-  const list = async (req: Request, res: Response<SurveySubmissionsResponse>): Promise<void> => {
+  const browse = async (req: Request, res: Response<SurveySubmissionsResponse>): Promise<void> => {
     const {
       params: { surveyId },
       query: { search },
@@ -47,7 +47,7 @@ export default (): AdminSurveySubmissionController => {
   };
 
   return {
-    list,
+    browse,
     entry,
     destroy,
   };

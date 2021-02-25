@@ -1,4 +1,4 @@
-import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import { SurveySubmissionPortionSizeField as SurveySubmissionPortionSizeFieldAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { SurveySubmissionFood } from '.';
@@ -29,11 +29,13 @@ export default class SurveySubmissionPortionSizeField
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(64),
   })
   public name!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public value!: string;
 

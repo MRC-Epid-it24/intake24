@@ -10,8 +10,7 @@ import {
   CreateUserRequest,
   CreateLanguageRequest,
 } from '@common/types/http';
-import { Meal, RecallQuestions } from '@common/types';
-import { defaultExport } from '@common/defaults';
+import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
 
 export const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
@@ -39,6 +38,10 @@ export const user = (): CreateUserRequest => {
   const multiFactorAuthentication = false;
   const emailNotifications = faker.random.boolean();
   const smsNotifications = faker.random.boolean();
+  const customFields = [
+    { name: faker.random.words(1), value: faker.random.words(5) },
+    { name: faker.random.words(1), value: faker.random.words(5) },
+  ];
 
   const permissions: number[] = [];
   const roles: number[] = [];
@@ -52,6 +55,7 @@ export const user = (): CreateUserRequest => {
     multiFactorAuthentication,
     emailNotifications,
     smsNotifications,
+    customFields,
     permissions,
     roles,
   };
@@ -102,15 +106,13 @@ export const scheme = (): CreateSchemeRequest => {
   const id = faker.helpers.slugify(faker.random.words(2));
   const name = faker.random.words(3);
   const type = 'data-driven';
-  const questions = {} as RecallQuestions;
-  const meals: Meal[] = [];
 
   return {
     id,
     name,
     type,
-    questions,
-    meals,
+    questions: defaultQuestions,
+    meals: defaultMeals,
     export: defaultExport,
   };
 };

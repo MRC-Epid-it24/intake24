@@ -145,7 +145,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Dictionary } from '@common/types';
+import { CustomField } from '@common/types';
+import { UserEntry } from '@common/types/http';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 
@@ -159,6 +160,7 @@ type UserForm = {
   multiFactorAuthentication: boolean;
   emailNotifications: boolean;
   smsNotifications: boolean;
+  customFields: CustomField[];
   permissions: number[];
   roles: number[];
 };
@@ -180,6 +182,7 @@ export default Vue.extend({
         multiFactorAuthentication: false,
         emailNotifications: false,
         smsNotifications: false,
+        customFields: [],
         permissions: [],
         roles: [],
       }),
@@ -187,12 +190,13 @@ export default Vue.extend({
   },
 
   methods: {
-    toForm(data: Dictionary) {
-      const { permissions = [], roles = [], ...rest } = data;
+    toForm(data: UserEntry) {
+      const { customFields, permissions, roles, ...rest } = data;
       const input = {
         ...rest,
-        permissions: permissions.map((item: any) => item.id),
-        roles: roles.map((item: any) => item.id),
+        permissions: permissions.map((item) => item.id),
+        roles: roles.map((item) => item.id),
+        customFields: customFields.map(({ name, value }) => ({ name, value })),
       };
       this.form.load(input);
     },

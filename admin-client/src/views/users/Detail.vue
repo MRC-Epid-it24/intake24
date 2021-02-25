@@ -38,6 +38,52 @@
         </tr>
       </tbody>
     </v-simple-table>
+    <v-card-subtitle>
+      {{ $t('users.customFields.title') }}
+    </v-card-subtitle>
+    <v-simple-table>
+      <thead>
+        <tr>
+          <th>{{ $t('users.customFields.name') }}</th>
+          <th>{{ $t('users.customFields.value') }}</th>
+        </tr>
+      </thead>
+      <tbody v-if="entry.customFields.length">
+        <tr v-for="field in entry.customFields" :key="field.name">
+          <th>{{ field.name }}</th>
+          <td>{{ field.value }}</td>
+        </tr>
+      </tbody>
+      <tbody v-else>
+        <tr>
+          <td colspan="2">{{ $t('users.customFields.none') }}</td>
+        </tr>
+      </tbody>
+    </v-simple-table>
+    <v-card-subtitle>
+      {{ $t('users.aliases.title') }}
+    </v-card-subtitle>
+    <v-simple-table>
+      <thead>
+        <tr>
+          <th>{{ $t('users.aliases.surveyId') }}</th>
+          <th>{{ $t('users.aliases.userName') }}</th>
+          <th>{{ $t('users.aliases.urlAuthToken') }}</th>
+        </tr>
+      </thead>
+      <tbody v-if="entry.aliases.length">
+        <tr v-for="alias in entry.aliases" :key="alias.name">
+          <th>{{ alias.surveyId }}</th>
+          <th>{{ alias.userName }}</th>
+          <td>{{ alias.urlAuthToken }}</td>
+        </tr>
+      </tbody>
+      <tbody v-else>
+        <tr>
+          <td colspan="2">{{ $t('users.aliases.none') }}</td>
+        </tr>
+      </tbody>
+    </v-simple-table>
   </layout>
 </template>
 

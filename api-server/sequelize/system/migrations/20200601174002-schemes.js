@@ -11,12 +11,12 @@ module.exports = {
           },
           name: {
             allowNull: false,
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(128),
             unique: true,
           },
           type: {
             allowNull: false,
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(64),
           },
           questions: {
             type: Sequelize.TEXT({ length: 'long' }),

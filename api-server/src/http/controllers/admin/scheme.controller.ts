@@ -33,7 +33,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res.json({ data: scheme, refs: await refs() });
   };
 
-  const list = async (req: Request, res: Response<SchemesResponse>): Promise<void> => {
+  const browse = async (req: Request, res: Response<SchemesResponse>): Promise<void> => {
     const schemes = await Scheme.paginate({ req, columns: ['id', 'name'] });
 
     res.json(schemes);
@@ -102,7 +102,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
   };
 
   return {
-    list,
+    browse,
     create,
     store,
     detail,

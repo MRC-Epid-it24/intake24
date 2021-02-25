@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 import validate from '@/http/requests/validate';
-import { paginate } from '@/http/requests/generic/defaults';
+import { paginate } from '@/http/requests/generic';
 import { jobExists } from '@/http/rules';
 
 export default validate(

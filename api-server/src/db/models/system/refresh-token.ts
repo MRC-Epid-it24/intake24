@@ -25,6 +25,7 @@ export default class RefreshToken extends BaseModel implements RefreshTokenAttri
   @Column({
     allowNull: false,
     primaryKey: true,
+    type: DataType.STRING(128),
   })
   public id!: string;
 

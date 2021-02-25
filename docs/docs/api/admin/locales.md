@@ -2,7 +2,7 @@
 
 ## List locales
 
-Get locale list
+Browse paginated locale list
 
 ### Request
 

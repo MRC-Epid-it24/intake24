@@ -10,16 +10,30 @@ const router = Router();
 router
   .route('')
   .post(permission('tasks-create'), validation.store, wrapAsync(taskController.store))
-  .get(permission('tasks-list'), validation.list, wrapAsync(taskController.list));
+  .get(permission('tasks-browse'), validation.browse, wrapAsync(taskController.browse));
 
 router.get('/create', permission('tasks-create'), wrapAsync(taskController.create));
 
 router
   .route('/:taskId')
-  .get(permission('tasks-detail'), wrapAsync(taskController.detail))
-  .put(permission('tasks-edit'), validation.update, wrapAsync(taskController.update))
-  .delete(permission('tasks-delete'), wrapAsync(taskController.destroy));
+  .get(permission('tasks-detail'), validation.entry('taskId'), wrapAsync(taskController.detail))
+  .put(
+    permission('tasks-edit'),
+    validation.entry('taskId'),
+    validation.update,
+    wrapAsync(taskController.update)
+  )
+  .delete(
+    permission('tasks-delete'),
+    validation.entry('taskId'),
+    wrapAsync(taskController.destroy)
+  );
 
-router.get('/:taskId/edit', permission('tasks-edit'), wrapAsync(taskController.edit));
+router.get(
+  '/:taskId/edit',
+  validation.entry('taskId'),
+  permission('tasks-edit'),
+  wrapAsync(taskController.edit)
+);
 
 export default router;

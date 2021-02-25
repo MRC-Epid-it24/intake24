@@ -11,12 +11,12 @@ module.exports = {
           },
           english_name: {
             allowNull: false,
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(512),
             unique: true,
           },
           local_name: {
             allowNull: false,
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(512),
             unique: true,
           },
           country_flag_code: {

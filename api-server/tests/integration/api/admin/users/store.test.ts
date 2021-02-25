@@ -1,3 +1,4 @@
+import { CustomField } from '@common/types';
 import { expect } from 'chai';
 import { pick, omit } from 'lodash';
 import request from 'supertest';
@@ -55,6 +56,7 @@ export default function (): void {
           multiFactorAuthentication: 10,
           emailNotifications: 'string',
           smsNotifications: [100],
+          customFields: 'invalidCustomFields',
           permissions: [1, 'invalidId', 2],
           roles: [1, 'invalidId', 2],
         });
@@ -68,6 +70,7 @@ export default function (): void {
         'multiFactorAuthentication',
         'emailNotifications',
         'smsNotifications',
+        'customFields',
         'permissions',
         'roles'
       );
@@ -82,7 +85,20 @@ export default function (): void {
 
       expect(status).to.equal(201);
       expect(body).to.be.an('object').to.have.key('data');
-      expect(pick(body.data, Object.keys(this.output))).to.deep.equal(this.output);
+
+      // Extract custom fields for non-order specific comparison
+      const { customFields: resCustomFields, ...data } = body.data;
+      const { customFields: outputCustomFields, ...output } = this.output;
+
+      // 1) match the output
+      expect(pick(data, Object.keys(output))).to.deep.equal(output);
+
+      // 2) non-order specific custom field comparison
+      const fields = resCustomFields.map(({ name, value }: CustomField) => ({
+        name,
+        value,
+      }));
+      expect(fields).to.have.deep.members(outputCustomFields);
     });
 
     it('should return 422 when duplicate email', async function () {

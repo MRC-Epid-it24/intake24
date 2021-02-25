@@ -48,7 +48,7 @@ export default class SurveySubmissionMeal
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(64),
   })
   public name!: string | null;
 

@@ -7,7 +7,7 @@ const { surveyController } = ioc.cradle;
 
 const router = Router();
 
-router.get('', wrapAsync(surveyController.list));
+router.get('', wrapAsync(surveyController.browse));
 router.get('/:surveyId', wrapAsync(surveyController.entry));
 router.post('/:surveyId/generate-user', wrapAsync(surveyController.generateUser));
 router.post('/:surveyId/create-user', wrapAsync(surveyController.createUser));

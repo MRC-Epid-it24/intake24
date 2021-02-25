@@ -43,11 +43,13 @@ export default class Permission extends BaseModel implements PermissionAttribute
   @Column({
     allowNull: false,
     unique: true,
+    type: DataType.STRING(128),
   })
   public name!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
   })
   public displayName!: string;
 

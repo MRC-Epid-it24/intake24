@@ -32,12 +32,12 @@ module.exports = {
           },
           name: {
             allowNull: false,
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(128),
             unique: true,
           },
           display_name: {
             allowNull: false,
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(128),
           },
           description: {
             allowNull: true,
@@ -64,12 +64,12 @@ module.exports = {
         },
         name: {
           allowNull: false,
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(128),
           unique: true,
         },
         display_name: {
           allowNull: false,
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(128),
         },
         description: {
           allowNull: true,

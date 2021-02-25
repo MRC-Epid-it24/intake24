@@ -56,7 +56,7 @@ export default ({
         `It looks like this link is invalid / expired. Please check your email or request another link.`
       );
 
-    await userService.updatePassword(passwordReset.userId, password);
+    await userService.updatePassword({ userId: passwordReset.userId, password });
 
     await passwordReset.destroy();
 

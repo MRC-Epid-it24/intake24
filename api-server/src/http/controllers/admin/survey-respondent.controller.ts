@@ -8,11 +8,11 @@ import type { IoC } from '@/ioc';
 import { Controller } from '../controller';
 
 export type AdminSurveyRespondentController = Controller<
-  'list' | 'store' | 'update' | 'destroy' | 'upload' | 'exportAuthUrls'
+  'browse' | 'store' | 'update' | 'destroy' | 'upload' | 'exportAuthUrls'
 >;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespondentController => {
-  const list = async (req: Request, res: Response): Promise<void> => {
+  const browse = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
@@ -34,7 +34,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
 
     const respondent = await surveyService.createRespondent(
       surveyId,
-      pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
+      pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
     );
 
     res.status(201).json({ data: respondent });
@@ -46,7 +46,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
     const respondent = await surveyService.updateRespondent(
       surveyId,
       userId,
-      pick(req.body, ['name', 'email', 'phone', 'userName', 'password'])
+      pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
     );
 
     res.json({ data: respondent });
@@ -79,7 +79,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
   };
 
   return {
-    list,
+    browse,
     store,
     update,
     destroy,

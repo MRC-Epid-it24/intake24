@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { pick, omit } from 'lodash';
 import request from 'supertest';
 import ioc from '@/ioc';
+import { CustomField } from '@common/types';
 import { setPermission } from '../../mocks/helpers';
 import * as mocker from '../../mocks/mocker';
 
@@ -55,7 +56,20 @@ export default function (): void {
 
       expect(status).to.equal(200);
       expect(body).to.be.an('object').to.have.keys('data', 'refs');
-      expect(pick(body.data, Object.keys(this.output))).to.deep.equal(this.output);
+
+      // Extract custom fields for non-order specific comparison
+      const { customFields: resCustomFields, ...data } = body.data;
+      const { customFields: outputCustomFields, ...output } = this.output;
+
+      // 1) match the output
+      expect(pick(data, Object.keys(output))).to.deep.equal(output);
+
+      // 2) non-order specific custom field comparison
+      const fields = resCustomFields.map(({ name, value }: CustomField) => ({
+        name,
+        value,
+      }));
+      expect(fields).to.have.deep.members(outputCustomFields);
     });
   });
 }

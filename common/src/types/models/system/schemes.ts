@@ -7,6 +7,8 @@ export enum SchemeTypes {
 export type SchemeType = SchemeTypes;
 
 export type ExportSection =
+  | 'user'
+  | 'userCustom'
   | 'survey'
   | 'surveyCustom'
   | 'meal'
