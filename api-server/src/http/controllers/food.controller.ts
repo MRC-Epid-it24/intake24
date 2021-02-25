@@ -7,7 +7,7 @@ export type FoodController = Controller<
   'entry' | 'entryWithSource' | 'brands' | 'associatedFoods' | 'composition'
 >;
 
-export default ({ foodDataService }: IoC): FoodController => {
+export default ({ foodDataService }: Pick<IoC, 'foodDataService'>): FoodController => {
   const entry = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
 

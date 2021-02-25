@@ -207,7 +207,7 @@ export default (): FoodDataService => {
     localeId: string,
     categoryCode: string
   ): Promise<PortionSizeMethodsResponse[]> => {
-    const categoyPortionMethods = await CategoryPortionSizeMethod.findAll({
+    let categoyPortionMethods = await CategoryPortionSizeMethod.findAll({
       where: { localeId, categoryCode },
       attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
       include: [
@@ -218,6 +218,12 @@ export default (): FoodDataService => {
         },
       ],
     });
+
+    categoyPortionMethods = categoyPortionMethods.map(method => {
+      method.parameters = !method.parameters ? [] : method.parameters
+      return method
+    })
+
     return categoyPortionMethods;
   };
 

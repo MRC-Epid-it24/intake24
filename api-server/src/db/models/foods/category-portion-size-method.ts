@@ -65,5 +65,5 @@ export default class CategoryPortionSizeMethod extends BaseModel {
   public category?: Category;
 
   @HasMany(() => CategoryPortionSizeMethodParameter, 'portionSizeMethodId')
-  public parameters!: CategoryPortionSizeMethodParameter[];
+  public parameters?: CategoryPortionSizeMethodParameter[];
 }
