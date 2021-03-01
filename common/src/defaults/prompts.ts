@@ -8,7 +8,6 @@ import {
   TextareaPromptProps,
   TimePickerPromptProps,
   PortionSizeOptionPromptProps,
-  AsServedPromptProps,
 } from '../types';
 
 export const basePromptProps: BasePromptProps = {
