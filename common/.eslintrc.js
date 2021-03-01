@@ -37,6 +37,7 @@ module.exports = {
     'no-console': 'warn',
     'no-debugger': 'warn',
     'no-shadow': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-shadow': 'error',
     'prefer-default-export': 'off',
     'import/extensions': [

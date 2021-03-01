@@ -4,7 +4,7 @@ import { WhereOptions } from 'sequelize';
 import { Locale, Scheme, Survey, User } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import surveyResponse from '@/http/responses/admin/survey.response';
+import { surveyResponse } from '@/http/responses/admin';
 import { staffSuffix } from '@/services/acl.service';
 import {
   CreateSurveyResponse,

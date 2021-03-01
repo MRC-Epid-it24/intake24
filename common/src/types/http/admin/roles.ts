@@ -11,6 +11,8 @@ export type RolesResponse = Pagination<Role>;
 
 export type RoleEntry = Role;
 
+export type RoleListEntry = Pick<Permission, 'id' | 'name' | 'displayName'>;
+
 export type RoleRefs = { permissions: Permission[] };
 
 export type RoleResponse = {
