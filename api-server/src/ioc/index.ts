@@ -7,6 +7,7 @@ import db, { DbInterface } from '@/db';
 import type {
   AuthenticationController,
   PasswordController,
+  SubscriptionController,
   FoodController,
   FoodSearchController,
   PortionSizeController,
@@ -40,6 +41,7 @@ import type {
   UserService,
   Filesystem,
   Mailer,
+  Pusher,
   Scheduler,
 } from '@/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@/services/queues';
@@ -57,13 +59,15 @@ export interface IoC extends Jobs {
   filesystem: Filesystem;
   logger: Logger;
   mailer: Mailer;
+  pusher: Pusher;
   scheduler: Scheduler;
 
   // Controllers
   authenticationController: AuthenticationController;
   passwordController: PasswordController;
+  subscriptionController: SubscriptionController;
 
-  // Public controllers
+  // Survey controllers
   foodController: FoodController;
   foodSearchController: FoodSearchController;
   portionSizeController: PortionSizeController;

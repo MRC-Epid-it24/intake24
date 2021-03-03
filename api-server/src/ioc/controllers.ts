@@ -5,6 +5,7 @@ export default (container: AwilixContainer): void => {
   container.register({
     authenticationController: asFunction(controllers.authentication),
     passwordController: asFunction(controllers.password),
+    subscriptionController: asFunction(controllers.subscription),
 
     foodController: asFunction(controllers.food),
     foodSearchController: asFunction(controllers.foodSearch),

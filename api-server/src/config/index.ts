@@ -5,6 +5,7 @@ import filesystem, { FileSystemConfig } from './filesystem';
 import mail, { MailConfig } from './mail';
 import queue, { QueueConfig } from './queue';
 import security, { SecurityConfig } from './security';
+import services, { ServicesConfig } from './services';
 
 export * from './acl';
 export * from './app';
@@ -13,6 +14,7 @@ export * from './filesystem';
 export * from './mail';
 export * from './queue';
 export * from './security';
+export * from './services';
 
 export type Config = {
   acl: ACLConfig;
@@ -22,6 +24,7 @@ export type Config = {
   mail: MailConfig;
   queue: QueueConfig;
   security: SecurityConfig;
+  services: ServicesConfig;
 };
 
 export default {
@@ -32,4 +35,5 @@ export default {
   mail,
   queue,
   security,
+  services,
 };

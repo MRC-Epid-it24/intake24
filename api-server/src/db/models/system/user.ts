@@ -25,6 +25,7 @@ import {
   UserCustomField,
   UserPassword,
   UserPasswordReset,
+  UserSubscription,
   UserSurveyAlias,
 } from '.';
 
@@ -140,6 +141,9 @@ export default class User extends BaseModel implements UserAttributes {
 
   @HasMany(() => SurveySubmission, 'userId')
   public submissions?: SurveySubmission[];
+
+  @HasMany(() => UserSubscription, 'userId')
+  public subscription?: UserSubscription[];
 
   @BelongsToMany(() => Role, () => RoleUser)
   public roles?: Role[];

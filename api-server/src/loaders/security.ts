@@ -1,7 +1,6 @@
 import cors from 'cors';
-import { Express, Response } from 'express';
+import { Express } from 'express';
 import helmet from 'helmet';
-import { nanoid } from 'nanoid';
 import type { Ops } from '@/app';
 
 export default async (app: Express, { config }: Ops): Promise<void> => {
@@ -10,11 +9,6 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
   app.set('trust proxy', 1);
 
   app.use(cors({ origin, credentials: true }));
-
-  app.use((req, res, next) => {
-    res.locals.nonce = { recaptcha: nanoid() };
-    next();
-  });
 
   // Security HTTP headers
   app.use(
@@ -28,9 +22,16 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
           scriptSrc: [
             "'self'",
             'https://storage.googleapis.com',
-            (req, res) => `'nonce-${(res as Response).locals.nonce.recaptcha}'`,
+            'https://www.google.com/recaptcha/',
+            'https://www.gstatic.com/recaptcha/',
           ],
-          styleSrc: ["'self'", 'https://fonts.googleapis.com', "'unsafe-inline'"],
+          styleSrc: [
+            "'self'",
+            'https://fonts.googleapis.com',
+            'https://www.google.com/recaptcha/',
+            'https://recaptcha.google.com/recaptcha/',
+            "'unsafe-inline'", // TODO: review for Vuetify theming
+          ],
         },
       },
     })

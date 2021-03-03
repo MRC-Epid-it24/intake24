@@ -30,11 +30,7 @@ export default ({
     const token = nanoid(64);
     await UserPasswordReset.create({ userId, token });
 
-    await scheduler.jobs.addJob(
-      { type: 'SendPasswordReset', userId },
-      { email, token },
-      { removeOnComplete: true }
-    );
+    await scheduler.jobs.addJob({ type: 'SendPasswordReset', userId }, { email, token });
 
     res.json();
   };

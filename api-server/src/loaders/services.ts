@@ -11,6 +11,9 @@ export default async (): Promise<void> => {
   // Mailer
   ioc.cradle.mailer.init();
 
+  // Pusher
+  await ioc.cradle.pusher.init();
+
   // Scheduler
   await ioc.cradle.scheduler.init();
 

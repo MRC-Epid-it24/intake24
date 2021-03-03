@@ -38,11 +38,6 @@ export type MultiFactorAuthentication = {
   };
 };
 
-export type RecaptchaConfig = {
-  enabled: boolean;
-  secret: string;
-};
-
 export type PasswordsConfig = {
   expire: number;
   throttle: number;
@@ -63,7 +58,6 @@ export interface SecurityConfig {
   };
   jwt: JwtAuthentication;
   mfa: MultiFactorAuthentication;
-  recaptcha: RecaptchaConfig;
   passwords: PasswordsConfig;
   authTokens: AuthTokensConfig;
   signInLog: SignInLogConfig;
@@ -103,10 +97,6 @@ const securityConfig: SecurityConfig = {
         host: process.env.DUO_HOST ?? '',
       },
     },
-  },
-  recaptcha: {
-    enabled: process.env.RECAPTCHA_ENABLED === 'true',
-    secret: process.env.RECAPTCHA_SECRET ?? '',
   },
   passwords: {
     expire: 60,

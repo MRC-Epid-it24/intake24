@@ -10,6 +10,7 @@ import {
   Filesystem,
   logger,
   Mailer,
+  Pusher,
   Scheduler,
   portionSizeService,
   foodDataService,
@@ -38,6 +39,7 @@ export default (container: AwilixContainer): void => {
     filesystem: asClass(Filesystem).singleton(),
     logger: asValue(logger),
     mailer: asClass(Mailer).singleton(),
+    pusher: asClass(Pusher).singleton(),
     scheduler: asClass(Scheduler).singleton(),
 
     jobsQueueHandler: asClass(JobsQueueHandler).singleton(),

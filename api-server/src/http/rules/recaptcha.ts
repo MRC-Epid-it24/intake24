@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from '@/config/security';
+import config from '@/config/services';
 
 export type ReCaptchaResponse = {
   success: boolean;
@@ -12,7 +12,7 @@ export type ReCaptchaResponse = {
 };
 
 export default async (token?: string | null): Promise<void> => {
-  const { enabled, secret } = config.recaptcha;
+  const { enabled, secret } = config.reCaptcha;
   if (!enabled) return Promise.resolve();
 
   if (typeof token !== 'string' || !token) throw new Error('Invalid reCAPTCHA challenge.');

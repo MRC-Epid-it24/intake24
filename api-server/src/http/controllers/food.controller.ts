@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IoC } from '@/ioc';
+import type { IoC } from '@/ioc';
 import { FoodDataEntryResponse } from '@common/types/http';
 import { Controller } from './controller';
 
