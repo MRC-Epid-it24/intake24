@@ -1,3 +1,5 @@
+import Redis from 'ioredis';
+import config from '@/config';
 import {
   Language,
   Locale,
@@ -21,6 +23,12 @@ export type MockData = {
   admin: User;
   user: User;
   respondent: UserSurveyAlias;
+};
+
+export const wipeRedis = async (): Promise<void> => {
+  const { host, port } = config.queue.redis;
+  const redis = new Redis(port, host);
+  await redis.flushall();
 };
 
 export const prepare = async (): Promise<MockData> => {

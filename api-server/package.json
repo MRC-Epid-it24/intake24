@@ -51,6 +51,7 @@
     "fecha": "^4.2.0",
     "fs-extra": "^9.1.0",
     "helmet": "^4.4.1",
+    "ioredis": "^4.23.0",
     "json2csv": "^5.0.6",
     "jsonwebtoken": "^8.5.1",
     "liblevenshtein": "^2.0.4",

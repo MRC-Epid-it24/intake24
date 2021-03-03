@@ -2,7 +2,7 @@ import '../../bootstrap';
 import request from 'supertest';
 import app from '@/app';
 import ioc from '@/ioc';
-import { prepare } from './mocks/setup';
+import { prepare, wipeRedis } from './mocks/setup';
 // import root from './root.test';
 import authentication from './authentication/index.test';
 import admin from './admin/index.test';
@@ -10,6 +10,8 @@ import portionSizes from './portion-sizes/index.test';
 
 describe('API', function () {
   before(async function () {
+    await wipeRedis();
+
     const { config, logger } = ioc.cradle;
     this.app = await app({ config, logger });
     this.data = await prepare();
