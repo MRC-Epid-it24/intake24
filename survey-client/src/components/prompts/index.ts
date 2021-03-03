@@ -5,7 +5,6 @@ import RadioListPrompt from './RadioListPrompt.vue';
 import SubmitPrompt from './SubmitPrompt.vue';
 import TextareaPrompt from './TextareaPrompt.vue';
 import TimePickerPrompt from './TimePickerPrompt.vue';
-import PortionSizeOptionPrompt from './PortionSizeOptionPrompt.vue';
 
 export default {
   CheckboxListPrompt,
@@ -15,5 +14,4 @@ export default {
   SubmitPrompt,
   TextareaPrompt,
   TimePickerPrompt,
-  PortionSizeOptionPrompt,
 };

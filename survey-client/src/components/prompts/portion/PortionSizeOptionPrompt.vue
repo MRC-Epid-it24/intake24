@@ -1,22 +1,13 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col>
-        <h2>{{ localeDescription }}</h2>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="11">
+    <portion-layout :text="text" :description="description">
+      <template v-slot:headerText>
         <!-- TO DO this won't handle RTL because of the question mark -->
         {{ $t('portion.option.label') }}<i>{{ localeDescription }}</i> ?
-      </v-col>
-      <v-col cols="1">
-        <v-btn color="primary" justify="end">{{ $t('common.help') }}</v-btn>
-      </v-col>
-    </v-row>
+      </template>
+    </portion-layout>
 
-    <v-row dense>
+    <v-row class="mt-2">
       <v-col
         v-for="(method, index) in methods"
         :key="index"
@@ -68,13 +59,13 @@ import merge from 'deepmerge';
 import { PortionSizeOptionPromptProps } from '@common/types';
 import { portionSizeOptionPromptProps } from '@common/defaults';
 import localeContent from '@/components/mixins/localeContent';
-import BasePrompt, { Prompt } from './BasePrompt';
+import BasePortion, { Portion } from './BasePortion';
 
 // For user to select which portion size estimation method they want to use
-export default (Vue as VueConstructor<Vue & Prompt>).extend({
+export default (Vue as VueConstructor<Vue & Portion>).extend({
   name: 'PortionSizeOptionPrompt',
 
-  mixins: [BasePrompt, localeContent],
+  mixins: [BasePortion, localeContent],
 
   props: {
     // Generic object 'props' used to store all props for each prompt

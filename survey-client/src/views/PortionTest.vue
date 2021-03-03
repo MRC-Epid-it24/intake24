@@ -39,7 +39,7 @@ import Vue from 'vue';
 // // import prompts from '@/components/prompts/';
 // import { portionSizeOptionPromptDefaultProps } from '@/common/prompts/promptDefaults';
 // import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
-import portionSizeOptionPrompt from '@/components/prompts/PortionSizeOptionPrompt.vue';
+import portionSizeOptionPrompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import asServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
 
 export default Vue.extend({
