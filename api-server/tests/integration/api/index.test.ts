@@ -7,6 +7,7 @@ import { prepare, wipeRedis } from './mocks/setup';
 import authentication from './authentication/index.test';
 import admin from './admin/index.test';
 import portionSizes from './portion-sizes/index.test';
+import subscriptions from './subscriptions/index.test';
 
 describe('API', function () {
   before(async function () {
@@ -48,6 +49,12 @@ describe('API', function () {
     describe('POST /api/login', authentication.login);
     describe('POST /api/login/alias', authentication.loginAlias);
     describe('POST /api/login/token', authentication.loginToken);
+  });
+
+  describe('Push subscriptions', function () {
+    describe('POST /api/subscriptions', subscriptions.subscribe);
+    describe('DELETE /api/subscriptions', subscriptions.unsubscribe);
+    describe('POST /api/subscriptions/push', subscriptions.push);
   });
 
   describe('Portion-sizes', function () {
