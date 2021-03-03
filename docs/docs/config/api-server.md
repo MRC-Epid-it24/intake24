@@ -9,6 +9,7 @@ Configuration is structured to following sections:
 * [Mail](#mail)
 * [Queue](#queue)
 * [Security](#security)
+* [Services](#services)
 
 ## Application
 
@@ -485,7 +486,7 @@ Refresh token is stored in `http-only` cookie in client's browser. There are sev
 * type: `boolean`
 * default: `false`
 
-## Multi-factor authentication (MFA)
+### Multi-factor authentication (MFA)
 
 System supports multi-factor authentication (`MFA`) for admin login.
 
@@ -495,7 +496,7 @@ Supported providers:
 
 MFA has to be enabled on system-level (configuration) and user-level (database user record).
 
-### Enabled
+#### Enabled
 
 Determines whether the MFA is system-enabled or not
 
@@ -504,7 +505,7 @@ Determines whether the MFA is system-enabled or not
 * type: `boolean`
 * default: `false`
 
-### Provider
+#### Provider
 
 Selected provider for MFA
 
@@ -513,7 +514,7 @@ Selected provider for MFA
 * type: `'duo'`
 * default: `'duo'`
 
-### Duo provider settings
+#### Duo provider settings
 
 For more information, check out [duo's documentation for WebSDK](https://duo.com/docs/duoweb)
 
@@ -547,11 +548,65 @@ API hostname (e.g. api-a1b2c3d4e5.duosecurity.com)
 * type: `string`
 * default: `''`
 
-## Google reCAPTCHA
+### Passwords
 
-Password recovery can be protected by [Google reCAPTCHA](https://developers.google.com/recaptcha/intro). V2 is currently supported.
+Settings for password restore functionality.
 
-### Enabled
+#### Expire
+
+Password reset link expiration in **minutes**.
+
+* object-path: `passwords.expire`
+* type: `number`
+* default: `60`
+
+#### Throttle
+
+Rate limit setting for password request. It allows 1 request per `throttle` value. Value is set in **seconds**.
+
+* object-path: `passwords.throttle`
+* type: `number`
+* default: `60`
+
+### Authentication tokens
+
+Settings for generation of random authentication tokens.
+
+#### Size
+
+Size of the tokens - string's length.
+
+* object-path: `authTokens.size`
+* type: `number`
+* default: `21`
+
+#### Alphabet
+
+String of custom alphabet - character set to be used for token generation.
+
+* object-path: `authTokens.alphabet`
+* type: `string | null`
+* default: `null`
+
+### Sign-in logging
+
+Settings for sign-in logging.
+
+#### Enabled
+
+Enable/disable database logging of sign-in attempts.
+
+* object-path: `signInLog.enabled`
+* type: `boolean`
+* default: `true`
+
+## Services
+
+### Google reCAPTCHA
+
+Password recovery can be protected by [Google reCAPTCHA](https://developers.google.com/recaptcha/intro). V2 (invisible) is currently implemented.
+
+#### Enabled
 
 Determines whether the reCAPTCHA is enabled or not.
 
@@ -560,61 +615,40 @@ Determines whether the reCAPTCHA is enabled or not.
 * type: `boolean`
 * default: `false`
 
-### Secret key
+#### Secret key
 
 * object-path: `recaptcha.secret`
 * dotenv var: `RECAPTCHA_SECRET`
 * type: `string`
 * default: `''`
 
-## Passwords
+### Web-push
 
-Settings for password restore functionality.
+Provides web-push functionality for supported browsers.
 
-### Expire
+To enable the functionality, VAPID keys has to be generated (adjust the path to point to correct binary based on your OS).
 
-Password reset link expiration in **minutes**.
+```sh
+web-push generate-vapid-keys
+```
 
-* object-path: `passwords.expire`
-* type: `number`
-* default: `60`
+#### Subject
 
-### Throttle
+* object-path: `webPush.subject`
+* dotenv var: `WEBPUSH_SUBJECT`
+* type: `string`
+* default: `''`
 
-Rate limit setting for password request. It allows 1 request per `throttle` value. Value is set in **seconds**.
+#### VAPID public key
 
-* object-path: `passwords.throttle`
-* type: `number`
-* default: `60`
+* object-path: `webPush.publicKey`
+* dotenv var: `WEBPUSH_PUBLIC_KEY`
+* type: `string`
+* default: `''`
 
-## Authentication tokens
+#### VAPID private key
 
-Settings for generation of random authentication tokens.
-
-### Size
-
-Size of the tokens - string's length.
-
-* object-path: `authTokens.size`
-* type: `number`
-* default: `21`
-
-### Alphabet
-
-String of custom alphabet - character set to be used for token generation.
-
-* object-path: `authTokens.alphabet`
-* type: `string | null`
-* default: `null`
-
-## Sign-in logging
-
-Settings for sign-in logging.
-
-### Enabled
-
-Enable/disable database logging of sign-in attempts.
-
-* object-path: `signInLog.enabled`
-* type: `boolean`
-* default: `true`
+* object-path: `webPush.privateKey`
+* dotenv var: `WEBPUSH_PRIVATE_KEY`
+* type: `string`
+* default: `''`
