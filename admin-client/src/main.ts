@@ -1,10 +1,7 @@
 import trim from 'lodash/trim';
 import Vue from 'vue';
 import './bootstrap';
-// TODO
-// Disable Service worker for now
-// admin tool per-request nonces for Google reCAPTCHA
-// import './registerServiceWorker';
+import './registerServiceWorker';
 import App from './App.vue';
 import i18n from './locale';
 import http from './services/http.service';

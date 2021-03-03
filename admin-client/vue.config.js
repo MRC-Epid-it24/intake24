@@ -47,6 +47,11 @@ module.exports = {
       theme_color: '#263238',
       background_color: '#FFFFFF',
     },
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: './src/service-worker.js',
+      swDest: 'service-worker.js',
+    },
   },
   transpileDependencies: ['vuetify'],
 };

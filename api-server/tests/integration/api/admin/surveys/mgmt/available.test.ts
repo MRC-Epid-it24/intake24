@@ -85,8 +85,8 @@ export default function (): void {
       .set('Authorization', this.bearer.user);
 
     expect(status).to.equal(200);
-    expect(body).to.be.an('object').to.have.keys('data', 'permissions');
-    expect(body.data).to.be.an('array');
+    expect(body).to.be.an('object').to.have.keys('users', 'permissions');
+    expect(body.users).to.be.an('array');
     expect(body.permissions).to.be.an('array');
   });
 }

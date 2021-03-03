@@ -14,7 +14,7 @@ router.get('*', (req: Request, res: Response): void => {
       return;
     }
 
-    res.render(index);
+    res.sendFile(index);
   });
 });
 

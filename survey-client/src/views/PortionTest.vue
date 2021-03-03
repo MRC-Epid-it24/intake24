@@ -31,11 +31,6 @@
         <asServedPrompt v-show="componentView == 1" :props="asServedProps"></asServedPrompt>
       </v-col>
     </v-row>
-    <!-- <v-row>
-      <v-col>
-        <testPrompt v-show="componentView == 2" :props="testPromptProps"></testPrompt>
-      </v-col>
-    </v-row> -->
   </v-container>
 </template>
 
@@ -46,7 +41,6 @@ import Vue from 'vue';
 // import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
 import portionSizeOptionPrompt from '@/components/prompts/PortionSizeOptionPrompt.vue';
 import asServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
-// import testPrompt from '@/components/prompts/portion/TestPrompt.vue';
 
 export default Vue.extend({
   name: 'PortionTest',
@@ -55,7 +49,6 @@ export default Vue.extend({
   components: {
     portionSizeOptionPrompt,
     asServedPrompt,
-    // testPrompt,
   },
 
   data() {
@@ -71,15 +64,16 @@ export default Vue.extend({
         localDescription: { en: 'chicken balti, curry' },
         methods: [
           {
-            method: "as-served",
-            description: "use_an_image",
-            imageUrl: 'https://api.intake24.org/images/as_served/NDNS_meat_curry/efb03e62-b7e0-4a04-88ef-aa9606ac04d1.jpg',
+            method: 'as-served',
+            description: 'use_an_image',
+            imageUrl:
+              'https://api.intake24.org/images/as_served/NDNS_meat_curry/efb03e62-b7e0-4a04-88ef-aa9606ac04d1.jpg',
             // imageUrl: 'https://bad.src',
             useForRecipes: false,
             conversionFactor: 0.0,
             parameters: {
-                "serving-image-set": "meat_curry",
-                "leftovers-image-set": "meat_curry_leftovers"
+              'serving-image-set': 'meat_curry',
+              'leftovers-image-set': 'meat_curry_leftovers',
             },
           },
         ],
@@ -92,7 +86,8 @@ export default Vue.extend({
         text: { en: 'Portion Size Options' },
         description: { en: 'chicken balti, curry' },
         localDescription: { en: 'chicken balti, curry' },
-        selectionImageUrl: 'https://api.intake24.org/images/as_served/NDNS_meat_curry/efb03e62-b7e0-4a04-88ef-aa9606ac04d1.jpg',
+        selectionImageUrl:
+          'https://api.intake24.org/images/as_served/NDNS_meat_curry/efb03e62-b7e0-4a04-88ef-aa9606ac04d1.jpg',
         // selectionImageUrl: 'https://bad.src',
         asServedSet: {
           id: 'meat_curry',
@@ -105,13 +100,13 @@ export default Vue.extend({
         },
       },
       asServedImages: [
-        "https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/ce913404-9e64-40cb-9baa-02aa08072dfe.jpg",
-        "https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/273f6af1-e2f7-452f-93a0-42f68d44855f.jpg",
-        "https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/55734371-174c-479b-a042-115af3032800.jpg",
-        "https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/efb03e62-b7e0-4a04-88ef-aa9606ac04d1.jpg",
-        "https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/a6cd940e-ed69-4920-9375-280082a7c784.jpg",
-        "https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/5dfd29ef-0487-435c-a4ad-f0881b82571a.jpg",
-        "https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/b45f6c3f-4849-466f-897e-310c143956ee.jpg"
+        'https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/ce913404-9e64-40cb-9baa-02aa08072dfe.jpg',
+        'https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/273f6af1-e2f7-452f-93a0-42f68d44855f.jpg',
+        'https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/55734371-174c-479b-a042-115af3032800.jpg',
+        'https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/efb03e62-b7e0-4a04-88ef-aa9606ac04d1.jpg',
+        'https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/a6cd940e-ed69-4920-9375-280082a7c784.jpg',
+        'https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/5dfd29ef-0487-435c-a4ad-f0881b82571a.jpg',
+        'https://api.intake24.org/images/as_served/NDNS_meat_curry/thumbnails/b45f6c3f-4849-466f-897e-310c143956ee.jpg',
       ],
     };
   },

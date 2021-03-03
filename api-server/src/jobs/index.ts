@@ -1,8 +1,10 @@
 import PurgeRefreshTokens from './purge-refresh-tokens';
-import SendPasswordReset from './send-password-reset';
-import SurveyDataExport from './survey-data-export';
-import SurveyExportRespondentAuthUrls from './survey-export-respondent-auth-urls';
-import SurveyImportRespondents from './survey-import-respondents';
+import SendPasswordReset, { SendPasswordResetData } from './send-password-reset';
+import SurveyDataExport, { SurveyDataExportData } from './survey-data-export';
+import SurveyExportRespondentAuthUrls, {
+  SurveyExportRespondentAuthUrlsData,
+} from './survey-export-respondent-auth-urls';
+import SurveyImportRespondents, { SurveyImportRespondentsData } from './survey-import-respondents';
 
 export * from './job';
 
@@ -13,6 +15,12 @@ const jobs = {
   SurveyExportRespondentAuthUrls,
   SurveyImportRespondents,
 };
+
+export type JobInputData =
+  | SendPasswordResetData
+  | SurveyDataExportData
+  | SurveyExportRespondentAuthUrlsData
+  | SurveyImportRespondentsData;
 
 export type JobType = keyof typeof jobs;
 

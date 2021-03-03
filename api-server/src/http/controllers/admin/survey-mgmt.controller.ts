@@ -1,9 +1,13 @@
 import { Request, Response } from 'express';
 import { Op } from 'sequelize';
-import { UserResponse } from '@common/types/http';
+import {
+  SurveysMgmtAvailableResponse,
+  SurveysMgmtResponse,
+  UserMgmtListEntry,
+} from '@common/types/http';
 import { Permission, Survey, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
-import userResponse from '@/http/responses/admin/user.response';
+import { permissionListResponse, userMgmtResponse } from '@/http/responses/admin';
 import type { IoC } from '@/ioc';
 import { surveyMgmt } from '@/services/acl.service';
 import { Controller } from '../controller';
@@ -11,42 +15,65 @@ import { Controller } from '../controller';
 export type AdminSurveyMgmtController = Controller<'browse' | 'available' | 'update'>;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtController => {
-  const browse = async (req: Request, res: Response): Promise<void> => {
+  const browse = async (req: Request, res: Response<SurveysMgmtResponse>): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
     if (!survey) throw new NotFoundError();
 
-    const users = await User.paginate<UserResponse>({
+    const users = await User.paginate<UserMgmtListEntry>({
       req,
       columns: ['name', 'email', 'simpleName'],
-      include: [{ model: Permission, where: { name: surveyMgmt(surveyId) } }],
-      transform: userResponse,
+      attributes: ['id', 'name', 'email'],
+      order: [['name', 'ASC']],
+      include: [
+        {
+          model: Permission,
+          attributes: ['id', 'name', 'displayName'],
+          where: { name: surveyMgmt(surveyId) },
+        },
+      ],
+      transform: userMgmtResponse,
     });
 
     res.json(users);
   };
 
-  const available = async (req: Request, res: Response): Promise<void> => {
+  const available = async (
+    req: Request,
+    res: Response<SurveysMgmtAvailableResponse>
+  ): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
     if (!survey) throw new NotFoundError();
 
     const users = await User.findAll({
+      attributes: ['id', 'name', 'email'],
       where: {
         email: { [Op.ne]: null },
-        '$permissions.name$': { [Op.or]: { [Op.eq]: null, [Op.notIn]: surveyMgmt(surveyId) } },
+        '$permissions.id$': { [Op.eq]: null },
       },
-      include: [{ model: Permission, through: { attributes: [] }, required: false }],
+      order: [['email', 'ASC']],
+      include: [
+        {
+          model: Permission,
+          attributes: ['id', 'name', 'displayName'],
+          required: false,
+          where: { name: { [Op.in]: surveyMgmt(surveyId) } },
+        },
+      ],
     });
 
     const permissions = await surveyService.getSurveyMgmtPermissions(surveyId, 'list');
 
-    res.json({ data: users.map(userResponse), permissions });
+    res.json({
+      users: users.map(userMgmtResponse),
+      permissions: permissions.map(permissionListResponse),
+    });
   };
 
-  const update = async (req: Request, res: Response): Promise<void> => {
+  const update = async (req: Request, res: Response<undefined>): Promise<void> => {
     const {
       params: { surveyId, userId },
       body: { permissions },

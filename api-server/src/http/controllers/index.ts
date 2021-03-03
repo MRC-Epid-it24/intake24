@@ -4,6 +4,7 @@ import password from './password.controller';
 import foodSearch from './food-search.controller';
 import food from './food.controller';
 import portionSize from './portion-size.controller';
+import subscription from './subscription.controller';
 import survey from './survey.controller';
 
 export * from './admin';
@@ -13,6 +14,7 @@ export * from './food-search.controller';
 export * from './food.controller';
 export * from './portion-size.controller';
 export * from './password.controller';
+export * from './subscription.controller';
 export * from './survey.controller';
 
 export default {
@@ -22,5 +24,6 @@ export default {
   foodSearch,
   food,
   portionSize,
+  subscription,
   survey,
 };

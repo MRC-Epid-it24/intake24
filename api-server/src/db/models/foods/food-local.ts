@@ -37,7 +37,7 @@ export default class FoodLocal extends BaseModel {
     allowNull: true,
     type: DataType.STRING,
   })
-  public name!: string | null;
+  public name!: string;
 
   @Column({
     allowNull: true,

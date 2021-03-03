@@ -38,6 +38,8 @@ export type UsersResponse = Pagination<User>;
 
 export interface UserEntry extends User, Required<UserAssociations> {}
 
+export type UserListEntry = Pick<User, 'id' | 'name' | 'email'>;
+
 export type UserRefs = {
   permissions: Permission[];
   roles: Role[];

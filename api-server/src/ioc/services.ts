@@ -10,8 +10,10 @@ import {
   Filesystem,
   logger,
   Mailer,
+  Pusher,
   Scheduler,
   portionSizeService,
+  foodDataService,
   surveyService,
   userService,
 } from '@/services';
@@ -26,6 +28,7 @@ export default (container: AwilixContainer): void => {
     signInService: asFunction(signInService),
 
     portionSizeService: asFunction(portionSizeService),
+    foodDataService: asFunction(foodDataService),
     surveyService: asFunction(surveyService),
     userService: asFunction(userService),
 
@@ -36,6 +39,7 @@ export default (container: AwilixContainer): void => {
     filesystem: asClass(Filesystem).singleton(),
     logger: asValue(logger),
     mailer: asClass(Mailer).singleton(),
+    pusher: asClass(Pusher).singleton(),
     scheduler: asClass(Scheduler).singleton(),
 
     jobsQueueHandler: asClass(JobsQueueHandler).singleton(),

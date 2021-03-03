@@ -5,12 +5,14 @@ import password from './password';
 import feedback from './feedback';
 import foods from './foods';
 import portionSizes from './portion-sizes';
+import subscriptions from './subscriptions';
 import surveys from './surveys';
 
 const router = Router();
 
 router.use(authentication);
 router.use('/password', password);
+router.use('/subscriptions', subscriptions);
 
 router.use('/admin', admin);
 

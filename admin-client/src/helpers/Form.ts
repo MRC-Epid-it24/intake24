@@ -53,7 +53,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig = {}): Form<
       ...formConfig,
     },
     assign(source: Dictionary): void {
-      const picked = pick(source, this.keys);
+      const picked = pick(cloneDeep(source), this.keys);
 
       mergeWith(this.data, picked, (objValue, srcValue) =>
         Array.isArray(objValue) ? srcValue : undefined

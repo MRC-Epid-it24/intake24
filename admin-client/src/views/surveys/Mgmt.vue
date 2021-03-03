@@ -28,7 +28,7 @@
                         <v-autocomplete
                           v-model="form.id"
                           :error-messages="form.errors.get('userId')"
-                          :items="options.users"
+                          :items="availableUsers"
                           :label="$t('users.name')"
                           :loading="options.isLoading"
                           hide-no-data
@@ -84,6 +84,11 @@
           </v-card>
         </v-dialog>
       </template>
+      <template v-slot:[`item.permissions`]="{ item }" class="text-right">
+        {{
+          item.permissions.map((permission) => permission.name.replace(`${id}/`, '')).join(' | ')
+        }}
+      </template>
       <template v-slot:[`item.action`]="{ item }" class="text-right">
         <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
           <v-icon dark>$edit</v-icon>
@@ -95,10 +100,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { Dictionary } from '@common/types';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
+import { SurveysMgmtAvailableResponse, UserMgmtListEntry } from '@common/types/http';
 import DataTable from './DataTable.vue';
 
 type SurveyMgmtRefs = {
@@ -110,6 +115,15 @@ type SurveyMgmtRefs = {
 type SurveyMgmtForm = {
   id: number | null;
   permissions: number[];
+};
+
+interface AvailableOptions extends SurveysMgmtAvailableResponse {
+  isLoading: boolean;
+}
+
+type OptionList = {
+  id: number;
+  name: string;
 };
 
 export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend({
@@ -135,6 +149,12 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
           align: 'start',
         },
         {
+          text: this.$t('permissions.index'),
+          sortable: false,
+          value: 'permissions',
+          align: 'start',
+        },
+        {
           text: this.$t('common.action._'),
           sortable: false,
           value: 'action',
@@ -151,11 +171,20 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
         isLoading: false,
         users: [],
         permissions: [],
-      },
+      } as AvailableOptions,
     };
   },
 
   computed: {
+    availableUsers(): OptionList[] {
+      return this.options.users.map(({ id, name, email }) => {
+        const [first, second] = [name, email, id].filter((item) => item) as (string | number)[];
+        return {
+          id,
+          name: second ? `${first} (${second})` : `${first}`,
+        };
+      });
+    },
     isCreate(): boolean {
       return !Object.keys(this.selected).length;
     },
@@ -169,9 +198,9 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
       await this.fetchOptions();
     },
 
-    async edit(item: Dictionary) {
-      const { permissions, ...rest } = item;
-      this.form.load({ ...rest, permissions: permissions.map((permission: any) => permission.id) });
+    async edit(item: UserMgmtListEntry) {
+      const { id, permissions } = item;
+      this.form.load({ id, permissions: permissions.map((permission) => permission.id) });
       this.selected = item;
       this.dialog = true;
       await this.fetchOptions();
@@ -198,9 +227,11 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
 
       try {
         const {
-          data: { data, permissions },
-        } = await this.$http.get(`admin/surveys/${this.id}/mgmt/available`);
-        this.options.users = data;
+          data: { users, permissions },
+        } = await this.$http.get<SurveysMgmtAvailableResponse>(
+          `admin/surveys/${this.id}/mgmt/available`
+        );
+        this.options.users = users;
         this.options.permissions = permissions;
       } catch {
         // continue
@@ -215,6 +246,15 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
 
       this.$refs.table.fetch();
       this.dialog = false;
+      await this.clearOptions();
+    },
+
+    async clearOptions() {
+      this.options = {
+        isLoading: false,
+        users: [],
+        permissions: [],
+      };
     },
   },
 });

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { Permission, Role, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
-import userResponse from '@/http/responses/admin/user.response';
+import { userEntryResponse } from '@/http/responses/admin';
 import type { IoC } from '@/ioc';
 import {
   CreateUserResponse,
@@ -31,7 +31,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
 
     if (!user) throw new NotFoundError();
 
-    const data = userResponse(user);
+    const data = userEntryResponse(user);
     const refs = await entryRefs();
 
     res.json({ data, refs });
@@ -69,7 +69,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
       ])
     );
 
-    const data = userResponse(
+    const data = userEntryResponse(
       (await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
         user.id
       )) as User
@@ -101,7 +101,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
       ])
     );
 
-    const data = userResponse(
+    const data = userEntryResponse(
       (await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
         userId
       )) as User

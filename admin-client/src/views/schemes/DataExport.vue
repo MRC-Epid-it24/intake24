@@ -114,9 +114,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
     },
 
     update(section: ExportSchemeSection) {
-      const match = (this.form.export as ExportSchemeSection[]).find(
-        (field) => field.id === section.id
-      );
+      const match = this.form.export.find((field) => field.id === section.id);
 
       if (match) match.fields = [...section.fields];
 

@@ -11,6 +11,8 @@ export type PermissionsResponse = Pagination<Permission>;
 
 export type PermissionEntry = Permission;
 
+export type PermissionListEntry = Pick<Permission, 'id' | 'name' | 'displayName'>;
+
 export type PermissionRefs = Dictionary;
 
 export type PermissionResponse = {

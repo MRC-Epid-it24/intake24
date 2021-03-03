@@ -1,5 +1,5 @@
-import { LocaleTranslation } from '.';
-import { PortionSizeMethod, AsServedSet } from './models';
+import type { LocaleTranslation } from '.';
+import type { PortionSizeMethod, AsServedSet } from './models';
 
 export interface BasePromptProps {
   text: LocaleTranslation;
