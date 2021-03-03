@@ -9,12 +9,19 @@ import {
 } from 'bullmq';
 import { Job as DbJob } from '@/db/models/system';
 import ioc, { IoC } from '@/ioc';
-import type { Job, JobData, JobType } from '@/jobs';
+import type { Job, JobData, JobInputData, JobType } from '@/jobs';
 import { QueueHandler } from './queue-handler';
+import { PushPayload } from '..';
 
 export type JobInput = {
   type: JobType;
   userId?: number | null;
+};
+
+export type NotificationPayload = {
+  jobId: string;
+  status: 'success' | 'error';
+  message?: string;
 };
 
 export default class JobsQueueHandler implements QueueHandler<JobData> {
@@ -23,6 +30,8 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   private readonly config;
 
   private readonly logger;
+
+  private readonly pusher;
 
   queue!: Queue<JobData>;
 
@@ -38,9 +47,10 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @param {string} name
    * @memberof JobsQueueHandler
    */
-  constructor({ config, logger }: Pick<IoC, 'config' | 'logger'>) {
+  constructor({ config, logger, pusher }: Pick<IoC, 'config' | 'logger' | 'pusher'>) {
     this.config = config;
     this.logger = logger;
+    this.pusher = pusher;
   }
 
   /**
@@ -66,51 +76,44 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     this.logger.info(`Queue ${this.name} has been loaded.`);
   }
 
+  /**
+   * Register event listeners to handle successful/failed jobs
+   * - look up corresponding database record
+   * - update status / messages
+   * - notify users using registered channels
+   *
+   * @private
+   * @memberof JobsQueueHandler
+   */
   private registerQueueEvents(): void {
     this.queueEvents.on('completed', async ({ jobId }) => {
-      const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
-      if (!bullJob) {
-        this.logger.warn(`Queue ${this.name}: BullJob (${jobId}) not found.`);
-        return;
-      }
-
-      const { id, data } = bullJob;
-      this.logger.info(
-        `Queue ${this.name}, BullJob ${id}: Job ${data.job.id} | ${data.job.type} has completed.`
-      );
-
-      const job = await DbJob.findByPk(data.job.id);
+      const job = await DbJob.findByPk(jobId);
       if (!job) {
-        this.logger.error(
-          `Queue ${this.name}, BullJob ${id}: Job entry not found (${data.job.id}).`
-        );
+        this.logger.error(`Queue ${this.name}, Job entry not found (${jobId}).`);
         return;
       }
 
       await job.update({ completedAt: new Date(), progress: 1, successful: true });
+
+      await this.notify(job.userId, { jobId, status: 'success' });
     });
 
     this.queueEvents.on('failed', async ({ jobId, failedReason }) => {
       const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
-
       if (!bullJob) {
         this.logger.warn(`Queue ${this.name}: BullJob (${jobId}) not found.`);
         return;
       }
 
-      const { id, data, stacktrace } = bullJob;
+      const { data, stacktrace } = bullJob;
 
       this.logger.error(
-        `Queue ${this.name}, BullJob ${id}: Job ${data.job.id} | ${
-          data.job.type
-        } has failed.\n ${stacktrace.join('\n')}`
+        `Queue ${this.name}, Job ${jobId} | ${data.job.type} has failed.\n ${stacktrace.join('\n')}`
       );
 
-      const job = await DbJob.findByPk(data.job.id);
+      const job = await DbJob.findByPk(jobId);
       if (!job) {
-        this.logger.error(
-          `Queue ${this.name}, BullJob ${id}: Job entry not found (${data.job.id}).`
-        );
+        this.logger.error(`Queue ${this.name}, Job entry not found (${jobId}).`);
         return;
       }
 
@@ -121,6 +124,8 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
         message: failedReason,
         stackTrace: stacktrace.join('\n'),
       });
+
+      await this.notify(job.userId, { jobId, status: 'error', message: failedReason });
     });
 
     /*
@@ -141,9 +146,9 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   async processor({ id, data }: BullJob<JobData>): Promise<void> {
-    const job = await DbJob.findByPk(data.job.id);
+    const job = await DbJob.findByPk(id);
     if (!job) {
-      this.logger.error(`Queue ${this.name}, BullJob ${id}: Job entry not found (${data.job.id}).`);
+      this.logger.error(`Queue ${this.name}, Job entry not found (${id}).`);
       return;
     }
 
@@ -162,10 +167,14 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
-  private async queueJob(job: DbJob, data = {}, options: JobsOptions = {}): Promise<void> {
+  private async queueJob(
+    job: DbJob,
+    data?: JobInputData,
+    options: JobsOptions = {}
+  ): Promise<void> {
     const { id, type } = job;
 
-    await this.queue.add(type, { job, data }, options);
+    await this.queue.add(type, { job, data }, { ...options, jobId: id.toString() });
 
     this.logger.debug(`Queue ${this.name}: Job ${id} | ${type} queued.`);
   }
@@ -179,10 +188,39 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @returns {Promise<DbJob>}
    * @memberof JobsQueueHandler
    */
-  public async addJob(input: JobInput, data = {}, options: JobsOptions = {}): Promise<DbJob> {
+  public async addJob(
+    input: JobInput,
+    data?: JobInputData,
+    options: JobsOptions = {}
+  ): Promise<DbJob> {
     const job = await DbJob.create(input);
     await this.queueJob(job, data, options);
 
     return job;
+  }
+
+  /**
+   * Notify user about finished job
+   *
+   * @param {number} userId
+   * @param {NotificationPayload} payload
+   * @returns {Promise<void>}
+   * @memberof JobsQueueHandler
+   */
+  public async notify(userId: number | null, payload: NotificationPayload): Promise<void> {
+    if (!userId) return;
+
+    const body = [
+      'Requested action has just finished. Click on the notification to show details in application.',
+    ];
+    if (payload.message) body.push(`Details: ${payload.message}`);
+
+    const pushPayload: PushPayload = {
+      title: `${payload.status ? '✔️' : '❌'} ${payload.status.toUpperCase()}: Job has finished.`,
+      body: body.join(' '),
+      url: `jobs/${payload.jobId}`,
+    };
+
+    await this.pusher.webPush(userId, pushPayload);
   }
 }

@@ -1,6 +1,7 @@
 export * from './auth';
 export * from './data-export';
 export * from './foods';
+export * from './pusher';
 export * from './survey.service';
 export * from './user.service';
 

@@ -4,13 +4,15 @@ import { UserSubscription } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 
 export type SubscriptionInput = {
-  userId: number | string;
+  userId: number;
   type: SubscriptionType;
 };
 
-export type PushPayload = {
+export type PushPayload<T = any> = {
   title: string;
   body: string;
+  url?: string;
+  data?: T;
 };
 
 export default class Pusher {
@@ -18,13 +20,13 @@ export default class Pusher {
 
   private readonly logger;
 
-  private readonly webPush;
+  private readonly $webPush;
 
   constructor({ config, logger }: Pick<IoC, 'config' | 'logger'>) {
     this.config = config;
     this.logger = logger;
 
-    this.webPush = webPush;
+    this.$webPush = webPush;
   }
 
   /**
@@ -34,16 +36,16 @@ export default class Pusher {
    */
   public async init(): Promise<void> {
     const { subject, publicKey, privateKey } = this.config.services.webPush;
-    this.webPush.setVapidDetails(subject, publicKey, privateKey);
+    this.$webPush.setVapidDetails(subject, publicKey, privateKey);
 
     this.logger.info(`Pusher has been loaded.`);
   }
 
   /**
    * Send push notification
-   * - looks up stored subscription
-   * - tries to send push notification
-   * - cleans non-valid subscriptions
+   * - look up stored subscription
+   * - send push notification
+   * - clean non-valid subscriptions
    *
    * @param {SubscriptionInput} input
    * @param {PushPayload} payload
@@ -62,7 +64,7 @@ export default class Pusher {
 
     for (const subscription of subscriptions) {
       try {
-        const result = await this.webPush.sendNotification(
+        const result = await this.$webPush.sendNotification(
           subscription.subscription,
           JSON.stringify(payload),
           options
@@ -71,15 +73,34 @@ export default class Pusher {
       } catch (err) {
         if ((err as WebPushError).statusCode === 410) {
           subscription.destroy().catch((dbErr) => {
-            this.logger.error(dbErr);
+            const { message, name, stack } = dbErr;
+            this.logger.error(stack ?? `${name}: ${message}`);
           });
           continue;
         }
 
-        this.logger.warn(err);
+        const { message, name, stack } = err;
+        this.logger.error(stack ?? `${name}: ${message}`);
       }
     }
 
     return results;
+  }
+
+  /**
+   * Push web notification
+   *
+   * @param {number} userId
+   * @param {PushPayload} payload
+   * @param {RequestOptions} [options]
+   * @returns {Promise<SendResult[]>}
+   * @memberof Pusher
+   */
+  public webPush(
+    userId: number,
+    payload: PushPayload,
+    options?: RequestOptions
+  ): Promise<SendResult[]> {
+    return this.sendNotification({ type: 'web-push', userId }, payload, options);
   }
 }
