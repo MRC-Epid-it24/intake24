@@ -5,6 +5,14 @@
         <v-btn @click="showComponent(0)">Portion Option</v-btn>
         <v-btn @click="showComponent(1)">As Served</v-btn>
         <v-btn @click="showComponent(2)">As Served Leftovers</v-btn>
+        <v-btn @click="showComponent(3)">Guide Image</v-btn>
+        <v-btn @click="showComponent(4)">Drink Scale</v-btn>
+        <v-btn @click="showComponent(5)">Standard portion</v-btn>
+        <v-btn @click="showComponent(6)">Cereal</v-btn>
+        <v-btn @click="showComponent(7)">Milk on cereal</v-btn>
+        <v-btn @click="showComponent(8)">Pizza</v-btn>
+        <v-btn @click="showComponent(9)">Milk in a hot drink</v-btn>
+        <v-btn @click="showComponent(10)">Direct weight input</v-btn>
       </v-col>
     </v-row>
     <v-row v-show="componentView == 0" justify-md="center" no-gutters>
@@ -23,6 +31,11 @@
         <asServedPrompt v-show="componentView == 1" :props="asServedProps"></asServedPrompt>
       </v-col>
     </v-row>
+    <!-- <v-row>
+      <v-col>
+        <testPrompt v-show="componentView == 2" :props="testPromptProps"></testPrompt>
+      </v-col>
+    </v-row> -->
   </v-container>
 </template>
 
@@ -33,6 +46,7 @@ import Vue from 'vue';
 // import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
 import portionSizeOptionPrompt from '@/components/prompts/PortionSizeOptionPrompt.vue';
 import asServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
+// import testPrompt from '@/components/prompts/portion/TestPrompt.vue';
 
 export default Vue.extend({
   name: 'PortionTest',
@@ -40,12 +54,17 @@ export default Vue.extend({
   // components: { ...prompts, portionSizeOption },
   components: {
     portionSizeOptionPrompt,
-    asServedPrompt
+    asServedPrompt,
+    // testPrompt,
   },
 
   data() {
     return {
       componentView: 0,
+      testPromptProps: {
+        text: { en: 'text'},
+        description: { en: 'description'}
+      },
       testProps: {
         text: { en: 'Portion Size Options' },
         description: { en: 'chicken balti, curry' },
