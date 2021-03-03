@@ -1,7 +1,7 @@
-import { ConnectionOptions } from 'bullmq';
+import { RedisOptions } from 'bullmq';
 
 export type QueueConfig = {
-  redis: ConnectionOptions;
+  redis: RedisOptions;
   workers: number;
 };
 
