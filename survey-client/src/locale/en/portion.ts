@@ -13,8 +13,8 @@ const portion: LocaleMessage = {
     imageInvalid: 'Image loading',
   },
   asServed: {
-    label: 'Using these pictures, please chose how much you had'
-  }
+    label: 'Using these pictures, please chose how much you had',
+  },
 };
 
 export default portion;

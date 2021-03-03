@@ -14,7 +14,6 @@
             </v-card-text>
           </v-col>
           <v-col cols="auto" class="mx-2">
-            
             <v-btn color="primary">{{ $t('common.help') }}</v-btn>
           </v-col>
         </v-row>

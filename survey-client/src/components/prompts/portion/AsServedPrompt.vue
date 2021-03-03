@@ -61,20 +61,6 @@
         </v-col>
       </v-row>
     </portion-layout>
-
-    <!-- <v-row>
-      <v-col>
-        <h2>{{ localeDescription }}</h2>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-message>Go back to the previous step</v-message>
-      </v-col>
-    </v-row> -->
-
-    
-
   </v-container>
 </template>
 
@@ -86,7 +72,6 @@ import { asServedPromptDefaultProps } from '@common/defaults';
 import localeContent from '@/components/mixins/localeContent';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 import BasePortion, { Portion } from './BasePortion';
-
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({
   name: 'AsServedPrompt',

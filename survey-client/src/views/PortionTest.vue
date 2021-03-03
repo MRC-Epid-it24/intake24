@@ -55,8 +55,8 @@ export default Vue.extend({
     return {
       componentView: 0,
       testPromptProps: {
-        text: { en: 'text'},
-        description: { en: 'description'}
+        text: { en: 'text' },
+        description: { en: 'description' },
       },
       testProps: {
         text: { en: 'Portion Size Options' },
