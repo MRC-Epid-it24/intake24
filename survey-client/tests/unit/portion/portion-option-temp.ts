@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Prompt from '@/components/prompts/portions/PortionSizeOptionPrompt.vue';
+import Prompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import i18n from '@/locale';
 
 // Vue.ls is not accessible so test falls over, need to refactor VueI18n.
