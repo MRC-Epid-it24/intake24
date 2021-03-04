@@ -1,10 +1,10 @@
 <template>
   <v-container>
     <portion-layout :text="text" :description="description">
-      <template v-slot:headerText>Guide Image</template>
+      <template v-slot:headerText>Standard Portion</template>
       <v-row>
         <v-col>
-          <v-card>Guide image content here</v-card>
+          <v-card>Standard Portion content here</v-card>
         </v-col>
       </v-row>
     </portion-layout>
@@ -14,26 +14,26 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { GuideImagePromptProps } from '@common/types';
-import { guideImagePromptDefaultProps } from '@common/defaults';
+import { StandardPortionPromptProps } from '@common/types';
+import { standardPortionPromptDefaultProps } from '@common/defaults';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({
-  name: 'GuideImagePrompt',
+  name: 'StandardPortionPrompt',
 
   mixins: [BasePortion, localeContent],
 
   props: {
     // Generic object 'props' used to store all props for each prompt
     props: {
-      type: Object as () => GuideImagePromptProps,
+      type: Object as () => StandardPortionPromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(guideImagePromptDefaultProps, this.props),
+      ...merge(standardPortionPromptDefaultProps, this.props),
       errors: [] as string[],
     };
   },

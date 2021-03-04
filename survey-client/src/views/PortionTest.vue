@@ -15,26 +15,46 @@
         <v-btn @click="showComponent(10)">Direct weight input</v-btn>
       </v-col>
     </v-row>
-    <v-row v-show="componentView == 0" justify-md="center" no-gutters>
+    <!-- <v-row v-show="componentView == 0" justify-md="center" no-gutters>
       <v-col cols="12" md="10">
-        <!-- <component
-          :is="portionSizeOptionPrompt"
+      </v-col>
+    </v-row> -->
+    <v-row justify-md="center" no-gutters>
+      <v-col>
+        <portion-size-option-prompt
+          v-show="componentView == 0"
           :props="testProps"
-        ></component> -->
-        <!-- Above requires a computed variable to return :is part unless loading from list -->
+        ></portion-size-option-prompt>
 
-        <portionSizeOptionPrompt :props="testProps"></portionSizeOptionPrompt>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <asServedPrompt v-show="componentView == 1" :props="asServedProps"></asServedPrompt>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <asServedLeftoverPrompt v-show="componentView == 2" :props="asServedProps">
-        </asServedLeftoverPrompt>
+        <as-served-prompt v-show="componentView == 1" :props="asServedProps"></as-served-prompt>
+
+        <as-served-leftover-prompt v-show="componentView == 2" :props="asServedProps">
+        </as-served-leftover-prompt>
+
+        <guideImagePrompt v-show="componentView == 3" :props="asServedProps"></guideImagePrompt>
+
+        <drink-scale-prompt v-show="componentView == 4" :props="asServedProps"></drink-scale-prompt>
+
+        <standard-portion-prompt
+          v-show="componentView == 5"
+          :props="asServedProps"
+        ></standard-portion-prompt>
+
+        <cereal-prompt v-show="componentView == 6" :props="asServedProps"></cereal-prompt>
+
+        <milk-cereal-prompt v-show="componentView == 7" :props="asServedProps"></milk-cereal-prompt>
+
+        <pizza-prompt v-show="componentView == 8" :props="asServedProps"></pizza-prompt>
+
+        <milk-hot-drink-prompt
+          v-show="componentView == 9"
+          :props="asServedProps"
+        ></milk-hot-drink-prompt>
+
+        <direct-weight-prompt
+          v-show="componentView == 10"
+          :props="asServedProps"
+        ></direct-weight-prompt>
       </v-col>
     </v-row>
   </v-container>
@@ -45,18 +65,19 @@ import Vue from 'vue';
 // // import prompts from '@/components/prompts/';
 // import { portionSizeOptionPromptDefaultProps } from '@/common/prompts/promptDefaults';
 // import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
-import PortionSizeOptionPrompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
-import AsServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
-import AsServedLeftoverPrompt from '@/components/prompts/portion/AsServedLeftoverPrompt.vue';
+import portionPrompts from '@/components/prompts/portion';
 
 export default Vue.extend({
   name: 'PortionTest',
 
   // components: { ...prompts, portionSizeOption },
+  // components: {
+  //   PortionSizeOptionPrompt,
+  //   AsServedPrompt,
+  //   AsServedLeftoverPrompt,
+  // },
   components: {
-    PortionSizeOptionPrompt,
-    AsServedPrompt,
-    AsServedLeftoverPrompt,
+    ...portionPrompts,
   },
 
   data() {
