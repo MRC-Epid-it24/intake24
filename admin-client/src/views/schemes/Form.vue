@@ -54,7 +54,7 @@ import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
 import { Meal, RecallQuestions } from '@common/types';
-import { ExportSchemeSection } from '@common/types/models';
+import { ExportSection } from '@common/types/models';
 import Meals from './Meals.vue';
 
 export type SchemeForm = {
@@ -63,7 +63,7 @@ export type SchemeForm = {
   type: string;
   questions: RecallQuestions;
   meals: Meal[];
-  export: ExportSchemeSection[];
+  export: ExportSection[];
 };
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({

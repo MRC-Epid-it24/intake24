@@ -2,7 +2,7 @@ import { orderBy } from 'lodash';
 import { NutrientTableCsvMappingFieldColumn } from '@/db/models/foods';
 import { NutrientType, Scheme, SurveySubmissionFood, UserCustomField } from '@/db/models/system';
 import { PromptQuestion } from '@common/types';
-import { ExportSection, ExportField as BaseExportField } from '@common/types/models';
+import { ExportSectionId, ExportField as BaseExportField } from '@common/types/models';
 
 export type ExportFieldTransform<T = SurveySubmissionFood> = (
   food: T
@@ -12,7 +12,7 @@ export interface ExportField extends BaseExportField {
   value?: string | ExportFieldTransform;
 }
 
-export type DataExportFields = Record<ExportSection, (...arg: any[]) => Promise<ExportField[]>>;
+export type DataExportFields = Record<ExportSectionId, (...arg: any[]) => Promise<ExportField[]>>;
 
 export const EMPTY = 'N/A';
 

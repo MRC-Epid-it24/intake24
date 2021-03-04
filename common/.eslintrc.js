@@ -34,8 +34,12 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     'import/no-cycle': 'warn',
+    'no-await-in-loop': 'off',
+    'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     'no-console': 'warn',
+    'no-continue': 'off',
     'no-debugger': 'warn',
+    'no-plusplus': 'off',
     'no-shadow': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-shadow': 'error',

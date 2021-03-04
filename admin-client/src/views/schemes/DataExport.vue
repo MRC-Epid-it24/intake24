@@ -56,7 +56,7 @@ import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
-import { ExportField, ExportSchemeSection } from '@common/types/models';
+import { ExportField, ExportSection } from '@common/types/models';
 import { SchemeExportRefsResponse } from '@common/types/http';
 import DataExportSection from './DataExportSection.vue';
 import { SchemeForm } from './Form.vue';
@@ -78,7 +78,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         meals: defaultMeals,
         export: defaultExport,
       }),
-      section: null as ExportSchemeSection | null,
+      section: null as ExportSection | null,
       exportRefs: {} as SchemeExportRefsResponse,
     };
   },
@@ -109,11 +109,11 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       this.exportRefs = data;
     },
 
-    edit(idx: number, section: ExportSchemeSection) {
+    edit(idx: number, section: ExportSection) {
       this.section = section;
     },
 
-    update(section: ExportSchemeSection) {
+    update(section: ExportSection) {
       const match = this.form.export.find((field) => field.id === section.id);
 
       if (match) match.fields = [...section.fields];

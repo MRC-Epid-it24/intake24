@@ -25,7 +25,7 @@ import {
 import type { StreamFindOptions } from '@/db/models/model';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
-import type { ExportScheme } from '@common/types/models';
+import type { ExportSection } from '@common/types/models';
 import type { ExportFieldInfo } from './data-export-mapper';
 import { EMPTY } from './data-export-fields';
 
@@ -53,7 +53,7 @@ export type SyncStreamOutput = {
 export type DataExportService = {
   getSubmissionOptions: (input: DataExportInput) => SubmissionFindOptions;
   getSubmissionsWithStream: (options: SubmissionFindOptions) => Readable;
-  getExportFields: (exportScheme: ExportScheme) => Promise<ExportFieldInfo[]>;
+  getExportFields: (sections: ExportSection[]) => Promise<ExportFieldInfo[]>;
   prepareExportInfo: (input: DataExportInput) => Promise<DataExportOptions>;
   queueExportJob: (input: DataExportInput) => Promise<Job>;
   syncStream: (input: DataExportInput) => Promise<SyncStreamOutput>;
@@ -198,13 +198,13 @@ export default ({
   /**
    * Sort and prepare export fields
    *
-   * @param {ExportScheme} exportScheme
+   * @param {ExportSection[]} sections
    * @returns {Promise<ExportFieldInfo[]>}
    */
-  const getExportFields = async (exportScheme: ExportScheme): Promise<ExportFieldInfo[]> => {
+  const getExportFields = async (sections: ExportSection[]): Promise<ExportFieldInfo[]> => {
     const fields: ExportFieldInfo[] = [];
 
-    for (const section of exportScheme) {
+    for (const section of sections) {
       fields.push(...(await dataExportMapper[section.id](section.fields)));
     }
 

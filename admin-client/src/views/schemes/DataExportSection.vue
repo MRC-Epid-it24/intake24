@@ -132,14 +132,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import draggable from 'vuedraggable';
-import { ExportSchemeSection, ExportField } from '@common/types/models';
+import { ExportSection, ExportField } from '@common/types/models';
 
 export default Vue.extend({
   name: 'DataExportSection',
 
   props: {
     section: {
-      type: Object as () => ExportSchemeSection | null,
+      type: Object as () => ExportSection | null,
     },
     refFields: {
       type: Array as () => ExportField[],

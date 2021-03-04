@@ -1,6 +1,6 @@
 import { Schema } from 'express-validator';
-import { isPlainObject, has } from 'lodash';
 import { SchemeTypes } from '@common/types/models';
+import { validateMeals, validateRecallQuestions, validateExportSections } from '@common/validators';
 
 const defaults: Schema = {
   name: {
@@ -21,19 +21,13 @@ const defaults: Schema = {
       },
     },
   },
-  // TODO: use some JSON Schema Validator for questions/meals/export, like ajv
   questions: {
     in: ['body'],
     errorMessage: 'Enter valid scheme questions.',
     custom: {
-      options: async (value): Promise<void> => {
-        if (
-          !isPlainObject(value) ||
-          Object.values(value).some((item) => !Array.isArray(item) && !isPlainObject(item))
-        )
-          throw new Error('Enter valid scheme questions.');
-
-        Promise.resolve();
+      options: (value): boolean => {
+        validateRecallQuestions(value);
+        return true;
       },
     },
   },
@@ -41,14 +35,9 @@ const defaults: Schema = {
     in: ['body'],
     errorMessage: 'Enter valid meal list.',
     custom: {
-      options: async (value): Promise<void> => {
-        if (
-          !Array.isArray(value) ||
-          value.some((item) => !isPlainObject(item) || !has(item, 'name.en') || !has(item, 'time'))
-        )
-          throw new Error('Enter valid meal list.');
-
-        Promise.resolve();
+      options: (value): boolean => {
+        validateMeals(value);
+        return true;
       },
     },
   },
@@ -56,14 +45,9 @@ const defaults: Schema = {
     in: ['body'],
     errorMessage: 'Enter valid data export field list.',
     custom: {
-      options: async (value): Promise<void> => {
-        if (
-          !Array.isArray(value) ||
-          value.some((item) => !isPlainObject(item) || !has(item, 'id') || !has(item, 'fields'))
-        )
-          throw new Error('Enter valid data export field list.');
-
-        Promise.resolve();
+      options: (value): boolean => {
+        validateExportSections(value);
+        return true;
       },
     },
   },

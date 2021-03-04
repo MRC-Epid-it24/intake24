@@ -1,13 +1,13 @@
 import json2csv from 'json2csv';
 import { SurveySubmissionFood } from '@/db/models/system';
-import { ExportSection } from '@common/types/models';
+import { ExportSectionId } from '@common/types/models';
 import type { IoC } from '@/ioc';
 import { ExportField, ExportFieldTransform } from './data-export-fields';
 
 export type ExportFieldInfo = json2csv.FieldInfo<SurveySubmissionFood>;
 
 export type DataExportMapper = Record<
-  ExportSection,
+  ExportSectionId,
   (fields: ExportField[], ...arg: any[]) => Promise<ExportFieldInfo[]>
 >;
 

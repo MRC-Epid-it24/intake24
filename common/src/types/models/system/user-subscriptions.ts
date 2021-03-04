@@ -4,6 +4,7 @@ export type SubscriptionType = 'web-push';
 
 export type PushSubscription = {
   endpoint: string;
+  expirationTime?: number | Date | null; // TODO: Verify this
   keys: {
     p256dh: string;
     auth: string;

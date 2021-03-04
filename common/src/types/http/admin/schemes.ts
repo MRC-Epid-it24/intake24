@@ -1,11 +1,11 @@
 import { Meal, RecallQuestions } from '../..';
 import {
   ExportField,
-  ExportSection,
+  ExportSectionId,
   Language,
   Pagination,
   Scheme,
-  ExportScheme,
+  ExportSection,
 } from '../../models';
 
 export type SchemeRequest = {
@@ -14,7 +14,7 @@ export type SchemeRequest = {
   type: string;
   questions: RecallQuestions;
   meals: Meal[];
-  export: ExportScheme;
+  export: ExportSection[];
 };
 
 export type CreateSchemeRequest = SchemeRequest;
@@ -39,4 +39,4 @@ export type CreateSchemeResponse = Pick<SchemeResponse, 'refs'>;
 
 export type StoreSchemeResponse = Pick<SchemeResponse, 'data'>;
 
-export type SchemeExportRefsResponse = Record<ExportSection, ExportField[]>;
+export type SchemeExportRefsResponse = Record<ExportSectionId, ExportField[]>;

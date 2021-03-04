@@ -8,7 +8,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { Meal, RecallQuestions } from '@common/types';
-import { Scheme as SchemeAttributes, SchemeType, ExportScheme } from '@common/types/models';
+import { Scheme as SchemeAttributes, SchemeType, ExportSection } from '@common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
 import BaseModel from '../model';
 import { Survey } from '.';
@@ -79,12 +79,12 @@ export default class Scheme extends BaseModel implements SchemeAttributes {
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get export(): ExportScheme {
+  get export(): ExportSection[] {
     const val = this.getDataValue('export') as unknown;
     return val ? JSON.parse(val as string) : defaultExport;
   }
 
-  set export(value: ExportScheme) {
+  set export(value: ExportSection[]) {
     this.setDataValue('export', JSON.stringify(value ?? defaultExport));
   }
 

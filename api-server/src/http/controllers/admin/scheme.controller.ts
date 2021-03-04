@@ -12,7 +12,7 @@ import {
   StoreSchemeResponse,
   SchemeExportRefsResponse,
 } from '@common/types/http';
-import { ExportField, ExportSection } from '@common/types/models';
+import { ExportField, ExportSectionId } from '@common/types/models';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions | 'dataExportRefs'>;
@@ -95,7 +95,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     const fields: any = {};
     for (const [section, callback] of Object.entries(dataExportFields)) {
       const sectionFields = await callback(scheme);
-      fields[section as ExportSection] = sectionFields.map(fieldMapper);
+      fields[section as ExportSectionId] = sectionFields.map(fieldMapper);
     }
 
     res.json(fields);

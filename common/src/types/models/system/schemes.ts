@@ -6,7 +6,7 @@ export enum SchemeTypes {
 
 export type SchemeType = SchemeTypes;
 
-export type ExportSection =
+export type ExportSectionId =
   | 'user'
   | 'userCustom'
   | 'survey'
@@ -24,12 +24,12 @@ export type ExportField = {
   label: string;
 };
 
-export type ExportSchemeSection = {
-  id: ExportSection;
+export type ExportSection = {
+  id: ExportSectionId;
   fields: ExportField[];
 };
 
-export type ExportScheme = ExportSchemeSection[];
+export type ExportSections = ExportSection[];
 
 export type Scheme = {
   id: string;
@@ -37,7 +37,7 @@ export type Scheme = {
   type: SchemeType;
   questions: RecallQuestions;
   meals: Meal[];
-  export: ExportScheme;
+  export: ExportSection[];
   createdAt: Date;
   updatedAt: Date;
 };

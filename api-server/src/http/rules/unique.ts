@@ -17,7 +17,7 @@ export default async ({ model, condition, except = {} }: UniqueOptions): Promise
   const { field, value, ci } = condition;
   const op = ci && model.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
-  const where = { [field]: { [op]: value }, ...except };
+  const where: WhereOptions = { [field]: { [op]: value }, ...except };
 
   const entry = await model.findOne({ where });
   return entry ? Promise.reject(new Error('Current value is already in use.')) : Promise.resolve();

@@ -1,5 +1,5 @@
 import { Meal, RecallQuestions } from '../types';
-import { ExportScheme } from '../types/models';
+import { ExportSection } from '../types/models';
 
 export const defaultMeals: Meal[] = [
   { name: { en: 'Breakfast' }, time: '8:00' },
@@ -10,7 +10,7 @@ export const defaultMeals: Meal[] = [
   { name: { en: 'Evening snack' }, time: '20:00' },
 ];
 
-export const defaultExport: ExportScheme = [
+export const defaultExport: ExportSection[] = [
   { id: 'user', fields: [] },
   { id: 'userCustom', fields: [] },
   { id: 'survey', fields: [] },
