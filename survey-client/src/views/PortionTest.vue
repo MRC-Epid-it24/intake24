@@ -31,6 +31,12 @@
         <asServedPrompt v-show="componentView == 1" :props="asServedProps"></asServedPrompt>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <asServedLeftoverPrompt v-show="componentView == 2" :props="asServedProps">
+        </asServedLeftoverPrompt>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -39,16 +45,18 @@ import Vue from 'vue';
 // // import prompts from '@/components/prompts/';
 // import { portionSizeOptionPromptDefaultProps } from '@/common/prompts/promptDefaults';
 // import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
-import portionSizeOptionPrompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
-import asServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
+import PortionSizeOptionPrompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
+import AsServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
+import AsServedLeftoverPrompt from '@/components/prompts/portion/AsServedLeftoverPrompt.vue';
 
 export default Vue.extend({
   name: 'PortionTest',
 
   // components: { ...prompts, portionSizeOption },
   components: {
-    portionSizeOptionPrompt,
-    asServedPrompt,
+    PortionSizeOptionPrompt,
+    AsServedPrompt,
+    AsServedLeftoverPrompt,
   },
 
   data() {

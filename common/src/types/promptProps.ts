@@ -60,3 +60,21 @@ export interface AsServedPromptProps extends ValidatedPromptProps {
   servingImageSet: AsServedSet;
   // images: Object[];
 }
+
+export type AsServedLeftoverPromptProps = ValidatedPromptProps;
+
+export type GuideImagePromptProps = ValidatedPromptProps;
+
+export type DrinkScalePromptProps = ValidatedPromptProps;
+
+export type StandardPortionPromptProps = ValidatedPromptProps;
+
+export type CerealPromptProps = ValidatedPromptProps;
+
+export type MilkCerealPromptProps = ValidatedPromptProps;
+
+export type PizzaPromptProps = ValidatedPromptProps;
+
+export type MilkHotDrinkPromptProps = ValidatedPromptProps;
+
+export type DirectWeightPromptProps = ValidatedPromptProps;

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <portion-layout :text="text" :description="description">
       <template v-slot:headerText>
         <!-- TO DO this won't handle RTL because of the question mark -->
