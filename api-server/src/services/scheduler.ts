@@ -36,4 +36,17 @@ export default class Scheduler {
 
     this.logger.info(`Scheduler has been loaded.`);
   }
+
+  /**
+   * Close all connections
+   *
+   * @returns {Promise<void>}
+   * @memberof Scheduler
+   */
+  public async close(): Promise<void> {
+    await this.jobs.close();
+    await this.tasks.close();
+
+    this.logger.info(`Scheduler has closed all connections.`);
+  }
 }

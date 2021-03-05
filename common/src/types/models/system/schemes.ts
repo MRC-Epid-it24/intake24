@@ -41,3 +41,5 @@ export type Scheme = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type SchemeCreateAttributes = Omit<Scheme, 'createdAt' | 'updatedAt'>;

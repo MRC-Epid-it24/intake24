@@ -1,5 +1,5 @@
-import { expect } from 'chai';
-
-// describe('Food Locale', function () {
-//   it('', function () {});
-// });
+describe('Food Locale', () => {
+  it('', () => {
+    console.log(`TODO`);
+  });
+});

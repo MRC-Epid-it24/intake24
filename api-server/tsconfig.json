@@ -15,7 +15,8 @@
     ],
     "types": [
       "node",
-      "mocha"
+      "jest",
+      "jest-extended"
     ]
   },
   "include": [

@@ -8,3 +8,5 @@ export type Task = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type TaskCreateAttributes = Omit<Task, 'id' | 'createdAt' | 'updatedAt'>;

@@ -1,12 +1,6 @@
-import { Task, Pagination } from '../../models';
+import { Task, TaskCreateAttributes, Pagination } from '../../models';
 
-export type TaskRequest = {
-  name: string;
-  job: string;
-  cron: string;
-  active: boolean;
-  description: string;
-};
+export type TaskRequest = TaskCreateAttributes;
 
 export type CreateTaskRequest = TaskRequest;
 

@@ -77,6 +77,26 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   }
 
   /**
+   * Close queue connections
+   *
+   * @returns {Promise<void>}
+   * @memberof JobsQueueHandler
+   */
+  public async close(): Promise<void> {
+    await this.scheduler.close();
+    await this.scheduler.disconnect();
+    await this.queue.close();
+    await this.queue.disconnect();
+    await this.queueEvents.close();
+    await this.queueEvents.disconnect();
+
+    for (const worker of this.workers) {
+      await worker.close();
+      await worker.disconnect();
+    }
+  }
+
+  /**
    * Register event listeners to handle successful/failed jobs
    * - look up corresponding database record
    * - update status / messages

@@ -1,13 +1,11 @@
 /* eslint-disable no-unused-expressions */
-
-import { expect } from 'chai';
 import { PhraseIndex, PhraseWithKey } from '@/food-index/phrase-index';
 import Metaphone3Encoder from '@/food-index/metaphone-encoder';
 import EnglishWordOps from '@/food-index/english-word-ops';
 import InterpretedPhrase, { cutCombinations } from '@/food-index/interpreted-phrase';
 import { InterpretedWord } from '@/food-index/interpreted-word';
 
-describe('Phrase index', function () {
+describe('Phrase index', () => {
   const phrases: Array<PhraseWithKey<string>> = [
     {
       phrase: 'banana with banana tea',
@@ -35,13 +33,13 @@ describe('Phrase index', function () {
     synonyms
   );
 
-  describe('Interpretation combinations', function () {
-    it('Empty interpretations list', function () {
+  describe('Interpretation combinations', () => {
+    it('Empty interpretations list', () => {
       const t = new InterpretedPhrase('bleh', []);
-      expect(t.generateCombinations(100)).to.be.empty;
+      expect(t.generateCombinations(100)).toBeEmpty();
     });
 
-    it('Cut combinations', function () {
+    it('Cut combinations', () => {
       const t = new InterpretedPhrase('bleh', [
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
@@ -56,11 +54,11 @@ describe('Phrase index', function () {
 
       const cut = cutCombinations(t.words, 1);
 
-      expect(cut[2].interpretations.length).eq(1);
-      expect(cut[2].interpretations[0].kind).eq('alt-spelling');
+      expect(cut[2].interpretations.length).toBe(1);
+      expect(cut[2].interpretations[0].kind).toBe('alt-spelling');
     });
 
-    it('Generate combinations', function () {
+    it('Generate combinations', () => {
       const t1 = new InterpretedPhrase('bleh', [
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
@@ -109,27 +107,27 @@ describe('Phrase index', function () {
         ]),
       ]);
 
-      expect(t1.generateCombinations(100)).deep.eq([
+      expect(t1.generateCombinations(100)).toEqual([
         [0, 0, 0],
         [0, 0, 1],
       ]);
 
-      expect(t2.generateCombinations(100)).deep.eq([
+      expect(t2.generateCombinations(100)).toEqual([
         [0, 0, 0],
         [0, 0, 1],
         [0, 1, 0],
         [0, 1, 1],
       ]);
 
-      expect(t2.generateCombinations(1)).deep.eq([[0, 0, 0]]);
+      expect(t2.generateCombinations(1)).toEqual([[0, 0, 0]]);
 
-      expect(t3.generateCombinations(2)).deep.eq([
+      expect(t3.generateCombinations(2)).toEqual([
         [0, 0, 0],
         [0, 0, 1],
       ]);
     });
 
-    it('Match', function () {
+    it('Match', () => {
       const t = index.interpretPhrase('banana with coffee', 'match-fewer');
 
       console.log(JSON.stringify(index.findMatches(t, 10, 100)));

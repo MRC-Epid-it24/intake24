@@ -59,6 +59,24 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
     this.logger.info(`${this.constructor.name} has been loaded.`);
   }
 
+  /**
+   * Close queue connections
+   *
+   * @returns {Promise<void>}
+   * @memberof TasksQueueHandler
+   */
+  public async close(): Promise<void> {
+    await this.scheduler.close();
+    await this.scheduler.disconnect();
+    await this.queue.close();
+    await this.queue.disconnect();
+
+    for (const worker of this.workers) {
+      await worker.close();
+      await worker.disconnect();
+    }
+  }
+
   // eslint-disable-next-line class-methods-use-this
   async processor(job: BullJob<TaskData>): Promise<void> {
     const task = ioc.resolve<Job>(job.data.jobType);
