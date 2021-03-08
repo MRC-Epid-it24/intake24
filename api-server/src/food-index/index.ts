@@ -29,6 +29,10 @@ export default {
     indexWorker.on('message', readyListener);
   },
 
+  async close(): Promise<void> {
+    await indexWorker.terminate();
+  },
+
   async search(query: string): Promise<FoodSearchResult[]> {
     if (indexReady) {
       queryIdCounter += 1;

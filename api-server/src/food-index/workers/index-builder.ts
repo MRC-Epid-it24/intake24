@@ -66,6 +66,10 @@ async function buildIndex() {
       results,
     });
   });
+
+  parentPort!.on('exit', async () => {
+    await db.close();
+  });
 }
 
 buildIndex();
