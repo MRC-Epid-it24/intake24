@@ -2,7 +2,6 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const common: LocaleMessageObject = {
   _: 'Intake24 Admin Tool',
-  dashboard: 'Dashboard',
   register: 'Registration',
   login: 'Sign in',
   logout: 'Sign out',

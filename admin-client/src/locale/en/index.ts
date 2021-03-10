@@ -1,5 +1,6 @@
 import { LocaleMessages } from 'vue-i18n';
 import common from './common';
+import dashboard from './dashboard';
 import flags from './flags';
 import languages from './languages';
 import locales from './locales';
@@ -13,6 +14,7 @@ import users from './users';
 
 const messages: LocaleMessages = {
   common,
+  dashboard,
   flags,
   languages,
   locales,

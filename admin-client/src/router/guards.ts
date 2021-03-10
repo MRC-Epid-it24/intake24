@@ -28,6 +28,8 @@ export default (router: Router, store: Store<RootState>): void => {
       return;
     }
 
+    if (!store.getters.module !== to.meta.module) await store.dispatch('module', to.meta.module);
+
     next();
   });
 };

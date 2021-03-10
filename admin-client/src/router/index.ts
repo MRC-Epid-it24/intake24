@@ -31,7 +31,7 @@ const routes: RouteConfig[] = [
     path: '/dashboard',
     name: 'dashboard',
     component: views.dashboard,
-    meta: { module: 'dashboard', title: 'common.dashboard' },
+    meta: { module: 'dashboard', title: 'dashboard._' },
   },
   {
     path: '/profile',

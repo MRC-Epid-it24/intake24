@@ -15,7 +15,7 @@
               <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>{{ $t('common.dashboard') }}</v-list-item-title>
+              <v-list-item-title>{{ $t('dashboard._') }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -114,13 +114,6 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
   },
 
   watch: {
-    '$route.meta.module': {
-      handler(module) {
-        this.$store.commit('module', module);
-      },
-      deep: true,
-      immediate: true,
-    },
     title: {
       handler(val) {
         document.title = val;
