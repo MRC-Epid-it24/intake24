@@ -1,6 +1,6 @@
 import { Method } from 'axios';
+import deepmerge from 'deepmerge';
 import cloneDeep from 'lodash/cloneDeep';
-import mergeWith from 'lodash/mergeWith';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 import http from '@/services/http.service';
@@ -52,17 +52,17 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig = {}): Form<
       resetOnSubmit: true,
       ...formConfig,
     },
-    assign(source: Dictionary): void {
-      const picked = pick(cloneDeep(source), this.keys);
+    assign<S extends T>(source: S): void {
+      const picked = pick(source, this.keys);
 
-      mergeWith(this.data, picked, (objValue, srcValue) =>
-        Array.isArray(objValue) ? srcValue : undefined
-      );
+      this.data = deepmerge(this.data, picked, {
+        arrayMerge: (destinationArray, sourceArray) => sourceArray,
+      });
     },
 
-    load(input: Dictionary): void {
+    load<S extends T>(source: S): void {
       this.reset();
-      this.assign(input);
+      this.assign(source);
     },
 
     hasErrors(): boolean {
