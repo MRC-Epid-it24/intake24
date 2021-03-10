@@ -56,13 +56,14 @@ export default Vue.extend({
 
   computed: {
     refsLoaded(): boolean {
-      return !!Object.keys(this.$store.state[this.module].refs).length;
+      const refs = this.$store.state[this.module]?.refs;
+      return refs ? !!Object.keys(refs).length : false;
     },
     filterRefs(): Dictionary {
-      return this.$store.state[this.module].refs?.filter ?? {};
+      return this.$store.state[this.module]?.refs?.filter ?? {};
     },
     activeFilter(): Dictionary {
-      return this.$store.state[this.module].filter.data;
+      return this.$store.state[this.module]?.filter?.data ?? {};
     },
   },
 
@@ -95,7 +96,7 @@ export default Vue.extend({
             if (this.filter[key].includes(item.id)) acc.push(item.name);
             return acc;
           }, []);
-          this.items = this.items.concat(stores);
+          this.items.push(...stores);
         } else this.items.push(this.filter[key]);
       });
       this.items = this.items.filter((item) => item);
