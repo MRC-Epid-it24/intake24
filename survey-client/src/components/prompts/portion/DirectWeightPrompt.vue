@@ -1,7 +1,9 @@
 <template>
   <v-container>
     <portion-layout :text="text" :description="description">
-      <template v-slot:headerText>Direct Weight Prompt</template>
+      <template v-slot:headerText>
+        {{ $t('portion.directWeight.label') }} - {{ localDescription }}
+      </template>
       <v-row>
         <v-col>
           <v-card>Direct Weight content here</v-card>

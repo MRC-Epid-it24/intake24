@@ -1,7 +1,9 @@
 <template>
   <v-container>
     <portion-layout :text="text" :description="description">
-      <template v-slot:headerText>Milk Hot Drink Prompt</template>
+      <template v-slot:headerText>
+        {{ $t('portion.milkHotDrink.label') }} - {{ localDescription }}
+      </template>
       <v-row>
         <v-col>
           <v-card>Milk Hot Drink content here</v-card>
