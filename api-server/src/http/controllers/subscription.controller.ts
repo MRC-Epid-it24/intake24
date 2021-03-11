@@ -18,12 +18,18 @@ export default ({ pusher }: Pick<IoC, 'pusher'>): SubscriptionController => {
   };
 
   const subscribe = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.user as User;
+    const { id: userId } = req.user as User;
     const { subscription } = req.body;
 
-    await UserSubscription.create({ userId: id, type: 'web-push', subscription });
+    const type = 'web-push';
 
-    res.status(201).json();
+    const subscriptions = await UserSubscription.findAll({
+      where: { userId, type, subscription: JSON.stringify(subscription) },
+    });
+
+    if (!subscriptions.length) await UserSubscription.create({ userId, type, subscription });
+
+    res.json();
   };
 
   const unsubscribe = async (req: Request, res: Response): Promise<void> => {

@@ -24,7 +24,7 @@
         </div>
       </v-col>
       <v-col class="shrink">
-        <v-btn v-show="granted" color="primary" @click="push">Test PUSH</v-btn>
+        <v-btn color="primary" @click="testPush">Test PUSH</v-btn>
       </v-col>
     </v-row>
     <v-row v-else align="center" no-gutters>
@@ -34,65 +34,31 @@
         </div>
       </v-col>
       <v-col class="shrink">
-        <v-btn v-show="!granted" color="primary" @click="subscribe">Allow PUSH</v-btn>
+        <v-btn color="primary" @click="requestPermission">Allow PUSH</v-btn>
       </v-col>
     </v-row>
   </v-alert>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
+import WebPushMixin from './WebPushMixin';
 
-export default Vue.extend({
-  data() {
-    return {
-      applicationServerKey: process.env.VUE_APP_WEBPUSH_PUBLIC_KEY as string | undefined,
-      permission: null as string | null, // NotificationPermission
-    };
-  },
+type Mixins = InstanceType<typeof WebPushMixin>;
 
-  computed: {
-    granted(): boolean {
-      return this.permission === 'granted';
-    },
-    supported(): boolean {
-      return (
-        !!this.applicationServerKey && 'Notification' in window && 'serviceWorker' in navigator
-      );
-    },
-  },
-
-  created() {
-    if (!this.supported) {
-      console.warn(`Notification or serviceWorker API not supported by browser.`);
-      return;
-    }
-
-    this.permission = Notification.permission;
-  },
+export default (Vue as VueConstructor<Vue & Mixins>).extend({
+  mixins: [WebPushMixin],
 
   methods: {
-    async subscribe() {
+    async requestPermission() {
       if (!this.supported) return;
 
-      const registration = await navigator.serviceWorker.getRegistration();
-      if (!registration) return;
-
-      const { pushManager } = registration;
-
-      let subscription = await pushManager.getSubscription();
       this.permission = await Notification.requestPermission();
 
-      if (this.permission === 'granted' && !subscription) {
-        subscription = await pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: this.applicationServerKey,
-        });
-        await this.$http.post('/subscriptions', { subscription });
-      }
+      if (this.granted) await this.subscribe();
     },
 
-    async push() {
+    async testPush() {
       await this.$http.post('/subscriptions/push');
     },
   },

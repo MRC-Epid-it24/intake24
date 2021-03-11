@@ -80,22 +80,25 @@
 import groupBy from 'lodash/groupBy';
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
-import Loader from './components/Loader.vue';
-import MenuTree from './components/sidebar/MenuTree.vue';
-import pwaUpdate from './mixins/pwaUpdateMixin';
-import resources from './router/resources';
+import Loader from '@/components/Loader.vue';
+import MenuTree from '@/components/sidebar/MenuTree.vue';
+import WebPushMixin from '@/components/web-push/WebPushMixin';
+import PwaUpdateMixin from '@/mixins/pwaUpdateMixin';
+import resources from '@/router/resources';
 
 export interface AppComponent {
   sidebar: boolean;
   toggleSidebar: () => void;
 }
 
-export default (Vue as VueConstructor<Vue & AppComponent>).extend({
+type Mixins = InstanceType<typeof PwaUpdateMixin> & InstanceType<typeof WebPushMixin>;
+
+export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   name: 'App',
 
   components: { Loader, MenuTree },
 
-  mixins: [pwaUpdate],
+  mixins: [PwaUpdateMixin, WebPushMixin],
 
   data() {
     return {
@@ -105,11 +108,15 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
   },
 
   computed: {
-    ...mapGetters({ loggedIn: 'auth/loggedIn' }),
+    ...mapGetters({ app: 'app', loggedIn: 'auth/loggedIn' }),
     title() {
       if (this.$route.meta.title) return this.$t(this.$route.meta.title);
 
-      return this.$t('common._');
+      if (!this.module || !this.$store.state[this.module]) return this.app.name;
+
+      const { id, name } = this.$store.state[this.module].entry?.data;
+
+      return name ?? id ?? this.$t(`${this.module}.index`);
     },
   },
 
@@ -131,6 +138,11 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
         // continue
       }
     }
+
+    // Send subscription to server to keep it up-to-date
+    setTimeout(async () => {
+      if (this.granted) await this.subscribe();
+    }, 5 * 1000);
   },
 
   methods: {
