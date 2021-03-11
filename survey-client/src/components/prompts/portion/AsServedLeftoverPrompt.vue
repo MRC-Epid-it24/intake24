@@ -1,10 +1,12 @@
 <template>
   <v-container>
     <portion-layout :text="text" :description="description">
-      <template v-slot:headerText>Leftovers</template>
+      <template v-slot:headerText>
+        {{ $t('portion.asServedLeftover.label') }} - {{ localDescription }}
+      </template>
       <v-row>
         <v-col>
-          <v-card>Leftover content here</v-card>
+          <v-card></v-card>
         </v-col>
       </v-row>
     </portion-layout>
