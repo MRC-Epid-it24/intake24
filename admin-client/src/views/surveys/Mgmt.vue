@@ -103,7 +103,7 @@ import Vue, { VueConstructor } from 'vue';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
-import { SurveysMgmtAvailableResponse, UserMgmtListEntry } from '@common/types/http';
+import { SurveyMgmtAvailableResponse, UserMgmtListEntry } from '@common/types/http';
 import DataTable from './DataTable.vue';
 
 type SurveyMgmtRefs = {
@@ -117,7 +117,7 @@ type SurveyMgmtForm = {
   permissions: number[];
 };
 
-interface AvailableOptions extends SurveysMgmtAvailableResponse {
+interface AvailableOptions extends SurveyMgmtAvailableResponse {
   isLoading: boolean;
 }
 
@@ -228,7 +228,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
       try {
         const {
           data: { users, permissions },
-        } = await this.$http.get<SurveysMgmtAvailableResponse>(
+        } = await this.$http.get<SurveyMgmtAvailableResponse>(
           `admin/surveys/${this.id}/mgmt/available`
         );
         this.options.users = users;

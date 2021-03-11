@@ -5,7 +5,10 @@ const common: LocaleMessageObject = {
   dashboard: 'Armaturenbrett',
   register: 'Registrierung',
   login: 'Einloggen',
-  logout: 'Ausloggen',
+  logout: {
+    _: 'Ausloggen',
+    text: 'Ausloggen',
+  },
 
   admin: 'Administratorin',
   local: 'Lokalisierung',
@@ -56,15 +59,24 @@ const common: LocaleMessageObject = {
     save: 'Save',
     show: 'Info',
     transfer: 'Transfer',
-    multi: {
-      delete: 'Delete selected items',
-    },
     confirm: {
-      delete: 'Do you really want to delete {name}?',
+      _: 'Confirm',
+      title: 'Do you want to continue?',
+      delete: `Do you want to delete '{name}'?`,
       multi: {
-        delete: 'Selected items will be deleted: ',
+        delete: 'Do you want to delete selected items: {count}',
       },
     },
+  },
+
+  msg: {
+    stored: 'Record ({name}) has been stored.',
+    updated: 'Record ({name}) has been updated.',
+    deleted: 'Record ({name}) has been deleted.',
+    multi: {
+      deleted: 'Selected items were deleted ({count}).',
+    },
+    sent: 'Your message has been sent.',
   },
 
   search: {
@@ -73,16 +85,6 @@ const common: LocaleMessageObject = {
     clear: 'Clear filter',
     count: 'Records count',
     selected: 'Records selected',
-  },
-
-  msg: {
-    stored: 'Record ({name}) has been stored.',
-    updated: 'Record ({name}) has been updated.',
-    deleted: 'Record ({name}) has been deleted.',
-    multi: {
-      deleted: 'Selected items were deleted.',
-    },
-    sent: 'Your message has been sent.',
   },
 
   not: {

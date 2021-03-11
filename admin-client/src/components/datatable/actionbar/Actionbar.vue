@@ -68,8 +68,7 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
     },
 
     async onDelete(): Promise<void> {
-      const { id, name } = this.item;
-      if (!confirm(this.$t('common.action.confirm.delete', { name }) as string)) return;
+      const { id } = this.item;
 
       await this.$http.delete(`${this.api}/${id}`);
       this.onSuccess('deleted');

@@ -20,11 +20,15 @@
         </v-btn>
         <slot name="actions"></slot>
         <v-spacer></v-spacer>
-        <delete
+        <confirm-dialog
           v-if="!isCreate && can({ action: 'delete' })"
-          action="delete"
-          @action="onDelete"
-        ></delete>
+          :label="$t('common.action.delete')"
+          color="error"
+          iconLeft="$delete"
+          @confirm="remove"
+        >
+          {{ $t('common.action.confirm.delete', { name: entry.name ? entry.name : entry.id }) }}
+        </confirm-dialog>
       </v-toolbar>
     </v-card>
     <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
@@ -47,7 +51,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import has from 'lodash/has';
-import Delete from '@/components/toolbar/Delete.vue';
+import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import resources from '@/router/resources';
 import { Resource } from '@/types/vue-router';
 
@@ -65,7 +69,7 @@ export default Vue.extend({
     },
   },
 
-  components: { Delete },
+  components: { ConfirmDialog },
 
   computed: {
     isCreate(): boolean {
@@ -87,12 +91,11 @@ export default Vue.extend({
       return this.$t(check ? `${this.module}.${tab}._` : `common.action.${tab}`);
     },
 
-    async onDelete(): Promise<void> {
-      const name = this.entry.name ?? this.entry.id;
-      if (!confirm(this.$t('common.action.confirm.delete', { name }) as string)) return;
+    async remove(): Promise<void> {
+      const { id, name } = this.entry;
 
       await this.$http.delete(`${this.resource.api}/${this.id}`);
-      this.$toasted.success(this.$t('common.msg.deleted', { name }) as string);
+      this.$toasted.success(this.$t('common.msg.deleted', { name: name ?? id }) as string);
       await this.$router.push({ name: this.resource.name });
     },
   },

@@ -48,7 +48,7 @@ export default Vue.extend({
           applicationServerKey: process.env.VUE_APP_WEBPUSH_PUBLIC_KEY,
         });
       }
-      await this.$http.post('/subscriptions', { subscription });
+      await this.$http.post('subscriptions', { subscription });
     },
   },
 });

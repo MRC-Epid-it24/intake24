@@ -59,7 +59,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
     },
 
     async testPush() {
-      await this.$http.post('/subscriptions/push');
+      await this.$http.post('subscriptions/push');
     },
   },
 });

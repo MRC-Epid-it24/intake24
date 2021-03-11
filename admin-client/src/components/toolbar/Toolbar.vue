@@ -13,17 +13,16 @@
         ></component>
       </template>
       <v-spacer></v-spacer>
-      <template v-for="action in ['delete']">
-        <component
-          :is="action"
-          v-if="currentActions.includes(action)"
-          :action="action"
-          :key="action"
-          :disabled="!selected.length"
-          class="mr-2"
-          @action="onAction"
-        ></component>
-      </template>
+      <confirm-dialog
+        v-if="currentActions.includes('delete')"
+        :disabled="!selected.length"
+        :label="$t('common.action.delete')"
+        color="error"
+        iconLeft="$delete"
+        @confirm="onDelete"
+      >
+        {{ $t('common.action.confirm.multi.delete', { count: selected.length }) }}
+      </confirm-dialog>
     </v-toolbar>
   </v-card>
 </template>
@@ -32,9 +31,9 @@
 import Vue, { VueConstructor } from 'vue';
 import { Location } from 'vue-router';
 import upperFirst from 'lodash/upperFirst';
+import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import Create from './Create.vue';
 import Detail from './Detail.vue';
-import Delete from './Delete.vue';
 import Edit from './Edit.vue';
 
 interface Actionable {
@@ -45,8 +44,8 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
   name: 'Toolbar',
 
   components: {
+    ConfirmDialog,
     Create,
-    Delete,
     Detail,
     Edit,
   },
@@ -100,9 +99,6 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
     async onDelete() {
       const id = this.getAtLeastOneSelected();
       if (id === false) return;
-
-      if (!confirm(this.$t('common.action.confirm.multi.delete', { count: id.length }) as string))
-        return;
 
       await this.$http.delete(this.api, { params: { id } });
       this.$toasted.success(this.$t('common.msg.multi.deleted') as string);

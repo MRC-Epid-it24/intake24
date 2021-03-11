@@ -8,9 +8,15 @@
         {{ new Date(item.endTime).toLocaleString() }}
       </template>
       <template v-slot:[`item.action`]="{ item }" class="text-right">
-        <v-btn color="error" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
-          <v-icon dark>$delete</v-icon>
-        </v-btn>
+        <confirm-dialog
+          :label="$t('common.action.delete')"
+          color="error"
+          icon
+          iconLeft="$delete"
+          @confirm="remove(item)"
+        >
+          {{ $t('common.action.confirm.delete', { name: item.id }) }}
+        </confirm-dialog>
       </template>
     </data-table>
   </layout>
@@ -18,6 +24,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import { EntryMixin } from '@/types/vue';
 import { SurveySubmissionEntry } from '@common/types/http';
@@ -32,7 +39,7 @@ export type SurveySubmissionsRefs = {
 export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>).extend({
   name: 'SurveySubmissions',
 
-  components: { DataTable },
+  components: { ConfirmDialog, DataTable },
 
   mixins: [detailMixin],
 
@@ -82,7 +89,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>)
   },
 
   methods: {
-    async edit(item: SurveySubmissionEntry) {
+    async remove(item: SurveySubmissionEntry) {
       console.log(item);
     },
   },

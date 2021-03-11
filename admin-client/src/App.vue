@@ -49,10 +49,15 @@
           <span class="mr-2">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
-        <v-btn text @click.stop="onLogout()">
-          <span class="mr-2">{{ $t('common.logout') }}</span>
-          <v-icon>$logout</v-icon>
-        </v-btn>
+        <confirm-dialog :label="$t('common.logout._')" @confirm="logout">
+          <template v-slot:activator="{ attrs, on }">
+            <v-btn text v-bind="attrs" v-on="on">
+              <span>{{ $t('common.logout._') }}</span>
+              <v-icon right>$logout</v-icon>
+            </v-btn>
+          </template>
+          {{ $t('common.logout.text') }}
+        </confirm-dialog>
       </template>
       <template v-else>
         <v-toolbar-title>{{ $t('common._') }}</v-toolbar-title>
@@ -80,6 +85,7 @@
 import groupBy from 'lodash/groupBy';
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
+import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import Loader from '@/components/Loader.vue';
 import MenuTree from '@/components/sidebar/MenuTree.vue';
 import WebPushMixin from '@/components/web-push/WebPushMixin';
@@ -96,7 +102,7 @@ type Mixins = InstanceType<typeof PwaUpdateMixin> & InstanceType<typeof WebPushM
 export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   name: 'App',
 
-  components: { Loader, MenuTree },
+  components: { ConfirmDialog, Loader, MenuTree },
 
   mixins: [PwaUpdateMixin, WebPushMixin],
 
@@ -150,7 +156,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
       this.sidebar = !this.sidebar;
     },
 
-    async onLogout() {
+    async logout() {
       await this.$store.dispatch('auth/logout', { invalidate: true });
       await this.$router.push({ name: 'login' });
     },

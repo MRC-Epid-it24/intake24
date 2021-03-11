@@ -125,9 +125,15 @@
         <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
           <v-icon dark>$edit</v-icon>
         </v-btn>
-        <v-btn color="error" icon :title="$t('common.action.delete')" @click.stop="remove(item)">
-          <v-icon dark>$delete</v-icon>
-        </v-btn>
+        <confirm-dialog
+          :label="$t('common.action.delete')"
+          color="error"
+          icon
+          iconLeft="$delete"
+          @confirm="remove(item)"
+        >
+          {{ $t('common.action.confirm.delete', { name: item.userName }) }}
+        </confirm-dialog>
       </template>
     </data-table>
   </layout>
@@ -136,6 +142,8 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { Dictionary } from '@common/types';
+import { RespondentEntry, SurveyRespondentResponse } from '@common/types/http';
+import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
@@ -162,7 +170,7 @@ export type SurveyRespondentsForm = {
 export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).extend({
   name: 'SurveyRespondents',
 
-  components: { DataTable, RespondentsAuthUrlExport, RespondentsUpload },
+  components: { ConfirmDialog, DataTable, RespondentsAuthUrlExport, RespondentsUpload },
 
   mixins: [detailMixin],
 
@@ -231,13 +239,15 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       if (this.form.userId) {
         const {
           data: { userName: name },
-        } = await this.form.put(`admin/surveys/${this.id}/respondents/${this.form.userId}`);
+        } = await this.form.put<SurveyRespondentResponse>(
+          `admin/surveys/${this.id}/respondents/${this.form.userId}`
+        );
 
         this.$toasted.success(this.$t('common.msg.updated', { name }) as string);
       } else {
         const {
           data: { userName: name },
-        } = await this.form.post(`admin/surveys/${this.id}/respondents`);
+        } = await this.form.post<SurveyRespondentResponse>(`admin/surveys/${this.id}/respondents`);
 
         this.$toasted.success(this.$t('common.msg.stored', { name }) as string);
       }
@@ -246,9 +256,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       await this.updateTable();
     },
 
-    async remove({ userName: name, userId }: Dictionary) {
-      if (!confirm(this.$t('common.action.confirm.delete', { name }) as string)) return;
-
+    async remove({ userName: name, userId }: RespondentEntry) {
       await this.$http.delete(`admin/surveys/${this.id}/respondents/${userId}`);
       this.$toasted.success(this.$t('common.msg.deleted', { name }) as string);
 
