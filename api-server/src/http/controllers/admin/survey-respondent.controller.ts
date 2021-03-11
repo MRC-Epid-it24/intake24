@@ -1,9 +1,15 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
+import {
+  JobResponse,
+  SurveyRespondentResponse,
+  SurveyRespondentsResponse,
+  SurveyRespondentListEntry,
+} from '@common/types/http';
 import { Survey, User, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import { userRespondentResponse } from '@/http/responses/admin';
-import { JobResponse, RespondentResponse } from '@common/types/http';
+
 import type { IoC } from '@/ioc';
 import { Controller } from '../controller';
 
@@ -12,13 +18,13 @@ export type AdminSurveyRespondentController = Controller<
 >;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespondentController => {
-  const browse = async (req: Request, res: Response): Promise<void> => {
+  const browse = async (req: Request, res: Response<SurveyRespondentsResponse>): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
     if (!survey) throw new NotFoundError();
 
-    const respondents = await UserSurveyAlias.paginate<RespondentResponse>({
+    const respondents = await UserSurveyAlias.paginate<SurveyRespondentListEntry>({
       req,
       columns: ['userName'],
       where: { surveyId },
@@ -29,7 +35,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
     res.json(respondents);
   };
 
-  const store = async (req: Request, res: Response): Promise<void> => {
+  const store = async (req: Request, res: Response<SurveyRespondentResponse>): Promise<void> => {
     const { surveyId } = req.params;
 
     const respondent = await surveyService.createRespondent(
@@ -37,10 +43,10 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
     );
 
-    res.status(201).json({ data: respondent });
+    res.status(201).json({ data: userRespondentResponse(respondent) });
   };
 
-  const update = async (req: Request, res: Response): Promise<void> => {
+  const update = async (req: Request, res: Response<SurveyRespondentResponse>): Promise<void> => {
     const { surveyId, userId } = req.params;
 
     const respondent = await surveyService.updateRespondent(
@@ -49,7 +55,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
     );
 
-    res.json({ data: respondent });
+    res.json({ data: userRespondentResponse(respondent) });
   };
 
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {

@@ -1,10 +1,10 @@
-import { UserEntry, UserMgmtListEntry, RespondentResponse } from '@common/types/http';
+import { UserEntry, UserMgmtListEntry, RespondentEntry } from '@common/types/http';
 import { User, UserSurveyAlias } from '@/db/models/system';
 import { permissionListResponse } from './permissions';
 
 export const userEntryResponse = (user: User): UserEntry => user.get();
 
-export const userRespondentResponse = (alias: UserSurveyAlias): RespondentResponse => {
+export const userRespondentResponse = (alias: UserSurveyAlias): RespondentEntry => {
   const {
     userId,
     userName,

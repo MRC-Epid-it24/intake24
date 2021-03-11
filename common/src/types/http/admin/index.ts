@@ -5,6 +5,7 @@ export * from './permissions';
 export * from './roles';
 export * from './schemes';
 export * from './survey-mgmt';
+export * from './survey-respondents';
 export * from './survey-submissions';
 export * from './surveys';
 export * from './tasks';

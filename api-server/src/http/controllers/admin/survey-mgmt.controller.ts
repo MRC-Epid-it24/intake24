@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { Op } from 'sequelize';
 import {
-  SurveysMgmtAvailableResponse,
-  SurveysMgmtResponse,
+  SurveyMgmtAvailableResponse,
+  SurveyMgmtResponse,
   UserMgmtListEntry,
 } from '@common/types/http';
 import { Permission, Survey, User } from '@/db/models/system';
@@ -15,7 +15,7 @@ import { Controller } from '../controller';
 export type AdminSurveyMgmtController = Controller<'browse' | 'available' | 'update'>;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtController => {
-  const browse = async (req: Request, res: Response<SurveysMgmtResponse>): Promise<void> => {
+  const browse = async (req: Request, res: Response<SurveyMgmtResponse>): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
 
@@ -41,7 +41,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtC
 
   const available = async (
     req: Request,
-    res: Response<SurveysMgmtAvailableResponse>
+    res: Response<SurveyMgmtAvailableResponse>
   ): Promise<void> => {
     const { surveyId } = req.params;
     const survey = await Survey.findByPk(surveyId);
