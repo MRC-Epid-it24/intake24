@@ -52,7 +52,7 @@ export default (): void => {
         },
       });
 
-    expect(status).toBe(201);
+    expect(status).toBe(200);
     expect(body).toBeEmpty();
   });
 };
