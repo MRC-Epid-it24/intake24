@@ -30,6 +30,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
       where: { surveyId },
       include: [{ model: User }],
       transform: userRespondentResponse,
+      order: [['userName', 'ASC']],
     });
 
     res.json(respondents);

@@ -26,6 +26,7 @@ export default (): LanguageController => {
     const languages = await Language.paginate({
       req,
       columns: ['id', 'englishName', 'localName'],
+      order: [['id', 'ASC']],
     });
 
     res.json(languages);

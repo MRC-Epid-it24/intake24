@@ -46,7 +46,7 @@ export default ({ config }: Pick<IoC, 'config'>): AdminSurveyController => {
       where.id = surveys;
     }
 
-    const surveys = await Survey.paginate({ req, columns: ['id'], where });
+    const surveys = await Survey.paginate({ req, columns: ['id'], where, order: [['id', 'ASC']] });
 
     res.json(surveys);
   };

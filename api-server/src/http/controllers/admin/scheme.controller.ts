@@ -34,7 +34,11 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
   };
 
   const browse = async (req: Request, res: Response<SchemesResponse>): Promise<void> => {
-    const schemes = await Scheme.paginate({ req, columns: ['id', 'name'] });
+    const schemes = await Scheme.paginate({
+      req,
+      columns: ['id', 'name'],
+      order: [['id', 'ASC']],
+    });
 
     res.json(schemes);
   };

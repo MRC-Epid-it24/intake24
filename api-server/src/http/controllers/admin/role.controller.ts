@@ -25,7 +25,11 @@ export default ({ config }: Pick<IoC, 'config'>): RoleController => {
   };
 
   const browse = async (req: Request, res: Response<RolesResponse>): Promise<void> => {
-    const roles = await Role.paginate({ req, columns: ['name', 'displayName'] });
+    const roles = await Role.paginate({
+      req,
+      columns: ['name', 'displayName'],
+      order: [['name', 'ASC']],
+    });
 
     res.json(roles);
   };

@@ -26,7 +26,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
   };
 
   const browse = async (req: Request, res: Response<TasksResponse>): Promise<void> => {
-    const tasks = await Task.paginate({ req, columns: ['name', 'job'] });
+    const tasks = await Task.paginate({ req, columns: ['name', 'job'], order: [['name', 'ASC']] });
 
     res.json(tasks);
   };

@@ -42,6 +42,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
       req,
       columns: ['name', 'email', 'simpleName'],
       include: [{ model: Role }],
+      order: [['name', 'ASC']],
     });
 
     res.json(users);

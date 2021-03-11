@@ -24,7 +24,11 @@ export default (): AdminSurveySubmissionController => {
       else where.userId = search;
     }
 
-    const submissions = await SurveySubmission.paginate({ req, where });
+    const submissions = await SurveySubmission.paginate({
+      req,
+      where,
+      order: [['submissionTime', 'DESC']],
+    });
 
     res.json(submissions);
   };

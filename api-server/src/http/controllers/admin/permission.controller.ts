@@ -22,7 +22,11 @@ export default (): PermissionController => {
   };
 
   const browse = async (req: Request, res: Response<PermissionsResponse>): Promise<void> => {
-    const permissions = await Permission.paginate({ req, columns: ['name', 'displayName'] });
+    const permissions = await Permission.paginate({
+      req,
+      columns: ['name', 'displayName'],
+      order: [['name', 'ASC']],
+    });
 
     res.json(permissions);
   };

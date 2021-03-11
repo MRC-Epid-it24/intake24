@@ -35,6 +35,7 @@ export default (): LocaleController => {
     const locales = await Locale.paginate({
       req,
       columns: ['id', 'englishName', 'localName'],
+      order: [['id', 'ASC']],
     });
 
     res.json(locales);
