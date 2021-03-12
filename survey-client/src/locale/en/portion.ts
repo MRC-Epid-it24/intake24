@@ -8,6 +8,7 @@ const portion: LocaleMessage = {
     // Maybe don't need both of these as semanitcally very similar
     confirmButtonMany: 'I had that much',
     confirmButton: 'I had that many',
+    quantityAnd: 'and', // E.g 1 and 3/4 bananas
   },
   option: {
     // Implementation of this needs looking at for RTL, as localDescription appears at end of line for label

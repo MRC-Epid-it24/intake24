@@ -1,0 +1,103 @@
+<template>
+  <v-row>
+    <v-col v-if="whole" md="auto">
+      <v-card align="center" class="px-4">
+        <v-row>
+          <v-col>
+            <v-btn text icon @click="modifyWhole(1)">
+              <v-icon aria-hidden="false">fas fa-fw fa-plus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>{{ wholeNum }}</v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn text icon @click="modifyWhole(-1)">
+              <v-icon aria-hidden="false">fas fa-fw fa-minus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-col>
+    <v-col v-if="whole && fraction" align="center" justify="center" md="auto">
+      {{ $t('portion.common.quantityAnd') }}
+    </v-col>
+    <v-col v-if="fraction" md="auto">
+      <v-card align="center" class="px-4">
+        <v-row>
+          <v-col>
+            <v-btn text icon @click="modifyFrac(0.25)">
+              <v-icon aria-hidden="false">fas fa-fw fa-plus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col> {{ displayFrac() }} </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn text icon @click="modifyFrac(-0.25)">
+              <v-icon aria-hidden="false">fas fa-fw fa-minus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-col>
+    <v-spacer></v-spacer>
+  </v-row>
+</template>
+
+<script lang="ts">
+import Vue, { VueConstructor } from 'vue';
+
+export default (Vue as VueConstructor<Vue>).extend({
+  name: 'QuantityCard',
+  // Purpose: Card that renders whole, fraction, or both, quantity counters for food items
+
+  // Should probably fail if both are false as nothing to display
+  props: {
+    whole: Boolean,
+    fraction: Boolean,
+  },
+
+  data() {
+    return {
+      wholeNum: 0,
+      fracNum: 0.0,
+    };
+  },
+
+  methods: {
+    modifyWhole(value: number) {
+      // Test we only subtract 1 from value
+      if (value >= -1 && value <= 1) {
+        // Currently no upper limit
+        if (this.wholeNum + value >= 0) {
+          this.wholeNum += value;
+        }
+      }
+    },
+    modifyFrac(value: number) {
+      if (this.fracNum + value >= 0 && this.fracNum + value < 1) {
+        this.fracNum += value;
+      }
+    },
+    displayFrac(): string {
+      switch (this.fracNum) {
+        case 0.25:
+          return '1/4';
+        case 0.5:
+          return '1/2';
+        case 0.75:
+          return '3/4';
+        default:
+          return this.fracNum.toString();
+      }
+    },
+  },
+});
+</script>
+
+<style></style>
