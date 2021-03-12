@@ -6,18 +6,48 @@
       </template>
       <v-row>
         <v-col>
-          <transition name="component-fade" mode="out-in">
-            <v-card v-show="!selectedGuide">
-              <!-- TODO: Implement image map or alternative -->
-              <v-img class="align-end" :src="selectionImageUrl" :aspect-ratio="16 / 9">
-                <template v-slot:placeholder>
-                  <ImagePlaceholder></ImagePlaceholder>
+          <v-expansion-panels v-model="panelOpen">
+            <v-expansion-panel>
+              <v-expansion-panel-header disable-icon-rotate>
+                Select guide image
+                <template v-slot:actions>
+                  <v-icon color="success" v-if="selectedGuide">
+                    fas fa-fw fa-check
+                  </v-icon>
                 </template>
-              </v-img>
-              <!-- TODO: Value from image map/canvas -->
-              <v-btn color="success" @click="onSelect()">{{ $t('common.continue') }}</v-btn>
-            </v-card>
-          </transition>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-card v-show="!selectedGuide">
+                  <!-- TODO: Implement image map or alternative -->
+                  <v-img class="align-end" :src="selectionImageUrl" :aspect-ratio="16 / 9">
+                    <template v-slot:placeholder>
+                      <ImagePlaceholder></ImagePlaceholder>
+                    </template>
+                  </v-img>
+                  <!-- TODO: Value from image map/canvas -->
+                  <v-btn color="success" @click="onSelect()">{{ $t('common.continue') }}</v-btn>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header>Input quantity</v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-card>
+                  <v-card-text>{{ $t('portion.guideImage.quantity') }}</v-card-text>
+                  <v-card-actions>
+                    <quantity-card :whole="true" :fraction="true"></quantity-card>
+                  </v-card-actions>
+                  <v-card-actions>
+                    <v-btn color="success">
+                      {{ $t('portion.common.confirmButton') }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+          
+            
         </v-col>
       </v-row>
       <transition name="component-fade" mode="out-in">
@@ -71,6 +101,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       ...merge(guideImagePromptDefaultProps, this.props),
       errors: [] as string[],
       selectedGuide: false,
+      panelOpen: 0,
     };
   },
 
@@ -86,7 +117,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   methods: {
     onSelect() {
       this.selectedGuide = !this.selectedGuide;
-      console.log(this.selectedGuide);
+      this.panelOpen = 1;
     },
     onSubmit() {
       this.$emit('Guide Image selection submitted');
