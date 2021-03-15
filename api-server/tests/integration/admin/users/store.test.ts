@@ -96,11 +96,13 @@ export default (): void => {
       expect(pick(data, Object.keys(restOutput))).toEqual(restOutput);
 
       // 2) non-order specific custom field comparison
-      const fields = resCustomFields.map(({ name, value }: CustomField) => ({
-        name,
-        value,
-      }));
-      expect(fields).toEqual(outputCustomFields);
+      if (outputCustomFields) {
+        const fields: CustomField[] = resCustomFields.map(({ name, value }: CustomField) => ({
+          name,
+          value,
+        }));
+        expect(fields).toIncludeSameMembers(outputCustomFields);
+      }
     });
 
     it('should return 422 when duplicate email', async () => {

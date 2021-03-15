@@ -148,11 +148,13 @@ export default (): void => {
       expect(pick(data, Object.keys(restUpdateInput))).toEqual(restUpdateInput);
 
       // 2) non-order specific comparison
-      const fields = resCustomFields.map(({ name, value }: CustomField) => ({
-        name,
-        value,
-      }));
-      expect(fields).toEqual(outputCustomFields);
+      if (outputCustomFields) {
+        const fields = resCustomFields.map(({ name, value }: CustomField) => ({
+          name,
+          value,
+        }));
+        expect(fields).toIncludeSameMembers(outputCustomFields);
+      }
 
       expect(resPermissions.map((item: Permission) => item.id)).toEqual(outputPermissions);
       expect(resRoles.map((item: Role) => item.id)).toEqual(outputRoles);
