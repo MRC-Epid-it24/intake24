@@ -5,12 +5,12 @@ import getters from './getters';
 import mutations from './mutations';
 import state from './state';
 
-const entry = (name: string): Module<EntryState, RootState> => ({
+const entry: Module<EntryState, RootState> = {
   namespaced: true,
-  state: state(name),
+  state: state(),
   actions,
   getters,
   mutations,
-});
+};
 
 export default entry;

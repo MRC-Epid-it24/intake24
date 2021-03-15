@@ -1,14 +1,9 @@
-import Vue, { VueConstructor } from 'vue';
-import { Dictionary } from '@common/types';
-import { MapEntryMixin } from '@/types/vue';
+import Vue from 'vue';
+import { mapGetters } from 'vuex';
 
-export default (Vue as VueConstructor<Vue & MapEntryMixin>).extend({
-  computed: {
-    entry(): Dictionary {
-      return this.$store.state[this.module].entry.data;
-    },
-    entryLoaded() {
-      return this.entry && !!Object.keys(this.entry).length;
-    },
-  },
+export default Vue.extend({
+  computed: mapGetters({
+    entry: 'resource/entry/data',
+    entryLoaded: 'resource/entry/dataLoaded',
+  }),
 });

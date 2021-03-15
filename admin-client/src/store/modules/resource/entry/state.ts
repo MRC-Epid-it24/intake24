@@ -1,7 +1,6 @@
 import { EntryState } from '@/types/vuex';
 
-const state = (name: string): EntryState => ({
-  name,
+const state = (): EntryState => ({
   data: {},
   refs: {},
   addons: {},

@@ -3,7 +3,7 @@ import { Permission, RootState, UserState } from '@/types/vuex';
 
 const getters: GetterTree<UserState, RootState> = {
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  can: (state, getters, rootState) => (
+  can: (state, getters, rootState, rootGetters) => (
     permission: string | string[] | Permission,
     strict = false
   ) => {
@@ -15,8 +15,8 @@ const getters: GetterTree<UserState, RootState> = {
         : permission.some((item) => getters.permissions.includes(item));
     }
 
-    const { module, action } = permission;
-    return getters.permissions.includes(`${module ?? rootState.module}-${action}`);
+    const { resource, action } = permission;
+    return getters.permissions.includes(`${resource ?? rootGetters['resource/name']}-${action}`);
   },
   loaded: (state) => !!Object.keys(state.profile).length,
   profile: (state) => state.profile,

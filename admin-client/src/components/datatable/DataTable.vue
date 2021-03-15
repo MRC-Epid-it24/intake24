@@ -1,12 +1,12 @@
 <template>
   <div>
-    <toolbar :api="api" :selected="tracked" @refresh="onRefresh"></toolbar>
+    <toolbar :actions="actions" :api="api" :selected="tracked" @refresh="onRefresh"></toolbar>
     <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
       <v-card-text>
         <data-table-filter
           :count="meta.total"
-          @filter-set="onFilterSet"
-          @filter-reset="onFilterReset"
+          @filter-set="setFilter"
+          @filter-reset="resetFilter"
         ></data-table-filter>
         <v-data-table
           v-model="selected"
@@ -21,13 +21,18 @@
           show-select
           :loading="isLoading"
           :server-items-length="meta.total"
-          @item-selected="updateTracked"
         >
           <template v-for="(_, scopedSlotName) in $scopedSlots" v-slot:[scopedSlotName]="slotData">
             <slot :name="scopedSlotName" v-bind="slotData" />
           </template>
           <template v-slot:[`item.action`]="{ item }">
-            <actionbar :api="api" :item="item" class="text-right" @refresh="onRefresh"></actionbar>
+            <actionbar
+              :actions="actions.filter((action) => action !== 'create')"
+              :api="api"
+              :item="item"
+              class="text-right"
+              @refresh="onRefresh"
+            ></actionbar>
           </template>
         </v-data-table>
       </v-card-text>
@@ -37,17 +42,19 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { mapGetters } from 'vuex';
 import { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
 import { Dictionary } from '@common/types';
 import Actionbar from '@/components/datatable/actionbar/Actionbar.vue';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
 import handlesLoading from '@/mixins/handlesLoading';
+import { Pagination, PaginationMeta } from '@common/types/models';
 import DataTableFilter from './DataTableFilter.vue';
 
-type mixins = InstanceType<typeof handlesLoading>;
+type Mixins = InstanceType<typeof handlesLoading>;
 
-export default (Vue as VueConstructor<Vue & mixins>).extend({
+export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'DataTable',
 
   components: { Actionbar, DataTableFilter, Toolbar },
@@ -55,6 +62,10 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
   mixins: [handlesLoading],
 
   props: {
+    actions: {
+      type: Array as () => string[],
+      default: (): string[] => ['create', 'read', 'edit', 'delete'],
+    },
     api: {
       type: String,
       required: true,
@@ -72,16 +83,16 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
   data() {
     return {
       items: [] as Dictionary[],
-      meta: {},
+      meta: {} as PaginationMeta,
       options: {} as DataOptions,
       selected: [] as Dictionary[],
-      tracked: [] as string[] | number[],
     };
   },
 
   computed: {
-    filter(): Dictionary {
-      return this.$store.state[this.module].filter.data;
+    ...mapGetters({ filter: 'resource/filter' }),
+    tracked(): string[] | number[] {
+      return this.selected.map((item) => item[this.trackBy]);
     },
   },
 
@@ -91,9 +102,6 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
         if (!isEqual(val, oldVal)) this.fetch();
       },
       deep: true,
-    },
-    selected() {
-      this.updateTracked();
     },
   },
 
@@ -112,7 +120,7 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
         const {
           data: { data, meta },
         } = await this.withLoading(
-          this.$http.get(this.api, { params: { limit, page, sort, ...this.filter } })
+          this.$http.get<Pagination>(this.api, { params: { limit, page, sort, ...this.filter } })
         );
 
         this.items = data;
@@ -122,19 +130,15 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
       }
     },
 
-    updateTracked() {
-      this.tracked = this.selected.map((item) => item[this.trackBy]);
-    },
-
-    async onFilterSet(data: Dictionary) {
+    async setFilter(data: Dictionary) {
       // this.clearSelected();
-      await this.$store.dispatch(`${this.module}/filter/add`, data);
+      await this.$store.dispatch(`resource/setFilter`, data);
       this.fetch();
     },
 
-    async onFilterReset() {
+    async resetFilter() {
       // this.clearSelected();
-      await this.$store.dispatch(`${this.module}/filter/reset`);
+      await this.$store.dispatch(`resource/resetFilter`);
       this.fetch();
     },
 

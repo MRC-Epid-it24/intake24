@@ -3,8 +3,8 @@ import { EntryState, RootState } from '@/types/vuex';
 import http from '@/services/http.service';
 
 const actions: ActionTree<EntryState, RootState> = {
-  async request({ commit, state }, { id, path, query }) {
-    const { name } = state;
+  async request({ commit, rootGetters }, { id, path, query }) {
+    const name = rootGetters['resource/name'];
     commit('request');
     commit('loading/add', `${name}/entry`, { root: true });
 

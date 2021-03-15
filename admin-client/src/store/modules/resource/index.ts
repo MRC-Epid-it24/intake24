@@ -1,16 +1,16 @@
 import { Module } from 'vuex';
-import { ListState, RootState } from '@/types/vuex';
+import type { ListState, RootState } from '@/types';
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 import state from './state';
 
-const list = (name: string): Module<ListState, RootState> => ({
+const resource: Module<ListState, RootState> = {
   namespaced: true,
-  state: state(name),
+  state: state(),
   actions,
   getters,
   mutations,
-});
+};
 
-export default list;
+export default resource;

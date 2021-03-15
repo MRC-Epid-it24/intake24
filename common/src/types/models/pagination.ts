@@ -1,3 +1,5 @@
+import { Dictionary } from '../common';
+
 export interface PaginationMeta {
   from: number;
   lastPage: number;
@@ -8,7 +10,7 @@ export interface PaginationMeta {
   total: number;
 }
 
-export interface Pagination<R> {
+export interface Pagination<R = Dictionary> {
   data: R[];
   meta: PaginationMeta;
 }

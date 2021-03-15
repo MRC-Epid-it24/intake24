@@ -4,10 +4,10 @@
       <v-col cols="12">
         <v-text-field
           v-model="filter.search"
+          :label="$t('common.search._')"
           append-icon="fas fa-search"
           clearable
           hide-details="auto"
-          :label="$t('common.search._')"
           outlined
           @click:append="setFilter"
           @click:clear="resetFilter"
@@ -19,7 +19,7 @@
     <v-row justify="space-between">
       <v-col col="12" sm="auto">
         {{ $t('common.search.filter') }}:
-        <v-chip v-for="item in items" :key="item" pill color="orange" class="mr-1">
+        <v-chip v-for="item in items" :key="item" pill color="orange darken-2" class="mr-1">
           {{ item }}
         </v-chip>
       </v-col>
@@ -33,6 +33,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { mapGetters } from 'vuex';
 import isEmpty from 'lodash/isEmpty';
 import { Dictionary } from '@common/types';
 
@@ -55,51 +56,29 @@ export default Vue.extend({
   },
 
   computed: {
-    refsLoaded(): boolean {
-      const refs = this.$store.state[this.module]?.refs;
-      return refs ? !!Object.keys(refs).length : false;
-    },
-    filterRefs(): Dictionary {
-      return this.$store.state[this.module]?.refs?.filter ?? {};
-    },
-    activeFilter(): Dictionary {
-      return this.$store.state[this.module]?.filter?.data ?? {};
-    },
+    ...mapGetters({ activeFilter: 'resource/filter' }),
   },
 
   watch: {
     activeFilter: {
       handler(val) {
         this.filter = { ...(isEmpty(val) ? this.defaults : val) };
-        this.loadApplied();
+        this.refreshItems();
       },
       immediate: true,
-    },
-    filterRefs(val) {
-      if (Object.keys(val).length) this.loadApplied();
     },
   },
 
   methods: {
     setFilter() {
-      this.loadApplied();
+      this.refreshItems();
       this.$emit('filter-set', this.filter);
     },
     resetFilter() {
       this.$emit('filter-reset');
     },
-    loadApplied() {
-      this.items = [];
-      Object.keys(this.filter).forEach((key) => {
-        if (Array.isArray(this.filter[key]) && this.filterRefs) {
-          const stores = this.filterRefs[key].reduce((acc: string[], item: Dictionary) => {
-            if (this.filter[key].includes(item.id)) acc.push(item.name);
-            return acc;
-          }, []);
-          this.items.push(...stores);
-        } else this.items.push(this.filter[key]);
-      });
-      this.items = this.items.filter((item) => item);
+    refreshItems() {
+      this.items = [...Object.values(this.filter)].filter((item) => item);
     },
   },
 });

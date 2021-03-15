@@ -3,7 +3,6 @@ import { UserPayload } from './auth';
 
 export interface RootState {
   lang: string;
-  module?: string | null;
   app: {
     api: string;
     host: string;
@@ -29,7 +28,7 @@ export interface UserState {
 }
 
 export interface Permission {
-  module?: string;
+  resource?: string;
   action?: string;
 }
 
@@ -41,7 +40,6 @@ export interface AuthState {
 }
 
 export interface EntryState {
-  name: string;
   status: string;
   data: Dictionary;
   refs: Dictionary;
@@ -54,11 +52,6 @@ export interface ListState {
   status: string;
   data: Dictionary[];
   refs: Dictionary;
+  filter: Dictionary;
   error: Dictionary;
-}
-
-export interface FilterState {
-  name: string;
-  key: string;
-  data: Dictionary;
 }

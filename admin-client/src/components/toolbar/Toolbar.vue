@@ -56,7 +56,7 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
       default: (): string[] => ['create', 'detail', 'edit', 'delete'],
     },
     selected: {
-      type: Array,
+      type: Array as () => (number | string)[],
       required: true,
     },
     api: {
@@ -84,21 +84,21 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
 
     async onDetail() {
       const id = this.getOneSelected();
-      if (id === false) return;
+      if (!id) return;
 
       await this.$router.push({ name: `${this.route}-detail`, params: { id } } as Location);
     },
 
     async onEdit() {
       const id = this.getOneSelected();
-      if (id === false) return;
+      if (!id) return;
 
       await this.$router.push({ name: `${this.route}-edit`, params: { id } } as Location);
     },
 
     async onDelete() {
       const id = this.getAtLeastOneSelected();
-      if (id === false) return;
+      if (!id) return;
 
       await this.$http.delete(this.api, { params: { id } });
       this.$toasted.success(this.$t('common.msg.multi.deleted') as string);

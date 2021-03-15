@@ -9,7 +9,7 @@ export default Vue.extend({
       resetLoading: 'reset',
     }),
 
-    async withLoading(promise: Promise<any>, id = null) {
+    async withLoading<T = any>(promise: Promise<T>, id = null) {
       const name = `${this.module}/${id ?? Math.round(Math.random() * 100)}`;
       await this.addLoading(name);
       try {

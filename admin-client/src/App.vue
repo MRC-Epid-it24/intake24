@@ -118,9 +118,9 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
     title() {
       if (this.$route.meta.title) return this.$t(this.$route.meta.title);
 
-      if (!this.module || !this.$store.state[this.module]) return this.app.name;
+      if (!this.module) return this.app.name;
 
-      const { id, name } = this.$store.state[this.module].entry?.data;
+      const { id, name } = this.$store.state.resource.entry.data;
 
       return name ?? id ?? this.$t(`${this.module}.index`);
     },
