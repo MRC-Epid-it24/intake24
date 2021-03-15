@@ -78,6 +78,8 @@ jobs:
         run: npm run lint
       - name: API Server - build
         run: npm run build
+      - name: API Server - use Github test environment file
+        run: cp ./tests/.env-test-gh ./tests/.env-test
       - name: API Server - unit tests
         run: npm run test:unit
       - name: API Server - integration tests
