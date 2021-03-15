@@ -119,7 +119,7 @@
             </v-row>
           </v-card-text>
           <v-card-actions>
-            <v-btn class="font-weight-bold" color="blue darken-3" text @click="confirm">
+            <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="confirm">
               {{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>

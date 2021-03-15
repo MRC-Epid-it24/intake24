@@ -56,8 +56,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { PortionSizeOptionPromptProps } from '@common/types';
-import { portionSizeOptionPromptProps } from '@common/defaults';
+import { PortionSizeOptionPromptProps, portionSizeOptionPromptProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 

@@ -55,7 +55,7 @@
                   :title="$t('schemes.questions.options.remove')"
                   @click.stop="remove(idx)"
                 >
-                  <v-icon color="error">fa-trash</v-icon>
+                  <v-icon color="error">$delete</v-icon>
                 </v-btn>
               </v-list-item-action>
             </v-list-item>
@@ -93,10 +93,7 @@ export default Vue.extend({
 
   computed: {
     outputOptions(): ListOption[] {
-      return this.currentOptions.map((item) => {
-        const { label, value } = item;
-        return { label, value };
-      });
+      return this.currentOptions.map(({ label, value }) => ({ label, value }));
     },
     optionValueRules() {
       return [

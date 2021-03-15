@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import {
   Meal as MealDefinition,
   MealQuestions,
@@ -7,9 +6,17 @@ import {
   PromptQuestion,
   QuestionSection,
   Selection,
+  PromptAnswer,
+  conditionOps,
 } from '@common/types';
 import { Scheme } from '@common/types/models';
 import Meal from './Meal';
+
+const findAnswerFor = (prompts: Prompt[], questionsId: string): PromptAnswer | undefined => {
+  const prompt = prompts.find((item) => item.question.id === questionsId);
+
+  return prompt?.answer;
+};
 
 export default class Recall {
   id: string;
@@ -22,11 +29,13 @@ export default class Recall {
 
   meals: Meal[] = [];
 
-  mealQuestions: MealQuestions;
+  // mealQuestions: MealQuestions;
 
   postMeals: Prompt[] = [];
 
   submission: Prompt[] = [];
+
+  currentSelection!: Selection | null;
 
   constructor(scheme: Scheme) {
     const { id, name, meals, questions } = scheme;
@@ -37,8 +46,10 @@ export default class Recall {
       this.loadPrompts(item, questions[item]);
     });
 
-    this.mealQuestions = questions.meals;
+    // this.mealQuestions = questions.meals;
     this.loadMeals(meals, questions.meals);
+
+    this.getNextQuestion();
   }
 
   loadMeals(meals: MealDefinition[], questions: MealQuestions): void {
@@ -53,16 +64,17 @@ export default class Recall {
     }));
   }
 
-  currentSelection(): Selection | null {
-    // Iterate pre and post meal custom questions
-    for (const section of ['preMeals', 'postMeals'] as QuestionSection[]) {
-      const selection = this.getNextSectionQuestion(section);
-      if (selection) return selection;
+  getNextQuestion(): void {
+    // preMeals
+    const preMeals = this.getNextSectionQuestion('preMeals');
+    if (preMeals) {
+      this.setSelection(preMeals);
+      return;
     }
 
-    // TO DO: Pre-submission questions - this only gets first submission question
-    const prompt = this.submission[0];
-    return { section: 'submission', index: 0, prompt };
+    // Meals
+    /* const meals = this.getNextSectionQuestion('preMeals');
+    if (meals) return meals; */
 
     // TODO: Pre foods questions
 
@@ -73,71 +85,102 @@ export default class Recall {
     // Otherwise display prompt for relevant method
 
     // TODO: Post-foods questions
-  }
-
-  getNextQuestion(): Selection | null {
-    // preMeals
-    const preMeals = this.getNextSectionQuestion('preMeals');
-    if (preMeals) return preMeals;
-
-    // meals
-    /* const meals = this.getNextSectionQuestion('preMeals');
-    if (meals) return meals; */
 
     // postMeals
     const postMeals = this.getNextSectionQuestion('preMeals');
-    if (postMeals) return postMeals;
+    if (postMeals) {
+      this.setSelection(postMeals);
+      return;
+    }
 
     // submission
     const submission = this.getNextSectionQuestion('submission');
-    if (submission) return submission;
+    if (submission) {
+      this.setSelection(submission);
+      return;
+    }
 
-    // TODO: Pre foods questions
+    this.setSelection(null);
+  }
 
-    // TODO: Foods questions
+  getSelection(): Selection | null {
+    return this.currentSelection;
+  }
 
-    // TODO: Post-foods questions
-
-    return null;
+  setSelection(selection: Selection | null): void {
+    this.currentSelection = selection;
   }
 
   getNextSectionQuestion(section: QuestionSection): Selection | null {
-    if (this.isSectionDone(section)) return null;
-
     const index = this[section].findIndex((item) => item.status !== PromptStatuses.DONE);
     if (index === -1) return null;
 
-    return { section, index, prompt: this[section][index] };
+    const prompt = this[section][index];
+
+    const check = this.promptMeetsConditions(prompt);
+    if (check) return { section, index, prompt };
+
+    this[section][index].status = PromptStatuses.DONE;
+    return this.getNextSectionQuestion(section);
   }
 
-  isPreMealDone(): boolean {
-    return this.isSectionDone('preMeals');
+  getAllQuestions(): Prompt[] {
+    // TODO: include meals section
+    return [...this.preMeals, ...this.postMeals, ...this.submission];
   }
 
-  isPostMealDone(): boolean {
-    return this.isSectionDone('postMeals');
-  }
+  promptMeetsConditions(prompt: Prompt): boolean {
+    const { conditions } = prompt.question.props;
 
-  isSubmitted(): boolean {
-    return this.isSectionDone('submission');
+    if (!conditions.length) return true;
+
+    for (const condition of conditions) {
+      // TODO: Extract switch to separate handler once more condition types are implemented
+      switch (condition.type) {
+        case 'promptAnswer':
+          if (prompt.question.id === condition.props.promptId) {
+            console.warn(`Referencing itself...?`);
+            return true;
+          }
+
+          // eslint-disable-next-line no-case-declarations
+          const matchPrompt = findAnswerFor(this.getAllQuestions(), condition.props.promptId);
+          if (!matchPrompt) return true;
+
+          if (Array.isArray(matchPrompt)) {
+            console.warn(`Not yet supported prompt answer condition.`);
+            return false;
+          }
+
+          return conditionOps[condition.op]([condition.value, matchPrompt]);
+        default:
+          break;
+      }
+    }
+
+    return false;
   }
 
   isSectionDone(section: QuestionSection): boolean {
-    if (this[section].length === 0) return true;
+    if (!this[section].length) return true;
 
     return this[section].every((question) => question.status === PromptStatuses.DONE);
   }
 
   answerQuestion(answer: string | string[]): void {
-    const currectSelection = this.currentSelection();
-    if (!currectSelection) return;
+    const { currentSelection } = this;
+    if (!currentSelection) return;
 
     const {
       section,
       index,
       prompt: { question },
-    } = currectSelection;
+    } = currentSelection;
 
     this[section].splice(index, 1, { question, answer, status: PromptStatuses.DONE });
+    // This won't trigger computed prop observer
+    // this[section][index] = { question, answer, status: PromptStatuses.DONE };
+
+    this.getNextQuestion();
   }
 }

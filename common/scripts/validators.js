@@ -10,21 +10,29 @@ const execa = require('execa');
  */
 
 const validators = [
-  { type: 'Meals', srcFile: 'src/types/meals.ts', destFile: 'src/validators/meals.validator.ts' },
+  {
+    type: 'Meals',
+    srcFile: 'src/types/meals.ts',
+    destFile: 'src/validators/meals.validator.ts',
+    params: '--useNamedExport',
+  },
   {
     type: 'RecallQuestions',
     srcFile: 'src/types/recall.ts',
     destFile: 'src/validators/recall-questions.validator.ts',
+    params: '--useNamedExport',
   },
   {
     type: 'ExportSections',
     srcFile: 'src/types/models/system/schemes.ts',
     destFile: 'src/validators/export-sections.validator.ts',
+    params: '--useNamedExport --noExtraProps',
   },
   {
     type: 'PushSubscription',
     srcFile: 'src/types/models/system/user-subscriptions.ts',
     destFile: 'src/validators/push-subscription.validator.ts',
+    params: '--useNamedExport --noExtraProps',
   },
 ];
 
@@ -32,7 +40,7 @@ const validators = [
   try {
     for (const validator of validators) {
       await execa.command(
-        `npx typescript-json-validator ${validator.srcFile} ${validator.type} --useNamedExport --noExtraProps`
+        `npx typescript-json-validator ${validator.srcFile} ${validator.type} ${validator.params}`
       );
 
       if (fs.existsSync(validator.destFile)) await fs.unlink(validator.destFile);

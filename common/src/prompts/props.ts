@@ -1,17 +1,21 @@
-import type { LocaleTranslation } from '.';
-import type { PortionSizeMethod, AsServedSet } from './models';
+import type { LocaleTranslation } from '../types';
+import type { PortionSizeMethod, AsServedSet } from '../types/models';
+import type { Condition } from './conditions';
 
 export interface BasePromptProps {
   text: LocaleTranslation;
   description: LocaleTranslation;
+  conditions: Condition[];
 }
 
-export interface ValidatedPromptProps extends BasePromptProps {
+export interface PromptValidationProps {
   validation: {
     required: boolean;
     message: LocaleTranslation;
   };
 }
+
+export interface ValidatedPromptProps extends BasePromptProps, PromptValidationProps {}
 
 export type DatePickerPromptProps = ValidatedPromptProps;
 

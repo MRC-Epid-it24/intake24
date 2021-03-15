@@ -6,6 +6,10 @@
       @update:text="update('text', $event)"
       @update:description="update('description', $event)"
     ></prompt-content>
+    <prompt-conditions
+      :conditions="conditions"
+      @update:conditions="update('conditions', $event)"
+    ></prompt-conditions>
     <prompt-validation v-bind.sync="validation"></prompt-validation>
     <v-tab-item key="options">
       <v-row>

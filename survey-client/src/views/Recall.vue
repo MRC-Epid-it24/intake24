@@ -3,7 +3,7 @@
     <v-col cols="12" md="10">
       <transition name="component-fade" mode="out-in">
         <component
-          v-if="loaded"
+          v-if="loaded && currentSelection"
           :is="currentSelection.prompt.question.component"
           :key="currentSelection.prompt.question.id"
           :props="currentSelection.prompt.question.props"
@@ -40,7 +40,7 @@ export default Vue.extend({
       return !!Object.keys(this.recall).length;
     },
     currentSelection(): Selection | null {
-      return this.loaded ? this.recall.currentSelection() : null;
+      return this.recall.currentSelection;
     },
   },
 

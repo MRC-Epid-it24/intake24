@@ -1,4 +1,4 @@
-import type { Dictionary } from '.';
+import type { BasePromptProps } from './props';
 
 export type ComponentType =
   | 'info-prompt'
@@ -18,7 +18,7 @@ export enum PromptStatuses {
 
 export type PromptStatus = PromptStatuses;
 
-export interface PromptQuestion<T = Dictionary> {
+export interface PromptQuestion<T extends BasePromptProps = BasePromptProps> {
   id: string;
   name: string;
   component: ComponentType;
@@ -27,7 +27,7 @@ export interface PromptQuestion<T = Dictionary> {
 
 export type PromptAnswer = string | string[] | null;
 
-export interface Prompt<T = Dictionary> {
+export interface Prompt<T extends BasePromptProps = BasePromptProps> {
   question: PromptQuestion<T>;
   answer: PromptAnswer;
   status: PromptStatus;

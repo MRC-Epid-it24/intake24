@@ -14,8 +14,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { PizzaPromptProps } from '@common/types';
-import { pizzaPromptDefaultProps } from '@common/defaults';
+import { PizzaPromptProps, pizzaPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 

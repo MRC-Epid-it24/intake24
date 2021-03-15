@@ -43,9 +43,9 @@
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn icon :title="$t('schemes.meals.remove')" @click.stop="remove(idx)"
-                ><v-icon color="error">fa-trash</v-icon></v-btn
-              >
+              <v-btn icon :title="$t('schemes.meals.remove')" @click.stop="remove(idx)">
+                <v-icon color="error">$delete</v-icon>
+              </v-btn>
             </v-list-item-action>
           </v-list-item>
         </transition-group>

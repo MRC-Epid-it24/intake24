@@ -59,11 +59,11 @@ import {
 import { SchemeForm } from './Form.vue';
 import QuestionList from './QuestionList.vue';
 
-const flattenScheme = (collection: RecallQuestions): PromptQuestion[] => {
-  return Object.values(collection).reduce((acc, item) => {
-    return Array.isArray(item) ? acc.concat(item) : acc.concat(flattenScheme(item));
+const flattenScheme = (questions: RecallQuestions): PromptQuestion[] =>
+  Object.values(questions).reduce((acc, item) => {
+    acc.push(...(Array.isArray(item) ? item : flattenScheme(item)));
+    return acc;
   }, []);
-};
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeQuestions',

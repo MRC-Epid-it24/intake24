@@ -14,8 +14,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { DirectWeightPromptProps } from '@common/types';
-import { directWeightPromptDefaultProps } from '@common/defaults';
+import { DirectWeightPromptProps, directWeightPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 

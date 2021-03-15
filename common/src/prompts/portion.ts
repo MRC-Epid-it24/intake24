@@ -1,4 +1,4 @@
-import {
+import type {
   AsServedPromptProps,
   AsServedLeftoverPromptProps,
   GuideImagePromptProps,
@@ -9,11 +9,12 @@ import {
   PizzaPromptProps,
   MilkHotDrinkPromptProps,
   DirectWeightPromptProps,
-} from '../types';
+} from '.';
 
 export const asServedPromptDefaultProps: AsServedPromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
   localDescription: { en: null },
   selectionImageUrl: '',
   servingImageSet: {
@@ -30,6 +31,7 @@ export const asServedPromptDefaultProps: AsServedPromptProps = {
 export const asServedLeftoverPromptDefaultProps: AsServedLeftoverPromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
   validation: {
     required: false,
     message: { en: null },
@@ -39,6 +41,7 @@ export const asServedLeftoverPromptDefaultProps: AsServedLeftoverPromptProps = {
 export const guideImagePromptDefaultProps: GuideImagePromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
   validation: {
     required: false,
     message: { en: null },
@@ -48,6 +51,7 @@ export const guideImagePromptDefaultProps: GuideImagePromptProps = {
 export const drinkScalePromptDefaultProps: DrinkScalePromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
   validation: {
     required: false,
     message: { en: null },
@@ -57,6 +61,7 @@ export const drinkScalePromptDefaultProps: DrinkScalePromptProps = {
 export const standardPortionPromptDefaultProps: StandardPortionPromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
   validation: {
     required: false,
     message: { en: null },
@@ -66,6 +71,7 @@ export const standardPortionPromptDefaultProps: StandardPortionPromptProps = {
 export const cerealPromptDefaultProps: CerealPromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
   validation: {
     required: false,
     message: { en: null },
@@ -75,6 +81,7 @@ export const cerealPromptDefaultProps: CerealPromptProps = {
 export const milkCerealPromptDefaultProps: MilkCerealPromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
   validation: {
     required: false,
     message: { en: null },
@@ -84,6 +91,7 @@ export const milkCerealPromptDefaultProps: MilkCerealPromptProps = {
 export const pizzaPromptDefaultProps: PizzaPromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
   validation: {
     required: false,
     message: { en: null },
@@ -93,6 +101,7 @@ export const pizzaPromptDefaultProps: PizzaPromptProps = {
 export const milkHotDrinkPromptDefaultProps: MilkHotDrinkPromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
   validation: {
     required: false,
     message: { en: null },
@@ -102,6 +111,7 @@ export const milkHotDrinkPromptDefaultProps: MilkHotDrinkPromptProps = {
 export const directWeightPromptDefaultProps: DirectWeightPromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
   validation: {
     required: false,
     message: { en: null },

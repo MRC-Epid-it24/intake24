@@ -43,7 +43,7 @@
             </v-list-item-action>
             <v-list-item-action>
               <v-btn icon :title="$t('schemes.questions.remove')" @click.stop="remove(idx)">
-                <v-icon color="error">fa-trash</v-icon>
+                <v-icon color="error">$delete</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
@@ -78,7 +78,7 @@
 
         <v-form ref="form" @submit.prevent="save">
           <v-container>
-            <v-tabs-items v-model="tab">
+            <v-tabs-items v-model="tab" class="pt-1">
               <v-tab-item key="general">
                 <v-row>
                   <v-col cols="12">
@@ -137,11 +137,12 @@
 </template>
 
 <script lang="ts">
+import merge from 'deepmerge';
 import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import { FormRefs, ComponentType, PromptQuestion } from '@common/types';
-import { promptQuestions } from '@common/defaults';
+import { promptQuestions } from '@common/prompts';
 import prompts from '@/components/prompts';
 
 export interface EditPromptQuestion extends PromptQuestion {
@@ -156,14 +157,18 @@ export type PromptQuestionDialog = {
 
 export type PromptTypeTabs = Record<ComponentType, string[]>;
 
+const baseTab = ['general', 'content', 'conditions'];
+const validatedTab = [...baseTab, 'validation'];
+const listTab = [...validatedTab, 'options'];
+
 const promptTypeTabs: PromptTypeTabs = {
-  'info-prompt': ['general', 'content'],
-  'date-picker-prompt': ['general', 'content', 'validation'],
-  'time-picker-prompt': ['general', 'content', 'validation'],
-  'checkbox-list-prompt': ['general', 'content', 'validation', 'options'],
-  'radio-list-prompt': ['general', 'content', 'validation', 'options'],
-  'textarea-prompt': ['general', 'content', 'validation'],
-  'submit-prompt': ['general', 'content'],
+  'info-prompt': [...baseTab],
+  'date-picker-prompt': [...validatedTab],
+  'time-picker-prompt': [...validatedTab],
+  'checkbox-list-prompt': [...listTab],
+  'radio-list-prompt': [...listTab],
+  'textarea-prompt': [...validatedTab],
+  'submit-prompt': [...baseTab],
 };
 
 export default (Vue as VueConstructor<Vue & FormRefs>).extend({
@@ -246,7 +251,13 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
 
     edit(index: number, question: PromptQuestion) {
-      this.dialog = { show: true, index, question: { origId: question.id, ...clone(question) } };
+      const defaults = this.promptQuestions.find((item) => item.component === question.component);
+
+      this.dialog = {
+        show: true,
+        index,
+        question: { origId: question.id, ...(defaults ? merge(defaults, question) : question) },
+      };
     },
 
     save() {

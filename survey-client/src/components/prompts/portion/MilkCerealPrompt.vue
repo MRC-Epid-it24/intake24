@@ -14,8 +14,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { MilkCerealPromptProps } from '@common/types';
-import { milkCerealPromptDefaultProps } from '@common/defaults';
+import { MilkCerealPromptProps, milkCerealPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 

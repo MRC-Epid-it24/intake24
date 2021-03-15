@@ -20,13 +20,11 @@ export const MealsSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   definitions: {
     T: {
-      additionalProperties: false,
       defaultProperties: [],
-      type: 'object',
+      type: ['null', 'string'],
     },
   },
   items: {
-    additionalProperties: false,
     defaultProperties: [],
     properties: {
       name: {

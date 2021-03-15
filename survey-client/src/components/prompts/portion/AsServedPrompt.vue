@@ -67,8 +67,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { AsServedPromptProps } from '@common/types';
-import { asServedPromptDefaultProps } from '@common/defaults';
+import { AsServedPromptProps, asServedPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 import BasePortion, { Portion } from './BasePortion';

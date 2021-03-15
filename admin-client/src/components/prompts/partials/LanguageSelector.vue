@@ -46,7 +46,7 @@
             text
             @click.stop="remove(languages[selected])"
           >
-            <v-icon class="mr-2">fa-trash</v-icon> {{ $t('common.action.delete') }}
+            <v-icon class="mr-2">$delete</v-icon> {{ $t('common.action.delete') }}
           </v-btn>
         </v-card-actions>
       </v-tab-item>
@@ -123,7 +123,7 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
     },
 
     async add(langId: string) {
-      await this.$emit('input', { ...this.value, [langId]: this.default });
+      this.$emit('input', { ...this.value, [langId]: this.default });
       this.selected = this.languages.length - 1;
     },
 

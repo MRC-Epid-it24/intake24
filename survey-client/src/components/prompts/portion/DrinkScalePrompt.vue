@@ -14,8 +14,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { DrinkScalePromptProps } from '@common/types';
-import { drinkScalePromptDefaultProps } from '@common/defaults';
+import { DrinkScalePromptProps, drinkScalePromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 

@@ -1,10 +1,16 @@
 <template>
-  <prompt-content
-    :text="text"
-    :description="description"
-    @update:text="update('text', $event)"
-    @update:description="update('description', $event)"
-  ></prompt-content>
+  <div>
+    <prompt-content
+      :text="text"
+      :description="description"
+      @update:text="update('text', $event)"
+      @update:description="update('description', $event)"
+    ></prompt-content>
+    <prompt-conditions
+      :conditions="conditions"
+      @update:conditions="update('conditions', $event)"
+    ></prompt-conditions>
+  </div>
 </template>
 
 <script lang="ts">

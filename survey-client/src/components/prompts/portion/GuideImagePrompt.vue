@@ -14,8 +14,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { GuideImagePromptProps } from '@common/types';
-import { guideImagePromptDefaultProps } from '@common/defaults';
+import { GuideImagePromptProps, guideImagePromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 

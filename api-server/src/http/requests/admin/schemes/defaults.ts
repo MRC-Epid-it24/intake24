@@ -1,4 +1,5 @@
 import { Schema } from 'express-validator';
+import { isPlainObject } from 'lodash';
 import { SchemeTypes } from '@common/types/models';
 import { validateMeals, validateRecallQuestions, validateExportSections } from '@common/validators';
 
@@ -25,9 +26,19 @@ const defaults: Schema = {
     in: ['body'],
     errorMessage: 'Enter valid scheme questions.',
     custom: {
-      options: (value): boolean => {
+      // TODO: tweak ajv JSON validator to work correctly with generic language object types & conditions
+      /* options: (value): boolean => {
         validateRecallQuestions(value);
         return true;
+      }, */
+      options: async (value): Promise<void> => {
+        if (
+          !isPlainObject(value) ||
+          Object.values(value).some((item) => !Array.isArray(item) && !isPlainObject(item))
+        )
+          throw new Error('Enter valid scheme questions.');
+
+        Promise.resolve();
       },
     },
   },

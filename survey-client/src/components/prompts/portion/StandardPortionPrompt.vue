@@ -14,8 +14,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { StandardPortionPromptProps } from '@common/types';
-import { standardPortionPromptDefaultProps } from '@common/defaults';
+import { StandardPortionPromptProps, standardPortionPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 

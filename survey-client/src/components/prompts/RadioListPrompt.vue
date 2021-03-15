@@ -38,8 +38,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { RadioListPromptProps } from '@common/types';
-import { radioListPromptProps } from '@common/defaults';
+import { RadioListPromptProps, radioListPromptProps } from '@common/prompts';
 import BasePrompt, { Prompt } from './BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({

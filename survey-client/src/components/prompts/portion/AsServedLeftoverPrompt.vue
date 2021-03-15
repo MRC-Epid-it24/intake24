@@ -14,8 +14,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { AsServedLeftoverPromptProps } from '@common/types';
-import { asServedLeftoverPromptDefaultProps } from '@common/defaults';
+import { AsServedLeftoverPromptProps, asServedLeftoverPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 

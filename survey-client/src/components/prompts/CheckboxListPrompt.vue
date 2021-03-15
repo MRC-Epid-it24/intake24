@@ -34,8 +34,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { CheckboxListPromptProps } from '@common/types';
-import { checkboxListPromptProps } from '@common/defaults';
+import { CheckboxListPromptProps, checkboxListPromptProps } from '@common/prompts';
 import BasePrompt, { Prompt } from './BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({

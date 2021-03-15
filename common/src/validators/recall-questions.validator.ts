@@ -18,9 +18,47 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
 export { RecallQuestions };
 export const RecallQuestionsSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
-  additionalProperties: false,
   defaultProperties: [],
   definitions: {
+    BasePromptProps: {
+      defaultProperties: [],
+      properties: {
+        conditions: {
+          items: {
+            $ref: '#/definitions/Condition<Dictionary<any>>',
+          },
+          type: 'array',
+        },
+        description: {
+          additionalProperties: {
+            $ref: '#/definitions/T',
+          },
+          defaultProperties: [],
+          properties: {
+            en: {
+              type: ['null', 'string'],
+            },
+          },
+          required: ['en'],
+          type: 'object',
+        },
+        text: {
+          additionalProperties: {
+            $ref: '#/definitions/T',
+          },
+          defaultProperties: [],
+          properties: {
+            en: {
+              type: ['null', 'string'],
+            },
+          },
+          required: ['en'],
+          type: 'object',
+        },
+      },
+      required: ['conditions', 'description', 'text'],
+      type: 'object',
+    },
     ComponentType: {
       enum: [
         'checkbox-list-prompt',
@@ -33,8 +71,38 @@ export const RecallQuestionsSchema = {
       ],
       type: 'string',
     },
-    'PromptQuestion<Dictionary<any>>': {
-      additionalProperties: false,
+    'Condition<Dictionary<any>>': {
+      defaultProperties: [],
+      properties: {
+        op: {
+          $ref: '#/definitions/ConditionOp',
+        },
+        props: {
+          additionalProperties: {
+            $ref: '#/definitions/T_1',
+          },
+          defaultProperties: [],
+          type: 'object',
+        },
+        type: {
+          $ref: '#/definitions/ConditionType',
+        },
+        value: {
+          type: 'string',
+        },
+      },
+      required: ['op', 'props', 'type', 'value'],
+      type: 'object',
+    },
+    ConditionOp: {
+      enum: ['eq', 'gt', 'gte', 'lt', 'lte', 'ne'],
+      type: 'string',
+    },
+    ConditionType: {
+      enum: ['promptAnswer', 'recallNumber'],
+      type: 'string',
+    },
+    'PromptQuestion<BasePromptProps>': {
       defaultProperties: [],
       properties: {
         component: {
@@ -47,18 +115,13 @@ export const RecallQuestionsSchema = {
           type: 'string',
         },
         props: {
-          additionalProperties: {
-            $ref: '#/definitions/T',
-          },
-          defaultProperties: [],
-          type: 'object',
+          $ref: '#/definitions/BasePromptProps',
         },
       },
       required: ['component', 'id', 'name', 'props'],
       type: 'object',
     },
-    'PromptQuestion<Dictionary<any>>_1': {
-      additionalProperties: false,
+    'PromptQuestion<BasePromptProps>_1': {
       defaultProperties: [],
       properties: {
         component: {
@@ -71,35 +134,30 @@ export const RecallQuestionsSchema = {
           type: 'string',
         },
         props: {
-          additionalProperties: {
-            $ref: '#/definitions/T',
-          },
-          defaultProperties: [],
-          type: 'object',
+          $ref: '#/definitions/BasePromptProps',
         },
       },
       required: ['component', 'id', 'name', 'props'],
       type: 'object',
     },
-    'Record<MealSection,PromptQuestion<Dictionary<any>>[]>': {
-      additionalProperties: false,
+    'Record<MealSection,PromptQuestion<BasePromptProps>[]>': {
       defaultProperties: [],
       properties: {
         foods: {
           items: {
-            $ref: '#/definitions/PromptQuestion<Dictionary<any>>',
+            $ref: '#/definitions/PromptQuestion<BasePromptProps>',
           },
           type: 'array',
         },
         postFoods: {
           items: {
-            $ref: '#/definitions/PromptQuestion<Dictionary<any>>',
+            $ref: '#/definitions/PromptQuestion<BasePromptProps>',
           },
           type: 'array',
         },
         preFoods: {
           items: {
-            $ref: '#/definitions/PromptQuestion<Dictionary<any>>',
+            $ref: '#/definitions/PromptQuestion<BasePromptProps>',
           },
           type: 'array',
         },
@@ -108,30 +166,33 @@ export const RecallQuestionsSchema = {
       type: 'object',
     },
     T: {
-      additionalProperties: false,
+      defaultProperties: [],
+      type: ['null', 'string'],
+    },
+    T_1: {
       defaultProperties: [],
       type: 'object',
     },
   },
   properties: {
     meals: {
-      $ref: '#/definitions/Record<MealSection,PromptQuestion<Dictionary<any>>[]>',
+      $ref: '#/definitions/Record<MealSection,PromptQuestion<BasePromptProps>[]>',
     },
     postMeals: {
       items: {
-        $ref: '#/definitions/PromptQuestion<Dictionary<any>>_1',
+        $ref: '#/definitions/PromptQuestion<BasePromptProps>_1',
       },
       type: 'array',
     },
     preMeals: {
       items: {
-        $ref: '#/definitions/PromptQuestion<Dictionary<any>>_1',
+        $ref: '#/definitions/PromptQuestion<BasePromptProps>_1',
       },
       type: 'array',
     },
     submission: {
       items: {
-        $ref: '#/definitions/PromptQuestion<Dictionary<any>>_1',
+        $ref: '#/definitions/PromptQuestion<BasePromptProps>_1',
       },
       type: 'array',
     },

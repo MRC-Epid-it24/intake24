@@ -1,5 +1,6 @@
 import clone from 'lodash/cloneDeep';
-import {
+import type {
+  PromptValidationProps,
   PromptQuestion,
   BasePromptProps,
   CheckboxListPromptProps,
@@ -8,83 +9,67 @@ import {
   TextareaPromptProps,
   TimePickerPromptProps,
   PortionSizeOptionPromptProps,
-} from '../types';
+} from '.';
 
 export const basePromptProps: BasePromptProps = {
   text: { en: null },
   description: { en: null },
+  conditions: [],
+};
+
+export const promptValidation: PromptValidationProps = {
+  validation: {
+    required: false,
+    message: { en: null },
+  },
 };
 
 export const infoPromptProps: BasePromptProps = clone(basePromptProps);
 
 export const submitPromptProps: BasePromptProps = clone(basePromptProps);
 
-export const datePickerPromptProps: DatePickerPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
-};
+export const datePickerPromptProps: DatePickerPromptProps = clone({
+  ...basePromptProps,
+  ...promptValidation,
+});
 
-export const timePickerPromptProps: TimePickerPromptProps = {
-  text: { en: null },
-  description: { en: null },
+export const timePickerPromptProps: TimePickerPromptProps = clone({
+  ...basePromptProps,
+  ...promptValidation,
   format: '24hr',
-  validation: {
-    required: false,
-    message: { en: null },
-  },
-};
+});
 
-export const checkboxListPromptProps: CheckboxListPromptProps = {
-  text: { en: null },
-  description: { en: null },
+export const checkboxListPromptProps: CheckboxListPromptProps = clone({
+  ...basePromptProps,
+  ...promptValidation,
   label: { en: null },
   options: { en: [] },
   other: false,
-  validation: {
-    required: false,
-    message: { en: null },
-  },
-};
+});
 
-export const radioListPromptProps: RadioListPromptProps = {
-  text: { en: null },
-  description: { en: null },
+export const radioListPromptProps: RadioListPromptProps = clone({
+  ...basePromptProps,
+  ...promptValidation,
   label: { en: null },
   options: { en: [] },
   orientation: 'column',
   other: false,
-  validation: {
-    required: false,
-    message: { en: null },
-  },
-};
+});
 
-export const textareaPromptProps: TextareaPromptProps = {
-  text: { en: null },
-  description: { en: null },
+export const textareaPromptProps: TextareaPromptProps = clone({
+  ...basePromptProps,
+  ...promptValidation,
   label: { en: null },
   hint: { en: null },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
-};
+});
 
 // TO DO: migrate this over to portion.ts
-export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = {
-  text: { en: null },
-  description: { en: null },
+export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = clone({
+  ...basePromptProps,
+  ...promptValidation,
   localDescription: { en: null },
   methods: [],
-  validation: {
-    required: false,
-    message: { en: null },
-  },
-};
+});
 
 export const promptQuestions: PromptQuestion[] = [
   {
