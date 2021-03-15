@@ -151,9 +151,11 @@ export default ({
       userPasswords.push({ userId, password });
     }
 
-    await PermissionUser.bulkCreate(userPermissions);
-    await userService.createPasswords(userPasswords);
-    await UserCustomField.bulkCreate(userCustomFields);
+    await Promise.all([
+      PermissionUser.bulkCreate(userPermissions),
+      userService.createPasswords(userPasswords),
+      UserCustomField.bulkCreate(userCustomFields),
+    ]);
 
     return UserSurveyAlias.bulkCreate(userAliases);
   };

@@ -144,9 +144,11 @@ export default (): UserService => {
       { include: [UserCustomField] }
     );
 
-    await createPassword({ userId: user.id, password });
-    await user.$set('permissions', permissions);
-    await user.$set('roles', roles);
+    await Promise.all([
+      createPassword({ userId: user.id, password }),
+      user.$set('permissions', permissions),
+      user.$set('roles', roles),
+    ]);
 
     return user;
   };
@@ -169,10 +171,11 @@ export default (): UserService => {
 
     const { customFields, permissions, roles, ...rest } = input;
 
-    await user.update({ ...rest, simpleName: toSimpleName(rest.name) });
-
-    await user.$set('permissions', permissions);
-    await user.$set('roles', roles);
+    await Promise.all([
+      user.update({ ...rest, simpleName: toSimpleName(rest.name) }),
+      user.$set('permissions', permissions),
+      user.$set('roles', roles),
+    ]);
 
     // Update custom fields
     if (customFields && user.customFields)
