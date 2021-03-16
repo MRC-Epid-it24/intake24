@@ -33,6 +33,21 @@ instance.
 
 Check that the settings are correct by starting the server with `npm run dev`.
 
+## Testing
+
+To run unit and integration tests on your local machine, start by copying your `.env` file to `tests/.env-test`.
+
+Make sure to edit the `.env-test` file and change the database settings to point to test databases instead of your
+normal development ones. The foods and system test databases should be empty databases with the necessary 
+extensions (e.g., `uuid-ossp`) installed. 
+
+:::danger
+**Do not run any tests** unless you're sure that the database configuration settings in the `.env-test` file are 
+correct because the test framework setup code will **destroy all data** in those databases!    
+:::
+
+If using the development VM, simply copy `tests/.env-test-dev-vm` to `tests/.env-test` and you're good to go.
+
 ## API access
 
 The default user with superuser rights is `admin` and the password is `intake24`. Refer to the [API docs](/api/) for 
