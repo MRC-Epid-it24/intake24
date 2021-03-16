@@ -123,7 +123,8 @@ module.exports = {
           collapsable: false,
           children: [
             '',
-            'authentication'
+            'authentication',
+            'subscriptions'
           ]
         },
         {
