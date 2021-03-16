@@ -32,6 +32,6 @@
 
 - name: Install common npm package dependencies
   become_user: '{{ app.user }}'
-  command: npm install
+  command: npm ci
   args:
     chdir: '{{ app.directory }}/common'
