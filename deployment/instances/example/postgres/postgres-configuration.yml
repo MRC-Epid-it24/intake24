@@ -13,6 +13,7 @@ intake24:
     user: intake24
     name: intake24_foods
     snapshot_path: /path/to/foods.pgcustom
+  create_test_databases: false
 
 # Basic settings
 postgresql_version: 13.1

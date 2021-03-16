@@ -18,6 +18,16 @@
   with_items:
    - uuid-ossp
 
+- name: Create system test database
+  command: /usr/bin/createdb -U {{postgres_admin_user}} --owner={{intake24.system_database.user}} {{intake24.system_database.name}}_test
+  when: intake24.create_test_databases is defined and intake24.create_test_databases | bool
+
+- name: Create system test database extensions
+  command: /usr/bin/psql -U {{postgres_admin_user}} -d {{intake24.system_database.name}}_test -c "create extension if not exists \"{{item}}\";"
+  with_items:
+   - uuid-ossp
+  when: intake24.create_test_databases is defined and intake24.create_test_databases | bool
+
 - name: Upload system database snapshot (schema)
   copy: src={{intake24.system_database.schema_snapshot_path}} dest=/home/deploy/intake24_system_schema.pgcustom
 
@@ -67,6 +77,17 @@
    - uuid-ossp
    - btree_gist
   when: intake24.food_database.name is defined
+
+- name: Create food test database
+  command: /usr/bin/createdb -U {{postgres_admin_user}} --owner={{intake24.food_database.user}} {{intake24.food_database.name}}_test
+  when: intake24.food_database.name is defined and intake24.create_test_databases is defined and intake24.create_test_databases | bool
+
+- name: Create food test database extensions
+  command: /usr/bin/psql -U {{postgres_admin_user}} -d {{intake24.food_database.name}}_test -c "create extension if not exists \"{{item}}\";"
+  with_items:
+   - uuid-ossp
+   - btree_gist
+  when: intake24.food_database.name is defined and intake24.create_test_databases is defined and intake24.create_test_databases | bool
 
 - name: Upload food database snapshot
   copy: src={{intake24.food_database.snapshot_path}} dest=/home/deploy/intake24_foods_snapshot.pgcustom
