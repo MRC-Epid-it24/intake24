@@ -2,7 +2,7 @@ import { CustomField } from '@common/types';
 import { pick, omit } from 'lodash';
 import request from 'supertest';
 import { CreateUserRequest, UpdateUserRequest } from '@common/types/http';
-import { mocker, suite, setPermission } from '../../helpers';
+import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const url = '/api/admin/users';

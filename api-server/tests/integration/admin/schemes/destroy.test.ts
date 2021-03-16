@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { Scheme } from '@/db/models/system';
 import { Scheme as SchemeAttributes } from '@common/types/models';
-import { mocker, suite, setPermission } from '../../helpers';
+import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const baseUrl = '/api/admin/schemes';

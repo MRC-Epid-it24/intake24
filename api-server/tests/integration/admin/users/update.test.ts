@@ -4,7 +4,7 @@ import { Permission, Role, User } from '@/db/models/system';
 import ioc from '@/ioc';
 import { CustomField } from '@common/types';
 import { CreateUserRequest, UpdateUserRequest } from '@common/types/http';
-import { mocker, suite, setPermission } from '../../helpers';
+import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const baseUrl = '/api/admin/users';

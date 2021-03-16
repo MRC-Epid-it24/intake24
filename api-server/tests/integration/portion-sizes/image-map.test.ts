@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { suite } from '../helpers';
+import { suite } from '@tests/integration/helpers';
 
 export default (): void => {
   const baseUrl = '/api/portion-sizes/image-maps';

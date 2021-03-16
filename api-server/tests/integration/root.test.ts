@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import request from 'supertest';
 import fsConfig from '@/config/filesystem';
-import { suite } from './helpers';
+import { suite } from '@tests/integration/helpers';
 
 export default (): void => {
   it('GET / should render when SPA app if deployed', async () => {

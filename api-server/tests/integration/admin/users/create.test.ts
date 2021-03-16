@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { suite, setPermission } from '../../helpers';
+import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const url = '/api/admin/users/create';

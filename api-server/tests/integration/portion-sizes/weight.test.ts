@@ -1,6 +1,6 @@
 import request from 'supertest';
 import ioc from '@/ioc';
-import { suite } from '../helpers';
+import { suite } from '@tests/integration/helpers';
 
 export default (): void => {
   const url = '/api/portion-sizes/weight';

@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { JobEntry } from '@common/types/http';
-import { suite, setPermission } from '../../../helpers';
+import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const baseUrl = '/api/admin/user/jobs';

@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { Task } from '@/db/models/system';
 import { TaskRequest } from '@common/types/http';
-import { mocker, suite, setPermission } from '../../helpers';
+import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const baseUrl = '/api/admin/tasks';

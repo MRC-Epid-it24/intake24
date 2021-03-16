@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { Locale as LocaleAttributes } from '@common/types/models';
-import { suite, setPermission } from '../../helpers';
+import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const url = '/api/admin/locales';

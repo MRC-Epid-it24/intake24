@@ -1,6 +1,6 @@
 import request from 'supertest';
 import '../bootstrap';
-import { suite } from './helpers';
+import { suite } from '@tests/integration/helpers';
 // import root from './root.test';
 import authentication from './authentication/index.test';
 import admin from './admin/index.test';

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import securityConfig from '@/config/security';
-import { suite } from '../helpers';
+import { suite } from '@tests/integration/helpers';
 
 export default (): void => {
   const url = '/api/login/token';

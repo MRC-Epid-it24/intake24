@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { surveyStaff } from '@/services/acl.service';
-import { suite, setPermission } from '../../../helpers';
+import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const baseUrl = '/api/admin/surveys';
