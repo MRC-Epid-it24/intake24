@@ -18,8 +18,6 @@ export default (): void => {
       endDate: endDate.toISOString().split('T')[0],
     };
 
-    await setPermission(['surveys-data-export', 'surveyadmin']);
-
     const {
       body: { data },
     } = await request(suite.app)
@@ -30,33 +28,12 @@ export default (): void => {
 
     job = data;
 
-    await setPermission([]);
-
-    url = `${baseUrl}/${job.id}/download`;
-    invalidUrl = `${baseUrl}/999999/download`;
-
-    // wait until the job is finished
-    let waiting = true;
-
-    const sleep = (ms: number) => {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    };
-
-    while (waiting) {
-      const res = await request(suite.app)
-        .get(`${baseUrl}/${job.id}`)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.admin);
-
-      if (res.body.data.downloadUrl !== null) {
-        job = res.body.data;
-        waiting = false;
-      } else sleep(1000);
-    }
+    url = `${baseUrl}/${job.id}`;
+    invalidUrl = `${baseUrl}/999999`;
   });
 
   it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
+    const { status } = await request(suite.app).delete(url).set('Accept', 'application/json');
 
     expect(status).toBe(401);
   });
@@ -65,7 +42,7 @@ export default (): void => {
     await setPermission([]);
 
     const { status } = await request(suite.app)
-      .get(url)
+      .delete(url)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
@@ -74,26 +51,26 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('jobs-detail');
+      await setPermission('jobs-delete');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
       const { status } = await request(suite.app)
-        .get(invalidUrl)
+        .delete(invalidUrl)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user);
 
       expect(status).toBe(404);
     });
 
-    it('should return 200 and data resource', async () => {
+    it('should return 204 and no content', async () => {
       const { status, body } = await request(suite.app)
-        .get(url)
+        .delete(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user);
 
-      expect(status).toBe(200);
-      expect(body).toBeInstanceOf(Buffer);
+      expect(status).toBe(204);
+      expect(body).toBeEmpty();
     });
   });
 };

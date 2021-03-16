@@ -19,17 +19,13 @@ export default (): void => {
       endDate: endDate.toISOString().split('T')[0],
     };
 
-    await setPermission(['surveys-data-export', 'surveyadmin']);
-
     const {
       body: { data },
     } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
       .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user)
+      .set('Authorization', suite.bearer.admin)
       .send(input);
-
-    await setPermission([]);
 
     job = data;
 
@@ -43,23 +39,40 @@ export default (): void => {
     expect(status).toBe(401);
   });
 
-  it(`should return 404 when record doesn't exist`, async () => {
+  it('should return 403 when missing permission', async () => {
+    await setPermission([]);
+
     const { status } = await request(suite.app)
-      .get(invalidUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(404);
-  });
-
-  it('should return 200 and data resource', async () => {
-    const { status, body } = await request(suite.app)
       .get(url)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
-    expect(status).toBe(200);
-    expect(body).toContainAllKeys(['data']);
-    expect(pick(body.data, Object.keys(job))).toEqual(job);
+    expect(status).toBe(403);
+  });
+
+  describe('with correct permissions', () => {
+    beforeAll(async () => {
+      await setPermission('jobs-detail');
+    });
+
+    it(`should return 404 when record doesn't exist`, async () => {
+      const { status } = await request(suite.app)
+        .get(invalidUrl)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user);
+
+      expect(status).toBe(404);
+    });
+
+    it('should return 200 and data/refs', async () => {
+      const { status, body } = await request(suite.app)
+        .get(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user);
+
+      expect(status).toBe(200);
+      expect(body).toContainAllKeys(['data']);
+      expect(pick(body.data, Object.keys(job))).toEqual(job);
+    });
   });
 };

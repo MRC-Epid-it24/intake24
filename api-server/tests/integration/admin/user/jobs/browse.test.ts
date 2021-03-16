@@ -1,8 +1,9 @@
 import request from 'supertest';
-import { suite, setPermission } from '../../helpers';
+import { Job } from '@/db/models/system';
+import { suite, setPermission } from '../../../helpers';
 
 export default (): void => {
-  const url = '/api/admin/jobs';
+  const url = '/api/admin/user/jobs';
   let input: { startDate: string; endDate: string };
 
   beforeAll(async () => {
@@ -11,12 +12,6 @@ export default (): void => {
       startDate: startDate.toISOString().split('T')[0],
       endDate: endDate.toISOString().split('T')[0],
     };
-
-    await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.admin)
-      .send(input);
   });
 
   it('should return 401 when no / invalid token', async () => {
@@ -25,19 +20,23 @@ export default (): void => {
     expect(status).toBe(401);
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
-    const { status } = await request(suite.app)
-      .get(url)
+  it('should return 200 and data list', async () => {
+    // Admin user job
+    await request(suite.app)
+      .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
       .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
+      .set('Authorization', suite.bearer.admin)
+      .send(input);
 
-    expect(status).toBe(403);
-  });
+    // Test user job
+    await setPermission(['surveys-data-export', 'surveyadmin']);
+    await request(suite.app)
+      .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.user)
+      .send(input);
 
-  it('should return 200 and data/refs list', async () => {
-    await setPermission('jobs-browse');
+    await setPermission([]);
 
     const { status, body } = await request(suite.app)
       .get(url)
@@ -48,5 +47,9 @@ export default (): void => {
     expect(body).toContainAllKeys(['data', 'meta']);
     expect(body.data).toBeArray();
     expect(body.data).not.toBeEmpty();
+
+    // Expect to only find test user's jobs
+    const match = body.data.find((item: Job) => item.userId !== suite.data.user.id);
+    expect(match).toBeUndefined();
   });
 };

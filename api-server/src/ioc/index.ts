@@ -15,7 +15,8 @@ import type {
   JobController,
   LanguageController,
   LocaleController,
-  ProfileController,
+  UserProfileController,
+  UserJobController,
   SchemeController,
   AdminSurveyController,
   AdminSurveyDataExportController,
@@ -74,8 +75,8 @@ export interface IoC extends Jobs {
   surveyController: SurveyController;
 
   // Admin controllers
-  profileController: ProfileController;
-  jobController: JobController;
+  userProfileController: UserProfileController;
+  userJobController: UserJobController;
 
   languageController: LanguageController;
   localeController: LocaleController;
@@ -87,6 +88,7 @@ export interface IoC extends Jobs {
   adminSurveySubmissionController: AdminSurveySubmissionController;
 
   // System controllers
+  jobController: JobController;
   taskController: TaskController;
 
   // ACL controllers

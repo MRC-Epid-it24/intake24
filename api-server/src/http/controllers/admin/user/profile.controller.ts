@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { User } from '@/db/models/system';
-import { Controller } from '../controller';
+import type { Controller } from '@/http/controllers';
 
-export type ProfileController = Controller<'index'>;
+export type UserProfileController = Controller<'index'>;
 
-export default (): ProfileController => {
+export default (): UserProfileController => {
   const index = async (req: Request, res: Response): Promise<void> => {
     const user = req.user as User;
 

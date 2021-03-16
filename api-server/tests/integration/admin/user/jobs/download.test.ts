@@ -1,9 +1,9 @@
 import request from 'supertest';
 import { JobEntry } from '@common/types/http';
-import { suite, setPermission } from '../../helpers';
+import { suite, setPermission } from '../../../helpers';
 
 export default (): void => {
-  const baseUrl = '/api/admin/jobs';
+  const baseUrl = '/api/admin/user/jobs';
 
   let url: string;
   let invalidUrl: string;
@@ -25,7 +25,7 @@ export default (): void => {
     } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
       .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.admin)
+      .set('Authorization', suite.bearer.user)
       .send(input);
 
     job = data;
@@ -46,7 +46,7 @@ export default (): void => {
       const res = await request(suite.app)
         .get(`${baseUrl}/${job.id}`)
         .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.admin);
+        .set('Authorization', suite.bearer.user);
 
       if (res.body.data.downloadUrl !== null) {
         job = res.body.data;
@@ -61,39 +61,22 @@ export default (): void => {
     expect(status).toBe(401);
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
+  it(`should return 404 when record doesn't exist`, async () => {
     const { status } = await request(suite.app)
+      .get(invalidUrl)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.user);
+
+    expect(status).toBe(404);
+  });
+
+  it('should return 200 and data resource', async () => {
+    const { status, body } = await request(suite.app)
       .get(url)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
-    expect(status).toBe(403);
-  });
-
-  describe('with correct permissions', () => {
-    beforeAll(async () => {
-      await setPermission('jobs-detail');
-    });
-
-    it(`should return 404 when record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .get(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(404);
-    });
-
-    it('should return 200 and data resource', async () => {
-      const { status, body } = await request(suite.app)
-        .get(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(200);
-      expect(body).toBeInstanceOf(Buffer);
-    });
+    expect(status).toBe(200);
+    expect(body).toBeInstanceOf(Buffer);
   });
 };

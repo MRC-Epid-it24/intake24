@@ -12,8 +12,8 @@ export default (container: AwilixContainer): void => {
     portionSizeController: asFunction(controllers.portionSize),
     surveyController: asFunction(controllers.survey),
 
-    profileController: asFunction(controllers.admin.profile),
-    jobController: asFunction(controllers.admin.job),
+    userProfileController: asFunction(controllers.admin.user.profile),
+    userJobController: asFunction(controllers.admin.user.job),
 
     languageController: asFunction(controllers.admin.language),
     localeController: asFunction(controllers.admin.locale),
@@ -25,10 +25,11 @@ export default (container: AwilixContainer): void => {
     adminSurveyRespondentController: asFunction(controllers.admin.surveyRespondent),
     adminSurveySubmissionController: asFunction(controllers.admin.surveySubmission),
 
+    jobController: asFunction(controllers.admin.job),
     taskController: asFunction(controllers.admin.task),
 
-    permissionController: asFunction(controllers.admin.permission),
-    roleController: asFunction(controllers.admin.role),
-    userController: asFunction(controllers.admin.user),
+    permissionController: asFunction(controllers.admin.acl.permission),
+    roleController: asFunction(controllers.admin.acl.role),
+    userController: asFunction(controllers.admin.acl.user),
   });
 };

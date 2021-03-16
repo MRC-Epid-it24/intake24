@@ -1,9 +1,16 @@
+import { pick } from 'lodash';
 import request from 'supertest';
-import { suite, setPermission } from '../../helpers';
+import { JobEntry } from '@common/types/http';
+import { suite, setPermission } from '../../../helpers';
 
 export default (): void => {
-  const url = '/api/admin/jobs';
+  const baseUrl = '/api/admin/user/jobs';
+
+  let url: string;
+  let invalidUrl: string;
+
   let input: { startDate: string; endDate: string };
+  let job: JobEntry;
 
   beforeAll(async () => {
     const { startDate, endDate } = suite.data.survey;
@@ -12,11 +19,22 @@ export default (): void => {
       endDate: endDate.toISOString().split('T')[0],
     };
 
-    await request(suite.app)
+    await setPermission(['surveys-data-export', 'surveyadmin']);
+
+    const {
+      body: { data },
+    } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
       .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.admin)
+      .set('Authorization', suite.bearer.user)
       .send(input);
+
+    await setPermission([]);
+
+    job = data;
+
+    url = `${baseUrl}/${job.id}`;
+    invalidUrl = `${baseUrl}/999999`;
   });
 
   it('should return 401 when no / invalid token', async () => {
@@ -25,28 +43,23 @@ export default (): void => {
     expect(status).toBe(401);
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
+  it(`should return 404 when record doesn't exist`, async () => {
     const { status } = await request(suite.app)
-      .get(url)
+      .get(invalidUrl)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
-    expect(status).toBe(403);
+    expect(status).toBe(404);
   });
 
-  it('should return 200 and data/refs list', async () => {
-    await setPermission('jobs-browse');
-
+  it('should return 200 and data resource', async () => {
     const { status, body } = await request(suite.app)
       .get(url)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['data', 'meta']);
-    expect(body.data).toBeArray();
-    expect(body.data).not.toBeEmpty();
+    expect(body).toContainAllKeys(['data']);
+    expect(pick(body.data, Object.keys(job))).toEqual(job);
   });
 };

@@ -131,6 +131,9 @@ module.exports = {
           title: 'Admin',
           collapsable: false,
           children: [
+            'admin/user/profile',
+            'admin/user/jobs',
+            'admin/jobs',
             'admin/languages',
             'admin/locales',
             'admin/schemes',

@@ -1,5 +1,5 @@
-import '../bootstrap';
 import request from 'supertest';
+import '../bootstrap';
 import { suite } from './helpers';
 // import root from './root.test';
 import authentication from './authentication/index.test';
@@ -64,19 +64,27 @@ describe('API', () => {
   });
 
   describe('Admin', () => {
-    describe('GET /admin/profile', admin.profile);
+    // User profile
+    const { user } = admin;
+    describe('GET /api/admin/user', user.profile);
+
+    // User jobs
+    describe('GET /api/admin/user/jobs', user.jobs.browse);
+    describe('GET /api/admin/user/jobs/:jobId', user.jobs.detail);
+    describe('GET /api/admin/user/jobs/:jobId/download', user.jobs.download);
 
     // Jobs
     const { jobs } = admin;
     describe('GET /api/admin/jobs', jobs.browse);
-    describe('GET /api/admin/languages/:jobId', jobs.detail);
-    describe('GET /api/admin/languages/:jobId/download', jobs.download);
+    describe('GET /api/admin/jobs/:jobId', jobs.detail);
+    describe('GET /api/admin/jobs/:jobId/download', jobs.download);
+    describe('DELETE /api/admin/jobs/:jobId', jobs.destroy);
 
     // Languages
     const { languages } = admin;
     describe('GET /api/admin/languages', languages.browse);
     describe('GET /api/admin/languages/create', languages.create);
-    describe('POST /admin/languages', languages.store);
+    describe('POST /api/admin/languages', languages.store);
     describe('GET /api/admin/languages/:languageId', languages.detail);
     describe('GET /api/admin/languages/:languageId/edit', languages.edit);
     describe('PUT /api/admin/languages/:languageId', languages.update);
@@ -86,7 +94,7 @@ describe('API', () => {
     const { locales } = admin;
     describe('GET /api/admin/locales', locales.browse);
     describe('GET /api/admin/locales/create', locales.create);
-    describe('POST /admin/locales', locales.store);
+    describe('POST /api/admin/locales', locales.store);
     describe('GET /api/admin/locales/:localeId', locales.detail);
     describe('GET /api/admin/locales/:localeId/edit', locales.edit);
     describe('PUT /api/admin/locales/:localeId', locales.update);

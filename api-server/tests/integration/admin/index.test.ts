@@ -1,4 +1,4 @@
-import profile from './profile/index.test';
+import user from './user/index.test';
 import jobs from './jobs/index.test';
 import languages from './languages/index.test';
 import locales from './locales/index.test';
@@ -10,7 +10,7 @@ import surveys from './surveys/index.test';
 import tasks from './tasks/index.test';
 
 export default {
-  profile,
+  user,
   jobs,
   languages,
   locales,
