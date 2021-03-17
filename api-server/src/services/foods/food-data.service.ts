@@ -23,6 +23,7 @@ import {
   PortionSizeMethodsResponse,
 } from '@common/types/http';
 import getAllParentCategories from '@api-server/db/raw/food-controller-sql';
+import InvalidIdError from '@/services/foods/invalid-id-error';
 
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;
@@ -113,9 +114,9 @@ export default (): FoodDataService => {
       include: [{ model: Locale, as: 'parent' }],
     });
 
-    if (locale == null) throw new NotFoundError(`Invalid locale: ${localeId}`);
+    if (locale == null) throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
 
-    return locale.parent;
+    return locale.parent ?? null;
   };
 
   const getNutrientKCalPer100G = async (localeId: string, foodCode: string): Promise<number> => {

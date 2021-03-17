@@ -6,8 +6,7 @@ import '../../bootstrap';
 import { FoodDataService, foodDataService } from '@/services';
 import { Locale } from '@/db/models/foods';
 import { DbInterface } from '@/db';
-
-import { NotFoundError } from '@/http/errors';
+import InvalidIdError from '@/services/foods/invalid-id-error';
 import { initDatabases, releaseDatabases } from '../helpers/databases';
 
 async function createLocales(): Promise<void> {
@@ -53,9 +52,9 @@ describe('Food data service', () => {
   });
 
   describe('getParentLocale', () => {
-    it('should throw NotFoundError for unknown locales', () => {
+    it('should throw InvalidIdError for unknown locales', () => {
       const parent = service.getParentLocale('bad_locale');
-      expect(parent).rejects.toThrow(NotFoundError);
+      expect(parent).rejects.toThrow(InvalidIdError);
     });
 
     it('should return null for locales without a parent locale', async () => {
