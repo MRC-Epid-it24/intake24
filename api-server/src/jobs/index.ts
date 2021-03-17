@@ -1,3 +1,4 @@
+import CleanStorageFiles from './clean-storage-files';
 import PurgeRefreshTokens from './purge-refresh-tokens';
 import SendPasswordReset, { SendPasswordResetData } from './send-password-reset';
 import SurveyDataExport, { SurveyDataExportData } from './survey-data-export';
@@ -9,6 +10,7 @@ import SurveyImportRespondents, { SurveyImportRespondentsData } from './survey-i
 export * from './job';
 
 const jobs = {
+  CleanStorageFiles,
   PurgeRefreshTokens,
   SendPasswordReset,
   SurveyDataExport,

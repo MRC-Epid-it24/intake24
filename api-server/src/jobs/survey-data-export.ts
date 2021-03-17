@@ -5,7 +5,7 @@ import { Job } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
 import { DataExportInput, EMPTY } from '@/services/data-export';
-import { getUrlExpireDate } from '@/util';
+import { addTime } from '@/util';
 import type { Job as BaseJob, JobData, JobType } from '.';
 
 export type SurveyDataExportData = DataExportInput;
@@ -76,7 +76,7 @@ export default class SurveyDataExport implements BaseJob {
       transform
         .on('error', (err) => reject(err))
         .on('end', async () => {
-          const downloadUrlExpiresAt = getUrlExpireDate(this.config.filesystem.urlExpiresAt);
+          const downloadUrlExpiresAt = addTime(this.config.filesystem.urlExpiresAt);
           await job.update({ downloadUrl: filename, downloadUrlExpiresAt });
           resolve();
         });

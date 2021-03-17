@@ -6,7 +6,7 @@ import path from 'path';
 import { Job, Survey, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import { getUrlExpireDate } from '@/util';
+import { addTime } from '@/util';
 import type { Job as BaseJob, JobData, JobType } from '.';
 
 export type SurveyExportRespondentAuthUrlsData = {
@@ -89,7 +89,7 @@ export default class SurveyExportRespondentAuthUrls implements BaseJob {
       transform
         .on('error', (err) => reject(err))
         .on('end', async () => {
-          const downloadUrlExpiresAt = getUrlExpireDate(this.config.filesystem.urlExpiresAt);
+          const downloadUrlExpiresAt = addTime(this.config.filesystem.urlExpiresAt);
           await job.update({ downloadUrl: filename, downloadUrlExpiresAt });
           resolve();
         });
