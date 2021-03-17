@@ -52,8 +52,8 @@ export default class Locale extends BaseModel {
   public textDirection!: string;
 
   @BelongsTo(() => Locale, 'prototypeLocaleId')
-  public parent!: Locale | null;
+  public parent?: Locale | null;
 
   @HasMany(() => Locale, 'prototypeLocaleId')
-  public children!: Locale[];
+  public children?: Locale[];
 }
