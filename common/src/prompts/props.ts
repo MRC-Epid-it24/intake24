@@ -1,3 +1,4 @@
+import type { QuantityValues } from '.';
 import type { LocaleTranslation } from '../types';
 import type { PortionSizeMethod, AsServedSet } from '../types/models';
 import type { Condition } from './conditions';
@@ -67,7 +68,11 @@ export interface AsServedPromptProps extends ValidatedPromptProps {
 
 export type AsServedLeftoverPromptProps = ValidatedPromptProps;
 
-export type GuideImagePromptProps = ValidatedPromptProps;
+export type LeftoverQuestionPromptProps = ValidatedPromptProps;
+
+export interface GuideImagePromptProps extends ValidatedPromptProps {
+  quantityValue: QuantityValues;
+}
 
 export type DrinkScalePromptProps = ValidatedPromptProps;
 

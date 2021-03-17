@@ -32,3 +32,8 @@ export interface Prompt<T extends BasePromptProps = BasePromptProps> {
   answer: PromptAnswer;
   status: PromptStatus;
 }
+
+export interface QuantityValues {
+  whole: number;
+  fraction: number;
+}

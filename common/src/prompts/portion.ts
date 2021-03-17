@@ -9,6 +9,7 @@ import type {
   PizzaPromptProps,
   MilkHotDrinkPromptProps,
   DirectWeightPromptProps,
+  LeftoverQuestionPromptProps,
 } from '.';
 
 export const asServedPromptDefaultProps: AsServedPromptProps = {
@@ -45,6 +46,10 @@ export const guideImagePromptDefaultProps: GuideImagePromptProps = {
   validation: {
     required: false,
     message: { en: null },
+  },
+  quantityValue: {
+    whole: 1,
+    fraction: 0,
   },
 };
 
@@ -109,6 +114,16 @@ export const milkHotDrinkPromptDefaultProps: MilkHotDrinkPromptProps = {
 };
 
 export const directWeightPromptDefaultProps: DirectWeightPromptProps = {
+  text: { en: null },
+  description: { en: null },
+  conditions: [],
+  validation: {
+    required: false,
+    message: { en: null },
+  },
+};
+
+export const leftoverQuestionPromptDefaultProps: LeftoverQuestionPromptProps = {
   text: { en: null },
   description: { en: null },
   conditions: [],

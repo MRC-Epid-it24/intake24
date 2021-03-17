@@ -5,7 +5,11 @@
         {{ $t('portion.asServedLeftover.label') }} - {{ localDescription }}
       </template>
       <v-card>
-        <v-card-text>Full asServed method here using leftover image set</v-card-text>
+        <v-card-text>{{ $t('portion.asServedLeftover.question') }}</v-card-text>
+        <v-card-actions>
+          <v-btn @click="onSubmit(true)">{{ $t('common.confirm.yes') }}</v-btn>
+          <v-btn @click="onSubmit(false)">{{ $t('common.confirm.no') }}</v-btn>
+        </v-card-actions>
       </v-card>
     </portion-layout>
   </v-container>
@@ -14,26 +18,27 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { AsServedLeftoverPromptProps, asServedLeftoverPromptDefaultProps } from '@common/prompts';
+import { LeftoverQuestionPromptProps, leftoverQuestionPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({
-  name: 'AsServedLeftoverPrompt',
+  name: 'LeftoverQuestionPrompt',
 
   mixins: [BasePortion, localeContent],
 
   props: {
     // Generic object 'props' used to store all props for each prompt
     props: {
-      type: Object as () => AsServedLeftoverPromptProps,
+      type: Object as () => LeftoverQuestionPromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(asServedLeftoverPromptDefaultProps, this.props),
+      ...merge(leftoverQuestionPromptDefaultProps, this.props),
       errors: [] as string[],
+      computeLeftovers: false,
     };
   },
 
@@ -43,6 +48,12 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     },
     hasErrors(): boolean {
       return !!this.errors.length;
+    },
+  },
+
+  methods: {
+    onSubmit(value: boolean) {
+      this.$emit('Leftover method required', value);
     },
   },
 });

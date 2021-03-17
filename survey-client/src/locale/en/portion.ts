@@ -22,11 +22,15 @@ const portion: LocaleMessage = {
     label: 'Using these pictures, please chose how much you had',
   },
   asServedLeftover: {
-    label: 'Leftover label',
+    label: 'Using these pictures, please choose how much you left',
+    question: 'Did you leave some of your?',
   },
   guideImage: {
     label: 'Please select the item you had or the closest match.',
     quantity: 'Please chose how many of those you had.',
+    validation: {
+      required: 'Please select the item you had or the closest match from the image.',
+    },
   },
   drinkScale: {
     label: 'Please select the cup or glass that looks most like the one you used for your',

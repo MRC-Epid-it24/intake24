@@ -9,6 +9,7 @@ import MilkCerealPrompt from './MilkCerealPrompt.vue';
 import PizzaPrompt from './PizzaPrompt.vue';
 import MilkHotDrinkPrompt from './MilkHotDrinkPrompt.vue';
 import DirectWeightPrompt from './DirectWeightPrompt.vue';
+import LeftoverQuestionPrompt from './LeftoverQuestionPrompt.vue';
 
 export default {
   PortionSizeOptionPrompt,
@@ -22,4 +23,5 @@ export default {
   PizzaPrompt,
   MilkHotDrinkPrompt,
   DirectWeightPrompt,
+  LeftoverQuestionPrompt,
 };

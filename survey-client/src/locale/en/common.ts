@@ -18,6 +18,11 @@ const common: LocaleMessageObject = {
     check: 'Content update is available',
     update: 'Update',
   },
+
+  confirm: {
+    yes: 'Yes',
+    no: 'No',
+  },
 };
 
 export default common;

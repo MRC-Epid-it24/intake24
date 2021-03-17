@@ -51,6 +51,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { QuantityValues } from '@common/prompts';
 
 export default (Vue as VueConstructor<Vue>).extend({
   name: 'QuantityCard',
@@ -64,7 +65,7 @@ export default (Vue as VueConstructor<Vue>).extend({
 
   data() {
     return {
-      wholeNum: 0,
+      wholeNum: 1,
       fracNum: 0.0,
     };
   },
@@ -76,12 +77,16 @@ export default (Vue as VueConstructor<Vue>).extend({
         // Currently no upper limit
         if (this.wholeNum + value >= 0) {
           this.wholeNum += value;
+          const emitValues: QuantityValues = { whole: this.wholeNum, fraction: this.fracNum };
+          this.$emit('update-quantity', emitValues);
         }
       }
     },
     modifyFrac(value: number) {
       if (this.fracNum + value >= 0 && this.fracNum + value < 1) {
         this.fracNum += value;
+        const emitValues: QuantityValues = { whole: this.wholeNum, fraction: this.fracNum };
+        this.$emit('update-quantity', emitValues);
       }
     },
     displayFrac(): string {
