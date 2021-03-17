@@ -2,6 +2,7 @@ import { ViewsCollection } from '@/types/vue-router';
 import authentication from './authentication';
 import dashboard from './Dashboard.vue';
 import profile from './Profile.vue';
+import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
 import schemes from './schemes';
@@ -15,6 +16,7 @@ const views: ViewsCollection = {
   authentication,
   dashboard,
   profile,
+  jobs,
   languages,
   locales,
   schemes,

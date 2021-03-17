@@ -24,9 +24,17 @@ const common: LocaleMessageObject = {
   name: 'Name',
   displayName: 'Label',
   description: 'Description',
+  id: 'ID',
+  type: 'Type',
+  status: 'Status',
 
+  date: 'Date',
+  expiredAt: 'Expired at',
+  startedAt: 'Started at',
+  completedAt: 'Completed at',
   createdAt: 'Created at',
   updatedAt: 'Updated at',
+  deletedAt: 'Deleted at',
 
   sw: {
     check: 'Content update is available',

@@ -13,13 +13,14 @@ const actions: ActionTree<UserState, RootState> = {
 
     commit('payload', decoded);
   },
+
   async request({ commit }) {
     return new Promise((resolve, reject) => {
       commit('request');
       commit('loading/add', 'profile', { root: true });
 
       http
-        .get('admin/profile')
+        .get('admin/user')
         .then((res) => {
           commit('success', res.data);
           resolve(res);

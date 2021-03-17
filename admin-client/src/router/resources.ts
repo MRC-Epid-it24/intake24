@@ -39,6 +39,14 @@ const resources: Resource[] = [
   // System
   {
     group: 'system',
+    name: 'jobs',
+    icon: 'fas fa-running',
+    api: 'admin/jobs',
+    generateRoutes: true,
+    routes: ['detail'],
+  },
+  {
+    group: 'system',
     name: 'tasks',
     icon: 'fas fa-tasks',
     api: 'admin/tasks',
