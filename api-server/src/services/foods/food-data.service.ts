@@ -108,11 +108,14 @@ export default (): FoodDataService => {
    * @returns {Promise<Locale | null>}
    */
   const getParentLocale = async (localeId: string): Promise<Locale | null> => {
-    const parentLocale = await Locale.findOne({
+    const locale = await Locale.findOne({
       where: { id: localeId },
-      attributes: ['prototypeLocaleId'],
+      include: [{ model: Locale, as: 'parent' }],
     });
-    return parentLocale;
+
+    if (locale == null) throw new NotFoundError(`Invalid locale: ${localeId}`);
+
+    return locale.parent;
   };
 
   const getNutrientKCalPer100G = async (localeId: string, foodCode: string): Promise<number> => {
