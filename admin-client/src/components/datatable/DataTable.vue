@@ -19,7 +19,7 @@
           :items-per-page="50"
           :options.sync="options"
           show-select
-          :loading="isLoading"
+          :loading="isAppLoading"
           :server-items-length="meta.total"
         >
           <template v-for="(_, scopedSlotName) in $scopedSlots" v-slot:[scopedSlotName]="slotData">

@@ -71,7 +71,7 @@
               <v-row>
                 <v-col>
                   <v-btn
-                    :disabled="form.errors.any() || isLoading"
+                    :disabled="form.errors.any() || isAppLoading"
                     x-large
                     type="submit"
                     block

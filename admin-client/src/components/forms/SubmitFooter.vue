@@ -7,7 +7,7 @@
         :color="color"
         block
         :title="label"
-        :disabled="disabled || isLoading"
+        :disabled="disabled || isAppLoading"
       >
         <v-icon left>{{ icon }}</v-icon> {{ label }}
       </v-btn>

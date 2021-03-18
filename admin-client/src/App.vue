@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <loader :show="isLoading" />
+    <loader :show="isAppLoading" />
     <v-navigation-drawer v-if="loggedIn" v-model="sidebar" app dark color="primary">
       <v-list-item>
         <v-list-item-content>

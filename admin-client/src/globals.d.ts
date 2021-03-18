@@ -10,7 +10,7 @@ declare module 'vue/types/vue' {
     can: (permission: string | string[] | Permission) => boolean;
 
     // loadingMixin
-    isLoading: () => boolean;
+    isAppLoading: () => boolean;
 
     // isMobile mixin
     isMobile: () => boolean;
