@@ -67,9 +67,9 @@ import Vue, { VueConstructor } from 'vue';
 import VueRecaptcha from 'vue-recaptcha';
 import form from '@/helpers/Form';
 
-type ReCaptchaRef = {
+type PasswordRequestRefs = {
   $refs: {
-    recaptcha: any;
+    recaptcha: InstanceType<typeof VueRecaptcha>;
   };
 };
 
@@ -78,7 +78,7 @@ type PasswordRequestForm = {
   recaptcha: string | null;
 };
 
-export default (Vue as VueConstructor<Vue & ReCaptchaRef>).extend({
+export default (Vue as VueConstructor<Vue & PasswordRequestRefs>).extend({
   name: 'PasswordRequest',
 
   components: { VueRecaptcha },
