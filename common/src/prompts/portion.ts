@@ -71,6 +71,10 @@ export const standardPortionPromptDefaultProps: StandardPortionPromptProps = {
     required: false,
     message: { en: null },
   },
+  quantityValue: {
+    whole: 1,
+    fraction: 0,
+  },
 };
 
 export const cerealPromptDefaultProps: CerealPromptProps = {

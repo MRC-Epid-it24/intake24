@@ -45,6 +45,10 @@ const portion: LocaleMessage = {
   standardPortion: {
     portionMethodLabel: 'How would you like to estimate your portion size?',
     label: 'How many did you have?',
+    optionLabel: 'In {food}', // E.g. In punnets, berries
+    validation: {
+      required: 'Please select an option from the list',
+    },
   },
   cereal: {
     label: 'Please select the bowl that looks most like the one you used.',

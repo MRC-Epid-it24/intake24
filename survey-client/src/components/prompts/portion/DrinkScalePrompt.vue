@@ -26,7 +26,6 @@
                 </v-btn>
               </v-col>
             </v-row>
-            
           </v-expansion-panel-content>
         </v-expansion-panel>
         <v-expansion-panel>
@@ -77,13 +76,19 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-btn @click="modifySliderValue(-10)">{{ $t('portion.drinkScale.lessFullButton') }}</v-btn>
+                <v-btn @click="modifySliderValue(-10)">
+                  {{ $t('portion.drinkScale.lessFullButton') }}
+                </v-btn>
               </v-col>
               <v-col>
-                <v-btn @click="modifySliderValue(10)">{{ $t('portion.drinkScale.moreFullButton') }}</v-btn>
+                <v-btn @click="modifySliderValue(10)">
+                  {{ $t('portion.drinkScale.moreFullButton') }}
+                </v-btn>
               </v-col>
               <v-col>
-                <v-btn color="success" @click="onSubmit()">{{ $t('portion.drinkScale.confirmFullButton') }}</v-btn>
+                <v-btn color="success" @click="onSubmit()">
+                  {{ $t('portion.drinkScale.confirmFullButton') }}
+                </v-btn>
               </v-col>
             </v-row>
           </v-expansion-panel-content>
@@ -174,8 +179,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
         return;
       }
       this.$emit('DrinkScale completed');
-      this.selectedQuantity = true;
-      this.panelOpen = -1;
+      this.selectedQuantity = true; // This sets the icon on the panel, UI sugar
+      this.panelOpen = -1; // Close panels if no errors
     },
   },
 });

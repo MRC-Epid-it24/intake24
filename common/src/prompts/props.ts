@@ -76,7 +76,9 @@ export interface GuideImagePromptProps extends ValidatedPromptProps {
 
 export type DrinkScalePromptProps = ValidatedPromptProps;
 
-export type StandardPortionPromptProps = ValidatedPromptProps;
+export interface StandardPortionPromptProps extends ValidatedPromptProps {
+  quantityValue: QuantityValues;
+}
 
 export type CerealPromptProps = ValidatedPromptProps;
 
