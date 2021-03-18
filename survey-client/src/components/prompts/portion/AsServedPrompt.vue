@@ -2,7 +2,7 @@
   <v-container>
     <portion-layout :text="text" :description="description">
       <template v-slot:headerText>
-        {{ $t('portion.asServed.label') }} - {{ localDescription }}
+        {{ $t('portion.asServed.label', { food: localeDescription }) }}
       </template>
       <v-row>
         <v-col>
@@ -93,6 +93,12 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       ...merge(asServedPromptDefaultProps, this.props),
       errors: [] as string[],
     };
+  },
+
+  computed: {
+    localeDescription(): string | null {
+      return this.getLocaleContent(this.description);
+    },
   },
 });
 </script>

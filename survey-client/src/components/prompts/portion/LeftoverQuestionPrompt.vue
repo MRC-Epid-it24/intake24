@@ -2,10 +2,12 @@
   <v-container>
     <portion-layout :text="text" :description="description">
       <template v-slot:headerText>
-        {{ $t('portion.asServedLeftover.label') }} - {{ localDescription }}
+        {{ localeDescription }}
       </template>
       <v-card>
-        <v-card-text>{{ $t('portion.asServedLeftover.question') }}</v-card-text>
+        <v-card-text>
+          {{ $t('portion.asServedLeftover.question', { food: localeDescription }) }}
+        </v-card-text>
         <v-card-actions>
           <v-btn @click="onSubmit(true)">{{ $t('common.confirm.yes') }}</v-btn>
           <v-btn @click="onSubmit(false)">{{ $t('common.confirm.no') }}</v-btn>

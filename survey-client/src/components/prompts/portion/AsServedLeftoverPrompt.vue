@@ -2,7 +2,7 @@
   <v-container>
     <portion-layout :text="text" :description="description">
       <template v-slot:headerText>
-        {{ $t('portion.asServedLeftover.label') }} - {{ localDescription }}
+        {{ $t('portion.asServedLeftover.label', { food: localeDescription }) }}
       </template>
       <v-card>
         <v-card-text>Full asServed method here using leftover image set</v-card-text>

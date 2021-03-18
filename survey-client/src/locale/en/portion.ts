@@ -12,18 +12,18 @@ const portion: LocaleMessage = {
   },
   option: {
     // Implementation of this needs looking at for RTL, as localDescription appears at end of line for label
-    label: 'How would you like to estimate the portion size of your',
+    label: 'How would you like to estimate the portion size of your {food}?',
     validation: {
       required: 'Please select how the portion will be measured.',
     },
     imageInvalid: 'Image loading',
   },
   asServed: {
-    label: 'Using these pictures, please chose how much you had',
+    label: 'Using these pictures, please chose how much {food} you had.',
   },
   asServedLeftover: {
-    label: 'Using these pictures, please choose how much you left',
-    question: 'Did you leave some of your?',
+    label: 'Using these pictures, please choose how much {food} you left.',
+    question: 'Did you leave some of your {food}?',
   },
   guideImage: {
     label: 'Please select the item you had or the closest match.',
@@ -33,7 +33,7 @@ const portion: LocaleMessage = {
     },
   },
   drinkScale: {
-    label: 'Please select the cup or glass that looks most like the one you used for your',
+    label: 'Please select the cup or glass that looks most like the one you used for your {food}',
     sliderLabel:
       'Please use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
     leftoverLabel: 'Please use the slider on the right to choose how much you had left',
@@ -59,7 +59,7 @@ const portion: LocaleMessage = {
     slicesLabel: 'How many of these slices did you have?',
   },
   milkHotDrink: {
-    label: 'How much skimmed milk did you have in your tea or coffee?',
+    label: 'How much {food} did you have in your tea or coffee?',
   },
   directWeight: {
     label: 'Please enter how much you had.',
