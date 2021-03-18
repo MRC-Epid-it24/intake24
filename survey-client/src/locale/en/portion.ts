@@ -40,6 +40,7 @@ const portion: LocaleMessage = {
     lessFullButton: 'It was less full',
     moreFullButton: 'It was more full',
     confirmFullButton: 'It was that full',
+    sliderHint: 'Slide this to indicate how full your cup or glass was.',
   },
   standardPortion: {
     portionMethodLabel: 'How would you like to estimate your portion size?',

@@ -11,7 +11,13 @@
               <template v-slot:placeholder>
                 <ImagePlaceholder></ImagePlaceholder>
               </template>
-              <v-message class="align-right">100g</v-message>
+              <v-row>
+                <v-col class="d-flex justify-end mr-auto">
+                  <v-chip class="ma-2">
+                    {{ foodWeight }}
+                  </v-chip>
+                </v-col>
+              </v-row>
             </v-img>
             <v-card-actions>
               <v-container dense>
@@ -92,12 +98,19 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     return {
       ...merge(asServedPromptDefaultProps, this.props),
       errors: [] as string[],
+      foodWeight: '100g', // This will be part of the props
     };
   },
 
   computed: {
     localeDescription(): string | null {
       return this.getLocaleContent(this.description);
+    },
+  },
+
+  methods: {
+    onSubmit() {
+      this.$emit('AsServed selected');
     },
   },
 });
