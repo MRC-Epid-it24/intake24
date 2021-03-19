@@ -31,7 +31,7 @@
       :items-per-page="50"
       :options.sync="options"
       :show-select="showSelect"
-      :loading="isLoading"
+      :loading="isAppLoading"
       :server-items-length="meta.total"
       @item-selected="updateTracked"
     >

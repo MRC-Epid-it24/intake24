@@ -112,7 +112,7 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
     },
 
     async download(id: number) {
-      const res = await this.$http.get(`admin/jobs/${id}/download`, { responseType: 'blob' });
+      const res = await this.$http.get(`admin/user/jobs/${id}/download`, { responseType: 'blob' });
       downloadFile(res);
     },
   },

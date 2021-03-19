@@ -35,7 +35,7 @@ export default Vue.extend({
     async status() {
       const {
         data: { data },
-      } = await this.$http.get(`admin/jobs`, { params: { type: this.jobType } });
+      } = await this.$http.get(`admin/user/jobs`, { params: { type: this.jobType } });
 
       this.jobs = [...data];
     },
