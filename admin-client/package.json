@@ -20,6 +20,9 @@
     "@tinymce/tinymce-vue": "^3.2.8",
     "axios": "^0.21.1",
     "core-js": "^3.8.3",
+    "d3-drag": "^2.0.0",
+    "d3-selection": "^2.0.0",
+    "d3-transition": "^2.0.0",
     "date-fns": "^2.19.0",
     "deepmerge": "^4.2.2",
     "dotenv": "^8.2.0",
@@ -46,6 +49,9 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@types/d3-drag": "^2.0.0",
+    "@types/d3-selection": "^2.0.0",
+    "@types/d3-transition": "^2.0.0",
     "@types/jest": "^26.0.20",
     "@types/lodash": "^4.14.168",
     "@types/tinymce": "^4.6.0",

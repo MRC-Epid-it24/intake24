@@ -1,0 +1,19 @@
+export const SelectedColor = '#337ab7';
+export const UnselectedColor = '#000000';
+export const HoveredColor = '#d9edf7';
+export const UnselectedOpacity = 0.8;
+export const HoveredOpacity = 0.8;
+export const SelectedOpacity = 1;
+export const NodeRadius = 4;
+export const ActiveNodeRadius = 6;
+export const InvisibleNodeRadius = 8;
+export const transitionDuration = 100;
+export const strokeWidth = 2;
+
+export const MainSelector = 'guides-drawer';
+export const PathGroupSelector = `${MainSelector}-path-group`;
+export const LineGroupSelector = `${MainSelector}-line-group`;
+export const LineSelector = `${MainSelector}-line`;
+export const NodeGroupSelector = `${MainSelector}-node-group`;
+export const NodeSelector = `${MainSelector}-node`;
+export const InvisibleNodeSelector = `${MainSelector}-invisible-node`;
