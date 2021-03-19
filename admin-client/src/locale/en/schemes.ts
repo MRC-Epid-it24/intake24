@@ -5,7 +5,7 @@ const schemes: LocaleMessageObject = {
   id: 'Scheme ID',
   index: 'Schemes',
   all: 'All schemes',
-  detail: 'Scheme Detail',
+  detail: 'Scheme detail',
   new: 'New scheme',
   create: 'Add scheme',
   edit: 'Edit scheme',

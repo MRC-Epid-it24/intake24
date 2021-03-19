@@ -1,5 +1,5 @@
 <template>
-  <data-table :actions="['detail', 'delete']" api="admin/jobs" :headers="headers">
+  <data-table :actions="['detail', 'delete']" :headers="headers">
     <template v-slot:[`item.user`]="{ item }">
       {{ item.user ? item.user.username : null }}
     </template>

@@ -3,7 +3,7 @@ import { LocaleMessageObject } from 'vue-i18n';
 const jobs: LocaleMessageObject = {
   _: 'Job',
   index: 'Jobs',
-  read: 'Job detail',
+  detail: 'Job detail',
   delete: 'Delete job',
   downloadUrl: 'Download Url',
   downloadUrlExpiresAt: 'Download Url expires at',

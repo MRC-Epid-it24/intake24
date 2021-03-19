@@ -4,7 +4,7 @@ const roles: LocaleMessageObject = {
   _: 'Role',
   index: 'Roles',
   all: 'All roles',
-  detail: 'Role Detail',
+  detail: 'Role detail',
   new: 'New role',
   create: 'Add role',
   edit: 'Edit role',

@@ -5,7 +5,7 @@ const locales: LocaleMessageObject = {
   id: 'Locale ID',
   index: 'Locales',
   all: 'All locales',
-  detail: 'Locale Detail',
+  detail: 'Locale detail',
   new: 'New locale',
   create: 'Add locale',
   edit: 'Edit locale',

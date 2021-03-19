@@ -5,7 +5,7 @@ const surveys: LocaleMessageObject = {
   id: 'Survey ID',
   index: 'Surveys',
   all: 'All surveys',
-  detail: 'Survey Detail',
+  detail: 'Survey detail',
   new: 'New survey',
   create: 'Add survey',
   edit: 'Edit survey',

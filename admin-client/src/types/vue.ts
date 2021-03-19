@@ -1,5 +1,6 @@
 import { Dictionary } from '@common/types';
 import type { Form } from '@/helpers/Form';
+import { Resource } from './vue-router';
 
 export interface FetchEntryMixin {
   fetch: () => Promise<void>;
@@ -7,6 +8,7 @@ export interface FetchEntryMixin {
 
 export interface HasEntryMixin {
   id: number | string;
+  resource: Resource;
 }
 
 export interface MapEntryMixin<E = Dictionary> {

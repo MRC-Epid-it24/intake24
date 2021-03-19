@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import ResourceMixin from '@/mixins/ResourceMixin';
 
 export default Vue.extend({
   props: {
@@ -7,4 +8,6 @@ export default Vue.extend({
       default: 'create',
     },
   },
+
+  mixins: [ResourceMixin],
 });

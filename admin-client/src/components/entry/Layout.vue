@@ -49,13 +49,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import has from 'lodash/has';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
-import resources from '@/router/resources';
-import { Resource } from '@/types/vue-router';
+import ResourceMixin from '@/mixins/ResourceMixin';
 
-export default Vue.extend({
+type Mixins = InstanceType<typeof ResourceMixin>;
+
+export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'EntryLayout',
 
   props: {
@@ -71,12 +72,11 @@ export default Vue.extend({
 
   components: { ConfirmDialog },
 
+  mixins: [ResourceMixin],
+
   computed: {
     isCreate(): boolean {
       return this.id === 'create';
-    },
-    resource(): Resource {
-      return resources.find((item) => item.name === this.module) as Resource;
     },
     tabs(): string[] {
       if (this.isCreate) return ['create'];

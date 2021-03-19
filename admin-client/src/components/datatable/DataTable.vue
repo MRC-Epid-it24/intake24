@@ -49,26 +49,26 @@ import { Dictionary } from '@common/types';
 import Actionbar from '@/components/datatable/actionbar/Actionbar.vue';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
 import handlesLoading from '@/mixins/handlesLoading';
+import ResourceMixin from '@/mixins/ResourceMixin';
 import { Pagination, PaginationMeta } from '@common/types/models';
 import DataTableFilter from './DataTableFilter.vue';
 
-type Mixins = InstanceType<typeof handlesLoading>;
+type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof ResourceMixin>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'DataTable',
 
   components: { Actionbar, DataTableFilter, Toolbar },
 
-  mixins: [handlesLoading],
+  mixins: [handlesLoading, ResourceMixin],
 
   props: {
     actions: {
       type: Array as () => string[],
-      default: (): string[] => ['create', 'read', 'edit', 'delete'],
+      default: (): string[] => ['create', 'detail', 'edit', 'delete'],
     },
-    api: {
+    apiUrl: {
       type: String,
-      required: true,
     },
     headers: {
       type: Array,
@@ -91,6 +91,9 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
   computed: {
     ...mapGetters({ filter: 'resource/filter' }),
+    api(): string {
+      return this.apiUrl ?? this.resource.api;
+    },
     tracked(): string[] | number[] {
       return this.selected.map((item) => item[this.trackBy]);
     },
@@ -120,7 +123,9 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
         const {
           data: { data, meta },
         } = await this.withLoading(
-          this.$http.get<Pagination>(this.api, { params: { limit, page, sort, ...this.filter } })
+          this.$http.get<Pagination>(this.api, {
+            params: { limit, page, sort, ...this.filter },
+          })
         );
 
         this.items = data;

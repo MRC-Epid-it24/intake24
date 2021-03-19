@@ -1,5 +1,5 @@
 <template>
-  <data-table :headers="headers" api="admin/locales">
+  <data-table :headers="headers">
     <template v-slot:[`item.id`]="{ item }">
       <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
       {{ item.id }}

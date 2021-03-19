@@ -4,7 +4,7 @@ const permissions: LocaleMessageObject = {
   _: 'Permission',
   index: 'Permissions',
   all: 'All permissions',
-  detail: 'Permission Detail',
+  detail: 'Permission detail',
   new: 'New permission',
   create: 'Add permission',
   edit: 'Edit permission',

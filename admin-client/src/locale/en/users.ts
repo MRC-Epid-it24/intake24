@@ -4,7 +4,7 @@ const users: LocaleMessageObject = {
   _: 'User',
   index: 'Users',
   all: 'All users',
-  detail: 'User Detail',
+  detail: 'User detail',
   new: 'New user',
   create: 'Add user',
   edit: 'Edit user',

@@ -32,9 +32,6 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   },
 
   computed: {
-    apiUrl(): string {
-      return this.module;
-    },
     isCreate(): boolean {
       return this.id === 'create';
     },
@@ -50,7 +47,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
     async onSubmit() {
       if (this.isEdit) {
-        const { data } = await this.form.put(`admin/${this.apiUrl}/${this.id}`);
+        const { data } = await this.form.put(`${this.resource.api}/${this.id}`);
         this.toForm(data);
 
         const { id, name } = data;
@@ -58,7 +55,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       } else {
         const {
           data: { id, name },
-        } = await this.form.post(`admin/${this.apiUrl}`);
+        } = await this.form.post(`${this.resource.api}`);
         this.$router.push({ name: `${this.module}-edit`, params: { id } });
 
         this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }) as string);

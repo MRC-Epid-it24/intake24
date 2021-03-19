@@ -1,5 +1,5 @@
 <template>
-  <data-table :headers="headers" api="admin/surveys">
+  <data-table :headers="headers">
     <template v-slot:[`item.state`]="{ item }">
       {{ $t(`surveys.state.${item.state}`) }}
     </template>
