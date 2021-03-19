@@ -4,6 +4,7 @@ import {
   CategoryAttribute,
   CategoryPortionSizeMethod,
   CategoryPortionSizeMethodParameter,
+  Food,
   FoodAttribute,
   FoodCategory,
   FoodLocal,
@@ -23,7 +24,7 @@ import {
   PortionSizeMethodsResponse,
 } from '@common/types/http';
 import getAllParentCategories from '@api-server/db/raw/food-controller-sql';
-import InvalidIdError from '@/services/foods/invalid-id-error';
+import InvalidArgumentError from '@/services/foods/invalid-argument-error';
 
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;
@@ -63,6 +64,16 @@ export interface FoodDataService {
 }
 
 export default (): FoodDataService => {
+  async function validateLocaleId(localeId: string) {
+    const localeCheck = await Locale.findOne({ where: { id: localeId }, attributes: ['id'] });
+    if (localeCheck == null) throw new InvalidArgumentError(`Invalid locale ID: ${localeId}`);
+  }
+
+  async function validateFoodCode(foodCode: string) {
+    const foodCodeCheck = await Food.findOne({ where: { code: foodCode }, attributes: ['code'] });
+    if (foodCodeCheck == null) throw new InvalidArgumentError(`Invalid food code: ${foodCode}`);
+  }
+
   /**
    *
    * Get food date corresponidng to locale and food code from the FoodLocale
@@ -114,7 +125,7 @@ export default (): FoodDataService => {
       include: [{ model: Locale, as: 'parent' }],
     });
 
-    if (locale == null) throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
+    if (locale == null) throw new InvalidArgumentError(`Invalid locale ID: ${localeId}`);
 
     return locale.parent ?? null;
   };
@@ -122,23 +133,21 @@ export default (): FoodDataService => {
   const getNutrientKCalPer100G = async (localeId: string, foodCode: string): Promise<number> => {
     const foodNutrientData = await FoodLocal.findOne({
       where: { localeId, foodCode },
-      attributes: ['id'],
+      attributes: [],
       include: [
         {
           model: NutrientMapping,
-          attributes: ['nutrientTableRecordId'],
+          attributes: ['id'], // there attributes should be empty, but sequelize crashes if that is the case
           include: [
             {
               model: NutrientTableRecord,
-              attributes: ['id'],
+              attributes: ['id'], // there attributes should be empty, but sequelize crashes if that is the case
               duplicating: true,
               include: [
                 {
                   model: NutrientTableRecordNutrient,
                   where: { nutrientTypeId: KCAL_NUTRIENT_TYPE_ID },
                   attributes: ['unitsPer100g'],
-                  limit: 1,
-                  duplicating: true,
                 },
               ],
             },
@@ -146,7 +155,13 @@ export default (): FoodDataService => {
         },
       ],
     });
-    console.log(JSON.stringify(foodNutrientData));
+
+    if (foodNutrientData == null)
+      throw new InvalidArgumentError(
+        `Either locale id '${localeId}' or food code '${foodCode}' is ` +
+          "invalid, food isn't linked to a nutrient table record, or the energy (kcal) nutrient " +
+          'data is missing'
+      );
 
     let kcal = foodNutrientData?.nutrientMappings?.map((el) => {
       return el.nutrientTableRecord?.nutrients
