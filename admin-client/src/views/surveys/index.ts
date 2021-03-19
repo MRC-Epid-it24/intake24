@@ -1,4 +1,3 @@
-import { Views } from '@/types/vue-router';
 import detail from './Detail.vue';
 import form from './Form.vue';
 import list from './List.vue';
@@ -16,4 +15,4 @@ export default {
   mgmt,
   respondents,
   submissions,
-} as Views;
+};

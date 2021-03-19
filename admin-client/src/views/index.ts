@@ -1,4 +1,4 @@
-import { ViewsCollection } from '@/types/vue-router';
+import { Dictionary } from '@common/types';
 import authentication from './authentication';
 import dashboard from './Dashboard.vue';
 import profile from './Profile.vue';
@@ -12,7 +12,7 @@ import roles from './roles';
 import tasks from './tasks';
 import users from './users';
 
-const views: ViewsCollection = {
+const views: Dictionary = {
   authentication,
   dashboard,
   profile,
