@@ -14,7 +14,9 @@ export type UniqueOptions = {
 };
 
 export default async ({ model, condition, except = {} }: UniqueOptions): Promise<void> => {
-  const { field, value, ci } = condition;
+  const mergedCondition = { ci: true, ...condition };
+
+  const { field, value, ci } = mergedCondition;
   const op = ci && model.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
   const where: WhereOptions = { [field]: { [op]: value }, ...except };

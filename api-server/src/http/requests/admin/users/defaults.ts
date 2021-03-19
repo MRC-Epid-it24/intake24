@@ -23,7 +23,7 @@ export const identifiers: Schema = {
         const { userId } = (req as Request).params;
         const except: WhereOptions = userId ? { id: { [Op.ne]: userId } } : {};
 
-        return unique({ model: User, condition: { field: 'email', value, ci: true }, except });
+        return unique({ model: User, condition: { field: 'email', value }, except });
       },
     },
   },

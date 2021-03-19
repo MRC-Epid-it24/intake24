@@ -14,7 +14,7 @@ export default validate(
       isEmpty: { negated: true },
       custom: {
         options: async (value): Promise<void> =>
-          unique({ model: Locale, condition: { field: 'id', value, ci: true } }),
+          unique({ model: Locale, condition: { field: 'id', value } }),
       },
     },
   })

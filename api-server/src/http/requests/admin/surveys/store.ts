@@ -15,7 +15,7 @@ export default validate(
       isEmpty: { negated: true },
       custom: {
         options: async (value): Promise<void> =>
-          unique({ model: Survey, condition: { field: 'id', value: slugify(value), ci: true } }),
+          unique({ model: Survey, condition: { field: 'id', value: slugify(value) } }),
       },
       customSanitizer: {
         options: (value) => (typeof value === 'string' ? slugify(value) : value),
