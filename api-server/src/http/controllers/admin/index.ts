@@ -1,4 +1,5 @@
 import acl from './acl';
+import images from './images';
 import user from './user';
 
 import job from './job.controller';
@@ -13,6 +14,7 @@ import survey from './survey.controller';
 import task from './task.controller';
 
 export * from './acl';
+export * from './images';
 export * from './user';
 
 export * from './job.controller';
@@ -30,6 +32,7 @@ export default {
   acl,
   user,
 
+  images,
   job,
   language,
   locale,

@@ -12,11 +12,13 @@ import type {
   FoodSearchController,
   PortionSizeController,
   SurveyController,
+  // Admin
+  UserProfileController,
+  UserJobController,
+  GuideImageController,
   JobController,
   LanguageController,
   LocaleController,
-  UserProfileController,
-  UserJobController,
   SchemeController,
   AdminSurveyController,
   AdminSurveyDataExportController,
@@ -78,6 +80,7 @@ export interface IoC extends Jobs {
   userProfileController: UserProfileController;
   userJobController: UserJobController;
 
+  guideImageController: GuideImageController;
   languageController: LanguageController;
   localeController: LocaleController;
   schemeController: SchemeController;

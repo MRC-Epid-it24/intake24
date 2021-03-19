@@ -1,3 +1,4 @@
+export * from './guide-images';
 export * from './jobs';
 export * from './languages';
 export * from './locales';

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import passport from 'passport';
 import user from './user';
 
+import images from './images';
 import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
@@ -17,6 +18,7 @@ const router = Router();
 router.use(passport.authenticate('admin', { session: false }));
 
 router.use('/user', user);
+router.use('/images', images);
 router.use('/jobs', jobs);
 router.use('/languages', languages);
 router.use('/locales', locales);

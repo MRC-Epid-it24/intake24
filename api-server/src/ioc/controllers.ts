@@ -12,9 +12,11 @@ export default (container: AwilixContainer): void => {
     portionSizeController: asFunction(controllers.portionSize),
     surveyController: asFunction(controllers.survey),
 
+    // Admin
     userProfileController: asFunction(controllers.admin.user.profile),
     userJobController: asFunction(controllers.admin.user.job),
 
+    guideImageController: asFunction(controllers.admin.images.guide),
     languageController: asFunction(controllers.admin.language),
     localeController: asFunction(controllers.admin.locale),
     schemeController: asFunction(controllers.admin.scheme),
