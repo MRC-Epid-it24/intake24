@@ -21,7 +21,7 @@ const appConfig: AppConfig = {
   urls: {
     admin: process.env.APP_URL_ADMIN ?? '/admin',
     survey: process.env.APP_URL_SURVEY ?? '/survey',
-    images: process.env.APP_URL_IMAGES ?? 'localhost:3100/images',
+    images: process.env.APP_URL_IMAGES ?? 'http://localhost:3100/images',
     docs: process.env.APP_URL_DOCS ?? '/docs',
   },
 };
