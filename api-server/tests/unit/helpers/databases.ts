@@ -33,3 +33,19 @@ export async function releaseDatabases(): Promise<void> {
   await databases.system.close();
   await databases.foods.close();
 }
+
+function logSql(sql: string, queryObject: any) {
+  console.debug(`${sql} with parameters ${queryObject.bind}`);
+}
+
+// These functions can be used to temporarily enable/disable SQL query logging for easier debugging
+// when testing. Enabling logging globally results in too much noise because all the initial table
+// creation queries etc. get logged.
+
+export function enableSqlLogging() {
+  databases.foods.options.logging = logSql;
+}
+
+export function disableSqlLogging() {
+  databases.foods.options.logging = false;
+}
