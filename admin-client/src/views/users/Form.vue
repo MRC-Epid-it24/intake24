@@ -146,7 +146,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { CustomField } from '@common/types';
-import { UserEntry } from '@common/types/http';
+import { UserEntry } from '@common/types/http/admin';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 

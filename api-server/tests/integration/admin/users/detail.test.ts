@@ -2,7 +2,7 @@ import { pick, omit } from 'lodash';
 import request from 'supertest';
 import ioc from '@/ioc';
 import { CustomField } from '@common/types';
-import { CreateUserRequest, UpdateUserRequest } from '@common/types/http';
+import { CreateUserRequest, UpdateUserRequest } from '@common/types/http/admin';
 import { User } from '@/db/models/system';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 

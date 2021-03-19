@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
 import request from 'supertest';
-import { PermissionRequest } from '@common/types/http';
+import { PermissionRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {

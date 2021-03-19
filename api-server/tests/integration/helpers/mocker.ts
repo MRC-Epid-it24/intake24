@@ -8,7 +8,7 @@ import {
   CreateTaskRequest,
   CreateUserRequest,
   CreateLanguageRequest,
-} from '@common/types/http';
+} from '@common/types/http/admin';
 import { SchemeCreateAttributes, SchemeTypes } from '@common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
 

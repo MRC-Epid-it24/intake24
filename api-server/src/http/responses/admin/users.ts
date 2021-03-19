@@ -1,4 +1,4 @@
-import { UserEntry, UserMgmtListEntry, RespondentEntry } from '@common/types/http';
+import { UserEntry, UserMgmtListEntry, RespondentEntry } from '@common/types/http/admin';
 import { User, UserSurveyAlias } from '@/db/models/system';
 import { permissionListResponse } from './permissions';
 

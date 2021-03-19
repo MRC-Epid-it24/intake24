@@ -152,7 +152,7 @@ import orderBy from 'lodash/orderBy';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
-import { LocaleRefs } from '@common/types/http';
+import { LocaleRefs } from '@common/types/http/admin';
 import { Locale } from '@common/types/models';
 
 type LocaleForm = {

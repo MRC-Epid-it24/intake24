@@ -5,7 +5,7 @@ import {
   SurveyRespondentResponse,
   SurveyRespondentsResponse,
   SurveyRespondentListEntry,
-} from '@common/types/http';
+} from '@common/types/http/admin';
 import { Survey, User, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import { userRespondentResponse } from '@/http/responses/admin';

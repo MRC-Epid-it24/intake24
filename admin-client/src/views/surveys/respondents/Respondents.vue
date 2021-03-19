@@ -142,7 +142,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { Dictionary } from '@common/types';
-import { RespondentEntry, SurveyRespondentResponse } from '@common/types/http';
+import { RespondentEntry, SurveyRespondentResponse } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';

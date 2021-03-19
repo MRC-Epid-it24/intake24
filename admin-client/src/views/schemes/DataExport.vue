@@ -57,7 +57,7 @@ import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
 import { ExportField, ExportSection } from '@common/types/models';
-import { SchemeExportRefsResponse } from '@common/types/http';
+import { SchemeExportRefsResponse } from '@common/types/http/admin';
 import DataExportSection from './DataExportSection.vue';
 import { SchemeForm } from './Form.vue';
 

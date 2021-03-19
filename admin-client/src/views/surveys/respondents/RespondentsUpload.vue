@@ -86,7 +86,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { JobResponse } from '@common/types/http';
+import { JobResponse } from '@common/types/http/admin';
 import form from '@/helpers/Form';
 import RespondentsJobMixin from './RespondentsJobMixin';
 

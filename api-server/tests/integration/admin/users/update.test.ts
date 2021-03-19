@@ -3,7 +3,7 @@ import request from 'supertest';
 import { Permission, Role, User } from '@/db/models/system';
 import ioc from '@/ioc';
 import { CustomField } from '@common/types';
-import { CreateUserRequest, UpdateUserRequest } from '@common/types/http';
+import { CreateUserRequest, UpdateUserRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {

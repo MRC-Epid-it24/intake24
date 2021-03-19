@@ -11,7 +11,7 @@ import {
   SchemesResponse,
   StoreSchemeResponse,
   SchemeExportRefsResponse,
-} from '@common/types/http';
+} from '@common/types/http/admin';
 import { ExportField, ExportSectionId } from '@common/types/models';
 import { Controller, CrudActions } from '../controller';
 

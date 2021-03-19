@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { PermissionListEntry } from '@common/types/http';
+import { PermissionListEntry } from '@common/types/http/admin';
 import { Permission } from '@/db/models/system';
 
 export const permissionListResponse = (permission: Permission): PermissionListEntry => {

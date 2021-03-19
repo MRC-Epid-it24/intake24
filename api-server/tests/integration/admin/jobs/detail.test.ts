@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
 import request from 'supertest';
-import { JobEntry } from '@common/types/http';
+import { JobEntry } from '@common/types/http/admin';
 import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {

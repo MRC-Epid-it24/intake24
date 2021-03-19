@@ -103,7 +103,7 @@ import Vue, { VueConstructor } from 'vue';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
 import { EntryMixin } from '@/types/vue';
-import { SurveyMgmtAvailableResponse, UserMgmtListEntry } from '@common/types/http';
+import { SurveyMgmtAvailableResponse, UserMgmtListEntry } from '@common/types/http/admin';
 import DataTable from './DataTable.vue';
 
 type SurveyMgmtRefs = {

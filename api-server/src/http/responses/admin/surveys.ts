@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { Survey } from '@/db/models/system';
-import { SurveyEntry } from '@common/types/http';
+import { SurveyEntry } from '@common/types/http/admin';
 
 export const surveyResponse = (survey: Survey): SurveyEntry => {
   return {

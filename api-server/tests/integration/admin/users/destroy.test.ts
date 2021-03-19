@@ -1,6 +1,6 @@
 import request from 'supertest';
 import ioc from '@/ioc';
-import { CreateUserRequest } from '@common/types/http';
+import { CreateUserRequest } from '@common/types/http/admin';
 import { User } from '@/db/models/system';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 

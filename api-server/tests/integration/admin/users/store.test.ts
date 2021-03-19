@@ -1,7 +1,7 @@
 import { CustomField } from '@common/types';
 import { pick, omit } from 'lodash';
 import request from 'supertest';
-import { CreateUserRequest, UpdateUserRequest } from '@common/types/http';
+import { CreateUserRequest, UpdateUserRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {

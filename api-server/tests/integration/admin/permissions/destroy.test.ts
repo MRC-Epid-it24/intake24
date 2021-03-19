@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { Permission } from '@/db/models/system';
-import { PermissionRequest } from '@common/types/http';
+import { PermissionRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {

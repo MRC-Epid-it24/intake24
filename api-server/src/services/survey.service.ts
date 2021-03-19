@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { CreateRespondentInput, UpdateRespondentInput } from '@common/types/http';
+import { CreateRespondentInput, UpdateRespondentInput } from '@common/types/http/admin';
 import { UserCustomField as UserCustomFieldAttributes } from '@common/types/models';
 import {
   GenUserCounter,

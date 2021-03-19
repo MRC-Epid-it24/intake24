@@ -5,7 +5,7 @@ import { Op, WhereOptions } from 'sequelize';
 import { Job, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import { JobResponse, JobsResponse } from '@common/types/http';
+import { JobResponse, JobsResponse } from '@common/types/http/admin';
 import type { Controller } from '@/http/controllers';
 
 export type UserJobController = Controller<'browse' | 'detail' | 'download'>;

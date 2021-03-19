@@ -4,7 +4,7 @@ import {
   SurveyMgmtAvailableResponse,
   SurveyMgmtResponse,
   UserMgmtListEntry,
-} from '@common/types/http';
+} from '@common/types/http/admin';
 import { Permission, Survey, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import { permissionListResponse, userMgmtResponse } from '@/http/responses/admin';

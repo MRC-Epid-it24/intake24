@@ -7,7 +7,7 @@ import {
   RoleResponse,
   RolesResponse,
   StoreRoleResponse,
-} from '@common/types/http';
+} from '@common/types/http/admin';
 import type { Controller, CrudActions } from '@/http/controllers';
 
 export type RoleController = Controller<CrudActions>;

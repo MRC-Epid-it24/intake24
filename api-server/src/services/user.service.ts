@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import { UserPassword as UserPasswordAttributes } from '@common/types/models';
-import { CreateUserInput, UpdateUserInput } from '@common/types/http';
+import { CreateUserInput, UpdateUserInput } from '@common/types/http/admin';
 import { User, UserCustomField, UserPassword } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import { defaultAlgorithm } from '@/util/passwords';
