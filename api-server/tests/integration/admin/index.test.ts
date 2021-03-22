@@ -1,4 +1,5 @@
 import user from './user/index.test';
+import images from './images/index.test';
 import jobs from './jobs/index.test';
 import languages from './languages/index.test';
 import locales from './locales/index.test';
@@ -11,6 +12,7 @@ import tasks from './tasks/index.test';
 
 export default {
   user,
+  images,
   jobs,
   languages,
   locales,

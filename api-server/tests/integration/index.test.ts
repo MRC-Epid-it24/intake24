@@ -73,6 +73,19 @@ describe('API', () => {
     describe('GET /api/admin/user/jobs/:jobId', user.jobs.detail);
     describe('GET /api/admin/user/jobs/:jobId/download', user.jobs.download);
 
+    // Images
+    const { images } = admin;
+
+    // Guided images
+    const { guided } = images;
+    describe('GET /api/admin/images/guided', guided.browse);
+    // describe('GET /api/admin/images/guided/create', guided.create);
+    // describe('POST /api/admin/images/guided', guided.store);
+    // describe('GET /api/admin/images/guided/:imageId', guided.detail);
+    // describe('GET /api/admin/images/guided/:imageId/edit', guided.edit);
+    // describe('PUT /api/admin/images/guided/:imageId', guided.update);
+    // describe('DELETE /api/admin/images/guided/:imageId', guided.destroy);
+
     // Jobs
     const { jobs } = admin;
     describe('GET /api/admin/jobs', jobs.browse);
