@@ -27,6 +27,12 @@
         :resources="resources.local"
       ></menu-tree>
       <menu-tree
+        v-if="can(['guide-images-browse'])"
+        icon="fas fa-fw fa-images"
+        name="images"
+        :resources="resources.images"
+      ></menu-tree>
+      <menu-tree
         v-if="can(['schemes-browse', 'surveys-browse'])"
         icon="fas fa-fw fa-tools"
         name="surveyMgmt"

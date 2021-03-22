@@ -7,7 +7,7 @@
           v-if="show"
           v-bind="attrs"
           v-on="on"
-          :color="color"
+          :color="iconColor ? iconColor : color"
           :disabled="disabled"
           :icon="icon"
           :title="label"
@@ -55,6 +55,9 @@ export default Vue.extend({
     icon: {
       type: Boolean,
       default: false,
+    },
+    iconColor: {
+      type: String,
     },
     iconLeft: {
       type: String,

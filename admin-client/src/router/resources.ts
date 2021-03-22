@@ -20,6 +20,7 @@ const resources: Resource[] = [
     generateRoutes: true,
     routes: [...routes],
   },
+  // Surveys
   {
     group: 'surveyMgmt',
     name: 'schemes',
@@ -35,6 +36,16 @@ const resources: Resource[] = [
     api: 'admin/surveys',
     generateRoutes: true,
     routes: [...routes, 'respondents', 'mgmt', 'submissions', 'data-export'],
+  },
+  // Images
+  {
+    group: 'images',
+    name: 'guide-images',
+    path: 'images/guided',
+    icon: 'fas fa-draw-polygon',
+    api: 'admin/images/guided',
+    generateRoutes: true,
+    routes: [...routes],
   },
   // System
   {

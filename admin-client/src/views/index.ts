@@ -2,6 +2,7 @@ import { Dictionary } from '@common/types';
 import authentication from './authentication';
 import dashboard from './Dashboard.vue';
 import profile from './Profile.vue';
+import images from './images';
 import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
@@ -16,6 +17,7 @@ const views: Dictionary = {
   authentication,
   dashboard,
   profile,
+  images,
   jobs,
   languages,
   locales,

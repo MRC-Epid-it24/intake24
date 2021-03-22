@@ -11,6 +11,7 @@ const common: LocaleMessageObject = {
 
   admin: 'Admin',
   local: 'Localization',
+  images: 'Images',
   surveyMgmt: 'Surveys MGMT',
   acl: 'Access Control',
   system: 'System',
