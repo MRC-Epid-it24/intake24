@@ -24,12 +24,7 @@ module.exports = {
       },
     },
   },
-  extends: [
-    'airbnb-base',
-    'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint',
-    'plugin:prettier/recommended',
-  ],
+  extends: ['airbnb-base', 'plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
   plugins: ['import', 'prettier', '@typescript-eslint'],
   rules: {
     'prettier/prettier': 'error',
