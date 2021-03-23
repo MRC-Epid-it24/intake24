@@ -12,7 +12,7 @@ import { GuideImage } from '.';
 })
 export default class GuideImageObject extends BaseModel implements GuideImageObjectAttributes {
   @Column({
-    allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
   })
   public id!: number;

@@ -5,11 +5,11 @@ module.exports = {
       const updated_at = created_at;
 
       const newPermissions = [
-        { name: 'guide-images-browse', display_name: 'Browse guide images' },
-        { name: 'guide-images-detail', display_name: 'Read guide images' },
-        { name: 'guide-images-create', display_name: 'Create guide images' },
-        { name: 'guide-images-edit', display_name: 'Edit guide images' },
-        { name: 'guide-images-delete', display_name: 'Delete guide images' },
+        { name: 'image-maps-browse', display_name: 'Browse guide images' },
+        { name: 'image-maps-detail', display_name: 'Read guide images' },
+        { name: 'image-maps-create', display_name: 'Create guide images' },
+        { name: 'image-maps-edit', display_name: 'Edit guide images' },
+        { name: 'image-maps-delete', display_name: 'Delete guide images' },
       ].map((permission) => ({ ...permission, created_at, updated_at }));
 
       await queryInterface.bulkInsert('permissions', newPermissions, { transaction });
@@ -19,7 +19,7 @@ module.exports = {
         { transaction }
       );
       const permissions = await queryInterface.sequelize.query(
-        `SELECT id, name FROM permissions WHERE name LIKE 'guide-images-%';`,
+        `SELECT id, name FROM permissions WHERE name LIKE 'image-maps-%';`,
         { transaction }
       );
 
@@ -40,7 +40,7 @@ module.exports = {
   down: async (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
-        `DELETE FROM permissions WHERE name LIKE 'guide-images-%';`,
+        `DELETE FROM permissions WHERE name LIKE 'image-maps-%';`,
         { transaction }
       );
     }),

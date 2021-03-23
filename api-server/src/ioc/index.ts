@@ -16,6 +16,7 @@ import type {
   UserProfileController,
   UserJobController,
   GuideImageController,
+  ImageMapController,
   JobController,
   LanguageController,
   LocaleController,
@@ -81,6 +82,7 @@ export interface IoC extends Jobs {
   userJobController: UserJobController;
 
   guideImageController: GuideImageController;
+  imageMapController: ImageMapController;
   languageController: LanguageController;
   localeController: LocaleController;
   schemeController: SchemeController;

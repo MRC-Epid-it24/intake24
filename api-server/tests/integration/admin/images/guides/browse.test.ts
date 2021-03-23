@@ -2,7 +2,7 @@ import request from 'supertest';
 import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
-  const url = '/api/admin/images/guided';
+  const url = '/api/admin/images/guides';
 
   it('should return 401 when no / invalid token', async () => {
     const { status } = await request(suite.app).get(url).set('Accept', 'application/json');

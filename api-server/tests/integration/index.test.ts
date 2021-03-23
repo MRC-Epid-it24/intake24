@@ -77,14 +77,24 @@ describe('API', () => {
     const { images } = admin;
 
     // Guided images
-    const { guided } = images;
-    describe('GET /api/admin/images/guided', guided.browse);
-    // describe('GET /api/admin/images/guided/create', guided.create);
-    // describe('POST /api/admin/images/guided', guided.store);
-    // describe('GET /api/admin/images/guided/:imageId', guided.detail);
-    // describe('GET /api/admin/images/guided/:imageId/edit', guided.edit);
-    // describe('PUT /api/admin/images/guided/:imageId', guided.update);
-    // describe('DELETE /api/admin/images/guided/:imageId', guided.destroy);
+    const { guides } = images;
+    describe('GET /api/admin/images/guides', guides.browse);
+    // describe('GET /api/admin/images/guides/create', guides.create);
+    // describe('POST /api/admin/images/guides', guides.store);
+    // describe('GET /api/admin/images/guides/:guideId', guides.detail);
+    // describe('GET /api/admin/images/guides/:guideId/edit', guides.edit);
+    // describe('PUT /api/admin/images/guides/:guideId', guides.update);
+    // describe('DELETE /api/admin/images/guides/:guideId', guides.destroy);
+
+    // Image Maps
+    const { maps } = images;
+    describe('GET /api/admin/images/maps', maps.browse);
+    // describe('GET /api/admin/images/maps/create', maps.create);
+    // describe('POST /api/admin/images/maps', maps.store);
+    // describe('GET /api/admin/images/maps/:mapId', maps.detail);
+    // describe('GET /api/admin/images/maps/:mapId/edit', maps.edit);
+    // describe('PUT /api/admin/images/maps/:mapId', maps.update);
+    // describe('DELETE /api/admin/images/maps/:mapId', maps.destroy);
 
     // Jobs
     const { jobs } = admin;

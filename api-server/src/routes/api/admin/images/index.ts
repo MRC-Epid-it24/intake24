@@ -1,8 +1,10 @@
 import { Router } from 'express';
-import guided from './guided';
+import guides from './guides';
+import maps from './maps';
 
 const router = Router();
 
-router.use('/guided', guided);
+router.use('/guides', guides);
+router.use('/maps', maps);
 
 export default router;

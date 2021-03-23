@@ -1,6 +1,6 @@
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import { AsServedImage, AsServedSet, ImageMap } from '.';
+import { AsServedImage, AsServedSet, ImageMap, ProcessedImage } from '.';
 
 @Scopes(() => ({
   asServedSets: { include: [{ model: AsServedSet }] },
@@ -9,13 +9,13 @@ import { AsServedImage, AsServedSet, ImageMap } from '.';
   imageMaps: { include: [{ model: ImageMap }] },
 }))
 @Table({
-  modelName: 'ProcessedImage',
-  tableName: 'processed_images',
+  modelName: 'SourceImage',
+  tableName: 'source_images',
   freezeTableName: true,
   timestamps: false,
   underscored: true,
 })
-export default class ProcessedImage extends BaseModel {
+export default class SourceImage extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -31,29 +31,22 @@ export default class ProcessedImage extends BaseModel {
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(256),
   })
-  public sourceId!: number;
-
-  @Column({
-    allowNull: false,
-  })
-  public purpose!: number;
+  public uploader!: string;
 
   @Column({
     allowNull: false,
     defaultValue: () => new Date(),
   })
-  public createdAt!: Date;
+  public uploadedAt!: Date;
 
-  @HasMany(() => AsServedSet, 'selectionImageId')
-  public asServedSets?: AsServedSet[];
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(1024),
+  })
+  public thumbnailPath!: string;
 
-  @HasMany(() => AsServedImage, 'imageId')
-  public asServedImages?: AsServedImage[];
-
-  @HasMany(() => AsServedImage, 'thumbnailImageId')
-  public asServedThumbnailImages?: AsServedImage[];
-
-  @HasMany(() => ImageMap, 'baseImageId')
-  public imageMaps?: ImageMap[];
+  @HasMany(() => ProcessedImage, 'sourceId')
+  public processedImages?: ProcessedImage[];
 }

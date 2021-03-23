@@ -17,6 +17,7 @@ export default (container: AwilixContainer): void => {
     userJobController: asFunction(controllers.admin.user.job),
 
     guideImageController: asFunction(controllers.admin.images.guide),
+    imageMapController: asFunction(controllers.admin.images.map),
     languageController: asFunction(controllers.admin.language),
     localeController: asFunction(controllers.admin.locale),
     schemeController: asFunction(controllers.admin.scheme),

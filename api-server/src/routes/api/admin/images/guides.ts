@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { permission } from '@/http/middleware/acl';
-import validation from '@/http/requests/admin/images/guided';
+import validation from '@/http/requests/admin/images/guides';
 import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
 
@@ -19,11 +19,11 @@ router
 router.get('/create', permission('guide-images-create'), wrapAsync(guideImageController.create));
 
 router
-  .route('/:imageId')
+  .route('/:guideId')
   .get(permission('guide-images-detail'), wrapAsync(guideImageController.detail))
   .put(permission('guide-images-edit'), validation.update, wrapAsync(guideImageController.update))
   .delete(permission('guide-images-delete'), wrapAsync(guideImageController.destroy));
 
-router.get('/:imageId/edit', permission('guide-images-edit'), wrapAsync(guideImageController.edit));
+router.get('/:guideId/edit', permission('guide-images-edit'), wrapAsync(guideImageController.edit));
 
 export default router;
