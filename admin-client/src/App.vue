@@ -27,7 +27,7 @@
         :resources="resources.local"
       ></menu-tree>
       <menu-tree
-        v-if="can(['guide-images-browse'])"
+        v-if="can(['guide-images-browse', 'image-maps-browse'])"
         icon="fas fa-fw fa-images"
         name="images"
         :resources="resources.images"

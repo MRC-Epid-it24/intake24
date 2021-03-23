@@ -6,7 +6,7 @@
       :height="height"
       :width="width"
       :style="svgCursor"
-      @dblclick.stop="disabled ? undefined : addNode($event)"
+      @dblclick.stop="isGuideImage || disabled ? undefined : addNode($event)"
     >
       <g v-for="(object, objectIdx) in scaled" :key="object.id" class="guides-drawer-group">
         <polygon
@@ -15,7 +15,7 @@
           :points="object.polygon"
           @click.stop="selectObject(objectIdx)"
         ></polygon>
-        <g class="guides-drawer-node-group" v-if="!disabled">
+        <g class="guides-drawer-node-group" v-if="isImageMap && !disabled">
           <circle
             v-for="([x, y], nodeIdx) in object.coords"
             :key="nodeIdx"
@@ -46,7 +46,7 @@
                   Object ID: {{ object.id }}
                   <v-spacer></v-spacer>
                   <confirm-dialog
-                    v-if="!disabled"
+                    v-if="isImageMap && !disabled"
                     :label="$t('guide-images.objects.delete')"
                     color="error"
                     icon
@@ -63,17 +63,17 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="object.description"
-                        :disabled="disabled"
+                        :disabled="isGuideImage || disabled"
                         :label="$t('common.description')"
                         hide-details="auto"
                         name="description"
                         outlined
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12">
+                    <v-col cols="12" v-if="isGuideImage">
                       <v-text-field
                         v-model.number="object.weight"
-                        :disabled="disabled"
+                        :disabled="isImageMap || disabled"
                         :label="$t('guide-images.objects.weight')"
                         hide-details="auto"
                         name="weight"
@@ -87,7 +87,7 @@
           </v-col>
           <v-col cols="12" sm="6" md="4">
             <v-card
-              v-if="!disabled"
+              v-if="isImageMap && !disabled"
               class="d-flex justify-center align-center"
               min-height="200px"
               height="100%"
@@ -109,7 +109,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { GuideImageEntry } from '@common/types/http/admin';
+import { GuideImageEntry, ImageMapEntry } from '@common/types/http/admin';
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { VImg } from 'vuetify/lib';
@@ -126,7 +126,7 @@ type Refs = {
 type PathObject = {
   id: number;
   description: string | null;
-  weight: number;
+  weight?: number;
 };
 
 type PathCoords = number[][][];
@@ -145,7 +145,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       default: false,
     },
     entry: {
-      type: Object as () => GuideImageEntry,
+      type: Object as () => GuideImageEntry | ImageMapEntry,
       required: true,
     },
   },
@@ -154,13 +154,9 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     const objects: PathObject[] = [];
     const coords: PathCoords = [];
 
-    this.entry.objects.forEach(({ id, description, outlineCoordinates, weight }) => {
+    this.entry.objects.forEach(({ outlineCoordinates, ...rest }) => {
       coords.push(chunk(outlineCoordinates, 2));
-      objects.push({
-        id,
-        description,
-        weight,
-      });
+      objects.push({ ...rest });
     });
 
     return {
@@ -174,6 +170,12 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
   },
 
   computed: {
+    isImageMap(): boolean {
+      return this.module === 'image-maps';
+    },
+    isGuideImage(): boolean {
+      return this.module === 'guide-images';
+    },
     svgCursor(): string {
       return `cursor: ${this.disabled || this.selectedObjectIdx === null ? 'no-drop' : 'pointer'}`;
     },

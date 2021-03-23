@@ -9,6 +9,7 @@ const jobs: LocaleMessageObject = {
   edit: 'Edit guide image',
   delete: 'Delete guide image',
 
+  id: 'Guide image ID',
   objects: {
     _: 'Guide image object',
     delete: 'Delete object',

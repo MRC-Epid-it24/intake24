@@ -1,5 +1,5 @@
 <template>
-  <gallery title="id" subtitle="description" imageUrl="selectionImageUrl"> </gallery>
+  <gallery title="id" subtitle="description"> </gallery>
 </template>
 
 <script lang="ts">
@@ -7,7 +7,7 @@ import Vue from 'vue';
 import Gallery from '@/components/gallery/Gallery.vue';
 
 export default Vue.extend({
-  name: 'GuidedImagesList',
+  name: 'ImageMapList',
 
   components: { Gallery },
 });

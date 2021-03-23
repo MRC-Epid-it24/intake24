@@ -160,27 +160,24 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
     },
 
     async setFilter(data: Dictionary) {
-      // this.clearSelected();
       await this.$store.dispatch(`resource/setFilter`, data);
       this.fetch();
     },
 
     async resetFilter() {
-      // this.clearSelected();
       await this.$store.dispatch(`resource/resetFilter`);
       this.fetch();
     },
 
     async refresh() {
-      // this.clearSelected();
       this.fetch();
     },
 
     async remove(item: Dictionary): Promise<void> {
       const { id, name } = item;
 
-      // await this.$http.delete(`${this.resource.api}/${id}`);
-      this.$toasted.success(this.$t(`common.msg.delete`, { name: name ?? id }) as string);
+      await this.$http.delete(`${this.resource.api}/${id}`);
+      this.$toasted.success(this.$t('common.msg.deleted', { name: name ?? id }) as string);
       this.refresh();
     },
   },

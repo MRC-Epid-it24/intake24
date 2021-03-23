@@ -40,10 +40,19 @@ const resources: Resource[] = [
   // Images
   {
     group: 'images',
-    name: 'guide-images',
-    path: 'images/guided',
+    name: 'image-maps',
+    path: 'images/maps',
     icon: 'fas fa-draw-polygon',
-    api: 'admin/images/guided',
+    api: 'admin/images/maps',
+    generateRoutes: true,
+    routes: [...routes],
+  },
+  {
+    group: 'images',
+    name: 'guide-images',
+    path: 'images/guides',
+    icon: 'fas fa-crosshairs',
+    api: 'admin/images/guides',
     generateRoutes: true,
     routes: [...routes],
   },

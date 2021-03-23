@@ -7,12 +7,12 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import type { DetailMixin } from '@/types';
-import { GuideImageEntry } from '@common/types/http/admin';
+import { ImageMapEntry } from '@common/types/http/admin';
 import detailMixin from '@/components/entry/detailMixin';
-import GuideDrawer from './GuideDrawer.vue';
+import GuideDrawer from '../GuideDrawer.vue';
 
-export default (Vue as VueConstructor<Vue & DetailMixin<GuideImageEntry>>).extend({
-  name: 'GuideImageDetail',
+export default (Vue as VueConstructor<Vue & DetailMixin<ImageMapEntry>>).extend({
+  name: 'ImageMapDetail',
 
   components: { GuideDrawer },
 

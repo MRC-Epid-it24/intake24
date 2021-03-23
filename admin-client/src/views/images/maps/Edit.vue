@@ -7,9 +7,9 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.id"
-                :disabled="isEdit"
                 :error-messages="form.errors.get('id')"
-                :label="$t('common.id')"
+                :label="$t('image-maps.id')"
+                disabled
                 hide-details="auto"
                 name="id"
                 outlined
@@ -18,7 +18,6 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.description"
-                :disabled="isEdit"
                 :error-messages="form.errors.get('description')"
                 :label="$t('common.description')"
                 hide-details="auto"
@@ -40,18 +39,17 @@ import Vue, { VueConstructor } from 'vue';
 import { FormMixin } from '@/types/vue';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
-import { Dictionary } from '@common/types';
-import { GuideImageEntry } from '@common/types/http/admin';
-import GuideDrawer from './GuideDrawer.vue';
+import { ImageMapEntry, ImageMapEntryObject } from '@common/types/http/admin';
+import GuideDrawer from '../GuideDrawer.vue';
 
-type GuideImageForm = {
+type EditImageMapForm = {
   id: number | null;
   description: string | null;
-  objects: Dictionary[];
+  objects: ImageMapEntryObject[];
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin<GuideImageEntry>>).extend({
-  name: 'GuideImageForm',
+export default (Vue as VueConstructor<Vue & FormMixin<ImageMapEntry>>).extend({
+  name: 'EditImageMapForm',
 
   components: { GuideDrawer },
 
@@ -59,7 +57,7 @@ export default (Vue as VueConstructor<Vue & FormMixin<GuideImageEntry>>).extend(
 
   data() {
     return {
-      form: form<GuideImageForm>({
+      form: form<EditImageMapForm>({
         id: null,
         description: null,
         objects: [],

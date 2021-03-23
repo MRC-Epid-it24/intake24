@@ -3,6 +3,7 @@ import common from './common';
 import dashboard from './dashboard';
 import flags from './flags';
 import guideImages from './guide-images';
+import imageMaps from './image-maps';
 import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
@@ -19,6 +20,7 @@ const messages: LocaleMessages = {
   dashboard,
   flags,
   'guide-images': guideImages,
+  'image-maps': imageMaps,
   jobs,
   languages,
   locales,

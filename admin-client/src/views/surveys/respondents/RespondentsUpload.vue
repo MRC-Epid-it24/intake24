@@ -25,7 +25,7 @@
                   name="file"
                   outlined
                   prepend-icon="fa-file-excel"
-                  @input="form.errors.clear('file')"
+                  @change="form.errors.clear('file')"
                 ></v-file-input>
               </v-col>
               <v-col cols="12" sm="auto">

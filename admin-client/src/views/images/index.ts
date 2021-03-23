@@ -1,5 +1,7 @@
-import guided from './guided';
+import guides from './guides';
+import maps from './maps';
 
 export default {
-  guided,
+  guides,
+  maps,
 };

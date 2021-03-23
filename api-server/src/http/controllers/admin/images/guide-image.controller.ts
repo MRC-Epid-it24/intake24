@@ -113,6 +113,8 @@ export default ({
     const guideImage = await GuideImage.findByPk(guideId, { include: ['selectionImage'] });
     if (!guideImage) throw new NotFoundError();
 
+    // TODO: delete selectionImage
+
     await guideImage.destroy();
 
     res.status(204).json();
