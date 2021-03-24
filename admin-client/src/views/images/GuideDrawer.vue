@@ -8,7 +8,7 @@
       :style="svgCursor"
       @dblclick.stop="isGuideImage || disabled ? undefined : addNode($event)"
     >
-      <g v-for="(object, objectIdx) in scaled" :key="object.id" class="guides-drawer-group">
+      <g v-for="(object, objectIdx) in scaled" :key="objectIdx" class="guides-drawer-group">
         <polygon
           class="guides-drawer-polygon"
           :class="{ active: objectIdx === selectedObjectIdx }"

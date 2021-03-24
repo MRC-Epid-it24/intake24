@@ -15,7 +15,7 @@
         ></data-table-filter>
       </v-card-text>
     </v-card>
-    <div class="py-4 text-center">
+    <div v-show="meta.total" class="py-4 text-center">
       <v-pagination v-model="page" :length="meta.lastPage" circle></v-pagination>
     </div>
     <v-container class="px-0">
@@ -62,7 +62,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <div class="py-4 text-center">
+      <div v-show="meta.total" class="py-4 text-center">
         <v-pagination v-model="page" :length="meta.lastPage" circle></v-pagination>
       </div>
     </v-container>
