@@ -23,7 +23,7 @@ const routes: RouteConfig[] = [
 
   // TESTING Temporary route for testing portion size code before foods & meals are loaded
   {
-    path: '/:surveyId/portionTest',
+    path: '/:surveyId/portion-test',
     name: 'portion-test',
     component: PortionTest,
     meta: { module: 'public', title: 'portionTest._' },

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <loader :show="isLoading" />
+    <loader :show="isAppLoading" />
     <v-navigation-drawer v-if="loggedIn" v-model="sidebar" app>
       <v-list-item>
         <v-list-item-content>
@@ -16,6 +16,14 @@
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>{{ $t('recall._') }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item :to="{ name: 'portion-test', params: { surveyId } }" link>
+            <v-list-item-action>
+              <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Portions test</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>

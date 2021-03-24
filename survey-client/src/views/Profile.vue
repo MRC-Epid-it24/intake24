@@ -66,7 +66,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters('user', ['profile', 'roles']),
+    ...mapGetters('user', ['profile']),
     languages(): LanguageOption[] {
       return this.$i18n.availableLocales.map((locale) => ({
         value: locale,

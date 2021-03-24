@@ -32,7 +32,7 @@
         <as-served-leftover-prompt v-show="componentView == 2" :props="asServedProps">
         </as-served-leftover-prompt>
 
-        <guideImagePrompt v-show="componentView == 3" :props="asServedProps"></guideImagePrompt>
+        <guideImagePrompt v-if="componentView == 3" :props="asServedProps"></guideImagePrompt>
 
         <drink-scale-prompt v-show="componentView == 4" :props="asServedProps"></drink-scale-prompt>
 

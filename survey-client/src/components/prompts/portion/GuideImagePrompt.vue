@@ -17,14 +17,34 @@
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <!-- TODO: Implement image map or alternative -->
                 <v-row>
                   <v-col>
-                    <v-img class="align-end" :src="selectionImageUrl" :aspect-ratio="16 / 9">
-                      <template v-slot:placeholder>
-                        <image-placeholder></image-placeholder>
-                      </template>
-                    </v-img>
+                    <div class="guides-drawer" v-if="dataLoaded">
+                      <v-img
+                        ref="img"
+                        v-resize="onImgResize"
+                        :src="
+                          guideImageData.imageMap.baseImageUrl.replace(
+                            'http://localhost:3100',
+                            'https://api.intake24.org'
+                          )
+                        "
+                      >
+                        <template v-slot:placeholder>
+                          <image-placeholder></image-placeholder>
+                        </template>
+                      </v-img>
+                      <svg ref="svg" :height="height" :width="width">
+                        <polygon
+                          v-for="(polygon, idx) in polygons"
+                          :key="idx"
+                          class="guides-drawer-polygon"
+                          :class="{ active: idx === selectedObjectIdx }"
+                          :points="polygon"
+                          @click.stop="selectObject(idx)"
+                        ></polygon>
+                      </svg>
+                    </div>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -75,6 +95,9 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
+import debounce from 'lodash/debounce';
+import chunk from 'lodash/chunk';
+import { VImg } from 'vuetify/lib';
 import {
   GuideImagePromptProps,
   guideImagePromptDefaultProps,
@@ -83,17 +106,23 @@ import {
 import localeContent from '@/components/mixins/localeContent';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@/components/elements/QuantityCard.vue';
+import { GuideImageResponse } from '@common/types/http/foods';
 import BasePortion, { Portion } from './BasePortion';
 
-export default (Vue as VueConstructor<Vue & Portion>).extend({
+type Refs = {
+  $refs: {
+    img: InstanceType<typeof VImg>;
+    svg: SVGElement;
+  };
+  debouncedImgResize: () => void;
+};
+
+export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
   name: 'GuideImagePrompt',
 
   mixins: [BasePortion, localeContent],
 
-  components: {
-    ImagePlaceholder,
-    QuantityCard,
-  },
+  components: { ImagePlaceholder, QuantityCard },
 
   props: {
     // Generic object 'props' used to store all props for each prompt
@@ -109,6 +138,12 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       selectedGuide: false, // TODO: Model this correctly
       selectedQuantity: false,
       panelOpen: 0,
+
+      guideImageData: {} as GuideImageResponse,
+      width: 0,
+      height: 0,
+      selectedObjectIdx: null as number | null,
+      selectedNodeIdx: null as number | null,
     };
   },
 
@@ -119,9 +154,60 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+
+    dataLoaded(): boolean {
+      return !!Object.keys(this.guideImageData).length;
+    },
+    polygons(): string[] {
+      if (!this.dataLoaded) return [];
+
+      const { width } = this;
+
+      return this.guideImageData.imageMap.objects.map((object) => {
+        return chunk(
+          object.outline.map((coord) => coord * width),
+          2
+        )
+          .map((node) => node.join(','))
+          .join(' ');
+      });
+    },
+  },
+
+  created() {
+    this.debouncedImgResize = debounce(() => {
+      this.updateSvgDimensions();
+    }, 500);
+  },
+
+  mounted() {
+    this.fetchGuideImageData();
   },
 
   methods: {
+    async fetchGuideImageData() {
+      const { data } = await this.$http.get<GuideImageResponse>(
+        'portion-sizes/guide-images/AUSalccans'
+      );
+
+      this.guideImageData = { ...data };
+    },
+
+    updateSvgDimensions() {
+      const { width, height } = this.$refs.img.$el.getBoundingClientRect();
+      this.width = width;
+      this.height = height;
+    },
+
+    onImgResize() {
+      this.debouncedImgResize();
+    },
+
+    selectObject(idx: number) {
+      this.selectedObjectIdx = idx;
+      console.log(this.guideImageData.weights[idx]);
+    },
+
     onSelectGuide() {
       this.selectedGuide = !this.selectedGuide;
       this.panelOpen = 1;
@@ -155,4 +241,30 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.guides-drawer {
+  position: relative;
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    .guides-drawer-polygon {
+      cursor: pointer;
+      fill: transparent;
+
+      &.active,
+      &:hover {
+        fill: #0d47a1;
+        fill-opacity: 0.4;
+        stroke-width: 8;
+        stroke: #0d47a1;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-opacity: 0.5;
+      }
+    }
+  }
+}
+</style>

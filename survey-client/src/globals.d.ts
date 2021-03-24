@@ -6,7 +6,7 @@ declare module 'vue/types/vue' {
     $http: HttpClient;
 
     // loading mixin
-    isLoading: () => boolean;
+    isAppLoading: () => boolean;
 
     // isMobile mixin
     isMobile: () => boolean;
