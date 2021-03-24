@@ -130,27 +130,6 @@
                 @change="form.errors.clear('state')"
               ></v-select>
             </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="form.authUrlDomainOverride"
-                :error-messages="form.errors.get('authUrlDomainOverride')"
-                :label="$t('surveys.authUrlDomainOverride')"
-                hide-details="auto"
-                name="authUrlDomainOverride"
-                outlined
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6" align-self="center">
-              <v-switch
-                v-model="form.storeUserSessionOnServer"
-                :error-messages="form.errors.get('storeUserSessionOnServer')"
-                :label="$t('surveys.storeUserSessionOnServer')"
-                class="mt-0"
-                hide-details="auto"
-                name="storeUserSessionOnServer"
-                @change="form.errors.clear('storeUserSessionOnServer')"
-              ></v-switch>
-            </v-col>
             <v-col cols="12" md="6" align-self="center">
               <v-switch
                 v-model="form.allowGenUsers"
@@ -173,11 +152,55 @@
                 outlined
               ></v-text-field>
             </v-col>
-
-            <v-col cols="12">
-              <hr class="my-5" />
-              <div class="text-h6">{{ $t('surveys.submissionLimits._') }}</div>
+            <v-col cols="12" md="6" align-self="center">
+              <v-switch
+                v-model="form.storeUserSessionOnServer"
+                :error-messages="form.errors.get('storeUserSessionOnServer')"
+                :label="$t('surveys.storeUserSessionOnServer')"
+                class="mt-0"
+                hide-details="auto"
+                name="storeUserSessionOnServer"
+                @change="form.errors.clear('storeUserSessionOnServer')"
+              ></v-switch>
             </v-col>
+          </v-row>
+          <v-divider class="my-4"></v-divider>
+          <div class="text-h6 mb-4">{{ $t('surveys.authUrl._') }}</div>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.authUrlTokenCharset"
+                :error-messages="form.errors.get('authUrlTokenCharset')"
+                :label="$t('surveys.authUrl.tokenCharset')"
+                hide-details="auto"
+                name="authUrlTokenCharset"
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model.number="form.authUrlTokenLength"
+                :error-messages="form.errors.get('authUrlTokenLength')"
+                :label="$t('surveys.authUrl.tokenLength')"
+                hide-details="auto"
+                name="authUrlTokenLength"
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.authUrlDomainOverride"
+                :error-messages="form.errors.get('authUrlDomainOverride')"
+                :label="$t('surveys.authUrl.domainOverride')"
+                hide-details="auto"
+                name="authUrlDomainOverride"
+                outlined
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-divider class="my-6"></v-divider>
+          <div class="text-h6 mb-4">{{ $t('surveys.submissionLimits._') }}</div>
+          <v-row>
             <v-col cols="12" md="6">
               <v-text-field
                 v-model.number="form.maximumDailySubmissions"
@@ -208,10 +231,10 @@
                 hide-details="auto"
               ></v-text-field>
             </v-col>
-            <v-col cols="12">
-              <hr class="my-5" />
-              <div class="text-h6">{{ $t('surveys.feedback._') }}</div>
-            </v-col>
+          </v-row>
+          <v-divider class="my-6"></v-divider>
+          <div class="text-h6 mb-4">{{ $t('surveys.feedback._') }}</div>
+          <v-row>
             <v-col cols="12" md="6">
               <v-switch
                 v-model="form.feedbackEnabled"
@@ -257,6 +280,8 @@ export type SurveyForm = {
   allowGenUsers: boolean;
   genUserKey: string | null;
   authUrlDomainOverride: string | null;
+  authUrlTokenCharset: string | null;
+  authUrlTokenLength: number | null;
   storeUserSessionOnServer: boolean;
   feedbackEnabled: boolean;
   numberOfSubmissionsForFeedback: number;
@@ -284,6 +309,8 @@ export default Vue.extend({
         allowGenUsers: false,
         genUserKey: null,
         authUrlDomainOverride: null,
+        authUrlTokenCharset: null,
+        authUrlTokenLength: null,
         storeUserSessionOnServer: false,
         feedbackEnabled: false,
         numberOfSubmissionsForFeedback: 1,

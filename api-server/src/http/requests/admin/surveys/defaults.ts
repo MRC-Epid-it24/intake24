@@ -73,6 +73,27 @@ const defaults: Schema = {
     isString: true,
     optional: { options: { nullable: true } },
   },
+  authUrlTokenCharset: {
+    in: ['body'],
+    errorMessage: 'Authentication URL Token charset must be a string of unique characters.',
+    isString: true,
+    optional: { options: { nullable: true } },
+    custom: {
+      options: async (value: any): Promise<void> => {
+        if (typeof value !== 'string') throw new Error('Charset must be a string.');
+
+        if (value.split('').length !== [...new Set(value.split(''))].length)
+          throw new Error('Charset must be a string of unique characters.');
+      },
+    },
+  },
+  authUrlTokenLength: {
+    in: ['body'],
+    errorMessage: 'Authentication URL Token length must be at least 8 or longer.',
+    isInt: { options: { min: 8 } },
+    toInt: true,
+    optional: { options: { nullable: true } },
+  },
   suspensionReason: {
     in: ['body'],
     errorMessage: 'Suspension reason must be a string.',

@@ -102,7 +102,6 @@ const securityConfig: SecurityConfig = {
     expire: 60,
     throttle: 60,
   },
-  // TODO: possibly move this do DB on survey / scheme level
   authTokens: {
     size: 21,
     alphabet: null,

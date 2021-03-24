@@ -104,6 +104,18 @@ export default class Survey extends BaseModel implements SurveyAttributes {
 
   @Column({
     allowNull: true,
+    type: DataType.STRING(128),
+  })
+  public authUrlTokenCharset!: string | null;
+
+  @Column({
+    allowNull: true,
+    type: DataType.INTEGER,
+  })
+  public authUrlTokenLength!: number | null;
+
+  @Column({
+    allowNull: true,
     type: DataType.STRING(512),
   })
   public suspensionReason!: string | null;

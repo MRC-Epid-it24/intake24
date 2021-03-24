@@ -50,6 +50,16 @@
           <th>{{ $t('surveys.feedback.numberOfSubmissions') }}</th>
           <td>{{ entry.numberOfSubmissionsForFeedback }}</td>
         </tr>
+        <tr>
+          <th>{{ $t('surveys.authUrl.domainOverride') }}</th>
+          <td colspan="3">{{ entry.authUrlDomainOverride }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('surveys.authUrl.tokenCharset') }}</th>
+          <td>{{ entry.authUrlTokenCharset }}</td>
+          <th>{{ $t('surveys.authUrl.tokenLength') }}</th>
+          <td>{{ entry.authUrlTokenLength }}</td>
+        </tr>
       </tbody>
     </v-simple-table>
   </layout>

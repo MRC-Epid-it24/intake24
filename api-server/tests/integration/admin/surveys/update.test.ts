@@ -126,6 +126,8 @@ export default (): void => {
           storeUserSessionOnServer: 'yes',
           maximumDailySubmissions: 'NaN',
           minimumSubmissionInterval: { nan: 5 },
+          authUrlTokenCharset: ['an array charset'],
+          authUrlTokenLength: 1,
         });
 
       expect(status).toBe(422);
@@ -143,6 +145,8 @@ export default (): void => {
         'storeUserSessionOnServer',
         'maximumDailySubmissions',
         'minimumSubmissionInterval',
+        'authUrlTokenCharset',
+        'authUrlTokenLength',
       ]);
     });
 

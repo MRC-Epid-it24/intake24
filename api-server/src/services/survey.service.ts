@@ -89,6 +89,8 @@ export default ({
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
+    const { authUrlTokenCharset, authUrlTokenLength } = survey;
+
     const { password, userName, ...rest } = input;
     const user = await User.create(
       { ...rest, simpleName: toSimpleName(rest.name) },
@@ -104,7 +106,7 @@ export default ({
       userId,
       surveyId,
       userName,
-      urlAuthToken: generateToken(size, alphabet),
+      urlAuthToken: generateToken(authUrlTokenLength ?? size, authUrlTokenCharset ?? alphabet),
     });
 
     await userService.createPassword({ userId, password });
@@ -129,6 +131,9 @@ export default ({
     const { id: permissionId } = await getSurveyRespondentPermission(surveyId);
     const { size, alphabet } = config.security.authTokens;
 
+    const urlTokenCharset = survey.authUrlTokenCharset ?? alphabet;
+    const urlTokenLength = survey.authUrlTokenLength ?? size;
+
     const userAliases = [];
     const userCustomFields: Omit<UserCustomFieldAttributes, 'id'>[] = [];
     const userPasswords = [];
@@ -146,7 +151,12 @@ export default ({
         });
       }
 
-      userAliases.push({ userId, surveyId, userName, urlAuthToken: generateToken(size, alphabet) });
+      userAliases.push({
+        userId,
+        surveyId,
+        userName,
+        urlAuthToken: generateToken(urlTokenLength, urlTokenCharset),
+      });
       userPermissions.push({ userId, permissionId });
       userPasswords.push({ userId, password });
     }
