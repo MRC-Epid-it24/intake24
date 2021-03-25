@@ -48,6 +48,24 @@ const routes: RouteConfig[] = [
     meta: { module: 'recall', title: 'recall._' },
   },
   {
+    path: '/:surveyId/recall/meals/:mealId/:questionId',
+    name: 'recall-meals',
+    component: views.recall,
+    meta: { module: 'recall', title: 'recall._', section: 'meals' },
+  },
+  {
+    path: '/:surveyId/recall/pre-meals/:questionId',
+    name: 'recall-preMeals',
+    component: views.recall,
+    meta: { module: 'recall', title: 'recall._', section: 'preMeals' },
+  },
+  {
+    path: '/:surveyId/recall/post-meals/:questionId',
+    name: 'recall-postMeals',
+    component: views.recall,
+    meta: { module: 'recall', title: 'recall._', section: 'postMeals' },
+  },
+  {
     path: '/:surveyId/feedback',
     name: 'feedback',
     component: views.feedback,

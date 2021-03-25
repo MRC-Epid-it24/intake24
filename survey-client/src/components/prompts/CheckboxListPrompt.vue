@@ -58,7 +58,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       errors: [] as string[],
       otherEnabled: false,
       otherValue: '',
-      selected: this.value,
+      selected: Array.isArray(this.value) ? this.value : [],
     };
   },
 

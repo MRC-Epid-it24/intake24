@@ -1,4 +1,6 @@
+import Recall from '@/util/Recall';
 import { Dictionary } from '@common/types';
+import { SurveyParametersResponse } from '@common/types/http';
 import { UserPayload } from './auth';
 
 export interface RootState {
@@ -28,4 +30,9 @@ export interface AuthState {
   status: string;
   accessToken: string | null;
   error: Dictionary;
+}
+
+export interface RecallState {
+  survey: SurveyParametersResponse | null;
+  user: Dictionary | null;
 }

@@ -5,6 +5,7 @@ import {
   PromptStatuses,
   PromptQuestion,
   QuestionSection,
+  RecallSection,
   Selection,
   PromptAnswer,
   conditionOps,
@@ -19,9 +20,7 @@ const findAnswerFor = (prompts: Prompt[], questionsId: string): PromptAnswer | u
 };
 
 export default class Recall {
-  id: string;
-
-  name: string;
+  id: string | null = null;
 
   flags: string[] = [];
 
@@ -35,12 +34,11 @@ export default class Recall {
 
   submission: Prompt[] = [];
 
-  currentSelection!: Selection | null;
+  currentSelection: Selection | null = null;
 
-  constructor(scheme: Scheme) {
-    const { id, name, meals, questions } = scheme;
+  init(scheme: Scheme): void {
+    const { id, meals, questions } = scheme;
     this.id = id;
-    this.name = name;
 
     (['preMeals', 'postMeals', 'submission'] as QuestionSection[]).forEach((item) => {
       this.loadPrompts(item, questions[item]);
@@ -49,7 +47,11 @@ export default class Recall {
     // this.mealQuestions = questions.meals;
     this.loadMeals(meals, questions.meals);
 
-    this.getNextQuestion();
+    this.setSelection(this.getNextAutoSelection());
+  }
+
+  isInitialized(): boolean {
+    return !!this.id;
   }
 
   loadMeals(meals: MealDefinition[], questions: MealQuestions): void {
@@ -64,13 +66,31 @@ export default class Recall {
     }));
   }
 
-  getNextQuestion(): void {
-    // preMeals
-    const preMeals = this.getNextSectionQuestion('preMeals');
-    if (preMeals) {
-      this.setSelection(preMeals);
-      return;
+  selectQuestionOrFindNext(section: RecallSection, questionId: string): Selection | null {
+    if (section === 'meals') {
+      if (!this.isSectionDone('preMeals')) {
+        this.getNextAutoSelection();
+        return null;
+      }
+
+      // TODO: show meal
+      return null;
     }
+
+    const manualSelection = this.getManualSectionQuestion(section, questionId);
+    if (manualSelection) {
+      this.setSelection(manualSelection);
+      return null;
+    }
+
+    const autoSelection = this.getNextAutoSelection();
+    return autoSelection;
+  }
+
+  getNextAutoSelection(): Selection | null {
+    // preMeals
+    const preMeals = this.getAutoSectionQuestion('preMeals');
+    if (preMeals) return preMeals;
 
     // Meals
     /* const meals = this.getNextSectionQuestion('preMeals');
@@ -87,20 +107,18 @@ export default class Recall {
     // TODO: Post-foods questions
 
     // postMeals
-    const postMeals = this.getNextSectionQuestion('preMeals');
-    if (postMeals) {
-      this.setSelection(postMeals);
-      return;
-    }
+    const postMeals = this.getAutoSectionQuestion('preMeals');
+    if (postMeals) return postMeals;
 
     // submission
-    const submission = this.getNextSectionQuestion('submission');
-    if (submission) {
-      this.setSelection(submission);
-      return;
-    }
+    const submission = this.getAutoSectionQuestion('submission');
+    if (submission) return submission;
 
-    this.setSelection(null);
+    return null;
+  }
+
+  setNextAutoSelection(): void {
+    this.setSelection(this.getNextAutoSelection());
   }
 
   getSelection(): Selection | null {
@@ -111,17 +129,30 @@ export default class Recall {
     this.currentSelection = selection;
   }
 
-  getNextSectionQuestion(section: QuestionSection): Selection | null {
+  getAutoSectionQuestion(section: QuestionSection): Selection | null {
     const index = this[section].findIndex((item) => item.status !== PromptStatuses.DONE);
     if (index === -1) return null;
 
+    return this.checkQuestionConditions(section, index);
+  }
+
+  getManualSectionQuestion(section: QuestionSection, questionId: string): Selection | null {
+    const index = this[section].findIndex((item) => item.question.id === questionId);
+    if (index === -1) return null;
+
+    if (index > 0 && this[section][index - 1].status !== PromptStatuses.DONE) return null;
+
+    return this.checkQuestionConditions(section, index);
+  }
+
+  checkQuestionConditions(section: QuestionSection, index: number): Selection | null {
     const prompt = this[section][index];
 
     const check = this.promptMeetsConditions(prompt);
     if (check) return { section, index, prompt };
 
     this[section][index].status = PromptStatuses.DONE;
-    return this.getNextSectionQuestion(section);
+    return this.getAutoSectionQuestion(section);
   }
 
   getAllQuestions(): Prompt[] {
@@ -167,9 +198,9 @@ export default class Recall {
     return this[section].every((question) => question.status === PromptStatuses.DONE);
   }
 
-  answerQuestion(answer: string | string[]): void {
+  answerQuestion(answer: string | string[]): Selection | null {
     const { currentSelection } = this;
-    if (!currentSelection) return;
+    if (!currentSelection) return this.getNextAutoSelection();
 
     const {
       section,
@@ -181,6 +212,6 @@ export default class Recall {
     // This won't trigger computed prop observer
     // this[section][index] = { question, answer, status: PromptStatuses.DONE };
 
-    this.getNextQuestion();
+    return this.getNextAutoSelection();
   }
 }

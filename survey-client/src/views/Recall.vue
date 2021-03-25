@@ -1,12 +1,16 @@
 <template>
-  <v-row justify-md="center" no-gutters>
+  <v-row>
     <v-col cols="12" md="10">
+      <v-toolbar class="mb-4">
+        <v-btn @click="$router.back()"> back </v-btn>
+      </v-toolbar>
       <transition name="component-fade" mode="out-in">
         <component
-          v-if="loaded && currentSelection"
+          v-if="currentSelection"
           :is="currentSelection.prompt.question.component"
           :key="currentSelection.prompt.question.id"
           :props="currentSelection.prompt.question.props"
+          :value="currentSelection.prompt.answer"
           @answer="onAnswer"
           @submit="onSubmit"
         ></component>
@@ -18,10 +22,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import prompts from '@/components/prompts/';
-import surveySvc from '@/services/survey.service';
 import Recall from '@/util/Recall';
 import { Selection } from '@common/types';
-import { Scheme } from '@common/types/models';
+import { SurveyParametersResponse } from '@common/types/http';
 
 export default Vue.extend({
   name: 'Recall',
@@ -30,14 +33,13 @@ export default Vue.extend({
 
   data() {
     return {
-      scheme: {} as Scheme,
-      recall: {} as Recall,
+      recall: new Recall(),
     };
   },
 
   computed: {
-    loaded(): boolean {
-      return !!Object.keys(this.recall).length;
+    survey(): SurveyParametersResponse | null {
+      return this.$store.state.recall.survey;
     },
     currentSelection(): Selection | null {
       return this.recall.currentSelection;
@@ -46,15 +48,54 @@ export default Vue.extend({
 
   async mounted() {
     const { surveyId } = this.$route.params;
-    const survey = await surveySvc.surveyInfo(surveyId);
-    this.scheme = survey.scheme;
-    this.recall = new Recall(this.scheme);
+    await this.$store.dispatch('recall/load', { surveyId });
+
+    if (this.survey?.scheme) {
+      this.recall.init(this.survey.scheme);
+      const selection = this.recall.getSelection();
+      if (!selection) return;
+
+      const {
+        params: { questionId },
+        meta: { section },
+      } = this.$route;
+
+      if (section !== selection.section || questionId !== selection.prompt.question.id) {
+        this.$router.push({
+          name: `recall-${selection.section}`,
+          params: { surveyId: this.survey.id, questionId: selection.prompt.question.id },
+        });
+      }
+    }
+  },
+
+  beforeRouteUpdate(to, from, next) {
+    const { surveyId, questionId } = to.params;
+
+    const selection = this.recall.selectQuestionOrFindNext('preMeals', questionId);
+    if (!selection) {
+      next();
+      return;
+    }
+
+    next({
+      name: `recall-${selection.section}`,
+      params: { surveyId, questionId: selection.prompt.question.id },
+    });
   },
 
   methods: {
     onAnswer(input: string | string[]) {
       console.log('onAnswer', input);
-      this.recall.answerQuestion(input);
+      const selection = this.recall.answerQuestion(input);
+
+      if (selection) {
+        this.recall.setSelection(selection);
+        this.$router.push({
+          name: `recall-${selection.section}`,
+          params: { surveyId: 'demo', questionId: selection.prompt.question.id },
+        });
+      }
     },
 
     onSubmit(input: string | string[]) {
