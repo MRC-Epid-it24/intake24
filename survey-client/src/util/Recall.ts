@@ -107,7 +107,7 @@ export default class Recall {
     // TODO: Post-foods questions
 
     // postMeals
-    const postMeals = this.getAutoSectionQuestion('preMeals');
+    const postMeals = this.getAutoSectionQuestion('postMeals');
     if (postMeals) return postMeals;
 
     // submission
