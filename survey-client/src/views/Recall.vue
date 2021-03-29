@@ -24,7 +24,8 @@ import Vue from 'vue';
 import prompts from '@/components/prompts/';
 import Recall from '@/util/Recall';
 import { Selection } from '@common/types';
-import { SurveyParametersResponse } from '@common/types/http';
+import { SurveyEntryResponse } from '@common/types/http';
+import surveyService from '@/services/survey.service';
 
 export default Vue.extend({
   name: 'Recall',
@@ -38,7 +39,7 @@ export default Vue.extend({
   },
 
   computed: {
-    survey(): SurveyParametersResponse | null {
+    survey(): SurveyEntryResponse | null {
       return this.$store.state.recall.survey;
     },
     currentSelection(): Selection | null {
@@ -47,9 +48,6 @@ export default Vue.extend({
   },
 
   async mounted() {
-    const { surveyId } = this.$route.params;
-    await this.$store.dispatch('recall/load', { surveyId });
-
     if (this.survey?.scheme) {
       this.recall.init(this.survey.scheme);
       const selection = this.recall.getSelection();
@@ -85,9 +83,12 @@ export default Vue.extend({
   },
 
   methods: {
-    onAnswer(input: string | string[]) {
+    async onAnswer(input: string | string[]) {
       console.log('onAnswer', input);
       const selection = this.recall.answerQuestion(input);
+
+      const state = this.recall.getState();
+      this.$store.dispatch('recall/setState', state);
 
       if (selection) {
         this.recall.setSelection(selection);
@@ -98,9 +99,15 @@ export default Vue.extend({
       }
     },
 
-    onSubmit(input: string | string[]) {
+    async onSubmit(input: string | string[]) {
       console.log('onSubmit', input);
-      // this.recall.submit(input);
+      try {
+        const submission = this.recall.submit();
+        await surveyService.submit(this.$route.params.surveyId, submission);
+        await this.$store.dispatch('recall/clearState');
+      } catch (err) {
+        // process error
+      }
     },
   },
 });

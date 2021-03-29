@@ -5,12 +5,11 @@ import './registerServiceWorker';
 import App from './App.vue';
 import i18n from './locale';
 import http from './services/http.service';
-import router from './router';
 import store from './store';
-import guards from './router/guards';
+import createRouter from './router';
 import vuetify from './plugins/vuetify';
 
-guards(router, store);
+const router = createRouter(store);
 
 const baseUrl = [process.env.VUE_APP_API_HOST, process.env.VUE_APP_API_URL]
   .map((item) => trim(item, '/'))

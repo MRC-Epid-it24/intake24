@@ -8,9 +8,11 @@ import {
   RecallSection,
   Selection,
   PromptAnswer,
+  PromptState,
+  RecallState,
   conditionOps,
 } from '@common/types';
-import { Scheme } from '@common/types/models';
+import { SchemeEntryResponse } from '@common/types/http';
 import Meal from './Meal';
 
 const findAnswerFor = (prompts: Prompt[], questionsId: string): PromptAnswer | undefined => {
@@ -20,25 +22,29 @@ const findAnswerFor = (prompts: Prompt[], questionsId: string): PromptAnswer | u
 };
 
 export default class Recall {
-  id: string | null = null;
+  private schemeId: string | null = null;
 
-  flags: string[] = [];
+  private startTime: Date | null = null;
 
-  preMeals: Prompt[] = [];
+  private endTime: Date | null = null;
 
-  meals: Meal[] = [];
+  private flags: string[] = [];
+
+  private preMeals: Prompt[] = [];
+
+  private meals: Meal[] = [];
 
   // mealQuestions: MealQuestions;
 
-  postMeals: Prompt[] = [];
+  private postMeals: Prompt[] = [];
 
-  submission: Prompt[] = [];
+  private submission: Prompt[] = [];
 
   currentSelection: Selection | null = null;
 
-  init(scheme: Scheme): void {
+  init(scheme: SchemeEntryResponse): void {
     const { id, meals, questions } = scheme;
-    this.id = id;
+    this.schemeId = id;
 
     (['preMeals', 'postMeals', 'submission'] as QuestionSection[]).forEach((item) => {
       this.loadPrompts(item, questions[item]);
@@ -47,23 +53,43 @@ export default class Recall {
     // this.mealQuestions = questions.meals;
     this.loadMeals(meals, questions.meals);
 
+    this.startTime = new Date();
+
     this.setSelection(this.getNextAutoSelection());
   }
 
   isInitialized(): boolean {
-    return !!this.id;
+    return !!this.schemeId;
   }
 
-  loadMeals(meals: MealDefinition[], questions: MealQuestions): void {
+  hasStarted(): boolean {
+    return this.isInitialized() && !!this.startTime;
+  }
+
+  private loadMeals(meals: MealDefinition[], questions: MealQuestions): void {
     this.meals = meals.map((meal) => new Meal(meal, questions));
   }
 
-  loadPrompts(section: QuestionSection, questions: PromptQuestion[]): void {
+  private loadPrompts(section: QuestionSection, questions: PromptQuestion[]): void {
     this[section] = questions.map((question) => ({
       question,
       answer: null,
       status: PromptStatuses.INITIAL,
     }));
+  }
+
+  private isSectionDone(section: QuestionSection): boolean {
+    if (!this[section].length) return true;
+
+    return this[section].every((question) => question.status === PromptStatuses.DONE);
+  }
+
+  getSelection(): Selection | null {
+    return this.currentSelection;
+  }
+
+  setSelection(selection: Selection | null): void {
+    this.currentSelection = selection;
   }
 
   selectQuestionOrFindNext(section: RecallSection, questionId: string): Selection | null {
@@ -121,14 +147,6 @@ export default class Recall {
     this.setSelection(this.getNextAutoSelection());
   }
 
-  getSelection(): Selection | null {
-    return this.currentSelection;
-  }
-
-  setSelection(selection: Selection | null): void {
-    this.currentSelection = selection;
-  }
-
   getAutoSectionQuestion(section: QuestionSection): Selection | null {
     const index = this[section].findIndex((item) => item.status !== PromptStatuses.DONE);
     if (index === -1) return null;
@@ -145,7 +163,7 @@ export default class Recall {
     return this.checkQuestionConditions(section, index);
   }
 
-  checkQuestionConditions(section: QuestionSection, index: number): Selection | null {
+  private checkQuestionConditions(section: QuestionSection, index: number): Selection | null {
     const prompt = this[section][index];
 
     const check = this.promptMeetsConditions(prompt);
@@ -155,12 +173,12 @@ export default class Recall {
     return this.getAutoSectionQuestion(section);
   }
 
-  getAllQuestions(): Prompt[] {
+  private getAllQuestions(): Prompt[] {
     // TODO: include meals section
     return [...this.preMeals, ...this.postMeals, ...this.submission];
   }
 
-  promptMeetsConditions(prompt: Prompt): boolean {
+  private promptMeetsConditions(prompt: Prompt): boolean {
     const { conditions } = prompt.question.props;
 
     if (!conditions.length) return true;
@@ -192,12 +210,6 @@ export default class Recall {
     return false;
   }
 
-  isSectionDone(section: QuestionSection): boolean {
-    if (!this[section].length) return true;
-
-    return this[section].every((question) => question.status === PromptStatuses.DONE);
-  }
-
   answerQuestion(answer: string | string[]): Selection | null {
     const { currentSelection } = this;
     if (!currentSelection) return this.getNextAutoSelection();
@@ -213,5 +225,37 @@ export default class Recall {
     // this[section][index] = { question, answer, status: PromptStatuses.DONE };
 
     return this.getNextAutoSelection();
+  }
+
+  getState(): RecallState {
+    const promptStateMapper = (item: Prompt) => ({
+      questionId: item.question.id,
+      answer: item.answer,
+      status: item.status,
+    });
+
+    const { schemeId, startTime, endTime } = this;
+
+    const preMeals: PromptState[] = this.preMeals.map(promptStateMapper);
+    const postMeals: PromptState[] = this.postMeals.map(promptStateMapper);
+    const submission: PromptState[] = this.submission.map(promptStateMapper);
+
+    const meals = this.meals.map((meal) => meal.getState());
+
+    return {
+      schemeId,
+      startTime,
+      endTime,
+      flags: [...this.flags],
+      preMeals,
+      meals,
+      postMeals,
+      submission,
+    };
+  }
+
+  submit(): RecallState {
+    this.endTime = new Date();
+    return this.getState();
   }
 }

@@ -10,8 +10,8 @@ import {
   Survey,
   SurveySubmission,
   SurveySubmissionCustomField,
-  SurveySubmissionFoodCustomField,
   SurveySubmissionMeal,
+  SurveySubmissionMealCustomField,
   User,
   UserCustomField,
   UserSurveyAlias,
@@ -377,7 +377,7 @@ export default ({
           value: Array.isArray(item.answer) ? item.answer.join(', ') : item.answer,
         }));
 
-      await SurveySubmissionFoodCustomField.bulkCreate(mealCustomFieldInputs);
+      await SurveySubmissionMealCustomField.bulkCreate(mealCustomFieldInputs);
 
       // TODO: process foods
     }

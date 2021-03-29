@@ -1,7 +1,8 @@
+import { RecallState } from '@common/types';
 import {
   GenerateUserResponse,
-  SurveyParametersResponse,
-  SurveyPublicParametersResponse,
+  PublicSurveyEntryResponse,
+  SurveyEntryResponse,
   SurveyUserInfoResponse,
 } from '@common/types/http';
 import http from './http.service';
@@ -15,14 +16,14 @@ export default {
     return { userName, password };
   },
 
-  surveyInfo: async (surveyId: string): Promise<SurveyParametersResponse> => {
-    const { data } = await http.get<SurveyParametersResponse>(`surveys/${surveyId}/parameters`);
+  surveyInfo: async (surveyId: string): Promise<SurveyEntryResponse> => {
+    const { data } = await http.get<SurveyEntryResponse>(`surveys/${surveyId}/parameters`);
 
     return data;
   },
 
-  surveyPublicInfo: async (surveyId: string): Promise<SurveyPublicParametersResponse> => {
-    const { data } = await http.get<SurveyPublicParametersResponse>(`surveys/${surveyId}`);
+  surveyPublicInfo: async (surveyId: string): Promise<PublicSurveyEntryResponse> => {
+    const { data } = await http.get<PublicSurveyEntryResponse>(`surveys/${surveyId}`);
 
     return data;
   },
@@ -31,5 +32,9 @@ export default {
     const { data } = await http.get<SurveyUserInfoResponse>(`surveys/${surveyId}/user-info`);
 
     return data;
+  },
+
+  submit: async (surveyId: string, submission: RecallState): Promise<void> => {
+    await http.post(`surveys/${surveyId}/submissions`, { submission });
   },
 };

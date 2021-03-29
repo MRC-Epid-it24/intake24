@@ -34,7 +34,7 @@
       <template v-if="loggedIn">
         <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
-        <v-btn text :to="{ name: 'profile' }">
+        <v-btn text :to="{ name: 'profile', params: { surveyId } }">
           <span class="mr-2">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>

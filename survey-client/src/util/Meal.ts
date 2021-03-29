@@ -5,24 +5,26 @@ import {
   Prompt,
   PromptStatuses,
   PromptQuestion,
+  MealState,
+  PromptState,
 } from '@common/types';
 
 import Food from './Food';
 
 export default class Meal {
-  name: string;
+  private name: string;
 
-  time: string;
+  private time: string;
 
-  flags: string[] = [];
+  private flags: string[] = [];
 
-  preFoods: Prompt[] = [];
+  private preFoods: Prompt[] = [];
 
-  foods: Food[] = [];
+  private foods: Food[] = [];
 
-  foodQuestions: PromptQuestion[] = [];
+  private foodQuestions: PromptQuestion[] = [];
 
-  postFoods: Prompt[] = [];
+  private postFoods: Prompt[] = [];
 
   constructor(meal: MealDefinition, questions: MealQuestions) {
     const { name, time } = meal;
@@ -37,11 +39,31 @@ export default class Meal {
     this.foodQuestions = questions.foods;
   }
 
-  loadPrompts(section: MealQuestionSection, questions: PromptQuestion[]): void {
+  private loadPrompts(section: MealQuestionSection, questions: PromptQuestion[]): void {
     this[section] = questions.map((question) => ({
       question,
       answer: null,
       status: PromptStatuses.INITIAL,
     }));
+  }
+
+  getState(): MealState {
+    const promptStateMapper = (item: Prompt) => ({
+      questionId: item.question.id,
+      answer: item.answer,
+      status: item.status,
+    });
+
+    const { name, time } = this;
+    const preFoods: PromptState[] = this.preFoods.map(promptStateMapper);
+    const postFoods: PromptState[] = this.postFoods.map(promptStateMapper);
+
+    return {
+      name,
+      time,
+      flags: [...this.flags],
+      preFoods,
+      postFoods,
+    };
   }
 }

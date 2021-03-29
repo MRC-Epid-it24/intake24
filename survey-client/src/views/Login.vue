@@ -55,7 +55,7 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import surveySvc from '@/services/survey.service';
-import { SurveyPublicParametersResponse } from '@common/types/http';
+import { PublicSurveyEntryResponse } from '@common/types/http';
 
 export default Vue.extend({
   name: 'Login',
@@ -68,7 +68,7 @@ export default Vue.extend({
       password: '',
       surveyId,
       status: null as number | null,
-      survey: {} as SurveyPublicParametersResponse,
+      survey: {} as PublicSurveyEntryResponse,
     };
   },
 
