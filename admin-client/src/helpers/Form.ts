@@ -56,7 +56,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig = {}): Form<
       const picked = pick(source, this.keys);
 
       this.data = deepmerge(this.data, picked, {
-        arrayMerge: (destinationArray, sourceArray) => sourceArray,
+        arrayMerge: (destinationArray, sourceArray) => cloneDeep(sourceArray),
       });
     },
 
