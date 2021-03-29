@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import * as uuid from 'uuid';
 import { CreateRespondentInput, UpdateRespondentInput } from '@common/types/http/admin';
 import { UserCustomField as UserCustomFieldAttributes } from '@common/types/models';
 import {
@@ -7,13 +8,18 @@ import {
   Permission,
   PermissionUser,
   Survey,
+  SurveySubmission,
+  SurveySubmissionCustomField,
+  SurveySubmissionFoodCustomField,
+  SurveySubmissionMeal,
   User,
   UserCustomField,
   UserSurveyAlias,
 } from '@/db/models/system';
-import { ForbiddenError, NotFoundError } from '@/http/errors';
+import { ForbiddenError, InternalServerError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { toSimpleName, generateToken } from '@/util';
+import { RecallState } from '@common/types';
 import { surveyMgmt, surveyRespondent } from './acl.service';
 
 export type RespondentWithPassword = {
@@ -38,6 +44,7 @@ export interface SurveyService {
   generateRespondent: (surveyId: string) => Promise<RespondentWithPassword>;
   importRespondents: (surveyId: string, userId: number, file: Express.Multer.File) => Promise<Job>;
   exportAuthenticationUrls: (surveyId: string, userId: number) => Promise<Job>;
+  submit: (surveyId: string, userId: number, input: RecallState) => Promise<void>;
 }
 
 export default ({
@@ -294,6 +301,88 @@ export default ({
     return scheduler.jobs.addJob({ type: 'SurveyExportRespondentAuthUrls', userId }, { surveyId });
   };
 
+  /**
+   * Submit survey recall
+   *
+   * @param {string} surveyId
+   * @param {number} userId
+   * @param {RecallState} input
+   * @returns {Promise<void>}
+   */
+  const submit = async (surveyId: string, userId: number, input: RecallState): Promise<void> => {
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
+    /*
+     * TODO: this could be pushed to background job
+     * - store state in DB for processing, processed as job, deleted successfully process data or mark as an issue in Admin Tool to reconcile
+     * - response to user is not delayed by processing bigger amount of data
+     * - it depends, whether we want to throw any errors / discrepancies back to user
+     * - all submission data should be validated in frontend, user probably won't be able to do any corrections unless specifically allowed?
+     */
+
+    // Survey submission
+    const { id: surveySubmissionId } = await SurveySubmission.create({
+      id: uuid.v4(),
+      surveyId,
+      userId,
+      startTime: input.startTime,
+      endTime: input.endTime,
+      uxSessionId: uuid.v4(),
+      submissionTime: new Date(),
+    });
+
+    // Survey custom fields - top-level questions
+    const surveyCustomFieldInputs = [...input.preMeals, ...input.postMeals]
+      // Filter out null answers (conditionally skipped prompt)
+      .filter((item) => item.answer)
+      .map((item) => ({
+        surveySubmissionId,
+        name: item.questionId,
+        value: Array.isArray(item.answer) ? item.answer.join(', ') : item.answer,
+      }));
+
+    await SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs);
+
+    // Survey meals
+    const mealInputs = input.meals.map(({ name, time }) => {
+      const [hours, minutes] = time.split(':');
+      return {
+        surveySubmissionId,
+        name,
+        hours,
+        minutes,
+      };
+    });
+
+    await SurveySubmissionMeal.bulkCreate(mealInputs);
+    const meals = await SurveySubmissionMeal.findAll({
+      where: { surveySubmissionId },
+      order: [['id', 'ASC']],
+    });
+
+    // We could iterate with index and access meal record by index, records should be created in same order
+    for (const mealInput of input.meals) {
+      const mealRecord = meals.find((meal) => meal.name === mealInput.name);
+      // This shouldn't really happen
+      if (!mealRecord) throw new InternalServerError();
+
+      // Meal custom fields - meal-level questions
+      const mealCustomFieldInputs = [...mealInput.preFoods, ...mealInput.postFoods]
+        // Filter out null answers (conditionally skipped prompt)
+        .filter((item) => item.answer)
+        .map((item) => ({
+          mealId: mealRecord.id,
+          name: item.questionId,
+          value: Array.isArray(item.answer) ? item.answer.join(', ') : item.answer,
+        }));
+
+      await SurveySubmissionFoodCustomField.bulkCreate(mealCustomFieldInputs);
+
+      // TODO: process foods
+    }
+  };
+
   return {
     getSurveyRespondentPermission,
     getSurveyMgmtPermissions,
@@ -304,5 +393,6 @@ export default ({
     generateRespondent,
     importRespondents,
     exportAuthenticationUrls,
+    submit,
   };
 };

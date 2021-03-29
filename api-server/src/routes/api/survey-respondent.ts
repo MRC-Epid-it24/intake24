@@ -14,6 +14,6 @@ router.use(isSurveyRespondent());
 router.get('/parameters', wrapAsync(surveyController.parameters));
 router.get('/user-info', wrapAsync(surveyController.userInfo));
 router.get('/request-help', wrapAsync(surveyController.requestHelp));
-router.get('/submission', wrapAsync(surveyController.submission));
+router.post('/submissions', wrapAsync(surveyController.submissions));
 
 export default router;

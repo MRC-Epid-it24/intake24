@@ -1,4 +1,4 @@
-import type { Prompt, PromptQuestion } from '.';
+import type { Prompt, PromptAnswer, PromptStatus, PromptQuestion } from '.';
 
 /* export enum RecallSections {
   PRE_MEALS = 'preMeals',
@@ -41,3 +41,30 @@ export interface Selection {
   index: number;
   prompt: Prompt;
 }
+
+export type PromptState = {
+  questionId: string;
+  answer: PromptAnswer;
+  status: PromptStatus;
+};
+
+export type MealState = {
+  name: string;
+  time: string;
+  flags: string[];
+
+  preFoods: PromptState[];
+  postFoods: PromptState[];
+};
+
+export type RecallState = {
+  schemeId: string | null;
+  startTime: Date | null;
+  endTime: Date | null;
+  flags: string[];
+
+  preMeals: PromptState[];
+  meals: MealState[];
+  postMeals: PromptState[];
+  submission: PromptState[];
+};

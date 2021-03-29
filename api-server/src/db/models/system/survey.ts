@@ -23,20 +23,6 @@ import {
 } from '.';
 
 @Scopes(() => ({
-  public: {
-    attributes: ['id', 'localeId', 'originatingUrl', 'supportEmail'],
-  },
-  respondent: {
-    attributes: [
-      'id',
-      'localeId',
-      'numberOfSubmissionsForFeedback',
-      'schemeId',
-      'state',
-      'storeUserSessionOnServer',
-      'suspensionReason',
-    ],
-  },
   counter: { include: [{ model: GenUserCounter }] },
   locale: { include: [{ model: Locale }] },
   scheme: { include: [{ model: Scheme }] },

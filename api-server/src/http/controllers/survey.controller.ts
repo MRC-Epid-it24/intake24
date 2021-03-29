@@ -2,7 +2,13 @@ import { Request, Response } from 'express';
 import { Survey, SurveySubmission, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import { UserInfoResponse, GenerateUserResponse } from '@common/types/http';
+import {
+  PublicSurveyEntryResponse,
+  PublicSurveyListResponse,
+  SurveyEntryResponse,
+  SurveyUserInfoResponse,
+  GenerateUserResponse,
+} from '@common/types/http';
 import { Controller } from './controller';
 
 export type SurveyController = Controller<
@@ -13,33 +19,70 @@ export type SurveyController = Controller<
   | 'generateUser'
   | 'createUser'
   | 'requestHelp'
-  | 'submission'
+  | 'submissions'
   | 'followUp'
 >;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController => {
-  const browse = async (req: Request, res: Response): Promise<void> => {
-    const surveys = await Survey.scope('public').findAll();
+  const browse = async (req: Request, res: Response<PublicSurveyListResponse[]>): Promise<void> => {
+    /*
+     * TODO:
+     * add human readable survey name
+     * only show publicly searchable surveys
+     * we should have a list survey to be accessible if PWA is used
+     *
+     */
+    const surveys = await Survey.findAll();
 
-    res.json(surveys);
+    const data = surveys.map((survey) => ({
+      id: survey.id,
+      localeId: survey.localeId,
+    }));
+
+    res.json(data);
   };
 
-  const entry = async (req: Request, res: Response): Promise<void> => {
+  const entry = async (req: Request, res: Response<PublicSurveyEntryResponse>): Promise<void> => {
     const { surveyId } = req.params;
-    const survey = await Survey.scope('public').findByPk(surveyId);
+    const survey = await Survey.findByPk(surveyId);
 
     if (!survey) throw new NotFoundError();
 
-    res.json(survey);
+    const { id, localeId, originatingUrl, supportEmail } = survey;
+
+    res.json({ id, localeId, originatingUrl, supportEmail });
   };
 
-  const parameters = async (req: Request, res: Response): Promise<void> => {
+  const parameters = async (req: Request, res: Response<SurveyEntryResponse>): Promise<void> => {
     const { surveyId } = req.params;
-    const survey = await Survey.scope(['respondent', 'scheme']).findByPk(surveyId);
+    const survey = await Survey.scope('scheme').findByPk(surveyId);
 
-    if (!survey) throw new NotFoundError();
+    if (!survey || !survey.scheme) throw new NotFoundError();
 
-    res.json(survey);
+    const {
+      id,
+      state,
+      localeId,
+      scheme,
+      numberOfSubmissionsForFeedback,
+      storeUserSessionOnServer,
+      suspensionReason,
+    } = survey;
+
+    res.json({
+      id,
+      state,
+      localeId,
+      scheme: {
+        id: scheme.id,
+        type: scheme.type,
+        meals: scheme.meals,
+        questions: scheme.questions,
+      },
+      numberOfSubmissionsForFeedback,
+      storeUserSessionOnServer,
+      suspensionReason,
+    });
   };
 
   /*
@@ -48,7 +91,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
    * - Implement submission limits
    *
    */
-  const userInfo = async (req: Request, res: Response<UserInfoResponse>): Promise<void> => {
+  const userInfo = async (req: Request, res: Response<SurveyUserInfoResponse>): Promise<void> => {
     const { surveyId } = req.params;
     const { tz } = req.query;
     const { id: userId, name } = req.user as User;
@@ -94,8 +137,12 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
   };
 
   // TODO: implement
-  const submission = async (req: Request, res: Response): Promise<void> => {
+  const submissions = async (req: Request, res: Response): Promise<void> => {
     const { surveyId } = req.params;
+    const { id: userId } = req.user as User;
+    const { submission } = req.body;
+
+    surveyService.submit(surveyId, userId, submission);
 
     res.json();
   };
@@ -120,7 +167,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
     generateUser,
     createUser,
     requestHelp,
-    submission,
+    submissions,
     followUp,
   };
 };

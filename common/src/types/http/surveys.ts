@@ -1,40 +1,36 @@
 import { Dictionary } from '../common';
-import { Scheme } from '../models';
+import { Scheme, SurveyState } from '../models';
 
 export type GenerateUserResponse = {
   userName: string;
   password: string;
 };
+export type PublicSurveyListResponse = {
+  id: string;
+  // todo name: string;
+  localeId: string;
+};
 
-export interface SurveyParametersResponse {
-  description: string | null;
-  finalPageHtml: string | null;
+export type PublicSurveyEntryResponse = {
   id: string;
   localeId: string;
-  numberOfSurveysForFeedback: number;
-  schemeId: string;
-  scheme: Scheme;
-  state: string;
+  originatingUrl: string | null;
+  supportEmail: string;
+};
+
+export type SchemeEntryResponse = Pick<Scheme, 'id' | 'type' | 'meals' | 'questions'>;
+
+export type SurveyEntryResponse = {
+  id: string;
+  state: SurveyState;
+  localeId: string;
+  scheme: SchemeEntryResponse;
+  numberOfSubmissionsForFeedback: number;
   storeUserSessionOnServer: boolean;
   suspensionReason: string | null;
-  uxEventsSettings: Dictionary;
-}
+};
 
-export interface SurveyPublicParametersResponse {
-  localeId: string;
-  originatingURL: string | null;
-  respondentLanguageId: string;
-  supportEmail: string;
-}
-
-export interface SurveyUserInfoResponse {
-  id: number;
-  name: string | null;
-  recallNumber: number;
-  redirectToFeedback: boolean;
-}
-
-export type UserInfoResponse = {
+export type SurveyUserInfoResponse = {
   userId: number;
   name: string | null;
   recallNumber: number;
