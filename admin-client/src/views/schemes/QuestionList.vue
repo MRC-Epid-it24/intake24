@@ -68,7 +68,7 @@
           <template v-slot:extension>
             <v-container>
               <v-tabs v-model="tab" background-color="primary" dark>
-                <v-tab v-for="item in promptTypeTabs[dialog.question.component]" :key="item">
+                <v-tab v-for="item in promptSettings[dialog.question.component].tabs" :key="item">
                   {{ item }}
                 </v-tab>
               </v-tabs>
@@ -84,7 +84,7 @@
                   <v-col cols="12">
                     <v-select
                       v-model="dialog.question.component"
-                      :items="promptQuestions"
+                      :items="promptSections"
                       :label="$t('schemes.questions.component')"
                       hide-details="auto"
                       item-value="component"
@@ -141,9 +141,11 @@ import merge from 'deepmerge';
 import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { FormRefs, ComponentType, PromptQuestion } from '@common/types';
-import { promptQuestions } from '@common/prompts';
-import prompts from '@/components/prompts';
+import { FormRefs, PromptQuestion, QuestionSection, MealSection } from '@common/types';
+import { genericPromptQuestions, standardPromptQuestions } from '@common/prompts';
+import { promptSettings } from '@/components/prompts';
+import genericPrompts from '@/components/prompts/generic';
+import standardPrompts from '@/components/prompts/standard';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;
@@ -155,28 +157,12 @@ export type PromptQuestionDialog = {
   question: EditPromptQuestion;
 };
 
-export type PromptTypeTabs = Record<ComponentType, string[]>;
-
-const baseTab = ['general', 'content', 'conditions'];
-const validatedTab = [...baseTab, 'validation'];
-const listTab = [...validatedTab, 'options'];
-
-const promptTypeTabs: PromptTypeTabs = {
-  'info-prompt': [...baseTab],
-  'date-picker-prompt': [...validatedTab],
-  'time-picker-prompt': [...validatedTab],
-  'checkbox-list-prompt': [...listTab],
-  'radio-list-prompt': [...listTab],
-  'textarea-prompt': [...validatedTab],
-  'submit-prompt': [...baseTab],
-};
-
 export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   name: 'QuestionList',
 
   props: {
     section: {
-      type: String,
+      type: String as () => QuestionSection | MealSection,
     },
     refScheme: {
       type: Array as () => PromptQuestion[],
@@ -188,9 +174,11 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
   },
 
-  components: { draggable, ...prompts },
+  components: { draggable, ...genericPrompts, ...standardPrompts },
 
   data() {
+    const promptQuestions = [...genericPromptQuestions, ...standardPromptQuestions];
+
     const dialog = (show = false): PromptQuestionDialog => ({
       show,
       index: -1,
@@ -202,7 +190,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       newDialog: dialog,
       questions: this.items,
       promptQuestions,
-      promptTypeTabs,
+      promptSettings,
       tab: null,
     };
   },
@@ -213,6 +201,11 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
     isEdit(): boolean {
       return !this.isCreate;
+    },
+    promptSections(): PromptQuestion[] {
+      return this.promptQuestions.filter((prompt) =>
+        this.promptSettings[prompt.component].sections.includes(this.section)
+      );
     },
     questionIdRules() {
       return [

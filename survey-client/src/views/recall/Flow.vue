@@ -21,20 +21,33 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import prompts from '@/components/prompts/';
-import Recall from '@/util/Recall';
-import { Selection } from '@common/types';
-import { SurveyEntryResponse } from '@common/types/http';
+import genericPrompts from '@/components/prompts/generic';
+import standardPrompts from '@/components/prompts/standard';
 import surveyService from '@/services/survey.service';
+import recall from '@/util/Recall';
+import { Dictionary, Selection } from '@common/types';
+import { SurveyEntryResponse } from '@common/types/http';
 
 export default Vue.extend({
-  name: 'Recall',
+  name: 'RecallFlow',
 
-  components: { ...prompts },
+  components: { ...genericPrompts, ...standardPrompts },
+
+  props: {
+    surveyId: {
+      type: String,
+    },
+    mealId: {
+      type: String,
+    },
+    questionId: {
+      type: String,
+    },
+  },
 
   data() {
     return {
-      recall: new Recall(),
+      recall,
     };
   },
 
@@ -47,39 +60,30 @@ export default Vue.extend({
     },
   },
 
-  async mounted() {
-    if (this.survey?.scheme) {
-      this.recall.init(this.survey.scheme);
-      const selection = this.recall.getSelection();
-      if (!selection) return;
-
-      const {
-        params: { questionId },
-        meta: { section },
-      } = this.$route;
-
-      if (section !== selection.section || questionId !== selection.prompt.question.id) {
-        this.$router.push({
-          name: `recall-${selection.section}`,
-          params: { surveyId: this.survey.id, questionId: selection.prompt.question.id },
-        });
-      }
+  async created() {
+    if (!this.recall.hasStarted()) {
+      const { surveyId } = this;
+      this.$router.push({ name: 'recall-entry', params: { surveyId } });
     }
   },
 
   beforeRouteUpdate(to, from, next) {
-    const { surveyId, questionId } = to.params;
+    const { surveyId, mealId, questionId } = to.params;
+    const { section } = to.meta;
 
-    const selection = this.recall.selectQuestionOrFindNext('preMeals', questionId);
+    const selection = this.recall.selectQuestionOrFindNext(section, mealId, questionId);
     if (!selection) {
       next();
       return;
     }
 
-    next({
-      name: `recall-${selection.section}`,
-      params: { surveyId, questionId: selection.prompt.question.id },
-    });
+    const params: Dictionary<string> = {
+      surveyId,
+      questionId: selection.prompt.question.id,
+    };
+    if (selection.mealIdx !== undefined) params.mealId = selection.mealIdx.toString();
+
+    next({ name: `recall-${selection.section}`, params });
   },
 
   methods: {
@@ -92,9 +96,16 @@ export default Vue.extend({
 
       if (selection) {
         this.recall.setSelection(selection);
-        this.$router.push({
+
+        const params: Dictionary<string> = {
+          surveyId: this.surveyId,
+          questionId: selection.prompt.question.id,
+        };
+        if (selection.mealIdx !== undefined) params.mealId = selection.mealIdx.toString();
+
+        await this.$router.push({
           name: `recall-${selection.section}`,
-          params: { surveyId: 'demo', questionId: selection.prompt.question.id },
+          params,
         });
       }
     },
@@ -103,7 +114,7 @@ export default Vue.extend({
       console.log('onSubmit', input);
       try {
         const submission = this.recall.submit();
-        await surveyService.submit(this.$route.params.surveyId, submission);
+        await surveyService.submit(this.surveyId, submission);
         await this.$store.dispatch('recall/clearState');
       } catch (err) {
         // process error

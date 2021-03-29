@@ -15,13 +15,14 @@ import {
 import { SchemeEntryResponse } from '@common/types/http';
 import Meal from './Meal';
 
-const findAnswerFor = (prompts: Prompt[], questionsId: string): PromptAnswer | undefined => {
+// TODO: move this to more appropriate place
+export const findAnswerFor = (prompts: Prompt[], questionsId: string): PromptAnswer | undefined => {
   const prompt = prompts.find((item) => item.question.id === questionsId);
 
   return prompt?.answer;
 };
 
-export default class Recall {
+export class Recall {
   private schemeId: string | null = null;
 
   private startTime: Date | null = null;
@@ -33,8 +34,6 @@ export default class Recall {
   private preMeals: Prompt[] = [];
 
   private meals: Meal[] = [];
-
-  // mealQuestions: MealQuestions;
 
   private postMeals: Prompt[] = [];
 
@@ -52,10 +51,14 @@ export default class Recall {
 
     // this.mealQuestions = questions.meals;
     this.loadMeals(meals, questions.meals);
+  }
 
+  start(): Selection | null {
     this.startTime = new Date();
 
-    this.setSelection(this.getNextAutoSelection());
+    this.setNextAutoSelection();
+
+    return this.getSelection();
   }
 
   isInitialized(): boolean {
@@ -92,15 +95,29 @@ export default class Recall {
     this.currentSelection = selection;
   }
 
-  selectQuestionOrFindNext(section: RecallSection, questionId: string): Selection | null {
+  selectQuestionOrFindNext(
+    section: RecallSection,
+    mealId: string,
+    questionId: string
+  ): Selection | null {
     if (section === 'meals') {
       if (!this.isSectionDone('preMeals')) {
         this.getNextAutoSelection();
         return null;
       }
 
-      // TODO: show meal
       return null;
+      /* const manualSelection = this.meals[parseInt(mealId, 10)].getManualSectionQuestion(
+        section,
+        questionId
+      );
+      if (manualSelection) {
+        this.setSelection(manualSelection);
+        return null;
+      }
+
+      const autoSelection = this.getNextAutoSelection();
+      return autoSelection; */
     }
 
     const manualSelection = this.getManualSectionQuestion(section, questionId);
@@ -119,8 +136,10 @@ export default class Recall {
     if (preMeals) return preMeals;
 
     // Meals
-    /* const meals = this.getNextSectionQuestion('preMeals');
-    if (meals) return meals; */
+    for (const [index, meal] of this.meals.entries()) {
+      const mealSelection = meal.getNextAutoSelection();
+      if (mealSelection) return { ...mealSelection, mealIdx: index };
+    }
 
     // TODO: Pre foods questions
 
@@ -163,18 +182,17 @@ export default class Recall {
     return this.checkQuestionConditions(section, index);
   }
 
-  private checkQuestionConditions(section: QuestionSection, index: number): Selection | null {
-    const prompt = this[section][index];
+  private checkQuestionConditions(section: QuestionSection, promptIdx: number): Selection | null {
+    const prompt = this[section][promptIdx];
 
     const check = this.promptMeetsConditions(prompt);
-    if (check) return { section, index, prompt };
+    if (check) return { section, promptIdx, prompt };
 
-    this[section][index].status = PromptStatuses.DONE;
+    this[section][promptIdx].status = PromptStatuses.DONE;
     return this.getAutoSectionQuestion(section);
   }
 
   private getAllQuestions(): Prompt[] {
-    // TODO: include meals section
     return [...this.preMeals, ...this.postMeals, ...this.submission];
   }
 
@@ -216,13 +234,20 @@ export default class Recall {
 
     const {
       section,
-      index,
+      mealSection,
+      mealIdx,
+      promptIdx,
       prompt: { question },
     } = currentSelection;
 
-    this[section].splice(index, 1, { question, answer, status: PromptStatuses.DONE });
-    // This won't trigger computed prop observer
-    // this[section][index] = { question, answer, status: PromptStatuses.DONE };
+    if (mealSection && mealIdx !== undefined) {
+      const meals = this[section] as Meal[];
+      meals[mealIdx][mealSection].splice(promptIdx, 1, {
+        question,
+        answer,
+        status: PromptStatuses.DONE,
+      });
+    } else this[section].splice(promptIdx, 1, { question, answer, status: PromptStatuses.DONE });
 
     return this.getNextAutoSelection();
   }
@@ -259,3 +284,10 @@ export default class Recall {
     return this.getState();
   }
 }
+
+/*
+ * Singleton for now
+ * - could be maintained through vuex, but all logic would have to be built into the vuex pattern
+ * - use Vue.js composition API to create "separate" simple store to inject
+ */
+export default new Recall();

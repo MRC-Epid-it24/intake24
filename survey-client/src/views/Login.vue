@@ -87,7 +87,7 @@ export default Vue.extend({
     if (name === 'token') {
       try {
         await this.token({ token });
-        await this.$router.push({ name: 'recall', params: { surveyId } });
+        await this.$router.push({ name: 'recall-entry', params: { surveyId } });
         return;
       } catch (err) {
         if (err.response?.status === 401)
@@ -111,7 +111,7 @@ export default Vue.extend({
         await this.login({ userName, password, surveyId });
         this.userName = '';
         this.password = '';
-        await this.$router.push({ name: 'recall', params: { surveyId } });
+        await this.$router.push({ name: 'recall-entry', params: { surveyId } });
       } catch (err) {
         if (err.response?.status === 401)
           this.$toasted.error(this.$t('login.err.invalidCredentials') as string);

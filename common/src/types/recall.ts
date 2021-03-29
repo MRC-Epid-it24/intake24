@@ -35,12 +35,14 @@ export interface RecallQuestions extends GenericQuestions {
   searchTerm: string;
 } */
 
-export interface Selection {
+// TODO: implement distinct selection types for survey/meal/food level
+export type Selection = {
   section: RecallSection;
   mealSection?: MealSection;
-  index: number;
+  mealIdx?: number;
+  promptIdx: number;
   prompt: Prompt;
-}
+};
 
 export type PromptState = {
   questionId: string;

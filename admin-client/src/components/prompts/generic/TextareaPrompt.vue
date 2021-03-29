@@ -10,15 +10,16 @@
       :conditions="conditions"
       @update:conditions="update('conditions', $event)"
     ></prompt-conditions>
+    <prompt-validation v-bind.sync="validation"></prompt-validation>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import prompt from './partials/Prompt';
+import prompt from '../partials/Prompt';
 
 export default Vue.extend({
-  name: 'InfoPrompt',
+  name: 'TextareaPrompt',
 
   mixins: [prompt],
 });

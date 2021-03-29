@@ -2,12 +2,13 @@
   <prompt-layout :text="text" :description="description">
     <v-card-text>
       <v-form ref="form" @submit.prevent="onSubmit">
-        <v-date-picker
+        <v-time-picker
           v-model="currentValue"
+          format="24hr"
           :landscape="!isMobile"
           full-width
           @input="clearErrors"
-        ></v-date-picker>
+        ></v-time-picker>
         <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
         <continue></continue>
       </v-form>
@@ -18,17 +19,17 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { DatePickerPromptProps, datePickerPromptProps } from '@common/prompts';
-import BasePrompt, { Prompt } from './BasePrompt';
+import { MealTimePromptProps, mealTimePromptProps } from '@common/prompts';
+import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
-  name: 'DatePickerPrompt',
+  name: 'MealTimePrompt',
 
   mixins: [BasePrompt],
 
   props: {
     props: {
-      type: Object as () => DatePickerPromptProps,
+      type: Object as () => MealTimePromptProps,
     },
     value: {
       type: String,
@@ -38,7 +39,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   data() {
     return {
-      ...merge(datePickerPromptProps, this.props),
+      ...merge(mealTimePromptProps, this.props),
       currentValue: this.value,
       errors: [] as string[],
     };
@@ -59,7 +60,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       if (this.validation.required && !this.currentValue) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??
-            (this.$t('prompts.datepicker.validation.required') as string),
+            (this.$t('prompts.timepicker.validation.required') as string),
         ];
         return;
       }

@@ -2,7 +2,7 @@
   <prompt-layout :text="text" :description="description">
     <v-card-text>
       <v-form ref="form" @submit.prevent="onSubmit">
-        <continue></continue>
+        <submit></submit>
       </v-form>
     </v-card-text>
   </prompt-layout>
@@ -11,13 +11,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import merge from 'deepmerge';
-import { BasePromptProps, infoPromptProps } from '@common/prompts';
-import BasePrompt from './BasePrompt';
+import { BasePromptProps, submitPromptProps } from '@common/prompts';
+import Submit from '@/components/Submit.vue';
+import BasePrompt from '../BasePrompt';
 
 export default Vue.extend({
-  name: 'InfoPage',
+  name: 'SubmitPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [BasePrompt, Submit],
 
   props: {
     props: {
@@ -26,15 +27,12 @@ export default Vue.extend({
   },
 
   data() {
-    return {
-      ...merge(infoPromptProps, this.props),
-      currentValue: 'ok',
-    };
+    return { ...merge(submitPromptProps, this.props) };
   },
 
   methods: {
     onSubmit() {
-      this.$emit('answer', this.currentValue);
+      this.$emit('submit');
     },
   },
 });

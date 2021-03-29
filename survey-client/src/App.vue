@@ -10,7 +10,7 @@
       <v-divider></v-divider>
       <v-list dense nav>
         <v-list-item-group>
-          <v-list-item :to="{ name: 'recall', params: { surveyId } }" link>
+          <v-list-item :to="{ name: 'recall-entry', params: { surveyId } }" link>
             <v-list-item-action>
               <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
             </v-list-item-action>
@@ -117,7 +117,7 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
         await this.$store.dispatch('auth/refresh');
 
         const { surveyId } = this.$route.params;
-        await this.$router.push({ name: 'recall', params: { surveyId } });
+        await this.$router.push({ name: 'recall-entry', params: { surveyId } });
       } catch (err) {
         // continue
       }

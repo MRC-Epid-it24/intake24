@@ -14,6 +14,16 @@
     <v-tab-item key="options">
       <v-row>
         <v-col cols="12">
+          <v-select
+            :value="orientation"
+            :items="orientations"
+            :label="$t('schemes.questions.orientation._')"
+            hide-details="auto"
+            outlined
+            @change="update('orientation', $event)"
+          ></v-select>
+        </v-col>
+        <v-col cols="12">
           <v-switch
             :input-value="other"
             :label="$t('schemes.questions.other')"
@@ -61,12 +71,28 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import selectListPrompt from './partials/SelectListPrompt';
+import selectListPrompt from '../partials/SelectListPrompt';
 
 export default Vue.extend({
-  name: 'CheckboxListPrompt',
+  name: 'RadioListPrompt',
 
   mixins: [selectListPrompt],
+
+  props: {
+    orientation: {
+      type: String,
+      default: 'column',
+    },
+  },
+
+  data() {
+    return {
+      orientations: [
+        { text: this.$t('schemes.questions.orientation.column'), value: 'column' },
+        { text: this.$t('schemes.questions.orientation.row'), value: 'row' },
+      ],
+    };
+  },
 });
 </script>
 

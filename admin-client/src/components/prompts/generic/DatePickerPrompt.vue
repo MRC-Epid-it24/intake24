@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import prompt from './partials/Prompt';
+import prompt from '../partials/Prompt';
 
 export default Vue.extend({
   name: 'DatePickerPrompt',

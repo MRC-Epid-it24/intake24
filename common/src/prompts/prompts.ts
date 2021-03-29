@@ -7,7 +7,8 @@ export type ComponentType =
   | 'checkbox-list-prompt'
   | 'radio-list-prompt'
   | 'textarea-prompt'
-  | 'submit-prompt';
+  | 'submit-prompt'
+  | 'meal-time-prompt';
 
 export enum PromptStatuses {
   INITIAL = 'initial',

@@ -11,7 +11,7 @@ export const recallGuard = (store: Store<RootState>): NavigationGuard => async (
   if (!store.getters['recall/loaded']) await store.dispatch('recall/load', { surveyId });
 
   if (!store.getters['recall/loaded']) {
-    next({ name: 'recall', params: { surveyId } });
+    next({ name: 'recall-entry', params: { surveyId } });
     return;
   }
 
@@ -32,7 +32,7 @@ export const globalGuard = (store: Store<RootState>): NavigationGuard => async (
 
   // Login pages (credentials / token)
   if (module === 'login') {
-    if (store.getters['user/loggedIn']) next({ name: 'recall', params: { surveyId } });
+    if (store.getters['user/loggedIn']) next({ name: 'recall-entry', params: { surveyId } });
     else next();
     return;
   }

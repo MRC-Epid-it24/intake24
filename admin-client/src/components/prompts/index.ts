@@ -1,17 +1,57 @@
-import DatePickerPrompt from './DatePickerPrompt.vue';
-import InfoPrompt from './InfoPrompt.vue';
-import SubmitPrompt from './SubmitPrompt.vue';
-import CheckboxListPrompt from './CheckboxListPrompt.vue';
-import RadioListPrompt from './RadioListPrompt.vue';
-import TimePickerPrompt from './TimePickerPrompt.vue';
-import TextareaPrompt from './TextareaPrompt.vue';
+import { ComponentType } from '@common/prompts';
+import { MealSection, QuestionSection } from '@common/types';
 
-export default {
-  DatePickerPrompt,
-  InfoPrompt,
-  SubmitPrompt,
-  CheckboxListPrompt,
-  RadioListPrompt,
-  TimePickerPrompt,
-  TextareaPrompt,
+const baseTab = ['general', 'content', 'conditions'];
+const validatedTab = [...baseTab, 'validation'];
+const listTab = [...validatedTab, 'options'];
+
+const allSection: (QuestionSection | MealSection)[] = [
+  'preMeals',
+  'postMeals',
+  'submission',
+  'preFoods',
+  'foods',
+  'postFoods',
+];
+
+export type PromptSettingsRecord = {
+  tabs: string[];
+  sections: (QuestionSection | MealSection)[];
+};
+
+export type PromptSettings = Record<ComponentType, PromptSettingsRecord>;
+
+export const promptSettings: PromptSettings = {
+  'info-prompt': {
+    tabs: [...baseTab],
+    sections: [...allSection],
+  },
+  'date-picker-prompt': {
+    tabs: [...validatedTab],
+    sections: [...allSection],
+  },
+  'time-picker-prompt': {
+    tabs: [...validatedTab],
+    sections: [...allSection],
+  },
+  'checkbox-list-prompt': {
+    tabs: [...listTab],
+    sections: [...allSection],
+  },
+  'radio-list-prompt': {
+    tabs: [...listTab],
+    sections: [...allSection],
+  },
+  'textarea-prompt': {
+    tabs: [...validatedTab],
+    sections: [...allSection],
+  },
+  'submit-prompt': {
+    tabs: [...baseTab],
+    sections: ['submission'],
+  },
+  'meal-time-prompt': {
+    tabs: [...baseTab],
+    sections: ['preFoods'],
+  },
 };

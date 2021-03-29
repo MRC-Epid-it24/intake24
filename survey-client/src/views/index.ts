@@ -3,7 +3,7 @@ import generateUser from './GenerateUser.vue';
 import home from './Home.vue';
 import login from './Login.vue';
 import profile from './Profile.vue';
-import recall from './Recall.vue';
+import recall from './recall';
 
 const views = {
   feedback,
