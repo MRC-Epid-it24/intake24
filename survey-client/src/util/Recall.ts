@@ -49,7 +49,6 @@ export class Recall {
       this.loadPrompts(item, questions[item]);
     });
 
-    // this.mealQuestions = questions.meals;
     this.loadMeals(meals, questions.meals);
   }
 

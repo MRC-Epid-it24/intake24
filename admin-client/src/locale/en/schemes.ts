@@ -86,7 +86,9 @@ const schemes: LocaleMessageObject = {
     title: 'Scheme questions',
     add: 'New question',
     edit: 'Edit question',
+    move: 'Move question',
     remove: 'Remove question',
+    section: 'Questions section',
     preMeals: {
       title: 'Pre-meals questions',
       subtitle: 'Questions asked before meals selection',

@@ -24,7 +24,7 @@
           v-if="!isCreate && can({ action: 'delete' })"
           :label="$t('common.action.delete')"
           color="error"
-          iconLeft="$delete"
+          icon-left="$delete"
           @confirm="remove"
         >
           {{ $t('common.action.confirm.delete', { name: entry.name ? entry.name : entry.id }) }}

@@ -1,10 +1,10 @@
 import { Method } from 'axios';
-import deepmerge from 'deepmerge';
 import cloneDeep from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 import http from '@/services/http.service';
 import store from '@/store';
+import { merge } from '@/util';
 import type { Dictionary } from '@common/types';
 import type { HttpRequestConfig, HttpError } from '@/types/http';
 import Errors from './Errors';
@@ -55,9 +55,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig = {}): Form<
     assign<S extends T>(source: S): void {
       const picked = pick(source, this.keys);
 
-      this.data = deepmerge(this.data, picked, {
-        arrayMerge: (destinationArray, sourceArray) => cloneDeep(sourceArray),
-      });
+      this.data = merge(this.data, picked);
     },
 
     load<S extends T>(source: S): void {

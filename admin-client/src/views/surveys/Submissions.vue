@@ -12,7 +12,7 @@
           :label="$t('common.action.delete')"
           color="error"
           icon
-          iconLeft="$delete"
+          icon-left="$delete"
           @confirm="remove(item)"
         >
           {{ $t('common.action.confirm.delete', { name: item.id }) }}

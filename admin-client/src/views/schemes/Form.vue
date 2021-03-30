@@ -42,7 +42,9 @@
       </v-container>
       <v-divider></v-divider>
       <meals v-if="form.type === 'data-driven'" v-model="form.meals" :defaults="refs.meals"></meals>
-      <submit-footer :disabled="form.errors.any()"></submit-footer>
+      <v-card-text>
+        <submit-footer :disabled="form.errors.any()"></submit-footer>
+      </v-card-text>
     </v-form>
   </layout>
 </template>

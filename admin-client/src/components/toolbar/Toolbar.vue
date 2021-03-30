@@ -18,7 +18,7 @@
         :disabled="!selected.length"
         :label="$t('common.action.delete')"
         color="error"
-        iconLeft="$delete"
+        icon-left="$delete"
         @confirm="onDelete"
       >
         {{ $t('common.action.confirm.multi.delete', { count: selected.length }) }}

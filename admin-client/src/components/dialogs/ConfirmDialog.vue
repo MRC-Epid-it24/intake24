@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" :persistent="persistent" max-width="350px">
+  <v-dialog v-model="dialog" :persistent="persistent" :max-width="maxWidth">
     <template v-slot:activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }">
         <v-btn
@@ -28,10 +28,18 @@
         </div>
       </v-card-text>
       <v-container class="pa-6">
-        <v-btn :color="color" :title="confirmLabel" block class="mb-2" dark large @click="confirm">
+        <v-btn
+          :color="color"
+          :title="confirmLabel"
+          block
+          class="mb-2"
+          dark
+          large
+          @click.stop="confirm"
+        >
           <v-icon v-if="confirmIcon" left>{{ confirmIcon }}</v-icon> {{ confirmLabel }}
         </v-btn>
-        <v-btn :color="color" :title="cancelLabel" block outlined large @click="cancel">
+        <v-btn :color="color" :title="cancelLabel" block outlined large @click.stop="cancel">
           <v-icon v-if="cancelIcon" left>{{ cancelIcon }}</v-icon> {{ cancelLabel }}
         </v-btn>
       </v-container>
@@ -77,6 +85,10 @@ export default Vue.extend({
     cancelIcon: {
       type: String,
     },
+    maxWidth: {
+      type: String,
+      default: '350px',
+    },
     persistent: {
       type: Boolean,
       default: false,
@@ -105,6 +117,12 @@ export default Vue.extend({
     },
     titleLabel(): string {
       return this.titleText ?? this.$t('common.action.confirm.title');
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      if (val === false) this.$emit('close');
     },
   },
 

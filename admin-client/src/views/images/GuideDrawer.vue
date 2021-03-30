@@ -50,8 +50,8 @@
                     :label="$t('guide-images.objects.delete')"
                     color="error"
                     icon
-                    :iconColor="active ? `white` : `error`"
-                    iconLeft="$delete"
+                    :icon-color="active ? `white` : `error`"
+                    icon-left="$delete"
                     @confirm="removeObject(idx)"
                   >
                     {{ $t('common.action.confirm.delete', { name: entry.id }) }}

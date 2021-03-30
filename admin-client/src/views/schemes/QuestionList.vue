@@ -37,8 +37,27 @@
               </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
+              <confirm-dialog
+                :label="$t('schemes.questions.move')"
+                color="primary lighten-1"
+                icon
+                icon-left="fa-exchange-alt"
+                max-width="450px"
+                @close="clearMoveToSection"
+                @confirm="move(idx)"
+              >
+                <v-select
+                  v-model="moveToSection"
+                  :items="moveSectionList(question)"
+                  :label="$t('schemes.questions.section')"
+                  hide-details="auto"
+                  outlined
+                ></v-select>
+              </confirm-dialog>
+            </v-list-item-action>
+            <v-list-item-action>
               <v-btn icon :title="$t('schemes.questions.edit')" @click.stop="edit(idx, question)">
-                <v-icon color="primary lighten-2">fa-ellipsis-v</v-icon>
+                <v-icon color="primary lighten-1">fa-ellipsis-v</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -84,7 +103,7 @@
                   <v-col cols="12">
                     <v-select
                       v-model="dialog.question.component"
-                      :items="promptSections"
+                      :items="availablePromptQuestions"
                       :label="$t('schemes.questions.component')"
                       hide-details="auto"
                       item-value="component"
@@ -137,15 +156,16 @@
 </template>
 
 <script lang="ts">
-import merge from 'deepmerge';
 import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { FormRefs, PromptQuestion, QuestionSection, MealSection } from '@common/types';
-import { genericPromptQuestions, standardPromptQuestions } from '@common/prompts';
+import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import { promptSettings } from '@/components/prompts';
 import genericPrompts from '@/components/prompts/generic';
 import standardPrompts from '@/components/prompts/standard';
+import { merge } from '@/util';
+import { FormRefs, PromptQuestion, QuestionSection, MealSection } from '@common/types';
+import { genericPromptQuestions, standardPromptQuestions } from '@common/prompts';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;
@@ -174,7 +194,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
   },
 
-  components: { draggable, ...genericPrompts, ...standardPrompts },
+  components: { ConfirmDialog, draggable, ...genericPrompts, ...standardPrompts },
 
   data() {
     const promptQuestions = [...genericPromptQuestions, ...standardPromptQuestions];
@@ -192,6 +212,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       promptQuestions,
       promptSettings,
       tab: null,
+      moveToSection: null,
     };
   },
 
@@ -202,7 +223,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     isEdit(): boolean {
       return !this.isCreate;
     },
-    promptSections(): PromptQuestion[] {
+    availablePromptQuestions(): PromptQuestion[] {
       return this.promptQuestions.filter((prompt) =>
         this.promptSettings[prompt.component].sections.includes(this.section)
       );
@@ -249,7 +270,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       this.dialog = {
         show: true,
         index,
-        question: { origId: question.id, ...(defaults ? merge(defaults, question) : question) },
+        question: { origId: question.id, ...merge(defaults ?? {}, question) },
       };
     },
 
@@ -268,6 +289,33 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
       this.update();
       this.reset();
+    },
+
+    moveSectionList(prompt: PromptQuestion): { value: string; text: string }[] {
+      return this.promptSettings[prompt.component].sections
+        .filter((item) => item !== this.section)
+        .map((item) => ({
+          value: item,
+          text: this.$t(`schemes.questions.${item}.title`) as string,
+        }));
+    },
+
+    move(index: number) {
+      if (!this.moveToSection) return;
+
+      this.$emit('move', {
+        section: this.moveToSection,
+        question: clone(this.questions[index]),
+      });
+      this.questions.splice(index, 1);
+      this.update();
+
+      // DOM object is destroyed so we have to clear it manually as event can't be emitted anymore
+      this.clearMoveToSection();
+    },
+
+    clearMoveToSection() {
+      this.moveToSection = null;
     },
 
     remove(index: number) {

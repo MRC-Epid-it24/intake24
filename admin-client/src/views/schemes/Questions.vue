@@ -39,7 +39,12 @@
         </v-row>
       </v-item-group>
     </v-container>
-    <question-list :refScheme="refScheme" :section="section" :items.sync="selected"></question-list>
+    <question-list
+      :refScheme="refScheme"
+      :section="section"
+      :items.sync="selected"
+      @move="move"
+    ></question-list>
   </layout>
 </template>
 
@@ -130,6 +135,17 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
     swap(section: QuestionSection | MealSection) {
       this.section = section;
+    },
+
+    move(event: { section: MealSection | QuestionSection; question: PromptQuestion }) {
+      const { section, question } = event;
+
+      if (this.isMealSection(section)) {
+        this.form.questions.meals[section].push(question);
+        return;
+      }
+
+      this.form.questions[section].push(question);
     },
   },
 });

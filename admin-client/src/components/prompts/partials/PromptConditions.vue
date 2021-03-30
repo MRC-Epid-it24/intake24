@@ -131,7 +131,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import clone from 'lodash/cloneDeep';
-import merge from 'deepmerge';
+import { merge } from '@/util';
 import draggable from 'vuedraggable';
 import { Condition, ConditionOp, conditionOps } from '@common/prompts';
 import conditionProps from './conditions';
@@ -267,7 +267,7 @@ export default Vue.extend({
       this.dialog = {
         show: true,
         index,
-        condition: { ...(defaults ? merge(defaults, condition) : condition) },
+        condition: merge(defaults ?? {}, condition),
       };
     },
 
