@@ -34,3 +34,5 @@ export { default as SourceImage } from './source-image';
 export { default as CategoryAttribute } from './category-attributes';
 export { default as CategoryPortionSizeMethod } from './category-portion-size-method';
 export { default as CategoryPortionSizeMethodParameter } from './category-portion-size-method-param';
+export { default as CategoryCategory } from './category-categories';
+export { default as AttributeDefaults } from './attribute-defaults';

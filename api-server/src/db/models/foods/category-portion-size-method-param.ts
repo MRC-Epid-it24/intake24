@@ -13,6 +13,7 @@ export default class CategoryPortionSizeMethodParameter extends BaseModel {
   @Column({
     allowNull: false,
     primaryKey: true,
+    autoIncrement: true,
   })
   public id!: number;
 

@@ -12,6 +12,7 @@ import BaseModel from '../model';
 export default class PortionSizeMethodParameter extends BaseModel {
   @Column({
     allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
   })
   public id!: number;

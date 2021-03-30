@@ -1,0 +1,43 @@
+// This has to be done first because the database config is pulled indirectly by services, doing
+// it during initDatabases is too late and moving helpers/databases import higher interferes with
+// ESLint import ordering rules
+import '../../bootstrap';
+
+import { FoodDataService } from '@/services';
+import { DbInterface } from '@/db';
+import InvalidArgumentError from '@/services/foods/invalid-argument-error';
+import { getParentLocale } from '@/services/foods/common';
+
+import { initDatabases, releaseDatabases } from '../helpers/databases';
+import createLocales from './test-data-locales';
+
+describe('Food data service helpers', () => {
+  let databases: DbInterface;
+  let service: FoodDataService;
+
+  beforeAll(async () => {
+    databases = await initDatabases();
+    await createLocales();
+  });
+
+  afterAll(async () => {
+    await releaseDatabases();
+  });
+
+  describe('getParentLocale', () => {
+    it('should throw InvalidArgumentError for unknown locales', async () => {
+      const parent = getParentLocale('bad_locale');
+      await expect(parent).rejects.toThrow(InvalidArgumentError);
+    });
+
+    it('should return null for locales without a parent locale', async () => {
+      const parent = await getParentLocale('en_GB');
+      expect(parent).toBe(null);
+    });
+
+    it('should return correct parent locale for locales that have it', async () => {
+      const parent = await getParentLocale('en_AU');
+      expect(parent?.id).toBe('en_GB');
+    });
+  });
+});

@@ -1,0 +1,129 @@
+import {
+  toUserCategoryPortionSizeMethod,
+  toUserPortionSizeMethod,
+  UserPortionSizeMethod,
+} from '@/services/foods/types/user-portion-size-method';
+import {
+  CategoryPortionSizeMethod,
+  CategoryPortionSizeMethodParameter,
+  FoodLocal,
+  PortionSizeMethod,
+  PortionSizeMethodParameter,
+} from '@/db/models/foods';
+import {
+  getCategoryParentCategories,
+  getFoodParentCategories,
+  getParentLocale,
+} from '@/services/foods/common';
+
+export interface PortionSizeMethodsService {
+  resolvePortionSizeMethods(localeId: string, foodCode: string): Promise<UserPortionSizeMethod[]>;
+}
+
+export default (): PortionSizeMethodsService => {
+  /**
+   *
+   * Get Portion Size Methods and their Parameters associated with the supplied category and locale.
+   *
+   * @param {string} localeId
+   * @param {string} categoyCode
+   */
+  const getCategoryPortionSizeMethods = async (
+    localeId: string,
+    categoryCode: string
+  ): Promise<UserPortionSizeMethod[]> => {
+    const categoryPortionMethods = await CategoryPortionSizeMethod.findAll({
+      where: { localeId, categoryCode },
+      attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
+      order: [['id', 'ASC']],
+      include: [
+        {
+          model: CategoryPortionSizeMethodParameter,
+          as: 'parameters',
+          attributes: ['name', 'value'],
+        },
+      ],
+    });
+
+    return categoryPortionMethods
+      ? categoryPortionMethods.map(toUserCategoryPortionSizeMethod)
+      : [];
+  };
+
+  const getNearestLocalCategoryPortionSizeMethods = async (
+    localeId: string,
+    categoryCodes: string[]
+  ): Promise<UserPortionSizeMethod[]> => {
+    for (let i = 0; i < categoryCodes.length; ++i) {
+      const methods = await getCategoryPortionSizeMethods(localeId, categoryCodes[i]);
+
+      if (methods.length > 0) return methods;
+    }
+
+    const parents = await getCategoryParentCategories(categoryCodes);
+
+    if (parents.length > 0) {
+      return getNearestLocalCategoryPortionSizeMethods(localeId, parents);
+    }
+    return [];
+  };
+
+  /**
+   *
+   * Get local food data record
+   *
+   * @param {string} localeId
+   * @param {string} foodCode
+   * @returns {Promise<FoodLocal>}
+   */
+  const getFoodLocal = async (localeId: string, foodCode: string): Promise<FoodLocal | null> => {
+    const food = await FoodLocal.findOne({
+      where: { localeId, foodCode },
+      include: [
+        {
+          model: PortionSizeMethod,
+          as: 'portionSizeMethods',
+          attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
+          include: [
+            {
+              model: PortionSizeMethodParameter,
+              as: 'parameters',
+              attributes: ['name', 'value'],
+            },
+          ],
+        },
+      ],
+      order: [[{ model: PortionSizeMethod, as: 'portionSizeMethods' }, 'id', 'ASC']],
+    });
+
+    return food;
+  };
+
+  const resolvePortionSizeMethods = async (
+    localeId: string,
+    foodCode: string
+  ): Promise<UserPortionSizeMethod[]> => {
+    const foodLocal = await getFoodLocal(localeId, foodCode);
+
+    if (foodLocal && foodLocal.portionSizeMethods && foodLocal.portionSizeMethods.length > 0) {
+      return foodLocal.portionSizeMethods.map(toUserPortionSizeMethod);
+    }
+    const parentCategories = await getFoodParentCategories(foodCode);
+
+    if (parentCategories.length > 0) {
+      const categoryPortionSizeMethods = await getNearestLocalCategoryPortionSizeMethods(
+        localeId,
+        parentCategories
+      );
+      if (categoryPortionSizeMethods.length > 0) return categoryPortionSizeMethods;
+    }
+
+    const prototypeLocale = await getParentLocale(localeId);
+
+    return prototypeLocale ? resolvePortionSizeMethods(prototypeLocale.id, foodCode) : [];
+  };
+
+  return {
+    resolvePortionSizeMethods,
+  };
+};
