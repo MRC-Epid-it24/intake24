@@ -36,4 +36,4 @@ export default () => {
       expect(kcal).toBe(100);
     });
   });
-}
+};

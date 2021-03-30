@@ -1,9 +1,5 @@
 import { InheritableAttributes } from '@/services/foods/types/inheritable-attributes';
-import {
-  AttributeDefaults,
-  CategoryAttribute,
-  FoodAttribute,
-} from '@/db/models/foods';
+import { AttributeDefaults, CategoryAttribute, FoodAttribute } from '@/db/models/foods';
 import { getCategoryParentCategories, getFoodParentCategories } from '@/services/foods/common';
 
 export interface InheritableAttributesService {

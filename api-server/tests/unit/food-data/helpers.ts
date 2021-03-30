@@ -1,8 +1,3 @@
-// This has to be done first because the database config is pulled indirectly by services, doing
-// it during initDatabases is too late and moving helpers/databases import higher interferes with
-// ESLint import ordering rules
-import '../../bootstrap';
-
 import { FoodDataService } from '@/services';
 import { DbInterface } from '@/db';
 import InvalidArgumentError from '@/services/foods/invalid-argument-error';
@@ -12,7 +7,6 @@ import { initDatabases, releaseDatabases } from '../helpers/databases';
 import createLocales from './test-data-locales';
 
 export default () => {
-
   describe('Helpers', () => {
     let databases: DbInterface;
     let service: FoodDataService;
@@ -43,4 +37,4 @@ export default () => {
       });
     });
   });
-}
+};
