@@ -1,14 +1,16 @@
 import type { BasePromptProps } from './props';
 
-export type ComponentType =
+export type GenericComponentType =
   | 'info-prompt'
   | 'date-picker-prompt'
   | 'time-picker-prompt'
   | 'checkbox-list-prompt'
   | 'radio-list-prompt'
-  | 'textarea-prompt'
-  | 'submit-prompt'
-  | 'meal-time-prompt';
+  | 'textarea-prompt';
+
+export type StandardComponentType = 'meal-time-prompt' | 'submit-prompt';
+
+export type ComponentType = GenericComponentType | StandardComponentType;
 
 export enum PromptStatuses {
   INITIAL = 'initial',
@@ -22,6 +24,7 @@ export type PromptStatus = PromptStatuses;
 export interface PromptQuestion<T extends BasePromptProps = BasePromptProps> {
   id: string;
   name: string;
+  type: 'generic' | 'standard' | 'portion-size';
   component: ComponentType;
   props: T;
 }

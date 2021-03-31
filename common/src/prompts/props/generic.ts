@@ -38,8 +38,6 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
 
 export const infoPromptProps: BasePromptProps = clone(basePromptProps);
 
-export const submitPromptProps: BasePromptProps = clone(basePromptProps);
-
 export const datePickerPromptProps: DatePickerPromptProps = clone({
   ...basePromptProps,
   ...promptValidation,
@@ -78,42 +76,42 @@ export const textareaPromptProps: TextareaPromptProps = clone({
 export const genericPromptQuestions: PromptQuestion[] = [
   {
     component: 'info-prompt',
+    type: 'generic',
     id: 'info-prompt',
     name: 'Info / confirmation prompt',
     props: clone(basePromptProps),
   },
   {
-    component: 'submit-prompt',
-    id: 'submit-prompt',
-    name: 'Submit prompt',
-    props: clone(basePromptProps),
-  },
-  {
     component: 'date-picker-prompt',
+    type: 'generic',
     id: 'date-picker-prompt',
     name: 'Date picker prompt',
     props: clone(datePickerPromptProps),
   },
   {
     component: 'time-picker-prompt',
+    type: 'generic',
     id: 'time-picker-prompt',
     name: 'Time picker prompt',
     props: clone(timePickerPromptProps),
   },
   {
     component: 'checkbox-list-prompt',
+    type: 'generic',
     id: 'checkbox-list-prompt',
     name: 'Checkbox List Prompt',
     props: clone(checkboxListPromptProps),
   },
   {
     component: 'radio-list-prompt',
+    type: 'generic',
     id: 'radio-list-prompt',
     name: 'Radio List Prompt',
     props: clone(radioListPromptProps),
   },
   {
     component: 'textarea-prompt',
+    type: 'generic',
     id: 'textarea-prompt',
     name: 'Textarea prompt',
     props: clone(textareaPromptProps),

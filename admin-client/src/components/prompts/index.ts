@@ -22,6 +22,7 @@ export type PromptSettingsRecord = {
 export type PromptSettings = Record<ComponentType, PromptSettingsRecord>;
 
 export const promptSettings: PromptSettings = {
+  // Generic
   'info-prompt': {
     tabs: [...baseTab],
     sections: [...allSection],
@@ -46,12 +47,13 @@ export const promptSettings: PromptSettings = {
     tabs: [...validatedTab],
     sections: [...allSection],
   },
-  'submit-prompt': {
-    tabs: [...baseTab],
-    sections: ['submission'],
-  },
+  // Standard
   'meal-time-prompt': {
     tabs: [...baseTab],
     sections: ['preFoods'],
+  },
+  'submit-prompt': {
+    tabs: [...baseTab],
+    sections: ['submission'],
   },
 };
