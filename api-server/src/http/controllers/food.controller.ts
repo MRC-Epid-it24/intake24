@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import type { IoC } from '@/ioc';
+import InvalidIdError from '@/services/foods/invalid-id-error';
+import { NotFoundError } from '@/http/errors';
 import { Controller } from './controller';
 
 export type FoodController = Controller<
@@ -10,9 +12,13 @@ export default ({ foodDataService }: Pick<IoC, 'foodDataService'>): FoodControll
   const entry = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
 
-    const response = await foodDataService.getFoodData(localeId, code);
-
-    res.status(200).json(response);
+    try {
+      const response = await foodDataService.getFoodData(localeId, code);
+      res.status(200).json(response);
+    } catch (err) {
+      if (err instanceof InvalidIdError) throw new NotFoundError(err.message);
+      throw err;
+    }
   };
 
   const entryWithSource = async (req: Request, res: Response): Promise<void> => {

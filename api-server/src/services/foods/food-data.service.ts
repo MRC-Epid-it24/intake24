@@ -3,13 +3,14 @@ import {
   Brand,
   Food,
   FoodLocal,
+  FoodLocalList,
   Locale,
   NutrientMapping,
   NutrientTableRecord,
   NutrientTableRecordNutrient,
 } from '@/db/models/foods';
 
-import InvalidArgumentError from '@/services/foods/invalid-argument-error';
+import InvalidIdError from '@/services/foods/invalid-id-error';
 import { UserAssociatedFoodPrompt } from '@/services/foods/types/user-associated-food-prompt';
 import { UserFoodData } from '@/services/foods/types/user-food-data';
 import { getParentLocale } from '@/services/foods/common';
@@ -56,7 +57,7 @@ export default (): FoodDataService => {
     });
 
     if (foodNutrientData == null)
-      throw new InvalidArgumentError(
+      throw new InvalidIdError(
         `Either locale id '${localeId}' or food code '${foodCode}' is ` +
           "invalid, food isn't linked to a nutrient table record, or the energy (kcal) nutrient " +
           'data is missing'
@@ -140,7 +141,7 @@ export default (): FoodDataService => {
       include: [{ model: Locale, as: 'parent' }],
     });
 
-    if (!locale) throw new InvalidArgumentError(`Unknown locale ID: ${localeId}`);
+    if (!locale) throw new InvalidIdError(`Unknown locale ID: ${localeId}`);
 
     if (locale.parent && locale.respondentLanguageId === locale.parent.respondentLanguageId) {
       return resolveAssociatedFoodPrompts(locale.parent.id, foodCode);
@@ -152,15 +153,23 @@ export default (): FoodDataService => {
   const getFoodData = async (localeId: string, foodCode: string): Promise<UserFoodData> => {
     const foodRecord = await Food.findOne({ where: { code: foodCode } });
 
-    if (foodRecord == null) throw new InvalidArgumentError(`Invalid food code: ${foodCode}`);
+    if (foodRecord == null) throw new InvalidIdError(`Invalid food code: ${foodCode}`);
+
+    const foodListCheck = await FoodLocalList.findOne({
+      where: { foodCode, localeId },
+      attributes: ['food_code'],
+    });
+
+    if (foodListCheck == null)
+      throw new InvalidIdError(`${foodCode} is not in the food list for locale ${localeId}`);
 
     const localeCheck = await Locale.findOne({ where: { id: localeId }, attributes: ['id'] });
-    if (localeCheck == null) throw new InvalidArgumentError(`Invalid locale ID: ${localeId}`);
+    if (localeCheck == null) throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
 
     const foodLocal = await FoodLocal.findOne({ where: { foodCode, localeId } });
 
     if (foodLocal == null)
-      throw new InvalidArgumentError(
+      throw new InvalidIdError(
         `No local food data for food code ${foodCode} in locale ${localeId}`
       );
 

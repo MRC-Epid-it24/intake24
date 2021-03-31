@@ -1,6 +1,6 @@
 import { FoodDataService, foodDataService } from '@/services';
 import { DbInterface } from '@/db';
-import InvalidArgumentError from '@/services/foods/invalid-argument-error';
+import InvalidIdError from '@/services/foods/invalid-id-error';
 import createTestData from '@tests/unit/food-data/get-kcal-test-data';
 import createLocales from './test-data-locales';
 import { initDatabases, releaseDatabases } from '../helpers/databases';
@@ -21,14 +21,14 @@ export default () => {
       await releaseDatabases();
     });
 
-    it('should throw InvalidArgumentError for unknown food IDs', async () => {
+    it('should throw InvalidIdError for unknown food IDs', async () => {
       const promise = service.getNutrientKCalPer100G('en_GB', 'BAD_FOOD');
-      await expect(promise).rejects.toThrow(InvalidArgumentError);
+      await expect(promise).rejects.toThrow(InvalidIdError);
     });
 
-    it('should throw InvalidArgumentError for unknown locale IDs', async () => {
+    it('should throw InvalidIdError for unknown locale IDs', async () => {
       const promise = service.getNutrientKCalPer100G('bad_locale', 'TEST1');
-      await expect(promise).rejects.toThrow(InvalidArgumentError);
+      await expect(promise).rejects.toThrow(InvalidIdError);
     });
 
     it('should return correct kcal value for valid food and locale IDs', async () => {

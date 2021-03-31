@@ -1,6 +1,6 @@
 import { FoodDataService } from '@/services';
 import { DbInterface } from '@/db';
-import InvalidArgumentError from '@/services/foods/invalid-argument-error';
+import InvalidIdError from '@/services/foods/invalid-id-error';
 import { getParentLocale } from '@/services/foods/common';
 
 import { initDatabases, releaseDatabases } from '../helpers/databases';
@@ -21,9 +21,9 @@ export default () => {
     });
 
     describe('getParentLocale', () => {
-      it('should throw InvalidArgumentError for unknown locales', async () => {
+      it('should throw InvalidIdError for unknown locales', async () => {
         const parent = getParentLocale('bad_locale');
-        await expect(parent).rejects.toThrow(InvalidArgumentError);
+        await expect(parent).rejects.toThrow(InvalidIdError);
       });
 
       it('should return null for locales without a parent locale', async () => {

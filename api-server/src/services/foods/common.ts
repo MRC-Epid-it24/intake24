@@ -1,5 +1,5 @@
 import { CategoryCategory, FoodCategory, Locale } from '@/db/models/foods';
-import InvalidArgumentError from '@/services/foods/invalid-argument-error';
+import InvalidIdError from '@/services/foods/invalid-id-error';
 
 export async function getFoodParentCategories(foodCode: string): Promise<string[]> {
   const categories = await FoodCategory.findAll({
@@ -34,7 +34,7 @@ export async function getParentLocale(localeId: string): Promise<Locale | null> 
     include: [{ model: Locale, as: 'parent' }],
   });
 
-  if (locale == null) throw new InvalidArgumentError(`Invalid locale ID: ${localeId}`);
+  if (locale == null) throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
 
   return locale.parent ?? null;
 }
