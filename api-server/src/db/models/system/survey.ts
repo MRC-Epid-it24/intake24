@@ -46,6 +46,13 @@ export default class Survey extends BaseModel implements SurveyAttributes {
 
   @Column({
     allowNull: false,
+    unique: true,
+    type: DataType.STRING(512),
+  })
+  public name!: string;
+
+  @Column({
+    allowNull: false,
   })
   public state!: SurveyState;
 

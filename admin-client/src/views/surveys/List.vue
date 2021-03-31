@@ -19,9 +19,14 @@ export default Vue.extend({
     return {
       headers: [
         {
-          text: this.$t('surveys._'),
+          text: this.$t('surveys.id'),
           sortable: true,
           value: 'id',
+        },
+        {
+          text: this.$t('surveys.name'),
+          sortable: true,
+          value: 'name',
         },
         {
           text: this.$t('surveys.locale'),

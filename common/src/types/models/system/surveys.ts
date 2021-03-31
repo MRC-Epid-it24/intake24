@@ -6,6 +6,7 @@ export enum SurveyState {
 
 export type Survey = {
   id: string;
+  name: string;
   state: SurveyState;
   startDate: Date;
   endDate: Date;

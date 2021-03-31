@@ -2,7 +2,6 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const surveys: LocaleMessageObject = {
   _: 'Survey',
-  id: 'Survey ID',
   index: 'Surveys',
   all: 'All surveys',
   detail: 'Survey detail',
@@ -11,6 +10,8 @@ const surveys: LocaleMessageObject = {
   edit: 'Edit survey',
   delete: 'Delete survey',
 
+  id: 'Survey ID',
+  name: 'Survey name',
   locale: 'Locale',
   scheme: 'Scheme',
   state: {

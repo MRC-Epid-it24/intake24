@@ -93,6 +93,7 @@ export default (): void => {
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
       expect(body.errors).toContainAllKeys([
+        'name',
         'state',
         'startDate',
         'endDate',
@@ -114,6 +115,7 @@ export default (): void => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .send({
+          name: { name: 'survey name' },
           state: 10,
           startDate: 'notValidDate',
           endDate: 100,
@@ -133,6 +135,7 @@ export default (): void => {
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
       expect(body.errors).toContainAllKeys([
+        'name',
         'state',
         'startDate',
         'endDate',

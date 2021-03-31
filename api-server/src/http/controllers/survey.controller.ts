@@ -25,17 +25,11 @@ export type SurveyController = Controller<
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController => {
   const browse = async (req: Request, res: Response<PublicSurveyListResponse[]>): Promise<void> => {
-    /*
-     * TODO:
-     * add human readable survey name
-     * only show publicly searchable surveys
-     * we should have a list survey to be accessible if PWA is used
-     *
-     */
     const surveys = await Survey.findAll();
 
     const data = surveys.map((survey) => ({
       id: survey.id,
+      name: survey.name,
       localeId: survey.localeId,
     }));
 
@@ -48,9 +42,9 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
 
     if (!survey) throw new NotFoundError();
 
-    const { id, localeId, originatingUrl, supportEmail } = survey;
+    const { id, name, localeId, originatingUrl, supportEmail } = survey;
 
-    res.json({ id, localeId, originatingUrl, supportEmail });
+    res.json({ id, name, localeId, originatingUrl, supportEmail });
   };
 
   const parameters = async (req: Request, res: Response<SurveyEntryResponse>): Promise<void> => {
@@ -61,6 +55,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
 
     const {
       id,
+      name,
       state,
       localeId,
       scheme,
@@ -71,6 +66,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
 
     res.json({
       id,
+      name,
       state,
       localeId,
       scheme: {

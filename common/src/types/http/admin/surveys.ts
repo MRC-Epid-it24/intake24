@@ -2,6 +2,7 @@ import { Locale, Scheme, Survey, Pagination } from '../../models';
 
 export type SurveyRequest = {
   id: string;
+  name: string;
   state: number;
   startDate: string;
   endDate: string;
@@ -31,7 +32,9 @@ export type CreateSurveyRequest = SurveyRequest;
 
 export type UpdateSurveyRequest = Omit<SurveyRequest, 'id'>;
 
-export type SurveysResponse = Pagination<Survey>;
+export type SurveyListEntry = Pick<Survey, 'id' | 'name' | 'localeId' | 'schemeId' | 'state'>;
+
+export type SurveysResponse = Pagination<SurveyListEntry>;
 
 export interface SurveyEntry extends Omit<Survey, 'startDate' | 'endDate'> {
   startDate: string;

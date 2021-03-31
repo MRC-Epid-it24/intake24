@@ -4,14 +4,24 @@
       <v-container>
         <v-card-text>
           <v-row>
-            <v-col cols="12">
+            <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.id"
                 :disabled="isEdit"
                 :error-messages="form.errors.get('id')"
-                :label="$t('surveys._')"
+                :label="$t('surveys.id')"
                 hide-details="auto"
                 name="id"
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.name"
+                :error-messages="form.errors.get('name')"
+                :label="$t('surveys.name')"
+                hide-details="auto"
+                name="name"
                 outlined
               ></v-text-field>
             </v-col>
@@ -271,6 +281,7 @@ import form from '@/helpers/Form';
 
 export type SurveyForm = {
   id: string | null;
+  name: string | null;
   state: number;
   localeId: string | null;
   schemeId: string | null;
@@ -300,6 +311,7 @@ export default Vue.extend({
       menus: { startDate: false, endDate: false },
       form: form<SurveyForm>({
         id: null,
+        name: null,
         state: 0,
         localeId: null,
         schemeId: null,

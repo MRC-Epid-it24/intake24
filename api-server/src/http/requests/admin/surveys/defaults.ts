@@ -1,8 +1,25 @@
+import { Request } from 'express';
 import { Schema } from 'express-validator';
-import { Locale, Scheme } from '@/db/models/system';
+import { Op, WhereOptions } from 'sequelize';
+import { Locale, Scheme, Survey } from '@/db/models/system';
 import { SurveyState } from '@common/types/models';
+import { unique } from '@/http/rules';
 
 const defaults: Schema = {
+  name: {
+    in: ['body'],
+    errorMessage: 'Name must be filled in.',
+    isString: true,
+    isEmpty: { negated: true },
+    custom: {
+      options: async (value, { req }): Promise<void> => {
+        const { surveyId } = (req as Request).params;
+        const except: WhereOptions = surveyId ? { id: { [Op.ne]: surveyId } } : {};
+
+        return unique({ model: Survey, condition: { field: 'name', value }, except });
+      },
+    },
+  },
   state: {
     in: ['body'],
     errorMessage: 'Enter valid survey state.',

@@ -46,6 +46,7 @@ export default (): void => {
       expect(body).toContainAllKeys(['errors', 'success']);
       expect(body.errors).toContainAllKeys([
         'id',
+        'name',
         'state',
         'startDate',
         'endDate',
@@ -68,6 +69,7 @@ export default (): void => {
         .set('Authorization', suite.bearer.user)
         .send({
           id: null,
+          name: [2, 0],
           state: 10,
           startDate: 'notValidDate',
           endDate: 100,
@@ -88,6 +90,7 @@ export default (): void => {
       expect(body).toContainAllKeys(['errors', 'success']);
       expect(body.errors).toContainAllKeys([
         'id',
+        'name',
         'state',
         'startDate',
         'endDate',
@@ -127,6 +130,18 @@ export default (): void => {
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
       expect(body.errors).toContainAllKeys(['id']);
+    });
+
+    it('should return 422 when duplicate name', async () => {
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .send({ ...mocker.survey(), name: input.name });
+
+      expect(status).toBe(422);
+      expect(body).toContainAllKeys(['errors', 'success']);
+      expect(body.errors).toContainAllKeys(['name']);
     });
   });
 };

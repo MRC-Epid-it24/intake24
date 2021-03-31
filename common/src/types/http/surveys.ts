@@ -1,4 +1,3 @@
-import { Dictionary } from '../common';
 import { Scheme, SurveyState } from '../models';
 
 export type GenerateUserResponse = {
@@ -7,12 +6,13 @@ export type GenerateUserResponse = {
 };
 export type PublicSurveyListResponse = {
   id: string;
-  // todo name: string;
+  name: string;
   localeId: string;
 };
 
 export type PublicSurveyEntryResponse = {
   id: string;
+  name: string;
   localeId: string;
   originatingUrl: string | null;
   supportEmail: string;
@@ -22,6 +22,7 @@ export type SchemeEntryResponse = Pick<Scheme, 'id' | 'type' | 'meals' | 'questi
 
 export type SurveyEntryResponse = {
   id: string;
+  name: string;
   state: SurveyState;
   localeId: string;
   scheme: SchemeEntryResponse;

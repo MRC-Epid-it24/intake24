@@ -4,10 +4,11 @@ import { WhereOptions } from 'sequelize';
 import { Locale, Scheme, Survey, User } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import { surveyResponse } from '@/http/responses/admin';
+import { surveyListResponse, surveyResponse } from '@/http/responses/admin';
 import { staffSuffix } from '@/services/acl.service';
 import {
   CreateSurveyResponse,
+  SurveyListEntry,
   SurveyResponse,
   SurveyRefs,
   SurveysResponse,
@@ -46,7 +47,13 @@ export default ({ config }: Pick<IoC, 'config'>): AdminSurveyController => {
       where.id = surveys;
     }
 
-    const surveys = await Survey.paginate({ req, columns: ['id'], where, order: [['id', 'ASC']] });
+    const surveys = await Survey.paginate<SurveyListEntry>({
+      req,
+      columns: ['id', 'name'],
+      where,
+      order: [['id', 'ASC']],
+      transform: surveyListResponse,
+    });
 
     res.json(surveys);
   };
@@ -59,6 +66,7 @@ export default ({ config }: Pick<IoC, 'config'>): AdminSurveyController => {
     const survey = await Survey.create(
       pick(req.body, [
         'id',
+        'name',
         'state',
         'startDate',
         'endDate',
@@ -103,6 +111,7 @@ export default ({ config }: Pick<IoC, 'config'>): AdminSurveyController => {
 
     await survey.update(
       pick(req.body, [
+        'name',
         'state',
         'startDate',
         'endDate',

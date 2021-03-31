@@ -119,6 +119,7 @@ const scheme = (): SchemeCreateAttributes => {
 
 const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest => {
   const id = faker.helpers.slugify(faker.random.words(2));
+  const name = faker.random.words(6);
   const state = faker.random.number(2);
   const startDate = new Date().toISOString().split('T')[0];
   const endDate = faker.date.future(1).toISOString().split('T')[0];
@@ -134,6 +135,7 @@ const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest =
 
   return {
     id,
+    name,
     state,
     startDate,
     endDate,
