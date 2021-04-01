@@ -3,6 +3,7 @@ import Storage from 'vue-ls';
 import Toasted from 'vue-toasted';
 
 import isMobile from './mixins/isMobile';
+import isNotDesktop from './mixins/isNotDesktop';
 import loading from './mixins/loading';
 
 const options = { namespace: process.env.VUE_APP_PREFIX };
@@ -17,4 +18,5 @@ Vue.use(Toasted, {
 });
 
 Vue.mixin(isMobile);
+Vue.mixin(isNotDesktop);
 Vue.mixin(loading);

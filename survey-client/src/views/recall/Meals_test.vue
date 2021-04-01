@@ -1,26 +1,8 @@
 <template>
   <v-row justify="center">
-    <v-col cols="4" md="2">
+    <v-col v-if="!isNotDesktop" cols="4" md="2">
       <v-card min-height="30rem" class="d-flex justify-center align-center">
-        <v-navigation-drawer permanent>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title class="title"> Recall </v-list-item-title>
-              <v-list-item-subtitle>
-                {{ survey.name }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider></v-divider>
-          <v-list dense nav>
-            <v-list-item v-for="meal in recall.meals" :key="meal.name" link>
-              <v-list-item-content>
-                <meal-item :name="meal.name" :foods="foodsTest"></meal-item>
-                <!-- <v-list-item-title>{{ meal.name }}</v-list-item-title> -->
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-navigation-drawer>
+        <meal-list :surveyName="survey.name" :meals="recall.meals"></meal-list>
       </v-card>
     </v-col>
     <v-col cols="12" md="10">
@@ -41,13 +23,13 @@ import Vue from 'vue';
 import recall from '@/util/Recall';
 import { SurveyEntryResponse } from '@common/types/http';
 import standardPromts from '@/components/prompts/standard';
-import MealItem from '../../components/elements/MealItem.vue';
+import MealList from '../../components/recall/MealList.vue';
 
 export default Vue.extend({
   name: 'RecallMeals_test',
 
   components: {
-    MealItem,
+    MealList,
     ...standardPromts,
   },
 
@@ -60,7 +42,6 @@ export default Vue.extend({
   data() {
     return {
       recall,
-      foodsTest: ['Chicken breast', 'Tea', 'muffin'],
     };
   },
 
@@ -72,6 +53,10 @@ export default Vue.extend({
 
   async mounted() {
     if (this.survey?.scheme) this.recall.init(this.survey.scheme);
+    // MockData For Test
+    // recall.meals.forEach(meal => {
+    // 	meal.foods = this.foodTest;
+    // });
   },
 
   methods: {
