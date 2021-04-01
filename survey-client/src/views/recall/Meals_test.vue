@@ -15,6 +15,8 @@
 				></meal-time-prompt> -->
       </v-card>
     </v-col>
+
+    <meal-list-mobile :meals="recall.meals"> </meal-list-mobile>
   </v-row>
 </template>
 
@@ -23,12 +25,14 @@ import Vue from 'vue';
 import recall from '@/util/Recall';
 import { SurveyEntryResponse } from '@common/types/http';
 import standardPromts from '@/components/prompts/standard';
-import MealList from '../../components/recall/MealList.vue';
+import MealList from '../../components/recall/MealListDesktop.vue';
+import MealListMobile from '../../components/recall/MealListMobile.vue';
 
 export default Vue.extend({
   name: 'RecallMeals_test',
 
   components: {
+    MealListMobile,
     MealList,
     ...standardPromts,
   },
