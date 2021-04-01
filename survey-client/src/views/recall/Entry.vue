@@ -40,9 +40,12 @@ export default Vue.extend({
 
   methods: {
     startRecall() {
+      console.log('Survey scheme:');
+      console.log(this.survey?.scheme);
       if (!this.recall.isInitialized()) return;
 
       const selection = this.recall.start();
+      console.log(this.recall);
       if (!selection) return;
 
       this.$router.push({
