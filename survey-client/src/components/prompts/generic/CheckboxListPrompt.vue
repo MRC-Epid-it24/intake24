@@ -16,7 +16,7 @@
       <v-row v-if="other" align="center" no-gutters>
         <v-checkbox v-model="otherEnabled" hide-details class="mt-0 pb-2"></v-checkbox>
         <v-text-field
-          v-model="otherValue"
+          v-model.trim="otherValue"
           :error="hasErrors && otherEnabled"
           :disabled="!otherEnabled"
           label="Please specify"

@@ -19,7 +19,7 @@
         <v-row v-if="other" align="center" no-gutters>
           <v-radio value="other" hide-details></v-radio>
           <v-text-field
-            v-model="otherValue"
+            v-model.trim="otherValue"
             :error="hasErrors"
             label="Please specify"
             @input="clearErrors"
