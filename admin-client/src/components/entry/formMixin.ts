@@ -1,5 +1,6 @@
 import Vue, { VueConstructor } from 'vue';
-import { Dictionary } from '@common/types';
+import pick from 'lodash/pick';
+import { Dictionary, ValidationError } from '@common/types';
 import { FormMixin } from '@/types/vue';
 import form from '@/helpers/Form';
 import SubmitFooter from '@/components/forms/SubmitFooter.vue';
@@ -19,6 +20,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   data() {
     return {
       form: form({}),
+      nonInputErrorKeys: [] as string[],
     };
   },
 
@@ -37,6 +39,9 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
     },
     isEdit(): boolean {
       return !this.isCreate;
+    },
+    nonInputErrors(): ValidationError[] {
+      return Object.values(pick(this.form.errors.all(), this.nonInputErrorKeys));
     },
   },
 
