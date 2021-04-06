@@ -225,7 +225,6 @@ export default Vue.extend({
       }));
     },
     outputConditions(): Condition[] {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       return this.currentConditions.map(({ id, ...rest }) => rest);
     },
   },

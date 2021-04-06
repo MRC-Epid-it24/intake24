@@ -36,7 +36,6 @@ const mutations: MutationTree<ListState> = {
   },
 
   resetFilter: (state) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { [state.name]: remove, ...rest } = state.filter;
 
     state.filter = { ...rest };

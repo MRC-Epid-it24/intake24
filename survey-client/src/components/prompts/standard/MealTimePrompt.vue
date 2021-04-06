@@ -52,7 +52,6 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   data() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { text, description, ...rest } = merge(mealTimePromptProps, this.promptProps);
 
     return {
