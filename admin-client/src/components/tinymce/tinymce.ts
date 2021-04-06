@@ -35,7 +35,7 @@ export default Vue.extend({
           'visualblocks fullscreen media table paste code help',
         ],
         toolbar:
-          'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | fullscreen | code | removeformat | help',
+          'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | media | fullscreen | code | removeformat | help',
       },
     };
   },
