@@ -3,6 +3,7 @@ import { LocaleMessageObject } from 'vue-i18n';
 const prompts: LocaleMessageObject = {
   checkbox: {
     label: 'Select any of the options',
+    other: 'Please specify',
     validation: {
       required: 'At least one of the options requires to be selected.',
     },
@@ -14,6 +15,7 @@ const prompts: LocaleMessageObject = {
   },
   radio: {
     label: 'Select one of the options',
+    other: 'Please specify',
     validation: {
       required: 'One of the options requires to be selected.',
     },

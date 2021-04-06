@@ -21,7 +21,7 @@
           <v-text-field
             v-model.trim="otherValue"
             :error="hasErrors"
-            label="Please specify"
+            :label="$t('prompts.radio.other')"
             @input="clearErrors"
             @focus="selected = 'other'"
           ></v-text-field>
