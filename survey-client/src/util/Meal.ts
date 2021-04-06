@@ -15,9 +15,9 @@ import { findAnswerFor } from './Recall';
 import Food from './Food';
 
 export default class Meal {
-  private name: string;
+  public name: string;
 
-  private time: string;
+  public time: string;
 
   private flags: string[] = [];
 

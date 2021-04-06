@@ -1,18 +1,30 @@
 <template>
   <prompt-layout :text="text" :description="description">
-    <v-card-text>
-      <v-form ref="form" @submit.prevent="onSubmit">
-        <v-time-picker
-          v-model="currentValue"
-          format="24hr"
-          :landscape="!isMobile"
-          full-width
-          @input="clearErrors"
-        ></v-time-picker>
-        <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
-        <continue></continue>
-      </v-form>
-    </v-card-text>
+    <v-form ref="form" @submit.prevent="submit">
+      <v-time-picker
+        v-model="currentValue"
+        :format="promptProps.format"
+        :landscape="!isMobile"
+        full-width
+        @input="clearErrors"
+      ></v-time-picker>
+      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+    </v-form>
+    <template v-slot:actions>
+      <v-btn :block="isMobile" class="px-5" large @click="removeMeal">
+        {{ $t('prompts.mealTime.no', { meal: currentMeal.name }) }}
+      </v-btn>
+      <v-btn
+        :block="isMobile"
+        :class="{ 'ma-0': isMobile, 'mb-2': isMobile }"
+        class="px-5"
+        color="success"
+        large
+        @click="submit"
+      >
+        {{ $t('prompts.mealTime.yes', { meal: currentMeal.name }) }}
+      </v-btn>
+    </template>
   </prompt-layout>
 </template>
 
@@ -20,6 +32,8 @@
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { MealTimePromptProps, mealTimePromptProps } from '@common/prompts';
+import recall from '@/util/Recall';
+import Meal from '@/util/Meal';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
@@ -38,9 +52,13 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   data() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { text, description, ...rest } = merge(mealTimePromptProps, this.promptProps);
+
     return {
-      ...merge(mealTimePromptProps, this.promptProps),
+      ...rest,
       currentValue: this.value,
+      recall,
       errors: [] as string[],
     };
   },
@@ -49,6 +67,24 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+    mealIndex(): number {
+      return parseInt(this.$route.params.mealId, 10);
+    },
+    currentMeal(): Meal | undefined {
+      return this.recall.getMeal(this.mealIndex);
+    },
+    text(): string {
+      const text = this.promptProps.text[this.$i18n.locale];
+      return text
+        ? text.replace('{meal}', this.currentMeal?.name ?? '')
+        : (this.$t('prompts.mealTime.text', { meal: this.currentMeal?.name }) as string);
+    },
+    description(): string {
+      const description = this.promptProps.text[this.$i18n.locale];
+      return description
+        ? description.replace('{meal}', this.currentMeal?.name ?? '')
+        : (this.$t('prompts.mealTime.description', { meal: this.currentMeal?.name }) as string);
+    },
   },
 
   methods: {
@@ -56,7 +92,11 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       this.errors = [];
     },
 
-    onSubmit() {
+    removeMeal() {
+      this.recall.removeMeal(this.mealIndex);
+    },
+
+    submit() {
       if (this.validation.required && !this.currentValue) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??

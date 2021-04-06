@@ -31,6 +31,15 @@ const prompts: LocaleMessageObject = {
       required: 'This field is required to be filled in.',
     },
   },
+  mealTime: {
+    text: 'Did you have {meal}? If so, when was this?',
+    description: '',
+    yes: 'Around that time',
+    no: 'I did not have {meal}',
+    validation: {
+      required: 'Please select time you had the meal.',
+    },
+  },
   portionoption: {
     validation: {
       required: 'Please select how the portion will be measured.',

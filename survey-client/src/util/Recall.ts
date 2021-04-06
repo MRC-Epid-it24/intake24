@@ -23,7 +23,7 @@ export const findAnswerFor = (prompts: Prompt[], questionsId: string): PromptAns
 };
 
 export class Recall {
-  private schemeId: string | null = null;
+  private scheme!: SchemeEntryResponse;
 
   private startTime: Date | null = null;
 
@@ -42,8 +42,9 @@ export class Recall {
   currentSelection: Selection | null = null;
 
   init(scheme: SchemeEntryResponse): void {
-    const { id, meals, questions } = scheme;
-    this.schemeId = id;
+    this.scheme = scheme;
+
+    const { meals, questions } = scheme;
 
     (['preMeals', 'postMeals', 'submission'] as QuestionSection[]).forEach((item) => {
       this.loadPrompts(item, questions[item]);
@@ -52,16 +53,16 @@ export class Recall {
     this.loadMeals(meals, questions.meals);
   }
 
+  isInitialized(): boolean {
+    return !!this.scheme;
+  }
+
   start(): Selection | null {
     this.startTime = new Date();
 
     this.setNextAutoSelection();
 
     return this.getSelection();
-  }
-
-  isInitialized(): boolean {
-    return !!this.schemeId;
   }
 
   hasStarted(): boolean {
@@ -78,6 +79,22 @@ export class Recall {
       answer: null,
       status: PromptStatuses.INITIAL,
     }));
+  }
+
+  getMeal(index: number): Meal | undefined {
+    return this.meals.find((meal, mealIndex) => index === mealIndex);
+  }
+
+  addMeal(mealName: string): void {
+    this.meals.push(
+      new Meal({ name: { en: mealName }, time: '8:00' }, this.scheme.questions.meals)
+    );
+  }
+
+  removeMeal(index: number): void {
+    this.meals.splice(index, 1);
+
+    this.setNextAutoSelection();
   }
 
   private isSectionDone(section: QuestionSection): boolean {
@@ -258,7 +275,7 @@ export class Recall {
       status: item.status,
     });
 
-    const { schemeId, startTime, endTime } = this;
+    const { scheme, startTime, endTime } = this;
 
     const preMeals: PromptState[] = this.preMeals.map(promptStateMapper);
     const postMeals: PromptState[] = this.postMeals.map(promptStateMapper);
@@ -267,7 +284,7 @@ export class Recall {
     const meals = this.meals.map((meal) => meal.getState());
 
     return {
-      schemeId,
+      schemeId: scheme.id,
       startTime,
       endTime,
       flags: [...this.flags],
