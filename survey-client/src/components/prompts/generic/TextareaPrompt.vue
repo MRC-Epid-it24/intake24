@@ -2,7 +2,7 @@
   <prompt-layout :text="text" :description="description">
     <v-form ref="form" @submit.prevent="submit">
       <v-textarea
-        v-model="currentValue"
+        v-model.trim="currentValue"
         :hint="getLocaleContent(hint)"
         :label="getLocaleContent(label)"
         :rules="rules"
