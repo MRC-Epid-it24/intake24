@@ -44,7 +44,7 @@
 
     <v-row>
       <v-col>
-        <v-form ref="form" @submit.prevent="onSubmit">
+        <v-form ref="form" @submit.prevent="submit">
           <!-- Should be disabled if nothing selected? -->
           <continue></continue>
         </v-form>
@@ -68,14 +68,14 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   props: {
     // Generic object 'props' used to store all props for each prompt
-    props: {
+    promptProps: {
       type: Object as () => PortionSizeOptionPromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(portionSizeOptionPromptProps, this.props),
+      ...merge(portionSizeOptionPromptProps, this.promptProps),
       errors: [] as string[],
       currentValue: -1,
     };
@@ -129,7 +129,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       return 0;
     },
 
-    onSubmit() {
+    submit() {
       if (!this.isValid()) {
         // Get either validation message passed in, or the default for the locale
         this.errors = [

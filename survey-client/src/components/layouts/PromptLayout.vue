@@ -2,11 +2,16 @@
   <v-card :flat="isMobile" :tile="isMobile">
     <slot name="header">
       <v-sheet class="pt-5 px-5">
-        <h3 class="my-3">{{ localeText }}</h3>
-        <p v-if="localeDescription" class="my-3" v-html="localeDescription"></p>
+        <h3 class="mb-4">{{ localeText }}</h3>
+        <div v-if="localeDescription" v-html="localeDescription"></div>
       </v-sheet>
     </slot>
-    <slot></slot>
+    <v-card-text>
+      <slot></slot>
+    </v-card-text>
+    <v-card-actions class="pa-4 d-flex" :class="{ 'flex-column-reverse': isMobile }">
+      <slot name="actions"></slot>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -22,22 +27,24 @@ export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
 
   props: {
     text: {
-      type: Object as () => LocaleTranslation<string>,
+      type: [Object as () => LocaleTranslation<string>, String],
       required: true,
     },
     description: {
-      type: Object as () => LocaleTranslation,
+      type: [Object as () => LocaleTranslation, String],
       default: null,
     },
   },
 
   computed: {
     localeText(): string {
-      return this.getLocaleContent(this.text);
+      const { text } = this;
+      return typeof text === 'string' ? text : this.getLocaleContent(text);
     },
 
     localeDescription(): string | null {
-      return this.getLocaleContent(this.description);
+      const { description } = this;
+      return typeof description === 'string' ? description : this.getLocaleContent(description);
     },
   },
 });

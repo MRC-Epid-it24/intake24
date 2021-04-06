@@ -1,10 +1,8 @@
 <template>
   <prompt-layout :text="text" :description="description">
-    <v-card-text>
-      <v-form ref="form" @submit.prevent="onSubmit">
-        <continue></continue>
-      </v-form>
-    </v-card-text>
+    <template v-slot:actions>
+      <continue @click.native="submit"></continue>
+    </template>
   </prompt-layout>
 </template>
 
@@ -20,20 +18,20 @@ export default Vue.extend({
   mixins: [BasePrompt],
 
   props: {
-    props: {
+    promptProps: {
       type: Object as () => BasePromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(infoPromptProps, this.props),
-      currentValue: 'ok',
+      ...merge(infoPromptProps, this.promptProps),
+      currentValue: null,
     };
   },
 
   methods: {
-    onSubmit() {
+    submit() {
       this.$emit('answer', this.currentValue);
     },
   },

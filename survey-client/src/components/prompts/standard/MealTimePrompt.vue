@@ -28,7 +28,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   mixins: [BasePrompt],
 
   props: {
-    props: {
+    promptProps: {
       type: Object as () => MealTimePromptProps,
     },
     value: {
@@ -39,7 +39,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   data() {
     return {
-      ...merge(mealTimePromptProps, this.props),
+      ...merge(mealTimePromptProps, this.promptProps),
       currentValue: this.value,
       errors: [] as string[],
     };
@@ -60,7 +60,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       if (this.validation.required && !this.currentValue) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??
-            (this.$t('prompts.timepicker.validation.required') as string),
+            (this.$t('prompts.mealTime.validation.required') as string),
         ];
         return;
       }

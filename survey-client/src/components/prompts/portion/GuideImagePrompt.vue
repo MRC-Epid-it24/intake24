@@ -78,7 +78,7 @@
                     <v-alert color="error" v-if="hasErrors">
                       <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
                     </v-alert>
-                    <v-btn color="success" @click="onSubmit">
+                    <v-btn color="success" @click="submit">
                       {{ $t('portion.common.confirmButton') }}
                     </v-btn>
                   </v-col>
@@ -126,14 +126,14 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
 
   props: {
     // Generic object 'props' used to store all props for each prompt
-    props: {
+    promptProps: {
       type: Object as () => GuideImagePromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(guideImagePromptDefaultProps, this.props),
+      ...merge(guideImagePromptDefaultProps, this.promptProps),
       errors: [] as string[],
       selectedGuide: false, // TODO: Model this correctly
       selectedQuantity: false,
@@ -221,7 +221,7 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
       }
       return false;
     },
-    onSubmit() {
+    submit() {
       if (!this.isValid()) {
         // Should this also just accept the default value of 1?
         this.errors = [

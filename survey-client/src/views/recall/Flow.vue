@@ -9,10 +9,10 @@
           v-if="currentSelection"
           :is="currentSelection.prompt.question.component"
           :key="currentSelection.prompt.question.id"
-          :props="currentSelection.prompt.question.props"
+          :promptProps="currentSelection.prompt.question.props"
           :value="currentSelection.prompt.answer"
-          @answer="onAnswer"
-          @submit="onSubmit"
+          @answer="answer"
+          @submit="submit"
         ></component>
       </transition>
     </v-col>
@@ -87,8 +87,8 @@ export default Vue.extend({
   },
 
   methods: {
-    async onAnswer(input: string | string[]) {
-      console.log('onAnswer', input);
+    async answer(input: string | string[]) {
+      console.log('answer', input);
       const selection = this.recall.answerQuestion(input);
 
       const state = this.recall.getState();
@@ -110,8 +110,8 @@ export default Vue.extend({
       }
     },
 
-    async onSubmit(input: string | string[]) {
-      console.log('onSubmit', input);
+    async submit(input: string | string[]) {
+      console.log('submit', input);
       try {
         const submission = this.recall.submit();
         await surveyService.submit(this.surveyId, submission);

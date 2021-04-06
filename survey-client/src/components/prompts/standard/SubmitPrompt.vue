@@ -1,7 +1,7 @@
 <template>
   <prompt-layout :text="text" :description="description">
     <v-card-text>
-      <v-form ref="form" @submit.prevent="onSubmit">
+      <v-form ref="form" @submit.prevent="submit">
         <submit></submit>
       </v-form>
     </v-card-text>
@@ -21,17 +21,17 @@ export default Vue.extend({
   mixins: [BasePrompt, Submit],
 
   props: {
-    props: {
+    promptProps: {
       type: Object as () => BasePromptProps,
     },
   },
 
   data() {
-    return { ...merge(submitPromptProps, this.props) };
+    return { ...merge(submitPromptProps, this.promptProps) };
   },
 
   methods: {
-    onSubmit() {
+    submit() {
       this.$emit('submit');
     },
   },

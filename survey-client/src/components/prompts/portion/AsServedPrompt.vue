@@ -89,14 +89,14 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   props: {
     // Generic object 'props' used to store all props for each prompt
-    props: {
+    promptProps: {
       type: Object as () => AsServedPromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(asServedPromptDefaultProps, this.props),
+      ...merge(asServedPromptDefaultProps, this.promptProps),
       errors: [] as string[],
       foodWeight: '100g', // This will be part of the props
     };
@@ -109,7 +109,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   },
 
   methods: {
-    onSubmit() {
+    submit() {
       this.$emit('AsServed selected');
     },
   },

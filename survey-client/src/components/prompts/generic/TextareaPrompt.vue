@@ -1,18 +1,18 @@
 <template>
   <prompt-layout :text="text" :description="description">
-    <v-card-text>
-      <v-form ref="form" @submit.prevent="onSubmit">
-        <v-textarea
-          v-model="currentValue"
-          :hint="getLocaleContent(hint)"
-          :label="getLocaleContent(label)"
-          :rules="rules"
-          hide-details="auto"
-          outlined
-        ></v-textarea>
-        <continue></continue>
-      </v-form>
-    </v-card-text>
+    <v-form ref="form" @submit.prevent="submit">
+      <v-textarea
+        v-model="currentValue"
+        :hint="getLocaleContent(hint)"
+        :label="getLocaleContent(label)"
+        :rules="rules"
+        hide-details="auto"
+        outlined
+      ></v-textarea>
+    </v-form>
+    <template v-slot:actions>
+      <continue @click.native="submit"></continue>
+    </template>
   </prompt-layout>
 </template>
 
@@ -28,7 +28,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   mixins: [BasePrompt],
 
   props: {
-    props: {
+    promptProps: {
       type: Object as () => TextareaPromptProps,
     },
     value: {
@@ -38,7 +38,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   data() {
-    const props: TextareaPromptProps = merge(textareaPromptProps, this.props);
+    const props: TextareaPromptProps = merge(textareaPromptProps, this.promptProps);
 
     return {
       ...props,
@@ -55,7 +55,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   methods: {
-    onSubmit() {
+    submit() {
       const isValid = this.$refs.form.validate();
       if (!isValid) return;
 
