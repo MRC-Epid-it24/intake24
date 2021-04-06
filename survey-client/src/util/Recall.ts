@@ -81,8 +81,8 @@ export class Recall {
     }));
   }
 
-  getMeal(index: number): Meal | undefined {
-    return this.meals.find((meal, mealIndex) => index === mealIndex);
+  getMeal(index: number): Meal {
+    return this.meals[index];
   }
 
   addMeal(mealName: string): void {
