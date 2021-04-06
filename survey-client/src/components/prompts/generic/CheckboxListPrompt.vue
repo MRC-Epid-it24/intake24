@@ -1,33 +1,33 @@
 <template>
   <prompt-layout :text="text" :description="description">
-    <v-card-text>
-      <v-form ref="form" @submit.prevent="onSubmit">
-        <v-label>{{ getLocaleContent(label) }}</v-label>
-        <v-checkbox
-          v-model="selected"
-          v-for="option in getLocaleContent(options)"
-          :key="option.value"
-          :error="hasErrors"
-          :label="option.label"
-          :value="option.value"
-          class="mt-2"
-          hide-details="auto"
-          @change="clearErrors"
-        ></v-checkbox>
-        <v-row v-if="other" align="center" no-gutters>
-          <v-checkbox v-model="otherEnabled" hide-details class="mt-0 pb-2"></v-checkbox>
-          <v-text-field
-            v-model="otherValue"
-            :error="hasErrors && otherEnabled"
-            :disabled="!otherEnabled"
-            label="Please specify"
-            @input="clearErrors"
-          ></v-text-field>
-        </v-row>
-        <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
-        <continue></continue>
-      </v-form>
-    </v-card-text>
+    <v-form ref="form" @submit.prevent="submit">
+      <v-label>{{ getLocaleContent(label) }}</v-label>
+      <v-checkbox
+        v-model="selected"
+        v-for="option in getLocaleContent(options)"
+        :key="option.value"
+        :error="hasErrors"
+        :label="option.label"
+        :value="option.value"
+        class="mt-2"
+        hide-details="auto"
+        @change="clearErrors"
+      ></v-checkbox>
+      <v-row v-if="other" align="center" no-gutters>
+        <v-checkbox v-model="otherEnabled" hide-details class="mt-0 pb-2"></v-checkbox>
+        <v-text-field
+          v-model="otherValue"
+          :error="hasErrors && otherEnabled"
+          :disabled="!otherEnabled"
+          label="Please specify"
+          @input="clearErrors"
+        ></v-text-field>
+      </v-row>
+      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+    </v-form>
+    <template v-slot:actions>
+      <continue @click.native="submit"></continue>
+    </template>
   </prompt-layout>
 </template>
 
@@ -43,7 +43,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   mixins: [BasePrompt],
 
   props: {
-    props: {
+    promptProps: {
       type: Object as () => CheckboxListPromptProps,
     },
     value: {
@@ -54,7 +54,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   data() {
     return {
-      ...merge(checkboxListPromptProps, this.props),
+      ...merge(checkboxListPromptProps, this.promptProps),
       errors: [] as string[],
       otherEnabled: false,
       otherValue: '',
@@ -82,7 +82,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       this.errors = [];
     },
 
-    onSubmit() {
+    submit() {
       if (this.validation.required && !this.currentValue.length) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??

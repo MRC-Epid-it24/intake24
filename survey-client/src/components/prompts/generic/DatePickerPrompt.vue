@@ -1,17 +1,17 @@
 <template>
   <prompt-layout :text="text" :description="description">
-    <v-card-text>
-      <v-form ref="form" @submit.prevent="onSubmit">
-        <v-date-picker
-          v-model="currentValue"
-          :landscape="!isMobile"
-          full-width
-          @input="clearErrors"
-        ></v-date-picker>
-        <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
-        <continue></continue>
-      </v-form>
-    </v-card-text>
+    <v-form ref="form" @submit.prevent="submit">
+      <v-date-picker
+        v-model="currentValue"
+        :landscape="!isMobile"
+        full-width
+        @input="clearErrors"
+      ></v-date-picker>
+      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+    </v-form>
+    <template v-slot:actions>
+      <continue @click.native="submit"></continue>
+    </template>
   </prompt-layout>
 </template>
 
@@ -27,7 +27,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   mixins: [BasePrompt],
 
   props: {
-    props: {
+    promptProps: {
       type: Object as () => DatePickerPromptProps,
     },
     value: {
@@ -38,7 +38,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   data() {
     return {
-      ...merge(datePickerPromptProps, this.props),
+      ...merge(datePickerPromptProps, this.promptProps),
       currentValue: this.value,
       errors: [] as string[],
     };
@@ -55,7 +55,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       this.errors = [];
     },
 
-    onSubmit() {
+    submit() {
       if (this.validation.required && !this.currentValue) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??

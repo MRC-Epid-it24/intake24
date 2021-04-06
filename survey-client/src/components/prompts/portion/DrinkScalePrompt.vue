@@ -86,7 +86,7 @@
                 </v-btn>
               </v-col>
               <v-col>
-                <v-btn color="success" @click="onSubmit()">
+                <v-btn color="success" @click="submit()">
                   {{ $t('portion.drinkScale.confirmFullButton') }}
                 </v-btn>
               </v-col>
@@ -118,14 +118,14 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   props: {
     // Generic object 'props' used to store all props for each prompt
-    props: {
+    promptProps: {
       type: Object as () => DrinkScalePromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(drinkScalePromptDefaultProps, this.props),
+      ...merge(drinkScalePromptDefaultProps, this.promptProps),
       errors: [] as string[],
       selectedGuide: false, // TODO: Model this correctly
       selectedQuantity: false,
@@ -170,7 +170,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       }
       return false;
     },
-    onSubmit() {
+    submit() {
       if (!this.isValid()) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??

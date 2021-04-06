@@ -52,7 +52,7 @@
 
         <v-row class="pa-2 mt-0">
           <v-col>
-            <v-btn color="success" @click="onSubmit()">Continue</v-btn>
+            <v-btn color="success" @click="submit()">Continue</v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -82,14 +82,14 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   props: {
     // Generic object 'props' used to store all props for each prompt
-    props: {
+    promptProps: {
       type: Object as () => StandardPortionPromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(standardPortionPromptDefaultProps, this.props),
+      ...merge(standardPortionPromptDefaultProps, this.promptProps),
       errors: [] as string[],
       portionOptions: ['berries', 'punnets', 'bags'], // This should be modelled in the props
       selectedOption: '',
@@ -124,7 +124,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     onUpdateQuantity(value: QuantityValues) {
       this.quantityValue = value;
     },
-    onSubmit() {
+    submit() {
       if (!this.isValid()) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??

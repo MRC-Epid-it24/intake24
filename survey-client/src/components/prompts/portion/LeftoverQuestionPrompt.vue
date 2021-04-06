@@ -9,8 +9,8 @@
           {{ $t('portion.asServedLeftover.question', { food: localeDescription }) }}
         </v-card-text>
         <v-card-actions>
-          <v-btn @click="onSubmit(true)">{{ $t('common.confirm.yes') }}</v-btn>
-          <v-btn @click="onSubmit(false)">{{ $t('common.confirm.no') }}</v-btn>
+          <v-btn @click="submit(true)">{{ $t('common.confirm.yes') }}</v-btn>
+          <v-btn @click="submit(false)">{{ $t('common.confirm.no') }}</v-btn>
         </v-card-actions>
       </v-card>
     </portion-layout>
@@ -31,14 +31,14 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   props: {
     // Generic object 'props' used to store all props for each prompt
-    props: {
+    promptProps: {
       type: Object as () => LeftoverQuestionPromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(leftoverQuestionPromptDefaultProps, this.props),
+      ...merge(leftoverQuestionPromptDefaultProps, this.promptProps),
       errors: [] as string[],
       computeLeftovers: false,
     };
@@ -54,7 +54,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   },
 
   methods: {
-    onSubmit(value: boolean) {
+    submit(value: boolean) {
       this.$emit('Leftover method required', value);
     },
   },

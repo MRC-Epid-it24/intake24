@@ -27,14 +27,14 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   props: {
     // Generic object 'props' used to store all props for each prompt
-    props: {
+    promptProps: {
       type: Object as () => MilkHotDrinkPromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(milkHotDrinkPromptDefaultProps, this.props),
+      ...merge(milkHotDrinkPromptDefaultProps, this.promptProps),
       errors: [] as string[],
     };
   },

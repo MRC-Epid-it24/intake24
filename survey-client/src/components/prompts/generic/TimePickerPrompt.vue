@@ -1,18 +1,18 @@
 <template>
   <prompt-layout :text="text" :description="description">
-    <v-card-text>
-      <v-form ref="form" @submit.prevent="onSubmit">
-        <v-time-picker
-          v-model="currentValue"
-          format="24hr"
-          :landscape="!isMobile"
-          full-width
-          @input="clearErrors"
-        ></v-time-picker>
-        <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
-        <continue></continue>
-      </v-form>
-    </v-card-text>
+    <v-form ref="form" @submit.prevent="submit">
+      <v-time-picker
+        v-model="currentValue"
+        :format="format"
+        :landscape="!isMobile"
+        full-width
+        @input="clearErrors"
+      ></v-time-picker>
+      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+    </v-form>
+    <template v-slot:actions>
+      <continue @click.native="submit"></continue>
+    </template>
   </prompt-layout>
 </template>
 
@@ -28,7 +28,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   mixins: [BasePrompt],
 
   props: {
-    props: {
+    promptProps: {
       type: Object as () => TimePickerPromptProps,
     },
     value: {
@@ -39,7 +39,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   data() {
     return {
-      ...merge(timePickerPromptProps, this.props),
+      ...merge(timePickerPromptProps, this.promptProps),
       currentValue: this.value,
       errors: [] as string[],
     };
@@ -56,7 +56,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       this.errors = [];
     },
 
-    onSubmit() {
+    submit() {
       if (this.validation.required && !this.currentValue) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??
