@@ -247,7 +247,22 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
   },
 
+  mounted() {
+    document.addEventListener('focusin', this.focusInTox, true);
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('focusin', this.focusInTox, true);
+  },
+
   methods: {
+    focusInTox(event: FocusEvent) {
+      const toxDialog = (event.target as HTMLElement).closest('.tox-dialog');
+      if (!toxDialog) return;
+
+      event.stopImmediatePropagation();
+    },
+
     updatePromptProps() {
       const {
         show,
