@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import Continue from '@/components/Continue.vue';
+import Continue from '@/components/prompts/actions/Continue.vue';
 import PromptLayout from '@/components/layouts/PromptLayout.vue';
 import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
 import { FormRefs } from '@common/types';
