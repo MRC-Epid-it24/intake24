@@ -1,12 +1,10 @@
 <template>
   <v-row justify="center">
-    <v-col v-if="!isNotDesktop" cols="4" md="2">
-      <v-card min-height="30rem" class="d-flex justify-center align-center">
-        <meal-list :surveyName="survey.name" :meals="recall.meals"></meal-list>
-      </v-card>
+    <v-col v-if="!isNotDesktop" cols="3" lg="3">
+      <meal-list :surveyName="survey.name" :meals="mealsExample"></meal-list>
     </v-col>
-    <v-col cols="12" md="10">
-      <v-card min-height="30rem" class="d-flex justify-center align-center">
+    <v-col cols="12" lg="9">
+      <v-card min-height="30rem" height="45rem" class="flex-grow-1 flex-shrink-0 justify-center align-center">
         <!-- <v-btn class="pa-10" color="success" x-large @click="startRecall">Start recall</v-btn> -->
         <!-- <meal-time-prompt
 					:props= {
@@ -16,7 +14,7 @@
       </v-card>
     </v-col>
 
-    <meal-list-mobile :meals="recall.meals"> </meal-list-mobile>
+    <meal-list-mobile :meals="recall.meals" v-if="isNotDesktop"> </meal-list-mobile>
   </v-row>
 </template>
 
@@ -46,6 +44,49 @@ export default Vue.extend({
   data() {
     return {
       recall,
+			// Mock Data
+			foodeExamples: [
+				{
+				code: "CHKA23",
+				name: "Chicken breast",
+				searchTerm: "Chicken breast",
+				portionSizeMethod: "asServed"
+				},
+				{
+				code: "BTEA23",
+				name: "Black Tea",
+				searchTerm: "Tea",
+				},
+				{
+				searchTerm: "Muffin with berry",
+				},
+			],
+			meals: [
+				{
+					name: 'Breakfast',
+					time: "8:00"
+				},
+				{
+					name: 'Morning Snack',
+					time: "10:00"
+				},
+				{
+				  name: 'Lunch',
+					time: "12:00"
+				},
+				{
+					name: 'Afternoon Snack',
+					time: "14:00"
+				},
+				{
+					name: 'Dinner',
+					time: "18:00"
+				 },
+				{
+					name: 'Evening Snack',
+					time: "21:00"
+				}
+				]
     };
   },
 
@@ -53,14 +94,24 @@ export default Vue.extend({
     survey(): SurveyEntryResponse | null {
       return this.$store.state.recall.survey;
     },
+		// MockData For Test
+		mealsExample() {
+			const mealsArr:Array<any | null> = []
+			this.meals.forEach(meal => {
+				const mealObj:any = {
+					name: meal.name,
+					time: Math.random() > 0.5 ? meal.time : "",
+				}
+				mealObj.foods = mealObj.time ? this.foodeExamples : []
+				mealsArr.push(mealObj);
+			});
+
+			return mealsArr
+		}
   },
 
   async mounted() {
     if (this.survey?.scheme) this.recall.init(this.survey.scheme);
-    // MockData For Test
-    // recall.meals.forEach(meal => {
-    // 	meal.foods = this.foodTest;
-    // });
   },
 
   methods: {

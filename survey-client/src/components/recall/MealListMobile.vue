@@ -1,10 +1,14 @@
 <template>
   <v-bottom-navigation absolute color="orange" horizontal grow>
-    <v-menu top v-for="meal in meals" :key="meal.name" :offset-y="offset">
+    <v-menu top v-for="(meal, index) in meals" :key="meal.name" :offset-y="offset">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on">
+				<v-btn v-if="isMobile" v-bind="attrs" v-on="on">
+          <span>{{ index+1 }}</span>
+        </v-btn>
+        <v-btn v-else-if="!isMobile" v-bind="attrs" v-on="on">
           <span>{{ meal.name }}</span>
         </v-btn>
+
       </template>
       <meal-item-mobile :foods="foodsTest"></meal-item-mobile>
     </v-menu>
