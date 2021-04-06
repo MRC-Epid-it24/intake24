@@ -310,8 +310,22 @@ export default ({
    * @returns {Promise<void>}
    */
   const submit = async (surveyId: string, userId: number, input: RecallState): Promise<void> => {
-    const survey = await Survey.findByPk(surveyId);
-    if (!survey) throw new NotFoundError();
+    const survey = await Survey.scope('scheme').findByPk(surveyId);
+    if (!survey || !survey.scheme) throw new NotFoundError();
+
+    const {
+      preMeals,
+      postMeals,
+      meals: { preFoods, postFoods },
+    } = survey.scheme.questions;
+
+    const surveyCustomQuestions = [...preMeals, ...postMeals]
+      .filter((question) => question.type === 'generic')
+      .map((question) => question.id);
+
+    const mealCustomQuestions = [...preFoods, ...postFoods]
+      .filter((question) => question.type === 'generic')
+      .map((question) => question.id);
 
     /*
      * TODO: this could be pushed to background job
@@ -328,14 +342,14 @@ export default ({
       userId,
       startTime: input.startTime,
       endTime: input.endTime,
-      uxSessionId: uuid.v4(),
+      uxSessionId: uuid.v4(), // TODO: verify this
       submissionTime: new Date(),
     });
 
     // Survey custom fields - top-level questions
     const surveyCustomFieldInputs = [...input.preMeals, ...input.postMeals]
       // Filter out null answers (conditionally skipped prompt)
-      .filter((item) => item.answer)
+      .filter((item) => surveyCustomQuestions.includes(item.questionId) && item.answer)
       .map((item) => ({
         surveySubmissionId,
         name: item.questionId,
@@ -370,7 +384,7 @@ export default ({
       // Meal custom fields - meal-level questions
       const mealCustomFieldInputs = [...mealInput.preFoods, ...mealInput.postFoods]
         // Filter out null answers (conditionally skipped prompt)
-        .filter((item) => item.answer)
+        .filter((item) => mealCustomQuestions.includes(item.questionId) && item.answer)
         .map((item) => ({
           mealId: mealRecord.id,
           name: item.questionId,
