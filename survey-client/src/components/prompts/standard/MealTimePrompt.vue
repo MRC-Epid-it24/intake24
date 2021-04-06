@@ -12,7 +12,7 @@
     </v-form>
     <template v-slot:actions>
       <v-btn :block="isMobile" class="px-5" large @click="removeMeal">
-        {{ $t('prompts.mealTime.no', { meal: currentMeal.name }) }}
+        {{ $t('prompts.mealTime.no', { meal: meal.name }) }}
       </v-btn>
       <v-btn
         :block="isMobile"
@@ -22,7 +22,7 @@
         large
         @click="submit"
       >
-        {{ $t('prompts.mealTime.yes', { meal: currentMeal.name }) }}
+        {{ $t('prompts.mealTime.yes', { meal: meal.name }) }}
       </v-btn>
     </template>
   </prompt-layout>
@@ -70,20 +70,20 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     mealIndex(): number {
       return parseInt(this.$route.params.mealId, 10);
     },
-    currentMeal(): Meal | undefined {
+    meal(): Meal {
       return this.recall.getMeal(this.mealIndex);
     },
     text(): string {
       const text = this.promptProps.text[this.$i18n.locale];
       return text
-        ? text.replace('{meal}', this.currentMeal?.name ?? '')
-        : (this.$t('prompts.mealTime.text', { meal: this.currentMeal?.name }) as string);
+        ? text.replace('{meal}', this.meal.name ?? '')
+        : (this.$t('prompts.mealTime.text', { meal: this.meal.name }) as string);
     },
     description(): string {
       const description = this.promptProps.text[this.$i18n.locale];
       return description
-        ? description.replace('{meal}', this.currentMeal?.name ?? '')
-        : (this.$t('prompts.mealTime.description', { meal: this.currentMeal?.name }) as string);
+        ? description.replace('{meal}', this.meal.name ?? '')
+        : (this.$t('prompts.mealTime.description', { meal: this.meal.name }) as string);
     },
   },
 
@@ -105,6 +105,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
         return;
       }
 
+      this.meal.time = this.currentValue;
       this.$emit('answer', this.currentValue);
     },
   },
