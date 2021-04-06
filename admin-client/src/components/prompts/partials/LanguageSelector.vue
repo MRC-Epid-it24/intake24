@@ -128,7 +128,6 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
     },
 
     remove(langId: string) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [langId]: remove, ...rest } = this.value;
       this.$emit('input', { ...rest });
     },

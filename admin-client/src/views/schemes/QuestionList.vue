@@ -296,7 +296,6 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
       const {
         index,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         question: { origId, ...rest },
       } = this.dialog;
 
