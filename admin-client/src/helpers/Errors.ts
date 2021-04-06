@@ -30,7 +30,8 @@ export default class Errors {
     }
 
     if (field) {
-      delete this.errors[field];
+      const { [field]: discard, ...rest } = this.errors;
+      this.errors = { ...rest };
       return;
     }
 
