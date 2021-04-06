@@ -162,11 +162,11 @@ import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import { promptSettings } from '@/components/prompts';
-import genericPrompts from '@/components/prompts/generic';
+import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
 import { merge } from '@/util';
 import { FormRefs, PromptQuestion, QuestionSection, MealSection } from '@common/types';
-import { genericPromptQuestions, standardPromptQuestions } from '@common/prompts';
+import { customPromptQuestions, standardPromptQuestions } from '@common/prompts';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;
@@ -195,10 +195,10 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
   },
 
-  components: { ConfirmDialog, draggable, ...genericPrompts, ...standardPrompts },
+  components: { ConfirmDialog, draggable, ...customPrompts, ...standardPrompts },
 
   data() {
-    const promptQuestions = [...genericPromptQuestions, ...standardPromptQuestions];
+    const promptQuestions = [...customPromptQuestions, ...standardPromptQuestions];
 
     const dialog = (show = false): PromptQuestionDialog => ({
       show,

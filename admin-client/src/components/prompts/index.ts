@@ -22,7 +22,7 @@ export type PromptSettingsRecord = {
 export type PromptSettings = Record<ComponentType, PromptSettingsRecord>;
 
 export const promptSettings: PromptSettings = {
-  // Generic
+  // Custom
   'info-prompt': {
     tabs: [...baseTab],
     sections: [...allSection],

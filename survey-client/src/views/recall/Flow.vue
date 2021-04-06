@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import genericPrompts from '@/components/prompts/generic';
+import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
 import surveyService from '@/services/survey.service';
 import recall from '@/util/Recall';
@@ -31,7 +31,7 @@ import { SurveyEntryResponse } from '@common/types/http';
 export default Vue.extend({
   name: 'RecallFlow',
 
-  components: { ...genericPrompts, ...standardPrompts },
+  components: { ...customPrompts, ...standardPrompts },
 
   props: {
     surveyId: {
