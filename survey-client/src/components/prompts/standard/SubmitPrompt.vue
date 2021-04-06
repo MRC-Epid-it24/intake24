@@ -1,10 +1,8 @@
 <template>
   <prompt-layout :text="text" :description="description">
-    <v-card-text>
-      <v-form ref="form" @submit.prevent="submit">
-        <submit></submit>
-      </v-form>
-    </v-card-text>
+    <template v-slot:actions>
+      <submit @click.native="submit"></submit>
+    </template>
   </prompt-layout>
 </template>
 
@@ -12,7 +10,7 @@
 import Vue from 'vue';
 import merge from 'deepmerge';
 import { BasePromptProps, submitPromptProps } from '@common/prompts';
-import Submit from '@/components/Submit.vue';
+import Submit from '@/components/prompts/actions/Submit.vue';
 import BasePrompt from '../BasePrompt';
 
 export default Vue.extend({

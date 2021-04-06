@@ -6,10 +6,14 @@
         <div v-if="localeDescription" v-html="localeDescription"></div>
       </v-sheet>
     </slot>
-    <v-card-text>
+    <v-card-text v-if="hasDefaultSlot">
       <slot></slot>
     </v-card-text>
-    <v-card-actions class="pa-4 d-flex" :class="{ 'flex-column-reverse': isMobile }">
+    <v-card-actions
+      v-if="hasActionsSlot"
+      :class="{ 'flex-column-reverse': isMobile }"
+      class="pa-4 d-flex"
+    >
       <slot name="actions"></slot>
     </v-card-actions>
   </v-card>
@@ -45,6 +49,14 @@ export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
     localeDescription(): string | null {
       const { description } = this;
       return typeof description === 'string' ? description : this.getLocaleContent(description);
+    },
+
+    hasDefaultSlot(): boolean {
+      return !!this.$slots.default;
+    },
+
+    hasActionsSlot(): boolean {
+      return !!this.$slots.actions;
     },
   },
 });
