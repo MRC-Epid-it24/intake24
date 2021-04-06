@@ -19,7 +19,7 @@
           v-model.trim="otherValue"
           :error="hasErrors && otherEnabled"
           :disabled="!otherEnabled"
-          label="Please specify"
+          :label="$t('prompts.checkbox.other')"
           @input="clearErrors"
         ></v-text-field>
       </v-row>
