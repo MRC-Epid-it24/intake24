@@ -73,45 +73,45 @@ export const textareaPromptProps: TextareaPromptProps = clone({
   hint: { en: null },
 });
 
-export const genericPromptQuestions: PromptQuestion[] = [
+export const customPromptQuestions: PromptQuestion[] = [
   {
     component: 'info-prompt',
-    type: 'generic',
+    type: 'custom',
     id: 'info-prompt',
     name: 'Info / confirmation prompt',
     props: clone(basePromptProps),
   },
   {
     component: 'date-picker-prompt',
-    type: 'generic',
+    type: 'custom',
     id: 'date-picker-prompt',
     name: 'Date picker prompt',
     props: clone(datePickerPromptProps),
   },
   {
     component: 'time-picker-prompt',
-    type: 'generic',
+    type: 'custom',
     id: 'time-picker-prompt',
     name: 'Time picker prompt',
     props: clone(timePickerPromptProps),
   },
   {
     component: 'checkbox-list-prompt',
-    type: 'generic',
+    type: 'custom',
     id: 'checkbox-list-prompt',
     name: 'Checkbox List Prompt',
     props: clone(checkboxListPromptProps),
   },
   {
     component: 'radio-list-prompt',
-    type: 'generic',
+    type: 'custom',
     id: 'radio-list-prompt',
     name: 'Radio List Prompt',
     props: clone(radioListPromptProps),
   },
   {
     component: 'textarea-prompt',
-    type: 'generic',
+    type: 'custom',
     id: 'textarea-prompt',
     name: 'Textarea prompt',
     props: clone(textareaPromptProps),

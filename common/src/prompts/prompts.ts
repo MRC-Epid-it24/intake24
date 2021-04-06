@@ -24,7 +24,7 @@ export type PromptStatus = PromptStatuses;
 export interface PromptQuestion<T extends BasePromptProps = BasePromptProps> {
   id: string;
   name: string;
-  type: 'generic' | 'standard' | 'portion-size';
+  type: 'custom' | 'standard' | 'portion-size';
   component: ComponentType;
   props: T;
 }

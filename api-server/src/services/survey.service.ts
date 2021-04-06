@@ -320,11 +320,11 @@ export default ({
     } = survey.scheme.questions;
 
     const surveyCustomQuestions = [...preMeals, ...postMeals]
-      .filter((question) => question.type === 'generic')
+      .filter((question) => question.type === 'custom')
       .map((question) => question.id);
 
     const mealCustomQuestions = [...preFoods, ...postFoods]
-      .filter((question) => question.type === 'generic')
+      .filter((question) => question.type === 'custom')
       .map((question) => question.id);
 
     /*
