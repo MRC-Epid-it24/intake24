@@ -4,10 +4,7 @@ export type ConditionType = 'promptAnswer' | 'recallNumber';
 
 export type ConditionOp = 'eq' | 'ne' | 'gte' | 'gt' | 'lte' | 'lt';
 
-export type ConditionOpInput = [
-  value: number | string,
-  answer: number | string | (number | string)[]
-];
+export type ConditionOpInput = [number | string, number | string | (number | string)[]];
 
 export type ConditionOpCallback = (input: ConditionOpInput) => boolean;
 
