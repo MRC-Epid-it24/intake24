@@ -79,7 +79,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
         : (this.$t('prompts.mealTime.text', { meal: this.meal.name }) as string);
     },
     description(): string {
-      const description = this.promptProps.text[this.$i18n.locale];
+      const description = this.promptProps.description[this.$i18n.locale];
       return description
         ? description.replace('{meal}', this.meal.name ?? '')
         : (this.$t('prompts.mealTime.description', { meal: this.meal.name }) as string);
