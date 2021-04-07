@@ -27,10 +27,12 @@ const defaults: Schema = {
     errorMessage: 'Enter valid scheme questions.',
     custom: {
       // TODO: tweak ajv JSON validator to work correctly with generic language object types & conditions
-      /* options: (value): boolean => {
+      /* try {
         validateRecallQuestions(value);
         return true;
-      }, */
+      } catch (err) {
+        throw new Error(err.message.split('\n')[0]);
+      } */
       options: async (value): Promise<void> => {
         if (
           !isPlainObject(value) ||
@@ -47,8 +49,12 @@ const defaults: Schema = {
     errorMessage: 'Enter valid meal list.',
     custom: {
       options: (value): boolean => {
-        validateMeals(value);
-        return true;
+        try {
+          validateMeals(value);
+          return true;
+        } catch (err) {
+          throw new Error(err.message.split('\n')[0]);
+        }
       },
     },
   },
@@ -57,8 +63,12 @@ const defaults: Schema = {
     errorMessage: 'Enter valid data export field list.',
     custom: {
       options: (value): boolean => {
-        validateExportSections(value);
-        return true;
+        try {
+          validateExportSections(value);
+          return true;
+        } catch (err) {
+          throw new Error(err.message.split('\n')[0]);
+        }
       },
     },
   },

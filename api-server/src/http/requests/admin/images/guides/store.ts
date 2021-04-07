@@ -23,8 +23,8 @@ export default validate(
       isEmpty: { negated: true },
       custom: {
         options: async (value): Promise<void> => {
-          const locale = await ImageMap.findOne({ where: { id: value } });
-          if (!locale) throw new Error('Enter valid Image map ID.');
+          const imageMap = await ImageMap.findOne({ where: { id: value } });
+          if (!imageMap) throw new Error('Enter valid Image map ID.');
         },
       },
     },

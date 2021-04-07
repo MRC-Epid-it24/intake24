@@ -1,5 +1,4 @@
 import { checkSchema } from 'express-validator';
-import path from 'path';
 import { ImageMap } from '@/db/models/foods';
 import validate from '@/http/requests/validate';
 import { unique } from '@/http/rules';
