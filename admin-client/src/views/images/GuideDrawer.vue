@@ -43,7 +43,8 @@
                   :style="{ cursor: 'pointer' }"
                   @click="selectObject(idx)"
                 >
-                  Object ID: {{ object.id }}
+                  <v-icon left>fa-draw-polygon</v-icon> {{ $t('guide-images.objects.id') }}:
+                  {{ object.id }}
                   <v-spacer></v-spacer>
                   <confirm-dialog
                     v-if="isImageMap && !disabled"
@@ -62,7 +63,7 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="object.description"
+                        v-model.trim="object.description"
                         :disabled="isGuideImage || disabled"
                         :label="$t('common.description')"
                         hide-details="auto"
@@ -85,9 +86,9 @@
               </v-card>
             </v-item>
           </v-col>
-          <v-col cols="12" sm="6" md="4">
+          <v-col v-if="isImageMap && !disabled" cols="12" sm="6" md="4">
             <v-card
-              v-if="isImageMap && !disabled"
+              :title="$t('guide-images.objects.add')"
               class="d-flex justify-center align-center"
               min-height="200px"
               height="100%"
@@ -109,7 +110,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { GuideImageEntry, ImageMapEntry } from '@common/types/http/admin';
+import {
+  GuideImageEntry,
+  GuideImageEntryObject,
+  ImageMapEntry,
+  ImageMapEntryObject,
+} from '@common/types/http/admin';
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { VImg } from 'vuetify/lib';
@@ -121,12 +127,8 @@ type Refs = {
     svg: SVGElement;
   };
   debouncedImgResize: () => void;
-};
-
-type PathObject = {
-  id: number;
-  description: string | null;
-  weight?: number;
+  debouncedImageMapObjects: () => void;
+  debouncedGuideImageObjects: () => void;
 };
 
 type PathCoords = number[][][];
@@ -151,12 +153,12 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
   },
 
   data() {
-    const objects: PathObject[] = [];
+    const objects: Omit<GuideImageEntryObject, 'outlineCoordinates'>[] = [];
     const coords: PathCoords = [];
 
     this.entry.objects.forEach(({ outlineCoordinates, ...rest }) => {
       coords.push(chunk(outlineCoordinates, 2));
-      objects.push({ ...rest });
+      objects.push({ weight: 0, ...rest });
     });
 
     return {
@@ -173,9 +175,11 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     isImageMap(): boolean {
       return this.module === 'image-maps';
     },
+
     isGuideImage(): boolean {
       return this.module === 'guide-images';
     },
+
     svgCursor(): string {
       return `cursor: ${this.disabled || this.selectedObjectIdx === null ? 'no-drop' : 'pointer'}`;
     },
@@ -197,12 +201,43 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
         };
       });
     },
+
+    imageMapObjects(): ImageMapEntryObject[] {
+      return this.objects.map(({ weight, ...rest }, index) => ({
+        ...rest,
+        outlineCoordinates: this.coords[index].flat(),
+      }));
+    },
+
+    guideImageObjects(): GuideImageEntryObject[] {
+      return this.objects.map((object, index) => ({
+        ...object,
+        outlineCoordinates: this.coords[index].flat(),
+      }));
+    },
+  },
+
+  watch: {
+    imageMapObjects() {
+      this.debouncedImageMapObjects();
+    },
+    guideImageObjects() {
+      this.debouncedGuideImageObjects();
+    },
   },
 
   created() {
     this.debouncedImgResize = debounce(() => {
       this.updateSvgDimensions();
     }, 500);
+
+    this.debouncedImageMapObjects = debounce(() => {
+      this.$emit('image-map-objects', this.imageMapObjects);
+    }, 200);
+
+    this.debouncedGuideImageObjects = debounce(() => {
+      this.$emit('guide-image-objects', this.guideImageObjects);
+    }, 200);
   },
 
   methods: {
@@ -223,7 +258,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     addObject() {
       const nextId = this.objects.reduce((acc, { id }) => (acc < id ? id : acc), -1);
       this.coords.push([]);
-      this.objects.push({ id: nextId + 1, description: null, weight: 0 });
+      this.objects.push({ id: nextId + 1, description: '', weight: 0 });
     },
 
     removeObject(index: number) {

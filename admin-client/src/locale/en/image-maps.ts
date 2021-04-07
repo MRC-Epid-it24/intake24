@@ -1,6 +1,6 @@
 import { LocaleMessageObject } from 'vue-i18n';
 
-const jobs: LocaleMessageObject = {
+const imageMaps: LocaleMessageObject = {
   _: 'Image map',
   index: 'Image maps',
   detail: 'Image map detail',
@@ -17,4 +17,4 @@ const jobs: LocaleMessageObject = {
   },
 };
 
-export default jobs;
+export default imageMaps;
