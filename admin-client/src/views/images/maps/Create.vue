@@ -51,7 +51,7 @@ import form from '@/helpers/Form';
 import { ImageMapEntry } from '@common/types/http/admin';
 
 type CreateImageMapForm = {
-  id: number | null;
+  id: string | null;
   description: string | null;
   baseImage: File | null;
 };

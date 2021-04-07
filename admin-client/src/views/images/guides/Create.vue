@@ -62,8 +62,8 @@ import { GuideImageEntry } from '@common/types/http/admin';
 
 type CreateGuideImageForm = {
   id: string | null;
-  description: string | null;
   imageMapId: string | null;
+  description: string | null;
 };
 
 export default (Vue as VueConstructor<Vue & FormMixin<GuideImageEntry>>).extend({

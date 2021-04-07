@@ -1,8 +1,8 @@
 <template>
   <layout :id="id" :entry="entry" @save="onSubmit" v-if="entryLoaded">
     <v-form @keydown.native="clearError" @submit.prevent="onSubmit">
-      <v-container>
-        <v-card-text>
+      <v-card-text>
+        <v-container>
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
@@ -26,11 +26,25 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
-        </v-card-text>
-      </v-container>
+        </v-container>
+      </v-card-text>
+      <guide-drawer :entry="entry" @image-map-objects="updateObjects"></guide-drawer>
+      <v-card-text v-if="nonInputErrors.length">
+        <v-alert
+          v-for="error in nonInputErrors"
+          :key="error.param"
+          outlined
+          type="error"
+          prominent
+          border="left"
+        >
+          {{ error.msg }}
+        </v-alert>
+      </v-card-text>
+      <v-card-text>
+        <submit-footer :disabled="form.errors.any()"></submit-footer>
+      </v-card-text>
     </v-form>
-    <guide-drawer :entry="entry"></guide-drawer>
   </layout>
 </template>
 
@@ -43,7 +57,7 @@ import { ImageMapEntry, ImageMapEntryObject } from '@common/types/http/admin';
 import GuideDrawer from '../GuideDrawer.vue';
 
 type EditImageMapForm = {
-  id: number | null;
+  id: string | null;
   description: string | null;
   objects: ImageMapEntryObject[];
 };
@@ -62,7 +76,16 @@ export default (Vue as VueConstructor<Vue & FormMixin<ImageMapEntry>>).extend({
         description: null,
         objects: [],
       }),
+      nonInputErrorKeys: ['objects'],
     };
+  },
+
+  methods: {
+    updateObjects(objects: ImageMapEntryObject[]) {
+      this.form.errors.clear('objects');
+
+      this.form.objects = [...objects];
+    },
   },
 });
 </script>
