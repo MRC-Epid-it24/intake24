@@ -23,8 +23,10 @@
 
 // $btn-font-weight: 600;
 
-html {
-  overflow: hidden !important;
+@media only screen and (min-width: 1264px) {
+	html {
+		overflow: hidden !important;
+	}
 }
 
 // .v-card {
