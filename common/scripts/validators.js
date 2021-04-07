@@ -34,6 +34,18 @@ const validators = [
     destFile: 'src/validators/push-subscription.validator.ts',
     params: '--useNamedExport --noExtraProps',
   },
+  {
+    type: 'GuideImageInputObjects',
+    srcFile: 'src/types/http/admin/guide-images.ts',
+    destFile: 'src/validators/guide-image-objects.validator.ts',
+    params: '--useNamedExport',
+  },
+  {
+    type: 'ImageMapInputObjects',
+    srcFile: 'src/types/http/admin/image-maps.ts',
+    destFile: 'src/validators/image-map-objects.validator.ts',
+    params: '--useNamedExport',
+  },
 ];
 
 (async () => {
