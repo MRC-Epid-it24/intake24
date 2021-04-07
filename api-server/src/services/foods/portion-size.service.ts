@@ -68,7 +68,7 @@ export default (): PortionSizeService => {
       association: 'objects',
       order: [['navigationIndex', 'ASC']],
       separate: true,
-      include: [{ association: 'overlayImage', required: true }],
+      include: [{ association: 'overlayImage' }],
     },
   ];
 
