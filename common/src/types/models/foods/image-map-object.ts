@@ -4,5 +4,5 @@ export type ImageMapObject = {
   description: string;
   navigationIndex: number;
   outlineCoordinates: number[];
-  overlayImageId: number;
+  overlayImageId: number | null;
 };
