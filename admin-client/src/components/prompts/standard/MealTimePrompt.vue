@@ -3,6 +3,7 @@
     <prompt-content
       :text="text"
       :description="description"
+      :text-required="false"
       @update:text="update('text', $event)"
       @update:description="update('description', $event)"
     ></prompt-content>
