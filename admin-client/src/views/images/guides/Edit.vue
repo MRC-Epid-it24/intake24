@@ -1,8 +1,8 @@
 <template>
   <layout :id="id" :entry="entry" @save="onSubmit" v-if="entryLoaded">
     <v-form @keydown.native="clearError" @submit.prevent="onSubmit">
-      <v-container>
-        <v-card-text>
+      <v-card-text>
+        <v-container>
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
@@ -17,6 +17,17 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
+                v-model="form.imageMapId"
+                :error-messages="form.errors.get('imageMapId')"
+                :label="$t('image-maps._')"
+                disabled
+                hide-details="auto"
+                name="imageMapId"
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
                 v-model="form.description"
                 :error-messages="form.errors.get('description')"
                 :label="$t('common.description')"
@@ -26,11 +37,24 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
-        </v-card-text>
-      </v-container>
+        </v-container>
+      </v-card-text>
+      <guide-drawer :entry="entry" @guide-image-objects="updateObjects"></guide-drawer>
+      <v-card-text v-if="nonInputErrors.length">
+        <v-alert
+          v-for="error in nonInputErrors"
+          :key="error.param"
+          border="left"
+          outlined
+          type="error"
+        >
+          {{ error.msg }}
+        </v-alert>
+      </v-card-text>
+      <v-card-text>
+        <submit-footer :disabled="form.errors.any()"></submit-footer>
+      </v-card-text>
     </v-form>
-    <guide-drawer :entry="entry"></guide-drawer>
   </layout>
 </template>
 
@@ -43,7 +67,8 @@ import { GuideImageEntry, GuideImageEntryObject } from '@common/types/http/admin
 import GuideDrawer from '../GuideDrawer.vue';
 
 type EditGuideImageForm = {
-  id: number | null;
+  id: string | null;
+  imageMapId: string | null;
   description: string | null;
   objects: GuideImageEntryObject[];
 };
@@ -59,10 +84,20 @@ export default (Vue as VueConstructor<Vue & FormMixin<GuideImageEntry>>).extend(
     return {
       form: form<EditGuideImageForm>({
         id: null,
+        imageMapId: null,
         description: null,
         objects: [],
       }),
+      nonInputErrorKeys: ['objects'],
     };
+  },
+
+  methods: {
+    async updateObjects(objects: GuideImageEntryObject[]) {
+      this.form.errors.clear('objects');
+
+      this.form.objects = [...objects];
+    },
   },
 });
 </script>
