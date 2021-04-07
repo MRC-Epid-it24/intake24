@@ -21,32 +21,24 @@ type Weights = { [index: number]: number };
 export default (baseUrl: string): ImageResponseCollection => {
   const mapObjects = (objects: ImageMapObject[]): ImageMapEntryObject[] => {
     return objects.map((object) => {
-      const { id, description, outlineCoordinates, overlayImage } = object;
-
-      if (!overlayImage)
-        throw new InternalServerError('ImageMapEntryObject: not loaded relationships.');
+      const { id, description, outlineCoordinates } = object;
 
       return {
         id,
         description,
         outlineCoordinates,
-        overlayUrl: `${baseUrl}/${overlayImage.path}`,
       };
     });
   };
 
   const guideObjects = (objects: ImageMapObject[], weights: Weights): GuideImageEntryObject[] => {
     return objects.map((object) => {
-      const { id, description, outlineCoordinates, overlayImage } = object;
-
-      if (!overlayImage)
-        throw new InternalServerError('GuideImageEntryObject: not loaded relationships.');
+      const { id, description, outlineCoordinates } = object;
 
       return {
         id,
         description,
         outlineCoordinates,
-        overlayUrl: `${baseUrl}/${overlayImage.path}`,
         weight: weights[id],
       };
     });

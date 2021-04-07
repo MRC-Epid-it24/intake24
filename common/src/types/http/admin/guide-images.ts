@@ -2,13 +2,26 @@ import { Dictionary } from '../..';
 import { ImageMapListEntry, ImageMapEntryObject, ImageMapEntry } from './image-maps';
 import { ImageMap, Pagination } from '../../models';
 
-export type GuideImageListEntry = ImageMapListEntry;
-
-export type GuideImagesResponse = Pagination<GuideImageListEntry>;
-
 export interface GuideImageEntryObject extends ImageMapEntryObject {
   weight: number;
 }
+
+export type GuideImageInputObjects = Pick<GuideImageEntryObject, 'id' | 'weight'>[];
+
+export type CreateGuideImageInput = {
+  id: string;
+  description: string;
+  imageMapId: string;
+};
+
+export type UpdateGuideImageInput = {
+  description: string;
+  objects: GuideImageInputObjects;
+};
+
+export type GuideImageListEntry = ImageMapListEntry;
+
+export type GuideImagesResponse = Pagination<GuideImageListEntry>;
 
 export interface GuideImageEntry extends ImageMapEntry {
   imageMapId: string;

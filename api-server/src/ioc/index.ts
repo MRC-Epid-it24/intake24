@@ -36,6 +36,8 @@ import type {
   JwtService,
   JwtRotationService,
   SignInService,
+  GuideImageService,
+  ImageMapService,
   PortionSizeService,
   FoodDataService,
   DataExportFields,
@@ -107,6 +109,8 @@ export interface IoC extends Jobs {
   jwtRotationService: JwtRotationService;
   signInService: SignInService;
 
+  guideImageService: GuideImageService;
+  imageMapService: ImageMapService;
   portionSizeService: PortionSizeService;
   foodDataService: FoodDataService;
   surveyService: SurveyService;

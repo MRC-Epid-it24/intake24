@@ -1,18 +1,24 @@
 import { Dictionary } from '../..';
 import { ImageMap, Pagination } from '../../models';
 
+export type ImageMapEntryObject = {
+  id: number;
+  description: string;
+  outlineCoordinates: number[];
+};
+
+export type ImageMapInputObjects = ImageMapEntryObject[];
+
+export type UpdateImageMapInput = {
+  description: string;
+  objects: ImageMapEntryObject[];
+};
+
 export interface ImageMapListEntry extends Pick<ImageMap, 'id' | 'description'> {
   imageUrl: string;
 }
 
 export type ImageMapsResponse = Pagination<ImageMapListEntry>;
-
-export type ImageMapEntryObject = {
-  id: number;
-  description: string;
-  overlayUrl: string;
-  outlineCoordinates: number[];
-};
 
 export type ImageMapEntry = {
   id: string;

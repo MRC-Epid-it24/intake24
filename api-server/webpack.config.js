@@ -37,7 +37,7 @@ module.exports = (env) => {
     optimization: {
       minimize: false,
     },
-    externals: [nodeExternals()],
+    externals: [nodeExternals(), { sharp: 'commonjs sharp' }],
     resolve: {
       extensions: ['.tsx', '.ts', '.js', '.json'],
       plugins: [

@@ -19,11 +19,15 @@ router
 router.get('/create', permission('guide-images-create'), wrapAsync(guideImageController.create));
 
 router
-  .route('/:guideId')
+  .route('/:guideImageId')
   .get(permission('guide-images-detail'), wrapAsync(guideImageController.detail))
   .put(permission('guide-images-edit'), validation.update, wrapAsync(guideImageController.update))
   .delete(permission('guide-images-delete'), wrapAsync(guideImageController.destroy));
 
-router.get('/:guideId/edit', permission('guide-images-edit'), wrapAsync(guideImageController.edit));
+router.get(
+  '/:guideImageId/edit',
+  permission('guide-images-edit'),
+  wrapAsync(guideImageController.edit)
+);
 
 export default router;

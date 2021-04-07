@@ -4,9 +4,11 @@ import {
   GuideImageListEntry,
   GuideImageResponse,
   GuideImagesResponse,
+  CreateGuideImageResponse,
+  StoreGuideImageResponse,
 } from '@common/types/http/admin';
 import type { IoC } from '@/ioc';
-import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@/db/models/foods';
+import { GuideImage, ImageMap } from '@/db/models/foods';
 import imagesResponseCollection from '@/http/responses/admin/images';
 import { Controller, CrudActions } from '../../controller';
 
@@ -14,23 +16,22 @@ export type GuideImageController = Controller<CrudActions>;
 
 export default ({
   config,
+  guideImageService,
   portionSizeService,
-}: Pick<IoC, 'config' | 'portionSizeService'>): GuideImageController => {
+}: Pick<IoC, 'config' | 'guideImageService' | 'portionSizeService'>): GuideImageController => {
   const responseCollection = imagesResponseCollection(config.app.urls.images);
 
   const entry = async (req: Request, res: Response<GuideImageResponse>): Promise<void> => {
-    const { guideId } = req.params;
+    const { guideImageId } = req.params;
 
-    const image = await portionSizeService.getGuideImage(guideId);
-    if (!image) throw new NotFoundError();
+    const guideImage = await portionSizeService.getGuideImage(guideImageId);
+    if (!guideImage) throw new NotFoundError();
 
-    const data = responseCollection.guideEntryResponse(image);
-
-    res.json({ data, refs: {} });
+    res.json({ data: responseCollection.guideEntryResponse(guideImage), refs: {} });
   };
 
   const browse = async (req: Request, res: Response<GuideImagesResponse>): Promise<void> => {
-    const images = await GuideImage.paginate<GuideImageListEntry>({
+    const guideImages = await GuideImage.paginate<GuideImageListEntry>({
       req,
       columns: ['id', 'description'],
       order: [['id', 'ASC']],
@@ -38,12 +39,10 @@ export default ({
       transform: responseCollection.guideListResponse,
     });
 
-    res.json(images);
+    res.json(guideImages);
   };
 
-  // TODO: create / update / delete
-
-  const create = async (req: Request, res: Response): Promise<void> => {
+  const create = async (req: Request, res: Response<CreateGuideImageResponse>): Promise<void> => {
     const imageMaps = await ImageMap.findAll({
       attributes: ['id', 'description'],
       order: [['id', 'ASC']],
@@ -54,37 +53,15 @@ export default ({
     });
   };
 
-  const store = async (req: Request, res: Response): Promise<void> => {
+  const store = async (req: Request, res: Response<StoreGuideImageResponse>): Promise<void> => {
     const { id, description, imageMapId } = req.body;
 
-    const imageMap = await ImageMap.findByPk(imageMapId);
-    if (!imageMap) throw new NotFoundError();
+    await guideImageService.create({ id, description, imageMapId });
 
-    /*
-     * TODO:
-     * 1) trigger selection image generation
-     * 2) update GuideImage record with selection image
-     */
-    const guideImage = await GuideImage.create({
-      id,
-      description,
-      imageMapId,
-      selectionImageId: imageMap.baseImageId,
-    });
+    const guideImage = await portionSizeService.getGuideImage(id);
+    if (!guideImage) throw new NotFoundError();
 
-    const imageMapObjects = await ImageMapObject.findAll({
-      where: { imageMapId },
-      order: [['id', 'ASC']],
-    });
-    const guideImageObjects = imageMapObjects.map((object) => ({
-      guideImageId: guideImage.id,
-      imageMapObjectId: object.id,
-      weight: 0,
-    }));
-
-    await GuideImageObject.bulkCreate(guideImageObjects);
-
-    res.status(201).json({ data: guideImage });
+    res.status(201).json({ data: responseCollection.guideEntryResponse(guideImage) });
   };
 
   const detail = async (req: Request, res: Response<GuideImageResponse>): Promise<void> =>
@@ -94,28 +71,21 @@ export default ({
     entry(req, res);
 
   const update = async (req: Request, res: Response<GuideImageResponse>): Promise<void> => {
-    const { guideId } = req.params;
-    const { description } = req.body;
+    const { guideImageId } = req.params;
+    const { description, objects } = req.body;
 
-    const guideImage = await GuideImage.findByPk(guideId);
-    if (!guideImage) throw new NotFoundError();
+    const guideImage = await guideImageService.update(guideImageId, {
+      description,
+      objects,
+    });
 
-    await guideImage.update({ description });
-
-    // TODO update weights
-
-    return entry(req, res);
+    res.json({ data: responseCollection.guideEntryResponse(guideImage), refs: {} });
   };
 
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
-    const { guideId } = req.params;
+    const { guideImageId } = req.params;
 
-    const guideImage = await GuideImage.findByPk(guideId, { include: ['selectionImage'] });
-    if (!guideImage) throw new NotFoundError();
-
-    // TODO: delete selectionImage
-
-    await guideImage.destroy();
+    await guideImageService.destroy(guideImageId);
 
     res.status(204).json();
   };

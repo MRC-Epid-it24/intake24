@@ -22,11 +22,11 @@ router
 router.get('/create', permission('image-maps-create'), wrapAsync(imageMapController.create));
 
 router
-  .route('/:mapId')
+  .route('/:imageMapId')
   .get(permission('image-maps-detail'), wrapAsync(imageMapController.detail))
   .put(permission('image-maps-edit'), validation.update, wrapAsync(imageMapController.update))
   .delete(permission('image-maps-delete'), wrapAsync(imageMapController.destroy));
 
-router.get('/:mapId/edit', permission('image-maps-edit'), wrapAsync(imageMapController.edit));
+router.get('/:imageMapId/edit', permission('image-maps-edit'), wrapAsync(imageMapController.edit));
 
 export default router;
