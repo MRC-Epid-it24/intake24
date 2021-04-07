@@ -51,6 +51,10 @@ export default Vue.extend({
     text: {
       type: Object as () => LocaleTranslation,
     },
+    textRequired: {
+      type: Boolean,
+      default: true,
+    },
     description: {
       type: Object as () => LocaleTranslation,
     },
@@ -58,7 +62,9 @@ export default Vue.extend({
 
   computed: {
     textRules() {
-      return [(value: string | null): boolean | string => !!value || 'Question text is required.'];
+      return this.textRequired
+        ? [(value: string | null): boolean | string => !!value || 'Question text is required.']
+        : [];
     },
   },
 
