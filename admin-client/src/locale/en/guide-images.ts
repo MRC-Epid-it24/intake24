@@ -1,6 +1,6 @@
 import { LocaleMessageObject } from 'vue-i18n';
 
-const jobs: LocaleMessageObject = {
+const guideImages: LocaleMessageObject = {
   _: 'Guide image',
   index: 'Guide images',
   detail: 'Guide image detail',
@@ -12,9 +12,11 @@ const jobs: LocaleMessageObject = {
   id: 'Guide image ID',
   objects: {
     _: 'Guide image object',
+    id: 'Object ID',
+    add: 'Add guide image',
     delete: 'Delete object',
     weight: 'Weight',
   },
 };
 
-export default jobs;
+export default guideImages;
