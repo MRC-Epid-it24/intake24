@@ -19,6 +19,7 @@ export default class ImageMapObject extends BaseModel implements ImageMapObjectA
 
   @Column({
     allowNull: false,
+    primaryKey: true,
     type: DataType.STRING(32),
   })
   public imageMapId!: string;
@@ -34,6 +35,7 @@ export default class ImageMapObject extends BaseModel implements ImageMapObjectA
   })
   public navigationIndex!: number;
 
+  // TODO: convert to mysql-compatible data type
   @Column({
     type: DataType.ARRAY(DataType.DOUBLE),
     allowNull: false,
@@ -41,9 +43,10 @@ export default class ImageMapObject extends BaseModel implements ImageMapObjectA
   public outlineCoordinates!: number[];
 
   @Column({
-    allowNull: false,
+    allowNull: true,
+    type: DataType.INTEGER,
   })
-  public overlayImageId!: number;
+  public overlayImageId!: number | null;
 
   @BelongsTo(() => ImageMap, 'imageMapId')
   public imageMap?: ImageMap;
