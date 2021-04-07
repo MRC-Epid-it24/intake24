@@ -7,4 +7,5 @@ export * from './guide-image';
 export * from './guide-image-object';
 export * from './image-map';
 export * from './image-map-object';
-export * from './portion-methods'
+export * from './processed-images';
+export * from './portion-methods';
