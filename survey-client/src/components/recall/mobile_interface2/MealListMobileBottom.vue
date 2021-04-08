@@ -14,7 +14,6 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import MealItemMobile from './MealItemMobile2.vue';
 
 export default (Vue as VueConstructor<Vue>).extend({
   // components: { MealItemMobile },

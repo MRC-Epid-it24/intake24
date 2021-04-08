@@ -15,12 +15,6 @@
         class="flex-grow-1 flex-shrink-0 justify-center align-center"
       >
         <v-breadcrumbs v-if="!isNotDesktop" :items="brdMeal" divider="/"></v-breadcrumbs>
-        <!-- <v-btn class="pa-10" color="success" x-large @click="startRecall">Start recall</v-btn> -->
-        <!-- <meal-time-prompt
-					:props= {
-
-					}
-				></meal-time-prompt> -->
       </v-card>
     </v-col>
 

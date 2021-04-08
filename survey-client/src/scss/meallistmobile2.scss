@@ -39,9 +39,11 @@
 	z-index: 99;
 }
 
-.content {
-  margin-top: 55px;
-	margin-bottom: 55px;
+@media only screen and (max-width: 1264px) {
+	.content {
+		margin-top: 65px;
+		margin-bottom: 55px;
+	}
 }
 
 .scrollable {
