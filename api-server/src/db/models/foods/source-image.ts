@@ -1,12 +1,11 @@
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { SourceImage as SourceImageAttributes } from '@common/types/models/foods';
 import BaseModel from '../model';
-import { AsServedImage, AsServedSet, ImageMap, ProcessedImage } from '.';
+import { ProcessedImage, SourceImageKeyword } from '.';
 
 @Scopes(() => ({
-  asServedSets: { include: [{ model: AsServedSet }] },
-  asServedImages: { include: [{ model: AsServedImage, as: 'asServedImages' }] },
-  asServedThumbnailImages: { include: [{ model: AsServedImage, as: 'asServedThumbnailImages' }] },
-  imageMaps: { include: [{ model: ImageMap }] },
+  keywords: { include: [{ model: SourceImageKeyword }] },
+  processedImages: { include: [{ model: ProcessedImage }] },
 }))
 @Table({
   modelName: 'SourceImage',
@@ -15,7 +14,7 @@ import { AsServedImage, AsServedSet, ImageMap, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SourceImage extends BaseModel {
+export default class SourceImage extends BaseModel implements SourceImageAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -46,6 +45,9 @@ export default class SourceImage extends BaseModel {
     type: DataType.STRING(1024),
   })
   public thumbnailPath!: string;
+
+  @HasMany(() => SourceImageKeyword, 'sourceImageId')
+  public keywords?: SourceImageKeyword[];
 
   @HasMany(() => ProcessedImage, 'sourceId')
   public processedImages?: ProcessedImage[];

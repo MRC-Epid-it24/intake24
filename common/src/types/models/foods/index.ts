@@ -9,3 +9,4 @@ export * from './image-map';
 export * from './image-map-object';
 export * from './processed-images';
 export * from './portion-methods';
+export * from './source-images';
