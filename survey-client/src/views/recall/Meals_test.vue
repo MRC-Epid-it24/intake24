@@ -1,7 +1,12 @@
 <template>
   <v-row justify="center">
     <v-col v-if="!isNotDesktop" cols="3" lg="3">
-      <meal-list :surveyName="survey.name" :meals="mealsExample"></meal-list>
+      <meal-list
+        :surveyName="survey.name"
+        :meals="mealsExample"
+        @breadcrimbMealUp="setMealbrd"
+        @breadcrimbFoodUp="setFoodbrd"
+      ></meal-list>
     </v-col>
     <v-col cols="12" lg="9">
       <v-card
@@ -9,6 +14,7 @@
         height="45rem"
         class="flex-grow-1 flex-shrink-0 justify-center align-center"
       >
+        <v-breadcrumbs v-if="!isNotDesktop" :items="brdMeal" divider="/"></v-breadcrumbs>
         <!-- <v-btn class="pa-10" color="success" x-large @click="startRecall">Start recall</v-btn> -->
         <!-- <meal-time-prompt
 					:props= {
@@ -48,6 +54,16 @@ export default Vue.extend({
   data() {
     return {
       recall,
+      brdMeal: [
+        {
+          text: 'Choose Meal',
+          disabled: true,
+        },
+        {
+          text: 'Choose Food',
+          disabled: true,
+        },
+      ],
       // Mock Data
       foodeExamples: [
         {
@@ -133,6 +149,16 @@ export default Vue.extend({
         name: `recall-${selection.section}`,
         params: { surveyId: this.surveyId, questionId: selection.prompt.question.id },
       });
+    },
+    setMealbrd(e: string) {
+      this.brdMeal[0].text = e;
+      this.brdMeal[0].disabled = false;
+      this.brdMeal[1].text = 'Choose Meal';
+      this.brdMeal[1].disabled = true;
+    },
+    setFoodbrd(e: string) {
+      this.brdMeal[1].text = e;
+      this.brdMeal[1].disabled = false;
     },
   },
 });

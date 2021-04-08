@@ -14,7 +14,11 @@
       <v-card-text class="scroll-y" style="height: 40rem">
         <v-list-item v-for="meal in meals" :key="meal.name" link>
           <v-list-item-content>
-            <meal-item :meal="meal"></meal-item>
+            <meal-item
+              :meal="meal"
+              @breadcrumbMeal="chooseMealUp(meal.name)"
+              @breadcrumbFood="chooseFoodUp"
+            ></meal-item>
           </v-list-item-content>
         </v-list-item>
       </v-card-text>
@@ -57,6 +61,14 @@ export default (Vue as VueConstructor<Vue>).extend({
         },
       ],
     };
+  },
+  methods: {
+    chooseMealUp(meal: string) {
+      this.$emit('breadcrimbMealUp', meal);
+    },
+    chooseFoodUp(e: string) {
+      this.$emit('breadcrimbFoodUp', e);
+    },
   },
 });
 </script>

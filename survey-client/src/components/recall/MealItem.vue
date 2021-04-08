@@ -1,7 +1,7 @@
 <template>
   <v-list-group :value="meal.time.length > 0 ? true : false">
     <template v-slot:activator>
-      <v-list-item-title class="font-weight-bold">
+      <v-list-item-title class="font-weight-bold" @click="chooseMeal(meal.name)">
         {{ meal.name }}
         <context-menu :menu="menuMeal" :icon="menuMealIcon"></context-menu>
       </v-list-item-title>
@@ -14,8 +14,16 @@
       </v-list-item-action>
     </template>
     <v-list-item v-for="(food, i) in meal.foods" :key="i" link>
-      <v-list-item-title v-if="food.name" v-text="food.name"></v-list-item-title>
-      <v-list-item-title v-else v-text="food.searchTerm"></v-list-item-title>
+      <v-list-item-title
+        v-if="food.name"
+        v-text="food.name"
+        @click="chooseFood(food.name)"
+      ></v-list-item-title>
+      <v-list-item-title
+        v-else
+        v-text="food.searchTerm"
+        @click="chooseFood(food.searchTerm)"
+      ></v-list-item-title>
       <v-list-item-action>
         <v-icon v-if="food.code" color="green darken-2">fa-check</v-icon>
       </v-list-item-action>
@@ -53,6 +61,14 @@ export default (Vue as VueConstructor<Vue>).extend({
         },
       ],
     };
+  },
+  methods: {
+    chooseMeal(mealName: string) {
+      this.$emit('breadcrumbMeal', mealName);
+    },
+    chooseFood(foodName: string) {
+      this.$emit('breadcrumbFood', foodName);
+    },
   },
 });
 </script>
