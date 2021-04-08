@@ -8,10 +8,9 @@
       :offset-y="offset"
     >
       <template v-slot:activator="{ on, attrs }">
-        <v-btn v-if="isMobile" v-bind="attrs" v-on="on">
-          <span>{{ index + 1 }}</span
-          ><br />
-          <v-icon v-if="meal.time.length === 0">far fa-question-circle </v-icon>
+        <v-btn v-if="isMobile" v-bind="attrs" v-on="on" x-small text>
+          <span v-if="meal.time.length > 0">{{ index + 1 }}</span>
+          <v-icon v-else>far fa-question-circle </v-icon>
         </v-btn>
         <v-btn v-else-if="!isMobile" v-bind="attrs" v-on="on">
           <span>{{ meal.name }}</span>
@@ -40,9 +39,12 @@ export default (Vue as VueConstructor<Vue>).extend({
   data() {
     return {
       // Test Data for food
-      foodsTest: ['Chicken breast', 'Tea', 'muffin'],
       offset: true,
     };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+@import '../../../scss/meallistmobile.scss';
+</style>

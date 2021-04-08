@@ -1,0 +1,59 @@
+.v-slide-group__next {
+	display: none !important;
+	flex: none;
+}
+
+.v-slide-group__prev  {
+	display: none !important;
+}
+
+.v-slide-group__prev--disabled {
+	display: none !important;
+}
+
+.add_button {
+	background-color: #ff3d00;
+}
+
+/* Style the meal bar */
+.mealbar {
+  overflow: auto;
+}
+
+.stickytop {
+  position: fixed;
+  top: 50;
+  width: 100%;
+	z-index: 99;
+}
+
+/* Style the food bar */
+.foodbar {
+  overflow: auto;
+}
+
+.stickybottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+	z-index: 99;
+}
+
+.content {
+  margin-top: 55px;
+	margin-bottom: 55px;
+}
+
+.scrollable {
+	flex-grow: 1;
+  overflow-y: auto;
+}
+
+html {
+	overflow: hidden !important;
+}
+
+.v-tab{
+	font-size: x-small;
+	font-weight: bold;
+}

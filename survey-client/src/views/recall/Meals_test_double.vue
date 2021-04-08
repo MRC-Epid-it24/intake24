@@ -1,24 +1,26 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" class="pa-0">
+    <v-col cols="12" class="mealbar stickytop">
+      <meal-list-mobile-top
+        :foods="foods"
+        :meals="mealsExample"
+        v-if="isNotDesktop"
+        @displayFoods="onMealClick"
+      >
+      </meal-list-mobile-top>
+    </v-col>
     <v-col v-if="!isNotDesktop" cols="3" lg="3">
       <meal-list :surveyName="survey.name" :meals="mealsExample"></meal-list>
     </v-col>
-    <v-col cols="12" lg="9">
-      <v-card
-        min-height="30rem"
-        height="45rem"
-        class="flex-grow-1 flex-shrink-0 justify-center align-center"
-      >
-        <!-- <v-btn class="pa-10" color="success" x-large @click="startRecall">Start recall</v-btn> -->
-        <!-- <meal-time-prompt
-					:props= {
-
-					}
-				></meal-time-prompt> -->
+    <v-col cols="12" lg="9" class="content">
+      <v-card min-height="30rem" height="45rem" class="justify-center align-center scrollable">
+        <p class="ma-2">Some prompts</p>
       </v-card>
     </v-col>
-
-    <meal-list-mobile :meals="mealsExample" v-if="isNotDesktop"> </meal-list-mobile>
+    <v-col cols="12" class="foodbar stickybottom">
+      <meal-list-mobile-bottom v-if="isNotDesktop" :loading="false" :foods="foods">
+      </meal-list-mobile-bottom>
+    </v-col>
   </v-row>
 </template>
 
@@ -28,13 +30,15 @@ import recall from '@/util/Recall';
 import { SurveyEntryResponse } from '@common/types/http';
 import standardPromts from '@/components/prompts/standard';
 import MealList from '../../components/recall/MealListDesktop.vue';
-import MealListMobile from '../../components/recall/mobile_interface1/MealListMobile.vue';
+import MealListMobileTop from '../../components/recall/mobile_interface2/MealListMobileTop.vue';
+import MealListMobileBottom from '../../components/recall/mobile_interface2/MealListMobileBottom.vue';
 
 export default Vue.extend({
-  name: 'RecallMeals_test',
+  name: 'RecallMeals_test_double',
 
   components: {
-    MealListMobile,
+    MealListMobileTop,
+    MealListMobileBottom,
     MealList,
     ...standardPromts,
   },
@@ -46,8 +50,10 @@ export default Vue.extend({
   },
 
   data() {
+    const foods: any = [];
     return {
       recall,
+      foods,
       // Mock Data
       foodeExamples: [
         {
@@ -134,8 +140,14 @@ export default Vue.extend({
         params: { surveyId: this.surveyId, questionId: selection.prompt.question.id },
       });
     },
+
+    onMealClick(event: Array<any>) {
+      this.foods = event;
+    },
   },
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+@import '../../scss/meallistmobile2.scss';
+</style>

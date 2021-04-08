@@ -23,11 +23,6 @@
 
 // $btn-font-weight: 600;
 
-@media only screen and (min-width: 1264px) {
-	html {
-		overflow: hidden !important;
-	}
-}
 
 // @media only screen and (max-width: 1264px) {
 // 	body {
@@ -35,20 +30,24 @@
 // 	}
 // }
 
-.sticky-bottom {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
+// .sticky-bottom {
+//   position: fixed;
+//   bottom: 0;
+//   width: 100%;
+// }
 
 // .v-card {
 //   display: flex !important;
 //   flex-direction: column;
 // }
 
-.v-card__text {
-  flex-grow: 1;
-  overflow-y: auto;
+// .v-card__text {
+//   flex-grow: 1;
+//   overflow-y: auto;
+// }
+
+.v-btn {
+	min-width: 0 !important;
 }
 
 // .flexcard {

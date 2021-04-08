@@ -42,6 +42,15 @@ export default (store: Store<RootState>): VueRouter => {
       props: true,
       beforeEnter: beforeRecall,
     },
+    {
+      path: '/:surveyId/recall/meals_test2',
+      name: 'recall-meals_test2',
+      component: views.recall.meals2,
+      meta: { module: 'recall', title: 'recall._' },
+      props: true,
+      beforeEnter: beforeRecall,
+    },
+    // END of TEST
 
     {
       path: '/:surveyId/profile',
