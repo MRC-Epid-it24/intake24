@@ -14,6 +14,8 @@ import {
   Scheduler,
   guideImageService,
   imageMapService,
+  processedImageService,
+  sourceImageService,
   portionSizeService,
   foodDataService,
   surveyService,
@@ -31,6 +33,8 @@ export default (container: AwilixContainer): void => {
 
     guideImageService: asFunction(guideImageService),
     imageMapService: asFunction(imageMapService),
+    processedImageService: asFunction(processedImageService),
+    sourceImageService: asFunction(sourceImageService),
     portionSizeService: asFunction(portionSizeService),
     foodDataService: asFunction(foodDataService),
     surveyService: asFunction(surveyService),

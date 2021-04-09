@@ -39,6 +39,8 @@ import type {
   GuideImageService,
   ImageMapService,
   PortionSizeService,
+  ProcessedImageService,
+  SourceImageService,
   FoodDataService,
   DataExportFields,
   DataExportMapper,
@@ -111,6 +113,9 @@ export interface IoC extends Jobs {
 
   guideImageService: GuideImageService;
   imageMapService: ImageMapService;
+  processedImageService: ProcessedImageService;
+  sourceImageService: SourceImageService;
+
   portionSizeService: PortionSizeService;
   foodDataService: FoodDataService;
   surveyService: SurveyService;
