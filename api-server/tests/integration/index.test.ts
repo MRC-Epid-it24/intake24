@@ -79,22 +79,22 @@ describe('API', () => {
     // Guided images
     const { guides } = images;
     describe('GET /api/admin/images/guides', guides.browse);
-    // describe('GET /api/admin/images/guides/create', guides.create);
-    // describe('POST /api/admin/images/guides', guides.store);
-    // describe('GET /api/admin/images/guides/:guideImageId', guides.detail);
-    // describe('GET /api/admin/images/guides/:guideImageId/edit', guides.edit);
-    // describe('PUT /api/admin/images/guides/:guideImageId', guides.update);
-    // describe('DELETE /api/admin/images/guides/:guideImageId', guides.destroy);
+    describe('GET /api/admin/images/guides/create', guides.create);
+    describe('POST /api/admin/images/guides', guides.store);
+    describe('GET /api/admin/images/guides/:guideImageId', guides.detail);
+    describe('GET /api/admin/images/guides/:guideImageId/edit', guides.edit);
+    describe('PUT /api/admin/images/guides/:guideImageId', guides.update);
+    describe('DELETE /api/admin/images/guides/:guideImageId', guides.destroy);
 
     // Image Maps
     const { maps } = images;
     describe('GET /api/admin/images/maps', maps.browse);
-    // describe('GET /api/admin/images/maps/create', maps.create);
-    // describe('POST /api/admin/images/maps', maps.store);
-    // describe('GET /api/admin/images/maps/:imageMapId', maps.detail);
-    // describe('GET /api/admin/images/maps/:imageMapId/edit', maps.edit);
-    // describe('PUT /api/admin/images/maps/:imageMapId', maps.update);
-    // describe('DELETE /api/admin/images/maps/:imageMapId', maps.destroy);
+    describe('GET /api/admin/images/maps/create', maps.create);
+    describe('POST /api/admin/images/maps', maps.store);
+    describe('GET /api/admin/images/maps/:imageMapId', maps.detail);
+    describe('GET /api/admin/images/maps/:imageMapId/edit', maps.edit);
+    describe('PUT /api/admin/images/maps/:imageMapId', maps.update);
+    describe('DELETE /api/admin/images/maps/:imageMapId', maps.destroy);
 
     // Jobs
     const { jobs } = admin;

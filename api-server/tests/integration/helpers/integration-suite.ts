@@ -1,4 +1,5 @@
 import { Express } from 'express';
+import fs from 'fs-extra';
 import app from '@/app';
 import ioc from '@/ioc';
 import foodIndex from '@/food-index';
@@ -59,6 +60,8 @@ class IntegrationSuite {
     await this.db.foods.close();
     await this.db.system.close();
     await foodIndex.close();
+
+    fs.rmdirSync('tests/tmp', { recursive: true });
   }
 }
 

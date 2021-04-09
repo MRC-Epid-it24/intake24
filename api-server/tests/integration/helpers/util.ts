@@ -1,3 +1,6 @@
+import axios from 'axios';
+import fs from 'fs-extra';
+import path from 'path';
 import { Permission, Role, User } from '@/db/models/system';
 
 /**
@@ -44,4 +47,18 @@ export const setUserPermission = async (perm: string | string[], userId: number)
     throw new Error('Missing mock permissions.');
 
   await user.$set('permissions', permissions);
+};
+
+export const downloadImage = async (url: string, filename: string): Promise<string> => {
+  const filePath = path.resolve('tests/tmp', filename);
+  const fileStream = fs.createWriteStream(filePath);
+
+  const { data } = await axios.get(url, { responseType: 'stream' });
+
+  data.pipe(fileStream);
+
+  return new Promise((resolve, reject) => {
+    fileStream.on('finish', () => resolve(filePath));
+    fileStream.on('error', () => reject);
+  });
 };
