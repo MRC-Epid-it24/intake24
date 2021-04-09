@@ -2,7 +2,7 @@
   <v-menu offset-y>
     <template v-slot:activator="{ on, attrs }">
       <v-btn icon v-bind="attrs" v-on="on">
-        <v-icon>{{ icon }}</v-icon>
+        <v-icon x-small>{{ icon }}</v-icon>
       </v-btn>
     </template>
     <v-list>

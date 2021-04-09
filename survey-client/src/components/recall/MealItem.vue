@@ -10,7 +10,7 @@
           v-if="meal.time.length > 0"
           v-text="meal.time"
         ></v-list-item-action-text>
-        <v-icon v-else>far fa-question-circle </v-icon>
+        <v-icon x-small v-else>far fa-question-circle </v-icon>
       </v-list-item-action>
     </template>
     <v-list-item v-for="(food, i) in meal.foods" :key="i" link>
@@ -25,10 +25,10 @@
         @click="chooseFood(food.searchTerm)"
       ></v-list-item-title>
       <v-list-item-action>
-        <v-icon v-if="food.code" color="green darken-2">fa-check</v-icon>
+        <v-icon x-small v-if="food.code" color="green darken-2">fa-check</v-icon>
       </v-list-item-action>
       <v-list-item-action>
-        <v-icon v-if="food.portionSizeMethod" color="green darken-2">fa-check</v-icon>
+        <v-icon x-small v-if="food.portionSizeMethod" color="green darken-2">fa-check</v-icon>
       </v-list-item-action>
     </v-list-item>
   </v-list-group>
@@ -49,7 +49,7 @@ export default (Vue as VueConstructor<Vue>).extend({
   },
   data() {
     return {
-      menuMealIcon: '#',
+      menuMealIcon: 'far fa-edit',
       menuMeal: [
         {
           name: 'Add Food',
