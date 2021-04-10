@@ -1,0 +1,60 @@
+// $body-font-family: 'Open Sans', sans-serif;
+
+// $material-light: (
+//   'background': #f5f5f5,
+// );
+
+// $font-weights: (
+//   'thin': 100,
+//   'light': 300,
+//   'regular': 400,
+//   'medium': 600,
+//   'bold': 700,
+//   'black': 900
+// );
+
+// $fab-icon-sizes: (
+//   'x-small': 16,
+//   'small': 18,
+//   'default': 20,
+//   'large': 28,
+//   'x-large': 32
+// );
+
+// $btn-font-weight: 600;
+
+
+// @media only screen and (max-width: 1264px) {
+// 	body {
+// 		margin: 0 0 55px 0;
+// 	}
+// }
+
+// .sticky-bottom {
+//   position: fixed;
+//   bottom: 0;
+//   width: 100%;
+// }
+
+// .v-card {
+//   display: flex !important;
+//   flex-direction: column;
+// }
+
+// .v-card__text {
+//   flex-grow: 1;
+//   overflow-y: auto;
+// }
+
+.v-btn {
+	min-width: 0 !important;
+}
+
+// .flexcard {
+//   display: flex;
+//   flex-direction: column;
+// }
+// // Add the css below if your card has a toolbar, and if your toolbar's height increases according to the flex display.
+// .flexcard .v-toolbar {
+//   flex: 0;
+// }
