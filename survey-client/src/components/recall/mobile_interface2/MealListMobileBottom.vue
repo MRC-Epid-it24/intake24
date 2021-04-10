@@ -3,7 +3,7 @@
     <v-toolbar dense>
       <v-tabs center-active touch show-arrows icons-and-text>
         <v-tab class="add_food"> ADD </v-tab>
-        <v-tab @displayFoods="foods = $event" v-for="food in foods" :key="food.name">
+        <v-tab @displayFoods="mealfoods = $event" v-for="food in mealfoods" :key="food.name">
           {{ food.name ? food.name : food.searchTerm }}
           <v-icon x-small v-if="food.code" color="green darken-2">fa-check</v-icon>
         </v-tab>
@@ -28,6 +28,11 @@ export default (Vue as VueConstructor<Vue>).extend({
       // Test Data for food
       offset: true,
     };
+  },
+  computed: {
+    mealfoods() {
+      return this.foods;
+    },
   },
 });
 </script>

@@ -59,7 +59,6 @@ export default (Vue as VueConstructor<Vue>).extend({
   methods: {
     emitFoodsList(foods: Array<any>) {
       this.$emit('displayFoods', foods);
-      console.log(foods);
     },
   },
 });

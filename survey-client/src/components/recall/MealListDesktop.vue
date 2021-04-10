@@ -42,11 +42,6 @@ export default (Vue as VueConstructor<Vue>).extend({
     surveyName: String,
     meals: Array,
   },
-
-  async mounted() {
-    console.log(this.meals);
-  },
-
   data() {
     return {
       menuRecallIcon: 'fas fa-angle-double-right',
