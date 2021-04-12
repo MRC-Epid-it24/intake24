@@ -5,7 +5,7 @@ import { Locale, Scheme, Survey, User } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { surveyListResponse, surveyResponse } from '@/http/responses/admin';
-import { staffSuffix } from '@/services/acl.service';
+import { staffSuffix } from '@/services/auth';
 import {
   CreateSurveyResponse,
   SurveyListEntry,
@@ -36,7 +36,9 @@ export default ({ config }: Pick<IoC, 'config'>): AdminSurveyController => {
   };
 
   const browse = async (req: Request, res: Response<SurveysResponse>): Promise<void> => {
-    const permissions = (req.user as User).allPermissions().map((permission) => permission.name);
+    const permissions = (await req.scope.cradle.aclService.getPermissions()).map(
+      (permission) => permission.name
+    );
 
     const where: WhereOptions = {};
     if (!permissions.includes(config.acl.permissions.surveyadmin)) {

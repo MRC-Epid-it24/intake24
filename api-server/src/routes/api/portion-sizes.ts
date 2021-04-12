@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import passport from 'passport';
+import { authenticate } from '@/http/middleware/acl';
 import validation from '@/http/requests/foods';
 import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
@@ -8,7 +8,7 @@ const { portionSizeController } = ioc.cradle;
 
 const router = Router();
 
-router.use(passport.authenticate('user', { session: false }));
+authenticate(router, 'user');
 
 router.get(
   '/as-served-sets',

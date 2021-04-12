@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import passport from 'passport';
 import validation from '@/http/requests/subscriptions';
+import { authenticate } from '@/http/middleware/acl';
 import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
 
@@ -8,7 +8,7 @@ const { subscriptionController } = ioc.cradle;
 
 const router = Router();
 
-router.use(passport.authenticate('user', { session: false }));
+authenticate(router, 'user');
 
 router
   .route('')

@@ -1,12 +1,14 @@
 import { asClass, asFunction, asValue, AwilixContainer } from 'awilix';
 import {
   authenticationService,
+  aclService,
   jwtService,
   jwtRotationService,
   signInService,
   dataExportFields,
   dataExportMapper,
   dataExportService,
+  Cache,
   Filesystem,
   logger,
   Mailer,
@@ -27,6 +29,7 @@ import { JobsQueueHandler, TasksQueueHandler } from '@/services/queues';
 export default (container: AwilixContainer): void => {
   container.register({
     authenticationService: asFunction(authenticationService),
+    aclService: asFunction(aclService).scoped(),
     jwtService: asFunction(jwtService),
     jwtRotationService: asFunction(jwtRotationService),
     signInService: asFunction(signInService),
@@ -44,6 +47,7 @@ export default (container: AwilixContainer): void => {
     dataExportMapper: asFunction(dataExportMapper),
     dataExportService: asFunction(dataExportService),
 
+    cache: asClass(Cache).singleton(),
     filesystem: asClass(Filesystem).singleton(),
     logger: asValue(logger),
     mailer: asClass(Mailer).singleton(),

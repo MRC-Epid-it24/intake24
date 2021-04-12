@@ -3,9 +3,11 @@ import { UserPassword as UserPasswordAttributes } from '@common/types/models';
 import { CreateUserInput, UpdateUserInput } from '@common/types/http/admin';
 import { User, UserCustomField, UserPassword } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
+import type { IoC } from '@/ioc';
 import { defaultAlgorithm } from '@/util/passwords';
 import { toSimpleName } from '@/util';
 import { CustomField } from '@common/types';
+import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from './auth';
 
 export type UserPasswordInput = {
   userId: number;
@@ -24,9 +26,21 @@ export interface UserService {
   createPassword: (input: UserPasswordInput) => Promise<UserPassword>;
   createPasswords: (records: UserPasswordInput[]) => Promise<UserPassword[]>;
   updatePassword: (input: UserPasswordInput) => Promise<UserPassword>;
+  flushACLCache: (userId: number) => Promise<void>;
 }
 
-export default (): UserService => {
+export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
+  /**
+   * Flush ACL cache for specified user
+   *
+   * @param {number} userId
+   * @returns {Promise<void>}
+   */
+  const flushACLCache = async (userId: number): Promise<void> => {
+    const keys = [`${ACL_PERMISSIONS_KEY}:${userId}`, `${ACL_ROLES_KEY}:${userId}`];
+    await cache.forget(keys);
+  };
+
   /**
    * Create password record
    *
@@ -181,6 +195,8 @@ export default (): UserService => {
     if (customFields && user.customFields)
       await updateUserCustomFields(userId, user.customFields, customFields);
 
+    await flushACLCache(user.id);
+
     return user;
   };
 
@@ -209,5 +225,6 @@ export default (): UserService => {
     create,
     update,
     destroy,
+    flushACLCache,
   };
 };

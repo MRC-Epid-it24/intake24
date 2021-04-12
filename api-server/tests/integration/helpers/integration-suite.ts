@@ -7,7 +7,7 @@ import { initDatabaseData, wipeRedis, MockData } from './setup';
 
 export type Bearers = Record<'admin' | 'user' | 'respondent', string>;
 
-const { config, logger, db, scheduler } = ioc.cradle;
+const { config, logger, db, cache, scheduler } = ioc.cradle;
 
 class IntegrationSuite {
   public config;
@@ -15,6 +15,8 @@ class IntegrationSuite {
   public logger;
 
   public db;
+
+  public cache;
 
   public scheduler;
 
@@ -28,6 +30,7 @@ class IntegrationSuite {
     this.config = config;
     this.logger = logger;
     this.db = db;
+    this.cache = cache;
     this.scheduler = scheduler;
   }
 
@@ -50,18 +53,22 @@ class IntegrationSuite {
   /**
    * Close all I/O connections
    * - databases
-   * - redis
-   * - worker threads
+   * - redis (cache & queue system)
+   * - worker threads (food index)
    *
    * @memberof IntegrationSuite
    */
   public async close() {
+    this.cache.close();
     await this.scheduler.close();
     await this.db.foods.close();
     await this.db.system.close();
     await foodIndex.close();
 
-    fs.rmdirSync('tests/tmp', { recursive: true });
+    const { downloads, uploads, images } = this.config.filesystem.local;
+    [downloads, uploads, images].forEach((folder) => {
+      fs.rmdirSync(folder, { recursive: true });
+    });
   }
 }
 

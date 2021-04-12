@@ -2,6 +2,7 @@ import axios from 'axios';
 import fs from 'fs-extra';
 import path from 'path';
 import { Permission, Role, User } from '@/db/models/system';
+import ioc from '@/ioc';
 
 /**
  * Set permissions for a testing role
@@ -50,7 +51,7 @@ export const setUserPermission = async (perm: string | string[], userId: number)
 };
 
 export const downloadImage = async (url: string, filename: string): Promise<string> => {
-  const filePath = path.resolve('tests/tmp', filename);
+  const filePath = path.resolve(ioc.cradle.config.filesystem.local.downloads, filename);
   const fileStream = fs.createWriteStream(filePath);
 
   const { data } = await axios.get(url, { responseType: 'stream' });

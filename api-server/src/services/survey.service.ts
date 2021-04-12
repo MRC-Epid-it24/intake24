@@ -20,7 +20,7 @@ import { ForbiddenError, InternalServerError, NotFoundError } from '@/http/error
 import type { IoC } from '@/ioc';
 import { toSimpleName, generateToken } from '@/util';
 import { RecallState } from '@common/types';
-import { surveyMgmt, surveyRespondent } from './acl.service';
+import { surveyMgmt, surveyRespondent } from './auth';
 
 export type RespondentWithPassword = {
   respondent: UserSurveyAlias;
@@ -205,6 +205,8 @@ export default ({
     // Update custom fields
     if (customFields && user.customFields)
       await userService.updateUserCustomFields(userId, user.customFields, customFields);
+
+    await userService.flushACLCache(user.id);
 
     return user.aliases[0];
   };

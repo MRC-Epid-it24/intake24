@@ -33,6 +33,7 @@ import type {
 } from '@/http/controllers';
 import type {
   AuthenticationService,
+  ACLService,
   JwtService,
   JwtRotationService,
   SignInService,
@@ -47,6 +48,7 @@ import type {
   DataExportService,
   SurveyService,
   UserService,
+  Cache,
   Filesystem,
   Mailer,
   Pusher,
@@ -55,15 +57,20 @@ import type {
 import type { JobsQueueHandler, TasksQueueHandler } from '@/services/queues';
 import type { Jobs } from '@/jobs';
 
+import type { User } from '@/db/models/system';
+
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';
 
 export interface IoC extends Jobs {
+  currentUser: User;
+
   environment: Environment;
   config: Config;
   databaseConfig: DatabaseConfig;
   db: DbInterface;
+  cache: Cache;
   filesystem: Filesystem;
   logger: Logger;
   mailer: Mailer;
@@ -107,6 +114,7 @@ export interface IoC extends Jobs {
 
   // Services
   authenticationService: AuthenticationService;
+  aclService: ACLService;
   jwtService: JwtService;
   jwtRotationService: JwtRotationService;
   signInService: SignInService;

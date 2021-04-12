@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import passport from 'passport';
+import { authenticate } from '@/http/middleware/acl';
 import { wrapAsync } from '@/util';
 import ioc from '@/ioc';
 
@@ -7,7 +7,7 @@ const { foodController, foodSearchController } = ioc.cradle;
 
 const router = Router();
 
-router.use(passport.authenticate('user', { session: false }));
+authenticate(router, 'user');
 
 // Food search
 router.get('/:localeId', wrapAsync(foodSearchController.lookup));

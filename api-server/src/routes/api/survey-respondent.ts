@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import passport from 'passport';
-import { isSurveyRespondent } from '@/http/middleware/acl';
+import { authenticate, isSurveyRespondent } from '@/http/middleware/acl';
 import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
 
@@ -8,7 +7,7 @@ const { surveyController } = ioc.cradle;
 
 const router = Router({ mergeParams: true });
 
-router.use(passport.authenticate('user', { session: false }));
+authenticate(router, 'user');
 router.use(isSurveyRespondent());
 
 router.get('/parameters', wrapAsync(surveyController.parameters));

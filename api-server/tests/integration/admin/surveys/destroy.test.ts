@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { Survey } from '@/db/models/system';
-import { surveyStaff } from '@/services/acl.service';
+import { surveyStaff } from '@/services/auth';
 import { CreateSurveyRequest, SurveyRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 

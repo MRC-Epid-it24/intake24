@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import passport from 'passport';
-import { isSurveyRespondent } from '@/http/middleware/acl';
+import { authenticate, isSurveyRespondent } from '@/http/middleware/acl';
 
 const router = Router();
 
-router.use(passport.authenticate('user', { session: false }));
+authenticate(router, 'user');
 router.use(isSurveyRespondent());
 
 export default router;

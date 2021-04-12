@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import passport from 'passport';
-import user from './user';
+import { authenticate } from '@/http/middleware/acl';
 
+import user from './user';
 import images from './images';
 import jobs from './jobs';
 import languages from './languages';
@@ -15,7 +15,7 @@ import users from './users';
 
 const router = Router();
 
-router.use(passport.authenticate('admin', { session: false }));
+authenticate(router, 'admin');
 
 router.use('/user', user);
 router.use('/images', images);

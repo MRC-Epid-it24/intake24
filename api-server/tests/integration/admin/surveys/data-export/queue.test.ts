@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { surveyStaff } from '@/services/acl.service';
+import { surveyStaff } from '@/services/auth';
 import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
