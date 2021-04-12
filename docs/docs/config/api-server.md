@@ -4,6 +4,7 @@ Configuration is structured to following sections:
 
 * [Application](#application)
 * [Access Control List (ACL)](#access-control-list-acl)
+* [Cache](#cache)
 * [Database](#database)
 * [Filesystem](#filesystem)
 * [Mail](#mail)
@@ -162,6 +163,26 @@ Name of the permission, which allows to work with any `food` record.
 * object-path: `permissions.foodsadmin`
 * type: `string`
 * default: `'foodsadmin'`
+
+## Cache
+
+[Redis](https://redis.io) is used as caching driver. Redis is also used for queues, they have separate connection settings, so they can be configured independently if needed.
+
+### Redis instance connection
+
+#### Host
+
+* object-path: `redis.host`
+* dotenv var: `CACHE_REDIS_HOST`
+* type: `string`
+* default: `'localhost'`
+
+#### Port
+
+* object-path: `redis.port`
+* dotenv var: `CACHE_REDIS_PORT`
+* type: `number`
+* default: `6379`
 
 ## Database
 

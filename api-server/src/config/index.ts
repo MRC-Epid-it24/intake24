@@ -1,5 +1,6 @@
 import acl, { ACLConfig } from './acl';
 import app, { AppConfig } from './app';
+import cache, { CacheConfig } from './cache';
 import database, { DatabaseConfig } from './database';
 import filesystem, { FileSystemConfig } from './filesystem';
 import mail, { MailConfig } from './mail';
@@ -9,6 +10,7 @@ import services, { ServicesConfig } from './services';
 
 export * from './acl';
 export * from './app';
+export * from './cache';
 export * from './database';
 export * from './filesystem';
 export * from './mail';
@@ -19,6 +21,7 @@ export * from './services';
 export type Config = {
   acl: ACLConfig;
   app: AppConfig;
+  cache: CacheConfig;
   database: DatabaseConfig;
   filesystem: FileSystemConfig;
   mail: MailConfig;
@@ -27,9 +30,10 @@ export type Config = {
   services: ServicesConfig;
 };
 
-export default {
+const config: Config = {
   acl,
   app,
+  cache,
   database,
   filesystem,
   mail,
@@ -37,3 +41,5 @@ export default {
   security,
   services,
 };
+
+export default config;

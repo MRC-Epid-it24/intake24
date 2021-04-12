@@ -6,6 +6,7 @@ export * from './pusher';
 export * from './survey.service';
 export * from './user.service';
 
+export { default as Cache } from './cache';
 export { default as Filesystem } from './filesystem';
 export { default as logger } from './logger';
 export { default as Mailer } from './mailer';

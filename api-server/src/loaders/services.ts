@@ -2,6 +2,9 @@ import foodIndex from '@/food-index';
 import ioc from '@/ioc';
 
 export default async (): Promise<void> => {
+  // Cache
+  ioc.cradle.cache.init();
+
   // Databases
   await ioc.cradle.db.init();
 
