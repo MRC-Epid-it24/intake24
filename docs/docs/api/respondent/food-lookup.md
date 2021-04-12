@@ -161,7 +161,7 @@ where
 
 **localDescription** is the description of the category in the local language.
 
-## List category contents
+## Browse category contents
 
 Get the category contents, i.e. foods and subcategories listed under the given category.
 

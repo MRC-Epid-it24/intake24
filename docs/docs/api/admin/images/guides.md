@@ -1,13 +1,13 @@
-# Schemes
+# Guide image
 
-## Browse schemes
+## Browse guide images
 
-Browse paginated scheme list
+Browse paginated guide image list
 
 ### Request
 
 ```http
-GET /api/admin/schemes
+GET /api/admin/images/guides
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -27,25 +27,22 @@ Content-Type: application/json
 }
 ```
 
-## Create scheme
+## Create guide image
 
-Create new scheme entry
+Create new guide image entry
 
 ### Request
 
 ```http
-POST /api/admin/schemes
+POST /api/admin/images/guides
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
     "id": string,
-    "name": string,
-    "type": 'legacy' | 'data-driven',
-    "meals": [{...}],
-    "questions": {...},
-    "export": [{...}]
+    "imageMapId": string,
+    "description": string
 }
 ```
 
@@ -59,14 +56,14 @@ Content-Type: application/json
 }
 ```
 
-## Get scheme
+## Get guide image
 
-Get scheme entry
+Get guide image entry
 
 ### Request
 
 ```http
-GET /api/admin/schemes/:schemeId
+GET /api/admin/images/guides/:guideImageId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -83,24 +80,27 @@ Content-Type: application/json
 }
 ```
 
-## Update scheme
+## Update guide image
 
-Update scheme entry
+Update guide image entry
 
 ### Request
 
 ```http
-PUT /api/admin/schemes/:schemeId
+PUT /api/admin/images/guides/:guideImageId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "name": string,
-    "type": 'legacy' | 'data-driven',
-    "meals": [{...}],
-    "questions": {...},
-    "export": [{...}]
+    "description": string,
+    "objects": [
+        {
+            "id": number,
+            "weight": number
+        },
+        ...
+    ]
 }
 ```
 
@@ -115,14 +115,14 @@ Content-Type: application/json
 }
 ```
 
-## Delete scheme
+## Delete guide image
 
-Delete scheme entry
+Delete guide image entry
 
 ### Request
 
 ```http
-DELETE /api/admin/schemes/:schemeId
+DELETE /api/admin/images/guides/:guideImageId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

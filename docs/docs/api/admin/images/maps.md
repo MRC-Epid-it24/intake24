@@ -1,13 +1,13 @@
-# Schemes
+# Image maps
 
-## Browse schemes
+## Browse image maps
 
-Browse paginated scheme list
+Browse paginated image map list
 
 ### Request
 
 ```http
-GET /api/admin/schemes
+GET /api/admin/images/maps
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -27,25 +27,24 @@ Content-Type: application/json
 }
 ```
 
-## Create scheme
+## Create image map
 
-Create new scheme entry
+Create new image map entry
+
+- use `multipart/form-data` data encoding to image file needs to be uploaded.
 
 ### Request
 
 ```http
-POST /api/admin/schemes
+POST /api/admin/images/maps
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
     "id": string,
-    "name": string,
-    "type": 'legacy' | 'data-driven',
-    "meals": [{...}],
-    "questions": {...},
-    "export": [{...}]
+    "description": string,
+    "baseImage": File
 }
 ```
 
@@ -59,14 +58,14 @@ Content-Type: application/json
 }
 ```
 
-## Get scheme
+## Get image map
 
-Get scheme entry
+Get image map entry
 
 ### Request
 
 ```http
-GET /api/admin/schemes/:schemeId
+GET /api/admin/images/maps/:imageMapId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -83,24 +82,28 @@ Content-Type: application/json
 }
 ```
 
-## Update scheme
+## Update image map
 
-Update scheme entry
+Update image map entry
 
 ### Request
 
 ```http
-PUT /api/admin/schemes/:schemeId
+PUT /api/admin/images/maps/:imageMapId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "name": string,
-    "type": 'legacy' | 'data-driven',
-    "meals": [{...}],
-    "questions": {...},
-    "export": [{...}]
+    "description": string,
+    "objects": [
+        {
+            "id": number,
+            "description": string,
+            "outlineCoordinates": number[]
+        },
+        ...
+    ]
 }
 ```
 
@@ -115,14 +118,14 @@ Content-Type: application/json
 }
 ```
 
-## Delete scheme
+## Delete image map
 
-Delete scheme entry
+Delete image map entry
 
 ### Request
 
 ```http
-DELETE /api/admin/schemes/:schemeId
+DELETE /api/admin/images/maps/:imageMapId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

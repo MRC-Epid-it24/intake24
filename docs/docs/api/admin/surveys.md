@@ -1,6 +1,6 @@
 # Surveys
 
-## List surveys
+## Browse surveys
 
 Browse paginated survey list
 
@@ -158,7 +158,7 @@ Content-Type: application/json
 204 No Content
 ```
 
-## List management users
+## Browse management users
 
 Get list of survey management users.
 
@@ -189,7 +189,7 @@ Content-Type: application/json
 }
 ```
 
-## List available management users
+## Browse available management users
 
 Get list of users, which can be assigned as survey management.
 
@@ -242,7 +242,7 @@ Content-Type: application/json
 200 OK
 ```
 
-## List respondents
+## Browse respondents
 
 Get list of survey respondents.
 

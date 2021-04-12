@@ -133,6 +133,8 @@ module.exports = {
           children: [
             'admin/user/profile',
             'admin/user/jobs',
+            'admin/images/guides',
+            'admin/images/maps',
             'admin/jobs',
             'admin/languages',
             'admin/locales',

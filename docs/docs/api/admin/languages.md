@@ -1,6 +1,6 @@
 # Languages
 
-## List languages
+## Browse languages
 
 Browse paginated language list
 

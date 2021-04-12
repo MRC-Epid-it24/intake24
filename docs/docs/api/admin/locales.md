@@ -1,6 +1,6 @@
 # Locales
 
-## List locales
+## Browse locales
 
 Browse paginated locale list
 

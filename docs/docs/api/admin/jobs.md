@@ -1,6 +1,6 @@
 # Jobs
 
-## List jobs
+## Browse jobs
 
 Browse paginated job list
 

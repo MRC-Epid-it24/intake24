@@ -2,7 +2,7 @@
 
 - partial resource that give access to logged user to owned job records.
 
-## List jobs
+## Browse jobs
 
 Browse paginated job list
 

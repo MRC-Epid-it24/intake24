@@ -1,6 +1,6 @@
 # Roles
 
-## List roles
+## Browse roles
 
 Browse paginated role list
 

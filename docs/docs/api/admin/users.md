@@ -1,6 +1,6 @@
 # Users
 
-## List users
+## Browse users
 
 Browse paginated user list
 

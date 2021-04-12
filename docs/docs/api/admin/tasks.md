@@ -1,6 +1,6 @@
 # Tasks
 
-## List tasks
+## Browse tasks
 
 Browse paginated task list
 

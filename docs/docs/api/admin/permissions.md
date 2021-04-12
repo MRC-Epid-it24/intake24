@@ -1,6 +1,6 @@
 # Permissions
 
-## List permissions
+## Browse permissions
 
 Browse paginated permission list
 
