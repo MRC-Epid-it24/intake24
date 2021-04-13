@@ -3,9 +3,7 @@ import type { IoC } from '@/ioc';
 import RedisStatic, { Redis, RedisOptions } from 'ioredis';
 
 export default class Cache {
-  private prefix = 'cache:it24';
-
-  private env;
+  private prefix;
 
   private config: RedisOptions;
 
@@ -14,8 +12,8 @@ export default class Cache {
   private redis!: Redis;
 
   constructor({ config, logger }: Pick<IoC, 'config' | 'logger'>) {
-    this.env = config.app.env;
     this.config = config.cache.redis;
+    this.prefix = config.cache.prefix;
     this.logger = logger;
   }
 
@@ -150,7 +148,7 @@ export default class Cache {
     getData: () => Promise<T>
   ): Promise<T> {
     const cachedData = await this.get<T>(key);
-    if (this.env !== 'test' && cachedData !== null) return cachedData;
+    if (cachedData !== null) return cachedData;
 
     const freshData = await getData();
     await this.set(key, freshData, expiresIn);
@@ -170,7 +168,7 @@ export default class Cache {
    */
   async rememberForever<T>(key: string, getData: () => Promise<T>): Promise<T> {
     const cachedData = await this.get<T>(key);
-    if (this.env !== 'test' && cachedData !== null) return cachedData;
+    if (cachedData !== null) return cachedData;
 
     const freshData = await getData();
     await this.set(key, freshData);

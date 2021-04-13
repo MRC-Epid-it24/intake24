@@ -120,6 +120,25 @@ This allows to grant permissions to users in two ways:
 
 Path: `src/config/acl.ts`
 
+### Cache
+Controls the permissions / roles caching
+
+#### Enabled
+Enables / disables caching for permissions / roles.
+
+* object-path: `cache.enabled`
+* dotenv var: `ACL_CACHE_ENABLED`
+* type: `boolean`
+* default: `false`
+
+#### Expires in
+Sets time the cache data expires at. Defined as `ms-formatted` string (see [ms](https://github.com/vercel/ms) for more information) or number in seconds.
+
+* object-path: `cache.expiresIn`
+* dotenv var: `ACL_CACHE_EXPIRES_IN`
+* type: `number | string`
+* default: `'7d'`
+
 ### Roles
 
 List of special-purpose roles.
@@ -167,6 +186,14 @@ Name of the permission, which allows to work with any `food` record.
 ## Cache
 
 [Redis](https://redis.io) is used as caching driver. Redis is also used for queues, they have separate connection settings, so they can be configured independently if needed.
+
+### Prefix
+Prefix string which is prepended to each key to identify cache data.
+
+* object-path: `prefix`
+* dotenv var: `CACHE_PREFIX`
+* type: `string`
+* default: `'cache:it24'`
 
 ### Redis instance connection
 
@@ -288,7 +315,7 @@ Images directory for locally hosted images.
 
 ### URL Expiration
 
-Expiration of URLs for generated files. Defined as ms-formatted string, see [ms](https://github.com/vercel/ms) for more information.
+Expiration of URLs for generated files. Defined as `ms-formatted`string, see [ms](https://github.com/vercel/ms) for more information.
 
 * object-path: `urlExpiresAt`
 * type: `string`
@@ -440,7 +467,7 @@ Secret to sign JWT access token
 
 #### Access token lifetime
 
-Lifetime of JWT access token. Defined as ms-formatted string, see [ms](https://github.com/vercel/ms) for more information.
+Lifetime of JWT access token. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
 
 * object-path: `jwt.access.lifetime`
 * dotenv var: `JWT_ACCESS_LIFETIME`
@@ -457,7 +484,7 @@ Secret to sign JWT refresh token
 
 #### Refresh token lifetime
 
-Lifetime of JWT refresh token. Defined as ms-formatted string, see [ms](https://github.com/vercel/ms) for more information.
+Lifetime of JWT refresh token. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
 
 * object-path: `jwt.refresh.lifetime`
 * dotenv var: `JWT_REFRESH_LIFETIME`

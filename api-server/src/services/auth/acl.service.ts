@@ -38,29 +38,42 @@ export interface ACLService {
   hasAnyRole: (role: string[]) => Promise<boolean>;
 }
 
-export default ({ cache, currentUser }: Pick<IoC, 'cache' | 'currentUser'>): ACLService => {
-  const expiresIn = '7d';
+export default ({
+  config,
+  cache,
+  currentUser,
+}: Pick<IoC, 'config' | 'cache' | 'currentUser'>): ACLService => {
+  const { enabled, expiresIn } = config.acl.cache;
+  const { id: userId } = currentUser;
+
+  const fetchPermissions = async () => {
+    const user = await User.scope(['permissions', 'rolesPerms']).findByPk(userId);
+    if (!user) return [];
+
+    return user.allPermissions();
+  };
+
+  const fetchRoles = async () => {
+    const user = await User.scope('roles').findByPk(userId);
+    if (!user) return [];
+
+    return user.allRoles();
+  };
 
   const getPermissions = async (): Promise<Permission[]> => {
-    return cache.remember<Permission[]>(
-      `${ACL_PERMISSIONS_KEY}:${currentUser.id}`,
-      expiresIn,
-      async () => {
-        const user = await User.scope(['permissions', 'rolesPerms']).findByPk(currentUser.id);
-        if (!user) return [];
+    if (!enabled) return fetchPermissions();
 
-        return user.allPermissions();
-      }
+    return cache.remember<Permission[]>(
+      `${ACL_PERMISSIONS_KEY}:${userId}`,
+      expiresIn,
+      fetchPermissions
     );
   };
 
   const getRoles = async (): Promise<Role[]> => {
-    return cache.remember<Role[]>(`${ACL_ROLES_KEY}:${currentUser.id}`, expiresIn, async () => {
-      const user = await User.scope('roles').findByPk(currentUser.id);
-      if (!user) return [];
+    if (!enabled) return fetchRoles();
 
-      return user.allRoles();
-    });
+    return cache.remember<Role[]>(`${ACL_ROLES_KEY}:${userId}`, expiresIn, fetchRoles);
   };
 
   const hasPermission = async (permission: string): Promise<boolean> => {
