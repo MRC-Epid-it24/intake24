@@ -46,6 +46,7 @@ export default Vue.extend({
 
       const selection = this.recall.start();
       console.log(this.recall);
+      console.log(selection);
       if (!selection) return;
 
       this.$router.push({

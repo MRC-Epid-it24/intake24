@@ -1,6 +1,13 @@
 <template>
-  <v-row>
-    <v-col cols="12" md="10">
+  <v-row justify="center" class="pa-0">
+    <v-col cols="12" class="mealbar stickytop">
+      <meal-list-mobile-top :foods="foods" :meals="recall.meals" v-if="isNotDesktop">
+      </meal-list-mobile-top>
+    </v-col>
+    <v-col v-if="!isNotDesktop" cols="3" lg="3">
+      <meal-list :surveyName="survey.name" :meals="recall.meals"></meal-list>
+    </v-col>
+    <v-col cols="12" lg="9" class="content">
       <v-toolbar class="mb-4">
         <v-btn @click="$router.back()"> back </v-btn>
       </v-toolbar>
@@ -16,6 +23,10 @@
         ></component>
       </transition>
     </v-col>
+    <v-col cols="12" class="foodbar stickybottom">
+      <meal-list-mobile-bottom v-if="isNotDesktop" :loading="false" :foods="foods">
+      </meal-list-mobile-bottom>
+    </v-col>
   </v-row>
 </template>
 
@@ -23,6 +34,9 @@
 import Vue from 'vue';
 import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
+import MealList from '@/components/recall/MealListDesktop.vue';
+import MealListMobileTop from '@/components/recall/mobile_interface2/MealListMobileTop.vue';
+import MealListMobileBottom from '@/components/recall/mobile_interface2/MealListMobileBottom.vue';
 import surveyService from '@/services/survey.service';
 import recall from '@/util/Recall';
 import { Dictionary, Selection } from '@common/types';
@@ -31,7 +45,13 @@ import { SurveyEntryResponse } from '@common/types/http';
 export default Vue.extend({
   name: 'RecallFlow',
 
-  components: { ...customPrompts, ...standardPrompts },
+  components: {
+    MealListMobileBottom,
+    MealListMobileTop,
+    MealList,
+    ...customPrompts,
+    ...standardPrompts,
+  },
 
   props: {
     surveyId: {
@@ -46,8 +66,11 @@ export default Vue.extend({
   },
 
   data() {
+    // Placeholder for foods
+    const foods: any = [];
     return {
       recall,
+      foods,
     };
   },
 
@@ -125,6 +148,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+@import '@/scss/meallistmobile2.scss';
 .component-fade-enter-active,
 .component-fade-leave-active {
   transition: opacity 0.3s ease;
