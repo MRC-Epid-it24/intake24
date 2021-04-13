@@ -12,7 +12,7 @@
       </v-list-item>
       <v-divider></v-divider>
       <v-card-text class="scroll-y" style="height: 40rem">
-        <v-list-item v-for="meal in meals" :key="meal.name" link>
+        <v-list-item :ripple="false" :inactive="true" v-for="meal in meals" :key="meal.name" link>
           <v-list-item-content>
             <meal-item
               :meal="meal"
