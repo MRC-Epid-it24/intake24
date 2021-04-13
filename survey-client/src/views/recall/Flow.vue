@@ -9,6 +9,8 @@
     </v-col>
     <v-col cols="12" lg="9" class="content">
       <v-toolbar class="mb-4">
+        <v-breadcrumbs v-if="!isNotDesktop" :items="brdMeal" divider="/"></v-breadcrumbs>
+        <v-spacer v-if="!isNotDesktop"></v-spacer>
         <v-btn @click="$router.back()"> back </v-btn>
       </v-toolbar>
       <transition name="component-fade" mode="out-in">
@@ -71,6 +73,16 @@ export default Vue.extend({
     return {
       recall,
       foods,
+      brdMeal: [
+        {
+          text: 'Choose Meal',
+          disabled: true,
+        },
+        {
+          text: 'Choose Food',
+          disabled: true,
+        },
+      ],
     };
   },
 
