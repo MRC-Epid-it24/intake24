@@ -35,7 +35,7 @@ module.exports = {
    * ref：https://v1.vuepress.vuejs.org/theme/default-theme-config.html
    */
   themeConfig: {
-    repo: '',
+    repo: 'MRC-Epid-it24/intake24',
     editLinks: false,
     docsDir: '',
     editLinkText: '',
@@ -50,16 +50,16 @@ module.exports = {
         link: '/config/',
       },
       {
+        text: 'API',
+        link: '/api/',
+      },
+      {
         text: 'Survey',
         link: '/survey/',
       },
       {
         text: 'Admin',
         link: '/admin/',
-      },
-      {
-        text: 'API',
-        link: '/api/',
       },
       {
         text: 'Data Dictionary',
@@ -69,10 +69,6 @@ module.exports = {
         text: 'Developer resources',
         link: '/developer/',
       },
-      {
-        text: 'GitHub',
-        link: 'https://github.com/MRC-Epid-it24/intake24',
-      }
     ],
     sidebar: {
       '/overview/': [
@@ -89,33 +85,39 @@ module.exports = {
         {
           title: 'Configuration',
           collapsable: false,
-          sidebarDepth: 2,
           children: [
             '',
-            'api-server',
-            'admin',
-            'survey',
           ]
         },
-      ],
-      '/survey/': [
         {
-          title: 'Survey',
+          title: 'API server',
           collapsable: false,
           children: [
-            ''
+            'api-server/application',
+            'api-server/acl',
+            'api-server/cache',
+            'api-server/database',
+            'api-server/filesystem',
+            'api-server/mail',
+            'api-server/queue',
+            'api-server/security',
+            'api-server/services',
           ]
-        }
-      ],
-      '/admin/': [
+        },
         {
-          title: 'Admin',
+          title: 'Admin client',
           collapsable: false,
           children: [
-            '',
-            'nutritionist-dictionary',
+            'admin/global',
           ]
-        }
+        },
+        {
+          title: 'Survey client',
+          collapsable: false,
+          children: [
+            'survey/global',
+          ]
+        },
       ],
       '/api/': [
         {
@@ -153,6 +155,25 @@ module.exports = {
               'respondent/survey',
               'respondent/food-lookup',
               'respondent/food-data'
+          ]
+        }
+      ],
+      '/survey/': [
+        {
+          title: 'Survey',
+          collapsable: false,
+          children: [
+            ''
+          ]
+        }
+      ],
+      '/admin/': [
+        {
+          title: 'Admin',
+          collapsable: false,
+          children: [
+            '',
+            'nutritionist-dictionary',
           ]
         }
       ],
