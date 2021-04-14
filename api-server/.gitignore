@@ -9,5 +9,8 @@
 
 # Editor directories and files
 .idea
-.vscode
 *.iml
+
+# VS Code
+.vscode/*
+!.vscode/launch.json
