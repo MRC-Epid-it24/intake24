@@ -24,42 +24,51 @@
       <v-col>
         <portion-size-option-prompt
           v-show="componentView == 0"
-          :props="testProps"
+          :promptProps="testProps"
         ></portion-size-option-prompt>
 
-        <as-served-prompt v-show="componentView == 1" :props="asServedProps"></as-served-prompt>
+        <as-served-prompt
+          v-show="componentView == 1"
+          :promptProps="asServedProps"
+        ></as-served-prompt>
 
-        <as-served-leftover-prompt v-show="componentView == 2" :props="asServedProps">
+        <as-served-leftover-prompt v-show="componentView == 2" :promptProps="asServedProps">
         </as-served-leftover-prompt>
 
-        <guideImagePrompt v-if="componentView == 3" :props="asServedProps"></guideImagePrompt>
+        <guideImagePrompt v-if="componentView == 3" :promptProps="asServedProps"></guideImagePrompt>
 
-        <drink-scale-prompt v-show="componentView == 4" :props="asServedProps"></drink-scale-prompt>
+        <drink-scale-prompt
+          v-show="componentView == 4"
+          :promptProps="asServedProps"
+        ></drink-scale-prompt>
 
         <standard-portion-prompt
           v-show="componentView == 5"
-          :props="asServedProps"
+          :promptProps="asServedProps"
         ></standard-portion-prompt>
 
-        <cereal-prompt v-show="componentView == 6" :props="asServedProps"></cereal-prompt>
+        <cereal-prompt v-show="componentView == 6" :promptProps="asServedProps"></cereal-prompt>
 
-        <milk-cereal-prompt v-show="componentView == 7" :props="asServedProps"></milk-cereal-prompt>
+        <milk-cereal-prompt
+          v-show="componentView == 7"
+          :promptProps="asServedProps"
+        ></milk-cereal-prompt>
 
-        <pizza-prompt v-show="componentView == 8" :props="asServedProps"></pizza-prompt>
+        <pizza-prompt v-show="componentView == 8" :promptProps="asServedProps"></pizza-prompt>
 
         <milk-hot-drink-prompt
           v-show="componentView == 9"
-          :props="asServedProps"
+          :promptProps="asServedProps"
         ></milk-hot-drink-prompt>
 
         <direct-weight-prompt
           v-show="componentView == 10"
-          :props="asServedProps"
+          :promptProps="asServedProps"
         ></direct-weight-prompt>
 
         <leftover-question-prompt
           v-show="componentView == 11"
-          :props="asServedProps"
+          :promptProps="asServedProps"
         ></leftover-question-prompt>
       </v-col>
     </v-row>
@@ -125,7 +134,7 @@ export default Vue.extend({
           'https://api.intake24.org/images/as_served/NDNS_meat_curry/efb03e62-b7e0-4a04-88ef-aa9606ac04d1.jpg',
         // selectionImageUrl: 'https://bad.src',
         asServedSet: {
-          id: 'meat_curry',
+          id: 'NDNS_meat_curry',
           description: '',
           selectionImageId: 0,
         },

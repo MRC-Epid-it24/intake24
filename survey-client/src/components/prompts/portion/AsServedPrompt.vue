@@ -4,6 +4,16 @@
       <template v-slot:headerText>
         {{ $t('portion.asServed.label', { food: localeDescription }) }}
       </template>
+
+      <v-row>
+        <v-col>
+          <div v-for="(image, idx) in selectionImages" :key="idx">
+            <v-img :src="image.thumbnailUrl" alt=""></v-img>
+            {{ image.thumbnailUrl }}
+          </div>
+        </v-col>
+      </v-row>
+
       <v-row>
         <v-col>
           <v-card>
@@ -76,6 +86,7 @@ import merge from 'deepmerge';
 import { AsServedPromptProps, asServedPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
+import { AsServedSetResponse, AsServedImageResponse } from '@common/types/http/foods';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({
@@ -99,6 +110,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       ...merge(asServedPromptDefaultProps, this.promptProps),
       errors: [] as string[],
       foodWeight: '100g', // This will be part of the props
+      selectionImageData: {} as AsServedSetResponse,
     };
   },
 
@@ -106,9 +118,29 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     localeDescription(): string | null {
       return this.getLocaleContent(this.description);
     },
+    dataLoaded(): boolean {
+      return !!Object.keys(this.selectionImageData).length;
+    },
+    selectionImages(): AsServedImageResponse[] | [] {
+      if (!this.dataLoaded) return [];
+
+      return this.selectionImageData.images;
+    },
+  },
+
+  mounted() {
+    this.fetchSelectionImageData();
   },
 
   methods: {
+    async fetchSelectionImageData() {
+      const { data } = await this.$http.get<AsServedSetResponse>(
+        `portion-sizes/as-served-sets/lasagne`
+      );
+
+      this.selectionImageData = { ...data };
+    },
+
     submit() {
       this.$emit('AsServed selected');
     },

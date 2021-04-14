@@ -7,6 +7,10 @@
       <v-row>
         <v-col>
           <v-card>Pizza Prompt content here</v-card>
+          <!-- Pizza type -->
+          <!-- Pizza thickness -->
+          <!-- slices -->
+          <!-- quantity of slices -->
         </v-col>
       </v-row>
     </portion-layout>

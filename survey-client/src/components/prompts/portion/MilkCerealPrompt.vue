@@ -7,6 +7,9 @@
       <v-row>
         <v-col>
           <v-card>Milk Cereal Prompt content here</v-card>
+          <!-- select food -->
+          <!-- portion size estimation -->
+          <!-- portion size method -->
         </v-col>
       </v-row>
     </portion-layout>

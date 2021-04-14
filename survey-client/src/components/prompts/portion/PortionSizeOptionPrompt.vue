@@ -2,7 +2,6 @@
   <v-container>
     <portion-layout :text="text" :description="description">
       <template v-slot:headerText>
-        <!-- TO DO this won't handle RTL because of the question mark -->
         {{ $t('portion.option.label', { food: localeDescription }) }}
       </template>
     </portion-layout>
@@ -58,6 +57,7 @@ import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { PortionSizeOptionPromptProps, portionSizeOptionPromptProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
+import { AsServedSetResponse } from '@common/types/http/foods';
 import BasePortion, { Portion } from './BasePortion';
 
 // For user to select which portion size estimation method they want to use
@@ -78,6 +78,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       ...merge(portionSizeOptionPromptProps, this.promptProps),
       errors: [] as string[],
       currentValue: -1,
+      selectionImageData: {} as AsServedSetResponse,
     };
   },
 
@@ -88,9 +89,29 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+    dataLoaded(): boolean {
+      return !!Object.keys(this.selectionImageData).length;
+    },
+    selectionImages(): AsServedSetResponse | [] {
+      if (!this.dataLoaded) return [];
+
+      return this.selectionImageData;
+    },
+  },
+
+  mounted() {
+    this.fetchOptionImageData();
   },
 
   methods: {
+    async fetchOptionImageData() {
+      // const { data } = await this.$http.get<AsServedSetResponse>(
+      //   `portion-sizes/as-served-sets/NDNS_meat_curry`
+      // );
+
+      // this.selectionImageData = { ...data };
+    },
+
     selectMethod(index: number) {
       if (this.currentValue === index) {
         this.currentValue = -1;

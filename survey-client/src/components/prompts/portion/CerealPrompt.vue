@@ -7,6 +7,13 @@
       <v-row>
         <v-col>
           <v-card>Cereal Prompt content here</v-card>
+          <!-- Select bowl -->
+
+          <!-- Portion size -->
+
+          <!-- Leftovers -->
+
+          
         </v-col>
       </v-row>
     </portion-layout>
