@@ -1,3 +1,3 @@
-import { browse } from '@/http/requests/generic';
+import { browse } from '@/http/requests/admin/generic';
 
 export default { browse };

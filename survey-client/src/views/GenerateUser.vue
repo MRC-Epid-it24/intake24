@@ -9,7 +9,7 @@
         </v-sheet>
         <v-card-text class="pa-6">
           <p>Thank you for choosing to take part in this study!</p>
-          <p>Please click on the 'Generate access' button generate new credetials for you.</p>
+          <p>Please click on the 'Generate access' button generate new credentials for you.</p>
           <p>
             This survey will take approximately 30 minutes to complete. If you would like to be able
             to stop filling out the survey and resume at a later time, please write down generated
@@ -30,11 +30,14 @@
             <h4 class="my-2">{{ $t('common.username') }}: {{ userName }}</h4>
             <h4 class="my-2">{{ $t('common.password') }}: {{ password }}</h4>
           </v-sheet>
-          <v-alert v-if="status === 403" border="left" color="error" dark>
+          <v-alert v-if="status === 403" type="error" dark>
             {{ `Survey '${surveyId}' doesn't allow user generation.` }}
           </v-alert>
-          <v-alert v-if="status === 404" border="left" color="error" dark>
-            {{ `Survey '${surveyId}' hasn't been recognised.` }}
+          <v-alert v-if="status === 404" type="error" dark>
+            {{ `Survey '${surveyId}' hasn't been recognized.` }}
+          </v-alert>
+          <v-alert v-if="status === 422" type="error" dark>
+            {{ `Invalid reCaptcha provided.` }}
           </v-alert>
           <p>
             If you close your browser window you can get back to your survey using the following
@@ -49,6 +52,23 @@
               {{ $t('common.continue') }}
             </v-btn>
           </v-card-actions>
+          <template v-if="reCaptcha.enabled">
+            <v-divider class="mt-4"></v-divider>
+            <div class="pa-2 text-caption">
+              <vue-recaptcha
+                ref="reCaptcha"
+                size="invisible"
+                :sitekey="reCaptcha.siteKey"
+                @verify="onCaptchaVerified"
+                @expired="onCaptchaExpired"
+              >
+              </vue-recaptcha>
+              This site is protected by reCAPTCHA and the Google
+              <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
+              <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a>
+              apply.
+            </div>
+          </template>
         </v-card-text>
       </v-card>
     </v-col>
@@ -56,22 +76,39 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
+import VueRecaptcha from 'vue-recaptcha';
 import { mapActions } from 'vuex';
 import surveySvc from '@/services/survey.service';
 
-export default Vue.extend({
+type GenerateUserRefs = {
+  $refs: {
+    reCaptcha: InstanceType<typeof VueRecaptcha>;
+  };
+};
+
+export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
   name: 'GenerateUser',
 
-  data() {
-    const { surveyId } = this.$route.params;
+  props: {
+    surveyId: {
+      type: String,
+    },
+  },
 
+  components: { VueRecaptcha },
+
+  data() {
     return {
       loading: false,
       status: null as number | null,
       userName: '',
       password: '',
-      surveyId,
+      reCaptchaToken: null as string | null,
+      reCaptcha: {
+        enabled: process.env.VUE_APP_RECAPTCHA_ENABLED === 'true',
+        siteKey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
+      },
     };
   },
 
@@ -84,11 +121,35 @@ export default Vue.extend({
   methods: {
     ...mapActions('auth', ['login']),
 
+    resetReCaptcha() {
+      this.reCaptchaToken = null;
+      this.$refs.reCaptcha.reset();
+    },
+
+    onCaptchaVerified(token: string) {
+      this.reCaptchaToken = token;
+      this.generateUser();
+    },
+
+    onCaptchaExpired() {
+      this.resetReCaptcha();
+    },
+
     async generateUser() {
+      const { reCaptchaToken } = this;
+
+      if (this.reCaptcha.enabled === true && !reCaptchaToken) {
+        this.$refs.reCaptcha.execute();
+        return;
+      }
+
       this.loading = true;
 
       try {
-        const { userName, password } = await surveySvc.generateUser(this.surveyId);
+        const { userName, password } = await surveySvc.generateUser(this.surveyId, {
+          reCaptchaToken,
+        });
+
         this.status = 200;
         this.userName = userName;
         this.password = password;
@@ -96,6 +157,8 @@ export default Vue.extend({
         this.status = err.response?.status;
       } finally {
         this.loading = false;
+
+        this.resetReCaptcha();
       }
     },
 
@@ -115,4 +178,8 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.grecaptcha-badge {
+  visibility: hidden;
+}
+</style>

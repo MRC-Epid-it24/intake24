@@ -1,4 +1,4 @@
-import { browse } from '../../generic';
+import { browse } from '../generic';
 import store from './store';
 import update from './update';
 

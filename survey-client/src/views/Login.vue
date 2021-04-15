@@ -60,13 +60,16 @@ import { PublicSurveyEntryResponse } from '@common/types/http';
 export default Vue.extend({
   name: 'Login',
 
-  data() {
-    const { surveyId } = this.$route.params;
+  props: {
+    surveyId: {
+      type: String,
+    },
+  },
 
+  data() {
     return {
       userName: '',
       password: '',
-      surveyId,
       status: null as number | null,
       survey: {} as PublicSurveyEntryResponse,
     };
@@ -81,13 +84,13 @@ export default Vue.extend({
   async mounted() {
     const {
       name,
-      params: { surveyId, token },
+      params: { token },
     } = this.$route;
 
-    if (name === 'token') {
+    if (name === 'login-token') {
       try {
         await this.token({ token });
-        await this.$router.push({ name: 'recall-entry', params: { surveyId } });
+        await this.$router.push({ name: 'recall-entry', params: { surveyId: this.surveyId } });
         return;
       } catch (err) {
         if (err.response?.status === 401)

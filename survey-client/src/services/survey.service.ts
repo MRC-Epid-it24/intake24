@@ -7,11 +7,18 @@ import {
 } from '@common/types/http';
 import http from './http.service';
 
+export type GenerateUserPayload = {
+  reCaptchaToken: string | null;
+};
+
 export default {
-  generateUser: async (surveyId: string): Promise<GenerateUserResponse> => {
+  generateUser: async (
+    surveyId: string,
+    payload: GenerateUserPayload
+  ): Promise<GenerateUserResponse> => {
     const {
       data: { userName, password },
-    } = await http.post<GenerateUserResponse>(`surveys/${surveyId}/generate-user`);
+    } = await http.post<GenerateUserResponse>(`surveys/${surveyId}/generate-user`, payload);
 
     return { userName, password };
   },

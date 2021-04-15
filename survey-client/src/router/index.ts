@@ -23,6 +23,7 @@ export default (store: Store<RootState>): VueRouter => {
       name: 'login',
       component: views.login,
       meta: { module: 'login', title: 'login._' },
+      props: true,
     },
 
     // TESTING Temporary route for testing portion size code before foods & meals are loaded
@@ -63,6 +64,7 @@ export default (store: Store<RootState>): VueRouter => {
       name: 'generate-user',
       component: views.generateUser,
       meta: { module: 'public', title: 'login._' },
+      props: true,
     },
     {
       path: '/:surveyId/recall',
@@ -113,7 +115,7 @@ export default (store: Store<RootState>): VueRouter => {
     },
     {
       path: '/:surveyId/:token',
-      name: 'token',
+      name: 'login-token',
       component: views.login,
       meta: { module: 'login', title: 'login._' },
     },
