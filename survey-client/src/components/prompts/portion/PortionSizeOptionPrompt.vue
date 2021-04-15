@@ -108,7 +108,6 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       // const { data } = await this.$http.get<AsServedSetResponse>(
       //   `portion-sizes/as-served-sets/NDNS_meat_curry`
       // );
-
       // this.selectionImageData = { ...data };
     },
 

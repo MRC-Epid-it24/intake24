@@ -35,8 +35,8 @@ import recall from '@/util/Recall';
 import { SurveyEntryResponse } from '@common/types/http';
 import standardPromts from '@/components/prompts/standard';
 import MealList from '../../components/recall/MealListDesktop.vue';
-import MealListMobileTop from '../../components/recall/mobile_interface2/MealListMobileTop.vue';
-import MealListMobileBottom from '../../components/recall/mobile_interface2/MealListMobileBottom.vue';
+import MealListMobileTop from '../../components/recall/MealListMobileTop.vue';
+import MealListMobileBottom from '../../components/recall/MealListMobileBottom.vue';
 
 export default Vue.extend({
   name: 'RecallMeals_test_double',

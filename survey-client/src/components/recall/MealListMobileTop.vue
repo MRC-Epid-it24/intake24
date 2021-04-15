@@ -64,5 +64,5 @@ export default (Vue as VueConstructor<Vue>).extend({
 });
 </script>
 <style lang="scss" scoped>
-@import '../../../scss/meallistmobile2.scss';
+@import '../../scss/meallistmobile2.scss';
 </style>

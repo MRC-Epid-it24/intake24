@@ -4,7 +4,7 @@
       <meal-list-mobile-top :foods="foods" :meals="recall.meals" v-if="isNotDesktop">
       </meal-list-mobile-top>
     </v-col>
-    <v-col v-if="!isNotDesktop" cols="3" lg="3">
+    <v-col v-if="!isNotDesktop" cols="3" lg="3" min-height="30rem" height="45rem">
       <meal-list :surveyName="survey.name" :meals="recall.meals"></meal-list>
     </v-col>
     <v-col cols="12" lg="9" class="content">
@@ -37,8 +37,8 @@ import Vue from 'vue';
 import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
 import MealList from '@/components/recall/MealListDesktop.vue';
-import MealListMobileTop from '@/components/recall/mobile_interface2/MealListMobileTop.vue';
-import MealListMobileBottom from '@/components/recall/mobile_interface2/MealListMobileBottom.vue';
+import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
+import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import surveyService from '@/services/survey.service';
 import recall from '@/util/Recall';
 import { Dictionary, Selection } from '@common/types';

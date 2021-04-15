@@ -1,10 +1,10 @@
 <template>
   <v-list-group :value="meal.time.length > 0 ? true : false">
     <template v-slot:activator>
-      <v-list-item-title class="font-weight-bold" @click="chooseMeal(meal.name)">
+      <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal(meal.name)">
         {{ meal.name }}
-        <context-menu :menu="menuMeal" :icon="menuMealIcon"></context-menu>
       </v-list-item-title>
+      <context-menu :menu="menuMeal" :icon="menuMealIcon"></context-menu>
       <v-list-item-action>
         <v-list-item-action-text
           v-if="meal.time.length > 0"

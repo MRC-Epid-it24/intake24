@@ -1,5 +1,5 @@
 <template>
-  <v-card min-height="30rem" height="45rem" class="d-flex justify-center align-center mx-6">
+  <v-card>
     <v-list dense nav class="flex-grow-1 flex-shrink-0">
       <v-list-item>
         <v-list-item-content>

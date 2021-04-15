@@ -12,8 +12,6 @@
           <!-- Portion size -->
 
           <!-- Leftovers -->
-
-          
         </v-col>
       </v-row>
     </portion-layout>
