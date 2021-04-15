@@ -34,7 +34,7 @@ export default (): PortionSizeService => {
         { association: 'selectionImage', required: true },
         {
           association: 'asServedImages',
-          order: [['weight', 'DESC']],
+          order: [['weight', 'ASC']],
           separate: true,
           include: [
             { association: 'image', required: true },
