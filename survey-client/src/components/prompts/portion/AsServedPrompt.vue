@@ -4,27 +4,18 @@
       <template v-slot:headerText>
         {{ $t('portion.asServed.label', { food: localeDescription }) }}
       </template>
-
-      <v-row>
-        <v-col>
-          <div v-for="(image, idx) in selectionImages" :key="idx">
-            <v-img :src="image.thumbnailUrl" alt=""></v-img>
-            {{ image.thumbnailUrl }}
-          </div>
-        </v-col>
-      </v-row>
-
       <v-row>
         <v-col>
           <v-card>
-            <v-img class="align-end" :src="selectionImageUrl" :aspect-ratio="16 / 9">
+            <v-img class="align-end" :src="getMainImage()" :aspect-ratio="16 / 9">
               <template v-slot:placeholder>
                 <ImagePlaceholder></ImagePlaceholder>
               </template>
               <v-row>
                 <v-col class="d-flex justify-end mr-auto">
                   <v-chip class="ma-2">
-                    {{ foodWeight }}
+                    {{ selectionImages[selectedObjectIdx].weight }}g
+                    <!-- Are these always in grams? -->
                   </v-chip>
                 </v-col>
               </v-row>
@@ -34,25 +25,25 @@
                 <v-row>
                   <v-col class="pa-1">
                     <v-card>
-                      <v-img :src="selectionImageUrl" max-width="5rem">-</v-img>
-                      <v-overlay absolute>
+                      <v-img :src="getFirstThumbnail()" max-width="5rem">-</v-img>
+                      <v-overlay absolute @click="hadLessInput()">
                         <v-btn icon>
                           <v-icon>fas fa-fw fa-minus</v-icon>
                         </v-btn>
                       </v-overlay>
                     </v-card>
                   </v-col>
-                  <template v-for="index in 7">
-                    <v-col v-bind:key="index" class="pa-1">
+                  <template v-for="(imageSet, idx) in selectionImages">
+                    <v-col v-bind:key="idx" class="pa-1">
                       <v-card>
-                        <v-img :src="selectionImageUrl" max-width="5rem"></v-img>
+                        <v-img :src="imageSet.thumbnailUrl" max-width="5rem"></v-img>
                       </v-card>
                     </v-col>
                   </template>
-                  <v-col class="pa-1" align="center">
+                  <v-col class="pa-1">
                     <v-card>
-                      <v-img :src="selectionImageUrl" max-width="5rem"></v-img>
-                      <v-overlay absolute>
+                      <v-img :src="getLastThumbnail()" max-width="5rem">-</v-img>
+                      <v-overlay absolute @click="hadMoreInput()">
                         <v-btn icon>
                           <v-icon>fas fa-fw fa-plus</v-icon>
                         </v-btn>
@@ -62,13 +53,13 @@
                 </v-row>
                 <v-row>
                   <v-col align="center">
-                    <v-btn>I had less</v-btn>
+                    <v-btn @click="hadLessInput()">I had less</v-btn>
                   </v-col>
                   <v-col align="center">
-                    <v-btn>I had more</v-btn>
+                    <v-btn @click="hadMoreInput()">I had more</v-btn>
                   </v-col>
                   <v-col align="center">
-                    <v-btn color="success">I had this much</v-btn>
+                    <v-btn color="success" @click="submit()">I had this much</v-btn>
                   </v-col>
                 </v-row>
               </v-container>
@@ -111,6 +102,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       errors: [] as string[],
       foodWeight: '100g', // This will be part of the props
       selectionImageData: {} as AsServedSetResponse,
+      selectedObjectIdx: null as number | null,
     };
   },
 
@@ -121,6 +113,12 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     dataLoaded(): boolean {
       return !!Object.keys(this.selectionImageData).length;
     },
+    thumbnailImages(): string[] {
+      // Not sure if this is needed now
+      if (!this.dataLoaded) return [];
+
+      return this.selectionImageData.images.map(urlSet => { return urlSet.thumbnailUrl; });
+    },
     selectionImages(): AsServedImageResponse[] | [] {
       if (!this.dataLoaded) return [];
 
@@ -130,6 +128,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   mounted() {
     this.fetchSelectionImageData();
+    
   },
 
   methods: {
@@ -139,8 +138,61 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       );
 
       this.selectionImageData = { ...data };
+      this.setDefaultSelection();  
     },
+    setDefaultSelection() {
+      // Variable length image sets: set default selected to middle value
+      this.selectedObjectIdx = Math.floor(this.selectionImageData.images.length/2);
+    },
+    getMainImage(): string {
+      // This is redundant - need to think how to handle null better
+      if (this.selectedObjectIdx === null || this.selectedObjectIdx === undefined) {
+        return '';
+      }
+      return this.dataLoaded ? this.selectionImages[this.selectedObjectIdx].mainImageUrl : ''; 
+    },
+    getFirstThumbnail(): string {
+      return this.dataLoaded ? this.selectionImages[0].thumbnailUrl : '';
+      // return this.selectionImages[0].thumbnailUrl;
+    },
+    getLastThumbnail() {
+      return this.dataLoaded ? this.selectionImages[this.selectionImages.length - 1].thumbnailUrl : '';
+    },
+    hadLessInput() {
+      if (!this.selectedObjectIdx) {
+        return;
+      }
 
+      const maxLength = this.selectionImages.length - 1;
+      if (this.selectedObjectIdx - 1 < 0) {
+        console.log('Trigger input quantity prompt');
+        // User wants to input less than on screen
+        // TO DO
+      } else {
+        this.selectedObjectIdx =
+          this.selectedObjectIdx - 1 === 0 ? 0 : this.selectedObjectIdx - 1;
+
+        console.log('had less');
+      }
+    },
+    hadMoreInput() {
+      // This is tripping up as it's falsy
+      if (this.selectedObjectIdx === null || this.selectedObjectIdx === undefined) {
+        return;
+      }
+
+      const maxLength = this.selectionImages.length - 1;
+      if (this.selectedObjectIdx + 1 > maxLength) {
+        console.log('Trigger input quantity prompt');
+        // User wants to input more than on screen
+        // TO DO
+      } else {
+        this.selectedObjectIdx =
+          this.selectedObjectIdx + 1 === maxLength ? maxLength : this.selectedObjectIdx + 1;
+
+        console.log('had more');
+      }
+    },
     submit() {
       this.$emit('AsServed selected');
     },
