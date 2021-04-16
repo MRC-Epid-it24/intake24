@@ -13,9 +13,9 @@ import {
 import InvalidIdError from '@/services/foods/invalid-id-error';
 import { getParentLocale } from '@/services/foods/common';
 
+import { UserAssociatedFoodPrompt, UserFoodData } from '@common/types/http/foods/user-food-data';
 import InheritableAttributesImpl from './inheritable-attributes-service';
 import PortionSizeMethodsImpl from './portion-size-methods-service';
-import { UserAssociatedFoodPrompt, UserFoodData } from '@common/types/http/foods/user-food-data';
 
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;
