@@ -10,12 +10,20 @@
       <v-divider></v-divider>
       <v-list dense nav>
         <v-list-item-group>
-          <v-list-item :to="{ name: 'recall-entry', params: { surveyId } }" link>
+          <v-list-item v-if="surveyId" :to="{ name: 'recall-entry', params: { surveyId } }" link>
             <v-list-item-action>
               <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>{{ $t('recall._') }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-if="surveyId" :to="{ name: 'dynamic-survey-entry', params: { surveyId } }" link>
+            <v-list-item-action>
+              <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ $t('recall.dynamic') }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item :to="{ name: 'portion-test', params: { surveyId } }" link>

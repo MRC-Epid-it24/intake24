@@ -18,6 +18,24 @@ export const recallGuard = (store: Store<RootState>): NavigationGuard => async (
   next();
 };
 
+export const surveyParametersGuard = (store: Store<RootState>): NavigationGuard => async (to, from, next) => {
+  const {
+    params: { surveyId },
+  } = to;
+
+  if (!store.getters['survey/parametersLoaded'])
+    await store.dispatch('survey/loadParameters', { surveyId });
+
+  // FIXME: if survey parameters fail to load for whatever reason this will cause an infinite loop
+  //        and may crash the browser
+  if (!store.getters['survey/parametersLoaded']) {
+    next({ name: 'survey-entry', params: { surveyId } });
+    return;
+  }
+
+  next();
+};
+
 export const globalGuard = (store: Store<RootState>): NavigationGuard => async (to, from, next) => {
   const {
     meta: { module },

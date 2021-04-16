@@ -4,12 +4,14 @@ import { Store } from 'vuex';
 import { RootState } from '@/types/vuex';
 import views from '@/views';
 import PortionTest from '@/views/PortionTest.vue';
-import { globalGuard, recallGuard } from './guards';
+import Survey from '@/views/dynamic/Survey.vue';
+import { globalGuard, recallGuard, surveyParametersGuard } from './guards';
 
 Vue.use(VueRouter);
 
 export default (store: Store<RootState>): VueRouter => {
   const beforeRecall = recallGuard(store);
+  const beforeDynamicRecall = surveyParametersGuard(store);
 
   const routes: RouteConfig[] = [
     {
@@ -24,6 +26,14 @@ export default (store: Store<RootState>): VueRouter => {
       component: views.login,
       meta: { module: 'login', title: 'login._' },
       props: true,
+    },
+
+    {
+      path: '/:surveyId/welcome',
+      name: 'dynamic-survey-entry',
+      component: Survey,
+      meta: { module: 'public', title: 'recall.dynamicTitle' },
+      beforeEnter: beforeDynamicRecall,
     },
 
     // TESTING Temporary route for testing portion size code before foods & meals are loaded
