@@ -1,4 +1,5 @@
-import type { Prompt, PromptAnswer, PromptStatus, PromptQuestion } from '.';
+import type { Prompt, PromptAnswer, PromptStatus, PromptQuestion, Dictionary } from '.';
+import { UserFoodData } from './http';
 
 /* export enum RecallSections {
   PRE_MEALS = 'preMeals',
@@ -69,4 +70,48 @@ export type RecallState = {
   meals: MealState[];
   postMeals: PromptState[];
   submission: PromptState[];
+};
+
+// Types for version 3 style dynamic survey flow logic
+
+export type CustomPromptAnswer = string | string[] | number | number[];
+
+export interface FreeTextFood {
+  type: 'free-text';
+  description: string;
+  flags: string[];
+  customPromptAnswers: Dictionary<CustomPromptAnswer>;
+}
+
+export interface EncodedFood {
+  type: 'encoded-food';
+  data: UserFoodData;
+  flags: string[];
+  customPromptAnswers: Dictionary<CustomPromptAnswer>;
+}
+
+export type FoodState = FreeTextFood | EncodedFood;
+
+export interface MealTime {
+  hours: number;
+  minutes: number;
+}
+
+export interface MealState2 {
+  name: string;
+  time: MealTime;
+  flags: string[];
+  customPromptAnswers: Dictionary<CustomPromptAnswer>;
+
+  foods: FoodState[];
+}
+
+export type SurveyState = {
+  schemeId: string | null;
+  startTime: Date | null;
+  endTime: Date | null;
+  flags: string[];
+  customPromptAnswers: Dictionary<CustomPromptAnswer>;
+
+  meals: MealState[];
 };

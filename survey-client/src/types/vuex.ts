@@ -1,4 +1,8 @@
-import { Dictionary, RecallState as CurrentRecallState } from '@common/types';
+import {
+  Dictionary,
+  SurveyState as CurrentSurveyState,
+  RecallState as CurrentRecallState,
+} from '@common/types';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
 import { UserPayload } from './auth';
 
@@ -35,4 +39,10 @@ export interface RecallState {
   survey: SurveyEntryResponse | null;
   user: SurveyUserInfoResponse | null;
   state: CurrentRecallState | null;
+}
+
+export interface SurveyState {
+  parameters: SurveyEntryResponse | null;
+  user: SurveyUserInfoResponse | null;
+  data: CurrentSurveyState | null;
 }
