@@ -24,9 +24,9 @@
               <v-container dense>
                 <v-row>
                   <v-col class="pa-1">
-                    <v-card>
+                    <v-card @click="hadLessInput()">
                       <v-img :src="getFirstThumbnail()" max-width="5rem">-</v-img>
-                      <v-overlay absolute @click="hadLessInput()">
+                      <v-overlay absolute >
                         <v-btn icon>
                           <v-icon>fas fa-fw fa-minus</v-icon>
                         </v-btn>
@@ -34,16 +34,16 @@
                     </v-card>
                   </v-col>
                   <template v-for="(imageSet, idx) in selectionImages">
-                    <v-col v-bind:key="idx" class="pa-1">
-                      <v-card>
+                    <v-col v-bind:key="idx" class="pa-1" :class="isSelected(idx)">
+                      <v-card @click="setSelection(idx)">
                         <v-img :src="imageSet.thumbnailUrl" max-width="5rem"></v-img>
                       </v-card>
                     </v-col>
                   </template>
                   <v-col class="pa-1">
-                    <v-card>
+                    <v-card @click="hadMoreInput()">
                       <v-img :src="getLastThumbnail()" max-width="5rem">-</v-img>
-                      <v-overlay absolute @click="hadMoreInput()">
+                      <v-overlay absolute >
                         <v-btn icon>
                           <v-icon>fas fa-fw fa-plus</v-icon>
                         </v-btn>
@@ -117,7 +117,9 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       // Not sure if this is needed now
       if (!this.dataLoaded) return [];
 
-      return this.selectionImageData.images.map(urlSet => { return urlSet.thumbnailUrl; });
+      return this.selectionImageData.images.map((urlSet) => {
+        return urlSet.thumbnailUrl;
+      });
     },
     selectionImages(): AsServedImageResponse[] | [] {
       if (!this.dataLoaded) return [];
@@ -128,49 +130,66 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   mounted() {
     this.fetchSelectionImageData();
-    
   },
 
   methods: {
     async fetchSelectionImageData() {
+      // const { data } = await this.$http.get<AsServedSetResponse>(
+      //   `portion-sizes/as-served-sets/lasagnesdasd`
+      // ).then(res => {
+      //   this.selectionImageData = { ...data };
+      //   this.setDefaultSelection();
+      // });
+
+      // At present this errors if there's a 404, error is unhandled
       const { data } = await this.$http.get<AsServedSetResponse>(
-        `portion-sizes/as-served-sets/lasagne`
+        `portion-sizes/as-served-sets/lasagnesdasd`
       );
 
       this.selectionImageData = { ...data };
-      this.setDefaultSelection();  
+      this.setDefaultSelection();
     },
     setDefaultSelection() {
       // Variable length image sets: set default selected to middle value
-      this.selectedObjectIdx = Math.floor(this.selectionImageData.images.length/2);
+      this.selectedObjectIdx = Math.floor(this.selectionImageData.images.length / 2);
+    },
+    setSelection(idx: number) {
+      this.selectedObjectIdx = idx;
     },
     getMainImage(): string {
       // This is redundant - need to think how to handle null better
       if (this.selectedObjectIdx === null || this.selectedObjectIdx === undefined) {
         return '';
       }
-      return this.dataLoaded ? this.selectionImages[this.selectedObjectIdx].mainImageUrl : ''; 
+      return this.dataLoaded ? this.selectionImages[this.selectedObjectIdx].mainImageUrl : '';
     },
     getFirstThumbnail(): string {
       return this.dataLoaded ? this.selectionImages[0].thumbnailUrl : '';
       // return this.selectionImages[0].thumbnailUrl;
     },
     getLastThumbnail() {
-      return this.dataLoaded ? this.selectionImages[this.selectionImages.length - 1].thumbnailUrl : '';
+      return this.dataLoaded
+        ? this.selectionImages[this.selectionImages.length - 1].thumbnailUrl
+        : '';
+    },
+    isSelected(idx: number): string {
+      // if (idx === this.selectedObjectIdx) {
+      //   return true;
+      // }
+      // return false;
+      return idx === this.selectedObjectIdx ? 'selectedThumb rounded-lg' : '';
     },
     hadLessInput() {
-      if (!this.selectedObjectIdx) {
+      if (this.selectedObjectIdx === null || this.selectedObjectIdx === undefined) {
         return;
       }
 
-      const maxLength = this.selectionImages.length - 1;
       if (this.selectedObjectIdx - 1 < 0) {
         console.log('Trigger input quantity prompt');
         // User wants to input less than on screen
-        // TO DO
+        // TO DO Method for this
       } else {
-        this.selectedObjectIdx =
-          this.selectedObjectIdx - 1 === 0 ? 0 : this.selectedObjectIdx - 1;
+        this.selectedObjectIdx = this.selectedObjectIdx - 1 === 0 ? 0 : this.selectedObjectIdx - 1;
 
         console.log('had less');
       }
@@ -185,7 +204,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       if (this.selectedObjectIdx + 1 > maxLength) {
         console.log('Trigger input quantity prompt');
         // User wants to input more than on screen
-        // TO DO
+        // TO DO Method for this
       } else {
         this.selectedObjectIdx =
           this.selectedObjectIdx + 1 === maxLength ? maxLength : this.selectedObjectIdx + 1;
@@ -200,4 +219,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .selectedThumb {
+    border: 0.1em solid #2196F3;
+  }
+</style>
