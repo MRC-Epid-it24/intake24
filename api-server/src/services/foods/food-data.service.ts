@@ -11,12 +11,11 @@ import {
 } from '@/db/models/foods';
 
 import InvalidIdError from '@/services/foods/invalid-id-error';
-import { UserAssociatedFoodPrompt } from '@/services/foods/types/user-associated-food-prompt';
-import { UserFoodData } from '@/services/foods/types/user-food-data';
 import { getParentLocale } from '@/services/foods/common';
 
 import InheritableAttributesImpl from './inheritable-attributes-service';
 import PortionSizeMethodsImpl from './portion-size-methods-service';
+import { UserAssociatedFoodPrompt, UserFoodData } from '@common/types/http/foods/user-food-data';
 
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;

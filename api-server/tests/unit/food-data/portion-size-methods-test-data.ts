@@ -25,18 +25,20 @@ import {
   Food,
   FoodCategory,
   FoodLocal,
-  NutrientMapping,
   PortionSizeMethod,
   PortionSizeMethodParameter,
 } from '@/db/models/foods';
+import * as faker from 'faker';
+
+import { Sequelize } from 'sequelize-typescript';
+import {
+  UserPortionSizeMethod,
+  UserPortionSizeMethodParameters,
+} from '@common/types/http/foods/user-food-data';
 import {
   toDatabasePortionSizeMethod,
   toDatabasePortionSizeMethodParameters,
-  UserPortionSizeMethod,
-} from '@/services/foods/types/user-portion-size-method';
-import * as faker from 'faker';
-import { UserPortionSizeMethodParameters } from '@/services/foods/types/user-portion-size-method-parameter';
-import { Sequelize } from 'sequelize-typescript';
+} from '@/services/foods/types/portion-size-method-utils';
 import createLocales from './test-data-locales';
 
 // TODO: use actual portion size method IDs and parameters.

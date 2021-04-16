@@ -1,18 +1,12 @@
 import { CategoryPortionSizeMethod, PortionSizeMethod } from '@/db/models/foods';
 import {
+  UserPortionSizeMethod,
+  UserPortionSizeMethodParameters,
+} from '@common/types/http/foods/user-food-data';
+import {
   toUserCategoryPortionSizeMethodParameters,
   toUserPortionSizeMethodParameters,
-  UserPortionSizeMethodParameters,
-} from '@/services/foods/types/user-portion-size-method-parameter';
-
-export interface UserPortionSizeMethod {
-  method: string;
-  description: string;
-  imageUrl: string;
-  useForRecipes: boolean;
-  conversionFactor: number;
-  parameters: UserPortionSizeMethodParameters;
-}
+} from './portion-size-method-parameter-utils';
 
 export interface DatabasePortionSizeMethod {
   method: string;

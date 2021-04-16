@@ -1,6 +1,5 @@
 import { CategoryPortionSizeMethodParameter, PortionSizeMethodParameter } from '@/db/models/foods';
-
-export type UserPortionSizeMethodParameters = { [name: string]: string };
+import { UserPortionSizeMethodParameters } from '@common/types/http/foods/user-food-data';
 
 export function toUserPortionSizeMethodParameters(
   parameters: PortionSizeMethodParameter[]

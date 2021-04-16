@@ -1,9 +1,4 @@
 import {
-  toUserCategoryPortionSizeMethod,
-  toUserPortionSizeMethod,
-  UserPortionSizeMethod,
-} from '@/services/foods/types/user-portion-size-method';
-import {
   CategoryPortionSizeMethod,
   CategoryPortionSizeMethodParameter,
   FoodLocal,
@@ -15,6 +10,11 @@ import {
   getFoodParentCategories,
   getParentLocale,
 } from '@/services/foods/common';
+import { UserPortionSizeMethod } from '@common/types/http/foods/user-food-data';
+import {
+  toUserCategoryPortionSizeMethod,
+  toUserPortionSizeMethod,
+} from './types/portion-size-method-utils';
 
 export interface PortionSizeMethodsService {
   resolvePortionSizeMethods(localeId: string, foodCode: string): Promise<UserPortionSizeMethod[]>;
