@@ -115,7 +115,7 @@
                   <v-col cols="12" md="6">
                     <v-text-field
                       v-model="dialog.question.id"
-                      :disabled="dialog.question.type !== 'generic'"
+                      :disabled="dialog.question.type !== 'custom'"
                       :label="$t('schemes.questions.id')"
                       :rules="questionIdRules"
                       hide-details="auto"
