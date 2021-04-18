@@ -44,15 +44,15 @@
 		margin-top: 65px;
 		margin-bottom: 55px;
 	}
+
+	html {
+		overflow: hidden !important;
+	}
 }
 
 .scrollable {
 	flex-grow: 1;
   overflow-y: auto;
-}
-
-html {
-	overflow: hidden !important;
 }
 
 .v-tab{
