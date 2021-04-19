@@ -48,7 +48,7 @@ function generateRandomPortionSizeMethods(count: number): UserPortionSizeMethod[
   const result: UserPortionSizeMethod[] = [];
 
   for (let i = 0; i < count; ++i) {
-    const paramCount = faker.random.number(5);
+    const paramCount = faker.datatype.number(5);
     const parameters: UserPortionSizeMethodParameters = {};
 
     for (let j = 0; j < paramCount; ++j) {
@@ -56,7 +56,7 @@ function generateRandomPortionSizeMethods(count: number): UserPortionSizeMethod[
     }
 
     result.push({
-      conversionFactor: faker.random.float({ min: 0.1, max: 10, precision: 2 }),
+      conversionFactor: faker.datatype.float({ min: 0.1, max: 10, precision: 2 }),
       description: faker.random.words(5),
       imageUrl: faker.internet.url(),
       method: faker.random.word(),
@@ -72,7 +72,7 @@ function generateRandomPortionSizeMethodSets(count: number): UserPortionSizeMeth
   const result: UserPortionSizeMethod[][] = [];
 
   for (let i = 0; i < count; ++i) {
-    result.push(generateRandomPortionSizeMethods(faker.random.number({ min: 1, max: 5 })));
+    result.push(generateRandomPortionSizeMethods(faker.datatype.number({ min: 1, max: 5 })));
   }
 
   return result;

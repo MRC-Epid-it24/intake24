@@ -36,8 +36,8 @@ const user = (): CreateUserRequest => {
   const passwordConfirm = password;
   const phone = faker.phone.phoneNumber();
   const multiFactorAuthentication = false;
-  const emailNotifications = faker.random.boolean();
-  const smsNotifications = faker.random.boolean();
+  const emailNotifications = faker.datatype.boolean();
+  const smsNotifications = faker.datatype.boolean();
   const customFields = [
     { name: faker.random.words(1), value: faker.random.words(5) },
     { name: faker.random.words(1), value: faker.random.words(5) },
@@ -120,18 +120,18 @@ const scheme = (): SchemeCreateAttributes => {
 const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest => {
   const id = faker.helpers.slugify(faker.random.words(2));
   const name = faker.random.words(6);
-  const state = faker.random.number(2);
+  const state = faker.datatype.number(2);
   const startDate = new Date().toISOString().split('T')[0];
   const endDate = faker.date.future(1).toISOString().split('T')[0];
-  const allowGenUsers = faker.random.boolean();
+  const allowGenUsers = faker.datatype.boolean();
   const supportEmail = faker.internet.email();
 
-  const feedbackEnabled = faker.random.boolean();
-  const numberOfSubmissionsForFeedback = faker.random.number(10);
-  const storeUserSessionOnServer = faker.random.boolean();
+  const feedbackEnabled = faker.datatype.boolean();
+  const numberOfSubmissionsForFeedback = faker.datatype.number(10);
+  const storeUserSessionOnServer = faker.datatype.boolean();
 
-  const maximumDailySubmissions = faker.random.number({ min: 1, max: 5 });
-  const minimumSubmissionInterval = faker.random.number(5);
+  const maximumDailySubmissions = faker.datatype.number({ min: 1, max: 5 });
+  const minimumSubmissionInterval = faker.datatype.number(5);
 
   return {
     id,
