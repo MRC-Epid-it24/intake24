@@ -6,20 +6,17 @@ Survey-specific API functions accessible to respondents.
 
 Publicly accessible API end-point.
  
-Returns survey parameters necessary to render the survey login page such as the language settings and the support
-e-mail. 
-
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/SystemDataSQL/src/main/scala/uk/ac/ncl/openlab/intake24/systemsql/user/SurveyServiceImpl.scala#L24-L35)
+Returns survey parameters necessary to render the survey login page such as the language settings and the support e-mail.
 
 ### Request
 
 ```http
-GET /api/surveys/{id}/parameters
+GET /api/surveys/{surveyId}/parameters
 ```
 
 where: 
 
-**id** is the survey ID.
+**surveyId** is the survey ID.
 
 ### Response
 
@@ -43,12 +40,10 @@ should be used for v4.
 
 Returns survey parameters such as the scheme ID, current status, custom HTML content etc.
 
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/SystemDataSQL/src/main/scala/uk/ac/ncl/openlab/intake24/systemsql/user/SurveyServiceImpl.scala#L46-L85)
-
 ### Request
 
 ```http
-GET /api/surveys/{id}/parameters
+GET /api/surveys/{surveyId}/parameters
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -56,7 +51,7 @@ Content-Type: application/json
 
 where: 
 
-**id** is the survey ID.
+**surveyId** is the survey ID.
 
 ### Response
 
@@ -87,7 +82,7 @@ and/or a link to the dietary feedback.
 ### Request
 
 ```http
-GET /api/surveys/{id}/follow-up
+GET /api/surveys/{surveyId}/follow-up
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -95,7 +90,7 @@ Content-Type: application/json
 
 where: 
 
-**id** is the survey ID.
+**surveyId** is the survey ID.
 
 ### Response
 
@@ -115,7 +110,7 @@ Returns a subset of personal data for the current user that is relevant to the r
 ### Request
 
 ```http
-GET /api/surveys/{id}/user-info?tz={timeZone}
+GET /api/surveys/{surveyId}/user-info?tz={timeZone}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -123,7 +118,7 @@ Content-Type: application/json
 
 where:
 
-**id** is the survey ID,
+**surveyId** is the survey ID,
 
 **tz** is the user's local time zone in tzdata format (e.g. as returned by `Intl.DateTimeFormat().resolvedOptions().timeZone` 
 in web browsers).
@@ -143,7 +138,7 @@ in web browsers).
 
 where:
 
-**id** is the internal (numerical) Intake24 user ID,
+**surveyId** is the internal (numerical) Intake24 user ID,
 
 **name** is optional first name of the respondent (used to confirm that the right person is completing the recall),
 
@@ -168,7 +163,7 @@ Submit a completed recall.
 ### Request
 
 ```http
-POST /api/surveys/{id}/submissions
+POST /api/surveys/{surveyId}/submissions
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -178,7 +173,7 @@ Content-Type: application/json
 
 where:
 
-**id** is the survey ID,
+**surveyId** is the survey ID,
 
 **recall** is a completed dietary recall in JSON format. 
 
@@ -203,7 +198,7 @@ Notify people having support role for the survey to give the respondent a call t
 ### Request
 
 ```http
-POST /api/surveys/{id}/request-callback
+POST /api/surveys/{surveyId}/request-callback
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -216,7 +211,7 @@ Content-Type: application/json
 
 where:
 
-**id** is the survey ID,
+**surveyId** is the survey ID,
 
 **name** and **phone** are the respondent's contact details (as entered into the assistance request form by the 
 respondent).
@@ -232,22 +227,19 @@ Publicly accessible API end-point.
 Automatically create a new user account with a respondent role and random credentials if allowed by the survey settings.
 Currently used for the demo survey feature.
 
-:::warning
-This function presents a serious vulnerability in the current implementation and needs a re-design to at least
-include a CAPTCHA challenge and a rate limit.    
+:::tip
+This function is using reCaptcha challenge and is rate-limited.
 :::
-
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/system/user/GeneratedUsersController.scala#L74-L96)
 
 ### Request
 
 ```http
-POST /api/surveys/{id}/generate-user
+POST /api/surveys/{surveyId}/generate-user
 ```
 
 where:
 
-**id** is the survey ID.
+**surveyId** is the survey ID.
 
 ### Response
 
@@ -277,12 +269,12 @@ client side by the current users of this function and can therefore be easily ex
 ### Request
 
 ```http
-POST /api/surveys/{id}/create-user?params={token}
+POST /api/surveys/{surveyId}/create-user?params={token}
 ```
 
 where:
 
-**id** is the survey ID,
+**surveyId** is the survey ID,
 
 **token** is the request parameters encoded as a signed JWT token. The signing key is set up in the survey parameters.
 

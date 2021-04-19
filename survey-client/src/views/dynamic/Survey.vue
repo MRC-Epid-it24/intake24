@@ -44,7 +44,10 @@ function checkCustomConditions(state: SurveyState, prompt: PromptQuestion) {
           console.error('Survey data should not be null at this point');
           return false;
         }
-        return conditionOps[condition.op]([condition.value, state.data.customPromptAnswers[prompt.id]]);
+        return conditionOps[condition.op]([
+          condition.value,
+          state.data.customPromptAnswers[prompt.id],
+        ]);
       case 'recallNumber':
         if (state.user == null) {
           console.error('User information should not be null at this point');
