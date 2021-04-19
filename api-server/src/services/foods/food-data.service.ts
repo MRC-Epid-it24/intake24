@@ -116,9 +116,9 @@ export default (): FoodDataService => {
    *
    * @param {string} localeId
    * @param {string} foodCode
-   * @returns {Promise<string[] | []>}
+   * @returns {Promise<string[]>}
    */
-  const getBrands = async (localeId: string, foodCode: string): Promise<string[] | []> => {
+  const getBrands = async (localeId: string, foodCode: string): Promise<string[]> => {
     const brands = await Brand.findAll({
       where: { localeId, foodCode },
       attributes: ['name'],

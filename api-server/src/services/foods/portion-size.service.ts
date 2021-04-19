@@ -28,7 +28,7 @@ export default (): PortionSizeService => {
    * @returns {Promise<AsServedSet[]>}
    */
   const getAsServedSets = async (id: string | string[]): Promise<AsServedSet[]> => {
-    const asServedSets = await AsServedSet.findAll({
+    return AsServedSet.findAll({
       where: { id },
       include: [
         { association: 'selectionImage', required: true },
@@ -43,8 +43,6 @@ export default (): PortionSizeService => {
         },
       ],
     });
-
-    return asServedSets;
   };
 
   /**
@@ -79,15 +77,13 @@ export default (): PortionSizeService => {
    * @returns {Promise<GuideImage[]>}
    */
   const getGuideImages = async (id: string | string[]): Promise<GuideImage[]> => {
-    const guideImages = await GuideImage.findAll({
+    return GuideImage.findAll({
       where: { id },
       include: [
         { association: 'imageMap', required: true, include: imageMapScope },
         { association: 'objects', separate: true },
       ],
     });
-
-    return guideImages;
   };
 
   /**
@@ -111,12 +107,10 @@ export default (): PortionSizeService => {
    * @returns {Promise<ImageMap[]>}
    */
   const getImageMaps = async (id: string | string[]): Promise<ImageMap[]> => {
-    const imageMaps = await ImageMap.findAll({
+    return ImageMap.findAll({
       where: { id },
       include: imageMapScope,
     });
-
-    return imageMaps;
   };
 
   /**
@@ -140,7 +134,7 @@ export default (): PortionSizeService => {
    * @returns {Promise<DrinkwareSet[]>}
    */
   const getDrinkwareSets = async (id: string | string[]): Promise<DrinkwareSet[]> => {
-    const drinkwareSets = await DrinkwareSet.findAll({
+    return DrinkwareSet.findAll({
       where: { id },
       include: [
         {
@@ -151,8 +145,6 @@ export default (): PortionSizeService => {
         },
       ],
     });
-
-    return drinkwareSets;
   };
 
   /**

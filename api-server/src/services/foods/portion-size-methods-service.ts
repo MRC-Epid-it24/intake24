@@ -26,7 +26,7 @@ export default (): PortionSizeMethodsService => {
    * Get Portion Size Methods and their Parameters associated with the supplied category and locale.
    *
    * @param {string} localeId
-   * @param {string} categoyCode
+   * @param {string} categoryCode
    */
   const getCategoryPortionSizeMethods = async (
     localeId: string,
