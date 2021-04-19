@@ -79,7 +79,7 @@ export default Vue.extend({
   props: {
     options: {
       type: Array as () => ListOption[],
-      default: [],
+      default: () => [],
     },
   },
   data() {

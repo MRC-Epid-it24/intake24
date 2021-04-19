@@ -187,11 +187,11 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
     refScheme: {
       type: Array as () => PromptQuestion[],
-      default: [],
+      default: () => [],
     },
     items: {
       type: Array as () => PromptQuestion[],
-      default: [],
+      default: () => [],
     },
   },
 
