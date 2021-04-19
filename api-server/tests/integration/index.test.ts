@@ -167,7 +167,7 @@ describe('API', () => {
     const { mgmt } = surveys;
     describe('GET /api/admin/surveys/:surveyId/mgmt', mgmt.browse);
     describe('GET /api/admin/surveys/:surveyId/mgmt/available', mgmt.available);
-    // describe('PUT /api/admin/surveys/:surveyId/mgmt/:userId', surveys.mgmt.update);
+    describe('PUT /api/admin/surveys/:surveyId/mgmt/:userId', mgmt.update);
 
     // Surveys respondents
     // describe('GET /api/admin/surveys/:surveyId/respondents', surveys.respondents.browse);

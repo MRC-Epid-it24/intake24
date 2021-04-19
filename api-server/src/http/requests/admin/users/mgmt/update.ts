@@ -11,12 +11,6 @@ export default validate(
       isInt: true,
       toInt: true,
     },
-    id: {
-      in: ['body'],
-      errorMessage: 'Please select an user.',
-      isInt: true,
-      toInt: true,
-    },
     permissions: {
       in: ['body'],
       custom: {
