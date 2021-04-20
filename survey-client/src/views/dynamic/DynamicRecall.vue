@@ -111,14 +111,22 @@ export default Vue.extend({
       return this.$store.state.survey.parameters?.name;
     },
 
+    showMealList(): boolean {
+      return this.currentPrompt?.section !== 'preMeals';
+    },
+
     // TODO: fix types for meal list
     meals(): any {
-      return this.$store.state.survey.data.meals.map((meal: MealState2) => {
-        return {
-          name: meal.name,
-          time: meal.time ? `${meal.time.hours}:${meal.time.minutes}` : `?`,
-        };
-      });
+      if (this.$store.state.survey.data) {
+        return this.$store.state.survey.data.meals.map((meal: MealState2) => {
+          return {
+            name: meal.name,
+            time: meal.time ? `${meal.time.hours}:${meal.time.minutes}` : `?`,
+          };
+        });
+      }
+
+      return [];
     },
 
     foods(): any {
@@ -156,15 +164,14 @@ export default Vue.extend({
       const nextPrompt = this.recallController!.getNextPrompt();
 
       if (nextPrompt === undefined) {
-        console.log('No more prompts available');
+        // TODO: handle completion
+        console.log('No prompts remaining');
       } else {
         this.currentPrompt = nextPrompt;
       }
     },
 
     async onPromptComponentMounted() {
-      console.log('Prompt component mounted');
-
       if (this.$refs.promptComponent instanceof Vue) {
         await this.currentPrompt!.onPromptComponentMounted(
           this.$refs.promptComponent as Vue,

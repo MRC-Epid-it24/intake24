@@ -92,7 +92,8 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     },
 
     removeMeal() {
-      this.recall.removeMeal(this.mealIndex);
+      // this.recall.removeMeal(this.mealIndex);
+      this.$emit('removeMeal');
     },
 
     submit() {

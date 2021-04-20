@@ -107,6 +107,24 @@ export interface MealState2 {
   foods: FoodState[];
 }
 
+export interface SelectedMeal {
+  type: 'meal';
+  mealIndex: number;
+}
+
+export interface SelectedFood {
+  type: 'food';
+  mealIndex: number;
+  foodIndex: number;
+}
+
+export type SelectionMode = 'manual' | 'auto';
+
+export interface Selection2 {
+  element: SelectedMeal | SelectedFood | null;
+  mode: SelectionMode;
+}
+
 export type SurveyState = {
   schemeId: string | null;
   startTime: Date | null;
@@ -114,5 +132,6 @@ export type SurveyState = {
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
 
+  selection: Selection2;
   meals: MealState2[];
 };
