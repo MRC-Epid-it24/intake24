@@ -25,6 +25,7 @@ import {
   UserCustomField,
   UserPassword,
   UserPasswordReset,
+  UserSession,
   UserSubscription,
   UserSurveyAlias,
 } from '.';
@@ -136,6 +137,12 @@ export default class User extends BaseModel implements UserAttributes {
   @BelongsToMany(() => Permission, () => PermissionUser)
   public permissions?: Permission[];
 
+  @BelongsToMany(() => Role, () => RoleUser)
+  public roles?: Role[];
+
+  @HasMany(() => UserSession, 'userId')
+  public sessions?: UserSession[];
+
   @HasMany(() => SignInLog, 'userId')
   public signInLog?: SignInLog[];
 
@@ -145,10 +152,7 @@ export default class User extends BaseModel implements UserAttributes {
   @HasMany(() => UserSubscription, 'userId')
   public subscription?: UserSubscription[];
 
-  @BelongsToMany(() => Role, () => RoleUser)
-  public roles?: Role[];
-
-  @HasMany(() => RefreshToken)
+  @HasMany(() => RefreshToken, 'userId')
   public tokens?: RefreshToken[];
 
   public allRoles(): Role[] {

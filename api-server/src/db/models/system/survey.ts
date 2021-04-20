@@ -19,6 +19,7 @@ import {
   Permission,
   Scheme,
   SurveySubmission,
+  UserSession,
   UserSurveyAlias,
 } from '.';
 
@@ -195,6 +196,9 @@ export default class Survey extends BaseModel implements SurveyAttributes {
   })
   public minimumSubmissionInterval!: number;
 
+  @HasMany(() => ClientErrorReport, 'surveyId')
+  public clientErrors?: ClientErrorReport[];
+
   @HasOne(() => GenUserCounter, 'surveyId')
   public counter?: GenUserCounter;
 
@@ -207,11 +211,11 @@ export default class Survey extends BaseModel implements SurveyAttributes {
   @HasMany(() => UserSurveyAlias, 'surveyId')
   public respondents?: UserSurveyAlias[];
 
+  @HasMany(() => UserSession, 'surveyId')
+  public sessions?: UserSession[];
+
   @HasMany(() => SurveySubmission, 'surveyId')
   public submissions?: SurveySubmission[];
-
-  @HasMany(() => ClientErrorReport, 'surveyId')
-  public clientErrors?: ClientErrorReport[];
 
   @AfterCreate
   static async createSurveyPermissions(instance: Survey): Promise<void> {
