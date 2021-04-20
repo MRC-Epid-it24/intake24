@@ -12,6 +12,7 @@ import type {
   FoodSearchController,
   PortionSizeController,
   SurveyController,
+  SurveyRespondentController,
   // Admin
   UserProfileController,
   UserJobController,
@@ -87,6 +88,7 @@ export interface IoC extends Jobs {
   foodSearchController: FoodSearchController;
   portionSizeController: PortionSizeController;
   surveyController: SurveyController;
+  surveyRespondentController: SurveyRespondentController;
 
   // Admin controllers
   userProfileController: UserProfileController;

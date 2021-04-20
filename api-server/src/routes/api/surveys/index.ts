@@ -3,7 +3,7 @@ import rateLimit from 'express-rate-limit';
 import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
 import validation from '@/http/requests/surveys';
-import surveyRespondent from './survey-respondent';
+import surveyRespondents from './survey-respondents';
 
 const { surveyController } = ioc.cradle;
 
@@ -25,6 +25,6 @@ router.post(
 );
 router.post('/:surveyId/create-user', wrapAsync(surveyController.createUser));
 
-router.use('/:surveyId', surveyRespondent);
+router.use('/:surveyId', surveyRespondents);
 
 export default router;

@@ -18,5 +18,6 @@ export * from './tasks';
 export * from './user';
 export * from './user-passwords';
 export * from './user-password-resets';
+export * from './user-sessions';
 export * from './user-subscriptions';
 export * from './user-survey-aliases';
