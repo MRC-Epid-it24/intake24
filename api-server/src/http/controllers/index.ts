@@ -6,6 +6,7 @@ import food from './food.controller';
 import portionSize from './portion-size.controller';
 import subscription from './subscription.controller';
 import survey from './survey.controller';
+import surveyRespondent from './survey-respondent.controller';
 
 export * from './admin';
 export * from './controller';
@@ -16,6 +17,7 @@ export * from './portion-size.controller';
 export * from './password.controller';
 export * from './subscription.controller';
 export * from './survey.controller';
+export * from './survey-respondent.controller';
 
 export default {
   admin,
@@ -26,4 +28,5 @@ export default {
   portionSize,
   subscription,
   survey,
+  surveyRespondent,
 };
