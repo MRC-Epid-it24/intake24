@@ -4,7 +4,7 @@ import { Store } from 'vuex';
 import { RootState } from '@/types/vuex';
 import views from '@/views';
 import PortionTest from '@/views/PortionTest.vue';
-import Survey from '@/views/dynamic/Survey.vue';
+import DynamicRecall from '@/views/dynamic/DynamicRecall.vue';
 import { globalGuard, recallGuard, surveyParametersGuard } from './guards';
 
 Vue.use(VueRouter);
@@ -28,10 +28,11 @@ export default (store: Store<RootState>): VueRouter => {
       props: true,
     },
 
+    // v3-like dynamic recall logic prototype
     {
-      path: '/:surveyId/welcome',
-      name: 'dynamic-survey-entry',
-      component: Survey,
+      path: '/:surveyId/dynamic-recall',
+      name: 'dynamic-recall',
+      component: DynamicRecall,
       meta: { module: 'public', title: 'recall.dynamicTitle' },
       beforeEnter: beforeDynamicRecall,
     },

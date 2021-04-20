@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
 import { SurveyState } from '@/types/vuex';
-import { CustomPromptAnswer, SurveyState as CurrentSurveyState } from '@common/types';
+import { CustomPromptAnswer, MealTime, SurveyState as CurrentSurveyState } from '@common/types';
 import { SurveyEntryResponse } from '@common/types/http';
 
 const mutations: MutationTree<SurveyState> = {
@@ -12,11 +12,19 @@ const mutations: MutationTree<SurveyState> = {
     state.data = data;
   },
 
-  addSurveyAnswer(state: SurveyState, data: { promptId: string; answer: CustomPromptAnswer }) {
+  setCustomPromptAnswer(state: SurveyState, data: { promptId: string; answer: CustomPromptAnswer }) {
     if (state.data == null) {
       console.error('state.data is null');
     } else {
       state.data.customPromptAnswers[data.promptId] = data.answer;
+    }
+  },
+
+  setMealTime(state: SurveyState, data: { mealIndex: number, time: MealTime }) {
+    if (state.data == null) {
+      console.error('state.data is null');
+    } else {
+      state.data.meals[data.mealIndex].time = data.time;
     }
   },
 

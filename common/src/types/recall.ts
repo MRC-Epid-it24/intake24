@@ -99,7 +99,8 @@ export interface MealTime {
 
 export interface MealState2 {
   name: string;
-  time: MealTime;
+  defaultTime: MealTime;
+  time: MealTime | undefined;
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
 
@@ -113,5 +114,5 @@ export type SurveyState = {
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
 
-  meals: MealState[];
+  meals: MealState2[];
 };
