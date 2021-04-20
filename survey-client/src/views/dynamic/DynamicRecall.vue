@@ -14,14 +14,17 @@
         <v-spacer v-if="!isNotDesktop"></v-spacer>
         <v-btn @click="$router.back()"> back </v-btn>
       </v-toolbar>
-
       <transition name="component-fade" mode="out-in">
+        <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
+        even if the next prompt uses the same component type, probably should be something like an internal counter,
+        or maybe not  ¯\_(ツ)_/¯  -->
         <component
           v-if="currentPrompt"
           ref="promptComponent"
           @hook:mounted="onPromptComponentMounted"
           :is="currentPrompt.prompt.component"
           :promptProps="currentPrompt.promptProps"
+          :key="Math.random()"
         ></component>
       </transition>
     </v-col>
@@ -44,6 +47,8 @@ import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
 import MealList from '@/components/recall/MealListDesktop.vue';
 import { MealState2 } from '@common/types';
+import MealTimePrompt2 from '@/components/prompts/standard/MealTimePrompt2.vue';
+import { mapGetters, mapState } from 'vuex';
 
 function checkStandardConditions(state: SurveyState, prompt: PromptQuestion): boolean {
   if (state.data == null) {
@@ -92,7 +97,7 @@ export default Vue.extend({
     MealListMobileTop,
     MealList,
     ...customPrompts,
-    ...standardPrompts,
+    MealTimePrompt: MealTimePrompt2,
   },
 
   data: () => {
@@ -115,20 +120,6 @@ export default Vue.extend({
       return this.currentPrompt?.section !== 'preMeals';
     },
 
-    // TODO: fix types for meal list
-    meals(): any {
-      if (this.$store.state.survey.data) {
-        return this.$store.state.survey.data.meals.map((meal: MealState2) => {
-          return {
-            name: meal.name,
-            time: meal.time ? `${meal.time.hours}:${meal.time.minutes}` : `?`,
-          };
-        });
-      }
-
-      return [];
-    },
-
     foods(): any {
       return [];
     },
@@ -145,6 +136,17 @@ export default Vue.extend({
         },
       ];
     },
+
+    ...mapState({
+      meals: (state: any) => {
+        return state.survey.data.meals.map((meal: MealState2) => {
+          return {
+            name: meal.name,
+            time: meal.time ? `${meal.time.hours}:${meal.time.minutes}` : `?`,
+          };
+        });
+      },
+    }),
   },
 
   async mounted() {
@@ -167,6 +169,7 @@ export default Vue.extend({
         // TODO: handle completion
         console.log('No prompts remaining');
       } else {
+        console.log(`Switching prompt to ${nextPrompt.prompt.component}`);
         this.currentPrompt = nextPrompt;
       }
     },

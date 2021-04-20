@@ -2,7 +2,12 @@ import { Store } from 'vuex';
 import { SurveyState } from '@/types/vuex';
 import PromptManager from '@/dynamic-recall/prompt-manager';
 import { PromptAnswer, PromptQuestion } from '@common/prompts';
-import { Dictionary, QuestionSection, SurveyState as CurrentSurveyState } from '@common/types';
+import {
+  Dictionary,
+  MealTime,
+  QuestionSection,
+  SurveyState as CurrentSurveyState,
+} from '@common/types';
 import { SchemeEntryResponse } from '@common/types/http';
 import Vue from 'vue';
 import SelectionManager from '@/dynamic-recall/selection-manager';
@@ -13,6 +18,14 @@ export interface PromptInstance {
   section: QuestionSection;
 
   onPromptComponentMounted(promptComponent: Vue, onComplete: () => Promise<void>): Promise<void>;
+}
+
+function parseMealTime(time: string): MealTime {
+  const parts = time.split(':');
+  return {
+    hours: parseInt(parts[0], 10),
+    minutes: parseInt(parts[1], 10),
+  };
 }
 
 export default class DynamicRecall {
@@ -59,7 +72,7 @@ export default class DynamicRecall {
         meals: this.surveyScheme.meals.map((meal) => {
           return {
             name: meal.name.en!, // FIXME: pick correct locale and handle nulls
-            defaultTime: { hours: 8, minutes: 0 }, // FIXME: fix types and use meal.time from scheme
+            defaultTime: parseMealTime(meal.time),
             time: undefined,
             flags: [],
             customPromptAnswers: {},
@@ -105,6 +118,17 @@ export default class DynamicRecall {
 
   createMealPromptInstance(prompt: PromptQuestion, mealIndex: number): PromptInstance {
     const { store } = this;
+    const meal = store.state.survey.data.meals[mealIndex];
+
+    const props: Dictionary = { ...prompt.props };
+
+    switch (prompt.component) {
+      case 'meal-time-prompt':
+        props.mealName = meal.name;
+        break;
+      default:
+        break;
+    }
 
     return {
       async onPromptComponentMounted(promptComponent: Vue, onComplete: () => Promise<void>) {
@@ -123,8 +147,7 @@ export default class DynamicRecall {
             promptComponent.$on('answer', async (answer: string) => {
               store.commit('survey/setMealTime', {
                 mealIndex,
-                promptId: prompt.id,
-                answer, // FIXME: time types
+                time: parseMealTime(answer),
               });
               await onComplete();
             });
@@ -151,7 +174,7 @@ export default class DynamicRecall {
       },
 
       prompt,
-      promptProps: prompt.props,
+      promptProps: props,
       section: 'preMeals',
     };
   }
@@ -160,7 +183,6 @@ export default class DynamicRecall {
     const surveyState = this.getSurveyState();
     const recallState = surveyState.data!;
 
-    // Check if any pre-meals prompts are available
     const nextPrompt = this.promptManager.nextPreMealsPrompt(surveyState);
 
     if (nextPrompt) return this.createSurveyPromptInstance(nextPrompt);
@@ -171,10 +193,9 @@ export default class DynamicRecall {
           const { mealIndex } = recallState.selection.element;
           const mealPrompt = this.promptManager.nextPreFoodsPrompt(surveyState, mealIndex);
 
-          // TODO: add post-foods prompts
+          // TODO: handle post-foods prompts
 
           if (mealPrompt) return this.createMealPromptInstance(mealPrompt, mealIndex);
-
           break;
         }
         case 'food': {
@@ -193,7 +214,11 @@ export default class DynamicRecall {
 
     if (nextPrompt) return nextPrompt;
 
+    console.debug('No prompts left for current selection');
+
     const nextSelection = this.selectionManager.nextSelection();
+
+    console.debug(`Next selection: ${JSON.stringify(nextSelection)}`);
 
     if (nextSelection) {
       this.store.commit('survey/setSelection', nextSelection);

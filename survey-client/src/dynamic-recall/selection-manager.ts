@@ -13,7 +13,7 @@ export default class SelectionManager {
   }
 
   private mealPromptsAvailable(mealIndex: number): boolean {
-    return !this.promptManager.nextPreFoodsPrompt(this.store.state.survey, mealIndex);
+    return this.promptManager.nextPreFoodsPrompt(this.store.state.survey, mealIndex) !== undefined;
   }
 
   private tryAnyMeal(): Selection2 | undefined {

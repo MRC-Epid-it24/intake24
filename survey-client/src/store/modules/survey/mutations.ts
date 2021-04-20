@@ -46,7 +46,11 @@ const mutations: MutationTree<SurveyState> = {
     if (state.data == null) {
       console.error('state.data is null');
     } else {
-      state.data.meals[data.mealIndex].time = data.time;
+      // Roundabout way of changing a property of object in an array so Vue can track
+      // changes
+      const item = state.data.meals.splice(data.mealIndex, 1);
+      item[0].time = data.time;
+      state.data.meals.splice(data.mealIndex, 0, item[0]);
     }
   },
 

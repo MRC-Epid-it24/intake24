@@ -6,6 +6,10 @@ export interface MealTimePromptProps extends ValidatedPromptProps {
   format: 'ampm' | '24hr';
 }
 
+export interface MealTimePrompt2Props extends MealTimePromptProps {
+  mealName: string;
+}
+
 export const mealTimePromptProps: MealTimePromptProps = clone({
   ...basePromptProps,
   ...promptValidation,
