@@ -45,7 +45,6 @@ import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
 import MealList from '@/components/recall/MealListDesktop.vue';
 import { MealState2 } from '@common/types';
 
-
 function checkStandardConditions(state: SurveyState, prompt: PromptQuestion): boolean {
   if (state.data == null) {
     console.error(`Survey data should not be null at this point`);

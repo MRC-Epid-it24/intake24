@@ -12,7 +12,10 @@ const mutations: MutationTree<SurveyState> = {
     state.data = data;
   },
 
-  setCustomPromptAnswer(state: SurveyState, data: { promptId: string; answer: CustomPromptAnswer }) {
+  setCustomPromptAnswer(
+    state: SurveyState,
+    data: { promptId: string; answer: CustomPromptAnswer }
+  ) {
     if (state.data == null) {
       console.error('state.data is null');
     } else {
@@ -20,7 +23,7 @@ const mutations: MutationTree<SurveyState> = {
     }
   },
 
-  setMealTime(state: SurveyState, data: { mealIndex: number, time: MealTime }) {
+  setMealTime(state: SurveyState, data: { mealIndex: number; time: MealTime }) {
     if (state.data == null) {
       console.error('state.data is null');
     } else {

@@ -26,7 +26,7 @@
                   <v-col class="pa-1">
                     <v-card @click="hadLessInput()">
                       <v-img :src="getFirstThumbnail()" max-width="5rem">-</v-img>
-                      <v-overlay absolute >
+                      <v-overlay absolute>
                         <v-btn icon>
                           <v-icon>fas fa-fw fa-minus</v-icon>
                         </v-btn>
@@ -43,7 +43,7 @@
                   <v-col class="pa-1">
                     <v-card @click="hadMoreInput()">
                       <v-img :src="getLastThumbnail()" max-width="5rem">-</v-img>
-                      <v-overlay absolute >
+                      <v-overlay absolute>
                         <v-btn icon>
                           <v-icon>fas fa-fw fa-plus</v-icon>
                         </v-btn>
@@ -220,7 +220,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 </script>
 
 <style lang="scss" scoped>
-  .selectedThumb {
-    border: 0.1em solid #2196F3;
-  }
+.selectedThumb {
+  border: 0.1em solid #2196f3;
+}
 </style>

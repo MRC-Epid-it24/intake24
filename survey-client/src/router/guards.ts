@@ -18,7 +18,11 @@ export const recallGuard = (store: Store<RootState>): NavigationGuard => async (
   next();
 };
 
-export const surveyParametersGuard = (store: Store<RootState>): NavigationGuard => async (to, from, next) => {
+export const surveyParametersGuard = (store: Store<RootState>): NavigationGuard => async (
+  to,
+  from,
+  next
+) => {
   const {
     params: { surveyId },
   } = to;
