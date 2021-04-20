@@ -19,3 +19,17 @@
   command: npm run production
   args:
     chdir: '{{ app.directory }}/api-server'
+
+- name: Run foods database migrations
+  become_user: '{{ app.user }}'
+  command: npm run migrate:foods
+  args:
+    chdir: '{{ app.directory }}/api-server'
+  when: migrations.foods
+
+- name: Run system database migrations
+  become_user: '{{ app.user }}'
+  command: npm run migrate:system
+  args:
+    chdir: '{{ app.directory }}/api-server'
+  when: migrations.system
