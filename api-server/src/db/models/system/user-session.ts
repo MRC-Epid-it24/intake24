@@ -1,4 +1,4 @@
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import BaseModel from '@/db/models/model';
 import { UserSession as UserSessionAttributes } from '@common/types/models';
 import { Survey, User } from '.';
@@ -7,13 +7,18 @@ import { Survey, User } from '.';
   modelName: 'UserSession',
   tableName: 'user_sessions',
   freezeTableName: true,
-  timestamps: false,
   underscored: true,
 })
 export default class UserSession extends BaseModel implements UserSessionAttributes {
   @Column({
-    allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
+  })
+  public id!: number;
+
+  @Column({
+    allowNull: false,
     type: DataType.BIGINT,
   })
   public userId!: number;
@@ -26,7 +31,7 @@ export default class UserSession extends BaseModel implements UserSessionAttribu
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT,
+    type: DataType.TEXT({ length: 'long' }),
   })
   // TODO: add types for recall state
   get sessionData(): any {
@@ -38,10 +43,13 @@ export default class UserSession extends BaseModel implements UserSessionAttribu
     this.setDataValue('sessionData', JSON.stringify(value));
   }
 
-  @Column({
-    allowNull: false,
-  })
-  public readonly created!: Date;
+  @CreatedAt
+  @Column
+  public readonly createdAt!: Date;
+
+  @UpdatedAt
+  @Column
+  public readonly updatedAt!: Date;
 
   @BelongsTo(() => Survey, 'surveyId')
   public survey?: Survey;
