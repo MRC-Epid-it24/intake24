@@ -6,6 +6,7 @@ import authentication from './authentication/index.test';
 import admin from './admin/index.test';
 import portionSizes from './portion-sizes/index.test';
 import subscriptions from './subscriptions/index.test';
+import surveys from './surveys/index.test';
 
 describe('API', () => {
   beforeAll(async () => {
@@ -49,6 +50,13 @@ describe('API', () => {
     describe('POST /api/subscriptions', subscriptions.subscribe);
     describe('DELETE /api/subscriptions', subscriptions.unsubscribe);
     describe('POST /api/subscriptions/push', subscriptions.push);
+  });
+
+  describe('Surveys', () => {
+    describe('GET /api/surveys', surveys.browse);
+    describe('GET /api/surveys/:surveyId', surveys.detail);
+    describe('GET /api/surveys/:surveyId/generate-user', surveys.generateUser);
+    // describe('GET /api/surveys/:surveyId/create-user', surveys.createUser);
   });
 
   describe('Portion-sizes', () => {

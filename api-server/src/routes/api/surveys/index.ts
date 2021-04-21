@@ -5,13 +5,13 @@ import { wrapAsync } from '@/util';
 import validation from '@/http/requests/surveys';
 import surveyRespondents from './survey-respondents';
 
-const { surveyController } = ioc.cradle;
+const { environment, surveyController } = ioc.cradle;
 
 const router = Router();
 
 const generateUserLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 1,
+  max: environment === 'test' ? 100 : 1,
   message: 'New user has just been generated, please try again later.',
 });
 
