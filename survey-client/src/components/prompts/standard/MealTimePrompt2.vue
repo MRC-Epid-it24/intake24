@@ -30,11 +30,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import merge from 'deepmerge';
-import { MealTimePrompt2Props, MealTimePromptProps, mealTimePromptProps } from '@common/prompts';
-import recall from '@/util/Recall';
-import Meal from '@/util/Meal';
-import { MealState2 } from '@common/types';
+import { MealTimePromptProps } from '@common/prompts';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
@@ -44,7 +40,10 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   props: {
     promptProps: {
-      type: Object as () => MealTimePrompt2Props,
+      type: Object as () => MealTimePromptProps,
+    },
+    mealName: {
+      type: String,
     },
     value: {
       type: String,
@@ -67,14 +66,14 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     text(): string {
       const text = this.promptProps.text[this.$i18n.locale];
       return text
-        ? text.replace('{meal}', this.promptProps.mealName ?? '')
-        : (this.$t('prompts.mealTime.text', { meal: this.promptProps.mealName }) as string);
+        ? text.replace('{meal}', this.mealName ?? '')
+        : (this.$t('prompts.mealTime.text', { meal: this.mealName }) as string);
     },
     description(): string {
       const description = this.promptProps.description[this.$i18n.locale];
       return description
-        ? description.replace('{meal}', this.promptProps.mealName ?? '')
-        : (this.$t('prompts.mealTime.description', { meal: this.promptProps.mealName }) as string);
+        ? description.replace('{meal}', this.mealName ?? '')
+        : (this.$t('prompts.mealTime.description', { meal: this.mealName }) as string);
     },
   },
 

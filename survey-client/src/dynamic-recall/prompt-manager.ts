@@ -1,5 +1,4 @@
 import { Condition, conditionOps, PromptQuestion } from '@common/prompts';
-import { Scheme } from '@common/types/models';
 import { SurveyState } from '@/types/vuex';
 import { SchemeEntryResponse } from '@common/types/http';
 
@@ -78,7 +77,7 @@ function checkMealCustomConditions(state: SurveyState, mealIndex: number, prompt
         }
         return conditionOps[condition.op]([
           condition.value,
-          state.data.customPromptAnswers[prompt.id],
+          state.data.meals[mealIndex].customPromptAnswers[prompt.id],
         ]);
       case 'recallNumber':
         return checkRecallNumber(state, condition);

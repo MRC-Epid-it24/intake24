@@ -21,10 +21,12 @@
         <component
           v-if="currentPrompt"
           ref="promptComponent"
-          @hook:mounted="onPromptComponentMounted"
-          :is="currentPrompt.prompt.component"
+          :is="handlerComponent"
+          :promptComponent="currentPrompt.prompt.component"
+          :promptId="currentPrompt.prompt.id"
           :promptProps="currentPrompt.promptProps"
           :key="Math.random()"
+          @complete="nextPrompt"
         ></component>
       </transition>
     </v-col>
@@ -38,56 +40,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
-import customPrompts from '@/components/prompts/custom';
-import standardPrompts from '@/components/prompts/standard';
-import { conditionOps, PromptAnswer, PromptQuestion } from '@common/prompts';
-import { SurveyState } from '@/types/vuex';
 import DynamicRecall, { PromptInstance } from '@/dynamic-recall/dynamic-recall';
 import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
 import MealList from '@/components/recall/MealListDesktop.vue';
 import { MealState2 } from '@common/types';
-import MealTimePrompt2 from '@/components/prompts/standard/MealTimePrompt2.vue';
-import { mapGetters, mapState } from 'vuex';
-
-function checkStandardConditions(state: SurveyState, prompt: PromptQuestion): boolean {
-  if (state.data == null) {
-    console.error(`Survey data should not be null at this point`);
-    return false;
-  }
-
-  switch (prompt.component) {
-    case 'info-prompt':
-      return !state.data.flags.includes(`${prompt.id}-acknowledged`);
-    default:
-      return state.data.customPromptAnswers[prompt.id] === undefined;
-  }
-}
-
-function checkCustomConditions(state: SurveyState, prompt: PromptQuestion) {
-  return prompt.props.conditions.every((condition) => {
-    switch (condition.type) {
-      case 'promptAnswer':
-        if (state.data == null) {
-          console.error('Survey data should not be null at this point');
-          return false;
-        }
-        return conditionOps[condition.op]([
-          condition.value,
-          state.data.customPromptAnswers[prompt.id],
-        ]);
-      case 'recallNumber':
-        if (state.user == null) {
-          console.error('User information should not be null at this point');
-          return false;
-        }
-        return conditionOps[condition.op]([condition.value, state.user.recallNumber]);
-      default:
-        console.error(`Unexpected condition type: ${condition.type}`);
-        return false;
-    }
-  });
-}
+import { mapState } from 'vuex';
+import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
+import standardHandlers from '@/components/prompts/dynamic/handlers/standard';
 
 export default Vue.extend({
   name: 'DynamicRecall',
@@ -96,8 +56,8 @@ export default Vue.extend({
     MealListMobileBottom,
     MealListMobileTop,
     MealList,
-    ...customPrompts,
-    MealTimePrompt: MealTimePrompt2,
+    CustomPromptHandler,
+    ...standardHandlers,
   },
 
   data: () => {
@@ -108,6 +68,21 @@ export default Vue.extend({
   },
 
   computed: {
+    handlerComponent(): string {
+      const prompt = this.currentPrompt?.prompt;
+
+      if (prompt === undefined) throw new Error('Current prompt must be defined');
+
+      switch (prompt.type) {
+        case 'custom':
+          return 'custom-prompt-handler';
+        case 'standard':
+          return `${prompt.component}-handler`;
+        default:
+          throw new Error('Not implemented');
+      }
+    },
+
     surveyScheme(): SchemeEntryResponse | null {
       return this.$store.state.survey.parameters?.scheme;
     },
@@ -151,7 +126,7 @@ export default Vue.extend({
     }),
   },
 
-  async mounted() {
+  async created() {
     if (this.surveyScheme == null) {
       console.error('Survey scheme must be known at this point');
       return;
@@ -160,6 +135,9 @@ export default Vue.extend({
     this.recallController = new DynamicRecall(this.surveyScheme, this.$store);
 
     await this.recallController.initialiseSurvey();
+  },
+
+  async mounted() {
     await this.nextPrompt();
   },
 
@@ -170,20 +148,10 @@ export default Vue.extend({
       if (nextPrompt === undefined) {
         // TODO: handle completion
         console.log('No prompts remaining');
+        this.currentPrompt = null;
       } else {
         console.log(`Switching prompt to ${nextPrompt.prompt.component}`);
         this.currentPrompt = nextPrompt;
-      }
-    },
-
-    async onPromptComponentMounted() {
-      if (this.$refs.promptComponent instanceof Vue) {
-        await this.currentPrompt!.onPromptComponentMounted(
-          this.$refs.promptComponent as Vue,
-          this.nextPrompt
-        );
-      } else {
-        throw new Error('Expected mounted prompt component to be a Vue instance');
       }
     },
   },

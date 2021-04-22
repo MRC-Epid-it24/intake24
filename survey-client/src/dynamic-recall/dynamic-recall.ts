@@ -63,10 +63,7 @@ export default class DynamicRecall {
         flags: [],
         customPromptAnswers: {},
         selection: {
-          element: {
-            type: 'meal',
-            mealIndex: 0,
-          },
+          element: null,
           mode: 'auto',
         },
         meals: this.surveyScheme.meals.map((meal) => {
@@ -183,11 +180,10 @@ export default class DynamicRecall {
     const surveyState = this.getSurveyState();
     const recallState = surveyState.data!;
 
-    const nextPrompt = this.promptManager.nextPreMealsPrompt(surveyState);
-
-    if (nextPrompt) return this.createSurveyPromptInstance(nextPrompt);
-
-    if (recallState.selection.element != null) {
+    if (recallState.selection.element == null) {
+      const nextPrompt = this.promptManager.nextPreMealsPrompt(surveyState);
+      if (nextPrompt) return this.createSurveyPromptInstance(nextPrompt);
+    } else {
       switch (recallState.selection.element.type) {
         case 'meal': {
           const { mealIndex } = recallState.selection.element;

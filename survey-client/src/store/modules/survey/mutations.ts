@@ -99,6 +99,25 @@ const mutations: MutationTree<SurveyState> = {
       state.data.meals[data.mealIndex].customPromptAnswers[data.promptId] = data.answer;
     }
   },
+
+  setFoodCustomPromptAnswer(
+    state: SurveyState,
+    data: { mealIndex: number; foodIndex: number; promptId: string; answer: CustomPromptAnswer }
+  ) {
+    if (state.data == null) {
+      console.error('state.data is null');
+    } else {
+      state.data.meals[data.mealIndex].foods[data.foodIndex].customPromptAnswers[data.promptId] =
+        data.answer;
+    }
+  },
+
+  setFoodFlag(state: SurveyState, data: { mealIndex: number; foodIndex: number; flag: string }) {
+    if (state.data == null) {
+      console.error('state.data is null');
+    } else if (!state.data.meals[data.mealIndex].foods[data.foodIndex].flags.includes(data.flag))
+      state.data.meals[data.mealIndex].foods[data.foodIndex].flags.push(data.flag);
+  },
 };
 
 export default mutations;
