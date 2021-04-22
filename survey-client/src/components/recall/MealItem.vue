@@ -1,10 +1,10 @@
 <template>
   <v-list-group :value="meal.time.length > 0 ? true : false">
     <template v-slot:activator>
-      <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal(meal.name)">
+      <v-list-item-title class="font-weight-bold" @click="chooseMeal(meal.name)">
         {{ meal.name }}
+        <context-menu :menu="menuMeal" :icon="menuMealIcon"></context-menu>
       </v-list-item-title>
-      <context-menu :menu="menuMeal" :icon="menuMealIcon"></context-menu>
       <v-list-item-action>
         <v-list-item-action-text
           v-if="meal.time.length > 0"
@@ -13,7 +13,8 @@
         <v-icon x-small v-else>far fa-question-circle </v-icon>
       </v-list-item-action>
     </template>
-    <v-list-item v-for="(food, i) in meal.foods" :key="i" link>
+    <food-item :foods="meal.foods"></food-item>
+    <!-- <v-list-item v-for="(food, i) in meal.foods" :key="i" link>
       <v-list-item-title
         v-if="food.name"
         v-text="food.name"
@@ -30,19 +31,21 @@
       <v-list-item-action>
         <v-icon x-small v-if="food.portionSizeMethod" color="green darken-2">fa-check</v-icon>
       </v-list-item-action>
-    </v-list-item>
+    </v-list-item> -->
   </v-list-group>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import ContextMenu from '../elements/ContextMenu.vue';
+import FoodItem from './FoodItem.vue';
 
 export default (Vue as VueConstructor<Vue>).extend({
   name: 'MealItem',
 
   components: {
     ContextMenu,
+    FoodItem,
   },
   props: {
     meal: Object,

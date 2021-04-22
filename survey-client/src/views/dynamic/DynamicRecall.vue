@@ -142,7 +142,8 @@ export default Vue.extend({
         return state.survey.data.meals.map((meal: MealState2) => {
           return {
             name: meal.name,
-            time: meal.time ? `${meal.time.hours}:${meal.time.minutes}` : `?`,
+            time: meal.time ? `${meal.time.hours}:${meal.time.minutes}` : ``,
+            foods: meal.foods,
           };
         });
       },
