@@ -143,6 +143,7 @@ export default Vue.extend({
           return {
             name: meal.name,
             time: meal.time ? `${meal.time.hours}:${meal.time.minutes}` : ``,
+            // FIXME: Foods is type of Encoded USer Food Data or Uswr Food Data. at the mpment FoodItem.vue component is expecting object iwth name and searchTerm properties.
             foods: meal.foods,
           };
         });

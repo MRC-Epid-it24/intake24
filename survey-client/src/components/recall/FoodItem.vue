@@ -27,6 +27,7 @@ import Vue, { VueConstructor } from 'vue';
 export default (Vue as VueConstructor<Vue>).extend({
   name: 'FoodItem',
   props: {
+    // FIXME: Should be an array of objects of type UserFoodData or EncodedUserFoodData ???
     foods: Array,
   },
   data() {
