@@ -1,7 +1,9 @@
+import type { SurveyState } from '../../recall';
+
 export type UserSession = {
   userId: number;
   surveyId: string;
-  sessionData: any;
+  sessionData: SurveyState;
   createdAt: Date;
   updatedAt: Date;
 };

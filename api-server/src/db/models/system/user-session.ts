@@ -1,6 +1,7 @@
 import { BelongsTo, Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import BaseModel from '@/db/models/model';
 import { UserSession as UserSessionAttributes } from '@common/types/models';
+import { SurveyState } from '@common/types';
 import { Survey, User } from '.';
 
 @Table({
@@ -28,13 +29,12 @@ export default class UserSession extends BaseModel implements UserSessionAttribu
     allowNull: false,
     type: DataType.TEXT({ length: 'long' }),
   })
-  // TODO: add types for recall state
-  get sessionData(): any {
+  get sessionData(): SurveyState {
     const val = this.getDataValue('sessionData') as unknown;
     return JSON.parse(val as string);
   }
 
-  set sessionData(value: any) {
+  set sessionData(value: SurveyState) {
     this.setDataValue('sessionData', JSON.stringify(value));
   }
 
