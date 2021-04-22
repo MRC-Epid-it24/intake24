@@ -54,11 +54,31 @@ const mutations: MutationTree<SurveyState> = {
     }
   },
 
-  deleteMeal(state: SurveyState, data: { mealIndex: number }) {
+  deleteMeal(state: SurveyState, mealIndex: number) {
     if (state.data == null) {
       console.error('state.data is null');
     } else {
-      state.data.meals.splice(data.mealIndex, 1);
+      state.data.meals.splice(mealIndex, 1);
+
+      const selectedElement = state.data.selection.element;
+
+      if (selectedElement == null) return;
+
+      const selectedMealIndex = selectedElement.mealIndex;
+
+      if (selectedMealIndex < mealIndex) return;
+
+      if (selectedMealIndex > mealIndex) {
+        selectedElement.mealIndex -= 1;
+        return;
+      }
+
+      state.data.selection.mode = 'auto';
+      selectedElement.type = 'meal'; // if a food from the deleted meal was selected make sure new selection is a meal
+
+      if (selectedElement.mealIndex === state.data.meals.length) selectedElement.mealIndex -= 1;
+
+      if (selectedElement.mealIndex < 0) state.data.selection.element = null;
     }
   },
 
