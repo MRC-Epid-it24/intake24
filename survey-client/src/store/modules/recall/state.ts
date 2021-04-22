@@ -6,7 +6,7 @@ export const STATE_LS_KEY = 'state';
 const state = (): RecallState => ({
   survey: null,
   user: null,
-  state: Vue.ls.get(STATE_LS_KEY, null),
+  state: Vue.ls?.get(STATE_LS_KEY, null),
 });
 
 export default state;

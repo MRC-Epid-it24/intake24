@@ -4,7 +4,7 @@ import { ACCESS_TOKEN, JwtPayload, Subject, UserPayload } from '@/types/auth';
 
 export default {
   getAccessToken(): string | null {
-    return Vue.ls.get(ACCESS_TOKEN);
+    return Vue.ls?.get(ACCESS_TOKEN);
   },
 
   decodeAccessToken(): UserPayload | null {
