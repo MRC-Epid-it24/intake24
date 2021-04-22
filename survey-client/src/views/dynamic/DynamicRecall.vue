@@ -20,7 +20,6 @@
         or maybe not  ¯\_(ツ)_/¯  -->
         <component
           v-if="currentPrompt"
-          ref="promptComponent"
           :is="handlerComponent"
           :promptComponent="currentPrompt.prompt.component"
           :promptId="currentPrompt.prompt.id"
