@@ -12,6 +12,8 @@ router.use(isSurveyRespondent());
 
 router.get('/parameters', wrapAsync(surveyRespondentController.parameters));
 router.get('/user-info', wrapAsync(surveyRespondentController.userInfo));
+router.get('/session', wrapAsync(surveyRespondentController.getSession));
+router.post('/session', wrapAsync(surveyRespondentController.setSession));
 router.post('/submissions', wrapAsync(surveyRespondentController.submissions));
 router.post('/follow-up', wrapAsync(surveyRespondentController.followUp));
 router.post('/request-help', wrapAsync(surveyRespondentController.requestHelp));

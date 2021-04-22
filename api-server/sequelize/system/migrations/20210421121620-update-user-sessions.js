@@ -6,18 +6,14 @@ module.exports = {
       await queryInterface.createTable(
         'user_sessions',
         {
-          id: {
-            allowNull: false,
-            autoIncrement: true,
-            primaryKey: true,
-            type: Sequelize.BIGINT,
-          },
           user_id: {
             allowNull: false,
+            primaryKey: true,
             type: Sequelize.BIGINT,
           },
           survey_id: {
             allowNull: false,
+            primaryKey: true,
             type: Sequelize.STRING(64),
           },
           session_data: {

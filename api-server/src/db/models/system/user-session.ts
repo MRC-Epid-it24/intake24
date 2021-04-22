@@ -11,20 +11,15 @@ import { Survey, User } from '.';
 })
 export default class UserSession extends BaseModel implements UserSessionAttributes {
   @Column({
-    autoIncrement: true,
-    primaryKey: true,
-    type: DataType.BIGINT,
-  })
-  public id!: number;
-
-  @Column({
     allowNull: false,
+    primaryKey: true,
     type: DataType.BIGINT,
   })
   public userId!: number;
 
   @Column({
     allowNull: false,
+    primaryKey: true,
     type: DataType.STRING(64),
   })
   public surveyId!: string;

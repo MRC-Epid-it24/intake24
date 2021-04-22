@@ -1,12 +1,18 @@
 import { Request, Response } from 'express';
-import { Survey, SurveySubmission, User } from '@/db/models/system';
-import { NotFoundError } from '@/http/errors';
+import { Survey, SurveySubmission, User, UserSession } from '@/db/models/system';
+import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
 import { Controller } from './controller';
 
 export type SurveyRespondentController = Controller<
-  'parameters' | 'userInfo' | 'requestHelp' | 'submissions' | 'followUp'
+  | 'parameters'
+  | 'userInfo'
+  | 'requestHelp'
+  | 'submissions'
+  | 'followUp'
+  | 'getSession'
+  | 'setSession'
 >;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondentController => {
@@ -83,7 +89,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
     const { id: userId } = req.user as User;
     const { submission } = req.body;
 
-    surveyService.submit(surveyId, userId, submission);
+    await surveyService.submit(surveyId, userId, submission);
 
     res.json();
   };
@@ -100,11 +106,43 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
     res.json();
   };
 
+  const getSession = async (req: Request, res: Response<UserSession>): Promise<void> => {
+    const { id: userId } = req.user as User;
+    const { surveyId } = req.params;
+
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
+    if (!survey.storeUserSessionOnServer) throw new ForbiddenError();
+
+    const session = await UserSession.findOne({ where: { userId, surveyId } });
+    if (!session) throw new NotFoundError();
+
+    res.json(session);
+  };
+
+  const setSession = async (req: Request, res: Response): Promise<void> => {
+    const { id: userId } = req.user as User;
+    const { surveyId } = req.params;
+    const { sessionData } = req.body;
+
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
+    if (!survey.storeUserSessionOnServer) throw new ForbiddenError();
+
+    await UserSession.upsert({ userId, surveyId, sessionData }, { fields: ['sessionData'] });
+
+    res.json();
+  };
+
   return {
     parameters,
     userInfo,
     requestHelp,
     submissions,
     followUp,
+    getSession,
+    setSession,
   };
 };
