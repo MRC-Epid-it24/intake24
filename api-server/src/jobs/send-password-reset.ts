@@ -1,5 +1,7 @@
+import { trim } from 'lodash';
 import nunjucks from 'nunjucks';
 import type { IoC } from '@/ioc';
+import { isUrlAbsolute } from '@/util';
 import type { Job, JobData, JobType } from '.';
 
 export interface SendPasswordResetData {
@@ -34,7 +36,12 @@ export default class SendPasswordReset implements Job {
 
     this.logger.debug(`Job ${this.name} started.`);
 
-    const url = `${this.config.app.urls.admin}/password/reset/${this.data.token}`;
+    const { base, admin } = this.config.app.urls;
+    const domain = isUrlAbsolute(admin)
+      ? trim(admin, '/')
+      : `${trim(base, '/')}/${trim(admin, '/')}`;
+
+    const url = `${domain}/password/reset/${this.data.token}`;
     const { expire: expiresAt } = this.config.security.passwords;
 
     const html = nunjucks.render('mail/password-reset.html', {
