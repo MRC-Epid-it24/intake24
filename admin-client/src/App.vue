@@ -151,6 +151,8 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
       }
     }
 
+    if (!this.loggedIn) return;
+
     // Send subscription to server to keep it up-to-date
     setTimeout(async () => {
       if (this.granted) await this.subscribe();
