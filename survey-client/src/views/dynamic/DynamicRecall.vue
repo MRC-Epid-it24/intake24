@@ -47,6 +47,7 @@ import { MealState2 } from '@common/types';
 import { mapState } from 'vuex';
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import standardHandlers from '@/components/prompts/dynamic/handlers/standard';
+import timeDoubleDigitsConvertor from '@/components/mixins/timeDoubleDigitsConvertor';
 
 export default Vue.extend({
   name: 'DynamicRecall',
@@ -116,7 +117,11 @@ export default Vue.extend({
         return state.survey.data.meals.map((meal: MealState2) => {
           return {
             name: meal.name,
-            time: meal.time ? `${meal.time.hours}:${meal.time.minutes}` : ``,
+            time: meal.time
+              ? timeDoubleDigitsConvertor(meal.time.hours)
+                  .concat(':')
+                  .concat(timeDoubleDigitsConvertor(meal.time.minutes))
+              : ``,
             // FIXME: Foods is type of Encoded USer Food Data or Uswr Food Data. at the mpment FoodItem.vue component is expecting object iwth name and searchTerm properties.
             foods: meal.foods,
           };

@@ -51,6 +51,7 @@ export default (Vue as VueConstructor<Vue>).extend({
     meal: Object,
   },
   data() {
+    console.log(this.meal.name);
     return {
       menuMealIcon: 'far fa-edit',
       menuMeal: [
