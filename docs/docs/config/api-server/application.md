@@ -45,6 +45,15 @@ List of sites URLs. These can either be relative or absolute URLs.
 * absolute URL -> site is hosted on different domain
 * relative URL -> site is hosted on same domain. URL gets registered as route.
 
+### Base URL / Domain
+
+Domain / base url to resolve fully qualified sites URLs (if relative)
+
+* object-path: `url.base`
+* dotenv var: `APP_URL_BASE`
+* type: `string`
+* default: `'localhost:3100'`
+
 ### Admin URL
 
 URL of admin site.
