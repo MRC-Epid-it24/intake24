@@ -9,7 +9,7 @@
           <h2>{{ $t('common._') }}</h2>
         </v-card-title>
         <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="onLogin">
-          <v-card-text class="pa-6">
+          <v-card-text class="px-6">
             <v-row>
               <v-col cols="12" class="mb-3">
                 <v-text-field
@@ -35,18 +35,18 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-card-actions class="px-0">
-              <v-btn type="submit" color="secondary" xLarge width="100%">
-                {{ $t('common.login') }}
-              </v-btn>
-            </v-card-actions>
-            <v-divider class="mt-6"></v-divider>
-            <v-card-actions class="d-flex justify-end">
-              <v-btn :to="{ name: 'password-request' }" color="blue darken-3" text>
-                {{ $t('users.password.forgot') }}
-              </v-btn>
-            </v-card-actions>
           </v-card-text>
+          <v-card-actions class="px-6 pb-6">
+            <v-btn type="submit" color="secondary" xLarge width="100%">
+              {{ $t('common.login') }}
+            </v-btn>
+          </v-card-actions>
+          <v-divider class="mx-6"></v-divider>
+          <v-card-actions class="d-flex justify-end px-6 pb-6">
+            <v-btn :to="{ name: 'password-request' }" color="blue darken-3" text>
+              {{ $t('users.password.forgot') }}
+            </v-btn>
+          </v-card-actions>
         </v-form>
       </v-card>
     </v-col>

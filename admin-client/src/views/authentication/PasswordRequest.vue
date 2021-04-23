@@ -21,7 +21,7 @@
           @keydown.native="form.errors.clear($event.target.name)"
           @submit.prevent="onSubmit"
         >
-          <v-card-text class="pa-6">
+          <v-card-text class="px-6">
             <v-row>
               <v-col cols="12">
                 <v-text-field
@@ -34,27 +34,27 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-card-actions class="px-0">
-              <v-btn type="submit" color="secondary" xLarge width="100%">
-                {{ $t('users.password.reset.send') }}
-              </v-btn>
-            </v-card-actions>
-            <v-divider class="mt-6"></v-divider>
-            <v-card-text class="pa-2 text-caption">
-              <vue-recaptcha
-                v-if="recaptcha.enabled"
-                ref="recaptcha"
-                size="invisible"
-                :sitekey="recaptcha.sitekey"
-                @verify="onCaptchaVerified"
-                @expired="onCaptchaExpired"
-              >
-              </vue-recaptcha>
-              This site is protected by reCAPTCHA and the Google
-              <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
-              <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a>
-              apply.
-            </v-card-text>
+          </v-card-text>
+          <v-card-actions class="px-6 pb-6">
+            <v-btn type="submit" color="secondary" xLarge width="100%">
+              {{ $t('users.password.reset.send') }}
+            </v-btn>
+          </v-card-actions>
+          <v-divider class="mx-6"></v-divider>
+          <v-card-text class="px-6 pb-6 text-caption">
+            <vue-recaptcha
+              v-if="recaptcha.enabled"
+              ref="recaptcha"
+              size="invisible"
+              :sitekey="recaptcha.sitekey"
+              @verify="onCaptchaVerified"
+              @expired="onCaptchaExpired"
+            >
+            </vue-recaptcha>
+            This site is protected by reCAPTCHA and the Google
+            <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
+            <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a>
+            apply.
           </v-card-text>
         </v-form>
       </v-card>
