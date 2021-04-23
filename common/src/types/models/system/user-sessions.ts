@@ -7,3 +7,5 @@ export type UserSession = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type UserSessionCreateAttributes = Omit<UserSession, 'createdAt' | 'updatedAt'>;

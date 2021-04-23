@@ -2,7 +2,11 @@ import { Request, Response } from 'express';
 import { Survey, SurveySubmission, User, UserSession } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
+import {
+  SurveyEntryResponse,
+  SurveyUserInfoResponse,
+  SurveyUserSessionResponse,
+} from '@common/types/http';
 import { Controller } from './controller';
 
 export type SurveyRespondentController = Controller<
@@ -18,8 +22,8 @@ export type SurveyRespondentController = Controller<
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondentController => {
   const parameters = async (req: Request, res: Response<SurveyEntryResponse>): Promise<void> => {
     const { surveyId } = req.params;
-    const survey = await Survey.scope('scheme').findByPk(surveyId);
 
+    const survey = await Survey.scope('scheme').findByPk(surveyId);
     if (!survey || !survey.scheme) throw new NotFoundError();
 
     const {
@@ -62,16 +66,19 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
     const { id: userId, name } = req.user as User;
 
     const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
     const submissions = await SurveySubmission.count({ where: { surveyId, userId } });
 
-    if (!survey) throw new NotFoundError();
+    const maximumTotalSubmissionsReached =
+      survey.maximumTotalSubmissions !== null && submissions >= survey.maximumTotalSubmissions;
 
     res.json({
       userId,
       name,
       recallNumber: submissions + 1,
       redirectToFeedback: submissions >= survey.numberOfSubmissionsForFeedback,
-      maximumTotalSubmissionsReached: false,
+      maximumTotalSubmissionsReached,
       maximumDailySubmissionsReached: false,
     });
   };
@@ -106,34 +113,29 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
     res.json();
   };
 
-  const getSession = async (req: Request, res: Response<UserSession>): Promise<void> => {
+  const getSession = async (
+    req: Request,
+    res: Response<SurveyUserSessionResponse>
+  ): Promise<void> => {
     const { id: userId } = req.user as User;
     const { surveyId } = req.params;
 
-    const survey = await Survey.findByPk(surveyId);
-    if (!survey) throw new NotFoundError();
-
-    if (!survey.storeUserSessionOnServer) throw new ForbiddenError();
-
-    const session = await UserSession.findOne({ where: { userId, surveyId } });
-    if (!session) throw new NotFoundError();
+    const session = await surveyService.getSession(surveyId, userId);
 
     res.json(session);
   };
 
-  const setSession = async (req: Request, res: Response): Promise<void> => {
+  const setSession = async (
+    req: Request,
+    res: Response<SurveyUserSessionResponse>
+  ): Promise<void> => {
     const { id: userId } = req.user as User;
     const { surveyId } = req.params;
     const { sessionData } = req.body;
 
-    const survey = await Survey.findByPk(surveyId);
-    if (!survey) throw new NotFoundError();
+    const session = await surveyService.setSession(surveyId, userId, sessionData);
 
-    if (!survey.storeUserSessionOnServer) throw new ForbiddenError();
-
-    await UserSession.upsert({ userId, surveyId, sessionData }, { fields: ['sessionData'] });
-
-    res.json();
+    res.json(session);
   };
 
   return {

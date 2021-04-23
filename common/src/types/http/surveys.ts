@@ -1,4 +1,4 @@
-import { Scheme, SurveyState } from '../models';
+import type { Scheme, SurveyState, UserSession } from '../models';
 
 export type GenerateUserResponse = {
   userName: string;
@@ -39,3 +39,5 @@ export type SurveyUserInfoResponse = {
   maximumTotalSubmissionsReached: boolean;
   maximumDailySubmissionsReached: boolean;
 };
+
+export type SurveyUserSessionResponse = UserSession;

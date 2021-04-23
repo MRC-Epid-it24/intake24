@@ -15,19 +15,15 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
   const browse = async (req: Request, res: Response<PublicSurveyListResponse[]>): Promise<void> => {
     const surveys = await Survey.findAll();
 
-    const data = surveys.map((survey) => ({
-      id: survey.id,
-      name: survey.name,
-      localeId: survey.localeId,
-    }));
+    const data = surveys.map(({ id, name, localeId }) => ({ id, name, localeId }));
 
     res.json(data);
   };
 
   const entry = async (req: Request, res: Response<PublicSurveyEntryResponse>): Promise<void> => {
     const { surveyId } = req.params;
-    const survey = await Survey.findByPk(surveyId);
 
+    const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
     const { id, name, localeId, originatingUrl, supportEmail } = survey;

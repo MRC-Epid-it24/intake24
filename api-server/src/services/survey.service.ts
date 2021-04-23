@@ -14,12 +14,13 @@ import {
   SurveySubmissionMealCustomField,
   User,
   UserCustomField,
+  UserSession,
   UserSurveyAlias,
 } from '@/db/models/system';
 import { ForbiddenError, InternalServerError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { toSimpleName, generateToken } from '@/util';
-import { RecallState } from '@common/types';
+import { RecallState, SurveyState } from '@common/types';
 import { surveyMgmt, surveyRespondent } from './auth';
 
 export type RespondentWithPassword = {
@@ -45,6 +46,8 @@ export interface SurveyService {
   importRespondents: (surveyId: string, userId: number, file: Express.Multer.File) => Promise<Job>;
   exportAuthenticationUrls: (surveyId: string, userId: number) => Promise<Job>;
   submit: (surveyId: string, userId: number, input: RecallState) => Promise<void>;
+  getSession: (surveyId: string, userId: number) => Promise<UserSession>;
+  setSession: (surveyId: string, userId: number, sessionData: SurveyState) => Promise<UserSession>;
 }
 
 export default ({
@@ -399,6 +402,51 @@ export default ({
     }
   };
 
+  /**
+   * Get respondent's survey session / recall state
+   *
+   * @param {string} surveyId
+   * @param {number} userId
+   * @returns {Promise<UserSession>}
+   */
+  const getSession = async (surveyId: string, userId: number): Promise<UserSession> => {
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
+    if (!survey.storeUserSessionOnServer) throw new ForbiddenError();
+
+    const session = await UserSession.findOne({ where: { userId, surveyId } });
+    if (!session) throw new NotFoundError();
+
+    return session;
+  };
+
+  /**
+   * Save respondent's survey session / recall state
+   *
+   * @param {string} surveyId
+   * @param {number} userId
+   * @param {SurveyState} sessionData
+   * @returns {Promise<UserSession>}
+   */
+  const setSession = async (
+    surveyId: string,
+    userId: number,
+    sessionData: SurveyState
+  ): Promise<UserSession> => {
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
+    if (!survey.storeUserSessionOnServer) throw new ForbiddenError();
+
+    const [session] = await UserSession.upsert(
+      { userId, surveyId, sessionData },
+      { fields: ['sessionData'] }
+    );
+
+    return session;
+  };
+
   return {
     getSurveyRespondentPermission,
     getSurveyMgmtPermissions,
@@ -410,5 +458,7 @@ export default ({
     importRespondents,
     exportAuthenticationUrls,
     submit,
+    getSession,
+    setSession,
   };
 };
