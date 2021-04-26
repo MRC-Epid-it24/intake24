@@ -152,7 +152,8 @@ module.exports = {
           title: 'Respondent',
           collapsable: false,
           children: [
-              'respondent/survey',
+              'respondent/surveys-public',
+              'respondent/surveys-respondent',
               'respondent/food-lookup',
               'respondent/food-data'
           ]
