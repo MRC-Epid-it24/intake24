@@ -10,6 +10,10 @@ function checkRecallNumber(state: SurveyState, condition: Condition) {
   return conditionOps[condition.op]([condition.value, state.user.recallNumber]);
 }
 
+// function showPrompt(state: SurveyState, prompt: PromptQuestion){
+
+// }
+
 function checkSurveyStandardConditions(state: SurveyState, prompt: PromptQuestion): boolean {
   if (state.data == null) {
     console.error(`Survey data should not be null at this point`);

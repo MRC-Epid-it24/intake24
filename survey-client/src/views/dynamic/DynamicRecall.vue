@@ -49,6 +49,7 @@ import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
 import MealList from '@/components/recall/MealListDesktop.vue';
 import { MealState2 } from '@common/types';
+import { ComponentType } from '@common/prompts';
 import { mapState } from 'vuex';
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import standardHandlers from '@/components/prompts/dynamic/handlers/standard';
@@ -69,6 +70,7 @@ export default Vue.extend({
     return {
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
+			clickedPrompt: null as ComponentType | null,
     };
   },
 
@@ -155,6 +157,11 @@ export default Vue.extend({
   },
 
   methods: {
+		async clickListHandler(actionPayload: string) {
+			console.log(actionPayload);
+			// await this.nextPrompt()
+		},
+
     async nextPrompt() {
       const nextPrompt = this.recallController!.getNextPrompt();
 
@@ -164,6 +171,8 @@ export default Vue.extend({
         this.currentPrompt = null;
       } else {
         console.log(`Switching prompt to ${nextPrompt.prompt.component}`);
+				// TODO: delete console.log
+				console.log(nextPrompt)
         this.currentPrompt = nextPrompt;
       }
     },
