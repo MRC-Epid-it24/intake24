@@ -56,4 +56,8 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['submission'],
   },
+  'meal-add-prompt': {
+    tabs: [...baseTab],
+    sections: ['preMeals'],
+  },
 };
