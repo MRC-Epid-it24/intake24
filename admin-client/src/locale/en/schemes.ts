@@ -1,4 +1,12 @@
 import { LocaleMessageObject } from 'vue-i18n';
+import {
+  basePromptProps,
+  checkboxListPromptProps,
+  datePickerPromptProps,
+  radioListPromptProps,
+  textareaPromptProps,
+  timePickerPromptProps,
+} from '@common/prompts';
 
 const schemes: LocaleMessageObject = {
   _: 'Scheme',
@@ -120,6 +128,8 @@ const schemes: LocaleMessageObject = {
     description: 'Question description',
     label: 'Options list label',
     other: 'Allow custom other option',
+    noStandardQuestions: 'No standard questions available for this section',
+    noCustomQuestions: 'No custom questions available for this section',
     orientation: {
       _: 'Orientation',
       column: 'Column',
@@ -136,6 +146,40 @@ const schemes: LocaleMessageObject = {
     validation: {
       required: 'Question is required to be filled in',
       message: 'Error message to be displayed',
+    },
+  },
+  prompts: {
+    'meal-time-prompt': {
+      title: 'Meal time',
+      subtitle: 'Confirm meal and its time or remove meal',
+    },
+    'submit-prompt': {
+      title: 'Submit',
+      subtitle: 'Confirm completion and submit recall',
+    },
+    'info-prompt': {
+      title: 'Information',
+      subtitle: 'Show a message or instructions and ask for confirmation',
+    },
+    'date-picker-prompt': {
+      title: 'Date',
+      subtitle: 'Ask to choose a date',
+    },
+    'time-picker-prompt': {
+      title: 'Time',
+      subtitle: 'Ask to choose a time of day',
+    },
+    'checkbox-list-prompt': {
+      title: 'Multiple choice',
+      subtitle: 'Ask to choose any number of items from a list',
+    },
+    'radio-list-prompt': {
+      title: 'Single choice',
+      subtitle: 'Ask to choose one item from a list',
+    },
+    'textarea-prompt': {
+      title: 'Free text',
+      subtitle: 'Ask to enter a free text answer or description',
     },
   },
 };

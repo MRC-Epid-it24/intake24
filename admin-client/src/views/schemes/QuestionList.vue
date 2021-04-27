@@ -101,16 +101,31 @@
               <v-tab-item key="general">
                 <v-row>
                   <v-col cols="12">
-                    <v-select
-                      v-model="dialog.question.component"
-                      :items="availablePromptQuestions"
-                      :label="$t('schemes.questions.component')"
-                      hide-details="auto"
-                      item-value="component"
-                      item-text="name"
-                      outlined
-                      @change="updatePromptProps"
-                    ></v-select>
+                    <v-card outlined>
+                      <v-card-title>Question type</v-card-title>
+                      <v-tabs v-model="questionTypeTab">
+                        <v-tab key="custom">Custom</v-tab>
+                        <v-tab key="standard">Standard</v-tab>
+                      </v-tabs>
+                      <v-item-group mandatory active-class="secondary" v-model="selectedQuestion">
+                        <v-tabs-items v-model="questionTypeTab">
+                          <v-tab-item key="custom">
+                            <question-type-selector
+                              :available-questions="availableCustomQuestions"
+                              :empty-alert="$t(`schemes.questions.noCustomQuestions`)"
+                              :update-question="setQuestionType"
+                            />
+                          </v-tab-item>
+                          <v-tab-item key="standard">
+                            <question-type-selector
+                              :available-questions="availableStandardQuestions"
+                              :empty-alert="$t(`schemes.questions.noStandardQuestions`)"
+                              :update-question="setQuestionType"
+                            />
+                          </v-tab-item>
+                        </v-tabs-items>
+                      </v-item-group>
+                    </v-card>
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-text-field
@@ -167,6 +182,7 @@ import standardPrompts from '@/components/prompts/standard';
 import { merge } from '@/util';
 import { FormRefs, PromptQuestion, QuestionSection, MealSection } from '@common/types';
 import { customPromptQuestions, standardPromptQuestions } from '@common/prompts';
+import QuestionTypeSelector from '@/views/schemes/QuestionTypeSelector.vue';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;
@@ -195,7 +211,13 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
   },
 
-  components: { ConfirmDialog, draggable, ...customPrompts, ...standardPrompts },
+  components: {
+    QuestionTypeSelector,
+    ConfirmDialog,
+    draggable,
+    ...customPrompts,
+    ...standardPrompts,
+  },
 
   data() {
     const promptQuestions = [...customPromptQuestions, ...standardPromptQuestions];
@@ -210,10 +232,14 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       dialog: dialog(),
       newDialog: dialog,
       questions: this.items,
+      customPromptQuestions,
+      standardPromptQuestions,
       promptQuestions,
       promptSettings,
       tab: null,
+      questionTypeTab: null,
       moveToSection: null,
+      selectedQuestion: 0,
     };
   },
 
@@ -224,6 +250,19 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     isEdit(): boolean {
       return !this.isCreate;
     },
+
+    availableCustomQuestions(): PromptQuestion[] {
+      return this.customPromptQuestions.filter((prompt) =>
+        this.promptSettings[prompt.component].sections.includes(this.section)
+      );
+    },
+
+    availableStandardQuestions(): PromptQuestion[] {
+      return this.standardPromptQuestions.filter((prompt) =>
+        this.promptSettings[prompt.component].sections.includes(this.section)
+      );
+    },
+
     availablePromptQuestions(): PromptQuestion[] {
       return this.promptQuestions.filter((prompt) =>
         this.promptSettings[prompt.component].sections.includes(this.section)
@@ -263,6 +302,13 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       event.stopImmediatePropagation();
     },
 
+    setQuestionType(question: PromptQuestion) {
+      this.dialog.question.id = question.id;
+      this.dialog.question.component = question.component;
+
+      this.updatePromptProps();
+    },
+
     updatePromptProps() {
       const {
         show,
@@ -282,6 +328,21 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
     edit(index: number, question: PromptQuestion) {
       const defaults = this.promptQuestions.find((item) => item.component === question.component);
+
+      const standardIndex = this.standardPromptQuestions.findIndex(
+        (q) => q.component === question.component
+      );
+
+      const customIndex = this.customPromptQuestions.findIndex(
+        (q) => q.component === question.component
+      );
+
+      let selectedIndex = 0;
+
+      if (standardIndex > 0) selectedIndex = standardIndex;
+      if (customIndex > 0) selectedIndex = customIndex;
+
+      this.selectedQuestion = selectedIndex;
 
       this.dialog = {
         show: true,
@@ -354,5 +415,3 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   },
 });
 </script>
-
-<style lang="scss" scoped></style>
