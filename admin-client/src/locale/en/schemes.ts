@@ -45,11 +45,15 @@ const schemes: LocaleMessageObject = {
     types: {
       _: 'Condition type',
       title: 'Condition types',
-      promptAnswer: 'Prompt answer',
+      surveyPromptAnswer: 'Survey prompt answer',
+      mealPromptAnswer: 'Meal prompt answer',
+      foodPromptAnswer: 'Food prompt answer',
       recallNumber: 'Recall number',
     },
     exTypes: {
-      promptAnswer: 'Prompt ({promptId}) answer',
+      surveyPromptAnswer: 'Survey question answer: {promptId}',
+      mealPromptAnswer: 'Meal question answer: {promptId}',
+      foodPromptAnswer: 'Food question answer: {promptId}',
       recallNumber: 'Recall number',
     },
     ops: {

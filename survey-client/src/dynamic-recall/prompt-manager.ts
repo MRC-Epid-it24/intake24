@@ -27,14 +27,14 @@ function checkSurveyStandardConditions(state: SurveyState, prompt: PromptQuestio
 function checkSurveyCustomConditions(state: SurveyState, prompt: PromptQuestion) {
   return prompt.props.conditions.every((condition) => {
     switch (condition.type) {
-      case 'promptAnswer':
+      case 'surveyPromptAnswer':
         if (state.data == null) {
           console.error('Survey data should not be null at this point');
           return false;
         }
         return conditionOps[condition.op]([
           condition.value,
-          state.data.customPromptAnswers[prompt.id],
+          state.data.customPromptAnswers[condition.props.promptId],
         ]);
       case 'recallNumber':
         return checkRecallNumber(state, condition);
@@ -70,14 +70,23 @@ function checkMealStandardConditions(
 function checkMealCustomConditions(state: SurveyState, mealIndex: number, prompt: PromptQuestion) {
   return prompt.props.conditions.every((condition) => {
     switch (condition.type) {
-      case 'promptAnswer':
+      case 'surveyPromptAnswer':
         if (state.data == null) {
           console.error('Survey data should not be null at this point');
           return false;
         }
         return conditionOps[condition.op]([
           condition.value,
-          state.data.meals[mealIndex].customPromptAnswers[prompt.id],
+          state.data.customPromptAnswers[condition.props.promptId],
+        ]);
+      case 'mealPromptAnswer':
+        if (state.data == null) {
+          console.error('Survey data should not be null at this point');
+          return false;
+        }
+        return conditionOps[condition.op]([
+          condition.value,
+          state.data.meals[mealIndex].customPromptAnswers[condition.props.promptId],
         ]);
       case 'recallNumber':
         return checkRecallNumber(state, condition);

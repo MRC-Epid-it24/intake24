@@ -134,7 +134,8 @@ import clone from 'lodash/cloneDeep';
 import { merge } from '@/util';
 import draggable from 'vuedraggable';
 import { Condition, ConditionOp, conditionOps } from '@common/prompts';
-import conditionProps from './conditions';
+import PromptAnswerProps from '@/components/prompts/partials/conditions/PromptAnswerProps.vue';
+import RecallNumberProps from '@/components/prompts/partials/conditions/RecallNumberProps.vue';
 
 export interface IndexedCondition extends Condition {
   id: number;
@@ -157,7 +158,23 @@ const opToIconMap: Record<ConditionOp, string> = {
 
 const promptConditions: Condition[] = [
   {
-    type: 'promptAnswer',
+    type: 'surveyPromptAnswer',
+    op: 'eq',
+    value: '',
+    props: {
+      promptId: '',
+    },
+  },
+  {
+    type: 'mealPromptAnswer',
+    op: 'eq',
+    value: '',
+    props: {
+      promptId: '',
+    },
+  },
+  {
+    type: 'foodPromptAnswer',
     op: 'eq',
     value: '',
     props: {
@@ -175,7 +192,13 @@ const promptConditions: Condition[] = [
 export default Vue.extend({
   name: 'PromptConditions',
 
-  components: { draggable, ...conditionProps },
+  components: {
+    draggable,
+    surveyPromptAnswer: PromptAnswerProps,
+    mealPromptAnswer: PromptAnswerProps,
+    foodPromptAnswer: PromptAnswerProps,
+    recallNumber: RecallNumberProps,
+  },
 
   props: {
     conditions: {

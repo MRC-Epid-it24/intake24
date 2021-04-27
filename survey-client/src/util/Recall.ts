@@ -220,7 +220,7 @@ export class Recall {
     for (const condition of conditions) {
       // TODO: Extract switch to separate handler once more condition types are implemented
       switch (condition.type) {
-        case 'promptAnswer':
+        case 'surveyPromptAnswer':
           if (prompt.question.id === condition.props.promptId) {
             console.warn(`Referencing itself...?`);
             return true;

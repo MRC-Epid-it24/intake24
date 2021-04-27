@@ -1,6 +1,10 @@
 import { Dictionary } from '../types/common';
 
-export type ConditionType = 'promptAnswer' | 'recallNumber';
+export type ConditionType =
+  | 'surveyPromptAnswer'
+  | 'mealPromptAnswer'
+  | 'foodPromptAnswer'
+  | 'recallNumber';
 
 export type ConditionOp = 'eq' | 'ne' | 'gte' | 'gt' | 'lte' | 'lt';
 
@@ -13,7 +17,8 @@ export type ConditionOps = Record<ConditionOp, ConditionOpCallback>;
 const toNumber = (values: ConditionOpInput) =>
   values.flat().map((value) => (typeof value === 'string' ? parseFloat(value) : value));
 
-const toString = (values: ConditionOpInput) => values.flat().map((value) => value.toString());
+const toString = (values: ConditionOpInput) =>
+  values.flat().map((value) => value?.toString() || '');
 
 export const conditionOps: ConditionOps = {
   eq: (values: ConditionOpInput) => {
