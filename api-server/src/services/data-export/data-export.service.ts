@@ -1,4 +1,4 @@
-import fecha from 'fecha';
+import { format as formatDate } from 'date-fns';
 import { Transform } from 'json2csv';
 import { groupBy } from 'lodash';
 import { Op, Order, WhereOptions } from 'sequelize';
@@ -228,7 +228,7 @@ export default ({
     const options = getSubmissionOptions(input);
 
     const fields = await getExportFields(survey.scheme.export);
-    const timestamp = fecha.format(new Date(), 'YYYY-MM-DD-HH-mm-ss');
+    const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-data-export-${surveyId}-${timestamp}.csv`;
 
     return { options, fields, filename };
