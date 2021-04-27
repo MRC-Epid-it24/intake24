@@ -8,8 +8,12 @@ import { STATE_LS_KEY } from './state';
 const actions: ActionTree<SurveyState, RootState> = {
   async loadParameters({ commit }, { surveyId }: { surveyId: string }) {
     try {
-      const surveyInfo = await surveyService.surveyInfo(surveyId);
+      const [surveyInfo, userInfo] = await Promise.all([
+        surveyService.surveyInfo(surveyId),
+        surveyService.userInfo(surveyId),
+      ]);
       commit('setParameters', surveyInfo);
+      commit('setUserInfo', userInfo);
     } catch (err) {
       // continue;
     }

@@ -6,11 +6,15 @@ import {
   Selection2,
   SurveyState as CurrentSurveyState,
 } from '@common/types';
-import { SurveyEntryResponse } from '@common/types/http';
+import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
 
 const mutations: MutationTree<SurveyState> = {
   setParameters(state, data: SurveyEntryResponse) {
     state.parameters = data;
+  },
+
+  setUserInfo(state, data: SurveyUserInfoResponse) {
+    state.user = data;
   },
 
   setState(state, data: CurrentSurveyState) {

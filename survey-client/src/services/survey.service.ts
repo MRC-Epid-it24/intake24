@@ -1,9 +1,11 @@
-import { RecallState } from '@common/types';
+import { RecallState, SurveyState } from '@common/types';
 import {
   GenerateUserResponse,
   PublicSurveyEntryResponse,
+  PublicSurveyListResponse,
   SurveyEntryResponse,
   SurveyUserInfoResponse,
+  SurveyUserSessionResponse,
 } from '@common/types/http';
 import http from './http.service';
 
@@ -23,8 +25,8 @@ export default {
     return { userName, password };
   },
 
-  surveyInfo: async (surveyId: string): Promise<SurveyEntryResponse> => {
-    const { data } = await http.get<SurveyEntryResponse>(`surveys/${surveyId}/parameters`);
+  surveyPublicList: async (): Promise<PublicSurveyListResponse> => {
+    const { data } = await http.get<PublicSurveyListResponse>(`surveys`);
 
     return data;
   },
@@ -35,8 +37,35 @@ export default {
     return data;
   },
 
+  surveyInfo: async (surveyId: string): Promise<SurveyEntryResponse> => {
+    const { data } = await http.get<SurveyEntryResponse>(`surveys/${surveyId}/parameters`);
+
+    return data;
+  },
+
   userInfo: async (surveyId: string): Promise<SurveyUserInfoResponse> => {
-    const { data } = await http.get<SurveyUserInfoResponse>(`surveys/${surveyId}/user-info`);
+    const tzOffset = new Date().getTimezoneOffset();
+
+    const { data } = await http.get<SurveyUserInfoResponse>(`surveys/${surveyId}/user-info`, {
+      params: { tzOffset },
+    });
+
+    return data;
+  },
+
+  getUserSession: async (surveyId: string): Promise<SurveyUserSessionResponse> => {
+    const { data } = await http.get<SurveyUserSessionResponse>(`surveys/${surveyId}/session`);
+
+    return data;
+  },
+
+  setUserSession: async (
+    surveyId: string,
+    sessionData: SurveyState
+  ): Promise<SurveyUserSessionResponse> => {
+    const { data } = await http.post<SurveyUserSessionResponse>(`surveys/${surveyId}/session`, {
+      sessionData,
+    });
 
     return data;
   },
