@@ -3,9 +3,13 @@
     <v-col cols="12" class="mealbar stickytop" v-if="isNotDesktop && showMealList">
       <meal-list-mobile-top :foods="foods" :meals="meals"> </meal-list-mobile-top>
     </v-col>
-
     <v-col v-if="!isNotDesktop && showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
-      <meal-list :surveyName="surveyName" :meals="meals"></meal-list>
+      <meal-list
+				:surveyName="surveyName"
+				:surveyId="surveyId"
+				:meals="meals"
+				>
+				</meal-list>
     </v-col>
 
     <v-col cols="12" lg="9" class="content">
@@ -90,6 +94,10 @@ export default Vue.extend({
 
     surveyName(): SurveyEntryResponse | null {
       return this.$store.state.survey.parameters?.name;
+    },
+
+		surveyId(): SurveyEntryResponse | null {
+      return this.$store.state.survey.parameters?.id;
     },
 
     showMealList(): boolean {

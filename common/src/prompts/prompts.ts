@@ -8,7 +8,11 @@ export type GenericComponentType =
   | 'radio-list-prompt'
   | 'textarea-prompt';
 
-export type StandardComponentType = 'meal-time-prompt' | 'submit-prompt' | 'food-search-prompt';
+export type StandardComponentType =
+  | 'meal-time-prompt'
+  | 'submit-prompt'
+  | 'food-search-prompt'
+  | 'meal-add-prompt';
 
 export type ComponentType = GenericComponentType | StandardComponentType;
 

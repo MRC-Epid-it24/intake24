@@ -3,7 +3,7 @@
     <template v-slot:activator>
       <v-list-item-title class="font-weight-bold" @click="chooseMeal(meal.name)">
         {{ meal.name }}
-        <context-menu :menu="menuMeal" :icon="menuMealIcon"></context-menu>
+        <context-menu :menu="menuMeal" :icon="menuMealIcon" :itemId="idx"></context-menu>
       </v-list-item-title>
       <v-list-item-action>
         <v-list-item-action-text
@@ -49,6 +49,7 @@ export default (Vue as VueConstructor<Vue>).extend({
   },
   props: {
     meal: Object,
+		idx: String
   },
   data() {
     return {
@@ -56,11 +57,11 @@ export default (Vue as VueConstructor<Vue>).extend({
       menuMeal: [
         {
           name: 'Add Food',
-          action: '',
+          action: 'add-food-prompt',
         },
         {
           name: 'Delete Food',
-          action: '',
+          action: 'remove-food-prompt',
         },
       ],
     };
