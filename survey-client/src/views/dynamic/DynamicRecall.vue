@@ -1,19 +1,20 @@
 <template>
   <v-row justify="center" class="pa-0">
-    <v-col cols="12" class="mealbar stickytop">
-      <meal-list-mobile-top :foods="foods" :meals="meals" v-if="isNotDesktop">
-      </meal-list-mobile-top>
+    <v-col cols="12" class="mealbar stickytop" v-if="isNotDesktop && showMealList">
+      <meal-list-mobile-top :foods="foods" :meals="meals"> </meal-list-mobile-top>
     </v-col>
-    <v-col v-if="!isNotDesktop" cols="3" lg="3" min-height="30rem" height="45rem">
+
+    <v-col v-if="!isNotDesktop && showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
       <meal-list :surveyName="surveyName" :meals="meals"></meal-list>
     </v-col>
 
     <v-col cols="12" lg="9" class="content">
-      <v-toolbar class="mb-4">
+      <v-toolbar class="mb-4" v-if="showMealList">
         <v-breadcrumbs v-if="!isNotDesktop" :items="brdMeal" divider="/"></v-breadcrumbs>
         <v-spacer v-if="!isNotDesktop"></v-spacer>
         <v-btn @click="$router.back()"> back </v-btn>
       </v-toolbar>
+
       <transition name="component-fade" mode="out-in">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
         even if the next prompt uses the same component type, probably should be something like an internal counter,

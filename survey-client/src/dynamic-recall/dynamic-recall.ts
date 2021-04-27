@@ -3,9 +3,9 @@ import { SurveyState } from '@/types/vuex';
 import PromptManager from '@/dynamic-recall/prompt-manager';
 import { PromptAnswer, PromptQuestion } from '@common/prompts';
 import {
-  Dictionary,
+  Dictionary, MealSection,
   MealTime,
-  QuestionSection,
+  QuestionSection, RecallSection,
   SurveyState as CurrentSurveyState,
 } from '@common/types';
 import { SchemeEntryResponse } from '@common/types/http';
@@ -15,7 +15,7 @@ import SelectionManager from '@/dynamic-recall/selection-manager';
 export interface PromptInstance {
   prompt: PromptQuestion;
   promptProps: Dictionary;
-  section: QuestionSection;
+  section: RecallSection | MealSection;
 
   onPromptComponentMounted(promptComponent: Vue, onComplete: () => Promise<void>): Promise<void>;
 }
@@ -172,7 +172,7 @@ export default class DynamicRecall {
 
       prompt,
       promptProps: props,
-      section: 'preMeals',
+      section: 'preFoods',
     };
   }
 
