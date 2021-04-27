@@ -32,7 +32,9 @@ export default (Vue as VueConstructor<Vue>).extend({
   },
 	methods: {
 		onClick(action: string, itemId: string | undefined) {
-			console.log(action, itemId)
+			console.log('Context Menu: ', action, itemId);
+			const payload = { action, itemId };
+			this.$emit('manual-prompt-selection', payload);
 		}
 	}
 });

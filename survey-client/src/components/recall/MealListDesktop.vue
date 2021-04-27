@@ -8,7 +8,12 @@
             {{ surveyName }}
           </v-list-item-subtitle>
         </v-list-item-content>
-        <context-menu :menu="menuRecall" :icon="menuRecallIcon" :itemId="surveyId"></context-menu>
+        <context-menu
+					:menu="menuRecall"
+					:icon="menuRecallIcon"
+					:itemId="surveyId"
+					@manual-prompt-selection="mealAction">
+				</context-menu>
       </v-list-item>
       <v-divider></v-divider>
       <v-card-text class="scroll-y" style="height: 40rem">
@@ -66,6 +71,9 @@ export default (Vue as VueConstructor<Vue>).extend({
     chooseFoodUp(e: string) {
       this.$emit('breadcrimbFoodUp', e);
     },
+		mealAction(payload: { action: string, itemId: string}) {
+			console.log("Meal Desktop: ", payload);
+		}
   },
 });
 </script>
