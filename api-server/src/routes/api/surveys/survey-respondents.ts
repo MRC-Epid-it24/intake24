@@ -12,7 +12,7 @@ authenticate(router, 'user');
 router.use(isSurveyRespondent());
 
 router.get('/parameters', wrapAsync(surveyRespondentController.parameters));
-router.get('/user-info', wrapAsync(surveyRespondentController.userInfo));
+router.get('/user-info', validation.userInfo, wrapAsync(surveyRespondentController.userInfo));
 router.get('/session', wrapAsync(surveyRespondentController.getSession));
 router.post('/session', validation.setSession, wrapAsync(surveyRespondentController.setSession));
 router.post('/submissions', wrapAsync(surveyRespondentController.submissions));

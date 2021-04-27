@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Survey, SurveySubmission, User, UserSession } from '@/db/models/system';
-import { ForbiddenError, NotFoundError } from '@/http/errors';
+import { Survey, User } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import {
   SurveyEntryResponse,
@@ -12,11 +12,11 @@ import { Controller } from './controller';
 export type SurveyRespondentController = Controller<
   | 'parameters'
   | 'userInfo'
+  | 'getSession'
+  | 'setSession'
   | 'requestHelp'
   | 'submissions'
   | 'followUp'
-  | 'getSession'
-  | 'setSession'
 >;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondentController => {
@@ -54,33 +54,39 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
     });
   };
 
-  /*
-   * TODO:
-   * - Review for V4 frontend - include user data - submissions, feedback data etc for user's dashboard?
-   * - Implement submission limits
-   *
-   */
   const userInfo = async (req: Request, res: Response<SurveyUserInfoResponse>): Promise<void> => {
     const { surveyId } = req.params;
-    const { tz } = req.query;
-    const { id: userId, name } = req.user as User;
+    const tzOffset = (req.query.tzOffset as unknown) as number; // validated & parsed in middleware (ideally, should have typed requests)
+    const user = req.user as User;
 
-    const survey = await Survey.findByPk(surveyId);
-    if (!survey) throw new NotFoundError();
+    const userResponse = await surveyService.userInfo(surveyId, user, tzOffset);
 
-    const submissions = await SurveySubmission.count({ where: { surveyId, userId } });
+    res.json(userResponse);
+  };
 
-    const maximumTotalSubmissionsReached =
-      survey.maximumTotalSubmissions !== null && submissions >= survey.maximumTotalSubmissions;
+  const getSession = async (
+    req: Request,
+    res: Response<SurveyUserSessionResponse>
+  ): Promise<void> => {
+    const { id: userId } = req.user as User;
+    const { surveyId } = req.params;
 
-    res.json({
-      userId,
-      name,
-      recallNumber: submissions + 1,
-      redirectToFeedback: submissions >= survey.numberOfSubmissionsForFeedback,
-      maximumTotalSubmissionsReached,
-      maximumDailySubmissionsReached: false,
-    });
+    const session = await surveyService.getSession(surveyId, userId);
+
+    res.json(session);
+  };
+
+  const setSession = async (
+    req: Request,
+    res: Response<SurveyUserSessionResponse>
+  ): Promise<void> => {
+    const { id: userId } = req.user as User;
+    const { surveyId } = req.params;
+    const { sessionData } = req.body;
+
+    const session = await surveyService.setSession(surveyId, userId, sessionData);
+
+    res.json(session);
   };
 
   // TODO: implement
@@ -113,38 +119,13 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
     res.json();
   };
 
-  const getSession = async (
-    req: Request,
-    res: Response<SurveyUserSessionResponse>
-  ): Promise<void> => {
-    const { id: userId } = req.user as User;
-    const { surveyId } = req.params;
-
-    const session = await surveyService.getSession(surveyId, userId);
-
-    res.json(session);
-  };
-
-  const setSession = async (
-    req: Request,
-    res: Response<SurveyUserSessionResponse>
-  ): Promise<void> => {
-    const { id: userId } = req.user as User;
-    const { surveyId } = req.params;
-    const { sessionData } = req.body;
-
-    const session = await surveyService.setSession(surveyId, userId, sessionData);
-
-    res.json(session);
-  };
-
   return {
     parameters,
     userInfo,
+    getSession,
+    setSession,
     requestHelp,
     submissions,
     followUp,
-    getSession,
-    setSession,
   };
 };

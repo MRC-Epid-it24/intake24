@@ -25,9 +25,31 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
-  it('should return 200 and public survey record', async () => {
+  it('should return 422 when missing timezone offset', async () => {
     const { status, body } = await request(suite.app)
       .get(url)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.respondent);
+
+    expect(status).toBe(422);
+    expect(body).toContainAllKeys(['success', 'errors']);
+    expect(body.errors).toContainAllKeys(['tzOffset']);
+  });
+
+  it('should return 422 when invalid timezone offset', async () => {
+    const { status, body } = await request(suite.app)
+      .get(`${url}?tzOffset=invalidTzOffset`)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.respondent);
+
+    expect(status).toBe(422);
+    expect(body).toContainAllKeys(['success', 'errors']);
+    expect(body.errors).toContainAllKeys(['tzOffset']);
+  });
+
+  it('should return 200 and public survey record', async () => {
+    const { status, body } = await request(suite.app)
+      .get(`${url}?tzOffset=-60`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.respondent);
 

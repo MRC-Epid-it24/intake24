@@ -40,23 +40,18 @@ Content-Type: application/json
 
 Returns a subset of personal data for the current user that is relevant to the recall application.
 
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/system/user/SurveyController.scala#L86-L114)
-
 ### Request
 
 ```http
-GET /api/surveys/{surveyId}/user-info?tz={timeZone}
+GET /api/surveys/{surveyId}/user-info?tzOffset={tzOffset}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 ```
 
-where:
-
-**surveyId** is the survey ID,
-
-**tz** is the user's local time zone in tzdata format (e.g. as returned by `Intl.DateTimeFormat().resolvedOptions().timeZone` 
-in web browsers).
+:::tip
+**tzOffset** is client's timezone offset, (e.g. as returned by `new Date().getTimezoneOffset()` in web browsers).
+:::
 
 ### Response
 
@@ -65,7 +60,7 @@ in web browsers).
 
 {
    "id" : string,
-   "name": string?,
+   "name": string | null,
    "recallNumber": number,
    "redirectToFeedback": boolean,
    "maximumTotalSubmissionsReached": boolean,
