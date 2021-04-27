@@ -8,14 +8,15 @@
             {{ surveyName }}
           </v-list-item-subtitle>
         </v-list-item-content>
-        <context-menu :menu="menuRecall" :icon="menuRecallIcon"></context-menu>
+        <context-menu :menu="menuRecall" :icon="menuRecallIcon" :itemId="surveyId"></context-menu>
       </v-list-item>
       <v-divider></v-divider>
       <v-card-text class="scroll-y" style="height: 40rem">
-        <v-list-item :ripple="false" :inactive="true" v-for="meal in meals" :key="meal.name" link>
+        <v-list-item :ripple="false" :inactive="true" v-for="(meal, idx) in meals" :key="meal.name" link>
           <v-list-item-content>
             <meal-item
               :meal="meal"
+							:idx="idx.toString()"
               @breadcrumbMeal="chooseMealUp(meal.name)"
               @breadcrumbFood="chooseFoodUp"
             ></meal-item>
@@ -40,6 +41,7 @@ export default (Vue as VueConstructor<Vue>).extend({
   },
   props: {
     surveyName: String,
+		surveyId: String,
     meals: Array,
   },
   data() {
@@ -48,11 +50,11 @@ export default (Vue as VueConstructor<Vue>).extend({
       menuRecall: [
         {
           name: 'Add Meal',
-          action: '',
+          action: 'add-meal-prompt',
         },
         {
           name: 'Delete Meal',
-          action: '',
+          action: 'remove-meal-prompt',
         },
       ],
     };

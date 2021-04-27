@@ -95,6 +95,9 @@ export default class DynamicRecall {
               await onComplete();
             });
             break;
+					case 'meal-add-prompt':
+						console.log('Trying to add a meal');
+						break;
           default:
             promptComponent.$on('answer', async (answer: PromptAnswer) => {
               store.commit('survey/setCustomPromptAnswer', {

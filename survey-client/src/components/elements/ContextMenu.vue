@@ -5,10 +5,14 @@
         <v-icon x-small>{{ icon }}</v-icon>
       </v-btn>
     </template>
-    <v-list>
-      <v-list-item v-for="item in menu" :key="item.name">
-        <v-list-item-title>{{ item.name }}</v-list-item-title>
-      </v-list-item>
+    <v-list dense>
+			<v-list-item-group color="primary">
+				<v-list-item v-for="item in menu" :key="item.name" @click="onClick(item.action, itemId)">
+					<v-list-item-content>
+						<v-list-item-title>{{ item.name }}</v-list-item-title>
+					</v-list-item-content>
+				</v-list-item>
+			</v-list-item-group>
     </v-list>
   </v-menu>
 </template>
@@ -21,9 +25,15 @@ export default (Vue as VueConstructor<Vue>).extend({
   props: {
     icon: String,
     menu: Array,
+		itemId: String,
   },
   data() {
     return {};
   },
+	methods: {
+		onClick(action: string, itemId: string | undefined) {
+			console.log(action, itemId)
+		}
+	}
 });
 </script>
