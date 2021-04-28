@@ -49,7 +49,7 @@ export default (Vue as VueConstructor<Vue>).extend({
   },
   props: {
     meal: Object,
-		idx: String
+    idx: String,
   },
   data() {
     return {

@@ -3,9 +3,11 @@ import { SurveyState } from '@/types/vuex';
 import PromptManager from '@/dynamic-recall/prompt-manager';
 import { PromptAnswer, PromptQuestion } from '@common/prompts';
 import {
-  Dictionary, MealSection,
+  Dictionary,
+  MealSection,
   MealTime,
-  QuestionSection, RecallSection,
+  QuestionSection,
+  RecallSection,
   SurveyState as CurrentSurveyState,
 } from '@common/types';
 import { SchemeEntryResponse } from '@common/types/http';
@@ -95,9 +97,9 @@ export default class DynamicRecall {
               await onComplete();
             });
             break;
-					case 'meal-add-prompt':
-						console.log('Trying to add a meal');
-						break;
+          case 'meal-add-prompt':
+            console.log('Trying to add a meal');
+            break;
           default:
             promptComponent.$on('answer', async (answer: PromptAnswer) => {
               store.commit('survey/setCustomPromptAnswer', {
@@ -223,6 +225,21 @@ export default class DynamicRecall {
       this.store.commit('survey/setSelection', nextSelection);
       return this.getNextPromptForCurrentSelection();
     }
+
+    return undefined;
+  }
+
+  setCurrentPrompt(promptComponent: PromptQuestion['component']): PromptInstance | undefined {
+    const surveyState = this.getSurveyState();
+    const recallState = surveyState.data!;
+    // FIXME: Delete consol log
+    console.log('[setCurrentPrompt]: ', promptComponent, surveyState);
+    const nextPrompt = this.promptManager.setNextPreMealsPrompt(surveyState, promptComponent);
+    if (nextPrompt) return this.createSurveyPromptInstance(nextPrompt);
+
+    // FIXME: Delete console log
+    console.log('setCurrentPrompt');
+    console.log();
 
     return undefined;
   }

@@ -9,19 +9,26 @@
           </v-list-item-subtitle>
         </v-list-item-content>
         <context-menu
-					:menu="menuRecall"
-					:icon="menuRecallIcon"
-					:itemId="surveyId"
-					@manual-prompt-selection="mealAction">
-				</context-menu>
+          :menu="menuRecall"
+          :icon="menuRecallIcon"
+          :itemId="surveyId"
+          @manual-prompt-selection="mealAction"
+        >
+        </context-menu>
       </v-list-item>
       <v-divider></v-divider>
       <v-card-text class="scroll-y" style="height: 40rem">
-        <v-list-item :ripple="false" :inactive="true" v-for="(meal, idx) in meals" :key="meal.name" link>
+        <v-list-item
+          :ripple="false"
+          :inactive="true"
+          v-for="(meal, idx) in meals"
+          :key="meal.name"
+          link
+        >
           <v-list-item-content>
             <meal-item
               :meal="meal"
-							:idx="idx.toString()"
+              :idx="idx.toString()"
               @breadcrumbMeal="chooseMealUp(meal.name)"
               @breadcrumbFood="chooseFoodUp"
             ></meal-item>
@@ -46,7 +53,7 @@ export default (Vue as VueConstructor<Vue>).extend({
   },
   props: {
     surveyName: String,
-		surveyId: String,
+    surveyId: String,
     meals: Array,
   },
   data() {
@@ -71,9 +78,10 @@ export default (Vue as VueConstructor<Vue>).extend({
     chooseFoodUp(e: string) {
       this.$emit('breadcrimbFoodUp', e);
     },
-		mealAction(payload: { action: string, itemId: string}) {
-			console.log("Meal Desktop: ", payload);
-		}
+    mealAction(payload: { action: string; itemId: string }) {
+      console.log('Meal Desktop: ', payload);
+      this.$emit('manual-prompt-selection', payload);
+    },
   },
 });
 </script>
