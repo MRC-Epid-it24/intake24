@@ -79,7 +79,6 @@ export default (Vue as VueConstructor<Vue>).extend({
       this.$emit('breadcrimbFoodUp', e);
     },
     mealAction(payload: { action: string; itemId: string }) {
-      console.log('Meal Desktop: ', payload);
       this.$emit('manual-prompt-selection', payload);
     },
   },

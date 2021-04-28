@@ -98,7 +98,6 @@ export default class DynamicRecall {
             });
             break;
           case 'meal-add-prompt':
-            console.log('Trying to add a meal');
             break;
           default:
             promptComponent.$on('answer', async (answer: PromptAnswer) => {
@@ -232,15 +231,8 @@ export default class DynamicRecall {
   setCurrentPrompt(promptComponent: PromptQuestion['component']): PromptInstance | undefined {
     const surveyState = this.getSurveyState();
     const recallState = surveyState.data!;
-    // FIXME: Delete consol log
-    console.log('[setCurrentPrompt]: ', promptComponent, surveyState);
     const nextPrompt = this.promptManager.setNextPreMealsPrompt(surveyState, promptComponent);
     if (nextPrompt) return this.createSurveyPromptInstance(nextPrompt);
-
-    // FIXME: Delete console log
-    console.log('setCurrentPrompt');
-    console.log();
-
     return undefined;
   }
 }

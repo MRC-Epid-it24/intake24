@@ -30,8 +30,8 @@ module.exports = {
       '/api': {
         target: 'http://localhost:3100',
         changeOrigin: true,
-				secure: false,
-			},
+        secure: false,
+      },
     },
   },
   outputDir: process.env.OUTPUT_DIR || 'dist',

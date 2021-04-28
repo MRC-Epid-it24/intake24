@@ -5,10 +5,16 @@ import { basePromptProps, BasePromptProps, promptValidation, ValidatedPromptProp
 export interface MealTimePromptProps extends ValidatedPromptProps {
   format: 'ampm' | '24hr';
 }
+
 export const mealTimePromptProps: MealTimePromptProps = clone({
   ...basePromptProps,
   ...promptValidation,
   format: '24hr',
+});
+
+export const mealAddPromptProps: BasePromptProps = clone({
+  ...basePromptProps,
+  ...promptValidation,
 });
 
 export const submitPromptProps: BasePromptProps = clone(basePromptProps);
@@ -27,5 +33,12 @@ export const standardPromptQuestions: PromptQuestion[] = [
     id: 'submit-prompt',
     name: 'Submit prompt',
     props: clone(submitPromptProps),
+  },
+  {
+    component: 'meal-add-prompt',
+    type: 'standard',
+    id: 'meal-add-prompt',
+    name: 'Meal App prompt',
+    props: clone(mealAddPromptProps),
   },
 ];

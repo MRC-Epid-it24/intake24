@@ -45,6 +45,11 @@ const prompts: LocaleMessageObject = {
       required: 'Please select how the portion will be measured.',
     },
   },
+  mealAdding: {
+    yes: 'Add Meal',
+    no: 'Abort adding',
+    hint: 'hit enter when finished typing',
+  },
 };
 
 export default prompts;

@@ -19,9 +19,6 @@ function showPrompt(
     console.error(`Survey data should not be null at this point`);
     return false;
   }
-
-  // FIXME: Delete the console.log
-  console.log(`[prompt-manager: showPrompt]: Comparing ${prompt.component} and ${promtComponent} `);
   return prompt.component === promtComponent;
 }
 
@@ -34,6 +31,8 @@ function checkSurveyStandardConditions(state: SurveyState, prompt: PromptQuestio
   switch (prompt.component) {
     case 'info-prompt':
       return !state.data.flags.includes(`${prompt.id}-acknowledged`);
+    case 'meal-add-prompt':
+      return false;
     default:
       return state.data.customPromptAnswers[prompt.id] === undefined;
   }
@@ -153,8 +152,6 @@ export default class PromptManager {
     promptComponent: PromptQuestion['component']
   ): PromptQuestion | undefined {
     return this.surveyScheme.questions.preMeals.find((question) => {
-      // TODO: Delete consol log:
-      console.log('[prmopt-manager: setNextPreMealsPrompt]: ', question, promptComponent);
       return showPrompt(state, question, promptComponent);
     });
   }
