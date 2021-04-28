@@ -69,15 +69,7 @@ export default class DynamicRecall {
             time: undefined,
             flags: [],
             customPromptAnswers: {},
-
-            foods: [
-              {
-                type: 'free-text',
-                description: 'Banana',
-                customPromptAnswers: {},
-                flags: [],
-              },
-            ],
+            foods: [],
           };
         }),
       };

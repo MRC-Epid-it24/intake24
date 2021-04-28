@@ -149,6 +149,14 @@ const mutations: MutationTree<SurveyState> = {
       state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 0, data.food);
     }
   },
+
+  setFoods(state: SurveyState, data: { mealIndex: number; foods: FoodState[] }) {
+    if (state.data == null) {
+      console.error('state.data is null');
+    } else {
+      state.data.meals[data.mealIndex].foods = data.foods;
+    }
+  },
 };
 
 export default mutations;
