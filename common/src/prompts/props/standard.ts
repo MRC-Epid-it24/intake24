@@ -17,10 +17,7 @@ export const mealTimePromptProps: MealTimePromptProps = clone({
   format: '24hr',
 });
 
-export const mealAddPromptProps: BasePromptProps = clone({
-  ...basePromptProps,
-  ...promptValidation,
-});
+export const mealAddPromptProps: BasePromptProps = clone(basePromptProps);
 
 export const submitPromptProps: BasePromptProps = clone(basePromptProps);
 
@@ -56,7 +53,7 @@ export const standardPromptQuestions: PromptQuestion[] = [
     component: 'meal-add-prompt',
     type: 'standard',
     id: 'meal-add-prompt',
-    name: 'Meal App prompt',
+    name: 'Meal Add prompt',
     props: clone(mealAddPromptProps),
   },
 ];
