@@ -90,7 +90,7 @@ const mutations: MutationTree<SurveyState> = {
 
   addMeal(state: SurveyState, mealName: string) {
     if (state.data == null || mealName == null) {
-			console.error('state.data or submittedMeal is null');
+      console.error('state.data or submittedMeal is null');
     } else {
       const newMeal: MealState2 = {
         name: mealName,
