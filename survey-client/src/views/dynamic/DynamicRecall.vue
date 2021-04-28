@@ -104,7 +104,11 @@ export default Vue.extend({
     },
 
     showMealList(): boolean {
-      return this.currentPrompt?.section !== 'preMeals';
+      // FIXME: decide on where to put prompts that are not connected to the main flow or refactor this.
+      return (
+        this.currentPrompt?.section !== 'preMeals' ||
+        this.currentPrompt.prompt.component === 'meal-add-prompt'
+      );
     },
 
     foods(): any {

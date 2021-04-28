@@ -150,9 +150,8 @@ export default class DynamicRecall {
   setCurrentPrompt(promptComponent: PromptQuestion['component']): PromptInstance | undefined {
     const surveyState = this.getSurveyState();
     const recallState = surveyState.data!;
-    // FIXME: Delete consol log
-    console.log('[setCurrentPrompt]: ', promptComponent, surveyState);
     const nextPrompt = this.promptManager.setNextPreMealsPrompt(surveyState, promptComponent);
+
     if (nextPrompt)
       return {
         prompt: nextPrompt,
