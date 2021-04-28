@@ -12,6 +12,7 @@ import FoodSearchPrompt from '@/components/prompts/standard/FoodSearchPrompt.vue
 import { mapGetters } from 'vuex';
 import { FoodSearchPromptProps } from '@common/prompts';
 import { FoodState } from '@common/types';
+import { UserFoodData } from '@common/types/http';
 
 export default Vue.extend({
   name: 'FoodSearchPromptHandler',
@@ -24,7 +25,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters('survey', ['selectedFood', 'selectedMealIndex']),
+    ...mapGetters('survey', ['selectedFood', 'selectedMealIndex', 'selectedFoodIndex']),
 
     selectedFoodDescription(): string {
       const { selectedFood } = this;
@@ -41,7 +42,22 @@ export default Vue.extend({
   },
 
   methods: {
-    onFoodSelected() {
+    onFoodSelected(data: UserFoodData) {
+      const currentState: FoodState | undefined = this.$store.getters['survey/selectedFood'];
+
+      const newState: FoodState = {
+        type: 'encoded-food',
+        data,
+        customPromptAnswers: currentState?.customPromptAnswers ?? {},
+        flags: currentState?.flags ?? [],
+      };
+
+      this.$store.commit('survey/updateFood', {
+        mealIndex: this.selectedMealIndex,
+        foodIndex: this.selectedFoodIndex,
+        food: newState,
+      });
+
       this.$emit('complete');
     },
   },

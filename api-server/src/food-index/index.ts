@@ -1,14 +1,10 @@
 import { Worker } from 'worker_threads';
 import config from '@/config';
+import { FoodSearchResponse } from '@common/types/http';
 
 let indexReady = false;
 let queryIdCounter = 0;
 let indexWorker: Worker;
-
-export interface FoodSearchResult {
-  code: string;
-  description: string;
-}
 
 export class IndexNotReadyError extends Error {}
 
@@ -33,7 +29,7 @@ export default {
     await indexWorker.terminate();
   },
 
-  async search(query: string): Promise<FoodSearchResult[]> {
+  async search(query: string): Promise<FoodSearchResponse> {
     if (indexReady) {
       queryIdCounter += 1;
 
@@ -43,7 +39,7 @@ export default {
         const listener = (msg: any) => {
           if (msg.queryId === queryId) {
             indexWorker.removeListener('message', listener);
-            resolve(msg.results);
+            resolve({ foods: msg.results });
           }
         };
 

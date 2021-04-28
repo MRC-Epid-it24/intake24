@@ -1,6 +1,11 @@
 import { GetterTree } from 'vuex';
 import { RootState, SurveyState } from '@/types/vuex';
-import { FoodState, MealState2, Selection2, SurveyState as CurrentSurveyState } from '@common/types';
+import {
+  FoodState,
+  MealState2,
+  Selection2,
+  SurveyState as CurrentSurveyState,
+} from '@common/types';
 
 const getters: GetterTree<SurveyState, RootState> = {
   parametersLoaded: (state) => !!state.parameters,

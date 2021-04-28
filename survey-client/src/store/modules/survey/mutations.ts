@@ -2,6 +2,7 @@ import { MutationTree } from 'vuex';
 import { SurveyState } from '@/types/vuex';
 import {
   CustomPromptAnswer,
+  FoodState,
   MealTime,
   Selection2,
   SurveyState as CurrentSurveyState,
@@ -121,6 +122,15 @@ const mutations: MutationTree<SurveyState> = {
       console.error('state.data is null');
     } else if (!state.data.meals[data.mealIndex].foods[data.foodIndex].flags.includes(data.flag))
       state.data.meals[data.mealIndex].foods[data.foodIndex].flags.push(data.flag);
+  },
+
+  updateFood(state: SurveyState, data: { mealIndex: number; foodIndex: number; food: FoodState }) {
+    if (state.data == null) {
+      console.error('state.data is null');
+    } else {
+      state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1);
+      state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 0, data.food);
+    }
   },
 };
 

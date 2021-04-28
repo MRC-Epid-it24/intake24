@@ -28,3 +28,21 @@ export interface FormRefs {
     form: HTMLFormElement;
   };
 }
+
+// TODO (performance): better done when the current locale is already known rather than processing all strings
+export function replaceInTranslation(
+  translation: LocaleTranslation,
+  string: string,
+  replaceValue: string
+): LocaleTranslation {
+  const rest = Object.fromEntries(
+    Object.entries(translation)
+      .filter((entry) => entry[0] !== 'en')
+      .map((entry) => [entry[0], entry[1]?.replace(string, replaceValue) ?? null])
+  );
+
+  return {
+    en: translation.en?.replace(string, replaceValue) ?? null,
+    ...rest,
+  };
+}

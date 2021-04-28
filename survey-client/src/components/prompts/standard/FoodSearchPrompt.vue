@@ -1,8 +1,13 @@
 <template>
   <prompt-layout :text="promptTitle" :description="promptProps.description">
-    <template v-slot:actions>
-      <submit @click.native="submit"></submit>
-    </template>
+    <v-text-field v-model="searchTerm" @change="search"></v-text-field>
+    <v-progress-circular indeterminate v-if="requestInProgress"></v-progress-circular>
+    <v-alert type="error" prominent v-if="requestFailed">Something went wrong :(</v-alert>
+    <food-search-results
+      :results="searchResults"
+      v-if="searchResults != null"
+      @food-selected="onFoodSelected"
+    ></food-search-results>
   </prompt-layout>
 </template>
 
@@ -11,12 +16,16 @@ import Vue from 'vue';
 import merge from 'deepmerge';
 import { BasePromptProps, submitPromptProps } from '@common/prompts';
 import Submit from '@/components/prompts/actions/Submit.vue';
-import { LocaleTranslation } from '@common/types';
+import { LocaleTranslation, replaceInTranslation } from '@common/types';
+import foodSearchService from '@/services/foods.service';
+import FoodSearchResults from '@/components/elements/FoodSearchResults.vue';
+import { FoodSearchResponse } from '@common/types/http';
+import Loader from '@/components/Loader.vue';
 import BasePrompt from '../BasePrompt';
 
 export default Vue.extend({
   name: 'FoodSearchPrompt',
-
+  components: { FoodSearchResults },
   mixins: [BasePrompt, Submit],
 
   props: {
@@ -30,25 +39,46 @@ export default Vue.extend({
 
   computed: {
     promptTitle(): LocaleTranslation {
-      return Object.fromEntries(
-        Object.entries(this.promptProps.text).map((value) => [
-          value[0],
-          value[1]?.replace('{searchTerm}', this.searchTerm),
-        ])
-      );
+      return replaceInTranslation(this.promptProps.text, '{searchTerm}', this.searchTerm);
     },
+  },
+
+  mounted() {
+    this.search();
   },
 
   data() {
     return {
       ...merge(submitPromptProps, this.promptProps),
-      searchTerm: () => this.initialSearchTerm,
+      requestInProgress: true,
+      requestFailed: false,
+      searchTerm: this.initialSearchTerm,
+      searchResults: null as FoodSearchResponse | null,
     };
   },
 
   methods: {
-    submit() {
-      this.$emit('foodSelected');
+    async search() {
+      this.requestInProgress = true;
+      this.searchResults = null;
+      try {
+        this.searchResults = await foodSearchService.search('en_GB', this.searchTerm);
+      } catch (e) {
+        this.requestFailed = true;
+      }
+      this.requestInProgress = false;
+    },
+
+    async onFoodSelected(code: string) {
+      this.requestInProgress = true;
+      this.searchResults = null;
+      try {
+        const foodData = await foodSearchService.getData('en_GB', code);
+        this.$emit('food-selected', foodData);
+      } catch (e) {
+        this.requestFailed = true;
+      }
+      this.requestInProgress = false;
     },
   },
 });
