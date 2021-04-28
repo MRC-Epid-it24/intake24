@@ -1,9 +1,9 @@
 import Vue from 'vue';
+import trimEnd from 'lodash/trimEnd';
 
 import 'tinymce/tinymce';
 import 'tinymce/icons/default';
 import 'tinymce/themes/silver';
-
 import 'tinymce/plugins/advlist';
 import 'tinymce/plugins/autolink';
 import 'tinymce/plugins/code';
@@ -22,13 +22,13 @@ import Editor from '@tinymce/tinymce-vue';
 
 export default Vue.extend({
   data() {
-    const baseUrl = process.env.VUE_APP_BASE_URL ?? '/';
+    const baseUrl = trimEnd(process.env.VUE_APP_BASE_URL ?? '', '/');
 
     return {
       tinymceInit: {
-        skin_url: `${baseUrl}css/tinymce/ui/oxide`,
+        skin_url: `${baseUrl}/css/tinymce/ui/oxide`,
         // TODO: this should point to frontend stylesheet
-        content_css: `${baseUrl}css/tinymce/content/default/content.min.css`,
+        content_css: `${baseUrl}/css/tinymce/content/default/content.min.css`,
         default_link_target: '_blank',
         height: 400,
         menubar: false,
