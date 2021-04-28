@@ -64,10 +64,6 @@ export default (Vue as VueConstructor<Vue>).extend({
           name: 'Add Meal',
           action: 'add-meal-prompt',
         },
-        {
-          name: 'Delete Meal',
-          action: 'remove-meal-prompt',
-        },
       ],
     };
   },
