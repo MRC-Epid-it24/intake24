@@ -12,7 +12,7 @@
     </v-form>
     <template v-slot:actions>
       <v-btn :block="isMobile" class="px-5" large @click="removeMeal">
-        {{ $t('prompts.mealTime.no', { meal: promptProps.mealName }) }}
+        {{ $t('prompts.mealTime.no', { meal: mealName }) }}
       </v-btn>
       <v-btn
         :block="isMobile"
@@ -22,7 +22,7 @@
         large
         @click="submit"
       >
-        {{ $t('prompts.mealTime.yes', { meal: promptProps.mealName }) }}
+        {{ $t('prompts.mealTime.yes', { meal: mealName }) }}
       </v-btn>
     </template>
   </prompt-layout>

@@ -97,6 +97,79 @@ function checkMealCustomConditions(state: SurveyState, mealIndex: number, prompt
   });
 }
 
+function checkFoodStandardConditions(
+  state: SurveyState,
+  mealIndex: number,
+  foodIndex: number,
+  prompt: PromptQuestion
+): boolean {
+  if (state.data == null) {
+    console.error(`Survey data should not be null at this point`);
+    return false;
+  }
+
+  if (prompt.component === 'food-search-prompt') {
+    return state.data.meals[mealIndex].foods[foodIndex].type === 'free-text';
+  }
+
+  switch (prompt.component) {
+    case 'info-prompt':
+      return !state.data.meals[mealIndex].foods[foodIndex].flags.includes(
+        `${prompt.id}-acknowledged`
+      );
+    default:
+      return (
+        state.data.meals[mealIndex].foods[foodIndex].customPromptAnswers[prompt.id] === undefined
+      );
+  }
+}
+
+function checkFoodCustomConditions(
+  state: SurveyState,
+  mealIndex: number,
+  foodIndex: number,
+  prompt: PromptQuestion
+) {
+  return prompt.props.conditions.every((condition) => {
+    switch (condition.type) {
+      case 'surveyPromptAnswer':
+        if (state.data == null) {
+          console.error('Survey data should not be null at this point');
+          return false;
+        }
+        return conditionOps[condition.op]([
+          condition.value,
+          state.data.customPromptAnswers[condition.props.promptId],
+        ]);
+      case 'mealPromptAnswer':
+        if (state.data == null) {
+          console.error('Survey data should not be null at this point');
+          return false;
+        }
+        return conditionOps[condition.op]([
+          condition.value,
+          state.data.meals[mealIndex].customPromptAnswers[condition.props.promptId],
+        ]);
+      case 'foodPromptAnswer':
+        if (state.data == null) {
+          console.error('Survey data should not be null at this point');
+          return false;
+        }
+        return conditionOps[condition.op]([
+          condition.value,
+          state.data.meals[mealIndex].foods[foodIndex].customPromptAnswers[
+            condition.props.promptId
+          ],
+        ]);
+      case 'recallNumber':
+        return checkRecallNumber(state, condition);
+      default:
+        console.error(`Unexpected condition type: ${condition.type}`);
+        return false;
+    }
+  });
+}
+
 export default class PromptManager {
   private surveyScheme: SchemeEntryResponse;
 
@@ -118,6 +191,19 @@ export default class PromptManager {
       return (
         checkMealStandardConditions(state, mealIndex, question) &&
         checkMealCustomConditions(state, mealIndex, question)
+      );
+    });
+  }
+
+  nextFoodsPrompt(
+    state: SurveyState,
+    mealIndex: number,
+    foodIndex: number
+  ): PromptQuestion | undefined {
+    return this.surveyScheme.questions.meals.foods.find((question) => {
+      return (
+        checkFoodStandardConditions(state, mealIndex, foodIndex, question) &&
+        checkFoodCustomConditions(state, mealIndex, foodIndex, question)
       );
     });
   }

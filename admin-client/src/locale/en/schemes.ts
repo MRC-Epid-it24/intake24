@@ -152,6 +152,10 @@ const schemes: LocaleMessageObject = {
       message: 'Error message to be displayed',
     },
   },
+  foodSearch: {
+    allowBrowsing: 'Allow respondents to search for foods by freely browsing food categories',
+    dualLanguage: 'Display alternative food names in another language',
+  },
   prompts: {
     'meal-time-prompt': {
       title: 'Meal time',
@@ -184,6 +188,10 @@ const schemes: LocaleMessageObject = {
     'textarea-prompt': {
       title: 'Free text',
       subtitle: 'Ask to enter a free text answer or description',
+    },
+    'food-search-prompt': {
+      title: 'Food database search',
+      subtitle: 'Choose a food from the database that best matches the description',
     },
   },
 };

@@ -24,7 +24,7 @@
           :is="handlerComponent"
           :promptComponent="currentPrompt.prompt.component"
           :promptId="currentPrompt.prompt.id"
-          :promptProps="currentPrompt.promptProps"
+          :promptProps="currentPrompt.prompt.props"
           :key="Math.random()"
           @complete="nextPrompt"
         ></component>

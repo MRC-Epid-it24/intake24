@@ -5,6 +5,12 @@ import { basePromptProps, BasePromptProps, promptValidation, ValidatedPromptProp
 export interface MealTimePromptProps extends ValidatedPromptProps {
   format: 'ampm' | '24hr';
 }
+
+export interface FoodSearchPromptProps extends BasePromptProps {
+  allowBrowsing: boolean;
+  dualLanguage: boolean;
+}
+
 export const mealTimePromptProps: MealTimePromptProps = clone({
   ...basePromptProps,
   ...promptValidation,
@@ -12,6 +18,12 @@ export const mealTimePromptProps: MealTimePromptProps = clone({
 });
 
 export const submitPromptProps: BasePromptProps = clone(basePromptProps);
+
+export const foodSearchPromptProps: FoodSearchPromptProps = clone({
+  ...basePromptProps,
+  allowBrowsing: true,
+  dualLanguage: false,
+});
 
 export const standardPromptQuestions: PromptQuestion[] = [
   {
@@ -27,5 +39,12 @@ export const standardPromptQuestions: PromptQuestion[] = [
     id: 'submit-prompt',
     name: 'Submit prompt',
     props: clone(submitPromptProps),
+  },
+  {
+    component: 'food-search-prompt',
+    type: 'standard',
+    id: 'food-search-prompt',
+    name: 'Food search prompt',
+    props: clone(foodSearchPromptProps),
   },
 ];

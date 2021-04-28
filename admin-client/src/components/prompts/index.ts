@@ -56,4 +56,8 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['submission'],
   },
+  'food-search-prompt': {
+    tabs: [...baseTab, 'options'],
+    sections: ['foods'],
+  },
 };

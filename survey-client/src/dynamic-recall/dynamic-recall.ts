@@ -1,23 +1,19 @@
 import { Store } from 'vuex';
 import { SurveyState } from '@/types/vuex';
 import PromptManager from '@/dynamic-recall/prompt-manager';
-import { PromptAnswer, PromptQuestion } from '@common/prompts';
+import { PromptQuestion } from '@common/prompts';
 import {
-  Dictionary, MealSection,
+  MealSection,
   MealTime,
-  QuestionSection, RecallSection,
+  RecallSection,
   SurveyState as CurrentSurveyState,
 } from '@common/types';
 import { SchemeEntryResponse } from '@common/types/http';
-import Vue from 'vue';
 import SelectionManager from '@/dynamic-recall/selection-manager';
 
 export interface PromptInstance {
   prompt: PromptQuestion;
-  promptProps: Dictionary;
   section: RecallSection | MealSection;
-
-  onPromptComponentMounted(promptComponent: Vue, onComplete: () => Promise<void>): Promise<void>;
 }
 
 function parseMealTime(time: string): MealTime {
@@ -74,7 +70,14 @@ export default class DynamicRecall {
             flags: [],
             customPromptAnswers: {},
 
-            foods: [],
+            foods: [
+              {
+                type: 'free-text',
+                description: 'Banana',
+                customPromptAnswers: {},
+                flags: [],
+              },
+            ],
           };
         }),
       };
@@ -83,106 +86,13 @@ export default class DynamicRecall {
     }
   }
 
-  createSurveyPromptInstance(prompt: PromptQuestion): PromptInstance {
-    const { store } = this;
-
-    return {
-      async onPromptComponentMounted(promptComponent: Vue, onComplete: () => Promise<void>) {
-        switch (prompt.component) {
-          case 'info-prompt':
-            promptComponent.$on('answer', async () => {
-              store.commit('survey/setSurveyFlag', `${prompt.id}-acknowledged`);
-              await onComplete();
-            });
-            break;
-          default:
-            promptComponent.$on('answer', async (answer: PromptAnswer) => {
-              store.commit('survey/setCustomPromptAnswer', {
-                promptId: prompt.id,
-                answer,
-              });
-              await onComplete();
-            });
-            break;
-        }
-      },
-
-      prompt,
-      promptProps: prompt.props,
-      section: 'preMeals',
-    };
-  }
-
-  createMealPromptInstance(prompt: PromptQuestion, mealIndex: number): PromptInstance {
-    const { store } = this;
-    const meal = store.state.survey.data.meals[mealIndex];
-
-    const props: Dictionary = { ...prompt.props };
-
-    switch (prompt.component) {
-      case 'meal-time-prompt':
-        props.mealName = meal.name;
-        break;
-      default:
-        break;
-    }
-
-    return {
-      async onPromptComponentMounted(promptComponent: Vue, onComplete: () => Promise<void>) {
-        switch (prompt.component) {
-          case 'info-prompt':
-            promptComponent.$on('answer', async () => {
-              store.commit('survey/setMealFlag', {
-                mealIndex,
-                flag: `${prompt.id}-acknowledged`,
-              });
-              await onComplete();
-            });
-            break;
-
-          case 'meal-time-prompt':
-            promptComponent.$on('answer', async (answer: string) => {
-              store.commit('survey/setMealTime', {
-                mealIndex,
-                time: parseMealTime(answer),
-              });
-              await onComplete();
-            });
-
-            promptComponent.$on('removeMeal', async () => {
-              store.commit('survey/deleteMeal', {
-                mealIndex,
-              });
-              await onComplete();
-            });
-
-            break;
-          default:
-            promptComponent.$on('answer', async (answer: PromptAnswer) => {
-              store.commit('survey/setMealCustomPromptAnswer', {
-                mealIndex,
-                promptId: prompt.id,
-                answer,
-              });
-              await onComplete();
-            });
-            break;
-        }
-      },
-
-      prompt,
-      promptProps: props,
-      section: 'preFoods',
-    };
-  }
-
   getNextPromptForCurrentSelection(): PromptInstance | undefined {
     const surveyState = this.getSurveyState();
     const recallState = surveyState.data!;
 
     if (recallState.selection.element == null) {
       const nextPrompt = this.promptManager.nextPreMealsPrompt(surveyState);
-      if (nextPrompt) return this.createSurveyPromptInstance(nextPrompt);
+      if (nextPrompt) return { prompt: nextPrompt, section: 'preMeals' };
     } else {
       switch (recallState.selection.element.type) {
         case 'meal': {
@@ -191,10 +101,23 @@ export default class DynamicRecall {
 
           // TODO: handle post-foods prompts
 
-          if (mealPrompt) return this.createMealPromptInstance(mealPrompt, mealIndex);
+          if (mealPrompt)
+            return {
+              prompt: mealPrompt,
+              section: 'preFoods',
+            };
           break;
         }
         case 'food': {
+          const { mealIndex, foodIndex } = recallState.selection.element;
+          const foodPrompt = this.promptManager.nextFoodsPrompt(surveyState, mealIndex, foodIndex);
+
+          if (foodPrompt)
+            return {
+              prompt: foodPrompt,
+              section: 'foods',
+            };
+
           break;
         }
         default:
