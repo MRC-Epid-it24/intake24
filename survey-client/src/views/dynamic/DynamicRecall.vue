@@ -5,11 +5,12 @@
     </v-col>
     <v-col v-if="!isNotDesktop && showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
       <meal-list
-				:surveyName="surveyName"
-				:surveyId="surveyId"
-				:meals="meals"
-				>
-				</meal-list>
+        :surveyName="surveyName"
+        :surveyId="surveyId"
+        :meals="meals"
+        @manual-prompt-selection="clickListHandler"
+      >
+      </meal-list>
     </v-col>
 
     <v-col cols="12" lg="9" class="content">
@@ -70,7 +71,7 @@ export default Vue.extend({
     return {
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
-			clickedPrompt: null as ComponentType | null,
+      clickedPrompt: null as ComponentType | null,
     };
   },
 
@@ -98,7 +99,7 @@ export default Vue.extend({
       return this.$store.state.survey.parameters?.name;
     },
 
-		surveyId(): SurveyEntryResponse | null {
+    surveyId(): SurveyEntryResponse | null {
       return this.$store.state.survey.parameters?.id;
     },
 
@@ -157,10 +158,21 @@ export default Vue.extend({
   },
 
   methods: {
-		async clickListHandler(actionPayload: string) {
-			console.log(actionPayload);
-			// await this.nextPrompt()
-		},
+    async clickListHandler(actionPayload: { action: string; itemId: string }) {
+      console.log('Recevied from the List: ', actionPayload);
+      // TODO: Choose between different types of Components
+      const promptComponent: ComponentType = 'meal-add-prompt';
+      const nextPrompt = this.recallController!.setCurrentPrompt(promptComponent);
+
+      if (nextPrompt === undefined) {
+        console.log('Undefined: ', nextPrompt);
+        this.currentPrompt = null;
+      } else {
+        console.log(`Switching prompt to ${nextPrompt.prompt.component}`);
+        this.currentPrompt = nextPrompt;
+      }
+      // await this.nextPrompt()
+    },
 
     async nextPrompt() {
       const nextPrompt = this.recallController!.getNextPrompt();
@@ -171,8 +183,6 @@ export default Vue.extend({
         this.currentPrompt = null;
       } else {
         console.log(`Switching prompt to ${nextPrompt.prompt.component}`);
-				// TODO: delete console.log
-				console.log(nextPrompt)
         this.currentPrompt = nextPrompt;
       }
     },

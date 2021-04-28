@@ -10,9 +10,20 @@ function checkRecallNumber(state: SurveyState, condition: Condition) {
   return conditionOps[condition.op]([condition.value, state.user.recallNumber]);
 }
 
-// function showPrompt(state: SurveyState, prompt: PromptQuestion){
+function showPrompt(
+  state: SurveyState,
+  prompt: PromptQuestion,
+  promtComponent: PromptQuestion['component']
+) {
+  if (state.data == null) {
+    console.error(`Survey data should not be null at this point`);
+    return false;
+  }
 
-// }
+  // FIXME: Delete the console.log
+  console.log(`[prompt-manager: showPrompt]: Comparing ${prompt.component} and ${promtComponent} `);
+  return prompt.component === promtComponent;
+}
 
 function checkSurveyStandardConditions(state: SurveyState, prompt: PromptQuestion): boolean {
   if (state.data == null) {
@@ -181,6 +192,11 @@ export default class PromptManager {
     this.surveyScheme = scheme;
   }
 
+  /**
+   * Returns next in line Pre-Meal promt that satisfy the conditions of not being shown before promt.id answer == undefined AND Custom conditions are satisfied
+   * @param state state of the Survey
+   * @returns { PromptQuestion }
+   */
   nextPreMealsPrompt(state: SurveyState): PromptQuestion | undefined {
     return this.surveyScheme.questions.preMeals.find((question) => {
       return (
@@ -209,6 +225,23 @@ export default class PromptManager {
         checkFoodStandardConditions(state, mealIndex, foodIndex, question) &&
         checkFoodCustomConditions(state, mealIndex, foodIndex, question)
       );
+    });
+  }
+
+  /**
+   *  set next Prompt in the Survey based on the type of the promt component
+   * @param state state of the Survey
+   * @param promptComponent type of the prompt component to find
+   * @returns { PromptQuestion }
+   */
+  setNextPreMealsPrompt(
+    state: SurveyState,
+    promptComponent: PromptQuestion['component']
+  ): PromptQuestion | undefined {
+    return this.surveyScheme.questions.preMeals.find((question) => {
+      // TODO: Delete consol log:
+      console.log('[prmopt-manager: setNextPreMealsPrompt]: ', question, promptComponent);
+      return showPrompt(state, question, promptComponent);
     });
   }
 }
