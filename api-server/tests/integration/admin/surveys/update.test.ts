@@ -21,7 +21,7 @@ export default (): void => {
     updateInput = mocker.survey();
 
     const { id } = input;
-    output = { ...updateInput, id };
+    output = { ...updateInput, id, supportEmail: updateInput.supportEmail.toLowerCase() };
 
     survey = await Survey.create(input);
 

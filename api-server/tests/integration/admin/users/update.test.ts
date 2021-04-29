@@ -18,7 +18,11 @@ export default (): void => {
 
   beforeAll(async () => {
     input = mocker.user();
-    updateInput = omit(mocker.user(), ['password', 'passwordConfirm']);
+    const updateUser = omit(mocker.user(), ['password', 'passwordConfirm']);
+    updateInput = {
+      ...updateUser,
+      email: updateUser.email?.toLocaleLowerCase(),
+    };
 
     const permissionInput = times(3, () => mocker.permission());
     const permissions = await Permission.bulkCreate(permissionInput);
@@ -116,7 +120,7 @@ export default (): void => {
 
       expect(status).toBe(200);
       expect(body).toContainAllKeys(['data', 'refs']);
-      expect(body.data.email).toBe(email);
+      expect(body.data.email).toBe(email?.toLocaleLowerCase());
     });
 
     it('should return 200 and data/refs', async () => {

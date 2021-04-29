@@ -11,7 +11,7 @@ export default (): void => {
 
   beforeAll(async () => {
     input = mocker.survey();
-    output = { ...input };
+    output = { ...input, supportEmail: input.supportEmail.toLowerCase() };
   });
 
   it('should return 401 when no / invalid token', async () => {

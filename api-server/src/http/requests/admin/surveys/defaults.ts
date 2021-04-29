@@ -128,7 +128,7 @@ const defaults: Schema = {
     errorMessage: 'Enter valid email address.',
     isEmail: true,
     isEmpty: { negated: true },
-    normalizeEmail: { options: { all_lowercase: true } },
+    toLowerCase: true,
   },
   originatingUrl: {
     in: ['body'],

@@ -12,7 +12,10 @@ export default (): void => {
 
   beforeAll(async () => {
     input = mocker.user();
-    output = omit(input, ['password', 'passwordConfirm', 'permissions', 'roles']);
+    output = {
+      ...omit(input, ['password', 'passwordConfirm', 'permissions', 'roles']),
+      email: input.email?.toLocaleLowerCase(),
+    };
   });
 
   it('should return 401 when no / invalid token', async () => {

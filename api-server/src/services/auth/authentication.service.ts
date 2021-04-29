@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import duo from '@duosecurity/duo_web';
 import { Permission, User, UserPassword, UserSurveyAlias } from '@/db/models/system';
 import { UnauthorizedError } from '@/http/errors';
@@ -186,8 +187,9 @@ export default ({
   ): Promise<Tokens | MfaRequest> => {
     const { email, password } = credentials;
 
+    const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
     const user = await User.findOne({
-      where: { email },
+      where: { email: { [op]: email } },
       include: [{ model: UserPassword, required: true }],
     });
 
