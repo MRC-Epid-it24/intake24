@@ -14,7 +14,7 @@
               <v-row>
                 <v-col class="d-flex justify-end mr-auto">
                   <v-chip class="ma-2">
-                    {{ selectionImages[selectedObjectIdx].weight }}g
+                    {{ mainWeight }}
                     <!-- Are these always in grams? -->
                   </v-chip>
                 </v-col>
@@ -33,7 +33,7 @@
                       </v-overlay>
                     </v-card>
                   </v-col>
-                  <template v-for="(imageSet, idx) in selectionImages">
+                  <template v-for="(imageSet, idx) in selectionImageData.images">
                     <v-col v-bind:key="idx" class="pa-1" :class="isSelected(idx)">
                       <v-card @click="setSelection(idx)">
                         <v-img :src="imageSet.thumbnailUrl" max-width="5rem"></v-img>
@@ -77,7 +77,7 @@ import merge from 'deepmerge';
 import { AsServedPromptProps, asServedPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
-import { AsServedSetResponse, AsServedImageResponse } from '@common/types/http/foods';
+import { AsServedSetResponse } from '@common/types/http/foods';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({
@@ -100,9 +100,9 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     return {
       ...merge(asServedPromptDefaultProps, this.promptProps),
       errors: [] as string[],
-      foodWeight: '100g', // This will be part of the props
       selectionImageData: {} as AsServedSetResponse,
       selectedObjectIdx: null as number | null,
+      dataLoaded: false,
     };
   },
 
@@ -110,21 +110,12 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     localeDescription(): string | null {
       return this.getLocaleContent(this.description);
     },
-    dataLoaded(): boolean {
-      return !!Object.keys(this.selectionImageData).length;
-    },
-    thumbnailImages(): string[] {
-      // Not sure if this is needed now
-      if (!this.dataLoaded) return [];
+    mainWeight(): string | null {
+      if (!this.dataLoaded) return null;
 
-      return this.selectionImageData.images.map((urlSet) => {
-        return urlSet.thumbnailUrl;
-      });
-    },
-    selectionImages(): AsServedImageResponse[] | [] {
-      if (!this.dataLoaded) return [];
+      if (this.selectedObjectIdx === null) return null;
 
-      return this.selectionImageData.images;
+      return `${this.selectionImageData.images[this.selectedObjectIdx].weight}g`;
     },
   },
 
@@ -134,59 +125,60 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   methods: {
     async fetchSelectionImageData() {
-      // const { data } = await this.$http.get<AsServedSetResponse>(
-      //   `portion-sizes/as-served-sets/lasagnesdasd`
-      // ).then(res => {
-      //   this.selectionImageData = { ...data };
-      //   this.setDefaultSelection();
-      // });
-
-      // At present this errors if there's a 404, error is unhandled
-      const { data } = await this.$http.get<AsServedSetResponse>(
-        `portion-sizes/as-served-sets/lasagnesdasd`
-      );
-
-      this.selectionImageData = { ...data };
-      this.setDefaultSelection();
+      try {
+        const { data } = await this.$http.get<AsServedSetResponse>(
+          `portion-sizes/as-served-sets/${this.asServedSet.id}`
+        );
+        this.selectionImageData = { ...data };
+        this.setDefaultSelection();
+        this.setDataLoaded();
+      } catch (e) {
+        console.log(e);
+      }
     },
     setDefaultSelection() {
       // Variable length image sets: set default selected to middle value
       this.selectedObjectIdx = Math.floor(this.selectionImageData.images.length / 2);
     },
+    setDataLoaded() {
+      this.dataLoaded = true;
+    },
     setSelection(idx: number) {
       this.selectedObjectIdx = idx;
     },
     getMainImage(): string {
-      // This is redundant - need to think how to handle null better
-      if (this.selectedObjectIdx === null || this.selectedObjectIdx === undefined) {
+      if (this.selectedObjectIdx === null) {
         return '';
       }
-      return this.dataLoaded ? this.selectionImages[this.selectedObjectIdx].mainImageUrl : '';
+      return this.dataLoaded
+        ? this.selectionImageData.images[this.selectedObjectIdx].mainImageUrl
+        : '';
     },
     getFirstThumbnail(): string {
-      return this.dataLoaded ? this.selectionImages[0].thumbnailUrl : '';
-      // return this.selectionImages[0].thumbnailUrl;
+      if (this.selectedObjectIdx === null) {
+        return '';
+      }
+      return this.dataLoaded ? this.selectionImageData.images[0].thumbnailUrl : '';
     },
     getLastThumbnail() {
+      if (this.selectedObjectIdx === null) {
+        return '';
+      }
       return this.dataLoaded
-        ? this.selectionImages[this.selectionImages.length - 1].thumbnailUrl
+        ? this.selectionImageData.images[this.selectionImageData.images.length - 1].thumbnailUrl
         : '';
     },
     isSelected(idx: number): string {
-      // if (idx === this.selectedObjectIdx) {
-      //   return true;
-      // }
-      // return false;
       return idx === this.selectedObjectIdx ? 'selectedThumb rounded-lg' : '';
     },
     hadLessInput() {
-      if (this.selectedObjectIdx === null || this.selectedObjectIdx === undefined) {
+      if (this.selectedObjectIdx === null) {
         return;
       }
 
       if (this.selectedObjectIdx - 1 < 0) {
         console.log('Trigger input quantity prompt');
-        // User wants to input less than on screen
+        // User wants to input less than thumbnail quantities on screen
         // TO DO Method for this
       } else {
         this.selectedObjectIdx = this.selectedObjectIdx - 1 === 0 ? 0 : this.selectedObjectIdx - 1;
@@ -195,15 +187,14 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       }
     },
     hadMoreInput() {
-      // This is tripping up as it's falsy
-      if (this.selectedObjectIdx === null || this.selectedObjectIdx === undefined) {
+      if (this.selectedObjectIdx === null) {
         return;
       }
 
-      const maxLength = this.selectionImages.length - 1;
+      const maxLength = this.selectionImageData.images.length - 1;
       if (this.selectedObjectIdx + 1 > maxLength) {
         console.log('Trigger input quantity prompt');
-        // User wants to input more than on screen
+        // User wants to input more than thumbnail quantity on screen
         // TO DO Method for this
       } else {
         this.selectedObjectIdx =
