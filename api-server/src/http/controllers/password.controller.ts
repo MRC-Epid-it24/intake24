@@ -17,7 +17,8 @@ export default ({
   const request = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { email } = req.body;
 
-    const user = await User.findOne({ where: { email } });
+    const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
+    const user = await User.findOne({ where: { email: { [op]: email } } });
 
     // Silently fail not to inform potential scanners of email existence in database
     if (!user) {
@@ -41,9 +42,11 @@ export default ({
     const expiredAt = new Date();
     expiredAt.setMinutes(expiredAt.getMinutes() - config.security.passwords.expire);
 
+    const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
+
     const passwordReset = await UserPasswordReset.findOne({
       where: { token, createdAt: { [Op.gt]: expiredAt } },
-      include: [{ model: User, where: { email } }],
+      include: [{ model: User, where: { email: { [op]: email } } }],
     });
 
     if (!passwordReset)

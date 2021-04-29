@@ -10,6 +10,7 @@ export default validate(
       errorMessage: 'Email must be filled in.',
       isEmail: true,
       isEmpty: { negated: true },
+      normalizeEmail: { options: { all_lowercase: true } },
     },
     token: {
       in: ['body'],

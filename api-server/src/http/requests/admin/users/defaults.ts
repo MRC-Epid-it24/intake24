@@ -18,6 +18,7 @@ export const identifiers: Schema = {
     errorMessage: 'Enter valid unique email address.',
     isEmail: true,
     optional: { options: { nullable: true } },
+    normalizeEmail: { options: { all_lowercase: true } },
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { userId } = (req as Request).params;

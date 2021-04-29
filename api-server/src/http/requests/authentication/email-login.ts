@@ -8,6 +8,7 @@ export default validate(
       errorMessage: 'Email must be filled in.',
       isString: true,
       isEmpty: { negated: true },
+      normalizeEmail: { options: { all_lowercase: true } },
     },
     password: {
       in: ['body'],
