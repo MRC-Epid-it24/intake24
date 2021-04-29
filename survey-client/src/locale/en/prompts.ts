@@ -50,6 +50,13 @@ const prompts: LocaleMessageObject = {
     no: 'Abort adding',
     hint: 'hit enter when finished typing',
   },
+  editMeal: {
+    text:
+      'Please list everything that you had for your {meal}, one item per line. Food and Drinks separately.',
+    description: 'Click enter or "Next Line" icon to save the item and move to the next',
+    yes: 'I have finished with the {meal}',
+    no: 'Delete {meal}',
+  },
 };
 
 export default prompts;
