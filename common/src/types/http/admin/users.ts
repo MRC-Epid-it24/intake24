@@ -36,7 +36,7 @@ export interface UpdateUserRequest extends UpdateUserInput {
 
 export type UsersResponse = Pagination<User>;
 
-export interface UserEntry extends User, Required<UserAssociations> {}
+export type UserEntry = User & Required<UserAssociations>;
 
 export type UserListEntry = Pick<User, 'id' | 'name' | 'email'>;
 

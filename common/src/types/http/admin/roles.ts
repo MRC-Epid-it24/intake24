@@ -1,4 +1,4 @@
-import { Permission, Role, Pagination } from '../../models';
+import { Permission, Role, RoleAssociations, Pagination } from '../../models';
 
 export type RoleRequest = {
   name: string;
@@ -9,7 +9,7 @@ export type RoleRequest = {
 
 export type RolesResponse = Pagination<Role>;
 
-export type RoleEntry = Role;
+export type RoleEntry = Role & Required<Pick<RoleAssociations, 'permissions'>>;
 
 export type RoleListEntry = Pick<Permission, 'id' | 'name' | 'displayName'>;
 

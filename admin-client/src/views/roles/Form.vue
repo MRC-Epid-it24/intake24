@@ -66,7 +66,7 @@
 <script lang="ts">
 import groupBy from 'lodash/groupBy';
 import Vue, { VueConstructor } from 'vue';
-import { Dictionary } from '@common/types';
+import { RoleEntry } from '@common/types/http/admin';
 import { FormMixin } from '@/types/vue';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
@@ -111,12 +111,11 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   },
 
   methods: {
-    toForm(data: Dictionary) {
-      const { permissions, ...rest } = data;
+    toForm(data: Partial<RoleEntry>) {
+      const { permissions = [], ...rest } = data;
       const input = {
         ...rest,
-        permissions:
-          permissions && Array.isArray(permissions) ? permissions.map((item) => item.id) : [],
+        permissions: permissions.map((item) => item.id),
       };
       this.form.load(input);
     },

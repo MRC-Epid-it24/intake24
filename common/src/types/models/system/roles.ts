@@ -1,3 +1,5 @@
+import type { Permission, User } from '.';
+
 export type Role = {
   id: number;
   name: string;
@@ -5,4 +7,9 @@ export type Role = {
   description: string | null;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type RoleAssociations = {
+  permissions?: Permission[];
+  users?: User[];
 };

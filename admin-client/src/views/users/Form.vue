@@ -190,8 +190,8 @@ export default Vue.extend({
   },
 
   methods: {
-    toForm(data: UserEntry) {
-      const { customFields, permissions, roles, ...rest } = data;
+    toForm(data: Partial<UserEntry>) {
+      const { customFields = [], permissions = [], roles = [], ...rest } = data;
       const input = {
         ...rest,
         permissions: permissions.map((item) => item.id),

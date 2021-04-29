@@ -1,12 +1,4 @@
 import { LocaleMessageObject } from 'vue-i18n';
-import {
-  basePromptProps,
-  checkboxListPromptProps,
-  datePickerPromptProps,
-  radioListPromptProps,
-  textareaPromptProps,
-  timePickerPromptProps,
-} from '@common/prompts';
 
 const schemes: LocaleMessageObject = {
   _: 'Scheme',
