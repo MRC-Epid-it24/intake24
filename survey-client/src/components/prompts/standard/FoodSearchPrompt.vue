@@ -3,6 +3,14 @@
     <v-text-field v-model="searchTerm" @change="search"></v-text-field>
     <v-progress-circular indeterminate v-if="requestInProgress"></v-progress-circular>
     <v-alert type="error" prominent v-if="requestFailed">Something went wrong :(</v-alert>
+    <v-alert
+      type="warning"
+      prominent
+      v-if="searchResults != null && searchResults.foods.length === 0"
+    >
+      <p>There is nothing in our database that matches "{{ searchTerm }}".</p>
+      <p>Please try re-wording your description.</p></v-alert
+    >
     <food-search-results
       :results="searchResults"
       v-if="searchResults != null"
