@@ -151,16 +151,16 @@ const schemes: LocaleMessageObject = {
   prompts: {
     'meal-time-prompt': {
       title: 'Meal time',
-      subtitle: 'Confirm meal and its time or remove meal',
+      subtitle: 'Confirm the time of the meal or remove the meal',
     },
     'meal-add-prompt': {
-			title: 'Meal add',
-      subtitle: 'Add new meal into survey',
+      title: 'Add meal',
+      subtitle: 'Add a new meal to the meal list',
     },
-		'edit-meal-prompt': {
-			title: 'Meal edit',
-			subtitle: 'Edit or enter free text for a meal',
-		},
+    'edit-meal-prompt': {
+      title: 'Food list',
+      subtitle: 'List or edit foods in this meal as free text descriptions',
+    },
     'submit-prompt': {
       title: 'Submit',
       subtitle: 'Confirm completion and submit recall',
