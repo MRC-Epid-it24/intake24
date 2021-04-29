@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Permission, Role } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
+import { roleEntryResponse } from '@/http/responses/admin';
 import type { IoC } from '@/ioc';
 import {
   CreateRoleResponse,
@@ -15,13 +16,14 @@ export type RoleController = Controller<CrudActions>;
 export default ({ config }: Pick<IoC, 'config'>): RoleController => {
   const entry = async (req: Request, res: Response<RoleResponse>): Promise<void> => {
     const { roleId } = req.params;
-    const role = await Role.scope('permissions').findByPk(roleId);
 
+    const role = await Role.scope('permissions').findByPk(roleId);
     if (!role) throw new NotFoundError();
 
+    const data = roleEntryResponse(role);
     const permissions = await Permission.scope('list').findAll();
 
-    res.json({ data: role, refs: { permissions } });
+    res.json({ data, refs: { permissions } });
   };
 
   const browse = async (req: Request, res: Response<RolesResponse>): Promise<void> => {
@@ -42,10 +44,13 @@ export default ({ config }: Pick<IoC, 'config'>): RoleController => {
 
   const store = async (req: Request, res: Response<StoreRoleResponse>): Promise<void> => {
     const { name, displayName, description, permissions } = req.body;
-    const role = await Role.create({ name, displayName, description });
+    let role = await Role.create({ name, displayName, description });
     await role.$set('permissions', permissions);
 
-    res.status(201).json({ data: role });
+    role = (await Role.scope('permissions').findByPk(role.id)) as Role;
+    const data = roleEntryResponse(role);
+
+    res.status(201).json({ data });
   };
 
   const detail = async (req: Request, res: Response<RoleResponse>): Promise<void> =>
@@ -70,8 +75,9 @@ export default ({ config }: Pick<IoC, 'config'>): RoleController => {
     );
 
     role = (await Role.scope('permissions').findByPk(roleId)) as Role;
+    const data = roleEntryResponse(role);
 
-    res.json({ data: role, refs: { permissions } });
+    res.json({ data, refs: { permissions } });
   };
 
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {

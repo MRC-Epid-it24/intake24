@@ -1,0 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+import { RoleEntry } from '@common/types/http/admin';
+import { Role } from '@/db/models/system';
+
+export const roleEntryResponse = (role: Role): RoleEntry => role.get();
