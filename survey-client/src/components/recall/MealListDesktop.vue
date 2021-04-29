@@ -22,7 +22,7 @@
           :ripple="false"
           :inactive="true"
           v-for="(meal, idx) in meals"
-          :key="meal.name"
+          :key="meal.name + idx"
           link
         >
           <v-list-item-content>

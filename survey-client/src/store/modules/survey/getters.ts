@@ -2,6 +2,7 @@ import { GetterTree } from 'vuex';
 import { RootState, SurveyState } from '@/types/vuex';
 import {
   FoodState,
+  Meals,
   MealState2,
   Selection2,
   SurveyState as CurrentSurveyState,
@@ -16,6 +17,10 @@ const getters: GetterTree<SurveyState, RootState> = {
 
   meals: (state): MealState2[] | undefined => {
     return state.data?.meals;
+  },
+
+  defaultSchemeMeals: (state): Meals | undefined => {
+    return state.parameters?.scheme.meals;
   },
 
   selection: (state): Selection2 | undefined => {

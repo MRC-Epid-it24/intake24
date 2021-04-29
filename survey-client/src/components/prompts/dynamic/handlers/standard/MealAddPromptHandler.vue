@@ -12,7 +12,7 @@
 import Vue from 'vue';
 import MealAddPrompt from '@/components/prompts/standard/MealAddPrompt.vue';
 import { BasePromptProps } from '@common/prompts';
-import { MealState2 } from '@common/types';
+import { Meal } from '@common/types';
 import { mapGetters } from 'vuex';
 
 export default Vue.extend({
@@ -26,11 +26,11 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters('survey', ['meals']),
+    ...mapGetters('survey', ['defaultSchemeMeals']),
 
     mealsList(): string[] {
-      if (this.meals.length === 0) return [];
-      return this.meals.map((meal: MealState2) => meal.name);
+      if (this.defaultSchemeMeals.length === 0) return [];
+      return this.defaultSchemeMeals.map((meal: Meal) => meal.name[this.$i18n.locale]);
     },
   },
 

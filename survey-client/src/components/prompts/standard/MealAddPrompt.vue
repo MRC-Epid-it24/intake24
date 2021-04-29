@@ -1,9 +1,18 @@
 <template>
   <prompt-layout :text="text" :description="description">
-    <v-form ref="form" @submit.prevent="submit">
-      <v-combobox v-model="currentValue" clearable hide-selected small-chips :items="listofmeals">
-      </v-combobox>
-    </v-form>
+    <v-col md="8" sm="12">
+      <v-form ref="form" @submit.prevent="submit">
+        <v-combobox
+          v-model="currentValue"
+          clearable
+          hide-selected
+          small-chips
+          outlined
+          :items="listofmeals"
+        >
+        </v-combobox>
+      </v-form>
+    </v-col>
     <template v-slot:actions>
       <v-btn :block="isMobile" class="px-5" large @click="abortMeal">
         {{ $t('prompts.mealAdding.no') }}
