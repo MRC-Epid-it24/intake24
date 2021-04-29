@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <v-alert v-if="availableQuestions.length === 0" color="primary" text type="info">{{
-      emptyAlert
-    }}</v-alert>
+    <v-alert v-if="availableQuestions.length === 0" color="primary" text type="info">
+      {{ emptyAlert }}
+    </v-alert>
     <v-row v-if="availableQuestions.length > 0">
       <v-col v-for="question in availableQuestions" :key="question.id" cols="12" md="3">
         <v-item v-slot:default="{ active, toggle }" @change="updateQuestion(question)">
@@ -23,24 +23,27 @@
   </v-container>
 </template>
 <script lang="ts">
+import Vue, { PropType } from 'vue';
 import { PromptQuestion } from '@common/prompts';
-import { PropType } from 'vue';
 
-export default {
+export default Vue.extend({
   name: 'question-type-selector',
+
   props: {
     availableQuestions: {
       type: Array as PropType<PromptQuestion[]>,
-      default: (): PromptQuestion[] => [],
-    },
-    updateQuestion: {
-      type: Function as PropType<(q: PromptQuestion) => void>,
-      required: true,
+      default: () => [],
     },
     emptyAlert: {
       type: String,
       required: true,
     },
   },
-};
+
+  methods: {
+    updateQuestion(question: PromptQuestion): void {
+      this.$emit('update-question', question);
+    },
+  },
+});
 </script>

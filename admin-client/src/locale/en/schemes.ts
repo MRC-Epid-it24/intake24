@@ -119,13 +119,20 @@ const schemes: LocaleMessageObject = {
     },
     id: 'Question ID',
     name: 'Question name',
-    component: 'Question type',
+    component: 'Question component',
+    type: 'Question type',
+    custom: {
+      _: 'Custom',
+      noQuestions: 'No custom questions available for this section',
+    },
+    standard: {
+      _: 'Standard',
+      noQuestions: 'No standard questions available for this section',
+    },
     text: 'Question text',
     description: 'Question description',
     label: 'Options list label',
     other: 'Allow custom other option',
-    noStandardQuestions: 'No standard questions available for this section',
-    noCustomQuestions: 'No custom questions available for this section',
     orientation: {
       _: 'Orientation',
       column: 'Column',
