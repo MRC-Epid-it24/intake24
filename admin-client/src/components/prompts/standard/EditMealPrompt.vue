@@ -20,7 +20,7 @@ import Vue from 'vue';
 import prompt from '../partials/Prompt';
 
 export default Vue.extend({
-  name: 'MealAddPrompt',
+  name: 'EditMealPrompt',
 
   mixins: [prompt],
 });

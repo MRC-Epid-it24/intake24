@@ -12,7 +12,8 @@ export type StandardComponentType =
   | 'meal-time-prompt'
   | 'submit-prompt'
   | 'food-search-prompt'
-  | 'meal-add-prompt';
+  | 'meal-add-prompt'
+  | 'edit-meal-prompt';
 
 export type ComponentType = GenericComponentType | StandardComponentType;
 
