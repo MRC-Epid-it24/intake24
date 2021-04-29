@@ -91,6 +91,10 @@ export interface EncodedFood {
 }
 
 export type FoodState = FreeTextFood | EncodedFood;
+export interface FoodEntry {
+  text: string;
+  disabled: boolean;
+}
 
 export interface MealTime {
   hours: number;

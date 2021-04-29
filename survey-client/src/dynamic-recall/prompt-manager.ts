@@ -73,6 +73,10 @@ function checkMealStandardConditions(
     return state.data.meals[mealIndex].time === undefined;
   }
 
+  if (prompt.component === 'edit-meal-prompt') {
+    return state.data.meals[mealIndex].foods.length === 0;
+  }
+
   switch (prompt.component) {
     case 'info-prompt':
       return !state.data.meals[mealIndex].flags.includes(`${prompt.id}-acknowledged`);
