@@ -2,10 +2,9 @@
   <edit-meal-prompt
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
-    :list="foods"
+    :food-list="foods"
     @finishMeal="onAnswer"
     @abortMeal="onAbort"
-    @addFood="onFoodAdd"
   >
   </edit-meal-prompt>
 </template>
@@ -41,19 +40,14 @@ export default Vue.extend({
   },
 
   methods: {
-    onAnswer(newMeal: string) {
-      // Add Logic
+    onAnswer(newFoods: FoodState[]) {
+      this.$store.commit('survey/setFoods', { mealIndex: this.selectedMealIndex, foods: newFoods });
       this.$emit('complete');
     },
 
     onAbort() {
       this.$store.commit('survey/deleteMeal', this.selectedMealIndex);
       this.$emit('complete');
-    },
-
-    onFoodAdd(e: string) {
-      // TODO: finish method
-      console.log(e);
     },
   },
 });

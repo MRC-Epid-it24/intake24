@@ -2,29 +2,29 @@
   <prompt-layout :text="text" :description="description">
     <v-col md="8" sm="12">
       <v-form ref="form" @submit.prevent="submit">
-        <v-list flat dense>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>
-                <v-text-field
-                  v-model="currentValue"
-                  id="newFood"
-                  name="newFood"
-                  label="Type food name"
-                  @keyup.enter="addFood"
-                  outlined
-                />
-              </v-list-item-title>
-            </v-list-item-content>
+        <v-list>
+          <v-list-item
+            :ripple="false"
+            v-for="(food, idx) in editableList"
+            :key="idx"
+            @click="edit(idx)"
+          >
+            <v-text-field
+              v-if="editIndex === idx"
+              v-model="editableList[idx].description"
+              ref="textField"
+              @keypress.enter.stop="addFood"
+              @focusout="onEditFocusLost"
+            ></v-text-field>
+            <v-list-item-icon v-if="editIndex === idx"
+              ><v-btn icon @click="deleteFood()"><v-icon>fa-trash</v-icon></v-btn></v-list-item-icon
+            >
+            <v-list-item-title v-else v-text="foodDisplayName(food)"></v-list-item-title>
           </v-list-item>
-          <v-list-item-group>
-            <v-list-item v-for="(food, idx) in foodsList" :key="idx">
-              <v-list-item-content>
-                <v-list-item-title v-text="foodDisplayName(food)"></v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
         </v-list>
+        <v-btn v-if="editIndex == null" icon x-large @click="addFood"
+          ><v-icon>fa-edit</v-icon></v-btn
+        >
       </v-form>
     </v-col>
     <template v-slot:actions>
@@ -49,6 +49,7 @@
 import Vue from 'vue';
 import { BasePromptProps, editMealPromptProps } from '@common/prompts';
 import { FoodState } from '@common/types';
+import { clone } from 'lodash';
 import BasePrompt from '../BasePrompt';
 
 export default Vue.extend({
@@ -60,7 +61,7 @@ export default Vue.extend({
     promptProps: {
       type: Object as () => BasePromptProps,
     },
-    list: {
+    foodList: {
       type: Array as () => FoodState[],
     },
     mealName: {
@@ -70,15 +71,14 @@ export default Vue.extend({
 
   data() {
     return {
-      currentValue: '',
+      editableList: clone(this.foodList),
+      newFoodDescription: '',
+      editIndex: null as number | null,
     };
   },
 
   // FIXME: Rewrite the logic in text, description, yes and no computed values to decouple similar code
   computed: {
-    foodsList(): FoodState[] {
-      return this.list;
-    },
     text(): string {
       const text = this.promptProps.text[this.$i18n.locale];
       return text
@@ -105,8 +105,23 @@ export default Vue.extend({
   },
 
   methods: {
+    edit(index: number) {
+      this.editIndex = index;
+
+      this.$nextTick(() => {
+        // FIXME: must be a better way to avoid type errors
+        const textField = this.$refs.textField as HTMLInputElement[];
+        textField[0].focus();
+      });
+    },
+
     submit() {
-      // this.$emit('finishMeal');
+      this.$emit(
+        'finishMeal',
+        this.editableList.filter(
+          (entry) => entry.type !== 'free-text' || entry.description.trim().length > 0
+        )
+      );
     },
 
     abortMeal() {
@@ -114,8 +129,35 @@ export default Vue.extend({
     },
 
     addFood() {
-      this.$emit('addFood', this.currentValue);
-      this.currentValue = '';
+      if (this.editIndex != null) {
+        const editEntry = this.editableList[this.editIndex];
+
+        if (editEntry.type === 'free-text' && editEntry.description.trim().length === 0) return;
+      }
+
+      this.editableList.push({
+        type: 'free-text',
+        description: this.newFoodDescription,
+        flags: [],
+        customPromptAnswers: {},
+      });
+
+      this.edit(this.editableList.length - 1);
+    },
+
+    deleteFood() {
+      if (this.editIndex != null) {
+        this.editableList.splice(this.editIndex, 1);
+        this.editIndex = null;
+      }
+    },
+
+    onEditFocusLost() {
+      if (this.editIndex != null) {
+        const editEntry = this.editableList[this.editIndex];
+        if (editEntry.type === 'free-text' && editEntry.description.trim().length === 0)
+          this.deleteFood();
+      }
     },
 
     foodDisplayName(food: FoodState): string {

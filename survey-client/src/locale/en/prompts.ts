@@ -54,7 +54,7 @@ const prompts: LocaleMessageObject = {
     text:
       'Please list everything that you had for your {meal}, one item per line. Food and Drinks separately.',
     description: 'Click enter or "Next Line" icon to save the item and move to the next',
-    yes: 'I have finished with the {meal}',
+    yes: 'Continue',
     no: 'Delete {meal}',
   },
 };
