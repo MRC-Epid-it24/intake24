@@ -2,6 +2,7 @@
   <v-list v-if="foods.length > 0">
     <v-list-item v-for="(food, i) in foods" :key="i" link>
       <v-list-item-title
+        class="text-wrap"
         v-text="foodDisplayName(food)"
         @click="chooseFood(food.name)"
       ></v-list-item-title>

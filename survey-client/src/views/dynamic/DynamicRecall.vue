@@ -14,11 +14,7 @@
     </v-col>
 
     <v-col cols="12" lg="9" class="content">
-      <v-toolbar class="mb-4" v-if="showMealList">
-        <v-breadcrumbs v-if="!isNotDesktop" :items="brdMeal" divider="/"></v-breadcrumbs>
-        <v-spacer v-if="!isNotDesktop"></v-spacer>
-        <v-btn @click="$router.back()"> back </v-btn>
-      </v-toolbar>
+      <recall-bread-crumbs v-if="showMealList"></recall-bread-crumbs>
 
       <transition name="component-fade" mode="out-in">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
@@ -48,6 +44,7 @@ import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
 import DynamicRecall, { PromptInstance } from '@/dynamic-recall/dynamic-recall';
 import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
+import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
 import MealList from '@/components/recall/MealListDesktop.vue';
 import { MealState2 } from '@common/types';
 import { ComponentType } from '@common/prompts';
@@ -63,6 +60,7 @@ export default Vue.extend({
     MealListMobileBottom,
     MealListMobileTop,
     MealList,
+    RecallBreadCrumbs,
     CustomPromptHandler,
     ...standardHandlers,
   },
