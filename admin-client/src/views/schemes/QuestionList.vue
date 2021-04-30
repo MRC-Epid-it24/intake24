@@ -102,13 +102,17 @@
                 <v-row>
                   <v-col cols="12">
                     <v-card outlined>
-                      <v-card-title>{{ $t(`schemes.questions.type`) }}</v-card-title>
+                      <v-card-subtitle>{{ $t(`schemes.questions.type`) }}</v-card-subtitle>
                       <v-tabs v-model="questionTypeTab">
                         <v-tab key="custom">{{ $t(`schemes.questions.custom._`) }}</v-tab>
                         <v-tab key="standard">{{ $t(`schemes.questions.standard._`) }}</v-tab>
                         <v-tab key="portionSize">{{ $t(`schemes.questions.portionSize._`) }}</v-tab>
                       </v-tabs>
-                      <v-item-group mandatory active-class="secondary" v-model="selectedQuestion">
+                      <v-item-group
+                        mandatory
+                        active-class="secondary"
+                        v-model="selectedQuestionType"
+                      >
                         <v-tabs-items v-model="questionTypeTab">
                           <v-tab-item key="custom">
                             <question-type-selector
@@ -126,7 +130,7 @@
                           <v-tab-item key="portionSize">
                             <question-type-selector
                               :available-questions="availablePortionSizeQuestions"
-                              :empty-alert="$t(`schemes.questions.standard.noQuestions`)"
+                              :empty-alert="$t(`schemes.questions.portionSize.noQuestions`)"
                               @update-question="setQuestionType"
                             />
                           </v-tab-item>
@@ -259,7 +263,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       tab: null as number | null,
       questionTypeTab: null as number | null,
       moveToSection: null,
-      selectedQuestion: 0,
+      selectedQuestionType: promptQuestions[0].component,
     };
   },
 
@@ -351,13 +355,11 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
     add() {
       this.dialog = this.newDialog(true);
+      this.selectedQuestionType = this.dialog.question.component;
     },
 
     edit(index: number, question: PromptQuestion) {
-      const promptIdx = this.availablePromptQuestions.findIndex(
-        (q) => q.component === question.component
-      );
-      const promptDefaults = this.availablePromptQuestions[promptIdx];
+      const promptDefaults = this.promptQuestions.find((q) => q.component === question.component);
 
       switch (question.type) {
         case 'standard':
@@ -370,7 +372,22 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
           this.questionTypeTab = 0;
       }
 
-      this.selectedQuestion = promptIdx;
+      // Item group component seems to be overriding this in some cases resulting in the wrong question type being
+      // selected. Delaying this seems to fix it, but feels like a hack.
+      //
+      // To reproduce :
+      //
+      // 1) Remove the nextTick wrapper below and assign the question type directly
+      // 2) Open any question section
+      // 3) Click Add question
+      // 4) Close new question editing dialog
+      // 5) Edit any other question
+      //
+      // Wrong question type is selected (info-prompt instead of whatever the selected question uses)
+
+      this.$nextTick(() => {
+        this.selectedQuestionType = question.component;
+      });
 
       this.dialog = {
         show: true,
@@ -430,7 +447,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     reset() {
       this.tab = null;
       this.questionTypeTab = null;
-      this.selectedQuestion = 0;
+      this.selectedQuestionType = 0;
       this.dialog = this.newDialog();
       this.$refs.form.resetValidation();
     },
