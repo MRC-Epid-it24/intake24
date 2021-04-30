@@ -104,35 +104,26 @@
                     <v-card outlined>
                       <v-card-title>{{ $t(`schemes.questions.type`) }}</v-card-title>
                       <v-tabs v-model="questionTypeTab">
-                        <v-tab key="custom" v-if="availableCustomQuestions.length > 0">{{
-                          $t(`schemes.questions.custom._`)
-                        }}</v-tab>
-                        <v-tab key="standard" v-if="availableStandardQuestions.length > 0">{{
-                          $t(`schemes.questions.standard._`)
-                        }}</v-tab>
-                        <v-tab key="portionSize" v-if="availablePortionSizeQuestions.length > 0">{{
-                          $t(`schemes.questions.portionSize._`)
-                        }}</v-tab>
+                        <v-tab key="custom">{{ $t(`schemes.questions.custom._`) }}</v-tab>
+                        <v-tab key="standard">{{ $t(`schemes.questions.standard._`) }}</v-tab>
+                        <v-tab key="portionSize">{{ $t(`schemes.questions.portionSize._`) }}</v-tab>
                       </v-tabs>
                       <v-item-group mandatory active-class="secondary" v-model="selectedQuestion">
                         <v-tabs-items v-model="questionTypeTab">
-                          <v-tab-item key="custom" v-if="availableCustomQuestions.length > 0">
+                          <v-tab-item key="custom">
                             <question-type-selector
                               :available-questions="availableCustomQuestions"
                               :empty-alert="$t(`schemes.questions.custom.noQuestions`)"
                               @update-question="setQuestionType"
                             />
                           </v-tab-item>
-                          <v-tab-item key="standard" v-if="availableStandardQuestions.length > 0">
+                          <v-tab-item key="standard">
                             <question-type-selector
                               :available-questions="availableStandardQuestions"
                               :empty-alert="$t(`schemes.questions.standard.noQuestions`)"
                               @update-question="setQuestionType"
                           /></v-tab-item>
-                          <v-tab-item
-                            key="portionSize"
-                            v-if="availablePortionSizeQuestions.length > 0"
-                          >
+                          <v-tab-item key="portionSize">
                             <question-type-selector
                               :available-questions="availablePortionSizeQuestions"
                               :empty-alert="$t(`schemes.questions.standard.noQuestions`)"
@@ -195,6 +186,7 @@ import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import { promptSettings } from '@/components/prompts';
 import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
+import portionSizePrompts from '@/components/prompts/portion-size';
 import { merge } from '@/util';
 import {
   FormRefs,
@@ -239,6 +231,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     draggable,
     ...customPrompts,
     ...standardPrompts,
+    ...portionSizePrompts,
   },
 
   data() {
@@ -366,7 +359,17 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       );
       const promptDefaults = this.availablePromptQuestions[promptIdx];
 
-      this.questionTypeTab = question.type === 'custom' ? 0 : 1; // TODO: improve this once more sections in place
+      switch (question.type) {
+        case 'standard':
+          this.questionTypeTab = 1;
+          break;
+        case 'portion-size':
+          this.questionTypeTab = 2;
+          break;
+        default:
+          this.questionTypeTab = 0;
+      }
+
       this.selectedQuestion = promptIdx;
 
       this.dialog = {
