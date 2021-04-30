@@ -12,7 +12,7 @@ export default () => {
 
     beforeAll(async () => {
       databases = await initDatabases();
-      service = foodDataService();
+      service = foodDataService({ imagesBaseUrl: 'https://localhost'});
       await createLocales();
       await createTestData(databases.foods);
     });

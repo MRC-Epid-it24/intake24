@@ -16,7 +16,7 @@ export default () => {
     beforeAll(async () => {
       databases = await initDatabases();
       await createTestData(databases.foods);
-      service = portionSizeMethodsService();
+      service = portionSizeMethodsService('https://localhost');
     });
 
     afterAll(async () => {

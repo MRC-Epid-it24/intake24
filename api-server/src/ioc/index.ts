@@ -69,7 +69,6 @@ export interface IoC extends Jobs {
 
   environment: Environment;
   config: Config;
-  databaseConfig: DatabaseConfig;
   db: DbInterface;
   cache: Cache;
   filesystem: Filesystem;
@@ -77,6 +76,11 @@ export interface IoC extends Jobs {
   mailer: Mailer;
   pusher: Pusher;
   scheduler: Scheduler;
+
+  // Expose some config settings directly to avoid pulling in the whole config when it doesn't
+  // make sense, e.g. for testing
+  databaseConfig: DatabaseConfig;
+  imagesBaseUrl: string;
 
   // Controllers
   authenticationController: AuthenticationController;
@@ -147,6 +151,7 @@ const configureContainer = () => {
     environment: asValue(config.app.env),
     databaseConfig: asValue(config.database),
     db: asClass(db).singleton(),
+    imagesBaseUrl: asValue(config.app.urls.images),
   });
 
   controllers(container);

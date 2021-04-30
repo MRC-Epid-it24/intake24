@@ -3,6 +3,7 @@ import {
   UserPortionSizeMethod,
   UserPortionSizeMethodParameters,
 } from '@common/types/http/foods/user-food-data';
+
 import {
   toUserCategoryPortionSizeMethodParameters,
   toUserPortionSizeMethodParameters,
@@ -17,11 +18,11 @@ export interface DatabasePortionSizeMethod {
   parameters: { name: string; value: string }[];
 }
 
-export function toUserPortionSizeMethod(psm: PortionSizeMethod): UserPortionSizeMethod {
+export function toUserPortionSizeMethod(psm: PortionSizeMethod, baseImageUrl: string): UserPortionSizeMethod {
   return {
     conversionFactor: psm.conversionFactor,
     description: psm.description,
-    imageUrl: psm.imageUrl,
+    imageUrl: `${baseImageUrl}/${psm.imageUrl}`,
     method: psm.method,
     parameters: psm.parameters ? toUserPortionSizeMethodParameters(psm.parameters) : {},
     useForRecipes: psm.useForRecipes,
@@ -52,12 +53,13 @@ export function toDatabasePortionSizeMethod(psm: UserPortionSizeMethod): Databas
 }
 
 export function toUserCategoryPortionSizeMethod(
-  psm: CategoryPortionSizeMethod
+  psm: CategoryPortionSizeMethod,
+  baseImageUrl: string,
 ): UserPortionSizeMethod {
   return {
     conversionFactor: psm.conversionFactor,
     description: psm.description,
-    imageUrl: psm.imageUrl,
+    imageUrl: `${baseImageUrl}/${psm.imageUrl}`,
     method: psm.method,
     parameters: psm.parameters ? toUserCategoryPortionSizeMethodParameters(psm.parameters) : {},
     useForRecipes: psm.useForRecipes,
