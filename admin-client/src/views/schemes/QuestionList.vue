@@ -447,7 +447,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     reset() {
       this.tab = null;
       this.questionTypeTab = null;
-      this.selectedQuestionType = 0;
+      this.selectedQuestionType = this.promptQuestions[0].component;
       this.dialog = this.newDialog();
       this.$refs.form.resetValidation();
     },
