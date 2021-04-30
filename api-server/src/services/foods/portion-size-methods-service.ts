@@ -21,7 +21,7 @@ export interface PortionSizeMethodsService {
   resolvePortionSizeMethods(localeId: string, foodCode: string): Promise<UserPortionSizeMethod[]>;
 }
 
-export default (imagesBaseUrl: string): PortionSizeMethodsService => {
+export default (): PortionSizeMethodsService => {
   /**
    *
    * Get Portion Size Methods and their Parameters associated with the supplied category and locale.
@@ -47,7 +47,7 @@ export default (imagesBaseUrl: string): PortionSizeMethodsService => {
     });
 
     return categoryPortionMethods
-      ? categoryPortionMethods.map((psm) => toUserCategoryPortionSizeMethod(psm, imagesBaseUrl))
+      ? categoryPortionMethods.map(toUserCategoryPortionSizeMethod)
       : [];
   };
 
@@ -107,7 +107,7 @@ export default (imagesBaseUrl: string): PortionSizeMethodsService => {
     const foodLocal = await getFoodLocal(localeId, foodCode);
 
     if (foodLocal && foodLocal.portionSizeMethods && foodLocal.portionSizeMethods.length > 0) {
-      return foodLocal.portionSizeMethods.map((psm) => toUserPortionSizeMethod(psm, imagesBaseUrl));
+      return foodLocal.portionSizeMethods.map(toUserPortionSizeMethod);
     }
     const parentCategories = await getFoodParentCategories(foodCode);
 

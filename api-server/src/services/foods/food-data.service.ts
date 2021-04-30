@@ -14,7 +14,6 @@ import InvalidIdError from '@/services/foods/invalid-id-error';
 import { getParentLocale } from '@/services/foods/common';
 
 import { UserAssociatedFoodPrompt, UserFoodData } from '@common/types/http/foods/user-food-data';
-import { IoC } from '@/ioc';
 import InheritableAttributesImpl from './inheritable-attributes-service';
 import PortionSizeMethodsImpl from './portion-size-methods-service';
 
@@ -26,9 +25,9 @@ export interface FoodDataService {
   getFoodData(localeId: string, foodCode: string): Promise<UserFoodData>;
 }
 
-export default (config: Pick<IoC, 'imagesBaseUrl'>): FoodDataService => {
+export default (): FoodDataService => {
   const inheritableAttributesImpl = InheritableAttributesImpl();
-  const portionSizeMethodsImpl = PortionSizeMethodsImpl(config.imagesBaseUrl);
+  const portionSizeMethodsImpl = PortionSizeMethodsImpl();
 
   const getNutrientKCalPer100G = async (localeId: string, foodCode: string): Promise<number> => {
     const foodNutrientData = await FoodLocal.findOne({
