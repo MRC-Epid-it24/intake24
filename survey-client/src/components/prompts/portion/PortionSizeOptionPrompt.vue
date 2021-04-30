@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <portion-layout :text="text" :description="description">
+    <portion-layout :text="promptProps.text" :description="promptProps.description">
       <template v-slot:headerText>
         {{ $t('portion.option.label', { food: localeDescription }) }}
       </template>
@@ -8,7 +8,7 @@
 
     <v-row class="mt-2">
       <v-col
-        v-for="(method, index) in methods"
+        v-for="(method, index) in availableMethods"
         :key="index"
         cols="6"
         @click="selectMethod(index)"
@@ -17,7 +17,7 @@
         <v-card :elevation="returnSelectElevation(index)">
           <v-img class="align-end" :src="method.imageUrl" :aspect-ratio="16 / 9">
             <v-chip class="ma-2" :color="returnSelectedStyle(index)">
-              {{ localeDescription }}
+              {{ $t(`portion.option.description.${method.description}`) }}
             </v-chip>
 
             <template v-slot:placeholder>
@@ -45,7 +45,7 @@
       <v-col>
         <v-form ref="form" @submit.prevent="submit">
           <!-- Should be disabled if nothing selected? -->
-          <continue></continue>
+          <continue @click="submit" :disabled="currentValue === -1"></continue>
         </v-form>
       </v-col>
     </v-row>
@@ -55,9 +55,10 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { PortionSizeOptionPromptProps, portionSizeOptionPromptProps } from '@common/prompts';
+import { BasePromptProps, basePromptProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
-import { AsServedSetResponse } from '@common/types/http/foods';
+import { AsServedSetResponse, UserPortionSizeMethod } from '@common/types/http/foods';
+import { LocaleTranslation } from '@common/types';
 import BasePortion, { Portion } from './BasePortion';
 
 // For user to select which portion size estimation method they want to use
@@ -69,13 +70,22 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => PortionSizeOptionPromptProps,
+      type: Object as () => BasePromptProps,
+      required: true,
+    },
+    foodName: {
+      type: Object as () => LocaleTranslation,
+      required: true,
+    },
+    availableMethods: {
+      type: Array as () => UserPortionSizeMethod[],
+      required: true,
     },
   },
 
   data() {
     return {
-      ...merge(portionSizeOptionPromptProps, this.promptProps),
+      ...merge(basePromptProps, this.promptProps),
       errors: [] as string[],
       currentValue: -1,
       selectionImageData: {} as AsServedSetResponse,
@@ -84,7 +94,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   computed: {
     localeDescription(): string | null {
-      return this.getLocaleContent(this.localDescription);
+      return this.getLocaleContent(this.foodName);
     },
     hasErrors(): boolean {
       return !!this.errors.length;
@@ -150,16 +160,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     },
 
     submit() {
-      if (!this.isValid()) {
-        // Get either validation message passed in, or the default for the locale
-        this.errors = [
-          this.getLocaleContent(this.validation.message) ??
-            (this.$t('prompts.portionoption.validation.required') as string),
-        ];
-        return;
-      }
-
-      this.$emit('portion size option selection', this.methods[this.currentValue]);
+      this.$emit('option-selected', this.currentValue);
     },
   },
 });

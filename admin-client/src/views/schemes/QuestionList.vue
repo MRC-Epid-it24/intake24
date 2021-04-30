@@ -104,21 +104,37 @@
                     <v-card outlined>
                       <v-card-title>{{ $t(`schemes.questions.type`) }}</v-card-title>
                       <v-tabs v-model="questionTypeTab">
-                        <v-tab key="custom">{{ $t(`schemes.questions.custom._`) }}</v-tab>
-                        <v-tab key="standard">{{ $t(`schemes.questions.standard._`) }}</v-tab>
+                        <v-tab key="custom" v-if="availableCustomQuestions.length > 0">{{
+                          $t(`schemes.questions.custom._`)
+                        }}</v-tab>
+                        <v-tab key="standard" v-if="availableStandardQuestions.length > 0">{{
+                          $t(`schemes.questions.standard._`)
+                        }}</v-tab>
+                        <v-tab key="portionSize" v-if="availablePortionSizeQuestions.length > 0">{{
+                          $t(`schemes.questions.portionSize._`)
+                        }}</v-tab>
                       </v-tabs>
                       <v-item-group mandatory active-class="secondary" v-model="selectedQuestion">
                         <v-tabs-items v-model="questionTypeTab">
-                          <v-tab-item key="custom">
+                          <v-tab-item key="custom" v-if="availableCustomQuestions.length > 0">
                             <question-type-selector
                               :available-questions="availableCustomQuestions"
                               :empty-alert="$t(`schemes.questions.custom.noQuestions`)"
                               @update-question="setQuestionType"
                             />
                           </v-tab-item>
-                          <v-tab-item key="standard">
+                          <v-tab-item key="standard" v-if="availableStandardQuestions.length > 0">
                             <question-type-selector
                               :available-questions="availableStandardQuestions"
+                              :empty-alert="$t(`schemes.questions.standard.noQuestions`)"
+                              @update-question="setQuestionType"
+                          /></v-tab-item>
+                          <v-tab-item
+                            key="portionSize"
+                            v-if="availablePortionSizeQuestions.length > 0"
+                          >
+                            <question-type-selector
+                              :available-questions="availablePortionSizeQuestions"
                               :empty-alert="$t(`schemes.questions.standard.noQuestions`)"
                               @update-question="setQuestionType"
                             />
@@ -180,7 +196,13 @@ import { promptSettings } from '@/components/prompts';
 import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
 import { merge } from '@/util';
-import { FormRefs, PromptQuestion, QuestionSection, MealSection } from '@common/types';
+import {
+  FormRefs,
+  PromptQuestion,
+  QuestionSection,
+  MealSection,
+  portionSizePromptQuestions,
+} from '@common/types';
 import { customPromptQuestions, standardPromptQuestions } from '@common/prompts';
 import QuestionTypeSelector from '@/views/schemes/QuestionTypeSelector.vue';
 
@@ -220,7 +242,11 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   },
 
   data() {
-    const promptQuestions = [...customPromptQuestions, ...standardPromptQuestions];
+    const promptQuestions = [
+      ...customPromptQuestions,
+      ...standardPromptQuestions,
+      ...portionSizePromptQuestions,
+    ];
 
     const dialog = (show = false): PromptQuestionDialog => ({
       show,
@@ -234,6 +260,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       questions: this.items,
       customPromptQuestions,
       standardPromptQuestions,
+      portionSizePromptQuestions,
       promptQuestions,
       promptSettings,
       tab: null as number | null,
@@ -266,6 +293,12 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
     availableStandardQuestions(): PromptQuestion[] {
       return this.standardPromptQuestions.filter((prompt) =>
+        this.promptSettings[prompt.component].sections.includes(this.section)
+      );
+    },
+
+    availablePortionSizeQuestions(): PromptQuestion[] {
+      return this.portionSizePromptQuestions.filter((prompt) =>
         this.promptSettings[prompt.component].sections.includes(this.section)
       );
     },

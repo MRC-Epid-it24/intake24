@@ -6,7 +6,7 @@
     <v-row v-if="availableQuestions.length > 0">
       <v-col v-for="question in availableQuestions" :key="question.id" cols="12" md="3">
         <v-item v-slot:default="{ active, toggle }" @change="updateQuestion(question)">
-          <v-card :color="active ? 'primary' : ''" dark height="160" @click.stop="toggle">
+          <v-card :color="active ? 'primary' : ''" dark height="180" @click.stop="toggle">
             <v-card-title class="justify-center">
               {{ $t(`schemes.prompts.${question.id}.title`) }}
             </v-card-title>

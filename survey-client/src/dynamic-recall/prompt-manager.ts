@@ -121,24 +121,26 @@ function checkFoodStandardConditions(
   foodIndex: number,
   prompt: PromptQuestion
 ): boolean {
-  if (state.data == null) {
-    console.error(`Survey data should not be null at this point`);
-    return false;
-  }
+  if (state.data == null) throw new Error(`Survey data should not be null at this point`);
+
+  const selectedFood = state.data?.meals[mealIndex].foods[foodIndex];
+
+  if (selectedFood === undefined)
+    throw new Error('This function must only be called when a food is selected');
 
   if (prompt.component === 'food-search-prompt') {
-    return state.data.meals[mealIndex].foods[foodIndex].type === 'free-text';
+    return selectedFood.type === 'free-text';
+  }
+
+  if (prompt.component === 'portion-size-option-prompt') {
+    return selectedFood.type === 'encoded-food' && selectedFood.portionSizeMethodIndex == null;
   }
 
   switch (prompt.component) {
     case 'info-prompt':
-      return !state.data.meals[mealIndex].foods[foodIndex].flags.includes(
-        `${prompt.id}-acknowledged`
-      );
+      return !selectedFood.flags.includes(`${prompt.id}-acknowledged`);
     default:
-      return (
-        state.data.meals[mealIndex].foods[foodIndex].customPromptAnswers[prompt.id] === undefined
-      );
+      return selectedFood.customPromptAnswers[prompt.id] === undefined;
   }
 }
 

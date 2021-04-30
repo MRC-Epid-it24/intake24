@@ -48,11 +48,12 @@ export default Vue.extend({
       const newState: FoodState = {
         type: 'encoded-food',
         data,
+        portionSizeMethodIndex: null,
         customPromptAnswers: currentState?.customPromptAnswers ?? {},
         flags: currentState?.flags ?? [],
       };
 
-      this.$store.commit('survey/updateFood', {
+      this.$store.commit('survey/replaceFood', {
         mealIndex: this.selectedMealIndex,
         foodIndex: this.selectedFoodIndex,
         food: newState,

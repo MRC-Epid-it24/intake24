@@ -87,6 +87,7 @@ export interface EncodedFood {
   type: 'encoded-food';
   data: UserFoodData;
   flags: string[];
+  portionSizeMethodIndex: number | null;
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
 }
 

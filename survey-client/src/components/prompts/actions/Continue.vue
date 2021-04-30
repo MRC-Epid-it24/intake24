@@ -1,5 +1,5 @@
 <template>
-  <v-btn class="px-5" color="success" large :block="isMobile" :title="label">
+  <v-btn class="px-5" color="success" large :block="isMobile" :title="label" v-on="$listeners">
     {{ label }}
   </v-btn>
 </template>

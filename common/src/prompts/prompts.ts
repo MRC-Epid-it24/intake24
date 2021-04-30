@@ -15,7 +15,9 @@ export type StandardComponentType =
   | 'meal-add-prompt'
   | 'edit-meal-prompt';
 
-export type ComponentType = GenericComponentType | StandardComponentType;
+export type PortionSizeComponentType = 'portion-size-option-prompt';
+
+export type ComponentType = GenericComponentType | StandardComponentType | PortionSizeComponentType;
 
 export enum PromptStatuses {
   INITIAL = 'initial',

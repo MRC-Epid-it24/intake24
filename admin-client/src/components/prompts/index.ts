@@ -64,8 +64,13 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['preMeals'],
   },
-	'edit-meal-prompt': {
-		tabs: [...baseTab],
-		sections: ['preFoods'],
-	},
+  'edit-meal-prompt': {
+    tabs: [...baseTab],
+    sections: ['preFoods'],
+  },
+  // Portion size
+  'portion-size-option-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
 };

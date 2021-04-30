@@ -9,6 +9,7 @@ import {
   SurveyState as CurrentSurveyState,
 } from '@common/types';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
+import Food from '@/util/Food';
 
 const mutations: MutationTree<SurveyState> = {
   setParameters(state, data: SurveyEntryResponse) {
@@ -141,12 +142,22 @@ const mutations: MutationTree<SurveyState> = {
       state.data.meals[data.mealIndex].foods[data.foodIndex].flags.push(data.flag);
   },
 
-  updateFood(state: SurveyState, data: { mealIndex: number; foodIndex: number; food: FoodState }) {
+  replaceFood(state: SurveyState, data: { mealIndex: number; foodIndex: number; food: FoodState }) {
     if (state.data == null) {
       console.error('state.data is null');
     } else {
       state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1);
       state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 0, data.food);
+    }
+  },
+
+  updateFood(state: SurveyState, data: { mealIndex: number; foodIndex: number; update: (state: FoodState) => void }) {
+    if (state.data == null) {
+      console.error('state.data is null');
+    } else {
+      const foodState = state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1)[0];
+      data.update(foodState);
+      state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 0, foodState);
     }
   },
 

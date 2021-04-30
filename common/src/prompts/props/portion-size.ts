@@ -1,15 +1,9 @@
 import clone from 'lodash/cloneDeep';
 import type { LocaleTranslation } from '../../types';
-import { basePromptProps, promptValidation, ValidatedPromptProps } from './base';
-import type { PortionSizeMethod, AsServedSet } from '../../types/models';
+import { PromptQuestion } from '../../types';
+import { basePromptProps, ValidatedPromptProps } from './base';
+import type { AsServedSet } from '../../types/models';
 import type { QuantityValues } from '..';
-
-// TODO Migrate these out
-export interface PortionSizeOptionPromptProps extends ValidatedPromptProps {
-  // Stores which methods to display
-  methods: PortionSizeMethod[];
-  localDescription: LocaleTranslation;
-}
 
 export interface AsServedPromptProps extends ValidatedPromptProps {
   localDescription: LocaleTranslation;
@@ -39,14 +33,6 @@ export type PizzaPromptProps = ValidatedPromptProps;
 export type MilkHotDrinkPromptProps = ValidatedPromptProps;
 
 export type DirectWeightPromptProps = ValidatedPromptProps;
-
-// TO DO: migrate this over to portion.ts
-export const portionSizeOptionPromptProps: PortionSizeOptionPromptProps = clone({
-  ...basePromptProps,
-  ...promptValidation,
-  localDescription: { en: null },
-  methods: [],
-});
 
 export const asServedPromptDefaultProps: AsServedPromptProps = {
   text: { en: null },
@@ -171,3 +157,13 @@ export const leftoverQuestionPromptDefaultProps: LeftoverQuestionPromptProps = {
     message: { en: null },
   },
 };
+
+export const portionSizePromptQuestions: PromptQuestion[] = [
+  {
+    component: 'portion-size-option-prompt',
+    type: 'portion-size',
+    id: 'portion-size-option-prompt',
+    name: 'Choose portion size method',
+    props: clone(basePromptProps),
+  },
+];

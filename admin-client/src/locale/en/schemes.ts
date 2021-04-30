@@ -94,28 +94,31 @@ const schemes: LocaleMessageObject = {
     remove: 'Remove question',
     section: 'Questions section',
     preMeals: {
-      title: 'Pre-meals questions',
-      subtitle: 'Questions asked before meals selection',
+      title: 'Pre-recall questions',
+      subtitle:
+        'General questions asked before the dietary recall, including personal questions and the initial instructions.',
     },
     postMeals: {
-      title: 'Post-meals questions',
-      subtitle: 'Questions asked after meals selection',
+      title: 'Post-recall questions',
+      subtitle: 'General questions asked after the dietary recall.',
     },
     submission: {
       title: 'Submission questions',
-      subtitle: 'Questions asked before submission',
+      subtitle: 'Final questions asked before the submission.',
     },
     preFoods: {
-      title: 'Pre-foods questions',
-      subtitle: 'Questions asked before foods selection',
+      title: 'Pre-foods meal questions',
+      subtitle: 'Questions asked about meals before foods are entered, such as the meal time.',
     },
     foods: {
-      title: 'Foods questions',
-      subtitle: 'Questions asked during foods selection',
+      title: 'Food questions',
+      subtitle:
+        'Questions asked about foods, including food database search and portion size estimation.',
     },
     postFoods: {
-      title: 'Post-foods questions',
-      subtitle: 'Questions asked before foods selection',
+      title: 'Post-foods meal questions',
+      subtitle:
+        'Questions asked about meals after the portion size estimation is complete for all foods in the meal.',
     },
     id: 'Question ID',
     name: 'Question name',
@@ -128,6 +131,10 @@ const schemes: LocaleMessageObject = {
     standard: {
       _: 'Standard',
       noQuestions: 'No standard questions available for this section',
+    },
+    portionSize: {
+      _: 'Portion size',
+      noQuestions: 'No portion size questions available for this section',
     },
     text: 'Question text',
     description: 'Question description',
@@ -199,6 +206,11 @@ const schemes: LocaleMessageObject = {
     'food-search-prompt': {
       title: 'Food database search',
       subtitle: 'Choose a food from the database that best matches the description',
+    },
+    'portion-size-option-prompt': {
+      title: 'Portion size method',
+      subtitle:
+        'Choose which portion size method to use in case more than one is available for this food',
     },
   },
 };

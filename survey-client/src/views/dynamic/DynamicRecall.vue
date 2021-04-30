@@ -51,6 +51,7 @@ import { ComponentType } from '@common/prompts';
 import { mapState } from 'vuex';
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import standardHandlers from '@/components/prompts/dynamic/handlers/standard';
+import portionSizeHandlers from '@/components/prompts/dynamic/handlers/portion-size';
 import timeDoubleDigitsConvertor from '@/components/mixins/timeDoubleDigitsConvertor';
 
 export default Vue.extend({
@@ -63,6 +64,7 @@ export default Vue.extend({
     RecallBreadCrumbs,
     CustomPromptHandler,
     ...standardHandlers,
+    ...portionSizeHandlers,
   },
 
   data: () => {
@@ -83,9 +85,10 @@ export default Vue.extend({
         case 'custom':
           return 'custom-prompt-handler';
         case 'standard':
+        case 'portion-size':
           return `${prompt.component}-handler`;
         default:
-          throw new Error('Not implemented');
+          throw new Error(`Unexpected prompt type: ${prompt.type}`);
       }
     },
 
