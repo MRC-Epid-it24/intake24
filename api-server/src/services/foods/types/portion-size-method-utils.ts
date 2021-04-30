@@ -18,7 +18,10 @@ export interface DatabasePortionSizeMethod {
   parameters: { name: string; value: string }[];
 }
 
-export function toUserPortionSizeMethod(psm: PortionSizeMethod, baseImageUrl: string): UserPortionSizeMethod {
+export function toUserPortionSizeMethod(
+  psm: PortionSizeMethod,
+  baseImageUrl: string
+): UserPortionSizeMethod {
   return {
     conversionFactor: psm.conversionFactor,
     description: psm.description,
@@ -54,7 +57,7 @@ export function toDatabasePortionSizeMethod(psm: UserPortionSizeMethod): Databas
 
 export function toUserCategoryPortionSizeMethod(
   psm: CategoryPortionSizeMethod,
-  baseImageUrl: string,
+  baseImageUrl: string
 ): UserPortionSizeMethod {
   return {
     conversionFactor: psm.conversionFactor,
