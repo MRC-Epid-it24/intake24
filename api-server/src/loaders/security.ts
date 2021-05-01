@@ -17,7 +17,13 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
         directives: {
           defaultSrc: ["'self'"],
           fontSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
-          frameSrc: ["'self'", 'https://www.google.com', 'https://*.duosecurity.com'],
+          frameSrc: [
+            "'self'",
+            'https://www.google.com',
+            'https://youtube.com',
+            'https://www.youtube.com',
+            'https://*.duosecurity.com',
+          ],
           imgSrc: ["'self'", 'blob:', 'data:'],
           scriptSrc: [
             "'self'",
