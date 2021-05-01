@@ -65,7 +65,7 @@ import { SchemeForm } from './Form.vue';
 import QuestionList from './QuestionList.vue';
 
 const flattenScheme = (questions: RecallQuestions): PromptQuestion[] =>
-  Object.values(questions).reduce((acc, item) => {
+  Object.values(questions).reduce<PromptQuestion[]>((acc, item) => {
     acc.push(...(Array.isArray(item) ? item : flattenScheme(item)));
     return acc;
   }, []);

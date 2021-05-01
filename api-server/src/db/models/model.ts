@@ -66,12 +66,12 @@ export default abstract class Model<
       options.where = { [Op.or]: operations };
     }
 
-    const countOptions = Object.keys(options).reduce((acc, key) => {
+    const countOptions = Object.keys(options).reduce<CountOptions>((acc, key) => {
       if (!['order', 'attributes', 'limit', 'offset'].includes(key)) {
         acc[key] = options[key];
       }
       return acc;
-    }, {} as CountOptions);
+    }, {});
 
     let total = await this.unscoped().count(countOptions);
 

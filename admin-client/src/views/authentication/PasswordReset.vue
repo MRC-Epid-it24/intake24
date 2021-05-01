@@ -97,11 +97,11 @@ export default Vue.extend({
 
       const allErrors = this.form.errors.all();
 
-      const errors = Object.keys(allErrors).reduce((acc, error) => {
+      const errors = Object.keys(allErrors).reduce<ValidationError[]>((acc, error) => {
         if (!keys.includes(error) || error === 'token') acc.push({ ...allErrors[error] });
 
         return acc;
-      }, [] as ValidationError[]);
+      }, []);
 
       return errors;
     },

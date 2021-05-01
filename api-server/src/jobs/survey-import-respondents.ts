@@ -205,12 +205,12 @@ export default class SurveyImportRespondents implements Job {
     const records = this.content.map((item) => {
       const { username, password, name, email, phone, ...rest } = item;
 
-      const customFields = Object.keys(rest).reduce((acc, key) => {
+      const customFields = Object.keys(rest).reduce<CustomField[]>((acc, key) => {
         const value = rest[key];
         if (value) acc.push({ name: key, value });
 
         return acc;
-      }, [] as CustomField[]);
+      }, []);
 
       return {
         userName: username,

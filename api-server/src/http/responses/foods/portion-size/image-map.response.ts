@@ -62,10 +62,10 @@ export default (baseUrl: string): ImageMapsResponse => {
     if (!imageMap || !objects)
       throw new InternalServerError('GuideImageResponse: not loaded relationships.');
 
-    const weights = objects.reduce((acc, object) => {
+    const weights = objects.reduce<{ [index: number]: number }>((acc, object) => {
       acc[object.imageMapObjectId] = object.weight;
       return acc;
-    }, {} as { [index: number]: number });
+    }, {});
 
     return {
       id,

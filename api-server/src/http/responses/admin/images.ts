@@ -80,10 +80,10 @@ export default (baseUrl: string): ImageResponseCollection => {
     if (!baseImage || !objects)
       throw new InternalServerError('GuideImageEntry: not loaded relationships.');
 
-    const weights = weightObjects.reduce((acc, object) => {
+    const weights = weightObjects.reduce<Weights>((acc, object) => {
       acc[object.imageMapObjectId] = object.weight;
       return acc;
-    }, {} as Weights);
+    }, {});
 
     return {
       id,
