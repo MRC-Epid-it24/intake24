@@ -1,4 +1,4 @@
-import bodyParser from 'body-parser';
+import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express, { Express } from 'express';
 import morgan from 'morgan';
@@ -8,8 +8,8 @@ import type { Ops } from '@/app';
 import { httpLogger as stream } from '@/services/logger';
 
 export default async (app: Express, { config }: Ops): Promise<void> => {
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(json());
+  app.use(urlencoded({ extended: false }));
   app.use(cookieParser());
 
   // Register global public folder
