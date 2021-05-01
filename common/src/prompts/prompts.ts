@@ -1,6 +1,8 @@
 import type { BasePromptProps } from './props';
 
-export type GenericComponentType =
+export type QuestionType = 'custom' | 'standard' | 'portion-size';
+
+export type CustomComponentType =
   | 'info-prompt'
   | 'date-picker-prompt'
   | 'time-picker-prompt'
@@ -20,7 +22,7 @@ export type PortionSizeComponentType =
   | 'as-served-prompt'
   | 'as-served-leftovers-prompt';
 
-export type ComponentType = GenericComponentType | StandardComponentType | PortionSizeComponentType;
+export type ComponentType = CustomComponentType | StandardComponentType | PortionSizeComponentType;
 
 export enum PromptStatuses {
   INITIAL = 'initial',
@@ -34,7 +36,7 @@ export type PromptStatus = PromptStatuses;
 export interface PromptQuestion<T extends BasePromptProps = BasePromptProps> {
   id: string;
   name: string;
-  type: 'custom' | 'standard' | 'portion-size';
+  type: QuestionType;
   component: ComponentType;
   props: T;
 }

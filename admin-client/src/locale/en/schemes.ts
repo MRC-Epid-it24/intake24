@@ -132,7 +132,7 @@ const schemes: LocaleMessageObject = {
       _: 'Standard',
       noQuestions: 'No standard questions available for this section',
     },
-    portionSize: {
+    'portion-size': {
       _: 'Portion size',
       noQuestions: 'No portion size questions available for this section',
     },

@@ -104,36 +104,22 @@
                     <v-card outlined>
                       <v-card-subtitle>{{ $t(`schemes.questions.type`) }}</v-card-subtitle>
                       <v-tabs v-model="questionTypeTab">
-                        <v-tab key="custom">{{ $t(`schemes.questions.custom._`) }}</v-tab>
-                        <v-tab key="standard">{{ $t(`schemes.questions.standard._`) }}</v-tab>
-                        <v-tab key="portionSize">{{ $t(`schemes.questions.portionSize._`) }}</v-tab>
+                        <v-tab v-for="type in Object.keys(availablePromptQuestions)" :key="type">
+                          {{ $t(`schemes.questions.${type}._`) }}
+                        </v-tab>
                       </v-tabs>
                       <v-item-group
-                        mandatory
                         active-class="secondary"
-                        v-model="selectedQuestionType"
+                        v-model="dialog.question.component"
+                        @change="updatePromptProps"
                       >
                         <v-tabs-items v-model="questionTypeTab">
-                          <v-tab-item key="custom">
-                            <question-type-selector
-                              :available-questions="availableCustomQuestions"
-                              :empty-alert="$t(`schemes.questions.custom.noQuestions`)"
-                              @update-question="setQuestionType"
-                            />
-                          </v-tab-item>
-                          <v-tab-item key="standard">
-                            <question-type-selector
-                              :available-questions="availableStandardQuestions"
-                              :empty-alert="$t(`schemes.questions.standard.noQuestions`)"
-                              @update-question="setQuestionType"
-                          /></v-tab-item>
-                          <v-tab-item key="portionSize">
-                            <question-type-selector
-                              :available-questions="availablePortionSizeQuestions"
-                              :empty-alert="$t(`schemes.questions.portionSize.noQuestions`)"
-                              @update-question="setQuestionType"
-                            />
-                          </v-tab-item>
+                          <question-type-selector
+                            v-for="(questions, type) in availablePromptQuestions"
+                            :key="type"
+                            :type="type"
+                            :questions="questions"
+                          ></question-type-selector>
                         </v-tabs-items>
                       </v-item-group>
                     </v-card>
@@ -199,7 +185,7 @@ import {
   MealSection,
   portionSizePromptQuestions,
 } from '@common/types';
-import { customPromptQuestions, standardPromptQuestions } from '@common/prompts';
+import { customPromptQuestions, QuestionType, standardPromptQuestions } from '@common/prompts';
 import QuestionTypeSelector from '@/views/schemes/QuestionTypeSelector.vue';
 
 export interface EditPromptQuestion extends PromptQuestion {
@@ -260,10 +246,9 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       portionSizePromptQuestions,
       promptQuestions,
       promptSettings,
-      tab: null as number | null,
-      questionTypeTab: null as number | null,
+      tab: 0,
+      questionTypeTab: 0,
       moveToSection: null,
-      selectedQuestionType: promptQuestions[0].component,
     };
   },
 
@@ -276,28 +261,18 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       return !this.isCreate;
     },
 
-    availablePromptQuestions(): PromptQuestion[] {
-      return this.promptQuestions.filter((prompt) =>
-        this.promptSettings[prompt.component].sections.includes(this.section)
-      );
-    },
-
-    availableCustomQuestions(): PromptQuestion[] {
-      return this.customPromptQuestions.filter((prompt) =>
-        this.promptSettings[prompt.component].sections.includes(this.section)
-      );
-    },
-
-    availableStandardQuestions(): PromptQuestion[] {
-      return this.standardPromptQuestions.filter((prompt) =>
-        this.promptSettings[prompt.component].sections.includes(this.section)
-      );
-    },
-
-    availablePortionSizeQuestions(): PromptQuestion[] {
-      return this.portionSizePromptQuestions.filter((prompt) =>
-        this.promptSettings[prompt.component].sections.includes(this.section)
-      );
+    availablePromptQuestions(): Record<QuestionType, PromptQuestion[]> {
+      return {
+        custom: this.promptQuestions.filter((prompt) =>
+          this.promptSettings[prompt.component].sections.includes(this.section)
+        ),
+        standard: this.standardPromptQuestions.filter((prompt) =>
+          this.promptSettings[prompt.component].sections.includes(this.section)
+        ),
+        'portion-size': this.portionSizePromptQuestions.filter((prompt) =>
+          this.promptSettings[prompt.component].sections.includes(this.section)
+        ),
+      };
     },
 
     questionIdRules() {
@@ -334,12 +309,6 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       event.stopImmediatePropagation();
     },
 
-    setQuestionType(question: PromptQuestion) {
-      this.dialog.question.component = question.component;
-
-      this.updatePromptProps();
-    },
-
     updatePromptProps() {
       const {
         show,
@@ -355,7 +324,6 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
     add() {
       this.dialog = this.newDialog(true);
-      this.selectedQuestionType = this.dialog.question.component;
     },
 
     edit(index: number, question: PromptQuestion) {
@@ -371,23 +339,6 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
         default:
           this.questionTypeTab = 0;
       }
-
-      // Item group component seems to be overriding this in some cases resulting in the wrong question type being
-      // selected. Delaying this seems to fix it, but feels like a hack.
-      //
-      // To reproduce :
-      //
-      // 1) Remove the nextTick wrapper below and assign the question type directly
-      // 2) Open any question section
-      // 3) Click Add question
-      // 4) Close new question editing dialog
-      // 5) Edit any other question
-      //
-      // Wrong question type is selected (info-prompt instead of whatever the selected question uses)
-
-      this.$nextTick(() => {
-        this.selectedQuestionType = question.component;
-      });
 
       this.dialog = {
         show: true,
@@ -445,9 +396,8 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
 
     reset() {
-      this.tab = null;
-      this.questionTypeTab = null;
-      this.selectedQuestionType = this.promptQuestions[0].component;
+      this.tab = 0;
+      this.questionTypeTab = 0;
       this.dialog = this.newDialog();
       this.$refs.form.resetValidation();
     },
