@@ -1,10 +1,10 @@
 <template>
   <layout :id="id" :entry="entry" v-if="entryLoaded" @save="onSubmit">
     <v-container>
-      <v-item-group mandatory active-class="secondary">
+      <v-item-group v-model="section" mandatory active-class="secondary">
         <v-row>
           <v-col v-for="item in sections.survey" :key="item" cols="12" md="4">
-            <v-item v-slot:default="{ active, toggle }" @change="swap(item)">
+            <v-item v-slot:default="{ active, toggle }" :value="item">
               <v-card :color="active ? 'primary' : ''" dark height="180" @click.stop="toggle">
                 <v-card-title class="justify-center">
                   {{ $t(`schemes.questions.${item}.title`) }}
@@ -22,7 +22,7 @@
         <v-divider class="my-3"></v-divider>
         <v-row>
           <v-col v-for="item in sections.meal" :key="item" cols="12" md="4">
-            <v-item v-slot:default="{ active, toggle }" @change="swap(item)">
+            <v-item v-slot:default="{ active, toggle }" :value="item">
               <v-card :color="active ? 'primary' : ''" dark height="180" @click.stop="toggle">
                 <v-card-title class="justify-center">
                   {{ $t(`schemes.questions.${item}.title`) }}
@@ -131,10 +131,6 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
     toForm(data: Dictionary) {
       const { questions, ...rest } = data;
       this.form.load({ ...rest, questions: { ...defaultQuestions, ...questions } });
-    },
-
-    swap(section: QuestionSection | MealSection) {
-      this.section = section;
     },
 
     move(event: { section: MealSection | QuestionSection; question: PromptQuestion }) {
