@@ -263,7 +263,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
     availablePromptQuestions(): Record<QuestionType, PromptQuestion[]> {
       return {
-        custom: this.promptQuestions.filter((prompt) =>
+        custom: this.customPromptQuestions.filter((prompt) =>
           this.promptSettings[prompt.component].sections.includes(this.section)
         ),
         standard: this.standardPromptQuestions.filter((prompt) =>
