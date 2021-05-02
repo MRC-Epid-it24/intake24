@@ -1,5 +1,5 @@
 import type { Prompt, PromptAnswer, PromptStatus, PromptQuestion, Dictionary } from '.';
-import { UserFoodData } from './http';
+import { PortionSizeMethod, UserFoodData } from './http';
 
 /* export enum RecallSections {
   PRE_MEALS = 'preMeals',
@@ -76,6 +76,25 @@ export type RecallState = {
 
 export type CustomPromptAnswer = string | string[] | number | number[];
 
+export interface PortionSizeStateBase {
+  method: PortionSizeMethod;
+  servingWeight: number | null;
+  leftoversWeight: number | null;
+}
+
+export interface SelectedAsServedImage {
+  index: number;
+  weight: number;
+}
+
+export interface AsServedState extends PortionSizeStateBase {
+  method: 'as-served';
+  serving: SelectedAsServedImage | null;
+  leftovers: SelectedAsServedImage | null;
+}
+
+export type PortionSizeState = AsServedState;
+
 export interface FreeTextFood {
   type: 'free-text';
   description: string;
@@ -88,6 +107,7 @@ export interface EncodedFood {
   data: UserFoodData;
   flags: string[];
   portionSizeMethodIndex: number | null;
+  portionSize: PortionSizeState | null;
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
 }
 

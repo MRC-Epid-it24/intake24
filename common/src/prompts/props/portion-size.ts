@@ -1,16 +1,7 @@
 import clone from 'lodash/cloneDeep';
-import type { LocaleTranslation } from '../../types';
 import { PromptQuestion } from '../../types';
 import { basePromptProps, ValidatedPromptProps } from './base';
-import type { AsServedSet } from '../../types/models';
 import type { QuantityValues } from '..';
-
-export interface AsServedPromptProps extends ValidatedPromptProps {
-  localDescription: LocaleTranslation;
-  asServedSet: AsServedSet;
-}
-
-export type AsServedLeftoverPromptProps = ValidatedPromptProps;
 
 export type LeftoverQuestionPromptProps = ValidatedPromptProps;
 
@@ -33,32 +24,6 @@ export type PizzaPromptProps = ValidatedPromptProps;
 export type MilkHotDrinkPromptProps = ValidatedPromptProps;
 
 export type DirectWeightPromptProps = ValidatedPromptProps;
-
-export const asServedPromptDefaultProps: AsServedPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  localDescription: { en: null },
-  asServedSet: {
-    id: '',
-    description: '',
-    selectionImageId: 0,
-  },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
-};
-
-export const asServedLeftoverPromptDefaultProps: AsServedLeftoverPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  validation: {
-    required: false,
-    message: { en: null },
-  },
-};
 
 export const guideImagePromptDefaultProps: GuideImagePromptProps = {
   text: { en: null },
@@ -164,6 +129,20 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'portion-size-option-prompt',
     name: 'Choose portion size method',
+    props: clone(basePromptProps),
+  },
+  {
+    component: 'as-served-prompt',
+    type: 'portion-size',
+    id: 'as-served-prompt',
+    name: 'As served',
+    props: clone(basePromptProps),
+  },
+  {
+    component: 'as-served-leftovers-prompt',
+    type: 'portion-size',
+    id: 'as-served-leftovers-prompt',
+    name: 'As served (leftovers)',
     props: clone(basePromptProps),
   },
 ];

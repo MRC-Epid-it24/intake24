@@ -208,9 +208,17 @@ const schemes: LocaleMessageObject = {
       subtitle: 'Choose a food from the database that best matches the description',
     },
     'portion-size-option-prompt': {
-      title: 'Portion size method',
+      title: 'Portion size estimation method',
       subtitle:
-        'Choose which portion size method to use in case more than one is available for this food',
+        'Choose which portion size method to use in case more than one is available for the food',
+    },
+    'as-served-prompt': {
+      title: 'As served portion size',
+      subtitle: 'Use the "as served" method to estimate the weight of the food',
+    },
+    'as-served-leftovers-prompt': {
+      title: 'As served leftovers',
+      subtitle: 'Use the "as served" method to estimate the weight of leftovers',
     },
   },
 };

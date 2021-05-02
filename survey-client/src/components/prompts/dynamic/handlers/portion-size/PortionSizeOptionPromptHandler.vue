@@ -10,16 +10,17 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import MealAddPrompt from '@/components/prompts/standard/MealAddPrompt.vue';
+
 import { BasePromptProps } from '@common/prompts';
-import { EncodedFood, FoodState, LocaleTranslation, Meal } from '@common/types';
-import { mapGetters } from 'vuex';
+import { EncodedFood } from '@common/types';
 import PortionSizeOptionPrompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import { UserPortionSizeMethod } from '@common/types/http';
+import foodPromptUtils from '../mixins/food-prompt-utils';
 
 export default Vue.extend({
   name: 'PortionSizeOptionPromptHandler',
   components: { PortionSizeOptionPrompt },
+  mixins: [foodPromptUtils],
 
   props: {
     promptProps: {
@@ -28,29 +29,8 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters('survey', ['selectedFood', 'selectedMealIndex', 'selectedFoodIndex']),
-
-    validatedSelectedFood(): EncodedFood {
-      const { selectedFood } = this;
-
-      if (selectedFood === undefined) throw new Error('This prompt requires a food to be selected');
-
-      if (selectedFood.type !== 'encoded-food')
-        throw new Error('This selected food must be an encoded food');
-
-      return selectedFood;
-    },
-
-    // FIXME: local food names need to be returned for all locales from food data service,
-    // en is hard-coded for now
-    foodName(): LocaleTranslation {
-      return {
-        en: this.validatedSelectedFood.data.englishDescription,
-      };
-    },
-
     availableMethods(): UserPortionSizeMethod[] {
-      return this.validatedSelectedFood.data.portionSizeMethods;
+      return this.encodedSelectedFood.data.portionSizeMethods;
     },
   },
 

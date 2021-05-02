@@ -14,7 +14,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { AsServedLeftoverPromptProps, asServedLeftoverPromptDefaultProps } from '@common/prompts';
+import { basePromptProps, BasePromptProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 
@@ -26,13 +26,13 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => AsServedLeftoverPromptProps,
+      type: Object as () => BasePromptProps,
     },
   },
 
   data() {
     return {
-      ...merge(asServedLeftoverPromptDefaultProps, this.promptProps),
+      ...merge(basePromptProps, this.promptProps),
       errors: [] as string[],
     };
   },

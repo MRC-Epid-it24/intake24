@@ -1,6 +1,11 @@
 import { Condition, conditionOps, PromptQuestion } from '@common/prompts';
 import { SurveyState } from '@/types/vuex';
 import { SchemeEntryResponse } from '@common/types/http';
+import {
+  asServedLeftoversComplete,
+  asServedSelected,
+  asServedServingComplete,
+} from './as-served-checks';
 
 function checkRecallNumber(state: SurveyState, condition: Condition) {
   if (state.user == null) {
@@ -128,17 +133,22 @@ function checkFoodStandardConditions(
   if (selectedFood === undefined)
     throw new Error('This function must only be called when a food is selected');
 
-  if (prompt.component === 'food-search-prompt') {
-    return selectedFood.type === 'free-text';
-  }
-
-  if (prompt.component === 'portion-size-option-prompt') {
-    return selectedFood.type === 'encoded-food' && selectedFood.portionSizeMethodIndex == null;
-  }
-
   switch (prompt.component) {
     case 'info-prompt':
       return !selectedFood.flags.includes(`${prompt.id}-acknowledged`);
+
+    case 'food-search-prompt':
+      return selectedFood.type === 'free-text';
+
+    case 'portion-size-option-prompt':
+      return selectedFood.type === 'encoded-food' && selectedFood.portionSizeMethodIndex == null;
+
+    case 'as-served-prompt':
+      return asServedSelected(selectedFood) && !asServedServingComplete(selectedFood);
+
+    case 'as-served-leftovers-prompt':
+      return asServedSelected(selectedFood) && !asServedLeftoversComplete(selectedFood);
+
     default:
       return selectedFood.customPromptAnswers[prompt.id] === undefined;
   }

@@ -1,7 +1,23 @@
+export type PortionSizeMethod =
+  | 'as-served'
+  | 'guide-image'
+  | 'drink-scale'
+  | 'standard-portion'
+  | 'cereal'
+  | 'milk-on-cereal'
+  | 'pizza'
+  | 'milk-in-a-hot-drink'
+  | 'weight';
+
 export type UserPortionSizeMethodParameters = { [name: string]: string };
 
+export interface AsServedParameters {
+  'serving-image-set': string;
+  'leftovers-image-set': string;
+}
+
 export interface UserPortionSizeMethod {
-  method: string;
+  method: PortionSizeMethod;
   description: string;
   imageUrl: string;
   useForRecipes: boolean;

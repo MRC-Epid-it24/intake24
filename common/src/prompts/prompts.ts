@@ -15,7 +15,10 @@ export type StandardComponentType =
   | 'meal-add-prompt'
   | 'edit-meal-prompt';
 
-export type PortionSizeComponentType = 'portion-size-option-prompt';
+export type PortionSizeComponentType =
+  | 'portion-size-option-prompt'
+  | 'as-served-prompt'
+  | 'as-served-leftovers-prompt';
 
 export type ComponentType = GenericComponentType | StandardComponentType | PortionSizeComponentType;
 

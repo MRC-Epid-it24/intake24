@@ -1,0 +1,60 @@
+<template>
+  <as-served-prompt
+    :food-name="foodName"
+    :prompt-props="promptProps"
+    :as-served-set-id="parameters['serving-image-set']"
+    @as-served-selected="onAsServedSelected"
+  ></as-served-prompt>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import { BasePromptProps } from '@common/prompts';
+import { EncodedFood, SelectedAsServedImage } from '@common/types';
+import AsServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
+import { AsServedParameters } from '@common/types/http';
+import foodPromptUtils from '../mixins/food-prompt-utils';
+
+export default Vue.extend({
+  name: 'AsServedPromptHandler',
+  components: { AsServedPrompt },
+  mixins: [foodPromptUtils],
+
+  props: {
+    promptProps: {
+      type: Object as () => BasePromptProps,
+    },
+  },
+
+  computed: {
+    parameters(): AsServedParameters {
+      if (this.selectedPortionSize.method !== 'as-served')
+        throw new Error('Selected portion size method must be "as-served"');
+
+      return this.selectedPortionSize.parameters as AsServedParameters;
+    },
+  },
+
+  methods: {
+    onAsServedSelected(selected: SelectedAsServedImage) {
+      const { conversionFactor } = this.selectedPortionSize;
+
+      this.$store.commit('survey/updateFood', {
+        mealIndex: this.selectedMealIndex,
+        foodIndex: this.selectedFoodIndex,
+        update: (state: EncodedFood) => {
+          state.portionSize = {
+            method: 'as-served',
+            serving: selected,
+            leftovers: state.portionSize?.leftovers,
+            servingWeight: selected.weight * conversionFactor,
+            leftoversWeight: state.portionSize?.leftoversWeight,
+          };
+        },
+      });
+
+      this.$emit('complete');
+    },
+  },
+});
+</script>

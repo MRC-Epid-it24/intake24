@@ -45,10 +45,15 @@ export default Vue.extend({
     onFoodSelected(data: UserFoodData) {
       const currentState: FoodState | undefined = this.$store.getters['survey/selectedFood'];
 
+      // Automatically select the only portion size method available to avoid triggering
+      // redundant portion size option prompt
+      const portionSizeMethodIndex = data.portionSizeMethods.length === 1 ? 0 : null;
+
       const newState: FoodState = {
         type: 'encoded-food',
         data,
-        portionSizeMethodIndex: null,
+        portionSizeMethodIndex,
+        portionSize: null,
         customPromptAnswers: currentState?.customPromptAnswers ?? {},
         flags: currentState?.flags ?? [],
       };

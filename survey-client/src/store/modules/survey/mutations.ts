@@ -158,9 +158,11 @@ const mutations: MutationTree<SurveyState> = {
     if (state.data == null) {
       console.error('state.data is null');
     } else {
-      const foodState = state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1)[0];
+      const foodState = state.data.meals[data.mealIndex].foods[data.foodIndex];
       data.update(foodState);
-      state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 0, foodState);
+
+      const spliced = state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1)[0];
+      state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 0, spliced);
     }
   },
 

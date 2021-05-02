@@ -73,4 +73,12 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['foods'],
   },
+  'as-served-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
+  'as-served-leftovers-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
 };

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <portion-layout :text="text" :description="description">
+    <portion-layout :text="promptProps.text" :description="promptProps.description">
       <template v-slot:headerText>
         {{ $t('portion.asServed.label', { food: localeDescription }) }}
       </template>
@@ -74,10 +74,13 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { AsServedPromptProps, asServedPromptDefaultProps } from '@common/prompts';
+
 import localeContent from '@/components/mixins/localeContent';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 import { AsServedSetResponse } from '@common/types/http/foods';
+import { basePromptProps, BasePromptProps } from '@common/prompts';
+import { LocaleTranslation } from '@common/types';
+import { AsServedSet } from '@common/types/models';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({
@@ -92,13 +95,22 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => AsServedPromptProps,
+      type: Object as () => BasePromptProps,
+      required: true,
+    },
+    foodName: {
+      type: Object as () => LocaleTranslation,
+      required: true,
+    },
+    asServedSetId: {
+      type: String,
+      required: true,
     },
   },
 
   data() {
     return {
-      ...merge(asServedPromptDefaultProps, this.promptProps),
+      ...merge(basePromptProps, this.promptProps),
       errors: [] as string[],
       selectionImageData: {} as AsServedSetResponse,
       selectedObjectIdx: null as number | null,
@@ -108,7 +120,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   computed: {
     localeDescription(): string | null {
-      return this.getLocaleContent(this.description);
+      return this.getLocaleContent(this.foodName);
     },
     mainWeight(): string | null {
       if (!this.dataLoaded) return null;
@@ -127,7 +139,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     async fetchSelectionImageData() {
       try {
         const { data } = await this.$http.get<AsServedSetResponse>(
-          `portion-sizes/as-served-sets/${this.asServedSet.id}`
+          `portion-sizes/as-served-sets/${this.asServedSetId}`
         );
         this.selectionImageData = { ...data };
         this.setDefaultSelection();
@@ -204,7 +216,10 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       }
     },
     submit() {
-      this.$emit('AsServed selected');
+      this.$emit('as-served-selected', {
+        imageIndex: this.selectedObjectIdx,
+        weight: this.selectionImageData.images[this.selectedObjectIdx].weight,
+      });
     },
   },
 });
