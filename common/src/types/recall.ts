@@ -1,5 +1,6 @@
 import type { Prompt, PromptAnswer, PromptStatus, PromptQuestion, Dictionary } from '.';
-import { PortionSizeMethod, UserFoodData } from './http';
+import { UserFoodData } from './http';
+import { PortionSizeMethodId } from './models';
 
 /* export enum RecallSections {
   PRE_MEALS = 'preMeals',
@@ -77,7 +78,7 @@ export type RecallState = {
 export type CustomPromptAnswer = string | string[] | number | number[];
 
 export interface PortionSizeStateBase {
-  method: PortionSizeMethod;
+  method: PortionSizeMethodId;
   servingWeight: number | null;
   leftoversWeight: number | null;
 }

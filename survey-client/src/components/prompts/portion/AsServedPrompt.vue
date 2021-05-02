@@ -80,7 +80,6 @@ import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 import { AsServedSetResponse } from '@common/types/http/foods';
 import { basePromptProps, BasePromptProps } from '@common/prompts';
 import { LocaleTranslation } from '@common/types';
-import { AsServedSet } from '@common/types/models';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({
@@ -216,6 +215,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       }
     },
     submit() {
+      if (this.selectedObjectIdx === null) return;
+
       this.$emit('as-served-selected', {
         imageIndex: this.selectedObjectIdx,
         weight: this.selectionImageData.images[this.selectedObjectIdx].weight,
