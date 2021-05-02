@@ -1,6 +1,7 @@
-import type { Permission, User } from '.';
+import type { OmitAndOptional } from '..';
+import type { PermissionAttributes, UserAttributes } from '.';
 
-export type Role = {
+export type RoleAttributes = {
   id: number;
   name: string;
   displayName: string;
@@ -9,7 +10,22 @@ export type Role = {
   updatedAt: Date;
 };
 
+export type RoleCreationAttributes = OmitAndOptional<
+  RoleAttributes,
+  'id' | 'createdAt' | 'updatedAt',
+  'description'
+>;
+
 export type RoleAssociations = {
-  permissions?: Permission[];
-  users?: User[];
+  permissions?: PermissionAttributes[];
+  users?: UserAttributes[];
 };
+
+export type RoleUserAttributes = {
+  roleId: number;
+  userId: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type RoleUserCreationAttributes = Omit<RoleUserAttributes, 'createdAt' | 'updatedAt'>;

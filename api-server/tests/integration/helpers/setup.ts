@@ -12,6 +12,7 @@ import {
 } from '@/db/models/system';
 import ioc from '@/ioc';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
+import { SchemeTypes } from '@common/types/models';
 
 export type MockData = {
   language: Language;
@@ -136,20 +137,22 @@ export const initDatabaseData = async (): Promise<MockData> => {
   const scheme = await Scheme.create({
     id: 'default',
     name: 'Default',
-    type: 'data-driven',
+    type: SchemeTypes.DATA_DRIVEN,
     questions: defaultQuestions,
     meals: [...defaultMeals],
     export: defaultExport,
   });
 
-  const today = new Date();
+  const startDate = new Date();
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() + 7);
 
   const survey = await Survey.create({
     id: 'test-survey',
     name: 'Test Survey Name',
     state: 0,
-    startDate: today,
-    endDate: new Date().setDate(today.getDate() + 7),
+    startDate,
+    endDate,
     schemeId: scheme.id,
     localeId: locale.id,
     allowGenUsers: false,

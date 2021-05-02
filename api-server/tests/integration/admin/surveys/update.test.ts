@@ -23,7 +23,11 @@ export default (): void => {
     const { id } = input;
     output = { ...updateInput, id, supportEmail: updateInput.supportEmail.toLowerCase() };
 
-    survey = await Survey.create(input);
+    survey = await Survey.create({
+      ...input,
+      startDate: new Date(input.startDate),
+      endDate: new Date(input.endDate),
+    });
 
     url = `${baseUrl}/${survey.id}`;
     invalidUrl = `${baseUrl}/999999`;

@@ -2,4 +2,7 @@
 import { RoleEntry } from '@common/types/http/admin';
 import { Role } from '@/db/models/system';
 
-export const roleEntryResponse = (role: Role): RoleEntry => role.get();
+export const roleEntryResponse = (role: Role): RoleEntry => ({
+  ...role.get(),
+  permissions: role.permissions ?? [],
+});

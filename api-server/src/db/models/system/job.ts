@@ -8,7 +8,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { JobType } from '@api-server/jobs';
-import { Job as JobAttributes } from '@common/types/models';
+import { JobAttributes, JobCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 
@@ -18,7 +18,9 @@ import { User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class Job extends BaseModel implements JobAttributes {
+export default class Job
+  extends BaseModel<JobAttributes, JobCreationAttributes>
+  implements JobAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

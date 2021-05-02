@@ -1,14 +1,14 @@
-import { Task, TaskCreateAttributes, Pagination } from '../../models';
+import { TaskAttributes, TaskCreationAttributes, Pagination } from '../../models';
 
-export type TaskRequest = TaskCreateAttributes;
+export type TaskRequest = TaskCreationAttributes;
 
 export type CreateTaskRequest = TaskRequest;
 
 export type UpdateTaskRequest = TaskRequest;
 
-export type TasksResponse = Pagination<Task>;
+export type TasksResponse = Pagination<TaskAttributes>;
 
-export type TaskEntry = Task;
+export type TaskEntry = TaskAttributes;
 
 export type TaskRefs = {
   jobs: string[];

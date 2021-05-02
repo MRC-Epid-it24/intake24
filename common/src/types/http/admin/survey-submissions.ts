@@ -1,6 +1,6 @@
-import { SurveySubmission, Pagination } from '../../models';
+import { SurveySubmissionAttributes, Pagination } from '../../models';
 
-export type SurveySubmissionEntry = SurveySubmission;
+export type SurveySubmissionEntry = SurveySubmissionAttributes;
 
 export type SurveySubmissionsResponse = Pagination<SurveySubmissionEntry>;
 

@@ -1,6 +1,6 @@
 import { Table, Column, CreatedAt, DataType, UpdatedAt } from 'sequelize-typescript';
 import { JobType } from '@api-server/jobs';
-import { Task as TaskAttributes } from '@common/types/models';
+import { TaskAttributes, TaskCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 
 @Table({
@@ -9,7 +9,9 @@ import BaseModel from '../model';
   freezeTableName: true,
   underscored: true,
 })
-export default class Task extends BaseModel implements TaskAttributes {
+export default class Task
+  extends BaseModel<TaskAttributes, TaskCreationAttributes>
+  implements TaskAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -1,10 +1,12 @@
+import { Optional } from '../model';
+
 export enum SurveyState {
   NOT_STARTED = 0,
   ACTIVE = 1,
   SUSPENDED = 2,
 }
 
-export type Survey = {
+export type SurveyAttributes = {
   id: string;
   name: string;
   state: SurveyState;
@@ -32,3 +34,23 @@ export type Survey = {
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
 };
+
+export type SurveyCreationAttributes = Optional<
+  SurveyAttributes,
+  | 'genUserKey'
+  | 'authUrlDomainOverride'
+  | 'authUrlTokenCharset'
+  | 'authUrlTokenLength'
+  | 'suspensionReason'
+  | 'surveyMonkeyUrl'
+  | 'originatingUrl'
+  | 'description'
+  | 'feedbackEnabled'
+  | 'feedbackStyle'
+  | 'submissionNotificationUrl'
+  | 'numberOfSubmissionsForFeedback'
+  | 'finalPageHtml'
+  | 'maximumDailySubmissions'
+  | 'maximumTotalSubmissions'
+  | 'minimumSubmissionInterval'
+>;

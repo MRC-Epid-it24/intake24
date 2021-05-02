@@ -1,5 +1,8 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { SurveySubmissionMealCustomField as SurveySubmissionMealCustomFieldAttributes } from '@common/types/models';
+import {
+  SurveySubmissionMealCustomFieldAttributes,
+  SurveySubmissionMealCustomFieldCreationAttributes,
+} from '@common/types/models';
 import BaseModel from '../model';
 import { SurveySubmissionMeal } from '.';
 
@@ -14,7 +17,10 @@ import { SurveySubmissionMeal } from '.';
   underscored: true,
 })
 export default class SurveySubmissionMealCustomField
-  extends BaseModel
+  extends BaseModel<
+    SurveySubmissionMealCustomFieldAttributes,
+    SurveySubmissionMealCustomFieldCreationAttributes
+  >
   implements SurveySubmissionMealCustomFieldAttributes {
   @Column({
     autoIncrement: true,

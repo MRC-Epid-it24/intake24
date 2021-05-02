@@ -2,7 +2,17 @@ import { UserEntry, UserMgmtListEntry, RespondentEntry } from '@common/types/htt
 import { User, UserSurveyAlias } from '@/db/models/system';
 import { permissionListResponse } from './permissions';
 
-export const userEntryResponse = (user: User): UserEntry => user.get();
+export const userEntryResponse = (user: User): UserEntry => {
+  const { aliases = [], customFields = [], permissions = [], roles = [] } = user;
+
+  return {
+    ...user.get(),
+    aliases,
+    customFields,
+    permissions,
+    roles,
+  };
+};
 
 export const userRespondentResponse = (alias: UserSurveyAlias): RespondentEntry => {
   const {

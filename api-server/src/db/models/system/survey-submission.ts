@@ -1,5 +1,8 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-import { SurveySubmission as SurveySubmissionAttributes } from '@common/types/models';
+import {
+  SurveySubmissionAttributes,
+  SurveySubmissionCreationAttributes,
+} from '@common/types/models';
 import BaseModel from '../model';
 import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from '.';
 
@@ -16,7 +19,9 @@ import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from 
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmission extends BaseModel implements SurveySubmissionAttributes {
+export default class SurveySubmission
+  extends BaseModel<SurveySubmissionAttributes, SurveySubmissionCreationAttributes>
+  implements SurveySubmissionAttributes {
   @Column({
     primaryKey: true,
     type: DataType.UUID,

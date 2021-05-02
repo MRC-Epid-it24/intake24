@@ -10,7 +10,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { User as UserAttributes } from '@common/types/models';
+import { UserAttributes, UserCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import {
   ClientErrorReport,
@@ -58,7 +58,9 @@ import {
   freezeTableName: true,
   underscored: true,
 })
-export default class User extends BaseModel implements UserAttributes {
+export default class User
+  extends BaseModel<UserAttributes, UserCreationAttributes>
+  implements UserAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

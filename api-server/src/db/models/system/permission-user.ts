@@ -1,5 +1,6 @@
 import { Column, DataType, ForeignKey, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import BaseModel from '@/db/models/model';
+import { PermissionUserAttributes, PermissionUserCreationAttributes } from '@common/types/models';
 import { Permission, User } from '.';
 
 @Table({
@@ -8,7 +9,9 @@ import { Permission, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class PermissionUser extends BaseModel {
+export default class PermissionUser
+  extends BaseModel<PermissionUserAttributes, PermissionUserCreationAttributes>
+  implements PermissionUserAttributes {
   @ForeignKey(() => Permission)
   @Column({
     type: DataType.BIGINT,

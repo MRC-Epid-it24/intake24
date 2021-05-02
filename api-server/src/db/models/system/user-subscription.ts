@@ -11,7 +11,8 @@ import BaseModel from '@/db/models/model';
 import {
   PushSubscription,
   SubscriptionType,
-  UserSubscription as UserSubscriptionAttributes,
+  UserSubscriptionAttributes,
+  UserSubscriptionCreationAttributes,
 } from '@common/types/models';
 import { User } from '.';
 
@@ -24,7 +25,9 @@ import { User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class UserSubscription extends BaseModel implements UserSubscriptionAttributes {
+export default class UserSubscription
+  extends BaseModel<UserSubscriptionAttributes, UserSubscriptionCreationAttributes>
+  implements UserSubscriptionAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -54,6 +57,8 @@ export default class UserSubscription extends BaseModel implements UserSubscript
   }
 
   set subscription(value: PushSubscription) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.setDataValue('subscription', JSON.stringify(value));
   }
 

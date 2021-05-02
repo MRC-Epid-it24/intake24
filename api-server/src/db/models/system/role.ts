@@ -8,7 +8,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import BaseModel from '@api-server/db/models/model';
-import { Role as RoleAttributes } from '@common/types/models';
+import { RoleAttributes, RoleCreationAttributes } from '@common/types/models';
 import { Permission, PermissionRole, RoleUser, User } from '.';
 
 @Scopes(() => ({
@@ -22,7 +22,9 @@ import { Permission, PermissionRole, RoleUser, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class Role extends BaseModel implements RoleAttributes {
+export default class Role
+  extends BaseModel<RoleAttributes, RoleCreationAttributes>
+  implements RoleAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
-import { UserPassword as UserPasswordAttributes } from '@common/types/models';
+import { UserPasswordAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 
@@ -10,7 +10,9 @@ import { User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class UserPassword extends BaseModel implements UserPasswordAttributes {
+export default class UserPassword
+  extends BaseModel<UserPasswordAttributes>
+  implements UserPasswordAttributes {
   @Column({
     primaryKey: true,
   })

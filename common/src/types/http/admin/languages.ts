@@ -1,5 +1,5 @@
 import { Dictionary } from '../..';
-import { Language, Pagination } from '../../models';
+import { LanguageAttributes, Pagination } from '../../models';
 
 export type LanguageRequest = {
   id: string;
@@ -13,9 +13,9 @@ export type CreateLanguageRequest = LanguageRequest;
 
 export type UpdateLanguageRequest = Omit<LanguageRequest, 'id'>;
 
-export type LanguagesResponse = Pagination<Language>;
+export type LanguagesResponse = Pagination<LanguageAttributes>;
 
-export type LanguageEntry = Language;
+export type LanguageEntry = LanguageAttributes;
 
 export type LanguageRefs = Dictionary;
 

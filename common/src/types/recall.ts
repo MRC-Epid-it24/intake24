@@ -61,7 +61,7 @@ export type MealState = {
 };
 
 export type RecallState = {
-  schemeId: string | null;
+  schemeId: string;
   startTime: Date | null;
   endTime: Date | null;
   flags: string[];

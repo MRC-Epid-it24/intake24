@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { Language } from '@/db/models/system';
-import { Language as LanguageAttributes } from '@common/types/models';
+import { LanguageCreationAttributes } from '@common/types/models';
 import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
@@ -10,9 +10,9 @@ export default (): void => {
   let url: string;
   let invalidUrl: string;
 
-  let input: Omit<LanguageAttributes, 'createdAt' | 'updatedAt'>;
-  let updateInput: Omit<LanguageAttributes, 'createdAt' | 'updatedAt'>;
-  let output: Omit<LanguageAttributes, 'createdAt' | 'updatedAt'>;
+  let input: LanguageCreationAttributes;
+  let updateInput: LanguageCreationAttributes;
+  let output: LanguageCreationAttributes;
   let language: Language;
 
   beforeAll(async () => {

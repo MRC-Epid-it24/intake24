@@ -1,4 +1,6 @@
-export type SurveySubmission = {
+import { OmitAndOptional, Optional } from '../model';
+
+export type SurveySubmissionAttributes = {
   id: string;
   surveyId: string;
   userId: number;
@@ -9,14 +11,21 @@ export type SurveySubmission = {
   uxSessionId: string;
 };
 
-export type SurveySubmissionCustomField = {
+export type SurveySubmissionCreationAttributes = Optional<SurveySubmissionAttributes, 'log'>;
+
+export type SurveySubmissionCustomFieldAttributes = {
   id: number;
   surveySubmissionId: string;
   name: string;
   value: string;
 };
 
-export type SurveySubmissionMeal = {
+export type SurveySubmissionCustomFieldCreationAttributes = Omit<
+  SurveySubmissionCustomFieldAttributes,
+  'id'
+>;
+
+export type SurveySubmissionMealAttributes = {
   id: number;
   surveySubmissionId: string;
   hours: number;
@@ -24,14 +33,21 @@ export type SurveySubmissionMeal = {
   name: string | null;
 };
 
-export type SurveySubmissionMealCustomField = {
+export type SurveySubmissionMealCreationAttributes = Omit<SurveySubmissionMealAttributes, 'id'>;
+
+export type SurveySubmissionMealCustomFieldAttributes = {
   id: number;
   mealId: number;
   name: string;
   value: string;
 };
 
-export type SurveySubmissionFood = {
+export type SurveySubmissionMealCustomFieldCreationAttributes = Omit<
+  SurveySubmissionMealCustomFieldAttributes,
+  'id'
+>;
+
+export type SurveySubmissionFoodAttributes = {
   id: number;
   mealId: number;
   code: string;
@@ -49,14 +65,25 @@ export type SurveySubmissionFood = {
   nutrientTableCode: string;
 };
 
-export type SurveySubmissionFoodCustomField = {
+export type SurveySubmissionFoodCreationAttributes = OmitAndOptional<
+  SurveySubmissionFoodAttributes,
+  'id',
+  'localDescription' | 'foodGroupLocalDescription'
+>;
+
+export type SurveySubmissionFoodCustomFieldAttributes = {
   id: number;
   foodId: number;
   name: string;
   value: string;
 };
 
-export type SurveySubmissionMissingFood = {
+export type SurveySubmissionFoodCustomFieldCreationAttributes = Omit<
+  SurveySubmissionFoodCustomFieldAttributes,
+  'id'
+>;
+
+export type SurveySubmissionMissingFoodAttributes = {
   id: number;
   mealId: number;
   name: string;
@@ -66,23 +93,40 @@ export type SurveySubmissionMissingFood = {
   leftovers: string;
 };
 
-export type SurveySubmissionField = {
+export type SurveySubmissionMissingFoodCreationAttributes = Omit<
+  SurveySubmissionMissingFoodAttributes,
+  'id'
+>;
+
+export type SurveySubmissionFieldAttributes = {
   id: number;
   foodId: number;
   fieldName: string;
   value: string;
 };
 
-export type SurveySubmissionNutrient = {
+export type SurveySubmissionFieldCreationAttributes = Omit<SurveySubmissionFieldAttributes, 'id'>;
+
+export type SurveySubmissionNutrientAttributes = {
   id: number;
   foodId: number;
   amount: number;
   nutrientTypeId: number;
 };
 
-export type SurveySubmissionPortionSizeField = {
+export type SurveySubmissionNutrientCreationAttributes = Omit<
+  SurveySubmissionNutrientAttributes,
+  'id'
+>;
+
+export type SurveySubmissionPortionSizeFieldAttributes = {
   id: number;
   foodId: number;
   name: string;
   value: string;
 };
+
+export type SurveySubmissionPortionSizeFieldCreationAttributes = Omit<
+  SurveySubmissionPortionSizeFieldAttributes,
+  'id'
+>;

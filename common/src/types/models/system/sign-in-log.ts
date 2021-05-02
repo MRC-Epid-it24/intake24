@@ -1,4 +1,6 @@
-export type SignInLog = {
+import type { OmitAndOptional } from '..';
+
+export type SignInLogAttributes = {
   id: number;
   date: Date;
   remoteAddress: string | null;
@@ -9,3 +11,9 @@ export type SignInLog = {
   message: string | null;
   userAgent: string | null;
 };
+
+export type SignInLogCreationAttributes = OmitAndOptional<
+  SignInLogAttributes,
+  'id',
+  'date' | 'remoteAddress' | 'userId' | 'message' | 'userAgent'
+>;

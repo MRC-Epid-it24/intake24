@@ -1,5 +1,7 @@
 import { CustomField } from '../..';
-import { Permission, Role, User, UserAssociations, Pagination } from '../../models';
+import { UserAttributes, UserAssociations, Pagination } from '../../models';
+import { PermissionEntry, PermissionListEntry } from './permissions';
+import { RoleEntry, RoleListEntry } from './roles';
 
 export type UserInput = {
   name?: string | null;
@@ -34,15 +36,15 @@ export interface UpdateUserRequest extends UpdateUserInput {
   passwordConfirm?: string;
 } */
 
-export type UsersResponse = Pagination<User>;
+export type UsersResponse = Pagination<UserAttributes>;
 
-export type UserEntry = User & Required<UserAssociations>;
+export type UserEntry = UserAttributes & Required<UserAssociations>;
 
-export type UserListEntry = Pick<User, 'id' | 'name' | 'email'>;
+export type UserListEntry = Pick<UserAttributes, 'id' | 'name' | 'email'>;
 
 export type UserRefs = {
-  permissions: Permission[];
-  roles: Role[];
+  permissions: PermissionListEntry[];
+  roles: RoleListEntry[];
 };
 
 export type UserResponse = {

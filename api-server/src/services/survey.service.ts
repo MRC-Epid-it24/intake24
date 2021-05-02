@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import { Op } from 'sequelize';
 import * as uuid from 'uuid';
 import { CreateRespondentInput, UpdateRespondentInput } from '@common/types/http/admin';
-import { UserCustomField as UserCustomFieldAttributes } from '@common/types/models';
+import { UserCustomFieldAttributes } from '@common/types/models';
 import {
   GenUserCounter,
   Job,
@@ -41,7 +41,7 @@ export interface SurveyService {
   ) => Promise<UserSurveyAlias[]>;
   updateRespondent: (
     surveyId: string,
-    userId: string | number,
+    userId: number,
     input: UpdateRespondentInput
   ) => Promise<UserSurveyAlias>;
   deleteRespondent: (surveyId: string, userId: string | number) => Promise<void>;
@@ -188,13 +188,13 @@ export default ({
    * Update respondent record
    *
    * @param {string} surveyId
-   * @param {(string | number)} userId
+   * @param {number} userId
    * @param {UpdateRespondentInput} input
    * @returns {Promise<UserSurveyAlias>}
    */
   const updateRespondent = async (
     surveyId: string,
-    userId: string | number,
+    userId: number,
     input: UpdateRespondentInput
   ): Promise<UserSurveyAlias> => {
     const survey = await Survey.findByPk(surveyId);
@@ -436,8 +436,8 @@ export default ({
       id: uuid.v4(),
       surveyId,
       userId,
-      startTime: input.startTime,
-      endTime: input.endTime,
+      startTime: input.startTime ?? new Date(),
+      endTime: input.endTime ?? new Date(),
       uxSessionId: uuid.v4(), // TODO: verify this
       submissionTime: new Date(),
     });
@@ -449,7 +449,7 @@ export default ({
       .map((item) => ({
         surveySubmissionId,
         name: item.questionId,
-        value: Array.isArray(item.answer) ? item.answer.join(', ') : item.answer,
+        value: Array.isArray(item.answer) ? item.answer.join(', ') : (item.answer as string),
       }));
 
     await SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs);
@@ -460,8 +460,8 @@ export default ({
       return {
         surveySubmissionId,
         name,
-        hours,
-        minutes,
+        hours: parseInt(hours, 10),
+        minutes: parseInt(minutes, 10),
       };
     });
 
@@ -484,7 +484,8 @@ export default ({
         .map((item) => ({
           mealId: mealRecord.id,
           name: item.questionId,
-          value: Array.isArray(item.answer) ? item.answer.join(', ') : item.answer,
+          // Empty / null answers filtered out, TS doesn't update type correctly
+          value: Array.isArray(item.answer) ? item.answer.join(', ') : (item.answer as string),
         }));
 
       await SurveySubmissionMealCustomField.bulkCreate(mealCustomFieldInputs);

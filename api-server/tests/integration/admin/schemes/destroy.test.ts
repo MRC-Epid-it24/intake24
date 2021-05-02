@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { Scheme } from '@/db/models/system';
-import { Scheme as SchemeAttributes } from '@common/types/models';
+import { SchemeCreationAttributes } from '@common/types/models';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
@@ -9,7 +9,7 @@ export default (): void => {
   let url: string;
   let invalidUrl: string;
 
-  let input: Omit<SchemeAttributes, 'createdAt' | 'updatedAt'>;
+  let input: SchemeCreationAttributes;
   let scheme: Scheme;
 
   beforeAll(async () => {

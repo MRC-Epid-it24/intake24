@@ -2,24 +2,24 @@ import { Meal } from '../..';
 import {
   ExportField,
   ExportSectionId,
-  Language,
   Pagination,
-  Scheme,
-  SchemeCreateAttributes,
+  SchemeAttributes,
+  SchemeCreationAttributes,
 } from '../../models';
+import { LanguageEntry } from './languages';
 
-export type SchemeRequest = SchemeCreateAttributes;
+export type SchemeRequest = SchemeCreationAttributes;
 
 export type CreateSchemeRequest = SchemeRequest;
 
 export type UpdateSchemeRequest = Omit<SchemeRequest, 'id'>;
 
-export type SchemesResponse = Pagination<Scheme>;
+export type SchemesResponse = Pagination<SchemeAttributes>;
 
-export type SchemeEntry = Scheme;
+export type SchemeEntry = SchemeAttributes;
 
 export type SchemeRefs = {
-  languages: Language[];
+  languages: LanguageEntry[];
   meals: Meal[];
 };
 

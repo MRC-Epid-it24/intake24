@@ -11,7 +11,7 @@ import {
 } from 'sequelize-typescript';
 import BaseModel from '@api-server/db/models/model';
 import config from '@api-server/config/acl';
-import { Permission as PermissionAttributes } from '@common/types/models';
+import { PermissionAttributes, PermissionCreationAttributes } from '@common/types/models';
 import { PermissionRole, PermissionUser, Role, User } from '.';
 
 // eslint-disable-next-line no-use-before-define
@@ -32,7 +32,9 @@ export const addPermissionsToAdmin = async (permissions: Permission[]): Promise<
   freezeTableName: true,
   underscored: true,
 })
-export default class Permission extends BaseModel implements PermissionAttributes {
+export default class Permission
+  extends BaseModel<PermissionAttributes, PermissionCreationAttributes>
+  implements PermissionAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

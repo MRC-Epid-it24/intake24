@@ -1,5 +1,5 @@
 import { Dictionary } from '../..';
-import { Permission, Pagination } from '../../models';
+import { PermissionAttributes, Pagination } from '../../models';
 
 export type PermissionRequest = {
   name: string;
@@ -7,11 +7,11 @@ export type PermissionRequest = {
   description: string | null;
 };
 
-export type PermissionsResponse = Pagination<Permission>;
+export type PermissionsResponse = Pagination<PermissionAttributes>;
 
-export type PermissionEntry = Permission;
+export type PermissionEntry = PermissionAttributes;
 
-export type PermissionListEntry = Pick<Permission, 'id' | 'name' | 'displayName'>;
+export type PermissionListEntry = Pick<PermissionAttributes, 'id' | 'name' | 'displayName'>;
 
 export type PermissionRefs = Dictionary;
 

@@ -9,7 +9,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import BaseModel from '@api-server/db/models/model';
-import { RefreshToken as RefreshTokenAttributes } from '@common/types/models';
+import { RefreshTokenAttributes, RefreshTokenCreationAttributes } from '@common/types/models';
 import { User } from '.';
 
 @Scopes(() => ({
@@ -21,7 +21,9 @@ import { User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class RefreshToken extends BaseModel implements RefreshTokenAttributes {
+export default class RefreshToken
+  extends BaseModel<RefreshTokenAttributes, RefreshTokenCreationAttributes>
+  implements RefreshTokenAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,

@@ -1,6 +1,6 @@
 import type { SurveyState } from '../../recall';
 
-export type UserSession = {
+export type UserSessionAttributes = {
   userId: number;
   surveyId: string;
   sessionData: SurveyState;
@@ -8,4 +8,4 @@ export type UserSession = {
   updatedAt: Date;
 };
 
-export type UserSessionCreateAttributes = Omit<UserSession, 'createdAt' | 'updatedAt'>;
+export type UserSessionCreationAttributes = Omit<UserSessionAttributes, 'createdAt' | 'updatedAt'>;

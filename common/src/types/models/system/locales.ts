@@ -1,4 +1,6 @@
-export type Locale = {
+import { Optional } from '../model';
+
+export type LocaleAttributes = {
   id: string;
   englishName: string;
   localName: string;
@@ -8,3 +10,8 @@ export type Locale = {
   prototypeLocaleId: string | null;
   textDirection: string;
 };
+
+export type LocaleCreationAttributes = Optional<
+  LocaleAttributes,
+  'prototypeLocaleId' | 'textDirection'
+>;

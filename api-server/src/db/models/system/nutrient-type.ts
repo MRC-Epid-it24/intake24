@@ -7,7 +7,7 @@ import {
   Scopes,
   Table,
 } from 'sequelize-typescript';
-import { NutrientType as NutrientTypeAttributes } from '@common/types/models';
+import { NutrientTypeAttributes, NutrientUnitCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { LocalNutrientType, NutrientUnit } from '.';
 
@@ -22,7 +22,9 @@ import { LocalNutrientType, NutrientUnit } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientType extends BaseModel implements NutrientTypeAttributes {
+export default class NutrientType
+  extends BaseModel<NutrientTypeAttributes, NutrientUnitCreationAttributes>
+  implements NutrientTypeAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

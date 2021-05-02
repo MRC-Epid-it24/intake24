@@ -1,13 +1,13 @@
 import { pick } from 'lodash';
 import request from 'supertest';
-import { Scheme as SchemeAttributes } from '@common/types/models';
+import { SchemeCreationAttributes } from '@common/types/models';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const url = '/api/admin/schemes';
 
-  let input: Omit<SchemeAttributes, 'createdAt' | 'updatedAt'>;
-  let output: Omit<SchemeAttributes, 'createdAt' | 'updatedAt'>;
+  let input: SchemeCreationAttributes;
+  let output: SchemeCreationAttributes;
 
   beforeAll(async () => {
     input = mocker.scheme();

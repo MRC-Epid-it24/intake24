@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { Locale } from '@/db/models/system';
-import { Locale as LocaleAttributes } from '@common/types/models';
+import { LocaleAttributes } from '@common/types/models';
 import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
@@ -10,9 +10,9 @@ export default (): void => {
   let url: string;
   let invalidUrl: string;
 
-  let input: Omit<LocaleAttributes, 'createdAt' | 'updatedAt'>;
-  let updateInput: Omit<LocaleAttributes, 'createdAt' | 'updatedAt'>;
-  let output: Omit<LocaleAttributes, 'createdAt' | 'updatedAt'>;
+  let input: LocaleAttributes;
+  let updateInput: LocaleAttributes;
+  let output: LocaleAttributes;
   let locale: Locale;
 
   beforeAll(async () => {

@@ -1,13 +1,13 @@
 import { pick } from 'lodash';
 import request from 'supertest';
-import { Language as LanguageAttributes } from '@common/types/models';
+import { LanguageCreationAttributes } from '@common/types/models';
 import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const url = '/api/admin/languages';
 
-  let input: Omit<LanguageAttributes, 'createdAt' | 'updatedAt'>;
-  let output: Omit<LanguageAttributes, 'createdAt' | 'updatedAt'>;
+  let input: LanguageCreationAttributes;
+  let output: LanguageCreationAttributes;
 
   beforeAll(async () => {
     input = {

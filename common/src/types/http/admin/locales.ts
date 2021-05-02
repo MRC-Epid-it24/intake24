@@ -1,4 +1,5 @@
-import { Language, Locale, Pagination } from '../../models';
+import { LocaleAttributes, Pagination } from '../../models';
+import { LanguageEntry } from './languages';
 
 export type LocaleRequest = {
   id: string;
@@ -15,13 +16,13 @@ export type CreateLocaleRequest = LocaleRequest;
 
 export type UpdateLocaleRequest = Omit<LocaleRequest, 'id'>;
 
-export type LocalesResponse = Pagination<Locale>;
+export type LocalesResponse = Pagination<LocaleAttributes>;
 
-export type LocaleEntry = Locale;
+export type LocaleEntry = LocaleAttributes;
 
 export type LocaleRefs = {
-  languages: Language[];
-  locales: Locale[];
+  languages: LanguageEntry[];
+  locales: LocaleEntry[];
 };
 
 export type LocaleResponse = {

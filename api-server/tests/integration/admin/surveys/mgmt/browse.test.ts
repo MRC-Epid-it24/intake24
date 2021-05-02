@@ -15,7 +15,11 @@ export default (): void => {
 
   beforeAll(async () => {
     input = mocker.survey();
-    survey = await Survey.create(input);
+    survey = await Survey.create({
+      ...input,
+      startDate: new Date(input.startDate),
+      endDate: new Date(input.endDate),
+    });
 
     url = `${baseUrl}/${survey.id}/mgmt`;
     invalidUrl = `${baseUrl}/invalid-survey-id/mgmt`;

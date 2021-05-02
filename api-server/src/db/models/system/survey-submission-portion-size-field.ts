@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { SurveySubmissionPortionSizeField as SurveySubmissionPortionSizeFieldAttributes } from '@common/types/models';
+import { SurveySubmissionPortionSizeFieldAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { SurveySubmissionFood } from '.';
 

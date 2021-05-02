@@ -1,4 +1,4 @@
-import type { Meal, RecallQuestions } from '../..';
+import type { Meal, RecallQuestions, PromptQuestion } from '../..';
 
 export enum SchemeTypes {
   DATA_DRIVEN = 'data-driven',
@@ -31,7 +31,7 @@ export type ExportSection = {
 
 export type ExportSections = ExportSection[];
 
-export type Scheme = {
+export type SchemeAttributes = {
   id: string;
   name: string;
   type: SchemeType;
@@ -42,4 +42,4 @@ export type Scheme = {
   updatedAt: Date;
 };
 
-export type SchemeCreateAttributes = Omit<Scheme, 'createdAt' | 'updatedAt'>;
+export type SchemeCreationAttributes = Omit<SchemeAttributes, 'createdAt' | 'updatedAt'>;

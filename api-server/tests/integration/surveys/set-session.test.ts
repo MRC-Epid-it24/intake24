@@ -1,14 +1,14 @@
 import request from 'supertest';
 import { pick } from 'lodash';
 import { suite } from '@tests/integration/helpers';
-import { UserSessionCreateAttributes } from '@common/types/models/system';
+import { UserSessionCreationAttributes } from '@common/types/models/system';
 import { SurveyState } from '@common/types';
 
 export default (): void => {
   let url: string;
   let invalidUrl: string;
 
-  let input: UserSessionCreateAttributes;
+  let input: UserSessionCreationAttributes;
 
   beforeAll(async () => {
     url = `/api/surveys/${suite.data.survey.id}/session`;

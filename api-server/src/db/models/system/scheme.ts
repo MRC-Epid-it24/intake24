@@ -8,7 +8,12 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { Meal, RecallQuestions } from '@common/types';
-import { Scheme as SchemeAttributes, SchemeType, ExportSection } from '@common/types/models';
+import {
+  SchemeAttributes,
+  SchemeCreationAttributes,
+  SchemeType,
+  ExportSection,
+} from '@common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
 import BaseModel from '../model';
 import { Survey } from '.';
@@ -22,7 +27,9 @@ import { Survey } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class Scheme extends BaseModel implements SchemeAttributes {
+export default class Scheme
+  extends BaseModel<SchemeAttributes, SchemeCreationAttributes>
+  implements SchemeAttributes {
   @Column({
     primaryKey: true,
     type: DataType.STRING(64),
@@ -59,6 +66,8 @@ export default class Scheme extends BaseModel implements SchemeAttributes {
   }
 
   set questions(value: RecallQuestions) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.setDataValue('questions', JSON.stringify(value ?? defaultQuestions));
   }
 
@@ -72,6 +81,8 @@ export default class Scheme extends BaseModel implements SchemeAttributes {
   }
 
   set meals(value: Meal[]) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.setDataValue('meals', JSON.stringify(value ?? defaultMeals));
   }
 
@@ -85,6 +96,8 @@ export default class Scheme extends BaseModel implements SchemeAttributes {
   }
 
   set export(value: ExportSection[]) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.setDataValue('export', JSON.stringify(value ?? defaultExport));
   }
 

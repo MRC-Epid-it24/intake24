@@ -1,5 +1,5 @@
 import { Column, DataType, HasMany, Scopes, Table, BelongsTo } from 'sequelize-typescript';
-import { Locale as LocaleAttributes } from '@common/types/models';
+import { LocaleAttributes, LocaleCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Language, LocalField, LocalNutrientType, Survey } from '.';
 
@@ -17,7 +17,9 @@ import { Language, LocalField, LocalNutrientType, Survey } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class Locale extends BaseModel implements LocaleAttributes {
+export default class Locale
+  extends BaseModel<LocaleAttributes, LocaleCreationAttributes>
+  implements LocaleAttributes {
   @Column({
     primaryKey: true,
     type: DataType.STRING(16),

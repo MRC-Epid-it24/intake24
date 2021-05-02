@@ -152,8 +152,7 @@ import orderBy from 'lodash/orderBy';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
-import { LocaleRefs } from '@common/types/http/admin';
-import { Locale } from '@common/types/models';
+import { LocaleEntry, LocaleRefs } from '@common/types/http/admin';
 
 type LocaleForm = {
   id: string | null;
@@ -166,7 +165,7 @@ type LocaleForm = {
   textDirection: string;
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin<Locale, LocaleRefs>>).extend({
+export default (Vue as VueConstructor<Vue & FormMixin<LocaleEntry, LocaleRefs>>).extend({
   name: 'LocaleForm',
 
   mixins: [formMixin],

@@ -10,7 +10,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { surveyPermissions } from '@/services/auth';
-import { Survey as SurveyAttributes, SurveyState } from '@common/types/models';
+import { SurveyAttributes, SurveyCreationAttributes, SurveyState } from '@common/types/models';
 import BaseModel from '../model';
 import {
   ClientErrorReport,
@@ -38,7 +38,9 @@ import {
   timestamps: false,
   underscored: true,
 })
-export default class Survey extends BaseModel implements SurveyAttributes {
+export default class Survey
+  extends BaseModel<SurveyAttributes, SurveyCreationAttributes>
+  implements SurveyAttributes {
   @Column({
     primaryKey: true,
     type: DataType.STRING(64),
@@ -160,7 +162,9 @@ export default class Survey extends BaseModel implements SurveyAttributes {
   })
   public submissionNotificationUrl!: string | null;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   public storeUserSessionOnServer!: boolean;
 
   @Column({

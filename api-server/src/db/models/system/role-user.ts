@@ -1,5 +1,6 @@
 import { Column, DataType, ForeignKey, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import BaseModel from '@/db/models/model';
+import { RoleUserAttributes, RoleUserCreationAttributes } from '@common/types/models';
 import { Role, User } from '.';
 
 @Table({
@@ -8,7 +9,9 @@ import { Role, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class RoleUser extends BaseModel {
+export default class RoleUser
+  extends BaseModel<RoleUserAttributes, RoleUserCreationAttributes>
+  implements RoleUserAttributes {
   @ForeignKey(() => Role)
   @Column({
     type: DataType.BIGINT,

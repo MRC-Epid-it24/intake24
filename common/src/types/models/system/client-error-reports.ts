@@ -1,6 +1,7 @@
 import { Dictionary } from '../../common';
+import { OmitAndOptional } from '../model';
 
-export type ClientErrorReport = {
+export type ClientErrorReportAttributes = {
   id: number;
   userId: number | null;
   surveyId: string | null;
@@ -9,3 +10,9 @@ export type ClientErrorReport = {
   surveyStateJson: Dictionary;
   new: boolean;
 };
+
+export type ClientErrorReportCreationAttributes = OmitAndOptional<
+  ClientErrorReportAttributes,
+  'id',
+  'userId' | 'surveyId'
+>;

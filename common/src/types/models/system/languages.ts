@@ -1,4 +1,4 @@
-export type Language = {
+export type LanguageAttributes = {
   id: string;
   englishName: string;
   localName: string;
@@ -7,3 +7,5 @@ export type Language = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type LanguageCreationAttributes = Omit<LanguageAttributes, 'createdAt' | 'updatedAt'>;

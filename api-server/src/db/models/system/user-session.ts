@@ -1,6 +1,6 @@
 import { BelongsTo, Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import BaseModel from '@/db/models/model';
-import { UserSession as UserSessionAttributes } from '@common/types/models';
+import { UserSessionAttributes, UserSessionCreationAttributes } from '@common/types/models';
 import { SurveyState } from '@common/types';
 import { Survey, User } from '.';
 
@@ -10,7 +10,9 @@ import { Survey, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class UserSession extends BaseModel implements UserSessionAttributes {
+export default class UserSession
+  extends BaseModel<UserSessionAttributes, UserSessionCreationAttributes>
+  implements UserSessionAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,
@@ -35,6 +37,8 @@ export default class UserSession extends BaseModel implements UserSessionAttribu
   }
 
   set sessionData(value: SurveyState) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.setDataValue('sessionData', JSON.stringify(value));
   }
 

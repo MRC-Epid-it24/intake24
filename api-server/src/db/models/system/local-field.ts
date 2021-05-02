@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
-import { LocalField as LocalFieldAttributes } from '@common/types/models';
+import { LocalFieldAttributes, LocalFieldCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Locale } from '.';
 
@@ -13,7 +13,9 @@ import { Locale } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class LocalField extends BaseModel implements LocalFieldAttributes {
+export default class LocalField
+  extends BaseModel<LocalFieldAttributes, LocalFieldCreationAttributes>
+  implements LocalFieldAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

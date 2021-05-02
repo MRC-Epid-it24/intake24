@@ -1,5 +1,8 @@
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
-import { LocalNutrientType as LocalNutrientTypeAttributes } from '@common/types/models';
+import {
+  LocalNutrientTypeAttributes,
+  LocalNutrientTypeCreationAttributes,
+} from '@common/types/models';
 import BaseModel from '../model';
 import { Locale, NutrientType } from '.';
 
@@ -14,7 +17,9 @@ import { Locale, NutrientType } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class LocalNutrientType extends BaseModel implements LocalNutrientTypeAttributes {
+export default class LocalNutrientType
+  extends BaseModel<LocalNutrientTypeAttributes, LocalNutrientTypeCreationAttributes>
+  implements LocalNutrientTypeAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

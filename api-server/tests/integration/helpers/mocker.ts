@@ -9,7 +9,7 @@ import {
   CreateUserRequest,
   CreateLanguageRequest,
 } from '@common/types/http/admin';
-import { SchemeCreateAttributes, SchemeTypes } from '@common/types/models';
+import { SchemeCreationAttributes, SchemeTypes } from '@common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
 
 const permission = (): PermissionRequest => {
@@ -102,7 +102,7 @@ const locale = (
   };
 };
 
-const scheme = (): SchemeCreateAttributes => {
+const scheme = (): SchemeCreationAttributes => {
   const id = faker.helpers.slugify(faker.random.words(2));
   const name = faker.random.words(3);
   const type = SchemeTypes.DATA_DRIVEN;

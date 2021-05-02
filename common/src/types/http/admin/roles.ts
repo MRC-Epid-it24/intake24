@@ -1,4 +1,5 @@
-import { Permission, Role, RoleAssociations, Pagination } from '../../models';
+import { RoleAttributes, RoleAssociations, Pagination } from '../../models';
+import { PermissionEntry } from './permissions';
 
 export type RoleRequest = {
   name: string;
@@ -7,13 +8,13 @@ export type RoleRequest = {
   permissions: number[];
 };
 
-export type RolesResponse = Pagination<Role>;
+export type RolesResponse = Pagination<RoleAttributes>;
 
-export type RoleEntry = Role & Required<Pick<RoleAssociations, 'permissions'>>;
+export type RoleEntry = RoleAttributes & Required<Pick<RoleAssociations, 'permissions'>>;
 
-export type RoleListEntry = Pick<Permission, 'id' | 'name' | 'displayName'>;
+export type RoleListEntry = Pick<RoleAttributes, 'id' | 'name' | 'displayName'>;
 
-export type RoleRefs = { permissions: Permission[] };
+export type RoleRefs = { permissions: PermissionEntry[] };
 
 export type RoleResponse = {
   data: RoleEntry;

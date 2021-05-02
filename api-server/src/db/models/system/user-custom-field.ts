@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { UserCustomField as UserCustomFieldAttributes } from '@common/types/models';
+import { UserCustomFieldAttributes, UserCustomFieldCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 
@@ -13,7 +13,9 @@ import { User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class UserCustomField extends BaseModel implements UserCustomFieldAttributes {
+export default class UserCustomField
+  extends BaseModel<UserCustomFieldAttributes, UserCustomFieldCreationAttributes>
+  implements UserCustomFieldAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

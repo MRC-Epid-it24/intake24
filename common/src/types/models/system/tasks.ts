@@ -1,4 +1,6 @@
-export type Task = {
+import type { OmitAndOptional } from '..';
+
+export type TaskAttributes = {
   id: number;
   name: string;
   job: string;
@@ -9,4 +11,8 @@ export type Task = {
   updatedAt: Date;
 };
 
-export type TaskCreateAttributes = Omit<Task, 'id' | 'createdAt' | 'updatedAt'>;
+export type TaskCreationAttributes = OmitAndOptional<
+  TaskAttributes,
+  'id' | 'createdAt' | 'updatedAt',
+  'active' | 'description'
+>;

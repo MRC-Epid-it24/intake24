@@ -2,6 +2,8 @@ import request from 'supertest';
 import { pick } from 'lodash';
 import { suite } from '@tests/integration/helpers';
 import { UserSession } from '@/db/models/system';
+import { SurveyState } from '@common/types';
+import { UserSessionCreationAttributes } from '@common/types/models';
 
 export default (): void => {
   let url: string;
@@ -56,7 +58,19 @@ export default (): void => {
       const { userId } = suite.data.respondent;
       const surveyId = suite.data.survey.id;
 
-      const input = { userId, surveyId, sessionData: { schemeId: 'SurveyState' } };
+      const input: UserSessionCreationAttributes = {
+        userId,
+        surveyId,
+        sessionData: {
+          schemeId: 'SurveyState',
+          startTime: new Date(),
+          endTime: new Date(),
+          flags: [],
+          meals: [],
+          customPromptAnswers: {},
+          selection: { element: null, mode: 'auto' },
+        },
+      };
       await UserSession.create(input);
 
       const { status, body } = await request(suite.app)
@@ -65,7 +79,14 @@ export default (): void => {
         .set('Authorization', suite.bearer.respondent);
 
       expect(status).toBe(200);
-      expect(pick(body, Object.keys(input))).toEqual(input);
+      expect(pick(body, Object.keys(input))).toEqual({
+        ...input,
+        sessionData: {
+          ...input.sessionData,
+          startTime: input.sessionData.startTime?.toISOString(),
+          endTime: input.sessionData.endTime?.toISOString(),
+        },
+      });
     });
   });
 };

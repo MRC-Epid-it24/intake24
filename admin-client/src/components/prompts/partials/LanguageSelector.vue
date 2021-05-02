@@ -59,8 +59,7 @@ import Vue, { VueConstructor } from 'vue';
 import tinymce from '@/components/tinymce/tinymce';
 import mapRefs from '@/components/entry/mapRefs';
 import { MapRefsMixin } from '@/types/vue';
-import { SchemeRefs } from '@common/types/http/admin';
-import { Language } from '@common/types/models';
+import { SchemeRefs, LanguageEntry } from '@common/types/http/admin';
 
 export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
   name: 'LanguageSelector',
@@ -102,7 +101,7 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
     languages(): string[] {
       return Object.keys(this.value);
     },
-    availableLanguages(): Language[] {
+    availableLanguages(): LanguageEntry[] {
       if (!this.refsLoaded) return [];
 
       return this.refs.languages.filter((lang) => !this.languages.includes(lang.id));

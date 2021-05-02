@@ -1,3 +1,4 @@
+export * from './model';
 export * from './pagination';
 
 export * from './foods';

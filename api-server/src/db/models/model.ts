@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable @typescript-eslint/ban-types */
 import { Request } from 'express';
-import { isObject } from 'lodash';
 import { FindOptions as BaseFindOptions, Op, CountOptions as BaseCountOptions } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Readable } from 'stream';
@@ -29,7 +28,7 @@ export interface StreamFindOptions<TAttributes = any> extends FindOptions<TAttri
 export type ModelCtor<M extends Model = Model> = typeof Model & { new (): M };
 export type ModelStatic<M extends Model = Model> = { new (): M };
 
-export default abstract class Model<
+export default class Model<
   TModelAttributes extends {} = any,
   TCreationAttributes extends {} = TModelAttributes
 > extends BaseModel<TModelAttributes, TCreationAttributes> {
@@ -39,13 +38,13 @@ export default abstract class Model<
    * @static
    * @template R
    * @template M
-   * @param {ModelCtor<R extends Model ? R : Model>} this
+   * @param {ModelStatic<R extends Model ? R : Model>} this
    * @param {Paginate} { req, columns = [], transform, ...params }
    * @returns {Promise<Pagination<R>>}
    * @memberof Model
    */
   public static async paginate<R = Model>(
-    this: ModelCtor<R extends Model ? R : Model>,
+    this: ModelStatic<R extends Model ? R : Model>,
     { req, columns = [], transform, ...params }: PaginateOptions
   ): Promise<Pagination<R>> {
     const { search, sort } = req.query;
@@ -56,9 +55,12 @@ export default abstract class Model<
     const offset = limit * (page - 1);
     const options: FindOptions = { limit, offset, ...params };
 
+    // TODO: fix with sequelize types
+    const model = this as ModelCtor<R extends Model ? R : Model>;
+
     if (search && columns.length) {
       const operation =
-        this.sequelize?.getDialect() === 'postgres'
+        model.sequelize?.getDialect() === 'postgres'
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
@@ -73,19 +75,14 @@ export default abstract class Model<
       return acc;
     }, {});
 
-    let total = await this.unscoped().count(countOptions);
-
-    // FIXME: improve type-check
-    if (isObject(total) && 'group' in options) {
-      total = (total as any).length;
-    }
+    const total = await model.unscoped().count(countOptions);
 
     if (sort && typeof sort === 'string') {
       const [column, order] = sort.split('|');
       options.order = [[column, order]];
     }
 
-    const records = await this.findAll(options);
+    const records = await model.findAll(options);
 
     const data = (transform ? records.map(transform) : records) as R[];
 
@@ -115,15 +112,17 @@ export default abstract class Model<
    * @template M
    * @param {ModelCtor<M>} this
    * @param {Readable} inputStream
-   * @param {StreamFindOptions} {}
+   * @param {StreamFindOptions<M['_attributes']>} options
    * @returns {Promise<void>}
    * @memberof Model
    */
   public static async performSearch<M extends Model<M>>(
     this: ModelCtor<M>,
     inputStream: Readable,
-    { batchSize = 100, limit, offset: startOffset = 0, ...params }: StreamFindOptions
+    options: StreamFindOptions<M['_attributes']>
   ): Promise<void> {
+    const { batchSize = 100, limit, offset: startOffset = 0, ...params } = options;
+
     try {
       const max = limit ?? (await this.count(params));
 
@@ -156,21 +155,24 @@ export default abstract class Model<
    *
    * @static
    * @template M
-   * @param {ModelCtor<M>} this
-   * @param {StreamFindOptions} [options={}]
+   * @param {ModelStatic<M>} this
+   * @param {StreamFindOptions<M['_attributes']>} [options={}]
    * @returns {Readable}
    * @memberof Model
    */
-  public static findAllWithStream<M extends Model<M>>(
-    this: ModelCtor<M>,
-    options: StreamFindOptions = {}
+  public static findAllWithStream<M extends Model = Model>(
+    this: ModelStatic<M>,
+    options: StreamFindOptions<M['_attributes']> = {}
   ): Readable {
+    // TODO: fix with sequelize types
+    const model = this as ModelCtor<M>;
+
     const inputStream = new Readable({
       // objectMode: true,
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       read() {},
     });
-    this.performSearch(inputStream, options);
+    model.performSearch(inputStream, options);
 
     return inputStream;
   }

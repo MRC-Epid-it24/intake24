@@ -1,4 +1,4 @@
-export type UserSurveyAlias = {
+export type UserSurveyAliasAttributes = {
   userId: number;
   surveyId: string;
   userName: string;

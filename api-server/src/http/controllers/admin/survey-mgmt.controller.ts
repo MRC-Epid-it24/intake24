@@ -52,6 +52,8 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtC
       attributes: ['id', 'name', 'email'],
       where: {
         email: { [Op.ne]: null },
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         '$permissions.id$': { [Op.eq]: null },
       },
       order: [['email', 'ASC']],

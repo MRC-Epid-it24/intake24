@@ -1,4 +1,4 @@
-import type { User } from '.';
+import type { UserAttributes } from '.';
 
 export type SubscriptionType = 'web-push';
 
@@ -11,7 +11,7 @@ export type PushSubscription = {
   };
 };
 
-export type UserSubscription = {
+export type UserSubscriptionAttributes = {
   id: number;
   userId: number;
   type: SubscriptionType;
@@ -20,6 +20,11 @@ export type UserSubscription = {
   updatedAt: Date;
 };
 
+export type UserSubscriptionCreationAttributes = Omit<
+  UserSubscriptionAttributes,
+  'id' | 'createdAt' | 'updatedAt'
+>;
+
 export type UserSubscriptionAssociations = {
-  user?: User;
+  user?: UserAttributes;
 };

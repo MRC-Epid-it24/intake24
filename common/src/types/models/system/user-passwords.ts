@@ -1,4 +1,4 @@
-export type UserPassword = {
+export type UserPasswordAttributes = {
   userId: number;
   passwordHash: string;
   passwordSalt: string;

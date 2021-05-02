@@ -1,4 +1,4 @@
-import type { Scheme, SurveyState, UserSession } from '../models';
+import type { SchemeAttributes, SurveyState, UserSessionAttributes } from '../models';
 
 export type GenerateUserResponse = {
   userName: string;
@@ -18,7 +18,7 @@ export type PublicSurveyEntryResponse = {
   supportEmail: string;
 };
 
-export type SchemeEntryResponse = Pick<Scheme, 'id' | 'type' | 'meals' | 'questions'>;
+export type SchemeEntryResponse = Pick<SchemeAttributes, 'id' | 'type' | 'meals' | 'questions'>;
 
 export type SurveyEntryResponse = {
   id: string;
@@ -40,4 +40,4 @@ export type SurveyUserInfoResponse = {
   maximumDailySubmissionsReached: boolean;
 };
 
-export type SurveyUserSessionResponse = UserSession;
+export type SurveyUserSessionResponse = UserSessionAttributes;

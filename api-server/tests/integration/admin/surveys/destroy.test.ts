@@ -6,7 +6,14 @@ import { mocker, suite, setPermission } from '@tests/integration/helpers';
 
 const refreshSurveyRecord = async (input: CreateSurveyRequest): Promise<Survey> => {
   const { id } = input;
-  const [survey] = await Survey.findOrCreate({ where: { id }, defaults: input });
+  const [survey] = await Survey.findOrCreate({
+    where: { id },
+    defaults: {
+      ...input,
+      startDate: new Date(input.startDate),
+      endDate: new Date(input.endDate),
+    },
+  });
 
   return survey;
 };

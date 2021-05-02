@@ -7,7 +7,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Language as LanguageAttributes } from '@common/types/models';
+import { LanguageAttributes, LanguageCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { Locale } from '.';
 
@@ -21,7 +21,9 @@ import { Locale } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class Language extends BaseModel implements LanguageAttributes {
+export default class Language
+  extends BaseModel<LanguageAttributes, LanguageCreationAttributes>
+  implements LanguageAttributes {
   @Column({
     primaryKey: true,
     type: DataType.STRING(16),

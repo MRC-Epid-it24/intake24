@@ -1,5 +1,8 @@
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
-import { ClientErrorReport as ClientErrorReportAttributes } from '@common/types/models';
+import {
+  ClientErrorReportAttributes,
+  ClientErrorReportCreationAttributes,
+} from '@common/types/models';
 import { Dictionary } from '@common/types';
 import BaseModel from '../model';
 import { Survey, User } from '.';
@@ -15,7 +18,9 @@ import { Survey, User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ClientErrorReport extends BaseModel implements ClientErrorReportAttributes {
+export default class ClientErrorReport
+  extends BaseModel<ClientErrorReportAttributes, ClientErrorReportCreationAttributes>
+  implements ClientErrorReportAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -56,6 +61,8 @@ export default class ClientErrorReport extends BaseModel implements ClientErrorR
   }
 
   set surveyStateJson(value: Dictionary) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.setDataValue('surveyStateJson', JSON.stringify(value ?? {}));
   }
 

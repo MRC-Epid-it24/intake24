@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { UserPassword as UserPasswordAttributes } from '@common/types/models';
+import { UserPasswordAttributes } from '@common/types/models';
 import { CreateUserInput, UpdateUserInput } from '@common/types/http/admin';
 import { User, UserCustomField, UserPassword } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
@@ -16,10 +16,10 @@ export type UserPasswordInput = {
 
 export interface UserService {
   create: (input: CreateUserInput) => Promise<User>;
-  update: (userId: number | string, input: UpdateUserInput) => Promise<User>;
-  destroy: (userId: number | string) => Promise<void>;
+  update: (userId: number, input: UpdateUserInput) => Promise<User>;
+  destroy: (userId: number) => Promise<void>;
   updateUserCustomFields: (
-    userId: number | string,
+    userId: number,
     userCustomFields: UserCustomField[],
     customFields: CustomField[]
   ) => Promise<void>;
@@ -88,13 +88,13 @@ export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
    * 2) updates existing ones
    * 3) add new ones
    *
-   * @param {(number | string)} userId
+   * @param {number} userId
    * @param {UserCustomField[]} userCustomFields
    * @param {CustomField[]} customFields
    * @returns {Promise<void>}
    */
   const updateUserCustomFields = async (
-    userId: number | string,
+    userId: number,
     userCustomFields: UserCustomField[],
     customFields: CustomField[]
   ): Promise<void> => {
@@ -174,11 +174,11 @@ export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
    * - user permissions
    * - user roles
    *
-   * @param {(string | number)} userId
+   * @param {number} userId
    * @param {UpdateUserInput} input
    * @returns {Promise<User>}
    */
-  const update = async (userId: number | string, input: UpdateUserInput): Promise<User> => {
+  const update = async (userId: number, input: UpdateUserInput): Promise<User> => {
     const user = await User.scope('customFields').findByPk(userId);
 
     if (!user) throw new NotFoundError();
@@ -203,10 +203,10 @@ export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
   /**
    * Delete user record and its associations
    *
-   * @param {(string | number)} userId
+   * @param {number} userId
    * @returns {Promise<void>}
    */
-  const destroy = async (userId: number | string): Promise<void> => {
+  const destroy = async (userId: number): Promise<void> => {
     const user = await User.scope('submissions').findByPk(userId);
 
     if (!user) throw new NotFoundError();
