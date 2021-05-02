@@ -1,5 +1,9 @@
-import { Dictionary } from '../..';
-import { DrinkwareScale, DrinkwareSet, DrinkwareVolumeSample } from '../../models';
+import type { Dictionary } from '../..';
+import type {
+  DrinkwareScaleAttributes,
+  DrinkwareSetAttributes,
+  DrinkwareVolumeSampleAttributes,
+} from '../../models';
 
 export type AsServedImageResponse = {
   mainImageUrl: string;
@@ -36,13 +40,17 @@ export type GuideImageResponse = {
   weights: { [index: number]: number };
 };
 
-export type DrinkwareVolumeSampleResponse = Pick<DrinkwareVolumeSample, 'fill' | 'volume'>;
+export type DrinkwareVolumeSampleResponse = Pick<
+  DrinkwareVolumeSampleAttributes,
+  'fill' | 'volume'
+>;
 
-export interface DrinkwareScaleResponse extends Omit<DrinkwareScale, 'id' | 'drinkwareSetId'> {
+export interface DrinkwareScaleResponse
+  extends Omit<DrinkwareScaleAttributes, 'id' | 'drinkwareSetId'> {
   volumeSamples: DrinkwareVolumeSampleResponse[];
 }
 
-export interface DrinkwareSetResponse extends Pick<DrinkwareSet, 'id' | 'guideImageId'> {
+export interface DrinkwareSetResponse extends Pick<DrinkwareSetAttributes, 'id' | 'guideImageId'> {
   scales: DrinkwareScaleResponse[];
 }
 

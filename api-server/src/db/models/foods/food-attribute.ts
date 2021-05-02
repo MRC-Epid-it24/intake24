@@ -1,4 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import { FoodAttributeAttributes, FoodAttributeCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import Food from './food';
 
@@ -12,15 +13,19 @@ import Food from './food';
   timestamps: false,
   underscored: true,
 })
-export default class FoodAttribute extends BaseModel {
+export default class FoodAttribute
+  extends BaseModel<FoodAttributeAttributes, FoodAttributeCreationAttributes>
+  implements FoodAttributeAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.INTEGER,
   })
   public id!: number;
 
   @Column({
-    primaryKey: true,
+    allowNull: false,
+    type: DataType.STRING(8),
   })
   public foodCode!: string;
 

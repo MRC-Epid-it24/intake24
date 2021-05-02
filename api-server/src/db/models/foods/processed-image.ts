@@ -1,6 +1,7 @@
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import {
-  ProcessedImage as ProcessedImageAttributes,
+  ProcessedImageAttributes,
+  ProcessedImageCreationAttributes,
   ProcessedImagePurpose,
 } from '@common/types/models/foods';
 import BaseModel from '../model';
@@ -19,7 +20,9 @@ import { AsServedImage, AsServedSet, ImageMap } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ProcessedImage extends BaseModel implements ProcessedImageAttributes {
+export default class ProcessedImage
+  extends BaseModel<ProcessedImageAttributes, ProcessedImageCreationAttributes>
+  implements ProcessedImageAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

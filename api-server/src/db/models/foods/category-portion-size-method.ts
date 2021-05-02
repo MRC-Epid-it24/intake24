@@ -1,5 +1,6 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Table } from 'sequelize-typescript';
 import CategoryPortionSizeMethodParameter from '@api-server/db/models/foods/category-portion-size-method-param';
+import { PortionSizeMethodId } from '@common/types/models';
 import BaseModel from '../model';
 import { Category, Locale } from '.';
 
@@ -36,7 +37,7 @@ export default class CategoryPortionSizeMethod extends BaseModel {
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public method!: string;
+  public method!: PortionSizeMethodId;
 
   @Column({
     allowNull: false,

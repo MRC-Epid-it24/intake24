@@ -1,8 +1,3 @@
-export interface PortionMethodParameters {
-  'serving-image-set': string;
-  'leftovers-image-set': string;
-}
-
 export type PortionSizeMethodId =
   | 'as-served'
   | 'guide-image'
@@ -14,12 +9,29 @@ export type PortionSizeMethodId =
   | 'milk-in-a-hot-drink'
   | 'weight';
 
-export interface PortionSizeMethod {
-  // These should all be types themselves
+export type PortionSizeMethodParameterAttributes = {
+  id: number;
+  portionSizeMethodId: number;
+  name: string;
+  value: string;
+};
+
+export type PortionSizeMethodParameterCreationAttributes = Omit<
+  PortionSizeMethodParameterAttributes,
+  'id'
+>;
+
+export type PortionSizeMethodAttributes = {
+  id: number;
+  foodLocalId: number;
   method: PortionSizeMethodId;
-  description: string | null;
+  description: string;
   imageUrl: string;
   useForRecipes: boolean;
   conversionFactor: number;
-  parameters: PortionMethodParameters;
+};
+
+export interface PortionSizeMethodCreationAttributes
+  extends Omit<PortionSizeMethodAttributes, 'id'> {
+  parameters: Omit<PortionSizeMethodParameterCreationAttributes, 'portionSizeMethodId'>[];
 }

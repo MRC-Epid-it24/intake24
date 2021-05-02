@@ -3,6 +3,7 @@ import {
   UserPortionSizeMethod,
   UserPortionSizeMethodParameters,
 } from '@common/types/http/foods/user-food-data';
+import { PortionSizeMethodId } from '@common/types/models';
 
 import {
   toUserCategoryPortionSizeMethodParameters,
@@ -10,7 +11,7 @@ import {
 } from './portion-size-method-parameter-utils';
 
 export interface DatabasePortionSizeMethod {
-  method: string;
+  method: PortionSizeMethodId;
   description: string;
   imageUrl: string;
   useForRecipes: boolean;

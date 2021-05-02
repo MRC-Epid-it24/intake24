@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-import { DrinkwareScale as DrinkwareScaleAttributes } from '@common/types/models';
+import { DrinkwareScaleAttributes, DrinkwareScaleCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { DrinkwareSet, DrinkwareVolumeSample } from '.';
 
@@ -14,7 +14,9 @@ import { DrinkwareSet, DrinkwareVolumeSample } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class DrinkwareScale extends BaseModel implements DrinkwareScaleAttributes {
+export default class DrinkwareScale
+  extends BaseModel<DrinkwareScaleAttributes, DrinkwareScaleCreationAttributes>
+  implements DrinkwareScaleAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

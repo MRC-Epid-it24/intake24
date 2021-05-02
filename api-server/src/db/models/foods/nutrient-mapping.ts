@@ -1,4 +1,5 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import { NutrientMappingAttributes, NutrientMappingCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { FoodLocal, NutrientTableRecord } from '.';
 
@@ -9,7 +10,9 @@ import { FoodLocal, NutrientTableRecord } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientMapping extends BaseModel {
+export default class NutrientMapping
+  extends BaseModel<NutrientMappingAttributes, NutrientMappingCreationAttributes>
+  implements NutrientMappingAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

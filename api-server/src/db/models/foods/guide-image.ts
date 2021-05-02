@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-import { GuideImage as GuideImageAttributes } from '@common/types/models';
+import { GuideImageAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { GuideImageObject, ImageMap, ProcessedImage } from '.';
 
@@ -15,7 +15,9 @@ import { GuideImageObject, ImageMap, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class GuideImage extends BaseModel implements GuideImageAttributes {
+export default class GuideImage
+  extends BaseModel<GuideImageAttributes>
+  implements GuideImageAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,

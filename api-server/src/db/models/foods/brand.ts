@@ -1,5 +1,6 @@
 import { BelongsTo, Column, DataType, ForeignKey, Table, Scopes } from 'sequelize-typescript';
 import { Locale, Food } from '@api-server/db/models/foods';
+import { BrandAttributes, BrandCreationAttributes } from '@common/types/models';
 import BaseModel from '@api-server/db/models/model';
 
 @Scopes(() => ({
@@ -13,7 +14,9 @@ import BaseModel from '@api-server/db/models/model';
   timestamps: false,
   underscored: true,
 })
-export default class Brand extends BaseModel {
+export default class Brand
+  extends BaseModel<BrandAttributes, BrandCreationAttributes>
+  implements BrandAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -1,6 +1,6 @@
 import { Dictionary } from '../..';
 import { ImageMapListEntry, ImageMapEntryObject, ImageMapEntry } from './image-maps';
-import { ImageMap, Pagination } from '../../models';
+import { ImageMapAttributes, Pagination } from '../../models';
 
 export interface GuideImageEntryObject extends ImageMapEntryObject {
   weight: number;
@@ -37,7 +37,7 @@ export type GuideImageResponse = {
 
 export type CreateGuideImageResponse = {
   refs: {
-    imageMaps: Pick<ImageMap, 'id' | 'description'>[];
+    imageMaps: Pick<ImageMapAttributes, 'id' | 'description'>[];
   };
 };
 

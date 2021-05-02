@@ -1,3 +1,5 @@
+import { OmitAndOptional } from '../model';
+
 export enum ProcessedImagePurposes {
   AsServedMainImage = 1,
   AsServedThumbnail = 2,
@@ -8,10 +10,16 @@ export enum ProcessedImagePurposes {
 
 export type ProcessedImagePurpose = ProcessedImagePurposes;
 
-export type ProcessedImage = {
+export type ProcessedImageAttributes = {
   id: number;
   path: string;
   sourceId: number;
   purpose: ProcessedImagePurpose;
   createdAt: Date;
 };
+
+export type ProcessedImageCreationAttributes = OmitAndOptional<
+  ProcessedImageAttributes,
+  'id',
+  'createdAt'
+>;

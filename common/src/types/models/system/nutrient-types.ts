@@ -1,7 +1,7 @@
 export type NutrientTypeAttributes = {
   id: number;
-  description: string;
   unitId: number;
+  description: string;
 };
 
 export type NutrientTypeCreationAttributes = Omit<NutrientTypeAttributes, 'id'>;

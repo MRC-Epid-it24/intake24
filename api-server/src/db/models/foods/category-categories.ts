@@ -1,5 +1,9 @@
-import { Column, Table, BelongsTo, Scopes } from 'sequelize-typescript';
-import { Food, Category } from '@api-server/db/models/foods';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import {
+  CategoryCategoryAttributes,
+  CategoryCategoryCreationAttributes,
+} from '@common/types/models';
+import { Category } from '@api-server/db/models/foods';
 import BaseModel from '../model';
 
 @Table({
@@ -8,7 +12,9 @@ import BaseModel from '../model';
   freezeTableName: true,
   tableName: 'categories_categories',
 })
-export default class CategoryCategory extends BaseModel {
+export default class CategoryCategory
+  extends BaseModel<CategoryCategoryAttributes, CategoryCategoryCreationAttributes>
+  implements CategoryCategoryAttributes {
   @Column({
     primaryKey: true,
     autoIncrement: true,
@@ -17,17 +23,19 @@ export default class CategoryCategory extends BaseModel {
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(8),
   })
   public subcategoryCode!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(8),
   })
   public categoryCode!: string;
 
-  @BelongsTo(() => Category, 'subcategory_code')
+  @BelongsTo(() => Category, 'subcategoryCode')
   public subcategory?: Category;
 
-  @BelongsTo(() => Category, 'category_code')
+  @BelongsTo(() => Category, 'categoryCode')
   public category?: Category;
 }

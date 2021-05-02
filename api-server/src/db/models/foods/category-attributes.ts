@@ -1,5 +1,9 @@
 import { Column, DataType, Table, Scopes, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Category } from '@api-server/db/models/foods';
+import {
+  CategoryAttributeAttributes,
+  CategoryAttributeCreationAttributes,
+} from '@common/types/models';
 import BaseModel from '../model';
 
 @Scopes(() => ({
@@ -12,7 +16,9 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class CategoryAttribute extends BaseModel {
+export default class CategoryAttribute
+  extends BaseModel<CategoryAttributeAttributes, CategoryAttributeCreationAttributes>
+  implements CategoryAttributeAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -23,7 +29,6 @@ export default class CategoryAttribute extends BaseModel {
   @ForeignKey(() => Category)
   @Column({
     allowNull: false,
-    primaryKey: true,
     type: DataType.STRING(8),
   })
   public categoryCode!: string;

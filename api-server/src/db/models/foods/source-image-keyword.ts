@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { SourceImageKeyword as SourceImageKeywordAttributes } from '@common/types/models/foods';
+import { SourceImageKeywordAttributes } from '@common/types/models/foods';
 import BaseModel from '../model';
 import { SourceImage } from '.';
 
@@ -13,7 +13,9 @@ import { SourceImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SourceImageKeyword extends BaseModel implements SourceImageKeywordAttributes {
+export default class SourceImageKeyword
+  extends BaseModel<SourceImageKeywordAttributes>
+  implements SourceImageKeywordAttributes {
   @Column({
     allowNull: false,
     type: DataType.INTEGER,

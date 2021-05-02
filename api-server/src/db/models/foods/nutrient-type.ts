@@ -1,4 +1,5 @@
 import { BelongsTo, Column, Table } from 'sequelize-typescript';
+import { NutrientTypeAttributes } from '@common/types/models';
 import NutrientUnit from '@api-server/db/models/foods/nutrient-unit';
 import BaseModel from '../model';
 
@@ -9,7 +10,9 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientType extends BaseModel {
+export default class NutrientType
+  extends BaseModel<NutrientTypeAttributes>
+  implements NutrientTypeAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,
@@ -21,7 +24,9 @@ export default class NutrientType extends BaseModel {
   })
   public unitId!: number;
 
-  @Column({ allowNull: false })
+  @Column({
+    allowNull: false,
+  })
   public description!: string;
 
   @BelongsTo(() => NutrientUnit, 'unitId')

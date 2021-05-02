@@ -1,5 +1,5 @@
 import clone from 'lodash/cloneDeep';
-import { PromptQuestion } from '../../types';
+import type { PromptQuestion } from '../../types';
 import { basePromptProps, ValidatedPromptProps } from './base';
 import type { QuantityValues } from '..';
 
@@ -129,20 +129,6 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'portion-size-option-prompt',
     name: 'Choose portion size method',
-    props: clone(basePromptProps),
-  },
-  {
-    component: 'as-served-prompt',
-    type: 'portion-size',
-    id: 'as-served-prompt',
-    name: 'As served',
-    props: clone(basePromptProps),
-  },
-  {
-    component: 'as-served-leftovers-prompt',
-    type: 'portion-size',
-    id: 'as-served-leftovers-prompt',
-    name: 'As served (leftovers)',
     props: clone(basePromptProps),
   },
 ];

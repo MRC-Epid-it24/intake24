@@ -59,7 +59,7 @@ function generateRandomPortionSizeMethods(count: number): UserPortionSizeMethod[
       conversionFactor: faker.datatype.float({ min: 0.1, max: 10, precision: 2 }),
       description: faker.random.words(5),
       imageUrl: faker.internet.url(),
-      method: faker.random.word(),
+      method: 'as-served',
       useForRecipes: false,
       parameters,
     });

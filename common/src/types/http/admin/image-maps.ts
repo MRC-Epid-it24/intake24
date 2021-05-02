@@ -1,5 +1,5 @@
 import { Dictionary } from '../..';
-import { ImageMap, Pagination } from '../../models';
+import { ImageMapAttributes, Pagination } from '../../models';
 
 export type ImageMapEntryObject = {
   id: number;
@@ -14,7 +14,7 @@ export type UpdateImageMapInput = {
   objects: ImageMapEntryObject[];
 };
 
-export interface ImageMapListEntry extends Pick<ImageMap, 'id' | 'description'> {
+export interface ImageMapListEntry extends Pick<ImageMapAttributes, 'id' | 'description'> {
   imageUrl: string;
 }
 

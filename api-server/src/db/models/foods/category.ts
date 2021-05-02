@@ -1,4 +1,6 @@
-import { Column, DataType, Table } from 'sequelize-typescript';
+import { BelongsToMany, Column, DataType, Table } from 'sequelize-typescript';
+import { CategoryAttributes, CategoryCreationAttributes } from '@common/types/models';
+import { Food, FoodCategory } from '.';
 import BaseModel from '../model';
 
 @Table({
@@ -8,15 +10,19 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class Category extends BaseModel {
+export default class Category
+  extends BaseModel<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,
+    type: DataType.STRING(8),
   })
   public code!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
   })
   public description!: string;
 
@@ -30,4 +36,7 @@ export default class Category extends BaseModel {
     type: DataType.UUID,
   })
   public version!: string;
+
+  @BelongsToMany(() => Food, () => FoodCategory)
+  public foods?: Food[];
 }

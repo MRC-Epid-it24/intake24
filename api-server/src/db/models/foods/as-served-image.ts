@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { AsServedImage as AsServedImageAttributes } from '@common/types/models';
+import { AsServedImageAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { AsServedSet, ProcessedImage } from '.';
 
@@ -15,7 +15,9 @@ import { AsServedSet, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class AsServedImage extends BaseModel implements AsServedImageAttributes {
+export default class AsServedImage
+  extends BaseModel<AsServedImageAttributes>
+  implements AsServedImageAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

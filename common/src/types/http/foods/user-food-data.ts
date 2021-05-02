@@ -1,13 +1,4 @@
-export type PortionSizeMethod =
-  | 'as-served'
-  | 'guide-image'
-  | 'drink-scale'
-  | 'standard-portion'
-  | 'cereal'
-  | 'milk-on-cereal'
-  | 'pizza'
-  | 'milk-in-a-hot-drink'
-  | 'weight';
+import type { PortionSizeMethodId } from '../../models';
 
 export type UserPortionSizeMethodParameters = { [name: string]: string };
 
@@ -17,7 +8,7 @@ export interface AsServedParameters {
 }
 
 export interface UserPortionSizeMethod {
-  method: PortionSizeMethod;
+  method: PortionSizeMethodId;
   description: string;
   imageUrl: string;
   useForRecipes: boolean;

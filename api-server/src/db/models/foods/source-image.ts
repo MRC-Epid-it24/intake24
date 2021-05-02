@@ -1,5 +1,5 @@
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-import { SourceImage as SourceImageAttributes } from '@common/types/models/foods';
+import { SourceImageAttributes, SourceImageCreationAttributes } from '@common/types/models/foods';
 import BaseModel from '../model';
 import { ProcessedImage, SourceImageKeyword } from '.';
 
@@ -14,7 +14,9 @@ import { ProcessedImage, SourceImageKeyword } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SourceImage extends BaseModel implements SourceImageAttributes {
+export default class SourceImage
+  extends BaseModel<SourceImageAttributes, SourceImageCreationAttributes>
+  implements SourceImageAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

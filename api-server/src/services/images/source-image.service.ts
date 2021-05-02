@@ -48,14 +48,14 @@ export default ({ config, logger }: Pick<IoC, 'config' | 'logger'>): SourceImage
 
     return SourceImage.create({
       path: sourcePath,
-      uploader,
+      uploader: uploader.toString(),
       uploadedAt: new Date(),
       thumbnailPath: sourceThumbPath,
     });
   };
 
   const destroy = async (sourceImageId: number | number[]): Promise<void> => {
-    const sourceImages = await SourceImage.findAll({ where: { sourceImageId } });
+    const sourceImages = await SourceImage.findAll({ where: { id: sourceImageId } });
 
     for (const sourceImage of sourceImages) {
       await sourceImage.destroy();

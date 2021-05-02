@@ -1,4 +1,8 @@
 import { Column, DataType, Table } from 'sequelize-typescript';
+import {
+  AttributeDefaultsAttributes,
+  AttributeDefaultsCreationAttributes,
+} from '@common/types/models';
 import BaseModel from '../model';
 
 @Table({
@@ -8,7 +12,9 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class AttributeDefaults extends BaseModel {
+export default class AttributeDefaults
+  extends BaseModel<AttributeDefaultsAttributes, AttributeDefaultsCreationAttributes>
+  implements AttributeDefaultsAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -1,4 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { FoodLocalAttributes, FoodLocalCreationAttributes } from '@common/types/models';
 import NutrientMapping from '@api-server/db/models/foods/nutrient-mapping';
 import { Food, FoodLocalList, Locale, PortionSizeMethod } from '@api-server/db/models/foods';
 import BaseModel from '../model';
@@ -15,7 +16,9 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class FoodLocal extends BaseModel {
+export default class FoodLocal
+  extends BaseModel<FoodLocalAttributes, FoodLocalCreationAttributes>
+  implements FoodLocalAttributes {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -25,23 +28,25 @@ export default class FoodLocal extends BaseModel {
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(32),
   })
   public foodCode!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(16),
   })
   public localeId!: string;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(256),
   })
   public name!: string;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(256),
   })
   public simpleName!: string | null;
 

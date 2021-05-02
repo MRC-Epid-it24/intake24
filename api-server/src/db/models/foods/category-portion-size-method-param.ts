@@ -11,9 +11,8 @@ import BaseModel from '../model';
 })
 export default class CategoryPortionSizeMethodParameter extends BaseModel {
   @Column({
-    allowNull: false,
-    primaryKey: true,
     autoIncrement: true,
+    primaryKey: true,
   })
   public id!: number;
 

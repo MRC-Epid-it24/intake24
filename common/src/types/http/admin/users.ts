@@ -1,7 +1,7 @@
 import { CustomField } from '../..';
 import { UserAttributes, UserAssociations, Pagination } from '../../models';
-import { PermissionEntry, PermissionListEntry } from './permissions';
-import { RoleEntry, RoleListEntry } from './roles';
+import { PermissionListEntry } from './permissions';
+import { RoleListEntry } from './roles';
 
 export type UserInput = {
   name?: string | null;

@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import { ImageMapObject as ImageMapObjectAttributes } from '@common/types/models';
+import { ImageMapObjectAttributes, ImageMapObjectCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { ImageMap, ProcessedImage } from '.';
 
@@ -10,7 +10,9 @@ import { ImageMap, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ImageMapObject extends BaseModel implements ImageMapObjectAttributes {
+export default class ImageMapObject
+  extends BaseModel<ImageMapObjectAttributes, ImageMapObjectCreationAttributes>
+  implements ImageMapObjectAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,
