@@ -11,7 +11,7 @@
         small
         class="mr-3"
         color="secondary"
-        :title="$t('schemes.meals.add')"
+        :title="$t('schemes.meals.new')"
         @click.stop="add"
       >
         <v-icon small>fa-plus</v-icon>
@@ -56,7 +56,7 @@
         <v-card-title>
           <v-icon class="mr-3" color="primary">fa-hamburger</v-icon>
           <span class="text-h5">
-            {{ $t(`schemes.meals.${dialog.index === -1 ? 'add' : 'edit'}`) }}
+            {{ $t(`schemes.meals.${dialog.index === -1 ? 'new' : 'edit'}`) }}
           </span>
         </v-card-title>
         <v-divider></v-divider>

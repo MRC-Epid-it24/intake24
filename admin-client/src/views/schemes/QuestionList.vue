@@ -11,8 +11,8 @@
         small
         class="mr-3"
         color="secondary"
-        :title="$t('schemes.questions.add')"
-        @click.stop="add"
+        :title="$t('schemes.questions.new')"
+        @click.stop="create"
       >
         <v-icon small>fa-plus</v-icon>
       </v-btn>
@@ -69,102 +69,8 @@
         </transition-group>
       </draggable>
     </v-list>
-    <v-dialog v-model="dialog.show" fullscreen hide-overlay transition="dialog-bottom-transition">
-      <v-card tile>
-        <v-toolbar dark color="primary">
-          <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
-            <v-icon>$cancel</v-icon>
-          </v-btn>
-          <v-toolbar-title>
-            {{ $t(`schemes.questions.${dialog.index === -1 ? 'add' : 'edit'}`) }}
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn :title="$t('common.action.ok')" dark text @click.stop="save">
-              <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
-            </v-btn>
-          </v-toolbar-items>
-          <template v-slot:extension>
-            <v-container>
-              <v-tabs v-model="tab" background-color="primary" dark>
-                <v-tab v-for="item in promptSettings[dialog.question.component].tabs" :key="item">
-                  {{ item }}
-                </v-tab>
-              </v-tabs>
-            </v-container>
-          </template>
-        </v-toolbar>
-
-        <v-form ref="form" @submit.prevent="save">
-          <v-container>
-            <v-tabs-items v-model="tab" class="pt-1">
-              <v-tab-item key="general">
-                <v-row>
-                  <v-col cols="12">
-                    <v-card outlined>
-                      <v-card-subtitle>{{ $t(`schemes.questions.type`) }}</v-card-subtitle>
-                      <v-tabs v-model="questionTypeTab">
-                        <v-tab v-for="type in Object.keys(availablePromptQuestions)" :key="type">
-                          {{ $t(`schemes.questions.${type}._`) }}
-                        </v-tab>
-                      </v-tabs>
-                      <v-item-group
-                        active-class="secondary"
-                        v-model="dialog.question.component"
-                        @change="updatePromptProps"
-                      >
-                        <v-tabs-items v-model="questionTypeTab">
-                          <question-type-selector
-                            v-for="(questions, type) in availablePromptQuestions"
-                            :key="type"
-                            :type="type"
-                            :questions="questions"
-                          ></question-type-selector>
-                        </v-tabs-items>
-                      </v-item-group>
-                    </v-card>
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-text-field
-                      v-model="dialog.question.id"
-                      :readonly="dialog.question.type !== 'custom'"
-                      :label="$t('schemes.questions.id')"
-                      :rules="questionIdRules"
-                      hide-details="auto"
-                      messages="Unique identifier, used e.g. in data-exports as header"
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-text-field
-                      v-model="dialog.question.name"
-                      :label="$t('schemes.questions.name')"
-                      hide-details="auto"
-                      messages="Descriptive name for better orientation"
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-tab-item>
-              <component
-                :is="dialog.question.component"
-                v-bind.sync="dialog.question.props"
-                @validate="validate"
-              ></component>
-            </v-tabs-items>
-            <v-card-actions>
-              <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
-              </v-btn>
-              <v-spacer></v-spacer>
-              <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
-                <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
-              </v-btn>
-            </v-card-actions>
-          </v-container>
-        </v-form>
-      </v-card>
-    </v-dialog>
+    <prompt-selector ref="selector" :section="section" :refScheme="refScheme" @save="save">
+    </prompt-selector>
   </v-card>
 </template>
 
@@ -174,31 +80,16 @@ import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import { promptSettings } from '@/components/prompts';
-import customPrompts from '@/components/prompts/custom';
-import standardPrompts from '@/components/prompts/standard';
-import portionSizePrompts from '@/components/prompts/portion-size';
-import { merge } from '@/util';
-import {
-  FormRefs,
-  PromptQuestion,
-  QuestionSection,
-  MealSection,
-  portionSizePromptQuestions,
-} from '@common/types';
-import { customPromptQuestions, QuestionType, standardPromptQuestions } from '@common/prompts';
-import QuestionTypeSelector from '@/views/schemes/QuestionTypeSelector.vue';
+import PromptSelector from '@/components/prompts/PromptSelector.vue';
+import { PromptQuestion, QuestionSection, MealSection } from '@common/types';
 
-export interface EditPromptQuestion extends PromptQuestion {
-  origId?: string;
-}
-
-export type PromptQuestionDialog = {
-  show: boolean;
-  index: number;
-  question: EditPromptQuestion;
+export type Refs = {
+  $refs: {
+    selector: InstanceType<typeof PromptSelector>;
+  };
 };
 
-export default (Vue as VueConstructor<Vue & FormRefs>).extend({
+export default (Vue as VueConstructor<Vue & Refs>).extend({
   name: 'QuestionList',
 
   props: {
@@ -216,75 +107,17 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   },
 
   components: {
-    QuestionTypeSelector,
     ConfirmDialog,
+    PromptSelector,
     draggable,
-    ...customPrompts,
-    ...standardPrompts,
-    ...portionSizePrompts,
   },
 
   data() {
-    const promptQuestions = [
-      ...customPromptQuestions,
-      ...standardPromptQuestions,
-      ...portionSizePromptQuestions,
-    ];
-
-    const dialog = (show = false): PromptQuestionDialog => ({
-      show,
-      index: -1,
-      question: clone(promptQuestions[0]),
-    });
-
     return {
-      dialog: dialog(),
-      newDialog: dialog,
       questions: this.items,
-      customPromptQuestions,
-      standardPromptQuestions,
-      portionSizePromptQuestions,
-      promptQuestions,
       promptSettings,
-      tab: 0,
-      questionTypeTab: 0,
       moveToSection: null,
     };
-  },
-
-  computed: {
-    isCreate(): boolean {
-      return this.dialog.index === -1;
-    },
-
-    isEdit(): boolean {
-      return !this.isCreate;
-    },
-
-    availablePromptQuestions(): Record<QuestionType, PromptQuestion[]> {
-      return {
-        custom: this.customPromptQuestions.filter((prompt) =>
-          this.promptSettings[prompt.component].sections.includes(this.section)
-        ),
-        standard: this.standardPromptQuestions.filter((prompt) =>
-          this.promptSettings[prompt.component].sections.includes(this.section)
-        ),
-        'portion-size': this.portionSizePromptQuestions.filter((prompt) =>
-          this.promptSettings[prompt.component].sections.includes(this.section)
-        ),
-      };
-    },
-
-    questionIdRules() {
-      return [
-        (value: string | null): boolean | string => {
-          const { origId } = this.dialog.question;
-          const match = this.refScheme.find((item) => item.id === value && item.id !== origId);
-
-          return !match || 'Question ID is already used.';
-        },
-      ];
-    },
   },
 
   watch: {
@@ -293,74 +126,18 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
   },
 
-  mounted() {
-    document.addEventListener('focusin', this.focusInTox, true);
-  },
-
-  beforeDestroy() {
-    document.removeEventListener('focusin', this.focusInTox, true);
-  },
-
   methods: {
-    focusInTox(event: FocusEvent) {
-      const toxDialog = (event.target as HTMLElement).closest('.tox-dialog');
-      if (!toxDialog) return;
-
-      event.stopImmediatePropagation();
-    },
-
-    updatePromptProps() {
-      const {
-        show,
-        index,
-        question: { id, component },
-      } = this.dialog;
-
-      const question = this.promptQuestions.find((item) => item.component === component);
-      if (!question) return;
-
-      this.dialog = { show, index, question: { origId: id, ...clone(question) } };
-    },
-
-    add() {
-      this.dialog = this.newDialog(true);
+    create() {
+      this.$refs.selector.create();
     },
 
     edit(index: number, question: PromptQuestion) {
-      const promptDefaults = this.promptQuestions.find((q) => q.component === question.component);
-
-      switch (question.type) {
-        case 'standard':
-          this.questionTypeTab = 1;
-          break;
-        case 'portion-size':
-          this.questionTypeTab = 2;
-          break;
-        default:
-          this.questionTypeTab = 0;
-      }
-
-      this.dialog = {
-        show: true,
-        index,
-        question: { origId: question.id, ...merge(promptDefaults ?? {}, question) },
-      };
+      this.$refs.selector.edit(index, question);
     },
 
-    save() {
-      const isValid = this.$refs.form.validate();
-      if (!isValid) return;
-
-      const {
-        index,
-        question: { origId, ...rest },
-      } = this.dialog;
-
-      if (index === -1) this.questions.push(rest);
-      else this.questions.splice(index, 1, rest);
-
-      this.update();
-      this.reset();
+    save({ question, index }: { question: PromptQuestion; index: number }) {
+      if (index === -1) this.questions.push(question);
+      else this.questions.splice(index, 1, question);
     },
 
     moveSectionList(prompt: PromptQuestion): { value: string; text: string }[] {
@@ -395,19 +172,8 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       this.update();
     },
 
-    reset() {
-      this.tab = 0;
-      this.questionTypeTab = 0;
-      this.dialog = this.newDialog();
-      this.$refs.form.resetValidation();
-    },
-
     update() {
       this.$emit('update:items', this.questions);
-    },
-
-    validate() {
-      this.$refs.form.validate();
     },
   },
 });

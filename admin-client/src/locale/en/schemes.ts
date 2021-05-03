@@ -20,7 +20,7 @@ const schemes: LocaleMessageObject = {
   meals: {
     _: 'Meal',
     title: 'Default meals',
-    add: 'New meal',
+    new: 'New meal',
     edit: 'Edit meal',
     remove: 'Remove meal',
     reset: 'Reset meals to default values',
@@ -88,7 +88,7 @@ const schemes: LocaleMessageObject = {
   },
   questions: {
     title: 'Scheme questions',
-    add: 'New question',
+    new: 'New question',
     edit: 'Edit question',
     move: 'Move question',
     remove: 'Remove question',

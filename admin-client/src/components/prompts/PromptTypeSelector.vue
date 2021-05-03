@@ -25,11 +25,11 @@
   </v-tab-item>
 </template>
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue from 'vue';
 import { PromptQuestion, QuestionType } from '@common/prompts';
 
 export default Vue.extend({
-  name: 'question-type-selector',
+  name: 'PromptTypeSelector',
 
   props: {
     type: {
@@ -37,7 +37,7 @@ export default Vue.extend({
       required: true,
     },
     questions: {
-      type: Array as PropType<PromptQuestion[]>,
+      type: Array as () => PromptQuestion[],
       default: () => [],
     },
   },
