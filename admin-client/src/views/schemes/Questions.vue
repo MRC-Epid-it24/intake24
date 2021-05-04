@@ -53,8 +53,16 @@ import Vue, { VueConstructor } from 'vue';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
-import { defaultExport, defaultMeals, defaultQuestions, flattenScheme } from '@common/schemes';
-import { Dictionary, PromptQuestion, QuestionSection, MealSection } from '@common/types';
+import {
+  defaultExport,
+  defaultMeals,
+  defaultQuestions,
+  flattenScheme,
+  isMealSection,
+  mealSections,
+  surveySections,
+} from '@common/schemes';
+import { Dictionary, PromptQuestion, SurveyQuestionSection, MealSection } from '@common/types';
 import { SchemeForm } from './Form.vue';
 import QuestionList from './QuestionList.vue';
 
@@ -76,10 +84,10 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         export: defaultExport,
       }),
       sections: {
-        survey: ['preMeals', 'postMeals', 'submission'] as QuestionSection[],
-        meal: ['preFoods', 'foods', 'postFoods'] as MealSection[],
+        survey: surveySections,
+        meal: mealSections,
       },
-      section: 'preMeals' as MealSection | QuestionSection,
+      section: 'preMeals' as MealSection | SurveyQuestionSection,
     };
   },
 
@@ -88,14 +96,14 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       get(): PromptQuestion[] {
         const { section } = this;
 
-        return this.isMealSection(section)
+        return isMealSection(section)
           ? this.form.questions.meals[section]
           : this.form.questions[section];
       },
       set(value: PromptQuestion[]): void {
         const { section } = this;
 
-        if (this.isMealSection(section)) {
+        if (isMealSection(section)) {
           this.form.questions.meals[section] = value;
           return;
         }
@@ -111,10 +119,6 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   },
 
   methods: {
-    isMealSection(section: any): section is MealSection {
-      return this.sections.meal.includes(section);
-    },
-
     /*
      * formMixin override
      */
@@ -123,10 +127,10 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       this.form.load({ ...rest, questions: { ...defaultQuestions, ...questions } });
     },
 
-    move(event: { section: MealSection | QuestionSection; question: PromptQuestion }) {
+    move(event: { section: MealSection | SurveyQuestionSection; question: PromptQuestion }) {
       const { section, question } = event;
 
-      if (this.isMealSection(section)) {
+      if (isMealSection(section)) {
         this.form.questions.meals[section].push(question);
         return;
       }

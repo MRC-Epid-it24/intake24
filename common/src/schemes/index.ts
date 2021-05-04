@@ -1,11 +1,40 @@
-import { Meal, PromptQuestion, RecallQuestions } from '../types';
+import {
+  Meal,
+  MealSection,
+  PromptQuestion,
+  PromptQuestionWithSection,
+  SurveyQuestionSection,
+  RecallQuestions,
+} from '../types';
 import { ExportSection } from '../types/models';
 
-export const flattenScheme = (questions: RecallQuestions): PromptQuestion[] =>
-  Object.values(questions).reduce<PromptQuestion[]>((acc, item) => {
-    acc.push(...(Array.isArray(item) ? item : flattenScheme(item)));
+export const flattenScheme = (scheme: RecallQuestions): PromptQuestion[] =>
+  Object.values(scheme).reduce<PromptQuestion[]>((acc, questions) => {
+    acc.push(...(Array.isArray(questions) ? questions : flattenScheme(questions)));
     return acc;
   }, []);
+
+export const flattenSchemeWithSection = (scheme: RecallQuestions): PromptQuestionWithSection[] =>
+  Object.entries(scheme).reduce<PromptQuestionWithSection[]>((acc, [section, questions]) => {
+    const items = Array.isArray(questions)
+      ? questions.map((question) => ({ ...question, section }))
+      : flattenScheme(questions);
+
+    acc.push(...items);
+    return acc;
+  }, []);
+
+export const surveySections: SurveyQuestionSection[] = ['preMeals', 'postMeals', 'submission'];
+
+export const mealSections: MealSection[] = ['preFoods', 'foods', 'postFoods'];
+
+export const isMealSection = (section: any): section is MealSection => {
+  return mealSections.includes(section);
+};
+
+export const isSurveySection = (section: any): section is SurveyQuestionSection => {
+  return surveySections.includes(section);
+};
 
 export const defaultMeals: Meal[] = [
   { name: { en: 'Breakfast' }, time: '8:00' },

@@ -11,6 +11,12 @@ const schemeQuestions: LocaleMessageObject = {
   delete: 'Delete scheme question',
 
   editTemplate: 'Edit question template',
+  sync: {
+    _: 'Synchronization',
+    title: 'List of schemes containing question with ID: {id}',
+    true: 'Question is synchronized',
+    false: 'Question is not synchronized',
+  },
 };
 
 export default schemeQuestions;

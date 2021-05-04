@@ -52,4 +52,11 @@ router.get(
   wrapAsync(schemeQuestionController.edit)
 );
 
+router.post(
+  '/:schemeQuestionId/sync',
+  permission('scheme-questions-sync'),
+  validation.entry('schemeQuestionId'),
+  wrapAsync(schemeQuestionController.sync)
+);
+
 export default router;

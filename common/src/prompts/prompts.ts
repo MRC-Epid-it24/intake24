@@ -1,3 +1,4 @@
+import type { MealSection, SurveyQuestionSection } from '../types';
 import type { BasePromptProps } from './props';
 
 export type QuestionType = 'custom' | 'standard' | 'portion-size';
@@ -40,6 +41,11 @@ export interface PromptQuestion<T extends BasePromptProps = BasePromptProps> {
   type: QuestionType;
   component: ComponentType;
   props: T;
+}
+
+export interface PromptQuestionWithSection<T extends BasePromptProps = BasePromptProps>
+  extends PromptQuestion<T> {
+  section: SurveyQuestionSection | MealSection;
 }
 
 export type PromptAnswer = string | string[] | null;

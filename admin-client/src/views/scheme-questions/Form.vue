@@ -45,14 +45,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import isEqual from 'lodash/isEqual';
 import formMixin from '@/components/entry/formMixin';
 import PromptSelector from '@/components/prompts/PromptSelector.vue';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
 import { customPromptQuestions } from '@common/prompts';
-import { flattenScheme } from '@common/schemes';
-import { Dictionary, PromptQuestion } from '@common/types';
+import { PromptQuestion } from '@common/types';
 import { SchemeQuestionEntry, SchemeQuestionRefs } from '@common/types/http/admin';
 
 export type SchemeQuestionForm = {
@@ -89,25 +87,7 @@ export default (Vue as VueConstructor<
 
   computed: {
     questionIds(): string[] {
-      return [];
-    },
-
-    schemesWithQuestion(): Dictionary<any> {
-      const schemeList = this.refs.schemes.reduce((acc, scheme) => {
-        const questions = flattenScheme(scheme.questions);
-
-        const match = questions.find((question) => question.id);
-        if (match) {
-          acc[scheme.id] = {
-            question: match,
-            synced: isEqual(this.form.prompt, match),
-          };
-        }
-
-        return acc;
-      }, {} as Dictionary<any>);
-
-      return schemeList;
+      return this.refs.questionIds;
     },
   },
 

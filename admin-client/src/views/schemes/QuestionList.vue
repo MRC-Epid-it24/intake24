@@ -81,7 +81,7 @@ import draggable from 'vuedraggable';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import { promptSettings } from '@/components/prompts';
 import PromptSelector from '@/components/prompts/PromptSelector.vue';
-import { PromptQuestion, QuestionSection, MealSection } from '@common/types';
+import { PromptQuestion, SurveyQuestionSection, MealSection } from '@common/types';
 
 export type Refs = {
   $refs: {
@@ -94,7 +94,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
 
   props: {
     section: {
-      type: String as () => QuestionSection | MealSection,
+      type: String as () => SurveyQuestionSection | MealSection,
     },
     questionIds: {
       type: Array as () => string[],

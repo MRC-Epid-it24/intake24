@@ -36,7 +36,11 @@
                       <v-toolbar-title>{{ $t(`schemes.questions.type`) }}</v-toolbar-title>
                       <template v-slot:extension>
                         <v-tabs v-model="questionTypeTab">
-                          <v-tab v-for="type in Object.keys(availablePromptQuestions)" :key="type">
+                          <v-tab
+                            v-for="type in Object.keys(availablePromptQuestions)"
+                            :key="type"
+                            class="font-weight-medium"
+                          >
                             {{ $t(`schemes.questions.${type}._`) }}
                           </v-tab>
                         </v-tabs>
@@ -112,7 +116,7 @@ import { merge } from '@/util';
 import {
   FormRefs,
   PromptQuestion,
-  QuestionSection,
+  SurveyQuestionSection,
   MealSection,
   portionSizePromptQuestions,
 } from '@common/types';
@@ -134,7 +138,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
   props: {
     section: {
-      type: String as () => QuestionSection | MealSection,
+      type: String as () => SurveyQuestionSection | MealSection,
     },
     questionIds: {
       type: Array as () => string[],

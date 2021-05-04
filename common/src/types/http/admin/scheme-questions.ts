@@ -19,6 +19,7 @@ export type SchemeQuestionEntry = SchemeQuestionAttributes;
 export type SchemeQuestionRefs = {
   languages: LanguageEntry[];
   schemes: SchemeEntry[];
+  questionIds: string[];
 };
 
 export type SchemeQuestionResponse = {

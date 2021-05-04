@@ -1,11 +1,11 @@
 import { ComponentType } from '@common/prompts';
-import { MealSection, QuestionSection } from '@common/types';
+import { MealSection, SurveyQuestionSection } from '@common/types';
 
 const baseTab = ['general', 'content', 'conditions'];
 const validatedTab = [...baseTab, 'validation'];
 const listTab = [...validatedTab, 'options'];
 
-const allSection: (QuestionSection | MealSection)[] = [
+const allSection: (SurveyQuestionSection | MealSection)[] = [
   'preMeals',
   'postMeals',
   'submission',
@@ -16,7 +16,7 @@ const allSection: (QuestionSection | MealSection)[] = [
 
 export type PromptSettingsRecord = {
   tabs: string[];
-  sections: (QuestionSection | MealSection)[];
+  sections: (SurveyQuestionSection | MealSection)[];
 };
 
 export type PromptSettings = Record<ComponentType, PromptSettingsRecord>;

@@ -9,28 +9,15 @@ import type {
 import { UserFoodData } from './http';
 import { PortionSizeMethodId } from './models';
 
-/* export enum RecallSections {
-  PRE_MEALS = 'preMeals',
-  MEALS = 'meals',
-  POST_MEALS = 'postMeals',
-  SUBMISSION = 'submission',
-}
+export type SurveyQuestionSection = 'preMeals' | 'postMeals' | 'submission';
 
-export enum MealSections {
-  PRE_FOODS = 'preFoods',
-  FOODS = 'foods',
-  POST_FOODS = 'postFoods',
-} */
-
-export type QuestionSection = 'preMeals' | 'postMeals' | 'submission';
-
-export type RecallSection = QuestionSection | 'meals';
-
-export type MealSection = 'preFoods' | 'foods' | 'postFoods';
+export type SurveySection = SurveyQuestionSection | 'meals';
 
 export type MealQuestionSection = 'preFoods' | 'postFoods';
 
-export type GenericQuestions = Record<QuestionSection, PromptQuestion[]>;
+export type MealSection = MealQuestionSection | 'foods';
+
+export type GenericQuestions = Record<SurveyQuestionSection, PromptQuestion[]>;
 
 export type MealQuestions = Record<MealSection, PromptQuestion[]>;
 
@@ -46,7 +33,7 @@ export interface RecallQuestions extends GenericQuestions {
 
 // TODO: implement distinct selection types for survey/meal/food level
 export type Selection = {
-  section: RecallSection;
+  section: SurveySection;
   mealSection?: MealSection;
   mealIdx?: number;
   promptIdx: number;

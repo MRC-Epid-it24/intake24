@@ -36,7 +36,7 @@ const resources: Resource[] = [
     icon: 'far fa-question-circle',
     api: 'admin/scheme-questions',
     generateRoutes: true,
-    routes: [...routes],
+    routes: [...routes, 'sync'],
   },
   {
     group: 'surveyMgmt',

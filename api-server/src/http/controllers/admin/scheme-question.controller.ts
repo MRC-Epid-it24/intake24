@@ -9,22 +9,27 @@ import {
   SchemeQuestionResponse,
   SchemeQuestionsResponse,
 } from '@common/types/http/admin';
+import { isMealSection } from '@common/schemes';
+import { MealSection, SurveyQuestionSection } from '@common/types';
 import { Controller, CrudActions } from '../controller';
 
-export type SchemeQuestionController = Controller<CrudActions>;
+export type SchemeQuestionController = Controller<CrudActions | 'sync'>;
 
 export default (): SchemeQuestionController => {
   const refs = async (): Promise<SchemeQuestionRefs> => {
     const languages = await Language.findAll();
     const schemes = await Scheme.findAll();
+    const questions = await SchemeQuestion.findAll();
 
-    return { languages, schemes };
+    const questionIds = questions.map((question) => question.prompt.id);
+
+    return { languages, schemes, questionIds };
   };
 
   const entry = async (req: Request, res: Response<SchemeQuestionResponse>): Promise<void> => {
     const { schemeQuestionId } = req.params;
-    const schemeQuestion = await SchemeQuestion.findByPk(schemeQuestionId);
 
+    const schemeQuestion = await SchemeQuestion.findByPk(schemeQuestionId);
     if (!schemeQuestion) throw new NotFoundError();
 
     res.json({ data: schemeQuestion, refs: await refs() });
@@ -80,6 +85,34 @@ export default (): SchemeQuestionController => {
     res.status(204).json();
   };
 
+  const sync = async (req: Request, res: Response<SchemeQuestionResponse>): Promise<void> => {
+    const { schemeQuestionId } = req.params;
+    const { schemeId, prompt } = req.body;
+    const section = req.body.section as SurveyQuestionSection | MealSection;
+
+    const schemeQuestion = await SchemeQuestion.findByPk(schemeQuestionId);
+    if (!schemeQuestion) throw new NotFoundError();
+
+    const scheme = await Scheme.findByPk(schemeId);
+    if (!scheme) throw new NotFoundError();
+
+    const { questions } = scheme;
+    const sectionQuestions = isMealSection(section) ? questions.meals[section] : questions[section];
+
+    const match = sectionQuestions.findIndex((question) => question.id === prompt.id);
+    if (match === -1) throw new NotFoundError();
+
+    sectionQuestions.splice(match, 1, prompt);
+
+    if (isMealSection(section)) questions.meals[section] = sectionQuestions;
+    else questions.preMeals = sectionQuestions;
+
+    scheme.questions = questions;
+    await scheme.save();
+
+    res.json();
+  };
+
   return {
     browse,
     create,
@@ -87,6 +120,7 @@ export default (): SchemeQuestionController => {
     detail,
     edit,
     update,
+    sync,
     destroy,
   };
 };
