@@ -1,6 +1,6 @@
 <template>
   <v-container :class="{ 'pa-0': isMobile }">
-    <v-row>
+    <v-row v-show="visible">
       <v-col>
         <v-btn @click="showComponent(0)">Portion Option</v-btn>
         <v-btn @click="showComponent(1)">As Served</v-btn>
@@ -16,6 +16,11 @@
         <v-btn @click="showComponent(10)">Direct weight input</v-btn>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <v-btn @click="visible = !visible">Show/Hide buttons</v-btn>
+      </v-col>
+    </v-row>
     <!-- <v-row v-show="componentView == 0" justify-md="center" no-gutters>
       <v-col cols="12" md="10">
       </v-col>
@@ -25,50 +30,60 @@
         <portion-size-option-prompt
           v-show="componentView == 0"
           :promptProps="testProps"
+          :foodName="foodName"
+          :availableMethods="portionMethods"
         ></portion-size-option-prompt>
 
         <as-served-prompt
           v-show="componentView == 1"
           :promptProps="asServedProps"
+          :foodName="foodName"
+          :asServedSetId="asServedSetId"
         ></as-served-prompt>
 
-        <as-served-leftover-prompt v-show="componentView == 2" :promptProps="asServedProps">
+        <as-served-leftover-prompt v-show="componentView == 2" :promptProps="asServedProps" :foodName="foodName">
         </as-served-leftover-prompt>
 
-        <guideImagePrompt v-if="componentView == 3" :promptProps="asServedProps"></guideImagePrompt>
+        <guideImagePrompt v-if="componentView == 3" :promptProps="asServedProps" :foodName="foodName"></guideImagePrompt>
 
         <drink-scale-prompt
           v-show="componentView == 4"
           :promptProps="asServedProps"
+          :foodName="foodName"
         ></drink-scale-prompt>
 
         <standard-portion-prompt
           v-show="componentView == 5"
           :promptProps="asServedProps"
+          :foodName="foodName"
         ></standard-portion-prompt>
 
-        <cereal-prompt v-show="componentView == 6" :promptProps="asServedProps"></cereal-prompt>
+        <cereal-prompt v-show="componentView == 6" :promptProps="asServedProps" :foodName="foodName"></cereal-prompt>
 
         <milk-cereal-prompt
           v-show="componentView == 7"
           :promptProps="asServedProps"
+          :foodName="foodName"
         ></milk-cereal-prompt>
 
-        <pizza-prompt v-show="componentView == 8" :promptProps="asServedProps"></pizza-prompt>
+        <pizza-prompt v-show="componentView == 8" :promptProps="asServedProps" :foodName="foodName"></pizza-prompt>
 
         <milk-hot-drink-prompt
           v-show="componentView == 9"
           :promptProps="asServedProps"
+          :foodName="foodName"
         ></milk-hot-drink-prompt>
 
         <direct-weight-prompt
           v-show="componentView == 10"
           :promptProps="asServedProps"
+          :foodName="foodName"
         ></direct-weight-prompt>
 
         <leftover-question-prompt
           v-show="componentView == 11"
           :promptProps="asServedProps"
+          :foodName="foodName"
         ></leftover-question-prompt>
       </v-col>
     </v-row>
@@ -97,11 +112,16 @@ export default Vue.extend({
 
   data() {
     return {
+      visible: true,
       componentView: 0,
       testPromptProps: {
         text: { en: 'text' },
         description: { en: 'description' },
       },
+      foodName: { en: 'food name' },
+      portionMethods: [{ name: 'as-served' }],
+      asServedSetId: 'NDNS_meat_curry',
+      selectionImageUrl: {},
       testProps: {
         text: { en: 'Portion Size Options' },
         description: { en: 'chicken balti, curry' },

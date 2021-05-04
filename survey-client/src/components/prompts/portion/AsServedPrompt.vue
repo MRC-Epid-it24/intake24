@@ -21,11 +21,12 @@
               </v-row>
             </v-img>
             <v-card-actions>
-              <v-container dense>
+              <v-container>
                 <v-row>
-                  <v-col class="pa-1">
+                  <!-- Thumbnails -->
+                  <v-col class="pa-1" cols="3" sm="2" lg="1">
                     <v-card @click="hadLessInput()">
-                      <v-img :src="getFirstThumbnail()" max-width="5rem">-</v-img>
+                      <v-img :src="getFirstThumbnail()">-</v-img>
                       <v-overlay absolute>
                         <v-btn icon>
                           <v-icon>fas fa-fw fa-minus</v-icon>
@@ -34,15 +35,15 @@
                     </v-card>
                   </v-col>
                   <template v-for="(imageSet, idx) in selectionImageData.images">
-                    <v-col v-bind:key="idx" class="pa-1" :class="isSelected(idx)">
+                    <v-col v-bind:key="idx" class="pa-1" cols="3" sm="2" lg="1" :class="isSelected(idx)">
                       <v-card @click="setSelection(idx)">
-                        <v-img :src="imageSet.thumbnailUrl" max-width="5rem"></v-img>
+                        <v-img :src="imageSet.thumbnailUrl"></v-img>
                       </v-card>
                     </v-col>
                   </template>
-                  <v-col class="pa-1">
+                  <v-col class="pa-1 mr-auto" cols="3" sm="2" lg="1">
                     <v-card @click="hadMoreInput()">
-                      <v-img :src="getLastThumbnail()" max-width="5rem">-</v-img>
+                      <v-img :src="getLastThumbnail()">-</v-img>
                       <v-overlay absolute>
                         <v-btn icon>
                           <v-icon>fas fa-fw fa-plus</v-icon>
@@ -52,6 +53,7 @@
                   </v-col>
                 </v-row>
                 <v-row>
+                  <!-- Inputs -->
                   <v-col align="center">
                     <v-btn @click="hadLessInput()">I had less</v-btn>
                   </v-col>
