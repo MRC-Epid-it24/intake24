@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <portion-layout :text="text" :description="description">
+    <portion-layout :text="promptProps.text" :description="promptProps.description">
       <template v-slot:headerText>
         {{ localeDescription }}
       </template>
@@ -94,19 +94,15 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import merge from 'deepmerge';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
 import { VImg } from 'vuetify/lib';
-import {
-  GuideImagePromptProps,
-  guideImagePromptDefaultProps,
-  QuantityValues,
-} from '@common/prompts';
+import { BasePromptProps, QuantityValues } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@/components/elements/QuantityCard.vue';
 import { GuideImageResponse } from '@common/types/http/foods';
+import { LocaleTranslation } from '@common/types';
 import BasePortion, { Portion } from './BasePortion';
 
 type Refs = {
@@ -127,13 +123,21 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => GuideImagePromptProps,
+      type: Object as () => BasePromptProps,
+      required: true,
+    },
+    foodName: {
+      type: Object as () => LocaleTranslation,
+      required: true,
+    },
+    guideImageId: {
+      type: String,
+      required: true,
     },
   },
 
   data() {
     return {
-      ...merge(guideImagePromptDefaultProps, this.promptProps),
       errors: [] as string[],
       selectedGuide: false, // TODO: Model this correctly
       selectedQuantity: false,
@@ -144,12 +148,13 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
       height: 0,
       selectedObjectIdx: null as number | null,
       selectedNodeIdx: null as number | null,
+      quantityValue: { whole: 1, fraction: 0 } as QuantityValues,
     };
   },
 
   computed: {
     localeDescription(): string | null {
-      return this.getLocaleContent(this.description);
+      return this.getLocaleContent(this.foodName);
     },
     hasErrors(): boolean {
       return !!this.errors.length;
@@ -187,7 +192,7 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
   methods: {
     async fetchGuideImageData() {
       const { data } = await this.$http.get<GuideImageResponse>(
-        'portion-sizes/guide-images/AUSalccans'
+        `portion-sizes/guide-images/${this.guideImageId}`
       );
 
       this.guideImageData = { ...data };
@@ -224,13 +229,20 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
     submit() {
       if (!this.isValid()) {
         // Should this also just accept the default value of 1?
-        this.errors = [
-          this.getLocaleContent(this.validation.message) ??
-            (this.$t('portion.guideImage.validation.required') as string),
-        ];
+        this.errors = [this.$t('portion.guideImage.validation.required') as string];
         return;
       }
-      this.$emit('Guide image and quantity selected', this.selectedGuide, this.quantityValue);
+
+      if (this.selectedObjectIdx == null) throw new Error('Selected object id is null');
+
+      this.$emit('guide-image-selected', {
+        object: {
+          id: this.selectedObjectIdx,
+          weight: this.guideImageData.weights[this.selectedObjectIdx],
+        },
+        quantity: this.quantityValue,
+      });
+
       this.selectedQuantity = true; // Barely see the change of icon before transition
       this.panelOpen = -1; // Closes all panels
     },

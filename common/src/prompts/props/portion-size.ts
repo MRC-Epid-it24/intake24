@@ -5,10 +5,6 @@ import type { QuantityValues } from '..';
 
 export type LeftoverQuestionPromptProps = ValidatedPromptProps;
 
-export interface GuideImagePromptProps extends ValidatedPromptProps {
-  quantityValue: QuantityValues;
-}
-
 export type DrinkScalePromptProps = ValidatedPromptProps;
 
 export interface StandardPortionPromptProps extends ValidatedPromptProps {
@@ -24,20 +20,6 @@ export type PizzaPromptProps = ValidatedPromptProps;
 export type MilkHotDrinkPromptProps = ValidatedPromptProps;
 
 export type DirectWeightPromptProps = ValidatedPromptProps;
-
-export const guideImagePromptDefaultProps: GuideImagePromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  validation: {
-    required: false,
-    message: { en: null },
-  },
-  quantityValue: {
-    whole: 1,
-    fraction: 0,
-  },
-};
 
 export const drinkScalePromptDefaultProps: DrinkScalePromptProps = {
   text: { en: null },
@@ -143,6 +125,13 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'as-served-leftovers-prompt',
     name: 'As served (leftovers)',
+    props: clone(basePromptProps),
+  },
+  {
+    component: 'guide-image-prompt',
+    type: 'portion-size',
+    id: 'guide-image-prompt',
+    name: 'Guide image',
     props: clone(basePromptProps),
   },
 ];

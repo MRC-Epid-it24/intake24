@@ -1,11 +1,9 @@
 import { Condition, conditionOps, PromptQuestion } from '@common/prompts';
 import { SurveyState } from '@/types/vuex';
 import { SchemeEntryResponse } from '@common/types/http';
-import {
-  asServedLeftoversComplete,
-  asServedSelected,
-  asServedServingComplete,
-} from './as-served-checks';
+import { portionSizeMethodSelected } from '@/dynamic-recall/common-checks';
+import { guideImageComplete } from '@/dynamic-recall/guide-image-checks';
+import { asServedLeftoversComplete, asServedServingComplete } from './as-served-checks';
 
 function checkRecallNumber(state: SurveyState, condition: Condition) {
   if (state.user == null) {
@@ -144,10 +142,21 @@ function checkFoodStandardConditions(
       return selectedFood.type === 'encoded-food' && selectedFood.portionSizeMethodIndex == null;
 
     case 'as-served-prompt':
-      return asServedSelected(selectedFood) && !asServedServingComplete(selectedFood);
+      return (
+        portionSizeMethodSelected(selectedFood, 'as-served') &&
+        !asServedServingComplete(selectedFood)
+      );
 
     case 'as-served-leftovers-prompt':
-      return asServedSelected(selectedFood) && !asServedLeftoversComplete(selectedFood);
+      return (
+        portionSizeMethodSelected(selectedFood, 'as-served') &&
+        !asServedLeftoversComplete(selectedFood)
+      );
+
+    case 'guide-image-prompt':
+      return (
+        portionSizeMethodSelected(selectedFood, 'guide-image') && !guideImageComplete(selectedFood)
+      );
 
     default:
       return selectedFood.customPromptAnswers[prompt.id] === undefined;

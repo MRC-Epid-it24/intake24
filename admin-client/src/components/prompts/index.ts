@@ -81,4 +81,8 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['foods'],
   },
+  'guide-image-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
 };

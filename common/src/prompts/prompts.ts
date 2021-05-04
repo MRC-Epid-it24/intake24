@@ -20,7 +20,8 @@ export type StandardComponentType =
 export type PortionSizeComponentType =
   | 'portion-size-option-prompt'
   | 'as-served-prompt'
-  | 'as-served-leftovers-prompt';
+  | 'as-served-leftovers-prompt'
+  | 'guide-image-prompt';
 
 export type ComponentType = CustomComponentType | StandardComponentType | PortionSizeComponentType;
 

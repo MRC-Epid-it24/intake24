@@ -7,6 +7,10 @@ export interface AsServedParameters {
   'leftovers-image-set': string;
 }
 
+export interface GuideImageParameters {
+  'guide-image-id': string;
+}
+
 export interface UserPortionSizeMethod {
   method: PortionSizeMethodId;
   description: string;

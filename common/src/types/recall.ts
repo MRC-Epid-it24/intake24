@@ -1,4 +1,11 @@
-import type { Prompt, PromptAnswer, PromptStatus, PromptQuestion, Dictionary } from '.';
+import type {
+  Prompt,
+  PromptAnswer,
+  PromptStatus,
+  PromptQuestion,
+  Dictionary,
+  QuantityValues,
+} from '.';
 import { UserFoodData } from './http';
 import { PortionSizeMethodId } from './models';
 
@@ -94,7 +101,18 @@ export interface AsServedState extends PortionSizeStateBase {
   leftovers: SelectedAsServedImage | null;
 }
 
-export type PortionSizeState = AsServedState;
+export interface SelectedGuideImageObject {
+  id: number;
+  weight: number;
+}
+
+export interface GuideImageState extends PortionSizeStateBase {
+  method: 'guide-image';
+  object: SelectedGuideImageObject | null;
+  quantity: QuantityValues | null;
+}
+
+export type PortionSizeState = AsServedState | GuideImageState;
 
 export interface FreeTextFood {
   type: 'free-text';

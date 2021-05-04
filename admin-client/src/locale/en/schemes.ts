@@ -220,6 +220,10 @@ const schemes: LocaleMessageObject = {
       title: 'As served leftovers',
       subtitle: 'Use the "as served" method to estimate the weight of leftovers',
     },
+    'guide-image-prompt': {
+      title: 'Guide image',
+      subtitle: 'Use the "guide image" method to estimate the weight of leftovers',
+    },
   },
 };
 
