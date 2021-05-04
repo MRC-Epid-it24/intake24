@@ -44,15 +44,15 @@ export type SchemeAttributes = {
 
 export type SchemeCreationAttributes = Omit<SchemeAttributes, 'createdAt' | 'updatedAt'>;
 
-export type SchemeQuestion = {
+export type SchemeQuestionAttributes = {
   id: number;
   name: string;
-  data: PromptQuestion;
+  prompt: PromptQuestion;
   createdAt: Date;
   updatedAt: Date;
 };
 
 export type SchemeQuestionCreationAttributes = Omit<
-  SchemeQuestion,
+  SchemeQuestionAttributes,
   'id' | 'createdAt' | 'updatedAt'
 >;

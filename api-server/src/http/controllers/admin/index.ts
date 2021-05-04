@@ -6,6 +6,7 @@ import job from './job.controller';
 import language from './language.controller';
 import locale from './locale.controller';
 import scheme from './scheme.controller';
+import schemeQuestion from './scheme-question.controller';
 import surveyDataExport from './survey-data-export.controller';
 import surveyMgmt from './survey-mgmt.controller';
 import surveyRespondent from './survey-respondent.controller';
@@ -21,6 +22,7 @@ export * from './job.controller';
 export * from './language.controller';
 export * from './locale.controller';
 export * from './scheme.controller';
+export * from './scheme-question.controller';
 export * from './survey-data-export.controller';
 export * from './survey-mgmt.controller';
 export * from './survey-respondent.controller';
@@ -37,6 +39,7 @@ export default {
   language,
   locale,
   scheme,
+  schemeQuestion,
   surveyDataExport,
   surveyMgmt,
   surveyRespondent,

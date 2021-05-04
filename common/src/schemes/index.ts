@@ -1,5 +1,11 @@
-import { Meal, RecallQuestions } from '../types';
+import { Meal, PromptQuestion, RecallQuestions } from '../types';
 import { ExportSection } from '../types/models';
+
+export const flattenScheme = (questions: RecallQuestions): PromptQuestion[] =>
+  Object.values(questions).reduce<PromptQuestion[]>((acc, item) => {
+    acc.push(...(Array.isArray(item) ? item : flattenScheme(item)));
+    return acc;
+  }, []);
 
 export const defaultMeals: Meal[] = [
   { name: { en: 'Breakfast' }, time: '8:00' },

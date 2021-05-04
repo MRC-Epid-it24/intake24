@@ -17,6 +17,7 @@ export { default as Role } from './role';
 export { default as RoleUser } from './role-user';
 export { default as SignInLog } from './sign-in-log';
 export { default as Scheme } from './scheme';
+export { default as SchemeQuestion } from './scheme-question';
 export { default as Survey } from './survey';
 export { default as SurveySubmission } from './survey-submission';
 export { default as SurveySubmissionCustomField } from './survey-submission-custom-field';

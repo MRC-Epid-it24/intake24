@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { Language, Scheme } from '@/db/models/system';
-import { defaultMeals } from '@common/defaults';
+import { defaultMeals } from '@common/schemes';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import {
@@ -24,7 +24,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     return { languages, meals: defaultMeals };
   };
 
-  const entry = async (req: Request, res: Response): Promise<void> => {
+  const entry = async (req: Request, res: Response<SchemeResponse>): Promise<void> => {
     const { schemeId } = req.params;
     const scheme = await Scheme.findByPk(schemeId);
 

@@ -74,7 +74,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     res.status(204).json();
   };
 
-  const run = async (req: Request, res: Response): Promise<void> => {
+  const run = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { taskId } = req.params;
     const task = await Task.findByPk(taskId);
 

@@ -14,7 +14,7 @@ import {
   SchemeType,
   ExportSection,
 } from '@common/types/models';
-import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
+import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import BaseModel from '../model';
 import { Survey } from '.';
 

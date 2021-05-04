@@ -22,6 +22,7 @@ import type {
   LanguageController,
   LocaleController,
   SchemeController,
+  SchemeQuestionController,
   AdminSurveyController,
   AdminSurveyDataExportController,
   AdminSurveyMgmtController,
@@ -103,6 +104,7 @@ export interface IoC extends Jobs {
   languageController: LanguageController;
   localeController: LocaleController;
   schemeController: SchemeController;
+  schemeQuestionController: SchemeQuestionController;
   adminSurveyController: AdminSurveyController;
   adminSurveyDataExportController: AdminSurveyDataExportController;
   adminSurveyMgmtController: AdminSurveyMgmtController;

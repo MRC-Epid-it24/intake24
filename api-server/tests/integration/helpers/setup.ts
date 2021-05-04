@@ -11,7 +11,7 @@ import {
   Role,
 } from '@/db/models/system';
 import ioc from '@/ioc';
-import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
+import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { SchemeTypes } from '@common/types/models';
 
 export type MockData = {

@@ -10,7 +10,7 @@ import {
   CreateLanguageRequest,
 } from '@common/types/http/admin';
 import { SchemeCreationAttributes, SchemeTypes } from '@common/types/models';
-import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
+import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 
 const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
