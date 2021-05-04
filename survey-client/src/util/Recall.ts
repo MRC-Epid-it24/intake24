@@ -4,13 +4,13 @@ import {
   Prompt,
   PromptStatuses,
   PromptQuestion,
-  QuestionSection,
-  RecallSection,
+  SurveyQuestionSection,
   Selection,
   PromptAnswer,
   PromptState,
   RecallState,
   conditionOps,
+  SurveySection,
 } from '@common/types';
 import { SchemeEntryResponse } from '@common/types/http';
 import Meal from './Meal';
@@ -46,7 +46,7 @@ export class Recall {
 
     const { meals, questions } = scheme;
 
-    (['preMeals', 'postMeals', 'submission'] as QuestionSection[]).forEach((item) => {
+    (['preMeals', 'postMeals', 'submission'] as SurveyQuestionSection[]).forEach((item) => {
       this.loadPrompts(item, questions[item]);
     });
 
@@ -73,7 +73,7 @@ export class Recall {
     this.meals = meals.map((meal) => new Meal(meal, questions));
   }
 
-  private loadPrompts(section: QuestionSection, questions: PromptQuestion[]): void {
+  private loadPrompts(section: SurveyQuestionSection, questions: PromptQuestion[]): void {
     this[section] = questions.map((question) => ({
       question,
       answer: null,
@@ -97,7 +97,7 @@ export class Recall {
     this.setNextAutoSelection();
   }
 
-  private isSectionDone(section: QuestionSection): boolean {
+  private isSectionDone(section: SurveyQuestionSection): boolean {
     if (!this[section].length) return true;
 
     return this[section].every((question) => question.status === PromptStatuses.DONE);
@@ -112,7 +112,7 @@ export class Recall {
   }
 
   selectQuestionOrFindNext(
-    section: RecallSection,
+    section: SurveySection,
     mealId: string,
     questionId: string
   ): Selection | null {
@@ -182,14 +182,14 @@ export class Recall {
     this.setSelection(this.getNextAutoSelection());
   }
 
-  getAutoSectionQuestion(section: QuestionSection): Selection | null {
+  getAutoSectionQuestion(section: SurveyQuestionSection): Selection | null {
     const index = this[section].findIndex((item) => item.status !== PromptStatuses.DONE);
     if (index === -1) return null;
 
     return this.checkQuestionConditions(section, index);
   }
 
-  getManualSectionQuestion(section: QuestionSection, questionId: string): Selection | null {
+  getManualSectionQuestion(section: SurveyQuestionSection, questionId: string): Selection | null {
     const index = this[section].findIndex((item) => item.question.id === questionId);
     if (index === -1) return null;
 
@@ -198,7 +198,10 @@ export class Recall {
     return this.checkQuestionConditions(section, index);
   }
 
-  private checkQuestionConditions(section: QuestionSection, promptIdx: number): Selection | null {
+  private checkQuestionConditions(
+    section: SurveyQuestionSection,
+    promptIdx: number
+  ): Selection | null {
     const prompt = this[section][promptIdx];
 
     const check = this.promptMeetsConditions(prompt);

@@ -47,10 +47,9 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       for (let i = 0; i < unitsCount; ++i) {
         units.push({
           name: this.selectedPortionSize.parameters[`unit${i}-name`],
-          weight: this.selectedPortionSize.parameters[`unit${i}-weight`],
-          omitFoodDescription: this.selectedPortionSize.parameters[
-            `unit${i}-omit-food-description`
-          ],
+          weight: parseFloat(this.selectedPortionSize.parameters[`unit${i}-weight`]),
+          omitFoodDescription:
+            this.selectedPortionSize.parameters[`unit${i}-omit-food-description`] === 'true',
         });
       }
 

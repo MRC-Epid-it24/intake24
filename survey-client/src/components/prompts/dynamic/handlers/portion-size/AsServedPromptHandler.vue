@@ -50,7 +50,10 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
           state.portionSize = {
             method: 'as-served',
             serving: selected,
-            leftovers: state.portionSize?.leftovers ?? null,
+            leftovers:
+              state.portionSize?.method === 'as-served'
+                ? state.portionSize?.leftovers ?? null
+                : null,
             servingWeight: selected.weight * conversionFactor,
             leftoversWeight: state.portionSize?.leftoversWeight ?? null,
           };

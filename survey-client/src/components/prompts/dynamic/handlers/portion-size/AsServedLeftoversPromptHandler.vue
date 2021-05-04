@@ -10,7 +10,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { BasePromptProps } from '@common/prompts';
-import { EncodedFood, SelectedAsServedImage } from '@common/types';
+import { AsServedState, EncodedFood, PortionSizeState, SelectedAsServedImage } from '@common/types';
 import AsServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
 import { AsServedParameters } from '@common/types/http';
 import foodPromptUtils from '../mixins/food-prompt-utils';
@@ -49,7 +49,8 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
         update: (state: EncodedFood) => {
           state.portionSize = {
             method: 'as-served',
-            serving: state.portionSize?.serving ?? null,
+            serving:
+              state.portionSize?.method === 'as-served' ? state.portionSize?.serving ?? null : null,
             leftovers: selected,
             servingWeight: state.portionSize?.servingWeight ?? null,
             leftoversWeight: selected.weight * conversionFactor,

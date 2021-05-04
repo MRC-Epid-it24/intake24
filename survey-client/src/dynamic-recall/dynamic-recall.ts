@@ -5,7 +5,7 @@ import { PromptQuestion } from '@common/prompts';
 import {
   MealSection,
   MealTime,
-  RecallSection,
+  SurveySection,
   SurveyState as CurrentSurveyState,
 } from '@common/types';
 import { SchemeEntryResponse } from '@common/types/http';
@@ -13,7 +13,7 @@ import SelectionManager from '@/dynamic-recall/selection-manager';
 
 export interface PromptInstance {
   prompt: PromptQuestion;
-  section: RecallSection | MealSection;
+  section: SurveySection | MealSection;
 }
 
 function parseMealTime(time: string): MealTime {

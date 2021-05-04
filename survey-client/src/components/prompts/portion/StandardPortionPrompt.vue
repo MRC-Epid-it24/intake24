@@ -99,6 +99,10 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       errors: [] as string[],
       selectedUnitIndex: -1,
       selectedQuantity: false,
+      quantityValue: {
+        whole: 1,
+        fraction: 0,
+      },
       panelOpen: 0,
     };
   },
@@ -137,7 +141,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     submit() {
       if (!this.isValid()) {
         this.errors = [
-          this.getLocaleContent(this.validation.message) ??
+          this.getLocaleContent(this.promptProps.validation.message) ??
             (this.$t('portion.standardPortion.validation.required') as string),
         ];
         return;
