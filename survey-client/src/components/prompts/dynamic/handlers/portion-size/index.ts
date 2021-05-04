@@ -1,4 +1,5 @@
-import GuideImagePromptHandler from '@/components/prompts/dynamic/handlers/portion-size/GuideImagePromptHandler.vue';
+import GuideImagePromptHandler from './GuideImagePromptHandler.vue';
+import StandardPortionPromptHandler from './StandardPortionPromptHandler.vue';
 import AsServedPromptHandler from './AsServedPromptHandler.vue';
 import PortionSizeOptionPromptHandler from './PortionSizeOptionPromptHandler.vue';
 import AsServedLeftoversPromptHandler from './AsServedLeftoversPromptHandler.vue';
@@ -8,4 +9,5 @@ export default {
   AsServedPromptHandler,
   AsServedLeftoversPromptHandler,
   GuideImagePromptHandler,
+  StandardPortionPromptHandler,
 };

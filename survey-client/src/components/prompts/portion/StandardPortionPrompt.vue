@@ -1,25 +1,26 @@
 <template>
   <v-container>
-    <portion-layout :text="text" :description="description">
+    <portion-layout :text="promptProps.text" :description="promptProps.description">
       <template v-slot:headerText>
         {{ localeDescription }}
       </template>
+      {{ this.selectedUnitIndex }}
       <v-expansion-panels v-model="panelOpen">
         <v-expansion-panel>
           <v-expansion-panel-header disable-icon-rotate>
             {{ $t('portion.standardPortion.portionMethodLabel', { food: localeDescription }) }}
             <template v-slot:actions>
-              <v-icon color="success" v-if="selectedOption">fas fa-fw fa-check</v-icon>
-              <v-icon color="error" v-if="!selectedOption">fas fa-fw fa-exclamation</v-icon>
+              <v-icon color="success" v-if="unitValid()">fas fa-fw fa-check</v-icon>
+              <v-icon color="error" v-if="!unitValid()">fas fa-fw fa-exclamation</v-icon>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-radio-group class="py-0" v-model="selectedOption">
+            <v-radio-group class="py-0" v-model="selectedUnitIndex">
               <v-radio
-                v-for="(opt, i) in portionOptions"
+                v-for="(opt, i) in standardUnits"
                 :key="i"
-                :value="opt"
-                :label="$t('portion.standardPortion.optionLabel', { food: opt })"
+                :value="i"
+                :label="optionLabel(opt.name)"
                 @change="onSelectMethod"
               ></v-radio>
             </v-radio-group>
@@ -62,15 +63,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import merge from 'deepmerge';
-import {
-  StandardPortionPromptProps,
-  standardPortionPromptDefaultProps,
-  QuantityValues,
-} from '@common/prompts';
+
+import { QuantityValues, ValidatedPromptProps } from '@common/prompts';
 import ErrorAlert from '@/components/elements/ErrorAlert.vue';
 import QuantityCard from '@/components/elements/QuantityCard.vue';
 import localeContent from '@/components/mixins/localeContent';
+import { LocaleTranslation, StandardPortionUnit } from '@common/types';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({
@@ -83,16 +81,23 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => StandardPortionPromptProps,
+      type: Object as () => ValidatedPromptProps,
+      required: true,
+    },
+    foodName: {
+      type: Object as () => LocaleTranslation,
+      required: true,
+    },
+    standardUnits: {
+      type: Array as () => StandardPortionUnit[],
+      required: true,
     },
   },
 
   data() {
     return {
-      ...merge(standardPortionPromptDefaultProps, this.promptProps),
       errors: [] as string[],
-      portionOptions: ['berries', 'punnets', 'bags'], // This should be modelled in the props
-      selectedOption: '',
+      selectedUnitIndex: -1,
       selectedQuantity: false,
       panelOpen: 0,
     };
@@ -100,7 +105,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   computed: {
     localeDescription(): string | null {
-      return this.getLocaleContent(this.description);
+      return this.getLocaleContent(this.foodName);
     },
     hasErrors(): boolean {
       return !!this.errors.length;
@@ -108,6 +113,11 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   },
 
   methods: {
+    optionLabel(unit: string) {
+      return this.$t('portion.standardPortion.optionLabel', {
+        unit: this.$t(`standardUnits.${unit}_estimate_in`),
+      });
+    },
     onSelectMethod() {
       this.clearErrors();
       this.panelOpen = 1;
@@ -115,11 +125,11 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     clearErrors() {
       this.errors = [];
     },
+    unitValid() {
+      return this.selectedUnitIndex > -1;
+    },
     isValid() {
-      if (this.selectedOption) {
-        return true;
-      }
-      return false;
+      return this.unitValid();
     },
     onUpdateQuantity(value: QuantityValues) {
       this.quantityValue = value;
@@ -132,7 +142,10 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
         ];
         return;
       }
-      this.$emit('Option selected', this.selectedOption);
+      this.$emit('standard-portion-selected', {
+        unit: this.standardUnits[this.selectedUnitIndex],
+        quantity: this.quantityValue,
+      });
       this.panelOpen = -1;
       this.selectedQuantity = true;
     },

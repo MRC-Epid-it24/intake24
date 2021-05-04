@@ -214,15 +214,19 @@ const schemes: LocaleMessageObject = {
     },
     'as-served-prompt': {
       title: 'As served portion size',
-      subtitle: 'Use the "as served" method to estimate the weight of the food',
+      subtitle: 'Use the "as served" method to estimate the portion size',
     },
     'as-served-leftovers-prompt': {
       title: 'As served leftovers',
-      subtitle: 'Use the "as served" method to estimate the weight of leftovers',
+      subtitle: 'Use the "as served" method to estimate the leftovers',
     },
     'guide-image-prompt': {
       title: 'Guide image',
-      subtitle: 'Use the "guide image" method to estimate the weight of leftovers',
+      subtitle: 'Use the "guide image" method to estimate the portion size',
+    },
+    'standard-portion-prompt': {
+      title: 'Standard portion',
+      subtitle: 'Use the "standard portion" method to estimate the portion size',
     },
   },
 };

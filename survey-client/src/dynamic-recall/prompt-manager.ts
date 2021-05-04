@@ -1,9 +1,13 @@
 import { Condition, conditionOps, PromptQuestion } from '@common/prompts';
 import { SurveyState } from '@/types/vuex';
 import { SchemeEntryResponse } from '@common/types/http';
-import { portionSizeMethodSelected } from '@/dynamic-recall/common-checks';
-import { guideImageComplete } from '@/dynamic-recall/guide-image-checks';
-import { asServedLeftoversComplete, asServedServingComplete } from './as-served-checks';
+import {
+  asServedLeftoversComplete,
+  asServedServingComplete,
+  guideImageComplete,
+  portionSizeMethodSelected,
+  standardPortionComplete,
+} from './portion-size-checks';
 
 function checkRecallNumber(state: SurveyState, condition: Condition) {
   if (state.user == null) {
@@ -157,6 +161,13 @@ function checkFoodStandardConditions(
       return (
         portionSizeMethodSelected(selectedFood, 'guide-image') && !guideImageComplete(selectedFood)
       );
+
+    case 'standard-portion-prompt': {
+      return (
+        portionSizeMethodSelected(selectedFood, 'standard-portion') &&
+        !standardPortionComplete(selectedFood)
+      );
+    }
 
     default:
       return selectedFood.customPromptAnswers[prompt.id] === undefined;

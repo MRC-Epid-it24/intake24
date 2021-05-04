@@ -99,7 +99,19 @@ export interface GuideImageState extends PortionSizeStateBase {
   quantity: QuantityValues | null;
 }
 
-export type PortionSizeState = AsServedState | GuideImageState;
+export interface StandardPortionUnit {
+  name: string;
+  weight: number;
+  omitFoodDescription: boolean;
+}
+
+export interface StandardPortionState extends PortionSizeStateBase {
+  method: 'standard-portion';
+  unit: StandardPortionUnit | null;
+  quantity: QuantityValues | null;
+}
+
+export type PortionSizeState = AsServedState | GuideImageState | StandardPortionState;
 
 export interface FreeTextFood {
   type: 'free-text';

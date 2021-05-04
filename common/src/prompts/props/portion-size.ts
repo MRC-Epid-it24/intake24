@@ -134,4 +134,11 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     name: 'Guide image',
     props: clone(basePromptProps),
   },
+  {
+    component: 'standard-portion-prompt',
+    type: 'portion-size',
+    id: 'standard-portion-prompt',
+    name: 'Standard portion',
+    props: clone(basePromptProps),
+  },
 ];
