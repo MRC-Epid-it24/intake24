@@ -35,7 +35,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       if (this.selectedPortionSize.method !== 'as-served')
         throw new Error('Selected portion size method must be "as-served"');
 
-      return this.selectedPortionSize.parameters as AsServedParameters;
+      return (this.selectedPortionSize.parameters as unknown) as AsServedParameters;
     },
   },
 
@@ -49,9 +49,9 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
         update: (state: EncodedFood) => {
           state.portionSize = {
             method: 'as-served',
-            serving: state.portionSize?.serving,
+            serving: state.portionSize?.serving ?? null,
             leftovers: selected,
-            servingWeight: state.portionSize?.servingWeight,
+            servingWeight: state.portionSize?.servingWeight ?? null,
             leftoversWeight: selected.weight * conversionFactor,
           };
         },
