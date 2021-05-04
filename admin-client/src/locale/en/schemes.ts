@@ -122,8 +122,8 @@ const schemes: LocaleMessageObject = {
     },
     id: 'Question ID',
     name: 'Question name',
-    component: 'Question component',
     type: 'Question type',
+    component: 'Question component',
     custom: {
       _: 'Custom',
       noQuestions: 'No custom questions available for this section',

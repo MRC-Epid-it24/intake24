@@ -69,7 +69,7 @@
         </transition-group>
       </draggable>
     </v-list>
-    <prompt-selector ref="selector" :section="section" :refScheme="refScheme" @save="save">
+    <prompt-selector ref="selector" :section="section" :questionIds="questionIds" @save="save">
     </prompt-selector>
   </v-card>
 </template>
@@ -96,8 +96,8 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     section: {
       type: String as () => QuestionSection | MealSection,
     },
-    refScheme: {
-      type: Array as () => PromptQuestion[],
+    questionIds: {
+      type: Array as () => string[],
       default: () => [],
     },
     items: {

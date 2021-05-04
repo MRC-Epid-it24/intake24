@@ -7,6 +7,7 @@ import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
 import schemes from './schemes';
+import schemeQuestions from './scheme-questions';
 import surveys from './surveys';
 import permissions from './permissions';
 import roles from './roles';
@@ -22,6 +23,7 @@ const views: Dictionary = {
   languages,
   locales,
   schemes,
+  'scheme-questions': schemeQuestions,
   surveys,
   permissions,
   roles,

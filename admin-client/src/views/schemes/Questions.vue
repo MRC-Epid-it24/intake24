@@ -40,7 +40,7 @@
       </v-item-group>
     </v-container>
     <question-list
-      :refScheme="refScheme"
+      :questionIds="questionIds"
       :section="section"
       :items.sync="selected"
       @move="move"
@@ -53,22 +53,10 @@ import Vue, { VueConstructor } from 'vue';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
-import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
-import {
-  Dictionary,
-  PromptQuestion,
-  QuestionSection,
-  MealSection,
-  RecallQuestions,
-} from '@common/types';
+import { defaultExport, defaultMeals, defaultQuestions, flattenScheme } from '@common/schemes';
+import { Dictionary, PromptQuestion, QuestionSection, MealSection } from '@common/types';
 import { SchemeForm } from './Form.vue';
 import QuestionList from './QuestionList.vue';
-
-const flattenScheme = (questions: RecallQuestions): PromptQuestion[] =>
-  Object.values(questions).reduce<PromptQuestion[]>((acc, item) => {
-    acc.push(...(Array.isArray(item) ? item : flattenScheme(item)));
-    return acc;
-  }, []);
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeQuestions',
@@ -115,8 +103,10 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         this.form.questions[section] = value;
       },
     },
-    refScheme(): PromptQuestion[] {
-      return flattenScheme(this.form.questions);
+    questionIds(): string[] {
+      const scheme = flattenScheme(this.form.questions);
+
+      return scheme.map((question) => question.id);
     },
   },
 

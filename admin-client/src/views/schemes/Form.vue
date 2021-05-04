@@ -54,7 +54,7 @@ import Vue, { VueConstructor } from 'vue';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
-import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
+import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { Meal, RecallQuestions } from '@common/types';
 import { ExportSection } from '@common/types/models';
 import Meals from './Meals.vue';

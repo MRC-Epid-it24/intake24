@@ -23,7 +23,7 @@
       <draggable v-model="form.export">
         <transition-group type="transition" name="drag-and-drop">
           <v-list-item
-            v-for="(section, idx) in form.export"
+            v-for="section in form.export"
             :key="section.id"
             link
             draggable
@@ -38,7 +38,7 @@
               ></v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn icon :title="$t('schemes.data-export.edit')" @click.stop="edit(idx, section)">
+              <v-btn icon :title="$t('schemes.data-export.edit')" @click.stop="edit(section)">
                 <v-icon color="primary lighten-2">fa-ellipsis-v</v-icon>
               </v-btn>
             </v-list-item-action>
@@ -55,7 +55,7 @@ import draggable from 'vuedraggable';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types/vue';
-import { defaultExport, defaultMeals, defaultQuestions } from '@common/defaults';
+import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { ExportField, ExportSection } from '@common/types/models';
 import { SchemeExportRefsResponse } from '@common/types/http/admin';
 import DataExportSection from './DataExportSection.vue';
@@ -109,7 +109,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       this.exportRefs = data;
     },
 
-    edit(idx: number, section: ExportSection) {
+    edit(section: ExportSection) {
       this.section = section;
     },
 

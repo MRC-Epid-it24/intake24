@@ -11,6 +11,7 @@ import profile from './profile';
 import permissions from './permissions';
 import roles from './roles';
 import schemes from './schemes';
+import schemeQuestions from './scheme-questions';
 import surveys from './surveys';
 import tasks from './tasks';
 import users from './users';
@@ -28,6 +29,7 @@ const messages: LocaleMessages = {
   permissions,
   roles,
   schemes,
+  'scheme-questions': schemeQuestions,
   surveys,
   tasks,
   users,

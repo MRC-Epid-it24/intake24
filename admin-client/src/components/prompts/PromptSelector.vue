@@ -32,12 +32,16 @@
               <v-row>
                 <v-col cols="12">
                   <v-card outlined>
-                    <v-card-subtitle>{{ $t(`schemes.questions.type`) }}</v-card-subtitle>
-                    <v-tabs v-model="questionTypeTab">
-                      <v-tab v-for="type in Object.keys(availablePromptQuestions)" :key="type">
-                        {{ $t(`schemes.questions.${type}._`) }}
-                      </v-tab>
-                    </v-tabs>
+                    <v-toolbar color="grey lighten-4" flat>
+                      <v-toolbar-title>{{ $t(`schemes.questions.type`) }}</v-toolbar-title>
+                      <template v-slot:extension>
+                        <v-tabs v-model="questionTypeTab">
+                          <v-tab v-for="type in Object.keys(availablePromptQuestions)" :key="type">
+                            {{ $t(`schemes.questions.${type}._`) }}
+                          </v-tab>
+                        </v-tabs>
+                      </template>
+                    </v-toolbar>
                     <v-item-group
                       active-class="secondary"
                       v-model="dialog.question.component"
@@ -131,10 +135,9 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   props: {
     section: {
       type: String as () => QuestionSection | MealSection,
-      required: true,
     },
-    refScheme: {
-      type: Array as () => PromptQuestion[],
+    questionIds: {
+      type: Array as () => string[],
       default: () => [],
     },
   },
@@ -153,6 +156,12 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       ...portionSizePromptQuestions,
     ];
 
+    const groupedPromptQuestions: Record<QuestionType, PromptQuestion[]> = {
+      custom: customPromptQuestions,
+      standard: standardPromptQuestions,
+      'portion-size': portionSizePromptQuestions,
+    };
+
     const dialog = (show = false): PromptQuestionDialog => ({
       show,
       index: -1,
@@ -162,10 +171,8 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     return {
       dialog: dialog(),
       newDialog: dialog,
-      customPromptQuestions,
-      standardPromptQuestions,
-      portionSizePromptQuestions,
       promptQuestions,
+      groupedPromptQuestions,
       promptSettings,
       tab: 0,
       questionTypeTab: 0,
@@ -174,24 +181,22 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
   computed: {
     availablePromptQuestions(): Record<QuestionType, PromptQuestion[]> {
-      return {
-        custom: this.customPromptQuestions.filter((prompt) =>
+      const { section } = this;
+      if (!section) return this.groupedPromptQuestions;
+
+      return Object.entries(this.groupedPromptQuestions).reduce((acc, [key, value]) => {
+        acc[key as QuestionType] = value.filter((prompt) =>
           this.promptSettings[prompt.component].sections.includes(this.section)
-        ),
-        standard: this.standardPromptQuestions.filter((prompt) =>
-          this.promptSettings[prompt.component].sections.includes(this.section)
-        ),
-        'portion-size': this.portionSizePromptQuestions.filter((prompt) =>
-          this.promptSettings[prompt.component].sections.includes(this.section)
-        ),
-      };
+        );
+        return acc;
+      }, {} as Record<QuestionType, PromptQuestion[]>);
     },
 
     questionIdRules() {
       return [
         (value: string | null): boolean | string => {
           const { origId } = this.dialog.question;
-          const match = this.refScheme.find((item) => item.id === value && item.id !== origId);
+          const match = this.questionIds.find((id) => id === value && id !== origId);
 
           return !match || 'Question ID is already used.';
         },

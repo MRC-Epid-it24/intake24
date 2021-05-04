@@ -31,6 +31,15 @@ const resources: Resource[] = [
   },
   {
     group: 'surveyMgmt',
+    name: 'scheme-questions',
+    path: 'scheme-questions',
+    icon: 'far fa-question-circle',
+    api: 'admin/scheme-questions',
+    generateRoutes: true,
+    routes: [...routes],
+  },
+  {
+    group: 'surveyMgmt',
     name: 'surveys',
     icon: 'fas fa-poll',
     api: 'admin/surveys',
