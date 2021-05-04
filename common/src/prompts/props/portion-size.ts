@@ -131,4 +131,18 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     name: 'Choose portion size method',
     props: clone(basePromptProps),
   },
+  {
+    component: 'as-served-prompt',
+    type: 'portion-size',
+    id: 'as-served-prompt',
+    name: 'As served',
+    props: clone(basePromptProps),
+  },
+  {
+    component: 'as-served-leftovers-prompt',
+    type: 'portion-size',
+    id: 'as-served-leftovers-prompt',
+    name: 'As served (leftovers)',
+    props: clone(basePromptProps),
+  },
 ];
