@@ -11,15 +11,16 @@
         v-for="(method, index) in availableMethods"
         :key="index"
         cols="6"
+        md="4"
+        lg="3"
         @click="selectMethod(index)"
         class="mx-auto"
       >
         <v-card :elevation="returnSelectElevation(index)">
-          <v-img class="align-end" :src="method.imageUrl" :aspect-ratio="16 / 9">
+          <v-img class="align-end" :src="method.imageUrl" contain aspect-ratio="1">
             <v-chip class="ma-2" :color="returnSelectedStyle(index)">
               {{ $t(`portion.option.description.${method.description}`) }}
             </v-chip>
-
             <template v-slot:placeholder>
               <v-alert outlined text>
                 <v-progress-circular
@@ -57,7 +58,7 @@ import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { BasePromptProps, basePromptProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
-import { AsServedSetResponse, UserPortionSizeMethod } from '@common/types/http/foods';
+import { UserPortionSizeMethod } from '@common/types/http/foods';
 import { LocaleTranslation } from '@common/types';
 import BasePortion, { Portion } from './BasePortion';
 
@@ -88,7 +89,6 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       ...merge(basePromptProps, this.promptProps),
       errors: [] as string[],
       currentValue: -1,
-      selectionImageData: {} as AsServedSetResponse,
     };
   },
 
@@ -99,34 +99,15 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
-    dataLoaded(): boolean {
-      return !!Object.keys(this.selectionImageData).length;
-    },
-    selectionImages(): AsServedSetResponse | [] {
-      if (!this.dataLoaded) return [];
-
-      return this.selectionImageData;
-    },
-  },
-
-  mounted() {
-    this.fetchOptionImageData();
   },
 
   methods: {
-    async fetchOptionImageData() {
-      // const { data } = await this.$http.get<AsServedSetResponse>(
-      //   `portion-sizes/as-served-sets/NDNS_meat_curry`
-      // );
-      // this.selectionImageData = { ...data };
-    },
 
     selectMethod(index: number) {
       if (this.currentValue === index) {
         this.currentValue = -1;
       } else {
         this.currentValue = index;
-        console.log(`Selected ${index} portion size estimation`);
         this.clearErrors();
       }
     },

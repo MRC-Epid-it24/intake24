@@ -45,8 +45,7 @@
           v-show="componentView == 2"
           :promptProps="asServedProps"
           :foodName="foodName"
-        >
-        </as-served-leftover-prompt>
+        ></as-served-leftover-prompt>
 
         <guideImagePrompt
           v-if="componentView == 3"
@@ -135,7 +134,46 @@ export default Vue.extend({
         description: { en: 'description' },
       },
       foodName: { en: 'food name' },
-      portionMethods: [{ name: 'as-served' }],
+      portionMethods: [
+        {
+          method: 'as-served',
+          description: 'use_an_image',
+          imageUrl:
+            'https://it24-dev.mrc-epid.cam.ac.uk/images/as_served/lasagne/selection/efa5caca-7af4-49f6-b1cf-f3ba197d9f5f.jpg',
+          useForRecipes: false,
+          conversionFactor: 1.0,
+          parameters: {
+            'serving-image-set': 'lasagne',
+            'leftovers-image-set': 'lasagne_leftovers',
+          },
+        },
+        {
+          method: 'drink-scale',
+          description: 'in_a_mug',
+          imageUrl:
+            'https://it24-dev.mrc-epid.cam.ac.uk/images/portion/mugs.jpg',
+          useForRecipes: false,
+          conversionFactor: 1.0,
+          parameters: {
+            'drinkware-id': 'mugs',
+            'initial-fill-level': 0.85,
+            'skip-fill-level': false,
+          },
+        },
+        {
+          method: 'drink-scale',
+          description: 'in_a_takeaway_cup',
+          imageUrl:
+            'https://it24-dev.mrc-epid.cam.ac.uk/images/portion/hotdrinks.jpg',
+          useForRecipes: false,
+          conversionFactor: 1.0,
+          parameters: {
+            'drinkware-id': 'takeaway_cups_hot',
+            'initial-fill-level': 0.85,
+            'skip-fill-level': true,
+          },
+        },
+      ],
       asServedSetId: 'NDNS_meat_curry',
       selectionImageUrl: {},
       testProps: {
