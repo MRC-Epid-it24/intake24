@@ -11,8 +11,7 @@
         <context-menu
           :menu="menuRecall"
           :icon="menuRecallIcon"
-          :itemId="surveyId"
-          @manual-prompt-selection="mealAction"
+          @context-menu-action="onRecallAction"
         >
         </context-menu>
       </v-list-item>
@@ -28,7 +27,9 @@
           <v-list-item-content>
             <meal-item
               :meal="meal"
-              :idx="idx.toString()"
+              :meal-index="idx"
+              @meal-action="onMealAction"
+              @food-selected="onFoodSelected"
               @breadcrumbMeal="chooseMealUp(meal.name)"
               @breadcrumbFood="chooseFoodUp"
             ></meal-item>
@@ -43,6 +44,8 @@
 import Vue, { VueConstructor } from 'vue';
 import MealItem from './MealItem.vue';
 import ContextMenu from '../elements/ContextMenu.vue';
+
+export type RecallAction = 'add-meal';
 
 export default (Vue as VueConstructor<Vue>).extend({
   name: 'MealList',
@@ -62,7 +65,7 @@ export default (Vue as VueConstructor<Vue>).extend({
       menuRecall: [
         {
           name: 'Add Meal',
-          action: 'add-meal-prompt',
+          action: 'add-meal',
         },
       ],
     };
@@ -74,8 +77,14 @@ export default (Vue as VueConstructor<Vue>).extend({
     chooseFoodUp(e: string) {
       this.$emit('breadcrimbFoodUp', e);
     },
-    mealAction(payload: { action: string; itemId: string }) {
-      this.$emit('manual-prompt-selection', payload);
+    onMealAction(payload: { mealIndex: number; action: string }) {
+      this.$emit('meal-action', payload);
+    },
+    onRecallAction(action: string) {
+      this.$emit('recall-action', action);
+    },
+    onFoodSelected(payload: { mealIndex: number; foodIndex: number }) {
+      this.$emit('food-selected', payload);
     },
   },
 });

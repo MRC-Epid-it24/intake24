@@ -35,7 +35,14 @@
                     </v-card>
                   </v-col>
                   <template v-for="(imageSet, idx) in selectionImageData.images">
-                    <v-col v-bind:key="idx" class="pa-1" cols="3" sm="2" lg="1" :class="isSelected(idx)">
+                    <v-col
+                      v-bind:key="idx"
+                      class="pa-1"
+                      cols="3"
+                      sm="2"
+                      lg="1"
+                      :class="isSelected(idx)"
+                    >
                       <v-card @click="setSelection(idx)">
                         <v-img :src="imageSet.thumbnailUrl"></v-img>
                       </v-card>

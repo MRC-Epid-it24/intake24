@@ -3,7 +3,11 @@ import { Dictionary, LocaleTranslation } from '@common/types';
 
 export type LocaleContent = {
   getLocaleContent<T>(content: LocaleTranslation<T>): T;
-  getLocaleString(content: LocaleTranslation<string | null>, fallbackPath: string, replace?: Dictionary<string>): string;
+  getLocaleString(
+    content: LocaleTranslation<string | null>,
+    fallbackPath: string,
+    replace?: Dictionary<string>
+  ): string;
 };
 
 export default Vue.extend({

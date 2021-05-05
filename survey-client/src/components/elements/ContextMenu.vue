@@ -7,7 +7,7 @@
     </template>
     <v-list dense>
       <v-list-item-group color="primary">
-        <v-list-item v-for="item in menu" :key="item.name" @click="onClick(item.action, itemId)">
+        <v-list-item v-for="item in menu" :key="item.name" @click="onClick(item.action)">
           <v-list-item-content>
             <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item-content>
@@ -25,16 +25,13 @@ export default (Vue as VueConstructor<Vue>).extend({
   props: {
     icon: String,
     menu: Array,
-    itemId: String,
   },
   data() {
     return {};
   },
   methods: {
-    onClick(action: string, itemId: string | undefined) {
-      console.log('Context Menu: ', action, itemId);
-      const payload = { action, itemId };
-      this.$emit('manual-prompt-selection', payload);
+    onClick(action: string) {
+      this.$emit('context-menu-action', action);
     },
   },
 });

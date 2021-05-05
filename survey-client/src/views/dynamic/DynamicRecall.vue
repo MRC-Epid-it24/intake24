@@ -8,7 +8,9 @@
         :surveyName="surveyName"
         :surveyId="surveyId"
         :meals="meals"
-        @manual-prompt-selection="clickListHandler"
+        @meal-action="onMealAction"
+        @recall-action="onRecallAction"
+        @food-selected="onFoodSelected"
       >
       </meal-list>
     </v-col>
@@ -45,14 +47,15 @@ import DynamicRecall, { PromptInstance } from '@/dynamic-recall/dynamic-recall';
 import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
 import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
-import MealList from '@/components/recall/MealListDesktop.vue';
-import { MealState2 } from '@common/types';
+import MealList, { RecallAction } from '@/components/recall/MealListDesktop.vue';
+import { MealSection, MealState2, Selection2, SurveyQuestionSection } from '@common/types';
 import { ComponentType } from '@common/prompts';
 import { mapState } from 'vuex';
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import standardHandlers from '@/components/prompts/dynamic/handlers/standard';
 import portionSizeHandlers from '@/components/prompts/dynamic/handlers/portion-size';
 import timeDoubleDigitsConvertor from '@/components/mixins/timeDoubleDigitsConvertor';
+import { MealAction } from '@/components/recall/MealItem.vue';
 
 export default Vue.extend({
   name: 'DynamicRecall',
@@ -163,20 +166,91 @@ export default Vue.extend({
   },
 
   methods: {
-    async clickListHandler(actionPayload: { action: string; itemId: string }) {
-      console.log('Recevied from the List: ', actionPayload);
-      // TODO: Choose between different types of Components
-      const promptComponent: ComponentType = 'meal-add-prompt';
-      const nextPrompt = this.recallController!.setCurrentPrompt(promptComponent);
+    setSelection(newSelection: Selection2) {
+      // Prevent the currently active prompt from crashing if it expects a different selection type
+      this.currentPrompt = null;
+      this.$store.commit('survey/setSelection', newSelection);
+    },
 
-      if (nextPrompt === undefined) {
-        console.log('Undefined: ', nextPrompt);
-        this.currentPrompt = null;
-      } else {
-        console.log(`Switching prompt to ${nextPrompt.prompt.component}`);
-        this.currentPrompt = nextPrompt;
+    showMealPrompt(mealIndex: number, promptSection: MealSection, promptType: ComponentType) {
+      this.setSelection({
+        element: {
+          type: 'meal',
+          mealIndex,
+        },
+        mode: 'manual',
+      });
+
+      const prompt = this.recallController!.promptManager.findMealPromptOfType(
+        promptType,
+        promptSection
+      );
+
+      if (prompt === undefined)
+        throw new Error(
+          `Survey scheme is missing required meal (preFoods) prompt of type ${promptType}`
+        );
+
+      this.currentPrompt = {
+        section: promptSection,
+        prompt,
+      };
+    },
+
+    showSurveyPrompt(promptSection: SurveyQuestionSection, promptType: ComponentType) {
+      this.setSelection({
+        element: null,
+        mode: 'manual',
+      });
+
+      const prompt = this.recallController!.promptManager.findSurveyPromptOfType(
+        promptType,
+        promptSection
+      );
+
+      if (prompt === undefined)
+        throw new Error(
+          `Survey scheme is missing required survey (preMeals) prompt of type ${promptType}`
+        );
+
+      this.currentPrompt = {
+        section: promptSection,
+        prompt,
+      };
+    },
+
+    onMealAction(payload: { action: MealAction; mealIndex: number }) {
+      // eslint-disable-next-line default-case
+      switch (payload.action) {
+        case 'edit-foods':
+          this.showMealPrompt(payload.mealIndex, 'preFoods', 'edit-meal-prompt');
+          break;
+        case 'edit-time':
+          this.showMealPrompt(payload.mealIndex, 'preFoods', 'meal-time-prompt');
+          break;
       }
-      // await this.nextPrompt()
+    },
+
+    onRecallAction(action: RecallAction) {
+      // eslint-disable-next-line default-case
+      switch (action) {
+        case 'add-meal':
+          this.showSurveyPrompt('preMeals', 'meal-add-prompt');
+          break;
+      }
+    },
+
+    async onFoodSelected(payload: { mealIndex: number; foodIndex: number }) {
+      this.setSelection({
+        element: {
+          type: 'food',
+          mealIndex: payload.mealIndex,
+          foodIndex: payload.foodIndex,
+        },
+        mode: 'manual',
+      });
+
+      await this.nextPrompt();
     },
 
     async nextPrompt() {

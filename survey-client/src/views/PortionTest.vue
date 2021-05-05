@@ -41,10 +41,18 @@
           :asServedSetId="asServedSetId"
         ></as-served-prompt>
 
-        <as-served-leftover-prompt v-show="componentView == 2" :promptProps="asServedProps" :foodName="foodName">
+        <as-served-leftover-prompt
+          v-show="componentView == 2"
+          :promptProps="asServedProps"
+          :foodName="foodName"
+        >
         </as-served-leftover-prompt>
 
-        <guideImagePrompt v-if="componentView == 3" :promptProps="asServedProps" :foodName="foodName"></guideImagePrompt>
+        <guideImagePrompt
+          v-if="componentView == 3"
+          :promptProps="asServedProps"
+          :foodName="foodName"
+        ></guideImagePrompt>
 
         <drink-scale-prompt
           v-show="componentView == 4"
@@ -58,7 +66,11 @@
           :foodName="foodName"
         ></standard-portion-prompt>
 
-        <cereal-prompt v-show="componentView == 6" :promptProps="asServedProps" :foodName="foodName"></cereal-prompt>
+        <cereal-prompt
+          v-show="componentView == 6"
+          :promptProps="asServedProps"
+          :foodName="foodName"
+        ></cereal-prompt>
 
         <milk-cereal-prompt
           v-show="componentView == 7"
@@ -66,7 +78,11 @@
           :foodName="foodName"
         ></milk-cereal-prompt>
 
-        <pizza-prompt v-show="componentView == 8" :promptProps="asServedProps" :foodName="foodName"></pizza-prompt>
+        <pizza-prompt
+          v-show="componentView == 8"
+          :promptProps="asServedProps"
+          :foodName="foodName"
+        ></pizza-prompt>
 
         <milk-hot-drink-prompt
           v-show="componentView == 9"

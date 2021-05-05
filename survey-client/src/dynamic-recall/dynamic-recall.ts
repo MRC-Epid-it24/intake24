@@ -29,7 +29,7 @@ export default class DynamicRecall {
 
   private surveyScheme: SchemeEntryResponse;
 
-  private promptManager: PromptManager;
+  readonly promptManager: PromptManager;
 
   private selectionManager: SelectionManager;
 
@@ -135,24 +135,6 @@ export default class DynamicRecall {
       this.store.commit('survey/setSelection', nextSelection);
       return this.getNextPromptForCurrentSelection();
     }
-
-    return undefined;
-  }
-
-  setCurrentPrompt(promptComponent: PromptQuestion['component']): PromptInstance | undefined {
-    const surveyState = this.getSurveyState();
-    const recallState = surveyState.data!;
-    const nextPrompt = this.promptManager.setNextPreMealsPrompt(surveyState, promptComponent);
-
-    if (nextPrompt)
-      return {
-        prompt: nextPrompt,
-        section: 'preMeals',
-      };
-
-    // FIXME: Delete console log
-    console.log('setCurrentPrompt');
-    console.log();
 
     return undefined;
   }

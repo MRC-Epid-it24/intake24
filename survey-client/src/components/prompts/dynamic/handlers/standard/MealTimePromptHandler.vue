@@ -41,7 +41,11 @@ export default Vue.extend({
 
     defaultTime(): string {
       if (this.selectedMeal === undefined) throw new Error('A meal must be selected');
-      return mealTimeToString(this.selectedMeal.defaultTime);
+
+      if (this.selectedMeal.time === undefined)
+        return mealTimeToString(this.selectedMeal.defaultTime);
+
+      return mealTimeToString(this.selectedMeal.time);
     },
   },
 

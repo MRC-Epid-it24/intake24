@@ -4,7 +4,11 @@
       <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal(meal.name)">
         {{ meal.name }}
       </v-list-item-title>
-      <context-menu :menu="menuMeal" :icon="menuMealIcon" :itemId="idx"></context-menu>
+      <context-menu
+        :menu="menuMeal"
+        :icon="menuMealIcon"
+        @context-menu-action="onContextMenuAction"
+      ></context-menu>
       <v-list-item-action>
         <v-list-item-action-text
           v-if="meal.time.length > 0"
@@ -13,7 +17,7 @@
         <v-icon x-small v-else>far fa-question-circle </v-icon>
       </v-list-item-action>
     </template>
-    <food-item :foods="meal.foods"></food-item>
+    <food-item :foods="meal.foods" @food-selected="onFoodSelected"></food-item>
   </v-list-group>
 </template>
 
@@ -21,6 +25,8 @@
 import Vue, { VueConstructor } from 'vue';
 import ContextMenu from '../elements/ContextMenu.vue';
 import FoodItem from './FoodItem.vue';
+
+export type MealAction = 'edit-foods' | 'edit-time';
 
 export default (Vue as VueConstructor<Vue>).extend({
   name: 'MealItem',
@@ -31,19 +37,19 @@ export default (Vue as VueConstructor<Vue>).extend({
   },
   props: {
     meal: Object,
-    idx: String,
+    mealIndex: Number,
   },
   data() {
     return {
       menuMealIcon: 'far fa-edit',
       menuMeal: [
         {
-          name: 'Add Food',
-          action: 'add-food-prompt',
+          name: 'Add or remove foods',
+          action: 'edit-foods',
         },
         {
-          name: 'Delete Food',
-          action: 'remove-food-prompt',
+          name: 'Change meal time',
+          action: 'edit-time',
         },
       ],
     };
@@ -54,6 +60,18 @@ export default (Vue as VueConstructor<Vue>).extend({
     },
     chooseFood(foodName: string) {
       this.$emit('breadcrumbFood', foodName);
+    },
+    onContextMenuAction(action: string) {
+      this.$emit('meal-action', {
+        mealIndex: this.mealIndex,
+        action,
+      });
+    },
+    onFoodSelected(foodIndex: number) {
+      this.$emit('food-selected', {
+        mealIndex: this.mealIndex,
+        foodIndex,
+      });
     },
   },
 });

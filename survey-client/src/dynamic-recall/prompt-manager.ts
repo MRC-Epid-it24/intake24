@@ -1,6 +1,7 @@
-import { Condition, conditionOps, PromptQuestion } from '@common/prompts';
+import { ComponentType, Condition, conditionOps, PromptQuestion } from '@common/prompts';
 import { SurveyState } from '@/types/vuex';
 import { SchemeEntryResponse } from '@common/types/http';
+import { MealSection, SurveyQuestionSection, SurveySection } from '@common/types';
 import {
   asServedLeftoversComplete,
   asServedServingComplete,
@@ -227,11 +228,6 @@ export default class PromptManager {
     this.surveyScheme = scheme;
   }
 
-  /**
-   * Returns next in line Pre-Meal promt that satisfy the conditions of not being shown before promt.id answer == undefined AND Custom conditions are satisfied
-   * @param state state of the Survey
-   * @returns { PromptQuestion }
-   */
   nextPreMealsPrompt(state: SurveyState): PromptQuestion | undefined {
     return this.surveyScheme.questions.preMeals.find((question) => {
       return (
@@ -239,6 +235,19 @@ export default class PromptManager {
         checkSurveyCustomConditions(state, question)
       );
     });
+  }
+
+  findMealPromptOfType(type: ComponentType, section: MealSection): PromptQuestion | undefined {
+    return this.surveyScheme.questions.meals[section].find(
+      (question) => question.component === type
+    );
+  }
+
+  findSurveyPromptOfType(
+    type: ComponentType,
+    section: SurveyQuestionSection
+  ): PromptQuestion | undefined {
+    return this.surveyScheme.questions[section].find((question) => question.component === type);
   }
 
   nextPreFoodsPrompt(state: SurveyState, mealIndex: number): PromptQuestion | undefined {

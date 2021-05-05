@@ -4,7 +4,7 @@
       <v-list-item-title
         class="text-wrap"
         v-text="foodDisplayName(food)"
-        @click="chooseFood(food.name)"
+        @click="selectFood(i)"
       ></v-list-item-title>
       <v-list-item-action>
         <v-icon x-small v-if="food.code" color="green darken-2">fa-check</v-icon>
@@ -37,8 +37,8 @@ export default (Vue as VueConstructor<Vue>).extend({
     return {};
   },
   methods: {
-    chooseFood(foodName: string) {
-      this.$emit('breadcrumbFood', foodName);
+    selectFood(foodIndex: number) {
+      this.$emit('food-selected', foodIndex);
     },
     foodDisplayName(food: FoodState): string {
       if (food.type === 'free-text') return food.description;
