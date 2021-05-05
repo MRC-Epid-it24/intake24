@@ -51,11 +51,16 @@ const prompts: LocaleMessageObject = {
     hint: 'hit enter when finished typing',
   },
   editMeal: {
-    text:
-      'Please list everything that you had for your {meal}, one item per line. Food and Drinks separately.',
-    description: 'Click enter or "Next Line" icon to save the item and move to the next',
-    yes: 'Continue',
-    no: 'Delete {meal}',
+    text: 'Please list everything you had for your {meal}, one item per line.',
+    description:
+      'For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>' +
+      '  <p>You can press Enter on your keyboard or the "add a food/drink" button to go to the next line as you type.</p>' +
+      '  <p><strong>Do not</strong> enter how much you had, just the food names.',
+    food: 'Food',
+    drinks: 'Drinks',
+    addFood: 'Add a food',
+    addDrink: 'Add a drink',
+    deleteMeal: 'Delete {meal}',
   },
 };
 

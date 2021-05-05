@@ -14,6 +14,8 @@ const common: LocaleMessageObject = {
   continue: 'Continue',
   help: 'Help',
 
+  nullString: '# Missing translation!',
+
   sw: {
     check: 'Content update is available',
     update: 'Update',

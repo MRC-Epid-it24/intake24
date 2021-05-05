@@ -1,0 +1,127 @@
+<template>
+  <v-card elevation="1">
+    <v-card-title>{{
+      drinks ? $t('prompts.editMeal.drinks') : $t('prompts.editMeal.food')
+    }}</v-card-title>
+    <v-card-text>
+      <v-list v-if="editableList.length > 0">
+        <v-list-item
+          :ripple="false"
+          v-for="(food, idx) in editableList"
+          :key="idx"
+          @click="edit(idx)"
+        >
+          <v-text-field
+            v-if="editIndex === idx"
+            v-model="editableList[idx].description"
+            ref="textField"
+            @keypress.enter.stop="addFood"
+            @focusout="onEditFocusLost"
+          ></v-text-field>
+          <v-list-item-icon v-if="editIndex === idx">
+            <v-btn icon @click="deleteFood">
+              <v-icon>fa-trash</v-icon>
+            </v-btn>
+          </v-list-item-icon>
+          <v-list-item-title v-else v-text="foodDisplayName(food)"></v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn depressed @click="addFood">
+        {{ drinks ? $t('prompts.editMeal.addDrink') : $t('prompts.editMeal.addFood') }}
+        <v-icon right>fa-edit</v-icon>
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</template>
+
+<script lang="ts">
+import Vue, { VueConstructor } from 'vue';
+import { FoodState } from '@common/types';
+import { clone } from 'lodash';
+
+export interface HasEditableFoodList {
+  editableList: FoodState[];
+}
+
+export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
+  name: 'EditableFoodList',
+
+  props: {
+    foodList: {
+      type: Array as () => FoodState[],
+      required: true,
+    },
+    drinks: {
+      type: Boolean,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      editableList: clone(this.foodList),
+      newFoodDescription: '',
+      editIndex: null as number | null,
+    };
+  },
+
+  methods: {
+    addFood() {
+      if (this.editIndex != null) {
+        const editEntry = this.editableList[this.editIndex];
+
+        if (editEntry.type === 'free-text' && editEntry.description.trim().length === 0) return;
+      }
+
+      this.editableList.push({
+        type: 'free-text',
+        description: this.newFoodDescription,
+        flags: this.drinks ? ['is-drink'] : [],
+        customPromptAnswers: {},
+      });
+
+      this.edit(this.editableList.length - 1);
+    },
+
+    deleteFood() {
+      if (this.editIndex != null) {
+        this.editableList.splice(this.editIndex, 1);
+        this.editIndex = null;
+      }
+    },
+
+    onEditFocusLost() {
+      if (this.editIndex != null) {
+        const editEntry = this.editableList[this.editIndex];
+        if (editEntry.type === 'free-text' && editEntry.description.trim().length === 0)
+          this.deleteFood();
+      }
+    },
+
+    edit(index: number) {
+      this.editIndex = index;
+
+      this.$nextTick(() => {
+        // FIXME: must be a better way to avoid type errors
+        const textField = this.$refs.textField as HTMLInputElement[];
+        textField[0].focus();
+      });
+    },
+
+    foodDisplayName(food: FoodState): string {
+      switch (food.type) {
+        case 'free-text':
+          return food.description;
+        case 'encoded-food':
+          return food.data.localDescription;
+        default: {
+          console.warn(`Unexpected food type`);
+          return '???';
+        }
+      }
+    },
+  },
+});
+</script>
