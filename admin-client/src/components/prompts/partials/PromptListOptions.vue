@@ -69,7 +69,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import draggable from 'vuedraggable';
-import { ListOption } from '@common/types';
+import { ListOption } from '@common/prompts';
 
 export default Vue.extend({
   name: 'PromptListOptions',

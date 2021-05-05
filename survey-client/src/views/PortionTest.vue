@@ -150,8 +150,7 @@ export default Vue.extend({
         {
           method: 'drink-scale',
           description: 'in_a_mug',
-          imageUrl:
-            'https://it24-dev.mrc-epid.cam.ac.uk/images/portion/mugs.jpg',
+          imageUrl: 'https://it24-dev.mrc-epid.cam.ac.uk/images/portion/mugs.jpg',
           useForRecipes: false,
           conversionFactor: 1.0,
           parameters: {
@@ -163,8 +162,7 @@ export default Vue.extend({
         {
           method: 'drink-scale',
           description: 'in_a_takeaway_cup',
-          imageUrl:
-            'https://it24-dev.mrc-epid.cam.ac.uk/images/portion/hotdrinks.jpg',
+          imageUrl: 'https://it24-dev.mrc-epid.cam.ac.uk/images/portion/hotdrinks.jpg',
           useForRecipes: false,
           conversionFactor: 1.0,
           parameters: {

@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { LocaleTranslation, LocaleOptionList } from '@common/types';
+import { LocaleOptionList } from '@common/prompts';
+import { LocaleTranslation } from '@common/types';
 import prompt from './Prompt';
 import PromptListOptions from './PromptListOptions.vue';
 import LanguageSelector from './LanguageSelector.vue';

@@ -2,22 +2,6 @@ import { NavigationGuard } from 'vue-router';
 import { Store } from 'vuex';
 import { RootState } from '@/types/vuex';
 
-export const recallGuard = (store: Store<RootState>): NavigationGuard => async (to, from, next) => {
-  const {
-    params: { surveyId },
-  } = to;
-
-  // Load survey data
-  if (!store.getters['recall/loaded']) await store.dispatch('recall/load', { surveyId });
-
-  if (!store.getters['recall/loaded']) {
-    next({ name: 'recall-entry', params: { surveyId } });
-    return;
-  }
-
-  next();
-};
-
 export const surveyParametersGuard = (store: Store<RootState>): NavigationGuard => async (
   to,
   from,

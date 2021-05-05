@@ -81,7 +81,8 @@ import draggable from 'vuedraggable';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import { promptSettings } from '@/components/prompts';
 import PromptSelector from '@/components/prompts/PromptSelector.vue';
-import { PromptQuestion, SurveyQuestionSection, MealSection } from '@common/types';
+import { PromptQuestion } from '@common/prompts';
+import { SurveyQuestionSection, MealSection } from '@common/types';
 
 export type Refs = {
   $refs: {

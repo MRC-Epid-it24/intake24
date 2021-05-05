@@ -1,4 +1,4 @@
-import { RecallState, SurveyState } from '@common/types';
+import { SurveyState } from '@common/types';
 import {
   GenerateUserResponse,
   PublicSurveyEntryResponse,
@@ -70,7 +70,7 @@ export default {
     return data;
   },
 
-  submit: async (surveyId: string, submission: RecallState): Promise<void> => {
+  submit: async (surveyId: string, submission: SurveyState): Promise<void> => {
     await http.post(`surveys/${surveyId}/submissions`, { submission });
   },
 };

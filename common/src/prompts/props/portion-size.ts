@@ -1,7 +1,6 @@
 import clone from 'lodash/cloneDeep';
-import type { PromptQuestion } from '../../types';
+import type { PromptQuestion, QuantityValues } from '..';
 import { basePromptProps, ValidatedPromptProps } from './base';
-import type { QuantityValues } from '..';
 
 export type LeftoverQuestionPromptProps = ValidatedPromptProps;
 

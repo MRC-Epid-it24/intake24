@@ -1,5 +1,5 @@
 import { Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
-import { PromptQuestion } from '@common/types';
+import { PromptQuestion } from '@common/prompts';
 import { SchemeQuestionAttributes, SchemeQuestionCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 

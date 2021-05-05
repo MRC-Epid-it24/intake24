@@ -1,6 +1,6 @@
 import { Store } from 'vuex';
 import PromptManager from '@/dynamic-recall/prompt-manager';
-import { Selection2 } from '@common/types';
+import { Selection } from '@common/types';
 
 export default class SelectionManager {
   private store: Store<any>;
@@ -23,7 +23,7 @@ export default class SelectionManager {
     );
   }
 
-  private tryAnyFood(mealIndex: number): Selection2 | undefined {
+  private tryAnyFood(mealIndex: number): Selection | undefined {
     const currentState = this.store.getters['survey/currentState'];
 
     for (let foodIndex = 0; foodIndex < currentState.meals[mealIndex].foods.length; ++foodIndex) {
@@ -41,7 +41,7 @@ export default class SelectionManager {
     return undefined;
   }
 
-  private tryFoodInAnyMeal(): Selection2 | undefined {
+  private tryFoodInAnyMeal(): Selection | undefined {
     const currentState = this.store.getters['survey/currentState'];
 
     for (let mealIndex = 0; mealIndex < currentState.meals.length; mealIndex++) {
@@ -52,7 +52,7 @@ export default class SelectionManager {
     return undefined;
   }
 
-  private tryAnyMeal(): Selection2 | undefined {
+  private tryAnyMeal(): Selection | undefined {
     const currentState = this.store.getters['survey/currentState'];
 
     for (let mealIndex = 0; mealIndex < currentState.meals.length; mealIndex++) {
@@ -68,7 +68,7 @@ export default class SelectionManager {
     return undefined;
   }
 
-  nextSelection(): Selection2 | undefined {
+  nextSelection(): Selection | undefined {
     return this.tryFoodInAnyMeal() ?? this.tryAnyMeal();
   }
 }

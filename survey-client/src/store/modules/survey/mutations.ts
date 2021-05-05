@@ -3,13 +3,12 @@ import { SurveyState } from '@/types/vuex';
 import {
   CustomPromptAnswer,
   FoodState,
-  MealState2,
+  MealState,
   MealTime,
-  Selection2,
+  Selection,
   SurveyState as CurrentSurveyState,
 } from '@common/types';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
-import Food from '@/util/Food';
 
 const mutations: MutationTree<SurveyState> = {
   setParameters(state, data: SurveyEntryResponse) {
@@ -24,7 +23,7 @@ const mutations: MutationTree<SurveyState> = {
     state.data = data;
   },
 
-  setSelection(state, selection: Selection2) {
+  setSelection(state, selection: Selection) {
     if (state.data == null) {
       console.error('state.data is null');
     } else {
@@ -93,7 +92,7 @@ const mutations: MutationTree<SurveyState> = {
     if (state.data == null || mealName == null) {
       console.error('state.data or submittedMeal is null');
     } else {
-      const newMeal: MealState2 = {
+      const newMeal: MealState = {
         name: mealName,
         defaultTime: { hours: 0, minutes: 0 },
         time: undefined,

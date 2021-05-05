@@ -48,7 +48,7 @@ import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
 import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
 import MealList, { RecallAction } from '@/components/recall/MealListDesktop.vue';
-import { MealSection, MealState2, Selection2, SurveyQuestionSection } from '@common/types';
+import { MealSection, MealState, Selection, SurveyQuestionSection } from '@common/types';
 import { ComponentType } from '@common/prompts';
 import { mapState } from 'vuex';
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
@@ -134,7 +134,7 @@ export default Vue.extend({
 
     ...mapState({
       meals: (state: any) => {
-        return state.survey.data.meals.map((meal: MealState2) => {
+        return state.survey.data.meals.map((meal: MealState) => {
           return {
             name: meal.name,
             time: meal.time
@@ -166,7 +166,7 @@ export default Vue.extend({
   },
 
   methods: {
-    setSelection(newSelection: Selection2) {
+    setSelection(newSelection: Selection) {
       // Prevent the currently active prompt from crashing if it expects a different selection type
       this.currentPrompt = null;
       this.$store.commit('survey/setSelection', newSelection);

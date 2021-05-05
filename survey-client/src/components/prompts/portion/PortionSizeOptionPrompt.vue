@@ -5,7 +5,6 @@
         {{ $t('portion.option.label', { food: localeDescription }) }}
       </template>
     </portion-layout>
-
     <v-row class="mt-2">
       <v-col
         v-for="(method, index) in availableMethods"
@@ -102,7 +101,6 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   },
 
   methods: {
-
     selectMethod(index: number) {
       if (this.currentValue === index) {
         this.currentValue = -1;

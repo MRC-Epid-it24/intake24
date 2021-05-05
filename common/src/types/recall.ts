@@ -1,11 +1,5 @@
-import type {
-  Prompt,
-  PromptAnswer,
-  PromptStatus,
-  PromptQuestion,
-  Dictionary,
-  QuantityValues,
-} from '.';
+import type { Dictionary } from '.';
+import type { PromptQuestion, QuantityValues } from '../prompts';
 import { UserFoodData } from './http';
 import { PortionSizeMethodId } from './models';
 
@@ -24,50 +18,6 @@ export type MealQuestions = Record<MealSection, PromptQuestion[]>;
 export interface RecallQuestions extends GenericQuestions {
   meals: MealQuestions;
 }
-
-/* export interface Food {
-  brand: string;
-  data: Dictionary;
-  searchTerm: string;
-} */
-
-// TODO: implement distinct selection types for survey/meal/food level
-export type Selection = {
-  section: SurveySection;
-  mealSection?: MealSection;
-  mealIdx?: number;
-  promptIdx: number;
-  prompt: Prompt;
-};
-
-export type PromptState = {
-  questionId: string;
-  answer: PromptAnswer;
-  status: PromptStatus;
-};
-
-export type MealState = {
-  name: string;
-  time: string;
-  flags: string[];
-
-  preFoods: PromptState[];
-  postFoods: PromptState[];
-};
-
-export type RecallState = {
-  schemeId: string;
-  startTime: Date | null;
-  endTime: Date | null;
-  flags: string[];
-
-  preMeals: PromptState[];
-  meals: MealState[];
-  postMeals: PromptState[];
-  submission: PromptState[];
-};
-
-// Types for version 3 style dynamic survey flow logic
 
 export type CustomPromptAnswer = string | string[] | number | number[];
 
@@ -140,7 +90,7 @@ export interface MealTime {
   minutes: number;
 }
 
-export interface MealState2 {
+export interface MealState {
   name: string;
   defaultTime: MealTime;
   time: MealTime | undefined;
@@ -163,7 +113,7 @@ export interface SelectedFood {
 
 export type SelectionMode = 'manual' | 'auto';
 
-export interface Selection2 {
+export interface Selection {
   element: SelectedMeal | SelectedFood | null;
   mode: SelectionMode;
 }
@@ -175,6 +125,6 @@ export type SurveyState = {
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
 
-  selection: Selection2;
-  meals: MealState2[];
+  selection: Selection;
+  meals: MealState[];
 };

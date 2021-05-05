@@ -1,5 +1,5 @@
 import clone from 'lodash/cloneDeep';
-import type { PromptQuestion } from '../../types';
+import type { PromptQuestion } from '..';
 import { basePromptProps, BasePromptProps, promptValidation, ValidatedPromptProps } from './base';
 
 export interface MealTimePromptProps extends ValidatedPromptProps {

@@ -5,12 +5,11 @@ import { RootState } from '@/types/vuex';
 import views from '@/views';
 import PortionTest from '@/views/PortionTest.vue';
 import DynamicRecall from '@/views/dynamic/DynamicRecall.vue';
-import { globalGuard, recallGuard, surveyParametersGuard } from './guards';
+import { globalGuard, surveyParametersGuard } from './guards';
 
 Vue.use(VueRouter);
 
 export default (store: Store<RootState>): VueRouter => {
-  const beforeRecall = recallGuard(store);
   const beforeDynamicRecall = surveyParametersGuard(store);
 
   const routes: RouteConfig[] = [
@@ -45,25 +44,6 @@ export default (store: Store<RootState>): VueRouter => {
       meta: { module: 'public', title: 'portionTest._' },
     },
 
-    // Testing Meals List
-    {
-      path: '/:surveyId/recall/meals_test',
-      name: 'recall-meals_test',
-      component: views.recall.meals,
-      meta: { module: 'recall', title: 'recall._' },
-      props: true,
-      beforeEnter: beforeRecall,
-    },
-    {
-      path: '/:surveyId/recall/meals_test2',
-      name: 'recall-meals_test2',
-      component: views.recall.meals2,
-      meta: { module: 'recall', title: 'recall._' },
-      props: true,
-      beforeEnter: beforeRecall,
-    },
-    // END of TEST
-
     {
       path: '/:surveyId/profile',
       name: 'profile',
@@ -76,47 +56,6 @@ export default (store: Store<RootState>): VueRouter => {
       component: views.generateUser,
       meta: { module: 'public', title: 'login._' },
       props: true,
-    },
-    {
-      path: '/:surveyId/recall',
-      name: 'recall-entry',
-      component: views.recall.entry,
-      meta: { module: 'recall', title: 'recall._' },
-      props: true,
-      beforeEnter: beforeRecall,
-    },
-    {
-      path: '/:surveyId/recall/meals/:mealId/:questionId?',
-      name: 'recall-meals',
-      component: views.recall.flow,
-      meta: { module: 'recall', title: 'recall._', section: 'meals' },
-      props: true,
-      beforeEnter: beforeRecall,
-    },
-    {
-      path: '/:surveyId/recall/pre-meals/:questionId?',
-      name: 'recall-preMeals',
-      component: views.recall.flow,
-      meta: { module: 'recall', title: 'recall._', section: 'preMeals' },
-      props: true,
-      beforeEnter: beforeRecall,
-    },
-    {
-      path: '/:surveyId/recall/post-meals/:questionId?',
-      name: 'recall-postMeals',
-      component: views.recall.flow,
-      meta: { module: 'recall', title: 'recall._', section: 'postMeals' },
-      props: true,
-      beforeEnter: beforeRecall,
-    },
-    {
-      path: '/:surveyId/recall/submission/:questionId?',
-      name: 'recall-submission',
-      component: views.recall.flow,
-
-      meta: { module: 'recall', title: 'recall._', section: 'submission' },
-      props: true,
-      beforeEnter: beforeRecall,
     },
     {
       path: '/:surveyId/feedback',

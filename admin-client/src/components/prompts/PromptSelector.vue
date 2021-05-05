@@ -113,14 +113,14 @@ import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
 import portionSizePrompts from '@/components/prompts/portion-size';
 import { merge } from '@/util';
+import { FormRefs, SurveyQuestionSection, MealSection } from '@common/types';
 import {
-  FormRefs,
   PromptQuestion,
-  SurveyQuestionSection,
-  MealSection,
+  QuestionType,
+  customPromptQuestions,
   portionSizePromptQuestions,
-} from '@common/types';
-import { customPromptQuestions, QuestionType, standardPromptQuestions } from '@common/prompts';
+  standardPromptQuestions,
+} from '@common/prompts';
 import PromptTypeSelector from './PromptTypeSelector.vue';
 
 export interface EditPromptQuestion extends PromptQuestion {

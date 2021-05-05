@@ -3,8 +3,8 @@ import { RootState, SurveyState } from '@/types/vuex';
 import {
   FoodState,
   Meals,
-  MealState2,
-  Selection2,
+  MealState,
+  Selection,
   SurveyState as CurrentSurveyState,
 } from '@common/types';
 
@@ -15,7 +15,7 @@ const getters: GetterTree<SurveyState, RootState> = {
     return state.data;
   },
 
-  meals: (state): MealState2[] | undefined => {
+  meals: (state): MealState[] | undefined => {
     return state.data?.meals;
   },
 
@@ -23,7 +23,7 @@ const getters: GetterTree<SurveyState, RootState> = {
     return state.parameters?.scheme.meals;
   },
 
-  selection: (state): Selection2 | undefined => {
+  selection: (state): Selection | undefined => {
     return state.data?.selection;
   },
 
@@ -31,7 +31,7 @@ const getters: GetterTree<SurveyState, RootState> = {
     return state.data?.selection.element?.mealIndex;
   },
 
-  selectedMeal: (state): MealState2 | undefined => {
+  selectedMeal: (state): MealState | undefined => {
     const mealIndex = state.data?.selection.element?.mealIndex;
     const meals = state.data?.meals;
 

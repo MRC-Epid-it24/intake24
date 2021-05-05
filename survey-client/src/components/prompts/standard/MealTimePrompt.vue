@@ -12,7 +12,7 @@
     </v-form>
     <template v-slot:actions>
       <v-btn :block="isMobile" class="px-5" large @click="removeMeal">
-        {{ $t('prompts.mealTime.no', { meal: meal.name }) }}
+        {{ $t('prompts.mealTime.no', { meal: mealName }) }}
       </v-btn>
       <v-btn
         :block="isMobile"
@@ -22,7 +22,7 @@
         large
         @click="submit"
       >
-        {{ $t('prompts.mealTime.yes', { meal: meal.name }) }}
+        {{ $t('prompts.mealTime.yes', { meal: mealName }) }}
       </v-btn>
     </template>
   </prompt-layout>
@@ -30,10 +30,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import merge from 'deepmerge';
-import { MealTimePromptProps, mealTimePromptProps } from '@common/prompts';
-import recall from '@/util/Recall';
-import Meal from '@/util/Meal';
+import { MealTimePromptProps } from '@common/prompts';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
@@ -45,6 +42,9 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     promptProps: {
       type: Object as () => MealTimePromptProps,
     },
+    mealName: {
+      type: String,
+    },
     value: {
       type: String,
       default: null,
@@ -52,12 +52,9 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   data() {
-    const { text, description, ...rest } = merge(mealTimePromptProps, this.promptProps);
-
     return {
-      ...rest,
       currentValue: this.value,
-      recall,
+      validation: this.promptProps.validation,
       errors: [] as string[],
     };
   },
@@ -66,23 +63,17 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
-    mealIndex(): number {
-      return parseInt(this.$route.params.mealId, 10);
-    },
-    meal(): Meal {
-      return this.recall.getMeal(this.mealIndex);
-    },
     text(): string {
       const text = this.promptProps.text[this.$i18n.locale];
       return text
-        ? text.replace('{meal}', this.meal.name ?? '')
-        : (this.$t('prompts.mealTime.text', { meal: this.meal.name }) as string);
+        ? text.replace('{meal}', this.mealName ?? '')
+        : (this.$t('prompts.mealTime.text', { meal: this.mealName }) as string);
     },
     description(): string {
       const description = this.promptProps.description[this.$i18n.locale];
       return description
-        ? description.replace('{meal}', this.meal.name ?? '')
-        : (this.$t('prompts.mealTime.description', { meal: this.meal.name }) as string);
+        ? description.replace('{meal}', this.mealName ?? '')
+        : (this.$t('prompts.mealTime.description', { meal: this.mealName }) as string);
     },
   },
 
@@ -92,7 +83,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     },
 
     removeMeal() {
-      this.recall.removeMeal(this.mealIndex);
+      this.$emit('removeMeal');
     },
 
     submit() {
@@ -104,7 +95,6 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
         return;
       }
 
-      this.meal.time = this.currentValue;
       this.$emit('answer', this.currentValue);
     },
   },

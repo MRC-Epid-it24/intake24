@@ -27,15 +27,6 @@ export type PortionSizeComponentType =
 
 export type ComponentType = CustomComponentType | StandardComponentType | PortionSizeComponentType;
 
-export enum PromptStatuses {
-  INITIAL = 'initial',
-  IN_PROGRESS = 'in_progress',
-  DONE = 'done',
-  ERROR = 'error',
-}
-
-export type PromptStatus = PromptStatuses;
-
 export interface PromptQuestion<T extends BasePromptProps = BasePromptProps> {
   id: string;
   name: string;
@@ -47,14 +38,6 @@ export interface PromptQuestion<T extends BasePromptProps = BasePromptProps> {
 export interface PromptQuestionWithSection<T extends BasePromptProps = BasePromptProps>
   extends PromptQuestion<T> {
   section: SurveyQuestionSection | MealSection;
-}
-
-export type PromptAnswer = string | string[] | null;
-
-export interface Prompt<T extends BasePromptProps = BasePromptProps> {
-  question: PromptQuestion<T>;
-  answer: PromptAnswer;
-  status: PromptStatus;
 }
 
 export interface QuantityValues {

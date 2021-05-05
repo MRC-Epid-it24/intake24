@@ -1,11 +1,5 @@
-import {
-  Meal,
-  MealSection,
-  PromptQuestion,
-  PromptQuestionWithSection,
-  SurveyQuestionSection,
-  RecallQuestions,
-} from '../types';
+import { Meal, MealSection, SurveyQuestionSection, RecallQuestions } from '../types';
+import { PromptQuestion, PromptQuestionWithSection } from '../prompts';
 import { ExportSection } from '../types/models';
 
 export const flattenScheme = (scheme: RecallQuestions): PromptQuestion[] =>

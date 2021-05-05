@@ -22,7 +22,7 @@ import {
 import { ForbiddenError, InternalServerError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { toSimpleName, generateToken } from '@/util';
-import { RecallState, SurveyState } from '@common/types';
+import { SurveyState } from '@common/types';
 import { SurveyUserInfoResponse } from '@common/types/http';
 import { surveyMgmt, surveyRespondent } from './auth';
 
@@ -51,7 +51,7 @@ export interface SurveyService {
   userInfo: (surveyId: string, user: User, tzOffset: number) => Promise<SurveyUserInfoResponse>;
   getSession: (surveyId: string, userId: number) => Promise<UserSession>;
   setSession: (surveyId: string, userId: number, sessionData: SurveyState) => Promise<UserSession>;
-  submit: (surveyId: string, userId: number, input: RecallState) => Promise<void>;
+  submit: (surveyId: string, userId: number, input: SurveyState) => Promise<void>;
 }
 
 export default ({
@@ -405,7 +405,7 @@ export default ({
    * @param {RecallState} input
    * @returns {Promise<void>}
    */
-  const submit = async (surveyId: string, userId: number, input: RecallState): Promise<void> => {
+  const submit = async (surveyId: string, userId: number, input: SurveyState): Promise<void> => {
     const survey = await Survey.scope('scheme').findByPk(surveyId);
     if (!survey || !survey.scheme) throw new NotFoundError();
 
@@ -443,27 +443,23 @@ export default ({
     });
 
     // Survey custom fields - top-level questions
-    const surveyCustomFieldInputs = [...input.preMeals, ...input.postMeals]
-      // Filter out null answers (conditionally skipped prompt)
-      .filter((item) => surveyCustomQuestions.includes(item.questionId) && item.answer)
-      .map((item) => ({
+    const surveyCustomFieldInputs = Object.entries(input.customPromptAnswers)
+      .filter(([questionId]) => surveyCustomQuestions.includes(questionId))
+      .map(([questionId, answer]) => ({
         surveySubmissionId,
-        name: item.questionId,
-        value: Array.isArray(item.answer) ? item.answer.join(', ') : (item.answer as string),
+        name: questionId,
+        value: Array.isArray(answer) ? answer.join(', ') : answer.toString(),
       }));
 
     await SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs);
 
     // Survey meals
-    const mealInputs = input.meals.map(({ name, time }) => {
-      const [hours, minutes] = time.split(':');
-      return {
-        surveySubmissionId,
-        name,
-        hours: parseInt(hours, 10),
-        minutes: parseInt(minutes, 10),
-      };
-    });
+    const mealInputs = input.meals.map(({ name, time }) => ({
+      surveySubmissionId,
+      name,
+      hours: time?.hours ?? 8,
+      minutes: time?.minutes ?? 0,
+    }));
 
     await SurveySubmissionMeal.bulkCreate(mealInputs);
     const meals = await SurveySubmissionMeal.findAll({
@@ -478,14 +474,12 @@ export default ({
       if (!mealRecord) throw new InternalServerError();
 
       // Meal custom fields - meal-level questions
-      const mealCustomFieldInputs = [...mealInput.preFoods, ...mealInput.postFoods]
-        // Filter out null answers (conditionally skipped prompt)
-        .filter((item) => mealCustomQuestions.includes(item.questionId) && item.answer)
-        .map((item) => ({
+      const mealCustomFieldInputs = Object.entries(mealInput.customPromptAnswers)
+        .filter(([questionId]) => mealCustomQuestions.includes(questionId))
+        .map(([questionId, answer]) => ({
           mealId: mealRecord.id,
-          name: item.questionId,
-          // Empty / null answers filtered out, TS doesn't update type correctly
-          value: Array.isArray(item.answer) ? item.answer.join(', ') : (item.answer as string),
+          name: questionId,
+          value: Array.isArray(answer) ? answer.join(', ') : answer.toString(),
         }));
 
       await SurveySubmissionMealCustomField.bulkCreate(mealCustomFieldInputs);

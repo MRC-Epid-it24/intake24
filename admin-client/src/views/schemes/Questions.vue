@@ -62,7 +62,8 @@ import {
   mealSections,
   surveySections,
 } from '@common/schemes';
-import { Dictionary, PromptQuestion, SurveyQuestionSection, MealSection } from '@common/types';
+import { PromptQuestion } from '@common/prompts';
+import { Dictionary, SurveyQuestionSection, MealSection } from '@common/types';
 import { SchemeForm } from './Form.vue';
 import QuestionList from './QuestionList.vue';
 

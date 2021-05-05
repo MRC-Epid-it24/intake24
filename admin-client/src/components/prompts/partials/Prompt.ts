@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { Condition, LocaleTranslation, PromptValidationProps } from '@common/types';
+import { Condition, PromptValidationProps } from '@common/prompts';
+import { LocaleTranslation } from '@common/types';
 import PromptContent from './PromptContent.vue';
 import PromptConditions from './PromptConditions.vue';
 import PromptValidation from './PromptValidation.vue';

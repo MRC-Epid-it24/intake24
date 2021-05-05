@@ -1,5 +1,6 @@
 import clone from 'lodash/cloneDeep';
-import type { LocaleTranslation, PromptQuestion } from '../../types';
+import type { LocaleTranslation } from '../../types';
+import type { PromptQuestion } from '..';
 import { basePromptProps, BasePromptProps, promptValidation, ValidatedPromptProps } from './base';
 
 export type DatePickerPromptProps = ValidatedPromptProps;

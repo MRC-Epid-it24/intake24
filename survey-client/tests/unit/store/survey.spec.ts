@@ -1,8 +1,8 @@
 import store from '@/store';
 
-import { MealState2, Selection2, SurveyState } from '@common/types';
+import { MealState, Selection, SurveyState } from '@common/types';
 
-function dummyMeal(name: string): MealState2 {
+function dummyMeal(name: string): MealState {
   return {
     name,
     customPromptAnswers: {},
@@ -13,7 +13,7 @@ function dummyMeal(name: string): MealState2 {
   };
 }
 
-function dummyMeals(count: number): MealState2[] {
+function dummyMeals(count: number): MealState[] {
   const result = [];
 
   for (let i = 1; i <= count; ++i) {
@@ -125,7 +125,7 @@ describe('Survey store', () => {
 
       expect(store.getters['survey/meals']).toHaveLength(2);
 
-      const selection: Selection2 = store.getters['survey/selection'];
+      const selection: Selection = store.getters['survey/selection'];
 
       if (selection.element == null) fail('selection should be null');
 
