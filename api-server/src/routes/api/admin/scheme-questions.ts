@@ -28,34 +28,24 @@ router.get(
 
 router
   .route('/:schemeQuestionId')
-  .get(
-    permission('scheme-questions-detail'),
-    validation.entry('schemeQuestionId'),
-    wrapAsync(schemeQuestionController.detail)
-  )
+  .get(permission('scheme-questions-detail'), wrapAsync(schemeQuestionController.detail))
   .put(
     permission('scheme-questions-edit'),
-    validation.entry('schemeQuestionId'),
     validation.update,
     wrapAsync(schemeQuestionController.update)
   )
-  .delete(
-    permission('scheme-questions-delete'),
-    validation.entry('schemeQuestionId'),
-    wrapAsync(schemeQuestionController.destroy)
-  );
+  .delete(permission('scheme-questions-delete'), wrapAsync(schemeQuestionController.destroy));
 
 router.get(
   '/:schemeQuestionId/edit',
   permission('scheme-questions-edit'),
-  validation.entry('schemeQuestionId'),
   wrapAsync(schemeQuestionController.edit)
 );
 
 router.post(
   '/:schemeQuestionId/sync',
   permission('scheme-questions-sync'),
-  validation.entry('schemeQuestionId'),
+  validation.sync,
   wrapAsync(schemeQuestionController.sync)
 );
 

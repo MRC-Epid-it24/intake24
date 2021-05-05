@@ -3,7 +3,6 @@
     <template v-slot:activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }">
         <v-btn
-          ref="activator"
           v-if="show"
           v-bind="attrs"
           v-on="on"

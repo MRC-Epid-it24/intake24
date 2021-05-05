@@ -4,11 +4,19 @@
       <v-container>
         <v-card-text>
           <v-row>
-            <v-col cols="12">
+            <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.name"
-                :error-messages="form.errors.get('name')"
-                :label="$t('schemes.name')"
+                v-model="form.question.id"
+                :label="$t('schemes.questions.id')"
+                hide-details="auto"
+                name="id"
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.question.name"
+                :label="$t('schemes.questions.name')"
                 hide-details="auto"
                 name="name"
                 outlined
@@ -32,12 +40,10 @@
             {{ error.msg }}
           </v-alert>
         </v-card-text>
+        <v-card-text>
+          <submit-footer :disabled="form.errors.any()"></submit-footer>
+        </v-card-text>
       </v-container>
-      <v-divider></v-divider>
-
-      <v-card-text>
-        <submit-footer :disabled="form.errors.any()"></submit-footer>
-      </v-card-text>
     </v-form>
     <prompt-selector ref="selector" :questionIds="questionIds" @save="save"></prompt-selector>
   </layout>
@@ -54,9 +60,7 @@ import { PromptQuestion } from '@common/types';
 import { SchemeQuestionEntry, SchemeQuestionRefs } from '@common/types/http/admin';
 
 export type SchemeQuestionForm = {
-  id: number | null;
-  name: string | null;
-  prompt: PromptQuestion;
+  question: PromptQuestion;
 };
 
 export type Refs = {
@@ -77,11 +81,9 @@ export default (Vue as VueConstructor<
   data() {
     return {
       form: form<SchemeQuestionForm>({
-        id: null,
-        name: null,
-        prompt: customPromptQuestions[0],
+        question: customPromptQuestions[0],
       }),
-      nonInputErrorKeys: ['prompt'],
+      nonInputErrorKeys: ['question'],
     };
   },
 
@@ -93,13 +95,13 @@ export default (Vue as VueConstructor<
 
   methods: {
     edit() {
-      this.$refs.selector.edit(0, this.form.prompt);
+      this.$refs.selector.edit(0, this.form.question);
     },
 
     save({ question }: { question: PromptQuestion; index: number }) {
-      this.form.errors.clear('prompt');
+      this.form.errors.clear('question');
 
-      this.form.prompt = question;
+      this.form.question = question;
     },
   },
 });

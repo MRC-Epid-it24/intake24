@@ -21,6 +21,12 @@ export default class SchemeQuestion
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
+  })
+  public questionId!: string;
+
+  @Column({
+    allowNull: false,
     type: DataType.STRING(512),
   })
   public name!: string;
@@ -29,15 +35,15 @@ export default class SchemeQuestion
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get prompt(): PromptQuestion {
-    const val = this.getDataValue('prompt') as unknown;
+  get question(): PromptQuestion {
+    const val = this.getDataValue('question') as unknown;
     return val ? JSON.parse(val as string) : {};
   }
 
-  set prompt(value: PromptQuestion) {
+  set question(value: PromptQuestion) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    this.setDataValue('prompt', JSON.stringify(value ?? {}));
+    this.setDataValue('question', JSON.stringify(value ?? {}));
   }
 
   @CreatedAt

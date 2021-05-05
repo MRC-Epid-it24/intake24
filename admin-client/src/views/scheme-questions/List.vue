@@ -1,10 +1,10 @@
 <template>
   <data-table :headers="headers">
     <template v-slot:[`item.type`]="{ item }">
-      {{ $t(`schemes.questions.${item.prompt.type}._`) }}
+      {{ $t(`schemes.questions.${item.question.type}._`) }}
     </template>
     <template v-slot:[`item.component`]="{ item }">
-      {{ $t(`schemes.prompts.${item.prompt.component}.title`) }}
+      {{ $t(`schemes.prompts.${item.question.component}.title`) }}
     </template>
   </data-table>
 </template>
@@ -22,7 +22,12 @@ export default Vue.extend({
     return {
       headers: [
         {
-          text: this.$t('common.name'),
+          text: this.$t('schemes.questions.id'),
+          sortable: true,
+          value: 'questionId',
+        },
+        {
+          text: this.$t('schemes.questions.name'),
           sortable: true,
           value: 'name',
         },

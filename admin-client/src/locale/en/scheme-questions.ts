@@ -13,9 +13,12 @@ const schemeQuestions: LocaleMessageObject = {
   editTemplate: 'Edit question template',
   sync: {
     _: 'Synchronization',
+    synchronize: 'Synchronize',
+    confirm: 'Synchronize template with scheme',
     title: 'List of schemes containing question with ID: {id}',
     true: 'Question is synchronized',
     false: 'Question is not synchronized',
+    noSchemes: 'No scheme contains this template yet.',
   },
 };
 
