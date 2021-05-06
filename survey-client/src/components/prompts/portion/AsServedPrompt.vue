@@ -6,74 +6,109 @@
       </template>
       <v-row>
         <v-col>
-          <v-card>
-            <v-img class="align-end" :src="getMainImage()" :aspect-ratio="16 / 9">
-              <template v-slot:placeholder>
-                <ImagePlaceholder></ImagePlaceholder>
-              </template>
-              <v-row>
-                <v-col class="d-flex justify-end mr-auto">
-                  <v-chip class="ma-2">
-                    {{ mainWeight }}
-                    <!-- Are these always in grams? -->
-                  </v-chip>
-                </v-col>
-              </v-row>
-            </v-img>
-            <v-card-actions>
-              <v-container>
-                <v-row>
-                  <!-- Thumbnails -->
-                  <v-col class="pa-1" cols="3" sm="2" lg="1">
-                    <v-card @click="hadLessInput()">
-                      <v-img :src="getFirstThumbnail()">-</v-img>
-                      <v-overlay absolute>
-                        <v-btn icon>
-                          <v-icon>fas fa-fw fa-minus</v-icon>
-                        </v-btn>
-                      </v-overlay>
-                    </v-card>
-                  </v-col>
-                  <template v-for="(imageSet, idx) in selectionImageData.images">
-                    <v-col
-                      v-bind:key="idx"
-                      class="pa-1"
-                      cols="3"
-                      sm="2"
-                      lg="1"
-                      :class="isSelected(idx)"
-                    >
-                      <v-card @click="setSelection(idx)">
-                        <v-img :src="imageSet.thumbnailUrl"></v-img>
-                      </v-card>
+          <v-expansion-panels>
+            <v-expansion-panel>
+              <v-expansion-panel-header disable-icon-rotate>
+                Select portion size
+                <template v-slot:actions>
+                  <valid-invalid-icon :valid="selectedServing"></valid-invalid-icon>
+                </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-card>
+                  <v-img class="align-end" :src="getMainImage()" :aspect-ratio="16 / 9">
+                    <template v-slot:placeholder>
+                      <image-placeholder></image-placeholder>
+                    </template>
+                    <v-row>
+                      <v-col class="d-flex justify-end mr-auto">
+                        <v-chip class="ma-2">
+                          {{ mainWeight }}
+                        </v-chip>
+                      </v-col>
+                    </v-row>
+                  </v-img>
+                  <v-card-actions>
+                    <v-container>
+                      <v-row>
+                        <!-- Thumbnails -->
+                        <v-col class="pa-1" cols="3" sm="2" lg="1">
+                          <v-card @click="hadLessInput()">
+                            <v-img :src="getFirstThumbnail()">-</v-img>
+                            <v-overlay absolute>
+                              <v-btn icon>
+                                <v-icon>fas fa-fw fa-minus</v-icon>
+                              </v-btn>
+                            </v-overlay>
+                          </v-card>
+                        </v-col>
+                        <template v-for="(imageSet, idx) in selectionImageData.images">
+                          <v-col
+                            v-bind:key="idx"
+                            class="pa-1"
+                            cols="3"
+                            sm="2"
+                            lg="1"
+                            :class="isSelected(idx)"
+                          >
+                            <v-card @click="setSelection(idx)">
+                              <v-img :src="imageSet.thumbnailUrl"></v-img>
+                            </v-card>
+                          </v-col>
+                        </template>
+                        <v-col class="pa-1 mr-auto" cols="3" sm="2" lg="1">
+                          <v-card @click="hadMoreInput()">
+                            <v-img :src="getLastThumbnail()">-</v-img>
+                            <v-overlay absolute>
+                              <v-btn icon>
+                                <v-icon>fas fa-fw fa-plus</v-icon>
+                              </v-btn>
+                            </v-overlay>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <!-- Inputs -->
+                        <v-col align="center">
+                          <v-btn @click="hadLessInput()">I had less</v-btn>
+                        </v-col>
+                        <v-col align="center">
+                          <v-btn @click="hadMoreInput()">I had more</v-btn>
+                        </v-col>
+                        <v-col align="center">
+                          <v-btn color="success" @click="servingCompleted()">I had this much</v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-actions>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header disable-icon-rotate>
+                Did you leave some?
+                <template v-slot:actions>
+                  <valid-invalid-icon :valid="selectedLeftover"></valid-invalid-icon>
+                </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+
+                  <v-row>
+                    <v-col>Yes / No</v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <as-served-selector
+                        :asServedData="this.selectionImageData"
+                        :imageSet="this.selectionImageData.images"
+                        @as-served-selector-submit="setLeftoverStatus($event)"
+                      ></as-served-selector>
                     </v-col>
-                  </template>
-                  <v-col class="pa-1 mr-auto" cols="3" sm="2" lg="1">
-                    <v-card @click="hadMoreInput()">
-                      <v-img :src="getLastThumbnail()">-</v-img>
-                      <v-overlay absolute>
-                        <v-btn icon>
-                          <v-icon>fas fa-fw fa-plus</v-icon>
-                        </v-btn>
-                      </v-overlay>
-                    </v-card>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <!-- Inputs -->
-                  <v-col align="center">
-                    <v-btn @click="hadLessInput()">I had less</v-btn>
-                  </v-col>
-                  <v-col align="center">
-                    <v-btn @click="hadMoreInput()">I had more</v-btn>
-                  </v-col>
-                  <v-col align="center">
-                    <v-btn color="success" @click="submit()">I had this much</v-btn>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-actions>
-          </v-card>
+                  </v-row>
+
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-col>
       </v-row>
     </portion-layout>
@@ -86,6 +121,8 @@ import merge from 'deepmerge';
 
 import localeContent from '@/components/mixins/localeContent';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
+import ValidInvalidIcon from '@/components/elements/ValidInvalidIcon.vue';
+import AsServedSelector from '@/components/prompts/portion/AsServedSelector.vue';
 import { AsServedSetResponse } from '@common/types/http/foods';
 import { basePromptProps, BasePromptProps } from '@common/prompts';
 import { LocaleTranslation } from '@common/types';
@@ -96,6 +133,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   components: {
     ImagePlaceholder,
+    ValidInvalidIcon,
+    AsServedSelector,
   },
 
   mixins: [BasePortion, localeContent],
@@ -122,7 +161,10 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       errors: [] as string[],
       selectionImageData: {} as AsServedSetResponse,
       selectedObjectIdx: null as number | null,
-      dataLoaded: false,
+      selectedServing: false as boolean,
+      selectedLeftover: false as boolean,
+      leftoverCompleteStatus: false as boolean,
+      dataLoaded: false as boolean,
     };
   },
 
@@ -162,6 +204,9 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     },
     setDataLoaded() {
       this.dataLoaded = true;
+    },
+    setLeftoverStatus(status: boolean) {
+      this.leftoverCompleteStatus = status;
     },
     setSelection(idx: number) {
       this.selectedObjectIdx = idx;
@@ -222,6 +267,9 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
         console.log('had more');
       }
+    },
+    servingCompleted() {
+      this.selectedServing = true;
     },
     submit() {
       if (this.selectedObjectIdx === null) return;
