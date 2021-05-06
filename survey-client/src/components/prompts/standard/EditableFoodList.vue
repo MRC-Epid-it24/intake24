@@ -39,7 +39,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { FoodState } from '@common/types';
-import { clone } from 'lodash';
+import clone from 'lodash/clone';
 
 export interface HasEditableFoodList {
   editableList: FoodState[];
