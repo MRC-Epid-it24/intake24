@@ -69,6 +69,8 @@ jobs:
         uses: actions/setup-node@v2.1.4
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install latest npm
+        run: npm install -g npm
       - name: Common - install dependencies
         working-directory: common
         run: npm ci
