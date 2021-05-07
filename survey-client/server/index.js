@@ -25,8 +25,19 @@ const startApp = () => {
           connectSrc: ["'self'", config.api.host],
           fontSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
           imgSrc: ["'self'", 'blob:', 'data:', config.api.host],
-          scriptSrc: ["'self'", 'https://storage.googleapis.com'],
-          styleSrc: ["'self'", 'https://fonts.googleapis.com', "'unsafe-inline'"],
+          scriptSrc: [
+            "'self'",
+            'https://storage.googleapis.com',
+            'https://www.google.com/recaptcha/',
+            'https://www.gstatic.com/recaptcha/',
+          ],
+          styleSrc: [
+            "'self'",
+            'https://fonts.googleapis.com',
+            'https://www.google.com/recaptcha/',
+            'https://recaptcha.google.com/recaptcha/',
+            "'unsafe-inline'", // TODO: review for Vuetify theming
+          ],
         },
       },
     })

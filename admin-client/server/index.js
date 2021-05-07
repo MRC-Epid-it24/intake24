@@ -7,18 +7,12 @@ dotenvExpand(env);
 
 const express = require('express');
 const helmet = require('helmet');
-const { nanoid } = require('nanoid');
-const nunjucks = require('nunjucks');
+const path = require('path');
 
 const config = require('./config');
 
 const startApp = async () => {
   const app = express();
-
-  app.use((req, res, next) => {
-    res.locals.nonce = { recaptcha: nanoid() };
-    next();
-  });
 
   app.use(
     helmet({
@@ -27,24 +21,35 @@ const startApp = async () => {
           defaultSrc: ["'self'"],
           connectSrc: ["'self'", config.api.host],
           fontSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
-          frameSrc: ["'self'", 'https://www.google.com', 'https://*.duosecurity.com'],
+          frameSrc: [
+            "'self'",
+            'https://www.google.com',
+            'https://youtube.com',
+            'https://www.youtube.com',
+            'https://*.duosecurity.com',
+          ],
           imgSrc: ["'self'", 'blob:', config.api.host],
           scriptSrc: [
             "'self'",
             'https://storage.googleapis.com',
-            (req, res) => `'nonce-${res.locals.nonce.recaptcha}'`,
+            'https://www.google.com/recaptcha/',
+            'https://www.gstatic.com/recaptcha/',
           ],
-          styleSrc: ["'self'", 'https://fonts.googleapis.com', "'unsafe-inline'"],
+          styleSrc: [
+            "'self'",
+            'https://fonts.googleapis.com',
+            'https://www.google.com/recaptcha/',
+            'https://recaptcha.google.com/recaptcha/',
+            "'unsafe-inline'", // TODO: review for Vuetify theming
+          ],
         },
       },
     })
   );
 
-  nunjucks.configure(config.static, { autoescape: true, express: app });
-
   app.use(express.static(config.static, { index: false }));
 
-  app.get('*', (req, res) => res.render('index.html'));
+  app.get('*', (req, res) => res.sendFile(path.resolve(config.static, 'index.html')));
 
   // Start listening
   app.listen(config.port, config.url, (err) => {
