@@ -10,7 +10,7 @@ import surveys from './surveys';
 
 const router = Router();
 
-router.use(authentication);
+router.use('/auth', authentication);
 router.use('/password', password);
 router.use('/subscriptions', subscriptions);
 

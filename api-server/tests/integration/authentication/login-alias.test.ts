@@ -3,7 +3,7 @@ import securityConfig from '@/config/security';
 import { suite } from '@tests/integration/helpers';
 
 export default (): void => {
-  const url = '/api/login/alias';
+  const url = '/api/auth/login/alias';
 
   it('Missing credentials should return 422 with errors', async () => {
     const { status, body } = await request(suite.app).post(url).set('Accept', 'application/json');

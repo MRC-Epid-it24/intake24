@@ -3,7 +3,7 @@ import securityConfig from '@/config/security';
 import { suite } from '@tests/integration/helpers';
 
 export default (): void => {
-  const url = '/api/login/token';
+  const url = '/api/auth/login/token';
 
   it('Missing token should return 401 with errors', async () => {
     const { status } = await request(suite.app).post(url).set('Accept', 'application/json');

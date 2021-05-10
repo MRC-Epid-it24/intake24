@@ -15,7 +15,7 @@ export default {
   async login(request: LoginRequest): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('login/alias', request);
+    } = await http.post<AuthResponse>('auth/login/alias', request);
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
@@ -24,7 +24,7 @@ export default {
   async token(request: TokenRequest): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>(`login/token`, request);
+    } = await http.post<AuthResponse>(`auth/login/token`, request);
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
@@ -33,14 +33,14 @@ export default {
   async refresh(): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('refresh');
+    } = await http.post<AuthResponse>('auth/refresh');
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
   },
 
   async logout(): Promise<void> {
-    await http.post('logout');
+    await http.post('auth/logout');
     tokenSvc.clearTokens();
   },
 };

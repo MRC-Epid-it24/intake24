@@ -86,7 +86,7 @@ export default ({
     const { accessToken, refreshToken } = await jwtService.signTokens(payload, {
       subject: typeof subject === 'string' ? subject : btoa(subject),
     });
-    await jwtRotationService.save(userId, refreshToken);
+    await jwtRotationService.store(refreshToken, userId);
 
     return { accessToken, refreshToken };
   };

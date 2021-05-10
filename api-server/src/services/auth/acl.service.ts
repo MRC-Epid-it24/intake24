@@ -46,14 +46,14 @@ export default ({
   const { enabled, expiresIn } = config.acl.cache;
   const { id: userId } = currentUser;
 
-  const fetchPermissions = async () => {
+  const fetchPermissions = async (): Promise<Permission[]> => {
     const user = await User.scope(['permissions', 'rolesPerms']).findByPk(userId);
     if (!user) return [];
 
     return user.allPermissions();
   };
 
-  const fetchRoles = async () => {
+  const fetchRoles = async (): Promise<Role[]> => {
     const user = await User.scope('roles').findByPk(userId);
     if (!user) return [];
 

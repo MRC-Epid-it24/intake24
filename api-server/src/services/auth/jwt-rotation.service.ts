@@ -7,31 +7,65 @@ import type { TokenPayload } from '.';
 export const decode = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;
 
 export interface JwtRotationService {
-  save: (userId: number, token: string) => Promise<void>;
-  revoke: (token: string) => Promise<void>;
-  revokeByUser: (userId: number) => Promise<void>;
+  store: (token: string, userId: number) => Promise<RefreshToken>;
+  revoke: (token: string) => Promise<number>;
+  revokeByUser: (userId: number) => Promise<number>;
   verify: (token: string) => Promise<boolean>;
   verifyAndRevoke: (token: string) => Promise<boolean>;
-  purge: () => Promise<void>;
+  purge: () => Promise<number>;
 }
 
 export default ({ logger }: Pick<IoC, 'logger'>): JwtRotationService => {
-  const save = async (userId: number, token: string): Promise<void> => {
+  /**
+   * Store new refresh token to database
+   *
+   * @param {string} token
+   * @param {number} userId
+   * @returns {Promise<RefreshToken>}
+   */
+  const store = async (token: string, userId: number): Promise<RefreshToken> => {
     const { jti: id, exp } = decode(token);
 
-    RefreshToken.create({ id, userId, revoked: false, expiresAt: new Date(exp * 1000) });
+    return RefreshToken.create({
+      id,
+      userId,
+      revoked: false,
+      expiresAt: new Date(exp * 1000),
+    });
   };
 
-  const revoke = async (token: string): Promise<void> => {
+  /**
+   * Revoke refresh token by ID
+   *
+   * @param {string} token
+   * @returns {Promise<number>}
+   */
+  const revoke = async (token: string): Promise<number> => {
     const { jti: id } = decode(token);
 
-    await RefreshToken.update({ revoked: true }, { where: { id } });
+    const [rows] = await RefreshToken.update({ revoked: true }, { where: { id } });
+
+    return rows;
   };
 
-  const revokeByUser = async (userId: number): Promise<void> => {
-    await RefreshToken.update({ revoked: true }, { where: { userId } });
+  /**
+   * Revoke refresh tokens by userId
+   *
+   * @param {number} userId
+   * @returns {Promise<number>}
+   */
+  const revokeByUser = async (userId: number): Promise<number> => {
+    const [rows] = await RefreshToken.update({ revoked: true }, { where: { userId } });
+
+    return rows;
   };
 
+  /**
+   * Verify refresh token against database record
+   *
+   * @param {string} token
+   * @returns {Promise<boolean>}
+   */
   const verify = async (token: string): Promise<boolean> => {
     const { jti } = decode(token);
 
@@ -55,20 +89,34 @@ export default ({ logger }: Pick<IoC, 'logger'>): JwtRotationService => {
     return true;
   };
 
+  /**
+   * 1) Verify refresh token against database record
+   * 2) Revoke refresh token for rotation
+   *
+   * @param {string} token
+   * @returns {Promise<boolean>}
+   */
   const verifyAndRevoke = async (token: string): Promise<boolean> => {
     const valid = await verify(token);
     await revoke(token);
     return valid;
   };
 
-  const purge = async (): Promise<void> => {
-    const selected = await RefreshToken.destroy({ where: { expiresAt: { [Op.lte]: new Date() } } });
+  /**
+   * Clean expired refresh tokens
+   *
+   * @returns {Promise<number>}
+   */
+  const purge = async (): Promise<number> => {
+    const rows = await RefreshToken.destroy({ where: { expiresAt: { [Op.lte]: new Date() } } });
 
-    logger.debug(`JWT-Rotation: Expired refresh tokens (${selected}) have been purged.`);
+    logger.debug(`JWT-Rotation: Expired refresh tokens (${rows}) have been purged.`);
+
+    return rows;
   };
 
   return {
-    save,
+    store,
     revoke,
     revokeByUser,
     verify,

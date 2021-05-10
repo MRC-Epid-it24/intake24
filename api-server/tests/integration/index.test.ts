@@ -13,17 +13,17 @@ describe('API', () => {
     await suite.init();
 
     const adminRes = await request(suite.app)
-      .post('/api/login')
+      .post('/api/auth/login')
       .set('Accept', 'application/json')
       .send({ email: 'testAdmin@example.com', password: 'testAdminPassword' });
 
     const userRes = await request(suite.app)
-      .post('/api/login')
+      .post('/api/auth/login')
       .set('Accept', 'application/json')
       .send({ email: 'testUser@example.com', password: 'testUserPassword' });
 
     const respondentRes = await request(suite.app)
-      .post('/api/login/alias')
+      .post('/api/auth/login/alias')
       .set('Accept', 'application/json')
       .send({
         surveyId: 'test-survey',
@@ -41,9 +41,12 @@ describe('API', () => {
   // describe('Root', root);
 
   describe('Authentication', () => {
-    describe('POST /api/login', authentication.login);
-    describe('POST /api/login/alias', authentication.loginAlias);
-    describe('POST /api/login/token', authentication.loginToken);
+    describe('POST /api/auth/login', authentication.login);
+    describe('POST /api/auth/login/alias', authentication.loginAlias);
+    describe('POST /api/auth/login/token', authentication.loginToken);
+    // describe('POST /api/auth/login/verify', authentication.verify);
+    // describe('POST /api/auth/login/refresh', authentication.refresh);
+    // describe('POST /api/auth/login/logout', authentication.logout);
   });
 
   describe('Push subscriptions', () => {

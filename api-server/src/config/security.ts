@@ -81,7 +81,7 @@ const securityConfig: SecurityConfig = {
       name: 'it24_refresh_token',
       maxAge: process.env.JWT_REFRESH_LIFETIME ?? '1d',
       httpOnly: true,
-      path: process.env.JWT_COOKIE_PATH ?? '/refresh',
+      path: process.env.JWT_COOKIE_PATH ?? '/api/auth',
       sameSite: (process.env.JWT_COOKIE_SAMESITE ?? 'lax') as SameSiteCookieOptions,
       secure: process.env.JWT_COOKIE_SECURE === 'true',
     },

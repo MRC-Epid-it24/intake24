@@ -91,10 +91,10 @@ const httpClient: HttpClient = {
         const origRequest = config;
 
         // Exclude non-401s and sign-in 401s (/login/alias and /login/token/:token)
-        if (status !== 401 || config.url?.includes('login')) return Promise.reject(err);
+        if (status !== 401 || config.url?.includes('auth/login')) return Promise.reject(err);
 
         // Refresh token has failed. Logout the user
-        if (config.url?.includes('refresh')) {
+        if (config.url?.includes('auth/refresh')) {
           isRefreshing = false;
 
           await store.dispatch('auth/logout');
