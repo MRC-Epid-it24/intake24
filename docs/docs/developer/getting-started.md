@@ -1,5 +1,26 @@
 # Getting started
 
+## Dev instance
+
+Steps to getting a local instance running
+
+* Run Dev VM (download from S3 bucket - contact the Intake24 team), which maps out the database on 192.168.56.10:5432 (PostgreSQL). Start this VM.
+* Clone the master repository from Github [link](https://github.com/MRC-Epid-it24/intake24)
+* Follow instructions to README to install node modules (e.g. `npm install` on each folder)
+* Local servers need to be run for `api-server`, `admin-client` and `survey-client` from each respective folder:
+  * To start `api-server`: `npm run dev`
+  * To start `admin-client` and `survey-client`: `npm run serve` for live reloads
+
+::: tip
+Authentication uses cookies, so separate browser sessions will be required to use both `admin-client` and `survey-client` interfaces at the same time.
+:::
+
+## Useful tools
+
+* IDE for developing Node, Typescript, npm and associated tooling (e.g. VS Code)
+* Virtual Box (v6.x minimum) for running database VM
+* Database browser (e.g. DBeaver) for exploring/manipulating PostgreSQL DB.
+
 ::: tip
 Intake24 requires node.js version 12 or newer, please make sure to check your node.js version before continuing.
 :::
@@ -32,21 +53,6 @@ according to your own DB settings,
 instance.
 
 Check that the settings are correct by starting the server with `npm run dev`.
-
-## Testing
-
-To run unit and integration tests on your local machine, start by copying your `.env` file to `tests/.env-test`.
-
-Make sure to edit the `.env-test` file and change the database settings to point to test databases instead of your
-normal development ones. The foods and system test databases should be empty databases with the necessary 
-extensions (e.g., `uuid-ossp`) installed. 
-
-:::danger
-**Do not run any tests** unless you're sure that the database configuration settings in the `.env-test` file are 
-correct because the test framework setup code will **destroy all data** in those databases!    
-:::
-
-If using the development VM, simply copy `tests/.env-test-dev-vm` to `tests/.env-test` and you're good to go.
 
 ## API access
 

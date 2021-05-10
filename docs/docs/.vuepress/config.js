@@ -77,7 +77,8 @@ module.exports = {
           collapsable: false,
           children: [
             '',
-            'get-started',
+            'requirements',
+            'installation',
           ]
         },
       ],
@@ -116,6 +117,15 @@ module.exports = {
           collapsable: false,
           children: [
             'survey/global',
+          ]
+        },
+      ],
+      '/deployment/': [
+        {
+          title: 'Deployment',
+          collapsable: false,
+          children: [
+            '',
           ]
         },
       ],
@@ -196,10 +206,11 @@ module.exports = {
           children: [
             '',
             'getting-started',
+            'technology-stack',
+            'testing',
             'vm',
             'v3-survey',
             'portion-size',
-            'technology-stack',
           ]
         }
       ],
