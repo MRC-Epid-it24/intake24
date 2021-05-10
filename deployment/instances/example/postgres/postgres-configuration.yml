@@ -16,7 +16,7 @@ intake24:
   create_test_databases: false
 
 # Basic settings
-postgresql_version: 13.1
+postgresql_version: 13
 postgresql_encoding: 'UTF-8'
 postgres_admin_user: postgres
 
@@ -26,7 +26,7 @@ postgresql_locale_parts:
 
 postgresql_users:
   - name: "{{intake24.system_database.user}}"
-  ## Delete this if not using local food datbase
+  ## Delete this if not using local food database
   - name: "{{intake24.food_database.user}}"
 
 postgresql_pg_hba_default: []
