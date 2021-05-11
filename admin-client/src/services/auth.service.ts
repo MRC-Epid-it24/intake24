@@ -19,7 +19,9 @@ export default {
   async login(request: LoginRequest): Promise<AuthResponseOrMfaChallenge> {
     const {
       data: { accessToken, mfa },
-    } = await http.post<AuthResponseOrMfaChallenge>('auth/login', request);
+    } = await http.post<AuthResponseOrMfaChallenge>('auth/login', request, {
+      withCredentials: true,
+    });
 
     if (accessToken) tokenSvc.saveAccessToken(accessToken);
     return { accessToken, mfa };
@@ -34,7 +36,11 @@ export default {
   async verify(sigResponse: string): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('auth/login/verify', { sigResponse });
+    } = await http.post<AuthResponse>(
+      'auth/login/verify',
+      { sigResponse },
+      { withCredentials: true }
+    );
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
@@ -52,7 +58,7 @@ export default {
   async refresh(): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('auth/refresh');
+    } = await http.post<AuthResponse>('auth/refresh', null, { withCredentials: true });
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
@@ -64,7 +70,7 @@ export default {
    * @returns {Promise<void>}
    */
   async logout(): Promise<void> {
-    await http.post('auth/logout');
+    await http.post('auth/logout', null, { withCredentials: true });
     tokenSvc.clearTokens();
   },
 };

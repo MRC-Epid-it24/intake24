@@ -17,7 +17,6 @@ const httpClient: HttpClient = {
   init(baseURL: string) {
     this.axios.defaults.baseURL = baseURL;
     // this.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-    this.axios.defaults.withCredentials = true;
 
     this.mountBearerInterceptor();
   },

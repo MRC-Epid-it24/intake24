@@ -15,7 +15,7 @@ export default {
   async login(request: LoginRequest): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('auth/login/alias', request);
+    } = await http.post<AuthResponse>('auth/login/alias', request, { withCredentials: true });
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
@@ -24,7 +24,7 @@ export default {
   async token(request: TokenRequest): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>(`auth/login/token`, request);
+    } = await http.post<AuthResponse>(`auth/login/token`, request, { withCredentials: true });
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
@@ -33,7 +33,7 @@ export default {
   async refresh(): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('auth/refresh');
+    } = await http.post<AuthResponse>('auth/refresh', null, { withCredentials: true });
 
     tokenSvc.saveAccessToken(accessToken);
     return accessToken;
