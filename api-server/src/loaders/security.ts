@@ -4,10 +4,15 @@ import helmet from 'helmet';
 import type { Ops } from '@/app';
 
 export default async (app: Express, { config }: Ops): Promise<void> => {
-  const { origin } = config.security.cors;
+  const {
+    cors: { origin },
+    proxy,
+  } = config.security;
 
-  app.set('trust proxy', 1);
+  // Trusted proxies
+  app.set('trust proxy', proxy);
 
+  // CORS
   app.use(cors({ origin, credentials: true }));
 
   // Security HTTP headers

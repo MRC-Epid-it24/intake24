@@ -56,6 +56,7 @@ export interface SecurityConfig {
   cors: {
     origin: boolean | string | string[];
   };
+  proxy: string[] | boolean;
   jwt: JwtAuthentication;
   mfa: MultiFactorAuthentication;
   passwords: PasswordsConfig;
@@ -67,6 +68,7 @@ const securityConfig: SecurityConfig = {
   cors: {
     origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : false,
   },
+  proxy: process.env.PROXY ? process.env.PROXY.split(',') : false,
   jwt: {
     issuer: 'intake24',
     access: {

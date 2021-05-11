@@ -6,11 +6,22 @@ Path: `src/config/security.ts`
 
 ### CORS Origin
 
-Single origin or list of origins to allow cross-origin resource sharing. Define these, when SPA applications (`admin` and `survey` sites) are deployed to different domain than `API Server`
+Single origin or list of origins to allow cross-origin resource sharing. Define these, when SPA applications (`Admin client` and `Survey client`) are deployed to different domain than `API server`.
 
 * object-path: `cors.origin`
 * dotenv var: `CORS_ORIGIN` (for list of origins, use `comma-delimited` string)
 * type: `string | string[] | boolean`
+* default: `false`
+
+## Proxy
+
+List of trusted proxies. It allows to define list proxies if application is behind multiple reverse proxies / load balancers.
+
+Since application is usually at least behind local reverse proxy, set as `loopback` (which translates to `127.0.0.1 / ::1`).
+
+* object-path: `proxy`
+* dotenv var: `PROXY` (`comma-delimited` string list)
+* type: `string[] | boolean`
 * default: `false`
 
 ## JSON web tokens
