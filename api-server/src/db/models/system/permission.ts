@@ -34,7 +34,8 @@ export const addPermissionsToAdmin = async (permissions: Permission[]): Promise<
 })
 export default class Permission
   extends BaseModel<PermissionAttributes, PermissionCreationAttributes>
-  implements PermissionAttributes {
+  implements PermissionAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

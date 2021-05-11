@@ -15,7 +15,8 @@ import { Survey, User } from '.';
 })
 export default class UserSurveyAlias
   extends BaseModel<UserSurveyAliasAttributes>
-  implements UserSurveyAliasAttributes {
+  implements UserSurveyAliasAttributes
+{
   @Column({
     allowNull: false,
   })

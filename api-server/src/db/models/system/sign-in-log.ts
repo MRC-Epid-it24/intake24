@@ -15,7 +15,8 @@ import { User } from '.';
 })
 export default class SignInLog
   extends BaseModel<SignInLogAttributes, SignInLogCreationAttributes>
-  implements SignInLogAttributes {
+  implements SignInLogAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

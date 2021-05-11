@@ -11,7 +11,8 @@ import BaseModel from '../model';
 })
 export default class Locale
   extends BaseModel<LocaleAttributes, LocaleCreationAttributes>
-  implements LocaleAttributes {
+  implements LocaleAttributes
+{
   @Column({
     primaryKey: true,
     type: DataType.STRING(16),

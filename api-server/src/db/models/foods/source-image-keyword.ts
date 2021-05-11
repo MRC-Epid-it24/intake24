@@ -15,7 +15,8 @@ import { SourceImage } from '.';
 })
 export default class SourceImageKeyword
   extends BaseModel<SourceImageKeywordAttributes>
-  implements SourceImageKeywordAttributes {
+  implements SourceImageKeywordAttributes
+{
   @Column({
     allowNull: false,
     type: DataType.INTEGER,

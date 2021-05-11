@@ -15,7 +15,8 @@ import { GuideImage } from '.';
 })
 export default class GuideImageObject
   extends BaseModel<GuideImageObjectAttributes, GuideImageObjectCreationAttributes>
-  implements GuideImageObjectAttributes {
+  implements GuideImageObjectAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

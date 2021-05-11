@@ -15,52 +15,54 @@ export type ExportFieldTransformCallback<T = SurveySubmissionFood> = (
   field: ExportField
 ) => ExportFieldTransform<T>;
 
-export const userCustomFieldValue: ExportFieldTransformCallback = (
-  field: ExportField
-): ExportFieldTransform => (food) => {
-  const match = food.meal?.submission?.user?.customFields?.find((item) => field.id === item.name);
-  return match?.value;
-};
+export const userCustomFieldValue: ExportFieldTransformCallback =
+  (field: ExportField): ExportFieldTransform =>
+  (food) => {
+    const match = food.meal?.submission?.user?.customFields?.find((item) => field.id === item.name);
+    return match?.value;
+  };
 
-export const surveyCustomFieldValue: ExportFieldTransformCallback = (
-  field: ExportField
-): ExportFieldTransform => (food) => {
-  const match = food.meal?.submission?.customFields?.find((item) => field.id === item.name);
-  return match?.value;
-};
+export const surveyCustomFieldValue: ExportFieldTransformCallback =
+  (field: ExportField): ExportFieldTransform =>
+  (food) => {
+    const match = food.meal?.submission?.customFields?.find((item) => field.id === item.name);
+    return match?.value;
+  };
 
-export const mealCustomFieldValue: ExportFieldTransformCallback = (
-  field: ExportField
-): ExportFieldTransform => (food) => {
-  const match = food.meal?.customFields?.find((item) => field.id === item.name);
-  return match?.value;
-};
+export const mealCustomFieldValue: ExportFieldTransformCallback =
+  (field: ExportField): ExportFieldTransform =>
+  (food) => {
+    const match = food.meal?.customFields?.find((item) => field.id === item.name);
+    return match?.value;
+  };
 
-export const foodCustomFieldValue: ExportFieldTransformCallback = (
-  field: ExportField
-): ExportFieldTransform => (food) => {
-  const match = food.customFields?.find((item) => field.id === item.name);
-  return match?.value;
-};
+export const foodCustomFieldValue: ExportFieldTransformCallback =
+  (field: ExportField): ExportFieldTransform =>
+  (food) => {
+    const match = food.customFields?.find((item) => field.id === item.name);
+    return match?.value;
+  };
 
-export const foodFieldValue = (field: ExportField): ExportFieldTransform => (
-  food: SurveySubmissionFood
-) => {
-  const match = food.fields?.find((item) => field.id === item.fieldName);
-  return match?.value;
-};
+export const foodFieldValue =
+  (field: ExportField): ExportFieldTransform =>
+  (food: SurveySubmissionFood) => {
+    const match = food.fields?.find((item) => field.id === item.fieldName);
+    return match?.value;
+  };
 
-export const foodNutrientValue = (field: ExportField): ExportFieldTransform => (
-  food: SurveySubmissionFood
-) => {
-  const match = food.nutrients?.find((item) => field.id === item.nutrientTypeId.toString());
-  return match?.amount;
-};
+export const foodNutrientValue =
+  (field: ExportField): ExportFieldTransform =>
+  (food: SurveySubmissionFood) => {
+    const match = food.nutrients?.find((item) => field.id === item.nutrientTypeId.toString());
+    return match?.amount;
+  };
 
-export const portionSizeValue = (field: ExportField): ExportFieldTransform => (food) => {
-  const match = food.portionSizes?.find((item) => field.id === item.name);
-  return match?.value;
-};
+export const portionSizeValue =
+  (field: ExportField): ExportFieldTransform =>
+  (food) => {
+    const match = food.portionSizes?.find((item) => field.id === item.name);
+    return match?.value;
+  };
 
 export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): DataExportMapper => {
   /**

@@ -60,7 +60,8 @@ import {
 })
 export default class User
   extends BaseModel<UserAttributes, UserCreationAttributes>
-  implements UserAttributes {
+  implements UserAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -12,7 +12,8 @@ import { FoodLocal, NutrientTableRecord } from '.';
 })
 export default class NutrientMapping
   extends BaseModel<NutrientMappingAttributes, NutrientMappingCreationAttributes>
-  implements NutrientMappingAttributes {
+  implements NutrientMappingAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

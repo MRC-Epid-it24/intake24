@@ -16,7 +16,8 @@ import { DrinkwareSet, DrinkwareVolumeSample } from '.';
 })
 export default class DrinkwareScale
   extends BaseModel<DrinkwareScaleAttributes, DrinkwareScaleCreationAttributes>
-  implements DrinkwareScaleAttributes {
+  implements DrinkwareScaleAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

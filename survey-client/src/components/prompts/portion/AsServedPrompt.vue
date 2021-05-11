@@ -92,20 +92,18 @@
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-
-                  <v-row>
-                    <v-col>Yes / No</v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <as-served-selector
-                        :asServedData="this.selectionImageData"
-                        :imageSet="this.selectionImageData.images"
-                        @as-served-selector-submit="setLeftoverStatus($event)"
-                      ></as-served-selector>
-                    </v-col>
-                  </v-row>
-
+                <v-row>
+                  <v-col>Yes / No</v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <as-served-selector
+                      :asServedData="this.selectionImageData"
+                      :imageSet="this.selectionImageData.images"
+                      @as-served-selector-submit="setLeftoverStatus($event)"
+                    ></as-served-selector>
+                  </v-col>
+                </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>

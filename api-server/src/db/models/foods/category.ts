@@ -12,7 +12,8 @@ import BaseModel from '../model';
 })
 export default class Category
   extends BaseModel<CategoryAttributes, CategoryCreationAttributes>
-  implements CategoryAttributes {
+  implements CategoryAttributes
+{
   @Column({
     allowNull: false,
     primaryKey: true,

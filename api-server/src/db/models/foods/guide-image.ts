@@ -17,7 +17,8 @@ import { GuideImageObject, ImageMap, ProcessedImage } from '.';
 })
 export default class GuideImage
   extends BaseModel<GuideImageAttributes>
-  implements GuideImageAttributes {
+  implements GuideImageAttributes
+{
   @Column({
     allowNull: false,
     primaryKey: true,

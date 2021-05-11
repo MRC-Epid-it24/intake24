@@ -20,7 +20,8 @@ import { User } from '.';
 })
 export default class Job
   extends BaseModel<JobAttributes, JobCreationAttributes>
-  implements JobAttributes {
+  implements JobAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

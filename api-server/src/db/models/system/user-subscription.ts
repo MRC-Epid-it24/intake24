@@ -27,7 +27,8 @@ import { User } from '.';
 })
 export default class UserSubscription
   extends BaseModel<UserSubscriptionAttributes, UserSubscriptionCreationAttributes>
-  implements UserSubscriptionAttributes {
+  implements UserSubscriptionAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

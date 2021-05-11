@@ -21,7 +21,8 @@ export default class SurveySubmissionCustomField
     SurveySubmissionCustomFieldAttributes,
     SurveySubmissionCustomFieldCreationAttributes
   >
-  implements SurveySubmissionCustomFieldAttributes {
+  implements SurveySubmissionCustomFieldAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -16,7 +16,8 @@ import { DrinkwareScale, GuideImage } from '.';
 })
 export default class DrinkwareSet
   extends BaseModel<DrinkwareSetAttributes>
-  implements DrinkwareSetAttributes {
+  implements DrinkwareSetAttributes
+{
   @Column({
     allowNull: false,
     primaryKey: true,

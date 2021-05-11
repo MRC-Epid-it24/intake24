@@ -19,7 +19,8 @@ import BaseModel from '../model';
 })
 export default class SurveySubmissionNutrient
   extends BaseModel<SurveySubmissionNutrientAttributes, SurveySubmissionNutrientCreationAttributes>
-  implements SurveySubmissionNutrientAttributes {
+  implements SurveySubmissionNutrientAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

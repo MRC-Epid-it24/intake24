@@ -16,7 +16,8 @@ import { ProcessedImage, SourceImageKeyword } from '.';
 })
 export default class SourceImage
   extends BaseModel<SourceImageAttributes, SourceImageCreationAttributes>
-  implements SourceImageAttributes {
+  implements SourceImageAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -12,7 +12,8 @@ import { ImageMap, ProcessedImage } from '.';
 })
 export default class ImageMapObject
   extends BaseModel<ImageMapObjectAttributes, ImageMapObjectCreationAttributes>
-  implements ImageMapObjectAttributes {
+  implements ImageMapObjectAttributes
+{
   @Column({
     allowNull: false,
     primaryKey: true,

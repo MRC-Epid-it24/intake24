@@ -15,7 +15,8 @@ import { User } from '.';
 })
 export default class UserCustomField
   extends BaseModel<UserCustomFieldAttributes, UserCustomFieldCreationAttributes>
-  implements UserCustomFieldAttributes {
+  implements UserCustomFieldAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

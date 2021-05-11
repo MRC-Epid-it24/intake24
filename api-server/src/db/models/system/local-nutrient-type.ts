@@ -19,7 +19,8 @@ import { Locale, NutrientType } from '.';
 })
 export default class LocalNutrientType
   extends BaseModel<LocalNutrientTypeAttributes, LocalNutrientTypeCreationAttributes>
-  implements LocalNutrientTypeAttributes {
+  implements LocalNutrientTypeAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

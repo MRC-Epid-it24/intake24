@@ -16,7 +16,8 @@ import BaseModel from '@api-server/db/models/model';
 })
 export default class Brand
   extends BaseModel<BrandAttributes, BrandCreationAttributes>
-  implements BrandAttributes {
+  implements BrandAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -17,7 +17,8 @@ import { FoodLocal } from '.';
 })
 export default class PortionSizeMethod
   extends BaseModel<PortionSizeMethodAttributes, PortionSizeMethodCreationAttributes>
-  implements PortionSizeMethodAttributes {
+  implements PortionSizeMethodAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

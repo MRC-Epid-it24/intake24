@@ -15,7 +15,8 @@ import { Locale } from '.';
 })
 export default class LocalField
   extends BaseModel<LocalFieldAttributes, LocalFieldCreationAttributes>
-  implements LocalFieldAttributes {
+  implements LocalFieldAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

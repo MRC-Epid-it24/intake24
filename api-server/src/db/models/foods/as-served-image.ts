@@ -17,7 +17,8 @@ import { AsServedSet, ProcessedImage } from '.';
 })
 export default class AsServedImage
   extends BaseModel<AsServedImageAttributes>
-  implements AsServedImageAttributes {
+  implements AsServedImageAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

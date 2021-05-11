@@ -11,7 +11,8 @@ import BaseModel from '../model';
 })
 export default class Task
   extends BaseModel<TaskAttributes, TaskCreationAttributes>
-  implements TaskAttributes {
+  implements TaskAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

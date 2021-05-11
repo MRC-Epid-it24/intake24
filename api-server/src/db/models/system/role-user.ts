@@ -11,7 +11,8 @@ import { Role, User } from '.';
 })
 export default class RoleUser
   extends BaseModel<RoleUserAttributes, RoleUserCreationAttributes>
-  implements RoleUserAttributes {
+  implements RoleUserAttributes
+{
   @ForeignKey(() => Role)
   @Column({
     type: DataType.BIGINT,

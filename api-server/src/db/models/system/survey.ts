@@ -40,7 +40,8 @@ import {
 })
 export default class Survey
   extends BaseModel<SurveyAttributes, SurveyCreationAttributes>
-  implements SurveyAttributes {
+  implements SurveyAttributes
+{
   @Column({
     primaryKey: true,
     type: DataType.STRING(64),

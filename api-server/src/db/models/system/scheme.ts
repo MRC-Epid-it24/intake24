@@ -29,7 +29,8 @@ import { Survey } from '.';
 })
 export default class Scheme
   extends BaseModel<SchemeAttributes, SchemeCreationAttributes>
-  implements SchemeAttributes {
+  implements SchemeAttributes
+{
   @Column({
     primaryKey: true,
     type: DataType.STRING(64),

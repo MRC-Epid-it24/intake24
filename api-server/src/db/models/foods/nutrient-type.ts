@@ -12,7 +12,8 @@ import BaseModel from '../model';
 })
 export default class NutrientType
   extends BaseModel<NutrientTypeAttributes>
-  implements NutrientTypeAttributes {
+  implements NutrientTypeAttributes
+{
   @Column({
     allowNull: false,
     primaryKey: true,

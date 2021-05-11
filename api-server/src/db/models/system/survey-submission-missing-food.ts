@@ -21,7 +21,8 @@ export default class SurveySubmissionMissingFood
     SurveySubmissionMissingFoodAttributes,
     SurveySubmissionMissingFoodCreationAttributes
   >
-  implements SurveySubmissionMissingFoodAttributes {
+  implements SurveySubmissionMissingFoodAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

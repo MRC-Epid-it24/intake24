@@ -15,7 +15,8 @@ import BaseModel from '../model';
 })
 export default class FoodCategory
   extends BaseModel<FoodCategoryAttributes, FoodCategoryCreationAttributes>
-  implements FoodCategoryAttributes {
+  implements FoodCategoryAttributes
+{
   @Column({
     primaryKey: true,
     autoIncrement: true,

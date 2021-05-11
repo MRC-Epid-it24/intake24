@@ -56,7 +56,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
 
   const userInfo = async (req: Request, res: Response<SurveyUserInfoResponse>): Promise<void> => {
     const { surveyId } = req.params;
-    const tzOffset = (req.query.tzOffset as unknown) as number; // validated & parsed in middleware (ideally, should have typed requests)
+    const tzOffset = req.query.tzOffset as unknown as number; // validated & parsed in middleware (ideally, should have typed requests)
     const user = req.user as User;
 
     const userResponse = await surveyService.userInfo(surveyId, user, tzOffset);

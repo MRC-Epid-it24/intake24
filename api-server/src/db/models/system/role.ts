@@ -24,7 +24,8 @@ import { Permission, PermissionRole, RoleUser, User } from '.';
 })
 export default class Role
   extends BaseModel<RoleAttributes, RoleCreationAttributes>
-  implements RoleAttributes {
+  implements RoleAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

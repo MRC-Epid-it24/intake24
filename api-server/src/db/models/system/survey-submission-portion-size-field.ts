@@ -15,7 +15,8 @@ import { SurveySubmissionFood } from '.';
 })
 export default class SurveySubmissionPortionSizeField
   extends BaseModel
-  implements SurveySubmissionPortionSizeFieldAttributes {
+  implements SurveySubmissionPortionSizeFieldAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

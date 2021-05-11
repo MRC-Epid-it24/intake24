@@ -14,7 +14,8 @@ import { User } from '.';
 })
 export default class UserPasswordReset
   extends BaseModel<UserPasswordResetAttributes, UserPasswordResetCreationAttributes>
-  implements UserPasswordResetAttributes {
+  implements UserPasswordResetAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

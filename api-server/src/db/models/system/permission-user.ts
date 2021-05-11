@@ -11,7 +11,8 @@ import { Permission, User } from '.';
 })
 export default class PermissionUser
   extends BaseModel<PermissionUserAttributes, PermissionUserCreationAttributes>
-  implements PermissionUserAttributes {
+  implements PermissionUserAttributes
+{
   @ForeignKey(() => Permission)
   @Column({
     type: DataType.BIGINT,

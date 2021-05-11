@@ -28,7 +28,8 @@ import {
 })
 export default class SurveySubmissionFood
   extends BaseModel<SurveySubmissionFoodAttributes, SurveySubmissionFoodCreationAttributes>
-  implements SurveySubmissionFoodAttributes {
+  implements SurveySubmissionFoodAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

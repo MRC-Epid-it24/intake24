@@ -18,7 +18,8 @@ import BaseModel from '../model';
 })
 export default class FoodLocal
   extends BaseModel<FoodLocalAttributes, FoodLocalCreationAttributes>
-  implements FoodLocalAttributes {
+  implements FoodLocalAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

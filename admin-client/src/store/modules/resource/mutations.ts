@@ -17,9 +17,8 @@ const mutations: MutationTree<ListState> = {
   },
 
   error(state, err: HttpError) {
-    const {
-      response: { status, statusText, data: { message } = {} as HttpResponseData } = {},
-    } = err;
+    const { response: { status, statusText, data: { message } = {} as HttpResponseData } = {} } =
+      err;
     state.error = {
       message,
       status,

@@ -23,7 +23,8 @@ import { Locale } from '.';
 })
 export default class Language
   extends BaseModel<LanguageAttributes, LanguageCreationAttributes>
-  implements LanguageAttributes {
+  implements LanguageAttributes
+{
   @Column({
     primaryKey: true,
     type: DataType.STRING(16),

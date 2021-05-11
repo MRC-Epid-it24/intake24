@@ -18,7 +18,8 @@ import BaseModel from '../model';
 })
 export default class CategoryAttribute
   extends BaseModel<CategoryAttributeAttributes, CategoryAttributeCreationAttributes>
-  implements CategoryAttributeAttributes {
+  implements CategoryAttributeAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

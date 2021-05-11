@@ -15,7 +15,8 @@ import { Survey } from '.';
 })
 export default class GenUserCounter
   extends BaseModel<GenUserCounterAttributes>
-  implements GenUserCounterAttributes {
+  implements GenUserCounterAttributes
+{
   @Column({
     allowNull: false,
     primaryKey: true,

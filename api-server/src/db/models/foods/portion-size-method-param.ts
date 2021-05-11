@@ -18,7 +18,8 @@ export default class PortionSizeMethodParameter
     PortionSizeMethodParameterAttributes,
     PortionSizeMethodParameterCreationAttributes
   >
-  implements PortionSizeMethodParameterAttributes {
+  implements PortionSizeMethodParameterAttributes
+{
   @Column({
     allowNull: false,
     autoIncrement: true,

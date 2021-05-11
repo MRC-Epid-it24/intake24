@@ -14,7 +14,8 @@ import BaseModel from '../model';
 })
 export default class AttributeDefaults
   extends BaseModel<AttributeDefaultsAttributes, AttributeDefaultsCreationAttributes>
-  implements AttributeDefaultsAttributes {
+  implements AttributeDefaultsAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

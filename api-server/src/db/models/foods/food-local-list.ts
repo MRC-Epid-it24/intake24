@@ -12,7 +12,8 @@ import { Locale } from '.';
 })
 export default class FoodLocalList
   extends BaseModel<FoodLocalListAttributes>
-  implements FoodLocalListAttributes {
+  implements FoodLocalListAttributes
+{
   @Column({
     allowNull: false,
     primaryKey: true,

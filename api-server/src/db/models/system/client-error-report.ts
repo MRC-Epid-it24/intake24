@@ -20,7 +20,8 @@ import { Survey, User } from '.';
 })
 export default class ClientErrorReport
   extends BaseModel<ClientErrorReportAttributes, ClientErrorReportCreationAttributes>
-  implements ClientErrorReportAttributes {
+  implements ClientErrorReportAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -23,7 +23,8 @@ import { User } from '.';
 })
 export default class RefreshToken
   extends BaseModel<RefreshTokenAttributes, RefreshTokenCreationAttributes>
-  implements RefreshTokenAttributes {
+  implements RefreshTokenAttributes
+{
   @Column({
     allowNull: false,
     primaryKey: true,

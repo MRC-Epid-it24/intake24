@@ -21,7 +21,8 @@ export default class SurveySubmissionFoodCustomField
     SurveySubmissionFoodCustomFieldAttributes,
     SurveySubmissionFoodCustomFieldCreationAttributes
   >
-  implements SurveySubmissionFoodCustomFieldAttributes {
+  implements SurveySubmissionFoodCustomFieldAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -21,7 +21,8 @@ import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from 
 })
 export default class SurveySubmission
   extends BaseModel<SurveySubmissionAttributes, SurveySubmissionCreationAttributes>
-  implements SurveySubmissionAttributes {
+  implements SurveySubmissionAttributes
+{
   @Column({
     primaryKey: true,
     type: DataType.UUID,

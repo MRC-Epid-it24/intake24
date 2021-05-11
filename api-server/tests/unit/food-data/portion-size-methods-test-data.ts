@@ -78,9 +78,8 @@ function generateRandomPortionSizeMethodSets(count: number): UserPortionSizeMeth
   return result;
 }
 
-export const generatedPortionSizeMethods: UserPortionSizeMethod[][] = generateRandomPortionSizeMethodSets(
-  10
-);
+export const generatedPortionSizeMethods: UserPortionSizeMethod[][] =
+  generateRandomPortionSizeMethodSets(10);
 
 async function createCategoryPortionSizeMethods(
   categoryCode: string,

@@ -12,7 +12,8 @@ import { Survey, User } from '.';
 })
 export default class UserSession
   extends BaseModel<UserSessionAttributes, UserSessionCreationAttributes>
-  implements UserSessionAttributes {
+  implements UserSessionAttributes
+{
   @Column({
     allowNull: false,
     primaryKey: true,

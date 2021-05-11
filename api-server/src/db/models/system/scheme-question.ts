@@ -11,7 +11,8 @@ import BaseModel from '../model';
 })
 export default class SchemeQuestion
   extends BaseModel<SchemeQuestionAttributes, SchemeQuestionCreationAttributes>
-  implements SchemeQuestionAttributes {
+  implements SchemeQuestionAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

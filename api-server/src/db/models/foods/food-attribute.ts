@@ -15,7 +15,8 @@ import Food from './food';
 })
 export default class FoodAttribute
   extends BaseModel<FoodAttributeAttributes, FoodAttributeCreationAttributes>
-  implements FoodAttributeAttributes {
+  implements FoodAttributeAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

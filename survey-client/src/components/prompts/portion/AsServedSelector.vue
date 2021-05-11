@@ -26,14 +26,7 @@
         </v-card>
       </v-col>
       <template v-for="(images, idx) in imageSet">
-        <v-col
-          v-bind:key="idx"
-          class="pa-1"
-          cols="3"
-          sm="2"
-          lg="1"
-          :class="isSelected(idx)"
-        >
+        <v-col v-bind:key="idx" class="pa-1" cols="3" sm="2" lg="1" :class="isSelected(idx)">
           <v-card @click="setSelection(idx)">
             <v-img :src="images.thumbnailUrl"></v-img>
           </v-card>
@@ -84,7 +77,7 @@ export default (Vue as VueConstructor<Vue>).extend({
     return {
       selectedObjectIdx: null as number | null,
       completed: false as boolean,
-    }
+    };
   },
   computed: {
     dataLoaded(): boolean {
@@ -104,15 +97,13 @@ export default (Vue as VueConstructor<Vue>).extend({
   mounted() {
     this.setDefaultSelection();
   },
-  
+
   methods: {
     getMainImage(): string {
       if (this.selectedObjectIdx === null) {
         return '';
       }
-      return this.dataLoaded
-        ? this.asServedData.images[this.selectedObjectIdx].mainImageUrl
-        : '';
+      return this.dataLoaded ? this.asServedData.images[this.selectedObjectIdx].mainImageUrl : '';
     },
     setDefaultSelection() {
       // Variable length image sets: set default selected to middle value
@@ -168,7 +159,7 @@ export default (Vue as VueConstructor<Vue>).extend({
         : '';
     },
     servingCompleted() {
-      this.$emit('as-served-selector-submit', this.completed)
+      this.$emit('as-served-selector-submit', this.completed);
     },
   },
 });

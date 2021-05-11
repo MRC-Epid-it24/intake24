@@ -46,9 +46,7 @@ async function buildIndex() {
     ['with'],
     new Metaphone3Encoder(),
     new EnglishWordOps(),
-    new Array(
-      new Set<string>(['banana', 'dog', 'helicopter'])
-    )
+    new Array(new Set<string>(['banana', 'dog', 'helicopter']))
   );
 
   parentPort!.postMessage('ready');

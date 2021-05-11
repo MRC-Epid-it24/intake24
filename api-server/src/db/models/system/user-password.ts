@@ -12,7 +12,8 @@ import { User } from '.';
 })
 export default class UserPassword
   extends BaseModel<UserPasswordAttributes>
-  implements UserPasswordAttributes {
+  implements UserPasswordAttributes
+{
   @Column({
     primaryKey: true,
   })
