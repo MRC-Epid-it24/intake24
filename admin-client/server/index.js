@@ -28,7 +28,7 @@ const startApp = async () => {
             'https://www.youtube.com',
             'https://*.duosecurity.com',
           ],
-          imgSrc: ["'self'", 'blob:', config.api.host],
+          imgSrc: ["'self'", 'blob:', 'data:', config.api.host],
           scriptSrc: [
             "'self'",
             'https://storage.googleapis.com',
