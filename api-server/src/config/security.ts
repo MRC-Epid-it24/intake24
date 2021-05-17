@@ -73,18 +73,18 @@ const securityConfig: SecurityConfig = {
     issuer: 'intake24',
     access: {
       secret: process.env.JWT_ACCESS_SECRET ?? '',
-      lifetime: process.env.JWT_ACCESS_LIFETIME ?? '15m',
+      lifetime: process.env.JWT_ACCESS_LIFETIME || '15m',
     },
     refresh: {
       secret: process.env.JWT_REFRESH_SECRET ?? '',
-      lifetime: process.env.JWT_REFRESH_LIFETIME ?? '1d',
+      lifetime: process.env.JWT_REFRESH_LIFETIME || '1d',
     },
     cookie: {
       name: 'it24_refresh_token',
-      maxAge: process.env.JWT_REFRESH_LIFETIME ?? '1d',
+      maxAge: process.env.JWT_REFRESH_LIFETIME || '1d',
       httpOnly: true,
-      path: process.env.JWT_COOKIE_PATH ?? '/api/auth',
-      sameSite: (process.env.JWT_COOKIE_SAMESITE ?? 'lax') as SameSiteCookieOptions,
+      path: process.env.JWT_COOKIE_PATH || '/api/auth',
+      sameSite: (process.env.JWT_COOKIE_SAMESITE || 'lax') as SameSiteCookieOptions,
       secure: process.env.JWT_COOKIE_SECURE === 'true',
     },
   },

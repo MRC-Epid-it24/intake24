@@ -7,10 +7,10 @@ export type CacheConfig = {
 
 const cacheConfig: CacheConfig = {
   redis: {
-    host: process.env.CACHE_REDIS_HOST ?? 'localhost',
-    port: parseInt(process.env.CACHE_REDIS_PORT ?? '6379', 10),
+    host: process.env.CACHE_REDIS_HOST || 'localhost',
+    port: parseInt(process.env.CACHE_REDIS_PORT || '6379', 10),
   },
-  prefix: process.env.CACHE_PREFIX ?? 'cache:it24',
+  prefix: process.env.CACHE_PREFIX || 'cache:it24',
 };
 
 export default cacheConfig;
