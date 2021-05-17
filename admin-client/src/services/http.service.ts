@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosResponse, Method } from 'axios';
 import Vue from 'vue';
 import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@/types/http';
-import tokenSvc from './token.service';
 
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];
@@ -14,11 +13,10 @@ const onTokenRefreshed = (errRefreshing?: AxiosError) =>
 const httpClient: HttpClient = {
   axios,
 
-  init(baseURL: string) {
-    this.axios.defaults.baseURL = baseURL;
-    // this.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+  init(router, store) {
+    this.axios.defaults.baseURL = store.getters.app.api;
 
-    this.mountBearerInterceptor();
+    this.mountInterceptors(router, store);
   },
 
   async get(url: string, config: HttpRequestConfig = {}) {
@@ -72,9 +70,14 @@ const httpClient: HttpClient = {
     });
   },
 
-  mountBearerInterceptor() {
+  mountInterceptors(router, store) {
+    this.mountBearerInterceptor(store);
+    this.mount401Interceptor(router, store);
+  },
+
+  mountBearerInterceptor(store) {
     this.axios.interceptors.request.use((request) => {
-      const accessToken = tokenSvc.getAccessToken();
+      const accessToken = store.getters['auth/accessToken'];
 
       // eslint-disable-next-line no-param-reassign
       if (accessToken) request.headers.Authorization = `Bearer ${accessToken}`;

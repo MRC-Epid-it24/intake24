@@ -1,4 +1,3 @@
-import trim from 'lodash/trim';
 import Vue from 'vue';
 import './bootstrap';
 import './registerServiceWorker';
@@ -11,12 +10,7 @@ import vuetify from './plugins/vuetify';
 
 const router = createRouter(store);
 
-const baseUrl = [process.env.VUE_APP_API_HOST, process.env.VUE_APP_API_URL]
-  .map((item) => trim(item, '/'))
-  .join('/');
-
-http.init(baseUrl);
-http.mount401Interceptor(router, store);
+http.init(router, store);
 Vue.prototype.$http = http;
 
 Vue.config.productionTip = false;

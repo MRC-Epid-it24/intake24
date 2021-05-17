@@ -19,7 +19,7 @@ export type HttpResponse = AxiosResponse<HttpResponseData>;
 
 export interface HttpClient {
   axios: AxiosStatic;
-  init(baseURL: string): void;
+  init(router: Router, store: Store<RootState>): void;
   get<T = any, R = AxiosResponse<T>>(url: string, config?: HttpRequestConfig): Promise<R>;
   post<T = any, R = AxiosResponse<T>>(
     url: string,
@@ -43,6 +43,7 @@ export interface HttpClient {
     data?: any,
     config?: HttpRequestConfig
   ): Promise<R>;
-  mountBearerInterceptor(): void;
+  mountInterceptors(router: Router, store: Store<RootState>): void;
+  mountBearerInterceptor(store: Store<RootState>): void;
   mount401Interceptor(router: Router, store: Store<RootState>): void;
 }

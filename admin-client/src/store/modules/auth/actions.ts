@@ -1,19 +1,16 @@
 import { ActionTree } from 'vuex';
 import { AuthState, RootState } from '@/types/vuex';
-import authSvc from '@/services/auth.service';
-import tokenSvc from '@/services/token.service';
+import authSvc, { LoginRequest } from '@/services/auth.service';
 
 const actions: ActionTree<AuthState, RootState> = {
-  async login({ commit, dispatch }, payload) {
+  async login({ commit, dispatch }, payload: LoginRequest) {
     commit('request');
     commit('loading/add', 'login', { root: true });
 
     try {
       const { accessToken, mfa } = await authSvc.login(payload);
-      if (accessToken) {
-        commit('login', accessToken);
-        await dispatch('user/request', {}, { root: true });
-      }
+
+      if (accessToken) await dispatch('successfulLogin', { accessToken });
       if (mfa) commit('mfa', mfa);
 
       return Promise.resolve();
@@ -25,14 +22,13 @@ const actions: ActionTree<AuthState, RootState> = {
     }
   },
 
-  async verify({ commit, dispatch }, sigResponse) {
+  async verify({ commit, dispatch }, sigResponse: string) {
     commit('request');
     commit('loading/add', 'verify', { root: true });
 
     try {
       const accessToken = await authSvc.verify(sigResponse);
-      commit('login', accessToken);
-      await dispatch('user/request', {}, { root: true });
+      await dispatch('successfulLogin', { accessToken });
       return Promise.resolve();
     } catch (err) {
       commit('error', err);
@@ -40,6 +36,11 @@ const actions: ActionTree<AuthState, RootState> = {
     } finally {
       commit('loading/remove', 'verify', { root: true });
     }
+  },
+
+  async successfulLogin({ commit, dispatch }, { accessToken }) {
+    commit('login', accessToken);
+    await dispatch('user/request', {}, { root: true });
   },
 
   async refresh({ commit, dispatch, rootGetters }, { withErr = true } = {}) {
@@ -58,8 +59,6 @@ const actions: ActionTree<AuthState, RootState> = {
 
   async logout({ commit }, { invalidate } = {}) {
     if (invalidate) await authSvc.logout();
-
-    tokenSvc.clearTokens();
 
     commit('loading/reset', {}, { root: true });
     commit('user/reset', {}, { root: true });

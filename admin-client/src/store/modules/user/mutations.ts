@@ -9,9 +9,6 @@ const mutations: MutationTree<UserState> = {
   success(state, data) {
     Object.assign(state, data, { status: 'success' });
   },
-  payload(state, data) {
-    state.payload = { ...data };
-  },
   error(state) {
     Object.assign(state, defaultState(), { status: 'error' });
   },

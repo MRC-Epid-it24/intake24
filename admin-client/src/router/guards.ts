@@ -12,9 +12,7 @@ export default (router: Router, store: Store<RootState>): void => {
     }
 
     // Get logged-in user information if not yet loaded
-    // TODO: when token not stored just refresh to get fresh one
-    // if (!store.getters['auth/loggedIn']) await store.dispatch('auth/refresh', { withErr: false });
-    if (!store.getters['user/loaded']) await store.dispatch('user/request', { withErr: false });
+    if (!store.getters['auth/loggedIn']) await store.dispatch('auth/refresh', { withErr: false });
 
     // Any other page (requires to be logged in)
     if (!store.getters['auth/loggedIn']) {

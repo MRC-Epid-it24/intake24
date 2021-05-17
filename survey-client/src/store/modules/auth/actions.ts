@@ -1,7 +1,6 @@
 import { ActionTree } from 'vuex';
 import { AuthState, RootState } from '@/types/vuex';
 import authSvc, { LoginRequest, TokenRequest } from '@/services/auth.service';
-import tokenSvc from '@/services/token.service';
 
 type AuthenticatePayload = {
   type: 'login' | 'token';
@@ -24,7 +23,7 @@ const actions: ActionTree<AuthState, RootState> = {
     try {
       const accessToken = await authSvc[type](payload);
       commit('login', accessToken);
-      await dispatch('user/load', {}, { root: true });
+      await dispatch('user/load', { accessToken }, { root: true });
       return Promise.resolve();
     } catch (err) {
       commit('error', err);
@@ -38,7 +37,7 @@ const actions: ActionTree<AuthState, RootState> = {
     try {
       const accessToken = await authSvc.refresh();
       commit('refresh', accessToken);
-      await dispatch('user/load', {}, { root: true });
+      await dispatch('user/load', { accessToken }, { root: true });
       return Promise.resolve();
     } catch (err) {
       commit('error', err);
@@ -48,8 +47,6 @@ const actions: ActionTree<AuthState, RootState> = {
 
   async logout({ commit }, { invalidate } = {}) {
     if (invalidate) await authSvc.logout();
-
-    tokenSvc.clearTokens();
 
     commit('loading/reset', {}, { root: true });
     commit('user/reset', {}, { root: true });

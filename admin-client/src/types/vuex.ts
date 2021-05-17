@@ -1,5 +1,4 @@
 import { Dictionary } from '@common/types';
-import { UserPayload } from './auth';
 
 export interface RootState {
   lang: string;
@@ -21,7 +20,6 @@ export interface LoadingState {
 
 export interface UserState {
   status: string;
-  payload: UserPayload;
   profile: any;
   permissions: string[];
   roles: string[];

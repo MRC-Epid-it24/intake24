@@ -1,5 +1,4 @@
 import http from './http.service';
-import tokenSvc from './token.service';
 
 export type LoginRequest = {
   userName: string;
@@ -17,7 +16,6 @@ export default {
       data: { accessToken },
     } = await http.post<AuthResponse>('auth/login/alias', request, { withCredentials: true });
 
-    tokenSvc.saveAccessToken(accessToken);
     return accessToken;
   },
 
@@ -26,7 +24,6 @@ export default {
       data: { accessToken },
     } = await http.post<AuthResponse>(`auth/login/token`, request, { withCredentials: true });
 
-    tokenSvc.saveAccessToken(accessToken);
     return accessToken;
   },
 
@@ -35,12 +32,10 @@ export default {
       data: { accessToken },
     } = await http.post<AuthResponse>('auth/refresh', null, { withCredentials: true });
 
-    tokenSvc.saveAccessToken(accessToken);
     return accessToken;
   },
 
   async logout(): Promise<void> {
     await http.post('auth/logout');
-    tokenSvc.clearTokens();
   },
 };

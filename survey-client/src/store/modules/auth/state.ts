@@ -1,8 +1,7 @@
 import { AuthState } from '@/types/vuex';
-import tokenSvc from '@/services/token.service';
 
 const state = (): AuthState => ({
-  accessToken: tokenSvc.getAccessToken(),
+  accessToken: null,
   status: '',
   error: {},
 });

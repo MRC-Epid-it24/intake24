@@ -91,7 +91,7 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
   },
 
   computed: {
-    ...mapGetters('user', ['loggedIn']),
+    ...mapGetters('auth', ['loggedIn']),
     surveyId(): string {
       return this.$route.params.surveyId;
     },

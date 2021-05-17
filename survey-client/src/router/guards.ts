@@ -38,16 +38,16 @@ export const globalGuard =
 
     // Login pages (credentials / token)
     if (module === 'login') {
-      if (store.getters['user/loggedIn']) next({ name: 'recall-entry', params: { surveyId } });
+      if (store.getters['auth/loggedIn']) next({ name: 'recall-entry', params: { surveyId } });
       else next();
       return;
     }
 
     // Get logged-in user information if not yet loaded
-    if (!store.getters['user/loggedIn']) await store.dispatch('auth/refresh', { withErr: false });
+    if (!store.getters['auth/loggedIn']) await store.dispatch('auth/refresh', { withErr: false });
 
     // Any other page (requires to be logged in)
-    if (!store.getters['user/loggedIn']) {
+    if (!store.getters['auth/loggedIn']) {
       if (surveyId) next({ name: 'login', params: { surveyId } });
       else next({ name: 'home' });
       return;
