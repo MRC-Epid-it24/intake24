@@ -171,7 +171,7 @@ export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
         await this.login({ userName, password, surveyId });
         this.userName = '';
         this.password = '';
-        await this.$router.push({ name: 'recall-entry', params: { surveyId } });
+        await this.$router.push({ name: 'dashboard', params: { surveyId } });
       } catch (err) {
         if (err.response?.status === 401)
           this.$toasted.error(this.$t('login.err.invalidCredentials') as string);

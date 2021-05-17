@@ -4,7 +4,7 @@ import { Store } from 'vuex';
 import { RootState } from '@/types/vuex';
 import views from '@/views';
 import PortionTest from '@/views/PortionTest.vue';
-import DynamicRecall from '@/views/dynamic/DynamicRecall.vue';
+
 import { globalGuard, surveyParametersGuard } from './guards';
 
 Vue.use(VueRouter);
@@ -26,13 +26,19 @@ export default (store: Store<RootState>): VueRouter => {
       meta: { module: 'login', title: 'login._' },
       props: true,
     },
-
+    {
+      path: '/:surveyId/dashboard',
+      name: 'dashboard',
+      component: views.dashboard,
+      meta: { module: 'recall', title: 'recall.dynamicTitle' },
+      props: true,
+    },
     // v3-like dynamic recall logic prototype
     {
       path: '/:surveyId/dynamic-recall',
       name: 'dynamic-recall',
-      component: DynamicRecall,
-      meta: { module: 'public', title: 'recall.dynamicTitle' },
+      component: views.dynamicRecall,
+      meta: { module: 'recall', title: 'recall.dynamicTitle' },
       beforeEnter: beforeDynamicRecall,
     },
 
@@ -41,7 +47,7 @@ export default (store: Store<RootState>): VueRouter => {
       path: '/:surveyId/portion-test',
       name: 'portion-test',
       component: PortionTest,
-      meta: { module: 'public', title: 'portionTest._' },
+      meta: { module: 'recall', title: 'portionTest._' },
     },
 
     {

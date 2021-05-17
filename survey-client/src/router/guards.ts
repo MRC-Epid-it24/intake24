@@ -38,7 +38,7 @@ export const globalGuard =
 
     // Login pages (credentials / token)
     if (module === 'login') {
-      if (store.getters['auth/loggedIn']) next({ name: 'recall-entry', params: { surveyId } });
+      if (store.getters['auth/loggedIn']) next({ name: 'dashboard', params: { surveyId } });
       else next();
       return;
     }

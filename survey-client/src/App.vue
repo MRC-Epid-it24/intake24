@@ -117,7 +117,7 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
         await this.$store.dispatch('auth/refresh');
 
         const { surveyId } = this.$route.params;
-        await this.$router.push({ name: 'recall-entry', params: { surveyId } });
+        await this.$router.push({ name: 'dashboard', params: { surveyId } });
       } catch (err) {
         // continue
       }
