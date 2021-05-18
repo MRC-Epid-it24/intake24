@@ -6,104 +6,61 @@
       </template>
       <v-row>
         <v-col>
-          <v-expansion-panels>
+          <v-expansion-panels v-model="panelOpen">
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 Select portion size
                 <template v-slot:actions>
-                  <valid-invalid-icon :valid="selectedServing"></valid-invalid-icon>
+                  <valid-invalid-icon :valid="servingCompleteStatus"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card>
-                  <v-img class="align-end" :src="getMainImage()" :aspect-ratio="16 / 9">
-                    <template v-slot:placeholder>
-                      <image-placeholder></image-placeholder>
-                    </template>
-                    <v-row>
-                      <v-col class="d-flex justify-end mr-auto">
-                        <v-chip class="ma-2">
-                          {{ mainWeight }}
-                        </v-chip>
-                      </v-col>
-                    </v-row>
-                  </v-img>
-                  <v-card-actions>
-                    <v-container>
-                      <v-row>
-                        <!-- Thumbnails -->
-                        <v-col class="pa-1" cols="3" sm="2" lg="1">
-                          <v-card @click="hadLessInput()">
-                            <v-img :src="getFirstThumbnail()">-</v-img>
-                            <v-overlay absolute>
-                              <v-btn icon>
-                                <v-icon>fas fa-fw fa-minus</v-icon>
-                              </v-btn>
-                            </v-overlay>
-                          </v-card>
-                        </v-col>
-                        <template v-for="(imageSet, idx) in selectionImageData.images">
-                          <v-col
-                            v-bind:key="idx"
-                            class="pa-1"
-                            cols="3"
-                            sm="2"
-                            lg="1"
-                            :class="isSelected(idx)"
-                          >
-                            <v-card @click="setSelection(idx)">
-                              <v-img :src="imageSet.thumbnailUrl"></v-img>
-                            </v-card>
-                          </v-col>
-                        </template>
-                        <v-col class="pa-1 mr-auto" cols="3" sm="2" lg="1">
-                          <v-card @click="hadMoreInput()">
-                            <v-img :src="getLastThumbnail()">-</v-img>
-                            <v-overlay absolute>
-                              <v-btn icon>
-                                <v-icon>fas fa-fw fa-plus</v-icon>
-                              </v-btn>
-                            </v-overlay>
-                          </v-card>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <!-- Inputs -->
-                        <v-col align="center">
-                          <v-btn @click="hadLessInput()">I had less</v-btn>
-                        </v-col>
-                        <v-col align="center">
-                          <v-btn @click="hadMoreInput()">I had more</v-btn>
-                        </v-col>
-                        <v-col align="center">
-                          <v-btn color="success" @click="servingCompleted()">I had this much</v-btn>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-actions>
-                </v-card>
+                <v-row>
+                    <v-col>
+                      {{ $t('portion.asServed.label', { food: localeDescription }) }}
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <!-- This currently is taking asServed data, not the leftover data -->
+                      <as-served-selector
+                        :asServedData="this.selectionImageData"
+                        @as-served-selector-submit="setServingStatus($event)"
+                      ></as-served-selector>
+                    </v-col>
+                  </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                Did you leave some?
+                {{ $t('portion.asServedLeftover.question', { food: localeDescription }) }}
                 <template v-slot:actions>
-                  <valid-invalid-icon :valid="selectedLeftover"></valid-invalid-icon>
+                  <valid-invalid-icon :valid="leftoverCompleteStatus"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-row>
-                  <v-col>Yes / No</v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <as-served-selector
-                      :asServedData="this.selectionImageData"
-                      :imageSet="this.selectionImageData.images"
-                      @as-served-selector-submit="setLeftoverStatus($event)"
-                    ></as-served-selector>
-                  </v-col>
-                </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-btn>Yes</v-btn>
+                      <v-btn>No</v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      {{ $t('portion.asServedLeftover.label', { food: localeDescription }) }}
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <!-- This currently is taking asServed data, not the leftover data -->
+                      <as-served-selector
+                        :asServedData="this.selectionImageData"
+                        :imageSet="this.selectionImageData.images"
+                        @as-served-selector-submit="setLeftoverStatus($event)"
+                      ></as-served-selector>
+                    </v-col>
+                  </v-row>
+
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -118,7 +75,6 @@ import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 
 import localeContent from '@/components/mixins/localeContent';
-import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 import ValidInvalidIcon from '@/components/elements/ValidInvalidIcon.vue';
 import AsServedSelector from '@/components/prompts/portion/AsServedSelector.vue';
 import { AsServedSetResponse } from '@common/types/http/foods';
@@ -130,7 +86,6 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   name: 'AsServedPrompt',
 
   components: {
-    ImagePlaceholder,
     ValidInvalidIcon,
     AsServedSelector,
   },
@@ -157,11 +112,12 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     return {
       ...merge(basePromptProps, this.promptProps),
       errors: [] as string[],
+      panelOpen: 0 as number,
       selectionImageData: {} as AsServedSetResponse,
-      selectedObjectIdx: null as number | null,
-      selectedServing: false as boolean,
-      selectedLeftover: false as boolean,
-      leftoverCompleteStatus: false as boolean,
+      servingIdx: null as number | null,
+      leftoverIdx: null as number | null,
+      servingCompleteStatus: false as boolean,  // Used to control the icons
+      leftoverCompleteStatus: false as boolean,  // Used to control the icons
       dataLoaded: false as boolean,
     };
   },
@@ -169,13 +125,6 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   computed: {
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
-    },
-    mainWeight(): string | null {
-      if (!this.dataLoaded) return null;
-
-      if (this.selectedObjectIdx === null) return null;
-
-      return `${this.selectionImageData.images[this.selectedObjectIdx].weight}g`;
     },
   },
 
@@ -185,97 +134,51 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
   methods: {
     async fetchSelectionImageData() {
+      // AsServed Data
       try {
         const { data } = await this.$http.get<AsServedSetResponse>(
           `portion-sizes/as-served-sets/${this.asServedSetId}`
         );
         this.selectionImageData = { ...data };
-        this.setDefaultSelection();
         this.setDataLoaded();
       } catch (e) {
         console.log(e);
       }
-    },
-    setDefaultSelection() {
-      // Variable length image sets: set default selected to middle value
-      this.selectedObjectIdx = Math.floor(this.selectionImageData.images.length / 2);
+      // Leftover Data
+      // try {
+      //   const { data } = await this.$http.get<AsServedSetResponse>(
+      //     `portion-sizes/as-served-sets/${this.asServedSetId}`
+      //   );
+      //   this.selectionImageData = { ...data };
+      //   this.setDataLoaded();
+      // } catch (e) {
+      //   console.log(e);
+      // }
     },
     setDataLoaded() {
       this.dataLoaded = true;
     },
+    setServingStatus(status: boolean) {
+      // Trigger by $emit from Serving (AsServedSelector)
+      this.servingCompleteStatus = status;
+      this.submit(); // Check in method whether fully complete
+    },
     setLeftoverStatus(status: boolean) {
+      // Trigger by $emit from Leftover (AsServedSelector)
       this.leftoverCompleteStatus = status;
-    },
-    setSelection(idx: number) {
-      this.selectedObjectIdx = idx;
-    },
-    getMainImage(): string {
-      if (this.selectedObjectIdx === null) {
-        return '';
-      }
-      return this.dataLoaded
-        ? this.selectionImageData.images[this.selectedObjectIdx].mainImageUrl
-        : '';
-    },
-    getFirstThumbnail(): string {
-      if (this.selectedObjectIdx === null) {
-        return '';
-      }
-      return this.dataLoaded ? this.selectionImageData.images[0].thumbnailUrl : '';
-    },
-    getLastThumbnail() {
-      if (this.selectedObjectIdx === null) {
-        return '';
-      }
-      return this.dataLoaded
-        ? this.selectionImageData.images[this.selectionImageData.images.length - 1].thumbnailUrl
-        : '';
-    },
-    isSelected(idx: number): string {
-      return idx === this.selectedObjectIdx ? 'selectedThumb rounded-lg' : '';
-    },
-    hadLessInput() {
-      if (this.selectedObjectIdx === null) {
-        return;
-      }
-
-      if (this.selectedObjectIdx - 1 < 0) {
-        console.log('Trigger input quantity prompt');
-        // User wants to input less than thumbnail quantities on screen
-        // TO DO Method for this
-      } else {
-        this.selectedObjectIdx = this.selectedObjectIdx - 1 === 0 ? 0 : this.selectedObjectIdx - 1;
-
-        console.log('had less');
-      }
-    },
-    hadMoreInput() {
-      if (this.selectedObjectIdx === null) {
-        return;
-      }
-
-      const maxLength = this.selectionImageData.images.length - 1;
-      if (this.selectedObjectIdx + 1 > maxLength) {
-        console.log('Trigger input quantity prompt');
-        // User wants to input more than thumbnail quantity on screen
-        // TO DO Method for this
-      } else {
-        this.selectedObjectIdx =
-          this.selectedObjectIdx + 1 === maxLength ? maxLength : this.selectedObjectIdx + 1;
-
-        console.log('had more');
-      }
-    },
-    servingCompleted() {
-      this.selectedServing = true;
+      this.submit();  // Check in method whether fully complete
     },
     submit() {
-      if (this.selectedObjectIdx === null) return;
+      // if (this.servingIdx === null && this.leftoverIdx === null) return;
 
-      this.$emit('as-served-selected', {
-        imageIndex: this.selectedObjectIdx,
-        weight: this.selectionImageData.images[this.selectedObjectIdx].weight,
-      });
+      // Check both sections are completed
+      if (this.servingIdx !== null && this.leftoverIdx !== null) {
+        // TODO emits only as served data
+        this.$emit('as-served-selected', {
+          imageIndex: this.servingIdx,
+          weight: this.selectionImageData.images[this.servingIdx].weight,
+        });
+      }
     },
   },
 });
