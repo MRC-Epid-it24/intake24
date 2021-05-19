@@ -89,5 +89,17 @@ export default (): void => {
       expect(body).toContainAllKeys(['errors', 'success']);
       expect(body.errors).toContainAllKeys(['id']);
     });
+
+    it('should return 422 when duplicate name', async () => {
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .send({ ...mocker.scheme(), name: input.name });
+
+      expect(status).toBe(422);
+      expect(body).toContainAllKeys(['errors', 'success']);
+      expect(body.errors).toContainAllKeys(['name']);
+    });
   });
 };

@@ -39,6 +39,7 @@ export default class Scheme
 
   @Column({
     allowNull: false,
+    unique: true,
     type: DataType.STRING(128),
   })
   public name!: string;

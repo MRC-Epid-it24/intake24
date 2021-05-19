@@ -1,13 +1,26 @@
+import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
+import { Op, WhereOptions } from 'sequelize';
+import { Scheme } from '@/db/models/system';
+import { unique } from '@/http/rules';
 import { SchemeTypes } from '@common/types/models';
 import { validateMeals, validateRecallQuestions, validateExportSections } from '@common/validators';
 
 const defaults: Schema = {
   name: {
     in: ['body'],
-    errorMessage: 'Scheme name must be a string.',
+    errorMessage: 'Scheme name must be unique string.',
     isString: true,
+    isEmpty: { negated: true },
+    custom: {
+      options: async (value, { req }): Promise<void> => {
+        const { schemeId } = (req as Request).params;
+        const except: WhereOptions = schemeId ? { id: { [Op.ne]: schemeId } } : {};
+
+        return unique({ model: Scheme, condition: { field: 'name', value }, except });
+      },
+    },
   },
   type: {
     in: ['body'],
