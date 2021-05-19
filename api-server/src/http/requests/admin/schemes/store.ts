@@ -15,10 +15,13 @@ export default validate(
       isEmpty: { negated: true },
       custom: {
         options: async (value): Promise<void> =>
-          unique({ model: Scheme, condition: { field: 'id', value: slugify(value) } }),
+          unique({
+            model: Scheme,
+            condition: { field: 'id', value: slugify(value, { strict: true }) },
+          }),
       },
       customSanitizer: {
-        options: (value) => (typeof value === 'string' ? slugify(value) : value),
+        options: (value) => (typeof value === 'string' ? slugify(value, { strict: true }) : value),
       },
     },
   })
