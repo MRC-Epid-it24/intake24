@@ -112,7 +112,7 @@ export default Vue.extend({
       return this.confirmText ?? this.label;
     },
     cancelLabel(): string {
-      return this.confirmText ?? this.$t('common.action.cancel');
+      return this.cancelText ?? this.$t('common.action.cancel');
     },
     titleLabel(): string {
       return this.titleText ?? this.$t('common.action.confirm.title');
