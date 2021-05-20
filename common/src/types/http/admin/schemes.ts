@@ -7,6 +7,7 @@ import {
   SchemeCreationAttributes,
 } from '../../models';
 import { LanguageEntry } from './languages';
+import { SchemeQuestionEntry } from './scheme-questions';
 
 export type SchemeRequest = SchemeCreationAttributes;
 
@@ -33,3 +34,7 @@ export type CreateSchemeResponse = Pick<SchemeResponse, 'refs'>;
 export type StoreSchemeResponse = Pick<SchemeResponse, 'data'>;
 
 export type SchemeExportRefsResponse = Record<ExportSectionId, ExportField[]>;
+
+export type SchemeQuestionTemplatesResponse = {
+  data: SchemeQuestionEntry[];
+};

@@ -22,6 +22,12 @@ router
 
 router.get('/:schemeId/edit', permission('schemes-edit'), wrapAsync(schemeController.edit));
 router.get(
+  '/:schemeId/templates',
+  permission('schemes-edit'),
+  validation.templates,
+  wrapAsync(schemeController.templates)
+);
+router.get(
   '/:schemeId/data-export',
   permission('schemes-edit'),
   wrapAsync(schemeController.dataExportRefs)

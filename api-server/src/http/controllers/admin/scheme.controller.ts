@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { Language, Scheme } from '@/db/models/system';
+import { FindOptions, Op } from 'sequelize';
+import { Language, Scheme, SchemeQuestion } from '@/db/models/system';
 import { defaultMeals } from '@common/schemes';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
@@ -11,11 +12,12 @@ import {
   SchemesResponse,
   StoreSchemeResponse,
   SchemeExportRefsResponse,
+  SchemeQuestionTemplatesResponse,
 } from '@common/types/http/admin';
 import { ExportField, ExportSectionId } from '@common/types/models';
 import { Controller, CrudActions } from '../controller';
 
-export type SchemeController = Controller<CrudActions | 'dataExportRefs'>;
+export type SchemeController = Controller<CrudActions | 'templates' | 'dataExportRefs'>;
 
 export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeController => {
   const refs = async (): Promise<SchemeRefs> => {
@@ -24,10 +26,13 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     return { languages, meals: defaultMeals };
   };
 
-  const entry = async (req: Request, res: Response<SchemeResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ schemeId: string }>,
+    res: Response<SchemeResponse>
+  ): Promise<void> => {
     const { schemeId } = req.params;
-    const scheme = await Scheme.findByPk(schemeId);
 
+    const scheme = await Scheme.findByPk(schemeId);
     if (!scheme) throw new NotFoundError();
 
     res.json({ data: scheme, refs: await refs() });
@@ -55,16 +60,23 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res.status(201).json({ data: scheme });
   };
 
-  const detail = async (req: Request, res: Response<SchemeResponse>): Promise<void> =>
-    entry(req, res);
+  const detail = async (
+    req: Request<{ schemeId: string }>,
+    res: Response<SchemeResponse>
+  ): Promise<void> => entry(req, res);
 
-  const edit = async (req: Request, res: Response<SchemeResponse>): Promise<void> =>
-    entry(req, res);
+  const edit = async (
+    req: Request<{ schemeId: string }>,
+    res: Response<SchemeResponse>
+  ): Promise<void> => entry(req, res);
 
-  const update = async (req: Request, res: Response<SchemeResponse>): Promise<void> => {
+  const update = async (
+    req: Request<{ schemeId: string }>,
+    res: Response<SchemeResponse>
+  ): Promise<void> => {
     const { schemeId } = req.params;
-    const scheme = await Scheme.findByPk(schemeId);
 
+    const scheme = await Scheme.findByPk(schemeId);
     if (!scheme) throw new NotFoundError();
 
     await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals', 'export']));
@@ -72,10 +84,13 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res.json({ data: scheme, refs: await refs() });
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ schemeId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { schemeId } = req.params;
-    const scheme = await Scheme.scope('surveys').findByPk(schemeId);
 
+    const scheme = await Scheme.scope('surveys').findByPk(schemeId);
     if (!scheme) throw new NotFoundError();
 
     if (scheme.surveys?.length)
@@ -85,8 +100,37 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res.status(204).json();
   };
 
+  const templates = async (
+    req: Request<{ schemeId: string }, any, any, { search?: string; limit?: number }>,
+    res: Response<SchemeQuestionTemplatesResponse>
+  ): Promise<void> => {
+    const {
+      params: { schemeId },
+      query: { search, limit },
+    } = req;
+
+    const scheme = await Scheme.findByPk(schemeId);
+    if (!scheme) throw new NotFoundError();
+
+    const options: FindOptions = { limit };
+
+    if (search) {
+      const op =
+        SchemeQuestion.sequelize?.getDialect() === 'postgres'
+          ? { [Op.iLike]: `%${search}%` }
+          : { [Op.substring]: search };
+
+      const ops = ['questionId', 'name'].map((column) => ({ [column]: op }));
+      options.where = { [Op.or]: ops };
+    }
+
+    const questions = await SchemeQuestion.findAll(options);
+
+    res.json({ data: questions });
+  };
+
   const dataExportRefs = async (
-    req: Request,
+    req: Request<{ schemeId: string }>,
     res: Response<SchemeExportRefsResponse>
   ): Promise<void> => {
     const { schemeId } = req.params;
@@ -113,6 +157,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     edit,
     update,
     destroy,
+    templates,
     dataExportRefs,
   };
 };
