@@ -133,3 +133,29 @@ Content-Type: application/json
 ```json
 204 No Content
 ```
+
+
+## Question templates
+
+Browse available question templates for scheme
+
+### Request
+
+```http
+GET /api/admin/schemes/:schemeId/templates
+    ?search={searchText}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+}
+```

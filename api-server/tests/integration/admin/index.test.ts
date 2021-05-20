@@ -89,6 +89,7 @@ export default (): void => {
   describe('GET /api/admin/schemes/:schemeId/edit', schemes.edit);
   describe('PUT /api/admin/schemes/:schemeId', schemes.update);
   describe('DELETE /api/admin/schemes/:schemeId', schemes.destroy);
+  describe('GET /api/admin/schemes/:schemeId/templates', schemes.templates);
 
   // Surveys
   describe('GET /api/admin/surveys', surveys.browse);
