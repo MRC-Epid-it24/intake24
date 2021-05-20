@@ -113,10 +113,9 @@ export default (): SchemeQuestionController => {
     sectionQuestions.splice(match, 1, question);
 
     if (isMealSection(section)) questions.meals[section] = sectionQuestions;
-    else questions.preMeals = sectionQuestions;
+    else questions[section] = sectionQuestions;
 
-    scheme.questions = questions;
-    await scheme.save();
+    await scheme.update({ questions });
 
     res.json();
   };
