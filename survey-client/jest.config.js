@@ -4,4 +4,5 @@ module.exports = {
   moduleNameMapper: {
     '^@common/(.*)$': '<rootDir>/../common/src/$1',
   },
+  setupFiles: ['<rootDir>/tests/unit/index.js'],
 };
