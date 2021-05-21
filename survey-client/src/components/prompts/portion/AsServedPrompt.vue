@@ -2,68 +2,86 @@
   <v-container>
     <portion-layout :text="promptProps.text" :description="promptProps.description">
       <template v-slot:headerText>
-        {{ $t('portion.asServed.label', { food: localeDescription }) }}
+        {{ $t('portion.asServed.promptLabel', { food: localeDescription }) }}
       </template>
       <v-row>
         <v-col>
           <v-expansion-panels v-model="panelOpen">
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                Select portion size
+                {{ $t('portion.asServed.portionHeader') }}
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="servingCompleteStatus"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-row>
-                    <v-col>
-                      {{ $t('portion.asServed.label', { food: localeDescription }) }}
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <!-- This currently is taking asServed data, not the leftover data -->
-                      <as-served-selector
-                        :asServedData="this.selectionImageData"
-                        @as-served-selector-submit="setServingStatus($event)"
-                      ></as-served-selector>
-                    </v-col>
-                  </v-row>
+                  <v-col>
+                    {{ $t('portion.asServed.portionLabel', { food: localeDescription }) }}
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <as-served-selector
+                      :asServedSetId="this.asServedSetId"
+                      @as-served-selector-submit="setServingStatus($event)"
+                    ></as-served-selector>
+                  </v-col>
+                </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.asServedLeftover.question', { food: localeDescription }) }}
+                {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="leftoverCompleteStatus"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                  <v-row>
-                    <v-col>
-                      <v-btn>Yes</v-btn>
-                      <v-btn>No</v-btn>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      {{ $t('portion.asServedLeftover.label', { food: localeDescription }) }}
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <!-- This currently is taking asServed data, not the leftover data -->
-                      <as-served-selector
-                        :asServedData="this.selectionImageData"
-                        :imageSet="this.selectionImageData.images"
-                        @as-served-selector-submit="setLeftoverStatus($event)"
-                      ></as-served-selector>
-                    </v-col>
-                  </v-row>
-
+                <v-row>
+                  <v-col>
+                    <p>
+                      {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
+                    </p>
+                    <v-btn @click="leftoverAnswer(true)" :color="leftoverButtonStyle('yes')">
+                      {{ $t('common.confirm.yes') }}
+                    </v-btn>
+                    <v-btn @click="leftoverAnswer(false)" :color="leftoverButtonStyle('no')">
+                      {{ $t('common.confirm.no') }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-row v-if="leftoverPromptAnswer">
+                  <v-col>
+                    {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
+                  </v-col>
+                </v-row>
+                <v-row v-if="leftoverPromptAnswer">
+                  <v-col>
+                    <!-- This currently is taking asServed data, not the leftover data -->
+                    <as-served-selector
+                      :asServedSetId="this.asServedSetId"
+                      @as-served-selector-submit="setLeftoverStatus($event)"
+                    ></as-served-selector>
+                  </v-col>
+                </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
+        </v-col>
+      </v-row>
+      <v-row v-show="errors.length">
+        <v-col>
+          <v-alert v-for="(e, idx) in errors" :key="idx" outlined type="error">
+            {{ e }}
+          </v-alert>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-btn @click="submit()" :color="submitButtonStyle()">
+            {{ $t('common.continue') }}
+          </v-btn>
         </v-col>
       </v-row>
     </portion-layout>
@@ -77,7 +95,6 @@ import merge from 'deepmerge';
 import localeContent from '@/components/mixins/localeContent';
 import ValidInvalidIcon from '@/components/elements/ValidInvalidIcon.vue';
 import AsServedSelector from '@/components/prompts/portion/AsServedSelector.vue';
-import { AsServedSetResponse } from '@common/types/http/foods';
 import { basePromptProps, BasePromptProps } from '@common/prompts';
 import { LocaleTranslation } from '@common/types';
 import BasePortion, { Portion } from './BasePortion';
@@ -113,11 +130,14 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       ...merge(basePromptProps, this.promptProps),
       errors: [] as string[],
       panelOpen: 0 as number,
-      selectionImageData: {} as AsServedSetResponse,
+      leftoverPromptAnswer: null as unknown,
+      // selectionImageData: {} as AsServedSetResponse,
       servingIdx: null as number | null,
       leftoverIdx: null as number | null,
-      servingCompleteStatus: false as boolean,  // Used to control the icons
-      leftoverCompleteStatus: false as boolean,  // Used to control the icons
+      asServedData: null as unknown,
+      leftoverData: null as unknown,
+      servingCompleteStatus: false as boolean, // Used to control the icons
+      leftoverCompleteStatus: false as boolean, // Used to control the icons
       dataLoaded: false as boolean,
     };
   },
@@ -128,56 +148,105 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     },
   },
 
-  mounted() {
-    this.fetchSelectionImageData();
-  },
-
   methods: {
-    async fetchSelectionImageData() {
-      // AsServed Data
-      try {
-        const { data } = await this.$http.get<AsServedSetResponse>(
-          `portion-sizes/as-served-sets/${this.asServedSetId}`
-        );
-        this.selectionImageData = { ...data };
-        this.setDataLoaded();
-      } catch (e) {
-        console.log(e);
+    leftoverAnswer(answer: boolean) {
+      // Controls display of leftover selector
+      this.leftoverPromptAnswer = answer;
+      if (answer === false) {
+        // 'no' answer makes form valid, so make ready for submit
+        this.leftoverCompleteStatus = true;
+        this.clearErrors();
+        this.setPanelOpen(1);
+      } else {
+        this.leftoverCompleteStatus = false;
       }
-      // Leftover Data
-      // try {
-      //   const { data } = await this.$http.get<AsServedSetResponse>(
-      //     `portion-sizes/as-served-sets/${this.asServedSetId}`
-      //   );
-      //   this.selectionImageData = { ...data };
-      //   this.setDataLoaded();
-      // } catch (e) {
-      //   console.log(e);
-      // }
     },
-    setDataLoaded() {
-      this.dataLoaded = true;
+    leftoverButtonStyle(buttonValue: string): string {
+      // Make button green for currently selection option
+      if (this.leftoverPromptAnswer === null) return '';
+      if (buttonValue === 'yes' && this.leftoverPromptAnswer) {
+        return 'success';
+      }
+      if (buttonValue === 'no' && !this.leftoverPromptAnswer) {
+        return 'success';
+      }
+      return '';
     },
-    setServingStatus(status: boolean) {
+    submitButtonStyle(): string {
+      if (this.servingCompleteStatus && this.leftoverCompleteStatus) return 'success';
+      return '';
+    },
+    setPanelOpen(panelIdComplete: number) {
+      if (this.isValid()) {
+        this.panelOpen = -1;
+        return;
+      }
+      // Completed asServed
+      if (panelIdComplete === 0) {
+        if (this.leftoverCompleteStatus) {
+          this.panelOpen = -1;
+        } else {
+          this.panelOpen = 1;
+        }
+      }
+      // Completed leftover
+      if (panelIdComplete === 1) {
+        if (!this.servingCompleteStatus) {
+          this.panelOpen = 0;
+        } else {
+          this.panelOpen = -1;
+        }
+      }
+    },
+    setServingStatus(status: Record<string, unknown>) {
       // Trigger by $emit from Serving (AsServedSelector)
-      this.servingCompleteStatus = status;
-      this.submit(); // Check in method whether fully complete
+      this.asServedData = status;
+      this.servingCompleteStatus = true;
+      if (this.isValid()) this.clearErrors();
+      this.setPanelOpen(0);
     },
-    setLeftoverStatus(status: boolean) {
+    setLeftoverStatus(status: Record<string, unknown>) {
       // Trigger by $emit from Leftover (AsServedSelector)
-      this.leftoverCompleteStatus = status;
-      this.submit();  // Check in method whether fully complete
+      this.leftoverData = status;
+      this.leftoverCompleteStatus = true;
+      if (this.isValid()) this.clearErrors();
+      this.setPanelOpen(1);
+    },
+    isValid(): boolean {
+      // Haven't filled in asServed, or answered leftover
+      if (!this.asServedData || this.leftoverPromptAnswer === null) return false;
+
+      // asServed is complete, leftoverPromptAnswer is false (no leftover)
+      if (this.asServedData && this.leftoverPromptAnswer === false) {
+        return true;
+      }
+      // Both asServed and leftoverData are full
+      if (this.asServedData && this.leftoverData) {
+        return true;
+      }
+      return false;
+    },
+    setErrors() {
+      this.errors = [this.$t('common.errors.expansionIncomplete') as string];
+    },
+    clearErrors() {
+      this.errors = [];
     },
     submit() {
-      // if (this.servingIdx === null && this.leftoverIdx === null) return;
-
-      // Check both sections are completed
-      if (this.servingIdx !== null && this.leftoverIdx !== null) {
-        // TODO emits only as served data
-        this.$emit('as-served-selected', {
-          imageIndex: this.servingIdx,
-          weight: this.selectionImageData.images[this.servingIdx].weight,
-        });
+      if (!this.isValid()) {
+        this.setErrors();
+        return;
+      }
+      // We can submit only as served (with no leftover)
+      // Edge case: asServed and leftover completed, but leftoverPrompt answer changed to no afterwards (caught below)
+      if (this.asServedData && !this.leftoverPromptAnswer) {
+        // console.log("submitting only as served, leftover no");
+        this.$emit('as-served-serving', this.asServedData);
+      } else if (this.asServedData && this.leftoverData) {
+        // Submit both as served & leftover
+        // console.log("submitting as served, leftover yes");
+        this.$emit('as-served-serving', this.asServedData);
+        this.$emit('as-served-leftover', this.leftoverData);
       }
     },
   },

@@ -6,8 +6,8 @@ const portion: LocaleMessage = {
     lessButton: 'I had less',
     moreButton: 'I had more',
     // Maybe don't need both of these as semanitcally very similar
-    confirmButtonMany: 'I had that much',
-    confirmButton: 'I had that many',
+    confirmButtonMany: 'I had that many',
+    confirmButton: 'I had that much',
     quantityAnd: 'and', // E.g 1 and 3/4 bananas
   },
   option: {
@@ -66,11 +66,13 @@ const portion: LocaleMessage = {
     },
   },
   asServed: {
-    label: 'Using these pictures, please chose how much {food} you had.',
-  },
-  asServedLeftover: {
-    label: 'Using these pictures, please choose how much {food} you left.',
-    question: 'Did you leave some of your {food}?',
+    promptLabel:
+      'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
+    portionHeader: 'Step 1. Select your portion size.',
+    portionLabel: 'Using these pictures, please chose how much {food} you had.',
+    leftoverHeader: 'Step 2. Select your leftover size.',
+    leftoverQuestion: 'Did you leave some of your {food}?',
+    leftoverLabel: 'Using these pictures, please choose how much {food} you left.',
   },
   guideImage: {
     label: 'Please select the item you had or the closest match.',

@@ -25,6 +25,10 @@ const common: LocaleMessageObject = {
     yes: 'Yes',
     no: 'No',
   },
+
+  errors: {
+    expansionIncomplete: 'Please complete all sections marked with !',
+  },
 };
 
 export default common;

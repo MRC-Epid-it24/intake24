@@ -26,14 +26,7 @@
         </v-card>
       </v-col>
       <template v-for="(images, idx) in asServedData.images">
-        <v-col
-          v-bind:key="idx"
-          class="pa-1"
-          cols="3"
-          sm="2"
-          lg="1"
-          :class="isSelected(idx)"
-        >
+        <v-col v-bind:key="idx" class="pa-1" cols="3" sm="2" lg="1" :class="isSelected(idx)">
           <v-card @click="setSelection(idx)">
             <v-img :src="images.thumbnailUrl"></v-img>
           </v-card>
@@ -52,13 +45,19 @@
     </v-row>
     <v-row>
       <v-col align="center">
-        <v-btn @click="hadLessInput()">I had less</v-btn>
+        <v-btn @click="hadLessInput()">
+          {{ $t('portion.common.lessButton') }}
+        </v-btn>
       </v-col>
       <v-col align="center">
-        <v-btn @click="hadMoreInput()">I had more</v-btn>
+        <v-btn @click="hadMoreInput()">
+          {{ $t('portion.common.moreButton') }}
+        </v-btn>
       </v-col>
       <v-col align="center">
-        <v-btn color="success" @click="servingCompleted()">I had this much</v-btn>
+        <v-btn color="success" @click="servingCompleted()">
+          {{ $t('portion.common.confirmButton') }}
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -75,24 +74,18 @@ export default (Vue as VueConstructor<Vue>).extend({
     ImagePlaceholder,
   },
   props: {
-    imageSet: Array,
-    asServedData: {
-      type: Object as () => AsServedSetResponse,
+    asServedSetId: {
+      type: String,
     },
   },
   data() {
     return {
       selectedObjectIdx: null as number | null,
-      completed: false as boolean,
+      asServedData: {} as AsServedSetResponse,
+      dataLoaded: false as boolean,
     };
   },
   computed: {
-    dataLoaded(): boolean {
-      if (this.asServedData) {
-        return true;
-      }
-      return false;
-    },
     mainWeight(): string | null {
       if (!this.dataLoaded) return null;
 
@@ -102,15 +95,30 @@ export default (Vue as VueConstructor<Vue>).extend({
     },
   },
   mounted() {
-    this.setDefaultSelection();
+    this.fetchAsServedImageData();
   },
 
   methods: {
+    async fetchAsServedImageData() {
+      try {
+        const { data } = await this.$http.get<AsServedSetResponse>(
+          `portion-sizes/as-served-sets/${this.asServedSetId}`
+        );
+        this.asServedData = { ...data };
+        this.setDataLoaded();
+        this.setDefaultSelection();
+      } catch (e) {
+        console.log(e);
+      }
+    },
     getMainImage(): string {
       if (this.selectedObjectIdx === null) {
         return '';
       }
       return this.dataLoaded ? this.asServedData.images[this.selectedObjectIdx].mainImageUrl : '';
+    },
+    setDataLoaded() {
+      this.dataLoaded = true;
     },
     setDefaultSelection() {
       // Variable length image sets: set default selected to middle value
@@ -166,7 +174,11 @@ export default (Vue as VueConstructor<Vue>).extend({
         : '';
     },
     servingCompleted() {
-      this.$emit('as-served-selector-submit', this.completed);
+      if (this.selectedObjectIdx === null) return;
+      this.$emit('as-served-selector-submit', {
+        imageIndex: this.selectedObjectIdx,
+        weight: this.asServedData.images[this.selectedObjectIdx].weight,
+      });
     },
   },
 });
