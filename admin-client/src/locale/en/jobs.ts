@@ -4,6 +4,7 @@ const jobs: LocaleMessageObject = {
   _: 'Job',
   index: 'Jobs',
   detail: 'Job detail',
+  new: 'New detail',
   delete: 'Delete job',
   downloadUrl: 'Download Url',
   downloadUrlExpiresAt: 'Download Url expires at',
