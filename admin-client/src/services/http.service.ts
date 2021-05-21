@@ -15,6 +15,7 @@ const httpClient: HttpClient = {
 
   init(router, store) {
     this.axios.defaults.baseURL = store.getters.app.api;
+    this.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     this.mountInterceptors(router, store);
   },
