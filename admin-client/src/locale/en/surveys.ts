@@ -47,16 +47,19 @@ const surveys: LocaleMessageObject = {
   },
   'data-export': {
     _: 'Data export',
+    tab: 'Data export',
     title: 'Data Export options',
   },
   mgmt: {
     _: 'Management',
+    tab: 'Management',
     title: 'Survey management',
     add: 'New staff/support',
     edit: 'Edit staff',
   },
   respondents: {
-    _: 'Respondents',
+    _: 'Respondent',
+    tab: 'Respondents',
     title: 'Survey respondents',
     add: 'New respondent',
     edit: 'Edit respondent',
@@ -74,7 +77,8 @@ const surveys: LocaleMessageObject = {
     },
   },
   submissions: {
-    _: 'Submissions',
+    _: 'Submission',
+    tab: 'Submissions',
     title: 'Survey submissions',
     id: 'Submission ID',
     userId: 'User ID',

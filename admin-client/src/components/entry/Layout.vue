@@ -87,8 +87,8 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
   methods: {
     tabTitle(tab: string) {
-      const check = has(this.$i18n.messages[this.$i18n.locale], `${this.module}.${tab}._`);
-      return this.$t(check ? `${this.module}.${tab}._` : `common.action.${tab}`);
+      const check = has(this.$i18n.messages[this.$i18n.locale], `${this.module}.${tab}.tab`);
+      return this.$t(check ? `${this.module}.${tab}.tab` : `common.action.${tab}`);
     },
 
     async remove(): Promise<void> {

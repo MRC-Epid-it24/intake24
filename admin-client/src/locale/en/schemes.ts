@@ -64,6 +64,7 @@ const schemes: LocaleMessageObject = {
   },
   'data-export': {
     _: 'Data export',
+    tab: 'Data export',
     title: 'Data export fields',
     edit: 'Edit fields',
     field: {
@@ -87,6 +88,8 @@ const schemes: LocaleMessageObject = {
     },
   },
   questions: {
+    _: 'Scheme question',
+    tab: 'Questions',
     title: 'Scheme questions',
     new: 'New question',
     edit: 'Edit question',
