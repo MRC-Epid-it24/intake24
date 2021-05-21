@@ -7,6 +7,7 @@ import permissions from './permissions/index.test';
 import roles from './roles/index.test';
 import users from './users/index.test';
 import schemes from './schemes/index.test';
+import schemeQuestions from './scheme-questions/index.test';
 import surveys from './surveys/index.test';
 import tasks from './tasks/index.test';
 
@@ -90,6 +91,16 @@ export default (): void => {
   describe('PUT /api/admin/schemes/:schemeId', schemes.update);
   describe('DELETE /api/admin/schemes/:schemeId', schemes.destroy);
   describe('GET /api/admin/schemes/:schemeId/templates', schemes.templates);
+
+  // Scheme questions
+  describe('GET /api/admin/scheme-questions', schemeQuestions.browse);
+  describe('GET /api/admin/scheme-questions/create', schemeQuestions.create);
+  describe('POST /api/admin/scheme-questions', schemeQuestions.store);
+  describe('GET /api/admin/scheme-questions/:schemeQuestionId', schemeQuestions.detail);
+  describe('GET /api/admin/scheme-questions/:schemeQuestionId/edit', schemeQuestions.edit);
+  describe('PUT /api/admin/scheme-questions/:schemeQuestionId', schemeQuestions.update);
+  describe('DELETE /api/admin/scheme-questions/:schemeQuestionId', schemeQuestions.destroy);
+  describe('POST /api/admin/scheme-questions/:schemeQuestionId/sync', schemeQuestions.sync);
 
   // Surveys
   describe('GET /api/admin/surveys', surveys.browse);

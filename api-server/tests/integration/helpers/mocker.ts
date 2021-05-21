@@ -9,8 +9,13 @@ import {
   CreateUserRequest,
   CreateLanguageRequest,
 } from '@common/types/http/admin';
-import { SchemeCreationAttributes, SchemeTypes } from '@common/types/models';
+import {
+  SchemeCreationAttributes,
+  SchemeQuestionCreationAttributes,
+  SchemeTypes,
+} from '@common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
+import { customPromptQuestions } from '@common/prompts';
 
 const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
@@ -117,6 +122,22 @@ const scheme = (): SchemeCreationAttributes => {
   };
 };
 
+const schemeQuestion = (): SchemeQuestionCreationAttributes => {
+  const question = {
+    ...customPromptQuestions[
+      faker.datatype.number({ min: 0, max: customPromptQuestions.length - 1 })
+    ],
+    id: faker.helpers.slugify(faker.random.words(6)),
+    name: faker.random.words(6),
+  };
+
+  return {
+    questionId: question.id,
+    name: question.name,
+    question,
+  };
+};
+
 const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest => {
   const id = faker.helpers.slugify(faker.random.words(2));
   const name = faker.random.words(6);
@@ -173,6 +194,7 @@ export default {
   permission,
   role,
   scheme,
+  schemeQuestion,
   survey,
   user,
   task,
