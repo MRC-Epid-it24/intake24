@@ -9,13 +9,18 @@
       <v-btn
         fab
         small
-        class="mr-3"
+        class="mx-3"
         color="secondary"
         :title="$t('schemes.questions.new')"
         @click.stop="create"
       >
         <v-icon small>fa-plus</v-icon>
       </v-btn>
+      <template-dialog
+        :schemeId="$route.params.id"
+        :questionIds="questionIds"
+        @insert="insertFromTemplate"
+      ></template-dialog>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="questions" @end="update">
@@ -83,6 +88,7 @@ import { promptSettings } from '@/components/prompts';
 import PromptSelector from '@/components/prompts/PromptSelector.vue';
 import { PromptQuestion } from '@common/prompts';
 import { SurveyQuestionSection, MealSection } from '@common/types';
+import TemplateDialog from './TemplateDialog.vue';
 
 export type Refs = {
   $refs: {
@@ -110,6 +116,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
   components: {
     ConfirmDialog,
     PromptSelector,
+    TemplateDialog,
     draggable,
   },
 
@@ -139,6 +146,10 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     save({ question, index }: { question: PromptQuestion; index: number }) {
       if (index === -1) this.questions.push(question);
       else this.questions.splice(index, 1, question);
+    },
+
+    insertFromTemplate(question: PromptQuestion) {
+      this.questions.push(question);
     },
 
     moveSectionList(prompt: PromptQuestion): { value: string; text: string }[] {

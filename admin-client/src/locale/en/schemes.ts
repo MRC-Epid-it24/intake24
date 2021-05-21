@@ -160,6 +160,13 @@ const schemes: LocaleMessageObject = {
       required: 'Question is required to be filled in',
       message: 'Error message to be displayed',
     },
+    templates: {
+      _: 'Question Template',
+      title: 'Question Templates',
+      add: 'Load from template',
+      alreadyExists: `Question with ID '{questionId}' already exists in scheme`,
+      none: 'No question template found',
+    },
   },
   foodSearch: {
     allowBrowsing: 'Allow respondents to search for foods by freely browsing food categories',
