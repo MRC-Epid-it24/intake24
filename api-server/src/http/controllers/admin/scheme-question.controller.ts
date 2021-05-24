@@ -25,7 +25,10 @@ export default (): SchemeQuestionController => {
     return { languages, schemes, questionIds };
   };
 
-  const entry = async (req: Request, res: Response<SchemeQuestionResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ schemeQuestionId: string }>,
+    res: Response<SchemeQuestionResponse>
+  ): Promise<void> => {
     const { schemeQuestionId } = req.params;
 
     const schemeQuestion = await SchemeQuestion.findByPk(schemeQuestionId);
@@ -60,13 +63,20 @@ export default (): SchemeQuestionController => {
     res.status(201).json({ data: schemeQuestion });
   };
 
-  const detail = async (req: Request, res: Response<SchemeQuestionResponse>): Promise<void> =>
-    entry(req, res);
+  const detail = async (
+    req: Request<{ schemeQuestionId: string }>,
+    res: Response<SchemeQuestionResponse>
+  ): Promise<void> => entry(req, res);
 
-  const edit = async (req: Request, res: Response<SchemeQuestionResponse>): Promise<void> =>
-    entry(req, res);
+  const edit = async (
+    req: Request<{ schemeQuestionId: string }>,
+    res: Response<SchemeQuestionResponse>
+  ): Promise<void> => entry(req, res);
 
-  const update = async (req: Request, res: Response<SchemeQuestionResponse>): Promise<void> => {
+  const update = async (
+    req: Request<{ schemeQuestionId: string }>,
+    res: Response<SchemeQuestionResponse>
+  ): Promise<void> => {
     const {
       params: { schemeQuestionId },
       body: { question },
@@ -81,7 +91,10 @@ export default (): SchemeQuestionController => {
     res.json({ data: schemeQuestion, refs: await refs() });
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ schemeQuestionId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { schemeQuestionId } = req.params;
 
     const schemeQuestion = await SchemeQuestion.findByPk(schemeQuestionId);
@@ -91,7 +104,10 @@ export default (): SchemeQuestionController => {
     res.status(204).json();
   };
 
-  const sync = async (req: Request, res: Response<SchemeQuestionResponse>): Promise<void> => {
+  const sync = async (
+    req: Request<{ schemeQuestionId: string }>,
+    res: Response<SchemeQuestionResponse>
+  ): Promise<void> => {
     const {
       params: { schemeQuestionId },
       body: { schemeId, question },

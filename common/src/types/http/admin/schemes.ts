@@ -1,3 +1,4 @@
+import { PromptQuestion } from '../../../prompts';
 import { Meal } from '../..';
 import {
   ExportField,
@@ -7,7 +8,6 @@ import {
   SchemeCreationAttributes,
 } from '../../models';
 import { LanguageEntry } from './languages';
-import { SchemeQuestionEntry } from './scheme-questions';
 
 export type SchemeRequest = SchemeCreationAttributes;
 
@@ -22,6 +22,7 @@ export type SchemeEntry = SchemeAttributes;
 export type SchemeRefs = {
   languages: LanguageEntry[];
   meals: Meal[];
+  templates: PromptQuestion[];
 };
 
 export type SchemeResponse = {
@@ -36,5 +37,5 @@ export type StoreSchemeResponse = Pick<SchemeResponse, 'data'>;
 export type SchemeExportRefsResponse = Record<ExportSectionId, ExportField[]>;
 
 export type SchemeQuestionTemplatesResponse = {
-  data: SchemeQuestionEntry[];
+  data: PromptQuestion[];
 };

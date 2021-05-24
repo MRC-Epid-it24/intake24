@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { FindOptions, Op } from 'sequelize';
 import { Language, Scheme, SchemeQuestion } from '@/db/models/system';
-import { defaultMeals } from '@common/schemes';
+import { defaultMeals, flattenScheme } from '@common/schemes';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import {
@@ -15,15 +15,25 @@ import {
   SchemeQuestionTemplatesResponse,
 } from '@common/types/http/admin';
 import { ExportField, ExportSectionId } from '@common/types/models';
+import { RecallQuestions } from '@common/types';
+import { PromptQuestion } from '@common/prompts';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions | 'templates' | 'dataExportRefs'>;
 
 export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeController => {
-  const refs = async (): Promise<SchemeRefs> => {
+  const refs = async (recallQuestions?: RecallQuestions): Promise<SchemeRefs> => {
     const languages = await Language.findAll();
 
-    return { languages, meals: defaultMeals };
+    let templates: PromptQuestion[] = [];
+
+    if (recallQuestions) {
+      const questionId = flattenScheme(recallQuestions).map((question) => question.id);
+      const questions = await SchemeQuestion.findAll({ where: { questionId } });
+      templates = questions.map((schemeQuestion) => schemeQuestion.question);
+    }
+
+    return { languages, meals: defaultMeals, templates };
   };
 
   const entry = async (
@@ -35,7 +45,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     const scheme = await Scheme.findByPk(schemeId);
     if (!scheme) throw new NotFoundError();
 
-    res.json({ data: scheme, refs: await refs() });
+    res.json({ data: scheme, refs: await refs(scheme.questions) });
   };
 
   const browse = async (req: Request, res: Response<SchemesResponse>): Promise<void> => {
@@ -81,7 +91,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
 
     await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals', 'export']));
 
-    res.json({ data: scheme, refs: await refs() });
+    res.json({ data: scheme, refs: await refs(scheme.questions) });
   };
 
   const destroy = async (
@@ -124,7 +134,8 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
       options.where = { [Op.or]: ops };
     }
 
-    const questions = await SchemeQuestion.findAll(options);
+    const schemeQuestions = await SchemeQuestion.findAll(options);
+    const questions = schemeQuestions.map((schemeQuestion) => schemeQuestion.question);
 
     res.json({ data: questions });
   };

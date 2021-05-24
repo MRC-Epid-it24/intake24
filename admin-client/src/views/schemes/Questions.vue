@@ -40,8 +40,8 @@
       </v-item-group>
     </v-container>
     <question-list
-      :questionIds="questionIds"
-      :section="section"
+      v-bind="{ section, questionIds }"
+      :templates="refs.templates"
       :items.sync="selected"
       @move="move"
     ></question-list>
@@ -65,7 +65,7 @@ import {
 import { PromptQuestion } from '@common/prompts';
 import { Dictionary, SurveyQuestionSection, MealSection } from '@common/types';
 import { SchemeForm } from './Form.vue';
-import QuestionList from './QuestionList.vue';
+import QuestionList, { PromptQuestionMoveEvent } from './QuestionList.vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeQuestions',
@@ -128,7 +128,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       this.form.load({ ...rest, questions: { ...defaultQuestions, ...questions } });
     },
 
-    move(event: { section: MealSection | SurveyQuestionSection; question: PromptQuestion }) {
+    move(event: PromptQuestionMoveEvent) {
       const { section, question } = event;
 
       if (isMealSection(section)) {

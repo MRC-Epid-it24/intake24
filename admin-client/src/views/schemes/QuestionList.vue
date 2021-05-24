@@ -25,69 +25,34 @@
     <v-list two-line>
       <draggable v-model="questions" @end="update">
         <transition-group type="transition" name="drag-and-drop">
-          <v-list-item
-            v-for="(question, idx) in questions"
+          <question-list-item
+            v-for="(question, index) in questions"
             :key="question.id"
-            class="drag-and-drop__item"
-            draggable
-            link
+            v-bind="{ question, index, templates }"
+            :moveSections="moveSections(question)"
+            @question:edit="edit"
+            @question:move="move"
+            @question:remove="remove"
+            @question:sync="sync"
           >
-            <v-list-item-avatar>
-              <v-icon>fa-grip-vertical</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ question.name }}</v-list-item-title>
-              <v-list-item-subtitle>
-                {{ `ID: ${question.id} | Type: ${question.component}` }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-action>
-              <confirm-dialog
-                :label="$t('schemes.questions.move')"
-                color="primary lighten-1"
-                icon
-                icon-left="fa-exchange-alt"
-                max-width="450px"
-                @close="clearMoveToSection"
-                @confirm="move(idx)"
-              >
-                <v-select
-                  v-model="moveToSection"
-                  :items="moveSectionList(question)"
-                  :label="$t('schemes.questions.section')"
-                  hide-details="auto"
-                  outlined
-                ></v-select>
-              </confirm-dialog>
-            </v-list-item-action>
-            <v-list-item-action>
-              <v-btn icon :title="$t('schemes.questions.edit')" @click.stop="edit(idx, question)">
-                <v-icon color="primary lighten-1">fa-ellipsis-v</v-icon>
-              </v-btn>
-            </v-list-item-action>
-            <v-list-item-action>
-              <v-btn icon :title="$t('schemes.questions.remove')" @click.stop="remove(idx)">
-                <v-icon color="error">$delete</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
+          </question-list-item>
         </transition-group>
       </draggable>
     </v-list>
-    <prompt-selector ref="selector" :section="section" :questionIds="questionIds" @save="save">
+    <prompt-selector ref="selector" v-bind="{ section, questionIds }" @save="save">
     </prompt-selector>
   </v-card>
 </template>
 
 <script lang="ts">
-import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import { promptSettings } from '@/components/prompts';
 import PromptSelector from '@/components/prompts/PromptSelector.vue';
 import { PromptQuestion } from '@common/prompts';
 import { SurveyQuestionSection, MealSection } from '@common/types';
+import { SchemeQuestionEntry } from '@common/types/http/admin';
+import QuestionListItem from './QuestionListItem.vue';
 import TemplateDialog from './TemplateDialog.vue';
 
 export type Refs = {
@@ -95,6 +60,17 @@ export type Refs = {
     selector: InstanceType<typeof PromptSelector>;
   };
 };
+
+export type MoveSection = { value: string; text: string };
+
+export type PromptQuestionEvent = {
+  index: number;
+  question: PromptQuestion;
+};
+
+export interface PromptQuestionMoveEvent extends PromptQuestionEvent {
+  section: MealSection | SurveyQuestionSection;
+}
 
 export default (Vue as VueConstructor<Vue & Refs>).extend({
   name: 'QuestionList',
@@ -107,6 +83,10 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       type: Array as () => string[],
       default: () => [],
     },
+    templates: {
+      type: Array as () => SchemeQuestionEntry[],
+      default: () => [],
+    },
     items: {
       type: Array as () => PromptQuestion[],
       default: () => [],
@@ -114,8 +94,8 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
   },
 
   components: {
-    ConfirmDialog,
     PromptSelector,
+    QuestionListItem,
     TemplateDialog,
     draggable,
   },
@@ -124,14 +104,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     return {
       questions: this.items,
       promptSettings,
-      moveToSection: null,
     };
-  },
-
-  watch: {
-    items(val) {
-      this.questions = val;
-    },
   },
 
   methods: {
@@ -139,48 +112,41 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       this.$refs.selector.create();
     },
 
-    edit(index: number, question: PromptQuestion) {
-      this.$refs.selector.edit(index, question);
-    },
-
-    save({ question, index }: { question: PromptQuestion; index: number }) {
-      if (index === -1) this.questions.push(question);
-      else this.questions.splice(index, 1, question);
-    },
-
     insertFromTemplate(question: PromptQuestion) {
       this.questions.push(question);
     },
 
-    moveSectionList(prompt: PromptQuestion): { value: string; text: string }[] {
-      return this.promptSettings[prompt.component].sections
+    edit({ question, index }: PromptQuestionEvent) {
+      this.$refs.selector.edit(index, question);
+    },
+
+    save({ question, index }: PromptQuestionEvent) {
+      if (index === -1) this.questions.push(question);
+      else this.questions.splice(index, 1, question);
+    },
+
+    moveSections(question: PromptQuestion): MoveSection[] {
+      return this.promptSettings[question.component].sections
         .filter((item) => item !== this.section)
         .map((item) => ({
           value: item,
-          text: this.$t(`schemes.questions.${item}.title`) as string,
+          text: this.$t(`schemes.questions.${item}.title`).toString(),
         }));
     },
 
-    move(index: number) {
-      if (!this.moveToSection) return;
-
-      this.$emit('move', {
-        section: this.moveToSection,
-        question: clone(this.questions[index]),
-      });
-      this.questions.splice(index, 1);
+    move(event: PromptQuestionMoveEvent) {
+      this.$emit('move', event);
+      this.questions.splice(event.index, 1);
       this.update();
-
-      // DOM object is destroyed so we have to clear it manually as event can't be emitted anymore
-      this.clearMoveToSection();
-    },
-
-    clearMoveToSection() {
-      this.moveToSection = null;
     },
 
     remove(index: number) {
       this.questions.splice(index, 1);
+      this.update();
+    },
+
+    sync({ question, index }: PromptQuestionEvent) {
+      this.questions.splice(index, 1, question);
       this.update();
     },
 

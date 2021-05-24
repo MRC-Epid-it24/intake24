@@ -38,10 +38,10 @@
             })
           }}
         </v-alert>
-        <v-list v-if="questions.length" two-line>
-          <v-list-item-group v-model="selected">
-            <template v-for="(question, idx) in questions">
-              <v-list-item :key="question.id" :value="question.id">
+        <v-list v-if="templates.length" two-line>
+          <v-list-item-group v-model="selectedId">
+            <template v-for="(template, idx) in templates">
+              <v-list-item :key="template.id" :value="template.id">
                 <template v-slot:default="{ active }">
                   <v-list-item-action>
                     <v-checkbox :input-value="active"></v-checkbox>
@@ -50,14 +50,14 @@
                     <v-icon>fa-question-circle</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
-                    <v-list-item-title>{{ question.name }}</v-list-item-title>
+                    <v-list-item-title>{{ template.name }}</v-list-item-title>
                     <v-list-item-subtitle>
-                      {{ `ID: ${question.question.id} | Type: ${question.question.component}` }}
+                      {{ `ID: ${template.id} | Type: ${template.component}` }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
                 </template>
               </v-list-item>
-              <v-divider v-if="idx + 1 < questions.length" :key="`div-${question.id}`"></v-divider>
+              <v-divider v-if="idx + 1 < templates.length" :key="`div-${template.id}`"></v-divider>
             </template>
           </v-list-item-group>
         </v-list>
@@ -73,7 +73,7 @@
         <v-btn
           class="font-weight-bold"
           color="blue darken-3"
-          :disabled="!selected || questionAlreadyExists"
+          :disabled="!selectedId || questionAlreadyExists"
           text
           @click.stop="confirm"
         >
@@ -87,7 +87,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import clone from 'lodash/cloneDeep';
-import { SchemeQuestionEntry, SchemeQuestionTemplatesResponse } from '@common/types/http/admin';
+import { SchemeQuestionTemplatesResponse } from '@common/types/http/admin';
+import { PromptQuestion } from '@common/prompts';
 
 export default Vue.extend({
   name: 'TemplateDialog',
@@ -108,27 +109,27 @@ export default Vue.extend({
       dialog: false,
       loading: false,
       search: null as string | null,
-      questions: [] as SchemeQuestionEntry[],
-      selected: undefined as number | undefined,
+      templates: [] as PromptQuestion[],
+      selectedId: undefined as string | undefined,
     };
   },
 
   computed: {
-    selectedQuestion(): SchemeQuestionEntry | undefined {
-      const { selected } = this;
-      if (!selected) return undefined;
+    selectedQuestion(): PromptQuestion | undefined {
+      const { selectedId } = this;
+      if (!selectedId) return undefined;
 
-      return this.questions.find((question) => question.id === selected);
+      return this.templates.find((template) => template.id === selectedId);
     },
     questionAlreadyExists(): boolean {
-      const match = this.questionIds.find((id) => id === this.selectedQuestion?.questionId);
+      const match = this.questionIds.find((id) => id === this.selectedQuestion?.id);
       return !!match;
     },
   },
 
   watch: {
     async dialog(val) {
-      if (val && !this.questions.length) await this.fetch();
+      if (val && !this.templates.length) await this.fetch();
     },
   },
 
@@ -145,7 +146,7 @@ export default Vue.extend({
       if (!this.selectedQuestion) return;
 
       this.close();
-      this.$emit('insert', clone(this.selectedQuestion.question));
+      this.$emit('insert', clone(this.selectedQuestion));
     },
 
     async fetch() {
@@ -159,7 +160,7 @@ export default Vue.extend({
           { params: { search: this.search, limit: 5 } }
         );
 
-        this.questions = data;
+        this.templates = data;
       } finally {
         this.loading = false;
       }
