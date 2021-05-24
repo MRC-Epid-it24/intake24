@@ -26,6 +26,10 @@ const mutations: MutationTree<EntryState> = {
     };
     state.status = 'error';
   },
+  update(state, { data, refs }) {
+    if (data) state.data = { ...data };
+    if (refs) state.refs = { ...refs };
+  },
 };
 
 export default mutations;

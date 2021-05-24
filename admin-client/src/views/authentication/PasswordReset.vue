@@ -5,7 +5,7 @@
         <v-card-title class="justify-center pt-6">
           <h2>{{ $t('users.password.reset._') }}</h2>
         </v-card-title>
-        <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="onSubmit">
+        <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="submit">
           <v-card-text class="px-6">
             <v-row>
               <v-col cols="12">
@@ -108,7 +108,7 @@ export default Vue.extend({
   },
 
   methods: {
-    async onSubmit() {
+    async submit() {
       await this.form.post('password/reset');
       this.$toasted.success(this.$t('users.password.changed') as string);
       this.$router.push({ name: 'login' });

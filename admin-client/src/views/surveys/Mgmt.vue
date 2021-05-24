@@ -1,5 +1,5 @@
 <template>
-  <layout :id="id" :entry="entry" v-if="entryLoaded">
+  <layout v-bind="{ id, entry }" v-if="entryLoaded">
     <data-table :headers="headers" :api="`admin/surveys/${id}/mgmt`" ref="table">
       <template v-slot:header-add>
         <v-dialog v-model="dialog" max-width="600px">

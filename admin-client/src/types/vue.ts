@@ -36,7 +36,7 @@ export interface FormMixin<E = Dictionary, R = Dictionary> extends EntryMixin<E,
   nonInputErrors: ValidationError[];
   // methods
   toForm: (data: Dictionary) => void;
-  onSubmit: () => Promise<void>;
+  submit: () => Promise<void>;
   clearError: (event: KeyboardEvent) => void;
 }
 

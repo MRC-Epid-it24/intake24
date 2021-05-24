@@ -19,7 +19,7 @@
         <v-form
           v-else
           @keydown.native="form.errors.clear($event.target.name)"
-          @submit.prevent="onSubmit"
+          @submit.prevent="submit"
         >
           <v-card-text class="px-6">
             <v-row>
@@ -98,7 +98,7 @@ export default (Vue as VueConstructor<Vue & PasswordRequestRefs>).extend({
   },
 
   methods: {
-    async onSubmit() {
+    async submit() {
       if (this.recaptcha.enabled === true && !this.form.recaptcha) {
         this.$refs.recaptcha.execute();
         return;

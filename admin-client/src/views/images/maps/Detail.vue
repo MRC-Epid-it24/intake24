@@ -1,5 +1,5 @@
 <template>
-  <layout :id="id" :entry="entry" v-if="entryLoaded">
+  <layout v-bind="{ id, entry }" v-if="entryLoaded">
     <guide-drawer :entry="entry" disabled></guide-drawer>
   </layout>
 </template>

@@ -1,4 +1,7 @@
 import Vue, { VueConstructor } from 'vue';
+import { Route } from 'vue-router';
+import clone from 'lodash/cloneDeep';
+import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import { Dictionary, ValidationError } from '@common/types';
 import { FormMixin } from '@/types/vue';
@@ -17,23 +20,52 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   mixins: [fetchEntry, hasEntry, mapEntry, mapRefs],
 
+  provide: {
+    editsResource: true,
+  },
+
   data() {
     return {
       form: form({}),
       nonInputErrorKeys: [] as string[],
+      originalEntry: {} as Dictionary,
+      routeLeave: {
+        dialog: false,
+        to: null as Route | null,
+        confirmed: false,
+      },
     };
   },
 
   watch: {
-    entry: {
-      handler() {
-        if (Object.keys(this.entry).length) this.toForm(this.entry);
-      },
-      // immediate: true,
+    entry(val) {
+      if (Object.keys(val).length) {
+        this.originalEntry = clone(val);
+        this.toForm(val);
+      }
     },
   },
 
+  beforeRouteLeave(to, from, next) {
+    if (this.routeLeave.confirmed) {
+      this.routeLeave = { dialog: false, to: null, confirmed: false };
+      next();
+      return;
+    }
+
+    if (this.entryChanged) {
+      this.routeLeave = { dialog: true, to, confirmed: false };
+      return;
+    }
+    next();
+  },
+
   computed: {
+    entryChanged(): boolean {
+      const original = pick(this.originalEntry, this.form.keys);
+
+      return !isEqual(original, this.form.getData());
+    },
     isCreate(): boolean {
       return this.id === 'create';
     },
@@ -50,10 +82,12 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       this.form.load(data);
     },
 
-    async onSubmit() {
+    async submit() {
       if (this.isEdit) {
-        const { data } = await this.form.put(`${this.resource.api}/${this.id}`);
+        const { data, refs } = await this.form.put(`${this.resource.api}/${this.id}`);
         this.toForm(data);
+
+        await this.$store.dispatch('resource/entry/update', { data, refs });
 
         const { id, name } = data;
         this.$toasted.success(this.$t('common.msg.updated', { name: name ?? id }) as string);
@@ -61,8 +95,8 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         const {
           data: { id, name },
         } = await this.form.post(`${this.resource.api}`);
-        this.$router.push({ name: `${this.module}-edit`, params: { id } });
 
+        this.$router.push({ name: `${this.module}-edit`, params: { id } });
         this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }) as string);
       }
     },

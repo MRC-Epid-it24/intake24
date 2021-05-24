@@ -1,5 +1,5 @@
 <template>
-  <layout :id="id" :entry="entry" v-if="entryLoaded">
+  <layout v-bind="{ id, entry }" v-if="entryLoaded">
     <v-card-title>{{ $t(`scheme-questions.sync.title`, { id: entry.question.id }) }}</v-card-title>
     <v-card-text v-if="!schemes.length">
       <v-alert color="primary" text type="info">

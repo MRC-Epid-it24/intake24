@@ -11,7 +11,7 @@
           <v-icon left>$back</v-icon> {{ $t(`common.action.back`) }}
         </v-btn>
         <v-btn
-          v-if="$route.name !== `${module}-detail`"
+          v-if="editsResource"
           color="primary"
           :title="$t(`common.action.save`)"
           @click="$emit('save')"
@@ -45,19 +45,65 @@
       <slot></slot>
     </v-card>
     <slot name="addons"></slot>
+    <v-dialog :value="routeLeave.dialog" max-width="350px" @input="handleLeave">
+      <v-card>
+        <v-card-title class="h2 justify-center">
+          {{ $t('common.action.confirm.title') }}
+        </v-card-title>
+        <v-card-text class="px-6 py-4 d-flex justify-center">
+          <div class="subtitle-1">
+            You're about leave the page with unsaved changes. Do you want to continue?
+          </div>
+        </v-card-text>
+        <v-container class="pa-6">
+          <v-btn
+            color="warning"
+            :title="$t('common.action.continue')"
+            block
+            class="mb-2"
+            dark
+            large
+            @click.stop="confirmLeave"
+          >
+            {{ $t('common.action.continue') }}
+          </v-btn>
+          <v-btn
+            color="warning"
+            :title="$t('common.action.cancel')"
+            block
+            outlined
+            large
+            @click.stop="cancelLeave"
+          >
+            {{ $t('common.action.cancel') }}
+          </v-btn>
+        </v-container>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { Route } from 'vue-router';
 import has from 'lodash/has';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import ResourceMixin from '@/mixins/ResourceMixin';
+
+export type RouteLeave = {
+  dialog: boolean;
+  to: Route | null;
+  confirmed: boolean;
+};
 
 type Mixins = InstanceType<typeof ResourceMixin>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'EntryLayout',
+
+  inject: {
+    editsResource: { default: false },
+  },
 
   props: {
     id: {
@@ -67,6 +113,14 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
     entry: {
       type: Object,
       required: true,
+    },
+    routeLeave: {
+      type: Object as () => RouteLeave,
+      default: () => ({
+        dialog: false,
+        to: null,
+        confirmed: false,
+      }),
     },
   },
 
@@ -89,6 +143,26 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
     tabTitle(tab: string) {
       const check = has(this.$i18n.messages[this.$i18n.locale], `${this.module}.${tab}.tab`);
       return this.$t(check ? `${this.module}.${tab}.tab` : `common.action.${tab}`);
+    },
+
+    handleLeave(value: boolean) {
+      if (value) return;
+
+      this.cancelLeave();
+    },
+
+    cancelLeave() {
+      this.$emit('update:routeLeave', { dialog: false, to: null, confirmed: false });
+    },
+
+    confirmLeave() {
+      const { dialog, to } = this.routeLeave;
+
+      if (!to) return;
+
+      this.$emit('update:routeLeave', { dialog, to, confirmed: true });
+      // TODO: vue-router RawLocation and Route types are incompatible (RawLocation:name cannot be null)
+      this.$router.push({ ...to, name: to.name ?? undefined });
     },
 
     async remove(): Promise<void> {

@@ -19,6 +19,10 @@ const actions: ActionTree<EntryState, RootState> = {
       commit('loading/remove', `${name}/entry`, { root: true });
     }
   },
+
+  async update({ commit }, { data, refs }) {
+    commit('update', { data, refs });
+  },
 };
 
 export default actions;

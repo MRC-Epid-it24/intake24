@@ -1,5 +1,5 @@
 <template>
-  <layout :id="id" :entry="entry" v-if="entryLoaded" @save="onSubmit">
+  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <v-container>
       <v-item-group v-model="section" mandatory active-class="secondary">
         <v-row>

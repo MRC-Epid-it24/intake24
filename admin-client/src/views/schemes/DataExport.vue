@@ -1,5 +1,5 @@
 <template>
-  <layout :id="id" :entry="entry" v-if="entryLoaded" @save="onSubmit">
+  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <v-card-title>{{ $t('schemes.data-export.title') }}</v-card-title>
     <v-card-text>
       <ul>

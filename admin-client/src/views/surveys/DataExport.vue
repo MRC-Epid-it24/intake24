@@ -1,6 +1,6 @@
 <template>
-  <layout :id="id" :entry="entry" v-if="entryLoaded">
-    <v-form @keydown.native="clearError" @submit.prevent="onSubmit">
+  <layout v-bind="{ id, entry }" v-if="entryLoaded">
+    <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container>
         <v-card-title>{{ $t('surveys.data-export.title') }}</v-card-title>
         <v-card-text>

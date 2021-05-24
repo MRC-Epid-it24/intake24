@@ -51,6 +51,7 @@ const common: LocaleMessageObject = {
     cancel: 'Cancel',
     clear: 'Clear',
     close: 'Close',
+    continue: 'Continue',
     create: 'Add',
     delete: 'Delete',
     destroy: 'Permanently delete',

@@ -1,6 +1,6 @@
 <template>
-  <layout :id="id" :entry="entry" @save="onSubmit" v-if="entryLoaded">
-    <v-form @keydown.native="clearError" @submit.prevent="onSubmit">
+  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+    <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-card-text>
         <v-container>
           <v-row>

@@ -1,5 +1,5 @@
 <template>
-  <layout :id="id" :entry="entry" v-if="entryLoaded">
+  <layout v-bind="{ id, entry }" v-if="entryLoaded">
     <data-table :headers="headers" :api="`admin/surveys/${id}/submissions`" ref="table">
       <template v-slot:[`item.startTime`]="{ item }">
         {{ new Date(item.startTime).toLocaleString() }}
