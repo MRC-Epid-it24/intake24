@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import type { IoC } from '@/ioc';
 import InvalidIdError from '@/services/foods/invalid-id-error';
 import { NotFoundError } from '@/http/errors';
-import { UserFoodData, UserPortionSizeMethod } from '@common/types/http';
 import { Controller } from './controller';
 
 export type FoodController = Controller<

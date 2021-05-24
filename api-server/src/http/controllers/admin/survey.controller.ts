@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { WhereOptions } from 'sequelize';
-import { Locale, Scheme, Survey, User } from '@/db/models/system';
+import { Locale, Scheme, Survey } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { surveyListResponse, surveyResponse } from '@/http/responses/admin';
