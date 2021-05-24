@@ -1,19 +1,21 @@
 import { AxiosResponse } from 'axios';
 import jsFileDownload from 'js-file-download';
 
-export const downloadFile = ({ data, headers }: AxiosResponse): void => {
-  let filename = headers['content-disposition']
-    .split(';')
-    .find((item: string) => item.trim().startsWith('filename='));
+export const downloadFile = ({ data, headers }: AxiosResponse, filename?: string | null): void => {
+  let finalFilename = filename;
+  if (!finalFilename && headers['content-disposition']) {
+    finalFilename = headers['content-disposition']
+      .split(';')
+      .find((item: string) => item.trim().startsWith('filename='));
+  }
 
-  filename =
-    typeof filename === 'undefined'
-      ? `File_${headers.date}`
-      : filename.replace(/"/g, '').replace('filename=', '').trim();
+  finalFilename = finalFilename
+    ? finalFilename.replace(/"/g, '').replace('filename=', '').trim()
+    : `File_${new Date().toLocaleString()}`;
 
   // TODO: read mime type
 
-  jsFileDownload(data, filename);
+  jsFileDownload(data, finalFilename);
 };
 
 export const readFile = async (file: Blob): Promise<string | ArrayBuffer | null> => {

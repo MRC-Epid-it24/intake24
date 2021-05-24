@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { JobEntry } from '@common/types/http/admin';
+import { downloadFile } from '@/util/fs';
 
 export default Vue.extend({
   data() {
@@ -51,6 +52,13 @@ export default Vue.extend({
         clearInterval(this.polling);
         this.polling = null;
       }
+    },
+
+    async download(job: JobEntry) {
+      const res = await this.$http.get(`admin/user/jobs/${job.id}/download`, {
+        responseType: 'blob',
+      });
+      downloadFile(res, job.downloadUrl);
     },
   },
 });

@@ -60,10 +60,12 @@
                     </template>
                     <v-date-picker v-model="form.endDate" scrollable>
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menus.endDate = false">Cancel</v-btn>
-                      <v-btn text color="primary" @click="$refs.endDate.save(form.endDate)"
-                        >OK</v-btn
-                      >
+                      <v-btn text color="primary" @click="menus.endDate = false">
+                        {{ $t('common.action.cancel') }}
+                      </v-btn>
+                      <v-btn text color="primary" @click="$refs.endDate.save(form.endDate)">
+                        {{ $t('common.action.ok') }}
+                      </v-btn>
                     </v-date-picker>
                   </v-dialog>
                 </v-col>
@@ -108,7 +110,7 @@
                       :title="$t('common.action.download')"
                       icon
                       link
-                      @click="download(item.id)"
+                      @click="download(item)"
                     >
                       <v-icon color="primary">fa-download</v-icon>
                     </v-btn>
@@ -136,10 +138,9 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { downloadFile } from '@/util/fs';
-import formMixin from '@/components/entry/formMixin';
+import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
-import { FormMixin } from '@/types/vue';
+import { DetailMixin } from '@/types/vue';
 import { JobResponse } from '@common/types/http/admin';
 import PollsForJobsMixin from './PollsForJobsMixin';
 
@@ -150,10 +151,10 @@ type SurveyDataExportForm = {
   endDate: string | null;
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin & mixins>).extend({
+export default (Vue as VueConstructor<Vue & DetailMixin & mixins>).extend({
   name: 'SurveyDataExport',
 
-  mixins: [formMixin, PollsForJobsMixin],
+  mixins: [detailMixin, PollsForJobsMixin],
 
   data() {
     return {
@@ -169,25 +170,24 @@ export default (Vue as VueConstructor<Vue & FormMixin & mixins>).extend({
     };
   },
 
-  computed: {},
+  watch: {
+    entry(val) {
+      if (Object.keys(val).length) this.form.load(val);
+    },
+  },
 
   async mounted() {
     await this.status();
   },
 
   methods: {
-    async onSubmit() {
+    async submit() {
       if (this.jobInProgress) return;
 
       const { data } = await this.form.post<JobResponse>(`admin/surveys/${this.id}/data-export`);
 
       this.jobs.unshift(data);
       this.startPolling();
-    },
-
-    async download(id: number) {
-      const res = await this.$http.get(`admin/user/jobs/${id}/download`, { responseType: 'blob' });
-      downloadFile(res);
     },
   },
 });

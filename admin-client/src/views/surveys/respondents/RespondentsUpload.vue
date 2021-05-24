@@ -51,7 +51,6 @@
                         Completed:
                         {{ item.completedAt ? new Date(item.completedAt).toLocaleString() : '' }}
                       </v-list-item-subtitle>
-                      <!-- <v-list-item-subtitle></v-list-item-subtitle> -->
                       <p v-if="item.message">{{ item.message }}</p>
                     </v-list-item-content>
                     <v-list-item-action>

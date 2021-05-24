@@ -45,7 +45,7 @@
                       :title="$t('common.action.download')"
                       icon
                       link
-                      @click="download(item.id)"
+                      @click="download(item)"
                     >
                       <v-icon color="primary">fa-download</v-icon>
                     </v-btn>
@@ -79,7 +79,6 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { downloadFile } from '@/util/fs';
 import RespondentsJobMixin from './RespondentsJobMixin';
 
 type mixins = InstanceType<typeof RespondentsJobMixin>;
@@ -109,11 +108,6 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
       this.jobs.unshift(data);
       this.startPolling();
-    },
-
-    async download(id: number) {
-      const res = await this.$http.get(`admin/user/jobs/${id}/download`, { responseType: 'blob' });
-      downloadFile(res);
     },
   },
 });
