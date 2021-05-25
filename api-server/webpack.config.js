@@ -1,3 +1,4 @@
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require('nodemon-webpack-plugin');
@@ -8,7 +9,7 @@ module.exports = (env) => {
   const { NODE_ENV = 'development' } = env;
   const isDev = NODE_ENV === 'development';
 
-  const plugins = [new WebpackBar({ name: 'Server' })];
+  const plugins = [new ForkTsCheckerWebpackPlugin(), new WebpackBar({ name: 'Server' })];
 
   if (isDev)
     plugins.push(
@@ -53,8 +54,11 @@ module.exports = (env) => {
       rules: [
         {
           test: /\.tsx?$/,
-          use: 'ts-loader',
+          loader: 'ts-loader',
           exclude: /node_modules/,
+          options: {
+            transpileOnly: true,
+          },
         },
       ],
     },
