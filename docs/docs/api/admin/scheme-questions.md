@@ -1,13 +1,15 @@
-# Schemes
+# Scheme questions
 
-## Browse schemes
+Manage scheme question templates
 
-Browse paginated scheme list
+## Browse scheme questions
+
+Browse paginated scheme questions list
 
 ### Request
 
 ```http
-GET /api/admin/schemes
+GET /api/admin/scheme-questions
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -27,25 +29,20 @@ Content-Type: application/json
 }
 ```
 
-## Create scheme
+## Create scheme question
 
-Create new scheme entry
+Create new scheme question entry
 
 ### Request
 
 ```http
-POST /api/admin/schemes
+POST /api/admin/scheme-questions
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "id": string,
-    "name": string,
-    "type": 'data-driven',
-    "meals": [{...}],
-    "questions": {...},
-    "export": [{...}]
+    "question": {...}
 }
 ```
 
@@ -59,14 +56,14 @@ Content-Type: application/json
 }
 ```
 
-## Get scheme
+## Get scheme question
 
-Get scheme entry
+Get scheme question entry
 
 ### Request
 
 ```http
-GET /api/admin/schemes/:schemeId
+GET /api/admin/scheme-questions/:schemeQuestionId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -83,24 +80,20 @@ Content-Type: application/json
 }
 ```
 
-## Update scheme
+## Update scheme question
 
-Update scheme entry
+Update scheme question entry
 
 ### Request
 
 ```http
-PUT /api/admin/schemes/:schemeId
+PUT /api/admin/scheme-questions/:schemeQuestionId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "name": string,
-    "type": 'data-driven',
-    "meals": [{...}],
-    "questions": {...},
-    "export": [{...}]
+    "question": {...}
 }
 ```
 
@@ -115,14 +108,14 @@ Content-Type: application/json
 }
 ```
 
-## Delete scheme
+## Delete scheme question
 
-Delete scheme entry
+Delete scheme question entry
 
 ### Request
 
 ```http
-DELETE /api/admin/schemes/:schemeId
+DELETE /api/admin/scheme-questions/:schemeQuestionId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -135,19 +128,23 @@ Content-Type: application/json
 ```
 
 
-## Question templates
+## Scheme question sync
 
-Browse available question templates for scheme
+Synchronize scheme question template with specific question in scheme section
 
 ### Request
 
 ```http
-GET /api/admin/schemes/:schemeId/templates
-    ?search={searchText}
-    &limit={limit}
+POST /api/admin/scheme-questions/:schemeQuestionId/sync
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
+
+{
+    "schemeId": string,
+    "section": string,
+    "question": {...}
+}
 ```
 
 ### Response

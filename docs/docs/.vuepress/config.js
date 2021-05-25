@@ -151,6 +151,7 @@ module.exports = {
             'admin/languages',
             'admin/locales',
             'admin/schemes',
+            'admin/scheme-questions',
             'admin/surveys',
             'admin/tasks',
             'admin/users',
