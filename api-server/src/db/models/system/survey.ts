@@ -57,6 +57,7 @@ export default class Survey
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public state!: SurveyState;
 
