@@ -107,6 +107,12 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     };
   },
 
+  watch: {
+    items(val) {
+      this.questions = val;
+    },
+  },
+
   methods: {
     create() {
       this.$refs.selector.create();
