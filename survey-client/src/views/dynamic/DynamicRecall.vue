@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center" class="pa-0">
-    <v-col cols="12" class="mealbar stickytop" v-if="isNotDesktop && showMealList">
+    <v-col cols="12" class="mealbar" v-if="isNotDesktop && showMealList">
       <meal-list-mobile-top :foods="foods" :meals="meals"> </meal-list-mobile-top>
     </v-col>
     <v-col v-if="!isNotDesktop && showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
@@ -15,9 +15,8 @@
       </meal-list>
     </v-col>
 
-    <v-col cols="12" lg="9" class="content">
-      <recall-bread-crumbs v-if="showMealList"></recall-bread-crumbs>
-
+    <v-col cols="12" lg="9" class="content after_stickytop">
+      <recall-bread-crumbs v-if="showMealList && !isNotDesktop"></recall-bread-crumbs>
       <transition name="component-fade" mode="out-in">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
         even if the next prompt uses the same component type, probably should be something like an internal counter,
@@ -268,3 +267,6 @@ export default Vue.extend({
   },
 });
 </script>
+<style lang="scss" scoped>
+@import '../../scss/meallistmobile2.scss';
+</style>

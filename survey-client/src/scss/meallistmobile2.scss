@@ -22,9 +22,9 @@
 
 .stickytop {
   position: fixed;
-  top: 50;
   width: 100%;
-	z-index: 99;
+	z-index: 1;
+	top: 4rem;
 }
 
 /* Style the food bar */
@@ -41,8 +41,8 @@
 
 @media only screen and (max-width: 1264px) {
 	.content {
-		margin-top: 65px;
-		margin-bottom: 55px;
+		margin-top: 3rem;
+		margin-bottom: 3rem;
 	}
 
 	html {

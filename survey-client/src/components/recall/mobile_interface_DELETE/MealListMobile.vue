@@ -1,19 +1,5 @@
 <template>
-  <v-card elevation="5" class="stickytop">
-    <v-toolbar flat>
-      <v-tabs icons-and-text center-active touch show-arrows>
-        <v-tabs-slider></v-tabs-slider>
-        <v-tab class="add_button">
-          <span>ADD</span>
-        </v-tab>
-        <v-tab v-for="meal in meals" :key="meal.name" @click="emitFoodsList(meal.foods)">
-          {{ meal.name }}
-          <v-icon x-small v-if="meal.time.length === 0">far fa-question-circle </v-icon>
-        </v-tab>
-      </v-tabs>
-    </v-toolbar>
-  </v-card>
-  <!-- <v-bottom-navigation absolute color="orange" horizontal grow>
+  <v-bottom-navigation absolute color="orange" horizontal grow>
     <v-menu
       :close-on-content-click="false"
       top
@@ -24,7 +10,7 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn v-if="isMobile" v-bind="attrs" v-on="on" x-small text>
           <span v-if="meal.time.length > 0">{{ index + 1 }}</span>
-          <v-icon v-else >far fa-question-circle </v-icon>
+          <v-icon v-else>far fa-question-circle </v-icon>
         </v-btn>
         <v-btn v-else-if="!isMobile" v-bind="attrs" v-on="on">
           <span>{{ meal.name }}</span>
@@ -36,19 +22,19 @@
     <v-btn color="secondary">
       <span>Add </span>
     </v-btn>
-  </v-bottom-navigation> -->
+  </v-bottom-navigation>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import MealItemMobile from './MealItemMobile.vue';
 
 export default (Vue as VueConstructor<Vue>).extend({
-  // components: { MealItemMobile },
-  name: 'MealListMobileTop',
+  components: { MealItemMobile },
+  name: 'MealListMobile',
 
   props: {
     meals: Array,
-    foods: Array,
   },
   data() {
     return {
@@ -56,15 +42,9 @@ export default (Vue as VueConstructor<Vue>).extend({
       offset: true,
     };
   },
-  methods: {
-    emitFoodsList(foods: Array<any>) {
-      this.$emit('displayFoods', foods);
-    },
-  },
 });
 </script>
-//
+
 <style lang="scss" scoped>
-// @import '../../scss/meallistmobile2.scss';
-//
+@import '../../../scss/meallistmobile.scss';
 </style>

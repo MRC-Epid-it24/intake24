@@ -41,7 +41,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       if (this.selectedPortionSize.method !== 'guide-image')
         throw new Error('Selected portion size method must be "guide-image"');
 
-      return this.selectedPortionSize.parameters as unknown as GuideImageParameters;
+      return (this.selectedPortionSize.parameters as unknown) as GuideImageParameters;
     },
   },
 
