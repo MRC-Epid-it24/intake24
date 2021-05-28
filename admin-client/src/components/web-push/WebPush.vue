@@ -47,6 +47,8 @@ import WebPushMixin from './WebPushMixin';
 type Mixins = InstanceType<typeof WebPushMixin>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
+  name: 'WebPush',
+
   mixins: [WebPushMixin],
 
   methods: {

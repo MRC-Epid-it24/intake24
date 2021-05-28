@@ -9,7 +9,15 @@ export default Vue.extend({
     };
   },
 
+  computed: {
+    supported(): boolean {
+      return 'serviceWorker' in navigator;
+    },
+  },
+
   created() {
+    if (!this.supported) return;
+
     // Listen for custom event from the SW registration
     document.addEventListener('swUpdated', this.updateAvailable as EventListener, { once: true });
 

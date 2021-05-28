@@ -12,7 +12,11 @@ export default Vue.extend({
       return this.permission === 'granted';
     },
     supported(): boolean {
-      return 'Notification' in window && 'serviceWorker' in navigator;
+      return (
+        window.location.protocol === 'https:' &&
+        'Notification' in window &&
+        'serviceWorker' in navigator
+      );
     },
   },
 
