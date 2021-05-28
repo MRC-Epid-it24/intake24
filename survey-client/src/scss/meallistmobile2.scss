@@ -1,22 +1,22 @@
-.v-slide-group__next {
+.v-card ::v-deep .v-slide-group__next {
 	display: none !important;
 	flex: none;
 }
 
-.v-slide-group__prev  {
+.v-card ::v-deep .v-slide-group__prev  {
 	display: none !important;
 }
 
-.v-slide-group__prev--disabled {
+.v-card ::v-deep .v-slide-group__prev--disabled {
 	display: none !important;
 }
 
-.add_button {
+.v-card ::v-deep .add_button {
 	background-color: #ff3d00;
 }
 
 /* Style the meal bar */
-.mealbar {
+.v-card ::v-deep .mealbar {
   overflow: auto;
 }
 
@@ -55,7 +55,9 @@
   overflow-y: auto;
 }
 
-.v-tab{
+ .v-card ::v-deep .v-tab{
 	font-size: x-small;
 	font-weight: bold;
 }
+
+
