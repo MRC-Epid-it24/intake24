@@ -180,10 +180,9 @@ export default Vue.extend({
         mode: 'manual',
       });
 
-      const prompt = this.recallController!.promptManager.findMealPromptOfType(
-        promptType,
-        promptSection
-      );
+      const prompt = this.recallController
+        ? this.recallController.promptManager.findMealPromptOfType(promptType, promptSection)
+        : undefined;
 
       if (prompt === undefined)
         throw new Error(
@@ -202,10 +201,9 @@ export default Vue.extend({
         mode: 'manual',
       });
 
-      const prompt = this.recallController!.promptManager.findSurveyPromptOfType(
-        promptType,
-        promptSection
-      );
+      const prompt = this.recallController
+        ? this.recallController.promptManager.findSurveyPromptOfType(promptType, promptSection)
+        : undefined;
 
       if (prompt === undefined)
         throw new Error(
@@ -253,7 +251,7 @@ export default Vue.extend({
     },
 
     async nextPrompt() {
-      const nextPrompt = this.recallController!.getNextPrompt();
+      const nextPrompt = this.recallController ? this.recallController.getNextPrompt() : undefined;
 
       if (nextPrompt === undefined) {
         // TODO: handle completion

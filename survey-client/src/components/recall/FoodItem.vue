@@ -20,13 +20,6 @@
 import Vue, { VueConstructor } from 'vue';
 import { FoodState } from '@common/types';
 
-function foodDisplayName(food: FoodState): string {
-  if (food.type === 'free-text') return food.description;
-  if (food.type === 'encoded-food') return food.data.localDescription;
-
-  return '???';
-}
-
 export default (Vue as VueConstructor<Vue>).extend({
   name: 'FoodItem',
   props: {
