@@ -9,7 +9,7 @@
         <v-tab v-for="meal in meals" :key="meal.name" @click="emitFoodsList(meal.foods)">
           {{ meal.name }}
           <v-icon x-small v-if="meal.time.length === 0">far fa-question-circle </v-icon>
-					<p v-else>{{meal.time}}</p>
+          <p v-else>{{ meal.time }}</p>
         </v-tab>
       </v-tabs>
     </v-toolbar>
