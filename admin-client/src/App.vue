@@ -155,7 +155,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
 
     // Send subscription to server to keep it up-to-date
     setTimeout(async () => {
-      if (this.granted) await this.subscribe();
+      if (this.isPermissionGranted) await this.subscribe();
     }, 5 * 1000);
   },
 

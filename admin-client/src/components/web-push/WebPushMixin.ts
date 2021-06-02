@@ -8,12 +8,14 @@ export default Vue.extend({
   },
 
   computed: {
-    granted(): boolean {
+    isPermissionGranted(): boolean {
       return this.permission === 'granted';
     },
-    supported(): boolean {
+    isWebPushSupported(): boolean {
+      const { protocol, hostname } = window.location;
+
       return (
-        window.location.protocol === 'https:' &&
+        (hostname === 'localhost' || protocol === 'https:') &&
         'Notification' in window &&
         'serviceWorker' in navigator
       );
@@ -21,7 +23,7 @@ export default Vue.extend({
   },
 
   async mounted() {
-    if (!this.supported) {
+    if (!this.isWebPushSupported) {
       console.warn(`Notification or serviceWorker API not supported by browser.`);
       return;
     }
@@ -31,13 +33,13 @@ export default Vue.extend({
 
   methods: {
     async requestPermission() {
-      if (!this.supported) return;
+      if (!this.isWebPushSupported) return;
 
       this.permission = await Notification.requestPermission();
     },
 
     async subscribe() {
-      if (!this.granted) return;
+      if (!this.isPermissionGranted) return;
 
       const registration = await navigator.serviceWorker.getRegistration();
       if (!registration) return;

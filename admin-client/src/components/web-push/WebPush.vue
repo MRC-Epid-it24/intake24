@@ -1,6 +1,6 @@
 <template>
   <v-alert
-    v-if="supported"
+    v-if="isWebPushSupported"
     border="left"
     class="my-4"
     color="secondary"
@@ -17,14 +17,14 @@
       have to re-check the status as you will get notified with push notification.
     </p>
     <v-divider class="my-4 secondary" style="opacity: 0.5"></v-divider>
-    <v-row v-if="granted" align="center" no-gutters>
+    <v-row v-if="isPermissionGranted" align="center" no-gutters>
       <v-col class="grow">
         <div class="subtitle-2">
           Push notifications are allowed. You can give it a test to see how it will look like.
         </div>
       </v-col>
       <v-col class="shrink">
-        <v-btn color="primary" @click="testPush">Test PUSH</v-btn>
+        <v-btn color="primary" @click="testWebPush">Test PUSH</v-btn>
       </v-col>
     </v-row>
     <v-row v-else align="center" no-gutters>
@@ -53,14 +53,14 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
   methods: {
     async requestPermission() {
-      if (!this.supported) return;
+      if (!this.isWebPushSupported) return;
 
       this.permission = await Notification.requestPermission();
 
-      if (this.granted) await this.subscribe();
+      if (this.isPermissionGranted) await this.subscribe();
     },
 
-    async testPush() {
+    async testWebPush() {
       await this.$http.post('subscriptions/push');
     },
   },
