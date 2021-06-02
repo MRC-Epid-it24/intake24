@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" no-gutters>
     <v-col cols="auto">
       <v-card v-if="mfaChallenge" class="mt-10" outlined raised width="30rem" height="25rem">
         <iframe id="duo_iframe"></iframe>

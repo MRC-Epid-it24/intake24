@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" no-gutters>
     <v-col cols="auto">
       <v-card class="mt-10" outlined raised width="30rem">
         <v-card-title class="justify-center pt-6">
