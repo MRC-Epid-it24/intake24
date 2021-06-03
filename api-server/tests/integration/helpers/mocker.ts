@@ -1,4 +1,5 @@
 import faker from 'faker';
+import slugify from 'slugify';
 import jobs from '@/jobs';
 import {
   PermissionRequest,
@@ -19,7 +20,7 @@ import { customPromptQuestions } from '@common/prompts';
 
 const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
-  const name = faker.helpers.slugify(displayName);
+  const name = slugify(displayName, { strict: true });
   const description = faker.lorem.words(10);
 
   return { name, displayName, description };
@@ -27,7 +28,7 @@ const permission = (): PermissionRequest => {
 
 const role = (): RoleRequest => {
   const displayName = faker.random.words(2);
-  const name = faker.helpers.slugify(displayName);
+  const name = slugify(displayName, { strict: true });
   const description = faker.lorem.words(10);
   const permissions: number[] = [];
 
@@ -108,7 +109,7 @@ const locale = (
 };
 
 const scheme = (): SchemeCreationAttributes => {
-  const id = faker.helpers.slugify(faker.random.words(2));
+  const id = slugify(faker.random.words(2), { strict: true });
   const name = faker.random.words(3);
   const type = SchemeTypes.DATA_DRIVEN;
 
@@ -127,7 +128,7 @@ const schemeQuestion = (): SchemeQuestionCreationAttributes => {
     ...customPromptQuestions[
       faker.datatype.number({ min: 0, max: customPromptQuestions.length - 1 })
     ],
-    id: faker.helpers.slugify(faker.random.words(6)),
+    id: slugify(faker.random.words(6), { strict: true }),
     name: faker.random.words(6),
   };
 
@@ -139,7 +140,7 @@ const schemeQuestion = (): SchemeQuestionCreationAttributes => {
 };
 
 const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest => {
-  const id = faker.helpers.slugify(faker.random.words(2));
+  const id = slugify(faker.random.words(2), { strict: true });
   const name = faker.random.words(6);
   const state = faker.datatype.number(2);
   const startDate = new Date().toISOString().split('T')[0];
