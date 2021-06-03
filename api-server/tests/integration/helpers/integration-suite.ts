@@ -5,7 +5,7 @@ import ioc from '@/ioc';
 import foodIndex from '@/food-index';
 import { initDatabaseData, wipeRedis, MockData } from './setup';
 
-export type Bearers = Record<'admin' | 'user' | 'respondent', string>;
+export type Bearers = Record<'superuser' | 'user' | 'respondent', string>;
 
 const { config, logger, db, cache, scheduler } = ioc.cradle;
 

@@ -12,7 +12,8 @@ describe('API', () => {
   beforeAll(async () => {
     await suite.init();
 
-    const adminRes = await request(suite.app)
+    // Get access tokens for superuser, admin-user, respondent
+    const superuserRes = await request(suite.app)
       .post('/api/auth/login')
       .set('Accept', 'application/json')
       .send({ email: 'testAdmin@example.com', password: 'testAdminPassword' });
@@ -32,7 +33,7 @@ describe('API', () => {
       });
 
     suite.bearer = {
-      admin: `Bearer ${adminRes.body.accessToken}`,
+      superuser: `Bearer ${superuserRes.body.accessToken}`,
       user: `Bearer ${userRes.body.accessToken}`,
       respondent: `Bearer ${respondentRes.body.accessToken}`,
     };
@@ -65,7 +66,6 @@ describe('API', () => {
     describe('GET /api/surveys/:surveyId/user-info', surveys.userInfo);
     describe('GET /api/surveys/:surveyId/session', surveys.getSession);
     describe('POST /api/surveys/:surveyId/session', surveys.setSession);
-
     // describe('POST /api/surveys/:surveyId/submissions', surveys.submissions);
     // describe('GET /api/surveys/:surveyId/follow-up', surveys.followUp);
     // describe('POST /api/surveys/:surveyId/request-help', surveys.requestHelp);

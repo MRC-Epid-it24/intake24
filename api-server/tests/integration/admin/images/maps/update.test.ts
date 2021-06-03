@@ -38,7 +38,7 @@ export default (): void => {
     const { body } = await request(suite.app)
       .post(baseUrl)
       .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.admin)
+      .set('Authorization', suite.bearer.superuser)
       .field('id', id)
       .field('description', description)
       .attach('baseImage', fs.createReadStream(filePath), fileName);

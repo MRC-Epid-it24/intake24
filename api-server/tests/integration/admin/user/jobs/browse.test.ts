@@ -25,7 +25,7 @@ export default (): void => {
     await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
       .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.admin)
+      .set('Authorization', suite.bearer.superuser)
       .send(input);
 
     // Test user job

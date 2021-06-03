@@ -25,7 +25,7 @@ export default (): void => {
     } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
       .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.admin)
+      .set('Authorization', suite.bearer.superuser)
       .send(input);
 
     job = data;
@@ -46,7 +46,7 @@ export default (): void => {
       const res = await request(suite.app)
         .get(`${baseUrl}/${job.id}`)
         .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.admin);
+        .set('Authorization', suite.bearer.superuser);
 
       if (res.body.data.downloadUrl !== null) {
         job = res.body.data;

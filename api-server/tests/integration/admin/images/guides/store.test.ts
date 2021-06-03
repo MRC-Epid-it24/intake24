@@ -23,7 +23,7 @@ export default (): void => {
     await request(suite.app)
       .post('/api/admin/images/maps')
       .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.admin)
+      .set('Authorization', suite.bearer.superuser)
       .field('id', 'imageMapForGuide')
       .field('description', 'imageMapForGuide')
       .attach('baseImage', fs.createReadStream(filePath), 'imageMapForGuide.jpg');

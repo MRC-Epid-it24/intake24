@@ -21,7 +21,7 @@ export default (): void => {
     const { body } = await request(suite.app)
       .post(baseUrl)
       .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.admin)
+      .set('Authorization', suite.bearer.superuser)
       .send(input);
 
     output = { ...body.data };
