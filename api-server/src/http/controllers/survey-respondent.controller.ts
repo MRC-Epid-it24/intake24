@@ -4,6 +4,7 @@ import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import {
   SurveyEntryResponse,
+  SurveyFollowUpResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@common/types/http';
@@ -20,7 +21,10 @@ export type SurveyRespondentController = Controller<
 >;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondentController => {
-  const parameters = async (req: Request, res: Response<SurveyEntryResponse>): Promise<void> => {
+  const parameters = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyEntryResponse>
+  ): Promise<void> => {
     const { surveyId } = req.params;
 
     const survey = await Survey.scope('scheme').findByPk(surveyId);
@@ -54,9 +58,14 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
     });
   };
 
-  const userInfo = async (req: Request, res: Response<SurveyUserInfoResponse>): Promise<void> => {
-    const { surveyId } = req.params;
-    const tzOffset = req.query.tzOffset as unknown as number; // validated & parsed in middleware (ideally, should have typed requests)
+  const userInfo = async (
+    req: Request<{ surveyId: string }, any, any, { tzOffset: number }>,
+    res: Response<SurveyUserInfoResponse>
+  ): Promise<void> => {
+    const {
+      params: { surveyId },
+      query: { tzOffset },
+    } = req;
     const user = req.user as User;
 
     const userResponse = await surveyService.userInfo(surveyId, user, tzOffset);
@@ -65,7 +74,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
   };
 
   const getSession = async (
-    req: Request,
+    req: Request<{ surveyId: string }>,
     res: Response<SurveyUserSessionResponse>
   ): Promise<void> => {
     const { id: userId } = req.user as User;
@@ -77,7 +86,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
   };
 
   const setSession = async (
-    req: Request,
+    req: Request<{ surveyId: string }>,
     res: Response<SurveyUserSessionResponse>
   ): Promise<void> => {
     const { id: userId } = req.user as User;
@@ -90,33 +99,35 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
   };
 
   // TODO: implement
-  const requestHelp = async (req: Request, res: Response): Promise<void> => {
-    const { surveyId } = req.params;
+  const requestHelp = async (req: Request<{ surveyId: string }>, res: Response): Promise<void> => {
+    // const { surveyId } = req.params;
 
     res.json();
   };
 
-  // TODO: implement
-  const submissions = async (req: Request, res: Response): Promise<void> => {
+  const submissions = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyFollowUpResponse>
+  ): Promise<void> => {
     const { surveyId } = req.params;
     const { id: userId } = req.user as User;
     const { submission } = req.body;
 
-    await surveyService.submit(surveyId, userId, submission);
+    const followUpInfo = await surveyService.submit(surveyId, userId, submission);
 
-    res.json();
+    res.json(followUpInfo);
   };
 
-  /*
-   * TODO:
-   * - Review if this is needed for V4, clarification needed
-   * - Feedback will probably be component of Survey app
-   * - We will only need some user/survey info, which can be included comes from above "parameters" & "user-info" endpoints
-   */
-  const followUp = async (req: Request, res: Response): Promise<void> => {
+  const followUp = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyFollowUpResponse>
+  ): Promise<void> => {
     const { surveyId } = req.params;
+    const { id: userId } = req.user as User;
 
-    res.json();
+    const followUpInfo = await surveyService.followUp(surveyId, userId);
+
+    res.json(followUpInfo);
   };
 
   return {

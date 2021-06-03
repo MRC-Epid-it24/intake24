@@ -138,9 +138,7 @@ Content-Type: application/json
 
 ## Survey follow-up
 
-Returns actions available at the end of the recall which an be a link to the next (external) stage of the survey and/or a link to the dietary feedback.  
-
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/system/user/SurveyController.scala#L116-L138)
+Returns actions available at the end of the recall which can be a link to the next (external) stage of the survey and/or a link to the dietary feedback.
 
 ### Request
 
@@ -151,17 +149,13 @@ Authorization: Bearer {accessToken}
 Content-Type: application/json
 ```
 
-where: 
-
-**surveyId** is the survey ID.
-
 ### Response
 
 ```json
 200 OK
 
 {
-  "followUpUrl": string?, 
+  "followUpUrl": string | null,
   "showFeedback": boolean
 }
 ```
@@ -200,7 +194,7 @@ Same as survey follow-up:
 200 OK
 
 {
-  "followUpUrl": string?, 
+  "followUpUrl": string | null, 
   "showFeedback": boolean
 }
 ```

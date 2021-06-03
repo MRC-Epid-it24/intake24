@@ -41,3 +41,8 @@ export type SurveyUserInfoResponse = {
 };
 
 export type SurveyUserSessionResponse = UserSessionAttributes;
+
+export type SurveyFollowUpResponse = {
+  followUpUrl: string | null;
+  showFeedback: boolean;
+};

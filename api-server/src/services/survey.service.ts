@@ -23,7 +23,8 @@ import { ForbiddenError, InternalServerError, NotFoundError } from '@/http/error
 import type { IoC } from '@/ioc';
 import { toSimpleName, generateToken } from '@/util';
 import { SurveyState } from '@common/types';
-import { SurveyUserInfoResponse } from '@common/types/http';
+import { SurveyUserInfoResponse, SurveyFollowUpResponse } from '@common/types/http';
+import { PromptQuestion, RedirectPromptProps } from '@common/prompts';
 import { surveyMgmt, surveyRespondent } from './auth';
 
 export type RespondentWithPassword = {
@@ -51,7 +52,8 @@ export interface SurveyService {
   userInfo: (surveyId: string, user: User, tzOffset: number) => Promise<SurveyUserInfoResponse>;
   getSession: (surveyId: string, userId: number) => Promise<UserSession>;
   setSession: (surveyId: string, userId: number, sessionData: SurveyState) => Promise<UserSession>;
-  submit: (surveyId: string, userId: number, input: SurveyState) => Promise<void>;
+  submit: (surveyId: string, userId: number, input: SurveyState) => Promise<SurveyFollowUpResponse>;
+  followUp: (surveyId: string, userId: number) => Promise<SurveyFollowUpResponse>;
 }
 
 export default ({
@@ -175,13 +177,14 @@ export default ({
       userPasswords.push({ userId, password });
     }
 
-    await Promise.all([
+    const [userAliasRecords] = await Promise.all([
+      UserSurveyAlias.bulkCreate(userAliases),
       PermissionUser.bulkCreate(userPermissions),
       userService.createPasswords(userPasswords),
       UserCustomField.bulkCreate(userCustomFields),
     ]);
 
-    return UserSurveyAlias.bulkCreate(userAliases);
+    return userAliasRecords;
   };
 
   /**
@@ -207,7 +210,7 @@ export default ({
     const { customFields, password, ...rest } = input;
 
     await user.update({ ...rest, simpleName: toSimpleName(rest.name) });
-    if (password) userService.updatePassword({ userId: user.id, password });
+    if (password) await userService.updatePassword({ userId: user.id, password });
 
     // Update custom fields
     if (customFields && user.customFields)
@@ -238,8 +241,10 @@ export default ({
 
     // System-wide account - delete only access to study
     if (user.email) {
-      await UserSurveyAlias.destroy({ where: { surveyId, userId } });
-      await user.$remove('permissions', await getSurveyRespondentPermission(surveyId));
+      await Promise.all([
+        UserSurveyAlias.destroy({ where: { surveyId, userId } }),
+        user.$remove('permissions', await getSurveyRespondentPermission(surveyId)),
+      ]);
     } else {
       // Wipe the whole user records
       await user.destroy();
@@ -331,14 +336,16 @@ export default ({
     const clientStartOfDay = addMinutes(startOfDay(new Date()), tzOffset * -1);
     const clientEndOfDay = addDays(clientStartOfDay, 1);
 
-    const totalSubmissions = await SurveySubmission.count({ where: { surveyId, userId } });
-    const daySubmissions = await SurveySubmission.count({
-      where: {
-        surveyId,
-        userId,
-        submissionTime: { [Op.gte]: clientStartOfDay, [Op.lt]: clientEndOfDay },
-      },
-    });
+    const [totalSubmissions, daySubmissions] = await Promise.all([
+      SurveySubmission.count({ where: { surveyId, userId } }),
+      SurveySubmission.count({
+        where: {
+          surveyId,
+          userId,
+          submissionTime: { [Op.gte]: clientStartOfDay, [Op.lt]: clientEndOfDay },
+        },
+      }),
+    ]);
 
     return {
       userId,
@@ -398,6 +405,77 @@ export default ({
   };
 
   /**
+   * Resolve follow-up URL, if any
+   *
+   * @param {Survey} survey
+   * @param {number} userId
+   * @returns {(Promise<string | null>)}
+   */
+  const getFollowUpUrl = async (survey: Survey, userId: number): Promise<string | null> => {
+    const { id: surveyId, scheme } = survey;
+    if (!scheme) throw new NotFoundError();
+
+    const redirectPrompt = scheme.questions.submission.find(
+      (question) => question.component === 'redirect-prompt'
+    );
+    if (!redirectPrompt) return null;
+
+    const user = await User.findByPk(userId, {
+      include: [
+        { model: UserSurveyAlias, where: { surveyId }, required: false },
+        { model: UserCustomField, where: { name: 'redirect url' }, required: false },
+      ],
+    });
+
+    if (!user) throw new NotFoundError();
+    const { aliases = [], customFields = [] } = user;
+
+    const { identifier, url } = (redirectPrompt as PromptQuestion<RedirectPromptProps>).props;
+
+    let identifierValue: string | null;
+
+    switch (identifier) {
+      case 'userId':
+        identifierValue = user.id.toString();
+        break;
+      case 'username':
+        identifierValue = aliases.length ? aliases[0].userName : null;
+        break;
+      case 'token':
+        identifierValue = aliases.length ? aliases[0].urlAuthToken : null;
+        break;
+      case 'custom':
+        identifierValue = customFields.length ? customFields[0].value : null;
+        break;
+      default:
+        identifierValue = null;
+        break;
+    }
+
+    if (!identifierValue) return null;
+
+    return url?.replace('{identifier}', identifierValue) ?? null;
+  };
+
+  /**
+   * Verify that user can be offered a feedback
+   *
+   * @param {Survey} survey
+   * @param {number} userId
+   * @returns {Promise<boolean>}
+   */
+  const canShowFeedback = async (survey: Survey, userId: number): Promise<boolean> => {
+    const { feedbackEnabled, numberOfSubmissionsForFeedback } = survey;
+    if (!feedbackEnabled) return false;
+
+    const submissions = await SurveySubmission.count({
+      where: { surveyId: survey.id, userId },
+    });
+
+    return numberOfSubmissionsForFeedback >= submissions;
+  };
+
+  /**
    * Submit survey recall
    *
    * @param {string} surveyId
@@ -405,7 +483,11 @@ export default ({
    * @param {RecallState} input
    * @returns {Promise<void>}
    */
-  const submit = async (surveyId: string, userId: number, input: SurveyState): Promise<void> => {
+  const submit = async (
+    surveyId: string,
+    userId: number,
+    input: SurveyState
+  ): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.scope('scheme').findByPk(surveyId);
     if (!survey || !survey.scheme) throw new NotFoundError();
 
@@ -486,6 +568,25 @@ export default ({
 
       // TODO: process foods
     }
+
+    const [followUpUrl, showFeedback] = await Promise.all([
+      getFollowUpUrl(survey, userId),
+      canShowFeedback(survey, userId),
+    ]);
+
+    return { followUpUrl, showFeedback };
+  };
+
+  const followUp = async (surveyId: string, userId: number): Promise<SurveyFollowUpResponse> => {
+    const survey = await Survey.scope('scheme').findByPk(surveyId);
+    if (!survey || !survey.scheme) throw new NotFoundError();
+
+    const [followUpUrl, showFeedback] = await Promise.all([
+      getFollowUpUrl(survey, userId),
+      canShowFeedback(survey, userId),
+    ]);
+
+    return { followUpUrl, showFeedback };
   };
 
   return {
@@ -502,5 +603,6 @@ export default ({
     getSession,
     setSession,
     submit,
+    followUp,
   };
 };
