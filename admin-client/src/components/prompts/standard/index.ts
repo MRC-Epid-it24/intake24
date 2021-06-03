@@ -1,13 +1,15 @@
-import FoodSearchPrompt from './FoodSearchPrompt.vue';
-import MealTimePrompt from './MealTimePrompt.vue';
-import SubmitPrompt from './SubmitPrompt.vue';
-import MealAddPrompt from './MealAddPrompt.vue';
 import EditMealPrompt from './EditMealPrompt.vue';
+import FoodSearchPrompt from './FoodSearchPrompt.vue';
+import MealAddPrompt from './MealAddPrompt.vue';
+import MealTimePrompt from './MealTimePrompt.vue';
+import RedirectPrompt from './RedirectPrompt.vue';
+import SubmitPrompt from './SubmitPrompt.vue';
 
 export default {
-  MealTimePrompt,
-  SubmitPrompt,
+  EditMealPrompt,
   FoodSearchPrompt,
   MealAddPrompt,
-  EditMealPrompt,
+  MealTimePrompt,
+  RedirectPrompt,
+  SubmitPrompt,
 };

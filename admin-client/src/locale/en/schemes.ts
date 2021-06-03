@@ -172,6 +172,28 @@ const schemes: LocaleMessageObject = {
     allowBrowsing: 'Allow respondents to search for foods by freely browsing food categories',
     dualLanguage: 'Display alternative food names in another language',
   },
+  redirect: {
+    url: {
+      _: 'Base URL',
+      title: 'URL Options',
+      subtitle: `Use '{identifier}' to indicate the place where user identifier should be to inserted.`,
+      hint: 'https://example.com/?arg={identifier}',
+    },
+    identifier: {
+      _: 'User identifier to embed into the URL',
+      subtitle: 'Specify which identifier to embed into the redirect URL',
+      options: {
+        userId: 'User ID',
+        username: 'Username',
+        token: 'Authentication token',
+        custom: 'Custom field',
+      },
+    },
+    timer: {
+      _: 'Number of seconds for redirect',
+      title: 'Timer options',
+    },
+  },
   prompts: {
     'meal-time-prompt': {
       title: 'Meal time',
@@ -188,6 +210,10 @@ const schemes: LocaleMessageObject = {
     'submit-prompt': {
       title: 'Submit',
       subtitle: 'Confirm completion and submit recall',
+    },
+    'redirect-prompt': {
+      title: 'Redirect',
+      subtitle: 'Redirect user to external site',
     },
     'info-prompt': {
       title: 'Information',
