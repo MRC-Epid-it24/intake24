@@ -14,6 +14,7 @@ export type CustomComponentType =
 export type StandardComponentType =
   | 'meal-time-prompt'
   | 'submit-prompt'
+  | 'redirect-prompt'
   | 'food-search-prompt'
   | 'meal-add-prompt'
   | 'edit-meal-prompt';

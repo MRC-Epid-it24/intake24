@@ -6,6 +6,12 @@ export interface MealTimePromptProps extends ValidatedPromptProps {
   format: 'ampm' | '24hr';
 }
 
+export interface RedirectPromptProps extends BasePromptProps {
+  url: string | null;
+  identifier: 'userId' | 'username' | 'token' | 'custom';
+  timer: number;
+}
+
 export interface FoodSearchPromptProps extends BasePromptProps {
   allowBrowsing: boolean;
   dualLanguage: boolean;
@@ -22,6 +28,13 @@ export const mealAddPromptProps: BasePromptProps = clone(basePromptProps);
 export const editMealPromptProps: BasePromptProps = clone(basePromptProps);
 
 export const submitPromptProps: BasePromptProps = clone(basePromptProps);
+
+export const redirectPromptProps: RedirectPromptProps = clone({
+  ...basePromptProps,
+  url: null,
+  identifier: 'username',
+  timer: 0,
+});
 
 export const foodSearchPromptProps: FoodSearchPromptProps = clone({
   ...basePromptProps,
@@ -43,6 +56,13 @@ export const standardPromptQuestions: PromptQuestion[] = [
     id: 'submit-prompt',
     name: 'Submit prompt',
     props: clone(submitPromptProps),
+  },
+  {
+    component: 'redirect-prompt',
+    type: 'standard',
+    id: 'redirect-prompt',
+    name: 'Redirect prompt',
+    props: clone(redirectPromptProps),
   },
   {
     component: 'food-search-prompt',
