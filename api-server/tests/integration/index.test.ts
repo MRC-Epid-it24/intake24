@@ -67,7 +67,7 @@ describe('API', () => {
     describe('GET /api/surveys/:surveyId/session', surveys.getSession);
     describe('POST /api/surveys/:surveyId/session', surveys.setSession);
     // describe('POST /api/surveys/:surveyId/submissions', surveys.submissions);
-    // describe('GET /api/surveys/:surveyId/follow-up', surveys.followUp);
+    describe('GET /api/surveys/:surveyId/follow-up', surveys.followUp);
     // describe('POST /api/surveys/:surveyId/request-help', surveys.requestHelp);
   });
 

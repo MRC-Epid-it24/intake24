@@ -2,7 +2,6 @@ import request from 'supertest';
 import { pick } from 'lodash';
 import { suite } from '@tests/integration/helpers';
 import { UserSession } from '@/db/models/system';
-import { SurveyState } from '@common/types';
 import { UserSessionCreationAttributes } from '@common/types/models';
 
 export default (): void => {
