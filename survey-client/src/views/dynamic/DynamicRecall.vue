@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center" class="pa-0">
     <v-col cols="12" class="mealbar" v-if="isNotDesktop && showMealList">
-      <meal-list-mobile-top :foods="foods" :meals="meals"> </meal-list-mobile-top>
+      <meal-list-mobile-top :meals="meals" @displayFoods="onMealMobileClick"></meal-list-mobile-top>
     </v-col>
     <v-col v-if="!isNotDesktop && showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
       <meal-list
@@ -36,6 +36,11 @@
       <meal-list-mobile-bottom v-if="isNotDesktop" :loading="false" :foods="foods">
       </meal-list-mobile-bottom>
     </v-col>
+    <meal-mobile-context-menu
+      :show="showMobileMealContextMenu"
+      :mealName="activeMeal"
+      @toggleMobileMealContext="onMobileMealContextMenu"
+    ></meal-mobile-context-menu>
   </v-row>
 </template>
 
@@ -45,9 +50,10 @@ import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
 import DynamicRecall, { PromptInstance } from '@/dynamic-recall/dynamic-recall';
 import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
+import MealMobileContextMenu from '@/components/recall/MobileMealContext.vue';
 import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
 import MealList, { RecallAction } from '@/components/recall/MealListDesktop.vue';
-import { MealSection, MealState, Selection, SurveyQuestionSection } from '@common/types';
+import { MealSection, MealState, Selection, SurveyQuestionSection, FoodState } from '@common/types';
 import { ComponentType } from '@common/prompts';
 import { mapState } from 'vuex';
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
@@ -64,6 +70,7 @@ export default Vue.extend({
     MealListMobileTop,
     MealList,
     RecallBreadCrumbs,
+    MealMobileContextMenu,
     CustomPromptHandler,
     ...standardHandlers,
     ...portionSizeHandlers,
@@ -74,6 +81,8 @@ export default Vue.extend({
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
       clickedPrompt: null as ComponentType | null,
+      showMobileMealContextMenu: false,
+      activeMeal: '',
     };
   },
 
@@ -116,19 +125,6 @@ export default Vue.extend({
 
     foods(): any {
       return [];
-    },
-
-    brdMeal(): any {
-      return [
-        {
-          text: 'Choose Meal',
-          disabled: true,
-        },
-        {
-          text: 'Choose Food',
-          disabled: true,
-        },
-      ];
     },
 
     ...mapState({
@@ -226,6 +222,15 @@ export default Vue.extend({
           this.showMealPrompt(payload.mealIndex, 'preFoods', 'meal-time-prompt');
           break;
       }
+    },
+
+    onMealMobileClick(payload: { mealIndex: number; name: string; foods: FoodState[] }) {
+      this.activeMeal = payload.name;
+      this.showMobileMealContextMenu = !this.showMobileMealContextMenu;
+    },
+
+    onMobileMealContextMenu() {
+      this.showMobileMealContextMenu = !this.showMobileMealContextMenu;
     },
 
     onRecallAction(action: RecallAction) {

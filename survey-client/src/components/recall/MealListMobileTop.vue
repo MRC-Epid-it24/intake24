@@ -6,7 +6,11 @@
         <v-tab class="add_button">
           <span>ADD</span>
         </v-tab>
-        <v-tab v-for="meal in meals" :key="meal.name" @click="emitFoodsList(meal.foods)">
+        <v-tab
+          v-for="(meal, idx) in meals"
+          :key="meal.name"
+          @click="emitFoodsList(idx, meal.name, meal.foods)"
+        >
           {{ meal.name }}
           <v-icon x-small v-if="meal.time.length === 0">far fa-question-circle </v-icon>
           <p v-else>{{ meal.time }}</p>
@@ -18,6 +22,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { FoodState } from '@common/types';
 
 export default (Vue as VueConstructor<Vue>).extend({
   // components: { MealItemMobile },
@@ -25,7 +30,6 @@ export default (Vue as VueConstructor<Vue>).extend({
 
   props: {
     meals: Array,
-    foods: Array,
   },
   data() {
     return {
@@ -34,8 +38,8 @@ export default (Vue as VueConstructor<Vue>).extend({
     };
   },
   methods: {
-    emitFoodsList(foods: Array<any>) {
-      this.$emit('displayFoods', foods);
+    emitFoodsList(idx: number, name: string, foods: FoodState[]) {
+      this.$emit('displayFoods', { idx, name, foods });
     },
   },
 });
