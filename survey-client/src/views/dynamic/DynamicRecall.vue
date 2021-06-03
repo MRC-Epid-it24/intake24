@@ -37,9 +37,12 @@
       </meal-list-mobile-bottom>
     </v-col>
     <meal-mobile-context-menu
-      :show="showMobileMealContextMenu"
+      :show="mobileMealContextMenu.show"
       :mealName="activeMeal"
+      :mealIndex="mobileMealContextMenu.mealIndex"
       @toggleMobileMealContext="onMobileMealContextMenu"
+      @meal-action="onMealAction"
+      @complete="nextPrompt"
     ></meal-mobile-context-menu>
   </v-row>
 </template>
@@ -81,7 +84,10 @@ export default Vue.extend({
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
       clickedPrompt: null as ComponentType | null,
-      showMobileMealContextMenu: false,
+      mobileMealContextMenu: {
+        show: false,
+        mealIndex: 0,
+      },
       activeMeal: '',
     };
   },
@@ -168,6 +174,7 @@ export default Vue.extend({
     },
 
     showMealPrompt(mealIndex: number, promptSection: MealSection, promptType: ComponentType) {
+      console.log(`[showMealPrompt]: ${mealIndex}, ${promptSection}, ${promptType}`);
       this.setSelection({
         element: {
           type: 'meal',
@@ -226,11 +233,12 @@ export default Vue.extend({
 
     onMealMobileClick(payload: { mealIndex: number; name: string; foods: FoodState[] }) {
       this.activeMeal = payload.name;
-      this.showMobileMealContextMenu = !this.showMobileMealContextMenu;
+      this.mobileMealContextMenu.show = !this.mobileMealContextMenu.show;
+      this.mobileMealContextMenu.mealIndex = payload.mealIndex;
     },
 
     onMobileMealContextMenu() {
-      this.showMobileMealContextMenu = !this.showMobileMealContextMenu;
+      this.mobileMealContextMenu.show = !this.mobileMealContextMenu.show;
     },
 
     onRecallAction(action: RecallAction) {

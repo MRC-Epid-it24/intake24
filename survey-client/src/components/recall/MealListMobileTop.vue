@@ -38,8 +38,8 @@ export default (Vue as VueConstructor<Vue>).extend({
     };
   },
   methods: {
-    emitFoodsList(idx: number, name: string, foods: FoodState[]) {
-      this.$emit('displayFoods', { idx, name, foods });
+    emitFoodsList(mealIndex: number, name: string, foods: FoodState[]) {
+      this.$emit('displayFoods', { mealIndex, name, foods });
     },
   },
 });
