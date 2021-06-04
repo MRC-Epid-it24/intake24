@@ -1,7 +1,11 @@
 <template>
   <v-row justify="center" class="pa-0">
     <v-col cols="12" class="mealbar" v-if="isNotDesktop && showMealList">
-      <meal-list-mobile-top :meals="meals" @displayFoods="onMealMobileClick"></meal-list-mobile-top>
+      <meal-list-mobile-top
+        :meals="meals"
+        @displayFoods="onMealMobileClick"
+        @recall-action="onRecallAction"
+      ></meal-list-mobile-top>
     </v-col>
     <v-col v-if="!isNotDesktop && showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
       <meal-list
@@ -129,7 +133,7 @@ export default Vue.extend({
       );
     },
 
-    foods(): any {
+    foods(): FoodState[] {
       return [];
     },
 

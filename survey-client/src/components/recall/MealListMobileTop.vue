@@ -3,7 +3,7 @@
     <v-toolbar flat>
       <v-tabs icons-and-text center-active touch show-arrows>
         <v-tabs-slider></v-tabs-slider>
-        <v-tab class="add_button">
+        <v-tab class="add_button" @click="emitAddMeal('add-meal')">
           <span>ADD</span>
         </v-tab>
         <v-tab
@@ -40,6 +40,9 @@ export default (Vue as VueConstructor<Vue>).extend({
   methods: {
     emitFoodsList(mealIndex: number, name: string, foods: FoodState[]) {
       this.$emit('displayFoods', { mealIndex, name, foods });
+    },
+    emitAddMeal(action: string) {
+      this.$emit('recall-action', action);
     },
   },
 });
