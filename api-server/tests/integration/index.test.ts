@@ -46,7 +46,7 @@ describe('API', () => {
     describe('POST /api/auth/login/alias', authentication.loginAlias);
     describe('POST /api/auth/login/token', authentication.loginToken);
     // describe('POST /api/auth/login/verify', authentication.verify);
-    // describe('POST /api/auth/login/refresh', authentication.refresh);
+    describe('POST /api/auth/login/refresh', authentication.refresh);
     // describe('POST /api/auth/login/logout', authentication.logout);
   });
 
