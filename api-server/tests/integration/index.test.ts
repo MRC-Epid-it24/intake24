@@ -47,7 +47,7 @@ describe('API', () => {
     describe('POST /api/auth/login/token', authentication.loginToken);
     // describe('POST /api/auth/login/verify', authentication.verify);
     describe('POST /api/auth/login/refresh', authentication.refresh);
-    // describe('POST /api/auth/login/logout', authentication.logout);
+    describe('POST /api/auth/login/logout', authentication.logout);
   });
 
   describe('Push subscriptions', () => {
