@@ -37,7 +37,13 @@
       </transition>
     </v-col>
     <v-col cols="12" class="foodbar stickybottom">
-      <meal-list-mobile-bottom v-if="isNotDesktop" :loading="false" :foods="foods">
+      <meal-list-mobile-bottom
+        v-if="isNotDesktop"
+        :loading="false"
+        :foods="foods"
+        :mealIndex="mealIndex"
+        @meal-action="onMealAction"
+      >
       </meal-list-mobile-bottom>
     </v-col>
     <meal-mobile-context-menu
@@ -53,6 +59,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { mapState, mapGetters } from 'vuex';
 import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
 import DynamicRecall, { PromptInstance } from '@/dynamic-recall/dynamic-recall';
 import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
@@ -62,7 +69,6 @@ import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
 import MealList, { RecallAction } from '@/components/recall/MealListDesktop.vue';
 import { MealSection, MealState, Selection, SurveyQuestionSection, FoodState } from '@common/types';
 import { ComponentType } from '@common/prompts';
-import { mapState } from 'vuex';
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import standardHandlers from '@/components/prompts/dynamic/handlers/standard';
 import portionSizeHandlers from '@/components/prompts/dynamic/handlers/portion-size';
@@ -97,6 +103,8 @@ export default Vue.extend({
   },
 
   computed: {
+    ...mapGetters('survey', ['selectedMeal', 'selectedFood', 'selectedMealIndex']),
+
     handlerComponent(): string {
       const prompt = this.currentPrompt?.prompt;
 
@@ -133,8 +141,12 @@ export default Vue.extend({
       );
     },
 
-    foods(): FoodState[] {
-      return [];
+    foods(): FoodState[] | [] {
+      return this.selectedMeal ? this.selectedMeal.foods : [];
+    },
+
+    mealIndex(): number | undefined {
+      return this.selectedMealIndex;
     },
 
     ...mapState({
