@@ -1,14 +1,14 @@
 <template>
   <v-bottom-sheet persistent v-model="showMenu">
-    <v-sheet class="text-center" height="20rem">
+    <v-sheet class="text-center pa-3" height="20rem">
       <v-btn class="mt-6 mb-3" text color="red" @click="toggleMenu"> close </v-btn>
-      <v-btn :block="isMobile" class="mb-3" large @click="onContextMenuAction('edit-foods')">
+      <v-btn block class="mb-3" large @click="onContextMenuAction('edit-foods')">
         {{ $t('prompts.editMeal.editMeal', { meal: name }) }}
       </v-btn>
-      <v-btn :block="isMobile" class="mb-8" large @click="onContextMenuAction('edit-time')">
+      <v-btn block class="mb-8" large @click="onContextMenuAction('edit-time')">
         {{ $t('prompts.editMeal.editTime', { meal: name }) }}
       </v-btn>
-      <v-btn :block="isMobile" class="delete-button" large @click="deleteMeal">
+      <v-btn block class="mb-0 delete-button" md="8" large @click="deleteMeal">
         {{ $t('prompts.editMeal.deleteMeal', { meal: name }) }}
       </v-btn>
     </v-sheet>
@@ -58,8 +58,6 @@ export default (Vue as VueConstructor<Vue>).extend({
 </script>
 <style lang="scss" scoped>
 .delete-button {
-  position: fixed;
-  bottom: 10px;
   color: red;
 }
 </style>
