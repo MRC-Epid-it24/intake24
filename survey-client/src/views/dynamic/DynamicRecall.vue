@@ -3,7 +3,7 @@
     <v-col cols="12" class="mealbar" v-if="isNotDesktop && showMealList">
       <meal-list-mobile-top
         :meals="meals"
-        @displayFoods="onMealMobileClick"
+        @displayMealContext="onMealFoodMobileClick"
         @recall-action="onRecallAction"
       ></meal-list-mobile-top>
     </v-col>
@@ -42,18 +42,25 @@
         :loading="false"
         :foods="foods"
         :mealIndex="mealIndex"
+        @displayFoodContext="onMealFoodMobileClick"
         @meal-action="onMealAction"
       >
       </meal-list-mobile-bottom>
     </v-col>
-    <meal-mobile-context-menu
-      :show="mobileMealContextMenu.show"
-      :mealName="activeMeal"
-      :mealIndex="mobileMealContextMenu.mealIndex"
-      @toggleMobileMealContext="onMobileMealContextMenu"
+    <meal-food-mobile-context-menu
+      :show="mobileMealFoodContextMenu.show"
+      :entityName="mobileMealFoodContextMenu.foodContext ? activeFood : activeMeal"
+      :entityIndex="
+        mobileMealFoodContextMenu.foodContext
+          ? mobileMealFoodContextMenu.foodIndex
+          : mobileMealFoodContextMenu.mealIndex
+      "
+      :mealIndex="mobileMealFoodContextMenu.mealIndex"
+      :entityType="mobileMealFoodContextMenu.foodContext"
+      @toggleMobileMealContext="onMobileMealFoodContextMenu"
       @meal-action="onMealAction"
       @complete="nextPrompt"
-    ></meal-mobile-context-menu>
+    ></meal-food-mobile-context-menu>
   </v-row>
 </template>
 
@@ -64,7 +71,7 @@ import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
 import DynamicRecall, { PromptInstance } from '@/dynamic-recall/dynamic-recall';
 import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
-import MealMobileContextMenu from '@/components/recall/MobileMealContext.vue';
+import MealFoodMobileContextMenu from '@/components/recall/MobileMealFoodContext.vue';
 import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
 import MealList, { RecallAction } from '@/components/recall/MealListDesktop.vue';
 import { MealSection, MealState, Selection, SurveyQuestionSection, FoodState } from '@common/types';
@@ -83,7 +90,7 @@ export default Vue.extend({
     MealListMobileTop,
     MealList,
     RecallBreadCrumbs,
-    MealMobileContextMenu,
+    MealFoodMobileContextMenu,
     CustomPromptHandler,
     ...standardHandlers,
     ...portionSizeHandlers,
@@ -94,11 +101,14 @@ export default Vue.extend({
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
       clickedPrompt: null as ComponentType | null,
-      mobileMealContextMenu: {
+      mobileMealFoodContextMenu: {
         show: false,
         mealIndex: 0,
+        foodIndex: 0,
+        foodContext: false,
       },
       activeMeal: '',
+      activeFood: '',
     };
   },
 
@@ -190,7 +200,6 @@ export default Vue.extend({
     },
 
     showMealPrompt(mealIndex: number, promptSection: MealSection, promptType: ComponentType) {
-      console.log(`[showMealPrompt]: ${mealIndex}, ${promptSection}, ${promptType}`);
       this.setSelection({
         element: {
           type: 'meal',
@@ -247,14 +256,34 @@ export default Vue.extend({
       }
     },
 
-    onMealMobileClick(payload: { mealIndex: number; name: string; foods: FoodState[] }) {
-      this.activeMeal = payload.name;
-      this.mobileMealContextMenu.show = !this.mobileMealContextMenu.show;
-      this.mobileMealContextMenu.mealIndex = payload.mealIndex;
+    onMealMobileClick(mealIndex: number, name: string, foods: FoodState[]) {
+      this.activeMeal = name;
+      this.mobileMealFoodContextMenu.foodContext = false;
+      this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
+      this.mobileMealFoodContextMenu.mealIndex = mealIndex;
     },
 
-    onMobileMealContextMenu() {
-      this.mobileMealContextMenu.show = !this.mobileMealContextMenu.show;
+    onFoodMobileClick(foodIndex: number, mealIndex: number, name: string) {
+      this.activeFood = name;
+      this.mobileMealFoodContextMenu.foodContext = true;
+      this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
+      this.mobileMealFoodContextMenu.mealIndex = mealIndex;
+      this.mobileMealFoodContextMenu.foodIndex = foodIndex;
+    },
+
+    onMealFoodMobileClick(
+      payload:
+        | { mealIndex: number; name: string; foods: FoodState[]; entity: 'meal' }
+        | { foodIndex: number; mealIndex: number; name: string; entity: 'food' }
+    ) {
+      if (payload.entity === 'meal')
+        this.onMealMobileClick(payload.mealIndex, payload.name, payload.foods);
+      if (payload.entity === 'food')
+        this.onFoodMobileClick(payload.foodIndex, payload.mealIndex, payload.name);
+    },
+
+    onMobileMealFoodContextMenu() {
+      this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
     },
 
     onRecallAction(action: RecallAction) {

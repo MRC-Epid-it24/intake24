@@ -150,6 +150,14 @@ const mutations: MutationTree<SurveyState> = {
     }
   },
 
+  deleteFood(state: SurveyState, data: { mealIndex: number; foodIndex: number }) {
+    if (state.data == null) {
+      console.error('state.data is null');
+    } else {
+      state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1);
+    }
+  },
+
   updateFood(
     state: SurveyState,
     data: { mealIndex: number; foodIndex: number; update: (state: FoodState) => void }

@@ -9,7 +9,7 @@
         <v-tab
           v-for="(meal, idx) in meals"
           :key="meal.name"
-          @click="emitFoodsList(idx, meal.name, meal.foods)"
+          @click="emitFoodsList(idx, meal.name, meal.foods, entity)"
         >
           {{ meal.name }}
           <v-icon x-small v-if="meal.time.length === 0">far fa-question-circle </v-icon>
@@ -33,13 +33,12 @@ export default (Vue as VueConstructor<Vue>).extend({
   },
   data() {
     return {
-      // Test Data for food
-      offset: true,
+      entity: 'meal',
     };
   },
   methods: {
-    emitFoodsList(mealIndex: number, name: string, foods: FoodState[]) {
-      this.$emit('displayFoods', { mealIndex, name, foods });
+    emitFoodsList(mealIndex: number, name: string, foods: FoodState[], entity: string) {
+      this.$emit('displayMealContext', { mealIndex, name, foods, entity });
     },
     emitAddMeal(action: string) {
       this.$emit('recall-action', action);

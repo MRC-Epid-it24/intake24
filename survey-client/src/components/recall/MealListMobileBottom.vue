@@ -3,7 +3,11 @@
     <v-toolbar dense>
       <v-tabs center-active touch show-arrows icons-and-text>
         <v-tab class="add_food" @click="onAddFood('edit-foods')"> ADD </v-tab>
-        <v-tab v-for="(food, i) in mealfoods" :key="i" @click="selectedFood(i)">
+        <v-tab
+          v-for="(food, i) in mealfoods"
+          :key="i"
+          @click="selectedFood(i, mealIndex, foodDisplayName(food), entity)"
+        >
           {{ foodDisplayName(food) }}
           <v-icon x-small v-if="food.code" color="green darken-2">fa-check</v-icon>
         </v-tab>
@@ -28,13 +32,13 @@ export default (Vue as VueConstructor<Vue>).extend({
   },
   data() {
     return {
-      offset: true,
+      entity: 'food',
     };
   },
   methods: {
-    selectedFood(foodIndex: number) {
-      console.log(`Selected Food: ${foodIndex}`);
-      this.$emit('food-selected', foodIndex);
+    selectedFood(foodIndex: number, mealIndex: number | undefined, name: string, entity: string) {
+      if (mealIndex !== undefined)
+        this.$emit('displayFoodContext', { foodIndex, mealIndex, name, entity });
     },
     foodDisplayName(food: FoodState): string {
       let dispalyName = '???';

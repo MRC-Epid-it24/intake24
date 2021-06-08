@@ -61,6 +61,7 @@ const prompts: LocaleMessageObject = {
     addFood: 'Add a food',
     addDrink: 'Add a drink',
     deleteMeal: 'Delete {meal}',
+    deleteFoodFromMeal: 'Delete {food}',
     editMeal: 'Edit {meal}',
     editTime: 'Change Time',
   },
