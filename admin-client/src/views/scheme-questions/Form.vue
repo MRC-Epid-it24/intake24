@@ -8,6 +8,7 @@
               <v-text-field
                 v-model="form.question.id"
                 :label="$t('schemes.questions.id')"
+                disabled
                 hide-details="auto"
                 name="id"
                 outlined
@@ -17,6 +18,7 @@
               <v-text-field
                 v-model="form.question.name"
                 :label="$t('schemes.questions.name')"
+                disabled
                 hide-details="auto"
                 name="name"
                 outlined

@@ -39,10 +39,17 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   watch: {
     entry(val) {
-      if (Object.keys(val).length) {
-        this.originalEntry = clone(val);
-        this.toForm(val);
+      if (!Object.keys(val).length) return;
+
+      // Creating new record
+      // TODO: might be better to load full blank templates directly in store
+      if (isEqual(val, { id: null })) {
+        this.originalEntry = clone(this.form.getData());
+        return;
       }
+
+      this.originalEntry = clone(val);
+      this.toForm(val);
     },
   },
 
