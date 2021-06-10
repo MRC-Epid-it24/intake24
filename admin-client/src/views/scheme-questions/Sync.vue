@@ -70,9 +70,9 @@ export type SchemeStatus = {
   synced: boolean;
 };
 
-export default (
-  Vue as VueConstructor<Vue & DetailMixin<SchemeQuestionEntry, SchemeQuestionRefs>>
-).extend({
+export default (Vue as VueConstructor<
+  Vue & DetailMixin<SchemeQuestionEntry, SchemeQuestionRefs>
+>).extend({
   name: 'SchemeQuestionSync',
 
   components: { ConfirmDialog },
