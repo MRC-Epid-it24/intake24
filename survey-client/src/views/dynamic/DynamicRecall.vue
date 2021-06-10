@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center" class="pa-0">
-    <v-col cols="12" class="mealbar" v-if="isNotDesktop && showMealList">
+    <v-col cols="12" class="mealbar" v-if="isNotDesktop" v-show="showMealList">
       <meal-list-mobile-top
         :meals="meals"
         @displayMealContext="onMealFoodMobileClick"
@@ -39,6 +39,7 @@
     <v-col cols="12" class="foodbar stickybottom">
       <meal-list-mobile-bottom
         v-if="isNotDesktop"
+        v-show="showMealList"
         :loading="false"
         :foods="foods"
         :mealIndex="mealIndex"
