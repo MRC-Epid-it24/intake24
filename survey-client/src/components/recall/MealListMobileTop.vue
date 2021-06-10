@@ -1,14 +1,14 @@
 <template>
   <v-card elevation="5" class="stickytop">
     <v-toolbar flat>
-      <v-tabs icons-and-text center-active touch show-arrows>
+      <v-tabs icons-and-text center-active touch show-arrows v-model="active_tab">
         <v-tabs-slider></v-tabs-slider>
         <v-tab class="add_button" @click="emitAddMeal('add-meal')">
           <span>ADD</span>
         </v-tab>
         <v-tab
           v-for="(meal, idx) in meals"
-          :key="meal.name"
+          :key="idx + meal.name"
           @click="emitFoodsList(idx, meal.name, meal.foods, entity)"
         >
           {{ meal.name }}
@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { mapGetters } from 'vuex';
 import { FoodState } from '@common/types';
 
 export default (Vue as VueConstructor<Vue>).extend({
@@ -36,9 +37,25 @@ export default (Vue as VueConstructor<Vue>).extend({
       entity: 'meal',
     };
   },
+
+  computed: {
+    ...mapGetters('survey', ['selectedMealIndex']),
+
+    active_tab: {
+      get() {
+        return this.selectedMealIndex + 1;
+      },
+
+      set(id: number) {
+        return id;
+      },
+    },
+  },
+
   methods: {
     emitFoodsList(mealIndex: number, name: string, foods: FoodState[], entity: string) {
       this.$emit('displayMealContext', { mealIndex, name, foods, entity });
+      this.active_tab = mealIndex + 1;
     },
     emitAddMeal(action: string) {
       this.$emit('recall-action', action);

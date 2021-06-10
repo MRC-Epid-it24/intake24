@@ -1,7 +1,7 @@
 <template>
   <v-card elevation="5" :loading="loading">
     <v-toolbar dense>
-      <v-tabs center-active touch show-arrows icons-and-text>
+      <v-tabs center-active touch show-arrows icons-and-text v-model="active_tab">
         <v-tab class="add_food" @click="onAddFood('edit-foods')"> ADD </v-tab>
         <v-tab
           v-for="(food, i) in mealfoods"
@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { mapGetters } from 'vuex';
 import { FoodState } from '@common/types';
 
 export default (Vue as VueConstructor<Vue>).extend({
@@ -35,10 +36,30 @@ export default (Vue as VueConstructor<Vue>).extend({
       entity: 'food',
     };
   },
+
+  computed: {
+    ...mapGetters('survey', ['selectedFoodIndex']),
+
+    mealfoods() {
+      return this.foods;
+    },
+
+    active_tab: {
+      get() {
+        return this.selectedFoodIndex + 1;
+      },
+
+      set(id: number) {
+        return id;
+      },
+    },
+  },
+
   methods: {
     selectedFood(foodIndex: number, mealIndex: number | undefined, name: string, entity: string) {
       if (mealIndex !== undefined)
         this.$emit('displayFoodContext', { foodIndex, mealIndex, name, entity });
+      this.active_tab = foodIndex + 1;
     },
     foodDisplayName(food: FoodState): string {
       let dispalyName = '???';
@@ -52,11 +73,6 @@ export default (Vue as VueConstructor<Vue>).extend({
         mealIndex: this.$props.mealIndex,
         action,
       });
-    },
-  },
-  computed: {
-    mealfoods() {
-      return this.foods;
     },
   },
 });
