@@ -29,6 +29,14 @@ export default (): DataExportFields => {
   });
 
   /**
+   * Helper to filter custom PromptQuestion to ExportField
+   *
+   * @param {PromptQuestion} { type }
+   * @returns {boolean}
+   */
+  const customQuestionFilter = ({ type }: PromptQuestion): boolean => type === 'custom';
+
+  /**
    * Default user fields
    *
    * @returns {Promise<ExportField[]>}
@@ -126,7 +134,9 @@ export default (): DataExportFields => {
    */
   const surveyCustom = async (scheme: Scheme): Promise<ExportField[]> => {
     const { preMeals, postMeals, submission } = scheme.questions;
-    return [...preMeals, ...postMeals, ...submission].map(customQuestionMapper);
+    return [...preMeals, ...postMeals, ...submission]
+      .filter(customQuestionFilter)
+      .map(customQuestionMapper);
   };
 
   /**
@@ -153,7 +163,8 @@ export default (): DataExportFields => {
     const {
       meals: { preFoods, postFoods },
     } = scheme.questions;
-    return [...preFoods, ...postFoods].map(customQuestionMapper);
+
+    return [...preFoods, ...postFoods].filter(customQuestionFilter).map(customQuestionMapper);
   };
 
   /**
@@ -202,7 +213,7 @@ export default (): DataExportFields => {
    * @returns {Promise<ExportField[]>}
    */
   const foodCustom = async (scheme: Scheme): Promise<ExportField[]> =>
-    scheme.questions.meals.foods.map(customQuestionMapper);
+    scheme.questions.meals.foods.filter(customQuestionFilter).map(customQuestionMapper);
 
   /**
    * Default food composition fields
