@@ -135,6 +135,7 @@ export default (): DataExportFields => {
    * @returns {Promise<ExportField[]>}
    */
   const meal = async (): Promise<ExportField[]> => [
+    { id: 'mealId', label: 'Meal ID', value: (food) => food.meal?.id },
     { id: 'name', label: 'Meal name', value: (food) => food.meal?.name },
     {
       id: 'time',
@@ -161,6 +162,7 @@ export default (): DataExportFields => {
    * @returns {Promise<ExportField[]>}
    */
   const food = async (): Promise<ExportField[]> => [
+    { id: 'foodId', label: 'Food ID', value: 'id' },
     { id: 'code', label: 'Food code', value: 'code' },
     { id: 'englishDescription', label: 'Description (en)', value: 'englishDescription' },
     { id: 'localDescription', label: 'Description (local)', value: 'localDescription' },
@@ -187,6 +189,7 @@ export default (): DataExportFields => {
      * - this is actually different record / table
      *
      */
+    { id: 'missingId', label: 'Missing ID', value: 'id' },
     { id: 'missingName', label: 'Missing name', value: 'name' },
     { id: 'missingDescription', label: 'Missing description', value: 'description' },
     { id: 'missingPortionSize', label: 'Missing portion size', value: 'portionSize' },
