@@ -15,11 +15,14 @@ import { Controller, CrudActions } from '../../controller';
 export type GuideImageController = Controller<CrudActions>;
 
 export default ({
-  config,
+  imagesBaseUrl,
   guideImageService,
   portionSizeService,
-}: Pick<IoC, 'config' | 'guideImageService' | 'portionSizeService'>): GuideImageController => {
-  const responseCollection = imagesResponseCollection(config.app.urls.images);
+}: Pick<
+  IoC,
+  'imagesBaseUrl' | 'guideImageService' | 'portionSizeService'
+>): GuideImageController => {
+  const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const entry = async (req: Request, res: Response<GuideImageResponse>): Promise<void> => {
     const { guideImageId } = req.params;

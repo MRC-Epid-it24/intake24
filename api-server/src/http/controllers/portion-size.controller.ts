@@ -17,17 +17,15 @@ export type PortionSizeController = Controller<
 >;
 
 export default ({
-  config,
+  imagesBaseUrl,
   portionSizeService,
-}: Pick<IoC, 'config' | 'portionSizeService'>): PortionSizeController => {
-  const baseUrl = config.app.urls.images;
-
+}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService'>): PortionSizeController => {
   const asServedSet = async (req: Request, res: Response<AsServedSetResponse>): Promise<void> => {
     const { id } = req.params;
 
     const record = await portionSizeService.getAsServedSet(id);
 
-    res.json(asServedResponse(baseUrl).setResponse(record));
+    res.json(asServedResponse(imagesBaseUrl).setResponse(record));
   };
 
   const asServedSets = async (
@@ -38,7 +36,7 @@ export default ({
 
     const records = await portionSizeService.getAsServedSets(id);
 
-    res.json(records.map(asServedResponse(baseUrl).setResponse));
+    res.json(records.map(asServedResponse(imagesBaseUrl).setResponse));
   };
 
   const drinkwareSet = async (req: Request, res: Response<DrinkwareSetResponse>): Promise<void> => {
@@ -46,7 +44,7 @@ export default ({
 
     const record = await portionSizeService.getDrinkwareSet(id);
 
-    res.json(drinkwareResponse(baseUrl).setResponse(record));
+    res.json(drinkwareResponse(imagesBaseUrl).setResponse(record));
   };
 
   const drinkwareSets = async (
@@ -57,7 +55,7 @@ export default ({
 
     const records = await portionSizeService.getDrinkwareSets(id);
 
-    res.json(records.map(drinkwareResponse(baseUrl).setResponse));
+    res.json(records.map(drinkwareResponse(imagesBaseUrl).setResponse));
   };
 
   const guideImage = async (req: Request, res: Response): Promise<void> => {
@@ -65,7 +63,7 @@ export default ({
 
     const record = await portionSizeService.getGuideImage(id);
 
-    res.json(imageMapsResponse(baseUrl).guideResponse(record));
+    res.json(imageMapsResponse(imagesBaseUrl).guideResponse(record));
   };
 
   const guideImages = async (req: Request, res: Response): Promise<void> => {
@@ -73,7 +71,7 @@ export default ({
 
     const records = await portionSizeService.getGuideImages(id);
 
-    res.json(records.map(imageMapsResponse(baseUrl).guideResponse));
+    res.json(records.map(imageMapsResponse(imagesBaseUrl).guideResponse));
 
     res.json();
   };
@@ -83,7 +81,7 @@ export default ({
 
     const record = await portionSizeService.getImageMap(id);
 
-    res.json(imageMapsResponse(baseUrl).imageResponse(record));
+    res.json(imageMapsResponse(imagesBaseUrl).imageResponse(record));
   };
 
   const imageMaps = async (req: Request, res: Response): Promise<void> => {
@@ -91,7 +89,7 @@ export default ({
 
     const records = await portionSizeService.getImageMaps(id);
 
-    res.json(records.map(imageMapsResponse(baseUrl).imageResponse));
+    res.json(records.map(imageMapsResponse(imagesBaseUrl).imageResponse));
   };
 
   const weight = async (req: Request, res: Response<WeightResponse>): Promise<void> => {
@@ -99,7 +97,7 @@ export default ({
       method: 'weight',
       description: 'weight',
       parameters: {},
-      imageUrl: `${baseUrl}/portion/weight.png`,
+      imageUrl: `${imagesBaseUrl}/portion/weight.png`,
       useForRecipes: true,
       conversionFactor: 1.0,
     });

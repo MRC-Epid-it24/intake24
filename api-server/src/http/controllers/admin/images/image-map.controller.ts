@@ -16,11 +16,11 @@ import { Controller, CrudActions } from '../../controller';
 export type ImageMapController = Controller<CrudActions>;
 
 export default ({
-  config,
+  imagesBaseUrl,
   imageMapService,
   portionSizeService,
-}: Pick<IoC, 'config' | 'imageMapService' | 'portionSizeService'>): ImageMapController => {
-  const responseCollection = imagesResponseCollection(config.app.urls.images);
+}: Pick<IoC, 'imagesBaseUrl' | 'imageMapService' | 'portionSizeService'>): ImageMapController => {
+  const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const entry = async (req: Request, res: Response<ImageMapResponse>): Promise<void> => {
     const { imageMapId } = req.params;

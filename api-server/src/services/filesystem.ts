@@ -2,10 +2,10 @@ import fs from 'fs-extra';
 import type { IoC } from '@/ioc';
 
 export default class Filesystem {
-  private readonly config;
+  private readonly fsConfig;
 
-  constructor({ config }: Pick<IoC, 'config'>) {
-    this.config = config.filesystem;
+  constructor({ fsConfig }: Pick<IoC, 'fsConfig'>) {
+    this.fsConfig = fsConfig;
   }
 
   /**
@@ -15,7 +15,7 @@ export default class Filesystem {
    * @memberof Filesystem
    */
   public async init(): Promise<void> {
-    for (const dir of Object.values(this.config.local)) {
+    for (const dir of Object.values(this.fsConfig.local)) {
       await fs.ensureDir(dir);
     }
   }

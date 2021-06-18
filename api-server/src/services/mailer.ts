@@ -2,27 +2,34 @@ import nodemailer, { SendMailOptions, Transporter } from 'nodemailer';
 import type { IoC } from '@/ioc';
 
 export default class Mailer {
-  private readonly config;
+  private readonly environment;
+
+  private readonly mailConfig;
 
   private readonly logger;
 
   private transporter!: Transporter;
 
-  constructor({ config, logger }: Pick<IoC, 'config' | 'logger'>) {
-    this.config = config;
+  constructor({
+    environment,
+    mailConfig,
+    logger,
+  }: Pick<IoC, 'environment' | 'mailConfig' | 'logger'>) {
+    this.environment = environment;
+    this.mailConfig = mailConfig;
     this.logger = logger;
   }
 
   init(): void {
-    const { mailer } = this.config.mail;
+    const { mailer } = this.mailConfig;
     let options = {};
 
-    const isDev = this.config.app.env === 'development';
+    const isDev = this.environment === 'development';
 
     switch (mailer) {
       case 'smtp':
         options = {
-          ...this.config.mail.mailers[mailer],
+          ...this.mailConfig.mailers[mailer],
           pool: true,
           debug: isDev,
           logger: isDev,
@@ -39,7 +46,7 @@ export default class Mailer {
 
   async sendMail(options: SendMailOptions): Promise<void> {
     try {
-      const { from } = this.config.mail;
+      const { from } = this.mailConfig;
       const defaults: SendMailOptions = { from };
 
       const info = await this.transporter.sendMail({ ...defaults, ...options });
@@ -47,7 +54,7 @@ export default class Mailer {
       this.logger.info(info.messageId);
 
       // TODO: pipe it to winston logger
-      if (this.config.mail.mailer === 'log') info.message.pipe(process.stdout);
+      if (this.mailConfig.mailer === 'log') info.message.pipe(process.stdout);
     } catch (err) {
       const { message, name, stack } = err;
       this.logger.error(stack ?? `${name}: ${message}`);

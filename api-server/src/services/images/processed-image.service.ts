@@ -18,8 +18,8 @@ export interface ProcessedImageService {
   destroy: (imageId: number, options?: DestroyOptions) => Promise<void>;
 }
 
-export default ({ config, logger }: Pick<IoC, 'config' | 'logger'>): ProcessedImageService => {
-  const { images: imagesPath } = config.filesystem.local;
+export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): ProcessedImageService => {
+  const { images: imagesPath } = fsConfig.local;
 
   const resolveSourceImage = async (sourceImageId: number): Promise<SourceImage> => {
     const sourceImage = await SourceImage.findByPk(sourceImageId);

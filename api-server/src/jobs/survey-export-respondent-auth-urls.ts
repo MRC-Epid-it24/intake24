@@ -16,7 +16,9 @@ export type SurveyExportRespondentAuthUrlsData = {
 export default class SurveyExportRespondentAuthUrls implements BaseJob {
   public readonly name: JobType = 'SurveyExportRespondentAuthUrls';
 
-  private readonly config;
+  private readonly appConfig;
+
+  private readonly fsConfig;
 
   private readonly logger;
 
@@ -24,8 +26,9 @@ export default class SurveyExportRespondentAuthUrls implements BaseJob {
 
   private data!: SurveyExportRespondentAuthUrlsData;
 
-  constructor({ config, logger }: Pick<IoC, 'config' | 'logger'>) {
-    this.config = config;
+  constructor({ appConfig, fsConfig, logger }: Pick<IoC, 'appConfig' | 'fsConfig' | 'logger'>) {
+    this.appConfig = appConfig;
+    this.fsConfig = fsConfig;
     this.logger = logger;
   }
 
@@ -59,7 +62,7 @@ export default class SurveyExportRespondentAuthUrls implements BaseJob {
 
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const baseFrontendURL = trimEnd(
-      survey.authUrlDomainOverride ?? this.config.app.urls.survey,
+      survey.authUrlDomainOverride ?? this.appConfig.urls.survey,
       '/'
     );
 
@@ -77,10 +80,10 @@ export default class SurveyExportRespondentAuthUrls implements BaseJob {
 
     return new Promise((resolve, reject) => {
       const transform = new Transform({ fields, withBOM: true });
-      const output = fs.createWriteStream(
-        path.resolve(this.config.filesystem.local.downloads, filename),
-        { encoding: 'utf8', flags: 'w+' }
-      );
+      const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
+        encoding: 'utf8',
+        flags: 'w+',
+      });
 
       const aliases = UserSurveyAlias.findAllWithStream({ where: { surveyId } });
 
@@ -89,7 +92,7 @@ export default class SurveyExportRespondentAuthUrls implements BaseJob {
       transform
         .on('error', (err) => reject(err))
         .on('end', async () => {
-          const downloadUrlExpiresAt = addTime(this.config.filesystem.urlExpiresAt);
+          const downloadUrlExpiresAt = addTime(this.fsConfig.urlExpiresAt);
           await job.update({ downloadUrl: filename, downloadUrlExpiresAt });
           resolve();
         });

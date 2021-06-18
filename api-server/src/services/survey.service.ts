@@ -57,10 +57,10 @@ export interface SurveyService {
 }
 
 export default ({
-  config,
+  securityConfig,
   scheduler,
   userService,
-}: Pick<IoC, 'config' | 'scheduler' | 'userService'>): SurveyService => {
+}: Pick<IoC, 'securityConfig' | 'scheduler' | 'userService'>): SurveyService => {
   /**
    * Fetch survey-specific respondent permission instance
    *
@@ -116,7 +116,7 @@ export default ({
     await user.$add('permissions', await getSurveyRespondentPermission(surveyId));
 
     const { id: userId } = user;
-    const { size, alphabet } = config.security.authTokens;
+    const { size, alphabet } = securityConfig.authTokens;
 
     const respondent = await UserSurveyAlias.create({
       userId,
@@ -145,7 +145,7 @@ export default ({
     if (!survey) throw new NotFoundError();
 
     const { id: permissionId } = await getSurveyRespondentPermission(surveyId);
-    const { size, alphabet } = config.security.authTokens;
+    const { size, alphabet } = securityConfig.authTokens;
 
     const urlTokenCharset = survey.authUrlTokenCharset ?? alphabet;
     const urlTokenLength = survey.authUrlTokenLength ?? size;

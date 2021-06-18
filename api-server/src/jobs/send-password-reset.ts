@@ -14,14 +14,22 @@ export default class SendPasswordReset implements Job {
 
   private data!: SendPasswordResetData;
 
-  private readonly config;
+  private readonly appConfig;
+
+  private readonly securityConfig;
 
   private readonly logger;
 
   private readonly mailer;
 
-  constructor({ config, logger, mailer }: Pick<IoC, 'config' | 'logger' | 'mailer'>) {
-    this.config = config;
+  constructor({
+    appConfig,
+    securityConfig,
+    logger,
+    mailer,
+  }: Pick<IoC, 'appConfig' | 'securityConfig' | 'logger' | 'mailer'>) {
+    this.appConfig = appConfig;
+    this.securityConfig = securityConfig;
     this.logger = logger;
     this.mailer = mailer;
   }
@@ -36,13 +44,13 @@ export default class SendPasswordReset implements Job {
 
     this.logger.debug(`Job ${this.name} started.`);
 
-    const { base, admin } = this.config.app.urls;
+    const { base, admin } = this.appConfig.urls;
     const domain = isUrlAbsolute(admin)
       ? trim(admin, '/')
       : `${trim(base, '/')}/${trim(admin, '/')}`;
 
     const url = `${domain}/password/reset/${this.data.token}`;
-    const { expire: expiresAt } = this.config.security.passwords;
+    const { expire: expiresAt } = this.securityConfig.passwords;
 
     const html = nunjucks.render('mail/password-reset.html', {
       title: 'Password reset',

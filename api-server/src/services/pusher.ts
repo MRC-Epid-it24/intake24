@@ -16,14 +16,14 @@ export type PushPayload<T = any> = {
 };
 
 export default class Pusher {
-  private readonly config;
+  private readonly servicesConfig;
 
   private readonly logger;
 
   private readonly $webPush;
 
-  constructor({ config, logger }: Pick<IoC, 'config' | 'logger'>) {
-    this.config = config;
+  constructor({ servicesConfig, logger }: Pick<IoC, 'servicesConfig' | 'logger'>) {
+    this.servicesConfig = servicesConfig;
     this.logger = logger;
 
     this.$webPush = webPush;
@@ -35,7 +35,7 @@ export default class Pusher {
    * @memberof Pusher
    */
   public async init(): Promise<void> {
-    const { subject, publicKey, privateKey } = this.config.services.webPush;
+    const { subject, publicKey, privateKey } = this.servicesConfig.webPush;
     this.$webPush.setVapidDetails(subject, publicKey, privateKey);
 
     this.logger.info(`Pusher has been loaded.`);

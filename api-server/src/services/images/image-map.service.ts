@@ -21,7 +21,7 @@ export default ({
   sourceImageService,
 }: Pick<
   IoC,
-  'config' | 'portionSizeService' | 'processedImageService' | 'sourceImageService'
+  'portionSizeService' | 'processedImageService' | 'sourceImageService'
 >): ImageMapService => {
   const create = async (input: CreateImageMapInput): Promise<ImageMap> => {
     const { id, description } = input;

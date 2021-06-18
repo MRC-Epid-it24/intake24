@@ -63,16 +63,16 @@ export interface AuthenticationService {
 }
 
 export default ({
-  config,
+  securityConfig,
   logger,
   jwtService,
   jwtRotationService,
   signInService,
 }: Pick<
   IoC,
-  'config' | 'logger' | 'jwtService' | 'jwtRotationService' | 'signInService'
+  'securityConfig' | 'logger' | 'jwtService' | 'jwtRotationService' | 'signInService'
 >): AuthenticationService => {
-  const { mfa: mfaConfig } = config.security;
+  const { mfa: mfaConfig } = securityConfig;
 
   /**
    * Issue JWT tokens and log for rotation
@@ -193,9 +193,8 @@ export default ({
       include: [{ model: UserPassword, required: true }],
     });
 
-    if (config.security.mfa.enabled && user?.multiFactorAuthentication) {
+    if (securityConfig.mfa.enabled && user?.multiFactorAuthentication)
       return signMfaRequest({ email, userId: user.id }, meta);
-    }
 
     const subject: Subject = { provider: 'email', providerKey: email };
 

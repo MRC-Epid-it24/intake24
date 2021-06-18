@@ -13,7 +13,7 @@ import type { Controller, CrudActions } from '@/http/controllers';
 
 export type RoleController = Controller<CrudActions>;
 
-export default ({ config }: Pick<IoC, 'config'>): RoleController => {
+export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
   const entry = async (req: Request, res: Response<RoleResponse>): Promise<void> => {
     const { roleId } = req.params;
 
@@ -71,7 +71,7 @@ export default ({ config }: Pick<IoC, 'config'>): RoleController => {
 
     await role.$set(
       'permissions',
-      role.name === config.acl.roles.superuser ? permissions : req.body.permissions
+      role.name === aclConfig.roles.superuser ? permissions : req.body.permissions
     );
 
     role = (await Role.scope('permissions').findByPk(roleId)) as Role;

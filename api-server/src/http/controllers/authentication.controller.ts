@@ -11,12 +11,12 @@ export type AuthenticationController = Controller<
 >;
 
 export default ({
-  config,
+  securityConfig,
   authenticationService,
   jwtRotationService,
 }: Pick<
   IoC,
-  'config' | 'authenticationService' | 'jwtRotationService'
+  'securityConfig' | 'authenticationService' | 'jwtRotationService'
 >): AuthenticationController => {
   /**
    * Successful login response helper
@@ -31,7 +31,7 @@ export default ({
     { accessToken, refreshToken }: Tokens,
     res: Response<LoginResponse>
   ): Promise<void> => {
-    const { name, httpOnly, maxAge, path, secure, sameSite } = config.security.jwt.cookie;
+    const { name, httpOnly, maxAge, path, secure, sameSite } = securityConfig.jwt.cookie;
 
     res
       .cookie(name, refreshToken, {
@@ -91,7 +91,7 @@ export default ({
   };
 
   const refresh = async (req: Request, res: Response<RefreshResponse>): Promise<void> => {
-    const { name } = config.security.jwt.cookie;
+    const { name } = securityConfig.jwt.cookie;
     const refreshToken = req.cookies[name];
     if (!refreshToken) throw new UnauthorizedError();
 
@@ -100,7 +100,7 @@ export default ({
   };
 
   const logout = async (req: Request, res: Response): Promise<void> => {
-    const { name, httpOnly, path, secure, sameSite } = config.security.jwt.cookie;
+    const { name, httpOnly, path, secure, sameSite } = securityConfig.jwt.cookie;
 
     const refreshToken = req.cookies[name];
     if (refreshToken) await jwtRotationService.revoke(refreshToken);

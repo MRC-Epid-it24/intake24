@@ -18,7 +18,7 @@ import { Controller, CrudActions } from '../controller';
 
 export type AdminSurveyController = Controller<CrudActions>;
 
-export default ({ config }: Pick<IoC, 'config'>): AdminSurveyController => {
+export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController => {
   const refs = async (): Promise<SurveyRefs> => {
     const locales = await Locale.findAll();
     const schemes = await Scheme.findAll({ attributes: ['id', 'name'] });
@@ -41,7 +41,7 @@ export default ({ config }: Pick<IoC, 'config'>): AdminSurveyController => {
     );
 
     const where: WhereOptions = {};
-    if (!permissions.includes(config.acl.permissions.surveyadmin)) {
+    if (!permissions.includes(aclConfig.permissions.surveyadmin)) {
       const surveys = permissions
         .filter((permission) => permission.endsWith(staffSuffix))
         .map((permission) => permission.replace(staffSuffix, ''));

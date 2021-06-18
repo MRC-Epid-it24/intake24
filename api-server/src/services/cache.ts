@@ -11,9 +11,9 @@ export default class Cache {
 
   private redis!: Redis;
 
-  constructor({ config, logger }: Pick<IoC, 'config' | 'logger'>) {
-    this.config = config.cache.redis;
-    this.prefix = config.cache.prefix;
+  constructor({ cacheConfig, logger }: Pick<IoC, 'cacheConfig' | 'logger'>) {
+    this.config = cacheConfig.redis;
+    this.prefix = cacheConfig.prefix;
     this.logger = logger;
   }
 

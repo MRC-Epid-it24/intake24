@@ -8,12 +8,12 @@ import type { Job, JobType } from '.';
 export default class CleanStorageFiles implements Job {
   public readonly name: JobType = 'CleanStorageFiles';
 
-  private readonly config;
+  private readonly fsConfig;
 
   private readonly logger;
 
-  constructor({ config, logger }: Pick<IoC, 'config' | 'logger'>) {
-    this.config = config;
+  constructor({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>) {
+    this.fsConfig = fsConfig;
     this.logger = logger;
   }
 
@@ -28,7 +28,7 @@ export default class CleanStorageFiles implements Job {
     const dirs: LocalLocation[] = ['downloads', 'uploads'];
 
     for (const dir of dirs) {
-      await this.cleanDir(this.config.filesystem.local[dir]);
+      await this.cleanDir(this.fsConfig.local[dir]);
     }
 
     this.logger.debug(`Job ${this.name} finished.`);

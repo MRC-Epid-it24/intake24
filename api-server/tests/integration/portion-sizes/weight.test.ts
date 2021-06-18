@@ -12,7 +12,7 @@ export default (): void => {
   });
 
   it(`should return 200 and record`, async () => {
-    const { config } = ioc.cradle;
+    const { imagesBaseUrl } = ioc.cradle;
 
     const { status, body } = await request(suite.app)
       .get(url)
@@ -24,7 +24,7 @@ export default (): void => {
       method: 'weight',
       description: 'weight',
       parameters: {},
-      imageUrl: `${config.app.urls.images}/portion/weight.png`,
+      imageUrl: `${imagesBaseUrl}/portion/weight.png`,
       useForRecipes: true,
       conversionFactor: 1.0,
     });

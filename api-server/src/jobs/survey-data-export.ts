@@ -15,7 +15,7 @@ export default class SurveyDataExport implements BaseJob {
 
   private readonly dataExportService;
 
-  private readonly config;
+  private readonly fsConfig;
 
   private readonly logger;
 
@@ -24,11 +24,11 @@ export default class SurveyDataExport implements BaseJob {
   private data!: SurveyDataExportData;
 
   constructor({
-    config,
+    fsConfig,
     dataExportService,
     logger,
-  }: Pick<IoC, 'config' | 'dataExportService' | 'logger'>) {
-    this.config = config;
+  }: Pick<IoC, 'fsConfig' | 'dataExportService' | 'logger'>) {
+    this.fsConfig = fsConfig;
     this.dataExportService = dataExportService;
     this.logger = logger;
   }
@@ -65,7 +65,7 @@ export default class SurveyDataExport implements BaseJob {
     if (!job) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.jobId}).`);
 
     return new Promise((resolve, reject) => {
-      const filepath = path.resolve(this.config.filesystem.local.downloads, filename);
+      const filepath = path.resolve(this.fsConfig.local.downloads, filename);
       const output = fs.createWriteStream(filepath, { encoding: 'utf8', flags: 'w+' });
 
       const foods = this.dataExportService.getSubmissionsWithStream(options);
@@ -76,7 +76,7 @@ export default class SurveyDataExport implements BaseJob {
       transform
         .on('error', (err) => reject(err))
         .on('end', async () => {
-          const downloadUrlExpiresAt = addTime(this.config.filesystem.urlExpiresAt);
+          const downloadUrlExpiresAt = addTime(this.fsConfig.urlExpiresAt);
           await job.update({ downloadUrl: filename, downloadUrlExpiresAt });
           resolve();
         });

@@ -34,8 +34,8 @@ export interface JwtService {
   verifyRefreshToken: (token: string) => Promise<TokenPayload>;
 }
 
-export default ({ config }: Pick<IoC, 'config'>): JwtService => {
-  const { issuer, access, refresh } = config.security.jwt;
+export default ({ securityConfig }: Pick<IoC, 'securityConfig'>): JwtService => {
+  const { issuer, access, refresh } = securityConfig.jwt;
   const signOptions: SignOptions = { issuer };
   const verifyOptions: VerifyOptions = { audience: 'refresh', issuer };
 

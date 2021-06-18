@@ -39,11 +39,11 @@ export interface ACLService {
 }
 
 export default ({
-  config,
+  aclConfig,
   cache,
   currentUser,
-}: Pick<IoC, 'config' | 'cache' | 'currentUser'>): ACLService => {
-  const { enabled, expiresIn } = config.acl.cache;
+}: Pick<IoC, 'aclConfig' | 'cache' | 'currentUser'>): ACLService => {
+  const { enabled, expiresIn } = aclConfig.cache;
   const { id: userId } = currentUser;
 
   const fetchPermissions = async (): Promise<Permission[]> => {

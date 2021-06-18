@@ -5,9 +5,9 @@ import validation from '@/http/requests/admin/images/maps';
 import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
 
-const { config, imageMapController } = ioc.cradle;
+const { fsConfig, imageMapController } = ioc.cradle;
 const router = Router();
-const upload = multer({ dest: config.filesystem.local.uploads });
+const upload = multer({ dest: fsConfig.local.uploads });
 
 router
   .route('')

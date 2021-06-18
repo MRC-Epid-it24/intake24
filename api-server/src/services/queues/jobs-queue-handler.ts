@@ -27,7 +27,7 @@ export type NotificationPayload = {
 export default class JobsQueueHandler implements QueueHandler<JobData> {
   readonly name = 'it24-jobs';
 
-  private readonly config;
+  private readonly queueConfig;
 
   private readonly logger;
 
@@ -47,8 +47,8 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @param {string} name
    * @memberof JobsQueueHandler
    */
-  constructor({ config, logger, pusher }: Pick<IoC, 'config' | 'logger' | 'pusher'>) {
-    this.config = config;
+  constructor({ queueConfig, logger, pusher }: Pick<IoC, 'queueConfig' | 'logger' | 'pusher'>) {
+    this.queueConfig = queueConfig;
     this.logger = logger;
     this.pusher = pusher;
   }
@@ -69,7 +69,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
 
     this.registerQueueEvents();
 
-    for (let i = 0; i < this.config.queue.workers; i++) {
+    for (let i = 0; i < this.queueConfig.workers; i++) {
       this.workers.push(new Worker(this.name, this.processor, { connection }));
     }
 

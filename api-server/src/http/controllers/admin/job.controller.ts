@@ -10,7 +10,7 @@ import type { Controller } from '../controller';
 
 export type JobController = Controller<'browse' | 'detail' | 'destroy' | 'download'>;
 
-export default ({ config }: Pick<IoC, 'config'>): JobController => {
+export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): JobController => {
   const browse = async (req: Request, res: Response<JobsResponse>): Promise<void> => {
     const jobs = await Job.paginate({
       req,
@@ -57,7 +57,7 @@ export default ({ config }: Pick<IoC, 'config'>): JobController => {
     if (!job?.downloadUrl) throw new NotFoundError();
     const { downloadUrl } = job;
 
-    const file = path.resolve(config.filesystem.local.downloads, downloadUrl);
+    const file = path.resolve(fsConfig.local.downloads, downloadUrl);
     if (!(await fs.pathExists(file))) throw new NotFoundError();
 
     const { size } = await fs.stat(file);

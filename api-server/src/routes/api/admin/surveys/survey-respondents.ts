@@ -5,9 +5,9 @@ import validation from '@/http/requests/admin/users/respondents';
 import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
 
-const { config, adminSurveyRespondentController } = ioc.cradle;
+const { fsConfig, adminSurveyRespondentController } = ioc.cradle;
 const router = Router({ mergeParams: true });
-const upload = multer({ dest: config.filesystem.local.uploads });
+const upload = multer({ dest: fsConfig.local.uploads });
 
 router.use(permission('surveys-respondents'));
 

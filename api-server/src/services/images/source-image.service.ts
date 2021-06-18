@@ -21,8 +21,8 @@ export interface SourceImageService {
   destroy: (sourceImageId: number | number[]) => Promise<void>;
 }
 
-export default ({ config, logger }: Pick<IoC, 'config' | 'logger'>): SourceImageService => {
-  const { images: imagesPath } = config.filesystem.local;
+export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): SourceImageService => {
+  const { images: imagesPath } = fsConfig.local;
 
   const uploadSourceImage = async (input: UploadSourceImageInput): Promise<SourceImage> => {
     const { id, file, uploader } = input;

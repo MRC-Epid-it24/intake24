@@ -9,11 +9,11 @@ import { Controller } from './controller';
 export type PasswordController = Controller<'request' | 'reset'>;
 
 export default ({
-  config,
+  securityConfig,
   logger,
   scheduler,
   userService,
-}: Pick<IoC, 'config' | 'logger' | 'scheduler' | 'userService'>): PasswordController => {
+}: Pick<IoC, 'securityConfig' | 'logger' | 'scheduler' | 'userService'>): PasswordController => {
   const request = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { email } = req.body;
 
@@ -40,7 +40,7 @@ export default ({
     const { email, password, token } = req.body;
 
     const expiredAt = new Date();
-    expiredAt.setMinutes(expiredAt.getMinutes() - config.security.passwords.expire);
+    expiredAt.setMinutes(expiredAt.getMinutes() - securityConfig.passwords.expire);
 
     const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 

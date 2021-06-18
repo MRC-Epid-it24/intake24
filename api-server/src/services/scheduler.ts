@@ -1,7 +1,7 @@
 import type { IoC } from '@/ioc';
 
 export default class Scheduler {
-  private readonly config;
+  private readonly queueConfig;
 
   private readonly logger;
 
@@ -10,12 +10,12 @@ export default class Scheduler {
   public readonly tasks;
 
   constructor({
-    config,
+    queueConfig,
     logger,
     jobsQueueHandler,
     tasksQueueHandler,
-  }: Pick<IoC, 'config' | 'logger' | 'jobsQueueHandler' | 'tasksQueueHandler'>) {
-    this.config = config;
+  }: Pick<IoC, 'queueConfig' | 'logger' | 'jobsQueueHandler' | 'tasksQueueHandler'>) {
+    this.queueConfig = queueConfig;
     this.logger = logger;
 
     this.jobs = jobsQueueHandler;
@@ -29,7 +29,7 @@ export default class Scheduler {
    * @memberof Scheduler
    */
   public async init(): Promise<void> {
-    const { redis } = this.config.queue;
+    const { redis } = this.queueConfig;
 
     await this.jobs.init(redis);
     await this.tasks.init(redis);
