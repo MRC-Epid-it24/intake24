@@ -1,27 +1,46 @@
 import { Request } from 'express';
-import { Schema } from 'express-validator';
+import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
+import slugify from 'slugify';
 import { Scheme } from '@/db/models/system';
 import { unique } from '@/http/rules';
 import { SchemeTypes } from '@common/types/models';
 import { validateMeals, validateRecallQuestions, validateExportSections } from '@common/validators';
 
-const defaults: Schema = {
-  name: {
-    in: ['body'],
-    errorMessage: 'Scheme name must be unique string.',
-    isString: true,
-    isEmpty: { negated: true },
-    custom: {
-      options: async (value, { req }): Promise<void> => {
-        const { schemeId } = (req as Request).params;
-        const except: WhereOptions = schemeId ? { id: { [Op.ne]: schemeId } } : {};
+export const id: ParamSchema = {
+  in: ['body'],
+  errorMessage: 'Scheme ID must be unique string.',
+  isString: true,
+  isEmpty: { negated: true },
+  custom: {
+    options: async (value): Promise<void> =>
+      unique({
+        model: Scheme,
+        condition: { field: 'id', value: slugify(value, { strict: true }) },
+      }),
+  },
+  customSanitizer: {
+    options: (value) => (typeof value === 'string' ? slugify(value, { strict: true }) : value),
+  },
+};
 
-        return unique({ model: Scheme, condition: { field: 'name', value }, except });
-      },
+export const name: ParamSchema = {
+  in: ['body'],
+  errorMessage: 'Scheme name must be unique string.',
+  isString: true,
+  isEmpty: { negated: true },
+  custom: {
+    options: async (value, { req }): Promise<void> => {
+      const { schemeId } = (req as Request).params;
+      const except: WhereOptions = schemeId ? { id: { [Op.ne]: schemeId } } : {};
+
+      return unique({ model: Scheme, condition: { field: 'name', value }, except });
     },
   },
+};
+
+export const defaults: Schema = {
   type: {
     in: ['body'],
     errorMessage: 'Enter valid scheme type.',
@@ -86,5 +105,3 @@ const defaults: Schema = {
     },
   },
 };
-
-export default defaults;

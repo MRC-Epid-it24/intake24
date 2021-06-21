@@ -13,6 +13,7 @@ router
   .get(permission('schemes-browse'), validation.browse, wrapAsync(schemeController.browse));
 
 router.get('/create', permission('schemes-create'), wrapAsync(schemeController.create));
+router.post('/copy', permission('schemes-edit'), validation.copy, wrapAsync(schemeController.copy));
 
 router
   .route('/:schemeId')

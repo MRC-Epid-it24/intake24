@@ -19,7 +19,7 @@ import { RecallQuestions } from '@common/types';
 import { PromptQuestion } from '@common/prompts';
 import { Controller, CrudActions } from '../controller';
 
-export type SchemeController = Controller<CrudActions | 'templates' | 'dataExportRefs'>;
+export type SchemeController = Controller<CrudActions | 'copy' | 'templates' | 'dataExportRefs'>;
 
 export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeController => {
   const refs = async (recallQuestions?: RecallQuestions): Promise<SchemeRefs> => {
@@ -110,6 +110,18 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res.status(204).json();
   };
 
+  const copy = async (req: Request, res: Response<StoreSchemeResponse>): Promise<void> => {
+    const { originalId, id, name } = req.body;
+
+    const originalScheme = await Scheme.findByPk(originalId);
+    if (!originalScheme) throw new NotFoundError();
+
+    const schemeAttributes = originalScheme.get();
+    const scheme = await Scheme.create({ ...schemeAttributes, id, name });
+
+    res.json({ data: scheme });
+  };
+
   const templates = async (
     req: Request<{ schemeId: string }, any, any, { search?: string; limit?: number }>,
     res: Response<SchemeQuestionTemplatesResponse>
@@ -145,7 +157,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res: Response<SchemeExportRefsResponse>
   ): Promise<void> => {
     const { schemeId } = req.params;
-    const scheme = await Scheme.scope('surveys').findByPk(schemeId);
+    const scheme = await Scheme.findByPk(schemeId);
 
     if (!scheme) throw new NotFoundError();
 
@@ -168,6 +180,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     edit,
     update,
     destroy,
+    copy,
     templates,
     dataExportRefs,
   };
