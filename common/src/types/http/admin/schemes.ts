@@ -33,6 +33,7 @@ export type SchemeResponse = {
 export type CreateSchemeResponse = Pick<SchemeResponse, 'refs'>;
 
 export type StoreSchemeResponse = Pick<SchemeResponse, 'data'>;
+export type CopySchemeResponse = StoreSchemeResponse;
 
 export type SchemeExportRefsResponse = Record<ExportSectionId, ExportField[]>;
 

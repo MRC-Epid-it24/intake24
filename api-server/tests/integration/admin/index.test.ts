@@ -86,6 +86,7 @@ export default (): void => {
   describe('GET /api/admin/schemes', schemes.browse);
   describe('GET /api/admin/schemes/create', schemes.create);
   describe('POST /api/admin/schemes', schemes.store);
+  describe('POST /api/admin/schemes/copy', schemes.copy);
   describe('GET /api/admin/schemes/:schemeId', schemes.detail);
   describe('GET /api/admin/schemes/:schemeId/edit', schemes.edit);
   describe('PUT /api/admin/schemes/:schemeId', schemes.update);

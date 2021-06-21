@@ -5,6 +5,7 @@ import detail from './detail.test';
 import edit from './edit.test';
 import update from './update.test';
 import destroy from './destroy.test';
+import copy from './copy.test';
 import templates from './templates.test';
 
 export default {
@@ -15,5 +16,6 @@ export default {
   edit,
   update,
   destroy,
+  copy,
   templates,
 };

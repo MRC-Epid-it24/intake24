@@ -10,6 +10,7 @@ import {
   SchemeRefs,
   SchemeResponse,
   SchemesResponse,
+  CopySchemeResponse,
   StoreSchemeResponse,
   SchemeExportRefsResponse,
   SchemeQuestionTemplatesResponse,
@@ -110,7 +111,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res.status(204).json();
   };
 
-  const copy = async (req: Request, res: Response<StoreSchemeResponse>): Promise<void> => {
+  const copy = async (req: Request, res: Response<CopySchemeResponse>): Promise<void> => {
     const { originalId, id, name } = req.body;
 
     const originalScheme = await Scheme.findByPk(originalId);
