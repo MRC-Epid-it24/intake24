@@ -4,9 +4,9 @@ import { id, name } from './defaults';
 
 export default validate(
   checkSchema({
-    originalId: {
+    sourceId: {
       in: ['body'],
-      errorMessage: 'Invalid Scheme ID.',
+      errorMessage: 'Invalid source Scheme ID.',
       isString: true,
       isEmpty: { negated: true },
     },

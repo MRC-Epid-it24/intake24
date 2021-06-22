@@ -53,7 +53,7 @@ import form from '@/helpers/Form';
 import { CopySchemeResponse } from '@common/types/http/admin';
 
 export type CopySchemeForm = {
-  originalId: string;
+  sourceId: string;
   id: string | null;
   name: string | null;
 };
@@ -71,7 +71,7 @@ export default Vue.extend({
   data() {
     return {
       form: form<CopySchemeForm>({
-        originalId: this.schemeId,
+        sourceId: this.schemeId,
         id: null,
         name: null,
       }),

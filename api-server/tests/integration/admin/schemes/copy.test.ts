@@ -49,7 +49,7 @@ export default (): void => {
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['originalId', 'id', 'name']);
+      expect(body.errors).toContainAllKeys(['sourceId', 'id', 'name']);
     });
 
     it('should return 422 when invalid input data', async () => {
@@ -57,11 +57,11 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ originalId: false, id: ['invalidId'], name: { name: 'objectName' } });
+        .send({ sourceId: false, id: ['invalidId'], name: { name: 'objectName' } });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['originalId', 'id', 'name']);
+      expect(body.errors).toContainAllKeys(['sourceId', 'id', 'name']);
     });
 
     it('should return 422 when same id/name provided', async () => {
@@ -71,7 +71,7 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ originalId: id, id, name });
+        .send({ sourceId: id, id, name });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
@@ -85,7 +85,7 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ originalId: 'invalidSchemeId', id, name });
+        .send({ sourceId: 'invalidSchemeId', id, name });
 
       expect(status).toBe(404);
     });
@@ -97,7 +97,7 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ originalId: input.id, id, name });
+        .send({ sourceId: input.id, id, name });
 
       expect(status).toBe(200);
       expect(body).toContainAllKeys(['data']);

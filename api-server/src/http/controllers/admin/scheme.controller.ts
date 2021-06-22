@@ -112,13 +112,12 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
   };
 
   const copy = async (req: Request, res: Response<CopySchemeResponse>): Promise<void> => {
-    const { originalId, id, name } = req.body;
+    const { sourceId, id, name } = req.body;
 
-    const originalScheme = await Scheme.findByPk(originalId);
-    if (!originalScheme) throw new NotFoundError();
+    const sourceScheme = await Scheme.findByPk(sourceId);
+    if (!sourceScheme) throw new NotFoundError();
 
-    const schemeAttributes = originalScheme.get();
-    const scheme = await Scheme.create({ ...schemeAttributes, id, name });
+    const scheme = await Scheme.create({ ...sourceScheme.get(), id, name });
 
     res.json({ data: scheme });
   };
@@ -158,8 +157,8 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res: Response<SchemeExportRefsResponse>
   ): Promise<void> => {
     const { schemeId } = req.params;
-    const scheme = await Scheme.findByPk(schemeId);
 
+    const scheme = await Scheme.findByPk(schemeId);
     if (!scheme) throw new NotFoundError();
 
     const fieldMapper = ({ id, label }: ExportField) => ({ id, label });
