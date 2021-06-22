@@ -134,6 +134,34 @@ Content-Type: application/json
 204 No Content
 ```
 
+## Copy scheme
+
+Create a new copy of specified source scheme
+
+### Request
+
+```http
+POST /api/admin/schemes/copy
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+    "sourceId": string,
+    "id": string,
+    "name": string
+}
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": {...}
+}
+```
 
 ## Question templates
 
