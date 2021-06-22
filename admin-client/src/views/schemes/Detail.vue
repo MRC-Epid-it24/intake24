@@ -1,5 +1,8 @@
 <template>
   <layout v-bind="{ id, entry }" v-if="entryLoaded">
+    <template v-slot:actions>
+      <copy-scheme-dialog v-if="can('schemes-edit')" :schemeId="id"></copy-scheme-dialog>
+    </template>
     <v-simple-table>
       <tbody>
         <tr>
@@ -23,9 +26,12 @@
 import Vue, { VueConstructor } from 'vue';
 import { DetailMixin } from '@/types/vue';
 import detailMixin from '@/components/entry/detailMixin';
+import CopySchemeDialog from './CopySchemeDialog.vue';
 
 export default (Vue as VueConstructor<Vue & DetailMixin>).extend({
   name: 'SchemeDetail',
+
+  components: { CopySchemeDialog },
 
   mixins: [detailMixin],
 });

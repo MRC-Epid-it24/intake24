@@ -1,5 +1,8 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+    <template v-slot:actions>
+      <copy-scheme-dialog v-if="can('schemes-edit')" :schemeId="id"></copy-scheme-dialog>
+    </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container>
         <v-card-text>
@@ -57,6 +60,7 @@ import { FormMixin } from '@/types/vue';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { Meal, RecallQuestions } from '@common/types';
 import { ExportSection } from '@common/types/models';
+import CopySchemeDialog from './CopySchemeDialog.vue';
 import Meals from './Meals.vue';
 
 export type SchemeForm = {
@@ -71,7 +75,7 @@ export type SchemeForm = {
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeForm',
 
-  components: { Meals },
+  components: { CopySchemeDialog, Meals },
 
   mixins: [formMixin],
 

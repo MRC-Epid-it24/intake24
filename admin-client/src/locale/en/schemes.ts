@@ -2,7 +2,6 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const schemes: LocaleMessageObject = {
   _: 'Scheme',
-  id: 'Scheme ID',
   index: 'Schemes',
   all: 'All schemes',
   detail: 'Scheme detail',
@@ -11,7 +10,16 @@ const schemes: LocaleMessageObject = {
   edit: 'Edit scheme',
   delete: 'Delete scheme',
 
+  id: 'Scheme ID',
   name: 'Name',
+
+  copy: {
+    _: 'Copy',
+    title: 'Copy scheme',
+    id: 'New scheme ID',
+    name: 'New scheme name',
+    redirect: 'Redirect to new scheme',
+  },
   types: {
     _: 'Type',
     legacy: 'Legacy survey scheme',
