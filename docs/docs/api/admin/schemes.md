@@ -163,6 +163,45 @@ Content-Type: application/json
 }
 ```
 
+## Data export references
+
+Available fields for data export
+
+### Request
+
+```http
+GET /api/admin/schemes/:schemeId/data-export
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "food": [
+        {
+            "id": string,
+            "label": string
+        },
+        ...
+    ],
+    "foodCustom": [],
+    "foodFields": [],
+    "foodNutrients": [],
+    "meal": [],
+    "mealCustom": [],
+    "portionSizes": [],
+    "survey": [],
+    "surveyCustom": [],
+    "user": [],
+    "userCustom": []
+}
+```
+
 ## Question templates
 
 Browse available question templates for scheme
