@@ -6,6 +6,7 @@ import edit from './edit.test';
 import update from './update.test';
 import destroy from './destroy.test';
 import copy from './copy.test';
+import dataExport from './data-export.test';
 import templates from './templates.test';
 
 export default {
@@ -17,5 +18,6 @@ export default {
   update,
   destroy,
   copy,
+  dataExport,
   templates,
 };

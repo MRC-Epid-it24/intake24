@@ -92,6 +92,7 @@ export default (): void => {
   describe('PUT /api/admin/schemes/:schemeId', schemes.update);
   describe('DELETE /api/admin/schemes/:schemeId', schemes.destroy);
   describe('GET /api/admin/schemes/:schemeId/templates', schemes.templates);
+  describe('GET /api/admin/schemes/:schemeId/data-export', schemes.dataExport);
 
   // Scheme questions
   describe('GET /api/admin/scheme-questions', schemeQuestions.browse);
