@@ -70,9 +70,9 @@ export type Refs = {
   };
 };
 
-export default (Vue as VueConstructor<
-  Vue & FormMixin<SchemeQuestionEntry, SchemeQuestionRefs> & Refs
->).extend({
+export default (
+  Vue as VueConstructor<Vue & FormMixin<SchemeQuestionEntry, SchemeQuestionRefs> & Refs>
+).extend({
   name: 'SchemeQuestionForm',
 
   components: { PromptSelector },

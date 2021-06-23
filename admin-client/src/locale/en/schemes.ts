@@ -18,7 +18,6 @@ const schemes: LocaleMessageObject = {
     title: 'Copy scheme',
     id: 'New scheme ID',
     name: 'New scheme name',
-    redirect: 'Redirect to new scheme',
   },
   types: {
     _: 'Type',
@@ -174,6 +173,10 @@ const schemes: LocaleMessageObject = {
       add: 'Load from template',
       alreadyExists: `Question with ID '{questionId}' already exists in scheme`,
       none: 'No question template found',
+      saveAs: {
+        _: 'Save as template',
+        title: 'Save question as template',
+      },
     },
   },
   foodSearch: {

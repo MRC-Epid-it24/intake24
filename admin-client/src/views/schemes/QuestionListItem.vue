@@ -9,38 +9,84 @@
         {{ `ID: ${question.id} | Type: ${question.component}` }}
       </v-list-item-subtitle>
     </v-list-item-content>
-    <v-list-item-action v-if="!!template">
-      <v-btn
-        :title="$t(`scheme-questions.sync.${isInSyncWithTemplate ? 'true' : 'false'}`)"
-        icon
-        @click.stop="sync"
-      >
-        <v-icon :color="isInSyncWithTemplate ? `success` : `warning`">fa-sync</v-icon>
-      </v-btn>
-    </v-list-item-action>
-    <v-list-item-action>
-      <confirm-dialog
-        :label="$t('schemes.questions.move')"
-        color="primary lighten-1"
-        icon
-        icon-left="fa-exchange-alt"
-        max-width="450px"
-        @close="clearMoveToSection"
-        @confirm="move"
-      >
-        <v-select
-          v-model="moveToSection"
-          :items="moveSections"
-          :label="$t('schemes.questions.section')"
-          hide-details="auto"
-          outlined
-        ></v-select>
-      </confirm-dialog>
-    </v-list-item-action>
+    <v-list-item-content v-if="hasTemplate">
+      <v-list-item-subtitle>
+        <v-icon :color="isInSyncWithTemplate ? `success` : `warning`" left>fa-sync</v-icon>
+        <span color="success">
+          {{ $t(`scheme-questions.sync.${isInSyncWithTemplate ? 'true' : 'false'}`) }}
+        </span>
+      </v-list-item-subtitle>
+    </v-list-item-content>
     <v-list-item-action>
       <v-btn icon :title="$t('schemes.questions.edit')" @click.stop="edit">
-        <v-icon color="primary lighten-1">fa-ellipsis-v</v-icon>
+        <v-icon color="primary lighten-1">$edit</v-icon>
       </v-btn>
+    </v-list-item-action>
+    <v-list-item-action>
+      <v-menu
+        v-model="contextMenu"
+        max-width="600px"
+        offset-y
+        close-on-content-click
+        close-on-click
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon color="primary lighten-1">fa-ellipsis-v</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <confirm-dialog
+            :label="$t('schemes.questions.move')"
+            color="primary lighten-1"
+            max-width="450px"
+            @close="clearMoveToSection"
+            @confirm="move"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-list-item link v-bind="attrs" v-on="on">
+                <v-list-item-title>
+                  <v-icon left>fa-exchange-alt</v-icon>
+                  {{ $t('schemes.questions.move') }}
+                </v-list-item-title>
+              </v-list-item>
+            </template>
+            <v-select
+              v-model="moveToSection"
+              :items="moveSections"
+              :label="$t('schemes.questions.section')"
+              hide-details="auto"
+              outlined
+            ></v-select>
+          </confirm-dialog>
+          <save-as-template-dialog
+            v-if="can('scheme-questions-create')"
+            :disabled="hasTemplate"
+            :question="question"
+          ></save-as-template-dialog>
+          <confirm-dialog
+            :label="$t('scheme-questions.sync.synchronize')"
+            color="primary lighten-1"
+            max-width="450px"
+            @confirm="sync"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-list-item
+                v-bind="attrs"
+                v-on="on"
+                link
+                :disabled="!hasTemplate || isInSyncWithTemplate"
+              >
+                <v-list-item-title>
+                  <v-icon left :disabled="!hasTemplate || isInSyncWithTemplate">fa-sync</v-icon>
+                  {{ $t('scheme-questions.sync.synchronize') }}
+                </v-list-item-title>
+              </v-list-item>
+            </template>
+            {{ $t('scheme-questions.sync.confirm') }}
+          </confirm-dialog>
+        </v-list>
+      </v-menu>
     </v-list-item-action>
     <v-list-item-action>
       <v-btn icon :title="$t('schemes.questions.remove')" @click.stop="remove">
@@ -57,6 +103,7 @@ import isEqual from 'lodash/isEqual';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import { PromptQuestion } from '@common/prompts';
 import { MoveSection } from './QuestionList.vue';
+import SaveAsTemplateDialog from './SaveAsTemplateDialog.vue';
 
 export default Vue.extend({
   name: 'QuestionListItem',
@@ -82,10 +129,12 @@ export default Vue.extend({
 
   components: {
     ConfirmDialog,
+    SaveAsTemplateDialog,
   },
 
   data() {
     return {
+      contextMenu: false,
       moveToSection: null,
     };
   },
@@ -93,6 +142,10 @@ export default Vue.extend({
   computed: {
     template(): PromptQuestion | undefined {
       return this.templates.find((template) => template.id === this.question.id);
+    },
+
+    hasTemplate(): boolean {
+      return !!this.template;
     },
 
     isInSyncWithTemplate(): boolean {

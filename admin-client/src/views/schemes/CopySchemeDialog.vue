@@ -15,6 +15,7 @@
               :error-messages="form.errors.get('id')"
               :label="$t('schemes.copy.id')"
               hide-details="auto"
+              name="id"
               outlined
             >
             </v-text-field>
@@ -25,12 +26,12 @@
               :error-messages="form.errors.get('name')"
               :label="$t('schemes.copy.name')"
               hide-details="auto"
-              name="id"
+              name="name"
               outlined
             ></v-text-field>
           </v-col>
           <v-col cols="12">
-            <v-checkbox v-model="redirect" :label="$t('schemes.copy.redirect')"></v-checkbox>
+            <v-checkbox v-model="redirect" :label="$t('common.redirect')"></v-checkbox>
           </v-col>
         </v-row>
       </v-card-text>

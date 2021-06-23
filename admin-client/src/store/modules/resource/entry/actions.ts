@@ -1,6 +1,7 @@
 import { ActionTree } from 'vuex';
 import { EntryState, RootState } from '@/types/vuex';
 import http from '@/services/http.service';
+import { Dictionary } from '@common/types';
 
 const actions: ActionTree<EntryState, RootState> = {
   async request({ commit, rootGetters }, { id, path, query }) {
@@ -20,7 +21,7 @@ const actions: ActionTree<EntryState, RootState> = {
     }
   },
 
-  async update({ commit }, { data, refs }) {
+  async update({ commit }, { data, refs }: { data?: Dictionary; refs?: Dictionary }) {
     commit('update', { data, refs });
   },
 };

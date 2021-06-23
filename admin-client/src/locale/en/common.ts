@@ -95,6 +95,8 @@ const common: LocaleMessageObject = {
     selected: 'Records selected',
   },
 
+  redirect: 'Redirect to new entry',
+
   not: {
     provided: 'Not provided',
   },
