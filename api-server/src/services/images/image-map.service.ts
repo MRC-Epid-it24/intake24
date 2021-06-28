@@ -2,12 +2,7 @@ import { Op } from 'sequelize';
 import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@/db/models/foods';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import { UpdateImageMapInput } from '@common/types/http/admin';
-import { UploadSourceImageInput } from './source-image.service';
-
-export interface CreateImageMapInput extends UploadSourceImageInput {
-  description: string;
-}
+import { CreateImageMapInput, UpdateImageMapInput } from '@common/types/http/admin';
 
 export interface ImageMapService {
   create: (input: CreateImageMapInput) => Promise<ImageMap>;

@@ -1,13 +1,17 @@
 import { Dictionary } from '../..';
-import { ImageMapAttributes, Pagination } from '../../models';
+import { ImageMapAttributes, ImageMapObjectAttributes, Pagination } from '../../models';
+import { UploadSourceImageInput } from './source-images';
 
-export type ImageMapEntryObject = {
-  id: number;
-  description: string;
-  outlineCoordinates: number[];
-};
+export type ImageMapEntryObject = Pick<
+  ImageMapObjectAttributes,
+  'id' | 'description' | 'outlineCoordinates'
+>;
 
 export type ImageMapInputObjects = ImageMapEntryObject[];
+
+export interface CreateImageMapInput extends UploadSourceImageInput {
+  description: string;
+}
 
 export type UpdateImageMapInput = {
   description: string;
