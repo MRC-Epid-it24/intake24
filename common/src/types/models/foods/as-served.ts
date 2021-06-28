@@ -11,3 +11,5 @@ export type AsServedImageAttributes = {
   imageId: number;
   thumbnailImageId: number;
 };
+
+export type AsServedImageCreationAttributes = Omit<AsServedImageAttributes, 'id'>;
