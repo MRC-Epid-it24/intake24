@@ -1,5 +1,6 @@
 import { Dictionary, ValidationError } from '@common/types';
 import type { Form } from '@/helpers/Form';
+import { RouteLeave } from './common';
 import { Resource } from './vue-router';
 
 export interface FetchEntryMixin {
@@ -30,11 +31,14 @@ export interface FormMixin<E = Dictionary, R = Dictionary> extends EntryMixin<E,
   // data
   form: Form;
   nonInputErrorKeys: string[];
+  // originalEntry: Dictionary;
+  // routeLeave: RouteLeave;
   // computed
   isEdit: boolean;
   isCreate: boolean;
   nonInputErrors: ValidationError[];
   // methods
+  setOriginalEntry: (data: Dictionary) => void;
   toForm: (data: Dictionary) => void;
   submit: () => Promise<void>;
   clearError: (event: KeyboardEvent) => void;

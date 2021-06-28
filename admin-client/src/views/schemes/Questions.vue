@@ -125,7 +125,10 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
      */
     toForm(data: Dictionary) {
       const { questions, ...rest } = data;
-      this.form.load({ ...rest, questions: { ...defaultQuestions, ...questions } });
+      const input = { ...rest, questions: { ...defaultQuestions, ...questions } };
+
+      this.setOriginalEntry(input);
+      this.form.load(input);
     },
 
     move(event: PromptQuestionMoveEvent) {

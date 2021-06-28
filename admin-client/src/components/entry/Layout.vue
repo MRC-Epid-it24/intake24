@@ -85,16 +85,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { Route } from 'vue-router';
 import has from 'lodash/has';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import ResourceMixin from '@/mixins/ResourceMixin';
-
-export type RouteLeave = {
-  dialog: boolean;
-  to: Route | null;
-  confirmed: boolean;
-};
+import { RouteLeave } from '@/types';
 
 type Mixins = InstanceType<typeof ResourceMixin>;
 

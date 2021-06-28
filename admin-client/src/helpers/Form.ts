@@ -25,7 +25,7 @@ export interface FormDef<T = Dictionary> {
   load(input: Dictionary): void;
   hasErrors(): boolean;
   reset(): void;
-  getData(): T | FormData;
+  getData(object?: boolean): T | FormData;
   submit<R>(url: string, method: Method, config?: HttpRequestConfig): Promise<R>;
   post<R>(url: string, config?: HttpRequestConfig): Promise<R>;
   get<R>(url: string): Promise<R>;
@@ -72,7 +72,9 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig = {}): Form<
       this.data = cloneDeep(this.initData);
     },
 
-    getData(): T | FormData {
+    getData(object = false): T | FormData {
+      if (object) return this.data;
+
       return this.config.multipart ? serialize<T>(this.data) : this.data;
     },
 

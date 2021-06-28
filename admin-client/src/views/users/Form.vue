@@ -144,11 +144,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import { CustomField } from '@common/types';
 import { UserEntry } from '@common/types/http/admin';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
+import { FormMixin } from '@/types';
 
 type UserForm = {
   id: number | null;
@@ -165,7 +166,7 @@ type UserForm = {
   roles: number[];
 };
 
-export default Vue.extend({
+export default (Vue as VueConstructor<Vue & FormMixin<UserEntry>>).extend({
   name: 'UserForm',
 
   mixins: [formMixin],
@@ -198,6 +199,8 @@ export default Vue.extend({
         roles: roles.map((item) => item.id),
         customFields: customFields.map(({ name, value }) => ({ name, value })),
       };
+
+      this.setOriginalEntry(input);
       this.form.load(input);
     },
   },

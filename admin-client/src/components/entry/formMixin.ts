@@ -44,11 +44,10 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       // Creating new record
       // TODO: might be better to load full blank templates directly in store
       if (isEqual(val, { id: null })) {
-        this.originalEntry = clone(this.form.getData());
+        this.originalEntry = clone(this.form.getData(true));
         return;
       }
 
-      this.originalEntry = clone(val);
       this.toForm(val);
     },
   },
@@ -69,9 +68,14 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   computed: {
     entryChanged(): boolean {
-      const original = pick(this.originalEntry, this.form.keys);
+      const formKeys = this.form.keys;
+      const entryKeys = Object.keys(this.originalEntry);
+      const commonKeys = entryKeys.filter((key) => formKeys.includes(key));
 
-      return !isEqual(original, this.form.getData());
+      const original = pick(this.originalEntry, commonKeys);
+      const updated = pick(this.form.getData(true), commonKeys);
+
+      return !isEqual(original, updated);
     },
     isCreate(): boolean {
       return this.id === 'create';
@@ -85,7 +89,12 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   },
 
   methods: {
+    setOriginalEntry(data: Dictionary) {
+      this.originalEntry = clone(data);
+    },
+
     toForm(data: Dictionary) {
+      this.setOriginalEntry(data);
       this.form.load(data);
     },
 

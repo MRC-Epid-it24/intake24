@@ -117,6 +117,8 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         ...rest,
         permissions: permissions.map((item) => item.id),
       };
+
+      this.setOriginalEntry(input);
       this.form.load(input);
     },
   },
