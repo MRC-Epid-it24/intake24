@@ -1,4 +1,6 @@
 import { Express, Request, Response, NextFunction } from 'express';
+import { MulterError } from 'multer';
+import { DatabaseError } from 'sequelize';
 import type { Ops } from '@/app';
 import {
   ApplicationError,
@@ -49,7 +51,20 @@ export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ValidationError) {
       const { errors } = err;
-      res.status(422).json({ errors });
+      res.status(422).json({ success: false, errors });
+      return;
+    }
+    next(err);
+  });
+
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof MulterError) {
+      const { field = 'file', message } = err;
+
+      res.status(422).json({
+        success: false,
+        errors: { [field]: { param: field, msg: message, location: 'body', value: null } },
+      });
       return;
     }
     next(err);
@@ -60,6 +75,16 @@ export default (app: Express, { logger }: Ops): void => {
       const { message, name, stack } = err;
       logger.error(stack ?? `${name}: ${message}`);
       res.status(500).json({ message: 'Internal Server Error' });
+      return;
+    }
+    next(err);
+  });
+
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof DatabaseError) {
+      const { message, name, stack } = err;
+      logger.error(stack ?? `${name}: ${message}`);
+      res.status(503).json({ message: 'Internal Database Error' });
       return;
     }
     next(err);
