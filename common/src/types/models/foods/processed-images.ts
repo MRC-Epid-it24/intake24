@@ -3,7 +3,7 @@ import { OmitAndOptional } from '../model';
 export enum ProcessedImagePurposes {
   AsServedMainImage = 1,
   AsServedThumbnail = 2,
-  GuideImageSelectionImage = 3,
+  SelectionImage = 3,
   ImageMapBaseImage = 4,
   ImageMapOverlay = 5,
 }

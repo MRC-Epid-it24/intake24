@@ -7,14 +7,24 @@ import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
 import { ProcessedImagePurposes } from '@common/types/models';
 
+export type SelectionImageType = 'guide' | 'as_served';
+
 export type DestroyOptions = { includeSources?: boolean };
 
 export interface ProcessedImageService {
+  createAsServedImages: (
+    id: string,
+    sourceImage: SourceImage | number
+  ) => Promise<[ProcessedImage, ProcessedImage]>;
   createImageMapBaseImage: (
     id: string,
     sourceImage: SourceImage | number
   ) => Promise<ProcessedImage>;
-  createSelectionImage: (id: string, sourceImage: SourceImage | number) => Promise<ProcessedImage>;
+  createSelectionImage: (
+    id: string,
+    sourceImage: SourceImage | number,
+    type: SelectionImageType
+  ) => Promise<ProcessedImage>;
   destroy: (imageId: number, options?: DestroyOptions) => Promise<void>;
 }
 
@@ -25,7 +35,7 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): Process
     const sourceImage = await SourceImage.findByPk(sourceImageId);
     if (!sourceImage) {
       logger.warn(
-        `processed-image.service|resolveSourceImage: Source image (${sourceImageId}) for selection image not found.`
+        `ProcessedImageService|resolveSourceImage: Source image (${sourceImageId}) for selection image not found.`
       );
       throw new NotFoundError();
     }
@@ -33,11 +43,56 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): Process
     try {
       await fs.access(path.join(imagesPath, sourceImage.path), fs.constants.F_OK);
     } catch (err) {
-      logger.error(`processed-image.service|resolveSourceImage: ${err.message}`);
+      logger.error(`ProcessedImageService|resolveSourceImage: ${err.message}`);
       throw new NotFoundError();
     }
 
     return sourceImage;
+  };
+
+  const createAsServedImages = async (
+    id: string,
+    sourceImage: SourceImage | number
+  ): Promise<[ProcessedImage, ProcessedImage]> => {
+    const image =
+      typeof sourceImage === 'number' ? await resolveSourceImage(sourceImage) : sourceImage;
+
+    const fileName = `${uuid.v4()}${path.extname(image.path)}`;
+    const fileDir = path.join('as_served', id);
+    const fullPath = path.join(fileDir, fileName);
+
+    const thumbFileName = `${uuid.v4()}${path.extname(image.path)}`;
+    const thumbFileDir = path.join('as_served', id, 'thumbnails');
+    const thumbFullPath = path.join(fileDir, thumbFileName);
+
+    await Promise.all([
+      fs.ensureDir(path.join(imagesPath, fileDir)),
+      fs.ensureDir(path.join(imagesPath, thumbFileDir)),
+    ]);
+
+    await Promise.all([
+      sharp(path.join(imagesPath, image.path))
+        .resize(654)
+        .jpeg({ mozjpeg: true })
+        .toFile(path.join(imagesPath, fullPath)),
+      sharp(path.join(imagesPath, image.path))
+        .resize(80)
+        .jpeg({ mozjpeg: true })
+        .toFile(path.join(imagesPath, thumbFullPath)),
+    ]);
+
+    return Promise.all([
+      ProcessedImage.create({
+        path: fullPath,
+        sourceId: image.id,
+        purpose: ProcessedImagePurposes.AsServedMainImage,
+      }),
+      ProcessedImage.create({
+        path: thumbFullPath,
+        sourceId: image.id,
+        purpose: ProcessedImagePurposes.AsServedThumbnail,
+      }),
+    ]);
   };
 
   const createImageMapBaseImage = async (
@@ -67,13 +122,14 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): Process
 
   const createSelectionImage = async (
     id: string,
-    sourceImage: SourceImage | number
+    sourceImage: SourceImage | number,
+    type: SelectionImageType
   ): Promise<ProcessedImage> => {
     const image =
       typeof sourceImage === 'number' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${uuid.v4()}${path.extname(image.path)}`;
-    const fileDir = path.join('guide', id, 'selection');
+    const fileDir = path.join(type, id, 'selection');
     const filePath = path.join(fileDir, fileName);
 
     await fs.ensureDir(path.join(imagesPath, fileDir));
@@ -86,20 +142,23 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): Process
     return ProcessedImage.create({
       path: filePath,
       sourceId: image.id,
-      purpose: ProcessedImagePurposes.GuideImageSelectionImage,
+      purpose: ProcessedImagePurposes.SelectionImage,
     });
   };
 
   const destroy = async (imageId: number, options: DestroyOptions = {}): Promise<void> => {
     const processedImage = await ProcessedImage.findByPk(imageId);
-    if (!processedImage) return;
+    if (!processedImage) {
+      logger.warn(`ProcessedImageService|destroy: processed image not found. (ID: ${imageId})`);
+      return;
+    }
 
     await processedImage.destroy();
 
     try {
       await fs.unlink(path.join(imagesPath, processedImage.path));
     } catch (err) {
-      logger.error(`processed-image.service|destroy: ${err.message}`);
+      logger.error(`ProcessedImageService|destroy: ${err.message}`);
     }
 
     const { includeSources } = options;
@@ -109,6 +168,7 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): Process
   };
 
   return {
+    createAsServedImages,
     createImageMapBaseImage,
     createSelectionImage,
     destroy,

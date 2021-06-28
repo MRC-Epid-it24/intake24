@@ -21,7 +21,8 @@ export default ({
 
     const selectionImage = await processedImageService.createSelectionImage(
       id,
-      imageMap.baseImage.sourceId
+      imageMap.baseImage.sourceId,
+      'guide'
     );
 
     const guideImage = await GuideImage.create({

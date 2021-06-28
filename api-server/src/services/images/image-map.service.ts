@@ -26,7 +26,7 @@ export default ({
   const create = async (input: CreateImageMapInput): Promise<ImageMap> => {
     const { id, description } = input;
 
-    const sourceImage = await sourceImageService.uploadSourceImage(input);
+    const sourceImage = await sourceImageService.uploadSourceImage(input, 'image_maps');
     const baseImage = await processedImageService.createImageMapBaseImage(id, sourceImage);
 
     return ImageMap.create({ id, description, baseImageId: baseImage.id });
