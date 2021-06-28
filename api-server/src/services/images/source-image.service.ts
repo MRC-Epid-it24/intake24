@@ -4,33 +4,26 @@ import sharp from 'sharp';
 import * as uuid from 'uuid';
 import { SourceImage } from '@/db/models/foods';
 import type { IoC } from '@/ioc';
-
-export type SourceFileInput = {
-  originalname: string;
-  path: string;
-};
-
-export type UploadSourceImageInput = {
-  id: string;
-  file: SourceFileInput;
-  uploader: number | string;
-};
+import { UploadSourceImageInput, SourceImageType } from '@common/types/http/admin';
 
 export interface SourceImageService {
-  uploadSourceImage: (input: UploadSourceImageInput) => Promise<SourceImage>;
+  uploadSourceImage: (input: UploadSourceImageInput, type: SourceImageType) => Promise<SourceImage>;
   destroy: (sourceImageId: number | number[]) => Promise<void>;
 }
 
 export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): SourceImageService => {
   const { images: imagesPath } = fsConfig.local;
 
-  const uploadSourceImage = async (input: UploadSourceImageInput): Promise<SourceImage> => {
+  const uploadSourceImage = async (
+    input: UploadSourceImageInput,
+    type: SourceImageType
+  ): Promise<SourceImage> => {
     const { id, file, uploader } = input;
 
     const filename = `${uuid.v4()}${path.extname(file.originalname)}`;
 
-    const sourceDir = path.join('source', 'image_maps', id);
-    const sourceThumbDir = path.join('source', 'thumbnails', 'image_maps', id);
+    const sourceDir = path.join('source', type, id);
+    const sourceThumbDir = path.join('source', 'thumbnails', type, id);
 
     const sourcePath = path.join(sourceDir, filename);
     const sourceThumbPath = path.join(sourceThumbDir, filename);
@@ -64,7 +57,7 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): SourceI
         await fs.unlink(path.join(imagesPath, sourceImage.path));
         await fs.unlink(path.join(imagesPath, sourceImage.thumbnailPath));
       } catch (err) {
-        logger.error(`source-image.service|destroy: ${err.message}`);
+        logger.error(`SourceImageService|destroy: ${err.message}`);
       }
     }
   };

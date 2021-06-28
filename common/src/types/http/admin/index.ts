@@ -7,6 +7,7 @@ export * from './permissions';
 export * from './roles';
 export * from './schemes';
 export * from './scheme-questions';
+export * from './source-images';
 export * from './survey-mgmt';
 export * from './survey-respondents';
 export * from './survey-submissions';
