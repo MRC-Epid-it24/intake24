@@ -10,7 +10,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { BasePromptProps } from '@common/prompts';
-import { AsServedState, EncodedFood, PortionSizeState, SelectedAsServedImage } from '@common/types';
+import { EncodedFood, SelectedAsServedImage } from '@common/types';
 import AsServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
 import { AsServedParameters } from '@common/types/http';
 import foodPromptUtils from '../mixins/food-prompt-utils';
@@ -35,7 +35,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       if (this.selectedPortionSize.method !== 'as-served')
         throw new Error('Selected portion size method must be "as-served"');
 
-      return (this.selectedPortionSize.parameters as unknown) as AsServedParameters;
+      return this.selectedPortionSize.parameters as unknown as AsServedParameters;
     },
   },
 

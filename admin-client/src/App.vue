@@ -122,7 +122,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   computed: {
     ...mapGetters({ app: 'app', loggedIn: 'auth/loggedIn' }),
     title() {
-      if (this.$route.meta.title) return this.$t(this.$route.meta.title);
+      if (this.$route.meta?.title) return this.$t(this.$route.meta.title);
 
       if (!this.module) return this.app.name;
 

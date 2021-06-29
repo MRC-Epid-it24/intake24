@@ -47,7 +47,7 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
       this.logger.info(`${this.name}: ${job.id} has completed.`);
     });
 
-    worker.on('failed', (job, err) => {
+    worker.on('failed', (job: BullJob, err: any) => {
       this.logger.error(`${this.name}: ${job.id} has failed with ${err.message}`);
     });
 

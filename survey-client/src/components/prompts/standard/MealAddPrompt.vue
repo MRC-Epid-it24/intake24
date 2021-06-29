@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { BasePromptProps, mealAddPromptProps } from '@common/prompts';
+import { BasePromptProps } from '@common/prompts';
 import BasePrompt from '../BasePrompt';
 
 export default Vue.extend({

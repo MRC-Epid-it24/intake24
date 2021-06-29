@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { NotFoundError } from '@/http/errors';
+import { NotFoundError, ValidationError } from '@/http/errors';
 import {
   AsServedSetResponse,
   AsServedSetsResponse,
@@ -56,6 +56,8 @@ export default ({
       body: { id, description },
     } = req;
     const user = req.user as User;
+
+    if (!file) throw new ValidationError('image', 'File not found.');
 
     let asServedSet = await asServedService.createSet({ id, description, file, uploader: user.id });
     asServedSet = await portionSizeService.getAsServedSet(asServedSet.id);

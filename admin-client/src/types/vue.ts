@@ -1,6 +1,5 @@
 import { Dictionary, ValidationError } from '@common/types';
 import type { Form } from '@/helpers/Form';
-import { RouteLeave } from './common';
 import { Resource } from './vue-router';
 
 export interface FetchEntryMixin {

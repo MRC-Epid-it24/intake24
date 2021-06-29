@@ -28,7 +28,6 @@ import { LocaleTranslation, replaceInTranslation } from '@common/types';
 import foodSearchService from '@/services/foods.service';
 import FoodSearchResults from '@/components/elements/FoodSearchResults.vue';
 import { FoodSearchResponse } from '@common/types/http';
-import Loader from '@/components/Loader.vue';
 import BasePrompt from '../BasePrompt';
 
 export default Vue.extend({

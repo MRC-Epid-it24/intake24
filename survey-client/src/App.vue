@@ -96,7 +96,7 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
       return this.$route.params.surveyId;
     },
     title(): TranslateResult {
-      if (this.$route.meta.title) return this.$t(this.$route.meta.title);
+      if (this.$route.meta?.title) return this.$t(this.$route.meta.title);
 
       return this.$t('common._');
     },

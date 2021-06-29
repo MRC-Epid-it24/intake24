@@ -4,8 +4,10 @@ import { RootState } from '@/types/vuex';
 
 export default (router: Router, store: Store<RootState>): void => {
   router.beforeEach(async (to, from, next) => {
+    const { meta: { module, perm, public: unrestricted } = {} } = to;
+
     // Login page
-    if (to.meta.public) {
+    if (unrestricted) {
       if (store.getters['auth/loggedIn']) next({ name: 'dashboard' });
       else next();
       return;
@@ -21,13 +23,12 @@ export default (router: Router, store: Store<RootState>): void => {
     }
 
     // Check correct permissions if any
-    if (to.meta.perm && !store.getters['user/can'](to.meta.perm)) {
+    if (perm && !store.getters['user/can'](perm)) {
       next({ name: 'dashboard' });
       return;
     }
 
-    if (!store.getters['resource/name'] !== to.meta.module)
-      await store.dispatch('resource/update', to.meta.module);
+    if (!store.getters['resource/name'] !== module) await store.dispatch('resource/update', module);
 
     next();
   });

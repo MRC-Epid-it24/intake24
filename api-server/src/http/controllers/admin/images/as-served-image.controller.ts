@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { NotFoundError } from '@/http/errors';
+import { NotFoundError, ValidationError } from '@/http/errors';
 import {
   AsServedImageEntry,
   AsServedImageResponse,
@@ -51,16 +51,17 @@ export default ({
   };
 
   const store = async (req: Request, res: Response<AsServedImageResponse>): Promise<void> => {
-    const { asServedSetId } = req.params;
-
-    const asServedSet = await AsServedSet.findByPk(asServedSetId);
-    if (!asServedSet) throw new NotFoundError();
-
     const {
       file,
       body: { weight },
+      params: { asServedSetId },
     } = req;
     const user = req.user as User;
+
+    if (!file) throw new ValidationError('image', 'File not found.');
+
+    const asServedSet = await AsServedSet.findByPk(asServedSetId);
+    if (!asServedSet) throw new NotFoundError();
 
     let asServedImage = await asServedService.createImage({
       id: asServedSetId,

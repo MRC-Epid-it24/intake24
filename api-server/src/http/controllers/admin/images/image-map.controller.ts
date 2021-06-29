@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { NotFoundError } from '@/http/errors';
+import { NotFoundError, ValidationError } from '@/http/errors';
 import {
   ImageMapListEntry,
   ImageMapResponse,
@@ -53,6 +53,8 @@ export default ({
       body: { id, description },
     } = req;
     const user = req.user as User;
+
+    if (!file) throw new ValidationError('baseImage', 'File not found.');
 
     let imageMap = await imageMapService.create({ id, description, file, uploader: user.id });
     imageMap = await portionSizeService.getImageMap(imageMap.id);

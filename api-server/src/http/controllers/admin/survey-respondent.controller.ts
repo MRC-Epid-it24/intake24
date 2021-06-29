@@ -7,7 +7,7 @@ import {
   SurveyRespondentListEntry,
 } from '@common/types/http/admin';
 import { Survey, User, UserSurveyAlias } from '@/db/models/system';
-import { NotFoundError } from '@/http/errors';
+import { NotFoundError, ValidationError } from '@/http/errors';
 import { userRespondentResponse } from '@/http/responses/admin';
 
 import type { IoC } from '@/ioc';
@@ -67,9 +67,13 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
   };
 
   const upload = async (req: Request, res: Response<JobResponse>): Promise<void> => {
-    const { surveyId } = req.params;
-    const { file } = req;
+    const {
+      file,
+      params: { surveyId },
+    } = req;
     const { id: userId } = req.user as User;
+
+    if (!file) throw new ValidationError('file', 'File not found.');
 
     const job = await surveyService.importRespondents(surveyId, userId, file);
 

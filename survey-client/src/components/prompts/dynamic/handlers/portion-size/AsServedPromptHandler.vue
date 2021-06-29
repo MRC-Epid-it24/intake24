@@ -35,7 +35,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       if (this.selectedPortionSize.method !== 'as-served')
         throw new Error('Selected portion size method must be "as-served"');
 
-      return (this.selectedPortionSize.parameters as unknown) as AsServedParameters;
+      return this.selectedPortionSize.parameters as unknown as AsServedParameters;
     },
   },
 
