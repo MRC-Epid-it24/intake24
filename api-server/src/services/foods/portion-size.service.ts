@@ -1,5 +1,6 @@
 import { Includeable } from 'sequelize';
 import {
+  AsServedImage,
   AsServedSet,
   DrinkwareScale,
   DrinkwareSet,
@@ -10,6 +11,11 @@ import {
 import { NotFoundError } from '@/http/errors';
 
 export interface PortionSizeService {
+  getAsServedImage: (asServedSetId: string, id: number | string) => Promise<AsServedImage>;
+  getAsServedImages: (
+    asServedSetId: string,
+    id: number | string | (number | string)[]
+  ) => Promise<AsServedImage[]>;
   getAsServedSet: (id: string) => Promise<AsServedSet>;
   getAsServedSets: (id: string | string[]) => Promise<AsServedSet[]>;
   getGuideImage: (id: string) => Promise<GuideImage>;
@@ -21,6 +27,45 @@ export interface PortionSizeService {
 }
 
 export default (): PortionSizeService => {
+  /**
+   * Get multiple records of as-served-images data
+   *
+   * @param {string} asServedSetId
+   * @param {(number | string | (number | string)[])} id
+   * @returns {Promise<AsServedImage[]>}
+   */
+  const getAsServedImages = async (
+    asServedSetId: string,
+    id: number | string | (number | string)[]
+  ): Promise<AsServedImage[]> => {
+    return AsServedImage.findAll({
+      where: { asServedSetId, id },
+      order: [['weight', 'ASC']],
+      include: [
+        { association: 'image', required: true },
+        { association: 'thumbnailImage', required: true },
+      ],
+    });
+  };
+
+  /**
+   * Get single record of as-served-images data
+   *
+   * @param {string} asServedSetId
+   * @param {(number | string)} id
+   * @returns {Promise<AsServedImage>}
+   */
+  const getAsServedImage = async (
+    asServedSetId: string,
+    id: number | string
+  ): Promise<AsServedImage> => {
+    const [asServedImage] = await getAsServedImages(asServedSetId, id);
+
+    if (!asServedImage) throw new NotFoundError('As served image not found.');
+
+    return asServedImage;
+  };
+
   /**
    * Get multiple records of as-served-set data
    *
@@ -162,6 +207,8 @@ export default (): PortionSizeService => {
   };
 
   return {
+    getAsServedImage,
+    getAsServedImages,
     getAsServedSet,
     getAsServedSets,
     getGuideImage,
