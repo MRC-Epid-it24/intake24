@@ -145,6 +145,8 @@ module.exports = {
           children: [
             'admin/user/profile',
             'admin/user/jobs',
+            'admin/images/as-served-sets',
+            'admin/images/as-served-images',
             'admin/images/guides',
             'admin/images/maps',
             'admin/jobs',

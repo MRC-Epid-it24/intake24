@@ -1,13 +1,13 @@
-# Image maps
+# As served sets
 
-## Browse image maps
+## Browse as served sets
 
-Browse paginated image map list
+Browse paginated as served set list
 
 ### Request
 
 ```http
-GET /api/admin/images/maps
+GET /api/admin/images/as-served
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -27,14 +27,14 @@ Content-Type: application/json
 }
 ```
 
-## Create image map
+## Create as served set
 
-Create new image map entry
+Create new as served set entry
 
 ### Request
 
 ```http
-POST /api/admin/images/maps
+POST /api/admin/images/as-served
 
 Authorization: Bearer {accessToken}
 Content-Type: multipart/form-data
@@ -42,7 +42,7 @@ Content-Type: multipart/form-data
 {
     "id": string,
     "description": string,
-    "baseImage": File
+    "selectionImage": File
 }
 ```
 
@@ -56,14 +56,14 @@ Content-Type: multipart/form-data
 }
 ```
 
-## Get image map
+## Get as served set
 
-Get image map entry
+Get as served set entry
 
 ### Request
 
 ```http
-GET /api/admin/images/maps/:imageMapId
+GET /api/admin/images/as-served/:asServedSetId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -80,25 +80,24 @@ Content-Type: application/json
 }
 ```
 
-## Update image map
+## Update as served set
 
-Update image map entry
+Update as served set entry
 
 ### Request
 
 ```http
-PUT /api/admin/images/maps/:imageMapId
+PUT /api/admin/images/as-served/:asServedSetId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
     "description": string,
-    "objects": [
+    "images": [
         {
             "id": number,
-            "description": string,
-            "outlineCoordinates": number[]
+            "weight": number
         },
         ...
     ]
@@ -116,14 +115,14 @@ Content-Type: application/json
 }
 ```
 
-## Delete image map
+## Delete as served set
 
-Delete image map entry
+Delete as served set entry
 
 ### Request
 
 ```http
-DELETE /api/admin/images/maps/:imageMapId
+DELETE /api/admin/images/as-served/:asServedSetId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
