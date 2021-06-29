@@ -14,6 +14,7 @@ import {
   Mailer,
   Pusher,
   Scheduler,
+  asServedService,
   guideImageService,
   imageMapService,
   processedImageService,
@@ -34,6 +35,7 @@ export default (container: AwilixContainer): void => {
     jwtRotationService: asFunction(jwtRotationService),
     signInService: asFunction(signInService),
 
+    asServedService: asFunction(asServedService),
     guideImageService: asFunction(guideImageService),
     imageMapService: asFunction(imageMapService),
     processedImageService: asFunction(processedImageService),

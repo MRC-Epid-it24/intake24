@@ -28,6 +28,8 @@ import type {
   // Admin
   UserProfileController,
   UserJobController,
+  AsServedSetController,
+  AsServedImageController,
   GuideImageController,
   ImageMapController,
   JobController,
@@ -51,6 +53,7 @@ import type {
   JwtService,
   JwtRotationService,
   SignInService,
+  AsServedService,
   GuideImageService,
   ImageMapService,
   PortionSizeService,
@@ -111,6 +114,8 @@ export interface IoC extends Jobs {
   userProfileController: UserProfileController;
   userJobController: UserJobController;
 
+  asServedSetController: AsServedSetController;
+  asServedImageController: AsServedImageController;
   guideImageController: GuideImageController;
   imageMapController: ImageMapController;
   languageController: LanguageController;
@@ -147,6 +152,7 @@ export interface IoC extends Jobs {
   jwtRotationService: JwtRotationService;
   signInService: SignInService;
 
+  asServedService: AsServedService;
   guideImageService: GuideImageService;
   imageMapService: ImageMapService;
   processedImageService: ProcessedImageService;

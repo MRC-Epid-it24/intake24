@@ -1,4 +1,10 @@
-import { GuideImage, ImageMap, ImageMapObject } from '@/db/models/foods';
+import {
+  AsServedImage,
+  AsServedSet,
+  GuideImage,
+  ImageMap,
+  ImageMapObject,
+} from '@/db/models/foods';
 import { InternalServerError } from '@/http/errors';
 import {
   GuideImageEntry,
@@ -7,9 +13,15 @@ import {
   ImageMapEntry,
   ImageMapListEntry,
   ImageMapEntryObject,
+  AsServedImageEntry,
+  AsServedSetEntry,
+  AsServedSetListEntry,
 } from '@common/types/http/admin';
 
 export interface ImageResponseCollection {
+  asServedImageEntryResponse: (item: AsServedImage) => AsServedImageEntry;
+  asServedSetListResponse: (item: AsServedSet) => AsServedSetListEntry;
+  asServedSetEntryResponse: (item: AsServedSet) => AsServedSetEntry;
   guideListResponse: (item: GuideImage) => GuideImageListEntry;
   guideEntryResponse: (item: GuideImage) => GuideImageEntry;
   mapListResponse: (item: ImageMap) => ImageMapListEntry;
@@ -19,6 +31,77 @@ export interface ImageResponseCollection {
 type Weights = { [index: number]: number };
 
 export default (baseUrl: string): ImageResponseCollection => {
+  /**
+   * As served image entry
+   *
+   * @param {AsServedImage} item
+   * @returns {AsServedImageEntry}
+   */
+  const asServedImageEntryResponse = (item: AsServedImage): AsServedImageEntry => {
+    const { id, image, thumbnailImage, weight } = item;
+
+    if (!image || !thumbnailImage)
+      throw new InternalServerError(
+        'ImageResponseCollection|asServedImages: not loaded relationships.'
+      );
+
+    return {
+      id,
+      mainImageUrl: `${baseUrl}/${image.path}`,
+      thumbnailUrl: `${baseUrl}/${thumbnailImage.path}`,
+      weight,
+    };
+  };
+
+  /**
+   * As served set list entry
+   *
+   * @param {AsServedSet} item
+   * @returns {AsServedSetListEntry}
+   */
+  const asServedSetListResponse = (item: AsServedSet): AsServedSetListEntry => {
+    const { id, description, selectionImage } = item;
+
+    if (!selectionImage)
+      throw new InternalServerError(
+        'ImageResponseCollection|asServedSetListResponse: not loaded relationships.'
+      );
+
+    return {
+      id,
+      description,
+      imageUrl: `${baseUrl}/${selectionImage.path}`,
+    };
+  };
+
+  /**
+   * As served set entry
+   *
+   * @param {AsServedSet} item
+   * @returns {AsServedSetEntry}
+   */
+  const asServedSetEntryResponse = (item: AsServedSet): AsServedSetEntry => {
+    const { id, description, asServedImages: images, selectionImage } = item;
+
+    if (!selectionImage || !images)
+      throw new InternalServerError(
+        'ImageResponseCollection|asServedSetEntryResponse: not loaded relationships.'
+      );
+
+    return {
+      id,
+      description,
+      selectionImageUrl: `${baseUrl}/${selectionImage.path}`,
+      images: images.map(asServedImageEntryResponse),
+    };
+  };
+
+  /**
+   * Helper to map image map objects
+   *
+   * @param {ImageMapObject[]} objects
+   * @returns {ImageMapEntryObject[]}
+   */
   const mapObjects = (objects: ImageMapObject[]): ImageMapEntryObject[] => {
     return objects.map((object) => {
       const { id, description, outlineCoordinates } = object;
@@ -31,6 +114,13 @@ export default (baseUrl: string): ImageResponseCollection => {
     });
   };
 
+  /**
+   * Helper to map guide image objects
+   *
+   * @param {ImageMapObject[]} objects
+   * @param {Weights} weights
+   * @returns {GuideImageEntryObject[]}
+   */
   const guideObjects = (objects: ImageMapObject[], weights: Weights): GuideImageEntryObject[] => {
     return objects.map((object) => {
       const { id, description, outlineCoordinates } = object;
@@ -54,7 +144,9 @@ export default (baseUrl: string): ImageResponseCollection => {
     const { id, description, selectionImage } = item;
 
     if (!selectionImage)
-      throw new InternalServerError('GuideImageListEntry: not loaded relationships.');
+      throw new InternalServerError(
+        'ImageResponseCollection|guideListResponse: not loaded relationships.'
+      );
 
     return {
       id,
@@ -73,12 +165,16 @@ export default (baseUrl: string): ImageResponseCollection => {
     const { id, description, imageMapId, imageMap, objects: weightObjects } = item;
 
     if (!imageMap || !weightObjects)
-      throw new InternalServerError('GuideImageEntry: not loaded relationships.');
+      throw new InternalServerError(
+        'ImageResponseCollection|guideEntryResponse: not loaded relationships.'
+      );
 
     const { baseImage, objects } = imageMap;
 
     if (!baseImage || !objects)
-      throw new InternalServerError('GuideImageEntry: not loaded relationships.');
+      throw new InternalServerError(
+        'ImageResponseCollection|guideEntryResponse: not loaded relationships.'
+      );
 
     const weights = weightObjects.reduce<Weights>((acc, object) => {
       acc[object.imageMapObjectId] = object.weight;
@@ -103,7 +199,10 @@ export default (baseUrl: string): ImageResponseCollection => {
   const mapListResponse = (item: ImageMap): ImageMapListEntry => {
     const { id, description, baseImage } = item;
 
-    if (!baseImage) throw new InternalServerError('ImageMapListEntry: not loaded relationships.');
+    if (!baseImage)
+      throw new InternalServerError(
+        'ImageResponseCollection|mapListResponse: not loaded relationships.'
+      );
 
     return {
       id,
@@ -122,7 +221,9 @@ export default (baseUrl: string): ImageResponseCollection => {
     const { id, description, baseImage, objects } = item;
 
     if (!baseImage || !objects)
-      throw new InternalServerError('ImageMapEntry: not loaded relationships.');
+      throw new InternalServerError(
+        'ImageResponseCollection|mapEntryResponse: not loaded relationships.'
+      );
 
     return {
       id,
@@ -132,5 +233,13 @@ export default (baseUrl: string): ImageResponseCollection => {
     };
   };
 
-  return { guideListResponse, guideEntryResponse, mapListResponse, mapEntryResponse };
+  return {
+    asServedImageEntryResponse,
+    asServedSetListResponse,
+    asServedSetEntryResponse,
+    guideListResponse,
+    guideEntryResponse,
+    mapListResponse,
+    mapEntryResponse,
+  };
 };

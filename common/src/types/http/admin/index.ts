@@ -1,3 +1,4 @@
+export * from './as-served';
 export * from './guide-images';
 export * from './image-maps';
 export * from './jobs';
