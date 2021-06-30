@@ -62,6 +62,6 @@ export const downloadImage = async (url: string, filename: string): Promise<stri
 
   return new Promise((resolve, reject) => {
     fileStream.on('finish', () => resolve(filePath));
-    fileStream.on('error', () => reject);
+    fileStream.on('error', () => reject());
   });
 };

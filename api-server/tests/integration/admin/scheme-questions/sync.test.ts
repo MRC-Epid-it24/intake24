@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import request from 'supertest';
 import { Scheme, SchemeQuestion } from '@/db/models/system';
 import { SchemeCreationAttributes, SchemeQuestionCreationAttributes } from '@common/types/models';

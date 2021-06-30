@@ -1,3 +1,7 @@
+import fs from 'fs-extra';
+import request from 'supertest';
+import { downloadImage, suite } from '@tests/integration/helpers';
+
 import user from './user/index.test';
 import images from './images/index.test';
 import jobs from './jobs/index.test';
@@ -19,6 +23,45 @@ export default (): void => {
   describe('GET /api/admin/user/jobs', user.jobs.browse);
   describe('GET /api/admin/user/jobs/:jobId', user.jobs.detail);
   describe('GET /api/admin/user/jobs/:jobId/download', user.jobs.download);
+
+  // As served sets
+  const { asServed } = images;
+  describe('GET /api/admin/images/as-served', asServed.browse);
+  describe('GET /api/admin/images/as-served/create', asServed.create);
+  describe('POST /api/admin/images/as-served', asServed.store);
+  describe('GET /api/admin/images/as-served/:asServedSetId', asServed.detail);
+  describe('GET /api/admin/images/as-served/:asServedSetId/edit', asServed.edit);
+  describe('PUT /api/admin/images/as-served/:asServedSetId', asServed.update);
+  describe('DELETE /api/admin/images/as-served/:asServedSetId', asServed.destroy);
+
+  // As served images
+  describe('As served images', () => {
+    beforeAll(async () => {
+      const filePath = await downloadImage(
+        'https://picsum.photos/1200/800.jpg',
+        'asServedSetForImages.jpg'
+      );
+      await request(suite.app)
+        .post('/api/admin/images/as-served')
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.superuser)
+        .field('id', 'asServedSetForImages')
+        .field('description', 'asServedSetForImages')
+        .attach('selectionImage', fs.createReadStream(filePath), 'asServedSetForImages.jpg');
+    });
+
+    const { asServedImages } = images;
+    describe('GET /api/admin/images/as-served/:asServedSetId/images', asServedImages.browse);
+    describe('POST /api/admin/images/as-served/:asServedSetId/images', asServedImages.store);
+    describe(
+      'GET /api/admin/images/as-served/:asServedSetId/images/:asServedImageId',
+      asServedImages.detail
+    );
+    describe(
+      'DELETE /api/admin/images/as-served/:asServedSetId/images/:asServedImageId',
+      asServedImages.destroy
+    );
+  });
 
   // Guided images
   const { guides } = images;
