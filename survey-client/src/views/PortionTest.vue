@@ -4,8 +4,6 @@
       <v-col>
         <v-btn @click="showComponent(0)">Portion Option</v-btn>
         <v-btn @click="showComponent(1)">As Served</v-btn>
-        <v-btn @click="showComponent(11)">Leftover Question</v-btn>
-        <v-btn @click="showComponent(2)">As Served Leftovers</v-btn>
         <v-btn @click="showComponent(3)">Guide Image</v-btn>
         <v-btn @click="showComponent(4)">Drink Scale</v-btn>
         <v-btn @click="showComponent(5)">Standard portion</v-btn>
@@ -41,12 +39,6 @@
           :asServedSetId="asServedSetId"
         ></as-served-prompt>
 
-        <as-served-leftover-prompt
-          v-show="componentView == 2"
-          :promptProps="asServedProps"
-          :foodName="foodName"
-        ></as-served-leftover-prompt>
-
         <guideImagePrompt
           v-if="componentView == 3"
           :promptProps="asServedProps"
@@ -56,7 +48,7 @@
         <drink-scale-prompt
           v-show="componentView == 4"
           :promptProps="asServedProps"
-          :foodName="foodName"
+          :foodName="'cream soda'"
         ></drink-scale-prompt>
 
         <standard-portion-prompt
@@ -94,12 +86,6 @@
           :promptProps="asServedProps"
           :foodName="foodName"
         ></direct-weight-prompt>
-
-        <leftover-question-prompt
-          v-show="componentView == 11"
-          :promptProps="asServedProps"
-          :foodName="foodName"
-        ></leftover-question-prompt>
       </v-col>
     </v-row>
   </v-container>

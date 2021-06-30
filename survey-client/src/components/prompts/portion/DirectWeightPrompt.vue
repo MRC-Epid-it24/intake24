@@ -6,7 +6,13 @@
       </template>
       <v-row>
         <v-col>
-          <v-card>Direct Weight content here</v-card>
+          <v-card>
+            Portion: {{ weight }}g
+            <v-card-actions>
+              <v-btn @click="quantity(-1)"> - </v-btn>
+              <v-btn @click="quantity(1)"> + </v-btn>
+            </v-card-actions>
+          </v-card>
         </v-col>
       </v-row>
     </portion-layout>
@@ -36,6 +42,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     return {
       ...merge(directWeightPromptDefaultProps, this.promptProps),
       errors: [] as string[],
+      // Prototyping variables
+      weight: 50,
     };
   },
 
@@ -46,6 +54,12 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+  },
+
+  methods: {
+    quantity(value: number) {
+      this.weight += value;
+    }
   },
 });
 </script>

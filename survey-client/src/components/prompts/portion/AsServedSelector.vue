@@ -1,18 +1,25 @@
 <template>
   <v-container>
     <v-row>
-      <v-img class="align-end" :src="getMainImage()" :aspect-ratio="16 / 9">
-        <template v-slot:placeholder>
-          <image-placeholder></image-placeholder>
-        </template>
-        <v-row>
-          <v-col class="d-flex justify-end mr-auto">
-            <v-chip class="ma-2">
-              {{ mainWeight }}
-            </v-chip>
-          </v-col>
-        </v-row>
-      </v-img>
+      
+        <v-img class="align-end" :src="getMainImage()" :aspect-ratio="16 / 9">
+          <template v-slot:placeholder>
+            <image-placeholder></image-placeholder>
+          </template>
+          <v-row>
+            <v-col class="d-flex justify-end mr-auto">
+              <v-chip class="ma-2">
+                {{ mainWeight }}
+              </v-chip>
+            </v-col>
+          </v-row>
+          <v-overlay
+            absolute
+            :value="overlay">
+            Input: Enter how much more/less you had
+          </v-overlay>
+        </v-img>
+      
     </v-row>
     <v-row>
       <v-col class="pa-1" cols="3" sm="2" lg="1">
@@ -83,6 +90,8 @@ export default (Vue as VueConstructor<Vue>).extend({
       selectedObjectIdx: null as number | null,
       asServedData: {} as AsServedSetResponse,
       dataLoaded: false as boolean,
+      // Prototyping
+      overlay: false as boolean,
     };
   },
   computed: {
@@ -140,6 +149,7 @@ export default (Vue as VueConstructor<Vue>).extend({
         console.log('Trigger input quantity prompt');
         // User wants to input more than thumbnail quantity on screen
         // TO DO Method for this
+        this.overlay = true;
       } else {
         this.selectedObjectIdx =
           this.selectedObjectIdx + 1 === maxLength ? maxLength : this.selectedObjectIdx + 1;
@@ -153,6 +163,7 @@ export default (Vue as VueConstructor<Vue>).extend({
         console.log('Trigger input quantity prompt');
         // User wants to input less than thumbnail quantities on screen
         // TO DO Method for this
+        this.overlay = true;
       } else {
         this.selectedObjectIdx = this.selectedObjectIdx - 1 === 0 ? 0 : this.selectedObjectIdx - 1;
       }

@@ -103,7 +103,9 @@ const portion: LocaleMessage = {
     label: 'Please select the bowl that looks most like the one you used.',
   },
   milkCereal: {
-    label: 'Please choose the level your milk came up to (without cereal).',
+    label: 'Milk with your cereal',
+    question: 'Did you have milk on your cereal?',
+    foodSelectButton: `I can't find my food`,
   },
   pizza: {
     label: 'Please select the pizza that is closest to the size you had.',

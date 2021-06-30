@@ -129,7 +129,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       errors: [] as string[],
       selectedGuide: false, // TODO: Model this correctly
       selectedQuantity: false,
-      selectionImageUrl: '',
+      selectionImageUrl: 'https://api.intake24.org/images/glasses/glass3.jpg',
       panelOpen: 0, // ID which panel is open
       sliderValue: 75,
     };
