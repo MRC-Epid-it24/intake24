@@ -1,6 +1,7 @@
-![Build Status](https://github.com/MRC-Epid-it24/intake24/workflows/CI/badge.svg)
-
 # Intake24 NG
+
+![Build Status](https://github.com/MRC-Epid-it24/intake24/workflows/CI/badge.svg)
+[![GitHub license](https://img.shields.io/github/license/MRC-Epid-it24/intake24)](https://github.com/MRC-Epid-it24/intake24/blob/master/LICENSE)
 
 ## Node.js
 
