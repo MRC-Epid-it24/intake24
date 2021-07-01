@@ -2,6 +2,7 @@ import { LocaleMessages } from 'vue-i18n';
 import common from './common';
 import dashboard from './dashboard';
 import flags from './flags';
+import asServed from './as-served';
 import guideImages from './guide-images';
 import imageMaps from './image-maps';
 import jobs from './jobs';
@@ -20,6 +21,7 @@ const messages: LocaleMessages = {
   common,
   dashboard,
   flags,
+  'as-served': asServed,
   'guide-images': guideImages,
   'image-maps': imageMaps,
   jobs,

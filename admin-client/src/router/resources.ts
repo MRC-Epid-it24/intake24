@@ -49,6 +49,15 @@ const resources: Resource[] = [
   // Images
   {
     group: 'images',
+    name: 'as-served',
+    path: 'images/as-served',
+    icon: 'fas fa-utensils',
+    api: 'admin/images/as-served',
+    generateRoutes: true,
+    routes: [...routes],
+  },
+  {
+    group: 'images',
     name: 'image-maps',
     path: 'images/maps',
     icon: 'fas fa-draw-polygon',

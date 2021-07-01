@@ -4,8 +4,6 @@ import { UploadSourceImageInput } from './source-images';
 
 export type AsServedImageInput = Pick<AsServedImageAttributes, 'id' | 'weight'>;
 
-export type AsServedImageInputs = AsServedImageInput[];
-
 export interface CreateAsServedImageInput extends UploadSourceImageInput {
   weight: number;
 }
@@ -16,7 +14,7 @@ export interface CreateAsServedSetInput extends UploadSourceImageInput {
 
 export type UpdateAsServedSetInput = {
   description: string;
-  images: AsServedImageInputs;
+  images: AsServedImageInput[];
 };
 
 export interface AsServedSetListEntry extends Pick<AsServedSetAttributes, 'id' | 'description'> {
