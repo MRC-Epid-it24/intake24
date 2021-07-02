@@ -113,17 +113,18 @@ import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { MilkCerealPromptProps, milkCerealPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
+import expansionPanelControls, { ExpansionPanelControls } from '@/components/mixins/expansionPanelControls';
 import ValidInvalidIcon from '@/components/elements/ValidInvalidIcon.vue';
 import BasePortion, { Portion } from './BasePortion';
 
-export default (Vue as VueConstructor<Vue & Portion>).extend({
+export default (Vue as VueConstructor<Vue & Portion & ExpansionPanelControls>).extend({
   name: 'MilkCerealPrompt',
 
   components: {
     ValidInvalidIcon,
   },
 
-  mixins: [BasePortion, localeContent],
+  mixins: [BasePortion, localeContent, expansionPanelControls],
 
   props: {
     // Generic object 'props' used to store all props for each prompt
@@ -137,7 +138,6 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       ...merge(milkCerealPromptDefaultProps, this.promptProps),
       errors: [] as string[],
       displayQuestions: false as boolean,
-      panelOpen: 0 as number,
       // Below are rough/testing vars to control UI prototype
       bowlType: 'A' as string, // For testing until food linking
       foodSelected: false as boolean,
@@ -191,9 +191,6 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       } catch (e) {
         console.log(e);
       }
-    },
-    setPanelOpen(value: number) {
-      this.panelOpen = value;
     },
     setDisplayQuestions(value: boolean) {
       this.displayQuestions = value;
