@@ -20,6 +20,10 @@ export type MilkHotDrinkPromptProps = ValidatedPromptProps;
 
 export type DirectWeightPromptProps = ValidatedPromptProps;
 
+export interface AssociatedFoodsPanelProps extends ValidatedPromptProps {
+  expansionPanelTotal: number;
+}
+
 export const drinkScalePromptDefaultProps: DrinkScalePromptProps = {
   text: { en: null },
   description: { en: null },
@@ -102,6 +106,17 @@ export const leftoverQuestionPromptDefaultProps: LeftoverQuestionPromptProps = {
     required: false,
     message: { en: null },
   },
+};
+
+export const associatedFoodPanelDefaultProps: AssociatedFoodsPanelProps = {
+  text: { en: null },
+  description: { en: null },
+  conditions: [],
+  validation: {
+    required: false,
+    message: { en: null },
+  },
+  expansionPanelTotal: 3,
 };
 
 export const portionSizePromptQuestions: PromptQuestion[] = [
