@@ -3,22 +3,6 @@ import type { PromptQuestion, QuantityValues } from '../prompts';
 import { UserFoodData } from './http';
 import { PortionSizeMethodId } from './models';
 
-export type SurveyQuestionSection = 'preMeals' | 'postMeals' | 'submission';
-
-export type SurveySection = SurveyQuestionSection | 'meals';
-
-export type MealQuestionSection = 'preFoods' | 'postFoods';
-
-export type MealSection = MealQuestionSection | 'foods';
-
-export type GenericQuestions = Record<SurveyQuestionSection, PromptQuestion[]>;
-
-export type MealQuestions = Record<MealSection, PromptQuestion[]>;
-
-export interface RecallQuestions extends GenericQuestions {
-  meals: MealQuestions;
-}
-
 export type CustomPromptAnswer = string | string[] | number | number[];
 
 export interface PortionSizeStateBase {

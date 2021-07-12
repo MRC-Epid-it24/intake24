@@ -24,7 +24,6 @@
       <v-row v-if="displayQuestions">
         <v-col>
           <v-expansion-panels v-model="panelOpen">
-
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 Please select the milk you had:
@@ -58,14 +57,18 @@
                 <v-row>
                   <v-col class="col-6">
                     <v-card @click="selectPortionMethod('glasses')">
-                      <v-img src="https://it24-dev.mrc-epid.cam.ac.uk/images/portion/gsoftdrnk.jpg"></v-img>
+                      <v-img
+                        src="https://it24-dev.mrc-epid.cam.ac.uk/images/portion/gsoftdrnk.jpg"
+                      ></v-img>
                       <v-card-title>In glasses</v-card-title>
                       <v-card-actions></v-card-actions>
                     </v-card>
                   </v-col>
                   <v-col class="col-6">
                     <v-card @click="selectPortionMethod('bowls')">
-                      <v-img src="https://it24-dev.mrc-epid.cam.ac.uk/images/cereal/milkbowlA.jpg"></v-img>
+                      <v-img
+                        src="https://it24-dev.mrc-epid.cam.ac.uk/images/cereal/milkbowlA.jpg"
+                      ></v-img>
                       <v-card-title>In bowls</v-card-title>
                       <v-card-actions></v-card-actions>
                     </v-card>
@@ -87,7 +90,6 @@
                 <v-img :src="imageMapData.baseImageUrl" @click="selectPortion()"></v-img>
               </v-expansion-panel-content>
             </v-expansion-panel>
-
           </v-expansion-panels>
           <!-- <v-card>Milk Cereal Prompt content here</v-card> -->
           <!-- select food -->
@@ -174,9 +176,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     async fetchFoodData() {
       const locale = 'en_GB';
       try {
-        const { data } = await this.$http.get(
-          `foods/image-maps/${locale}/${this.foodCode}`
-        );
+        const { data } = await this.$http.get(`foods/image-maps/${locale}/${this.foodCode}`);
         this.foodData = { ...data };
         // this.imageMapLoaded = true;
       } catch (e) {
@@ -185,9 +185,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     },
     async fetchImageMapData() {
       try {
-        const { data } = await this.$http.get(
-          `portion-sizes/image-maps/${this.imageMapId}`
-        );
+        const { data } = await this.$http.get(`portion-sizes/image-maps/${this.imageMapId}`);
         this.imageMapData = { ...data };
         this.imageMapLoaded = true;
       } catch (e) {
@@ -229,7 +227,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       } else {
         console.log('not complete');
       }
-    }
+    },
   },
 });
 </script>

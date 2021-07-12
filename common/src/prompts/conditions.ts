@@ -1,10 +1,13 @@
 import { Dictionary } from '../types/common';
 
-export type ConditionType =
-  | 'surveyPromptAnswer'
-  | 'mealPromptAnswer'
-  | 'foodPromptAnswer'
-  | 'recallNumber';
+export const conditionTypes = [
+  'surveyPromptAnswer',
+  'mealPromptAnswer',
+  'foodPromptAnswer',
+  'recallNumber',
+] as const;
+
+export type ConditionType = typeof conditionTypes[number];
 
 export type ConditionOp = 'eq' | 'ne' | 'gte' | 'gt' | 'lte' | 'lt';
 

@@ -50,7 +50,7 @@ import draggable from 'vuedraggable';
 import { promptSettings } from '@/components/prompts';
 import PromptSelector from '@/components/prompts/PromptSelector.vue';
 import { PromptQuestion } from '@common/prompts';
-import { SurveyQuestionSection, MealSection } from '@common/types';
+import { SurveyQuestionSection, MealSection } from '@common/schemes';
 import { SchemeQuestionEntry } from '@common/types/http/admin';
 import QuestionListItem from './QuestionListItem.vue';
 import TemplateDialog from './TemplateDialog.vue';

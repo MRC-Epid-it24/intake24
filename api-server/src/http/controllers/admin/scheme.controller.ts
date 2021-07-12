@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { FindOptions, Op } from 'sequelize';
 import { Language, Scheme, SchemeQuestion } from '@/db/models/system';
-import { defaultMeals, flattenScheme } from '@common/schemes';
+import { defaultMeals, flattenScheme, RecallQuestions } from '@common/schemes';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import {
@@ -16,7 +16,6 @@ import {
   SchemeQuestionTemplatesResponse,
 } from '@common/types/http/admin';
 import { ExportField, ExportSectionId } from '@common/types/models';
-import { RecallQuestions } from '@common/types';
 import { PromptQuestion } from '@common/prompts';
 import { Controller, CrudActions } from '../controller';
 

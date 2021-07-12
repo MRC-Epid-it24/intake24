@@ -18,7 +18,7 @@ const validators = [
   },
   {
     type: 'RecallQuestions',
-    srcFile: 'src/types/recall.ts',
+    srcFile: 'src/schemes/index.ts',
     destFile: 'src/validators/recall-questions.validator.ts',
     params: '--useNamedExport',
   },

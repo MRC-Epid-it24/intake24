@@ -2,12 +2,8 @@ import { Store } from 'vuex';
 import { SurveyState } from '@/types/vuex';
 import PromptManager from '@/dynamic-recall/prompt-manager';
 import { PromptQuestion } from '@common/prompts';
-import {
-  MealSection,
-  MealTime,
-  SurveySection,
-  SurveyState as CurrentSurveyState,
-} from '@common/types';
+import { MealSection, SurveySection } from '@common/schemes';
+import { MealTime, SurveyState as CurrentSurveyState } from '@common/types';
 import { SchemeEntryResponse } from '@common/types/http';
 import SelectionManager from '@/dynamic-recall/selection-manager';
 

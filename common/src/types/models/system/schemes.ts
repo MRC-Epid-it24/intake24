@@ -1,5 +1,6 @@
 import type { PromptQuestion } from '../../../prompts';
-import type { Meal, RecallQuestions } from '../..';
+import type { RecallQuestions } from '../../../schemes';
+import type { Meal } from '../..';
 
 export enum SchemeTypes {
   DATA_DRIVEN = 'data-driven',

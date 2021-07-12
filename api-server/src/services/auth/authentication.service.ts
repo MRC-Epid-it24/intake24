@@ -291,7 +291,12 @@ export default ({
       throw new UnauthorizedError();
     }
 
-    signInService.log({ ...signInAttempt, providerKey: email, userId: user.id, successful: true });
+    await signInService.log({
+      ...signInAttempt,
+      providerKey: email,
+      userId: user.id,
+      successful: true,
+    });
 
     const subject: Subject = { provider: 'email', providerKey: email };
 

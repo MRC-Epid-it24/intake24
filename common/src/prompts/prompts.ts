@@ -1,30 +1,40 @@
-import type { MealSection, SurveyQuestionSection } from '../types';
+import type { MealSection, SurveyQuestionSection } from '../schemes';
 import type { BasePromptProps } from './props';
 
-export type QuestionType = 'custom' | 'standard' | 'portion-size';
+export const questionTypes = ['custom', 'standard', 'portion-size'] as const;
+export type QuestionType = typeof questionTypes[number];
 
-export type CustomComponentType =
-  | 'info-prompt'
-  | 'date-picker-prompt'
-  | 'time-picker-prompt'
-  | 'checkbox-list-prompt'
-  | 'radio-list-prompt'
-  | 'textarea-prompt';
+export const customComponentTypes = [
+  'info-prompt',
+  'date-picker-prompt',
+  'time-picker-prompt',
+  'checkbox-list-prompt',
+  'radio-list-prompt',
+  'textarea-prompt',
+] as const;
 
-export type StandardComponentType =
-  | 'meal-time-prompt'
-  | 'submit-prompt'
-  | 'redirect-prompt'
-  | 'food-search-prompt'
-  | 'meal-add-prompt'
-  | 'edit-meal-prompt';
+export type CustomComponentType = typeof customComponentTypes[number];
 
-export type PortionSizeComponentType =
-  | 'portion-size-option-prompt'
-  | 'as-served-prompt'
-  | 'as-served-leftovers-prompt'
-  | 'guide-image-prompt'
-  | 'standard-portion-prompt';
+export const standardComponentTypes = [
+  'meal-time-prompt',
+  'submit-prompt',
+  'redirect-prompt',
+  'food-search-prompt',
+  'meal-add-prompt',
+  'edit-meal-prompt',
+] as const;
+
+export type StandardComponentType = typeof standardComponentTypes[number];
+
+export const portionSizeComponentTypes = [
+  'portion-size-option-prompt',
+  'as-served-prompt',
+  'as-served-leftovers-prompt',
+  'guide-image-prompt',
+  'standard-portion-prompt',
+] as const;
+
+export type PortionSizeComponentType = typeof portionSizeComponentTypes[number];
 
 export type ComponentType = CustomComponentType | StandardComponentType | PortionSizeComponentType;
 

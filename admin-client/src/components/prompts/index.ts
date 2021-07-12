@@ -1,5 +1,5 @@
 import { ComponentType } from '@common/prompts';
-import { MealSection, SurveyQuestionSection } from '@common/types';
+import { MealSection, SurveyQuestionSection } from '@common/schemes';
 
 const baseTab = ['general', 'content', 'conditions'];
 const validatedTab = [...baseTab, 'validation'];

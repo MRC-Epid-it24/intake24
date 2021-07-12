@@ -113,7 +113,8 @@ import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
 import portionSizePrompts from '@/components/prompts/portion-size';
 import { merge } from '@/util';
-import { FormRefs, SurveyQuestionSection, MealSection } from '@common/types';
+import { SurveyQuestionSection, MealSection } from '@common/schemes';
+import { FormRefs } from '@common/types';
 import {
   PromptQuestion,
   QuestionType,

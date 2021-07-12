@@ -1,6 +1,33 @@
-import { Meal, MealSection, SurveyQuestionSection, RecallQuestions } from '../types';
+import { Meal } from '../types';
 import { PromptQuestion, PromptQuestionWithSection } from '../prompts';
 import { ExportSection } from '../types/models';
+
+export const surveySections = ['preMeals', 'postMeals', 'submission'] as const;
+export type SurveyQuestionSection = typeof surveySections[number];
+
+export const mealSections = ['preFoods', 'foods', 'postFoods'] as const;
+export type MealSection = typeof mealSections[number];
+
+export const mealQuestionSections = ['preFoods', 'postFoods'] as const;
+export type MealQuestionSection = typeof mealQuestionSections[number];
+
+export const isMealSection = (section: any): section is MealSection => {
+  return mealSections.includes(section);
+};
+
+export const isSurveySection = (section: any): section is SurveyQuestionSection => {
+  return surveySections.includes(section);
+};
+
+export type SurveySection = SurveyQuestionSection | 'meals';
+
+export type GenericQuestions = Record<SurveyQuestionSection, PromptQuestion[]>;
+
+export type MealQuestions = Record<MealSection, PromptQuestion[]>;
+
+export interface RecallQuestions extends GenericQuestions {
+  meals: MealQuestions;
+}
 
 export const flattenScheme = (scheme: RecallQuestions): PromptQuestion[] =>
   Object.values(scheme).reduce<PromptQuestion[]>((acc, questions) => {
@@ -17,18 +44,6 @@ export const flattenSchemeWithSection = (scheme: RecallQuestions): PromptQuestio
     acc.push(...items);
     return acc;
   }, []);
-
-export const surveySections: SurveyQuestionSection[] = ['preMeals', 'postMeals', 'submission'];
-
-export const mealSections: MealSection[] = ['preFoods', 'foods', 'postFoods'];
-
-export const isMealSection = (section: any): section is MealSection => {
-  return mealSections.includes(section);
-};
-
-export const isSurveySection = (section: any): section is SurveyQuestionSection => {
-  return surveySections.includes(section);
-};
 
 export const defaultMeals: Meal[] = [
   { name: { en: 'Breakfast' }, time: '8:00' },

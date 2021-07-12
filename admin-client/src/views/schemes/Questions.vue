@@ -61,9 +61,11 @@ import {
   isMealSection,
   mealSections,
   surveySections,
+  SurveyQuestionSection,
+  MealSection,
 } from '@common/schemes';
 import { PromptQuestion } from '@common/prompts';
-import { Dictionary, SurveyQuestionSection, MealSection } from '@common/types';
+import { Dictionary } from '@common/types';
 import { SchemeForm } from './Form.vue';
 import QuestionList, { PromptQuestionMoveEvent } from './QuestionList.vue';
 

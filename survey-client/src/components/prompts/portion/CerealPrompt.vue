@@ -145,9 +145,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   methods: {
     async fetchBowlImageMap() {
       try {
-        const { data } = await this.$http.get(
-          `portion-sizes/image-maps/${this.bowlImageMapId}`
-        );
+        const { data } = await this.$http.get(`portion-sizes/image-maps/${this.bowlImageMapId}`);
         this.bowlImageMapData = { ...data };
       } catch (e) {
         console.log(e);
@@ -156,9 +154,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
     async fetchAsServedData() {
       try {
-        const { data } = await this.$http.get(
-          `portion-sizes/as-served-sets/${this.cerealType}`
-        );
+        const { data } = await this.$http.get(`portion-sizes/as-served-sets/${this.cerealType}`);
         this.asServedData = { ...data };
       } catch (e) {
         console.log(e);
@@ -167,9 +163,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
     async fetchLeftoverData() {
       try {
-        const { data } = await this.$http.get(
-          `portion-sizes/image-maps/${this.bowlImageMapId}`
-        );
+        const { data } = await this.$http.get(`portion-sizes/image-maps/${this.bowlImageMapId}`);
         this.leftoverData = { ...data };
       } catch (e) {
         console.log(e);
@@ -212,10 +206,10 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     },
     submit() {
       if (this.bowlComplete && this.asServedComplete && this.leftoverComplete) {
-        console.log("submitted");
+        console.log('submitted');
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

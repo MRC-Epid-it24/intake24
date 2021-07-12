@@ -59,7 +59,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   methods: {
     quantity(value: number) {
       this.weight += value;
-    }
+    },
   },
 });
 </script>

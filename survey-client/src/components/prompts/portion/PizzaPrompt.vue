@@ -136,9 +136,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   methods: {
     async fetchPizzaImageMapData() {
       try {
-        const { data } = await this.$http.get(
-          `portion-sizes/image-maps/${this.pizzaImageMapId}`
-        );
+        const { data } = await this.$http.get(`portion-sizes/image-maps/${this.pizzaImageMapId}`);
         this.pizzaImageMapData = { ...data };
       } catch (e) {
         console.log(e);
@@ -156,9 +154,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     },
     async fetchSliceImageMapData() {
       try {
-        const { data } = await this.$http.get(
-          `portion-sizes/image-maps/${this.pizzaSliceMapId}`
-        );
+        const { data } = await this.$http.get(`portion-sizes/image-maps/${this.pizzaSliceMapId}`);
         this.pizzaSliceMapData = { ...data };
       } catch (e) {
         console.log(e);
@@ -189,7 +185,12 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       this.quantityComplete = true;
     },
     submitButtonStyle() {
-      if (this.typeComplete && this.thicknessComplete && this.sizeComplete && this.quantityComplete) {
+      if (
+        this.typeComplete &&
+        this.thicknessComplete &&
+        this.sizeComplete &&
+        this.quantityComplete
+      ) {
         return 'success';
       }
       return '';

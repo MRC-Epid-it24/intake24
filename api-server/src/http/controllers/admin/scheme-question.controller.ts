@@ -8,8 +8,7 @@ import {
   SchemeQuestionResponse,
   SchemeQuestionsResponse,
 } from '@common/types/http/admin';
-import { isMealSection } from '@common/schemes';
-import { MealSection, SurveyQuestionSection } from '@common/types';
+import { isMealSection, MealSection, SurveyQuestionSection } from '@common/schemes';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeQuestionController = Controller<CrudActions | 'sync'>;
