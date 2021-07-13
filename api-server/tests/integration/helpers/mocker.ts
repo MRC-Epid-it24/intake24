@@ -1,4 +1,5 @@
 import faker from 'faker';
+import { nanoid } from 'nanoid';
 import slugify from 'slugify';
 import jobs from '@/jobs';
 import {
@@ -9,6 +10,7 @@ import {
   CreateTaskRequest,
   CreateUserRequest,
   CreateLanguageRequest,
+  CreateAsServedSetInput,
 } from '@common/types/http/admin';
 import {
   SchemeCreationAttributes,
@@ -17,6 +19,7 @@ import {
 } from '@common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { customPromptQuestions } from '@common/prompts';
+import { downloadImage } from './util';
 
 const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
@@ -64,6 +67,20 @@ const user = (): CreateUserRequest => {
     customFields,
     permissions,
     roles,
+  };
+};
+
+const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInput> => {
+  const id = asServedSetId ?? nanoid(32);
+  const originalname = `${id}.jpg`;
+
+  const filePath = await downloadImage('https://picsum.photos/1200/800.jpg', originalname);
+
+  return {
+    id,
+    description: `${id}_description`,
+    file: { originalname: `${id}.jpg`, path: filePath },
+    uploader: 'admin',
   };
 };
 

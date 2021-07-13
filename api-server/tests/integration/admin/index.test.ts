@@ -12,6 +12,7 @@ import roles from './roles/index.test';
 import users from './users/index.test';
 import schemes from './schemes/index.test';
 import schemeQuestions from './scheme-questions/index.test';
+import signInLogs from './sign-in-logs/index.test';
 import surveys from './surveys/index.test';
 import tasks from './tasks/index.test';
 
@@ -146,6 +147,11 @@ export default (): void => {
   describe('PUT /api/admin/scheme-questions/:schemeQuestionId', schemeQuestions.update);
   describe('DELETE /api/admin/scheme-questions/:schemeQuestionId', schemeQuestions.destroy);
   describe('POST /api/admin/scheme-questions/:schemeQuestionId/sync', schemeQuestions.sync);
+
+  // Sign-in logs
+  describe('GET /api/admin/sign-in-logs', signInLogs.browse);
+  describe('GET /api/admin/sign-in-logs/:signInLogId', signInLogs.detail);
+  describe('DELETE /api/admin/sign-in-logs/:signInLogId', signInLogs.destroy);
 
   // Surveys
   describe('GET /api/admin/surveys', surveys.browse);
