@@ -8,6 +8,7 @@ import languages from './languages';
 import locales from './locales';
 import schemes from './schemes';
 import schemeQuestions from './scheme-questions';
+import signInLogs from './sign-in-logs';
 import surveys from './surveys';
 import permissions from './permissions';
 import roles from './roles';
@@ -24,6 +25,7 @@ const views: Dictionary = {
   locales,
   schemes,
   'scheme-questions': schemeQuestions,
+  'sign-in-logs': signInLogs,
   surveys,
   permissions,
   roles,

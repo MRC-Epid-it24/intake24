@@ -13,6 +13,7 @@ import permissions from './permissions';
 import roles from './roles';
 import schemes from './schemes';
 import schemeQuestions from './scheme-questions';
+import signInLogs from './sign-in-logs';
 import surveys from './surveys';
 import tasks from './tasks';
 import users from './users';
@@ -32,6 +33,7 @@ const messages: LocaleMessages = {
   roles,
   schemes,
   'scheme-questions': schemeQuestions,
+  'sign-in-logs': signInLogs,
   surveys,
   tasks,
   users,

@@ -85,6 +85,14 @@ const resources: Resource[] = [
   },
   {
     group: 'system',
+    name: 'sign-in-logs',
+    icon: 'fas fa-sign-in-alt',
+    api: 'admin/sign-in-logs',
+    generateRoutes: true,
+    routes: ['detail'],
+  },
+  {
+    group: 'system',
     name: 'tasks',
     icon: 'fas fa-tasks',
     api: 'admin/tasks',
