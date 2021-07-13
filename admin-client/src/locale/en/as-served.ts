@@ -12,6 +12,7 @@ const asServedSets: LocaleMessageObject = {
   id: 'As served set ID',
   selectionImage: 'Selection image',
   images: 'Images',
+  weight: 'Weight',
 };
 
 export default asServedSets;

@@ -20,12 +20,7 @@
         <v-img class="ma-2" :src="entry.selectionImageUrl"></v-img>
       </v-col>
     </v-row>
-    <v-card-title>{{ $t('as-served.images') }}</v-card-title>
-    <v-row>
-      <v-col v-for="image in entry.images" :key="image.id" cols="12" sm="6" md="4" lg="3">
-        <v-img :src="image.mainImageUrl"></v-img>
-      </v-col>
-    </v-row>
+    <images :items="entry.images" disabled></images>
   </layout>
 </template>
 
@@ -34,9 +29,12 @@ import Vue, { VueConstructor } from 'vue';
 import type { DetailMixin } from '@/types';
 import { AsServedSetEntry } from '@common/types/http/admin';
 import detailMixin from '@/components/entry/detailMixin';
+import Images from './Images.vue';
 
 export default (Vue as VueConstructor<Vue & DetailMixin<AsServedSetEntry>>).extend({
   name: 'AsServedDetail',
+
+  components: { Images },
 
   mixins: [detailMixin],
 });

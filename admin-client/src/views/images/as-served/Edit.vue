@@ -40,6 +40,7 @@
           {{ error.msg }}
         </v-alert>
       </v-card-text>
+      <images :items="entry.images" @images="updateImages"></images>
       <v-card-text>
         <submit-footer :disabled="form.errors.any()"></submit-footer>
       </v-card-text>
@@ -53,6 +54,7 @@ import { FormMixin } from '@/types/vue';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 import { AsServedSetEntry, AsServedImageInput } from '@common/types/http/admin';
+import Images from './Images.vue';
 
 type EditAsServedSetForm = {
   id: string | null;
@@ -61,7 +63,9 @@ type EditAsServedSetForm = {
 };
 
 export default (Vue as VueConstructor<Vue & FormMixin<AsServedSetEntry>>).extend({
-  name: 'AsServedSetForm',
+  name: 'EditAsServedSetForm',
+
+  components: { Images },
 
   mixins: [formMixin],
 
@@ -77,6 +81,14 @@ export default (Vue as VueConstructor<Vue & FormMixin<AsServedSetEntry>>).extend
   },
 
   methods: {
+    toForm(data: AsServedSetEntry) {
+      const { images, ...rest } = data;
+      const input = { ...rest, images: images.map(({ id, weight }) => ({ id, weight })) };
+
+      this.setOriginalEntry(input);
+      this.form.load(input);
+    },
+
     updateImages(images: AsServedImageInput[]) {
       this.form.errors.clear('images');
 
