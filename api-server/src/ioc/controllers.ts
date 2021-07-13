@@ -33,6 +33,7 @@ export default (container: AwilixContainer): void => {
     adminSurveySubmissionController: asFunction(controllers.admin.surveySubmission),
 
     jobController: asFunction(controllers.admin.job),
+    signInLogController: asFunction(controllers.admin.signInLog),
     taskController: asFunction(controllers.admin.task),
 
     permissionController: asFunction(controllers.admin.acl.permission),

@@ -37,6 +37,7 @@ import type {
   LocaleController,
   SchemeController,
   SchemeQuestionController,
+  SignInLogController,
   AdminSurveyController,
   AdminSurveyDataExportController,
   AdminSurveyMgmtController,
@@ -130,6 +131,7 @@ export interface IoC extends Jobs {
 
   // System controllers
   jobController: JobController;
+  signInLogController: SignInLogController;
   taskController: TaskController;
 
   // ACL controllers
