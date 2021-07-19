@@ -154,6 +154,7 @@ module.exports = {
             'admin/locales',
             'admin/schemes',
             'admin/scheme-questions',
+            'admin/sign-in-logs',
             'admin/surveys',
             'admin/tasks',
             'admin/users',
