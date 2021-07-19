@@ -20,7 +20,7 @@
         <v-img class="ma-2" :src="entry.selectionImageUrl"></v-img>
       </v-col>
     </v-row>
-    <images :items="entry.images" disabled></images>
+    <as-served-images :setId="entry.id" :items="entry.images" disabled></as-served-images>
   </layout>
 </template>
 
@@ -29,12 +29,12 @@ import Vue, { VueConstructor } from 'vue';
 import type { DetailMixin } from '@/types';
 import { AsServedSetEntry } from '@common/types/http/admin';
 import detailMixin from '@/components/entry/detailMixin';
-import Images from './Images.vue';
+import AsServedImages from './Images.vue';
 
 export default (Vue as VueConstructor<Vue & DetailMixin<AsServedSetEntry>>).extend({
   name: 'AsServedDetail',
 
-  components: { Images },
+  components: { AsServedImages },
 
   mixins: [detailMixin],
 });

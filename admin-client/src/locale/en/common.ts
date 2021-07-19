@@ -70,7 +70,7 @@ const common: LocaleMessageObject = {
     confirm: {
       _: 'Confirm',
       title: 'Do you want to continue?',
-      delete: `Do you want to delete '{name}'?`,
+      delete: `Do you want to delete {name}?`,
       multi: {
         delete: 'Do you want to delete selected items: {count}',
       },

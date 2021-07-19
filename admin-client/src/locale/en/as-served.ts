@@ -11,7 +11,12 @@ const asServedSets: LocaleMessageObject = {
 
   id: 'As served set ID',
   selectionImage: 'Selection image',
-  images: 'Images',
+  images: {
+    _: 'As served image',
+    title: 'As served images',
+    add: 'Add as served image',
+    delete: 'Delete as served image',
+  },
   weight: 'Weight',
 };
 

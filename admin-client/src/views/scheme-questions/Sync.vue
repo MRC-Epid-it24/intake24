@@ -105,7 +105,7 @@ export default (
       const { question } = this.entry;
       const { id: schemeId, section } = scheme;
 
-      await this.$http.post(`/admin/${this.module}/${this.id}/sync`, {
+      await this.$http.post(`admin/${this.module}/${this.id}/sync`, {
         schemeId,
         section,
         question,

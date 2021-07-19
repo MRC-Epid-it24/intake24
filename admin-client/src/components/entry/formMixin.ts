@@ -112,7 +112,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
           data: { id, name },
         } = await this.form.post(`${this.resource.api}`);
 
-        this.$router.push({ name: `${this.module}-edit`, params: { id } });
+        this.$router.push({ name: `${this.resource.name}-edit`, params: { id } });
         this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }) as string);
       }
     },
