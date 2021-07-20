@@ -44,7 +44,7 @@ export default (): void => {
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name', 'job', 'cron', 'active']);
+      expect(body.errors).toContainAllKeys(['name', 'job', 'cron', 'active', 'params']);
     });
 
     it('should return 422 when invalid input data', async () => {
@@ -58,11 +58,19 @@ export default (): void => {
           cron: 'invalid-cron-entry',
           active: 'not-a-boolean',
           description: { text: 'should just be string' },
+          params: 1,
         });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name', 'job', 'cron', 'active', 'description']);
+      expect(body.errors).toContainAllKeys([
+        'name',
+        'job',
+        'cron',
+        'active',
+        'description',
+        'params',
+      ]);
     });
 
     it('should return 201 and new resource', async () => {

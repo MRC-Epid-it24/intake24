@@ -1,21 +1,23 @@
 import { ConnectionOptions, Job as BullJob, Queue, QueueScheduler, Worker } from 'bullmq';
+import type { Logger } from 'winston';
 import { Task } from '@/db/models/system';
-import ioc, { IoC } from '@/ioc';
-import { validate, Job, JobType } from '@/jobs';
+import type { IoC } from '@/ioc';
+import ioc from '@/ioc';
+import { Job } from '@/jobs';
+import { JobData, RepeatableBullJob } from '@common/types';
+import { sleep } from '@/util';
 import { QueueHandler } from './queue-handler';
 
-export type TaskData = { jobType: JobType };
-
-export default class TasksQueueHandler implements QueueHandler<TaskData> {
+export default class TasksQueueHandler implements QueueHandler<JobData> {
   readonly name = 'it24-tasks';
 
-  private readonly logger;
+  private readonly logger: Logger;
 
-  queue!: Queue<TaskData>;
+  queue!: Queue<JobData>;
 
   scheduler!: QueueScheduler;
 
-  workers: Worker<TaskData>[] = [];
+  workers: Worker<JobData>[] = [];
 
   /**
    * Creates an instance of TasksQueueHandler.
@@ -44,11 +46,11 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
     const worker = new Worker(this.name, this.processor, { connection });
 
     worker.on('completed', (job) => {
-      this.logger.info(`${this.name}: ${job.id} has completed.`);
+      this.logger.info(`${this.name}: ${job.name} | ${job.id} has completed.`);
     });
 
-    worker.on('failed', (job: BullJob, err: any) => {
-      this.logger.error(`${this.name}: ${job.id} has failed with ${err.message}`);
+    worker.on('failed', (job: any, err: any) => {
+      this.logger.error(`${this.name}: ${job.name} | ${job.id} has failed with ${err.message}`);
     });
 
     this.workers.push(worker);
@@ -56,7 +58,7 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
     await this.clearRepeatableJobs();
     await this.loadRepeatableJobs();
 
-    this.logger.info(`${this.constructor.name} has been loaded.`);
+    this.logger.info(`${this.name} has been loaded.`);
   }
 
   /**
@@ -78,23 +80,41 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async processor(job: BullJob<TaskData>): Promise<void> {
-    const task = ioc.resolve<Job>(job.data.jobType);
-    await task.run();
+  async processor(job: BullJob<JobData>): Promise<void> {
+    const {
+      id,
+      data: { params },
+      name,
+      opts,
+    } = job;
+
+    if (!id) {
+      this.logger.error(`Queue ${this.name}: Job ID missing.`);
+      return;
+    }
+
+    const newJob = ioc.resolve<Job>(name);
+    await newJob.run(id, params, opts);
+  }
+
+  async getRepeatableJobById(id: string): Promise<RepeatableBullJob | undefined> {
+    const jobs = await this.queue.getRepeatableJobs();
+
+    return jobs.find((job) => job.id === id);
   }
 
   /**
    * Remove repeatable job(s) from queue
    *
    * @private
-   * @param {string} [name]
-   * @memberof Scheduler
+   * @param {string} [id]
+   * @memberof TasksQueueHandler
    */
-  private async clearRepeatableJobs(name?: string) {
+  private async clearRepeatableJobs(id?: string) {
     const repeatableJobs = await this.queue.getRepeatableJobs();
 
     for (const job of repeatableJobs) {
-      if (name && job.name !== name) continue;
+      if (id && job.id !== id) continue;
 
       await this.queue.removeRepeatableByKey(job.key);
     }
@@ -123,9 +143,9 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
    * @memberof TasksQueueHandler
    */
   private async queueJob(task: Task): Promise<void> {
-    const { name, job: jobType, cron } = task;
+    const { id, job, cron, params } = task;
 
-    await this.queue.add(name, { jobType }, { repeat: { cron } });
+    await this.queue.add(job, { params }, { repeat: { cron }, jobId: id.toString() });
   }
 
   /**
@@ -137,7 +157,7 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
    * @memberof TasksQueueHandler
    */
   private async dequeueJob(task: Task): Promise<void> {
-    this.clearRepeatableJobs(task.name);
+    this.clearRepeatableJobs(task.id.toString());
   }
 
   /**
@@ -148,23 +168,16 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
    * @memberof TasksQueueHandler
    */
   public async addJob(task: Task): Promise<void> {
-    const { id, name, job, active } = task;
-
-    if (!validate(job)) {
-      this.logger.warn(`${this.constructor.name}: Job "${job}" not found in job definitions.`);
-      return;
-    }
+    const { id, name, active } = task;
 
     if (!active) {
-      this.logger.warn(
-        `${this.constructor.name}: Task (ID: ${id}, Name: ${name}) not set as active.`
-      );
+      this.logger.warn(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) not set as active.`);
       return;
     }
 
     await this.queueJob(task);
 
-    this.logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) added.`);
+    this.logger.debug(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) added.`);
   }
 
   /**
@@ -175,18 +188,21 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
    * @memberof TasksQueueHandler
    */
   public async updateJob(task: Task): Promise<void> {
-    const { id, name, job } = task;
-
-    if (!validate(job)) {
-      this.logger.warn(`${this.constructor.name}: Job "${job}" not found in job definitions.`);
-      return;
-    }
+    const { id, name, active } = task;
 
     await this.dequeueJob(task);
 
-    if (task.active) await this.queueJob(task);
+    /*
+     * Bullmq bug
+     * When repeatable job removed right away and new job pushed in, job entry doesn't end up in redis store
+     * Though queue.add returns correct job entry
+     * Workaround: simple sleep/wait for few ms solves it for now
+     */
+    await sleep(20);
 
-    this.logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) updated.`);
+    if (active) await this.queueJob(task);
+
+    this.logger.debug(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) updated.`);
   }
 
   /**
@@ -201,7 +217,7 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
 
     await this.dequeueJob(task);
 
-    this.logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) removed.`);
+    this.logger.debug(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) removed.`);
   }
 
   /**
@@ -212,16 +228,11 @@ export default class TasksQueueHandler implements QueueHandler<TaskData> {
    * @memberof TasksQueueHandler
    */
   public async runJob(task: Task): Promise<void> {
-    const { id, name, job: jobType } = task;
+    const { id, name, job, params } = task;
 
-    if (!validate(jobType)) {
-      this.logger.warn(`${this.constructor.name}: Job "${jobType}" not found in job definitions.`);
-      return;
-    }
+    await this.queue.add(job, { params }, { delay: 500 });
 
-    await this.queue.add(name, { jobType }, { delay: 1000 });
-
-    this.logger.debug(`${this.constructor.name}: Task (ID: ${id}, Name: ${name}) queued.`);
+    this.logger.debug(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) queued.`);
   }
 
   /**

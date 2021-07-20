@@ -1,3 +1,4 @@
+import { RepeatableBullJob } from '../../jobs';
 import { TaskAttributes, TaskCreationAttributes, Pagination } from '../../models';
 
 export type TaskRequest = TaskCreationAttributes;
@@ -16,6 +17,7 @@ export type TaskRefs = {
 
 export type TaskResponse = {
   data: TaskEntry;
+  bullJob?: RepeatableBullJob;
   refs: TaskRefs;
 };
 

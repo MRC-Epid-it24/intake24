@@ -1,7 +1,7 @@
 import faker from 'faker';
 import { nanoid } from 'nanoid';
 import slugify from 'slugify';
-import jobs from '@/jobs';
+import { jobTypes } from '@common/types';
 import {
   PermissionRequest,
   RoleRequest,
@@ -192,10 +192,11 @@ const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest =
 
 const task = (): CreateTaskRequest => {
   const name = faker.random.words(3);
-  const job = Object.keys(jobs)[0];
+  const job = jobTypes[0];
   const cron = '0 * * * *';
   const active = true;
   const description = faker.random.words(10);
+  const params = {};
 
   return {
     name,
@@ -203,6 +204,7 @@ const task = (): CreateTaskRequest => {
     cron,
     active,
     description,
+    params,
   };
 };
 

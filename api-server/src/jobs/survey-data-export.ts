@@ -4,51 +4,54 @@ import { Transform } from 'json2csv';
 import { Job } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
-import { DataExportInput, EMPTY } from '@/services/data-export';
+import { EMPTY } from '@/services/data-export';
 import { addTime } from '@/util';
-import type { Job as BaseJob, JobData, JobType } from '.';
+import { SurveyDataExportParams } from '@common/types';
+import { JobsOptions } from 'bullmq';
+import BaseJob from './job';
 
-export type SurveyDataExportData = DataExportInput;
+export default class SurveyDataExport extends BaseJob<SurveyDataExportParams> {
+  readonly name = 'SurveyDataExport';
 
-export default class SurveyDataExport implements BaseJob {
-  public readonly name: JobType = 'SurveyDataExport';
+  private job!: Job;
 
   private readonly dataExportService;
 
   private readonly fsConfig;
-
-  private readonly logger;
-
-  private jobId!: number;
-
-  private data!: SurveyDataExportData;
 
   constructor({
     fsConfig,
     dataExportService,
     logger,
   }: Pick<IoC, 'fsConfig' | 'dataExportService' | 'logger'>) {
+    super({ logger });
+
     this.fsConfig = fsConfig;
     this.dataExportService = dataExportService;
-    this.logger = logger;
   }
 
   /**
-   * Run the job
+   * Run the task
    *
-   * @param {JobData<SurveyDataExportData>} jobData
+   * @param {string} jobId
+   * @param {SurveyDataExportParams} params
+   * @param {JobsOptions} ops
    * @returns {Promise<void>}
    * @memberof SurveyDataExport
    */
-  public async run({ job, data }: JobData<SurveyDataExportData>): Promise<void> {
-    this.data = data;
-    this.jobId = job.id;
+  public async run(jobId: string, params: SurveyDataExportParams, ops: JobsOptions): Promise<void> {
+    this.init(jobId, params, ops);
 
-    this.logger.debug(`Job ${this.name} started.`);
+    const job = await Job.findByPk(jobId);
+    if (!job) throw new NotFoundError(`Job ${this.name}: Job record not found (${jobId}).`);
+
+    this.job = job;
+
+    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
 
     await this.exportData();
 
-    this.logger.debug(`Job ${this.name} finished.`);
+    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
   }
 
   /**
@@ -59,10 +62,9 @@ export default class SurveyDataExport implements BaseJob {
    * @memberof SurveyDataExport
    */
   private async exportData(): Promise<void> {
-    const { options, fields, filename } = await this.dataExportService.prepareExportInfo(this.data);
-
-    const job = await Job.findByPk(this.jobId);
-    if (!job) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.jobId}).`);
+    const { options, fields, filename } = await this.dataExportService.prepareExportInfo(
+      this.params
+    );
 
     return new Promise((resolve, reject) => {
       const filepath = path.resolve(this.fsConfig.local.downloads, filename);
@@ -77,7 +79,7 @@ export default class SurveyDataExport implements BaseJob {
         .on('error', (err) => reject(err))
         .on('end', async () => {
           const downloadUrlExpiresAt = addTime(this.fsConfig.urlExpiresAt);
-          await job.update({ downloadUrl: filename, downloadUrlExpiresAt });
+          await this.job.update({ downloadUrl: filename, downloadUrlExpiresAt });
           resolve();
         });
 

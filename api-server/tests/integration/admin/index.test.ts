@@ -194,6 +194,7 @@ export default (): void => {
   describe('GET /api/admin/tasks/:taskId/edit', tasks.edit);
   describe('PUT /api/admin/tasks/:taskId', tasks.update);
   describe('DELETE /api/admin/tasks/:taskId', tasks.destroy);
+  describe('POST /api/admin/tasks/:taskId/run', tasks.run);
 
   // Users
   describe('GET /api/admin/users', users.browse);

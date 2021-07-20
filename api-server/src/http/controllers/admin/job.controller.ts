@@ -15,7 +15,7 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): JobController => {
     const jobs = await Job.paginate({
       req,
       columns: ['type'],
-      order: [['completedAt', 'DESC']],
+      order: [['startedAt', 'DESC']],
       include: [{ model: User, attributes: ['name', 'email'], required: false }],
     });
 

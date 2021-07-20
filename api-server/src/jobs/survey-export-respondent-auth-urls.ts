@@ -7,58 +7,67 @@ import { Job, Survey, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { addTime } from '@/util';
-import type { Job as BaseJob, JobData, JobType } from '.';
+import { SurveyExportRespondentAuthUrlsParams } from '@common/types';
+import { JobsOptions } from 'bullmq';
+import BaseJob from './job';
 
-export type SurveyExportRespondentAuthUrlsData = {
-  surveyId: string;
-};
+export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExportRespondentAuthUrlsParams> {
+  readonly name = 'SurveyExportRespondentAuthUrls';
 
-export default class SurveyExportRespondentAuthUrls implements BaseJob {
-  public readonly name: JobType = 'SurveyExportRespondentAuthUrls';
+  private job!: Job;
 
   private readonly appConfig;
 
   private readonly fsConfig;
 
-  private readonly logger;
-
-  private jobId!: number;
-
-  private data!: SurveyExportRespondentAuthUrlsData;
-
   constructor({ appConfig, fsConfig, logger }: Pick<IoC, 'appConfig' | 'fsConfig' | 'logger'>) {
+    super({ logger });
+
     this.appConfig = appConfig;
     this.fsConfig = fsConfig;
-    this.logger = logger;
   }
 
   /**
-   * Run the job
+   * Run the task
    *
-   * @param {JobData<SurveyExportRespondentAuthUrlsData>} jobData
+   * @param {string} jobId
+   * @param {SurveyExportRespondentAuthUrlsParams} params
+   * @param {JobsOptions} ops
    * @returns {Promise<void>}
    * @memberof SurveyExportRespondentAuthUrls
    */
-  public async run({ job, data }: JobData<SurveyExportRespondentAuthUrlsData>): Promise<void> {
-    this.data = data;
-    this.jobId = job.id;
+  public async run(
+    jobId: string,
+    params: SurveyExportRespondentAuthUrlsParams,
+    ops: JobsOptions
+  ): Promise<void> {
+    this.init(jobId, params, ops);
 
-    this.logger.debug(`Job ${this.name} started.`);
+    const job = await Job.findByPk(jobId);
+    if (!job) throw new NotFoundError(`Job ${this.name}: Job record not found (${jobId}).`);
+
+    this.job = job;
+
+    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
 
     await this.download();
 
-    this.logger.debug(`Job ${this.name} finished.`);
+    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
   }
 
+  /**
+   *
+   *
+   * @private
+   * @returns {Promise<void>}
+   * @memberof SurveyExportRespondentAuthUrls
+   */
   private async download(): Promise<void> {
-    const { surveyId } = this.data;
+    const { surveyId } = this.params;
 
     const survey = await Survey.findByPk(surveyId);
     if (!survey)
       throw new NotFoundError(`Job ${this.name}: Survey record not found (${surveyId}).`);
-
-    const job = await Job.findByPk(this.jobId);
-    if (!job) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.jobId}).`);
 
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const baseFrontendURL = trimEnd(
@@ -93,7 +102,7 @@ export default class SurveyExportRespondentAuthUrls implements BaseJob {
         .on('error', (err) => reject(err))
         .on('end', async () => {
           const downloadUrlExpiresAt = addTime(this.fsConfig.urlExpiresAt);
-          await job.update({ downloadUrl: filename, downloadUrlExpiresAt });
+          await this.job.update({ downloadUrl: filename, downloadUrlExpiresAt });
           resolve();
         });
 

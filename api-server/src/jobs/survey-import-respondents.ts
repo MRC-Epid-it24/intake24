@@ -3,13 +3,9 @@ import fs from 'fs-extra';
 import path from 'path';
 import { User, UserSurveyAlias } from '@/db/models/system';
 import type { IoC } from '@/ioc';
-import type { CustomField } from '@common/types';
-import type { Job, JobData, JobType } from '.';
-
-export type SurveyImportRespondentsData = {
-  surveyId: string;
-  file: string;
-};
+import type { CustomField, SurveyImportRespondentsParams } from '@common/types';
+import { JobsOptions } from 'bullmq';
+import Job from './job';
 
 export type CSVRow = {
   username: string;
@@ -22,12 +18,8 @@ export type CSVRow = {
 
 const requiredFields = ['username', 'password'];
 
-export default class SurveyImportRespondents implements Job {
-  public readonly name: JobType = 'SurveyImportRespondents';
-
-  private data!: SurveyImportRespondentsData;
-
-  private readonly logger;
+export default class SurveyImportRespondents extends Job<SurveyImportRespondentsParams> {
+  readonly name = 'SurveyImportRespondents';
 
   private readonly surveyService;
 
@@ -36,22 +28,30 @@ export default class SurveyImportRespondents implements Job {
   private content: CSVRow[] = [];
 
   constructor({ logger, surveyService }: Pick<IoC, 'logger' | 'surveyService'>) {
-    this.logger = logger;
+    super({ logger });
+
     this.surveyService = surveyService;
   }
 
   /**
-   * Run the job
+   * Run the task
    *
-   * @param {JobData<SurveyImportRespondentsData>} { data }
+   * @param {string} jobId
+   * @param {SurveyImportRespondentsParams} params
+   * @param {JobsOptions} ops
    * @returns {Promise<void>}
    * @memberof SurveyImportRespondents
    */
-  public async run({ data }: JobData<SurveyImportRespondentsData>): Promise<void> {
-    this.data = data;
-    this.file = path.resolve(data.file);
+  public async run(
+    jobId: string,
+    params: SurveyImportRespondentsParams,
+    ops: JobsOptions
+  ): Promise<void> {
+    this.init(jobId, params, ops);
 
-    this.logger.debug(`Job ${this.name} started.`);
+    this.file = path.resolve(params.file);
+
+    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
 
     const fileExists = await fs.pathExists(this.file);
     if (!fileExists) throw new Error(`Missing file (${this.file}).`);
@@ -60,7 +60,7 @@ export default class SurveyImportRespondents implements Job {
 
     await this.import();
 
-    this.logger.debug(`Job ${this.name} finished.`);
+    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
   }
 
   /**
@@ -126,7 +126,7 @@ export default class SurveyImportRespondents implements Job {
       throw new Error(`Missing required fields, 'username' or 'password'.`);
 
     const userName = this.content.map((item) => item.username);
-    const { surveyId } = this.data;
+    const { surveyId } = this.params;
 
     // Check for unique aliases within survey
     const aliases = await UserSurveyAlias.findAll({ where: { surveyId, userName } });
@@ -222,7 +222,7 @@ export default class SurveyImportRespondents implements Job {
       };
     });
 
-    await this.surveyService.createRespondents(this.data.surveyId, records);
+    await this.surveyService.createRespondents(this.params.surveyId, records);
 
     this.content = [];
   }

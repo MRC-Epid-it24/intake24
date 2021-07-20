@@ -22,7 +22,7 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
 
     if (type) where.type = type as string | string[];
 
-    const jobs = await Job.paginate({ req, where, order: [['started_at', 'DESC']] });
+    const jobs = await Job.paginate({ req, where, order: [['startedAt', 'DESC']] });
 
     res.json(jobs);
   };

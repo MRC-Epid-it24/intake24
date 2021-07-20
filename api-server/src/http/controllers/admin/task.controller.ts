@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { Task } from '@/db/models/system';
+import { Task, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import jobsDefs, { JobType } from '@/jobs';
+import { jobTypes, JobType } from '@common/types';
 import {
   CreateTaskResponse,
   StoreTaskResponse,
@@ -14,15 +14,20 @@ import { Controller, CrudActions } from '../controller';
 export type TaskController = Controller<CrudActions | 'run'>;
 
 export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
-  const jobs = Object.keys(jobsDefs) as JobType[];
+  const jobs: JobType[] = [...jobTypes];
 
-  const entry = async (req: Request, res: Response<TaskResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ taskId: number }>,
+    res: Response<TaskResponse>
+  ): Promise<void> => {
     const { taskId } = req.params;
-    const task = await Task.findByPk(taskId);
 
+    const task = await Task.findByPk(taskId);
     if (!task) throw new NotFoundError();
 
-    res.json({ data: task, refs: { jobs } });
+    const bullJob = await scheduler.tasks.getRepeatableJobById(taskId.toString());
+
+    res.json({ data: task, bullJob, refs: { jobs } });
   };
 
   const browse = async (req: Request, res: Response<TasksResponse>): Promise<void> => {
@@ -36,37 +41,50 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
   };
 
   const store = async (req: Request, res: Response<StoreTaskResponse>): Promise<void> => {
-    const { name, job, cron, active, description } = req.body;
+    const { name, job, cron, active, description, params } = req.body;
 
-    const task = await Task.create({ name, job, cron, active, description });
+    const task = await Task.create({ name, job, cron, active, description, params });
     await scheduler.tasks.addJob(task);
 
     res.status(201).json({ data: task });
   };
 
-  const detail = async (req: Request, res: Response<TaskResponse>): Promise<void> =>
-    entry(req, res);
+  const detail = async (
+    req: Request<{ taskId: number }>,
+    res: Response<TaskResponse>
+  ): Promise<void> => entry(req, res);
 
-  const edit = async (req: Request, res: Response<TaskResponse>): Promise<void> => entry(req, res);
+  const edit = async (
+    req: Request<{ taskId: number }>,
+    res: Response<TaskResponse>
+  ): Promise<void> => entry(req, res);
 
-  const update = async (req: Request, res: Response<TaskResponse>): Promise<void> => {
+  const update = async (
+    req: Request<{ taskId: number }>,
+    res: Response<TaskResponse>
+  ): Promise<void> => {
     const { taskId } = req.params;
-    const task = await Task.findByPk(taskId);
 
+    const task = await Task.findByPk(taskId);
     if (!task) throw new NotFoundError();
 
-    const { name, job, cron, active, description } = req.body;
+    const { name, job, cron, active, description, params } = req.body;
 
-    await task.update({ name, job, cron, active, description });
+    await task.update({ name, job, cron, active, description, params });
     await scheduler.tasks.updateJob(task);
 
-    res.json({ data: task, refs: { jobs } });
+    const bullJob = await scheduler.tasks.getRepeatableJobById(taskId.toString());
+
+    res.json({ data: task, bullJob, refs: { jobs } });
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ taskId: number }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { taskId } = req.params;
-    const task = await Task.findByPk(taskId);
 
+    const task = await Task.findByPk(taskId);
     if (!task) throw new NotFoundError();
 
     await task.destroy();
@@ -74,13 +92,16 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     res.status(204).json();
   };
 
-  const run = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const run = async (req: Request<{ taskId: number }>, res: Response): Promise<void> => {
     const { taskId } = req.params;
-    const task = await Task.findByPk(taskId);
+    const { id: userId } = req.user as User;
 
+    const task = await Task.findByPk(taskId);
     if (!task) throw new NotFoundError();
 
-    scheduler.tasks.runJob(task);
+    const { job, params } = task;
+
+    await scheduler.jobs.addJob({ userId, type: job }, params, { delay: 500 });
 
     res.json();
   };

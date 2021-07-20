@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
+import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
 import { Task } from '@/db/models/system';
 import { cron, jobExists, unique } from '@/http/rules';
@@ -44,6 +45,17 @@ const defaults: Schema = {
     errorMessage: 'Enter a valid string.',
     isString: true,
     optional: { options: { nullable: true } },
+  },
+  params: {
+    in: ['body'],
+    errorMessage: 'Parameters must be valid object.',
+    isEmpty: { negated: true },
+    custom: {
+      options: async (value): Promise<void> => {
+        if (!isPlainObject(value)) throw new Error('Parameters must be valid object.');
+        // TODO: add full json validation for each job type
+      },
+    },
   },
 };
 

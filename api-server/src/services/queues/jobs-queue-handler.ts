@@ -9,7 +9,8 @@ import {
 } from 'bullmq';
 import { Job as DbJob } from '@/db/models/system';
 import ioc, { IoC } from '@/ioc';
-import type { Job, JobData, JobInputData, JobType } from '@/jobs';
+import { Job } from '@/jobs';
+import { JobData, JobParams, JobType } from '@common/types';
 import { QueueHandler } from './queue-handler';
 import { PushPayload } from '..';
 
@@ -27,7 +28,7 @@ export type NotificationPayload = {
 export default class JobsQueueHandler implements QueueHandler<JobData> {
   readonly name = 'it24-jobs';
 
-  private readonly queueConfig;
+  private readonly config;
 
   private readonly logger;
 
@@ -48,7 +49,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   constructor({ queueConfig, logger, pusher }: Pick<IoC, 'queueConfig' | 'logger' | 'pusher'>) {
-    this.queueConfig = queueConfig;
+    this.config = queueConfig;
     this.logger = logger;
     this.pusher = pusher;
   }
@@ -69,7 +70,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
 
     this.registerQueueEvents();
 
-    for (let i = 0; i < this.queueConfig.workers; i++) {
+    for (let i = 0; i < this.config.workers; i++) {
       this.workers.push(new Worker(this.name, this.processor, { connection }));
     }
 
@@ -109,7 +110,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     this.queueEvents.on('completed', async ({ jobId }) => {
       const job = await DbJob.findByPk(jobId);
       if (!job) {
-        this.logger.error(`Queue ${this.name}, Job entry not found (${jobId}).`);
+        this.logger.error(`Queue ${this.name}: Job entry not found (${jobId}).`);
         return;
       }
 
@@ -125,15 +126,15 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
         return;
       }
 
-      const { data, stacktrace } = bullJob;
+      const { name, stacktrace } = bullJob;
 
       this.logger.error(
-        `Queue ${this.name}, Job ${jobId} | ${data.job.type} has failed.\n ${stacktrace.join('\n')}`
+        `Queue ${this.name}: Job ${name} | ${jobId} has failed.\n ${stacktrace.join('\n')}`
       );
 
       const job = await DbJob.findByPk(jobId);
       if (!job) {
-        this.logger.error(`Queue ${this.name}, Job entry not found (${jobId}).`);
+        this.logger.error(`Queue ${this.name}: Job entry not found (${jobId}).`);
         return;
       }
 
@@ -161,21 +162,34 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   /**
    * Queue job processor
    *
-   * @param {BullJob<JobData>} bullJob
+   * @param {BullJob<JobData>} job
    * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
-  async processor({ id, data }: BullJob<JobData>): Promise<void> {
-    const job = await DbJob.findByPk(id);
-    if (!job) {
-      this.logger.error(`Queue ${this.name}, Job entry not found (${id}).`);
+  // eslint-disable-next-line class-methods-use-this
+  async processor(job: BullJob<JobData>): Promise<void> {
+    const {
+      id,
+      data: { params },
+      name,
+      opts,
+    } = job;
+
+    if (!id) {
+      this.logger.error(`Queue ${this.name}: Job ID missing.`);
       return;
     }
 
-    await job.update({ startedAt: new Date() });
+    const dbJob = await DbJob.findByPk(id);
+    if (!dbJob) {
+      this.logger.error(`Queue ${this.name}: Job entry not found (${id}).`);
+      return;
+    }
 
-    const newJob = ioc.resolve<Job>(job.type);
-    await newJob.run(data);
+    await dbJob.update({ startedAt: new Date() });
+
+    const newJob = ioc.resolve<Job>(name);
+    await newJob.run(id, params, opts);
   }
 
   /**
@@ -183,18 +197,15 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    *
    * @private
    * @param {DbJob} job
-   * @param {*} [data={}]
+   * @param {JobParams} [params]
+   * @param {JobsOptions} [options={}]
    * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
-  private async queueJob(
-    job: DbJob,
-    data?: JobInputData,
-    options: JobsOptions = {}
-  ): Promise<void> {
+  private async queueJob(job: DbJob, params?: JobParams, options: JobsOptions = {}): Promise<void> {
     const { id, type } = job;
 
-    await this.queue.add(type, { job, data }, { ...options, jobId: id.toString() });
+    await this.queue.add(type, { params }, { ...options, jobId: id.toString() });
 
     this.logger.debug(`Queue ${this.name}: Job ${id} | ${type} queued.`);
   }
@@ -203,18 +214,18 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * Add job to queue
    *
    * @param {JobInput} input
-   * @param {*} [data={}]
+   * @param {JobParams} [params]
    * @param {JobsOptions} [options={}]
    * @returns {Promise<DbJob>}
    * @memberof JobsQueueHandler
    */
   public async addJob(
     input: JobInput,
-    data?: JobInputData,
+    params?: JobParams,
     options: JobsOptions = {}
   ): Promise<DbJob> {
     const job = await DbJob.create(input);
-    await this.queueJob(job, data, options);
+    await this.queueJob(job, params, options);
 
     return job;
   }
@@ -222,7 +233,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   /**
    * Notify user about finished job
    *
-   * @param {number} userId
+   * @param {(number | null)} userId
    * @param {NotificationPayload} payload
    * @returns {Promise<void>}
    * @memberof JobsQueueHandler

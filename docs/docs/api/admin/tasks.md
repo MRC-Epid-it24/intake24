@@ -132,3 +132,22 @@ Content-Type: application/json
 ```json
 204 No Content
 ```
+
+## Run task
+
+Trigger task pushing into the job queue
+
+### Request
+
+```http
+POST /api/admin/tasks/:taskId/run
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+```

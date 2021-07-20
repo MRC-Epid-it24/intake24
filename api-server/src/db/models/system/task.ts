@@ -1,5 +1,5 @@
 import { Table, Column, CreatedAt, DataType, UpdatedAt } from 'sequelize-typescript';
-import { JobType } from '@api-server/jobs';
+import { JobParams, JobType } from '@common/types';
 import { TaskAttributes, TaskCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 
@@ -50,6 +50,21 @@ export default class Task
     type: DataType.TEXT,
   })
   public description!: string | null;
+
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  get params(): JobParams {
+    const val = this.getDataValue('params') as unknown;
+    return val ? JSON.parse(val as string) : {};
+  }
+
+  set params(value: JobParams) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this.setDataValue('params', JSON.stringify(value ?? {}));
+  }
 
   @CreatedAt
   @Column

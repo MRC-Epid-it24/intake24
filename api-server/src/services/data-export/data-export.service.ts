@@ -26,16 +26,11 @@ import type { StreamFindOptions } from '@/db/models/model';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
 import type { ExportSection } from '@common/types/models';
+import type { SurveyDataExportParams } from '@common/types';
 import type { ExportFieldInfo } from './data-export-mapper';
 import { EMPTY } from './data-export-fields';
 
-export type DataExportInput = {
-  id?: string | string[];
-  surveyId: string;
-  startDate?: Date;
-  endDate?: Date;
-  userId?: number;
-};
+export type DataExportInput = SurveyDataExportParams;
 
 export type SubmissionFindOptions = Record<'foods' | 'missingFoods', StreamFindOptions>;
 

@@ -1,8 +1,9 @@
+import { JobType } from '../../jobs';
 import { OmitAndOptional } from '../model';
 
 export type JobAttributes = {
   id: number;
-  type: string;
+  type: JobType;
   userId: number | null;
   startedAt: Date | null;
   completedAt: Date | null;

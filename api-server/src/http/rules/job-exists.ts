@@ -1,3 +1,3 @@
-import jobs from '@/jobs';
+import { isValidJob } from '@common/types';
 
-export default (value: string): boolean => Object.keys(jobs).includes(value);
+export default (value: string): boolean => isValidJob(value);

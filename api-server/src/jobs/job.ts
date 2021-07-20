@@ -1,10 +1,32 @@
-import { Job as DbJob } from '@api-server/db/models/system';
+import type { IoC } from '@/ioc';
+import type { JobsOptions } from 'bullmq';
 
-export type JobData<T = any> = { job: DbJob; data: T };
+export default abstract class Job<T = any> {
+  readonly name!: string;
 
-export interface Job {
-  readonly name: string;
-  run(data?: JobData): Promise<void>;
+  protected jobId!: string;
+
+  protected params!: T;
+
+  protected ops!: JobsOptions;
+
+  protected isRepeatable!: boolean;
+
+  protected readonly logger;
+
+  constructor({ logger }: Pick<IoC, 'logger'>) {
+    this.logger = logger;
+  }
+
+  abstract run(jobId: string, data: T, ops: JobsOptions): Promise<void>;
+
+  protected init(jobId: string, params: T, ops: JobsOptions): void {
+    this.jobId = jobId;
+    this.params = params;
+    this.ops = ops;
+
+    this.isRepeatable = jobId.startsWith('repeat:');
+  }
 }
 
 export interface JobConstructor {

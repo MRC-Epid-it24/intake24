@@ -36,4 +36,11 @@ router.get(
   wrapAsync(taskController.edit)
 );
 
+router.post(
+  '/:taskId/run',
+  permission('tasks-edit'),
+  validation.entry('taskId'),
+  wrapAsync(taskController.run)
+);
+
 export default router;

@@ -1,13 +1,13 @@
+import { JobType } from '@common/types';
 import CleanStorageFiles from './clean-storage-files';
 import PurgeRefreshTokens from './purge-refresh-tokens';
-import SendPasswordReset, { SendPasswordResetData } from './send-password-reset';
-import SurveyDataExport, { SurveyDataExportData } from './survey-data-export';
-import SurveyExportRespondentAuthUrls, {
-  SurveyExportRespondentAuthUrlsData,
-} from './survey-export-respondent-auth-urls';
-import SurveyImportRespondents, { SurveyImportRespondentsData } from './survey-import-respondents';
+import SendPasswordReset from './send-password-reset';
+import SurveyDataExport from './survey-data-export';
+import SurveyExportRespondentAuthUrls from './survey-export-respondent-auth-urls';
+import SurveyImportRespondents from './survey-import-respondents';
 
 export * from './job';
+export { default as Job } from './job';
 
 const jobs = {
   CleanStorageFiles,
@@ -18,18 +18,8 @@ const jobs = {
   SurveyImportRespondents,
 };
 
-export type JobInputData =
-  | SendPasswordResetData
-  | SurveyDataExportData
-  | SurveyExportRespondentAuthUrlsData
-  | SurveyImportRespondentsData;
-
-export type JobType = keyof typeof jobs;
-
 export type Jobs = {
   [P in JobType]: new (...args: any[]) => typeof jobs[P];
 };
-
-export const validate = (job: JobType): boolean => Object.keys(jobs).includes(job);
 
 export default jobs;

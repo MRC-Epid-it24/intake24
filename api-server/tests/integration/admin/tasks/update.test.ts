@@ -54,7 +54,7 @@ export default (): void => {
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name', 'job', 'cron', 'active']);
+      expect(body.errors).toContainAllKeys(['name', 'job', 'cron', 'active', 'params']);
     });
 
     it('should return 422 when invalid input data', async () => {
@@ -68,11 +68,19 @@ export default (): void => {
           cron: false,
           active: 'not-a-boolean',
           description: ['should just be string', 'should just be string'],
+          params: ['invalidObject'],
         });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name', 'job', 'cron', 'active', 'description']);
+      expect(body.errors).toContainAllKeys([
+        'name',
+        'job',
+        'cron',
+        'active',
+        'description',
+        'params',
+      ]);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
@@ -93,7 +101,7 @@ export default (): void => {
         .send(updateInput);
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data', 'refs']);
+      expect(body).toContainAllKeys(['data', 'bullJob', 'refs']);
       expect(pick(body.data, Object.keys(updateInput))).toEqual(updateInput);
     });
   });

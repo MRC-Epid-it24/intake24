@@ -7,5 +7,5 @@ export interface QueueHandler<T = any> {
   workers: Worker<T>[];
 
   init(connection: ConnectionOptions): Promise<void>;
-  processor(job: Job<T>): Promise<void>;
+  processor(job: Job<T>, token?: string): Promise<void>;
 }

@@ -19,3 +19,13 @@ export const addTime = (offset: string | number, since: Date = new Date()): Date
  */
 export const subtractTime = (offset: string | number, since: Date = new Date()): Date =>
   new Date(since.getTime() - (typeof offset === 'string' ? ms(offset) : offset));
+
+/**
+ * Simple sleep/wait async helper
+ *
+ * @param {number} timeout
+ * @returns {Promise<void>}
+ */
+export const sleep = (timeout: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
