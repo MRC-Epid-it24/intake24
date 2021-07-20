@@ -39,6 +39,6 @@ export default class Errors {
   }
 
   any(): boolean {
-    return Object.keys(this.errors).length > 0;
+    return !!Object.keys(this.errors).length;
   }
 }

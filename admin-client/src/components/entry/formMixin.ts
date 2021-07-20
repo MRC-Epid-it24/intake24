@@ -4,7 +4,7 @@ import clone from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import { Dictionary, ValidationError } from '@common/types';
-import { FormMixin } from '@/types/vue';
+import { FormMixin } from '@/types';
 import form from '@/helpers/Form';
 import SubmitFooter from '@/components/forms/SubmitFooter.vue';
 import fetchEntry from './fetchEntry';

@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
 import { HttpError, HttpResponseData } from '@/types/http';
-import { ListState } from '@/types/vuex';
+import { ListState } from '@/types';
 
 const mutations: MutationTree<ListState> = {
   update(state, resource) {

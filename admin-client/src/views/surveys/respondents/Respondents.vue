@@ -146,7 +146,7 @@ import { RespondentEntry, SurveyRespondentResponse } from '@common/types/http/ad
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
-import { EntryMixin } from '@/types/vue';
+import { EntryMixin } from '@/types';
 import DataTable from '../DataTable.vue';
 import RespondentsUpload from './RespondentsUpload.vue';
 import RespondentsAuthUrlExport from './RespondentsAuthUrlExport.vue';

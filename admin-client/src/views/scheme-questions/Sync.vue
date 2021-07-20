@@ -56,7 +56,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import isEqual from 'lodash/isEqual';
-import { DetailMixin } from '@/types/vue';
+import { DetailMixin } from '@/types';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import { flattenSchemeWithSection, MealSection, SurveyQuestionSection } from '@common/schemes';

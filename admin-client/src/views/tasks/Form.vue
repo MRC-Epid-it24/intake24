@@ -1,5 +1,17 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+    <template v-slot:actions>
+      <confirm-dialog
+        v-if="!isCreate && can({ action: 'edit' })"
+        :label="$t('tasks.run._')"
+        :activatorClass="['ml-2']"
+        color="secondary"
+        iconLeft="fas fa-play"
+        @confirm="triggerJob"
+      >
+        {{ $t('tasks.run.confirm') }}
+      </confirm-dialog>
+    </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container>
         <v-card-text>
@@ -24,7 +36,7 @@
                 hide-details="auto"
                 name="job"
                 outlined
-                @change="form.errors.clear('job')"
+                @change="jobChanged"
               ></v-select>
             </v-col>
             <v-col cols="12" md="6">
@@ -35,7 +47,18 @@
                 hide-details="auto"
                 name="cron"
                 outlined
-              ></v-text-field>
+              >
+                <template v-slot:append>
+                  <pre>{{ readableCron }}</pre>
+                </template>
+              </v-text-field>
+            </v-col>
+            <v-col v-if="form.active" cols="12" md="6">
+              <div class="d-flex align-center" style="height: 100%">
+                <span v-if="addons.bullJob" class="subtitle-1">
+                  {{ $t('tasks.run.next') }}: {{ formatDate(new Date(addons.bullJob.next)) }}
+                </span>
+              </div>
             </v-col>
             <v-col cols="12" md="6">
               <v-switch
@@ -57,6 +80,12 @@
               ></v-textarea>
             </v-col>
           </v-row>
+          <component
+            v-if="Object.keys(form.params).length"
+            :is="form.job"
+            v-bind.sync="form.params"
+            :refs="refs"
+          ></component>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
       </v-container>
@@ -66,23 +95,55 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { FormMixin } from '@/types/vue';
+import cronstrue from 'cronstrue';
+import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import formMixin from '@/components/entry/formMixin';
+import mapAddons from '@/components/entry/mapAddons';
 import form from '@/helpers/Form';
+import FormatsDateTime from '@/mixins/FormatsDateTime';
+import { FormMixin, MapAddonsMixin } from '@/types';
+import { JobParams, JobParamsList, JobType } from '@common/types';
+import { TaskEntry, TaskRefs, TaskResponse } from '@common/types/http/admin';
+import paramComponents from './params';
 
 type TaskForm = {
   id: number | null;
   name: string | null;
-  job: string | null;
-  cron: string;
+  job: JobType | null;
+  cron: string | null;
   active: boolean;
   description: string | null;
+  params: JobParams;
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin>).extend({
+const defaultParams: JobParamsList = {
+  CleanStorageFiles: {},
+  PurgeRefreshTokens: {},
+  SendPasswordReset: {
+    email: '',
+    token: '',
+  },
+  SurveyDataExport: {
+    surveyId: '',
+  },
+
+  SurveyExportRespondentAuthUrls: {
+    surveyId: '',
+  },
+  SurveyImportRespondents: {
+    surveyId: '',
+    file: '',
+  },
+};
+
+export default (
+  Vue as VueConstructor<Vue & FormMixin<TaskEntry, TaskRefs> & MapAddonsMixin<TaskResponse>>
+).extend({
   name: 'TaskForm',
 
-  mixins: [formMixin],
+  components: { ConfirmDialog, ...paramComponents },
+
+  mixins: [FormatsDateTime, formMixin, mapAddons],
 
   data() {
     return {
@@ -93,8 +154,48 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         cron: '0 * * * *',
         active: false,
         description: null,
+        params: {},
       }),
+      defaultParams,
     };
+  },
+
+  computed: {
+    readableCron(): string {
+      if (!this.form.cron) return '';
+
+      try {
+        return cronstrue.toString(this.form.cron, { use24HourTimeFormat: true });
+      } catch (err) {
+        return this.$t('tasks.invalidCron') as string;
+      }
+    },
+  },
+
+  methods: {
+    toForm(data: TaskEntry) {
+      const { params, ...rest } = data;
+
+      this.form.load({ ...rest, params: { ...defaultParams[rest.job], ...params } });
+    },
+
+    jobChanged() {
+      this.form.errors.clear('job');
+      this.updateParams();
+    },
+
+    updateParams() {
+      if (!this.form.job) {
+        this.form.params = {};
+        return;
+      }
+
+      this.form.params = { ...this.defaultParams[this.form.job] };
+    },
+
+    async triggerJob() {
+      await this.$http.post(`admin/tasks/${this.id}/run`);
+    },
   },
 });
 </script>

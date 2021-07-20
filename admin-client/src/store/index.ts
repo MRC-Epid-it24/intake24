@@ -1,7 +1,7 @@
 import trim from 'lodash/trim';
 import Vue from 'vue';
 import Vuex, { GetterTree } from 'vuex';
-import { RootState } from '@/types/vuex';
+import { RootState } from '@/types';
 import modules from './modules';
 
 Vue.use(Vuex);

@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Resource } from '@/types/vue-router';
+import { Resource } from '@/types';
 import MenuItem from './MenuItem.vue';
 
 export default Vue.extend({

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { ListState } from '@/types/vuex';
+import { ListState } from '@/types';
 
 export const FILTER_LS_KEY = 'filter';
 

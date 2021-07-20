@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
 import { HttpError, HttpResponseData } from '@/types/http';
-import { EntryState } from '@/types/vuex';
+import { EntryState } from '@/types';
 import { Dictionary } from '@common/types';
 
 const mutations: MutationTree<EntryState> = {
@@ -28,9 +28,10 @@ const mutations: MutationTree<EntryState> = {
     };
     state.status = 'error';
   },
-  update(state, { data, refs }: { data?: Dictionary; refs?: Dictionary }) {
+  update(state, { data, refs, addons }: Partial<Record<'data' | 'refs' | 'addons', Dictionary>>) {
     if (data) state.data = { ...data };
     if (refs) state.refs = { ...refs };
+    if (addons) state.addons = { ...addons };
   },
 };
 

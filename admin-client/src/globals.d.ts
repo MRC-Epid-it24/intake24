@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { HttpClient } from '@/types/http';
-import { Permission } from '@/types/vuex';
+import { Permission } from '@/types';
 
 declare module 'vue/types/vue' {
   interface Vue {

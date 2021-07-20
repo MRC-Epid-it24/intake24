@@ -67,7 +67,7 @@ import Vue, { VueConstructor } from 'vue';
 import clone from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
 import form from '@/helpers/Form';
-import { MapRefsMixin } from '@/types/vue';
+import { MapRefsMixin } from '@/types';
 import { StoreSchemeQuestionResponse, SchemeRefs } from '@common/types/http/admin';
 import { PromptQuestion } from '@common/prompts';
 import { ValidationError } from '@common/types';

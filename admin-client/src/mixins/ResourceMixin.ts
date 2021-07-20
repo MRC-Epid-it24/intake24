@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import resources from '@/router/resources';
-import { Resource } from '@/types/vue-router';
+import { Resource } from '@/types';
 
 export default Vue.extend({
   computed: {

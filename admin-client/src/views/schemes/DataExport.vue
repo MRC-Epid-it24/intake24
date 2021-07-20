@@ -54,7 +54,7 @@ import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
-import { FormMixin } from '@/types/vue';
+import { FormMixin } from '@/types';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { ExportField, ExportSection } from '@common/types/models';
 import { SchemeExportRefsResponse } from '@common/types/http/admin';

@@ -52,7 +52,7 @@
 import Vue, { VueConstructor } from 'vue';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
-import { FormMixin } from '@/types/vue';
+import { FormMixin } from '@/types';
 import {
   defaultExport,
   defaultMeals,

@@ -1,4 +1,4 @@
-import { EntryState } from '@/types/vuex';
+import { EntryState } from '@/types';
 
 const state = (): EntryState => ({
   data: {},

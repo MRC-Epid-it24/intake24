@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import { HasEntryMixin } from '@/types/vue';
+import { HasEntryMixin } from '@/types';
 
 export default (Vue as VueConstructor<Vue & HasEntryMixin>).extend({
   watch: {

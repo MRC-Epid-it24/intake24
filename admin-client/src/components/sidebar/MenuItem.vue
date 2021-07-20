@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Resource } from '@/types/vue-router';
+import { Resource } from '@/types';
 
 export default Vue.extend({
   name: 'MenuItem',

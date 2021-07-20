@@ -1,4 +1,4 @@
-import { AuthState } from '@/types/vuex';
+import { AuthState } from '@/types';
 
 const state = (): AuthState => ({
   accessToken: null,

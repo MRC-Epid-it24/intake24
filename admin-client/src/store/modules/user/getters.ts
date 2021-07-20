@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { GetterTree } from 'vuex';
-import { Permission, RootState, UserState } from '@/types/vuex';
+import { Permission, RootState, UserState } from '@/types';
 
 const getters: GetterTree<UserState, RootState> = {
   can:

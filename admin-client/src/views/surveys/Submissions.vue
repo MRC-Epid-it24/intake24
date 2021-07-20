@@ -26,7 +26,7 @@
 import Vue, { VueConstructor } from 'vue';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
-import { EntryMixin } from '@/types/vue';
+import { EntryMixin } from '@/types';
 import { SurveySubmissionEntry } from '@common/types/http/admin';
 import DataTable from './DataTable.vue';
 

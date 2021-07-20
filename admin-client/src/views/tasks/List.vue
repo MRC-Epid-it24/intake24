@@ -1,9 +1,18 @@
 <template>
-  <data-table :headers="headers"></data-table>
+  <data-table :headers="headers">
+    <template v-slot:[`item.active`]="{ item }">
+      <v-icon v-if="item.active" color="success">fa-check-circle</v-icon>
+      <v-icon v-else color="error">fa-times-circle</v-icon>
+    </template>
+    <template v-slot:[`item.schedule`]="{ item }">
+      {{ readableCron(item.cron) }}
+    </template>
+  </data-table>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import cronstrue from 'cronstrue';
 import DataTable from '@/components/datatable/DataTable.vue';
 
 export default Vue.extend({
@@ -25,8 +34,13 @@ export default Vue.extend({
           value: 'job',
         },
         {
+          text: this.$t('tasks.schedule'),
+          sortable: false,
+          value: 'schedule',
+        },
+        {
           text: this.$t('tasks.cron'),
-          sortable: true,
+          sortable: false,
           value: 'cron',
         },
         {
@@ -42,6 +56,12 @@ export default Vue.extend({
         },
       ],
     };
+  },
+
+  methods: {
+    readableCron(cron: string): string {
+      return cronstrue.toString(cron, { use24HourTimeFormat: true });
+    },
   },
 });
 </script>

@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex';
-import { RootState, UserState } from '@/types/vuex';
+import { RootState, UserState } from '@/types';
 import http from '@/services/http.service';
 
 const actions: ActionTree<UserState, RootState> = {

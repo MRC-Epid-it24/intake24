@@ -1,4 +1,4 @@
-import { Resource } from '@/types/vue-router';
+import { Resource } from '@/types';
 
 const routes: string[] = ['create', 'detail', 'edit'];
 

@@ -24,7 +24,11 @@
           <th>{{ $t('jobs.progress') }}</th>
           <td>{{ entry.progress }}</td>
           <th>{{ $t('jobs.successful') }}</th>
-          <td>{{ entry.successful }}</td>
+          <td>
+            <v-icon v-if="entry.successful" color="success" left>fa-check-circle</v-icon>
+            <v-icon v-else color="error" left>fa-times-circle</v-icon>
+            {{ $t(`common.${entry.successful}`) }}
+          </td>
         </tr>
         <tr>
           <th>{{ $t('jobs.message') }}</th>

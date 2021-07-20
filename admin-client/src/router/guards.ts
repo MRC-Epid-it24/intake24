@@ -1,6 +1,6 @@
 import Router from 'vue-router';
 import { Store } from 'vuex';
-import { RootState } from '@/types/vuex';
+import { RootState } from '@/types';
 
 export default (router: Router, store: Store<RootState>): void => {
   router.beforeEach(async (to, from, next) => {

@@ -1,4 +1,4 @@
-import { UserState } from '@/types/vuex';
+import { UserState } from '@/types';
 
 const state = (): UserState => ({
   status: '',

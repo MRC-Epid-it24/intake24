@@ -6,6 +6,7 @@
           v-if="show"
           v-bind="attrs"
           v-on="on"
+          :class="activatorClass"
           :color="iconColor ? iconColor : color"
           :disabled="disabled"
           :icon="icon"
@@ -51,6 +52,10 @@ import Vue from 'vue';
 
 export default Vue.extend({
   props: {
+    activatorClass: {
+      type: Array as () => string[],
+      default: () => [],
+    },
     color: {
       type: String,
       default: 'secondary',

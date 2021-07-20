@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { ActionTree } from 'vuex';
-import { ListState, RootState } from '@/types/vuex';
+import { ListState, RootState } from '@/types';
 import http from '@/services/http.service';
 import { FILTER_LS_KEY } from './state';
 

@@ -2,16 +2,12 @@
   <div>
     <v-card outlined class="my-5">
       <v-toolbar flat>
-        <v-btn
-          class="mr-3"
-          color="white"
-          :title="$t(`common.action.back`)"
-          :to="{ name: resource.name }"
-        >
+        <v-btn color="white" :title="$t(`common.action.back`)" :to="{ name: resource.name }">
           <v-icon left>$back</v-icon> {{ $t(`common.action.back`) }}
         </v-btn>
         <v-btn
           v-if="editsResource"
+          class="ml-3"
           color="primary"
           :title="$t(`common.action.save`)"
           @click="$emit('save')"

@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
 import { HttpError, HttpResponseData } from '@/types/http';
-import { AuthState } from '@/types/vuex';
+import { AuthState } from '@/types';
 import defaultState from './state';
 
 const mutations: MutationTree<AuthState> = {

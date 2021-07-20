@@ -21,6 +21,11 @@ export interface MapRefsMixin<R = Dictionary> {
   refsLoaded: boolean;
 }
 
+export interface MapAddonsMixin<R> {
+  addons: Omit<R, 'data' | 'refs'>;
+  addonsLoaded: boolean;
+}
+
 export type EntryMixin<E = Dictionary, R = Dictionary> = FetchEntryMixin &
   HasEntryMixin &
   MapEntryMixin<E> &
