@@ -65,7 +65,7 @@ export default class Model<
           : { [Op.substring]: search };
 
       const operations = columns.map((column) => ({ [column]: operation }));
-      options.where = { [Op.or]: operations };
+      options.where = { ...options.where, [Op.or]: operations };
     }
 
     const countOptions = Object.keys(options).reduce<CountOptions>((acc, key) => {
