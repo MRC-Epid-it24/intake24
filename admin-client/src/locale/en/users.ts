@@ -2,9 +2,9 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const users: LocaleMessageObject = {
   _: 'User',
-  index: 'Users',
+  title: 'Users',
   all: 'All users',
-  detail: 'User detail',
+  read: 'User detail',
   new: 'New user',
   create: 'Add user',
   edit: 'Edit user',

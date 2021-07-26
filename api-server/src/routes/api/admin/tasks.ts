@@ -16,7 +16,7 @@ router.get('/create', permission('tasks-create'), wrapAsync(taskController.creat
 
 router
   .route('/:taskId')
-  .get(permission('tasks-detail'), validation.entry('taskId'), wrapAsync(taskController.detail))
+  .get(permission('tasks-read'), validation.entry('taskId'), wrapAsync(taskController.read))
   .put(
     permission('tasks-edit'),
     validation.entry('taskId'),

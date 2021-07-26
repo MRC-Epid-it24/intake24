@@ -53,8 +53,7 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
     res.status(201).json({ data });
   };
 
-  const detail = async (req: Request, res: Response<RoleResponse>): Promise<void> =>
-    entry(req, res);
+  const read = async (req: Request, res: Response<RoleResponse>): Promise<void> => entry(req, res);
 
   const edit = async (req: Request, res: Response<RoleResponse>): Promise<void> => entry(req, res);
 
@@ -94,7 +93,7 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
     browse,
     create,
     store,
-    detail,
+    read,
     edit,
     update,
     destroy,

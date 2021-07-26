@@ -15,7 +15,7 @@ export default new Vuetify({
       create: 'fas fa-plus',
       delete: 'fas fa-trash',
       edit: 'fas fa-edit',
-      detail: 'far fa-file',
+      read: 'far fa-file',
       save: 'fas fa-save',
     },
   },

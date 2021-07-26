@@ -20,7 +20,7 @@ router.get('/create', permission('guide-images-create'), wrapAsync(guideImageCon
 
 router
   .route('/:guideImageId')
-  .get(permission('guide-images-detail'), wrapAsync(guideImageController.detail))
+  .get(permission('guide-images-read'), wrapAsync(guideImageController.read))
   .put(permission('guide-images-edit'), validation.update, wrapAsync(guideImageController.update))
   .delete(permission('guide-images-delete'), wrapAsync(guideImageController.destroy));
 

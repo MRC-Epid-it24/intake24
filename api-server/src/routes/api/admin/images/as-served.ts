@@ -24,7 +24,7 @@ router.get('/create', permission('as-served-create'), wrapAsync(asServedSetContr
 
 router
   .route('/:asServedSetId')
-  .get(permission('as-served-detail'), wrapAsync(asServedSetController.detail))
+  .get(permission('as-served-read'), wrapAsync(asServedSetController.read))
   .put(permission('as-served-edit'), validation.update, wrapAsync(asServedSetController.update))
   .delete(permission('as-served-delete'), wrapAsync(asServedSetController.destroy));
 

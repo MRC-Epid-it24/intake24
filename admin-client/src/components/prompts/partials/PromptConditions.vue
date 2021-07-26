@@ -4,7 +4,7 @@
       <v-card v-show="dialog.show" class="mb-6" outlined>
         <v-toolbar color="grey lighten-4" flat>
           <v-toolbar-title>
-            {{ $t(`schemes.conditions.${isCreate ? 'new' : 'edit'}`) }}
+            {{ $t(`schemes.conditions.${isCreate ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn class="font-weight-bold" color="error" @click.stop="cancel" text>
@@ -74,7 +74,7 @@
             fab
             small
             color="secondary"
-            :title="$t('schemes.conditions.new')"
+            :title="$t('schemes.conditions.create')"
             @click.stop="add"
           >
             <v-icon small>fa-plus</v-icon>

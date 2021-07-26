@@ -2,8 +2,8 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const signInLogs: LocaleMessageObject = {
   _: 'Sign-in log',
-  index: 'Sign-in log',
-  detail: 'Sign-in log detail',
+  title: 'Sign-in log',
+  read: 'Sign-in log detail',
   delete: 'Delete sign-in log',
   date: 'Attempted at',
   provider: 'Provider',

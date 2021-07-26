@@ -62,7 +62,7 @@ export default (): LocaleController => {
     res.status(201).json({ data: locale });
   };
 
-  const detail = async (req: Request, res: Response<LocaleResponse>): Promise<void> =>
+  const read = async (req: Request, res: Response<LocaleResponse>): Promise<void> =>
     entry(req, res);
 
   const edit = async (req: Request, res: Response<LocaleResponse>): Promise<void> =>
@@ -110,7 +110,7 @@ export default (): LocaleController => {
     browse,
     create,
     store,
-    detail,
+    read,
     edit,
     update,
     destroy,

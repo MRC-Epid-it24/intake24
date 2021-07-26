@@ -2,10 +2,9 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const schemes: LocaleMessageObject = {
   _: 'Scheme',
-  index: 'Schemes',
+  title: 'Schemes',
   all: 'All schemes',
-  detail: 'Scheme detail',
-  new: 'New scheme',
+  read: 'Scheme detail',
   create: 'Add scheme',
   edit: 'Edit scheme',
   delete: 'Delete scheme',
@@ -27,7 +26,7 @@ const schemes: LocaleMessageObject = {
   meals: {
     _: 'Meal',
     title: 'Default meals',
-    new: 'New meal',
+    create: 'New meal',
     edit: 'Edit meal',
     remove: 'Remove meal',
     reset: 'Reset meals to default values',
@@ -39,7 +38,7 @@ const schemes: LocaleMessageObject = {
   conditions: {
     _: 'Condition',
     title: 'Conditions',
-    new: 'New condition',
+    create: 'New condition',
     edit: 'Edit condition',
     types: {
       _: 'Condition type',
@@ -98,7 +97,7 @@ const schemes: LocaleMessageObject = {
     _: 'Scheme question',
     tab: 'Questions',
     title: 'Scheme questions',
-    new: 'New question',
+    create: 'New question',
     edit: 'Edit question',
     move: 'Move question',
     remove: 'Remove question',

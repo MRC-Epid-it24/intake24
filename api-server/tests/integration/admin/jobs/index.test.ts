@@ -1,11 +1,11 @@
 import browse from './browse.test';
-import detail from './detail.test';
+import read from './read.test';
 import download from './download.test';
 import destroy from './destroy.test';
 
 export default {
   browse,
-  detail,
+  read,
   download,
   destroy,
 };

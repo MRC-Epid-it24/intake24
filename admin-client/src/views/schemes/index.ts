@@ -1,14 +1,14 @@
-import detail from './Detail.vue';
-import form from './Form.vue';
-import list from './List.vue';
-import questions from './Questions.vue';
-import dataExport from './DataExport.vue';
+import browse from './browse.vue';
+import form from './form.vue';
+import read from './read.vue';
+import questions from './questions';
+import dataExport from './data-export';
 
 export default {
-  detail,
+  browse,
   create: form,
+  read,
   edit: form,
-  list,
   questions,
   'data-export': dataExport,
 };

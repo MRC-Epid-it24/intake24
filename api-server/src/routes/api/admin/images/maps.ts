@@ -23,7 +23,7 @@ router.get('/create', permission('image-maps-create'), wrapAsync(imageMapControl
 
 router
   .route('/:imageMapId')
-  .get(permission('image-maps-detail'), wrapAsync(imageMapController.detail))
+  .get(permission('image-maps-read'), wrapAsync(imageMapController.read))
   .put(permission('image-maps-edit'), validation.update, wrapAsync(imageMapController.update))
   .delete(permission('image-maps-delete'), wrapAsync(imageMapController.destroy));
 

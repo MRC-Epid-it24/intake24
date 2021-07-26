@@ -72,7 +72,11 @@
 
     <v-main>
       <v-container :class="{ 'pa-0': isMobile }" fluid>
-        <h2 v-if="loggedIn" class="ma-2 text-dark">{{ title }}</h2>
+        <v-breadcrumbs v-if="breadcrumbs.length" :items="breadcrumbs" large>
+          <template v-slot:divider>
+            <v-icon>fas fa-caret-right</v-icon>
+          </template>
+        </v-breadcrumbs>
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -89,19 +93,32 @@
 
 <script lang="ts">
 import groupBy from 'lodash/groupBy';
+import pluralize from 'pluralize';
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
+import { Location } from 'vue-router';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import Loader from '@/components/Loader.vue';
 import MenuTree from '@/components/sidebar/MenuTree.vue';
 import WebPushMixin from '@/components/web-push/WebPushMixin';
 import PwaUpdateMixin from '@/mixins/pwaUpdateMixin';
 import resources from '@/router/resources';
+import { Dictionary } from '@common/types';
 
 export interface AppComponent {
   sidebar: boolean;
   toggleSidebar: () => void;
+  buildBreadCrumb(module: string, action: string, params: Dictionary, parent?: string): any[];
 }
+
+type Breadcrumbs = {
+  disabled?: boolean;
+  exact?: boolean;
+  href?: string;
+  link?: boolean;
+  text: string | number;
+  to?: string | Location;
+};
 
 type Mixins = InstanceType<typeof PwaUpdateMixin> & InstanceType<typeof WebPushMixin>;
 
@@ -121,6 +138,13 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
 
   computed: {
     ...mapGetters({ app: 'app', loggedIn: 'auth/loggedIn' }),
+    breadcrumbs(): Breadcrumbs[] {
+      const { meta: { module, action } = {}, params } = this.$route;
+      if (!module || !action) return [];
+
+      const { current, parent } = module;
+      return this.buildBreadCrumb(current, action, params, parent);
+    },
     title() {
       if (this.$route.meta?.title) return this.$t(this.$route.meta.title);
 
@@ -128,7 +152,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
 
       const { id, name } = this.$store.state.resource.entry.data;
 
-      return name ?? id ?? this.$t(`${this.module}.index`);
+      return name ?? id ?? this.$t(`${this.module}.title`);
     },
   },
 
@@ -167,6 +191,52 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
     async logout() {
       await this.$store.dispatch('auth/logout', { invalidate: true });
       await this.$router.push({ name: 'login' });
+    },
+
+    buildBreadCrumb(module: string, action: string, currentParams: Dictionary, parent?: string) {
+      const defaults = { disabled: false, exact: true, link: true };
+      const items: Breadcrumbs[] = [];
+
+      if (parent) items.push(...this.buildBreadCrumb(parent, action, currentParams));
+
+      const name = parent ? `${parent}-${module}` : module;
+      const title = parent ? `${parent}.${module}` : module;
+      const identifier = parent ? `${pluralize.singular(module)}Id` : 'id';
+      const { [identifier]: currentId, id } = currentParams;
+
+      const params: Dictionary<string> = { [identifier]: currentId };
+      if (parent) params.id = id;
+
+      items.push({ ...defaults, text: this.$t(`${title}.title`) as string, to: { name } });
+
+      if (!currentId) return items;
+
+      if (currentId === 'create') {
+        items.push({
+          ...defaults,
+          text: this.$t(`${title}.${action}`) as string,
+          to: { name: `${name}-${action}`, params },
+        });
+        return items;
+      }
+
+      const { name: entryName, id: entryId } = this.$store.state.resource.entry.data;
+
+      items.push({
+        ...defaults,
+        text: parent ? this.$t(`${title}.read`) : entryName ?? entryId ?? this.$t(`${title}.read`),
+        to: { name: `${name}-read`, params },
+      });
+
+      if (['edit'].includes(action)) {
+        items.push({
+          ...defaults,
+          text: this.$t(`${title}.${action}`) as string,
+          to: { name: `${name}-${action}`, params },
+        });
+      }
+
+      return items;
     },
   },
 });

@@ -58,7 +58,7 @@ import { FormMixin } from '@/types';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 import { AsServedSetEntry, AsServedImageInput } from '@common/types/http/admin';
-import AsServedImages from './Images.vue';
+import AsServedImages from './images.vue';
 
 type EditAsServedSetForm = {
   id: string | null;

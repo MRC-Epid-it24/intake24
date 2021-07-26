@@ -17,7 +17,7 @@ router.post('/copy', permission('schemes-edit'), validation.copy, wrapAsync(sche
 
 router
   .route('/:schemeId')
-  .get(permission('schemes-detail'), wrapAsync(schemeController.detail))
+  .get(permission('schemes-read'), wrapAsync(schemeController.read))
   .put(permission('schemes-edit'), validation.update, wrapAsync(schemeController.update))
   .delete(permission('schemes-delete'), wrapAsync(schemeController.destroy));
 

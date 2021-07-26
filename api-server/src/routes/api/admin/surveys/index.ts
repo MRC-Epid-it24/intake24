@@ -22,7 +22,7 @@ router.use('/:surveyId', canManageSurvey());
 
 router
   .route('/:surveyId')
-  .get(permission('surveys-detail'), wrapAsync(adminSurveyController.detail))
+  .get(permission('surveys-read'), wrapAsync(adminSurveyController.read))
   .put(permission('surveys-edit'), validation.update, wrapAsync(adminSurveyController.update))
   .delete(permission('surveys-delete'), wrapAsync(adminSurveyController.destroy));
 

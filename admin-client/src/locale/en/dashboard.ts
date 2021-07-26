@@ -2,7 +2,7 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const dashboard: LocaleMessageObject = {
   _: 'Dashboard',
-  index: 'Dashboard',
+  title: 'Dashboard',
 };
 
 export default dashboard;

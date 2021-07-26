@@ -2,9 +2,8 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const guideImages: LocaleMessageObject = {
   _: 'Guide image',
-  index: 'Guide images',
-  detail: 'Guide image detail',
-  new: 'New guide image',
+  title: 'Guide images',
+  read: 'Guide image detail',
   create: 'Add guide image',
   edit: 'Edit guide image',
   delete: 'Delete guide image',

@@ -1,6 +1,6 @@
 import { Resource } from '@/types';
 
-const routes: string[] = ['create', 'detail', 'edit'];
+const routes: string[] = ['create', 'read', 'edit'];
 
 const resources: Resource[] = [
   // Admin
@@ -81,7 +81,7 @@ const resources: Resource[] = [
     icon: 'fas fa-running',
     api: 'admin/jobs',
     generateRoutes: true,
-    routes: ['detail'],
+    routes: ['read'],
   },
   {
     group: 'system',
@@ -89,7 +89,7 @@ const resources: Resource[] = [
     icon: 'fas fa-sign-in-alt',
     api: 'admin/sign-in-logs',
     generateRoutes: true,
-    routes: ['detail'],
+    routes: ['read'],
   },
   {
     group: 'system',

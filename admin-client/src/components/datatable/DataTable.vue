@@ -65,7 +65,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   props: {
     actions: {
       type: Array as () => string[],
-      default: (): string[] => ['create', 'detail', 'edit', 'delete'],
+      default: (): string[] => ['create', 'read', 'edit', 'delete'],
     },
     apiUrl: {
       type: String,

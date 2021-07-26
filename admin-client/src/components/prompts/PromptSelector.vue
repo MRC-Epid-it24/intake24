@@ -6,7 +6,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t(`schemes.questions.${dialog.index === -1 ? 'new' : 'edit'}`) }}
+          {{ $t(`schemes.questions.${dialog.index === -1 ? 'create' : 'edit'}`) }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>

@@ -2,10 +2,9 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const permissions: LocaleMessageObject = {
   _: 'Permission',
-  index: 'Permissions',
+  title: 'Permissions',
   all: 'All permissions',
-  detail: 'Permission detail',
-  new: 'New permission',
+  read: 'Permission detail',
   create: 'Add permission',
   edit: 'Edit permission',
   delete: 'Delete permission',

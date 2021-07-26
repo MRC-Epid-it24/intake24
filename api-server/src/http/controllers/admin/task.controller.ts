@@ -49,7 +49,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     res.status(201).json({ data: task });
   };
 
-  const detail = async (
+  const read = async (
     req: Request<{ taskId: number }>,
     res: Response<TaskResponse>
   ): Promise<void> => entry(req, res);
@@ -110,7 +110,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     browse,
     create,
     store,
-    detail,
+    read,
     edit,
     update,
     destroy,

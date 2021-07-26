@@ -12,12 +12,12 @@ router.route('').get(permission('jobs-browse'), validation.browse, wrapAsync(job
 
 router
   .route('/:jobId')
-  .get(permission('jobs-detail'), validation.entry('jobId'), wrapAsync(jobController.detail))
+  .get(permission('jobs-read'), validation.entry('jobId'), wrapAsync(jobController.read))
   .delete(permission('jobs-delete'), validation.entry('jobId'), wrapAsync(jobController.destroy));
 
 router.get(
   '/:jobId/download',
-  permission('jobs-detail'),
+  permission('jobs-read'),
   validation.entry('jobId'),
   wrapAsync(jobController.download)
 );

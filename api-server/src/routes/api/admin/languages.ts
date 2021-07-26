@@ -16,7 +16,7 @@ router.get('/create', permission('languages-create'), wrapAsync(languageControll
 
 router
   .route('/:languageId')
-  .get(permission('languages-detail'), wrapAsync(languageController.detail))
+  .get(permission('languages-read'), wrapAsync(languageController.read))
   .put(permission('languages-edit'), validation.update, wrapAsync(languageController.update))
   .delete(permission('languages-delete'), wrapAsync(languageController.destroy));
 

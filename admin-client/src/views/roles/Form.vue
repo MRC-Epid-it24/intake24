@@ -36,12 +36,12 @@
               ></v-textarea>
             </v-col>
           </v-row>
-          <h4 class="my-3" for="permissions">{{ $t('permissions.index') }}</h4>
+          <h4 class="my-3" for="permissions">{{ $t('permissions.title') }}</h4>
           <v-row>
             <v-col v-for="(pModule, key) in permissions" :key="key" cols="4">
               <v-card height="100%">
                 <v-card-title>
-                  <h6>{{ key === 'general' ? $t('common.misc') : $t(`${key}.index`) }}</h6>
+                  <h6>{{ key === 'general' ? $t('common.misc') : $t(`${key}.title`) }}</h6>
                 </v-card-title>
                 <v-card-text>
                   <v-switch

@@ -1,9 +1,5 @@
-import Login from './Login.vue';
-import PasswordRequest from './PasswordRequest.vue';
-import PasswordReset from './PasswordReset.vue';
+import login from './login.vue';
+import passwordRequest from './password-request.vue';
+import passwordReset from './password-reset.vue';
 
-export default {
-  login: Login,
-  passwordRequest: PasswordRequest,
-  passwordReset: PasswordReset,
-};
+export default { login, passwordRequest, passwordReset };

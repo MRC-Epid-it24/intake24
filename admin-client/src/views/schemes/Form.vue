@@ -60,8 +60,8 @@ import { FormMixin } from '@/types';
 import { defaultExport, defaultMeals, defaultQuestions, RecallQuestions } from '@common/schemes';
 import { Meal } from '@common/types';
 import { ExportSection } from '@common/types/models';
-import CopySchemeDialog from './CopySchemeDialog.vue';
-import Meals from './Meals.vue';
+import CopySchemeDialog from './copy-scheme-dialog.vue';
+import Meals from './meal-list.vue';
 
 export type SchemeForm = {
   id: string | null;

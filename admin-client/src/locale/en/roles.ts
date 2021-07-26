@@ -2,10 +2,9 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const roles: LocaleMessageObject = {
   _: 'Role',
-  index: 'Roles',
+  title: 'Roles',
   all: 'All roles',
-  detail: 'Role detail',
-  new: 'New role',
+  read: 'Role detail',
   create: 'Add role',
   edit: 'Edit role',
   delete: 'Delete role',

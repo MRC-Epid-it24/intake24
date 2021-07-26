@@ -62,7 +62,7 @@ export default (): SchemeQuestionController => {
     res.status(201).json({ data: schemeQuestion });
   };
 
-  const detail = async (
+  const read = async (
     req: Request<{ schemeQuestionId: string }>,
     res: Response<SchemeQuestionResponse>
   ): Promise<void> => entry(req, res);
@@ -139,7 +139,7 @@ export default (): SchemeQuestionController => {
     browse,
     create,
     store,
-    detail,
+    read,
     edit,
     update,
     sync,

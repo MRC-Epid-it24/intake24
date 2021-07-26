@@ -16,7 +16,7 @@ router.get('/create', permission('locales-create'), wrapAsync(localeController.c
 
 router
   .route('/:localeId')
-  .get(permission('locales-detail'), wrapAsync(localeController.detail))
+  .get(permission('locales-read'), wrapAsync(localeController.read))
   .put(permission('locales-edit'), validation.update, wrapAsync(localeController.update))
   .delete(permission('locales-delete'), wrapAsync(localeController.destroy));
 

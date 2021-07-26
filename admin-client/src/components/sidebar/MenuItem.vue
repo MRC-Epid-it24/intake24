@@ -30,7 +30,7 @@ export default Vue.extend({
   computed: {
     title(): string {
       const { name, title } = this.item;
-      return this.$t(title ?? `${name}.index`) as string;
+      return this.$t(title ?? `${name}.title`) as string;
     },
   },
 });

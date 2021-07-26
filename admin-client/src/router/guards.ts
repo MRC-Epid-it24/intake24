@@ -4,7 +4,7 @@ import { RootState } from '@/types';
 
 export default (router: Router, store: Store<RootState>): void => {
   router.beforeEach(async (to, from, next) => {
-    const { meta: { module, perm, public: unrestricted } = {} } = to;
+    const { meta: { perm, public: unrestricted } = {} } = to;
 
     // Login page
     if (unrestricted) {
@@ -28,8 +28,14 @@ export default (router: Router, store: Store<RootState>): void => {
       return;
     }
 
-    if (!store.getters['resource/name'] !== module) await store.dispatch('resource/update', module);
-
     next();
+  });
+
+  router.afterEach(async (to) => {
+    const { meta: { module } = {} } = to;
+
+    // Update module/resource name
+    const value = module.parent ?? module.current;
+    if (!store.getters['resource/name'] !== value) await store.dispatch('resource/update', value);
   });
 };

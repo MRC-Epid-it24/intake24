@@ -67,7 +67,7 @@ export default ({
     res.status(201).json({ data: responseCollection.guideEntryResponse(guideImage) });
   };
 
-  const detail = async (req: Request, res: Response<GuideImageResponse>): Promise<void> =>
+  const read = async (req: Request, res: Response<GuideImageResponse>): Promise<void> =>
     entry(req, res);
 
   const edit = async (req: Request, res: Response<GuideImageResponse>): Promise<void> =>
@@ -97,7 +97,7 @@ export default ({
     browse,
     create,
     store,
-    detail,
+    read,
     edit,
     update,
     destroy,

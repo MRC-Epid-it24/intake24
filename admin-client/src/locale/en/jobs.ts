@@ -2,9 +2,8 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const jobs: LocaleMessageObject = {
   _: 'Job',
-  index: 'Jobs',
-  detail: 'Job detail',
-  new: 'New detail',
+  title: 'Jobs',
+  read: 'Job detail',
   delete: 'Delete job',
   downloadUrl: 'Download Url',
   downloadUrlExpiresAt: 'Download Url expires at',

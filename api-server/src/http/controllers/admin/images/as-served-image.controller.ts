@@ -11,7 +11,7 @@ import { User } from '@/db/models/system';
 import imagesResponseCollection from '@/http/responses/admin/images';
 import { Controller } from '../../controller';
 
-export type AsServedImageController = Controller<'browse' | 'store' | 'detail' | 'destroy'>;
+export type AsServedImageController = Controller<'browse' | 'store' | 'read' | 'destroy'>;
 
 export default ({
   imagesBaseUrl,
@@ -74,7 +74,7 @@ export default ({
     res.status(201).json({ data: responseCollection.asServedImageEntryResponse(asServedImage) });
   };
 
-  const detail = async (req: Request, res: Response<AsServedImageResponse>): Promise<void> =>
+  const read = async (req: Request, res: Response<AsServedImageResponse>): Promise<void> =>
     entry(req, res);
 
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
@@ -88,7 +88,7 @@ export default ({
   return {
     browse,
     store,
-    detail,
+    read,
     destroy,
   };
 };

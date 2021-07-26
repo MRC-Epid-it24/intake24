@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import request from 'supertest';
 import { Task } from '@/db/models/system';
 import { TaskRequest } from '@common/types/http/admin';
@@ -11,13 +10,11 @@ export default (): void => {
   let invalidUrl: string;
 
   let input: TaskRequest;
-  let output: TaskRequest;
   let task: Task;
 
   beforeAll(async () => {
     input = mocker.task();
     task = await Task.create(input);
-    output = { ...input };
 
     url = `${baseUrl}/${task.id}/run`;
     invalidUrl = `${baseUrl}/999999/run`;

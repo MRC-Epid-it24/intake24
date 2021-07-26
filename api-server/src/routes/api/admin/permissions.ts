@@ -19,9 +19,9 @@ router.get('/create', permission('permissions-create'), wrapAsync(permissionCont
 router
   .route('/:permissionId')
   .get(
-    permission('permissions-detail'),
+    permission('permissions-read'),
     validation.entry('permissionId'),
-    wrapAsync(permissionController.detail)
+    wrapAsync(permissionController.read)
   )
   .put(
     permission('permissions-edit'),

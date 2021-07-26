@@ -44,7 +44,7 @@ export default (): LanguageController => {
     res.status(201).json({ data: scheme });
   };
 
-  const detail = async (req: Request, res: Response<LanguageResponse>): Promise<void> =>
+  const read = async (req: Request, res: Response<LanguageResponse>): Promise<void> =>
     entry(req, res);
 
   const edit = async (req: Request, res: Response<LanguageResponse>): Promise<void> =>
@@ -82,7 +82,7 @@ export default (): LanguageController => {
     browse,
     create,
     store,
-    detail,
+    read,
     edit,
     update,
     destroy,

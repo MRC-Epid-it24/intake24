@@ -2,9 +2,8 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const imageMaps: LocaleMessageObject = {
   _: 'Image map',
-  index: 'Image maps',
-  detail: 'Image map detail',
-  new: 'New image map',
+  title: 'Image maps',
+  read: 'Image map detail',
   create: 'Add image map',
   edit: 'Edit image map',
   delete: 'Delete image map',

@@ -1,7 +1,7 @@
 import { Dictionary } from '@common/types';
 import authentication from './authentication';
-import dashboard from './Dashboard.vue';
-import profile from './Profile.vue';
+import dashboard from './dashboard.vue';
+import profile from './profile.vue';
 import images from './images';
 import jobs from './jobs';
 import languages from './languages';

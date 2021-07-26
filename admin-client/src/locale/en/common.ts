@@ -55,7 +55,7 @@ const common: LocaleMessageObject = {
     create: 'Add',
     delete: 'Delete',
     destroy: 'Permanently delete',
-    detail: 'Detail',
+    read: 'Detail',
     download: 'Download',
     edit: 'Edit',
     export: 'Export',

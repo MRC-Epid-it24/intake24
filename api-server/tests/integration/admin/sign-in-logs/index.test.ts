@@ -1,9 +1,9 @@
 import browse from './browse.test';
-import detail from './detail.test';
+import read from './read.test';
 import destroy from './destroy.test';
 
 export default {
   browse,
-  detail,
+  read,
   destroy,
 };

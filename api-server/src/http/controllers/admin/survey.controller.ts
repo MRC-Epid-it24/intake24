@@ -99,7 +99,7 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
     res.status(201).json({ data: surveyResponse(survey) });
   };
 
-  const detail = async (req: Request, res: Response<SurveyResponse>): Promise<void> =>
+  const read = async (req: Request, res: Response<SurveyResponse>): Promise<void> =>
     entry(req, res);
 
   const edit = async (req: Request, res: Response<SurveyResponse>): Promise<void> =>
@@ -162,7 +162,7 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
     browse,
     create,
     store,
-    detail,
+    read,
     edit,
     update,
     destroy,

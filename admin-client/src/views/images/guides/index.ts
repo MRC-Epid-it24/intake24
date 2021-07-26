@@ -1,6 +1,6 @@
-import list from './List.vue';
-import detail from './Detail.vue';
-import create from './Create.vue';
-import edit from './Edit.vue';
+import browse from './browse.vue';
+import create from './create.vue';
+import edit from './edit.vue';
+import read from './read.vue';
 
-export default { list, create, edit, detail };
+export default { browse, create, edit, read };

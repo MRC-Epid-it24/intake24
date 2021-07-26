@@ -70,7 +70,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res.status(201).json({ data: scheme });
   };
 
-  const detail = async (
+  const read = async (
     req: Request<{ schemeId: string }>,
     res: Response<SchemeResponse>
   ): Promise<void> => entry(req, res);
@@ -175,7 +175,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     browse,
     create,
     store,
-    detail,
+    read,
     edit,
     update,
     destroy,

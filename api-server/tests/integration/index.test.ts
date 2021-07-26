@@ -58,7 +58,7 @@ describe('API', () => {
 
   describe('Surveys', () => {
     describe('GET /api/surveys', surveys.browse);
-    describe('GET /api/surveys/:surveyId', surveys.detail);
+    describe('GET /api/surveys/:surveyId', surveys.read);
     describe('POST /api/surveys/:surveyId/generate-user', surveys.generateUser);
     // describe('POST /api/surveys/:surveyId/create-user', surveys.createUser);
 

@@ -28,7 +28,7 @@ router.get(
 
 router
   .route('/:schemeQuestionId')
-  .get(permission('scheme-questions-detail'), wrapAsync(schemeQuestionController.detail))
+  .get(permission('scheme-questions-read'), wrapAsync(schemeQuestionController.read))
   .put(
     permission('scheme-questions-edit'),
     validation.update,

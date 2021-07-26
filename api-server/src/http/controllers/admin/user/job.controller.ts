@@ -8,7 +8,7 @@ import type { IoC } from '@/ioc';
 import { JobResponse, JobsResponse } from '@common/types/http/admin';
 import type { Controller } from '@/http/controllers';
 
-export type UserJobController = Controller<'browse' | 'detail' | 'download'>;
+export type UserJobController = Controller<'browse' | 'read' | 'download'>;
 
 export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
   const browse = async (req: Request, res: Response<JobsResponse>): Promise<void> => {
@@ -27,7 +27,7 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
     res.json(jobs);
   };
 
-  const detail = async (req: Request, res: Response<JobResponse>): Promise<void> => {
+  const read = async (req: Request, res: Response<JobResponse>): Promise<void> => {
     const { jobId: id } = req.params;
     const { id: userId } = req.user as User;
 
@@ -67,7 +67,7 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
 
   return {
     browse,
-    detail,
+    read,
     download,
   };
 };

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Vue from 'vue';
 import { HttpClient } from '@/types/http';
 import { Permission } from '@/types';

@@ -62,7 +62,7 @@ export default ({
     res.status(201).json({ data: responseCollection.mapEntryResponse(imageMap) });
   };
 
-  const detail = async (req: Request, res: Response<ImageMapResponse>): Promise<void> =>
+  const read = async (req: Request, res: Response<ImageMapResponse>): Promise<void> =>
     entry(req, res);
 
   const edit = async (req: Request, res: Response<ImageMapResponse>): Promise<void> =>
@@ -89,7 +89,7 @@ export default ({
     browse,
     create,
     store,
-    detail,
+    read,
     edit,
     update,
     destroy,

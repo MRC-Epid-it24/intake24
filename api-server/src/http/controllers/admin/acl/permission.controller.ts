@@ -42,7 +42,7 @@ export default (): PermissionController => {
     res.status(201).json({ data: permission });
   };
 
-  const detail = async (req: Request, res: Response<PermissionResponse>): Promise<void> =>
+  const read = async (req: Request, res: Response<PermissionResponse>): Promise<void> =>
     entry(req, res);
 
   const edit = async (req: Request, res: Response<PermissionResponse>): Promise<void> =>
@@ -74,7 +74,7 @@ export default (): PermissionController => {
     browse,
     create,
     store,
-    detail,
+    read,
     edit,
     update,
     destroy,

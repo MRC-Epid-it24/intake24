@@ -1,7 +1,7 @@
 <template>
-  <v-card outlined class="my-5">
+  <v-card outlined class="mb-5">
     <v-toolbar>
-      <template v-for="action in ['create', 'detail', 'edit']">
+      <template v-for="action in ['create', 'read', 'edit']">
         <component
           :is="action"
           v-if="currentActions.includes(action)"
@@ -33,7 +33,7 @@ import { Location } from 'vue-router';
 import upperFirst from 'lodash/upperFirst';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import Create from './Create.vue';
-import Detail from './Detail.vue';
+import Read from './Read.vue';
 import Edit from './Edit.vue';
 
 interface Actionable {
@@ -46,14 +46,14 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
   components: {
     ConfirmDialog,
     Create,
-    Detail,
+    Read,
     Edit,
   },
 
   props: {
     actions: {
       type: Array as () => string[],
-      default: (): string[] => ['create', 'detail', 'edit', 'delete'],
+      default: (): string[] => ['create', 'read', 'edit', 'delete'],
     },
     selected: {
       type: Array as () => (number | string)[],
@@ -82,11 +82,11 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
       this[`on${upperFirst(action)}`]();
     },
 
-    async onDetail() {
+    async onRead() {
       const id = this.getOneSelected();
       if (!id) return;
 
-      await this.$router.push({ name: `${this.route}-detail`, params: { id } } as Location);
+      await this.$router.push({ name: `${this.route}-read`, params: { id } } as Location);
     },
 
     async onEdit() {

@@ -25,7 +25,7 @@ router
 
 router
   .route('/:asServedImageId')
-  .get(permission('as-served-detail'), wrapAsync(asServedImageController.detail))
+  .get(permission('as-served-read'), wrapAsync(asServedImageController.read))
   .delete(permission('as-served-delete'), wrapAsync(asServedImageController.destroy));
 
 export default router;

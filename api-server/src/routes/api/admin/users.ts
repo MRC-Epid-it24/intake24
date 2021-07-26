@@ -18,7 +18,7 @@ router.get('/create', permission('users-create'), wrapAsync(userController.creat
 
 router
   .route('/:userId')
-  .get(permission('users-detail'), validation.entry('userId'), wrapAsync(userController.detail))
+  .get(permission('users-read'), validation.entry('userId'), wrapAsync(userController.read))
   .put(
     permission('users-edit'),
     validation.entry('userId'),

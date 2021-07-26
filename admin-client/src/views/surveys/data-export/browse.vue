@@ -1,0 +1,196 @@
+<template>
+  <layout v-bind="{ id, entry }" v-if="entryLoaded">
+    <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-container>
+        <v-card-title>{{ $t('surveys.data-export.title') }}</v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-row>
+                <v-col cols="12">
+                  <v-dialog
+                    ref="startDate"
+                    v-model="menus.startDate"
+                    :return-value.sync="form.startDate"
+                    persistent
+                    width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="form.startDate"
+                        :error-messages="form.errors.get('startDate')"
+                        :label="$t('surveys.startDate')"
+                        hide-details="auto"
+                        outlined
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="form.startDate" scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="menus.startDate = false">
+                        {{ $t('common.action.cancel') }}
+                      </v-btn>
+                      <v-btn text color="primary" @click="$refs.startDate.save(form.startDate)">
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-col>
+                <v-col cols="12">
+                  <v-dialog
+                    ref="endDate"
+                    v-model="menus.endDate"
+                    :return-value.sync="form.endDate"
+                    persistent
+                    width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="form.endDate"
+                        :error-messages="form.errors.get('endDate')"
+                        :label="$t('surveys.endDate')"
+                        hide-details="auto"
+                        outlined
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="form.endDate" scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="menus.endDate = false">
+                        {{ $t('common.action.cancel') }}
+                      </v-btn>
+                      <v-btn text color="primary" @click="$refs.endDate.save(form.endDate)">
+                        {{ $t('common.action.ok') }}
+                      </v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn
+                    :disabled="form.errors.any() || isAppLoading"
+                    x-large
+                    type="submit"
+                    block
+                    color="secondary"
+                    title="Submit"
+                  >
+                    <v-icon left>fa-submit</v-icon> Submit
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-list three-line>
+                <v-list-item v-for="item in visibleJobs" :key="item.id">
+                  <v-list-item-avatar>
+                    <v-icon class="grey" dark>fa-running</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ item.type }}</v-list-item-title>
+                    <v-list-item-subtitle>
+                      Started:
+                      {{ item.completedAt ? new Date(item.startedAt).toLocaleString() : '' }}
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle>
+                      Completed:
+                      {{ item.completedAt ? new Date(item.completedAt).toLocaleString() : '' }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn
+                      v-if="item.downloadUrl"
+                      :title="$t('common.action.download')"
+                      icon
+                      link
+                      @click="download(item)"
+                    >
+                      <v-icon color="primary">fa-download</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                  <v-list-item-action>
+                    <v-progress-circular
+                      indeterminate
+                      color="secondary"
+                      v-if="item.progress != 1"
+                    ></v-progress-circular>
+                    <template v-else>
+                      <v-icon v-if="item.successful" color="success" large>fa-check-circle</v-icon>
+                      <v-icon v-if="!item.successful" color="error" large>fa-times-circle</v-icon>
+                    </template>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-container>
+    </v-form>
+  </layout>
+</template>
+
+<script lang="ts">
+import Vue, { VueConstructor } from 'vue';
+import detailMixin from '@/components/entry/detailMixin';
+import form from '@/helpers/Form';
+import { DetailMixin } from '@/types';
+import { JobResponse } from '@common/types/http/admin';
+import PollsForJobsMixin from '../polls-for-jobs-mixin';
+
+type mixins = InstanceType<typeof PollsForJobsMixin>;
+
+type SurveyDataExportForm = {
+  startDate: string | null;
+  endDate: string | null;
+};
+
+export default (Vue as VueConstructor<Vue & DetailMixin & mixins>).extend({
+  name: 'SurveyDataExport',
+
+  mixins: [detailMixin, PollsForJobsMixin],
+
+  data() {
+    return {
+      menus: { startDate: false, endDate: false },
+      form: form<SurveyDataExportForm>(
+        {
+          startDate: null,
+          endDate: null,
+        },
+        { resetOnSubmit: false }
+      ),
+      jobType: 'SurveyDataExport',
+    };
+  },
+
+  watch: {
+    entry(val) {
+      if (Object.keys(val).length) this.form.load(val);
+    },
+  },
+
+  async mounted() {
+    await this.status();
+  },
+
+  methods: {
+    async submit() {
+      if (this.jobInProgress) return;
+
+      const { data } = await this.form.post<JobResponse>(`admin/surveys/${this.id}/data-export`);
+
+      this.jobs.unshift(data);
+      this.startPolling();
+    },
+  },
+});
+</script>
+
+<style lang="scss" scoped></style>

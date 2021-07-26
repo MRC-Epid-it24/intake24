@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card outlined class="my-5">
+    <v-card outlined class="mb-5">
       <v-toolbar flat>
         <v-btn color="white" :title="$t(`common.action.back`)" :to="{ name: resource.name }">
           <v-icon left>$back</v-icon> {{ $t(`common.action.back`) }}

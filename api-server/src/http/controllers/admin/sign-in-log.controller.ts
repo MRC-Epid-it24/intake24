@@ -4,7 +4,7 @@ import { NotFoundError } from '@/http/errors';
 import { SignInLogResponse, SignInLogsResponse } from '@common/types/http/admin';
 import { Controller } from '../controller';
 
-export type SignInLogController = Controller<'browse' | 'detail' | 'destroy'>;
+export type SignInLogController = Controller<'browse' | 'read' | 'destroy'>;
 
 export default (): SignInLogController => {
   const entry = async (
@@ -29,7 +29,7 @@ export default (): SignInLogController => {
     res.json(signInLogs);
   };
 
-  const detail = async (
+  const read = async (
     req: Request<{ signInLogId: number }>,
     res: Response<SignInLogResponse>
   ): Promise<void> => entry(req, res);
@@ -49,7 +49,7 @@ export default (): SignInLogController => {
 
   return {
     browse,
-    detail,
+    read,
     destroy,
   };
 };

@@ -1,16 +1,16 @@
-import detail from './Detail.vue';
-import form from './Form.vue';
-import list from './List.vue';
-import dataExport from './DataExport.vue';
-import mgmt from './Mgmt.vue';
-import respondents from './respondents/Respondents.vue';
-import submissions from './Submissions.vue';
+import browse from './browse.vue';
+import form from './form.vue';
+import read from './read.vue';
+import dataExport from './data-export';
+import mgmt from './mgmt';
+import respondents from './respondents';
+import submissions from './submissions';
 
 export default {
-  detail,
+  browse,
   create: form,
+  read,
   edit: form,
-  list,
   'data-export': dataExport,
   mgmt,
   respondents,

@@ -1,4 +1,4 @@
-import list from './List.vue';
-import detail from './Detail.vue';
+import browse from './browse.vue';
+import read from './read.vue';
 
-export default { list, detail };
+export default { browse, read };

@@ -1,12 +1,6 @@
-import detail from './Detail.vue';
-import form from './Form.vue';
-import list from './List.vue';
-import sync from './Sync.vue';
+import browse from './browse.vue';
+import form from './form.vue';
+import read from './read.vue';
+import sync from './sync.vue';
 
-export default {
-  detail,
-  create: form,
-  edit: form,
-  list,
-  sync,
-};
+export default { browse, create: form, read, edit: form, sync };

@@ -3,10 +3,9 @@ import { LocaleMessageObject } from 'vue-i18n';
 const locales: LocaleMessageObject = {
   _: 'Locales',
   id: 'Locale ID',
-  index: 'Locales',
+  title: 'Locales',
   all: 'All locales',
-  detail: 'Locale detail',
-  new: 'New locale',
+  read: 'Locale detail',
   create: 'Add locale',
   edit: 'Edit locale',
   delete: 'Delete locale',

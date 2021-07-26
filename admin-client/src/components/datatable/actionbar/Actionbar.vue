@@ -17,7 +17,7 @@
 import Vue, { VueConstructor } from 'vue';
 import upperFirst from 'lodash/upperFirst';
 import Delete from './Delete.vue';
-import Detail from './Detail.vue';
+import Read from './Read.vue';
 import Download from './Download.vue';
 import Edit from './Edit.vue';
 
@@ -30,7 +30,7 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
 
   components: {
     Delete,
-    Detail,
+    Read,
     Download,
     Edit,
   },
@@ -38,7 +38,7 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
   props: {
     actions: {
       type: Array as () => string[],
-      default: (): string[] => ['detail', 'edit', 'delete'],
+      default: (): string[] => ['read', 'edit', 'delete'],
     },
     item: {
       type: Object,

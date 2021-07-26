@@ -14,9 +14,9 @@ router
 router
   .route('/:signInLogId')
   .get(
-    permission('sign-in-logs-detail'),
+    permission('sign-in-logs-read'),
     validation.entry('signInLogId'),
-    wrapAsync(signInLogController.detail)
+    wrapAsync(signInLogController.read)
   )
   .delete(
     permission('sign-in-logs-delete'),

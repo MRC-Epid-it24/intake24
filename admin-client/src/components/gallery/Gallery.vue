@@ -22,7 +22,7 @@
       <v-row>
         <v-col v-for="item in items" :key="item.id" cols="12" sm="6" md="4" lg="3">
           <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile" height="100%">
-            <router-link :to="{ name: `${module}-detail`, params: { id: item.id } }">
+            <router-link :to="{ name: `${module}-read`, params: { id: item.id } }">
               <v-img :src="item[imageUrl]"></v-img>
             </router-link>
             <v-card-title>
@@ -104,7 +104,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
     },
     actions: {
       type: Array as () => string[],
-      default: (): string[] => ['create', 'detail', 'edit', 'delete'],
+      default: (): string[] => ['create', 'read', 'edit', 'delete'],
     },
     trackBy: {
       type: String,
