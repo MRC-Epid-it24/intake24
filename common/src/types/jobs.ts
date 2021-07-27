@@ -18,6 +18,7 @@ export const jobTypes = [
   'SurveyDataExport',
   'SurveyExportRespondentAuthUrls',
   'SurveyImportRespondents',
+  'SurveySubmissionNotification',
 ] as const;
 
 export type JobType = typeof jobTypes[number];
@@ -51,13 +52,19 @@ export type SurveyImportRespondentsParams = {
   file: string;
 };
 
+export type SurveySubmissionNotificationParams = {
+  surveyId: string;
+  submissionId: string;
+};
+
 export type JobParams =
   | CleanStorageFilesParams
   | PurgeRefreshTokensParams
   | SendPasswordResetParams
   | SurveyDataExportParams
   | SurveyExportRespondentAuthUrlsParams
-  | SurveyImportRespondentsParams;
+  | SurveyImportRespondentsParams
+  | SurveySubmissionNotificationParams;
 
 export type JobParamsList = {
   CleanStorageFiles: CleanStorageFilesParams;
@@ -66,6 +73,7 @@ export type JobParamsList = {
   SurveyDataExport: SurveyDataExportParams;
   SurveyExportRespondentAuthUrls: SurveyExportRespondentAuthUrlsParams;
   SurveyImportRespondents: SurveyImportRespondentsParams;
+  SurveySubmissionNotification: SurveySubmissionNotificationParams;
 };
 
 export type GetJobParams<P extends keyof JobParamsList> = JobParamsList[P];

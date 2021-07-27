@@ -57,7 +57,6 @@ const common: LocaleMessageObject = {
     remove: 'Remove',
     restore: 'Restore',
     save: 'Save',
-    show: 'Info',
     transfer: 'Transfer',
     confirm: {
       _: 'Confirm',

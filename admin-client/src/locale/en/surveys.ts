@@ -39,6 +39,7 @@ const surveys: LocaleMessageObject = {
     minInterval: 'Minimum interval between submissions (seconds)',
   },
   storeUserSessionOnServer: 'Store user session on server',
+  submissionNotificationUrl: 'Submission notification URL',
   feedback: {
     _: 'Feedback settings',
     enabled: 'Feedback Enabled',

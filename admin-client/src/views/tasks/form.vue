@@ -134,6 +134,10 @@ const defaultParams: JobParamsList = {
     surveyId: '',
     file: '',
   },
+  SurveySubmissionNotification: {
+    surveyId: '',
+    submissionId: '',
+  },
 };
 
 export default (

@@ -3,7 +3,7 @@ import { LocaleMessageObject } from 'vue-i18n';
 const tasks: LocaleMessageObject = {
   _: 'Task',
   title: 'Tasks',
-  show: 'Task detail',
+  read: 'Task detail',
   create: 'Add task',
   edit: 'Edit task',
   delete: 'Delete task',

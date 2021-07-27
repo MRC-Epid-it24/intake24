@@ -569,6 +569,13 @@ export default ({
       // TODO: process foods
     }
 
+    if (survey.submissionNotificationUrl) {
+      await scheduler.jobs.addJob(
+        { type: 'SurveySubmissionNotification', userId },
+        { surveyId, submissionId: surveySubmissionId }
+      );
+    }
+
     const [followUpUrl, showFeedback] = await Promise.all([
       getFollowUpUrl(survey, userId),
       canShowFeedback(survey, userId),

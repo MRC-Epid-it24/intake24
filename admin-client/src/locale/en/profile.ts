@@ -2,6 +2,7 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const profile: LocaleMessageObject = {
   _: 'Profile',
+  title: 'Profile',
   info: 'Information',
   settings: 'Settings',
 

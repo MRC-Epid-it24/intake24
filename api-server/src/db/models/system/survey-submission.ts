@@ -3,8 +3,41 @@ import {
   SurveySubmissionAttributes,
   SurveySubmissionCreationAttributes,
 } from '@common/types/models';
+import { FindOptions } from 'sequelize/types';
 import BaseModel from '../model';
 import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from '.';
+import UserSurveyAlias from './user-survey-alias';
+import UserCustomField from './user-custom-field';
+import SurveySubmissionMealCustomField from './survey-submission-meal-custom-field';
+import SurveySubmissionFood from './survey-submission-food';
+import SurveySubmissionFoodCustomField from './survey-submission-food-custom-field';
+import SurveySubmissionMissingFood from './survey-submission-missing-food';
+
+export const submissionScope = (surveyId: string): FindOptions<SurveySubmissionAttributes> => ({
+  include: [
+    {
+      model: User,
+      include: [
+        { model: UserSurveyAlias, where: { surveyId } },
+        { model: UserCustomField, separate: true },
+      ],
+    },
+    { model: SurveySubmissionCustomField, separate: true },
+    {
+      model: SurveySubmissionMeal,
+      separate: true,
+      include: [
+        { model: SurveySubmissionMealCustomField, separate: true },
+        {
+          model: SurveySubmissionFood,
+          separate: true,
+          include: [{ model: SurveySubmissionFoodCustomField }],
+        },
+        { model: SurveySubmissionMissingFood, separate: true },
+      ],
+    },
+  ],
+});
 
 @Scopes(() => ({
   survey: { include: [{ model: Survey }] },

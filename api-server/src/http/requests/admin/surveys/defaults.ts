@@ -150,8 +150,8 @@ const defaults: Schema = {
   // feedbackStyle: {},
   submissionNotificationUrl: {
     in: ['body'],
-    errorMessage: 'URL must be a string.',
-    isString: true,
+    errorMessage: 'Submission notification URL must be valid URL',
+    isURL: { options: { require_tld: false } },
     optional: { options: { nullable: true } },
   },
   storeUserSessionOnServer: {

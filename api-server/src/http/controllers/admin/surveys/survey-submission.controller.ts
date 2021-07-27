@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { WhereOptions } from 'sequelize';
 import { Survey, SurveySubmission } from '@/db/models/system';
+import { submissionScope } from '@/db/models/system/survey-submission';
 import { NotFoundError } from '@/http/errors';
 import { SurveySubmissionResponse, SurveySubmissionsResponse } from '@common/types/http/admin';
 import { validate } from 'uuid';
@@ -9,7 +10,10 @@ import { Controller } from '../../controller';
 export type AdminSurveySubmissionController = Controller<'browse' | 'entry' | 'destroy'>;
 
 export default (): AdminSurveySubmissionController => {
-  const browse = async (req: Request, res: Response<SurveySubmissionsResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveySubmissionsResponse>
+  ): Promise<void> => {
     const {
       params: { surveyId },
       query: { search },
@@ -33,16 +37,22 @@ export default (): AdminSurveySubmissionController => {
     res.json(submissions);
   };
 
-  const entry = async (req: Request, res: Response<SurveySubmissionResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ surveyId: string; submissionId: string }>,
+    res: Response<SurveySubmissionResponse>
+  ): Promise<void> => {
     const { surveyId, submissionId } = req.params;
 
-    const submission = await SurveySubmission.findOne({ where: { id: submissionId, surveyId } });
+    const submission = await SurveySubmission.findByPk(submissionId, submissionScope(surveyId));
     if (!submission) throw new NotFoundError();
 
     res.json({ data: submission });
   };
 
-  const destroy = async (req: Request, res: Response): Promise<void> => {
+  const destroy = async (
+    req: Request<{ surveyId: string; submissionId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { surveyId, submissionId } = req.params;
 
     await SurveySubmission.destroy({ where: { id: submissionId, surveyId } });

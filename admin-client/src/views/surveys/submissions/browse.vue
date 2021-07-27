@@ -1,24 +1,42 @@
 <template>
   <layout v-bind="{ id, entry }" v-if="entryLoaded">
-    <data-table :headers="headers" :api="`admin/surveys/${id}/submissions`" ref="table">
+    <data-table :headers="headers" :api="baseAPI" ref="table">
       <template v-slot:[`item.startTime`]="{ item }">
-        {{ new Date(item.startTime).toLocaleString() }}
+        {{ formatDate(item.startTime) }}
       </template>
       <template v-slot:[`item.endTime`]="{ item }">
-        {{ new Date(item.endTime).toLocaleString() }}
+        {{ formatDate(item.endTime) }}
       </template>
-      <template v-slot:[`item.action`]="{ item }" class="text-right">
+      <template v-slot:[`item.action`]="{ item }">
+        <v-btn :title="$t('common.action.read')" color="primary" icon @click.stop="detail(item.id)">
+          <v-icon>$read</v-icon>
+        </v-btn>
         <confirm-dialog
           :label="$t('common.action.delete')"
           color="error"
           icon
           icon-left="$delete"
-          @confirm="remove(item)"
+          @confirm="remove(item.id)"
         >
           {{ $t('common.action.confirm.delete', { name: item.id }) }}
         </confirm-dialog>
       </template>
     </data-table>
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-card tile>
+        <v-toolbar dark color="primary">
+          <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="close">
+            <v-icon>$cancel</v-icon>
+          </v-btn>
+          <v-toolbar-title>
+            {{ selected.id }}
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-container>
+          <pre>{{ JSON.stringify(selected, null, '\t') }}</pre>
+        </v-container>
+      </v-card>
+    </v-dialog>
   </layout>
 </template>
 
@@ -27,7 +45,8 @@ import Vue, { VueConstructor } from 'vue';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import { EntryMixin } from '@/types';
-import { SurveySubmissionEntry } from '@common/types/http/admin';
+import { SurveySubmissionEntry, SurveySubmissionResponse } from '@common/types/http/admin';
+import FormatsDateTime from '@/mixins/FormatsDateTime';
 import DataTable from '../data-table.vue';
 
 export type SurveySubmissionsRefs = {
@@ -41,7 +60,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>)
 
   components: { ConfirmDialog, DataTable },
 
-  mixins: [detailMixin],
+  mixins: [detailMixin, FormatsDateTime],
 
   data() {
     return {
@@ -78,19 +97,40 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>)
         },
       ],
       dialog: false,
-      selected: {},
+      selected: {} as SurveySubmissionEntry,
     };
   },
 
   computed: {
-    isCreate(): boolean {
+    baseAPI(): string {
+      return `admin/surveys/${this.id}/submissions`;
+    },
+    isSelected(): boolean {
       return !Object.keys(this.selected).length;
     },
   },
 
   methods: {
-    async remove(item: SurveySubmissionEntry) {
-      console.log(item);
+    open() {
+      this.dialog = true;
+    },
+    close() {
+      this.dialog = false;
+    },
+
+    async detail(submissionId: string) {
+      const {
+        data: { data },
+      } = await this.$http.get<SurveySubmissionResponse>(`${this.baseAPI}/${submissionId}`);
+
+      this.selected = data;
+      this.open();
+    },
+
+    async remove(submissionId: string) {
+      await this.$http.delete(`${this.baseAPI}/${submissionId}`);
+      this.$toasted.success(this.$t(`common.msg.deleted`, { name: submissionId }) as string);
+      await this.$refs.table.fetch();
     },
   },
 });

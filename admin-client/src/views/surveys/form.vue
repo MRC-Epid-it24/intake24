@@ -162,6 +162,16 @@
                 outlined
               ></v-text-field>
             </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.submissionNotificationUrl"
+                :error-messages="form.errors.get('submissionNotificationUrl')"
+                :label="$t('surveys.submissionNotificationUrl')"
+                hide-details="auto"
+                name="submissionNotificationUrl"
+                outlined
+              ></v-text-field>
+            </v-col>
             <v-col cols="12" md="6" align-self="center">
               <v-switch
                 v-model="form.storeUserSessionOnServer"
@@ -295,6 +305,7 @@ export type SurveyForm = {
   authUrlTokenLength: number | null;
   storeUserSessionOnServer: boolean;
   feedbackEnabled: boolean;
+  submissionNotificationUrl: string | null;
   numberOfSubmissionsForFeedback: number;
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
@@ -325,6 +336,7 @@ export default Vue.extend({
         authUrlTokenLength: null,
         storeUserSessionOnServer: false,
         feedbackEnabled: false,
+        submissionNotificationUrl: null,
         numberOfSubmissionsForFeedback: 1,
         maximumDailySubmissions: 3,
         maximumTotalSubmissions: null,
