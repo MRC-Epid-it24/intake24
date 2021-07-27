@@ -47,6 +47,7 @@ module.exports = {
     'no-plusplus': 'off',
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     'no-shadow': 'off',
+    '@typescript-eslint/ban-types': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-shadow': 'error',
   },

@@ -27,7 +27,11 @@ export interface TokenPayload extends SignPayload {
 }
 
 export interface JwtService {
-  sign: (payload: SignPayload, secret: string, options?: SignOptions) => Promise<string>;
+  sign: (
+    payload: string | Buffer | object,
+    secret: string,
+    options?: SignOptions
+  ) => Promise<string>;
   signAccessToken: (payload: SignPayload, options?: SignOptions) => Promise<string>;
   signRefreshToken: (payload: SignPayload, options?: SignOptions) => Promise<string>;
   signTokens: (payload: SignPayload, options?: SignOptions) => Promise<Tokens>;
@@ -42,13 +46,13 @@ export default ({ securityConfig }: Pick<IoC, 'securityConfig'>): JwtService => 
   /**
    * Sign a token
    *
-   * @param {SignPayload} payload
+   * @param {(string | Buffer | object)} payload
    * @param {string} secret
    * @param {SignOptions} [options={}]
    * @returns {Promise<string>}
    */
   const sign = async (
-    payload: SignPayload,
+    payload: string | Buffer | object,
     secret: string,
     options: SignOptions = {}
   ): Promise<string> => {
