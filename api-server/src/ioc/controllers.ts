@@ -26,11 +26,11 @@ export default (container: AwilixContainer): void => {
     schemeController: asFunction(controllers.admin.scheme),
     schemeQuestionController: asFunction(controllers.admin.schemeQuestion),
 
-    adminSurveyController: asFunction(controllers.admin.survey),
-    adminSurveyDataExportController: asFunction(controllers.admin.surveyDataExport),
-    adminSurveyMgmtController: asFunction(controllers.admin.surveyMgmt),
-    adminSurveyRespondentController: asFunction(controllers.admin.surveyRespondent),
-    adminSurveySubmissionController: asFunction(controllers.admin.surveySubmission),
+    adminSurveyController: asFunction(controllers.admin.surveys.survey),
+    adminSurveyDataExportController: asFunction(controllers.admin.surveys.dataExport),
+    adminSurveyMgmtController: asFunction(controllers.admin.surveys.mgmt),
+    adminSurveyRespondentController: asFunction(controllers.admin.surveys.respondent),
+    adminSurveySubmissionController: asFunction(controllers.admin.surveys.submission),
 
     jobController: asFunction(controllers.admin.job),
     signInLogController: asFunction(controllers.admin.signInLog),

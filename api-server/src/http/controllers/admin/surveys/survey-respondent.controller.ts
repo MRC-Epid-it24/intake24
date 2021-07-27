@@ -9,9 +9,8 @@ import {
 import { Survey, User, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError, ValidationError } from '@/http/errors';
 import { userRespondentResponse } from '@/http/responses/admin';
-
 import type { IoC } from '@/ioc';
-import { Controller } from '../controller';
+import { Controller } from '../../controller';
 
 export type AdminSurveyRespondentController = Controller<
   'browse' | 'store' | 'update' | 'destroy' | 'upload' | 'exportAuthUrls'

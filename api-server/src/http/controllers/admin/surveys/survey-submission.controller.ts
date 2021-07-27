@@ -4,7 +4,7 @@ import { Survey, SurveySubmission } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import { SurveySubmissionResponse, SurveySubmissionsResponse } from '@common/types/http/admin';
 import { validate } from 'uuid';
-import { Controller } from '../controller';
+import { Controller } from '../../controller';
 
 export type AdminSurveySubmissionController = Controller<'browse' | 'entry' | 'destroy'>;
 

@@ -1,5 +1,6 @@
 import acl from './acl';
 import images from './images';
+import surveys from './surveys';
 import user from './user';
 
 import job from './job.controller';
@@ -8,15 +9,11 @@ import locale from './locale.controller';
 import scheme from './scheme.controller';
 import schemeQuestion from './scheme-question.controller';
 import signInLog from './sign-in-log.controller';
-import surveyDataExport from './survey-data-export.controller';
-import surveyMgmt from './survey-mgmt.controller';
-import surveyRespondent from './survey-respondent.controller';
-import surveySubmission from './survey-submission.controller';
-import survey from './survey.controller';
 import task from './task.controller';
 
 export * from './acl';
 export * from './images';
+export * from './surveys';
 export * from './user';
 
 export * from './job.controller';
@@ -25,28 +22,19 @@ export * from './locale.controller';
 export * from './scheme.controller';
 export * from './scheme-question.controller';
 export * from './sign-in-log.controller';
-export * from './survey-data-export.controller';
-export * from './survey-mgmt.controller';
-export * from './survey-respondent.controller';
-export * from './survey-submission.controller';
-export * from './survey.controller';
 export * from './task.controller';
 
 export default {
   acl,
   user,
-
   images,
+  surveys,
+
   job,
   language,
   locale,
   scheme,
   schemeQuestion,
   signInLog,
-  surveyDataExport,
-  surveyMgmt,
-  surveyRespondent,
-  surveySubmission,
-  survey,
   task,
 };

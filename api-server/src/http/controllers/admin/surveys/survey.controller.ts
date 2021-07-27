@@ -14,7 +14,7 @@ import {
   SurveysResponse,
   StoreSurveyResponse,
 } from '@common/types/http/admin';
-import { Controller, CrudActions } from '../controller';
+import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyController = Controller<CrudActions>;
 

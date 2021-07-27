@@ -3,7 +3,7 @@ import { Survey, User } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import { JobResponse } from '@common/types/http/admin';
 import { NotFoundError } from '@/http/errors';
-import { Controller } from '../controller';
+import { Controller } from '../../controller';
 
 export type AdminSurveyDataExportController = Controller<'sync' | 'queue'>;
 
