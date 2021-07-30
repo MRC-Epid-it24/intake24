@@ -104,7 +104,10 @@
                 <v-btn @click="setAssocQuestionDisplay(1, false)">
                   {{ $t('common.confirm.no') }}
                 </v-btn>
-                <associated-food-panel :promptProps="milkPromptProps" v-if="displayAssocPrompt1"></associated-food-panel>
+                <associated-food-panel
+                  :promptProps="milkPromptProps"
+                  v-if="displayAssocPrompt1"
+                ></associated-food-panel>
               </v-expansion-panel-content>
             </v-expansion-panel>
             <!-- Probably makes sense to have a component for this the associated food prompts -->
@@ -125,9 +128,6 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import debounce from 'lodash/debounce';
-import chunk from 'lodash/chunk';
-import { VImg } from 'vuetify/lib';
 import {
   CerealPromptProps,
   cerealPromptDefaultProps,
@@ -138,7 +138,7 @@ import AsServedSelector from '@/components/prompts/portion/selectors/AsServedSel
 import ImageMapSelector from '@/components/prompts/portion/selectors/ImageMapSelector.vue';
 import AssociatedFoodPanel from '@/components/prompts/portion/AssociatedFoodPanel.vue';
 import { LocaleTranslation } from '@common/types';
-import { ImageMapResponse, UserFoodData } from '@common/types/http';
+import { UserFoodData } from '@common/types/http';
 import BaseExpansionPortion, { ExpansionPortion } from './BaseExpansionPortion';
 
 export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
@@ -286,11 +286,13 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
       // Get as served now bowl is confirmed
     },
 
+    // TODO: Implement emission type
     setAsServedStatus(status: Record<string, unknown>) {
       this.asServedComplete = true;
       this.setPanelOpen(2);
     },
 
+    // TODO: Implement emission type
     setLeftoverStatus(status: Record<string, unknown>) {
       this.leftoverComplete = true;
       this.setPanelOpen(-1);
