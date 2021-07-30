@@ -24,6 +24,16 @@ export interface AssociatedFoodsPanelProps extends ValidatedPromptProps {
   expansionPanelTotal: number;
 }
 
+export interface ImageMapSelectorProps {
+  imageMapId: string;
+}
+
+export interface ImageMapSelectorEmit {
+  selectedIdx: number;
+}
+
+// Default props
+
 export const drinkScalePromptDefaultProps: DrinkScalePromptProps = {
   text: { en: null },
   description: { en: null },
@@ -117,6 +127,10 @@ export const associatedFoodPanelDefaultProps: AssociatedFoodsPanelProps = {
     message: { en: null },
   },
   expansionPanelTotal: 3,
+};
+
+export const imageMapSelectorDefaultProps: ImageMapSelectorProps = {
+  imageMapId: '',
 };
 
 export const portionSizePromptQuestions: PromptQuestion[] = [

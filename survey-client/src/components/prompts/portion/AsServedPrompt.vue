@@ -94,7 +94,7 @@ import merge from 'deepmerge';
 
 import localeContent from '@/components/mixins/localeContent';
 import ValidInvalidIcon from '@/components/elements/ValidInvalidIcon.vue';
-import AsServedSelector from '@/components/prompts/portion/AsServedSelector.vue';
+import AsServedSelector from '@/components/prompts/portion/selectors/AsServedSelector.vue';
 import { basePromptProps, BasePromptProps } from '@common/prompts';
 import { LocaleTranslation } from '@common/types';
 import BasePortion, { Portion } from './BasePortion';

@@ -8,7 +8,6 @@
         <v-btn @click="showComponent(4)">Drink Scale</v-btn>
         <v-btn @click="showComponent(5)">Standard portion</v-btn>
         <v-btn @click="showComponent(6)">Cereal</v-btn>
-        <v-btn @click="showComponent(7)">Milk on cereal</v-btn>
         <v-btn @click="showComponent(8)">Pizza</v-btn>
         <v-btn @click="showComponent(9)">Milk in a hot drink</v-btn>
         <v-btn @click="showComponent(10)">Direct weight input</v-btn>
@@ -43,6 +42,7 @@
           v-if="componentView == 3"
           :promptProps="asServedProps"
           :foodName="foodName"
+          guideImageId="Gcans"
         ></guideImagePrompt>
 
         <drink-scale-prompt
@@ -59,15 +59,12 @@
 
         <cereal-prompt
           v-show="componentView == 6"
-          :promptProps="asServedProps"
+          :promptProps="asServedPropsCereal"
           :foodName="foodName"
+          :foodCode="cerealFoodCode"
+          :imageMapId="bowlGuideImageId"
+          localeTEMP="en_GB"
         ></cereal-prompt>
-
-        <milk-cereal-prompt
-          v-show="componentView == 7"
-          :promptProps="asServedProps"
-          :foodName="foodName"
-        ></milk-cereal-prompt>
 
         <pizza-prompt
           v-show="componentView == 8"
@@ -198,6 +195,17 @@ export default Vue.extend({
           message: { en: null },
         },
       },
+      asServedPropsCereal: {
+        text: { en: 'Portion Size Options' },
+        description: { en: 'chocolate hoops cereal' },
+        localDescription: { en: 'chocolate hoops cereal' },
+        validation: {
+          required: false,
+          message: { en: null },
+        },
+      },
+      bowlGuideImageId: 'gbowl',
+      cerealFoodCode: 'HNUT',
     };
   },
 
