@@ -22,11 +22,11 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): SourceI
 
     const filename = `${uuid.v4()}${path.extname(file.originalname)}`;
 
-    const sourceDir = path.join('source', type, id);
-    const sourceThumbDir = path.join('source', 'thumbnails', type, id);
+    const sourceDir = path.posix.join('source', type, id);
+    const sourceThumbDir = path.posix.join('source', 'thumbnails', type, id);
 
-    const sourcePath = path.join(sourceDir, filename);
-    const sourceThumbPath = path.join(sourceThumbDir, filename);
+    const sourcePath = path.posix.join(sourceDir, filename);
+    const sourceThumbPath = path.posix.join(sourceThumbDir, filename);
 
     for (const dir of [sourceDir, sourceThumbDir]) {
       await fs.ensureDir(path.join(imagesPath, dir));

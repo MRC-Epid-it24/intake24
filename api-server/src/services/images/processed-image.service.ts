@@ -62,12 +62,12 @@ export default ({
       typeof sourceImage === 'number' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${uuid.v4()}${path.extname(image.path)}`;
-    const fileDir = path.join('as_served', id);
-    const fullPath = path.join(fileDir, fileName);
+    const fileDir = path.posix.join('as_served', id);
+    const fullPath = path.posix.join(fileDir, fileName);
 
     const thumbFileName = `${uuid.v4()}${path.extname(image.path)}`;
-    const thumbFileDir = path.join('as_served', id, 'thumbnails');
-    const thumbFullPath = path.join(fileDir, thumbFileName);
+    const thumbFileDir = path.posix.join('as_served', id, 'thumbnails');
+    const thumbFullPath = path.posix.join(fileDir, thumbFileName);
 
     await Promise.all([
       fs.ensureDir(path.join(imagesPath, fileDir)),
@@ -107,8 +107,8 @@ export default ({
       typeof sourceImage === 'number' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${uuid.v4()}${path.extname(image.path)}`;
-    const fileDir = path.join('image_maps', id);
-    const fullPath = path.join(fileDir, fileName);
+    const fileDir = path.posix.join('image_maps', id);
+    const fullPath = path.posix.join(fileDir, fileName);
 
     await fs.ensureDir(path.join(imagesPath, fileDir));
 
@@ -133,8 +133,8 @@ export default ({
       typeof sourceImage === 'number' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${uuid.v4()}${path.extname(image.path)}`;
-    const fileDir = path.join(type, id, 'selection');
-    const filePath = path.join(fileDir, fileName);
+    const fileDir = path.posix.join(type, id, 'selection');
+    const filePath = path.posix.join(fileDir, fileName);
 
     await fs.ensureDir(path.join(imagesPath, fileDir));
 
