@@ -1,7 +1,4 @@
 import { Request, Response } from 'express';
-import { Task, User } from '@/db/models/system';
-import { NotFoundError } from '@/http/errors';
-import type { IoC } from '@/ioc';
 import { jobTypes, JobType } from '@common/types';
 import {
   CreateTaskResponse,
@@ -9,6 +6,9 @@ import {
   TaskResponse,
   TasksResponse,
 } from '@common/types/http/admin';
+import { Task, User } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
+import type { IoC } from '@/ioc';
 import { Controller, CrudActions } from '../controller';
 
 export type TaskController = Controller<CrudActions | 'run'>;

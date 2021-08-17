@@ -1,6 +1,6 @@
-import validation from '@/http/middleware/validation';
 import { RequestHandler } from 'express';
 import { ValidationChain } from 'express-validator';
+import validation from '@/http/middleware/validation';
 
 export type ValidationMiddleware = RequestHandler | ValidationChain;
 

@@ -1,6 +1,6 @@
 import ms from 'ms';
-import type { IoC } from '@/ioc';
 import RedisStatic, { Redis } from 'ioredis';
+import type { IoC } from '@/ioc';
 
 export default class Cache {
   private readonly prefix;

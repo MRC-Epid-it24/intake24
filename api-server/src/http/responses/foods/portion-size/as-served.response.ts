@@ -1,6 +1,6 @@
+import { AsServedImageResponse, AsServedSetResponse } from '@common/types/http';
 import { AsServedSet, AsServedImage } from '@/db/models/foods';
 import { InternalServerError } from '@/http/errors';
-import { AsServedImageResponse, AsServedSetResponse } from '@common/types/http';
 
 export interface AsServedResponse {
   imageResponse: (item: AsServedImage) => AsServedImageResponse;

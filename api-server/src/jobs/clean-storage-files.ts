@@ -1,10 +1,10 @@
 import { JobsOptions } from 'bullmq';
 import fs from 'fs-extra';
 import path from 'path';
+import { CleanStorageFilesParams } from '@common/types';
 import type { IoC } from '@/ioc';
 import { addTime } from '@/util';
 import { LocalLocation } from '@/config/filesystem';
-import { CleanStorageFilesParams } from '@common/types';
 import Job from './job';
 
 export default class CleanStorageFiles extends Job<CleanStorageFilesParams> {

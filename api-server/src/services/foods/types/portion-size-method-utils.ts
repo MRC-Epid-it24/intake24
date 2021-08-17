@@ -1,9 +1,9 @@
-import { CategoryPortionSizeMethod, PortionSizeMethod } from '@/db/models/foods';
 import {
   UserPortionSizeMethod,
   UserPortionSizeMethodParameters,
 } from '@common/types/http/foods/user-food-data';
 import { PortionSizeMethodId } from '@common/types/models';
+import { CategoryPortionSizeMethod, PortionSizeMethod } from '@/db/models/foods';
 
 import {
   toUserCategoryPortionSizeMethodParameters,

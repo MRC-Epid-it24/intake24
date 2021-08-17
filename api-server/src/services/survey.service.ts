@@ -4,6 +4,9 @@ import { Op } from 'sequelize';
 import * as uuid from 'uuid';
 import { CreateRespondentInput, UpdateRespondentInput } from '@common/types/http/admin';
 import { UserCustomFieldAttributes } from '@common/types/models';
+import { SurveyState } from '@common/types';
+import { SurveyUserInfoResponse, SurveyFollowUpResponse } from '@common/types/http';
+import { PromptQuestion, RedirectPromptProps } from '@common/prompts';
 import {
   GenUserCounter,
   Job,
@@ -22,9 +25,6 @@ import {
 import { ForbiddenError, InternalServerError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { toSimpleName, generateToken } from '@/util';
-import { SurveyState } from '@common/types';
-import { SurveyUserInfoResponse, SurveyFollowUpResponse } from '@common/types/http';
-import { PromptQuestion, RedirectPromptProps } from '@common/prompts';
 import { surveyMgmt, surveyRespondent } from './auth';
 
 export type RespondentWithPassword = {

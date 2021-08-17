@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { WhereOptions } from 'sequelize';
+import { SurveySubmissionResponse, SurveySubmissionsResponse } from '@common/types/http/admin';
+import { validate } from 'uuid';
 import { Survey, SurveySubmission } from '@/db/models/system';
 import { submissionScope } from '@/db/models/system/survey-submission';
 import { NotFoundError } from '@/http/errors';
-import { SurveySubmissionResponse, SurveySubmissionsResponse } from '@common/types/http/admin';
-import { validate } from 'uuid';
 import { Controller } from '../../controller';
 
 export type AdminSurveySubmissionController = Controller<'browse' | 'entry' | 'destroy'>;

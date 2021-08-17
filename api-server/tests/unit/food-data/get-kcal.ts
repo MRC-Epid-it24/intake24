@@ -1,7 +1,7 @@
+import createTestData from '@tests/unit/food-data/get-kcal-test-data';
 import { FoodDataService, foodDataService } from '@/services';
 import { DbInterface } from '@/db';
 import InvalidIdError from '@/services/foods/invalid-id-error';
-import createTestData from '@tests/unit/food-data/get-kcal-test-data';
 import createLocales from './test-data-locales';
 import { initDatabases, releaseDatabases } from '../helpers/databases';
 

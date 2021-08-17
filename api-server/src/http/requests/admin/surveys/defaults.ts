@@ -1,8 +1,8 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
-import { Locale, Scheme, Survey } from '@/db/models/system';
 import { SurveyState } from '@common/types/models';
+import { Locale, Scheme, Survey } from '@/db/models/system';
 import { unique } from '@/http/rules';
 
 const defaults: Schema = {

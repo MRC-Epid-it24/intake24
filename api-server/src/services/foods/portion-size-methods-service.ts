@@ -1,3 +1,4 @@
+import { UserPortionSizeMethod } from '@common/types/http/foods/user-food-data';
 import {
   CategoryPortionSizeMethod,
   CategoryPortionSizeMethodParameter,
@@ -10,7 +11,6 @@ import {
   getFoodParentCategories,
   getParentLocale,
 } from '@/services/foods/common';
-import { UserPortionSizeMethod } from '@common/types/http/foods/user-food-data';
 
 import {
   toUserCategoryPortionSizeMethod,

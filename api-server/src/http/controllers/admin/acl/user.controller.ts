@@ -1,9 +1,5 @@
 import { Request, Response } from 'express';
 import { pick, toInteger } from 'lodash';
-import { Permission, Role, User } from '@/db/models/system';
-import { NotFoundError } from '@/http/errors';
-import { userEntryResponse } from '@/http/responses/admin';
-import type { IoC } from '@/ioc';
 import {
   CreateUserResponse,
   UserResponse,
@@ -11,6 +7,10 @@ import {
   UsersResponse,
   StoreUserResponse,
 } from '@common/types/http/admin';
+import { Permission, Role, User } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
+import { userEntryResponse } from '@/http/responses/admin';
+import type { IoC } from '@/ioc';
 import type { Controller, CrudActions } from '@/http/controllers';
 
 export type UserController = Controller<CrudActions>;

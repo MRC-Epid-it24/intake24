@@ -1,8 +1,8 @@
 import { pick } from 'lodash';
 import request from 'supertest';
-import { Scheme } from '@/db/models/system';
 import { SchemeCreationAttributes } from '@common/types/models';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
+import { Scheme } from '@/db/models/system';
 
 export default (): void => {
   const baseUrl = '/api/admin/schemes';

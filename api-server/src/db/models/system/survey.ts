@@ -9,8 +9,8 @@ import {
   Scopes,
   Table,
 } from 'sequelize-typescript';
-import { surveyPermissions } from '@/services/auth';
 import { SurveyAttributes, SurveyCreationAttributes, SurveyState } from '@common/types/models';
+import { surveyPermissions } from '@/services/auth';
 import BaseModel from '../model';
 import {
   ClientErrorReport,

@@ -1,11 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { WhereOptions } from 'sequelize';
-import { Locale, Scheme, Survey } from '@/db/models/system';
-import { ForbiddenError, NotFoundError } from '@/http/errors';
-import type { IoC } from '@/ioc';
-import { surveyListResponse, surveyResponse } from '@/http/responses/admin';
-import { staffSuffix } from '@/services/auth';
 import {
   CreateSurveyResponse,
   SurveyListEntry,
@@ -14,6 +9,11 @@ import {
   SurveysResponse,
   StoreSurveyResponse,
 } from '@common/types/http/admin';
+import { Locale, Scheme, Survey } from '@/db/models/system';
+import { ForbiddenError, NotFoundError } from '@/http/errors';
+import type { IoC } from '@/ioc';
+import { surveyListResponse, surveyResponse } from '@/http/responses/admin';
+import { staffSuffix } from '@/services/auth';
 import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyController = Controller<CrudActions>;

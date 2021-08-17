@@ -7,10 +7,10 @@ import {
   QueueScheduler,
   Worker,
 } from 'bullmq';
+import { JobData, JobParams, JobType } from '@common/types';
 import { Job as DbJob } from '@/db/models/system';
 import ioc, { IoC } from '@/ioc';
 import { Job } from '@/jobs';
-import { JobData, JobParams, JobType } from '@common/types';
 import { QueueHandler } from './queue-handler';
 import { PushPayload } from '..';
 

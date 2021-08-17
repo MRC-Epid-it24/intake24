@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
+import { JobResponse } from '@common/types/http/admin';
 import { Survey, User } from '@/db/models/system';
 import type { IoC } from '@/ioc';
-import { JobResponse } from '@common/types/http/admin';
 import { NotFoundError } from '@/http/errors';
 import { Controller } from '../../controller';
 

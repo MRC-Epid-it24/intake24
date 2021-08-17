@@ -7,13 +7,13 @@ import {
   UpdatedAt,
   Table,
 } from 'sequelize-typescript';
-import BaseModel from '@/db/models/model';
 import {
   PushSubscription,
   SubscriptionType,
   UserSubscriptionAttributes,
   UserSubscriptionCreationAttributes,
 } from '@common/types/models';
+import BaseModel from '@/db/models/model';
 import { User } from '.';
 
 @Scopes(() => ({

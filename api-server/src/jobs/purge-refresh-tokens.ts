@@ -1,6 +1,6 @@
 import { JobsOptions } from 'bullmq';
-import type { IoC } from '@/ioc';
 import { PurgeRefreshTokensParams } from '@common/types';
+import type { IoC } from '@/ioc';
 import Job from './job';
 
 export default class PurgeRefreshTokens extends Job<PurgeRefreshTokensParams> {

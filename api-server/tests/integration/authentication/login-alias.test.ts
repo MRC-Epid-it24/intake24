@@ -1,6 +1,6 @@
 import request from 'supertest';
-import securityConfig from '@/config/security';
 import { suite } from '@tests/integration/helpers';
+import securityConfig from '@/config/security';
 
 export default (): void => {
   const url = '/api/auth/login/alias';

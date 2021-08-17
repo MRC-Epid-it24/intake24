@@ -2,9 +2,9 @@ import fs from 'fs-extra';
 import path from 'path';
 import sharp from 'sharp';
 import * as uuid from 'uuid';
+import { UploadSourceImageInput, SourceImageType } from '@common/types/http/admin';
 import { SourceImage } from '@/db/models/foods';
 import type { IoC } from '@/ioc';
-import { UploadSourceImageInput, SourceImageType } from '@common/types/http/admin';
 
 export interface SourceImageService {
   uploadSourceImage: (input: UploadSourceImageInput, type: SourceImageType) => Promise<SourceImage>;

@@ -1,6 +1,6 @@
+import { DrinkwareSetResponse, DrinkwareScaleResponse } from '@common/types/http';
 import { DrinkwareScale, DrinkwareSet } from '@/db/models/foods';
 import { InternalServerError } from '@/http/errors';
-import { DrinkwareSetResponse, DrinkwareScaleResponse } from '@common/types/http';
 
 export interface DrinkwareResponse {
   scaleResponse: (item: DrinkwareScale) => DrinkwareScaleResponse;

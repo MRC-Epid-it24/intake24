@@ -1,4 +1,6 @@
 import Redis from 'ioredis';
+import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
+import { SchemeTypes } from '@common/types/models';
 import config from '@/config';
 import {
   Language,
@@ -11,8 +13,6 @@ import {
   Role,
 } from '@/db/models/system';
 import ioc from '@/ioc';
-import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
-import { SchemeTypes } from '@common/types/models';
 
 export type MockData = {
   language: Language;

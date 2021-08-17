@@ -1,7 +1,7 @@
+import { CreateGuideImageInput, UpdateGuideImageInput } from '@common/types/http/admin';
 import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@/db/models/foods';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import { CreateGuideImageInput, UpdateGuideImageInput } from '@common/types/http/admin';
 
 export interface GuideImageService {
   create: (input: CreateGuideImageInput) => Promise<GuideImage>;

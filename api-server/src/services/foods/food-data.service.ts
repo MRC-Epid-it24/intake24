@@ -1,3 +1,4 @@
+import { UserAssociatedFoodPrompt, UserFoodData } from '@common/types/http/foods/user-food-data';
 import {
   AssociatedFood,
   Brand,
@@ -13,7 +14,6 @@ import {
 import InvalidIdError from '@/services/foods/invalid-id-error';
 import { getParentLocale } from '@/services/foods/common';
 
-import { UserAssociatedFoodPrompt, UserFoodData } from '@common/types/http/foods/user-food-data';
 import InheritableAttributesImpl from './inheritable-attributes-service';
 import PortionSizeMethodsImpl from './portion-size-methods-service';
 

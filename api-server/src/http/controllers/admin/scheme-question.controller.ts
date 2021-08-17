@@ -1,6 +1,4 @@
 import { Request, Response } from 'express';
-import { Language, Scheme, SchemeQuestion } from '@/db/models/system';
-import { NotFoundError } from '@/http/errors';
 import {
   CreateSchemeQuestionResponse,
   StoreSchemeQuestionResponse,
@@ -9,6 +7,8 @@ import {
   SchemeQuestionsResponse,
 } from '@common/types/http/admin';
 import { isMealSection, MealSection, SurveyQuestionSection } from '@common/schemes';
+import { Language, Scheme, SchemeQuestion } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeQuestionController = Controller<CrudActions | 'sync'>;

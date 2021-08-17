@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import { Permission, Role } from '@/db/models/system';
-import { NotFoundError } from '@/http/errors';
-import { roleEntryResponse } from '@/http/responses/admin';
-import type { IoC } from '@/ioc';
 import {
   CreateRoleResponse,
   RoleResponse,
   RolesResponse,
   StoreRoleResponse,
 } from '@common/types/http/admin';
+import { Permission, Role } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
+import { roleEntryResponse } from '@/http/responses/admin';
+import type { IoC } from '@/ioc';
 import type { Controller, CrudActions } from '@/http/controllers';
 
 export type RoleController = Controller<CrudActions>;

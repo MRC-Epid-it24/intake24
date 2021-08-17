@@ -1,6 +1,6 @@
 import request from 'supertest';
-import { Job } from '@/db/models/system';
 import { suite, setPermission } from '@tests/integration/helpers';
+import { Job } from '@/db/models/system';
 
 export default (): void => {
   const url = '/api/admin/user/jobs';

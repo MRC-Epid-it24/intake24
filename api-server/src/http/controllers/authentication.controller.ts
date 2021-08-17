@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import ms from 'ms';
+import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http';
 import { UnauthorizedError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import type { Tokens, LoginMeta } from '@/services/auth';
-import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http';
 import { Controller } from './controller';
 
 export type AuthenticationController = Controller<

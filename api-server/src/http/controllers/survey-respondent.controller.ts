@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
-import { Survey, User } from '@/db/models/system';
-import { NotFoundError } from '@/http/errors';
-import type { IoC } from '@/ioc';
 import {
   SurveyEntryResponse,
   SurveyFollowUpResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@common/types/http';
+import { Survey, User } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
+import type { IoC } from '@/ioc';
 import { Controller } from './controller';
 
 export type SurveyRespondentController = Controller<

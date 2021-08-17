@@ -1,8 +1,8 @@
 import request from 'supertest';
 import { pick } from 'lodash';
 import { suite } from '@tests/integration/helpers';
-import { UserSession } from '@/db/models/system';
 import { UserSessionCreationAttributes } from '@common/types/models';
+import { UserSession } from '@/db/models/system';
 
 export default (): void => {
   let url: string;

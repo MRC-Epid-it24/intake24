@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { Survey } from '@/db/models/system';
-import { NotFoundError } from '@/http/errors';
-import type { IoC } from '@/ioc';
 import {
   PublicSurveyEntryResponse,
   PublicSurveyListResponse,
   GenerateUserResponse,
 } from '@common/types/http';
+import { Survey } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
+import type { IoC } from '@/ioc';
 import { Controller } from './controller';
 
 export type SurveyController = Controller<'browse' | 'entry' | 'generateUser' | 'createUser'>;

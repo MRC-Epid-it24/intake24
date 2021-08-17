@@ -1,6 +1,6 @@
 import { Column, DataType, ForeignKey, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
-import BaseModel from '@/db/models/model';
 import { RoleUserAttributes, RoleUserCreationAttributes } from '@common/types/models';
+import BaseModel from '@/db/models/model';
 import { Role, User } from '.';
 
 @Table({

@@ -1,8 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { Op } from 'sequelize';
-import { Language, Locale } from '@/db/models/system';
-import { ForbiddenError, NotFoundError } from '@/http/errors';
 import {
   CreateLocaleResponse,
   LocaleRefs,
@@ -10,6 +8,8 @@ import {
   LocalesResponse,
   StoreLocaleResponse,
 } from '@common/types/http/admin';
+import { Language, Locale } from '@/db/models/system';
+import { ForbiddenError, NotFoundError } from '@/http/errors';
 import { Controller, CrudActions } from '../controller';
 
 export type LocaleController = Controller<CrudActions>;

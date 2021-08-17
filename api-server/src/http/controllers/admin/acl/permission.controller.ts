@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { Permission } from '@/db/models/system';
-import { NotFoundError } from '@/http/errors';
 import {
   CreatePermissionResponse,
   PermissionResponse,
   PermissionsResponse,
   StorePermissionResponse,
 } from '@common/types/http/admin';
+import { Permission } from '@/db/models/system';
+import { NotFoundError } from '@/http/errors';
 import type { Controller, CrudActions } from '@/http/controllers';
 
 export type PermissionController = Controller<CrudActions>;

@@ -17,6 +17,13 @@ CAT2 (no portion size methods in en_GB)
     |- FOOD5 (no portion size methods in en_GB, portionSizeMethods[5] in en_AU)
  */
 
+import * as faker from 'faker';
+
+import { Sequelize } from 'sequelize-typescript';
+import {
+  UserPortionSizeMethod,
+  UserPortionSizeMethodParameters,
+} from '@common/types/http/foods/user-food-data';
 import {
   Category,
   CategoryCategory,
@@ -28,13 +35,6 @@ import {
   PortionSizeMethod,
   PortionSizeMethodParameter,
 } from '@/db/models/foods';
-import * as faker from 'faker';
-
-import { Sequelize } from 'sequelize-typescript';
-import {
-  UserPortionSizeMethod,
-  UserPortionSizeMethodParameters,
-} from '@common/types/http/foods/user-food-data';
 import {
   toDatabasePortionSizeMethod,
   toDatabasePortionSizeMethodParameters,

@@ -2,10 +2,10 @@ import { Request, Response } from 'express';
 import fs from 'fs-extra';
 import path from 'path';
 import { Op } from 'sequelize';
+import { JobResponse, JobsResponse } from '@common/types/http/admin';
 import { Job, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
-import { JobResponse, JobsResponse } from '@common/types/http/admin';
 import type { Controller } from '../controller';
 
 export type JobController = Controller<'browse' | 'read' | 'destroy' | 'download'>;

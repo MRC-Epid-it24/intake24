@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator';
 import { isPlainObject } from 'lodash';
-import validate from '@/http/requests/validate';
 import { isMealSection, isSurveySection } from '@common/schemes';
+import validate from '@/http/requests/validate';
 
 export default validate(
   checkSchema({

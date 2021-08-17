@@ -3,10 +3,10 @@ import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
 import slugify from 'slugify';
-import { Scheme } from '@/db/models/system';
-import { unique } from '@/http/rules';
 import { SchemeTypes } from '@common/types/models';
 import { validateMeals, validateRecallQuestions, validateExportSections } from '@common/validators';
+import { Scheme } from '@/db/models/system';
+import { unique } from '@/http/rules';
 
 export const id: ParamSchema = {
   in: ['body'],

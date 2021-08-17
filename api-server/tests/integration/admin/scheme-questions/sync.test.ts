@@ -1,7 +1,7 @@
 import request from 'supertest';
-import { Scheme, SchemeQuestion } from '@/db/models/system';
 import { SchemeCreationAttributes, SchemeQuestionCreationAttributes } from '@common/types/models';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
+import { Scheme, SchemeQuestion } from '@/db/models/system';
 
 export default (): void => {
   const baseUrl = '/api/admin/scheme-questions';

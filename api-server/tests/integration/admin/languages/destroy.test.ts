@@ -1,7 +1,7 @@
 import request from 'supertest';
-import { Language, Locale } from '@/db/models/system';
 import { LanguageCreationAttributes } from '@common/types/models';
 import { suite, setPermission } from '@tests/integration/helpers';
+import { Language, Locale } from '@/db/models/system';
 
 export default (): void => {
   const baseUrl = '/api/admin/languages';

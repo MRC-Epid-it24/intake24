@@ -3,12 +3,12 @@ import fs from 'fs-extra';
 import json2csv, { Transform } from 'json2csv';
 import { trimEnd } from 'lodash';
 import path from 'path';
+import { SurveyExportRespondentAuthUrlsParams } from '@common/types';
+import { JobsOptions } from 'bullmq';
 import { Job, Survey, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { addTime } from '@/util';
-import { SurveyExportRespondentAuthUrlsParams } from '@common/types';
-import { JobsOptions } from 'bullmq';
 import BaseJob from './job';
 
 export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExportRespondentAuthUrlsParams> {

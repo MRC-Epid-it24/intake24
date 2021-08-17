@@ -1,6 +1,6 @@
 import { Worker } from 'worker_threads';
-import config from '@/config';
 import { FoodSearchResponse } from '@common/types/http';
+import config from '@/config';
 
 let indexReady = false;
 let queryIdCounter = 0;

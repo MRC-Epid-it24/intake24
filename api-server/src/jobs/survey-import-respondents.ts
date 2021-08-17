@@ -1,10 +1,10 @@
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import path from 'path';
-import { User, UserSurveyAlias } from '@/db/models/system';
-import type { IoC } from '@/ioc';
 import type { CustomField, SurveyImportRespondentsParams } from '@common/types';
 import { JobsOptions } from 'bullmq';
+import { User, UserSurveyAlias } from '@/db/models/system';
+import type { IoC } from '@/ioc';
 import Job from './job';
 
 export type CSVRow = {

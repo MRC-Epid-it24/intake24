@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { Language } from '@/db/models/system';
-import { ForbiddenError, NotFoundError } from '@/http/errors';
 import {
   CreateLanguageResponse,
   LanguageResponse,
   LanguagesResponse,
   StoreLanguageResponse,
 } from '@common/types/http/admin';
+import { Language } from '@/db/models/system';
+import { ForbiddenError, NotFoundError } from '@/http/errors';
 import { Controller, CrudActions } from '../controller';
 
 export type LanguageController = Controller<CrudActions>;

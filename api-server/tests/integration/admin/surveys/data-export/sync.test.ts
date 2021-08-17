@@ -1,6 +1,6 @@
 import request from 'supertest';
-import { surveyStaff } from '@/services/auth';
 import { suite, setPermission } from '@tests/integration/helpers';
+import { surveyStaff } from '@/services/auth';
 
 export default (): void => {
   const baseUrl = '/api/admin/surveys';

@@ -1,7 +1,7 @@
 import request from 'supertest';
-import { Permission } from '@/db/models/system';
 import { PermissionRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
+import { Permission } from '@/db/models/system';
 
 export default (): void => {
   const baseUrl = '/api/admin/permissions';

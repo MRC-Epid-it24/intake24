@@ -1,8 +1,8 @@
-import { DbInterface } from '@/db';
 import {
   createTestData,
   generatedPortionSizeMethods,
 } from '@tests/unit/food-data/portion-size-methods-test-data';
+import { DbInterface } from '@/db';
 import portionSizeMethodsService, {
   PortionSizeMethodsService,
 } from '@/services/foods/portion-size-methods-service';

@@ -1,10 +1,10 @@
 import { ConnectionOptions, Job as BullJob, Queue, QueueScheduler, Worker } from 'bullmq';
 import type { Logger } from 'winston';
+import { JobData, RepeatableBullJob } from '@common/types';
 import { Task } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import ioc from '@/ioc';
 import { Job } from '@/jobs';
-import { JobData, RepeatableBullJob } from '@common/types';
 import { sleep } from '@/util';
 import { QueueHandler } from './queue-handler';
 

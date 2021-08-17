@@ -1,7 +1,7 @@
 import request from 'supertest';
-import { Role } from '@/db/models/system';
 import { RoleRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
+import { Role } from '@/db/models/system';
 
 export default (): void => {
   const baseUrl = '/api/admin/roles';

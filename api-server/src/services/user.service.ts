@@ -1,12 +1,12 @@
 import { Op } from 'sequelize';
 import { UserPasswordAttributes } from '@common/types/models';
 import { CreateUserInput, UpdateUserInput } from '@common/types/http/admin';
+import { CustomField } from '@common/types';
 import { User, UserCustomField, UserPassword } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { defaultAlgorithm } from '@/util/passwords';
 import { toSimpleName } from '@/util';
-import { CustomField } from '@common/types';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from './auth';
 
 export type UserPasswordInput = {

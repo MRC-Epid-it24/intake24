@@ -1,5 +1,5 @@
-import type { IoC } from '@/ioc';
 import type { JobsOptions } from 'bullmq';
+import type { IoC } from '@/ioc';
 
 export default abstract class Job<T = any> {
   readonly name!: string;

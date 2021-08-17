@@ -1,3 +1,4 @@
+import { Sequelize } from 'sequelize-typescript';
 import {
   Food,
   FoodLocal,
@@ -8,7 +9,6 @@ import {
   NutrientType,
   NutrientUnit,
 } from '@/db/models/foods';
-import { Sequelize } from 'sequelize-typescript';
 
 export default async (foodDatabase: Sequelize) => {
   await NutrientUnit.create({

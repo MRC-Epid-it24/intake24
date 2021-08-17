@@ -1,10 +1,10 @@
 import { omit, pick, times } from 'lodash';
 import request from 'supertest';
-import { Permission, Role, User } from '@/db/models/system';
-import ioc from '@/ioc';
 import { CustomField } from '@common/types';
 import { CreateUserRequest, UpdateUserRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
+import ioc from '@/ioc';
+import { Permission, Role, User } from '@/db/models/system';
 
 export default (): void => {
   const baseUrl = '/api/admin/users';

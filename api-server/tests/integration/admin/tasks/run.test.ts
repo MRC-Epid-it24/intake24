@@ -1,7 +1,7 @@
 import request from 'supertest';
-import { Task } from '@/db/models/system';
 import { TaskRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
+import { Task } from '@/db/models/system';
 
 export default (): void => {
   const baseUrl = '/api/admin/tasks';

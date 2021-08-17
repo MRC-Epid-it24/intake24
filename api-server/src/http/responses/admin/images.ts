@@ -1,12 +1,4 @@
 import {
-  AsServedImage,
-  AsServedSet,
-  GuideImage,
-  ImageMap,
-  ImageMapObject,
-} from '@/db/models/foods';
-import { InternalServerError } from '@/http/errors';
-import {
   GuideImageEntry,
   GuideImageEntryObject,
   GuideImageListEntry,
@@ -17,6 +9,14 @@ import {
   AsServedSetEntry,
   AsServedSetListEntry,
 } from '@common/types/http/admin';
+import {
+  AsServedImage,
+  AsServedSet,
+  GuideImage,
+  ImageMap,
+  ImageMapObject,
+} from '@/db/models/foods';
+import { InternalServerError } from '@/http/errors';
 
 export interface ImageResponseCollection {
   asServedImageEntryResponse: (item: AsServedImage) => AsServedImageEntry;

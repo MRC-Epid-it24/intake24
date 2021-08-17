@@ -2,10 +2,10 @@ import fs from 'fs-extra';
 import path from 'path';
 import sharp from 'sharp';
 import * as uuid from 'uuid';
+import { ProcessedImagePurposes } from '@common/types/models';
 import { ProcessedImage, SourceImage } from '@/db/models/foods';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
-import { ProcessedImagePurposes } from '@common/types/models';
 
 export type SelectionImageType = 'guide' | 'as_served';
 

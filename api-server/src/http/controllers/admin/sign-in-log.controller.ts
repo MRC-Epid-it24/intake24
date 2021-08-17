@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
+import { SignInLogResponse, SignInLogsResponse } from '@common/types/http/admin';
 import { SignInLog } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
-import { SignInLogResponse, SignInLogsResponse } from '@common/types/http/admin';
 import { Controller } from '../controller';
 
 export type SignInLogController = Controller<'browse' | 'read' | 'destroy'>;

@@ -3,6 +3,8 @@ import { Transform } from 'json2csv';
 import { groupBy } from 'lodash';
 import { Op, Order, WhereOptions } from 'sequelize';
 import { Readable } from 'stream';
+import type { ExportSection } from '@common/types/models';
+import type { SurveyDataExportParams } from '@common/types';
 import {
   Job,
   NutrientType,
@@ -25,8 +27,6 @@ import {
 import type { StreamFindOptions } from '@/db/models/model';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
-import type { ExportSection } from '@common/types/models';
-import type { SurveyDataExportParams } from '@common/types';
 import type { ExportFieldInfo } from './data-export-mapper';
 import { EMPTY } from './data-export-fields';
 
