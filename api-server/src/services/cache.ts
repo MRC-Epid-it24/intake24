@@ -1,13 +1,13 @@
 import ms from 'ms';
 import type { IoC } from '@/ioc';
-import RedisStatic, { Redis, RedisOptions } from 'ioredis';
+import RedisStatic, { Redis } from 'ioredis';
 
 export default class Cache {
-  private prefix;
+  private readonly prefix;
 
-  private config: RedisOptions;
+  private readonly config;
 
-  private logger;
+  private readonly logger;
 
   private redis!: Redis;
 
@@ -15,10 +15,6 @@ export default class Cache {
     this.config = cacheConfig.redis;
     this.prefix = cacheConfig.prefix;
     this.logger = logger;
-  }
-
-  getPrefix(): string {
-    return this.prefix;
   }
 
   /**
@@ -46,11 +42,14 @@ export default class Cache {
   /**
    * Flush cache data
    *
+   * @param {string} [pattern]
    * @returns {Promise<boolean>}
    * @memberof Cache
    */
-  async flush(): Promise<boolean> {
-    const keys = await this.redis.keys(this.prefix);
+  async flush(pattern?: string): Promise<boolean> {
+    const keys = await this.redis.keys(pattern ? `${this.prefix}:${pattern}` : this.prefix);
+    if (!keys.length) return false;
+
     const result = await this.redis.del(keys);
 
     return !!result;
@@ -66,9 +65,9 @@ export default class Cache {
    * @memberof Cache
    */
   async flushAll(): Promise<boolean> {
-    await this.redis.flushall();
+    const result = await this.redis.flushall();
 
-    return true;
+    return !!result;
   }
 
   /**
