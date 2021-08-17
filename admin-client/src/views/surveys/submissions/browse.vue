@@ -42,10 +42,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { SurveySubmissionEntry, SurveySubmissionResponse } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import { EntryMixin } from '@/types';
-import { SurveySubmissionEntry, SurveySubmissionResponse } from '@common/types/http/admin';
 import FormatsDateTime from '@/mixins/FormatsDateTime';
 import DataTable from '../data-table.vue';
 

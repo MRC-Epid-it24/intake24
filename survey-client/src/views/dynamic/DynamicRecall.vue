@@ -69,15 +69,15 @@
 import Vue from 'vue';
 import { mapState, mapGetters } from 'vuex';
 import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
+import { MealSection, SurveyQuestionSection } from '@common/schemes';
+import { MealState, Selection, FoodState } from '@common/types';
+import { ComponentType } from '@common/prompts';
 import DynamicRecall, { PromptInstance } from '@/dynamic-recall/dynamic-recall';
 import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
 import MealFoodMobileContextMenu from '@/components/recall/MobileMealFoodContext.vue';
 import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
 import MealList, { RecallAction } from '@/components/recall/MealListDesktop.vue';
-import { MealSection, SurveyQuestionSection } from '@common/schemes';
-import { MealState, Selection, FoodState } from '@common/types';
-import { ComponentType } from '@common/prompts';
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import standardHandlers from '@/components/prompts/dynamic/handlers/standard';
 import portionSizeHandlers from '@/components/prompts/dynamic/handlers/portion-size';

@@ -134,11 +134,11 @@ import {
   AssociatedFoodsPanelProps,
   ImageMapSelectorEmit,
 } from '@common/prompts';
+import { LocaleTranslation } from '@common/types';
+import { UserFoodData } from '@common/types/http';
 import AsServedSelector from '@/components/prompts/portion/selectors/AsServedSelector.vue';
 import ImageMapSelector from '@/components/prompts/portion/selectors/ImageMapSelector.vue';
 import AssociatedFoodPanel from '@/components/prompts/portion/AssociatedFoodPanel.vue';
-import { LocaleTranslation } from '@common/types';
-import { UserFoodData } from '@common/types/http';
 import BaseExpansionPortion, { ExpansionPortion } from './BaseExpansionPortion';
 
 export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({

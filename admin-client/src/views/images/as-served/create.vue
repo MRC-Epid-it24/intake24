@@ -45,10 +45,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { AsServedSetEntry } from '@common/types/http/admin';
 import { FormMixin } from '@/types';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
-import { AsServedSetEntry } from '@common/types/http/admin';
 
 type CreateAsServedSetForm = {
   id: string | null;

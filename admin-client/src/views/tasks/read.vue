@@ -52,12 +52,12 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import cronstrue from 'cronstrue';
+import { TaskEntry, TaskRefs, TaskResponse } from '@common/types/http/admin';
 import { DetailMixin, MapAddonsMixin } from '@/types';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import mapAddons from '@/components/entry/mapAddons';
 import FormatsDateTime from '@/mixins/FormatsDateTime';
-import { TaskEntry, TaskRefs, TaskResponse } from '@common/types/http/admin';
 
 export default (
   Vue as VueConstructor<Vue & DetailMixin<TaskEntry, TaskRefs> & MapAddonsMixin<TaskResponse>>

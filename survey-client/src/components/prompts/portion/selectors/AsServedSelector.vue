@@ -66,8 +66,8 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 import { AsServedSetResponse } from '@common/types/http/foods';
+import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 
 export default (Vue as VueConstructor<Vue>).extend({
   name: 'AsServedSelector',

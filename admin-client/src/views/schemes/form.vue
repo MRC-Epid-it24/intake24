@@ -54,12 +54,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import formMixin from '@/components/entry/formMixin';
-import form from '@/helpers/Form';
-import { FormMixin } from '@/types';
 import { defaultExport, defaultMeals, defaultQuestions, RecallQuestions } from '@common/schemes';
 import { Meal } from '@common/types';
 import { ExportSection } from '@common/types/models';
+import formMixin from '@/components/entry/formMixin';
+import form from '@/helpers/Form';
+import { FormMixin } from '@/types';
 import CopySchemeDialog from './copy-scheme-dialog.vue';
 import Meals from './meal-list.vue';
 

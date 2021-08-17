@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
+import { Dictionary } from '@common/types';
 import { HttpError, HttpResponseData } from '@/types/http';
 import { EntryState } from '@/types';
-import { Dictionary } from '@common/types';
 
 const mutations: MutationTree<EntryState> = {
   request(state) {

@@ -50,9 +50,6 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import formMixin from '@/components/entry/formMixin';
-import form from '@/helpers/Form';
-import { FormMixin } from '@/types';
 import {
   defaultExport,
   defaultMeals,
@@ -66,6 +63,9 @@ import {
 } from '@common/schemes';
 import { PromptQuestion } from '@common/prompts';
 import { Dictionary } from '@common/types';
+import formMixin from '@/components/entry/formMixin';
+import form from '@/helpers/Form';
+import { FormMixin } from '@/types';
 import { SchemeForm } from '../form.vue';
 import QuestionList, { PromptQuestionMoveEvent } from './question-list.vue';
 

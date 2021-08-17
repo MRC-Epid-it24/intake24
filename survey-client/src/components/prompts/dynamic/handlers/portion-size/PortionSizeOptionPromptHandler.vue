@@ -12,8 +12,8 @@
 import Vue, { VueConstructor } from 'vue';
 import { BasePromptProps } from '@common/prompts';
 import { EncodedFood } from '@common/types';
-import PortionSizeOptionPrompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import { UserPortionSizeMethod } from '@common/types/http';
+import PortionSizeOptionPrompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;

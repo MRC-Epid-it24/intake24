@@ -11,8 +11,8 @@
 import Vue, { VueConstructor } from 'vue';
 import { BasePromptProps } from '@common/prompts';
 import { EncodedFood, SelectedAsServedImage } from '@common/types';
-import AsServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
 import { AsServedParameters } from '@common/types/http';
+import AsServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;

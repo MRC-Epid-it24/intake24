@@ -47,11 +47,11 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { promptSettings } from '@/components/prompts';
-import PromptSelector from '@/components/prompts/PromptSelector.vue';
 import { PromptQuestion } from '@common/prompts';
 import { SurveyQuestionSection, MealSection } from '@common/schemes';
 import { SchemeQuestionEntry } from '@common/types/http/admin';
+import PromptSelector from '@/components/prompts/PromptSelector.vue';
+import { promptSettings } from '@/components/prompts';
 import QuestionListItem from './question-list-item.vue';
 import TemplateDialog from './template-dialog.vue';
 

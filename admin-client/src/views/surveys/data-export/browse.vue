@@ -138,10 +138,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { JobResponse } from '@common/types/http/admin';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
 import { DetailMixin } from '@/types';
-import { JobResponse } from '@common/types/http/admin';
 import PollsForJobsMixin from '../polls-for-jobs-mixin';
 
 type mixins = InstanceType<typeof PollsForJobsMixin>;

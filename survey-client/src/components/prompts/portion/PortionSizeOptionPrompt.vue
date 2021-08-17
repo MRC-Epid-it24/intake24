@@ -56,9 +56,9 @@
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { BasePromptProps, basePromptProps } from '@common/prompts';
-import localeContent from '@/components/mixins/localeContent';
 import { UserPortionSizeMethod } from '@common/types/http/foods';
 import { LocaleTranslation } from '@common/types';
+import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 
 // For user to select which portion size estimation method they want to use

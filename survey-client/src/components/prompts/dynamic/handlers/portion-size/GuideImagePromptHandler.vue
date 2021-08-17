@@ -12,8 +12,8 @@
 import Vue, { VueConstructor } from 'vue';
 import { BasePromptProps, QuantityValues } from '@common/prompts';
 import { EncodedFood, SelectedGuideImageObject } from '@common/types';
-import GuideImagePrompt from '@/components/prompts/portion/GuideImagePrompt.vue';
 import { GuideImageParameters } from '@common/types/http';
+import GuideImagePrompt from '@/components/prompts/portion/GuideImagePrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;

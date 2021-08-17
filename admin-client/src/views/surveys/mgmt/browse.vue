@@ -100,10 +100,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { SurveyMgmtAvailableResponse, UserMgmtListEntry } from '@common/types/http/admin';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
 import { EntryMixin } from '@/types';
-import { SurveyMgmtAvailableResponse, UserMgmtListEntry } from '@common/types/http/admin';
 import DataTable from '../data-table.vue';
 
 type SurveyMgmtRefs = {

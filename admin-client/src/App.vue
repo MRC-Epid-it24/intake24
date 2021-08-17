@@ -97,13 +97,13 @@ import pluralize from 'pluralize';
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { Location } from 'vue-router';
+import { Dictionary } from '@common/types';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import Loader from '@/components/Loader.vue';
 import MenuTree from '@/components/sidebar/MenuTree.vue';
 import WebPushMixin from '@/components/web-push/WebPushMixin';
 import PwaUpdateMixin from '@/mixins/pwaUpdateMixin';
 import resources from '@/router/resources';
-import { Dictionary } from '@common/types';
 
 export interface AppComponent {
   sidebar: boolean;

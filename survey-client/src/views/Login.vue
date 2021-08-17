@@ -54,8 +54,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions } from 'vuex';
-import surveySvc from '@/services/survey.service';
 import { PublicSurveyEntryResponse } from '@common/types/http';
+import surveySvc from '@/services/survey.service';
 
 export default Vue.extend({
   name: 'Login',

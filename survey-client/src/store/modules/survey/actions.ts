@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { ActionTree } from 'vuex';
-import { RootState, SurveyState } from '@/types/vuex';
 import { SurveyState as CurrentSurveyState } from '@common/types';
+import { RootState, SurveyState } from '@/types/vuex';
 import surveyService from '@/services/survey.service';
 import { STATE_LS_KEY } from './state';
 

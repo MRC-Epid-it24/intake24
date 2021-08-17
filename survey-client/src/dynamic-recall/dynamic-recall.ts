@@ -1,10 +1,10 @@
 import { Store } from 'vuex';
-import { SurveyState } from '@/types/vuex';
-import PromptManager from '@/dynamic-recall/prompt-manager';
 import { PromptQuestion } from '@common/prompts';
 import { MealSection, SurveySection } from '@common/schemes';
 import { MealTime, SurveyState as CurrentSurveyState } from '@common/types';
 import { SchemeEntryResponse } from '@common/types/http';
+import PromptManager from '@/dynamic-recall/prompt-manager';
+import { SurveyState } from '@/types/vuex';
 import SelectionManager from '@/dynamic-recall/selection-manager';
 
 export interface PromptInstance {

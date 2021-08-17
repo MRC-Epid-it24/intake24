@@ -23,11 +23,11 @@
 import Vue from 'vue';
 import merge from 'deepmerge';
 import { BasePromptProps, submitPromptProps } from '@common/prompts';
-import Submit from '@/components/prompts/actions/Submit.vue';
 import { LocaleTranslation, replaceInTranslation } from '@common/types';
+import { FoodSearchResponse } from '@common/types/http';
+import Submit from '@/components/prompts/actions/Submit.vue';
 import foodSearchService from '@/services/foods.service';
 import FoodSearchResults from '@/components/elements/FoodSearchResults.vue';
-import { FoodSearchResponse } from '@common/types/http';
 import BasePrompt from '../BasePrompt';
 
 export default Vue.extend({

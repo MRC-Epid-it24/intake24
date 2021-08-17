@@ -52,12 +52,12 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import formMixin from '@/components/entry/formMixin';
-import form from '@/helpers/Form';
-import { FormMixin } from '@/types';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { ExportField, ExportSection } from '@common/types/models';
 import { SchemeExportRefsResponse } from '@common/types/http/admin';
+import formMixin from '@/components/entry/formMixin';
+import form from '@/helpers/Form';
+import { FormMixin } from '@/types';
 import DataExportSection from './data-export-section.vue';
 import { SchemeForm } from '../form.vue';
 

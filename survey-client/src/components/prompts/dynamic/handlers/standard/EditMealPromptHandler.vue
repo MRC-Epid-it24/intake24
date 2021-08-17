@@ -11,10 +11,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import EditMealPrompt from '@/components/prompts/standard/EditMealPrompt.vue';
 import { BasePromptProps } from '@common/prompts';
 import { FoodState } from '@common/types';
 import { mapGetters } from 'vuex';
+import EditMealPrompt from '@/components/prompts/standard/EditMealPrompt.vue';
 
 export default Vue.extend({
   name: 'MealAddPromptHandler',

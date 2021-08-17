@@ -26,8 +26,8 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import type { DetailMixin } from '@/types';
 import { AsServedSetEntry } from '@common/types/http/admin';
+import type { DetailMixin } from '@/types';
 import detailMixin from '@/components/entry/detailMixin';
 import AsServedImages from './images.vue';
 

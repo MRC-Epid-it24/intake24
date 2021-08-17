@@ -92,11 +92,11 @@
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 
+import { basePromptProps, BasePromptProps } from '@common/prompts';
+import { LocaleTranslation } from '@common/types';
 import localeContent from '@/components/mixins/localeContent';
 import ValidInvalidIcon from '@/components/elements/ValidInvalidIcon.vue';
 import AsServedSelector from '@/components/prompts/portion/selectors/AsServedSelector.vue';
-import { basePromptProps, BasePromptProps } from '@common/prompts';
-import { LocaleTranslation } from '@common/types';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({

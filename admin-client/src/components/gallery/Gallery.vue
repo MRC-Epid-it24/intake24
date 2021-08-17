@@ -73,10 +73,10 @@
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { Dictionary } from '@common/types';
+import { Pagination, PaginationMeta } from '@common/types/models';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
 import handlesLoading from '@/mixins/handlesLoading';
 import ResourceMixin from '@/mixins/ResourceMixin';
-import { Pagination, PaginationMeta } from '@common/types/models';
 import DataTableFilter from '@/components/datatable/DataTableFilter.vue';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 

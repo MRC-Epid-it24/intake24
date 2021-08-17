@@ -50,10 +50,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { ImageMapEntry, ImageMapEntryObject } from '@common/types/http/admin';
 import { FormMixin } from '@/types';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
-import { ImageMapEntry, ImageMapEntryObject } from '@common/types/http/admin';
 import GuideDrawer from '../guide-drawer.vue';
 
 type EditImageMapForm = {

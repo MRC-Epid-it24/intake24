@@ -108,11 +108,6 @@
 <script lang="ts">
 import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
-import { promptSettings } from '@/components/prompts';
-import customPrompts from '@/components/prompts/custom';
-import standardPrompts from '@/components/prompts/standard';
-import portionSizePrompts from '@/components/prompts/portion-size';
-import { merge } from '@/util';
 import { SurveyQuestionSection, MealSection } from '@common/schemes';
 import { FormRefs } from '@common/types';
 import {
@@ -122,6 +117,11 @@ import {
   portionSizePromptQuestions,
   standardPromptQuestions,
 } from '@common/prompts';
+import { promptSettings } from '@/components/prompts';
+import customPrompts from '@/components/prompts/custom';
+import standardPrompts from '@/components/prompts/standard';
+import portionSizePrompts from '@/components/prompts/portion-size';
+import { merge } from '@/util';
 import PromptTypeSelector from './PromptTypeSelector.vue';
 
 export interface EditPromptQuestion extends PromptQuestion {

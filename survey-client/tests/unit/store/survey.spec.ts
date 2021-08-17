@@ -1,6 +1,5 @@
-import store from '@/store';
-
 import { MealState, Selection, SurveyState } from '@common/types';
+import store from '@/store';
 
 function dummyMeal(name: string): MealState {
   return {

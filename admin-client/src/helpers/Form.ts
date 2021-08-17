@@ -2,10 +2,10 @@ import { Method } from 'axios';
 import cloneDeep from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
+import type { Dictionary } from '@common/types';
 import http from '@/services/http.service';
 import store from '@/store';
 import { merge } from '@/util';
-import type { Dictionary } from '@common/types';
 import type { HttpRequestConfig, HttpError } from '@/types/http';
 import Errors from './Errors';
 

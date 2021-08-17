@@ -10,10 +10,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import MealAddPrompt from '@/components/prompts/standard/MealAddPrompt.vue';
 import { BasePromptProps } from '@common/prompts';
 import { Meal } from '@common/types';
 import { mapGetters } from 'vuex';
+import MealAddPrompt from '@/components/prompts/standard/MealAddPrompt.vue';
 
 export default Vue.extend({
   name: 'MealAddPromptHandler',

@@ -8,11 +8,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import FoodSearchPrompt from '@/components/prompts/standard/FoodSearchPrompt.vue';
 import { mapGetters } from 'vuex';
 import { FoodSearchPromptProps } from '@common/prompts';
 import { FoodState } from '@common/types';
 import { UserFoodData } from '@common/types/http';
+import FoodSearchPrompt from '@/components/prompts/standard/FoodSearchPrompt.vue';
 
 export default Vue.extend({
   name: 'FoodSearchPromptHandler',

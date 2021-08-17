@@ -46,11 +46,11 @@ import { mapGetters } from 'vuex';
 import { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
 import { Dictionary } from '@common/types';
+import { Pagination, PaginationMeta } from '@common/types/models';
 import Actionbar from '@/components/datatable/actionbar/Actionbar.vue';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
 import handlesLoading from '@/mixins/handlesLoading';
 import ResourceMixin from '@/mixins/ResourceMixin';
-import { Pagination, PaginationMeta } from '@common/types/models';
 import DataTableFilter from './DataTableFilter.vue';
 
 type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof ResourceMixin>;

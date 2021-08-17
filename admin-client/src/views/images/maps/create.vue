@@ -45,10 +45,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { ImageMapEntry } from '@common/types/http/admin';
 import { FormMixin } from '@/types';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
-import { ImageMapEntry } from '@common/types/http/admin';
 
 type CreateImageMapForm = {
   id: string | null;

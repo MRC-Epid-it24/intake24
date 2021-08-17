@@ -65,10 +65,10 @@
 import Vue, { VueConstructor } from 'vue';
 
 import { QuantityValues, ValidatedPromptProps } from '@common/prompts';
+import { LocaleTranslation, StandardPortionUnit } from '@common/types';
 import ErrorAlert from '@/components/elements/ErrorAlert.vue';
 import QuantityCard from '@/components/elements/QuantityCard.vue';
 import localeContent from '@/components/mixins/localeContent';
-import { LocaleTranslation, StandardPortionUnit } from '@common/types';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({

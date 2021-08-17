@@ -1,6 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import TextareaPrompt from '@/components/prompts/custom/TextareaPrompt.vue';
 import VueI18n, { I18nOptions } from 'vue-i18n';
+import TextareaPrompt from '@/components/prompts/custom/TextareaPrompt.vue';
 
 const localVue = createLocalVue();
 const i18n: I18nOptions = { locale: 'en' };

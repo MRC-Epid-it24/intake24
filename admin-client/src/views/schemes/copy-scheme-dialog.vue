@@ -50,8 +50,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import form from '@/helpers/Form';
 import { CopySchemeResponse } from '@common/types/http/admin';
+import form from '@/helpers/Form';
 
 export type CopySchemeForm = {
   sourceId: string;

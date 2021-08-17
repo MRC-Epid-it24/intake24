@@ -1,6 +1,6 @@
 import { Store } from 'vuex';
-import PromptManager from '@/dynamic-recall/prompt-manager';
 import { Selection } from '@common/types';
+import PromptManager from '@/dynamic-recall/prompt-manager';
 
 export default class SelectionManager {
   private store: Store<any>;

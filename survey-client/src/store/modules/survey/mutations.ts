@@ -1,5 +1,4 @@
 import { MutationTree } from 'vuex';
-import { SurveyState } from '@/types/vuex';
 import {
   CustomPromptAnswer,
   FoodState,
@@ -9,6 +8,7 @@ import {
   SurveyState as CurrentSurveyState,
 } from '@common/types';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
+import { SurveyState } from '@/types/vuex';
 
 const mutations: MutationTree<SurveyState> = {
   setParameters(state, data: SurveyEntryResponse) {

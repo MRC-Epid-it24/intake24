@@ -131,9 +131,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import clone from 'lodash/cloneDeep';
-import { merge } from '@/util';
 import draggable from 'vuedraggable';
 import { Condition, ConditionOp, conditionOps } from '@common/prompts';
+import { merge } from '@/util';
 import PromptAnswerProps from '@/components/prompts/partials/conditions/PromptAnswerProps.vue';
 import RecallNumberProps from '@/components/prompts/partials/conditions/RecallNumberProps.vue';
 

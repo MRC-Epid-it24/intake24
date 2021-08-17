@@ -100,8 +100,8 @@
 import Vue from 'vue';
 import clone from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import { PromptQuestion } from '@common/prompts';
+import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import { MoveSection } from './question-list.vue';
 import SaveAsTemplateDialog from './save-as-template-dialog.vue';
 

@@ -98,11 +98,11 @@ import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
 import { VImg } from 'vuetify/lib';
 import { BasePromptProps, QuantityValues } from '@common/prompts';
+import { GuideImageResponse } from '@common/types/http/foods';
+import { LocaleTranslation } from '@common/types';
 import localeContent from '@/components/mixins/localeContent';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@/components/elements/QuantityCard.vue';
-import { GuideImageResponse } from '@common/types/http/foods';
-import { LocaleTranslation } from '@common/types';
 import BasePortion, { Portion } from './BasePortion';
 
 type Refs = {

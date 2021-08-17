@@ -61,10 +61,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { JobEntry } from '@common/types/http/admin';
 import FormatsDateTime from '@/mixins/FormatsDateTime';
 import detailMixin from '@/components/entry/detailMixin';
 import type { DetailMixin } from '@/types';
-import { JobEntry } from '@common/types/http/admin';
 
 type Mixins = InstanceType<typeof FormatsDateTime>;
 

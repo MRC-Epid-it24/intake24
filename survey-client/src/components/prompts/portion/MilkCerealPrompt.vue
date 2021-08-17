@@ -113,7 +113,9 @@ import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
 import { MilkCerealPromptProps, milkCerealPromptDefaultProps } from '@common/prompts';
 import localeContent from '@/components/mixins/localeContent';
-import expansionPanelControls, { ExpansionPanelControls } from '@/components/mixins/expansionPanelControls';
+import expansionPanelControls, {
+  ExpansionPanelControls,
+} from '@/components/mixins/expansionPanelControls';
 import ValidInvalidIcon from '@/components/elements/ValidInvalidIcon.vue';
 import BasePortion, { Portion } from './BasePortion';
 
