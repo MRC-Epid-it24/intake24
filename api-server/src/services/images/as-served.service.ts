@@ -8,11 +8,11 @@ import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 
 export interface AsServedService {
+  createImage: (input: CreateAsServedImageInput) => Promise<AsServedImage>;
+  destroyImage: (asServedSetId: string, id?: number | string) => Promise<void>;
   createSet: (input: CreateAsServedSetInput) => Promise<AsServedSet>;
   updateSet: (asServedSetId: string, input: UpdateAsServedSetInput) => Promise<AsServedSet>;
   destroySet: (asServedSetId: string) => Promise<void>;
-  createImage: (input: CreateAsServedImageInput) => Promise<AsServedImage>;
-  destroyImage: (asServedSetId: string, id: number | string) => Promise<void>;
 }
 
 export default ({
@@ -23,6 +23,37 @@ export default ({
   IoC,
   'portionSizeService' | 'processedImageService' | 'sourceImageService'
 >): AsServedService => {
+  const createImage = async (input: CreateAsServedImageInput): Promise<AsServedImage> => {
+    const { id, weight } = input;
+
+    const sourceImage = await sourceImageService.uploadSourceImage(input, 'as_served');
+    const [image, thumbnailImage] = await processedImageService.createAsServedImages(
+      id,
+      sourceImage
+    );
+
+    return AsServedImage.create({
+      asServedSetId: id,
+      imageId: image.id,
+      thumbnailImageId: thumbnailImage.id,
+      weight,
+    });
+  };
+
+  const destroyImage = async (asServedSetId: string, id?: number | string): Promise<void> => {
+    const asServedImages = await AsServedImage.findAll({
+      where: id ? { asServedSetId, id } : { asServedSetId },
+    });
+
+    for (const asServedImage of asServedImages) {
+      await Promise.all([
+        asServedImage.destroy(),
+        processedImageService.destroy(asServedImage.imageId, { includeSources: true }),
+        processedImageService.destroy(asServedImage.thumbnailImageId, { includeSources: true }),
+      ]);
+    }
+  };
+
   const createSet = async (input: CreateAsServedSetInput): Promise<AsServedSet> => {
     const { id, description } = input;
 
@@ -61,47 +92,16 @@ export default ({
     const asServedSet = await AsServedSet.findByPk(asServedSetId);
     if (!asServedSet) throw new NotFoundError();
 
+    await destroyImage(asServedSetId);
     await asServedSet.destroy();
     await processedImageService.destroy(asServedSet.selectionImageId, { includeSources: true });
-
-    // TODO: destroy AsServedImage records + images
-  };
-
-  const createImage = async (input: CreateAsServedImageInput): Promise<AsServedImage> => {
-    const { id, weight } = input;
-
-    const sourceImage = await sourceImageService.uploadSourceImage(input, 'as_served');
-    const [image, thumbnailImage] = await processedImageService.createAsServedImages(
-      id,
-      sourceImage
-    );
-
-    return AsServedImage.create({
-      asServedSetId: id,
-      imageId: image.id,
-      thumbnailImageId: thumbnailImage.id,
-      weight,
-    });
-  };
-
-  const destroyImage = async (asServedSetId: string, id: number | string): Promise<void> => {
-    const asServedImage = await AsServedImage.findOne({ where: { asServedSetId, id } });
-    if (!asServedImage) throw new NotFoundError();
-
-    await Promise.all([
-      asServedImage.destroy(),
-      processedImageService.destroy(asServedImage.imageId, { includeSources: true }),
-      processedImageService.destroy(asServedImage.thumbnailImageId, { includeSources: true }),
-    ]);
-
-    // TODO: destroy AsServedImage records + images
   };
 
   return {
+    createImage,
+    destroyImage,
     createSet,
     updateSet,
     destroySet,
-    createImage,
-    destroyImage,
   };
 };

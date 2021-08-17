@@ -1,11 +1,11 @@
-import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import {
   ProcessedImageAttributes,
   ProcessedImageCreationAttributes,
   ProcessedImagePurpose,
 } from '@common/types/models/foods';
 import BaseModel from '../model';
-import { AsServedImage, AsServedSet, ImageMap } from '.';
+import { AsServedImage, AsServedSet, ImageMap, SourceImage } from '.';
 
 @Scopes(() => ({
   asServedSets: { include: [{ model: AsServedSet }] },
@@ -53,6 +53,9 @@ export default class ProcessedImage
     defaultValue: () => new Date(),
   })
   public createdAt!: Date;
+
+  @BelongsTo(() => SourceImage, 'sourceId')
+  public sourceImage?: SourceImage;
 
   @HasMany(() => AsServedSet, 'selectionImageId')
   public asServedSets?: AsServedSet[];

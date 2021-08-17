@@ -28,7 +28,11 @@ export interface ProcessedImageService {
   destroy: (imageId: number, options?: DestroyOptions) => Promise<void>;
 }
 
-export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): ProcessedImageService => {
+export default ({
+  fsConfig,
+  logger,
+  sourceImageService,
+}: Pick<IoC, 'fsConfig' | 'logger' | 'sourceImageService'>): ProcessedImageService => {
   const { images: imagesPath } = fsConfig.local;
 
   const resolveSourceImage = async (sourceImageId: number): Promise<SourceImage> => {
@@ -158,13 +162,11 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): Process
     try {
       await fs.unlink(path.join(imagesPath, processedImage.path));
     } catch (err) {
-      logger.error(`ProcessedImageService|destroy: ${err.message}`);
+      logger.warn(`ProcessedImageService|destroy: ${err.message}`);
     }
 
     const { includeSources } = options;
-    if (includeSources) {
-      // delete source records
-    }
+    if (includeSources) await sourceImageService.destroy(processedImage.sourceId);
   };
 
   return {
