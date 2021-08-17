@@ -80,7 +80,8 @@ export default ({
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { asServedSetId, asServedImageId } = req.params;
 
-    await asServedService.destroyImage(asServedSetId, asServedImageId);
+    const result = await asServedService.destroyImage(asServedSetId, asServedImageId);
+    if (!result) throw new NotFoundError();
 
     res.status(204).json();
   };
