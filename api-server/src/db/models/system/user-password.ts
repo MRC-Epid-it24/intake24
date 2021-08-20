@@ -15,10 +15,12 @@ export default class UserPassword
   implements UserPasswordAttributes
 {
   @Column({
+    allowNull: false,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
-  public userId!: number;
+  public userId!: string;
 
   @Column({
     allowNull: false,

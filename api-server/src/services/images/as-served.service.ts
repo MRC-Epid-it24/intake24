@@ -9,7 +9,7 @@ import type { IoC } from '@/ioc';
 
 export interface AsServedService {
   createImage: (input: CreateAsServedImageInput) => Promise<AsServedImage>;
-  destroyImage: (asServedSetId: string, id?: number | string) => Promise<boolean>;
+  destroyImage: (asServedSetId: string, id?: string) => Promise<boolean>;
   createSet: (input: CreateAsServedSetInput) => Promise<AsServedSet>;
   updateSet: (asServedSetId: string, input: UpdateAsServedSetInput) => Promise<AsServedSet>;
   destroySet: (asServedSetId: string) => Promise<void>;
@@ -40,7 +40,7 @@ export default ({
     });
   };
 
-  const destroyImage = async (asServedSetId: string, id?: number | string): Promise<boolean> => {
+  const destroyImage = async (asServedSetId: string, id?: string): Promise<boolean> => {
     const asServedImages = await AsServedImage.findAll({
       where: id ? { asServedSetId, id } : { asServedSetId },
     });

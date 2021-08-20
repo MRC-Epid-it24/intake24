@@ -17,7 +17,7 @@ export default (): void => {
   let surveyInput: SurveyRequest;
   let survey: Survey;
 
-  let input: { permissions: number[] };
+  let input: { permissions: string[] };
 
   beforeAll(async () => {
     surveyInput = mocker.survey();

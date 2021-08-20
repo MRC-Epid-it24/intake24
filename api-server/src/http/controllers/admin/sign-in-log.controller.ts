@@ -8,7 +8,7 @@ export type SignInLogController = Controller<'browse' | 'read' | 'destroy'>;
 
 export default (): SignInLogController => {
   const entry = async (
-    req: Request<{ signInLogId: number }>,
+    req: Request<{ signInLogId: string }>,
     res: Response<SignInLogResponse>
   ): Promise<void> => {
     const { signInLogId } = req.params;
@@ -30,12 +30,12 @@ export default (): SignInLogController => {
   };
 
   const read = async (
-    req: Request<{ signInLogId: number }>,
+    req: Request<{ signInLogId: string }>,
     res: Response<SignInLogResponse>
   ): Promise<void> => entry(req, res);
 
   const destroy = async (
-    req: Request<{ signInLogId: number }>,
+    req: Request<{ signInLogId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
     const { signInLogId } = req.params;

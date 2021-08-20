@@ -2,7 +2,7 @@ import type { OmitAndOptional } from '..';
 import type { PermissionAttributes, UserAttributes } from '.';
 
 export type RoleAttributes = {
-  id: number;
+  id: string;
   name: string;
   displayName: string;
   description: string | null;
@@ -22,8 +22,8 @@ export type RoleAssociations = {
 };
 
 export type RoleUserAttributes = {
-  roleId: number;
-  userId: number;
+  roleId: string;
+  userId: string;
   createdAt: Date;
   updatedAt: Date;
 };

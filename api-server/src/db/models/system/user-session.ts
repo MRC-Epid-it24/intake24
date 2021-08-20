@@ -19,7 +19,7 @@ export default class UserSession
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public userId!: number;
+  public userId!: string;
 
   @Column({
     allowNull: false,

@@ -17,13 +17,13 @@ export default class PermissionUser
   @Column({
     type: DataType.BIGINT,
   })
-  public permissionId!: number;
+  public permissionId!: string;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.BIGINT,
   })
-  public userId!: number;
+  public userId!: string;
 
   @CreatedAt
   @Column

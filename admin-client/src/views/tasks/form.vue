@@ -107,7 +107,7 @@ import { FormMixin, MapAddonsMixin } from '@/types';
 import paramComponents from './params';
 
 type TaskForm = {
-  id: number | null;
+  id: string | null;
   name: string | null;
   job: JobType | null;
   cron: string | null;

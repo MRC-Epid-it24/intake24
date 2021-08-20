@@ -23,7 +23,7 @@ export default class DrinkwareScale
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
@@ -33,26 +33,31 @@ export default class DrinkwareScale
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public width!: number;
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public height!: number;
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public emptyLevel!: number;
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public fullLevel!: number;
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public choiceId!: number;
 

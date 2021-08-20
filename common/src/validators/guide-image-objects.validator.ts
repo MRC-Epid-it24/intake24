@@ -23,7 +23,7 @@ export const GuideImageInputObjectsSchema = {
       defaultProperties: [],
       properties: {
         id: {
-          type: 'number',
+          type: 'string',
         },
         weight: {
           type: 'number',

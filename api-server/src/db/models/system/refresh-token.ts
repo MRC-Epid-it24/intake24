@@ -37,7 +37,7 @@ export default class RefreshToken
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public userId!: number;
+  public userId!: string;
 
   @Column({
     allowNull: false,

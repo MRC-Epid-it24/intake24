@@ -16,19 +16,19 @@ export default class NutrientTableRecordNutrient extends BaseModel {
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public nutrientTableRecordId!: number;
+  public nutrientTableRecordId!: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public nutrientTypeId!: number;
+  public nutrientTypeId!: string;
 
   @Column({
     allowNull: false,

@@ -113,8 +113,8 @@ type SurveyMgmtRefs = {
 };
 
 type SurveyMgmtForm = {
-  id: number | null;
-  permissions: number[];
+  id: string | null;
+  permissions: string[];
 };
 
 interface AvailableOptions extends SurveyMgmtAvailableResponse {
@@ -122,7 +122,7 @@ interface AvailableOptions extends SurveyMgmtAvailableResponse {
 }
 
 type OptionList = {
-  id: number;
+  id: string;
   name: string;
 };
 
@@ -178,7 +178,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
   computed: {
     availableUsers(): OptionList[] {
       return this.options.users.map(({ id, name, email }) => {
-        const [first, second] = [name, email, id].filter((item) => item) as (string | number)[];
+        const [first, second] = [name, email, id].filter((item) => item) as string[];
         return {
           id,
           name: second ? `${first} (${second})` : `${first}`,

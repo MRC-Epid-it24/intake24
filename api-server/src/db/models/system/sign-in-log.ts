@@ -20,8 +20,15 @@ export default class SignInLog
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
+
+  @Column({
+    allowNull: true,
+    type: DataType.BIGINT,
+  })
+  public userId!: string | null;
 
   @Column({
     allowNull: false,
@@ -49,16 +56,12 @@ export default class SignInLog
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
   })
   public successful!: boolean;
 
   @Column({
     allowNull: true,
-    type: DataType.BIGINT,
-  })
-  public userId!: number | null;
-
-  @Column({
     type: DataType.TEXT,
   })
   public message!: string | null;

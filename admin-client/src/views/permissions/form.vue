@@ -49,7 +49,7 @@ import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 
 type PermissionForm = {
-  id: number | null;
+  id: string | null;
   name: string | null;
   displayName: string | null;
   description: string | null;

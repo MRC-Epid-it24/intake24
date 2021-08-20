@@ -37,3 +37,6 @@ export { default as PortionSizeMethodParameter } from './portion-size-method-par
 export { default as ProcessedImage } from './processed-image';
 export { default as SourceImage } from './source-image';
 export { default as SourceImageKeyword } from './source-image-keyword';
+export { default as SplitList } from './split-list';
+export { default as SplitWord } from './split-word';
+export { default as SynonymSet } from './synonym-set';

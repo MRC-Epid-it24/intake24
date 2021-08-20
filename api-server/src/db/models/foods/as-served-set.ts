@@ -33,8 +33,9 @@ export default class AsServedSet
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public selectionImageId!: number;
+  public selectionImageId!: string;
 
   @BelongsTo(() => ProcessedImage, 'selectionImageId')
   public selectionImage?: ProcessedImage;

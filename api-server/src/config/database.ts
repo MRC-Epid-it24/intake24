@@ -9,12 +9,12 @@ export type DatabaseConfig = Record<Environment, DBConnectionInfo>;
 
 const dialectOptions: Record<Dialect, Dictionary> = {
   mariadb: {
-    // supportBigNumbers: true,
-    // bigNumberStrings: true,
+    supportBigNumbers: true,
+    bigNumberStrings: true,
   },
   mysql: {
-    // supportBigNumbers: true,
-    // bigNumberStrings: true,
+    supportBigNumbers: true,
+    bigNumberStrings: true,
   },
   mssql: {},
   postgres: {},

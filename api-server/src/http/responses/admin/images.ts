@@ -28,7 +28,7 @@ export interface ImageResponseCollection {
   mapEntryResponse: (item: ImageMap) => ImageMapEntry;
 }
 
-type Weights = { [index: number]: number };
+type Weights = { [index: string]: number };
 
 export default (baseUrl: string): ImageResponseCollection => {
   /**

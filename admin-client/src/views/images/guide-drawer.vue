@@ -131,6 +131,10 @@ type Refs = {
   debouncedGuideImageObjects: () => void;
 };
 
+interface Objects extends Omit<GuideImageEntryObject, 'id' | 'outlineCoordinates'> {
+  id: number;
+}
+
 type PathCoords = number[][][];
 
 const distance = ([sourceX, sourceY]: number[], [targetX, targetY]: number[]) =>
@@ -153,12 +157,12 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
   },
 
   data() {
-    const objects: Omit<GuideImageEntryObject, 'outlineCoordinates'>[] = [];
+    const objects: Objects[] = [];
     const coords: PathCoords = [];
 
-    this.entry.objects.forEach(({ outlineCoordinates, ...rest }) => {
+    this.entry.objects.forEach(({ id, outlineCoordinates, ...rest }) => {
       coords.push(chunk(outlineCoordinates, 2));
-      objects.push({ weight: 0, ...rest });
+      objects.push({ weight: 0, id: parseInt(id, 10), ...rest });
     });
 
     return {
@@ -203,15 +207,17 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     },
 
     imageMapObjects(): ImageMapEntryObject[] {
-      return this.objects.map(({ weight, ...rest }, index) => ({
+      return this.objects.map(({ id, weight, ...rest }, index) => ({
         ...rest,
+        id: id.toString(),
         outlineCoordinates: this.coords[index].flat(),
       }));
     },
 
     guideImageObjects(): GuideImageEntryObject[] {
-      return this.objects.map((object, index) => ({
-        ...object,
+      return this.objects.map(({ id, ...rest }, index) => ({
+        ...rest,
+        id: id.toString(),
         outlineCoordinates: this.coords[index].flat(),
       }));
     },

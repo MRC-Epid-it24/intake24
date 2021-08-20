@@ -31,8 +31,9 @@ export default class SurveySubmissionMeal
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
@@ -42,11 +43,13 @@ export default class SurveySubmissionMeal
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public hours!: number;
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public minutes!: number;
 

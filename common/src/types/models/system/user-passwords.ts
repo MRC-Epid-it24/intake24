@@ -1,5 +1,5 @@
 export type UserPasswordAttributes = {
-  userId: number;
+  userId: string;
   passwordHash: string;
   passwordSalt: string;
   passwordHasher: string;

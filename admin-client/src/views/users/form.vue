@@ -152,7 +152,7 @@ import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
 
 type UserForm = {
-  id: number | null;
+  id: string | null;
   name: string | null;
   email: string | null;
   phone: string | null;
@@ -162,8 +162,8 @@ type UserForm = {
   emailNotifications: boolean;
   smsNotifications: boolean;
   customFields: CustomField[];
-  permissions: number[];
-  roles: number[];
+  permissions: string[];
+  roles: string[];
 };
 
 export default (Vue as VueConstructor<Vue & FormMixin<UserEntry>>).extend({

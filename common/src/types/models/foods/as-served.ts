@@ -1,15 +1,15 @@
 export type AsServedSetAttributes = {
   id: string;
   description: string;
-  selectionImageId: number;
+  selectionImageId: string;
 };
 
 export type AsServedImageAttributes = {
-  id: number;
+  id: string;
   weight: number;
   asServedSetId: string;
-  imageId: number;
-  thumbnailImageId: number;
+  imageId: string;
+  thumbnailImageId: string;
 };
 
 export type AsServedImageCreationAttributes = Omit<AsServedImageAttributes, 'id'>;

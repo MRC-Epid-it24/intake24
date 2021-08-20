@@ -85,6 +85,7 @@ export default class Survey
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
   })
   public allowGenUsers!: boolean;
 

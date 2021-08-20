@@ -1,6 +1,6 @@
 export type RefreshTokenAttributes = {
   id: string;
-  userId: number;
+  userId: string;
   revoked: boolean;
   expiresAt: Date;
   createdAt: Date;

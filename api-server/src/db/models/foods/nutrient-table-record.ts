@@ -17,20 +17,23 @@ export default class NutrientTableRecord extends BaseModel {
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING,
   })
   public nutrientTableId!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING,
   })
   public nutrientTableRecordId!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING,
   })
   public name!: string;
 
@@ -52,7 +55,7 @@ export default class NutrientTableRecord extends BaseModel {
   @HasMany(() => NutrientTableRecordField, 'nutrientTableRecordId')
   public fields?: NutrientTableRecordField[];
 
-  getNutrientByType(nutrientTypeId: number): NutrientTableRecordNutrient | undefined {
+  getNutrientByType(nutrientTypeId: string): NutrientTableRecordNutrient | undefined {
     return this.nutrients?.find((nutrient) => nutrient.nutrientTypeId === nutrientTypeId);
   }
 }

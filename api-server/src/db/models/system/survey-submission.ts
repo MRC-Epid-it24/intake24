@@ -70,29 +70,33 @@ export default class SurveySubmission
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public userId!: number;
+  public userId!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.DATE,
   })
   public startTime!: Date;
 
   @Column({
     allowNull: false,
+    type: DataType.DATE,
   })
   public endTime!: Date;
 
   @Column({
     allowNull: false,
+    type: DataType.DATE,
   })
   public submissionTime!: Date;
 
   @Column({
     allowNull: true,
-    type: DataType.ARRAY(DataType.TEXT),
+    type: DataType.TEXT,
   })
-  public log!: string[] | null;
+  public log!: string | null;
 
   @Column({
     allowNull: false,

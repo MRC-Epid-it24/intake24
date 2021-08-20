@@ -16,7 +16,7 @@ import { PushPayload } from '..';
 
 export type JobInput = {
   type: JobType;
-  userId?: number | null;
+  userId?: string | null;
 };
 
 export type NotificationPayload = {
@@ -143,7 +143,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
         progress: 1,
         successful: false,
         message: failedReason,
-        stackTrace: stacktrace.join('\n'),
+        stackTrace: stacktrace,
       });
 
       await this.notify(job.userId, { jobId, status: 'error', message: failedReason });
@@ -233,12 +233,12 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   /**
    * Notify user about finished job
    *
-   * @param {(number | null)} userId
+   * @param {(string | null)} userId
    * @param {NotificationPayload} payload
    * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
-  public async notify(userId: number | null, payload: NotificationPayload): Promise<void> {
+  public async notify(userId: string | null, payload: NotificationPayload): Promise<void> {
     if (!userId) return;
 
     const body = [

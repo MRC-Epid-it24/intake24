@@ -10,7 +10,7 @@ export type FoodAttributes = {
 };
 
 export type FoodLocalAttributes = {
-  id: number;
+  id: string;
   foodCode: string;
   localeId: string;
   name: string;

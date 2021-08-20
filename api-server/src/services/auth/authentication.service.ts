@@ -24,7 +24,7 @@ export type TokenLoginCredentials = {
 
 export type MFALoginCredentials = {
   email: string;
-  userId: number;
+  userId: string;
 };
 
 export type MFAVerifyCredentials = {
@@ -43,7 +43,7 @@ export type LoginMeta = {
 };
 
 export interface SignInAttempt extends LoginMeta, Subject {
-  userId?: number;
+  userId?: string;
   successful: boolean;
   message?: string;
 }
@@ -51,7 +51,7 @@ export interface SignInAttempt extends LoginMeta, Subject {
 export type MfaRequest = { mfa: { request: string; host: string } };
 
 export interface AuthenticationService {
-  issueTokens: (userId: number, subject: Subject | string) => Promise<Tokens>;
+  issueTokens: (userId: string, subject: Subject | string) => Promise<Tokens>;
   verifyPassword: (password: string, user: User) => Promise<boolean>;
   signMfaRequest: (credentials: MFALoginCredentials, meta: LoginMeta) => Promise<MfaRequest>;
   login: (credentials: LoginCredentials, meta: LoginMeta) => Promise<Tokens>;
@@ -80,7 +80,7 @@ export default ({
    * @param {User} user
    * @returns {Promise<Tokens>}
    */
-  const issueTokens = async (userId: number, subject: Subject | string): Promise<Tokens> => {
+  const issueTokens = async (userId: string, subject: Subject | string): Promise<Tokens> => {
     const payload: SignPayload = { userId };
 
     const { accessToken, refreshToken } = await jwtService.signTokens(payload, {

@@ -33,34 +33,37 @@ export default class SurveySubmissionFood
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public mealId!: number;
+  public mealId!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   public code!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(128),
+    type: DataType.STRING(256),
   })
   public englishDescription!: string;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING(128),
+    type: DataType.STRING(256),
   })
   public localDescription!: string | null;
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
   })
   public readyMeal!: boolean;
 
@@ -78,13 +81,15 @@ export default class SurveySubmissionFood
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
   })
   public reasonableAmount!: boolean;
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public foodGroupId!: number;
+  public foodGroupId!: string;
 
   @Column({
     allowNull: false,

@@ -25,13 +25,13 @@ export default class DrinkwareVolumeSample
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public drinkwareScaleId!: number;
+  public drinkwareScaleId!: string;
 
   @Column({
     allowNull: false,

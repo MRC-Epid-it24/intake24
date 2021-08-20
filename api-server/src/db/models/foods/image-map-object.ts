@@ -17,8 +17,9 @@ export default class ImageMapObject
   @Column({
     allowNull: false,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
@@ -35,6 +36,7 @@ export default class ImageMapObject
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public navigationIndex!: number;
 
@@ -47,9 +49,9 @@ export default class ImageMapObject
 
   @Column({
     allowNull: true,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
-  public overlayImageId!: number | null;
+  public overlayImageId!: string | null;
 
   @BelongsTo(() => ImageMap, 'imageMapId')
   public imageMap?: ImageMap;

@@ -2,17 +2,17 @@ import { JobType } from '../../jobs';
 import { OmitAndOptional } from '../model';
 
 export type JobAttributes = {
-  id: number;
+  id: string;
   type: JobType;
-  userId: number | null;
-  startedAt: Date | null;
-  completedAt: Date | null;
+  userId: string | null;
   downloadUrl: string | null;
   downloadUrlExpiresAt: Date | null;
   progress: number | null;
   successful: boolean | null;
   message: string | null;
-  stackTrace: string | null;
+  stackTrace: string[] | null;
+  startedAt: Date | null;
+  completedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -21,12 +21,12 @@ export type JobCreationAttributes = OmitAndOptional<
   JobAttributes,
   'id' | 'createdAt' | 'updatedAt',
   | 'userId'
-  | 'startedAt'
-  | 'completedAt'
   | 'downloadUrl'
   | 'downloadUrlExpiresAt'
   | 'progress'
   | 'successful'
   | 'message'
   | 'stackTrace'
+  | 'startedAt'
+  | 'completedAt'
 >;

@@ -7,7 +7,7 @@ export interface FetchEntryMixin {
 }
 
 export interface HasEntryMixin {
-  id: number | string;
+  id: string;
   resource: Resource;
 }
 

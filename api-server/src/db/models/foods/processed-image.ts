@@ -29,7 +29,7 @@ export default class ProcessedImage
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
@@ -39,8 +39,9 @@ export default class ProcessedImage
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public sourceId!: number;
+  public sourceId!: string;
 
   @Column({
     allowNull: false,

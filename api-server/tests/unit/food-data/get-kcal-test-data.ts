@@ -12,15 +12,15 @@ import {
 
 export default async (foodDatabase: Sequelize) => {
   await NutrientUnit.create({
-    id: 1,
+    id: '1',
     description: 'Test unit',
     symbol: 'tu',
   });
 
   await NutrientType.create({
-    id: 1,
+    id: '1',
     description: 'Energy (kcal)',
-    unitId: 1,
+    unitId: '1',
   });
 
   await NutrientTable.create(
@@ -67,7 +67,7 @@ export default async (foodDatabase: Sequelize) => {
         version: '00000000-0000-0000-0000-000000000000',
         nutrientMappings: [
           {
-            nutrientTableRecordId: 1,
+            nutrientTableRecordId: '1',
           },
         ],
       },

@@ -10,3 +10,6 @@ export * from './nutrients';
 export * from './processed-images';
 export * from './portion-methods';
 export * from './source-images';
+export * from './split-lists';
+export * from './split-words';
+export * from './synonym-sets';

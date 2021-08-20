@@ -1,7 +1,11 @@
-import { Column, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import { NutrientUnitAttributes } from '@common/types/models';
 import BaseModel from '../model';
+import { NutrientType } from '.';
 
+@Scopes(() => ({
+  nutrientTypes: { include: [{ model: NutrientType }] },
+}))
 @Table({
   modelName: 'NutrientUnit',
   tableName: 'nutrient_units',
@@ -14,18 +18,23 @@ export default class NutrientUnit
   implements NutrientUnitAttributes
 {
   @Column({
-    allowNull: false,
+    type: DataType.BIGINT,
     primaryKey: true,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public description!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(32),
   })
   public symbol!: string;
+
+  @HasMany(() => NutrientType, 'unitId')
+  public nutrientTypes?: NutrientType[];
 }

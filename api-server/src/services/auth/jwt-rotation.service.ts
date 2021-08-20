@@ -7,9 +7,9 @@ import type { TokenPayload } from '.';
 export const decode = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;
 
 export interface JwtRotationService {
-  store: (token: string, userId: number) => Promise<RefreshToken>;
+  store: (token: string, userId: string) => Promise<RefreshToken>;
   revoke: (token: string) => Promise<number>;
-  revokeByUser: (userId: number) => Promise<number>;
+  revokeByUser: (userId: string) => Promise<number>;
   verify: (token: string) => Promise<boolean>;
   verifyAndRevoke: (token: string) => Promise<boolean>;
   purge: () => Promise<number>;
@@ -20,10 +20,10 @@ export default ({ logger }: Pick<IoC, 'logger'>): JwtRotationService => {
    * Store new refresh token to database
    *
    * @param {string} token
-   * @param {number} userId
+   * @param {string} userId
    * @returns {Promise<RefreshToken>}
    */
-  const store = async (token: string, userId: number): Promise<RefreshToken> => {
+  const store = async (token: string, userId: string): Promise<RefreshToken> => {
     const { jti: id, exp } = decode(token);
 
     return RefreshToken.create({
@@ -51,10 +51,10 @@ export default ({ logger }: Pick<IoC, 'logger'>): JwtRotationService => {
   /**
    * Revoke refresh tokens by userId
    *
-   * @param {number} userId
+   * @param {string} userId
    * @returns {Promise<number>}
    */
-  const revokeByUser = async (userId: number): Promise<number> => {
+  const revokeByUser = async (userId: string): Promise<number> => {
     const [rows] = await RefreshToken.update({ revoked: true }, { where: { userId } });
 
     return rows;

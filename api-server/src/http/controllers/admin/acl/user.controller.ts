@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { pick, toInteger } from 'lodash';
+import { pick } from 'lodash';
 import {
   CreateUserResponse,
   UserResponse,
@@ -87,7 +87,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
     const { userId } = req.params;
 
     await userService.update(
-      toInteger(userId),
+      userId,
       pick(req.body, [
         'name',
         'email',
@@ -114,7 +114,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { userId } = req.params;
 
-    await userService.destroy(toInteger(userId));
+    await userService.destroy(userId);
     res.status(204).json();
   };
 

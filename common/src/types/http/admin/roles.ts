@@ -5,7 +5,7 @@ export type RoleRequest = {
   name: string;
   displayName: string;
   description: string | null;
-  permissions: number[];
+  permissions: string[];
 };
 
 export type RolesResponse = Pagination<RoleAttributes>;

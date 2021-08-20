@@ -2,7 +2,7 @@ import type { OmitAndOptional } from '..';
 import type { PermissionAttributes, RoleAttributes, UserSurveyAliasAttributes } from '.';
 
 export type UserAttributes = {
-  id: number;
+  id: string;
   name: string | null;
   email: string | null;
   phone: string | null;
@@ -27,8 +27,8 @@ export type UserCreationAttributes = OmitAndOptional<
 >;
 
 export type UserCustomFieldAttributes = {
-  id: number;
-  userId: number;
+  id: string;
+  userId: string;
   name: string;
   value: string;
 };

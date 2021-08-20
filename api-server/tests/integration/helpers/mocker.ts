@@ -33,7 +33,7 @@ const role = (): RoleRequest => {
   const displayName = faker.random.words(2);
   const name = slugify(displayName, { strict: true });
   const description = faker.lorem.words(10);
-  const permissions: number[] = [];
+  const permissions: string[] = [];
 
   return { name, displayName, description, permissions };
 };
@@ -52,8 +52,8 @@ const user = (): CreateUserRequest => {
     { name: faker.random.words(1), value: faker.random.words(5) },
   ];
 
-  const permissions: number[] = [];
-  const roles: number[] = [];
+  const permissions: string[] = [];
+  const roles: string[] = [];
 
   return {
     name,

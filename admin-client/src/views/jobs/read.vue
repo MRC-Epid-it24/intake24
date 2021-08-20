@@ -37,9 +37,9 @@
         <tr>
           <th>{{ $t('jobs.stackTrace') }}</th>
           <td colspan="3">
-            <code v-if="entry.stackTrace">
-              {{ entry.stackTrace }}
-            </code>
+            <pre v-if="entry.stackTrace.length">
+              {{ entry.stackTrace.join('\n') }}
+            </pre>
           </td>
         </tr>
         <tr>

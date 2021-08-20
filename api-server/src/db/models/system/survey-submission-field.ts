@@ -23,17 +23,19 @@ export default class SurveySubmissionField
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public foodId!: number;
+  public foodId!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(32),
+    type: DataType.STRING(64),
   })
   public fieldName!: string;
 

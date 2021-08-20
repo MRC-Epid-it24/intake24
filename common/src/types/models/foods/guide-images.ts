@@ -2,14 +2,14 @@ export type GuideImageAttributes = {
   id: string;
   description: string;
   imageMapId: string;
-  selectionImageId: number;
+  selectionImageId: string;
 };
 
 export type GuideImageObjectAttributes = {
-  id: number;
+  id: string;
   guideImageId: string;
   weight: number;
-  imageMapObjectId: number;
+  imageMapObjectId: string;
 };
 
 export type GuideImageObjectCreationAttributes = Omit<GuideImageObjectAttributes, 'id'>;

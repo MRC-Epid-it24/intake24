@@ -19,14 +19,16 @@ export default class UserSurveyAlias
 {
   @Column({
     allowNull: false,
+    primaryKey: true,
+    type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
-  public userId!: number;
+  public userId!: string;
 
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: DataType.STRING(32),
+    type: DataType.STRING(64),
   })
   @ForeignKey(() => Survey)
   public surveyId!: string;
@@ -41,7 +43,7 @@ export default class UserSurveyAlias
   @Column({
     allowNull: false,
     unique: true,
-    type: DataType.STRING(32),
+    type: DataType.STRING(128),
   })
   public urlAuthToken!: string;
 

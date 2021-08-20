@@ -20,8 +20,9 @@ export default class GuideImageObject
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
@@ -37,8 +38,9 @@ export default class GuideImageObject
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public imageMapObjectId!: number;
+  public imageMapObjectId!: string;
 
   @BelongsTo(() => GuideImage, 'guideImageId')
   public guideImage?: GuideImage;

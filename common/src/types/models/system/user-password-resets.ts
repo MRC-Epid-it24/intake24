@@ -1,6 +1,6 @@
 export type UserPasswordResetAttributes = {
-  id: number;
-  userId: number;
+  id: string;
+  userId: string;
   token: string;
   createdAt: Date;
   updatedAt: Date;

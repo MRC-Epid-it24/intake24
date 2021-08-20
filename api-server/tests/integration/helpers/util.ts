@@ -37,7 +37,7 @@ export const setPermission = async (
  * @param {number} userId
  * @returns {Promise<void>}
  */
-export const setUserPermission = async (perm: string | string[], userId: number): Promise<void> => {
+export const setUserPermission = async (perm: string | string[], userId: string): Promise<void> => {
   const user = await User.findByPk(userId);
 
   if (!user) throw new Error('Missing mock user.');

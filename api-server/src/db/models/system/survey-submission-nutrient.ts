@@ -1,4 +1,4 @@
-import { BelongsTo, Column, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import {
   SurveySubmissionNutrientAttributes,
   SurveySubmissionNutrientCreationAttributes,
@@ -24,23 +24,27 @@ export default class SurveySubmissionNutrient
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public foodId!: number;
+  public foodId!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.DOUBLE,
   })
   public amount!: number;
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public nutrientTypeId!: number;
+  public nutrientTypeId!: string;
 
   @BelongsTo(() => SurveySubmissionFood, 'foodId')
   public food?: SurveySubmissionFood;

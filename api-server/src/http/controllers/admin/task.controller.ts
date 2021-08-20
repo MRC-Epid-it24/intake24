@@ -17,7 +17,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
   const jobs: JobType[] = [...jobTypes];
 
   const entry = async (
-    req: Request<{ taskId: number }>,
+    req: Request<{ taskId: string }>,
     res: Response<TaskResponse>
   ): Promise<void> => {
     const { taskId } = req.params;
@@ -50,17 +50,17 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
   };
 
   const read = async (
-    req: Request<{ taskId: number }>,
+    req: Request<{ taskId: string }>,
     res: Response<TaskResponse>
   ): Promise<void> => entry(req, res);
 
   const edit = async (
-    req: Request<{ taskId: number }>,
+    req: Request<{ taskId: string }>,
     res: Response<TaskResponse>
   ): Promise<void> => entry(req, res);
 
   const update = async (
-    req: Request<{ taskId: number }>,
+    req: Request<{ taskId: string }>,
     res: Response<TaskResponse>
   ): Promise<void> => {
     const { taskId } = req.params;
@@ -79,7 +79,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
   };
 
   const destroy = async (
-    req: Request<{ taskId: number }>,
+    req: Request<{ taskId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
     const { taskId } = req.params;
@@ -92,7 +92,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     res.status(204).json();
   };
 
-  const run = async (req: Request<{ taskId: number }>, res: Response): Promise<void> => {
+  const run = async (req: Request<{ taskId: string }>, res: Response): Promise<void> => {
     const { taskId } = req.params;
     const { id: userId } = req.user as User;
 

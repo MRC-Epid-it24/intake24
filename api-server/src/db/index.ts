@@ -1,16 +1,8 @@
-import pg from 'pg';
 import { Sequelize } from 'sequelize-typescript';
 import { Database, DatabaseConfig, Environment } from '@api-server/config';
 import { Logger } from 'winston';
 import * as foods from './models/foods';
 import * as system from './models/system';
-
-/*
- * Parse int8 to number
- * - this should be removed later on to keep bigInt/int8 as strings once DB is migrated to int8
- * (JS Number won't fit fully int8 range ...)
- */
-pg.defaults.parseInt8 = true;
 
 const models = {
   foods: Object.values(foods),

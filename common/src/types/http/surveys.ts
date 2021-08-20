@@ -32,7 +32,7 @@ export type SurveyEntryResponse = {
 };
 
 export type SurveyUserInfoResponse = {
-  userId: number;
+  userId: string;
   name: string | null;
   recallNumber: number;
   redirectToFeedback: boolean;

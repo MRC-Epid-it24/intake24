@@ -24,13 +24,13 @@ export default class PortionSizeMethod
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public foodLocalId!: number;
+  public foodLocalId!: string;
 
   @Column({
     allowNull: false,

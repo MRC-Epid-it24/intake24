@@ -10,33 +10,33 @@ import { toSimpleName } from '@/util';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from './auth';
 
 export type UserPasswordInput = {
-  userId: number;
+  userId: string;
   password: string;
 };
 
 export interface UserService {
   create: (input: CreateUserInput) => Promise<User>;
-  update: (userId: number, input: UpdateUserInput) => Promise<User>;
-  destroy: (userId: number) => Promise<void>;
+  update: (userId: string, input: UpdateUserInput) => Promise<User>;
+  destroy: (userId: string) => Promise<void>;
   updateUserCustomFields: (
-    userId: number,
+    userId: string,
     userCustomFields: UserCustomField[],
     customFields: CustomField[]
   ) => Promise<void>;
   createPassword: (input: UserPasswordInput) => Promise<UserPassword>;
   createPasswords: (records: UserPasswordInput[]) => Promise<UserPassword[]>;
   updatePassword: (input: UserPasswordInput) => Promise<UserPassword>;
-  flushACLCache: (userId: number) => Promise<void>;
+  flushACLCache: (userId: string) => Promise<void>;
 }
 
 export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
   /**
    * Flush ACL cache for specified user
    *
-   * @param {number} userId
+   * @param {string} userId
    * @returns {Promise<void>}
    */
-  const flushACLCache = async (userId: number): Promise<void> => {
+  const flushACLCache = async (userId: string): Promise<void> => {
     const keys = [`${ACL_PERMISSIONS_KEY}:${userId}`, `${ACL_ROLES_KEY}:${userId}`];
     await cache.forget(keys);
   };
@@ -88,13 +88,13 @@ export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
    * 2) updates existing ones
    * 3) add new ones
    *
-   * @param {number} userId
+   * @param {string} userId
    * @param {UserCustomField[]} userCustomFields
    * @param {CustomField[]} customFields
    * @returns {Promise<void>}
    */
   const updateUserCustomFields = async (
-    userId: number,
+    userId: string,
     userCustomFields: UserCustomField[],
     customFields: CustomField[]
   ): Promise<void> => {
@@ -174,11 +174,11 @@ export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
    * - user permissions
    * - user roles
    *
-   * @param {number} userId
+   * @param {string} userId
    * @param {UpdateUserInput} input
    * @returns {Promise<User>}
    */
-  const update = async (userId: number, input: UpdateUserInput): Promise<User> => {
+  const update = async (userId: string, input: UpdateUserInput): Promise<User> => {
     const user = await User.scope('customFields').findByPk(userId);
 
     if (!user) throw new NotFoundError();
@@ -203,10 +203,10 @@ export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
   /**
    * Delete user record and its associations
    *
-   * @param {number} userId
+   * @param {string} userId
    * @returns {Promise<void>}
    */
-  const destroy = async (userId: number): Promise<void> => {
+  const destroy = async (userId: string): Promise<void> => {
     const user = await User.scope('submissions').findByPk(userId);
 
     if (!user) throw new NotFoundError();

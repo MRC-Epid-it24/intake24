@@ -8,5 +8,5 @@ export type SourceFileInput = {
 export type UploadSourceImageInput = {
   id: string;
   file: SourceFileInput;
-  uploader: number | string;
+  uploader: string;
 };

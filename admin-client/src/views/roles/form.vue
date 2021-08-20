@@ -72,11 +72,11 @@ import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 
 type RoleForm = {
-  id: number | null;
+  id: string | null;
   name: string | null;
   displayName: string | null;
   description: string | null;
-  permissions: number[];
+  permissions: string[];
 };
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({

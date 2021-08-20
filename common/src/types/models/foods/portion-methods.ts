@@ -10,8 +10,8 @@ export type PortionSizeMethodId =
   | 'weight';
 
 export type PortionSizeMethodParameterAttributes = {
-  id: number;
-  portionSizeMethodId: number;
+  id: string;
+  portionSizeMethodId: string;
   name: string;
   value: string;
 };
@@ -22,8 +22,8 @@ export type PortionSizeMethodParameterCreationAttributes = Omit<
 >;
 
 export type PortionSizeMethodAttributes = {
-  id: number;
-  foodLocalId: number;
+  id: string;
+  foodLocalId: string;
   method: PortionSizeMethodId;
   description: string;
   imageUrl: string;

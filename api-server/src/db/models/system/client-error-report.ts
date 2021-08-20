@@ -25,15 +25,16 @@ export default class ClientErrorReport
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
-  public userId!: number | null;
+  public userId!: string | null;
 
   @Column({
     allowNull: true,
@@ -49,8 +50,17 @@ export default class ClientErrorReport
 
   @Column({
     allowNull: false,
+    type: DataType.TEXT({ length: 'long' }),
   })
-  public stackTrace!: string;
+  get stackTrace(): string[] {
+    return (this.getDataValue('stackTrace') as unknown as string).split('\n');
+  }
+
+  set stackTrace(value: string[]) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this.setDataValue('stackTrace', value.join('\n'));
+  }
 
   @Column({
     allowNull: false,

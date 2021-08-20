@@ -11,11 +11,8 @@ import {
 import { NotFoundError } from '@/http/errors';
 
 export interface PortionSizeService {
-  getAsServedImage: (asServedSetId: string, id: number | string) => Promise<AsServedImage>;
-  getAsServedImages: (
-    asServedSetId: string,
-    id: number | string | (number | string)[]
-  ) => Promise<AsServedImage[]>;
+  getAsServedImage: (asServedSetId: string, id: string) => Promise<AsServedImage>;
+  getAsServedImages: (asServedSetId: string, id: string | string[]) => Promise<AsServedImage[]>;
   getAsServedSet: (id: string) => Promise<AsServedSet>;
   getAsServedSets: (id: string | string[]) => Promise<AsServedSet[]>;
   getGuideImage: (id: string) => Promise<GuideImage>;
@@ -31,12 +28,12 @@ export default (): PortionSizeService => {
    * Get multiple records of as-served-images data
    *
    * @param {string} asServedSetId
-   * @param {(number | string | (number | string)[])} id
+   * @param {(string | string[])} id
    * @returns {Promise<AsServedImage[]>}
    */
   const getAsServedImages = async (
     asServedSetId: string,
-    id: number | string | (number | string)[]
+    id: string | string[]
   ): Promise<AsServedImage[]> => {
     return AsServedImage.findAll({
       where: { asServedSetId, id },
@@ -52,13 +49,10 @@ export default (): PortionSizeService => {
    * Get single record of as-served-images data
    *
    * @param {string} asServedSetId
-   * @param {(number | string)} id
+   * @param {(string)} id
    * @returns {Promise<AsServedImage>}
    */
-  const getAsServedImage = async (
-    asServedSetId: string,
-    id: number | string
-  ): Promise<AsServedImage> => {
+  const getAsServedImage = async (asServedSetId: string, id: string): Promise<AsServedImage> => {
     const [asServedImage] = await getAsServedImages(asServedSetId, id);
 
     if (!asServedImage) throw new NotFoundError('As served image not found.');

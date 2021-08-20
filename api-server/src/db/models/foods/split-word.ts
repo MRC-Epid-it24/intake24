@@ -1,0 +1,38 @@
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import { SplitWordAttributes, SplitWordCreationAttributes } from '@common/types/models/foods';
+import BaseModel from '../model';
+import { Locale } from '.';
+
+@Table({
+  modelName: 'SplitWord',
+  tableName: 'split_words',
+  freezeTableName: true,
+  timestamps: false,
+  underscored: true,
+})
+export default class SplitWord
+  extends BaseModel<SplitWordAttributes, SplitWordCreationAttributes>
+  implements SplitWordAttributes
+{
+  @Column({
+    autoIncrement: true,
+    primaryKey: true,
+    type: DataType.BIGINT,
+  })
+  public id!: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(16),
+  })
+  public localeId!: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  public words!: string;
+
+  @BelongsTo(() => Locale, 'localeId')
+  public locale?: Locale;
+}

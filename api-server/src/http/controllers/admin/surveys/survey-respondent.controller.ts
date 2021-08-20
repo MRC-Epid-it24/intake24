@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { pick, toInteger } from 'lodash';
+import { pick } from 'lodash';
 import {
   JobResponse,
   SurveyRespondentResponse,
@@ -51,7 +51,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
 
     const respondent = await surveyService.updateRespondent(
       surveyId,
-      toInteger(userId),
+      userId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
     );
 

@@ -19,7 +19,7 @@ export type AsServedSetResponse = {
 };
 
 export type ImageMapObjectResponse = {
-  id: number;
+  id: string;
   description: string;
   navigationIndex: number;
   overlayUrl: string;
@@ -37,7 +37,7 @@ export type GuideImageResponse = {
   id: string;
   description: string;
   imageMap: ImageMapResponse;
-  weights: { [index: number]: number };
+  weights: { [index: string]: number };
 };
 
 export type DrinkwareVolumeSampleResponse = Pick<

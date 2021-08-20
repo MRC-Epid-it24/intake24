@@ -1,11 +1,11 @@
 import { OmitAndOptional } from '../model';
 
 export type SourceImageAttributes = {
-  id: number;
+  id: string;
   path: string;
+  thumbnailPath: string;
   uploader: string;
   uploadedAt: Date;
-  thumbnailPath: string;
 };
 
 export type SourceImageCreationAttributes = OmitAndOptional<
@@ -15,6 +15,6 @@ export type SourceImageCreationAttributes = OmitAndOptional<
 >;
 
 export type SourceImageKeywordAttributes = {
-  sourceImageId: number;
+  sourceImageId: string;
   keyword: string;
 };

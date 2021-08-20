@@ -25,7 +25,7 @@ export const ImageMapInputObjectsSchema = {
         type: 'string',
       },
       id: {
-        type: 'number',
+        type: 'string',
       },
       outlineCoordinates: {
         items: {

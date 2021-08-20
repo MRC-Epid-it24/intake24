@@ -7,21 +7,21 @@ import { NutrientType } from '.';
   nutrientTypes: { include: [{ model: NutrientType }] },
 }))
 @Table({
-  modelName: 'NutrientType',
-  tableName: 'nutrient_types',
+  modelName: 'NutrientUnit',
+  tableName: 'nutrient_units',
   freezeTableName: true,
   timestamps: false,
   underscored: true,
 })
 export default class NutrientUnit
-  extends BaseModel<NutrientUnitAttributes, NutrientUnitCreationAttributes>
+  extends BaseModel<NutrientUnitAttributes>
   implements NutrientUnitAttributes
 {
   @Column({
-    autoIncrement: true,
+    type: DataType.BIGINT,
     primaryKey: true,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,

@@ -20,13 +20,15 @@ export default class UserCustomField
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public userId!: number;
+  public userId!: string;
 
   @Column({
     allowNull: false,

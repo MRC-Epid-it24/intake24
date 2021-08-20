@@ -24,7 +24,7 @@ export default class AsServedImage
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
@@ -40,13 +40,15 @@ export default class AsServedImage
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public imageId!: number;
+  public imageId!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public thumbnailImageId!: number;
+  public thumbnailImageId!: string;
 
   @BelongsTo(() => AsServedSet, 'asServedSetId')
   public asServedSet?: AsServedSet;

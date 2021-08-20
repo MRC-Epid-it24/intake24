@@ -19,9 +19,9 @@ export default class SourceImageKeyword
 {
   @Column({
     allowNull: false,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
-  public sourceImageId!: number;
+  public sourceImageId!: string;
 
   @Column({
     allowNull: false,

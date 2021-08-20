@@ -40,8 +40,9 @@ export default class GuideImage
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public selectionImageId!: number;
+  public selectionImageId!: string;
 
   @BelongsTo(() => ImageMap, 'imageMapId')
   public imageMap?: ImageMap;

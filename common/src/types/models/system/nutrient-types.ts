@@ -1,6 +1,6 @@
 export type NutrientTypeAttributes = {
-  id: number;
-  unitId: number;
+  id: string;
+  unitId: string;
   description: string;
 };
 

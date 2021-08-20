@@ -3,18 +3,18 @@ import { OmitAndOptional, Optional } from '../model';
 export type SurveySubmissionAttributes = {
   id: string;
   surveyId: string;
-  userId: number;
+  userId: string;
   startTime: Date;
   endTime: Date;
   submissionTime: Date;
-  log: string[] | null;
+  log: string | null;
   uxSessionId: string;
 };
 
 export type SurveySubmissionCreationAttributes = Optional<SurveySubmissionAttributes, 'log'>;
 
 export type SurveySubmissionCustomFieldAttributes = {
-  id: number;
+  id: string;
   surveySubmissionId: string;
   name: string;
   value: string;
@@ -26,7 +26,7 @@ export type SurveySubmissionCustomFieldCreationAttributes = Omit<
 >;
 
 export type SurveySubmissionMealAttributes = {
-  id: number;
+  id: string;
   surveySubmissionId: string;
   hours: number;
   minutes: number;
@@ -36,8 +36,8 @@ export type SurveySubmissionMealAttributes = {
 export type SurveySubmissionMealCreationAttributes = Omit<SurveySubmissionMealAttributes, 'id'>;
 
 export type SurveySubmissionMealCustomFieldAttributes = {
-  id: number;
-  mealId: number;
+  id: string;
+  mealId: string;
   name: string;
   value: string;
 };
@@ -48,8 +48,8 @@ export type SurveySubmissionMealCustomFieldCreationAttributes = Omit<
 >;
 
 export type SurveySubmissionFoodAttributes = {
-  id: number;
-  mealId: number;
+  id: string;
+  mealId: string;
   code: string;
   englishDescription: string;
   localDescription: string | null;
@@ -57,7 +57,7 @@ export type SurveySubmissionFoodAttributes = {
   searchTerm: string;
   portionSizeMethodId: string;
   reasonableAmount: boolean;
-  foodGroupId: number;
+  foodGroupId: string;
   foodGroupEnglishDescription: string;
   foodGroupLocalDescription: string | null;
   brand: string;
@@ -72,8 +72,8 @@ export type SurveySubmissionFoodCreationAttributes = OmitAndOptional<
 >;
 
 export type SurveySubmissionFoodCustomFieldAttributes = {
-  id: number;
-  foodId: number;
+  id: string;
+  foodId: string;
   name: string;
   value: string;
 };
@@ -84,8 +84,8 @@ export type SurveySubmissionFoodCustomFieldCreationAttributes = Omit<
 >;
 
 export type SurveySubmissionMissingFoodAttributes = {
-  id: number;
-  mealId: number;
+  id: string;
+  mealId: string;
   name: string;
   brand: string;
   description: string;
@@ -99,8 +99,8 @@ export type SurveySubmissionMissingFoodCreationAttributes = Omit<
 >;
 
 export type SurveySubmissionFieldAttributes = {
-  id: number;
-  foodId: number;
+  id: string;
+  foodId: string;
   fieldName: string;
   value: string;
 };
@@ -108,10 +108,10 @@ export type SurveySubmissionFieldAttributes = {
 export type SurveySubmissionFieldCreationAttributes = Omit<SurveySubmissionFieldAttributes, 'id'>;
 
 export type SurveySubmissionNutrientAttributes = {
-  id: number;
-  foodId: number;
+  id: string;
+  foodId: string;
   amount: number;
-  nutrientTypeId: number;
+  nutrientTypeId: string;
 };
 
 export type SurveySubmissionNutrientCreationAttributes = Omit<
@@ -120,8 +120,8 @@ export type SurveySubmissionNutrientCreationAttributes = Omit<
 >;
 
 export type SurveySubmissionPortionSizeFieldAttributes = {
-  id: number;
-  foodId: number;
+  id: string;
+  foodId: string;
   name: string;
   value: string;
 };

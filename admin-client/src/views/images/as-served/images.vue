@@ -154,7 +154,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       }
     },
 
-    async removeImage(imageId: number) {
+    async removeImage(imageId: string) {
       await this.$http.delete(`admin/images/as-served/${this.setId}/images/${imageId}`);
       this.images = this.images.filter((image) => image.id !== imageId);
     },

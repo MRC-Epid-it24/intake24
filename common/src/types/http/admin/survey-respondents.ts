@@ -2,7 +2,7 @@ import { CustomField } from '../..';
 import type { Pagination } from '../../models';
 
 export type RespondentEntry = {
-  userId: number;
+  userId: string;
   userName: string;
   surveyId: string;
   name: string | null;

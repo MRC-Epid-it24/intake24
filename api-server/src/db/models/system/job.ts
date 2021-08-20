@@ -27,7 +27,7 @@ export default class Job
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
@@ -40,19 +40,7 @@ export default class Job
     type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
-  public userId!: number | null;
-
-  @Column({
-    allowNull: true,
-    type: DataType.DATE,
-  })
-  public startedAt!: Date | null;
-
-  @Column({
-    allowNull: true,
-    type: DataType.DATE,
-  })
-  public completedAt!: Date | null;
+  public userId!: string | null;
 
   @Column({
     allowNull: true,
@@ -80,7 +68,7 @@ export default class Job
 
   @Column({
     allowNull: true,
-    type: DataType.STRING(512),
+    type: DataType.STRING(1024),
   })
   public message!: string | null;
 
@@ -88,7 +76,28 @@ export default class Job
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  public stackTrace!: string | null;
+  get stackTrace(): string[] | null {
+    const val = this.getDataValue('stackTrace') as unknown;
+    return val ? (val as string).split('\n') : null;
+  }
+
+  set stackTrace(value: string[] | null) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this.setDataValue('stackTrace', value.join('\n'));
+  }
+
+  @Column({
+    allowNull: true,
+    type: DataType.DATE,
+  })
+  public startedAt!: Date | null;
+
+  @Column({
+    allowNull: true,
+    type: DataType.DATE,
+  })
+  public completedAt!: Date | null;
 
   @CreatedAt
   @Column

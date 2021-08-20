@@ -19,19 +19,19 @@ export default class NutrientMapping
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public nutrientTableRecordId!: number;
+  public nutrientTableRecordId!: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public foodLocalId!: number;
+  public foodLocalId!: string;
 
   @BelongsTo(() => FoodLocal, 'foodLocalId')
   public foodLocal?: FoodLocal;

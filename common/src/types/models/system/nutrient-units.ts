@@ -1,5 +1,5 @@
 export type NutrientUnitAttributes = {
-  id: number;
+  id: string;
   description: string;
   symbol: string;
 };

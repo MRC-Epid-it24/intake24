@@ -1,18 +1,9 @@
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  ForeignKey,
-  HasMany,
-  Scopes,
-  Table,
-} from 'sequelize-typescript';
-import { NutrientTypeAttributes, NutrientUnitCreationAttributes } from '@common/types/models';
+import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
+import { NutrientTypeAttributes, NutrientTypeCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
-import { LocalNutrientType, NutrientUnit } from '.';
+import { NutrientUnit } from '.';
 
 @Scopes(() => ({
-  localNutrientTypes: { include: [{ model: LocalNutrientType }] },
   unit: { include: [{ model: NutrientUnit }] },
 }))
 @Table({
@@ -23,14 +14,14 @@ import { LocalNutrientType, NutrientUnit } from '.';
   underscored: true,
 })
 export default class NutrientType
-  extends BaseModel<NutrientTypeAttributes, NutrientUnitCreationAttributes>
+  extends BaseModel<NutrientTypeAttributes>
   implements NutrientTypeAttributes
 {
   @Column({
-    autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
@@ -40,12 +31,10 @@ export default class NutrientType
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
   @ForeignKey(() => NutrientUnit)
-  public unitId!: number;
-
-  @HasMany(() => LocalNutrientType, 'nutrientTypeId')
-  public localNutrientTypes?: LocalNutrientType[];
+  public unitId!: string;
 
   @BelongsTo(() => NutrientUnit, 'unitId')
   public unit?: NutrientUnit;

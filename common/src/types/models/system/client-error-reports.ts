@@ -2,11 +2,11 @@ import { Dictionary } from '../../common';
 import { OmitAndOptional } from '../model';
 
 export type ClientErrorReportAttributes = {
-  id: number;
-  userId: number | null;
+  id: string;
+  userId: string | null;
   surveyId: string | null;
   reportedAt: Date;
-  stackTrace: string;
+  stackTrace: string[];
   surveyStateJson: Dictionary;
   new: boolean;
 };

@@ -5,7 +5,7 @@ export type DrinkwareSetAttributes = {
 };
 
 export type DrinkwareScaleAttributes = {
-  id: number;
+  id: string;
   drinkwareSetId: string;
   width: number;
   height: number;
@@ -19,8 +19,8 @@ export type DrinkwareScaleAttributes = {
 export type DrinkwareScaleCreationAttributes = Omit<DrinkwareScaleAttributes, 'id'>;
 
 export type DrinkwareVolumeSampleAttributes = {
-  id: number;
-  drinkwareScaleId: number;
+  id: string;
+  drinkwareScaleId: string;
   fill: number;
   volume: number;
 };

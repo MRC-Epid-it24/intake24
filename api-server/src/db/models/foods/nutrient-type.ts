@@ -1,8 +1,11 @@
-import { BelongsTo, Column, Table } from 'sequelize-typescript';
-import { NutrientTypeAttributes } from '@common/types/models';
-import NutrientUnit from '@api-server/db/models/foods/nutrient-unit';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import { NutrientTypeAttributes, NutrientTypeCreationAttributes } from '@common/types/models';
+import { NutrientUnit } from '.';
 import BaseModel from '../model';
 
+@Scopes(() => ({
+  unit: { include: [{ model: NutrientUnit }] },
+}))
 @Table({
   modelName: 'NutrientType',
   tableName: 'nutrient_types',
@@ -15,20 +18,22 @@ export default class NutrientType
   implements NutrientTypeAttributes
 {
   @Column({
-    allowNull: false,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
-  })
-  public unitId!: number;
-
-  @Column({
-    allowNull: false,
+    type: DataType.STRING(512),
   })
   public description!: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.BIGINT,
+  })
+  public unitId!: string;
 
   @BelongsTo(() => NutrientUnit, 'unitId')
   public unit?: NutrientUnit;

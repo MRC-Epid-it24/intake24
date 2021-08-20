@@ -40,7 +40,7 @@ export type SurveyDataExportParams = {
   surveyId: string;
   startDate?: Date;
   endDate?: Date;
-  userId?: number;
+  userId?: string;
 };
 
 export type SurveyExportRespondentAuthUrlsParams = {

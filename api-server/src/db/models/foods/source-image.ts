@@ -23,13 +23,19 @@ export default class SourceImage
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(1024),
   })
   public path!: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(1024),
+  })
+  public thumbnailPath!: string;
 
   @Column({
     allowNull: false,
@@ -42,12 +48,6 @@ export default class SourceImage
     defaultValue: () => new Date(),
   })
   public uploadedAt!: Date;
-
-  @Column({
-    allowNull: false,
-    type: DataType.STRING(1024),
-  })
-  public thumbnailPath!: string;
 
   @HasMany(() => SourceImageKeyword, 'sourceImageId')
   public keywords?: SourceImageKeyword[];

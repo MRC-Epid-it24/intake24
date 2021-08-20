@@ -14,7 +14,7 @@ export type Tokens = {
 };
 
 export interface SignPayload {
-  userId: number;
+  userId: string;
 }
 
 export interface TokenPayload extends SignPayload {

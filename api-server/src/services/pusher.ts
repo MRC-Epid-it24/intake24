@@ -4,7 +4,7 @@ import { UserSubscription } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 
 export type SubscriptionInput = {
-  userId: number;
+  userId: string;
   type: SubscriptionType;
 };
 
@@ -90,14 +90,14 @@ export default class Pusher {
   /**
    * Push web notification
    *
-   * @param {number} userId
+   * @param {string} userId
    * @param {PushPayload} payload
    * @param {RequestOptions} [options]
    * @returns {Promise<SendResult[]>}
    * @memberof Pusher
    */
   public webPush(
-    userId: number,
+    userId: string,
     payload: PushPayload,
     options?: RequestOptions
   ): Promise<SendResult[]> {

@@ -49,7 +49,7 @@ export default ({
           id: object.id,
           imageMapId,
           description: object.description,
-          navigationIndex: object.id,
+          navigationIndex: parseInt(object.id, 10),
           outlineCoordinates: object.outlineCoordinates,
         });
 
@@ -68,7 +68,7 @@ export default ({
 
       await match.update({
         description: object.description,
-        navigationIndex: object.id,
+        navigationIndex: parseInt(object.id, 10),
         outlineCoordinates: object.outlineCoordinates,
       });
     }

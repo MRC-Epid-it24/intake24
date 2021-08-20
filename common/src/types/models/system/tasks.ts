@@ -2,7 +2,7 @@ import { JobParams, JobType } from '../../jobs';
 import type { OmitAndOptional } from '..';
 
 export type TaskAttributes = {
-  id: number;
+  id: string;
   name: string;
   job: JobType;
   cron: string;

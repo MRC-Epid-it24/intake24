@@ -11,9 +11,9 @@ export enum ProcessedImagePurposes {
 export type ProcessedImagePurpose = ProcessedImagePurposes;
 
 export type ProcessedImageAttributes = {
-  id: number;
+  id: string;
   path: string;
-  sourceId: number;
+  sourceId: string;
   purpose: ProcessedImagePurpose;
   createdAt: Date;
 };

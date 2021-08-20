@@ -42,18 +42,18 @@ export interface SurveyService {
   ) => Promise<UserSurveyAlias[]>;
   updateRespondent: (
     surveyId: string,
-    userId: number,
+    userId: string,
     input: UpdateRespondentInput
   ) => Promise<UserSurveyAlias>;
-  deleteRespondent: (surveyId: string, userId: string | number) => Promise<void>;
+  deleteRespondent: (surveyId: string, userId: string) => Promise<void>;
   generateRespondent: (surveyId: string) => Promise<RespondentWithPassword>;
-  importRespondents: (surveyId: string, userId: number, file: Express.Multer.File) => Promise<Job>;
-  exportAuthenticationUrls: (surveyId: string, userId: number) => Promise<Job>;
+  importRespondents: (surveyId: string, userId: string, file: Express.Multer.File) => Promise<Job>;
+  exportAuthenticationUrls: (surveyId: string, userId: string) => Promise<Job>;
   userInfo: (surveyId: string, user: User, tzOffset: number) => Promise<SurveyUserInfoResponse>;
-  getSession: (surveyId: string, userId: number) => Promise<UserSession>;
-  setSession: (surveyId: string, userId: number, sessionData: SurveyState) => Promise<UserSession>;
-  submit: (surveyId: string, userId: number, input: SurveyState) => Promise<SurveyFollowUpResponse>;
-  followUp: (surveyId: string, userId: number) => Promise<SurveyFollowUpResponse>;
+  getSession: (surveyId: string, userId: string) => Promise<UserSession>;
+  setSession: (surveyId: string, userId: string, sessionData: SurveyState) => Promise<UserSession>;
+  submit: (surveyId: string, userId: string, input: SurveyState) => Promise<SurveyFollowUpResponse>;
+  followUp: (surveyId: string, userId: string) => Promise<SurveyFollowUpResponse>;
 }
 
 export default ({
@@ -191,13 +191,13 @@ export default ({
    * Update respondent record
    *
    * @param {string} surveyId
-   * @param {number} userId
+   * @param {string} userId
    * @param {UpdateRespondentInput} input
    * @returns {Promise<UserSurveyAlias>}
    */
   const updateRespondent = async (
     surveyId: string,
-    userId: number,
+    userId: string,
     input: UpdateRespondentInput
   ): Promise<UserSurveyAlias> => {
     const survey = await Survey.findByPk(surveyId);
@@ -282,13 +282,13 @@ export default ({
    * - temporarily stores CSV file
    *
    * @param {string} surveyId
-   * @param {number} userId
+   * @param {string} userId
    * @param {Express.Multer.File} file
    * @returns {Promise<Job>}
    */
   const importRespondents = async (
     surveyId: string,
-    userId: number,
+    userId: string,
     file: Express.Multer.File
   ): Promise<Job> => {
     const survey = await Survey.findByPk(surveyId);
@@ -305,10 +305,10 @@ export default ({
    * - runs as a job and creates downloadable file
    *
    * @param {string} surveyId
-   * @param {number} userId
+   * @param {string} userId
    * @returns {Promise<Job>}
    */
-  const exportAuthenticationUrls = async (surveyId: string, userId: number): Promise<Job> => {
+  const exportAuthenticationUrls = async (surveyId: string, userId: string): Promise<Job> => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
@@ -363,10 +363,10 @@ export default ({
    * Get respondent's survey session / recall state
    *
    * @param {string} surveyId
-   * @param {number} userId
+   * @param {string} userId
    * @returns {Promise<UserSession>}
    */
-  const getSession = async (surveyId: string, userId: number): Promise<UserSession> => {
+  const getSession = async (surveyId: string, userId: string): Promise<UserSession> => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
@@ -382,13 +382,13 @@ export default ({
    * Save respondent's survey session / recall state
    *
    * @param {string} surveyId
-   * @param {number} userId
+   * @param {string} userId
    * @param {SurveyState} sessionData
    * @returns {Promise<UserSession>}
    */
   const setSession = async (
     surveyId: string,
-    userId: number,
+    userId: string,
     sessionData: SurveyState
   ): Promise<UserSession> => {
     const survey = await Survey.findByPk(surveyId);
@@ -408,10 +408,10 @@ export default ({
    * Resolve follow-up URL, if any
    *
    * @param {Survey} survey
-   * @param {number} userId
+   * @param {string} userId
    * @returns {(Promise<string | null>)}
    */
-  const getFollowUpUrl = async (survey: Survey, userId: number): Promise<string | null> => {
+  const getFollowUpUrl = async (survey: Survey, userId: string): Promise<string | null> => {
     const { id: surveyId, scheme } = survey;
     if (!scheme) throw new NotFoundError();
 
@@ -461,10 +461,10 @@ export default ({
    * Verify that user can be offered a feedback
    *
    * @param {Survey} survey
-   * @param {number} userId
+   * @param {string} userId
    * @returns {Promise<boolean>}
    */
-  const canShowFeedback = async (survey: Survey, userId: number): Promise<boolean> => {
+  const canShowFeedback = async (survey: Survey, userId: string): Promise<boolean> => {
     const { feedbackEnabled, numberOfSubmissionsForFeedback } = survey;
     if (!feedbackEnabled) return false;
 
@@ -479,13 +479,13 @@ export default ({
    * Submit survey recall
    *
    * @param {string} surveyId
-   * @param {number} userId
+   * @param {string} userId
    * @param {RecallState} input
    * @returns {Promise<void>}
    */
   const submit = async (
     surveyId: string,
-    userId: number,
+    userId: string,
     input: SurveyState
   ): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.scope('scheme').findByPk(surveyId);
@@ -584,7 +584,7 @@ export default ({
     return { followUpUrl, showFeedback };
   };
 
-  const followUp = async (surveyId: string, userId: number): Promise<SurveyFollowUpResponse> => {
+  const followUp = async (surveyId: string, userId: string): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.scope('scheme').findByPk(surveyId);
     if (!survey || !survey.scheme) throw new NotFoundError();
 

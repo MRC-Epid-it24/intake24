@@ -8,7 +8,7 @@ import type { IoC } from '@/ioc';
 
 export interface SourceImageService {
   uploadSourceImage: (input: UploadSourceImageInput, type: SourceImageType) => Promise<SourceImage>;
-  destroy: (sourceImageId: number | number[]) => Promise<void>;
+  destroy: (sourceImageId: string | string[]) => Promise<void>;
 }
 
 export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): SourceImageService => {
@@ -47,7 +47,7 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): SourceI
     });
   };
 
-  const destroy = async (sourceImageId: number | number[]): Promise<void> => {
+  const destroy = async (sourceImageId: string | string[]): Promise<void> => {
     const sourceImages = await SourceImage.findAll({ where: { id: sourceImageId } });
 
     for (const sourceImage of sourceImages) {

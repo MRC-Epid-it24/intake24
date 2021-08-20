@@ -67,7 +67,7 @@ export default class User
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: true,
@@ -95,18 +95,21 @@ export default class User
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
     defaultValue: false,
   })
   public multiFactorAuthentication!: boolean;
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
     defaultValue: true,
   })
   public emailNotifications!: boolean;
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
     defaultValue: true,
   })
   public smsNotifications!: boolean;

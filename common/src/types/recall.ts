@@ -1,5 +1,5 @@
 import type { Dictionary } from '.';
-import type { PromptQuestion, QuantityValues } from '../prompts';
+import type { QuantityValues } from '../prompts';
 import { UserFoodData } from './http';
 import { PortionSizeMethodId } from './models';
 

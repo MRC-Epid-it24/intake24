@@ -1,5 +1,5 @@
 export type UserSurveyAliasAttributes = {
-  userId: number;
+  userId: string;
   surveyId: string;
   userName: string;
   urlAuthToken: string;

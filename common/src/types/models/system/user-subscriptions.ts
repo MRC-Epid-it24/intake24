@@ -12,8 +12,8 @@ export type PushSubscription = {
 };
 
 export type UserSubscriptionAttributes = {
-  id: number;
-  userId: number;
+  id: string;
+  userId: string;
   type: SubscriptionType;
   subscription: PushSubscription;
   createdAt: Date;

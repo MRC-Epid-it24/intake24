@@ -11,7 +11,7 @@ export default validate(
         options: async (value): Promise<void> => {
           if (
             !Array.isArray(value) ||
-            value.some(({ id, weight }) => typeof id !== 'number' || typeof weight !== 'number')
+            value.some(({ id, weight }) => typeof id !== 'string' || typeof weight !== 'number')
           )
             throw new Error('Please enter a list of as served image IDs and weights.');
         },

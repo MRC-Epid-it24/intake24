@@ -8,7 +8,6 @@ export default (param: string): ValidationMiddleware[] => {
         in: ['params'],
         errorMessage: `Invalid :${param} URL parameter.`,
         isInt: true,
-        toInt: true,
       },
     })
   );

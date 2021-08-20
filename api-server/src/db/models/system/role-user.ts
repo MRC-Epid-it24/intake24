@@ -17,13 +17,13 @@ export default class RoleUser
   @Column({
     type: DataType.BIGINT,
   })
-  public roleId!: number;
+  public roleId!: string;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.BIGINT,
   })
-  public userId!: number;
+  public userId!: string;
 
   @CreatedAt
   @Column

@@ -26,6 +26,7 @@ export default class GenUserCounter
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
     defaultValue: 0,
   })
   public count!: number;

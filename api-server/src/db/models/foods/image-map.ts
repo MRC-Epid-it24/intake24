@@ -15,7 +15,7 @@ import { GuideImage, ImageMapObject, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ImageMap extends BaseModel implements ImageMapAttributes {
+export default class ImageMap extends BaseModel<ImageMapAttributes> implements ImageMapAttributes {
   @Column({
     allowNull: false,
     primaryKey: true,
@@ -31,8 +31,9 @@ export default class ImageMap extends BaseModel implements ImageMapAttributes {
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public baseImageId!: number;
+  public baseImageId!: string;
 
   @BelongsTo(() => ProcessedImage, 'baseImageId')
   public baseImage?: ProcessedImage;

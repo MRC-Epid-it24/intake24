@@ -14,18 +14,18 @@ export type DestroyOptions = { includeSources?: boolean };
 export interface ProcessedImageService {
   createAsServedImages: (
     id: string,
-    sourceImage: SourceImage | number
+    sourceImage: SourceImage | string
   ) => Promise<[ProcessedImage, ProcessedImage]>;
   createImageMapBaseImage: (
     id: string,
-    sourceImage: SourceImage | number
+    sourceImage: SourceImage | string
   ) => Promise<ProcessedImage>;
   createSelectionImage: (
     id: string,
-    sourceImage: SourceImage | number,
+    sourceImage: SourceImage | string,
     type: SelectionImageType
   ) => Promise<ProcessedImage>;
-  destroy: (imageId: number, options?: DestroyOptions) => Promise<void>;
+  destroy: (imageId: string, options?: DestroyOptions) => Promise<void>;
 }
 
 export default ({
@@ -35,7 +35,7 @@ export default ({
 }: Pick<IoC, 'fsConfig' | 'logger' | 'sourceImageService'>): ProcessedImageService => {
   const { images: imagesPath } = fsConfig.local;
 
-  const resolveSourceImage = async (sourceImageId: number): Promise<SourceImage> => {
+  const resolveSourceImage = async (sourceImageId: string): Promise<SourceImage> => {
     const sourceImage = await SourceImage.findByPk(sourceImageId);
     if (!sourceImage) {
       logger.warn(
@@ -56,10 +56,10 @@ export default ({
 
   const createAsServedImages = async (
     id: string,
-    sourceImage: SourceImage | number
+    sourceImage: SourceImage | string
   ): Promise<[ProcessedImage, ProcessedImage]> => {
     const image =
-      typeof sourceImage === 'number' ? await resolveSourceImage(sourceImage) : sourceImage;
+      typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${uuid.v4()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('as_served', id);
@@ -101,10 +101,10 @@ export default ({
 
   const createImageMapBaseImage = async (
     id: string,
-    sourceImage: SourceImage | number
+    sourceImage: SourceImage | string
   ): Promise<ProcessedImage> => {
     const image =
-      typeof sourceImage === 'number' ? await resolveSourceImage(sourceImage) : sourceImage;
+      typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${uuid.v4()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('image_maps', id);
@@ -126,11 +126,11 @@ export default ({
 
   const createSelectionImage = async (
     id: string,
-    sourceImage: SourceImage | number,
+    sourceImage: SourceImage | string,
     type: SelectionImageType
   ): Promise<ProcessedImage> => {
     const image =
-      typeof sourceImage === 'number' ? await resolveSourceImage(sourceImage) : sourceImage;
+      typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${uuid.v4()}${path.extname(image.path)}`;
     const fileDir = path.posix.join(type, id, 'selection');
@@ -150,7 +150,7 @@ export default ({
     });
   };
 
-  const destroy = async (imageId: number, options: DestroyOptions = {}): Promise<void> => {
+  const destroy = async (imageId: string, options: DestroyOptions = {}): Promise<void> => {
     const processedImage = await ProcessedImage.findByPk(imageId);
     if (!processedImage) {
       logger.warn(`ProcessedImageService|destroy: processed image not found. (ID: ${imageId})`);

@@ -18,7 +18,7 @@ export default class SchemeQuestion
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
