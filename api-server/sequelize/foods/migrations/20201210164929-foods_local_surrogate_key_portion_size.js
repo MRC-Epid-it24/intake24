@@ -51,7 +51,7 @@ module.exports = {
       );
 
       await queryInterface.addIndex('food_portion_size_methods', ['food_local_id'], {
-        indexName: 'food_portion_size_methods_food_local_id_idx',
+        name: 'food_portion_size_methods_food_local_id_idx',
         indexType: 'btree',
         transaction,
       });

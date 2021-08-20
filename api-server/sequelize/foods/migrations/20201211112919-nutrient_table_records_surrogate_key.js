@@ -40,13 +40,13 @@ module.exports = {
       );
 
       await queryInterface.addIndex('nutrient_table_records', ['nutrient_table_id'], {
-        indexName: 'nutrient_table_records_nutrient_table_id_idx',
+        name: 'nutrient_table_records_nutrient_table_id_idx',
         indexType: 'btree',
         transaction,
       });
 
       await queryInterface.addIndex('nutrient_table_records', ['nutrient_table_record_id'], {
-        indexName: 'nutrient_table_records_nutrient_nutrient_table_record_id_idx',
+        name: 'nutrient_table_records_nutrient_nutrient_table_record_id_idx',
         indexType: 'btree',
         transaction,
       });

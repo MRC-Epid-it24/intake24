@@ -30,13 +30,13 @@ module.exports = {
       );
 
       await queryInterface.addIndex('food_locals', ['food_code'], {
-        indexName: 'food_locals_food_code_idx',
+        name: 'food_locals_food_code_idx',
         indexType: 'btree',
         transaction,
       });
 
       await queryInterface.addIndex('food_locals', ['locale_id'], {
-        indexName: 'food_locals_locale_id_idx',
+        name: 'food_locals_locale_id_idx',
         indexType: 'btree',
         transaction,
       });
