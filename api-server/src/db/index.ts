@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Database, DatabaseConfig, Environment } from '@api-server/config';
-import { Logger } from 'winston';
+import { Database } from '@api-server/config';
 import * as foods from './models/foods';
 import * as system from './models/system';
+import type { IoC } from '@/ioc';
 
 const models = {
   foods: Object.values(foods),
@@ -16,26 +16,30 @@ export interface DbInterface extends BaseDbInterface {
 }
 
 export default class DB implements DbInterface {
-  private readonly config: DatabaseConfig;
+  private readonly config;
 
-  private readonly env: Environment;
+  private readonly env;
 
-  private readonly logger: Logger;
+  private readonly logger;
 
   public foods!: Sequelize;
 
   public system!: Sequelize;
 
-  constructor(opts: { environment: Environment; databaseConfig: DatabaseConfig; logger: Logger }) {
-    this.env = opts.environment;
-    this.config = opts.databaseConfig;
-    this.logger = opts.logger;
+  constructor({
+    environment,
+    databaseConfig,
+    logger,
+  }: Pick<IoC, 'environment' | 'databaseConfig' | 'logger'>) {
+    this.env = environment;
+    this.config = databaseConfig;
+    this.logger = logger;
   }
 
   async init(): Promise<void> {
     const isDev = this.env === 'development';
 
-    (Object.keys(this.config[this.env]) as Database[]).forEach((database) => {
+    for (const database of Object.keys(this.config[this.env]) as Database[]) {
       const dbConf = this.config[this.env][database];
 
       this[database] = new Sequelize({
@@ -47,12 +51,9 @@ export default class DB implements DbInterface {
             }
           : false,
       });
-    });
 
-    // Force sync for TEST environment
-    if (this.env === 'test') {
-      await this.foods.sync({ force: true });
-      await this.system.sync({ force: true });
+      // Force sync for TEST environment
+      if (this.env === 'test') await this[database].sync({ force: true });
     }
   }
 }
