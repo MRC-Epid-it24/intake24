@@ -38,7 +38,8 @@ export interface UpdateUserRequest extends UpdateUserInput {
 
 export type UsersResponse = Pagination<UserAttributes>;
 
-export type UserEntry = UserAttributes & Required<UserAssociations>;
+export type UserEntry = UserAttributes &
+  Required<Pick<UserAssociations, 'aliases' | 'customFields' | 'permissions' | 'roles'>>;
 
 export type UserListEntry = Pick<UserAttributes, 'id' | 'name' | 'email'>;
 

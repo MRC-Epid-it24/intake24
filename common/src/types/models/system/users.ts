@@ -1,5 +1,19 @@
 import type { OmitAndOptional } from '..';
-import type { PermissionAttributes, RoleAttributes, UserSurveyAliasAttributes } from '.';
+import type {
+  ClientErrorReportAttributes,
+  JobAttributes,
+  PermissionAttributes,
+  RefreshTokenAttributes,
+  RoleAttributes,
+  SignInLogAttributes,
+  SurveySubmissionAttributes,
+  UserPasswordAttributes,
+  UserPasswordResetAttributes,
+  UserPhysicalDataAttributes,
+  UserSessionAttributes,
+  UserSubscriptionAttributes,
+  UserSurveyAliasAttributes,
+} from '.';
 
 export type UserAttributes = {
   id: string;
@@ -37,7 +51,17 @@ export type UserCustomFieldCreationAttributes = Omit<UserCustomFieldAttributes, 
 
 export type UserAssociations = {
   aliases?: UserSurveyAliasAttributes[];
+  clientErrors?: ClientErrorReportAttributes[];
   customFields?: UserCustomFieldAttributes[];
+  jobs?: JobAttributes[];
+  password?: UserPasswordAttributes;
+  passwordResets?: UserPasswordResetAttributes[];
   permissions?: PermissionAttributes[];
+  physicalData?: UserPhysicalDataAttributes;
   roles?: RoleAttributes[];
+  sessions?: UserSessionAttributes[];
+  signInLog?: SignInLogAttributes[];
+  submissions?: SurveySubmissionAttributes[];
+  subscription?: UserSubscriptionAttributes[];
+  tokens?: RefreshTokenAttributes[];
 };

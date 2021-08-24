@@ -25,6 +25,7 @@ import {
   UserCustomField,
   UserPassword,
   UserPasswordReset,
+  UserPhysicalData,
   UserSession,
   UserSubscription,
   UserSurveyAlias,
@@ -142,6 +143,9 @@ export default class User
 
   @BelongsToMany(() => Permission, () => PermissionUser)
   public permissions?: Permission[];
+
+  @HasOne(() => UserPhysicalData)
+  public physicalData?: UserPhysicalData;
 
   @BelongsToMany(() => Role, () => RoleUser)
   public roles?: Role[];
