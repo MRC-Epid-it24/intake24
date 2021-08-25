@@ -6,17 +6,22 @@
         {{ $t('schemes.meals.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        fab
-        small
-        class="mr-3"
-        color="secondary"
-        :title="$t('schemes.meals.create')"
-        @click.stop="add"
-      >
+      <v-btn fab small color="secondary" :title="$t('schemes.meals.create')" @click.stop="add">
         <v-icon small>fa-plus</v-icon>
       </v-btn>
-      <v-btn fab small color="error" :title="$t('schemes.meals.reset')" @click.stop="resetMealList">
+      <load-section-dialog
+        :schemeId="$route.params.id"
+        section="meals"
+        @load="loadFromScheme"
+      ></load-section-dialog>
+      <v-btn
+        class="ml-3"
+        color="error"
+        fab
+        small
+        :title="$t('schemes.meals.reset')"
+        @click.stop="resetMealList"
+      >
         <v-icon small>fa-sync</v-icon>
       </v-btn>
     </v-toolbar>
@@ -105,8 +110,9 @@
 import clone from 'lodash/cloneDeep';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { FormRefs, Meal } from '@common/types';
+import { FormRefs, Meal, Meals } from '@common/types';
 import LanguageSelector from '@/components/prompts/partials/LanguageSelector.vue';
+import LoadSectionDialog from './load-section-dialog.vue';
 
 export type MealDialog = { show: boolean; index: number; meal: Meal };
 
@@ -122,7 +128,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
   },
 
-  components: { draggable, LanguageSelector },
+  components: { draggable, LanguageSelector, LoadSectionDialog },
 
   data() {
     const dialog = (show = false): MealDialog => ({
@@ -187,6 +193,10 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     reset() {
       this.dialog = this.newDialog();
       this.$refs.form.resetValidation();
+    },
+
+    loadFromScheme(meals: Meals) {
+      this.meals = [...meals];
     },
 
     resetMealList() {

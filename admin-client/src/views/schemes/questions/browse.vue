@@ -1,5 +1,16 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+    <v-toolbar flat tile color="grey lighten-5" bottom>
+      <v-toolbar-title class="font-weight-medium">
+        {{ $t(`schemes.data-export.sections._`) }}
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <load-section-dialog
+        :schemeId="id"
+        section="questions"
+        @load="loadFromScheme"
+      ></load-section-dialog>
+    </v-toolbar>
     <v-container>
       <v-item-group v-model="section" mandatory active-class="secondary">
         <v-row>
@@ -60,6 +71,7 @@ import {
   surveySections,
   SurveyQuestionSection,
   MealSection,
+  RecallQuestions,
 } from '@common/schemes';
 import { PromptQuestion } from '@common/prompts';
 import { Dictionary } from '@common/types';
@@ -68,11 +80,12 @@ import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
 import { SchemeForm } from '../form.vue';
 import QuestionList, { PromptQuestionMoveEvent } from './question-list.vue';
+import LoadSectionDialog from '../load-section-dialog.vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeQuestions',
 
-  components: { QuestionList },
+  components: { LoadSectionDialog, QuestionList },
 
   mixins: [formMixin],
 
@@ -142,6 +155,10 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       }
 
       this.form.questions[section].push(question);
+    },
+
+    loadFromScheme(questions: RecallQuestions) {
+      this.form.questions = { ...questions };
     },
   },
 });

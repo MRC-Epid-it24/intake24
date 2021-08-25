@@ -12,6 +12,12 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`schemes.data-export.sections._`) }}
       </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <load-section-dialog
+        :schemeId="id"
+        section="export"
+        @load="loadFromScheme"
+      ></load-section-dialog>
     </v-toolbar>
     <data-export-section
       :section="section"
@@ -59,12 +65,13 @@ import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
 import DataExportSection from './data-export-section.vue';
+import LoadSectionDialog from '../load-section-dialog.vue';
 import { SchemeForm } from '../form.vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeDataExport',
 
-  components: { draggable, DataExportSection },
+  components: { draggable, DataExportSection, LoadSectionDialog },
 
   mixins: [formMixin],
 
@@ -125,13 +132,9 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       this.section = null;
     },
 
-    /*
-     * formMixin override
-     */
-    /* toForm(data: AnyDictionary) {
-      const { questions, ...rest } = data;
-      this.form.load({ ...rest, questions: { ...defaultQuestions, ...questions } });
-    }, */
+    loadFromScheme(exportSections: ExportSection[]) {
+      this.form.export = [...exportSections];
+    },
   },
 });
 </script>

@@ -5,17 +5,18 @@
         <v-btn
           v-bind="attrs"
           v-on="on"
+          class="ml-3"
           color="secondary"
           fab
           small
-          :title="$t('schemes.questions.templates.add')"
+          :title="$t('schemes.load')"
         >
           <v-icon>fa-download</v-icon>
         </v-btn>
       </slot>
     </template>
     <v-card :loading="loading">
-      <v-card-title>{{ $t('schemes.questions.templates.title') }}</v-card-title>
+      <v-card-title>{{ $t('schemes.load') }}</v-card-title>
       <v-card-text class="pa-6">
         <v-text-field
           v-model="search"
@@ -31,38 +32,29 @@
           @keyup.enter="fetch"
         >
         </v-text-field>
-        <v-alert v-if="questionAlreadyExists" text type="error">
-          {{
-            $t('schemes.questions.templates.alreadyExists', {
-              questionId: selectedQuestion.questionId,
-            })
-          }}
-        </v-alert>
-        <v-list v-if="templates.length" two-line>
+        <v-list v-if="schemes.length" min-height="350px" two-line>
           <v-list-item-group v-model="selectedId">
-            <template v-for="(template, idx) in templates">
-              <v-list-item :key="template.id" :value="template.id">
+            <template v-for="(scheme, idx) in schemes">
+              <v-list-item :key="scheme.id" :value="scheme.id">
                 <template v-slot:default="{ active }">
                   <v-list-item-action>
                     <v-checkbox :input-value="active"></v-checkbox>
                   </v-list-item-action>
                   <v-list-item-avatar>
-                    <v-icon>fa-question-circle</v-icon>
+                    <v-icon>fa-route</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
-                    <v-list-item-title>{{ template.name }}</v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{ `ID: ${template.id} | Type: ${template.component}` }}
-                    </v-list-item-subtitle>
+                    <v-list-item-title>{{ scheme.id }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ scheme.name }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </template>
               </v-list-item>
-              <v-divider v-if="idx + 1 < templates.length" :key="`div-${template.id}`"></v-divider>
+              <v-divider v-if="idx + 1 < schemes.length" :key="`div-${scheme.id}`"></v-divider>
             </template>
           </v-list-item-group>
         </v-list>
         <v-alert v-else color="primary" text type="info">
-          {{ $t('schemes.questions.templates.none') }}
+          {{ $t('schemes.none') }}
         </v-alert>
       </v-card-text>
       <v-card-actions>
@@ -73,7 +65,7 @@
         <v-btn
           class="font-weight-bold"
           color="blue darken-3"
-          :disabled="!selectedId || questionAlreadyExists"
+          :disabled="!selectedId"
           text
           @click.stop="confirm"
         >
@@ -85,22 +77,29 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import clone from 'lodash/cloneDeep';
-import { SchemeQuestionTemplatesResponse } from '@common/types/http/admin';
-import { PromptQuestion } from '@common/prompts';
+import debounce from 'lodash/debounce';
+import { SchemeEntry, SchemesResponse } from '@common/types/http/admin';
+import { RecallQuestions } from '@common/schemes';
+import { Meal } from '@common/types';
+import { ExportSection } from '@common/types/models';
 
-export default Vue.extend({
-  name: 'TemplateDialog',
+type LoadSectionDialog = {
+  debouncedFetch: () => void;
+};
+
+export default (Vue as VueConstructor<Vue & LoadSectionDialog>).extend({
+  name: 'LoadSectionDialog',
 
   props: {
     schemeId: {
       type: String,
       required: true,
     },
-    questionIds: {
-      type: Array as () => string[],
-      default: () => [],
+    section: {
+      type: String as () => 'export' | 'meals' | 'questions',
+      required: true,
     },
   },
 
@@ -109,28 +108,34 @@ export default Vue.extend({
       dialog: false,
       loading: false,
       search: null as string | null,
-      templates: [] as PromptQuestion[],
+      schemes: [] as SchemeEntry[],
       selectedId: undefined as string | undefined,
     };
   },
 
   computed: {
-    selectedQuestion(): PromptQuestion | undefined {
+    selectedSection(): RecallQuestions | Meal[] | ExportSection[] | undefined {
       const { selectedId } = this;
       if (!selectedId) return undefined;
 
-      return this.templates.find((template) => template.id === selectedId);
-    },
-    questionAlreadyExists(): boolean {
-      const match = this.questionIds.find((id) => id === this.selectedQuestion?.id);
-      return !!match;
+      const scheme = this.schemes.find((item) => item.id === selectedId);
+      return scheme ? scheme[this.section] : undefined;
     },
   },
 
   watch: {
     async dialog(val) {
-      if (val && !this.templates.length) await this.fetch();
+      if (val && !this.schemes.length) await this.fetch();
     },
+    search() {
+      this.debouncedFetch();
+    },
+  },
+
+  created() {
+    this.debouncedFetch = debounce(() => {
+      this.fetch();
+    }, 500);
   },
 
   methods: {
@@ -143,10 +148,10 @@ export default Vue.extend({
     },
 
     confirm() {
-      if (!this.selectedQuestion) return;
+      if (!this.selectedSection) return;
 
       this.close();
-      this.$emit('insert', clone(this.selectedQuestion));
+      this.$emit('load', clone(this.selectedSection));
     },
 
     async fetch() {
@@ -155,12 +160,11 @@ export default Vue.extend({
       try {
         const {
           data: { data },
-        } = await this.$http.get<SchemeQuestionTemplatesResponse>(
-          `admin/schemes/${this.schemeId}/templates`,
-          { params: { search: this.search, limit: 5 } }
-        );
+        } = await this.$http.get<SchemesResponse>(`admin/schemes`, {
+          params: { search: this.search, limit: 10 },
+        });
 
-        this.templates = data;
+        this.schemes = data.filter((item) => item.id !== this.schemeId).slice(0, 5);
       } finally {
         this.loading = false;
       }

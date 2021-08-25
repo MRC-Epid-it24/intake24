@@ -8,6 +8,7 @@ const schemes: LocaleMessageObject = {
   create: 'Add scheme',
   edit: 'Edit scheme',
   delete: 'Delete scheme',
+  none: 'No scheme found',
 
   id: 'Scheme ID',
   name: 'Name',
@@ -18,6 +19,7 @@ const schemes: LocaleMessageObject = {
     id: 'New scheme ID',
     name: 'New scheme name',
   },
+  load: 'Load from scheme',
   types: {
     _: 'Type',
     legacy: 'Legacy survey scheme',

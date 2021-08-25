@@ -16,11 +16,11 @@
       >
         <v-icon small>fa-plus</v-icon>
       </v-btn>
-      <template-dialog
+      <load-template-dialog
         :schemeId="$route.params.id"
         :questionIds="questionIds"
-        @insert="insertFromTemplate"
-      ></template-dialog>
+        @load="loadFromTemplate"
+      ></load-template-dialog>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="questions" @end="update">
@@ -53,7 +53,7 @@ import { SchemeQuestionEntry } from '@common/types/http/admin';
 import PromptSelector from '@/components/prompts/PromptSelector.vue';
 import { promptSettings } from '@/components/prompts';
 import QuestionListItem from './question-list-item.vue';
-import TemplateDialog from './template-dialog.vue';
+import LoadTemplateDialog from './load-template-dialog.vue';
 
 export type Refs = {
   $refs: {
@@ -96,7 +96,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
   components: {
     PromptSelector,
     QuestionListItem,
-    TemplateDialog,
+    LoadTemplateDialog,
     draggable,
   },
 
@@ -118,7 +118,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       this.$refs.selector.create();
     },
 
-    insertFromTemplate(question: PromptQuestion) {
+    loadFromTemplate(question: PromptQuestion) {
       this.questions.push(question);
     },
 
