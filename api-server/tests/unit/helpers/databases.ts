@@ -26,8 +26,8 @@ export async function initDatabases(): Promise<DbInterface> {
 
 export async function releaseDatabases(): Promise<void> {
   // Clean up the tables created by Sequelize to leave the database in the original blank state
-  await databases.system.drop();
-  await databases.foods.drop();
+  await databases.system.drop({ cascade: true });
+  await databases.foods.drop({ cascade: true });
 
   // Close database connections to let jest test runner detect termination correctly
   await databases.system.close();
