@@ -1,8 +1,17 @@
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  BelongsToMany,
+  Column,
+  DataType,
+  HasMany,
+  Scopes,
+  Table,
+} from 'sequelize-typescript';
 import { FoodLocalAttributes, FoodLocalCreationAttributes } from '@common/types/models';
 import NutrientMapping from '@api-server/db/models/foods/nutrient-mapping';
 import { Food, FoodLocalList, Locale, PortionSizeMethod } from '@api-server/db/models/foods';
 import BaseModel from '../model';
+import NutrientTableRecord from './nutrient-table-record';
 
 @Scopes(() => ({
   food: { include: [{ model: Food }] },
@@ -68,4 +77,7 @@ export default class FoodLocal
 
   @HasMany(() => NutrientMapping, 'foodLocalId')
   public nutrientMappings?: NutrientMapping[];
+
+  @BelongsToMany(() => NutrientTableRecord, () => NutrientMapping)
+  public nutrients?: NutrientTableRecord[];
 }

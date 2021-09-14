@@ -1,6 +1,9 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import NutrientTableRecord from '@api-server/db/models/foods/nutrient-table-record';
-import NutrientType from '@api-server/db/models/foods/nutrient-type';
+import { NutrientTableRecord, NutrientType } from '@api-server/db/models/foods';
+import {
+  NutrientTableRecordNutrientAttributes,
+  NutrientTableRecordNutrientCreationAttributes,
+} from '@common/types/models';
 import BaseModel from '../model';
 
 @Table({
@@ -10,7 +13,10 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientTableRecordNutrient extends BaseModel {
+export default class NutrientTableRecordNutrient extends BaseModel<
+  NutrientTableRecordNutrientAttributes,
+  NutrientTableRecordNutrientCreationAttributes
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -33,6 +39,7 @@ export default class NutrientTableRecordNutrient extends BaseModel {
   @Column({
     allowNull: false,
     field: 'units_per_100g',
+    type: DataType.DOUBLE,
   })
   public unitsPer100g!: number;
 

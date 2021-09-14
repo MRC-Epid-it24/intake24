@@ -1,10 +1,11 @@
-import { Column, HasMany, HasOne, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, HasOne, Table } from 'sequelize-typescript';
 import NutrientTableRecord from '@api-server/db/models/foods/nutrient-table-record';
+import { NutrientTableAttributes, NutrientTableCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import {
   NutrientTableCsvMapping,
-  NutrientTableCsvMappingFieldColumn,
-  NutrientTableCsvMappingNutrientColumn,
+  NutrientTableCsvMappingField,
+  NutrientTableCsvMappingNutrient,
 } from '.';
 
 @Table({
@@ -14,15 +15,20 @@ import {
   timestamps: false,
   underscored: true,
 })
-export default class NutrientTable extends BaseModel {
+export default class NutrientTable extends BaseModel<
+  NutrientTableAttributes,
+  NutrientTableCreationAttributes
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
+    type: DataType.STRING(32),
   })
   public id!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public description!: string;
 
@@ -32,9 +38,9 @@ export default class NutrientTable extends BaseModel {
   @HasOne(() => NutrientTableCsvMapping, 'nutrientTableId')
   csvMapping?: NutrientTableCsvMapping;
 
-  @HasMany(() => NutrientTableCsvMappingFieldColumn, 'nutrientTableId')
-  csvMappingFields?: NutrientTableCsvMappingFieldColumn[];
+  @HasMany(() => NutrientTableCsvMappingField, 'nutrientTableId')
+  csvMappingFields?: NutrientTableCsvMappingField[];
 
-  @HasMany(() => NutrientTableCsvMappingNutrientColumn, 'nutrientTableId')
-  csvMappingNutrients?: NutrientTableCsvMappingFieldColumn[];
+  @HasMany(() => NutrientTableCsvMappingNutrient, 'nutrientTableId')
+  csvMappingNutrients?: NutrientTableCsvMappingNutrient[];
 }

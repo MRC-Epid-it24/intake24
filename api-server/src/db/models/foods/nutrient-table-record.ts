@@ -1,8 +1,16 @@
-import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
-import NutrientTable from '@api-server/db/models/foods/nutrient-table';
-import NutrientTableRecordNutrient from '@api-server/db/models/foods/nutrient-table-record-nutrient';
-import { NutrientMapping, NutrientTableRecordField } from '@api-server/db/models/foods/index';
+import { BelongsTo, BelongsToMany, Column, DataType, HasMany, Table } from 'sequelize-typescript';
+import {
+  NutrientMapping,
+  NutrientTable,
+  NutrientTableRecordField,
+  NutrientTableRecordNutrient,
+} from '@api-server/db/models/foods';
+import {
+  NutrientTableRecordAttributes,
+  NutrientTableRecordCreationAttributes,
+} from '@common/types/models';
 import BaseModel from '../model';
+import FoodLocal from './food-local';
 
 @Table({
   modelName: 'NutrientTableRecord',
@@ -11,7 +19,10 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientTableRecord extends BaseModel {
+export default class NutrientTableRecord extends BaseModel<
+  NutrientTableRecordAttributes,
+  NutrientTableRecordCreationAttributes
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -21,25 +32,25 @@ export default class NutrientTableRecord extends BaseModel {
 
   @Column({
     allowNull: false,
-    type: DataType.STRING,
+    type: DataType.STRING(32),
   })
   public nutrientTableId!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING,
+    type: DataType.STRING(32),
   })
   public nutrientTableRecordId!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public name!: string;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING,
+    type: DataType.STRING(512),
   })
   public localName!: string | null;
 
@@ -54,6 +65,9 @@ export default class NutrientTableRecord extends BaseModel {
 
   @HasMany(() => NutrientTableRecordField, 'nutrientTableRecordId')
   public fields?: NutrientTableRecordField[];
+
+  @BelongsToMany(() => FoodLocal, () => NutrientMapping)
+  public foods?: FoodLocal[];
 
   getNutrientByType(nutrientTypeId: string): NutrientTableRecordNutrient | undefined {
     return this.nutrients?.find((nutrient) => nutrient.nutrientTypeId === nutrientTypeId);

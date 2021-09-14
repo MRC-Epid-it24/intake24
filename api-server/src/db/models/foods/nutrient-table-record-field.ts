@@ -1,5 +1,9 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import NutrientTableRecord from '@api-server/db/models/foods/nutrient-table-record';
+import { NutrientTableRecord } from '@api-server/db/models/foods';
+import {
+  NutrientTableRecordFieldAttributes,
+  NutrientTableRecordFieldCreationAttributes,
+} from '@common/types/models';
 import BaseModel from '../model';
 
 @Table({
@@ -9,7 +13,10 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientTableRecordField extends BaseModel {
+export default class NutrientTableRecordField extends BaseModel<
+  NutrientTableRecordFieldAttributes,
+  NutrientTableRecordFieldCreationAttributes
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -25,11 +32,13 @@ export default class NutrientTableRecordField extends BaseModel {
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(32),
   })
   public name!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(512),
   })
   public value!: string;
 

@@ -29,14 +29,15 @@ export default async (foodDatabase: Sequelize) => {
       description: 'Test nutrient table',
       records: [
         {
-          id: 1,
           nutrientTableRecordId: 'TN1',
           name: 'Food A',
           localName: 'Food A',
-          nutrients: {
-            nutrientTypeId: 1,
-            unitsPer100g: 100,
-          },
+          nutrients: [
+            {
+              nutrientTypeId: '1',
+              unitsPer100g: 100,
+            },
+          ],
         },
       ],
     },

@@ -1,3 +1,4 @@
+import { NutrientTableCsvMappingAttributes } from '@common/types/models';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import { NutrientTable } from '.';
 import BaseModel from '../model';
@@ -9,15 +10,17 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientTableCsvMapping extends BaseModel {
+export default class NutrientTableCsvMapping extends BaseModel<NutrientTableCsvMappingAttributes> {
   @Column({
     allowNull: false,
     primaryKey: true,
+    type: DataType.STRING(32),
   })
   public nutrientTableId!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public rowOffset!: number;
 
@@ -38,12 +41,6 @@ export default class NutrientTableCsvMapping extends BaseModel {
     type: DataType.INTEGER,
   })
   public localDescriptionColumnOffset!: number | null;
-
-  @Column({
-    allowNull: true,
-    type: DataType.STRING,
-  })
-  public localName!: string | null;
 
   @BelongsTo(() => NutrientTable, 'nutrientTableId')
   public nutrientTable?: NutrientTable;

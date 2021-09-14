@@ -1,4 +1,4 @@
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
 import { NutrientMappingAttributes, NutrientMappingCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { FoodLocal, NutrientTableRecord } from '.';
@@ -21,12 +21,14 @@ export default class NutrientMapping
   })
   public id!: string;
 
+  @ForeignKey(() => NutrientTableRecord)
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
   public nutrientTableRecordId!: string;
 
+  @ForeignKey(() => FoodLocal)
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
