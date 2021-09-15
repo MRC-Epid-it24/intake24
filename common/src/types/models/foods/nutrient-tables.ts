@@ -1,4 +1,13 @@
-import { NutrientTableRecordCreationAttributes } from './nutrient-table-records';
+import {
+  NutrientTableRecordCreationAttributes,
+  NutrientTableRecordAttributes,
+} from './nutrient-table-records';
+import {
+  NutrientTableCsvMappingAttributes,
+  NutrientTableCsvMappingCreationAttributes,
+  NutrientTableCsvMappingFieldAttributes,
+  NutrientTableCsvMappingNutrientAttributes,
+} from './nutrient-table-csv-mappings';
 
 export type NutrientTableAttributes = {
   id: string;
@@ -7,4 +16,12 @@ export type NutrientTableAttributes = {
 
 export interface NutrientTableCreationAttributes extends NutrientTableAttributes {
   records?: Omit<NutrientTableRecordCreationAttributes, 'nutrientTableId'>[];
+  csvMapping?: Omit<NutrientTableCsvMappingCreationAttributes, 'nutrientTableId'>;
 }
+
+export type NutrientTableAssociations = {
+  records?: NutrientTableRecordAttributes[];
+  csvMapping?: NutrientTableCsvMappingAttributes;
+  csvMappingFields?: NutrientTableCsvMappingFieldAttributes[];
+  csvMappingNutrients?: NutrientTableCsvMappingNutrientAttributes[];
+};
