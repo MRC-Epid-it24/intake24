@@ -37,7 +37,7 @@ export default class NutrientTableCsvMapping extends BaseModel<NutrientTableCsvM
   public descriptionColumnOffset!: number;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
     type: DataType.INTEGER,
   })
   public localDescriptionColumnOffset!: number | null;
