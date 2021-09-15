@@ -17,6 +17,11 @@ export type NutrientTableAttributes = {
 export interface NutrientTableCreationAttributes extends NutrientTableAttributes {
   records?: Omit<NutrientTableRecordCreationAttributes, 'nutrientTableId'>[];
   csvMapping?: Omit<NutrientTableCsvMappingCreationAttributes, 'nutrientTableId'>;
+  csvMappingFields?: Omit<NutrientTableCsvMappingFieldAttributes, 'id ' | 'nutrientTableId'>[];
+  csvMappingNutrients?: Omit<
+    NutrientTableCsvMappingNutrientAttributes,
+    'id ' | 'nutrientTableId'
+  >[];
 }
 
 export type NutrientTableAssociations = {

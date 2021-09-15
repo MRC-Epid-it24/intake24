@@ -4,6 +4,7 @@ export * from './image-maps';
 export * from './jobs';
 export * from './languages';
 export * from './locales';
+export * from './nutrient-tables';
 export * from './permissions';
 export * from './roles';
 export * from './schemes';
