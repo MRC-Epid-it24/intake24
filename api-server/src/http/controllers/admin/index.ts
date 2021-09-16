@@ -6,6 +6,7 @@ import user from './user';
 import job from './job.controller';
 import language from './language.controller';
 import locale from './locale.controller';
+import nutrientTable from './nutrient-table.controller';
 import scheme from './scheme.controller';
 import schemeQuestion from './scheme-question.controller';
 import signInLog from './sign-in-log.controller';
@@ -19,6 +20,7 @@ export * from './user';
 export * from './job.controller';
 export * from './language.controller';
 export * from './locale.controller';
+export * from './nutrient-table.controller';
 export * from './scheme.controller';
 export * from './scheme-question.controller';
 export * from './sign-in-log.controller';
@@ -33,6 +35,7 @@ export default {
   job,
   language,
   locale,
+  nutrientTable,
   scheme,
   schemeQuestion,
   signInLog,

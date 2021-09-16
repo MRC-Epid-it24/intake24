@@ -23,6 +23,7 @@ export default (container: AwilixContainer): void => {
     imageMapController: asFunction(controllers.admin.images.map),
     languageController: asFunction(controllers.admin.language),
     localeController: asFunction(controllers.admin.locale),
+    nutrientTableController: asFunction(controllers.admin.nutrientTable),
     schemeController: asFunction(controllers.admin.scheme),
     schemeQuestionController: asFunction(controllers.admin.schemeQuestion),
 

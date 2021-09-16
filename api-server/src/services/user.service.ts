@@ -102,7 +102,7 @@ export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
     const customFieldNames = customFields.map((field) => field.name);
     await UserCustomField.destroy({ where: { userId, name: { [Op.notIn]: customFieldNames } } });
 
-    if (!customFieldNames.length) return;
+    if (!customFields.length) return;
 
     for (const customField of customFields) {
       const { name, value } = customField;

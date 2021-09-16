@@ -19,8 +19,9 @@ import {
   imageMapService,
   processedImageService,
   sourceImageService,
-  portionSizeService,
+  nutrientTableService,
   foodDataService,
+  portionSizeService,
   surveyService,
   userService,
 } from '@/services';
@@ -40,8 +41,10 @@ export default (container: AwilixContainer): void => {
     imageMapService: asFunction(imageMapService),
     processedImageService: asFunction(processedImageService),
     sourceImageService: asFunction(sourceImageService),
-    portionSizeService: asFunction(portionSizeService),
+
     foodDataService: asFunction(foodDataService),
+    nutrientTableService: asFunction(nutrientTableService),
+    portionSizeService: asFunction(portionSizeService),
     surveyService: asFunction(surveyService),
     userService: asFunction(userService),
 

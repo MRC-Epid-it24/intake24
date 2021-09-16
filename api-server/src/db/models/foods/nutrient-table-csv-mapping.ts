@@ -42,6 +42,10 @@ export default class NutrientTableCsvMapping extends BaseModel<NutrientTableCsvM
   })
   public localDescriptionColumnOffset!: number | null;
 
-  @BelongsTo(() => NutrientTable, 'nutrientTableId')
+  @BelongsTo(() => NutrientTable, {
+    foreignKey: 'nutrientTableId',
+    onUpdate: 'cascade',
+    onDelete: 'cascade',
+  })
   public nutrientTable?: NutrientTable;
 }

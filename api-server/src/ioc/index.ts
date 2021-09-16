@@ -35,6 +35,7 @@ import type {
   JobController,
   LanguageController,
   LocaleController,
+  NutrientTableController,
   SchemeController,
   SchemeQuestionController,
   SignInLogController,
@@ -61,6 +62,7 @@ import type {
   ProcessedImageService,
   SourceImageService,
   FoodDataService,
+  NutrientTableService,
   DataExportFields,
   DataExportMapper,
   DataExportService,
@@ -121,6 +123,7 @@ export interface IoC extends Jobs {
   imageMapController: ImageMapController;
   languageController: LanguageController;
   localeController: LocaleController;
+  nutrientTableController: NutrientTableController;
   schemeController: SchemeController;
   schemeQuestionController: SchemeQuestionController;
   adminSurveyController: AdminSurveyController;
@@ -139,7 +142,7 @@ export interface IoC extends Jobs {
   roleController: RoleController;
   userController: UserController;
 
-  // Services
+  // System services
   db: DbInterface;
   cache: Cache;
   filesystem: Filesystem;
@@ -148,24 +151,31 @@ export interface IoC extends Jobs {
   pusher: Pusher;
   scheduler: Scheduler;
 
+  // Authentication
   authenticationService: AuthenticationService;
   aclService: ACLService;
   jwtService: JwtService;
   jwtRotationService: JwtRotationService;
   signInService: SignInService;
 
+  // Images
   asServedService: AsServedService;
   guideImageService: GuideImageService;
   imageMapService: ImageMapService;
   processedImageService: ProcessedImageService;
   sourceImageService: SourceImageService;
 
-  portionSizeService: PortionSizeService;
+  // Foods
   foodDataService: FoodDataService;
+  nutrientTableService: NutrientTableService;
+  portionSizeService: PortionSizeService;
+
+  // Surveys
   surveyService: SurveyService;
   dataExportFields: DataExportFields;
   dataExportMapper: DataExportMapper;
   dataExportService: DataExportService;
+
   userService: UserService;
 
   // Queues
