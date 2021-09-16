@@ -320,7 +320,7 @@ export default ({
       if (!valid) throw new UnauthorizedError();
 
       return await issueTokens(userId, subject);
-    } catch (err) {
+    } catch (err: any) {
       const { message, name, stack } = err;
       logger.error(stack ?? `${name}: ${message}`);
       throw new UnauthorizedError();

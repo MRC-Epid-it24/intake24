@@ -56,7 +56,7 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): SourceI
       try {
         await fs.unlink(path.join(imagesPath, sourceImage.path));
         await fs.unlink(path.join(imagesPath, sourceImage.thumbnailPath));
-      } catch (err) {
+      } catch (err: any) {
         logger.warn(`SourceImageService|destroy: ${err.message}`);
       }
     }

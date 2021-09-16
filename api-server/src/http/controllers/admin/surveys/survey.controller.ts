@@ -9,6 +9,7 @@ import {
   SurveysResponse,
   StoreSurveyResponse,
 } from '@common/types/http/admin';
+import { SurveyAttributes } from '@common/types/models';
 import { Locale, Scheme, Survey } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
@@ -40,7 +41,7 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
       (permission) => permission.name
     );
 
-    const where: WhereOptions = {};
+    const where: WhereOptions<SurveyAttributes> = {};
     if (!permissions.includes(aclConfig.permissions.surveyadmin)) {
       const surveys = permissions
         .filter((permission) => permission.endsWith(staffSuffix))

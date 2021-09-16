@@ -14,7 +14,7 @@ export default validate(
           try {
             validateGuideImageObjects(value);
             return true;
-          } catch (err) {
+          } catch (err: any) {
             throw new Error(err.message.split('\n')[0]);
           }
         },

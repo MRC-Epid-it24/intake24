@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { WhereOptions } from 'sequelize';
 import { SurveySubmissionResponse, SurveySubmissionsResponse } from '@common/types/http/admin';
 import { validate } from 'uuid';
+import { SurveySubmissionAttributes } from '@common/types/models';
 import { Survey, SurveySubmission } from '@/db/models/system';
 import { submissionScope } from '@/db/models/system/survey-submission';
 import { NotFoundError } from '@/http/errors';
@@ -22,7 +23,7 @@ export default (): AdminSurveySubmissionController => {
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    const where: WhereOptions = { surveyId };
+    const where: WhereOptions<SurveySubmissionAttributes> = { surveyId };
     if (typeof search === 'string' && search) {
       if (validate(search)) where.id = search;
       else where.userId = search;

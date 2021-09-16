@@ -1,8 +1,7 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Table } from 'sequelize-typescript';
-import CategoryPortionSizeMethodParameter from '@api-server/db/models/foods/category-portion-size-method-param';
+import { CategoryPortionSizeMethodParameter, Category, Locale } from '@api-server/db/models/foods';
 import { PortionSizeMethodId } from '@common/types/models';
 import BaseModel from '../model';
-import { Category, Locale } from '.';
 
 @Table({
   modelName: 'CategoryPortionSizeMethod',

@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { Op, WhereOptions } from 'sequelize';
 import { JobResponse, JobsResponse } from '@common/types/http/admin';
+import { JobAttributes } from '@common/types/models';
 import { Job, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
@@ -15,9 +16,9 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
     const user = req.user as User;
     const { type } = req.query;
 
-    const where: WhereOptions = {
+    const where: WhereOptions<JobAttributes> = {
       userId: user.id,
-      downloadUrlExpiresAt: { [Op.or]: { [Op.eq]: null, [Op.gt]: new Date() } },
+      downloadUrlExpiresAt: { [Op.or]: [null, new Date()] },
     };
 
     if (type) where.type = type as string | string[];

@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { AxiosError } from 'axios';
+import axios from 'axios';
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import Errors from '@/helpers/Errors';
@@ -96,11 +96,13 @@ export default Vue.extend({
 
         if (this.loggedIn) await this.$router.push({ name: 'dashboard' });
       } catch (err) {
-        const { response: { status, data = {} } = {} } = err as AxiosError;
+        if (axios.isAxiosError(err)) {
+          const { response: { status, data = {} } = {} } = err;
 
-        if (status === 422 && 'errors' in data) this.errors.record(data.errors);
+          if (status === 422 && 'errors' in data) this.errors.record(data.errors);
 
-        if (status === 401) this.$toasted.error('Invalid authentication credentials provided.');
+          if (status === 401) this.$toasted.error('Invalid authentication credentials provided.');
+        }
       }
     },
 
@@ -111,7 +113,8 @@ export default Vue.extend({
 
         if (this.loggedIn) await this.$router.push({ name: 'dashboard' });
       } catch (err) {
-        if (err.response?.status === 401) this.$toasted.error('Invalid MFA authentication.');
+        if (axios.isAxiosError(err) && err.response?.status === 401)
+          this.$toasted.error('Invalid MFA authentication.');
       }
     },
   },

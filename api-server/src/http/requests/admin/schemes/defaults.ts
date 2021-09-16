@@ -84,7 +84,7 @@ export const defaults: Schema = {
         try {
           validateMeals(value);
           return true;
-        } catch (err) {
+        } catch (err: any) {
           throw new Error(err.message.split('\n')[0]);
         }
       },
@@ -98,7 +98,7 @@ export const defaults: Schema = {
         try {
           validateExportSections(value);
           return true;
-        } catch (err) {
+        } catch (err: any) {
           throw new Error(err.message.split('\n')[0]);
         }
       },

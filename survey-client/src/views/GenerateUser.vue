@@ -79,6 +79,7 @@
 </template>
 
 <script lang="ts">
+import axios from 'axios';
 import Vue, { VueConstructor } from 'vue';
 import VueRecaptcha from 'vue-recaptcha';
 import { mapActions } from 'vuex';
@@ -157,7 +158,7 @@ export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
         this.userName = userName;
         this.password = password;
       } catch (err) {
-        this.status = err.response?.status;
+        if (axios.isAxiosError(err)) this.status = err.response?.status ?? 0;
       } finally {
         this.loading = false;
 
@@ -173,7 +174,7 @@ export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
         this.password = '';
         await this.$router.push({ name: 'dashboard', params: { surveyId } });
       } catch (err) {
-        if (err.response?.status === 401)
+        if (axios.isAxiosError(err) && err.response?.status === 401)
           this.$toasted.error(this.$t('login.err.invalidCredentials') as string);
       }
     },

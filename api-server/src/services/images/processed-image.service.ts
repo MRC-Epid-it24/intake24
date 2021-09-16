@@ -46,7 +46,7 @@ export default ({
 
     try {
       await fs.access(path.join(imagesPath, sourceImage.path), fs.constants.F_OK);
-    } catch (err) {
+    } catch (err: any) {
       logger.error(`ProcessedImageService|resolveSourceImage: ${err.message}`);
       throw new NotFoundError();
     }
@@ -161,7 +161,7 @@ export default ({
 
     try {
       await fs.unlink(path.join(imagesPath, processedImage.path));
-    } catch (err) {
+    } catch (err: any) {
       logger.warn(`ProcessedImageService|destroy: ${err.message}`);
     }
 

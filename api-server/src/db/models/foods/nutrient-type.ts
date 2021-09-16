@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { NutrientTypeAttributes, NutrientTypeCreationAttributes } from '@common/types/models';
+import { NutrientTypeAttributes } from '@common/types/models';
 import { NutrientUnit } from '.';
 import BaseModel from '../model';
 

@@ -3,5 +3,3 @@ export type NutrientTypeAttributes = {
   unitId: string;
   description: string;
 };
-
-export type NutrientTypeCreationAttributes = Omit<NutrientTypeAttributes, 'id'>;

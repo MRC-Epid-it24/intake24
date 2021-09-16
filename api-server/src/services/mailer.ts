@@ -55,7 +55,7 @@ export default class Mailer {
 
       // TODO: pipe it to winston logger
       if (this.mailConfig.mailer === 'log') info.message.pipe(process.stdout);
-    } catch (err) {
+    } catch (err: any) {
       const { message, name, stack } = err;
       this.logger.error(stack ?? `${name}: ${message}`);
     }

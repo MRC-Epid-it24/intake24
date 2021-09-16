@@ -52,6 +52,7 @@
 </template>
 
 <script lang="ts">
+import axios from 'axios';
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import { PublicSurveyEntryResponse } from '@common/types/http';
@@ -93,7 +94,7 @@ export default Vue.extend({
         await this.$router.push({ name: 'dashboard', params: { surveyId: this.surveyId } });
         return;
       } catch (err) {
-        if (err.response?.status === 401)
+        if (axios.isAxiosError(err) && err.response?.status === 401)
           this.$toasted.error(this.$t('login.err.invalidToken') as string);
       }
     }
@@ -101,7 +102,7 @@ export default Vue.extend({
     try {
       this.survey = await surveySvc.surveyPublicInfo(this.surveyId);
     } catch (err) {
-      this.status = err.response?.status;
+      if (axios.isAxiosError(err)) this.status = err.response?.status ?? 0;
     }
   },
 
@@ -116,7 +117,7 @@ export default Vue.extend({
         this.password = '';
         await this.$router.push({ name: 'dashboard', params: { surveyId } });
       } catch (err) {
-        if (err.response?.status === 401)
+        if (axios.isAxiosError(err) && err.response?.status === 401)
           this.$toasted.error(this.$t('login.err.invalidCredentials') as string);
       }
     },

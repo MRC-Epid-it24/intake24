@@ -1,5 +1,6 @@
 import { BelongsTo, BelongsToMany, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 import {
+  FoodLocal,
   NutrientMapping,
   NutrientTable,
   NutrientTableRecordField,
@@ -10,7 +11,6 @@ import {
   NutrientTableRecordCreationAttributes,
 } from '@common/types/models';
 import BaseModel from '../model';
-import FoodLocal from './food-local';
 
 @Table({
   modelName: 'NutrientTableRecord',

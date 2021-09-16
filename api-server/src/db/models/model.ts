@@ -145,7 +145,7 @@ export default class Model<
       }
 
       inputStream.push(null);
-    } catch (err) {
+    } catch (err: any) {
       inputStream.destroy(err);
     }
   }
