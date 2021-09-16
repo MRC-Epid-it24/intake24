@@ -152,6 +152,7 @@ module.exports = {
             'admin/jobs',
             'admin/languages',
             'admin/locales',
+            'admin/nutrient-tables',
             'admin/schemes',
             'admin/scheme-questions',
             'admin/sign-in-logs',
