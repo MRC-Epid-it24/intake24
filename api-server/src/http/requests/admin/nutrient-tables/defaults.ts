@@ -1,4 +1,8 @@
 import {
+  NutrientTableCsvMappingFieldInput,
+  NutrientTableCsvMappingNutrientInput,
+} from '@common/types/http/admin';
+import {
   validateCsvMapping,
   validateCsvMappingFields,
   validateCsvMappingNutrients,
@@ -26,8 +30,14 @@ const defaults: Schema = {
     in: ['body'],
     errorMessage: 'Invalid csv mapping fields.',
     custom: {
-      options: (value): boolean => {
-        validateCsvMappingFields(value);
+      options: (fields: NutrientTableCsvMappingFieldInput[]): boolean => {
+        validateCsvMappingFields(fields);
+
+        const fieldNames = fields.map((field) => field.fieldName);
+
+        const noDups = [...new Set(fieldNames)];
+        if (fieldNames.length !== noDups.length) throw new Error('Duplicate field names.');
+
         return true;
       },
     },
@@ -36,8 +46,14 @@ const defaults: Schema = {
     in: ['body'],
     errorMessage: 'Invalid csv mapping nutrients.',
     custom: {
-      options: (value): boolean => {
-        validateCsvMappingNutrients(value);
+      options: (nutrients: NutrientTableCsvMappingNutrientInput[]): boolean => {
+        validateCsvMappingNutrients(nutrients);
+
+        const nutrientTypeIds = nutrients.map((nutrient) => nutrient.nutrientTypeId);
+
+        const noDups = [...new Set(nutrientTypeIds)];
+        if (nutrientTypeIds.length !== noDups.length) throw new Error('Duplicate nutrients.');
+
         return true;
       },
     },
