@@ -7,6 +7,7 @@ import images from './images/index.test';
 import jobs from './jobs/index.test';
 import languages from './languages/index.test';
 import locales from './locales/index.test';
+import nutrientTables from './nutrient-tables/index.test';
 import permissions from './permissions/index.test';
 import roles from './roles/index.test';
 import users from './users/index.test';
@@ -107,6 +108,15 @@ export default (): void => {
   describe('GET /api/admin/locales/:localeId/edit', locales.edit);
   describe('PUT /api/admin/locales/:localeId', locales.update);
   describe('DELETE /api/admin/locales/:localeId', locales.destroy);
+
+  // Nutrient tables
+  describe('GET /api/admin/nutrient-tables', nutrientTables.browse);
+  describe('GET /api/admin/nutrient-tables/create', nutrientTables.create);
+  describe('POST /api/admin/nutrient-tables', nutrientTables.store);
+  describe('GET /api/admin/nutrient-tables/:nutrientTableId', nutrientTables.read);
+  describe('GET /api/admin/nutrient-tables/:nutrientTableId/edit', nutrientTables.edit);
+  describe('PUT /api/admin/nutrient-tables/:nutrientTableId', nutrientTables.update);
+  describe('DELETE /api/admin/nutrient-tables/:nutrientTableId', nutrientTables.destroy);
 
   // Permissions
   describe('GET /api/admin/permissions', permissions.browse);
