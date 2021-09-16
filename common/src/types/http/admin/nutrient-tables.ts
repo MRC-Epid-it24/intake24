@@ -13,15 +13,25 @@ export type NutrientTableCsvMappingInput = Omit<
   'nutrientTableId'
 >;
 
-export type NutrientTableCsvMappingFieldsInput = Omit<
+export type NutrientTableCsvMappingFieldInput = Omit<
   NutrientTableCsvMappingFieldAttributes,
   'id' | 'nutrientTableId'
->[];
+>;
 
-export type NutrientTableCsvMappingNutrientsInput = Omit<
+export type NutrientTableCsvMappingFieldsInput = NutrientTableCsvMappingFieldInput[];
+
+export type NutrientTableCsvMappingNutrientInput = Omit<
   NutrientTableCsvMappingNutrientAttributes,
   'id' | 'nutrientTableId'
->[];
+>;
+
+export type NutrientTableCsvMappingNutrientsInput = NutrientTableCsvMappingNutrientInput[];
+
+export interface NutrientTableInput extends NutrientTableAttributes {
+  csvMapping: NutrientTableCsvMappingInput;
+  csvMappingFields: NutrientTableCsvMappingFieldsInput;
+  csvMappingNutrients: NutrientTableCsvMappingNutrientsInput;
+}
 
 export type NutrientTablesResponse = Pagination<NutrientTableAttributes>;
 
