@@ -9,10 +9,11 @@ import { merge } from '@/util';
 import type { HttpRequestConfig, HttpError } from '@/types/http';
 import Errors from './Errors';
 
-export interface FormConfig {
+export interface FormConfig<T> {
   status?: string;
   multipart?: boolean;
   resetOnSubmit?: boolean;
+  transform?: (data: T) => any;
 }
 
 export interface FormDef<T = Dictionary> {
@@ -20,7 +21,7 @@ export interface FormDef<T = Dictionary> {
   initData: T;
   keys: (keyof T)[];
   errors: Errors;
-  config: FormConfig;
+  config: FormConfig<T>;
   assign(source: Dictionary): void;
   load(input: Dictionary): void;
   hasErrors(): boolean;
@@ -39,7 +40,7 @@ export type FormFields<T = Dictionary> = { [P in keyof T]: T[P] };
 
 export type Form<T = Dictionary> = FormDef<T> & FormFields<T>;
 
-export default <T = Dictionary>(initData: T, formConfig: FormConfig = {}): Form<T> => {
+export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Form<T> => {
   const keys = Object.keys(initData) as (keyof T)[];
 
   const formDef: FormDef<T> = {
@@ -83,9 +84,13 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig = {}): Form<
       const loadStr = `form-${url}`;
       store.commit('loading/add', loadStr);
 
+      const { transform } = this.config;
+      const output =
+        transform && !this.config.multipart ? transform(this.getData() as T) : this.getData();
+
       return new Promise((resolve, reject) => {
         http
-          .request<R>(url, method, this.getData(), { withErr: true, ...rest })
+          .request<R>(url, method, output, { withErr: true, ...rest })
           .then((res) => {
             const { data } = res;
             this.onSuccess();

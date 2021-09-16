@@ -21,19 +21,25 @@
         </v-list-item-group>
       </v-list>
       <menu-tree
+        v-if="can(['nutrient-tables-browse'])"
+        icon="fas fa-fw fa-hamburger"
+        name="fdb"
+        :resources="resources.fdb"
+      ></menu-tree>
+      <menu-tree
         v-if="can(['languages-browse', 'locales-browse'])"
         icon="fas fa-fw fa-globe"
         name="local"
         :resources="resources.local"
       ></menu-tree>
       <menu-tree
-        v-if="can(['guide-images-browse', 'image-maps-browse'])"
+        v-if="can(['as-served-browse', 'guide-images-browse', 'image-maps-browse'])"
         icon="fas fa-fw fa-images"
         name="images"
         :resources="resources.images"
       ></menu-tree>
       <menu-tree
-        v-if="can(['schemes-browse', 'surveys-browse'])"
+        v-if="can(['schemes-browse', 'scheme-questions-browse', 'surveys-browse'])"
         icon="fas fa-fw fa-tools"
         name="surveyMgmt"
         :resources="resources.surveyMgmt"

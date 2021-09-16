@@ -8,6 +8,7 @@ import imageMaps from './image-maps';
 import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
+import nutrientTables from './nutrient-tables';
 import profile from './profile';
 import permissions from './permissions';
 import roles from './roles';
@@ -28,6 +29,7 @@ const messages: LocaleMessages = {
   jobs,
   languages,
   locales,
+  'nutrient-tables': nutrientTables,
   profile,
   permissions,
   roles,

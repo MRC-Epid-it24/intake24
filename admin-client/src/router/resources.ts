@@ -3,7 +3,16 @@ import { Resource } from '@/types';
 const routes: string[] = ['create', 'read', 'edit'];
 
 const resources: Resource[] = [
-  // Admin
+  // Food databases
+  {
+    group: 'fdb',
+    name: 'nutrient-tables',
+    icon: 'fas fa-seedling',
+    api: 'admin/nutrient-tables',
+    generateRoutes: true,
+    routes: [...routes],
+  },
+  // Localization
   {
     group: 'local',
     name: 'languages',

@@ -10,6 +10,7 @@ const common: LocaleMessageObject = {
   },
 
   admin: 'Admin',
+  fdb: 'Food DBs',
   local: 'Localization',
   images: 'Images',
   surveyMgmt: 'Surveys MGMT',

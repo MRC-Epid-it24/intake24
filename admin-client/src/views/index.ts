@@ -6,6 +6,7 @@ import images from './images';
 import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
+import nutrientTables from './nutrient-tables';
 import schemes from './schemes';
 import schemeQuestions from './scheme-questions';
 import signInLogs from './sign-in-logs';
@@ -23,6 +24,7 @@ const views: Dictionary = {
   jobs,
   languages,
   locales,
+  'nutrient-tables': nutrientTables,
   schemes,
   'scheme-questions': schemeQuestions,
   'sign-in-logs': signInLogs,
