@@ -11,7 +11,7 @@ export default (): void => {
   let output: Omit<UpdateUserRequest, 'permissions' | 'roles'>;
 
   beforeAll(async () => {
-    input = mocker.user();
+    input = mocker.system.user();
     output = {
       ...omit(input, ['password', 'passwordConfirm', 'permissions', 'roles']),
       email: input.email?.toLocaleLowerCase(),
@@ -113,7 +113,7 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.user(), email: input.email });
+        .send({ ...mocker.system.user(), email: input.email });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);

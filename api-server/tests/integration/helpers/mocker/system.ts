@@ -19,7 +19,7 @@ import {
 } from '@common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { customPromptQuestions } from '@common/prompts';
-import { downloadImage } from './util';
+import { downloadImage } from '../util';
 
 const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
@@ -126,7 +126,7 @@ const locale = (
 };
 
 const scheme = (): SchemeCreationAttributes => {
-  const id = slugify(faker.random.words(2), { strict: true });
+  const id = slugify(nanoid(16), { strict: true });
   const name = faker.random.words(3);
   const type = SchemeTypes.DATA_DRIVEN;
 
@@ -157,7 +157,7 @@ const schemeQuestion = (): SchemeQuestionCreationAttributes => {
 };
 
 const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest => {
-  const id = slugify(faker.random.words(2), { strict: true });
+  const id = slugify(nanoid(16), { strict: true });
   const name = faker.random.words(6);
   const state = faker.datatype.number(2);
   const startDate = new Date().toISOString().split('T')[0];

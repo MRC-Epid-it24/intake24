@@ -17,18 +17,18 @@ export default (): void => {
   let user: User;
 
   beforeAll(async () => {
-    input = mocker.user();
-    const updateUser = omit(mocker.user(), ['password', 'passwordConfirm']);
+    input = mocker.system.user();
+    const updateUser = omit(mocker.system.user(), ['password', 'passwordConfirm']);
     updateInput = {
       ...updateUser,
       email: updateUser.email?.toLocaleLowerCase(),
     };
 
-    const permissionInput = times(3, () => mocker.permission());
+    const permissionInput = times(3, () => mocker.system.permission());
     const permissions = await Permission.bulkCreate(permissionInput);
     updateInput.permissions = permissions.map((item) => item.id);
 
-    const roleInput = times(2, () => mocker.role());
+    const roleInput = times(2, () => mocker.system.role());
     const roles = await Role.bulkCreate(roleInput);
     updateInput.roles = roles.map((item) => item.id);
 

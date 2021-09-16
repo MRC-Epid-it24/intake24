@@ -20,15 +20,15 @@ export default (): void => {
   let input: { permissions: string[] };
 
   beforeAll(async () => {
-    surveyInput = mocker.survey();
+    surveyInput = mocker.system.survey();
     survey = await Survey.create({
       ...surveyInput,
       startDate: new Date(surveyInput.startDate),
       endDate: new Date(surveyInput.endDate),
     });
 
-    url = `${baseUrl}/${survey.id}/mgmt/${suite.data.user.id}`;
-    invalidSurveyUrl = `${baseUrl}/invalid-survey-id/mgmt/${suite.data.user.id}`;
+    url = `${baseUrl}/${survey.id}/mgmt/${suite.data.system.user.id}`;
+    invalidSurveyUrl = `${baseUrl}/invalid-survey-id/mgmt/${suite.data.system.user.id}`;
     invalidUserUrl = `${baseUrl}/${survey.id}/mgmt/999999`;
 
     const permissions = await surveyService.getSurveyMgmtPermissions(survey.id);

@@ -11,7 +11,7 @@ export default (): void => {
   let invalidUrl: string;
 
   beforeAll(async () => {
-    const { id, startDate, endDate } = suite.data.survey;
+    const { id, startDate, endDate } = suite.data.system.survey;
     input = {
       startDate: startDate.toISOString().split('T')[0],
       endDate: endDate.toISOString().split('T')[0],
@@ -50,7 +50,7 @@ export default (): void => {
   });
 
   it(`should return 403 when missing 'surveys-data-export' permission (surveyStaff)`, async () => {
-    await setPermission(surveyStaff(suite.data.survey.id));
+    await setPermission(surveyStaff(suite.data.system.survey.id));
 
     const { status } = await request(suite.app)
       .put(url)

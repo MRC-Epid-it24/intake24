@@ -16,8 +16,8 @@ export default (): void => {
   let scheme: Scheme;
 
   beforeAll(async () => {
-    input = mocker.scheme();
-    updateInput = mocker.scheme();
+    input = mocker.system.scheme();
+    updateInput = mocker.system.scheme();
 
     const { id } = input;
     output = { ...updateInput, id };

@@ -10,7 +10,7 @@ export default (): void => {
   let output: LocaleAttributes;
 
   beforeAll(async () => {
-    const { id: langId } = suite.data.language;
+    const { id: langId } = suite.data.system.language;
     input = {
       id: 'en-cb',
       englishName: 'English - Caribbean',
@@ -108,7 +108,7 @@ export default (): void => {
     });
 
     it('should return 422 when duplicate id', async () => {
-      const { id: langId } = suite.data.language;
+      const { id: langId } = suite.data.system.language;
 
       const { status, body } = await request(suite.app)
         .post(url)

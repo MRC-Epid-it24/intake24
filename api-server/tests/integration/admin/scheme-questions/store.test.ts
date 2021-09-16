@@ -10,7 +10,7 @@ export default (): void => {
   let output: SchemeQuestionCreationAttributes;
 
   beforeAll(async () => {
-    input = mocker.schemeQuestion();
+    input = mocker.system.schemeQuestion();
     output = { ...input };
   });
 
@@ -77,7 +77,7 @@ export default (): void => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .send({
-          ...mocker.schemeQuestion().question,
+          ...mocker.system.schemeQuestion().question,
           id: input.question.id,
         });
 

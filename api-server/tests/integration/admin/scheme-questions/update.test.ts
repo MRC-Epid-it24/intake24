@@ -15,8 +15,8 @@ export default (): void => {
   let schemeQuestion: SchemeQuestion;
 
   beforeAll(async () => {
-    input = mocker.schemeQuestion();
-    updateInput = mocker.schemeQuestion();
+    input = mocker.system.schemeQuestion();
+    updateInput = mocker.system.schemeQuestion();
 
     schemeQuestion = await SchemeQuestion.create(input);
 

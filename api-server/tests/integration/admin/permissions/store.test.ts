@@ -9,7 +9,7 @@ export default (): void => {
   let input: PermissionRequest;
 
   beforeAll(async () => {
-    input = mocker.permission();
+    input = mocker.system.permission();
   });
 
   it('should return 401 when no / invalid token', async () => {

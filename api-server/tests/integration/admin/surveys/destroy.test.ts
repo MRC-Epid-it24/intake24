@@ -28,7 +28,7 @@ export default (): void => {
   let survey: Survey;
 
   beforeAll(async () => {
-    input = mocker.survey();
+    input = mocker.system.survey();
     survey = await refreshSurveyRecord(input);
 
     url = `${baseUrl}/${survey.id}`;

@@ -12,7 +12,7 @@ export default (): void => {
   let job: JobEntry;
 
   beforeAll(async () => {
-    const { startDate, endDate } = suite.data.survey;
+    const { startDate, endDate } = suite.data.system.survey;
     input = {
       startDate: startDate.toISOString().split('T')[0],
       endDate: endDate.toISOString().split('T')[0],
@@ -23,7 +23,7 @@ export default (): void => {
     const {
       body: { data },
     } = await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
+      .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user)
       .send(input);

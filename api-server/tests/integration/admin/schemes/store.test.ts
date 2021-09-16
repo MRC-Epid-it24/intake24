@@ -10,7 +10,7 @@ export default (): void => {
   let output: SchemeCreationAttributes;
 
   beforeAll(async () => {
-    input = mocker.scheme();
+    input = mocker.system.scheme();
     output = { ...input };
   });
 
@@ -83,7 +83,7 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.scheme(), id: input.id });
+        .send({ ...mocker.system.scheme(), id: input.id });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
@@ -95,7 +95,7 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.scheme(), name: input.name });
+        .send({ ...mocker.system.scheme(), name: input.name });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);

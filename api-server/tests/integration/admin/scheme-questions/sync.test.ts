@@ -17,8 +17,8 @@ export default (): void => {
   let schemeQuestion: SchemeQuestion;
 
   beforeAll(async () => {
-    schemeInput = mocker.scheme();
-    schemeQuestionInput = mocker.schemeQuestion();
+    schemeInput = mocker.system.scheme();
+    schemeQuestionInput = mocker.system.schemeQuestion();
 
     schemeInput = {
       ...schemeInput,
@@ -35,7 +35,7 @@ export default (): void => {
       schemeId: scheme.id,
       section: 'preMeals',
       question: {
-        ...mocker.schemeQuestion().question,
+        ...mocker.system.schemeQuestion().question,
         id: schemeQuestionInput.question.id,
       },
     };

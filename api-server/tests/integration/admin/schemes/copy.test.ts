@@ -11,9 +11,9 @@ export default (): void => {
   let output: SchemeCreationAttributes;
 
   beforeAll(async () => {
-    input = mocker.scheme();
+    input = mocker.system.scheme();
 
-    const { id, name } = mocker.scheme();
+    const { id, name } = mocker.system.scheme();
     output = { ...input, id, name };
 
     await Scheme.create(input);

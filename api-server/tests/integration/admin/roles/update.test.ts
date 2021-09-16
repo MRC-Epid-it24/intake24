@@ -16,10 +16,10 @@ export default (): void => {
   let role: Role;
 
   beforeAll(async () => {
-    input = mocker.role();
-    updateInput = mocker.role();
+    input = mocker.system.role();
+    updateInput = mocker.system.role();
 
-    const permissionInput = times(3, () => mocker.permission());
+    const permissionInput = times(3, () => mocker.system.permission());
     const permissions = await Permission.bulkCreate(permissionInput);
     updateInput.permissions = permissions.map((item: Permission) => item.id);
 

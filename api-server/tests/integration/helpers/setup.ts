@@ -3,8 +3,15 @@ import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { SchemeTypes } from '@common/types/models';
 import config from '@/config';
 import {
+  Locale as FoodsLocale,
+  NutrientType as FoodsNutrientType,
+  NutrientUnit as FoodsNutrientUnit,
+} from '@/db/models/foods';
+import {
   Language,
-  Locale,
+  Locale as SystemLocale,
+  NutrientType as SystemNutrientType,
+  NutrientUnit as SystemNutrientUnit,
   Scheme,
   Survey,
   User,
@@ -15,14 +22,19 @@ import {
 import ioc from '@/ioc';
 
 export type MockData = {
-  language: Language;
-  locale: Locale;
-  scheme: Scheme;
-  survey: Survey;
-  role: Role;
-  admin: User;
-  user: User;
-  respondent: UserSurveyAlias;
+  foods: {
+    locale: FoodsLocale;
+  };
+  system: {
+    language: Language;
+    locale: SystemLocale;
+    scheme: Scheme;
+    survey: Survey;
+    role: Role;
+    admin: User;
+    user: User;
+    respondent: UserSurveyAlias;
+  };
 };
 
 export const wipeRedis = async (): Promise<void> => {
@@ -88,6 +100,12 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'locales-create', displayName: 'Create locales' },
     { name: 'locales-edit', displayName: 'Edit locales' },
     { name: 'locales-delete', displayName: 'Delete locales' },
+    { name: 'nutrient-tables-browse', displayName: 'Browse nutrient tables' },
+    { name: 'nutrient-tables-read', displayName: 'Read nutrient tables' },
+    { name: 'nutrient-tables-create', displayName: 'Create nutrient tables' },
+    { name: 'nutrient-tables-edit', displayName: 'Edit nutrient tables' },
+    { name: 'nutrient-tables-delete', displayName: 'Delete nutrient tables' },
+    { name: 'nutrient-tables-upload', displayName: 'Nutrient tables upload' },
     { name: 'schemes-browse', displayName: 'Browse schemes' },
     { name: 'schemes-read', displayName: 'Read schemes' },
     { name: 'schemes-create', displayName: 'Create schemes' },
@@ -120,7 +138,7 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'tasks-delete', displayName: 'Delete tasks' },
   ];
 
-  const locales = await Locale.findAll();
+  const locales = await SystemLocale.findAll();
   locales.forEach((locale) => {
     permissions.push({ name: `fdbm/${locale.id}`, displayName: `fdbm/${locale.id}` });
   });
@@ -137,7 +155,7 @@ export const initDatabaseData = async (): Promise<MockData> => {
     textDirection: 'ltr',
   });
 
-  const locale = await Locale.create({
+  const localeInput = {
     id: 'en_GB',
     englishName: 'United Kingdom',
     localName: 'United Kingdom',
@@ -146,7 +164,58 @@ export const initDatabaseData = async (): Promise<MockData> => {
     countryFlagCode: 'gb',
     prototypeLocaleId: null,
     textDirection: 'ltr',
-  });
+  };
+
+  const foodsLocale = await FoodsLocale.create(localeInput);
+  const systemLocale = await SystemLocale.create(localeInput);
+
+  const nutrientUnits = [
+    { id: '1', description: 'Gram', symbol: 'g' },
+    { id: '2', description: 'Milligram', symbol: 'mg' },
+    { id: '3', description: 'Microgram', symbol: 'µg' },
+    { id: '4', description: 'Kilocalorie', symbol: 'kcal' },
+    { id: '5', description: 'Kilojoule', symbol: 'kJ' },
+    { id: '6', description: 'International Units', symbol: 'IU' },
+  ];
+
+  await FoodsNutrientUnit.bulkCreate(nutrientUnits);
+  await SystemNutrientUnit.bulkCreate(nutrientUnits);
+
+  const nutrientTypes = [
+    { id: '1', description: 'Energy (kcal)', unitId: '4' },
+    { id: '2', description: 'Energy (kJ)', unitId: '5' },
+    {
+      id: '3',
+      description: 'Energy, total metabolisable (kcal, including dietary fibre)',
+      unitId: '4',
+    },
+    {
+      id: '4',
+      description: 'Energy, total metabolisable, available carbohydrate, FSANZ (kcal)',
+      unitId: '4',
+    },
+    {
+      id: '5',
+      description: 'Energy, total metabolisable, available carbohydrate, FSANZ (kJ)',
+      unitId: '5',
+    },
+    {
+      id: '6',
+      description: 'Energy, total metabolisable, carbohydrate by difference, FSANZ (kcal) Units',
+      unitId: '4',
+    },
+    {
+      id: '7',
+      description: 'Energy, total metabolisable, carbohydrate by difference, FSANZ (kJ)',
+      unitId: '5',
+    },
+    { id: '8', description: 'Water', unitId: '1' },
+    { id: '9', description: 'Total nitrogen', unitId: '1' },
+    { id: '10', description: 'Nitrogen conversion factor', unitId: '1' },
+  ];
+
+  await FoodsNutrientType.bulkCreate(nutrientTypes);
+  await SystemNutrientType.bulkCreate(nutrientTypes);
 
   const scheme = await Scheme.create({
     id: 'default',
@@ -168,7 +237,7 @@ export const initDatabaseData = async (): Promise<MockData> => {
     startDate,
     endDate,
     schemeId: scheme.id,
-    localeId: locale.id,
+    localeId: systemLocale.id,
     allowGenUsers: false,
     supportEmail: 'testSupportEmail@example.com',
     storeUserSessionOnServer: false,
@@ -201,10 +270,28 @@ export const initDatabaseData = async (): Promise<MockData> => {
     password: 'testRespondentPassword',
   });
 
-  return { language, locale, scheme, survey, role, admin, user, respondent };
+  return {
+    foods: {
+      locale: foodsLocale,
+    },
+    system: {
+      language,
+      locale: systemLocale,
+      scheme,
+      survey,
+      role,
+      admin,
+      user,
+      respondent,
+    },
+  };
 };
 
 export const cleanup = async (): Promise<void> => {
+  for (const model of Object.values(ioc.cradle.db.foods.models)) {
+    await model.truncate({ cascade: true });
+  }
+
   for (const model of Object.values(ioc.cradle.db.system.models)) {
     await model.truncate({ cascade: true });
   }

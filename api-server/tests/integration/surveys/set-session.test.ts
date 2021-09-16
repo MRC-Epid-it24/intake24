@@ -11,11 +11,11 @@ export default (): void => {
   let input: UserSessionCreationAttributes;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.survey.id}/session`;
+    url = `/api/surveys/${suite.data.system.survey.id}/session`;
     invalidUrl = `/api/surveys/invalid-survey/session`;
 
-    const { userId } = suite.data.respondent;
-    const surveyId = suite.data.survey.id;
+    const { userId } = suite.data.system.respondent;
+    const surveyId = suite.data.system.survey.id;
 
     const sessionData: SurveyState = {
       schemeId: 'schemeId',
@@ -49,7 +49,7 @@ export default (): void => {
   });
 
   it(`should return 403 when user session disabled`, async () => {
-    await suite.data.survey.update({ storeUserSessionOnServer: false });
+    await suite.data.system.survey.update({ storeUserSessionOnServer: false });
 
     const { status } = await request(suite.app)
       .post(url)
@@ -62,7 +62,7 @@ export default (): void => {
 
   describe('user session enabled', () => {
     beforeAll(async () => {
-      await suite.data.survey.update({ storeUserSessionOnServer: true });
+      await suite.data.system.survey.update({ storeUserSessionOnServer: true });
     });
 
     it('should return 422 when missing input data', async () => {

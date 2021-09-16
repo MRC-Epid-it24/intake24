@@ -17,8 +17,8 @@ export default (): void => {
   let survey: Survey;
 
   beforeAll(async () => {
-    input = mocker.survey();
-    updateInput = mocker.survey();
+    input = mocker.system.survey();
+    updateInput = mocker.system.survey();
 
     const { id } = input;
     output = { ...updateInput, id, supportEmail: updateInput.supportEmail.toLowerCase() };

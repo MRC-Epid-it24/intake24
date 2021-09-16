@@ -17,7 +17,7 @@ export default (): void => {
   let user: User;
 
   beforeAll(async () => {
-    input = mocker.user();
+    input = mocker.system.user();
     user = await ioc.cradle.userService.create(input);
     output = omit(input, ['password', 'passwordConfirm']);
 

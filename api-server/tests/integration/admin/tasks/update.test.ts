@@ -15,8 +15,8 @@ export default (): void => {
   let task: Task;
 
   beforeAll(async () => {
-    input = mocker.task();
-    updateInput = mocker.task();
+    input = mocker.system.task();
+    updateInput = mocker.system.task();
 
     task = await Task.create(input);
 

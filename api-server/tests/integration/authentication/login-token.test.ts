@@ -24,7 +24,7 @@ export default (): void => {
     const res = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ token: suite.data.respondent.urlAuthToken });
+      .send({ token: suite.data.system.respondent.urlAuthToken });
 
     expect(res.status).toBe(200);
     expect(res.body).toContainAllKeys(['accessToken']);

@@ -14,7 +14,7 @@ export default (): void => {
   let role: Role;
 
   beforeAll(async () => {
-    input = mocker.role();
+    input = mocker.system.role();
     role = await Role.create(input);
 
     url = `${baseUrl}/${role.id}/edit`;

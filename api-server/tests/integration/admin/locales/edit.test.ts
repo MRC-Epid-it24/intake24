@@ -15,7 +15,7 @@ export default (): void => {
   let locale: Locale;
 
   beforeAll(async () => {
-    const { id: langId } = suite.data.language;
+    const { id: langId } = suite.data.system.language;
     input = {
       id: 'en-ca',
       englishName: 'English - Canada',

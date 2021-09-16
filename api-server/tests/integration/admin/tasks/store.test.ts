@@ -10,7 +10,7 @@ export default (): void => {
   let output: TaskRequest;
 
   beforeAll(async () => {
-    input = mocker.task();
+    input = mocker.system.task();
     output = { ...input };
   });
 

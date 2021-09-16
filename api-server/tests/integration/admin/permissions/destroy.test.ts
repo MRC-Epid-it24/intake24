@@ -13,7 +13,7 @@ export default (): void => {
   let permission: Permission;
 
   beforeAll(async () => {
-    input = mocker.permission();
+    input = mocker.system.permission();
     permission = await Permission.create(input);
 
     url = `${baseUrl}/${permission.id}`;

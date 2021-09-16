@@ -6,14 +6,14 @@ export default (): void => {
   let input: { startDate: string; endDate: string };
 
   beforeAll(async () => {
-    const { startDate, endDate } = suite.data.survey;
+    const { startDate, endDate } = suite.data.system.survey;
     input = {
       startDate: startDate.toISOString().split('T')[0],
       endDate: endDate.toISOString().split('T')[0],
     };
 
     await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
+      .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .send(input);

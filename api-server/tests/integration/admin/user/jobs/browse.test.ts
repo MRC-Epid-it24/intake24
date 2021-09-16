@@ -7,7 +7,7 @@ export default (): void => {
   let input: { startDate: string; endDate: string };
 
   beforeAll(async () => {
-    const { startDate, endDate } = suite.data.survey;
+    const { startDate, endDate } = suite.data.system.survey;
     input = {
       startDate: startDate.toISOString().split('T')[0],
       endDate: endDate.toISOString().split('T')[0],
@@ -23,7 +23,7 @@ export default (): void => {
   it('should return 200 and data list', async () => {
     // Admin user job
     await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
+      .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .send(input);
@@ -31,7 +31,7 @@ export default (): void => {
     // Test user job
     await setPermission(['surveys-data-export', 'surveyadmin']);
     await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.survey.id}/data-export`)
+      .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user)
       .send(input);
@@ -49,7 +49,7 @@ export default (): void => {
     expect(body.data).not.toBeEmpty();
 
     // Expect to only find test user's jobs
-    const match = body.data.find((item: Job) => item.userId !== suite.data.user.id);
+    const match = body.data.find((item: Job) => item.userId !== suite.data.system.user.id);
     expect(match).toBeUndefined();
   });
 };

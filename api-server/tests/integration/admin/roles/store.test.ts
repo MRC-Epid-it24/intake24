@@ -10,7 +10,7 @@ export default (): void => {
   let output: Omit<RoleRequest, 'permissions'>;
 
   beforeAll(async () => {
-    input = mocker.role();
+    input = mocker.system.role();
     output = omit(input, 'permissions');
   });
 

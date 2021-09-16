@@ -10,7 +10,7 @@ export default (): void => {
   let output: SurveyRequest;
 
   beforeAll(async () => {
-    input = mocker.survey();
+    input = mocker.system.survey();
     output = { ...input, supportEmail: input.supportEmail.toLowerCase() };
   });
 
@@ -125,7 +125,7 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.survey(), id: input.id });
+        .send({ ...mocker.system.survey(), id: input.id });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
@@ -137,7 +137,7 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.survey(), name: input.name });
+        .send({ ...mocker.system.survey(), name: input.name });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);

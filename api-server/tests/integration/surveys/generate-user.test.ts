@@ -6,7 +6,7 @@ export default (): void => {
   let invalidUrl: string;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.survey.id}/generate-user`;
+    url = `/api/surveys/${suite.data.system.survey.id}/generate-user`;
     invalidUrl = `/api/surveys/invalid-survey/generate-user`;
   });
 
@@ -20,7 +20,7 @@ export default (): void => {
   });
 
   it(`should return 403 when user generation disabled`, async () => {
-    await suite.data.survey.update({ allowGenUsers: false });
+    await suite.data.system.survey.update({ allowGenUsers: false });
 
     const { status } = await request(suite.app)
       .post(url)
@@ -31,7 +31,7 @@ export default (): void => {
   });
 
   it('should return 200 and public survey record', async () => {
-    await suite.data.survey.update({ allowGenUsers: true });
+    await suite.data.system.survey.update({ allowGenUsers: true });
 
     const { status, body } = await request(suite.app)
       .post(url)

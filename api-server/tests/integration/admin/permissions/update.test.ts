@@ -16,8 +16,8 @@ export default (): void => {
   let permission: Permission;
 
   beforeAll(async () => {
-    input = mocker.permission();
-    updateInput = mocker.permission();
+    input = mocker.system.permission();
+    updateInput = mocker.system.permission();
 
     const { name } = input;
     output = { ...updateInput, name };

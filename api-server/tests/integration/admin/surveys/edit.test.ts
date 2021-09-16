@@ -16,7 +16,7 @@ export default (): void => {
   let survey: Survey;
 
   beforeAll(async () => {
-    input = mocker.survey();
+    input = mocker.system.survey();
     survey = await Survey.create({
       ...input,
       startDate: new Date(input.startDate),
