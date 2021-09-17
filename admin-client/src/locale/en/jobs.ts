@@ -11,6 +11,19 @@ const jobs: LocaleMessageObject = {
   successful: 'Successful',
   message: 'Message',
   stackTrace: 'Error message',
+
+  types: {
+    _: 'Job types',
+    CleanStorageFiles: 'Clean storage files',
+    PurgeRefreshTokens: 'Purge expired refresh tokens',
+    NutrientTableImportMapping: 'Nutrient tables - import NDB mapping',
+    NutrientTableImportData: 'Nutrient tables - import NDB data',
+    SendPasswordReset: 'Send password reset',
+    SurveyDataExport: 'Surveys - data export',
+    SurveyExportRespondentAuthUrls: 'Surveys - export respondent authentication URLs ',
+    SurveyImportRespondents: 'Surveys - import respondents',
+    SurveySubmissionNotification: 'Surveys - submission notification',
+  },
 };
 
 export default jobs;

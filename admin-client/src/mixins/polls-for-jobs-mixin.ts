@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import { JobEntry } from '@common/types/http/admin';
+import { JobType } from '@common/types';
 import { downloadFile } from '@/util/fs';
 
 export default Vue.extend({
   data() {
     return {
-      jobType: null as string | null,
+      jobType: [] as JobType | JobType[],
       jobs: [] as JobEntry[],
       polling: null as number | null,
     };

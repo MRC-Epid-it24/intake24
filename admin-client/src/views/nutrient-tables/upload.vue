@@ -1,0 +1,153 @@
+<template>
+  <layout v-bind="{ id, entry }" v-if="entryLoaded">
+    <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-container fluid>
+        <v-card-title>{{ $t('nutrient-tables.upload.title') }}</v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-row>
+                <v-col cols="12">
+                  <v-select
+                    v-model="form.type"
+                    :items="jobTypeList"
+                    :label="$t('nutrient-tables.upload.type')"
+                    hide-details="auto"
+                    name="type"
+                    outlined
+                    prepend-icon="fa-running"
+                    @change="form.errors.clear('type')"
+                  ></v-select>
+                </v-col>
+                <v-col cols="12">
+                  <v-file-input
+                    v-model="form.file"
+                    :error-messages="form.errors.get('file')"
+                    :label="$t('nutrient-tables.upload.file')"
+                    hide-details="auto"
+                    name="file"
+                    outlined
+                    prepend-icon="fa-file-csv"
+                    @change="form.errors.clear('file')"
+                  ></v-file-input>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" sm="10" md="8" lg="6">
+                  <v-btn
+                    :disabled="form.errors.any() || isAppLoading"
+                    block
+                    x-large
+                    type="submit"
+                    color="secondary"
+                    :title="$t('common.action.upload')"
+                  >
+                    <v-icon left>fa-upload</v-icon> {{ $t('common.action.upload') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-list two-line>
+                <v-list-item v-for="item in visibleJobs" :key="item.id">
+                  <v-list-item-avatar>
+                    <v-icon class="grey" dark>fa-running</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ item.type }}</v-list-item-title>
+                    <v-list-item-subtitle>
+                      Started: {{ new Date(item.startedAt).toLocaleString() }}
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle>
+                      Completed:
+                      {{ item.completedAt ? new Date(item.completedAt).toLocaleString() : '' }}
+                    </v-list-item-subtitle>
+                    <p v-if="item.message">{{ item.message }}</p>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-progress-circular
+                      indeterminate
+                      color="secondary"
+                      v-if="item.progress != 1"
+                    ></v-progress-circular>
+                    <template v-else>
+                      <v-icon v-if="item.successful" color="success" large>
+                        fa-check-circle
+                      </v-icon>
+                      <v-icon v-if="!item.successful" color="error" large>fa-times-circle</v-icon>
+                    </template>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-container>
+    </v-form>
+  </layout>
+</template>
+
+<script lang="ts">
+import Vue, { VueConstructor } from 'vue';
+import { JobResponse, NutrientTableEntry, NutrientTableRefs } from '@common/types/http/admin';
+import { JobType } from '@common/types';
+import { DetailMixin } from '@/types';
+import detailMixin from '@/components/entry/detailMixin';
+import form from '@/helpers/Form';
+import PollsForJobsMixin from '@/mixins/polls-for-jobs-mixin';
+
+type Mixins = InstanceType<typeof PollsForJobsMixin>;
+
+type UploadForm = {
+  file: File | null;
+  type: string;
+};
+
+export default (
+  Vue as VueConstructor<Vue & DetailMixin<NutrientTableEntry, NutrientTableRefs> & Mixins>
+).extend({
+  name: 'NutrientTableUpload',
+
+  mixins: [detailMixin, PollsForJobsMixin],
+
+  data() {
+    const jobType: JobType[] = ['NutrientTableImportMapping', 'NutrientTableImportData'];
+
+    const jobTypeList = jobType.map((item) => ({
+      value: item,
+      text: this.$t(`jobs.types.${item}`),
+    }));
+
+    return {
+      form: form<UploadForm>(
+        {
+          file: null,
+          type: jobTypeList[0].value,
+        },
+        { multipart: true }
+      ),
+      jobType,
+      jobTypeList,
+    };
+  },
+
+  async mounted() {
+    await this.status();
+  },
+
+  methods: {
+    async submit() {
+      if (this.jobInProgress) return;
+
+      const { data } = await this.form.post<JobResponse>(`admin/nutrient-tables/${this.id}/upload`);
+
+      this.jobs.unshift(data);
+      this.startPolling();
+    },
+  },
+});
+</script>
+
+<style lang="scss" scoped></style>

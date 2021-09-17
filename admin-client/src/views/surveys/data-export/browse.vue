@@ -33,7 +33,7 @@
                         {{ $t('common.action.cancel') }}
                       </v-btn>
                       <v-btn text color="primary" @click="$refs.startDate.save(form.startDate)">
-                        OK
+                        {{ $t('common.action.ok') }}
                       </v-btn>
                     </v-date-picker>
                   </v-dialog>
@@ -78,9 +78,9 @@
                     type="submit"
                     block
                     color="secondary"
-                    title="Submit"
+                    :title="$t('common.action.download')"
                   >
-                    <v-icon left>fa-submit</v-icon> Submit
+                    <v-icon left>fa-download</v-icon> {{ $t('common.action.download') }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -142,7 +142,7 @@ import { JobResponse } from '@common/types/http/admin';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
 import { DetailMixin } from '@/types';
-import PollsForJobsMixin from '../polls-for-jobs-mixin';
+import PollsForJobsMixin from '@/mixins/polls-for-jobs-mixin';
 
 type mixins = InstanceType<typeof PollsForJobsMixin>;
 

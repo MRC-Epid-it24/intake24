@@ -119,6 +119,14 @@ type TaskForm = {
 const defaultParams: JobParamsList = {
   CleanStorageFiles: {},
   PurgeRefreshTokens: {},
+  NutrientTableImportMapping: {
+    nutrientTableId: '',
+    file: '',
+  },
+  NutrientTableImportData: {
+    nutrientTableId: '',
+    file: '',
+  },
   SendPasswordReset: {
     email: '',
     token: '',

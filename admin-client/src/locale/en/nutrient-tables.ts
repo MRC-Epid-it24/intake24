@@ -31,6 +31,14 @@ const nutrientTables: LocaleMessageObject = {
       columnOffset: 'CSV column',
     },
   },
+
+  upload: {
+    _: 'Uploads',
+    title: 'Nutrient table uploads',
+    tab: 'Uploads',
+    type: 'Data type upload',
+    file: 'CSV file',
+  },
 };
 
 export default nutrientTables;

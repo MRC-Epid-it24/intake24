@@ -15,6 +15,8 @@ export const jobTypes = [
   'CleanStorageFiles',
   'PurgeRefreshTokens',
   'SendPasswordReset',
+  'NutrientTableImportMapping',
+  'NutrientTableImportData',
   'SurveyDataExport',
   'SurveyExportRespondentAuthUrls',
   'SurveyImportRespondents',
@@ -33,6 +35,16 @@ export type PurgeRefreshTokensParams = EmptyJobParams;
 export type SendPasswordResetParams = {
   email: string;
   token: string;
+};
+
+export type NutrientTableImportMappingParams = {
+  nutrientTableId: string;
+  file: string;
+};
+
+export type NutrientTableImportDataParams = {
+  nutrientTableId: string;
+  file: string;
 };
 
 export type SurveyDataExportParams = {
@@ -60,6 +72,8 @@ export type SurveySubmissionNotificationParams = {
 export type JobParams =
   | CleanStorageFilesParams
   | PurgeRefreshTokensParams
+  | NutrientTableImportMappingParams
+  | NutrientTableImportDataParams
   | SendPasswordResetParams
   | SurveyDataExportParams
   | SurveyExportRespondentAuthUrlsParams
@@ -69,6 +83,8 @@ export type JobParams =
 export type JobParamsList = {
   CleanStorageFiles: CleanStorageFilesParams;
   PurgeRefreshTokens: PurgeRefreshTokensParams;
+  NutrientTableImportMapping: NutrientTableImportMappingParams;
+  NutrientTableImportData: NutrientTableImportDataParams;
   SendPasswordReset: SendPasswordResetParams;
   SurveyDataExport: SurveyDataExportParams;
   SurveyExportRespondentAuthUrls: SurveyExportRespondentAuthUrlsParams;

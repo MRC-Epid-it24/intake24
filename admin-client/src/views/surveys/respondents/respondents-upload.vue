@@ -38,7 +38,7 @@
             <v-row>
               <v-col cols="12">
                 <v-list two-line>
-                  <v-list-item v-for="item in jobs" :key="item.id">
+                  <v-list-item v-for="item in visibleJobs" :key="item.id">
                     <v-list-item-avatar>
                       <v-icon class="grey" dark>fa-running</v-icon>
                     </v-list-item-avatar>

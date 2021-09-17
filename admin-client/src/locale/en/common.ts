@@ -66,7 +66,9 @@ const common: LocaleMessageObject = {
     remove: 'Remove',
     restore: 'Restore',
     save: 'Save',
+    submit: 'Submit',
     transfer: 'Transfer',
+    upload: 'Upload',
     confirm: {
       _: 'Confirm',
       title: 'Do you want to continue?',

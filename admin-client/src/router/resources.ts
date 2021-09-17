@@ -10,7 +10,7 @@ const resources: Resource[] = [
     icon: 'fas fa-seedling',
     api: 'admin/nutrient-tables',
     generateRoutes: true,
-    routes: [...routes],
+    routes: [...routes, 'upload'],
   },
   // Localization
   {
