@@ -70,9 +70,9 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { NutrientTableEntry, NutrientTableRefs } from '@common/types/http/admin';
+import { offsetToExcelColumn } from '@common/util';
 import { DetailMixin } from '@/types';
 import detailMixin from '@/components/entry/detailMixin';
-import { excelColumnToOffset, offsetToExcelColumn } from '@/util';
 
 export default (
   Vue as VueConstructor<Vue & DetailMixin<NutrientTableEntry, NutrientTableRefs>>
@@ -83,7 +83,6 @@ export default (
 
   methods: {
     offsetToExcelColumn,
-    excelColumnToOffset,
 
     getNutrientName(id: string): string {
       const match = this.refs.nutrients.find((nutrient) => nutrient.id === id);

@@ -1,17 +1,21 @@
 import { Request, Response } from 'express';
 import {
   CreateNutrientTableResponse,
+  JobResponse,
   NutrientTableInput,
   NutrientTableRefs,
   NutrientTableResponse,
   NutrientTablesResponse,
   StoreNutrientTableResponse,
 } from '@common/types/http/admin';
+import { JobType } from '@common/types';
 import { Controller, CrudActions } from '../controller';
 import { NutrientType, NutrientTable } from '@/db/models/foods';
 import type { IoC } from '@/ioc';
+import { ValidationError } from '@/http/errors';
+import { User } from '@/db/models/system';
 
-export type NutrientTableController = Controller<CrudActions>;
+export type NutrientTableController = Controller<CrudActions | 'upload'>;
 
 export default ({
   nutrientTableService,
@@ -91,6 +95,28 @@ export default ({
     res.status(204).json();
   };
 
+  const upload = async (
+    req: Request<{ nutrientTableId: string }>,
+    res: Response<JobResponse>
+  ): Promise<void> => {
+    const {
+      file,
+      params: { nutrientTableId },
+      body: { type },
+    } = req;
+    const { id: userId } = req.user as User;
+
+    if (!file) throw new ValidationError('file', 'Missing file.');
+
+    const data = await nutrientTableService.uploadCsvFile(nutrientTableId, {
+      type,
+      file: file.path,
+      userId,
+    });
+
+    res.json({ data });
+  };
+
   return {
     browse,
     create,
@@ -99,5 +125,6 @@ export default ({
     edit,
     update,
     destroy,
+    upload,
   };
 };

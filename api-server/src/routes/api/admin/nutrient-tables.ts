@@ -1,11 +1,13 @@
 import { Router } from 'express';
+import multer from 'multer';
 import { permission } from '@/http/middleware/acl';
 import validation from '@/http/requests/admin/nutrient-tables';
 import ioc from '@/ioc';
 import { wrapAsync } from '@/util';
 
-const { nutrientTableController } = ioc.cradle;
+const { fsConfig, nutrientTableController } = ioc.cradle;
 const router = Router();
+const upload = multer({ dest: fsConfig.local.uploads });
 
 router
   .route('')
@@ -40,6 +42,13 @@ router.get(
   '/:nutrientTableId/edit',
   permission('nutrient-tables-edit'),
   wrapAsync(nutrientTableController.edit)
+);
+
+router.post(
+  '/:nutrientTableId/upload',
+  upload.single('file'),
+  validation.upload,
+  wrapAsync(nutrientTableController.upload)
 );
 
 export default router;

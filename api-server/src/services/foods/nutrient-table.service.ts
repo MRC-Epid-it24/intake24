@@ -5,23 +5,32 @@ import {
   NutrientTableCsvMappingFieldInput,
   NutrientTableCsvMappingNutrientInput,
 } from '@common/types/http/admin';
+import { JobType } from '@common/types';
 import {
   NutrientTable,
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
 } from '@/db/models/foods';
+import { Job } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
+
+export type UploadCsvFileInput = {
+  type: Extract<JobType, 'NutrientTableImportData' | 'NutrientTableImportMapping'>;
+  file: string;
+  userId?: string;
+};
 
 export interface NutrientTableService {
   getTable: (nutrientTableId: string) => Promise<NutrientTableEntry>;
   createTable: (input: NutrientTableInput) => Promise<NutrientTableEntry>;
   updateTable: (nutrientTableId: string, input: NutrientTableInput) => Promise<NutrientTableEntry>;
   deleteTable: (nutrientTableId: string) => Promise<void>;
+  uploadCsvFile: (nutrientTableId: string, input: UploadCsvFileInput) => Promise<Job>;
 }
 
-export default ({ db }: Pick<IoC, 'db'>): NutrientTableService => {
+export default ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>): NutrientTableService => {
   /**
    * Get nutrient table record with all CSV mappings
    *
@@ -239,10 +248,20 @@ export default ({ db }: Pick<IoC, 'db'>): NutrientTableService => {
     await nutrientTable.destroy();
   };
 
+  const uploadCsvFile = async (
+    nutrientTableId: string,
+    input: UploadCsvFileInput
+  ): Promise<Job> => {
+    const { type, file, userId } = input;
+
+    return scheduler.jobs.addJob({ type, userId }, { nutrientTableId, file });
+  };
+
   return {
     getTable,
     createTable,
     updateTable,
     deleteTable,
+    uploadCsvFile,
   };
 };

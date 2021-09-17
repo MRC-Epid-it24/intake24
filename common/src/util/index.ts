@@ -16,9 +16,7 @@ export const offsetToExcelColumn = (offset: number | null): string | null => {
   return letters.charAt(currOffset) + result;
 };
 
-export const excelColumnToOffset = (column: string | null): number | null => {
-  if (column === null) return null;
-
+export const excelColumnToOffset = (column: string): number => {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const currColumn = column.toUpperCase();
   let result = 0;

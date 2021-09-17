@@ -219,9 +219,9 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { NutrientTableEntry, NutrientTableRefs } from '@common/types/http/admin';
+import { excelColumnToOffset, offsetToExcelColumn } from '@common/util';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
-import { excelColumnToOffset, offsetToExcelColumn } from '@/util';
 import { FormMixin } from '@/types';
 
 export type NutrientTableForm = {
@@ -270,7 +270,9 @@ export const transformOut = (data: NutrientTableForm) => {
       ...csvMapping,
       idColumnOffset: excelColumnToOffset(idColumnOffset),
       descriptionColumnOffset: excelColumnToOffset(descriptionColumnOffset),
-      localDescriptionColumnOffset: excelColumnToOffset(localDescriptionColumnOffset),
+      localDescriptionColumnOffset: localDescriptionColumnOffset
+        ? excelColumnToOffset(localDescriptionColumnOffset)
+        : null,
     },
     csvMappingFields: csvMappingFields
       .filter((field) => field.fieldName && field.columnOffset)

@@ -1,50 +1,43 @@
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import path from 'path';
-import type { CustomField, SurveyImportRespondentsParams } from '@common/types';
+import type { NutrientTableImportMappingParams } from '@common/types';
 import { JobsOptions } from 'bullmq';
-import { User, UserSurveyAlias } from '@/db/models/system';
+import { excelColumnToOffset } from '@common/util';
 import type { IoC } from '@/ioc';
 import Job from './job';
+import { NutrientTable, NutrientTableCsvMappingNutrient, NutrientType } from '@/db/models/foods';
 
 export type CSVRow = {
-  username: string;
-  password: string;
-  name?: string;
-  email?: string;
-  phone?: string;
-  [key: string]: string | undefined;
+  'Intake24 nutrient ID': string;
+  'NDB spreadsheet column index': string;
 };
 
-const requiredFields = ['username', 'password'];
+const requiredFields = ['Intake24 nutrient ID', 'NDB spreadsheet column index'];
 
-export default class SurveyImportRespondents extends Job<SurveyImportRespondentsParams> {
-  readonly name = 'SurveyImportRespondents';
-
-  private readonly surveyService;
+export default class NutrientTableImportMapping extends Job<NutrientTableImportMappingParams> {
+  readonly name = 'NutrientTableImportMapping';
 
   private file!: string;
 
   private content: CSVRow[] = [];
 
-  constructor({ logger, surveyService }: Pick<IoC, 'logger' | 'surveyService'>) {
+  constructor({ logger }: Pick<IoC, 'logger'>) {
     super({ logger });
-
-    this.surveyService = surveyService;
   }
 
   /**
    * Run the task
    *
    * @param {string} jobId
-   * @param {SurveyImportRespondentsParams} params
+   * @param {NutrientTableImportMappingParams} params
    * @param {JobsOptions} ops
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof NutrientTableImportMapping
    */
   public async run(
     jobId: string,
-    params: SurveyImportRespondentsParams,
+    params: NutrientTableImportMappingParams,
     ops: JobsOptions
   ): Promise<void> {
     this.init(jobId, params, ops);
@@ -55,6 +48,9 @@ export default class SurveyImportRespondents extends Job<SurveyImportRespondents
 
     const fileExists = await fs.pathExists(this.file);
     if (!fileExists) throw new Error(`Missing file (${this.file}).`);
+
+    const nutrientTable = await NutrientTable.findByPk(params.nutrientTableId);
+    if (!nutrientTable) throw new Error(`Nutrient table record not found.`);
 
     await this.validate();
 
@@ -69,7 +65,7 @@ export default class SurveyImportRespondents extends Job<SurveyImportRespondents
    * @private
    * @param {number} [chunk=100]
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof NutrientTableImportMapping
    */
   private async validate(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -112,7 +108,7 @@ export default class SurveyImportRespondents extends Job<SurveyImportRespondents
    *
    * @private
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof NutrientTableImportMapping
    */
   private async validateChunk(): Promise<void> {
     if (!this.content.length) return;
@@ -123,26 +119,11 @@ export default class SurveyImportRespondents extends Job<SurveyImportRespondents
     if (requiredFields.some((field) => !csvFields.includes(field)))
       throw new Error(`Missing some of the required fields (${requiredFields.join(',')}).`);
 
-    const userName = this.content.map((item) => item.username);
-    const { surveyId } = this.params;
+    const nutrientIds = this.content.map((item) => item['Intake24 nutrient ID']);
+    const count = await NutrientType.count({ where: { id: nutrientIds } });
 
-    // Check for unique aliases within survey
-    const aliases = await UserSurveyAlias.findAll({ where: { surveyId, userName } });
-    if (aliases.length) {
-      const existingAliases = aliases.map((alias) => alias.userName);
-      throw new Error(`Following usernames already exist in survey: ${existingAliases.join(', ')}`);
-    }
-
-    // Check for unique emails within system
-    const email = this.content.filter((item) => item.email).map((item) => item.email) as string[];
-    if (email.length) {
-      const users = await User.findAll({ where: { email } });
-
-      if (users.length) {
-        const existingUsers = users.map((user) => user.email);
-        throw new Error(`Following emails already exist in system: ${existingUsers.join(', ')}`);
-      }
-    }
+    if (nutrientIds.length !== count)
+      throw new Error(`Spreadsheet contains some invalid nutrient IDs.`);
 
     this.content = [];
   }
@@ -153,9 +134,14 @@ export default class SurveyImportRespondents extends Job<SurveyImportRespondents
    * @private
    * @param {number} [chunk=100]
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof NutrientTableImportMapping
    */
   private async import(chunk = 100): Promise<void> {
+    const { nutrientTableId } = this.params;
+
+    // Clean old data
+    await NutrientTableCsvMappingNutrient.destroy({ where: { nutrientTableId } });
+
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
 
@@ -193,32 +179,27 @@ export default class SurveyImportRespondents extends Job<SurveyImportRespondents
    *
    * @private
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof NutrientTableImportMapping
    */
   private async importChunk(): Promise<void> {
     if (!this.content.length) return;
 
+    const { nutrientTableId } = this.params;
+
     const records = this.content.map((item) => {
-      const { username, password, name, email, phone, ...rest } = item;
-
-      const customFields = Object.keys(rest).reduce<CustomField[]>((acc, key) => {
-        const value = rest[key];
-        if (value) acc.push({ name: key, value });
-
-        return acc;
-      }, []);
+      const {
+        'Intake24 nutrient ID': nutrientTypeId,
+        'NDB spreadsheet column index': columnOffset,
+      } = item;
 
       return {
-        userName: username,
-        password,
-        name,
-        email,
-        phone,
-        customFields,
+        nutrientTableId,
+        nutrientTypeId,
+        columnOffset: excelColumnToOffset(columnOffset),
       };
     });
 
-    await this.surveyService.createRespondents(this.params.surveyId, records);
+    await NutrientTableCsvMappingNutrient.bulkCreate(records);
 
     this.content = [];
   }
