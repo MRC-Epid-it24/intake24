@@ -9,8 +9,6 @@ Mail implementation supports following transports:
 
 Implementation is using [nodemailer](https://nodemailer.com).
 
-Path: `src/config/mail.ts`
-
 ## Mailer
 
 Selected mailer transport

@@ -12,7 +12,7 @@ const startApp = async (ops: Ops): Promise<void> => {
 
   // Start listening
   server.listen(port, host, () => {
-    logger.info(`${name} is listening on ${host}:${port}!`);
+    logger.child({ service: 'Application' }).info(`${name} is listening on ${host}:${port}!`);
   });
 };
 

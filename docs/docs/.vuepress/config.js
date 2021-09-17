@@ -99,6 +99,7 @@ module.exports = {
             'api-server/cache',
             'api-server/database',
             'api-server/filesystem',
+            'api-server/log',
             'api-server/mail',
             'api-server/queue',
             'api-server/security',

@@ -6,7 +6,7 @@ import securityLoader from './security';
 import servicesLoader from './services';
 
 export default async (app: Express, ops: Ops): Promise<void> => {
-  const { logger } = ops;
+  const logger = ops.logger.child({ service: 'Application' });
 
   await securityLoader(app, ops);
   logger.info('Security settings loaded.');

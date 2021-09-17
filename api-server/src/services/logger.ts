@@ -7,24 +7,19 @@ const silent = config.app.env === 'test';
 const dirname = path.resolve(config.filesystem.local.logs);
 
 const logFormat = format.printf(
-  ({ level, message, timestamp }) => `${timestamp} ${level}: ${message}`
+  ({ level, message, timestamp, service }) =>
+    `${timestamp} ${level}${service ? ` ${service}` : ''}: ${message}`
 );
 
 const logger = createLogger({
-  level: 'info',
-  format: format.combine(
-    format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss',
-    }),
-    logFormat
-  ),
+  level: config.logConfig.level,
+  format: format.combine(format.timestamp(), format.json()),
   silent,
   transports: [
     new transports.DailyRotateFile({
       dirname,
       filename: 'application-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
-      zippedArchive: true,
       maxSize: '10m',
       maxFiles: '30d',
     }),
@@ -33,12 +28,10 @@ const logger = createLogger({
       dirname,
       filename: 'error-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
-      zippedArchive: true,
       maxSize: '10m',
       maxFiles: '30d',
     }),
     new transports.Console({
-      level: 'debug',
       format: format.combine(
         format.colorize(),
         format.timestamp({
@@ -53,12 +46,12 @@ const logger = createLogger({
 
 export const httpLogger = {
   write: (message: string): void => {
-    logger.info(message.trim());
+    logger.child({ service: 'Http' }).info(message.trim());
   },
 };
 
 export const dbLogger = (sql: string): void => {
-  logger.debug(sql);
+  logger.child({ service: 'Database' }).debug(sql);
 };
 
 export default logger;

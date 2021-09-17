@@ -10,6 +10,7 @@ import type {
   DatabaseConfig,
   Environment,
   FileSystemConfig,
+  LogConfig,
   MailConfig,
   QueueConfig,
   SecurityConfig,
@@ -90,6 +91,7 @@ export interface IoC extends Jobs {
   cacheConfig: CacheConfig;
   databaseConfig: DatabaseConfig;
   fsConfig: FileSystemConfig;
+  logConfig: LogConfig;
   mailConfig: MailConfig;
   queueConfig: QueueConfig;
   securityConfig: SecurityConfig;

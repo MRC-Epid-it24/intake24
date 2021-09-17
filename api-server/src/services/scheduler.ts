@@ -16,7 +16,7 @@ export default class Scheduler {
     tasksQueueHandler,
   }: Pick<IoC, 'queueConfig' | 'logger' | 'jobsQueueHandler' | 'tasksQueueHandler'>) {
     this.queueConfig = queueConfig;
-    this.logger = logger;
+    this.logger = logger.child({ service: 'Scheduler' });
 
     this.jobs = jobsQueueHandler;
     this.tasks = tasksQueueHandler;

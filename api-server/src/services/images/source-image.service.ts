@@ -11,8 +11,12 @@ export interface SourceImageService {
   destroy: (sourceImageId: string | string[]) => Promise<void>;
 }
 
-export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): SourceImageService => {
+export default ({
+  fsConfig,
+  logger: globalLogger,
+}: Pick<IoC, 'fsConfig' | 'logger'>): SourceImageService => {
   const { images: imagesPath } = fsConfig.local;
+  const logger = globalLogger.child({ service: 'SourceImageService' });
 
   const uploadSourceImage = async (
     input: UploadSourceImageInput,
@@ -57,7 +61,7 @@ export default ({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>): SourceI
         await fs.unlink(path.join(imagesPath, sourceImage.path));
         await fs.unlink(path.join(imagesPath, sourceImage.thumbnailPath));
       } catch (err: any) {
-        logger.warn(`SourceImageService|destroy: ${err.message}`);
+        logger.warn(`destroy: ${err.message}`);
       }
     }
   };

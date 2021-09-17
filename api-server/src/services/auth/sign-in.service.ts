@@ -8,8 +8,10 @@ export interface SignInService {
 
 export default ({
   securityConfig,
-  logger,
+  logger: globalLogger,
 }: Pick<IoC, 'securityConfig' | 'logger'>): SignInService => {
+  const logger = globalLogger.child({ service: 'SignInService' });
+
   const log = async (input: SignInAttempt): Promise<void> => {
     logger.debug(
       `SignInService: Login attempt, Provider: ${input.provider}, ProviderKey: ${input.providerKey}`

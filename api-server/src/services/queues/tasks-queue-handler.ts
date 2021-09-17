@@ -25,7 +25,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
    * @memberof TasksQueueHandler
    */
   constructor({ logger }: Pick<IoC, 'logger'>) {
-    this.logger = logger;
+    this.logger = logger.child({ service: 'TasksQueueHandler' });
   }
 
   /**

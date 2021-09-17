@@ -30,16 +30,17 @@ export interface ProcessedImageService {
 
 export default ({
   fsConfig,
-  logger,
+  logger: globalLogger,
   sourceImageService,
 }: Pick<IoC, 'fsConfig' | 'logger' | 'sourceImageService'>): ProcessedImageService => {
   const { images: imagesPath } = fsConfig.local;
+  const logger = globalLogger.child({ service: 'ProcessedImageService' });
 
   const resolveSourceImage = async (sourceImageId: string): Promise<SourceImage> => {
     const sourceImage = await SourceImage.findByPk(sourceImageId);
     if (!sourceImage) {
       logger.warn(
-        `ProcessedImageService|resolveSourceImage: Source image (${sourceImageId}) for selection image not found.`
+        `resolveSourceImage: Source image (${sourceImageId}) for selection image not found.`
       );
       throw new NotFoundError();
     }
@@ -47,7 +48,7 @@ export default ({
     try {
       await fs.access(path.join(imagesPath, sourceImage.path), fs.constants.F_OK);
     } catch (err: any) {
-      logger.error(`ProcessedImageService|resolveSourceImage: ${err.message}`);
+      logger.error(`resolveSourceImage: ${err.message}`);
       throw new NotFoundError();
     }
 
@@ -153,7 +154,7 @@ export default ({
   const destroy = async (imageId: string, options: DestroyOptions = {}): Promise<void> => {
     const processedImage = await ProcessedImage.findByPk(imageId);
     if (!processedImage) {
-      logger.warn(`ProcessedImageService|destroy: processed image not found. (ID: ${imageId})`);
+      logger.warn(`destroy: processed image not found. (ID: ${imageId})`);
       return;
     }
 
@@ -162,7 +163,7 @@ export default ({
     try {
       await fs.unlink(path.join(imagesPath, processedImage.path));
     } catch (err: any) {
-      logger.warn(`ProcessedImageService|destroy: ${err.message}`);
+      logger.warn(`destroy: ${err.message}`);
     }
 
     const { includeSources } = options;

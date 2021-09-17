@@ -24,7 +24,7 @@ export default class Pusher {
 
   constructor({ servicesConfig, logger }: Pick<IoC, 'servicesConfig' | 'logger'>) {
     this.servicesConfig = servicesConfig;
-    this.logger = logger;
+    this.logger = logger.child({ service: 'Pusher' });
 
     this.$webPush = webPush;
   }

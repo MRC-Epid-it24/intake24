@@ -12,13 +12,11 @@ export default abstract class Job<T = any> {
 
   protected isRepeatable!: boolean;
 
-  protected readonly logger;
+  protected logger;
 
   constructor({ logger }: Pick<IoC, 'logger'>) {
     this.logger = logger;
   }
-
-  abstract run(jobId: string, data: T, ops: JobsOptions): Promise<void>;
 
   protected init(jobId: string, params: T, ops: JobsOptions): void {
     this.jobId = jobId;
@@ -26,7 +24,11 @@ export default abstract class Job<T = any> {
     this.ops = ops;
 
     this.isRepeatable = jobId.startsWith('repeat:');
+
+    this.logger = this.logger.child({ service: this.name, jobId, params, ops });
   }
+
+  abstract run(jobId: string, data: T, ops: JobsOptions): Promise<void>;
 }
 
 export interface JobConstructor {

@@ -3,6 +3,7 @@ import app, { AppConfig } from './app';
 import cache, { CacheConfig } from './cache';
 import database, { DatabaseConfig } from './database';
 import filesystem, { FileSystemConfig } from './filesystem';
+import logConfig, { LogConfig } from './log';
 import mail, { MailConfig } from './mail';
 import queue, { QueueConfig } from './queue';
 import security, { SecurityConfig } from './security';
@@ -13,6 +14,7 @@ export * from './app';
 export * from './cache';
 export * from './database';
 export * from './filesystem';
+export * from './log';
 export * from './mail';
 export * from './queue';
 export * from './security';
@@ -24,6 +26,7 @@ export type Config = {
   cache: CacheConfig;
   database: DatabaseConfig;
   filesystem: FileSystemConfig;
+  logConfig: LogConfig;
   mail: MailConfig;
   queue: QueueConfig;
   security: SecurityConfig;
@@ -36,6 +39,7 @@ const config: Config = {
   cache,
   database,
   filesystem,
+  logConfig,
   mail,
   queue,
   security,

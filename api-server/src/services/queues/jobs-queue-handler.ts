@@ -50,7 +50,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    */
   constructor({ queueConfig, logger, pusher }: Pick<IoC, 'queueConfig' | 'logger' | 'pusher'>) {
     this.config = queueConfig;
-    this.logger = logger;
+    this.logger = logger.child({ service: 'JobsQueueHandler' });
     this.pusher = pusher;
   }
 

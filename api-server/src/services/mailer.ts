@@ -17,7 +17,7 @@ export default class Mailer {
   }: Pick<IoC, 'environment' | 'mailConfig' | 'logger'>) {
     this.environment = environment;
     this.mailConfig = mailConfig;
-    this.logger = logger;
+    this.logger = logger.child({ service: 'Mailer' });
   }
 
   init(): void {

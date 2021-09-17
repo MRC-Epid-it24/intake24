@@ -15,7 +15,9 @@ export interface JwtRotationService {
   purge: () => Promise<number>;
 }
 
-export default ({ logger }: Pick<IoC, 'logger'>): JwtRotationService => {
+export default (ops: Pick<IoC, 'logger'>): JwtRotationService => {
+  const logger = ops.logger.child({ service: 'JwtRotationService' });
+
   /**
    * Store new refresh token to database
    *
@@ -72,17 +74,17 @@ export default ({ logger }: Pick<IoC, 'logger'>): JwtRotationService => {
     const refreshToken = await RefreshToken.findByPk(jti);
 
     if (!refreshToken) {
-      logger.debug('JWT-Rotation: Refresh token not found.');
+      logger.debug('Refresh token not found.');
       return false;
     }
 
     if (refreshToken.revoked) {
-      logger.debug('JWT-Rotation: Refresh token revoked.');
+      logger.debug('Refresh token revoked.');
       return false;
     }
 
     if (refreshToken.expiresAt <= new Date()) {
-      logger.debug('JWT-Rotation: Refresh token expired.');
+      logger.debug('Refresh token expired.');
       return false;
     }
 
@@ -110,7 +112,7 @@ export default ({ logger }: Pick<IoC, 'logger'>): JwtRotationService => {
   const purge = async (): Promise<number> => {
     const rows = await RefreshToken.destroy({ where: { expiresAt: { [Op.lte]: new Date() } } });
 
-    logger.debug(`JWT-Rotation: Expired refresh tokens (${rows}) have been purged.`);
+    logger.debug(`Expired refresh tokens (${rows}) have been purged.`);
 
     return rows;
   };

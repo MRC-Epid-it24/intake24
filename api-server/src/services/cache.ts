@@ -14,7 +14,7 @@ export default class Cache {
   constructor({ cacheConfig, logger }: Pick<IoC, 'cacheConfig' | 'logger'>) {
     this.config = cacheConfig.redis;
     this.prefix = cacheConfig.prefix;
-    this.logger = logger;
+    this.logger = logger.child({ service: 'Cache' });
   }
 
   /**

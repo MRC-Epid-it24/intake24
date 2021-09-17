@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { Database } from '@api-server/config';
 import * as foods from './models/foods';
 import * as system from './models/system';
+import { dbLogger } from '@/services/logger';
 import type { IoC } from '@/ioc';
 
 const models = {
@@ -33,7 +34,7 @@ export default class DB implements DbInterface {
   }: Pick<IoC, 'environment' | 'databaseConfig' | 'logger'>) {
     this.env = environment;
     this.config = databaseConfig;
-    this.logger = logger;
+    this.logger = logger.child({ service: 'Database' });
   }
 
   async init(): Promise<void> {
