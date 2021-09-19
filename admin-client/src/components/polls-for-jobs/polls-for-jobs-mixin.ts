@@ -2,10 +2,10 @@ import Vue from 'vue';
 import { JobEntry } from '@common/types/http/admin';
 import { JobType } from '@common/types';
 import { downloadFile } from '@/util/fs';
-import { PollJobList } from '.';
+import PollsJobList from './polls-job-list.vue';
 
 export default Vue.extend({
-  components: { PollJobList },
+  components: { PollsJobList },
 
   data() {
     return {
