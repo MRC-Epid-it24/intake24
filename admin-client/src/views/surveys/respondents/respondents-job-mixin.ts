@@ -1,10 +1,10 @@
 import Vue, { VueConstructor } from 'vue';
-import pollsForJobsMixin from '@/mixins/polls-for-jobs-mixin';
+import { PollsForJobs } from '@/components/polls-for-jobs';
 
-type mixins = InstanceType<typeof pollsForJobsMixin>;
+type mixins = InstanceType<typeof PollsForJobs>;
 
 export default (Vue as VueConstructor<Vue & mixins>).extend({
-  mixins: [pollsForJobsMixin],
+  mixins: [PollsForJobs],
 
   data() {
     return {

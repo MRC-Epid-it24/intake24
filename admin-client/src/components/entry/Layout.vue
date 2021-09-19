@@ -97,7 +97,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
   props: {
     id: {
-      type: [Number, String],
+      type: String,
       required: true,
     },
     entry: {

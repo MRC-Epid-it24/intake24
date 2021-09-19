@@ -4,7 +4,7 @@ import ResourceMixin from '@/mixins/ResourceMixin';
 export default Vue.extend({
   props: {
     id: {
-      type: [Number, String],
+      type: String,
       default: 'create',
     },
   },

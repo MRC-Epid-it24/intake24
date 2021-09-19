@@ -2,8 +2,11 @@ import Vue from 'vue';
 import { JobEntry } from '@common/types/http/admin';
 import { JobType } from '@common/types';
 import { downloadFile } from '@/util/fs';
+import { PollJobList } from '.';
 
 export default Vue.extend({
+  components: { PollJobList },
+
   data() {
     return {
       jobType: [] as JobType | JobType[],
@@ -13,9 +16,6 @@ export default Vue.extend({
   },
 
   computed: {
-    visibleJobs(): JobEntry[] {
-      return this.jobs.length > 5 ? this.jobs.slice(0, 5) : this.jobs;
-    },
     jobInProgress(): boolean {
       return this.jobs.some((item) => item.progress !== 1);
     },
@@ -37,7 +37,7 @@ export default Vue.extend({
     async status() {
       const {
         data: { data },
-      } = await this.$http.get(`admin/user/jobs`, { params: { type: this.jobType } });
+      } = await this.$http.get(`admin/user/jobs`, { params: { type: this.jobType, limit: 5 } });
 
       this.jobs = [...data];
     },

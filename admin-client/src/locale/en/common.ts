@@ -22,6 +22,7 @@ const common: LocaleMessageObject = {
   no: 'No',
   false: 'No',
   none: 'None',
+  na: 'N/A',
 
   name: 'Name',
   displayName: 'Label',

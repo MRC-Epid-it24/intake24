@@ -78,58 +78,15 @@
                     type="submit"
                     block
                     color="secondary"
-                    :title="$t('common.action.download')"
+                    :title="$t('common.action.export')"
                   >
-                    <v-icon left>fa-download</v-icon> {{ $t('common.action.download') }}
+                    <v-icon left>fa-download</v-icon> {{ $t('common.action.export') }}
                   </v-btn>
                 </v-col>
               </v-row>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-list three-line>
-                <v-list-item v-for="item in visibleJobs" :key="item.id">
-                  <v-list-item-avatar>
-                    <v-icon class="grey" dark>fa-running</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ item.type }}</v-list-item-title>
-                    <v-list-item-subtitle>
-                      Started:
-                      {{ item.completedAt ? new Date(item.startedAt).toLocaleString() : '' }}
-                    </v-list-item-subtitle>
-                    <v-list-item-subtitle>
-                      Completed:
-                      {{ item.completedAt ? new Date(item.completedAt).toLocaleString() : '' }}
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-btn
-                      v-if="item.downloadUrl"
-                      :title="$t('common.action.download')"
-                      icon
-                      link
-                      @click="download(item)"
-                    >
-                      <v-icon color="primary">fa-download</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                  <v-list-item-action>
-                    <v-progress-circular
-                      indeterminate
-                      color="secondary"
-                      v-if="item.progress != 1"
-                    ></v-progress-circular>
-                    <template v-else>
-                      <v-icon v-if="item.successful" color="success" large>fa-check-circle</v-icon>
-                      <v-icon v-if="!item.successful" color="error" large>fa-times-circle</v-icon>
-                    </template>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list>
-            </v-col>
-          </v-row>
+          <polls-job-list v-bind="{ jobs }" @download="download"></polls-job-list>
         </v-card-text>
       </v-container>
     </v-form>
@@ -140,11 +97,11 @@
 import Vue, { VueConstructor } from 'vue';
 import { JobResponse } from '@common/types/http/admin';
 import detailMixin from '@/components/entry/detailMixin';
+import { PollsForJobs } from '@/components/polls-for-jobs';
 import form from '@/helpers/Form';
 import { DetailMixin } from '@/types';
-import PollsForJobsMixin from '@/mixins/polls-for-jobs-mixin';
 
-type mixins = InstanceType<typeof PollsForJobsMixin>;
+type mixins = InstanceType<typeof PollsForJobs>;
 
 type SurveyDataExportForm = {
   startDate: string | null;
@@ -154,7 +111,7 @@ type SurveyDataExportForm = {
 export default (Vue as VueConstructor<Vue & DetailMixin & mixins>).extend({
   name: 'SurveyDataExport',
 
-  mixins: [detailMixin, PollsForJobsMixin],
+  mixins: [detailMixin, PollsForJobs],
 
   data() {
     return {
