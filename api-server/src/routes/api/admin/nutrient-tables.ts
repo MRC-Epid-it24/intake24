@@ -47,6 +47,7 @@ router.get(
 router.post(
   '/:nutrientTableId/upload',
   upload.single('file'),
+  permission('nutrient-tables-upload'),
   validation.upload,
   wrapAsync(nutrientTableController.upload)
 );
