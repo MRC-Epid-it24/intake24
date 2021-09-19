@@ -18,10 +18,10 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
 
     const where: WhereOptions<JobAttributes> = {
       userId: user.id,
-      downloadUrlExpiresAt: { [Op.or]: [null, new Date()] },
+      downloadUrlExpiresAt: { [Op.or]: [null, { [Op.gt]: new Date() }] },
     };
 
-    if (type) where.type = type as string | string[];
+    if (type) where.type = type;
 
     const jobs = await Job.paginate({ req, where, order: [['startedAt', 'DESC']] });
 
