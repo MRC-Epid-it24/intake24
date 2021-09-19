@@ -71,7 +71,14 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     this.registerQueueEvents();
 
     for (let i = 0; i < this.config.workers; i++) {
-      this.workers.push(new Worker(this.name, this.processor, { connection }));
+      const worker = new Worker(this.name, this.processor, { connection });
+
+      worker.on('error', (err) => {
+        const { message, name, stack } = err;
+        this.logger.error(stack ?? `${name}: ${message}`);
+      });
+
+      this.workers.push(worker);
     }
 
     this.logger.info(`Queue ${this.name} has been loaded.`);
@@ -110,7 +117,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     this.queueEvents.on('completed', async ({ jobId }) => {
       const job = await DbJob.findByPk(jobId);
       if (!job) {
-        this.logger.error(`Queue ${this.name}: Job entry not found (${jobId}).`);
+        this.logger.error(`QueueEvent completed: Job entry not found (${jobId}).`);
         return;
       }
 
@@ -122,19 +129,19 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     this.queueEvents.on('failed', async ({ jobId, failedReason }) => {
       const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
       if (!bullJob) {
-        this.logger.warn(`Queue ${this.name}: BullJob (${jobId}) not found.`);
+        this.logger.error(`QueueEvent failed: BullJob (${jobId}) not found.`);
         return;
       }
 
       const { name, stacktrace } = bullJob;
 
       this.logger.error(
-        `Queue ${this.name}: Job ${name} | ${jobId} has failed.\n ${stacktrace.join('\n')}`
+        `QueueEvent failed: Job ${name} | ${jobId} has failed.\n ${stacktrace.join('\n')}`
       );
 
       const job = await DbJob.findByPk(jobId);
       if (!job) {
-        this.logger.error(`Queue ${this.name}: Job entry not found (${jobId}).`);
+        this.logger.error(`QueueEvent failed: Job entry not found (${jobId}).`);
         return;
       }
 

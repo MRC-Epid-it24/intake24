@@ -45,13 +45,17 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
 
     const worker = new Worker(this.name, this.processor, { connection });
 
-    worker.on('completed', (job) => {
-      this.logger.info(`${this.name}: ${job.name} | ${job.id} has completed.`);
-    });
-
-    worker.on('failed', (job: any, err: any) => {
-      this.logger.error(`${this.name}: ${job.name} | ${job.id} has failed with ${err.message}`);
-    });
+    worker
+      .on('completed', (job) => {
+        this.logger.info(`${this.name}: ${job.name} | ${job.id} has completed.`);
+      })
+      .on('failed', (job, err) => {
+        this.logger.error(`${this.name}: ${job.name} | ${job.id} has failed with ${err.message}`);
+      })
+      .on('error', (err) => {
+        const { message, name, stack } = err;
+        this.logger.error(stack ?? `${name}: ${message}`);
+      });
 
     this.workers.push(worker);
 
