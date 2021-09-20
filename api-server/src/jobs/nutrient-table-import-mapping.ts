@@ -83,6 +83,8 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
           }
         })
         .on('end', (records: number) => {
+          this.initProgress(records);
+
           this.validateChunk()
             .then(() => resolve())
             .catch((err) => {
@@ -156,7 +158,7 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
               });
           }
         })
-        .on('end', (records: number) => {
+        .on('end', () => {
           this.importChunk()
             .then(() => resolve())
             .catch((err) => {
@@ -194,6 +196,8 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
     });
 
     await NutrientTableCsvMappingNutrient.bulkCreate(records);
+
+    await this.updateProgress(this.content.length);
 
     this.content = [];
   }
