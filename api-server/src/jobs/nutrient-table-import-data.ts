@@ -1,9 +1,9 @@
+import { Job } from 'bullmq';
 import fs from 'fs-extra';
 import path from 'path';
 import type { NutrientTableImportDataParams } from '@common/types';
-import { JobsOptions } from 'bullmq';
 import type { IoC } from '@/ioc';
-import Job from './job';
+import BaseJob from './job';
 import { NutrientTable } from '@/db/models/foods';
 
 export type CSVRow = {
@@ -13,7 +13,7 @@ export type CSVRow = {
 
 // const requiredFields = ['username', 'password'];
 
-export default class NutrientTableImportData extends Job<NutrientTableImportDataParams> {
+export default class NutrientTableImportData extends BaseJob<NutrientTableImportDataParams> {
   readonly name = 'NutrientTableImportData';
 
   private file!: string;
@@ -27,29 +27,23 @@ export default class NutrientTableImportData extends Job<NutrientTableImportData
   /**
    * Run the task
    *
-   * @param {string} jobId
-   * @param {NutrientTableImportDataParams} params
-   * @param {JobsOptions} ops
+   * @param {Job} job
    * @returns {Promise<void>}
-   * @memberof NutrientTableImportMapping
+   * @memberof NutrientTableImportData
    */
-  public async run(
-    jobId: string,
-    params: NutrientTableImportDataParams,
-    ops: JobsOptions
-  ): Promise<void> {
-    this.init(jobId, params, ops);
+  public async run(job: Job): Promise<void> {
+    this.init(job);
 
-    this.file = path.resolve(params.file);
+    this.file = path.resolve(this.params.file);
 
-    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
+    this.logger.debug('Job started.');
 
     const fileExists = await fs.pathExists(this.file);
     if (!fileExists) throw new Error(`Missing file (${this.file}).`);
 
-    const nutrientTable = await NutrientTable.findByPk(params.nutrientTableId);
+    const nutrientTable = await NutrientTable.findByPk(this.params.nutrientTableId);
     if (!nutrientTable) throw new Error(`Nutrient table record not found.`);
 
-    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
+    this.logger.debug('Job finished.');
   }
 }

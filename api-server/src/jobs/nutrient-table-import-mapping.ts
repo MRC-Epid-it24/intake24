@@ -1,11 +1,11 @@
+import { Job } from 'bullmq';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import path from 'path';
 import type { NutrientTableImportMappingParams } from '@common/types';
-import { JobsOptions } from 'bullmq';
 import { excelColumnToOffset } from '@common/util';
 import type { IoC } from '@/ioc';
-import Job from './job';
+import BaseJob from './job';
 import { NutrientTable, NutrientTableCsvMappingNutrient, NutrientType } from '@/db/models/foods';
 
 export type CSVRow = {
@@ -15,7 +15,7 @@ export type CSVRow = {
 
 const requiredFields = ['Intake24 nutrient ID', 'NDB spreadsheet column index'];
 
-export default class NutrientTableImportMapping extends Job<NutrientTableImportMappingParams> {
+export default class NutrientTableImportMapping extends BaseJob<NutrientTableImportMappingParams> {
   readonly name = 'NutrientTableImportMapping';
 
   private file!: string;
@@ -29,34 +29,28 @@ export default class NutrientTableImportMapping extends Job<NutrientTableImportM
   /**
    * Run the task
    *
-   * @param {string} jobId
-   * @param {NutrientTableImportMappingParams} params
-   * @param {JobsOptions} ops
+   * @param {Job} job
    * @returns {Promise<void>}
    * @memberof NutrientTableImportMapping
    */
-  public async run(
-    jobId: string,
-    params: NutrientTableImportMappingParams,
-    ops: JobsOptions
-  ): Promise<void> {
-    this.init(jobId, params, ops);
+  public async run(job: Job): Promise<void> {
+    this.init(job);
 
-    this.file = path.resolve(params.file);
+    this.file = path.resolve(this.params.file);
 
-    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
+    this.logger.debug('Job started.');
 
     const fileExists = await fs.pathExists(this.file);
     if (!fileExists) throw new Error(`Missing file (${this.file}).`);
 
-    const nutrientTable = await NutrientTable.findByPk(params.nutrientTableId);
+    const nutrientTable = await NutrientTable.findByPk(this.params.nutrientTableId);
     if (!nutrientTable) throw new Error(`Nutrient table record not found.`);
 
     await this.validate();
 
     await this.import();
 
-    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
+    this.logger.debug('Job finished.');
   }
 
   /**

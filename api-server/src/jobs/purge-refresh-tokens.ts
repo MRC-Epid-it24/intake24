@@ -1,9 +1,9 @@
-import { JobsOptions } from 'bullmq';
+import { Job } from 'bullmq';
 import { PurgeRefreshTokensParams } from '@common/types';
 import type { IoC } from '@/ioc';
-import Job from './job';
+import BaseJob from './job';
 
-export default class PurgeRefreshTokens extends Job<PurgeRefreshTokensParams> {
+export default class PurgeRefreshTokens extends BaseJob<PurgeRefreshTokensParams> {
   readonly name = 'PurgeRefreshTokens';
 
   private readonly jwtRotationService;
@@ -17,24 +17,18 @@ export default class PurgeRefreshTokens extends Job<PurgeRefreshTokensParams> {
   /**
    * Run the task
    *
-   * @param {string} jobId
-   * @param {PurgeRefreshTokensParams} params
-   * @param {JobsOptions} ops
+   * @param {Job} job
    * @returns {Promise<void>}
    * @memberof PurgeRefreshTokens
    */
-  public async run(
-    jobId: string,
-    params: PurgeRefreshTokensParams,
-    ops: JobsOptions
-  ): Promise<void> {
-    this.init(jobId, params, ops);
+  public async run(job: Job): Promise<void> {
+    this.init(job);
 
-    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
+    this.logger.debug('Job started.');
 
     await this.purgeTokens();
 
-    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
+    this.logger.debug('Job finished.');
   }
 
   /**
@@ -45,10 +39,6 @@ export default class PurgeRefreshTokens extends Job<PurgeRefreshTokensParams> {
    * @memberof PurgeRefreshTokens
    */
   private async purgeTokens(): Promise<void> {
-    this.logger.debug(`Job ${this.name}: refresh tokens purge started.`);
-
     await this.jwtRotationService.purge();
-
-    this.logger.debug(`Job ${this.name}: refresh tokens purge finished.`);
   }
 }

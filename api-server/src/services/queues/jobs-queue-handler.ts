@@ -114,6 +114,16 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   private registerQueueEvents(): void {
+    this.queueEvents.on('progress', async ({ jobId, data }) => {
+      const job = await DbJob.findByPk(jobId);
+      if (!job) {
+        this.logger.error(`QueueEvent progress: Job entry not found (${jobId}).`);
+        return;
+      }
+
+      if (typeof data === 'number' && data < 1) await job.update({ progress: data });
+    });
+
     this.queueEvents.on('completed', async ({ jobId }) => {
       const job = await DbJob.findByPk(jobId);
       if (!job) {
@@ -175,12 +185,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    */
   // eslint-disable-next-line class-methods-use-this
   async processor(job: BullJob<JobData>): Promise<void> {
-    const {
-      id,
-      data: { params },
-      name,
-      opts,
-    } = job;
+    const { id, name } = job;
 
     if (!id) {
       this.logger.error(`Queue ${this.name}: Job ID missing.`);
@@ -196,7 +201,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     await dbJob.update({ startedAt: new Date() });
 
     const newJob = ioc.resolve<Job>(name);
-    await newJob.run(id, params, opts);
+    await newJob.run(job);
   }
 
   /**

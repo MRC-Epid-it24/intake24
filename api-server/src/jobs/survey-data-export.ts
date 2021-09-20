@@ -1,9 +1,9 @@
+import { Job } from 'bullmq';
 import fs from 'fs-extra';
-import path from 'path';
 import { Transform } from 'json2csv';
+import path from 'path';
 import { SurveyDataExportParams } from '@common/types';
-import { JobsOptions } from 'bullmq';
-import { Job } from '@/db/models/system';
+import { Job as DbJob } from '@/db/models/system';
 import type { IoC } from '@/ioc';
 import { NotFoundError } from '@/http/errors';
 import { EMPTY } from '@/services/data-export';
@@ -13,7 +13,7 @@ import BaseJob from './job';
 export default class SurveyDataExport extends BaseJob<SurveyDataExportParams> {
   readonly name = 'SurveyDataExport';
 
-  private job!: Job;
+  private dbJob!: DbJob;
 
   private readonly dataExportService;
 
@@ -33,25 +33,23 @@ export default class SurveyDataExport extends BaseJob<SurveyDataExportParams> {
   /**
    * Run the task
    *
-   * @param {string} jobId
-   * @param {SurveyDataExportParams} params
-   * @param {JobsOptions} ops
+   * @param {Job} job
    * @returns {Promise<void>}
    * @memberof SurveyDataExport
    */
-  public async run(jobId: string, params: SurveyDataExportParams, ops: JobsOptions): Promise<void> {
-    this.init(jobId, params, ops);
+  public async run(job: Job): Promise<void> {
+    this.init(job);
 
-    const job = await Job.findByPk(jobId);
-    if (!job) throw new NotFoundError(`Job ${this.name}: Job record not found (${jobId}).`);
+    const dbJob = await DbJob.findByPk(this.id);
+    if (!dbJob) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.id}).`);
 
-    this.job = job;
+    this.dbJob = dbJob;
 
-    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
+    this.logger.debug('Job started.');
 
     await this.exportData();
 
-    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
+    this.logger.debug('Job finished.');
   }
 
   /**
@@ -79,7 +77,7 @@ export default class SurveyDataExport extends BaseJob<SurveyDataExportParams> {
         .on('error', (err) => reject(err))
         .on('end', async () => {
           const downloadUrlExpiresAt = addTime(this.fsConfig.urlExpiresAt);
-          await this.job.update({ downloadUrl: filename, downloadUrlExpiresAt });
+          await this.dbJob.update({ downloadUrl: filename, downloadUrlExpiresAt });
           resolve();
         });
 

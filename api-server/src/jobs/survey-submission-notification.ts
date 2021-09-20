@@ -1,6 +1,6 @@
 import axios from 'axios';
+import { Job } from 'bullmq';
 import { Dictionary, SurveySubmissionNotificationParams } from '@common/types';
-import { JobsOptions } from 'bullmq';
 import { Survey, SurveySubmission } from '@/db/models/system';
 import { submissionScope } from '@/db/models/system/survey-submission';
 import { NotFoundError } from '@/http/errors';
@@ -21,24 +21,18 @@ export default class SurveySubmissionNotification extends BaseJob<SurveySubmissi
   /**
    * Run the task
    *
-   * @param {string} jobId
-   * @param {SurveySubmissionNotificationParams} params
-   * @param {JobsOptions} ops
+   * @param {Job} job
    * @returns {Promise<void>}
    * @memberof SurveySubmissionNotification
    */
-  public async run(
-    jobId: string,
-    params: SurveySubmissionNotificationParams,
-    ops: JobsOptions
-  ): Promise<void> {
-    this.init(jobId, params, ops);
+  public async run(job: Job): Promise<void> {
+    this.init(job);
 
-    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
+    this.logger.debug('Job started.');
 
     await this.sendSubmissionNotification();
 
-    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
+    this.logger.debug('Job finished.');
   }
 
   /**
@@ -56,9 +50,7 @@ export default class SurveySubmissionNotification extends BaseJob<SurveySubmissi
 
     const { submissionNotificationUrl, genUserKey } = survey;
     if (!submissionNotificationUrl) {
-      this.logger.warn(
-        `Job ${this.name} | ${this.jobId}: submission notification url not set for survey ${surveyId}`
-      );
+      this.logger.warn(`Submission notification url not set for survey ${surveyId}`);
       return;
     }
 

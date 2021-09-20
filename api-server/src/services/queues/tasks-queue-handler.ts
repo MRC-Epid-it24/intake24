@@ -85,12 +85,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
 
   // eslint-disable-next-line class-methods-use-this
   async processor(job: BullJob<JobData>): Promise<void> {
-    const {
-      id,
-      data: { params },
-      name,
-      opts,
-    } = job;
+    const { id, name } = job;
 
     if (!id) {
       this.logger.error(`Queue ${this.name}: Job ID missing.`);
@@ -98,7 +93,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
     }
 
     const newJob = ioc.resolve<Job>(name);
-    await newJob.run(id, params, opts);
+    await newJob.run(job);
   }
 
   async getRepeatableJobById(id: string): Promise<RepeatableBullJob | undefined> {

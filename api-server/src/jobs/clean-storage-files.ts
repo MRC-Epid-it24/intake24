@@ -1,13 +1,13 @@
-import { JobsOptions } from 'bullmq';
+import { Job } from 'bullmq';
 import fs from 'fs-extra';
 import path from 'path';
 import { CleanStorageFilesParams } from '@common/types';
 import type { IoC } from '@/ioc';
 import { addTime } from '@/util';
 import { LocalLocation } from '@/config/filesystem';
-import Job from './job';
+import BaseJob from './job';
 
-export default class CleanStorageFiles extends Job<CleanStorageFilesParams> {
+export default class CleanStorageFiles extends BaseJob<CleanStorageFilesParams> {
   readonly name = 'CleanStorageFiles';
 
   private readonly config;
@@ -21,20 +21,14 @@ export default class CleanStorageFiles extends Job<CleanStorageFilesParams> {
   /**
    * Run the task
    *
-   * @param {string} jobId
-   * @param {CleanStorageFilesParams} params
-   * @param {JobsOptions} ops
+   * @param {Job} job
    * @returns {Promise<void>}
    * @memberof CleanStorageFiles
    */
-  public async run(
-    jobId: string,
-    params: CleanStorageFilesParams,
-    ops: JobsOptions
-  ): Promise<void> {
-    this.init(jobId, params, ops);
+  public async run(job: Job): Promise<void> {
+    this.init(job);
 
-    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
+    this.logger.debug('Job started.');
 
     const dirs: LocalLocation[] = ['downloads', 'uploads'];
 
@@ -42,7 +36,7 @@ export default class CleanStorageFiles extends Job<CleanStorageFilesParams> {
       await this.cleanDir(this.config.local[dir]);
     }
 
-    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
+    this.logger.debug('Job finished.');
   }
 
   /**
@@ -55,7 +49,7 @@ export default class CleanStorageFiles extends Job<CleanStorageFilesParams> {
    * @memberof CleanStorageFiles
    */
   private async cleanDir(dir: string, expiresIn = '1h'): Promise<void> {
-    this.logger.debug(`Job ${this.name}: cleaning of '${dir}' folder started.`);
+    this.logger.debug(`Cleaning of '${dir}' folder started.`);
 
     const files = await fs.readdir(path.resolve(dir));
     const now = new Date();
@@ -70,6 +64,6 @@ export default class CleanStorageFiles extends Job<CleanStorageFilesParams> {
       await fs.unlink(filepath);
     }
 
-    this.logger.debug(`Job ${this.name}: cleaning of '${dir}' folder finished.`);
+    this.logger.debug(`Cleaning of '${dir}' folder finished.`);
   }
 }

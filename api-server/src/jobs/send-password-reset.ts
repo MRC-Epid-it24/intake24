@@ -1,12 +1,12 @@
+import { Job } from 'bullmq';
 import { trim } from 'lodash';
 import nunjucks from 'nunjucks';
 import { SendPasswordResetParams } from '@common/types';
-import { JobsOptions } from 'bullmq';
 import type { IoC } from '@/ioc';
 import { isUrlAbsolute } from '@/util';
-import Job from './job';
+import BaseJob from './job';
 
-export default class SendPasswordReset extends Job<SendPasswordResetParams> {
+export default class SendPasswordReset extends BaseJob<SendPasswordResetParams> {
   readonly name = 'SendPasswordReset';
 
   private readonly appConfig;
@@ -31,20 +31,14 @@ export default class SendPasswordReset extends Job<SendPasswordResetParams> {
   /**
    * Run the task
    *
-   * @param {string} jobId
-   * @param {SendPasswordResetParams} params
-   * @param {JobsOptions} ops
+   * @param {Job} job
    * @returns {Promise<void>}
    * @memberof SendPasswordReset
    */
-  public async run(
-    jobId: string,
-    params: SendPasswordResetParams,
-    ops: JobsOptions
-  ): Promise<void> {
-    this.init(jobId, params, ops);
+  public async run(job: Job): Promise<void> {
+    this.init(job);
 
-    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
+    this.logger.debug('Job started.');
 
     const { base, admin } = this.appConfig.urls;
     const domain = isUrlAbsolute(admin)
@@ -62,6 +56,6 @@ export default class SendPasswordReset extends Job<SendPasswordResetParams> {
 
     await this.mailer.sendMail({ to: this.params.email, subject: 'Password reset', html });
 
-    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
+    this.logger.debug('Job finished.');
   }
 }

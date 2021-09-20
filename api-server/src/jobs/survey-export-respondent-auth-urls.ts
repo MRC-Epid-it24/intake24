@@ -1,11 +1,11 @@
+import { Job } from 'bullmq';
 import { format as formatDate } from 'date-fns';
 import fs from 'fs-extra';
 import json2csv, { Transform } from 'json2csv';
 import { trimEnd } from 'lodash';
 import path from 'path';
 import { SurveyExportRespondentAuthUrlsParams } from '@common/types';
-import { JobsOptions } from 'bullmq';
-import { Job, Survey, UserSurveyAlias } from '@/db/models/system';
+import { Job as DbJob, Survey, UserSurveyAlias } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { addTime } from '@/util';
@@ -14,7 +14,7 @@ import BaseJob from './job';
 export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExportRespondentAuthUrlsParams> {
   readonly name = 'SurveyExportRespondentAuthUrls';
 
-  private job!: Job;
+  private dbJob!: DbJob;
 
   private readonly appConfig;
 
@@ -30,29 +30,23 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
   /**
    * Run the task
    *
-   * @param {string} jobId
-   * @param {SurveyExportRespondentAuthUrlsParams} params
-   * @param {JobsOptions} ops
+   * @param {Job} job
    * @returns {Promise<void>}
    * @memberof SurveyExportRespondentAuthUrls
    */
-  public async run(
-    jobId: string,
-    params: SurveyExportRespondentAuthUrlsParams,
-    ops: JobsOptions
-  ): Promise<void> {
-    this.init(jobId, params, ops);
+  public async run(job: Job): Promise<void> {
+    this.init(job);
 
-    const job = await Job.findByPk(jobId);
-    if (!job) throw new NotFoundError(`Job ${this.name}: Job record not found (${jobId}).`);
+    const dbJob = await DbJob.findByPk(this.id);
+    if (!dbJob) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.id}).`);
 
-    this.job = job;
+    this.dbJob = dbJob;
 
-    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
+    this.logger.debug('Job started.');
 
     await this.download();
 
-    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
+    this.logger.debug('Job finished.');
   }
 
   /**
@@ -102,7 +96,7 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
         .on('error', (err) => reject(err))
         .on('end', async () => {
           const downloadUrlExpiresAt = addTime(this.fsConfig.urlExpiresAt);
-          await this.job.update({ downloadUrl: filename, downloadUrlExpiresAt });
+          await this.dbJob.update({ downloadUrl: filename, downloadUrlExpiresAt });
           resolve();
         });
 

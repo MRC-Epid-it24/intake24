@@ -1,11 +1,11 @@
+import { Job } from 'bullmq';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import path from 'path';
 import type { CustomField, SurveyImportRespondentsParams } from '@common/types';
-import { JobsOptions } from 'bullmq';
 import { User, UserSurveyAlias } from '@/db/models/system';
 import type { IoC } from '@/ioc';
-import Job from './job';
+import BaseJob from './job';
 
 export type CSVRow = {
   username: string;
@@ -18,7 +18,7 @@ export type CSVRow = {
 
 const requiredFields = ['username', 'password'];
 
-export default class SurveyImportRespondents extends Job<SurveyImportRespondentsParams> {
+export default class SurveyImportRespondents extends BaseJob<SurveyImportRespondentsParams> {
   readonly name = 'SurveyImportRespondents';
 
   private readonly surveyService;
@@ -34,24 +34,19 @@ export default class SurveyImportRespondents extends Job<SurveyImportRespondents
   }
 
   /**
+  /**
    * Run the task
    *
-   * @param {string} jobId
-   * @param {SurveyImportRespondentsParams} params
-   * @param {JobsOptions} ops
+   * @param {Job} job
    * @returns {Promise<void>}
    * @memberof SurveyImportRespondents
    */
-  public async run(
-    jobId: string,
-    params: SurveyImportRespondentsParams,
-    ops: JobsOptions
-  ): Promise<void> {
-    this.init(jobId, params, ops);
+  public async run(job: Job): Promise<void> {
+    this.init(job);
 
-    this.file = path.resolve(params.file);
+    this.file = path.resolve(this.params.file);
 
-    this.logger.debug(`Job ${this.name} | ${jobId} started.`);
+    this.logger.debug('Job started.');
 
     const fileExists = await fs.pathExists(this.file);
     if (!fileExists) throw new Error(`Missing file (${this.file}).`);
@@ -60,7 +55,7 @@ export default class SurveyImportRespondents extends Job<SurveyImportRespondents
 
     await this.import();
 
-    this.logger.debug(`Job ${this.name} | ${jobId} finished.`);
+    this.logger.debug('Job finished.');
   }
 
   /**
