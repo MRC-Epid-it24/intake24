@@ -146,3 +146,37 @@ Content-Type: application/json
 ```json
 204 No Content
 ```
+
+
+## Upload nutrient data
+
+Endpoint accepts two types of CSV files.
+
+* NDB mapping
+* NDB nutrient data
+
+Upload is submitted as job and response returns `JobResponse` entry
+
+### Request
+
+```http
+POST /api/admin/nutrient-tables/:nutrientTableId/upload
+
+Authorization: Bearer {accessToken}
+Content-Type: multipart/form-data
+
+{
+    "type": 'NutrientTableImportData' | 'NutrientTableImportMapping',
+    "file": File
+}
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": {...}
+}
+```

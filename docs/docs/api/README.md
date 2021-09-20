@@ -1,7 +1,35 @@
 # Introduction
 
-The API serves content and connects to the database.
+REST-based API endpoints use:
+* mostly in `application/json` content-type
+* file-based endpoints use `multipart/form-data` content type
 
-## Usage
+# Usage
 
-Users of the API must be authenticated before they are able to access the API
+Protected endpoints require to supply access token (obtained during login) in `Authorization` http header.
+
+## Header format:
+```
+Authorization: Bearer {accessToken}
+```
+
+## Example request
+
+### Request
+
+```http
+GET /api/endpoint
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": {...},
+}
+```
