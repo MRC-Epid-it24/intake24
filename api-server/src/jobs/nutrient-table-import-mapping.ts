@@ -85,6 +85,8 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
         .on('end', (records: number) => {
           this.initProgress(records);
 
+          if (records % chunk === 0) return;
+
           this.validateChunk()
             .then(() => resolve())
             .catch((err) => {
@@ -158,7 +160,9 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
               });
           }
         })
-        .on('end', () => {
+        .on('end', (records: number) => {
+          if (records % chunk === 0) return;
+
           this.importChunk()
             .then(() => resolve())
             .catch((err) => {

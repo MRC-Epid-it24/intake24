@@ -134,7 +134,7 @@ export default (Vue as VueConstructor<Vue & DetailMixin & mixins>).extend({
   },
 
   async mounted() {
-    await this.status();
+    await this.startPolling(true);
   },
 
   methods: {

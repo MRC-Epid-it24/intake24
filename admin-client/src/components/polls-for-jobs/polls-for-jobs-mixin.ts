@@ -42,10 +42,12 @@ export default Vue.extend({
       this.jobs = [...data];
     },
 
-    async startPolling() {
+    async startPolling(now = false, ms = 2000) {
+      if (now) await this.status();
+
       this.polling = setInterval(async () => {
         await this.status();
-      }, 2000);
+      }, ms);
     },
 
     stopPolling() {

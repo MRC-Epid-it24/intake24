@@ -88,6 +88,10 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
           }
         })
         .on('end', (records: number) => {
+          this.initProgress(records);
+
+          if (records % chunk === 0) return;
+
           this.validateChunk()
             .then(() => resolve())
             .catch((err) => {
@@ -172,6 +176,8 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
           }
         })
         .on('end', (records: number) => {
+          if (records % chunk === 0) return;
+
           this.importChunk()
             .then(() => resolve())
             .catch((err) => {
@@ -214,6 +220,8 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
     });
 
     await this.surveyService.createRespondents(this.params.surveyId, records);
+
+    await this.updateProgress(this.content.length);
 
     this.content = [];
   }

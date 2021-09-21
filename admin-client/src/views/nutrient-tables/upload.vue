@@ -100,7 +100,7 @@ export default (
   },
 
   async mounted() {
-    await this.status();
+    await this.startPolling(true);
   },
 
   methods: {
