@@ -81,6 +81,16 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
 
     const filename = `intake24-${surveyId}-auth-urls-${timestamp}.csv`;
 
+    const total = await UserSurveyAlias.count({ where: { surveyId } });
+    const aliases = UserSurveyAlias.findAllWithStream({ where: { surveyId } });
+
+    this.initProgress(total);
+
+    let counter = 0;
+    const progressInterval = setInterval(() => {
+      this.setProgress(counter);
+    }, 1500);
+
     return new Promise((resolve, reject) => {
       const transform = new Transform({ fields, withBOM: true });
       const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
@@ -88,15 +98,19 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
         flags: 'w+',
       });
 
-      const aliases = UserSurveyAlias.findAllWithStream({ where: { surveyId } });
-
       aliases.on('error', (err) => reject(err));
 
       transform
         .on('error', (err) => reject(err))
+        .on('data', () => {
+          counter++;
+        })
         .on('end', async () => {
+          clearInterval(progressInterval);
+
           const downloadUrlExpiresAt = addTime(this.fsConfig.urlExpiresAt);
           await this.dbJob.update({ downloadUrl: filename, downloadUrlExpiresAt });
+
           resolve();
         });
 

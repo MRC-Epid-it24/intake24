@@ -227,7 +227,7 @@ export default class NutrientTableImportData extends StreamLockJob<NutrientTable
       }
     }
 
-    await this.updateProgress(this.content.length);
+    await this.incrementProgress(this.content.length);
 
     this.content = [];
 

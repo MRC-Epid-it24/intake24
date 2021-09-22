@@ -74,15 +74,32 @@ export default abstract class Job<T = any> {
   }
 
   /**
-   * Update current progress, emit update if greater than zero
+   * Increment current progress, emit update if greater than zero
    *
    * @protected
    * @param {number} done
    * @returns {Promise<void>}
    * @memberof Job
    */
-  protected async updateProgress(done: number): Promise<void> {
+  protected async incrementProgress(done: number): Promise<void> {
     this.progress.done += done;
+
+    const current = this.getProgress();
+    if (!current) return;
+
+    await this.job.updateProgress(current);
+  }
+
+  /**
+   * Set current progress, emit update if greater than zero
+   *
+   * @protected
+   * @param {number} done
+   * @returns {Promise<void>}
+   * @memberof Job
+   */
+  protected async setProgress(done: number): Promise<void> {
+    this.progress.done = done;
 
     const current = this.getProgress();
     if (!current) return;

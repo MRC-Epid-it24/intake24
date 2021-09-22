@@ -38,6 +38,7 @@ export type DataExportOptions = {
   options: SubmissionFindOptions;
   fields: ExportFieldInfo[];
   filename: string;
+  total: number;
 };
 
 export type SyncStreamOutput = {
@@ -226,7 +227,10 @@ export default ({
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-data-export-${surveyId}-${timestamp}.csv`;
 
-    return { options, fields, filename };
+    const totalFoods = await SurveySubmissionFood.count(options.foods);
+    const totalMissingFoods = await SurveySubmissionMissingFood.count(options.missingFoods);
+
+    return { options, fields, filename, total: totalFoods + totalMissingFoods };
   };
 
   /**

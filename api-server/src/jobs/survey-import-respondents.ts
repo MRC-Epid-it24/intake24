@@ -223,7 +223,7 @@ export default class SurveyImportRespondents extends StreamLockJob<SurveyImportR
 
     await this.surveyService.createRespondents(this.params.surveyId, records);
 
-    await this.updateProgress(this.content.length);
+    await this.incrementProgress(this.content.length);
 
     this.content = [];
     this.unlock();

@@ -60,9 +60,16 @@ export default class SurveyDataExport extends BaseJob<SurveyDataExportParams> {
    * @memberof SurveyDataExport
    */
   private async exportData(): Promise<void> {
-    const { options, fields, filename } = await this.dataExportService.prepareExportInfo(
+    const { options, fields, filename, total } = await this.dataExportService.prepareExportInfo(
       this.params
     );
+
+    this.initProgress(total);
+
+    let counter = 0;
+    const progressInterval = setInterval(() => {
+      this.setProgress(counter);
+    }, 1500);
 
     return new Promise((resolve, reject) => {
       const filepath = path.resolve(this.fsConfig.local.downloads, filename);
@@ -75,9 +82,15 @@ export default class SurveyDataExport extends BaseJob<SurveyDataExportParams> {
 
       transform
         .on('error', (err) => reject(err))
+        .on('data', () => {
+          counter++;
+        })
         .on('end', async () => {
+          clearInterval(progressInterval);
+
           const downloadUrlExpiresAt = addTime(this.fsConfig.urlExpiresAt);
           await this.dbJob.update({ downloadUrl: filename, downloadUrlExpiresAt });
+
           resolve();
         });
 

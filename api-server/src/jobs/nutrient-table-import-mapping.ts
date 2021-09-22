@@ -203,7 +203,7 @@ export default class NutrientTableImportMapping extends StreamLockJob<NutrientTa
 
     await NutrientTableCsvMappingNutrient.bulkCreate(records);
 
-    await this.updateProgress(this.content.length);
+    await this.incrementProgress(this.content.length);
 
     this.content = [];
     this.unlock();
