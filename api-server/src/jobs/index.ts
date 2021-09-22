@@ -11,6 +11,7 @@ import SurveySubmissionNotification from './survey-submission-notification';
 
 export * from './job';
 export { default as Job } from './job';
+export { default as StreamLockJob } from './stream-lock-job';
 
 const jobs = {
   // System

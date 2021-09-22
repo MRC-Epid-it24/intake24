@@ -1,5 +1,4 @@
 import { ConnectionOptions, Job as BullJob, Queue, QueueScheduler, Worker } from 'bullmq';
-import type { Logger } from 'winston';
 import { JobData, RepeatableBullJob } from '@common/types';
 import { Task } from '@/db/models/system';
 import type { IoC } from '@/ioc';
@@ -11,7 +10,7 @@ import { QueueHandler } from './queue-handler';
 export default class TasksQueueHandler implements QueueHandler<JobData> {
   readonly name = 'it24-tasks';
 
-  private readonly logger: Logger;
+  private readonly logger;
 
   queue!: Queue<JobData>;
 

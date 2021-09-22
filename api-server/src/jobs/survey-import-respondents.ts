@@ -5,7 +5,7 @@ import path from 'path';
 import type { CustomField, SurveyImportRespondentsParams } from '@common/types';
 import { User, UserSurveyAlias } from '@/db/models/system';
 import type { IoC } from '@/ioc';
-import BaseJob from './job';
+import StreamLockJob from './stream-lock-job';
 
 export type CSVRow = {
   username: string;
@@ -18,7 +18,7 @@ export type CSVRow = {
 
 const requiredFields = ['username', 'password'];
 
-export default class SurveyImportRespondents extends BaseJob<SurveyImportRespondentsParams> {
+export default class SurveyImportRespondents extends StreamLockJob<SurveyImportRespondentsParams> {
   readonly name = 'SurveyImportRespondents';
 
   private readonly surveyService;
@@ -78,8 +78,7 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
             stream.pause();
             this.validateChunk()
               .then(() => {
-                if (stream.destroyed) resolve();
-                else stream.resume();
+                stream.resume();
               })
               .catch((err) => {
                 stream.destroy(err);
@@ -87,10 +86,9 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
               });
           }
         })
-        .on('end', (records: number) => {
+        .on('end', async (records: number) => {
           this.initProgress(records);
-
-          if (records % chunk === 0) return;
+          await this.waitForUnlock();
 
           this.validateChunk()
             .then(() => resolve())
@@ -115,6 +113,8 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
    */
   private async validateChunk(): Promise<void> {
     if (!this.content.length) return;
+
+    this.lock();
 
     const csvFields = Object.keys(this.content[0]);
 
@@ -144,6 +144,7 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
     }
 
     this.content = [];
+    this.unlock();
   }
 
   /**
@@ -166,8 +167,7 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
             stream.pause();
             this.importChunk()
               .then(() => {
-                if (stream.destroyed) resolve();
-                else stream.resume();
+                stream.resume();
               })
               .catch((err) => {
                 stream.destroy(err);
@@ -175,8 +175,8 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
               });
           }
         })
-        .on('end', (records: number) => {
-          if (records % chunk === 0) return;
+        .on('end', async () => {
+          await this.waitForUnlock();
 
           this.importChunk()
             .then(() => resolve())
@@ -198,6 +198,8 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
    */
   private async importChunk(): Promise<void> {
     if (!this.content.length) return;
+
+    this.lock();
 
     const records = this.content.map((item) => {
       const { username, password, name, email, phone, ...rest } = item;
@@ -224,5 +226,6 @@ export default class SurveyImportRespondents extends BaseJob<SurveyImportRespond
     await this.updateProgress(this.content.length);
 
     this.content = [];
+    this.unlock();
   }
 }

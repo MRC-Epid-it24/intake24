@@ -26,6 +26,5 @@ export const subtractTime = (offset: string | number, since: Date = new Date()):
  * @param {number} timeout
  * @returns {Promise<void>}
  */
-export const sleep = (timeout: number): Promise<void> => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
+export const sleep = (timeout: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, timeout));

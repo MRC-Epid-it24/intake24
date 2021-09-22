@@ -5,7 +5,7 @@ import path from 'path';
 import type { NutrientTableImportMappingParams } from '@common/types';
 import { excelColumnToOffset } from '@common/util';
 import type { IoC } from '@/ioc';
-import BaseJob from './job';
+import StreamLockJob from './stream-lock-job';
 import { NutrientTable, NutrientTableCsvMappingNutrient, NutrientType } from '@/db/models/foods';
 
 export type CSVRow = {
@@ -15,7 +15,7 @@ export type CSVRow = {
 
 const requiredFields = ['Intake24 nutrient ID', 'NDB spreadsheet column index'];
 
-export default class NutrientTableImportMapping extends BaseJob<NutrientTableImportMappingParams> {
+export default class NutrientTableImportMapping extends StreamLockJob<NutrientTableImportMappingParams> {
   readonly name = 'NutrientTableImportMapping';
 
   private file!: string;
@@ -73,8 +73,7 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
             stream.pause();
             this.validateChunk()
               .then(() => {
-                if (stream.destroyed) resolve();
-                else stream.resume();
+                stream.resume();
               })
               .catch((err) => {
                 stream.destroy(err);
@@ -82,10 +81,9 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
               });
           }
         })
-        .on('end', (records: number) => {
+        .on('end', async (records: number) => {
           this.initProgress(records);
-
-          if (records % chunk === 0) return;
+          await this.waitForUnlock();
 
           this.validateChunk()
             .then(() => resolve())
@@ -111,6 +109,8 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
   private async validateChunk(): Promise<void> {
     if (!this.content.length) return;
 
+    this.lock();
+
     const csvFields = Object.keys(this.content[0]);
 
     // Check for presence of required fields
@@ -124,6 +124,7 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
       throw new Error(`Spreadsheet contains some invalid nutrient IDs.`);
 
     this.content = [];
+    this.unlock();
   }
 
   /**
@@ -151,8 +152,7 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
             stream.pause();
             this.importChunk()
               .then(() => {
-                if (stream.destroyed) resolve();
-                else stream.resume();
+                stream.resume();
               })
               .catch((err) => {
                 stream.destroy(err);
@@ -160,8 +160,8 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
               });
           }
         })
-        .on('end', (records: number) => {
-          if (records % chunk === 0) return;
+        .on('end', async () => {
+          await this.waitForUnlock();
 
           this.importChunk()
             .then(() => resolve())
@@ -184,6 +184,8 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
   private async importChunk(): Promise<void> {
     if (!this.content.length) return;
 
+    this.lock();
+
     const { nutrientTableId } = this.params;
 
     const records = this.content.map((item) => {
@@ -204,5 +206,6 @@ export default class NutrientTableImportMapping extends BaseJob<NutrientTableImp
     await this.updateProgress(this.content.length);
 
     this.content = [];
+    this.unlock();
   }
 }

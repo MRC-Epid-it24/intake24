@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import type { NutrientTableImportDataParams } from '@common/types';
 import type { IoC } from '@/ioc';
-import BaseJob from './job';
+import StreamLockJob from './stream-lock-job';
 import {
   NutrientTable,
   NutrientTableCsvMapping,
@@ -23,7 +23,7 @@ export type Mappings = {
   nutrients: NutrientTableCsvMappingNutrient[];
 };
 
-export default class NutrientTableImportData extends BaseJob<NutrientTableImportDataParams> {
+export default class NutrientTableImportData extends StreamLockJob<NutrientTableImportDataParams> {
   readonly name = 'NutrientTableImportData';
 
   private file!: string;
@@ -151,8 +151,7 @@ export default class NutrientTableImportData extends BaseJob<NutrientTableImport
             stream.pause();
             this.importChunk()
               .then(() => {
-                if (stream.destroyed) resolve();
-                else stream.resume();
+                stream.resume();
               })
               .catch((err) => {
                 stream.destroy(err);
@@ -160,8 +159,8 @@ export default class NutrientTableImportData extends BaseJob<NutrientTableImport
               });
           }
         })
-        .on('end', (records: number) => {
-          if (records % chunk === 0) return;
+        .on('end', async () => {
+          await this.waitForUnlock();
 
           this.importChunk()
             .then(() => resolve())
@@ -183,6 +182,8 @@ export default class NutrientTableImportData extends BaseJob<NutrientTableImport
    */
   private async importChunk(): Promise<void> {
     if (!this.content.length) return;
+
+    this.lock();
 
     const { nutrientTableId } = this.params;
     const {
@@ -229,5 +230,7 @@ export default class NutrientTableImportData extends BaseJob<NutrientTableImport
     await this.updateProgress(this.content.length);
 
     this.content = [];
+
+    this.unlock();
   }
 }
