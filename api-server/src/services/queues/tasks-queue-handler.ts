@@ -82,7 +82,6 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async processor(job: BullJob<JobData>): Promise<void> {
     const { id, name } = job;
 

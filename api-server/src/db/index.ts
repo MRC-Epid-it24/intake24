@@ -2,7 +2,6 @@ import { Sequelize } from 'sequelize-typescript';
 import { Database } from '@api-server/config';
 import * as foods from './models/foods';
 import * as system from './models/system';
-import { dbLogger } from '@/services/logger';
 import type { IoC } from '@/ioc';
 
 const models = {

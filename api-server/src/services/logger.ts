@@ -6,13 +6,16 @@ import config from '@api-server/config';
 const silent = config.app.env === 'test';
 const dirname = path.resolve(config.filesystem.local.logs);
 
-const logFormat = format.printf(
-  ({ level, message, timestamp, service }) =>
-    `${timestamp} ${level}${service ? ` ${service}` : ''}: ${message}`
-);
+const logFormat = format.printf(({ level, message, timestamp, service, ...rest }) => {
+  let msg = `${timestamp} ${level} ${service ? `${service}` : ''}: ${message}`;
+
+  if (Object.keys(rest).length) msg = `${msg} ${JSON.stringify(rest)}`;
+
+  return msg;
+});
 
 const logger = createLogger({
-  level: config.logConfig.level,
+  level: config.log.level,
   format: format.combine(format.timestamp(), format.json()),
   silent,
   transports: [

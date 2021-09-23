@@ -195,6 +195,7 @@ const configureContainer = () => {
     cacheConfig: asValue(config.cache),
     databaseConfig: asValue(config.database),
     fsConfig: asValue(config.filesystem),
+    logConfig: asValue(config.log),
     mailConfig: asValue(config.mail),
     queueConfig: asValue(config.queue),
     securityConfig: asValue(config.security),
