@@ -27,10 +27,9 @@ export default abstract class Job<T = any> {
     const {
       id,
       data: { params },
-      opts,
     } = job;
 
-    this.logger = this.logger.child({ service: this.name, id, params, opts });
+    this.logger = this.logger.child({ service: this.name, id, params });
 
     if (!id) throw new Error('Job ID missing.');
 
