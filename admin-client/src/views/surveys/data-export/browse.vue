@@ -1,7 +1,7 @@
 <template>
   <layout v-bind="{ id, entry }" v-if="entryLoaded">
-    <v-form @keydown.native="clearError" @submit.prevent="submit">
-      <v-container>
+    <v-container fluid>
+      <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-title>{{ $t('surveys.data-export.title') }}</v-card-title>
         <v-card-text>
           <v-row>
@@ -88,8 +88,8 @@
           </v-row>
           <polls-job-list v-bind="{ jobs }" @download="download"></polls-job-list>
         </v-card-text>
-      </v-container>
-    </v-form>
+      </v-form>
+    </v-container>
   </layout>
 </template>
 

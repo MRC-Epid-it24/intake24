@@ -42,7 +42,7 @@ const users: LocaleMessageObject = {
     _: 'Custom field',
     title: 'Custom fields',
     name: 'Field name',
-    value: 'Fields value',
+    value: 'Field value',
     none: 'No custom field defined',
   },
   permissions: {

@@ -38,9 +38,9 @@
         </tr>
       </tbody>
     </v-simple-table>
-    <v-card-subtitle>
+    <v-card-title>
       {{ $t('users.customFields.title') }}
-    </v-card-subtitle>
+    </v-card-title>
     <v-simple-table>
       <thead>
         <tr>
@@ -60,9 +60,9 @@
         </tr>
       </tbody>
     </v-simple-table>
-    <v-card-subtitle>
+    <v-card-title>
       {{ $t('users.aliases.title') }}
-    </v-card-subtitle>
+    </v-card-title>
     <v-simple-table>
       <thead>
         <tr>

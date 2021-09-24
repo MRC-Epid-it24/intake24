@@ -1,8 +1,8 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
-    <v-form @keydown.native="clearError" @submit.prevent="submit">
-      <v-card-text>
-        <v-container>
+    <v-container fluid>
+      <v-form @keydown.native="clearError" @submit.prevent="submit">
+        <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
@@ -37,24 +37,24 @@
               ></v-text-field>
             </v-col>
           </v-row>
-        </v-container>
-      </v-card-text>
-      <guide-drawer :entry="entry" @guide-image-objects="updateObjects"></guide-drawer>
-      <v-card-text v-if="nonInputErrors.length">
-        <v-alert
-          v-for="error in nonInputErrors"
-          :key="error.param"
-          border="left"
-          outlined
-          type="error"
-        >
-          {{ error.msg }}
-        </v-alert>
-      </v-card-text>
-      <v-card-text>
-        <submit-footer :disabled="form.errors.any()"></submit-footer>
-      </v-card-text>
-    </v-form>
+        </v-card-text>
+        <guide-drawer :entry="entry" @guide-image-objects="updateObjects"></guide-drawer>
+        <v-card-text v-if="nonInputErrors.length">
+          <v-alert
+            v-for="error in nonInputErrors"
+            :key="error.param"
+            border="left"
+            outlined
+            type="error"
+          >
+            {{ error.msg }}
+          </v-alert>
+        </v-card-text>
+        <v-card-text>
+          <submit-footer :disabled="form.errors.any()"></submit-footer>
+        </v-card-text>
+      </v-form>
+    </v-container>
   </layout>
 </template>
 

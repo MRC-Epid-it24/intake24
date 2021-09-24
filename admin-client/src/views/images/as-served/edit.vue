@@ -1,8 +1,8 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
-    <v-form @keydown.native="clearError" @submit.prevent="submit">
-      <v-card-text>
-        <v-container>
+    <v-container fluid>
+      <v-form @keydown.native="clearError" @submit.prevent="submit">
+        <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
@@ -26,29 +26,29 @@
               ></v-text-field>
             </v-col>
           </v-row>
-        </v-container>
-      </v-card-text>
-      <v-card-text v-if="nonInputErrors.length">
-        <v-alert
-          v-for="error in nonInputErrors"
-          :key="error.param"
-          outlined
-          type="error"
-          prominent
-          border="left"
-        >
-          {{ error.msg }}
-        </v-alert>
-      </v-card-text>
-      <as-served-images
-        :setId="entry.id"
-        :items="entry.images"
-        @images="updateImages"
-      ></as-served-images>
-      <v-card-text>
-        <submit-footer :disabled="form.errors.any()"></submit-footer>
-      </v-card-text>
-    </v-form>
+        </v-card-text>
+        <v-card-text v-if="nonInputErrors.length">
+          <v-alert
+            v-for="error in nonInputErrors"
+            :key="error.param"
+            outlined
+            type="error"
+            prominent
+            border="left"
+          >
+            {{ error.msg }}
+          </v-alert>
+        </v-card-text>
+        <as-served-images
+          :setId="entry.id"
+          :items="entry.images"
+          @images="updateImages"
+        ></as-served-images>
+        <v-card-text>
+          <submit-footer :disabled="form.errors.any()"></submit-footer>
+        </v-card-text>
+      </v-form>
+    </v-container>
   </layout>
 </template>
 

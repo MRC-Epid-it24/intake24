@@ -14,16 +14,22 @@
         section="meals"
         @load="loadFromScheme"
       ></load-section-dialog>
-      <v-btn
-        class="ml-3"
-        color="error"
-        fab
-        small
-        :title="$t('schemes.meals.reset')"
-        @click.stop="resetMealList"
-      >
-        <v-icon small>fa-sync</v-icon>
-      </v-btn>
+      <confirm-dialog :label="$t('schemes.meals.reset._')" @confirm="resetMealList">
+        <template v-slot:activator="{ attrs, on }">
+          <v-btn
+            class="ml-3"
+            color="error"
+            fab
+            small
+            :title="$t('schemes.meals.reset._')"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon small>fa-sync</v-icon>
+          </v-btn>
+        </template>
+        {{ $t('schemes.meals.reset.text') }}
+      </confirm-dialog>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="meals">
@@ -56,7 +62,7 @@
         </transition-group>
       </draggable>
     </v-list>
-    <v-dialog v-model="dialog.show" max-width="600px">
+    <v-dialog v-model="dialog.show" max-width="600px" persistent>
       <v-card>
         <v-card-title>
           <v-icon class="mr-3" color="primary">fa-hamburger</v-icon>
@@ -113,6 +119,7 @@ import draggable from 'vuedraggable';
 import { FormRefs, Meal, Meals } from '@common/types';
 import LanguageSelector from '@/components/prompts/partials/LanguageSelector.vue';
 import LoadSectionDialog from './load-section-dialog.vue';
+import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 
 export type MealDialog = { show: boolean; index: number; meal: Meal };
 
@@ -128,7 +135,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
   },
 
-  components: { draggable, LanguageSelector, LoadSectionDialog },
+  components: { ConfirmDialog, draggable, LanguageSelector, LoadSectionDialog },
 
   data() {
     const dialog = (show = false): MealDialog => ({

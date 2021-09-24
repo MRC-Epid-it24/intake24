@@ -1,7 +1,7 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
-    <v-form @keydown.native="clearError" @submit.prevent="submit">
-      <v-container>
+    <v-container fluid>
+      <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -285,8 +285,8 @@
           </v-row>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
-      </v-container>
-    </v-form>
+      </v-form>
+    </v-container>
   </layout>
 </template>
 
