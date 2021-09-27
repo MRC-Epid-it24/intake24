@@ -1,3 +1,4 @@
+import { LanguageEntry } from '.';
 import { SurveyAttributes, SurveyCreationAttributes, Pagination } from '../../models';
 import { LocaleEntry } from './locales';
 import { SchemeEntry } from './schemes';
@@ -24,6 +25,7 @@ export interface SurveyEntry extends Omit<SurveyAttributes, 'startDate' | 'endDa
 }
 
 export type SurveyRefs = {
+  languages: LanguageEntry[];
   locales: LocaleEntry[];
   schemes: SchemeEntry[];
 };

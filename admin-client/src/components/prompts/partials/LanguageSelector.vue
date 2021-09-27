@@ -101,6 +101,7 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
     languages(): string[] {
       return Object.keys(this.value);
     },
+    // Language refs should through provide/injected or something (relies too much on entry reference)
     availableLanguages(): LanguageEntry[] {
       if (!this.refsLoaded) return [];
 

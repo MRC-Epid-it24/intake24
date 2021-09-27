@@ -38,10 +38,10 @@
             })
           }}
         </v-alert>
-        <v-list v-if="templates.length" min-height="350px" two-line>
+        <v-list v-if="questions.length" min-height="350px" two-line>
           <v-list-item-group v-model="selectedId">
-            <template v-for="(template, idx) in templates">
-              <v-list-item :key="template.id" :value="template.id">
+            <template v-for="(question, idx) in questions">
+              <v-list-item :key="question.id" :value="question.id">
                 <template v-slot:default="{ active }">
                   <v-list-item-action>
                     <v-checkbox :input-value="active"></v-checkbox>
@@ -50,14 +50,14 @@
                     <v-icon>fa-question-circle</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
-                    <v-list-item-title>{{ template.name }}</v-list-item-title>
+                    <v-list-item-title>{{ question.name }}</v-list-item-title>
                     <v-list-item-subtitle>
-                      {{ `ID: ${template.id} | Type: ${template.component}` }}
+                      {{ `ID: ${question.id} | Type: ${question.component}` }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
                 </template>
               </v-list-item>
-              <v-divider v-if="idx + 1 < templates.length" :key="`div-${template.id}`"></v-divider>
+              <v-divider v-if="idx + 1 < questions.length" :key="`div-${question.id}`"></v-divider>
             </template>
           </v-list-item-group>
         </v-list>
@@ -91,12 +91,12 @@ import debounce from 'lodash/debounce';
 import { SchemeQuestionTemplatesResponse } from '@common/types/http/admin';
 import { PromptQuestion } from '@common/prompts';
 
-type LoadTemplateDialog = {
+type LoadPromptDialog = {
   debouncedFetch: () => void;
 };
 
-export default (Vue as VueConstructor<Vue & LoadTemplateDialog>).extend({
-  name: 'LoadTemplateDialog',
+export default (Vue as VueConstructor<Vue & LoadPromptDialog>).extend({
+  name: 'LoadPromptDialog',
 
   props: {
     schemeId: {
@@ -107,6 +107,9 @@ export default (Vue as VueConstructor<Vue & LoadTemplateDialog>).extend({
       type: Array as () => string[],
       default: () => [],
     },
+    items: {
+      type: Array as () => PromptQuestion[] | undefined,
+    },
   },
 
   data() {
@@ -114,7 +117,7 @@ export default (Vue as VueConstructor<Vue & LoadTemplateDialog>).extend({
       dialog: false,
       loading: false,
       search: null as string | null,
-      templates: [] as PromptQuestion[],
+      questions: [] as PromptQuestion[],
       selectedId: undefined as string | undefined,
     };
   },
@@ -124,7 +127,7 @@ export default (Vue as VueConstructor<Vue & LoadTemplateDialog>).extend({
       const { selectedId } = this;
       if (!selectedId) return undefined;
 
-      return this.templates.find((template) => template.id === selectedId);
+      return this.questions.find((question) => question.id === selectedId);
     },
     questionAlreadyExists(): boolean {
       const match = this.questionIds.find((id) => id === this.selectedQuestion?.id);
@@ -134,7 +137,7 @@ export default (Vue as VueConstructor<Vue & LoadTemplateDialog>).extend({
 
   watch: {
     async dialog(val) {
-      if (val && !this.templates.length) await this.fetch();
+      if (val && !this.questions.length) await this.fetch();
     },
     search() {
       this.debouncedFetch();
@@ -149,6 +152,7 @@ export default (Vue as VueConstructor<Vue & LoadTemplateDialog>).extend({
 
   methods: {
     close() {
+      this.selectedId = undefined;
       this.dialog = false;
     },
 
@@ -159,25 +163,42 @@ export default (Vue as VueConstructor<Vue & LoadTemplateDialog>).extend({
     confirm() {
       if (!this.selectedQuestion) return;
 
-      this.close();
       this.$emit('load', clone(this.selectedQuestion));
+      this.close();
     },
 
     async fetch() {
       this.loading = true;
 
       try {
-        const {
-          data: { data },
-        } = await this.$http.get<SchemeQuestionTemplatesResponse>(
-          `admin/schemes/${this.schemeId}/templates`,
-          { params: { search: this.search, limit: 5 } }
-        );
-
-        this.templates = data;
+        this.questions = this.items ? this.fetchLocally() : await this.fetchFromApi();
       } finally {
         this.loading = false;
       }
+    },
+
+    fetchLocally() {
+      const { search } = this;
+      const items = this.items ?? [];
+
+      const filtered = items.filter((item) => {
+        return search ? item.name.match(new RegExp(search, 'i')) : true;
+      });
+
+      return filtered.slice(0, 5);
+    },
+
+    async fetchFromApi() {
+      const { search } = this;
+
+      const {
+        data: { data },
+      } = await this.$http.get<SchemeQuestionTemplatesResponse>(
+        `admin/schemes/${this.schemeId}/templates`,
+        { params: { search, limit: 5 } }
+      );
+
+      return data;
     },
 
     async clear() {

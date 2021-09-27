@@ -5,6 +5,8 @@ import {
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@common/types/http';
+import { flattenSchemeWithSection, isMealSection } from '@common/schemes';
+import { merge } from '@common/util';
 import { Survey, User } from '@/db/models/system';
 import { NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
@@ -39,7 +41,29 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
       numberOfSubmissionsForFeedback,
       storeUserSessionOnServer,
       suspensionReason,
+      overrides,
     } = survey;
+
+    const { questions } = scheme;
+
+    // Merge survey's scheme overrides
+    if (overrides.questions.length) {
+      const flattenScheme = flattenSchemeWithSection(scheme.questions);
+      for (const question of overrides.questions) {
+        const match = flattenScheme.find((item) => item.id === question.id);
+        if (!match) continue;
+
+        const { section } = match;
+
+        if (isMealSection(section)) {
+          const index = questions.meals[section].findIndex((item) => item.id === question.id);
+          if (index !== -1) questions.meals[section].splice(index, 1, merge(match, question));
+        } else {
+          const index = questions[section].findIndex((item) => item.id === question.id);
+          if (index !== -1) questions[section].splice(index, 1, merge(match, question));
+        }
+      }
+    }
 
     res.json({
       id,
@@ -50,7 +74,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
         id: scheme.id,
         type: scheme.type,
         meals: scheme.meals,
-        questions: scheme.questions,
+        questions,
       },
       numberOfSubmissionsForFeedback,
       storeUserSessionOnServer,

@@ -38,8 +38,7 @@ export default class UserSession
   }
 
   set sessionData(value: SurveyState) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('sessionData', JSON.stringify(value));
   }
 

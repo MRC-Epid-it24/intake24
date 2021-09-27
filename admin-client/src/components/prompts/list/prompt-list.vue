@@ -3,10 +3,11 @@
     <v-toolbar flat tile color="grey lighten-2">
       <v-icon class="mr-3" color="primary">far fa-question-circle</v-icon>
       <v-toolbar-title class="font-weight-medium">
-        {{ $t(`schemes.questions.${section}.title`) }}
+        {{ title }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
+        v-if="!isOverrideMode"
         fab
         small
         class="mx-3"
@@ -16,30 +17,31 @@
       >
         <v-icon small>fa-plus</v-icon>
       </v-btn>
-      <load-template-dialog
+      <load-prompt-dialog
         :schemeId="$route.params.id"
+        :items="templates"
         :questionIds="questionIds"
-        @load="loadFromTemplate"
-      ></load-template-dialog>
+        @load="load"
+      ></load-prompt-dialog>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="questions" @end="update">
         <transition-group type="transition" name="drag-and-drop">
-          <question-list-item
+          <prompt-list-item
             v-for="(question, index) in questions"
             :key="question.id"
-            v-bind="{ question, index, templates }"
+            v-bind="{ mode, question, index, templates }"
             :moveSections="moveSections(question)"
             @question:edit="edit"
             @question:move="move"
             @question:remove="remove"
             @question:sync="sync"
           >
-          </question-list-item>
+          </prompt-list-item>
         </transition-group>
       </draggable>
     </v-list>
-    <prompt-selector ref="selector" v-bind="{ section, questionIds }" @save="save">
+    <prompt-selector ref="selector" v-bind="{ mode, section, questionIds }" @save="save">
     </prompt-selector>
   </v-card>
 </template>
@@ -49,11 +51,10 @@ import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import { PromptQuestion } from '@common/prompts';
 import { SurveyQuestionSection, MealSection } from '@common/schemes';
-import { SchemeQuestionEntry } from '@common/types/http/admin';
-import PromptSelector from '@/components/prompts/PromptSelector.vue';
 import { promptSettings } from '@/components/prompts';
-import QuestionListItem from './question-list-item.vue';
-import LoadTemplateDialog from './load-template-dialog.vue';
+import LoadPromptDialog from './load-prompt-dialog.vue';
+import PromptListItem from './prompt-list-item.vue';
+import PromptSelector from '../prompt-selector.vue';
 
 export type Refs = {
   $refs: {
@@ -73,9 +74,13 @@ export interface PromptQuestionMoveEvent extends PromptQuestionEvent {
 }
 
 export default (Vue as VueConstructor<Vue & Refs>).extend({
-  name: 'QuestionList',
+  name: 'PromptList',
 
   props: {
+    mode: {
+      type: String as () => 'full' | 'override',
+      default: 'full',
+    },
     section: {
       type: String as () => SurveyQuestionSection | MealSection,
     },
@@ -84,7 +89,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       default: () => [],
     },
     templates: {
-      type: Array as () => SchemeQuestionEntry[],
+      type: Array as () => PromptQuestion[],
       default: () => [],
     },
     items: {
@@ -94,10 +99,10 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
   },
 
   components: {
-    PromptSelector,
-    QuestionListItem,
-    LoadTemplateDialog,
     draggable,
+    LoadPromptDialog,
+    PromptListItem,
+    PromptSelector,
   },
 
   data() {
@@ -105,6 +110,17 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       questions: this.items,
       promptSettings,
     };
+  },
+
+  computed: {
+    isOverrideMode(): boolean {
+      return this.mode === 'override';
+    },
+    title(): string {
+      return this.$t(
+        `schemes.questions.${this.isOverrideMode ? 'overrides' : this.section}.title`
+      ).toString();
+    },
   },
 
   watch: {
@@ -115,10 +131,12 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
 
   methods: {
     create() {
+      if (this.isOverrideMode) return;
+
       this.$refs.selector.create();
     },
 
-    loadFromTemplate(question: PromptQuestion) {
+    load(question: PromptQuestion) {
       this.questions.push(question);
     },
 
@@ -141,6 +159,8 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     },
 
     move(event: PromptQuestionMoveEvent) {
+      if (this.isOverrideMode) return;
+
       this.$emit('move', event);
       this.questions.splice(event.index, 1);
       this.update();
@@ -152,6 +172,8 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     },
 
     sync({ question, index }: PromptQuestionEvent) {
+      if (this.isOverrideMode) return;
+
       this.questions.splice(index, 1, question);
       this.update();
     },

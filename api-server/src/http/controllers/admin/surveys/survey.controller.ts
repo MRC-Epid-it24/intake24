@@ -10,7 +10,7 @@ import {
   StoreSurveyResponse,
 } from '@common/types/http/admin';
 import { SurveyAttributes } from '@common/types/models';
-import { Locale, Scheme, Survey } from '@/db/models/system';
+import { Language, Locale, Scheme, Survey } from '@/db/models/system';
 import { ForbiddenError, NotFoundError } from '@/http/errors';
 import type { IoC } from '@/ioc';
 import { surveyListResponse, surveyResponse } from '@/http/responses/admin';
@@ -21,10 +21,11 @@ export type AdminSurveyController = Controller<CrudActions>;
 
 export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController => {
   const refs = async (): Promise<SurveyRefs> => {
+    const languages = await Language.findAll();
     const locales = await Locale.findAll();
-    const schemes = await Scheme.findAll({ attributes: ['id', 'name'] });
+    const schemes = await Scheme.findAll();
 
-    return { locales, schemes };
+    return { languages, locales, schemes };
   };
 
   const entry = async (req: Request, res: Response<SurveyResponse>): Promise<void> => {
@@ -94,6 +95,7 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
         'maximumDailySubmissions',
         'maximumTotalSubmissions',
         'minimumSubmissionInterval',
+        'overrides',
       ])
     );
 
@@ -139,6 +141,7 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
         'maximumDailySubmissions',
         'maximumTotalSubmissions',
         'minimumSubmissionInterval',
+        'overrides',
       ])
     );
 

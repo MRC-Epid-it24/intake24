@@ -241,6 +241,7 @@ export const initDatabaseData = async (): Promise<MockData> => {
     allowGenUsers: false,
     supportEmail: 'testSupportEmail@example.com',
     storeUserSessionOnServer: false,
+    overrides: { questions: [] },
   });
 
   await setupPermissions();

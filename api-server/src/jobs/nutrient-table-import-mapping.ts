@@ -3,7 +3,7 @@ import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import path from 'path';
 import type { NutrientTableImportMappingParams } from '@common/types';
-import { excelColumnToOffset } from '@common/util';
+import { excelColumnToOffset } from '@common/util/strings';
 import type { IoC } from '@/ioc';
 import StreamLockJob from './stream-lock-job';
 import { NutrientTable, NutrientTableCsvMappingNutrient, NutrientType } from '@/db/models/foods';

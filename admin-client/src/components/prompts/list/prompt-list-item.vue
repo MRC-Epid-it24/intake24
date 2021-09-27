@@ -9,7 +9,7 @@
         {{ `ID: ${question.id} | Type: ${question.component}` }}
       </v-list-item-subtitle>
     </v-list-item-content>
-    <v-list-item-content v-if="hasTemplate">
+    <v-list-item-content v-if="!isOverrideMode && hasTemplate">
       <v-list-item-subtitle>
         <v-icon :color="isInSyncWithTemplate ? `success` : `warning`" left>fa-sync</v-icon>
         <span color="success">
@@ -22,7 +22,7 @@
         <v-icon color="primary lighten-1">$edit</v-icon>
       </v-btn>
     </v-list-item-action>
-    <v-list-item-action>
+    <v-list-item-action v-if="!isOverrideMode">
       <v-menu
         v-model="contextMenu"
         max-width="600px"
@@ -102,13 +102,17 @@ import clone from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 import { PromptQuestion } from '@common/prompts';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
-import { MoveSection } from './question-list.vue';
+import { MoveSection } from './prompt-list.vue';
 import SaveAsTemplateDialog from './save-as-template-dialog.vue';
 
 export default Vue.extend({
   name: 'QuestionListItem',
 
   props: {
+    mode: {
+      type: String as () => 'full' | 'override',
+      default: 'full',
+    },
     question: {
       type: Object as () => PromptQuestion,
       required: true,
@@ -140,6 +144,10 @@ export default Vue.extend({
   },
 
   computed: {
+    isOverrideMode(): boolean {
+      return this.mode === 'override';
+    },
+
     template(): PromptQuestion | undefined {
       return this.templates.find((template) => template.id === this.question.id);
     },

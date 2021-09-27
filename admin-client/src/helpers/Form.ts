@@ -3,9 +3,9 @@ import cloneDeep from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 import type { Dictionary } from '@common/types';
+import { merge } from '@common/util';
 import http from '@/services/http.service';
 import store from '@/store';
-import { merge } from '@/util';
 import type { HttpRequestConfig, HttpError } from '@/types/http';
 import Errors from './Errors';
 

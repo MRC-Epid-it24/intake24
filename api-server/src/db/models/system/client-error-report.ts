@@ -57,8 +57,7 @@ export default class ClientErrorReport
   }
 
   set stackTrace(value: string[]) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('stackTrace', value.join('\n'));
   }
 
@@ -72,8 +71,7 @@ export default class ClientErrorReport
   }
 
   set surveyStateJson(value: Dictionary) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('surveyStateJson', JSON.stringify(value ?? {}));
   }
 

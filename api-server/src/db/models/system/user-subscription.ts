@@ -58,8 +58,7 @@ export default class UserSubscription
   }
 
   set subscription(value: PushSubscription) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('subscription', JSON.stringify(value));
   }
 

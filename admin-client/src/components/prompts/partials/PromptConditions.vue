@@ -133,7 +133,7 @@ import Vue from 'vue';
 import clone from 'lodash/cloneDeep';
 import draggable from 'vuedraggable';
 import { Condition, ConditionOp, conditionOps } from '@common/prompts';
-import { merge } from '@/util';
+import { merge } from '@common/util';
 import PromptAnswerProps from '@/components/prompts/partials/conditions/PromptAnswerProps.vue';
 import RecallNumberProps from '@/components/prompts/partials/conditions/RecallNumberProps.vue';
 

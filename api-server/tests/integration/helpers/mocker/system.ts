@@ -171,6 +171,7 @@ const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest =
 
   const maximumDailySubmissions = faker.datatype.number({ min: 1, max: 5 });
   const minimumSubmissionInterval = faker.datatype.number(5);
+  const overrides = { questions: [] };
 
   return {
     id,
@@ -187,6 +188,7 @@ const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest =
     storeUserSessionOnServer,
     maximumDailySubmissions,
     minimumSubmissionInterval,
+    overrides,
   };
 };
 

@@ -14,7 +14,7 @@
         section="meals"
         @load="loadFromScheme"
       ></load-section-dialog>
-      <confirm-dialog :label="$t('schemes.meals.reset._')" @confirm="resetMealList">
+      <confirm-dialog color="error" :label="$t('schemes.meals.reset._')" @confirm="resetMealList">
         <template v-slot:activator="{ attrs, on }">
           <v-btn
             class="ml-3"

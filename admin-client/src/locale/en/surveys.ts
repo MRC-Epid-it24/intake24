@@ -57,6 +57,11 @@ const surveys: LocaleMessageObject = {
     add: 'New staff/support',
     edit: 'Edit staff',
   },
+  overrides: {
+    _: 'Scheme overrides',
+    tab: 'Overrides',
+    title: 'Scheme overrides',
+  },
   respondents: {
     _: 'Respondent',
     tab: 'Respondents',

@@ -292,6 +292,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { SchemeOverrides, defaultOverrides } from '@common/schemes';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 
@@ -316,6 +317,31 @@ export type SurveyForm = {
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
+  overrides: SchemeOverrides;
+};
+
+export const surveyForm = {
+  id: null,
+  name: null,
+  state: 0,
+  localeId: null,
+  schemeId: null,
+  startDate: null,
+  endDate: null,
+  supportEmail: null,
+  allowGenUsers: false,
+  genUserKey: null,
+  authUrlDomainOverride: null,
+  authUrlTokenCharset: null,
+  authUrlTokenLength: null,
+  storeUserSessionOnServer: false,
+  feedbackEnabled: false,
+  submissionNotificationUrl: null,
+  numberOfSubmissionsForFeedback: 1,
+  maximumDailySubmissions: 3,
+  maximumTotalSubmissions: null,
+  minimumSubmissionInterval: 600,
+  overrides: defaultOverrides,
 };
 
 export default Vue.extend({
@@ -326,28 +352,7 @@ export default Vue.extend({
   data() {
     return {
       menus: { startDate: false, endDate: false },
-      form: form<SurveyForm>({
-        id: null,
-        name: null,
-        state: 0,
-        localeId: null,
-        schemeId: null,
-        startDate: null,
-        endDate: null,
-        supportEmail: null,
-        allowGenUsers: false,
-        genUserKey: null,
-        authUrlDomainOverride: null,
-        authUrlTokenCharset: null,
-        authUrlTokenLength: null,
-        storeUserSessionOnServer: false,
-        feedbackEnabled: false,
-        submissionNotificationUrl: null,
-        numberOfSubmissionsForFeedback: 1,
-        maximumDailySubmissions: 3,
-        maximumTotalSubmissions: null,
-        minimumSubmissionInterval: 600,
-      }),
+      form: form<SurveyForm>(surveyForm),
       states: [
         { value: 0, text: this.$t('surveys.state.0') },
         { value: 1, text: this.$t('surveys.state.1') },

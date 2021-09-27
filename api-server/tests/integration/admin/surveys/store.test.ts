@@ -59,6 +59,7 @@ export default (): void => {
         'storeUserSessionOnServer',
         'maximumDailySubmissions',
         'minimumSubmissionInterval',
+        'overrides',
       ]);
     });
 
@@ -84,6 +85,7 @@ export default (): void => {
           minimumSubmissionInterval: { nan: 5 },
           authUrlTokenCharset: 'abcabc',
           authUrlTokenLength: 'this is not a number',
+          overrides: 'invalidOverrides',
         });
 
       expect(status).toBe(422);
@@ -105,6 +107,7 @@ export default (): void => {
         'minimumSubmissionInterval',
         'authUrlTokenCharset',
         'authUrlTokenLength',
+        'overrides',
       ]);
     });
 

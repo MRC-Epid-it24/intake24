@@ -53,7 +53,7 @@ const resources: Resource[] = [
     icon: 'fas fa-poll',
     api: 'admin/surveys',
     generateRoutes: true,
-    routes: [...routes, 'respondents', 'mgmt', 'submissions', 'data-export'],
+    routes: [...routes, 'overrides', 'respondents', 'mgmt', 'submissions', 'data-export'],
   },
   // Images
   {

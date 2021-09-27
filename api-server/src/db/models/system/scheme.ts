@@ -50,14 +50,6 @@ export default class Scheme
   })
   public type!: SchemeType;
 
-  /*
-   * Sequelize and TypeScript don't play nice together when using
-   * setters/getters with different types
-   *
-   * Current workaround - double-cast
-   * TODO: check if fixed later in TS or Sequelize
-   *
-   * */
   @Column({
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
@@ -68,8 +60,7 @@ export default class Scheme
   }
 
   set questions(value: RecallQuestions) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('questions', JSON.stringify(value ?? defaultQuestions));
   }
 
@@ -83,8 +74,7 @@ export default class Scheme
   }
 
   set meals(value: Meal[]) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('meals', JSON.stringify(value ?? defaultMeals));
   }
 
@@ -98,8 +88,7 @@ export default class Scheme
   }
 
   set export(value: ExportSection[]) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('export', JSON.stringify(value ?? defaultExport));
   }
 

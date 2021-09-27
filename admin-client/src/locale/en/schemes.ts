@@ -182,6 +182,9 @@ const schemes: LocaleMessageObject = {
         title: 'Save question as template',
       },
     },
+    overrides: {
+      title: 'Scheme questions overrides',
+    },
   },
   foodSearch: {
     allowBrowsing: 'Allow respondents to search for foods by freely browsing food categories',

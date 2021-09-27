@@ -50,12 +50,12 @@
         </v-row>
       </v-item-group>
     </v-container>
-    <question-list
+    <prompt-list
       v-bind="{ section, questionIds }"
       :templates="refs.templates"
       :items.sync="selected"
       @move="move"
-    ></question-list>
+    ></prompt-list>
   </layout>
 </template>
 
@@ -76,16 +76,16 @@ import {
 import { PromptQuestion } from '@common/prompts';
 import { Dictionary } from '@common/types';
 import formMixin from '@/components/entry/formMixin';
+import PromptList, { PromptQuestionMoveEvent } from '@/components/prompts/list/prompt-list.vue';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
 import { SchemeForm } from '../form.vue';
-import QuestionList, { PromptQuestionMoveEvent } from './question-list.vue';
 import LoadSectionDialog from '../load-section-dialog.vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeQuestions',
 
-  components: { LoadSectionDialog, QuestionList },
+  components: { LoadSectionDialog, PromptList },
 
   mixins: [formMixin],
 

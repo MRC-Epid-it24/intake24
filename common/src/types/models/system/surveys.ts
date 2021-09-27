@@ -1,3 +1,4 @@
+import type { SchemeOverrides } from '../../../schemes';
 import { Optional } from '../model';
 
 export enum SurveyState {
@@ -33,6 +34,7 @@ export type SurveyAttributes = {
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
+  overrides: SchemeOverrides;
 };
 
 export type SurveyCreationAttributes = Optional<

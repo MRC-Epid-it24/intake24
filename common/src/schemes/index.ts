@@ -39,7 +39,7 @@ export const flattenSchemeWithSection = (scheme: RecallQuestions): PromptQuestio
   Object.entries(scheme).reduce<PromptQuestionWithSection[]>((acc, [section, questions]) => {
     const items = Array.isArray(questions)
       ? questions.map((question) => ({ ...question, section }))
-      : flattenScheme(questions);
+      : flattenSchemeWithSection(questions);
 
     acc.push(...items);
     return acc;
@@ -77,4 +77,12 @@ export const defaultQuestions: RecallQuestions = {
   },
   postMeals: [],
   submission: [],
+};
+
+export type SchemeOverrides = {
+  questions: PromptQuestion[];
+};
+
+export const defaultOverrides: SchemeOverrides = {
+  questions: [],
 };

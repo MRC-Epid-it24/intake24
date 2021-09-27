@@ -52,8 +52,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtC
       attributes: ['id', 'name', 'email'],
       where: {
         email: { [Op.ne]: null },
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error: Sequelize typings don't know about this type of syntax yet
         '$permissions.id$': { [Op.eq]: null },
       },
       order: [['email', 'ASC']],

@@ -10,6 +10,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { SurveyAttributes, SurveyCreationAttributes, SurveyState } from '@common/types/models';
+import { defaultOverrides, SchemeOverrides } from '@common/schemes';
 import { surveyPermissions } from '@/services/auth';
 import BaseModel from '../model';
 import {
@@ -202,6 +203,20 @@ export default class Survey
     defaultValue: 600,
   })
   public minimumSubmissionInterval!: number;
+
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  get overrides(): SchemeOverrides {
+    const val = this.getDataValue('overrides') as unknown;
+    return val ? JSON.parse(val as string) : defaultOverrides;
+  }
+
+  set overrides(value: SchemeOverrides) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('overrides', JSON.stringify(value ?? defaultOverrides));
+  }
 
   @HasMany(() => ClientErrorReport, 'surveyId')
   public clientErrors?: ClientErrorReport[];

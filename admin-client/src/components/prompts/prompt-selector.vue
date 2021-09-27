@@ -30,7 +30,7 @@
           <v-tabs-items v-model="tab" class="pt-1">
             <v-tab-item key="general">
               <v-row>
-                <v-col cols="12">
+                <v-col cols="12" v-if="!isOverrideMode">
                   <v-card outlined>
                     <v-toolbar color="grey lighten-4" flat>
                       <v-toolbar-title>{{ $t(`schemes.questions.type`) }}</v-toolbar-title>
@@ -65,6 +65,7 @@
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model="dialog.question.id"
+                    :disabled="isOverrideMode"
                     :readonly="dialog.question.type !== 'custom'"
                     :label="$t('schemes.questions.id')"
                     :rules="questionIdRules"
@@ -76,6 +77,7 @@
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model="dialog.question.name"
+                    :disabled="isOverrideMode"
                     :label="$t('schemes.questions.name')"
                     hide-details="auto"
                     messages="Descriptive name for better orientation"
@@ -117,12 +119,12 @@ import {
   portionSizePromptQuestions,
   standardPromptQuestions,
 } from '@common/prompts';
+import { merge } from '@common/util';
 import { promptSettings } from '@/components/prompts';
 import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
 import portionSizePrompts from '@/components/prompts/portion-size';
-import { merge } from '@/util';
-import PromptTypeSelector from './PromptTypeSelector.vue';
+import PromptTypeSelector from './prompt-type-selector.vue';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;
@@ -138,6 +140,10 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   name: 'QuestionListDialog',
 
   props: {
+    mode: {
+      type: String as () => 'full' | 'override',
+      default: 'full',
+    },
     section: {
       type: String as () => SurveyQuestionSection | MealSection,
     },
@@ -185,6 +191,9 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   },
 
   computed: {
+    isOverrideMode(): boolean {
+      return this.mode === 'override';
+    },
     availablePromptQuestions(): Record<QuestionType, PromptQuestion[]> {
       const { section } = this;
       if (!section) return this.groupedPromptQuestions;
