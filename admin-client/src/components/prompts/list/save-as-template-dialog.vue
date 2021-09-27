@@ -64,7 +64,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import clone from 'lodash/cloneDeep';
+import { copy } from '@common/util';
 import pick from 'lodash/pick';
 import { StoreSchemeQuestionResponse, SchemeRefs } from '@common/types/http/admin';
 import { PromptQuestion } from '@common/prompts';
@@ -125,11 +125,11 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
         data: { id, question },
       } = await this.form.post<StoreSchemeQuestionResponse>('admin/scheme-questions');
 
-      const templates = clone(this.refs.templates);
+      const templates = copy(this.refs.templates);
       templates.push(question);
 
       await this.$store.dispatch('resource/entry/update', {
-        refs: { ...clone(this.refs), templates },
+        refs: { ...copy(this.refs), templates },
       });
 
       this.close();

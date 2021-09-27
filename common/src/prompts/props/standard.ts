@@ -1,4 +1,4 @@
-import clone from 'lodash/cloneDeep';
+import { copy } from '@common/util';
 import type { PromptQuestion } from '..';
 import { basePromptProps, BasePromptProps, promptValidation, ValidatedPromptProps } from './base';
 
@@ -17,26 +17,26 @@ export interface FoodSearchPromptProps extends BasePromptProps {
   dualLanguage: boolean;
 }
 
-export const mealTimePromptProps: MealTimePromptProps = clone({
+export const mealTimePromptProps: MealTimePromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
   format: '24hr',
 });
 
-export const mealAddPromptProps: BasePromptProps = clone(basePromptProps);
+export const mealAddPromptProps: BasePromptProps = copy(basePromptProps);
 
-export const editMealPromptProps: BasePromptProps = clone(basePromptProps);
+export const editMealPromptProps: BasePromptProps = copy(basePromptProps);
 
-export const submitPromptProps: BasePromptProps = clone(basePromptProps);
+export const submitPromptProps: BasePromptProps = copy(basePromptProps);
 
-export const redirectPromptProps: RedirectPromptProps = clone({
+export const redirectPromptProps: RedirectPromptProps = copy({
   ...basePromptProps,
   url: null,
   identifier: 'username',
   timer: 0,
 });
 
-export const foodSearchPromptProps: FoodSearchPromptProps = clone({
+export const foodSearchPromptProps: FoodSearchPromptProps = copy({
   ...basePromptProps,
   allowBrowsing: true,
   dualLanguage: false,
@@ -48,41 +48,41 @@ export const standardPromptQuestions: PromptQuestion[] = [
     type: 'standard',
     id: 'meal-time-prompt',
     name: 'Meal Time prompt',
-    props: clone(mealTimePromptProps),
+    props: copy(mealTimePromptProps),
   },
   {
     component: 'submit-prompt',
     type: 'standard',
     id: 'submit-prompt',
     name: 'Submit prompt',
-    props: clone(submitPromptProps),
+    props: copy(submitPromptProps),
   },
   {
     component: 'redirect-prompt',
     type: 'standard',
     id: 'redirect-prompt',
     name: 'Redirect prompt',
-    props: clone(redirectPromptProps),
+    props: copy(redirectPromptProps),
   },
   {
     component: 'food-search-prompt',
     type: 'standard',
     id: 'food-search-prompt',
     name: 'Food search prompt',
-    props: clone(foodSearchPromptProps),
+    props: copy(foodSearchPromptProps),
   },
   {
     component: 'meal-add-prompt',
     type: 'standard',
     id: 'meal-add-prompt',
     name: 'Meal Add prompt',
-    props: clone(mealAddPromptProps),
+    props: copy(mealAddPromptProps),
   },
   {
     component: 'edit-meal-prompt',
     type: 'standard',
     id: 'edit-meal-prompt',
     name: 'Meal Edit prompt',
-    props: clone(editMealPromptProps),
+    props: copy(editMealPromptProps),
   },
 ];

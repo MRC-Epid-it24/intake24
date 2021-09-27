@@ -78,7 +78,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import clone from 'lodash/cloneDeep';
+import { copy } from '@common/util';
 import debounce from 'lodash/debounce';
 import { SchemeEntry, SchemesResponse } from '@common/types/http/admin';
 import { RecallQuestions } from '@common/schemes';
@@ -151,7 +151,7 @@ export default (Vue as VueConstructor<Vue & LoadSectionDialog>).extend({
       if (!this.selectedSection) return;
 
       this.close();
-      this.$emit('load', clone(this.selectedSection));
+      this.$emit('load', copy(this.selectedSection));
     },
 
     async fetch() {

@@ -39,7 +39,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { FoodState } from '@common/types';
-import clone from 'lodash/clone';
+import { copy } from '@common/util';
 
 export interface HasEditableFoodList {
   editableList: FoodState[];
@@ -61,7 +61,7 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
 
   data() {
     return {
-      editableList: clone(this.foodList),
+      editableList: copy(this.foodList),
       newFoodDescription: '',
       editIndex: null as number | null,
     };

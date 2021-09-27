@@ -98,7 +98,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import clone from 'lodash/cloneDeep';
+import { copy } from '@common/util';
 import isEqual from 'lodash/isEqual';
 import { PromptQuestion } from '@common/prompts';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
@@ -173,7 +173,7 @@ export default Vue.extend({
       this.$emit('question:move', {
         section: this.moveToSection,
         index: this.index,
-        question: clone(this.question),
+        question: copy(this.question),
       });
 
       // DOM object is destroyed so we have to clear it manually as event can't be emitted anymore
@@ -192,7 +192,7 @@ export default Vue.extend({
       if (!this.template || this.isInSyncWithTemplate) return;
 
       this.$emit('question:sync', {
-        question: clone(this.template),
+        question: copy(this.template),
         index: this.index,
       });
     },

@@ -1,9 +1,8 @@
 import { Method } from 'axios';
-import cloneDeep from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 import type { Dictionary } from '@common/types';
-import { merge } from '@common/util';
+import { copy, merge } from '@common/util';
 import http from '@/services/http.service';
 import store from '@/store';
 import type { HttpRequestConfig, HttpError } from '@/types/http';
@@ -44,7 +43,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
   const keys = Object.keys(initData) as (keyof T)[];
 
   const formDef: FormDef<T> = {
-    data: cloneDeep(initData),
+    data: copy(initData),
     initData,
     keys,
     errors: new Errors(),
@@ -70,7 +69,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
 
     reset(): void {
       this.errors.clear();
-      this.data = cloneDeep(this.initData);
+      this.data = copy(this.initData);
     },
 
     getData(object = false): T | FormData {

@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import clone from 'lodash/cloneDeep';
+import { copy } from '@common/util';
 import { AsServedImageEntry, AsServedImageResponse } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import form from '@/helpers/Form';
@@ -108,7 +108,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
 
   data() {
     return {
-      images: clone(this.items),
+      images: copy(this.items),
       form: form<AsServedImageForm>(
         {
           image: null as File | null,

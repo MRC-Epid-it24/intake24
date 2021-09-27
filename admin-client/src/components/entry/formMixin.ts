@@ -1,6 +1,6 @@
 import Vue, { VueConstructor } from 'vue';
 import { Route } from 'vue-router';
-import clone from 'lodash/cloneDeep';
+import { copy } from '@common/util';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import { Dictionary, ValidationError } from '@common/types';
@@ -44,7 +44,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       // Creating new record
       // TODO: might be better to load full blank templates directly in store
       if (isEqual(val, { id: null })) {
-        this.originalEntry = clone(this.form.getData(true));
+        this.originalEntry = copy(this.form.getData(true));
         return;
       }
 
@@ -90,7 +90,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   methods: {
     setOriginalEntry(data: Dictionary) {
-      this.originalEntry = clone(data);
+      this.originalEntry = copy(data);
     },
 
     toForm(data: Dictionary) {

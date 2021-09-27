@@ -113,7 +113,7 @@
 </template>
 
 <script lang="ts">
-import clone from 'lodash/cloneDeep';
+import { copy } from '@common/util';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import { FormRefs, Meal, Meals } from '@common/types';
@@ -178,7 +178,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
 
     edit(index: number, meal: Meal) {
-      this.dialog = { show: true, index, meal: clone(meal) };
+      this.dialog = { show: true, index, meal: copy(meal) };
     },
 
     save() {

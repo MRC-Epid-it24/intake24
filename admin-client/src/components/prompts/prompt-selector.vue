@@ -108,7 +108,7 @@
 </template>
 
 <script lang="ts">
-import clone from 'lodash/cloneDeep';
+import { copy, merge } from '@common/util';
 import Vue, { VueConstructor } from 'vue';
 import { SurveyQuestionSection, MealSection } from '@common/schemes';
 import { FormRefs } from '@common/types';
@@ -119,7 +119,6 @@ import {
   portionSizePromptQuestions,
   standardPromptQuestions,
 } from '@common/prompts';
-import { merge } from '@common/util';
 import { promptSettings } from '@/components/prompts';
 import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
@@ -176,7 +175,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     const dialog = (show = false): PromptQuestionDialog => ({
       show,
       index: -1,
-      question: clone(promptQuestions[0]),
+      question: copy(promptQuestions[0]),
     });
 
     return {
@@ -244,7 +243,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       const question = this.promptQuestions.find((item) => item.component === component);
       if (!question) return;
 
-      this.dialog = { show, index, question: { origId: id, ...clone(question) } };
+      this.dialog = { show, index, question: { origId: id, ...copy(question) } };
     },
 
     create() {

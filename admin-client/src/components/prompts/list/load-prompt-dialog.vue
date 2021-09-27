@@ -86,7 +86,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import clone from 'lodash/cloneDeep';
+import { copy } from '@common/util';
 import debounce from 'lodash/debounce';
 import { SchemeQuestionTemplatesResponse } from '@common/types/http/admin';
 import { PromptQuestion } from '@common/prompts';
@@ -163,7 +163,7 @@ export default (Vue as VueConstructor<Vue & LoadPromptDialog>).extend({
     confirm() {
       if (!this.selectedQuestion) return;
 
-      this.$emit('load', clone(this.selectedQuestion));
+      this.$emit('load', copy(this.selectedQuestion));
       this.close();
     },
 

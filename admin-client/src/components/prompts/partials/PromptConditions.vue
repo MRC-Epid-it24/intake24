@@ -130,10 +130,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import clone from 'lodash/cloneDeep';
+import { copy, merge } from '@common/util';
 import draggable from 'vuedraggable';
 import { Condition, ConditionOp, conditionOps } from '@common/prompts';
-import { merge } from '@common/util';
 import PromptAnswerProps from '@/components/prompts/partials/conditions/PromptAnswerProps.vue';
 import RecallNumberProps from '@/components/prompts/partials/conditions/RecallNumberProps.vue';
 
@@ -216,7 +215,7 @@ export default Vue.extend({
     const dialog = (show = false): PromptConditionDialog => ({
       show,
       index: -1,
-      condition: clone(promptConditions[0]),
+      condition: copy(promptConditions[0]),
     });
 
     return {
@@ -272,7 +271,7 @@ export default Vue.extend({
       const condition = this.promptConditions.find((item) => item.type === type);
       if (!condition) return;
 
-      this.dialog = { show, index, condition: clone(condition) };
+      this.dialog = { show, index, condition: copy(condition) };
     },
 
     add() {

@@ -1,4 +1,4 @@
-import clone from 'lodash/cloneDeep';
+import { copy } from '@common/util';
 import type { LocaleTranslation } from '../../types';
 import type { PromptQuestion } from '..';
 import { basePromptProps, BasePromptProps, promptValidation, ValidatedPromptProps } from './base';
@@ -37,20 +37,20 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
   other: boolean;
 }
 
-export const infoPromptProps: BasePromptProps = clone(basePromptProps);
+export const infoPromptProps: BasePromptProps = copy(basePromptProps);
 
-export const datePickerPromptProps: DatePickerPromptProps = clone({
+export const datePickerPromptProps: DatePickerPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
 });
 
-export const timePickerPromptProps: TimePickerPromptProps = clone({
+export const timePickerPromptProps: TimePickerPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
   format: '24hr',
 });
 
-export const checkboxListPromptProps: CheckboxListPromptProps = clone({
+export const checkboxListPromptProps: CheckboxListPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
   label: { en: null },
@@ -58,7 +58,7 @@ export const checkboxListPromptProps: CheckboxListPromptProps = clone({
   other: false,
 });
 
-export const radioListPromptProps: RadioListPromptProps = clone({
+export const radioListPromptProps: RadioListPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
   label: { en: null },
@@ -67,7 +67,7 @@ export const radioListPromptProps: RadioListPromptProps = clone({
   other: false,
 });
 
-export const textareaPromptProps: TextareaPromptProps = clone({
+export const textareaPromptProps: TextareaPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
   label: { en: null },
@@ -80,41 +80,41 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'info-prompt',
     name: 'Info / confirmation prompt',
-    props: clone(basePromptProps),
+    props: copy(basePromptProps),
   },
   {
     component: 'date-picker-prompt',
     type: 'custom',
     id: 'date-picker-prompt',
     name: 'Date picker prompt',
-    props: clone(datePickerPromptProps),
+    props: copy(datePickerPromptProps),
   },
   {
     component: 'time-picker-prompt',
     type: 'custom',
     id: 'time-picker-prompt',
     name: 'Time picker prompt',
-    props: clone(timePickerPromptProps),
+    props: copy(timePickerPromptProps),
   },
   {
     component: 'checkbox-list-prompt',
     type: 'custom',
     id: 'checkbox-list-prompt',
     name: 'Checkbox List Prompt',
-    props: clone(checkboxListPromptProps),
+    props: copy(checkboxListPromptProps),
   },
   {
     component: 'radio-list-prompt',
     type: 'custom',
     id: 'radio-list-prompt',
     name: 'Radio List Prompt',
-    props: clone(radioListPromptProps),
+    props: copy(radioListPromptProps),
   },
   {
     component: 'textarea-prompt',
     type: 'custom',
     id: 'textarea-prompt',
     name: 'Textarea prompt',
-    props: clone(textareaPromptProps),
+    props: copy(textareaPromptProps),
   },
 ];
