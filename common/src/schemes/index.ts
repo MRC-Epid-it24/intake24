@@ -80,9 +80,11 @@ export const defaultQuestions: RecallQuestions = {
 };
 
 export type SchemeOverrides = {
+  meals: Meal[];
   questions: PromptQuestion[];
 };
 
 export const defaultOverrides: SchemeOverrides = {
+  meals: [],
   questions: [],
 };

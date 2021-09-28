@@ -76,11 +76,11 @@ import {
 import { PromptQuestion } from '@common/prompts';
 import { Dictionary } from '@common/types';
 import formMixin from '@/components/entry/formMixin';
+import LoadSectionDialog from '@/components/prompts/load-section-dialog.vue';
 import PromptList, { PromptQuestionMoveEvent } from '@/components/prompts/list/prompt-list.vue';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
 import { SchemeForm } from '../form.vue';
-import LoadSectionDialog from '../load-section-dialog.vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeQuestions',

@@ -2,9 +2,7 @@
   <v-card flat tile>
     <v-toolbar flat tile color="grey lighten-2">
       <v-icon class="mr-3" color="primary">fa-hamburger</v-icon>
-      <v-toolbar-title class="font-weight-medium">
-        {{ $t('schemes.meals.title') }}
-      </v-toolbar-title>
+      <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn fab small color="secondary" :title="$t('schemes.meals.create')" @click.stop="add">
         <v-icon small>fa-plus</v-icon>
@@ -12,9 +10,9 @@
       <load-section-dialog
         :schemeId="$route.params.id"
         section="meals"
-        @load="loadFromScheme"
+        @load="load"
       ></load-section-dialog>
-      <confirm-dialog color="error" :label="$t('schemes.meals.reset._')" @confirm="resetMealList">
+      <confirm-dialog color="error" :label="$t('schemes.meals.reset._')" @confirm="resetList">
         <template v-slot:activator="{ attrs, on }">
           <v-btn
             class="ml-3"
@@ -117,20 +115,26 @@ import { copy } from '@common/util';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import { FormRefs, Meal, Meals } from '@common/types';
+import { defaultMeals } from '@common/schemes';
 import LanguageSelector from '@/components/prompts/partials/LanguageSelector.vue';
-import LoadSectionDialog from './load-section-dialog.vue';
+import LoadSectionDialog from '@/components/prompts/load-section-dialog.vue';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 
-export type MealDialog = { show: boolean; index: number; meal: Meal };
+export type MealDialog = {
+  show: boolean;
+  index: number;
+  meal: Meal;
+};
 
 export default (Vue as VueConstructor<Vue & FormRefs>).extend({
-  name: 'SchemeMeals',
+  name: 'MealList',
 
   props: {
-    value: {
-      type: Array as () => Meal[],
+    mode: {
+      type: String as () => 'full' | 'override',
+      default: 'full',
     },
-    defaults: {
+    value: {
       type: Array as () => Meal[],
     },
   },
@@ -148,7 +152,19 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       dialog: dialog(),
       newDialog: dialog,
       meals: [...this.value],
+      defaultMeals,
     };
+  },
+
+  computed: {
+    isOverrideMode(): boolean {
+      return this.mode === 'override';
+    },
+    title(): string {
+      return this.$t(
+        this.isOverrideMode ? 'schemes.overrides.meals.title' : 'schemes.meals.title'
+      ).toString();
+    },
   },
 
   watch: {
@@ -161,14 +177,14 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     rules(langId: string) {
       return [
         (value: string | null): boolean | string => {
-          if (!value) return this.$t('schemes.meals.validation.required') as string;
+          if (!value) return this.$t('schemes.meals.validation.required').toString();
 
           const { index } = this.dialog;
           const match = this.meals.find(
             (meal, idx) => value === meal.name[langId] && index !== idx
           );
 
-          return match ? (this.$t('schemes.meals.validation.unique') as string) : true;
+          return match ? this.$t('schemes.meals.validation.unique').toString() : true;
         },
       ];
     },
@@ -202,12 +218,12 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       this.$refs.form.resetValidation();
     },
 
-    loadFromScheme(meals: Meals) {
+    load(meals: Meals) {
       this.meals = [...meals];
     },
 
-    resetMealList() {
-      this.meals = [...this.defaults];
+    resetList() {
+      this.meals = [...this.defaultMeals];
     },
   },
 });

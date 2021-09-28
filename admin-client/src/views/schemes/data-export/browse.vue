@@ -62,10 +62,11 @@ import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { ExportField, ExportSection } from '@common/types/models';
 import { SchemeExportRefsResponse } from '@common/types/http/admin';
 import formMixin from '@/components/entry/formMixin';
+import LoadSectionDialog from '@/components/prompts/load-section-dialog.vue';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
 import DataExportSection from './data-export-section.vue';
-import LoadSectionDialog from '../load-section-dialog.vue';
+
 import { SchemeForm } from '../form.vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({

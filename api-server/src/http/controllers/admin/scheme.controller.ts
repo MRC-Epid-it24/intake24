@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { FindOptions, Op } from 'sequelize';
-import { defaultMeals, flattenScheme, RecallQuestions } from '@common/schemes';
+import { flattenScheme, RecallQuestions } from '@common/schemes';
 import {
   CreateSchemeResponse,
   SchemeRefs,
@@ -33,7 +33,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
       templates = questions.map((schemeQuestion) => schemeQuestion.question);
     }
 
-    return { languages, meals: defaultMeals, templates };
+    return { languages, templates };
   };
 
   const entry = async (

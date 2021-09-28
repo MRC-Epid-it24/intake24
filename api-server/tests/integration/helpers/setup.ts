@@ -129,6 +129,7 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'surveys-delete', displayName: 'Delete surveys' },
     { name: 'surveys-data-export', displayName: 'Survey data export' },
     { name: 'surveys-mgmt', displayName: 'Survey management' },
+    { name: 'surveys-overrides', displayName: 'Survey scheme overrides' },
     { name: 'surveys-respondents', displayName: 'Survey respondents' },
     { name: 'surveys-submissions', displayName: 'Survey submissions' },
     { name: 'tasks-browse', displayName: 'Browse tasks' },
@@ -241,7 +242,7 @@ export const initDatabaseData = async (): Promise<MockData> => {
     allowGenUsers: false,
     supportEmail: 'testSupportEmail@example.com',
     storeUserSessionOnServer: false,
-    overrides: { questions: [] },
+    overrides: { meals: [], questions: [] },
   });
 
   await setupPermissions();

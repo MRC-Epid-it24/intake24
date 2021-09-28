@@ -2,9 +2,7 @@
   <v-card flat tile>
     <v-toolbar flat tile color="grey lighten-2">
       <v-icon class="mr-3" color="primary">far fa-question-circle</v-icon>
-      <v-toolbar-title class="font-weight-medium">
-        {{ title }}
-      </v-toolbar-title>
+      <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         v-if="!isOverrideMode"
@@ -118,7 +116,9 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     },
     title(): string {
       return this.$t(
-        `schemes.questions.${this.isOverrideMode ? 'overrides' : this.section}.title`
+        this.isOverrideMode
+          ? `schemes.overrides.questions.title`
+          : `schemes.questions.${this.section}.title`
       ).toString();
     },
   },

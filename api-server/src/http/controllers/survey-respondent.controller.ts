@@ -44,9 +44,14 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
       overrides,
     } = survey;
 
+    let { meals } = scheme;
     const { questions } = scheme;
 
     // Merge survey's scheme overrides
+    // 1) Meals - override whole list
+    if (overrides.meals.length) meals = [...overrides.meals];
+
+    // 2) Questions - merge by Question ID
     if (overrides.questions.length) {
       const flattenScheme = flattenSchemeWithSection(scheme.questions);
       for (const question of overrides.questions) {
@@ -70,12 +75,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
       name,
       state,
       localeId,
-      scheme: {
-        id: scheme.id,
-        type: scheme.type,
-        meals: scheme.meals,
-        questions,
-      },
+      scheme: { id: scheme.id, type: scheme.type, meals, questions },
       numberOfSubmissionsForFeedback,
       storeUserSessionOnServer,
       suspensionReason,

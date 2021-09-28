@@ -44,7 +44,7 @@
         </v-card-text>
       </v-container>
       <v-divider></v-divider>
-      <meals v-if="form.type === 'data-driven'" v-model="form.meals" :defaults="refs.meals"></meals>
+      <meal-list v-model="form.meals"></meal-list>
       <v-card-text>
         <submit-footer :disabled="form.errors.any()"></submit-footer>
       </v-card-text>
@@ -58,10 +58,10 @@ import { defaultExport, defaultMeals, defaultQuestions, RecallQuestions } from '
 import { Meal } from '@common/types';
 import { ExportSection } from '@common/types/models';
 import formMixin from '@/components/entry/formMixin';
+import MealList from '@/components/meals/meal-list.vue';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
 import CopySchemeDialog from './copy-scheme-dialog.vue';
-import Meals from './meal-list.vue';
 
 export type SchemeForm = {
   id: string | null;
@@ -75,7 +75,7 @@ export type SchemeForm = {
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeForm',
 
-  components: { CopySchemeDialog, Meals },
+  components: { CopySchemeDialog, MealList },
 
   mixins: [formMixin],
 

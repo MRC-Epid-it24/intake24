@@ -171,7 +171,7 @@ const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest =
 
   const maximumDailySubmissions = faker.datatype.number({ min: 1, max: 5 });
   const minimumSubmissionInterval = faker.datatype.number(5);
-  const overrides = { questions: [] };
+  const overrides = { meals: [], questions: [] };
 
   return {
     id,

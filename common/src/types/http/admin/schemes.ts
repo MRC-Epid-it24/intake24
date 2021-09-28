@@ -1,5 +1,4 @@
 import { PromptQuestion } from '../../../prompts';
-import { Meal } from '../..';
 import {
   ExportField,
   ExportSectionId,
@@ -21,7 +20,6 @@ export type SchemeEntry = SchemeAttributes;
 
 export type SchemeRefs = {
   languages: LanguageEntry[];
-  meals: Meal[];
   templates: PromptQuestion[];
 };
 

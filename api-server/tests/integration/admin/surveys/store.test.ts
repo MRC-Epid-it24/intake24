@@ -85,7 +85,10 @@ export default (): void => {
           minimumSubmissionInterval: { nan: 5 },
           authUrlTokenCharset: 'abcabc',
           authUrlTokenLength: 'this is not a number',
-          overrides: 'invalidOverrides',
+          overrides: {
+            meals: ['shouldBeProperlyFormatMealList'],
+            questions: 'invalidQuestions',
+          },
         });
 
       expect(status).toBe(422);

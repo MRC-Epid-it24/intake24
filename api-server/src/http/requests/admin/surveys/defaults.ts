@@ -3,7 +3,7 @@ import { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
 import { SurveyState } from '@common/types/models';
-import { type } from 'os';
+import { validateMeals } from '@common/validators';
 import { Locale, Scheme, Survey } from '@/db/models/system';
 import { unique } from '@/http/rules';
 
@@ -195,10 +195,18 @@ const defaults: Schema = {
       options: async (value): Promise<void> => {
         if (
           typeof value !== 'object' ||
-          Object.keys(value).some((key) => !['questions'].includes(key))
+          Object.keys(value).some((key) => !['meals', 'questions'].includes(key))
         )
           throw new Error('Invalid override object. Not and object or missing properties');
 
+        // Meals
+        try {
+          validateMeals(value.meals);
+        } catch (err: any) {
+          throw new Error(err.message.split('\n')[0]);
+        }
+
+        // Questions
         if (
           !Array.isArray(value.questions) ||
           value.questions.some((item: any) => !isPlainObject(item))

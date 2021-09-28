@@ -19,7 +19,7 @@ const schemes: LocaleMessageObject = {
     id: 'New scheme ID',
     name: 'New scheme name',
   },
-  load: 'Load from scheme',
+  load: 'Load section from scheme',
   types: {
     _: 'Type',
     legacy: 'Legacy survey scheme',
@@ -182,8 +182,16 @@ const schemes: LocaleMessageObject = {
         title: 'Save question as template',
       },
     },
-    overrides: {
+  },
+  overrides: {
+    _: 'Scheme overrides',
+    meals: {
+      title: 'Scheme meals overrides',
+      subtitle: 'Override specific scheme question prompt. Changes will get merged by Question ID.',
+    },
+    questions: {
       title: 'Scheme questions overrides',
+      subtitle: 'Override specific scheme question prompt. Changes will get merged by Question ID.',
     },
   },
   foodSearch: {
