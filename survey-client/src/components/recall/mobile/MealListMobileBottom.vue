@@ -1,9 +1,10 @@
 <template>
-  <v-card elevation="5" class="stickytop">
-    <v-toolbar flat>
-      <v-tabs icons-and-text center-active touch show-arrows v-model="active_tab">
+  <v-card flat>
+    <v-toolbar flat dense>
+      <v-tabs icons-and-text center-active show-arrows touch v-model="active_tab">
         <v-tabs-slider></v-tabs-slider>
         <v-tab class="add_button" @click="emitAddMeal('add-meal')">
+          <span>MEAL</span>
           <span>ADD</span>
         </v-tab>
         <v-tab
@@ -27,7 +28,7 @@ import { FoodState } from '@common/types';
 
 export default (Vue as VueConstructor<Vue>).extend({
   // components: { MealItemMobile },
-  name: 'MealListMobileTop',
+  name: 'MealListMobileBottom',
 
   props: {
     meals: Array,
@@ -65,6 +66,5 @@ export default (Vue as VueConstructor<Vue>).extend({
 </script>
 //
 <style lang="scss" scoped>
-// @import '../../scss/meallistmobile2.scss';
-//
+@import '../../../scss/meallistmobile.scss';
 </style>

@@ -52,7 +52,28 @@
       >
       </meal-list-mobile-bottom>
     </v-col> -->
-    <bottom-navigation-mobile v-if="isNotDesktop"></bottom-navigation-mobile>
+    <v-col cols="12" class="stickybottom" v-if="isNotDesktop" v-show="showMealList">
+      <meal-list-mobile-bottom
+        v-show="activeItem == 'meal'"
+        :meals="meals"
+        @displayMealContext="onMealFoodMobileClick"
+        @recall-action="onRecallAction"
+      >
+      </meal-list-mobile-bottom>
+      <food-list-mobile-bottom
+        v-show="activeItem == 'food'"
+        :loading="false"
+        :foods="foods"
+        :mealIndex="mealIndex"
+        @displayFoodContext="onMealFoodMobileClick"
+        @meal-action="onMealAction"
+      >
+      </food-list-mobile-bottom>
+    </v-col>
+    <bottom-navigation-mobile
+      v-if="isNotDesktop"
+      @navigation-item-click="onBottomNavClick"
+    ></bottom-navigation-mobile>
     <meal-food-mobile-context-menu
       :show="mobileMealFoodContextMenu.show"
       :entityName="mobileMealFoodContextMenu.foodContext ? activeFood : activeMeal"
@@ -87,8 +108,8 @@ import timeDoubleDigitsConvertor from '@/components/mixins/timeDoubleDigitsConve
 import { MealAction } from '@/components/recall/MealItem.vue';
 
 // Mobile
-import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
-import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
+import MealListMobileBottom from '@/components/recall/mobile/MealListMobileBottom.vue';
+import FoodListMobileBottom from '@/components/recall/mobile/FoodListMobileBottom.vue';
 import MealFoodMobileContextMenu from '@/components/recall/MobileMealFoodContext.vue';
 import RecallBreadCrumbsMobile from '@/components/recall/mobile/BreadCrumbsMobile.vue';
 import BottomNavigationMobile from '@/components/recall/mobile/BottomNavMobile.vue';
@@ -98,7 +119,7 @@ export default Vue.extend({
 
   components: {
     MealListMobileBottom,
-    MealListMobileTop,
+    FoodListMobileBottom,
     MealList,
     RecallBreadCrumbs,
     RecallBreadCrumbsMobile,
@@ -122,6 +143,7 @@ export default Vue.extend({
       },
       activeMeal: '',
       activeFood: '',
+      activeItem: 'meal',
     };
   },
 
@@ -312,6 +334,10 @@ export default Vue.extend({
       }
     },
 
+    onBottomNavClick(item: string) {
+      this.activeItem = item;
+    },
+
     async onFoodSelected(payload: { mealIndex: number; foodIndex: number }) {
       this.setSelection({
         element: {
@@ -341,5 +367,5 @@ export default Vue.extend({
 });
 </script>
 <style lang="scss" scoped>
-@import '../../scss/meallistmobile2.scss';
+@import '../../scss/meallistmobile.scss';
 </style>
