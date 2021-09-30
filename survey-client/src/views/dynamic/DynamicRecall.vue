@@ -1,12 +1,16 @@
 <template>
   <v-row justify="center" class="pa-0">
-    <v-col cols="12" class="mealbar" v-if="isNotDesktop" v-show="showMealList">
+    <recall-bread-crumbs-mobile
+      v-if="isNotDesktop"
+      :prompt="activePrompt"
+    ></recall-bread-crumbs-mobile>
+    <!-- <v-col cols="12" class="mealbar" v-if="isNotDesktop" v-show="showMealList">
       <meal-list-mobile-top
         :meals="meals"
         @displayMealContext="onMealFoodMobileClick"
         @recall-action="onRecallAction"
       ></meal-list-mobile-top>
-    </v-col>
+    </v-col> -->
     <v-col v-if="!isNotDesktop && showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
       <meal-list
         :surveyName="surveyName"
@@ -77,6 +81,7 @@ import MealListMobileBottom from '@/components/recall/MealListMobileBottom.vue';
 import MealListMobileTop from '@/components/recall/MealListMobileTop.vue';
 import MealFoodMobileContextMenu from '@/components/recall/MobileMealFoodContext.vue';
 import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
+import RecallBreadCrumbsMobile from '@/components/recall/BreadCrumbsMobile.vue';
 import MealList, { RecallAction } from '@/components/recall/MealListDesktop.vue';
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import standardHandlers from '@/components/prompts/dynamic/handlers/standard';
@@ -92,6 +97,7 @@ export default Vue.extend({
     MealListMobileTop,
     MealList,
     RecallBreadCrumbs,
+    RecallBreadCrumbsMobile,
     MealFoodMobileContextMenu,
     CustomPromptHandler,
     ...standardHandlers,
@@ -159,6 +165,10 @@ export default Vue.extend({
 
     mealIndex(): number | undefined {
       return this.selectedMealIndex;
+    },
+
+    activePrompt(): string {
+      return this.currentPrompt ? this.currentPrompt?.prompt.name : '';
     },
 
     ...mapState({

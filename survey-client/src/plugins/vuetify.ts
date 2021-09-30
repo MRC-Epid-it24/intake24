@@ -17,13 +17,19 @@ export default new Vuetify({
       edit: 'fas fa-edit',
       show: 'far fa-file',
       save: 'fas fa-save',
+      meal: 'fas fa-utensils',
+      food: 'fas fa-cheese',
+      survey: 'fas fa-poll-h',
+      forward: 'fas fa-caret-right',
+      question: 'far fa-question-circle',
+      check: 'fas fa-check',
     },
   },
   theme: {
     themes: {
       light: {
         primary: '#263238',
-        secondary: '#FF3D00',
+        secondary: '#ff8737',
       },
     },
   },
