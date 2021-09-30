@@ -1,8 +1,11 @@
 <template>
-  <v-card elevation="5" :loading="loading">
-    <v-toolbar dense>
+  <v-card flat :loading="loading">
+    <v-toolbar flat dense>
       <v-tabs center-active touch show-arrows icons-and-text v-model="active_tab">
-        <v-tab class="add_food" @click="onAddFood('edit-foods')"> ADD </v-tab>
+        <v-tab class="add_button" @click="onAddFood('edit-foods')">
+          <span>FOOD</span>
+          <span>ADD</span>
+        </v-tab>
         <v-tab
           v-for="(food, i) in mealfoods"
           :key="i"
@@ -22,8 +25,7 @@ import { mapGetters } from 'vuex';
 import { FoodState } from '@common/types';
 
 export default (Vue as VueConstructor<Vue>).extend({
-  // components: { MealItemMobile },
-  name: 'MealListMobileBottom',
+  name: 'FoodListMobileBottom',
 
   props: {
     // FIXME: Should be an array of objects of type UserFoodData or EncodedUserFoodData ???
@@ -78,5 +80,5 @@ export default (Vue as VueConstructor<Vue>).extend({
 });
 </script>
 <style lang="scss" scoped>
-@import '../../scss/meallistmobile2.scss';
+@import '../../../scss/meallistmobile.scss';
 </style>
