@@ -35,11 +35,11 @@
         <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-btn text :to="{ name: 'profile', params: { surveyId } }">
-          <span class="mr-2">{{ $t('profile._') }}</span>
+          <!-- <span class="mr-2">{{ $t('profile._') }}</span> -->
           <v-icon>$profile</v-icon>
         </v-btn>
-        <v-btn text @click.stop="onLogout()">
-          <span class="mr-2">{{ $t('common.logout') }}</span>
+        <v-btn text @click.stop="toggleDialog">
+          <!-- <span class="mr-2">{{ $t('common.logout') }}</span> -->
           <v-icon>$logout</v-icon>
         </v-btn>
       </template>
@@ -47,7 +47,13 @@
         <v-toolbar-title>{{ $t('common._') }}</v-toolbar-title>
       </template>
     </v-app-bar>
-
+    <dialog-window
+      :dialog="dialog"
+      :title="$t('common.logout')"
+      :message="$t('common.logoutMessage')"
+      :type="'Logout'"
+      @dialog-change="onLogoutDialog"
+    ></dialog-window>
     <v-main>
       <v-container :class="{ 'pa-0': isMobile }">
         <!-- <h2 v-if="loggedIn" class="ma-2 text-dark">{{ title }}</h2> -->
@@ -71,6 +77,7 @@ import { mapGetters } from 'vuex';
 import { TranslateResult } from 'vue-i18n';
 import Loader from '@/components/Loader.vue';
 import pwaUpdate from '@/components/mixins/pwaUpdate';
+import DialogWindow from '@/components/elements/DialogWindow.vue';
 
 export interface AppComponent {
   sidebar: boolean;
@@ -80,13 +87,14 @@ export interface AppComponent {
 export default (Vue as VueConstructor<Vue & AppComponent>).extend({
   name: 'App',
 
-  components: { Loader },
+  components: { Loader, DialogWindow },
 
   mixins: [pwaUpdate],
 
   data() {
     return {
       sidebar: true,
+      dialog: false,
     };
   },
 
@@ -129,12 +137,19 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
       this.sidebar = !this.sidebar;
     },
 
-    async onLogout() {
-      await this.$store.dispatch('auth/logout', { invalidate: true });
-      const { surveyId } = this.$route.params;
-      await this.$router.push(
-        surveyId ? { name: 'login', params: { surveyId } } : { name: 'home' }
-      );
+    toggleDialog() {
+      this.dialog = !this.dialog;
+    },
+
+    async onLogoutDialog(value: boolean) {
+      this.dialog = !this.dialog;
+      if (value) {
+        await this.$store.dispatch('auth/logout', { invalidate: true });
+        const { surveyId } = this.$route.params;
+        await this.$router.push(
+          surveyId ? { name: 'login', params: { surveyId } } : { name: 'home' }
+        );
+      }
     },
   },
 });

@@ -6,6 +6,7 @@ const common: LocaleMessageObject = {
   register: 'التسجيل',
   login: 'تسجيل الدخول',
   logout: 'خروج',
+  logoutMessage: 'هل تريد الخروج',
 
   username: 'اسم المستخدم',
   email: 'البريد الإلكتروني',

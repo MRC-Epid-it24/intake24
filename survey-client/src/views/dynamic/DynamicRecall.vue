@@ -4,13 +4,7 @@
       v-if="isNotDesktop"
       :prompt="activePrompt"
     ></recall-bread-crumbs-mobile>
-    <!-- <v-col cols="12" class="mealbar" v-if="isNotDesktop" v-show="showMealList">
-      <meal-list-mobile-top
-        :meals="meals"
-        @displayMealContext="onMealFoodMobileClick"
-        @recall-action="onRecallAction"
-      ></meal-list-mobile-top>
-    </v-col> -->
+
     <v-col v-if="!isNotDesktop && showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
       <meal-list
         :surveyName="surveyName"
@@ -40,18 +34,7 @@
         ></component>
       </transition>
     </v-col>
-    <!-- <v-col cols="12" class="foodbar stickybottom">
-      <meal-list-mobile-bottom
-        v-if="isNotDesktop"
-        v-show="showMealList"
-        :loading="false"
-        :foods="foods"
-        :mealIndex="mealIndex"
-        @displayFoodContext="onMealFoodMobileClick"
-        @meal-action="onMealAction"
-      >
-      </meal-list-mobile-bottom>
-    </v-col> -->
+
     <v-col cols="12" class="stickybottom" v-if="isNotDesktop" v-show="showMealList">
       <meal-list-mobile-bottom
         v-show="activeItem == 'meal'"
