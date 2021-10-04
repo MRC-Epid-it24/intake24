@@ -1,0 +1,28 @@
+{
+  "name": "@intake24/docs",
+  "version": "0.0.1",
+  "description": "Intake24 dietary recall system",
+  "main": "index.js",
+  "authors": {
+    "name": "Intake24",
+    "email": "support@intake24.co.uk"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MRC-Epid-it24/intake24.git",
+    "directory": "apps/docs"
+  },
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.8.2",
+    "@vuepress/plugin-medium-zoom": "^1.8.2",
+    "vuepress": "^1.8.2"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  }
+}

@@ -1,6 +1,0 @@
----
-- hosts: api-server
-  remote_user: deploy
-  become: true
-  roles:
-    - nginx-site

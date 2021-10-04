@@ -1,0 +1,35 @@
+- name: Include shared vars
+  include_vars: '../instances/{{ instance }}/shared/config.json'
+
+- name: Install npm package dependencies
+  become_user: '{{ app.user }}'
+  command: npm ci
+  args:
+    chdir: '{{ app.directory }}/apps/api'
+
+- name: Copy .env config file
+  become_user: '{{ app.user }}'
+  copy:
+    src: '{{ env_file }}'
+    dest: '{{ app.directory }}/apps/api/.env'
+    mode: '644'
+
+- name: Build API server
+  become_user: '{{ app.user }}'
+  command: npm run production
+  args:
+    chdir: '{{ app.directory }}/apps/api'
+
+- name: Run foods database migrations
+  become_user: '{{ app.user }}'
+  command: npm run migrate:foods
+  args:
+    chdir: '{{ app.directory }}/apps/api'
+  when: migrations.foods
+
+- name: Run system database migrations
+  become_user: '{{ app.user }}'
+  command: npm run migrate:system
+  args:
+    chdir: '{{ app.directory }}/apps/api'
+  when: migrations.system

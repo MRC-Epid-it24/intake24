@@ -4,11 +4,11 @@ localhost
 [dbservers]
 localhost
 
-[api-server]
+[api]
 localhost
 
-[admin-site]
+[admin]
 localhost
 
-[survey-site]
+[survey]
 localhost

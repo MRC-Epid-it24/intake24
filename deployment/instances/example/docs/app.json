@@ -1,3 +1,0 @@
-{
-  "env_file": "../instances/{{ instance }}/docs/.env"
-}

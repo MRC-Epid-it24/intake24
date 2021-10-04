@@ -1,0 +1,9 @@
+---
+- hosts: admin
+  remote_user: deploy
+  become: true
+  roles:
+    - role: app-init
+    - role: app-admin
+    - role: app-service
+      when: service.deploy | bool

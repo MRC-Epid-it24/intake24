@@ -34,4 +34,4 @@
   become_user: '{{ app.user }}'
   command: npm ci
   args:
-    chdir: '{{ app.directory }}/common'
+    chdir: '{{ app.directory }}/packages/common'

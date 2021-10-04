@@ -1,5 +1,5 @@
 ---
-- hosts: api-server
+- hosts: api
   remote_user: deploy
   become: true
   roles:

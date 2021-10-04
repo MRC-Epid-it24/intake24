@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "packages/common"
+		},
+		{
+			"path": "deployment"
+		},
+		{
+			"path": "apps/api"
+		},
+	],
+	"settings": {
+		"eslint.workingDirectories": [
+			{ "directory": "./packages/common", "changeProcessCWD": true },
+			{ "directory": "./apps/api", "changeProcessCWD": true },
+		]
+	}
+}

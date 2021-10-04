@@ -1,0 +1,12 @@
+{
+  "env_file": "../instances/{{ instance }}/app-api/.env",
+  "migrations": {
+    "foods": true,
+    "system": true
+  },
+  "service": {
+    "deploy": true,
+    "template": "app-api",
+    "name": "api"
+  }
+}

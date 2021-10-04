@@ -1,8 +1,0 @@
----
-- hosts: api-server
-  remote_user: deploy
-  become: true
-  roles:
-    - role: app-init
-    - role: api-server
-    - role: app-service

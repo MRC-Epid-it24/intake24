@@ -1,0 +1,8 @@
+---
+- hosts: api
+  remote_user: deploy
+  become: true
+  roles:
+    - role: app-init
+    - role: app-api
+    - role: app-service

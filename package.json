@@ -1,0 +1,25 @@
+{
+  "name": "intake24",
+  "version": "1.0.0",
+  "description": "Intake24 API Server",
+  "private": true,
+  "author": "",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MRC-Epid-it24/intake24.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/MRC-Epid-it24/intake24/issues"
+  },
+  "homepage": "https://github.com/MRC-Epid-it24/intake24#readme",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

@@ -1,5 +1,5 @@
 ---
-- hosts: admin-site
+- hosts: admin
   remote_user: deploy
   become: true
   roles:

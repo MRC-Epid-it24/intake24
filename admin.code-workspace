@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "packages/common"
+		},
+		{
+			"path": "apps/admin"
+		},
+	],
+	"settings": {
+		"eslint.workingDirectories": [
+			{ "directory": "./packages/common", "changeProcessCWD": true },
+			{ "directory": "./apps/admin", "changeProcessCWD": true },
+		]
+	}
+}

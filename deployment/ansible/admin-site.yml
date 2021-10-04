@@ -1,9 +1,0 @@
----
-- hosts: admin-site
-  remote_user: deploy
-  become: true
-  roles:
-    - role: app-init
-    - role: admin-site
-    - role: app-service
-      when: service.deploy | bool

@@ -1,0 +1,8 @@
+{
+  "env_file": "../instances/{{ instance }}/app-survey/.env",
+  "service": {
+    "deploy": false,
+    "template": "app-survey",
+    "name": "survey"
+  }
+}

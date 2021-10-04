@@ -5,16 +5,16 @@ on:
     branches: [ master ]
     paths-ignore:
       - 'deployment/**'
-      - 'docs/**'
+      - 'apps/docs/**'
   pull_request:
     branches: [ master ]
     paths-ignore:
       - 'deployment/**'
-      - 'docs/**'
+      - 'apps/docs/**'
 
 jobs:
   # API Server
-  api-server:
+  api:
     name: API Server
 
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: api-server
+        working-directory: apps/api
 
     services:
       postgres:
@@ -71,10 +71,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install latest npm
         run: npm install -g npm
-      - name: Common - install dependencies
-        working-directory: common
+      - name: Install dependencies
+        working-directory: .
         run: npm ci
-      - name: API Server - install dependencies
+      - name: Install local dependencies
         run: npm ci
       - name: API Server - lint
         run: npm run lint
@@ -88,7 +88,7 @@ jobs:
         run: npm run test:integration
 
   # Admin client
-  admin-client:
+  admin:
     name: Admin client
 
     runs-on: ubuntu-latest
@@ -99,7 +99,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: admin-client
+        working-directory: apps/admin
 
     steps:
       - name: Repository checkout
@@ -108,10 +108,10 @@ jobs:
         uses: actions/setup-node@v2.2.0
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Common - install dependencies
-        working-directory: common
-        run: npm ci
-      - name: Admin client - install dependencies
+      - name: Install latest npm
+        run: npm install -g npm
+      - name: Install dependencies
+        working-directory: .
         run: npm ci
       - name: Admin client - lint
         run: npm run lint
@@ -119,7 +119,7 @@ jobs:
         run: npm run build
 
   # Survey client
-  survey-client:
+  survey:
     name: Survey client
 
     runs-on: ubuntu-latest
@@ -130,7 +130,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: survey-client
+        working-directory: apps/survey
 
     steps:
       - name: Repository checkout
@@ -139,12 +139,12 @@ jobs:
         uses: actions/setup-node@v2.2.0
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Common - install dependencies
-        working-directory: common
+      - name: Install latest npm
+        run: npm install -g npm
+      - name: Install dependencies
+        working-directory: .
         run: npm ci
-      - name: Admin client - install dependencies
-        run: npm ci
-      - name: Admin client - lint
+      - name: Survey client - lint
         run: npm run lint
-      - name: Admin client - build
+      - name: Survey client - build
         run: npm run build

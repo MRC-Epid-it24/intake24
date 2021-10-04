@@ -1,0 +1,8 @@
+{
+  "env_file": "../instances/{{ instance }}/app-admin/.env",
+  "service": {
+    "deploy": false,
+    "template": "app-admin",
+    "name": "admin"
+  }
+}

@@ -1,9 +1,0 @@
----
-- hosts: survey-site
-  remote_user: deploy
-  become: true
-  roles:
-    - role: app-init
-    - role: survey-site
-    - role: app-service
-      when: service.deploy | bool

@@ -1,0 +1,57 @@
+{
+  "name": "@intake24/find-portion-images",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Intake24 miscellaneous scripts",
+  "author": "",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MRC-Epid-it24/intake24.git",
+    "directory": "apps/find-portion-images"
+  },
+  "scripts": {
+    "development": "cross-env NODE_ENV=development webpack",
+    "dev": "npm run development",
+    "find": "cross-env NODE_PATH=../api/node_modules node dist/findPortionSizes.js",
+    "lint": "eslint --ext .js,.ts src/",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "engines": {
+    "node": ">=10.20.1"
+  },
+  "dependencies": {
+    "command-line-args": "^5.2.0",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^10.0.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/command-line-args": "^5.2.0",
+    "@types/lodash": "^4.14.175",
+    "@types/node": "^16.10.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "loader-utils": "^2.0.0",
+    "prettier": "^2.4.1",
+    "ts-loader": "^9.2.6",
+    "tsconfig-paths": "^3.11.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.1",
+    "typescript": "^4.4.3",
+    "typescript-json-validator": "^2.4.2",
+    "webpack": "^5.55.1",
+    "webpack-cli": "^4.8.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "bundledDependencies": [
+    "@intake24/common",
+    "@intake24/api"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "packages/common"
+		},
+		{
+			"path": "apps/survey"
+		},
+	],
+	"settings": {
+		"eslint.workingDirectories": [
+			{ "directory": "./packages/common", "changeProcessCWD": true },
+			{ "directory": "./apps/survey", "changeProcessCWD": true },
+		]
+	}
+}

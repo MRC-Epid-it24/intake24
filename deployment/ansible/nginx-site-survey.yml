@@ -1,5 +1,5 @@
 ---
-- hosts: survey-site
+- hosts: survey
   remote_user: deploy
   become: true
   roles:
