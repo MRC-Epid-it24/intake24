@@ -23,7 +23,6 @@
       </v-card-title>
       <v-card-text class="px-6 py-4">
         <div class="subtitle-1 d-flex justify-center">
-          <v-icon left>fa-hand-point-right</v-icon>
           <slot></slot>
         </div>
       </v-card-text>
@@ -117,10 +116,10 @@ export default Vue.extend({
       return this.confirmText ?? this.label;
     },
     cancelLabel(): string {
-      return this.cancelText ?? this.$t('common.action.cancel');
+      return this.cancelText ?? this.$t('common.cancel');
     },
     titleLabel(): string {
-      return this.titleText ?? this.$t('common.action.confirm.title');
+      return this.titleText ?? this.$t('common.confirm.title');
     },
   },
 

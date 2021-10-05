@@ -7,12 +7,21 @@
       <editable-food-list :food-list="drinks" :drinks="true" ref="drinksList" />
     </v-col>
     <template v-slot:actions>
-      <v-btn :block="isMobile" class="px-5" large @click="dialog = !dialog">
-        {{ $t('prompts.editMeal.deleteMeal', { meal: mealName }) }}
-      </v-btn>
+      <confirm-dialog
+        color="warning"
+        :label="$t('prompts.editMeal.deleteMeal', { meal: mealName })"
+        @confirm="removeMeal"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn :block="isMobile" class="px-5" large v-bind="attrs" v-on="on">
+            {{ $t('prompts.editMeal.deleteMeal', { meal: mealName }) }}
+          </v-btn>
+        </template>
+        {{ $t('prompts.mealDelete.message', { meal: mealName }) }}
+      </confirm-dialog>
       <v-btn
         :block="isMobile"
-        :class="{ 'ma-0': isMobile, 'mb-2': isMobile }"
+        :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
         class="px-5"
         color="success"
         large
@@ -20,13 +29,6 @@
       >
         {{ $t('common.continue') }}
       </v-btn>
-      <dialog-window
-        :dialog="dialog"
-        :title="$t('prompts.mealDelete.title')"
-        :message="$t('prompts.mealDelete.message', { meal: mealName })"
-        :type="'Delete Meal'"
-        @dialog-change="deleteMeal"
-      ></dialog-window>
     </template>
   </prompt-layout>
 </template>
@@ -37,7 +39,7 @@ import { BasePromptProps } from '@common/prompts';
 import { FoodState } from '@common/types';
 import EditableFoodList, { HasEditableFoodList } from './EditableFoodList.vue';
 import BasePrompt, { Prompt } from '../BasePrompt';
-import DialogWindow from '@/components/elements/DialogWindow.vue';
+import ConfirmDialog from '@/components/elements/ConfirmDialog.vue';
 
 type Refs = {
   $refs: {
@@ -48,7 +50,9 @@ type Refs = {
 
 export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
   name: 'EditMealPrompt',
-  components: { EditableFoodList, DialogWindow },
+
+  components: { EditableFoodList, ConfirmDialog },
+
   mixins: [BasePrompt],
 
   props: {
@@ -64,12 +68,6 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
       type: String,
       required: true,
     },
-  },
-
-  data() {
-    return {
-      dialog: false,
-    };
   },
 
   computed: {
@@ -100,11 +98,8 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
       this.$emit('finishMeal', editedFoods.concat(editedMeals));
     },
 
-    deleteMeal(value: boolean) {
-      this.dialog = !this.dialog;
-      if (value) {
-        this.$emit('abortMeal');
-      }
+    removeMeal() {
+      this.$emit('abortMeal');
     },
   },
 });

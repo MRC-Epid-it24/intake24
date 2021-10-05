@@ -8,37 +8,30 @@
       <v-btn v-if="!entityType" block class="mb-8" large @click="onContextMenuAction('edit-time')">
         {{ $t('prompts.editMeal.editTime', { meal: name }) }}
       </v-btn>
-      <v-btn
-        v-if="!entityType"
-        block
-        class="mb-0 delete-button"
-        md="8"
-        large
-        @click="dialog = !dialog"
+      <confirm-dialog
+        color="error"
+        :label="$t('prompts.editMeal.deleteMeal', { meal: name })"
+        @confirm="deleteEntity"
       >
-        {{ $t('prompts.editMeal.deleteMeal', { meal: name }) }}
-      </v-btn>
-      <v-btn v-else block class="mb-0 delete-button" md="8" large @click="dialog = !dialog">
-        {{ $t('prompts.editMeal.deleteFoodFromMeal', { food: name }) }}
-      </v-btn>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn block class="px-5" large color="error" v-bind="attrs" v-on="on">
+            {{ $t('prompts.editMeal.deleteMeal', { meal: name }) }}
+          </v-btn>
+        </template>
+        {{ $t('prompts.mealDelete.message', { meal: name }) }}
+      </confirm-dialog>
     </v-sheet>
-    <dialog-window
-      :dialog="dialog"
-      :title="$t('prompts.mealDelete.title')"
-      :message="$t('prompts.mealDelete.message', { meal: name })"
-      :type="'Delete Meal'"
-      @dialog-change="deleteEntity"
-    ></dialog-window>
   </v-bottom-sheet>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import DialogWindow from '@/components/elements/DialogWindow.vue';
+import ConfirmDialog from '@/components/elements/ConfirmDialog.vue';
 
 export default (Vue as VueConstructor<Vue>).extend({
   name: 'MealFoodMobileContextMenu',
-  components: { DialogWindow },
+
+  components: { ConfirmDialog },
 
   props: {
     show: Boolean,
@@ -47,11 +40,7 @@ export default (Vue as VueConstructor<Vue>).extend({
     entityType: Boolean,
     mealIndex: Number,
   },
-  data() {
-    return {
-      dialog: false,
-    };
-  },
+
   computed: {
     showMenu() {
       return this.show;
@@ -60,6 +49,7 @@ export default (Vue as VueConstructor<Vue>).extend({
       return this.entityName;
     },
   },
+
   methods: {
     toggleMenu() {
       this.$emit('toggleMobileMealContext');
@@ -72,15 +62,9 @@ export default (Vue as VueConstructor<Vue>).extend({
       this.$emit('toggleMobileMealContext');
     },
 
-    deleteEntity(value: boolean) {
-      this.dialog = !this.dialog;
-      if (value) {
-        if (!this.entityType) {
-          this.deleteMeal();
-        } else {
-          this.deleteFood();
-        }
-      }
+    deleteEntity() {
+      if (!this.entityType) this.deleteMeal();
+      else this.deleteFood();
     },
     deleteMeal() {
       this.$store.commit('survey/deleteMeal', this.$props.entityIndex);
@@ -98,8 +82,4 @@ export default (Vue as VueConstructor<Vue>).extend({
   },
 });
 </script>
-<style lang="scss" scoped>
-.delete-button {
-  color: red;
-}
-</style>
+<style lang="scss" scoped></style>

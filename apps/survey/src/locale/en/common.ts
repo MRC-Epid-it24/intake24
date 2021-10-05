@@ -5,14 +5,15 @@ const common: LocaleMessageObject = {
   dashboard: 'Dashboard',
   register: 'Registration',
   login: 'Sign in',
-  logout: 'Sign out',
-  logoutMessage: 'Do you want to Sign out',
+  logout: {
+    _: 'Sign out',
+    text: 'Sign out of the application',
+  },
 
   username: 'Username',
   email: 'Email',
   password: 'Password',
 
-  continue: 'Continue',
   help: 'Help',
 
   nullString: '# Missing translation!',
@@ -22,7 +23,12 @@ const common: LocaleMessageObject = {
     update: 'Update',
   },
 
+  cancel: 'Cancel',
+  continue: 'Continue',
   confirm: {
+    _: 'Confirm',
+    title: 'Do you want to continue?',
+    delete: `Do you want to delete {name}?`,
     yes: 'Yes',
     no: 'No',
   },

@@ -40,22 +40,20 @@
           <span class="mr-2" v-if="!isNotDesktop">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
-        <v-btn text @click.stop="toggleDialog">
-          <span class="mr-2" v-if="!isNotDesktop">{{ $t('common.logout') }}</span>
-          <v-icon>$logout</v-icon>
-        </v-btn>
+        <confirm-dialog :label="$t('common.logout._')" @confirm="logout">
+          <template v-slot:activator="{ attrs, on }">
+            <v-btn text v-bind="attrs" v-on="on">
+              <span class="mr-2" v-if="!isNotDesktop">{{ $t('common.logout._') }}</span>
+              <v-icon right>$logout</v-icon>
+            </v-btn>
+          </template>
+          {{ $t('common.logout.text') }}
+        </confirm-dialog>
       </template>
       <template v-else>
         <v-toolbar-title>{{ $t('common._') }}</v-toolbar-title>
       </template>
     </v-app-bar>
-    <dialog-window
-      :dialog="dialog"
-      :title="$t('common.logout')"
-      :message="$t('common.logoutMessage')"
-      :type="'Logout'"
-      @dialog-change="onLogoutDialog"
-    ></dialog-window>
     <v-main>
       <v-container :class="{ 'pa-0': isMobile }">
         <!-- <h2 v-if="loggedIn" class="ma-2 text-dark">{{ title }}</h2> -->
@@ -79,7 +77,7 @@ import { mapGetters } from 'vuex';
 import { TranslateResult } from 'vue-i18n';
 import Loader from '@/components/Loader.vue';
 import pwaUpdate from '@/components/mixins/pwaUpdate';
-import DialogWindow from '@/components/elements/DialogWindow.vue';
+import ConfirmDialog from '@/components/elements/ConfirmDialog.vue';
 
 export interface AppComponent {
   sidebar: boolean;
@@ -89,7 +87,7 @@ export interface AppComponent {
 export default (Vue as VueConstructor<Vue & AppComponent>).extend({
   name: 'App',
 
-  components: { Loader, DialogWindow },
+  components: { ConfirmDialog, Loader },
 
   mixins: [pwaUpdate],
 
@@ -143,15 +141,12 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
       this.dialog = !this.dialog;
     },
 
-    async onLogoutDialog(value: boolean) {
-      this.dialog = !this.dialog;
-      if (value) {
-        await this.$store.dispatch('auth/logout', { invalidate: true });
-        const { surveyId } = this.$route.params;
-        await this.$router.push(
-          surveyId ? { name: 'login', params: { surveyId } } : { name: 'home' }
-        );
-      }
+    async logout(value: boolean) {
+      await this.$store.dispatch('auth/logout', { invalidate: true });
+      const { surveyId } = this.$route.params;
+      await this.$router.push(
+        surveyId ? { name: 'login', params: { surveyId } } : { name: 'home' }
+      );
     },
   },
 });

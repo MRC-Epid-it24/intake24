@@ -11,12 +11,21 @@
       <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
     </v-form>
     <template v-slot:actions>
-      <v-btn :block="isMobile" class="px-5" large @click="dialog = !dialog">
-        {{ $t('prompts.mealTime.no', { meal: mealName }) }}
-      </v-btn>
+      <confirm-dialog
+        color="warning"
+        :label="$t('prompts.editMeal.deleteMeal', { meal: mealName })"
+        @confirm="removeMeal"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn :block="isMobile" class="px-5" large v-bind="attrs" v-on="on">
+            {{ $t('prompts.mealTime.no', { meal: mealName }) }}
+          </v-btn>
+        </template>
+        {{ $t('prompts.mealDelete.message', { meal: mealName }) }}
+      </confirm-dialog>
       <v-btn
         :block="isMobile"
-        :class="{ 'ma-0': isMobile, 'mb-2': isMobile }"
+        :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
         class="px-5"
         color="success"
         large
@@ -24,13 +33,6 @@
       >
         {{ $t('prompts.mealTime.yes', { meal: mealName }) }}
       </v-btn>
-      <dialog-window
-        :dialog="dialog"
-        :title="$t('prompts.mealDelete.title')"
-        :message="$t('prompts.mealDelete.message', { meal: mealName })"
-        :type="'Delete Meal'"
-        @dialog-change="removeMeal"
-      ></dialog-window>
     </template>
   </prompt-layout>
 </template>
@@ -39,11 +41,13 @@
 import Vue, { VueConstructor } from 'vue';
 import { MealTimePromptProps } from '@common/prompts';
 import BasePrompt, { Prompt } from '../BasePrompt';
-import DialogWindow from '@/components/elements/DialogWindow.vue';
+import ConfirmDialog from '@/components/elements/ConfirmDialog.vue';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'MealTimePrompt',
-  components: { DialogWindow },
+
+  components: { ConfirmDialog },
+
   mixins: [BasePrompt],
 
   props: {
@@ -64,7 +68,6 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       currentValue: this.value,
       validation: this.promptProps.validation,
       errors: [] as string[],
-      dialog: false,
     };
   },
 
@@ -91,11 +94,8 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       this.errors = [];
     },
 
-    removeMeal(value: boolean) {
-      this.dialog = !this.dialog;
-      if (value) {
-        this.$emit('removeMeal');
-      }
+    removeMeal() {
+      this.$emit('removeMeal');
     },
 
     submit() {
