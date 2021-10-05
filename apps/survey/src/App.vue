@@ -30,7 +30,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app dark color="secondary" fixed>
+    <v-app-bar app flat dark color="secondary" permanent hide-on-scroll>
       <template v-if="loggedIn">
         <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>

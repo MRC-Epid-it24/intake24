@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar dense flat class="brdcrmbs">
+  <v-toolbar flat dense class="brdcrmbs">
     <v-breadcrumbs :items="breads">
       <template v-slot:divider>
         <v-icon>{{ forwardIcon }}</v-icon>
@@ -57,10 +57,11 @@ export default Vue.extend({
 /* Style the food bar */
 
 .brdcrmbs {
-  position: fixed;
-  top: 55px;
+  position: sticky;
+  top: 0px;
   left: 0;
   width: 100%;
   z-index: 1;
+  //padding-top: 5px;
 }
 </style>

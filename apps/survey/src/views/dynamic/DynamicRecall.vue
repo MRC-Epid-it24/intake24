@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" class="pa-0">
+  <v-row justify="center" class="pt-2">
     <recall-bread-crumbs-mobile
       v-if="isNotDesktop"
       :prompt="activePrompt"
@@ -17,7 +17,7 @@
       </meal-list>
     </v-col>
 
-    <v-col cols="12" lg="9" class="content after_stickytop">
+    <v-col cols="12" lg="9" class="content">
       <recall-bread-crumbs v-if="showMealList && !isNotDesktop"></recall-bread-crumbs>
       <transition name="component-fade" mode="out-in">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
