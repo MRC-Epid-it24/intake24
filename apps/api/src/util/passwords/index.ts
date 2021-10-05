@@ -1,6 +1,9 @@
 import PasswordBcrypt from './password-bcrypt';
 import PasswordShiro from './password-shiro';
 
+export { default as PasswordBcrypt } from './password-bcrypt';
+export { default as PasswordShiro } from './password-shiro';
+
 export interface HashedPassword {
   hash: string;
   salt: string;
