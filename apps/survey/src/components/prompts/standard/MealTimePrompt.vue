@@ -11,7 +11,7 @@
       <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
     </v-form>
     <template v-slot:actions>
-      <v-btn :block="isMobile" class="px-5" large @click="removeMeal">
+      <v-btn :block="isMobile" class="px-5" large @click="dialog = !dialog">
         {{ $t('prompts.mealTime.no', { meal: mealName }) }}
       </v-btn>
       <v-btn
@@ -24,6 +24,13 @@
       >
         {{ $t('prompts.mealTime.yes', { meal: mealName }) }}
       </v-btn>
+      <dialog-window
+        :dialog="dialog"
+        :title="$t('prompts.mealDelete.title')"
+        :message="$t('prompts.mealDelete.message', { meal: mealName })"
+        :type="'Delete Meal'"
+        @dialog-change="removeMeal"
+      ></dialog-window>
     </template>
   </prompt-layout>
 </template>
@@ -32,10 +39,11 @@
 import Vue, { VueConstructor } from 'vue';
 import { MealTimePromptProps } from '@common/prompts';
 import BasePrompt, { Prompt } from '../BasePrompt';
+import DialogWindow from '@/components/elements/DialogWindow.vue';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'MealTimePrompt',
-
+  components: { DialogWindow },
   mixins: [BasePrompt],
 
   props: {
@@ -56,6 +64,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       currentValue: this.value,
       validation: this.promptProps.validation,
       errors: [] as string[],
+      dialog: false,
     };
   },
 
@@ -82,8 +91,11 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       this.errors = [];
     },
 
-    removeMeal() {
-      this.$emit('removeMeal');
+    removeMeal(value: boolean) {
+      this.dialog = !this.dialog;
+      if (value) {
+        this.$emit('removeMeal');
+      }
     },
 
     submit() {

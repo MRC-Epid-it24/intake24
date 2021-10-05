@@ -50,6 +50,10 @@ const prompts: LocaleMessageObject = {
     no: 'Abort adding',
     hint: 'hit enter when finished typing',
   },
+  mealDelete: {
+    title: 'Delete Meal/Food',
+    message: 'Do you want to delete {meal}',
+  },
   editMeal: {
     text: 'Please list everything you had for your {meal}, one item per line.',
     description:

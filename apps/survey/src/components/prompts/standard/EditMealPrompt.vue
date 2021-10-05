@@ -7,7 +7,7 @@
       <editable-food-list :food-list="drinks" :drinks="true" ref="drinksList" />
     </v-col>
     <template v-slot:actions>
-      <v-btn :block="isMobile" class="px-5" large @click="deleteMeal">
+      <v-btn :block="isMobile" class="px-5" large @click="dialog = !dialog">
         {{ $t('prompts.editMeal.deleteMeal', { meal: mealName }) }}
       </v-btn>
       <v-btn
@@ -20,6 +20,13 @@
       >
         {{ $t('common.continue') }}
       </v-btn>
+      <dialog-window
+        :dialog="dialog"
+        :title="$t('prompts.mealDelete.title')"
+        :message="$t('prompts.mealDelete.message', { meal: mealName })"
+        :type="'Delete Meal'"
+        @dialog-change="deleteMeal"
+      ></dialog-window>
     </template>
   </prompt-layout>
 </template>
@@ -30,6 +37,7 @@ import { BasePromptProps } from '@common/prompts';
 import { FoodState } from '@common/types';
 import EditableFoodList, { HasEditableFoodList } from './EditableFoodList.vue';
 import BasePrompt, { Prompt } from '../BasePrompt';
+import DialogWindow from '@/components/elements/DialogWindow.vue';
 
 type Refs = {
   $refs: {
@@ -40,7 +48,7 @@ type Refs = {
 
 export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
   name: 'EditMealPrompt',
-  components: { EditableFoodList },
+  components: { EditableFoodList, DialogWindow },
   mixins: [BasePrompt],
 
   props: {
@@ -56,6 +64,12 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
       type: String,
       required: true,
     },
+  },
+
+  data() {
+    return {
+      dialog: false,
+    };
   },
 
   computed: {
@@ -86,8 +100,11 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
       this.$emit('finishMeal', editedFoods.concat(editedMeals));
     },
 
-    deleteMeal() {
-      this.$emit('abortMeal');
+    deleteMeal(value: boolean) {
+      this.dialog = !this.dialog;
+      if (value) {
+        this.$emit('abortMeal');
+      }
     },
   },
 });

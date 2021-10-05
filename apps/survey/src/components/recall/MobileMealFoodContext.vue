@@ -8,21 +8,37 @@
       <v-btn v-if="!entityType" block class="mb-8" large @click="onContextMenuAction('edit-time')">
         {{ $t('prompts.editMeal.editTime', { meal: name }) }}
       </v-btn>
-      <v-btn v-if="!entityType" block class="mb-0 delete-button" md="8" large @click="deleteMeal">
+      <v-btn
+        v-if="!entityType"
+        block
+        class="mb-0 delete-button"
+        md="8"
+        large
+        @click="dialog = !dialog"
+      >
         {{ $t('prompts.editMeal.deleteMeal', { meal: name }) }}
       </v-btn>
-      <v-btn v-else block class="mb-0 delete-button" md="8" large @click="deleteFood">
+      <v-btn v-else block class="mb-0 delete-button" md="8" large @click="dialog = !dialog">
         {{ $t('prompts.editMeal.deleteFoodFromMeal', { food: name }) }}
       </v-btn>
     </v-sheet>
+    <dialog-window
+      :dialog="dialog"
+      :title="$t('prompts.mealDelete.title')"
+      :message="$t('prompts.mealDelete.message', { meal: name })"
+      :type="'Delete Meal'"
+      @dialog-change="deleteEntity"
+    ></dialog-window>
   </v-bottom-sheet>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import DialogWindow from '@/components/elements/DialogWindow.vue';
 
 export default (Vue as VueConstructor<Vue>).extend({
   name: 'MealFoodMobileContextMenu',
+  components: { DialogWindow },
 
   props: {
     show: Boolean,
@@ -32,7 +48,9 @@ export default (Vue as VueConstructor<Vue>).extend({
     mealIndex: Number,
   },
   data() {
-    return {};
+    return {
+      dialog: false,
+    };
   },
   computed: {
     showMenu() {
@@ -52,6 +70,17 @@ export default (Vue as VueConstructor<Vue>).extend({
         action,
       });
       this.$emit('toggleMobileMealContext');
+    },
+
+    deleteEntity(value: boolean) {
+      this.dialog = !this.dialog;
+      if (value) {
+        if (!this.entityType) {
+          this.deleteMeal();
+        } else {
+          this.deleteFood();
+        }
+      }
     },
     deleteMeal() {
       this.$store.commit('survey/deleteMeal', this.$props.entityIndex);
