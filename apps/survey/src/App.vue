@@ -33,13 +33,15 @@
     <v-app-bar app flat dark color="secondary" permanent hide-on-scroll>
       <template v-if="loggedIn">
         <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
+        <v-img class="mx-2" src="@/assets/logo.svg" max-height="30" max-width="150" contain>
+        </v-img>
         <v-spacer></v-spacer>
         <v-btn text :to="{ name: 'profile', params: { surveyId } }">
-          <!-- <span class="mr-2">{{ $t('profile._') }}</span> -->
+          <span class="mr-2" v-if="!isNotDesktop">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
         <v-btn text @click.stop="toggleDialog">
-          <!-- <span class="mr-2">{{ $t('common.logout') }}</span> -->
+          <span class="mr-2" v-if="!isNotDesktop">{{ $t('common.logout') }}</span>
           <v-icon>$logout</v-icon>
         </v-btn>
       </template>
