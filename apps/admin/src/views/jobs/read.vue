@@ -11,7 +11,7 @@
         <tr>
           <th>{{ $t('users._') }}</th>
           <td colspan="3">
-            {{ entry.user ? `${entry.user.name} (${entry.user.username})` : null }}
+            {{ entry.user ? `${entry.user.name} (${entry.user.email})` : null }}
           </td>
         </tr>
         <tr>
@@ -37,7 +37,7 @@
         <tr>
           <th>{{ $t('jobs.stackTrace') }}</th>
           <td colspan="3">
-            <pre v-if="entry.stackTrace.length">
+            <pre v-if="entry.stackTrace && entry.stackTrace.length">
               {{ entry.stackTrace.join('\n') }}
             </pre>
           </td>
