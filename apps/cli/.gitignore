@@ -1,0 +1,14 @@
+/dist
+/node_modules
+
+# Local env files
+.env*
+!.env-template
+
+# Editor directories and files
+.idea
+*.iml
+
+# VS Code
+.vscode/*
+!.vscode/launch.json
