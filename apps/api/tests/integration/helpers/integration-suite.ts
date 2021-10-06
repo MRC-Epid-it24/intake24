@@ -7,7 +7,7 @@ import { initDatabaseData, wipeRedis, MockData } from './setup';
 
 export type Bearers = Record<'superuser' | 'user' | 'respondent', string>;
 
-const { config, logger, db, cache, scheduler } = ioc.cradle;
+const { config, logger, db, cache, scheduler, session } = ioc.cradle;
 
 class IntegrationSuite {
   public config;
@@ -19,6 +19,8 @@ class IntegrationSuite {
   public cache;
 
   public scheduler;
+
+  public session;
 
   public app!: Express;
 
@@ -32,6 +34,7 @@ class IntegrationSuite {
     this.db = db;
     this.cache = cache;
     this.scheduler = scheduler;
+    this.session = session;
   }
 
   /**
@@ -59,7 +62,13 @@ class IntegrationSuite {
    * @memberof IntegrationSuite
    */
   public async close() {
+    // Close redis store connections
     this.cache.close();
+    this.session.close();
+
+    // Close redis queue connections
+    await this.scheduler.close();
+
     await this.scheduler.close();
     await this.db.foods.close();
     await this.db.system.close();
