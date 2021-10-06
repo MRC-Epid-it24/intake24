@@ -9,6 +9,8 @@ export type AppConfig = {
   host: string;
   port: number;
 
+  secret: string;
+
   urls: SiteUrls;
 };
 
@@ -21,6 +23,8 @@ const appConfig: AppConfig = {
   name: process.env.APP_NAME || 'Intake24',
   host: process.env.APP_HOST || host,
   port: process.env.APP_PORT ? parseInt(process.env.APP_PORT, 10) : port,
+
+  secret: process.env.APP_SECRET || '',
 
   urls: {
     base: process.env.APP_URL_BASE || domain,

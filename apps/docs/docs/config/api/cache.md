@@ -2,15 +2,9 @@
 
 Path: `src/config/cache.ts`
 
-[Redis](https://redis.io) is used as caching driver. Redis is also used for queues, they have separate connection settings, so they can be configured independently if needed.
+[Redis](https://redis.io) is used as session driver.
 
-## Prefix
-Prefix string which is prepended to each key to identify cache data.
-
-* object-path: `prefix`
-* dotenv var: `CACHE_PREFIX`
-* type: `string`
-* default: `'cache:it24'`
+Redis is also used for other parts of system (queue, session), they have separate connection settings, so they can be configured independently if needed.
 
 ## Redis instance
 
@@ -27,3 +21,11 @@ Prefix string which is prepended to each key to identify cache data.
 * dotenv var: `CACHE_REDIS_PORT`
 * type: `number`
 * default: `6379`
+
+### Prefix
+Prefix string which is pre-pended to each key to identify cache data.
+
+* object-path: `prefix`
+* dotenv var: `CACHE_REDIS_PREFIX`
+* type: `string`
+* default: `'it24:cache:'`

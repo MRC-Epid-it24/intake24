@@ -104,6 +104,7 @@ module.exports = {
             'api/queue',
             'api/security',
             'api/services',
+            'api/session',
           ]
         },
         {

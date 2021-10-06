@@ -15,6 +15,7 @@ import type {
   QueueConfig,
   SecurityConfig,
   ServicesConfig,
+  SessionConfig,
 } from '@api/config';
 import db, { DbInterface } from '@api/db';
 import type {
@@ -74,6 +75,7 @@ import type {
   Mailer,
   Pusher,
   Scheduler,
+  Session,
 } from '@api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@api/services/queues';
 import type { Jobs } from '@api/jobs';
@@ -96,6 +98,7 @@ export interface IoC extends Jobs {
   queueConfig: QueueConfig;
   securityConfig: SecurityConfig;
   servicesConfig: ServicesConfig;
+  sessionConfig: SessionConfig;
   // Expose some config settings directly to avoid pulling in the whole config when it doesn't
   // make sense, e.g. for testing
   environment: Environment;
@@ -152,6 +155,7 @@ export interface IoC extends Jobs {
   mailer: Mailer;
   pusher: Pusher;
   scheduler: Scheduler;
+  session: Session;
 
   // Authentication
   authenticationService: AuthenticationService;
@@ -200,6 +204,7 @@ const configureContainer = () => {
     queueConfig: asValue(config.queue),
     securityConfig: asValue(config.security),
     servicesConfig: asValue(config.services),
+    sessionConfig: asValue(config.session),
     environment: asValue(config.app.env),
     imagesBaseUrl: asValue(config.app.urls.images),
 

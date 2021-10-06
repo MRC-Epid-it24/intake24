@@ -38,7 +38,7 @@ module.exports = {
     'import/no-cycle': 'warn',
     'import/no-extraneous-dependencies': [
       'error',
-      { devDependencies: ['**/*.config.js', '**/*.mocha.js', 'tests/**/*.ts', 'tests/**/*.js'] },
+      { devDependencies: ['**/*.config.js', 'tests/**/*.ts', 'tests/**/*.js'] },
     ],
     'no-await-in-loop': 'off',
     'no-continue': 'off',

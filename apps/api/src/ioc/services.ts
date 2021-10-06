@@ -14,6 +14,7 @@ import {
   Mailer,
   Pusher,
   Scheduler,
+  Session,
   asServedService,
   guideImageService,
   imageMapService,
@@ -58,6 +59,7 @@ export default (container: AwilixContainer): void => {
     mailer: asClass(Mailer).singleton(),
     pusher: asClass(Pusher).singleton(),
     scheduler: asClass(Scheduler).singleton(),
+    session: asClass(Session).singleton(),
 
     jobsQueueHandler: asClass(JobsQueueHandler).singleton(),
     tasksQueueHandler: asClass(TasksQueueHandler).singleton(),

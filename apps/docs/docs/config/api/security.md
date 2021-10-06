@@ -82,7 +82,9 @@ Refresh token is stored in `http-only` cookie in client's browser. There are sev
 
 ### Cookie maxAge
 
-* object-path: `jwt.cookie.name`
+Lifetime of cookie. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
+
+* object-path: `jwt.cookie.maxAge`
 * default: `jwt.refresh.lifetime` value
 * type: `string`
 
@@ -97,7 +99,7 @@ Refresh token is stored in `http-only` cookie in client's browser. There are sev
 * object-path: `jwt.cookie.path`
 * dotenv var: `JWT_COOKIE_PATH`
 * type: `string`
-* default: `'/api/refresh'`
+* default: `'/api/auth'`
 
 ### Cookie sameSite
 

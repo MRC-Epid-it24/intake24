@@ -34,13 +34,7 @@ export default ({
     const { name, httpOnly, maxAge, path, secure, sameSite } = securityConfig.jwt.cookie;
 
     res
-      .cookie(name, refreshToken, {
-        maxAge: typeof maxAge === 'string' ? ms(maxAge) : maxAge,
-        httpOnly,
-        path,
-        sameSite,
-        secure,
-      })
+      .cookie(name, refreshToken, { maxAge, httpOnly, path, sameSite, secure })
       .json({ accessToken });
   };
 

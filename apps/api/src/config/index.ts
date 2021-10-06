@@ -8,6 +8,7 @@ import mail, { MailConfig } from './mail';
 import queue, { QueueConfig } from './queue';
 import security, { SecurityConfig } from './security';
 import services, { ServicesConfig } from './services';
+import session, { SessionConfig } from './session';
 
 export * from './acl';
 export * from './app';
@@ -19,6 +20,7 @@ export * from './mail';
 export * from './queue';
 export * from './security';
 export * from './services';
+export * from './session';
 
 export type Config = {
   acl: ACLConfig;
@@ -31,6 +33,7 @@ export type Config = {
   queue: QueueConfig;
   security: SecurityConfig;
   services: ServicesConfig;
+  session: SessionConfig;
 };
 
 const config: Config = {
@@ -44,6 +47,7 @@ const config: Config = {
   queue,
   security,
   services,
+  session,
 };
 
 export default config;

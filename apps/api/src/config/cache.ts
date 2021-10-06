@@ -10,7 +10,7 @@ const cacheConfig: CacheConfig = {
     host: process.env.CACHE_REDIS_HOST || 'localhost',
     port: parseInt(process.env.CACHE_REDIS_PORT || '6379', 10),
   },
-  prefix: process.env.CACHE_PREFIX || 'cache:it24',
+  prefix: process.env.CACHE_REDIS_PREFIX || 'it24:cache:',
 };
 
 export default cacheConfig;

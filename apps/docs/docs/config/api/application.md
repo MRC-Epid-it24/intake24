@@ -38,6 +38,15 @@ Internal port application listens on.
 * type: `number`
 * default: `3100`
 
+## Secret
+
+Secret key to use for in-app signing/encryption (cookie/session)
+
+* object-path: `secret`
+* dotenv var: `APP_SECRET`
+* type: `string`
+* default: `''`
+
 ## Sites URLs
 
 List of sites URLs. These can either be relative or absolute URLs.

@@ -1,24 +1,16 @@
+import ms from 'ms';
+import { CookieSettings, SameSiteCookieOptions } from './common';
+
 export type JwtTokenSettings = {
   secret: string;
   lifetime: string;
-};
-
-export type SameSiteCookieOptions = boolean | 'lax' | 'strict' | 'none';
-
-export type JwtCookieSettings = {
-  name: string;
-  maxAge: number | string;
-  httpOnly: boolean;
-  path: string;
-  sameSite: SameSiteCookieOptions;
-  secure: boolean;
 };
 
 export type JwtAuthentication = {
   issuer: string;
   access: JwtTokenSettings;
   refresh: JwtTokenSettings;
-  cookie: JwtCookieSettings;
+  cookie: CookieSettings;
 };
 
 export type MFAProvider = 'duo';
@@ -81,7 +73,7 @@ const securityConfig: SecurityConfig = {
     },
     cookie: {
       name: 'it24_refresh_token',
-      maxAge: process.env.JWT_REFRESH_LIFETIME || '1d',
+      maxAge: ms(process.env.JWT_REFRESH_LIFETIME || '1d'),
       httpOnly: true,
       path: process.env.JWT_COOKIE_PATH || '/api/auth',
       sameSite: (process.env.JWT_COOKIE_SAMESITE || 'lax') as SameSiteCookieOptions,
