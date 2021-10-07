@@ -10,22 +10,26 @@ Clone the repository:
 git clone https://github.com/MRC-Epid-it24/intake24
 ```
 
-System components share some code which is in `common` directory.
+## Repository structure
 
-Navigate to `common` directory and install project dependencies.
+Repository is set with [workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces).
+
+Shared components are in `packages` folder. Applications are in `apps` folder.
+
+Navigate to `packages/common` directory and install project dependencies.
 
 ```sh
-cd common
+cd packages/common
 
 npm install
 ```
 
 ## API Server
 
-Navigate to `api` directory and install project dependencies.
+Navigate to `apps/api` directory and install project dependencies.
 
 ```sh
-cd api
+cd apps/api
 
 npm install
 ```
@@ -58,10 +62,10 @@ Deployment section / ansible scripts provide examples how to use dedicated servi
 
 ## Admin client
 
-Navigate to `admin` directory and install project dependencies.
+Navigate to `apps/admin` directory and install project dependencies.
 
 ```sh
-cd admin
+cd apps/admin
 
 npm install
 ```
@@ -90,10 +94,10 @@ This should only be used if you host the client on separate domain. It will star
 
 ## Survey client
 
-Navigate to `survey` directory and install project dependencies.
+Navigate to `apps/survey` directory and install project dependencies.
 
 ```sh
-cd survey
+cd apps/survey
 
 npm install
 ```

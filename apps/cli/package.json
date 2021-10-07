@@ -28,7 +28,10 @@
   "dependencies": {
     "commander": "^8.2.0",
     "dotenv": "^10.0.0",
-    "dotenv-expand": "^5.1.0"
+    "dotenv-expand": "^5.1.0",
+    "fs-extra": "^10.0.0",
+    "nanoid": "^3.1.29",
+    "web-push": "^3.4.5"
   },
   "devDependencies": {
     "@types/node": "^16.10.2",

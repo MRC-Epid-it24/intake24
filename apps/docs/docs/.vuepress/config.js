@@ -81,6 +81,14 @@ module.exports = {
             'installation',
           ]
         },
+        {
+          title: 'CLI',
+          collapsable: false,
+          children: [
+            'cli/global',
+            'cli/generate-env',
+          ]
+        },
       ],
       '/config/': [
         {
