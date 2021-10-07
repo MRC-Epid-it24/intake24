@@ -134,7 +134,6 @@ const defaultParams: JobParamsList = {
   SurveyDataExport: {
     surveyId: '',
   },
-
   SurveyExportRespondentAuthUrls: {
     surveyId: '',
   },
@@ -187,8 +186,10 @@ export default (
   methods: {
     toForm(data: TaskEntry) {
       const { params, ...rest } = data;
+      const input = { ...rest, params: { ...defaultParams[rest.job], ...params } };
 
-      this.form.load({ ...rest, params: { ...defaultParams[rest.job], ...params } });
+      this.setOriginalEntry(input);
+      this.form.load(input);
     },
 
     jobChanged() {
