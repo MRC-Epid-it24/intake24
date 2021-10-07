@@ -25,7 +25,7 @@ Redis is also used for other parts of system (queue, session), they have separat
 ### Prefix
 Prefix string which is pre-pended to each key to identify cache data.
 
-* object-path: `prefix`
+* object-path: `redis.keyPrefix`
 * dotenv var: `CACHE_REDIS_PREFIX`
 * type: `string`
 * default: `'it24:cache:'`
