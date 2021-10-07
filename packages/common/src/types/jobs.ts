@@ -12,6 +12,7 @@ export type RepeatableBullJob = {
 export type JobData<T = any> = { params: T };
 
 export const jobTypes = [
+  'CleanRedisStore',
   'CleanStorageFiles',
   'PurgeRefreshTokens',
   'SendPasswordReset',
@@ -28,6 +29,10 @@ export type JobType = typeof jobTypes[number];
 export const isValidJob = (job: any): boolean => jobTypes.includes(job);
 
 export type EmptyJobParams = Record<string, never>;
+
+export type CleanRedisStoreParams = {
+  store: 'cache' | 'session';
+};
 
 export type CleanStorageFilesParams = EmptyJobParams;
 export type PurgeRefreshTokensParams = EmptyJobParams;
@@ -70,6 +75,7 @@ export type SurveySubmissionNotificationParams = {
 };
 
 export type JobParams =
+  | CleanRedisStoreParams
   | CleanStorageFilesParams
   | PurgeRefreshTokensParams
   | NutrientTableImportMappingParams
@@ -81,6 +87,7 @@ export type JobParams =
   | SurveySubmissionNotificationParams;
 
 export type JobParamsList = {
+  CleanRedisStore: CleanRedisStoreParams;
   CleanStorageFiles: CleanStorageFilesParams;
   PurgeRefreshTokens: PurgeRefreshTokensParams;
   NutrientTableImportMapping: NutrientTableImportMappingParams;

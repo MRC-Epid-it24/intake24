@@ -20,6 +20,11 @@ const tasks: LocaleMessageObject = {
   params: 'Task parameters',
   bullJob: 'Bull job (Queue entry)',
   file: 'File location',
+  stores: {
+    _: 'Redis store',
+    cache: 'Cache',
+    session: 'Session',
+  },
 };
 
 export default tasks;

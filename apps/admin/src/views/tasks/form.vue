@@ -117,6 +117,7 @@ type TaskForm = {
 };
 
 const defaultParams: JobParamsList = {
+  CleanRedisStore: { store: 'cache' },
   CleanStorageFiles: {},
   PurgeRefreshTokens: {},
   NutrientTableImportMapping: {
