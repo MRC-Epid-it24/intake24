@@ -24,7 +24,7 @@ export default class UserPhysicalData
 
   @Column({
     allowNull: true,
-    type: DataType.ENUM('f', 'm'),
+    type: DataType.STRING(64),
   })
   public sex!: Sex | null;
 
@@ -42,7 +42,7 @@ export default class UserPhysicalData
 
   @Column({
     allowNull: true,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
   public physicalActivityLevelId!: number | null;
 
@@ -54,7 +54,7 @@ export default class UserPhysicalData
 
   @Column({
     allowNull: true,
-    type: DataType.ENUM('keep_weight', 'lose_weight', 'gain_weight'),
+    type: DataType.STRING(64),
   })
   public weightTarget!: WeightTarget | null;
 
