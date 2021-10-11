@@ -9,6 +9,8 @@ export { default as CategoryAttribute } from './category-attributes';
 export { default as CategoryCategory } from './category-categories';
 export { default as CategoryPortionSizeMethod } from './category-portion-size-method';
 export { default as CategoryPortionSizeMethodParameter } from './category-portion-size-method-param';
+export { default as DemographicGroup } from './demographic-group';
+export { default as DemographicGroupScaleSector } from './demographic-group-scale-sector';
 export { default as DrinkwareScale } from './drinkware-scale';
 export { default as DrinkwareSet } from './drinkware-set';
 export { default as DrinkwareVolumeSample } from './drinkware-volume-sample';
@@ -32,6 +34,7 @@ export { default as NutrientTableRecordNutrient } from './nutrient-table-record-
 export { default as NutrientTableRecordField } from './nutrient-table-record-field';
 export { default as NutrientType } from './nutrient-type';
 export { default as NutrientUnit } from './nutrient-unit';
+export { default as PhysicalActivityLevel } from './physical-activity-level';
 export { default as PortionSizeMethod } from './portion-size-method';
 export { default as PortionSizeMethodParameter } from './portion-size-method-param';
 export { default as ProcessedImage } from './processed-image';
