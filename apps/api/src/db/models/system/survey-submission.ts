@@ -5,7 +5,16 @@ import {
 } from '@common/types/models';
 import { FindOptions } from 'sequelize/types';
 import BaseModel from '../model';
-import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from '.';
+import {
+  NutrientType,
+  Survey,
+  SurveySubmissionCustomField,
+  SurveySubmissionField,
+  SurveySubmissionMeal,
+  SurveySubmissionNutrient,
+  SurveySubmissionPortionSizeField,
+  User,
+} from '.';
 import UserSurveyAlias from './user-survey-alias';
 import UserCustomField from './user-custom-field';
 import SurveySubmissionMealCustomField from './survey-submission-meal-custom-field';
@@ -13,12 +22,16 @@ import SurveySubmissionFood from './survey-submission-food';
 import SurveySubmissionFoodCustomField from './survey-submission-food-custom-field';
 import SurveySubmissionMissingFood from './survey-submission-missing-food';
 
-export const submissionScope = (surveyId: string): FindOptions<SurveySubmissionAttributes> => ({
+export const submissionScope = (
+  surveyId: string,
+  userId?: string
+): FindOptions<SurveySubmissionAttributes> => ({
+  where: userId ? { surveyId, userId } : { surveyId },
   include: [
     {
       model: User,
       include: [
-        { model: UserSurveyAlias, where: { surveyId } },
+        { model: UserSurveyAlias, where: { surveyId }, required: false },
         { model: UserCustomField, separate: true },
       ],
     },
@@ -31,7 +44,16 @@ export const submissionScope = (surveyId: string): FindOptions<SurveySubmissionA
         {
           model: SurveySubmissionFood,
           separate: true,
-          include: [{ model: SurveySubmissionFoodCustomField }],
+          include: [
+            { model: SurveySubmissionFoodCustomField },
+            { model: SurveySubmissionField, separate: true },
+            {
+              model: SurveySubmissionNutrient,
+              separate: true,
+              include: [{ model: NutrientType, required: true }],
+            },
+            { model: SurveySubmissionPortionSizeField, separate: true },
+          ],
         },
         { model: SurveySubmissionMissingFood, separate: true },
       ],
