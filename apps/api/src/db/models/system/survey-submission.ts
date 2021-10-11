@@ -23,7 +23,7 @@ import SurveySubmissionFoodCustomField from './survey-submission-food-custom-fie
 import SurveySubmissionMissingFood from './survey-submission-missing-food';
 
 export const submissionScope = (
-  surveyId: string,
+  surveyId: string | string[],
   userId?: string
 ): FindOptions<SurveySubmissionAttributes> => ({
   where: userId ? { surveyId, userId } : { surveyId },
