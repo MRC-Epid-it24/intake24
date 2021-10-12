@@ -4,38 +4,38 @@ import validation from '@api/http/requests/admin/users';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
 
-const { userController } = ioc.cradle;
+const { adminUserController } = ioc.cradle;
 const router = Router();
 
 router.use(permission('acl'));
 
 router
   .route('')
-  .post(permission('users-create'), validation.store, wrapAsync(userController.store))
-  .get(permission('users-browse'), validation.browse, wrapAsync(userController.browse));
+  .post(permission('users-create'), validation.store, wrapAsync(adminUserController.store))
+  .get(permission('users-browse'), validation.browse, wrapAsync(adminUserController.browse));
 
-router.get('/create', permission('users-create'), wrapAsync(userController.create));
+router.get('/create', permission('users-create'), wrapAsync(adminUserController.create));
 
 router
   .route('/:userId')
-  .get(permission('users-read'), validation.entry('userId'), wrapAsync(userController.read))
+  .get(permission('users-read'), validation.entry('userId'), wrapAsync(adminUserController.read))
   .put(
     permission('users-edit'),
     validation.entry('userId'),
     validation.update,
-    wrapAsync(userController.update)
+    wrapAsync(adminUserController.update)
   )
   .delete(
     permission('users-delete'),
     validation.entry('userId'),
-    wrapAsync(userController.destroy)
+    wrapAsync(adminUserController.destroy)
   );
 
 router.get(
   '/:userId/edit',
   permission('users-edit'),
   validation.entry('userId'),
-  wrapAsync(userController.edit)
+  wrapAsync(adminUserController.edit)
 );
 
 export default router;

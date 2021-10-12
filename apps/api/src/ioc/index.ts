@@ -22,11 +22,13 @@ import type {
   AuthenticationController,
   PasswordController,
   SubscriptionController,
+  FeedbackController,
   FoodController,
   FoodSearchController,
   PortionSizeController,
   SurveyController,
   SurveyRespondentController,
+  UserController,
   // Admin
   UserProfileController,
   UserJobController,
@@ -49,7 +51,7 @@ import type {
   TaskController,
   PermissionController,
   RoleController,
-  UserController,
+  AdminUserController,
 } from '@api/http/controllers';
 import type {
   AuthenticationService,
@@ -110,6 +112,7 @@ export interface IoC extends Jobs {
   authenticationController: AuthenticationController;
   passwordController: PasswordController;
   subscriptionController: SubscriptionController;
+  userController: UserController;
 
   // Survey controllers
   foodController: FoodController;
@@ -117,6 +120,9 @@ export interface IoC extends Jobs {
   portionSizeController: PortionSizeController;
   surveyController: SurveyController;
   surveyRespondentController: SurveyRespondentController;
+
+  // Feedback controllers
+  feedbackController: FeedbackController;
 
   // Admin controllers
   userProfileController: UserProfileController;
@@ -145,7 +151,7 @@ export interface IoC extends Jobs {
   // ACL controllers
   permissionController: PermissionController;
   roleController: RoleController;
-  userController: UserController;
+  adminUserController: AdminUserController;
 
   // System services
   db: DbInterface;

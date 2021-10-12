@@ -6,12 +6,16 @@ export default (container: AwilixContainer): void => {
     authenticationController: asFunction(controllers.authentication),
     passwordController: asFunction(controllers.password),
     subscriptionController: asFunction(controllers.subscription),
+    userController: asFunction(controllers.user),
 
     foodController: asFunction(controllers.food),
     foodSearchController: asFunction(controllers.foodSearch),
     portionSizeController: asFunction(controllers.portionSize),
     surveyController: asFunction(controllers.survey),
     surveyRespondentController: asFunction(controllers.surveyRespondent),
+
+    // Feedback
+    feedbackController: asFunction(controllers.feedback),
 
     // Admin
     userProfileController: asFunction(controllers.admin.user.profile),
@@ -39,6 +43,6 @@ export default (container: AwilixContainer): void => {
 
     permissionController: asFunction(controllers.admin.acl.permission),
     roleController: asFunction(controllers.admin.acl.role),
-    userController: asFunction(controllers.admin.acl.user),
+    adminUserController: asFunction(controllers.admin.acl.user),
   });
 };

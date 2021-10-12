@@ -13,9 +13,9 @@ import { userEntryResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
 import type { Controller, CrudActions } from '@api/http/controllers';
 
-export type UserController = Controller<CrudActions>;
+export type AdminUserController = Controller<CrudActions>;
 
-export default ({ userService }: Pick<IoC, 'userService'>): UserController => {
+export default ({ userService }: Pick<IoC, 'userService'>): AdminUserController => {
   const entryRefs = async (): Promise<UserRefs> => {
     const permissions = await Permission.scope('list').findAll();
     const roles = await Role.scope('list').findAll();
