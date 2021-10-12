@@ -40,12 +40,19 @@ export default class ImageMapObject
   })
   public navigationIndex!: number;
 
-  // TODO: convert to mysql-compatible data type
   @Column({
-    type: DataType.ARRAY(DataType.DOUBLE),
     allowNull: false,
+    type: DataType.TEXT({ length: 'long' }),
   })
-  public outlineCoordinates!: number[];
+  get outlineCoordinates(): number[] {
+    const val = this.getDataValue('outlineCoordinates') as unknown;
+    return val ? JSON.parse(val as string) : [];
+  }
+
+  set outlineCoordinates(value: number[]) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('outlineCoordinates', JSON.stringify(value ?? []));
+  }
 
   @Column({
     allowNull: true,
