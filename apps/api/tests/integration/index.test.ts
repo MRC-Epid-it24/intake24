@@ -56,6 +56,12 @@ describe('API', () => {
     describe('POST /api/subscriptions/push', subscriptions.push);
   });
 
+  describe('Feedback', () => {
+    // describe('GET /api/feedback/henry-coefficients', feedback.henryCoefficients);
+    // describe('GET /api/feedback/physical-activity-levels', feedback.physicalActivityLevels);
+    // describe('GET /api/feedback/weight-targets', feedback.weightTargets);
+  });
+
   describe('Surveys', () => {
     describe('GET /api/surveys', surveys.browse);
     describe('GET /api/surveys/:surveyId', surveys.read);
@@ -81,6 +87,12 @@ describe('API', () => {
     describe('GET /api/portion-sizes/image-maps', portionSizes.imageMaps);
     describe('GET /api/portion-sizes/image-maps/:id', portionSizes.imageMap);
     describe('GET /api/portion-sizes/weight', portionSizes.weight);
+  });
+
+  describe('User routes', () => {
+    // describe('GET /api/user/physical-data', user.getPhysicalData);
+    // describe('POST /api/user/physical-data', user.updatePhysicalData);
+    // describe('GET /api/user', user.submissions);
   });
 
   describe('Admin', admin);
