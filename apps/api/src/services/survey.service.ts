@@ -25,6 +25,7 @@ import {
 import { ForbiddenError, InternalServerError, NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { toSimpleName, generateToken } from '@api/util';
+import { submissionScope } from '@api/db/models/system/survey-submission';
 import { surveyMgmt, surveyRespondent } from './auth';
 
 export type RespondentWithPassword = {
@@ -52,6 +53,7 @@ export interface SurveyService {
   userInfo: (surveyId: string, user: User, tzOffset: number) => Promise<SurveyUserInfoResponse>;
   getSession: (surveyId: string, userId: string) => Promise<UserSession>;
   setSession: (surveyId: string, userId: string, sessionData: SurveyState) => Promise<UserSession>;
+  getSubmissions: (surveyId: string | string[], userId: string) => Promise<SurveySubmission[]>;
   submit: (surveyId: string, userId: string, input: SurveyState) => Promise<SurveyFollowUpResponse>;
   followUp: (surveyId: string, userId: string) => Promise<SurveyFollowUpResponse>;
 }
@@ -405,6 +407,18 @@ export default ({
   };
 
   /**
+   * Get user's submissions
+   *
+   * @param {(string | string[])} surveyId
+   * @param {string} userId
+   * @returns {Promise<SurveySubmission[]>}
+   */
+  const getSubmissions = async (
+    surveyId: string | string[],
+    userId: string
+  ): Promise<SurveySubmission[]> => SurveySubmission.findAll(submissionScope(surveyId, userId));
+
+  /**
    * Resolve follow-up URL, if any
    *
    * @param {Survey} survey
@@ -609,6 +623,7 @@ export default ({
     userInfo,
     getSession,
     setSession,
+    getSubmissions,
     submit,
     followUp,
   };
