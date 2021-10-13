@@ -14,7 +14,6 @@ export default class CategoryPortionSizeMethod extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,
-    type: DataType.BIGINT,
   })
   public id!: number;
 
