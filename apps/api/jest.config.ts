@@ -8,7 +8,7 @@ export default {
   },
   rootDir: '.',
   roots: ['<rootDir>/tests'],
-  setupFilesAfterEnv: ['jest-extended'],
+  setupFilesAfterEnv: ['jest-extended/all'],
   testEnvironment: 'node',
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
