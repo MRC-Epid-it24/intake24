@@ -1,7 +1,10 @@
 import { AxiosResponse } from 'axios';
 import jsFileDownload from 'js-file-download';
 
-export const downloadFile = ({ data, headers }: AxiosResponse, filename?: string | null): void => {
+export const downloadFile = (
+  { data, headers }: AxiosResponse<any>,
+  filename?: string | null
+): void => {
   let finalFilename = filename;
   if (!finalFilename && headers['content-disposition']) {
     finalFilename = headers['content-disposition']
