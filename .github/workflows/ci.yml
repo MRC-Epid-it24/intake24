@@ -12,21 +12,32 @@ on:
       - 'deployment/**'
       - 'apps/docs/**'
 
+env:
+  DB_SYSTEM_DATABASE: it24_system_test
+  DB_SYSTEM_USERNAME: it24
+  DB_SYSTEM_PASSWORD: it24
+  DB_FOODS_DATABASE: it24_foods_test
+  DB_FOODS_USERNAME: it24
+  DB_FOODS_PASSWORD: it24
+
 jobs:
   # API Server
-  api:
-    name: API Server
+  api-postgres:
+    name: API Server (Postgres)
 
     runs-on: ubuntu-latest
 
     env:
-      POSTGRES_USER: it24
-      POSTGRES_PASSWORD: it24
-      POSTGRES_DB: it24
+      DB_SYSTEM_DRIVER: postgres
+      DB_SYSTEM_HOST: localhost
+      DB_SYSTEM_PORT: 5432
+      DB_FOODS_DRIVER: postgres
+      DB_FOODS_HOST: localhost
+      DB_FOODS_PORT: 5432
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [14.x, 16.x]
         postgres-version: [13]
         redis-version: [6]
 
@@ -61,10 +72,10 @@ jobs:
     steps:
       - name: Repository checkout
         uses: actions/checkout@v2.3.4
-      - name: Create foods db
-        run: PGPASSWORD=${{ env.POSTGRES_PASSWORD }} psql -h localhost -p 5432 -U ${{ env.POSTGRES_USER }} -c 'CREATE DATABASE it24_foods_test;'
-      - name: Create system db
-        run: PGPASSWORD=${{ env.POSTGRES_PASSWORD }} psql -h localhost -p 5432 -U ${{ env.POSTGRES_USER }} -c 'CREATE DATABASE it24_system_test;'
+      - name: Create foods/system databases
+        run: |
+          PGPASSWORD=${{ env.DB_FOODS_PASSWORD }} psql -h ${{ env.DB_FOODS_HOST }} -p 5432 -U ${{ env.DB_FOODS_USERNAME }} -c 'CREATE DATABASE ${{ env.DB_FOODS_DATABASE }};'
+          PGPASSWORD=${{ env.DB_SYSTEM_PASSWORD }} psql -h ${{ env.DB_SYSTEM_HOST }} -p 5432 -U ${{ env.DB_SYSTEM_USERNAME }} -c 'CREATE DATABASE ${{ env.DB_SYSTEM_DATABASE }};'
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2.2.0
         with:
@@ -87,6 +98,85 @@ jobs:
       - name: API Server - integration tests
         run: npm run test:integration
 
+  api-mariadb:
+    name: API Server (MariaDB)
+
+    runs-on: ubuntu-latest
+
+    env:
+      DB_SYSTEM_DRIVER: mariadb
+      DB_SYSTEM_HOST: 127.0.0.1
+      DB_SYSTEM_PORT: 3306
+      DB_FOODS_DRIVER: mariadb
+      DB_FOODS_HOST: 127.0.0.1
+      DB_FOODS_PORT: 3306
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+        mariadb-version: [10]
+        redis-version: [6]
+
+    defaults:
+      run:
+        working-directory: apps/api
+
+    services:
+      mariadb:
+        image: mariadb:${{ matrix.mariadb-version }}
+        env:
+          MYSQL_USER: it24
+          MYSQL_PASSWORD: it24
+          MYSQL_DATABASE: it24
+          MYSQL_ROOT_PASSWORD: it24
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 3306:3306
+      redis:
+        image: redis:${{ matrix.redis-version }}
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2.3.4
+      - name: Create foods/system databases
+        run: |
+          mysql --host 127.0.0.1 --port 3306 -uroot -pit24 -e "CREATE DATABASE ${{ env.DB_FOODS_DATABASE }} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
+          mysql --host 127.0.0.1 --port 3306 -uroot -pit24 -e "CREATE DATABASE ${{ env.DB_SYSTEM_DATABASE }} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
+          mysql --host 127.0.0.1 --port 3306 -uroot -pit24 -e "GRANT ALL ON *.* TO 'it24'@'%' with grant option; FLUSH PRIVILEGES;"
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.2.0
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install latest npm
+        run: npm install -g npm
+      - name: Install dependencies
+        working-directory: .
+        run: npm ci
+      - name: Install local dependencies
+        run: npm ci
+      - name: API Server - lint
+        run: npm run lint
+      - name: API Server - build
+        run: npm run build
+      - name: API Server - use Github test environment file
+        run: cp ./tests/.env-test-gh ./tests/.env-test
+      - name: API Server - unit tests
+        run: npm run test:unit
+      #- name: API Server - integration tests
+      #  run: npm run test:integration
+
+
   # Admin client
   admin:
     name: Admin client
@@ -95,7 +185,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [14.x, 16.x]
 
     defaults:
       run:
@@ -108,11 +198,12 @@ jobs:
         uses: actions/setup-node@v2.2.0
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - name: Install latest npm
         run: npm install -g npm
       - name: Install dependencies
         working-directory: .
-        run: npm ci
+        run: npm install
       - name: Admin client - lint
         run: npm run lint
       - name: Admin client - build
@@ -126,7 +217,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [14.x, 16.x]
 
     defaults:
       run:
@@ -139,11 +230,12 @@ jobs:
         uses: actions/setup-node@v2.2.0
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - name: Install latest npm
         run: npm install -g npm
       - name: Install dependencies
         working-directory: .
-        run: npm ci
+        run: npm install
       - name: Survey client - lint
         run: npm run lint
       - name: Survey client - build
