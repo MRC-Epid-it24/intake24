@@ -99,6 +99,14 @@ const mutations: MutationTree<SurveyState> = {
     }
   },
 
+  clearUndo(state: SurveyState) {
+    if (state.data == null) {
+      console.error('state.data is null');
+    } else {
+      state.undo = null;
+    }
+  },
+
   addMeal(state: SurveyState, mealName: string) {
     if (state.data == null || mealName == null) {
       console.error('state.data or submittedMeal is null');

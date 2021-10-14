@@ -25,6 +25,14 @@
   overflow: auto;
 }
 
+.v-row ::v-deep .undoAlert {
+	position: absolute;
+	z-index: 10;
+	top: 1rem;
+	width: 80%;
+	max-width:300px
+}
+
 .stickybottom {
   position: fixed;
   bottom: 45px;

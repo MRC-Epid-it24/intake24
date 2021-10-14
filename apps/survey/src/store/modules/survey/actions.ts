@@ -28,6 +28,10 @@ const actions: ActionTree<SurveyState, RootState> = {
     commit('setState', null);
     Vue.ls.remove(STATE_LS_KEY);
   },
+
+  async clearUndo({ commit }) {
+    commit('clearUndo');
+  },
 };
 
 export default actions;

@@ -71,12 +71,17 @@
       @meal-action="onMealAction"
       @complete="nextPrompt"
     ></meal-food-mobile-context-menu>
+    <info-alert
+      :status="undo ? true : false"
+      :info="undo ? 'Undo deletion of ' + undo.type : ''"
+      @alert-dismissed="clearUndo"
+    ></info-alert>
   </v-row>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
 import { MealSection, SurveyQuestionSection } from '@common/schemes';
 import { MealState, Selection, FoodState } from '@common/types';
@@ -89,6 +94,7 @@ import standardHandlers from '@/components/prompts/dynamic/handlers/standard';
 import portionSizeHandlers from '@/components/prompts/dynamic/handlers/portion-size';
 import timeDoubleDigitsConvertor from '@/components/mixins/timeDoubleDigitsConvertor';
 import { MealAction } from '@/components/recall/MealItem.vue';
+import { MealUndo, FoodUndo } from '@/types/vuex';
 
 // Mobile
 import MealListMobileBottom from '@/components/recall/mobile/MealListMobileBottom.vue';
@@ -96,6 +102,7 @@ import FoodListMobileBottom from '@/components/recall/mobile/FoodListMobileBotto
 import MealFoodMobileContextMenu from '@/components/recall/MobileMealFoodContext.vue';
 import RecallBreadCrumbsMobile from '@/components/recall/mobile/BreadCrumbsMobile.vue';
 import BottomNavigationMobile from '@/components/recall/mobile/BottomNavMobile.vue';
+import InfoAlert from '@/components/elements/InfoAlert.vue';
 
 export default Vue.extend({
   name: 'DynamicRecall',
@@ -109,6 +116,7 @@ export default Vue.extend({
     MealFoodMobileContextMenu,
     CustomPromptHandler,
     BottomNavigationMobile,
+    InfoAlert,
     ...standardHandlers,
     ...portionSizeHandlers,
   },
@@ -127,6 +135,7 @@ export default Vue.extend({
       activeMeal: '',
       activeFood: '',
       activeItem: 'meal',
+      alert: false,
     };
   },
 
@@ -159,6 +168,10 @@ export default Vue.extend({
 
     surveyId(): SurveyEntryResponse | null {
       return this.$store.state.survey.parameters?.id;
+    },
+
+    undo(): MealUndo | FoodUndo | null {
+      return this.$store.state.survey.undo;
     },
 
     showMealList(): boolean {
@@ -219,6 +232,11 @@ export default Vue.extend({
       // Prevent the currently active prompt from crashing if it expects a different selection type
       this.currentPrompt = null;
       this.$store.commit('survey/setSelection', newSelection);
+    },
+
+    clearUndo() {
+      // FIXME: Stop components from re-rendering after clearing objectrs in vuex store.
+      this.$store.commit('survey/clearUndo');
     },
 
     showMealPrompt(mealIndex: number, promptSection: MealSection, promptType: ComponentType) {
