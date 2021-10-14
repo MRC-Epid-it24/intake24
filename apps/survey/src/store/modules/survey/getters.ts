@@ -6,7 +6,7 @@ import {
   Selection,
   SurveyState as CurrentSurveyState,
 } from '@common/types';
-import { RootState, SurveyState } from '@/types/vuex';
+import { FoodUndo, MealUndo, RootState, SurveyState } from '@/types/vuex';
 
 const getters: GetterTree<SurveyState, RootState> = {
   parametersLoaded: (state) => !!state.parameters,
@@ -38,6 +38,11 @@ const getters: GetterTree<SurveyState, RootState> = {
     if (meals === undefined || mealIndex === undefined) return undefined;
 
     return meals[mealIndex];
+  },
+
+  undoEntity: (state): MealUndo | FoodUndo | null => {
+    const undoEntity = state.undo;
+    return undoEntity;
   },
 
   selectedFood: (state): FoodState | undefined => {

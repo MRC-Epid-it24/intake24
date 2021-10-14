@@ -21,6 +21,7 @@ const mutations: MutationTree<SurveyState> = {
 
   setState(state, data: CurrentSurveyState) {
     state.data = data;
+    state.undo = null;
   },
 
   setSelection(state, selection: Selection) {
@@ -64,8 +65,10 @@ const mutations: MutationTree<SurveyState> = {
     if (state.data == null) {
       console.error('state.data is null');
     } else {
-      state.data.meals.splice(mealIndex, 1);
-
+      const mealUndo: MealState[] = state.data.meals.splice(mealIndex, 1);
+      if (mealUndo.length !== 0) {
+        state.undo = { type: 'meal', index: mealIndex, value: mealUndo[0] };
+      }
       const selectedElement = state.data.selection.element;
 
       if (selectedElement == null) return;
@@ -85,6 +88,14 @@ const mutations: MutationTree<SurveyState> = {
       if (selectedElement.mealIndex === state.data.meals.length) selectedElement.mealIndex -= 1;
 
       if (selectedElement.mealIndex < 0) state.data.selection.element = null;
+    }
+  },
+
+  undoDeleteMeal(state: SurveyState, data: { mealIndex: number; meal: MealState }) {
+    if (state.data == null) {
+      console.error('state.data is null');
+    } else {
+      state.data.meals.splice(data.mealIndex, 0, data.meal);
     }
   },
 
@@ -154,7 +165,18 @@ const mutations: MutationTree<SurveyState> = {
     if (state.data == null) {
       console.error('state.data is null');
     } else {
-      state.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1);
+      const foodUndo: FoodState[] = state.data.meals[data.mealIndex].foods.splice(
+        data.foodIndex,
+        1
+      );
+      if (foodUndo.length !== 0) {
+        state.undo = {
+          type: 'food',
+          index: data.foodIndex,
+          mealIndex: data.mealIndex,
+          value: foodUndo[0],
+        };
+      }
     }
   },
 

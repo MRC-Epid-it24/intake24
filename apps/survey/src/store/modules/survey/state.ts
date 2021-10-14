@@ -7,6 +7,7 @@ const state = (): SurveyState => ({
   parameters: null,
   user: null,
   data: Vue.ls?.get(STATE_LS_KEY, null),
+  undo: null,
 });
 
 export default state;

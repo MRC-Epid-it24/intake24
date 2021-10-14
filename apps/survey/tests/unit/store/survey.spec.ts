@@ -153,5 +153,38 @@ describe('Survey store', () => {
       expect(store.getters['survey/selectedMealIndex']).toBeUndefined();
       expect(store.getters['survey/selectedMeal']).toBeUndefined();
     });
+
+    it('should keep undo object equals to null if no meal or food was deleted', () => {
+      store.commit('survey/setState', initialState());
+
+      store.commit('survey/setSelection', {
+        element: {
+          type: 'meal',
+          mealIndex: 1,
+        },
+        mode: 'auto',
+      });
+
+      expect(store.getters['survey/meals']).toHaveLength(3);
+      expect(store.getters['survey/undoEntity']).toBeNull();
+    });
+
+    it('should record deleted meal in undo object', () => {
+      store.commit('survey/setState', initialState());
+
+      store.commit('survey/setSelection', {
+        element: {
+          type: 'meal',
+          mealIndex: 1,
+        },
+        mode: 'auto',
+      });
+
+      expect(store.getters['survey/selectedMeal'].name).toBe('Meal 2');
+      store.commit('survey/deleteMeal', 1);
+      expect(store.getters['survey/undoEntity'].type).toBe('meal');
+      expect(store.getters['survey/undoEntity'].index).toBe(1);
+      expect(store.getters['survey/undoEntity'].value.name).toBe('Meal 2');
+    });
   });
 });
