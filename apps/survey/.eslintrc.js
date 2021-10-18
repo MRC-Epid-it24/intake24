@@ -14,6 +14,10 @@ module.exports = {
     ecmaVersion: 2021,
   },
   rules: {
+    // .prettierrc seems to be ignored
+    // Git defaults to CRLF line breaks on Windows, override the default "lf" setting here
+    // to avoid having to mess with Git and editor defaults on Windows
+    'prettier/prettier': ['warn', { endOfLine: 'auto' }],
     'import/no-cycle': 'warn',
     'import/no-extraneous-dependencies': [
       'error',
