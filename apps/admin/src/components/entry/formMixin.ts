@@ -106,14 +106,14 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         await this.$store.dispatch('resource/entry/update', { data, refs });
 
         const { id, name } = data;
-        this.$toasted.success(this.$t('common.msg.updated', { name: name ?? id }) as string);
+        this.$toasted.success(this.$t('common.msg.updated', { name: name ?? id }).toString());
       } else {
         const {
           data: { id, name },
         } = await this.form.post(`${this.resource.api}`);
 
         this.$router.push({ name: `${this.resource.name}-edit`, params: { id } });
-        this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }) as string);
+        this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }).toString());
       }
     },
 

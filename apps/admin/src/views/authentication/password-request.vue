@@ -123,7 +123,7 @@ export default (Vue as VueConstructor<Vue & PasswordRequestRefs>).extend({
       } catch (err) {
         if (this.form.errors.has('recaptcha')) {
           this.form.errors.clear('recaptcha');
-          this.$toasted.error(this.$t('users.password.reset.recaptcha') as string);
+          this.$toasted.error(this.$t('users.password.reset.recaptcha').toString());
         }
       } finally {
         if (this.$refs.recaptcha) this.$refs.recaptcha.reset();

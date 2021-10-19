@@ -101,13 +101,13 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
       if (!id) return;
 
       await this.$http.delete(this.api, { params: { id } });
-      this.$toasted.success(this.$t('common.msg.multi.deleted') as string);
+      this.$toasted.success(this.$t('common.msg.multi.deleted').toString());
       this.onDraw();
     },
 
     getOneSelected() {
       if (this.selected.length !== 1) {
-        this.$toasted.info(this.$t('Select one item to view/edit details.') as string);
+        this.$toasted.info(this.$t('Select one item to view/edit details.').toString());
         return false;
       }
       return this.selected[0];
@@ -115,7 +115,7 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
 
     getAtLeastOneSelected() {
       if (!this.selected.length) {
-        this.$toasted.info(this.$t('Select at least one item.') as string);
+        this.$toasted.info(this.$t('Select at least one item.').toString());
         return false;
       }
       return this.selected;

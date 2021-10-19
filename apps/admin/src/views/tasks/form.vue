@@ -179,7 +179,7 @@ export default (
       try {
         return cronstrue.toString(this.form.cron, { use24HourTimeFormat: true });
       } catch (err) {
-        return this.$t('tasks.invalidCron') as string;
+        return this.$t('tasks.invalidCron').toString();
       }
     },
   },

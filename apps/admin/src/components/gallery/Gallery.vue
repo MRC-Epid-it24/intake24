@@ -177,7 +177,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       const { id, name } = item;
 
       await this.$http.delete(`${this.resource.api}/${id}`);
-      this.$toasted.success(this.$t('common.msg.deleted', { name: name ?? id }) as string);
+      this.$toasted.success(this.$t('common.msg.deleted', { name: name ?? id }).toString());
       this.refresh();
     },
   },

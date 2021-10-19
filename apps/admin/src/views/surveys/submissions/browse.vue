@@ -129,7 +129,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>)
 
     async remove(submissionId: string) {
       await this.$http.delete(`${this.baseAPI}/${submissionId}`);
-      this.$toasted.success(this.$t(`common.msg.deleted`, { name: submissionId }) as string);
+      this.$toasted.success(this.$t(`common.msg.deleted`, { name: submissionId }).toString());
       await this.$refs.table.fetch();
     },
   },

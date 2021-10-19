@@ -21,27 +21,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
 
 export default Vue.extend({
   name: 'SurveyError',
 
   data() {
     return {};
-  },
-
-  computed: {
-    surveyScheme(): SchemeEntryResponse | null {
-      return this.$store.state.survey.parameters?.scheme;
-    },
-
-    surveyName(): SurveyEntryResponse | null {
-      return this.$store.state.survey.parameters?.name;
-    },
-
-    surveyId(): SurveyEntryResponse | null {
-      return this.$store.state.survey.parameters?.id;
-    },
   },
 
   methods: {

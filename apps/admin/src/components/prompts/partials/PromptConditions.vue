@@ -237,13 +237,13 @@ export default Vue.extend({
     conditionSelectList(): { type: string; text: string }[] {
       return this.promptConditions.map(({ type }) => ({
         type,
-        text: this.$t(`schemes.conditions.types.${type}`) as string,
+        text: this.$t(`schemes.conditions.types.${type}`).toString(),
       }));
     },
     operationSelectList(): { op: string; text: string }[] {
       return Object.keys(conditionOps).map((op) => ({
         op,
-        text: this.$t(`schemes.conditions.ops.${op}`) as string,
+        text: this.$t(`schemes.conditions.ops.${op}`).toString(),
       }));
     },
     outputConditions(): Condition[] {

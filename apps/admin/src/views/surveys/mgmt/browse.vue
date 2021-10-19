@@ -242,7 +242,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
 
     async save() {
       await this.form.put(`admin/surveys/${this.id}/mgmt/${this.form.id}`);
-      // this.$toasted.success(this.$t('common.msg.updated', { name }) as string);
+      // this.$toasted.success(this.$t('common.msg.updated', { name }).toString());
 
       this.$refs.table.fetch();
       this.dialog = false;

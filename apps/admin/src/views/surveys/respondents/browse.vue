@@ -243,13 +243,13 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
           `admin/surveys/${this.id}/respondents/${this.form.userId}`
         );
 
-        this.$toasted.success(this.$t('common.msg.updated', { name }) as string);
+        this.$toasted.success(this.$t('common.msg.updated', { name }).toString());
       } else {
         const {
           data: { userName: name },
         } = await this.form.post<SurveyRespondentResponse>(`admin/surveys/${this.id}/respondents`);
 
-        this.$toasted.success(this.$t('common.msg.stored', { name }) as string);
+        this.$toasted.success(this.$t('common.msg.stored', { name }).toString());
       }
 
       this.dialog = false;
@@ -258,7 +258,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
 
     async remove({ userName: name, userId }: RespondentEntry) {
       await this.$http.delete(`admin/surveys/${this.id}/respondents/${userId}`);
-      this.$toasted.success(this.$t('common.msg.deleted', { name }) as string);
+      this.$toasted.success(this.$t('common.msg.deleted', { name }).toString());
 
       await this.updateTable();
     },

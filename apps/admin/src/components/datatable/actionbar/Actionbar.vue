@@ -76,7 +76,7 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
 
     onSuccess(action: string): void {
       const { id, name } = this.item;
-      this.$toasted.success(this.$t(`common.msg.${action}`, { name: name ?? id }) as string);
+      this.$toasted.success(this.$t(`common.msg.${action}`, { name: name ?? id }).toString());
       this.$emit('refresh');
     },
   },

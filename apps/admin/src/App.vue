@@ -213,14 +213,14 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
       const params: Dictionary<string> = { [identifier]: currentId };
       if (parent) params.id = id;
 
-      items.push({ ...defaults, text: this.$t(`${title}.title`) as string, to: { name } });
+      items.push({ ...defaults, text: this.$t(`${title}.title`).toString(), to: { name } });
 
       if (!currentId) return items;
 
       if (currentId === 'create') {
         items.push({
           ...defaults,
-          text: this.$t(`${title}.${action}`) as string,
+          text: this.$t(`${title}.${action}`).toString(),
           to: { name: `${name}-${action}`, params },
         });
         return items;
@@ -237,7 +237,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
       if (['edit'].includes(action)) {
         items.push({
           ...defaults,
-          text: this.$t(`${title}.${action}`) as string,
+          text: this.$t(`${title}.${action}`).toString(),
           to: { name: `${name}-${action}`, params },
         });
       }
