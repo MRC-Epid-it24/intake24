@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { HttpError, HttpResponseData } from '@/types/http';
+import { AxiosError } from 'axios';
 import { AuthState } from '@/types/vuex';
 import defaultState from './state';
 
@@ -7,29 +7,21 @@ const mutations: MutationTree<AuthState> = {
   request(state) {
     state.status = 'loading';
   },
-  login(state, accessToken) {
+  login(state, accessToken: string) {
     state.status = 'success';
-    state.error = {};
+    state.error = null;
     state.accessToken = accessToken;
   },
-  refresh(state, accessToken) {
+  refresh(state, accessToken: string) {
     state.status = 'success';
-    state.error = {};
+    state.error = null;
     state.accessToken = accessToken;
   },
   logout(state) {
     Object.assign(state, defaultState());
   },
-  error(state, err: HttpError) {
-    const {
-      response: { status, statusText, data: { message, errors } = {} as HttpResponseData } = {},
-    } = err;
-    state.error = {
-      errors,
-      message,
-      status,
-      statusText,
-    };
+  error(state, err: AxiosError) {
+    state.error = err;
     state.status = 'error';
   },
 };

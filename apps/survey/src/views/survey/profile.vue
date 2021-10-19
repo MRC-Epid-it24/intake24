@@ -70,7 +70,7 @@ export default Vue.extend({
     languages(): LanguageOption[] {
       return this.$i18n.availableLocales.map((locale) => ({
         value: locale,
-        text: this.$t(`profile.languages.${locale}`) as string,
+        text: this.$t(`profile.languages.${locale}`).toString(),
       }));
     },
   },

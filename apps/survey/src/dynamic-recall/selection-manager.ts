@@ -1,13 +1,14 @@
 import { Store } from 'vuex';
 import { Selection } from '@common/types';
 import PromptManager from '@/dynamic-recall/prompt-manager';
+import { RootStateWithModules } from '@/types/vuex';
 
 export default class SelectionManager {
-  private store: Store<any>;
+  private store;
 
-  private promptManager: PromptManager;
+  private promptManager;
 
-  constructor(store: Store<any>, promptManager: PromptManager) {
+  constructor(store: Store<RootStateWithModules>, promptManager: PromptManager) {
     this.store = store;
     this.promptManager = promptManager;
   }

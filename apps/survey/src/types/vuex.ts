@@ -1,6 +1,49 @@
-import { Dictionary, FoodState, MealState, SurveyState as CurrentSurveyState } from '@common/types';
+import { FoodState, MealState, SurveyState as CurrentSurveyState } from '@common/types';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
+import { AxiosError } from 'axios';
 import { UserPayload } from './auth';
+
+export interface AuthState {
+  status: string;
+  accessToken: string | null;
+  error: AxiosError | null;
+}
+
+export interface LoadingState {
+  items: string[];
+}
+
+export interface MealUndo {
+  type: 'meal';
+  index: number;
+  value: MealState;
+}
+
+export interface FoodUndo {
+  type: 'food';
+  index: number;
+  mealIndex: number;
+  value: FoodState;
+}
+
+export type SurveyStateSnapshot = {
+  timestamp: Date;
+  data: CurrentSurveyState;
+};
+
+export interface SurveyState {
+  parameters: SurveyEntryResponse | null;
+  user: SurveyUserInfoResponse | null;
+  data: CurrentSurveyState;
+  history: SurveyStateSnapshot[];
+  undo: MealUndo | FoodUndo | null;
+  error: AxiosError | null;
+}
+
+export interface UserState {
+  status: string;
+  profile: UserPayload;
+}
 
 export interface RootState {
   lang: string;
@@ -16,36 +59,11 @@ export interface RootState {
   };
 }
 
-export interface LoadingState {
-  items: string[];
+export interface Modules {
+  auth: AuthState;
+  loading: LoadingState;
+  survey: SurveyState;
+  user: UserState;
 }
 
-export interface UserState {
-  status: string;
-  profile: UserPayload;
-}
-
-export interface AuthState {
-  status: string;
-  accessToken: string | null;
-  error: Dictionary;
-}
-
-export interface MealUndo {
-  type: 'meal';
-  index: number;
-  value: MealState;
-}
-
-export interface FoodUndo {
-  type: 'food';
-  index: number;
-  mealIndex: number;
-  value: FoodState;
-}
-export interface SurveyState {
-  parameters: SurveyEntryResponse | null;
-  user: SurveyUserInfoResponse | null;
-  data: CurrentSurveyState | null;
-  undo: MealUndo | FoodUndo | null;
-}
+export type RootStateWithModules = RootState & Modules;

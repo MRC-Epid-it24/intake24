@@ -175,7 +175,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       if (!this.isValid()) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??
-            (this.$t('portion.guideImage.validation.required') as string),
+            this.$t('portion.guideImage.validation.required').toString(),
         ];
         return;
       }

@@ -3,15 +3,11 @@ import VueRouter, { RouteConfig } from 'vue-router';
 import { Store } from 'vuex';
 import { RootState } from '@/types/vuex';
 import views from '@/views';
-import PortionTest from '@/views/PortionTest.vue';
-
-import { globalGuard, surveyParametersGuard } from './guards';
+import { globalGuard, surveyParametersGuard, surveyParametersErrorGuard } from './guards';
 
 Vue.use(VueRouter);
 
 export default (store: Store<RootState>): VueRouter => {
-  const beforeDynamicRecall = surveyParametersGuard(store);
-
   const routes: RouteConfig[] = [
     {
       path: '/',
@@ -22,57 +18,64 @@ export default (store: Store<RootState>): VueRouter => {
     {
       path: '/:surveyId',
       name: 'login',
-      component: views.login,
+      component: views.survey.login,
       meta: { module: 'login', title: 'login._' },
       props: true,
     },
     {
       path: '/:surveyId/dashboard',
       name: 'dashboard',
-      component: views.dashboard,
+      component: views.survey.dashboard,
       meta: { module: 'recall', title: 'recall.dynamicTitle' },
       props: true,
     },
     // v3-like dynamic recall logic prototype
     {
-      path: '/:surveyId/dynamic-recall',
-      name: 'dynamic-recall',
-      component: views.dynamicRecall,
+      path: '/:surveyId/recall',
+      name: 'recall',
+      component: views.survey.recall,
       meta: { module: 'recall', title: 'recall.dynamicTitle' },
-      beforeEnter: beforeDynamicRecall,
+      beforeEnter: surveyParametersGuard(store),
+    },
+    {
+      path: '/:surveyId/error',
+      name: 'recall-error',
+      component: views.survey.error,
+      meta: { module: 'recall', title: 'recall.dynamicTitle' },
+      beforeEnter: surveyParametersErrorGuard(store),
     },
 
     // TESTING Temporary route for testing portion size code before foods & meals are loaded
     {
       path: '/:surveyId/portion-test',
       name: 'portion-test',
-      component: PortionTest,
+      component: views.survey.portionTest,
       meta: { module: 'recall', title: 'portionTest._' },
     },
 
     {
       path: '/:surveyId/profile',
       name: 'profile',
-      component: views.profile,
+      component: views.survey.profile,
       meta: { module: 'profile', title: 'profile._' },
     },
     {
       path: '/:surveyId/generate-user',
       name: 'generate-user',
-      component: views.generateUser,
+      component: views.survey.generateUser,
       meta: { module: 'public', title: 'login._' },
       props: true,
     },
     {
       path: '/:surveyId/feedback',
       name: 'feedback',
-      component: views.feedback,
+      component: views.survey.feedback,
       meta: { module: 'feedback', title: 'feedback._' },
     },
     {
       path: '/:surveyId/:token',
       name: 'login-token',
-      component: views.login,
+      component: views.survey.login,
       meta: { module: 'login', title: 'login._' },
     },
 

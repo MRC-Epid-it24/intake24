@@ -29,11 +29,13 @@ function mealTimeToString(time: MealTime): string {
 
 export default Vue.extend({
   name: 'MealTimePromptHandler',
+
   components: { MealTimePrompt },
 
   props: {
     promptProps: {
       type: Object as () => MealTimePromptProps,
+      required: true,
     },
   },
 

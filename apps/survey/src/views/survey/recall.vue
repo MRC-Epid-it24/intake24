@@ -37,14 +37,14 @@
 
     <v-col cols="12" class="stickybottom" v-if="isNotDesktop" v-show="showMealList">
       <meal-list-mobile-bottom
-        v-show="activeItem == 'meal'"
+        v-show="activeItem === 'meal'"
         :meals="meals"
         @displayMealContext="onMealFoodMobileClick"
         @recall-action="onRecallAction"
       >
       </meal-list-mobile-bottom>
       <food-list-mobile-bottom
-        v-show="activeItem == 'food'"
+        v-show="activeItem === 'food'"
         :loading="false"
         :foods="foods"
         :mealIndex="mealIndex"
@@ -81,7 +81,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
 import { MealSection, SurveyQuestionSection } from '@common/schemes';
 import { MealState, Selection, FoodState } from '@common/types';
@@ -213,7 +213,7 @@ export default Vue.extend({
   },
 
   async created() {
-    if (this.surveyScheme == null) {
+    if (this.surveyScheme === null) {
       console.error('Survey scheme must be known at this point');
       return;
     }

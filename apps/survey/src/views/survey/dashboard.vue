@@ -3,12 +3,7 @@
     <v-card-title>Dashboard</v-card-title>
     <v-row justify="center">
       <v-col cols="auto">
-        <v-btn
-          x-large
-          class="pa-6"
-          color="success"
-          :to="{ name: 'dynamic-recall', params: { surveyId } }"
-        >
+        <v-btn x-large class="pa-6" color="success" :to="{ name: 'recall', params: { surveyId } }">
           Dynamic recall
         </v-btn>
       </v-col>

@@ -142,7 +142,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       if (!this.isValid()) {
         this.errors = [
           this.getLocaleContent(this.promptProps.validation.message) ??
-            (this.$t('portion.standardPortion.validation.required') as string),
+            this.$t('portion.standardPortion.validation.required').toString(),
         ];
         return;
       }

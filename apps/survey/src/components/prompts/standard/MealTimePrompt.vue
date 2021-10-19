@@ -79,13 +79,13 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       const text = this.promptProps.text[this.$i18n.locale];
       return text
         ? text.replace('{meal}', this.mealName ?? '')
-        : (this.$t('prompts.mealTime.text', { meal: this.mealName }) as string);
+        : this.$t('prompts.mealTime.text', { meal: this.mealName }).toString();
     },
     description(): string {
       const description = this.promptProps.description[this.$i18n.locale];
       return description
         ? description.replace('{meal}', this.mealName ?? '')
-        : (this.$t('prompts.mealTime.description', { meal: this.mealName }) as string);
+        : this.$t('prompts.mealTime.description', { meal: this.mealName }).toString();
     },
   },
 
@@ -102,7 +102,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       if (this.validation.required && !this.currentValue) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??
-            (this.$t('prompts.mealTime.validation.required') as string),
+            this.$t('prompts.mealTime.validation.required').toString(),
         ];
         return;
       }

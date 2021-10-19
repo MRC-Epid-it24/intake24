@@ -16,11 +16,13 @@ import FoodSearchPrompt from '@/components/prompts/standard/FoodSearchPrompt.vue
 
 export default Vue.extend({
   name: 'FoodSearchPromptHandler',
+
   components: { FoodSearchPrompt },
 
   props: {
     promptProps: {
       type: Object as () => FoodSearchPromptProps,
+      required: true,
     },
   },
 

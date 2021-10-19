@@ -1,6 +1,13 @@
-import type { ValidationErrors } from '@/types';
+export type ValidationError = {
+  location: string;
+  msg: string;
+  param: string;
+  value: string;
+};
 
-export default class Errors {
+export type ValidationErrors = Record<string, ValidationError>;
+
+export class Errors {
   private errors: ValidationErrors;
 
   constructor() {

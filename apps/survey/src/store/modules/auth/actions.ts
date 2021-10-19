@@ -1,4 +1,5 @@
 import { ActionTree } from 'vuex';
+import axios from 'axios';
 import { AuthState, RootState } from '@/types/vuex';
 import authSvc, { LoginRequest, TokenRequest } from '@/services/auth.service';
 
@@ -26,7 +27,7 @@ const actions: ActionTree<AuthState, RootState> = {
       await dispatch('user/load', { accessToken }, { root: true });
       return Promise.resolve();
     } catch (err) {
-      commit('error', err);
+      if (axios.isAxiosError(err)) commit('error', err);
       return Promise.reject(err);
     } finally {
       commit('loading/remove', 'login', { root: true });
@@ -40,7 +41,7 @@ const actions: ActionTree<AuthState, RootState> = {
       await dispatch('user/load', { accessToken }, { root: true });
       return Promise.resolve();
     } catch (err) {
-      commit('error', err);
+      if (axios.isAxiosError(err)) commit('error', err);
       return withErr ? Promise.reject(err) : Promise.resolve();
     }
   },

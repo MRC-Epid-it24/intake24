@@ -7,21 +7,22 @@
             <h2>{{ $t('login.title') }}</h2>
           </v-card-title>
         </v-sheet>
-        <v-card-text v-if="status === 404" class="px-5 py-10">
+        <v-card-text v-if="status === 404" class="px-6 py-10">
           <v-alert border="left" color="error" dark>
             <p>{{ $t('login.err.invalidSurvey', { surveyId }) }}</p>
             <p>{{ $t('login.err.checkCredentials') }}</p>
           </v-alert>
         </v-card-text>
-        <v-card-text v-if="surveyLoaded">
+        <v-card-text v-if="surveyLoaded" class="px-6">
           <v-card-subtitle class="text-center">
             {{ $t('login.subtitle') }}
           </v-card-subtitle>
-          <v-form @submit.prevent="onLogin">
+          <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="onLogin">
             <v-row>
               <v-col cols="12" class="mb-3">
                 <v-text-field
                   v-model="userName"
+                  :error-messages="errors.get('userName')"
                   :label="$t('common.username')"
                   hide-details="auto"
                   required
@@ -31,9 +32,11 @@
               <v-col cols="12" class="mb-3">
                 <v-text-field
                   v-model="password"
+                  :append-icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
+                  :error-messages="errors.get('password')"
                   :label="$t('common.password')"
+                  :type="showPassword ? 'text' : 'password'"
                   hide-details="auto"
-                  type="password"
                   required
                   outlined
                 ></v-text-field>
@@ -52,10 +55,11 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import { PublicSurveyEntryResponse } from '@common/types/http';
+import { Errors } from '@common/util';
 import surveySvc from '@/services/survey.service';
 
 export default Vue.extend({
@@ -71,14 +75,16 @@ export default Vue.extend({
     return {
       userName: '',
       password: '',
+      showPassword: false,
       status: null as number | null,
-      survey: {} as PublicSurveyEntryResponse,
+      survey: null as PublicSurveyEntryResponse | null,
+      errors: new Errors(),
     };
   },
 
   computed: {
     surveyLoaded(): boolean {
-      return !!Object.keys(this.survey).length;
+      return !!this.survey;
     },
   },
 
@@ -95,7 +101,7 @@ export default Vue.extend({
         return;
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 401)
-          this.$toasted.error(this.$t('login.err.invalidToken') as string);
+          this.$toasted.error(this.$t('login.err.invalidToken').toString());
       }
     }
 
@@ -117,8 +123,14 @@ export default Vue.extend({
         this.password = '';
         await this.$router.push({ name: 'dashboard', params: { surveyId } });
       } catch (err) {
-        if (axios.isAxiosError(err) && err.response?.status === 401)
-          this.$toasted.error(this.$t('login.err.invalidCredentials') as string);
+        if (axios.isAxiosError(err)) {
+          const { response: { status, data = {} } = {} } = err as AxiosError<any>;
+
+          if (status === 422 && 'errors' in data) this.errors.record(data.errors);
+
+          if (status === 401)
+            this.$toasted.error(this.$t('login.err.invalidCredentials').toString());
+        }
       }
     },
   },

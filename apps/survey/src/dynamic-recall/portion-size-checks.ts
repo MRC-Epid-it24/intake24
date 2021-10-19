@@ -7,7 +7,7 @@ export function portionSizeMethodSelected(
 ): boolean {
   if (selectedFood.type !== 'encoded-food') return false;
 
-  if (selectedFood.portionSizeMethodIndex == null) return false;
+  if (selectedFood.portionSizeMethodIndex === null) return false;
 
   if (selectedFood.data.portionSizeMethods[selectedFood.portionSizeMethodIndex].method !== method)
     return false;

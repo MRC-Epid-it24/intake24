@@ -29,7 +29,7 @@ export default Vue.extend({
     selectedPortionSize(): UserPortionSizeMethod {
       const selectedFood = this.encodedSelectedFood;
 
-      if (selectedFood.portionSizeMethodIndex == null)
+      if (selectedFood.portionSizeMethodIndex === null)
         throw new Error('This prompt requires a portion size option to be selected');
 
       return selectedFood.data.portionSizeMethods[selectedFood.portionSizeMethodIndex];

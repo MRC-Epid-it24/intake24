@@ -126,7 +126,7 @@ describe('Survey store', () => {
 
       const selection: Selection = store.getters['survey/selection'];
 
-      if (selection.element == null) fail('selection should be null');
+      if (selection.element === null) fail('selection should be null');
 
       expect(selection.element.type).toBe('meal');
 

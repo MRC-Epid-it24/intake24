@@ -3,7 +3,7 @@ import { AuthState } from '@/types/vuex';
 const state = (): AuthState => ({
   accessToken: null,
   status: '',
-  error: {},
+  error: null,
 });
 
 export default state;

@@ -4,7 +4,7 @@ import { MealSection, SurveySection } from '@common/schemes';
 import { MealTime, SurveyState as CurrentSurveyState } from '@common/types';
 import { SchemeEntryResponse } from '@common/types/http';
 import PromptManager from '@/dynamic-recall/prompt-manager';
-import { SurveyState } from '@/types/vuex';
+import { RootStateWithModules, SurveyState } from '@/types/vuex';
 import SelectionManager from '@/dynamic-recall/selection-manager';
 
 export interface PromptInstance {
@@ -20,16 +20,29 @@ function parseMealTime(time: string): MealTime {
   };
 }
 
+export const surveyInitialState: CurrentSurveyState = {
+  schemeId: null,
+  startTime: null,
+  endTime: null,
+  flags: [],
+  customPromptAnswers: {},
+  selection: {
+    element: null,
+    mode: 'auto',
+  },
+  meals: [],
+};
+
 export default class DynamicRecall {
-  private store: Store<any>;
+  private store;
 
-  private surveyScheme: SchemeEntryResponse;
+  private surveyScheme;
 
-  readonly promptManager: PromptManager;
+  readonly promptManager;
 
-  private selectionManager: SelectionManager;
+  private selectionManager;
 
-  constructor(surveyScheme: SchemeEntryResponse, store: Store<any>) {
+  constructor(surveyScheme: SchemeEntryResponse, store: Store<RootStateWithModules>) {
     this.surveyScheme = surveyScheme;
     this.store = store;
     this.promptManager = new PromptManager(surveyScheme);
@@ -37,37 +50,25 @@ export default class DynamicRecall {
   }
 
   private getSurveyState(): SurveyState {
-    if (this.store.state.survey == null) {
-      throw new Error('Survey state is null should not be null here');
-    }
-
     return this.store.state.survey;
   }
 
   async initialiseSurvey() {
-    if (!this.store.state.survey.data) {
+    if (!this.store.getters['survey/hasStarted']) {
       console.debug('Current survey data is null, starting new survey');
 
       const initialState: CurrentSurveyState = {
+        ...surveyInitialState,
         schemeId: this.surveyScheme.id,
         startTime: new Date(),
-        endTime: null,
-        flags: [],
-        customPromptAnswers: {},
-        selection: {
-          element: null,
-          mode: 'auto',
-        },
-        meals: this.surveyScheme.meals.map((meal) => {
-          return {
-            name: meal.name.en!, // FIXME: pick correct locale and handle nulls
-            defaultTime: parseMealTime(meal.time),
-            time: undefined,
-            flags: [],
-            customPromptAnswers: {},
-            foods: [],
-          };
-        }),
+        meals: this.surveyScheme.meals.map((meal) => ({
+          name: meal.name.en!, // FIXME: pick correct locale and handle nulls
+          defaultTime: parseMealTime(meal.time),
+          time: undefined,
+          flags: [],
+          customPromptAnswers: {},
+          foods: [],
+        })),
       };
 
       await this.store.dispatch('survey/setState', initialState);
@@ -76,9 +77,9 @@ export default class DynamicRecall {
 
   getNextPromptForCurrentSelection(): PromptInstance | undefined {
     const surveyState = this.getSurveyState();
-    const recallState = surveyState.data!;
+    const recallState = surveyState.data;
 
-    if (recallState.selection.element == null) {
+    if (recallState.selection.element === null) {
       const nextPrompt = this.promptManager.nextPreMealsPrompt(surveyState);
       if (nextPrompt) return { prompt: nextPrompt, section: 'preMeals' };
     } else {

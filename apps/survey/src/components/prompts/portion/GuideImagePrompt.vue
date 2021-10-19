@@ -229,11 +229,11 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
     submit() {
       if (!this.isValid()) {
         // Should this also just accept the default value of 1?
-        this.errors = [this.$t('portion.guideImage.validation.required') as string];
+        this.errors = [this.$t('portion.guideImage.validation.required').toString()];
         return;
       }
 
-      if (this.selectedObjectIdx == null) throw new Error('Selected object id is null');
+      if (this.selectedObjectIdx === null) throw new Error('Selected object id is null');
 
       this.$emit('guide-image-selected', {
         object: {

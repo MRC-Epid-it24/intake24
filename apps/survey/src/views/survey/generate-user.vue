@@ -175,7 +175,7 @@ export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
         await this.$router.push({ name: 'dashboard', params: { surveyId } });
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 401)
-          this.$toasted.error(this.$t('login.err.invalidCredentials') as string);
+          this.$toasted.error(this.$t('login.err.invalidCredentials').toString());
       }
     },
   },

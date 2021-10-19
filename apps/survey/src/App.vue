@@ -10,7 +10,7 @@
       <v-divider></v-divider>
       <v-list dense nav>
         <v-list-item-group>
-          <v-list-item v-if="surveyId" :to="{ name: 'dynamic-recall', params: { surveyId } }" link>
+          <v-list-item v-if="surveyId" :to="{ name: 'recall', params: { surveyId } }" link>
             <v-list-item-action>
               <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
             </v-list-item-action>

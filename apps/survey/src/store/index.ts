@@ -1,6 +1,7 @@
 import trim from 'lodash/trim';
 import Vue from 'vue';
 import Vuex, { GetterTree } from 'vuex';
+import { SurveyState } from '@common/types';
 import { RootState } from '@/types/vuex';
 import modules from './modules';
 
@@ -8,7 +9,7 @@ Vue.use(Vuex);
 
 const debug = process.env.NODE_ENV !== 'production';
 
-const defaultState = (): RootState => ({
+const rootState = (): RootState => ({
   lang: document.documentElement.lang.substr(0, 2),
   app: {
     name: process.env.VUE_APP_NAME,
@@ -24,14 +25,24 @@ const defaultState = (): RootState => ({
   },
 });
 
-const getters: GetterTree<RootState, RootState> = {
+const rootGetters: GetterTree<RootState, RootState> = {
   lang: (state) => state.lang,
   app: (state) => state.app,
 };
 
-export default new Vuex.Store<RootState>({
-  state: defaultState(),
-  getters,
+const store = new Vuex.Store<RootState>({
+  state: rootState(),
+  getters: rootGetters,
   modules,
   strict: debug,
 });
+
+store.watch(
+  (state, getters) => getters['survey/currentState'],
+  (value: SurveyState, oldValue: SurveyState) => {
+    store.dispatch('survey/recordSnapshot', { value, oldValue });
+  },
+  { deep: true }
+);
+
+export default store;

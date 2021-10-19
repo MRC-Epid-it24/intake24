@@ -2,11 +2,10 @@ import { Method } from 'axios';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 import type { Dictionary } from '@common/types';
-import { copy, merge } from '@common/util';
+import { copy, merge, Errors } from '@common/util';
 import http from '@/services/http.service';
 import store from '@/store';
 import type { HttpRequestConfig, HttpError } from '@/types/http';
-import Errors from './Errors';
 
 export interface FormConfig<T> {
   status?: string;

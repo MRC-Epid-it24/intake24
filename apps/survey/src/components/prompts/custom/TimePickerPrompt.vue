@@ -60,7 +60,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       if (this.validation.required && !this.currentValue) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??
-            (this.$t('prompts.timepicker.validation.required') as string),
+            this.$t('prompts.timepicker.validation.required').toString(),
         ];
         return;
       }

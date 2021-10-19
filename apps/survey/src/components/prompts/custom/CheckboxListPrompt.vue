@@ -86,7 +86,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       if (this.validation.required && !this.currentValue.length) {
         this.errors = [
           this.getLocaleContent(this.validation.message) ??
-            (this.$t('prompts.checkbox.validation.required') as string),
+            this.$t('prompts.checkbox.validation.required').toString(),
         ];
         return;
       }

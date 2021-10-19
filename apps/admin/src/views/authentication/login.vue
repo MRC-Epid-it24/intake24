@@ -57,7 +57,7 @@
 import axios, { AxiosError } from 'axios';
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import Errors from '@/helpers/Errors';
+import { Errors } from '@common/util';
 
 export default Vue.extend({
   name: 'Login',

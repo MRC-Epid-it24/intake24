@@ -227,7 +227,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       return false;
     },
     setErrors() {
-      this.errors = [this.$t('common.errors.expansionIncomplete') as string];
+      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
     clearErrors() {
       this.errors = [];

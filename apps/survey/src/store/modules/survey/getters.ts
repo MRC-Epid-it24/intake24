@@ -9,14 +9,22 @@ import {
 import { FoodUndo, MealUndo, RootState, SurveyState } from '@/types/vuex';
 
 const getters: GetterTree<SurveyState, RootState> = {
-  parametersLoaded: (state) => !!state.parameters,
+  parametersLoaded: (state) => !!state.parameters && !!state.user,
 
-  currentState: (state): CurrentSurveyState | null => {
+  currentState: (state): CurrentSurveyState => {
     return state.data;
   },
 
+  hasStarted: (state): boolean => {
+    return !!state.data.startTime;
+  },
+
+  hasFinished: (state): boolean => {
+    return !!state.data.endTime;
+  },
+
   meals: (state): MealState[] | undefined => {
-    return state.data?.meals;
+    return state.data.meals;
   },
 
   defaultSchemeMeals: (state): Meals | undefined => {
@@ -24,18 +32,18 @@ const getters: GetterTree<SurveyState, RootState> = {
   },
 
   selection: (state): Selection | undefined => {
-    return state.data?.selection;
+    return state.data.selection;
   },
 
   selectedMealIndex: (state): number | undefined => {
-    return state.data?.selection.element?.mealIndex;
+    return state.data.selection.element?.mealIndex;
   },
 
   selectedMeal: (state): MealState | undefined => {
-    const mealIndex = state.data?.selection.element?.mealIndex;
-    const meals = state.data?.meals;
+    const mealIndex = state.data.selection.element?.mealIndex;
+    const { meals } = state.data;
 
-    if (meals === undefined || mealIndex === undefined) return undefined;
+    if (mealIndex === undefined) return undefined;
 
     return meals[mealIndex];
   },
@@ -46,25 +54,17 @@ const getters: GetterTree<SurveyState, RootState> = {
   },
 
   selectedFood: (state): FoodState | undefined => {
-    if (state.data == null) return undefined;
-
     const { element } = state.data.selection;
 
-    if (element == null) return undefined;
-
-    if (element.type !== 'food') return undefined;
+    if (element === null || element.type !== 'food') return undefined;
 
     return state.data.meals[element.mealIndex].foods[element.foodIndex];
   },
 
   selectedFoodIndex: (state): number | undefined => {
-    if (state.data == null) return undefined;
-
     const { element } = state.data.selection;
 
-    if (element == null) return undefined;
-
-    if (element.type !== 'food') return undefined;
+    if (element === null || element.type !== 'food') return undefined;
 
     return element.foodIndex;
   },

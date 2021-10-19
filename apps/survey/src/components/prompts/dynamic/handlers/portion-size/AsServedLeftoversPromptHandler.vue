@@ -27,6 +27,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   props: {
     promptProps: {
       type: Object as () => BasePromptProps,
+      required: true,
     },
   },
 

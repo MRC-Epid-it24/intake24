@@ -18,9 +18,16 @@ export default Vue.extend({
   props: {
     promptProps: {
       type: Object as () => BasePromptProps,
+      required: true,
     },
-    promptComponent: String,
-    promptId: String,
+    promptComponent: {
+      type: String,
+      required: true,
+    },
+    promptId: {
+      type: String,
+      required: true,
+    },
   },
 
   computed: {
