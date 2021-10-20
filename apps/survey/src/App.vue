@@ -123,8 +123,6 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
     },
   },
 
-  async mounted() {},
-
   methods: {
     toggleSidebar() {
       this.sidebar = !this.sidebar;
