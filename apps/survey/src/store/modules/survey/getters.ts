@@ -10,6 +10,7 @@ import { FoodUndo, MealUndo, RootState, SurveyState } from '@/types/vuex';
 
 const getters: GetterTree<SurveyState, RootState> = {
   parametersLoaded: (state) => !!state.parameters && !!state.user,
+  error: (state) => state.error,
 
   currentState: (state): CurrentSurveyState => {
     return state.data;

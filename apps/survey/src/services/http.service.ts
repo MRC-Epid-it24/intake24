@@ -107,7 +107,10 @@ const httpClient: HttpClient = {
 
           await store.dispatch('auth/logout');
           const { name, params: { surveyId } = {} } = router.currentRoute;
-          if (surveyId && name !== 'login') router.push({ name: 'login', params: { surveyId } });
+
+          if (surveyId && name !== 'survey-login')
+            router.push({ name: 'survey-login', params: { surveyId } });
+
           return Promise.reject(err);
         }
 

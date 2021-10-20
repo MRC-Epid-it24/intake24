@@ -10,7 +10,7 @@
       <v-divider></v-divider>
       <v-list dense nav>
         <v-list-item-group>
-          <v-list-item v-if="surveyId" :to="{ name: 'recall', params: { surveyId } }" link>
+          <v-list-item v-if="surveyId" :to="{ name: 'survey-recall', params: { surveyId } }" link>
             <v-list-item-action>
               <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
             </v-list-item-action>
@@ -18,7 +18,11 @@
               <v-list-item-title>{{ $t('recall.dynamic') }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item :to="{ name: 'portion-test', params: { surveyId } }" link>
+          <v-list-item
+            v-if="surveyId"
+            :to="{ name: 'survey-portion-test', params: { surveyId } }"
+            link
+          >
             <v-list-item-action>
               <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
             </v-list-item-action>
@@ -36,7 +40,7 @@
         <v-img class="mx-2" src="@/assets/logo.svg" max-height="30" max-width="150" contain>
         </v-img>
         <v-spacer></v-spacer>
-        <v-btn text :to="{ name: 'profile', params: { surveyId } }">
+        <v-btn text :to="{ name: 'survey-profile', params: { surveyId } }">
           <span class="mr-2" v-if="!isNotDesktop">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
@@ -119,18 +123,7 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
     },
   },
 
-  async mounted() {
-    if (!this.loggedIn && this.$route.name === 'login') {
-      try {
-        await this.$store.dispatch('auth/refresh');
-
-        const { surveyId } = this.$route.params;
-        await this.$router.push({ name: 'dashboard', params: { surveyId } });
-      } catch (err) {
-        // continue
-      }
-    }
-  },
+  async mounted() {},
 
   methods: {
     toggleSidebar() {
@@ -141,11 +134,11 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
       this.dialog = !this.dialog;
     },
 
-    async logout(value: boolean) {
+    async logout() {
       await this.$store.dispatch('auth/logout', { invalidate: true });
       const { surveyId } = this.$route.params;
       await this.$router.push(
-        surveyId ? { name: 'login', params: { surveyId } } : { name: 'home' }
+        surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' }
       );
     },
   },

@@ -13,7 +13,7 @@ export const surveyParametersGuard =
       await store.dispatch('survey/loadParameters', { surveyId });
 
     if (!store.getters['survey/parametersLoaded']) {
-      next({ name: 'recall-error', params: { surveyId } });
+      next({ name: 'survey-error', params: { surveyId } });
       return;
     }
 
@@ -28,7 +28,7 @@ export const surveyParametersErrorGuard =
     } = to;
 
     if (store.getters['survey/parametersLoaded']) {
-      next({ name: 'recall', params: { surveyId } });
+      next({ name: 'survey-dashboard', params: { surveyId } });
       return;
     }
 
@@ -51,7 +51,7 @@ export const globalGuard =
 
     // Login pages (credentials / token)
     if (module === 'login') {
-      if (store.getters['auth/loggedIn']) next({ name: 'dashboard', params: { surveyId } });
+      if (store.getters['auth/loggedIn']) next({ name: 'survey-dashboard', params: { surveyId } });
       else next();
       return;
     }
@@ -61,7 +61,7 @@ export const globalGuard =
 
     // Any other page (requires to be logged in)
     if (!store.getters['auth/loggedIn']) {
-      if (surveyId) next({ name: 'login', params: { surveyId } });
+      if (surveyId) next({ name: 'survey-login', params: { surveyId } });
       else next({ name: 'home' });
       return;
     }

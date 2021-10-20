@@ -1,7 +1,7 @@
 import { LocaleMessageObject } from 'vue-i18n';
 
 const common: LocaleMessageObject = {
-  _: 'Intake24 Survey App',
+  _: 'Intake24',
   dashboard: 'Dashboard',
   register: 'Registration',
   login: 'Sign in',
@@ -32,6 +32,7 @@ const common: LocaleMessageObject = {
     yes: 'Yes',
     no: 'No',
   },
+  reload: 'Reload',
 
   errors: {
     expansionIncomplete: 'Please complete all sections marked with !',
