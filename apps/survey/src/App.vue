@@ -59,7 +59,7 @@
       </template>
     </v-app-bar>
     <v-main>
-      <v-container :class="{ 'pa-0': isMobile }">
+      <v-container>
         <!-- <h2 v-if="loggedIn" class="ma-2 text-dark">{{ title }}</h2> -->
         <router-view></router-view>
       </v-container>
