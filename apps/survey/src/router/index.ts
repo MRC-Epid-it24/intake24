@@ -33,7 +33,7 @@ export default (store: Store<RootState>): VueRouter => {
     {
       path: '/:surveyId/recall',
       name: 'survey-recall',
-      component: views.survey.recall,
+      component: views.survey.recallContainer,
       meta: { module: 'survey', title: 'recall.dynamicTitle' },
       beforeEnter: surveyParametersGuard(store),
     },

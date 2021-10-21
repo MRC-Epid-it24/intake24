@@ -1,85 +1,3 @@
-<template>
-  <v-row justify="center" class="pt-2">
-    <recall-bread-crumbs-mobile
-      v-if="isNotDesktop"
-      :prompt="activePrompt"
-    ></recall-bread-crumbs-mobile>
-
-    <v-col v-if="!isNotDesktop && showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
-      <meal-list
-        :surveyName="surveyName"
-        :surveyId="surveyId"
-        :meals="meals"
-        @meal-action="onMealAction"
-        @recall-action="onRecallAction"
-        @food-selected="onFoodSelected"
-      >
-      </meal-list>
-    </v-col>
-
-    <v-col cols="12" lg="9" class="content">
-      <recall-bread-crumbs v-if="showMealList && !isNotDesktop"></recall-bread-crumbs>
-      <transition name="component-fade" mode="out-in">
-        <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
-        even if the next prompt uses the same component type, probably should be something like an internal counter,
-        or maybe not  ¯\_(ツ)_/¯  -->
-        <component
-          v-if="currentPrompt"
-          :is="handlerComponent"
-          :promptComponent="currentPrompt.prompt.component"
-          :promptId="currentPrompt.prompt.id"
-          :promptProps="currentPrompt.prompt.props"
-          :key="Math.random()"
-          @complete="nextPrompt"
-        ></component>
-      </transition>
-    </v-col>
-
-    <v-col cols="12" class="stickybottom" v-if="isNotDesktop" v-show="showMealList">
-      <meal-list-mobile-bottom
-        v-show="activeItem === 'meal'"
-        :meals="meals"
-        @displayMealContext="onMealFoodMobileClick"
-        @recall-action="onRecallAction"
-      >
-      </meal-list-mobile-bottom>
-      <food-list-mobile-bottom
-        v-show="activeItem === 'food'"
-        :loading="false"
-        :foods="foods"
-        :mealIndex="mealIndex"
-        @displayFoodContext="onMealFoodMobileClick"
-        @meal-action="onMealAction"
-      >
-      </food-list-mobile-bottom>
-    </v-col>
-    <bottom-navigation-mobile
-      v-if="isNotDesktop"
-      @navigation-item-click="onBottomNavClick"
-    ></bottom-navigation-mobile>
-    <meal-food-mobile-context-menu
-      :show="mobileMealFoodContextMenu.show"
-      :entityName="mobileMealFoodContextMenu.foodContext ? activeFood : activeMeal"
-      :entityIndex="
-        mobileMealFoodContextMenu.foodContext
-          ? mobileMealFoodContextMenu.foodIndex
-          : mobileMealFoodContextMenu.mealIndex
-      "
-      :mealIndex="mobileMealFoodContextMenu.mealIndex"
-      :entityType="mobileMealFoodContextMenu.foodContext"
-      @toggleMobileMealContext="onMobileMealFoodContextMenu"
-      @meal-action="onMealAction"
-      @complete="nextPrompt"
-    ></meal-food-mobile-context-menu>
-    <info-alert
-      :status="undo ? true : false"
-      :info="undo ? 'Undo deletion of ' + undo.type : ''"
-      @alert-dismissed="clearUndo"
-    ></info-alert>
-  </v-row>
-</template>
-
-<script lang="ts">
 import Vue from 'vue';
 import { mapState, mapGetters } from 'vuex';
 import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
@@ -105,7 +23,7 @@ import BottomNavigationMobile from '@/components/recall/mobile/BottomNavMobile.v
 import InfoAlert from '@/components/elements/InfoAlert.vue';
 
 export default Vue.extend({
-  name: 'DynamicRecall',
+  name: 'Recall',
 
   components: {
     MealListMobileBottom,
@@ -201,8 +119,8 @@ export default Vue.extend({
             name: meal.name,
             time: meal.time
               ? timeDoubleDigitsConvertor(meal.time.hours)
-                  .concat(':')
-                  .concat(timeDoubleDigitsConvertor(meal.time.minutes))
+                .concat(':')
+                .concat(timeDoubleDigitsConvertor(meal.time.minutes))
               : ``,
             // FIXME: Foods is type of Encoded USer Food Data or Uswr Food Data. at the mpment FoodItem.vue component is expecting object iwth name and searchTerm properties.
             foods: meal.foods,
@@ -339,6 +257,18 @@ export default Vue.extend({
       this.activeItem = item;
     },
 
+    async onMealSelected(payload: { mealIndex: number }) {
+      this.setSelection({
+        element: {
+          type: 'meal',
+          mealIndex: payload.mealIndex,
+        },
+        mode: 'manual',
+      });
+
+      await this.nextPrompt();
+    },
+
     async onFoodSelected(payload: { mealIndex: number; foodIndex: number }) {
       this.setSelection({
         element: {
@@ -366,7 +296,3 @@ export default Vue.extend({
     },
   },
 });
-</script>
-<style lang="scss" scoped>
-@import '../../scss/meallistmobile.scss';
-</style>

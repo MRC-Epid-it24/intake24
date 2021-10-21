@@ -5,7 +5,7 @@ import generateUser from './generate-user.vue';
 import login from './login.vue';
 import portionTest from './portion-test.vue';
 import profile from './profile.vue';
-import recall from './recall.vue';
+import recallContainer from './recall-container.vue';
 
 const views = {
   dashboard,
@@ -15,7 +15,7 @@ const views = {
   login,
   portionTest,
   profile,
-  recall,
+  recallContainer,
 };
 
 export default views;
