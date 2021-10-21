@@ -3,26 +3,39 @@ import axios from 'axios';
 import { AuthState, RootState } from '@/types/vuex';
 import authSvc, { LoginRequest, TokenRequest } from '@/services/auth.service';
 
-type AuthenticatePayload = {
-  type: 'login' | 'token';
-  payload: LoginRequest & TokenRequest;
+type LoginPayload = {
+  type: 'login';
+  payload: LoginRequest;
 };
 
+type TokenPayload = {
+  type: 'token';
+  payload: TokenRequest;
+};
+
+type AuthenticatePayload = LoginPayload | TokenPayload;
+
 const actions: ActionTree<AuthState, RootState> = {
-  async login({ dispatch }, payload) {
+  async login({ dispatch }, payload: LoginPayload) {
     await dispatch('authenticate', { type: 'login', payload });
   },
 
-  async token({ dispatch }, payload) {
+  async token({ dispatch }, payload: TokenPayload) {
     await dispatch('authenticate', { type: 'token', payload });
   },
 
-  async authenticate({ commit, dispatch }, { type, payload }: AuthenticatePayload) {
+  async authenticate({ commit, dispatch }, payload: AuthenticatePayload) {
     commit('request');
     commit('loading/add', 'login', { root: true });
 
     try {
-      const accessToken = await authSvc[type](payload);
+      // TS won't narrow the type
+      // const accessToken = await authSvc[type](payload);
+      const accessToken =
+        payload.type === 'login'
+          ? await authSvc.login(payload.payload)
+          : await authSvc.token(payload.payload);
+
       commit('login', accessToken);
       await dispatch('user/load', { accessToken }, { root: true });
       return Promise.resolve();
@@ -34,7 +47,7 @@ const actions: ActionTree<AuthState, RootState> = {
     }
   },
 
-  async refresh({ commit, dispatch }, { withErr = true } = {}) {
+  async refresh({ commit, dispatch }, { withErr = true }: { withErr?: boolean } = {}) {
     try {
       const accessToken = await authSvc.refresh();
       commit('refresh', accessToken);
@@ -46,7 +59,7 @@ const actions: ActionTree<AuthState, RootState> = {
     }
   },
 
-  async logout({ commit }, { invalidate } = {}) {
+  async logout({ commit }, { invalidate }: { invalidate?: boolean } = {}) {
     if (invalidate) await authSvc.logout();
 
     commit('loading/reset', {}, { root: true });

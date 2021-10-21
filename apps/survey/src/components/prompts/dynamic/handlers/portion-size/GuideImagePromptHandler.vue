@@ -1,7 +1,6 @@
 <template>
   <guide-image-prompt
-    :prompt-props="promptProps"
-    :food-name="foodName"
+    v-bind="{ foodName, promptProps }"
     :guide-image-id="parameters['guide-image-id']"
     @guide-image-selected="onGuideImageSelected"
   >

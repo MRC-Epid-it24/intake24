@@ -1,8 +1,6 @@
 <template>
   <standard-portion-prompt
-    :prompt-props="promptProps"
-    :food-name="foodName"
-    :standard-units="standardUnits"
+    v-bind="{ foodName, promptProps, standardUnits }"
     @standard-portion-selected="onStandardPortionSelected"
   >
   </standard-portion-prompt>

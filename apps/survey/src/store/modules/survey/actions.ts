@@ -4,7 +4,8 @@ import { ActionTree } from 'vuex';
 import { SurveyState as CurrentSurveyState } from '@common/types';
 import { RootState, SurveyState } from '@/types/vuex';
 import surveyService from '@/services/survey.service';
-import { HISTORY_LS_KEY, STATE_LS_KEY } from './state';
+import { LS_KEY_HISTORY, LS_KEY_STATE, LS_LIFETIME } from './state';
+import { surveyInitialState } from '@/dynamic-recall/dynamic-recall';
 
 const actions: ActionTree<SurveyState, RootState> = {
   async loadParameters({ commit }, { surveyId }: { surveyId: string }) {
@@ -25,14 +26,13 @@ const actions: ActionTree<SurveyState, RootState> = {
     }
   },
 
-  async setState({ commit, state }, payload: CurrentSurveyState) {
+  async setState({ commit }, payload: CurrentSurveyState) {
     commit('setState', payload);
-    Vue.ls.set(STATE_LS_KEY, state.data, 24 * 60 * 60 * 1000);
   },
 
-  async clearState({ commit }) {
-    commit('setState', null);
-    Vue.ls.remove(STATE_LS_KEY);
+  async clearState({ commit, dispatch }) {
+    commit('setState', surveyInitialState);
+    dispatch('clearLocalStorageState');
   },
 
   async clearUndo({ commit }) {
@@ -40,11 +40,21 @@ const actions: ActionTree<SurveyState, RootState> = {
   },
 
   async recordSnapshot(
-    { commit, state },
+    { commit, dispatch },
     { value, oldValue }: { value: CurrentSurveyState; oldValue: CurrentSurveyState }
   ) {
     commit('recordSnapshot', oldValue);
-    Vue.ls.set(HISTORY_LS_KEY, state.history, 24 * 60 * 60 * 1000);
+    dispatch('saveLocalStorageState');
+  },
+
+  saveLocalStorageState({ state }) {
+    Vue.ls.set(LS_KEY_STATE, state.data, LS_LIFETIME);
+    Vue.ls.set(LS_KEY_HISTORY, state.history, LS_LIFETIME);
+  },
+
+  clearLocalStorageState() {
+    Vue.ls.remove(LS_KEY_STATE);
+    Vue.ls.remove(LS_KEY_HISTORY);
   },
 
   async submitRecall({ commit, state }) {

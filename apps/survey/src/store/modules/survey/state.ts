@@ -2,14 +2,15 @@ import Vue from 'vue';
 import { SurveyState } from '@/types/vuex';
 import { surveyInitialState } from '@/dynamic-recall/dynamic-recall';
 
-export const STATE_LS_KEY = 'state';
-export const HISTORY_LS_KEY = 'history';
+export const LS_KEY_STATE = 'state';
+export const LS_KEY_HISTORY = 'history';
+export const LS_LIFETIME = 12 * 60 * 60 * 1000;
 
 const state = (): SurveyState => ({
   parameters: null,
   user: null,
-  data: Vue.ls?.get(STATE_LS_KEY, surveyInitialState),
-  history: [],
+  data: Vue.ls.get(LS_KEY_STATE, surveyInitialState),
+  history: Vue.ls.get(LS_KEY_HISTORY, []),
   undo: null,
   error: null,
 });

@@ -7,7 +7,7 @@ import prompts from './prompts';
 import portion from './portion';
 import recall from './recall';
 import survey from './survey';
-import standardUnits from './standardUnits';
+import standardUnits from './standard-units';
 
 const messages: LocaleMessageObject = {
   common,

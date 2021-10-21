@@ -1,7 +1,6 @@
 <template>
   <as-served-prompt
-    :food-name="foodName"
-    :prompt-props="promptProps"
+    v-bind="{ foodName, promptProps }"
     :as-served-set-id="parameters['leftovers-image-set']"
     @as-served-selected="onAsServedSelected"
   ></as-served-prompt>

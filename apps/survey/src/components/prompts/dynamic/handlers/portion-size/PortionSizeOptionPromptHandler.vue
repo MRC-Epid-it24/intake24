@@ -1,8 +1,6 @@
 <template>
   <portion-size-option-prompt
-    :prompt-props="promptProps"
-    :available-methods="availableMethods"
-    :food-name="foodName"
+    v-bind="{ foodName, promptProps, availableMethods }"
     @option-selected="onOptionSelected"
   >
   </portion-size-option-prompt>
