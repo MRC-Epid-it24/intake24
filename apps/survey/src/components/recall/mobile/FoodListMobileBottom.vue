@@ -20,11 +20,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import { FoodState } from '@common/types';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'FoodListMobileBottom',
 
   props: {

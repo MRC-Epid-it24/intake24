@@ -9,7 +9,7 @@ const state = (): ListState => ({
   refs: {},
   filter: Vue.ls.get(FILTER_LS_KEY, {}),
   status: '',
-  error: {},
+  error: null,
 });
 
 export default state;

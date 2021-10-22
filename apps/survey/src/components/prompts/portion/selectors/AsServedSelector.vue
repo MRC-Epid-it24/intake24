@@ -65,11 +65,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import { AsServedSetResponse } from '@common/types/http/foods';
 import ImagePlaceholder from '@/components/elements/ImagePlaceholder.vue';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'AsServedSelector',
   components: {
     ImagePlaceholder,

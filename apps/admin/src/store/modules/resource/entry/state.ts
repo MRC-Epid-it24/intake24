@@ -5,7 +5,7 @@ const state = (): EntryState => ({
   refs: {},
   addons: {},
   status: '',
-  error: {},
+  error: null,
 });
 
 export default state;

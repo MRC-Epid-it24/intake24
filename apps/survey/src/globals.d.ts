@@ -8,8 +8,9 @@ declare module 'vue/types/vue' {
     // loading mixin
     isAppLoading: () => boolean;
 
-    // isMobile mixin
-    isMobile: () => boolean;
+    // platform mixin
+    isMobile: boolean;
+    isNotDesktop: boolean;
   }
 }
 

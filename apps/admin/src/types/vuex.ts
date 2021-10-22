@@ -1,4 +1,5 @@
 import { Dictionary } from '@common/types';
+import { AxiosError } from 'axios';
 
 export interface RootState {
   lang: string;
@@ -34,7 +35,7 @@ export interface AuthState {
   accessToken: string | null;
   mfa: { request: string; host: string } | null;
   status: string;
-  error: Dictionary;
+  error: AxiosError | null;
 }
 
 export interface EntryState {
@@ -42,7 +43,7 @@ export interface EntryState {
   data: Dictionary;
   refs: Dictionary;
   addons: Dictionary;
-  error: Dictionary;
+  error: AxiosError | null;
 }
 
 export interface ListState {
@@ -51,5 +52,5 @@ export interface ListState {
   data: Dictionary[];
   refs: Dictionary;
   filter: Dictionary;
-  error: Dictionary;
+  error: AxiosError | null;
 }

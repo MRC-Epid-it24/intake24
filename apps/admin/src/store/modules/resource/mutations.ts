@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { HttpError, HttpResponseData } from '@/types/http';
+import { AxiosError } from 'axios';
 import { ListState } from '@/types';
 
 const mutations: MutationTree<ListState> = {
@@ -16,14 +16,8 @@ const mutations: MutationTree<ListState> = {
     state.refs = res.data;
   },
 
-  error(state, err: HttpError) {
-    const { response: { status, statusText, data: { message } = {} as HttpResponseData } = {} } =
-      err;
-    state.error = {
-      message,
-      status,
-      statusText,
-    };
+  error(state, error: AxiosError) {
+    state.error = error;
     state.status = 'error';
   },
 

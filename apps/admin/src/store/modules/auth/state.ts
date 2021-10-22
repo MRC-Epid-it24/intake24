@@ -4,7 +4,7 @@ const state = (): AuthState => ({
   accessToken: null,
   mfa: null,
   status: '',
-  error: {},
+  error: null,
 });
 
 export default state;

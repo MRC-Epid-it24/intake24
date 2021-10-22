@@ -17,10 +17,10 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import { FoodState } from '@common/types';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'FoodItem',
   props: {
     // FIXME: Should be an array of objects of type UserFoodData or EncodedUserFoodData ???

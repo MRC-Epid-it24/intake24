@@ -9,10 +9,10 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import { FoodSearchResponse } from '@common/types/http';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'FoodSearchResults',
   props: {
     results: {

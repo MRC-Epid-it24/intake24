@@ -62,7 +62,7 @@
       </v-bottom-navigation>
     </transition>
 
-    <!-- Contexr menu for Meal or Food with actions options -->
+    <!-- Context menu for Meal or Food with actions options -->
     <meal-food-mobile-context-menu
       :show="mobileMealFoodContextMenu.show"
       :entityName="mobileMealFoodContextMenu.foodContext ? activeFood : activeMeal"
@@ -89,13 +89,13 @@
 <script lang="ts">
 import { FoodState } from '@common/types';
 import Recall from './recall';
-import MealListMobileBottom from '../../components/recall/mobile/MealListMobileBottom.vue';
-import FoodListMobileBottom from '../../components/recall/mobile/FoodListMobileBottom.vue';
-import RecallBreadCrumbsMobile from '../../components/recall/mobile/BreadCrumbsMobile.vue';
-import MealFoodMobileContextMenu from '../../components/recall/MobileMealFoodContext.vue';
+import MealListMobileBottom from '@/components/recall/mobile/MealListMobileBottom.vue';
+import FoodListMobileBottom from '@/components/recall/mobile/FoodListMobileBottom.vue';
+import RecallBreadCrumbsMobile from '@/components/recall/mobile/BreadCrumbsMobile.vue';
+import MealFoodMobileContextMenu from '@/components/recall/MobileMealFoodContext.vue';
 
-import CustomPromptHandler from '../../components/prompts/dynamic/handlers/CustomPromptHandler.vue';
-import BottomNavigationMobile from '../../components/recall/mobile/BottomNavMobile.vue';
+import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
+import BottomNavigationMobile from '@/components/recall/mobile/BottomNavMobile.vue';
 import Review from '@/components/recall/mobile/review/Review.vue';
 
 export default Recall.extend({

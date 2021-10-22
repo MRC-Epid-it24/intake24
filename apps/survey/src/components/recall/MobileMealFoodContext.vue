@@ -25,10 +25,10 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import ConfirmDialog from '@/components/elements/ConfirmDialog.vue';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'MealFoodMobileContextMenu',
 
   components: { ConfirmDialog },

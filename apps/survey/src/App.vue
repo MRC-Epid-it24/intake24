@@ -40,7 +40,7 @@
         <v-img class="mx-2" src="@/assets/logo.svg" max-height="30" max-width="150" contain>
         </v-img>
         <v-spacer></v-spacer>
-        <v-btn text :to="{ name: 'survey-profile', params: { surveyId } }">
+        <v-btn v-if="surveyId" text :to="{ name: 'survey-profile', params: { surveyId } }">
           <span class="mr-2" v-if="!isNotDesktop">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
@@ -80,7 +80,7 @@ import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { TranslateResult } from 'vue-i18n';
 import Loader from '@/components/Loader.vue';
-import pwaUpdate from '@/components/mixins/pwaUpdate';
+import pwaUpdate from '@/mixins/pwa-update';
 import ConfirmDialog from '@/components/elements/ConfirmDialog.vue';
 
 export interface AppComponent {
@@ -98,15 +98,16 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
   data() {
     return {
       sidebar: true,
-      dialog: false,
     };
   },
 
   computed: {
     ...mapGetters('auth', ['loggedIn']),
+
     surveyId(): string {
       return this.$route.params.surveyId;
     },
+
     title(): TranslateResult {
       if (this.$route.meta?.title) return this.$t(this.$route.meta.title);
 
@@ -126,10 +127,6 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
   methods: {
     toggleSidebar() {
       this.sidebar = !this.sidebar;
-    },
-
-    toggleDialog() {
-      this.dialog = !this.dialog;
     },
 
     async logout() {

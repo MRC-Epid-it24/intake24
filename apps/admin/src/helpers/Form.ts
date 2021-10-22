@@ -1,11 +1,11 @@
-import { Method } from 'axios';
+import { AxiosError, Method } from 'axios';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 import type { Dictionary } from '@common/types';
 import { copy, merge, Errors } from '@common/util';
 import http from '@/services/http.service';
 import store from '@/store';
-import type { HttpRequestConfig, HttpError } from '@/types/http';
+import type { HttpRequestConfig } from '@/types/http';
 
 export interface FormConfig<T> {
   status?: string;
@@ -31,7 +31,7 @@ export interface FormDef<T = Dictionary> {
   patch<R>(url: string): Promise<R>;
   put<R>(url: string): Promise<R>;
   onSuccess(): void;
-  onFail(err: HttpError): void;
+  onFail(err: AxiosError): void;
 }
 
 export type FormFields<T = Dictionary> = { [P in keyof T]: T[P] };
@@ -123,7 +123,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
       if (this.config.resetOnSubmit === true) this.reset();
     },
 
-    onFail(err: HttpError): void {
+    onFail(err: AxiosError<any>): void {
       const { response: { status, data = {} } = {} } = err;
       if (status === 422 && 'errors' in data) this.errors.record(data.errors);
     },

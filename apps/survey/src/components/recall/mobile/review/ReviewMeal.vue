@@ -25,13 +25,13 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import ReviewFood from '@/components/recall/mobile/review/ReviewFood.vue';
 import ContextMenu from '@/components/elements/ContextMenu.vue';
 
 export type MealAction = 'edit-foods' | 'edit-time';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'ReviewMeal',
 
   components: {

@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
 import { Dictionary } from '@common/types';
-import { HttpError, HttpResponseData } from '@/types/http';
+import { AxiosError } from 'axios';
 import { EntryState } from '@/types';
 
 const mutations: MutationTree<EntryState> = {
@@ -10,6 +10,7 @@ const mutations: MutationTree<EntryState> = {
     state.addons = {};
     state.status = 'loading';
   },
+
   success(state, res) {
     state.status = 'success';
     const { data = { id: null }, refs = {}, ...addons } = res.data;
@@ -17,17 +18,12 @@ const mutations: MutationTree<EntryState> = {
     state.refs = { ...refs };
     state.addons = { ...addons };
   },
-  error(state, err: HttpError) {
-    const { response: { status, statusText, data: { message } = {} as HttpResponseData } = {} } =
-      err;
 
-    state.error = {
-      message,
-      status,
-      statusText,
-    };
+  error(state, error: AxiosError) {
+    state.error = error;
     state.status = 'error';
   },
+
   update(state, { data, refs, addons }: Partial<Record<'data' | 'refs' | 'addons', Dictionary>>) {
     if (data) state.data = { ...data };
     if (refs) state.refs = { ...refs };

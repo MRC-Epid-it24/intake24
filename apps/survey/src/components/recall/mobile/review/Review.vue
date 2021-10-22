@@ -42,14 +42,14 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import ReviewMeal from '@/components/recall/mobile/review/ReviewMeal.vue';
 import SurveyProgress from '@/components/recall/mobile/review/SurveyProgress.vue';
 // import ContextMenu from '@/components/elements/ContextMenu.vue';
 
 export type RecallAction = 'add-meal';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'Review',
 
   components: {

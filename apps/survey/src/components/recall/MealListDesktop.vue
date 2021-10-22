@@ -41,13 +41,13 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import MealItem from './MealItem.vue';
 import ContextMenu from '../elements/ContextMenu.vue';
 
 export type RecallAction = 'add-meal';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'MealList',
 
   components: {

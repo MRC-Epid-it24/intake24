@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'MealItem',
   props: {
     name: String,

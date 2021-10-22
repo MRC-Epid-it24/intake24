@@ -1,21 +1,13 @@
 import { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import Router from 'vue-router';
 import { Store } from 'vuex';
-import type { RootState } from '@/types';
+import { RootState } from '@/types/vuex';
 
 export type SubscribeCallback = (err?: AxiosError) => void;
 
-export interface HttpRequestConfig extends AxiosRequestConfig {
+export interface HttpRequestConfig<T = any> extends AxiosRequestConfig<T> {
   withErr?: boolean;
 }
-
-export interface HttpResponseData {
-  message?: string;
-  [key: string]: any;
-}
-
-export type HttpError = AxiosError<HttpResponseData>;
-export type HttpResponse = AxiosResponse<HttpResponseData>;
 
 export interface HttpClient {
   axios: AxiosInstance;

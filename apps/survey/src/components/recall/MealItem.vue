@@ -22,13 +22,13 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import ContextMenu from '../elements/ContextMenu.vue';
 import FoodItem from './FoodItem.vue';
 
 export type MealAction = 'edit-foods' | 'edit-time';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'MealItem',
 
   components: {

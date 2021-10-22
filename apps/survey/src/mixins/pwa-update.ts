@@ -9,7 +9,15 @@ export default Vue.extend({
     };
   },
 
+  computed: {
+    isPWASupported(): boolean {
+      return 'serviceWorker' in navigator;
+    },
+  },
+
   created() {
+    if (!this.isPWASupported) return;
+
     // Listen for custom event from the SW registration
     document.addEventListener('swUpdated', this.updateAvailable as EventListener, { once: true });
 

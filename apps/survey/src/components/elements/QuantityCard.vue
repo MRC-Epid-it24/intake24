@@ -50,10 +50,10 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import { QuantityValues } from '@common/prompts';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default Vue.extend({
   name: 'QuantityCard',
   // Purpose: Card that renders whole, fraction, or both, quantity counters for food items
 
