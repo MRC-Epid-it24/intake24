@@ -13,7 +13,7 @@ authenticate(router, 'user');
 router
   .route('/physical-data')
   .get(wrapAsync(userController.getPhysicalData))
-  .post(validation.physicalData, wrapAsync(userController.updatePhysicalData));
+  .post(validation.physicalData, wrapAsync(userController.setPhysicalData));
 
 router.get('/submissions', validation.submissions, wrapAsync(userController.submissions));
 

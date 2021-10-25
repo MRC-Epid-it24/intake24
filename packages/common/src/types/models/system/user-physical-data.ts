@@ -1,13 +1,8 @@
-export enum Sex {
-  FEMALE = 'f',
-  MALE = 'm',
-}
+export const sexes = ['f', 'm'] as const;
+export type Sex = typeof sexes[number];
 
-export enum WeightTarget {
-  KEEP_WEIGHT = 'keep_weight',
-  LOSE_WEIGHT = 'lose_weight',
-  GAIN_WEIGHT = 'gain_weight',
-}
+export const weightTargets = ['keep_weight', 'lose_weight', 'gain_weight'] as const;
+export type WeightTarget = typeof weightTargets[number];
 
 export type UserPhysicalDataAttributes = {
   userId: string;
@@ -15,6 +10,6 @@ export type UserPhysicalDataAttributes = {
   weightKg: number | null;
   heightCm: number | null;
   physicalActivityLevelId: number | null;
-  birthdate: Date | null;
+  birthdate: number | null;
   weightTarget: WeightTarget | null;
 };

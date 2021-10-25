@@ -50,7 +50,16 @@ export default class UserPhysicalData
     allowNull: true,
     type: DataType.DATEONLY,
   })
-  public birthdate!: Date | null;
+  get birthdate(): number | null {
+    const birthdate = this.getDataValue('birthdate') as string | null;
+
+    return birthdate && birthdate.length >= 4 ? parseInt(birthdate.slice(0, 4), 10) : null;
+  }
+
+  set birthdate(value: number | string | null) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('birthdate', typeof value === 'number' ? value.toString() : value);
+  }
 
   @Column({
     allowNull: true,

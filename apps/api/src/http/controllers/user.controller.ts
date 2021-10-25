@@ -5,7 +5,7 @@ import { UserPhysicalDataResponse } from '@common/types/http';
 import type { IoC } from '@api/ioc';
 import { Controller } from './controller';
 
-export type UserController = Controller<'submissions' | 'getPhysicalData' | 'updatePhysicalData'>;
+export type UserController = Controller<'submissions' | 'getPhysicalData' | 'setPhysicalData'>;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): UserController => {
   const submissions = async (
@@ -31,7 +31,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): UserController =
     res.json(data);
   };
 
-  const updatePhysicalData = async (
+  const setPhysicalData = async (
     req: Request,
     res: Response<UserPhysicalDataResponse>
   ): Promise<void> => {
@@ -55,6 +55,6 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): UserController =
   return {
     submissions,
     getPhysicalData,
-    updatePhysicalData,
+    setPhysicalData,
   };
 };
