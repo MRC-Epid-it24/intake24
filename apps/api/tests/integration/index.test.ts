@@ -7,6 +7,7 @@ import authentication from './authentication/index.test';
 import portionSizes from './portion-sizes/index.test';
 import subscriptions from './subscriptions/index.test';
 import surveys from './surveys/index.test';
+import user from './user/index.test';
 
 describe('API', () => {
   beforeAll(async () => {
@@ -90,9 +91,9 @@ describe('API', () => {
   });
 
   describe('User routes', () => {
-    // describe('GET /api/user/physical-data', user.getPhysicalData);
-    // describe('POST /api/user/physical-data', user.updatePhysicalData);
-    // describe('GET /api/user', user.submissions);
+    describe('GET /api/user/physical-data', user.getPhysicalData);
+    describe('POST /api/user/physical-data', user.setPhysicalData);
+    describe('GET /api/user', user.submissions);
   });
 
   describe('Admin', admin);
