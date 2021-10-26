@@ -114,6 +114,8 @@ export default Vue.extend({
 
     await this.fetchSurveyPublicInfo();
 
+    if (this.invalidSurvey) return;
+
     if (!this.loggedIn) {
       try {
         await this.$store.dispatch('auth/refresh');

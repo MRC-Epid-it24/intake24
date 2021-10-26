@@ -27,6 +27,7 @@ export default (store: Store<RootState>): VueRouter => {
       name: 'survey-dashboard',
       component: views.survey.dashboard,
       meta: { module: 'survey', title: 'recall.dynamicTitle' },
+      beforeEnter: surveyParametersGuard(store),
       props: true,
     },
     // v3-like dynamic recall logic prototype

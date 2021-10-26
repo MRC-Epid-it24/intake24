@@ -9,6 +9,7 @@ import {
 } from '@common/types';
 import { copy } from '@common/util';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
+import { AxiosError } from 'axios';
 import { SurveyState } from '@/types/vuex';
 
 const mutations: MutationTree<SurveyState> = {
@@ -18,6 +19,10 @@ const mutations: MutationTree<SurveyState> = {
 
   setUserInfo(state, data: SurveyUserInfoResponse) {
     state.user = data;
+  },
+
+  setError(state, error: AxiosError) {
+    state.error = error;
   },
 
   setState(state, data: CurrentSurveyState) {

@@ -40,6 +40,8 @@ const store = new Vuex.Store<RootState>({
 store.watch(
   (state, getters) => getters['survey/currentState'],
   (value: SurveyState, oldValue: SurveyState) => {
+    // TODO: value = oldValue => most likely due due to the fact that whole state is mutated rather when re-assigned
+    // need to capture old state correctly
     store.dispatch('survey/recordSnapshot', { value, oldValue });
   },
   { deep: true }
