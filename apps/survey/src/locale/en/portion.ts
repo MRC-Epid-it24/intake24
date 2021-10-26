@@ -106,7 +106,11 @@ const portion: LocaleMessage = {
   milkCereal: {
     label: 'Milk with your cereal',
     question: 'Did you have milk on your cereal?',
+    searchLabel: 'Please select which type of milk you had',
     foodSelectButton: `I can't find my food`,
+    validation: {
+      required: 'Please complete the sections marked with !',
+    }
   },
   pizza: {
     label: 'Please select the pizza that is closest to the size you had.',

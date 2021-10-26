@@ -117,6 +117,9 @@
       </v-row>
       <v-row>
         <v-col>
+          <v-alert color="error" v-if="hasErrors">
+            <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
+          </v-alert>
           <v-btn @click="submit()" :color="submitButtonStyle()">
             {{ $t('common.continue') }}
           </v-btn>
@@ -237,6 +240,19 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
     dataLoaded(): boolean {
       return !!Object.keys(this.foodData).length;
     },
+    isValid(): boolean {
+      if (
+        this.bowlComplete &&
+        this.asServedComplete &&
+        this.leftoverComplete &&
+        this.assoc1Complete &&
+        this.assoc2Complete
+      ) {
+        this.clearErrors();
+        return true;
+      }
+      return false;
+    },
   },
 
   mounted() {
@@ -307,28 +323,23 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
       this.setPanelOpen(-1);
     },
 
+    clearErrors() {
+      this.errors = [];
+    },
+
     submitButtonStyle() {
-      if (
-        this.bowlComplete &&
-        this.asServedComplete &&
-        this.leftoverComplete &&
-        this.assoc1Complete &&
-        this.assoc2Complete
-      ) {
+      if (this.isValid) {
         return 'success';
       }
       return '';
     },
+
     submit() {
-      if (
-        this.bowlComplete &&
-        this.asServedComplete &&
-        this.leftoverComplete &&
-        this.assoc1Complete &&
-        this.assoc2Complete
-      ) {
+      if (this.isValid) {
         // TODO Update state
         console.log('submitted');
+      } else {
+        this.errors = [this.$t('portion.milkCereal.validation.required').toString()];
       }
     },
   },
