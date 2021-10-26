@@ -70,7 +70,7 @@ const portion: LocaleMessage = {
     promptLabel:
       'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
     portionHeader: 'Step 1. Select your portion size.',
-    portionLabel: 'Using these pictures, please chose how much {food} you had.',
+    portionLabel: 'Using these pictures, please choose how much {food} you had.',
     leftoverHeader: 'Step 2. Select your leftover size.',
     leftoverQuestion: 'Did you leave some of your {food}?',
     leftoverLabel: 'Using these pictures, please choose how much {food} you left.',
