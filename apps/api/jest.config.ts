@@ -14,4 +14,5 @@ export default {
     '^.+\\.tsx?$': 'ts-jest',
   },
   testMatch: ['**/tests/(unit|integration)/**/*.test.ts'],
+  testTimeout: 10000,
 };
