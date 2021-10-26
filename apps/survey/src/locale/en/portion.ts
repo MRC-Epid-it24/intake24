@@ -3,6 +3,7 @@ import { LocaleMessage } from 'vue-i18n';
 const portion: LocaleMessage = {
   common: {
     backStep: 'Go back to previous step',
+    completeBelow: 'Please complete each of the sections below',
     lessButton: 'I had less',
     moreButton: 'I had more',
     // Maybe don't need both of these as semanitcally very similar

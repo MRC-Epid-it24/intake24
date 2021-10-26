@@ -2,14 +2,14 @@
   <v-container>
     <portion-layout :text="text" :description="description">
       <template v-slot:headerText>
-        {{ $t('portion.cereal.label') }}
+        {{ $t('portion.common.completeBelow') }}
       </template>
       <v-row>
         <v-col>
           <v-expansion-panels v-model="panelOpenId">
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                Please select the bowl that looks most like the one you used.
+                {{ $t('portion.cereal.label') }}
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="bowlComplete"></valid-invalid-icon>
                 </template>
@@ -25,7 +25,7 @@
             </v-expansion-panel>
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                Using these pictures, please choose how much chocolate hoops cereal you had.
+                {{ $t('portion.asServed.portionLabel', { food: localeDescription }) }}
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="asServedComplete"></valid-invalid-icon>
                 </template>
@@ -40,7 +40,7 @@
             </v-expansion-panel>
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                Leftovers
+                {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="leftoverComplete"></valid-invalid-icon>
                 </template>
@@ -48,9 +48,9 @@
               <v-expansion-panel-content>
                 <v-row>
                   <v-col>
-                    <p>
+                    <!-- <p>
                       {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
-                    </p>
+                    </p> -->
                     <v-btn @click="leftoverAnswer(true)">
                       {{ $t('common.confirm.yes') }}
                     </v-btn>
@@ -60,7 +60,7 @@
                   </v-col>
                 </v-row>
 
-                <v-row v-if="showLeftovers">
+                <v-row v-show="displayLeftovers">
                   <v-col>
                     <as-served-selector
                       :asServedSetId="this.cerealType"
@@ -193,19 +193,16 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
       // Foodcode: HNUT
       // Testing/prototyping variables
       // Couldn't find a mapping between imageMap objs and bowl A,B,C,D
-      bowlTypeLookup: ['A', 'B', 'C', 'D'] as string[],
+      // bowlTypeLookup: ['A', 'B', 'C', 'D'] as string[],
       cerealType: 'cereal_hoopA' as string,
-      asServedData: [] as any,
-      leftoverData: [] as any,
       bowlComplete: false as boolean,
       asServedComplete: false as boolean,
       leftoverComplete: false as boolean,
-      showLeftovers: false as boolean,
       assoc1Complete: false as boolean,
       assoc2Complete: false as boolean,
+      displayLeftovers: false as boolean,
       displayAssocPrompts: { '0': false, '1': false } as displayObject,
-      displayAssocPrompt0: false,
-      displayAssocPrompt1: false,
+
       // Testing associated prompt
       milkPromptProps: {
         text: { en: 'milk' },
@@ -237,6 +234,9 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+    dataLoaded(): boolean {
+      return !!Object.keys(this.foodData).length;
+    },
   },
 
   mounted() {
@@ -253,43 +253,27 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
       }
     },
 
-    async fetchAsServedData() {
-      try {
-        const { data } = await this.$http.get(`portion-sizes/as-served-sets/${this.cerealType}`);
-        this.asServedData = { ...data };
-      } catch (e) {
-        console.log(e);
-      }
-    },
-
-    async fetchLeftoverData() {
-      try {
-        const { data } = await this.$http.get(`portion-sizes/image-maps/${this.imageMapId}`);
-        this.leftoverData = { ...data };
-      } catch (e) {
-        console.log(e);
-      }
-    },
-
     setAssocQuestionDisplay(questionId: number, newValue: boolean) {
       // Not the most elegant solution
-      if (questionId < this.foodData.associatedFoodPrompts.length) {
-        if (questionId === 0) {
-          this.displayAssocPrompts[`0`] = newValue;
-          if (newValue === false) {
-            this.setPanelOpen(4);
-            this.assoc1Complete = true;
-          } else {
-            // Reset if previously set
-            this.assoc1Complete = false;
-          }
-        } else if (questionId === 1) {
-          this.displayAssocPrompts[`1`] = newValue;
-          if (newValue === false) {
-            this.setPanelOpen(-1);
-            this.assoc2Complete = true;
-          } else {
-            this.assoc2Complete = false;
+      if (this.dataLoaded) {
+        if (questionId < this.foodData.associatedFoodPrompts.length) {
+          if (questionId === 0) {
+            this.displayAssocPrompts[`0`] = newValue;
+            if (newValue === false) {
+              this.setPanelOpen(4);
+              this.assoc1Complete = true;
+            } else {
+              // Reset if previously set
+              this.assoc1Complete = false;
+            }
+          } else if (questionId === 1) {
+            this.displayAssocPrompts[`1`] = newValue;
+            if (newValue === false) {
+              this.setPanelOpen(-1);
+              this.assoc2Complete = true;
+            } else {
+              this.assoc2Complete = false;
+            }
           }
         }
       }
@@ -297,7 +281,7 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
 
     leftoverAnswer(value: boolean) {
       if (value) {
-        this.showLeftovers = true;
+        this.displayLeftovers = true;
       } else {
         this.leftoverComplete = true;
         this.setPanelOpen(3);
@@ -305,7 +289,6 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
     },
 
     selectBowlType(status: ImageMapSelectorEmit) {
-      console.log(status);
       this.bowlTypeSelected = status.selectedIdx;
       this.bowlComplete = true;
       this.setPanelOpen(1);
@@ -325,13 +308,26 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
     },
 
     submitButtonStyle() {
-      if (this.bowlComplete && this.asServedComplete && this.leftoverComplete) {
+      if (
+        this.bowlComplete &&
+        this.asServedComplete &&
+        this.leftoverComplete &&
+        this.assoc1Complete &&
+        this.assoc2Complete
+      ) {
         return 'success';
       }
       return '';
     },
     submit() {
-      if (this.bowlComplete && this.asServedComplete && this.leftoverComplete) {
+      if (
+        this.bowlComplete &&
+        this.asServedComplete &&
+        this.leftoverComplete &&
+        this.assoc1Complete &&
+        this.assoc2Complete
+      ) {
+        // TODO Update state
         console.log('submitted');
       }
     },
