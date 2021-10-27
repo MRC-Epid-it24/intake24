@@ -73,7 +73,7 @@
             <!-- Assoc prompt 1 -->
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                {{ foodData.associatedFoodPrompts[0].promptText }}
+                {{ assocPromptText0 }}
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="assoc1Complete"></valid-invalid-icon>
                 </template>
@@ -94,7 +94,7 @@
             <!-- Assoc prompt 2 -->
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                {{ foodData.associatedFoodPrompts[1].promptText }}
+                {{ assocPromptText1 }}
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="assoc2Complete"></valid-invalid-icon>
                 </template>
@@ -233,6 +233,18 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
   computed: {
     localeDescription(): string | null {
       return this.getLocaleContent(this.description);
+    },
+    assocPromptText0(): string | null {
+      if (this.dataLoaded) {
+        return this.foodData.associatedFoodPrompts[0].promptText;
+      }
+      return null;
+    },
+    assocPromptText1(): string | null {
+      if (this.dataLoaded) {
+        return this.foodData.associatedFoodPrompts[1].promptText;
+      }
+      return null;
     },
     hasErrors(): boolean {
       return !!this.errors.length;
