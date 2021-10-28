@@ -51,10 +51,16 @@
                     <!-- <p>
                       {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
                     </p> -->
-                    <v-btn @click="leftoverAnswer(true)">
+                    <v-btn
+                      @click="leftoverAnswer(true)"
+                      :color="toggleAnswersStyle.leftover === true ? 'success' : ''"
+                    >
                       {{ $t('common.confirm.yes') }}
                     </v-btn>
-                    <v-btn @click="leftoverAnswer(false)">
+                    <v-btn
+                      @click="leftoverAnswer(false)"
+                      :color="toggleAnswersStyle.leftover === false ? 'success' : ''"
+                    >
                       {{ $t('common.confirm.no') }}
                     </v-btn>
                   </v-col>
@@ -73,42 +79,56 @@
             <!-- Assoc prompt 1 -->
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                {{ assocPromptText0 }}
+                {{ assocPrompt0.promptText }}
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="assoc1Complete"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-btn @click="setAssocQuestionDisplay(0, true)">
+                <v-btn
+                  @click="setAssocQuestionDisplay(0, true)"
+                  :color="toggleAnswersStyle.assoc1 === true ? 'success' : ''"
+                >
                   {{ $t('common.confirm.yes') }}
                 </v-btn>
-                <v-btn @click="setAssocQuestionDisplay(0, false)">
+                <v-btn
+                  @click="setAssocQuestionDisplay(0, false)"
+                  :color="toggleAnswersStyle.assoc1 === false ? 'success' : ''"
+                >
                   {{ $t('common.confirm.no') }}
                 </v-btn>
                 <associated-food-panel
                   :promptProps="milkPromptProps"
                   v-show="displayAssocPrompts['0']"
+                  @associated-done="handleAssociatedPanelAnswer($event, 0)"
                 ></associated-food-panel>
               </v-expansion-panel-content>
             </v-expansion-panel>
             <!-- Assoc prompt 2 -->
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                {{ assocPromptText1 }}
+                {{ assocPrompt1.promptText }}
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="assoc2Complete"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-btn @click="setAssocQuestionDisplay(1, true)">
+                <v-btn
+                  @click="setAssocQuestionDisplay(1, true)"
+                  :color="toggleAnswersStyle.assoc2 === true ? 'success' : ''"
+                >
                   {{ $t('common.confirm.yes') }}
                 </v-btn>
-                <v-btn @click="setAssocQuestionDisplay(1, false)">
+                <v-btn
+                  @click="setAssocQuestionDisplay(1, false)"
+                  :color="toggleAnswersStyle.assoc2 === false ? 'success' : ''"
+                >
                   {{ $t('common.confirm.no') }}
                 </v-btn>
                 <associated-food-panel
-                  :promptProps="milkPromptProps"
+                  :promptProps="sugarPromptProps"
                   v-show="displayAssocPrompts['1']"
+                  @associated-done="handleAssociatedPanelAnswer($event, 1)"
                 ></associated-food-panel>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -137,18 +157,17 @@ import {
   cerealPromptDefaultProps,
   AssociatedFoodsPanelProps,
   ImageMapSelectorEmit,
+  DisplayAssocPromptControl,
+  ToggleAnswersStyle
 } from '@common/prompts';
 import { LocaleTranslation } from '@common/types';
-import { UserFoodData } from '@common/types/http';
+import { UserFoodData, UserAssociatedFoodPrompt } from '@common/types/http';
 import AsServedSelector from '@/components/prompts/portion/selectors/AsServedSelector.vue';
 import ImageMapSelector from '@/components/prompts/portion/selectors/ImageMapSelector.vue';
 import AssociatedFoodPanel from '@/components/prompts/portion/AssociatedFoodPanel.vue';
 import BaseExpansionPortion, { ExpansionPortion } from './BaseExpansionPortion';
 
-interface displayObject {
-  '0': boolean;
-  '1': boolean;
-}
+
 // declare function greet(setting: GreetingSettings): void;
 
 export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
@@ -204,28 +223,21 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
       assoc1Complete: false as boolean,
       assoc2Complete: false as boolean,
       displayLeftovers: false as boolean,
-      displayAssocPrompts: { '0': false, '1': false } as displayObject,
+      displayAssocPrompts: { '0': false, '1': false } as DisplayAssocPromptControl,
+      toggleAnswersStyle: {
+        leftover: null,
+        assoc1: null,
+        assoc2: null,
+      } as ToggleAnswersStyle,
 
       // Testing associated prompt
       milkPromptProps: {
-        text: { en: 'milk' },
-        description: { en: 'Did you have milk?' },
-        conditions: [],
-        validation: {
-          required: false,
-          message: { en: 'error' },
-        },
         expansionPanelTotal: 3,
+        assocPromptData: null,
       } as AssociatedFoodsPanelProps,
       sugarPromptProps: {
-        text: { en: 'milk' },
-        description: { en: 'Did you have milk?' },
-        conditions: [],
-        validation: {
-          required: false,
-          message: { en: 'error' },
-        },
         expansionPanelTotal: 3,
+        assocPromptData: null,
       } as AssociatedFoodsPanelProps,
     };
   },
@@ -234,17 +246,17 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
     localeDescription(): string | null {
       return this.getLocaleContent(this.description);
     },
-    assocPromptText0(): string | null {
+    assocPrompt0(): UserAssociatedFoodPrompt | string {
       if (this.dataLoaded) {
-        return this.foodData.associatedFoodPrompts[0].promptText;
+        return this.foodData.associatedFoodPrompts[0];
       }
-      return null;
+      return '';
     },
-    assocPromptText1(): string | null {
+    assocPrompt1(): UserAssociatedFoodPrompt | string {
       if (this.dataLoaded) {
-        return this.foodData.associatedFoodPrompts[1].promptText;
+        return this.foodData.associatedFoodPrompts[1];
       }
-      return null;
+      return '';
     },
     hasErrors(): boolean {
       return !!this.errors.length;
@@ -276,6 +288,10 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
       try {
         const { data } = await this.$http.get(`foods/${this.localeTEMP}/${this.foodCode}`);
         this.foodData = { ...data };
+        // eslint-disable-next-line prefer-destructuring
+        this.milkPromptProps.assocPromptData = this.foodData.associatedFoodPrompts[0];
+        // eslint-disable-next-line prefer-destructuring
+        this.sugarPromptProps.assocPromptData = this.foodData.associatedFoodPrompts[1];
       } catch (e) {
         console.log(e);
       }
@@ -290,29 +306,69 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
             if (newValue === false) {
               this.setPanelOpen(4);
               this.assoc1Complete = true;
+              this.setAnswerToggles('assoc1', false);
             } else {
               // Reset if previously set
               this.assoc1Complete = false;
+              this.setAnswerToggles('assoc1', true);
             }
           } else if (questionId === 1) {
             this.displayAssocPrompts[`1`] = newValue;
             if (newValue === false) {
               this.setPanelOpen(-1);
               this.assoc2Complete = true;
+              this.setAnswerToggles('assoc2', false);
             } else {
               this.assoc2Complete = false;
+              this.setAnswerToggles('assoc2', true);
             }
           }
         }
       }
     },
 
+    setAnswerToggles(toggleItem: string, value: boolean) {
+      // Handle answers re: optional prompts (leftovers, associated food)
+      // Used to control styling of yes / no buttons
+      switch (toggleItem) {
+        case 'leftover':
+          this.toggleAnswersStyle.leftover = value;
+          break;
+        case 'assoc1':
+          this.toggleAnswersStyle.assoc1 = value;
+          break;
+        case 'assoc2':
+          this.toggleAnswersStyle.assoc2 = value;
+          break;
+        default:
+          break;
+      }
+    },
+
     leftoverAnswer(value: boolean) {
       if (value) {
         this.displayLeftovers = true;
+        this.leftoverComplete = false;
+        this.toggleAnswersStyle.leftover = true;
       } else {
         this.leftoverComplete = true;
+        this.toggleAnswersStyle.leftover = false;
         this.setPanelOpen(3);
+      }
+    },
+
+    handleAssociatedPanelAnswer(value: any, promptNo: number) {
+      switch (promptNo) {
+        case 0:
+          this.assoc1Complete = true;
+          this.setPanelOpen(4);
+          break;
+        case 1:
+          this.assoc2Complete = true;
+          this.setPanelOpen(-1);
+          break;
+        default:
+          break;
       }
     },
 

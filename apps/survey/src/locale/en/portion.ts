@@ -110,7 +110,7 @@ const portion: LocaleMessage = {
     foodSelectButton: `I can't find my food`,
     validation: {
       required: 'Please complete the sections marked with !',
-    }
+    },
   },
   pizza: {
     label: 'Please select the pizza that is closest to the size you had.',
@@ -124,6 +124,9 @@ const portion: LocaleMessage = {
   },
   directWeight: {
     label: 'Please enter how much you had.',
+  },
+  associatedFoods: {
+    searchLabel: 'Please select the {food} you had',
   },
 };
 

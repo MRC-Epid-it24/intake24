@@ -1,4 +1,5 @@
 import { copy } from '@common/util';
+import { UserAssociatedFoodPrompt } from '@common/types/http';
 import type { PromptQuestion, QuantityValues } from '..';
 import { basePromptProps, ValidatedPromptProps } from './base';
 
@@ -20,8 +21,9 @@ export type MilkHotDrinkPromptProps = ValidatedPromptProps;
 
 export type DirectWeightPromptProps = ValidatedPromptProps;
 
-export interface AssociatedFoodsPanelProps extends ValidatedPromptProps {
+export interface AssociatedFoodsPanelProps {
   expansionPanelTotal: number;
+  assocPromptData: UserAssociatedFoodPrompt | null;
 }
 
 export interface ImageMapSelectorProps {
@@ -119,14 +121,8 @@ export const leftoverQuestionPromptDefaultProps: LeftoverQuestionPromptProps = {
 };
 
 export const associatedFoodPanelDefaultProps: AssociatedFoodsPanelProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  validation: {
-    required: false,
-    message: { en: null },
-  },
   expansionPanelTotal: 3,
+  assocPromptData: null,
 };
 
 export const imageMapSelectorDefaultProps: ImageMapSelectorProps = {

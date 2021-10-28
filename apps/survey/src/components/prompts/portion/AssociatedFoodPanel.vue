@@ -4,21 +4,17 @@
       <v-expansion-panels v-model="panelOpenId">
         <v-expansion-panel>
           <v-expansion-panel-header disable-icon-rotate>
-            Please select the {associated food} you had:
+            {{ $t('portion.common.completeBelow') }}
             <template v-slot:actions>
-              <valid-invalid-icon></valid-invalid-icon>
+              <valid-invalid-icon :valid="foodSearchComplete"></valid-invalid-icon>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <h4>Foods in this category:</h4>
-            <v-list>
-              <v-list-item @click="selectFood('almond milk')">Placeholder items</v-list-item>
-              <v-list-item @click="selectFood('almond milk')">Almond milk</v-list-item>
-              <v-list-item @click="selectFood('hot milk')">Hot milk, semi-skimmed</v-list-item>
-              <v-list-item @click="selectFood('hot milk')">Hot milk, whole</v-list-item>
-              <v-list-item @click="selectFood('milk')">Milk, semi-skimmed</v-list-item>
-              <v-list-item @click="selectFood('milk')">Milk, skimmed</v-list-item>
-            </v-list>
+            <food-search-prompt
+              :prompt-props="searchTestPromptProps"
+              :initial-search-term="genericName"
+              @food-selected="selectFood($event)"
+            ></food-search-prompt>
             <v-btn>{{ $t('portion.milkCereal.foodSelectButton') }}</v-btn>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -27,30 +23,16 @@
           <v-expansion-panel-header disable-icon-rotate>
             Option select portion method (if applicable)
             <template v-slot:actions>
-              <valid-invalid-icon></valid-invalid-icon>
+              <valid-invalid-icon :valid="portionMethodSelected"></valid-invalid-icon>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-row>
-              <v-col class="col-6">
-                <v-card @click="selectPortionMethod('glasses')">
-                  <v-img
-                    src="https://it24-dev.mrc-epid.cam.ac.uk/images/portion/gsoftdrnk.jpg"
-                  ></v-img>
-                  <v-card-title>In glasses (placeholders)</v-card-title>
-                  <v-card-actions></v-card-actions>
-                </v-card>
-              </v-col>
-              <v-col class="col-6">
-                <v-card @click="selectPortionMethod('bowls')">
-                  <v-img
-                    src="https://it24-dev.mrc-epid.cam.ac.uk/images/cereal/milkbowlA.jpg"
-                  ></v-img>
-                  <v-card-title>In bowls</v-card-title>
-                  <v-card-actions></v-card-actions>
-                </v-card>
-              </v-col>
-            </v-row>
+            <portion-size-option-prompt
+              :promptProps="portionOptionProps"
+              :foodName="selectedFoodData.localDescription"
+              :availableMethods="selectedFoodData.portionSizeMethods"
+              @option-selected="selectPortionMethod($event)"
+            ></portion-size-option-prompt>
           </v-expansion-panel-content>
         </v-expansion-panel>
 
@@ -58,13 +40,11 @@
           <v-expansion-panel-header disable-icon-rotate>
             Select how much {associated food} you had:
             <template v-slot:actions>
-              <valid-invalid-icon></valid-invalid-icon>
+              <valid-invalid-icon :valid="portionSelected"></valid-invalid-icon>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <p>Please choose the level your milk came up to (without cereal).</p>
-            <!-- Portion estimation - this will display the asServed gallery for the selected milk, using the bowl reference it was passed -->
-            <v-img :src="imageMapData.baseImageUrl" @click="selectPortion()"></v-img>
+            {{ selectedMethodData }}
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -75,11 +55,25 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import merge from 'deepmerge';
-import { AssociatedFoodsPanelProps, associatedFoodPanelDefaultProps } from '@common/prompts';
+import { UserFoodData, UserPortionSizeMethod } from '@common/types/http';
+import {
+  AssociatedFoodsPanelProps,
+  associatedFoodPanelDefaultProps,
+  FoodSearchPromptProps,
+  BasePromptProps,
+} from '@common/prompts';
+import { LocaleTranslation } from '@common/types';
 import BaseExpansionPortion, { ExpansionPortion } from './BaseExpansionPortion';
+import FoodSearchPrompt from '@/components/prompts/standard/FoodSearchPrompt.vue';
+import PortionSizeOptionPrompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
 
 export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
   name: 'AssociatedFoodPanel',
+
+  components: {
+    FoodSearchPrompt,
+    PortionSizeOptionPrompt,
+  },
 
   mixins: [BaseExpansionPortion],
 
@@ -88,21 +82,22 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
     promptProps: {
       type: Object as () => AssociatedFoodsPanelProps,
     },
+    // assocPromptData: {
+    //   type: Object as () => UserAssociatedFoodPrompt,
+    // },
   },
 
   data() {
     return {
       ...merge(associatedFoodPanelDefaultProps, this.promptProps),
       errors: [] as string[],
-      // expansionPanelTotal: 2 as number,
       validPanels: [] as any,
       // Below are rough/testing vars to control UI prototype
       bowlType: 'A' as string, // For testing until food linking
-      foodSelected: false as boolean,
-      foodValue: '' as string,
-      foodCode: 'SMLK' as string,
-      foodData: [] as any,
+      foodSearchComplete: false as boolean,
+      selectedFoodData: {} as UserFoodData,
       portionMethodSelected: false as boolean,
+      selectedMethodData: {} as UserPortionSizeMethod,
       portionMethodValue: '' as string,
       portionSelected: false as boolean,
       portionValue: '' as string,
@@ -111,40 +106,56 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
       imageMapLoaded: false as boolean,
       // If MCRL (milk_in_cereal) associated food category is triggered, we will wind up here
       // Associated_foods contains `text` field which is the question
+      // Testing props for the food search
+      searchTestPromptProps: {
+        allowBrowsing: true,
+        dualLanguage: true,
+        text: { en: '' },
+        description: { en: '' },
+        conditions: [],
+      } as FoodSearchPromptProps,
+      assocFoodDescription: '',
+      portionOptionProps: {
+        text: { en: ''},
+        description: { en: ''},
+      } as BasePromptProps,
     };
   },
 
   computed: {
     localeDescription(): string | null {
-      return this.getLocaleContent(this.description);
+      // return this.getLocaleContent(this.description);
+      return 'computed locale description TODO';
     },
     hasErrors(): boolean {
       return !!this.errors.length;
+    },
+    genericName(): string | null {
+      if (this.promptProps.assocPromptData) {
+        return this.promptProps.assocPromptData.genericName;
+      }
+      return null;
+    },
+    isValid(): boolean {
+      if (this.foodSearchComplete && this.portionMethodSelected && this.portionSelected) {
+        return true;
+      }
+      return false;
     },
   },
 
   mounted() {
     // this.validPanels = new Array<boolean>(this.expansionPanelTotal);
+    if (this.promptProps.assocPromptData) {
+      // Note: this is not translation safe as hard encoding the locale here
+      const promptTitle: LocaleTranslation = {
+        en: this.$t('portion.associatedFoods.searchLabel', { food: this.genericName }) as string,
+      };
+      this.searchTestPromptProps.text = promptTitle;
+    }
   },
 
   methods: {
-    // TODO: fix this as no milk will be false and not validate
-    // displayQuestionStyle(button: string) {
-    //   if (button === 'yes' && this.displayQuestions) {
-    //     return 'success';
-    //   }
-    //   return '';
-    // },
-    async fetchFoodData() {
-      const locale = 'en_GB';
-      try {
-        const { data } = await this.$http.get(`foods/image-maps/${locale}/${this.foodCode}`);
-        this.foodData = { ...data };
-        // this.imageMapLoaded = true;
-      } catch (e) {
-        console.log(e);
-      }
-    },
     async fetchImageMapData() {
       try {
         const { data } = await this.$http.get(`portion-sizes/image-maps/${this.imageMapId}`);
@@ -157,15 +168,17 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
     // setDisplayQuestions(value: boolean) {
     //   this.displayQuestions = value;
     // },
-    selectFood(value: string) {
-      this.foodValue = value;
-      this.foodSelected = true;
+    selectFood(value: UserFoodData) {
+      this.selectedFoodData = value;
+      this.foodSearchComplete = true;
       this.setPanelOpen(1);
       this.submit();
     },
-    selectPortionMethod(value: string) {
+    selectPortionMethod(value: number) {
       this.portionMethodSelected = true;
-      this.portionMethodValue = value;
+      // PortionOption emits the # of option selected. Look this up then pass to portion method
+      console.log(value, this.selectedFoodData.portionSizeMethods[value]);
+      this.selectedMethodData = this.selectedFoodData.portionSizeMethods[value];
       this.setPanelOpen(2);
       if (!this.imageMapLoaded) {
         this.fetchImageMapData();
@@ -178,8 +191,8 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
       this.submit();
     },
     submit() {
-      if (this.foodSelected && this.portionMethodSelected && this.portionSelected) {
-        console.log('submitted');
+      if (this.isValid) {
+        this.$emit('associated-done');
       }
     },
   },

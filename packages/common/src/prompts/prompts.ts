@@ -55,3 +55,13 @@ export interface QuantityValues {
   whole: number;
   fraction: number;
 }
+
+export interface DisplayAssocPromptControl {
+  '0': boolean;
+  '1': boolean;
+}
+export interface ToggleAnswersStyle {
+  leftover: boolean | null;
+  assoc1: boolean | null;
+  assoc2: boolean | null;
+}
