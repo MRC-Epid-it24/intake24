@@ -22,6 +22,7 @@ import chunk from 'lodash/chunk';
 import { VImg } from 'vuetify/lib';
 import { ImageMapSelectorProps, imageMapSelectorDefaultProps } from '@common/prompts';
 import { ImageMapResponse } from '@common/types/http';
+import { ImageMapEmit } from '@common/types/http/foods';
 import localeContent from '@/components/mixins/localeContent';
 import BasePortion, { Portion } from '../BasePortion';
 
@@ -114,7 +115,7 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
       this.selectedIdx = idx;
       this.$emit('image-map-selector-submit', {
         selectedIdx: this.selectedIdx,
-      });
+      } as ImageMapEmit);
     },
   },
 });

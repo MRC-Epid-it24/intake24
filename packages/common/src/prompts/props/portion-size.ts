@@ -15,7 +15,12 @@ export type CerealPromptProps = ValidatedPromptProps;
 
 export type MilkCerealPromptProps = ValidatedPromptProps;
 
-export type PizzaPromptProps = ValidatedPromptProps;
+// export type PizzaPromptProps = ValidatedPromptProps;
+export interface PizzaPromptProps extends ValidatedPromptProps {
+  typeImageMapId: string;
+  thicknessImageMapId: string;
+  slicePrefix: string;
+}
 
 export type MilkHotDrinkPromptProps = ValidatedPromptProps;
 
@@ -88,6 +93,9 @@ export const pizzaPromptDefaultProps: PizzaPromptProps = {
     required: false,
     message: { en: null },
   },
+  typeImageMapId: 'gpizza',
+  thicknessImageMapId: 'gpthick',
+  slicePrefix: 'gpiz',
 };
 
 export const milkHotDrinkPromptDefaultProps: MilkHotDrinkPromptProps = {
