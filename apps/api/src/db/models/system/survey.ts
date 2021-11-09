@@ -230,7 +230,12 @@ export default class Survey
   @BelongsTo(() => Scheme, 'schemeId')
   public scheme?: Scheme;
 
-  @HasMany(() => UserSurveyAlias, 'surveyId')
+  @HasMany(() => UserSurveyAlias, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+    hooks: true,
+    foreignKey: 'surveyId',
+  })
   public respondents?: UserSurveyAlias[];
 
   @HasMany(() => UserSession, 'surveyId')
