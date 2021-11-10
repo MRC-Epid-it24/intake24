@@ -70,20 +70,6 @@ const user = (): CreateUserRequest => {
   };
 };
 
-const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInput> => {
-  const id = asServedSetId ?? nanoid(32);
-  const originalname = `${id}.jpg`;
-
-  const filePath = await downloadImage('https://picsum.photos/1200/800.jpg', originalname);
-
-  return {
-    id,
-    description: `${id}_description`,
-    file: { originalname: `${id}.jpg`, path: filePath },
-    uploader: 'admin',
-  };
-};
-
 const language = (): CreateLanguageRequest => {
   const id = faker.address.countryCode();
   const englishName = faker.address.country();

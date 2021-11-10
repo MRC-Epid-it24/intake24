@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { JobEntry } from '@common/types/http/admin';
 import { suite, setPermission } from '@tests/integration/helpers';
+import { sleep } from '@api/util';
 
 export default (): void => {
   const baseUrl = '/api/admin/jobs';
@@ -37,10 +38,6 @@ export default (): void => {
 
     // wait until the job is finished
     let waiting = true;
-
-    const sleep = (ms: number) => {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    };
 
     while (waiting) {
       const res = await request(suite.app)

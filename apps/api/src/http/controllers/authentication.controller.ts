@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import ms from 'ms';
 import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http';
 import { UnauthorizedError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';

@@ -1,5 +1,3 @@
-import { FoodDataService } from '@api/services';
-import { DbInterface } from '@api/db';
 import InvalidIdError from '@api/services/foods/invalid-id-error';
 import { getParentLocale } from '@api/services/foods/common';
 
@@ -8,11 +6,8 @@ import createLocales from './test-data-locales';
 
 export default () => {
   describe('Helpers', () => {
-    let databases: DbInterface;
-    let service: FoodDataService;
-
     beforeAll(async () => {
-      databases = await initDatabases();
+      await initDatabases();
       await createLocales();
     });
 

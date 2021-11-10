@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import { Column, DataType, HasMany, Scopes, Table, BelongsTo } from 'sequelize-typescript';
 import { LocaleAttributes, LocaleCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';

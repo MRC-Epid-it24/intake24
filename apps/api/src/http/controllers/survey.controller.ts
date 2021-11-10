@@ -44,7 +44,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
 
   // TODO: implement
   const createUser = async (req: Request, res: Response): Promise<void> => {
-    const { surveyId } = req.params;
+    // const { surveyId } = req.params;
 
     res.json();
   };

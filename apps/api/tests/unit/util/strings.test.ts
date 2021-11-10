@@ -16,10 +16,6 @@ describe('String utilities', () => {
   });
 
   describe('generateToken', () => {
-    it('should produce 21-token with defaults', () => {
-      expect(generateToken()).toHaveLength(21);
-    });
-
     it('should produce token of defined ', () => {
       expect(generateToken(10)).toHaveLength(10);
     });

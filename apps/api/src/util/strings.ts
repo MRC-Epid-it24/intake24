@@ -21,11 +21,11 @@ export const isUrlAbsolute = (url: string, options?: validator.IsURLOptions): bo
 /**
  * Generate random token with optional custom size / alphabet
  *
- * @param {number} [size=21]
+ * @param {number} size
  * @param {(string | null)} [alphabet]
  * @returns {string}
  */
-export const generateToken = (size = 21, alphabet?: string | null): string => {
+export const generateToken = (size: number, alphabet?: string | null): string => {
   if (!alphabet) return nanoid(size);
 
   return customAlphabet(alphabet, size)();

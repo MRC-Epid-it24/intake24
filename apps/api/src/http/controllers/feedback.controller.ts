@@ -6,7 +6,6 @@ import {
   HenryCoefficientsResponse,
   HenryCoefficient,
 } from '@common/types/http';
-import { Sex } from '@common/types/models';
 import { Controller } from './controller';
 
 export type FeedbackController = Controller<
