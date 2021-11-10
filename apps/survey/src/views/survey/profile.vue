@@ -55,7 +55,7 @@ type LanguageOption = {
 };
 
 export default Vue.extend({
-  name: 'Profile',
+  name: 'SurveyUserProfile',
 
   data() {
     return {

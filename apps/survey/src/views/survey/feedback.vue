@@ -93,12 +93,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { HenryCoefficient, WeightTarget } from '@common/types/http';
+import { HenryCoefficient, WeightTargetCoefficient } from '@common/feedback';
 import { PhysicalActivityLevelAttributes, UserPhysicalDataAttributes } from '@common/types/models';
 import { feedbackService, userService } from '@/services';
 
 export default Vue.extend({
-  name: 'Feedback',
+  name: 'SurveyFeedback',
 
   data() {
     return {
@@ -107,7 +107,7 @@ export default Vue.extend({
       physicalData: null as null | UserPhysicalDataAttributes,
       henryCoefficients: [] as HenryCoefficient[],
       physicalActivityLevels: [] as PhysicalActivityLevelAttributes[],
-      weightTargets: [] as WeightTarget[],
+      weightTargets: [] as WeightTargetCoefficient[],
       genders: [
         { text: 'Male', value: 'm' },
         { text: 'Female', value: 'f' },

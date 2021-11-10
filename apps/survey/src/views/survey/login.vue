@@ -71,7 +71,7 @@ import { Errors } from '@common/util';
 import surveySvc from '@/services/survey.service';
 
 export default Vue.extend({
-  name: 'Login',
+  name: 'SurveyLogin',
 
   props: {
     surveyId: {
