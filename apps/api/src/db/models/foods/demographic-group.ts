@@ -4,7 +4,7 @@ import {
   DemographicGroupCreationAttributes,
   NutrientRuleType,
 } from '@common/types/models/foods';
-import { Sex } from '@common/types/models';
+import { Sex } from '@common/feedback';
 import BaseModel from '../model';
 import { DemographicGroupScaleSector, NutrientType, PhysicalActivityLevel } from '.';
 

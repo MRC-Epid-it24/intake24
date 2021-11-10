@@ -4,6 +4,7 @@ import { suite } from '@tests/integration/helpers';
 // import root from './root.test';
 import admin from './admin/index.test';
 import authentication from './authentication/index.test';
+import feedback from './feedback/index.test';
 import portionSizes from './portion-sizes/index.test';
 import subscriptions from './subscriptions/index.test';
 import surveys from './surveys/index.test';
@@ -58,9 +59,9 @@ describe('API', () => {
   });
 
   describe('Feedback', () => {
-    // describe('GET /api/feedback/henry-coefficients', feedback.henryCoefficients);
-    // describe('GET /api/feedback/physical-activity-levels', feedback.physicalActivityLevels);
-    // describe('GET /api/feedback/weight-targets', feedback.weightTargets);
+    describe('GET /api/feedback/henry-coefficients', feedback.henryCoefficients);
+    describe('GET /api/feedback/physical-activity-levels', feedback.physicalActivityLevels);
+    describe('GET /api/feedback/weight-targets', feedback.weightTargets);
   });
 
   describe('Surveys', () => {

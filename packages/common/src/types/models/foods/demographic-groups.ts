@@ -1,4 +1,5 @@
-import type { OmitAndOptional, Sex } from '..';
+import { Sex } from '../../../feedback';
+import type { OmitAndOptional } from '..';
 
 export enum NutrientRuleType {
   PERCENTAGE_OF_ENERGY = 'percentage_of_energy',

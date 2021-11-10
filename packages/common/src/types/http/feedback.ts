@@ -1,21 +1,8 @@
-import { PhysicalActivityLevelAttributes, Sex } from '../models';
-
-export type HenryCoefficient = {
-  sex: Sex;
-  ageRange: [number, number];
-  weightCoefficient: number;
-  heightCoefficient: number;
-  constant: number;
-};
+import { HenryCoefficient, WeightTargetCoefficient } from '../../feedback';
+import { PhysicalActivityLevelAttributes } from '../models';
 
 export type HenryCoefficientsResponse = HenryCoefficient[];
 
 export type PhysicalActivityLevelsResponse = PhysicalActivityLevelAttributes[];
 
-export type WeightTarget = {
-  id: string;
-  name: string;
-  coefficient: number;
-};
-
-export type WeightTargetsResponse = WeightTarget[];
+export type WeightTargetsResponse = WeightTargetCoefficient[];

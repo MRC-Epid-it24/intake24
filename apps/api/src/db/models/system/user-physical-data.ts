@@ -1,5 +1,6 @@
 import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
-import { Sex, WeightTarget, UserPhysicalDataAttributes } from '@common/types/models';
+import { UserPhysicalDataAttributes } from '@common/types/models';
+import { Sex, WeightTarget } from '@common/feedback';
 import BaseModel from '../model';
 import { User } from '.';
 
