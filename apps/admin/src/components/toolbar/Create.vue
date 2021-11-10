@@ -13,7 +13,7 @@ import Vue from 'vue';
 import ActionMixin from './ActionMixin';
 
 export default Vue.extend({
-  name: 'Create',
+  name: 'CreateAction',
 
   mixins: [ActionMixin],
 });

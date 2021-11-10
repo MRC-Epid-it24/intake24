@@ -7,7 +7,7 @@ import mapEntry from './mapEntry';
 import mapRefs from './mapRefs';
 
 export default (Vue as VueConstructor<Vue & DetailMixin>).extend({
-  name: 'Show',
+  name: 'DetailMixin',
 
   components: { Layout },
 

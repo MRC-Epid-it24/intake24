@@ -16,7 +16,7 @@ import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import ActionMixin from './ActionMixin';
 
 export default Vue.extend({
-  name: 'Delete',
+  name: 'DeleteAction',
 
   components: { ConfirmDialog },
 

@@ -21,6 +21,7 @@ module.exports = {
     'no-restricted-globals': 'warn',
     'no-restricted-syntax': 'off',
     'no-shadow': 'off',
+    'vue/multi-word-component-names': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-shadow': 'error',
     '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],

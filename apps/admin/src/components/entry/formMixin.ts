@@ -14,7 +14,7 @@ import mapEntry from './mapEntry';
 import mapRefs from './mapRefs';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
-  name: 'Form',
+  name: 'FormMixin',
 
   components: { Layout, SubmitFooter },
 

@@ -14,7 +14,7 @@ import Vue from 'vue';
 import ActionMixin from './ActionMixin';
 
 export default Vue.extend({
-  name: 'Edit',
+  name: 'EditAction',
 
   mixins: [ActionMixin],
 });

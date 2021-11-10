@@ -26,7 +26,7 @@ interface Actionable {
 }
 
 export default (Vue as VueConstructor<Vue & Actionable>).extend({
-  name: 'Actionbar',
+  name: 'ActionBar',
 
   components: {
     Delete,

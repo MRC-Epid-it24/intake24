@@ -84,12 +84,12 @@
           </v-card>
         </v-dialog>
       </template>
-      <template v-slot:[`item.permissions`]="{ item }" class="text-right">
+      <template v-slot:[`item.permissions`]="{ item }">
         {{
           item.permissions.map((permission) => permission.name.replace(`${id}/`, '')).join(' | ')
         }}
       </template>
-      <template v-slot:[`item.action`]="{ item }" class="text-right">
+      <template v-slot:[`item.action`]="{ item }">
         <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
           <v-icon dark>$edit</v-icon>
         </v-btn>

@@ -41,7 +41,7 @@ interface Actionable {
 }
 
 export default (Vue as VueConstructor<Vue & Actionable>).extend({
-  name: 'Toolbar',
+  name: 'ToolBar',
 
   components: {
     ConfirmDialog,

@@ -14,7 +14,7 @@ import Vue from 'vue';
 import ActionMixin from './ActionMixin';
 
 export default Vue.extend({
-  name: 'Read',
+  name: 'ReadAction',
 
   mixins: [ActionMixin],
 });

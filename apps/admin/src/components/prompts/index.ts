@@ -54,7 +54,8 @@ export const promptSettings: PromptSettings = {
   },
   'submit-prompt': {
     tabs: [...baseTab],
-    sections: ['submission'],
+    // sections: ['submission'],
+    sections: [...allSection],
   },
   'redirect-prompt': {
     tabs: [...baseTab, 'options'],

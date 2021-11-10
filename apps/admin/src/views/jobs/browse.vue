@@ -3,7 +3,7 @@
     <template v-slot:[`item.user`]="{ item }">
       {{ item.user ? item.user.email : null }}
     </template>
-    <template v-slot:[`item.successful`]="{ item }" class="d-flex">
+    <template v-slot:[`item.successful`]="{ item }">
       <v-icon v-if="item.successful" color="success">fa-check-circle</v-icon>
       <v-icon v-else color="error">fa-times-circle</v-icon>
     </template>

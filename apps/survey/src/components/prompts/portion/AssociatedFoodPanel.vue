@@ -116,8 +116,8 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
       } as FoodSearchPromptProps,
       assocFoodDescription: '',
       portionOptionProps: {
-        text: { en: ''},
-        description: { en: ''},
+        text: { en: '' },
+        description: { en: '' },
       } as BasePromptProps,
     };
   },

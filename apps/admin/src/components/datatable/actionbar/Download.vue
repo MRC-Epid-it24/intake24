@@ -16,7 +16,7 @@ import { mapGetters } from 'vuex';
 import ActionMixin from './ActionMixin';
 
 export default Vue.extend({
-  name: 'Download',
+  name: 'DownloadAction',
 
   mixins: [ActionMixin],
 
