@@ -180,7 +180,9 @@ module.exports = {
               'respondent/surveys-public',
               'respondent/surveys-respondent',
               'respondent/food-lookup',
-              'respondent/food-data'
+              'respondent/food-data',
+              'respondent/feedback',
+              'respondent/user',
           ]
         }
       ],
