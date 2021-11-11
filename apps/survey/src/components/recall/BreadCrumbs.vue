@@ -10,7 +10,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { LocaleTranslation } from '@common/types';
-import localeContent, { LocaleContent } from '@/components/mixins/localeContent'
+import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
 
 type BrdCrumbs = {
   text: string;
@@ -20,7 +20,7 @@ type BrdCrumbs = {
 export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
   name: 'RecallBreadCrumbs',
 
-	mixins: [localeContent],
+  mixins: [localeContent],
 
   data: () => {
     return {};
@@ -30,10 +30,12 @@ export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
     ...mapGetters('survey', ['selectedMeal', 'selectedMealIndex', 'selectedFood']),
 
     breads(): BrdCrumbs[] {
-			const localMealName: string | null = this.selectedMeal ? this.getLocaleContent(this.selectedMeal.localName) : null
+      const localMealName: string | null = this.selectedMeal
+        ? this.getLocaleContent(this.selectedMeal.localName)
+        : null;
       return [
         {
-          text: localMealName !==null ? localMealName : 'Choose Meal',
+          text: localMealName !== null ? localMealName : 'Choose Meal',
           disabled: !this.selectedMeal,
         },
         {
