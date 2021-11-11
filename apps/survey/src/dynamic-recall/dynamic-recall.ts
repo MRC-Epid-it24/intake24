@@ -6,7 +6,6 @@ import { SchemeEntryResponse } from '@common/types/http';
 import PromptManager from '@/dynamic-recall/prompt-manager';
 import { RootStateWithModules, SurveyState } from '@/types/vuex';
 import SelectionManager from '@/dynamic-recall/selection-manager';
-import i18n from '@/locale';
 
 export interface PromptInstance {
   prompt: PromptQuestion;

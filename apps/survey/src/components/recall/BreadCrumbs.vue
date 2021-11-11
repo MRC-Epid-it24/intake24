@@ -9,7 +9,6 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
-import { LocaleTranslation } from '@common/types';
 import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
 
 type BrdCrumbs = {
