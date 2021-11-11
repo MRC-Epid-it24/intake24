@@ -6,6 +6,7 @@ import { SchemeEntryResponse } from '@common/types/http';
 import PromptManager from '@/dynamic-recall/prompt-manager';
 import { RootStateWithModules, SurveyState } from '@/types/vuex';
 import SelectionManager from '@/dynamic-recall/selection-manager';
+import i18n from '@/locale';
 
 export interface PromptInstance {
   prompt: PromptQuestion;
@@ -62,7 +63,8 @@ export default class DynamicRecall {
         schemeId: this.surveyScheme.id,
         startTime: new Date(),
         meals: this.surveyScheme.meals.map((meal) => ({
-          name: meal.name.en!, // FIXME: pick correct locale and handle nulls
+          name: meal.name.en!,
+          localName: meal.name, // FIXME: pick correct locale and handle nulls
           defaultTime: parseMealTime(meal.time),
           time: undefined,
           flags: [],

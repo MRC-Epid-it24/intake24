@@ -113,7 +113,7 @@ export default Vue.extend({
     },
 
     ...mapState({
-      meals: (state: any) => {
+      meals(state: any) {
         return state.survey.data.meals.map((meal: MealState) => {
           return {
             name: meal.name,

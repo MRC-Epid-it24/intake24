@@ -45,7 +45,6 @@ const getters: GetterTree<SurveyState, RootState> = {
     const { meals } = state.data;
 
     if (mealIndex === undefined) return undefined;
-
     return meals[mealIndex];
   },
 

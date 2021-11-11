@@ -4,6 +4,7 @@ import store from '@/store';
 function dummyMeal(name: string): MealState {
   return {
     name,
+    localName: { en: name },
     customPromptAnswers: {},
     defaultTime: { hours: 8, minutes: 0 },
     flags: [],

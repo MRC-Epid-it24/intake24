@@ -11,6 +11,7 @@ import { copy } from '@common/util';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
 import { AxiosError } from 'axios';
 import { SurveyState } from '@/types/vuex';
+import i18n from '@/locale';
 
 const mutations: MutationTree<SurveyState> = {
   setParameters(state, data: SurveyEntryResponse) {
@@ -100,12 +101,14 @@ const mutations: MutationTree<SurveyState> = {
   addMeal(state, mealName: string) {
     const newMeal: MealState = {
       name: mealName,
+      localName: { en: mealName },
       defaultTime: { hours: 0, minutes: 0 },
       time: undefined,
       flags: [],
       foods: [],
       customPromptAnswers: {},
     };
+    newMeal.localName[i18n.locale] = mealName;
     state.data.meals.push(newMeal);
   },
 

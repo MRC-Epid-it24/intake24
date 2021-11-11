@@ -1,4 +1,4 @@
-import type { Dictionary } from '@common/types';
+import type { Dictionary, LocaleTranslation } from '@common/types';
 import type { QuantityValues } from '../prompts';
 import { UserFoodData } from './http';
 import { PortionSizeMethodId } from './models';
@@ -76,6 +76,7 @@ export interface MealTime {
 
 export interface MealState {
   name: string;
+  localName: LocaleTranslation;
   defaultTime: MealTime;
   time: MealTime | undefined;
   flags: string[];
