@@ -133,7 +133,6 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       leftoverPromptAnswer: null as unknown,
       // selectionImageData: {} as AsServedSetResponse,
       servingIdx: null as number | null,
-      leftoverIdx: null as number | null,
       asServedData: null as unknown,
       leftoverData: null as unknown,
       servingCompleteStatus: false as boolean, // Used to control the icons
@@ -154,6 +153,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       this.leftoverPromptAnswer = answer;
       if (answer === false) {
         // 'no' answer makes form valid, so make ready for submit
+        this.leftoverData = null;
         this.leftoverCompleteStatus = true;
         this.clearErrors();
         this.setPanelOpen(1);
