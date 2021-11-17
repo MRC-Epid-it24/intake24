@@ -15,9 +15,11 @@ export type SchemeQuestionController = Controller<CrudActions | 'sync'>;
 
 export default (): SchemeQuestionController => {
   const refs = async (): Promise<SchemeQuestionRefs> => {
-    const languages = await Language.findAll();
-    const schemes = await Scheme.findAll();
-    const questions = await SchemeQuestion.findAll();
+    const [languages, schemes, questions] = await Promise.all([
+      Language.findAll(),
+      Scheme.findAll(),
+      SchemeQuestion.findAll(),
+    ]);
 
     const questionIds = questions.map((q) => q.question.id);
 

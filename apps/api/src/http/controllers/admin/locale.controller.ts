@@ -16,16 +16,18 @@ export type LocaleController = Controller<CrudActions>;
 
 export default (): LocaleController => {
   const refs = async (localeId: string | undefined = undefined): Promise<LocaleRefs> => {
-    const languages = await Language.findAll();
-    const locales = await Locale.findAll({ where: localeId ? { id: { [Op.ne]: localeId } } : {} });
+    const [languages, locales] = await Promise.all([
+      Language.findAll(),
+      Locale.findAll({ where: localeId ? { id: { [Op.ne]: localeId } } : {} }),
+    ]);
 
     return { languages, locales };
   };
 
   const entry = async (req: Request, res: Response<LocaleResponse>): Promise<void> => {
     const { localeId } = req.params;
-    const locale = await Locale.findByPk(localeId);
 
+    const locale = await Locale.findByPk(localeId);
     if (!locale) throw new NotFoundError();
 
     res.json({ data: locale, refs: await refs(locale.id) });
@@ -70,8 +72,8 @@ export default (): LocaleController => {
 
   const update = async (req: Request, res: Response<LocaleResponse>): Promise<void> => {
     const { localeId } = req.params;
-    const locale = await Locale.findByPk(localeId);
 
+    const locale = await Locale.findByPk(localeId);
     if (!locale) throw new NotFoundError();
 
     await locale.update(
@@ -91,8 +93,8 @@ export default (): LocaleController => {
 
   const destroy = async (req: Request /* , res: Response<undefined> */): Promise<void> => {
     const { localeId } = req.params;
-    const locale = await Locale.scope('surveys').findByPk(localeId);
 
+    const locale = await Locale.scope('surveys').findByPk(localeId);
     if (!locale) throw new NotFoundError();
 
     if (locale.surveys?.length)

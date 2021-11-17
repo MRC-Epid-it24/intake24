@@ -15,8 +15,8 @@ export type LanguageController = Controller<CrudActions>;
 export default (): LanguageController => {
   const entry = async (req: Request, res: Response<LanguageResponse>): Promise<void> => {
     const { languageId } = req.params;
-    const language = await Language.findByPk(languageId);
 
+    const language = await Language.findByPk(languageId);
     if (!language) throw new NotFoundError();
 
     res.json({ data: language, refs: {} });
@@ -52,8 +52,8 @@ export default (): LanguageController => {
 
   const update = async (req: Request, res: Response<LanguageResponse>): Promise<void> => {
     const { languageId } = req.params;
-    const language = await Language.findByPk(languageId);
 
+    const language = await Language.findByPk(languageId);
     if (!language) throw new NotFoundError();
 
     await language.update(
@@ -65,8 +65,8 @@ export default (): LanguageController => {
 
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { languageId } = req.params;
-    const language = await Language.scope(['adminLocales', 'surveyLocales']).findByPk(languageId);
 
+    const language = await Language.scope(['adminLocales', 'surveyLocales']).findByPk(languageId);
     if (!language) throw new NotFoundError();
 
     if (language.adminLocales?.length || language.surveyLocales?.length)

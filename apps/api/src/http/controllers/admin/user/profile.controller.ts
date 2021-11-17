@@ -10,8 +10,9 @@ export default (): UserProfileController => {
     const { aclService } = req.scope.cradle;
 
     const { name, email, phone } = user;
-    const permissions = (await aclService.getPermissions()).map((item) => item.name);
-    const roles = (await aclService.getRoles()).map((item) => item.name);
+    const [permissions, roles] = (
+      await Promise.all([aclService.getPermissions(), aclService.getRoles()])
+    ).map((aclItem) => aclItem.map((item) => item.name));
 
     res.json({ profile: { name, email, phone }, permissions, roles });
   };

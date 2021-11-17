@@ -19,8 +19,8 @@ export type AdminSurveyRespondentController = Controller<
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespondentController => {
   const browse = async (req: Request, res: Response<SurveyRespondentsResponse>): Promise<void> => {
     const { surveyId } = req.params;
-    const survey = await Survey.findByPk(surveyId);
 
+    const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
     const respondents = await UserSurveyAlias.paginate<SurveyRespondentListEntry>({

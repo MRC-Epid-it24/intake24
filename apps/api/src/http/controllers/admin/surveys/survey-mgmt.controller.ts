@@ -17,8 +17,8 @@ export type AdminSurveyMgmtController = Controller<'browse' | 'available' | 'upd
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtController => {
   const browse = async (req: Request, res: Response<SurveyMgmtResponse>): Promise<void> => {
     const { surveyId } = req.params;
-    const survey = await Survey.findByPk(surveyId);
 
+    const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
     const users = await User.paginate<UserMgmtListEntry>({
@@ -44,8 +44,8 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtC
     res: Response<SurveyMgmtAvailableResponse>
   ): Promise<void> => {
     const { surveyId } = req.params;
-    const survey = await Survey.findByPk(surveyId);
 
+    const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
     const users = await User.findAll({
@@ -80,8 +80,10 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtC
       body: { permissions },
     } = req;
 
-    const survey = await Survey.findByPk(surveyId);
-    const user = await User.findOne({ where: { id: userId, email: { [Op.ne]: null } } });
+    const [survey, user] = await Promise.all([
+      Survey.findByPk(surveyId),
+      User.findOne({ where: { id: userId, email: { [Op.ne]: null } } }),
+    ]);
 
     if (!survey || !user) throw new NotFoundError();
 

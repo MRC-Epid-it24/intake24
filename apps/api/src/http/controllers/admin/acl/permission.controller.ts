@@ -14,8 +14,8 @@ export type PermissionController = Controller<CrudActions>;
 export default (): PermissionController => {
   const entry = async (req: Request, res: Response<PermissionResponse>): Promise<void> => {
     const { permissionId } = req.params;
-    const permission = await Permission.findByPk(permissionId);
 
+    const permission = await Permission.findByPk(permissionId);
     if (!permission) throw new NotFoundError();
 
     res.json({ data: permission, refs: {} });
@@ -50,8 +50,8 @@ export default (): PermissionController => {
 
   const update = async (req: Request, res: Response<PermissionResponse>): Promise<void> => {
     const { permissionId } = req.params;
-    const permission = await Permission.findByPk(permissionId);
 
+    const permission = await Permission.findByPk(permissionId);
     if (!permission) throw new NotFoundError();
 
     const { displayName, description } = req.body;
@@ -62,8 +62,8 @@ export default (): PermissionController => {
 
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { permissionId } = req.params;
-    const permission = await Permission.findByPk(permissionId);
 
+    const permission = await Permission.findByPk(permissionId);
     if (!permission) throw new NotFoundError();
 
     await permission.destroy();

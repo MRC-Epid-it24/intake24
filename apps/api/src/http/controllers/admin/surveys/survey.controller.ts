@@ -21,17 +21,19 @@ export type AdminSurveyController = Controller<CrudActions>;
 
 export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController => {
   const refs = async (): Promise<SurveyRefs> => {
-    const languages = await Language.findAll();
-    const locales = await Locale.findAll();
-    const schemes = await Scheme.findAll();
+    const [languages, locales, schemes] = await Promise.all([
+      Language.findAll(),
+      Locale.findAll(),
+      Scheme.findAll(),
+    ]);
 
     return { languages, locales, schemes };
   };
 
   const entry = async (req: Request, res: Response<SurveyResponse>): Promise<void> => {
     const { surveyId } = req.params;
-    const survey = await Survey.findByPk(surveyId);
 
+    const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
     res.json({ data: surveyResponse(survey), refs: await refs() });
@@ -110,8 +112,8 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
 
   const update = async (req: Request, res: Response<SurveyResponse>): Promise<void> => {
     const { surveyId } = req.params;
-    const survey = await Survey.findByPk(surveyId);
 
+    const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
     await survey.update(
@@ -150,8 +152,8 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
 
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { surveyId } = req.params;
-    const survey = await Survey.scope('submissions').findByPk(surveyId);
 
+    const survey = await Survey.scope('submissions').findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
     if (survey.submissions?.length)

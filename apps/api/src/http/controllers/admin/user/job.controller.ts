@@ -33,7 +33,6 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
     const { id: userId } = req.user as User;
 
     const job = await Job.findOne({ where: { id, userId } });
-
     if (!job) throw new NotFoundError();
 
     res.json({ data: job });

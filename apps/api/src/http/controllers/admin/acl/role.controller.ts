@@ -44,10 +44,10 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
 
   const store = async (req: Request, res: Response<StoreRoleResponse>): Promise<void> => {
     const { name, displayName, description, permissions } = req.body;
-    let role = await Role.create({ name, displayName, description });
+    const role = await Role.create({ name, displayName, description });
     await role.$set('permissions', permissions);
 
-    role = (await Role.scope('permissions').findByPk(role.id)) as Role;
+    await role.reload({ include: [{ model: Permission }] });
     const data = roleEntryResponse(role);
 
     res.status(201).json({ data });
@@ -59,8 +59,8 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
 
   const update = async (req: Request, res: Response<RoleResponse>): Promise<void> => {
     const { roleId } = req.params;
-    let role = await Role.scope('permissions').findByPk(roleId);
 
+    const role = await Role.scope('permissions').findByPk(roleId);
     if (!role) throw new NotFoundError();
 
     const { displayName, description } = req.body;
@@ -73,7 +73,7 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
       role.name === aclConfig.roles.superuser ? permissions : req.body.permissions
     );
 
-    role = (await Role.scope('permissions').findByPk(roleId)) as Role;
+    await role.reload({ include: [{ model: Permission }] });
     const data = roleEntryResponse(role);
 
     res.json({ data, refs: { permissions } });
@@ -81,8 +81,8 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
 
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { roleId } = req.params;
-    const role = await Role.findByPk(roleId);
 
+    const role = await Role.findByPk(roleId);
     if (!role) throw new NotFoundError();
 
     await role.destroy();

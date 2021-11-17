@@ -17,18 +17,20 @@ export type AdminUserController = Controller<CrudActions>;
 
 export default ({ userService }: Pick<IoC, 'userService'>): AdminUserController => {
   const entryRefs = async (): Promise<UserRefs> => {
-    const permissions = await Permission.scope('list').findAll();
-    const roles = await Role.scope('list').findAll();
+    const [permissions, roles] = await Promise.all([
+      Permission.scope('list').findAll(),
+      Role.scope('list').findAll(),
+    ]);
 
     return { permissions, roles };
   };
 
   const entry = async (req: Request, res: Response<UserResponse>): Promise<void> => {
     const { userId } = req.params;
+
     const user = await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
       userId
     );
-
     if (!user) throw new NotFoundError();
 
     const data = userEntryResponse(user);

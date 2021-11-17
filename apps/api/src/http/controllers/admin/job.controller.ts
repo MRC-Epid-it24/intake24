@@ -35,8 +35,8 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): JobController => {
 
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { jobId } = req.params;
-    const job = await Job.findByPk(jobId);
 
+    const job = await Job.findByPk(jobId);
     if (!job) throw new NotFoundError();
 
     await job.destroy();
