@@ -10,6 +10,7 @@ const portion: LocaleMessage = {
     confirmButtonMany: 'I had that many',
     confirmButton: 'I had that much',
     quantityAnd: 'and', // E.g 1 and 3/4 bananas
+    completePreviousStep: 'Please complete the previous step before answering this question.',
   },
   option: {
     // Implementation of this needs looking at for RTL, as localDescription appears at end of line for label
@@ -117,7 +118,8 @@ const portion: LocaleMessage = {
     thicknessLabel: 'How thick was your pizza?',
     sizeLabel: 'What size slice(s) did you have?',
     wholePizzaButton: 'I had the whole pizza',
-    slicesLabel: 'How many of these slices did you have?',
+    slicesQuantityLabel: 'How many of these slices did you have?',
+    wholeQuantityLabel: 'How many of these pizzas did you have?',
   },
   milkHotDrink: {
     label: 'How much {food} did you have in your tea or coffee?',

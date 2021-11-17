@@ -29,7 +29,11 @@
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-img :src="pizzaThicknessMapData.baseImageUrl" @click="selectThickness()"></v-img>
+                <image-map-selector
+                  :promptProps="thickPromptProps"
+                  @image-map-selector-submit="selectThickness($event)"
+                ></image-map-selector>
+                <!-- <v-img :src="pizzaThicknessMapData.baseImageUrl" @click="selectThickness()"></v-img> -->
               </v-expansion-panel-content>
             </v-expansion-panel>
             <v-expansion-panel>
@@ -40,18 +44,31 @@
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-btn @click="selectWhole()">{{ $t('portion.pizza.wholePizzaLabel') }}</v-btn>
-                <image-map-selector
-                  :promptProps="sizePromptProps"
-                  @image-map-selector-submit="selectSlice($event)"
-                ></image-map-selector>
+                <template v-if="!sizePromptProps.imageMapId">
+                  {{ $t('portion.common.completePreviousStep') }}
+                </template>
+                <template v-if="sizePromptProps.imageMapId">
+                  <v-btn @click="selectWhole()"
+                    :color="wholeSelected === true ? 'success' : ''"
+                  >
+                    {{ $t('portion.pizza.wholePizzaButton') }}
+                  </v-btn>
+                  <image-map-selector
+                    :promptProps="sizePromptProps"
+                    @image-map-selector-submit="selectSlice($event)"
+                  ></image-map-selector>
+                </template>
                 <!-- <v-img :src="pizzaSliceMapData.baseImageUrl" @click="selectSlice()"></v-img> -->
               </v-expansion-panel-content>
             </v-expansion-panel>
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
-                <template v-if="!wholeSelected">How many of these slices did you have?</template>
-                <template v-if="wholeSelected">How many pizzas did you have?</template>
+                <template v-if="!wholeSelected">{{
+                  $t('portion.pizza.slicesQuantityLabel')
+                }}</template>
+                <template v-if="wholeSelected">{{
+                  $t('portion.pizza.wholeQuantityLabel')
+                }}</template>
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="quantityComplete"></valid-invalid-icon>
                 </template>
@@ -62,7 +79,9 @@
                     <quantity-card whole fraction></quantity-card>
                   </v-col>
                 </v-row>
-                <v-btn @click="selectQuantity()">I had that many</v-btn>
+                <v-btn @click="selectQuantity()">
+                  {{ $t('portion.common.confirmButtonMany') }}
+                </v-btn>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -127,6 +146,9 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       typePromptProps: {
         imageMapId: 'gpizza',
       } as ImageMapSelectorProps,
+      thickPromptProps: {
+        imageMapId: 'gpthick',
+      } as ImageMapSelectorProps,
       sizePromptProps: {
         imageMapId: '',
       } as ImageMapSelectorProps,
@@ -186,9 +208,9 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       this.thicknessComplete = true;
     },
     selectSlice(value: ImageMapEmit) {
-      console.log(value);
       this.setPanelOpen(3);
       this.sizeComplete = true;
+      this.wholeSelected = false;
     },
     selectWhole() {
       this.setPanelOpen(3);
