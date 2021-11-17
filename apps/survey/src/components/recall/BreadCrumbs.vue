@@ -34,11 +34,11 @@ export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
         : null;
       return [
         {
-          text: localMealName !== null ? localMealName : 'Choose Meal',
+          text: localMealName !== null ? localMealName : this.$t('breadcrumbs.meal'),
           disabled: !this.selectedMeal,
         },
         {
-          text: this.selectedFood ? this.selectedFood.name : 'Choose Food',
+          text: this.selectedFood ? this.selectedFood.name : this.$t('breadcrumbs.food'),
           disabled: !this.selectedFood,
         },
       ];

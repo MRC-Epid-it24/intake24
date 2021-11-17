@@ -8,6 +8,7 @@ import portion from './portion';
 import recall from './recall';
 import survey from './survey';
 import standardUnits from './standard-units';
+import breadcrumbs from './breadcrumbs';
 
 const messages: LocaleMessageObject = {
   common,
@@ -19,6 +20,7 @@ const messages: LocaleMessageObject = {
   portion,
   survey,
   standardUnits,
+  breadcrumbs,
 };
 
 export default messages;
