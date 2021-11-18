@@ -9,16 +9,19 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
+import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
 
 type BrdCrumbs = {
   text: string;
   disabled: boolean;
 };
 
-export default Vue.extend({
+export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
   name: 'RecallBreadCrumbsMobile',
+
+	mixins: [localeContent],
 
   props: {
     prompt: String,
@@ -34,18 +37,17 @@ export default Vue.extend({
     ...mapGetters('survey', ['selectedMeal', 'selectedMealIndex', 'selectedFood']),
 
     breads(): BrdCrumbs[] {
+      const localMealName: string | null = this.selectedMeal
+        ? this.getLocaleContent(this.selectedMeal.localName)
+        : null;
       return [
         {
-          text: this.selectedMeal ? this.selectedMeal.name : 'Choose Meal',
+          text: localMealName !== null ? localMealName : this.$t('breadcrumbs.meal'),
           disabled: !this.selectedMeal,
         },
         {
-          text: this.selectedFood ? this.selectedFood.name : 'Choose Food',
+          text: this.selectedFood ? this.selectedFood.name : this.$t('breadcrumbs.food'),
           disabled: !this.selectedFood,
-        },
-        {
-          text: this.prompt ? this.prompt : '',
-          disabled: this.prompt === '',
         },
       ];
     },
