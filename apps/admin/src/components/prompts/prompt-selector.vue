@@ -85,6 +85,30 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
+              <v-row  class="justify-end">
+                <v-col cols="12" md="6">
+                  <language-selector
+                    :label="$t('schemes.questions.localName')"
+                    :value="dialog.question.localName"
+                  >
+                    <template
+                      v-for="lang in Object.keys(dialog.question.localName)"
+                      v-slot:[`lang.${lang}`]
+                    >
+                      <v-text-field
+                        :key="lang"
+                        :value="dialog.question.localName[lang]"
+                        :rules="textRules"
+                        :disabled="isOverrideMode"
+                        :label="$t('schemes.questions.localName')"
+                        hide-details="auto"
+                        messages="Localized name"
+                        outlined
+                      ></v-text-field>
+                    </template>
+                  </language-selector>
+                </v-col>
+              </v-row>
             </v-tab-item>
             <component
               :is="dialog.question.component"
@@ -124,6 +148,7 @@ import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
 import portionSizePrompts from '@/components/prompts/portion-size';
 import PromptTypeSelector from './prompt-type-selector.vue';
+import LanguageSelector from './partials/LanguageSelector.vue';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;
@@ -150,6 +175,10 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       type: Array as () => string[],
       default: () => [],
     },
+    textRequired: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   components: {
@@ -157,6 +186,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     ...customPrompts,
     ...standardPrompts,
     ...portionSizePrompts,
+    LanguageSelector,
   },
 
   data() {
@@ -192,6 +222,14 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   computed: {
     isOverrideMode(): boolean {
       return this.mode === 'override';
+    },
+    textRules() {
+      return this.textRequired
+        ? [
+            (value: string | null): boolean | string =>
+              !!value || 'Question localized name is required.',
+          ]
+        : [];
     },
     availablePromptQuestions(): Record<QuestionType, PromptQuestion[]> {
       const { section } = this;
