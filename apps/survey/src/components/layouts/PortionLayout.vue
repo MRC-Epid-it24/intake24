@@ -1,10 +1,5 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col>
-        {{ $t('portion.common.backStep') }}
-      </v-col>
-    </v-row>
     <v-card>
       <v-card>
         <v-row>
