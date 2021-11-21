@@ -82,7 +82,11 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="form.startDate" scrollable>
+                <v-date-picker
+                  v-model="form.startDate"
+                  scrollable
+                  @change="form.errors.clear('startDate')"
+                >
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="menus.startDate = false">
                     {{ $t('common.action.cancel') }}
@@ -113,7 +117,11 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="form.endDate" scrollable>
+                <v-date-picker
+                  v-model="form.endDate"
+                  scrollable
+                  @change="form.errors.clear('endDate')"
+                >
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="menus.endDate = false">
                     {{ $t('common.action.cancel') }}
