@@ -9,7 +9,7 @@ describe('Input trim string middleware', () => {
     expect(trimStrings('  ')).toEqual(null);
   });
 
-  it('should trim empty string null', () => {
+  it('should trim empty string to null', () => {
     expect(trimStrings('')).toEqual(null);
   });
 });
