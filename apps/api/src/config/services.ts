@@ -1,13 +1,17 @@
+export type ReCaptcha = {
+  enabled: boolean;
+  secret: string;
+};
+
+export type WebPush = {
+  subject: string;
+  publicKey: string;
+  privateKey: string;
+};
+
 export type ServicesConfig = {
-  reCaptcha: {
-    enabled: boolean;
-    secret: string;
-  };
-  webPush: {
-    subject: string;
-    publicKey: string;
-    privateKey: string;
-  };
+  reCaptcha: ReCaptcha;
+  webPush: WebPush;
 };
 
 const servicesConfig: ServicesConfig = {
