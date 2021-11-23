@@ -169,17 +169,18 @@ export default class User
     return uniqBy(this.roles, 'name');
   }
 
-  public hasRoleByName(role: string): boolean {
-    if (!this.roles) return false;
+  public hasRole(role: string | string[], key: 'id' | 'name' = 'name'): boolean {
+    if (!this.roles || !this.roles.length) return false;
 
-    const match = this.roles.find((item) => item.name === role);
-    return !!match;
+    if (Array.isArray(role)) return this.roles.every((item) => role.includes(item[key]));
+
+    return !!this.roles.find((item) => item[key] === role);
   }
 
-  public hasAnyRole(roles: string[]): boolean {
-    if (!this.roles) return false;
+  public hasAnyRole(roles: string[], key: 'id' | 'name' = 'name'): boolean {
+    if (!this.roles || !this.roles.length) return false;
 
-    return this.roles.some((item) => roles.includes(item.name));
+    return this.roles.some((item) => roles.includes(item[key]));
   }
 
   public allPermissions(): Permission[] {
@@ -192,20 +193,24 @@ export default class User
     return uniqBy(permissions, 'name');
   }
 
-  public hasPermissionByName(permission: string): boolean {
+  public hasPermission(permission: string | string[], key: 'id' | 'name' = 'name'): boolean {
     const permissions = this.allPermissions();
+    if (!permissions.length) return false;
 
-    const match = permissions.find((item) => item.name === permission);
-    return !!match;
+    if (Array.isArray(permission))
+      return permissions.every((item) => permission.includes(item[key]));
+
+    return !!permissions.find((item) => item[key] === permission);
   }
 
-  public can(permission: string): boolean {
-    return this.hasPermissionByName(permission);
+  public can(permission: string | string[], key: 'id' | 'name' = 'name'): boolean {
+    return this.hasPermission(permission, key);
   }
 
-  public hasAnyPermission(permission: string[]): boolean {
+  public hasAnyPermission(permission: string[], key: 'id' | 'name' = 'name'): boolean {
     const permissions = this.allPermissions();
+    if (!permissions.length) return false;
 
-    return permissions.some((item) => permission.includes(item.name));
+    return permissions.some((item) => permission.includes(item[key]));
   }
 }
