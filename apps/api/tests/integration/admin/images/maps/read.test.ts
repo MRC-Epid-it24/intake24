@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import { pick } from 'lodash';
 import request from 'supertest';
-import { downloadImage, suite, setPermission } from '@tests/integration/helpers';
+import { suite, setPermission } from '@tests/integration/helpers';
 import { ImageMapEntry } from '@common/types/http/admin';
 
 export default (): void => {
@@ -14,18 +14,16 @@ export default (): void => {
   const url = `${baseUrl}/${id}`;
   const invalidUrl = `${baseUrl}/999999`;
 
-  let filePath: string;
   let output: ImageMapEntry;
 
   beforeAll(async () => {
-    filePath = await downloadImage('https://picsum.photos/1200/800.jpg', fileName);
     const { body } = await request(suite.app)
       .post(baseUrl)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .field('id', id)
       .field('description', description)
-      .attach('baseImage', fs.createReadStream(filePath), fileName);
+      .attach('baseImage', fs.createReadStream(suite.files.images.jpg), fileName);
 
     output = { ...body.data };
   });

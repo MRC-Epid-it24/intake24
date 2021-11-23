@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import request from 'supertest';
-import { downloadImage, suite, setPermission } from '@tests/integration/helpers';
+import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
   const baseUrl = '/api/admin/images/as-served/asServedSetForImages/images';
@@ -13,16 +13,13 @@ export default (): void => {
   const invalidUrl = `${baseUrl}/999999`;
   let invalidParentUrl: string;
 
-  let filePath: string;
-
   beforeAll(async () => {
-    filePath = await downloadImage('https://picsum.photos/1200/800.jpg', fileName);
     const { body } = await request(suite.app)
       .post(baseUrl)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .field('weight', weight)
-      .attach('image', fs.createReadStream(filePath), fileName);
+      .attach('image', fs.createReadStream(suite.files.images.jpg), fileName);
 
     const output = { ...body.data };
 

@@ -15,7 +15,7 @@ export default (): void => {
   let output: Pick<AsServedImageEntry, 'weight'>;
 
   beforeAll(async () => {
-    filePath = await downloadImage('https://picsum.photos/1200/800.jpg', fileName);
+    filePath = suite.files.images.jpg;
 
     output = { weight };
   });

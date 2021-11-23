@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import { pick } from 'lodash';
 import request from 'supertest';
-import { downloadImage, suite, setPermission } from '@tests/integration/helpers';
+import { suite, setPermission } from '@tests/integration/helpers';
 import { ImageMapEntry } from '@common/types/http/admin';
 
 export default (): void => {
@@ -15,7 +15,7 @@ export default (): void => {
   let output: Omit<ImageMapEntry, 'baseImageUrl'>;
 
   beforeAll(async () => {
-    filePath = await downloadImage('https://picsum.photos/1200/800.jpg', fileName);
+    filePath = suite.files.images.jpg;
 
     output = { id, description, objects: [] };
   });
