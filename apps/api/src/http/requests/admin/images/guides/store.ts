@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator';
 import { GuideImage, ImageMap } from '@api/db/models/foods';
 import validate from '@api/http/requests/validate';
-import { unique } from '@api/http/rules';
+import { identifierSafeChars, unique } from '@api/http/rules';
 import defaults from './defaults';
 
 export default validate(
@@ -9,8 +9,9 @@ export default validate(
     ...defaults,
     id: {
       in: ['body'],
-      errorMessage: 'Guide image ID must be unique code.',
+      errorMessage: 'Guide image ID must be unique code (charset [a-zA-Z0-9-_]).',
       isEmpty: { negated: true },
+      isWhitelisted: { options: identifierSafeChars },
       custom: {
         options: async (value): Promise<void> =>
           unique({ model: GuideImage, condition: { field: 'id', value } }),

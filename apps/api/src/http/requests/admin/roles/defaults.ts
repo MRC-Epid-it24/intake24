@@ -2,14 +2,15 @@ import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
 import { Role } from '@api/db/models/system';
-import { unique } from '@api/http/rules';
+import { identifierSafeChars, unique } from '@api/http/rules';
 
 const defaults: Schema = {
   name: {
     in: ['body'],
-    errorMessage: 'Internal name must be filled in.',
+    errorMessage: 'Internal name must be filled in (charset [a-zA-Z0-9-_]).',
     isString: true,
     isEmpty: { negated: true },
+    isWhitelisted: { options: identifierSafeChars },
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { roleId } = (req as Request).params;

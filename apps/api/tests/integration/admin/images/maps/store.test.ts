@@ -58,7 +58,7 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .field('id', [])
+        .field('id', '/etc/imageMap_001')
         .field('description', [])
         .field('baseImage', 'notAFile');
 

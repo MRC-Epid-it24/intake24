@@ -10,7 +10,6 @@ import {
   CreateTaskRequest,
   CreateUserRequest,
   CreateLanguageRequest,
-  CreateAsServedSetInput,
 } from '@common/types/http/admin';
 import {
   SchemeCreationAttributes,
@@ -19,7 +18,6 @@ import {
 } from '@common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { customPromptQuestions } from '@common/prompts';
-import { downloadImage } from '../util';
 
 const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);

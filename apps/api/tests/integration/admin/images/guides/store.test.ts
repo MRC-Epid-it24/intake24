@@ -70,7 +70,7 @@ export default (): void => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .send({
-          id: null,
+          id: './guideImage_001',
           imageMapId: 'nonExistingImageMapId',
           description: { key: 'invalidDescription' },
         });

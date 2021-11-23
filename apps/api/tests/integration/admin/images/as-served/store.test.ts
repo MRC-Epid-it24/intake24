@@ -58,7 +58,7 @@ export default (): void => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .field('id', [])
+        .field('id', '../../asServedSet_001')
         .field('description', [])
         .field('selectionImage', 'notAFile');
 
