@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import { pick } from 'lodash';
 import request from 'supertest';
-import { downloadImage, suite, setPermission } from '@tests/integration/helpers';
+import { suite, setPermission } from '@tests/integration/helpers';
 import { AsServedSetEntry } from '@common/types/http/admin';
 
 export default (): void => {
@@ -19,18 +19,16 @@ export default (): void => {
   const url = `${baseUrl}/${id}`;
   const invalidUrl = `${baseUrl}/999999`;
 
-  let filePath: string;
   let output: AsServedSetEntry;
 
   beforeAll(async () => {
-    filePath = await downloadImage('https://picsum.photos/1200/800.jpg', fileName);
     const { body } = await request(suite.app)
       .post(baseUrl)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .field('id', id)
       .field('description', description)
-      .attach('selectionImage', fs.createReadStream(filePath), fileName);
+      .attach('selectionImage', fs.createReadStream(suite.files.images.jpg), fileName);
 
     const images = [];
     for (const weight of [50, 100, 150]) {
@@ -41,7 +39,7 @@ export default (): void => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.superuser)
         .field('weight', 10)
-        .attach('image', fs.createReadStream(filePath), fileName);
+        .attach('image', fs.createReadStream(suite.files.images.jpg), fileName);
 
       images.push({ ...data, weight });
     }

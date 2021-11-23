@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import { pick } from 'lodash';
 import request from 'supertest';
-import { downloadImage, suite, setPermission } from '@tests/integration/helpers';
+import { suite, setPermission } from '@tests/integration/helpers';
 import { GuideImageEntry } from '@common/types/http/admin';
 
 export default (): void => {
@@ -16,17 +16,13 @@ export default (): void => {
   let output: Omit<GuideImageEntry, 'baseImageUrl'>;
 
   beforeAll(async () => {
-    const filePath = await downloadImage(
-      'https://picsum.photos/1200/800.jpg',
-      'imageMapForGuide.jpg'
-    );
     await request(suite.app)
       .post('/api/admin/images/maps')
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .field('id', 'imageMapForGuide')
       .field('description', 'imageMapForGuide')
-      .attach('baseImage', fs.createReadStream(filePath), 'imageMapForGuide.jpg');
+      .attach('baseImage', fs.createReadStream(suite.files.images.jpg), 'imageMapForGuide.jpg');
 
     output = { ...input, objects: [] };
   });

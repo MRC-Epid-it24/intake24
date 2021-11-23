@@ -147,7 +147,7 @@ export const setupPermissions = async (): Promise<void> => {
   await Permission.bulkCreate(permissions);
 };
 
-export const initDatabaseData = async (): Promise<MockData> => {
+export const initDatabase = async (): Promise<MockData> => {
   const language = await Language.create({
     id: 'en',
     englishName: 'United Kingdom',
@@ -289,7 +289,7 @@ export const initDatabaseData = async (): Promise<MockData> => {
   };
 };
 
-export const cleanup = async (): Promise<void> => {
+export const wipeDatabase = async (): Promise<void> => {
   for (const model of Object.values(ioc.cradle.db.foods.models)) {
     await model.truncate({ cascade: true });
   }

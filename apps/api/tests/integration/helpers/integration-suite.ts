@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import app from '@api/app';
 import ioc from '@api/ioc';
 import foodIndex from '@api/food-index';
-import { initDatabaseData, wipeRedis, MockData } from './setup';
+import { initDatabase, initFiles, wipeRedis, MockData, MockFiles } from '.';
 
 export type Bearers = Record<'superuser' | 'user' | 'respondent', string>;
 
@@ -25,6 +25,8 @@ class IntegrationSuite {
   public app!: Express;
 
   public data!: MockData;
+
+  public files!: MockFiles;
 
   public bearer!: Bearers;
 
@@ -50,7 +52,10 @@ class IntegrationSuite {
     this.app = await app({ config: this.config, logger: this.logger });
 
     // Fill in database with initial data
-    this.data = await initDatabaseData();
+    this.data = await initDatabase();
+
+    // Grab mock files
+    this.files = await initFiles();
   }
 
   /**
