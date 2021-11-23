@@ -6,13 +6,14 @@ import slugify from 'slugify';
 import { SchemeTypes } from '@common/types/models';
 import { validateMeals, validateRecallQuestions, validateExportSections } from '@common/validators';
 import { Scheme } from '@api/db/models/system';
-import { unique } from '@api/http/rules';
+import { unique, identifierSafeChars } from '@api/http/rules';
 
 export const id: ParamSchema = {
   in: ['body'],
-  errorMessage: 'Scheme ID must be unique string.',
+  errorMessage: 'Scheme ID must be unique string (charset [a-zA-Z0-9-_]).',
   isString: true,
   isEmpty: { negated: true },
+  isWhitelisted: { options: identifierSafeChars },
   custom: {
     options: async (value): Promise<void> =>
       unique({
@@ -71,8 +72,6 @@ export const defaults: Schema = {
           Object.values(value).some((item) => !Array.isArray(item) && !isPlainObject(item))
         )
           throw new Error('Enter valid scheme questions.');
-
-        Promise.resolve();
       },
     },
   },
