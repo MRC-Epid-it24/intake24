@@ -264,7 +264,7 @@ export default ({
 
     if (!survey) throw new NotFoundError();
 
-    if (!survey.allowGenUsers) throw new ForbiddenError();
+    if (!survey.allowGenUsers || survey.genUserKey) throw new ForbiddenError();
 
     let { counter } = survey;
     if (counter) await counter.increment('count');

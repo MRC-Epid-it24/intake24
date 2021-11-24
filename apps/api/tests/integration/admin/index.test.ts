@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import request from 'supertest';
-import { downloadImage, suite } from '@tests/integration/helpers';
+import { suite } from '@tests/integration/helpers';
 
 import user from './user/index.test';
 import images from './images/index.test';
@@ -39,17 +39,17 @@ export default (): void => {
   // As served images
   describe('As served images', () => {
     beforeAll(async () => {
-      const filePath = await downloadImage(
-        'https://picsum.photos/1200/800.jpg',
-        'asServedSetForImages.jpg'
-      );
       await request(suite.app)
         .post('/api/admin/images/as-served')
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.superuser)
         .field('id', 'asServedSetForImages')
         .field('description', 'asServedSetForImages')
-        .attach('selectionImage', fs.createReadStream(filePath), 'asServedSetForImages.jpg');
+        .attach(
+          'selectionImage',
+          fs.createReadStream(suite.files.images.jpg),
+          'asServedSetForImages.jpg'
+        );
     });
 
     const { asServedImages } = images;

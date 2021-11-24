@@ -30,8 +30,19 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
+  it(`should return 403 when user generation enabled and JWT secret set`, async () => {
+    await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: 'aSuperSecret' });
+
+    const { status } = await request(suite.app)
+      .post(url)
+      .set('Accept', 'application/json')
+      .send({ reCaptchaToken: 'reCaptchaToken' });
+
+    expect(status).toBe(403);
+  });
+
   it('should return 200 and public survey record', async () => {
-    await suite.data.system.survey.update({ allowGenUsers: true });
+    await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: null });
 
     const { status, body } = await request(suite.app)
       .post(url)
