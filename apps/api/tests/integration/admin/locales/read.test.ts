@@ -2,7 +2,8 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { LocaleAttributes } from '@common/types/models';
 import { suite, setPermission } from '@tests/integration/helpers';
-import { Locale } from '@api/db/models/system';
+import { Locale as FoodsLocale } from '@api/db/models/foods';
+import { Locale as SystemLocale } from '@api/db/models/system';
 
 export default (): void => {
   const baseUrl = '/api/admin/locales';
@@ -12,7 +13,7 @@ export default (): void => {
 
   let input: LocaleAttributes;
   let output: LocaleAttributes;
-  let locale: Locale;
+  let systemLocale: SystemLocale;
 
   beforeAll(async () => {
     const { id: langId } = suite.data.system.language;
@@ -26,10 +27,13 @@ export default (): void => {
       prototypeLocaleId: null,
       textDirection: 'ltr',
     };
-    locale = await Locale.create(input);
+
+    await FoodsLocale.create(input);
+    systemLocale = await SystemLocale.create(input);
+
     output = { ...input };
 
-    url = `${baseUrl}/${locale.id}`;
+    url = `${baseUrl}/${systemLocale.id}`;
     invalidUrl = `${baseUrl}/999999`;
   });
 
