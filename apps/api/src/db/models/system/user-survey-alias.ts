@@ -29,6 +29,7 @@ export default class UserSurveyAlias
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(64),
+    unique: 'survey_id_user_name_unique',
   })
   @ForeignKey(() => Survey)
   public surveyId!: string;
@@ -37,6 +38,7 @@ export default class UserSurveyAlias
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(256),
+    unique: 'survey_id_user_name_unique',
   })
   public userName!: string;
 
