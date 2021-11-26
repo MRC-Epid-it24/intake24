@@ -1,3 +1,4 @@
+export * from './admin';
 export * from './auth';
 export * from './data-export';
 export * from './foods';

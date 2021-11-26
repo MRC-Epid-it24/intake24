@@ -50,6 +50,7 @@ module.exports = {
     '@typescript-eslint/ban-types': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-shadow': 'error',
+    '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],
   },
   overrides: [
     {

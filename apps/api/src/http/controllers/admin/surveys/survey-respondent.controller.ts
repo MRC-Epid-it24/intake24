@@ -16,7 +16,9 @@ export type AdminSurveyRespondentController = Controller<
   'browse' | 'store' | 'update' | 'destroy' | 'upload' | 'exportAuthUrls'
 >;
 
-export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespondentController => {
+export default ({
+  adminSurveyService,
+}: Pick<IoC, 'adminSurveyService'>): AdminSurveyRespondentController => {
   const browse = async (req: Request, res: Response<SurveyRespondentsResponse>): Promise<void> => {
     const { surveyId } = req.params;
 
@@ -38,7 +40,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
   const store = async (req: Request, res: Response<SurveyRespondentResponse>): Promise<void> => {
     const { surveyId } = req.params;
 
-    const respondent = await surveyService.createRespondent(
+    const respondent = await adminSurveyService.createRespondent(
       surveyId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
     );
@@ -49,7 +51,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
   const update = async (req: Request, res: Response<SurveyRespondentResponse>): Promise<void> => {
     const { surveyId, userId } = req.params;
 
-    const respondent = await surveyService.updateRespondent(
+    const respondent = await adminSurveyService.updateRespondent(
       surveyId,
       userId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
@@ -61,7 +63,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { surveyId, userId } = req.params;
 
-    await surveyService.deleteRespondent(surveyId, userId);
+    await adminSurveyService.deleteRespondent(surveyId, userId);
     res.status(204).json();
   };
 
@@ -74,7 +76,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
 
     if (!file) throw new ValidationError('file', 'File not found.');
 
-    const job = await surveyService.importRespondents(surveyId, userId, file);
+    const job = await adminSurveyService.importRespondents(surveyId, userId, file);
 
     res.json({ data: job });
   };
@@ -83,7 +85,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyRespo
     const { surveyId } = req.params;
     const { id: userId } = req.user as User;
 
-    const job = await surveyService.exportAuthenticationUrls(surveyId, userId);
+    const job = await adminSurveyService.exportAuthenticationUrls(surveyId, userId);
 
     res.json({ data: job });
   };
