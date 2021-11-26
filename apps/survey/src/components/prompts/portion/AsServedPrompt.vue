@@ -90,7 +90,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import merge from 'deepmerge';
+import { merge } from '@common/util';
 
 import { basePromptProps, BasePromptProps } from '@common/prompts';
 import { LocaleTranslation } from '@common/types';

@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import merge from 'deepmerge';
+import { merge } from '@common/util';
 import { BasePromptProps, submitPromptProps } from '@common/prompts';
 import Submit from '@/components/prompts/actions/Submit.vue';
 import BasePrompt from '../BasePrompt';

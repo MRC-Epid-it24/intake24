@@ -21,7 +21,7 @@ type BrdCrumbs = {
 export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
   name: 'RecallBreadCrumbsMobile',
 
-	mixins: [localeContent],
+  mixins: [localeContent],
 
   props: {
     prompt: String,

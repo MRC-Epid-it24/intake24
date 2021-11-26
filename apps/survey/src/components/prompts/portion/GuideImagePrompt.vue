@@ -42,6 +42,7 @@
                           :class="{ active: idx === selectedObjectIdx }"
                           :points="polygon"
                           @click.stop="selectObject(idx)"
+                          @keypress.stop="selectObject(idx)"
                         ></polygon>
                       </svg>
                     </div>

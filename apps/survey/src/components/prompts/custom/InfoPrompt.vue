@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import merge from 'deepmerge';
+import { merge } from '@common/util';
 import { BasePromptProps, infoPromptProps } from '@common/prompts';
 import BasePrompt from '../BasePrompt';
 

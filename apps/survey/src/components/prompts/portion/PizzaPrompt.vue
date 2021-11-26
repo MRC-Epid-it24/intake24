@@ -48,9 +48,7 @@
                   {{ $t('portion.common.completePreviousStep') }}
                 </template>
                 <template v-if="sizePromptProps.imageMapId">
-                  <v-btn @click="selectWhole()"
-                    :color="wholeSelected === true ? 'success' : ''"
-                  >
+                  <v-btn @click="selectWhole()" :color="wholeSelected === true ? 'success' : ''">
                     {{ $t('portion.pizza.wholePizzaButton') }}
                   </v-btn>
                   <image-map-selector
@@ -100,7 +98,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import merge from 'deepmerge';
+import { merge } from '@common/util';
 import { PizzaPromptProps, pizzaPromptDefaultProps, ImageMapSelectorProps } from '@common/prompts';
 import { ImageMapEmit } from '@common/types/http/foods';
 import localeContent from '@/components/mixins/localeContent';

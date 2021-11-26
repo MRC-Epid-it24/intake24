@@ -56,13 +56,16 @@
             </v-btn>
           </div>
         </v-card>
-        <input
-          ref="fileInput"
-          class="d-none"
-          type="file"
-          accept="image/jpeg"
-          @change="onFileChanged"
-        />
+        <label for="fileInput" class="d-none">
+          <input
+            ref="fileInput"
+            class="d-none"
+            id="fileInput"
+            type="file"
+            accept="image/jpeg"
+            @change="onFileChanged"
+          />
+        </label>
       </v-col>
     </v-row>
   </div>

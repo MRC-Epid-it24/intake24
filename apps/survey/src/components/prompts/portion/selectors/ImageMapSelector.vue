@@ -9,6 +9,7 @@
         :class="{ active: idx === selectedIdx }"
         :points="polygon"
         @click.stop="selectObject(idx)"
+        @keypress.stop="selectObject(idx)"
       ></polygon>
     </svg>
   </div>
@@ -16,7 +17,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import merge from 'deepmerge';
+import { merge } from '@common/util';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
 import { VImg } from 'vuetify/lib';

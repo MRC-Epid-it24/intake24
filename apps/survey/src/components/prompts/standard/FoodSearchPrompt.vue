@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import merge from 'deepmerge';
+import { merge } from '@common/util';
 import { BasePromptProps, submitPromptProps } from '@common/prompts';
 import { LocaleTranslation, replaceInTranslation } from '@common/types';
 import { FoodSearchResponse } from '@common/types/http';

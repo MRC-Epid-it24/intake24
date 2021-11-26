@@ -92,7 +92,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import merge from 'deepmerge';
+import { merge } from '@common/util';
 import { CerealPromptProps, cerealPromptDefaultProps, ImageMapSelectorEmit } from '@common/prompts';
 import { LocaleTranslation } from '@common/types';
 import { UserFoodData } from '@common/types/http';
