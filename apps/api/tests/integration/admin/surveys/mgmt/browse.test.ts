@@ -2,7 +2,7 @@ import request from 'supertest';
 import { SurveyRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 import { Survey } from '@api/db/models/system';
-import { surveyStaff } from '@api/services/auth';
+import { surveyStaff } from '@api/services/core/auth';
 
 export default (): void => {
   const baseUrl = '/api/admin/surveys';

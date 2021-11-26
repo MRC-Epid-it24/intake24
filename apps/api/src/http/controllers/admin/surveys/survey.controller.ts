@@ -14,7 +14,7 @@ import { Language, Locale, Scheme, Survey } from '@api/db/models/system';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { surveyListResponse, surveyResponse } from '@api/http/responses/admin';
-import { staffSuffix } from '@api/services/auth';
+import { staffSuffix } from '@api/services/core/auth';
 import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyController = Controller<CrudActions>;

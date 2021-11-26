@@ -9,7 +9,7 @@ import { Permission, Survey, User } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
 import { permissionListResponse, userMgmtResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
-import { surveyMgmt } from '@api/services/auth';
+import { surveyMgmt } from '@api/services/core/auth';
 import { Controller } from '../../controller';
 
 export type AdminSurveyMgmtController = Controller<'browse' | 'available' | 'update'>;

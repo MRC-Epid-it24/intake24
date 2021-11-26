@@ -7,29 +7,14 @@ import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { defaultAlgorithm } from '@api/util/passwords';
 import { toSimpleName } from '@api/util';
-import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from './auth';
+import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '../core/auth';
 
 export type UserPasswordInput = {
   userId: string;
   password: string;
 };
 
-export interface UserService {
-  create: (input: CreateUserInput) => Promise<User>;
-  update: (userId: string, input: UpdateUserInput) => Promise<User>;
-  destroy: (userId: string) => Promise<void>;
-  updateUserCustomFields: (
-    userId: string,
-    userCustomFields: UserCustomField[],
-    customFields: CustomField[]
-  ) => Promise<void>;
-  createPassword: (input: UserPasswordInput) => Promise<UserPassword>;
-  createPasswords: (records: UserPasswordInput[]) => Promise<UserPassword[]>;
-  updatePassword: (input: UserPasswordInput) => Promise<UserPassword>;
-  flushACLCache: (userId: string) => Promise<void>;
-}
-
-export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
+const userService = ({ cache }: Pick<IoC, 'cache'>) => {
   /**
    * Flush ACL cache for specified user
    *
@@ -228,3 +213,7 @@ export default ({ cache }: Pick<IoC, 'cache'>): UserService => {
     flushACLCache,
   };
 };
+
+export default userService;
+
+export type UserService = ReturnType<typeof userService>;
