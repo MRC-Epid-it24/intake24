@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http';
 import { UnauthorizedError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
-import type { Tokens, LoginMeta } from '@api/services/auth';
+import type { Tokens, LoginMeta } from '@api/services/core/auth';
 import { Controller } from './controller';
 
 export type AuthenticationController = Controller<

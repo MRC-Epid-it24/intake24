@@ -6,7 +6,7 @@ import * as foods from '@api/db/models/foods';
 import Metaphone3Encoder from '@api/food-index/metaphone-encoder';
 import { PhraseIndex, PhraseWithKey } from '@api/food-index/phrase-index';
 import EnglishWordOps from '@api/food-index/english-word-ops';
-import { dbLogger } from '@api/services/logger';
+import { dbLogger } from '@api/services';
 
 const db = new Sequelize({
   ...workerData.dbConnectionInfo,

@@ -6,7 +6,7 @@ import { SurveyDataExportParams } from '@common/types';
 import { Job as DbJob } from '@api/db/models/system';
 import type { IoC } from '@api/ioc';
 import { NotFoundError } from '@api/http/errors';
-import { EMPTY } from '@api/services/data-export';
+import { EMPTY } from '@api/services/admin/data-export';
 import { addTime } from '@api/util';
 import BaseJob from './job';
 

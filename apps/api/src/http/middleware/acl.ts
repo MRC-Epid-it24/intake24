@@ -5,7 +5,7 @@ import passport from 'passport';
 import { User } from '@api/db/models/system';
 import { ForbiddenError } from '@api/http/errors';
 import ioc, { IoC } from '@api/ioc';
-import { foodDatabaseMaintainer, surveyRespondent, surveyStaff } from '@api/services/auth';
+import { foodDatabaseMaintainer, surveyRespondent, surveyStaff } from '@api/services/core/auth';
 
 const { acl: AclConfig } = ioc.cradle.config;
 

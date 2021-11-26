@@ -2,7 +2,7 @@
 // stuff like redis, mail etc. as in integration suite
 
 import databaseConfig from '@api/config/database';
-import logger from '@api/services/logger';
+import { logger } from '@api/services/core';
 import appConfig from '@api/config/app';
 import DB, { DbInterface } from '@api/db';
 

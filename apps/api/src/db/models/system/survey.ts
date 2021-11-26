@@ -11,7 +11,7 @@ import {
 } from 'sequelize-typescript';
 import { SurveyAttributes, SurveyCreationAttributes, SurveyState } from '@common/types/models';
 import { defaultOverrides, SchemeOverrides } from '@common/schemes';
-import { surveyPermissions } from '@api/services/auth';
+import { surveyPermissions } from '@api/services/core/auth';
 import BaseModel from '../model';
 import {
   ClientErrorReport,

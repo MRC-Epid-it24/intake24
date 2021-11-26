@@ -80,7 +80,7 @@ import type {
   Scheduler,
   Session,
 } from '@api/services';
-import type { JobsQueueHandler, TasksQueueHandler } from '@api/services/queues';
+import type { JobsQueueHandler, TasksQueueHandler } from '@api/services/core/queues';
 import type { Jobs } from '@api/jobs';
 
 import type { User } from '@api/db/models/system';

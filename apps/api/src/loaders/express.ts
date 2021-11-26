@@ -8,7 +8,7 @@ import nunjucks from 'nunjucks';
 import path from 'path';
 import type { Ops } from '@api/app';
 import ioc from '@api/ioc';
-import { httpLogger as stream } from '@api/services/logger';
+import { httpLogger as stream } from '@api/services/core';
 
 export default async (app: Express, { config }: Ops): Promise<void> => {
   const {

@@ -12,7 +12,7 @@ import {
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { toSimpleName, generateToken } from '@api/util';
-import { surveyMgmt, surveyRespondent } from '../auth';
+import { surveyMgmt, surveyRespondent } from '../core/auth';
 
 const adminSurveyService = ({
   securityConfig,

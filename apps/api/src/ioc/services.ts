@@ -28,11 +28,10 @@ import {
   userService,
 } from '@api/services';
 
-import { JobsQueueHandler, TasksQueueHandler } from '@api/services/queues';
+import { JobsQueueHandler, TasksQueueHandler } from '@api/services/core/queues';
 
 export default (container: AwilixContainer): void => {
   container.register({
-    adminSurveyService: asFunction(adminSurveyService),
     authenticationService: asFunction(authenticationService),
     aclService: asFunction(aclService).scoped(),
     jwtService: asFunction(jwtService),
@@ -48,12 +47,14 @@ export default (container: AwilixContainer): void => {
     foodDataService: asFunction(foodDataService),
     nutrientTableService: asFunction(nutrientTableService),
     portionSizeService: asFunction(portionSizeService),
-    surveyService: asFunction(surveyService),
-    userService: asFunction(userService),
 
+    adminSurveyService: asFunction(adminSurveyService),
+    surveyService: asFunction(surveyService),
     dataExportFields: asFunction(dataExportFields),
     dataExportMapper: asFunction(dataExportMapper),
     dataExportService: asFunction(dataExportService),
+
+    userService: asFunction(userService),
 
     cache: asClass(Cache).singleton(),
     filesystem: asClass(Filesystem).singleton(),
