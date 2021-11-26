@@ -14,7 +14,7 @@ describe('API', () => {
   beforeAll(async () => {
     await suite.init();
 
-    // Get access tokens for superuser, admin-user, respondent
+    // Get access tokens for superuser, user (admin tool), respondent (survey frontend)
     const superuserRes = await request(suite.app)
       .post('/api/auth/login')
       .set('Accept', 'application/json')
@@ -68,7 +68,7 @@ describe('API', () => {
     describe('GET /api/surveys', surveys.browse);
     describe('GET /api/surveys/:surveyId', surveys.read);
     describe('POST /api/surveys/:surveyId/generate-user', surveys.generateUser);
-    // describe('POST /api/surveys/:surveyId/create-user', surveys.createUser);
+    describe('POST /api/surveys/:surveyId/create-user', surveys.createUser);
 
     describe('GET /api/surveys/:surveyId/parameters', surveys.parameters);
     describe('GET /api/surveys/:surveyId/user-info', surveys.userInfo);

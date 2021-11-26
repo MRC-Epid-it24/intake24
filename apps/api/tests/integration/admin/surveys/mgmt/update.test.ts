@@ -5,7 +5,7 @@ import { Survey } from '@api/db/models/system';
 import { surveyStaff } from '@api/services/auth';
 import ioc from '@api/ioc';
 
-const { surveyService } = ioc.cradle;
+const { adminSurveyService } = ioc.cradle;
 
 export default (): void => {
   const baseUrl = '/api/admin/surveys';
@@ -31,7 +31,7 @@ export default (): void => {
     invalidSurveyUrl = `${baseUrl}/invalid-survey-id/mgmt/${suite.data.system.user.id}`;
     invalidUserUrl = `${baseUrl}/${survey.id}/mgmt/999999`;
 
-    const permissions = await surveyService.getSurveyMgmtPermissions(survey.id);
+    const permissions = await adminSurveyService.getSurveyMgmtPermissions(survey.id);
     const ids = permissions.map((permission) => permission.id);
 
     input = {

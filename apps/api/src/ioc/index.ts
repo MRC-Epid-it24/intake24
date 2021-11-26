@@ -54,6 +54,7 @@ import type {
   AdminUserController,
 } from '@api/http/controllers';
 import type {
+  AdminSurveyService,
   AuthenticationService,
   ACLService,
   JwtService,
@@ -183,6 +184,7 @@ export interface IoC extends Jobs {
   portionSizeService: PortionSizeService;
 
   // Surveys
+  adminSurveyService: AdminSurveyService;
   surveyService: SurveyService;
   dataExportFields: DataExportFields;
   dataExportMapper: DataExportMapper;

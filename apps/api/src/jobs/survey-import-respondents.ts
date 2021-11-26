@@ -21,16 +21,16 @@ const requiredFields = ['username', 'password'];
 export default class SurveyImportRespondents extends StreamLockJob<SurveyImportRespondentsParams> {
   readonly name = 'SurveyImportRespondents';
 
-  private readonly surveyService;
+  private readonly adminSurveyService;
 
   private file!: string;
 
   private content: CSVRow[] = [];
 
-  constructor({ logger, surveyService }: Pick<IoC, 'logger' | 'surveyService'>) {
+  constructor({ logger, adminSurveyService }: Pick<IoC, 'logger' | 'adminSurveyService'>) {
     super({ logger });
 
-    this.surveyService = surveyService;
+    this.adminSurveyService = adminSurveyService;
   }
 
   /**
@@ -221,7 +221,7 @@ export default class SurveyImportRespondents extends StreamLockJob<SurveyImportR
       };
     });
 
-    await this.surveyService.createRespondents(this.params.surveyId, records);
+    await this.adminSurveyService.createRespondents(this.params.surveyId, records);
 
     await this.incrementProgress(this.content.length);
 

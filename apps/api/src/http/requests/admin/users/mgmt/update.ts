@@ -17,7 +17,9 @@ export default validate(
         options: async (value, { req }): Promise<void> => {
           const { surveyId } = (req as Request).params;
 
-          const permissions = await ioc.cradle.surveyService.getSurveyMgmtPermissions(surveyId);
+          const permissions = await ioc.cradle.adminSurveyService.getSurveyMgmtPermissions(
+            surveyId
+          );
           const allowedPermissions = permissions.map((permission) => permission.id);
 
           if (!Array.isArray(value) || value.some((item) => !allowedPermissions.includes(item)))

@@ -14,7 +14,9 @@ import { Controller } from '../../controller';
 
 export type AdminSurveyMgmtController = Controller<'browse' | 'available' | 'update'>;
 
-export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtController => {
+export default ({
+  adminSurveyService,
+}: Pick<IoC, 'adminSurveyService'>): AdminSurveyMgmtController => {
   const browse = async (req: Request, res: Response<SurveyMgmtResponse>): Promise<void> => {
     const { surveyId } = req.params;
 
@@ -66,7 +68,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtC
       ],
     });
 
-    const permissions = await surveyService.getSurveyMgmtPermissions(surveyId, 'list');
+    const permissions = await adminSurveyService.getSurveyMgmtPermissions(surveyId, 'list');
 
     res.json({
       users: users.map(userMgmtResponse),
@@ -87,7 +89,10 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): AdminSurveyMgmtC
 
     if (!survey || !user) throw new NotFoundError();
 
-    const surveyMgmtPermissions = await surveyService.getSurveyMgmtPermissions(surveyId, 'list');
+    const surveyMgmtPermissions = await adminSurveyService.getSurveyMgmtPermissions(
+      surveyId,
+      'list'
+    );
 
     await user.$remove('permissions', surveyMgmtPermissions);
 

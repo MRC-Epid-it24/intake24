@@ -1,5 +1,6 @@
 import { asClass, asFunction, asValue, AwilixContainer } from 'awilix';
 import {
+  adminSurveyService,
   authenticationService,
   aclService,
   jwtService,
@@ -31,6 +32,7 @@ import { JobsQueueHandler, TasksQueueHandler } from '@api/services/queues';
 
 export default (container: AwilixContainer): void => {
   container.register({
+    adminSurveyService: asFunction(adminSurveyService),
     authenticationService: asFunction(authenticationService),
     aclService: asFunction(aclService).scoped(),
     jwtService: asFunction(jwtService),

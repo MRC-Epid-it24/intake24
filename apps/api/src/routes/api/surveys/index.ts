@@ -23,7 +23,11 @@ router.post(
   validation.generateUser,
   wrapAsync(surveyController.generateUser)
 );
-router.post('/:surveyId/create-user', wrapAsync(surveyController.createUser));
+router.post(
+  '/:surveyId/create-user',
+  validation.createUser,
+  wrapAsync(surveyController.createUser)
+);
 
 router.use('/:surveyId', surveyRespondents);
 
