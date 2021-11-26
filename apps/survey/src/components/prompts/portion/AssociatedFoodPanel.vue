@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import merge from 'deepmerge';
+import { merge } from '@common/util';
 import { UserFoodData, UserPortionSizeMethod } from '@common/types/http';
 import {
   AssociatedFoodsPanelProps,

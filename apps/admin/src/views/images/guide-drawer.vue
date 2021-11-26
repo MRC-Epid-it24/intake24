@@ -14,6 +14,7 @@
           :class="{ active: objectIdx === selectedObjectIdx }"
           :points="object.polygon"
           @click.stop="selectObject(objectIdx)"
+          @keypress.stop="selectObject(objectIdx)"
         ></polygon>
         <g class="guides-drawer-node-group" v-if="isImageMap && !disabled">
           <circle
