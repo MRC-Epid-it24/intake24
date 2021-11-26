@@ -7,7 +7,7 @@ export default {
     '^@common/(.*)$': '<rootDir>/../../packages/common/src/$1',
   },
   rootDir: '.',
-  roots: ['<rootDir>/tests'],
+  roots: ['<rootDir>/src', '<rootDir>/tests'],
   setupFilesAfterEnv: ['jest-extended/all'],
   testEnvironment: 'node',
   transform: {
