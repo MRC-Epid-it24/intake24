@@ -8,7 +8,7 @@ User={{ app.user }}
 Group={{ app.group }}
 Restart=on-failure
 WorkingDirectory={{ app.directory }}/apps/api
-ExecStart=/usr/bin/node dist/server.js
+ExecStart=/usr/bin/pm2 start
 
 [Install]
 WantedBy=multi-user.target
