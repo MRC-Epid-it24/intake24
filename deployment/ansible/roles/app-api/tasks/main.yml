@@ -1,6 +1,13 @@
 - name: Include shared vars
   include_vars: '../instances/{{ instance }}/shared/config.json'
 
+- name: Update pm2 to latest
+  command: npm install -g pm2
+
+- name: Update in-memory pm2 code
+  become_user: '{{ app.user }}'
+  command: pm2 updatePM2
+
 - name: Install npm package dependencies
   become_user: '{{ app.user }}'
   command: npm ci
@@ -12,6 +19,13 @@
   copy:
     src: '{{ env_file }}'
     dest: '{{ app.directory }}/apps/api/.env'
+    mode: '644'
+
+- name: Copy pm2 config file
+  become_user: '{{ app.user }}'
+  copy:
+    src: '{{ pm2_file }}'
+    dest: '{{ app.directory }}/apps/api/ecosystem.config.js'
     mode: '644'
 
 - name: Build API server

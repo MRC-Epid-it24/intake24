@@ -1,5 +1,6 @@
 {
   "env_file": "../instances/{{ instance }}/app-api/.env",
+  "pm2_file": "../instances/{{ instance }}/app-api/pm2.js",
   "migrations": {
     "foods": true,
     "system": true
