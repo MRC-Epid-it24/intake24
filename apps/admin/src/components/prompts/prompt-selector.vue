@@ -341,7 +341,6 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
 
     updateLocales(changeField: ChangeQuestionFieldLocale) {
-      console.log('update-emitted', changeField.value, ' - ', changeField.field);
       const newQuestion: EditPromptQuestion = {
         ...this.dialog.question,
         [changeField.field]: changeField.value,
