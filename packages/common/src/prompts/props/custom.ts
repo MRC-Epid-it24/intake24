@@ -80,6 +80,7 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'info-prompt',
     name: 'Info / confirmation prompt',
+    localName: { en: 'Info / confirmation prompt' },
     props: copy(basePromptProps),
   },
   {
@@ -87,6 +88,7 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'date-picker-prompt',
     name: 'Date picker prompt',
+    localName: { en: 'Date picker prompt' },
     props: copy(datePickerPromptProps),
   },
   {
@@ -94,6 +96,7 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'time-picker-prompt',
     name: 'Time picker prompt',
+    localName: { en: 'Time picker prompt' },
     props: copy(timePickerPromptProps),
   },
   {
@@ -101,6 +104,7 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'checkbox-list-prompt',
     name: 'Checkbox List Prompt',
+    localName: { en: 'Checkbox List Prompt' },
     props: copy(checkboxListPromptProps),
   },
   {
@@ -108,6 +112,7 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'radio-list-prompt',
     name: 'Radio List Prompt',
+    localName: { en: 'Radio List Prompt' },
     props: copy(radioListPromptProps),
   },
   {
@@ -115,6 +120,7 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'textarea-prompt',
     name: 'Textarea prompt',
+    localName: { en: 'Textarea prompt' },
     props: copy(textareaPromptProps),
   },
 ];
