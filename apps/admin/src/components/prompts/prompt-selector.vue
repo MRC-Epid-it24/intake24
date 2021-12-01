@@ -85,11 +85,12 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-row  class="justify-end">
+              <v-row class="justify-end">
                 <v-col cols="12" md="6">
                   <language-selector
                     :label="$t('schemes.questions.localName')"
                     :value="dialog.question.localName"
+                    @input="updateLocales({ field: 'localName', value: $event })"
                   >
                     <template
                       v-for="lang in Object.keys(dialog.question.localName)"
@@ -97,7 +98,7 @@
                     >
                       <v-text-field
                         :key="lang"
-                        :value="dialog.question.localName[lang]"
+                        v-model="dialog.question.localName[lang]"
                         :rules="textRules"
                         :disabled="isOverrideMode"
                         :label="$t('schemes.questions.localName')"
@@ -135,7 +136,7 @@
 import { copy, merge } from '@common/util';
 import Vue, { VueConstructor } from 'vue';
 import { SurveyQuestionSection, MealSection } from '@common/schemes';
-import { FormRefs } from '@common/types';
+import { FormRefs, LocaleTranslation } from '@common/types';
 import {
   PromptQuestion,
   QuestionType,
@@ -158,6 +159,11 @@ export type PromptQuestionDialog = {
   show: boolean;
   index: number;
   question: EditPromptQuestion;
+};
+
+type ChangeQuestionFieldLocale = {
+  field: keyof EditPromptQuestion;
+  value: LocaleTranslation;
 };
 
 export default (Vue as VueConstructor<Vue & FormRefs>).extend({
@@ -332,6 +338,15 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
     validate() {
       this.$refs.form.validate();
+    },
+
+    updateLocales(changeField: ChangeQuestionFieldLocale) {
+      console.log('update-emitted', changeField.value, ' - ', changeField.field);
+      const newQuestion: EditPromptQuestion = {
+        ...this.dialog.question,
+        [changeField.field]: changeField.value,
+      };
+      this.dialog.question = newQuestion;
     },
   },
 });
