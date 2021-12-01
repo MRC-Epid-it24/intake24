@@ -143,6 +143,7 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'portion-size-option-prompt',
     name: 'Choose portion size method',
+    localName: { en: 'Choose Portion Size Method' },
     props: copy(basePromptProps),
   },
   {
@@ -150,6 +151,7 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'as-served-prompt',
     name: 'As served',
+    localName: { en: 'As served' },
     props: copy(basePromptProps),
   },
   {
@@ -157,6 +159,7 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'as-served-leftovers-prompt',
     name: 'As served (leftovers)',
+    localName: { en: 'As served (leftovers)' },
     props: copy(basePromptProps),
   },
   {
@@ -164,6 +167,7 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'guide-image-prompt',
     name: 'Guide image',
+    localName: { en: 'Guide image' },
     props: copy(basePromptProps),
   },
   {
@@ -171,6 +175,7 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'standard-portion-prompt',
     name: 'Standard portion',
+    localName: { en: 'Standard portion' },
     props: copy(basePromptProps),
   },
 ];

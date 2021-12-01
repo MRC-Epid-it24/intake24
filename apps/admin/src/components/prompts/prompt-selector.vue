@@ -85,6 +85,31 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
+              <v-row class="justify-end">
+                <v-col cols="12" md="6">
+                  <language-selector
+                    :label="$t('schemes.questions.localName')"
+                    :value="dialog.question.localName"
+                    @input="updateLocales({ field: 'localName', value: $event })"
+                  >
+                    <template
+                      v-for="lang in Object.keys(dialog.question.localName)"
+                      v-slot:[`lang.${lang}`]
+                    >
+                      <v-text-field
+                        :key="lang"
+                        v-model="dialog.question.localName[lang]"
+                        :rules="textRules"
+                        :disabled="isOverrideMode"
+                        :label="$t('schemes.questions.localName')"
+                        hide-details="auto"
+                        messages="Localized name"
+                        outlined
+                      ></v-text-field>
+                    </template>
+                  </language-selector>
+                </v-col>
+              </v-row>
             </v-tab-item>
             <component
               :is="dialog.question.component"
@@ -111,7 +136,7 @@
 import { copy, merge } from '@common/util';
 import Vue, { VueConstructor } from 'vue';
 import { SurveyQuestionSection, MealSection } from '@common/schemes';
-import { FormRefs } from '@common/types';
+import { FormRefs, LocaleTranslation } from '@common/types';
 import {
   PromptQuestion,
   QuestionType,
@@ -124,6 +149,7 @@ import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
 import portionSizePrompts from '@/components/prompts/portion-size';
 import PromptTypeSelector from './prompt-type-selector.vue';
+import LanguageSelector from './partials/LanguageSelector.vue';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;
@@ -133,6 +159,11 @@ export type PromptQuestionDialog = {
   show: boolean;
   index: number;
   question: EditPromptQuestion;
+};
+
+type ChangeQuestionFieldLocale = {
+  field: keyof EditPromptQuestion;
+  value: LocaleTranslation;
 };
 
 export default (Vue as VueConstructor<Vue & FormRefs>).extend({
@@ -150,6 +181,10 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       type: Array as () => string[],
       default: () => [],
     },
+    textRequired: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   components: {
@@ -157,6 +192,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     ...customPrompts,
     ...standardPrompts,
     ...portionSizePrompts,
+    LanguageSelector,
   },
 
   data() {
@@ -192,6 +228,14 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   computed: {
     isOverrideMode(): boolean {
       return this.mode === 'override';
+    },
+    textRules() {
+      return this.textRequired
+        ? [
+            (value: string | null): boolean | string =>
+              !!value || 'Question localized name is required.',
+          ]
+        : [];
     },
     availablePromptQuestions(): Record<QuestionType, PromptQuestion[]> {
       const { section } = this;
@@ -294,6 +338,14 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
     validate() {
       this.$refs.form.validate();
+    },
+
+    updateLocales(changeField: ChangeQuestionFieldLocale) {
+      const newQuestion: EditPromptQuestion = {
+        ...this.dialog.question,
+        [changeField.field]: changeField.value,
+      };
+      this.dialog.question = newQuestion;
     },
   },
 });

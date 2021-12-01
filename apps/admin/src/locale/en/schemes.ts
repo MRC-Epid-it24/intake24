@@ -136,6 +136,7 @@ const schemes: LocaleMessageObject = {
     },
     id: 'Question ID',
     name: 'Question name',
+    localName: 'Question localized name',
     type: 'Question type',
     component: 'Question component',
     custom: {
