@@ -1,6 +1,11 @@
 <template>
-  <v-toolbar flat dense class="brdcrmbs">
-    <v-breadcrumbs :items="breads">
+  <v-toolbar
+    flat
+    dense
+    class="brdcrmbs"
+    style="overflow-y: hidden; overflow-x: scroll; white-space: nowrap"
+  >
+    <v-breadcrumbs :items="brds">
       <template v-slot:divider>
         <v-icon>{{ forwardIcon }}</v-icon>
       </template>
@@ -11,21 +16,13 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
-import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
+import breadcrumbs, { BreadCrumbsContent, BrdCrumbs } from '@/components/mixins/breadcrumbs';
 
-type BrdCrumbs = {
-  text: string;
-  disabled: boolean;
-};
-
-export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
+export default (Vue as VueConstructor<Vue & BreadCrumbsContent>).extend({
   name: 'RecallBreadCrumbsMobile',
+  props: ['promptName'],
 
-  mixins: [localeContent],
-
-  props: {
-    prompt: String,
-  },
+  mixins: [breadcrumbs],
 
   data: () => {
     return {
@@ -36,20 +33,8 @@ export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
   computed: {
     ...mapGetters('survey', ['selectedMeal', 'selectedMealIndex', 'selectedFood']),
 
-    breads(): BrdCrumbs[] {
-      const localMealName: string | null = this.selectedMeal
-        ? this.getLocaleContent(this.selectedMeal.localName)
-        : null;
-      return [
-        {
-          text: localMealName !== null ? localMealName : this.$t('breadcrumbs.meal'),
-          disabled: !this.selectedMeal,
-        },
-        {
-          text: this.selectedFood ? this.selectedFood.name : this.$t('breadcrumbs.food'),
-          disabled: !this.selectedFood,
-        },
-      ];
+    brds(): BrdCrumbs[] {
+      return this.getBreadCrumbs(this.promptName).filter((el) => !el.disabled);
     },
   },
 });

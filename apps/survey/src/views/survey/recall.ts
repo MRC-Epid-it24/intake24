@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { mapState, mapGetters } from 'vuex';
 import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
 import { MealSection, SurveyQuestionSection } from '@common/schemes';
-import { MealState, Selection, FoodState } from '@common/types';
+import { MealState, Selection, FoodState, LocaleTranslation } from '@common/types';
 import { ComponentType } from '@common/prompts';
 import DynamicRecall, { PromptInstance } from '@/dynamic-recall/dynamic-recall';
 import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
@@ -108,8 +108,13 @@ export default Vue.extend({
       return this.selectedMealIndex;
     },
 
-    activePrompt(): string {
-      return this.currentPrompt ? this.currentPrompt?.prompt.name : '';
+    activePrompt(): string | LocaleTranslation {
+      if (this.currentPrompt) {
+        return this.currentPrompt.prompt.props.localName
+          ? this.currentPrompt.prompt.props.localName
+          : this.currentPrompt.prompt.name;
+      }
+      return '';
     },
 
     ...mapState({

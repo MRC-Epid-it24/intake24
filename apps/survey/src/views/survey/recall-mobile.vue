@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center" class="pt-2">
-    <recall-bread-crumbs-mobile :prompt="activePrompt"></recall-bread-crumbs-mobile>
+    <recall-bread-crumbs-mobile :promptName="activePrompt"></recall-bread-crumbs-mobile>
     <v-col cols="12" lg="9" class="content" v-if="bottomNavTab !== 1">
       <transition name="component-fade" mode="out-in">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch

@@ -12,7 +12,8 @@ export type LocaleContent = {
 
 export default Vue.extend({
   methods: {
-    getLocaleContent<T>(content: LocaleTranslation<T>): T {
+    getLocaleContent<T>(content: LocaleTranslation<T> | string): T | string {
+      if (typeof content === 'string') return content;
       return content[this.$i18n.locale] ?? content.en;
     },
     getLocaleString(
