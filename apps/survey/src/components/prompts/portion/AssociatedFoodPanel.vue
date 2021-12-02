@@ -112,6 +112,7 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
         dualLanguage: true,
         text: { en: '' },
         description: { en: '' },
+        localName: { en: '' },
         conditions: [],
       } as FoodSearchPromptProps,
       assocFoodDescription: '',

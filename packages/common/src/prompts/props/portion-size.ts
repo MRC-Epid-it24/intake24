@@ -45,6 +45,7 @@ export const drinkScalePromptDefaultProps: DrinkScalePromptProps = {
   text: { en: null },
   description: { en: null },
   conditions: [],
+  localName: { en: '' },
   validation: {
     required: false,
     message: { en: null },
@@ -55,6 +56,7 @@ export const standardPortionPromptDefaultProps: StandardPortionPromptProps = {
   text: { en: null },
   description: { en: null },
   conditions: [],
+  localName: { en: '' },
   validation: {
     required: false,
     message: { en: null },
@@ -69,6 +71,7 @@ export const cerealPromptDefaultProps: CerealPromptProps = {
   text: { en: null },
   description: { en: null },
   conditions: [],
+  localName: { en: '' },
   validation: {
     required: false,
     message: { en: null },
@@ -79,6 +82,7 @@ export const milkCerealPromptDefaultProps: MilkCerealPromptProps = {
   text: { en: null },
   description: { en: null },
   conditions: [],
+  localName: { en: '' },
   validation: {
     required: false,
     message: { en: null },
@@ -89,6 +93,7 @@ export const pizzaPromptDefaultProps: PizzaPromptProps = {
   text: { en: null },
   description: { en: null },
   conditions: [],
+  localName: { en: '' },
   validation: {
     required: false,
     message: { en: null },
@@ -102,6 +107,7 @@ export const milkHotDrinkPromptDefaultProps: MilkHotDrinkPromptProps = {
   text: { en: null },
   description: { en: null },
   conditions: [],
+  localName: { en: '' },
   validation: {
     required: false,
     message: { en: null },
@@ -112,6 +118,7 @@ export const directWeightPromptDefaultProps: DirectWeightPromptProps = {
   text: { en: null },
   description: { en: null },
   conditions: [],
+  localName: { en: '' },
   validation: {
     required: false,
     message: { en: null },
@@ -122,6 +129,7 @@ export const leftoverQuestionPromptDefaultProps: LeftoverQuestionPromptProps = {
   text: { en: null },
   description: { en: null },
   conditions: [],
+  localName: { en: '' },
   validation: {
     required: false,
     message: { en: null },
@@ -143,39 +151,34 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'portion-size-option-prompt',
     name: 'Choose portion size method',
-    localName: { en: 'Choose Portion Size Method' },
-    props: copy(basePromptProps),
+    props: copy({ ...basePromptProps, localName: { en: 'Choose Portion Method' } }),
   },
   {
     component: 'as-served-prompt',
     type: 'portion-size',
     id: 'as-served-prompt',
     name: 'As served',
-    localName: { en: 'As served' },
-    props: copy(basePromptProps),
+    props: copy({ ...basePromptProps, localName: { en: 'As served' } }),
   },
   {
     component: 'as-served-leftovers-prompt',
     type: 'portion-size',
     id: 'as-served-leftovers-prompt',
     name: 'As served (leftovers)',
-    localName: { en: 'As served (leftovers)' },
-    props: copy(basePromptProps),
+    props: copy({ ...basePromptProps, localName: { en: 'Leftovers' } }),
   },
   {
     component: 'guide-image-prompt',
     type: 'portion-size',
     id: 'guide-image-prompt',
     name: 'Guide image',
-    localName: { en: 'Guide image' },
-    props: copy(basePromptProps),
+    props: copy({ ...basePromptProps, localName: { en: 'Guide image' } }),
   },
   {
     component: 'standard-portion-prompt',
     type: 'portion-size',
     id: 'standard-portion-prompt',
     name: 'Standard portion',
-    localName: { en: 'Standard portion' },
-    props: copy(basePromptProps),
+    props: copy({ ...basePromptProps, localName: { en: 'Standart portion' } }),
   },
 ];

@@ -21,25 +21,37 @@ export const mealTimePromptProps: MealTimePromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
   format: '24hr',
+  localName: { en: 'Edit Time' },
 });
 
-export const mealAddPromptProps: BasePromptProps = copy(basePromptProps);
+export const mealAddPromptProps: BasePromptProps = copy({
+  ...basePromptProps,
+  localName: { en: 'Add Meal' },
+});
 
-export const editMealPromptProps: BasePromptProps = copy(basePromptProps);
+export const editMealPromptProps: BasePromptProps = copy({
+  ...basePromptProps,
+  localName: { en: 'Edit Meal' },
+});
 
-export const submitPromptProps: BasePromptProps = copy(basePromptProps);
+export const submitPromptProps: BasePromptProps = copy({
+  ...basePromptProps,
+  localName: { en: 'Submit' },
+});
 
 export const redirectPromptProps: RedirectPromptProps = copy({
   ...basePromptProps,
   url: null,
   identifier: 'username',
   timer: 0,
+  localName: { en: 'Redirect' },
 });
 
 export const foodSearchPromptProps: FoodSearchPromptProps = copy({
   ...basePromptProps,
   allowBrowsing: true,
   dualLanguage: false,
+  localName: { en: 'Search Food' },
 });
 
 export const standardPromptQuestions: PromptQuestion[] = [
@@ -48,7 +60,6 @@ export const standardPromptQuestions: PromptQuestion[] = [
     type: 'standard',
     id: 'meal-time-prompt',
     name: 'Meal Time prompt',
-    localName: { en: 'Edit Time' },
     props: copy(mealTimePromptProps),
   },
   {
@@ -56,7 +67,6 @@ export const standardPromptQuestions: PromptQuestion[] = [
     type: 'standard',
     id: 'submit-prompt',
     name: 'Submit prompt',
-    localName: { en: 'Submit' },
     props: copy(submitPromptProps),
   },
   {
@@ -64,7 +74,6 @@ export const standardPromptQuestions: PromptQuestion[] = [
     type: 'standard',
     id: 'redirect-prompt',
     name: 'Redirect prompt',
-    localName: { en: 'Redirect' },
     props: copy(redirectPromptProps),
   },
   {
@@ -72,7 +81,6 @@ export const standardPromptQuestions: PromptQuestion[] = [
     type: 'standard',
     id: 'food-search-prompt',
     name: 'Food search prompt',
-    localName: { en: 'Search Food' },
     props: copy(foodSearchPromptProps),
   },
   {
@@ -80,7 +88,6 @@ export const standardPromptQuestions: PromptQuestion[] = [
     type: 'standard',
     id: 'meal-add-prompt',
     name: 'Meal Add prompt',
-    localName: { en: 'Add Meal' },
     props: copy(mealAddPromptProps),
   },
   {
@@ -88,7 +95,6 @@ export const standardPromptQuestions: PromptQuestion[] = [
     type: 'standard',
     id: 'edit-meal-prompt',
     name: 'Meal Edit prompt',
-    localName: { en: 'Edit Meal' },
     props: copy(editMealPromptProps),
   },
 ];

@@ -42,12 +42,14 @@ export const infoPromptProps: BasePromptProps = copy(basePromptProps);
 export const datePickerPromptProps: DatePickerPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
+  localName: { en: 'Pick Date' },
 });
 
 export const timePickerPromptProps: TimePickerPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
   format: '24hr',
+  localName: { en: 'Pick Time' },
 });
 
 export const checkboxListPromptProps: CheckboxListPromptProps = copy({
@@ -56,6 +58,7 @@ export const checkboxListPromptProps: CheckboxListPromptProps = copy({
   label: { en: null },
   options: { en: [] },
   other: false,
+  localName: { en: 'Checkbox List' },
 });
 
 export const radioListPromptProps: RadioListPromptProps = copy({
@@ -65,6 +68,7 @@ export const radioListPromptProps: RadioListPromptProps = copy({
   options: { en: [] },
   orientation: 'column',
   other: false,
+  localName: { en: 'Radio List' },
 });
 
 export const textareaPromptProps: TextareaPromptProps = copy({
@@ -72,6 +76,7 @@ export const textareaPromptProps: TextareaPromptProps = copy({
   ...promptValidation,
   label: { en: null },
   hint: { en: null },
+  localName: { en: 'Fill Text' },
 });
 
 export const customPromptQuestions: PromptQuestion[] = [
@@ -80,15 +85,13 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'info-prompt',
     name: 'Info / confirmation prompt',
-    localName: { en: 'Info / confirmation prompt' },
-    props: copy(basePromptProps),
+    props: copy({ ...basePromptProps, localName: { en: 'Info / confirmation' } }),
   },
   {
     component: 'date-picker-prompt',
     type: 'custom',
     id: 'date-picker-prompt',
     name: 'Date picker prompt',
-    localName: { en: 'Date picker prompt' },
     props: copy(datePickerPromptProps),
   },
   {
@@ -96,7 +99,6 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'time-picker-prompt',
     name: 'Time picker prompt',
-    localName: { en: 'Time picker prompt' },
     props: copy(timePickerPromptProps),
   },
   {
@@ -104,7 +106,6 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'checkbox-list-prompt',
     name: 'Checkbox List Prompt',
-    localName: { en: 'Checkbox List Prompt' },
     props: copy(checkboxListPromptProps),
   },
   {
@@ -112,7 +113,6 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'radio-list-prompt',
     name: 'Radio List Prompt',
-    localName: { en: 'Radio List Prompt' },
     props: copy(radioListPromptProps),
   },
   {
@@ -120,7 +120,6 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'textarea-prompt',
     name: 'Textarea prompt',
-    localName: { en: 'Textarea prompt' },
     props: copy(textareaPromptProps),
   },
 ];

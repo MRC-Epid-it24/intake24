@@ -89,16 +89,16 @@
                 <v-col cols="12" md="6">
                   <language-selector
                     :label="$t('schemes.questions.localName')"
-                    :value="dialog.question.localName"
-                    @input="updateLocales({ field: 'localName', value: $event })"
+                    :value="dialog.question.props.localName"
+                    @input="updateQuestionProps({ field: 'localName', value: $event })"
                   >
                     <template
-                      v-for="lang in Object.keys(dialog.question.localName)"
+                      v-for="lang in Object.keys(dialog.question.props.localName)"
                       v-slot:[`lang.${lang}`]
                     >
                       <v-text-field
                         :key="lang"
-                        v-model="dialog.question.localName[lang]"
+                        v-model="dialog.question.props.localName[lang]"
                         :rules="textRules"
                         :disabled="isOverrideMode"
                         :label="$t('schemes.questions.localName')"
@@ -143,6 +143,7 @@ import {
   customPromptQuestions,
   portionSizePromptQuestions,
   standardPromptQuestions,
+  BasePromptProps,
 } from '@common/prompts';
 import { promptSettings } from '@/components/prompts';
 import customPrompts from '@/components/prompts/custom';
@@ -340,12 +341,12 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       this.$refs.form.validate();
     },
 
-    updateLocales(changeField: ChangeQuestionFieldLocale) {
-      const newQuestion: EditPromptQuestion = {
-        ...this.dialog.question,
+    updateQuestionProps(changeField: ChangeQuestionFieldLocale) {
+      const newProps: BasePromptProps = {
+        ...this.dialog.question.props,
         [changeField.field]: changeField.value,
       };
-      this.dialog.question = newQuestion;
+      this.dialog.question.props = newProps;
     },
   },
 });

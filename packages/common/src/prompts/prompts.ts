@@ -1,4 +1,3 @@
-import { LocaleTranslation } from '@common/types';
 import type { MealSection, SurveyQuestionSection } from '../schemes';
 import type { BasePromptProps } from './props';
 
@@ -42,7 +41,6 @@ export type ComponentType = CustomComponentType | StandardComponentType | Portio
 export interface PromptQuestion<T extends BasePromptProps = BasePromptProps> {
   id: string;
   name: string;
-  localName: LocaleTranslation;
   type: QuestionType;
   component: ComponentType;
   props: T;
