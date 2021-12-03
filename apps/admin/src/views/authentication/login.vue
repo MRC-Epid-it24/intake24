@@ -1,10 +1,7 @@
 <template>
   <v-row justify="center" no-gutters>
     <v-col cols="auto">
-      <v-card v-if="mfaChallenge" class="mt-10" outlined raised width="30rem" height="25rem">
-        <iframe id="duo_iframe" title="duo_iframe"></iframe>
-      </v-card>
-      <v-card v-else class="mt-10" outlined raised max-width="30rem">
+      <v-card class="mt-10" outlined raised max-width="30rem">
         <v-card-title class="justify-center pt-6">
           <h2>{{ $t('common._') }}</h2>
         </v-card-title>
@@ -71,7 +68,25 @@ export default Vue.extend({
     };
   },
 
-  computed: mapGetters('auth', ['loggedIn', 'mfaChallenge']),
+  computed: mapGetters('auth', ['loggedIn', 'mfaRequestUrl']),
+
+  async mounted() {
+    // Check for MFA response
+    const { state, code } = this.$route.query;
+
+    if ([state, code].some((item) => typeof item !== 'string' || !item.length)) {
+      return;
+    }
+
+    try {
+      await this.verify({ state, code });
+
+      if (this.loggedIn) await this.$router.push({ name: 'dashboard' });
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.status === 401)
+        this.$toasted.error('Invalid MFA authentication.');
+    }
+  },
 
   methods: {
     ...mapActions('auth', ['login', 'verify']),
@@ -83,14 +98,8 @@ export default Vue.extend({
         this.email = '';
         this.password = '';
 
-        if (this.mfaChallenge) {
-          window.Duo.init({
-            iframe: 'duo_iframe',
-            host: this.mfaChallenge.host,
-            sig_request: this.mfaChallenge.request,
-            submit_callback: this.mfaVerify.bind(this),
-          });
-
+        if (this.mfaRequestUrl) {
+          window.location.href = this.mfaRequestUrl;
           return;
         }
 
@@ -105,26 +114,8 @@ export default Vue.extend({
         }
       }
     },
-
-    async mfaVerify(form: HTMLElement) {
-      try {
-        const sigResponse = form.querySelector<HTMLInputElement>('input[name=sig_response]')?.value;
-        await this.verify(sigResponse);
-
-        if (this.loggedIn) await this.$router.push({ name: 'dashboard' });
-      } catch (err) {
-        if (axios.isAxiosError(err) && err.response?.status === 401)
-          this.$toasted.error('Invalid MFA authentication.');
-      }
-    },
   },
 });
 </script>
 
-<style lang="scss">
-#duo_iframe {
-  height: 100%;
-  width: 100%;
-  border: none;
-}
-</style>
+<style lang="scss"></style>

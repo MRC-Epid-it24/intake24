@@ -145,35 +145,41 @@ Selected provider for MFA
 
 ### Duo provider settings
 
-For more information, check out [duo's documentation for WebSDK](https://duo.com/docs/duoweb)
+For more information, check out [duo's documentation for WebSDK](https://duo.com/docs/duoweb). Intake24 implements Universal Prompt flow.
 
-#### Integration key
+#### Duo client ID
 
-* object-path: `mfa.providers.duo.ikey`
-* dotenv var: `DUO_IKEY`
+Duo client ID - can be found in Duo administration
+
+* object-path: `mfa.providers.duo.clientId`
+* dotenv var: `DUO_CLIENT_ID`
 * type: `string`
 * default: `''`
 
-#### Secret key
+#### Duo client secret
 
-* object-path: `mfa.providers.duo.skey`
-* dotenv var: `DUO_SKEY`
+Duo client secret - can be found in Duo administration
+
+* object-path: `mfa.providers.duo.clientSecret`
+* dotenv var: `DUO_CLIENT_SECRET`
 * type: `string`
 * default: `''`
 
-#### Application secret key
+#### Duo API host
 
-* object-path: `mfa.providers.duo.akey`
-* dotenv var: `DUO_AKEY`
+Duo API hostname (e.g. api-a1b2c3d4e5.duosecurity.com) - can be found in Duo administration
+
+* object-path: `mfa.providers.duo.apiHost`
+* dotenv var: `DUO_API_HOST`
 * type: `string`
 * default: `''`
 
-#### Host
+#### Duo redirect URL
 
-API hostname (e.g. api-a1b2c3d4e5.duosecurity.com)
+URL where to redirect from MFA verification step. This should be admin tool login page.
 
-* object-path: `mfa.providers.duo.host`
-* dotenv var: `DUO_HOST`
+* object-path: `mfa.providers.duo.redirectUrl`
+* dotenv var: `DUO_REDIRECT_URL`
 * type: `string`
 * default: `''`
 

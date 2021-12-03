@@ -1,3 +1,5 @@
+export * from './mfa';
+
 export * from './authentication.service';
 export * from './acl.service';
 export * from './jwt-rotation.service';

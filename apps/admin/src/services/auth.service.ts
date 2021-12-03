@@ -1,42 +1,39 @@
+import { LoginResponse, MFAResponse } from '@common/types/http';
 import http from './http.service';
 
 export type LoginRequest = { email: string; password: string };
 
-export type AuthResponse = { accessToken: string };
+export type MFAVerifyRequest = { code: string; state: string };
 
-export type MfaRequest = { mfa: { request: string; host: string } };
-
-export type AuthResponseOrMfaChallenge = { accessToken?: string; mfa?: MfaRequest };
+export type AuthResponse = LoginResponse | MFAResponse;
 
 export default {
   /**
    * Login the user and store the access token to token service.
    *
    * @param {LoginRequest} request
-   * @returns {Promise<AuthOrMfaChallengeResponse>}
+   * @returns {Promise<AuthResponse>}
    */
-  async login(request: LoginRequest): Promise<AuthResponseOrMfaChallenge> {
-    const {
-      data: { accessToken, mfa },
-    } = await http.post<AuthResponseOrMfaChallenge>('auth/login', request, {
+  async login(request: LoginRequest): Promise<AuthResponse> {
+    const { data } = await http.post<AuthResponse>('auth/login', request, {
       withCredentials: true,
     });
 
-    return { accessToken, mfa };
+    return data;
   },
 
   /**
    * Verify multi-factor challenge response
    *
-   * @param {string} sigResponse
+   * @param {MFAVerifyRequest} request
    * @returns {Promise<string>}
    */
-  async verify(sigResponse: string): Promise<string> {
+  async verify({ code, state }: MFAVerifyRequest): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>(
+    } = await http.post<LoginResponse>(
       'auth/login/verify',
-      { sigResponse },
+      { code, state },
       { withCredentials: true }
     );
 
@@ -55,7 +52,7 @@ export default {
   async refresh(): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('auth/refresh', null, { withCredentials: true });
+    } = await http.post<LoginResponse>('auth/refresh', null, { withCredentials: true });
 
     return accessToken;
   },

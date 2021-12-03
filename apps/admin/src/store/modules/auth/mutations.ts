@@ -4,26 +4,23 @@ import { AuthState } from '@/types';
 import defaultState from './state';
 
 const mutations: MutationTree<AuthState> = {
-  request(state) {
-    state.status = 'loading';
-  },
-
   login(state, accessToken) {
-    state.status = 'success';
     state.error = null;
+
     state.accessToken = accessToken;
-    state.mfa = null;
+    state.mfaRequestUrl = null;
   },
 
-  mfa(state, mfa) {
-    state.status = 'success';
+  mfaRequest(state, url) {
     state.error = null;
-    state.mfa = { ...mfa };
+
+    state.accessToken = null;
+    state.mfaRequestUrl = url;
   },
 
   refresh(state, accessToken) {
-    state.status = 'success';
     state.error = null;
+
     state.accessToken = accessToken;
   },
 
@@ -33,7 +30,6 @@ const mutations: MutationTree<AuthState> = {
 
   error(state, error: AxiosError) {
     state.error = error;
-    state.status = 'error';
   },
 };
 

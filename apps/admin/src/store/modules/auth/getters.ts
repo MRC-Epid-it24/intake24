@@ -4,7 +4,7 @@ import { AuthState, RootState } from '@/types';
 const getters: GetterTree<AuthState, RootState> = {
   accessToken: (state) => state.accessToken,
   loggedIn: (state) => !!state.accessToken,
-  mfaChallenge: (state) => state.mfa,
+  mfaRequestUrl: (state) => state.mfaRequestUrl,
 };
 
 export default getters;

@@ -29,20 +29,11 @@ export const surveyPermissions = (surveyId: string): string[] => [
 export const foodDatabaseMaintainer = (fdbId: string): string =>
   `${foodDatabaseMaintainerPrefix}${fdbId}`;
 
-export interface ACLService {
-  getPermissions: () => Promise<Permission[]>;
-  getRoles: () => Promise<Role[]>;
-  hasPermission: (permission: string) => Promise<boolean>;
-  hasAnyPermission: (permission: string[]) => Promise<boolean>;
-  hasRole: (role: string) => Promise<boolean>;
-  hasAnyRole: (role: string[]) => Promise<boolean>;
-}
-
-export default ({
+const aclService = ({
   aclConfig,
   cache,
   currentUser,
-}: Pick<IoC, 'aclConfig' | 'cache' | 'currentUser'>): ACLService => {
+}: Pick<IoC, 'aclConfig' | 'cache' | 'currentUser'>) => {
   const { enabled, expiresIn } = aclConfig.cache;
   const { id: userId } = currentUser;
 
@@ -111,3 +102,7 @@ export default ({
     hasAnyRole,
   };
 };
+
+export default aclService;
+
+export type ACLService = ReturnType<typeof aclService>;

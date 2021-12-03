@@ -1,21 +1,25 @@
-import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
+import jwt, { Secret, SignOptions, VerifyOptions } from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 import type { MFAProvider } from '@api/config';
 import { InternalServerError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
+import { btoa } from '@api/util';
 
 export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken';
 
-export type Subject = { provider: SubjectProvider | MFAProvider; providerKey: string };
+export type Subject = {
+  provider: SubjectProvider | MFAProvider;
+  providerKey: string;
+};
 
 export type Tokens = {
   accessToken: string;
   refreshToken: string;
 };
 
-export interface SignPayload {
+export type SignPayload = {
   userId: string;
-}
+};
 
 export interface TokenPayload extends SignPayload {
   sub: string;
@@ -26,19 +30,10 @@ export interface TokenPayload extends SignPayload {
   exp: number;
 }
 
-export interface JwtService {
-  sign: (
-    payload: string | Buffer | object,
-    secret: string,
-    options?: SignOptions
-  ) => Promise<string>;
-  signAccessToken: (payload: SignPayload, options?: SignOptions) => Promise<string>;
-  signRefreshToken: (payload: SignPayload, options?: SignOptions) => Promise<string>;
-  signTokens: (payload: SignPayload, options?: SignOptions) => Promise<Tokens>;
-  verifyRefreshToken: (token: string) => Promise<TokenPayload>;
-}
-
-export default ({ securityConfig }: Pick<IoC, 'securityConfig'>): JwtService => {
+const jwtService = ({
+  jwtRotationService,
+  securityConfig,
+}: Pick<IoC, 'jwtRotationService' | 'securityConfig'>) => {
   const { issuer, access, refresh } = securityConfig.jwt;
   const signOptions: SignOptions = { issuer };
   const verifyOptions: VerifyOptions = { audience: 'refresh', issuer };
@@ -47,22 +42,21 @@ export default ({ securityConfig }: Pick<IoC, 'securityConfig'>): JwtService => 
    * Sign a token
    *
    * @param {(string | Buffer | object)} payload
-   * @param {string} secret
+   * @param {Secret} secret
    * @param {SignOptions} [options={}]
    * @returns {Promise<string>}
    */
   const sign = async (
     payload: string | Buffer | object,
-    secret: string,
+    secret: Secret,
     options: SignOptions = {}
-  ): Promise<string> => {
-    return new Promise((resolve, reject) => {
+  ): Promise<string> =>
+    new Promise((resolve, reject) => {
       const jwtid = nanoid(64);
       jwt.sign(payload, secret, { jwtid, ...signOptions, ...options }, (err, encoded) =>
         err || !encoded ? reject(err ?? new Error('Unable to sign token.')) : resolve(encoded)
       );
     });
-  };
 
   /**
    * Sign access token
@@ -120,14 +114,31 @@ export default ({ securityConfig }: Pick<IoC, 'securityConfig'>): JwtService => 
    * @param {string} token
    * @returns {TokenPayload}
    */
-  const verifyRefreshToken = async (token: string): Promise<TokenPayload> => {
-    return new Promise((resolve, reject) => {
+  const verifyRefreshToken = async (token: string): Promise<TokenPayload> =>
+    new Promise((resolve, reject) => {
       jwt.verify(token, refresh.secret, verifyOptions, (err, decoded) =>
         err || !decoded
           ? reject(err ?? new Error('Unable to verify refresh token.'))
           : resolve(decoded as TokenPayload)
       );
     });
+
+  /**
+   * Issue JWT tokens and log for rotation
+   *
+   * @param {string} userId
+   * @param {(Subject | string)} subject
+   * @returns {Promise<Tokens>}
+   */
+  const issueTokens = async (userId: string, subject: Subject | string): Promise<Tokens> => {
+    const payload: SignPayload = { userId };
+
+    const { accessToken, refreshToken } = await signTokens(payload, {
+      subject: typeof subject === 'string' ? subject : btoa(subject),
+    });
+    await jwtRotationService.store(refreshToken, userId);
+
+    return { accessToken, refreshToken };
   };
 
   return {
@@ -136,5 +147,10 @@ export default ({ securityConfig }: Pick<IoC, 'securityConfig'>): JwtService => 
     signRefreshToken,
     signTokens,
     verifyRefreshToken,
+    issueTokens,
   };
 };
+
+export default jwtService;
+
+export type JwtService = ReturnType<typeof jwtService>;

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { LoginResponse, MfaResponse, RefreshResponse } from '@common/types/http';
+import { LoginResponse, MFAResponse, RefreshResponse } from '@common/types/http';
 import { UnauthorizedError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
-import type { Tokens, LoginMeta } from '@api/services/core/auth';
+import type { Tokens } from '@api/services/core/auth';
 import { Controller } from './controller';
 
 export type AuthenticationController = Controller<
@@ -10,12 +10,13 @@ export type AuthenticationController = Controller<
 >;
 
 export default ({
-  securityConfig,
   authenticationService,
   jwtRotationService,
+  mfaProvider,
+  securityConfig,
 }: Pick<
   IoC,
-  'securityConfig' | 'authenticationService' | 'jwtRotationService'
+  'authenticationService' | 'jwtRotationService' | 'mfaProvider' | 'securityConfig'
 >): AuthenticationController => {
   /**
    * Successful login response helper
@@ -39,13 +40,12 @@ export default ({
 
   const emailLogin = async (
     req: Request,
-    res: Response<LoginResponse | MfaResponse>
+    res: Response<LoginResponse | MFAResponse>
   ): Promise<void> => {
     const { email, password } = req.body;
-    const meta: LoginMeta = { remoteAddress: req.ip, userAgent: req.headers['user-agent'] };
 
-    const result = await authenticationService.emailLogin({ email, password }, meta);
-    if ('mfa' in result) {
+    const result = await authenticationService.emailLogin({ email, password }, { req });
+    if ('mfaRequestUrl' in result) {
       res.json(result);
       return;
     }
@@ -55,32 +55,34 @@ export default ({
 
   const aliasLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
     const { userName, password, surveyId } = req.body;
-    const meta: LoginMeta = { remoteAddress: req.ip, userAgent: req.headers['user-agent'] };
 
-    const tokens = await authenticationService.aliasLogin({ userName, password, surveyId }, meta);
+    const tokens = await authenticationService.aliasLogin(
+      { userName, password, surveyId },
+      { req }
+    );
 
     await sendTokenResponse(tokens, res);
   };
 
   const tokenLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
     const { token } = req.body;
-    const meta: LoginMeta = { remoteAddress: req.ip, userAgent: req.headers['user-agent'] };
 
-    if (!token) throw new UnauthorizedError();
+    if (typeof token !== 'string' || !token) throw new UnauthorizedError();
 
-    const tokens = await authenticationService.tokenLogin({ token }, meta);
+    const tokens = await authenticationService.tokenLogin({ token }, { req });
 
     await sendTokenResponse(tokens, res);
   };
 
   const verify = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
-    const { sigResponse } = req.body;
-    const meta: LoginMeta = { remoteAddress: req.ip, userAgent: req.headers['user-agent'] };
+    const { code, state } = req.body;
 
-    if (!sigResponse) throw new UnauthorizedError();
-
-    const tokens = await authenticationService.verifyMfa({ sigResponse }, meta);
-    await sendTokenResponse(tokens, res);
+    try {
+      const tokens = await mfaProvider.verify({ code, state }, { req });
+      await sendTokenResponse(tokens, res);
+    } finally {
+      delete req.session.duo;
+    }
   };
 
   const refresh = async (req: Request, res: Response<RefreshResponse>): Promise<void> => {

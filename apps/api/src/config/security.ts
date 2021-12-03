@@ -16,10 +16,10 @@ export type JwtAuthentication = {
 export type MFAProvider = 'duo';
 
 export type DuoProvider = {
-  ikey: string;
-  skey: string;
-  akey: string;
-  host: string;
+  clientId: string;
+  clientSecret: string;
+  apiHost: string;
+  redirectUrl: string;
 };
 
 export type MultiFactorAuthentication = {
@@ -85,10 +85,10 @@ const securityConfig: SecurityConfig = {
     provider: process.env.MFA_PROVIDER as MFAProvider,
     providers: {
       duo: {
-        ikey: process.env.DUO_IKEY ?? '',
-        skey: process.env.DUO_SKEY ?? '',
-        akey: process.env.DUO_AKEY ?? '',
-        host: process.env.DUO_HOST ?? '',
+        clientId: process.env.DUO_CLIENT_ID || '',
+        clientSecret: process.env.DUO_CLIENT_SECRET || '',
+        apiHost: process.env.DUO_API_HOST || '',
+        redirectUrl: process.env.DUO_REDIRECT_URL || '',
       },
     },
   },

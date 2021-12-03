@@ -6,16 +6,7 @@ import type { TokenPayload } from '.';
 
 export const decode = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;
 
-export interface JwtRotationService {
-  store: (token: string, userId: string) => Promise<RefreshToken>;
-  revoke: (token: string) => Promise<number>;
-  revokeByUser: (userId: string) => Promise<number>;
-  verify: (token: string) => Promise<boolean>;
-  verifyAndRevoke: (token: string) => Promise<boolean>;
-  purge: () => Promise<number>;
-}
-
-export default (ops: Pick<IoC, 'logger'>): JwtRotationService => {
+const jwtRotationService = (ops: Pick<IoC, 'logger'>) => {
   const logger = ops.logger.child({ service: 'JwtRotationService' });
 
   /**
@@ -126,3 +117,7 @@ export default (ops: Pick<IoC, 'logger'>): JwtRotationService => {
     purge,
   };
 };
+
+export default jwtRotationService;
+
+export type JwtRotationService = ReturnType<typeof jwtRotationService>;

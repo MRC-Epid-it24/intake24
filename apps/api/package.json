@@ -32,7 +32,6 @@
     "test:integration:watch": "npm run test:integration -- --watch"
   },
   "dependencies": {
-    "@duosecurity/duo_web": "^1.0.6",
     "awilix": "^6.0.0",
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
@@ -46,6 +45,7 @@
     "dompurify": "^2.3.3",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
+    "duo_universal": "^1.0.3",
     "express": "^4.17.1",
     "express-rate-limit": "^5.5.1",
     "express-session": "^1.17.2",

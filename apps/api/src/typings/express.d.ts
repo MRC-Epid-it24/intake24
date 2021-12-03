@@ -8,3 +8,12 @@ declare global {
     }
   }
 }
+
+declare module 'express-session' {
+  interface SessionData {
+    duo: {
+      state: string;
+      email: string;
+    };
+  }
+}

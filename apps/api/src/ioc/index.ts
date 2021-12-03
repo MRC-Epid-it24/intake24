@@ -79,6 +79,8 @@ import type {
   Pusher,
   Scheduler,
   Session,
+  // MFA Providers
+  MFAProvider,
 } from '@api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@api/services/core/queues';
 import type { Jobs } from '@api/jobs';
@@ -170,6 +172,9 @@ export interface IoC extends Jobs {
   jwtService: JwtService;
   jwtRotationService: JwtRotationService;
   signInService: SignInService;
+
+  // MFA Providers
+  mfaProvider: MFAProvider;
 
   // Images
   asServedService: AsServedService;

@@ -33,8 +33,7 @@ export interface Permission {
 
 export interface AuthState {
   accessToken: string | null;
-  mfa: { request: string; host: string } | null;
-  status: string;
+  mfaRequestUrl: string | null;
   error: AxiosError | null;
 }
 

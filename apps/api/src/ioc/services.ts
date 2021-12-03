@@ -3,6 +3,7 @@ import {
   adminSurveyService,
   authenticationService,
   aclService,
+  duoSecurityProvider,
   jwtService,
   jwtRotationService,
   signInService,
@@ -34,6 +35,7 @@ export default (container: AwilixContainer): void => {
   container.register({
     authenticationService: asFunction(authenticationService),
     aclService: asFunction(aclService).scoped(),
+    mfaProvider: asFunction(duoSecurityProvider),
     jwtService: asFunction(jwtService),
     jwtRotationService: asFunction(jwtRotationService),
     signInService: asFunction(signInService),

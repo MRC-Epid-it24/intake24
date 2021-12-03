@@ -1,17 +1,17 @@
 import { ActionTree } from 'vuex';
 import { AuthState, RootState } from '@/types';
-import authSvc, { LoginRequest } from '@/services/auth.service';
+import authSvc, { LoginRequest, MFAVerifyRequest } from '@/services/auth.service';
 
 const actions: ActionTree<AuthState, RootState> = {
   async login({ commit, dispatch }, payload: LoginRequest) {
-    commit('request');
     commit('loading/add', 'login', { root: true });
 
     try {
-      const { accessToken, mfa } = await authSvc.login(payload);
+      const data = await authSvc.login(payload);
 
-      if (accessToken) await dispatch('successfulLogin', { accessToken });
-      if (mfa) commit('mfa', mfa);
+      if ('accessToken' in data)
+        await dispatch('successfulLogin', { accessToken: data.accessToken });
+      else commit('mfaRequest', data.mfaRequestUrl);
 
       return Promise.resolve();
     } catch (err) {
@@ -22,12 +22,11 @@ const actions: ActionTree<AuthState, RootState> = {
     }
   },
 
-  async verify({ commit, dispatch }, sigResponse: string) {
-    commit('request');
+  async verify({ commit, dispatch }, request: MFAVerifyRequest) {
     commit('loading/add', 'verify', { root: true });
 
     try {
-      const accessToken = await authSvc.verify(sigResponse);
+      const accessToken = await authSvc.verify(request);
       await dispatch('successfulLogin', { accessToken });
       return Promise.resolve();
     } catch (err) {
