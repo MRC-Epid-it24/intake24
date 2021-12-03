@@ -17,7 +17,6 @@
       </v-btn>
       <load-prompt-dialog
         :schemeId="$route.params.id"
-        :items="templates"
         :questionIds="questionIds"
         @load="load"
       ></load-prompt-dialog>
