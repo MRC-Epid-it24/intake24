@@ -17,6 +17,7 @@
       </v-btn>
       <load-prompt-dialog
         :schemeId="$route.params.id"
+        :items="isOverrideMode ? templates : undefined"
         :questionIds="questionIds"
         @load="load"
       ></load-prompt-dialog>
