@@ -168,12 +168,15 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.genUserKey"
+                :append-icon="showGenUserKey ? 'fa-eye' : 'fa-eye-slash'"
                 :disabled="!form.allowGenUsers"
                 :error-messages="form.errors.get('genUserKey')"
                 :label="$t('surveys.genUsers.secret')"
+                :type="showGenUserKey ? 'text' : 'password'"
                 hide-details="auto"
                 name="genUserKey"
                 outlined
+                @click:append="showGenUserKey = !showGenUserKey"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -361,12 +364,21 @@ export default Vue.extend({
     return {
       menus: { startDate: false, endDate: false },
       form: form<SurveyForm>(surveyForm),
+      showGenUserKey: false,
       states: [
         { value: 0, text: this.$t('surveys.state.0') },
         { value: 1, text: this.$t('surveys.state.1') },
         { value: 2, text: this.$t('surveys.state.2') },
       ],
     };
+  },
+
+  watch: {
+    'form.allowGenUsers': {
+      handler(val) {
+        if (!val) this.showGenUserKey = false;
+      },
+    },
   },
 });
 </script>
