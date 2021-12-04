@@ -64,14 +64,16 @@ const authenticationService = ({
    * error otherwise.
    *
    * @param {string} password
-   * @param {User} user
+   * @param {UserPassword} [userPassword]
    * @returns {Promise<boolean>}
    */
-  const verifyPassword = async (password: string, user: User): Promise<boolean> => {
-    const { password: dbPassword } = user;
-    if (!dbPassword) throw new Error('Password login not enabled for this user.');
+  const verifyPassword = async (
+    password: string,
+    userPassword?: UserPassword
+  ): Promise<boolean> => {
+    if (!userPassword) throw new Error('Password login not enabled for this user.');
 
-    const { passwordHasher, passwordSalt, passwordHash } = dbPassword;
+    const { passwordHasher, passwordSalt, passwordHash } = userPassword;
 
     const algorithm = supportedAlgorithms.find((a) => a.id === passwordHasher);
     if (!algorithm) throw new Error(`Password algorithm '${passwordHasher}' not supported.`);
@@ -110,7 +112,7 @@ const authenticationService = ({
       throw new UnauthorizedError(`Provided credentials do not match our records.`);
     }
 
-    if (subject.provider !== 'URLToken' && !(await verifyPassword(password, user))) {
+    if (subject.provider !== 'URLToken' && !(await verifyPassword(password, user.password))) {
       await signInService.log({ ...signInLog, message: 'Credentials do not match.' });
 
       throw new UnauthorizedError(`Provided credentials do not match our records.`);
