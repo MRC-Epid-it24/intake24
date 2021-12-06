@@ -81,7 +81,7 @@ class IntegrationSuite {
 
     const { downloads, uploads, images } = this.config.filesystem.local;
     [downloads, uploads, images].forEach((folder) => {
-      fs.rmdirSync(folder, { recursive: true });
+      fs.rm(folder, { recursive: true });
     });
   }
 }
