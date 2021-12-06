@@ -34,7 +34,7 @@ export const submissionScope = ({
   const where: WhereOptions<SurveySubmissionAttributes> = {};
 
   if (surveyId) where.surveyId = surveyId;
-  if (userId) where.userId = surveyId;
+  if (userId) where.userId = userId;
 
   return {
     where,
