@@ -82,7 +82,7 @@ export default (app: Express, { logger }: Ops): void => {
 
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof DatabaseError) {
-      const { message, name, stack } = err;
+      const { message, name, stack } = err.original;
       logger.error(stack ?? `${name}: ${message}`);
       res.status(503).json({ message: 'Internal Database Error' });
       return;
