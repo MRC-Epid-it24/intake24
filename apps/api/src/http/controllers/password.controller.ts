@@ -9,11 +9,14 @@ import { Controller } from './controller';
 export type PasswordController = Controller<'request' | 'reset'>;
 
 export default ({
-  securityConfig,
+  adminUserService,
   logger,
   scheduler,
-  userService,
-}: Pick<IoC, 'securityConfig' | 'logger' | 'scheduler' | 'userService'>): PasswordController => {
+  securityConfig,
+}: Pick<
+  IoC,
+  'adminUserService' | 'logger' | 'securityConfig' | 'scheduler'
+>): PasswordController => {
   const request = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { email } = req.body;
 
@@ -29,9 +32,11 @@ export default ({
 
     const { id: userId } = user;
     const token = nanoid(64);
-    await UserPasswordReset.create({ userId, token });
 
-    await scheduler.jobs.addJob({ type: 'SendPasswordReset', userId }, { email, token });
+    await Promise.all([
+      UserPasswordReset.create({ userId, token }),
+      scheduler.jobs.addJob({ type: 'SendPasswordReset', userId }, { email, token }),
+    ]);
 
     res.json();
   };
@@ -55,9 +60,9 @@ export default ({
         `It looks like this link is invalid / expired. Please check your email or request another link.`
       );
 
-    await userService.updatePassword({ userId: passwordReset.userId, password });
+    const { userId } = passwordReset;
 
-    await passwordReset.destroy();
+    await Promise.all([adminUserService.updatePassword(userId, password), passwordReset.destroy()]);
 
     res.json();
   };
