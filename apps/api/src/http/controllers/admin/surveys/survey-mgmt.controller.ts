@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { Op } from 'sequelize';
+import { Op, WhereOptions } from 'sequelize';
 import {
-  SurveyMgmtAvailableResponse,
+  SurveyMgmtAvailablePermissionsResponse,
+  SurveyMgmtAvailableUsersResponse,
   SurveyMgmtResponse,
   UserMgmtListEntry,
 } from '@common/types/http/admin';
@@ -10,14 +11,22 @@ import { NotFoundError } from '@api/http/errors';
 import { permissionListResponse, userMgmtResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
 import { surveyMgmt } from '@api/services/core/auth';
+import { nanoid } from 'nanoid';
+import { UserAttributes } from '@common/types/models';
 import { Controller } from '../../controller';
 
-export type AdminSurveyMgmtController = Controller<'browse' | 'available' | 'update'>;
+export type AdminSurveyMgmtController = Controller<
+  'browse' | 'availablePermissions' | 'availableUsers' | 'store' | 'update'
+>;
 
 export default ({
   adminSurveyService,
-}: Pick<IoC, 'adminSurveyService'>): AdminSurveyMgmtController => {
-  const browse = async (req: Request, res: Response<SurveyMgmtResponse>): Promise<void> => {
+  adminUserService,
+}: Pick<IoC, 'adminSurveyService' | 'adminUserService'>): AdminSurveyMgmtController => {
+  const browse = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyMgmtResponse>
+  ): Promise<void> => {
     const { surveyId } = req.params;
 
     const survey = await Survey.findByPk(surveyId);
@@ -32,7 +41,8 @@ export default ({
         {
           model: Permission,
           attributes: ['id', 'name', 'displayName'],
-          where: { name: surveyMgmt(surveyId) },
+          through: { attributes: [] },
+          where: { name: { [Op.or]: [surveyMgmt(surveyId), { [Op.startsWith]: 'surveys-' }] } },
         },
       ],
       transform: userMgmtResponse,
@@ -41,42 +51,27 @@ export default ({
     res.json(users);
   };
 
-  const available = async (
-    req: Request,
-    res: Response<SurveyMgmtAvailableResponse>
+  const store = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<undefined>
   ): Promise<void> => {
-    const { surveyId } = req.params;
+    const {
+      params: { surveyId },
+      body: { email, name, phone, permissions },
+    } = req;
 
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    const users = await User.findAll({
-      attributes: ['id', 'name', 'email'],
-      where: {
-        email: { [Op.ne]: null },
-        // @ts-expect-error: Sequelize typings don't know about this type of syntax yet
-        '$permissions.id$': { [Op.eq]: null },
-      },
-      order: [['email', 'ASC']],
-      include: [
-        {
-          model: Permission,
-          attributes: ['id', 'name', 'displayName'],
-          required: false,
-          where: { name: { [Op.in]: surveyMgmt(surveyId) } },
-        },
-      ],
-    });
+    await adminUserService.create({ email, name, phone, password: nanoid(12), permissions });
 
-    const permissions = await adminSurveyService.getSurveyMgmtPermissions(surveyId, 'list');
-
-    res.json({
-      users: users.map(userMgmtResponse),
-      permissions: permissions.map(permissionListResponse),
-    });
+    res.status(201).json();
   };
 
-  const update = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const update = async (
+    req: Request<{ surveyId: string; userId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const {
       params: { surveyId, userId },
       body: { permissions },
@@ -86,25 +81,87 @@ export default ({
       Survey.findByPk(surveyId),
       User.findOne({ where: { id: userId, email: { [Op.ne]: null } } }),
     ]);
-
     if (!survey || !user) throw new NotFoundError();
 
-    const surveyMgmtPermissions = await adminSurveyService.getSurveyMgmtPermissions(
-      surveyId,
-      'list'
-    );
+    const surveyPermissions = await adminSurveyService.getSurveyPermissions(surveyId, 'list');
 
-    await user.$remove('permissions', surveyMgmtPermissions);
+    await user.$remove('permissions', surveyPermissions);
 
     if (Array.isArray(permissions) && !!permissions.length)
       await user.$add('permissions', permissions);
 
+    await adminUserService.flushACLCache(user.id);
+
     res.json();
+  };
+
+  const availablePermissions = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyMgmtAvailablePermissionsResponse>
+  ): Promise<void> => {
+    const { surveyId } = req.params;
+
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
+    const permissions = await adminSurveyService.getSurveyPermissions(surveyId, 'list');
+
+    res.json(permissions.map(permissionListResponse));
+  };
+
+  const availableUsers = async (
+    req: Request<{ surveyId: string }, any, any, { search?: string }>,
+    res: Response<SurveyMgmtAvailableUsersResponse>
+  ): Promise<void> => {
+    const {
+      params: { surveyId },
+      query: { search },
+    } = req;
+
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
+    if (!search) {
+      res.json([]);
+      return;
+    }
+
+    const where: WhereOptions<UserAttributes> = {
+      email: { [Op.ne]: null },
+      // @ts-expect-error: Sequelize typings don't know about this type of syntax yet
+      '$permissions.id$': { [Op.eq]: null },
+    };
+
+    const op =
+      User.sequelize?.getDialect() === 'postgres'
+        ? { [Op.iLike]: `%${search}%` }
+        : { [Op.substring]: search };
+
+    const users = await User.findAll({
+      attributes: ['id', 'name', 'email'],
+      where: { ...where, [Op.or]: { name: op, email: op } },
+      order: [['email', 'ASC']],
+      // TODO: sequelize bug -> limit malforms (double-wrapped select) the query or find out correct syntax?
+      // limit: 10,
+      include: [
+        {
+          model: Permission,
+          attributes: [],
+          through: { attributes: [] },
+          required: false,
+          where: { name: { [Op.or]: [surveyMgmt(surveyId), { [Op.startsWith]: 'surveys-' }] } },
+        },
+      ],
+    });
+
+    res.json(users.map(userMgmtResponse));
   };
 
   return {
     browse,
-    available,
+    store,
     update,
+    availablePermissions,
+    availableUsers,
   };
 };

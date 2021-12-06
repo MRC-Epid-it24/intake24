@@ -175,8 +175,10 @@ export default (): void => {
   // Surveys user management
   const { mgmt } = surveys;
   describe('GET /api/admin/surveys/:surveyId/mgmt', mgmt.browse);
-  describe('GET /api/admin/surveys/:surveyId/mgmt/available', mgmt.available);
-  describe('PUT /api/admin/surveys/:surveyId/mgmt/:userId', mgmt.update);
+  describe('POST /api/admin/surveys/:surveyId/mgmt', mgmt.store);
+  describe('GET /api/admin/surveys/:surveyId/mgmt/permissions', mgmt.availablePermissions);
+  describe('GET /api/admin/surveys/:surveyId/mgmt/users', mgmt.availableUsers);
+  describe('PATCH /api/admin/surveys/:surveyId/mgmt/:userId', mgmt.update);
 
   // Surveys respondents
   // describe('GET /api/admin/surveys/:surveyId/respondents', surveys.respondents.browse);

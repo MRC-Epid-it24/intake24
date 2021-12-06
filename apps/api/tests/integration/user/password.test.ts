@@ -10,7 +10,7 @@ export default (): void => {
     expect(status).toBe(401);
   });
 
-  it('should return 422 when missing input data', async () => {
+  it('should return 422 for missing input data', async () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
@@ -53,7 +53,7 @@ export default (): void => {
     expect(body.errors).toContainAllKeys(['passwordConfirm']);
   });
 
-  it('should return 422 when invalid current password', async () => {
+  it('should return 422 for invalid current password', async () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')

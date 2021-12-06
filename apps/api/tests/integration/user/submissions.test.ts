@@ -35,7 +35,7 @@ export default (): void => {
     expect(status).toBe(401);
   });
 
-  it('should return 422 when missing surveyId query parameter', async () => {
+  it('should return 422 for missing surveyId query parameter', async () => {
     const { status, body } = await request(suite.app)
       .get(url)
       .set('Accept', 'application/json')

@@ -54,7 +54,7 @@ export default (): void => {
       await setPermission(['acl', 'roles-edit']);
     });
 
-    it('should return 422 when missing input data', async () => {
+    it('should return 422 for missing input data', async () => {
       const { status, body } = await request(suite.app)
         .put(url)
         .set('Accept', 'application/json')
@@ -65,7 +65,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['name', 'displayName', 'permissions']);
     });
 
-    it('should return 422 when invalid input data', async () => {
+    it('should return 422 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
         .put(url)
         .set('Accept', 'application/json')

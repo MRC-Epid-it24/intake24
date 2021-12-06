@@ -19,7 +19,10 @@ export type AdminSurveyRespondentController = Controller<
 export default ({
   adminSurveyService,
 }: Pick<IoC, 'adminSurveyService'>): AdminSurveyRespondentController => {
-  const browse = async (req: Request, res: Response<SurveyRespondentsResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyRespondentsResponse>
+  ): Promise<void> => {
     const { surveyId } = req.params;
 
     const survey = await Survey.findByPk(surveyId);
@@ -37,7 +40,10 @@ export default ({
     res.json(respondents);
   };
 
-  const store = async (req: Request, res: Response<SurveyRespondentResponse>): Promise<void> => {
+  const store = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyRespondentResponse>
+  ): Promise<void> => {
     const { surveyId } = req.params;
 
     const respondent = await adminSurveyService.createRespondent(
@@ -48,7 +54,10 @@ export default ({
     res.status(201).json({ data: userRespondentResponse(respondent) });
   };
 
-  const update = async (req: Request, res: Response<SurveyRespondentResponse>): Promise<void> => {
+  const update = async (
+    req: Request<{ surveyId: string; userId: string }>,
+    res: Response<SurveyRespondentResponse>
+  ): Promise<void> => {
     const { surveyId, userId } = req.params;
 
     const respondent = await adminSurveyService.updateRespondent(
@@ -60,14 +69,21 @@ export default ({
     res.json({ data: userRespondentResponse(respondent) });
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ surveyId: string; userId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { surveyId, userId } = req.params;
 
     await adminSurveyService.deleteRespondent(surveyId, userId);
+
     res.status(204).json();
   };
 
-  const upload = async (req: Request, res: Response<JobResponse>): Promise<void> => {
+  const upload = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<JobResponse>
+  ): Promise<void> => {
     const {
       file,
       params: { surveyId },
@@ -81,7 +97,10 @@ export default ({
     res.json({ data: job });
   };
 
-  const exportAuthUrls = async (req: Request, res: Response<JobResponse>): Promise<void> => {
+  const exportAuthUrls = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<JobResponse>
+  ): Promise<void> => {
     const { surveyId } = req.params;
     const { id: userId } = req.user as User;
 

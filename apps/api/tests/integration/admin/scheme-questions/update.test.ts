@@ -46,7 +46,7 @@ export default (): void => {
       await setPermission('scheme-questions-edit');
     });
 
-    it('should return 422 when missing input data', async () => {
+    it('should return 422 for missing input data', async () => {
       const { status, body } = await request(suite.app)
         .put(url)
         .set('Accept', 'application/json')
@@ -57,7 +57,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['question']);
     });
 
-    it('should return 422 when invalid input data', async () => {
+    it('should return 422 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
         .put(url)
         .set('Accept', 'application/json')

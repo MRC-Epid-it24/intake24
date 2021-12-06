@@ -45,8 +45,6 @@ export const identifiers: Schema = {
           value.some((item) => !isPlainObject(item) || !has(item, 'name') || !has(item, 'value'))
         )
           throw new Error('Enter valid custom field object.');
-
-        Promise.resolve();
       },
     },
   },

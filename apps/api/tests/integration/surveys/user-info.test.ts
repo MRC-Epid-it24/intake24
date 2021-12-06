@@ -25,7 +25,7 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
-  it('should return 422 when missing timezone offset', async () => {
+  it('should return 422 for missing timezone offset', async () => {
     const { status, body } = await request(suite.app)
       .get(url)
       .set('Accept', 'application/json')
@@ -36,7 +36,7 @@ export default (): void => {
     expect(body.errors).toContainAllKeys(['tzOffset']);
   });
 
-  it('should return 422 when invalid timezone offset', async () => {
+  it('should return 422 for invalid timezone offset', async () => {
     const { status, body } = await request(suite.app)
       .get(`${url}?tzOffset=invalidTzOffset`)
       .set('Accept', 'application/json')

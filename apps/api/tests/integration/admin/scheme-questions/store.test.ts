@@ -36,7 +36,7 @@ export default (): void => {
       await setPermission('scheme-questions-create');
     });
 
-    it('should return 422 when missing input data', async () => {
+    it('should return 422 for missing input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -47,7 +47,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['question']);
     });
 
-    it('should return 422 when invalid input data', async () => {
+    it('should return 422 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -71,7 +71,7 @@ export default (): void => {
       expect(status).toBe(201);
     });
 
-    it('should return 422 when duplicate questionId', async () => {
+    it('should return 422 for duplicate questionId', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')

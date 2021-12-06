@@ -7,7 +7,7 @@ import { ForbiddenError } from '@api/http/errors';
 import ioc, { IoC } from '@api/ioc';
 import { foodDatabaseMaintainer, surveyRespondent, surveyStaff } from '@api/services/core/auth';
 
-const { acl: AclConfig } = ioc.cradle.config;
+const { acl: aclConfig } = ioc.cradle.config;
 
 /*
  * This middleware should be placed after authentication
@@ -54,7 +54,7 @@ export const canManageFoodDatabase = () => {
     const { fdbId } = req.params;
 
     req.scope.cradle.aclService
-      .hasAnyPermission([AclConfig.permissions.foodsadmin, foodDatabaseMaintainer(fdbId)])
+      .hasAnyPermission([aclConfig.permissions.foodsadmin, foodDatabaseMaintainer(fdbId)])
       .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };
@@ -65,7 +65,7 @@ export const canManageSurvey = () => {
     const { surveyId } = req.params;
 
     req.scope.cradle.aclService
-      .hasAnyPermission([AclConfig.permissions.surveyadmin, surveyStaff(surveyId)])
+      .hasAnyPermission([aclConfig.permissions.surveyadmin, surveyStaff(surveyId)])
       .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };

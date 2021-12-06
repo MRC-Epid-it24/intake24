@@ -18,7 +18,7 @@ export default (): void => {
     };
 
     url = `${baseUrl}/${id}/data-export`;
-    invalidUrl = `${baseUrl}/999999/data-export`;
+    invalidUrl = `${baseUrl}/invalid-survey-id/data-export`;
   });
 
   it('should return 401 when no / invalid token', async () => {
@@ -27,11 +27,22 @@ export default (): void => {
     expect(status).toBe(401);
   });
 
+  it('should return 403 when missing permission', async () => {
+    await setPermission([]);
+
+    const { status } = await request(suite.app)
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.user);
+
+    expect(status).toBe(403);
+  });
+
   it('should return 403 when missing survey-specific permission', async () => {
     await setPermission('surveys-data-export');
 
     const { status } = await request(suite.app)
-      .put(url)
+      .post(url)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
@@ -42,7 +53,7 @@ export default (): void => {
     await setPermission('surveyadmin');
 
     const { status } = await request(suite.app)
-      .put(url)
+      .post(url)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
@@ -53,7 +64,18 @@ export default (): void => {
     await setPermission(surveyStaff(suite.data.system.survey.id));
 
     const { status } = await request(suite.app)
-      .put(url)
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.user);
+
+    expect(status).toBe(403);
+  });
+
+  it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
+    await setPermission(['surveys-mgmt', surveyStaff(suite.data.system.survey.id)]);
+
+    const { status } = await request(suite.app)
+      .post(invalidUrl)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
@@ -62,20 +84,10 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission(['surveys-data-export', 'surveyadmin']);
+      await setPermission(['surveys-data-export', surveyStaff(suite.data.system.survey.id)]);
     });
 
-    it(`should return 404 when record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .post(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(input);
-
-      expect(status).toBe(404);
-    });
-
-    it('should return 422 when missing input data', async () => {
+    it('should return 422 for missing input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -86,7 +98,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['startDate', 'endDate']);
     });
 
-    it('should return 422 when invalid input data', async () => {
+    it('should return 422 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')

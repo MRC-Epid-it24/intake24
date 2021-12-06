@@ -13,8 +13,6 @@ export const permissions: ParamSchema = {
 
       const availablePermissions = await Permission.count({ where: { id: value } });
       if (availablePermissions !== value.length) throw new Error('Invalid permissions.');
-
-      return Promise.resolve();
     },
   },
 };
@@ -30,8 +28,6 @@ export const roles: ParamSchema = {
 
       const availableRoles = await Role.count({ where: { id: value } });
       if (availableRoles !== value.length) throw new Error('Invalid roles.');
-
-      return Promise.resolve();
     },
   },
 };

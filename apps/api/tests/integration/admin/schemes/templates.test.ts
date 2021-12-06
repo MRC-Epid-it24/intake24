@@ -42,7 +42,7 @@ export default (): void => {
       await setPermission('schemes-edit');
     });
 
-    it('should return 422 when invalid query input data (#1)', async () => {
+    it('should return 422 for invalid query input data (#1)', async () => {
       const { status, body } = await request(suite.app)
         .get(`${url}?limit=not-a-number`)
         .set('Accept', 'application/json')
@@ -53,7 +53,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['limit']);
     });
 
-    it('should return 422 when invalid query input data (#2)', async () => {
+    it('should return 422 for invalid query input data (#2)', async () => {
       const { status, body } = await request(suite.app)
         .get(`${url}?limit=-1`)
         .set('Accept', 'application/json')
@@ -64,7 +64,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['limit']);
     });
 
-    it('should return 422 when invalid query input data (#3)', async () => {
+    it('should return 422 for invalid query input data (#3)', async () => {
       const { status, body } = await request(suite.app)
         .get(`${url}?limit=9999`)
         .set('Accept', 'application/json')

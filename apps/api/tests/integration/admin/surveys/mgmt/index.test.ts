@@ -1,9 +1,13 @@
 import browse from './browse.test';
-import available from './available.test';
+import store from './store.test';
 import update from './update.test';
+import availablePermissions from './available-permissions.test';
+import availableUsers from './available-users.test';
 
 export default {
   browse,
-  available,
+  store,
   update,
+  availablePermissions,
+  availableUsers,
 };

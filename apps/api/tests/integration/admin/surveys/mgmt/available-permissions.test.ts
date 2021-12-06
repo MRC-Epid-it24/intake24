@@ -21,8 +21,8 @@ export default (): void => {
       endDate: new Date(input.endDate),
     });
 
-    url = `${baseUrl}/${survey.id}/mgmt/available`;
-    invalidUrl = `${baseUrl}/invalid-survey-id/mgmt/available`;
+    url = `${baseUrl}/${survey.id}/mgmt/permissions`;
+    invalidUrl = `${baseUrl}/invalid-survey-id/mgmt/permissions`;
   });
 
   it('should return 401 when no / invalid token', async () => {
@@ -95,8 +95,6 @@ export default (): void => {
       .set('Authorization', suite.bearer.user);
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['users', 'permissions']);
-    expect(body.users).toBeArray();
-    expect(body.permissions).toBeArray();
+    expect(body).toBeArray();
   });
 };

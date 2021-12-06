@@ -42,7 +42,7 @@ export default (): void => {
       await setPermission('as-served-create');
     });
 
-    it('should return 422 when missing input data', async () => {
+    it('should return 422 for missing input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -53,7 +53,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['id', 'description', 'selectionImage']);
     });
 
-    it('should return 422 when invalid input data', async () => {
+    it('should return 422 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -81,7 +81,7 @@ export default (): void => {
       expect(pick(body.data, Object.keys(output))).toEqual(output);
     });
 
-    it('should return 422 when duplicate id', async () => {
+    it('should return 422 for duplicate id', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')

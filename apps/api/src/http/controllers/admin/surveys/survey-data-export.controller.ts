@@ -10,7 +10,7 @@ export type AdminSurveyDataExportController = Controller<'sync' | 'queue'>;
 export default ({
   dataExportService,
 }: Pick<IoC, 'dataExportService'>): AdminSurveyDataExportController => {
-  const sync = async (req: Request, res: Response<Buffer>): Promise<void> => {
+  const sync = async (req: Request<{ surveyId: string }>, res: Response<Buffer>): Promise<void> => {
     const { surveyId } = req.params;
     const { startDate, endDate } = req.body;
 
@@ -29,7 +29,10 @@ export default ({
     stream.pipe(res);
   };
 
-  const queue = async (req: Request, res: Response<JobResponse>): Promise<void> => {
+  const queue = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<JobResponse>
+  ): Promise<void> => {
     const { surveyId } = req.params;
     const { startDate, endDate } = req.body;
     const { id: userId } = req.user as User;

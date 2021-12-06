@@ -19,9 +19,10 @@ export default (): void => {
   let surveyInput: SurveyRequest;
   let survey: Survey;
 
-  let userId: string;
-
-  let input: { permissions: string[] };
+  let input: {
+    email: string;
+    permissions: string[];
+  };
 
   let nonSurveyPermissionIds: string[];
 
@@ -33,13 +34,8 @@ export default (): void => {
       endDate: new Date(surveyInput.endDate),
     });
 
-    const userInput = mocker.system.user();
-    const user = await ioc.cradle.adminUserService.create(userInput);
-    userId = user.id;
-
-    url = `${baseUrl}/${survey.id}/mgmt/${userId}`;
-    invalidSurveyUrl = `${baseUrl}/invalid-survey-id/mgmt/${userId}`;
-    invalidUserUrl = `${baseUrl}/${survey.id}/mgmt/999999`;
+    url = `${baseUrl}/${survey.id}/mgmt`;
+    invalidSurveyUrl = `${baseUrl}/invalid-survey-id/mgmt`;
 
     const permissions = await adminSurveyService.getSurveyPermissions(survey.id);
     const ids = permissions.map(({ id }) => id);
@@ -48,12 +44,13 @@ export default (): void => {
     nonSurveyPermissionIds = nonSurveyPermissions.map(({ id }) => id);
 
     input = {
+      email: 'newStaffEmail@example.com',
       permissions: ids,
     };
   });
 
   it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).patch(url).set('Accept', 'application/json');
+    const { status } = await request(suite.app).post(url).set('Accept', 'application/json');
 
     expect(status).toBe(401);
   });
@@ -62,7 +59,7 @@ export default (): void => {
     await setPermission('surveys-mgmt');
 
     const { status } = await request(suite.app)
-      .patch(url)
+      .post(url)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
@@ -73,7 +70,7 @@ export default (): void => {
     await setPermission('surveyadmin');
 
     const { status } = await request(suite.app)
-      .patch(url)
+      .post(url)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
@@ -84,7 +81,7 @@ export default (): void => {
     await setPermission(surveyStaff(survey.id));
 
     const { status } = await request(suite.app)
-      .patch(url)
+      .post(url)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
@@ -95,7 +92,7 @@ export default (): void => {
     await setPermission(['surveys-mgmt', surveyStaff(survey.id)]);
 
     const { status } = await request(suite.app)
-      .patch(invalidSurveyUrl)
+      .post(invalidSurveyUrl)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user);
 
@@ -104,67 +101,63 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission(['surveys-mgmt', 'surveyadmin']);
+      await setPermission(['surveys-mgmt', surveyStaff(survey.id)]);
     });
 
     it('should return 422 for missing input data', async () => {
       const { status, body } = await request(suite.app)
-        .patch(url)
+        .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user);
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['permissions']);
+      expect(body.errors).toContainAllKeys(['email', 'permissions']);
     });
 
     it('should return 422 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
-        .patch(url)
+        .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ permissions: ['invalid permission'] });
+        .send({
+          email: 'this-is-not-an-email',
+          permissions: { name: 'not a valid permission' },
+        });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['permissions']);
+      expect(body.errors).toContainAllKeys(['email', 'permissions']);
     });
 
-    it('should return 422 for incorrect permissions', async () => {
+    it('should return 422 for incorrect permissions / existing email account', async () => {
       const invalidPermissionIdx = faker.datatype.number({
         min: 0,
         max: nonSurveyPermissionIds.length,
       });
 
       const { status, body } = await request(suite.app)
-        .patch(url)
+        .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
-        .send({ permissions: [nonSurveyPermissionIds[invalidPermissionIdx]] });
+        .send({
+          email: suite.data.system.user.email,
+          permissions: [nonSurveyPermissionIds[invalidPermissionIdx]],
+        });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['permissions']);
+      expect(body.errors).toContainAllKeys(['email', 'permissions']);
     });
 
-    it(`should return 404 when user record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .patch(invalidUserUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(input);
-
-      expect(status).toBe(404);
-    });
-
-    it('should return 200 and empty response body', async () => {
+    it('should return 201 and empty response body', async () => {
       const { status, body } = await request(suite.app)
-        .patch(url)
+        .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .send(input);
 
-      expect(status).toBe(200);
+      expect(status).toBe(201);
       expect(body).toBeEmpty();
     });
   });

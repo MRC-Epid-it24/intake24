@@ -51,7 +51,7 @@ export default (): void => {
     expect(status).toBe(401);
   });
 
-  it('should return 422 when invalid input data', async () => {
+  it('should return 422 for invalid input data', async () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')

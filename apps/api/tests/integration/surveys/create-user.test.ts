@@ -18,7 +18,7 @@ export default (): void => {
     invalidUrl = `/api/surveys/invalid-survey/create-user`;
   });
 
-  it(`should return 422 when missing JWT in query params`, async () => {
+  it(`should return 422 for missing JWT in query params`, async () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
@@ -29,7 +29,7 @@ export default (): void => {
     expect(body.errors).toContainAllKeys(['params']);
   });
 
-  it(`should return 422 when malformed JWT in query params`, async () => {
+  it(`should return 422 for malformed JWT in query params`, async () => {
     const { status, body } = await request(suite.app)
       .post(`${url}?params=this-is-not-a-jwt-token`)
       .set('Accept', 'application/json')

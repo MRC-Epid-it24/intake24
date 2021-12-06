@@ -9,8 +9,13 @@ const router = Router({ mergeParams: true });
 
 router.use(permission('surveys-mgmt'));
 
-router.get('', validation.browse, wrapAsync(adminSurveyMgmtController.browse));
-router.get('/available', wrapAsync(adminSurveyMgmtController.available));
-router.put('/:userId', validation.update, wrapAsync(adminSurveyMgmtController.update));
+router
+  .route('')
+  .get(validation.browse, wrapAsync(adminSurveyMgmtController.browse))
+  .post(validation.store, wrapAsync(adminSurveyMgmtController.store));
+
+router.get('/permissions', wrapAsync(adminSurveyMgmtController.availablePermissions));
+router.get('/users', wrapAsync(adminSurveyMgmtController.availableUsers));
+router.patch('/:userId', validation.update, wrapAsync(adminSurveyMgmtController.update));
 
 export default router;

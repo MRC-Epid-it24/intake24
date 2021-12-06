@@ -7,7 +7,6 @@ export interface UserMgmtListEntry extends UserListEntry {
 
 export type SurveyMgmtResponse = Pagination<UserMgmtListEntry>;
 
-export type SurveyMgmtAvailableResponse = {
-  users: UserListEntry[];
-  permissions: PermissionListEntry[];
-};
+export type SurveyMgmtAvailableUsersResponse = UserListEntry[];
+
+export type SurveyMgmtAvailablePermissionsResponse = PermissionListEntry[];

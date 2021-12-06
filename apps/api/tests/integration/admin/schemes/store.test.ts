@@ -36,7 +36,7 @@ export default (): void => {
       await setPermission('schemes-create');
     });
 
-    it('should return 422 when missing input data', async () => {
+    it('should return 422 for missing input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -47,7 +47,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['id', 'name', 'type', 'meals', 'questions', 'export']);
     });
 
-    it('should return 422 when invalid input data', async () => {
+    it('should return 422 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -78,7 +78,7 @@ export default (): void => {
       expect(status).toBe(201);
     });
 
-    it('should return 422 when duplicate id', async () => {
+    it('should return 422 for duplicate id', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -90,7 +90,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['id']);
     });
 
-    it('should return 422 when duplicate name', async () => {
+    it('should return 422 for duplicate name', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')

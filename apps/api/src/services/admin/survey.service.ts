@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { CreateRespondentInput, UpdateRespondentInput } from '@common/types/http/admin';
 import { UserCustomFieldAttributes } from '@common/types/models';
 import {
@@ -20,7 +21,7 @@ const adminSurveyService = ({
   scheduler,
 }: Pick<IoC, 'adminUserService' | 'securityConfig' | 'scheduler'>) => {
   /**
-   * Fetch survey-specific respondent permission instance
+   * Fetch survey-specific respondent permission instance or create one
    *
    * @param {string} surveyId
    * @returns {Promise<Permission>}
@@ -45,9 +46,41 @@ const adminSurveyService = ({
   const getSurveyMgmtPermissions = async (
     surveyId: string,
     scope: string | string[] = []
-  ): Promise<Permission[]> => {
-    return Permission.scope(scope).findAll({ where: { name: surveyMgmt(surveyId) } });
-  };
+  ): Promise<Permission[]> =>
+    Permission.scope(scope).findAll({
+      where: { name: surveyMgmt(surveyId) },
+      order: [['name', 'ASC']],
+    });
+
+  /**
+   * Get survey resource permissions
+   *
+   * @param {(string | string[])} [scope=[]]
+   * @returns {Promise<Permission[]>}
+   */
+  const getSurveyResourcePermissions = async (
+    scope: string | string[] = []
+  ): Promise<Permission[]> =>
+    Permission.scope(scope).findAll({
+      where: { name: { [Op.startsWith]: 'surveys-' } },
+      order: [['name', 'ASC']],
+    });
+
+  /**
+   * Get survey permissions
+   *
+   * @param {string} surveyId
+   * @param {(string | string[])} [scope=[]]
+   * @returns {Promise<Permission[]>}
+   */
+  const getSurveyPermissions = async (
+    surveyId: string,
+    scope: string | string[] = []
+  ): Promise<Permission[]> =>
+    Permission.scope(scope).findAll({
+      where: { name: { [Op.or]: [surveyMgmt(surveyId), { [Op.startsWith]: 'surveys-' }] } },
+      order: [['name', 'ASC']],
+    });
 
   /**
    * Create respondent record
@@ -251,6 +284,8 @@ const adminSurveyService = ({
   return {
     getSurveyRespondentPermission,
     getSurveyMgmtPermissions,
+    getSurveyResourcePermissions,
+    getSurveyPermissions,
     createRespondent,
     createRespondents,
     updateRespondent,

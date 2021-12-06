@@ -41,7 +41,7 @@ export default (): void => {
       await setPermission('schemes-edit');
     });
 
-    it('should return 422 when missing input data', async () => {
+    it('should return 422 for missing input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -52,7 +52,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['sourceId', 'id', 'name']);
     });
 
-    it('should return 422 when invalid input data', async () => {
+    it('should return 422 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -64,7 +64,7 @@ export default (): void => {
       expect(body.errors).toContainAllKeys(['sourceId', 'id', 'name']);
     });
 
-    it('should return 422 when same id/name provided', async () => {
+    it('should return 422 for same id/name provided', async () => {
       const { id, name } = input;
 
       const { status, body } = await request(suite.app)

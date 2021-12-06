@@ -18,8 +18,8 @@ export type AdminUserController = Controller<CrudActions>;
 export default ({ adminUserService }: Pick<IoC, 'adminUserService'>): AdminUserController => {
   const entryRefs = async (): Promise<UserRefs> => {
     const [permissions, roles] = await Promise.all([
-      Permission.scope('list').findAll(),
-      Role.scope('list').findAll(),
+      Permission.scope('list').findAll({ order: [['name', 'ASC']] }),
+      Role.scope('list').findAll({ order: [['name', 'ASC']] }),
     ]);
 
     return { permissions, roles };
