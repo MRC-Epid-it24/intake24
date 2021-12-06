@@ -11,8 +11,8 @@ export type UserInput = {
   smsNotifications?: boolean;
   multiFactorAuthentication?: boolean;
   customFields?: CustomField[];
-  permissions: string[];
-  roles: string[];
+  permissions?: string[];
+  roles?: string[];
 };
 
 export interface CreateUserInput extends UserInput {

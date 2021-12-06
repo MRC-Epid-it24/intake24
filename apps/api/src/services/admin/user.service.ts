@@ -137,7 +137,7 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
    * @returns {Promise<User>}
    */
   const create = async (input: CreateUserInput): Promise<User> => {
-    const { password, permissions, roles, ...rest } = input;
+    const { password, permissions = [], roles = [], ...rest } = input;
 
     const user = await User.create(
       { ...rest, simpleName: toSimpleName(rest.name) },
@@ -169,7 +169,7 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
 
     if (!user) throw new NotFoundError();
 
-    const { customFields, permissions, roles, ...rest } = input;
+    const { customFields, permissions = [], roles = [], ...rest } = input;
 
     await Promise.all([
       user.update({ ...rest, simpleName: toSimpleName(rest.name) }),
