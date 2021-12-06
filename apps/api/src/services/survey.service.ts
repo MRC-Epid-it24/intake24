@@ -25,7 +25,7 @@ import {
 } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { jwt } from '@api/util';
-import { submissionScope } from '@api/db/models/system/survey-submission';
+import { SubmissionScope, submissionScope } from '@api/db/models/system/survey-submission';
 
 export type RespondentWithPassword = {
   respondent: UserSurveyAlias;
@@ -213,14 +213,11 @@ const surveyService = ({
   /**
    * Get user's submissions
    *
-   * @param {(string | string[])} surveyId
-   * @param {string} userId
+   * @param {SubmissionScope} options
    * @returns {Promise<SurveySubmission[]>}
    */
-  const getSubmissions = async (
-    surveyId: string | string[],
-    userId: string
-  ): Promise<SurveySubmission[]> => SurveySubmission.findAll(submissionScope(surveyId, userId));
+  const getSubmissions = async (options: SubmissionScope): Promise<SurveySubmission[]> =>
+    SurveySubmission.findAll(submissionScope(options));
 
   /**
    * Resolve follow-up URL, if any

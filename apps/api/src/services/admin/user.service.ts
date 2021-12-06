@@ -14,7 +14,7 @@ export type UserPasswordInput = {
   password: string;
 };
 
-const userService = ({ cache }: Pick<IoC, 'cache'>) => {
+const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
   /**
    * Flush ACL cache for specified user
    *
@@ -106,12 +106,13 @@ const userService = ({ cache }: Pick<IoC, 'cache'>) => {
   };
 
   /**
-   * Update password
+   * Update user password
    *
-   * @param {UserPasswordInput} input
+   * @param {string} userId
+   * @param {string} password
    * @returns {Promise<UserPassword>}
    */
-  const updatePassword = async ({ userId, password }: UserPasswordInput): Promise<UserPassword> => {
+  const updatePassword = async (userId: string, password: string): Promise<UserPassword> => {
     const userPassword = await UserPassword.findByPk(userId);
     if (!userPassword) throw new NotFoundError();
 
@@ -214,6 +215,6 @@ const userService = ({ cache }: Pick<IoC, 'cache'>) => {
   };
 };
 
-export default userService;
+export default adminUserService;
 
-export type UserService = ReturnType<typeof userService>;
+export type AdminUserService = ReturnType<typeof adminUserService>;

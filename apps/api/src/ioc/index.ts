@@ -55,6 +55,7 @@ import type {
 } from '@api/http/controllers';
 import type {
   AdminSurveyService,
+  AdminUserService,
   AuthenticationService,
   ACLService,
   JwtService,
@@ -84,9 +85,7 @@ import type {
 } from '@api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@api/services/core/queues';
 import type { Jobs } from '@api/jobs';
-
 import type { User } from '@api/db/models/system';
-
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';
@@ -166,6 +165,10 @@ export interface IoC extends Jobs {
   scheduler: Scheduler;
   session: Session;
 
+  // Queues
+  jobsQueueHandler: JobsQueueHandler;
+  tasksQueueHandler: TasksQueueHandler;
+
   // Authentication
   authenticationService: AuthenticationService;
   aclService: ACLService;
@@ -176,30 +179,28 @@ export interface IoC extends Jobs {
   // MFA Providers
   mfaProvider: MFAProvider;
 
-  // Images
-  asServedService: AsServedService;
-  guideImageService: GuideImageService;
-  imageMapService: ImageMapService;
-  processedImageService: ProcessedImageService;
-  sourceImageService: SourceImageService;
+  // Data export
+  dataExportFields: DataExportFields;
+  dataExportMapper: DataExportMapper;
+  dataExportService: DataExportService;
 
   // Foods
   foodDataService: FoodDataService;
   nutrientTableService: NutrientTableService;
   portionSizeService: PortionSizeService;
 
-  // Surveys
+  // Images
+  processedImageService: ProcessedImageService;
+  sourceImageService: SourceImageService;
+  asServedService: AsServedService;
+  guideImageService: GuideImageService;
+  imageMapService: ImageMapService;
+
+  // Survey / user
   adminSurveyService: AdminSurveyService;
   surveyService: SurveyService;
-  dataExportFields: DataExportFields;
-  dataExportMapper: DataExportMapper;
-  dataExportService: DataExportService;
-
+  adminUserService: AdminUserService;
   userService: UserService;
-
-  // Queues
-  jobsQueueHandler: JobsQueueHandler;
-  tasksQueueHandler: TasksQueueHandler;
 }
 
 const configureContainer = () => {

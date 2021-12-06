@@ -1,6 +1,5 @@
 import { asClass, asFunction, asValue, AwilixContainer } from 'awilix';
 import {
-  adminSurveyService,
   authenticationService,
   aclService,
   duoSecurityProvider,
@@ -17,6 +16,8 @@ import {
   Pusher,
   Scheduler,
   Session,
+  adminSurveyService,
+  adminUserService,
   asServedService,
   guideImageService,
   imageMapService,
@@ -50,12 +51,13 @@ export default (container: AwilixContainer): void => {
     nutrientTableService: asFunction(nutrientTableService),
     portionSizeService: asFunction(portionSizeService),
 
-    adminSurveyService: asFunction(adminSurveyService),
-    surveyService: asFunction(surveyService),
     dataExportFields: asFunction(dataExportFields),
     dataExportMapper: asFunction(dataExportMapper),
     dataExportService: asFunction(dataExportService),
 
+    adminSurveyService: asFunction(adminSurveyService),
+    surveyService: asFunction(surveyService),
+    adminUserService: asFunction(adminUserService),
     userService: asFunction(userService),
 
     cache: asClass(Cache).singleton(),

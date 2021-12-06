@@ -18,7 +18,7 @@ export default (): void => {
 
   beforeAll(async () => {
     input = mocker.system.user();
-    user = await ioc.cradle.userService.create(input);
+    user = await ioc.cradle.adminUserService.create(input);
     output = omit(input, ['password', 'passwordConfirm']);
 
     url = `${baseUrl}/${user.id}/edit`;

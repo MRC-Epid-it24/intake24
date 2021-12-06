@@ -15,7 +15,7 @@ import type { Controller, CrudActions } from '@api/http/controllers';
 
 export type AdminUserController = Controller<CrudActions>;
 
-export default ({ userService }: Pick<IoC, 'userService'>): AdminUserController => {
+export default ({ adminUserService }: Pick<IoC, 'adminUserService'>): AdminUserController => {
   const entryRefs = async (): Promise<UserRefs> => {
     const [permissions, roles] = await Promise.all([
       Permission.scope('list').findAll(),
@@ -57,7 +57,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): AdminUserController 
   };
 
   const store = async (req: Request, res: Response<StoreUserResponse>): Promise<void> => {
-    const user = await userService.create(
+    const user = await adminUserService.create(
       pick(req.body, [
         'name',
         'email',
@@ -88,7 +88,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): AdminUserController 
   const update = async (req: Request, res: Response<UserResponse>): Promise<void> => {
     const { userId } = req.params;
 
-    await userService.update(
+    await adminUserService.update(
       userId,
       pick(req.body, [
         'name',
@@ -116,7 +116,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): AdminUserController 
   const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { userId } = req.params;
 
-    await userService.destroy(userId);
+    await adminUserService.destroy(userId);
     res.status(204).json();
   };
 

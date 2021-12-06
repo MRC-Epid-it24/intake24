@@ -94,7 +94,8 @@ describe('API', () => {
   describe('User routes', () => {
     describe('GET /api/user/physical-data', user.getPhysicalData);
     describe('POST /api/user/physical-data', user.setPhysicalData);
-    describe('GET /api/user', user.submissions);
+    describe('GET /api/user/submissions', user.submissions);
+    describe('GET /api/user/password', user.password);
   });
 
   describe('Admin', admin);

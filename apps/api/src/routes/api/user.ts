@@ -10,6 +10,8 @@ const router = Router();
 
 authenticate(router, 'user');
 
+router.post('/password', validation.updatePassword, wrapAsync(userController.updatePassword));
+
 router
   .route('/physical-data')
   .get(wrapAsync(userController.getPhysicalData))

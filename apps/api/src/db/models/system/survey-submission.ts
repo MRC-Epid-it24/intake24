@@ -3,7 +3,7 @@ import {
   SurveySubmissionAttributes,
   SurveySubmissionCreationAttributes,
 } from '@common/types/models';
-import { FindOptions } from 'sequelize/types';
+import { FindOptions, WhereOptions } from 'sequelize/types';
 import BaseModel from '../model';
 import {
   NutrientType,
@@ -22,44 +22,56 @@ import SurveySubmissionFood from './survey-submission-food';
 import SurveySubmissionFoodCustomField from './survey-submission-food-custom-field';
 import SurveySubmissionMissingFood from './survey-submission-missing-food';
 
-export const submissionScope = (
-  surveyId: string | string[],
-  userId?: string
-): FindOptions<SurveySubmissionAttributes> => ({
-  where: userId ? { surveyId, userId } : { surveyId },
-  include: [
-    {
-      model: User,
-      include: [
-        { model: UserSurveyAlias, where: { surveyId }, required: false },
-        { model: UserCustomField, separate: true },
-      ],
-    },
-    { model: SurveySubmissionCustomField, separate: true },
-    {
-      model: SurveySubmissionMeal,
-      separate: true,
-      include: [
-        { model: SurveySubmissionMealCustomField, separate: true },
-        {
-          model: SurveySubmissionFood,
-          separate: true,
-          include: [
-            { model: SurveySubmissionFoodCustomField },
-            { model: SurveySubmissionField, separate: true },
-            {
-              model: SurveySubmissionNutrient,
-              separate: true,
-              include: [{ model: NutrientType, required: true }],
-            },
-            { model: SurveySubmissionPortionSizeField, separate: true },
-          ],
-        },
-        { model: SurveySubmissionMissingFood, separate: true },
-      ],
-    },
-  ],
-});
+export type SubmissionScope = {
+  surveyId?: string | string[];
+  userId?: string | string[];
+};
+
+export const submissionScope = ({
+  surveyId,
+  userId,
+}: SubmissionScope): FindOptions<SurveySubmissionAttributes> => {
+  const where: WhereOptions<SurveySubmissionAttributes> = {};
+
+  if (surveyId) where.surveyId = surveyId;
+  if (userId) where.userId = surveyId;
+
+  return {
+    where,
+    include: [
+      {
+        model: User,
+        include: [
+          { model: UserSurveyAlias, where, required: false },
+          { model: UserCustomField, separate: true },
+        ],
+      },
+      { model: SurveySubmissionCustomField, separate: true },
+      {
+        model: SurveySubmissionMeal,
+        separate: true,
+        include: [
+          { model: SurveySubmissionMealCustomField, separate: true },
+          {
+            model: SurveySubmissionFood,
+            separate: true,
+            include: [
+              { model: SurveySubmissionFoodCustomField },
+              { model: SurveySubmissionField, separate: true },
+              {
+                model: SurveySubmissionNutrient,
+                separate: true,
+                include: [{ model: NutrientType, required: true }],
+              },
+              { model: SurveySubmissionPortionSizeField, separate: true },
+            ],
+          },
+          { model: SurveySubmissionMissingFood, separate: true },
+        ],
+      },
+    ],
+  };
+};
 
 @Scopes(() => ({
   survey: { include: [{ model: Survey }] },

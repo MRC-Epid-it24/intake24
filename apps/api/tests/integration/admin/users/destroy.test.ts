@@ -15,7 +15,7 @@ export default (): void => {
 
   beforeAll(async () => {
     input = mocker.system.user();
-    user = await ioc.cradle.userService.create(input);
+    user = await ioc.cradle.adminUserService.create(input);
 
     url = `${baseUrl}/${user.id}`;
     invalidUrl = `${baseUrl}/999999`;

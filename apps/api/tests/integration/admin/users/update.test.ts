@@ -32,7 +32,7 @@ export default (): void => {
     const roles = await Role.bulkCreate(roleInput);
     updateInput.roles = roles.map((item) => item.id);
 
-    user = await ioc.cradle.userService.create(input);
+    user = await ioc.cradle.adminUserService.create(input);
 
     url = `${baseUrl}/${user.id}`;
     invalidUrl = `${baseUrl}/999999`;

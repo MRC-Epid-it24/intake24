@@ -39,7 +39,7 @@ const role = (): RoleRequest => {
 const user = (): CreateUserRequest => {
   const name = faker.name.firstName();
   const email = faker.internet.email();
-  const password = faker.internet.password();
+  const password = nanoid(20);
   const passwordConfirm = password;
   const phone = faker.phone.phoneNumber();
   const multiFactorAuthentication = false;

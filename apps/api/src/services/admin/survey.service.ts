@@ -15,10 +15,10 @@ import { toSimpleName, generateToken } from '@api/util';
 import { surveyMgmt, surveyRespondent } from '../core/auth';
 
 const adminSurveyService = ({
+  adminUserService,
   securityConfig,
   scheduler,
-  userService,
-}: Pick<IoC, 'securityConfig' | 'scheduler' | 'userService'>) => {
+}: Pick<IoC, 'adminUserService' | 'securityConfig' | 'scheduler'>) => {
   /**
    * Fetch survey-specific respondent permission instance
    *
@@ -83,7 +83,7 @@ const adminSurveyService = ({
       urlAuthToken: generateToken(authUrlTokenLength ?? size, authUrlTokenCharset ?? alphabet),
     });
 
-    await userService.createPassword({ userId, password });
+    await adminUserService.createPassword({ userId, password });
 
     return respondent;
   };
@@ -138,7 +138,7 @@ const adminSurveyService = ({
     const [userAliasRecords] = await Promise.all([
       UserSurveyAlias.bulkCreate(userAliases),
       PermissionUser.bulkCreate(userPermissions),
-      userService.createPasswords(userPasswords),
+      adminUserService.createPasswords(userPasswords),
       UserCustomField.bulkCreate(userCustomFields),
     ]);
 
@@ -168,13 +168,13 @@ const adminSurveyService = ({
     const { customFields, password, ...rest } = input;
 
     await user.update({ ...rest, simpleName: toSimpleName(rest.name) });
-    if (password) await userService.updatePassword({ userId: user.id, password });
+    if (password) await adminUserService.updatePassword(user.id, password);
 
     // Update custom fields
     if (customFields && user.customFields)
-      await userService.updateUserCustomFields(userId, user.customFields, customFields);
+      await adminUserService.updateUserCustomFields(userId, user.customFields, customFields);
 
-    await userService.flushACLCache(user.id);
+    await adminUserService.flushACLCache(user.id);
 
     return user.aliases[0];
   };

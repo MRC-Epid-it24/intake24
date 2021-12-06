@@ -55,22 +55,24 @@ export const identifiers: Schema = {
 export const password: Schema = {
   password: {
     in: ['body'],
-    errorMessage: 'Enter a valid password, at least 8 chars length.',
+    errorMessage: 'Password must contain at least 10 chars of lower/upper chars and numbers.',
     isString: true,
     isEmpty: { negated: true },
-    isLength: { options: { min: 8 } },
+    isStrongPassword: {
+      options: { minLength: 10, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 },
+    },
   },
   passwordConfirm: {
     in: ['body'],
-    errorMessage: 'Enter a valid password, at least 8 chars length.',
+    errorMessage: 'Password must contain at least 10 chars of lower/upper chars and numbers.',
     isString: true,
     isEmpty: { negated: true },
-    isLength: { options: { min: 8 } },
+    isStrongPassword: {
+      options: { minLength: 10, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 },
+    },
     custom: {
       options: async (value, { req }): Promise<void> => {
-        return value === req.body.password
-          ? Promise.resolve()
-          : Promise.reject(new Error(`Passwords don't match.`));
+        if (value !== req.body.password) throw new Error(`Passwords don't match.`);
       },
     },
   },

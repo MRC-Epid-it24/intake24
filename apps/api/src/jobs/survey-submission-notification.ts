@@ -54,7 +54,7 @@ export default class SurveySubmissionNotification extends BaseJob<SurveySubmissi
       return;
     }
 
-    const submission = await SurveySubmission.findByPk(submissionId, submissionScope(surveyId));
+    const submission = await SurveySubmission.findByPk(submissionId, submissionScope({ surveyId }));
     if (!submission) throw new NotFoundError('Submission not found');
 
     const headers: Dictionary = {};

@@ -251,7 +251,7 @@ export const initDatabase = async (): Promise<MockData> => {
   const permissions = await Permission.findAll();
   await adminRole.$set('permissions', permissions);
 
-  const admin = await ioc.cradle.userService.create({
+  const admin = await ioc.cradle.adminUserService.create({
     email: 'testAdmin@example.com',
     password: 'testAdminPassword',
     permissions: [],
@@ -260,7 +260,7 @@ export const initDatabase = async (): Promise<MockData> => {
 
   const role = await Role.create({ name: 'test-role', displayName: 'Test Role' });
 
-  const user = await ioc.cradle.userService.create({
+  const user = await ioc.cradle.adminUserService.create({
     email: 'testUser@example.com',
     password: 'testUserPassword',
     permissions: [],
