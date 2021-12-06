@@ -50,7 +50,12 @@
         name="acl"
         :resources="resources.acl"
       ></menu-tree>
-      <menu-tree icon="fas fa-fw fa-tools" name="system" :resources="resources.system"></menu-tree>
+      <menu-tree
+        v-if="can(['jobs-browse', 'sign-in-logs-browse', 'tasks-browse'])"
+        icon="fas fa-fw fa-tools"
+        name="system"
+        :resources="resources.system"
+      ></menu-tree>
     </v-navigation-drawer>
 
     <v-app-bar app dark color="secondary" fixed>
