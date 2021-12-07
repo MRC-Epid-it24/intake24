@@ -43,62 +43,14 @@ describe('API', () => {
 
   // describe('Root', root);
 
-  describe('Authentication', () => {
-    describe('POST /api/auth/login', authentication.login);
-    describe('POST /api/auth/login/alias', authentication.loginAlias);
-    describe('POST /api/auth/login/token', authentication.loginToken);
-    // describe('POST /api/auth/login/verify', authentication.verify);
-    describe('POST /api/auth/login/refresh', authentication.refresh);
-    describe('POST /api/auth/login/logout', authentication.logout);
-  });
+  describe('/api/auth', authentication);
+  describe('/api/subscriptions', subscriptions);
+  describe('/api/feedback', feedback);
+  describe('/api/surveys', surveys);
+  describe('/api/portion-sizes', portionSizes);
+  describe('/api/user', user);
 
-  describe('Push subscriptions', () => {
-    describe('POST /api/subscriptions', subscriptions.subscribe);
-    describe('DELETE /api/subscriptions', subscriptions.unsubscribe);
-    describe('POST /api/subscriptions/push', subscriptions.push);
-  });
-
-  describe('Feedback', () => {
-    describe('GET /api/feedback/henry-coefficients', feedback.henryCoefficients);
-    describe('GET /api/feedback/physical-activity-levels', feedback.physicalActivityLevels);
-    describe('GET /api/feedback/weight-targets', feedback.weightTargets);
-  });
-
-  describe('Surveys', () => {
-    describe('GET /api/surveys', surveys.browse);
-    describe('GET /api/surveys/:surveyId', surveys.read);
-    describe('POST /api/surveys/:surveyId/generate-user', surveys.generateUser);
-    describe('POST /api/surveys/:surveyId/create-user', surveys.createUser);
-
-    describe('GET /api/surveys/:surveyId/parameters', surveys.parameters);
-    describe('GET /api/surveys/:surveyId/user-info', surveys.userInfo);
-    describe('GET /api/surveys/:surveyId/session', surveys.getSession);
-    describe('POST /api/surveys/:surveyId/session', surveys.setSession);
-    // describe('POST /api/surveys/:surveyId/submissions', surveys.submissions);
-    describe('GET /api/surveys/:surveyId/follow-up', surveys.followUp);
-    // describe('POST /api/surveys/:surveyId/request-help', surveys.requestHelp);
-  });
-
-  describe('Portion-sizes', () => {
-    describe('GET /api/portion-sizes/as-served-sets', portionSizes.asServedSets);
-    describe('GET /api/portion-sizes/as-served-sets/:id', portionSizes.asServedSet);
-    describe('GET /api/portion-sizes/drinkware-sets', portionSizes.drinkwareSets);
-    describe('GET /api/portion-sizes/drinkware-sets/:id', portionSizes.drinkwareSet);
-    describe('GET /api/portion-sizes/guide-images', portionSizes.guideImages);
-    describe('GET /api/portion-sizes/guide-images/:id', portionSizes.guideImage);
-    describe('GET /api/portion-sizes/image-maps', portionSizes.imageMaps);
-    describe('GET /api/portion-sizes/image-maps/:id', portionSizes.imageMap);
-    describe('GET /api/portion-sizes/weight', portionSizes.weight);
-  });
-
-  describe('User routes', () => {
-    describe('GET /api/user/physical-data', user.getPhysicalData);
-    describe('POST /api/user/physical-data', user.setPhysicalData);
-    describe('GET /api/user/submissions', user.submissions);
-    describe('GET /api/user/password', user.password);
-  });
-
-  describe('Admin', admin);
+  describe('/api/admin', admin);
 
   afterAll(async () => {
     await suite.close();

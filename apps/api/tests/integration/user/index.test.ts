@@ -3,9 +3,9 @@ import setPhysicalData from './set-physical-data.test';
 import password from './password.test';
 import submissions from './submissions.test';
 
-export default {
-  getPhysicalData,
-  setPhysicalData,
-  password,
-  submissions,
+export default () => {
+  describe('GET /api/user/physical-data', getPhysicalData);
+  describe('POST /api/user/physical-data', setPhysicalData);
+  describe('GET /api/user/submissions', submissions);
+  describe('GET /api/user/password', password);
 };
