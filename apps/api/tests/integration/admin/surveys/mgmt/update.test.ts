@@ -102,6 +102,17 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
+  it(`should return 404 when record doesn't exist`, async () => {
+    await setPermission(['surveys-mgmt', 'surveyadmin']);
+
+    const { status } = await request(suite.app)
+      .get(invalidSurveyUrl)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.user);
+
+    expect(status).toBe(404);
+  });
+
   describe('with correct permissions', () => {
     beforeAll(async () => {
       await setPermission(['surveys-mgmt', 'surveyadmin']);
