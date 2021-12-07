@@ -14,11 +14,14 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title>
-              <span class="text-h5">
+            <v-toolbar dark color="primary" flat>
+              <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
+                <v-icon>$cancel</v-icon>
+              </v-btn>
+              <v-toolbar-title>
                 {{ $t(`surveys.respondents.${isCreate ? 'add' : 'edit'}`) }}
-              </span>
-            </v-card-title>
+              </v-toolbar-title>
+            </v-toolbar>
             <v-form ref="form" @keydown.native="clearError" @submit.prevent="save">
               <v-card-text>
                 <v-container>
