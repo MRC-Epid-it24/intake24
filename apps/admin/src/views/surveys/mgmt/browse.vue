@@ -15,62 +15,127 @@
               <v-icon class="mr-2">fa-user-plus</v-icon> {{ $t('surveys.mgmt.add') }}
             </v-btn>
           </template>
-          <v-card :loading="options.isLoading">
-            <v-card-title>
-              <span class="text-h5">{{ $t(`surveys.mgmt.${isCreate ? 'add' : 'edit'}`) }}</span>
-            </v-card-title>
+          <v-card :loading="isLoading">
+            <v-toolbar dark color="primary" flat>
+              <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
+                <v-icon>$cancel</v-icon>
+              </v-btn>
+              <v-toolbar-title>
+                {{ $t(`surveys.mgmt.${isEdit ? 'edit' : 'add'}`) }}
+              </v-toolbar-title>
+              <template v-slot:extension v-if="!isEdit">
+                <v-tabs v-model="tab" grow>
+                  <v-tab key="search">
+                    <v-icon left>fa-search</v-icon>
+                    {{ $t(`surveys.mgmt.search`) }}
+                  </v-tab>
+                  <v-tab key="create">
+                    <v-icon left>fa-user-plus</v-icon>
+                    {{ $t(`surveys.mgmt.create`) }}
+                  </v-tab>
+                </v-tabs>
+              </template>
+            </v-toolbar>
             <v-form ref="form" @keydown.native="clearError" @submit.prevent="save">
+              <v-tabs-items v-model="tab">
+                <v-tab-item key="search">
+                  <v-card-text>
+                    <v-row>
+                      <v-col cols="12">
+                        <template v-if="isEdit">
+                          <v-text-field
+                            :error-messages="form.errors.get('userId')"
+                            :label="$t('users.email')"
+                            :value="`${selected.email} / ${selected.name}`"
+                            name="userId"
+                            disabled
+                            hide-details="auto"
+                            outlined
+                            prepend-icon="fas fa-user"
+                          ></v-text-field>
+                        </template>
+                        <template v-else>
+                          <v-autocomplete
+                            v-model="form.userId"
+                            :error-messages="form.errors.get('userId')"
+                            :items="users"
+                            :label="$t('users.email')"
+                            :loading="isLoading"
+                            :search-input.sync="search"
+                            clearable
+                            hide-no-data
+                            hide-selected
+                            item-text="email"
+                            item-value="id"
+                            name="userId"
+                            outlined
+                            prepend-icon="fas fa-users"
+                            @input="form.errors.clear('userId')"
+                          ></v-autocomplete>
+                        </template>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-tab-item>
+                <v-tab-item key="create">
+                  <v-card flat>
+                    <v-card-text>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="form.email"
+                            :error-messages="form.errors.get('email')"
+                            :label="$t('users.email')"
+                            hide-details="auto"
+                            name="email"
+                            outlined
+                            prepend-icon="fa-at"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="form.name"
+                            :error-messages="form.errors.get('name')"
+                            :label="$t('users.name')"
+                            hide-details="auto"
+                            name="name"
+                            outlined
+                            prepend-icon="fa-user"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="form.phone"
+                            :error-messages="form.errors.get('phone')"
+                            :label="$t('users.phone')"
+                            hide-details="auto"
+                            name="phone"
+                            outlined
+                            prepend-icon="fa-phone"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-tab-item>
+              </v-tabs-items>
               <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <template v-if="isCreate">
-                        <v-autocomplete
-                          v-model="form.id"
-                          :error-messages="form.errors.get('userId')"
-                          :items="availableUsers"
-                          :label="$t('users.name')"
-                          :loading="options.isLoading"
-                          hide-no-data
-                          hide-selected
-                          item-text="name"
-                          item-value="id"
-                          name="userId"
-                          outlined
-                          prepend-icon="fas fa-users"
-                          @input="form.errors.clear('userId')"
-                        ></v-autocomplete>
-                      </template>
-                      <template v-else>
-                        <v-text-field
-                          :error-messages="form.errors.get('userId')"
-                          :label="$t('users.username')"
-                          :value="selected.name"
-                          name="userId"
-                          disabled
-                          hide-details="auto"
-                          outlined
-                          prepend-icon="fas fa-user"
-                        ></v-text-field>
-                      </template>
-                    </v-col>
-                    <v-col
-                      v-for="permission in options.permissions"
-                      :key="permission.id"
-                      cols="12"
-                      sm="6"
+                <v-row no-gutters>
+                  <v-col v-for="permission in permissions" :key="permission.id" cols="12" sm="6">
+                    <v-checkbox
+                      v-model="form.permissions"
+                      :label="permission.displayName"
+                      :value="permission.id"
+                      dense
+                      :prepend-icon="
+                        form.permissions.includes(permission.id) ? `fas fa-unlock` : `fas fa-lock`
+                      "
                     >
-                      <v-checkbox
-                        v-model="form.permissions"
-                        :label="permission.name"
-                        :value="permission.id"
-                        prepend-icon="fas fa-user-nurse"
-                      >
-                      </v-checkbox>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                    </v-checkbox>
+                  </v-col>
+                </v-row>
               </v-card-text>
+
               <v-card-actions>
                 <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
                   <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
@@ -86,7 +151,10 @@
       </template>
       <template v-slot:[`item.permissions`]="{ item }">
         {{
-          item.permissions.map((permission) => permission.name.replace(`${id}/`, '')).join(' | ')
+          item.permissions
+            .map((permission) => permission.name.replace(`${id}/`, '').replace(`surveys-`, ''))
+            .sort()
+            .join(' | ')
         }}
       </template>
       <template v-slot:[`item.action`]="{ item }">
@@ -100,33 +168,33 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { SurveyMgmtAvailableResponse, UserMgmtListEntry } from '@common/types/http/admin';
+import debounce from 'lodash/debounce';
+import {
+  SurveyMgmtAvailablePermissionsResponse,
+  SurveyMgmtAvailableUsersResponse,
+  UserMgmtListEntry,
+} from '@common/types/http/admin';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
 import { EntryMixin } from '@/types';
 import DataTable from '../data-table.vue';
 
-type SurveyMgmtRefs = {
+type SurveyMgmtForm = {
+  userId: string | null;
+  email: string | null;
+  name: string | null;
+  phone: string | null;
+  permissions: string[];
+};
+
+type SurveyMgmt = {
+  debouncedFetchUsers: () => void;
   $refs: {
     table: InstanceType<typeof DataTable>;
   };
 };
 
-type SurveyMgmtForm = {
-  id: string | null;
-  permissions: string[];
-};
-
-interface AvailableOptions extends SurveyMgmtAvailableResponse {
-  isLoading: boolean;
-}
-
-type OptionList = {
-  id: string;
-  name: string;
-};
-
-export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend({
+export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmt>).extend({
   name: 'SurveyMgmt',
 
   components: { DataTable },
@@ -137,15 +205,15 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
     return {
       headers: [
         {
-          text: this.$t('users.name'),
-          sortable: true,
-          value: 'name',
-          align: 'start',
-        },
-        {
           text: this.$t('users.email'),
           sortable: true,
           value: 'email',
+          align: 'start',
+        },
+        {
+          text: this.$t('users.name'),
+          sortable: true,
+          value: 'name',
           align: 'start',
         },
         {
@@ -162,32 +230,51 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
         },
       ],
       dialog: false,
+      search: null,
+      tab: 0,
       selected: {},
       form: form<SurveyMgmtForm>({
-        id: null,
+        userId: null,
+        email: null,
+        name: null,
+        phone: null,
         permissions: [],
       }),
-      options: {
-        isLoading: false,
-        users: [],
-        permissions: [],
-      } as AvailableOptions,
+      isLoading: false,
+      users: [] as SurveyMgmtAvailableUsersResponse,
+      permissions: [] as SurveyMgmtAvailablePermissionsResponse,
     };
   },
 
   computed: {
-    availableUsers(): OptionList[] {
-      return this.options.users.map(({ id, name, email }) => {
-        const [first, second] = [name, email, id].filter((item) => item) as string[];
-        return {
-          id,
-          name: second ? `${first} (${second})` : `${first}`,
-        };
-      });
+    isEdit(): boolean {
+      return !!Object.keys(this.selected).length;
     },
-    isCreate(): boolean {
-      return !Object.keys(this.selected).length;
+    isNew(): boolean {
+      return this.tab === 1;
     },
+  },
+
+  watch: {
+    search() {
+      this.debouncedFetchUsers();
+    },
+  },
+
+  created() {
+    this.debouncedFetchUsers = debounce(() => {
+      this.fetchUsers();
+    }, 500);
+  },
+
+  async mounted() {
+    if (this.permissions.length > 0) return;
+
+    const { data } = await this.$http.get<SurveyMgmtAvailablePermissionsResponse>(
+      `admin/surveys/${this.id}/mgmt/permissions`
+    );
+
+    this.permissions = data;
   },
 
   methods: {
@@ -195,21 +282,20 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
       this.form.reset();
       this.selected = {};
       this.dialog = true;
-      await this.fetchOptions();
     },
 
     async edit(item: UserMgmtListEntry) {
-      const { id, permissions } = item;
-      this.form.load({ id, permissions: permissions.map((permission) => permission.id) });
+      const { id: userId, permissions } = item;
+      this.form.load({ userId, permissions: permissions.map(({ id }) => id) });
       this.selected = item;
       this.dialog = true;
-      await this.fetchOptions();
     },
 
     reset() {
+      this.dialog = false;
       this.form.reset();
       this.selected = {};
-      this.dialog = false;
+      this.tab = 0;
     },
 
     clearError(event: KeyboardEvent) {
@@ -218,43 +304,29 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmtRefs>).extend
       if (name) this.form.errors.clear(name);
     },
 
-    async fetchOptions() {
-      if (this.options.permissions.length > 0) return;
+    async fetchUsers() {
+      if (this.isLoading) return;
 
-      if (this.options.isLoading) return;
-
-      this.options.isLoading = true;
+      this.isLoading = true;
 
       try {
-        const {
-          data: { users, permissions },
-        } = await this.$http.get<SurveyMgmtAvailableResponse>(
-          `admin/surveys/${this.id}/mgmt/available`
+        const { data } = await this.$http.get<SurveyMgmtAvailableUsersResponse>(
+          `admin/surveys/${this.id}/mgmt/users`,
+          { params: { search: this.search } }
         );
-        this.options.users = users;
-        this.options.permissions = permissions;
-      } catch {
-        // continue
+        this.users = data;
       } finally {
-        this.options.isLoading = false;
+        this.isLoading = false;
       }
     },
 
     async save() {
-      await this.form.put(`admin/surveys/${this.id}/mgmt/${this.form.id}`);
+      if (this.isNew) await this.form.post(`admin/surveys/${this.id}/mgmt`);
+      else await this.form.patch(`admin/surveys/${this.id}/mgmt/${this.form.userId}`);
       // this.$toasted.success(this.$t('common.msg.updated', { name }).toString());
 
       this.$refs.table.fetch();
-      this.dialog = false;
-      await this.clearOptions();
-    },
-
-    async clearOptions() {
-      this.options = {
-        isLoading: false,
-        users: [],
-        permissions: [],
-      };
+      this.reset();
     },
   },
 });

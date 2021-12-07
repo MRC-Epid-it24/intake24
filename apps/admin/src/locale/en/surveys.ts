@@ -54,8 +54,10 @@ const surveys: LocaleMessageObject = {
     _: 'Management',
     tab: 'Management',
     title: 'Survey management',
-    add: 'New staff/support',
-    edit: 'Edit staff',
+    add: 'New staff / support',
+    edit: 'Edit staff access',
+    search: 'Search for user',
+    create: 'Create new user',
   },
   overrides: {
     _: 'Scheme overrides',
