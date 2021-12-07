@@ -8,6 +8,7 @@ import destroy from './destroy.test';
 import mgmt from './mgmt/index.test';
 import dataExport from './data-export/index.test';
 import respondents from './respondents/index.test';
+import submissions from './submissions/index.test';
 
 export default () => {
   describe('GET /api/admin/surveys', browse);
@@ -34,9 +35,9 @@ export default () => {
   describe('DELETE /api/admin/surveys/:surveyId/respondents/:userId', respondents.destroy);
 
   // Surveys submissions
-  // describe('GET /api/admin/surveys/:surveyId/submissions', surveys.respondents.submissions.browse);
-  // describe('GET /api/admin/surveys/:surveyId/submissions/:submissionId', surveys.respondents.submissions.read);
-  // describe('DELETE /api/admin/surveys/:surveyId/submissions/:submissionId', surveys.respondents.submissions.destroy);
+  describe('GET /api/admin/surveys/:surveyId/submissions', submissions.browse);
+  describe('GET /api/admin/surveys/:surveyId/submissions/:submissionId', submissions.read);
+  describe('DELETE /api/admin/surveys/:surveyId/submissions/:submissionId', submissions.destroy);
 
   // Surveys data-export
   describe('POST /api/admin/surveys/:surveyId/data-export', dataExport.queue);

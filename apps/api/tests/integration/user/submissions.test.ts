@@ -1,6 +1,5 @@
 import request from 'supertest';
-import * as uuid from 'uuid';
-import { suite } from '@tests/integration/helpers';
+import { mocker, suite } from '@tests/integration/helpers';
 import { SurveySubmission } from '@api/db/models/system';
 
 export default (): void => {
@@ -14,15 +13,7 @@ export default (): void => {
     surveyId = suite.data.system.survey.id;
     userId = suite.data.system.respondent.userId;
 
-    await SurveySubmission.create({
-      id: uuid.v4(),
-      surveyId,
-      userId,
-      startTime: new Date(),
-      endTime: new Date(),
-      submissionTime: new Date(),
-      uxSessionId: uuid.v4(),
-    });
+    await SurveySubmission.create(mocker.system.submission(surveyId, userId));
   });
 
   afterAll(async () => {

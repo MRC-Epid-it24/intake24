@@ -44,7 +44,11 @@ export default (): AdminSurveySubmissionController => {
   ): Promise<void> => {
     const { surveyId, submissionId } = req.params;
 
-    const submission = await SurveySubmission.findByPk(submissionId, submissionScope({ surveyId }));
+    const scope = submissionScope({ surveyId });
+    const submission = await SurveySubmission.findOne({
+      ...scope,
+      where: { ...scope.where, id: submissionId },
+    });
     if (!submission) throw new NotFoundError();
 
     res.json({ data: submission });
@@ -56,7 +60,10 @@ export default (): AdminSurveySubmissionController => {
   ): Promise<void> => {
     const { surveyId, submissionId } = req.params;
 
-    await SurveySubmission.destroy({ where: { id: submissionId, surveyId } });
+    const submission = await SurveySubmission.findOne({ where: { id: submissionId, surveyId } });
+    if (!submission) throw new NotFoundError();
+
+    await submission.destroy();
 
     res.status(204).json();
   };

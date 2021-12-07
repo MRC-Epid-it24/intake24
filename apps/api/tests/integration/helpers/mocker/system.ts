@@ -1,6 +1,7 @@
 import faker from 'faker';
 import { nanoid } from 'nanoid';
 import slugify from 'slugify';
+import * as uuid from 'uuid';
 import { jobTypes } from '@common/types';
 import {
   PermissionRequest,
@@ -10,7 +11,6 @@ import {
   CreateTaskRequest,
   CreateUserRequest,
   CreateLanguageRequest,
-  CreateRespondentInput,
   CreateRespondentRequest,
 } from '@common/types/http/admin';
 import {
@@ -201,6 +201,18 @@ const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest =
   };
 };
 
+const submission = (surveyId: string, userId: string) => {
+  return {
+    id: uuid.v4(),
+    surveyId,
+    userId,
+    startTime: new Date(),
+    endTime: faker.date.soon(1),
+    submissionTime: faker.date.soon(1),
+    uxSessionId: uuid.v4(),
+  };
+};
+
 const task = (): CreateTaskRequest => {
   const name = faker.random.words(3);
   const job = jobTypes[0];
@@ -227,6 +239,7 @@ export default {
   scheme,
   schemeQuestion,
   survey,
+  submission,
   respondent,
   user,
   task,
