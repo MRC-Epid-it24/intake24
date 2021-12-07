@@ -1,9 +1,5 @@
 import request from 'supertest';
-import {
-  CreateRespondentRequest,
-  SurveyRequest,
-  UpdateRespondentRequest,
-} from '@common/types/http/admin';
+import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 import { Survey, UserSurveyAlias } from '@api/db/models/system';
 import { surveyStaff } from '@api/services/core/auth';
@@ -18,7 +14,6 @@ export default (): void => {
   let invalidSurveyUrl: string;
   let invalidRespondentUrl: string;
 
-  let surveyInput: SurveyRequest;
   let survey: Survey;
 
   let input: CreateRespondentRequest;
@@ -26,7 +21,7 @@ export default (): void => {
   let respondent: UserSurveyAlias;
 
   beforeAll(async () => {
-    surveyInput = mocker.system.survey();
+    const surveyInput = mocker.system.survey();
     survey = await Survey.create({
       ...surveyInput,
       startDate: new Date(surveyInput.startDate),

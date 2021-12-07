@@ -1,5 +1,4 @@
 import request from 'supertest';
-import { SurveyRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 import { Survey } from '@api/db/models/system';
 import { surveyStaff } from '@api/services/core/auth';
@@ -10,15 +9,14 @@ export default (): void => {
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveyRequest;
   let survey: Survey;
 
   beforeAll(async () => {
-    input = mocker.system.survey();
+    const surveyInput = mocker.system.survey();
     survey = await Survey.create({
-      ...input,
-      startDate: new Date(input.startDate),
-      endDate: new Date(input.endDate),
+      ...surveyInput,
+      startDate: new Date(surveyInput.startDate),
+      endDate: new Date(surveyInput.endDate),
     });
 
     url = `${baseUrl}/${survey.id}/mgmt`;

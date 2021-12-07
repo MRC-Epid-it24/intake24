@@ -1,7 +1,6 @@
 import faker from 'faker';
 import request from 'supertest';
 import { Op } from 'sequelize';
-import { SurveyRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 import { Permission, Survey } from '@api/db/models/system';
 import { surveyStaff } from '@api/services/core/auth';
@@ -16,7 +15,6 @@ export default (): void => {
   let invalidSurveyUrl: string;
   let invalidUserUrl: string;
 
-  let surveyInput: SurveyRequest;
   let survey: Survey;
 
   let userId: string;
@@ -26,7 +24,7 @@ export default (): void => {
   let nonSurveyPermissionIds: string[];
 
   beforeAll(async () => {
-    surveyInput = mocker.system.survey();
+    const surveyInput = mocker.system.survey();
     survey = await Survey.create({
       ...surveyInput,
       startDate: new Date(surveyInput.startDate),

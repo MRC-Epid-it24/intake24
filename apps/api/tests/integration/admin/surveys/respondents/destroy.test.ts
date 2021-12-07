@@ -1,15 +1,8 @@
 import request from 'supertest';
-import {
-  CreateRespondentRequest,
-  SurveyRequest,
-  UpdateRespondentRequest,
-} from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Survey, UserSurveyAlias } from '@api/db/models/system';
+import { Survey } from '@api/db/models/system';
 import { surveyStaff } from '@api/services/core/auth';
-import { omit, pick } from 'lodash';
 import ioc from '@api/ioc';
-import { CustomField } from '@common/types';
 
 export default (): void => {
   const baseUrl = '/api/admin/surveys';
@@ -18,22 +11,20 @@ export default (): void => {
   let invalidSurveyUrl: string;
   let invalidRespondentUrl: string;
 
-  let surveyInput: SurveyRequest;
   let survey: Survey;
 
-  let input: CreateRespondentRequest;
-  let respondent: UserSurveyAlias;
-
   beforeAll(async () => {
-    surveyInput = mocker.system.survey();
+    const surveyInput = mocker.system.survey();
     survey = await Survey.create({
       ...surveyInput,
       startDate: new Date(surveyInput.startDate),
       endDate: new Date(surveyInput.endDate),
     });
 
-    input = mocker.system.respondent();
-    respondent = await ioc.cradle.adminSurveyService.createRespondent(survey.id, input);
+    const respondent = await ioc.cradle.adminSurveyService.createRespondent(
+      survey.id,
+      mocker.system.respondent()
+    );
 
     url = `${baseUrl}/${survey.id}/respondents/${respondent.userId}`;
     invalidSurveyUrl = `${baseUrl}/invalid-survey-id/respondents/${respondent.userId}`;

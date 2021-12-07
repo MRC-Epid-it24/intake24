@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import { pick } from 'lodash';
 import request from 'supertest';
-import { downloadImage, suite, setPermission } from '@tests/integration/helpers';
+import { suite, setPermission } from '@tests/integration/helpers';
 import { AsServedImageEntry } from '@common/types/http/admin';
 
 export default (): void => {
