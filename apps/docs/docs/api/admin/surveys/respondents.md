@@ -74,18 +74,17 @@ Update survey respondent
 ### Request
 
 ```http
-PUT /api/admin/surveys/:surveyId/respondents/:userId
+PATCH /api/admin/surveys/:surveyId/respondents/:userId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "userName": string,
-    "name": string,
-    "email": string,
-    "phone": string,
-    "password": string,
-    "passwordConfirm": string
+    "name": string | undefined,
+    "email": string | undefined,
+    "phone": string | undefined,
+    "password": string | undefined,
+    "passwordConfirm": string | undefined
 }
 ```
 
@@ -116,4 +115,58 @@ Content-Type: application/json
 
 ```json
 204 No Content
+```
+
+## Export authentication URLs
+
+Submits a job to generate CSV file with authentication URLs.
+
+### Request
+
+```http
+POST /api/admin/surveys/:surveyId/respondents/export-auth-urls
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+Returns job resource entry.
+
+```json
+200 OK
+
+{
+    "data": {...},
+}
+```
+
+## Upload respondents
+
+Submits a job to import respondent from CSV file.
+
+### Request
+
+```http
+POST /api/admin/surveys/:surveyId/respondents/upload
+
+Authorization: Bearer {accessToken}
+Content-Type: multipart/form-data
+
+{
+    "file": File
+}
+```
+
+### Response
+
+Returns job resource entry.
+
+```json
+200 OK
+
+{
+    "data": {...},
+}
 ```

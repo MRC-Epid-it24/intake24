@@ -22,7 +22,12 @@
                 {{ $t(`surveys.respondents.${isCreate ? 'add' : 'edit'}`) }}
               </v-toolbar-title>
             </v-toolbar>
-            <v-form ref="form" @keydown.native="clearError" @submit.prevent="save">
+            <v-form
+              ref="form"
+              autocomplete="off"
+              @keydown.native="clearError"
+              @submit.prevent="save"
+            >
               <v-card-text>
                 <v-container>
                   <v-row>
@@ -38,32 +43,32 @@
                         prepend-icon="fas fa-user-secret"
                       ></v-text-field>
                     </v-col>
-                    <template v-if="isCreate">
-                      <v-col cols="12">
-                        <v-text-field
-                          v-model="form.password"
-                          :error-messages="form.errors.get('password')"
-                          :label="$t('users.password._')"
-                          hide-details="auto"
-                          name="password"
-                          outlined
-                          prepend-icon="fas fa-unlock"
-                          type="password"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12">
-                        <v-text-field
-                          v-model="form.passwordConfirm"
-                          :error-messages="form.errors.get('passwordConfirm')"
-                          :label="$t('users.password.confirm')"
-                          hide-details="auto"
-                          name="passwordConfirm"
-                          outlined
-                          prepend-icon="fas fa-unlock"
-                          type="password"
-                        ></v-text-field>
-                      </v-col>
-                    </template>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="form.password"
+                        :error-messages="form.errors.get('password')"
+                        :label="$t('users.password._')"
+                        autocomplete="new-password"
+                        hide-details="auto"
+                        name="password"
+                        outlined
+                        prepend-icon="fas fa-unlock"
+                        type="password"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="form.passwordConfirm"
+                        :error-messages="form.errors.get('passwordConfirm')"
+                        :label="$t('users.password.confirm')"
+                        autocomplete="new-password"
+                        hide-details="auto"
+                        name="passwordConfirm"
+                        outlined
+                        prepend-icon="fas fa-unlock"
+                        type="password"
+                      ></v-text-field>
+                    </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="form.name"
@@ -242,7 +247,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       if (this.form.userId) {
         const {
           data: { userName: name },
-        } = await this.form.put<SurveyRespondentResponse>(
+        } = await this.form.patch<SurveyRespondentResponse>(
           `admin/surveys/${this.id}/respondents/${this.form.userId}`
         );
 
