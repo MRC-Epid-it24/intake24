@@ -1,5 +1,19 @@
 import { checkSchema } from 'express-validator';
 import validate from '@api/http/requests/validate';
-import { identifiers } from '../defaults';
+import { identifiers, password as passFields } from '../defaults';
 
-export default validate(checkSchema(identifiers));
+const { password, passwordConfirm } = passFields;
+
+export default validate(
+  checkSchema({
+    ...identifiers,
+    password: {
+      ...password,
+      optional: { options: { nullable: true } },
+    },
+    passwordConfirm: {
+      ...passwordConfirm,
+      optional: { options: { nullable: true } },
+    },
+  })
+);

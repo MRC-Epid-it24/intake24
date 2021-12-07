@@ -6,7 +6,7 @@ import {
   SurveyRespondentsResponse,
   SurveyRespondentListEntry,
 } from '@common/types/http/admin';
-import { Survey, User, UserSurveyAlias } from '@api/db/models/system';
+import { Survey, User, UserCustomField, UserSurveyAlias } from '@api/db/models/system';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import { userRespondentResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
@@ -46,10 +46,17 @@ export default ({
   ): Promise<void> => {
     const { surveyId } = req.params;
 
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
     const respondent = await adminSurveyService.createRespondent(
       surveyId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
     );
+
+    await respondent.reload({
+      include: [{ model: User, include: [{ model: UserCustomField }] }],
+    });
 
     res.status(201).json({ data: userRespondentResponse(respondent) });
   };
@@ -65,6 +72,10 @@ export default ({
       userId,
       pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
     );
+
+    await respondent.reload({
+      include: [{ model: User, include: [{ model: UserCustomField }] }],
+    });
 
     res.json({ data: userRespondentResponse(respondent) });
   };

@@ -7,6 +7,7 @@ import update from './update.test';
 import destroy from './destroy.test';
 import mgmt from './mgmt/index.test';
 import dataExport from './data-export/index.test';
+import respondents from './respondents/index.test';
 
 export default () => {
   describe('GET /api/admin/surveys', browse);
@@ -25,12 +26,12 @@ export default () => {
   describe('PATCH /api/admin/surveys/:surveyId/mgmt/:userId', mgmt.update);
 
   // Surveys respondents
-  // describe('GET /api/admin/surveys/:surveyId/respondents', surveys.respondents.browse);
-  // describe('POST /api/admin/surveys/:surveyId/respondents', surveys.respondents.store);
-  // describe('POST /api/admin/surveys/:surveyId/upload', surveys.respondents.upload);
-  // describe('POST /api/admin/surveys/:surveyId/export-auth-urls', surveys.respondents.exportAuthUrls);
-  // describe('PUT /api/admin/surveys/:surveyId/respondents/:userId', surveys.respondents.update);
-  // describe('DELETE /api/admin/surveys/:surveyId/respondents/:userId', surveys.respondents.destroy);
+  describe('GET /api/admin/surveys/:surveyId/respondents', respondents.browse);
+  describe('POST /api/admin/surveys/:surveyId/respondents', respondents.store);
+  describe('POST /api/admin/surveys/:surveyId/upload', respondents.upload);
+  describe('POST /api/admin/surveys/:surveyId/export-auth-urls', respondents.exportAuthUrls);
+  describe('PUT /api/admin/surveys/:surveyId/respondents/:userId', respondents.update);
+  describe('DELETE /api/admin/surveys/:surveyId/respondents/:userId', respondents.destroy);
 
   // Surveys submissions
   // describe('GET /api/admin/surveys/:surveyId/submissions', surveys.respondents.submissions.browse);

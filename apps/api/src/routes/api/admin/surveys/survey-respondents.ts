@@ -26,7 +26,7 @@ router.post('/export-auth-urls', wrapAsync(adminSurveyRespondentController.expor
 
 router
   .route('/:userId')
-  .put(validation.update, wrapAsync(adminSurveyRespondentController.update))
+  .patch(validation.update, wrapAsync(adminSurveyRespondentController.update))
   .delete(wrapAsync(adminSurveyRespondentController.destroy));
 
 export default router;

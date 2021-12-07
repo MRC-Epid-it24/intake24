@@ -19,10 +19,10 @@ export const userRespondentResponse = (alias: UserSurveyAlias): RespondentEntry 
     userId,
     userName,
     surveyId,
-    user: { name = null, email = null, phone = null } = {},
+    user: { name = null, email = null, phone = null, customFields = [] } = {},
   } = alias;
 
-  return { userId, userName, surveyId, name, email, phone };
+  return { userId, userName, surveyId, name, email, phone, customFields };
 };
 
 export const userMgmtResponse = (user: User): UserMgmtListEntry => {

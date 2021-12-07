@@ -10,6 +10,8 @@ import {
   CreateTaskRequest,
   CreateUserRequest,
   CreateLanguageRequest,
+  CreateRespondentInput,
+  CreateRespondentRequest,
 } from '@common/types/http/admin';
 import {
   SchemeCreationAttributes,
@@ -65,6 +67,29 @@ const user = (): CreateUserRequest => {
     customFields,
     permissions,
     roles,
+  };
+};
+
+const respondent = (): CreateRespondentRequest => {
+  const userName = faker.internet.userName();
+  const name = faker.name.firstName();
+  const email = faker.internet.email();
+  const password = nanoid(20);
+  const passwordConfirm = password;
+  const phone = faker.phone.phoneNumber();
+  const customFields = [
+    { name: faker.random.words(1), value: faker.random.words(5) },
+    { name: faker.random.words(1), value: faker.random.words(5) },
+  ];
+
+  return {
+    userName,
+    name,
+    email,
+    password,
+    passwordConfirm,
+    phone,
+    customFields,
   };
 };
 
@@ -202,6 +227,7 @@ export default {
   scheme,
   schemeQuestion,
   survey,
+  respondent,
   user,
   task,
 };

@@ -8,6 +8,7 @@ export type RespondentEntry = {
   name: string | null;
   email: string | null;
   phone: string | null;
+  customFields: CustomField[];
 };
 
 export type SurveyRespondentListEntry = RespondentEntry[];

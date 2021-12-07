@@ -1,13 +1,14 @@
-import faker from 'faker';
 import request from 'supertest';
-import { Op } from 'sequelize';
-import { SurveyRequest } from '@common/types/http/admin';
+import {
+  CreateRespondentInput,
+  CreateRespondentRequest,
+  SurveyRequest,
+} from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Permission, Survey } from '@api/db/models/system';
+import { Survey } from '@api/db/models/system';
 import { surveyStaff } from '@api/services/core/auth';
-import ioc from '@api/ioc';
-
-const { adminSurveyService } = ioc.cradle;
+import { pick } from 'lodash';
+import { CustomField } from '@common/types';
 
 export default (): void => {
   const baseUrl = '/api/admin/surveys';
@@ -18,12 +19,8 @@ export default (): void => {
   let surveyInput: SurveyRequest;
   let survey: Survey;
 
-  let input: {
-    email: string;
-    permissions: string[];
-  };
-
-  let nonSurveyPermissionIds: string[];
+  let input: CreateRespondentRequest;
+  let output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>;
 
   beforeAll(async () => {
     surveyInput = mocker.system.survey();
@@ -33,18 +30,14 @@ export default (): void => {
       endDate: new Date(surveyInput.endDate),
     });
 
-    url = `${baseUrl}/${survey.id}/mgmt`;
-    invalidSurveyUrl = `${baseUrl}/invalid-survey-id/mgmt`;
+    url = `${baseUrl}/${survey.id}/respondents`;
+    invalidSurveyUrl = `${baseUrl}/invalid-survey-id/respondents`;
 
-    const permissions = await adminSurveyService.getSurveyPermissions(survey.id);
-    const ids = permissions.map(({ id }) => id);
-
-    const nonSurveyPermissions = await Permission.findAll({ where: { id: { [Op.notIn]: ids } } });
-    nonSurveyPermissionIds = nonSurveyPermissions.map(({ id }) => id);
-
-    input = {
-      email: 'newStaffEmail@example.com',
-      permissions: ids,
+    input = mocker.system.respondent();
+    const { email, password, passwordConfirm, ...rest } = input;
+    output = {
+      ...rest,
+      email: email ? email.toLowerCase() : undefined,
     };
   });
 
@@ -55,7 +48,7 @@ export default (): void => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys-mgmt');
+    await setPermission('surveys-respondents');
 
     const { status } = await request(suite.app)
       .post(url)
@@ -65,7 +58,7 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
-  it(`should return 403 when missing 'surveys-mgmt' permission (surveyadmin)`, async () => {
+  it(`should return 403 when missing 'surveys-respondents' permission (surveyadmin)`, async () => {
     await setPermission('surveyadmin');
 
     const { status } = await request(suite.app)
@@ -76,7 +69,7 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
-  it(`should return 403 when missing 'surveys-mgmt' permission (surveyStaff)`, async () => {
+  it(`should return 403 when missing 'surveys-respondents' permission (surveyStaff)`, async () => {
     await setPermission(surveyStaff(survey.id));
 
     const { status } = await request(suite.app)
@@ -88,7 +81,7 @@ export default (): void => {
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
-    await setPermission(['surveys-mgmt', surveyStaff(survey.id)]);
+    await setPermission(['surveys-respondents', surveyStaff(survey.id)]);
 
     const { status } = await request(suite.app)
       .post(invalidSurveyUrl)
@@ -98,9 +91,21 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
+  it(`should return 404 when record doesn't exist`, async () => {
+    await setPermission(['surveys-respondents', 'surveyadmin']);
+
+    const { status } = await request(suite.app)
+      .post(invalidSurveyUrl)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.user)
+      .send(input);
+
+    expect(status).toBe(404);
+  });
+
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission(['surveys-mgmt', surveyStaff(survey.id)]);
+      await setPermission(['surveys-respondents', surveyStaff(survey.id)]);
     });
 
     it('should return 422 for missing input data', async () => {
@@ -111,7 +116,7 @@ export default (): void => {
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['email', 'permissions']);
+      expect(body.errors).toContainAllKeys(['userName', 'password', 'passwordConfirm']);
     });
 
     it('should return 422 for invalid input data', async () => {
@@ -120,36 +125,29 @@ export default (): void => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .send({
-          email: 'this-is-not-an-email',
-          permissions: { name: 'not a valid permission' },
+          userName: 'test-respondent@example.com',
+          password: 'notacomplexpassword',
+          passwordConfirm: 'notMatchingPassword',
+          name: ['test respondent'],
+          email: false,
+          phone: [new Date()],
+          customFields: 'not-a-custom-field',
         });
 
       expect(status).toBe(422);
       expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['email', 'permissions']);
+      expect(body.errors).toContainAllKeys([
+        'userName',
+        'password',
+        'passwordConfirm',
+        'name',
+        'email',
+        'phone',
+        'customFields',
+      ]);
     });
 
-    it('should return 422 for incorrect permissions / existing email account', async () => {
-      const invalidPermissionIdx = faker.datatype.number({
-        min: 0,
-        max: nonSurveyPermissionIds.length,
-      });
-
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          email: suite.data.system.user.email,
-          permissions: [nonSurveyPermissionIds[invalidPermissionIdx]],
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['email', 'permissions']);
-    });
-
-    it('should return 201 and empty response body', async () => {
+    it('should return 201 and new resource', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -157,7 +155,23 @@ export default (): void => {
         .send(input);
 
       expect(status).toBe(201);
-      expect(body).toBeEmpty();
+      expect(body).toContainAllKeys(['data']);
+
+      // Extract custom fields for non-order specific comparison
+      const { customFields: resCustomFields, ...data } = body.data;
+      const { customFields: outputCustomFields, ...restOutput } = output;
+
+      // 1) match the output
+      expect(pick(data, Object.keys(restOutput))).toEqual(restOutput);
+
+      // 2) non-order specific custom field comparison
+      if (outputCustomFields) {
+        const fields: CustomField[] = resCustomFields.map(({ name, value }: CustomField) => ({
+          name,
+          value,
+        }));
+        expect(fields).toIncludeSameMembers(outputCustomFields);
+      }
     });
   });
 };

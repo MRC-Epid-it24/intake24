@@ -1,6 +1,9 @@
-import { downloadImage } from '../util';
+import { generateCSV, downloadImage } from '../util';
 
 export type MockFiles = {
+  data: {
+    csv: string;
+  };
   images: {
     jpg: string;
   };
@@ -8,10 +11,10 @@ export type MockFiles = {
 
 export const initFiles = async (): Promise<MockFiles> => {
   const jpg = await downloadImage('https://picsum.photos/1200/800.jpg', 'mockImage.jpg');
+  const csv = await generateCSV('uploadRespondents.csv');
 
   return {
-    images: {
-      jpg,
-    },
+    data: { csv },
+    images: { jpg },
   };
 };

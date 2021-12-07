@@ -55,7 +55,6 @@ export const password: Schema = {
     in: ['body'],
     errorMessage: 'Password must contain at least 10 chars of lower/upper chars and numbers.',
     isString: true,
-    isEmpty: { negated: true },
     isStrongPassword: {
       options: { minLength: 10, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 },
     },
@@ -64,7 +63,6 @@ export const password: Schema = {
     in: ['body'],
     errorMessage: 'Password must contain at least 10 chars of lower/upper chars and numbers.',
     isString: true,
-    isEmpty: { negated: true },
     isStrongPassword: {
       options: { minLength: 10, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 },
     },

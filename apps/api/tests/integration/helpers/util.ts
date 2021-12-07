@@ -1,5 +1,8 @@
 import axios from 'axios';
+import faker from 'faker';
 import fs, { ReadStream } from 'fs-extra';
+import { Parser } from 'json2csv';
+import { times } from 'lodash';
 import path from 'path';
 import { Permission, Role, User } from '@api/db/models/system';
 import ioc from '@api/ioc';
@@ -64,4 +67,25 @@ export const downloadImage = async (url: string, filename: string): Promise<stri
     fileStream.on('finish', () => resolve(filePath));
     fileStream.on('error', () => reject());
   });
+};
+
+export const generateCSV = async (filename: string): Promise<string> => {
+  const filePath = path.resolve(fsConfig.local.downloads, filename);
+
+  const fields = ['userName', 'password', 'email', 'name', 'phone'];
+
+  const data = times(10, () => ({
+    userName: faker.internet.userName(),
+    password: faker.internet.password(),
+    email: faker.internet.email(),
+    name: faker.name.firstName(),
+    phone: faker.phone.phoneNumber(),
+  }));
+
+  const json2csvParser = new Parser({ fields });
+  const csv = json2csvParser.parse(data);
+
+  await fs.writeFile(filePath, csv, { encoding: 'utf-8' });
+
+  return filePath;
 };
