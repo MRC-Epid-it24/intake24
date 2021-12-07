@@ -1,7 +1,7 @@
 {
   "name": "intake24",
   "version": "1.0.0",
-  "description": "Intake24 API Server",
+  "description": "Intake24 dietary recall system",
   "private": true,
   "author": "",
   "license": "Apache-2.0",
@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/MRC-Epid-it24/intake24/issues"
   },
-  "homepage": "https://github.com/MRC-Epid-it24/intake24#readme",
+  "homepage": "https://docs.intake24.co.uk",
   "workspaces": [
     "apps/*",
     "packages/*"

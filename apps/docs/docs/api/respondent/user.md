@@ -149,3 +149,28 @@ Content-Type: application/json
   ]
 }[]
 ```
+
+## Update password
+
+Update password of authenticated user
+
+### Request
+
+```http
+POST /api/user/password
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+  "passwordCurrent": string,
+  "password": string,
+  "passwordConfirm": string
+}
+```
+
+### Response
+
+```json
+200 OK
+```

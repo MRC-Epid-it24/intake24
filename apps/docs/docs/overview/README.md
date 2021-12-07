@@ -1,13 +1,14 @@
 # Overview
 
-Intake24 [description]
+Intake24 dietary recall system
 
-It is comprised of four key parts:
+It is comprised of following parts:
 
 * Survey/Recall interface
 * Admin interface
 * API Service
-* Database containing: system data, and food data
+* Databases containing: system data and food data
+* CLI
 
 ## Survey/Recall interface
 
@@ -25,4 +26,8 @@ Serves data from the database for the front end interfaces (admin and survey).
 
 ## Database
 
-Built on PostgreSQL, there are two databases: `intake24_system` and `intake24_foods`, storing the system data (users, recalls, surveys, schemes) and food lists respectively.
+Built on PostgreSQL, there are two databases: `system` and `foods`, storing the system data (users, recalls, surveys, schemes) and food lists respectively.
+
+## CLI
+
+Command line tool with various useful commands / scripts.

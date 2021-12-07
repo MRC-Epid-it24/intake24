@@ -12,7 +12,7 @@ module.exports = {
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
-  title: 'Intake24 NG Documentation',
+  title: 'Intake24 Documentation',
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
@@ -166,7 +166,9 @@ module.exports = {
             'admin/schemes',
             'admin/scheme-questions',
             'admin/sign-in-logs',
-            'admin/surveys',
+            'admin/surveys/surveys',
+            'admin/surveys/mgmt',
+            'admin/surveys/respondents',
             'admin/tasks',
             'admin/users',
             'admin/roles',

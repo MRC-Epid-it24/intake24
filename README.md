@@ -1,20 +1,14 @@
-# Intake24 NG
+# Intake24
 
 ![Build Status](https://github.com/MRC-Epid-it24/intake24/workflows/CI/badge.svg)
 [![GitHub license](https://img.shields.io/github/license/MRC-Epid-it24/intake24)](https://github.com/MRC-Epid-it24/intake24/blob/master/LICENSE)
 
-## Node.js
+Intake24 dietary recall system
 
-- Intake24 **requires node.js version 12 or newer**, please make sure to check your node.js version before continuing.
-- for `npm v7+`, use install/update commands with `--legacy-peer-deps` parameter
+# Documentation
 
-## Project setup
+Documentation can be found here -> https://docs.intake24.co.uk.
 
-1. Install common dependencies
-```
-cd common
-npm install
-```
-1. Follow the readme in each of `admin`, `api` and `survey` folders
+# Contributing
 
-2. You will need access to the database instances, please contact the development team for access to these.
+Fork the repo, make some changes, submit a pull-request.
