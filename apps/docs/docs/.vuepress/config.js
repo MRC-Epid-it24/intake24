@@ -169,6 +169,7 @@ module.exports = {
             'admin/surveys/surveys',
             'admin/surveys/mgmt',
             'admin/surveys/respondents',
+            'admin/surveys/submissions',
             'admin/surveys/data-export',
             'admin/tasks',
             'admin/users',

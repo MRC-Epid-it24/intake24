@@ -45,9 +45,9 @@ Content-Type: application/json
 
 {
     "userName": string,
-    "name": string,
-    "email": string,
-    "phone": string,
+    "name": string? | null,
+    "email": string? | null,
+    "phone": string? | null,
     "password": string,
     "passwordConfirm": string,
     "customFields": {
@@ -80,11 +80,11 @@ Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "name": string | undefined,
-    "email": string | undefined,
-    "phone": string | undefined,
-    "password": string | undefined,
-    "passwordConfirm": string | undefined
+    "name": string? | null,
+    "email": string? | null,
+    "phone": string? | null,
+    "password": string? | null,
+    "passwordConfirm": string? | null
 }
 ```
 

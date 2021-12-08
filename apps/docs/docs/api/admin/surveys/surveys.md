@@ -75,7 +75,7 @@ Content-Type: application/json
 
 Get survey entry
 
-### Request url
+### Request
 
 ```http
 GET /api/admin/surveys/:surveyId
@@ -99,7 +99,7 @@ Content-Type: application/json
 
 Update survey entry
 
-### Request url
+### Request
 
 ```http
 PUT /api/admin/surveys/:surveyId
