@@ -29,10 +29,12 @@ export default () => {
   // Surveys respondents
   describe('GET /api/admin/surveys/:surveyId/respondents', respondents.browse);
   describe('POST /api/admin/surveys/:surveyId/respondents', respondents.store);
+  describe('GET /api/admin/surveys/:surveyId/respondents/:surveyId', respondents.read);
+  describe('GET /api/admin/surveys/:surveyId/respondents/:surveyId/edit', respondents.edit);
+  describe('PATCH /api/admin/surveys/:surveyId/respondents/:userId', respondents.update);
+  describe('DELETE /api/admin/surveys/:surveyId/respondents/:userId', respondents.destroy);
   describe('POST /api/admin/surveys/:surveyId/upload', respondents.upload);
   describe('POST /api/admin/surveys/:surveyId/export-auth-urls', respondents.exportAuthUrls);
-  describe('PUT /api/admin/surveys/:surveyId/respondents/:userId', respondents.update);
-  describe('DELETE /api/admin/surveys/:surveyId/respondents/:userId', respondents.destroy);
 
   // Surveys submissions
   describe('GET /api/admin/surveys/:surveyId/submissions', submissions.browse);

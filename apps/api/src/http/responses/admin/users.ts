@@ -1,4 +1,4 @@
-import { UserEntry, UserMgmtListEntry, RespondentEntry } from '@common/types/http/admin';
+import { UserEntry, UserMgmtListEntry, SurveyRespondentEntry } from '@common/types/http/admin';
 import { User, UserSurveyAlias } from '@api/db/models/system';
 import { permissionListResponse } from './permissions';
 
@@ -14,15 +14,16 @@ export const userEntryResponse = (user: User): UserEntry => {
   };
 };
 
-export const userRespondentResponse = (alias: UserSurveyAlias): RespondentEntry => {
+export const userRespondentResponse = (alias: UserSurveyAlias): SurveyRespondentEntry => {
   const {
     userId,
     userName,
     surveyId,
+    urlAuthToken,
     user: { name = null, email = null, phone = null, customFields = [] } = {},
   } = alias;
 
-  return { userId, userName, surveyId, name, email, phone, customFields };
+  return { userId, surveyId, userName, urlAuthToken, name, email, phone, customFields };
 };
 
 export const userMgmtResponse = (user: User): UserMgmtListEntry => {

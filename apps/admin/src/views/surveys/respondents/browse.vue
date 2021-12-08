@@ -13,7 +13,7 @@
               <v-icon class="mr-2">fa-user-plus</v-icon> {{ $t('surveys.respondents.add') }}
             </v-btn>
           </template>
-          <v-card>
+          <v-card :loading="loading">
             <v-toolbar dark color="primary" flat>
               <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
                 <v-icon>$cancel</v-icon>
@@ -149,8 +149,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { Dictionary } from '@common/types';
-import { RespondentEntry, SurveyRespondentResponse } from '@common/types/http/admin';
+import { SurveyRespondentListEntry, SurveyRespondentResponse } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
@@ -186,9 +185,21 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
     return {
       headers: [
         {
-          text: this.$t('users.username'),
+          text: this.$t('users.id'),
+          sortable: true,
+          value: 'userId',
+          align: 'start',
+        },
+        {
+          text: this.$t('users.aliases.userName'),
           sortable: true,
           value: 'userName',
+          align: 'start',
+        },
+        {
+          text: this.$t('users.aliases.urlAuthToken'),
+          sortable: true,
+          value: 'urlAuthToken',
           align: 'start',
         },
         {
@@ -199,6 +210,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
         },
       ],
       dialog: false,
+      loading: false,
       form: form<SurveyRespondentsForm>({
         userId: null,
         userName: null,
@@ -218,14 +230,31 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
   },
 
   methods: {
+    async fetchUser(userId: string) {
+      const {
+        data: { data },
+      } = await this.$http.get<SurveyRespondentResponse>(
+        `admin/surveys/${this.id}/respondents/${userId}`
+      );
+
+      return data;
+    },
+
     add() {
       this.form.reset();
       this.dialog = true;
     },
 
-    edit(item: Dictionary) {
-      this.form.load(item);
+    async edit(item: SurveyRespondentListEntry) {
+      this.loading = true;
       this.dialog = true;
+
+      try {
+        const user = await this.fetchUser(item.userId);
+        this.form.load(user);
+      } finally {
+        this.loading = false;
+      }
     },
 
     reset() {
@@ -264,7 +293,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       await this.updateTable();
     },
 
-    async remove({ userName: name, userId }: RespondentEntry) {
+    async remove({ userName: name, userId }: SurveyRespondentListEntry) {
       await this.$http.delete(`admin/surveys/${this.id}/respondents/${userId}`);
       this.$toasted.success(this.$t('common.msg.deleted', { name }).toString());
 

@@ -97,26 +97,28 @@ const adminSurveyService = ({
     if (!surveyEntry) throw new NotFoundError();
 
     const { id: surveyId, authUrlTokenCharset, authUrlTokenLength } = surveyEntry;
-
     const { password, userName, ...rest } = input;
+
     const user = await User.create(
       { ...rest, simpleName: toSimpleName(rest.name) },
       { include: [UserCustomField] }
     );
 
-    await user.$add('permissions', await getSurveyRespondentPermission(surveyId));
-
     const { id: userId } = user;
     const { size, alphabet } = securityConfig.authTokens;
 
-    const respondent = await UserSurveyAlias.create({
-      userId,
-      surveyId,
-      userName,
-      urlAuthToken: generateToken(authUrlTokenLength ?? size, authUrlTokenCharset ?? alphabet),
-    });
+    const surveyRespondentPermission = await getSurveyRespondentPermission(surveyId);
 
-    await adminUserService.createPassword({ userId, password });
+    const [respondent] = await Promise.all([
+      UserSurveyAlias.create({
+        userId,
+        surveyId,
+        userName,
+        urlAuthToken: generateToken(authUrlTokenLength ?? size, authUrlTokenCharset ?? alphabet),
+      }),
+      user.$add('permissions', surveyRespondentPermission),
+      adminUserService.createPassword({ userId, password }),
+    ]);
 
     return respondent;
   };

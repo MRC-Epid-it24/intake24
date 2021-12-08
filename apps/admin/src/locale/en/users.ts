@@ -10,6 +10,7 @@ const users: LocaleMessageObject = {
   edit: 'Edit user',
   delete: 'Delete user',
 
+  id: 'UserID',
   name: 'Name',
   simpleName: 'Simple name',
   username: 'Username',

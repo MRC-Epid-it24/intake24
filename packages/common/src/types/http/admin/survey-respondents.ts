@@ -1,22 +1,19 @@
 import { CustomField } from '../..';
-import type { Pagination } from '../../models';
+import type { Pagination, UserSurveyAliasAttributes } from '../../models';
 
-export type RespondentEntry = {
-  userId: string;
-  userName: string;
-  surveyId: string;
+export interface SurveyRespondentEntry extends UserSurveyAliasAttributes {
   name: string | null;
   email: string | null;
   phone: string | null;
   customFields: CustomField[];
-};
+}
 
-export type SurveyRespondentListEntry = RespondentEntry[];
+export type SurveyRespondentListEntry = UserSurveyAliasAttributes;
 
 export type SurveyRespondentsResponse = Pagination<SurveyRespondentListEntry>;
 
 export type SurveyRespondentResponse = {
-  data: RespondentEntry;
+  data: SurveyRespondentEntry;
 };
 
 export type RespondentInput = {

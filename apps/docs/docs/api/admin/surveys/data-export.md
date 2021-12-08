@@ -21,7 +21,7 @@ Returns job resource entry.
 200 OK
 
 {
-    "data": {...},
+    "data": {...}
 }
 ```
 

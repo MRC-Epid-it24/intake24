@@ -63,7 +63,42 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...},
+    "data": {...}
+}
+```
+
+## Get respondent
+
+Get survey respondent record
+
+### Request
+
+```http
+GET /api/admin/surveys/:surveyId/respondents/:userId
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": {
+        "userId": string,
+        "surveyId": string,
+        "userName": string,
+        "urlAuthToken": string,
+        "name": string | null,
+        "email": string | null,
+        "phone": string | null,
+        "customFields": {
+            "name": string,
+            "value": string
+        }[]
+    }
 }
 ```
 
@@ -94,7 +129,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
+    "data": {...}
 }
 ```
 
@@ -138,7 +173,7 @@ Returns job resource entry.
 200 OK
 
 {
-    "data": {...},
+    "data": {...}
 }
 ```
 
@@ -167,6 +202,6 @@ Returns job resource entry.
 200 OK
 
 {
-    "data": {...},
+    "data": {...}
 }
 ```

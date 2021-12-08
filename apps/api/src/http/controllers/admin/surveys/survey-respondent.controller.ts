@@ -4,21 +4,35 @@ import {
   JobResponse,
   SurveyRespondentResponse,
   SurveyRespondentsResponse,
-  SurveyRespondentListEntry,
 } from '@common/types/http/admin';
 import { Survey, User, UserCustomField, UserSurveyAlias } from '@api/db/models/system';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import { userRespondentResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
-import { Controller } from '../../controller';
+import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyRespondentController = Controller<
-  'browse' | 'store' | 'update' | 'destroy' | 'upload' | 'exportAuthUrls'
+  Exclude<CrudActions, 'create'> | 'upload' | 'exportAuthUrls'
 >;
 
 export default ({
   adminSurveyService,
 }: Pick<IoC, 'adminSurveyService'>): AdminSurveyRespondentController => {
+  const entry = async (
+    req: Request<{ surveyId: string; userId: string }>,
+    res: Response<SurveyRespondentResponse>
+  ): Promise<void> => {
+    const { surveyId, userId } = req.params;
+
+    const respondent = await UserSurveyAlias.findOne({
+      where: { userId, surveyId },
+      include: [{ model: User, include: [{ model: UserCustomField }] }],
+    });
+    if (!respondent) throw new NotFoundError();
+
+    res.json({ data: userRespondentResponse(respondent) });
+  };
+
   const browse = async (
     req: Request<{ surveyId: string }>,
     res: Response<SurveyRespondentsResponse>
@@ -28,11 +42,10 @@ export default ({
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    const respondents = await UserSurveyAlias.paginate<SurveyRespondentListEntry>({
+    const respondents = await UserSurveyAlias.paginate({
       req,
       columns: ['userName'],
       where: { surveyId },
-      include: [{ model: User }],
       transform: userRespondentResponse,
       order: [['userName', 'ASC']],
     });
@@ -60,6 +73,16 @@ export default ({
 
     res.status(201).json({ data: userRespondentResponse(respondent) });
   };
+
+  const read = async (
+    req: Request<{ surveyId: string; userId: string }>,
+    res: Response<SurveyRespondentResponse>
+  ): Promise<void> => entry(req, res);
+
+  const edit = async (
+    req: Request<{ surveyId: string; userId: string }>,
+    res: Response<SurveyRespondentResponse>
+  ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ surveyId: string; userId: string }>,
@@ -123,6 +146,8 @@ export default ({
   return {
     browse,
     store,
+    read,
+    edit,
     update,
     destroy,
     upload,
