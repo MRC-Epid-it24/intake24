@@ -1,4 +1,5 @@
 export * from './client-error-reports';
+export * from './fixed-food-ranking';
 export * from './gen-user-counters';
 export * from './jobs';
 export * from './languages';
