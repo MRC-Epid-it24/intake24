@@ -1,4 +1,5 @@
 import acl from './acl';
+import foods from './foods';
 import images from './images';
 import surveys from './surveys';
 import user from './user';
@@ -13,6 +14,7 @@ import signInLog from './sign-in-log.controller';
 import task from './task.controller';
 
 export * from './acl';
+export * from './foods';
 export * from './images';
 export * from './surveys';
 export * from './user';
@@ -29,6 +31,7 @@ export * from './task.controller';
 export default {
   acl,
   user,
+  foods,
   images,
   surveys,
 

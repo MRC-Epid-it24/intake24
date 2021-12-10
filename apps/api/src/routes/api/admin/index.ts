@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from '@api/http/middleware/acl';
 
-import user from './user';
+import foods from './foods';
 import images from './images';
 import jobs from './jobs';
 import languages from './languages';
@@ -14,13 +14,14 @@ import schemeQuestions from './scheme-questions';
 import signInLogs from './sign-in-logs';
 import surveys from './surveys';
 import tasks from './tasks';
+import user from './user';
 import users from './users';
 
 const router = Router();
 
 authenticate(router, 'admin');
 
-router.use('/user', user);
+router.use(foods);
 router.use('/images', images);
 router.use('/jobs', jobs);
 router.use('/languages', languages);
@@ -33,6 +34,7 @@ router.use('/scheme-questions', schemeQuestions);
 router.use('/sign-in-logs', signInLogs);
 router.use('/surveys', surveys);
 router.use('/tasks', tasks);
+router.use('/user', user);
 router.use('/users', users);
 
 export default router;
