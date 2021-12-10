@@ -13,7 +13,7 @@ const surveys: LocaleMessageObject = {
   name: 'Survey name',
   locale: 'Locale',
   scheme: 'Scheme',
-  state: {
+  states: {
     _: 'State',
     0: 'Not started',
     1: 'Active',
@@ -31,6 +31,17 @@ const surveys: LocaleMessageObject = {
   genUsers: {
     allow: 'Allow user generation',
     secret: 'JWT secret for user generation',
+  },
+  search: {
+    _: 'Search options',
+    sortingAlgorithm: 'Sorting algorithm',
+    matchScoreWeight: 'Match score weight',
+    algorithms: {
+      paRules: 'Pairwise associations (machine learning)',
+      popularity: 'Popularity (reporting frequency)',
+      globalPop: 'Global popularity (reporting frequency)',
+      fixed: 'Predetermined order',
+    },
   },
   submissionLimits: {
     _: 'Submission limits',

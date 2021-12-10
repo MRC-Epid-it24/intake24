@@ -146,8 +146,8 @@
               <v-select
                 v-model="form.state"
                 :error-messages="form.errors.get('state')"
-                :items="states"
-                :label="$t('surveys.state._')"
+                :items="surveyStates"
+                :label="$t('surveys.states._')"
                 hide-details="auto"
                 name="state"
                 outlined
@@ -201,7 +201,35 @@
               ></v-switch>
             </v-col>
           </v-row>
-          <v-divider class="my-4"></v-divider>
+          <v-divider class="my-6"></v-divider>
+          <div class="text-h6 mb-4">{{ $t('surveys.search._') }}</div>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.searchSortingAlgorithm"
+                :error-messages="form.errors.get('searchSortingAlgorithm')"
+                :items="searchSortingAlgorithms"
+                :label="$t('surveys.search.sortingAlgorithm')"
+                hide-details="auto"
+                name="searchSortingAlgorithm"
+                outlined
+                @change="form.errors.clear('searchSortingAlgorithm')"
+              ></v-select>
+            </v-col>
+            <v-col cols="12" md="6" align-self="center">
+              <v-slider
+                v-model.number="form.searchMatchScoreWeight"
+                :error-messages="form.errors.get('searchMatchScoreWeight')"
+                :label="$t('surveys.search.matchScoreWeight')"
+                hide-details="auto"
+                max="100"
+                min="0"
+                name="searchMatchScoreWeight"
+                thumb-label
+              ></v-slider>
+            </v-col>
+          </v-row>
+          <v-divider class="my-6"></v-divider>
           <div class="text-h6 mb-4">{{ $t('surveys.authUrl._') }}</div>
           <v-row>
             <v-col cols="12" md="6">
@@ -304,13 +332,19 @@
 <script lang="ts">
 import Vue from 'vue';
 import { SchemeOverrides, defaultOverrides } from '@common/schemes';
+import {
+  searchSortingAlgorithms,
+  SearchSortingAlgorithm,
+  surveyStates,
+  SurveyState,
+} from '@common/types/models';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 
 export type SurveyForm = {
   id: string | null;
   name: string | null;
-  state: number;
+  state: SurveyState;
   localeId: string | null;
   schemeId: string | null;
   startDate: string | null;
@@ -328,10 +362,12 @@ export type SurveyForm = {
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
+  searchSortingAlgorithm: SearchSortingAlgorithm;
+  searchMatchScoreWeight: number;
   overrides: SchemeOverrides;
 };
 
-export const surveyForm = {
+export const surveyForm: SurveyForm = {
   id: null,
   name: null,
   state: 0,
@@ -352,6 +388,8 @@ export const surveyForm = {
   maximumDailySubmissions: 3,
   maximumTotalSubmissions: null,
   minimumSubmissionInterval: 600,
+  searchSortingAlgorithm: 'paRules',
+  searchMatchScoreWeight: 20,
   overrides: defaultOverrides,
 };
 
@@ -365,11 +403,14 @@ export default Vue.extend({
       menus: { startDate: false, endDate: false },
       form: form<SurveyForm>(surveyForm),
       showGenUserKey: false,
-      states: [
-        { value: 0, text: this.$t('surveys.state.0') },
-        { value: 1, text: this.$t('surveys.state.1') },
-        { value: 2, text: this.$t('surveys.state.2') },
-      ],
+      surveyStates: Object.values(surveyStates).map((value) => ({
+        value,
+        text: this.$t(`surveys.states.${value}`),
+      })),
+      searchSortingAlgorithms: searchSortingAlgorithms.map((value) => ({
+        value,
+        text: this.$t(`surveys.search.algorithms.${value}`),
+      })),
     };
   },
 

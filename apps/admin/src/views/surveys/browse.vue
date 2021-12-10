@@ -1,7 +1,7 @@
 <template>
   <data-table :headers="headers">
     <template v-slot:[`item.state`]="{ item }">
-      {{ $t(`surveys.state.${item.state}`) }}
+      {{ $t(`surveys.states.${item.state}`) }}
     </template>
   </data-table>
 </template>
@@ -39,7 +39,7 @@ export default Vue.extend({
           value: 'schemeId',
         },
         {
-          text: this.$t('surveys.state._'),
+          text: this.$t('surveys.states._'),
           sortable: true,
           value: 'state',
         },

@@ -55,10 +55,7 @@ export default (): void => {
         'supportEmail',
         'allowGenUsers',
         'feedbackEnabled',
-        'numberOfSubmissionsForFeedback',
         'storeUserSessionOnServer',
-        'maximumDailySubmissions',
-        'minimumSubmissionInterval',
         'overrides',
       ]);
     });
@@ -85,6 +82,8 @@ export default (): void => {
           minimumSubmissionInterval: { nan: 5 },
           authUrlTokenCharset: 'abcabc',
           authUrlTokenLength: 'this is not a number',
+          searchSortingAlgorithm: 'invalid-search-algorithm',
+          searchMatchScoreWeight: 500,
           overrides: {
             meals: ['shouldBeProperlyFormatMealList'],
             questions: 'invalidQuestions',
@@ -110,6 +109,8 @@ export default (): void => {
         'minimumSubmissionInterval',
         'authUrlTokenCharset',
         'authUrlTokenLength',
+        'searchSortingAlgorithm',
+        'searchMatchScoreWeight',
         'overrides',
       ]);
     });

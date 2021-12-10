@@ -17,6 +17,7 @@ import {
   SchemeCreationAttributes,
   SchemeQuestionCreationAttributes,
   SchemeTypes,
+  surveyStates,
 } from '@common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { customPromptQuestions } from '@common/prompts';
@@ -168,7 +169,7 @@ const schemeQuestion = (): SchemeQuestionCreationAttributes => {
 const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest => {
   const id = slugify(nanoid(16), { strict: true });
   const name = faker.random.words(6);
-  const state = faker.datatype.number(2);
+  const state = surveyStates.NOT_STARTED;
   const startDate = new Date().toISOString().split('T')[0];
   const endDate = faker.date.future(1).toISOString().split('T')[0];
   const allowGenUsers = faker.datatype.boolean();

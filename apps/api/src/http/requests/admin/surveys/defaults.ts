@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
-import { SurveyState } from '@common/types/models';
+import { searchSortingAlgorithms, surveyStates } from '@common/types/models';
 import { validateMeals } from '@common/validators';
 import { Locale, Scheme, Survey } from '@api/db/models/system';
 import { unique } from '@api/http/rules';
@@ -25,15 +25,8 @@ const defaults: Schema = {
   state: {
     in: ['body'],
     errorMessage: 'Enter valid survey state.',
-    isInt: true,
     toInt: true,
-    custom: {
-      options: async (value): Promise<void> => {
-        return Object.values(SurveyState).includes(value)
-          ? Promise.resolve()
-          : Promise.reject(new Error('Enter valid survey state.'));
-      },
-    },
+    isIn: { options: [Object.values(surveyStates)] },
   },
   startDate: {
     in: ['body'],
@@ -57,8 +50,7 @@ const defaults: Schema = {
     custom: {
       options: async (value): Promise<void> => {
         const scheme = await Scheme.findOne({ where: { id: value } });
-
-        return scheme ? Promise.resolve() : Promise.reject(new Error('Enter valid scheme.'));
+        if (!scheme) throw new Error('Enter valid scheme.');
       },
     },
   },
@@ -70,8 +62,7 @@ const defaults: Schema = {
     custom: {
       options: async (value): Promise<void> => {
         const locale = await Locale.findOne({ where: { id: value } });
-
-        return locale ? Promise.resolve() : Promise.reject(new Error('Enter valid locale.'));
+        if (!locale) throw new Error('Enter valid locale.');
       },
     },
   },
@@ -165,6 +156,7 @@ const defaults: Schema = {
     errorMessage: 'Value has to be a number.',
     isInt: true,
     toInt: true,
+    optional: true,
   },
   finalPageHtml: {
     in: ['body'],
@@ -176,6 +168,7 @@ const defaults: Schema = {
     errorMessage: 'Value has to be a number.',
     isInt: true,
     toInt: true,
+    optional: true,
   },
   maximumTotalSubmissions: {
     errorMessage: 'Value has to be a number.',
@@ -187,6 +180,18 @@ const defaults: Schema = {
     errorMessage: 'Value has to be a number.',
     isInt: true,
     toInt: true,
+    optional: true,
+  },
+  searchSortingAlgorithm: {
+    errorMessage: 'Select valid search sorting algorithm.',
+    isIn: { options: [searchSortingAlgorithms] },
+    optional: true,
+  },
+  searchMatchScoreWeight: {
+    errorMessage: 'Search match score weight has to be between 0-100.',
+    isInt: { options: { min: 0, max: 100 } },
+    toInt: true,
+    optional: true,
   },
   overrides: {
     in: ['body'],
@@ -212,8 +217,6 @@ const defaults: Schema = {
           value.questions.some((item: any) => !isPlainObject(item))
         )
           throw new Error('Invalid questions. Should be array of PromptQuestions.');
-
-        Promise.resolve();
       },
     },
   },

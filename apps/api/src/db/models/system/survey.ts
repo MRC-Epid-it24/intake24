@@ -9,7 +9,12 @@ import {
   Scopes,
   Table,
 } from 'sequelize-typescript';
-import { SurveyAttributes, SurveyCreationAttributes, SurveyState } from '@common/types/models';
+import {
+  SearchSortingAlgorithm,
+  SurveyAttributes,
+  SurveyCreationAttributes,
+  SurveyState,
+} from '@common/types/models';
 import { defaultOverrides, SchemeOverrides } from '@common/schemes';
 import { surveyPermissions } from '@api/services/core/auth';
 import BaseModel from '../model';
@@ -203,6 +208,20 @@ export default class Survey
     defaultValue: 600,
   })
   public minimumSubmissionInterval!: number;
+
+  @Column({
+    allowNull: false,
+    defaultValue: 'paRules',
+    type: DataType.STRING(10),
+  })
+  public searchSortingAlgorithm!: SearchSortingAlgorithm;
+
+  @Column({
+    allowNull: false,
+    defaultValue: 20,
+    type: DataType.INTEGER,
+  })
+  public searchMatchScoreWeight!: number;
 
   @Column({
     allowNull: true,

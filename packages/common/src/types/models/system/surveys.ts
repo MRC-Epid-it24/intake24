@@ -1,11 +1,17 @@
 import type { SchemeOverrides } from '../../../schemes';
 import { Optional } from '../model';
 
-export enum SurveyState {
-  NOT_STARTED = 0,
-  ACTIVE = 1,
-  SUSPENDED = 2,
-}
+export const surveyStates = {
+  NOT_STARTED: 0,
+  ACTIVE: 1,
+  SUSPENDED: 2,
+} as const;
+
+export type SurveyState = typeof surveyStates[keyof typeof surveyStates];
+
+export const searchSortingAlgorithms = ['paRules', 'popularity', 'globalPop', 'fixed'] as const;
+
+export type SearchSortingAlgorithm = typeof searchSortingAlgorithms[number];
 
 export type SurveyAttributes = {
   id: string;
@@ -34,6 +40,8 @@ export type SurveyAttributes = {
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
+  searchSortingAlgorithm: SearchSortingAlgorithm;
+  searchMatchScoreWeight: number;
   overrides: SchemeOverrides;
 };
 
@@ -55,4 +63,6 @@ export type SurveyCreationAttributes = Optional<
   | 'maximumDailySubmissions'
   | 'maximumTotalSubmissions'
   | 'minimumSubmissionInterval'
+  | 'searchSortingAlgorithm'
+  | 'searchMatchScoreWeight'
 >;

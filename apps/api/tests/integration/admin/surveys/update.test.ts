@@ -106,10 +106,7 @@ export default (): void => {
         'supportEmail',
         'allowGenUsers',
         'feedbackEnabled',
-        'numberOfSubmissionsForFeedback',
         'storeUserSessionOnServer',
-        'maximumDailySubmissions',
-        'minimumSubmissionInterval',
         'overrides',
       ]);
     });
@@ -135,6 +132,8 @@ export default (): void => {
           minimumSubmissionInterval: { nan: 5 },
           authUrlTokenCharset: ['an array charset'],
           authUrlTokenLength: 1,
+          searchSortingAlgorithm: false,
+          searchMatchScoreWeight: { number: 20 },
           overrides: {
             meals: ['shouldBeProperlyFormatMealList'],
             questions: { value: 'not a valid overrides object' },
@@ -159,6 +158,8 @@ export default (): void => {
         'minimumSubmissionInterval',
         'authUrlTokenCharset',
         'authUrlTokenLength',
+        'searchSortingAlgorithm',
+        'searchMatchScoreWeight',
         'overrides',
       ]);
     });

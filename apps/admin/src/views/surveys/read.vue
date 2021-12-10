@@ -23,8 +23,8 @@
         <tr>
           <th>{{ $t('surveys.supportEmail') }}</th>
           <td>{{ entry.supportEmail }}</td>
-          <th>{{ $t('surveys.state._') }}</th>
-          <td>{{ $t(`surveys.state.${entry.state}`) }}</td>
+          <th>{{ $t('surveys.states._') }}</th>
+          <td>{{ $t(`surveys.states.${entry.state}`) }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.genUsers.allow') }}</th>
@@ -61,6 +61,12 @@
           <td>{{ entry.authUrlTokenCharset }}</td>
           <th>{{ $t('surveys.authUrl.tokenLength') }}</th>
           <td>{{ entry.authUrlTokenLength }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('surveys.search.sortingAlgorithm') }}</th>
+          <td>{{ $t(`surveys.search.algorithms.${entry.searchSortingAlgorithm}`) }}</td>
+          <th>{{ $t('surveys.search.matchScoreWeight') }}</th>
+          <td>{{ entry.searchMatchScoreWeight }}</td>
         </tr>
       </tbody>
     </v-simple-table>
