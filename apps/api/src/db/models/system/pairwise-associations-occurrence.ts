@@ -1,0 +1,33 @@
+import { Column, DataType, Table } from 'sequelize-typescript';
+import { PAOccurrenceAttributes } from '@common/types/models';
+import BaseModel from '../model';
+
+@Table({
+  modelName: 'PAOccurrence',
+  tableName: 'pairwise_associations_occurrences',
+  freezeTableName: true,
+  timestamps: false,
+  underscored: true,
+})
+export default class PAOccurrence
+  extends BaseModel<PAOccurrenceAttributes>
+  implements PAOccurrenceAttributes
+{
+  @Column({
+    primaryKey: true,
+    type: DataType.STRING(64),
+  })
+  public locale!: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(50),
+  })
+  public foodCode!: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.INTEGER,
+  })
+  public occurrences!: number;
+}
