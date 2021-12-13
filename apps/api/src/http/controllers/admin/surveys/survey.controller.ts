@@ -9,17 +9,22 @@ import {
   SurveysResponse,
   StoreSurveyResponse,
 } from '@common/types/http/admin';
-import { SurveyAttributes } from '@common/types/models';
+import {
+  createSurveyFields,
+  overridesFields,
+  staffUpdateSurveyFields,
+  updateSurveyFields,
+  SurveyAttributes,
+} from '@common/types/models';
 import { Language, Locale, Scheme, Survey } from '@api/db/models/system';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
 import { surveyListResponse, surveyResponse } from '@api/http/responses/admin';
-import { staffSuffix } from '@api/services/core/auth';
+import { staffSuffix, surveyAdmin } from '@api/services/core/auth';
 import { Controller, CrudActions } from '../../controller';
 
-export type AdminSurveyController = Controller<CrudActions>;
+export type AdminSurveyController = Controller<CrudActions | 'patch' | 'put'>;
 
-export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController => {
+export default (): AdminSurveyController => {
   const refs = async (): Promise<SurveyRefs> => {
     const [languages, locales, schemes] = await Promise.all([
       Language.findAll(),
@@ -30,7 +35,10 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
     return { languages, locales, schemes };
   };
 
-  const entry = async (req: Request, res: Response<SurveyResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyResponse>
+  ): Promise<void> => {
     const { surveyId } = req.params;
 
     const survey = await Survey.findByPk(surveyId);
@@ -45,7 +53,7 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
     );
 
     const where: WhereOptions<SurveyAttributes> = {};
-    if (!permissions.includes(aclConfig.permissions.surveyadmin)) {
+    if (!permissions.includes(surveyAdmin)) {
       const surveys = permissions
         .filter((permission) => permission.endsWith(staffSuffix))
         .map((permission) => permission.replace(staffSuffix, ''));
@@ -69,88 +77,68 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
   };
 
   const store = async (req: Request, res: Response<StoreSurveyResponse>): Promise<void> => {
-    const survey = await Survey.create(
-      pick(req.body, [
-        'id',
-        'name',
-        'state',
-        'startDate',
-        'endDate',
-        'schemeId',
-        'localeId',
-        'allowGenUsers',
-        'genUserKey',
-        'authUrlDomainOverride',
-        'authUrlTokenCharset',
-        'authUrlTokenLength',
-        'suspensionReason',
-        'surveyMonkeyUrl',
-        'supportEmail',
-        'originatingUrl',
-        'description',
-        'feedbackEnabled',
-        'feedbackStyle',
-        'submissionNotificationUrl',
-        'storeUserSessionOnServer',
-        'numberOfSubmissionsForFeedback',
-        'finalPageHtml',
-        'maximumDailySubmissions',
-        'maximumTotalSubmissions',
-        'minimumSubmissionInterval',
-        'overrides',
-      ])
-    );
+    const survey = await Survey.create(pick(req.body, createSurveyFields));
 
     res.status(201).json({ data: surveyResponse(survey) });
   };
 
-  const read = async (req: Request, res: Response<SurveyResponse>): Promise<void> =>
-    entry(req, res);
+  const read = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyResponse>
+  ): Promise<void> => entry(req, res);
 
-  const edit = async (req: Request, res: Response<SurveyResponse>): Promise<void> =>
-    entry(req, res);
+  const edit = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyResponse>
+  ): Promise<void> => entry(req, res);
 
-  const update = async (req: Request, res: Response<SurveyResponse>): Promise<void> => {
+  const update = async (req: Request<{ surveyId: string }>, res: Response<SurveyResponse>) => {
     const { surveyId } = req.params;
 
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    await survey.update(
-      pick(req.body, [
-        'name',
-        'state',
-        'startDate',
-        'endDate',
-        'schemeId',
-        'localeId',
-        'allowGenUsers',
-        'genUserKey',
-        'authUrlDomainOverride',
-        'authUrlTokenCharset',
-        'authUrlTokenLength',
-        'suspensionReason',
-        'surveyMonkeyUrl',
-        'supportEmail',
-        'originatingUrl',
-        'description',
-        'feedbackEnabled',
-        'feedbackStyle',
-        'submissionNotificationUrl',
-        'storeUserSessionOnServer',
-        'numberOfSubmissionsForFeedback',
-        'finalPageHtml',
-        'maximumDailySubmissions',
-        'maximumTotalSubmissions',
-        'minimumSubmissionInterval',
-        'overrides',
-      ])
-    );
+    await survey.update(pick(req.body, updateSurveyFields));
 
     res.json({ data: surveyResponse(survey), refs: await refs() });
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const patch = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyResponse>
+    // eslint-disable-next-line consistent-return
+  ): Promise<void> => {
+    const { surveyId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    if (await aclService.hasPermission(surveyAdmin)) {
+      return update(req, res);
+    }
+
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) throw new NotFoundError();
+
+    const keysToUpdate: string[] = [];
+
+    if (await aclService.hasPermission('surveys-edit'))
+      keysToUpdate.push(...staffUpdateSurveyFields);
+
+    if (await aclService.hasPermission('surveys-overrides')) keysToUpdate.push(...overridesFields);
+
+    if (keysToUpdate.length) await survey.update(pick(req.body, keysToUpdate));
+
+    res.json({ data: surveyResponse(survey), refs: await refs() });
+  };
+
+  const put = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyResponse>
+  ): Promise<void> => update(req, res);
+
+  const destroy = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { surveyId } = req.params;
 
     const survey = await Survey.scope('submissions').findByPk(surveyId);
@@ -171,6 +159,8 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): AdminSurveyController =>
     read,
     edit,
     update,
+    patch,
+    put,
     destroy,
   };
 };

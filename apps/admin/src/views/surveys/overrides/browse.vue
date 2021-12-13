@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { flattenScheme } from '@common/schemes';
+import { defaultOverrides, flattenScheme } from '@common/schemes';
 import { SurveyEntry, SurveyRefs } from '@common/types/http/admin';
 import { PromptQuestion } from '@common/prompts';
 import formMixin from '@/components/entry/formMixin';
@@ -34,7 +34,9 @@ import MealList from '@/components/meals/meal-list.vue';
 import PromptList from '@/components/prompts/list/prompt-list.vue';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
-import { SurveyForm, surveyForm } from '../form.vue';
+import { SurveyForm } from '../form.vue';
+
+export type SurveyOverridesForm = Pick<SurveyForm, 'overrides'>;
 
 export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>).extend({
   name: 'SurveySchemeOverrides',
@@ -45,7 +47,8 @@ export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>)
 
   data() {
     return {
-      form: form<SurveyForm>(surveyForm),
+      editMethod: 'patch',
+      form: form<SurveyOverridesForm>({ overrides: defaultOverrides }),
     };
   },
 

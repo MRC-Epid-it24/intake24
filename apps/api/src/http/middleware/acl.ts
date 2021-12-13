@@ -5,7 +5,13 @@ import passport from 'passport';
 import { User } from '@api/db/models/system';
 import { ForbiddenError } from '@api/http/errors';
 import ioc, { IoC } from '@api/ioc';
-import { foodDatabaseMaintainer, surveyRespondent, surveyStaff } from '@api/services/core/auth';
+import {
+  foodDatabaseMaintainer,
+  surveyRespondent,
+  surveyStaff,
+  surveyAdmin,
+  foodsAdmin,
+} from '@api/services/core/auth';
 
 const { acl: aclConfig } = ioc.cradle.config;
 
@@ -31,7 +37,7 @@ export const authenticate = (app: Router, type: string): void => {
   app.use(registerACLScope);
 };
 
-export const permission = (permission: string) => {
+export const permission = (permission: string | string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     req.scope.cradle.aclService
       .hasPermission(permission)
@@ -40,7 +46,16 @@ export const permission = (permission: string) => {
   };
 };
 
-export const role = (role: string) => {
+export const anyPermission = (permission: string[]) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    req.scope.cradle.aclService
+      .hasAnyPermission(permission)
+      .then((result) => (result ? next() : next(new ForbiddenError())))
+      .catch((err) => next(err));
+  };
+};
+
+export const role = (role: string | string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     req.scope.cradle.aclService
       .hasRole(role)
@@ -54,7 +69,7 @@ export const canManageFoodDatabase = () => {
     const { fdbId } = req.params;
 
     req.scope.cradle.aclService
-      .hasAnyPermission([aclConfig.permissions.foodsadmin, foodDatabaseMaintainer(fdbId)])
+      .hasAnyPermission([foodsAdmin, foodDatabaseMaintainer(fdbId)])
       .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };
@@ -65,7 +80,7 @@ export const canManageSurvey = () => {
     const { surveyId } = req.params;
 
     req.scope.cradle.aclService
-      .hasAnyPermission([aclConfig.permissions.surveyadmin, surveyStaff(surveyId)])
+      .hasAnyPermission([surveyAdmin, surveyStaff(surveyId)])
       .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission, canManageSurvey } from '@api/http/middleware/acl';
+import { anyPermission, permission, canManageSurvey } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/surveys';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -23,7 +23,16 @@ router.use('/:surveyId', canManageSurvey());
 router
   .route('/:surveyId')
   .get(permission('surveys-read'), wrapAsync(adminSurveyController.read))
-  .put(permission('surveys-edit'), validation.update, wrapAsync(adminSurveyController.update))
+  .put(
+    permission(['surveys-edit', 'surveyadmin']),
+    validation.put,
+    wrapAsync(adminSurveyController.put)
+  )
+  .patch(
+    anyPermission(['surveys-edit', 'surveys-overrides']),
+    validation.patch,
+    wrapAsync(adminSurveyController.patch)
+  )
   .delete(permission('surveys-delete'), wrapAsync(adminSurveyController.destroy));
 
 router.get('/:surveyId/edit', permission('surveys-edit'), wrapAsync(adminSurveyController.edit));

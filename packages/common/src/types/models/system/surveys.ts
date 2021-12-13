@@ -66,3 +66,59 @@ export type SurveyCreationAttributes = Optional<
   | 'searchSortingAlgorithm'
   | 'searchMatchScoreWeight'
 >;
+
+// TODO: to review
+export type Deprecated = 'surveyMonkeyUrl' | 'originatingUrl' | 'description' | 'finalPageHtml';
+
+export type SurveyAttributesKeys = keyof Omit<SurveyAttributes, Deprecated>;
+
+export const updateSurveyFields = [
+  'name',
+  'state',
+  'startDate',
+  'endDate',
+  'schemeId',
+  'localeId',
+  'allowGenUsers',
+  'genUserKey',
+  'authUrlDomainOverride',
+  'authUrlTokenCharset',
+  'authUrlTokenLength',
+  'suspensionReason',
+  'supportEmail',
+  'description',
+  'feedbackEnabled',
+  'feedbackStyle',
+  'submissionNotificationUrl',
+  'storeUserSessionOnServer',
+  'numberOfSubmissionsForFeedback',
+  'maximumDailySubmissions',
+  'maximumTotalSubmissions',
+  'minimumSubmissionInterval',
+  'searchSortingAlgorithm',
+  'searchMatchScoreWeight',
+  'overrides',
+] as const;
+
+export type UpdateSurveyFields = typeof updateSurveyFields[number];
+
+export const createSurveyFields = ['id', ...updateSurveyFields] as const;
+
+export type CreateSurveyFields = typeof updateSurveyFields[number];
+
+export const staffUpdateSurveyFields = [
+  'name',
+  'state',
+  'startDate',
+  'endDate',
+  'schemeId',
+  'localeId',
+  'supportEmail',
+  'suspensionReason',
+] as const;
+
+export type StaffUpdateSurveyFields = typeof staffUpdateSurveyFields[number];
+
+export const overridesFields = ['overrides'] as const;
+
+export type OverridesFields = typeof overridesFields[number];

@@ -154,174 +154,201 @@
                 @change="form.errors.clear('state')"
               ></v-select>
             </v-col>
-            <v-col cols="12" md="6" align-self="center">
-              <v-switch
-                v-model="form.allowGenUsers"
-                :error-messages="form.errors.get('allowGenUsers')"
-                :label="$t('surveys.genUsers.allow')"
-                class="mt-0"
-                hide-details="auto"
-                name="allowGenUsers"
-                @change="form.errors.clear('allowGenUsers')"
-              ></v-switch>
-            </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" v-show="form.state === 2">
               <v-text-field
-                v-model="form.genUserKey"
-                :append-icon="showGenUserKey ? 'fa-eye' : 'fa-eye-slash'"
-                :disabled="!form.allowGenUsers"
-                :error-messages="form.errors.get('genUserKey')"
-                :label="$t('surveys.genUsers.secret')"
-                :type="showGenUserKey ? 'text' : 'password'"
+                v-model="form.suspensionReason"
+                :error-messages="form.errors.get('suspensionReason')"
+                :label="$t('surveys.suspensionReason')"
                 hide-details="auto"
-                name="genUserKey"
-                outlined
-                @click:append="showGenUserKey = !showGenUserKey"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="form.submissionNotificationUrl"
-                :error-messages="form.errors.get('submissionNotificationUrl')"
-                :label="$t('surveys.submissionNotificationUrl')"
-                hide-details="auto"
-                name="submissionNotificationUrl"
-                outlined
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6" align-self="center">
-              <v-switch
-                v-model="form.storeUserSessionOnServer"
-                :error-messages="form.errors.get('storeUserSessionOnServer')"
-                :label="$t('surveys.storeUserSessionOnServer')"
-                class="mt-0"
-                hide-details="auto"
-                name="storeUserSessionOnServer"
-                @change="form.errors.clear('storeUserSessionOnServer')"
-              ></v-switch>
-            </v-col>
-          </v-row>
-          <v-divider class="my-6"></v-divider>
-          <div class="text-h6 mb-4">{{ $t('surveys.search._') }}</div>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="form.searchSortingAlgorithm"
-                :error-messages="form.errors.get('searchSortingAlgorithm')"
-                :items="searchSortingAlgorithms"
-                :label="$t('surveys.search.sortingAlgorithm')"
-                hide-details="auto"
-                name="searchSortingAlgorithm"
-                outlined
-                @change="form.errors.clear('searchSortingAlgorithm')"
-              ></v-select>
-            </v-col>
-            <v-col cols="12" md="6" align-self="center">
-              <v-slider
-                v-model.number="form.searchMatchScoreWeight"
-                :error-messages="form.errors.get('searchMatchScoreWeight')"
-                :label="$t('surveys.search.matchScoreWeight')"
-                hide-details="auto"
-                max="100"
-                min="0"
-                name="searchMatchScoreWeight"
-                thumb-label
-              ></v-slider>
-            </v-col>
-          </v-row>
-          <v-divider class="my-6"></v-divider>
-          <div class="text-h6 mb-4">{{ $t('surveys.authUrl._') }}</div>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="form.authUrlTokenCharset"
-                :error-messages="form.errors.get('authUrlTokenCharset')"
-                :label="$t('surveys.authUrl.tokenCharset')"
-                hide-details="auto"
-                name="authUrlTokenCharset"
-                outlined
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model.number="form.authUrlTokenLength"
-                :error-messages="form.errors.get('authUrlTokenLength')"
-                :label="$t('surveys.authUrl.tokenLength')"
-                hide-details="auto"
-                name="authUrlTokenLength"
-                outlined
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="form.authUrlDomainOverride"
-                :error-messages="form.errors.get('authUrlDomainOverride')"
-                :label="$t('surveys.authUrl.domainOverride')"
-                hide-details="auto"
-                name="authUrlDomainOverride"
+                name="suspensionReason"
                 outlined
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-divider class="my-6"></v-divider>
-          <div class="text-h6 mb-4">{{ $t('surveys.submissionLimits._') }}</div>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model.number="form.maximumDailySubmissions"
-                outlined
-                :error-messages="form.errors.get('maximumDailySubmissions')"
-                :label="$t('surveys.submissionLimits.maxDaily')"
-                name="maximumDailySubmissions"
-                hide-details="auto"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model.number="form.maximumTotalSubmissions"
-                outlined
-                :error-messages="form.errors.get('maximumTotalSubmissions')"
-                :label="$t('surveys.submissionLimits.maxTotal')"
-                name="maximumTotalSubmissions"
-                hide-details="auto"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model.number="form.minimumSubmissionInterval"
-                outlined
-                :error-messages="form.errors.get('minimumSubmissionInterval')"
-                :label="$t('surveys.submissionLimits.minInterval')"
-                name="minimumSubmissionInterval"
-                hide-details="auto"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-divider class="my-6"></v-divider>
-          <div class="text-h6 mb-4">{{ $t('surveys.feedback._') }}</div>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-switch
-                v-model="form.feedbackEnabled"
-                :error-messages="form.errors.get('feedbackEnabled')"
-                :label="$t('surveys.feedback.enabled')"
-                hide-details="auto"
-                name="feedbackEnabled"
-                @change="form.errors.clear('feedbackEnabled')"
-              ></v-switch>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model.number="form.numberOfSubmissionsForFeedback"
-                outlined
-                :disabled="!form.feedbackEnabled"
-                :error-messages="form.errors.get('numberOfSubmissionsForFeedback')"
-                :label="$t('surveys.feedback.numberOfSubmissions')"
-                name="numberOfSubmissionsForFeedback"
-                hide-details="auto"
-              ></v-text-field>
-            </v-col>
-          </v-row>
+          <template v-if="can('surveyadmin')">
+            <v-row>
+              <v-col cols="12" md="6" align-self="center">
+                <v-switch
+                  v-model="form.allowGenUsers"
+                  :error-messages="form.errors.get('allowGenUsers')"
+                  :label="$t('surveys.genUsers.allow')"
+                  class="mt-0"
+                  hide-details="auto"
+                  name="allowGenUsers"
+                  @change="form.errors.clear('allowGenUsers')"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="form.genUserKey"
+                  :append-icon="showGenUserKey ? 'fa-eye' : 'fa-eye-slash'"
+                  :disabled="!form.allowGenUsers"
+                  :error-messages="form.errors.get('genUserKey')"
+                  :label="$t('surveys.genUsers.secret')"
+                  :type="showGenUserKey ? 'text' : 'password'"
+                  hide-details="auto"
+                  name="genUserKey"
+                  outlined
+                  @click:append="showGenUserKey = !showGenUserKey"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="form.submissionNotificationUrl"
+                  :error-messages="form.errors.get('submissionNotificationUrl')"
+                  :label="$t('surveys.submissionNotificationUrl')"
+                  hide-details="auto"
+                  name="submissionNotificationUrl"
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6" align-self="center">
+                <v-switch
+                  v-model="form.storeUserSessionOnServer"
+                  :error-messages="form.errors.get('storeUserSessionOnServer')"
+                  :label="$t('surveys.storeUserSessionOnServer')"
+                  class="mt-0"
+                  hide-details="auto"
+                  name="storeUserSessionOnServer"
+                  @change="form.errors.clear('storeUserSessionOnServer')"
+                ></v-switch>
+              </v-col>
+            </v-row>
+            <v-divider class="my-6"></v-divider>
+            <div class="text-h6 mb-4">{{ $t('surveys.search._') }}</div>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="form.searchSortingAlgorithm"
+                  :error-messages="form.errors.get('searchSortingAlgorithm')"
+                  :items="searchSortingAlgorithms"
+                  :label="$t('surveys.search.sortingAlgorithm')"
+                  hide-details="auto"
+                  name="searchSortingAlgorithm"
+                  outlined
+                  @change="form.errors.clear('searchSortingAlgorithm')"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" md="6" align-self="center">
+                <v-slider
+                  v-model.number="form.searchMatchScoreWeight"
+                  :error-messages="form.errors.get('searchMatchScoreWeight')"
+                  :label="$t('surveys.search.matchScoreWeight')"
+                  hide-details="auto"
+                  max="100"
+                  min="0"
+                  name="searchMatchScoreWeight"
+                  thumb-label
+                ></v-slider>
+              </v-col>
+            </v-row>
+            <v-divider class="my-6"></v-divider>
+            <div class="text-h6 mb-4">{{ $t('surveys.authUrl._') }}</div>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="form.authUrlTokenCharset"
+                  :error-messages="form.errors.get('authUrlTokenCharset')"
+                  :label="$t('surveys.authUrl.tokenCharset')"
+                  hide-details="auto"
+                  name="authUrlTokenCharset"
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model.number="form.authUrlTokenLength"
+                  :error-messages="form.errors.get('authUrlTokenLength')"
+                  :label="$t('surveys.authUrl.tokenLength')"
+                  hide-details="auto"
+                  name="authUrlTokenLength"
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="form.authUrlDomainOverride"
+                  :error-messages="form.errors.get('authUrlDomainOverride')"
+                  :label="$t('surveys.authUrl.domainOverride')"
+                  hide-details="auto"
+                  name="authUrlDomainOverride"
+                  outlined
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-divider class="my-6"></v-divider>
+            <div class="text-h6 mb-4">{{ $t('surveys.submissionLimits._') }}</div>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model.number="form.maximumDailySubmissions"
+                  outlined
+                  :error-messages="form.errors.get('maximumDailySubmissions')"
+                  :label="$t('surveys.submissionLimits.maxDaily')"
+                  name="maximumDailySubmissions"
+                  hide-details="auto"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model.number="form.maximumTotalSubmissions"
+                  outlined
+                  :error-messages="form.errors.get('maximumTotalSubmissions')"
+                  :label="$t('surveys.submissionLimits.maxTotal')"
+                  name="maximumTotalSubmissions"
+                  hide-details="auto"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model.number="form.minimumSubmissionInterval"
+                  outlined
+                  :error-messages="form.errors.get('minimumSubmissionInterval')"
+                  :label="$t('surveys.submissionLimits.minInterval')"
+                  name="minimumSubmissionInterval"
+                  hide-details="auto"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-divider class="my-6"></v-divider>
+            <div class="text-h6 mb-4">{{ $t('surveys.feedback._') }}</div>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-switch
+                  v-model="form.feedbackEnabled"
+                  :error-messages="form.errors.get('feedbackEnabled')"
+                  :label="$t('surveys.feedback.enabled')"
+                  hide-details="auto"
+                  name="feedbackEnabled"
+                  @change="form.errors.clear('feedbackEnabled')"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="form.feedbackStyle"
+                  :disabled="!form.feedbackEnabled"
+                  :error-messages="form.errors.get('feedbackStyle')"
+                  :items="feedbackStyles"
+                  :label="$t('surveys.feedback.styles._')"
+                  hide-details="auto"
+                  name="feedbackStyle"
+                  outlined
+                  @change="form.errors.clear('feedbackStyle')"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model.number="form.numberOfSubmissionsForFeedback"
+                  outlined
+                  :disabled="!form.feedbackEnabled"
+                  :error-messages="form.errors.get('numberOfSubmissionsForFeedback')"
+                  :label="$t('surveys.feedback.numberOfSubmissions')"
+                  name="numberOfSubmissionsForFeedback"
+                  hide-details="auto"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </template>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
       </v-form>
@@ -337,7 +364,10 @@ import {
   SearchSortingAlgorithm,
   surveyStates,
   SurveyState,
+  staffUpdateSurveyFields,
+  StaffUpdateSurveyFields,
 } from '@common/types/models';
+import { pick } from 'lodash';
 import formMixin from '@/components/entry/formMixin';
 import form from '@/helpers/Form';
 
@@ -350,6 +380,13 @@ export type SurveyForm = {
   startDate: string | null;
   endDate: string | null;
   supportEmail: string | null;
+  suspensionReason: string | null;
+  /*
+  surveyMonkeyUrl: string | null;
+  originatingUrl: string | null;
+  description: string | null;
+  finalPageHtml: string | null;
+   */
   allowGenUsers: boolean;
   genUserKey: string | null;
   authUrlDomainOverride: string | null;
@@ -357,6 +394,7 @@ export type SurveyForm = {
   authUrlTokenLength: number | null;
   storeUserSessionOnServer: boolean;
   feedbackEnabled: boolean;
+  feedbackStyle: string;
   submissionNotificationUrl: string | null;
   numberOfSubmissionsForFeedback: number;
   maximumDailySubmissions: number;
@@ -367,6 +405,8 @@ export type SurveyForm = {
   overrides: SchemeOverrides;
 };
 
+export type StaffSurveyForm = Pick<SurveyForm, StaffUpdateSurveyFields>;
+
 export const surveyForm: SurveyForm = {
   id: null,
   name: null,
@@ -376,6 +416,11 @@ export const surveyForm: SurveyForm = {
   startDate: null,
   endDate: null,
   supportEmail: null,
+  suspensionReason: null,
+  /* surveyMonkeyUrl: null,
+  originatingUrl: null,
+  description: null,
+  finalPageHtml: null, */
   allowGenUsers: false,
   genUserKey: null,
   authUrlDomainOverride: null,
@@ -383,6 +428,7 @@ export const surveyForm: SurveyForm = {
   authUrlTokenLength: null,
   storeUserSessionOnServer: false,
   feedbackEnabled: false,
+  feedbackStyle: 'default',
   submissionNotificationUrl: null,
   numberOfSubmissionsForFeedback: 1,
   maximumDailySubmissions: 3,
@@ -393,6 +439,8 @@ export const surveyForm: SurveyForm = {
   overrides: defaultOverrides,
 };
 
+export const staffSurveyForm: StaffSurveyForm = pick(surveyForm, staffUpdateSurveyFields);
+
 export default Vue.extend({
   name: 'SurveyForm',
 
@@ -401,6 +449,10 @@ export default Vue.extend({
   data() {
     return {
       menus: { startDate: false, endDate: false },
+      /* form: this.can('surveyadmin')
+        ? form<SurveyForm>(surveyForm)
+        : form<StaffSurveyForm>(staffSurveyForm), */
+      editMethod: 'patch',
       form: form<SurveyForm>(surveyForm),
       showGenUserKey: false,
       surveyStates: Object.values(surveyStates).map((value) => ({
@@ -410,6 +462,10 @@ export default Vue.extend({
       searchSortingAlgorithms: searchSortingAlgorithms.map((value) => ({
         value,
         text: this.$t(`surveys.search.algorithms.${value}`),
+      })),
+      feedbackStyles: ['default'].map((value) => ({
+        value,
+        text: this.$t(`surveys.feedback.styles.${value}`),
       })),
     };
   },

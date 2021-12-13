@@ -3,11 +3,10 @@ import slugify from 'slugify';
 import { Survey } from '@api/db/models/system';
 import validate from '@api/http/requests/validate';
 import { identifierSafeChars, unique } from '@api/http/rules';
-import defaults from './defaults';
+import { defaults, overrides } from './defaults';
 
 export default validate(
   checkSchema({
-    ...defaults,
     id: {
       in: ['body'],
       errorMessage: 'Survey ID must be unique string (charset [a-zA-Z0-9-_]).',
@@ -25,5 +24,7 @@ export default validate(
         options: (value) => (typeof value === 'string' ? slugify(value, { strict: true }) : value),
       },
     },
+    ...defaults,
+    overrides,
   })
 );

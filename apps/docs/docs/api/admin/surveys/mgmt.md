@@ -136,7 +136,7 @@ Content-Type: application/json
 ### Response
 
 ```json
-201 OK
+201 Created
 ```
 
 ## Update management user

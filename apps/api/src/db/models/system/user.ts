@@ -172,7 +172,10 @@ export default class User
   public hasRole(role: string | string[], key: 'id' | 'name' = 'name'): boolean {
     if (!this.roles || !this.roles.length) return false;
 
-    if (Array.isArray(role)) return this.roles.every((item) => role.includes(item[key]));
+    if (Array.isArray(role)) {
+      const currentRoleKeys = this.roles.map((item) => item[key]);
+      return role.every((item) => currentRoleKeys.includes(item));
+    }
 
     return !!this.roles.find((item) => item[key] === role);
   }
@@ -197,8 +200,10 @@ export default class User
     const permissions = this.allPermissions();
     if (!permissions.length) return false;
 
-    if (Array.isArray(permission))
-      return permissions.every((item) => permission.includes(item[key]));
+    if (Array.isArray(permission)) {
+      const currentPermissionKeys = permissions.map((item) => item[key]);
+      return permission.every((item) => currentPermissionKeys.includes(item));
+    }
 
     return !!permissions.find((item) => item[key] === permission);
   }

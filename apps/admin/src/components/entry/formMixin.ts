@@ -26,6 +26,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   data() {
     return {
+      editMethod: 'put',
       form: form({}),
       nonInputErrorKeys: [] as string[],
       originalEntry: {} as Dictionary,
@@ -100,7 +101,7 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
     async submit() {
       if (this.isEdit) {
-        const { data, refs } = await this.form.put(`${this.resource.api}/${this.id}`);
+        const { data, refs } = await this.form[this.editMethod](`${this.resource.api}/${this.id}`);
         this.toForm(data);
 
         await this.$store.dispatch('resource/entry/update', { data, refs });

@@ -53,33 +53,3 @@ Any newly created permission will be associated with this role.
 * object-path: `roles.superuser`
 * type: `string`
 * default: `'superuser'`
-
-## Permissions
-
-List of special-purpose permissions.
-
-* object-path: `permissions`
-
-### Global support
-
-Name of the permission, which defines top-level system support.
-
-* object-path: `permissions.globalsupport`
-* type: `string`
-* default: `'globalsupport'`
-
-### Survey admin
-
-Name of the permission, which allows to work with any `survey` record.
-
-* object-path: `permissions.surveyadmin`
-* type: `string`
-* default: `'surveyadmin'`
-
-### Foods admin
-
-Name of the permission, which allows to work with any `food` record.
-
-* object-path: `permissions.foodsadmin`
-* type: `string`
-* default: `'foodsadmin'`

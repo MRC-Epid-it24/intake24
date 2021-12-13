@@ -3,7 +3,9 @@ import create from './create.test';
 import store from './store.test';
 import read from './read.test';
 import edit from './edit.test';
-import update from './update.test';
+import patchAdmin from './patch-admin.test';
+import patchStaff from './patch-staff.test';
+import put from './put.test';
 import destroy from './destroy.test';
 import mgmt from './mgmt/index.test';
 import dataExport from './data-export/index.test';
@@ -16,7 +18,9 @@ export default () => {
   describe('POST /api/admin/surveys', store);
   describe('GET /api/admin/surveys/:surveyId', read);
   describe('GET /api/admin/surveys/:surveyId/edit', edit);
-  describe('PUT /api/admin/surveys/:surveyId', update);
+  describe('PATCH /api/admin/surveys/:surveyId', patchAdmin);
+  describe('PATCH /api/admin/surveys/:surveyId', patchStaff);
+  describe('PUT /api/admin/surveys/:surveyId', put);
   describe('DELETE /api/admin/surveys/:surveyId', destroy);
 
   // Surveys user management

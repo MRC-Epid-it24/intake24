@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Schema } from 'express-validator';
+import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
 import { searchSortingAlgorithms, surveyStates } from '@common/types/models';
@@ -7,7 +7,7 @@ import { validateMeals } from '@common/validators';
 import { Locale, Scheme, Survey } from '@api/db/models/system';
 import { unique } from '@api/http/rules';
 
-const defaults: Schema = {
+export const defaults: Schema = {
   name: {
     in: ['body'],
     errorMessage: 'Name must be filled in.',
@@ -110,12 +110,12 @@ const defaults: Schema = {
     isString: true,
     optional: { options: { nullable: true } },
   },
-  surveyMonkeyUrl: {
+  /* surveyMonkeyUrl: {
     in: ['body'],
     errorMessage: 'URL must be a string.',
     isString: true,
     optional: { options: { nullable: true } },
-  },
+  }, */
   supportEmail: {
     in: ['body'],
     errorMessage: 'Enter valid email address.',
@@ -123,24 +123,29 @@ const defaults: Schema = {
     isEmpty: { negated: true },
     toLowerCase: true,
   },
-  originatingUrl: {
+  /* originatingUrl: {
     in: ['body'],
     errorMessage: 'URL must be a string.',
     isString: true,
     optional: { options: { nullable: true } },
-  },
-  description: {
+  }, */
+  /* description: {
     in: ['body'],
     errorMessage: 'Description must be a string.',
     isString: true,
     optional: { options: { nullable: true } },
-  },
+  }, */
   feedbackEnabled: {
     in: ['body'],
     errorMessage: 'Enter true/false value.',
     isBoolean: true,
   },
-  // feedbackStyle: {},
+  feedbackStyle: {
+    in: ['body'],
+    errorMessage: 'Enter feedback style.',
+    isIn: { options: [['default']] },
+    optional: true,
+  },
   submissionNotificationUrl: {
     in: ['body'],
     errorMessage: 'Submission notification URL must be valid URL',
@@ -158,12 +163,12 @@ const defaults: Schema = {
     toInt: true,
     optional: true,
   },
-  finalPageHtml: {
+  /* finalPageHtml: {
     in: ['body'],
     errorMessage: 'Final page html must be a string.',
     isString: true,
     optional: { options: { nullable: true } },
-  },
+  }, */
   maximumDailySubmissions: {
     errorMessage: 'Value has to be a number.',
     isInt: true,
@@ -193,33 +198,32 @@ const defaults: Schema = {
     toInt: true,
     optional: true,
   },
-  overrides: {
-    in: ['body'],
-    errorMessage: 'Enter valid scheme overrides.',
-    custom: {
-      options: async (value): Promise<void> => {
-        if (
-          typeof value !== 'object' ||
-          Object.keys(value).some((key) => !['meals', 'questions'].includes(key))
-        )
-          throw new Error('Invalid override object. Not and object or missing properties');
+};
 
-        // Meals
-        try {
-          validateMeals(value.meals);
-        } catch (err: any) {
-          throw new Error(err.message.split('\n')[0]);
-        }
+export const overrides: ParamSchema = {
+  in: ['body'],
+  errorMessage: 'Enter valid scheme overrides.',
+  custom: {
+    options: async (value): Promise<void> => {
+      if (
+        typeof value !== 'object' ||
+        Object.keys(value).some((key) => !['meals', 'questions'].includes(key))
+      )
+        throw new Error('Invalid override object. Not and object or missing properties');
 
-        // Questions
-        if (
-          !Array.isArray(value.questions) ||
-          value.questions.some((item: any) => !isPlainObject(item))
-        )
-          throw new Error('Invalid questions. Should be array of PromptQuestions.');
-      },
+      // Meals
+      try {
+        validateMeals(value.meals);
+      } catch (err: any) {
+        throw new Error(err.message.split('\n')[0]);
+      }
+
+      // Questions
+      if (
+        !Array.isArray(value.questions) ||
+        value.questions.some((item: any) => !isPlainObject(item))
+      )
+        throw new Error('Invalid questions. Should be array of PromptQuestions.');
     },
   },
 };
-
-export default defaults;

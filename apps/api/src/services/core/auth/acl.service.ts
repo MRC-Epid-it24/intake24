@@ -9,6 +9,10 @@ export const staffSuffix = '/staff';
 export const supportSuffix = '/support';
 export const foodDatabaseMaintainerPrefix = 'fdbm/';
 
+export const globalsupport = 'globalsupport';
+export const surveyAdmin = 'surveyadmin';
+export const foodsAdmin = 'foodsadmin';
+
 export const surveyStaff = (surveyId: string): string => `${surveyId}${staffSuffix}`;
 
 export const surveySupport = (surveyId: string): string => `${surveyId}${supportSuffix}`;
@@ -67,28 +71,40 @@ const aclService = ({
     return cache.remember<Role[]>(`${ACL_ROLES_KEY}:${userId}`, expiresIn, fetchRoles);
   };
 
-  const hasPermission = async (permission: string): Promise<boolean> => {
+  const hasPermission = async (permission: string | string[]): Promise<boolean> => {
     const currentPermissions = await getPermissions();
+    if (!currentPermissions.length) return false;
 
-    const match = currentPermissions.find((item) => item.name === permission);
-    return !!match;
+    if (Array.isArray(permission)) {
+      const currentPermissionNames = currentPermissions.map(({ name }) => name);
+      return permission.every((item) => currentPermissionNames.includes(item));
+    }
+
+    return !!currentPermissions.find(({ name }) => name === permission);
   };
 
   const hasAnyPermission = async (permissions: string[]): Promise<boolean> => {
     const currentPermissions = await getPermissions();
+    if (!currentPermissions.length) return false;
 
     return currentPermissions.some((item) => permissions.includes(item.name));
   };
 
-  const hasRole = async (role: string): Promise<boolean> => {
+  const hasRole = async (role: string | string[]): Promise<boolean> => {
     const currentRoles = await getRoles();
+    if (!currentRoles.length) return false;
 
-    const match = currentRoles.find((item) => item.name === role);
-    return !!match;
+    if (Array.isArray(role)) {
+      const currentRoleNames = currentRoles.map(({ name }) => name);
+      return role.every((name) => currentRoleNames.includes(name));
+    }
+
+    return !!currentRoles.find(({ name }) => name === role);
   };
 
   const hasAnyRole = async (roles: string[]): Promise<boolean> => {
     const currentRoles = await getRoles();
+    if (!currentRoles.length) return false;
 
     return currentRoles.some((item) => roles.includes(item.name));
   };

@@ -1,5 +1,5 @@
 import faker from 'faker';
-import { nanoid } from 'nanoid';
+import { nanoid, customAlphabet } from 'nanoid';
 import slugify from 'slugify';
 import * as uuid from 'uuid';
 import { jobTypes } from '@common/types';
@@ -17,6 +17,7 @@ import {
   SchemeCreationAttributes,
   SchemeQuestionCreationAttributes,
   SchemeTypes,
+  searchSortingAlgorithms,
   surveyStates,
 } from '@common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
@@ -42,7 +43,7 @@ const role = (): RoleRequest => {
 const user = (): CreateUserRequest => {
   const name = faker.name.firstName();
   const email = faker.internet.email();
-  const password = nanoid(20);
+  const password = nanoid(30);
   const passwordConfirm = password;
   const phone = faker.phone.phoneNumber();
   const multiFactorAuthentication = false;
@@ -174,14 +175,34 @@ const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest =
   const endDate = faker.date.future(1).toISOString().split('T')[0];
   const allowGenUsers = faker.datatype.boolean();
   const supportEmail = faker.internet.email();
+  const suspensionReason = faker.random.words(10);
 
   const feedbackEnabled = faker.datatype.boolean();
+  const feedbackStyle = 'default';
   const numberOfSubmissionsForFeedback = faker.datatype.number(10);
   const storeUserSessionOnServer = faker.datatype.boolean();
 
   const maximumDailySubmissions = faker.datatype.number({ min: 1, max: 5 });
   const minimumSubmissionInterval = faker.datatype.number(5);
-  const overrides = { meals: [], questions: [] };
+
+  const authUrlDomainOverride = faker.internet.url();
+  const authUrlTokenCharset = [
+    ...new Set(
+      customAlphabet('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 30)().split('')
+    ),
+  ].join('');
+  const authUrlTokenLength = faker.datatype.number({ min: 10, max: 100 });
+
+  const searchSortingAlgorithm =
+    searchSortingAlgorithms[
+      faker.datatype.number({ min: 0, max: searchSortingAlgorithms.length - 1 })
+    ];
+  const searchMatchScoreWeight = faker.datatype.number({ min: 0, max: 100 });
+
+  const overrides = {
+    meals: [{ name: { en: faker.random.words(3) }, time: '8:00' }],
+    questions: [],
+  };
 
   return {
     id,
@@ -193,11 +214,18 @@ const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest =
     localeId,
     allowGenUsers,
     supportEmail,
+    suspensionReason,
     feedbackEnabled,
+    feedbackStyle,
     numberOfSubmissionsForFeedback,
     storeUserSessionOnServer,
     maximumDailySubmissions,
     minimumSubmissionInterval,
+    authUrlDomainOverride,
+    authUrlTokenCharset,
+    authUrlTokenLength,
+    searchSortingAlgorithm,
+    searchMatchScoreWeight,
     overrides,
   };
 };

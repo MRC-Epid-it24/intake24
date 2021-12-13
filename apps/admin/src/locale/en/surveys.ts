@@ -49,11 +49,16 @@ const surveys: LocaleMessageObject = {
     maxTotal: 'Maximum allowed total submissions',
     minInterval: 'Minimum interval between submissions (seconds)',
   },
+  suspensionReason: 'Suspension reason',
   storeUserSessionOnServer: 'Store user session on server',
   submissionNotificationUrl: 'Submission notification URL',
   feedback: {
     _: 'Feedback settings',
-    enabled: 'Feedback Enabled',
+    enabled: 'Feedback enabled',
+    styles: {
+      _: 'Feedback style',
+      default: 'Default',
+    },
     numberOfSubmissions: 'Number of submissions for feedback',
   },
   'data-export': {

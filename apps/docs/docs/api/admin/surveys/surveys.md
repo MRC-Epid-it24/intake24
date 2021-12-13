@@ -40,24 +40,31 @@ Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "id": string,
-    "state": 0 | 1 | 2,
-    "startDate": Date,
-    "endDate": Date,
-    "schemeId": string,
-    "locale": string,
+    "id": string | null,
+    "name": string | null,
+    "state": SurveyState,
+    "localeId": string | null,
+    "schemeId": string | null,
+    "startDate": string | null,
+    "endDate": string | null,
+    "supportEmail": string | null,
+    "suspensionReason": string | null,
     "allowGenUsers": boolean,
-    "suspensionReason": string,
-    "surveyMonkeyUrl": string,
-    "supportEmail": string,
-    "originatingUrl": string,
-    "description": string,
+    "genUserKey": string | null,
+    "authUrlDomainOverride": string | null,
+    "authUrlTokenCharset": string | null,
+    "authUrlTokenLength": number | null,
+    "storeUserSessionOnServer": boolean,
     "feedbackEnabled": boolean,
     "feedbackStyle": string,
-    "submissionNotificationUrl": string,
-    "storeUserSessionOnServer": boolean,
+    "submissionNotificationUrl": string | null,
     "numberOfSubmissionsForFeedback": number,
-    "finalPageHtml": string
+    "maximumDailySubmissions": number,
+    "maximumTotalSubmissions": number | null,
+    "minimumSubmissionInterval": number,
+    "searchSortingAlgorithm": SearchSortingAlgorithm,
+    "searchMatchScoreWeight": number,
+    "overrides": SchemeOverrides,
 }
 ```
 
@@ -108,23 +115,81 @@ Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "state": 0 | 1 | 2,
-    "startDate": Date,
-    "endDate": Date,
-    "schemeId": string,
-    "locale": string,
+    "name": string | null,
+    "state": SurveyState,
+    "localeId": string | null,
+    "schemeId": string | null,
+    "startDate": string | null,
+    "endDate": string | null,
+    "supportEmail": string | null,
+    "suspensionReason": string | null,
     "allowGenUsers": boolean,
-    "suspensionReason": string,
-    "surveyMonkeyUrl": string,
-    "supportEmail": string,
-    "originatingUrl": string,
-    "description": string,
+    "genUserKey": string | null,
+    "authUrlDomainOverride": string | null,
+    "authUrlTokenCharset": string | null,
+    "authUrlTokenLength": number | null,
+    "storeUserSessionOnServer": boolean,
     "feedbackEnabled": boolean,
     "feedbackStyle": string,
-    "submissionNotificationUrl": string,
-    "storeUserSessionOnServer": boolean,
+    "submissionNotificationUrl": string | null,
     "numberOfSubmissionsForFeedback": number,
-    "finalPageHtml": string
+    "maximumDailySubmissions": number,
+    "maximumTotalSubmissions": number | null,
+    "minimumSubmissionInterval": number,
+    "searchSortingAlgorithm": SearchSortingAlgorithm,
+    "searchMatchScoreWeight": number,
+    "overrides": SchemeOverrides,
+}
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": {...},
+    "refs": {...}
+}
+```
+
+## Partial update survey
+
+Update survey entry - patch / partial update
+
+### Request
+
+```http
+PATCH /api/admin/surveys/:surveyId
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+    "name"?: string | null,
+    "state"?: SurveyState,
+    "localeId"?: string | null,
+    "schemeId"?: string | null,
+    "startDate"?: string | null,
+    "endDate"?: string | null,
+    "supportEmail"?: string | null,
+    "suspensionReason"?: string | null,
+    "allowGenUsers"?: boolean,
+    "genUserKey"?: string | null,
+    "authUrlDomainOverride"?: string | null,
+    "authUrlTokenCharset"?: string | null,
+    "authUrlTokenLength"?: number | null,
+    "storeUserSessionOnServer"?: boolean,
+    "feedbackEnabled"?: boolean,
+    "feedbackStyle"?: string,
+    "submissionNotificationUrl"?: string | null,
+    "numberOfSubmissionsForFeedback"?: number,
+    "maximumDailySubmissions"?: number,
+    "maximumTotalSubmissions"?: number | null,
+    "minimumSubmissionInterval"?: number,
+    "searchSortingAlgorithm"?: SearchSortingAlgorithm,
+    "searchMatchScoreWeight"?: number,
+    "overrides"?: SchemeOverrides,
 }
 ```
 
