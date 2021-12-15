@@ -23,6 +23,8 @@ export default new Vuetify({
       forward: 'fas fa-caret-right',
       question: 'far fa-question-circle',
       check: 'fas fa-check',
+      next: 'fa-angle-right',
+      plus: 'fa-plus',
     },
   },
   theme: {

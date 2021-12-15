@@ -61,6 +61,9 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       type: String,
       default: null,
     },
+    submitTrigger: {
+      type: Boolean,
+    },
   },
 
   data() {
@@ -108,6 +111,15 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       }
 
       this.$emit('answer', this.currentValue);
+    },
+  },
+  watch: {
+    submitTrigger: {
+      handler(trigger: boolean) {
+        if (trigger) this.submit();
+      },
+      deep: false,
+      immediate: true,
     },
   },
 });

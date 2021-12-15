@@ -14,7 +14,9 @@
           :promptId="currentPrompt.prompt.id"
           :promptProps="currentPrompt.prompt.props"
           :key="Math.random()"
+          :submitTrigger="submitTrigger"
           @complete="nextPrompt"
+          @resetPromptTrigger="resetTrigger"
         ></component>
       </transition>
     </v-col>
@@ -35,31 +37,7 @@
     </v-col>
 
     <transition type="fade">
-      <v-bottom-navigation
-        app
-        fixed
-        grow
-        v-if="showMealList"
-        v-model="bottomNavTab"
-        @change="onBottomNavChange"
-        background-color="secondary"
-        color="white"
-      >
-        <v-btn>
-          <span>Add meal</span>
-          <v-icon>fa-plus</v-icon>
-        </v-btn>
-
-        <v-btn>
-          <span>Review</span>
-          <v-icon>$survey</v-icon>
-        </v-btn>
-
-        <v-btn>
-          <span>Next question</span>
-          <v-icon>fa-angle-right</v-icon>
-        </v-btn>
-      </v-bottom-navigation>
+      <bottom-navigation-mobile v-if="showMealList" @navigation-item-click="onBottomNavChange" />
     </transition>
 
     <!-- Context menu for Meal or Food with actions options -->
@@ -120,6 +98,7 @@ export default Recall.extend({
         foodIndex: 0,
         foodContext: false,
       },
+      submitTrigger: false,
     };
   },
 
@@ -129,8 +108,15 @@ export default Recall.extend({
       if (tab === 0) {
         this.onRecallAction('add-meal');
       } else if (tab === 2) {
+        this.submitTrigger = true;
+        // this.submitTrigger = false;
         this.nextPrompt();
       }
+    },
+
+    resetTrigger() {
+      this.submitTrigger = false;
+      console.log('Trigger Reseted', this.submitTrigger);
     },
 
     onMealFoodMobileClick(

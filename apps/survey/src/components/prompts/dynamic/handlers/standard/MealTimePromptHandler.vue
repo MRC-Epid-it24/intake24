@@ -2,6 +2,7 @@
   <meal-time-prompt
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
+    :submitTrigger="submitTrigger"
     :value="defaultTime"
     @answer="onAnswer"
     @removeMeal="onRemoveMeal"
@@ -37,6 +38,9 @@ export default Vue.extend({
       type: Object as () => MealTimePromptProps,
       required: true,
     },
+    submitTrigger: {
+      type: Boolean,
+    },
   },
 
   computed: {
@@ -58,6 +62,7 @@ export default Vue.extend({
         mealIndex: this.selectedMealIndex,
         time: parseMealTime(mealTime),
       });
+      this.$emit('resetPromptTrigger');
       this.$emit('complete');
     },
 
