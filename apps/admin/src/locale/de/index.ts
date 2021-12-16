@@ -1,10 +1,10 @@
 import { LocaleMessages } from 'vue-i18n';
 import common from './common';
-import profile from './profile';
+import user from './user';
 
 const messages: LocaleMessages = {
   common,
-  profile,
+  user,
 };
 
 export default messages;

@@ -6,7 +6,7 @@ const actions: ActionTree<UserState, RootState> = {
   async request({ commit }) {
     return new Promise((resolve, reject) => {
       commit('request');
-      commit('loading/add', 'profile', { root: true });
+      commit('loading/add', 'user', { root: true });
 
       http
         .get('admin/user')
@@ -18,7 +18,7 @@ const actions: ActionTree<UserState, RootState> = {
           commit('error');
           reject(err);
         })
-        .finally(() => commit('loading/remove', 'profile', { root: true }));
+        .finally(() => commit('loading/remove', 'user', { root: true }));
     });
   },
 };

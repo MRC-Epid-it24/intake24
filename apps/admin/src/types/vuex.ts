@@ -21,7 +21,11 @@ export interface LoadingState {
 
 export interface UserState {
   status: string;
-  profile: any;
+  profile: {
+    email: string;
+    name: string | null;
+    phone: string | null;
+  } | null;
   permissions: string[];
   roles: string[];
 }

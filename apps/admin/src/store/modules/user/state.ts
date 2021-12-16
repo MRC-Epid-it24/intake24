@@ -2,7 +2,7 @@ import { UserState } from '@/types';
 
 const state = (): UserState => ({
   status: '',
-  profile: {},
+  profile: null,
   permissions: [],
   roles: [],
 });

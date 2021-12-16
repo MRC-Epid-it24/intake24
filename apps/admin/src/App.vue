@@ -62,9 +62,9 @@
       <template v-if="loggedIn">
         <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
-        <v-btn text :to="{ name: 'profile' }">
-          <span class="mr-2">{{ $t('profile._') }}</span>
-          <v-icon>$profile</v-icon>
+        <v-btn text :to="{ name: 'user' }">
+          <span class="mr-2">{{ $t('user._') }}</span>
+          <v-icon>$user</v-icon>
         </v-btn>
         <confirm-dialog :label="$t('common.logout._')" @confirm="logout">
           <template v-slot:activator="{ attrs, on }">

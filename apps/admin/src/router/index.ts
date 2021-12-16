@@ -96,10 +96,10 @@ const routes: RouteConfig[] = [
     meta: { module: { current: 'dashboard' }, action: 'browse', title: 'dashboard._' },
   },
   {
-    path: '/profile',
-    name: 'profile',
-    component: views.profile,
-    meta: { module: { current: 'profile' }, action: 'browse', title: 'profile._' },
+    path: '/user',
+    name: 'user',
+    component: views.user.profile,
+    meta: { module: { current: 'user' }, title: 'user._' },
   },
 ];
 

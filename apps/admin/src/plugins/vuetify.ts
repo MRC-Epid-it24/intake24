@@ -11,7 +11,7 @@ export default new Vuetify({
       dashboard: 'fas fa-tachometer-alt',
       login: 'fas fa-sign-in-alt',
       logout: 'fas fa-sign-out-alt',
-      profile: 'fas fa-user-circle',
+      user: 'fas fa-user-circle',
       create: 'fas fa-plus',
       delete: 'fas fa-trash',
       edit: 'fas fa-edit',

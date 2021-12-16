@@ -17,7 +17,7 @@ const getters: GetterTree<UserState, RootState> = {
       const { resource, action } = permission;
       return getters.permissions.includes(`${resource ?? rootGetters['resource/name']}-${action}`);
     },
-  loaded: (state) => !!Object.keys(state.profile).length,
+  loaded: (state) => !!state.profile,
   profile: (state) => state.profile,
   permissions: (state) => state.permissions,
   roles: (state) => state.roles,

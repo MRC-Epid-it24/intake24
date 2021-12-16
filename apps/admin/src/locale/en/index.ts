@@ -9,7 +9,6 @@ import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
 import nutrientTables from './nutrient-tables';
-import profile from './profile';
 import permissions from './permissions';
 import roles from './roles';
 import schemes from './schemes';
@@ -17,6 +16,7 @@ import schemeQuestions from './scheme-questions';
 import signInLogs from './sign-in-logs';
 import surveys from './surveys';
 import tasks from './tasks';
+import user from './user';
 import users from './users';
 
 const messages: LocaleMessages = {
@@ -30,7 +30,6 @@ const messages: LocaleMessages = {
   languages,
   locales,
   'nutrient-tables': nutrientTables,
-  profile,
   permissions,
   roles,
   schemes,
@@ -38,6 +37,7 @@ const messages: LocaleMessages = {
   'sign-in-logs': signInLogs,
   surveys,
   tasks,
+  user,
   users,
 };
 

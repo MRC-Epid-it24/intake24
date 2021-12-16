@@ -1,6 +1,6 @@
 import { LocaleMessageObject } from 'vue-i18n';
 
-const profile: LocaleMessageObject = {
+const user: LocaleMessageObject = {
   _: 'الملف الشخصي',
   info: 'معلومات',
   settings: 'الإعدادات',
@@ -24,4 +24,4 @@ const profile: LocaleMessageObject = {
   },
 };
 
-export default profile;
+export default user;
