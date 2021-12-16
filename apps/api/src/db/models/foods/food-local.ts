@@ -49,7 +49,6 @@ export default class FoodLocal
   public localeId!: string;
 
   @Column({
-    allowNull: true,
     type: DataType.STRING(256),
   })
   public name!: string;

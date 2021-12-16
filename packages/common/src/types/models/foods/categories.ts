@@ -16,3 +16,11 @@ export type CategoryCategoryAttributes = {
 };
 
 export type CategoryCategoryCreationAttributes = Omit<CategoryCategoryAttributes, 'id'>;
+
+export type CategoryLocalAttributes = {
+  categoryCode: string;
+  localeId: string;
+  localDescription: string | null;
+  simpleLocalDescription: string | null;
+  version: string;
+};

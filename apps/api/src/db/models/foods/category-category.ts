@@ -19,6 +19,7 @@ export default class CategoryCategory
   @Column({
     primaryKey: true,
     autoIncrement: true,
+    type: DataType.INTEGER,
   })
   public id!: number;
 

@@ -1,5 +1,9 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import { CategoryPortionSizeMethod } from '@api/db/models/foods';
+import {
+  CategoryPortionSizeMethodParameterAttributes,
+  CategoryPortionSizeMethodParameterCreationAttributes,
+} from '@common/types/models';
 import BaseModel from '../model';
 
 @Table({
@@ -9,15 +13,23 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class CategoryPortionSizeMethodParameter extends BaseModel {
+export default class CategoryPortionSizeMethodParameter
+  extends BaseModel<
+    CategoryPortionSizeMethodParameterAttributes,
+    CategoryPortionSizeMethodParameterCreationAttributes
+  >
+  implements CategoryPortionSizeMethodParameterAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.INTEGER,
   })
   public id!: number;
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
   })
   public portionSizeMethodId!: number;
 
@@ -34,5 +46,5 @@ export default class CategoryPortionSizeMethodParameter extends BaseModel {
   public value!: string;
 
   @BelongsTo(() => CategoryPortionSizeMethod, 'portionSizeMethodId')
-  public categoryPortionSizeMethod?: CategoryPortionSizeMethod;
+  public portionSizeMethod?: CategoryPortionSizeMethod;
 }
