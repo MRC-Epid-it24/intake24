@@ -1,18 +1,16 @@
 <template>
-  <v-container>
+  <v-container px-0>
     <v-card>
-      <v-card>
-        <v-row>
-          <v-col>
-            <v-card-text>
-              <slot name="headerText"></slot>
-            </v-card-text>
-          </v-col>
-          <v-col cols="auto" class="mx-2">
-            <v-btn color="primary">{{ $t('common.help') }}</v-btn>
-          </v-col>
-        </v-row>
-      </v-card>
+      <v-row>
+        <v-col>
+          <v-card-text>
+            <slot name="headerText"></slot>
+          </v-card-text>
+        </v-col>
+        <v-col cols="auto" class="mx-2">
+          <v-btn color="primary">{{ $t('common.help') }}</v-btn>
+        </v-col>
+      </v-row>
     </v-card>
     <slot></slot>
   </v-container>

@@ -1,91 +1,89 @@
 <template>
-  <v-container>
-    <portion-layout :text="promptProps.text" :description="promptProps.description">
-      <template v-slot:headerText>
-        {{ $t('portion.asServed.promptLabel', { food: localeDescription }) }}
-      </template>
-      <v-row>
-        <v-col>
-          <v-expansion-panels v-model="panelOpen">
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.asServed.portionHeader') }}
-                <template v-slot:actions>
-                  <valid-invalid-icon :valid="servingCompleteStatus"></valid-invalid-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row>
-                  <v-col>
-                    {{ $t('portion.asServed.portionLabel', { food: localeDescription }) }}
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <as-served-selector
-                      :asServedSetId="this.asServedSetId"
-                      @as-served-selector-submit="setServingStatus($event)"
-                    ></as-served-selector>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
-                <template v-slot:actions>
-                  <valid-invalid-icon :valid="leftoverCompleteStatus"></valid-invalid-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row>
-                  <v-col>
-                    <p>
-                      {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
-                    </p>
-                    <v-btn @click="leftoverAnswer(true)" :color="leftoverButtonStyle('yes')">
-                      {{ $t('common.confirm.yes') }}
-                    </v-btn>
-                    <v-btn @click="leftoverAnswer(false)" :color="leftoverButtonStyle('no')">
-                      {{ $t('common.confirm.no') }}
-                    </v-btn>
-                  </v-col>
-                </v-row>
-                <v-row v-if="leftoverPromptAnswer">
-                  <v-col>
-                    {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
-                  </v-col>
-                </v-row>
-                <v-row v-if="leftoverPromptAnswer">
-                  <v-col>
-                    <!-- This currently is taking asServed data, not the leftover data -->
-                    <as-served-selector
-                      :asServedSetId="this.asServedSetId"
-                      @as-served-selector-submit="setLeftoverStatus($event)"
-                    ></as-served-selector>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-col>
-      </v-row>
-      <v-row v-show="errors.length">
-        <v-col>
-          <v-alert v-for="(e, idx) in errors" :key="idx" outlined type="error">
-            {{ e }}
-          </v-alert>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-btn @click="submit()" :color="submitButtonStyle()">
-            {{ $t('common.continue') }}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </portion-layout>
-  </v-container>
+  <portion-layout :text="promptProps.text" :description="promptProps.description" id="test">
+    <template v-slot:headerText>
+      {{ $t('portion.asServed.promptLabel', { food: localeDescription }) }}
+    </template>
+    <v-row>
+      <v-col>
+        <v-expansion-panels v-model="panelOpen">
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.asServed.portionHeader') }}
+              <template v-slot:actions>
+                <valid-invalid-icon :valid="servingCompleteStatus"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col>
+                  {{ $t('portion.asServed.portionLabel', { food: localeDescription }) }}
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <as-served-selector
+                    :asServedSetId="this.asServedSetId"
+                    @as-served-selector-submit="setServingStatus($event)"
+                  ></as-served-selector>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
+              <template v-slot:actions>
+                <valid-invalid-icon :valid="leftoverCompleteStatus"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col>
+                  <p>
+                    {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
+                  </p>
+                  <v-btn @click="leftoverAnswer(true)" :color="leftoverButtonStyle('yes')">
+                    {{ $t('common.confirm.yes') }}
+                  </v-btn>
+                  <v-btn @click="leftoverAnswer(false)" :color="leftoverButtonStyle('no')">
+                    {{ $t('common.confirm.no') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row v-if="leftoverPromptAnswer">
+                <v-col>
+                  {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
+                </v-col>
+              </v-row>
+              <v-row v-if="leftoverPromptAnswer">
+                <v-col>
+                  <!-- This currently is taking asServed data, not the leftover data -->
+                  <as-served-selector
+                    :asServedSetId="this.asServedSetId"
+                    @as-served-selector-submit="setLeftoverStatus($event)"
+                  ></as-served-selector>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-col>
+    </v-row>
+    <v-row v-show="errors.length">
+      <v-col>
+        <v-alert v-for="(e, idx) in errors" :key="idx" outlined type="error">
+          {{ e }}
+        </v-alert>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-btn @click="submit()" :color="submitButtonStyle()">
+          {{ $t('common.continue') }}
+        </v-btn>
+      </v-col>
+    </v-row>
+  </portion-layout>
 </template>
 
 <script lang="ts">
