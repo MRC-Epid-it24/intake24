@@ -1,55 +1,53 @@
 <template>
-  <v-container>
-    <portion-layout :text="promptProps.text" :description="promptProps.description">
-      <template v-slot:headerText>
-        {{ $t('portion.option.label', { food: localeDescription }) }}
-      </template>
-    </portion-layout>
-    <v-row class="mt-2">
-      <v-col
-        v-for="(method, index) in availableMethods"
-        :key="index"
-        cols="6"
-        md="4"
-        lg="3"
-        @click="selectMethod(index)"
-        class="mx-auto"
-      >
-        <v-card :elevation="returnSelectElevation(index)">
-          <v-img class="align-end" :src="method.imageUrl" contain aspect-ratio="1">
-            <v-chip class="ma-2" :color="returnSelectedStyle(index)">
-              {{ $t(`portion.option.description.${method.description}`) }}
-            </v-chip>
-            <template v-slot:placeholder>
-              <v-alert outlined text>
-                <v-progress-circular
-                  indeterminate
-                  color="primary"
-                  class="mr-2"
-                ></v-progress-circular>
-                {{ $t('portion.option.imageInvalid') }}
-              </v-alert>
-            </template>
-          </v-img>
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col>
-        <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col>
-        <v-form ref="form" @submit.prevent="submit">
-          <!-- Should be disabled if nothing selected? -->
-          <continue @click="submit" :disabled="currentValue === -1"></continue>
-        </v-form>
-      </v-col>
-    </v-row>
-  </v-container>
+  <portion-layout :text="promptProps.text" :description="promptProps.description">
+    <template v-slot:headerText>
+      {{ $t('portion.option.label', { food: localeDescription }) }}
+    </template>
+    <v-sheet>
+      <v-row class="mt-2">
+        <v-col
+          v-for="(method, index) in availableMethods"
+          :key="index"
+          cols="6"
+          md="4"
+          lg="3"
+          @click="selectMethod(index)"
+          class="mx-auto"
+        >
+          <v-card :elevation="returnSelectElevation(index)">
+            <v-img class="align-end" :src="method.imageUrl" contain aspect-ratio="1">
+              <v-chip class="ma-2" :color="returnSelectedStyle(index)">
+                {{ $t(`portion.option.description.${method.description}`) }}
+              </v-chip>
+              <template v-slot:placeholder>
+                <v-alert outlined text>
+                  <v-progress-circular
+                    indeterminate
+                    color="primary"
+                    class="mr-2"
+                  ></v-progress-circular>
+                  {{ $t('portion.option.imageInvalid') }}
+                </v-alert>
+              </template>
+            </v-img>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-form ref="form" @submit.prevent="submit">
+            <!-- Should be disabled if nothing selected? -->
+            <continue @click="submit" :disabled="currentValue === -1"></continue>
+          </v-form>
+        </v-col>
+      </v-row>
+    </v-sheet>
+  </portion-layout>
 </template>
 
 <script lang="ts">
