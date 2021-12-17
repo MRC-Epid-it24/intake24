@@ -8,6 +8,7 @@ import {
 } from '@common/types/http/admin';
 import { Language } from '@api/db/models/system';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type LanguageController = Controller<CrudActions>;
@@ -22,9 +23,12 @@ export default (): LanguageController => {
     res.json({ data: language, refs: {} });
   };
 
-  const browse = async (req: Request, res: Response<LanguagesResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<LanguagesResponse>
+  ): Promise<void> => {
     const languages = await Language.paginate({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'englishName', 'localName'],
       order: [['id', 'ASC']],
     });

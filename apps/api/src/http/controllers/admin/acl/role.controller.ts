@@ -10,6 +10,8 @@ import { NotFoundError } from '@api/http/errors';
 import { roleEntryResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
 import type { Controller, CrudActions } from '@api/http/controllers';
+import { PaginateQuery } from '@api/db/models/model';
+import { pick } from 'lodash';
 
 export type RoleController = Controller<CrudActions>;
 
@@ -26,9 +28,12 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
     res.json({ data, refs: { permissions } });
   };
 
-  const browse = async (req: Request, res: Response<RolesResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<RolesResponse>
+  ): Promise<void> => {
     const roles = await Role.paginate({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'displayName'],
       order: [['name', 'ASC']],
     });

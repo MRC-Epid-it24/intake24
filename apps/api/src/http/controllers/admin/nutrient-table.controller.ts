@@ -12,6 +12,8 @@ import { NutrientType, NutrientTable } from '@api/db/models/foods';
 import type { IoC } from '@api/ioc';
 import { ValidationError } from '@api/http/errors';
 import { User } from '@api/db/models/system';
+import { pick } from 'lodash';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type NutrientTableController = Controller<CrudActions | 'upload'>;
@@ -36,9 +38,12 @@ export default ({
     res.json({ data, refs: await refs() });
   };
 
-  const browse = async (req: Request, res: Response<NutrientTablesResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<NutrientTablesResponse>
+  ): Promise<void> => {
     const nutrientTables = await NutrientTable.paginate({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
       order: [['id', 'ASC']],
     });

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import fs from 'fs-extra';
+import { pick } from 'lodash';
 import path from 'path';
 import { Op, WhereOptions } from 'sequelize';
 import { JobResponse, JobsResponse } from '@common/types/http/admin';
@@ -8,11 +9,15 @@ import { Job, User } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import type { Controller } from '@api/http/controllers';
+import { PaginateQuery } from '@api/db/models/model';
 
 export type UserJobController = Controller<'browse' | 'read' | 'download'>;
 
 export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
-  const browse = async (req: Request, res: Response<JobsResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery & { type?: string }>,
+    res: Response<JobsResponse>
+  ): Promise<void> => {
     const user = req.user as User;
     const { type } = req.query;
 
@@ -23,7 +28,11 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
 
     if (type) where.type = type;
 
-    const jobs = await Job.paginate({ req, where, order: [['startedAt', 'DESC']] });
+    const jobs = await Job.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      where,
+      order: [['startedAt', 'DESC']],
+    });
 
     res.json(jobs);
   };

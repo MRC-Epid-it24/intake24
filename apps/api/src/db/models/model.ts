@@ -1,13 +1,19 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable @typescript-eslint/ban-types */
-import { Request } from 'express';
 import { FindOptions as BaseFindOptions, Op, CountOptions as BaseCountOptions } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Readable } from 'stream';
 import { Pagination, PaginationMeta } from '@common/types/models';
 
+export type PaginateQuery = {
+  page?: number;
+  limit?: number;
+  sort?: string;
+  search?: string;
+};
+
 export interface PaginateOptions<TAttributes = any> extends BaseFindOptions<TAttributes> {
-  req: Request;
+  query: PaginateQuery;
   columns?: string[];
   transform?: (item: any) => any;
 }
@@ -45,12 +51,9 @@ export default class Model<
    */
   public static async paginate<R = Model>(
     this: ModelStatic<R extends Model ? R : Model>,
-    { req, columns = [], transform, ...params }: PaginateOptions
+    { query, columns = [], transform, ...params }: PaginateOptions
   ): Promise<Pagination<R>> {
-    const { search, sort } = req.query;
-    let { page = 1, limit = 50 } = req.query;
-    page = page as number;
-    limit = limit as number;
+    const { page = 1, limit = 50, sort, search } = query;
 
     const offset = limit * (page - 1);
     const options: FindOptions = { limit, offset, ...params };

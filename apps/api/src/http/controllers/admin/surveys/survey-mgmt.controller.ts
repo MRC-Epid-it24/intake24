@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { pick } from 'lodash';
+import { nanoid } from 'nanoid';
 import { Op, WhereOptions } from 'sequelize';
 import {
   SurveyMgmtAvailablePermissionsResponse,
@@ -11,8 +13,8 @@ import { NotFoundError } from '@api/http/errors';
 import { permissionListResponse, userMgmtResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
 import { surveyMgmt } from '@api/services/core/auth';
-import { nanoid } from 'nanoid';
 import { UserAttributes } from '@common/types/models';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller } from '../../controller';
 
 export type AdminSurveyMgmtController = Controller<
@@ -24,7 +26,7 @@ export default ({
   adminUserService,
 }: Pick<IoC, 'adminSurveyService' | 'adminUserService'>): AdminSurveyMgmtController => {
   const browse = async (
-    req: Request<{ surveyId: string }>,
+    req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveyMgmtResponse>
   ): Promise<void> => {
     const { surveyId } = req.params;
@@ -33,7 +35,7 @@ export default ({
     if (!survey) throw new NotFoundError();
 
     const users = await User.paginate<UserMgmtListEntry>({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'email', 'simpleName'],
       attributes: ['id', 'name', 'email'],
       order: [['name', 'ASC']],

@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { SignInLogResponse, SignInLogsResponse } from '@common/types/http/admin';
 import { SignInLog } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
+import { pick } from 'lodash';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller } from '../controller';
 
 export type SignInLogController = Controller<'browse' | 'read' | 'destroy'>;
@@ -19,9 +21,12 @@ export default (): SignInLogController => {
     res.json({ data: signInLog });
   };
 
-  const browse = async (req: Request, res: Response<SignInLogsResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<SignInLogsResponse>
+  ): Promise<void> => {
     const signInLogs = await SignInLog.paginate({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'provider', 'providerKey'],
       order: [['id', 'DESC']],
     });

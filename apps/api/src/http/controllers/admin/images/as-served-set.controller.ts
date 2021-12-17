@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pick } from 'lodash';
 import {
   AsServedSetResponse,
   AsServedSetsResponse,
@@ -11,6 +12,7 @@ import type { IoC } from '@api/ioc';
 import { AsServedSet } from '@api/db/models/foods';
 import { User } from '@api/db/models/system';
 import imagesResponseCollection from '@api/http/responses/admin/images';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
 export type AsServedSetController = Controller<CrudActions>;
@@ -34,9 +36,12 @@ export default ({
     res.json({ data: responseCollection.asServedSetEntryResponse(asServedSet), refs: {} });
   };
 
-  const browse = async (req: Request, res: Response<AsServedSetsResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<AsServedSetsResponse>
+  ): Promise<void> => {
     const asServedSets = await AsServedSet.paginate<AsServedSetListEntry>({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
       order: [['id', 'ASC']],
       include: ['selectionImage'],

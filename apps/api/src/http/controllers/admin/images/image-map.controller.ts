@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pick } from 'lodash';
 import {
   ImageMapListEntry,
   ImageMapResponse,
@@ -11,6 +12,7 @@ import type { IoC } from '@api/ioc';
 import { ImageMap } from '@api/db/models/foods';
 import { User } from '@api/db/models/system';
 import imagesResponseCollection from '@api/http/responses/admin/images';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
 export type ImageMapController = Controller<CrudActions>;
@@ -31,9 +33,12 @@ export default ({
     res.json({ data: responseCollection.mapEntryResponse(image), refs: {} });
   };
 
-  const browse = async (req: Request, res: Response<ImageMapsResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<ImageMapsResponse>
+  ): Promise<void> => {
     const images = await ImageMap.paginate<ImageMapListEntry>({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
       order: [['id', 'ASC']],
       include: ['baseImage'],

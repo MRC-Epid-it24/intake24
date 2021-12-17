@@ -11,6 +11,7 @@ import {
 import { Locale as FoodsLocale } from '@api/db/models/foods';
 import { Language, Locale as SystemLocale } from '@api/db/models/system';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type LocaleController = Controller<CrudActions>;
@@ -37,9 +38,12 @@ export default (): LocaleController => {
     res.json({ data: systemLocale, refs: await refs(systemLocale.id) });
   };
 
-  const browse = async (req: Request, res: Response<LocalesResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<LocalesResponse>
+  ): Promise<void> => {
     const locales = await SystemLocale.paginate({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'englishName', 'localName'],
       order: [['id', 'ASC']],
     });

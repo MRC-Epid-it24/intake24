@@ -9,6 +9,8 @@ import {
 import { isMealSection, MealSection, SurveyQuestionSection } from '@common/schemes';
 import { Language, Scheme, SchemeQuestion } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
+import { pick } from 'lodash';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeQuestionController = Controller<CrudActions | 'sync'>;
@@ -38,9 +40,12 @@ export default (): SchemeQuestionController => {
     res.json({ data: schemeQuestion, refs: await refs() });
   };
 
-  const browse = async (req: Request, res: Response<SchemeQuestionsResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<SchemeQuestionsResponse>
+  ): Promise<void> => {
     const schemeQuestions = await SchemeQuestion.paginate({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['questionId', 'name'],
       order: [['questionId', 'ASC']],
     });

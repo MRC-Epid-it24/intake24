@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pick } from 'lodash';
 import {
   GuideImageListEntry,
   GuideImageResponse,
@@ -10,6 +11,7 @@ import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { GuideImage, ImageMap } from '@api/db/models/foods';
 import imagesResponseCollection from '@api/http/responses/admin/images';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
 export type GuideImageController = Controller<CrudActions>;
@@ -33,9 +35,12 @@ export default ({
     res.json({ data: responseCollection.guideEntryResponse(guideImage), refs: {} });
   };
 
-  const browse = async (req: Request, res: Response<GuideImagesResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<GuideImagesResponse>
+  ): Promise<void> => {
     const guideImages = await GuideImage.paginate<GuideImageListEntry>({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
       order: [['id', 'ASC']],
       include: ['selectionImage'],

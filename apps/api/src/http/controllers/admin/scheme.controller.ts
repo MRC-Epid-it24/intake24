@@ -17,6 +17,7 @@ import { PromptQuestion } from '@common/prompts';
 import type { IoC } from '@api/ioc';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import { Language, Scheme, SchemeQuestion } from '@api/db/models/system';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions | 'copy' | 'templates' | 'dataExportRefs'>;
@@ -48,9 +49,12 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res.json({ data: scheme, refs: await refs(scheme.questions) });
   };
 
-  const browse = async (req: Request, res: Response<SchemesResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<SchemesResponse>
+  ): Promise<void> => {
     const schemes = await Scheme.paginate({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'name'],
       order: [['id', 'ASC']],
     });

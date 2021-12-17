@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pick } from 'lodash';
 import {
   CreatePermissionResponse,
   PermissionResponse,
@@ -8,6 +9,7 @@ import {
 import { Permission } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
 import type { Controller, CrudActions } from '@api/http/controllers';
+import { PaginateQuery } from '@api/db/models/model';
 
 export type PermissionController = Controller<CrudActions>;
 
@@ -21,9 +23,12 @@ export default (): PermissionController => {
     res.json({ data: permission, refs: {} });
   };
 
-  const browse = async (req: Request, res: Response<PermissionsResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<PermissionsResponse>
+  ): Promise<void> => {
     const permissions = await Permission.paginate({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'displayName'],
       order: [['name', 'ASC']],
     });

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { pick } from 'lodash';
 import { jobTypes, JobType } from '@common/types';
 import {
   CreateTaskResponse,
@@ -9,6 +10,7 @@ import {
 import { Task, User } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type TaskController = Controller<CrudActions | 'run'>;
@@ -30,8 +32,15 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     res.json({ data: task, bullJob, refs: { jobs } });
   };
 
-  const browse = async (req: Request, res: Response<TasksResponse>): Promise<void> => {
-    const tasks = await Task.paginate({ req, columns: ['name', 'job'], order: [['name', 'ASC']] });
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<TasksResponse>
+  ): Promise<void> => {
+    const tasks = await Task.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name', 'job'],
+      order: [['name', 'ASC']],
+    });
 
     res.json(tasks);
   };

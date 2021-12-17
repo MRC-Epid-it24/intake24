@@ -20,6 +20,7 @@ import { Language, Locale, Scheme, Survey } from '@api/db/models/system';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import { surveyListResponse, surveyResponse } from '@api/http/responses/admin';
 import { staffSuffix, surveyAdmin } from '@api/services/core/auth';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyController = Controller<CrudActions | 'patch' | 'put'>;
@@ -47,7 +48,10 @@ export default (): AdminSurveyController => {
     res.json({ data: surveyResponse(survey), refs: await refs() });
   };
 
-  const browse = async (req: Request, res: Response<SurveysResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<SurveysResponse>
+  ): Promise<void> => {
     const permissions = (await req.scope.cradle.aclService.getPermissions()).map(
       (permission) => permission.name
     );
@@ -62,7 +66,7 @@ export default (): AdminSurveyController => {
     }
 
     const surveys = await Survey.paginate<SurveyListEntry>({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'name'],
       where,
       order: [['id', 'ASC']],

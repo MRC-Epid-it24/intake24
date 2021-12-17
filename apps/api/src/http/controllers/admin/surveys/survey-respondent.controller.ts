@@ -9,6 +9,7 @@ import { Survey, User, UserCustomField, UserSurveyAlias } from '@api/db/models/s
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import { userRespondentResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
+import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyRespondentController = Controller<
@@ -34,7 +35,7 @@ export default ({
   };
 
   const browse = async (
-    req: Request<{ surveyId: string }>,
+    req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveyRespondentsResponse>
   ): Promise<void> => {
     const { surveyId } = req.params;
@@ -43,11 +44,11 @@ export default ({
     if (!survey) throw new NotFoundError();
 
     const respondents = await UserSurveyAlias.paginate({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['userName'],
       where: { surveyId },
-      transform: userRespondentResponse,
       order: [['userName', 'ASC']],
+      transform: userRespondentResponse,
     });
 
     res.json(respondents);

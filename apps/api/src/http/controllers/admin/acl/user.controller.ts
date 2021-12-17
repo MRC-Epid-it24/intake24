@@ -12,6 +12,7 @@ import { NotFoundError } from '@api/http/errors';
 import { userEntryResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
 import type { Controller, CrudActions } from '@api/http/controllers';
+import { PaginateQuery } from '@api/db/models/model';
 
 export type AdminUserController = Controller<CrudActions>;
 
@@ -39,9 +40,12 @@ export default ({ adminUserService }: Pick<IoC, 'adminUserService'>): AdminUserC
     res.json({ data, refs });
   };
 
-  const browse = async (req: Request, res: Response<UsersResponse>): Promise<void> => {
+  const browse = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<UsersResponse>
+  ): Promise<void> => {
     const users = await User.paginate({
-      req,
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'email', 'simpleName'],
       include: [{ model: Role }],
       order: [['name', 'ASC']],
