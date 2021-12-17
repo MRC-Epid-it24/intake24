@@ -9,7 +9,7 @@ import {
 } from 'sequelize-typescript';
 import { FoodLocalAttributes, FoodLocalCreationAttributes } from '@common/types/models';
 import NutrientMapping from '@api/db/models/foods/nutrient-mapping';
-import { Food, FoodLocalList, Locale, PortionSizeMethod } from '@api/db/models/foods';
+import { Food, FoodLocalList, Locale, FoodPortionSizeMethod } from '@api/db/models/foods';
 import BaseModel from '../model';
 import NutrientTableRecord from './nutrient-table-record';
 
@@ -71,8 +71,8 @@ export default class FoodLocal
   @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;
 
-  @HasMany(() => PortionSizeMethod, 'foodLocalId')
-  public portionSizeMethods?: PortionSizeMethod[];
+  @HasMany(() => FoodPortionSizeMethod, 'foodLocalId')
+  public portionSizeMethods?: FoodPortionSizeMethod[];
 
   @HasMany(() => NutrientMapping, 'foodLocalId')
   public nutrientMappings?: NutrientMapping[];

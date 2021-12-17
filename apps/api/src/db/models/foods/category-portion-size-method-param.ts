@@ -1,37 +1,37 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import { CategoryPortionSizeMethod } from '@api/db/models/foods';
 import {
-  CategoryPortionSizeMethodParameterAttributes,
-  CategoryPortionSizeMethodParameterCreationAttributes,
+  PortionSizeMethodParameterAttributes,
+  PortionSizeMethodParameterCreationAttributes,
 } from '@common/types/models';
 import BaseModel from '../model';
 
 @Table({
   modelName: 'CategoryPortionSizeMethodParameter',
-  tableName: 'categories_portion_size_method_params',
+  tableName: 'category_portion_size_method_params',
   freezeTableName: true,
   timestamps: false,
   underscored: true,
 })
 export default class CategoryPortionSizeMethodParameter
   extends BaseModel<
-    CategoryPortionSizeMethodParameterAttributes,
-    CategoryPortionSizeMethodParameterCreationAttributes
+    PortionSizeMethodParameterAttributes,
+    PortionSizeMethodParameterCreationAttributes
   >
-  implements CategoryPortionSizeMethodParameterAttributes
+  implements PortionSizeMethodParameterAttributes
 {
   @Column({
     autoIncrement: true,
     primaryKey: true,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
-  public portionSizeMethodId!: number;
+  public portionSizeMethodId!: string;
 
   @Column({
     allowNull: false,

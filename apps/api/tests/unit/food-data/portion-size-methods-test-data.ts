@@ -27,13 +27,14 @@ import {
 import {
   Category,
   CategoryCategory,
+  CategoryLocal,
   CategoryPortionSizeMethod,
   CategoryPortionSizeMethodParameter,
   Food,
   FoodCategory,
   FoodLocal,
-  PortionSizeMethod,
-  PortionSizeMethodParameter,
+  FoodPortionSizeMethod,
+  FoodPortionSizeMethodParameter,
 } from '@api/db/models/foods';
 import {
   toDatabasePortionSizeMethod,
@@ -82,15 +83,13 @@ export const generatedPortionSizeMethods: UserPortionSizeMethod[][] =
   generateRandomPortionSizeMethodSets(10);
 
 async function createCategoryPortionSizeMethods(
-  categoryCode: string,
-  localeId: string,
+  categoryLocalId: string,
   portionSizeMethods: UserPortionSizeMethod[]
 ): Promise<void> {
   for (let i = 0; i < portionSizeMethods.length; i++) {
     const catPsm = new CategoryPortionSizeMethod(
       {
-        categoryCode,
-        localeId,
+        categoryLocalId,
         method: portionSizeMethods[i].method,
         description: portionSizeMethods[i].description,
         imageUrl: portionSizeMethods[i].imageUrl,
@@ -98,9 +97,7 @@ async function createCategoryPortionSizeMethods(
         conversionFactor: portionSizeMethods[i].conversionFactor,
         parameters: toDatabasePortionSizeMethodParameters(portionSizeMethods[i].parameters),
       },
-      {
-        include: [CategoryPortionSizeMethodParameter],
-      }
+      { include: [CategoryPortionSizeMethodParameter] }
     );
 
     await catPsm.save();
@@ -108,57 +105,75 @@ async function createCategoryPortionSizeMethods(
 }
 
 async function createCategories(): Promise<void> {
-  const cat1 = new Category({
+  await Category.create({
     code: 'CAT1',
     description: 'Test category 1',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
 
-  await cat1.save();
+  const catLocal1 = await CategoryLocal.create({
+    categoryCode: 'CAT1',
+    localeId: 'en_GB',
+    localDescription: 'Test category 1',
+    simpleLocalDescription: 'Test category 1',
+    version: '00000000-0000-0000-0000-000000000000',
+  });
 
-  await createCategoryPortionSizeMethods('CAT1', 'en_GB', generatedPortionSizeMethods[1]);
+  await createCategoryPortionSizeMethods(catLocal1.id, generatedPortionSizeMethods[1]);
 
-  const cat2 = new Category({
+  await Category.create({
     code: 'CAT2',
     description: 'Test category 2',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
 
-  await cat2.save();
+  await CategoryLocal.create({
+    categoryCode: 'CAT2',
+    localeId: 'en_GB',
+    localDescription: 'Test category 2',
+    simpleLocalDescription: 'Test category 2',
+    version: '00000000-0000-0000-0000-000000000000',
+  });
 
-  const cat3 = new Category({
+  await Category.create({
     code: 'CAT3',
     description: 'Test category 3',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
 
-  await cat3.save();
+  const catLocal3 = await CategoryLocal.create({
+    categoryCode: 'CAT3',
+    localeId: 'en_GB',
+    localDescription: 'Test category 3',
+    simpleLocalDescription: 'Test category 3',
+    version: '00000000-0000-0000-0000-000000000000',
+  });
 
-  await createCategoryPortionSizeMethods('CAT3', 'en_GB', generatedPortionSizeMethods[2]);
+  await createCategoryPortionSizeMethods(catLocal3.id, generatedPortionSizeMethods[2]);
 
-  const cat4 = new Category({
+  await Category.create({
     code: 'CAT4',
     description: 'Test category 4',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
 
-  await cat4.save();
+  const catLocal4 = await CategoryLocal.create({
+    categoryCode: 'CAT4',
+    localeId: 'en_GB',
+    localDescription: 'Test category 4',
+    simpleLocalDescription: 'Test category 4',
+    version: '00000000-0000-0000-0000-000000000000',
+  });
 
-  await createCategoryPortionSizeMethods('CAT4', 'en_GB', generatedPortionSizeMethods[3]);
+  await createCategoryPortionSizeMethods(catLocal4.id, generatedPortionSizeMethods[3]);
 
-  await new CategoryCategory({
-    categoryCode: 'CAT2',
-    subcategoryCode: 'CAT3',
-  }).save();
+  await CategoryCategory.create({ categoryCode: 'CAT2', subcategoryCode: 'CAT3' });
 
-  await new CategoryCategory({
-    categoryCode: 'CAT2',
-    subcategoryCode: 'CAT4',
-  }).save();
+  await CategoryCategory.create({ categoryCode: 'CAT2', subcategoryCode: 'CAT4' });
 
   await new Category({
     code: 'CAT5',
@@ -167,19 +182,24 @@ async function createCategories(): Promise<void> {
     version: '00000000-0000-0000-0000-000000000000',
   }).save();
 
-  await createCategoryPortionSizeMethods('CAT5', 'en_GB', generatedPortionSizeMethods[4]);
+  const catLocal5 = await CategoryLocal.create({
+    categoryCode: 'CAT5',
+    localeId: 'en_GB',
+    localDescription: 'Test category 5',
+    simpleLocalDescription: 'Test category 5',
+    version: '00000000-0000-0000-0000-000000000000',
+  });
 
-  await new Category({
+  await createCategoryPortionSizeMethods(catLocal5.id, generatedPortionSizeMethods[4]);
+
+  await Category.create({
     code: 'CAT6',
     description: 'Test category 6',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
-  }).save();
+  });
 
-  await new CategoryCategory({
-    categoryCode: 'CAT5',
-    subcategoryCode: 'CAT6',
-  }).save();
+  await CategoryCategory.create({ categoryCode: 'CAT5', subcategoryCode: 'CAT6' });
 
   await Category.create({
     code: 'CAT7',
@@ -195,10 +215,7 @@ async function createCategories(): Promise<void> {
     version: '00000000-0000-0000-0000-000000000000',
   });
 
-  await CategoryCategory.create({
-    categoryCode: 'CAT7',
-    subcategoryCode: 'CAT8',
-  });
+  await CategoryCategory.create({ categoryCode: 'CAT7', subcategoryCode: 'CAT8' });
 }
 
 async function createFoods(sequelize: Sequelize): Promise<void> {
@@ -223,7 +240,7 @@ async function createFoods(sequelize: Sequelize): Promise<void> {
       },
       {
         transaction: t,
-        include: [{ model: PortionSizeMethod, include: [PortionSizeMethodParameter] }],
+        include: [{ model: FoodPortionSizeMethod, include: [FoodPortionSizeMethodParameter] }],
       }
     )
   );
@@ -318,7 +335,7 @@ async function createFoods(sequelize: Sequelize): Promise<void> {
       },
       {
         transaction: t,
-        include: [{ model: PortionSizeMethod, include: [PortionSizeMethodParameter] }],
+        include: [{ model: FoodPortionSizeMethod, include: [FoodPortionSizeMethodParameter] }],
       }
     )
   );

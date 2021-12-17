@@ -1,5 +1,5 @@
-import { BelongsTo, Column, DataType, ForeignKey, HasMany, Table } from 'sequelize-typescript';
-import { CategoryPortionSizeMethodParameter, Category, Locale } from '@api/db/models/foods';
+import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
+import { CategoryPortionSizeMethodParameter, Category } from '@api/db/models/foods';
 import {
   PortionSizeMethodId,
   CategoryPortionSizeMethodAttributes,
@@ -10,7 +10,7 @@ import CategoryLocal from './category-local';
 
 @Table({
   modelName: 'CategoryPortionSizeMethod',
-  tableName: 'categories_portion_size_methods',
+  tableName: 'category_portion_size_methods',
   freezeTableName: true,
   timestamps: false,
   underscored: true,
@@ -25,22 +25,15 @@ export default class CategoryPortionSizeMethod
   @Column({
     autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
-  @ForeignKey(() => Category)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.BIGINT,
   })
-  public categoryCode!: string;
-
-  @ForeignKey(() => Locale)
-  @Column({
-    allowNull: false,
-    type: DataType.STRING(16),
-  })
-  public localeId!: string;
+  public categoryLocalId!: string;
 
   @Column({
     allowNull: false,
@@ -50,7 +43,7 @@ export default class CategoryPortionSizeMethod
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(128),
+    type: DataType.STRING(256),
   })
   public description!: string;
 
@@ -72,11 +65,8 @@ export default class CategoryPortionSizeMethod
   })
   public conversionFactor!: number;
 
-  @BelongsTo(() => Category, 'categoryCode')
-  public category?: Category;
-
-  @BelongsTo(() => CategoryLocal, 'categoryCode')
-  public localCategory?: CategoryLocal;
+  @BelongsTo(() => CategoryLocal, 'categoryLocalId')
+  public categoryLocal?: CategoryLocal;
 
   @HasMany(() => CategoryPortionSizeMethodParameter, 'portionSizeMethodId')
   public parameters?: CategoryPortionSizeMethodParameter[];

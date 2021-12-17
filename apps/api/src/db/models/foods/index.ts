@@ -20,6 +20,8 @@ export { default as FoodAttribute } from './food-attribute';
 export { default as FoodCategory } from './food-category';
 export { default as FoodLocal } from './food-local';
 export { default as FoodLocalList } from './food-local-list';
+export { default as FoodPortionSizeMethod } from './food-portion-size-method';
+export { default as FoodPortionSizeMethodParameter } from './food-portion-size-method-param';
 export { default as GuideImage } from './guide-image';
 export { default as GuideImageObject } from './guide-image-object';
 export { default as ImageMap } from './image-map';
@@ -36,8 +38,6 @@ export { default as NutrientTableRecordField } from './nutrient-table-record-fie
 export { default as NutrientType } from './nutrient-type';
 export { default as NutrientUnit } from './nutrient-unit';
 export { default as PhysicalActivityLevel } from './physical-activity-level';
-export { default as PortionSizeMethod } from './portion-size-method';
-export { default as PortionSizeMethodParameter } from './portion-size-method-param';
 export { default as ProcessedImage } from './processed-image';
 export { default as SourceImage } from './source-image';
 export { default as SourceImageKeyword } from './source-image-keyword';

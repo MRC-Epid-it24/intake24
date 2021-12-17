@@ -17,13 +17,6 @@ export default class CategoryCategory
   implements CategoryCategoryAttributes
 {
   @Column({
-    primaryKey: true,
-    autoIncrement: true,
-    type: DataType.INTEGER,
-  })
-  public id!: number;
-
-  @Column({
     allowNull: false,
     type: DataType.STRING(8),
   })

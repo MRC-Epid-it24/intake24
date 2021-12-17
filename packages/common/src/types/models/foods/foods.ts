@@ -1,6 +1,6 @@
 import { OmitAndOptional } from '../model';
 import { NutrientMappingCreationAttributes } from './nutrients';
-import { PortionSizeMethodCreationAttributes } from './portion-methods';
+import { FoodPortionSizeMethodCreationAttributes } from './portion-methods';
 
 export type FoodAttributes = {
   code: string;
@@ -21,7 +21,7 @@ export type FoodLocalAttributes = {
 export interface FoodLocalCreationAttributes
   extends OmitAndOptional<FoodLocalAttributes, 'id', 'simpleName'> {
   nutrientMappings?: Omit<NutrientMappingCreationAttributes, 'foodLocalId'>[];
-  portionSizeMethods?: Omit<PortionSizeMethodCreationAttributes, 'foodLocalId'>[];
+  portionSizeMethods?: Omit<FoodPortionSizeMethodCreationAttributes, 'foodLocalId'>[];
 }
 
 export type FoodLocalListAttributes = {

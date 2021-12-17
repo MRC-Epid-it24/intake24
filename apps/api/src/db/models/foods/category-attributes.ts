@@ -11,7 +11,7 @@ import BaseModel from '../model';
 }))
 @Table({
   modelName: 'CategoryAttribute',
-  tableName: 'categories_attributes',
+  tableName: 'category_attributes',
   freezeTableName: true,
   timestamps: false,
   underscored: true,
@@ -23,9 +23,9 @@ export default class CategoryAttribute
   @Column({
     autoIncrement: true,
     primaryKey: true,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @ForeignKey(() => Category)
   @Column({

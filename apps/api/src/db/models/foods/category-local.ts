@@ -1,19 +1,26 @@
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
-import { CategoryLocalAttributes } from '@common/types/models';
+import { CategoryLocalAttributes, CategoryLocalCreationAttributes } from '@common/types/models';
 import { Category, CategoryPortionSizeMethod, Locale } from '@api/db/models/foods';
 import BaseModel from '../model';
 
 @Table({
   modelName: 'CategoryLocal',
-  tableName: 'categories_local',
+  tableName: 'category_locals',
   freezeTableName: true,
   timestamps: false,
   underscored: true,
 })
 export default class CategoryLocal
-  extends BaseModel<CategoryLocalAttributes>
+  extends BaseModel<CategoryLocalAttributes, CategoryLocalCreationAttributes>
   implements CategoryLocalAttributes
 {
+  @Column({
+    autoIncrement: true,
+    primaryKey: true,
+    type: DataType.BIGINT,
+  })
+  public id!: string;
+
   @Column({
     allowNull: false,
     primaryKey: true,
@@ -28,16 +35,16 @@ export default class CategoryLocal
   public localeId!: string;
 
   @Column({
-    allowNull: true,
-    type: DataType.STRING(128),
+    allowNull: false,
+    type: DataType.STRING(256),
   })
-  public localDescription!: string | null;
+  public localDescription!: string;
 
   @Column({
-    allowNull: true,
-    type: DataType.STRING(128),
+    allowNull: false,
+    type: DataType.STRING(256),
   })
-  public simpleLocalDescription!: string | null;
+  public simpleLocalDescription!: string;
 
   @Column({
     allowNull: false,
@@ -51,6 +58,6 @@ export default class CategoryLocal
   @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;
 
-  @HasMany(() => CategoryPortionSizeMethod, 'categoryCode')
+  @HasMany(() => CategoryPortionSizeMethod, 'categoryLocalId')
   public portionSizeMethods?: CategoryPortionSizeMethod[];
 }

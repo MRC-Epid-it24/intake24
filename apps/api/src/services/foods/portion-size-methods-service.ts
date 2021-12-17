@@ -1,10 +1,11 @@
 import { UserPortionSizeMethod } from '@common/types/http/foods/user-food-data';
 import {
+  CategoryLocal,
   CategoryPortionSizeMethod,
   CategoryPortionSizeMethodParameter,
   FoodLocal,
-  PortionSizeMethod,
-  PortionSizeMethodParameter,
+  FoodPortionSizeMethod,
+  FoodPortionSizeMethodParameter,
 } from '@api/db/models/foods';
 import {
   getCategoryParentCategories,
@@ -34,10 +35,13 @@ export default (): PortionSizeMethodsService => {
     categoryCode: string
   ): Promise<UserPortionSizeMethod[]> => {
     const categoryPortionMethods = await CategoryPortionSizeMethod.findAll({
-      where: { localeId, categoryCode },
       attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
       order: [['id', 'ASC']],
       include: [
+        {
+          model: CategoryLocal,
+          where: { localeId, categoryCode },
+        },
         {
           model: CategoryPortionSizeMethodParameter,
           as: 'parameters',
@@ -82,19 +86,19 @@ export default (): PortionSizeMethodsService => {
       where: { localeId, foodCode },
       include: [
         {
-          model: PortionSizeMethod,
+          model: FoodPortionSizeMethod,
           as: 'portionSizeMethods',
           attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
           include: [
             {
-              model: PortionSizeMethodParameter,
+              model: FoodPortionSizeMethodParameter,
               as: 'parameters',
               attributes: ['name', 'value'],
             },
           ],
         },
       ],
-      order: [[{ model: PortionSizeMethod, as: 'portionSizeMethods' }, 'id', 'ASC']],
+      order: [[{ model: FoodPortionSizeMethod, as: 'portionSizeMethods' }, 'id', 'ASC']],
     });
 
     return food;

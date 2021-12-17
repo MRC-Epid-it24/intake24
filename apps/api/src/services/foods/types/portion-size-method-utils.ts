@@ -3,7 +3,7 @@ import {
   UserPortionSizeMethodParameters,
 } from '@common/types/http/foods/user-food-data';
 import { PortionSizeMethodId } from '@common/types/models';
-import { CategoryPortionSizeMethod, PortionSizeMethod } from '@api/db/models/foods';
+import { CategoryPortionSizeMethod, FoodPortionSizeMethod } from '@api/db/models/foods';
 
 import {
   toUserCategoryPortionSizeMethodParameters,
@@ -19,7 +19,7 @@ export interface DatabasePortionSizeMethod {
   parameters: { name: string; value: string }[];
 }
 
-export function toUserPortionSizeMethod(psm: PortionSizeMethod): UserPortionSizeMethod {
+export function toUserPortionSizeMethod(psm: FoodPortionSizeMethod): UserPortionSizeMethod {
   return {
     conversionFactor: psm.conversionFactor,
     description: psm.description,

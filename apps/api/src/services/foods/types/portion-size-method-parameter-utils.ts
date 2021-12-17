@@ -1,11 +1,11 @@
 import { UserPortionSizeMethodParameters } from '@common/types/http/foods/user-food-data';
 import {
   CategoryPortionSizeMethodParameter,
-  PortionSizeMethodParameter,
+  FoodPortionSizeMethodParameter,
 } from '@api/db/models/foods';
 
 export function toUserPortionSizeMethodParameters(
-  parameters: PortionSizeMethodParameter[]
+  parameters: FoodPortionSizeMethodParameter[]
 ): UserPortionSizeMethodParameters {
   const result: UserPortionSizeMethodParameters = {};
 

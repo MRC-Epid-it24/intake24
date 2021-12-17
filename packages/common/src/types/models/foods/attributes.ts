@@ -26,7 +26,7 @@ export type FoodAttributeCreationAttributes = OmitAndOptional<
 >;
 
 export type CategoryAttributeAttributes = {
-  id: number;
+  id: string;
   categoryCode: string;
   sameAsBeforeOption: boolean | null;
   readyMealOption: boolean | null;

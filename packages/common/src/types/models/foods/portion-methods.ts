@@ -23,7 +23,6 @@ export type PortionSizeMethodParameterCreationAttributes = Omit<
 
 export type PortionSizeMethodAttributes = {
   id: string;
-  foodLocalId: string;
   method: PortionSizeMethodId;
   description: string;
   imageUrl: string;
@@ -31,36 +30,20 @@ export type PortionSizeMethodAttributes = {
   conversionFactor: number;
 };
 
-export interface PortionSizeMethodCreationAttributes
-  extends Omit<PortionSizeMethodAttributes, 'id'> {
+export interface FoodPortionSizeMethodAttributes extends PortionSizeMethodAttributes {
+  foodLocalId: string;
+}
+
+export interface FoodPortionSizeMethodCreationAttributes
+  extends Omit<FoodPortionSizeMethodAttributes, 'id'> {
   parameters: Omit<PortionSizeMethodParameterCreationAttributes, 'portionSizeMethodId'>[];
 }
 
-// Duplication - once converted to int8 - foods PSM type can be used
-export type CategoryPortionSizeMethodParameterAttributes = {
-  id: number;
-  portionSizeMethodId: number;
-  name: string;
-  value: string;
-};
-
-export type CategoryPortionSizeMethodParameterCreationAttributes = Omit<
-  CategoryPortionSizeMethodParameterAttributes,
-  'id'
->;
-
-export type CategoryPortionSizeMethodAttributes = {
-  id: number;
-  categoryCode: string;
-  localeId: string;
-  method: PortionSizeMethodId;
-  description: string;
-  imageUrl: string;
-  useForRecipes: boolean;
-  conversionFactor: number;
-};
+export interface CategoryPortionSizeMethodAttributes extends PortionSizeMethodAttributes {
+  categoryLocalId: string;
+}
 
 export interface CategoryPortionSizeMethodCreationAttributes
   extends Omit<CategoryPortionSizeMethodAttributes, 'id'> {
-  parameters: Omit<CategoryPortionSizeMethodParameterCreationAttributes, 'portionSizeMethodId'>[];
+  parameters: Omit<PortionSizeMethodParameterCreationAttributes, 'portionSizeMethodId'>[];
 }
