@@ -79,9 +79,9 @@ export default class FoodLocal
   @HasMany(() => FoodPortionSizeMethod, 'foodLocalId')
   public portionSizeMethods?: FoodPortionSizeMethod[];
 
+  @BelongsToMany(() => NutrientTableRecord, () => FoodNutrient)
+  public nutrientRecords?: NutrientTableRecord[];
+
   @HasMany(() => FoodNutrient, 'foodLocalId')
   public nutrientMappings?: FoodNutrient[];
-
-  @BelongsToMany(() => NutrientTableRecord, () => FoodNutrient)
-  public nutrients?: NutrientTableRecord[];
 }

@@ -2,6 +2,7 @@
 import { Column, DataType, HasMany, Table, BelongsTo } from 'sequelize-typescript';
 import { LocaleAttributes, LocaleCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
+import { AssociatedFood } from '.';
 
 @Table({
   modelName: 'Locale',
@@ -68,4 +69,7 @@ export default class Locale
 
   @HasMany(() => Locale, 'prototypeLocaleId')
   public children?: Locale[];
+
+  @HasMany(() => AssociatedFood, 'localeId')
+  public associatedFoods?: AssociatedFood[];
 }

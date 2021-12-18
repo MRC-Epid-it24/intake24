@@ -48,13 +48,13 @@ export default class Category
   public parentCategories?: Category[];
 
   @HasMany(() => CategoryCategory, 'subcategoryCode')
-  public parentCategoryLinks?: CategoryCategory[];
+  public parentCategoryMappings?: CategoryCategory[];
 
   @BelongsToMany(() => Category, () => CategoryCategory, 'categoryCode', 'subcategoryCode')
   public subCategories?: Category[];
 
   @HasMany(() => CategoryCategory, 'categoryCode')
-  public subcategoryLinks?: CategoryCategory[];
+  public subcategoryMappings?: CategoryCategory[];
 
   @BelongsToMany(() => Food, () => FoodCategory)
   public foods?: Food[];

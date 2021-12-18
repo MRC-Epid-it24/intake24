@@ -35,37 +35,30 @@ export default (): FoodDataService => {
       attributes: [],
       include: [
         {
-          model: FoodNutrient,
-          attributes: ['foodLocalId'], // these attributes should be empty, but sequelize crashes if that is the case
+          model: NutrientTableRecord,
+          attributes: ['id'], // these attributes should be empty, but sequelize crashes if that is the case
+          through: { attributes: [] },
+          duplicating: true,
           include: [
             {
-              model: NutrientTableRecord,
-              attributes: ['id'], // these attributes should be empty, but sequelize crashes if that is the case
-              duplicating: true,
-              include: [
-                {
-                  model: NutrientTableRecordNutrient,
-                  where: { nutrientTypeId: KCAL_NUTRIENT_TYPE_ID },
-                  attributes: ['unitsPer100g'],
-                },
-              ],
+              model: NutrientTableRecordNutrient,
+              where: { nutrientTypeId: KCAL_NUTRIENT_TYPE_ID },
+              attributes: ['unitsPer100g'],
             },
           ],
         },
       ],
     });
 
-    if (foodNutrientData == null)
+    if (!foodNutrientData)
       throw new InvalidIdError(
         `Either locale id '${localeId}' or food code '${foodCode}' is ` +
           "invalid, food isn't linked to a nutrient table record, or the energy (kcal) nutrient " +
           'data is missing'
       );
 
-    let kcal = foodNutrientData?.nutrientMappings?.map((el) => {
-      return el.nutrientTableRecord?.nutrients
-        ? el.nutrientTableRecord?.nutrients[0].unitsPer100g
-        : 0;
+    let kcal = foodNutrientData?.nutrientRecords?.map((el) => {
+      return el.nutrients ? el.nutrients[0].unitsPer100g : 0;
     })[0];
     kcal = kcal || 0;
     if (!kcal) {
@@ -99,15 +92,13 @@ export default (): FoodDataService => {
       ],
     });
 
-    return associatedFoods.map((row) => {
-      return {
-        foodCode: row.associatedFoodCode ?? undefined,
-        categoryCode: row.associatedCategoryCode ?? undefined,
-        promptText: row.text,
-        linkAsMain: row.linkAsMain,
-        genericName: row.genericName,
-      };
-    });
+    return associatedFoods.map((row) => ({
+      foodCode: row.associatedFoodCode ?? undefined,
+      categoryCode: row.associatedCategoryCode ?? undefined,
+      promptText: row.text,
+      linkAsMain: row.linkAsMain,
+      genericName: row.genericName,
+    }));
   };
 
   /**
@@ -119,10 +110,7 @@ export default (): FoodDataService => {
    * @returns {Promise<string[]>}
    */
   const getBrands = async (localeId: string, foodCode: string): Promise<string[]> => {
-    const brands = await Brand.findAll({
-      where: { localeId, foodCode },
-      attributes: ['name'],
-    });
+    const brands = await Brand.findAll({ where: { localeId, foodCode }, attributes: ['name'] });
 
     return brands ? brands.map((brand) => brand.name) : [];
   };
@@ -152,36 +140,39 @@ export default (): FoodDataService => {
   const getFoodData = async (localeId: string, foodCode: string): Promise<UserFoodData> => {
     const foodRecord = await Food.findOne({ where: { code: foodCode } });
 
-    if (foodRecord == null) throw new InvalidIdError(`Invalid food code: ${foodCode}`);
+    if (!foodRecord) throw new InvalidIdError(`Invalid food code: ${foodCode}`);
 
     const foodListCheck = await FoodLocalList.findOne({
       where: { foodCode, localeId },
       attributes: ['food_code'],
     });
 
-    if (foodListCheck == null)
+    if (!foodListCheck)
       throw new InvalidIdError(`${foodCode} is not in the food list for locale ${localeId}`);
 
     const localeCheck = await Locale.findOne({ where: { id: localeId }, attributes: ['id'] });
-    if (localeCheck == null) throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
+    if (!localeCheck) throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
 
     const foodLocal = await FoodLocal.findOne({ where: { foodCode, localeId } });
 
-    if (foodLocal == null)
+    if (!foodLocal)
       throw new InvalidIdError(
         `No local food data for food code ${foodCode} in locale ${localeId}`
       );
 
-    const associatedFoodPrompts = await resolveAssociatedFoodPrompts(localeId, foodCode);
-    const brandNames = await getBrands(localeId, foodCode);
-    const kcalPer100g = await getNutrientKCalPer100G(localeId, foodCode);
-    const portionSizeMethods = await portionSizeMethodsImpl.resolvePortionSizeMethods(
-      localeId,
-      foodCode
-    );
-    const inheritableAttributes = await inheritableAttributesImpl.resolveInheritableAttributes(
-      foodCode
-    );
+    const [
+      associatedFoodPrompts,
+      brandNames,
+      kcalPer100g,
+      portionSizeMethods,
+      inheritableAttributes,
+    ] = await Promise.all([
+      resolveAssociatedFoodPrompts(localeId, foodCode),
+      getBrands(localeId, foodCode),
+      getNutrientKCalPer100G(localeId, foodCode),
+      portionSizeMethodsImpl.resolvePortionSizeMethods(localeId, foodCode),
+      inheritableAttributesImpl.resolveInheritableAttributes(foodCode),
+    ]);
 
     return {
       associatedFoodPrompts,
