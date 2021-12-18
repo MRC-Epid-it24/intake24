@@ -1,5 +1,5 @@
 export type BrandAttributes = {
-  id: number;
+  id: string;
   foodCode: string;
   localeId: string;
   name: string;

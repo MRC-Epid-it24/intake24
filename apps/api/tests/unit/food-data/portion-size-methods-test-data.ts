@@ -107,7 +107,7 @@ async function createCategoryPortionSizeMethods(
 async function createCategories(): Promise<void> {
   await Category.create({
     code: 'CAT1',
-    description: 'Test category 1',
+    name: 'Test category 1',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
@@ -115,8 +115,8 @@ async function createCategories(): Promise<void> {
   const catLocal1 = await CategoryLocal.create({
     categoryCode: 'CAT1',
     localeId: 'en_GB',
-    localDescription: 'Test category 1',
-    simpleLocalDescription: 'Test category 1',
+    name: 'Test category 1',
+    simpleName: 'Test category 1',
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -124,7 +124,7 @@ async function createCategories(): Promise<void> {
 
   await Category.create({
     code: 'CAT2',
-    description: 'Test category 2',
+    name: 'Test category 2',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
@@ -132,14 +132,14 @@ async function createCategories(): Promise<void> {
   await CategoryLocal.create({
     categoryCode: 'CAT2',
     localeId: 'en_GB',
-    localDescription: 'Test category 2',
-    simpleLocalDescription: 'Test category 2',
+    name: 'Test category 2',
+    simpleName: 'Test category 2',
     version: '00000000-0000-0000-0000-000000000000',
   });
 
   await Category.create({
     code: 'CAT3',
-    description: 'Test category 3',
+    name: 'Test category 3',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
@@ -147,8 +147,8 @@ async function createCategories(): Promise<void> {
   const catLocal3 = await CategoryLocal.create({
     categoryCode: 'CAT3',
     localeId: 'en_GB',
-    localDescription: 'Test category 3',
-    simpleLocalDescription: 'Test category 3',
+    name: 'Test category 3',
+    simpleName: 'Test category 3',
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -156,7 +156,7 @@ async function createCategories(): Promise<void> {
 
   await Category.create({
     code: 'CAT4',
-    description: 'Test category 4',
+    name: 'Test category 4',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
@@ -164,8 +164,8 @@ async function createCategories(): Promise<void> {
   const catLocal4 = await CategoryLocal.create({
     categoryCode: 'CAT4',
     localeId: 'en_GB',
-    localDescription: 'Test category 4',
-    simpleLocalDescription: 'Test category 4',
+    name: 'Test category 4',
+    simpleName: 'Test category 4',
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -177,7 +177,7 @@ async function createCategories(): Promise<void> {
 
   await new Category({
     code: 'CAT5',
-    description: 'Test category 5',
+    name: 'Test category 5',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   }).save();
@@ -185,8 +185,8 @@ async function createCategories(): Promise<void> {
   const catLocal5 = await CategoryLocal.create({
     categoryCode: 'CAT5',
     localeId: 'en_GB',
-    localDescription: 'Test category 5',
-    simpleLocalDescription: 'Test category 5',
+    name: 'Test category 5',
+    simpleName: 'Test category 5',
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -194,7 +194,7 @@ async function createCategories(): Promise<void> {
 
   await Category.create({
     code: 'CAT6',
-    description: 'Test category 6',
+    name: 'Test category 6',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
@@ -203,14 +203,14 @@ async function createCategories(): Promise<void> {
 
   await Category.create({
     code: 'CAT7',
-    description: 'Test category 7',
+    name: 'Test category 7',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
 
   await Category.create({
     code: 'CAT8',
-    description: 'Test category 8',
+    name: 'Test category 8',
     isHidden: false,
     version: '00000000-0000-0000-0000-000000000000',
   });
@@ -221,8 +221,8 @@ async function createCategories(): Promise<void> {
 async function createFoods(sequelize: Sequelize): Promise<void> {
   const food1 = new Food({
     code: 'FOOD1',
-    description: 'Test food 1',
-    foodGroupId: 1,
+    name: 'Test food 1',
+    foodGroupId: '1',
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -254,8 +254,8 @@ async function createFoods(sequelize: Sequelize): Promise<void> {
 
   const food2 = new Food({
     code: 'FOOD2',
-    description: 'Test food 2',
-    foodGroupId: 1,
+    name: 'Test food 2',
+    foodGroupId: '1',
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -280,8 +280,8 @@ async function createFoods(sequelize: Sequelize): Promise<void> {
 
   const food3 = new Food({
     code: 'FOOD3',
-    description: 'Test food 3',
-    foodGroupId: 1,
+    name: 'Test food 3',
+    foodGroupId: '1',
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -301,8 +301,8 @@ async function createFoods(sequelize: Sequelize): Promise<void> {
 
   await new Food({
     code: 'FOOD4',
-    description: 'Test food 4',
-    foodGroupId: 1,
+    name: 'Test food 4',
+    foodGroupId: '1',
     version: '00000000-0000-0000-0000-000000000000',
   }).save();
 
@@ -313,8 +313,8 @@ async function createFoods(sequelize: Sequelize): Promise<void> {
 
   await Food.create({
     code: 'FOOD5',
-    description: 'Test food 5',
-    foodGroupId: 1,
+    name: 'Test food 5',
+    foodGroupId: '1',
     version: '00000000-0000-0000-0000-000000000000',
   });
 

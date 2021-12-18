@@ -38,13 +38,13 @@ export default class CategoryLocal
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public localDescription!: string;
+  public name!: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public simpleLocalDescription!: string;
+  public simpleName!: string;
 
   @Column({
     allowNull: false,

@@ -1,4 +1,4 @@
-import { LanguageEntry } from '.';
+import { LanguageEntry } from './languages';
 import { SurveyAttributes, SurveyCreationAttributes, Pagination } from '../../models';
 import { LocaleEntry } from './locales';
 import { SchemeEntry } from './schemes';

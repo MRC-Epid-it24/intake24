@@ -25,9 +25,7 @@ export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
       if (!food) return '';
       if (food.type === 'free-text') return food.description;
       if (food.type === 'encoded-food')
-        return food.data.localDescription
-          ? food.data.englishDescription
-          : food.data.localDescription;
+        return food.data.localName ? food.data.englishName : food.data.localName;
       return '';
     },
 

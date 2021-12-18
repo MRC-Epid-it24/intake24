@@ -20,9 +20,9 @@ export default class FoodAttribute
   @Column({
     autoIncrement: true,
     primaryKey: true,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,

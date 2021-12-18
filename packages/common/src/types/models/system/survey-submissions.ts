@@ -51,15 +51,15 @@ export type SurveySubmissionFoodAttributes = {
   id: string;
   mealId: string;
   code: string;
-  englishDescription: string;
-  localDescription: string | null;
+  englishName: string;
+  localName: string | null;
   readyMeal: boolean;
   searchTerm: string;
   portionSizeMethodId: string;
   reasonableAmount: boolean;
   foodGroupId: string;
-  foodGroupEnglishDescription: string;
-  foodGroupLocalDescription: string | null;
+  foodGroupEnglishName: string;
+  foodGroupLocalName: string | null;
   brand: string;
   nutrientTableId: string;
   nutrientTableCode: string;
@@ -68,7 +68,7 @@ export type SurveySubmissionFoodAttributes = {
 export type SurveySubmissionFoodCreationAttributes = OmitAndOptional<
   SurveySubmissionFoodAttributes,
   'id',
-  'localDescription' | 'foodGroupLocalDescription'
+  'localName' | 'foodGroupLocalName'
 >;
 
 export type SurveySubmissionFoodCustomFieldAttributes = {

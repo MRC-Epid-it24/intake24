@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import {
   Food,
   FoodLocal,
-  NutrientMapping,
+  FoodNutrient,
   NutrientTable,
   NutrientTableRecord,
   NutrientTableRecordNutrient,
@@ -53,8 +53,8 @@ export default async (foodDatabase: Sequelize) => {
 
   await Food.create({
     code: 'FOOD1',
-    description: 'Test food 1',
-    foodGroupId: 1,
+    name: 'Test food 1',
+    foodGroupId: '1',
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -74,7 +74,7 @@ export default async (foodDatabase: Sequelize) => {
       },
       {
         transaction: t,
-        include: [NutrientMapping],
+        include: [FoodNutrient],
       }
     )
   );

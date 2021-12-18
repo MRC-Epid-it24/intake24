@@ -35,7 +35,7 @@ export default Vue.extend({
     },
     foodDisplayName(food: FoodState): string {
       if (food.type === 'free-text') return food.description;
-      if (food.type === 'encoded-food') return food.data.localDescription;
+      if (food.type === 'encoded-food') return food.data.localName;
 
       return '???';
     },

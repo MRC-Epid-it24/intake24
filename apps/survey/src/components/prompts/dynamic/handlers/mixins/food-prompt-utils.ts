@@ -22,7 +22,7 @@ export default Vue.extend({
     // en is hard-coded for now
     foodName(): LocaleTranslation {
       return {
-        en: this.encodedSelectedFood.data.englishDescription,
+        en: this.encodedSelectedFood.data.englishName,
       };
     },
 

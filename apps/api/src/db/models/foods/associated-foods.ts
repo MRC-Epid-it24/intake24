@@ -17,9 +17,9 @@ export default class AssociatedFood extends BaseModel {
   @Column({
     autoIncrement: true,
     primaryKey: true,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @ForeignKey(() => Food)
   @Column({
@@ -67,12 +67,15 @@ export default class AssociatedFood extends BaseModel {
   })
   public genericName!: string;
 
+  @BelongsTo(() => Food, 'foodCode')
+  public food?: Food;
+
   @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;
 
   @BelongsTo(() => Category, 'associatedCategoryCode')
-  public category?: Category;
+  public associatedCategory?: Category;
 
-  @BelongsTo(() => Food, 'foodCode')
-  public food?: Food;
+  @BelongsTo(() => Food, 'associatedFoodCode')
+  public associatedFood?: Food;
 }

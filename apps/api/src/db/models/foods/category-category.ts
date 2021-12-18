@@ -1,8 +1,5 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import {
-  CategoryCategoryAttributes,
-  CategoryCategoryCreationAttributes,
-} from '@common/types/models';
+import { CategoryCategoryAttributes } from '@common/types/models';
 import { Category } from '@api/db/models/foods';
 import BaseModel from '../model';
 
@@ -13,7 +10,7 @@ import BaseModel from '../model';
   tableName: 'categories_categories',
 })
 export default class CategoryCategory
-  extends BaseModel<CategoryCategoryAttributes, CategoryCategoryCreationAttributes>
+  extends BaseModel<CategoryCategoryAttributes>
   implements CategoryCategoryAttributes
 {
   @Column({

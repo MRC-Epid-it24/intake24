@@ -1,7 +1,4 @@
-export type NutrientMappingAttributes = {
-  id: string;
+export type FoodNutrientAttributes = {
   nutrientTableRecordId: string;
   foodLocalId: string;
 };
-
-export type NutrientMappingCreationAttributes = Omit<NutrientMappingAttributes, 'id'>;

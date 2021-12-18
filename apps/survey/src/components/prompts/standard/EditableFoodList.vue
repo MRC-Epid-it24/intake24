@@ -115,7 +115,7 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
         case 'free-text':
           return food.description;
         case 'encoded-food':
-          return food.data.localDescription;
+          return food.data.localName;
         default: {
           console.warn(`Unexpected food type`);
           return '???';

@@ -1,25 +1,25 @@
 import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
-import { NutrientMappingAttributes, NutrientMappingCreationAttributes } from '@common/types/models';
+import { FoodNutrientAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import { FoodLocal, NutrientTableRecord } from '.';
 
 @Table({
-  modelName: 'NutrientMapping',
-  tableName: 'food_nutrient_mapping',
+  modelName: 'FoodNutrient',
+  tableName: 'foods_nutrients',
   freezeTableName: true,
   timestamps: false,
   underscored: true,
 })
-export default class NutrientMapping
-  extends BaseModel<NutrientMappingAttributes, NutrientMappingCreationAttributes>
-  implements NutrientMappingAttributes
+export default class FoodNutrient
+  extends BaseModel<FoodNutrientAttributes>
+  implements FoodNutrientAttributes
 {
+  @ForeignKey(() => FoodLocal)
   @Column({
-    autoIncrement: true,
-    primaryKey: true,
+    allowNull: false,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  public foodLocalId!: string;
 
   @ForeignKey(() => NutrientTableRecord)
   @Column({
@@ -27,13 +27,6 @@ export default class NutrientMapping
     type: DataType.BIGINT,
   })
   public nutrientTableRecordId!: string;
-
-  @ForeignKey(() => FoodLocal)
-  @Column({
-    allowNull: false,
-    type: DataType.BIGINT,
-  })
-  public foodLocalId!: string;
 
   @BelongsTo(() => FoodLocal, 'foodLocalId')
   public foodLocal?: FoodLocal;

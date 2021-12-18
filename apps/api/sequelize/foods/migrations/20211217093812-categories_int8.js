@@ -3,14 +3,27 @@ const { updateSequence } = require('../../utils.js');
 module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
+      await queryInterface.renameColumn('categories', 'description', 'name', { transaction });
+
+      await queryInterface.addIndex('categories', ['name'], {
+        name: 'categories_name_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
       await queryInterface.sequelize.query(
-        'update categories_local set local_description = c.description, simple_local_description = lower(c.description) FROM categories c where category_code = c.code and local_description is null;',
+        'update categories_local set local_description = c.name, simple_local_description = lower(c.name) FROM categories c where category_code = c.code and local_description is null;',
         { transaction }
       );
 
       await queryInterface.renameTable('categories_attributes', 'v3_categories_attributes', {
         transaction,
       });
+
+      await queryInterface.sequelize.query(
+        `ALTER TABLE v3_categories_attributes RENAME CONSTRAINT categories_attributes_pk TO v3_categories_attributes_pk;`,
+        { transaction }
+      );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE categories_attributes_id_seq RENAME TO v3_categories_attributes_id_seq;',
@@ -181,11 +194,11 @@ module.exports = {
             type: Sequelize.STRING(16),
             allowNull: false,
           },
-          local_description: {
+          name: {
             type: Sequelize.STRING(256),
             allowNull: false,
           },
-          simple_local_description: {
+          simple_name: {
             type: Sequelize.STRING(256),
             allowNull: false,
           },
@@ -235,8 +248,26 @@ module.exports = {
         transaction,
       });
 
+      await queryInterface.addIndex('category_locals', ['category_code', 'locale_id'], {
+        name: 'category_locals_category_code_locale_id_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
+      await queryInterface.addIndex('category_locals', ['name'], {
+        name: 'category_locals_name_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
+      await queryInterface.addIndex('category_locals', ['simple_name'], {
+        name: 'category_locals_simple_name_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
       await queryInterface.sequelize.query(
-        'INSERT INTO category_locals (category_code, locale_id, local_description, simple_local_description, version) SELECT category_code, locale_id, local_description, simple_local_description, version FROM v3_categories_local',
+        'INSERT INTO category_locals (category_code, locale_id, name, simple_name, version) SELECT category_code, locale_id, local_description, simple_local_description, version FROM v3_categories_local',
         { transaction }
       );
 

@@ -19,9 +19,9 @@ export default class AttributeDefaults
   @Column({
     autoIncrement: true,
     primaryKey: true,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @Column({
     allowNull: false,

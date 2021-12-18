@@ -1,7 +1,7 @@
 import { OmitAndOptional } from '../model';
 
 export type AttributeDefaultsAttributes = {
-  id: number;
+  id: string;
   sameAsBeforeOption: boolean;
   readyMealOption: boolean;
   reasonableAmount: number;
@@ -11,7 +11,7 @@ export type AttributeDefaultsAttributes = {
 export type AttributeDefaultsCreationAttributes = Omit<AttributeDefaultsAttributes, 'id'>;
 
 export type FoodAttributeAttributes = {
-  id: number;
+  id: string;
   foodCode: string;
   sameAsBeforeOption: boolean | null;
   readyMealOption: boolean | null;

@@ -27,7 +27,7 @@ export default class Category
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public description!: string;
+  public name!: string;
 
   @Column({
     allowNull: false,

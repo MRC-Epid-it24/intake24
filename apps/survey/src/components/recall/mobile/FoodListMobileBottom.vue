@@ -66,7 +66,7 @@ export default Vue.extend({
     foodDisplayName(food: FoodState): string {
       let dispalyName = '???';
       if (food.type === 'free-text') dispalyName = food.description;
-      if (food.type === 'encoded-food') dispalyName = food.data.localDescription;
+      if (food.type === 'encoded-food') dispalyName = food.data.localName;
       if (dispalyName.length > 16) dispalyName = dispalyName.slice(0, 16).concat('...');
       return dispalyName;
     },

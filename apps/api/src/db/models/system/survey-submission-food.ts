@@ -53,13 +53,13 @@ export default class SurveySubmissionFood
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public englishDescription!: string;
+  public englishName!: string;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(256),
   })
-  public localDescription!: string | null;
+  public localName!: string | null;
 
   @Column({
     allowNull: false,
@@ -95,13 +95,13 @@ export default class SurveySubmissionFood
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public foodGroupEnglishDescription!: string;
+  public foodGroupEnglishName!: string;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(256),
   })
-  public foodGroupLocalDescription!: string | null;
+  public foodGroupLocalName!: string | null;
 
   @Column({
     allowNull: false,

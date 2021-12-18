@@ -36,12 +36,13 @@ export default class Food extends BaseModel<FoodAttributes> implements FoodAttri
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public description!: string;
+  public name!: string;
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
   })
-  public foodGroupId!: number;
+  public foodGroupId!: string;
 
   @Column({
     allowNull: false,

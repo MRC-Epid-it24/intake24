@@ -5,8 +5,8 @@ import {
   Food,
   FoodLocal,
   FoodLocalList,
+  FoodNutrient,
   Locale,
-  NutrientMapping,
   NutrientTableRecord,
   NutrientTableRecordNutrient,
 } from '@api/db/models/foods';
@@ -35,8 +35,8 @@ export default (): FoodDataService => {
       attributes: [],
       include: [
         {
-          model: NutrientMapping,
-          attributes: ['id'], // these attributes should be empty, but sequelize crashes if that is the case
+          model: FoodNutrient,
+          attributes: ['foodLocalId'], // these attributes should be empty, but sequelize crashes if that is the case
           include: [
             {
               model: NutrientTableRecord,
@@ -187,10 +187,10 @@ export default (): FoodDataService => {
       associatedFoodPrompts,
       brandNames,
       code: foodRecord.code,
-      englishDescription: foodRecord.description,
+      englishName: foodRecord.name,
       groupCode: foodRecord.foodGroupId,
       kcalPer100g,
-      localDescription: foodLocal.name,
+      localName: foodLocal.name,
       portionSizeMethods,
       readyMealOption: inheritableAttributes.readyMealOption,
       reasonableAmount: inheritableAttributes.reasonableAmount,

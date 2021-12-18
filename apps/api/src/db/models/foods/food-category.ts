@@ -1,5 +1,5 @@
 import { Column, DataType, ForeignKey, Table, BelongsTo, Scopes } from 'sequelize-typescript';
-import { FoodCategoryAttributes, FoodCategoryCreationAttributes } from '@common/types/models';
+import { FoodCategoryAttributes } from '@common/types/models';
 import { Food, Category } from '@api/db/models/foods';
 import BaseModel from '../model';
 
@@ -14,15 +14,9 @@ import BaseModel from '../model';
   tableName: 'foods_categories',
 })
 export default class FoodCategory
-  extends BaseModel<FoodCategoryAttributes, FoodCategoryCreationAttributes>
+  extends BaseModel<FoodCategoryAttributes>
   implements FoodCategoryAttributes
 {
-  @Column({
-    primaryKey: true,
-    autoIncrement: true,
-  })
-  public id!: number;
-
   @ForeignKey(() => Food)
   @Column({
     allowNull: false,

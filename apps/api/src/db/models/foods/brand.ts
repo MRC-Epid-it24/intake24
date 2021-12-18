@@ -21,9 +21,9 @@ export default class Brand
   @Column({
     autoIncrement: true,
     primaryKey: true,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
-  public id!: number;
+  public id!: string;
 
   @ForeignKey(() => Food)
   @Column({

@@ -29,9 +29,9 @@ export type UserAssociatedFoodPrompt = {
 
 export interface UserFoodData {
   code: string;
-  englishDescription: string;
-  localDescription: string;
-  groupCode: number;
+  englishName: string;
+  localName: string;
+  groupCode: string;
   kcalPer100g: number;
   reasonableAmount: number;
   readyMealOption: boolean;

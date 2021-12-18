@@ -1,7 +1,7 @@
 import { BelongsTo, BelongsToMany, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 import {
   FoodLocal,
-  NutrientMapping,
+  FoodNutrient,
   NutrientTable,
   NutrientTableRecordField,
   NutrientTableRecordNutrient,
@@ -54,20 +54,20 @@ export default class NutrientTableRecord extends BaseModel<
   })
   public localName!: string | null;
 
+  @BelongsToMany(() => FoodLocal, () => FoodNutrient)
+  public foods?: FoodLocal[];
+
+  @HasMany(() => FoodNutrient, 'nutrientTableRecordId')
+  public foodMappings?: FoodNutrient[];
+
   @BelongsTo(() => NutrientTable, 'nutrientTableId')
   public nutrientTable?: NutrientTable;
-
-  @HasMany(() => NutrientMapping, 'nutrientTableRecordId')
-  public mappings?: NutrientMapping[];
 
   @HasMany(() => NutrientTableRecordNutrient, 'nutrientTableRecordId')
   public nutrients?: NutrientTableRecordNutrient[];
 
   @HasMany(() => NutrientTableRecordField, 'nutrientTableRecordId')
   public fields?: NutrientTableRecordField[];
-
-  @BelongsToMany(() => FoodLocal, () => NutrientMapping)
-  public foods?: FoodLocal[];
 
   getNutrientByType(nutrientTypeId: string): NutrientTableRecordNutrient | undefined {
     return this.nutrients?.find((nutrient) => nutrient.nutrientTypeId === nutrientTypeId);

@@ -2,7 +2,7 @@ import { Optional } from '../model';
 
 export type CategoryAttributes = {
   code: string;
-  description: string;
+  name: string;
   isHidden: boolean;
   version: string;
 };
@@ -14,14 +14,12 @@ export type CategoryCategoryAttributes = {
   categoryCode: string;
 };
 
-export type CategoryCategoryCreationAttributes = Omit<CategoryCategoryAttributes, 'id'>;
-
 export type CategoryLocalAttributes = {
   id: string;
   categoryCode: string;
   localeId: string;
-  localDescription: string | null;
-  simpleLocalDescription: string | null;
+  name: string | null;
+  simpleName: string | null;
   version: string;
 };
 
