@@ -56,6 +56,7 @@ import type {
   AdminUserController,
 } from '@api/http/controllers';
 import type {
+  AdminCategoryService,
   AdminSurveyService,
   AdminUserService,
   AuthenticationService,
@@ -187,6 +188,8 @@ export interface IoC extends Jobs {
   dataExportFields: DataExportFields;
   dataExportMapper: DataExportMapper;
   dataExportService: DataExportService;
+
+  adminCategoryService: AdminCategoryService;
 
   // Foods
   foodDataService: FoodDataService;

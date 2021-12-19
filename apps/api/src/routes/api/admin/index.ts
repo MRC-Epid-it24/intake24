@@ -21,7 +21,7 @@ const router = Router();
 
 authenticate(router, 'admin');
 
-router.use(foods);
+router.use('/fdbs', foods);
 router.use('/images', images);
 router.use('/jobs', jobs);
 router.use('/languages', languages);

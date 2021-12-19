@@ -4,7 +4,7 @@ import foods from './foods';
 
 const router = Router();
 
-router.use('/categories/:localeId', categories);
-router.use('/foods/:localeId', foods);
+router.use('/:localeId/categories', categories);
+router.use('/:localeId/foods', foods);
 
 export default router;
