@@ -1,6 +1,7 @@
 import { BelongsTo, Column, DataType, ForeignKey, Table, Scopes } from 'sequelize-typescript';
 import { Locale, Food, Category } from '@api/db/models/foods';
 import BaseModel from '@api/db/models/model';
+import { AssociatedFoodAttributes, AssociatedFoodCreationAttributes } from '@common/types/models';
 
 @Scopes(() => ({
   locale: { include: [{ model: Locale }] },
@@ -13,7 +14,10 @@ import BaseModel from '@api/db/models/model';
   timestamps: false,
   underscored: true,
 })
-export default class AssociatedFood extends BaseModel {
+export default class AssociatedFood
+  extends BaseModel<AssociatedFoodAttributes, AssociatedFoodCreationAttributes>
+  implements AssociatedFoodAttributes
+{
   @Column({
     autoIncrement: true,
     primaryKey: true,

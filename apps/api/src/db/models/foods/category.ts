@@ -1,9 +1,15 @@
 /* eslint-disable no-use-before-define */
 import { BelongsToMany, Column, DataType, HasMany, HasOne, Table } from 'sequelize-typescript';
 import { CategoryAttributes, CategoryCreationAttributes } from '@common/types/models';
-import { CategoryAttribute, CategoryCategory, Food, FoodCategory } from '.';
+import {
+  AssociatedFood,
+  CategoryAttribute,
+  CategoryCategory,
+  CategoryLocal,
+  Food,
+  FoodCategory,
+} from '.';
 import BaseModel from '../model';
-import CategoryLocal from './category-local';
 
 @Table({
   modelName: 'Category',
@@ -43,6 +49,9 @@ export default class Category
 
   @HasOne(() => CategoryAttribute)
   public attributes?: CategoryAttribute;
+
+  @HasMany(() => AssociatedFood, 'associatedCategoryCode')
+  public categoryAssociations?: AssociatedFood[];
 
   @BelongsToMany(() => Category, () => CategoryCategory, 'subcategoryCode', 'categoryCode')
   public parentCategories?: Category[];

@@ -6,16 +6,24 @@ import {
   HasMany,
   Scopes,
   Table,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { FoodAttributes } from '@common/types/models';
 import BaseModel from '../model';
-import { AssociatedFood, FoodAttribute, FoodLocal, Brand, Category, FoodCategory } from '.';
+import {
+  AssociatedFood,
+  FoodAttribute,
+  FoodLocal,
+  Brand,
+  Category,
+  FoodCategory,
+  FoodGroup,
+} from '.';
 
 @Scopes(() => ({
   attributes: { include: [{ model: FoodAttribute }] },
   localFoods: { include: [{ model: FoodLocal }] },
   brand: { include: [{ model: Brand }] },
-  foodAssociations: { include: [{ model: AssociatedFood }] },
 }))
 @Table({
   modelName: 'Food',
@@ -65,8 +73,11 @@ export default class Food extends BaseModel<FoodAttributes> implements FoodAttri
   @HasMany(() => FoodCategory, 'foodCode')
   public categoryMappings?: FoodCategory[];
 
-  @HasMany(() => AssociatedFood, 'foodCode')
+  @HasMany(() => AssociatedFood, 'associatedFoodCode')
   public foodAssociations?: AssociatedFood[];
+
+  @BelongsTo(() => FoodGroup, 'foodGroupId')
+  public foodGroup?: FoodGroup;
 
   @HasMany(() => FoodLocal, 'foodCode')
   public localFoods?: FoodLocal[];

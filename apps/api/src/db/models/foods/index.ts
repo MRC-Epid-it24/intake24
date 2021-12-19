@@ -18,6 +18,8 @@ export { default as DrinkwareVolumeSample } from './drinkware-volume-sample';
 export { default as Food } from './food';
 export { default as FoodAttribute } from './food-attribute';
 export { default as FoodCategory } from './food-category';
+export { default as FoodGroup } from './food-group';
+export { default as FoodGroupLocal } from './food-group-local';
 export { default as FoodLocal } from './food-local';
 export { default as FoodLocalList } from './food-local-list';
 export { default as FoodNutrient } from './food-nutrient';

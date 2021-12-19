@@ -33,3 +33,36 @@ export type FoodCategoryAttributes = {
   foodCode: string;
   categoryCode: string;
 };
+
+export type FoodGroupAttributes = {
+  id: string;
+  name: string;
+};
+
+export type FoodGroupCreationAttributes = Omit<FoodGroupAttributes, 'id'>;
+
+export type FoodGroupLocalAttributes = {
+  id: string;
+  foodGroupId: string;
+  localeId: string;
+  name: string;
+};
+
+export type FoodGroupLocalCreationAttributes = Omit<FoodGroupLocalAttributes, 'id'>;
+
+export type AssociatedFoodAttributes = {
+  id: string;
+  foodCode: string;
+  localeId: string;
+  associatedFoodCode: string | null;
+  associatedCategoryCode: string | null;
+  text: string;
+  linkAsMain: boolean;
+  genericName: string;
+};
+
+export type AssociatedFoodCreationAttributes = OmitAndOptional<
+  AssociatedFoodAttributes,
+  'id',
+  'associatedCategoryCode' | 'associatedFoodCode'
+>;
