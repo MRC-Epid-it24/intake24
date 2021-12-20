@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 import {
   Food,
+  FoodGroup,
   FoodLocal,
   FoodNutrient,
   NutrientTable,
@@ -51,10 +52,12 @@ export default async (foodDatabase: Sequelize) => {
     }
   );
 
+  const { id: foodGroupId } = await FoodGroup.create({ name: 'Test food group' });
+
   await Food.create({
     code: 'FOOD1',
     name: 'Test food 1',
-    foodGroupId: '1',
+    foodGroupId,
     version: '00000000-0000-0000-0000-000000000000',
   });
 
