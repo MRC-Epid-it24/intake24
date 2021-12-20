@@ -6,7 +6,14 @@
       </v-btn>
     </template>
     <v-card>
-      <v-card-title>{{ $t('schemes.copy.title') }}</v-card-title>
+      <v-toolbar dark color="primary" flat>
+        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="cancel">
+          <v-icon>$cancel</v-icon>
+        </v-btn>
+        <v-toolbar-title>
+          {{ $t('schemes.copy.title') }}
+        </v-toolbar-title>
+      </v-toolbar>
       <v-card-text class="pa-6">
         <v-row>
           <v-col cols="12">

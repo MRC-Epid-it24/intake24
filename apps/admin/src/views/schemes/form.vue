@@ -1,7 +1,7 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <template v-slot:actions>
-      <copy-scheme-dialog v-if="can('schemes-edit')" :schemeId="id"></copy-scheme-dialog>
+      <copy-scheme-dialog v-if="isEdit && can('schemes-edit')" :schemeId="id"></copy-scheme-dialog>
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container>
