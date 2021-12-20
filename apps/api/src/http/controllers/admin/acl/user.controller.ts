@@ -1,12 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import {
-  CreateUserResponse,
-  UserResponse,
-  UserRefs,
-  UsersResponse,
-  StoreUserResponse,
-} from '@common/types/http/admin';
+import { UserEntry, UserRefs, UsersResponse } from '@common/types/http/admin';
 import { Permission, Role, User } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
 import { userEntryResponse } from '@api/http/responses/admin';
@@ -17,16 +11,10 @@ import { PaginateQuery } from '@api/db/models/model';
 export type AdminUserController = Controller<CrudActions>;
 
 export default ({ adminUserService }: Pick<IoC, 'adminUserService'>): AdminUserController => {
-  const entryRefs = async (): Promise<UserRefs> => {
-    const [permissions, roles] = await Promise.all([
-      Permission.scope('list').findAll({ order: [['name', 'ASC']] }),
-      Role.scope('list').findAll({ order: [['name', 'ASC']] }),
-    ]);
-
-    return { permissions, roles };
-  };
-
-  const entry = async (req: Request, res: Response<UserResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ userId: string }>,
+    res: Response<UserEntry>
+  ): Promise<void> => {
     const { userId } = req.params;
 
     const user = await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
@@ -34,10 +22,7 @@ export default ({ adminUserService }: Pick<IoC, 'adminUserService'>): AdminUserC
     );
     if (!user) throw new NotFoundError();
 
-    const data = userEntryResponse(user);
-    const refs = await entryRefs();
-
-    res.json({ data, refs });
+    res.json(userEntryResponse(user));
   };
 
   const browse = async (
@@ -54,13 +39,7 @@ export default ({ adminUserService }: Pick<IoC, 'adminUserService'>): AdminUserC
     res.json(users);
   };
 
-  const create = async (req: Request, res: Response<CreateUserResponse>): Promise<void> => {
-    const refs = await entryRefs();
-
-    res.json({ refs });
-  };
-
-  const store = async (req: Request, res: Response<StoreUserResponse>): Promise<void> => {
+  const store = async (req: Request, res: Response<UserEntry>): Promise<void> => {
     const user = await adminUserService.create(
       pick(req.body, [
         'name',
@@ -82,14 +61,19 @@ export default ({ adminUserService }: Pick<IoC, 'adminUserService'>): AdminUserC
       )) as User
     );
 
-    res.status(201).json({ data });
+    res.status(201).json(data);
   };
 
-  const read = async (req: Request, res: Response<UserResponse>): Promise<void> => entry(req, res);
+  const read = async (req: Request<{ userId: string }>, res: Response<UserEntry>): Promise<void> =>
+    entry(req, res);
 
-  const edit = async (req: Request, res: Response<UserResponse>): Promise<void> => entry(req, res);
+  const edit = async (req: Request<{ userId: string }>, res: Response<UserEntry>): Promise<void> =>
+    entry(req, res);
 
-  const update = async (req: Request, res: Response<UserResponse>): Promise<void> => {
+  const update = async (
+    req: Request<{ userId: string }>,
+    res: Response<UserEntry>
+  ): Promise<void> => {
     const { userId } = req.params;
 
     await adminUserService.update(
@@ -112,25 +96,36 @@ export default ({ adminUserService }: Pick<IoC, 'adminUserService'>): AdminUserC
         userId
       )) as User
     );
-    const refs = await entryRefs();
 
-    res.json({ data, refs });
+    res.json(data);
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ userId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { userId } = req.params;
 
     await adminUserService.destroy(userId);
     res.status(204).json();
   };
 
+  const refs = async (req: Request, res: Response<UserRefs>): Promise<void> => {
+    const [permissions, roles] = await Promise.all([
+      Permission.scope('list').findAll({ order: [['name', 'ASC']] }),
+      Role.scope('list').findAll({ order: [['name', 'ASC']] }),
+    ]);
+
+    res.json({ permissions, roles });
+  };
+
   return {
     browse,
-    create,
     store,
     read,
     edit,
     update,
     destroy,
+    refs,
   };
 };

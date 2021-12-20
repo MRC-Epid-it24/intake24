@@ -1,4 +1,3 @@
-import { Dictionary } from '../..';
 import { ImageMapAttributes, ImageMapObjectAttributes, Pagination } from '../../models';
 import { UploadSourceImageInput } from './source-images';
 
@@ -30,14 +29,3 @@ export type ImageMapEntry = {
   baseImageUrl: string;
   objects: ImageMapEntryObject[];
 };
-
-export type ImageMapRefs = Dictionary;
-
-export type ImageMapResponse = {
-  data: ImageMapEntry;
-  refs: ImageMapRefs;
-};
-
-export type CreateImageMapResponse = Pick<ImageMapResponse, 'refs'>;
-
-export type StoreImageMapResponse = Pick<ImageMapResponse, 'data'>;

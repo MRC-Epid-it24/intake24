@@ -2,7 +2,7 @@ import request from 'supertest';
 import { suite, setPermission } from '@tests/integration/helpers';
 
 export default (): void => {
-  const url = '/api/admin/locales/create';
+  const url = '/api/admin/surveys/refs';
 
   it('should return 401 when no / invalid token', async () => {
     const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
@@ -21,8 +21,8 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
-  it('should return 200 and data/refs', async () => {
-    await setPermission('locales-create');
+  it('should return 200 and data', async () => {
+    await setPermission('surveys-create');
 
     const { status, body } = await request(suite.app)
       .get(url)
@@ -30,6 +30,6 @@ export default (): void => {
       .set('Authorization', suite.bearer.user);
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['refs']);
+    expect(body).toContainAllKeys(['languages', 'locales', 'schemes']);
   });
 };

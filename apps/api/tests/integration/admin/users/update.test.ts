@@ -119,11 +119,10 @@ export default (): void => {
         .send({ email, permissions: [], roles: [] });
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data', 'refs']);
-      expect(body.data.email).toBe(email?.toLocaleLowerCase());
+      expect(body.email).toBe(email?.toLocaleLowerCase());
     });
 
-    it('should return 200 and data/refs', async () => {
+    it('should return 200 and data', async () => {
       const { status, body } = await request(suite.app)
         .put(url)
         .set('Accept', 'application/json')
@@ -131,7 +130,6 @@ export default (): void => {
         .send(updateInput);
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data', 'refs']);
 
       // Extract custom fields, permissions, roles for non-order specific comparison
       const {
@@ -139,7 +137,7 @@ export default (): void => {
         permissions: resPermissions,
         roles: resRoles,
         ...data
-      } = body.data;
+      } = body;
 
       const {
         customFields: outputCustomFields,

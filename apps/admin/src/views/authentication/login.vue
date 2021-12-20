@@ -57,7 +57,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { Errors } from '@common/util';
 
 export default Vue.extend({
-  name: 'Login',
+  name: 'AppLogin',
 
   data() {
     return {

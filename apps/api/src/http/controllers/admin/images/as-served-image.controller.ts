@@ -1,10 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import {
-  AsServedImageEntry,
-  AsServedImageResponse,
-  AsServedImagesResponse,
-} from '@common/types/http/admin';
+import { AsServedImageEntry, AsServedImagesResponse } from '@common/types/http/admin';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { AsServedImage, AsServedSet } from '@api/db/models/foods';
@@ -25,17 +21,20 @@ export default ({
 >): AsServedImageController => {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
-  const entry = async (req: Request, res: Response<AsServedImageResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ asServedSetId: string; asServedImageId: string }>,
+    res: Response<AsServedImageEntry>
+  ): Promise<void> => {
     const { asServedSetId, asServedImageId } = req.params;
 
     const asServedImage = await portionSizeService.getAsServedImage(asServedSetId, asServedImageId);
     if (!asServedImage) throw new NotFoundError();
 
-    res.json({ data: responseCollection.asServedImageEntryResponse(asServedImage) });
+    res.json(responseCollection.asServedImageEntryResponse(asServedImage));
   };
 
   const browse = async (
-    req: Request<any, any, any, PaginateQuery>,
+    req: Request<{ asServedSetId: string }, any, any, PaginateQuery>,
     res: Response<AsServedImagesResponse>
   ): Promise<void> => {
     const { asServedSetId } = req.params;
@@ -55,7 +54,10 @@ export default ({
     res.json(asServedImages);
   };
 
-  const store = async (req: Request, res: Response<AsServedImageResponse>): Promise<void> => {
+  const store = async (
+    req: Request<{ asServedSetId: string }>,
+    res: Response<AsServedImageEntry>
+  ): Promise<void> => {
     const {
       file,
       body: { weight },
@@ -76,13 +78,18 @@ export default ({
     });
     asServedImage = await portionSizeService.getAsServedImage(asServedSetId, asServedImage.id);
 
-    res.status(201).json({ data: responseCollection.asServedImageEntryResponse(asServedImage) });
+    res.status(201).json(responseCollection.asServedImageEntryResponse(asServedImage));
   };
 
-  const read = async (req: Request, res: Response<AsServedImageResponse>): Promise<void> =>
-    entry(req, res);
+  const read = async (
+    req: Request<{ asServedSetId: string; asServedImageId: string }>,
+    res: Response<AsServedImageEntry>
+  ): Promise<void> => entry(req, res);
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ asServedSetId: string; asServedImageId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { asServedSetId, asServedImageId } = req.params;
 
     const result = await asServedService.destroyImage(asServedSetId, asServedImageId);

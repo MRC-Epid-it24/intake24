@@ -44,7 +44,7 @@
         </v-card-text>
       </v-container>
       <v-divider></v-divider>
-      <meal-list v-model="form.meals"></meal-list>
+      <meal-list :schemeId="id" v-model="form.meals"></meal-list>
       <v-card-text>
         <submit-footer :disabled="form.errors.any()"></submit-footer>
       </v-card-text>

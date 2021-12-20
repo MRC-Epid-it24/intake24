@@ -1,5 +1,5 @@
 import { RoleAttributes, RoleAssociations, Pagination } from '../../models';
-import { PermissionEntry } from './permissions';
+import { PermissionListEntry } from './permissions';
 
 export type RoleRequest = {
   name: string;
@@ -14,13 +14,4 @@ export type RoleEntry = RoleAttributes & Required<Pick<RoleAssociations, 'permis
 
 export type RoleListEntry = Pick<RoleAttributes, 'id' | 'name' | 'displayName'>;
 
-export type RoleRefs = { permissions: PermissionEntry[] };
-
-export type RoleResponse = {
-  data: RoleEntry;
-  refs: RoleRefs;
-};
-
-export type CreateRoleResponse = Pick<RoleResponse, 'refs'>;
-
-export type StoreRoleResponse = Pick<RoleResponse, 'data'>;
+export type RoleRefs = { permissions: PermissionListEntry[] };

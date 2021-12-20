@@ -12,6 +12,7 @@ import BaseModel from '../model';
 import { Locale } from '.';
 
 @Scopes(() => ({
+  list: { attributes: ['id', 'englishName', 'localName', 'countryFlagCode'] },
   adminLocales: { include: [{ model: Locale, as: 'adminLocales' }] },
   surveyLocales: { include: [{ model: Locale, as: 'surveyLocales' }] },
 }))

@@ -3,7 +3,7 @@ import {
   SchemeQuestionAttributes,
   SchemeQuestionCreationAttributes,
 } from '../../models';
-import { LanguageEntry } from './languages';
+import { LanguageListEntry } from './languages';
 import { SchemeEntry } from './schemes';
 
 export type SchemeQuestionRequest = SchemeQuestionCreationAttributes;
@@ -17,16 +17,7 @@ export type SchemeQuestionsResponse = Pagination<SchemeQuestionAttributes>;
 export type SchemeQuestionEntry = SchemeQuestionAttributes;
 
 export type SchemeQuestionRefs = {
-  languages: LanguageEntry[];
+  languages: LanguageListEntry[];
   schemes: SchemeEntry[];
   questionIds: string[];
 };
-
-export type SchemeQuestionResponse = {
-  data: SchemeQuestionEntry;
-  refs: SchemeQuestionRefs;
-};
-
-export type CreateSchemeQuestionResponse = Pick<SchemeQuestionResponse, 'refs'>;
-
-export type StoreSchemeQuestionResponse = Pick<SchemeQuestionResponse, 'data'>;

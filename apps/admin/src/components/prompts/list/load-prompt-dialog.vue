@@ -95,7 +95,6 @@
 import Vue, { VueConstructor } from 'vue';
 import { copy } from '@common/util';
 import debounce from 'lodash/debounce';
-import { SchemeQuestionTemplatesResponse } from '@common/types/http/admin';
 import { PromptQuestion } from '@common/prompts';
 
 type LoadPromptDialog = {
@@ -198,9 +197,7 @@ export default (Vue as VueConstructor<Vue & LoadPromptDialog>).extend({
     async fetchFromApi() {
       const { search } = this;
 
-      const {
-        data: { data },
-      } = await this.$http.get<SchemeQuestionTemplatesResponse>(
+      const { data } = await this.$http.get<PromptQuestion[]>(
         `admin/schemes/${this.schemeId}/templates`,
         { params: { search, limit: 5 } }
       );

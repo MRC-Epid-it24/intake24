@@ -3,6 +3,7 @@ import { ListState, RootState } from '@/types';
 
 const getters: GetterTree<ListState, RootState> = {
   name: (state) => state.name,
+  api: (state) => state.api,
   data: (state) => state.data,
   refs: (state) => state.refs,
   filter: (state) => {

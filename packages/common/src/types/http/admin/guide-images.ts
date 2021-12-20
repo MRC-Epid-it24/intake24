@@ -28,17 +28,6 @@ export interface GuideImageEntry extends ImageMapEntry {
   objects: GuideImageEntryObject[];
 }
 
-export type GuideImageRefs = Dictionary;
-
-export type GuideImageResponse = {
-  data: GuideImageEntry;
-  refs: GuideImageRefs;
+export type GuideImageRefs = {
+  imageMaps: Pick<ImageMapAttributes, 'id' | 'description'>[];
 };
-
-export type CreateGuideImageResponse = {
-  refs: {
-    imageMaps: Pick<ImageMapAttributes, 'id' | 'description'>[];
-  };
-};
-
-export type StoreGuideImageResponse = Pick<GuideImageResponse, 'data'>;

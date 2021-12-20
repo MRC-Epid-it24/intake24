@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { WhereOptions } from 'sequelize';
 import { validate } from 'uuid';
-import { SurveySubmissionResponse, SurveySubmissionsResponse } from '@common/types/http/admin';
+import { SurveySubmissionEntry, SurveySubmissionsResponse } from '@common/types/http/admin';
 import { SurveySubmissionAttributes } from '@common/types/models';
 import { Survey, SurveySubmission } from '@api/db/models/system';
 import { submissionScope } from '@api/db/models/system/survey-submission';
@@ -42,7 +42,7 @@ export default (): AdminSurveySubmissionController => {
 
   const entry = async (
     req: Request<{ surveyId: string; submissionId: string }>,
-    res: Response<SurveySubmissionResponse>
+    res: Response<SurveySubmissionEntry>
   ): Promise<void> => {
     const { surveyId, submissionId } = req.params;
 
@@ -53,7 +53,7 @@ export default (): AdminSurveySubmissionController => {
     });
     if (!submission) throw new NotFoundError();
 
-    res.json({ data: submission });
+    res.json(submission);
   };
 
   const destroy = async (

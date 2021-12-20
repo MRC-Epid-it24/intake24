@@ -51,8 +51,7 @@
       </v-item-group>
     </v-container>
     <prompt-list
-      v-bind="{ section, questionIds }"
-      :templates="refs.templates"
+      v-bind="{ section, questionIds, templates }"
       :items.sync="selected"
       @move="move"
     ></prompt-list>
@@ -75,6 +74,7 @@ import {
 } from '@common/schemes';
 import { PromptQuestion } from '@common/prompts';
 import { Dictionary } from '@common/types';
+import { SchemeEntry, SchemeRefs } from '@common/types/http/admin';
 import formMixin from '@/components/entry/formMixin';
 import LoadSectionDialog from '@/components/prompts/load-section-dialog.vue';
 import PromptList, { PromptQuestionMoveEvent } from '@/components/prompts/list/prompt-list.vue';
@@ -82,7 +82,7 @@ import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
 import { SchemeForm } from '../form.vue';
 
-export default (Vue as VueConstructor<Vue & FormMixin>).extend({
+export default (Vue as VueConstructor<Vue & FormMixin<SchemeEntry, SchemeRefs>>).extend({
   name: 'SchemeQuestions',
 
   components: { LoadSectionDialog, PromptList },
@@ -131,6 +131,11 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       const scheme = flattenScheme(this.form.questions);
 
       return scheme.map((question) => question.id);
+    },
+    templates(): PromptQuestion[] {
+      if (!this.refsLoaded) return [];
+
+      return this.refs.templates.filter((template) => this.questionIds.includes(template.id));
     },
   },
 

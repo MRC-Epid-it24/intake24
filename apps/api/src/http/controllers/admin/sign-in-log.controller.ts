@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SignInLogResponse, SignInLogsResponse } from '@common/types/http/admin';
+import { SignInLogEntry, SignInLogsResponse } from '@common/types/http/admin';
 import { SignInLog } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
 import { pick } from 'lodash';
@@ -11,14 +11,14 @@ export type SignInLogController = Controller<'browse' | 'read' | 'destroy'>;
 export default (): SignInLogController => {
   const entry = async (
     req: Request<{ signInLogId: string }>,
-    res: Response<SignInLogResponse>
+    res: Response<SignInLogEntry>
   ): Promise<void> => {
     const { signInLogId } = req.params;
 
     const signInLog = await SignInLog.findByPk(signInLogId);
     if (!signInLog) throw new NotFoundError();
 
-    res.json({ data: signInLog });
+    res.json(signInLog);
   };
 
   const browse = async (
@@ -36,7 +36,7 @@ export default (): SignInLogController => {
 
   const read = async (
     req: Request<{ signInLogId: string }>,
-    res: Response<SignInLogResponse>
+    res: Response<SignInLogEntry>
   ): Promise<void> => entry(req, res);
 
   const destroy = async (

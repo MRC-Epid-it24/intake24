@@ -90,7 +90,7 @@ export default (): void => {
       expect(status).toBe(404);
     });
 
-    it('should return 200 and data/refs', async () => {
+    it('should return 200 and data', async () => {
       const { id, name } = output;
 
       const { status, body } = await request(suite.app)
@@ -100,8 +100,7 @@ export default (): void => {
         .send({ sourceId: input.id, id, name });
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data']);
-      expect(pick(body.data, Object.keys(input))).toEqual(output);
+      expect(pick(body, Object.keys(input))).toEqual(output);
     });
   });
 };

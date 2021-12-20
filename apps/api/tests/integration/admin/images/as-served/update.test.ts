@@ -32,20 +32,18 @@ export default (): void => {
 
     const images = [];
     for (const weight of [50, 100, 150]) {
-      const {
-        body: { data },
-      } = await request(suite.app)
+      const { body: image } = await request(suite.app)
         .post(`${url}/images`)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.superuser)
         .field('weight', 10)
         .attach('image', fs.createReadStream(suite.files.images.jpg), fileName);
 
-      images.push({ ...data, weight });
+      images.push({ ...image, weight });
     }
 
     updateInput = { ...updateInput, images };
-    output = { ...body.data, ...updateInput };
+    output = { ...body, ...updateInput };
   });
 
   it('should return 401 when no / invalid token', async () => {
@@ -106,7 +104,7 @@ export default (): void => {
       expect(status).toBe(404);
     });
 
-    it('should return 200 and data/refs', async () => {
+    it('should return 200 and data', async () => {
       const { status, body } = await request(suite.app)
         .put(url)
         .set('Accept', 'application/json')
@@ -114,8 +112,7 @@ export default (): void => {
         .send(updateInput);
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data', 'refs']);
-      expect(pick(body.data, Object.keys(output))).toEqual(output);
+      expect(pick(body, Object.keys(output))).toEqual(output);
     });
   });
 };

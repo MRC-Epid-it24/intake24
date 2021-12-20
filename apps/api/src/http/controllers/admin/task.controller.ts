@@ -1,12 +1,7 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { jobTypes, JobType } from '@common/types';
-import {
-  CreateTaskResponse,
-  StoreTaskResponse,
-  TaskResponse,
-  TasksResponse,
-} from '@common/types/http/admin';
+import { TaskEntry, TaskRefs, TasksResponse } from '@common/types/http/admin';
 import { Task, User } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
@@ -16,11 +11,9 @@ import { Controller, CrudActions } from '../controller';
 export type TaskController = Controller<CrudActions | 'run'>;
 
 export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
-  const jobs: JobType[] = [...jobTypes];
-
   const entry = async (
     req: Request<{ taskId: string }>,
-    res: Response<TaskResponse>
+    res: Response<TaskEntry>
   ): Promise<void> => {
     const { taskId } = req.params;
 
@@ -29,7 +22,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
 
     const bullJob = await scheduler.tasks.getRepeatableJobById(taskId.toString());
 
-    res.json({ data: task, bullJob, refs: { jobs } });
+    res.json({ ...task.get(), bullJob });
   };
 
   const browse = async (
@@ -45,32 +38,24 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     res.json(tasks);
   };
 
-  const create = async (req: Request, res: Response<CreateTaskResponse>): Promise<void> => {
-    res.json({ refs: { jobs } });
-  };
-
-  const store = async (req: Request, res: Response<StoreTaskResponse>): Promise<void> => {
+  const store = async (req: Request, res: Response<TaskEntry>): Promise<void> => {
     const { name, job, cron, active, description, params } = req.body;
 
     const task = await Task.create({ name, job, cron, active, description, params });
     await scheduler.tasks.addJob(task);
 
-    res.status(201).json({ data: task });
+    res.status(201).json(task);
   };
 
-  const read = async (
-    req: Request<{ taskId: string }>,
-    res: Response<TaskResponse>
-  ): Promise<void> => entry(req, res);
+  const read = async (req: Request<{ taskId: string }>, res: Response<TaskEntry>): Promise<void> =>
+    entry(req, res);
 
-  const edit = async (
-    req: Request<{ taskId: string }>,
-    res: Response<TaskResponse>
-  ): Promise<void> => entry(req, res);
+  const edit = async (req: Request<{ taskId: string }>, res: Response<TaskEntry>): Promise<void> =>
+    entry(req, res);
 
   const update = async (
     req: Request<{ taskId: string }>,
-    res: Response<TaskResponse>
+    res: Response<TaskEntry>
   ): Promise<void> => {
     const { taskId } = req.params;
 
@@ -84,7 +69,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
 
     const bullJob = await scheduler.tasks.getRepeatableJobById(taskId.toString());
 
-    res.json({ data: task, bullJob, refs: { jobs } });
+    res.json({ ...task.get(), bullJob });
   };
 
   const destroy = async (
@@ -99,6 +84,11 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     await task.destroy();
     await scheduler.tasks.removeJob(task);
     res.status(204).json();
+  };
+
+  const refs = async (req: Request, res: Response<TaskRefs>): Promise<void> => {
+    const jobs: JobType[] = [...jobTypes];
+    res.json({ jobs });
   };
 
   const run = async (req: Request<{ taskId: string }>, res: Response): Promise<void> => {
@@ -117,12 +107,12 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
 
   return {
     browse,
-    create,
     store,
     read,
     edit,
     update,
     destroy,
+    refs,
     run,
   };
 };

@@ -14,8 +14,6 @@ router
   .post(permission('permissions-create'), validation.store, wrapAsync(permissionController.store))
   .get(permission('permissions-browse'), validation.browse, wrapAsync(permissionController.browse));
 
-router.get('/create', permission('permissions-create'), wrapAsync(permissionController.create));
-
 router
   .route('/:permissionId')
   .get(

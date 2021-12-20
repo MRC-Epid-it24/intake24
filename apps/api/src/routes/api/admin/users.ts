@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/users';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -14,7 +14,11 @@ router
   .post(permission('users-create'), validation.store, wrapAsync(adminUserController.store))
   .get(permission('users-browse'), validation.browse, wrapAsync(adminUserController.browse));
 
-router.get('/create', permission('users-create'), wrapAsync(adminUserController.create));
+router.get(
+  '/refs',
+  anyPermission(['users-create', 'users-read', 'users-edit']),
+  wrapAsync(adminUserController.refs)
+);
 
 router
   .route('/:userId')

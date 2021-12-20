@@ -83,7 +83,7 @@ export default (): void => {
       expect(status).toBe(404);
     });
 
-    it('should return 200 and data/refs', async () => {
+    it('should return 200 and data', async () => {
       const { status, body } = await request(suite.app)
         .put(url)
         .set('Accept', 'application/json')
@@ -91,8 +91,7 @@ export default (): void => {
         .send(updateInput);
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data', 'refs']);
-      expect(pick(body.data, Object.keys(output))).toEqual(output);
+      expect(pick(body, Object.keys(output))).toEqual(output);
     });
   });
 };

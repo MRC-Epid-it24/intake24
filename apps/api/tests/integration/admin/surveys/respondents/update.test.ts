@@ -144,7 +144,7 @@ export default (): void => {
       expect(status).toBe(404);
     });
 
-    it('should return 200 and data/refs', async () => {
+    it('should return 200 and data', async () => {
       const { status, body } = await request(suite.app)
         .patch(url)
         .set('Accept', 'application/json')
@@ -152,10 +152,9 @@ export default (): void => {
         .send(updateInput);
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data']);
 
       // Extract custom fields, permissions, roles for non-order specific comparison
-      const { customFields: resCustomFields, ...data } = body.data;
+      const { customFields: resCustomFields, ...data } = body;
 
       const {
         customFields: outputCustomFields,

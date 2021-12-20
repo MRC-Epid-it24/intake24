@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import {
-  CreateSchemeQuestionResponse,
-  StoreSchemeQuestionResponse,
+  SchemeQuestionEntry,
   SchemeQuestionRefs,
-  SchemeQuestionResponse,
   SchemeQuestionsResponse,
 } from '@common/types/http/admin';
 import { isMealSection, MealSection, SurveyQuestionSection } from '@common/schemes';
@@ -16,28 +14,16 @@ import { Controller, CrudActions } from '../controller';
 export type SchemeQuestionController = Controller<CrudActions | 'sync'>;
 
 export default (): SchemeQuestionController => {
-  const refs = async (): Promise<SchemeQuestionRefs> => {
-    const [languages, schemes, questions] = await Promise.all([
-      Language.findAll(),
-      Scheme.findAll(),
-      SchemeQuestion.findAll(),
-    ]);
-
-    const questionIds = questions.map((q) => q.question.id);
-
-    return { languages, schemes, questionIds };
-  };
-
   const entry = async (
     req: Request<{ schemeQuestionId: string }>,
-    res: Response<SchemeQuestionResponse>
+    res: Response<SchemeQuestionEntry>
   ): Promise<void> => {
     const { schemeQuestionId } = req.params;
 
     const schemeQuestion = await SchemeQuestion.findByPk(schemeQuestionId);
     if (!schemeQuestion) throw new NotFoundError();
 
-    res.json({ data: schemeQuestion, refs: await refs() });
+    res.json(schemeQuestion);
   };
 
   const browse = async (
@@ -53,35 +39,28 @@ export default (): SchemeQuestionController => {
     res.json(schemeQuestions);
   };
 
-  const create = async (
-    req: Request,
-    res: Response<CreateSchemeQuestionResponse>
-  ): Promise<void> => {
-    res.json({ refs: await refs() });
-  };
-
-  const store = async (req: Request, res: Response<StoreSchemeQuestionResponse>): Promise<void> => {
+  const store = async (req: Request, res: Response<SchemeQuestionEntry>): Promise<void> => {
     const { question } = req.body;
     const { id: questionId, name } = question;
 
     const schemeQuestion = await SchemeQuestion.create({ questionId, name, question });
 
-    res.status(201).json({ data: schemeQuestion });
+    res.status(201).json(schemeQuestion);
   };
 
   const read = async (
     req: Request<{ schemeQuestionId: string }>,
-    res: Response<SchemeQuestionResponse>
+    res: Response<SchemeQuestionEntry>
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ schemeQuestionId: string }>,
-    res: Response<SchemeQuestionResponse>
+    res: Response<SchemeQuestionEntry>
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ schemeQuestionId: string }>,
-    res: Response<SchemeQuestionResponse>
+    res: Response<SchemeQuestionEntry>
   ): Promise<void> => {
     const {
       params: { schemeQuestionId },
@@ -94,7 +73,7 @@ export default (): SchemeQuestionController => {
 
     await schemeQuestion.update({ questionId, name, question });
 
-    res.json({ data: schemeQuestion, refs: await refs() });
+    res.json(schemeQuestion);
   };
 
   const destroy = async (
@@ -110,9 +89,21 @@ export default (): SchemeQuestionController => {
     res.status(204).json();
   };
 
+  const refs = async (req: Request, res: Response<SchemeQuestionRefs>): Promise<void> => {
+    const [languages, schemes, questions] = await Promise.all([
+      Language.scope('list').findAll(),
+      Scheme.findAll(),
+      SchemeQuestion.findAll({ attributes: ['question'] }),
+    ]);
+
+    const questionIds = questions.map((q) => q.question.id);
+
+    res.json({ languages, schemes, questionIds });
+  };
+
   const sync = async (
     req: Request<{ schemeQuestionId: string }>,
-    res: Response<SchemeQuestionResponse>
+    res: Response<undefined>
   ): Promise<void> => {
     const {
       params: { schemeQuestionId },
@@ -144,12 +135,12 @@ export default (): SchemeQuestionController => {
 
   return {
     browse,
-    create,
     store,
     read,
     edit,
     update,
-    sync,
     destroy,
+    refs,
+    sync,
   };
 };

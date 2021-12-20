@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { JobResponse, NutrientTableEntry, NutrientTableRefs } from '@common/types/http/admin';
+import { JobEntry, NutrientTableEntry, NutrientTableRefs } from '@common/types/http/admin';
 import { JobType } from '@common/types';
 import { DetailMixin } from '@/types';
 import detailMixin from '@/components/entry/detailMixin';
@@ -107,9 +107,9 @@ export default (
     async submit() {
       if (this.jobInProgress) return;
 
-      const { data } = await this.form.post<JobResponse>(`admin/nutrient-tables/${this.id}/upload`);
+      const job = await this.form.post<JobEntry>(`admin/nutrient-tables/${this.id}/upload`);
 
-      this.jobs.unshift(data);
+      this.jobs.unshift(job);
       this.startPolling();
     },
   },

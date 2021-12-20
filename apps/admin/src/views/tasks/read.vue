@@ -36,9 +36,9 @@
             {{ $t(`common.${entry.active}`) }}
           </td>
         </tr>
-        <tr v-if="addons.bullJob">
+        <tr v-if="entry.bullJob">
           <th>{{ $t('tasks.run.next') }}</th>
-          <td>{{ formatDate(new Date(addons.bullJob.next)) }}</td>
+          <td>{{ formatDate(new Date(entry.bullJob.next)) }}</td>
         </tr>
         <tr>
           <th>{{ $t('common.description') }}</th>
@@ -52,16 +52,14 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import cronstrue from 'cronstrue';
-import { TaskEntry, TaskRefs, TaskResponse } from '@common/types/http/admin';
-import { DetailMixin, MapAddonsMixin } from '@/types';
+import { TaskEntry, TaskRefs } from '@common/types/http/admin';
+import { DetailMixin } from '@/types';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import mapAddons from '@/components/entry/mapAddons';
 import FormatsDateTime from '@/mixins/FormatsDateTime';
 
-export default (
-  Vue as VueConstructor<Vue & DetailMixin<TaskEntry, TaskRefs> & MapAddonsMixin<TaskResponse>>
-).extend({
+export default (Vue as VueConstructor<Vue & DetailMixin<TaskEntry, TaskRefs>>).extend({
   name: 'TaskDetail',
 
   components: { ConfirmDialog },

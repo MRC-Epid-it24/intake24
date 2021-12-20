@@ -83,7 +83,7 @@ import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof ResourceMixin>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
-  name: 'Gallery',
+  name: 'ImageGallery',
 
   components: { ConfirmDialog, DataTableFilter, Toolbar },
 

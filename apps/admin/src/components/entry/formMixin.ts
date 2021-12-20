@@ -101,10 +101,10 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
     async submit() {
       if (this.isEdit) {
-        const { data, refs } = await this.form[this.editMethod](`${this.resource.api}/${this.id}`);
+        const data = await this.form[this.editMethod](`${this.resource.api}/${this.id}`);
         this.toForm(data);
 
-        await this.$store.dispatch('resource/entry/update', { data, refs });
+        await this.$store.dispatch('resource/entry/update', data);
 
         const { id, name } = data;
         this.$toasted.success(this.$t('common.msg.updated', { name: name ?? id }).toString());

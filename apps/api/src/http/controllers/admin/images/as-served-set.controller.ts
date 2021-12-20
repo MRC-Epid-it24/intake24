@@ -1,11 +1,9 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import {
-  AsServedSetResponse,
+  AsServedSetEntry,
   AsServedSetsResponse,
   AsServedSetListEntry,
-  CreateAsServedSetResponse,
-  StoreAsServedSetResponse,
 } from '@common/types/http/admin';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
@@ -15,7 +13,7 @@ import imagesResponseCollection from '@api/http/responses/admin/images';
 import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
-export type AsServedSetController = Controller<CrudActions>;
+export type AsServedSetController = Controller<Exclude<CrudActions, 'refs'>>;
 
 export default ({
   imagesBaseUrl,
@@ -27,13 +25,16 @@ export default ({
 >): AsServedSetController => {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
-  const entry = async (req: Request, res: Response<AsServedSetResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ asServedSetId: string }>,
+    res: Response<AsServedSetEntry>
+  ): Promise<void> => {
     const { asServedSetId } = req.params;
 
     const asServedSet = await portionSizeService.getAsServedSet(asServedSetId);
     if (!asServedSet) throw new NotFoundError();
 
-    res.json({ data: responseCollection.asServedSetEntryResponse(asServedSet), refs: {} });
+    res.json(responseCollection.asServedSetEntryResponse(asServedSet));
   };
 
   const browse = async (
@@ -51,11 +52,7 @@ export default ({
     res.json(asServedSets);
   };
 
-  const create = async (req: Request, res: Response<CreateAsServedSetResponse>): Promise<void> => {
-    res.json({ refs: {} });
-  };
-
-  const store = async (req: Request, res: Response<StoreAsServedSetResponse>): Promise<void> => {
+  const store = async (req: Request, res: Response<AsServedSetEntry>): Promise<void> => {
     const {
       file,
       body: { id, description },
@@ -67,25 +64,35 @@ export default ({
     let asServedSet = await asServedService.createSet({ id, description, file, uploader: user.id });
     asServedSet = await portionSizeService.getAsServedSet(asServedSet.id);
 
-    res.status(201).json({ data: responseCollection.asServedSetEntryResponse(asServedSet) });
+    res.status(201).json(responseCollection.asServedSetEntryResponse(asServedSet));
   };
 
-  const read = async (req: Request, res: Response<AsServedSetResponse>): Promise<void> =>
-    entry(req, res);
+  const read = async (
+    req: Request<{ asServedSetId: string }>,
+    res: Response<AsServedSetEntry>
+  ): Promise<void> => entry(req, res);
 
-  const edit = async (req: Request, res: Response<AsServedSetResponse>): Promise<void> =>
-    entry(req, res);
+  const edit = async (
+    req: Request<{ asServedSetId: string }>,
+    res: Response<AsServedSetEntry>
+  ): Promise<void> => entry(req, res);
 
-  const update = async (req: Request, res: Response<AsServedSetResponse>): Promise<void> => {
+  const update = async (
+    req: Request<{ asServedSetId: string }>,
+    res: Response<AsServedSetEntry>
+  ): Promise<void> => {
     const { asServedSetId } = req.params;
     const { description, images } = req.body;
 
     const asServedSet = await asServedService.updateSet(asServedSetId, { description, images });
 
-    res.json({ data: responseCollection.asServedSetEntryResponse(asServedSet), refs: {} });
+    res.json(responseCollection.asServedSetEntryResponse(asServedSet));
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ asServedSetId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { asServedSetId } = req.params;
 
     await asServedService.destroySet(asServedSetId);
@@ -95,7 +102,6 @@ export default ({
 
   return {
     browse,
-    create,
     store,
     read,
     edit,

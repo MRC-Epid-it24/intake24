@@ -43,12 +43,3 @@ export type NutrientTableEntry = NutrientTableAttributes &
 export type NutrientTableRefs = {
   nutrients: NutrientTypeAttributes[];
 };
-
-export type NutrientTableResponse = {
-  data: NutrientTableEntry;
-  refs: NutrientTableRefs;
-};
-
-export type CreateNutrientTableResponse = Pick<NutrientTableResponse, 'refs'>;
-
-export type StoreNutrientTableResponse = Pick<NutrientTableResponse, 'data'>;

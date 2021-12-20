@@ -6,7 +6,7 @@ import {
   SchemeAttributes,
   SchemeCreationAttributes,
 } from '../../models';
-import { LanguageEntry } from './languages';
+import { LanguageListEntry } from './languages';
 
 export type SchemeRequest = SchemeCreationAttributes;
 
@@ -18,23 +18,11 @@ export type SchemesResponse = Pagination<SchemeAttributes>;
 
 export type SchemeEntry = SchemeAttributes;
 
+export type SchemeListEntry = Pick<SchemeAttributes, 'id' | 'name'>;
+
 export type SchemeRefs = {
-  languages: LanguageEntry[];
+  languages: LanguageListEntry[];
   templates: PromptQuestion[];
 };
 
-export type SchemeResponse = {
-  data: SchemeEntry;
-  refs: SchemeRefs;
-};
-
-export type CreateSchemeResponse = Pick<SchemeResponse, 'refs'>;
-
-export type StoreSchemeResponse = Pick<SchemeResponse, 'data'>;
-export type CopySchemeResponse = StoreSchemeResponse;
-
 export type SchemeExportRefsResponse = Record<ExportSectionId, ExportField[]>;
-
-export type SchemeQuestionTemplatesResponse = {
-  data: PromptQuestion[];
-};

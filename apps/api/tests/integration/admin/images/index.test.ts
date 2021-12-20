@@ -9,7 +9,6 @@ import maps from './maps/index.test';
 export default () => {
   // As served sets
   describe('GET /api/admin/images/as-served', asServed.browse);
-  describe('GET /api/admin/images/as-served/create', asServed.create);
   describe('POST /api/admin/images/as-served', asServed.store);
   describe('GET /api/admin/images/as-served/:asServedSetId', asServed.read);
   describe('GET /api/admin/images/as-served/:asServedSetId/edit', asServed.edit);
@@ -46,8 +45,8 @@ export default () => {
 
   // Guided images
   describe('GET /api/admin/images/guides', guides.browse);
-  describe('GET /api/admin/images/guides/create', guides.create);
   describe('POST /api/admin/images/guides', guides.store);
+  describe('GET /api/admin/images/guides/refs', guides.refs);
   describe('GET /api/admin/images/guides/:guideImageId', guides.read);
   describe('GET /api/admin/images/guides/:guideImageId/edit', guides.edit);
   describe('PUT /api/admin/images/guides/:guideImageId', guides.update);
@@ -55,7 +54,6 @@ export default () => {
 
   // Image Maps
   describe('GET /api/admin/images/maps', maps.browse);
-  describe('GET /api/admin/images/maps/create', maps.create);
   describe('POST /api/admin/images/maps', maps.store);
   describe('GET /api/admin/images/maps/:imageMapId', maps.read);
   describe('GET /api/admin/images/maps/:imageMapId/edit', maps.edit);

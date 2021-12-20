@@ -47,12 +47,3 @@ export type UserRefs = {
   permissions: PermissionListEntry[];
   roles: RoleListEntry[];
 };
-
-export type UserResponse = {
-  data: UserEntry;
-  refs: UserRefs;
-};
-
-export type CreateUserResponse = Pick<UserResponse, 'refs'>;
-
-export type StoreUserResponse = Pick<UserResponse, 'data'>;

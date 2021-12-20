@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/tasks';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -12,7 +12,11 @@ router
   .post(permission('tasks-create'), validation.store, wrapAsync(taskController.store))
   .get(permission('tasks-browse'), validation.browse, wrapAsync(taskController.browse));
 
-router.get('/create', permission('tasks-create'), wrapAsync(taskController.create));
+router.get(
+  '/refs',
+  anyPermission(['tasks-create', 'tasks-read', 'tasks-edit']),
+  wrapAsync(taskController.refs)
+);
 
 router
   .route('/:taskId')

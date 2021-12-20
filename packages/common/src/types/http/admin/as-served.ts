@@ -1,4 +1,3 @@
-import { Dictionary } from '../..';
 import { AsServedSetAttributes, AsServedImageAttributes, Pagination } from '../../models';
 import { UploadSourceImageInput } from './source-images';
 
@@ -30,24 +29,9 @@ export interface AsServedImageEntry extends Pick<AsServedImageAttributes, 'id' |
 
 export type AsServedImagesResponse = Pagination<AsServedImageEntry>;
 
-export type AsServedImageResponse = {
-  data: AsServedImageEntry;
-};
-
 export type AsServedSetEntry = {
   id: string;
   description: string;
   selectionImageUrl: string;
   images: AsServedImageEntry[];
 };
-
-export type AsServedSetRefs = Dictionary;
-
-export type AsServedSetResponse = {
-  data: AsServedSetEntry;
-  refs: AsServedSetRefs;
-};
-
-export type CreateAsServedSetResponse = Pick<AsServedSetResponse, 'refs'>;
-
-export type StoreAsServedSetResponse = Pick<AsServedSetResponse, 'data'>;

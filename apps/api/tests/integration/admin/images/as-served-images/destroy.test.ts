@@ -21,7 +21,7 @@ export default (): void => {
       .field('weight', weight)
       .attach('image', fs.createReadStream(suite.files.images.jpg), fileName);
 
-    const output = { ...body.data };
+    const output = { ...body };
 
     url = `${baseUrl}/${output.id}`;
     invalidParentUrl = `${invalidBaseUrl}/${output.id}`;

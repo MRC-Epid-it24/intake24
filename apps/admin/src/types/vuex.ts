@@ -42,15 +42,14 @@ export interface AuthState {
 }
 
 export interface EntryState {
-  status: string;
   data: Dictionary;
   refs: Dictionary;
-  addons: Dictionary;
   error: AxiosError | null;
 }
 
 export interface ListState {
   name: string;
+  api: string;
   status: string;
   data: Dictionary[];
   refs: Dictionary;

@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { SurveySubmissionEntry, SurveySubmissionResponse } from '@common/types/http/admin';
+import { SurveySubmissionEntry } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import { EntryMixin } from '@/types';
@@ -119,9 +119,9 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>)
     },
 
     async detail(submissionId: string) {
-      const {
-        data: { data },
-      } = await this.$http.get<SurveySubmissionResponse>(`${this.baseAPI}/${submissionId}`);
+      const { data } = await this.$http.get<SurveySubmissionEntry>(
+        `${this.baseAPI}/${submissionId}`
+      );
 
       this.selected = data;
       this.open();

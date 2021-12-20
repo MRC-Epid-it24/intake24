@@ -1,10 +1,5 @@
 import { Request, Response } from 'express';
-import {
-  CreateRoleResponse,
-  RoleResponse,
-  RolesResponse,
-  StoreRoleResponse,
-} from '@common/types/http/admin';
+import { RoleEntry, RoleRefs, RolesResponse } from '@common/types/http/admin';
 import { Permission, Role } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
 import { roleEntryResponse } from '@api/http/responses/admin';
@@ -16,16 +11,16 @@ import { pick } from 'lodash';
 export type RoleController = Controller<CrudActions>;
 
 export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
-  const entry = async (req: Request, res: Response<RoleResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ roleId: string }>,
+    res: Response<RoleEntry>
+  ): Promise<void> => {
     const { roleId } = req.params;
 
     const role = await Role.scope('permissions').findByPk(roleId);
     if (!role) throw new NotFoundError();
 
-    const data = roleEntryResponse(role);
-    const permissions = await Permission.scope('list').findAll();
-
-    res.json({ data, refs: { permissions } });
+    res.json(roleEntryResponse(role));
   };
 
   const browse = async (
@@ -41,28 +36,26 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
     res.json(roles);
   };
 
-  const create = async (req: Request, res: Response<CreateRoleResponse>): Promise<void> => {
-    const permissions = await Permission.scope('list').findAll();
-
-    res.json({ refs: { permissions } });
-  };
-
-  const store = async (req: Request, res: Response<StoreRoleResponse>): Promise<void> => {
+  const store = async (req: Request, res: Response<RoleEntry>): Promise<void> => {
     const { name, displayName, description, permissions } = req.body;
     const role = await Role.create({ name, displayName, description });
     await role.$set('permissions', permissions);
 
     await role.reload({ include: [{ model: Permission }] });
-    const data = roleEntryResponse(role);
 
-    res.status(201).json({ data });
+    res.status(201).json(roleEntryResponse(role));
   };
 
-  const read = async (req: Request, res: Response<RoleResponse>): Promise<void> => entry(req, res);
+  const read = async (req: Request<{ roleId: string }>, res: Response<RoleEntry>): Promise<void> =>
+    entry(req, res);
 
-  const edit = async (req: Request, res: Response<RoleResponse>): Promise<void> => entry(req, res);
+  const edit = async (req: Request<{ roleId: string }>, res: Response<RoleEntry>): Promise<void> =>
+    entry(req, res);
 
-  const update = async (req: Request, res: Response<RoleResponse>): Promise<void> => {
+  const update = async (
+    req: Request<{ roleId: string }>,
+    res: Response<RoleEntry>
+  ): Promise<void> => {
     const { roleId } = req.params;
 
     const role = await Role.scope('permissions').findByPk(roleId);
@@ -79,12 +72,14 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
     );
 
     await role.reload({ include: [{ model: Permission }] });
-    const data = roleEntryResponse(role);
 
-    res.json({ data, refs: { permissions } });
+    res.json(roleEntryResponse(role));
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ roleId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { roleId } = req.params;
 
     const role = await Role.findByPk(roleId);
@@ -94,13 +89,19 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
     res.status(204).json();
   };
 
+  const refs = async (req: Request, res: Response<RoleRefs>): Promise<void> => {
+    const permissions = await Permission.scope('list').findAll();
+
+    res.json({ permissions });
+  };
+
   return {
     browse,
-    create,
     store,
     read,
     edit,
     update,
     destroy,
+    refs,
   };
 };

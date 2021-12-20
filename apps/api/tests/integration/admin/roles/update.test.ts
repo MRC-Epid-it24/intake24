@@ -87,7 +87,7 @@ export default (): void => {
       expect(status).toBe(404);
     });
 
-    it('should return 200 and data/refs', async () => {
+    it('should return 200 and data', async () => {
       const { status, body } = await request(suite.app)
         .put(url)
         .set('Accept', 'application/json')
@@ -95,11 +95,10 @@ export default (): void => {
         .send(updateInput);
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data', 'refs']);
 
       const data = {
-        ...body.data,
-        permissions: body.data.permissions.map((item: Permission) => item.id),
+        ...body,
+        permissions: body.permissions.map((item: Permission) => item.id),
       };
 
       expect(pick(data, Object.keys(output))).toEqual(output);

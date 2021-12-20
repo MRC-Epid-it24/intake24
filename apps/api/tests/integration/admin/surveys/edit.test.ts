@@ -98,8 +98,7 @@ export default (): void => {
       .set('Authorization', suite.bearer.user);
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['data', 'refs']);
-    expect(pick(body.data, Object.keys(output))).toEqual(output);
+    expect(pick(body, Object.keys(output))).toEqual(output);
   });
 
   it('should return 200 and data/refs (surveyStaff)', async () => {
@@ -111,7 +110,6 @@ export default (): void => {
       .set('Authorization', suite.bearer.user);
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['data', 'refs']);
-    expect(pick(body.data, Object.keys(output))).toEqual(output);
+    expect(pick(body, Object.keys(output))).toEqual(output);
   });
 };

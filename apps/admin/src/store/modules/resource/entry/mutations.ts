@@ -6,28 +6,26 @@ import { EntryState } from '@/types';
 const mutations: MutationTree<EntryState> = {
   request(state) {
     state.data = {};
-    state.refs = {};
-    state.addons = {};
-    state.status = 'loading';
   },
 
-  success(state, res) {
-    state.status = 'success';
-    const { data = { id: null }, refs = {}, ...addons } = res.data;
-    state.data = { ...data };
-    state.refs = { ...refs };
-    state.addons = { ...addons };
+  init(state) {
+    state.data = { ...{ id: null } };
+  },
+
+  update(state, data?: Dictionary) {
+    if (data) state.data = { ...(data ?? { id: null }) };
+  },
+
+  requestRefs(state) {
+    state.refs = {};
+  },
+
+  updateRefs(state, refs?: Dictionary) {
+    if (refs) state.refs = { ...refs };
   },
 
   error(state, error: AxiosError) {
     state.error = error;
-    state.status = 'error';
-  },
-
-  update(state, { data, refs, addons }: Partial<Record<'data' | 'refs' | 'addons', Dictionary>>) {
-    if (data) state.data = { ...data };
-    if (refs) state.refs = { ...refs };
-    if (addons) state.addons = { ...addons };
   },
 };
 

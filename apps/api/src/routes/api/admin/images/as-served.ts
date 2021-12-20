@@ -20,8 +20,6 @@ router
   )
   .get(permission('as-served-browse'), validation.browse, wrapAsync(asServedSetController.browse));
 
-router.get('/create', permission('as-served-create'), wrapAsync(asServedSetController.create));
-
 router
   .route('/:asServedSetId')
   .get(permission('as-served-read'), wrapAsync(asServedSetController.read))

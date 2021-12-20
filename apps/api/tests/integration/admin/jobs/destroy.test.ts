@@ -18,15 +18,13 @@ export default (): void => {
       endDate: endDate.toISOString().split('T')[0],
     };
 
-    const {
-      body: { data },
-    } = await request(suite.app)
+    const { body } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .send(input);
 
-    job = data;
+    job = body;
 
     url = `${baseUrl}/${job.id}`;
     invalidUrl = `${baseUrl}/999999`;

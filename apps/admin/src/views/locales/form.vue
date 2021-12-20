@@ -198,7 +198,13 @@ export default (Vue as VueConstructor<Vue & FormMixin<LocaleEntry, LocaleRefs>>)
 
   computed: {
     locales() {
-      return [{ id: null, englishName: this.$t('common.none').toString() }, ...this.refs.locales];
+      const locales = [{ id: null, englishName: this.$t('common.none').toString() }];
+
+      if (!this.refs.locales) return locales;
+
+      const availableLocales = this.refs.locales.filter((locale) => locale.id !== this.id);
+
+      return [...locales, ...availableLocales];
     },
   },
 });

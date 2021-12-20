@@ -19,8 +19,6 @@ router
   )
   .get(permission('image-maps-browse'), validation.browse, wrapAsync(imageMapController.browse));
 
-router.get('/create', permission('image-maps-create'), wrapAsync(imageMapController.create));
-
 router
   .route('/:imageMapId')
   .get(permission('image-maps-read'), wrapAsync(imageMapController.read))

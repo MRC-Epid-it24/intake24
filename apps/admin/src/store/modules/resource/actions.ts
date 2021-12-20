@@ -5,8 +5,8 @@ import http from '@/services/http.service';
 import { FILTER_LS_KEY } from './state';
 
 const actions: ActionTree<ListState, RootState> = {
-  async update({ commit }, resource) {
-    commit('update', resource);
+  async update({ commit }, { name, api }) {
+    commit('update', { name, api });
   },
 
   async request({ commit, state }) {

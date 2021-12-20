@@ -12,8 +12,6 @@ router
   .post(permission('languages-create'), validation.store, wrapAsync(languageController.store))
   .get(permission('languages-browse'), validation.browse, wrapAsync(languageController.browse));
 
-router.get('/create', permission('languages-create'), wrapAsync(languageController.create));
-
 router
   .route('/:languageId')
   .get(permission('languages-read'), wrapAsync(languageController.read))

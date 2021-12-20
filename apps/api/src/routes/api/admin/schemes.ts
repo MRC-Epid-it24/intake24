@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/schemes';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -12,7 +12,12 @@ router
   .post(permission('schemes-create'), validation.store, wrapAsync(schemeController.store))
   .get(permission('schemes-browse'), validation.browse, wrapAsync(schemeController.browse));
 
-router.get('/create', permission('schemes-create'), wrapAsync(schemeController.create));
+router.get(
+  '/refs',
+  anyPermission(['schemes-create', 'schemes-read', 'schemes-edit']),
+  wrapAsync(schemeController.refs)
+);
+
 router.post('/copy', permission('schemes-edit'), validation.copy, wrapAsync(schemeController.copy));
 
 router

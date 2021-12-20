@@ -1,12 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import {
-  ImageMapListEntry,
-  ImageMapResponse,
-  ImageMapsResponse,
-  CreateImageMapResponse,
-  StoreImageMapResponse,
-} from '@common/types/http/admin';
+import { ImageMapEntry, ImageMapListEntry, ImageMapsResponse } from '@common/types/http/admin';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { ImageMap } from '@api/db/models/foods';
@@ -15,7 +9,7 @@ import imagesResponseCollection from '@api/http/responses/admin/images';
 import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
-export type ImageMapController = Controller<CrudActions>;
+export type ImageMapController = Controller<Exclude<CrudActions, 'refs'>>;
 
 export default ({
   imagesBaseUrl,
@@ -24,13 +18,16 @@ export default ({
 }: Pick<IoC, 'imagesBaseUrl' | 'imageMapService' | 'portionSizeService'>): ImageMapController => {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
-  const entry = async (req: Request, res: Response<ImageMapResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ imageMapId: string }>,
+    res: Response<ImageMapEntry>
+  ): Promise<void> => {
     const { imageMapId } = req.params;
 
     const image = await portionSizeService.getImageMap(imageMapId);
     if (!image) throw new NotFoundError();
 
-    res.json({ data: responseCollection.mapEntryResponse(image), refs: {} });
+    res.json(responseCollection.mapEntryResponse(image));
   };
 
   const browse = async (
@@ -48,11 +45,7 @@ export default ({
     res.json(images);
   };
 
-  const create = async (req: Request, res: Response<CreateImageMapResponse>): Promise<void> => {
-    res.json({ refs: {} });
-  };
-
-  const store = async (req: Request, res: Response<StoreImageMapResponse>): Promise<void> => {
+  const store = async (req: Request, res: Response<ImageMapEntry>): Promise<void> => {
     const {
       file,
       body: { id, description },
@@ -64,25 +57,35 @@ export default ({
     let imageMap = await imageMapService.create({ id, description, file, uploader: user.id });
     imageMap = await portionSizeService.getImageMap(imageMap.id);
 
-    res.status(201).json({ data: responseCollection.mapEntryResponse(imageMap) });
+    res.status(201).json(responseCollection.mapEntryResponse(imageMap));
   };
 
-  const read = async (req: Request, res: Response<ImageMapResponse>): Promise<void> =>
-    entry(req, res);
+  const read = async (
+    req: Request<{ imageMapId: string }>,
+    res: Response<ImageMapEntry>
+  ): Promise<void> => entry(req, res);
 
-  const edit = async (req: Request, res: Response<ImageMapResponse>): Promise<void> =>
-    entry(req, res);
+  const edit = async (
+    req: Request<{ imageMapId: string }>,
+    res: Response<ImageMapEntry>
+  ): Promise<void> => entry(req, res);
 
-  const update = async (req: Request, res: Response<ImageMapResponse>): Promise<void> => {
+  const update = async (
+    req: Request<{ imageMapId: string }>,
+    res: Response<ImageMapEntry>
+  ): Promise<void> => {
     const { imageMapId } = req.params;
     const { description, objects } = req.body;
 
     const image = await imageMapService.update(imageMapId, { description, objects });
 
-    res.json({ data: responseCollection.mapEntryResponse(image), refs: {} });
+    res.json(responseCollection.mapEntryResponse(image));
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ imageMapId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { imageMapId } = req.params;
 
     await imageMapService.destroy(imageMapId);
@@ -92,7 +95,6 @@ export default ({
 
   return {
     browse,
-    create,
     store,
     read,
     edit,

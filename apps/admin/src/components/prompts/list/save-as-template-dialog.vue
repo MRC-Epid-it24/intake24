@@ -66,7 +66,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { copy } from '@common/util';
 import pick from 'lodash/pick';
-import { StoreSchemeQuestionResponse, SchemeRefs } from '@common/types/http/admin';
+import { SchemeQuestionEntry, SchemeRefs } from '@common/types/http/admin';
 import { PromptQuestion } from '@common/prompts';
 import { ValidationError } from '@common/types';
 import { MapRefsMixin } from '@/types';
@@ -121,21 +121,16 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
     },
 
     async confirm() {
-      const {
-        data: { id, question },
-      } = await this.form.post<StoreSchemeQuestionResponse>('admin/scheme-questions');
+      const { id, question } = await this.form.post<SchemeQuestionEntry>('admin/scheme-questions');
 
       const templates = copy(this.refs.templates);
       templates.push(question);
 
-      await this.$store.dispatch('resource/entry/update', {
-        refs: { ...copy(this.refs), templates },
-      });
+      await this.$store.dispatch('resource/entry/updateRefs', { ...copy(this.refs), templates });
 
       this.close();
 
-      if (this.redirect)
-        this.$router.push({ name: 'scheme-questions-detail', params: { id: id.toString() } });
+      if (this.redirect) this.$router.push({ name: 'scheme-questions-detail', params: { id } });
     },
   },
 });

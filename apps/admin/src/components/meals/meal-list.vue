@@ -7,11 +7,7 @@
       <v-btn fab small color="secondary" :title="$t('schemes.meals.create')" @click.stop="add">
         <v-icon small>fa-plus</v-icon>
       </v-btn>
-      <load-section-dialog
-        :schemeId="$route.params.id"
-        section="meals"
-        @load="load"
-      ></load-section-dialog>
+      <load-section-dialog :schemeId="schemeId" section="meals" @load="load"></load-section-dialog>
       <confirm-dialog color="error" :label="$t('schemes.meals.reset._')" @confirm="resetList">
         <template v-slot:activator="{ attrs, on }">
           <v-btn
@@ -130,6 +126,10 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   name: 'MealList',
 
   props: {
+    schemeId: {
+      type: String,
+      required: true,
+    },
     mode: {
       type: String as () => 'full' | 'override',
       default: 'full',

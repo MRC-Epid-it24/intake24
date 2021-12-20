@@ -1,5 +1,4 @@
 import browse from './browse.test';
-import create from './create.test';
 import store from './store.test';
 import read from './read.test';
 import edit from './edit.test';
@@ -7,6 +6,7 @@ import patchAdmin from './patch-admin.test';
 import patchStaff from './patch-staff.test';
 import put from './put.test';
 import destroy from './destroy.test';
+import refs from './refs.test';
 import mgmt from './mgmt/index.test';
 import dataExport from './data-export/index.test';
 import respondents from './respondents/index.test';
@@ -14,8 +14,8 @@ import submissions from './submissions/index.test';
 
 export default () => {
   describe('GET /api/admin/surveys', browse);
-  describe('GET /api/admin/surveys/create', create);
   describe('POST /api/admin/surveys', store);
+  describe('GET /api/admin/surveys/refs', refs);
   describe('GET /api/admin/surveys/:surveyId', read);
   describe('GET /api/admin/surveys/:surveyId/edit', edit);
   describe('PATCH /api/admin/surveys/:surveyId', patchAdmin);

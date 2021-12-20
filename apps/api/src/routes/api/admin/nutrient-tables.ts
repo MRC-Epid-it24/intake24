@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/nutrient-tables';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -23,9 +23,9 @@ router
   );
 
 router.get(
-  '/create',
-  permission('nutrient-tables-create'),
-  wrapAsync(nutrientTableController.create)
+  '/refs',
+  anyPermission(['nutrient-tables-create', 'nutrient-tables-read', 'nutrient-tables-edit']),
+  wrapAsync(nutrientTableController.refs)
 );
 
 router

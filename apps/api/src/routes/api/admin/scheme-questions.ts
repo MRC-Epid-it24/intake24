@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/scheme-questions';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -21,9 +21,9 @@ router
   );
 
 router.get(
-  '/create',
-  permission('scheme-questions-create'),
-  wrapAsync(schemeQuestionController.create)
+  '/refs',
+  anyPermission(['scheme-questions-create', 'scheme-questions-read', 'scheme-questions-edit']),
+  wrapAsync(schemeQuestionController.refs)
 );
 
 router

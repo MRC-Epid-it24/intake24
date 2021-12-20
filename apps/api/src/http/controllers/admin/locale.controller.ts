@@ -1,13 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { Op } from 'sequelize';
-import {
-  CreateLocaleResponse,
-  LocaleRefs,
-  LocaleResponse,
-  LocalesResponse,
-  StoreLocaleResponse,
-} from '@common/types/http/admin';
+import { LocaleEntry, LocaleRefs, LocalesResponse } from '@common/types/http/admin';
 import { Locale as FoodsLocale } from '@api/db/models/foods';
 import { Language, Locale as SystemLocale } from '@api/db/models/system';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
@@ -17,16 +10,10 @@ import { Controller, CrudActions } from '../controller';
 export type LocaleController = Controller<CrudActions>;
 
 export default (): LocaleController => {
-  const refs = async (localeId?: string): Promise<LocaleRefs> => {
-    const [languages, locales] = await Promise.all([
-      Language.findAll(),
-      SystemLocale.findAll({ where: localeId ? { id: { [Op.ne]: localeId } } : {} }),
-    ]);
-
-    return { languages, locales };
-  };
-
-  const entry = async (req: Request, res: Response<LocaleResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ localeId: string }>,
+    res: Response<LocaleEntry>
+  ): Promise<void> => {
     const { localeId } = req.params;
 
     const [systemLocale, foodsLocale] = await Promise.all([
@@ -35,7 +22,7 @@ export default (): LocaleController => {
     ]);
     if (!systemLocale || !foodsLocale) throw new NotFoundError();
 
-    res.json({ data: systemLocale, refs: await refs(systemLocale.id) });
+    res.json(systemLocale);
   };
 
   const browse = async (
@@ -51,11 +38,7 @@ export default (): LocaleController => {
     res.json(locales);
   };
 
-  const create = async (req: Request, res: Response<CreateLocaleResponse>): Promise<void> => {
-    res.json({ refs: await refs() });
-  };
-
-  const store = async (req: Request, res: Response<StoreLocaleResponse>): Promise<void> => {
+  const store = async (req: Request, res: Response<LocaleEntry>): Promise<void> => {
     const input = pick(req.body, [
       'id',
       'englishName',
@@ -69,16 +52,23 @@ export default (): LocaleController => {
 
     const [locale] = await Promise.all([SystemLocale.create(input), FoodsLocale.create(input)]);
 
-    res.status(201).json({ data: locale });
+    res.status(201).json(locale);
   };
 
-  const read = async (req: Request, res: Response<LocaleResponse>): Promise<void> =>
-    entry(req, res);
+  const read = async (
+    req: Request<{ localeId: string }>,
+    res: Response<LocaleEntry>
+  ): Promise<void> => entry(req, res);
 
-  const edit = async (req: Request, res: Response<LocaleResponse>): Promise<void> =>
-    entry(req, res);
+  const edit = async (
+    req: Request<{ localeId: string }>,
+    res: Response<LocaleEntry>
+  ): Promise<void> => entry(req, res);
 
-  const update = async (req: Request, res: Response<LocaleResponse>): Promise<void> => {
+  const update = async (
+    req: Request<{ localeId: string }>,
+    res: Response<LocaleEntry>
+  ): Promise<void> => {
     const { localeId } = req.params;
 
     const [systemLocale, foodsLocale] = await Promise.all([
@@ -99,10 +89,12 @@ export default (): LocaleController => {
 
     await Promise.all([systemLocale.update(input), foodsLocale.update(input)]);
 
-    res.json({ data: systemLocale, refs: await refs(systemLocale.id) });
+    res.json(systemLocale);
   };
 
-  const destroy = async (req: Request /* , res: Response<undefined> */): Promise<void> => {
+  const destroy = async (
+    req: Request<{ localeId: string }> /* , res: Response<undefined> */
+  ): Promise<void> => {
     const { localeId } = req.params;
 
     const [systemLocale, foodsLocale] = await Promise.all([
@@ -122,13 +114,22 @@ export default (): LocaleController => {
     // res.status(204).json();
   };
 
+  const refs = async (req: Request, res: Response<LocaleRefs>): Promise<void> => {
+    const [languages, locales] = await Promise.all([
+      Language.scope('list').findAll(),
+      SystemLocale.scope('list').findAll(),
+    ]);
+
+    res.json({ languages, locales });
+  };
+
   return {
     browse,
-    create,
     store,
     read,
     edit,
     update,
     destroy,
+    refs,
   };
 };

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { JobResponse } from '@common/types/http/admin';
+import { JobEntry } from '@common/types/http/admin';
 import { Survey, User } from '@api/db/models/system';
 import type { IoC } from '@api/ioc';
 import { NotFoundError } from '@api/http/errors';
@@ -31,7 +31,7 @@ export default ({
 
   const queue = async (
     req: Request<{ surveyId: string }>,
-    res: Response<JobResponse>
+    res: Response<JobEntry>
   ): Promise<void> => {
     const { surveyId } = req.params;
     const { startDate, endDate } = req.body;
@@ -42,7 +42,7 @@ export default ({
 
     const job = await dataExportService.queueExportJob({ surveyId, startDate, endDate, userId });
 
-    res.json({ data: job });
+    res.json(job);
   };
 
   return {

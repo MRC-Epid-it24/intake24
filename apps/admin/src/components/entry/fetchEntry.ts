@@ -14,10 +14,7 @@ export default (Vue as VueConstructor<Vue & HasEntryMixin>).extend({
 
   methods: {
     async fetch(): Promise<void> {
-      await this.$store.dispatch(`resource/entry/request`, {
-        path: this.resource.api,
-        id: this.id,
-      });
+      await this.$store.dispatch(`resource/entry/request`, { id: this.id });
     },
   },
 });

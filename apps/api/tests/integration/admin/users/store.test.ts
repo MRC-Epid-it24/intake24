@@ -89,10 +89,9 @@ export default (): void => {
         .send(input);
 
       expect(status).toBe(201);
-      expect(body).toContainAllKeys(['data']);
 
       // Extract custom fields for non-order specific comparison
-      const { customFields: resCustomFields, ...data } = body.data;
+      const { customFields: resCustomFields, ...data } = body;
       const { customFields: outputCustomFields, ...restOutput } = output;
 
       // 1) match the output

@@ -50,7 +50,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { CopySchemeResponse } from '@common/types/http/admin';
+import { SchemeEntry } from '@common/types/http/admin';
 import form from '@/helpers/Form';
 
 export type CopySchemeForm = {
@@ -92,9 +92,7 @@ export default Vue.extend({
 
     async confirm() {
       const { name } = this.$route;
-      const {
-        data: { id },
-      } = await this.form.post<CopySchemeResponse>('admin/schemes/copy');
+      const { id } = await this.form.post<SchemeEntry>('admin/schemes/copy');
 
       this.close();
 

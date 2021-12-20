@@ -81,8 +81,7 @@ export default (): void => {
         .send(input);
 
       expect(status).toBe(201);
-      expect(body).toContainAllKeys(['data']);
-      expect(pick(body.data, Object.keys(output))).toEqual(output);
+      expect(pick(body, Object.keys(output))).toEqual(output);
     });
 
     it('should return 422 for duplicate name', async () => {

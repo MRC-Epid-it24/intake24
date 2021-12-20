@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import { pick } from 'lodash';
 import path from 'path';
 import { Op } from 'sequelize';
-import { JobResponse, JobsResponse } from '@common/types/http/admin';
+import { JobEntry, JobsResponse } from '@common/types/http/admin';
 import { Job, User } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
@@ -27,18 +27,21 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): JobController => {
     res.json(jobs);
   };
 
-  const read = async (req: Request, res: Response<JobResponse>): Promise<void> => {
+  const read = async (req: Request<{ jobId: string }>, res: Response<JobEntry>): Promise<void> => {
     const { jobId } = req.params;
+
     const job = await Job.findByPk(jobId, {
       include: [{ model: User, attributes: ['name', 'email'], required: false }],
     });
-
     if (!job) throw new NotFoundError();
 
-    res.json({ data: job });
+    res.json(job);
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ jobId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { jobId } = req.params;
 
     const job = await Job.findByPk(jobId);
@@ -48,7 +51,10 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): JobController => {
     res.status(204).json();
   };
 
-  const download = async (req: Request, res: Response<Buffer>): Promise<void> => {
+  const download = async (
+    req: Request<{ jobId: string }>,
+    res: Response<Buffer>
+  ): Promise<void> => {
     const { jobId: id } = req.params;
 
     const job = await Job.findOne({

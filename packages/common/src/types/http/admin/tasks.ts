@@ -9,18 +9,10 @@ export type UpdateTaskRequest = TaskRequest;
 
 export type TasksResponse = Pagination<TaskAttributes>;
 
-export type TaskEntry = TaskAttributes;
+export interface TaskEntry extends TaskAttributes {
+  bullJob?: RepeatableBullJob;
+}
 
 export type TaskRefs = {
   jobs: string[];
 };
-
-export type TaskResponse = {
-  data: TaskEntry;
-  bullJob?: RepeatableBullJob;
-  refs: TaskRefs;
-};
-
-export type CreateTaskResponse = Pick<TaskResponse, 'refs'>;
-
-export type StoreTaskResponse = Pick<TaskResponse, 'data'>;

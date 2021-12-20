@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/locales';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -12,7 +12,11 @@ router
   .post(permission('locales-create'), validation.store, wrapAsync(localeController.store))
   .get(permission('locales-browse'), validation.browse, wrapAsync(localeController.browse));
 
-router.get('/create', permission('locales-create'), wrapAsync(localeController.create));
+router.get(
+  '/refs',
+  anyPermission(['locales-create', 'locales-read', 'locales-edit']),
+  wrapAsync(localeController.refs)
+);
 
 router
   .route('/:localeId')

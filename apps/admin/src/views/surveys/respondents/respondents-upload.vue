@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { JobResponse } from '@common/types/http/admin';
+import { JobEntry } from '@common/types/http/admin';
 import form from '@/helpers/Form';
 import RespondentsJobMixin from './respondents-job-mixin';
 
@@ -83,11 +83,11 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
     async submit() {
       if (this.jobInProgress) return;
 
-      const { data } = await this.form.post<JobResponse>(
+      const job = await this.form.post<JobEntry>(
         `admin/surveys/${this.surveyId}/respondents/upload`
       );
 
-      this.jobs.unshift(data);
+      this.jobs.unshift(job);
       this.startPolling();
     },
   },

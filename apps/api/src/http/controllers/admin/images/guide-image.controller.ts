@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import {
+  GuideImageEntry,
+  GuideImageRefs,
   GuideImageListEntry,
-  GuideImageResponse,
   GuideImagesResponse,
-  CreateGuideImageResponse,
-  StoreGuideImageResponse,
 } from '@common/types/http/admin';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
@@ -26,13 +25,16 @@ export default ({
 >): GuideImageController => {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
-  const entry = async (req: Request, res: Response<GuideImageResponse>): Promise<void> => {
+  const entry = async (
+    req: Request<{ guideImageId: string }>,
+    res: Response<GuideImageEntry>
+  ): Promise<void> => {
     const { guideImageId } = req.params;
 
     const guideImage = await portionSizeService.getGuideImage(guideImageId);
     if (!guideImage) throw new NotFoundError();
 
-    res.json({ data: responseCollection.guideEntryResponse(guideImage), refs: {} });
+    res.json(responseCollection.guideEntryResponse(guideImage));
   };
 
   const browse = async (
@@ -50,18 +52,7 @@ export default ({
     res.json(guideImages);
   };
 
-  const create = async (req: Request, res: Response<CreateGuideImageResponse>): Promise<void> => {
-    const imageMaps = await ImageMap.findAll({
-      attributes: ['id', 'description'],
-      order: [['id', 'ASC']],
-    });
-
-    res.json({
-      refs: { imageMaps: imageMaps.map(({ id, description }) => ({ id, description })) },
-    });
-  };
-
-  const store = async (req: Request, res: Response<StoreGuideImageResponse>): Promise<void> => {
+  const store = async (req: Request, res: Response<GuideImageEntry>): Promise<void> => {
     const { id, description, imageMapId } = req.body;
 
     await guideImageService.create({ id, description, imageMapId });
@@ -69,16 +60,23 @@ export default ({
     const guideImage = await portionSizeService.getGuideImage(id);
     if (!guideImage) throw new NotFoundError();
 
-    res.status(201).json({ data: responseCollection.guideEntryResponse(guideImage) });
+    res.status(201).json(responseCollection.guideEntryResponse(guideImage));
   };
 
-  const read = async (req: Request, res: Response<GuideImageResponse>): Promise<void> =>
-    entry(req, res);
+  const read = async (
+    req: Request<{ guideImageId: string }>,
+    res: Response<GuideImageEntry>
+  ): Promise<void> => entry(req, res);
 
-  const edit = async (req: Request, res: Response<GuideImageResponse>): Promise<void> =>
-    entry(req, res);
+  const edit = async (
+    req: Request<{ guideImageId: string }>,
+    res: Response<GuideImageEntry>
+  ): Promise<void> => entry(req, res);
 
-  const update = async (req: Request, res: Response<GuideImageResponse>): Promise<void> => {
+  const update = async (
+    req: Request<{ guideImageId: string }>,
+    res: Response<GuideImageEntry>
+  ): Promise<void> => {
     const { guideImageId } = req.params;
     const { description, objects } = req.body;
 
@@ -87,10 +85,13 @@ export default ({
       objects,
     });
 
-    res.json({ data: responseCollection.guideEntryResponse(guideImage), refs: {} });
+    res.json(responseCollection.guideEntryResponse(guideImage));
   };
 
-  const destroy = async (req: Request, res: Response<undefined>): Promise<void> => {
+  const destroy = async (
+    req: Request<{ guideImageId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
     const { guideImageId } = req.params;
 
     await guideImageService.destroy(guideImageId);
@@ -98,13 +99,22 @@ export default ({
     res.status(204).json();
   };
 
+  const refs = async (req: Request, res: Response<GuideImageRefs>): Promise<void> => {
+    const imageMaps = await ImageMap.findAll({
+      attributes: ['id', 'description'],
+      order: [['id', 'ASC']],
+    });
+
+    res.json({ imageMaps: imageMaps.map(({ id, description }) => ({ id, description })) });
+  };
+
   return {
     browse,
-    create,
     store,
     read,
     edit,
     update,
     destroy,
+    refs,
   };
 };

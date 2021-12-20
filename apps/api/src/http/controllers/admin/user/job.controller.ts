@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import { pick } from 'lodash';
 import path from 'path';
 import { Op, WhereOptions } from 'sequelize';
-import { JobResponse, JobsResponse } from '@common/types/http/admin';
+import { JobEntry, JobsResponse } from '@common/types/http/admin';
 import { JobAttributes } from '@common/types/models';
 import { Job, User } from '@api/db/models/system';
 import { NotFoundError } from '@api/http/errors';
@@ -37,14 +37,14 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
     res.json(jobs);
   };
 
-  const read = async (req: Request, res: Response<JobResponse>): Promise<void> => {
+  const read = async (req: Request, res: Response<JobEntry>): Promise<void> => {
     const { jobId: id } = req.params;
     const { id: userId } = req.user as User;
 
     const job = await Job.findOne({ where: { id, userId } });
     if (!job) throw new NotFoundError();
 
-    res.json({ data: job });
+    res.json(job);
   };
 
   const download = async (req: Request, res: Response<Buffer>): Promise<void> => {

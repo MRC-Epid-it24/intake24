@@ -1,6 +1,7 @@
 import Router from 'vue-router';
 import { Store } from 'vuex';
 import { RootState } from '@/types';
+import resources from './resources';
 
 export default (router: Router, store: Store<RootState>): void => {
   router.beforeEach(async (to, from, next) => {
@@ -35,7 +36,10 @@ export default (router: Router, store: Store<RootState>): void => {
     const { meta: { module } = {} } = to;
 
     // Update module/resource name
-    const value = module.parent ?? module.current;
-    if (!store.getters['resource/name'] !== value) await store.dispatch('resource/update', value);
+    const name = module.parent ?? module.current;
+    const resource = resources.find((item) => item.name === name);
+
+    if (!store.getters['resource/name'] !== name)
+      await store.dispatch('resource/update', { name, api: resource?.api ?? `admin/${name}` });
   });
 };

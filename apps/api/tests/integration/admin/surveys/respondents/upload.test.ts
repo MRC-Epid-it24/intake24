@@ -117,7 +117,7 @@ export default (): void => {
         .attach('file', fs.createReadStream(filePath), fileName);
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data']);
+      expect(body).not.toBeEmpty();
     });
   });
 };

@@ -2,12 +2,10 @@ import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { WhereOptions } from 'sequelize';
 import {
-  CreateSurveyResponse,
+  SurveyEntry,
   SurveyListEntry,
-  SurveyResponse,
   SurveyRefs,
   SurveysResponse,
-  StoreSurveyResponse,
 } from '@common/types/http/admin';
 import {
   createSurveyFields,
@@ -26,26 +24,16 @@ import { Controller, CrudActions } from '../../controller';
 export type AdminSurveyController = Controller<CrudActions | 'patch' | 'put'>;
 
 export default (): AdminSurveyController => {
-  const refs = async (): Promise<SurveyRefs> => {
-    const [languages, locales, schemes] = await Promise.all([
-      Language.findAll(),
-      Locale.findAll(),
-      Scheme.findAll(),
-    ]);
-
-    return { languages, locales, schemes };
-  };
-
   const entry = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyResponse>
+    res: Response<SurveyEntry>
   ): Promise<void> => {
     const { surveyId } = req.params;
 
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    res.json({ data: surveyResponse(survey), refs: await refs() });
+    res.json(surveyResponse(survey));
   };
 
   const browse = async (
@@ -76,27 +64,23 @@ export default (): AdminSurveyController => {
     res.json(surveys);
   };
 
-  const create = async (req: Request, res: Response<CreateSurveyResponse>): Promise<void> => {
-    res.json({ refs: await refs() });
-  };
-
-  const store = async (req: Request, res: Response<StoreSurveyResponse>): Promise<void> => {
+  const store = async (req: Request, res: Response<SurveyEntry>): Promise<void> => {
     const survey = await Survey.create(pick(req.body, createSurveyFields));
 
-    res.status(201).json({ data: surveyResponse(survey) });
+    res.status(201).json(surveyResponse(survey));
   };
 
   const read = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyResponse>
+    res: Response<SurveyEntry>
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyResponse>
+    res: Response<SurveyEntry>
   ): Promise<void> => entry(req, res);
 
-  const update = async (req: Request<{ surveyId: string }>, res: Response<SurveyResponse>) => {
+  const update = async (req: Request<{ surveyId: string }>, res: Response<SurveyEntry>) => {
     const { surveyId } = req.params;
 
     const survey = await Survey.findByPk(surveyId);
@@ -104,12 +88,12 @@ export default (): AdminSurveyController => {
 
     await survey.update(pick(req.body, updateSurveyFields));
 
-    res.json({ data: surveyResponse(survey), refs: await refs() });
+    res.json(surveyResponse(survey));
   };
 
   const patch = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyResponse>
+    res: Response<SurveyEntry>
     // eslint-disable-next-line consistent-return
   ): Promise<void> => {
     const { surveyId } = req.params;
@@ -131,12 +115,12 @@ export default (): AdminSurveyController => {
 
     if (keysToUpdate.length) await survey.update(pick(req.body, keysToUpdate));
 
-    res.json({ data: surveyResponse(survey), refs: await refs() });
+    res.json(surveyResponse(survey));
   };
 
   const put = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyResponse>
+    res: Response<SurveyEntry>
   ): Promise<void> => update(req, res);
 
   const destroy = async (
@@ -156,9 +140,21 @@ export default (): AdminSurveyController => {
     res.status(204).json();
   };
 
+  const refs = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<SurveyRefs>
+  ): Promise<void> => {
+    const [languages, locales, schemes] = await Promise.all([
+      Language.scope('list').findAll(),
+      Locale.scope('list').findAll(),
+      Scheme.findAll(),
+    ]);
+
+    res.json({ languages, locales, schemes });
+  };
+
   return {
     browse,
-    create,
     store,
     read,
     edit,
@@ -166,5 +162,6 @@ export default (): AdminSurveyController => {
     patch,
     put,
     destroy,
+    refs,
   };
 };

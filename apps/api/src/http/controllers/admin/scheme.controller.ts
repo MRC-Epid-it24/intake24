@@ -1,52 +1,33 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { FindOptions, Op } from 'sequelize';
-import { flattenScheme, RecallQuestions } from '@common/schemes';
 import {
-  CreateSchemeResponse,
+  SchemeEntry,
   SchemeRefs,
-  SchemeResponse,
   SchemesResponse,
-  CopySchemeResponse,
-  StoreSchemeResponse,
   SchemeExportRefsResponse,
-  SchemeQuestionTemplatesResponse,
 } from '@common/types/http/admin';
 import { ExportField, ExportSectionId } from '@common/types/models';
-import { PromptQuestion } from '@common/prompts';
 import type { IoC } from '@api/ioc';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import { Language, Scheme, SchemeQuestion } from '@api/db/models/system';
 import { PaginateQuery } from '@api/db/models/model';
+import { PromptQuestion } from '@common/prompts';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions | 'copy' | 'templates' | 'dataExportRefs'>;
 
 export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeController => {
-  const refs = async (recallQuestions?: RecallQuestions): Promise<SchemeRefs> => {
-    const languages = await Language.findAll();
-
-    let templates: PromptQuestion[] = [];
-
-    if (recallQuestions) {
-      const questionId = flattenScheme(recallQuestions).map((question) => question.id);
-      const questions = await SchemeQuestion.findAll({ where: { questionId } });
-      templates = questions.map((schemeQuestion) => schemeQuestion.question);
-    }
-
-    return { languages, templates };
-  };
-
   const entry = async (
     req: Request<{ schemeId: string }>,
-    res: Response<SchemeResponse>
+    res: Response<SchemeEntry>
   ): Promise<void> => {
     const { schemeId } = req.params;
 
     const scheme = await Scheme.findByPk(schemeId);
     if (!scheme) throw new NotFoundError();
 
-    res.json({ data: scheme, refs: await refs(scheme.questions) });
+    res.json(scheme);
   };
 
   const browse = async (
@@ -62,31 +43,27 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res.json(schemes);
   };
 
-  const create = async (req: Request, res: Response<CreateSchemeResponse>): Promise<void> => {
-    res.json({ refs: await refs() });
-  };
-
-  const store = async (req: Request, res: Response<StoreSchemeResponse>): Promise<void> => {
+  const store = async (req: Request, res: Response<SchemeEntry>): Promise<void> => {
     const scheme = await Scheme.create(
       pick(req.body, ['id', 'name', 'type', 'questions', 'meals', 'export'])
     );
 
-    res.status(201).json({ data: scheme });
+    res.status(201).json(scheme);
   };
 
   const read = async (
     req: Request<{ schemeId: string }>,
-    res: Response<SchemeResponse>
+    res: Response<SchemeEntry>
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ schemeId: string }>,
-    res: Response<SchemeResponse>
+    res: Response<SchemeEntry>
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ schemeId: string }>,
-    res: Response<SchemeResponse>
+    res: Response<SchemeEntry>
   ): Promise<void> => {
     const { schemeId } = req.params;
 
@@ -95,7 +72,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
 
     await scheme.update(pick(req.body, ['name', 'type', 'questions', 'meals', 'export']));
 
-    res.json({ data: scheme, refs: await refs(scheme.questions) });
+    res.json(scheme);
   };
 
   const destroy = async (
@@ -114,7 +91,15 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     res.status(204).json();
   };
 
-  const copy = async (req: Request, res: Response<CopySchemeResponse>): Promise<void> => {
+  const refs = async (req: Request, res: Response<SchemeRefs>): Promise<void> => {
+    const languages = await Language.scope('list').findAll();
+    const questions = await SchemeQuestion.findAll({ attributes: ['question'] });
+    const templates = questions.map((schemeQuestion) => schemeQuestion.question);
+
+    res.json({ languages, templates });
+  };
+
+  const copy = async (req: Request, res: Response<SchemeEntry>): Promise<void> => {
     const { sourceId, id, name } = req.body;
 
     const sourceScheme = await Scheme.findByPk(sourceId);
@@ -122,12 +107,12 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
 
     const scheme = await Scheme.create({ ...sourceScheme.get(), id, name });
 
-    res.json({ data: scheme });
+    res.json(scheme);
   };
 
   const templates = async (
     req: Request<{ schemeId: string }, any, any, { search?: string; limit?: number }>,
-    res: Response<SchemeQuestionTemplatesResponse>
+    res: Response<PromptQuestion[]>
   ): Promise<void> => {
     const {
       params: { schemeId },
@@ -152,7 +137,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
     const schemeQuestions = await SchemeQuestion.findAll(options);
     const questions = schemeQuestions.map((schemeQuestion) => schemeQuestion.question);
 
-    res.json({ data: questions });
+    res.json(questions);
   };
 
   const dataExportRefs = async (
@@ -177,12 +162,12 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SchemeCont
 
   return {
     browse,
-    create,
     store,
     read,
     edit,
     update,
     destroy,
+    refs,
     copy,
     templates,
     dataExportRefs,

@@ -1,4 +1,3 @@
-import { Dictionary } from '../..';
 import { LanguageAttributes, Pagination } from '../../models';
 
 export type LanguageRequest = {
@@ -17,13 +16,7 @@ export type LanguagesResponse = Pagination<LanguageAttributes>;
 
 export type LanguageEntry = LanguageAttributes;
 
-export type LanguageRefs = Dictionary;
-
-export type LanguageResponse = {
-  data: LanguageEntry;
-  refs: LanguageRefs;
-};
-
-export type CreateLanguageResponse = Pick<LanguageResponse, 'refs'>;
-
-export type StoreLanguageResponse = Pick<LanguageResponse, 'data'>;
+export type LanguageListEntry = Pick<
+  LanguageAttributes,
+  'id' | 'englishName' | 'localName' | 'countryFlagCode'
+>;

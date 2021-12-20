@@ -6,7 +6,7 @@ import PromptConditions from './PromptConditions.vue';
 import PromptValidation from './PromptValidation.vue';
 
 export default Vue.extend({
-  name: 'Prompt',
+  name: 'BasePrompt',
 
   components: { PromptContent, PromptConditions, PromptValidation },
 

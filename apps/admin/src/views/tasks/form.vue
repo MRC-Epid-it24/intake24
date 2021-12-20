@@ -55,8 +55,8 @@
             </v-col>
             <v-col v-if="form.active" cols="12" md="6">
               <div class="d-flex align-center" style="height: 100%">
-                <span v-if="addons.bullJob" class="subtitle-1">
-                  {{ $t('tasks.run.next') }}: {{ formatDate(new Date(addons.bullJob.next)) }}
+                <span v-if="entry.bullJob" class="subtitle-1">
+                  {{ $t('tasks.run.next') }}: {{ formatDate(new Date(entry.bullJob.next)) }}
                 </span>
               </div>
             </v-col>
@@ -97,13 +97,13 @@
 import Vue, { VueConstructor } from 'vue';
 import cronstrue from 'cronstrue';
 import { JobParams, JobParamsList, JobType } from '@common/types';
-import { TaskEntry, TaskRefs, TaskResponse } from '@common/types/http/admin';
+import { TaskEntry, TaskRefs } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import formMixin from '@/components/entry/formMixin';
 import mapAddons from '@/components/entry/mapAddons';
 import form from '@/helpers/Form';
 import FormatsDateTime from '@/mixins/FormatsDateTime';
-import { FormMixin, MapAddonsMixin } from '@/types';
+import { FormMixin } from '@/types';
 import paramComponents from './params';
 
 type TaskForm = {
@@ -148,9 +148,7 @@ const defaultParams: JobParamsList = {
   },
 };
 
-export default (
-  Vue as VueConstructor<Vue & FormMixin<TaskEntry, TaskRefs> & MapAddonsMixin<TaskResponse>>
-).extend({
+export default (Vue as VueConstructor<Vue & FormMixin<TaskEntry, TaskRefs>>).extend({
   name: 'TaskForm',
 
   components: { ConfirmDialog, ...paramComponents },

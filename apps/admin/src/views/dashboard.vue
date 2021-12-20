@@ -9,7 +9,7 @@ import Vue from 'vue';
 import WebPush from '@/components/web-push/WebPush.vue';
 
 export default Vue.extend({
-  name: 'Dashboard',
+  name: 'AppDashboard',
 
   components: { WebPush },
 });

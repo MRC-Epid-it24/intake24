@@ -1,6 +1,6 @@
-import { LanguageEntry } from './languages';
+import { LanguageListEntry } from './languages';
 import { SurveyAttributes, SurveyCreationAttributes, Pagination } from '../../models';
-import { LocaleEntry } from './locales';
+import { LocaleListEntry } from './locales';
 import { SchemeEntry } from './schemes';
 
 export interface SurveyRequest extends Omit<SurveyCreationAttributes, 'startDate' | 'endDate'> {
@@ -25,16 +25,7 @@ export interface SurveyEntry extends Omit<SurveyAttributes, 'startDate' | 'endDa
 }
 
 export type SurveyRefs = {
-  languages: LanguageEntry[];
-  locales: LocaleEntry[];
+  languages: LanguageListEntry[];
+  locales: LocaleListEntry[];
   schemes: SchemeEntry[];
 };
-
-export type SurveyResponse = {
-  data: SurveyEntry;
-  refs: SurveyRefs;
-};
-
-export type CreateSurveyResponse = Pick<SurveyResponse, 'refs'>;
-
-export type StoreSurveyResponse = Pick<SurveyResponse, 'data'>;

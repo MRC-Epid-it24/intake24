@@ -61,7 +61,7 @@ const httpClient: HttpClient = {
         .then((res) => resolve(res))
         .catch((err) => {
           const { response } = err;
-          if (response && ![401, 422].includes(response.status)) {
+          if (response && ![401, 404, 422].includes(response.status)) {
             const {
               data: { message },
             } = response;

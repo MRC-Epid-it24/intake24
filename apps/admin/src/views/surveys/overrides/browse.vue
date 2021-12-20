@@ -13,7 +13,11 @@
       Override scheme meal list. If left empty, scheme list is used. If any item added, whole list
       is used.
     </v-card-subtitle>
-    <meal-list v-model="form.overrides.meals" mode="override"></meal-list>
+    <meal-list
+      :schemeId="entry.schemeId"
+      v-model="form.overrides.meals"
+      mode="override"
+    ></meal-list>
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -54,7 +58,9 @@ export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>)
 
   computed: {
     questions(): PromptQuestion[] {
-      const scheme = this.refs.schemes.find((item) => item.id === this.form.schemeId);
+      if (!this.entryLoaded || !this.refsLoaded) return [];
+
+      const scheme = this.refs.schemes.find((item) => item.id === this.entry.schemeId);
       if (!scheme) return [];
 
       return flattenScheme(scheme.questions);

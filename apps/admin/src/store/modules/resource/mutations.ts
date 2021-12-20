@@ -3,8 +3,9 @@ import { AxiosError } from 'axios';
 import { ListState } from '@/types';
 
 const mutations: MutationTree<ListState> = {
-  update(state, resource) {
-    state.name = resource;
+  update(state, { name, api }) {
+    state.name = name;
+    state.api = api;
   },
 
   request(state) {

@@ -16,7 +16,11 @@ router
   .post(permission('surveys-create'), validation.store, wrapAsync(adminSurveyController.store))
   .get(permission('surveys-browse'), validation.browse, wrapAsync(adminSurveyController.browse));
 
-router.get('/create', permission('surveys-create'), wrapAsync(adminSurveyController.create));
+router.get(
+  '/refs',
+  anyPermission(['surveys-create', 'surveys-read', 'surveys-edit']),
+  wrapAsync(adminSurveyController.refs)
+);
 
 router.use('/:surveyId', canManageSurvey());
 

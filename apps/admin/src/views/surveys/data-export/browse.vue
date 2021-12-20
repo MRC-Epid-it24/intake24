@@ -103,7 +103,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { JobResponse } from '@common/types/http/admin';
+import { JobEntry } from '@common/types/http/admin';
 import detailMixin from '@/components/entry/detailMixin';
 import { PollsForJobs } from '@/components/polls-for-jobs';
 import form from '@/helpers/Form';
@@ -149,9 +149,9 @@ export default (Vue as VueConstructor<Vue & DetailMixin & mixins>).extend({
     async submit() {
       if (this.jobInProgress) return;
 
-      const { data } = await this.form.post<JobResponse>(`admin/surveys/${this.id}/data-export`);
+      const job = await this.form.post<JobEntry>(`admin/surveys/${this.id}/data-export`);
 
-      this.jobs.unshift(data);
+      this.jobs.unshift(job);
       this.startPolling();
     },
   },

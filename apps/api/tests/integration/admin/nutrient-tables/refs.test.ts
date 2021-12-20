@@ -8,7 +8,7 @@ import {
 } from '@api/db/models/foods';
 
 export default (): void => {
-  const url = '/api/admin/nutrient-tables/create';
+  const url = '/api/admin/nutrient-tables/refs';
 
   beforeAll(async () => {
     const input = mocker.foods.nutrientTable();
@@ -38,7 +38,7 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
-  it('should return 200 and data/refs', async () => {
+  it('should return 200 and refs', async () => {
     await setPermission('nutrient-tables-create');
 
     const { status, body } = await request(suite.app)
@@ -47,8 +47,8 @@ export default (): void => {
       .set('Authorization', suite.bearer.user);
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['refs']);
-    expect(body.refs.nutrients).toBeArray();
-    expect(body.refs.nutrients).not.toBeEmpty();
+    expect(body).toContainAllKeys(['nutrients']);
+    expect(body.nutrients).toBeArray();
+    expect(body.nutrients).not.toBeEmpty();
   });
 };

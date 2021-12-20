@@ -74,7 +74,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { copy } from '@common/util';
-import { AsServedImageEntry, AsServedImageResponse } from '@common/types/http/admin';
+import { AsServedImageEntry } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import form from '@/helpers/Form';
 
@@ -147,7 +147,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       this.form.image = target.files ? target.files[0] : null;
 
       try {
-        const { data } = await this.form.post<AsServedImageResponse>(
+        const data = await this.form.post<AsServedImageEntry>(
           `admin/images/as-served/${this.setId}/images`
         );
         this.images.push(data);

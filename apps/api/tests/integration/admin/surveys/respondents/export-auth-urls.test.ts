@@ -95,7 +95,7 @@ export default (): void => {
         .send(input);
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data']);
+      expect(body).not.toBeEmpty();
     });
   });
 };

@@ -84,15 +84,14 @@ export default (): void => {
       expect(status).toBe(404);
     });
 
-    it('should return 200 and data/refs', async () => {
+    it('should return 200 and data', async () => {
       const { status, body } = await request(suite.app)
         .get(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user);
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data']);
-      expect(body.data).toBeArray();
+      expect(body).toBeArray();
     });
   });
 };

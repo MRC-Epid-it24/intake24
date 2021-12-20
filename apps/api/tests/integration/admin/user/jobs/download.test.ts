@@ -21,15 +21,13 @@ export default (): void => {
 
     await setPermission(['surveys-data-export', 'surveyadmin']);
 
-    const {
-      body: { data },
-    } = await request(suite.app)
+    const { body } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user)
       .send(input);
 
-    job = data;
+    job = body;
 
     await setPermission([]);
 
@@ -45,8 +43,8 @@ export default (): void => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user);
 
-      if (res.body.data.downloadUrl !== null) {
-        job = res.body.data;
+      if (res.body.downloadUrl !== null) {
+        job = res.body;
         waiting = false;
       } else sleep(1000);
     }

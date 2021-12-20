@@ -28,14 +28,3 @@ export type CategoryContentsResponse = {
 };
 
 export type CategoryEntry = CategoryLocalAttributes;
-
-export type CategoryRefs = Dictionary;
-
-export type CategoryResponse = {
-  data: CategoryEntry;
-  refs: CategoryRefs;
-};
-
-export type CreateCategoryResponse = Pick<CategoryResponse, 'refs'>;
-
-export type StoreCategoryResponse = Pick<CategoryResponse, 'data'>;

@@ -149,7 +149,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { SurveyRespondentListEntry, SurveyRespondentResponse } from '@common/types/http/admin';
+import { SurveyRespondentEntry, SurveyRespondentListEntry } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
 import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
@@ -231,9 +231,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
 
   methods: {
     async fetchUser(userId: string) {
-      const {
-        data: { data },
-      } = await this.$http.get<SurveyRespondentResponse>(
+      const { data } = await this.$http.get<SurveyRespondentEntry>(
         `admin/surveys/${this.id}/respondents/${userId}`
       );
 
@@ -274,17 +272,15 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
 
     async save() {
       if (this.form.userId) {
-        const {
-          data: { userName: name },
-        } = await this.form.patch<SurveyRespondentResponse>(
+        const { userName: name } = await this.form.patch<SurveyRespondentEntry>(
           `admin/surveys/${this.id}/respondents/${this.form.userId}`
         );
 
         this.$toasted.success(this.$t('common.msg.updated', { name }).toString());
       } else {
-        const {
-          data: { userName: name },
-        } = await this.form.post<SurveyRespondentResponse>(`admin/surveys/${this.id}/respondents`);
+        const { userName: name } = await this.form.post<SurveyRespondentEntry>(
+          `admin/surveys/${this.id}/respondents`
+        );
 
         this.$toasted.success(this.$t('common.msg.stored', { name }).toString());
       }

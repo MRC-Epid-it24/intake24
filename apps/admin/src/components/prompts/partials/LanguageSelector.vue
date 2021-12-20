@@ -111,12 +111,16 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
 
   methods: {
     getLanguageFlag(langId: string) {
+      if (!this.refsLoaded) return 'gb';
+
       const language = this.refs.languages.find((lang) => lang.id === langId);
 
       return language?.countryFlagCode ?? 'gb';
     },
 
     getLanguageName(langId: string) {
+      if (!this.refsLoaded) return 'English';
+
       const language = this.refs.languages.find((lang) => lang.id === langId);
 
       return language?.englishName ?? 'English';

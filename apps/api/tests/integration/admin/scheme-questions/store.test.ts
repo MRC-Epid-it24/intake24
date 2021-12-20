@@ -66,8 +66,7 @@ export default (): void => {
         .set('Authorization', suite.bearer.user)
         .send(input);
 
-      expect(body).toContainAllKeys(['data']);
-      expect(pick(body.data, Object.keys(output))).toEqual(output);
+      expect(pick(body, Object.keys(output))).toEqual(output);
       expect(status).toBe(201);
     });
 

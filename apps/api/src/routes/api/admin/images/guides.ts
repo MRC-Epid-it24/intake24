@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/images/guides';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -16,7 +16,11 @@ router
     wrapAsync(guideImageController.browse)
   );
 
-router.get('/create', permission('guide-images-create'), wrapAsync(guideImageController.create));
+router.get(
+  '/refs',
+  anyPermission(['guide-images-create', 'guide-images-read', 'guide-images-edit']),
+  wrapAsync(guideImageController.refs)
+);
 
 router
   .route('/:guideImageId')

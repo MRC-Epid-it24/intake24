@@ -5,8 +5,8 @@ import { CategoryLocal } from '@api/db/models/foods';
 import { NotFoundError } from '@api/http/errors';
 import { PaginateQuery } from '@api/db/models/model';
 import {
+  CategoryEntry,
   CategoryContentsResponse,
-  CategoryResponse,
   RootCategoriesResponse,
 } from '@common/types/http/admin';
 import { categoryContentsResponse } from '@api/http/responses/admin/categories';
@@ -42,14 +42,14 @@ export default ({
 
   const read = async (
     req: Request<{ categoryId: string; localeId: string }>,
-    res: Response<CategoryResponse>
+    res: Response<CategoryEntry>
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
 
     const categoryLocal = await adminCategoryService.getCategory(categoryId, localeId);
     if (!categoryLocal) throw new NotFoundError();
 
-    res.json({ data: categoryLocal, refs: {} });
+    res.json(categoryLocal);
   };
 
   const update = async (
@@ -61,7 +61,7 @@ export default ({
     const categoryLocal = await CategoryLocal.findOne({ where: { id: categoryId, localeId } });
     if (!categoryLocal) throw new NotFoundError();
 
-    res.json();
+    res.json(categoryLocal);
   };
 
   const destroy = async (

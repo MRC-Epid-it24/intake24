@@ -12,10 +12,6 @@ export type SurveyRespondentListEntry = UserSurveyAliasAttributes;
 
 export type SurveyRespondentsResponse = Pagination<SurveyRespondentListEntry>;
 
-export type SurveyRespondentResponse = {
-  data: SurveyRespondentEntry;
-};
-
 export type RespondentInput = {
   name?: string;
   email?: string;

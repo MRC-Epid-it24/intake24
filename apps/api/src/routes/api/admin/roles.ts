@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/roles';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -14,7 +14,11 @@ router
   .post(permission('roles-create'), validation.store, wrapAsync(roleController.store))
   .get(permission('roles-browse'), validation.browse, wrapAsync(roleController.browse));
 
-router.get('/create', permission('roles-create'), wrapAsync(roleController.create));
+router.get(
+  '/refs',
+  anyPermission(['roles-create', 'roles-read', 'roles-edit']),
+  wrapAsync(roleController.refs)
+);
 
 router
   .route('/:roleId')

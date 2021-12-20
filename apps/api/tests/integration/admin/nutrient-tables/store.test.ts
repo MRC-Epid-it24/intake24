@@ -89,14 +89,13 @@ export default (): void => {
         .send(input);
 
       expect(status).toBe(201);
-      expect(body).toContainAllKeys(['data']);
 
       const {
         csvMapping: resCsvMapping,
         csvMappingFields: resCsvMappingFields,
         csvMappingNutrients: resCsvMappingNutrients,
         ...restData
-      } = body.data;
+      } = body;
       const {
         csvMapping: outputCsvMapping,
         csvMappingFields: outputCsvMappingFields,

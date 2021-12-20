@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import {
-  JobResponse,
-  SurveyRespondentResponse,
+  JobEntry,
+  SurveyRespondentEntry,
   SurveyRespondentsResponse,
 } from '@common/types/http/admin';
 import { Survey, User, UserCustomField, UserSurveyAlias } from '@api/db/models/system';
@@ -13,7 +13,7 @@ import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyRespondentController = Controller<
-  Exclude<CrudActions, 'create'> | 'upload' | 'exportAuthUrls'
+  Exclude<CrudActions, 'create' | 'refs'> | 'upload' | 'exportAuthUrls'
 >;
 
 export default ({
@@ -21,7 +21,7 @@ export default ({
 }: Pick<IoC, 'adminSurveyService'>): AdminSurveyRespondentController => {
   const entry = async (
     req: Request<{ surveyId: string; userId: string }>,
-    res: Response<SurveyRespondentResponse>
+    res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
     const { surveyId, userId } = req.params;
 
@@ -31,7 +31,7 @@ export default ({
     });
     if (!respondent) throw new NotFoundError();
 
-    res.json({ data: userRespondentResponse(respondent) });
+    res.json(userRespondentResponse(respondent));
   };
 
   const browse = async (
@@ -56,7 +56,7 @@ export default ({
 
   const store = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyRespondentResponse>
+    res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
     const { surveyId } = req.params;
 
@@ -72,22 +72,22 @@ export default ({
       include: [{ model: User, include: [{ model: UserCustomField }] }],
     });
 
-    res.status(201).json({ data: userRespondentResponse(respondent) });
+    res.status(201).json(userRespondentResponse(respondent));
   };
 
   const read = async (
     req: Request<{ surveyId: string; userId: string }>,
-    res: Response<SurveyRespondentResponse>
+    res: Response<SurveyRespondentEntry>
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ surveyId: string; userId: string }>,
-    res: Response<SurveyRespondentResponse>
+    res: Response<SurveyRespondentEntry>
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ surveyId: string; userId: string }>,
-    res: Response<SurveyRespondentResponse>
+    res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
     const { surveyId, userId } = req.params;
 
@@ -101,7 +101,7 @@ export default ({
       include: [{ model: User, include: [{ model: UserCustomField }] }],
     });
 
-    res.json({ data: userRespondentResponse(respondent) });
+    res.json(userRespondentResponse(respondent));
   };
 
   const destroy = async (
@@ -117,7 +117,7 @@ export default ({
 
   const upload = async (
     req: Request<{ surveyId: string }>,
-    res: Response<JobResponse>
+    res: Response<JobEntry>
   ): Promise<void> => {
     const {
       file,
@@ -129,19 +129,19 @@ export default ({
 
     const job = await adminSurveyService.importRespondents(surveyId, userId, file);
 
-    res.json({ data: job });
+    res.json(job);
   };
 
   const exportAuthUrls = async (
     req: Request<{ surveyId: string }>,
-    res: Response<JobResponse>
+    res: Response<JobEntry>
   ): Promise<void> => {
     const { surveyId } = req.params;
     const { id: userId } = req.user as User;
 
     const job = await adminSurveyService.exportAuthenticationUrls(surveyId, userId);
 
-    res.json({ data: job });
+    res.json(job);
   };
 
   return {
