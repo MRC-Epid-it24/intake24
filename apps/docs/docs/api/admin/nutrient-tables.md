@@ -200,6 +200,6 @@ Content-Type: multipart/form-data
 200 OK
 
 {
-    "data": {...}
+    ...
 }
 ```

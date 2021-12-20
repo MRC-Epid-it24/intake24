@@ -8,7 +8,7 @@ REST-based API endpoints use:
 
 Protected endpoints require to supply access token (obtained during login) in `Authorization` http header.
 
-## Header format:
+## Header format
 ```
 Authorization: Bearer {accessToken}
 ```
@@ -30,6 +30,6 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...}
+    ...
 }
 ```
