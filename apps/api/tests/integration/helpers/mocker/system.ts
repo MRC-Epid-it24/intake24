@@ -76,7 +76,7 @@ const respondent = (): CreateRespondentRequest => {
   const userName = faker.internet.userName();
   const name = faker.name.firstName();
   const email = faker.internet.email();
-  const password = nanoid(20);
+  const password = 'sUpErStRoNgPaSwOrD-123467890';
   const passwordConfirm = password;
   const phone = faker.phone.phoneNumber();
   const customFields = [
