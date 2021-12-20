@@ -13,8 +13,6 @@ import {
   foodsAdmin,
 } from '@api/services/core/auth';
 
-const { acl: aclConfig } = ioc.cradle.config;
-
 /*
  * This middleware should be placed after authentication
  * It assumes successfully authenticated user on request scope hence the assertion to User

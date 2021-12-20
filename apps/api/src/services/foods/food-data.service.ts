@@ -5,7 +5,6 @@ import {
   Food,
   FoodLocal,
   FoodLocalList,
-  FoodNutrient,
   Locale,
   NutrientTableRecord,
   NutrientTableRecordNutrient,
