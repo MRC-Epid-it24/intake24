@@ -59,7 +59,7 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...}
+    ...
 }
 ```
 
@@ -82,10 +82,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {
-        "nutrients": [{...}]
-    }
+    ...
 }
 ```
 
@@ -121,10 +118,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {
-        "nutrients": [{...}]
-    }
+    ...
 }
 ```
 
@@ -147,6 +141,35 @@ Content-Type: application/json
 204 No Content
 ```
 
+## Nutrient table references
+
+Get nutrient table references
+
+### Request
+
+```http
+GET /api/admin/nutrient-tables/refs
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "nutrients": [
+        {
+            "id": string,
+            "unitId": string,
+            "description": string
+        },
+        ...
+    ]
+}
+```
 
 ## Upload nutrient data
 

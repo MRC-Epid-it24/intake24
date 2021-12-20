@@ -22,7 +22,14 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": [{...}],
+    "data": [
+        {
+            "id": string,
+            "description": string,
+            "imageUrl": string,
+        },
+        ...
+    ],
     "meta": {...}
 }
 ```
@@ -52,7 +59,17 @@ Content-Type: multipart/form-data
 201 Created
 
 {
-    "data": {...}
+    "id": string,
+    "description": string,
+    "baseImageUrl": string,
+    "objects": [
+        {
+            "id": string,
+            "description": string,
+            "outlineCoordinates": number[]
+        },
+        ...
+    ],
 }
 ```
 
@@ -75,8 +92,17 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    "id": string,
+    "description": string,
+    "baseImageUrl": string,
+    "objects": [
+        {
+            "id": string,
+            "description": string,
+            "outlineCoordinates": number[]
+        },
+        ...
+    ],
 }
 ```
 
@@ -111,8 +137,17 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    "id": string,
+    "description": string,
+    "baseImageUrl": string,
+    "objects": [
+        {
+            "id": string,
+            "description": string,
+            "outlineCoordinates": number[]
+        },
+        ...
+    ],
 }
 ```
 

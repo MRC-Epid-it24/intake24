@@ -78,11 +78,13 @@ Content-Type: application/json
 ```json
 200 OK
 
-{
-    "id": string,
-    "name": string,
-    "displayName": string
-}[]
+[
+    {
+        "id": string,
+        "name": string,
+        "displayName": string
+    }
+]
 ```
 
 ## Available management users
@@ -103,11 +105,13 @@ Content-Type: application/json
 ```json
 200 OK
 
-{
-    "id": string,
-    "name": string,
-    "email": string
-}[]
+[
+    {
+        "id": string,
+        "name": string,
+        "email": string
+    }
+]
 ```
 
 ## Create management user

@@ -57,7 +57,7 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...}
+    ...
 }
 ```
 
@@ -80,11 +80,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {
-        "languages": [{...}],
-        "locales": [{...}]
-    }
+    ...
 }
 ```
 
@@ -117,11 +113,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {
-        "languages": [{...}],
-        "locales": [{...}]
-    }
+    ...
 }
 ```
 
@@ -142,4 +134,43 @@ Content-Type: application/json
 
 ```json
 204 No Content
+```
+
+## Locale references
+
+Get locale references
+
+### Request
+
+```http
+GET /api/admin/locales/refs
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "languages": [
+        {
+            "id": string,
+            "englishName": string,
+            "localName": string,
+            "countryFlagCode": string
+        },
+        ...
+    ],
+    "locales": [
+        {
+            "id": string,
+            "englishName": string,
+            "localName": string
+        },
+        ...
+    ]
+}
 ```

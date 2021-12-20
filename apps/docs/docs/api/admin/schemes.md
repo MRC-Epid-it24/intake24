@@ -55,7 +55,7 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...}
+    ...
 }
 ```
 
@@ -78,8 +78,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    ...
 }
 ```
 
@@ -110,8 +109,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    ...
 }
 ```
 
@@ -132,6 +130,38 @@ Content-Type: application/json
 
 ```json
 204 No Content
+```
+
+## Scheme references
+
+Get scheme references
+
+### Request
+
+```http
+GET /api/admin/schemes/refs
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "languages": [
+        {
+            "id": string,
+            "englishName": string,
+            "localName": string,
+            "countryFlagCode": string
+        },
+        ...
+    ],
+    "templates": PromptQuestion[]
+}
 ```
 
 ## Copy scheme
@@ -159,7 +189,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...}
+    ...
 }
 ```
 
@@ -222,7 +252,7 @@ Content-Type: application/json
 ```json
 200 OK
 
-{
-    "data": [{...}],
-}
+[
+    {...}
+]
 ```

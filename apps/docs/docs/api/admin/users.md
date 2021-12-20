@@ -63,7 +63,7 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...}
+    ...
 }
 ```
 
@@ -86,11 +86,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {
-        "permissions": [{...}],
-        "roles": [{...}]
-    }
+    ...
 }
 ```
 
@@ -125,11 +121,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {
-        "permissions": [{...}],
-        "roles": [{...}]
-    }
+    ...
 }
 ```
 
@@ -150,4 +142,42 @@ Content-Type: application/json
 
 ```json
 204 No Content
+```
+
+## User references
+
+Get user references
+
+### Request
+
+```http
+GET /api/admin/users/refs
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "permissions": [
+        {
+            "id": string,
+            "name": string,
+            "displayName": string
+        },
+        ...
+    ],
+    "roles": [
+        {
+            "id": string,
+            "name": string,
+            "displayName": string
+        },
+        ...
+    ]
+}
 ```

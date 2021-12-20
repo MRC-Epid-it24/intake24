@@ -52,7 +52,7 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...}
+    ...
 }
 ```
 
@@ -75,8 +75,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    ...
 }
 ```
 
@@ -103,8 +102,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    ...
 }
 ```
 
@@ -127,6 +125,38 @@ Content-Type: application/json
 204 No Content
 ```
 
+## Scheme question references
+
+Get scheme question references
+
+### Request
+
+```http
+GET /api/admin/scheme-questions/refs
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "languages": [
+        {
+            "id": string,
+            "englishName": string,
+            "localName": string,
+            "countryFlagCode": string
+        },
+        ...
+    ],
+    "questionIds": string[],
+    "schemes": [{...}]
+}
+```
 
 ## Scheme question sync
 

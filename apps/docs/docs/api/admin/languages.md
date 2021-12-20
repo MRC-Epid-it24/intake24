@@ -54,7 +54,7 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...}
+    ...
 }
 ```
 
@@ -77,8 +77,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    ...
 }
 ```
 
@@ -108,8 +107,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    ...
 }
 ```
 

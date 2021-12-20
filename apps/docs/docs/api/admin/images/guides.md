@@ -22,7 +22,14 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": [{...}],
+    "data": [
+        {
+            "id": string,
+            "description": string,
+            "imageUrl": string,
+        },
+        ...
+    ],
     "meta": {...}
 }
 ```
@@ -52,7 +59,19 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...}
+    "id": string,
+    "description": string,
+    "baseImageUrl": string,
+    "imageMapId": string,
+    "objects": [
+        {
+            "id": string,
+            "description": string,
+            "outlineCoordinates": number[],
+            "weight": number
+        },
+        ...
+    ],
 }
 ```
 
@@ -75,8 +94,19 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    "id": string,
+    "description": string,
+    "baseImageUrl": string,
+    "imageMapId": string,
+    "objects": [
+        {
+            "id": string,
+            "description": string,
+            "outlineCoordinates": number[],
+            "weight": number
+        },
+        ...
+    ],
 }
 ```
 
@@ -110,8 +140,19 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    "id": string,
+    "description": string,
+    "baseImageUrl": string,
+    "imageMapId": string,
+    "objects": [
+        {
+            "id": string,
+            "description": string,
+            "outlineCoordinates": number[],
+            "weight": number
+        },
+        ...
+    ],
 }
 ```
 
@@ -132,4 +173,33 @@ Content-Type: application/json
 
 ```json
 204 No Content
+```
+
+## Guide image references
+
+Get guide image references
+
+### Request
+
+```http
+GET /api/admin/images/guides/refs
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "imageMaps": [
+        {
+            "id": string,
+            "description": string
+        },
+        ...
+    ]
+}
 ```

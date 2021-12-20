@@ -22,8 +22,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": [{...}],
-    "meta": {...}
+    ...
 }
 ```
 
@@ -53,7 +52,7 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...}
+    ...
 }
 ```
 
@@ -76,10 +75,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {
-        "permissions": [{...}]
-    }
+    ...
 }
 ```
 
@@ -109,10 +105,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {
-        "permissions": [{...}]
-    }
+    ...
 }
 ```
 
@@ -133,4 +126,34 @@ Content-Type: application/json
 
 ```json
 204 No Content
+```
+
+## Role references
+
+Get role references
+
+### Request
+
+```http
+GET /api/admin/roles/refs
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "permissions": [
+        {
+            "id": string,
+            "name": string,
+            "displayName": string
+        },
+        ...
+    ]
+}
 ```

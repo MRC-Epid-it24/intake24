@@ -50,10 +50,12 @@ Content-Type: application/json
     "phone": string? | null,
     "password": string,
     "passwordConfirm": string,
-    "customFields": {
-        "name": string,
-        "value": string
-    }[]
+    "customFields": [
+        {
+            "name": string,
+            "value": string
+        }
+    ]
 }
 ```
 
@@ -63,7 +65,19 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...}
+    "userId": string,
+    "surveyId": string,
+    "userName": string,
+    "urlAuthToken": string,
+    "name": string | null,
+    "email": string | null,
+    "phone": string | null,
+    "customFields": [
+        {
+            "name": string,
+            "value": string
+        }
+    ]
 }
 ```
 
@@ -86,19 +100,19 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {
-        "userId": string,
-        "surveyId": string,
-        "userName": string,
-        "urlAuthToken": string,
-        "name": string | null,
-        "email": string | null,
-        "phone": string | null,
-        "customFields": {
+    "userId": string,
+    "surveyId": string,
+    "userName": string,
+    "urlAuthToken": string,
+    "name": string | null,
+    "email": string | null,
+    "phone": string | null,
+    "customFields": [
+        {
             "name": string,
             "value": string
-        }[]
-    }
+        }
+    ]
 }
 ```
 
@@ -129,7 +143,19 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...}
+    "userId": string,
+    "surveyId": string,
+    "userName": string,
+    "urlAuthToken": string,
+    "name": string | null,
+    "email": string | null,
+    "phone": string | null,
+    "customFields": [
+        {
+            "name": string,
+            "value": string
+        }
+    ]
 }
 ```
 
@@ -173,7 +199,7 @@ Returns job resource entry.
 200 OK
 
 {
-    "data": {...}
+    ...
 }
 ```
 
@@ -202,6 +228,6 @@ Returns job resource entry.
 200 OK
 
 {
-    "data": {...}
+    ...
 }
 ```

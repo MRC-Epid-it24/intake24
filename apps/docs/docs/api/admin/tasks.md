@@ -54,7 +54,7 @@ Content-Type: application/json
 201 Created
 
 {
-    "data": {...}
+    ...
 }
 ```
 
@@ -77,8 +77,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    ...
 }
 ```
 
@@ -109,8 +108,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    ...
 }
 ```
 
@@ -150,4 +148,27 @@ Content-Type: application/json
 
 ```json
 200 OK
+```
+
+## Task references
+
+Get task references
+
+### Request
+
+```http
+GET /api/admin/tasks/refs
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "jobs": string[]
+}
 ```

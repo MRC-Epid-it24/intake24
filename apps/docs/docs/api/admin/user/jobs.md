@@ -48,8 +48,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "data": {...},
-    "refs": {...}
+    ...
 }
 ```
 
