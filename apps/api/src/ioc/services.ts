@@ -17,6 +17,7 @@ import {
   Scheduler,
   Session,
   adminCategoryService,
+  adminFoodService,
   adminSurveyService,
   adminUserService,
   asServedService,
@@ -53,6 +54,7 @@ export default (container: AwilixContainer): void => {
     portionSizeService: asFunction(portionSizeService),
 
     adminCategoryService: asFunction(adminCategoryService),
+    adminFoodService: asFunction(adminFoodService),
 
     dataExportFields: asFunction(dataExportFields),
     dataExportMapper: asFunction(dataExportMapper),

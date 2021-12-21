@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
+import validation from '@api/http/requests/admin/categories';
 
 const { adminCategoryController } = ioc.cradle;
 const router = Router({ mergeParams: true });
@@ -8,7 +9,7 @@ const router = Router({ mergeParams: true });
 router
   .route('')
   .post(wrapAsync(adminCategoryController.store))
-  .get(wrapAsync(adminCategoryController.browse));
+  .get(validation.browse, wrapAsync(adminCategoryController.browse));
 
 router.get('/root', wrapAsync(adminCategoryController.root));
 

@@ -10,10 +10,10 @@ import {
   RootCategoriesResponse,
 } from '@common/types/http/admin';
 import { categoryContentsResponse } from '@api/http/responses/admin/categories';
-import type { Controller } from '../../controller';
+import type { Controller, CrudActions } from '../../controller';
 
 export type AdminCategoryController = Controller<
-  'browse' | 'store' | 'read' | 'update' | 'destroy' | 'root' | 'contents'
+  Exclude<CrudActions, 'edit' | 'refs'> | 'root' | 'contents'
 >;
 
 export default ({

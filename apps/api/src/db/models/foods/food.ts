@@ -59,13 +59,13 @@ export default class Food extends BaseModel<FoodAttributes> implements FoodAttri
   public version!: string;
 
   @HasOne(() => FoodAttribute, 'foodCode')
-  public attributes?: FoodAttribute[];
+  public attributes?: FoodAttribute;
 
   @HasMany(() => AssociatedFood, 'foodCode')
   public associatedFoods?: AssociatedFood[];
 
   @HasMany(() => Brand, 'foodCode')
-  public brand?: Brand[];
+  public brands?: Brand[];
 
   @BelongsToMany(() => Category, () => FoodCategory)
   public categories?: Category[];

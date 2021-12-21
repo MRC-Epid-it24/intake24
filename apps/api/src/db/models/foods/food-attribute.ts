@@ -8,7 +8,7 @@ import Food from './food';
 }))
 @Table({
   modelName: 'FoodAttribute',
-  tableName: 'foods_attributes',
+  tableName: 'food_attributes',
   freezeTableName: true,
   timestamps: false,
   underscored: true,
