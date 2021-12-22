@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/languages';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -11,6 +11,12 @@ router
   .route('')
   .post(permission('languages-create'), validation.store, wrapAsync(languageController.store))
   .get(permission('languages-browse'), validation.browse, wrapAsync(languageController.browse));
+
+router.get(
+  '/refs',
+  anyPermission(['languages-create', 'languages-read', 'languages-edit']),
+  wrapAsync(languageController.refs)
+);
 
 router
   .route('/:languageId')

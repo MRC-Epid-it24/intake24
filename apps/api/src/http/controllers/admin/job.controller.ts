@@ -10,7 +10,7 @@ import type { IoC } from '@api/ioc';
 import type { PaginateQuery } from '@api/db/models/model';
 import type { Controller } from '../controller';
 
-export type JobController = Controller<'browse' | 'read' | 'destroy' | 'download'>;
+export type JobController = Controller<'browse' | 'read' | 'destroy' | 'refs' | 'download'>;
 
 export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): JobController => {
   const browse = async (
@@ -51,6 +51,10 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): JobController => {
     res.status(204).json();
   };
 
+  const refs = async (): Promise<void> => {
+    throw new NotFoundError();
+  };
+
   const download = async (
     req: Request<{ jobId: string }>,
     res: Response<Buffer>
@@ -83,6 +87,7 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): JobController => {
     browse,
     read,
     destroy,
+    refs,
     download,
   };
 };

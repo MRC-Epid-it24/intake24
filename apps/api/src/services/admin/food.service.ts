@@ -9,7 +9,6 @@ import {
   FoodPortionSizeMethodParameter,
 } from '@api/db/models/foods';
 import { PaginateQuery } from '@api/db/models/model';
-import { NotFoundError } from '@api/http/errors';
 
 const adminFoodService = () => {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {

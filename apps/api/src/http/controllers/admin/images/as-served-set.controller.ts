@@ -13,7 +13,7 @@ import imagesResponseCollection from '@api/http/responses/admin/images';
 import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
-export type AsServedSetController = Controller<Exclude<CrudActions, 'refs'>>;
+export type AsServedSetController = Controller<CrudActions>;
 
 export default ({
   imagesBaseUrl,
@@ -100,6 +100,10 @@ export default ({
     res.status(204).json();
   };
 
+  const refs = async (): Promise<void> => {
+    throw new NotFoundError();
+  };
+
   return {
     browse,
     store,
@@ -107,5 +111,6 @@ export default ({
     edit,
     update,
     destroy,
+    refs,
   };
 };

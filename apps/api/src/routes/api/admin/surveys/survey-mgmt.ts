@@ -15,7 +15,7 @@ router
   .post(validation.store, wrapAsync(adminSurveyMgmtController.store));
 
 router.get('/permissions', wrapAsync(adminSurveyMgmtController.availablePermissions));
-router.get('/users', wrapAsync(adminSurveyMgmtController.availableUsers));
+router.get('/users', validation.browse, wrapAsync(adminSurveyMgmtController.availableUsers));
 router.patch('/:userId', validation.update, wrapAsync(adminSurveyMgmtController.update));
 
 export default router;

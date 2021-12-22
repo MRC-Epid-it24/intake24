@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/permissions';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -13,6 +13,12 @@ router
   .route('')
   .post(permission('permissions-create'), validation.store, wrapAsync(permissionController.store))
   .get(permission('permissions-browse'), validation.browse, wrapAsync(permissionController.browse));
+
+router.get(
+  '/refs',
+  anyPermission(['permissions-create', 'permissions-read', 'permissions-edit']),
+  wrapAsync(permissionController.refs)
+);
 
 router
   .route('/:permissionId')

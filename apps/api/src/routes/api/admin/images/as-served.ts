@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/images/as-served';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -19,6 +19,12 @@ router
     wrapAsync(asServedSetController.store)
   )
   .get(permission('as-served-browse'), validation.browse, wrapAsync(asServedSetController.browse));
+
+router.get(
+  '/refs',
+  anyPermission(['as-served-create', 'as-served-read', 'as-served-edit']),
+  wrapAsync(asServedSetController.refs)
+);
 
 router
   .route('/:asServedSetId')

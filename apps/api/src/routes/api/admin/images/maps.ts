@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/images/maps';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -18,6 +18,12 @@ router
     wrapAsync(imageMapController.store)
   )
   .get(permission('image-maps-browse'), validation.browse, wrapAsync(imageMapController.browse));
+
+router.get(
+  '/refs',
+  anyPermission(['image-maps-create', 'image-maps-read', 'image-maps-edit']),
+  wrapAsync(imageMapController.refs)
+);
 
 router
   .route('/:imageMapId')

@@ -23,6 +23,7 @@ export default (container: AwilixContainer): void => {
 
     adminCategoryController: asFunction(controllers.admin.foods.category),
     adminFoodController: asFunction(controllers.admin.foods.food),
+    adminFoodGroupController: asFunction(controllers.admin.foods.foodGroup),
 
     asServedSetController: asFunction(controllers.admin.images.asServedSet),
     asServedImageController: asFunction(controllers.admin.images.asServedImage),

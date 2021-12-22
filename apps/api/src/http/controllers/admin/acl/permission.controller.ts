@@ -6,7 +6,7 @@ import { NotFoundError } from '@api/http/errors';
 import type { Controller, CrudActions } from '@api/http/controllers';
 import { PaginateQuery } from '@api/db/models/model';
 
-export type PermissionController = Controller<Exclude<CrudActions, 'refs'>>;
+export type PermissionController = Controller<CrudActions>;
 
 export default (): PermissionController => {
   const entry = async (
@@ -79,6 +79,10 @@ export default (): PermissionController => {
     res.status(204).json();
   };
 
+  const refs = async (): Promise<void> => {
+    throw new NotFoundError();
+  };
+
   return {
     browse,
     store,
@@ -86,5 +90,6 @@ export default (): PermissionController => {
     edit,
     update,
     destroy,
+    refs,
   };
 };

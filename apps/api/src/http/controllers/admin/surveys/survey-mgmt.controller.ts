@@ -112,7 +112,7 @@ export default ({
   };
 
   const availableUsers = async (
-    req: Request<{ surveyId: string }, any, any, { search?: string }>,
+    req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveyMgmtAvailableUsersResponse>
   ): Promise<void> => {
     const {

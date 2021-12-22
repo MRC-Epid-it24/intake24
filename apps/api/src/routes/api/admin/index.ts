@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { authenticate } from '@api/http/middleware/acl';
 
 import foods from './foods';
+import foodGroups from './food-groups';
 import images from './images';
 import jobs from './jobs';
 import languages from './languages';
@@ -22,6 +23,7 @@ const router = Router();
 authenticate(router, 'admin');
 
 router.use('/fdbs', foods);
+router.use('/food-groups', foodGroups);
 router.use('/images', images);
 router.use('/jobs', jobs);
 router.use('/languages', languages);

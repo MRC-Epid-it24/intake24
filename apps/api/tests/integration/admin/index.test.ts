@@ -1,3 +1,4 @@
+import foodGroups from './food-groups/index.test';
 import images from './images/index.test';
 import jobs from './jobs/index.test';
 import languages from './languages/index.test';
@@ -14,6 +15,7 @@ import user from './user/index.test';
 import users from './users/index.test';
 
 export default (): void => {
+  describe('/api/admin/food-groups', foodGroups);
   describe('/api/admin/images', images);
   describe('/api/admin/jobs', jobs);
   describe('/api/admin/languages', languages);

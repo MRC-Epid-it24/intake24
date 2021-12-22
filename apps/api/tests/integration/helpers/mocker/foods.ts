@@ -1,12 +1,28 @@
 import faker from 'faker';
 import { nanoid } from 'nanoid';
 import slugify from 'slugify';
+import * as uuid from 'uuid';
 import {
   CreateLocaleRequest,
   CreateAsServedSetInput,
   NutrientTableInput,
 } from '@common/types/http/admin';
 import { downloadImage } from '../util';
+
+const food = (foodGroupId: string) => {
+  return {
+    code: nanoid(8),
+    foodGroupId,
+    name: faker.random.words(5),
+    version: uuid.v4(),
+  };
+};
+
+const foodGroup = () => {
+  return {
+    name: faker.random.words(10),
+  };
+};
 
 const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInput> => {
   const id = asServedSetId ?? nanoid(32);
@@ -80,6 +96,8 @@ const nutrientTable = (): NutrientTableInput => {
 };
 
 export default {
+  food,
+  foodGroup,
   asServedSet,
   locale,
   nutrientTable,

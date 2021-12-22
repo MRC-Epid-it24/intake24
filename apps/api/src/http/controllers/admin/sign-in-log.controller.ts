@@ -6,7 +6,7 @@ import { pick } from 'lodash';
 import { PaginateQuery } from '@api/db/models/model';
 import { Controller } from '../controller';
 
-export type SignInLogController = Controller<'browse' | 'read' | 'destroy'>;
+export type SignInLogController = Controller<'browse' | 'read' | 'destroy' | 'refs'>;
 
 export default (): SignInLogController => {
   const entry = async (
@@ -52,9 +52,14 @@ export default (): SignInLogController => {
     res.status(204).json();
   };
 
+  const refs = async (): Promise<void> => {
+    throw new NotFoundError();
+  };
+
   return {
     browse,
     read,
     destroy,
+    refs,
   };
 };

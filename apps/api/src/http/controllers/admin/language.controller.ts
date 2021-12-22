@@ -6,7 +6,7 @@ import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
-export type LanguageController = Controller<Exclude<CrudActions, 'refs'>>;
+export type LanguageController = Controller<CrudActions>;
 
 export default (): LanguageController => {
   const entry = async (req: Request, res: Response<LanguageEntry>): Promise<void> => {
@@ -83,6 +83,10 @@ export default (): LanguageController => {
     res.status(204).json();
   };
 
+  const refs = async (): Promise<void> => {
+    throw new NotFoundError();
+  };
+
   return {
     browse,
     store,
@@ -90,5 +94,6 @@ export default (): LanguageController => {
     edit,
     update,
     destroy,
+    refs,
   };
 };

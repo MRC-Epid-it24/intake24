@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/jobs';
 import { wrapAsync } from '@api/util';
 import ioc from '@api/ioc';
@@ -9,6 +9,12 @@ const { jobController } = ioc.cradle;
 const router = Router();
 
 router.route('').get(permission('jobs-browse'), validation.browse, wrapAsync(jobController.browse));
+
+router.get(
+  '/refs',
+  anyPermission(['jobs-create', 'jobs-read', 'jobs-edit']),
+  wrapAsync(jobController.refs)
+);
 
 router
   .route('/:jobId')

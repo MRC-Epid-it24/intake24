@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
+import { anyPermission, permission } from '@api/http/middleware/acl';
 import validation from '@api/http/requests/admin/sign-in-logs';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
@@ -10,6 +10,12 @@ const router = Router();
 router
   .route('')
   .get(permission('sign-in-logs-browse'), validation.browse, wrapAsync(signInLogController.browse));
+
+router.get(
+  '/refs',
+  anyPermission(['sign-in-logs-create', 'sign-in-logs-read', 'sign-in-logs-edit']),
+  wrapAsync(signInLogController.refs)
+);
 
 router
   .route('/:signInLogId')
