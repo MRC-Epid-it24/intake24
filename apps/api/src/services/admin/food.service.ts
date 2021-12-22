@@ -1,11 +1,15 @@
 import { FindOptions, Op } from 'sequelize';
 import {
+  Brand,
   Food,
+  FoodAttribute,
+  FoodGroup,
   FoodLocal,
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
 } from '@api/db/models/foods';
 import { PaginateQuery } from '@api/db/models/model';
+import { NotFoundError } from '@api/http/errors';
 
 const adminFoodService = () => {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
@@ -18,7 +22,7 @@ const adminFoodService = () => {
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
-      const ops = ['name', '$food.name$'].map((column) => ({ [column]: op }));
+      const ops = ['name', '$main.name$'].map((column) => ({ [column]: op }));
 
       options.where = { ...options.where, [Op.or]: ops };
     }
@@ -26,16 +30,24 @@ const adminFoodService = () => {
     return FoodLocal.paginate({ query, ...options });
   };
 
-  const getFood = async (foodId: string, localeId?: string) =>
-    FoodLocal.findOne({
-      where: localeId ? { id: foodId, localeId } : { id: foodId },
+  const getFood = async (foodId: string, localeId?: string) => {
+    const where = localeId ? { localeId } : {};
+
+    return FoodLocal.findOne({
+      where: { ...where, id: foodId },
       include: [
         {
           model: Food,
+          required: true,
           include: [
-            { association: 'attributes' },
-            { association: 'brands', where: { localeId }, required: false, separate: true },
-            { association: 'categories', through: { attributes: [] } },
+            { model: FoodAttribute },
+            { model: FoodGroup },
+            { model: Brand, where, required: false, separate: true },
+            {
+              association: 'parentCategories',
+              through: { attributes: [] },
+              include: [{ association: 'locals', attributes: ['name'], where }],
+            },
           ],
         },
         {
@@ -45,6 +57,7 @@ const adminFoodService = () => {
         },
       ],
     });
+  };
 
   return {
     browseFoods,

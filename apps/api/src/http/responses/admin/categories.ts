@@ -11,24 +11,22 @@ export const categoryContentsResponse = ({
   foods: FoodLocal[];
 }): CategoryContentsResponse => ({
   categories: categories.map((item) => {
-    const { id, categoryCode: code, localeId, name, category } = item;
+    const { id, categoryCode: code, localeId, name, main } = item;
 
-    if (!category)
-      throw new InternalServerError(
-        `categoryContentsResponse: 'category' not loaded relationships.`
-      );
+    if (!main)
+      throw new InternalServerError(`categoryContentsResponse: 'main' not loaded relationships.`);
 
-    const { name: englishName, isHidden } = category;
+    const { name: englishName, isHidden } = main;
 
     return { id, code, localeId, name, englishName, isHidden };
   }),
   foods: foods.map((item) => {
-    const { id, foodCode: code, localeId, name, food } = item;
+    const { id, foodCode: code, localeId, name, main } = item;
 
-    if (!food)
-      throw new InternalServerError(`categoryContentsResponse: 'food' not loaded relationships.`);
+    if (!main)
+      throw new InternalServerError(`categoryContentsResponse: 'main' not loaded relationships.`);
 
-    const { name: englishName } = food;
+    const { name: englishName } = main;
 
     return { id, code, localeId, name, englishName };
   }),

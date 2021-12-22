@@ -4,6 +4,7 @@ import { pick } from 'lodash';
 import { PaginateQuery } from '@api/db/models/model';
 import { NotFoundError } from '@api/http/errors';
 import { FoodLocal } from '@api/db/models/foods';
+import { FoodEntry, FoodsResponse } from '@common/types/http/admin';
 import type { Controller, CrudActions } from '../../controller';
 
 export type AdminFoodController = Controller<Exclude<CrudActions, 'edit' | 'refs'>>;
@@ -11,7 +12,7 @@ export type AdminFoodController = Controller<Exclude<CrudActions, 'edit' | 'refs
 export default ({ adminFoodService }: Pick<IoC, 'adminFoodService'>): AdminFoodController => {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
-    res: Response
+    res: Response<FoodsResponse>
   ): Promise<void> => {
     const { localeId } = req.params;
 
@@ -32,7 +33,7 @@ export default ({ adminFoodService }: Pick<IoC, 'adminFoodService'>): AdminFoodC
 
   const read = async (
     req: Request<{ foodId: string; localeId: string }>,
-    res: Response
+    res: Response<FoodEntry>
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
 
@@ -44,7 +45,7 @@ export default ({ adminFoodService }: Pick<IoC, 'adminFoodService'>): AdminFoodC
 
   const update = async (
     req: Request<{ foodId: string; localeId: string }>,
-    res: Response
+    res: Response<FoodEntry>
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
 

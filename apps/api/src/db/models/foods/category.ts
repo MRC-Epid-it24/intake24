@@ -72,5 +72,5 @@ export default class Category
   public foodLinks?: CategoryCategory[];
 
   @HasMany(() => CategoryLocal, 'categoryCode')
-  public localCategories?: CategoryLocal[];
+  public locals?: CategoryLocal[];
 }

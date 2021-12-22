@@ -3,7 +3,7 @@ import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
 import slugify from 'slugify';
-import { SchemeTypes } from '@common/types/models';
+import { SchemeAttributes, SchemeTypes } from '@common/types/models';
 import { validateMeals, validateRecallQuestions, validateExportSections } from '@common/validators';
 import { Scheme } from '@api/db/models/system';
 import { unique, identifierSafeChars } from '@api/http/rules';
@@ -34,9 +34,9 @@ export const name: ParamSchema = {
   custom: {
     options: async (value, { req }): Promise<void> => {
       const { schemeId } = (req as Request).params;
-      const except: WhereOptions = schemeId ? { id: { [Op.ne]: schemeId } } : {};
+      const where: WhereOptions<SchemeAttributes> = schemeId ? { id: { [Op.ne]: schemeId } } : {};
 
-      return unique({ model: Scheme, condition: { field: 'name', value }, except });
+      return unique({ model: Scheme, condition: { field: 'name', value }, options: { where } });
     },
   },
 };

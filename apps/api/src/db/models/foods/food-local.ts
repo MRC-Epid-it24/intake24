@@ -71,7 +71,7 @@ export default class FoodLocal
   public version!: string;
 
   @BelongsTo(() => Food, 'foodCode')
-  public food?: Food;
+  public main?: Food;
 
   @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;

@@ -16,7 +16,7 @@ router.get('/root', wrapAsync(adminCategoryController.root));
 router
   .route('/:categoryId')
   .get(wrapAsync(adminCategoryController.read))
-  .put(wrapAsync(adminCategoryController.update))
+  .put(validation.update, wrapAsync(adminCategoryController.update))
   .delete(wrapAsync(adminCategoryController.destroy));
 
 router.route('/:categoryId/contents').get(wrapAsync(adminCategoryController.contents));

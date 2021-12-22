@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
-import { searchSortingAlgorithms, surveyStates } from '@common/types/models';
+import { searchSortingAlgorithms, SurveyAttributes, surveyStates } from '@common/types/models';
 import { validateMeals } from '@common/validators';
 import { Locale, Scheme, Survey } from '@api/db/models/system';
 import { unique } from '@api/http/rules';
@@ -16,9 +16,9 @@ export const defaults: Schema = {
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { surveyId } = (req as Request).params;
-        const except: WhereOptions = surveyId ? { id: { [Op.ne]: surveyId } } : {};
+        const where: WhereOptions<SurveyAttributes> = surveyId ? { id: { [Op.ne]: surveyId } } : {};
 
-        return unique({ model: Survey, condition: { field: 'name', value }, except });
+        return unique({ model: Survey, condition: { field: 'name', value }, options: { where } });
       },
     },
   },

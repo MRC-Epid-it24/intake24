@@ -3,6 +3,7 @@ import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
 import { Role } from '@api/db/models/system';
 import { identifierSafeChars, unique } from '@api/http/rules';
+import { RoleAttributes } from '@common/types/models';
 
 const defaults: Schema = {
   name: {
@@ -14,9 +15,9 @@ const defaults: Schema = {
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { roleId } = (req as Request).params;
-        const except: WhereOptions = roleId ? { id: { [Op.ne]: roleId } } : {};
+        const where: WhereOptions<RoleAttributes> = roleId ? { id: { [Op.ne]: roleId } } : {};
 
-        return unique({ model: Role, condition: { field: 'name', value }, except });
+        return unique({ model: Role, condition: { field: 'name', value }, options: { where } });
       },
     },
   },

@@ -14,7 +14,7 @@ router
 router
   .route('/:foodId')
   .get(wrapAsync(adminFoodController.read))
-  .put(wrapAsync(adminFoodController.update))
+  .put(validation.update, wrapAsync(adminFoodController.update))
   .delete(wrapAsync(adminFoodController.destroy));
 
 export default router;

@@ -3,6 +3,7 @@ import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
 import { Language } from '@api/db/models/system';
 import { unique } from '@api/http/rules';
+import { LanguageAttributes } from '@common/types/models';
 
 const defaults: Schema = {
   englishName: {
@@ -13,9 +14,15 @@ const defaults: Schema = {
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { languageId } = (req as Request).params;
-        const except: WhereOptions = languageId ? { id: { [Op.ne]: languageId } } : {};
+        const where: WhereOptions<LanguageAttributes> = languageId
+          ? { id: { [Op.ne]: languageId } }
+          : {};
 
-        return unique({ model: Language, condition: { field: 'englishName', value }, except });
+        return unique({
+          model: Language,
+          condition: { field: 'englishName', value },
+          options: { where },
+        });
       },
     },
   },
@@ -27,9 +34,15 @@ const defaults: Schema = {
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { languageId } = (req as Request).params;
-        const except: WhereOptions = languageId ? { id: { [Op.ne]: languageId } } : {};
+        const where: WhereOptions<LanguageAttributes> = languageId
+          ? { id: { [Op.ne]: languageId } }
+          : {};
 
-        return unique({ model: Language, condition: { field: 'localName', value }, except });
+        return unique({
+          model: Language,
+          condition: { field: 'localName', value },
+          options: { where },
+        });
       },
     },
   },

@@ -1,5 +1,6 @@
-import { Op, WhereOptions } from 'sequelize';
+import { Op, FindOptions } from 'sequelize';
 import Model, { ModelCtor, ModelStatic } from '@api/db/models/model';
+import { merge } from '@common/util';
 
 export type UniqueCondition = {
   field: string;
@@ -10,10 +11,10 @@ export type UniqueCondition = {
 export type UniqueOptions = {
   model: ModelStatic;
   condition: UniqueCondition;
-  except?: WhereOptions;
+  options?: FindOptions;
 };
 
-export default async ({ model, condition, except = {} }: UniqueOptions): Promise<void> => {
+export default async ({ model, condition, options = {} }: UniqueOptions): Promise<void> => {
   const mergedCondition = { ci: true, ...condition };
 
   const cModel = model as ModelCtor<Model>;
@@ -21,9 +22,9 @@ export default async ({ model, condition, except = {} }: UniqueOptions): Promise
   const { field, value, ci } = mergedCondition;
   const op = ci && cModel.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
-  const where: WhereOptions = { [field]: { [op]: value }, ...except };
+  const findOptions: FindOptions = merge(options, { where: { [field]: { [op]: value } } });
 
-  const entry = await cModel.findOne({ where });
+  const entry = await cModel.findOne(findOptions);
   if (entry) throw new Error('Current value is already in use.');
 
   Promise.resolve();

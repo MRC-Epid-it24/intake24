@@ -24,6 +24,10 @@ export interface FoodLocalCreationAttributes
   portionSizeMethods?: Omit<FoodPortionSizeMethodCreationAttributes, 'foodLocalId'>[];
 }
 
+export type FoodLocalAssociations = {
+  main?: FoodAttributes;
+};
+
 export type FoodLocalListAttributes = {
   foodCode: string;
   localeId: string;

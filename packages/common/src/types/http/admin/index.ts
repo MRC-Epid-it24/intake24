@@ -1,5 +1,6 @@
 export * from './as-served';
 export * from './categories';
+export * from './foods';
 export * from './guide-images';
 export * from './image-maps';
 export * from './jobs';

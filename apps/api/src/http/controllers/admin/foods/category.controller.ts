@@ -8,6 +8,7 @@ import {
   CategoryEntry,
   CategoryContentsResponse,
   RootCategoriesResponse,
+  CategoriesResponse,
 } from '@common/types/http/admin';
 import { categoryContentsResponse } from '@api/http/responses/admin/categories';
 import type { Controller, CrudActions } from '../../controller';
@@ -21,7 +22,7 @@ export default ({
 }: Pick<IoC, 'adminCategoryService'>): AdminCategoryController => {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
-    res: Response
+    res: Response<CategoriesResponse>
   ): Promise<void> => {
     const { localeId } = req.params;
 
@@ -54,7 +55,7 @@ export default ({
 
   const update = async (
     req: Request<{ categoryId: string; localeId: string }>,
-    res: Response
+    res: Response<CategoryEntry>
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
 

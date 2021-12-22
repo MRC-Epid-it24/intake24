@@ -1,9 +1,11 @@
 import { FindOptions, Op, QueryTypes } from 'sequelize';
 import {
   Category,
+  CategoryAttribute,
   CategoryLocal,
   CategoryPortionSizeMethod,
   CategoryPortionSizeMethodParameter,
+  Food,
   FoodLocal,
 } from '@api/db/models/foods';
 import { CategoryListEntry } from '@common/types/http/admin';
@@ -21,7 +23,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
-      const ops = ['name', '$category.name$'].map((column) => ({ [column]: op }));
+      const ops = ['name', '$main.name$'].map((column) => ({ [column]: op }));
 
       options.where = { ...options.where, [Op.or]: ops };
     }
@@ -53,13 +55,13 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
       include: [
         { association: 'subcategoryMappings', attributes: [] },
         {
-          association: 'localCategories',
-          attributes: ['localDescription'],
+          association: 'locals',
+          attributes: ['name'],
           where: { localeId },
           required: false,
         },
       ],
-      order: [['localCategories', 'localDescription', 'ASC']],
+      order: [['locals', 'name', 'ASC']],
       where: Sequelize.literal(`NOT EXISTS (SELECT cc2.category_code
           FROM categories_categories cc2 JOIN categories c2 ON cc2.category_code = c2.code
           WHERE c2.is_hidden = False AND cc2.subcategory_code = Category.code)`),
@@ -71,7 +73,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
       where: localeId ? { localeId } : {},
       include: [
         {
-          association: 'category',
+          model: Category,
           attributes: ['name', 'isHidden'],
           required: true,
           include: [
@@ -90,10 +92,12 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
       where: { localeId },
       include: [
         {
-          association: 'food',
+          model: Food,
           attributes: ['name'],
           required: true,
-          include: [{ association: 'categoryMappings', attributes: [], where: { categoryCode } }],
+          include: [
+            { association: 'parentCategoryMappings', attributes: [], where: { categoryCode } },
+          ],
         },
       ],
       order: [['name', 'ASC']],
@@ -102,15 +106,22 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
     return { categories, foods };
   };
 
-  const getCategory = async (categoryId: string, localeId?: string) =>
-    CategoryLocal.findOne({
-      where: localeId ? { id: categoryId, localeId } : { id: categoryId },
+  const getCategory = async (categoryId: string, localeId?: string) => {
+    const where = localeId ? { localeId } : {};
+
+    return CategoryLocal.findOne({
+      where: { ...where, id: categoryId },
       include: [
         {
           model: Category,
+          required: true,
           include: [
-            { association: 'attributes' },
-            { association: 'parentCategories', through: { attributes: [] } },
+            { model: CategoryAttribute },
+            {
+              association: 'parentCategories',
+              through: { attributes: [] },
+              include: [{ association: 'locals', attributes: ['name'], where }],
+            },
           ],
         },
         {
@@ -120,6 +131,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
         },
       ],
     });
+  };
 
   return {
     browseCategories,

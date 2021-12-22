@@ -4,9 +4,13 @@ import { Schema } from 'express-validator';
 export const paginate: Schema = {
   page: {
     in: ['query'],
-    isInt: true,
+    isInt: {
+      options: {
+        min: 1,
+      },
+    },
     toInt: true,
-    optional: { options: { nullable: true } },
+    optional: true,
   },
   limit: {
     in: ['query'],
@@ -17,19 +21,17 @@ export const paginate: Schema = {
       },
     },
     toInt: true,
-    optional: { options: { nullable: true } },
+    optional: true,
   },
   sort: {
     in: ['query'],
     isString: true,
-    optional: { options: { nullable: true } },
+    optional: true,
     matches: { options: /^\w+\|(asc|desc)$/ },
-    escape: true,
   },
   search: {
     in: ['query'],
     isString: true,
-    optional: { options: { nullable: true } },
-    escape: true,
+    optional: true,
   },
 };

@@ -3,6 +3,7 @@ import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
 import { Permission } from '@api/db/models/system';
 import { identifierSafeChars, unique } from '@api/http/rules';
+import { PermissionAttributes } from '@common/types/models';
 
 const defaults: Schema = {
   name: {
@@ -14,9 +15,15 @@ const defaults: Schema = {
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { permissionId } = (req as Request).params;
-        const except: WhereOptions = permissionId ? { id: { [Op.ne]: permissionId } } : {};
+        const where: WhereOptions<PermissionAttributes> = permissionId
+          ? { id: { [Op.ne]: permissionId } }
+          : {};
 
-        return unique({ model: Permission, condition: { field: 'name', value }, except });
+        return unique({
+          model: Permission,
+          condition: { field: 'name', value },
+          options: { where },
+        });
       },
     },
   },

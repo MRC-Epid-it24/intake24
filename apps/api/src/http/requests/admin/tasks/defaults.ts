@@ -4,6 +4,7 @@ import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
 import { Task } from '@api/db/models/system';
 import { cron, jobExists, unique } from '@api/http/rules';
+import { TaskAttributes } from '@common/types/models';
 
 const defaults: Schema = {
   name: {
@@ -14,9 +15,9 @@ const defaults: Schema = {
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { taskId } = (req as Request).params;
-        const except: WhereOptions = taskId ? { id: { [Op.ne]: taskId } } : {};
+        const where: WhereOptions<TaskAttributes> = taskId ? { id: { [Op.ne]: taskId } } : {};
 
-        return unique({ model: Task, condition: { field: 'name', value }, except });
+        return unique({ model: Task, condition: { field: 'name', value }, options: { where } });
       },
     },
   },

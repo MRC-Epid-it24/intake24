@@ -1,5 +1,5 @@
-import { Dictionary } from '@common/types';
-import { CategoryLocalAttributes, Pagination } from '../../models';
+import { CategoryAttributes, CategoryLocalAttributes, Pagination } from '../../models';
+import { FoodListEntry } from './foods';
 
 export type CategoryListEntry = {
   id: string;
@@ -10,15 +10,7 @@ export type CategoryListEntry = {
   isHidden: boolean;
 };
 
-export type FoodListEntry = {
-  id: string;
-  code: string;
-  localeId: string;
-  name: string;
-  englishName: string;
-};
-
-export type CategoriesResponse = Pagination<CategoryListEntry>;
+export type CategoriesResponse = Pagination<CategoryLocalAttributes>;
 
 export type RootCategoriesResponse = CategoryListEntry[];
 
@@ -27,4 +19,6 @@ export type CategoryContentsResponse = {
   foods: FoodListEntry[];
 };
 
-export type CategoryEntry = CategoryLocalAttributes;
+export interface CategoryEntry extends CategoryLocalAttributes {
+  main?: CategoryAttributes;
+}

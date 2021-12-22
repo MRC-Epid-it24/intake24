@@ -22,7 +22,7 @@ import {
 
 @Scopes(() => ({
   attributes: { include: [{ model: FoodAttribute }] },
-  localFoods: { include: [{ model: FoodLocal }] },
+  locals: { include: [{ model: FoodLocal }] },
   brand: { include: [{ model: Brand }] },
 }))
 @Table({
@@ -68,10 +68,10 @@ export default class Food extends BaseModel<FoodAttributes> implements FoodAttri
   public brands?: Brand[];
 
   @BelongsToMany(() => Category, () => FoodCategory)
-  public categories?: Category[];
+  public parentCategories?: Category[];
 
   @HasMany(() => FoodCategory, 'foodCode')
-  public categoryMappings?: FoodCategory[];
+  public parentCategoryMappings?: FoodCategory[];
 
   @HasMany(() => AssociatedFood, 'associatedFoodCode')
   public foodAssociations?: AssociatedFood[];
@@ -80,5 +80,5 @@ export default class Food extends BaseModel<FoodAttributes> implements FoodAttri
   public foodGroup?: FoodGroup;
 
   @HasMany(() => FoodLocal, 'foodCode')
-  public localFoods?: FoodLocal[];
+  public locals?: FoodLocal[];
 }

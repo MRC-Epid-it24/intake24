@@ -53,7 +53,7 @@ export default class CategoryLocal
   public version!: string;
 
   @BelongsTo(() => Category, 'categoryCode')
-  public category?: Category;
+  public main?: Category;
 
   @BelongsTo(() => Locale, 'localeId')
   public locale?: Locale;

@@ -3,6 +3,7 @@ import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
 import { Language, Locale } from '@api/db/models/system';
 import { unique } from '@api/http/rules';
+import { LocaleAttributes } from '@common/types/models';
 
 const defaults: Schema = {
   englishName: {
@@ -13,9 +14,13 @@ const defaults: Schema = {
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { localeId } = (req as Request).params;
-        const except: WhereOptions = localeId ? { id: { [Op.ne]: localeId } } : {};
+        const where: WhereOptions<LocaleAttributes> = localeId ? { id: { [Op.ne]: localeId } } : {};
 
-        return unique({ model: Locale, condition: { field: 'englishName', value }, except });
+        return unique({
+          model: Locale,
+          condition: { field: 'englishName', value },
+          options: { where },
+        });
       },
     },
   },
@@ -27,9 +32,13 @@ const defaults: Schema = {
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { localeId } = (req as Request).params;
-        const except: WhereOptions = localeId ? { id: { [Op.ne]: localeId } } : {};
+        const where: WhereOptions<LocaleAttributes> = localeId ? { id: { [Op.ne]: localeId } } : {};
 
-        return unique({ model: Locale, condition: { field: 'localName', value }, except });
+        return unique({
+          model: Locale,
+          condition: { field: 'localName', value },
+          options: { where },
+        });
       },
     },
   },
@@ -40,9 +49,8 @@ const defaults: Schema = {
     isEmpty: { negated: true },
     custom: {
       options: async (value): Promise<void> => {
-        const language = await Language.findOne({ where: { id: value } });
-
-        return language ? Promise.resolve() : Promise.reject(new Error('Enter valid language id.'));
+        const language = await Language.findByPk(value);
+        if (!language) throw new Error('Enter valid language id.');
       },
     },
   },
@@ -53,9 +61,8 @@ const defaults: Schema = {
     isEmpty: { negated: true },
     custom: {
       options: async (value): Promise<void> => {
-        const language = await Language.findOne({ where: { id: value } });
-
-        return language ? Promise.resolve() : Promise.reject(new Error('Enter valid language id.'));
+        const language = await Language.findByPk(value);
+        if (!language) throw new Error('Enter valid language id.');
       },
     },
   },
@@ -71,9 +78,8 @@ const defaults: Schema = {
     optional: { options: { nullable: true } },
     custom: {
       options: async (value): Promise<void> => {
-        const locale = await Locale.findOne({ where: { id: value } });
-
-        return locale ? Promise.resolve() : Promise.reject(new Error('Enter valid locale.'));
+        const locale = await Locale.findByPk(value);
+        if (!locale) throw new Error('Enter valid llocale.');
       },
     },
   },
