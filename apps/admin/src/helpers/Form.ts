@@ -7,6 +7,18 @@ import http from '@/services/http.service';
 import store from '@/store';
 import type { HttpRequestConfig } from '@/types/http';
 
+const getNestedKeys = <T extends Dictionary>(object: T, prefix?: string) =>
+  Object.entries(object).reduce<string[]>((acc, [key, value]) => {
+    let items =
+      Object.prototype.toString.call(value) === '[object Object]'
+        ? getNestedKeys(value, key)
+        : [key];
+
+    if (prefix) items = items.map((item) => `${prefix}.${item}`);
+    acc.push(...items);
+    return acc;
+  }, []);
+
 export interface FormConfig<T> {
   status?: string;
   multipart?: boolean;
@@ -18,6 +30,7 @@ export interface FormDef<T = Dictionary> {
   data: T;
   initData: T;
   keys: (keyof T)[];
+  allKeys: string[];
   errors: Errors;
   config: FormConfig<T>;
   assign(source: Dictionary): void;
@@ -40,11 +53,13 @@ export type Form<T = Dictionary> = FormDef<T> & FormFields<T>;
 
 export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Form<T> => {
   const keys = Object.keys(initData) as (keyof T)[];
+  const allKeys = getNestedKeys(initData);
 
   const formDef: FormDef<T> = {
     data: copy(initData),
     initData,
     keys,
+    allKeys,
     errors: new Errors(),
     config: {
       multipart: false,
@@ -52,9 +67,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
       ...formConfig,
     },
     assign<S extends T>(source: S): void {
-      const picked = pick(source, this.keys);
-
-      this.data = merge(this.data, picked);
+      this.data = merge(this.data, pick(source, this.allKeys));
     },
 
     load<S extends T>(source: S): void {
