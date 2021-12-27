@@ -55,23 +55,20 @@
                           ></v-text-field>
                         </template>
                         <template v-else>
-                          <v-autocomplete
+                          <auto-complete
                             v-model="form.userId"
                             :error-messages="form.errors.get('userId')"
-                            :items="users"
                             :label="$t('users.email')"
-                            :loading="isLoading"
-                            :search-input.sync="search"
+                            :api="`admin/surveys/${id}/mgmt/users`"
                             clearable
                             hide-no-data
                             hide-selected
                             item-text="email"
                             item-value="id"
                             name="userId"
-                            outlined
                             prepend-icon="fas fa-users"
                             @input="form.errors.clear('userId')"
-                          ></v-autocomplete>
+                          ></auto-complete>
                         </template>
                       </v-col>
                     </v-row>
@@ -178,6 +175,7 @@ import detailMixin from '@/components/entry/detailMixin';
 import form from '@/helpers/Form';
 import { EntryMixin } from '@/types';
 import DataTable from '../data-table.vue';
+import AutoComplete from '@/components/forms/auto-complete.vue';
 
 type SurveyMgmtForm = {
   userId: string | null;
@@ -197,7 +195,7 @@ type SurveyMgmt = {
 export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmt>).extend({
   name: 'SurveyMgmt',
 
-  components: { DataTable },
+  components: { AutoComplete, DataTable },
 
   mixins: [detailMixin],
 

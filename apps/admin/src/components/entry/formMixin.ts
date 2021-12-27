@@ -6,7 +6,7 @@ import pick from 'lodash/pick';
 import { Dictionary, ValidationError } from '@common/types';
 import { FormMixin } from '@/types';
 import form from '@/helpers/Form';
-import SubmitFooter from '@/components/forms/SubmitFooter.vue';
+import SubmitFooter from '@/components/forms/submit-footer.vue';
 import fetchEntry from './fetchEntry';
 import hasEntry from './hasEntry';
 import Layout from './Layout.vue';
