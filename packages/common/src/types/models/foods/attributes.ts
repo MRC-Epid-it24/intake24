@@ -1,23 +1,32 @@
-import { OmitAndOptional } from '../model';
+import { Nullable, OmitAndOptional } from '../model';
 
-export type AttributeDefaultsAttributes = {
-  id: string;
+export const useInRecipeTypes = {
+  USE_ANYWHERE: 0,
+  USE_AS_REGULAR_FOOD: 1,
+  USE_AS_RECIPE_INGREDIENT: 2,
+} as const;
+
+export type UseInRecipeType = typeof useInRecipeTypes[keyof typeof useInRecipeTypes];
+
+export type Attributes = {
   sameAsBeforeOption: boolean;
   readyMealOption: boolean;
   reasonableAmount: number;
-  useInRecipes: number;
+  useInRecipes: UseInRecipeType;
 };
+
+export type AttributeType = keyof Attributes;
+
+export interface AttributeDefaultsAttributes extends Attributes {
+  id: string;
+}
 
 export type AttributeDefaultsCreationAttributes = Omit<AttributeDefaultsAttributes, 'id'>;
 
-export type FoodAttributeAttributes = {
+export interface FoodAttributeAttributes extends Nullable<Attributes> {
   id: string;
   foodCode: string;
-  sameAsBeforeOption: boolean | null;
-  readyMealOption: boolean | null;
-  reasonableAmount: number | null;
-  useInRecipes: number | null;
-};
+}
 
 export type FoodAttributeCreationAttributes = OmitAndOptional<
   FoodAttributeAttributes,
@@ -25,14 +34,10 @@ export type FoodAttributeCreationAttributes = OmitAndOptional<
   'sameAsBeforeOption' | 'readyMealOption' | 'reasonableAmount' | 'useInRecipes'
 >;
 
-export type CategoryAttributeAttributes = {
+export interface CategoryAttributeAttributes extends Nullable<Attributes> {
   id: string;
   categoryCode: string;
-  sameAsBeforeOption: boolean | null;
-  readyMealOption: boolean | null;
-  reasonableAmount: number | null;
-  useInRecipes: number | null;
-};
+}
 
 export type CategoryAttributeCreationAttributes = OmitAndOptional<
   CategoryAttributeAttributes,

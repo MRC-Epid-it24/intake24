@@ -1,5 +1,9 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { FoodAttributeAttributes, FoodAttributeCreationAttributes } from '@common/types/models';
+import {
+  FoodAttributeAttributes,
+  FoodAttributeCreationAttributes,
+  UseInRecipeType,
+} from '@common/types/models';
 import BaseModel from '../model';
 import Food from './food';
 
@@ -52,7 +56,7 @@ export default class FoodAttribute
     allowNull: true,
     type: DataType.INTEGER,
   })
-  public useInRecipes!: number | null;
+  public useInRecipes!: UseInRecipeType | null;
 
   @BelongsTo(() => Food, 'foodCode')
   public food?: Food;

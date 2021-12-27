@@ -2,6 +2,7 @@ import { Column, DataType, Table } from 'sequelize-typescript';
 import {
   AttributeDefaultsAttributes,
   AttributeDefaultsCreationAttributes,
+  UseInRecipeType,
 } from '@common/types/models';
 import BaseModel from '../model';
 
@@ -45,5 +46,5 @@ export default class AttributeDefaults
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public useInRecipes!: number;
+  public useInRecipes!: UseInRecipeType;
 }

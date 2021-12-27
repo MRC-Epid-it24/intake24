@@ -3,6 +3,7 @@ import { Category } from '@api/db/models/foods';
 import {
   CategoryAttributeAttributes,
   CategoryAttributeCreationAttributes,
+  UseInRecipeType,
 } from '@common/types/models';
 import BaseModel from '../model';
 
@@ -56,7 +57,7 @@ export default class CategoryAttribute
     allowNull: true,
     type: DataType.INTEGER,
   })
-  public useInRecipes!: number | null;
+  public useInRecipes!: UseInRecipeType | null;
 
   @BelongsTo(() => Category, 'categoryCode')
   public category?: Category;
