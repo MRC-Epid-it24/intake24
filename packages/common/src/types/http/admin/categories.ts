@@ -1,5 +1,22 @@
-import { CategoryAttributes, CategoryLocalAttributes, Pagination } from '../../models';
+import {
+  CategoryAttributes,
+  CategoryAssociations,
+  CategoryLocalAttributes,
+  Pagination,
+  Attributes,
+} from '../../models';
 import { FoodListEntry } from './foods';
+
+export type CategoryInput = {
+  name: string;
+  main: {
+    code: string;
+    name: string;
+    isHidden: boolean;
+    attributes: Attributes;
+    parentCategories: Pick<CategoryAttributes, 'code' | 'name'>[];
+  };
+};
 
 export type CategoryListEntry = {
   id: string;
@@ -10,7 +27,7 @@ export type CategoryListEntry = {
   isHidden: boolean;
 };
 
-export type CategoriesResponse = Pagination<CategoryLocalAttributes>;
+export type CategoriesResponse = Pagination<CategoryListEntry>;
 
 export type RootCategoriesResponse = CategoryListEntry[];
 
@@ -19,6 +36,9 @@ export type CategoryContentsResponse = {
   foods: FoodListEntry[];
 };
 
-export interface CategoryEntry extends CategoryLocalAttributes {
-  main?: CategoryAttributes;
+export type CategoryEntry = CategoryAttributes &
+  Pick<CategoryAssociations, 'attributes' | 'parentCategories'>;
+
+export interface CategoryLocalEntry extends CategoryLocalAttributes {
+  main?: CategoryEntry;
 }

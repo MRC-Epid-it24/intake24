@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
-import validation from '@api/http/requests/admin/categories';
+import validation from '@api/http/requests/admin/fdbs/categories';
 
 const { adminCategoryController } = ioc.cradle;
 const router = Router({ mergeParams: true });

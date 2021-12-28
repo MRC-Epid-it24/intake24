@@ -1,9 +1,23 @@
 import {
+  Attributes,
+  CategoryAttributes,
+  FoodAssociations,
+  FoodAttributes,
   FoodGroupAttributes,
-  FoodLocalAssociations,
   FoodLocalAttributes,
   Pagination,
 } from '../../models';
+
+export type FoodInput = {
+  name: string;
+  main: {
+    code: string;
+    name: string;
+    foodGroupId: string;
+    attributes: Attributes;
+    parentCategories: Pick<CategoryAttributes, 'code' | 'name'>[];
+  };
+};
 
 export type FoodListEntry = {
   id: string;
@@ -15,7 +29,11 @@ export type FoodListEntry = {
 
 export type FoodsResponse = Pagination<FoodLocalAttributes>;
 
-export type FoodEntry = FoodLocalAttributes & Pick<FoodLocalAssociations, 'main'>;
+export type FoodEntry = FoodAttributes & Pick<FoodAssociations, 'attributes' | 'parentCategories'>;
+
+export interface FoodLocalEntry extends FoodLocalAttributes {
+  main?: FoodEntry;
+}
 
 export type FoodGroupsResponse = Pagination<FoodGroupAttributes>;
 

@@ -1,6 +1,4 @@
-import categories from './categories';
-import foods from './foods';
-import foodGroups from './food-groups';
+import fdbs from './fdbs';
 import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
@@ -15,9 +13,7 @@ import tasks from './tasks';
 import users from './users';
 
 export default {
-  categories,
-  foods,
-  foodGroups,
+  fdbs,
   jobs,
   languages,
   locales,

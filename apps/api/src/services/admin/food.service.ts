@@ -1,3 +1,4 @@
+import { pick } from 'lodash';
 import { FindOptions, Op } from 'sequelize';
 import {
   Brand,
@@ -9,6 +10,8 @@ import {
   FoodPortionSizeMethodParameter,
 } from '@api/db/models/foods';
 import { PaginateQuery } from '@api/db/models/model';
+import { NotFoundError } from '@api/http/errors';
+import { FoodInput } from '@common/types/http/admin';
 
 const adminFoodService = () => {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
@@ -58,9 +61,42 @@ const adminFoodService = () => {
     });
   };
 
+  const updateFood = async (foodId: string, localeId: string, input: FoodInput) => {
+    const foodLocal = await getFood(foodId, localeId);
+    if (!foodLocal) throw new NotFoundError();
+
+    const { main } = foodLocal;
+    if (!main) throw new NotFoundError();
+
+    const { attributes } = main;
+    if (!attributes) throw new NotFoundError();
+
+    const categories = (input.main.parentCategories ?? []).map((cat) => cat.code);
+
+    await Promise.all([
+      foodLocal.update(pick(input, ['name'])),
+      main.update(pick(input.main, ['name', 'foodGroupId'])),
+      attributes.update(
+        pick(input.main.attributes, [
+          'sameAsBeforeOption',
+          'readyMealOption',
+          'reasonableAmount',
+          'useInRecipes',
+        ])
+      ),
+      main.$set('parentCategories', categories),
+    ]);
+
+    if (main.code !== input.main.code)
+      await Food.update({ code: input.main.code }, { where: { code: main.code } });
+
+    return getFood(foodId, localeId);
+  };
+
   return {
     browseFoods,
     getFood,
+    updateFood,
   };
 };
 

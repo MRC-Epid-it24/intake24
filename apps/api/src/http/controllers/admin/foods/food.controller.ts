@@ -4,7 +4,7 @@ import { pick } from 'lodash';
 import { PaginateQuery } from '@api/db/models/model';
 import { NotFoundError } from '@api/http/errors';
 import { FoodLocal } from '@api/db/models/foods';
-import { FoodEntry, FoodsResponse } from '@common/types/http/admin';
+import { FoodLocalEntry, FoodsResponse } from '@common/types/http/admin';
 import type { Controller, CrudActions } from '../../controller';
 
 export type AdminFoodController = Controller<Exclude<CrudActions, 'edit' | 'refs'>>;
@@ -33,7 +33,7 @@ export default ({ adminFoodService }: Pick<IoC, 'adminFoodService'>): AdminFoodC
 
   const read = async (
     req: Request<{ foodId: string; localeId: string }>,
-    res: Response<FoodEntry>
+    res: Response<FoodLocalEntry>
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
 
@@ -45,11 +45,11 @@ export default ({ adminFoodService }: Pick<IoC, 'adminFoodService'>): AdminFoodC
 
   const update = async (
     req: Request<{ foodId: string; localeId: string }>,
-    res: Response<FoodEntry>
+    res: Response<FoodLocalEntry>
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
 
-    const foodLocal = await FoodLocal.findOne({ where: { id: foodId, localeId } });
+    const foodLocal = await adminFoodService.updateFood(foodId, localeId, req.body);
     if (!foodLocal) throw new NotFoundError();
 
     res.json(foodLocal);

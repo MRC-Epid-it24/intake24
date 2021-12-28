@@ -8,13 +8,19 @@ import {
   Food,
   FoodLocal,
 } from '@api/db/models/foods';
-import { CategoryListEntry } from '@common/types/http/admin';
+import { CategoryInput, CategoryListEntry } from '@common/types/http/admin';
 import type { IoC } from '@api/ioc';
 import { PaginateQuery } from '@api/db/models/model';
+import { NotFoundError } from '@api/http/errors';
+import { pick } from 'lodash';
+import { categoryResponse } from '@api/http/responses/admin';
 
 const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   const browseCategories = async (localeId: string, query: PaginateQuery) => {
-    const options: FindOptions = { where: { localeId }, include: [{ model: Category }] };
+    const options: FindOptions = {
+      where: { localeId },
+      include: [{ model: Category, required: true }],
+    };
     const { search } = query;
 
     if (search) {
@@ -28,7 +34,11 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
       options.where = { ...options.where, [Op.or]: ops };
     }
 
-    return CategoryLocal.paginate({ query, ...options });
+    return CategoryLocal.paginate<CategoryListEntry>({
+      query,
+      transform: categoryResponse,
+      ...options,
+    });
   };
 
   const getRootCategories = async (localeId: string) => {
@@ -69,39 +79,40 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   };
 
   const getCategoryContents = async (categoryCode: string, localeId?: string) => {
-    const categories = await CategoryLocal.findAll({
-      where: localeId ? { localeId } : {},
-      include: [
-        {
-          model: Category,
-          attributes: ['name', 'isHidden'],
-          required: true,
-          include: [
-            {
-              association: 'parentCategoryMappings',
-              attributes: [],
-              where: { categoryCode },
-            },
-          ],
-        },
-      ],
-      order: [['name', 'ASC']],
-    });
-
-    const foods = await FoodLocal.findAll({
-      where: { localeId },
-      include: [
-        {
-          model: Food,
-          attributes: ['name'],
-          required: true,
-          include: [
-            { association: 'parentCategoryMappings', attributes: [], where: { categoryCode } },
-          ],
-        },
-      ],
-      order: [['name', 'ASC']],
-    });
+    const [categories, foods] = await Promise.all([
+      CategoryLocal.findAll({
+        where: localeId ? { localeId } : {},
+        include: [
+          {
+            model: Category,
+            attributes: ['name', 'isHidden'],
+            required: true,
+            include: [
+              {
+                association: 'parentCategoryMappings',
+                attributes: [],
+                where: { categoryCode },
+              },
+            ],
+          },
+        ],
+        order: [['name', 'ASC']],
+      }),
+      FoodLocal.findAll({
+        where: { localeId },
+        include: [
+          {
+            model: Food,
+            attributes: ['name'],
+            required: true,
+            include: [
+              { association: 'parentCategoryMappings', attributes: [], where: { categoryCode } },
+            ],
+          },
+        ],
+        order: [['name', 'ASC']],
+      }),
+    ]);
 
     return { categories, foods };
   };
@@ -133,11 +144,44 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
     });
   };
 
+  const updateCategory = async (categoryId: string, localeId: string, input: CategoryInput) => {
+    const categoryLocal = await getCategory(categoryId, localeId);
+    if (!categoryLocal) throw new NotFoundError();
+
+    const { main } = categoryLocal;
+    if (!main) throw new NotFoundError();
+
+    const { attributes } = main;
+    if (!attributes) throw new NotFoundError();
+
+    const categories = (input.main.parentCategories ?? []).map((cat) => cat.code);
+
+    await Promise.all([
+      categoryLocal.update(pick(input, ['name'])),
+      main.update(pick(input.main, ['name', 'isHidden'])),
+      attributes.update(
+        pick(input.main.attributes, [
+          'sameAsBeforeOption',
+          'readyMealOption',
+          'reasonableAmount',
+          'useInRecipes',
+        ])
+      ),
+      main.$set('parentCategories', categories),
+    ]);
+
+    if (main.code !== input.main.code)
+      await Category.update({ code: input.main.code }, { where: { code: main.code } });
+
+    return getCategory(categoryId, localeId);
+  };
+
   return {
     browseCategories,
     getRootCategories,
     getCategoryContents,
     getCategory,
+    updateCategory,
   };
 };
 

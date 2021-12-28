@@ -1,12 +1,21 @@
-import { OmitAndOptional } from '../model';
-import { FoodNutrientAttributes } from './nutrients';
-import { FoodPortionSizeMethodCreationAttributes } from './portion-methods';
+import type {
+  CategoryAttributes,
+  FoodAttributeAttributes,
+  FoodNutrientAttributes,
+  FoodPortionSizeMethodCreationAttributes,
+} from '.';
+import type { OmitAndOptional } from '../model';
 
 export type FoodAttributes = {
   code: string;
   name: string;
   foodGroupId: string;
   version: string;
+};
+
+export type FoodAssociations = {
+  attributes?: FoodAttributeAttributes;
+  parentCategories?: CategoryAttributes[];
 };
 
 export type FoodLocalAttributes = {

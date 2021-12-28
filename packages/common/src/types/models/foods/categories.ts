@@ -1,3 +1,4 @@
+import { CategoryAttributeAttributes } from './attributes';
 import { Optional } from '../model';
 
 export type CategoryAttributes = {
@@ -5,6 +6,11 @@ export type CategoryAttributes = {
   name: string;
   isHidden: boolean;
   version: string;
+};
+
+export type CategoryAssociations = {
+  attributes?: CategoryAttributeAttributes;
+  parentCategories?: CategoryAttributes[];
 };
 
 export type CategoryCreationAttributes = Optional<CategoryAttributes, 'isHidden'>;

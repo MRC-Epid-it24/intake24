@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
-import validation from '@api/http/requests/admin/foods';
+import validation from '@api/http/requests/admin/fdbs/foods';
 
 const { adminFoodController } = ioc.cradle;
 const router = Router({ mergeParams: true });

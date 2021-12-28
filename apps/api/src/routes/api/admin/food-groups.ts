@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { anyPermission, permission } from '@api/http/middleware/acl';
-import validation from '@api/http/requests/admin/food-groups';
+import validation from '@api/http/requests/admin/fdbs/groups';
 import ioc from '@api/ioc';
 import { wrapAsync } from '@api/util';
 
