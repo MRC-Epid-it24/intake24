@@ -58,7 +58,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { SchemeRefs, LanguageListEntry } from '@common/types/http/admin';
 import tinymce from '@/components/tinymce/tinymce';
-import mapRefs from '@/components/entry/mapRefs';
+import mapRefs from '@/components/entry/map-refs';
 import { MapRefsMixin } from '@/types';
 
 export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({

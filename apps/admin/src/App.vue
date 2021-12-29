@@ -21,7 +21,7 @@
         </v-list-item-group>
       </v-list>
       <menu-tree
-        v-if="can(['nutrient-tables-browse'])"
+        v-if="can(['fdbs-browse', 'food-groups-browse', 'nutrient-tables-browse'])"
         icon="fas fa-fw fa-hamburger"
         name="fdb"
         :resources="resources.fdb"
@@ -109,7 +109,7 @@ import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { Location } from 'vue-router';
 import { Dictionary } from '@common/types';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
+import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
 import Loader from '@/components/Loader.vue';
 import MenuTree from '@/components/sidebar/MenuTree.vue';
 import WebPushMixin from '@/components/web-push/WebPushMixin';

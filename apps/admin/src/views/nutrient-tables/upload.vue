@@ -60,7 +60,7 @@ import Vue, { VueConstructor } from 'vue';
 import { JobEntry, NutrientTableEntry, NutrientTableRefs } from '@common/types/http/admin';
 import { JobType } from '@common/types';
 import { DetailMixin } from '@/types';
-import detailMixin from '@/components/entry/detailMixin';
+import detailMixin from '@/components/entry/detail-mixin';
 import { PollsForJobs } from '@/components/polls-for-jobs';
 import form from '@/helpers/Form';
 

@@ -368,7 +368,7 @@ import {
   StaffUpdateSurveyFields,
 } from '@common/types/models';
 import { pick } from 'lodash';
-import formMixin from '@/components/entry/formMixin';
+import formMixin from '@/components/entry/form-mixin';
 import form from '@/helpers/Form';
 
 export type SurveyForm = {

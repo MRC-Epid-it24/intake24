@@ -63,7 +63,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { JobEntry } from '@common/types/http/admin';
 import FormatsDateTime from '@/mixins/FormatsDateTime';
-import detailMixin from '@/components/entry/detailMixin';
+import detailMixin from '@/components/entry/detail-mixin';
 import type { DetailMixin } from '@/types';
 
 type Mixins = InstanceType<typeof FormatsDateTime>;

@@ -16,7 +16,7 @@
             </v-btn>
           </template>
           <v-card :loading="isLoading">
-            <v-toolbar dark color="primary" flat>
+            <v-toolbar color="primary" dark flat>
               <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
                 <v-icon>$cancel</v-icon>
               </v-btn>
@@ -171,7 +171,7 @@ import {
   SurveyMgmtAvailableUsersResponse,
   UserMgmtListEntry,
 } from '@common/types/http/admin';
-import detailMixin from '@/components/entry/detailMixin';
+import detailMixin from '@/components/entry/detail-mixin';
 import form from '@/helpers/Form';
 import { EntryMixin } from '@/types';
 import DataTable from '../data-table.vue';

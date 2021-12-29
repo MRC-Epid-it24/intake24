@@ -25,7 +25,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { DetailMixin } from '@/types';
-import detailMixin from '@/components/entry/detailMixin';
+import detailMixin from '@/components/entry/detail-mixin';
 import CopySchemeDialog from './copy-scheme-dialog.vue';
 
 export default (Vue as VueConstructor<Vue & DetailMixin>).extend({

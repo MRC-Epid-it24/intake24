@@ -98,9 +98,8 @@ import Vue, { VueConstructor } from 'vue';
 import cronstrue from 'cronstrue';
 import { JobParams, JobParamsList, JobType } from '@common/types';
 import { TaskEntry, TaskRefs } from '@common/types/http/admin';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
-import formMixin from '@/components/entry/formMixin';
-import mapAddons from '@/components/entry/mapAddons';
+import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import formMixin from '@/components/entry/form-mixin';
 import form from '@/helpers/Form';
 import FormatsDateTime from '@/mixins/FormatsDateTime';
 import { FormMixin } from '@/types';
@@ -153,7 +152,7 @@ export default (Vue as VueConstructor<Vue & FormMixin<TaskEntry, TaskRefs>>).ext
 
   components: { ConfirmDialog, ...paramComponents },
 
-  mixins: [FormatsDateTime, formMixin, mapAddons],
+  mixins: [FormatsDateTime, formMixin],
 
   data() {
     return {

@@ -55,7 +55,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { customPromptQuestions, PromptQuestion } from '@common/prompts';
 import { SchemeQuestionEntry, SchemeQuestionRefs } from '@common/types/http/admin';
-import formMixin from '@/components/entry/formMixin';
+import formMixin from '@/components/entry/form-mixin';
 import PromptSelector from '@/components/prompts/prompt-selector.vue';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types';

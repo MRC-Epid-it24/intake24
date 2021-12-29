@@ -54,9 +54,8 @@ import Vue, { VueConstructor } from 'vue';
 import cronstrue from 'cronstrue';
 import { TaskEntry, TaskRefs } from '@common/types/http/admin';
 import { DetailMixin } from '@/types';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
-import detailMixin from '@/components/entry/detailMixin';
-import mapAddons from '@/components/entry/mapAddons';
+import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import detailMixin from '@/components/entry/detail-mixin';
 import FormatsDateTime from '@/mixins/FormatsDateTime';
 
 export default (Vue as VueConstructor<Vue & DetailMixin<TaskEntry, TaskRefs>>).extend({
@@ -64,7 +63,7 @@ export default (Vue as VueConstructor<Vue & DetailMixin<TaskEntry, TaskRefs>>).e
 
   components: { ConfirmDialog },
 
-  mixins: [detailMixin, FormatsDateTime, mapAddons],
+  mixins: [detailMixin, FormatsDateTime],
 
   computed: {
     readableCron(): string {

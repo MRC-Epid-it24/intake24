@@ -72,7 +72,7 @@ import Vue, { VueConstructor } from 'vue';
 import { NutrientTableEntry, NutrientTableRefs } from '@common/types/http/admin';
 import { offsetToExcelColumn } from '@common/util';
 import { DetailMixin } from '@/types';
-import detailMixin from '@/components/entry/detailMixin';
+import detailMixin from '@/components/entry/detail-mixin';
 
 export default (
   Vue as VueConstructor<Vue & DetailMixin<NutrientTableEntry, NutrientTableRefs>>

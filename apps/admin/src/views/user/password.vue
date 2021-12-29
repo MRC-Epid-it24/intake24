@@ -6,7 +6,7 @@
       </v-btn>
     </template>
     <v-card :loading="loading">
-      <v-toolbar dark color="primary" flat>
+      <v-toolbar color="primary" dark flat>
         <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>

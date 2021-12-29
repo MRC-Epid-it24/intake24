@@ -7,11 +7,11 @@ import { Dictionary, ValidationError } from '@common/types';
 import { FormMixin } from '@/types';
 import form from '@/helpers/Form';
 import SubmitFooter from '@/components/forms/submit-footer.vue';
-import fetchEntry from './fetchEntry';
-import hasEntry from './hasEntry';
-import Layout from './Layout.vue';
-import mapEntry from './mapEntry';
-import mapRefs from './mapRefs';
+import fetchEntry from './fetch-entry';
+import hasEntry from './has-entry';
+import Layout from './layout.vue';
+import mapEntry from './map-entry';
+import mapRefs from './map-refs';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'FormMixin',

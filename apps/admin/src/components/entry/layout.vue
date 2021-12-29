@@ -82,7 +82,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import has from 'lodash/has';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
+import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
 import ResourceMixin from '@/mixins/ResourceMixin';
 import { RouteLeave } from '@/types';
 

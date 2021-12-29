@@ -78,7 +78,7 @@ import Toolbar from '@/components/toolbar/Toolbar.vue';
 import handlesLoading from '@/mixins/handlesLoading';
 import ResourceMixin from '@/mixins/ResourceMixin';
 import DataTableFilter from '@/components/datatable/DataTableFilter.vue';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
+import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
 
 type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof ResourceMixin>;
 

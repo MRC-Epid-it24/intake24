@@ -80,7 +80,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import orderBy from 'lodash/orderBy';
-import formMixin from '@/components/entry/formMixin';
+import formMixin from '@/components/entry/form-mixin';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
 

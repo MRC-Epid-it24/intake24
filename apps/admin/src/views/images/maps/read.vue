@@ -8,7 +8,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { ImageMapEntry } from '@common/types/http/admin';
 import type { DetailMixin } from '@/types';
-import detailMixin from '@/components/entry/detailMixin';
+import detailMixin from '@/components/entry/detail-mixin';
 import GuideDrawer from '../guide-drawer.vue';
 
 export default (Vue as VueConstructor<Vue & DetailMixin<ImageMapEntry>>).extend({

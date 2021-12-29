@@ -14,7 +14,7 @@
             </v-btn>
           </template>
           <v-card :loading="loading">
-            <v-toolbar dark color="primary" flat>
+            <v-toolbar color="primary" dark flat>
               <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
                 <v-icon>$cancel</v-icon>
               </v-btn>
@@ -150,8 +150,8 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { SurveyRespondentEntry, SurveyRespondentListEntry } from '@common/types/http/admin';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
-import detailMixin from '@/components/entry/detailMixin';
+import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import detailMixin from '@/components/entry/detail-mixin';
 import form from '@/helpers/Form';
 import { EntryMixin } from '@/types';
 import DataTable from '../data-table.vue';

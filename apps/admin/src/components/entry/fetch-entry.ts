@@ -3,11 +3,6 @@ import { HasEntryMixin } from '@/types';
 
 export default (Vue as VueConstructor<Vue & HasEntryMixin>).extend({
   async beforeRouteUpdate(to, from, next) {
-    if (from.params.id === to.params.id) {
-      next();
-      return;
-    }
-
     await this.fetch();
     next();
   },

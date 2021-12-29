@@ -33,7 +33,7 @@ import Vue, { VueConstructor } from 'vue';
 import { defaultOverrides, flattenScheme } from '@common/schemes';
 import { SurveyEntry, SurveyRefs } from '@common/types/http/admin';
 import { PromptQuestion } from '@common/prompts';
-import formMixin from '@/components/entry/formMixin';
+import formMixin from '@/components/entry/form-mixin';
 import MealList from '@/components/meals/meal-list.vue';
 import PromptList from '@/components/prompts/list/prompt-list.vue';
 import form from '@/helpers/Form';

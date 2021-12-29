@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog.vue';
+import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
 import ActionMixin from './ActionMixin';
 
 export default Vue.extend({

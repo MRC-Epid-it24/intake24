@@ -75,7 +75,7 @@ import {
 import { PromptQuestion } from '@common/prompts';
 import { Dictionary } from '@common/types';
 import { SchemeEntry, SchemeRefs } from '@common/types/http/admin';
-import formMixin from '@/components/entry/formMixin';
+import formMixin from '@/components/entry/form-mixin';
 import LoadSectionDialog from '@/components/prompts/load-section-dialog.vue';
 import PromptList, { PromptQuestionMoveEvent } from '@/components/prompts/list/prompt-list.vue';
 import form from '@/helpers/Form';

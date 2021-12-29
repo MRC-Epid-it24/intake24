@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import formMixin from '@/components/entry/formMixin';
+import formMixin from '@/components/entry/form-mixin';
 import form from '@/helpers/Form';
 
 type PermissionForm = {

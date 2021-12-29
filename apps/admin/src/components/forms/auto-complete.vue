@@ -3,6 +3,7 @@
     v-bind="{
       clearable,
       errorMessages,
+      hideDetails,
       hideNoData,
       hideSelected,
       name,
@@ -40,6 +41,10 @@ export default (Vue as VueConstructor<Vue & AutoComplete>).extend({
     clearable: {
       type: Boolean,
       default: false,
+    },
+    hideDetails: {
+      type: String,
+      default: 'auto',
     },
     hideNoData: {
       type: Boolean,

@@ -45,7 +45,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { DetailMixin } from '@/types';
-import detailMixin from '@/components/entry/detailMixin';
+import detailMixin from '@/components/entry/detail-mixin';
 
 export default (Vue as VueConstructor<Vue & DetailMixin>).extend({
   name: 'LocaleDetail',

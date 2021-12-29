@@ -52,7 +52,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { ImageMapEntry, ImageMapEntryObject } from '@common/types/http/admin';
 import { FormMixin } from '@/types';
-import formMixin from '@/components/entry/formMixin';
+import formMixin from '@/components/entry/form-mixin';
 import form from '@/helpers/Form';
 import GuideDrawer from '../guide-drawer.vue';
 

@@ -41,7 +41,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { SignInLogEntry } from '@common/types/http/admin';
-import detailMixin from '@/components/entry/detailMixin';
+import detailMixin from '@/components/entry/detail-mixin';
 import FormatsDateTime from '@/mixins/FormatsDateTime';
 import type { DetailMixin } from '@/types';
 

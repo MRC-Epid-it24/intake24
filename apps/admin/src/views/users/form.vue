@@ -147,7 +147,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { CustomField } from '@common/types';
 import { UserEntry } from '@common/types/http/admin';
-import formMixin from '@/components/entry/formMixin';
+import formMixin from '@/components/entry/form-mixin';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
 

@@ -72,7 +72,7 @@ import { ValidationError } from '@common/types';
 import { MapRefsMixin } from '@/types';
 import form from '@/helpers/Form';
 
-import mapRefs from '@/components/entry/mapRefs';
+import mapRefs from '@/components/entry/map-refs';
 
 export type SchemeQuestionForm = {
   question: PromptQuestion;

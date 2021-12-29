@@ -61,7 +61,7 @@ import draggable from 'vuedraggable';
 import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { ExportField, ExportSection } from '@common/types/models';
 import { SchemeExportRefsResponse } from '@common/types/http/admin';
-import formMixin from '@/components/entry/formMixin';
+import formMixin from '@/components/entry/form-mixin';
 import LoadSectionDialog from '@/components/prompts/load-section-dialog.vue';
 import form from '@/helpers/Form';
 import { FormMixin } from '@/types';
