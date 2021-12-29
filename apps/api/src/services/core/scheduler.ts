@@ -31,8 +31,7 @@ export default class Scheduler {
   public async init(): Promise<void> {
     const { redis } = this.queueConfig;
 
-    await this.jobs.init(redis);
-    await this.tasks.init(redis);
+    await Promise.all([this.jobs.init(redis), this.tasks.init(redis)]);
 
     this.logger.info(`Scheduler has been loaded.`);
   }
@@ -44,8 +43,7 @@ export default class Scheduler {
    * @memberof Scheduler
    */
   public async close(): Promise<void> {
-    await this.jobs.close();
-    await this.tasks.close();
+    await Promise.all([this.jobs.close(), this.tasks.close()]);
 
     this.logger.info(`Scheduler has closed all connections.`);
   }
