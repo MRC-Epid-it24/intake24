@@ -20,7 +20,10 @@ export type LocalesResponse = Pagination<LocaleAttributes>;
 
 export type LocaleEntry = LocaleAttributes;
 
-export type LocaleListEntry = Pick<LocaleAttributes, 'id' | 'englishName' | 'localName'>;
+export type LocaleListEntry = Pick<
+  LocaleAttributes,
+  'id' | 'englishName' | 'localName' | 'countryFlagCode'
+>;
 
 export type LocaleRefs = {
   languages: LanguageListEntry[];
