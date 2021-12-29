@@ -117,6 +117,30 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
     return { categories, foods };
   };
 
+  const getNoCategoryContents = async (localeId: string) =>
+    FoodLocal.findAll({
+      where: {
+        localeId,
+        // @ts-expect-error: Sequelize typings don't know about this type of syntax yet
+        '$main->parentCategoryMappings.category_code$': null,
+      },
+      include: [
+        {
+          model: Food,
+          attributes: ['name'],
+          required: true,
+          include: [
+            {
+              association: 'parentCategoryMappings',
+              attributes: [],
+              required: false,
+            },
+          ],
+        },
+      ],
+      order: [['name', 'ASC']],
+    });
+
   const getCategory = async (categoryId: string, localeId?: string) => {
     const where = localeId ? { localeId } : {};
 
@@ -179,6 +203,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   return {
     browseCategories,
     getRootCategories,
+    getNoCategoryContents,
     getCategoryContents,
     getCategory,
     updateCategory,

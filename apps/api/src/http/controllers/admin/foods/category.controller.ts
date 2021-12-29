@@ -96,6 +96,12 @@ export default ({
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
 
+    if (categoryId === 'no-category') {
+      const foods = await adminCategoryService.getNoCategoryContents(localeId);
+      res.json(categoryContentsResponse({ categories: [], foods }));
+      return;
+    }
+
     const categoryLocal = await CategoryLocal.findOne({ where: { id: categoryId, localeId } });
     if (!categoryLocal) throw new NotFoundError();
 
