@@ -46,7 +46,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import formMixin from '@/components/entry/form-mixin';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 
 type PermissionForm = {
   id: string | null;

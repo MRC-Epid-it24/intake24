@@ -83,7 +83,7 @@
 import Vue, { VueConstructor } from 'vue';
 import has from 'lodash/has';
 import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
-import ResourceMixin from '@/mixins/ResourceMixin';
+import ResourceMixin from '@/mixins/resource-mixin';
 import { RouteLeave } from '@/types';
 
 type Mixins = InstanceType<typeof ResourceMixin>;

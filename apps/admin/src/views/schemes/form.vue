@@ -59,7 +59,7 @@ import { Meal } from '@common/types';
 import { ExportSection } from '@common/types/models';
 import formMixin from '@/components/entry/form-mixin';
 import MealList from '@/components/meals/meal-list.vue';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 import { FormMixin } from '@/types';
 import CopySchemeDialog from './copy-scheme-dialog.vue';
 

@@ -42,7 +42,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { SignInLogEntry } from '@common/types/http/admin';
 import detailMixin from '@/components/entry/detail-mixin';
-import FormatsDateTime from '@/mixins/FormatsDateTime';
+import FormatsDateTime from '@/mixins/formats-date-time';
 import type { DetailMixin } from '@/types';
 
 export default (Vue as VueConstructor<Vue & DetailMixin<SignInLogEntry>>).extend({

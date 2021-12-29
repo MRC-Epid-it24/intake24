@@ -150,7 +150,7 @@ import customPrompts from '@/components/prompts/custom';
 import standardPrompts from '@/components/prompts/standard';
 import portionSizePrompts from '@/components/prompts/portion-size';
 import PromptTypeSelector from './prompt-type-selector.vue';
-import LanguageSelector from './partials/LanguageSelector.vue';
+import LanguageSelector from './partials/language-selector.vue';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;

@@ -1,8 +1,8 @@
-import AsServedPrompt from '@/components/prompts/portion-size/AsServedPrompt.vue';
-import AsServedLeftoversPrompt from '@/components/prompts/portion-size/AsServedLeftoversPrompt.vue';
-import GuideImagePrompt from '@/components/prompts/portion-size/GuideImagePrompt.vue';
-import StandardPortionPrompt from '@/components/prompts/portion-size/StandardPortionPrompt.vue';
-import PortionSizeOptionPrompt from './PortionSizeOptionPrompt.vue';
+import AsServedPrompt from '@/components/prompts/portion-size/as-served-prompt.vue';
+import AsServedLeftoversPrompt from '@/components/prompts/portion-size/as-served-leftovers-prompt.vue';
+import GuideImagePrompt from '@/components/prompts/portion-size/guide-image-prompt.vue';
+import StandardPortionPrompt from '@/components/prompts/portion-size/standard-portion-prompt.vue';
+import PortionSizeOptionPrompt from './portion-size-option-prompt.vue';
 
 export default {
   PortionSizeOptionPrompt,

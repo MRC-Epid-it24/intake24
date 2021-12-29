@@ -46,7 +46,7 @@ import { SurveySubmissionEntry } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
 import detailMixin from '@/components/entry/detail-mixin';
 import { EntryMixin } from '@/types';
-import FormatsDateTime from '@/mixins/FormatsDateTime';
+import FormatsDateTime from '@/mixins/formats-date-time';
 import DataTable from '../data-table.vue';
 
 export type SurveySubmissionsRefs = {

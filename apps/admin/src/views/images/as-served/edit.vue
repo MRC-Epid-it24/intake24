@@ -57,7 +57,7 @@ import Vue, { VueConstructor } from 'vue';
 import { AsServedSetEntry, AsServedImageInput } from '@common/types/http/admin';
 import { FormMixin } from '@/types';
 import formMixin from '@/components/entry/form-mixin';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 import AsServedImages from './images.vue';
 
 type EditAsServedSetForm = {

@@ -62,7 +62,7 @@ import { JobType } from '@common/types';
 import { DetailMixin } from '@/types';
 import detailMixin from '@/components/entry/detail-mixin';
 import { PollsForJobs } from '@/components/polls-for-jobs';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 
 type Mixins = InstanceType<typeof PollsForJobs>;
 

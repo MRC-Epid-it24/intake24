@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import WebPush from '@/components/web-push/WebPush.vue';
+import WebPush from '@/components/web-push/web-push.vue';
 
 export default Vue.extend({
   name: 'AppDashboard',

@@ -70,7 +70,7 @@ import { SchemeQuestionEntry, SchemeRefs } from '@common/types/http/admin';
 import { PromptQuestion } from '@common/prompts';
 import { ValidationError } from '@common/types';
 import { MapRefsMixin } from '@/types';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 
 import mapRefs from '@/components/entry/map-refs';
 

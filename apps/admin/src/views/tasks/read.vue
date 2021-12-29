@@ -56,7 +56,7 @@ import { TaskEntry, TaskRefs } from '@common/types/http/admin';
 import { DetailMixin } from '@/types';
 import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
 import detailMixin from '@/components/entry/detail-mixin';
-import FormatsDateTime from '@/mixins/FormatsDateTime';
+import FormatsDateTime from '@/mixins/formats-date-time';
 
 export default (Vue as VueConstructor<Vue & DetailMixin<TaskEntry, TaskRefs>>).extend({
   name: 'TaskDetail',

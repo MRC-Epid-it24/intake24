@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import { Dictionary, ValidationError } from '@common/types';
 import { FormMixin } from '@/types';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 import SubmitFooter from '@/components/forms/submit-footer.vue';
 import fetchEntry from './fetch-entry';
 import hasEntry from './has-entry';

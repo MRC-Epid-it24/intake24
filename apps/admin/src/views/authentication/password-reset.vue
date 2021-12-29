@@ -68,7 +68,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { ValidationError } from '@common/types';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 
 type PasswordResetForm = {
   token: string;

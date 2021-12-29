@@ -2,10 +2,10 @@ import Vue from 'vue';
 import Storage from 'vue-ls';
 import Toasted from 'vue-toasted';
 
-import authMixin from './mixins/authMixin';
-import isMobile from './mixins/isMobile';
-import loadingMixin from './mixins/loadingMixin';
-import moduleMixin from './mixins/moduleMixin';
+import authMixin from './mixins/auth-mixin';
+import isMobile from './mixins/is-mobile';
+import loadingMixin from './mixins/loading-mixin';
+import moduleMixin from './mixins/module-mixin';
 
 const options = { namespace: process.env.VUE_APP_PREFIX };
 Vue.use(Storage, options);

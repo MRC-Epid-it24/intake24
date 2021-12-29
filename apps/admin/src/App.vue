@@ -110,10 +110,10 @@ import { mapGetters } from 'vuex';
 import { Location } from 'vue-router';
 import { Dictionary } from '@common/types';
 import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
-import Loader from '@/components/Loader.vue';
-import MenuTree from '@/components/sidebar/MenuTree.vue';
-import WebPushMixin from '@/components/web-push/WebPushMixin';
-import PwaUpdateMixin from '@/mixins/pwaUpdateMixin';
+import Loader from '@/components/loader.vue';
+import MenuTree from '@/components/sidebar/menu-tree.vue';
+import WebPushMixin from '@/components/web-push/web-push-mixin';
+import PwaUpdateMixin from '@/mixins/pwa-update-mixin';
 import resources from '@/router/resources';
 
 export interface AppComponent {

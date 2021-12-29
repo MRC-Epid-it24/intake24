@@ -81,7 +81,7 @@
 import Vue, { VueConstructor } from 'vue';
 import orderBy from 'lodash/orderBy';
 import formMixin from '@/components/entry/form-mixin';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 import { FormMixin } from '@/types';
 
 type LanguageForm = {

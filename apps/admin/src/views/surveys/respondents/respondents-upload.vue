@@ -52,7 +52,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { JobEntry } from '@common/types/http/admin';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 import RespondentsJobMixin from './respondents-job-mixin';
 
 type mixins = InstanceType<typeof RespondentsJobMixin>;

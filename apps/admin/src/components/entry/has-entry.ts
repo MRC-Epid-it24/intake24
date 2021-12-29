@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import ResourceMixin from '@/mixins/ResourceMixin';
+import ResourceMixin from '@/mixins/resource-mixin';
 
 export default Vue.extend({
   props: {

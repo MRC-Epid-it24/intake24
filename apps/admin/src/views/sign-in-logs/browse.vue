@@ -12,8 +12,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import FormatsDateTime from '@/mixins/FormatsDateTime';
-import DataTable from '@/components/datatable/DataTable.vue';
+import FormatsDateTime from '@/mixins/formats-date-time';
+import DataTable from '@/components/datatable/data-table.vue';
 
 export default Vue.extend({
   name: 'SignInLogList',

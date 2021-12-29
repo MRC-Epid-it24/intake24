@@ -1,6 +1,8 @@
 import { Dictionary } from '@common/types';
 import authentication from './authentication';
 import dashboard from './dashboard.vue';
+import fdbs from './fdbs';
+import foodGroups from './food-groups';
 import images from './images';
 import jobs from './jobs';
 import languages from './languages';
@@ -19,6 +21,8 @@ import users from './users';
 const views: Dictionary = {
   authentication,
   dashboard,
+  fdbs,
+  'food-groups': foodGroups,
   images,
   jobs,
   languages,

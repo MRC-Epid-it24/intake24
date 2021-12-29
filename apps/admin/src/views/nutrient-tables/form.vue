@@ -221,7 +221,7 @@ import Vue, { VueConstructor } from 'vue';
 import { NutrientTableEntry, NutrientTableRefs } from '@common/types/http/admin';
 import { excelColumnToOffset, offsetToExcelColumn } from '@common/util';
 import formMixin from '@/components/entry/form-mixin';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 import { FormMixin } from '@/types';
 
 export type NutrientTableForm = {

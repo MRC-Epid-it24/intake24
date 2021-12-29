@@ -47,7 +47,7 @@ import Vue, { VueConstructor } from 'vue';
 import { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
 import { Dictionary } from '@common/types';
-import handlesLoading from '@/mixins/handlesLoading';
+import handlesLoading from '@/mixins/handles-loading';
 
 type mixins = InstanceType<typeof handlesLoading>;
 

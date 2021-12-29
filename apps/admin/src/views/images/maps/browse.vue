@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Gallery from '@/components/gallery/Gallery.vue';
+import Gallery from '@/components/gallery/gallery.vue';
 
 export default Vue.extend({
   name: 'ImageMapList',

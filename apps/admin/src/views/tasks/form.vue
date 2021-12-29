@@ -100,8 +100,8 @@ import { JobParams, JobParamsList, JobType } from '@common/types';
 import { TaskEntry, TaskRefs } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
 import formMixin from '@/components/entry/form-mixin';
-import form from '@/helpers/Form';
-import FormatsDateTime from '@/mixins/FormatsDateTime';
+import { form } from '@/helpers';
+import FormatsDateTime from '@/mixins/formats-date-time';
 import { FormMixin } from '@/types';
 import paramComponents from './params';
 

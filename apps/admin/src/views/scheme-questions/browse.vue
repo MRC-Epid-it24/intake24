@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import DataTable from '@/components/datatable/DataTable.vue';
+import DataTable from '@/components/datatable/data-table.vue';
 
 export default Vue.extend({
   name: 'SchemeQuestionList',

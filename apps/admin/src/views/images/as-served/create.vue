@@ -48,7 +48,7 @@ import Vue, { VueConstructor } from 'vue';
 import { AsServedSetEntry } from '@common/types/http/admin';
 import { FormMixin } from '@/types';
 import formMixin from '@/components/entry/form-mixin';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 
 type CreateAsServedSetForm = {
   id: string | null;

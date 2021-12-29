@@ -152,7 +152,7 @@ import Vue, { VueConstructor } from 'vue';
 import { SurveyRespondentEntry, SurveyRespondentListEntry } from '@common/types/http/admin';
 import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
 import detailMixin from '@/components/entry/detail-mixin';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 import { EntryMixin } from '@/types';
 import DataTable from '../data-table.vue';
 import RespondentsUpload from './respondents-upload.vue';

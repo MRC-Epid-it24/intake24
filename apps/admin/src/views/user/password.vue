@@ -73,7 +73,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import form from '@/helpers/Form';
+import { form } from '@/helpers';
 
 export default Vue.extend({
   name: 'UserPassword',

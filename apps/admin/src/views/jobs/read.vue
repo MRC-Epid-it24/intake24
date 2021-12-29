@@ -62,7 +62,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { JobEntry } from '@common/types/http/admin';
-import FormatsDateTime from '@/mixins/FormatsDateTime';
+import FormatsDateTime from '@/mixins/formats-date-time';
 import detailMixin from '@/components/entry/detail-mixin';
 import type { DetailMixin } from '@/types';
 
