@@ -10,10 +10,6 @@
       "@cli/*": ["src/*"],
       "@common/*": ["../../packages/common/src/*"]
     },
-    "types": [
-      "node",
-      "webpack-env"
-    ]
   },
   "include": [
     "src/**/*.ts",

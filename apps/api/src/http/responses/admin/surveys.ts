@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { SurveyEntry, SurveyListEntry } from '@common/types/http/admin';
 import { Survey } from '@api/db/models/system';
 

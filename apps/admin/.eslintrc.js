@@ -11,6 +11,17 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 2021,
+    sourceType: 'module',
+  },
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+      },
+    },
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

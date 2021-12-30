@@ -9,13 +9,7 @@
       "@api/*": ["src/*"],
       "@tests/*": ["tests/*"],
       "@common/*": ["../../packages/common/src/*"]
-    },
-    "types": [
-      "node",
-      "jest",
-      "jest-extended",
-      "webpack-env"
-    ]
+    }
   },
   "include": [
     "src/**/*.ts",

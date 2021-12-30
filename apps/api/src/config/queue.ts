@@ -1,4 +1,4 @@
-import { RedisOptions } from 'bullmq';
+import { RedisOptions } from 'ioredis';
 
 export type QueueConfig = {
   redis: RedisOptions;
