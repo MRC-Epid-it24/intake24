@@ -50,11 +50,11 @@ export default (container: AwilixContainer): void => {
     sourceImageService: asFunction(sourceImageService),
 
     foodDataService: asFunction(foodDataService),
-    nutrientTableService: asFunction(nutrientTableService),
     portionSizeService: asFunction(portionSizeService),
 
     adminCategoryService: asFunction(adminCategoryService),
     adminFoodService: asFunction(adminFoodService),
+    nutrientTableService: asFunction(nutrientTableService),
 
     dataExportFields: asFunction(dataExportFields),
     dataExportMapper: asFunction(dataExportMapper),

@@ -194,10 +194,10 @@ export interface IoC extends Jobs {
 
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;
+  nutrientTableService: NutrientTableService;
 
   // Foods
   foodDataService: FoodDataService;
-  nutrientTableService: NutrientTableService;
   portionSizeService: PortionSizeService;
 
   // Images

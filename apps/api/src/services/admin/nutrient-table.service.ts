@@ -22,15 +22,7 @@ export type UploadCsvFileInput = {
   userId?: string;
 };
 
-export interface NutrientTableService {
-  getTable: (nutrientTableId: string) => Promise<NutrientTableEntry>;
-  createTable: (input: NutrientTableInput) => Promise<NutrientTableEntry>;
-  updateTable: (nutrientTableId: string, input: NutrientTableInput) => Promise<NutrientTableEntry>;
-  deleteTable: (nutrientTableId: string) => Promise<void>;
-  uploadCsvFile: (nutrientTableId: string, input: UploadCsvFileInput) => Promise<Job>;
-}
-
-export default ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>): NutrientTableService => {
+const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) => {
   /**
    * Get nutrient table record with all CSV mappings
    *
@@ -265,3 +257,7 @@ export default ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>): NutrientTable
     uploadCsvFile,
   };
 };
+
+export default nutrientTableService;
+
+export type NutrientTableService = ReturnType<typeof nutrientTableService>;
