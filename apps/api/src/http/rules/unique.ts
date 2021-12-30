@@ -8,10 +8,10 @@ export type UniqueCondition = {
   ci?: boolean;
 };
 
-export type UniqueOptions = {
+export type UniqueOptions<TAttributes = any> = {
   model: ModelStatic;
   condition: UniqueCondition;
-  options?: FindOptions;
+  options?: FindOptions<TAttributes>;
 };
 
 export default async ({ model, condition, options = {} }: UniqueOptions): Promise<void> => {

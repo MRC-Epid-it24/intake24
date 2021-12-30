@@ -98,12 +98,12 @@ export default (): LocaleController => {
     const { localeId } = req.params;
 
     const [systemLocale, foodsLocale] = await Promise.all([
-      SystemLocale.findByPk(localeId),
+      SystemLocale.scope('surveys').findByPk(localeId),
       FoodsLocale.findByPk(localeId),
     ]);
-    if (!systemLocale || !foodsLocale) throw new NotFoundError();
+    if (!systemLocale || !systemLocale.surveys || !foodsLocale) throw new NotFoundError();
 
-    if (systemLocale.surveys?.length)
+    if (systemLocale.surveys.length)
       throw new ForbiddenError('Locale cannot be deleted. There are surveys using this locale.');
 
     // TODO: implement locale deletion -> check what needs to be deleted in food DB

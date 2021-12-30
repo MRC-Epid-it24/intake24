@@ -12,10 +12,14 @@ import {
 import { PaginateQuery } from '@api/db/models/model';
 import { NotFoundError } from '@api/http/errors';
 import { FoodInput } from '@common/types/http/admin';
+import { FoodLocalAttributes } from '@common/types/models';
 
 const adminFoodService = () => {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
-    const options: FindOptions = { where: { localeId }, include: [{ model: Food }] };
+    const options: FindOptions<FoodLocalAttributes> = {
+      where: { localeId },
+      include: [{ model: Food }],
+    };
     const { search } = query;
 
     if (search) {

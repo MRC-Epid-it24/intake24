@@ -72,9 +72,9 @@ export default (): LanguageController => {
     const { languageId } = req.params;
 
     const language = await Language.scope(['adminLocales', 'surveyLocales']).findByPk(languageId);
-    if (!language) throw new NotFoundError();
+    if (!language || !language.adminLocales || !language.surveyLocales) throw new NotFoundError();
 
-    if (language.adminLocales?.length || language.surveyLocales?.length)
+    if (language.adminLocales.length || language.surveyLocales.length)
       throw new ForbiddenError(
         'Language cannot be deleted. There are locales using this language.'
       );

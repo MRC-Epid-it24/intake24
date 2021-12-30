@@ -14,10 +14,11 @@ import { PaginateQuery } from '@api/db/models/model';
 import { NotFoundError } from '@api/http/errors';
 import { pick } from 'lodash';
 import { categoryResponse } from '@api/http/responses/admin';
+import { CategoryLocalAttributes } from '@common/types/models';
 
 const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   const browseCategories = async (localeId: string, query: PaginateQuery) => {
-    const options: FindOptions = {
+    const options: FindOptions<CategoryLocalAttributes> = {
       where: { localeId },
       include: [{ model: Category, required: true }],
     };
