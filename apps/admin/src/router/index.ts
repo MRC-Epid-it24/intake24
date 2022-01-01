@@ -101,6 +101,51 @@ const routes: RouteConfig[] = [
     component: views.user.profile,
     meta: { module: { current: 'user' }, title: 'user._' },
   },
+  // Food databases explorer
+  {
+    path: '/fdbs',
+    name: 'fdbs',
+    component: views.fdbs.browse,
+    meta: {
+      module: { current: 'fdbs' },
+      title: 'fdbs.title',
+      action: 'browse',
+      perm: 'fdbs-browse',
+    },
+  },
+  {
+    path: '/fdbs/:id',
+    name: 'fdbs-read',
+    component: views.fdbs.read,
+    meta: { module: { current: 'fdbs' }, title: 'fdbs.read', action: 'read', perm: 'fdbs-read' },
+    props: true,
+    children: [
+      {
+        path: 'categories/:entryId',
+        name: 'fdbs-categories',
+        component: views.fdbs.category,
+        meta: {
+          module: { current: 'categories', parent: 'fdbs' },
+          title: 'fdbs.read',
+          action: 'read',
+          perm: 'fdbs-read',
+        },
+        props: true,
+      },
+      {
+        path: 'foods/:entryId',
+        name: 'fdbs-foods',
+        component: views.fdbs.food,
+        meta: {
+          module: { current: 'foods', parent: 'fdbs' },
+          title: 'fdbs.read',
+          action: 'read',
+          perm: 'fdbs-read',
+        },
+        props: true,
+      },
+    ],
+  },
 ];
 
 resources.forEach((item) => {
@@ -108,9 +153,7 @@ resources.forEach((item) => {
   if (!generateRoutes) return;
 
   const pathSegments = path.split('/');
-  const resourceViews = pathSegments.reduce((acc, seg) => {
-    return acc[seg];
-  }, views);
+  const resourceViews = pathSegments.reduce((acc, seg) => acc[seg], views);
 
   const [first, ...rest] = pathSegments;
   routes.push(...generateResourceRoutes(name, [`/${first}`, ...rest], resourceViews));

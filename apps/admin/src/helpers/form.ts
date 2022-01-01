@@ -23,6 +23,7 @@ export interface FormConfig<T> {
   status?: string;
   multipart?: boolean;
   resetOnSubmit?: boolean;
+  extractNestedKeys?: boolean;
   transform?: (data: T) => any;
 }
 
@@ -30,7 +31,6 @@ export interface FormDef<T = Dictionary> {
   data: T;
   initData: T;
   keys: (keyof T)[];
-  allKeys: string[];
   errors: Errors;
   config: FormConfig<T>;
   assign(source: Dictionary): void;
@@ -53,13 +53,12 @@ export type Form<T = Dictionary> = FormDef<T> & FormFields<T>;
 
 export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Form<T> => {
   const keys = Object.keys(initData) as (keyof T)[];
-  const allKeys = getNestedKeys(initData);
+  const allKeys = formConfig.extractNestedKeys ? getNestedKeys(initData) : [...keys];
 
   const formDef: FormDef<T> = {
     data: copy(initData),
     initData,
     keys,
-    allKeys,
     errors: new Errors(),
     config: {
       multipart: false,
@@ -67,7 +66,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
       ...formConfig,
     },
     assign<S extends T>(source: S): void {
-      this.data = merge(this.data, pick(source, this.allKeys));
+      this.data = merge(this.data, pick(source, allKeys));
     },
 
     load<S extends T>(source: S): void {

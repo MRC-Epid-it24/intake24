@@ -100,20 +100,23 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
     },
 
     async submit() {
-      if (this.isEdit) {
-        const data = await this.form[this.editMethod](`${this.resource.api}/${this.id}`);
-        this.toForm(data);
+      let data;
 
-        await this.$store.dispatch('resource/entry/update', data);
+      if (this.isEdit) {
+        data = await this.form[this.editMethod](`${this.resource.api}/${this.id}`);
 
         const { id, name } = data;
         this.$toasted.success(this.$t('common.msg.updated', { name: name ?? id }).toString());
       } else {
-        const { id, name } = await this.form.post(`${this.resource.api}`);
+        data = await this.form.post(`${this.resource.api}`);
 
+        const { id, name } = data;
         this.$router.push({ name: `${this.resource.name}-edit`, params: { id } });
+
         this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }).toString());
       }
+
+      await this.$store.dispatch('resource/entry/update', data);
     },
 
     clearError(event: KeyboardEvent) {

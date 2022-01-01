@@ -1,0 +1,25 @@
+<template>
+  <layout v-bind="{ id, entry }" v-if="entryLoaded">
+    <v-simple-table>
+      <tbody>
+        <tr>
+          <th>{{ $t('common.name') }}</th>
+          <td>{{ entry.name }}</td>
+        </tr>
+      </tbody>
+    </v-simple-table>
+  </layout>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import detailMixin from '@/components/entry/detail-mixin';
+
+export default Vue.extend({
+  name: 'FoodGroupDetail',
+
+  mixins: [detailMixin],
+});
+</script>
+
+<style scoped></style>

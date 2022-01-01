@@ -1,6 +1,8 @@
 import { LocaleMessages } from 'vue-i18n';
 import common from './common';
 import dashboard from './dashboard';
+import fdbs from './fdbs';
+import foodGroups from './food-groups';
 import flags from './flags';
 import asServed from './as-served';
 import guideImages from './guide-images';
@@ -22,6 +24,8 @@ import users from './users';
 const messages: LocaleMessages = {
   common,
   dashboard,
+  fdbs,
+  'food-groups': foodGroups,
   flags,
   'as-served': asServed,
   'guide-images': guideImages,

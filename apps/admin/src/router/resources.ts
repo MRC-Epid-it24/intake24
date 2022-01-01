@@ -6,6 +6,22 @@ const resources: Resource[] = [
   // Food databases
   {
     group: 'fdb',
+    name: 'fdbs',
+    icon: 'fas fa-drumstick-bite',
+    api: 'admin/fdbs',
+    generateRoutes: false,
+    routes: [...routes],
+  },
+  {
+    group: 'fdb',
+    name: 'food-groups',
+    icon: 'fas fa-utensils',
+    api: 'admin/food-groups',
+    generateRoutes: true,
+    routes: [...routes],
+  },
+  {
+    group: 'fdb',
     name: 'nutrient-tables',
     icon: 'fas fa-seedling',
     api: 'admin/nutrient-tables',
