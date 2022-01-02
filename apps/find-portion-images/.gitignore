@@ -1,11 +1,2 @@
-dist
-node_modules
-.env
-storage
 config.json
 *.csv
-
-# Editor directories and files
-.idea
-.vscode
-*.iml
