@@ -30,8 +30,12 @@ export const surveyPermissions = (surveyId: string): string[] => [
   surveySupport(surveyId),
 ];
 
-export const foodDatabaseMaintainer = (fdbId: string): string =>
-  `${foodDatabaseMaintainerPrefix}${fdbId}`;
+export const foodDatabaseMaintainer = (localeId: string): string =>
+  `${foodDatabaseMaintainerPrefix}${localeId}`;
+
+export const foodDatabasePermissions = (localeId: string): string[] => [
+  foodDatabaseMaintainer(localeId),
+];
 
 const aclService = ({
   aclConfig,

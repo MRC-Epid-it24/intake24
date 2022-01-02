@@ -32,6 +32,7 @@ import type {
   // Admin
   UserProfileController,
   UserJobController,
+  AdminFoodDatabaseController,
   AdminCategoryController,
   AdminFoodController,
   AdminFoodGroupController,
@@ -135,6 +136,7 @@ export interface IoC extends Jobs {
   userProfileController: UserProfileController;
   userJobController: UserJobController;
 
+  adminFoodDatabaseController: AdminFoodDatabaseController;
   adminCategoryController: AdminCategoryController;
   adminFoodController: AdminFoodController;
   adminFoodGroupController: AdminFoodGroupController;

@@ -64,10 +64,10 @@ export const role = (role: string | string[]) => {
 
 export const canManageFoodDatabase = () => {
   return (req: Request, res: Response, next: NextFunction): void => {
-    const { fdbId } = req.params;
+    const { localeId } = req.params;
 
     req.scope.cradle.aclService
-      .hasAnyPermission([foodsAdmin, foodDatabaseMaintainer(fdbId)])
+      .hasAnyPermission([foodsAdmin, foodDatabaseMaintainer(localeId)])
       .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };

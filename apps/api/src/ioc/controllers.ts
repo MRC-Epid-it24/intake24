@@ -21,6 +21,7 @@ export default (container: AwilixContainer): void => {
     userProfileController: asFunction(controllers.admin.user.profile),
     userJobController: asFunction(controllers.admin.user.job),
 
+    adminFoodDatabaseController: asFunction(controllers.admin.foods.fdb),
     adminCategoryController: asFunction(controllers.admin.foods.category),
     adminFoodController: asFunction(controllers.admin.foods.food),
     adminFoodGroupController: asFunction(controllers.admin.foods.foodGroup),

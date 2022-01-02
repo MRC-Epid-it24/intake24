@@ -279,5 +279,5 @@ export default class Survey
     await Permission.destroy({ where: { name: surveyPermissions(instance.id) } });
   }
 
-  // TODO: add BulkAfterCreate & BulkAfterDestroy when implemented in system
+  // TODO: add BulkAfterCreate & BulkAfterDestroy if/when implemented in system
 }

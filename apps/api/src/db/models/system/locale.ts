@@ -1,8 +1,18 @@
 /* eslint-disable no-use-before-define */
-import { Column, DataType, HasMany, Scopes, Table, BelongsTo } from 'sequelize-typescript';
+import {
+  AfterCreate,
+  AfterDestroy,
+  Column,
+  DataType,
+  HasMany,
+  Scopes,
+  Table,
+  BelongsTo,
+} from 'sequelize-typescript';
 import { LocaleAttributes, LocaleCreationAttributes } from '@common/types/models';
+import { foodDatabasePermissions } from '@api/services';
 import BaseModel from '../model';
-import { Language, Survey } from '.';
+import { Language, Permission, Survey } from '.';
 
 @Scopes(() => ({
   list: { attributes: ['id', 'englishName', 'localName', 'countryFlagCode'] },
@@ -84,4 +94,22 @@ export default class Locale
 
   @HasMany(() => Survey, 'localeId')
   public surveys?: Survey[];
+
+  @AfterCreate
+  static async createLocalePermissions(instance: Locale): Promise<void> {
+    const permissions = foodDatabasePermissions(instance.id).map((item) => ({
+      name: item,
+      displayName: item,
+      description: `Food database specific permission (${item})`,
+    }));
+
+    await Permission.bulkCreate(permissions);
+  }
+
+  @AfterDestroy
+  static async destroyLocalePermissions(instance: Locale): Promise<void> {
+    await Permission.destroy({ where: { name: foodDatabasePermissions(instance.id) } });
+  }
+
+  // TODO: add BulkAfterCreate & BulkAfterDestroy if/when implemented in system
 }
