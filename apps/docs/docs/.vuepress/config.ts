@@ -1,8 +1,11 @@
-require('dotenv').config();
-const { description } = require('../../package')
+import dotenv from 'dotenv';
+import { defineConfig } from "vuepress/config";
+import { description } from '../../package.json';
 
-module.exports = {
+dotenv.config();
 
+export default defineConfig({
+  //@ts-expect-error - `/${string}/` doesn't seem correct -> where `/` renders to `///` and doesn't serve the page
   base: process.env.BASE_URL || '/',
 
   dest: process.env.OUTPUT_DIR || 'dist',
@@ -245,4 +248,4 @@ module.exports = {
     '@vuepress/plugin-back-to-top',
     '@vuepress/plugin-medium-zoom',
   ]
-}
+});
