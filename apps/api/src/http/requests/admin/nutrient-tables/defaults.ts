@@ -2,11 +2,7 @@ import {
   NutrientTableCsvMappingFieldInput,
   NutrientTableCsvMappingNutrientInput,
 } from '@common/types/http/admin';
-import {
-  validateCsvMapping,
-  validateCsvMappingFields,
-  validateCsvMappingNutrients,
-} from '@common/validators';
+import { validateCsvMappingFields, validateCsvMappingNutrients } from '@common/validators';
 import { Schema } from 'express-validator';
 
 const defaults: Schema = {
@@ -16,15 +12,30 @@ const defaults: Schema = {
     isString: true,
     isEmpty: { negated: true },
   },
-  csvMapping: {
+  'csvMapping.rowOffset': {
     in: ['body'],
-    errorMessage: 'Invalid csv mappings.',
-    custom: {
-      options: (value): boolean => {
-        validateCsvMapping(value);
-        return true;
-      },
-    },
+    errorMessage: 'Value must be a number.',
+    isInt: true,
+    toInt: true,
+  },
+  'csvMapping.idColumnOffset': {
+    in: ['body'],
+    errorMessage: 'Value must be a number.',
+    isInt: true,
+    toInt: true,
+  },
+  'csvMapping.descriptionColumnOffset': {
+    in: ['body'],
+    errorMessage: 'Value must be a number.',
+    isInt: true,
+    toInt: true,
+  },
+  'csvMapping.localDescriptionColumnOffset': {
+    in: ['body'],
+    errorMessage: 'Value must be a number.',
+    isInt: true,
+    toInt: true,
+    optional: { options: { nullable: true } },
   },
   csvMappingFields: {
     in: ['body'],

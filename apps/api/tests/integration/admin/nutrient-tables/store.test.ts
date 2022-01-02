@@ -51,7 +51,9 @@ export default (): void => {
       expect(body.errors).toContainAllKeys([
         'id',
         'description',
-        'csvMapping',
+        'csvMapping.rowOffset',
+        'csvMapping.idColumnOffset',
+        'csvMapping.descriptionColumnOffset',
         'csvMappingFields',
         'csvMappingNutrients',
       ]);
@@ -75,7 +77,9 @@ export default (): void => {
       expect(body.errors).toContainAllKeys([
         'id',
         'description',
-        'csvMapping',
+        'csvMapping.rowOffset',
+        'csvMapping.idColumnOffset',
+        'csvMapping.descriptionColumnOffset',
         'csvMappingFields',
         'csvMappingNutrients',
       ]);

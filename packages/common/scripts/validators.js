@@ -44,12 +44,6 @@ const validators = [
   },
   // Nutrient tables
   {
-    type: 'NutrientTableCsvMappingInput',
-    srcFile: 'src/types/http/admin/nutrient-tables.ts',
-    destFile: 'src/validators/nutrient-tables/csv-mapping.validator.ts',
-    params: '--useNamedExport',
-  },
-  {
     type: 'NutrientTableCsvMappingFieldsInput',
     srcFile: 'src/types/http/admin/nutrient-tables.ts',
     destFile: 'src/validators/nutrient-tables/csv-mapping-fields.validator.ts',

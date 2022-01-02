@@ -34,36 +34,40 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.csvMapping.idColumnOffset"
+                :error-messages="form.errors.get('csvMapping.idColumnOffset')"
                 :label="$t('nutrient-tables.mapping.source.idColumnOffset')"
                 hide-details="auto"
-                name="idColumnOffset"
+                name="csvMapping.idColumnOffset"
                 outlined
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.csvMapping.descriptionColumnOffset"
+                :error-messages="form.errors.get('csvMapping.descriptionColumnOffset')"
                 :label="$t('nutrient-tables.mapping.source.descriptionColumnOffset')"
                 hide-details="auto"
-                name="descriptionColumnOffset"
+                name="csvMapping.descriptionColumnOffset"
                 outlined
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.csvMapping.localDescriptionColumnOffset"
+                :error-messages="form.errors.get('csvMapping.localDescriptionColumnOffset')"
                 :label="$t('nutrient-tables.mapping.source.localDescriptionColumnOffset')"
                 hide-details="auto"
-                name="localDescriptionColumnOffset"
+                name="csvMapping.localDescriptionColumnOffset"
                 outlined
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.csvMapping.rowOffset"
+                :error-messages="form.errors.get('csvMapping.rowOffset')"
                 :label="$t('nutrient-tables.mapping.source.rowOffset')"
                 hide-details="auto"
-                name="rowOffset"
+                name="csvMapping.rowOffset"
                 outlined
               ></v-text-field>
             </v-col>
