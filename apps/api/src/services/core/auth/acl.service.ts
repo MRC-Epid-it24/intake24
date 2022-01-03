@@ -1,4 +1,4 @@
-import { Permission, Role, User } from '@api/db/models/system';
+import { Permission, Role, User } from '@api/db';
 import type { IoC } from '@api/ioc';
 
 export const ACL_PERMISSIONS_KEY = 'acl:permissions';

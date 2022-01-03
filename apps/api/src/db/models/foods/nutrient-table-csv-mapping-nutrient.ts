@@ -4,7 +4,7 @@ import {
   NutrientTableCsvMappingNutrientCreationAttributes,
 } from '@common/types/models';
 import BaseModel from '../model';
-import { NutrientTable, NutrientType } from '.';
+import { NutrientTable, FoodsNutrientType } from '.';
 
 @Table({
   modelName: 'NutrientTableCsvMappingNutrient',
@@ -49,6 +49,6 @@ export default class NutrientTableCsvMappingNutrient extends BaseModel<
   })
   public nutrientTable?: NutrientTable;
 
-  @BelongsTo(() => NutrientType, 'nutrientTypeId')
-  public nutrientType?: NutrientType;
+  @BelongsTo(() => FoodsNutrientType, 'nutrientTypeId')
+  public nutrientType?: FoodsNutrientType;
 }

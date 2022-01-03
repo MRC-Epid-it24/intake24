@@ -3,12 +3,12 @@ import {
   SurveySubmissionNutrientAttributes,
   SurveySubmissionNutrientCreationAttributes,
 } from '@common/types/models';
-import { NutrientType, SurveySubmissionFood } from '.';
+import { SystemNutrientType, SurveySubmissionFood } from '.';
 import BaseModel from '../model';
 
 @Scopes(() => ({
   food: { include: [{ model: SurveySubmissionFood }] },
-  nutrientType: { include: [{ model: NutrientType }] },
+  nutrientType: { include: [{ model: SystemNutrientType }] },
 }))
 @Table({
   modelName: 'SurveySubmissionNutrient',
@@ -49,6 +49,6 @@ export default class SurveySubmissionNutrient
   @BelongsTo(() => SurveySubmissionFood, 'foodId')
   public food?: SurveySubmissionFood;
 
-  @BelongsTo(() => NutrientType, 'nutrientTypeId')
-  public nutrientType?: NutrientType;
+  @BelongsTo(() => SystemNutrientType, 'nutrientTypeId')
+  public nutrientType?: SystemNutrientType;
 }

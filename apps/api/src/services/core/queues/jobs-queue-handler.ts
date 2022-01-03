@@ -8,7 +8,7 @@ import {
   Worker,
 } from 'bullmq';
 import { JobData, JobParams, JobType } from '@common/types';
-import { Job as DbJob } from '@api/db/models/system';
+import { Job as DbJob } from '@api/db';
 import ioc, { IoC } from '@api/ioc';
 import { Job } from '@api/jobs';
 import { QueueHandler } from './queue-handler';

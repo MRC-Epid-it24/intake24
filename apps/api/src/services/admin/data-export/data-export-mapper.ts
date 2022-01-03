@@ -1,6 +1,6 @@
 import json2csv from 'json2csv';
 import { ExportSectionId } from '@common/types/models';
-import { SurveySubmissionFood } from '@api/db/models/system';
+import { SurveySubmissionFood } from '@api/db';
 import type { IoC } from '@api/ioc';
 import { ExportField, ExportFieldTransform } from './data-export-fields';
 

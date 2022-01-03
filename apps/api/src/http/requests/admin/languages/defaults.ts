@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
-import { Language } from '@api/db/models/system';
+import { Language } from '@api/db';
 import { unique } from '@api/http/rules';
 import { LanguageAttributes } from '@common/types/models';
 

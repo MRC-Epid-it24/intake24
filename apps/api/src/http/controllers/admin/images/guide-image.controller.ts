@@ -8,9 +8,8 @@ import {
 } from '@common/types/http/admin';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
-import { GuideImage, ImageMap } from '@api/db/models/foods';
+import { GuideImage, ImageMap, PaginateQuery } from '@api/db';
 import imagesResponseCollection from '@api/http/responses/admin/images';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
 export type GuideImageController = Controller<CrudActions>;

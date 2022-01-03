@@ -1,6 +1,6 @@
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 import { CategoryLocalAttributes, CategoryLocalCreationAttributes } from '@common/types/models';
-import { Category, CategoryPortionSizeMethod, Locale } from '@api/db/models/foods';
+import { Category, CategoryPortionSizeMethod, FoodsLocale } from '@api/db';
 import BaseModel from '../model';
 
 @Table({
@@ -55,8 +55,8 @@ export default class CategoryLocal
   @BelongsTo(() => Category, 'categoryCode')
   public main?: Category;
 
-  @BelongsTo(() => Locale, 'localeId')
-  public locale?: Locale;
+  @BelongsTo(() => FoodsLocale, 'localeId')
+  public locale?: FoodsLocale;
 
   @HasMany(() => CategoryPortionSizeMethod, 'categoryLocalId')
   public portionSizeMethods?: CategoryPortionSizeMethod[];

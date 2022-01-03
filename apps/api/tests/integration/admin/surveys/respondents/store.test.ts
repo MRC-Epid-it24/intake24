@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { CreateRespondentRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Survey } from '@api/db/models/system';
+import { Survey } from '@api/db';
 import { surveyStaff } from '@api/services/core/auth';
 import { pick } from 'lodash';
 import { CustomField } from '@common/types';

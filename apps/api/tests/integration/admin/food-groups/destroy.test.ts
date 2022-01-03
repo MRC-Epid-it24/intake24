@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Food, FoodGroup } from '@api/db/models/foods';
+import { Food, FoodGroup } from '@api/db';
 
 export default (): void => {
   const baseUrl = '/api/admin/food-groups';

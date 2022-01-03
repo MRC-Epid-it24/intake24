@@ -1,13 +1,13 @@
 import createTestData from '@tests/unit/food-data/get-kcal-test-data';
 import { FoodDataService, foodDataService } from '@api/services';
-import { DbInterface } from '@api/db';
+import { DatabasesInterface } from '@api/db';
 import InvalidIdError from '@api/services/foods/invalid-id-error';
 import createLocales from './test-data-locales';
 import { initDatabases, releaseDatabases } from '../helpers/databases';
 
 export default () => {
   describe('getNutrientKCalPer100G', () => {
-    let databases: DbInterface;
+    let databases: DatabasesInterface;
     let service: FoodDataService;
 
     beforeAll(async () => {

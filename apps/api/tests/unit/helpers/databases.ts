@@ -4,16 +4,16 @@
 import databaseConfig from '@api/config/database';
 import { logger } from '@api/services/core';
 import appConfig from '@api/config/app';
-import DB, { DbInterface } from '@api/db';
+import { Database, DatabasesInterface } from '@api/db';
 
-let databases: DbInterface;
+let databases: DatabasesInterface;
 
-export async function initDatabases(): Promise<DbInterface> {
+export async function initDatabases(): Promise<DatabasesInterface> {
   console.info(
     `Using database ${databaseConfig.test.foods.database} on ${databaseConfig.test.foods.host}`
   );
 
-  databases = new DB({
+  databases = new Database({
     environment: appConfig.env,
     databaseConfig,
     logger,

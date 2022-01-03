@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { SurveyRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Survey } from '@api/db/models/system';
+import { Survey } from '@api/db';
 import { surveyStaff } from '@api/services/core/auth';
 import { StaffUpdateSurveyFields, staffUpdateSurveyFields } from '@common/types/models';
 

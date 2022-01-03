@@ -17,7 +17,7 @@ import type {
   ServicesConfig,
   SessionConfig,
 } from '@api/config';
-import db, { DbInterface } from '@api/db';
+import { Database, DatabasesInterface } from '@api/db';
 import type {
   AuthenticationController,
   PasswordController,
@@ -91,7 +91,7 @@ import type {
 } from '@api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@api/services/core/queues';
 import type { Jobs } from '@api/jobs';
-import type { User } from '@api/db/models/system';
+import type { User } from '@api/db';
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';
@@ -166,7 +166,7 @@ export interface IoC extends Jobs {
   adminUserController: AdminUserController;
 
   // System services
-  db: DbInterface;
+  db: DatabasesInterface;
   cache: Cache;
   filesystem: Filesystem;
   logger: Logger;
@@ -235,7 +235,7 @@ const configureContainer = () => {
     environment: asValue(config.app.env),
     imagesBaseUrl: asValue(config.app.urls.images),
 
-    db: asClass(db).singleton(),
+    db: asClass(Database).singleton(),
   });
 
   controllers(container);

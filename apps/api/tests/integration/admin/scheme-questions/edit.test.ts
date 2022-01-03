@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { SchemeQuestionCreationAttributes } from '@common/types/models';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { SchemeQuestion } from '@api/db/models/system';
+import { SchemeQuestion } from '@api/db';
 
 export default (): void => {
   const baseUrl = '/api/admin/scheme-questions';

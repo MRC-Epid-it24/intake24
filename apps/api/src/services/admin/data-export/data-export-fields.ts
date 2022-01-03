@@ -1,8 +1,13 @@
 import { orderBy } from 'lodash';
 import { PromptQuestion } from '@common/prompts';
 import { ExportSectionId, ExportField as BaseExportField } from '@common/types/models';
-import { NutrientTableCsvMappingField } from '@api/db/models/foods';
-import { NutrientType, Scheme, SurveySubmissionFood, UserCustomField } from '@api/db/models/system';
+import {
+  NutrientTableCsvMappingField,
+  SystemNutrientType,
+  Scheme,
+  SurveySubmissionFood,
+  UserCustomField,
+} from '@api/db';
 
 export type ExportFieldTransform<T = SurveySubmissionFood> = (
   food: T
@@ -234,7 +239,7 @@ export default (): DataExportFields => {
    * @returns {Promise<ExportField[]>}
    */
   const foodNutrients = async (): Promise<ExportField[]> => {
-    const types = await NutrientType.findAll();
+    const types = await SystemNutrientType.findAll();
 
     return types.map((type) => ({ id: type.id.toString(), label: type.description }));
   };

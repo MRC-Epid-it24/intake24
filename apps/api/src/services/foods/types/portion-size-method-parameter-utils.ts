@@ -1,8 +1,5 @@
 import { UserPortionSizeMethodParameters } from '@common/types/http/foods/user-food-data';
-import {
-  CategoryPortionSizeMethodParameter,
-  FoodPortionSizeMethodParameter,
-} from '@api/db/models/foods';
+import { CategoryPortionSizeMethodParameter, FoodPortionSizeMethodParameter } from '@api/db';
 
 export function toUserPortionSizeMethodParameters(
   parameters: FoodPortionSizeMethodParameter[]

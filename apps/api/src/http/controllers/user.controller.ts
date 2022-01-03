@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
 import { Request, Response } from 'express';
-import { User, UserPassword } from '@api/db/models/system';
+import { User, UserPassword } from '@api/db';
 import type { IoC } from '@api/ioc';
 import { UserPhysicalDataResponse } from '@common/types/http';
 import { Controller } from './controller';

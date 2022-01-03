@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { FoodGroupCreationAttributes } from '@common/types/models';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { FoodGroup } from '@api/db/models/foods';
+import { FoodGroup } from '@api/db';
 
 export default (): void => {
   const baseUrl = '/api/admin/food-groups';

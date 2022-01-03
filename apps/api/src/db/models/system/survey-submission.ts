@@ -6,7 +6,7 @@ import {
 import { FindOptions, WhereOptions } from 'sequelize/types';
 import BaseModel from '../model';
 import {
-  NutrientType,
+  SystemNutrientType,
   Survey,
   SurveySubmissionCustomField,
   SurveySubmissionField,
@@ -61,7 +61,7 @@ export const submissionScope = ({
               {
                 model: SurveySubmissionNutrient,
                 separate: true,
-                include: [{ model: NutrientType, required: true }],
+                include: [{ model: SystemNutrientType, required: true }],
               },
               { model: SurveySubmissionPortionSizeField, separate: true },
             ],

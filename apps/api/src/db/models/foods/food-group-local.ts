@@ -1,7 +1,7 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import { FoodGroupLocalAttributes, FoodGroupLocalCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
-import { FoodGroup, Locale } from '.';
+import { FoodGroup, FoodsLocale } from '.';
 
 @Table({
   modelName: 'FoodGroupLocal',
@@ -42,6 +42,6 @@ export default class FoodGroupLocal
   @BelongsTo(() => FoodGroup, 'foodGroupId')
   public group?: FoodGroup;
 
-  @BelongsTo(() => Locale, 'localeId')
-  public locale?: Locale;
+  @BelongsTo(() => FoodsLocale, 'localeId')
+  public locale?: FoodsLocale;
 }

@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { checkSchema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
-import { User } from '@api/db/models/system';
+import { User } from '@api/db';
 import validate from '@api/http/requests/validate';
 import { unique } from '@api/http/rules';
 import { UserAttributes } from '@common/types/models';

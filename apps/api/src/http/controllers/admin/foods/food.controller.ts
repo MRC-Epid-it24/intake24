@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import type { IoC } from '@api/ioc';
 import { pick } from 'lodash';
-import { PaginateQuery } from '@api/db/models/model';
+import { PaginateQuery, FoodLocal } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
-import { FoodLocal } from '@api/db/models/foods';
 import { FoodLocalEntry, FoodsResponse } from '@common/types/http/admin';
 import type { Controller, CrudActions } from '../../controller';
 

@@ -7,10 +7,10 @@ import {
   CategoryPortionSizeMethodParameter,
   Food,
   FoodLocal,
-} from '@api/db/models/foods';
+  PaginateQuery,
+} from '@api/db';
 import { CategoryInput, CategoryListEntry } from '@common/types/http/admin';
 import type { IoC } from '@api/ioc';
-import { PaginateQuery } from '@api/db/models/model';
 import { NotFoundError } from '@api/http/errors';
 import { pick } from 'lodash';
 import { categoryResponse } from '@api/http/responses/admin';

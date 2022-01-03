@@ -1,7 +1,7 @@
 import { PassportStatic } from 'passport';
 import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
 import security from '@api/config/security';
-import { User } from '@api/db/models/system';
+import { User } from '@api/db';
 
 const { issuer, access } = security.jwt;
 

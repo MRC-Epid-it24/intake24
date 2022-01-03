@@ -5,10 +5,9 @@ import {
   SchemeQuestionsResponse,
 } from '@common/types/http/admin';
 import { isMealSection, MealSection, SurveyQuestionSection } from '@common/schemes';
-import { Language, Scheme, SchemeQuestion } from '@api/db/models/system';
+import { Language, Scheme, SchemeQuestion, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import { pick } from 'lodash';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeQuestionController = Controller<CrudActions | 'sync'>;

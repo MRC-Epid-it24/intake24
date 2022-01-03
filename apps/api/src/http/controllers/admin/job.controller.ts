@@ -4,10 +4,9 @@ import { pick } from 'lodash';
 import path from 'path';
 import { Op } from 'sequelize';
 import { JobEntry, JobsResponse } from '@common/types/http/admin';
-import { Job, User } from '@api/db/models/system';
+import { Job, User, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
-import type { PaginateQuery } from '@api/db/models/model';
 import type { Controller } from '../controller';
 
 export type JobController = Controller<'browse' | 'read' | 'destroy' | 'refs' | 'download'>;

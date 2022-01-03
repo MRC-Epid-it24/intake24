@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
-import { CategoryPortionSizeMethodParameter } from '@api/db/models/foods';
+import { CategoryPortionSizeMethodParameter } from '@api/db';
 import {
   PortionSizeMethodId,
   CategoryPortionSizeMethodAttributes,

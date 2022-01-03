@@ -7,7 +7,7 @@ import {
   DrinkwareVolumeSample,
   GuideImage,
   ImageMap,
-} from '@api/db/models/foods';
+} from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 
 export interface PortionSizeService {

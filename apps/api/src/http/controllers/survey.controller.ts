@@ -4,7 +4,7 @@ import {
   PublicSurveyListResponse,
   GenerateUserResponse,
 } from '@common/types/http';
-import { Survey } from '@api/db/models/system';
+import { Survey } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { RespondentFromJWT } from '@api/services';

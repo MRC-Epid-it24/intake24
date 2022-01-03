@@ -5,7 +5,7 @@ import {
   NutrientTable,
   NutrientTableRecordField,
   NutrientTableRecordNutrient,
-} from '@api/db/models/foods';
+} from '@api/db';
 import {
   NutrientTableRecordAttributes,
   NutrientTableRecordCreationAttributes,

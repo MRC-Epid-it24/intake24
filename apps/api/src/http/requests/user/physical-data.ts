@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator';
 import validate from '@api/http/requests/validate';
 import { sexes, weightTargets } from '@common/feedback';
-import { PhysicalActivityLevel } from '@api/db/models/foods';
+import { PhysicalActivityLevel } from '@api/db';
 
 export default validate(
   checkSchema({

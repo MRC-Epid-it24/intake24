@@ -9,7 +9,7 @@ import {
 } from 'sequelize-typescript';
 import { LanguageAttributes, LanguageCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
-import { Locale } from '.';
+import Locale from './locale';
 
 @Scopes(() => ({
   list: { attributes: ['id', 'englishName', 'localName', 'countryFlagCode'] },

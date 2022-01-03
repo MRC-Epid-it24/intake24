@@ -6,7 +6,7 @@ import {
 } from '@common/types/models/foods';
 import { Sex } from '@common/feedback';
 import BaseModel from '../model';
-import { DemographicGroupScaleSector, NutrientType, PhysicalActivityLevel } from '.';
+import { DemographicGroupScaleSector, FoodsNutrientType, PhysicalActivityLevel } from '.';
 
 @Table({
   modelName: 'DemographicGroup',
@@ -89,8 +89,8 @@ export default class DemographicGroup
   @BelongsTo(() => PhysicalActivityLevel, 'physicalActivityLevelId')
   public physicalActivityLevel?: PhysicalActivityLevel;
 
-  @BelongsTo(() => NutrientType, 'nutrientTypeId')
-  public nutrientType?: NutrientType;
+  @BelongsTo(() => FoodsNutrientType, 'nutrientTypeId')
+  public nutrientType?: FoodsNutrientType;
 
   @HasMany(() => DemographicGroupScaleSector, 'demographicGroupId')
   public scaleSectors?: DemographicGroupScaleSector[];

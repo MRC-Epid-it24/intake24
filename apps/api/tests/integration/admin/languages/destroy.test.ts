@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { LanguageCreationAttributes } from '@common/types/models';
 import { suite, setPermission } from '@tests/integration/helpers';
-import { Language, Locale } from '@api/db/models/system';
+import { Language, SystemLocale } from '@api/db';
 
 export default (): void => {
   const baseUrl = '/api/admin/languages';
@@ -75,7 +75,7 @@ export default (): void => {
         countryFlagCode: 'es-bo',
         textDirection: 'ltr',
       });
-      await Locale.create({
+      await SystemLocale.create({
         id,
         englishName: 'Spanish - Bolivia',
         localName: 'Spanish - Bolivia',

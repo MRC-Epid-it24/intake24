@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { PermissionRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Permission } from '@api/db/models/system';
+import { Permission } from '@api/db';
 
 export default (): void => {
   const baseUrl = '/api/admin/permissions';

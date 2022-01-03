@@ -1,12 +1,12 @@
 import { Column, DataType, HasMany, HasOne, Table } from 'sequelize-typescript';
-import NutrientTableRecord from '@api/db/models/foods/nutrient-table-record';
 import { NutrientTableAttributes, NutrientTableCreationAttributes } from '@common/types/models';
-import BaseModel from '../model';
 import {
+  NutrientTableRecord,
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
 } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'NutrientTable',

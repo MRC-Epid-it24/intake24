@@ -1,7 +1,7 @@
 import request from 'supertest';
 import * as uuid from 'uuid';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Survey, SurveySubmission } from '@api/db/models/system';
+import { Survey, SurveySubmission } from '@api/db';
 import { surveyStaff } from '@api/services/core/auth';
 import ioc from '@api/ioc';
 

@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { CreateRespondentRequest, UpdateRespondentRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Survey, UserSurveyAlias } from '@api/db/models/system';
+import { Survey, UserSurveyAlias } from '@api/db';
 import { surveyStaff } from '@api/services/core/auth';
 import { omit, pick } from 'lodash';
 import ioc from '@api/ioc';

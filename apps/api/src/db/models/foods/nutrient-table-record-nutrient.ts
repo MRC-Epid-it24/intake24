@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import { NutrientTableRecord, NutrientType } from '@api/db/models/foods';
+import { NutrientTableRecord, FoodsNutrientType } from '@api/db';
 import {
   NutrientTableRecordNutrientAttributes,
   NutrientTableRecordNutrientCreationAttributes,
@@ -43,8 +43,8 @@ export default class NutrientTableRecordNutrient extends BaseModel<
   })
   public unitsPer100g!: number;
 
-  @BelongsTo(() => NutrientType, 'nutrientTypeId')
-  public nutrientType?: NutrientType;
+  @BelongsTo(() => FoodsNutrientType, 'nutrientTypeId')
+  public nutrientType?: FoodsNutrientType;
 
   @BelongsTo(() => NutrientTableRecord, 'nutrientTableRecordId')
   public record?: NutrientTableRecord;

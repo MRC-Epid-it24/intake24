@@ -12,7 +12,7 @@ import {
   NutrientTableRecord,
   NutrientTableRecordField,
   NutrientTableRecordNutrient,
-} from '@api/db/models/foods';
+} from '@api/db';
 import StreamLockJob from './stream-lock-job';
 
 export type CSVRow = string[];

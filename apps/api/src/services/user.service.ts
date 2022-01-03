@@ -1,4 +1,4 @@
-import { UserPhysicalData } from '@api/db/models/system';
+import { UserPhysicalData } from '@api/db';
 import type { UserPhysicalDataAttributes } from '@common/types/models';
 
 export type UpdatePasswordInput = {

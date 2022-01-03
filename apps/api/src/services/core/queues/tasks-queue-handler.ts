@@ -1,6 +1,6 @@
 import { ConnectionOptions, Job as BullJob, Queue, QueueScheduler, Worker } from 'bullmq';
 import { JobData, RepeatableBullJob } from '@common/types';
-import { Task } from '@api/db/models/system';
+import { Task } from '@api/db';
 import type { IoC } from '@api/ioc';
 import ioc from '@api/ioc';
 import { Job } from '@api/jobs';

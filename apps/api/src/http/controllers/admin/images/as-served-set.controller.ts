@@ -7,10 +7,8 @@ import {
 } from '@common/types/http/admin';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
-import { AsServedSet } from '@api/db/models/foods';
-import { User } from '@api/db/models/system';
+import { AsServedSet, User, PaginateQuery } from '@api/db';
 import imagesResponseCollection from '@api/http/responses/admin/images';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
 export type AsServedSetController = Controller<CrudActions>;

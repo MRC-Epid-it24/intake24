@@ -1,7 +1,7 @@
 import { BelongsTo, Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { UserSessionAttributes, UserSessionCreationAttributes } from '@common/types/models';
 import { SurveyState } from '@common/types';
-import BaseModel from '@api/db/models/model';
+import BaseModel from '../model';
 import { Survey, User } from '.';
 
 @Table({

@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
-import { SchemeQuestion } from '@api/db/models/system';
+import { SchemeQuestion } from '@api/db';
 
 const defaults: Schema = {
   question: {

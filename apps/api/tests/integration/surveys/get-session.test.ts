@@ -2,7 +2,7 @@ import request from 'supertest';
 import { pick } from 'lodash';
 import { suite } from '@tests/integration/helpers';
 import { UserSessionCreationAttributes } from '@common/types/models';
-import { UserSession } from '@api/db/models/system';
+import { UserSession } from '@api/db';
 
 export default (): void => {
   let url: string;

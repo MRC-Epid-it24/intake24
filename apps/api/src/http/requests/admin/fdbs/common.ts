@@ -1,4 +1,4 @@
-import { Category } from '@api/db/models/foods';
+import { Category } from '@api/db';
 import { useInRecipeTypes } from '@common/types/models';
 import { Schema } from 'express-validator';
 

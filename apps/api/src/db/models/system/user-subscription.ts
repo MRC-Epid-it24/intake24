@@ -13,7 +13,7 @@ import {
   UserSubscriptionAttributes,
   UserSubscriptionCreationAttributes,
 } from '@common/types/models';
-import BaseModel from '@api/db/models/model';
+import BaseModel from '../model';
 import { User } from '.';
 
 @Scopes(() => ({

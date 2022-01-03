@@ -5,10 +5,10 @@ import {
   Food,
   FoodLocal,
   FoodLocalList,
-  Locale,
+  FoodsLocale,
   NutrientTableRecord,
   NutrientTableRecordNutrient,
-} from '@api/db/models/foods';
+} from '@api/db';
 
 import InvalidIdError from '@api/services/foods/invalid-id-error';
 import { getParentLocale } from '@api/services/foods/common';
@@ -122,9 +122,9 @@ export default (): FoodDataService => {
 
     if (localPrompts.length > 0) return localPrompts;
 
-    const locale = await Locale.findOne({
+    const locale = await FoodsLocale.findOne({
       where: { id: localeId },
-      include: [{ model: Locale, as: 'parent' }],
+      include: [{ model: FoodsLocale, as: 'parent' }],
     });
 
     if (!locale) throw new InvalidIdError(`Unknown locale ID: ${localeId}`);
@@ -149,7 +149,7 @@ export default (): FoodDataService => {
     if (!foodListCheck)
       throw new InvalidIdError(`${foodCode} is not in the food list for locale ${localeId}`);
 
-    const localeCheck = await Locale.findOne({ where: { id: localeId }, attributes: ['id'] });
+    const localeCheck = await FoodsLocale.findOne({ where: { id: localeId }, attributes: ['id'] });
     if (!localeCheck) throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
 
     const foodLocal = await FoodLocal.findOne({ where: { foodCode, localeId } });

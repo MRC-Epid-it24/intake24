@@ -1,7 +1,7 @@
-import { Locale } from '@api/db/models/foods';
+import { FoodsLocale } from '@api/db';
 
 export default async () => {
-  await Locale.create({
+  await FoodsLocale.create({
     adminLanguageId: 'en',
     countryFlagCode: 'gb',
     englishName: 'United Kingdom',
@@ -12,7 +12,7 @@ export default async () => {
     textDirection: 'ltr',
   });
 
-  await Locale.create({
+  await FoodsLocale.create({
     adminLanguageId: 'en',
     countryFlagCode: 'au',
     englishName: 'Australia',

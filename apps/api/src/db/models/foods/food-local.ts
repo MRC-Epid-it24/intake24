@@ -8,19 +8,13 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { FoodLocalAttributes, FoodLocalCreationAttributes } from '@common/types/models';
-import {
-  Food,
-  FoodLocalList,
-  Locale,
-  FoodPortionSizeMethod,
-  FoodNutrient,
-} from '@api/db/models/foods';
+import { Food, FoodLocalList, FoodsLocale, FoodPortionSizeMethod, FoodNutrient } from '@api/db';
 import BaseModel from '../model';
 import NutrientTableRecord from './nutrient-table-record';
 
 @Scopes(() => ({
   food: { include: [{ model: Food }] },
-  locale: { include: [{ model: Locale }] },
+  locale: { include: [{ model: FoodsLocale }] },
   localeLists: { include: [{ model: FoodLocalList }] },
 }))
 @Table({
@@ -73,8 +67,8 @@ export default class FoodLocal
   @BelongsTo(() => Food, 'foodCode')
   public main?: Food;
 
-  @BelongsTo(() => Locale, 'localeId')
-  public locale?: Locale;
+  @BelongsTo(() => FoodsLocale, 'localeId')
+  public locale?: FoodsLocale;
 
   @HasMany(() => FoodPortionSizeMethod, 'foodLocalId')
   public portionSizeMethods?: FoodPortionSizeMethod[];

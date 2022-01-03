@@ -1,7 +1,7 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import { FoodLocalListAttributes } from '@common/types/models';
 import BaseModel from '../model';
-import { Locale } from '.';
+import { FoodsLocale } from '.';
 
 @Table({
   modelName: 'FoodLocalList',
@@ -28,6 +28,6 @@ export default class FoodLocalList
   })
   public localeId!: string;
 
-  @BelongsTo(() => Locale, 'localeId')
-  public locale?: Locale;
+  @BelongsTo(() => FoodsLocale, 'localeId')
+  public locale?: FoodsLocale;
 }

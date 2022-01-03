@@ -2,7 +2,7 @@ import {
   createTestData,
   generatedPortionSizeMethods,
 } from '@tests/unit/food-data/portion-size-methods-test-data';
-import { DbInterface } from '@api/db';
+import { DatabasesInterface } from '@api/db';
 import portionSizeMethodsService, {
   PortionSizeMethodsService,
 } from '@api/services/foods/portion-size-methods-service';
@@ -10,7 +10,7 @@ import { initDatabases, releaseDatabases } from '../helpers/databases';
 
 export default () => {
   describe('Portion size methods service', () => {
-    let databases: DbInterface;
+    let databases: DatabasesInterface;
     let service: PortionSizeMethodsService;
 
     beforeAll(async () => {

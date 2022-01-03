@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
 import { parentPort, workerData } from 'worker_threads';
-import { FoodLocal, FoodLocalList } from '@api/db/models/foods';
+import { FoodLocal, FoodLocalList } from '@api/db';
 import config from '@api/config/app';
-import * as foods from '@api/db/models/foods';
+import * as foods from '@api/db';
 import Metaphone3Encoder from '@api/food-index/metaphone-encoder';
 import { PhraseIndex, PhraseWithKey } from '@api/food-index/phrase-index';
 import EnglishWordOps from '@api/food-index/english-word-ops';

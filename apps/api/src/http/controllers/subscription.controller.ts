@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, UserSubscription } from '@api/db/models/system';
+import { User, UserSubscription } from '@api/db';
 import type { IoC } from '@api/ioc';
 import { Controller } from './controller';
 

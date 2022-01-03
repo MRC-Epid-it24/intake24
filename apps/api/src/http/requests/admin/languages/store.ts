@@ -1,5 +1,5 @@
 import { checkSchema } from 'express-validator';
-import { Language } from '@api/db/models/system';
+import { Language } from '@api/db';
 import validate from '@api/http/requests/validate';
 import { unique } from '@api/http/rules';
 import defaults from './defaults';

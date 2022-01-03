@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { LanguageEntry, LanguagesResponse } from '@common/types/http/admin';
-import { Language } from '@api/db/models/system';
+import { Language, PaginateQuery } from '@api/db';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type LanguageController = Controller<CrudActions>;

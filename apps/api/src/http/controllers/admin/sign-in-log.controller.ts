@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { SignInLogEntry, SignInLogsResponse } from '@common/types/http/admin';
-import { SignInLog } from '@api/db/models/system';
+import { SignInLog, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import { pick } from 'lodash';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller } from '../controller';
 
 export type SignInLogController = Controller<'browse' | 'read' | 'destroy' | 'refs'>;

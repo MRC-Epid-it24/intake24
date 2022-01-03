@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { PhysicalActivityLevel } from '@api/db/models/foods';
+import { PhysicalActivityLevel } from '@api/db';
 import {
   PhysicalActivityLevelsResponse,
   WeightTargetsResponse,

@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
-import { FoodGroup } from '@api/db/models/foods';
+import { FoodGroup } from '@api/db';
 import { FoodGroupAttributes } from '@common/types/models';
 import { unique } from '@api/http/rules';
 

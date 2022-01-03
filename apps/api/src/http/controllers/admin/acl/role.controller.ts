@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
 import { RoleEntry, RoleRefs, RolesResponse } from '@common/types/http/admin';
-import { Permission, Role } from '@api/db/models/system';
+import { Permission, Role, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import { roleEntryResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
 import type { Controller, CrudActions } from '@api/http/controllers';
-import { PaginateQuery } from '@api/db/models/model';
 import { pick } from 'lodash';
 
 export type RoleController = Controller<CrudActions>;

@@ -6,12 +6,10 @@ import {
   NutrientTablesResponse,
   JobEntry,
 } from '@common/types/http/admin';
-import { NutrientType, NutrientTable } from '@api/db/models/foods';
+import { FoodsNutrientType, NutrientTable, User, PaginateQuery } from '@api/db';
 import type { IoC } from '@api/ioc';
 import { ValidationError } from '@api/http/errors';
-import { User } from '@api/db/models/system';
 import { pick } from 'lodash';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type NutrientTableController = Controller<CrudActions | 'upload'>;
@@ -85,7 +83,7 @@ export default ({
   };
 
   const refs = async (req: Request, res: Response<NutrientTableRefs>): Promise<void> => {
-    const nutrients = await NutrientType.findAll({ order: [['id', 'ASC']] });
+    const nutrients = await FoodsNutrientType.findAll({ order: [['id', 'ASC']] });
 
     res.json({ nutrients });
   };

@@ -4,7 +4,7 @@ import fs, { ReadStream } from 'fs-extra';
 import { Parser } from 'json2csv';
 import { times } from 'lodash';
 import path from 'path';
-import { Permission, Role, User } from '@api/db/models/system';
+import { Permission, Role, User } from '@api/db';
 import ioc from '@api/ioc';
 
 const { fsConfig } = ioc.cradle;

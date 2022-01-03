@@ -1,10 +1,10 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import { NutrientTypeAttributes } from '@common/types/models';
-import { DemographicGroup, NutrientUnit } from '.';
+import { DemographicGroup, FoodsNutrientUnit } from '.';
 import BaseModel from '../model';
 
 @Scopes(() => ({
-  unit: { include: [{ model: NutrientUnit }] },
+  unit: { include: [{ model: FoodsNutrientUnit }] },
 }))
 @Table({
   modelName: 'NutrientType',
@@ -35,8 +35,8 @@ export default class NutrientType
   })
   public unitId!: string;
 
-  @BelongsTo(() => NutrientUnit, 'unitId')
-  public unit?: NutrientUnit;
+  @BelongsTo(() => FoodsNutrientUnit, 'unitId')
+  public unit?: FoodsNutrientUnit;
 
   @HasMany(() => DemographicGroup, 'nutrientTypeId')
   public demographicGroups?: DemographicGroup[];

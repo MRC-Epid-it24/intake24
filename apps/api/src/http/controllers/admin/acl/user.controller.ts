@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { UserEntry, UserRefs, UsersResponse } from '@common/types/http/admin';
-import { Permission, Role, User } from '@api/db/models/system';
+import { Permission, Role, User, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import { userEntryResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
 import type { Controller, CrudActions } from '@api/http/controllers';
-import { PaginateQuery } from '@api/db/models/model';
 
 export type AdminUserController = Controller<CrudActions>;
 

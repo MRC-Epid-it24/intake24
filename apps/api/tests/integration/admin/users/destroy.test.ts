@@ -2,7 +2,7 @@ import request from 'supertest';
 import { CreateUserRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
 import ioc from '@api/ioc';
-import { User } from '@api/db/models/system';
+import { User } from '@api/db';
 
 export default (): void => {
   const baseUrl = '/api/admin/users';

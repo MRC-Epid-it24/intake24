@@ -5,7 +5,7 @@ import json2csv, { Transform } from 'json2csv';
 import { trimEnd } from 'lodash';
 import path from 'path';
 import { SurveyExportRespondentAuthUrlsParams } from '@common/types';
-import { Job as DbJob, Survey, UserSurveyAlias } from '@api/db/models/system';
+import { Job as DbJob, Survey, UserSurveyAlias } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { addTime } from '@api/util';

@@ -11,8 +11,8 @@ import {
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
-} from '@api/db/models/foods';
-import { Job } from '@api/db/models/system';
+  Job,
+} from '@api/db';
 import type { IoC } from '@api/ioc';
 import { NotFoundError } from '@api/http/errors';
 

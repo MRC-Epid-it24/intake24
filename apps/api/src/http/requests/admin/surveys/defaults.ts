@@ -4,7 +4,7 @@ import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
 import { searchSortingAlgorithms, SurveyAttributes, surveyStates } from '@common/types/models';
 import { validateMeals } from '@common/validators';
-import { Locale, Scheme, Survey } from '@api/db/models/system';
+import { SystemLocale, Scheme, Survey } from '@api/db';
 import { unique } from '@api/http/rules';
 
 export const defaults: Schema = {
@@ -61,7 +61,7 @@ export const defaults: Schema = {
     isEmpty: { negated: true },
     custom: {
       options: async (value): Promise<void> => {
-        const locale = await Locale.findOne({ where: { id: value } });
+        const locale = await SystemLocale.findOne({ where: { id: value } });
         if (!locale) throw new Error('Enter valid locale.');
       },
     },

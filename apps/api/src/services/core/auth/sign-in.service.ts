@@ -1,4 +1,4 @@
-import { SignInLog } from '@api/db/models/system';
+import { SignInLog } from '@api/db';
 import type { IoC } from '@api/ioc';
 import type { SignInAttempt } from '.';
 

@@ -2,10 +2,9 @@ import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { jobTypes, JobType } from '@common/types';
 import { TaskEntry, TaskRefs, TasksResponse } from '@common/types/http/admin';
-import { Task, User } from '@api/db/models/system';
+import { Task, User, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type TaskController = Controller<CrudActions | 'run'>;

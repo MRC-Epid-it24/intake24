@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { Op, WhereOptions } from 'sequelize';
-import { Language, Locale } from '@api/db/models/system';
+import { Language, SystemLocale } from '@api/db';
 import { unique } from '@api/http/rules';
 import { LocaleAttributes } from '@common/types/models';
 
@@ -17,7 +17,7 @@ const defaults: Schema = {
         const where: WhereOptions<LocaleAttributes> = localeId ? { id: { [Op.ne]: localeId } } : {};
 
         return unique({
-          model: Locale,
+          model: SystemLocale,
           condition: { field: 'englishName', value },
           options: { where },
         });
@@ -35,7 +35,7 @@ const defaults: Schema = {
         const where: WhereOptions<LocaleAttributes> = localeId ? { id: { [Op.ne]: localeId } } : {};
 
         return unique({
-          model: Locale,
+          model: SystemLocale,
           condition: { field: 'localName', value },
           options: { where },
         });
@@ -78,7 +78,7 @@ const defaults: Schema = {
     optional: { options: { nullable: true } },
     custom: {
       options: async (value): Promise<void> => {
-        const locale = await Locale.findByPk(value);
+        const locale = await SystemLocale.findByPk(value);
         if (!locale) throw new Error('Enter valid llocale.');
       },
     },

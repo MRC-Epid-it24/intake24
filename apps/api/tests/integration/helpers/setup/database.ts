@@ -3,22 +3,20 @@ import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
 import { SchemeTypes } from '@common/types/models';
 import config from '@api/config';
 import {
-  Locale as FoodsLocale,
-  NutrientType as FoodsNutrientType,
-  NutrientUnit as FoodsNutrientUnit,
-} from '@api/db/models/foods';
-import {
+  FoodsLocale,
+  FoodsNutrientType,
+  FoodsNutrientUnit,
   Language,
-  Locale as SystemLocale,
-  NutrientType as SystemNutrientType,
-  NutrientUnit as SystemNutrientUnit,
+  SystemLocale,
+  SystemNutrientType,
+  SystemNutrientUnit,
   Scheme,
   Survey,
   User,
   UserSurveyAlias,
   Permission,
   Role,
-} from '@api/db/models/system';
+} from '@api/db';
 import ioc from '@api/ioc';
 
 export type MockData = {
@@ -149,11 +147,6 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'tasks-delete', displayName: 'Delete tasks' },
   ];
 
-  const locales = await SystemLocale.findAll();
-  locales.forEach((locale) => {
-    permissions.push({ name: `fdbm/${locale.id}`, displayName: `fdbm/${locale.id}` });
-  });
-
   await Permission.bulkCreate(permissions);
 };
 
@@ -177,8 +170,10 @@ export const initDatabase = async (): Promise<MockData> => {
     textDirection: 'ltr',
   };
 
-  const foodsLocale = await FoodsLocale.create(localeInput);
-  const systemLocale = await SystemLocale.create(localeInput);
+  const [foodsLocale, systemLocale] = await Promise.all([
+    FoodsLocale.create(localeInput),
+    SystemLocale.create(localeInput),
+  ]);
 
   const nutrientUnits = [
     { id: '1', description: 'Gram', symbol: 'g' },
@@ -189,8 +184,10 @@ export const initDatabase = async (): Promise<MockData> => {
     { id: '6', description: 'International Units', symbol: 'IU' },
   ];
 
-  await FoodsNutrientUnit.bulkCreate(nutrientUnits);
-  await SystemNutrientUnit.bulkCreate(nutrientUnits);
+  await Promise.all([
+    FoodsNutrientUnit.bulkCreate(nutrientUnits),
+    SystemNutrientUnit.bulkCreate(nutrientUnits),
+  ]);
 
   const nutrientTypes = [
     { id: '1', description: 'Energy (kcal)', unitId: '4' },
@@ -225,8 +222,10 @@ export const initDatabase = async (): Promise<MockData> => {
     { id: '10', description: 'Nitrogen conversion factor', unitId: '1' },
   ];
 
-  await FoodsNutrientType.bulkCreate(nutrientTypes);
-  await SystemNutrientType.bulkCreate(nutrientTypes);
+  await Promise.all([
+    FoodsNutrientType.bulkCreate(nutrientTypes),
+    SystemNutrientType.bulkCreate(nutrientTypes),
+  ]);
 
   const scheme = await Scheme.create({
     id: 'default',

@@ -1,5 +1,5 @@
 import { checkSchema } from 'express-validator';
-import { Locale } from '@api/db/models/system';
+import { SystemLocale } from '@api/db';
 import validate from '@api/http/requests/validate';
 import { unique } from '@api/http/rules';
 import defaults from './defaults';
@@ -14,7 +14,7 @@ export default validate(
       isEmpty: { negated: true },
       custom: {
         options: async (value): Promise<void> =>
-          unique({ model: Locale, condition: { field: 'id', value } }),
+          unique({ model: SystemLocale, condition: { field: 'id', value } }),
       },
     },
   })

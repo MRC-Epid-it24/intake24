@@ -2,8 +2,7 @@ import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { FoodGroupEntry, FoodGroupsResponse } from '@common/types/http/admin';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import { PaginateQuery } from '@api/db/models/model';
-import { Food, FoodGroup } from '@api/db/models/foods';
+import { PaginateQuery, Food, FoodGroup } from '@api/db';
 import { Controller, CrudActions } from '../../controller';
 
 export type AdminFoodGroupController = Controller<CrudActions>;

@@ -5,7 +5,7 @@ import path from 'path';
 import type { NutrientTableImportMappingParams } from '@common/types';
 import { excelColumnToOffset } from '@common/util/strings';
 import type { IoC } from '@api/ioc';
-import { NutrientTable, NutrientTableCsvMappingNutrient, NutrientType } from '@api/db/models/foods';
+import { NutrientTable, NutrientTableCsvMappingNutrient, FoodsNutrientType } from '@api/db';
 import StreamLockJob from './stream-lock-job';
 
 export type CSVRow = {
@@ -118,7 +118,7 @@ export default class NutrientTableImportMapping extends StreamLockJob<NutrientTa
       throw new Error(`Missing some of the required fields (${requiredFields.join(',')}).`);
 
     const nutrientIds = this.content.map((item) => item['Intake24 nutrient ID']);
-    const count = await NutrientType.count({ where: { id: nutrientIds } });
+    const count = await FoodsNutrientType.count({ where: { id: nutrientIds } });
 
     if (nutrientIds.length !== count)
       throw new Error(`Spreadsheet contains some invalid nutrient IDs.`);

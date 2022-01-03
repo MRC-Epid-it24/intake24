@@ -8,13 +8,12 @@ import {
   SurveyMgmtResponse,
   UserMgmtListEntry,
 } from '@common/types/http/admin';
-import { Permission, Survey, User } from '@api/db/models/system';
+import { Permission, Survey, User, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import { permissionListResponse, userMgmtResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
 import { surveyMgmt } from '@api/services/core/auth';
 import { UserAttributes } from '@common/types/models';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller } from '../../controller';
 
 export type AdminSurveyMgmtController = Controller<

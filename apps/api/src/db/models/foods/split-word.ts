@@ -1,7 +1,7 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import { SplitWordAttributes, SplitWordCreationAttributes } from '@common/types/models/foods';
 import BaseModel from '../model';
-import { Locale } from '.';
+import { FoodsLocale } from '.';
 
 @Table({
   modelName: 'SplitWord',
@@ -33,6 +33,6 @@ export default class SplitWord
   })
   public words!: string;
 
-  @BelongsTo(() => Locale, 'localeId')
-  public locale?: Locale;
+  @BelongsTo(() => FoodsLocale, 'localeId')
+  public locale?: FoodsLocale;
 }

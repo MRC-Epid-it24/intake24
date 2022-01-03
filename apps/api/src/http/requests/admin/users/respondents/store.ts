@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { checkSchema } from 'express-validator';
 import validate from '@api/http/requests/validate';
-import { UserSurveyAlias } from '@api/db/models/system';
+import { UserSurveyAlias } from '@api/db';
 import { identifiers, password } from '../defaults';
 
 export default validate(

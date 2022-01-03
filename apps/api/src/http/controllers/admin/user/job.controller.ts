@@ -5,11 +5,10 @@ import path from 'path';
 import { Op, WhereOptions } from 'sequelize';
 import { JobEntry, JobsResponse } from '@common/types/http/admin';
 import { JobAttributes } from '@common/types/models';
-import { Job, User } from '@api/db/models/system';
+import { Job, User, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import type { Controller } from '@api/http/controllers';
-import { PaginateQuery } from '@api/db/models/model';
 
 export type UserJobController = Controller<'browse' | 'read' | 'download'>;
 

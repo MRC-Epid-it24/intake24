@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import type { IoC } from '@api/ioc';
-import { CategoryLocal } from '@api/db/models/foods';
+import { CategoryLocal, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
-import { PaginateQuery } from '@api/db/models/model';
 import {
   CategoryLocalEntry,
   CategoryContentsResponse,

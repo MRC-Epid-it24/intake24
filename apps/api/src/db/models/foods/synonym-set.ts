@@ -4,7 +4,7 @@ import {
   SynonymSetsAttributesCreationAttributes,
 } from '@common/types/models/foods';
 import BaseModel from '../model';
-import { Locale } from '.';
+import { FoodsLocale } from '.';
 
 @Table({
   modelName: 'SynonymSet',
@@ -36,6 +36,6 @@ export default class SynonymSet
   })
   public synonyms!: string;
 
-  @BelongsTo(() => Locale, 'localeId')
-  public locale?: Locale;
+  @BelongsTo(() => FoodsLocale, 'localeId')
+  public locale?: FoodsLocale;
 }

@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { PermissionEntry, PermissionsResponse } from '@common/types/http/admin';
-import { Permission } from '@api/db/models/system';
+import { Permission, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import type { Controller, CrudActions } from '@api/http/controllers';
-import { PaginateQuery } from '@api/db/models/model';
 
 export type PermissionController = Controller<CrudActions>;
 

@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { LocaleEntry, LocaleRefs, LocalesResponse } from '@common/types/http/admin';
-import { Locale as FoodsLocale } from '@api/db/models/foods';
-import { Language, Locale as SystemLocale } from '@api/db/models/system';
+import { FoodsLocale, Language, SystemLocale, PaginateQuery } from '@api/db';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../controller';
 
 export type LocaleController = Controller<CrudActions>;

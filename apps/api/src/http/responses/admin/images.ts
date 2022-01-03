@@ -9,13 +9,7 @@ import {
   AsServedSetEntry,
   AsServedSetListEntry,
 } from '@common/types/http/admin';
-import {
-  AsServedImage,
-  AsServedSet,
-  GuideImage,
-  ImageMap,
-  ImageMapObject,
-} from '@api/db/models/foods';
+import { AsServedImage, AsServedSet, GuideImage, ImageMap, ImageMapObject } from '@api/db';
 import { InternalServerError } from '@api/http/errors';
 
 export interface ImageResponseCollection {

@@ -1,5 +1,5 @@
 import { SurveyEntry, SurveyListEntry } from '@common/types/http/admin';
-import { Survey } from '@api/db/models/system';
+import { Survey } from '@api/db';
 
 export const surveyListResponse = (survey: Survey): SurveyListEntry => {
   const { id, name, localeId, schemeId, state } = survey;

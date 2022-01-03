@@ -1,5 +1,5 @@
 import { Op, FindOptions } from 'sequelize';
-import Model, { ModelCtor, ModelStatic } from '@api/db/models/model';
+import { BaseModel, ModelCtor, ModelStatic } from '@api/db';
 import { merge } from '@common/util';
 
 export type UniqueCondition = {
@@ -17,7 +17,7 @@ export type UniqueOptions<TAttributes = any> = {
 export default async ({ model, condition, options = {} }: UniqueOptions): Promise<void> => {
   const mergedCondition = { ci: true, ...condition };
 
-  const cModel = model as ModelCtor<Model>;
+  const cModel = model as ModelCtor<BaseModel>;
 
   const { field, value, ci } = mergedCondition;
   const op = ci && cModel.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;

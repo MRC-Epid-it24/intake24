@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import { UserPasswordAttributes } from '@common/types/models';
 import { CreateUserInput, UpdateUserInput } from '@common/types/http/admin';
 import { CustomField } from '@common/types';
-import { User, UserCustomField, UserPassword } from '@api/db/models/system';
+import { User, UserCustomField, UserPassword } from '@api/db';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { defaultAlgorithm } from '@api/util/passwords';

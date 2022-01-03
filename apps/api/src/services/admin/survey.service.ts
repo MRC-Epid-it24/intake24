@@ -9,7 +9,7 @@ import {
   User,
   UserCustomField,
   UserSurveyAlias,
-} from '@api/db/models/system';
+} from '@api/db';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { toSimpleName, generateToken } from '@api/util';

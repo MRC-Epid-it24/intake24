@@ -1,6 +1,6 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import { CategoryCategoryAttributes } from '@common/types/models';
-import { Category } from '@api/db/models/foods';
+import { Category } from '@api/db';
 import BaseModel from '../model';
 
 @Table({

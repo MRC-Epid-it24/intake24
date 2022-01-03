@@ -14,11 +14,10 @@ import {
   updateSurveyFields,
   SurveyAttributes,
 } from '@common/types/models';
-import { Language, Locale, Scheme, Survey } from '@api/db/models/system';
+import { Language, SystemLocale, Scheme, Survey, PaginateQuery } from '@api/db';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import { surveyListResponse, surveyResponse } from '@api/http/responses/admin';
 import { staffSuffix, surveyAdmin } from '@api/services/core/auth';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyController = Controller<CrudActions | 'patch' | 'put'>;
@@ -146,7 +145,7 @@ export default (): AdminSurveyController => {
   ): Promise<void> => {
     const [languages, locales, schemes] = await Promise.all([
       Language.scope('list').findAll(),
-      Locale.scope('list').findAll(),
+      SystemLocale.scope('list').findAll(),
       Scheme.findAll(),
     ]);
 

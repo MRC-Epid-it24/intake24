@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions } from 'sequelize';
-import { Task } from '@api/db/models/system';
+import { Task } from '@api/db';
 import { cron, jobExists, unique } from '@api/http/rules';
 import { TaskAttributes } from '@common/types/models';
 

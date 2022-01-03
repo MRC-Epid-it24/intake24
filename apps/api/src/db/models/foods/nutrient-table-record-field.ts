@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import { NutrientTableRecord } from '@api/db/models/foods';
+import { NutrientTableRecord } from '@api/db';
 import {
   NutrientTableRecordFieldAttributes,
   NutrientTableRecordFieldCreationAttributes,

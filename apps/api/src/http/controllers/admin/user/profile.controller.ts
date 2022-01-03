@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '@api/db/models/system';
+import { User } from '@api/db';
 import type { Controller } from '@api/http/controllers';
 
 export type UserProfileController = Controller<'index'>;

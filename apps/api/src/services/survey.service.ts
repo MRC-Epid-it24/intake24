@@ -16,7 +16,9 @@ import {
   UserCustomField,
   UserSession,
   UserSurveyAlias,
-} from '@api/db/models/system';
+  SubmissionScope,
+  submissionScope,
+} from '@api/db';
 import {
   ApplicationError,
   ForbiddenError,
@@ -25,7 +27,6 @@ import {
 } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { jwt } from '@api/util';
-import { SubmissionScope, submissionScope } from '@api/db/models/system/survey-submission';
 
 export type RespondentWithPassword = {
   respondent: UserSurveyAlias;

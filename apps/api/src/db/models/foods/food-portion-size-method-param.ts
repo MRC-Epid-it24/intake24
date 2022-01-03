@@ -1,9 +1,9 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import PortionSizeMethod from '@api/db/models/foods/food-portion-size-method';
 import {
   PortionSizeMethodParameterAttributes,
   PortionSizeMethodParameterCreationAttributes,
 } from '@common/types/models/foods';
+import { FoodPortionSizeMethod } from '.';
 import BaseModel from '../model';
 
 @Table({
@@ -45,6 +45,6 @@ export default class FoodPortionSizeMethodParameter
   })
   public value!: string;
 
-  @BelongsTo(() => PortionSizeMethod, 'portionSizeMethodId')
-  public portionSizeMethod?: PortionSizeMethod;
+  @BelongsTo(() => FoodPortionSizeMethod, 'portionSizeMethodId')
+  public portionSizeMethod?: FoodPortionSizeMethod;
 }

@@ -4,9 +4,9 @@ export { default as FixedFoodRanking } from './fixed-food-ranking';
 export { default as GenUserCounter } from './gen-user-counter';
 export { default as Job } from './job';
 export { default as Language } from './language';
-export { default as Locale } from './locale';
-export { default as NutrientType } from './nutrient-type';
-export { default as NutrientUnit } from './nutrient-unit';
+export { default as SystemLocale } from './locale';
+export { default as SystemNutrientType } from './nutrient-type';
+export { default as SystemNutrientUnit } from './nutrient-unit';
 export { default as PAOccurrence } from './pairwise-associations-occurrence';
 export { default as PACoOccurrence } from './pairwise-associations-co-occurrence';
 export { default as PAOccurrenceTransactionCountAttributes } from './pairwise-associations-occurrences-transactions-count';
@@ -40,3 +40,5 @@ export { default as UserPhysicalData } from './user-physical-data';
 export { default as UserSession } from './user-session';
 export { default as UserSubscription } from './user-subscription';
 export { default as UserSurveyAlias } from './user-survey-alias';
+
+export * from './survey-submission';

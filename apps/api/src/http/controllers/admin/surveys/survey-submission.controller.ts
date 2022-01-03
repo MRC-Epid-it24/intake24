@@ -4,10 +4,8 @@ import { WhereOptions } from 'sequelize';
 import { validate } from 'uuid';
 import { SurveySubmissionEntry, SurveySubmissionsResponse } from '@common/types/http/admin';
 import { SurveySubmissionAttributes } from '@common/types/models';
-import { Survey, SurveySubmission } from '@api/db/models/system';
-import { submissionScope } from '@api/db/models/system/survey-submission';
+import { Survey, SurveySubmission, PaginateQuery, submissionScope } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller } from '../../controller';
 
 export type AdminSurveySubmissionController = Controller<'browse' | 'entry' | 'destroy'>;

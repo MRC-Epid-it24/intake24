@@ -4,7 +4,7 @@ import {
   FoodPortionSizeMethodCreationAttributes,
   PortionSizeMethodId,
 } from '@common/types/models/foods';
-import { FoodLocal, FoodPortionSizeMethodParameter } from '@api/db/models/foods';
+import { FoodLocal, FoodPortionSizeMethodParameter } from '@api/db';
 import BaseModel from '../model';
 
 @Table({

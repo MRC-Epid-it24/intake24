@@ -6,7 +6,7 @@ import {
   FoodLocal,
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
-} from '@api/db/models/foods';
+} from '@api/db';
 import {
   getCategoryParentCategories,
   getFoodParentCategories,

@@ -1,5 +1,5 @@
 import { DrinkwareSetResponse, DrinkwareScaleResponse } from '@common/types/http';
-import { DrinkwareScale, DrinkwareSet } from '@api/db/models/foods';
+import { DrinkwareScale, DrinkwareSet } from '@api/db';
 import { InternalServerError } from '@api/http/errors';
 
 export interface DrinkwareResponse {

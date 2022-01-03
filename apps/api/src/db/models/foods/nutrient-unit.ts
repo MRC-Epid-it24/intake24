@@ -1,10 +1,10 @@
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 import { NutrientUnitAttributes } from '@common/types/models';
 import BaseModel from '../model';
-import { NutrientType } from '.';
+import { FoodsNutrientType } from '.';
 
 @Scopes(() => ({
-  nutrientTypes: { include: [{ model: NutrientType }] },
+  nutrientTypes: { include: [{ model: FoodsNutrientType }] },
 }))
 @Table({
   modelName: 'NutrientUnit',
@@ -35,6 +35,6 @@ export default class NutrientUnit
   })
   public symbol!: string;
 
-  @HasMany(() => NutrientType, 'unitId')
-  public nutrientTypes?: NutrientType[];
+  @HasMany(() => FoodsNutrientType, 'unitId')
+  public nutrientTypes?: FoodsNutrientType[];
 }

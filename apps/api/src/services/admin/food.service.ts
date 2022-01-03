@@ -8,8 +8,8 @@ import {
   FoodLocal,
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
-} from '@api/db/models/foods';
-import { PaginateQuery } from '@api/db/models/model';
+  PaginateQuery,
+} from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import { FoodInput } from '@common/types/http/admin';
 import { FoodLocalAttributes } from '@common/types/models';

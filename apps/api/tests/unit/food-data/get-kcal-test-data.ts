@@ -7,18 +7,18 @@ import {
   NutrientTable,
   NutrientTableRecord,
   NutrientTableRecordNutrient,
-  NutrientType,
-  NutrientUnit,
-} from '@api/db/models/foods';
+  FoodsNutrientType,
+  FoodsNutrientUnit,
+} from '@api/db';
 
 export default async (foodDatabase: Sequelize) => {
-  await NutrientUnit.create({
+  await FoodsNutrientUnit.create({
     id: '1',
     description: 'Test unit',
     symbol: 'tu',
   });
 
-  await NutrientType.create({
+  await FoodsNutrientType.create({
     id: '1',
     description: 'Energy (kcal)',
     unitId: '1',

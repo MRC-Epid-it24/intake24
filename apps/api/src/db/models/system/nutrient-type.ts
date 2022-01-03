@@ -1,10 +1,10 @@
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 import { NutrientTypeAttributes } from '@common/types/models';
 import BaseModel from '../model';
-import { NutrientUnit } from '.';
+import { SystemNutrientUnit } from '.';
 
 @Scopes(() => ({
-  unit: { include: [{ model: NutrientUnit }] },
+  unit: { include: [{ model: SystemNutrientUnit }] },
 }))
 @Table({
   modelName: 'NutrientType',
@@ -33,9 +33,9 @@ export default class NutrientType
     allowNull: false,
     type: DataType.BIGINT,
   })
-  @ForeignKey(() => NutrientUnit)
+  @ForeignKey(() => SystemNutrientUnit)
   public unitId!: string;
 
-  @BelongsTo(() => NutrientUnit, 'unitId')
-  public unit?: NutrientUnit;
+  @BelongsTo(() => SystemNutrientUnit, 'unitId')
+  public unit?: SystemNutrientUnit;
 }

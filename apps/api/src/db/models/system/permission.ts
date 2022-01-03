@@ -9,9 +9,9 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import BaseModel from '@api/db/models/model';
 import config from '@api/config/acl';
 import { PermissionAttributes, PermissionCreationAttributes } from '@common/types/models';
+import BaseModel from '../model';
 import { PermissionRole, PermissionUser, Role, User } from '.';
 
 // eslint-disable-next-line no-use-before-define

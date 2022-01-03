@@ -1,5 +1,5 @@
 import { AsServedImageResponse, AsServedSetResponse } from '@common/types/http';
-import { AsServedSet, AsServedImage } from '@api/db/models/foods';
+import { AsServedSet, AsServedImage } from '@api/db';
 import { InternalServerError } from '@api/http/errors';
 
 export interface AsServedResponse {

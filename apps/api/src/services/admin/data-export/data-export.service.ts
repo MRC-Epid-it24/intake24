@@ -7,7 +7,7 @@ import type { ExportSection } from '@common/types/models';
 import type { SurveyDataExportParams } from '@common/types';
 import {
   Job,
-  NutrientType,
+  SystemNutrientType,
   Scheme,
   Survey,
   SurveySubmission,
@@ -23,8 +23,8 @@ import {
   User,
   UserSurveyAlias,
   UserCustomField,
-} from '@api/db/models/system';
-import type { StreamFindOptions } from '@api/db/models/model';
+  StreamFindOptions,
+} from '@api/db';
 import type { IoC } from '@api/ioc';
 import { NotFoundError } from '@api/http/errors';
 import type { ExportFieldInfo } from './data-export-mapper';
@@ -110,7 +110,7 @@ export default ({
         {
           model: SurveySubmissionNutrient,
           separate: true,
-          include: [{ model: NutrientType, required: true }],
+          include: [{ model: SystemNutrientType, required: true }],
         },
         { model: SurveySubmissionPortionSizeField, separate: true },
       ],

@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { FindOptions, Op, WhereOptions } from 'sequelize';
 import { unique } from '@api/http/rules';
-import { Category, CategoryLocal } from '@api/db/models/foods';
+import { Category, CategoryLocal } from '@api/db';
 
 const defaults: Schema = {
   name: {

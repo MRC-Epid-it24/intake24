@@ -21,7 +21,7 @@ import BaseModel from '../model';
 import {
   ClientErrorReport,
   GenUserCounter,
-  Locale,
+  SystemLocale,
   Permission,
   Scheme,
   SurveySubmission,
@@ -31,7 +31,7 @@ import {
 
 @Scopes(() => ({
   counter: { include: [{ model: GenUserCounter }] },
-  locale: { include: [{ model: Locale }] },
+  locale: { include: [{ model: SystemLocale }] },
   scheme: { include: [{ model: Scheme }] },
   respondents: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
@@ -243,8 +243,8 @@ export default class Survey
   @HasOne(() => GenUserCounter, 'surveyId')
   public counter?: GenUserCounter;
 
-  @BelongsTo(() => Locale, 'localeId')
-  public locale?: Locale;
+  @BelongsTo(() => SystemLocale, 'localeId')
+  public locale?: SystemLocale;
 
   @BelongsTo(() => Scheme, 'schemeId')
   public scheme?: Scheme;

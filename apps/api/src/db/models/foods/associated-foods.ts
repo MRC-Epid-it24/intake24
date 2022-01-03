@@ -1,10 +1,10 @@
 import { BelongsTo, Column, DataType, ForeignKey, Table, Scopes } from 'sequelize-typescript';
-import { Locale, Food, Category } from '@api/db/models/foods';
-import BaseModel from '@api/db/models/model';
+import { FoodsLocale, Food, Category } from '@api/db';
 import { AssociatedFoodAttributes, AssociatedFoodCreationAttributes } from '@common/types/models';
+import BaseModel from '../model';
 
 @Scopes(() => ({
-  locale: { include: [{ model: Locale }] },
+  locale: { include: [{ model: FoodsLocale }] },
   category: { include: [{ model: Category }] },
 }))
 @Table({
@@ -32,7 +32,7 @@ export default class AssociatedFood
   })
   public foodCode!: string;
 
-  @ForeignKey(() => Locale)
+  @ForeignKey(() => FoodsLocale)
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
@@ -74,8 +74,8 @@ export default class AssociatedFood
   @BelongsTo(() => Food, 'foodCode')
   public food?: Food;
 
-  @BelongsTo(() => Locale, 'localeId')
-  public locale?: Locale;
+  @BelongsTo(() => FoodsLocale, 'localeId')
+  public locale?: FoodsLocale;
 
   @BelongsTo(() => Category, 'associatedCategoryCode')
   public associatedCategory?: Category;

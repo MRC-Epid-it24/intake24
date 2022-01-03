@@ -5,7 +5,7 @@ import {
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
-} from '@api/db/models/foods';
+} from '@api/db';
 
 export default (): void => {
   const url = '/api/admin/nutrient-tables/refs';

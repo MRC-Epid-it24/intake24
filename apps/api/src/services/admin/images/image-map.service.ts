@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import { CreateImageMapInput, UpdateImageMapInput } from '@common/types/http/admin';
-import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@api/db/models/foods';
+import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 

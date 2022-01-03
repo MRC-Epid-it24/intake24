@@ -1,6 +1,6 @@
 import webPush, { RequestOptions, SendResult, WebPushError } from 'web-push';
 import { SubscriptionType } from '@common/types/models';
-import { UserSubscription } from '@api/db/models/system';
+import { UserSubscription } from '@api/db';
 import type { IoC } from '@api/ioc';
 
 export type SubscriptionInput = {

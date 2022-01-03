@@ -1,5 +1,5 @@
 import { Column, DataType, Table, Scopes, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { Category } from '@api/db/models/foods';
+import { Category } from '@api/db';
 import {
   CategoryAttributeAttributes,
   CategoryAttributeCreationAttributes,

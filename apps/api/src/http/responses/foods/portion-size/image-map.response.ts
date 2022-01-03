@@ -1,5 +1,5 @@
 import { GuideImageResponse, ImageMapResponse, ImageMapObjectResponse } from '@common/types/http';
-import { GuideImage, ImageMap, ImageMapObject } from '@api/db/models/foods';
+import { GuideImage, ImageMap, ImageMapObject } from '@api/db';
 import { InternalServerError } from '@api/http/errors';
 
 export interface ImageMapsResponse {

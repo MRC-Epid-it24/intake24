@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { JobEntry } from '@common/types/http/admin';
-import { Survey, User } from '@api/db/models/system';
+import { Survey, User } from '@api/db';
 import type { IoC } from '@api/ioc';
 import { NotFoundError } from '@api/http/errors';
 import { Controller } from '../../controller';

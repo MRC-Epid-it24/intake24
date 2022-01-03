@@ -10,8 +10,7 @@ import {
 import { ExportField, ExportSectionId } from '@common/types/models';
 import type { IoC } from '@api/ioc';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import { Language, Scheme, SchemeQuestion } from '@api/db/models/system';
-import { PaginateQuery } from '@api/db/models/model';
+import { Language, Scheme, SchemeQuestion, PaginateQuery } from '@api/db';
 import { PromptQuestion } from '@common/prompts';
 import { Controller, CrudActions } from '../controller';
 

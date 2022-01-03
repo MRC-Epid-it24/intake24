@@ -5,11 +5,10 @@ import {
   SurveyRespondentEntry,
   SurveyRespondentsResponse,
 } from '@common/types/http/admin';
-import { Survey, User, UserCustomField, UserSurveyAlias } from '@api/db/models/system';
+import { Survey, User, UserCustomField, UserSurveyAlias, PaginateQuery } from '@api/db';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import { userRespondentResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';
-import { PaginateQuery } from '@api/db/models/model';
 import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyRespondentController = Controller<

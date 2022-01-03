@@ -1,6 +1,6 @@
 import { Column, DataType, ForeignKey, Table, BelongsTo, Scopes } from 'sequelize-typescript';
 import { FoodCategoryAttributes } from '@common/types/models';
-import { Food, Category } from '@api/db/models/foods';
+import { Food, Category } from '@api/db';
 import BaseModel from '../model';
 
 @Scopes(() => ({

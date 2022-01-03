@@ -1,4 +1,4 @@
-import { CategoryLocal, FoodLocal } from '@api/db/models/foods';
+import { CategoryLocal, FoodLocal } from '@api/db';
 import { InternalServerError } from '@api/http/errors';
 import { CategoryContentsResponse, CategoryListEntry } from '@common/types/http/admin';
 import { foodsResponse } from './foods';
