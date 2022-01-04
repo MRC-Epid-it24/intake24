@@ -66,7 +66,6 @@
 
 <script lang="ts">
 import { FoodState } from '@common/types';
-import Recall from './recall';
 import MealListMobileBottom from '@/components/recall/mobile/MealListMobileBottom.vue';
 import FoodListMobileBottom from '@/components/recall/mobile/FoodListMobileBottom.vue';
 import RecallBreadCrumbsMobile from '@/components/recall/mobile/BreadCrumbsMobile.vue';
@@ -75,6 +74,7 @@ import MealFoodMobileContextMenu from '@/components/recall/MobileMealFoodContext
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import BottomNavigationMobile from '@/components/recall/mobile/BottomNavMobile.vue';
 import Review from '@/components/recall/mobile/review/Review.vue';
+import Recall from './recall';
 
 export default Recall.extend({
   name: 'RecallMobile',

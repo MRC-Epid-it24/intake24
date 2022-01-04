@@ -39,11 +39,11 @@
 </template>
 
 <script lang="ts">
-import Recall from './recall';
 import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import MealListDesktop from '@/components/recall/MealListDesktop.vue';
 import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
 import InfoAlert from '@/components/elements/InfoAlert.vue';
+import Recall from './recall';
 
 export default Recall.extend({
   name: 'DynamicRecallDesktop',

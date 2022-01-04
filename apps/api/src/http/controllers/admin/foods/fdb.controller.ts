@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { PaginateQuery, FoodsLocale, SystemLocale } from '@intake24/db';
+import { PaginateQuery, FoodsLocale, SystemLocale, WhereOptions } from '@intake24/db';
 import { LocaleEntry, LocalesResponse } from '@common/types/http/admin';
-import { WhereOptions } from 'sequelize/types';
 import { LocaleAttributes } from '@common/types/models';
 import { foodDatabaseMaintainerPrefix, foodsAdmin } from '@api/services';
 import { NotFoundError } from '@api/http/errors';

@@ -4,8 +4,8 @@ import { ActionTree } from 'vuex';
 import { SurveyState as CurrentSurveyState } from '@common/types';
 import { RootState, SurveyState } from '@/types/vuex';
 import surveyService from '@/services/survey.service';
-import { LS_KEY_HISTORY, LS_KEY_STATE, LS_LIFETIME } from './state';
 import { surveyInitialState } from '@/dynamic-recall/dynamic-recall';
+import { LS_KEY_HISTORY, LS_KEY_STATE, LS_LIFETIME } from './state';
 
 const actions: ActionTree<SurveyState, RootState> = {
   async loadParameters({ commit }, { surveyId }: { surveyId: string }) {
