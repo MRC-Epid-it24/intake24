@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { RoleEntry, RoleRefs, RolesResponse } from '@common/types/http/admin';
-import { Permission, Role, PaginateQuery } from '@api/db';
+import { Permission, Role, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import { roleEntryResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';

@@ -1,11 +1,7 @@
 import { startOfDay, addMinutes, addDays } from 'date-fns';
 import { nanoid } from 'nanoid';
-import { Op } from 'sequelize';
-import * as uuid from 'uuid';
-import { SurveyState } from '@common/types';
-import { SurveyUserInfoResponse, SurveyFollowUpResponse } from '@common/types/http';
-import { PromptQuestion, RedirectPromptProps } from '@common/prompts';
 import {
+  Op,
   GenUserCounter,
   Survey,
   SurveySubmission,
@@ -18,7 +14,11 @@ import {
   UserSurveyAlias,
   SubmissionScope,
   submissionScope,
-} from '@api/db';
+} from '@intake24/db';
+import * as uuid from 'uuid';
+import { SurveyState } from '@common/types';
+import { SurveyUserInfoResponse, SurveyFollowUpResponse } from '@common/types/http';
+import { PromptQuestion, RedirectPromptProps } from '@common/prompts';
 import {
   ApplicationError,
   ForbiddenError,

@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { suite } from '@tests/integration/helpers';
 import { UserPhysicalDataAttributes } from '@common/types/models/system';
-import { UserPhysicalData } from '@api/db';
+import { UserPhysicalData } from '@intake24/db';
 
 export default (): void => {
   let url: string;

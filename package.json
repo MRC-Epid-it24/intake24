@@ -7,7 +7,9 @@
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
-    "cli": "npm run cli --workspace=apps/cli"
+    "cli": "npm run cli --workspace=apps/cli",
+    "migrate:foods": "npm run migrate:foods --workspace=packages/db",
+    "migrate:system": "npm run migrate:system --workspace=packages/db"
   },
   "repository": {
     "type": "git",

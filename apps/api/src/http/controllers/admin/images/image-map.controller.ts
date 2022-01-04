@@ -3,7 +3,7 @@ import { pick } from 'lodash';
 import { ImageMapEntry, ImageMapListEntry, ImageMapsResponse } from '@common/types/http/admin';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
-import { ImageMap, User, PaginateQuery } from '@api/db';
+import { ImageMap, User, PaginateQuery } from '@intake24/db';
 import imagesResponseCollection from '@api/http/responses/admin/images';
 import { Controller, CrudActions } from '../../controller';
 

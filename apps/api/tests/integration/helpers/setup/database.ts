@@ -16,7 +16,7 @@ import {
   UserSurveyAlias,
   Permission,
   Role,
-} from '@api/db';
+} from '@intake24/db';
 import ioc from '@api/ioc';
 
 export type MockData = {

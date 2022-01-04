@@ -1,5 +1,5 @@
 import express, { Express } from 'express';
-import type { Logger } from 'winston';
+import type { Logger } from '@intake24/services';
 import type { Config } from '@api/config';
 import loaders from '@api/loaders';
 

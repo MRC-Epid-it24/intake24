@@ -19,7 +19,6 @@ CAT2 (no portion size methods in en_GB)
 
 import * as faker from 'faker';
 
-import { Sequelize } from 'sequelize-typescript';
 import {
   UserPortionSizeMethod,
   UserPortionSizeMethodParameters,
@@ -36,7 +35,8 @@ import {
   FoodLocal,
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
-} from '@api/db';
+  SequelizeTS,
+} from '@intake24/db';
 import {
   toDatabasePortionSizeMethod,
   toDatabasePortionSizeMethodParameters,
@@ -219,7 +219,7 @@ async function createCategories(): Promise<void> {
   await CategoryCategory.create({ categoryCode: 'CAT7', subcategoryCode: 'CAT8' });
 }
 
-async function createFoods(sequelize: Sequelize): Promise<void> {
+async function createFoods(sequelize: SequelizeTS): Promise<void> {
   const { id: foodGroupId } = await FoodGroup.create({ name: 'Test food group' });
 
   const food1 = new Food({
@@ -344,7 +344,7 @@ async function createFoods(sequelize: Sequelize): Promise<void> {
   );
 }
 
-export async function createTestData(sequelize: Sequelize): Promise<void> {
+export async function createTestData(sequelize: SequelizeTS): Promise<void> {
   await createLocales();
   await createCategories();
   await createFoods(sequelize);

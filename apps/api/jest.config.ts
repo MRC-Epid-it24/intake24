@@ -5,6 +5,7 @@ export default {
     '^@api/(.*)$': '<rootDir>/src/$1',
     '^@tests/(.*)$': '<rootDir>/tests/$1',
     '^@common/(.*)$': '<rootDir>/../../packages/common/src/$1',
+    '^@intake24/(.*?)$': '<rootDir>/../../packages/$1/src',
   },
   rootDir: '.',
   roots: ['<rootDir>/src', '<rootDir>/tests'],

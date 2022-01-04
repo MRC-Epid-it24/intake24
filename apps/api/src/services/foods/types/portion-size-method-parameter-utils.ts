@@ -1,5 +1,5 @@
 import { UserPortionSizeMethodParameters } from '@common/types/http/foods/user-food-data';
-import { CategoryPortionSizeMethodParameter, FoodPortionSizeMethodParameter } from '@api/db';
+import { CategoryPortionSizeMethodParameter, FoodPortionSizeMethodParameter } from '@intake24/db';
 
 export function toUserPortionSizeMethodParameters(
   parameters: FoodPortionSizeMethodParameter[]

@@ -1,6 +1,5 @@
 import { Request } from 'express';
-import { Op } from 'sequelize';
-import { Permission, User, UserPassword, UserSurveyAlias } from '@api/db';
+import { Op, Permission, User, UserPassword, UserSurveyAlias } from '@intake24/db';
 import { UnauthorizedError } from '@api/http/errors';
 import { supportedAlgorithms } from '@api/util/passwords';
 import type { IoC } from '@api/ioc';

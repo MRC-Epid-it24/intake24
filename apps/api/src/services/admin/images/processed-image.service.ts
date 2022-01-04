@@ -3,7 +3,7 @@ import path from 'path';
 import sharp from 'sharp';
 import * as uuid from 'uuid';
 import { ProcessedImagePurposes } from '@common/types/models';
-import { ProcessedImage, SourceImage } from '@api/db';
+import { ProcessedImage, SourceImage } from '@intake24/db';
 import type { IoC } from '@api/ioc';
 import { NotFoundError } from '@api/http/errors';
 

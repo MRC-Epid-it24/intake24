@@ -1,10 +1,15 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { WhereOptions } from 'sequelize';
+import {
+  WhereOptions,
+  Survey,
+  SurveySubmission,
+  PaginateQuery,
+  submissionScope,
+} from '@intake24/db';
 import { validate } from 'uuid';
 import { SurveySubmissionEntry, SurveySubmissionsResponse } from '@common/types/http/admin';
 import { SurveySubmissionAttributes } from '@common/types/models';
-import { Survey, SurveySubmission, PaginateQuery, submissionScope } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import { Controller } from '../../controller';
 

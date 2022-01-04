@@ -1,7 +1,5 @@
-import { Op } from 'sequelize';
-import { CreateRespondentInput, UpdateRespondentInput } from '@common/types/http/admin';
-import { UserCustomFieldAttributes } from '@common/types/models';
 import {
+  Op,
   Job,
   Permission,
   PermissionUser,
@@ -9,7 +7,9 @@ import {
   User,
   UserCustomField,
   UserSurveyAlias,
-} from '@api/db';
+} from '@intake24/db';
+import { CreateRespondentInput, UpdateRespondentInput } from '@common/types/http/admin';
+import { UserCustomFieldAttributes } from '@common/types/models';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { toSimpleName, generateToken } from '@api/util';

@@ -1,5 +1,5 @@
 import { checkSchema } from 'express-validator';
-import { SystemLocale } from '@api/db';
+import { SystemLocale } from '@intake24/db';
 import validate from '@api/http/requests/validate';
 import { unique } from '@api/http/rules';
 import defaults from './defaults';

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { jobTypes, JobType } from '@common/types';
 import { TaskEntry, TaskRefs, TasksResponse } from '@common/types/http/admin';
-import { Task, User, PaginateQuery } from '@api/db';
+import { Task, User, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { Controller, CrudActions } from '../controller';

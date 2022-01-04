@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { LocaleAttributes } from '@common/types/models';
 import { suite, setPermission } from '@tests/integration/helpers';
-import { FoodsLocale, SystemLocale } from '@api/db';
+import { FoodsLocale, SystemLocale } from '@intake24/db';
 
 export default (): void => {
   const baseUrl = '/api/admin/locales';

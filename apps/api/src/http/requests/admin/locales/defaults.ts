@@ -1,7 +1,6 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
-import { Op, WhereOptions } from 'sequelize';
-import { Language, SystemLocale } from '@api/db';
+import { Op, WhereOptions, Language, SystemLocale } from '@intake24/db';
 import { unique } from '@api/http/rules';
 import { LocaleAttributes } from '@common/types/models';
 

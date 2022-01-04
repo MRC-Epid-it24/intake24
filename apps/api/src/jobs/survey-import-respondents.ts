@@ -3,7 +3,7 @@ import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import path from 'path';
 import type { CustomField, SurveyImportRespondentsParams } from '@common/types';
-import { User, UserSurveyAlias } from '@api/db';
+import { User, UserSurveyAlias } from '@intake24/db';
 import type { IoC } from '@api/ioc';
 import StreamLockJob from './stream-lock-job';
 

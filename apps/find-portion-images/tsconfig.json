@@ -4,7 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "@common/*": ["../../packages/common/src/*"],
-      "@api/*": ["../api/src/*"]
+      "@api/*": ["../api/src/*"],
+      "@intake24/*": ["../../packages/*/src"]
     },
     "types": [
       "node",

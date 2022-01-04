@@ -1,16 +1,14 @@
-import { Sequelize } from 'sequelize-typescript';
 import { parentPort, workerData } from 'worker_threads';
-import { FoodLocal, FoodLocalList } from '@api/db';
+import { models, FoodLocal, FoodLocalList, SequelizeTS } from '@intake24/db';
 import config from '@api/config/app';
-import * as foods from '@api/db';
 import Metaphone3Encoder from '@api/food-index/metaphone-encoder';
 import { PhraseIndex, PhraseWithKey } from '@api/food-index/phrase-index';
 import EnglishWordOps from '@api/food-index/english-word-ops';
-import { dbLogger } from '@api/services';
+import { dbLogger } from '@intake24/services';
 
-const db = new Sequelize({
+const db = new SequelizeTS({
   ...workerData.dbConnectionInfo,
-  models: Object.values(foods),
+  models: models.foods,
   logging: config.env === 'development' ? dbLogger : false,
 });
 
@@ -19,19 +17,12 @@ let foodIndex: PhraseIndex<string>;
 async function buildIndex() {
   const foodList = await FoodLocalList.findAll({
     attributes: ['foodCode'],
-    where: {
-      localeId: 'en_GB',
-    },
+    where: { localeId: 'en_GB' },
   });
 
   const foodCodes = foodList.map((row) => row.foodCode);
 
-  const localFoods = await FoodLocal.findAll({
-    where: {
-      foodCode: foodCodes,
-      localeId: 'en_GB',
-    },
-  });
+  const localFoods = await FoodLocal.findAll({ where: { foodCode: foodCodes, localeId: 'en_GB' } });
 
   const foodDescriptions = new Array<PhraseWithKey<string>>();
 
@@ -70,4 +61,8 @@ async function buildIndex() {
   });
 }
 
-buildIndex();
+(async () => {
+  await buildIndex();
+})().catch((err) => {
+  console.log(err);
+});

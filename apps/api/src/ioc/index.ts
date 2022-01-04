@@ -1,5 +1,4 @@
 import { createContainer, asClass, asValue } from 'awilix';
-import type { Logger } from 'winston';
 
 import config from '@api/config';
 import type {
@@ -7,17 +6,15 @@ import type {
   AppConfig,
   CacheConfig,
   Config,
-  DatabaseConfig,
-  Environment,
   FileSystemConfig,
-  LogConfig,
   MailConfig,
   QueueConfig,
   SecurityConfig,
   ServicesConfig,
   SessionConfig,
 } from '@api/config';
-import { Database, DatabasesInterface } from '@api/db';
+import { Database, DatabaseConfig, DatabasesInterface } from '@intake24/db';
+import { Logger, LogConfig } from '@intake24/services';
 import type {
   AuthenticationController,
   PasswordController,
@@ -91,7 +88,8 @@ import type {
 } from '@api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@api/services/core/queues';
 import type { Jobs } from '@api/jobs';
-import type { User } from '@api/db';
+import type { User } from '@intake24/db';
+import { Environment } from '@common/types';
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';

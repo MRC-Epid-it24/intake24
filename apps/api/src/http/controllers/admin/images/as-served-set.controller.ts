@@ -7,7 +7,7 @@ import {
 } from '@common/types/http/admin';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
-import { AsServedSet, User, PaginateQuery } from '@api/db';
+import { AsServedSet, User, PaginateQuery } from '@intake24/db';
 import imagesResponseCollection from '@api/http/responses/admin/images';
 import { Controller, CrudActions } from '../../controller';
 

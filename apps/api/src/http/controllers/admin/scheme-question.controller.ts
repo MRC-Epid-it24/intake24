@@ -5,7 +5,7 @@ import {
   SchemeQuestionsResponse,
 } from '@common/types/http/admin';
 import { isMealSection, MealSection, SurveyQuestionSection } from '@common/schemes';
-import { Language, Scheme, SchemeQuestion, PaginateQuery } from '@api/db';
+import { Language, Scheme, SchemeQuestion, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import { pick } from 'lodash';
 import { Controller, CrudActions } from '../controller';

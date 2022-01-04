@@ -35,6 +35,7 @@
   },
   "bundledDependencies": [
     "@intake24/common",
-    "@intake24/api"
+    "@intake24/db",
+    "@intake24/services"
   ]
 }

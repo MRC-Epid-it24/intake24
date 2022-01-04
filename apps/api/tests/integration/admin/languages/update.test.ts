@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { LanguageCreationAttributes } from '@common/types/models';
 import { suite, setPermission } from '@tests/integration/helpers';
-import { Language } from '@api/db';
+import { Language } from '@intake24/db';
 
 export default (): void => {
   const baseUrl = '/api/admin/languages';

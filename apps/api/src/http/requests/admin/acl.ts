@@ -1,6 +1,6 @@
 import { ParamSchema } from 'express-validator';
 import { isNaN, toNumber } from 'lodash';
-import { Permission, Role } from '@api/db';
+import { Permission, Role } from '@intake24/db';
 
 export const permissions: ParamSchema = {
   in: ['body'],

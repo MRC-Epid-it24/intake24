@@ -1,4 +1,12 @@
-import { Op, Transaction } from 'sequelize';
+import {
+  Op,
+  Transaction,
+  NutrientTable,
+  NutrientTableCsvMapping,
+  NutrientTableCsvMappingField,
+  NutrientTableCsvMappingNutrient,
+  Job,
+} from '@intake24/db';
 import {
   NutrientTableEntry,
   NutrientTableInput,
@@ -6,13 +14,6 @@ import {
   NutrientTableCsvMappingNutrientInput,
 } from '@common/types/http/admin';
 import { JobType } from '@common/types';
-import {
-  NutrientTable,
-  NutrientTableCsvMapping,
-  NutrientTableCsvMappingField,
-  NutrientTableCsvMappingNutrient,
-  Job,
-} from '@api/db';
 import type { IoC } from '@api/ioc';
 import { NotFoundError } from '@api/http/errors';
 

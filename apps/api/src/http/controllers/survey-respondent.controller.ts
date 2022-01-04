@@ -7,7 +7,7 @@ import {
 } from '@common/types/http';
 import { flattenSchemeWithSection, isMealSection } from '@common/schemes';
 import { merge } from '@common/util';
-import { Survey, User } from '@api/db';
+import { Survey, User } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { Controller } from './controller';

@@ -3,7 +3,7 @@ import { pick } from 'lodash';
 import { AsServedImageEntry, AsServedImagesResponse } from '@common/types/http/admin';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
-import { AsServedImage, AsServedSet, User, PaginateQuery } from '@api/db';
+import { AsServedImage, AsServedSet, User, PaginateQuery } from '@intake24/db';
 import imagesResponseCollection from '@api/http/responses/admin/images';
 import { Controller } from '../../controller';
 

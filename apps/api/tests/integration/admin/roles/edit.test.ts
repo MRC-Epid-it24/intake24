@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { RoleRequest } from '@common/types/http/admin';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Role } from '@api/db';
+import { Role } from '@intake24/db';
 
 export default (): void => {
   const baseUrl = '/api/admin/roles';

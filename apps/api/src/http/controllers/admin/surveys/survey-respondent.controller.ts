@@ -5,7 +5,7 @@ import {
   SurveyRespondentEntry,
   SurveyRespondentsResponse,
 } from '@common/types/http/admin';
-import { Survey, User, UserCustomField, UserSurveyAlias, PaginateQuery } from '@api/db';
+import { Survey, User, UserCustomField, UserSurveyAlias, PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@api/http/errors';
 import { userRespondentResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';

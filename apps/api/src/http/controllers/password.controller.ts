@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { nanoid } from 'nanoid';
-import { Op } from 'sequelize';
-import { User, UserPasswordReset } from '@api/db';
+import { Op, User, UserPasswordReset } from '@intake24/db';
 import { ValidationError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import { Controller } from './controller';

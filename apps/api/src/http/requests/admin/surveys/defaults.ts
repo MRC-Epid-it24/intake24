@@ -1,10 +1,9 @@
 import { Request } from 'express';
 import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
-import { Op, WhereOptions } from 'sequelize';
+import { Op, WhereOptions, SystemLocale, Scheme, Survey } from '@intake24/db';
 import { searchSortingAlgorithms, SurveyAttributes, surveyStates } from '@common/types/models';
 import { validateMeals } from '@common/validators';
-import { SystemLocale, Scheme, Survey } from '@api/db';
 import { unique } from '@api/http/rules';
 
 export const defaults: Schema = {

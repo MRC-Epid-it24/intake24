@@ -8,7 +8,7 @@ import {
 } from '@common/types/http/admin';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
-import { GuideImage, ImageMap, PaginateQuery } from '@api/db';
+import { GuideImage, ImageMap, PaginateQuery } from '@intake24/db';
 import imagesResponseCollection from '@api/http/responses/admin/images';
 import { Controller, CrudActions } from '../../controller';
 

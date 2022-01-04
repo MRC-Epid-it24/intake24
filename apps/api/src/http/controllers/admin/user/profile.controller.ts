@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '@api/db';
+import { User } from '@intake24/db';
 import type { Controller } from '@api/http/controllers';
 
 export type UserProfileController = Controller<'index'>;

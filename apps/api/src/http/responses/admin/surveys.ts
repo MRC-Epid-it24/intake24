@@ -1,5 +1,5 @@
 import { SurveyEntry, SurveyListEntry } from '@common/types/http/admin';
-import { Survey } from '@api/db';
+import { Survey } from '@intake24/db';
 
 export const surveyListResponse = (survey: Survey): SurveyListEntry => {
   const { id, name, localeId, schemeId, state } = survey;

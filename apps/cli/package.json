@@ -35,7 +35,9 @@
     "web-push": "^3.4.5"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.178"
+    "@types/fs-extra": "^9.0.13",
+    "@types/lodash": "^4.14.178",
+    "@types/web-push": "^3.3.2"
   },
   "bundledDependencies": [
     "@intake24/common"

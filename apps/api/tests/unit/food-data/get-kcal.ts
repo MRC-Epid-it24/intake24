@@ -1,6 +1,6 @@
 import createTestData from '@tests/unit/food-data/get-kcal-test-data';
 import { FoodDataService, foodDataService } from '@api/services';
-import { DatabasesInterface } from '@api/db';
+import { DatabasesInterface } from '@intake24/db';
 import InvalidIdError from '@api/services/foods/invalid-id-error';
 import createLocales from './test-data-locales';
 import { initDatabases, releaseDatabases } from '../helpers/databases';

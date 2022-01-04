@@ -6,7 +6,7 @@ import {
   FoodLocal,
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
-} from '@api/db';
+} from '@intake24/db';
 import {
   getCategoryParentCategories,
   getFoodParentCategories,

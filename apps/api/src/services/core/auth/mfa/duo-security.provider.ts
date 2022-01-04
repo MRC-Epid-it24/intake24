@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Client } from 'duo_universal';
-import { User } from '@api/db';
+import { User } from '@intake24/db';
 import { UnauthorizedError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import type { LoginMeta, Subject, Tokens } from '..';

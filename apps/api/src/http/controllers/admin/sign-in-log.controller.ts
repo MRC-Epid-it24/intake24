@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { SignInLogEntry, SignInLogsResponse } from '@common/types/http/admin';
-import { SignInLog, PaginateQuery } from '@api/db';
+import { SignInLog, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import { pick } from 'lodash';
 import { Controller } from '../controller';

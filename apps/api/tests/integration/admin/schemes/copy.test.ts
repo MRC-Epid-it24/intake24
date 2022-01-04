@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import request from 'supertest';
 import { SchemeCreationAttributes } from '@common/types/models';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Scheme } from '@api/db';
+import { Scheme } from '@intake24/db';
 
 export default (): void => {
   const url = '/api/admin/schemes/copy';

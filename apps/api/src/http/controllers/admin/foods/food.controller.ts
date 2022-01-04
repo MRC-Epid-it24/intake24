@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import type { IoC } from '@api/ioc';
 import { pick } from 'lodash';
-import { PaginateQuery, FoodLocal } from '@api/db';
+import { PaginateQuery, FoodLocal } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import { FoodLocalEntry, FoodsResponse } from '@common/types/http/admin';
 import type { Controller, CrudActions } from '../../controller';

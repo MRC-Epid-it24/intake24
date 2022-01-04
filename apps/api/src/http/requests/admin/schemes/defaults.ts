@@ -1,11 +1,10 @@
 import { Request } from 'express';
 import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
-import { Op, WhereOptions } from 'sequelize';
+import { Op, WhereOptions, Scheme } from '@intake24/db';
 import slugify from 'slugify';
 import { SchemeAttributes, SchemeTypes } from '@common/types/models';
 import { validateMeals, validateRecallQuestions, validateExportSections } from '@common/validators';
-import { Scheme } from '@api/db';
 import { unique, identifierSafeChars } from '@api/http/rules';
 
 export const id: ParamSchema = {

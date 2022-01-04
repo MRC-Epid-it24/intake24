@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { UserEntry, UserRefs, UsersResponse } from '@common/types/http/admin';
-import { Permission, Role, User, PaginateQuery } from '@api/db';
+import { Permission, Role, User, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import { userEntryResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';

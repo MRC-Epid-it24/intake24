@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import { Transform } from 'json2csv';
 import path from 'path';
 import { SurveyDataExportParams } from '@common/types';
-import { Job as DbJob } from '@api/db';
+import { Job as DbJob } from '@intake24/db';
 import type { IoC } from '@api/ioc';
 import { NotFoundError } from '@api/http/errors';
 import { EMPTY } from '@api/services/admin/data-export';

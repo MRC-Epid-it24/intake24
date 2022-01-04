@@ -9,7 +9,7 @@ import {
   AsServedSetEntry,
   AsServedSetListEntry,
 } from '@common/types/http/admin';
-import { AsServedImage, AsServedSet, GuideImage, ImageMap, ImageMapObject } from '@api/db';
+import { AsServedImage, AsServedSet, GuideImage, ImageMap, ImageMapObject } from '@intake24/db';
 import { InternalServerError } from '@api/http/errors';
 
 export interface ImageResponseCollection {

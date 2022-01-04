@@ -1,5 +1,5 @@
 import { UserEntry, UserMgmtListEntry, SurveyRespondentEntry } from '@common/types/http/admin';
-import { User, UserSurveyAlias } from '@api/db';
+import { User, UserSurveyAlias } from '@intake24/db';
 import { permissionListResponse } from './permissions';
 
 export const userEntryResponse = (user: User): UserEntry => {

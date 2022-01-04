@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 import slugify from 'slugify';
-import { Survey } from '@api/db';
+import { Survey } from '@intake24/db';
 import validate from '@api/http/requests/validate';
 import { identifierSafeChars, unique } from '@api/http/rules';
 import { defaults, overrides } from './defaults';

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Job } from 'bullmq';
 import { Dictionary, SurveySubmissionNotificationParams } from '@common/types';
-import { Survey, SurveySubmission, submissionScope } from '@api/db';
+import { Survey, SurveySubmission, submissionScope } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import BaseJob from './job';

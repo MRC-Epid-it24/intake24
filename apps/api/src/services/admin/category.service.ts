@@ -1,5 +1,7 @@
-import { FindOptions, Op, QueryTypes } from 'sequelize';
 import {
+  FindOptions,
+  Op,
+  QueryTypes,
   Category,
   CategoryAttribute,
   CategoryLocal,
@@ -8,7 +10,7 @@ import {
   Food,
   FoodLocal,
   PaginateQuery,
-} from '@api/db';
+} from '@intake24/db';
 import { CategoryInput, CategoryListEntry } from '@common/types/http/admin';
 import type { IoC } from '@api/ioc';
 import { NotFoundError } from '@api/http/errors';

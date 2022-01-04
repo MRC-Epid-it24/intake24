@@ -1,5 +1,5 @@
 import { CreateGuideImageInput, UpdateGuideImageInput } from '@common/types/http/admin';
-import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@api/db';
+import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 

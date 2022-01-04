@@ -2,7 +2,7 @@ import faker from 'faker';
 import request from 'supertest';
 import { Op } from 'sequelize';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Permission, Survey } from '@api/db';
+import { Permission, Survey } from '@intake24/db';
 import { surveyStaff } from '@api/services/core/auth';
 import ioc from '@api/ioc';
 

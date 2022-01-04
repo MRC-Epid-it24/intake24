@@ -3,7 +3,7 @@ import {
   UserPortionSizeMethodParameters,
 } from '@common/types/http/foods/user-food-data';
 import { PortionSizeMethodId } from '@common/types/models';
-import { CategoryPortionSizeMethod, FoodPortionSizeMethod } from '@api/db';
+import { CategoryPortionSizeMethod, FoodPortionSizeMethod } from '@intake24/db';
 
 import {
   toUserCategoryPortionSizeMethodParameters,

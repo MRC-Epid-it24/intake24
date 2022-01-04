@@ -14,7 +14,8 @@
       "@api/*": ["apps/api/src/*"],
       "@admin/*": ["apps/admin/src/*"],
       "@cli/*": ["apps/cli/src/*"],
-      "@survey/*": ["apps/survey/src/*"]
+      "@survey/*": ["apps/survey/src/*"],
+      "@intake24/*": ["packages/*/src"]
     },
     "types": [
       "node",

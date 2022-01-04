@@ -3,7 +3,7 @@ import path from 'path';
 import sharp from 'sharp';
 import * as uuid from 'uuid';
 import { UploadSourceImageInput, SourceImageType } from '@common/types/http/admin';
-import { SourceImage } from '@api/db';
+import { SourceImage } from '@intake24/db';
 import type { IoC } from '@api/ioc';
 
 export interface SourceImageService {

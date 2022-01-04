@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { WhereOptions } from 'sequelize';
+import { WhereOptions, Language, SystemLocale, Scheme, Survey, PaginateQuery } from '@intake24/db';
 import {
   SurveyEntry,
   SurveyListEntry,
@@ -14,7 +14,6 @@ import {
   updateSurveyFields,
   SurveyAttributes,
 } from '@common/types/models';
-import { Language, SystemLocale, Scheme, Survey, PaginateQuery } from '@api/db';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
 import { surveyListResponse, surveyResponse } from '@api/http/responses/admin';
 import { staffSuffix, surveyAdmin } from '@api/services/core/auth';

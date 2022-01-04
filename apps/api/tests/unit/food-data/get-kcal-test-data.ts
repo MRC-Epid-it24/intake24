@@ -1,4 +1,3 @@
-import { Sequelize } from 'sequelize-typescript';
 import {
   Food,
   FoodGroup,
@@ -9,9 +8,10 @@ import {
   NutrientTableRecordNutrient,
   FoodsNutrientType,
   FoodsNutrientUnit,
-} from '@api/db';
+  SequelizeTS,
+} from '@intake24/db';
 
-export default async (foodDatabase: Sequelize) => {
+export default async (foodDatabase: SequelizeTS) => {
   await FoodsNutrientUnit.create({
     id: '1',
     description: 'Test unit',

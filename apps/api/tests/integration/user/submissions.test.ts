@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { mocker, suite } from '@tests/integration/helpers';
-import { SurveySubmission } from '@api/db';
+import { SurveySubmission } from '@intake24/db';
 
 export default (): void => {
   let url: string;

@@ -1,4 +1,4 @@
-import { CategoryLocal, FoodLocal } from '@api/db';
+import { CategoryLocal, FoodLocal } from '@intake24/db';
 import { InternalServerError } from '@api/http/errors';
 import { CategoryContentsResponse, CategoryListEntry } from '@common/types/http/admin';
 import { foodsResponse } from './foods';

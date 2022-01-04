@@ -1,8 +1,7 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
-import { FindOptions, Op, WhereOptions } from 'sequelize';
+import { FindOptions, Op, WhereOptions, Food, FoodGroup, FoodLocal } from '@intake24/db';
 import { unique } from '@api/http/rules';
-import { Food, FoodGroup, FoodLocal } from '@api/db';
 
 const defaults: Schema = {
   name: {

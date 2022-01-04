@@ -1,8 +1,7 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
-import { Op, WhereOptions } from 'sequelize';
-import { SchemeQuestion } from '@api/db';
+import { Op, WhereOptions, SchemeQuestion } from '@intake24/db';
 
 const defaults: Schema = {
   question: {

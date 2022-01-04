@@ -1,4 +1,4 @@
-import { CategoryCategory, FoodCategory, FoodsLocale } from '@api/db';
+import { CategoryCategory, FoodCategory, FoodsLocale } from '@intake24/db';
 import InvalidIdError from '@api/services/foods/invalid-id-error';
 
 export async function getFoodParentCategories(foodCode: string): Promise<string[]> {

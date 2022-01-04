@@ -6,7 +6,7 @@ import {
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
-} from '@api/db';
+} from '@intake24/db';
 
 export default (): void => {
   const baseUrl = '/api/admin/nutrient-tables';

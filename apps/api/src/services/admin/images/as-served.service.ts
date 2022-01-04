@@ -3,7 +3,7 @@ import {
   CreateAsServedImageInput,
   UpdateAsServedSetInput,
 } from '@common/types/http/admin';
-import { AsServedImage, AsServedSet } from '@api/db';
+import { AsServedImage, AsServedSet } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 

@@ -22,8 +22,6 @@
     "production": "npm run clean && npm run build",
     "prod": "npm run production",
     "start": "node dist/server.js",
-    "migrate:foods": "npx sequelize db:migrate --options-path sequelize/foods/options.js",
-    "migrate:system": "npx sequelize db:migrate --options-path sequelize/system/options.js",
     "lint": "eslint --ext .js,.ts src/ tests/",
     "lint:fix": "npm run lint -- --fix",
     "test:unit": "jest --testMatch '**/tests/unit/**/*.test.ts'",
@@ -79,9 +77,7 @@
     "slugify": "^1.6.4",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",
-    "web-push": "^3.4.5",
-    "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.5"
+    "web-push": "^3.4.5"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -119,6 +115,8 @@
     "supertest": "^6.1.6"
   },
   "bundledDependencies": [
-    "@intake24/common"
+    "@intake24/common",
+    "@intake24/db",
+    "@intake24/services"
   ]
 }

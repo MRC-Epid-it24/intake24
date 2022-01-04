@@ -1,4 +1,4 @@
-import { FoodsLocale } from '@api/db';
+import { FoodsLocale } from '@intake24/db';
 
 export default async () => {
   await FoodsLocale.create({

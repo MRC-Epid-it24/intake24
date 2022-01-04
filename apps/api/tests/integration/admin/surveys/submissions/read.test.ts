@@ -2,7 +2,7 @@ import request from 'supertest';
 import { pick } from 'lodash';
 import * as uuid from 'uuid';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { Survey, SurveySubmission } from '@api/db';
+import { Survey, SurveySubmission } from '@intake24/db';
 import { surveyStaff } from '@api/services/core/auth';
 import ioc from '@api/ioc';
 import { SurveySubmissionCreationAttributes } from '@common/types/models';

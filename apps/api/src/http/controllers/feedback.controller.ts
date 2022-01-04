@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { PhysicalActivityLevel } from '@api/db';
+import { PhysicalActivityLevel } from '@intake24/db';
 import {
   PhysicalActivityLevelsResponse,
   WeightTargetsResponse,

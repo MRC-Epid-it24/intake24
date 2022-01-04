@@ -1,5 +1,5 @@
-import { Includeable } from 'sequelize';
 import {
+  Includeable,
   AsServedImage,
   AsServedSet,
   DrinkwareScale,
@@ -7,7 +7,7 @@ import {
   DrinkwareVolumeSample,
   GuideImage,
   ImageMap,
-} from '@api/db';
+} from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 
 export interface PortionSizeService {

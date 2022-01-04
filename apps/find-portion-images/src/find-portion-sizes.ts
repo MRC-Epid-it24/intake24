@@ -7,25 +7,23 @@ import {
   AsServedSet,
   Food,
   FoodLocal,
+  FoodNutrient,
+  FoodPortionSizeMethod,
+  FoodPortionSizeMethodParameter,
+  FoodsNutrientType,
+  FoodsNutrientUnit,
   GuideImage,
   GuideImageObject,
   ImageMap,
   ImageMapObject,
-  NutrientMapping,
   NutrientTableRecord,
   NutrientTableRecordNutrient,
-  NutrientType,
-  NutrientUnit,
-  PortionSizeMethod,
-  PortionSizeMethodParameter,
   ProcessedImage,
-} from '@api/db/models/foods';
+  databaseConfig,
+  Database,
+} from '@intake24/db';
 
-import DB from '@api/db';
-
-import databaseConfig from '@api/config/database';
-
-import logger from '@api/services/logger';
+import { logger } from '@intake24/services';
 import * as fs from 'fs';
 import dotenv from 'dotenv';
 import validate from './config.validator';
@@ -169,7 +167,7 @@ class GuideImageHelper {
           guideImagePath: guideImage.imageMap.baseImage?.path,
           objectId: guideImageObject.imageMapObjectId,
           overlayImagePath: imageMapObject.overlayImage?.path,
-          coordinates: this.calculateObjectRect(
+          coordinates: GuideImageHelper.calculateObjectRect(
             imageMapObject.outlineCoordinates,
             this.guideImageWidth
           ),
@@ -180,7 +178,7 @@ class GuideImageHelper {
     return undefined;
   }
 
-  private calculateObjectRect(
+  static calculateObjectRect(
     coordinates: number[],
     width: number
   ): [number, number, number, number] {
@@ -228,11 +226,9 @@ interface PortionSizeImages {
 async function getNutrientLabels(ids: string[]): Promise<Map<string, string>> {
   const nutrientLabels = new Map<string, string>();
 
-  const records = await NutrientType.findAll({
-    include: [NutrientUnit],
-    where: {
-      id: ids,
-    },
+  const records = await FoodsNutrientType.findAll({
+    include: [{ model: FoodsNutrientUnit }],
+    where: { id: ids },
   });
 
   for (const id of ids) {
@@ -287,13 +283,13 @@ async function findPortionSizeImages(
           where: { localeId: config.locale },
           include: [
             {
-              model: PortionSizeMethod,
+              model: FoodPortionSizeMethod,
               separate: true,
-              include: [PortionSizeMethodParameter],
+              include: [FoodPortionSizeMethodParameter],
               required: false,
             },
             {
-              model: NutrientMapping,
+              model: FoodNutrient,
               separate: true,
               include: [
                 {
@@ -317,7 +313,7 @@ async function findPortionSizeImages(
     });
 
     for (let i = 0; i < currentBatch.length; ++i) {
-      const local = currentBatch[i]?.localFoods?.[0];
+      const local = currentBatch[i]?.locals?.[0];
 
       if (local) {
         console.log(currentBatch[i].code, local.name);
@@ -450,7 +446,7 @@ async function findPortionSizeImages(
 }
 
 async function main(config: Config, outputFilePath: string) {
-  const db = new DB({ databaseConfig, logger, environment: 'development' });
+  const db = new Database({ databaseConfig, logger, environment: 'development' });
 
   await db.init();
 
@@ -461,7 +457,7 @@ async function main(config: Config, outputFilePath: string) {
         order: ['id']
     })).map(r => r.nutrientTypeId); */
 
-  const nutrientIds = (await NutrientType.findAll({ order: ['id'] })).map((r) => r.id);
+  const nutrientIds = (await FoodsNutrientType.findAll({ order: ['id'] })).map((r) => r.id);
 
   const nutrientLabels = await getNutrientLabels(nutrientIds);
 

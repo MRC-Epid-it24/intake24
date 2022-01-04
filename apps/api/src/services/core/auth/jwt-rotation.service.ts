@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { Op } from 'sequelize';
-import { RefreshToken } from '@api/db';
+import { Op, RefreshToken } from '@intake24/db';
 import type { IoC } from '@api/ioc';
 import type { TokenPayload } from '.';
 

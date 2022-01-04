@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { suite, setPermission } from '@tests/integration/helpers';
-import { Job } from '@api/db';
+import { Job } from '@intake24/db';
 
 export default (): void => {
   const url = '/api/admin/user/jobs';

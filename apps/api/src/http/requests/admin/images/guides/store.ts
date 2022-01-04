@@ -1,5 +1,5 @@
 import { checkSchema } from 'express-validator';
-import { GuideImage, ImageMap } from '@api/db';
+import { GuideImage, ImageMap } from '@intake24/db';
 import validate from '@api/http/requests/validate';
 import { identifierSafeChars, unique } from '@api/http/rules';
 import defaults from './defaults';

@@ -1,11 +1,10 @@
 import { format as formatDate } from 'date-fns';
 import { Transform } from 'json2csv';
 import { groupBy } from 'lodash';
-import { Op, Order, WhereOptions } from 'sequelize';
-import { Readable } from 'stream';
-import type { ExportSection } from '@common/types/models';
-import type { SurveyDataExportParams } from '@common/types';
 import {
+  Op,
+  Order,
+  WhereOptions,
   Job,
   SystemNutrientType,
   Scheme,
@@ -24,7 +23,10 @@ import {
   UserSurveyAlias,
   UserCustomField,
   StreamFindOptions,
-} from '@api/db';
+} from '@intake24/db';
+import { Readable } from 'stream';
+import type { ExportSection } from '@common/types/models';
+import type { SurveyDataExportParams } from '@common/types';
 import type { IoC } from '@api/ioc';
 import { NotFoundError } from '@api/http/errors';
 import type { ExportFieldInfo } from './data-export-mapper';
@@ -254,7 +256,7 @@ export default ({
   const syncStream = async (input: DataExportInput): Promise<SyncStreamOutput> => {
     const { options, fields, filename } = await prepareExportInfo(input);
 
-    const foods = SurveySubmissionFood.findAllWithStream(options);
+    const foods = SurveySubmissionFood.findAllWithStream(options.foods);
     const transform = new Transform({ fields, defaultValue: EMPTY, withBOM: true });
 
     foods.on('error', (err) => {

@@ -1,8 +1,7 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
-import { Op, WhereOptions } from 'sequelize';
-import { Task } from '@api/db';
+import { Op, WhereOptions, Task } from '@intake24/db';
 import { cron, jobExists, unique } from '@api/http/rules';
 import { TaskAttributes } from '@common/types/models';
 

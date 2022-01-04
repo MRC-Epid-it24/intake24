@@ -5,7 +5,7 @@ import path from 'path';
 import type { NutrientTableImportMappingParams } from '@common/types';
 import { excelColumnToOffset } from '@common/util/strings';
 import type { IoC } from '@api/ioc';
-import { NutrientTable, NutrientTableCsvMappingNutrient, FoodsNutrientType } from '@api/db';
+import { NutrientTable, NutrientTableCsvMappingNutrient, FoodsNutrientType } from '@intake24/db';
 import StreamLockJob from './stream-lock-job';
 
 export type CSVRow = {

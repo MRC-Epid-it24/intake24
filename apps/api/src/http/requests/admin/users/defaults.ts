@@ -1,8 +1,7 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { isPlainObject, has } from 'lodash';
-import { Op, WhereOptions } from 'sequelize';
-import { User } from '@api/db';
+import { Op, WhereOptions, User } from '@intake24/db';
 import { unique } from '@api/http/rules';
 import { UserAttributes } from '@common/types/models';
 import { permissions, roles } from '../acl';

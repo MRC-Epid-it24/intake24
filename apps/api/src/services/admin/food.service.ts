@@ -1,6 +1,7 @@
 import { pick } from 'lodash';
-import { FindOptions, Op } from 'sequelize';
 import {
+  FindOptions,
+  Op,
   Brand,
   Food,
   FoodAttribute,
@@ -9,7 +10,7 @@ import {
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
   PaginateQuery,
-} from '@api/db';
+} from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import { FoodInput } from '@common/types/http/admin';
 import { FoodLocalAttributes } from '@common/types/models';

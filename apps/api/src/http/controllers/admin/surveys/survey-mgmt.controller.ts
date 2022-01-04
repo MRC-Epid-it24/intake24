@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { nanoid } from 'nanoid';
-import { Op, WhereOptions } from 'sequelize';
+import { Op, WhereOptions, Permission, Survey, User, PaginateQuery } from '@intake24/db';
 import {
   SurveyMgmtAvailablePermissionsResponse,
   SurveyMgmtAvailableUsersResponse,
   SurveyMgmtResponse,
   UserMgmtListEntry,
 } from '@common/types/http/admin';
-import { Permission, Survey, User, PaginateQuery } from '@api/db';
 import { NotFoundError } from '@api/http/errors';
 import { permissionListResponse, userMgmtResponse } from '@api/http/responses/admin';
 import type { IoC } from '@api/ioc';

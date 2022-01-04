@@ -7,7 +7,7 @@ import {
   Scheme,
   SurveySubmissionFood,
   UserCustomField,
-} from '@api/db';
+} from '@intake24/db';
 
 export type ExportFieldTransform<T = SurveySubmissionFood> = (
   food: T

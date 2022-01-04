@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { mocker, suite, setPermission } from '@tests/integration/helpers';
-import { FoodGroup } from '@api/db';
+import { FoodGroup } from '@intake24/db';
 
 export default (): void => {
   const url = '/api/admin/food-groups';

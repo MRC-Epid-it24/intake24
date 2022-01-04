@@ -1,4 +1,4 @@
-export type Environment = 'development' | 'test' | 'production';
+import { Environment } from '@common/types';
 
 export type Site = 'base' | 'admin' | 'survey' | 'images' | 'docs';
 export type SiteUrls = Record<Site, string>;

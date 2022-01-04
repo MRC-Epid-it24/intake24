@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { FindOptions, Op } from 'sequelize';
+import { FindOptions, Op, Language, Scheme, SchemeQuestion, PaginateQuery } from '@intake24/db';
 import {
   SchemeEntry,
   SchemeRefs,
@@ -10,7 +10,6 @@ import {
 import { ExportField, ExportSectionId } from '@common/types/models';
 import type { IoC } from '@api/ioc';
 import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import { Language, Scheme, SchemeQuestion, PaginateQuery } from '@api/db';
 import { PromptQuestion } from '@common/prompts';
 import { Controller, CrudActions } from '../controller';
 

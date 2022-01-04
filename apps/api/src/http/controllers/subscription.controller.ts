@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, UserSubscription } from '@api/db';
+import { User, UserSubscription } from '@intake24/db';
 import type { IoC } from '@api/ioc';
 import { Controller } from './controller';
 

@@ -1,4 +1,4 @@
-import { Category } from '@api/db';
+import { Category } from '@intake24/db';
 import { useInRecipeTypes } from '@common/types/models';
 import { Schema } from 'express-validator';
 

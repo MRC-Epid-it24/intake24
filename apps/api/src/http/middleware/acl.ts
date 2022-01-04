@@ -2,7 +2,7 @@
 import { asValue } from 'awilix';
 import { Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import { User } from '@api/db';
+import { User } from '@intake24/db';
 import { ForbiddenError } from '@api/http/errors';
 import ioc, { IoC } from '@api/ioc';
 import {

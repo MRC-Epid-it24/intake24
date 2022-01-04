@@ -8,7 +8,7 @@ import {
   FoodsLocale,
   NutrientTableRecord,
   NutrientTableRecordNutrient,
-} from '@api/db';
+} from '@intake24/db';
 
 import InvalidIdError from '@api/services/foods/invalid-id-error';
 import { getParentLocale } from '@api/services/foods/common';
