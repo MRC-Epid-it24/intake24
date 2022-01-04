@@ -81,7 +81,8 @@ export default defineConfig({
           children: [
             '',
             'requirements',
-            'installation',
+            'repository',
+            'get-started',
           ]
         },
         {

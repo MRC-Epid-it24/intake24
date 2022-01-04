@@ -11,22 +11,16 @@ Navigate to application folder
 cd apps/cli
 ```
 
-Install local project dependencies
-
-```sh
-npm install
-```
-
 Build the project for production
 
 ```sh
-npm run prod
+pnpm run prod
 ```
 
 or for development (with file watching and reloads)
 
 ```sh
-npm run dev
+pnpm run dev
 ```
 
 ## Usage
@@ -34,9 +28,9 @@ npm run dev
 You can run commands either on top/root level repository or within `apps/cli`.
 
 ```sh
-npm run cli -- <command> <options>
+pnpm run cli -- <command> <options>
 ```
 
 :::warning
-Please note the syntax and double-dash. Double-dash will pass the arguments to the script. If omitted `npm` would try to interpret them as well.
+Please note the syntax and double-dash. Double-dash will pass the arguments to the script. If omitted `pnpm` would try to interpret them as well.
 :::

@@ -1,6 +1,6 @@
 # Cache
 
-Path: `src/config/cache.ts`
+Path: `apps/api/src/config/cache.ts`
 
 [Redis](https://redis.io) is used as session driver.
 

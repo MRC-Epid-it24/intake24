@@ -1,0 +1,6 @@
+packages:
+  - 'apps/**'
+  - 'packages/**'
+  # exclude docs for now - doesn't resolve correctly vuepress deps -> investigate
+  # although pnpm installs webpack 4.x, vue-server-renderer detects presence of webpack v5 and uses newer version
+  - '!apps/docs/**'

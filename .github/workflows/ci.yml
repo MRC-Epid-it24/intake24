@@ -70,32 +70,42 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
+
       - name: Create foods/system databases
         run: |
           PGPASSWORD=${{ env.DB_FOODS_PASSWORD }} psql -h ${{ env.DB_FOODS_HOST }} -p 5432 -U ${{ env.DB_FOODS_USERNAME }} -c 'CREATE DATABASE ${{ env.DB_FOODS_DATABASE }};'
           PGPASSWORD=${{ env.DB_SYSTEM_PASSWORD }} psql -h ${{ env.DB_SYSTEM_HOST }} -p 5432 -U ${{ env.DB_SYSTEM_USERNAME }} -c 'CREATE DATABASE ${{ env.DB_SYSTEM_DATABASE }};'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.4.1
+        uses: actions/setup-node@v2.5.1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install latest npm
-        run: npm install -g npm
+          cache: 'pnpm'
+
       - name: Install dependencies
         working-directory: .
-        run: npm ci
-      - name: Install local dependencies
-        run: npm ci
+        run: pnpm install
+
       - name: API - lint
-        run: npm run lint
+        run: pnpm run lint
+
       - name: API - build
-        run: npm run build
+        run: pnpm run build
+
       - name: API - use Github test environment file
         run: cp ./tests/.env-test-gh ./tests/.env-test
+
       - name: API - unit tests
-        run: npm run test:unit
+        run: pnpm run test:unit
+
       - name: API - integration tests
-        run: npm run test:integration
+        run: pnpm run test:integration
 
   api-mariadb:
     name: API (Node.js ${{ matrix.node-version }}, MariaDB ${{ matrix.mariadb-version }}, Redis ${{ matrix.redis-version }})
@@ -146,33 +156,43 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
+
       - name: Create foods/system databases
         run: |
           mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "CREATE DATABASE ${{ env.DB_FOODS_DATABASE }} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
           mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "CREATE DATABASE ${{ env.DB_SYSTEM_DATABASE }} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
           mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "GRANT ALL ON *.* TO 'it24'@'%' with grant option; FLUSH PRIVILEGES;"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.4.1
+        uses: actions/setup-node@v2.5.1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install latest npm
-        run: npm install -g npm
+          cache: 'pnpm'
+
       - name: Install dependencies
         working-directory: .
-        run: npm ci
-      - name: Install local dependencies
-        run: npm ci
+        run: pnpm install
+
       - name: API - lint
-        run: npm run lint
+        run: pnpm run lint
+
       - name: API - build
-        run: npm run build
+        run: pnpm run build
+
       - name: API - use Github test environment file
         run: cp ./tests/.env-test-gh ./tests/.env-test
+
       - name: API - unit tests
-        run: npm run test:unit
-      # - name: API - integration tests
-      #   run: npm run test:integration
+        run: pnpm run test:unit
+
+      #- name: API - integration tests
+      #  run: pnpm run test:integration
 
   # api-mssql:
   #   name: API (Node.js ${{ matrix.node-version }}, MSSQL ${{ matrix.mssql-version }}, Redis ${{ matrix.redis-version }})
@@ -222,7 +242,7 @@ jobs:
 
   #   steps:
   #     - name: Repository checkout
-  #       uses: actions/checkout@v2.3.5
+  #       uses: actions/checkout@v2.4.0
   #     - name: Create foods/system databases
   #       run: |
   #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "CREATE DATABASE ${{ env.DB_FOODS_DATABASE }}; ALTER DATABASE ${{ env.DB_FOODS_DATABASE }} SET READ_COMMITTED_SNAPSHOT ON;"
@@ -232,27 +252,28 @@ jobs:
   #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_SYSTEM_DATABASE }}; EXEC sp_addrolemember N'db_owner', N'${{ env.DB_SYSTEM_USERNAME }}';"
   #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_FOODS_DATABASE }}; CREATE USER ${{ env.DB_FOODS_USERNAME }} FOR LOGIN ${{ env.DB_FOODS_USERNAME }};"
   #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_FOODS_DATABASE }}; EXEC sp_addrolemember N'db_owner', N'${{ env.DB_FOODS_USERNAME }}';"
+  #     - name: Install pnpm
+  #       uses: pnpm/action-setup@v2.0.1
+  #       with:
+  #         version: 6
   #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v2.4.1
+  #       uses: actions/setup-node@v2.5.1
   #       with:
   #         node-version: ${{ matrix.node-version }}
-  #     - name: Install latest npm
-  #       run: npm install -g npm
+  #         cache: 'pnpm'
   #     - name: Install dependencies
   #       working-directory: .
-  #       run: npm ci
-  #     - name: Install local dependencies
-  #       run: npm ci
+  #       run: pnpm install
   #     - name: API - lint
-  #       run: npm run lint
+  #       run: pnpm run lint
   #     - name: API - build
-  #       run: npm run build
+  #       run: pnpm run build
   #     - name: API - use Github test environment file
   #       run: cp ./tests/.env-test-gh ./tests/.env-test
   #     - name: API - unit tests
-  #       run: npm run test:unit
+  #       run: pnpm run test:unit
   #     - name: API - integration tests
-  #       run: npm run test:integration
+  #       run: pnpm run test:integration
 
   # Admin client
   admin:
@@ -270,21 +291,28 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.4.1
+        uses: actions/setup-node@v2.5.1
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - name: Install latest npm
-        run: npm install -g npm
+          cache: 'pnpm'
+
       - name: Install dependencies
         working-directory: .
-        run: npm install
+        run: pnpm install
+
       - name: Admin client - lint
-        run: npm run lint
+        run: pnpm run lint
+
       - name: Admin client - build
-        run: npm run build
+        run: pnpm run build
 
   # Survey client
   survey:
@@ -302,18 +330,25 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
+      
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.4.1
+        uses: actions/setup-node@v2.5.1
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - name: Install latest npm
-        run: npm install -g npm
+          cache: 'pnpm'
+
       - name: Install dependencies
         working-directory: .
-        run: npm install
+        run: pnpm install
+
       - name: Survey client - lint
-        run: npm run lint
+        run: pnpm run lint
+
       - name: Survey client - build
-        run: npm run build
+        run: pnpm run build

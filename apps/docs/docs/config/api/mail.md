@@ -1,6 +1,6 @@
 # Mail
 
-Path: `src/config/mail.ts`
+Path: `apps/api/src/config/mail.ts`
 
 Mail implementation supports following transports:
 

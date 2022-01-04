@@ -1,6 +1,6 @@
 # Database
 
-Path: `src/config/database.ts`
+Path: `packages/db/src/config.ts`
 
 System consists of two databases:
 

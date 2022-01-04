@@ -1,6 +1,6 @@
 # Session
 
-Path: `src/config/session.ts`
+Path: `apps/api/src/config/session.ts`
 
 [Redis](https://redis.io) is used as session driver.
 

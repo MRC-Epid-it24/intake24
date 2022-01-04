@@ -1,6 +1,6 @@
 # Application
 
-Path: `src/config/app.ts`
+Path: `apps/api/src/config/app.ts`
 
 ## Node environment
 

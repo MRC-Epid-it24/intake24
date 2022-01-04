@@ -1,6 +1,6 @@
 # Access control list (ACL)
 
-Path: `src/config/acl.ts`
+Path: `apps/api/src/config/acl.ts`
 
 Access control list (`ACL`) implementation is based on three models:
 

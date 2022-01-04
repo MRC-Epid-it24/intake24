@@ -1,6 +1,6 @@
 # Security
 
-Path: `src/config/security.ts`
+Path: `apps/api/src/config/security.ts`
 
 ## Cross-origin resource sharing (CORS)
 

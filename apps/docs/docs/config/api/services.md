@@ -1,6 +1,6 @@
 # Services
 
-Path: `src/config/services.ts`
+Path: `apps/api/src/config/services.ts`
 
 ## Google reCAPTCHA
 

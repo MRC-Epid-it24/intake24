@@ -1,6 +1,6 @@
 # Testing
 
-Both `admin` / `survey` front-ends and `api` backend are set up with [Jest](https://jestjs.io/) testing framework.
+Both `admin` / `survey` front-ends and `api` backend are set up with [Jest](https://jestjs.io) testing framework.
 
 ## API Server
 
@@ -21,23 +21,23 @@ Backend testing is set up for `unit` and `integration` tests. You can run tests 
 
 Unit tests
 ```sh
-npm run test:unit
+pnpm run test:unit
 ```
 
 Unit tests watch for development
 ```sh
-npm run test:unit:watch
+pnpm run test:unit:watch
 ```
 
 Integration tests
 ```sh
-npm run test:integration
+pnpm run test:integration
 ```
 
 Integration tests watch for development
 
 ```sh
-npm run test:integration:watch
+pnpm run test:integration:watch
 ```
 
 ## Admin & Survey apps
@@ -45,5 +45,5 @@ npm run test:integration:watch
 Frontends use Vue.js Jest implementation, so you can run tests with:
 
 ```sh
-npm run test
+pnpm run test
 ```

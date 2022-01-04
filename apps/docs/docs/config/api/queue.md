@@ -1,6 +1,6 @@
 # Queue
 
-Path: `src/config/queue.ts`
+Path: `apps/api/src/config/queue.ts`
 
 Queueing system is handled by [Redis](https://redis.io) & [bullmq](https://github.com/taskforcesh/bullmq)
 

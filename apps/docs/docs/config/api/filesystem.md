@@ -1,15 +1,6 @@
 # Filesystem
 
-Path: `src/config/filesystem.ts`
-
-## Logs dir
-
-Logs directory where all application logs are stored.
-
-* object-path: `local.logs`
-* dotenv var: `FS_LOGS`
-* type: `string`
-* default: `'storage/logs'`
+Path: `apps/api/src/config/filesystem.ts`
 
 ## Public dir
 

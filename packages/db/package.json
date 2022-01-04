@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "dotenv": "^10.0.0",
+    "mariadb": "^2.5.5",
+    "mssql": "^7.3.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@types/pg": "^8.6.3",
+    "@types/validator": "^13.7.1",
     "sequelize-cli": "^6.3.0"
   },
   "bundledDependencies": [

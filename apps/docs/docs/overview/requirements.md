@@ -1,5 +1,11 @@
 # Requirements
 
+* [Node.js](https://nodejs.org) runtime environment. System is tested with latest LTS (14.x | 16.x).
+
+* [PNPM](https://pnpm.io) Alternative package manager with support for workspaces & mono-repository setup, which is encouraged to use for now.
+
+* [NPM](https://docs.npmjs.com/cli) Although you can still use default `npm` shipped with `node.js`, there are few caveats with workspaces & mono-repository setup use. See [Installation section](/overview/installation/).
+
 Intake24 system has three main components:
 
 1) API server
@@ -9,8 +15,6 @@ Intake24 system has three main components:
 Source code is written in Typescript and can be flexibly deployed to various environments. Source code also provides ansible roles for deployment to Ubuntu-based OS. [Deployment](/deployment/) section describes in detail how to use ansible scripts. For custom deployment, there are few requirements to consider.
 
 ### API Server
-
-* [Node.js](https://nodejs.org) runtime environment. System is tested with latest LTS (currently 14.x).
 
 * Backend database engine. API server is using [sequelize](https://sequelize.org/master) ORM so any of supported dialects can be used.
 
