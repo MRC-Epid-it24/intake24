@@ -1,0 +1,37 @@
+{
+  "extends": [
+    "config:base",
+    "schedule:earlyMondays"
+    // "group:allNonMajor"
+  ],
+  "labels": ["dependencies"],
+  "pin": false,
+  "packageRules": [
+    {
+      "matchPackagePatterns": [
+        "*"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "excludePackageNames": ["typescript"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    }
+  ],
+  "rangeStrategy": "bump",
+  "ignoreDeps": [
+    // Manual
+    "node",
+
+    // Breaking changes
+    "sequelize", // occasional breaking changes due to TS codebase port since 6.12.x
+    "execa", // ESM-only since 6.x.x
+
+    // Bump after Vue.js v3 upgrade
+    "@tinymce/tinymce-vue",
+    "sass",
+    "sass-loader"
+  ]
+}
