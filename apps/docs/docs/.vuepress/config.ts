@@ -159,6 +159,7 @@ export default defineConfig({
           children: [
             'admin/user/profile',
             'admin/user/jobs',
+            'admin/food-groups',
             'admin/images/as-served-sets',
             'admin/images/as-served-images',
             'admin/images/guides',
