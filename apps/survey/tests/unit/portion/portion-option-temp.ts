@@ -2,7 +2,7 @@
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Prompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
-import i18n from '@/locale';
+import i18n from '@/i18n';
 
 // Vue.ls is not accessible so test falls over, need to refactor VueI18n.
 // Useful: https://github.com/kazupon/vue-i18n/issues/323#issuecomment-463228178

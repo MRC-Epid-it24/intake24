@@ -11,7 +11,7 @@ import { copy } from '@common/util';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
 import { AxiosError } from 'axios';
 import { SurveyState } from '@/types/vuex';
-import i18n from '@/locale';
+import i18n from '@/i18n';
 
 const mutations: MutationTree<SurveyState> = {
   setParameters(state, data: SurveyEntryResponse) {

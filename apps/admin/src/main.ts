@@ -2,7 +2,7 @@ import Vue from 'vue';
 import './bootstrap';
 import './registerServiceWorker';
 import App from './App.vue';
-import i18n from './locale';
+import i18n from './i18n';
 import http from './services/http.service';
 import router from './router';
 import store from './store';

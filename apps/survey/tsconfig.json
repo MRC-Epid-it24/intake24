@@ -16,7 +16,8 @@
     ],
     "paths": {
       "@/*": ["src/*"],
-      "@common/*": ["../../packages/common/src/*"]
+      "@common/*": ["../../packages/common/src/*"],
+      "@intake24/*": ["../../packages/*/src"]
     },
     "lib": [
       "esnext",

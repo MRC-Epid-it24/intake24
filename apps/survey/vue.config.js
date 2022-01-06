@@ -20,7 +20,8 @@ module.exports = {
     plugins: process.env.WEBPACK_ANALYZE_BUNDLE === 'true' ? [new BundleAnalyzerPlugin()] : [],
     resolve: {
       alias: {
-        '@common': path.resolve(__dirname, '../../packages/common/src/'),
+        '@common': path.resolve(__dirname, '../../packages/common/src'),
+        '@intake24/i18n': path.resolve(__dirname, '../../packages/i18n/src'),
       },
     },
   },

@@ -2,7 +2,6 @@
   "extends": [
     "config:base",
     "schedule:earlyMondays"
-    // "group:allNonMajor"
   ],
   "labels": ["dependencies"],
   "pin": false,
@@ -31,6 +30,7 @@
 
     // Bump after Vue.js v3 upgrade
     "@tinymce/tinymce-vue",
+    "vue-recaptcha", // might be upgraded sooner, but needs composition API
     "sass",
     "sass-loader"
   ]

@@ -1,12 +1,8 @@
 import Vue from 'vue';
-import VueI18n, { LocaleMessages } from 'vue-i18n';
-import ar from './ar';
-import en from './en';
-import de from './de';
+import VueI18n from 'vue-i18n';
+import { admin as messages } from '@intake24/i18n';
 
 Vue.use(VueI18n);
-
-const messages: LocaleMessages = { ar, en, de };
 
 const browserLanguage = navigator.language || navigator.userLanguage;
 const userLanguage = Vue.ls.get('language', browserLanguage);

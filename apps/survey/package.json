@@ -66,6 +66,7 @@
     "webpack-bundle-analyzer": "^4.5.0"
   },
   "bundledDependencies": [
-    "@intake24/common"
+    "@intake24/common",
+    "@intake24/i18n"
   ]
 }

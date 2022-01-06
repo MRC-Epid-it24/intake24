@@ -1,0 +1,22 @@
+{
+  "name": "@intake24/i18n",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Intake24 localization",
+  "author": "",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MRC-Epid-it24/intake24.git",
+    "directory": "packages/i18n"
+  },
+  "main": "src/index.ts",
+  "engines": {
+    "node": ">=12.20.1"
+  },
+  "scripts": {
+  },
+  "dependencies": {
+    "vue-i18n": "^8.26.8"
+  }
+}
