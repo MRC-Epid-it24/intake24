@@ -120,7 +120,7 @@ import {
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { VImg } from 'vuetify/lib';
-import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import { ConfirmDialog } from '@intake24/ui';
 
 type Refs = {
   $refs: {

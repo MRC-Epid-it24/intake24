@@ -22,6 +22,7 @@ module.exports = {
       alias: {
         '@common': path.resolve(__dirname, '../../packages/common/src'),
         '@intake24/i18n': path.resolve(__dirname, '../../packages/i18n/src'),
+        '@intake24/ui': path.resolve(__dirname, '../../packages/ui/src'),
       },
     },
   },

@@ -109,11 +109,10 @@ import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { Location } from 'vue-router';
 import { Dictionary } from '@common/types';
-import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import { ConfirmDialog, pwaUpdate, setsLanguage } from '@intake24/ui';
 import Loader from '@/components/loader.vue';
 import MenuTree from '@/components/sidebar/menu-tree.vue';
-import WebPushMixin from '@/components/web-push/web-push-mixin';
-import PwaUpdateMixin from '@/mixins/pwa-update-mixin';
+import webPush from '@/components/web-push/web-push';
 import resources from '@/router/resources';
 
 export interface AppComponent {
@@ -131,14 +130,16 @@ type Breadcrumbs = {
   to?: string | Location;
 };
 
-type Mixins = InstanceType<typeof PwaUpdateMixin> & InstanceType<typeof WebPushMixin>;
+type Mixins = InstanceType<typeof pwaUpdate> &
+  InstanceType<typeof setsLanguage> &
+  InstanceType<typeof webPush>;
 
 export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   name: 'App',
 
   components: { ConfirmDialog, Loader, MenuTree },
 
-  mixins: [PwaUpdateMixin, WebPushMixin],
+  mixins: [pwaUpdate, setsLanguage, webPush],
 
   data() {
     return {
@@ -174,6 +175,11 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
       },
       immediate: true,
     },
+  },
+
+  async created() {
+    const userLanguage = this.$ls.get('language', navigator.language || navigator.userLanguage);
+    if (this.$root.$i18n.locale !== userLanguage) await this.setLanguage('admin', userLanguage);
   },
 
   async mounted() {

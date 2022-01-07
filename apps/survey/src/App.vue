@@ -80,20 +80,21 @@ import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { TranslateResult } from 'vue-i18n';
 import Loader from '@/components/Loader.vue';
-import pwaUpdate from '@/mixins/pwa-update';
-import ConfirmDialog from '@/components/elements/ConfirmDialog.vue';
+import { ConfirmDialog, pwaUpdate, setsLanguage } from '@intake24/ui';
 
 export interface AppComponent {
   sidebar: boolean;
   toggleSidebar: () => void;
 }
 
-export default (Vue as VueConstructor<Vue & AppComponent>).extend({
+type Mixins = InstanceType<typeof pwaUpdate> & InstanceType<typeof setsLanguage>;
+
+export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   name: 'App',
 
   components: { ConfirmDialog, Loader },
 
-  mixins: [pwaUpdate],
+  mixins: [pwaUpdate, setsLanguage],
 
   data() {
     return {
@@ -122,6 +123,11 @@ export default (Vue as VueConstructor<Vue & AppComponent>).extend({
       },
       immediate: true,
     },
+  },
+
+  async created() {
+    const userLanguage = this.$ls.get('language', navigator.language || navigator.userLanguage);
+    if (this.$root.$i18n.locale !== userLanguage) await this.setLanguage('survey', userLanguage);
   },
 
   methods: {

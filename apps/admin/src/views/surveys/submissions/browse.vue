@@ -43,7 +43,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { SurveySubmissionEntry } from '@common/types/http/admin';
-import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import { ConfirmDialog } from '@intake24/ui';
 import detailMixin from '@/components/entry/detail-mixin';
 import { EntryMixin } from '@/types';
 import FormatsDateTime from '@/mixins/formats-date-time';

@@ -6,7 +6,11 @@ export default (container: AwilixContainer): void => {
     authenticationController: asFunction(controllers.authentication),
     passwordController: asFunction(controllers.password),
     subscriptionController: asFunction(controllers.subscription),
-    userController: asFunction(controllers.user),
+
+    userI18nController: asFunction(controllers.user.i18n),
+    userProfileController: asFunction(controllers.user.profile),
+    userPhysicalDataController: asFunction(controllers.user.physicalData),
+    userSubmissionsController: asFunction(controllers.user.submissions),
 
     foodController: asFunction(controllers.food),
     foodSearchController: asFunction(controllers.foodSearch),
@@ -18,8 +22,8 @@ export default (container: AwilixContainer): void => {
     feedbackController: asFunction(controllers.feedback),
 
     // Admin
-    userProfileController: asFunction(controllers.admin.user.profile),
-    userJobController: asFunction(controllers.admin.user.job),
+    adminUserProfileController: asFunction(controllers.admin.user.profile),
+    adminUserJobController: asFunction(controllers.admin.user.job),
 
     adminFoodDatabaseController: asFunction(controllers.admin.foods.fdb),
     adminCategoryController: asFunction(controllers.admin.foods.category),

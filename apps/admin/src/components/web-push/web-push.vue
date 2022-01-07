@@ -42,14 +42,14 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import WebPushMixin from './web-push-mixin';
+import webPush from './web-push';
 
-type Mixins = InstanceType<typeof WebPushMixin>;
+type Mixins = InstanceType<typeof webPush>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'WebPush',
 
-  mixins: [WebPushMixin],
+  mixins: [webPush],
 
   methods: {
     async requestPermission() {

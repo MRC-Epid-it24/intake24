@@ -114,7 +114,7 @@ import { FormRefs, Meal, Meals } from '@common/types';
 import { defaultMeals } from '@common/schemes';
 import LanguageSelector from '@/components/prompts/partials/language-selector.vue';
 import LoadSectionDialog from '@/components/prompts/load-section-dialog.vue';
-import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import { ConfirmDialog } from '@intake24/ui';
 
 export type MealDialog = {
   show: boolean;

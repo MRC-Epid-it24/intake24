@@ -62,7 +62,7 @@
         </v-list-item>
         <v-list-item>
           <v-list-item-avatar>
-            <v-icon class="primary" dark>fa-users</v-icon>
+            <v-icon class="primary" dark>fa-eye-slash</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ $t('user.permissions') }}</v-list-item-title>
@@ -73,96 +73,88 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <v-list subheader two-line flat>
-        <v-subheader>{{ $t('user.settings') }}</v-subheader>
-        <v-list-item>
-          <v-list-item-avatar>
-            <v-icon class="primary" dark>fa-language</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-select
-              v-model="language"
-              :items="languages"
-              :label="$t('user.languages._')"
-              hide-details="auto"
-              outlined
-            >
-              <template v-slot:item="{ item }">
-                <span
-                  :class="`flag-icon flag-icon-${item.value === 'en' ? 'gb' : item.value} mr-3`"
+      <v-row no-gutters>
+        <v-col cols="12" md="6">
+          <v-list subheader two-line flat>
+            <v-subheader>{{ $t('user.settings') }}</v-subheader>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-icon class="primary" dark>fa-language</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-select
+                  v-model="language"
+                  :items="languages"
+                  :label="$t('user.languages._')"
+                  item-text="englishName"
+                  item-value="id"
+                  hide-details="auto"
+                  outlined
+                  @change="updateLanguage"
                 >
-                </span>
-                {{ item.text }}
-              </template>
-              <template v-slot:selection="{ item }">
-                <span
-                  :class="`flag-icon flag-icon-${item.value === 'en' ? 'gb' : item.value} mr-3`"
-                >
-                </span>
-                {{ item.text }}
-              </template>
-            </v-select>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+                  <template v-slot:item="{ item }">
+                    <span
+                      :class="`flag-icon flag-icon-${
+                        item.countryFlagCode === 'en' ? 'gb' : item.countryFlagCode
+                      } mr-3`"
+                    >
+                    </span>
+                    {{ item.englishName }}
+                  </template>
+                  <template v-slot:selection="{ item }">
+                    <span
+                      :class="`flag-icon flag-icon-${
+                        item.countryFlagCode === 'en' ? 'gb' : item.countryFlagCode
+                      } mr-3`"
+                    >
+                    </span>
+                    {{ item.englishName }}
+                  </template>
+                </v-select>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-col>
+      </v-row>
     </v-card>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { LanguageAttributes } from '@common/types/models';
+import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
+import { setsLanguage } from '@intake24/ui';
 import UserPassword from './password.vue';
 
-type LanguageOption = {
-  value: string;
-  text: string;
-};
+type Mixins = InstanceType<typeof setsLanguage>;
 
-export default Vue.extend({
+export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'UserProfile',
 
   components: { UserPassword },
 
+  mixins: [setsLanguage],
+
   data() {
     return {
-      language: this.$i18n.locale,
-      // TODO: move to more appropriate location
-      rtlLanguages: ['ar'],
+      language: this.$root.$i18n.locale,
+      languages: [] as LanguageAttributes[],
     };
   },
 
   computed: {
     ...mapGetters('user', ['profile', 'permissions', 'roles']),
-    languages(): LanguageOption[] {
-      return this.$i18n.availableLocales.map((locale) => ({
-        value: locale,
-        text: this.$t(`user.languages.${locale}`).toString(),
-      }));
-    },
-
-    /* flags: orderBy(
-      Object.entries(this.$i18n.messages[this.$i18n.locale].flags).map(([key, value]) => ({
-        value: key,
-        text: value,
-      })),
-      'text'
-    ), */
   },
 
-  watch: {
-    language(val, oldVal) {
-      if (!val || val === oldVal) return;
-
-      this.updateLanguage(val);
-    },
+  async mounted() {
+    const { data } = await this.$http.get('i18n');
+    this.languages = data;
   },
 
   methods: {
-    updateLanguage(language: string) {
-      this.$root.$i18n.locale = language;
-      this.$vuetify.rtl = this.rtlLanguages.includes(language);
-      this.$ls.set('language', language);
+    async updateLanguage(languageId: string) {
+      await this.setLanguage('admin', languageId);
     },
   },
 });

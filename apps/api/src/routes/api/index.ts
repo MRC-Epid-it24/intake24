@@ -1,9 +1,10 @@
 import { Request, Response, Router } from 'express';
-import authentication from './authentication';
 import admin from './admin';
-import password from './password';
+import authentication from './authentication';
 import feedback from './feedback';
 import foods from './foods';
+import i18n from './i18n';
+import password from './password';
 import portionSizes from './portion-sizes';
 import subscriptions from './subscriptions';
 import surveys from './surveys';
@@ -11,20 +12,24 @@ import user from './user';
 
 const router = Router();
 
+// Unauthenticated
 router.use('/auth', authentication);
 router.use('/password', password);
-router.use('/subscriptions', subscriptions);
+router.use('/i18n', i18n);
 
+// Admin
 router.use('/admin', admin);
 
+// Survey / User
 router.use('/feedback', feedback);
 router.use('/foods', foods);
 router.use('/portion-sizes', portionSizes);
+router.use('/subscriptions', subscriptions);
 router.use('/surveys', surveys);
 router.use('/user', user);
 
 router.all('*', (req: Request, res: Response): void => {
-  res.status(404).json('Route not found.');
+  res.status(404).json('Invalid route');
 });
 
 export default router;

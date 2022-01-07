@@ -93,18 +93,18 @@
 import Vue, { VueConstructor } from 'vue';
 import { CategoryLocalEntry } from '@common/types/http/admin';
 import { form } from '@/helpers';
-import categoryOrFoodMixin from './category-or-food-mixin';
+import categoryOrFood from './category-or-food';
 import AttributeController from './partials/attribute-controller.vue';
 import CategoryController from './partials/category-controller.vue';
 
-type Mixins = InstanceType<typeof categoryOrFoodMixin>;
+type Mixins = InstanceType<typeof categoryOrFood>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'CategoryEntry',
 
   components: { AttributeController, CategoryController },
 
-  mixins: [categoryOrFoodMixin],
+  mixins: [categoryOrFood],
 
   data() {
     return {

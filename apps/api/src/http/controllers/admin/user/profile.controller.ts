@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import { User } from '@intake24/db';
 import type { Controller } from '@api/http/controllers';
 
-export type UserProfileController = Controller<'index'>;
+export type AdminUserProfileController = Controller<'index'>;
 
-export default (): UserProfileController => {
+export default (): AdminUserProfileController => {
   const index = async (req: Request, res: Response): Promise<void> => {
     const user = req.user as User;
     const { aclService } = req.scope.cradle;

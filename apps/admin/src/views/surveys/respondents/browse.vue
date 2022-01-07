@@ -150,7 +150,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { SurveyRespondentEntry, SurveyRespondentListEntry } from '@common/types/http/admin';
-import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import { ConfirmDialog } from '@intake24/ui';
 import detailMixin from '@/components/entry/detail-mixin';
 import { form } from '@/helpers';
 import { EntryMixin } from '@/types';

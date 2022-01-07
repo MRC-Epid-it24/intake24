@@ -82,14 +82,18 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import has from 'lodash/has';
-import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
-import ResourceMixin from '@/mixins/resource-mixin';
+import { ConfirmDialog } from '@intake24/ui';
+import hasResource from '@/mixins/has-resource';
 import { RouteLeave } from '@/types';
 
-type Mixins = InstanceType<typeof ResourceMixin>;
+type Mixins = InstanceType<typeof hasResource>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'EntryLayout',
+
+  components: { ConfirmDialog },
+
+  mixins: [hasResource],
 
   inject: {
     editsResource: { default: false },
@@ -113,10 +117,6 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       }),
     },
   },
-
-  components: { ConfirmDialog },
-
-  mixins: [ResourceMixin],
 
   computed: {
     isCreate(): boolean {

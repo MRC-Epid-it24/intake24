@@ -95,18 +95,18 @@ import Vue, { VueConstructor } from 'vue';
 import { FoodLocalEntry } from '@common/types/http/admin';
 import { form } from '@/helpers';
 import AutoComplete from '@/components/forms/auto-complete.vue';
-import categoryOrFoodMixin from './category-or-food-mixin';
+import categoryOrFood from './category-or-food';
 import AttributeController from './partials/attribute-controller.vue';
 import CategoryController from './partials/category-controller.vue';
 
-type Mixins = InstanceType<typeof categoryOrFoodMixin>;
+type Mixins = InstanceType<typeof categoryOrFood>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'FoodEntry',
 
   components: { AttributeController, AutoComplete, CategoryController },
 
-  mixins: [categoryOrFoodMixin],
+  mixins: [categoryOrFood],
 
   data() {
     return {

@@ -53,9 +53,9 @@
 import Vue, { VueConstructor } from 'vue';
 import { JobEntry } from '@common/types/http/admin';
 import { form } from '@/helpers';
-import RespondentsJobMixin from './respondents-job-mixin';
+import respondentsJob from './respondents-job';
 
-type mixins = InstanceType<typeof RespondentsJobMixin>;
+type mixins = InstanceType<typeof respondentsJob>;
 
 type RespondentsUploadForm = {
   file: File | null;
@@ -64,7 +64,7 @@ type RespondentsUploadForm = {
 export default (Vue as VueConstructor<Vue & mixins>).extend({
   name: 'RespondentsUpload',
 
-  mixins: [RespondentsJobMixin],
+  mixins: [respondentsJob],
 
   data() {
     return {

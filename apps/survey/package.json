@@ -67,6 +67,7 @@
   },
   "bundledDependencies": [
     "@intake24/common",
-    "@intake24/i18n"
+    "@intake24/i18n",
+    "@intake24/ui"
   ]
 }

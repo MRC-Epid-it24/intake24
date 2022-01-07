@@ -37,7 +37,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { BasePromptProps } from '@common/prompts';
 import { FoodState } from '@common/types';
-import ConfirmDialog from '@/components/elements/ConfirmDialog.vue';
+import { ConfirmDialog } from '@intake24/ui';
 import EditableFoodList, { HasEditableFoodList } from './EditableFoodList.vue';
 import BasePrompt, { Prompt } from '../BasePrompt';
 

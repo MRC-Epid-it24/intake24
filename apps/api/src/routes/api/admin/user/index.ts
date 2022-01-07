@@ -5,9 +5,9 @@ import jobs from './jobs';
 
 const router = Router();
 
-const { userProfileController } = ioc.cradle;
+const { adminUserProfileController } = ioc.cradle;
 
-router.get('', wrapAsync(userProfileController.index));
+router.get('', wrapAsync(adminUserProfileController.index));
 
 router.use('/jobs', jobs);
 

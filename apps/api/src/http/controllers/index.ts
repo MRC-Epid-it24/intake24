@@ -8,7 +8,7 @@ import portionSize from './portion-size.controller';
 import subscription from './subscription.controller';
 import survey from './survey.controller';
 import surveyRespondent from './survey-respondent.controller';
-import user from './user.controller';
+import user from './user';
 
 export * from './admin';
 export * from './controller';
@@ -21,7 +21,7 @@ export * from './password.controller';
 export * from './subscription.controller';
 export * from './survey.controller';
 export * from './survey-respondent.controller';
-export * from './user.controller';
+export * from './user';
 
 export default {
   admin,

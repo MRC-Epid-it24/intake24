@@ -1,0 +1,28 @@
+{
+  "name": "@intake24/ui",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Intake24 UI components",
+  "author": "",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MRC-Epid-it24/intake24.git",
+    "directory": "packages/ui"
+  },
+  "main": "src/index.ts",
+  "engines": {
+    "node": ">=12.20.1"
+  },
+  "scripts": {
+  },
+  "dependencies": {
+    "vue": "^2.6.14",
+    "vue-i18n": "^8.26.8",
+    "vue-ls": "^4.0.0",
+    "vue-router": "^3.5.3",
+    "vue-toasted": "^1.1.28",
+    "vuetify": "^2.6.2",
+    "vuex": "^3.6.2"
+  }
+}

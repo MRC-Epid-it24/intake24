@@ -37,7 +37,11 @@
             v-model="language"
             :items="languages"
             :label="$t('profile.languages._')"
+            item-text="englishName"
+            item-value="id"
             hide-details="auto"
+            outlined
+            @change="updateLanguage"
           ></v-select>
         </v-list-item-content>
       </v-list-item>
@@ -46,48 +50,37 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
+import { setsLanguage } from '@intake24/ui';
+import { LanguageAttributes } from '@common/types/models';
 
-type LanguageOption = {
-  value: string;
-  text: string;
-};
+type Mixins = InstanceType<typeof setsLanguage>;
 
-export default Vue.extend({
+export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'SurveyUserProfile',
+
+  mixins: [setsLanguage],
 
   data() {
     return {
       language: this.$i18n.locale,
-      // TODO: move to more appropriate location
-      rtlLanguages: ['ar'],
+      languages: [] as LanguageAttributes[],
     };
   },
 
   computed: {
     ...mapGetters('user', ['profile']),
-    languages(): LanguageOption[] {
-      return this.$i18n.availableLocales.map((locale) => ({
-        value: locale,
-        text: this.$t(`profile.languages.${locale}`).toString(),
-      }));
-    },
   },
 
-  watch: {
-    language(val, oldVal) {
-      if (!val || val === oldVal) return;
-
-      this.updateLanguage(val);
-    },
+  async mounted() {
+    const { data } = await this.$http.get('i18n');
+    this.languages = data;
   },
 
   methods: {
-    updateLanguage(language: string) {
-      this.$root.$i18n.locale = language;
-      this.$vuetify.rtl = this.rtlLanguages.includes(language);
-      this.$ls.set('language', language);
+    async updateLanguage(languageId: string) {
+      await this.setLanguage('survey', languageId);
     },
   },
 });

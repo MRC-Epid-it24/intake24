@@ -22,10 +22,6 @@ declare module 'vue/types/vue' {
 }
 
 declare global {
-  interface Window {
-    Duo: any;
-  }
-
   interface Navigator {
     userLanguage: string;
   }

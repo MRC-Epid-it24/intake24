@@ -9,9 +9,9 @@ import { NotFoundError } from '@api/http/errors';
 import type { IoC } from '@api/ioc';
 import type { Controller } from '@api/http/controllers';
 
-export type UserJobController = Controller<'browse' | 'read' | 'download'>;
+export type AdminUserJobController = Controller<'browse' | 'read' | 'download'>;
 
-export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): UserJobController => {
+export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): AdminUserJobController => {
   const browse = async (
     req: Request<any, any, any, PaginateQuery & { type?: string }>,
     res: Response<JobsResponse>

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import ResourceMixin from '@/mixins/resource-mixin';
+import hasResource from '@/mixins/has-resource';
 
 export default Vue.extend({
   props: {
@@ -9,5 +9,5 @@ export default Vue.extend({
     },
   },
 
-  mixins: [ResourceMixin],
+  mixins: [hasResource],
 });

@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import ConfirmDialog from '@/components/elements/ConfirmDialog.vue';
+import { ConfirmDialog } from '@intake24/ui';
 
 export default Vue.extend({
   name: 'MealFoodMobileContextMenu',

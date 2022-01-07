@@ -40,7 +40,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { MealTimePromptProps } from '@common/prompts';
-import ConfirmDialog from '@/components/elements/ConfirmDialog.vue';
+import { ConfirmDialog } from '@intake24/ui';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({

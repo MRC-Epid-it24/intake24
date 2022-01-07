@@ -75,7 +75,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { copy } from '@common/util';
 import { AsServedImageEntry } from '@common/types/http/admin';
-import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import { ConfirmDialog } from '@intake24/ui';
 import { form } from '@/helpers';
 
 type AsServedImageForm = {

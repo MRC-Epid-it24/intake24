@@ -1,11 +1,11 @@
 {
 	"folders": [
 		{
-			"path": "packages/common"
-		},
-		{
 			"path": "apps/admin"
 		},
+		{
+			"path": "packages"
+		}
 	],
 	"settings": {
 		"eslint.workingDirectories": [

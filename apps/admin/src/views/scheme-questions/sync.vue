@@ -59,7 +59,7 @@ import isEqual from 'lodash/isEqual';
 import { flattenSchemeWithSection, MealSection, SurveyQuestionSection } from '@common/schemes';
 import { SchemeQuestionEntry, SchemeQuestionRefs } from '@common/types/http/admin';
 import { DetailMixin } from '@/types';
-import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import { ConfirmDialog } from '@intake24/ui';
 import detailMixin from '@/components/entry/detail-mixin';
 
 export type SchemeStatus = {

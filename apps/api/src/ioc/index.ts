@@ -25,10 +25,15 @@ import type {
   PortionSizeController,
   SurveyController,
   SurveyRespondentController,
-  UserController,
-  // Admin
+  // User
+  UserI18nController,
+  UserPhysicalDataController,
   UserProfileController,
-  UserJobController,
+  UserSubmissionsController,
+  // Admin
+  AdminUserController,
+  AdminUserProfileController,
+  AdminUserJobController,
   AdminFoodDatabaseController,
   AdminCategoryController,
   AdminFoodController,
@@ -52,7 +57,6 @@ import type {
   TaskController,
   PermissionController,
   RoleController,
-  AdminUserController,
 } from '@api/http/controllers';
 import type {
   AdminCategoryService,
@@ -118,7 +122,12 @@ export interface IoC extends Jobs {
   authenticationController: AuthenticationController;
   passwordController: PasswordController;
   subscriptionController: SubscriptionController;
-  userController: UserController;
+
+  // User
+  userI18nController: UserI18nController;
+  userProfileController: UserProfileController;
+  userPhysicalDataController: UserPhysicalDataController;
+  userSubmissionsController: UserSubmissionsController;
 
   // Survey controllers
   foodController: FoodController;
@@ -131,8 +140,8 @@ export interface IoC extends Jobs {
   feedbackController: FeedbackController;
 
   // Admin controllers
-  userProfileController: UserProfileController;
-  userJobController: UserJobController;
+  adminUserProfileController: AdminUserProfileController;
+  adminUserJobController: AdminUserJobController;
 
   adminFoodDatabaseController: AdminFoodDatabaseController;
   adminCategoryController: AdminCategoryController;

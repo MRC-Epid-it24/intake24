@@ -50,17 +50,17 @@ import { Pagination, PaginationMeta } from '@common/types/models';
 import ActionBar from '@/components/datatable/action-bar/action-bar.vue';
 import ToolBar from '@/components/toolbar/tool-bar.vue';
 import handlesLoading from '@/mixins/handles-loading';
-import ResourceMixin from '@/mixins/resource-mixin';
+import hasResource from '@/mixins/has-resource';
 import DataTableFilter from './data-table-filter.vue';
 
-type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof ResourceMixin>;
+type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof hasResource>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'DataTable',
 
   components: { ActionBar, DataTableFilter, ToolBar },
 
-  mixins: [handlesLoading, ResourceMixin],
+  mixins: [handlesLoading, hasResource],
 
   props: {
     actions: {

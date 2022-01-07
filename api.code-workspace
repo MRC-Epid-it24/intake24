@@ -1,14 +1,14 @@
 {
 	"folders": [
 		{
-			"path": "packages/common"
-		},
-		{
 			"path": "deployment"
 		},
 		{
 			"path": "apps/api"
 		},
+		{
+			"path": "packages"
+		}
 	],
 	"settings": {
 		"eslint.workingDirectories": [

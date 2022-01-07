@@ -37,14 +37,14 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import RespondentsJobMixin from './respondents-job-mixin';
+import respondentsJob from './respondents-job';
 
-type mixins = InstanceType<typeof RespondentsJobMixin>;
+type mixins = InstanceType<typeof respondentsJob>;
 
 export default (Vue as VueConstructor<Vue & mixins>).extend({
   name: 'RespondentsAuthUrlExport',
 
-  mixins: [RespondentsJobMixin],
+  mixins: [respondentsJob],
 
   data() {
     return {

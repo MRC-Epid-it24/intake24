@@ -31,7 +31,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { Location } from 'vue-router';
 import upperFirst from 'lodash/upperFirst';
-import ConfirmDialog from '@/components/dialogs/confirm-dialog.vue';
+import { ConfirmDialog } from '@intake24/ui';
 import Create from './create.vue';
 import Read from './read.vue';
 import Edit from './edit.vue';
