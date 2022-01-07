@@ -76,7 +76,7 @@ importers:
       dotenv-expand: ^5.1.0
       express: ^4.17.2
       flag-icon-css: ^4.1.7
-      helmet: ^4.6.0
+      helmet: ^5.0.1
       js-file-download: ^0.4.12
       jwt-decode: ^3.1.2
       lodash: ^4.17.21
@@ -111,7 +111,7 @@ importers:
       dotenv-expand: 5.1.0
       express: 4.17.2
       flag-icon-css: 4.1.7
-      helmet: 4.6.0
+      helmet: 5.0.1
       js-file-download: 0.4.12
       jwt-decode: 3.1.2
       lodash: 4.17.21
@@ -203,7 +203,7 @@ importers:
       fast-csv: ^4.3.6
       fork-ts-checker-webpack-plugin: ^6.5.0
       fs-extra: ^10.0.0
-      helmet: ^4.6.0
+      helmet: ^5.0.1
       ioredis: ^4.28.2
       jsdom: ^19.0.0
       json2csv: ^5.0.6
@@ -262,7 +262,7 @@ importers:
       express-validator: 6.14.0
       fast-csv: 4.3.6
       fs-extra: 10.0.0
-      helmet: 4.6.0
+      helmet: 5.0.1
       ioredis: 4.28.2
       jsdom: 19.0.0
       json2csv: 5.0.6
@@ -421,7 +421,7 @@ importers:
       dotenv: ^10.0.0
       dotenv-expand: ^5.1.0
       express: ^4.17.2
-      helmet: ^4.6.0
+      helmet: ^5.0.1
       jquery: ^3.6.0
       jwt-decode: ^3.1.2
       laravel-mix: ^6.0.39
@@ -454,7 +454,7 @@ importers:
       dotenv: 10.0.0
       dotenv-expand: 5.1.0
       express: 4.17.2
-      helmet: 4.6.0
+      helmet: 5.0.1
       jquery: 3.6.0
       jwt-decode: 3.1.2
       lodash: 4.17.21
@@ -7621,9 +7621,9 @@ packages:
     hasBin: true
     dev: true
 
-  /helmet/4.6.0:
-    resolution: {integrity: sha512-HVqALKZlR95ROkrnesdhbbZJFi/rIVSoNq6f3jA/9u6MIbTsPh3xZwihjeI5+DO/2sOV6HMHooXcEOuwskHpTg==}
-    engines: {node: '>=10.0.0'}
+  /helmet/5.0.1:
+    resolution: {integrity: sha512-iyYpGYH2nbQVaQtauYDnemWg45S2RyGvJ+iKj+V9jp7Dc1NTtAJHmD+hFOSYS7Xdwe1GeyVEYSydggXLOg6TKQ==}
+    engines: {node: '>=12.0.0'}
     dev: false
 
   /highlight.js/10.7.3:
