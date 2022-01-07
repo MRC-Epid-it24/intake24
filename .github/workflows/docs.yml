@@ -39,7 +39,7 @@ jobs:
         run: echo "docs.intake24.co.uk" > dist/CNAME
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@4.1.8
+        uses: JamesIves/github-pages-deploy-action@4.2.0
         with:
           branch: ghp-docs
           folder: apps/docs/dist
