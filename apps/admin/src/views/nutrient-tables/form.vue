@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-title>{{ $t('nutrient-tables._') }}</v-card-title>
@@ -170,10 +170,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="(nutrient, idx) in form.csvMappingNutrients"
-                :key="`csv-mapping-nutrients-${idx}`"
-              >
+              <tr v-for="(nutrient, idx) in nutrients.items" :key="`csv-mapping-nutrients-${idx}`">
                 <td class="py-2">
                   <v-select
                     v-model="nutrient.nutrientTypeId"
@@ -209,6 +206,11 @@
                   </v-btn>
                 </td>
               </tr>
+              <v-skeleton-loader
+                v-if="nutrientsAvailableToLoad"
+                v-intersect="loadMoreNutrients"
+                type="table-row"
+              />
             </tbody>
           </v-simple-table>
         </v-card-text>
@@ -228,6 +230,9 @@ import formMixin from '@/components/entry/form-mixin';
 import { form } from '@/helpers';
 import { FormMixin } from '@/types';
 
+export type CsvMappingField = { fieldName: string; columnOffset: string };
+export type CsvMappingNutrient = { nutrientTypeId: string; columnOffset: string };
+
 export type NutrientTableForm = {
   id: string | null;
   description: string | null;
@@ -237,8 +242,8 @@ export type NutrientTableForm = {
     localDescriptionColumnOffset: string | null;
     rowOffset: number;
   };
-  csvMappingFields: { fieldName: string; columnOffset: string }[];
-  csvMappingNutrients: { nutrientTypeId: string; columnOffset: string }[];
+  csvMappingFields: CsvMappingField[];
+  csvMappingNutrients: CsvMappingNutrient[];
 };
 
 export const transformIn = (data: NutrientTableEntry) => {
@@ -317,16 +322,20 @@ export default (
         },
         { transform: transformOut }
       ),
+      nutrients: {
+        chunk: 10,
+        items: [] as CsvMappingNutrient[],
+      },
     };
   },
 
-  watch: {
-    'form.csvMapping': {
-      handler() {
-        this.form.errors.clear('csvMapping');
-      },
-      deep: true,
+  computed: {
+    nutrientsAvailableToLoad(): boolean {
+      return this.nutrients.items.length < this.form.csvMappingNutrients.length;
     },
+  },
+
+  watch: {
     'form.csvMappingFields': {
       handler() {
         this.form.errors.clear('csvMappingFields');
@@ -342,6 +351,19 @@ export default (
   },
 
   methods: {
+    loadMoreNutrients(entries: IntersectionObserverEntry[]) {
+      if (entries[0].isIntersecting && this.nutrientsAvailableToLoad) {
+        const startIndex = this.nutrients.items.length;
+        const endIndex =
+          startIndex + this.nutrients.chunk > this.form.csvMappingNutrients.length
+            ? startIndex + (this.form.csvMappingNutrients.length - startIndex)
+            : startIndex + this.nutrients.chunk;
+
+        const items = this.form.csvMappingNutrients.slice(startIndex, endIndex);
+        this.nutrients.items.push(...items);
+      }
+    },
+
     toForm(data: NutrientTableEntry) {
       const input = transformIn(data);
 
