@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" v-if="entryLoaded">
+  <layout v-bind="{ id, entry }">
     <v-simple-table>
       <tbody>
         <tr>

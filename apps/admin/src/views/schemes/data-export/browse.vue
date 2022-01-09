@@ -20,9 +20,9 @@
       ></load-section-dialog>
     </v-toolbar>
     <data-export-section
-      :section="section"
+      :section="selected"
       :refFields="sectionRefFields"
-      @cancel="close"
+      @close="close"
       @update="update"
     ></data-export-section>
     <v-list two-line>
@@ -45,7 +45,7 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon :title="$t('schemes.data-export.edit')" @click.stop="edit(section)">
-                <v-icon color="primary lighten-2">fa-ellipsis-v</v-icon>
+                <v-icon color="primary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
@@ -86,16 +86,16 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         meals: defaultMeals,
         export: defaultExport,
       }),
-      section: null as ExportSection | null,
+      selected: null as ExportSection | null,
       exportRefs: {} as SchemeExportRefsResponse,
     };
   },
 
   computed: {
     sectionRefFields(): ExportField[] | undefined {
-      if (!this.section) return undefined;
+      if (!this.selected) return undefined;
 
-      return this.exportRefs[this.section.id];
+      return this.exportRefs[this.selected.id];
     },
   },
 
@@ -118,19 +118,17 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
     },
 
     edit(section: ExportSection) {
-      this.section = section;
+      this.selected = section;
     },
 
     update(section: ExportSection) {
       const match = this.form.export.find((field) => field.id === section.id);
 
       if (match) match.fields = [...section.fields];
-
-      this.close();
     },
 
     close() {
-      this.section = null;
+      this.selected = null;
     },
 
     loadFromScheme(exportSections: ExportSection[]) {

@@ -18,6 +18,30 @@ const languages: LocaleMessageObject = {
     ltr: 'Left to right',
     rtl: 'Right to left',
   },
+
+  messages: {
+    _: 'Translation',
+    title: 'Translations',
+    tab: 'Translations',
+    edit: 'Edit section',
+    path: 'Key path',
+    applications: {
+      admin: 'Admin',
+      survey: 'Survey',
+    },
+    sections: {
+      breadcrumbs: 'Breadcrumbs',
+      feedback: 'Feedback',
+      flags: 'Flags',
+      login: 'Login',
+      portion: 'Portion sizes',
+      profile: 'Profile',
+      prompts: 'Prompts',
+      recall: 'Recall',
+      standardUnits: 'Standard units',
+      survey: 'Survey',
+    },
+  },
 };
 
 export default languages;

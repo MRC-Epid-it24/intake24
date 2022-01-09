@@ -1,5 +1,15 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" @save="submit">
+    <!-- <template v-slot:actions>
+      <v-btn
+        v-if="isEdit && can('languages-edit')"
+        class="ml-2"
+        color="primary"
+        @click="initLanguageMessages"
+      >
+        <v-icon left>fa-play</v-icon> INIT
+      </v-btn>
+    </template> -->
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -113,11 +123,17 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         })),
         'text'
       ),
-      textDirections: [
-        { value: 'ltr', text: this.$t('languages.textDirections.ltr') },
-        { value: 'rtl', text: this.$t('languages.textDirections.rtl') },
-      ],
+      textDirections: ['ltr', 'rtl'].map((value) => ({
+        value,
+        text: this.$t(`languages.textDirections.${value}`),
+      })),
     };
+  },
+
+  methods: {
+    async initLanguageMessages() {
+      await this.$http.post(`admin/languages/${this.id}/init`);
+    },
   },
 });
 </script>

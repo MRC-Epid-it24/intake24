@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@common/*": ["src/*"]
+      "@common/*": ["src/*"],
+      "@intake24/*": ["../*/src"],
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true

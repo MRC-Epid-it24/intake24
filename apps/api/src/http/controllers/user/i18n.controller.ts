@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { Language } from '@intake24/db';
-import { admin, survey } from '@intake24/i18n';
+import { Language, LanguageMessage } from '@intake24/db';
 import { NotFoundError } from '@api/http/errors';
 import { Controller } from '../controller';
 
@@ -22,10 +21,23 @@ export default (): UserI18nController => {
       query: { app },
     } = req;
 
-    const language = await Language.findByPk(languageId);
+    const language = await Language.scope('public').findByPk(languageId, {
+      include: [
+        { model: LanguageMessage, where: { application: app }, required: false, separate: true },
+      ],
+    });
     if (!language) throw new NotFoundError();
 
-    res.json({ ...language.get(), messages: admin[languageId] });
+    const response = {
+      ...language.get(),
+      messages:
+        language.messages?.reduce<Record<string, string | object>>((acc, { section, messages }) => {
+          acc[section] = messages;
+          return acc;
+        }, {}) ?? {},
+    };
+
+    res.json(response);
   };
 
   return { browse, entry };

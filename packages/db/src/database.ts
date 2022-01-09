@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
-import { dbLogger, Logger } from '@intake24/services';
-import { Environment } from '@common/types';
-import { DatabaseType, DatabaseConfig } from './config';
+import type { Logger } from '@intake24/services';
+import type { Environment } from '@common/types';
+import type { DatabaseType, DatabaseConfig } from './config';
 import * as foods from './models/foods';
 import * as system from './models/system';
 
@@ -48,7 +48,11 @@ export class Database implements DatabasesInterface {
       this[database] = new Sequelize({
         ...dbConf,
         models: models[database],
-        logging: isDev ? dbLogger : false,
+        logging: isDev
+          ? (sql: string): void => {
+              this.logger.debug(sql);
+            }
+          : false,
       });
 
       // Force sync for TEST environment

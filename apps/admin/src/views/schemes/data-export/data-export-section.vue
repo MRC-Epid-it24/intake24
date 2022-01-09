@@ -169,6 +169,9 @@ export default Vue.extend({
   },
 
   watch: {
+    dialog(val: boolean) {
+      if (!val) this.$emit('close');
+    },
     section(val) {
       if (!val) return;
 
@@ -199,12 +202,13 @@ export default Vue.extend({
     },
 
     cancel() {
-      this.$emit('cancel');
       this.close();
     },
 
     save() {
-      this.$emit('update', { id: this.section?.id, fields: this.fields });
+      if (!this.section) return;
+
+      this.$emit('update', { id: this.section.id, fields: this.fields });
       this.close();
     },
   },

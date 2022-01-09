@@ -2,6 +2,8 @@ export type Dictionary<T = any> = { [key: string]: T };
 
 export type Environment = 'development' | 'test' | 'production';
 
+export type Application = 'admin' | 'survey';
+
 export type CustomField = {
   name: string;
   value: string;

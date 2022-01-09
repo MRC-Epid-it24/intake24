@@ -26,4 +26,10 @@ router
 
 router.get('/:languageId/edit', permission('languages-edit'), wrapAsync(languageController.edit));
 
+router.post(
+  '/:languageId/init',
+  permission('languages-edit'),
+  wrapAsync(languageController.initializeMessages)
+);
+
 export default router;

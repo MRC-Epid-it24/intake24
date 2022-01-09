@@ -10,11 +10,13 @@ import {
 import { LanguageAttributes, LanguageCreationAttributes } from '@common/types/models';
 import BaseModel from '../model';
 import Locale from './locale';
+import LanguageMessage from './language-message';
 
 @Scopes(() => ({
+  public: { attributes: ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection'] },
   list: { attributes: ['id', 'englishName', 'localName', 'countryFlagCode'] },
-  adminLocales: { include: [{ model: Locale, as: 'adminLocales' }] },
-  surveyLocales: { include: [{ model: Locale, as: 'surveyLocales' }] },
+  adminLocales: { include: [{ association: 'adminLocales' }] },
+  surveyLocales: { include: [{ association: 'surveyLocales' }] },
 }))
 @Table({
   modelName: 'Language',
@@ -64,6 +66,9 @@ export default class Language
   @UpdatedAt
   @Column
   public readonly updatedAt!: Date;
+
+  @HasMany(() => LanguageMessage, 'languageId')
+  public messages?: LanguageMessage[];
 
   @HasMany(() => Locale, 'adminLanguageId')
   public adminLocales?: Locale[];
