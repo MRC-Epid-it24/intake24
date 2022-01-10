@@ -31,7 +31,7 @@ module.exports = {
     'import/no-cycle': 'warn',
     'import/no-extraneous-dependencies': [
       'error',
-      { devDependencies: ['**/*.js', 'tests/**/*.ts', 'tests/**/*.js'] },
+      { devDependencies: ['**/*.js', '__tests__/**/*.ts', '__tests__/**/*.js'] },
     ],
     'no-await-in-loop': 'off',
     'no-continue': 'off',
@@ -47,7 +47,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
+      files: ['**/__tests__/*.{j,t}s?(x)', '**/__tests__/unit/**/*.spec.{j,t}s?(x)'],
       env: {
         jest: true,
       },

@@ -99,7 +99,7 @@ jobs:
         run: pnpm run build
 
       - name: API - use Github test environment file
-        run: cp ./tests/.env-test-gh ./tests/.env-test
+        run: cp ./__tests__/.env-test-gh ./__tests__/.env-test
 
       - name: Repo - unit tests
         working-directory: .
@@ -188,7 +188,7 @@ jobs:
         run: pnpm run build
 
       - name: API - use Github test environment file
-        run: cp ./tests/.env-test-gh ./tests/.env-test
+        run: cp ./__tests__/.env-test-gh ./__tests__/.env-test
 
       - name: Repo - unit tests
         working-directory: .
@@ -273,7 +273,7 @@ jobs:
   #     - name: API - build
   #       run: pnpm run build
   #     - name: API - use Github test environment file
-  #       run: cp ./tests/.env-test-gh ./tests/.env-test
+  #       run: cp ./__tests__/.env-test-gh ./__tests__/.env-test
   #     - name: API - unit tests
   #       run: pnpm run test:unit
   #     - name: API - integration tests

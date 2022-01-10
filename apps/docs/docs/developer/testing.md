@@ -4,7 +4,7 @@ Both `admin` / `survey` front-ends and `api` backend are set up with [Jest](http
 
 ## API Server
 
-To run unit and integration tests on your local machine, start by copying your `.env` file to `tests/.env-test`.
+To run unit and integration tests on your local machine, start by copying your `.env` file to `__tests__/.env-test`.
 
 Make sure to edit the `.env-test` file and change the database settings to point to test databases instead of your
 normal development ones. The foods and system test databases should be empty databases with the necessary 
@@ -15,7 +15,7 @@ extensions (e.g., `uuid-ossp`) installed.
 correct because the test framework setup code will **destroy all data** in those databases!    
 :::
 
-If using the development VM, simply copy `tests/.env-test-dev-vm` to `tests/.env-test` and you're good to go.
+If using the development VM, simply copy `__tests__/.env-test-dev-vm` to `__tests__/.env-test` and you're good to go.
 
 Backend testing is set up for `unit` and `integration` tests. You can run tests with following commands.
 
