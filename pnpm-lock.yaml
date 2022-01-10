@@ -553,11 +553,11 @@ importers:
 
   packages/services:
     specifiers:
-      winston: ^3.3.3
+      winston: ^3.3.4
       winston-daily-rotate-file: ^4.5.5
     dependencies:
-      winston: 3.3.3
-      winston-daily-rotate-file: 4.5.5_winston@3.3.3
+      winston: 3.3.4
+      winston-daily-rotate-file: 4.5.5_winston@3.3.4
 
   packages/ui:
     specifiers:
@@ -4511,8 +4511,8 @@ packages:
     dependencies:
       lodash: 4.17.21
 
-  /async/3.2.2:
-    resolution: {integrity: sha512-H0E+qZaDEfx/FY4t7iLRv1W2fFI6+pyCeTw1uN20AQPiwqwM6ojPxHxdLv4z8hi2DtnW9BOckSspLucW7pIE5g==}
+  /async/3.2.3:
+    resolution: {integrity: sha512-spZRyzKL5l5BZQrr/6m/SqFdBN0q3OCI0f9rjfBzCMBIP4p75P620rR3gTmaksNOhmzgdxcaxdNfMy6anrbM0g==}
     dev: false
 
   /asynckit/0.4.0:
@@ -7407,7 +7407,6 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.3
-    dev: false
 
   /fork-ts-checker-webpack-plugin/6.5.0_08045028340eef0849916ac6246993aa:
     resolution: {integrity: sha512-cS178Y+xxtIjEUorcHddKS7yCMlrDPV31mt47blKKRfMd70Kxu5xruAFE2o9sDY6wVC5deuob/u/alD04YYHnw==}
@@ -8095,7 +8094,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.6
+      follow-redirects: 1.14.6_debug@4.3.3
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -10313,6 +10312,16 @@ packages:
 
   /logform/2.3.0:
     resolution: {integrity: sha512-graeoWUH2knKbGthMtuG1EfaSPMZFZBIrhuJHhkS5ZseFBrc7DupCzihOQAzsK/qIKPQaPJ/lFQFctILUY5ARQ==}
+    dependencies:
+      colors: 1.4.0
+      fecha: 4.2.1
+      ms: 2.1.3
+      safe-stable-stringify: 1.1.1
+      triple-beam: 1.3.0
+    dev: false
+
+  /logform/2.3.2:
+    resolution: {integrity: sha512-V6JiPThZzTsbVRspNO6TmHkR99oqYTs8fivMBYQkjZj6rxW92KxtDCPE6IkAk1DNBnYKNkjm4jYBm6JDUcyhOA==}
     dependencies:
       colors: 1.4.0
       fecha: 4.2.1
@@ -15150,7 +15159,7 @@ packages:
     resolution: {integrity: sha512-JcKqAHLPxcdb9KM49dufGXn2x3ssnfjbcaQdLlfZsL9rH9wgDQjUtDxbo8NE0F6SFvydeu1VhZe7hZuHsB2/pw==}
     dev: true
 
-  /winston-daily-rotate-file/4.5.5_winston@3.3.3:
+  /winston-daily-rotate-file/4.5.5_winston@3.3.4:
     resolution: {integrity: sha512-ds0WahIjiDhKCiMXmY799pDBW+58ByqIBtUcsqr4oDoXrAI3Zn+hbgFdUxzMfqA93OG0mPLYVMiotqTgE/WeWQ==}
     engines: {node: '>=8'}
     peerDependencies:
@@ -15159,7 +15168,7 @@ packages:
       file-stream-rotator: 0.5.7
       object-hash: 2.2.0
       triple-beam: 1.3.0
-      winston: 3.3.3
+      winston: 3.3.4
       winston-transport: 4.4.1
     dev: false
 
@@ -15172,19 +15181,28 @@ packages:
       triple-beam: 1.3.0
     dev: false
 
-  /winston/3.3.3:
-    resolution: {integrity: sha512-oEXTISQnC8VlSAKf1KYSSd7J6IWuRPQqDdo8eoRNaYKLvwSb5+79Z3Yi1lrl6KDpU6/VWaxpakDAtb1oQ4n9aw==}
+  /winston-transport/4.4.2:
+    resolution: {integrity: sha512-9jmhltAr5ygt5usgUTQbEiw/7RYXpyUbEAFRCSicIacpUzPkrnQsQZSPGEI12aLK9Jth4zNcYJx3Cvznwrl8pw==}
+    engines: {node: '>= 6.4.0'}
+    dependencies:
+      logform: 2.3.2
+      readable-stream: 3.6.0
+      triple-beam: 1.3.0
+    dev: false
+
+  /winston/3.3.4:
+    resolution: {integrity: sha512-zWJrfmqE+2IXtVJ125vxpA2m303TjwchLhfRbcnma7c76Qd4pv80JIp37l8uGnWbCoG4X6PMz3vAQeh+vH1CtA==}
     engines: {node: '>= 6.4.0'}
     dependencies:
       '@dabh/diagnostics': 2.0.2
-      async: 3.2.2
+      async: 3.2.3
       is-stream: 2.0.1
-      logform: 2.3.0
+      logform: 2.3.2
       one-time: 1.0.0
       readable-stream: 3.6.0
       stack-trace: 0.0.10
       triple-beam: 1.3.0
-      winston-transport: 4.4.1
+      winston-transport: 4.4.2
     dev: false
 
   /wkx/0.5.0:
