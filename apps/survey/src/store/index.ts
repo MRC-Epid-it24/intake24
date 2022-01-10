@@ -1,8 +1,8 @@
 import trim from 'lodash/trim';
 import Vue from 'vue';
 import Vuex, { GetterTree } from 'vuex';
-import { SurveyState } from '@common/types';
-import { RootState } from '@/types/vuex';
+import { SurveyState } from '@intake24/common/types';
+import { RootState } from '@intake24/survey/types/vuex';
 import modules from './modules';
 
 Vue.use(Vuex);

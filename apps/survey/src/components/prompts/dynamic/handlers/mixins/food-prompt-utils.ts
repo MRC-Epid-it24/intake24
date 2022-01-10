@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
-import { EncodedFood, LocaleTranslation } from '@common/types';
-import { UserPortionSizeMethod } from '@common/types/http';
+import { EncodedFood, LocaleTranslation } from '@intake24/common/types';
+import { UserPortionSizeMethod } from '@intake24/common/types/http';
 
 export default Vue.extend({
   computed: {

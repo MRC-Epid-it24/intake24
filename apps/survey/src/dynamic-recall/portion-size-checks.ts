@@ -1,5 +1,5 @@
-import { FoodState } from '@common/types';
-import { PortionSizeMethodId } from '@common/types/models';
+import { FoodState } from '@intake24/common/types';
+import { PortionSizeMethodId } from '@intake24/common/types/models';
 
 export function portionSizeMethodSelected(
   selectedFood: FoodState,

@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { QuantityValues } from '@common/prompts';
+import { QuantityValues } from '@intake24/common/prompts';
 
 export default Vue.extend({
   name: 'QuantityCard',

@@ -1,6 +1,9 @@
 import { BelongsTo, Column, DataType, ForeignKey, Table, Scopes } from 'sequelize-typescript';
 import { FoodsLocale, Food, Category } from '@intake24/db';
-import { AssociatedFoodAttributes, AssociatedFoodCreationAttributes } from '@common/types/models';
+import {
+  AssociatedFoodAttributes,
+  AssociatedFoodCreationAttributes,
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 
 @Scopes(() => ({

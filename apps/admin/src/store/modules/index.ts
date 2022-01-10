@@ -1,5 +1,5 @@
 import { ModuleTree } from 'vuex';
-import { RootState } from '@/types';
+import { RootState } from '@intake24/admin/types';
 import loading from './loading';
 import auth from './auth';
 import user from './user';

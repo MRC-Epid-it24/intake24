@@ -5,9 +5,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
-import { BasePromptProps } from '@common/prompts';
-import { CustomPromptAnswer } from '@common/types';
-import customPrompts from '@/components/prompts/custom';
+import { BasePromptProps } from '@intake24/common/prompts';
+import { CustomPromptAnswer } from '@intake24/common/types';
+import customPrompts from '@intake24/survey/components/prompts/custom';
 
 export default Vue.extend({
   name: 'CustomPromptHandler',

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import ioc from '@api/ioc';
-import { wrapAsync } from '@api/util';
-import { canManageFoodDatabase, permission } from '@api/http/middleware/acl';
+import ioc from '@intake24/api/ioc';
+import { wrapAsync } from '@intake24/api/util';
+import { canManageFoodDatabase, permission } from '@intake24/api/http/middleware/acl';
 import categories from './categories';
 import foods from './foods';
 

@@ -103,11 +103,11 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { JobEntry } from '@common/types/http/admin';
-import detailMixin from '@/components/entry/detail-mixin';
-import { PollsForJobs } from '@/components/polls-for-jobs';
-import { form } from '@/helpers';
-import { DetailMixin } from '@/types';
+import { JobEntry } from '@intake24/common/types/http/admin';
+import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { PollsForJobs } from '@intake24/admin/components/polls-for-jobs';
+import { form } from '@intake24/admin/helpers';
+import { DetailMixin } from '@intake24/admin/types';
 
 type mixins = InstanceType<typeof PollsForJobs>;
 

@@ -1,6 +1,6 @@
-import { DrinkwareSetResponse, DrinkwareScaleResponse } from '@common/types/http';
+import { DrinkwareSetResponse, DrinkwareScaleResponse } from '@intake24/common/types/http';
 import { DrinkwareScale, DrinkwareSet } from '@intake24/db';
-import { InternalServerError } from '@api/http/errors';
+import { InternalServerError } from '@intake24/api/http/errors';
 
 export interface DrinkwareResponse {
   scaleResponse: (item: DrinkwareScale) => DrinkwareScaleResponse;

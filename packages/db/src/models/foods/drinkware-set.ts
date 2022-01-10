@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-import { DrinkwareSetAttributes } from '@common/types/models';
+import { DrinkwareSetAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { DrinkwareScale, GuideImage } from '.';
 

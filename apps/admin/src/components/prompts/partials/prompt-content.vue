@@ -36,8 +36,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { LocaleTranslation } from '@common/types';
-import tinymce from '@/components/tinymce/tinymce';
+import { LocaleTranslation } from '@intake24/common/types';
+import tinymce from '@intake24/admin/components/tinymce/tinymce';
 import LanguageSelector from './language-selector.vue';
 
 export default Vue.extend({

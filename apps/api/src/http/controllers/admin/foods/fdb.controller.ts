@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { PaginateQuery, FoodsLocale, SystemLocale, WhereOptions } from '@intake24/db';
-import { LocaleEntry, LocalesResponse } from '@common/types/http/admin';
-import { LocaleAttributes } from '@common/types/models';
-import { foodDatabaseMaintainerPrefix, foodsAdmin } from '@api/services';
-import { NotFoundError } from '@api/http/errors';
+import { LocaleEntry, LocalesResponse } from '@intake24/common/types/http/admin';
+import { LocaleAttributes } from '@intake24/common/types/models';
+import { foodDatabaseMaintainerPrefix, foodsAdmin } from '@intake24/api/services';
+import { NotFoundError } from '@intake24/api/http/errors';
 import type { Controller, CrudActions } from '../../controller';
 
 export type AdminFoodDatabaseController = Controller<Extract<CrudActions, 'browse' | 'read'>>;

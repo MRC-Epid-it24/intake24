@@ -1,4 +1,4 @@
-import { UserPhysicalDataResponse } from '@common/types/http';
+import { UserPhysicalDataResponse } from '@intake24/common/types/http';
 import http from './http.service';
 
 export default {

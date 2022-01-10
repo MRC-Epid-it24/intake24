@@ -73,10 +73,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { copy } from '@common/util';
-import { AsServedImageEntry } from '@common/types/http/admin';
+import { copy } from '@intake24/common/util';
+import { AsServedImageEntry } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
-import { form } from '@/helpers';
+import { form } from '@intake24/admin/helpers';
 
 type AsServedImageForm = {
   image: File | null;

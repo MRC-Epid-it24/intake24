@@ -7,7 +7,7 @@ import {
   Scopes,
   Table,
 } from 'sequelize-typescript';
-import { FoodLocalAttributes, FoodLocalCreationAttributes } from '@common/types/models';
+import { FoodLocalAttributes, FoodLocalCreationAttributes } from '@intake24/common/types/models';
 import {
   Food,
   FoodLocalList,

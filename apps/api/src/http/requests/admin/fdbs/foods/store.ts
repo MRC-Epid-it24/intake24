@@ -1,5 +1,5 @@
 import { checkSchema } from 'express-validator';
-import validate from '@api/http/requests/validate';
+import validate from '@intake24/api/http/requests/validate';
 import defaults from './defaults';
 import { attributes, categories } from '../common';
 

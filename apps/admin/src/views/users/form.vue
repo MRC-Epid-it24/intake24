@@ -145,11 +145,11 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { CustomField } from '@common/types';
-import { UserEntry } from '@common/types/http/admin';
-import formMixin from '@/components/entry/form-mixin';
-import { form } from '@/helpers';
-import { FormMixin } from '@/types';
+import { CustomField } from '@intake24/common/types';
+import { UserEntry } from '@intake24/common/types/http/admin';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { form } from '@intake24/admin/helpers';
+import { FormMixin } from '@intake24/admin/types';
 
 type UserForm = {
   id: string | null;

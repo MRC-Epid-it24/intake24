@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator';
-import validate from '@api/http/requests/validate';
-import { reCaptcha } from '@api/http/rules';
-import ioc from '@api/ioc';
+import validate from '@intake24/api/http/requests/validate';
+import { reCaptcha } from '@intake24/api/http/rules';
+import ioc from '@intake24/api/ioc';
 
 const config = ioc.resolve('servicesConfig');
 

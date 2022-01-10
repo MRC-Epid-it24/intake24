@@ -90,9 +90,9 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import orderBy from 'lodash/orderBy';
-import formMixin from '@/components/entry/form-mixin';
-import { form } from '@/helpers';
-import { FormMixin } from '@/types';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { form } from '@intake24/admin/helpers';
+import { FormMixin } from '@intake24/admin/types';
 
 type LanguageForm = {
   id: string | null;

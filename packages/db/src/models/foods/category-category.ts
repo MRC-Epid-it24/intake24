@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import { CategoryCategoryAttributes } from '@common/types/models';
+import { CategoryCategoryAttributes } from '@intake24/common/types/models';
 import { Category } from '@intake24/db';
 import BaseModel from '../model';
 

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { PermissionEntry, PermissionsResponse } from '@common/types/http/admin';
+import { PermissionEntry, PermissionsResponse } from '@intake24/common/types/http/admin';
 import { Permission, PaginateQuery } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import type { Controller, CrudActions } from '@api/http/controllers';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { Controller, CrudActions } from '@intake24/api/http/controllers';
 
 export type PermissionController = Controller<CrudActions>;
 

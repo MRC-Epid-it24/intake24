@@ -1,7 +1,7 @@
-import { CreateGuideImageInput, UpdateGuideImageInput } from '@common/types/http/admin';
+import { CreateGuideImageInput, UpdateGuideImageInput } from '@intake24/common/types/http/admin';
 import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 
 export interface GuideImageService {
   create: (input: CreateGuideImageInput) => Promise<GuideImage>;

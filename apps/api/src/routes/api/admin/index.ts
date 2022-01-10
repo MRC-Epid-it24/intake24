@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate } from '@api/http/middleware/acl';
+import { authenticate } from '@intake24/api/http/middleware/acl';
 
 import fdbs from './fdbs';
 import foodGroups from './food-groups';

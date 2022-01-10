@@ -1,6 +1,9 @@
-import { InheritableAttributes } from '@api/services/foods/types/inheritable-attributes';
+import { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
 import { AttributeDefaults, CategoryAttribute, FoodAttribute } from '@intake24/db';
-import { getCategoryParentCategories, getFoodParentCategories } from '@api/services/foods/common';
+import {
+  getCategoryParentCategories,
+  getFoodParentCategories,
+} from '@intake24/api/services/foods/common';
 
 export interface InheritableAttributesService {
   resolveInheritableAttributes(foodCode: string): Promise<InheritableAttributes>;

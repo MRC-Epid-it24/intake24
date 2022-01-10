@@ -1,4 +1,4 @@
-import { LoginResponse, MFAResponse } from '@common/types/http';
+import { LoginResponse, MFAResponse } from '@intake24/common/types/http';
 import http from './http.service';
 
 export type LoginRequest = { email: string; password: string };

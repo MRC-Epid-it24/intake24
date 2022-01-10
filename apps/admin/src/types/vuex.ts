@@ -1,4 +1,4 @@
-import { Dictionary } from '@common/types';
+import { Dictionary } from '@intake24/common/types';
 import { AxiosError } from 'axios';
 
 export interface RootState {

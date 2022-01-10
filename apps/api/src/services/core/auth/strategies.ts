@@ -1,6 +1,6 @@
 import { PassportStatic } from 'passport';
 import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
-import security from '@api/config/security';
+import security from '@intake24/api/config/security';
 import { User } from '@intake24/db';
 
 const { issuer, access } = security.jwt;

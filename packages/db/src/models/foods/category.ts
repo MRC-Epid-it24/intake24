@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import { BelongsToMany, Column, DataType, HasMany, HasOne, Table } from 'sequelize-typescript';
-import { CategoryAttributes, CategoryCreationAttributes } from '@common/types/models';
+import { CategoryAttributes, CategoryCreationAttributes } from '@intake24/common/types/models';
 import {
   AssociatedFood,
   CategoryAttribute,

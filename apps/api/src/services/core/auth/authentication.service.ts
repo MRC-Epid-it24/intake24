@@ -1,8 +1,8 @@
 import { Request } from 'express';
 import { Op, Permission, User, UserPassword, UserSurveyAlias } from '@intake24/db';
-import { UnauthorizedError } from '@api/http/errors';
-import { supportedAlgorithms } from '@api/util/passwords';
-import type { IoC } from '@api/ioc';
+import { UnauthorizedError } from '@intake24/api/http/errors';
+import { supportedAlgorithms } from '@intake24/api/util/passwords';
+import type { IoC } from '@intake24/api/ioc';
 import type { Subject, Tokens } from '.';
 import type { MFARequest } from './mfa';
 

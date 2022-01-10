@@ -9,10 +9,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { BasePromptProps, QuantityValues } from '@common/prompts';
-import { EncodedFood, SelectedGuideImageObject } from '@common/types';
-import { GuideImageParameters } from '@common/types/http';
-import GuideImagePrompt from '@/components/prompts/portion/GuideImagePrompt.vue';
+import { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
+import { EncodedFood, SelectedGuideImageObject } from '@intake24/common/types';
+import { GuideImageParameters } from '@intake24/common/types/http';
+import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;

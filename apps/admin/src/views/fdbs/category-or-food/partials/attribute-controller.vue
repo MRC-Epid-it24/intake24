@@ -93,8 +93,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import isEqual from 'lodash/isEqual';
-import { Attributes, AttributeType, Nullable, useInRecipeTypes } from '@common/types/models';
-import { Errors } from '@common/util';
+import {
+  Attributes,
+  AttributeType,
+  Nullable,
+  useInRecipeTypes,
+} from '@intake24/common/types/models';
+import { Errors } from '@intake24/common/util';
 
 const defaultAttributes: Attributes = {
   sameAsBeforeOption: false,

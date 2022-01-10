@@ -1,6 +1,6 @@
 import { NavigationGuard } from 'vue-router';
 import { Store } from 'vuex';
-import { RootState } from '@/types/vuex';
+import { RootState } from '@intake24/survey/types/vuex';
 
 export const surveyParametersGuard =
   (store: Store<RootState>): NavigationGuard =>

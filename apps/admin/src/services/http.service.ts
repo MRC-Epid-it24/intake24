@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse, Method } from 'axios';
 import Vue from 'vue';
-import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@/types/http';
+import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/admin/types/http';
 
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];

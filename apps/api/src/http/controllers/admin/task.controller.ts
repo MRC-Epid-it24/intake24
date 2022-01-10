@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { jobTypes, JobType } from '@common/types';
-import { TaskEntry, TaskRefs, TasksResponse } from '@common/types/http/admin';
+import { jobTypes, JobType } from '@intake24/common/types';
+import { TaskEntry, TaskRefs, TasksResponse } from '@intake24/common/types/http/admin';
 import { Task, User, PaginateQuery } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import { Controller, CrudActions } from '../controller';
 
 export type TaskController = Controller<CrudActions | 'run'>;

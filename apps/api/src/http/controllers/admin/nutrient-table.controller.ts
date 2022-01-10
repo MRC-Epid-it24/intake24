@@ -5,10 +5,10 @@ import {
   NutrientTableRefs,
   NutrientTablesResponse,
   JobEntry,
-} from '@common/types/http/admin';
+} from '@intake24/common/types/http/admin';
 import { FoodsNutrientType, NutrientTable, User, PaginateQuery } from '@intake24/db';
-import type { IoC } from '@api/ioc';
-import { ValidationError } from '@api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import { ValidationError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
 import { Controller, CrudActions } from '../controller';
 

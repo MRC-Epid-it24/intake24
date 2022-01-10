@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { AsServedImageEntry, AsServedImagesResponse } from '@common/types/http/admin';
-import { NotFoundError, ValidationError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
+import { AsServedImageEntry, AsServedImagesResponse } from '@intake24/common/types/http/admin';
+import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import { AsServedImage, AsServedSet, User, PaginateQuery } from '@intake24/db';
-import imagesResponseCollection from '@api/http/responses/admin/images';
+import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { Controller } from '../../controller';
 
 export type AsServedImageController = Controller<'browse' | 'store' | 'read' | 'destroy'>;

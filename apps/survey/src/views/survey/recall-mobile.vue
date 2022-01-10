@@ -65,15 +65,15 @@
 </template>
 
 <script lang="ts">
-import { FoodState } from '@common/types';
-import MealListMobileBottom from '@/components/recall/mobile/MealListMobileBottom.vue';
-import FoodListMobileBottom from '@/components/recall/mobile/FoodListMobileBottom.vue';
-import RecallBreadCrumbsMobile from '@/components/recall/mobile/BreadCrumbsMobile.vue';
-import MealFoodMobileContextMenu from '@/components/recall/MobileMealFoodContext.vue';
+import { FoodState } from '@intake24/common/types';
+import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
+import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
+import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
+import MealFoodMobileContextMenu from '@intake24/survey/components/recall/MobileMealFoodContext.vue';
 
-import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
-import BottomNavigationMobile from '@/components/recall/mobile/BottomNavMobile.vue';
-import Review from '@/components/recall/mobile/review/Review.vue';
+import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
+import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
+import Review from '@intake24/survey/components/recall/mobile/review/Review.vue';
 import Recall from './recall';
 
 export default Recall.extend({

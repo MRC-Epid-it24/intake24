@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import detailMixin from '@/components/entry/detail-mixin';
+import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 
 export default Vue.extend({
   name: 'RoleDetail',

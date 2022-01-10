@@ -1,11 +1,11 @@
 import Vue, { VueConstructor } from 'vue';
-import Continue from '@/components/prompts/actions/Continue.vue';
-import PortionLayout from '@/components/layouts/PortionLayout.vue';
-import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
+import Continue from '@intake24/survey/components/prompts/actions/Continue.vue';
+import PortionLayout from '@intake24/survey/components/layouts/PortionLayout.vue';
+import localeContent, { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
 import expansionPanelControls, {
   ExpansionPanelControls,
-} from '@/components/mixins/expansionPanelControls';
-import ValidInvalidIcon from '@/components/elements/ValidInvalidIcon.vue';
+} from '@intake24/survey/components/mixins/expansionPanelControls';
+import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 
 export type ExpansionPortion = LocaleContent & ExpansionPanelControls;
 

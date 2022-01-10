@@ -1,5 +1,8 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { UserCustomFieldAttributes, UserCustomFieldCreationAttributes } from '@common/types/models';
+import {
+  UserCustomFieldAttributes,
+  UserCustomFieldCreationAttributes,
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 

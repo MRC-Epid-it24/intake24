@@ -3,7 +3,7 @@ import {
   FoodAttributeAttributes,
   FoodAttributeCreationAttributes,
   UseInRecipeType,
-} from '@common/types/models';
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import Food from './food';
 

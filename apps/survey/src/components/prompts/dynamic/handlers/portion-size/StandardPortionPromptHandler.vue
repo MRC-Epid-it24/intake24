@@ -8,9 +8,9 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { BasePromptProps, QuantityValues } from '@common/prompts';
-import { EncodedFood, StandardPortionUnit } from '@common/types';
-import StandardPortionPrompt from '@/components/prompts/portion/StandardPortionPrompt.vue';
+import { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
+import { EncodedFood, StandardPortionUnit } from '@intake24/common/types';
+import StandardPortionPrompt from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;

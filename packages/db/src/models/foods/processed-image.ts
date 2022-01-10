@@ -3,7 +3,7 @@ import {
   ProcessedImageAttributes,
   ProcessedImageCreationAttributes,
   ProcessedImagePurpose,
-} from '@common/types/models/foods';
+} from '@intake24/common/types/models/foods';
 import BaseModel from '../model';
 import { AsServedImage, AsServedSet, ImageMap, SourceImage } from '.';
 

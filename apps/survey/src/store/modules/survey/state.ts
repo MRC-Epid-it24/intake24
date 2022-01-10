@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import { SurveyState } from '@/types/vuex';
-import { surveyInitialState } from '@/dynamic-recall/dynamic-recall';
+import { SurveyState } from '@intake24/survey/types/vuex';
+import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
 
 export const LS_KEY_STATE = 'state';
 export const LS_KEY_HISTORY = 'history';

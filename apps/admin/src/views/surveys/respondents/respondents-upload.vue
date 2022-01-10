@@ -51,8 +51,8 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { JobEntry } from '@common/types/http/admin';
-import { form } from '@/helpers';
+import { JobEntry } from '@intake24/common/types/http/admin';
+import { form } from '@intake24/admin/helpers';
 import respondentsJob from './respondents-job';
 
 type mixins = InstanceType<typeof respondentsJob>;

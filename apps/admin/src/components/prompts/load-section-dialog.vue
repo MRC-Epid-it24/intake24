@@ -85,12 +85,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { copy } from '@common/util';
+import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
-import { SchemeEntry, SchemesResponse } from '@common/types/http/admin';
-import { RecallQuestions } from '@common/schemes';
-import { Meal } from '@common/types';
-import { ExportSection } from '@common/types/models';
+import { SchemeEntry, SchemesResponse } from '@intake24/common/types/http/admin';
+import { RecallQuestions } from '@intake24/common/schemes';
+import { Meal } from '@intake24/common/types';
+import { ExportSection } from '@intake24/common/types/models';
 
 type LoadSectionDialog = {
   debouncedFetch: () => void;

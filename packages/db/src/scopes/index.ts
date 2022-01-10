@@ -1,4 +1,4 @@
-import { SurveySubmissionAttributes } from '@common/types/models';
+import { SurveySubmissionAttributes } from '@intake24/common/types/models';
 import { FindOptions, WhereOptions } from 'sequelize';
 import {
   User,

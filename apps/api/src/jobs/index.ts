@@ -1,4 +1,4 @@
-import { JobType } from '@common/types';
+import { JobType } from '@intake24/common/types';
 import CleanRedisStore from './clean-redis-store';
 import CleanStorageFiles from './clean-storage-files';
 import PurgeRefreshTokens from './purge-refresh-tokens';

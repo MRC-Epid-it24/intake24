@@ -15,9 +15,9 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { merge } from '@common/util';
-import { MilkHotDrinkPromptProps, milkHotDrinkPromptDefaultProps } from '@common/prompts';
-import localeContent from '@/components/mixins/localeContent';
+import { merge } from '@intake24/common/util';
+import { MilkHotDrinkPromptProps, milkHotDrinkPromptDefaultProps } from '@intake24/common/prompts';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({

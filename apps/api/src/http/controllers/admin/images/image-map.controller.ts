@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { ImageMapEntry, ImageMapListEntry, ImageMapsResponse } from '@common/types/http/admin';
-import { NotFoundError, ValidationError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
+import {
+  ImageMapEntry,
+  ImageMapListEntry,
+  ImageMapsResponse,
+} from '@intake24/common/types/http/admin';
+import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import { ImageMap, User, PaginateQuery } from '@intake24/db';
-import imagesResponseCollection from '@api/http/responses/admin/images';
+import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { Controller, CrudActions } from '../../controller';
 
 export type ImageMapController = Controller<CrudActions>;

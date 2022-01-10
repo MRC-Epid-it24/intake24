@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { checkSchema } from 'express-validator';
-import validate from '@api/http/requests/validate';
+import validate from '@intake24/api/http/requests/validate';
 import { UserSurveyAlias } from '@intake24/db';
 import { identifiers, password } from '../defaults';
 

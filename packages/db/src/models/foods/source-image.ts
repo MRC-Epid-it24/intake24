@@ -1,5 +1,8 @@
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-import { SourceImageAttributes, SourceImageCreationAttributes } from '@common/types/models/foods';
+import {
+  SourceImageAttributes,
+  SourceImageCreationAttributes,
+} from '@intake24/common/types/models/foods';
 import BaseModel from '../model';
 import { ProcessedImage, SourceImageKeyword } from '.';
 

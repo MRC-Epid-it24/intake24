@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { UserEntry, UserRefs, UsersResponse } from '@common/types/http/admin';
+import { UserEntry, UserRefs, UsersResponse } from '@intake24/common/types/http/admin';
 import { Permission, Role, User, PaginateQuery } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import { userEntryResponse } from '@api/http/responses/admin';
-import type { IoC } from '@api/ioc';
-import type { Controller, CrudActions } from '@api/http/controllers';
+import { NotFoundError } from '@intake24/api/http/errors';
+import { userEntryResponse } from '@intake24/api/http/responses/admin';
+import type { IoC } from '@intake24/api/ioc';
+import type { Controller, CrudActions } from '@intake24/api/http/controllers';
 
 export type AdminUserController = Controller<CrudActions>;
 

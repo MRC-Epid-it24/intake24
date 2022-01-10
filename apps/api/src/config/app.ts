@@ -1,4 +1,4 @@
-import { Environment } from '@common/types';
+import { Environment } from '@intake24/common/types';
 
 export type Site = 'base' | 'admin' | 'survey' | 'images' | 'docs';
 export type SiteUrls = Record<Site, string>;

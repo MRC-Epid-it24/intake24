@@ -90,10 +90,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-// // import prompts from '@/components/prompts/';
-// import { portionSizeOptionPromptDefaultProps } from '@/common/prompts/promptDefaults';
-// import { PortionSizeOptionPromptProps } from '@common/types/promptProps';
-import portionPrompts from '@/components/prompts/portion';
+// // import prompts from '@intake24/survey/components/prompts/';
+// import { portionSizeOptionPromptDefaultProps } from '@intake24/survey/common/prompts/promptDefaults';
+// import { PortionSizeOptionPromptProps } from '@intake24/common/types/promptProps';
+import portionPrompts from '@intake24/survey/components/prompts/portion';
 
 export default Vue.extend({
   name: 'PortionTest',

@@ -2,12 +2,12 @@ import { Job } from 'bullmq';
 import fs from 'fs-extra';
 import { Transform } from 'json2csv';
 import path from 'path';
-import { SurveyDataExportParams } from '@common/types';
+import { SurveyDataExportParams } from '@intake24/common/types';
 import { Job as DbJob } from '@intake24/db';
-import type { IoC } from '@api/ioc';
-import { NotFoundError } from '@api/http/errors';
-import { EMPTY } from '@api/services/admin/data-export';
-import { addTime } from '@api/util';
+import type { IoC } from '@intake24/api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
+import { EMPTY } from '@intake24/api/services/admin/data-export';
+import { addTime } from '@intake24/api/util';
 import BaseJob from './job';
 
 export default class SurveyDataExport extends BaseJob<SurveyDataExportParams> {

@@ -8,9 +8,12 @@ import {
   submissionScope,
 } from '@intake24/db';
 import { validate } from 'uuid';
-import { SurveySubmissionEntry, SurveySubmissionsResponse } from '@common/types/http/admin';
-import { SurveySubmissionAttributes } from '@common/types/models';
-import { NotFoundError } from '@api/http/errors';
+import {
+  SurveySubmissionEntry,
+  SurveySubmissionsResponse,
+} from '@intake24/common/types/http/admin';
+import { SurveySubmissionAttributes } from '@intake24/common/types/models';
+import { NotFoundError } from '@intake24/api/http/errors';
 import { Controller } from '../../controller';
 
 export type AdminSurveySubmissionController = Controller<'browse' | 'entry' | 'destroy'>;

@@ -1,4 +1,4 @@
-import { WordOps } from '@api/food-index/phrase-index';
+import { WordOps } from '@intake24/api/food-index/phrase-index';
 
 export default class EnglishWordOps implements WordOps {
   // eslint-disable-next-line class-methods-use-this

@@ -52,11 +52,11 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { merge } from '@common/util';
-import { BasePromptProps, basePromptProps } from '@common/prompts';
-import { UserPortionSizeMethod } from '@common/types/http/foods';
-import { LocaleTranslation } from '@common/types';
-import localeContent from '@/components/mixins/localeContent';
+import { merge } from '@intake24/common/util';
+import { BasePromptProps, basePromptProps } from '@intake24/common/prompts';
+import { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
+import { LocaleTranslation } from '@intake24/common/types';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 
 // For user to select which portion size estimation method they want to use

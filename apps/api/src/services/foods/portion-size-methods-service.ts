@@ -1,4 +1,4 @@
-import { UserPortionSizeMethod } from '@common/types/http/foods/user-food-data';
+import { UserPortionSizeMethod } from '@intake24/common/types/http/foods/user-food-data';
 import {
   CategoryLocal,
   CategoryPortionSizeMethod,
@@ -11,7 +11,7 @@ import {
   getCategoryParentCategories,
   getFoodParentCategories,
   getParentLocale,
-} from '@api/services/foods/common';
+} from '@intake24/api/services/foods/common';
 
 import {
   toUserCategoryPortionSizeMethod,

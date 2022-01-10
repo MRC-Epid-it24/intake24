@@ -1,5 +1,5 @@
 import { Module } from 'vuex';
-import { EntryState, RootState } from '@/types';
+import { EntryState, RootState } from '@intake24/admin/types';
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';

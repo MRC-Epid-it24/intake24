@@ -65,7 +65,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import VueRecaptcha from 'vue-recaptcha';
-import { form } from '@/helpers';
+import { form } from '@intake24/admin/helpers';
 
 type PasswordRequestRefs = {
   $refs: {

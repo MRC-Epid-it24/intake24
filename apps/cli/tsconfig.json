@@ -6,8 +6,8 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@cli/*": ["src/*"],
-      "@common/*": ["../../packages/common/src/*"]
+      "@intake24/cli/*": ["src/*"],
+      "@intake24/common/*": ["../../packages/common/src/*"]
     },
   },
   "include": [

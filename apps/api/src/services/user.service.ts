@@ -1,5 +1,5 @@
 import { UserPhysicalData } from '@intake24/db';
-import type { UserPhysicalDataAttributes } from '@common/types/models';
+import type { UserPhysicalDataAttributes } from '@intake24/common/types/models';
 
 export type UpdatePasswordInput = {
   currentPassword: string;

@@ -98,9 +98,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { copy } from '@common/util';
+import { copy } from '@intake24/common/util';
 import isEqual from 'lodash/isEqual';
-import { PromptQuestion } from '@common/prompts';
+import { PromptQuestion } from '@intake24/common/prompts';
 import { ConfirmDialog } from '@intake24/ui';
 import { MoveSection } from './prompt-list.vue';
 import SaveAsTemplateDialog from './save-as-template-dialog.vue';

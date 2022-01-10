@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequel
 import {
   UserPasswordResetAttributes,
   UserPasswordResetCreationAttributes,
-} from '@common/types/models';
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 

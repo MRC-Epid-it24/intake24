@@ -3,7 +3,7 @@
 import { CountOptions, FindOptions, Op } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Readable } from 'stream';
-import { Pagination, PaginationMeta } from '@common/types/models';
+import { Pagination, PaginationMeta } from '@intake24/common/types/models';
 
 export type PaginateQuery = {
   page?: number;

@@ -1,6 +1,6 @@
 import { ActionTree } from 'vuex';
-import { AuthState, RootState } from '@/types';
-import authSvc, { LoginRequest, MFAVerifyRequest } from '@/services/auth.service';
+import { AuthState, RootState } from '@intake24/admin/types';
+import authSvc, { LoginRequest, MFAVerifyRequest } from '@intake24/admin/services/auth.service';
 
 const actions: ActionTree<AuthState, RootState> = {
   async login({ commit, dispatch }, payload: LoginRequest) {

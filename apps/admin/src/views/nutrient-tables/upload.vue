@@ -57,12 +57,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { JobEntry, NutrientTableEntry, NutrientTableRefs } from '@common/types/http/admin';
-import { JobType } from '@common/types';
-import { DetailMixin } from '@/types';
-import detailMixin from '@/components/entry/detail-mixin';
-import { PollsForJobs } from '@/components/polls-for-jobs';
-import { form } from '@/helpers';
+import { JobEntry, NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
+import { JobType } from '@intake24/common/types';
+import { DetailMixin } from '@intake24/admin/types';
+import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { PollsForJobs } from '@intake24/admin/components/polls-for-jobs';
+import { form } from '@intake24/admin/helpers';
 
 type Mixins = InstanceType<typeof PollsForJobs>;
 

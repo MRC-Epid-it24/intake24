@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import { Column, DataType, HasMany, Table, BelongsTo } from 'sequelize-typescript';
-import { LocaleAttributes, LocaleCreationAttributes } from '@common/types/models';
+import { LocaleAttributes, LocaleCreationAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { AssociatedFood } from '.';
 

@@ -4,11 +4,11 @@ import {
   JobEntry,
   SurveyRespondentEntry,
   SurveyRespondentsResponse,
-} from '@common/types/http/admin';
+} from '@intake24/common/types/http/admin';
 import { Survey, User, UserCustomField, UserSurveyAlias, PaginateQuery } from '@intake24/db';
-import { NotFoundError, ValidationError } from '@api/http/errors';
-import { userRespondentResponse } from '@api/http/responses/admin';
-import type { IoC } from '@api/ioc';
+import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import { userRespondentResponse } from '@intake24/api/http/responses/admin';
+import type { IoC } from '@intake24/api/ioc';
 import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyRespondentController = Controller<

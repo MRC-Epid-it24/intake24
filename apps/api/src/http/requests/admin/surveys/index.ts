@@ -1,4 +1,4 @@
-import { browse } from '@api/http/requests/admin/generic';
+import { browse } from '@intake24/api/http/requests/admin/generic';
 import store from './store';
 import patch from './patch';
 import put from './put';

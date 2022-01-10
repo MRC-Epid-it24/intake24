@@ -1,7 +1,7 @@
 import Vue from 'vue';
-import { JobEntry } from '@common/types/http/admin';
-import { JobType } from '@common/types';
-import { downloadFile } from '@/util/fs';
+import { JobEntry } from '@intake24/common/types/http/admin';
+import { JobType } from '@intake24/common/types';
+import { downloadFile } from '@intake24/admin/util/fs';
 import PollsJobList from './polls-job-list.vue';
 
 export default Vue.extend({

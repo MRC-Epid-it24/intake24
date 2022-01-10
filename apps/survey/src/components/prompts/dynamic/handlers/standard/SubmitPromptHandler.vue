@@ -4,8 +4,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { BasePromptProps } from '@common/prompts';
-import SubmitPrompt from '@/components/prompts/standard/SubmitPrompt.vue';
+import { BasePromptProps } from '@intake24/common/prompts';
+import SubmitPrompt from '@intake24/survey/components/prompts/standard/SubmitPrompt.vue';
 
 export default Vue.extend({
   name: 'SubmitPromptHandler',

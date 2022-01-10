@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex';
 import axios from 'axios';
-import { AuthState, RootState } from '@/types/vuex';
-import authSvc, { LoginRequest, TokenRequest } from '@/services/auth.service';
+import { AuthState, RootState } from '@intake24/survey/types/vuex';
+import authSvc, { LoginRequest, TokenRequest } from '@intake24/survey/services/auth.service';
 
 type LoginPayload = {
   type: 'login';

@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-t
 import {
   SurveySubmissionAttributes,
   SurveySubmissionCreationAttributes,
-} from '@common/types/models';
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from '.';
 

@@ -1,8 +1,8 @@
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { TranslateResult } from 'vue-i18n';
-import { FoodState, LocaleTranslation } from '@common/types';
-import localeContent, { LocaleContent } from '@/components/mixins/localeContent';
+import { FoodState, LocaleTranslation } from '@intake24/common/types';
+import localeContent, { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
 
 export type BrdCrumbs = {
   text: string | TranslateResult | null;

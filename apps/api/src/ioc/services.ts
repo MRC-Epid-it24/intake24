@@ -30,9 +30,9 @@ import {
   portionSizeService,
   surveyService,
   userService,
-} from '@api/services';
+} from '@intake24/api/services';
 
-import { JobsQueueHandler, TasksQueueHandler } from '@api/services/core/queues';
+import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 
 export default (container: AwilixContainer): void => {
   container.register({

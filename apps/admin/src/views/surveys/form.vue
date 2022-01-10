@@ -358,7 +358,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { SchemeOverrides, defaultOverrides } from '@common/schemes';
+import { SchemeOverrides, defaultOverrides } from '@intake24/common/schemes';
 import {
   searchSortingAlgorithms,
   SearchSortingAlgorithm,
@@ -366,10 +366,10 @@ import {
   SurveyState,
   staffUpdateSurveyFields,
   StaffUpdateSurveyFields,
-} from '@common/types/models';
+} from '@intake24/common/types/models';
 import { pick } from 'lodash';
-import formMixin from '@/components/entry/form-mixin';
-import { form } from '@/helpers';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { form } from '@intake24/admin/helpers';
 
 export type SurveyForm = {
   id: string | null;

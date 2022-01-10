@@ -16,17 +16,17 @@ import {
   submissionScope,
 } from '@intake24/db';
 import * as uuid from 'uuid';
-import { SurveyState } from '@common/types';
-import { SurveyUserInfoResponse, SurveyFollowUpResponse } from '@common/types/http';
-import { PromptQuestion, RedirectPromptProps } from '@common/prompts';
+import { SurveyState } from '@intake24/common/types';
+import { SurveyUserInfoResponse, SurveyFollowUpResponse } from '@intake24/common/types/http';
+import { PromptQuestion, RedirectPromptProps } from '@intake24/common/prompts';
 import {
   ApplicationError,
   ForbiddenError,
   InternalServerError,
   NotFoundError,
-} from '@api/http/errors';
-import type { IoC } from '@api/ioc';
-import { jwt } from '@api/util';
+} from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import { jwt } from '@intake24/api/util';
 
 export type RespondentWithPassword = {
   respondent: UserSurveyAlias;

@@ -2,10 +2,10 @@ import fs from 'fs-extra';
 import path from 'path';
 import sharp from 'sharp';
 import * as uuid from 'uuid';
-import { ProcessedImagePurposes } from '@common/types/models';
+import { ProcessedImagePurposes } from '@intake24/common/types/models';
 import { ProcessedImage, SourceImage } from '@intake24/db';
-import type { IoC } from '@api/ioc';
-import { NotFoundError } from '@api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
 
 export type SelectionImageType = 'guide' | 'as_served';
 

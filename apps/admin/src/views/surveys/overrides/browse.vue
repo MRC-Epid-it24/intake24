@@ -30,14 +30,14 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { defaultOverrides, flattenScheme } from '@common/schemes';
-import { SurveyEntry, SurveyRefs } from '@common/types/http/admin';
-import { PromptQuestion } from '@common/prompts';
-import formMixin from '@/components/entry/form-mixin';
-import MealList from '@/components/meals/meal-list.vue';
-import PromptList from '@/components/prompts/list/prompt-list.vue';
-import { form } from '@/helpers';
-import { FormMixin } from '@/types';
+import { defaultOverrides, flattenScheme } from '@intake24/common/schemes';
+import { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
+import { PromptQuestion } from '@intake24/common/prompts';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import MealList from '@intake24/admin/components/meals/meal-list.vue';
+import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
+import { form } from '@intake24/admin/helpers';
+import { FormMixin } from '@intake24/admin/types';
 import { SurveyForm } from '../form.vue';
 
 export type SurveyOverridesForm = Pick<SurveyForm, 'overrides'>;

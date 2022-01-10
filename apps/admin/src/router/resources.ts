@@ -1,4 +1,4 @@
-import { Resource } from '@/types';
+import { Resource } from '@intake24/admin/types';
 
 const routes: string[] = ['create', 'read', 'edit'];
 

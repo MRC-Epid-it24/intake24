@@ -83,7 +83,7 @@ import axios from 'axios';
 import Vue, { VueConstructor } from 'vue';
 import VueRecaptcha from 'vue-recaptcha';
 import { mapActions } from 'vuex';
-import surveySvc from '@/services/survey.service';
+import surveySvc from '@intake24/survey/services/survey.service';
 
 type GenerateUserRefs = {
   $refs: {

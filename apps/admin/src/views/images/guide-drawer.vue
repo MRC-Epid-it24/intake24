@@ -116,7 +116,7 @@ import {
   GuideImageEntryObject,
   ImageMapEntry,
   ImageMapEntryObject,
-} from '@common/types/http/admin';
+} from '@intake24/common/types/http/admin';
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { VImg } from 'vuetify/lib';

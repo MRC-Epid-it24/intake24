@@ -1,4 +1,4 @@
-import { SurveyState } from '@common/types';
+import { SurveyState } from '@intake24/common/types';
 import {
   GenerateUserResponse,
   PublicSurveyEntryResponse,
@@ -6,7 +6,7 @@ import {
   SurveyEntryResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
-} from '@common/types/http';
+} from '@intake24/common/types/http';
 import http from './http.service';
 
 export type GenerateUserPayload = {

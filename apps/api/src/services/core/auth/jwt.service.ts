@@ -1,9 +1,9 @@
 import jwt, { Secret, SignOptions, VerifyOptions } from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
-import type { MFAProvider } from '@api/config';
-import { InternalServerError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
-import { btoa } from '@api/util';
+import type { MFAProvider } from '@intake24/api/config';
+import { InternalServerError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import { btoa } from '@intake24/api/util';
 
 export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken';
 

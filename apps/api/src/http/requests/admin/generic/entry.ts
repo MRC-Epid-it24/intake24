@@ -1,5 +1,5 @@
 import { checkSchema } from 'express-validator';
-import validate, { ValidationMiddleware } from '@api/http/requests/validate';
+import validate, { ValidationMiddleware } from '@intake24/api/http/requests/validate';
 
 export default (param: string): ValidationMiddleware[] => {
   return validate(

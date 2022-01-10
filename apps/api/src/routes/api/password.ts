@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import validation from '@api/http/requests/password';
-import ioc from '@api/ioc';
-import { wrapAsync } from '@api/util';
+import validation from '@intake24/api/http/requests/password';
+import ioc from '@intake24/api/ioc';
+import { wrapAsync } from '@intake24/api/util';
 
 const { config, passwordController } = ioc.cradle;
 

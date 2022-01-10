@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { permission } from '@api/http/middleware/acl';
-import validation from '@api/http/requests/admin/users/submissions';
-import ioc from '@api/ioc';
-import { wrapAsync } from '@api/util';
+import { permission } from '@intake24/api/http/middleware/acl';
+import validation from '@intake24/api/http/requests/admin/users/submissions';
+import ioc from '@intake24/api/ioc';
+import { wrapAsync } from '@intake24/api/util';
 
 const { adminSurveySubmissionController } = ioc.cradle;
 const router = Router({ mergeParams: true });

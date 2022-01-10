@@ -1,5 +1,5 @@
 import { Column, DataType, Table } from 'sequelize-typescript';
-import { PAOccurrenceTransactionCountAttributes } from '@common/types/models';
+import { PAOccurrenceTransactionCountAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 
 @Table({

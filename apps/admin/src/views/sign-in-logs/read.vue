@@ -40,10 +40,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { SignInLogEntry } from '@common/types/http/admin';
-import detailMixin from '@/components/entry/detail-mixin';
-import FormatsDateTime from '@/mixins/formats-date-time';
-import type { DetailMixin } from '@/types';
+import { SignInLogEntry } from '@intake24/common/types/http/admin';
+import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
+import type { DetailMixin } from '@intake24/admin/types';
 
 export default (Vue as VueConstructor<Vue & DetailMixin<SignInLogEntry>>).extend({
   name: 'SignInLogDetail',

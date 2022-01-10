@@ -34,8 +34,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import isEqual from 'lodash/isEqual';
-import { CategoryAttributes } from '@common/types/models';
-import { Errors } from '@common/util';
+import { CategoryAttributes } from '@intake24/common/types/models';
+import { Errors } from '@intake24/common/util';
 import LoadCategoryDialog from './add-category-dialog.vue';
 
 export default Vue.extend({

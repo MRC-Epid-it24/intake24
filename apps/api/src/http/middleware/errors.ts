@@ -1,7 +1,7 @@
 import { Express, Request, Response, NextFunction } from 'express';
 import { MulterError } from 'multer';
 import { DatabaseError } from '@intake24/db';
-import type { Ops } from '@api/app';
+import type { Ops } from '@intake24/api/app';
 import {
   ApplicationError,
   ForbiddenError,

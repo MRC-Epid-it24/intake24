@@ -1,11 +1,11 @@
 import { AxiosError, Method } from 'axios';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
-import type { Dictionary } from '@common/types';
-import { copy, merge, Errors } from '@common/util';
-import http from '@/services/http.service';
-import store from '@/store';
-import type { HttpRequestConfig } from '@/types/http';
+import type { Dictionary } from '@intake24/common/types';
+import { copy, merge, Errors } from '@intake24/common/util';
+import http from '@intake24/admin/services/http.service';
+import store from '@intake24/admin/store';
+import type { HttpRequestConfig } from '@intake24/admin/types/http';
 
 const getNestedKeys = <T extends Dictionary>(object: T, prefix?: string) =>
   Object.entries(object).reduce<string[]>((acc, [key, value]) => {

@@ -1,5 +1,8 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import { SplitListAttributes, SplitListCreationAttributes } from '@common/types/models/foods';
+import {
+  SplitListAttributes,
+  SplitListCreationAttributes,
+} from '@intake24/common/types/models/foods';
 import BaseModel from '../model';
 import { FoodsLocale } from '.';
 

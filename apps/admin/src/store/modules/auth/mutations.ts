@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
 import { AxiosError } from 'axios';
-import { AuthState } from '@/types';
+import { AuthState } from '@intake24/admin/types';
 import defaultState from './state';
 
 const mutations: MutationTree<AuthState> = {

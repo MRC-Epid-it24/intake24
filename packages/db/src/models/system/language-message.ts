@@ -1,7 +1,10 @@
 import { Column, DataType, Table, CreatedAt, UpdatedAt, BelongsTo } from 'sequelize-typescript';
 import { LocaleMessages } from '@intake24/i18n';
-import { LanguageMessageAttributes, LanguageMessageCreationAttributes } from '@common/types/models';
-import { Application } from '@common/types';
+import {
+  LanguageMessageAttributes,
+  LanguageMessageCreationAttributes,
+} from '@intake24/common/types/models';
+import { Application } from '@intake24/common/types';
 import BaseModel from '../model';
 import { Language } from '.';
 

@@ -1,12 +1,12 @@
 import Vue, { VueConstructor } from 'vue';
 import { Route } from 'vue-router';
-import { copy } from '@common/util';
+import { copy } from '@intake24/common/util';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
-import { Dictionary, ValidationError } from '@common/types';
-import { FormMixin } from '@/types';
-import { form } from '@/helpers';
-import SubmitFooter from '@/components/forms/submit-footer.vue';
+import { Dictionary, ValidationError } from '@intake24/common/types';
+import { FormMixin } from '@intake24/admin/types';
+import { form } from '@intake24/admin/helpers';
+import SubmitFooter from '@intake24/admin/components/forms/submit-footer.vue';
 import fetchEntry from './fetch-entry';
 import hasEntry from './has-entry';
 import Layout from './layout.vue';

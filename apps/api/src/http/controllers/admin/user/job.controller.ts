@@ -3,11 +3,11 @@ import fs from 'fs-extra';
 import { pick } from 'lodash';
 import path from 'path';
 import { Op, WhereOptions, Job, User, PaginateQuery } from '@intake24/db';
-import { JobEntry, JobsResponse } from '@common/types/http/admin';
-import { JobAttributes } from '@common/types/models';
-import { NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
-import type { Controller } from '@api/http/controllers';
+import { JobEntry, JobsResponse } from '@intake24/common/types/http/admin';
+import { JobAttributes } from '@intake24/common/types/models';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import type { Controller } from '@intake24/api/http/controllers';
 
 export type AdminUserJobController = Controller<'browse' | 'read' | 'download'>;
 

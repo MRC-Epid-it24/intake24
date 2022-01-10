@@ -3,8 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@common/*": ["../../packages/common/src/*"],
-      "@api/*": ["../api/src/*"],
+      "@intake24/common/*": ["../../packages/common/src/*"],
+      "@intake24/api/*": ["../api/src/*"],
       "@intake24/*": ["../../packages/*/src"]
     },
     "types": [

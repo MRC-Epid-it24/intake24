@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue, { CreateElement, VNode, VNodeChildren } from 'vue';
-import { LanguageMessageAttributes } from '@common/types/models';
-import { copy } from '@common/util';
+import { LanguageMessageAttributes } from '@intake24/common/types/models';
+import { copy } from '@intake24/common/util';
 import {
   VBtn,
   VCard,

@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import { HasEntryMixin } from '@/types';
+import { HasEntryMixin } from '@intake24/admin/types';
 
 export default (Vue as VueConstructor<Vue & HasEntryMixin>).extend({
   async beforeRouteUpdate(to, from, next) {

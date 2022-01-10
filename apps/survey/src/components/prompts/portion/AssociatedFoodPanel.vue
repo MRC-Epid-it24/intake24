@@ -54,18 +54,18 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { merge } from '@common/util';
-import { UserFoodData, UserPortionSizeMethod } from '@common/types/http';
+import { merge } from '@intake24/common/util';
+import { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 import {
   AssociatedFoodsPanelProps,
   associatedFoodPanelDefaultProps,
   FoodSearchPromptProps,
   BasePromptProps,
-} from '@common/prompts';
-import { LocaleTranslation } from '@common/types';
+} from '@intake24/common/prompts';
+import { LocaleTranslation } from '@intake24/common/types';
+import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
+import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import BaseExpansionPortion, { ExpansionPortion } from './BaseExpansionPortion';
-import FoodSearchPrompt from '@/components/prompts/standard/FoodSearchPrompt.vue';
-import PortionSizeOptionPrompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
 
 export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
   name: 'AssociatedFoodPanel',

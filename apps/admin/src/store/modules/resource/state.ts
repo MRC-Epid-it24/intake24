@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { ListState } from '@/types';
+import { ListState } from '@intake24/admin/types';
 
 export const FILTER_LS_KEY = 'filter';
 

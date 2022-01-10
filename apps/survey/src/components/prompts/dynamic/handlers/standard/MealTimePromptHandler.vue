@@ -12,9 +12,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
-import { MealTimePromptProps } from '@common/prompts';
-import { MealTime } from '@common/types';
-import MealTimePrompt from '@/components/prompts/standard/MealTimePrompt.vue';
+import { MealTimePromptProps } from '@intake24/common/prompts';
+import { MealTime } from '@intake24/common/types';
+import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
 
 function parseMealTime(time: string): MealTime {
   const parts = time.split(':');

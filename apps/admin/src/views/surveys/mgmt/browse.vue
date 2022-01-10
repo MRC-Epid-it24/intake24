@@ -170,11 +170,11 @@ import {
   SurveyMgmtAvailablePermissionsResponse,
   SurveyMgmtAvailableUsersResponse,
   UserMgmtListEntry,
-} from '@common/types/http/admin';
-import detailMixin from '@/components/entry/detail-mixin';
-import { form } from '@/helpers';
-import { EntryMixin } from '@/types';
-import AutoComplete from '@/components/forms/auto-complete.vue';
+} from '@intake24/common/types/http/admin';
+import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { form } from '@intake24/admin/helpers';
+import { EntryMixin } from '@intake24/admin/types';
+import AutoComplete from '@intake24/admin/components/forms/auto-complete.vue';
 import DataTable from '../data-table.vue';
 
 type SurveyMgmtForm = {

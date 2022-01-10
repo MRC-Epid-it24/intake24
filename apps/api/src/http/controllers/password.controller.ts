@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { nanoid } from 'nanoid';
 import { Op, User, UserPasswordReset } from '@intake24/db';
-import { ValidationError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
+import { ValidationError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import { Controller } from './controller';
 
 export type PasswordController = Controller<'request' | 'reset'>;

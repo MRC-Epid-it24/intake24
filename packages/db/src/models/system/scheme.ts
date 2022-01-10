@@ -7,14 +7,19 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Meal } from '@common/types';
+import { Meal } from '@intake24/common/types';
 import {
   SchemeAttributes,
   SchemeCreationAttributes,
   SchemeType,
   ExportSection,
-} from '@common/types/models';
-import { defaultExport, defaultMeals, defaultQuestions, RecallQuestions } from '@common/schemes';
+} from '@intake24/common/types/models';
+import {
+  defaultExport,
+  defaultMeals,
+  defaultQuestions,
+  RecallQuestions,
+} from '@intake24/common/schemes';
 import BaseModel from '../model';
 import { Survey } from '.';
 

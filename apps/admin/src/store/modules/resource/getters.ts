@@ -1,5 +1,5 @@
 import { GetterTree } from 'vuex';
-import { ListState, RootState } from '@/types';
+import { ListState, RootState } from '@intake24/admin/types';
 
 const getters: GetterTree<ListState, RootState> = {
   name: (state) => state.name,

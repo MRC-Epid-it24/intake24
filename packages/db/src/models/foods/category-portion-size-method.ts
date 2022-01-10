@@ -4,7 +4,7 @@ import {
   PortionSizeMethodId,
   CategoryPortionSizeMethodAttributes,
   CategoryPortionSizeMethodCreationAttributes,
-} from '@common/types/models';
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import CategoryLocal from './category-local';
 

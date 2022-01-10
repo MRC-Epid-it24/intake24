@@ -56,11 +56,15 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import isEqual from 'lodash/isEqual';
-import { flattenSchemeWithSection, MealSection, SurveyQuestionSection } from '@common/schemes';
-import { SchemeQuestionEntry, SchemeQuestionRefs } from '@common/types/http/admin';
-import { DetailMixin } from '@/types';
+import {
+  flattenSchemeWithSection,
+  MealSection,
+  SurveyQuestionSection,
+} from '@intake24/common/schemes';
+import { SchemeQuestionEntry, SchemeQuestionRefs } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
-import detailMixin from '@/components/entry/detail-mixin';
+import { DetailMixin } from '@intake24/admin/types';
+import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 
 export type SchemeStatus = {
   id: string;

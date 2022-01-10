@@ -1,4 +1,4 @@
-import { copy } from '@common/util';
+import { copy } from '@intake24/common/util';
 import type { LocaleTranslation } from '../../types';
 import type { PromptQuestion } from '..';
 import { basePromptProps, BasePromptProps, promptValidation, ValidatedPromptProps } from './base';

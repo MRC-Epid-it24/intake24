@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Resource } from '@/types';
+import { Resource } from '@intake24/admin/types';
 
 export default Vue.extend({
   name: 'MenuItem',

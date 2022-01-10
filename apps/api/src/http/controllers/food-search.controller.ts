@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import foodIndex, { IndexNotReadyError } from '@api/food-index';
+import foodIndex, { IndexNotReadyError } from '@intake24/api/food-index';
 import { Controller } from './controller';
 
 export type FoodSearchController = Controller<

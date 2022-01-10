@@ -1,4 +1,4 @@
-import { AuthState } from '@/types/vuex';
+import { AuthState } from '@intake24/survey/types/vuex';
 
 const state = (): AuthState => ({
   accessToken: null,

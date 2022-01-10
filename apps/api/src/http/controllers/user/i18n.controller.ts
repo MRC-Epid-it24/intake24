@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Language, LanguageMessage } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
+import { NotFoundError } from '@intake24/api/http/errors';
 import { Controller } from '../controller';
 
 export type UserI18nController = Controller<'browse' | 'entry'>;

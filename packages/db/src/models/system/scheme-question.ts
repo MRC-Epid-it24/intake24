@@ -1,6 +1,9 @@
 import { Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
-import { PromptQuestion } from '@common/prompts';
-import { SchemeQuestionAttributes, SchemeQuestionCreationAttributes } from '@common/types/models';
+import { PromptQuestion } from '@intake24/common/prompts';
+import {
+  SchemeQuestionAttributes,
+  SchemeQuestionCreationAttributes,
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 
 @Table({

@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import { Store } from 'vuex';
-import { RootState } from '@/types/vuex';
-import views from '@/views';
+import { RootState } from '@intake24/survey/types/vuex';
+import views from '@intake24/survey/views';
 import { globalGuard, surveyParametersGuard, surveyParametersErrorGuard } from './guards';
 
 Vue.use(VueRouter);

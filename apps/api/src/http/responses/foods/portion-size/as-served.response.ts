@@ -1,6 +1,6 @@
-import { AsServedImageResponse, AsServedSetResponse } from '@common/types/http';
+import { AsServedImageResponse, AsServedSetResponse } from '@intake24/common/types/http';
 import { AsServedSet, AsServedImage } from '@intake24/db';
-import { InternalServerError } from '@api/http/errors';
+import { InternalServerError } from '@intake24/api/http/errors';
 
 export interface AsServedResponse {
   imageResponse: (item: AsServedImage) => AsServedImageResponse;

@@ -7,8 +7,8 @@ import {
   UpdatedAt,
   Table,
 } from 'sequelize-typescript';
-import { JobType } from '@common/types';
-import { JobAttributes, JobCreationAttributes } from '@common/types/models';
+import { JobType } from '@intake24/common/types';
+import { JobAttributes, JobCreationAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 

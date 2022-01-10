@@ -11,9 +11,9 @@ import {
   FoodPortionSizeMethodParameter,
   PaginateQuery,
 } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import { FoodInput } from '@common/types/http/admin';
-import { FoodLocalAttributes } from '@common/types/models';
+import { NotFoundError } from '@intake24/api/http/errors';
+import { FoodInput } from '@intake24/common/types/http/admin';
+import { FoodLocalAttributes } from '@intake24/common/types/models';
 
 const adminFoodService = () => {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {

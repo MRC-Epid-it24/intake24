@@ -8,7 +8,7 @@ import {
   Table,
   BelongsTo,
 } from 'sequelize-typescript';
-import { FoodAttributes } from '@common/types/models';
+import { FoodAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import {
   AssociatedFood,

@@ -1,8 +1,8 @@
 import { pick } from 'lodash';
 import { Request, Response } from 'express';
 import { User } from '@intake24/db';
-import type { IoC } from '@api/ioc';
-import { UserPhysicalDataResponse } from '@common/types/http';
+import type { IoC } from '@intake24/api/ioc';
+import { UserPhysicalDataResponse } from '@intake24/common/types/http';
 import { Controller } from '../controller';
 
 export type UserPhysicalDataController = Controller<'getPhysicalData' | 'setPhysicalData'>;

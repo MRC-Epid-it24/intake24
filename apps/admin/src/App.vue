@@ -108,12 +108,12 @@ import pluralize from 'pluralize';
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { Location } from 'vue-router';
-import { Dictionary } from '@common/types';
+import { Dictionary } from '@intake24/common/types';
 import { ConfirmDialog, pwaUpdate, setsLanguage } from '@intake24/ui';
-import Loader from '@/components/loader.vue';
-import MenuTree from '@/components/sidebar/menu-tree.vue';
-import webPush from '@/components/web-push/web-push';
-import resources from '@/router/resources';
+import Loader from '@intake24/admin/components/loader.vue';
+import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
+import webPush from '@intake24/admin/components/web-push/web-push';
+import resources from '@intake24/admin/router/resources';
 
 export interface AppComponent {
   sidebar: boolean;

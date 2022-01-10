@@ -1,26 +1,26 @@
 import Vue from 'vue';
 import { mapState, mapGetters } from 'vuex';
-import { SchemeEntryResponse, SurveyEntryResponse } from '@common/types/http';
-import { MealSection, SurveyQuestionSection } from '@common/schemes';
-import { MealState, Selection, FoodState, LocaleTranslation } from '@common/types';
-import { ComponentType } from '@common/prompts';
-import DynamicRecall, { PromptInstance } from '@/dynamic-recall/dynamic-recall';
-import RecallBreadCrumbs from '@/components/recall/BreadCrumbs.vue';
-import MealList, { RecallAction } from '@/components/recall/MealListDesktop.vue';
-import CustomPromptHandler from '@/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
-import standardHandlers from '@/components/prompts/dynamic/handlers/standard';
-import portionSizeHandlers from '@/components/prompts/dynamic/handlers/portion-size';
-import timeDoubleDigitsConvertor from '@/components/mixins/timeDoubleDigitsConvertor';
-import { MealAction } from '@/components/recall/MealItem.vue';
-import { MealUndo, FoodUndo } from '@/types/vuex';
+import { SchemeEntryResponse, SurveyEntryResponse } from '@intake24/common/types/http';
+import { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import { MealState, Selection, FoodState, LocaleTranslation } from '@intake24/common/types';
+import { ComponentType } from '@intake24/common/prompts';
+import DynamicRecall, { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
+import MealList, { RecallAction } from '@intake24/survey/components/recall/MealListDesktop.vue';
+import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
+import standardHandlers from '@intake24/survey/components/prompts/dynamic/handlers/standard';
+import portionSizeHandlers from '@intake24/survey/components/prompts/dynamic/handlers/portion-size';
+import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
+import { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
+import { MealUndo, FoodUndo } from '@intake24/survey/types/vuex';
 
 // Mobile
-import MealListMobileBottom from '@/components/recall/mobile/MealListMobileBottom.vue';
-import FoodListMobileBottom from '@/components/recall/mobile/FoodListMobileBottom.vue';
-import MealFoodMobileContextMenu from '@/components/recall/MobileMealFoodContext.vue';
-import RecallBreadCrumbsMobile from '@/components/recall/mobile/BreadCrumbsMobile.vue';
-import BottomNavigationMobile from '@/components/recall/mobile/BottomNavMobile.vue';
-import InfoAlert from '@/components/elements/InfoAlert.vue';
+import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
+import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
+import MealFoodMobileContextMenu from '@intake24/survey/components/recall/MobileMealFoodContext.vue';
+import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
+import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
+import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
 
 export default Vue.extend({
   name: 'Recall',

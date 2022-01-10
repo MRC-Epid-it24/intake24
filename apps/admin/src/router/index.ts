@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import pluralize from 'pluralize';
-import views from '@/views';
+import views from '@intake24/admin/views';
 import resources from './resources';
 
 const generateResourceRoutes = (

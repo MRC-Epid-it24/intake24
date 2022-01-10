@@ -12,10 +12,10 @@ import {
   NutrientTableInput,
   NutrientTableCsvMappingFieldInput,
   NutrientTableCsvMappingNutrientInput,
-} from '@common/types/http/admin';
-import { JobType } from '@common/types';
-import type { IoC } from '@api/ioc';
-import { NotFoundError } from '@api/http/errors';
+} from '@intake24/common/types/http/admin';
+import { JobType } from '@intake24/common/types';
+import type { IoC } from '@intake24/api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
 
 export type UploadCsvFileInput = {
   type: Extract<JobType, 'NutrientTableImportData' | 'NutrientTableImportMapping'>;

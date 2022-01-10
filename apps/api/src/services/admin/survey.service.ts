@@ -8,11 +8,11 @@ import {
   UserCustomField,
   UserSurveyAlias,
 } from '@intake24/db';
-import { CreateRespondentInput, UpdateRespondentInput } from '@common/types/http/admin';
-import { UserCustomFieldAttributes } from '@common/types/models';
-import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
-import { toSimpleName, generateToken } from '@api/util';
+import { CreateRespondentInput, UpdateRespondentInput } from '@intake24/common/types/http/admin';
+import { UserCustomFieldAttributes } from '@intake24/common/types/models';
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import { toSimpleName, generateToken } from '@intake24/api/util';
 import { surveyMgmt, surveyRespondent } from '../core/auth';
 
 const adminSurveyService = ({

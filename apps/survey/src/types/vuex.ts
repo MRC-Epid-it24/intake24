@@ -1,5 +1,5 @@
-import { FoodState, MealState, SurveyState as CurrentSurveyState } from '@common/types';
-import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
+import { FoodState, MealState, SurveyState as CurrentSurveyState } from '@intake24/common/types';
+import { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import { AxiosError } from 'axios';
 import { UserPayload } from './auth';
 

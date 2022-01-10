@@ -2,10 +2,10 @@ import {
   CreateAsServedSetInput,
   CreateAsServedImageInput,
   UpdateAsServedSetInput,
-} from '@common/types/http/admin';
+} from '@intake24/common/types/http/admin';
 import { AsServedImage, AsServedSet } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 
 export interface AsServedService {
   createImage: (input: CreateAsServedImageInput) => Promise<AsServedImage>;

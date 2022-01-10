@@ -1,4 +1,4 @@
-import type { Dictionary, LocaleTranslation } from '@common/types';
+import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
 import type { QuantityValues } from '../prompts';
 import { UserFoodData } from './http';
 import { PortionSizeMethodId } from './models';

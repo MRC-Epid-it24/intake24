@@ -8,10 +8,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { BasePromptProps } from '@common/prompts';
-import { EncodedFood } from '@common/types';
-import { UserPortionSizeMethod } from '@common/types/http';
-import PortionSizeOptionPrompt from '@/components/prompts/portion/PortionSizeOptionPrompt.vue';
+import { BasePromptProps } from '@intake24/common/prompts';
+import { EncodedFood } from '@intake24/common/types';
+import { UserPortionSizeMethod } from '@intake24/common/types/http';
+import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;

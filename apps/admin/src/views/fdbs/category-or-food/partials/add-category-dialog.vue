@@ -84,10 +84,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { copy } from '@common/util';
+import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
-import { CategoriesResponse, CategoryListEntry } from '@common/types/http/admin';
-import { CategoryAttributes } from '@common/types/models';
+import { CategoriesResponse, CategoryListEntry } from '@intake24/common/types/http/admin';
+import { CategoryAttributes } from '@intake24/common/types/models';
 
 type AddCategoryDialog = {
   debouncedFetch: () => void;

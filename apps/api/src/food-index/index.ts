@@ -1,6 +1,6 @@
 import { Worker } from 'worker_threads';
-import { FoodSearchResponse } from '@common/types/http';
-import config from '@api/config';
+import { FoodSearchResponse } from '@intake24/common/types/http';
+import config from '@intake24/api/config';
 
 let indexReady = false;
 let queryIdCounter = 0;

@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
-import { password } from '@api/http/requests/admin/users/defaults';
-import validate from '@api/http/requests/validate';
+import { password } from '@intake24/api/http/requests/admin/users/defaults';
+import validate from '@intake24/api/http/requests/validate';
 
 export default validate(
   checkSchema({

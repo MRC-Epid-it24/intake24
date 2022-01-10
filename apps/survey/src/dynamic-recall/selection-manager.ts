@@ -1,7 +1,7 @@
 import { Store } from 'vuex';
-import { Selection } from '@common/types';
-import PromptManager from '@/dynamic-recall/prompt-manager';
-import { RootStateWithModules } from '@/types/vuex';
+import { Selection } from '@intake24/common/types';
+import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
+import { RootStateWithModules } from '@intake24/survey/types/vuex';
 
 export default class SelectionManager {
   private store;

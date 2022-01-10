@@ -1,5 +1,8 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { AsServedImageAttributes, AsServedImageCreationAttributes } from '@common/types/models';
+import {
+  AsServedImageAttributes,
+  AsServedImageCreationAttributes,
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { AsServedSet, ProcessedImage } from '.';
 

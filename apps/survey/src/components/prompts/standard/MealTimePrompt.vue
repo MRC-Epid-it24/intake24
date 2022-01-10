@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { MealTimePromptProps } from '@common/prompts';
+import { MealTimePromptProps } from '@intake24/common/prompts';
 import { ConfirmDialog } from '@intake24/ui';
 import BasePrompt, { Prompt } from '../BasePrompt';
 

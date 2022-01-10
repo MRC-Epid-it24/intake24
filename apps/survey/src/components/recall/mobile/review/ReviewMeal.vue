@@ -26,8 +26,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import ReviewFood from '@/components/recall/mobile/review/ReviewFood.vue';
-import ContextMenu from '@/components/elements/ContextMenu.vue';
+import ReviewFood from '@intake24/survey/components/recall/mobile/review/ReviewFood.vue';
+import ContextMenu from '@intake24/survey/components/elements/ContextMenu.vue';
 
 export type MealAction = 'edit-foods' | 'edit-time';
 

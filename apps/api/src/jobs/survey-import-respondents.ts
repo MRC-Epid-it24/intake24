@@ -2,9 +2,9 @@ import { Job } from 'bullmq';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import path from 'path';
-import type { CustomField, SurveyImportRespondentsParams } from '@common/types';
+import type { CustomField, SurveyImportRespondentsParams } from '@intake24/common/types';
 import { User, UserSurveyAlias } from '@intake24/db';
-import type { IoC } from '@api/ioc';
+import type { IoC } from '@intake24/api/ioc';
 import StreamLockJob from './stream-lock-job';
 
 export type CSVRow = {

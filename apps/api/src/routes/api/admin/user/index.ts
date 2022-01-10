@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import ioc from '@api/ioc';
-import { wrapAsync } from '@api/util';
+import ioc from '@intake24/api/ioc';
+import { wrapAsync } from '@intake24/api/util';
 import jobs from './jobs';
 
 const router = Router();

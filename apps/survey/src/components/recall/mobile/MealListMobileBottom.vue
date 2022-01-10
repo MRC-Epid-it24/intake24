@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FoodState } from '@common/types';
+import { FoodState } from '@intake24/common/types';
 
 export default Vue.extend({
   // components: { MealItemMobile },

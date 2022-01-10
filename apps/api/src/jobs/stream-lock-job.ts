@@ -1,5 +1,5 @@
-import type { IoC } from '@api/ioc';
-import { sleep } from '@api/util';
+import type { IoC } from '@intake24/api/ioc';
+import { sleep } from '@intake24/api/util';
 import BaseJob from './job';
 
 /*

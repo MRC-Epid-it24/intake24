@@ -5,8 +5,8 @@ import {
   MealState,
   Selection,
   SurveyState as CurrentSurveyState,
-} from '@common/types';
-import { FoodUndo, MealUndo, RootState, SurveyState } from '@/types/vuex';
+} from '@intake24/common/types';
+import { FoodUndo, MealUndo, RootState, SurveyState } from '@intake24/survey/types/vuex';
 
 const getters: GetterTree<SurveyState, RootState> = {
   parametersLoaded: (state) => !!state.parameters && !!state.user,

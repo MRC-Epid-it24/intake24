@@ -22,11 +22,11 @@
     "production": "npm run clean && npm run build",
     "prod": "npm run production",
     "start": "node dist/server.js",
-    "lint": "eslint --ext .js,.ts src/ tests/",
+    "lint": "eslint --ext .js,.ts src/ __tests__/",
     "lint:fix": "npm run lint -- --fix",
-    "test:unit": "jest --testMatch '**/tests/unit/**/*.test.ts'",
+    "test:unit": "jest --testMatch '**/__tests__/unit/**/*.spec.ts'",
     "test:unit:watch": "npm run test:unit -- --watch",
-    "test:integration": "jest ./tests/integration/index.test.ts --runInBand",
+    "test:integration": "jest ./__tests__/integration/index.test.ts --runInBand",
     "test:integration:watch": "npm run test:integration -- --watch"
   },
   "dependencies": {

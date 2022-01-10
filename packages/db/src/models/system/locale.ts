@@ -9,8 +9,8 @@ import {
   Table,
   BelongsTo,
 } from 'sequelize-typescript';
-import { LocaleAttributes, LocaleCreationAttributes } from '@common/types/models';
-import { foodDatabasePermissions } from '@api/services';
+import { LocaleAttributes, LocaleCreationAttributes } from '@intake24/common/types/models';
+import { foodDatabasePermissions } from '@intake24/api/services';
 import BaseModel from '../model';
 import { Language, Permission, Survey } from '.';
 

@@ -224,11 +224,11 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { NutrientTableEntry, NutrientTableRefs } from '@common/types/http/admin';
-import { excelColumnToOffset, offsetToExcelColumn } from '@common/util';
-import formMixin from '@/components/entry/form-mixin';
-import { form } from '@/helpers';
-import { FormMixin } from '@/types';
+import { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
+import { excelColumnToOffset, offsetToExcelColumn } from '@intake24/common/util';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { form } from '@intake24/admin/helpers';
+import { FormMixin } from '@intake24/admin/types';
 
 export type CsvMappingField = { fieldName: string; columnOffset: string };
 export type CsvMappingNutrient = { nutrientTypeId: string; columnOffset: string };

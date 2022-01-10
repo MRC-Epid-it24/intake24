@@ -3,10 +3,10 @@ import {
   SchemeQuestionEntry,
   SchemeQuestionRefs,
   SchemeQuestionsResponse,
-} from '@common/types/http/admin';
-import { isMealSection, MealSection, SurveyQuestionSection } from '@common/schemes';
+} from '@intake24/common/types/http/admin';
+import { isMealSection, MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import { Language, Scheme, SchemeQuestion, PaginateQuery } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
+import { NotFoundError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
 import { Controller, CrudActions } from '../controller';
 

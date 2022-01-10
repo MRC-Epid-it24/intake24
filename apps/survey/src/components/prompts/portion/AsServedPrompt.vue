@@ -88,13 +88,13 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { merge } from '@common/util';
+import { merge } from '@intake24/common/util';
 
-import { basePromptProps, BasePromptProps } from '@common/prompts';
-import { LocaleTranslation } from '@common/types';
-import localeContent from '@/components/mixins/localeContent';
-import ValidInvalidIcon from '@/components/elements/ValidInvalidIcon.vue';
-import AsServedSelector from '@/components/prompts/portion/selectors/AsServedSelector.vue';
+import { basePromptProps, BasePromptProps } from '@intake24/common/prompts';
+import { LocaleTranslation } from '@intake24/common/types';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
+import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
+import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({

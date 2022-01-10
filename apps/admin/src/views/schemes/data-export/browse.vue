@@ -58,13 +58,13 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { defaultExport, defaultMeals, defaultQuestions } from '@common/schemes';
-import { ExportField, ExportSection } from '@common/types/models';
-import { SchemeExportRefsResponse } from '@common/types/http/admin';
-import formMixin from '@/components/entry/form-mixin';
-import LoadSectionDialog from '@/components/prompts/load-section-dialog.vue';
-import { form } from '@/helpers';
-import { FormMixin } from '@/types';
+import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
+import { ExportField, ExportSection } from '@intake24/common/types/models';
+import { SchemeExportRefsResponse } from '@intake24/common/types/http/admin';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import LoadSectionDialog from '@intake24/admin/components/prompts/load-section-dialog.vue';
+import { form } from '@intake24/admin/helpers';
+import { FormMixin } from '@intake24/admin/types';
 import DataExportSection from './data-export-section.vue';
 
 import { SchemeForm } from '../form.vue';

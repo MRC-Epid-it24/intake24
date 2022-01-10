@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { UserState } from '@/types';
+import { UserState } from '@intake24/admin/types';
 import defaultState from './state';
 
 const mutations: MutationTree<UserState> = {

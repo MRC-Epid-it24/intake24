@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Resource } from '@/types';
+import { Resource } from '@intake24/admin/types';
 import MenuItem from './menu-item.vue';
 
 export default Vue.extend({

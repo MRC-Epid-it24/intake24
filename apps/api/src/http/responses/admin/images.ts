@@ -8,9 +8,9 @@ import {
   AsServedImageEntry,
   AsServedSetEntry,
   AsServedSetListEntry,
-} from '@common/types/http/admin';
+} from '@intake24/common/types/http/admin';
 import { AsServedImage, AsServedSet, GuideImage, ImageMap, ImageMapObject } from '@intake24/db';
-import { InternalServerError } from '@api/http/errors';
+import { InternalServerError } from '@intake24/api/http/errors';
 
 export interface ImageResponseCollection {
   asServedImageEntryResponse: (item: AsServedImage) => AsServedImageEntry;

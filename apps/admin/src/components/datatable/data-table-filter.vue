@@ -35,7 +35,7 @@
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import isEmpty from 'lodash/isEmpty';
-import { Dictionary } from '@common/types';
+import { Dictionary } from '@intake24/common/types';
 
 export default Vue.extend({
   name: 'DataTableFilter',

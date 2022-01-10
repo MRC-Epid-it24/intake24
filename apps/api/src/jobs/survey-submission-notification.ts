@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { Job } from 'bullmq';
-import { Dictionary, SurveySubmissionNotificationParams } from '@common/types';
+import { Dictionary, SurveySubmissionNotificationParams } from '@intake24/common/types';
 import { Survey, SurveySubmission, submissionScope } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import BaseJob from './job';
 
 export default class SurveySubmissionNotification extends BaseJob<SurveySubmissionNotificationParams> {

@@ -93,9 +93,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { HenryCoefficient, WeightTargetCoefficient } from '@common/feedback';
-import { PhysicalActivityLevelAttributes, UserPhysicalDataAttributes } from '@common/types/models';
-import { feedbackService, userService } from '@/services';
+import { HenryCoefficient, WeightTargetCoefficient } from '@intake24/common/feedback';
+import {
+  PhysicalActivityLevelAttributes,
+  UserPhysicalDataAttributes,
+} from '@intake24/common/types/models';
+import { feedbackService, userService } from '@intake24/survey/services';
 
 export default Vue.extend({
   name: 'SurveyFeedback',

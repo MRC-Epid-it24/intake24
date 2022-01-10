@@ -121,7 +121,7 @@
 </template>
 
 <script lang="ts">
-import { LanguageAttributes } from '@common/types/models';
+import { LanguageAttributes } from '@intake24/common/types/models';
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { setsLanguage } from '@intake24/ui';

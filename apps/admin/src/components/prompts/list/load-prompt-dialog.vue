@@ -93,9 +93,9 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { copy } from '@common/util';
+import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
-import { PromptQuestion } from '@common/prompts';
+import { PromptQuestion } from '@intake24/common/prompts';
 
 type LoadPromptDialog = {
   debouncedFetch: () => void;

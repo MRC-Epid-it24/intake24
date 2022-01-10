@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode';
-import { JwtPayload, Subject, UserPayload } from '@/types/auth';
+import { JwtPayload, Subject, UserPayload } from '@intake24/survey/types/auth';
 
 export default {
   decodeAccessToken(accessToken: string): UserPayload | null {

@@ -1,8 +1,8 @@
 import type { Express } from 'express';
 import helmet from 'helmet';
-import type { Site } from '@api/config';
-import type { Ops } from '@api/app';
-import { isUrlAbsolute } from '@api/util';
+import type { Site } from '@intake24/api/config';
+import type { Ops } from '@intake24/api/app';
+import { isUrlAbsolute } from '@intake24/api/util';
 import api from './api';
 import sites from './sites';
 

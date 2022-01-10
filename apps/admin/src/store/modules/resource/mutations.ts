@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
 import { AxiosError } from 'axios';
-import { ListState } from '@/types';
+import { ListState } from '@intake24/admin/types';
 
 const mutations: MutationTree<ListState> = {
   update(state, { name, api }) {

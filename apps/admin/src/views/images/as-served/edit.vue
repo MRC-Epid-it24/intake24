@@ -54,10 +54,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { AsServedSetEntry, AsServedImageInput } from '@common/types/http/admin';
-import { FormMixin } from '@/types';
-import formMixin from '@/components/entry/form-mixin';
-import { form } from '@/helpers';
+import { AsServedSetEntry, AsServedImageInput } from '@intake24/common/types/http/admin';
+import { FormMixin } from '@intake24/admin/types';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { form } from '@intake24/admin/helpers';
 import AsServedImages from './images.vue';
 
 type EditAsServedSetForm = {

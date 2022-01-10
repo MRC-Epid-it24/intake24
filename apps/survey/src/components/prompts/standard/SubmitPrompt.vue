@@ -8,9 +8,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { merge } from '@common/util';
-import { BasePromptProps, submitPromptProps } from '@common/prompts';
-import Submit from '@/components/prompts/actions/Submit.vue';
+import { merge } from '@intake24/common/util';
+import { BasePromptProps, submitPromptProps } from '@intake24/common/prompts';
+import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import BasePrompt from '../BasePrompt';
 
 export default Vue.extend({

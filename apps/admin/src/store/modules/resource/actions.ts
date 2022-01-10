@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { ActionTree } from 'vuex';
-import { ListState, RootState } from '@/types';
-import http from '@/services/http.service';
+import { ListState, RootState } from '@intake24/admin/types';
+import http from '@intake24/admin/services/http.service';
 import { FILTER_LS_KEY } from './state';
 
 const actions: ActionTree<ListState, RootState> = {

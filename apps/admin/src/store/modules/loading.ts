@@ -1,5 +1,5 @@
 import { ActionTree, GetterTree, MutationTree, Module } from 'vuex';
-import { LoadingState, RootState } from '@/types';
+import { LoadingState, RootState } from '@intake24/admin/types';
 
 export const defaultState = (): LoadingState => ({ items: [] });
 

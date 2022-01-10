@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { authenticate } from '@api/http/middleware/acl';
-import { wrapAsync } from '@api/util';
-import ioc from '@api/ioc';
+import { authenticate } from '@intake24/api/http/middleware/acl';
+import { wrapAsync } from '@intake24/api/util';
+import ioc from '@intake24/api/ioc';
 
 const { foodController, foodSearchController } = ioc.cradle;
 

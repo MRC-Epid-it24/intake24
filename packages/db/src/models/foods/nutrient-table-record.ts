@@ -9,7 +9,7 @@ import {
 import {
   NutrientTableRecordAttributes,
   NutrientTableRecordCreationAttributes,
-} from '@common/types/models';
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 
 @Table({

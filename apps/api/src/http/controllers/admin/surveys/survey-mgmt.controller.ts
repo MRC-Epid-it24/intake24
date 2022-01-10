@@ -7,12 +7,12 @@ import {
   SurveyMgmtAvailableUsersResponse,
   SurveyMgmtResponse,
   UserMgmtListEntry,
-} from '@common/types/http/admin';
-import { NotFoundError } from '@api/http/errors';
-import { permissionListResponse, userMgmtResponse } from '@api/http/responses/admin';
-import type { IoC } from '@api/ioc';
-import { surveyMgmt } from '@api/services/core/auth';
-import { UserAttributes } from '@common/types/models';
+} from '@intake24/common/types/http/admin';
+import { NotFoundError } from '@intake24/api/http/errors';
+import { permissionListResponse, userMgmtResponse } from '@intake24/api/http/responses/admin';
+import type { IoC } from '@intake24/api/ioc';
+import { surveyMgmt } from '@intake24/api/services/core/auth';
+import { UserAttributes } from '@intake24/common/types/models';
 import { Controller } from '../../controller';
 
 export type AdminSurveyMgmtController = Controller<

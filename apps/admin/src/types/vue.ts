@@ -1,5 +1,5 @@
-import type { Dictionary, ValidationError } from '@common/types';
-import type { Form } from '@/helpers';
+import type { Dictionary, ValidationError } from '@intake24/common/types';
+import type { Form } from '@intake24/admin/helpers';
 import type { Resource } from './vue-router';
 
 export interface FetchEntryMixin {

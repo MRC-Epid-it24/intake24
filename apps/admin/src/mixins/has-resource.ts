@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import resources from '@/router/resources';
-import { Resource } from '@/types';
+import resources from '@intake24/admin/router/resources';
+import { Resource } from '@intake24/admin/types';
 
 export default Vue.extend({
   computed: {

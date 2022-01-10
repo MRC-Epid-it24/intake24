@@ -6,9 +6,9 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { GuideImageEntry } from '@common/types/http/admin';
-import type { DetailMixin } from '@/types';
-import detailMixin from '@/components/entry/detail-mixin';
+import { GuideImageEntry } from '@intake24/common/types/http/admin';
+import type { DetailMixin } from '@intake24/admin/types';
+import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import GuideDrawer from '../guide-drawer.vue';
 
 export default (Vue as VueConstructor<Vue & DetailMixin<GuideImageEntry>>).extend({

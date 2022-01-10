@@ -6,15 +6,18 @@
     "sourceMap": true,
     "outDir": "dist",
     "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@common/*": ["packages/common/src/*"],
-      "@api/*": ["apps/api/src/*"],
-      "@admin/*": ["apps/admin/src/*"],
-      "@cli/*": ["apps/cli/src/*"],
-      "@survey/*": ["apps/survey/src/*"],
+      "@intake24/api/*": ["apps/api/src/*"],
+      "@intake24/api-tests/*": ["apps/api/__tests__/*"],
+      "@intake24/admin/*": ["apps/admin/src/*"],
+      "@intake24/cli/*": ["apps/cli/src/*"],
+      "@intake24/survey/*": ["apps/survey/src/*"],
+      "@intake24/common/*": ["packages/common/src/*"],
       "@intake24/*": ["packages/*/src"]
     },
     "types": [

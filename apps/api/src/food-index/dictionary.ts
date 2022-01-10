@@ -4,8 +4,8 @@ import {
   InterpretedWord,
   Synonym,
   WordInterpretation,
-} from '@api/food-index/interpreted-word';
-import { LevenshteinTransducer } from '@api/food-index/levenshtein';
+} from '@intake24/api/food-index/interpreted-word';
+import { LevenshteinTransducer } from '@intake24/api/food-index/levenshtein';
 
 export type MatchStrategy = 'match-fewer' | 'match-more';
 

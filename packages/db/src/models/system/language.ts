@@ -7,7 +7,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { LanguageAttributes, LanguageCreationAttributes } from '@common/types/models';
+import { LanguageAttributes, LanguageCreationAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import Locale from './locale';
 import LanguageMessage from './language-message';

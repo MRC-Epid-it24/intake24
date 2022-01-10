@@ -16,7 +16,10 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
-import breadcrumbs, { BreadCrumbsContent, BrdCrumbs } from '@/components/mixins/breadcrumbs';
+import breadcrumbs, {
+  BreadCrumbsContent,
+  BrdCrumbs,
+} from '@intake24/survey/components/mixins/breadcrumbs';
 
 export default (Vue as VueConstructor<Vue & BreadCrumbsContent>).extend({
   name: 'RecallBreadCrumbsMobile',

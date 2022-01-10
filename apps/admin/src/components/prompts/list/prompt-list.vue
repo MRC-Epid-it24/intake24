@@ -47,9 +47,9 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { PromptQuestion } from '@common/prompts';
-import { SurveyQuestionSection, MealSection } from '@common/schemes';
-import { promptSettings } from '@/components/prompts';
+import { PromptQuestion } from '@intake24/common/prompts';
+import { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
+import { promptSettings } from '@intake24/admin/components/prompts';
 import LoadPromptDialog from './load-prompt-dialog.vue';
 import PromptListItem from './prompt-list-item.vue';
 import PromptSelector from '../prompt-selector.vue';

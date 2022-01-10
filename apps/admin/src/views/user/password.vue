@@ -73,7 +73,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { form } from '@/helpers';
+import { form } from '@intake24/admin/helpers';
 
 export default Vue.extend({
   name: 'UserPassword',

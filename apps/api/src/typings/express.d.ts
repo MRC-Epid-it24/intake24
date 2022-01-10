@@ -1,5 +1,5 @@
 import type { AwilixContainer } from 'awilix';
-import type { IoC } from '@api/ioc';
+import type { IoC } from '@intake24/api/ioc';
 
 declare global {
   namespace Express {

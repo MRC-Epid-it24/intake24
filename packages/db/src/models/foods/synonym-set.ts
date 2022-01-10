@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import {
   SynonymSetsAttributes,
   SynonymSetsAttributesCreationAttributes,
-} from '@common/types/models/foods';
+} from '@intake24/common/types/models/foods';
 import BaseModel from '../model';
 import { FoodsLocale } from '.';
 

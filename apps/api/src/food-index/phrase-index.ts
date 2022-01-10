@@ -1,5 +1,9 @@
-import { MatchStrategy, PhoneticEncoder, RichDictionary } from '@api/food-index/dictionary';
-import InterpretedPhrase from '@api/food-index/interpreted-phrase';
+import {
+  MatchStrategy,
+  PhoneticEncoder,
+  RichDictionary,
+} from '@intake24/api/food-index/dictionary';
+import InterpretedPhrase from '@intake24/api/food-index/interpreted-phrase';
 
 const MAX_WORDS_PER_PHRASE = 10;
 const MAX_WORD_INTERPRETATIONS = 4;

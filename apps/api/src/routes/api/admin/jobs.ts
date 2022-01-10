@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { anyPermission, permission } from '@api/http/middleware/acl';
-import validation from '@api/http/requests/admin/jobs';
-import { wrapAsync } from '@api/util';
-import ioc from '@api/ioc';
+import { anyPermission, permission } from '@intake24/api/http/middleware/acl';
+import validation from '@intake24/api/http/requests/admin/jobs';
+import { wrapAsync } from '@intake24/api/util';
+import ioc from '@intake24/api/ioc';
 
 const { jobController } = ioc.cradle;
 

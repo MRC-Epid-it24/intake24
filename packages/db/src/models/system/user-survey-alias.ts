@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
-import { UserSurveyAliasAttributes } from '@common/types/models';
+import { UserSurveyAliasAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { Survey, User } from '.';
 

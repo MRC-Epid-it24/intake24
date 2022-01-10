@@ -53,12 +53,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { customPromptQuestions, PromptQuestion } from '@common/prompts';
-import { SchemeQuestionEntry, SchemeQuestionRefs } from '@common/types/http/admin';
-import formMixin from '@/components/entry/form-mixin';
-import PromptSelector from '@/components/prompts/prompt-selector.vue';
-import { form } from '@/helpers';
-import { FormMixin } from '@/types';
+import { customPromptQuestions, PromptQuestion } from '@intake24/common/prompts';
+import { SchemeQuestionEntry, SchemeQuestionRefs } from '@intake24/common/types/http/admin';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import PromptSelector from '@intake24/admin/components/prompts/prompt-selector.vue';
+import { form } from '@intake24/admin/helpers';
+import { FormMixin } from '@intake24/admin/types';
 
 export type SchemeQuestionForm = {
   question: PromptQuestion;

@@ -57,8 +57,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { SchemeEntry } from '@common/types/http/admin';
-import { form } from '@/helpers';
+import { SchemeEntry } from '@intake24/common/types/http/admin';
+import { form } from '@intake24/admin/helpers';
 
 export type CopySchemeForm = {
   sourceId: string;

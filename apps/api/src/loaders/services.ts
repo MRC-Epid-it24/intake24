@@ -1,5 +1,5 @@
-import foodIndex from '@api/food-index';
-import ioc from '@api/ioc';
+import foodIndex from '@intake24/api/food-index';
+import ioc from '@intake24/api/ioc';
 
 export default async (): Promise<void> => {
   // Cache

@@ -1,5 +1,5 @@
 import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
-import { FoodGroupAttributes, FoodGroupCreationAttributes } from '@common/types/models';
+import { FoodGroupAttributes, FoodGroupCreationAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { Food, FoodGroupLocal } from '.';
 

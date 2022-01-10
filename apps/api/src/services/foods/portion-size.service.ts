@@ -8,7 +8,7 @@ import {
   GuideImage,
   ImageMap,
 } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
+import { NotFoundError } from '@intake24/api/http/errors';
 
 export interface PortionSizeService {
   getAsServedImage: (asServedSetId: string, id: string) => Promise<AsServedImage>;

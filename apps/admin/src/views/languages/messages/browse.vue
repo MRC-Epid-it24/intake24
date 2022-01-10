@@ -35,12 +35,12 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import has from 'lodash/has';
-import { LanguageEntry } from '@common/types/http/admin';
-import formMixin from '@/components/entry/form-mixin';
-import { form } from '@/helpers';
-import { FormMixin } from '@/types';
-import { LanguageMessageAttributes } from '@common/types/models';
-import { copy } from '@common/util';
+import { LanguageEntry } from '@intake24/common/types/http/admin';
+import { LanguageMessageAttributes } from '@intake24/common/types/models';
+import { copy } from '@intake24/common/util';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { form } from '@intake24/admin/helpers';
+import { FormMixin } from '@intake24/admin/types';
 import TranslationSection from './translation-section.vue';
 
 export type LanguageMessageForm = {

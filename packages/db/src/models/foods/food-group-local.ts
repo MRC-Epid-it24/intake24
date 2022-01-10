@@ -1,5 +1,8 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import { FoodGroupLocalAttributes, FoodGroupLocalCreationAttributes } from '@common/types/models';
+import {
+  FoodGroupLocalAttributes,
+  FoodGroupLocalCreationAttributes,
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { FoodGroup, FoodsLocale } from '.';
 

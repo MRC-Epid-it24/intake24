@@ -1,7 +1,7 @@
 import json2csv from 'json2csv';
-import { ExportSectionId } from '@common/types/models';
+import { ExportSectionId } from '@intake24/common/types/models';
 import { SurveySubmissionFood } from '@intake24/db';
-import type { IoC } from '@api/ioc';
+import type { IoC } from '@intake24/api/ioc';
 import { ExportField, ExportFieldTransform } from './data-export-fields';
 
 export type ExportFieldInfo = json2csv.FieldInfo<SurveySubmissionFood>;

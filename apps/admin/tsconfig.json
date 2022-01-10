@@ -15,8 +15,10 @@
       "webpack-env"
     ],
     "paths": {
-      "@/*": ["src/*"],
-      "@common/*": ["../../packages/common/src/*"],
+      "@intake24/admin/*": ["src/*"],
+      "@intake24/common/*": ["../../packages/common/src/*"],
+      "@intake24/i18n/*": ["../../packages/i18n/src/*"],
+      "@intake24/ui/*": ["../../packages/ui/src/*"],
       "@intake24/*": ["../../packages/*/src"]
     },
     "lib": [

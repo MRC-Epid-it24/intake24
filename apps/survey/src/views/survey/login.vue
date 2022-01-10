@@ -66,9 +66,9 @@
 import axios, { AxiosError } from 'axios';
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import { PublicSurveyEntryResponse } from '@common/types/http';
-import { Errors } from '@common/util';
-import surveySvc from '@/services/survey.service';
+import { PublicSurveyEntryResponse } from '@intake24/common/types/http';
+import { Errors } from '@intake24/common/util';
+import surveySvc from '@intake24/survey/services/survey.service';
 
 export default Vue.extend({
   name: 'SurveyLogin',

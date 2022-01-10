@@ -14,9 +14,9 @@ import {
   SurveyAttributes,
   SurveyCreationAttributes,
   SurveyState,
-} from '@common/types/models';
-import { defaultOverrides, SchemeOverrides } from '@common/schemes';
-import { surveyPermissions } from '@api/services/core/auth';
+} from '@intake24/common/types/models';
+import { defaultOverrides, SchemeOverrides } from '@intake24/common/schemes';
+import { surveyPermissions } from '@intake24/api/services/core/auth';
 import BaseModel from '../model';
 import {
   ClientErrorReport,

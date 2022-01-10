@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
-import { Dictionary } from '@common/types';
+import { Dictionary } from '@intake24/common/types';
 import { AxiosError } from 'axios';
-import { EntryState } from '@/types';
+import { EntryState } from '@intake24/admin/types';
 
 const mutations: MutationTree<EntryState> = {
   request(state) {

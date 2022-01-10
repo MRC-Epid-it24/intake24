@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { HttpClient } from '@/types/http';
+import { HttpClient } from '@intake24/survey/types/http';
 
 declare module 'vue/types/vue' {
   interface Vue {

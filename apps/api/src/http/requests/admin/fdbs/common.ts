@@ -1,5 +1,5 @@
 import { Category } from '@intake24/db';
-import { useInRecipeTypes } from '@common/types/models';
+import { useInRecipeTypes } from '@intake24/common/types/models';
 import { Schema } from 'express-validator';
 
 export const attributes: Schema = {

@@ -2,9 +2,13 @@ import { Request } from 'express';
 import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions, SystemLocale, Scheme, Survey } from '@intake24/db';
-import { searchSortingAlgorithms, SurveyAttributes, surveyStates } from '@common/types/models';
-import { validateMeals } from '@common/validators';
-import { unique } from '@api/http/rules';
+import {
+  searchSortingAlgorithms,
+  SurveyAttributes,
+  surveyStates,
+} from '@intake24/common/types/models';
+import { validateMeals } from '@intake24/common/validators';
+import { unique } from '@intake24/api/http/rules';
 
 export const defaults: Schema = {
   name: {

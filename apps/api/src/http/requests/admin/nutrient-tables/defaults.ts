@@ -1,8 +1,8 @@
 import {
   NutrientTableCsvMappingFieldInput,
   NutrientTableCsvMappingNutrientInput,
-} from '@common/types/http/admin';
-import { validateCsvMappingFields, validateCsvMappingNutrients } from '@common/validators';
+} from '@intake24/common/types/http/admin';
+import { validateCsvMappingFields, validateCsvMappingNutrients } from '@intake24/common/validators';
 import { Schema } from 'express-validator';
 
 const defaults: Schema = {

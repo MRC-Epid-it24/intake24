@@ -56,10 +56,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { SchemeRefs, LanguageListEntry } from '@common/types/http/admin';
-import tinymce from '@/components/tinymce/tinymce';
-import mapRefs from '@/components/entry/map-refs';
-import { MapRefsMixin } from '@/types';
+import { SchemeRefs, LanguageListEntry } from '@intake24/common/types/http/admin';
+import tinymce from '@intake24/admin/components/tinymce/tinymce';
+import mapRefs from '@intake24/admin/components/entry/map-refs';
+import { MapRefsMixin } from '@intake24/admin/types';
 
 export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
   name: 'LanguageSelector',

@@ -8,10 +8,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { BasePromptProps } from '@common/prompts';
-import { EncodedFood, SelectedAsServedImage } from '@common/types';
-import { AsServedParameters } from '@common/types/http';
-import AsServedPrompt from '@/components/prompts/portion/AsServedPrompt.vue';
+import { BasePromptProps } from '@intake24/common/prompts';
+import { EncodedFood, SelectedAsServedImage } from '@intake24/common/types';
+import { AsServedParameters } from '@intake24/common/types/http';
+import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;

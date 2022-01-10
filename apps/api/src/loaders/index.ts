@@ -1,5 +1,5 @@
 import type { Express } from 'express';
-import type { Ops } from '@api/app';
+import type { Ops } from '@intake24/api/app';
 import expressLoader from './express';
 import routesLoader from './routes';
 import securityLoader from './security';

@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { SignInLogAttributes, SignInLogCreationAttributes } from '@common/types/models';
+import { SignInLogAttributes, SignInLogCreationAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 

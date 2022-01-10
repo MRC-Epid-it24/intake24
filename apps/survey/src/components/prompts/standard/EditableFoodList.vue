@@ -38,8 +38,8 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { FoodState } from '@common/types';
-import { copy } from '@common/util';
+import { FoodState } from '@intake24/common/types';
+import { copy } from '@intake24/common/util';
 
 export interface HasEditableFoodList {
   editableList: FoodState[];

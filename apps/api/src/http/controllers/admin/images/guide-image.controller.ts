@@ -5,11 +5,11 @@ import {
   GuideImageRefs,
   GuideImageListEntry,
   GuideImagesResponse,
-} from '@common/types/http/admin';
-import { NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
+} from '@intake24/common/types/http/admin';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import { GuideImage, ImageMap, PaginateQuery } from '@intake24/db';
-import imagesResponseCollection from '@api/http/responses/admin/images';
+import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { Controller, CrudActions } from '../../controller';
 
 export type GuideImageController = Controller<CrudActions>;

@@ -1,4 +1,4 @@
-import { UserState } from '@/types';
+import { UserState } from '@intake24/admin/types';
 
 const state = (): UserState => ({
   status: '',

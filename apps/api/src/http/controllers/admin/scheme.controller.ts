@@ -6,11 +6,11 @@ import {
   SchemeRefs,
   SchemesResponse,
   SchemeExportRefsResponse,
-} from '@common/types/http/admin';
-import { ExportField, ExportSectionId } from '@common/types/models';
-import type { IoC } from '@api/ioc';
-import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import { PromptQuestion } from '@common/prompts';
+} from '@intake24/common/types/http/admin';
+import { ExportField, ExportSectionId } from '@intake24/common/types/models';
+import type { IoC } from '@intake24/api/ioc';
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import { PromptQuestion } from '@intake24/common/prompts';
 import { Controller, CrudActions } from '../controller';
 
 export type SchemeController = Controller<CrudActions | 'copy' | 'templates' | 'dataExportRefs'>;

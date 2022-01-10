@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { ValidationChain } from 'express-validator';
-import validation from '@api/http/middleware/validation';
+import validation from '@intake24/api/http/middleware/validation';
 
 export type ValidationMiddleware = RequestHandler | ValidationChain;
 

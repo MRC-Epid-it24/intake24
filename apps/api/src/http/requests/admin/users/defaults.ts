@@ -2,8 +2,8 @@ import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { isPlainObject, has } from 'lodash';
 import { Op, WhereOptions, User } from '@intake24/db';
-import { unique } from '@api/http/rules';
-import { UserAttributes } from '@common/types/models';
+import { unique } from '@intake24/api/http/rules';
+import { UserAttributes } from '@intake24/common/types/models';
 import { permissions, roles } from '../acl';
 
 export const identifiers: Schema = {

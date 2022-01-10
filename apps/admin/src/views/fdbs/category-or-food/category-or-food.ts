@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import { CategoryLocalEntry, FoodLocalEntry } from '@common/types/http/admin';
-import { form } from '@/helpers';
+import { CategoryLocalEntry, FoodLocalEntry } from '@intake24/common/types/http/admin';
+import { form } from '@intake24/admin/helpers';
 
 export type Entry = CategoryLocalEntry | FoodLocalEntry;
 

@@ -1,5 +1,8 @@
 import { Column, DataType, HasMany, HasOne, Table } from 'sequelize-typescript';
-import { NutrientTableAttributes, NutrientTableCreationAttributes } from '@common/types/models';
+import {
+  NutrientTableAttributes,
+  NutrientTableCreationAttributes,
+} from '@intake24/common/types/models';
 import {
   NutrientTableRecord,
   NutrientTableCsvMapping,

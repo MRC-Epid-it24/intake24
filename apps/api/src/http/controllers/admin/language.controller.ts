@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { LanguageEntry, LanguagesResponse } from '@common/types/http/admin';
+import { LanguageEntry, LanguagesResponse } from '@intake24/common/types/http/admin';
 import { Language, LanguageMessage, PaginateQuery } from '@intake24/db';
 import { admin, survey, LocaleMessages } from '@intake24/i18n';
-import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import { LanguageMessageCreationAttributes } from '@common/types/models';
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import { LanguageMessageCreationAttributes } from '@intake24/common/types/models';
 import { Controller, CrudActions } from '../controller';
 
 export type LanguageController = Controller<CrudActions | 'initializeMessages'>;

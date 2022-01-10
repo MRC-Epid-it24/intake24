@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import validation from '@api/http/requests/authentication';
-import ioc from '@api/ioc';
-import { wrapAsync } from '@api/util';
+import validation from '@intake24/api/http/requests/authentication';
+import ioc from '@intake24/api/ioc';
+import { wrapAsync } from '@intake24/api/util';
 
 const { authenticationController } = ioc.cradle;
 

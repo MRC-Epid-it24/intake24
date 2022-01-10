@@ -1,4 +1,8 @@
-import { UserEntry, UserMgmtListEntry, SurveyRespondentEntry } from '@common/types/http/admin';
+import {
+  UserEntry,
+  UserMgmtListEntry,
+  SurveyRespondentEntry,
+} from '@intake24/common/types/http/admin';
 import { User, UserSurveyAlias } from '@intake24/db';
 import { permissionListResponse } from './permissions';
 

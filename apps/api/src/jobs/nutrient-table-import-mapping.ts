@@ -2,9 +2,9 @@ import { Job } from 'bullmq';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import path from 'path';
-import type { NutrientTableImportMappingParams } from '@common/types';
-import { excelColumnToOffset } from '@common/util/strings';
-import type { IoC } from '@api/ioc';
+import type { NutrientTableImportMappingParams } from '@intake24/common/types';
+import { excelColumnToOffset } from '@intake24/common/util/strings';
+import type { IoC } from '@intake24/api/ioc';
 import { NutrientTable, NutrientTableCsvMappingNutrient, FoodsNutrientType } from '@intake24/db';
 import StreamLockJob from './stream-lock-job';
 

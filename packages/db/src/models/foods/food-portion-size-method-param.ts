@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import {
   PortionSizeMethodParameterAttributes,
   PortionSizeMethodParameterCreationAttributes,
-} from '@common/types/models/foods';
+} from '@intake24/common/types/models/foods';
 import { FoodPortionSizeMethod } from '.';
 import BaseModel from '../model';
 

@@ -3,7 +3,7 @@ import { NutrientTableRecord, FoodsNutrientType } from '@intake24/db';
 import {
   NutrientTableRecordNutrientAttributes,
   NutrientTableRecordNutrientCreationAttributes,
-} from '@common/types/models';
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 
 @Table({

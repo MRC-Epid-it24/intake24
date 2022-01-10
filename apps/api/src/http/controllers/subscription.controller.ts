@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { User, UserSubscription } from '@intake24/db';
-import type { IoC } from '@api/ioc';
+import type { IoC } from '@intake24/api/ioc';
 import { Controller } from './controller';
 
 export type SubscriptionController = Controller<'push' | 'subscribe' | 'unsubscribe'>;

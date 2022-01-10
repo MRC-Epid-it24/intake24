@@ -1,4 +1,4 @@
-import { Dictionary } from '@common/types';
+import { Dictionary } from '@intake24/common/types';
 import authentication from './authentication';
 import dashboard from './dashboard.vue';
 import fdbs from './fdbs';

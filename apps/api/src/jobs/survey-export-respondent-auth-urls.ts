@@ -4,11 +4,11 @@ import fs from 'fs-extra';
 import json2csv, { Transform } from 'json2csv';
 import { trimEnd } from 'lodash';
 import path from 'path';
-import { SurveyExportRespondentAuthUrlsParams } from '@common/types';
+import { SurveyExportRespondentAuthUrlsParams } from '@intake24/common/types';
 import { Job as DbJob, Survey, UserSurveyAlias } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
-import { addTime } from '@api/util';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import { addTime } from '@intake24/api/util';
 import BaseJob from './job';
 
 export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExportRespondentAuthUrlsParams> {

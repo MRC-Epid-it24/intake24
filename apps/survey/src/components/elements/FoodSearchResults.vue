@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FoodSearchResponse } from '@common/types/http';
+import { FoodSearchResponse } from '@intake24/common/types/http';
 
 export default Vue.extend({
   name: 'FoodSearchResults',

@@ -25,10 +25,10 @@ import {
   StreamFindOptions,
 } from '@intake24/db';
 import { Readable } from 'stream';
-import type { ExportSection } from '@common/types/models';
-import type { SurveyDataExportParams } from '@common/types';
-import type { IoC } from '@api/ioc';
-import { NotFoundError } from '@api/http/errors';
+import type { ExportSection } from '@intake24/common/types/models';
+import type { SurveyDataExportParams } from '@intake24/common/types';
+import type { IoC } from '@intake24/api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
 import type { ExportFieldInfo } from './data-export-mapper';
 import { EMPTY } from './data-export-fields';
 

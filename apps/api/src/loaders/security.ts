@@ -1,6 +1,6 @@
 import cors from 'cors';
 import { Express } from 'express';
-import type { Ops } from '@api/app';
+import type { Ops } from '@intake24/api/app';
 
 export default async (app: Express, { config }: Ops): Promise<void> => {
   const {

@@ -8,8 +8,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { merge } from '@common/util';
-import { BasePromptProps, infoPromptProps } from '@common/prompts';
+import { merge } from '@intake24/common/util';
+import { BasePromptProps, infoPromptProps } from '@intake24/common/prompts';
 import BasePrompt from '../BasePrompt';
 
 export default Vue.extend({

@@ -11,12 +11,12 @@ import {
   FoodLocal,
   PaginateQuery,
 } from '@intake24/db';
-import { CategoryInput, CategoryListEntry } from '@common/types/http/admin';
-import type { IoC } from '@api/ioc';
-import { NotFoundError } from '@api/http/errors';
+import { CategoryInput, CategoryListEntry } from '@intake24/common/types/http/admin';
+import type { IoC } from '@intake24/api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
-import { categoryResponse } from '@api/http/responses/admin';
-import { CategoryLocalAttributes } from '@common/types/models';
+import { categoryResponse } from '@intake24/api/http/responses/admin';
+import { CategoryLocalAttributes } from '@intake24/common/types/models';
 
 const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   const browseCategories = async (localeId: string, query: PaginateQuery) => {

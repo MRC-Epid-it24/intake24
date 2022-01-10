@@ -72,13 +72,13 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
-import { Dictionary } from '@common/types';
-import { Pagination, PaginationMeta } from '@common/types/models';
-import ToolBar from '@/components/toolbar/tool-bar.vue';
-import handlesLoading from '@/mixins/handles-loading';
-import hasResource from '@/mixins/has-resource';
-import DataTableFilter from '@/components/datatable/data-table-filter.vue';
+import { Dictionary } from '@intake24/common/types';
+import { Pagination, PaginationMeta } from '@intake24/common/types/models';
 import { ConfirmDialog } from '@intake24/ui';
+import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
+import handlesLoading from '@intake24/admin/mixins/handles-loading';
+import hasResource from '@intake24/admin/mixins/has-resource';
+import DataTableFilter from '@intake24/admin/components/datatable/data-table-filter.vue';
 
 type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof hasResource>;
 

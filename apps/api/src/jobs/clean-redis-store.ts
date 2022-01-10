@@ -1,7 +1,7 @@
 import { Job } from 'bullmq';
-import { CleanRedisStoreParams } from '@common/types';
-import type { IoC } from '@api/ioc';
-import type { RedisStore } from '@api/services';
+import { CleanRedisStoreParams } from '@intake24/common/types';
+import type { IoC } from '@intake24/api/ioc';
+import type { RedisStore } from '@intake24/api/services';
 import BaseJob from './job';
 
 export default class CleanRedisStore extends BaseJob<CleanRedisStoreParams> {

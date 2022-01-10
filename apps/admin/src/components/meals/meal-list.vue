@@ -107,14 +107,14 @@
 </template>
 
 <script lang="ts">
-import { copy } from '@common/util';
+import { copy } from '@intake24/common/util';
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { FormRefs, Meal, Meals } from '@common/types';
-import { defaultMeals } from '@common/schemes';
-import LanguageSelector from '@/components/prompts/partials/language-selector.vue';
-import LoadSectionDialog from '@/components/prompts/load-section-dialog.vue';
+import { FormRefs, Meal, Meals } from '@intake24/common/types';
+import { defaultMeals } from '@intake24/common/schemes';
 import { ConfirmDialog } from '@intake24/ui';
+import LanguageSelector from '@intake24/admin/components/prompts/partials/language-selector.vue';
+import LoadSectionDialog from '@intake24/admin/components/prompts/load-section-dialog.vue';
 
 export type MealDialog = {
   show: boolean;

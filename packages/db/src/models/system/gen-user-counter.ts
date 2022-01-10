@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { GenUserCounterAttributes } from '@common/types/models';
+import { GenUserCounterAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { Survey } from '.';
 

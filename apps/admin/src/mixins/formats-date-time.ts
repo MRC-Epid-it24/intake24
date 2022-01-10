@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { formatDate } from '@/util';
+import { formatDate } from '@intake24/admin/util';
 
 export default Vue.extend({
   methods: {

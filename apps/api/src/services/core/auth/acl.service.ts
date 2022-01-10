@@ -1,5 +1,5 @@
 import { Permission, Role, User } from '@intake24/db';
-import type { IoC } from '@api/ioc';
+import type { IoC } from '@intake24/api/ioc';
 
 export const ACL_PERMISSIONS_KEY = 'acl:permissions';
 export const ACL_ROLES_KEY = 'acl:roles';

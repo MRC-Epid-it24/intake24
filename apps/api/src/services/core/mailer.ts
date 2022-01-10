@@ -1,5 +1,5 @@
 import nodemailer, { SendMailOptions, Transporter } from 'nodemailer';
-import type { IoC } from '@api/ioc';
+import type { IoC } from '@intake24/api/ioc';
 
 export default class Mailer {
   private readonly environment;

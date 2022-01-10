@@ -47,9 +47,9 @@ import {
   CategoryListEntry,
   FoodListEntry,
   RootCategoriesResponse,
-} from '@common/types/http/admin';
-import { DetailMixin } from '@/types';
-import detailMixin from '@/components/entry/detail-mixin';
+} from '@intake24/common/types/http/admin';
+import { DetailMixin } from '@intake24/admin/types';
+import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 
 export interface CategoryListEntryItem extends CategoryListEntry {
   children: (CategoryListEntryItem | FoodListEntry)[];

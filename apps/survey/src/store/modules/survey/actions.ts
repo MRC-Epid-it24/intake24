@@ -1,10 +1,10 @@
 import axios from 'axios';
 import Vue from 'vue';
 import { ActionTree } from 'vuex';
-import { SurveyState as CurrentSurveyState } from '@common/types';
-import { RootState, SurveyState } from '@/types/vuex';
-import surveyService from '@/services/survey.service';
-import { surveyInitialState } from '@/dynamic-recall/dynamic-recall';
+import { SurveyState as CurrentSurveyState } from '@intake24/common/types';
+import { RootState, SurveyState } from '@intake24/survey/types/vuex';
+import surveyService from '@intake24/survey/services/survey.service';
+import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { LS_KEY_HISTORY, LS_KEY_STATE, LS_LIFETIME } from './state';
 
 const actions: ActionTree<SurveyState, RootState> = {

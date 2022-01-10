@@ -1,4 +1,4 @@
-import { EntryState } from '@/types';
+import { EntryState } from '@intake24/admin/types';
 
 const state = (): EntryState => ({
   data: {},

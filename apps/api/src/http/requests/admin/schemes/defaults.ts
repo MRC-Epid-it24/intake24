@@ -3,9 +3,13 @@ import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions, Scheme } from '@intake24/db';
 import slugify from 'slugify';
-import { SchemeAttributes, SchemeTypes } from '@common/types/models';
-import { validateMeals, validateRecallQuestions, validateExportSections } from '@common/validators';
-import { unique, identifierSafeChars } from '@api/http/rules';
+import { SchemeAttributes, SchemeTypes } from '@intake24/common/types/models';
+import {
+  validateMeals,
+  validateRecallQuestions,
+  validateExportSections,
+} from '@intake24/common/validators';
+import { unique, identifierSafeChars } from '@intake24/api/http/rules';
 
 export const id: ParamSchema = {
   in: ['body'],

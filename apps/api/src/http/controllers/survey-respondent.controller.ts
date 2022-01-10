@@ -4,12 +4,12 @@ import {
   SurveyFollowUpResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
-} from '@common/types/http';
-import { flattenSchemeWithSection, isMealSection } from '@common/schemes';
-import { merge } from '@common/util';
+} from '@intake24/common/types/http';
+import { flattenSchemeWithSection, isMealSection } from '@intake24/common/schemes';
+import { merge } from '@intake24/common/util';
 import { Survey, User } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import { Controller } from './controller';
 
 export type SurveyRespondentController = Controller<

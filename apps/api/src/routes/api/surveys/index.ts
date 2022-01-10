@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import ioc from '@api/ioc';
-import { wrapAsync } from '@api/util';
-import validation from '@api/http/requests/surveys';
+import ioc from '@intake24/api/ioc';
+import { wrapAsync } from '@intake24/api/util';
+import validation from '@intake24/api/http/requests/surveys';
 import surveyRespondents from './survey-respondents';
 
 const { environment, surveyController } = ioc.cradle;

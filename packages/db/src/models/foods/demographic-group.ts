@@ -3,8 +3,8 @@ import {
   DemographicGroupAttributes,
   DemographicGroupCreationAttributes,
   NutrientRuleType,
-} from '@common/types/models/foods';
-import { Sex } from '@common/feedback';
+} from '@intake24/common/types/models/foods';
+import { Sex } from '@intake24/common/feedback';
 import BaseModel from '../model';
 import { DemographicGroupScaleSector, FoodsNutrientType, PhysicalActivityLevel } from '.';
 

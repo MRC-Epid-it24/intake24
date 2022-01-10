@@ -3,11 +3,11 @@ import {
   PublicSurveyEntryResponse,
   PublicSurveyListResponse,
   GenerateUserResponse,
-} from '@common/types/http';
+} from '@intake24/common/types/http';
 import { Survey } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
-import { RespondentFromJWT } from '@api/services';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import { RespondentFromJWT } from '@intake24/api/services';
 import { Controller } from './controller';
 
 export type SurveyController = Controller<'browse' | 'entry' | 'generateUser' | 'createUser'>;

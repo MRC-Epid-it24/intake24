@@ -1,6 +1,6 @@
 import { createContainer, asClass, asValue } from 'awilix';
 
-import config from '@api/config';
+import config from '@intake24/api/config';
 import type {
   ACLConfig,
   AppConfig,
@@ -12,7 +12,7 @@ import type {
   SecurityConfig,
   ServicesConfig,
   SessionConfig,
-} from '@api/config';
+} from '@intake24/api/config';
 import { Database, DatabaseConfig, DatabasesInterface } from '@intake24/db';
 import { Logger, LogConfig } from '@intake24/services';
 import type {
@@ -57,7 +57,7 @@ import type {
   TaskController,
   PermissionController,
   RoleController,
-} from '@api/http/controllers';
+} from '@intake24/api/http/controllers';
 import type {
   AdminCategoryService,
   AdminFoodService,
@@ -89,11 +89,11 @@ import type {
   Session,
   // MFA Providers
   MFAProvider,
-} from '@api/services';
-import type { JobsQueueHandler, TasksQueueHandler } from '@api/services/core/queues';
-import type { Jobs } from '@api/jobs';
+} from '@intake24/api/services';
+import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
+import type { Jobs } from '@intake24/api/jobs';
 import type { User } from '@intake24/db';
-import { Environment } from '@common/types';
+import { Environment } from '@intake24/common/types';
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';

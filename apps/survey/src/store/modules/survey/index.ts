@@ -1,5 +1,5 @@
 import { Module } from 'vuex';
-import { RootState, SurveyState } from '@/types/vuex';
+import { RootState, SurveyState } from '@intake24/survey/types/vuex';
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';

@@ -3,7 +3,7 @@ import {
   DemographicGroupScaleSectorAttributes,
   DemographicGroupScaleSectorCreationAttributes,
   Sentiment,
-} from '@common/types/models/foods';
+} from '@intake24/common/types/models/foods';
 import BaseModel from '../model';
 import { DemographicGroup } from '.';
 

@@ -1,4 +1,4 @@
-import { SurveyEntry, SurveyListEntry } from '@common/types/http/admin';
+import { SurveyEntry, SurveyListEntry } from '@intake24/common/types/http/admin';
 import { Survey } from '@intake24/db';
 
 export const surveyListResponse = (survey: Survey): SurveyListEntry => {

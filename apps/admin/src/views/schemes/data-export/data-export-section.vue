@@ -132,7 +132,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import draggable from 'vuedraggable';
-import { ExportSection, ExportField } from '@common/types/models';
+import { ExportSection, ExportField } from '@intake24/common/types/models';
 
 export default Vue.extend({
   name: 'DataExportSection',

@@ -1,8 +1,8 @@
 import { Request } from 'express';
 import { Schema } from 'express-validator';
 import { Op, WhereOptions, Language } from '@intake24/db';
-import { unique } from '@api/http/rules';
-import { LanguageAttributes } from '@common/types/models';
+import { unique } from '@intake24/api/http/rules';
+import { LanguageAttributes } from '@intake24/common/types/models';
 
 const defaults: Schema = {
   englishName: {

@@ -1,5 +1,5 @@
-import { ComponentType } from '@common/prompts';
-import { MealSection, SurveyQuestionSection } from '@common/schemes';
+import { ComponentType } from '@intake24/common/prompts';
+import { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 
 const baseTab = ['general', 'content', 'conditions'];
 const validatedTab = [...baseTab, 'validation'];

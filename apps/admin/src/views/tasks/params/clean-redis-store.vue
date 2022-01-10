@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { TaskRefs } from '@common/types/http/admin';
+import { TaskRefs } from '@intake24/common/types/http/admin';
 import Vue from 'vue';
 
 export default Vue.extend({

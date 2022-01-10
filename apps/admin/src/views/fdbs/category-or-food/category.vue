@@ -91,8 +91,8 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { CategoryLocalEntry } from '@common/types/http/admin';
-import { form } from '@/helpers';
+import { CategoryLocalEntry } from '@intake24/common/types/http/admin';
+import { form } from '@intake24/admin/helpers';
 import categoryOrFood from './category-or-food';
 import AttributeController from './partials/attribute-controller.vue';
 import CategoryController from './partials/category-controller.vue';

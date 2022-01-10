@@ -1,6 +1,6 @@
 import Router from 'vue-router';
 import { Store } from 'vuex';
-import { RootState } from '@/types';
+import { RootState } from '@intake24/admin/types';
 import resources from './resources';
 
 export default (router: Router, store: Store<RootState>): void => {

@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { anyPermission, permission, canManageSurvey } from '@api/http/middleware/acl';
-import validation from '@api/http/requests/admin/surveys';
-import ioc from '@api/ioc';
-import { wrapAsync } from '@api/util';
+import { anyPermission, permission, canManageSurvey } from '@intake24/api/http/middleware/acl';
+import validation from '@intake24/api/http/requests/admin/surveys';
+import ioc from '@intake24/api/ioc';
+import { wrapAsync } from '@intake24/api/util';
 import surveyDataExport from './survey-data-export';
 import surveyMgmt from './survey-mgmt';
 import surveyRespondents from './survey-respondents';

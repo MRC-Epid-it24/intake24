@@ -133,10 +133,10 @@
 </template>
 
 <script lang="ts">
-import { copy, merge } from '@common/util';
+import { copy, merge } from '@intake24/common/util';
 import Vue, { VueConstructor } from 'vue';
-import { SurveyQuestionSection, MealSection } from '@common/schemes';
-import { FormRefs, LocaleTranslation } from '@common/types';
+import { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
+import { FormRefs, LocaleTranslation } from '@intake24/common/types';
 import {
   PromptQuestion,
   QuestionType,
@@ -144,11 +144,11 @@ import {
   portionSizePromptQuestions,
   standardPromptQuestions,
   BasePromptProps,
-} from '@common/prompts';
-import { promptSettings } from '@/components/prompts';
-import customPrompts from '@/components/prompts/custom';
-import standardPrompts from '@/components/prompts/standard';
-import portionSizePrompts from '@/components/prompts/portion-size';
+} from '@intake24/common/prompts';
+import { promptSettings } from '@intake24/admin/components/prompts';
+import customPrompts from '@intake24/admin/components/prompts/custom';
+import standardPrompts from '@intake24/admin/components/prompts/standard';
+import portionSizePrompts from '@intake24/admin/components/prompts/portion-size';
 import PromptTypeSelector from './prompt-type-selector.vue';
 import LanguageSelector from './partials/language-selector.vue';
 

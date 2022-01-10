@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ReCaptcha } from '@api/config';
+import { ReCaptcha } from '@intake24/api/config';
 
 export type ReCaptchaResponse = {
   success: boolean;

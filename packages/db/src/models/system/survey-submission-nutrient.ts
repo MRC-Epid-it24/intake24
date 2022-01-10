@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript
 import {
   SurveySubmissionNutrientAttributes,
   SurveySubmissionNutrientCreationAttributes,
-} from '@common/types/models';
+} from '@intake24/common/types/models';
 import { SystemNutrientType, SurveySubmissionFood } from '.';
 import BaseModel from '../model';
 

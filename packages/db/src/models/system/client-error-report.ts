@@ -2,8 +2,8 @@ import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequeliz
 import {
   ClientErrorReportAttributes,
   ClientErrorReportCreationAttributes,
-} from '@common/types/models';
-import { Dictionary } from '@common/types';
+} from '@intake24/common/types/models';
+import { Dictionary } from '@intake24/common/types';
 import BaseModel from '../model';
 import { Survey, User } from '.';
 

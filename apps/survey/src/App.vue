@@ -79,7 +79,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { TranslateResult } from 'vue-i18n';
-import Loader from '@/components/Loader.vue';
+import Loader from '@intake24/survey/components/Loader.vue';
 import { ConfirmDialog, pwaUpdate, setsLanguage } from '@intake24/ui';
 
 export interface AppComponent {

@@ -1,7 +1,7 @@
 import { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import Router from 'vue-router';
 import { Store } from 'vuex';
-import { RootState } from '@/types/vuex';
+import { RootState } from '@intake24/admin/types/vuex';
 
 export type SubscribeCallback = (err?: AxiosError) => void;
 

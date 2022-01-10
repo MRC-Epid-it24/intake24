@@ -9,10 +9,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
-import { FoodSearchPromptProps } from '@common/prompts';
-import { FoodState } from '@common/types';
-import { UserFoodData } from '@common/types/http';
-import FoodSearchPrompt from '@/components/prompts/standard/FoodSearchPrompt.vue';
+import { FoodSearchPromptProps } from '@intake24/common/prompts';
+import { FoodState } from '@intake24/common/types';
+import { UserFoodData } from '@intake24/common/types/http';
+import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
 
 export default Vue.extend({
   name: 'FoodSearchPromptHandler',

@@ -1,7 +1,7 @@
 import { Op, GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@intake24/db';
-import { CreateImageMapInput, UpdateImageMapInput } from '@common/types/http/admin';
-import { NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
+import { CreateImageMapInput, UpdateImageMapInput } from '@intake24/common/types/http/admin';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 
 export interface ImageMapService {
   create: (input: CreateImageMapInput) => Promise<ImageMap>;

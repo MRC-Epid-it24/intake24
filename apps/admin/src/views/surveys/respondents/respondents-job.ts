@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import { PollsForJobs } from '@/components/polls-for-jobs';
+import { PollsForJobs } from '@intake24/admin/components/polls-for-jobs';
 
 type mixins = InstanceType<typeof PollsForJobs>;
 

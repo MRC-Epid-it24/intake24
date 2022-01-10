@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { RoleEntry, RoleRefs, RolesResponse } from '@common/types/http/admin';
+import { RoleEntry, RoleRefs, RolesResponse } from '@intake24/common/types/http/admin';
 import { Permission, Role, PaginateQuery } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
-import { roleEntryResponse } from '@api/http/responses/admin';
-import type { IoC } from '@api/ioc';
-import type { Controller, CrudActions } from '@api/http/controllers';
+import { NotFoundError } from '@intake24/api/http/errors';
+import { roleEntryResponse } from '@intake24/api/http/responses/admin';
+import type { IoC } from '@intake24/api/ioc';
+import type { Controller, CrudActions } from '@intake24/api/http/controllers';
 import { pick } from 'lodash';
 
 export type RoleController = Controller<CrudActions>;

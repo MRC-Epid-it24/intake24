@@ -26,7 +26,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import { PromptQuestion, QuestionType } from '@common/prompts';
+import { PromptQuestion, QuestionType } from '@intake24/common/prompts';
 
 export default Vue.extend({
   name: 'PromptTypeSelector',

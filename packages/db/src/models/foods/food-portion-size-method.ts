@@ -3,7 +3,7 @@ import {
   FoodPortionSizeMethodAttributes,
   FoodPortionSizeMethodCreationAttributes,
   PortionSizeMethodId,
-} from '@common/types/models/foods';
+} from '@intake24/common/types/models/foods';
 import { FoodLocal, FoodPortionSizeMethodParameter } from '@intake24/db';
 import BaseModel from '../model';
 

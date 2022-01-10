@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import type { Logger } from '@intake24/services';
-import type { Config } from '@api/config';
-import loaders from '@api/loaders';
+import type { Config } from '@intake24/api/config';
+import loaders from '@intake24/api/loaders';
 
 export interface Ops {
   config: Config;

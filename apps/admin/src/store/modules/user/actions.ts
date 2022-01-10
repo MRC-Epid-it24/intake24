@@ -1,6 +1,6 @@
 import { ActionTree } from 'vuex';
-import { RootState, UserState } from '@/types';
-import http from '@/services/http.service';
+import { RootState, UserState } from '@intake24/admin/types';
+import http from '@intake24/admin/services/http.service';
 
 const actions: ActionTree<UserState, RootState> = {
   async request({ commit }) {

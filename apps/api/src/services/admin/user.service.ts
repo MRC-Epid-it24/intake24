@@ -1,11 +1,11 @@
 import { Op, User, UserCustomField, UserPassword } from '@intake24/db';
-import { UserPasswordAttributes } from '@common/types/models';
-import { CreateUserInput, UpdateUserInput } from '@common/types/http/admin';
-import { CustomField } from '@common/types';
-import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import type { IoC } from '@api/ioc';
-import { defaultAlgorithm } from '@api/util/passwords';
-import { toSimpleName } from '@api/util';
+import { UserPasswordAttributes } from '@intake24/common/types/models';
+import { CreateUserInput, UpdateUserInput } from '@intake24/common/types/http/admin';
+import { CustomField } from '@intake24/common/types';
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import { defaultAlgorithm } from '@intake24/api/util/passwords';
+import { toSimpleName } from '@intake24/api/util';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '../core/auth';
 
 export type UserPasswordInput = {

@@ -3,15 +3,15 @@ import { asValue } from 'awilix';
 import { Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { User } from '@intake24/db';
-import { ForbiddenError } from '@api/http/errors';
-import ioc, { IoC } from '@api/ioc';
+import { ForbiddenError } from '@intake24/api/http/errors';
+import ioc, { IoC } from '@intake24/api/ioc';
 import {
   foodDatabaseMaintainer,
   surveyRespondent,
   surveyStaff,
   surveyAdmin,
   foodsAdmin,
-} from '@api/services/core/auth';
+} from '@intake24/api/services/core/auth';
 
 /*
  * This middleware should be placed after authentication

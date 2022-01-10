@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse, Method } from 'axios';
-import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@/types/http';
+import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/survey/types/http';
 
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];

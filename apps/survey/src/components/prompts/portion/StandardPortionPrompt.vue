@@ -64,11 +64,11 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 
-import { QuantityValues, ValidatedPromptProps } from '@common/prompts';
-import { LocaleTranslation, StandardPortionUnit } from '@common/types';
-import ErrorAlert from '@/components/elements/ErrorAlert.vue';
-import QuantityCard from '@/components/elements/QuantityCard.vue';
-import localeContent from '@/components/mixins/localeContent';
+import { QuantityValues, ValidatedPromptProps } from '@intake24/common/prompts';
+import { LocaleTranslation, StandardPortionUnit } from '@intake24/common/types';
+import ErrorAlert from '@intake24/survey/components/elements/ErrorAlert.vue';
+import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({

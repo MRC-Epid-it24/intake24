@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { FoodLocal } from '@intake24/db';
-import { InternalServerError } from '@api/http/errors';
-import { FoodListEntry } from '@common/types/http/admin';
+import { InternalServerError } from '@intake24/api/http/errors';
+import { FoodListEntry } from '@intake24/common/types/http/admin';
 
 export const foodsResponse = (food: FoodLocal): FoodListEntry => {
   const { id, foodCode: code, localeId, name, main } = food;

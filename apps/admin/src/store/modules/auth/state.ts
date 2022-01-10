@@ -1,4 +1,4 @@
-import { AuthState } from '@/types';
+import { AuthState } from '@intake24/admin/types';
 
 const state = (): AuthState => ({
   accessToken: null,

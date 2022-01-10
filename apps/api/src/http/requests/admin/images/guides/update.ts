@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
-import { validateGuideImageObjects } from '@common/validators';
-import validate from '@api/http/requests/validate';
+import { validateGuideImageObjects } from '@intake24/common/validators';
+import validate from '@intake24/api/http/requests/validate';
 import defaults from './defaults';
 
 export default validate(

@@ -2,7 +2,7 @@ import {
   HenryCoefficientsResponse,
   PhysicalActivityLevelsResponse,
   WeightTargetsResponse,
-} from '@common/types/http';
+} from '@intake24/common/types/http';
 import http from './http.service';
 
 export default {

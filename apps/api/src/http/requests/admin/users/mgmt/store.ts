@@ -1,9 +1,9 @@
 import { Request } from 'express';
 import { checkSchema } from 'express-validator';
 import { Op, WhereOptions, User } from '@intake24/db';
-import validate from '@api/http/requests/validate';
-import { unique } from '@api/http/rules';
-import { UserAttributes } from '@common/types/models';
+import validate from '@intake24/api/http/requests/validate';
+import { unique } from '@intake24/api/http/rules';
+import { UserAttributes } from '@intake24/common/types/models';
 import defaults from './defaults';
 
 export default validate(

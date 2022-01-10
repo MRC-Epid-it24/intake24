@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 import type { Logger } from '@intake24/services';
-import type { Environment } from '@common/types';
+import type { Environment } from '@intake24/common/types';
 import type { DatabaseType, DatabaseConfig } from './config';
 import * as foods from './models/foods';
 import * as system from './models/system';

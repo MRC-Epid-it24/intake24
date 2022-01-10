@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { JobEntry } from '@common/types/http/admin';
+import { JobEntry } from '@intake24/common/types/http/admin';
 
 export default (Vue as VueConstructor<Vue>).extend({
   name: 'PollsJobList',

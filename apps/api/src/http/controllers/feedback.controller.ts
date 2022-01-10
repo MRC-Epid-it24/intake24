@@ -4,8 +4,8 @@ import {
   PhysicalActivityLevelsResponse,
   WeightTargetsResponse,
   HenryCoefficientsResponse,
-} from '@common/types/http';
-import { henryCoefficientsData, weightTargetsData } from '@common/feedback';
+} from '@intake24/common/types/http';
+import { henryCoefficientsData, weightTargetsData } from '@intake24/common/feedback';
 import { Controller } from './controller';
 
 export type FeedbackController = Controller<

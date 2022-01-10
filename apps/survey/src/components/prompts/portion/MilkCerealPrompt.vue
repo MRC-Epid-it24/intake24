@@ -110,13 +110,13 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { merge } from '@common/util';
-import { MilkCerealPromptProps, milkCerealPromptDefaultProps } from '@common/prompts';
-import localeContent from '@/components/mixins/localeContent';
+import { merge } from '@intake24/common/util';
+import { MilkCerealPromptProps, milkCerealPromptDefaultProps } from '@intake24/common/prompts';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
 import expansionPanelControls, {
   ExpansionPanelControls,
-} from '@/components/mixins/expansionPanelControls';
-import ValidInvalidIcon from '@/components/elements/ValidInvalidIcon.vue';
+} from '@intake24/survey/components/mixins/expansionPanelControls';
+import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import BasePortion, { Portion } from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion & ExpansionPanelControls>).extend({

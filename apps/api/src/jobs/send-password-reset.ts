@@ -1,9 +1,9 @@
 import { Job } from 'bullmq';
 import { trim } from 'lodash';
 import nunjucks from 'nunjucks';
-import { SendPasswordResetParams } from '@common/types';
-import type { IoC } from '@api/ioc';
-import { isUrlAbsolute } from '@api/util';
+import { SendPasswordResetParams } from '@intake24/common/types';
+import type { IoC } from '@intake24/api/ioc';
+import { isUrlAbsolute } from '@intake24/api/util';
 import BaseJob from './job';
 
 export default class SendPasswordReset extends BaseJob<SendPasswordResetParams> {

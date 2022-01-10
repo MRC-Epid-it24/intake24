@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Dictionary, LocaleTranslation } from '@common/types';
+import { Dictionary, LocaleTranslation } from '@intake24/common/types';
 
 export type LocaleContent = {
   getLocaleContent<T>(content: LocaleTranslation<T>): T;

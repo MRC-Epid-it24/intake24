@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { GetterTree } from 'vuex';
-import { Permission, RootState, UserState } from '@/types';
+import { Permission, RootState, UserState } from '@intake24/admin/types';
 
 const getters: GetterTree<UserState, RootState> = {
   can:

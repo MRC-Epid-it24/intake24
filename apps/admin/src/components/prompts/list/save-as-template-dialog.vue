@@ -64,15 +64,15 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { copy } from '@common/util';
+import { copy } from '@intake24/common/util';
 import pick from 'lodash/pick';
-import { SchemeQuestionEntry, SchemeRefs } from '@common/types/http/admin';
-import { PromptQuestion } from '@common/prompts';
-import { ValidationError } from '@common/types';
-import { MapRefsMixin } from '@/types';
-import { form } from '@/helpers';
+import { SchemeQuestionEntry, SchemeRefs } from '@intake24/common/types/http/admin';
+import { PromptQuestion } from '@intake24/common/prompts';
+import { ValidationError } from '@intake24/common/types';
+import { MapRefsMixin } from '@intake24/admin/types';
+import { form } from '@intake24/admin/helpers';
 
-import mapRefs from '@/components/entry/map-refs';
+import mapRefs from '@intake24/admin/components/entry/map-refs';
 
 export type SchemeQuestionForm = {
   question: PromptQuestion;

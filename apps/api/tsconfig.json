@@ -5,9 +5,17 @@
     "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "paths": {
-      "@api/*": ["src/*"],
-      "@tests/*": ["tests/*"],
-      "@common/*": ["../../packages/common/src/*"],
+      "@intake24/api/*": ["src/*"],
+      "@intake24/api-tests/*": ["__tests__/*"],
+      "@intake24/common/*": ["../../packages/common/src/*"],
+      "@intake24/db/*": ["../../packages/db/src/*"],
+      "@intake24/i18n/*": ["../../packages/i18n/src/*"],
+      "@intake24/services/*": ["../../packages/services/src/*"],
+      /*
+      * This syntax works nice, though few notes to be aware
+      * - code also needs exported to level - this actually helps with package organization
+      * - VS Code intellisense doesn't auto-import, it offers the option but does not inject the import line
+      */
       "@intake24/*": ["../../packages/*/src"]
     }
   },

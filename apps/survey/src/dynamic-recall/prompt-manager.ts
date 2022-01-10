@@ -1,7 +1,7 @@
-import { ComponentType, Condition, conditionOps, PromptQuestion } from '@common/prompts';
-import { MealSection, SurveyQuestionSection } from '@common/schemes';
-import { SchemeEntryResponse } from '@common/types/http';
-import { SurveyState } from '@/types/vuex';
+import { ComponentType, Condition, conditionOps, PromptQuestion } from '@intake24/common/prompts';
+import { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import { SchemeEntryResponse } from '@intake24/common/types/http';
+import { SurveyState } from '@intake24/survey/types/vuex';
 import {
   asServedLeftoversComplete,
   asServedServingComplete,

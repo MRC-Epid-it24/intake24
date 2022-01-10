@@ -43,9 +43,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import ReviewMeal from '@/components/recall/mobile/review/ReviewMeal.vue';
-import SurveyProgress from '@/components/recall/mobile/review/SurveyProgress.vue';
-// import ContextMenu from '@/components/elements/ContextMenu.vue';
+import ReviewMeal from '@intake24/survey/components/recall/mobile/review/ReviewMeal.vue';
+import SurveyProgress from '@intake24/survey/components/recall/mobile/review/SurveyProgress.vue';
+// import ContextMenu from '@intake24/survey/components/elements/ContextMenu.vue';
 
 export type RecallAction = 'add-meal';
 

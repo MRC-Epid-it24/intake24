@@ -54,7 +54,7 @@
 import axios, { AxiosError } from 'axios';
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import { Errors } from '@common/util';
+import { Errors } from '@intake24/common/util';
 
 export default Vue.extend({
   name: 'AppLogin',

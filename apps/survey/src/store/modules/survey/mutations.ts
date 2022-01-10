@@ -6,12 +6,12 @@ import {
   MealTime,
   Selection,
   SurveyState as CurrentSurveyState,
-} from '@common/types';
-import { copy } from '@common/util';
-import { SurveyEntryResponse, SurveyUserInfoResponse } from '@common/types/http';
+} from '@intake24/common/types';
+import { copy } from '@intake24/common/util';
+import { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import { AxiosError } from 'axios';
-import { SurveyState } from '@/types/vuex';
-import i18n from '@/i18n';
+import { SurveyState } from '@intake24/survey/types/vuex';
+import i18n from '@intake24/survey/i18n';
 
 const mutations: MutationTree<SurveyState> = {
   setParameters(state, data: SurveyEntryResponse) {

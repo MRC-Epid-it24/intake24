@@ -130,11 +130,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { copy, merge } from '@common/util';
+import { copy, merge } from '@intake24/common/util';
 import draggable from 'vuedraggable';
-import { Condition, ConditionOp, conditionOps } from '@common/prompts';
-import PromptAnswerProps from '@/components/prompts/partials/conditions/prompt-answer-props.vue';
-import RecallNumberProps from '@/components/prompts/partials/conditions/recall-number-props.vue';
+import { Condition, ConditionOp, conditionOps } from '@intake24/common/prompts';
+import PromptAnswerProps from '@intake24/admin/components/prompts/partials/conditions/prompt-answer-props.vue';
+import RecallNumberProps from '@intake24/admin/components/prompts/partials/conditions/recall-number-props.vue';
 
 export interface IndexedCondition extends Condition {
   id: number;

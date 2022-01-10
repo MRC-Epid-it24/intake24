@@ -12,7 +12,7 @@ import {
   SubscriptionType,
   UserSubscriptionAttributes,
   UserSubscriptionCreationAttributes,
-} from '@common/types/models';
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 

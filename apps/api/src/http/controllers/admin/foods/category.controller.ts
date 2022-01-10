@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import type { IoC } from '@api/ioc';
+import type { IoC } from '@intake24/api/ioc';
 import { CategoryLocal, PaginateQuery } from '@intake24/db';
-import { NotFoundError } from '@api/http/errors';
+import { NotFoundError } from '@intake24/api/http/errors';
 import {
   CategoryLocalEntry,
   CategoryContentsResponse,
   RootCategoriesResponse,
   CategoriesResponse,
-} from '@common/types/http/admin';
-import { categoryContentsResponse } from '@api/http/responses/admin/categories';
+} from '@intake24/common/types/http/admin';
+import { categoryContentsResponse } from '@intake24/api/http/responses/admin/categories';
 import type { Controller, CrudActions } from '../../controller';
 
 export type AdminCategoryController = Controller<

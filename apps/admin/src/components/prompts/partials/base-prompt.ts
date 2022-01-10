@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import { Condition, PromptValidationProps } from '@common/prompts';
-import { LocaleTranslation } from '@common/types';
+import { Condition, PromptValidationProps } from '@intake24/common/prompts';
+import { LocaleTranslation } from '@intake24/common/types';
 import PromptContent from './prompt-content.vue';
 import PromptConditions from './prompt-conditions.vue';
 import PromptValidation from './prompt-validation.vue';

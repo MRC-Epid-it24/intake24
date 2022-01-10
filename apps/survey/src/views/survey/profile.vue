@@ -53,7 +53,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { mapGetters } from 'vuex';
 import { setsLanguage } from '@intake24/ui';
-import { LanguageAttributes } from '@common/types/models';
+import { LanguageAttributes } from '@intake24/common/types/models';
 
 type Mixins = InstanceType<typeof setsLanguage>;
 

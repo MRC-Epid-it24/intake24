@@ -1,4 +1,4 @@
-import { FoodSearchResponse, UserFoodData } from '@common/types/http';
+import { FoodSearchResponse, UserFoodData } from '@intake24/common/types/http';
 import http from './http.service';
 
 export default {

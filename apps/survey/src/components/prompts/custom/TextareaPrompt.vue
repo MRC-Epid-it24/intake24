@@ -18,8 +18,8 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { merge } from '@common/util';
-import { TextareaPromptProps, textareaPromptProps } from '@common/prompts';
+import { merge } from '@intake24/common/util';
+import { TextareaPromptProps, textareaPromptProps } from '@intake24/common/prompts';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({

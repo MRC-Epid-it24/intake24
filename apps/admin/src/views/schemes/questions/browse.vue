@@ -71,15 +71,17 @@ import {
   SurveyQuestionSection,
   MealSection,
   RecallQuestions,
-} from '@common/schemes';
-import { PromptQuestion } from '@common/prompts';
-import { Dictionary } from '@common/types';
-import { SchemeEntry, SchemeRefs } from '@common/types/http/admin';
-import formMixin from '@/components/entry/form-mixin';
-import LoadSectionDialog from '@/components/prompts/load-section-dialog.vue';
-import PromptList, { PromptQuestionMoveEvent } from '@/components/prompts/list/prompt-list.vue';
-import { form } from '@/helpers';
-import { FormMixin } from '@/types';
+} from '@intake24/common/schemes';
+import { PromptQuestion } from '@intake24/common/prompts';
+import { Dictionary } from '@intake24/common/types';
+import { SchemeEntry, SchemeRefs } from '@intake24/common/types/http/admin';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import LoadSectionDialog from '@intake24/admin/components/prompts/load-section-dialog.vue';
+import PromptList, {
+  PromptQuestionMoveEvent,
+} from '@intake24/admin/components/prompts/list/prompt-list.vue';
+import { form } from '@intake24/admin/helpers';
+import { FormMixin } from '@intake24/admin/types';
 import { SchemeForm } from '../form.vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin<SchemeEntry, SchemeRefs>>).extend({

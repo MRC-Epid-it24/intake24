@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import {
   NutrientTableCsvMappingNutrientAttributes,
   NutrientTableCsvMappingNutrientCreationAttributes,
-} from '@common/types/models';
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { NutrientTable, FoodsNutrientType } from '.';
 

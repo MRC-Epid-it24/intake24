@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { User } from '@intake24/db';
-import type { Controller } from '@api/http/controllers';
+import type { Controller } from '@intake24/api/http/controllers';
 
 export type AdminUserProfileController = Controller<'index'>;
 

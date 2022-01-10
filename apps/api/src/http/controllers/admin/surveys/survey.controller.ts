@@ -6,17 +6,17 @@ import {
   SurveyListEntry,
   SurveyRefs,
   SurveysResponse,
-} from '@common/types/http/admin';
+} from '@intake24/common/types/http/admin';
 import {
   createSurveyFields,
   overridesFields,
   staffUpdateSurveyFields,
   updateSurveyFields,
   SurveyAttributes,
-} from '@common/types/models';
-import { ForbiddenError, NotFoundError } from '@api/http/errors';
-import { surveyListResponse, surveyResponse } from '@api/http/responses/admin';
-import { staffSuffix, surveyAdmin } from '@api/services/core/auth';
+} from '@intake24/common/types/models';
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses/admin';
+import { staffSuffix, surveyAdmin } from '@intake24/api/services/core/auth';
 import { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyController = Controller<CrudActions | 'patch' | 'put'>;

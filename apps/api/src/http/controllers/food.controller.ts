@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import type { IoC } from '@api/ioc';
-import InvalidIdError from '@api/services/foods/invalid-id-error';
-import { NotFoundError } from '@api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
+import { NotFoundError } from '@intake24/api/http/errors';
 import { Controller } from './controller';
 
 export type FoodController = Controller<

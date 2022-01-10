@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import hasResource from '@/mixins/has-resource';
+import hasResource from '@intake24/admin/mixins/has-resource';
 
 export default Vue.extend({
   props: {
