@@ -1,6 +1,6 @@
-$flag-icons-path: '~flag-icon-css/flags' !default;
+$flag-icons-path: '~flag-icons/flags' !default;
 $flag-icons-rect-path: '/4x3' !default;
 $flag-icons-square-path: '/1x1' !default;
 
-@import "~flag-icon-css/sass/flag-icons-base";
-@import "~flag-icon-css/sass/flag-icons-list";
+@import "~flag-icons/sass/flag-icons-base";
+@import "~flag-icons/sass/flag-icons-list";
