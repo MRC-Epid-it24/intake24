@@ -106,7 +106,7 @@
     "@types/uuid": "^8.3.4",
     "@types/validator": "^13.7.1",
     "@types/web-push": "^3.3.2",
-    "faker": "^5.5.3",
+    "faker": "^6.6.6",
     "fork-ts-checker-webpack-plugin": "^6.5.0",
     "nodemon": "^2.0.15",
     "nodemon-webpack-plugin": "^4.7.0",
