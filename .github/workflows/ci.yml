@@ -36,7 +36,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
         postgres-version: [13]
         redis-version: [6]
 
@@ -101,10 +101,12 @@ jobs:
       - name: API - use Github test environment file
         run: cp ./tests/.env-test-gh ./tests/.env-test
 
-      - name: API - unit tests
+      - name: Repo - unit tests
+        working-directory: .
         run: pnpm run test:unit
 
-      - name: API - integration tests
+      - name: Repo - integration tests
+        working-directory: .
         run: pnpm run test:integration
 
   api-mariadb:
@@ -121,7 +123,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
         mariadb-version: [10]
         redis-version: [6]
 
@@ -188,10 +190,12 @@ jobs:
       - name: API - use Github test environment file
         run: cp ./tests/.env-test-gh ./tests/.env-test
 
-      - name: API - unit tests
+      - name: Repo - unit tests
+        working-directory: .
         run: pnpm run test:unit
 
-      #- name: API - integration tests
+      #- name: Repo - integration tests
+      #  working-directory: .
       #  run: pnpm run test:integration
 
   # api-mssql:
@@ -208,7 +212,7 @@ jobs:
 
   #   strategy:
   #     matrix:
-  #       node-version: [14.x, 16.x]
+  #       node-version: [16.x]
   #       mssql-version: [2019]
   #       redis-version: [6]
 
@@ -283,7 +287,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
 
     defaults:
       run:
@@ -322,7 +326,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
 
     defaults:
       run:
