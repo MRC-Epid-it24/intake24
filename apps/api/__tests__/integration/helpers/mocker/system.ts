@@ -1,7 +1,7 @@
 import faker from 'faker';
 import { nanoid, customAlphabet } from 'nanoid';
 import slugify from 'slugify';
-import * as uuid from 'uuid';
+import { randomUUID } from 'crypto';
 import { jobTypes } from '@intake24/common/types';
 import {
   PermissionRequest,
@@ -232,13 +232,13 @@ const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest =
 
 const submission = (surveyId: string, userId: string) => {
   return {
-    id: uuid.v4(),
+    id: randomUUID(),
     surveyId,
     userId,
     startTime: new Date(),
     endTime: faker.date.soon(1),
     submissionTime: faker.date.soon(1),
-    uxSessionId: uuid.v4(),
+    uxSessionId: randomUUID(),
   };
 };
 

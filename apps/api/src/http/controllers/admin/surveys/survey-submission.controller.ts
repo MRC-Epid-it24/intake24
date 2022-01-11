@@ -7,7 +7,7 @@ import {
   PaginateQuery,
   submissionScope,
 } from '@intake24/db';
-import { validate } from 'uuid';
+import validator from 'validator';
 import {
   SurveySubmissionEntry,
   SurveySubmissionsResponse,
@@ -33,7 +33,7 @@ export default (): AdminSurveySubmissionController => {
 
     const where: WhereOptions<SurveySubmissionAttributes> = { surveyId };
     if (typeof search === 'string' && search) {
-      if (validate(search)) where.id = search;
+      if (validator.isUUID(search)) where.id = search;
       else where.userId = search;
     }
 

@@ -1,7 +1,7 @@
+import { randomUUID } from 'crypto';
 import fs from 'fs-extra';
 import path from 'path';
 import sharp from 'sharp';
-import * as uuid from 'uuid';
 import { ProcessedImagePurposes } from '@intake24/common/types/models';
 import { ProcessedImage, SourceImage } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
@@ -62,11 +62,11 @@ export default ({
     const image =
       typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
-    const fileName = `${uuid.v4()}${path.extname(image.path)}`;
+    const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('as_served', id);
     const fullPath = path.posix.join(fileDir, fileName);
 
-    const thumbFileName = `${uuid.v4()}${path.extname(image.path)}`;
+    const thumbFileName = `${randomUUID()}${path.extname(image.path)}`;
     const thumbFileDir = path.posix.join('as_served', id, 'thumbnails');
     const thumbFullPath = path.posix.join(fileDir, thumbFileName);
 
@@ -107,7 +107,7 @@ export default ({
     const image =
       typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
-    const fileName = `${uuid.v4()}${path.extname(image.path)}`;
+    const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('image_maps', id);
     const fullPath = path.posix.join(fileDir, fileName);
 
@@ -133,7 +133,7 @@ export default ({
     const image =
       typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
-    const fileName = `${uuid.v4()}${path.extname(image.path)}`;
+    const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join(type, id, 'selection');
     const filePath = path.posix.join(fileDir, fileName);
 

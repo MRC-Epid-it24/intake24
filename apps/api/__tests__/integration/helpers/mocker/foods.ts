@@ -1,7 +1,7 @@
 import faker from 'faker';
 import { nanoid } from 'nanoid';
 import slugify from 'slugify';
-import * as uuid from 'uuid';
+import { randomUUID } from 'crypto';
 import {
   CreateLocaleRequest,
   CreateAsServedSetInput,
@@ -14,7 +14,7 @@ const food = (foodGroupId: string) => {
     code: nanoid(8),
     foodGroupId,
     name: faker.random.words(5),
-    version: uuid.v4(),
+    version: randomUUID(),
   };
 };
 

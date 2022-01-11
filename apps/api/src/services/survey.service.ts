@@ -15,7 +15,7 @@ import {
   SubmissionScope,
   submissionScope,
 } from '@intake24/db';
-import * as uuid from 'uuid';
+import { randomUUID } from 'crypto';
 import { SurveyState } from '@intake24/common/types';
 import { SurveyUserInfoResponse, SurveyFollowUpResponse } from '@intake24/common/types/http';
 import { PromptQuestion, RedirectPromptProps } from '@intake24/common/prompts';
@@ -331,12 +331,12 @@ const surveyService = ({
 
     // Survey submission
     const { id: surveySubmissionId } = await SurveySubmission.create({
-      id: uuid.v4(),
+      id: randomUUID(),
       surveyId,
       userId,
       startTime: input.startTime ?? new Date(),
       endTime: input.endTime ?? new Date(),
-      uxSessionId: uuid.v4(), // TODO: verify this
+      uxSessionId: randomUUID(), // TODO: verify this
       submissionTime: new Date(),
     });
 

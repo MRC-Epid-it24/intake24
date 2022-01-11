@@ -1,5 +1,5 @@
 import request from 'supertest';
-import * as uuid from 'uuid';
+import { randomUUID } from 'crypto';
 import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { Survey, SurveySubmission } from '@intake24/db';
 import { surveyStaff } from '@intake24/api/services/core/auth';
@@ -33,7 +33,7 @@ export default (): void => {
 
     url = `${baseUrl}/${survey.id}/submissions/${submission.id}`;
     invalidSurveyUrl = `${baseUrl}/invalid-survey-id/submissions/${submission.id}`;
-    invalidRespondentUrl = `${baseUrl}/${survey.id}/submissions/${uuid.v4()}`;
+    invalidRespondentUrl = `${baseUrl}/${survey.id}/submissions/${randomUUID()}`;
   });
 
   it('should return 401 when no / invalid token', async () => {

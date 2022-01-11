@@ -1,7 +1,7 @@
+import { randomUUID } from 'crypto';
 import fs from 'fs-extra';
 import path from 'path';
 import sharp from 'sharp';
-import * as uuid from 'uuid';
 import { UploadSourceImageInput, SourceImageType } from '@intake24/common/types/http/admin';
 import { SourceImage } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
@@ -24,7 +24,7 @@ export default ({
   ): Promise<SourceImage> => {
     const { id, file, uploader } = input;
 
-    const filename = `${uuid.v4()}${path.extname(file.originalname)}`;
+    const filename = `${randomUUID()}${path.extname(file.originalname)}`;
 
     const sourceDir = path.posix.join('source', type, id);
     const sourceThumbDir = path.posix.join('source', 'thumbnails', type, id);
