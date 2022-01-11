@@ -27,6 +27,7 @@
     // Breaking changes
     "sequelize", // occasional breaking changes due to TS codebase port since 6.12.x
     "execa", // ESM-only since 6.x.x
+    "faker", // Original package no longer maintained, it's continued (https://github.com/faker-js/faker), not yet published in npm -> bump / update namespace once it's published
 
     // Bump after Vue.js v3 upgrade
     "@tinymce/tinymce-vue",
