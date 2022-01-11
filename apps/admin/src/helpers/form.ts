@@ -2,22 +2,10 @@ import { AxiosError, Method } from 'axios';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 import type { Dictionary } from '@intake24/common/types';
-import { copy, merge, Errors } from '@intake24/common/util';
+import { copy, merge, Errors, getObjectNestedKeys } from '@intake24/common/util';
 import http from '@intake24/admin/services/http.service';
 import store from '@intake24/admin/store';
 import type { HttpRequestConfig } from '@intake24/admin/types/http';
-
-const getNestedKeys = <T extends Dictionary>(object: T, prefix?: string) =>
-  Object.entries(object).reduce<string[]>((acc, [key, value]) => {
-    let items =
-      Object.prototype.toString.call(value) === '[object Object]'
-        ? getNestedKeys(value, key)
-        : [key];
-
-    if (prefix) items = items.map((item) => `${prefix}.${item}`);
-    acc.push(...items);
-    return acc;
-  }, []);
 
 export interface FormConfig<T> {
   status?: string;
@@ -53,7 +41,7 @@ export type Form<T = Dictionary> = FormDef<T> & FormFields<T>;
 
 export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Form<T> => {
   const keys = Object.keys(initData) as (keyof T)[];
-  const allKeys = formConfig.extractNestedKeys ? getNestedKeys(initData) : [...keys];
+  const allKeys = formConfig.extractNestedKeys ? getObjectNestedKeys(initData) : [...keys];
 
   const formDef: FormDef<T> = {
     data: copy(initData),

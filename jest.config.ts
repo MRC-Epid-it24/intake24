@@ -17,7 +17,7 @@ const config: Config.InitialOptions = {
   rootDir: '.',
   testMatch: [
     '<rootDir>/apps/api/__tests__/unit/**/*.spec.ts',
-    '<rootDir>/packages/**/__tests__/unit/**/*.spec.ts',
+    '<rootDir>/packages/**/__tests__/**/*.spec.ts',
   ],
   testPathIgnorePatterns: ['/node_modules/', '/apps/api/__tests__/integration/'],
   testTimeout: 10000,

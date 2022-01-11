@@ -120,6 +120,7 @@
     "webpackbar": "^5.0.2"
   },
   "bundledDependencies": [
+    "@intake24/api",
     "@intake24/common",
     "@intake24/db",
     "@intake24/i18n",

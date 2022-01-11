@@ -70,6 +70,7 @@
     "webpack-bundle-analyzer": "^4.5.0"
   },
   "bundledDependencies": [
+    "@intake24/admin",
     "@intake24/common",
     "@intake24/ui",
     "@intake24/i18n"
