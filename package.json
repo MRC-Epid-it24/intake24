@@ -6,6 +6,9 @@
   "author": "",
   "license": "Apache-2.0",
   "main": "index.js",
+  "engines": {
+    "node": "^14.17.0 || >=16.0.0"
+  },
   "scripts": {
     "cli": "npm run cli --workspace=apps/cli",
     "migrate:foods": "npm run migrate:foods --workspace=packages/db",
