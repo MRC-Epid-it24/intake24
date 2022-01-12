@@ -5,8 +5,6 @@
 Steps to getting a local instance running
 
 * Run Dev VM (download from S3 bucket - contact the Intake24 team), which maps out the database on 192.168.56.10:5432 (PostgreSQL). Start this VM.
-* Clone the master repository from Github [link](https://github.com/MRC-Epid-it24/intake24)
-* Follow instructions to README to install node modules (e.g. `npm install` on each folder)
 * Local servers need to be run for `api`, `admin` and `survey` from each respective folder:
   * To start `api`: `npm run dev`
   * To start `admin` and `survey`: `npm run serve` for live reloads

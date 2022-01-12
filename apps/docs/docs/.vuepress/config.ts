@@ -81,7 +81,6 @@ export default defineConfig({
           children: [
             '',
             'requirements',
-            'repository',
             'get-started',
           ]
         },
@@ -231,6 +230,7 @@ export default defineConfig({
           collapsable: false,
           children: [
             '',
+            'source-code',
             'getting-started',
             'technology-stack',
             'testing',

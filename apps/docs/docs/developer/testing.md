@@ -1,6 +1,46 @@
 # Testing
 
-Both `admin` / `survey` front-ends and `api` backend are set up with [Jest](https://jestjs.io) testing framework.
+Tests are set up with [Jest](https://jestjs.io) framework.
+
+All tests can be triggered from top-level repository structure.
+
+::: warning
+API Server integration test and some unit tests interacts with database, so be sure to set up empty testing databases and `__tests__/.env-test` file correctly. See below for more details.
+:::
+
+Tests are always located in `__tests__` folder in each `app` or `package` and use following directory structure convention. `__tests__` folder for `apps` has `unit` and `integration` subfolders as it will most likely have more then unit tests. While unit tests for `packages` are located directly in `__tests__`.
+
+```
+├─ apps
+│  └─ {application}
+│     └─ __tests__
+│        ├─ unit
+│           └─ my-function1.spec.ts
+│        └─ integration
+│           └─ my-function2.spec.ts
+├─ packages
+   └─ {package}
+      └─ __tests__
+        └─ my-function3.spec.ts
+```
+
+Unit tests in `apps` folders
+
+Use following commands to run unit tests across repository and trigger tests in `__tests__` folders and `__tests__/unit` folders for package and apps, respectively. `Jest` will search for all files with `.spec.ts` extension.
+
+```
+pnpm run test:unit
+
+pnpm run test:unit:watch
+```
+
+Integration tests can be run with following commands. At the moment, there are only API Server integration tests, so it re-triggers the api internal npm command.
+
+```
+pnpm run test:integration
+
+pnpm run test:integration:watch
+```
 
 ## API Server
 
