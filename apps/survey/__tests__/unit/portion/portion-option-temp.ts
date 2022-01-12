@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Prompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import i18n from '@intake24/survey/i18n';

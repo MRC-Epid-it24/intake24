@@ -51,6 +51,8 @@
 import Vue from 'vue';
 
 export default Vue.extend({
+  name: 'ConfirmDialog',
+
   props: {
     activatorClass: {
       type: Array as () => string[],

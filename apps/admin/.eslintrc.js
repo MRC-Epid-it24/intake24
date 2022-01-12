@@ -24,12 +24,15 @@ module.exports = {
     },
   },
   rules: {
+    'import/no-cycle': 'warn',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'import/no-cycle': 'warn',
+    'no-await-in-loop': 'off',
+    'no-continue': 'off',
     'no-param-reassign': 'warn',
+    'no-plusplus': 'off',
     'no-restricted-globals': 'warn',
-    'no-restricted-syntax': 'off',
+    'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     'no-shadow': 'off',
     'vue/multi-word-component-names': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
@@ -38,10 +41,8 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/__tests__/*.{j,t}s?(x)', '**/__tests__/unit/**/*.spec.{j,t}s?(x)'],
-      env: {
-        jest: true,
-      },
+      files: ['__tests__/**/*.{j,t}s?(x)', '__tests__/**/*.spec.{j,t}s?(x)'],
+      env: { jest: true },
     },
   ],
 };

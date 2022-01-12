@@ -29,11 +29,19 @@ module.exports = {
     // to avoid having to mess with Git and editor defaults on Windows
     'prettier/prettier': ['warn', { endOfLine: 'auto' }],
     'import/no-cycle': 'warn',
-    'no-await-in-loop': 'off',
-    'no-continue': 'off',
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: ['**/__tests__/**/*.ts', '**/*.{config,mix}.js'],
+      },
+    ],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-await-in-loop': 'off',
+    'no-continue': 'off',
+    'no-param-reassign': 'warn',
     'no-plusplus': 'off',
+    'no-restricted-globals': 'warn',
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     'no-shadow': 'off',
     'vue/multi-word-component-names': 'warn',
@@ -43,16 +51,9 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/__tests__/*.{j,t}s?(x)', '**/__tests__/unit/**/*.spec.{j,t}s?(x)'],
-      env: {
-        jest: true,
-      },
+      files: ['__tests__/**/*.{j,t}s?(x)', '__tests__/**/*.spec.{j,t}s?(x)'],
+      env: { jest: true },
     },
-    {
-      files: ['*.mix.js'],
-      rules: {
-        '@typescript-eslint/no-var-requires': 'off',
-      },
-    },
+    { files: ['*.mix.js'], rules: { '@typescript-eslint/no-var-requires': 'off' } },
   ],
 };

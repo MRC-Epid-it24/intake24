@@ -27,13 +27,7 @@ module.exports = defineConfig({
   plugins: ['import', 'prettier', '@typescript-eslint'],
   rules: {
     'prettier/prettier': 'error',
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        ts: 'never',
-      },
-    ],
+    'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
     'import/no-cycle': 'warn',
     'no-await-in-loop': 'off',
     'no-continue': 'off',
