@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Vue from 'vue';
+// TODO extract these
 import { HttpClient } from '@intake24/admin/types/http';
 import { Permission } from '@intake24/admin/types';
 
@@ -22,10 +23,6 @@ declare module 'vue/types/vue' {
 }
 
 declare global {
-  interface Window {
-    Duo: any;
-  }
-
   interface Navigator {
     userLanguage: string;
   }

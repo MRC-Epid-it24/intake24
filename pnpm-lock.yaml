@@ -516,9 +516,11 @@ importers:
 
   packages/db:
     specifiers:
+      '@types/lodash': ^4.14.178
       '@types/pg': ^8.6.3
       '@types/validator': ^13.7.1
       dotenv: ^10.0.0
+      lodash: ^4.17.21
       mariadb: ^2.5.5
       mssql: ^7.3.0
       pg: ^8.7.1
@@ -529,6 +531,7 @@ importers:
       sequelize-typescript: ^2.1.2
     dependencies:
       dotenv: 10.0.0
+      lodash: 4.17.21
       mariadb: 2.5.5
       mssql: 7.3.0
       pg: 8.7.1
@@ -537,6 +540,7 @@ importers:
       sequelize: 6.12.5_7a3f065cc219bc88b86a2f790c9b17bb
       sequelize-typescript: 2.1.2_095c5f30513f640893b793cbcf3fa823
     devDependencies:
+      '@types/lodash': 4.14.178
       '@types/pg': 8.6.3
       '@types/validator': 13.7.1
       sequelize-cli: 6.3.0

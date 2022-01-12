@@ -29,10 +29,6 @@ module.exports = {
     // to avoid having to mess with Git and editor defaults on Windows
     'prettier/prettier': ['warn', { endOfLine: 'auto' }],
     'import/no-cycle': 'warn',
-    'import/no-extraneous-dependencies': [
-      'error',
-      { devDependencies: ['**/*.js', '__tests__/**/*.ts', '__tests__/**/*.js'] },
-    ],
     'no-await-in-loop': 'off',
     'no-continue': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

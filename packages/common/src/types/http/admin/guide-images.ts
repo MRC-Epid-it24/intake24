@@ -1,4 +1,3 @@
-import { Dictionary } from '../..';
 import { ImageMapListEntry, ImageMapEntryObject, ImageMapEntry } from './image-maps';
 import { ImageMapAttributes, Pagination } from '../../models';
 

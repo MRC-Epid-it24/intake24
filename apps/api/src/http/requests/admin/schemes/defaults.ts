@@ -6,7 +6,7 @@ import slugify from 'slugify';
 import { SchemeAttributes, SchemeTypes } from '@intake24/common/types/models';
 import {
   validateMeals,
-  validateRecallQuestions,
+  // validateRecallQuestions,
   validateExportSections,
 } from '@intake24/common/validators';
 import { unique, identifierSafeChars } from '@intake24/api/http/rules';

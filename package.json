@@ -10,6 +10,8 @@
     "node": "^14.17.0 || >=16.0.0"
   },
   "scripts": {
+    "lint": "eslint --ext .ts apps/*/src/**/*.ts apps/*/__tests__/**/*.ts packages/*/src/**/*.ts packages/*/__tests__/**/*.ts",
+    "lint:fix": "npm run lint -- --fix",
     "cli": "npm run cli --workspace=apps/cli",
     "migrate:foods": "npm run migrate:foods --workspace=packages/db",
     "migrate:system": "npm run migrate:system --workspace=packages/db",

@@ -85,7 +85,7 @@ export default class NutrientTableImportData extends StreamLockJob<NutrientTable
    * @returns {Promise<void>}
    * @memberof NutrientTableImportData
    */
-  private async validate(chunk = 500): Promise<void> {
+  private async validate(/* chunk = 500 */): Promise<void> {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(this.file).pipe(
         parse({
