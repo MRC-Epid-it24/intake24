@@ -1,5 +1,4 @@
 import Vue, { VueConstructor } from 'vue';
-import { Route } from 'vue-router';
 import { copy } from '@intake24/common/util';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
@@ -12,13 +11,16 @@ import hasEntry from './has-entry';
 import Layout from './layout.vue';
 import mapEntry from './map-entry';
 import mapRefs from './map-refs';
+import watchEntry from './watch-entry';
 
-export default (Vue as VueConstructor<Vue & FormMixin>).extend({
+type Mixins = InstanceType<typeof watchEntry>;
+
+export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
   name: 'FormMixin',
 
   components: { Layout, SubmitFooter },
 
-  mixins: [fetchEntry, hasEntry, mapEntry, mapRefs],
+  mixins: [fetchEntry, hasEntry, mapEntry, mapRefs, watchEntry],
 
   provide: {
     editsResource: true,
@@ -29,12 +31,6 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
       editMethod: 'put',
       form: form({}),
       nonInputErrorKeys: [] as string[],
-      originalEntry: {} as Dictionary,
-      routeLeave: {
-        dialog: false,
-        to: null as Route | null,
-        confirmed: false,
-      },
     };
   },
 
@@ -51,20 +47,6 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
       this.toForm(val);
     },
-  },
-
-  beforeRouteLeave(to, from, next) {
-    if (this.routeLeave.confirmed) {
-      this.routeLeave = { dialog: false, to: null, confirmed: false };
-      next();
-      return;
-    }
-
-    if (this.entryChanged) {
-      this.routeLeave = { dialog: true, to, confirmed: false };
-      return;
-    }
-    next();
   },
 
   computed: {
@@ -90,10 +72,6 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   },
 
   methods: {
-    setOriginalEntry(data: Dictionary) {
-      this.originalEntry = copy(data);
-    },
-
     toForm(data: Dictionary) {
       this.setOriginalEntry(data);
       this.form.load(data);
