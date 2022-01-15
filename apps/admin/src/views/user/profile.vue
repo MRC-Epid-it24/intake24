@@ -94,7 +94,7 @@
                 >
                   <template v-slot:item="{ item }">
                     <span
-                      :class="`flag-icon flag-icon-${
+                      :class="`fi fi-${
                         item.countryFlagCode === 'en' ? 'gb' : item.countryFlagCode
                       } mr-3`"
                     >
@@ -103,7 +103,7 @@
                   </template>
                   <template v-slot:selection="{ item }">
                     <span
-                      :class="`flag-icon flag-icon-${
+                      :class="`fi fi-${
                         item.countryFlagCode === 'en' ? 'gb' : item.countryFlagCode
                       } mr-3`"
                     >

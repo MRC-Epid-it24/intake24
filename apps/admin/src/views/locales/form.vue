@@ -29,11 +29,11 @@
                 @change="form.errors.clear('prototypeLocaleId')"
               >
                 <template v-slot:item="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
                 <template v-slot:selection="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
               </v-select>
@@ -72,11 +72,11 @@
                 @change="form.errors.clear('respondentLanguageId')"
               >
                 <template v-slot:item="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
                 <template v-slot:selection="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
               </v-select>
@@ -95,11 +95,11 @@
                 @change="form.errors.clear('adminLanguageId')"
               >
                 <template v-slot:item="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
                 <template v-slot:selection="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
               </v-select>
@@ -116,11 +116,11 @@
                 @change="form.errors.clear('countryFlagCode')"
               >
                 <template v-slot:item="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.value} mr-3`"></span>
+                  <span :class="`fi fi-${item.value} mr-3`"></span>
                   {{ item.text }}
                 </template>
                 <template v-slot:selection="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.value} mr-3`"></span>
+                  <span :class="`fi fi-${item.value} mr-3`"></span>
                   {{ item.text }}
                 </template>
               </v-select>

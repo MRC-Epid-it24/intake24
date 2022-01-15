@@ -18,7 +18,7 @@
         </template>
         <v-list class="grey lighten-3">
           <v-list-item v-for="lang in availableLanguages" :key="lang.id" @click="add(lang.id)">
-            <span :class="`flag-icon flag-icon-${lang.countryFlagCode} mr-3`"></span>
+            <span :class="`fi fi-${lang.countryFlagCode} mr-3`"></span>
             <span class="font-weight-medium">{{ lang.englishName }}</span>
           </v-list-item>
         </v-list>
@@ -27,7 +27,7 @@
         <v-tabs v-model="selected" background-color="grey lighten-4">
           <v-tabs-slider></v-tabs-slider>
           <v-tab v-for="lang in languages" :key="lang">
-            <span :class="`flag-icon flag-icon-${getLanguageFlag(lang)} mr-3`"></span>
+            <span :class="`fi fi-${getLanguageFlag(lang)} mr-3`"></span>
             <span class="font-weight-medium">{{ getLanguageName(lang) }}</span>
           </v-tab>
         </v-tabs>

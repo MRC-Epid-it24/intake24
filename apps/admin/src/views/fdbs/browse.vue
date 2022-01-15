@@ -1,7 +1,7 @@
 <template>
   <data-table :actions="['read']" :headers="headers" :apiUrl="`admin/locales`">
     <template v-slot:[`item.id`]="{ item }">
-      <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+      <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
       {{ item.id }}
     </template>
   </data-table>

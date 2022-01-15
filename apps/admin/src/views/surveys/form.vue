@@ -39,11 +39,11 @@
                 @change="form.errors.clear('localeId')"
               >
                 <template v-slot:item="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
                 <template v-slot:selection="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.countryFlagCode} mr-3`"></span>
+                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
               </v-select>

@@ -29,7 +29,7 @@
         <tr>
           <th>{{ $t('locales.countryFlagCode') }}</th>
           <td>
-            <span :class="`flag-icon flag-icon-${entry.countryFlagCode} mr-3`"></span>
+            <span :class="`fi fi-${entry.countryFlagCode} mr-3`"></span>
             {{ entry.countryFlagCode }}
           </td>
         </tr>

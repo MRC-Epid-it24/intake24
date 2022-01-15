@@ -1,15 +1,5 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" @save="submit">
-    <!-- <template v-slot:actions>
-      <v-btn
-        v-if="isEdit && can('languages-edit')"
-        class="ml-2"
-        color="primary"
-        @click="initLanguageMessages"
-      >
-        <v-icon left>fa-play</v-icon> INIT
-      </v-btn>
-    </template> -->
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -37,11 +27,11 @@
                 @change="form.errors.clear('countryFlagCode')"
               >
                 <template v-slot:item="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.value} mr-3`"></span>
+                  <span :class="`fi fi-${item.value} mr-3`"></span>
                   {{ item.text }}
                 </template>
                 <template v-slot:selection="{ item }">
-                  <span :class="`flag-icon flag-icon-${item.value} mr-3`"></span>
+                  <span :class="`fi fi-${item.value} mr-3`"></span>
                   {{ item.text }}
                 </template>
               </v-select>
@@ -128,12 +118,6 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         text: this.$t(`languages.textDirections.${value}`),
       })),
     };
-  },
-
-  methods: {
-    async initLanguageMessages() {
-      await this.$http.post(`admin/languages/${this.id}/init`);
-    },
   },
 });
 </script>
