@@ -127,7 +127,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
 
   async created() {
     const userLanguage = this.$ls.get('language', navigator.language || navigator.userLanguage);
-    if (this.$root.$i18n.locale !== userLanguage) await this.setLanguage('survey', userLanguage);
+    await this.setLanguage('survey', userLanguage);
   },
 
   methods: {
