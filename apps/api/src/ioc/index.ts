@@ -75,6 +75,7 @@ import type {
   ProcessedImageService,
   SourceImageService,
   FoodDataService,
+  LanguageService,
   NutrientTableService,
   DataExportFields,
   DataExportMapper,
@@ -203,6 +204,7 @@ export interface IoC extends Jobs {
 
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;
+  languageService: LanguageService;
   nutrientTableService: NutrientTableService;
 
   // Foods

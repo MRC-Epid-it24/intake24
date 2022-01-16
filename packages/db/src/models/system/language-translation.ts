@@ -1,22 +1,22 @@
 import { Column, DataType, Table, CreatedAt, UpdatedAt, BelongsTo } from 'sequelize-typescript';
-import { LocaleMessages } from '@intake24/i18n';
+import { LocaleMessageObject } from '@intake24/i18n';
 import {
-  LanguageMessageAttributes,
-  LanguageMessageCreationAttributes,
+  LanguageTranslationAttributes,
+  LanguageTranslationCreationAttributes,
 } from '@intake24/common/types/models';
 import { Application } from '@intake24/common/types';
 import BaseModel from '../model';
 import { Language } from '.';
 
 @Table({
-  modelName: 'LanguageMessage',
-  tableName: 'language_messages',
+  modelName: 'LanguageTranslations',
+  tableName: 'language_translations',
   freezeTableName: true,
   underscored: true,
 })
-export default class LanguageMessage
-  extends BaseModel<LanguageMessageAttributes, LanguageMessageCreationAttributes>
-  implements LanguageMessageAttributes
+export default class LanguageTranslation
+  extends BaseModel<LanguageTranslationAttributes, LanguageTranslationCreationAttributes>
+  implements LanguageTranslationAttributes
 {
   @Column({
     autoIncrement: true,
@@ -47,12 +47,12 @@ export default class LanguageMessage
     allowNull: false,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get messages(): LocaleMessages {
+  get messages(): LocaleMessageObject {
     const val = this.getDataValue('messages') as unknown;
     return JSON.parse(val as string);
   }
 
-  set messages(value: LocaleMessages) {
+  set messages(value: LocaleMessageObject) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('messages', JSON.stringify(value));
   }

@@ -9,6 +9,7 @@ import SurveyDataExport from './survey-data-export';
 import SurveyExportRespondentAuthUrls from './survey-export-respondent-auth-urls';
 import SurveyImportRespondents from './survey-import-respondents';
 import SurveySubmissionNotification from './survey-submission-notification';
+import SyncLanguageTranslations from './sync-language-translations';
 
 export * from './job';
 export { default as Job } from './job';
@@ -20,6 +21,7 @@ const jobs = {
   CleanStorageFiles,
   PurgeRefreshTokens,
   SendPasswordReset,
+  SyncLanguageTranslations,
   // Nutrient tables
   NutrientTableImportData,
   NutrientTableImportMapping,

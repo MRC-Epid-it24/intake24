@@ -22,9 +22,9 @@ export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
 
   mixins: [fetchEntry, hasEntry, mapEntry, mapRefs, watchEntry],
 
-  provide: {
+  provide: () => ({
     editsResource: true,
-  },
+  }),
 
   data() {
     return {
@@ -78,7 +78,7 @@ export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
     },
 
     async submit() {
-      let data;
+      let data: any;
 
       if (this.isEdit) {
         data = await this.form[this.editMethod](`${this.resource.api}/${this.id}`);

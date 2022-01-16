@@ -1,11 +1,19 @@
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
+import isEqual from 'lodash/isEqual';
+import pick from 'lodash/pick';
 import { CategoryLocalEntry, FoodLocalEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
+import watchEntry from '@intake24/admin/components/entry/watch-entry';
+import { getObjectNestedKeys } from '@intake24/common/util';
+
+type Mixins = InstanceType<typeof watchEntry>;
 
 export type Entry = CategoryLocalEntry | FoodLocalEntry;
 
-export default Vue.extend({
+export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'CategoryOrFoodEntryMixin',
+
+  mixins: [watchEntry],
 
   props: {
     id: {
@@ -23,13 +31,25 @@ export default Vue.extend({
       loading: false,
       type: 'categories' as 'categories' | 'foods',
       entry: null as Entry | null,
-      form: form({}),
+      form: form({}, { extractNestedKeys: true }),
     };
   },
 
   computed: {
     isEntryLoaded(): boolean {
       return !!this.entry;
+    },
+    entryChanged(): boolean {
+      const formKeys = this.form.allKeys;
+      const entryKeys = this.form.config.extractNestedKeys
+        ? getObjectNestedKeys(this.originalEntry)
+        : Object.keys(this.originalEntry);
+      const commonKeys = entryKeys.filter((key) => formKeys.includes(key));
+
+      const original = pick(this.originalEntry, commonKeys);
+      const updated = pick(this.form.getData(true), commonKeys);
+
+      return !isEqual(original, updated);
     },
   },
 
@@ -44,6 +64,7 @@ export default Vue.extend({
 
   methods: {
     toForm(data: Entry) {
+      this.setOriginalEntry(data);
       this.form.load(data);
     },
 
@@ -57,7 +78,7 @@ export default Vue.extend({
       try {
         const { data } = await this.$http.get<Entry>(`admin/fdbs/${id}/${type}/${entryId}`);
 
-        this.form.load(data);
+        this.toForm(data);
         this.entry = data;
       } finally {
         this.loading = false;

@@ -10,7 +10,7 @@ import {
 import { LanguageAttributes, LanguageCreationAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import Locale from './locale';
-import LanguageMessage from './language-message';
+import LanguageTranslation from './language-translation';
 
 @Scopes(() => ({
   public: { attributes: ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection'] },
@@ -67,8 +67,8 @@ export default class Language
   @Column
   public readonly updatedAt!: Date;
 
-  @HasMany(() => LanguageMessage, 'languageId')
-  public messages?: LanguageMessage[];
+  @HasMany(() => LanguageTranslation, 'languageId')
+  public translations?: LanguageTranslation[];
 
   @HasMany(() => Locale, 'adminLanguageId')
   public adminLocales?: Locale[];

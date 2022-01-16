@@ -19,6 +19,7 @@ export interface FormDef<T = Dictionary> {
   data: T;
   initData: T;
   keys: (keyof T)[];
+  allKeys: string[];
   errors: Errors;
   config: FormConfig<T>;
   assign(source: Dictionary): void;
@@ -41,12 +42,15 @@ export type Form<T = Dictionary> = FormDef<T> & FormFields<T>;
 
 export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Form<T> => {
   const keys = Object.keys(initData) as (keyof T)[];
-  const allKeys = formConfig.extractNestedKeys ? getObjectNestedKeys(initData) : [...keys];
+  const allKeys = formConfig.extractNestedKeys
+    ? getObjectNestedKeys(initData)
+    : ([...keys] as string[]);
 
   const formDef: FormDef<T> = {
     data: copy(initData),
     initData,
     keys,
+    allKeys,
     errors: new Errors(),
     config: {
       multipart: false,

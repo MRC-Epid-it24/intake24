@@ -1,6 +1,5 @@
-import { LocaleMessages } from 'vue-i18n';
 import en from './en';
 
-const messages: LocaleMessages = { en };
+const messages = { en };
 
 export default messages;

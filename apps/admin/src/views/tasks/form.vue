@@ -119,6 +119,7 @@ const defaultParams: JobParamsList = {
   CleanRedisStore: { store: 'cache' },
   CleanStorageFiles: {},
   PurgeRefreshTokens: {},
+  SyncLanguageTranslations: {},
   NutrientTableImportMapping: {
     nutrientTableId: '',
     file: '',

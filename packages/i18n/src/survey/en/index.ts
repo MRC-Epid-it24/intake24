@@ -1,4 +1,4 @@
-import { LocaleMessageObject } from 'vue-i18n';
+import { LocaleMessages } from 'vue-i18n';
 import common from './common';
 import feedback from './feedback';
 import login from './login';
@@ -10,7 +10,7 @@ import survey from './survey';
 import standardUnits from './standard-units';
 import breadcrumbs from './breadcrumbs';
 
-const messages: LocaleMessageObject = {
+const messages: LocaleMessages = {
   common,
   feedback,
   login,

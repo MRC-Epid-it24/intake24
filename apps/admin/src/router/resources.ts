@@ -35,7 +35,7 @@ const resources: Resource[] = [
     icon: 'fas fa-language',
     api: 'admin/languages',
     generateRoutes: true,
-    routes: [...routes, 'messages'],
+    routes: [...routes, 'translations'],
   },
   {
     group: 'local',

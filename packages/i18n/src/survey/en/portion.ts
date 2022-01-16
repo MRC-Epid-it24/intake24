@@ -1,6 +1,6 @@
-import { LocaleMessage } from 'vue-i18n';
+import { LocaleMessageObject } from 'vue-i18n';
 
-const portion: LocaleMessage = {
+const portion: LocaleMessageObject = {
   common: {
     backStep: 'Go back to previous step',
     completeBelow: 'Please complete each of the sections below',

@@ -1,4 +1,4 @@
-import type { LocaleMessages } from '@intake24/i18n';
+import type { LocaleMessageObject } from '@intake24/i18n';
 import type { Application } from '../..';
 
 export type LanguageAttributes = {
@@ -13,17 +13,17 @@ export type LanguageAttributes = {
 
 export type LanguageCreationAttributes = Omit<LanguageAttributes, 'createdAt' | 'updatedAt'>;
 
-export type LanguageMessageAttributes = {
+export type LanguageTranslationAttributes = {
   id: string;
   languageId: string;
   application: Application;
   section: string;
-  messages: LocaleMessages;
+  messages: LocaleMessageObject;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export type LanguageMessageCreationAttributes = Omit<
-  LanguageMessageAttributes,
+export type LanguageTranslationCreationAttributes = Omit<
+  LanguageTranslationAttributes,
   'id' | 'createdAt' | 'updatedAt'
 >;

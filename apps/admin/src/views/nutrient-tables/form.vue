@@ -356,7 +356,7 @@ export default (
         const startIndex = this.nutrients.items.length;
         const endIndex =
           startIndex + this.nutrients.chunk > this.form.csvMappingNutrients.length
-            ? startIndex + (this.form.csvMappingNutrients.length - startIndex)
+            ? this.form.csvMappingNutrients.length
             : startIndex + this.nutrients.chunk;
 
         const items = this.form.csvMappingNutrients.slice(startIndex, endIndex);

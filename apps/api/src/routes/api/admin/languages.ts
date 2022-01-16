@@ -26,10 +26,13 @@ router
 
 router.get('/:languageId/edit', permission('languages-edit'), wrapAsync(languageController.edit));
 
-router.post(
-  '/:languageId/init',
-  permission('languages-edit'),
-  wrapAsync(languageController.initializeMessages)
-);
+router
+  .route('/:languageId/translations')
+  .get(permission('languages-translations'), wrapAsync(languageController.getTranslations))
+  .post(
+    permission('languages-translations'),
+    validation.translations,
+    wrapAsync(languageController.updateTranslations)
+  );
 
 export default router;

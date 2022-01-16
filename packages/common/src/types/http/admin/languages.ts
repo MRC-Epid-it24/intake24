@@ -1,4 +1,4 @@
-import { LanguageAttributes, Pagination } from '../../models';
+import { LanguageAttributes, LanguageTranslationAttributes, Pagination } from '../../models';
 
 export type LanguageRequest = {
   id: string;
@@ -20,3 +20,7 @@ export type LanguageListEntry = Pick<
   LanguageAttributes,
   'id' | 'englishName' | 'localName' | 'countryFlagCode'
 >;
+
+export type LanguageTranslationEntry = LanguageTranslationAttributes;
+
+export type LanguageTranslationsResponse = LanguageTranslationAttributes[];

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Language, LanguageMessage } from '@intake24/db';
+import { Language, LanguageTranslation } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Controller } from '../controller';
 
@@ -23,7 +23,12 @@ export default (): UserI18nController => {
 
     const language = await Language.scope('public').findByPk(languageId, {
       include: [
-        { model: LanguageMessage, where: { application: app }, required: false, separate: true },
+        {
+          model: LanguageTranslation,
+          where: { application: app },
+          required: false,
+          separate: true,
+        },
       ],
     });
     if (!language) throw new NotFoundError();
@@ -31,10 +36,13 @@ export default (): UserI18nController => {
     const response = {
       ...language.get(),
       messages:
-        language.messages?.reduce<Record<string, string | object>>((acc, { section, messages }) => {
-          acc[section] = messages;
-          return acc;
-        }, {}) ?? {},
+        language.translations?.reduce<Record<string, string | object>>(
+          (acc, { section, messages }) => {
+            acc[section] = messages;
+            return acc;
+          },
+          {}
+        ) ?? {},
     };
 
     res.json(response);

@@ -2,7 +2,9 @@ export type Dictionary<T = any> = { [key: string]: T };
 
 export type Environment = 'development' | 'test' | 'production';
 
-export type Application = 'admin' | 'survey';
+export const applications = ['admin', 'survey'] as const;
+
+export type Application = typeof applications[number];
 
 export type CustomField = {
   name: string;

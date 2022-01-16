@@ -4,7 +4,7 @@ export { default as FixedFoodRanking } from './fixed-food-ranking';
 export { default as GenUserCounter } from './gen-user-counter';
 export { default as Job } from './job';
 export { default as Language } from './language';
-export { default as LanguageMessage } from './language-message';
+export { default as LanguageTranslation } from './language-translation';
 export { default as SystemLocale } from './locale';
 export { default as SystemNutrientType } from './nutrient-type';
 export { default as SystemNutrientUnit } from './nutrient-unit';

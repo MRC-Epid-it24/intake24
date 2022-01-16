@@ -19,7 +19,7 @@ const languages: LocaleMessageObject = {
     rtl: 'Right to left',
   },
 
-  messages: {
+  translations: {
     _: 'Translation',
     title: 'Translations',
     tab: 'Translations',

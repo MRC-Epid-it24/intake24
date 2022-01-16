@@ -1,5 +1,14 @@
-/* eslint-disable import/prefer-default-export */
+import { Dictionary } from '@intake24/common/types';
+import { getObjectNestedKeys } from '@intake24/common/util';
 
+/**
+ * Merges two translations files together
+ * - this used to merge default in-built translation with database message object
+ *
+ * @param {*} target
+ * @param {*} source
+ * @returns
+ */
 export const mergeTranslations = (target: any, source: any) => {
   if (typeof target === 'undefined') return undefined;
 
@@ -15,4 +24,37 @@ export const mergeTranslations = (target: any, source: any) => {
   }
 
   return undefined;
+};
+
+/**
+ * Compares two translation messages objects if they same deeply nested keys
+ *
+ * @template T1
+ * @template T2
+ * @param {T1} x
+ * @param {T2} y
+ * @returns {boolean}
+ */
+export const compareMessageKeys = <T1 = Dictionary, T2 = Dictionary>(x: T1, y: T2): boolean => {
+  const xKeys = getObjectNestedKeys(x);
+  const yKeys = getObjectNestedKeys(y);
+
+  return xKeys.length === yKeys.length && xKeys.every((key) => yKeys.includes(key));
+};
+
+/**
+ * Check that input is either string of object of strings
+ *
+ * @param {(string | Record<string, any>)} translation
+ * @returns {boolean}
+ */
+export const validateTranslations = (translation: string | Record<string, any>): boolean => {
+  if (Object.prototype.toString.call(translation) === '[object Object]') {
+    for (const value of Object.values(translation)) {
+      if (!validateTranslations(value)) return false;
+    }
+    return true;
+  }
+
+  return typeof translation === 'string';
 };

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
+import validator from 'validator';
 import {
   WhereOptions,
   Survey,
@@ -7,7 +8,6 @@ import {
   PaginateQuery,
   submissionScope,
 } from '@intake24/db';
-import validator from 'validator';
 import {
   SurveySubmissionEntry,
   SurveySubmissionsResponse,

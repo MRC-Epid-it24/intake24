@@ -16,6 +16,7 @@ export const jobTypes = [
   'CleanStorageFiles',
   'PurgeRefreshTokens',
   'SendPasswordReset',
+  'SyncLanguageTranslations',
   'NutrientTableImportMapping',
   'NutrientTableImportData',
   'SurveyDataExport',
@@ -41,6 +42,8 @@ export type SendPasswordResetParams = {
   email: string;
   token: string;
 };
+
+export type SyncLanguageTranslationsParams = EmptyJobParams;
 
 export type NutrientTableImportMappingParams = {
   nutrientTableId: string;
@@ -84,7 +87,8 @@ export type JobParams =
   | SurveyDataExportParams
   | SurveyExportRespondentAuthUrlsParams
   | SurveyImportRespondentsParams
-  | SurveySubmissionNotificationParams;
+  | SurveySubmissionNotificationParams
+  | SyncLanguageTranslationsParams;
 
 export type JobParamsList = {
   CleanRedisStore: CleanRedisStoreParams;
@@ -97,6 +101,7 @@ export type JobParamsList = {
   SurveyExportRespondentAuthUrls: SurveyExportRespondentAuthUrlsParams;
   SurveyImportRespondents: SurveyImportRespondentsParams;
   SurveySubmissionNotification: SurveySubmissionNotificationParams;
+  SyncLanguageTranslations: SyncLanguageTranslationsParams;
 };
 
 export type GetJobParams<P extends keyof JobParamsList> = JobParamsList[P];

@@ -1,31 +1,25 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { LanguageEntry, LanguagesResponse } from '@intake24/common/types/http/admin';
-import { Language, LanguageMessage, PaginateQuery } from '@intake24/db';
-import { admin, survey, LocaleMessages } from '@intake24/i18n';
-import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { LanguageMessageCreationAttributes } from '@intake24/common/types/models';
+import {
+  LanguageEntry,
+  LanguagesResponse,
+  LanguageTranslationsResponse,
+} from '@intake24/common/types/http/admin';
+import { Language, PaginateQuery } from '@intake24/db';
+import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import { Controller, CrudActions } from '../controller';
 
-export type LanguageController = Controller<CrudActions | 'initializeMessages'>;
+export type LanguageController = Controller<CrudActions | 'getTranslations' | 'updateTranslations'>;
 
-export default (): LanguageController => {
-  const entry = async (req: Request, res: Response<LanguageEntry>): Promise<void> => {
+export default ({ languageService }: Pick<IoC, 'languageService'>): LanguageController => {
+  const entry = async (
+    req: Request<{ languageId: string }>,
+    res: Response<LanguageEntry>
+  ): Promise<void> => {
     const { languageId } = req.params;
 
-    const language = await Language.findByPk(languageId, {
-      include: [
-        {
-          model: LanguageMessage,
-          order: [
-            ['application', 'ASC'],
-            ['section', 'ASC'],
-          ],
-          separate: true,
-        },
-      ],
-    });
-    if (!language) throw new NotFoundError();
+    const language = await languageService.getLanguage(languageId);
 
     res.json(language);
   };
@@ -44,7 +38,7 @@ export default (): LanguageController => {
   };
 
   const store = async (req: Request, res: Response<LanguageEntry>): Promise<void> => {
-    const language = await Language.create(
+    const language = await languageService.createLanguage(
       pick(req.body, ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection'])
     );
 
@@ -67,10 +61,8 @@ export default (): LanguageController => {
   ): Promise<void> => {
     const { languageId } = req.params;
 
-    const language = await Language.findByPk(languageId);
-    if (!language) throw new NotFoundError();
-
-    await language.update(
+    const language = await languageService.updateLanguage(
+      languageId,
       pick(req.body, ['englishName', 'localName', 'countryFlagCode', 'textDirection'])
     );
 
@@ -83,15 +75,8 @@ export default (): LanguageController => {
   ): Promise<void> => {
     const { languageId } = req.params;
 
-    const language = await Language.scope(['adminLocales', 'surveyLocales']).findByPk(languageId);
-    if (!language || !language.adminLocales || !language.surveyLocales) throw new NotFoundError();
+    await languageService.deleteLanguage(languageId);
 
-    if (language.adminLocales.length || language.surveyLocales.length)
-      throw new ForbiddenError(
-        'Language cannot be deleted. There are locales using this language.'
-      );
-
-    await language.destroy();
     res.status(204).json();
   };
 
@@ -99,47 +84,29 @@ export default (): LanguageController => {
     throw new NotFoundError();
   };
 
-  const initializeMessages = async (
+  const getTranslations = async (
     req: Request<{ languageId: string }>,
-    res: Response<undefined>
+    res: Response<LanguageTranslationsResponse>
   ): Promise<void> => {
     const { languageId } = req.params;
 
-    const language = await Language.findByPk(languageId, { include: [{ model: LanguageMessage }] });
-    if (!language || !language.messages) throw new NotFoundError();
+    const translations = await languageService.getLanguageTranslations(languageId);
 
-    const { messages } = language;
+    res.json(translations);
+  };
 
-    const adminSections = messages
-      .filter((message) => message.application === 'admin')
-      .map(({ section }) => section);
-    const surveySections = messages
-      .filter((message) => message.application === 'survey')
-      .map(({ section }) => section);
+  const updateTranslations = async (
+    req: Request<{ languageId: string }>,
+    res: Response<LanguageTranslationsResponse>
+  ): Promise<void> => {
+    const {
+      body: { translations },
+      params: { languageId },
+    } = req;
 
-    const adminLanguageMessages: LanguageMessageCreationAttributes[] = Object.keys(admin.en)
-      .filter((section) => !adminSections.includes(section))
-      .map((section) => ({
-        languageId: language.id,
-        application: 'admin',
-        section,
-        messages: admin.en[section] as LocaleMessages,
-      }));
+    const translation = await languageService.updateLanguageTranslations(languageId, translations);
 
-    const surveyLanguageMessages: LanguageMessageCreationAttributes[] = Object.keys(survey.en)
-      .filter((section) => !surveySections.includes(section))
-      .map((section) => ({
-        languageId: language.id,
-        application: 'survey',
-        section,
-        messages: survey.en[section] as LocaleMessages,
-      }));
-
-    const languageMessages = [...adminLanguageMessages, ...surveyLanguageMessages];
-
-    if (languageMessages.length) await LanguageMessage.bulkCreate(languageMessages);
-
-    res.json();
+    res.json(translation);
   };
 
   return {
@@ -150,6 +117,7 @@ export default (): LanguageController => {
     update,
     destroy,
     refs,
-    initializeMessages,
+    getTranslations,
+    updateTranslations,
   };
 };

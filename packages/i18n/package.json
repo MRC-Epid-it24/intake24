@@ -18,5 +18,8 @@
   },
   "dependencies": {
     "vue-i18n": "^8.26.8"
-  }
+  },
+  "bundledDependencies": [
+    "@intake24/common"
+  ]
 }

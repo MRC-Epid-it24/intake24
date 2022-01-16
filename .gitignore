@@ -1,8 +1,9 @@
 .DS_Store
-node_modules
 coverage
 dist
 logs
+node_modules
+tmp
 
 # Local env files
 .env*
