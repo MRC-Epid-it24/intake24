@@ -10,20 +10,7 @@ import {
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 
-export interface PortionSizeService {
-  getAsServedImage: (asServedSetId: string, id: string) => Promise<AsServedImage>;
-  getAsServedImages: (asServedSetId: string, id: string | string[]) => Promise<AsServedImage[]>;
-  getAsServedSet: (id: string) => Promise<AsServedSet>;
-  getAsServedSets: (id: string | string[]) => Promise<AsServedSet[]>;
-  getGuideImage: (id: string) => Promise<GuideImage>;
-  getGuideImages: (id: string | string[]) => Promise<GuideImage[]>;
-  getImageMap: (id: string) => Promise<ImageMap>;
-  getImageMaps: (id: string | string[]) => Promise<ImageMap[]>;
-  getDrinkwareSet: (id: string) => Promise<DrinkwareSet>;
-  getDrinkwareSets: (id: string | string[]) => Promise<DrinkwareSet[]>;
-}
-
-export default (): PortionSizeService => {
+const portionSizeService = () => {
   /**
    * Get multiple records of as-served-images data
    *
@@ -213,3 +200,7 @@ export default (): PortionSizeService => {
     getDrinkwareSets,
   };
 };
+
+export default portionSizeService;
+
+export type PortionSizeService = ReturnType<typeof portionSizeService>;

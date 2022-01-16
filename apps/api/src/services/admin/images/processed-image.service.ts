@@ -11,28 +11,11 @@ export type SelectionImageType = 'guide' | 'as_served';
 
 export type DestroyOptions = { includeSources?: boolean };
 
-export interface ProcessedImageService {
-  createAsServedImages: (
-    id: string,
-    sourceImage: SourceImage | string
-  ) => Promise<[ProcessedImage, ProcessedImage]>;
-  createImageMapBaseImage: (
-    id: string,
-    sourceImage: SourceImage | string
-  ) => Promise<ProcessedImage>;
-  createSelectionImage: (
-    id: string,
-    sourceImage: SourceImage | string,
-    type: SelectionImageType
-  ) => Promise<ProcessedImage>;
-  destroy: (imageId: string, options?: DestroyOptions) => Promise<void>;
-}
-
-export default ({
+const processedImageService = ({
   fsConfig,
   logger: globalLogger,
   sourceImageService,
-}: Pick<IoC, 'fsConfig' | 'logger' | 'sourceImageService'>): ProcessedImageService => {
+}: Pick<IoC, 'fsConfig' | 'logger' | 'sourceImageService'>) => {
   const { images: imagesPath } = fsConfig.local;
   const logger = globalLogger.child({ service: 'ProcessedImageService' });
 
@@ -177,3 +160,7 @@ export default ({
     destroy,
   };
 };
+
+export default processedImageService;
+
+export type ProcessedImageService = ReturnType<typeof processedImageService>;

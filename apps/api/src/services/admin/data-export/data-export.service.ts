@@ -48,19 +48,10 @@ export type SyncStreamOutput = {
   stream: Transform<SurveySubmissionFood>;
 };
 
-export type DataExportService = {
-  getSubmissionOptions: (input: DataExportInput) => SubmissionFindOptions;
-  getSubmissionsWithStream: (options: SubmissionFindOptions) => Readable;
-  getExportFields: (sections: ExportSection[]) => Promise<ExportFieldInfo[]>;
-  prepareExportInfo: (input: DataExportInput) => Promise<DataExportOptions>;
-  queueExportJob: (input: DataExportInput) => Promise<Job>;
-  syncStream: (input: DataExportInput) => Promise<SyncStreamOutput>;
-};
-
-export default ({
+const dataExportService = ({
   dataExportMapper,
   scheduler,
-}: Pick<IoC, 'dataExportMapper' | 'scheduler'>): DataExportService => {
+}: Pick<IoC, 'dataExportMapper' | 'scheduler'>) => {
   /**
    * Scope to query submission foods and missing foods records
    *
@@ -281,3 +272,7 @@ export default ({
     syncStream,
   };
 };
+
+export default dataExportService;
+
+export type DataExportService = ReturnType<typeof dataExportService>;

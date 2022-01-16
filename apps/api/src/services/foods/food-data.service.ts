@@ -12,22 +12,15 @@ import {
   NutrientTableRecord,
   NutrientTableRecordNutrient,
 } from '@intake24/db';
-
 import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
 import { getParentLocale } from '@intake24/api/services/foods/common';
-
 import InheritableAttributesImpl from './inheritable-attributes-service';
 import PortionSizeMethodsImpl from './portion-size-methods-service';
 
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;
 
-export interface FoodDataService {
-  getNutrientKCalPer100G(localeId: string, foodCode: string): Promise<number>;
-  getFoodData(localeId: string, foodCode: string): Promise<UserFoodData>;
-}
-
-export default (): FoodDataService => {
+const foodDataService = () => {
   const inheritableAttributesImpl = InheritableAttributesImpl();
   const portionSizeMethodsImpl = PortionSizeMethodsImpl();
 
@@ -196,3 +189,7 @@ export default (): FoodDataService => {
     getFoodData,
   };
 };
+
+export default foodDataService;
+
+export type FoodDataService = ReturnType<typeof foodDataService>;

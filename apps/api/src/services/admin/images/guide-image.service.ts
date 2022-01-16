@@ -3,16 +3,10 @@ import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@intake2
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 
-export interface GuideImageService {
-  create: (input: CreateGuideImageInput) => Promise<GuideImage>;
-  update: (guideImageId: string, input: UpdateGuideImageInput) => Promise<GuideImage>;
-  destroy: (guideImageId: string) => Promise<void>;
-}
-
-export default ({
+const guideImageService = ({
   portionSizeService,
   processedImageService,
-}: Pick<IoC, 'portionSizeService' | 'processedImageService'>): GuideImageService => {
+}: Pick<IoC, 'portionSizeService' | 'processedImageService'>) => {
   const create = async (input: CreateGuideImageInput): Promise<GuideImage> => {
     const { id, description, imageMapId } = input;
 
@@ -88,3 +82,7 @@ export default ({
     destroy,
   };
 };
+
+export default guideImageService;
+
+export type GuideImageService = ReturnType<typeof guideImageService>;

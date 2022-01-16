@@ -3,20 +3,11 @@ import { CreateImageMapInput, UpdateImageMapInput } from '@intake24/common/types
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 
-export interface ImageMapService {
-  create: (input: CreateImageMapInput) => Promise<ImageMap>;
-  update: (imageMapId: string, input: UpdateImageMapInput) => Promise<ImageMap>;
-  destroy: (imageMapId: string) => Promise<void>;
-}
-
-export default ({
+const imageMapService = ({
   portionSizeService,
   processedImageService,
   sourceImageService,
-}: Pick<
-  IoC,
-  'portionSizeService' | 'processedImageService' | 'sourceImageService'
->): ImageMapService => {
+}: Pick<IoC, 'portionSizeService' | 'processedImageService' | 'sourceImageService'>) => {
   const create = async (input: CreateImageMapInput): Promise<ImageMap> => {
     const { id, description } = input;
 
@@ -89,3 +80,7 @@ export default ({
     destroy,
   };
 };
+
+export default imageMapService;
+
+export type ImageMapService = ReturnType<typeof imageMapService>;

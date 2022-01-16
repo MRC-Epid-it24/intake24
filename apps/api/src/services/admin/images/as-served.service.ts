@@ -7,22 +7,11 @@ import { AsServedImage, AsServedSet } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 
-export interface AsServedService {
-  createImage: (input: CreateAsServedImageInput) => Promise<AsServedImage>;
-  destroyImage: (asServedSetId: string, id?: string) => Promise<boolean>;
-  createSet: (input: CreateAsServedSetInput) => Promise<AsServedSet>;
-  updateSet: (asServedSetId: string, input: UpdateAsServedSetInput) => Promise<AsServedSet>;
-  destroySet: (asServedSetId: string) => Promise<void>;
-}
-
-export default ({
+const asServedService = ({
   portionSizeService,
   processedImageService,
   sourceImageService,
-}: Pick<
-  IoC,
-  'portionSizeService' | 'processedImageService' | 'sourceImageService'
->): AsServedService => {
+}: Pick<IoC, 'portionSizeService' | 'processedImageService' | 'sourceImageService'>) => {
   const createImage = async (input: CreateAsServedImageInput): Promise<AsServedImage> => {
     const { id, weight } = input;
 
@@ -107,3 +96,7 @@ export default ({
     destroySet,
   };
 };
+
+export default asServedService;
+
+export type AsServedService = ReturnType<typeof asServedService>;

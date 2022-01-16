@@ -12,17 +12,12 @@ import {
   getFoodParentCategories,
   getParentLocale,
 } from '@intake24/api/services/foods/common';
-
 import {
   toUserCategoryPortionSizeMethod,
   toUserPortionSizeMethod,
 } from './types/portion-size-method-utils';
 
-export interface PortionSizeMethodsService {
-  resolvePortionSizeMethods(localeId: string, foodCode: string): Promise<UserPortionSizeMethod[]>;
-}
-
-export default (): PortionSizeMethodsService => {
+const portionSizeMethodsService = () => {
   /**
    *
    * Get Portion Size Methods and their Parameters associated with the supplied category and locale.
@@ -132,3 +127,7 @@ export default (): PortionSizeMethodsService => {
     resolvePortionSizeMethods,
   };
 };
+
+export default portionSizeMethodsService;
+
+export type PortionSizeMethodsService = ReturnType<typeof portionSizeMethodsService>;

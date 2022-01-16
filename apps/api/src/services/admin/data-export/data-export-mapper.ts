@@ -1,15 +1,9 @@
 import json2csv from 'json2csv';
-import { ExportSectionId } from '@intake24/common/types/models';
 import { SurveySubmissionFood } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import { ExportField, ExportFieldTransform } from './data-export-fields';
 
 export type ExportFieldInfo = json2csv.FieldInfo<SurveySubmissionFood>;
-
-export type DataExportMapper = Record<
-  ExportSectionId,
-  (fields: ExportField[], ...arg: any[]) => Promise<ExportFieldInfo[]>
->;
 
 export type ExportFieldTransformCallback<T = SurveySubmissionFood> = (
   field: ExportField
@@ -53,7 +47,7 @@ export const foodFieldValue =
 export const foodNutrientValue =
   (field: ExportField): ExportFieldTransform =>
   (food: SurveySubmissionFood) => {
-    const match = food.nutrients?.find((item) => field.id === item.nutrientTypeId.toString());
+    const match = food.nutrients?.find((item) => field.id === item.nutrientTypeId);
     return match?.amount;
   };
 
@@ -64,7 +58,7 @@ export const portionSizeValue =
     return match?.value;
   };
 
-export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): DataExportMapper => {
+const dataExportMapper = ({ dataExportFields }: Pick<IoC, 'dataExportFields'>) => {
   /**
    * Map record based fields (Survey submission / meal / food)
    *
@@ -75,15 +69,14 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): DataExport
   const getRecordFields = async (
     fields: ExportField[],
     referenceFields: ExportField[]
-  ): Promise<ExportFieldInfo[]> => {
-    return fields.map((field) => {
+  ): Promise<ExportFieldInfo[]> =>
+    fields.map((field) => {
       const match = referenceFields.find((refField) => refField.id === field.id);
 
       const { id, label } = field;
 
       return { label, value: match?.value ?? id };
     });
-  };
 
   /**
    * Map custom field based fields
@@ -95,9 +88,8 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): DataExport
   const getCustomRecordFields = async (
     fields: ExportField[],
     value: ExportFieldTransformCallback
-  ): Promise<ExportFieldInfo[]> => {
-    return fields.map((field) => ({ label: field.label, value: value(field) }));
-  };
+  ): Promise<ExportFieldInfo[]> =>
+    fields.map((field) => ({ label: field.label, value: value(field) }));
 
   /**
    * User fields
@@ -212,3 +204,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): DataExport
     portionSizes,
   };
 };
+
+export default dataExportMapper;
+
+export type DataExportMapper = ReturnType<typeof dataExportMapper>;

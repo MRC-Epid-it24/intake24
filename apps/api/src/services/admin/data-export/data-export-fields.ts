@@ -1,6 +1,6 @@
 import { orderBy } from 'lodash';
 import { PromptQuestion } from '@intake24/common/prompts';
-import { ExportSectionId, ExportField as BaseExportField } from '@intake24/common/types/models';
+import { ExportField as BaseExportField } from '@intake24/common/types/models';
 import {
   NutrientTableCsvMappingField,
   SystemNutrientType,
@@ -17,11 +17,9 @@ export interface ExportField extends BaseExportField {
   value?: string | ExportFieldTransform;
 }
 
-export type DataExportFields = Record<ExportSectionId, (...arg: any[]) => Promise<ExportField[]>>;
-
 export const EMPTY = 'N/A';
 
-export default (): DataExportFields => {
+const dataExportFields = () => {
   /**
    * Helper to map custom PromptQuestion to ExportField
    *
@@ -241,7 +239,7 @@ export default (): DataExportFields => {
   const foodNutrients = async (): Promise<ExportField[]> => {
     const types = await SystemNutrientType.findAll();
 
-    return types.map((type) => ({ id: type.id.toString(), label: type.description }));
+    return types.map((type) => ({ id: type.id, label: type.description }));
   };
 
   /**
@@ -314,3 +312,7 @@ export default (): DataExportFields => {
     portionSizes,
   };
 };
+
+export default dataExportFields;
+
+export type DataExportFields = ReturnType<typeof dataExportFields>;

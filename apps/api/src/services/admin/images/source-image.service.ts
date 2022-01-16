@@ -6,15 +6,10 @@ import { UploadSourceImageInput, SourceImageType } from '@intake24/common/types/
 import { SourceImage } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 
-export interface SourceImageService {
-  uploadSourceImage: (input: UploadSourceImageInput, type: SourceImageType) => Promise<SourceImage>;
-  destroy: (sourceImageId: string | string[]) => Promise<void>;
-}
-
-export default ({
+const sourceImageService = ({
   fsConfig,
   logger: globalLogger,
-}: Pick<IoC, 'fsConfig' | 'logger'>): SourceImageService => {
+}: Pick<IoC, 'fsConfig' | 'logger'>) => {
   const { images: imagesPath } = fsConfig.local;
   const logger = globalLogger.child({ service: 'SourceImageService' });
 
@@ -71,3 +66,7 @@ export default ({
     destroy,
   };
 };
+
+export default sourceImageService;
+
+export type SourceImageService = ReturnType<typeof sourceImageService>;
