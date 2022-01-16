@@ -252,7 +252,7 @@ const surveyService = ({
 
     switch (identifier) {
       case 'userId':
-        identifierValue = user.id.toString();
+        identifierValue = user.id;
         break;
       case 'username':
         identifierValue = aliases.length ? aliases[0].userName : null;

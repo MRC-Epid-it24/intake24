@@ -19,7 +19,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     const task = await Task.findByPk(taskId);
     if (!task) throw new NotFoundError();
 
-    const bullJob = await scheduler.tasks.getRepeatableJobById(taskId.toString());
+    const bullJob = await scheduler.tasks.getRepeatableJobById(taskId);
 
     res.json({ ...task.get(), bullJob });
   };
@@ -66,7 +66,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     await task.update({ name, job, cron, active, description, params });
     await scheduler.tasks.updateJob(task);
 
-    const bullJob = await scheduler.tasks.getRepeatableJobById(taskId.toString());
+    const bullJob = await scheduler.tasks.getRepeatableJobById(taskId);
 
     res.json({ ...task.get(), bullJob });
   };

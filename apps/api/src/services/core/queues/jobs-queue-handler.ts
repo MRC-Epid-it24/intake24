@@ -216,7 +216,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   private async queueJob(job: DbJob, params?: JobParams, options: JobsOptions = {}): Promise<void> {
     const { id, type } = job;
 
-    await this.queue.add(type, { params }, { ...options, jobId: id.toString() });
+    await this.queue.add(type, { params }, { ...options, jobId: id });
 
     this.logger.debug(`Queue ${this.name}: Job ${id} | ${type} queued.`);
   }

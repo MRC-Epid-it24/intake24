@@ -142,7 +142,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
   private async queueJob(task: Task): Promise<void> {
     const { id, job, cron, params } = task;
 
-    await this.queue.add(job, { params }, { repeat: { cron }, jobId: id.toString() });
+    await this.queue.add(job, { params }, { repeat: { cron }, jobId: id });
   }
 
   /**
@@ -154,7 +154,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
    * @memberof TasksQueueHandler
    */
   private async dequeueJob(task: Task): Promise<void> {
-    this.clearRepeatableJobs(task.id.toString());
+    this.clearRepeatableJobs(task.id);
   }
 
   /**
