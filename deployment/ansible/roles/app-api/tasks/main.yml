@@ -8,12 +8,6 @@
   become_user: '{{ app.user }}'
   command: pm2 updatePM2
 
-- name: Install npm package dependencies
-  become_user: '{{ app.user }}'
-  command: npm ci
-  args:
-    chdir: '{{ app.directory }}/apps/api'
-
 - name: Copy .env config file
   become_user: '{{ app.user }}'
   copy:
@@ -30,20 +24,16 @@
 
 - name: Build API server
   become_user: '{{ app.user }}'
-  command: npm run production
+  command: pnpm production
   args:
     chdir: '{{ app.directory }}/apps/api'
 
 - name: Run foods database migrations
   become_user: '{{ app.user }}'
-  command: npm run migrate:foods
-  args:
-    chdir: '{{ app.directory }}/apps/api'
+  command: pnpm db:migrate:foods
   when: migrations.foods
 
 - name: Run system database migrations
   become_user: '{{ app.user }}'
-  command: npm run migrate:system
-  args:
-    chdir: '{{ app.directory }}/apps/api'
+  command: pnpm db:migrate:system
   when: migrations.system

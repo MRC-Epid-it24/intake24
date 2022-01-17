@@ -1,9 +1,3 @@
-- name: Install npm package dependencies
-  become_user: '{{ app.user }}'
-  command: npm ci
-  args:
-    chdir: '{{ app.directory }}/apps/admin'
-
 - name: Copy .env config file
   become_user: '{{ app.user }}'
   copy:
@@ -13,6 +7,6 @@
 
 - name: Build client application
   become_user: '{{ app.user }}'
-  command: npm run build
+  command: pnpm build
   args:
     chdir: '{{ app.directory }}/apps/admin'

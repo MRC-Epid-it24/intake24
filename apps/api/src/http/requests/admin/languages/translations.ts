@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 import validate from '@intake24/api/http/requests/validate';
-import { validateTranslations } from '@intake24/i18n/util';
+import { validateTranslations } from '@intake24/i18n';
 
 export default validate(
   checkSchema({

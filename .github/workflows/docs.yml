@@ -16,31 +16,33 @@ jobs:
       matrix:
         node-version: [16.x]
 
-    defaults:
-      run:
-        working-directory: apps/docs
-
     steps:
       - name: Repository checkout
         uses: actions/checkout@v2.4.0
+      
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2.5.1
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
-      - name: Docs - install dependencies
-        run: npm ci
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Docs - build
-        run: npm run build
+        run: pnpm docs:build
 
       - name: Set CNAME
-        run: echo "docs.intake24.co.uk" > dist/CNAME
+        run: echo "docs.intake24.co.uk" > docs/.vitepress/dist/CNAME
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.2.1
         with:
           branch: ghp-docs
-          folder: apps/docs/dist
+          folder: docs/.vitepress/dist
           clean: true

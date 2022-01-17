@@ -11,8 +11,8 @@
     name: '{{ app.user }}'
     group: '{{ app.group }}'
 
-- name: Update npm to latest
-  command: npm install -g npm
+- name: Install pnpm to latest
+  command: npm install -g pnpm
 
 - name: Create / check application directory
   file:
@@ -30,8 +30,6 @@
     force: yes
     accept_hostkey: true
 
-- name: Install common npm package dependencies
+- name: Install dependencies
   become_user: '{{ app.user }}'
-  command: npm ci
-  args:
-    chdir: '{{ app.directory }}/packages/common'
+  command: pnpm install

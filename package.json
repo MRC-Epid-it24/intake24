@@ -9,12 +9,17 @@
   "engines": {
     "node": "^14.17.0 || >=16.0.0"
   },
+  "packageManager": "pnpm@6.26.1",
   "scripts": {
+    "preinstall": "npx -y only-allow pnpm",
+    "db:migrate:foods": "npm run db:migrate:foods --workspace=packages/db",
+    "db:migrate:system": "npm run db:migrate:system --workspace=packages/db",
+    "cli": "npm run cli --workspace=apps/cli",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs",
     "lint": "eslint --ext .ts apps/*/src/**/*.ts apps/*/__tests__/**/*.ts packages/*/src/**/*.ts packages/*/__tests__/**/*.ts",
     "lint:fix": "npm run lint -- --fix",
-    "cli": "npm run cli --workspace=apps/cli",
-    "migrate:foods": "npm run migrate:foods --workspace=packages/db",
-    "migrate:system": "npm run migrate:system --workspace=packages/db",
     "test:unit": "jest",
     "test:unit:watch": "npm run test:unit -- --watch",
     "test:integration": "npm run test:integration --workspace=apps/api"
@@ -54,6 +59,7 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^27.1.2",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "vitepress": "^0.21.5"
   }
 }

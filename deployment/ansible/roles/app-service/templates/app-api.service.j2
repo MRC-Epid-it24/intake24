@@ -8,7 +8,7 @@ User={{ app.user }}
 Group={{ app.group }}
 Restart=on-failure
 WorkingDirectory={{ app.directory }}/apps/api
-ExecStart=/usr/bin/pm2 start
+ExecStart=/usr/bin/pm2 start ecosystem.config.js
 
 [Install]
 WantedBy=multi-user.target
