@@ -74,7 +74,7 @@ importers:
       core-js: ^3.20.2
       cronstrue: ^1.122.0
       date-fns: ^2.28.0
-      dotenv: ^10.0.0
+      dotenv: ^13.0.1
       dotenv-expand: ^5.1.0
       express: ^4.17.2
       flag-icons: ^6.0.2
@@ -109,7 +109,7 @@ importers:
       core-js: 3.20.2
       cronstrue: 1.122.0
       date-fns: 2.28.0
-      dotenv: 10.0.0
+      dotenv: 13.0.1
       dotenv-expand: 5.1.0
       express: 4.17.2
       flag-icons: 6.0.2
@@ -193,7 +193,7 @@ importers:
       cron-validator: ^1.2.1
       date-fns: ^2.28.0
       dompurify: ^2.3.4
-      dotenv: ^10.0.0
+      dotenv: ^13.0.1
       dotenv-expand: ^5.1.0
       duo_universal: ^1.0.3
       express: ^4.17.2
@@ -253,7 +253,7 @@ importers:
       cron-validator: 1.2.1
       date-fns: 2.28.0
       dompurify: 2.3.4
-      dotenv: 10.0.0
+      dotenv: 13.0.1
       dotenv-expand: 5.1.0
       duo_universal: 1.0.3
       express: 4.17.2
@@ -334,7 +334,7 @@ importers:
       '@types/lodash': ^4.14.178
       '@types/web-push': ^3.3.2
       commander: ^8.3.0
-      dotenv: ^10.0.0
+      dotenv: ^13.0.1
       dotenv-expand: ^5.1.0
       fork-ts-checker-webpack-plugin: ^6.5.0
       fs-extra: ^10.0.0
@@ -348,7 +348,7 @@ importers:
       webpackbar: ^5.0.2
     dependencies:
       commander: 8.3.0
-      dotenv: 10.0.0
+      dotenv: 13.0.1
       dotenv-expand: 5.1.0
       fs-extra: 10.0.0
       lodash: 4.17.21
@@ -373,7 +373,7 @@ importers:
       command-line-args: ^5.2.0
       cross-env: ^7.0.3
       csv-writer: ^1.6.0
-      dotenv: ^10.0.0
+      dotenv: ^13.0.1
       dotenv-expand: ^5.1.0
       lodash: ^4.17.21
       ts-loader: ^9.2.6
@@ -385,7 +385,7 @@ importers:
       ajv: 8.8.2
       command-line-args: 5.2.0
       csv-writer: 1.6.0
-      dotenv: 10.0.0
+      dotenv: 13.0.1
       dotenv-expand: 5.1.0
       lodash: 4.17.21
     devDependencies:
@@ -416,7 +416,7 @@ importers:
       axios: ^0.24.0
       bootstrap: ^5.1.3
       core-js: ^3.20.2
-      dotenv: ^10.0.0
+      dotenv: ^13.0.1
       dotenv-expand: ^5.1.0
       express: ^4.17.2
       helmet: ^5.0.1
@@ -449,7 +449,7 @@ importers:
       axios: 0.24.0
       bootstrap: 5.1.3
       core-js: 3.20.2
-      dotenv: 10.0.0
+      dotenv: 13.0.1
       dotenv-expand: 5.1.0
       express: 4.17.2
       helmet: 5.0.1
@@ -519,7 +519,7 @@ importers:
       '@types/lodash': ^4.14.178
       '@types/pg': ^8.6.3
       '@types/validator': ^13.7.1
-      dotenv: ^10.0.0
+      dotenv: ^13.0.1
       lodash: ^4.17.21
       mariadb: ^2.5.5
       mssql: ^7.3.0
@@ -530,7 +530,7 @@ importers:
       sequelize-cli: ^6.3.0
       sequelize-typescript: ^2.1.2
     dependencies:
-      dotenv: 10.0.0
+      dotenv: 13.0.1
       lodash: 4.17.21
       mariadb: 2.5.5
       mssql: 7.3.0
@@ -6407,6 +6407,12 @@ packages:
   /dotenv/10.0.0:
     resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
     engines: {node: '>=10'}
+    dev: true
+
+  /dotenv/13.0.1:
+    resolution: {integrity: sha512-u3KAkK+VHk01+D7V6SFtSJl2JScX1Yi4anKsKXS4oT8s8LnL5xgJe7XFAZ1bSsOfAmxU54OwOuhaLv3v70oXgw==}
+    engines: {node: '>=12'}
+    dev: false
 
   /dottie/2.0.2:
     resolution: {integrity: sha512-fmrwR04lsniq/uSr8yikThDTrM7epXHBAAjH9TbeH3rEA8tdCO7mRzB9hdmdGyJCxF8KERo9CITcm3kGuoyMhg==}

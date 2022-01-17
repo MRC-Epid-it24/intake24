@@ -41,7 +41,7 @@
     "cron-validator": "^1.2.1",
     "date-fns": "^2.28.0",
     "dompurify": "^2.3.4",
-    "dotenv": "^10.0.0",
+    "dotenv": "^13.0.1",
     "dotenv-expand": "^5.1.0",
     "duo_universal": "^1.0.3",
     "express": "^4.17.2",
