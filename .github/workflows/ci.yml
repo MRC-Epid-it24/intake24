@@ -5,12 +5,12 @@ on:
     branches: [ master ]
     paths-ignore:
       - 'deployment/**'
-      - 'apps/docs/**'
+      - 'docs/**'
   pull_request:
     branches: [ master ]
     paths-ignore:
       - 'deployment/**'
-      - 'apps/docs/**'
+      - 'docs/**'
 
 env:
   DB_SYSTEM_DATABASE: it24_system_test

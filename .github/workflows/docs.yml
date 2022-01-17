@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'apps/docs/**'
+      - 'docs/**'
 
 jobs:
   docs-build-deploy:
