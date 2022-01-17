@@ -1,0 +1,1 @@
+import{_ as t,c as e,o as i,a}from"./app.e32337bc.js";const m='{"title":"Data Dictionary for Nutritionists","description":"","frontmatter":{},"headers":[],"relativePath":"admin/nutritionist-dictionary.md","lastUpdated":1642417039293}',r={},n=a("",3),d=[n];function s(o,c,_,l,h,p){return i(),e("div",null,d)}var f=t(r,[["render",s]]);export{m as __pageData,f as default};

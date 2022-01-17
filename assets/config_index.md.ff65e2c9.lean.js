@@ -1,0 +1,1 @@
+import{_ as e,c as a,o as i,a as r}from"./app.e32337bc.js";const v='{"title":"Introduction","description":"","frontmatter":{},"headers":[],"relativePath":"config/index.md","lastUpdated":1642417039309}',t={},o=r("",13),n=[o];function c(l,s,d,p,f,h){return i(),a("div",null,n)}var m=e(t,[["render",c]]);export{v as __pageData,m as default};
