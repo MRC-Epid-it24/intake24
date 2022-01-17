@@ -84,6 +84,8 @@ export default (
 
   computed: {
     schemes(): SchemeStatus[] {
+      if (!this.refsLoaded) return [];
+
       return this.refs.schemes.reduce<SchemeStatus[]>((acc, scheme) => {
         const questions = flattenSchemeWithSection(scheme.questions);
 
