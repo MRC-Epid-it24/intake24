@@ -16,7 +16,7 @@ There are two 3rd party ones, `yarn` (facebook backed) and `pnpm` (community bac
 
 Node.js v16.9 comes with `corepack`, which is sort of a bridge between managers and can be used to install other managers. Though, you can install them usually juts through `npm` like any other package.
 
-There are some caveats with using `npm` and workspaces & monorepo implementation. So `pnpm` is now set up for Intake24 components. Documentation is still using `npm`.
+There are some caveats with using `npm` and workspaces & monorepo implementation. So `pnpm` is now set up for Intake24 components.
 
 Install `pnpm` using built-in `npm` or see [pnpm docs](https://pnpm.io) for further options.
 ```sh

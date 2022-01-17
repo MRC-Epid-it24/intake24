@@ -14,13 +14,15 @@ Repository is set as mono-repository with [workspaces](https://docs.npmjs.com/cl
 Applications are in `apps` folder. Shared components are in `packages` folder.
 
 ```
+.
+├─ .github -> Github actions / workflows
 ├─ apps -> Applications
 │  └─ api -> API Server
 │  └─ admin -> Admin tool
 │  └─ cli -> Command line interface
-│  └─ docs -> Documentation site
 │  └─ survey -> Survey applications
 ├─ deployment - Ansible playbooks / scripts for deployment
+├─ docs -> Documentation site
 └─ packages
    └─ common (common shared code)
    └─ db (database layer)
@@ -31,9 +33,10 @@ Applications are in `apps` folder. Shared components are in `packages` folder.
 
 ## Dependencies
 
-Intake24 components are set up with `pnpm` and documentation is set up with `npm` (there are some issues to be resolved for migration to `pnpm`).
+Intake24 components are set up with `pnpm`.
 
 Install `pnpm` using built-in `npm` or see [pnpm docs](https://pnpm.io) for further options.
+
 ```sh
 npm install -g pnpm
 ```
@@ -42,16 +45,6 @@ Install all dependencies from root-level
 ```sh
 pnpm install
 ```
-
-:::warning
-Installing deps from top-level using `npm` isn't 100% perfect. Few observations:
-- it works fine for frontend apps
-- `apps/api` can cause some platform-specific issues, where not all dependencies are correctly resolved. If you cannot boot it up due to missing dependencies, run `npm install` in `app/api` folder.
-- above applies also for few packages
-- some IDEs have issues to see all dependencies correctly and can show some false-positive issues of missing dependencies. This might require you to tweak your IDE to work correctly with multi-repository structure.
-:::
-
-If you are running `npm install` separately for each application, do not forget to run it in all `package/*` folders
 
 ## Code style
 
@@ -73,7 +66,7 @@ pnpm lint:fix
 
 ## Renovate
 
-Repository is set up with [renovate bot](https://github.com/renovatebot/renovate), which checks the dependecies prepare PRs. It runs on weekly basis and can be configured using [`renovate.json`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/renovate.json5) config file.
+Repository is set up with [renovate bot](https://github.com/renovatebot/renovate), which checks the dependecies prepare PRs. It runs on weekly basis and can be configured using [`.github/renovate.json5`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/renovate.json5) config file.
 
 ## Continuous integration
 

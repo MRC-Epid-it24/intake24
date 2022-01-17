@@ -55,10 +55,7 @@ Response can differ based on whether multi-factor authentication is enabled or n
 200 OK
 
 {
-    "mfa": {
-        "request": string,
-        "host": string
-    }
+    "mfaRequestUrl": string;
 }
 ```
 
@@ -128,7 +125,8 @@ POST /api/login/verify
 Content-Type: application/json
 
 {
-    "sigResponse": string
+    "code": string,
+    "state": string
 }
 ```
 

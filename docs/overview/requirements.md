@@ -2,9 +2,7 @@
 
 * [Node.js](https://nodejs.org) runtime environment. System is tested with latest LTS (14.x | 16.x).
 
-* [PNPM](https://pnpm.io) Alternative package manager with support for workspaces & mono-repository setup, which is encouraged to use for now.
-
-* [NPM](https://docs.npmjs.com/cli) Although you can still use default `npm` shipped with `node.js`, there are few caveats with workspaces & mono-repository setup use. See [Installation section](/overview/).
+* [PNPM](https://pnpm.io) Package manager with support for workspaces & mono-repository setup, which is encouraged to use for now.
 
 Intake24 system has three main components:
 

@@ -1,8 +1,8 @@
 # Introduction
 
-All parts of the system are using environment variables. Environment specific configuration is extracted to `process.env` variables. All applications are using [`dotenv`](https://github.com/motdotla/dotenv) and [`dotenv-expand`](https://github.com/motdotla/dotenv-expand) to set environment variables.
+All parts of the system are using environment variables. Environment specific configuration is parsed to `process.env` variables. All applications are using [`dotenv`](https://github.com/motdotla/dotenv) and [`dotenv-expand`](https://github.com/motdotla/dotenv-expand) to set environment variables.
 
-Application loads `.env` file in root directory. There is example file (`.env-template`), which can be used as template.
+Each `application` / `package` loads `.env` file in respective directory. There is example file (`.env-template`), which can be used as template.
 
 Copy the `.env-template` file and modify the `.env` file as needed.
 
@@ -12,19 +12,21 @@ cp .env-template .env
 
 # API Server
 
-Configuration files are stored in `src/config` directory.
+Configuration files are stored in `src/config` directory of `application` or `package`.
 
 Configuration is structured to following sections:
 
-* [Application](/config/api/application.md)
-* [Access Control List (ACL)](/config/api/acl.md)
-* [Cache](/config/api/cache.md)
-* [Database](/config/api/database.md)
-* [Filesystem](/config/api/filesystem.md)
-* [Mail](/config/api/mail.md)
-* [Queue](/config/api/queue.md)
-* [Security](/config/api/security.md)
-* [Services](/config/api/services.md)
+* [Application](/config/api/application)
+* [Access Control List (ACL)](/config/api/acl)
+* [Cache](/config/api/cache)
+* [Database](/config/api/database)
+* [Filesystem](/config/api/filesystem)
+* [Mail](/config/api/mail)
+* [Logging](/config/api/log)
+* [Queue](/config/api/queue)
+* [Security](/config/api/security)
+* [Services](/config/api/services)
+* [Session](/config/api/session)
 
 # Admin client
 
