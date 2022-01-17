@@ -353,6 +353,18 @@ export default defineConfig({
               text: 'Nutritionist dictionary',
               link: '/admin/nutritionist-dictionary',
             },
+            {
+              text: 'Languages',
+              link: '/admin/languages',
+            },
+            {
+              text: 'Locales',
+              link: '/admin/locales',
+            },
+            {
+              text: 'Schemes',
+              link: '/admin/schemes',
+            },
           ],
         },
       ],

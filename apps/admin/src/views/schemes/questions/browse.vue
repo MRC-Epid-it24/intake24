@@ -2,7 +2,7 @@
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <v-toolbar flat tile color="grey lighten-5" bottom>
       <v-toolbar-title class="font-weight-medium">
-        {{ $t(`schemes.data-export.sections._`) }}
+        {{ $t(`schemes.questions.title`) }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <load-section-dialog
