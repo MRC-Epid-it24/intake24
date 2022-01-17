@@ -31,9 +31,9 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.178",
-    "@types/pg": "^8.6.3",
+    "@types/pg": "^8.6.4",
     "@types/validator": "^13.7.1",
-    "sequelize-cli": "^6.3.0"
+    "sequelize-cli": "^6.4.1"
   },
   "bundledDependencies": [
     "@intake24/api",
