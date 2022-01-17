@@ -19,7 +19,7 @@
     "db:migrate:system": "npx sequelize db:migrate --options-path sequelize/system/options.js"
   },
   "dependencies": {
-    "dotenv": "^10.0.0",
+    "dotenv": "^14.1.0",
     "lodash": "^4.17.21",
     "mariadb": "^2.5.5",
     "mssql": "^7.3.0",
