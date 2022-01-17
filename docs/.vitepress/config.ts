@@ -33,12 +33,12 @@ export default defineConfig({
         link: '/api/',
       },
       {
-        text: 'Survey',
-        link: '/survey/',
-      },
-      {
         text: 'Admin',
         link: '/admin/',
+      },
+      {
+        text: 'Survey',
+        link: '/survey/',
       },
       {
         text: 'Data Dictionary',
@@ -164,18 +164,6 @@ export default defineConfig({
             {
               text: 'Introduction',
               link: '/config/survey/',
-            },
-          ],
-        },
-      ],
-      '/deployment/': [
-        {
-          text: 'Deployment',
-          collapsable: false,
-          children: [
-            {
-              text: 'Introduction',
-              link: '/deployment/',
             },
           ],
         },
@@ -328,18 +316,6 @@ export default defineConfig({
           ],
         },
       ],
-      '/survey/': [
-        {
-          text: 'Survey',
-          collapsable: false,
-          children: [
-            {
-              text: 'Introduction',
-              link: '/survey/',
-            },
-          ],
-        },
-      ],
       '/admin/': [
         {
           text: 'Admin',
@@ -353,17 +329,95 @@ export default defineConfig({
               text: 'Nutritionist dictionary',
               link: '/admin/nutritionist-dictionary',
             },
+          ],
+        },
+        {
+          text: 'Localization',
+          children: [
             {
               text: 'Languages',
-              link: '/admin/languages',
+              link: '/admin/localization/languages',
             },
             {
               text: 'Locales',
-              link: '/admin/locales',
+              link: '/admin/localization/locales',
             },
+          ],
+        },
+        {
+          text: 'Surveys MGMT',
+          children: [
             {
               text: 'Schemes',
-              link: '/admin/schemes',
+              link: '/admin/surveys/schemes',
+            },
+            {
+              text: 'Scheme questions',
+              link: '/admin/surveys/scheme-questions',
+            },
+            {
+              text: 'Surveys',
+              link: '/admin/surveys',
+            },
+          ],
+        },
+        {
+          text: 'Access control list',
+          children: [
+            {
+              text: 'Introduction',
+              link: '/admin/acl/',
+            },
+            {
+              text: 'Permissions',
+              link: '/admin/acl/permissions',
+            },
+            {
+              text: 'Roles',
+              link: '/admin/acl/roles',
+            },
+            {
+              text: 'Users',
+              link: '/admin/acl/users',
+            },
+          ],
+        },
+        {
+          text: 'System',
+          children: [
+            {
+              text: 'Jobs',
+              link: '/admin/system/jobs',
+            },
+            {
+              text: 'Sign-in logs',
+              link: '/admin/system/sign-in-logs',
+            },
+            {
+              text: 'Tasks',
+              link: '/admin/system/tasks',
+            },
+          ],
+        },
+      ],
+      '/survey/': [
+        {
+          text: 'Survey',
+          children: [
+            {
+              text: 'Introduction',
+              link: '/survey/',
+            },
+          ],
+        },
+      ],
+      '/deployment/': [
+        {
+          text: 'Deployment',
+          children: [
+            {
+              text: 'Introduction',
+              link: '/deployment/',
             },
           ],
         },
@@ -371,7 +425,6 @@ export default defineConfig({
       '/data-dictionary/': [
         {
           text: 'Data Dictionary',
-          collapsable: false,
           children: [
             {
               text: 'Introduction',
@@ -391,7 +444,6 @@ export default defineConfig({
       '/developer/': [
         {
           text: 'Developer resources',
-          collapsable: false,
           children: [
             {
               text: 'Introduction',

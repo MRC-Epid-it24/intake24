@@ -4,11 +4,11 @@ Survey recall flow is defined by scheme, which has couple of sections.
 
 ## Detail tab
 
-Detail tab displays basic settings of the selected scheme.
+Detail tab displays selected scheme info.
 
 ## Create / Edit tab
 
-Edit tab allows to edit settings of the selected scheme.
+Edit tab allows to modify selected scheme.
 
 - `Scheme ID` - short and unique, ideally slug-based string. It is used as primary key in database.
 
@@ -30,12 +30,12 @@ Questions are categorized to sections and they are asked in specified fixed orde
 
 #### Recall sections
 | Name             | Description                                                    |
-| ---------------- | ----------------------------------------------------           | 
+| ---------------- | ----------------------------------------------------           |
 | 1. Pre-meal      | Questions asked about whole recall before dietary data entered |
 | 2. Pre-foods     | Questions asked about meal before foods were entered           |
 | 3. Foods         | Questions asked about the foods                                |
 | 4. Post-foods    | Questions asked about meal after foods were entered            |
-| 5. Post-meal     | Questions asked about whole recall after dietary data          | 
+| 5. Post-meal     | Questions asked about whole recall after dietary data          |
 | 6. Submission    | Questions asked during data submissions                        | 
 
 Whole question sections group can be loaded from another scheme using `load from scheme` button.

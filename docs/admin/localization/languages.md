@@ -6,11 +6,11 @@ Languages are then associated with locales and they in list of available languag
 
 ## Detail tab
 
-Detail tab displays basic settings of the selected language.
+Detail tab displays selected language info.
 
 ## Create / Edit tab
 
-Edit tab allows to edit settings of the selected language.
+Edit tab allows to modify selected language.
 
 - `Language ID` - short, unique and valid locale ID.
 

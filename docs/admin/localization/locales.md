@@ -1,14 +1,14 @@
 # Locales
 
-Locale is a record to hold a specific list of foods.
+Locale is a grouping record to hold a specific list of categories / foods and its inheritance.
 
 ## Detail tab
 
-Detail tab displays basic settings of the selected locale.
+Detail tab displays selected locale.
 
 ## Create / Edit tab
 
-Edit tab allows to edit settings of the selected locale.
+Edit tab allows to modify selected locale.
 
 - `Locale ID` - short, unique and valid locale ID.
 

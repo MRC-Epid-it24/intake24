@@ -2,25 +2,6 @@
 
 Path: `apps/api/src/config/acl.ts`
 
-Access control list (`ACL`) implementation is based on three models:
-
-* `user`
-* `role`
-* `permission`
-
-Relations between the models are defined as follows:
-
-* `many-to-many` between `user` and `role`
-* `many-to-many` between `user` and `permission`
-* `many-to-many` between `role` and `permission`
-
-This allows to grant permissions to users in two ways:
-
-* directly associate `permission` with `user`
-* associate `permission` with `user` through `role` (acting as grouping record for a set of permissions)
-
-Path: `src/config/acl.ts`
-
 ## Cache
 Controls the permissions / roles caching
 
