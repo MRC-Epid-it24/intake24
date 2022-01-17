@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
 const env = dotenv.config();
-dotenvExpand(env);
+dotenvExpand.expand(env);
 
 const express = require('express');
 const helmet = require('helmet');
