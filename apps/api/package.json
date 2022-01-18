@@ -15,19 +15,16 @@
     "node": "^14.17.0 || >=16.0.0"
   },
   "scripts": {
-    "development": "webpack --env NODE_ENV=development",
-    "dev": "npm run development",
+    "build": "pnpm clean && webpack --env NODE_ENV=production",
     "clean": "rimraf dist",
-    "build": "webpack --env NODE_ENV=production",
-    "production": "npm run clean && npm run build",
-    "prod": "npm run production",
+    "dev": "webpack --env NODE_ENV=development",
     "start": "node dist/server.js",
     "lint": "eslint --ext .js,.ts src/ __tests__/",
-    "lint:fix": "npm run lint -- --fix",
+    "lint:fix": "pnpm lint -- --fix",
     "test:unit": "jest --testMatch '**/__tests__/unit/**/*.spec.ts'",
-    "test:unit:watch": "npm run test:unit -- --watch",
+    "test:unit:watch": "pnpm test:unit -- --watch",
     "test:integration": "jest ./__tests__/integration/index.test.ts --runInBand",
-    "test:integration:watch": "npm run test:integration -- --watch"
+    "test:integration:watch": "pnpm test:integration -- --watch"
   },
   "dependencies": {
     "awilix": "^6.0.0",

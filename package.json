@@ -12,17 +12,19 @@
   "packageManager": "pnpm@6.26.1",
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
-    "db:migrate:foods": "npm run db:migrate:foods --workspace=packages/db",
-    "db:migrate:system": "npm run db:migrate:system --workspace=packages/db",
-    "cli": "npm run cli --workspace=apps/cli",
+    "build": "pnpm build --filter ./apps",
+    "db:migrate": "run-s db:migrate:foods db:migrate:system",
+    "db:migrate:foods": "pnpm db:migrate:foods --filter ./packages/db",
+    "db:migrate:system": "pnpm db:migrate:system --filter ./packages/db",
+    "cli": "pnpm cli --filter ./apps/cli",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs",
     "lint": "eslint --ext .ts apps/*/src/**/*.ts apps/*/__tests__/**/*.ts packages/*/src/**/*.ts packages/*/__tests__/**/*.ts",
-    "lint:fix": "npm run lint -- --fix",
+    "lint:fix": "pnpm lint -- --fix",
     "test:unit": "jest",
-    "test:unit:watch": "npm run test:unit -- --watch",
-    "test:integration": "npm run test:integration --workspace=apps/api"
+    "test:unit:watch": "pnpm test:unit -- --watch",
+    "test:integration": "pnpm test:integration --filter ./apps/api"
   },
   "repository": {
     "type": "git",
@@ -55,6 +57,7 @@
     "eslint-plugin-vuejs-accessibility": "^1.1.1",
     "jest": "^27.4.7",
     "jest-extended": "^1.2.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.1.3",

@@ -12,10 +12,10 @@
   },
   "scripts": {
     "development": "cross-env NODE_ENV=development webpack",
-    "dev": "npm run development",
+    "dev": "pnpm development",
     "find": "cross-env NODE_PATH=../api/node_modules node dist/findPortionSizes.js",
     "lint": "eslint --ext .js,.ts src/",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "pnpm lint -- --fix"
   },
   "engines": {
     "node": "^14.17.0 || >=16.0.0"

@@ -9,13 +9,13 @@
     "directory": "apps/survey"
   },
   "scripts": {
-    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build-site": "mix",
-    "test:unit": "vue-cli-service test:unit",
+    "dev": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
     "start": "node server/index.js",
-    "test": "jest"
+    "test": "jest",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",

@@ -24,7 +24,7 @@
 
 - name: Build API server
   become_user: '{{ app.user }}'
-  command: pnpm production
+  command: pnpm build
   args:
     chdir: '{{ app.directory }}/apps/api'
 

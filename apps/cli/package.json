@@ -15,15 +15,12 @@
     "node": "^14.17.0 || >=16.0.0"
   },
   "scripts": {
-    "development": "webpack --env NODE_ENV=development",
-    "dev": "npm run development",
+    "build": "pnpm clean && webpack --env NODE_ENV=production",
     "clean": "rimraf dist",
-    "build": "webpack --env NODE_ENV=production",
-    "production": "npm run clean && npm run build",
-    "prod": "npm run production",
+    "dev": "webpack --env NODE_ENV=development",
     "cli": "node dist/cli.js",
     "lint": "eslint --ext .js,.ts src/",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "pnpm lint -- --fix"
   },
   "dependencies": {
     "commander": "^8.3.0",
