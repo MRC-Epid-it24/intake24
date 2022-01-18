@@ -143,8 +143,8 @@ module.exports = {
           table: 'processed_images',
           field: 'id',
         },
-        onUpdate: 'restrict',
-        onDelete: 'cascade',
+        onUpdate: 'cascade',
+        onDelete: 'restrict',
         name: 'image_maps_base_image_id_fk',
         transaction,
       });
@@ -235,8 +235,8 @@ module.exports = {
           table: 'processed_images',
           field: 'id',
         },
-        onUpdate: 'restrict',
-        onDelete: 'cascade',
+        onUpdate: 'cascade',
+        onDelete: 'restrict',
         name: 'guide_images_selection_image_id_fk',
         transaction,
       });
@@ -252,8 +252,8 @@ module.exports = {
           table: 'image_maps',
           field: 'id',
         },
-        onUpdate: 'restrict',
-        onDelete: 'cascade',
+        onUpdate: 'cascade',
+        onDelete: 'restrict',
         name: 'guide_images_image_map_id_fk',
         transaction,
       });
@@ -339,8 +339,8 @@ module.exports = {
           table: 'processed_images',
           field: 'id',
         },
-        onUpdate: 'restrict',
-        onDelete: 'cascade',
+        onUpdate: 'cascade',
+        onDelete: 'restrict',
         name: 'as_served_sets_selection_image_id_fk',
         transaction,
       });
