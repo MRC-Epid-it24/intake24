@@ -1,6 +1,6 @@
 import { Op, GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@intake24/db';
 import { CreateImageMapInput, UpdateImageMapInput } from '@intake24/common/types/http/admin';
-import { NotFoundError } from '@intake24/api/http/errors';
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 
 const imageMapService = ({
@@ -67,8 +67,13 @@ const imageMapService = ({
   };
 
   const destroy = async (imageMapId: string): Promise<void> => {
-    const imageMap = await ImageMap.findByPk(imageMapId);
-    if (!imageMap) throw new NotFoundError();
+    const imageMap = await ImageMap.findByPk(imageMapId, { include: [{ model: GuideImage }] });
+    if (!imageMap || !imageMap.guideImages) throw new NotFoundError();
+
+    if (imageMap.guideImages.length)
+      throw new ForbiddenError(
+        'Image map cannot be deleted. There are guide images using this image map.'
+      );
 
     await imageMap.destroy();
     await processedImageService.destroy(imageMap.baseImageId, { includeSources: true });
