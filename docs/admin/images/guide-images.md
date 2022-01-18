@@ -2,11 +2,11 @@
 
 Guide images are enhanced records of corresponding image map. They allow to assign weights to each of the object defined in [Image map record](/admin/images/image-maps).
 
-## Detail tab
+## Detail
 
 Detail tab displays selected image map info.
 
-## Create / Edit tab
+## Create / Edit
 
 Edit tab allows to modify selected image map.
 

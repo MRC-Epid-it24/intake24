@@ -19,11 +19,13 @@ Content-Type: application/json
 ```json
 200 OK
 
-{
-  "id": string,
-  "name": string,
-  "localeId": string
-}[]
+[
+  {
+    "id": string,
+    "name": string,
+    "localeId": string
+  }
+]
 ``` 
 
 ## Public survey parameters
@@ -77,7 +79,7 @@ POST /api/surveys/{surveyId}/generate-user
 Content-Type: application/json
 
 {
-    "reCaptchaToken": string,
+    "reCaptchaToken": string
 }
 ```
 
@@ -104,8 +106,6 @@ This function presents a vulnerability similar to the generate user function. Th
 client side by the current users of this function and can therefore be easily extracted. 
 :::
 
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/system/user/GeneratedUsersController.scala#L126-L153)
-
 ### Request
 
 ```http
@@ -114,11 +114,20 @@ POST /api/surveys/{surveyId}/create-user?params={token}
 Content-Type: application/json
 ```
 
-where:
+`token` is the request parameters encoded as a signed JWT token. The signing key is set up in the survey parameters.
 
-**surveyId** is the survey ID,
+JWT payload expects following claims:
 
-**token** is the request parameters encoded as a signed JWT token. The signing key is set up in the survey parameters.
+- `user` - Unique respondent username within the survey
+- `redirect` - Unique respondent username within the survey
+
+JWT Payload object
+```json
+{
+  "user": string,
+  "redirect": string,
+}
+```
 
 ### Response
 
@@ -132,10 +141,8 @@ where:
 }
 ```
 
-where:
+- `userId` - Internal Intake24 user ID
 
-**userId** is the internal Intake24 user ID,
+- `redirect` - Redirect URL decoded from the input token
 
-**redirect** is the redirect URL decoded from the input token,
-
-**authToken** is the authentication token for the new user.
+- `authToken` - Authentication token for the new user

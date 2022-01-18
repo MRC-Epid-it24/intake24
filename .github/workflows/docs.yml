@@ -1,4 +1,4 @@
-name: Docs deploy
+name: Docs
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
       - 'docs/**'
 
 jobs:
-  docs-build-deploy:
-    name: Documentation
+  docs-deploy:
+    name: Deploy
 
     runs-on: ubuntu-latest
 

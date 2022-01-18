@@ -6,11 +6,11 @@ Permissions resource defines system-level implemented access control.
 Usually, there is no need to create / edit / delete permissions as they are distributes as database migrations to ensure system functionality.
 :::
 
-## Detail tab
+## Detail
 
 Detail tab displays selected permission info.
 
-## Create / Edit tab
+## Create / Edit
 
 Edit tab allows to modify selected permission.
 

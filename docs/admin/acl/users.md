@@ -2,11 +2,11 @@
 
 Users resource defines primary user records.
 
-## Detail tab
+## Detail
 
 Detail tab displays selected user info.
 
-## Create / Edit tab
+## Create / Edit
 
 Edit tab allows to modify selected user.
 

@@ -4,11 +4,11 @@ Intake24 bundles by default on English default texts. Additional languages can b
 
 Languages are then associated with locales and they in list of available languages in frontend UI (`admin tool` or `survey recall`).
 
-## Detail tab
+## Detail
 
 Detail tab displays selected language info.
 
-## Create / Edit tab
+## Create / Edit
 
 Edit tab allows to modify selected language.
 

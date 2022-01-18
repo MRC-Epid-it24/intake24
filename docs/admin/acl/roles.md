@@ -6,11 +6,11 @@ Roles resource allows to define groups, that can be associated with `permission`
 Intake24 treats one specific role as `superuser` (name can be adjusted in [ACL Config](/config/api/acl)). Whenever new permission is created, it is assigned automatically to this role.
 :::
 
-## Detail tab
+## Detail
 
 Detail tab displays selected role info.
 
-## Create / Edit tab
+## Create / Edit
 
 Edit tab allows to modify selected role with permissions assignment.
 

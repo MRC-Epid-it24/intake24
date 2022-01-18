@@ -2,6 +2,6 @@
 
 Jobs resource allows to view any sign-in attempts into the Intake24 system.
 
-## Detail tab
+## Detail
 
 Detail tab displays selected sign-in attempt info.

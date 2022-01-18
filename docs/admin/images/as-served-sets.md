@@ -2,11 +2,11 @@
 
 As served sets form groups of images to be offered to respondent by selected portion size methods.
 
-## Detail tab
+## Detail
 
 Detail tab displays selected as served set info.
 
-## Create / Edit tab
+## Create / Edit
 
 Edit tab allows to modify selected as served set.
 

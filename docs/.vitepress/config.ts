@@ -378,7 +378,7 @@ export default defineConfig({
             },
             {
               text: 'Surveys',
-              link: '/admin/surveys',
+              link: '/admin/surveys/',
             },
           ],
         },
@@ -406,6 +406,10 @@ export default defineConfig({
         {
           text: 'System',
           children: [
+            {
+              text: 'Job types',
+              link: '/admin/system/job-types',
+            },
             {
               text: 'Jobs',
               link: '/admin/system/jobs',

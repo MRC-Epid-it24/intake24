@@ -2,11 +2,11 @@
 
 Image maps allows to define selectable objects on uploaded image.
 
-## Detail tab
+## Detail
 
 Detail tab displays selected image map info.
 
-## Create / Edit tab
+## Create / Edit
 
 Edit tab allows to modify selected image map.
 

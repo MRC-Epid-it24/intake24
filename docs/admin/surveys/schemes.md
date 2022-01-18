@@ -2,11 +2,11 @@
 
 Survey recall flow is defined by scheme, which has couple of sections.
 
-## Detail tab
+## Detail
 
 Detail tab displays selected scheme info.
 
-## Create / Edit tab
+## Create / Edit
 
 Edit tab allows to modify selected scheme.
 
@@ -24,7 +24,7 @@ Edit tab allows to modify selected scheme.
     - Load whole meal list from different scheme
     - Reset the list to default one
 
-## Questions tab
+## Questions
 
 Questions tab allows to design dietary survey recall flow and define details about each question asked.
 

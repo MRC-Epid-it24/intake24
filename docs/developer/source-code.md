@@ -20,9 +20,9 @@ Applications are in `apps` folder. Shared components are in `packages` folder.
 │  └─ api -> API Server
 │  └─ admin -> Admin tool
 │  └─ cli -> Command line interface
-│  └─ survey -> Survey applications
+│  └─ survey -> Survey application
 ├─ deployment - Ansible playbooks / scripts for deployment
-├─ docs -> Documentation site
+├─ docs -> Documentation
 └─ packages
    └─ common (common shared code)
    └─ db (database layer)
