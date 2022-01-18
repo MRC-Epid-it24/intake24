@@ -14,7 +14,7 @@ Detail tab displays selected role info.
 
 Edit tab allows to modify selected role with permissions assignment.
 
-- `Name` - role name
+- `Name` - Unique permission name within `permission` records
 
 - `Display name` - User friendly role name
 

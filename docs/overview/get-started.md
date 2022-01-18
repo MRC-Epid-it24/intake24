@@ -44,7 +44,7 @@ cp .env-template .env
 Build the application
 
 ```
-pnpm prod
+pnpm build
 ```
 
 Start the application
@@ -112,7 +112,7 @@ This should only be used if you host the client on separate domain. It will star
 Serve the application locally in development mode with hot-reload
 
 ```
-pnpm serve
+pnpm dev
 ```
 
 ## Survey client
@@ -148,7 +148,7 @@ This should only be used if you host the client on separate domain. It will star
 Serve the application locally in development mode with hot-reload
 
 ```
-pnpm serve
+pnpm dev
 ```
 
 ## Documentation

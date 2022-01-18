@@ -6,8 +6,7 @@ Steps to getting a local instance running
 
 * Run Dev VM (download from S3 bucket - contact the Intake24 team), which maps out the database on 192.168.56.10:5432 (PostgreSQL). Start this VM.
 * Local servers need to be run for `api`, `admin` and `survey` from each respective folder:
-  * To start `api`: `npm run dev`
-  * To start `admin` and `survey`: `npm run serve` for live reloads
+* To start `api` / `admin` / `survey`: `pnpm dev` for live reloads
 
 ::: tip
 Authentication uses cookies, so separate browser sessions will be required to use both `admin` and `survey` interfaces at the same time.
@@ -50,7 +49,7 @@ according to your own DB settings,
 - `QUEUE_REDIS_HOST` —  set to `192.168.56.4` if using the development VM or alternatively point to your own Redis 
 instance.
 
-Check that the settings are correct by starting the server with `npm run dev`.
+Check that the settings are correct by starting the server with `pnpm dev`.
 
 ## API access
 

@@ -14,7 +14,7 @@ cd apps/cli
 Build the project for production
 
 ```sh
-pnpm prod
+pnpm build
 ```
 
 or for development (with file watching and reloads)

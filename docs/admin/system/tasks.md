@@ -10,17 +10,17 @@ Detail tab displays selected task info.
 
 Edit tab allows to modify selected task.
 
-- `Name` - System-wide unique name.
+- `Name` - Unique string within `tasks` records
 
-- `Job` - valid job from provided list.
+- `Job` - Valid job from provided list
 
-- `CRON` - valid `cron` entry to be used for scheduling.
+- `CRON` - Valid `cron` entry to be used for scheduling
 
-- `Active` - scheduler `on` / `off` status.
+- `Active` - Scheduler `on` / `off` status
 
-- `Description` - free text, any details about the particular task.
+- `Description` - Free text, any details about the particular task
 
-- `Task parameters` - additional job specific parameters
+- `Task parameters` - Additional job specific parameters
 
 ## Manual task trigger
 

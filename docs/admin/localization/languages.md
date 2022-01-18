@@ -12,15 +12,15 @@ Detail tab displays selected language info.
 
 Edit tab allows to modify selected language.
 
-- `Language ID` - short, unique and valid locale ID.
+- `Language ID` - valid locale ID and unique string within `language` records
 
-- `Country flag code` - country code to select correct flag.
+- `Country flag code` - Country code to select correct flag
 
-- `English name` - english name of the language (e.g. Czech).
+- `English name` - English name of the language (e.g. Czech)
 
-- `Local name` - local name of the language (e.g. Čeština).
+- `Local name` - Local name of the language (e.g. Čeština)
 
-- `Text direction` - read/write direction of text. Valid options are `ltr` or `rlt`.
+- `Text direction` - Read / write direction of text. Valid options are `ltr` or `rlt`
 
 ## Translations
 

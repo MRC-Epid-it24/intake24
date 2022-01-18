@@ -10,17 +10,17 @@ Detail tab displays selected locale.
 
 Edit tab allows to modify selected locale.
 
-- `Locale ID` - short, unique and valid locale ID.
+- `Locale ID` - Valid locale ID and unique string within `locale` records
 
-- `Prototype locale ID` - prototype locale it inherits foods data from.
+- `Prototype locale ID` - Prototype locale it inherits foods data from
 
-- `English name` - english name of the language (e.g. Czech).
+- `English name` - English name of the language (e.g. Czech)
 
-- `Local name` - local name of the language (e.g. Čeština).
+- `Local name` - Local name of the language (e.g. Čeština)
 
-- `Country flag code` - country code to select correct flag. (`DEPRECATED - moved to language settings`)
+- `Country flag code` - Country code to select correct flag (`DEPRECATED - moved to language settings`)
 
-- `Text direction` - read/write direction of text. Valid options are `ltr` or `rlt`. (`DEPRECATED - moved to language settings`)
+- `Text direction` - Read / write direction of text. Valid options are `ltr` or `rlt` (`DEPRECATED - moved to language settings`)
 
 ## Deletion
 

@@ -10,17 +10,19 @@ Detail tab displays selected scheme info.
 
 Edit tab allows to modify selected scheme.
 
-- `Scheme ID` - short and unique, ideally slug-based string. It is used as primary key in database.
+- `Scheme ID` - Short and unique, ideally slug-based string. It is used as primary key in database.
 
-- `Scheme name` - user friendly name for admin purposes
+- `Scheme name` - User friendly name for admin purposes
 
-- `Scheme type` - placeholder at the moment for future to allow to define various types of schemes.
+- `Scheme type` - Placeholder at the moment for future to allow to define various types of schemes
 
-- `Default meals` - list of predefined meals that will appear at the start of the recall. It allows to:
-  - create new meals with default time and localized name
-  - remove meals
-  - load whole meal list from different scheme
-  - reset the list to default one
+- `Default meals` - List of predefined meals that will appear at the start of the recall.
+
+  - It allows to:
+    - Create new meals with default time and localized name
+    - Remove meals
+    - Load whole meal list from different scheme
+    - Reset the list to default one
 
 ## Questions tab
 
@@ -41,43 +43,43 @@ Questions are categorized to sections and they are asked in specified fixed orde
 Whole question sections group can be loaded from another scheme using `load from scheme` button.
 
 When question section is selected, list of questions appear below:
-- new questions can be added
-- questions can be removed
-- list of questions can be re-arranged by drag & drop
-- question can be loaded from `template` defined in `scheme questions` section.
-- question can be saved as `template` if it doesn't exist yet (determined by unique `question id`)
-- question's settings can be synced from `template` if it exists (determined by unique `question id`).
+- New questions can be added
+- Questions can be removed
+- List of questions can be re-arranged by drag & drop
+- Question can be loaded from `template` defined in `scheme questions` section
+- Question can be saved as `template` if it doesn't exist yet (determined by unique `question id`)
+- Question's settings can be synced from `template` if it exists (determined by unique `question id`)
 
 ## Question editor
 
 Full screen modal opens when create or edit action triggered.
 
 Top level toolbar has:
-- cancel button on the left - changes are discarded
-- confirm button on the right - changes are confirmed, but not yet saved to server's database
-- tab list with:
-  - `general` - defines type & id & name of question for administrative purposes
-  - `content` - defines localized content, which appears to user
-  - `conditions` - list of conditions to be met so question is displayed
-  - `validation` - defines validation options, e.g. if question is optional or required
-  - `options` - defines list of options for `list-based` question types like `checkbox` or `radio` lists
+- Cancel button on the left - changes are discarded
+- Confirm button on the right - changes are confirmed, but not yet saved to server's database
+- Tab list with:
+  - `general` - Defines type & id & name of question for administrative purposes
+  - `content` - Defines localized content, which appears to user
+  - `conditions` - List of conditions to be met so question is displayed
+  - `validation` - Defines validation options, e.g. if question is optional or required
+  - `options` - Defines list of options for `list-based` question types like `checkbox` or `radio` lists
 
 #### General tab
 
 General tab defines administrative fields
 
-- `question type` - type of question that is asked. Questions are further categorized to `custom`, `standard` and `portion size` groups.
-- `question id` - ID assigned to question, which must be unique within the question list.
-- `question name` - user friendly name for better orientation. It's only for admin use, it is not displayed to respondent
+- `question type` - Type of question that is asked. Questions are further categorized to `custom`, `standard` and `portion size` groups
+- `question id` - ID assigned to question, which must be unique within the question list
+- `question name` - User friendly name for better orientation. It's only for admin use, it is not displayed to respondent
 
 
 #### Content tab
 
 Content tab defines respondent facing content
 
-- `question name` - very short question name, used to be displayed in frontend UI breadcrumb component
-- `question text` - main question text to be asked
-- `question name` - any question details, allows to embed `html` content
+- `question name` - Very short question name, used to be displayed in frontend UI breadcrumb component
+- `question text` - Main question text to be asked
+- `question name` - Any question details, allows to embed `html` content
 
 All three fields can be localized to various languages
 

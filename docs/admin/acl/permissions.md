@@ -14,7 +14,7 @@ Detail tab displays selected permission info.
 
 Edit tab allows to modify selected permission.
 
-- `Name` - `slug-based` permission name
+- `Name` - Unique `slug-based` permission name within `permission` records
 
 - `Display name` - User friendly permission name
 

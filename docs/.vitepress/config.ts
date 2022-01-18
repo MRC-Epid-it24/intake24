@@ -345,6 +345,27 @@ export default defineConfig({
           ],
         },
         {
+          text: 'Images',
+          children: [
+            {
+              text: 'Introduction',
+              link: '/admin/images/',
+            },
+            {
+              text: 'As served sets',
+              link: '/admin/images/as-served-sets',
+            },
+            {
+              text: 'Image maps',
+              link: '/admin/images/image-maps',
+            },
+            {
+              text: 'Guide images',
+              link: '/admin/images/guide-images',
+            },
+          ],
+        },
+        {
           text: 'Surveys MGMT',
           children: [
             {
