@@ -129,3 +129,63 @@ Content-Type: application/json
 ```json
 204 No Content
 ```
+
+## Get language translations
+
+Get language translations
+
+### Request
+
+```http
+GET /api/admin/languages/:languageId/translations
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+[
+    {
+        "id": string,
+        "languageId": string,
+        "application": string,
+        "section": string,
+        "messages": { ... },
+        "createdAt": Date,
+        "updatedAt": Date
+    },
+    ...
+]
+```
+
+## Update language translations
+
+Update language translations
+
+### Request
+
+```http
+POST /api/admin/languages/:languageId/translations
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+[
+    {
+        "id": string,
+        "messages": { ... },
+    },
+    ...
+]
+```
+
+### Response
+
+```json
+200 OK
+
+```

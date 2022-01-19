@@ -87,67 +87,73 @@ Content-Type: application/json
 ```json
 200 OK
 
-{
-  "id": string,
-  "surveyId": string,
-  "userId": string,
-  "startTime": Date,
-  "endTime": Date,
-  "submissionTime": Date,
-  "log": string | null,
-  "uxSessionId": string,
-  "user": [
-    {
-      "id": string,
-      "name": string,
-      "email": string,
-      "phone": string,
-      "aliases": [
-        {
-          "userId": string,
-          "surveyId": string,
-          "userName": string,
-          "urlAuthToken": string
-        }
-      ],
-      "customFields": [
-        {
-          "id": string,
-          "userId": string,
-          "name": string,
-          "value": string
-        }
-      ]
-    }
-  ],
-  "customFields": [
-    {
-      "id": string,
-      "submissionId": string,
-      "name": string,
-      "value": string
-    }
-  ],
-  "meals": [
-    {
-      "id": string,
-      "submissionId": string,
-      "name": string,
-      "hours": number,
-      "minutes": number,
-      "customFields": [
-        {
-          "id": string,
-          "meaId": string,
-          "name": string,
-          "value": string
-        }
-      ],
-      "foods": [{...}],
-      "missingFoods": [{...}]
-    }
-  ]
-}[]
+[
+  {
+    "id": string,
+    "surveyId": string,
+    "userId": string,
+    "startTime": Date,
+    "endTime": Date,
+    "submissionTime": Date,
+    "log": string | null,
+    "uxSessionId": string,
+    "user": [
+      {
+        "id": string,
+        "name": string,
+        "email": string,
+        "phone": string,
+        "aliases": [
+          {
+            "userId": string,
+            "surveyId": string,
+            "userName": string,
+            "urlAuthToken": string
+          },
+          ...
+        ],
+        "customFields": [
+          {
+            "id": string,
+            "userId": string,
+            "name": string,
+            "value": string
+          },
+          ...
+        ]
+      }
+    ],
+    "customFields": [
+      {
+        "id": string,
+        "submissionId": string,
+        "name": string,
+        "value": string
+      },
+      ...
+    ],
+    "meals": [
+      {
+        "id": string,
+        "submissionId": string,
+        "name": string,
+        "hours": number,
+        "minutes": number,
+        "customFields": [
+          {
+            "id": string,
+            "meaId": string,
+            "name": string,
+            "value": string
+          },
+          ...
+        ],
+        "foods": [{...}],
+        "missingFoods": [{...}]
+      }
+    ]
+  }
+]
 ```
 
 ## Update password

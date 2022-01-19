@@ -48,10 +48,13 @@ Content-Type: application/json
     "multiFactorAuthentication": boolean,
     "password": string,
     "passwordConfirm": string,
-    "customFields": {
-        "name": string,
-        "value": string
-    }[],
+    "customFields": [
+        {
+            "name": string,
+            "value": string
+        },
+        ...
+    ],
     "permissions": number[],
     "roles": number[]
 }
@@ -109,7 +112,12 @@ Content-Type: application/json
     "emailNotifications": boolean,
     "smsNotifications": boolean,
     "multiFactorAuthentication": boolean,
-    "customFields": { "name": string, "value": string }[],
+    "customFields": [
+        {
+            "name": string,
+            "value": string
+        }
+    ],
     "permissions": number[],
     "roles": number[]
 }

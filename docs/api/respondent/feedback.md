@@ -20,13 +20,15 @@ Content-Type: application/json
 ```json
 200 OK
 
-{
-  "sex": Sex,
-  "ageRange": [number, number],
-  "weightCoefficient": number,
-  "heightCoefficient": number,
-  "constant": number
-}[]
+[
+  {
+    "sex": Sex,
+    "ageRange": [number, number],
+    "weightCoefficient": number,
+    "heightCoefficient": number,
+    "constant": number
+  }
+]
 ```
 
 ## Physical activity levels
@@ -47,11 +49,14 @@ Content-Type: application/json
 ```json
 200 OK
 
-{
-  "id": string,
-  "name": string,
-  "coefficient": number
-}[]
+[
+  {
+    "id": string,
+    "name": string,
+    "coefficient": number
+  },
+  ...
+]
 ```
 
 ## Weight targets
@@ -72,9 +77,12 @@ Content-Type: application/json
 ```json
 200 OK
 
-{
-  "id": string,
-  "name": string,
-  "coefficient": number
-}[]
+[
+  {
+    "id": string,
+    "name": string,
+    "coefficient": number
+  },
+  ...
+]
 ```

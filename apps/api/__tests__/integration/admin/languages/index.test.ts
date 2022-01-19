@@ -12,4 +12,7 @@ export default () => {
   describe('GET /api/admin/languages/:languageId/edit', edit);
   describe('PUT /api/admin/languages/:languageId', update);
   describe('DELETE /api/admin/languages/:languageId', destroy);
+
+  // describe('GET /api/admin/languages/:languageId/translations', getTranslations);
+  // describe('POST /api/admin/languages/:languageId/translations', updateTranslations);
 };
