@@ -4,6 +4,9 @@ localhost
 [dbservers]
 localhost
 
+[redis]
+localhost
+
 [api]
 localhost
 
