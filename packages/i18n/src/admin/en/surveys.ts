@@ -29,6 +29,7 @@ const surveys: LocaleMessageObject = {
     tokenLength: 'Token length',
   },
   genUsers: {
+    _: 'User generation settings',
     allow: 'Allow user generation',
     secret: 'JWT secret for user generation',
   },

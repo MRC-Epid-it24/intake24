@@ -66,8 +66,21 @@ Any additional column not listed above, will get stored as `UserCustomField` rec
 
 ## SurveySubmissionNotification
 
-`SurveySubmissionNotification` is used with webhook to process survey submission notification. It calls the `submission URL` defined in survey settings. It calls `POST` request and attached whole submission 
+`SurveySubmissionNotification` is used with webhook to dispatch survey submission notification.
+
+When valid `Submission notification URL` is set in survey settings, webhook is automatically called with each successful submission. Submission data are attached in request body.
+
+If survey settings specify JWT secret, signed JWT token is attached as Bearer in `Authorization` header of the request.
 
 #### Request
-- method - `POST` method
-- body - contains whole submission data
+
+```http
+POST https://my-submission-notification-url.example.com
+
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+    ...
+}
+```

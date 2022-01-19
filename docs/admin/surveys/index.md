@@ -31,6 +31,7 @@ Edit tab allows to modify selected survey.
 
 - `Suspension reason` - If `Suspended` state is set, additional details can be passed on to respondent using this field..
 
+- `Store user session on server` - If enabled, user partial submission data are sent to server for store and retrieval. If disabled, user partial submission data are only stored locally in client browser,
 
 ### Automatic user generation
 
@@ -43,12 +44,19 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 #### `1. JWT secret is left blank`
 
 - Anyone can generate new respondent account using following survey URL: `survey-app.domain.com/:surveyId/generate-user`.
+
 - API endpoint is rate limited and protected by Google reCaptcha to minimize the misuses
+
 - This is useful for `demo-like` surveys.
 
 #### `2. JWT secret is set`
 
 - API endpoint can be used to create new respondent accounts. See [API docs](/api/respondent/surveys-public#create-user) for more details.
+
+
+### Submission webhooks
+
+- `Submission notification URL` - Webhook to be called when recall data submitted. Internally it dispatches [SurveySubmissionNotification](/admin/system/job-types#surveysubmissionnotification) job.
 
 ### Search options
 

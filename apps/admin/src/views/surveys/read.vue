@@ -33,6 +33,12 @@
           <td>{{ entry.genUserKey }}</td>
         </tr>
         <tr>
+          <th>{{ $t('surveys.submissionNotificationUrl') }}</th>
+          <td>{{ entry.submissionNotificationUrl }}</td>
+          <th>{{ $t('surveys.storeUserSessionOnServer') }}</th>
+          <td>{{ entry.storeUserSessionOnServer }}</td>
+        </tr>
+        <tr>
           <th>{{ $t('surveys.submissionLimits.maxDaily') }}</th>
           <td>{{ entry.maximumDailySubmissions }}</td>
           <th>{{ $t('surveys.submissionLimits.maxTotal') }}</th>

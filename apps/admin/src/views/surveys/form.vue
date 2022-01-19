@@ -164,8 +164,21 @@
                 outlined
               ></v-text-field>
             </v-col>
+            <v-col cols="12" md="6" align-self="center">
+              <v-switch
+                v-model="form.storeUserSessionOnServer"
+                :error-messages="form.errors.get('storeUserSessionOnServer')"
+                :label="$t('surveys.storeUserSessionOnServer')"
+                class="mt-0"
+                hide-details="auto"
+                name="storeUserSessionOnServer"
+                @change="form.errors.clear('storeUserSessionOnServer')"
+              ></v-switch>
+            </v-col>
           </v-row>
           <template v-if="can('surveyadmin')">
+            <v-divider class="my-6"></v-divider>
+            <div class="text-h6 mb-4">{{ $t('surveys.genUsers._') }}</div>
             <v-row>
               <v-col cols="12" md="6" align-self="center">
                 <v-switch
@@ -201,17 +214,6 @@
                   name="submissionNotificationUrl"
                   outlined
                 ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6" align-self="center">
-                <v-switch
-                  v-model="form.storeUserSessionOnServer"
-                  :error-messages="form.errors.get('storeUserSessionOnServer')"
-                  :label="$t('surveys.storeUserSessionOnServer')"
-                  class="mt-0"
-                  hide-details="auto"
-                  name="storeUserSessionOnServer"
-                  @change="form.errors.clear('storeUserSessionOnServer')"
-                ></v-switch>
               </v-col>
             </v-row>
             <v-divider class="my-6"></v-divider>
