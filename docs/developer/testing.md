@@ -28,7 +28,7 @@ Unit tests in `apps` folders
 
 Use following commands to run unit tests across repository and trigger tests in `__tests__` folders and `__tests__/unit` folders for package and apps, respectively. `Jest` will search for all files with `.spec.ts` extension.
 
-```
+```sh
 pnpm test:unit
 
 pnpm test:unit:watch
@@ -36,7 +36,7 @@ pnpm test:unit:watch
 
 Integration tests can be run with following commands. At the moment, there are only API Server integration tests, so it re-triggers the api internal npm command.
 
-```
+```sh
 pnpm test:integration
 
 pnpm test:integration:watch
@@ -60,16 +60,19 @@ If using the development VM, simply copy `__tests__/.env-test-dev-vm` to `__test
 Backend testing is set up for `unit` and `integration` tests. You can run tests with following commands.
 
 Unit tests
+
 ```sh
 pnpm test:unit
 ```
 
 Unit tests watch for development
+
 ```sh
 pnpm test:unit:watch
 ```
 
 Integration tests
+
 ```sh
 pnpm test:integration
 ```

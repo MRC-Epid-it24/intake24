@@ -55,12 +55,14 @@ Both integrate very well with most of the IDEs. You will probably just need to i
 You can also run it manually from root-level or in each `app` / `package`.
 
 Run linting
-```
+
+```sh
 pnpm lint
 ```
 
 Run linting and try to fix as much as possible automatically
-```
+
+```sh
 pnpm lint:fix
 ```
 
