@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as t,a as o}from"./app.a95cc4c4.js";const h='{"title":"Generate .env files","description":"","frontmatter":{},"headers":[],"relativePath":"overview/cli/generate-env.md","lastUpdated":1642613177059}',c={},n=o("",6),i=[n];function r(s,d,p,l,_,f){return t(),a("div",null,i)}var m=e(c,[["render",r]]);export{h as __pageData,m as default};
