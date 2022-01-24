@@ -17,7 +17,7 @@
   "scripts": {
   },
   "dependencies": {
-    "vue-i18n": "^8.26.8"
+    "vue-i18n": "^8.27.0"
   },
   "bundledDependencies": [
     "@intake24/common"
