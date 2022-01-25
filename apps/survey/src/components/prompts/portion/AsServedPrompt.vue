@@ -43,10 +43,10 @@
                     {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
                   </p>
                   <v-btn @click="leftoverAnswer(true)" :color="leftoverButtonStyle('yes')">
-                    {{ $t('common.confirm.yes') }}
+                    {{ $t('common.action.confirm.yes') }}
                   </v-btn>
                   <v-btn @click="leftoverAnswer(false)" :color="leftoverButtonStyle('no')">
-                    {{ $t('common.confirm.no') }}
+                    {{ $t('common.action.confirm.no') }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -79,7 +79,7 @@
     <v-row>
       <v-col>
         <v-btn @click="submit()" :color="submitButtonStyle()">
-          {{ $t('common.continue') }}
+          {{ $t('common.action.continue') }}
         </v-btn>
       </v-col>
     </v-row>

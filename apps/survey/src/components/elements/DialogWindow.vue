@@ -11,10 +11,10 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" text @click="toggleDialog(true)">
-          {{ $t('common.confirm.yes') }}
+          {{ $t('common.action.confirm.yes') }}
         </v-btn>
         <v-btn color="secondary" text @click="toggleDialog(false)">
-          {{ $t('common.confirm.no') }}
+          {{ $t('common.action.confirm.no') }}
         </v-btn>
       </v-card-actions>
     </v-card>

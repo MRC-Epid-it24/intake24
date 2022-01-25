@@ -1,12 +1,15 @@
-import Vue from 'vue';
 import './bootstrap';
+import Vue from 'vue';
 import './registerServiceWorker';
+import { Chart, registerables } from 'chart.js';
 import App from './App.vue';
 import i18n from './i18n';
 import http from './services/http.service';
 import store from './store';
 import createRouter from './router';
 import vuetify from './plugins/vuetify';
+
+Chart.register(...registerables);
 
 const router = createRouter(store);
 

@@ -1,22 +1,5 @@
-import { Sex } from '../../../feedback';
+import { NutrientRuleType, Sentiment, Sex } from '../../../feedback';
 import type { OmitAndOptional } from '..';
-
-export enum NutrientRuleType {
-  PERCENTAGE_OF_ENERGY = 'percentage_of_energy',
-  ENERGY_DIVIDED_BY_BMR = 'energy_divided_by_bmr',
-  PER_UNIT_OF_WEIGHT = 'per_unit_of_weight',
-  RANGE = 'range',
-}
-
-export enum Sentiment {
-  TOO_LOW = 'too_low',
-  BIT_LOW = 'bit_low',
-  GOOD = 'good',
-  EXCELENT = 'excellent',
-  HIGH = 'high',
-  BIT_HIGH = 'bit_high',
-  TOO_HIGH = 'too_high',
-}
 
 export type DemographicGroupAttributes = {
   id: string;
@@ -50,7 +33,7 @@ export type DemographicGroupScaleSectorAttributes = {
   demographicGroupId: string;
   name: string;
   description: string | null;
-  sentiment: string;
+  sentiment: Sentiment;
   minRange: number;
   maxRange: number;
 };

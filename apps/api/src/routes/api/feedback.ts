@@ -9,8 +9,6 @@ const router = Router();
 
 authenticate(router, 'user');
 
-router.get('/henry-coefficients', wrapAsync(feedbackController.henryCoefficients));
-router.get('/physical-activity-levels', wrapAsync(feedbackController.physicalActivityLevels));
-router.get('/weight-targets', wrapAsync(feedbackController.weightTargets));
+router.get('/', wrapAsync(feedbackController.data));
 
 export default router;

@@ -88,7 +88,7 @@
       <v-row>
         <v-col>
           <v-btn @click="submit()" :color="submitButtonStyle()">
-            {{ $t('common.continue') }}
+            {{ $t('common.action.continue') }}
           </v-btn>
         </v-col>
       </v-row>

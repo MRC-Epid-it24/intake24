@@ -22,7 +22,7 @@
             <v-row>
               <v-col>
                 <v-btn color="success" @click="onSelectGuide()">
-                  {{ $t('common.continue') }}
+                  {{ $t('common.action.continue') }}
                 </v-btn>
               </v-col>
             </v-row>

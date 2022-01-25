@@ -40,6 +40,10 @@ export interface SurveyState {
   error: AxiosError | null;
 }
 
+export interface FeedbackState {
+  error: AxiosError | null;
+}
+
 export interface UserState {
   status: string;
   profile: UserPayload;

@@ -27,37 +27,37 @@ export default class UserPhysicalData
     allowNull: true,
     type: DataType.STRING(64),
   })
-  public sex!: Sex | null;
+  public sex!: Sex;
 
   @Column({
     allowNull: true,
     type: DataType.DOUBLE,
   })
-  public weightKg!: number | null;
+  public weightKg!: number;
 
   @Column({
     allowNull: true,
     type: DataType.DOUBLE,
   })
-  public heightCm!: number | null;
+  public heightCm!: number;
 
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public physicalActivityLevelId!: number | null;
+  public physicalActivityLevelId!: string;
 
   @Column({
     allowNull: true,
     type: DataType.DATEONLY,
   })
-  get birthdate(): number | null {
-    const birthdate = this.getDataValue('birthdate') as string | null;
+  get birthdate(): number {
+    const birthdate = this.getDataValue('birthdate') as unknown as string;
 
-    return birthdate && birthdate.length >= 4 ? parseInt(birthdate.slice(0, 4), 10) : null;
+    return parseInt(birthdate.slice(0, 4), 10);
   }
 
-  set birthdate(value: number | string | null) {
+  set birthdate(value: number | string) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('birthdate', typeof value === 'number' ? value.toString() : value);
   }
@@ -66,7 +66,7 @@ export default class UserPhysicalData
     allowNull: true,
     type: DataType.STRING(64),
   })
-  public weightTarget!: WeightTarget | null;
+  public weightTarget!: WeightTarget;
 
   @BelongsTo(() => User, 'userId')
   public user?: User[];

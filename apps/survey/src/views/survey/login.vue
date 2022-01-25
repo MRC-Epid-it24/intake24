@@ -76,6 +76,7 @@ export default Vue.extend({
   props: {
     surveyId: {
       type: String,
+      required: true,
     },
   },
 
@@ -120,8 +121,8 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('auth/refresh');
 
-        const { surveyId } = this.$route.params;
-        await this.$router.push({ name: 'survey-dashboard', params: { surveyId } });
+        const { surveyId } = this;
+        await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {
         // continue
       }
@@ -131,7 +132,7 @@ export default Vue.extend({
     if (name === 'survey-login-token') {
       try {
         await this.token({ token });
-        await this.$router.push({ name: 'survey-dashboard', params: { surveyId: this.surveyId } });
+        await this.$router.push({ name: 'survey-home', params: { surveyId: this.surveyId } });
         return;
       } catch (err) {
         if (axios.isAxiosError(err)) this.status = err.response?.status ?? 0;
@@ -156,7 +157,7 @@ export default Vue.extend({
         await this.login({ userName, password, surveyId });
         this.userName = '';
         this.password = '';
-        await this.$router.push({ name: 'survey-dashboard', params: { surveyId } });
+        await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {
         if (axios.isAxiosError(err)) {
           const { response: { status = 0, data = {} } = {} } = err as AxiosError<any>;

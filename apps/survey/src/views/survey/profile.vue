@@ -62,6 +62,13 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
   mixins: [setsLanguage],
 
+  props: {
+    surveyId: {
+      type: String,
+      required: true,
+    },
+  },
+
   data() {
     return {
       language: this.$i18n.locale,

@@ -1,3 +1,24 @@
+export const feedbackStyles = ['default', 'playful'] as const;
+export type FeedbackStyle = typeof feedbackStyles[number];
+
+export enum NutrientRuleType {
+  PERCENTAGE_OF_ENERGY = 'percentage_of_energy',
+  ENERGY_DIVIDED_BY_BMR = 'energy_divided_by_bmr',
+  PER_UNIT_OF_WEIGHT = 'per_unit_of_weight',
+  RANGE = 'range',
+}
+
+export enum Sentiment {
+  TOO_LOW = 'too_low',
+  LOW = 'low',
+  BIT_LOW = 'bit_low',
+  GOOD = 'good',
+  EXCELLENT = 'excellent',
+  HIGH = 'high',
+  BIT_HIGH = 'bit_high',
+  TOO_HIGH = 'too_high',
+}
+
 export const sexes = ['f', 'm'] as const;
 export type Sex = typeof sexes[number];
 

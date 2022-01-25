@@ -30,6 +30,14 @@
               <v-list-item-title>Portions test</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item v-if="surveyId" :to="{ name: 'feedback-home', params: { surveyId } }" link>
+            <v-list-item-action>
+              <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ $t('feedback._') }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -59,7 +67,7 @@
       </template>
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container :class="{ 'pa-0': isMobile }">
         <!-- <h2 v-if="loggedIn" class="ma-2 text-dark">{{ title }}</h2> -->
         <router-view></router-view>
       </v-container>

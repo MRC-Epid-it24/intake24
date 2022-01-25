@@ -9,8 +9,8 @@
           {{ $t('portion.asServedLeftover.question', { food: localeDescription }) }}
         </v-card-text>
         <v-card-actions>
-          <v-btn @click="submit(true)">{{ $t('common.confirm.yes') }}</v-btn>
-          <v-btn @click="submit(false)">{{ $t('common.confirm.no') }}</v-btn>
+          <v-btn @click="submit(true)">{{ $t('common.action.confirm.yes') }}</v-btn>
+          <v-btn @click="submit(false)">{{ $t('common.action.confirm.no') }}</v-btn>
         </v-card-actions>
       </v-card>
     </portion-layout>

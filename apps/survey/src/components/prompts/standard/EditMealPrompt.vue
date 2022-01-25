@@ -27,7 +27,7 @@
         large
         @click="submit"
       >
-        {{ $t('common.continue') }}
+        {{ $t('common.action.continue') }}
       </v-btn>
     </template>
   </prompt-layout>

@@ -29,6 +29,7 @@ import {
   nutrientTableService,
   foodDataService,
   portionSizeService,
+  feedbackService,
   surveyService,
   userService,
 } from '@intake24/api/services';
@@ -50,6 +51,7 @@ export default (container: AwilixContainer): void => {
     processedImageService: asFunction(processedImageService),
     sourceImageService: asFunction(sourceImageService),
 
+    feedbackService: asFunction(feedbackService),
     foodDataService: asFunction(foodDataService),
     portionSizeService: asFunction(portionSizeService),
 

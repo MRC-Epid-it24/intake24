@@ -23,27 +23,68 @@ export default (store: Store<RootState>): VueRouter => {
       props: true,
     },
     {
-      path: '/:surveyId/dashboard',
-      name: 'survey-dashboard',
-      component: views.survey.dashboard,
+      path: '/:surveyId/generate-user',
+      name: 'survey-generate-user',
+      component: views.survey.generateUser,
+      meta: { module: 'public', title: 'login._' },
+      props: true,
+    },
+    {
+      path: '/:surveyId/home',
+      name: 'survey-home',
+      component: views.survey.home,
       meta: { module: 'survey', title: 'recall.dynamicTitle' },
       beforeEnter: surveyParametersGuard(store),
       props: true,
     },
-    // v3-like dynamic recall logic prototype
+    {
+      path: '/:surveyId/profile',
+      name: 'survey-profile',
+      component: views.survey.profile,
+      meta: { module: 'survey', title: 'profile._' },
+      beforeEnter: surveyParametersGuard(store),
+      props: true,
+    },
     {
       path: '/:surveyId/recall',
       name: 'survey-recall',
       component: views.survey.recallContainer,
       meta: { module: 'survey', title: 'recall.dynamicTitle' },
       beforeEnter: surveyParametersGuard(store),
+      props: true,
     },
     {
       path: '/:surveyId/error',
       name: 'survey-error',
       component: views.survey.error,
-      meta: { module: 'recall', title: 'recall.dynamicTitle' },
+      meta: { module: 'survey', title: 'recall.dynamicTitle' },
       beforeEnter: surveyParametersErrorGuard(store),
+      props: true,
+    },
+    // Feedback
+    {
+      path: '/:surveyId/feedback',
+      name: 'feedback-home',
+      component: views.feedback.home,
+      meta: { module: 'feedback', title: 'feedback._' },
+      beforeEnter: surveyParametersGuard(store),
+      props: true,
+    },
+    {
+      path: '/:surveyId/feedback/error',
+      name: 'feedback-error',
+      component: views.survey.error,
+      meta: { module: 'feedback', title: 'feedback._' },
+      beforeEnter: surveyParametersErrorGuard(store),
+      props: true,
+    },
+    {
+      path: '/:surveyId/feedback/physical-data',
+      name: 'feedback-physical-data',
+      component: views.feedback.physicalData,
+      meta: { module: 'feedback', title: 'feedback._' },
+      beforeEnter: surveyParametersGuard(store),
+      props: true,
     },
 
     // TESTING Temporary route for testing portion size code before foods & meals are loaded
@@ -54,27 +95,8 @@ export default (store: Store<RootState>): VueRouter => {
       meta: { module: 'survey', title: 'portionTest._' },
       beforeEnter: surveyParametersGuard(store),
     },
-    {
-      path: '/:surveyId/profile',
-      name: 'survey-profile',
-      component: views.survey.profile,
-      meta: { module: 'survey', title: 'profile._' },
-      beforeEnter: surveyParametersGuard(store),
-    },
-    {
-      path: '/:surveyId/generate-user',
-      name: 'survey-generate-user',
-      component: views.survey.generateUser,
-      meta: { module: 'public', title: 'login._' },
-      props: true,
-    },
-    {
-      path: '/:surveyId/feedback',
-      name: 'survey-feedback',
-      component: views.survey.feedback,
-      meta: { module: 'survey', title: 'feedback._' },
-      beforeEnter: surveyParametersGuard(store),
-    },
+
+    // Needs to be last as :token is param
     {
       path: '/:surveyId/:token',
       name: 'survey-login-token',

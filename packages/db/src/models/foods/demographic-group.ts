@@ -2,11 +2,15 @@ import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescrip
 import {
   DemographicGroupAttributes,
   DemographicGroupCreationAttributes,
-  NutrientRuleType,
 } from '@intake24/common/types/models/foods';
-import { Sex } from '@intake24/common/feedback';
+import { NutrientRuleType, Sex } from '@intake24/common/feedback';
 import BaseModel from '../model';
-import { DemographicGroupScaleSector, FoodsNutrientType, PhysicalActivityLevel } from '.';
+import {
+  DemographicGroupScaleSector,
+  FoodsNutrientType,
+  NutrientTypeInKcal,
+  PhysicalActivityLevel,
+} from '.';
 
 @Table({
   modelName: 'DemographicGroup',
@@ -91,6 +95,12 @@ export default class DemographicGroup
 
   @BelongsTo(() => FoodsNutrientType, 'nutrientTypeId')
   public nutrientType?: FoodsNutrientType;
+
+  @BelongsTo(() => NutrientTypeInKcal, {
+    foreignKey: 'nutrientTypeId',
+    targetKey: 'nutrientTypeId',
+  })
+  public nutrientTypeInKcal?: NutrientTypeInKcal;
 
   @HasMany(() => DemographicGroupScaleSector, 'demographicGroupId')
   public scaleSectors?: DemographicGroupScaleSector[];

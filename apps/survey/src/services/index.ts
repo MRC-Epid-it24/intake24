@@ -5,3 +5,5 @@ export { default as httpService } from './http.service';
 export { default as surveyService } from './survey.service';
 export { default as tokenService } from './token.service';
 export { default as userService } from './user.service';
+
+export * from './feedback.service';

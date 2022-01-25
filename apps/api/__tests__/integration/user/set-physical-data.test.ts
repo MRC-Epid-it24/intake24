@@ -1,11 +1,11 @@
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import { UserPhysicalDataAttributes } from '@intake24/common/types/models/system';
+import { PhysicalActivityLevel } from '@intake24/db';
 
 export default (): void => {
   let url: string;
 
-  let emptyUserPhysicalData: UserPhysicalDataAttributes;
   let createUserPhysicalData: UserPhysicalDataAttributes;
   let updateUserPhysicalData: UserPhysicalDataAttributes;
 
@@ -14,22 +14,17 @@ export default (): void => {
 
     const { userId } = suite.data.system.respondent;
 
-    emptyUserPhysicalData = {
-      userId,
-      sex: null,
-      weightKg: null,
-      heightCm: null,
-      physicalActivityLevelId: null,
-      birthdate: null,
-      weightTarget: null,
-    };
+    await PhysicalActivityLevel.bulkCreate([
+      { name: 'test one', coefficient: 10 },
+      { name: 'test two', coefficient: 100 },
+    ]);
 
     createUserPhysicalData = {
       userId,
       sex: 'm',
       weightKg: 85,
       heightCm: 182,
-      physicalActivityLevelId: null,
+      physicalActivityLevelId: '1',
       birthdate: 1975,
       weightTarget: 'lose_weight',
     };
@@ -39,7 +34,7 @@ export default (): void => {
       sex: 'f',
       weightKg: 72,
       heightCm: 176,
-      physicalActivityLevelId: null,
+      physicalActivityLevelId: '2',
       birthdate: 1981,
       weightTarget: 'keep_weight',
     };
@@ -75,17 +70,6 @@ export default (): void => {
       'physicalActivityLevelId',
       'weightTarget',
     ]);
-  });
-
-  it('should return 200 and empty user physical data', async () => {
-    const { status, body } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent)
-      .send(emptyUserPhysicalData);
-
-    expect(status).toBe(200);
-    expect(body).toStrictEqual(emptyUserPhysicalData);
   });
 
   it('should return 200 and user physical data', async () => {

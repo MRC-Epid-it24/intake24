@@ -37,6 +37,7 @@ export default Vue.extend({
   props: {
     surveyId: {
       type: String,
+      required: true,
     },
   },
 });

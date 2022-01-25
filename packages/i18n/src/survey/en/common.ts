@@ -23,16 +23,19 @@ const common: LocaleMessageObject = {
     update: 'Update',
   },
 
-  cancel: 'Cancel',
-  continue: 'Continue',
-  confirm: {
-    _: 'Confirm',
-    title: 'Do you want to continue?',
-    delete: `Do you want to delete {name}?`,
-    yes: 'Yes',
-    no: 'No',
+  action: {
+    cancel: 'Cancel',
+    continue: 'Continue',
+    confirm: {
+      _: 'Confirm',
+      title: 'Do you want to continue?',
+      delete: `Do you want to delete {name}?`,
+      yes: 'Yes',
+      no: 'No',
+    },
+    reload: 'Reload',
+    submit: 'Submit',
   },
-  reload: 'Reload',
 
   errors: {
     expansionIncomplete: 'Please complete all sections marked with !',

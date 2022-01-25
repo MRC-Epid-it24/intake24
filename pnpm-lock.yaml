@@ -73,6 +73,8 @@ importers:
       '@vue/cli-plugin-unit-jest': ^5.0.0-rc.2
       '@vue/cli-plugin-vuex': ^5.0.0-rc.2
       '@vue/cli-service': ^5.0.0-rc.2
+      '@vue/composition-api': ^1.4.4
+      '@vue/runtime-dom': ^3.2.27
       '@vue/test-utils': 1.3.0
       axios: ^0.25.0
       core-js: ^3.20.3
@@ -109,6 +111,7 @@ importers:
     dependencies:
       '@fortawesome/fontawesome-free': 5.15.4
       '@tinymce/tinymce-vue': 3.2.8_vue@2.6.14
+      '@vue/composition-api': 1.4.4_vue@2.6.14
       axios: 0.25.0
       core-js: 3.20.3
       cronstrue: 1.123.0
@@ -151,6 +154,7 @@ importers:
       '@vue/cli-plugin-unit-jest': 5.0.0-rc.2_273e85d81e073896448885d4687320bc
       '@vue/cli-plugin-vuex': 5.0.0-rc.2_@vue+cli-service@5.0.0-rc.2
       '@vue/cli-service': 5.0.0-rc.2_6ea0837a110d10d5b4a7839bd1d980f3
+      '@vue/runtime-dom': 3.2.27
       '@vue/test-utils': 1.3.0_9065e7474e033a8e4b95615fc8e6c36c
       sass: 1.32.13
       sass-loader: 10.2.0_sass@1.32.13
@@ -415,10 +419,13 @@ importers:
       '@vue/cli-plugin-unit-jest': ^5.0.0-rc.2
       '@vue/cli-plugin-vuex': ^5.0.0-rc.2
       '@vue/cli-service': ^5.0.0-rc.2
+      '@vue/composition-api': ^1.4.4
+      '@vue/runtime-dom': ^3.2.27
       '@vue/test-utils': 1.3.0
       '@vue/vue2-jest': ^27.0.0-alpha.4
       axios: ^0.25.0
       bootstrap: ^5.1.3
+      chart.js: ^3.7.0
       core-js: ^3.20.3
       dotenv: ^14.2.0
       dotenv-expand: ^6.0.1
@@ -450,8 +457,10 @@ importers:
       webpack-bundle-analyzer: ^4.5.0
     dependencies:
       '@fortawesome/fontawesome-free': 5.15.4
+      '@vue/composition-api': 1.4.4_vue@2.6.14
       axios: 0.25.0
       bootstrap: 5.1.3
+      chart.js: 3.7.0
       core-js: 3.20.3
       dotenv: 14.2.0
       dotenv-expand: 6.0.1
@@ -484,6 +493,7 @@ importers:
       '@vue/cli-plugin-unit-jest': 5.0.0-rc.2_0f383e04963229dae75ceeac32b5489e
       '@vue/cli-plugin-vuex': 5.0.0-rc.2_@vue+cli-service@5.0.0-rc.2
       '@vue/cli-service': 5.0.0-rc.2_6ea0837a110d10d5b4a7839bd1d980f3
+      '@vue/runtime-dom': 3.2.27
       '@vue/test-utils': 1.3.0_9065e7474e033a8e4b95615fc8e6c36c
       '@vue/vue2-jest': 27.0.0-alpha.4_27c0bf30991f88b76ffdfd6f9fed6c37
       laravel-mix: 6.0.41_1d84af9b451ab23d7c88f11e4496d156
@@ -3998,6 +4008,15 @@ packages:
       prettier: 2.5.1
     dev: true
 
+  /@vue/composition-api/1.4.4_vue@2.6.14:
+    resolution: {integrity: sha512-0AMpkSy28NG1BUqTPXLfQzJUnjSp+qUa4jaG7A2FBRSKHJOl1g10/xvNb44+OW5Jg9f79zKOb7PYhFhJG2vLyQ==}
+    peerDependencies:
+      vue: '>= 2.5 < 3'
+    dependencies:
+      tslib: 2.3.1
+      vue: 2.6.14
+    dev: false
+
   /@vue/eslint-config-airbnb/6.0.0_bf2b79eca305732eb49d48502221736c:
     resolution: {integrity: sha512-zoOad6NKIEh8nDOC6fcWMp3i1nYlNF1au80cvTXIEV2w7iRLVo8C10rHAhjCnmgA0Sr+ec1KQxpl7o838DMKOg==}
     peerDependencies:
@@ -5273,6 +5292,10 @@ packages:
   /charenc/0.0.2:
     resolution: {integrity: sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=}
     dev: true
+
+  /chart.js/3.7.0:
+    resolution: {integrity: sha512-31gVuqqKp3lDIFmzpKIrBeum4OpZsQjSIAqlOpgjosHDJZlULtvwLEZKtEhIAZc7JMPaHlYMys40Qy9Mf+1AAg==}
+    dev: false
 
   /chokidar/3.5.2:
     resolution: {integrity: sha512-ekGhOnNVPgT77r4K/U3GDhu+FQ2S8TnK/s2KbIGXi0SZWuwkZ2QNyfWdZW+TVfn84DpEP7rLeCt2UI6bJ8GwbQ==}
@@ -7709,6 +7732,18 @@ packages:
       debug:
         optional: true
 
+  /follow-redirects/1.14.7_debug@4.3.3:
+    resolution: {integrity: sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dependencies:
+      debug: 4.3.3
+    dev: true
+
   /fork-ts-checker-webpack-plugin/6.5.0_30e3284c0ef3df942980ea8a1f481282:
     resolution: {integrity: sha512-cS178Y+xxtIjEUorcHddKS7yCMlrDPV31mt47blKKRfMd70Kxu5xruAFE2o9sDY6wVC5deuob/u/alD04YYHnw==}
     engines: {node: '>=10', yarn: '>=1.0.0'}
@@ -8418,7 +8453,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.7
+      follow-redirects: 1.14.7_debug@4.3.3
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug

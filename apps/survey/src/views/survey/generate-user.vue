@@ -52,7 +52,7 @@
           </p>
           <v-card-actions class="px-0">
             <v-btn block color="secondary" xLarge :disabled="!canContinue" @click="onLogin">
-              {{ $t('common.continue') }}
+              {{ $t('common.action.continue') }}
             </v-btn>
           </v-card-actions>
           <template v-if="reCaptcha.enabled">
@@ -97,6 +97,7 @@ export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
   props: {
     surveyId: {
       type: String,
+      required: true,
     },
   },
 
@@ -172,7 +173,7 @@ export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
         await this.login({ userName, password, surveyId });
         this.userName = '';
         this.password = '';
-        await this.$router.push({ name: 'survey-dashboard', params: { surveyId } });
+        await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 401)
           this.$toasted.error(this.$t('login.err.invalidCredentials').toString());

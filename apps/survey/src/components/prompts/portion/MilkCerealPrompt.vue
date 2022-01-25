@@ -12,10 +12,10 @@
             </v-card-text>
             <v-card-actions>
               <v-btn @click="setDisplayQuestions(true)" :color="displayQuestionStyle('yes')">
-                {{ $t('common.confirm.yes') }}
+                {{ $t('common.action.confirm.yes') }}
               </v-btn>
               <v-btn @click="setDisplayQuestions(false)" :color="displayQuestionStyle('no')">
-                {{ $t('common.confirm.no') }}
+                {{ $t('common.action.confirm.no') }}
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -100,7 +100,7 @@
       <v-row>
         <v-col>
           <v-btn @click="submit()" :color="submitButtonStyle()">
-            {{ $t('common.continue') }}
+            {{ $t('common.action.continue') }}
           </v-btn>
         </v-col>
       </v-row>

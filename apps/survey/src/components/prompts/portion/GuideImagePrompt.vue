@@ -52,7 +52,7 @@
                   <v-col>
                     <!-- TODO: Value from image map/canvas -->
                     <v-btn color="success" @click="onSelectGuide()">
-                      {{ $t('common.continue') }}
+                      {{ $t('common.action.continue') }}
                     </v-btn>
                   </v-col>
                 </v-row>

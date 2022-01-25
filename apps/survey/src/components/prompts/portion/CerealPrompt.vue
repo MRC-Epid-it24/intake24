@@ -52,13 +52,13 @@
                       @click="leftoverAnswer(true)"
                       :color="toggleLeftoverAnswer === true ? 'success' : ''"
                     >
-                      {{ $t('common.confirm.yes') }}
+                      {{ $t('common.action.confirm.yes') }}
                     </v-btn>
                     <v-btn
                       @click="leftoverAnswer(false)"
                       :color="toggleLeftoverAnswer === false ? 'success' : ''"
                     >
-                      {{ $t('common.confirm.no') }}
+                      {{ $t('common.action.confirm.no') }}
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -82,7 +82,7 @@
             <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
           </v-alert>
           <v-btn @click="submit()" :color="submitButtonStyle()">
-            {{ $t('common.continue') }}
+            {{ $t('common.action.continue') }}
           </v-btn>
         </v-col>
       </v-row>

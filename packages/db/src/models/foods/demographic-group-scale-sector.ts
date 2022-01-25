@@ -2,8 +2,8 @@ import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import {
   DemographicGroupScaleSectorAttributes,
   DemographicGroupScaleSectorCreationAttributes,
-  Sentiment,
 } from '@intake24/common/types/models/foods';
+import { Sentiment } from '@intake24/common/feedback';
 import BaseModel from '../model';
 import { DemographicGroup } from '.';
 

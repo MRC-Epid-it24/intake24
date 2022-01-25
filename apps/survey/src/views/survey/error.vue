@@ -20,12 +20,12 @@
         <v-divider class="mx-6"></v-divider>
         <router-link
           class="text-decoration-none"
-          :to="{ name: 'survey-dashboard', params: { surveyId: this.$route.params.surveyId } }"
+          :to="{ name: 'survey-home', params: { surveyId } }"
         >
           <div class="d-flex flex-column flex-sm-row justify-center align-center py-6" v-ripple>
             <v-icon class="py-3 mr-sm-6" size="100">fa-sync-alt</v-icon>
             <span class="py-3 text-h3 font-weight-bold text--secondary text-uppercase">
-              {{ $t('common.reload') }}
+              {{ $t('common.action.reload') }}
             </span>
           </div>
         </router-link>
@@ -40,6 +40,13 @@ import { mapGetters } from 'vuex';
 
 export default Vue.extend({
   name: 'SurveyError',
+
+  props: {
+    surveyId: {
+      type: String,
+      required: true,
+    },
+  },
 
   computed: {
     ...mapGetters('survey', ['error']),

@@ -1,4 +1,4 @@
-import { UserPhysicalDataResponse } from '@intake24/common/types/http';
+import type { UserPhysicalDataResponse, SurveySubmissionEntry } from '@intake24/common/types/http';
 import http from './http.service';
 
 export default {
@@ -12,8 +12,10 @@ export default {
     return data;
   },
 
-  submissions: async (surveyId: string | string[]): Promise<any> => {
-    const { data } = await http.get(`user/submissions`, { params: { surveyId } });
+  submissions: async (surveyId: string | string[]): Promise<SurveySubmissionEntry[]> => {
+    const { data } = await http.get<SurveySubmissionEntry[]>(`user/submissions`, {
+      params: { surveyId },
+    });
     return data;
   },
 };

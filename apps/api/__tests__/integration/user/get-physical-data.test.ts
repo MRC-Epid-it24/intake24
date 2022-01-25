@@ -18,7 +18,7 @@ export default (): void => {
       sex: 'f',
       weightKg: 70,
       heightCm: 175,
-      physicalActivityLevelId: null,
+      physicalActivityLevelId: '1',
       birthdate: 1965,
       weightTarget: 'keep_weight',
     };

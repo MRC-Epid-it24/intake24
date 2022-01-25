@@ -15,7 +15,7 @@ export default Vue.extend({
       type: String,
       default() {
         // Display translated text on button
-        return this.$t('common.continue');
+        return this.$t('common.action.continue');
       },
     },
   },
