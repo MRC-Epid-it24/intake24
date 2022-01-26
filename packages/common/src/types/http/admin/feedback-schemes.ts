@@ -3,6 +3,7 @@ import {
   // FeedbackSchemeCreationAttributes,
 } from '../../models/system/feedback-schemes';
 import { NutrientTypeAttributes, Pagination } from '../../models';
+import { LanguageListEntry } from './languages';
 
 /* export type FeedbackSchemeRequest = FeedbackSchemeCreationAttributes;
 
@@ -17,5 +18,6 @@ export type FeedbackSchemeEntry = FeedbackSchemeAttributes;
 export type FeedbackSchemeListEntry = Pick<FeedbackSchemeAttributes, 'id' | 'name'>;
 
 export type FeedbackSchemeRefs = {
+  languages: LanguageListEntry[];
   nutrients: NutrientTypeAttributes[];
 };

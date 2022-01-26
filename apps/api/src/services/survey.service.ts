@@ -14,6 +14,8 @@ import {
   UserSurveyAlias,
   SubmissionScope,
   submissionScope,
+  Scheme,
+  FeedbackScheme,
 } from '@intake24/db';
 import { randomUUID } from 'crypto';
 import { SurveyState } from '@intake24/common/types';
@@ -281,8 +283,8 @@ const surveyService = ({
    * @returns {Promise<boolean>}
    */
   const canShowFeedback = async (survey: Survey, userId: string): Promise<boolean> => {
-    const { feedbackEnabled, numberOfSubmissionsForFeedback } = survey;
-    if (!feedbackEnabled) return false;
+    const { feedbackScheme, numberOfSubmissionsForFeedback } = survey;
+    if (!feedbackScheme) return false;
 
     const submissions = await SurveySubmission.count({
       where: { surveyId: survey.id, userId },
@@ -304,7 +306,9 @@ const surveyService = ({
     userId: string,
     input: SurveyState
   ): Promise<SurveyFollowUpResponse> => {
-    const survey = await Survey.scope('scheme').findByPk(surveyId);
+    const survey = await Survey.findByPk(surveyId, {
+      include: [{ model: Scheme, required: true }, { model: FeedbackScheme }],
+    });
     if (!survey || !survey.scheme) throw new NotFoundError();
 
     const {
@@ -401,7 +405,9 @@ const surveyService = ({
   };
 
   const followUp = async (surveyId: string, userId: string): Promise<SurveyFollowUpResponse> => {
-    const survey = await Survey.scope('scheme').findByPk(surveyId);
+    const survey = await Survey.findByPk(surveyId, {
+      include: [{ model: Scheme, required: true }, { model: FeedbackScheme }],
+    });
     if (!survey || !survey.scheme) throw new NotFoundError();
 
     const [followUpUrl, showFeedback] = await Promise.all([

@@ -10,9 +10,9 @@
         </tr>
         <tr>
           <th>{{ $t('locales._') }}</th>
-          <td>{{ entry.localeId }}</td>
+          <td>{{ entry.locale.englishName }}</td>
           <th>{{ $t('schemes._') }}</th>
-          <td>{{ entry.schemeId }}</td>
+          <td>{{ entry.scheme.name }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.startDate') }}</th>
@@ -52,11 +52,15 @@
           <th>{{ $t('surveys.storeUserSessionOnServer') }}</th>
           <td colspan="3">{{ entry.storeUserSessionOnServer }}</td>
         </tr>
-        <tr>
-          <th>{{ $t('surveys.feedback.enabled') }}</th>
-          <td>{{ entry.feedbackEnabled }}</td>
+        <tr v-if="entry.feedbackScheme">
+          <th>{{ $t('feedback-schemes._') }}</th>
+          <td>{{ entry.feedbackScheme.name }}</td>
           <th>{{ $t('surveys.feedback.numberOfSubmissions') }}</th>
           <td>{{ entry.numberOfSubmissionsForFeedback }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('surveys.feedback.enabled') }}</th>
+          <td colspan="3">{{ $t('common.no') }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.authUrl.domainOverride') }}</th>

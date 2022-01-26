@@ -54,10 +54,6 @@ const surveys: LocaleMessageObject = {
   feedback: {
     _: 'Feedback settings',
     enabled: 'Feedback enabled',
-    styles: {
-      _: 'Feedback style',
-      default: 'Default',
-    },
     numberOfSubmissions: 'Number of submissions for feedback',
   },
   'data-export': {

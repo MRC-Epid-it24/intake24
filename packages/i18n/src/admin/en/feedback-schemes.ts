@@ -9,8 +9,52 @@ const feedbackSchemes: LocaleMessageObject = {
   delete: 'Delete feedback scheme',
   none: 'No feedback scheme found',
 
-  id: 'Feedback scheme ID',
   name: 'Name',
+
+  types: {
+    _: 'Feedback type',
+    title: 'Feedback types',
+    default: 'Default',
+    playful: 'Playful',
+  },
+
+  'top-foods': {
+    _: 'Top food',
+    title: 'Top foods',
+    tab: 'Top foods',
+    max: {
+      _: 'Number of foods',
+      title: 'Number of foods to display',
+      required: 'Value must be an integer',
+    },
+    colors: {
+      _: 'Color',
+      title: 'Color list',
+      edit: 'Edit color',
+    },
+    nutrientTypes: {
+      _: 'Nutrient type',
+      title: 'Nutrient types to display',
+      create: 'Add nutrient type',
+      edit: 'Edit nutrient type',
+      remove: 'Remove nutrient type',
+      label: 'Nutrient type label',
+      reset: {
+        _: 'Reset nutrient types',
+        text: 'Reset nutrient types to default list',
+      },
+      validation: {
+        required: 'Nutrient type must be filled in.',
+        unique: 'Nutrient type already exists in current list.',
+      },
+    },
+  },
+
+  'food-groups': {
+    _: 'Food group',
+    title: 'Food groups',
+    tab: 'Food groups',
+  },
 };
 
 export default feedbackSchemes;

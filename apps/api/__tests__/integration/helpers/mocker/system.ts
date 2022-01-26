@@ -200,8 +200,6 @@ const survey = (
   const supportEmail = faker.internet.email();
   const suspensionReason = faker.random.words(10);
 
-  const feedbackEnabled = faker.datatype.boolean();
-  const feedbackStyle = 'default';
   const numberOfSubmissionsForFeedback = faker.datatype.number(10);
   const storeUserSessionOnServer = faker.datatype.boolean();
 
@@ -238,9 +236,7 @@ const survey = (
     allowGenUsers,
     supportEmail,
     suspensionReason,
-    feedbackEnabled,
     feedbackSchemeId,
-    feedbackStyle,
     numberOfSubmissionsForFeedback,
     storeUserSessionOnServer,
     maximumDailySubmissions,

@@ -154,23 +154,10 @@ export default class Survey
   public description!: string | null;
 
   @Column({
-    allowNull: false,
-    defaultValue: false,
-  })
-  public feedbackEnabled!: boolean;
-
-  @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
   public feedbackSchemeId!: string | null;
-
-  @Column({
-    allowNull: false,
-    defaultValue: 'default',
-    type: DataType.STRING(50),
-  })
-  public feedbackStyle!: string;
 
   @Column({
     allowNull: false,

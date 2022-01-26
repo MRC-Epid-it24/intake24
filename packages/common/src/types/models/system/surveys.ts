@@ -31,9 +31,7 @@ export type SurveyAttributes = {
   supportEmail: string;
   originatingUrl: string | null;
   description: string | null;
-  feedbackEnabled: boolean;
   feedbackSchemeId: string | null;
-  feedbackStyle: string;
   submissionNotificationUrl: string | null;
   storeUserSessionOnServer: boolean;
   numberOfSubmissionsForFeedback: number;
@@ -56,9 +54,7 @@ export type SurveyCreationAttributes = Optional<
   | 'surveyMonkeyUrl'
   | 'originatingUrl'
   | 'description'
-  | 'feedbackEnabled'
   | 'feedbackSchemeId'
-  | 'feedbackStyle'
   | 'submissionNotificationUrl'
   | 'numberOfSubmissionsForFeedback'
   | 'finalPageHtml'
@@ -89,9 +85,7 @@ export const updateSurveyFields = [
   'suspensionReason',
   'supportEmail',
   'description',
-  'feedbackEnabled',
   'feedbackSchemeId',
-  'feedbackStyle',
   'submissionNotificationUrl',
   'storeUserSessionOnServer',
   'numberOfSubmissionsForFeedback',

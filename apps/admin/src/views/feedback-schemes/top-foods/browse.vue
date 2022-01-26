@@ -1,0 +1,126 @@
+<template>
+  <layout
+    v-bind="{ id, entry }"
+    :routeLeave.sync="routeLeave"
+    v-if="entryLoaded & refsLoaded"
+    @save="submit"
+  >
+    <v-card-title>{{ $t('feedback-schemes.top-foods.title') }}</v-card-title>
+    <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-container>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-toolbar flat tile color="grey lighten-2">
+              <v-icon class="mr-3" color="primary">fa-palette</v-icon>
+              <v-toolbar-title class="font-weight-medium">
+                {{ $t('feedback-schemes.top-foods.max.title') }}
+              </v-toolbar-title>
+            </v-toolbar>
+            <v-card-text>
+              <v-text-field
+                v-model.number="form.topFoods.max"
+                :error-messages="form.errors.get('topFoods.max')"
+                :label="$t('feedback-schemes.top-foods.max._')"
+                :rules="topFoodsMaxRules"
+                hide-details="auto"
+                name="name"
+                outlined
+              ></v-text-field>
+            </v-card-text>
+            <color-list v-model="form.topFoods.colors" :feedback-scheme-id="id"></color-list>
+          </v-col>
+          <v-divider vertical></v-divider>
+          <v-col cols="12" md="6">
+            <nutrient-list
+              v-model="form.topFoods.nutrientTypes"
+              :feedback-scheme-id="id"
+              :available-nutrient-types="refs.nutrients"
+            ></nutrient-list>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-card-text>
+        <submit-footer :disabled="form.errors.any()"></submit-footer>
+      </v-card-text>
+    </v-form>
+  </layout>
+</template>
+
+<script lang="ts">
+import Vue, { VueConstructor } from 'vue';
+import debounce from 'lodash/debounce';
+import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { form } from '@intake24/admin/helpers';
+import { defaultTopFoods } from '@intake24/common/feedback';
+import { FeedbackSchemeForm } from '../form.vue';
+import NutrientList from './nutrient-list.vue';
+import ColorList from './color-list.vue';
+
+type FeedbackSchemeTopFoods = {
+  debouncedUpdateColorList: () => void;
+};
+
+export default (Vue as VueConstructor<Vue & FeedbackSchemeTopFoods>).extend({
+  name: 'FeedbackSchemeTopFoods',
+
+  components: { ColorList, NutrientList },
+
+  mixins: [formMixin],
+
+  data() {
+    return {
+      form: form<FeedbackSchemeForm>({
+        id: null,
+        name: null,
+        type: 'default',
+        topFoods: defaultTopFoods,
+        foodGroups: [],
+      }),
+    };
+  },
+
+  computed: {
+    topFoodsMaxRules() {
+      return [
+        (value: string | null): boolean | string => {
+          return !Number.isInteger(value)
+            ? this.$t('feedback-schemes.top-foods.max.required').toString()
+            : true;
+        },
+      ];
+    },
+  },
+
+  watch: {
+    'form.topFoods.max': {
+      handler() {
+        this.debouncedUpdateColorList();
+      },
+    },
+  },
+
+  created() {
+    this.debouncedUpdateColorList = debounce(() => {
+      this.updateColorList();
+    }, 300);
+  },
+
+  methods: {
+    async updateColorList() {
+      const size = this.form.topFoods.max + 1;
+
+      if (size < this.form.topFoods.colors.length) {
+        this.form.topFoods.colors = [...this.form.topFoods.colors.slice(0, size)];
+      } else if (size > this.form.topFoods.colors.length) {
+        const newColors = Array.from<string>({
+          length: size - this.form.topFoods.colors.length,
+        }).fill('#ef6c00');
+
+        this.form.topFoods.colors = [...this.form.topFoods.colors, ...newColors];
+      }
+    },
+  },
+});
+</script>
+
+<style lang="scss" scoped></style>

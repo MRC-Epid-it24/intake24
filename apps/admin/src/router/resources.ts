@@ -48,6 +48,14 @@ const resources: Resource[] = [
   // Surveys
   {
     group: 'surveyMgmt',
+    name: 'feedback-schemes',
+    icon: 'fas fa-comment-dots',
+    api: 'admin/feedback-schemes',
+    generateRoutes: true,
+    routes: [...routes, 'top-foods', 'food-groups'],
+  },
+  {
+    group: 'surveyMgmt',
     name: 'schemes',
     icon: 'fas fa-route',
     api: 'admin/schemes',

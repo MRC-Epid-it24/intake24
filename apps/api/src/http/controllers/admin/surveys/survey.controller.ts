@@ -36,7 +36,9 @@ export default (): AdminSurveyController => {
   ): Promise<void> => {
     const { surveyId } = req.params;
 
-    const survey = await Survey.findByPk(surveyId);
+    const survey = await Survey.findByPk(surveyId, {
+      include: [{ model: SystemLocale }, { model: FeedbackScheme }, { model: Scheme }],
+    });
     if (!survey) throw new NotFoundError();
 
     res.json(surveyResponse(survey));

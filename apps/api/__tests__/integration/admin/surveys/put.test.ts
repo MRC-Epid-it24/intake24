@@ -105,7 +105,6 @@ export default (): void => {
         'localeId',
         'supportEmail',
         'allowGenUsers',
-        'feedbackEnabled',
         'storeUserSessionOnServer',
         'overrides',
       ]);
@@ -125,7 +124,6 @@ export default (): void => {
           localeId: 10,
           supportEmail: 'thisIsNotValidEmail',
           allowGenUsers: 'no',
-          feedbackEnabled: 10,
           numberOfSubmissionsForFeedback: 'number',
           storeUserSessionOnServer: 'yes',
           maximumDailySubmissions: 'NaN',
@@ -151,7 +149,6 @@ export default (): void => {
         'localeId',
         'supportEmail',
         'allowGenUsers',
-        'feedbackEnabled',
         'numberOfSubmissionsForFeedback',
         'storeUserSessionOnServer',
         'maximumDailySubmissions',

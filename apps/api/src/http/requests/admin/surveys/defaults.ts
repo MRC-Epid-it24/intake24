@@ -9,7 +9,6 @@ import {
 } from '@intake24/common/types/models';
 import { validateMeals } from '@intake24/common/validators';
 import { unique } from '@intake24/api/http/rules';
-import { feedbackTypes } from '@intake24/common/feedback';
 
 export const defaults: Schema = {
   name: {
@@ -139,11 +138,6 @@ export const defaults: Schema = {
     isString: true,
     optional: { options: { nullable: true } },
   }, */
-  feedbackEnabled: {
-    in: ['body'],
-    errorMessage: 'Enter true/false value.',
-    isBoolean: true,
-  },
   feedbackSchemeId: {
     in: ['body'],
     errorMessage: 'Enter valid feedback scheme.',
@@ -155,12 +149,6 @@ export const defaults: Schema = {
         if (!feedbackScheme) throw new Error('Enter valid feedback scheme.');
       },
     },
-  },
-  feedbackStyle: {
-    in: ['body'],
-    errorMessage: 'Enter feedback style.',
-    isIn: { options: [feedbackTypes] },
-    optional: true,
   },
   submissionNotificationUrl: {
     in: ['body'],

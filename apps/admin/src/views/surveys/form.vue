@@ -316,16 +316,6 @@
             <div class="text-h6 mb-4">{{ $t('surveys.feedback._') }}</div>
             <v-row>
               <v-col cols="12" md="6">
-                <v-switch
-                  v-model="form.feedbackEnabled"
-                  :error-messages="form.errors.get('feedbackEnabled')"
-                  :label="$t('surveys.feedback.enabled')"
-                  hide-details="auto"
-                  name="feedbackEnabled"
-                  @change="form.errors.clear('feedbackEnabled')"
-                ></v-switch>
-              </v-col>
-              <v-col cols="12" md="6">
                 <v-select
                   v-model="form.feedbackSchemeId"
                   :error-messages="form.errors.get('feedbackSchemeId')"
@@ -340,23 +330,10 @@
                 ></v-select>
               </v-col>
               <v-col cols="12" md="6">
-                <v-select
-                  v-model="form.feedbackStyle"
-                  :disabled="!form.feedbackEnabled"
-                  :error-messages="form.errors.get('feedbackStyle')"
-                  :items="feedbackStyles"
-                  :label="$t('surveys.feedback.styles._')"
-                  hide-details="auto"
-                  name="feedbackStyle"
-                  outlined
-                  @change="form.errors.clear('feedbackStyle')"
-                ></v-select>
-              </v-col>
-              <v-col cols="12" md="6">
                 <v-text-field
                   v-model.number="form.numberOfSubmissionsForFeedback"
                   outlined
-                  :disabled="!form.feedbackEnabled"
+                  :disabled="!form.feedbackSchemeId"
                   :error-messages="form.errors.get('numberOfSubmissionsForFeedback')"
                   :label="$t('surveys.feedback.numberOfSubmissions')"
                   name="numberOfSubmissionsForFeedback"
@@ -411,11 +388,9 @@ export type SurveyForm = {
   authUrlTokenCharset: string | null;
   authUrlTokenLength: number | null;
   storeUserSessionOnServer: boolean;
-  feedbackEnabled: boolean;
   feedbackSchemeId: string | null;
-  feedbackStyle: string;
-  submissionNotificationUrl: string | null;
   numberOfSubmissionsForFeedback: number;
+  submissionNotificationUrl: string | null;
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
@@ -446,11 +421,9 @@ export const surveyForm: SurveyForm = {
   authUrlTokenCharset: null,
   authUrlTokenLength: null,
   storeUserSessionOnServer: false,
-  feedbackEnabled: false,
   feedbackSchemeId: null,
-  feedbackStyle: 'default',
-  submissionNotificationUrl: null,
   numberOfSubmissionsForFeedback: 1,
+  submissionNotificationUrl: null,
   maximumDailySubmissions: 3,
   maximumTotalSubmissions: null,
   minimumSubmissionInterval: 600,
@@ -484,10 +457,6 @@ export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>)
       searchSortingAlgorithms: searchSortingAlgorithms.map((value) => ({
         value,
         text: this.$t(`surveys.search.algorithms.${value}`),
-      })),
-      feedbackStyles: ['default'].map((value) => ({
-        value,
-        text: this.$t(`surveys.feedback.styles.${value}`),
       })),
     };
   },

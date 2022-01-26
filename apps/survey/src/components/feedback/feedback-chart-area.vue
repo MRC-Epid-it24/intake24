@@ -4,7 +4,7 @@
       <v-col v-for="nutrient in foodData.nutrients" class="mb-4" cols="auto" :key="nutrient.id">
         <canvas :id="`chart-${nutrient.id}`"></canvas>
         <v-divider class="my-4"></v-divider>
-        <div class="title">Highest in {{ nutrient.name.toLowerCase() }}</div>
+        <div class="title">Highest in {{ nutrient.name }}</div>
         <v-list max-width="300px" dense>
           <v-list-item v-for="(item, index) in nutrient.list" :key="item.name">
             <v-list-item-icon

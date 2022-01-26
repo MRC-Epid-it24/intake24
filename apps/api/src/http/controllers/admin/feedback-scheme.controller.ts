@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { PaginateQuery, FeedbackScheme, SystemNutrientType } from '@intake24/db';
+import { PaginateQuery, FeedbackScheme, SystemNutrientType, Language } from '@intake24/db';
 import {
   FeedbackSchemeEntry,
   FeedbackSchemesResponse,
@@ -90,9 +90,12 @@ export default (): FeedbackSchemeController => {
   };
 
   const refs = async (req: Request, res: Response<FeedbackSchemeRefs>): Promise<void> => {
-    const nutrients = await SystemNutrientType.findAll({ order: [['id', 'ASC']] });
+    const [languages, nutrients] = await Promise.all([
+      Language.scope('list').findAll(),
+      SystemNutrientType.findAll({ order: [['id', 'ASC']] }),
+    ]);
 
-    res.json({ nutrients });
+    res.json({ languages, nutrients });
   };
 
   const copy = async (req: Request, res: Response<FeedbackSchemeEntry>): Promise<void> => {
