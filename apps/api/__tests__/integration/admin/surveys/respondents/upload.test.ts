@@ -38,7 +38,7 @@ export default (): void => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys-respondents');
+    await setPermission('surveys|respondents');
 
     const { status } = await request(suite.app)
       .post(url)
@@ -71,7 +71,7 @@ export default (): void => {
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
-    await setPermission(['surveys-respondents', surveyStaff(suite.data.system.survey.id)]);
+    await setPermission(['surveys|respondents', surveyStaff(suite.data.system.survey.id)]);
 
     const { status } = await request(suite.app)
       .post(invalidUrl)
@@ -83,7 +83,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission(['surveys-respondents', surveyStaff(suite.data.system.survey.id)]);
+      await setPermission(['surveys|respondents', surveyStaff(suite.data.system.survey.id)]);
     });
 
     it('should return 422 for missing input data', async () => {

@@ -47,7 +47,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('image-maps-edit');
+      await setPermission('image-maps|edit');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

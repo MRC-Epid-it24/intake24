@@ -39,7 +39,7 @@ export default (): void => {
   });
 
   it('should return 200 and refs', async () => {
-    await setPermission('nutrient-tables-create');
+    await setPermission('nutrient-tables|create');
 
     const { status, body } = await request(suite.app)
       .get(url)

@@ -43,7 +43,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('tasks-edit');
+      await setPermission('tasks|edit');
     });
 
     it('should return 422 for missing input data', async () => {

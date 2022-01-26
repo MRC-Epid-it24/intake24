@@ -7,7 +7,7 @@ import { wrapAsync } from '@intake24/api/util';
 const { adminSurveyMgmtController } = ioc.cradle;
 const router = Router({ mergeParams: true });
 
-router.use(permission('surveys-mgmt'));
+router.use(permission('surveys|mgmt'));
 
 router
   .route('')

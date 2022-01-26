@@ -60,7 +60,7 @@
             ></v-select>
           </confirm-dialog>
           <save-as-template-dialog
-            v-if="can('scheme-questions-create')"
+            v-if="can('scheme-questions|create')"
             :disabled="hasTemplate"
             :question="question"
           ></save-as-template-dialog>

@@ -8,22 +8,22 @@ const { jobController } = ioc.cradle;
 
 const router = Router();
 
-router.route('').get(permission('jobs-browse'), validation.browse, wrapAsync(jobController.browse));
+router.route('').get(permission('jobs|browse'), validation.browse, wrapAsync(jobController.browse));
 
 router.get(
   '/refs',
-  anyPermission(['jobs-create', 'jobs-read', 'jobs-edit']),
+  anyPermission(['jobs|create', 'jobs|read', 'jobs|edit']),
   wrapAsync(jobController.refs)
 );
 
 router
   .route('/:jobId')
-  .get(permission('jobs-read'), validation.entry('jobId'), wrapAsync(jobController.read))
-  .delete(permission('jobs-delete'), validation.entry('jobId'), wrapAsync(jobController.destroy));
+  .get(permission('jobs|read'), validation.entry('jobId'), wrapAsync(jobController.read))
+  .delete(permission('jobs|delete'), validation.entry('jobId'), wrapAsync(jobController.destroy));
 
 router.get(
   '/:jobId/download',
-  permission('jobs-read'),
+  permission('jobs|read'),
   validation.entry('jobId'),
   wrapAsync(jobController.download)
 );

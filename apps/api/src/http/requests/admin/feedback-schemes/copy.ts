@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 import validate from '@intake24/api/http/requests/validate';
-import { FeedbackScheme } from '@intake24/db/models';
+import { FeedbackScheme } from '@intake24/db';
 import { name } from './defaults';
 
 export default validate(

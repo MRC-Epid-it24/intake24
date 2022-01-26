@@ -9,13 +9,13 @@ const router = Router({ mergeParams: true });
 
 router
   .route('')
-  .post(permission('fdbs-create'), wrapAsync(adminFoodController.store))
-  .get(permission('fdbs-read'), validation.browse, wrapAsync(adminFoodController.browse));
+  .post(permission('fdbs|create'), wrapAsync(adminFoodController.store))
+  .get(permission('fdbs|read'), validation.browse, wrapAsync(adminFoodController.browse));
 
 router
   .route('/:foodId')
-  .get(permission('fdbs-read'), wrapAsync(adminFoodController.read))
-  .put(permission('fdbs-edit'), validation.update, wrapAsync(adminFoodController.update))
-  .delete(permission('fdbs-delete'), wrapAsync(adminFoodController.destroy));
+  .get(permission('fdbs|read'), wrapAsync(adminFoodController.read))
+  .put(permission('fdbs|edit'), validation.update, wrapAsync(adminFoodController.update))
+  .delete(permission('fdbs|delete'), wrapAsync(adminFoodController.destroy));
 
 export default router;

@@ -7,7 +7,7 @@ import { wrapAsync } from '@intake24/api/util';
 const { adminSurveyDataExportController } = ioc.cradle;
 const router = Router({ mergeParams: true });
 
-router.use(permission('surveys-data-export'));
+router.use(permission('surveys|data-export'));
 
 router.post('', validation.dataExport, wrapAsync(adminSurveyDataExportController.queue));
 router.post('/sync', validation.dataExport, wrapAsync(adminSurveyDataExportController.sync));

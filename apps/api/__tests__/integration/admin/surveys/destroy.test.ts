@@ -53,7 +53,7 @@ export default (): void => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys-delete');
+    await setPermission('surveys|delete');
 
     const { status } = await request(suite.app)
       .delete(url)
@@ -86,7 +86,7 @@ export default (): void => {
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    await setPermission(['surveys-delete', 'surveyadmin']);
+    await setPermission(['surveys|delete', 'surveyadmin']);
 
     const { status } = await request(suite.app)
       .delete(invalidUrl)
@@ -98,7 +98,7 @@ export default (): void => {
 
   it('should return 204 and no content (surveyadmin)', async () => {
     survey = await refreshSurveyRecord(input);
-    await setPermission(['surveys-delete', 'surveyadmin']);
+    await setPermission(['surveys|delete', 'surveyadmin']);
 
     const { status, body } = await request(suite.app)
       .delete(url)
@@ -111,7 +111,7 @@ export default (): void => {
 
   it('should return 204 and no content (surveyStaff)', async () => {
     survey = await refreshSurveyRecord(input);
-    await setPermission(['surveys-delete', surveyStaff(survey.id)]);
+    await setPermission(['surveys|delete', surveyStaff(survey.id)]);
 
     const { status, body } = await request(suite.app)
       .delete(url)

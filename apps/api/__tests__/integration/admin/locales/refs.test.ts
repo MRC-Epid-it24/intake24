@@ -22,7 +22,7 @@ export default (): void => {
   });
 
   it('should return 200 and refs', async () => {
-    await setPermission('locales-create');
+    await setPermission('locales|create');
 
     const { status, body } = await request(suite.app)
       .get(url)

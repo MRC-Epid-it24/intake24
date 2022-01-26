@@ -46,7 +46,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('food-groups-edit');
+      await setPermission('food-groups|edit');
     });
 
     it('should return 422 for missing input data', async () => {

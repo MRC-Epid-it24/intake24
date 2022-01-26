@@ -31,7 +31,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('sign-in-logs-read');
+      await setPermission('sign-in-logs|read');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

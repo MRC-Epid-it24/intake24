@@ -40,7 +40,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission(['acl', 'roles-read']);
+      await setPermission(['acl', 'roles|read']);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

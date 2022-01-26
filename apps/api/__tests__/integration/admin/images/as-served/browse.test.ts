@@ -22,7 +22,7 @@ export default (): void => {
   });
 
   it('should return 200 and data/refs list', async () => {
-    await setPermission('as-served-browse');
+    await setPermission('as-served|browse');
 
     const { status, body } = await request(suite.app)
       .get(url)

@@ -20,7 +20,7 @@ export default (): void => {
   });
 
   it('should return 200 and empty list when no survey-permissions', async () => {
-    await setPermission('surveys-browse');
+    await setPermission('surveys|browse');
 
     const { status, body } = await request(suite.app)
       .get(url)
@@ -33,7 +33,7 @@ export default (): void => {
   });
 
   it('should return 200 and data/refs list', async () => {
-    await setPermission(['surveys-browse', 'surveyadmin']);
+    await setPermission(['surveys|browse', 'surveyadmin']);
 
     const { status, body } = await request(suite.app)
       .get(url)

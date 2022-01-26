@@ -48,7 +48,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('languages-edit');
+      await setPermission('languages|edit');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

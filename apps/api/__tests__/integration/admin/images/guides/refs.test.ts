@@ -22,7 +22,7 @@ export default (): void => {
   });
 
   it('should return 200 and refs', async () => {
-    await setPermission('guide-images-create');
+    await setPermission('guide-images|create');
 
     const { status, body } = await request(suite.app)
       .get(url)

@@ -9,7 +9,7 @@ const { fsConfig, adminSurveyRespondentController } = ioc.cradle;
 const router = Router({ mergeParams: true });
 const upload = multer({ dest: fsConfig.local.uploads });
 
-router.use(permission('surveys-respondents'));
+router.use(permission('surveys|respondents'));
 
 router
   .route('')

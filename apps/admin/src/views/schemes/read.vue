@@ -1,7 +1,7 @@
 <template>
   <layout v-bind="{ id, entry }" v-if="entryLoaded">
     <template v-slot:actions>
-      <copy-scheme-dialog v-if="can('schemes-edit')" :schemeId="id"></copy-scheme-dialog>
+      <copy-scheme-dialog v-if="can('schemes|edit')" :schemeId="id"></copy-scheme-dialog>
     </template>
     <v-simple-table>
       <tbody>

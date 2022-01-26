@@ -11,37 +11,37 @@ router.use(permission('acl'));
 
 router
   .route('')
-  .post(permission('permissions-create'), validation.store, wrapAsync(permissionController.store))
-  .get(permission('permissions-browse'), validation.browse, wrapAsync(permissionController.browse));
+  .post(permission('permissions|create'), validation.store, wrapAsync(permissionController.store))
+  .get(permission('permissions|browse'), validation.browse, wrapAsync(permissionController.browse));
 
 router.get(
   '/refs',
-  anyPermission(['permissions-create', 'permissions-read', 'permissions-edit']),
+  anyPermission(['permissions|create', 'permissions|read', 'permissions|edit']),
   wrapAsync(permissionController.refs)
 );
 
 router
   .route('/:permissionId')
   .get(
-    permission('permissions-read'),
+    permission('permissions|read'),
     validation.entry('permissionId'),
     wrapAsync(permissionController.read)
   )
   .put(
-    permission('permissions-edit'),
+    permission('permissions|edit'),
     validation.entry('permissionId'),
     validation.update,
     wrapAsync(permissionController.update)
   )
   .delete(
-    permission('permissions-delete'),
+    permission('permissions|delete'),
     validation.entry('permissionId'),
     wrapAsync(permissionController.destroy)
   );
 
 router.get(
   '/:permissionId/edit',
-  permission('permissions-edit'),
+  permission('permissions|edit'),
   validation.entry('permissionId'),
   wrapAsync(permissionController.edit)
 );

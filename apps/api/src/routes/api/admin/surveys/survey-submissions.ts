@@ -7,7 +7,7 @@ import { wrapAsync } from '@intake24/api/util';
 const { adminSurveySubmissionController } = ioc.cradle;
 const router = Router({ mergeParams: true });
 
-router.use(permission('surveys-submissions'));
+router.use(permission('surveys|submissions'));
 
 router.get('', validation.browse, wrapAsync(adminSurveySubmissionController.browse));
 

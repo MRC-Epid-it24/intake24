@@ -46,7 +46,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('as-served-delete');
+      await setPermission('as-served|delete');
     });
 
     it(`should return 404 when parent record doesn't exist`, async () => {

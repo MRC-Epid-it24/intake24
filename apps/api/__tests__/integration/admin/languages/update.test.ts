@@ -59,7 +59,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('languages-edit');
+      await setPermission('languages|edit');
     });
 
     it('should return 422 for missing input data', async () => {

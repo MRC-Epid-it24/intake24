@@ -10,42 +10,42 @@ const router = Router();
 router
   .route('')
   .post(
-    permission('feedback-schemes-create'),
+    permission('feedback-schemes|create'),
     validation.store,
     wrapAsync(feedbackSchemeController.store)
   )
   .get(
-    permission('feedback-schemes-browse'),
+    permission('feedback-schemes|browse'),
     validation.browse,
     wrapAsync(feedbackSchemeController.browse)
   );
 
 router.get(
   '/refs',
-  anyPermission(['feedback-schemes-create', 'feedback-schemes-read', 'feedback-schemes-edit']),
+  anyPermission(['feedback-schemes|create', 'feedback-schemes|read', 'feedback-schemes|edit']),
   wrapAsync(feedbackSchemeController.refs)
 );
 
 router.post(
   '/copy',
-  permission('feedback-schemes-edit'),
+  permission('feedback-schemes|edit'),
   validation.copy,
   wrapAsync(feedbackSchemeController.copy)
 );
 
 router
   .route('/:feedbackSchemeId')
-  .get(permission('feedback-schemes-read'), wrapAsync(feedbackSchemeController.read))
+  .get(permission('feedback-schemes|read'), wrapAsync(feedbackSchemeController.read))
   .put(
-    permission('feedback-schemes-edit'),
+    permission('feedback-schemes|edit'),
     validation.update,
     wrapAsync(feedbackSchemeController.update)
   )
-  .delete(permission('feedback-schemes-delete'), wrapAsync(feedbackSchemeController.destroy));
+  .delete(permission('feedback-schemes|delete'), wrapAsync(feedbackSchemeController.destroy));
 
 router.get(
   '/:feedbackSchemeId/edit',
-  permission('feedback-schemes-edit'),
+  permission('feedback-schemes|edit'),
   wrapAsync(feedbackSchemeController.edit)
 );
 

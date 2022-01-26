@@ -65,7 +65,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('as-served-edit');
+      await setPermission('as-served|edit');
     });
 
     it('should return 422 for missing input data', async () => {

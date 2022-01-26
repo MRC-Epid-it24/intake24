@@ -66,7 +66,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('scheme-questions-sync');
+      await setPermission('scheme-questions|sync');
     });
 
     it('should return 422 for missing input data', async () => {

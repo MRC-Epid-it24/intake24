@@ -33,7 +33,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('food-groups-create');
+      await setPermission('food-groups|create');
     });
 
     it('should return 422 for missing input data', async () => {

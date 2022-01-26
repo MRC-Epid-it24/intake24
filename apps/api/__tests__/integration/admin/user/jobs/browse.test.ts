@@ -29,7 +29,7 @@ export default (): void => {
       .send(input);
 
     // Test user job
-    await setPermission(['surveys-data-export', 'surveyadmin']);
+    await setPermission(['surveys|data-export', 'surveyadmin']);
     await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
       .set('Accept', 'application/json')

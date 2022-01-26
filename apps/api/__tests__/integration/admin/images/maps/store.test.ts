@@ -39,7 +39,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('image-maps-create');
+      await setPermission('image-maps|create');
     });
 
     it('should return 422 for missing input data', async () => {

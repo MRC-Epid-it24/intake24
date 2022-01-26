@@ -160,7 +160,7 @@ export default class Survey
   public feedbackEnabled!: boolean;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
     type: DataType.BIGINT,
   })
   public feedbackSchemeId!: string | null;
@@ -173,6 +173,12 @@ export default class Survey
   public feedbackStyle!: string;
 
   @Column({
+    allowNull: false,
+    defaultValue: 1,
+  })
+  public numberOfSubmissionsForFeedback!: number;
+
+  @Column({
     allowNull: true,
     type: DataType.STRING(2048),
   })
@@ -182,12 +188,6 @@ export default class Survey
     allowNull: false,
   })
   public storeUserSessionOnServer!: boolean;
-
-  @Column({
-    allowNull: false,
-    defaultValue: 1,
-  })
-  public numberOfSubmissionsForFeedback!: number;
 
   // V4 Deprecated
   // finalPageHtml was used to hold content of "final page"

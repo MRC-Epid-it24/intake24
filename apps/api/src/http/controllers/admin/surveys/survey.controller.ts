@@ -114,10 +114,10 @@ export default (): AdminSurveyController => {
 
     const keysToUpdate: string[] = [];
 
-    if (await aclService.hasPermission('surveys-edit'))
+    if (await aclService.hasPermission('surveys|edit'))
       keysToUpdate.push(...staffUpdateSurveyFields);
 
-    if (await aclService.hasPermission('surveys-overrides')) keysToUpdate.push(...overridesFields);
+    if (await aclService.hasPermission('surveys|overrides')) keysToUpdate.push(...overridesFields);
 
     if (keysToUpdate.length) await survey.update(pick(req.body, keysToUpdate));
 

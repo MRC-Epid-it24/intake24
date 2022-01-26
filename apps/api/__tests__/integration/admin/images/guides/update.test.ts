@@ -84,7 +84,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('guide-images-edit');
+      await setPermission('guide-images|edit');
     });
 
     it('should return 422 for missing input data', async () => {

@@ -10,41 +10,41 @@ const router = Router();
 router
   .route('')
   .post(
-    permission('scheme-questions-create'),
+    permission('scheme-questions|create'),
     validation.store,
     wrapAsync(schemeQuestionController.store)
   )
   .get(
-    permission('scheme-questions-browse'),
+    permission('scheme-questions|browse'),
     validation.browse,
     wrapAsync(schemeQuestionController.browse)
   );
 
 router.get(
   '/refs',
-  anyPermission(['scheme-questions-create', 'scheme-questions-read', 'scheme-questions-edit']),
+  anyPermission(['scheme-questions|create', 'scheme-questions|read', 'scheme-questions|edit']),
   wrapAsync(schemeQuestionController.refs)
 );
 
 router
   .route('/:schemeQuestionId')
-  .get(permission('scheme-questions-read'), wrapAsync(schemeQuestionController.read))
+  .get(permission('scheme-questions|read'), wrapAsync(schemeQuestionController.read))
   .put(
-    permission('scheme-questions-edit'),
+    permission('scheme-questions|edit'),
     validation.update,
     wrapAsync(schemeQuestionController.update)
   )
-  .delete(permission('scheme-questions-delete'), wrapAsync(schemeQuestionController.destroy));
+  .delete(permission('scheme-questions|delete'), wrapAsync(schemeQuestionController.destroy));
 
 router.get(
   '/:schemeQuestionId/edit',
-  permission('scheme-questions-edit'),
+  permission('scheme-questions|edit'),
   wrapAsync(schemeQuestionController.edit)
 );
 
 router.post(
   '/:schemeQuestionId/sync',
-  permission('scheme-questions-sync'),
+  permission('scheme-questions|sync'),
   validation.sync,
   wrapAsync(schemeQuestionController.sync)
 );

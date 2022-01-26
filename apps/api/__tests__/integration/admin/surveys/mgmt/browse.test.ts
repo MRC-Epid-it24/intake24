@@ -30,7 +30,7 @@ export default (): void => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys-mgmt');
+    await setPermission('surveys|mgmt');
 
     const { status } = await request(suite.app)
       .get(url)
@@ -63,7 +63,7 @@ export default (): void => {
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
-    await setPermission(['surveys-mgmt', surveyStaff(survey.id)]);
+    await setPermission(['surveys|mgmt', surveyStaff(survey.id)]);
 
     const { status } = await request(suite.app)
       .get(invalidUrl)
@@ -74,7 +74,7 @@ export default (): void => {
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    await setPermission(['surveys-mgmt', 'surveyadmin']);
+    await setPermission(['surveys|mgmt', 'surveyadmin']);
 
     const { status } = await request(suite.app)
       .get(invalidUrl)
@@ -85,7 +85,7 @@ export default (): void => {
   });
 
   it('should return 200 and data/refs list', async () => {
-    await setPermission(['surveys-mgmt', surveyStaff(survey.id)]);
+    await setPermission(['surveys|mgmt', surveyStaff(survey.id)]);
 
     const { status, body } = await request(suite.app)
       .get(url)

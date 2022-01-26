@@ -42,7 +42,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('tasks-edit');
+      await setPermission('tasks|edit');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

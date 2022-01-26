@@ -9,21 +9,21 @@ const router = Router();
 
 router
   .route('')
-  .post(permission('locales-create'), validation.store, wrapAsync(localeController.store))
-  .get(permission('locales-browse'), validation.browse, wrapAsync(localeController.browse));
+  .post(permission('locales|create'), validation.store, wrapAsync(localeController.store))
+  .get(permission('locales|browse'), validation.browse, wrapAsync(localeController.browse));
 
 router.get(
   '/refs',
-  anyPermission(['locales-create', 'locales-read', 'locales-edit']),
+  anyPermission(['locales|create', 'locales|read', 'locales|edit']),
   wrapAsync(localeController.refs)
 );
 
 router
   .route('/:localeId')
-  .get(permission('locales-read'), wrapAsync(localeController.read))
-  .put(permission('locales-edit'), validation.update, wrapAsync(localeController.update))
-  .delete(permission('locales-delete'), wrapAsync(localeController.destroy));
+  .get(permission('locales|read'), wrapAsync(localeController.read))
+  .put(permission('locales|edit'), validation.update, wrapAsync(localeController.update))
+  .delete(permission('locales|delete'), wrapAsync(localeController.destroy));
 
-router.get('/:localeId/edit', permission('locales-edit'), wrapAsync(localeController.edit));
+router.get('/:localeId/edit', permission('locales|edit'), wrapAsync(localeController.edit));
 
 export default router;

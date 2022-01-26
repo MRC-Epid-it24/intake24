@@ -21,7 +21,7 @@
         </v-list-item-group>
       </v-list>
       <menu-tree
-        v-if="can(['fdbs-browse', 'food-groups-browse', 'nutrient-tables-browse'])"
+        v-if="can(['fdbs|browse', 'food-groups|browse', 'nutrient-tables|browse'])"
         icon="fas fa-fw fa-hamburger"
         name="fdb"
         :resources="resources.fdb"
@@ -33,13 +33,13 @@
         :resources="resources.local"
       ></menu-tree>
       <menu-tree
-        v-if="can(['as-served-browse', 'guide-images-browse', 'image-maps-browse'])"
+        v-if="can(['as-served|browse', 'guide-images|browse', 'image-maps|browse'])"
         icon="fas fa-fw fa-images"
         name="images"
         :resources="resources.images"
       ></menu-tree>
       <menu-tree
-        v-if="can(['schemes-browse', 'scheme-questions-browse', 'surveys-browse'])"
+        v-if="can(['schemes|browse', 'scheme-questions|browse', 'surveys|browse'])"
         icon="fas fa-fw fa-tools"
         name="surveyMgmt"
         :resources="resources.surveyMgmt"
@@ -51,7 +51,7 @@
         :resources="resources.acl"
       ></menu-tree>
       <menu-tree
-        v-if="can(['jobs-browse', 'sign-in-logs-browse', 'tasks-browse'])"
+        v-if="can(['jobs|browse', 'sign-in-logs|browse', 'tasks|browse'])"
         icon="fas fa-fw fa-tools"
         name="system"
         :resources="resources.system"

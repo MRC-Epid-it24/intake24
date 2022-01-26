@@ -38,6 +38,7 @@ export default (): void => {
       'state',
       'localeId',
       'scheme',
+      'feedbackScheme',
       'numberOfSubmissionsForFeedback',
       'storeUserSessionOnServer',
       'suspensionReason',

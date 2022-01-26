@@ -43,7 +43,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('locales-create');
+      await setPermission('locales|create');
     });
 
     it('should return 422 for missing input data', async () => {

@@ -51,7 +51,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission(['acl', 'roles-edit']);
+      await setPermission(['acl', 'roles|edit']);
     });
 
     it('should return 422 for missing input data', async () => {

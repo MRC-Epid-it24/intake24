@@ -39,7 +39,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('as-served-create');
+      await setPermission('as-served|create');
     });
 
     it(`should return 404 when parent record doesn't exist`, async () => {

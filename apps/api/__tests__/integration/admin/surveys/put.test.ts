@@ -51,7 +51,7 @@ export default (): void => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys-edit');
+    await setPermission('surveys|edit');
 
     const { status } = await request(suite.app)
       .put(url)
@@ -73,7 +73,7 @@ export default (): void => {
   });
 
   it(`should return 403 when missing surveyadmin`, async () => {
-    await setPermission(['surveys-edit', surveyStaff(survey.id)]);
+    await setPermission(['surveys|edit', surveyStaff(survey.id)]);
 
     const { status } = await request(suite.app)
       .put(url)
@@ -85,7 +85,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission(['surveys-edit', 'surveyadmin']);
+      await setPermission(['surveys|edit', 'surveyadmin']);
     });
 
     it('should return 422 for missing input data', async () => {

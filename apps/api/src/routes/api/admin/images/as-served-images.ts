@@ -12,20 +12,20 @@ const upload = multer({ dest: fsConfig.local.uploads });
 router
   .route('')
   .post(
-    permission('as-served-create'),
+    permission('as-served|create'),
     upload.single('image'),
     validation.store,
     wrapAsync(asServedImageController.store)
   )
   .get(
-    permission('as-served-browse'),
+    permission('as-served|browse'),
     validation.browse,
     wrapAsync(asServedImageController.browse)
   );
 
 router
   .route('/:asServedImageId')
-  .get(permission('as-served-read'), wrapAsync(asServedImageController.read))
-  .delete(permission('as-served-delete'), wrapAsync(asServedImageController.destroy));
+  .get(permission('as-served|read'), wrapAsync(asServedImageController.read))
+  .delete(permission('as-served|delete'), wrapAsync(asServedImageController.destroy));
 
 export default router;

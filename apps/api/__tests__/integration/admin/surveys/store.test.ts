@@ -33,7 +33,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('surveys-create');
+      await setPermission('surveys|create');
     });
 
     it('should return 422 for missing input data', async () => {

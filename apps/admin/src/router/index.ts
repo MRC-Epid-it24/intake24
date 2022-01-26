@@ -20,7 +20,7 @@ const generateResourceRoutes = (
   const meta = { module: { current: resourceName, parent } };
 
   resourceRoutes.forEach((action) => {
-    const perm = parent ? `${parent}-${resourceName}` : `${resourceName}-${action}`;
+    const perm = parent ? `${parent}|${resourceName}` : `${resourceName}|${action}`;
 
     if (action === 'browse') {
       routerRoutes.push({
@@ -110,14 +110,14 @@ const routes: RouteConfig[] = [
       module: { current: 'fdbs' },
       title: 'fdbs.title',
       action: 'browse',
-      perm: 'fdbs-browse',
+      perm: 'fdbs|browse',
     },
   },
   {
     path: '/fdbs/:id',
     name: 'fdbs-read',
     component: views.fdbs.read,
-    meta: { module: { current: 'fdbs' }, title: 'fdbs.read', action: 'read', perm: 'fdbs-read' },
+    meta: { module: { current: 'fdbs' }, title: 'fdbs.read', action: 'read', perm: 'fdbs|read' },
     props: true,
     children: [
       {
@@ -128,7 +128,7 @@ const routes: RouteConfig[] = [
           module: { current: 'categories', parent: 'fdbs' },
           title: 'fdbs.read',
           action: 'read',
-          perm: 'fdbs-read',
+          perm: 'fdbs|read',
         },
         props: true,
       },
@@ -140,7 +140,7 @@ const routes: RouteConfig[] = [
           module: { current: 'foods', parent: 'fdbs' },
           title: 'fdbs.read',
           action: 'read',
-          perm: 'fdbs-read',
+          perm: 'fdbs|read',
         },
         props: true,
       },

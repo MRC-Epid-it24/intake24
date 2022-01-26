@@ -37,7 +37,7 @@ export default (): void => {
   });
 
   it('should return 200 and data/refs list', async () => {
-    await setPermission('jobs-browse');
+    await setPermission('jobs|browse');
 
     const { status, body } = await request(suite.app)
       .get(url)

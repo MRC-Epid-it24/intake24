@@ -42,7 +42,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('food-groups-read');
+      await setPermission('food-groups|read');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

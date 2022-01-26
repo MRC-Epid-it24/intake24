@@ -37,7 +37,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('nutrient-tables-create');
+      await setPermission('nutrient-tables|create');
     });
 
     it('should return 422 for missing input data', async () => {

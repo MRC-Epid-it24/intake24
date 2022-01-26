@@ -11,33 +11,33 @@ router.use(permission('acl'));
 
 router
   .route('')
-  .post(permission('users-create'), validation.store, wrapAsync(adminUserController.store))
-  .get(permission('users-browse'), validation.browse, wrapAsync(adminUserController.browse));
+  .post(permission('users|create'), validation.store, wrapAsync(adminUserController.store))
+  .get(permission('users|browse'), validation.browse, wrapAsync(adminUserController.browse));
 
 router.get(
   '/refs',
-  anyPermission(['users-create', 'users-read', 'users-edit']),
+  anyPermission(['users|create', 'users|read', 'users|edit']),
   wrapAsync(adminUserController.refs)
 );
 
 router
   .route('/:userId')
-  .get(permission('users-read'), validation.entry('userId'), wrapAsync(adminUserController.read))
+  .get(permission('users|read'), validation.entry('userId'), wrapAsync(adminUserController.read))
   .put(
-    permission('users-edit'),
+    permission('users|edit'),
     validation.entry('userId'),
     validation.update,
     wrapAsync(adminUserController.update)
   )
   .delete(
-    permission('users-delete'),
+    permission('users|delete'),
     validation.entry('userId'),
     wrapAsync(adminUserController.destroy)
   );
 
 router.get(
   '/:userId/edit',
-  permission('users-edit'),
+  permission('users|edit'),
   validation.entry('userId'),
   wrapAsync(adminUserController.edit)
 );

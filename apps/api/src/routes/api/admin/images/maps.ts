@@ -12,25 +12,25 @@ const upload = multer({ dest: fsConfig.local.uploads });
 router
   .route('')
   .post(
-    permission('image-maps-create'),
+    permission('image-maps|create'),
     upload.single('baseImage'),
     validation.store,
     wrapAsync(imageMapController.store)
   )
-  .get(permission('image-maps-browse'), validation.browse, wrapAsync(imageMapController.browse));
+  .get(permission('image-maps|browse'), validation.browse, wrapAsync(imageMapController.browse));
 
 router.get(
   '/refs',
-  anyPermission(['image-maps-create', 'image-maps-read', 'image-maps-edit']),
+  anyPermission(['image-maps|create', 'image-maps|read', 'image-maps|edit']),
   wrapAsync(imageMapController.refs)
 );
 
 router
   .route('/:imageMapId')
-  .get(permission('image-maps-read'), wrapAsync(imageMapController.read))
-  .put(permission('image-maps-edit'), validation.update, wrapAsync(imageMapController.update))
-  .delete(permission('image-maps-delete'), wrapAsync(imageMapController.destroy));
+  .get(permission('image-maps|read'), wrapAsync(imageMapController.read))
+  .put(permission('image-maps|edit'), validation.update, wrapAsync(imageMapController.update))
+  .delete(permission('image-maps|delete'), wrapAsync(imageMapController.destroy));
 
-router.get('/:imageMapId/edit', permission('image-maps-edit'), wrapAsync(imageMapController.edit));
+router.get('/:imageMapId/edit', permission('image-maps|edit'), wrapAsync(imageMapController.edit));
 
 export default router;

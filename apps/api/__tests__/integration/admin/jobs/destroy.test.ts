@@ -49,7 +49,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('jobs-delete');
+      await setPermission('jobs|delete');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

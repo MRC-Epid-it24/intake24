@@ -33,7 +33,7 @@ export default (): void => {
   });
 
   it('should return 200 and data/refs list', async () => {
-    await setPermission(['acl', 'roles-browse']);
+    await setPermission(['acl', 'roles|browse']);
 
     const { status, body } = await request(suite.app)
       .get(url)

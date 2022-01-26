@@ -39,7 +39,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('as-served-create');
+      await setPermission('as-served|create');
     });
 
     it('should return 422 for missing input data', async () => {

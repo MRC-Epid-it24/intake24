@@ -9,11 +9,11 @@ const router = Router();
 
 const { adminFoodDatabaseController } = ioc.cradle;
 
-router.get('', permission('fdbs-browse'), wrapAsync(adminFoodDatabaseController.browse));
+router.get('', permission('fdbs|browse'), wrapAsync(adminFoodDatabaseController.browse));
 
 router.use('/:localeId', canManageFoodDatabase());
 
-router.get('/:localeId', permission('fdbs-read'), wrapAsync(adminFoodDatabaseController.read));
+router.get('/:localeId', permission('fdbs|read'), wrapAsync(adminFoodDatabaseController.read));
 router.use('/:localeId/categories', categories);
 router.use('/:localeId/foods', foods);
 

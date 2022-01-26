@@ -13,28 +13,28 @@ const upload = multer({ dest: fsConfig.local.uploads });
 router
   .route('')
   .post(
-    permission('as-served-create'),
+    permission('as-served|create'),
     upload.single('selectionImage'),
     validation.store,
     wrapAsync(asServedSetController.store)
   )
-  .get(permission('as-served-browse'), validation.browse, wrapAsync(asServedSetController.browse));
+  .get(permission('as-served|browse'), validation.browse, wrapAsync(asServedSetController.browse));
 
 router.get(
   '/refs',
-  anyPermission(['as-served-create', 'as-served-read', 'as-served-edit']),
+  anyPermission(['as-served|create', 'as-served|read', 'as-served|edit']),
   wrapAsync(asServedSetController.refs)
 );
 
 router
   .route('/:asServedSetId')
-  .get(permission('as-served-read'), wrapAsync(asServedSetController.read))
-  .put(permission('as-served-edit'), validation.update, wrapAsync(asServedSetController.update))
-  .delete(permission('as-served-delete'), wrapAsync(asServedSetController.destroy));
+  .get(permission('as-served|read'), wrapAsync(asServedSetController.read))
+  .put(permission('as-served|edit'), validation.update, wrapAsync(asServedSetController.update))
+  .delete(permission('as-served|delete'), wrapAsync(asServedSetController.destroy));
 
 router.get(
   '/:asServedSetId/edit',
-  permission('as-served-edit'),
+  permission('as-served|edit'),
   wrapAsync(asServedSetController.edit)
 );
 

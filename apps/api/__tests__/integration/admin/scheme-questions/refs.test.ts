@@ -22,7 +22,7 @@ export default (): void => {
   });
 
   it('should return 200 and refs', async () => {
-    await setPermission('scheme-questions-create');
+    await setPermission('scheme-questions|create');
 
     const { status, body } = await request(suite.app)
       .get(url)

@@ -19,7 +19,7 @@ export default (): void => {
       endDate: endDate.toISOString().split('T')[0],
     };
 
-    await setPermission(['surveys-data-export', 'surveyadmin']);
+    await setPermission(['surveys|data-export', 'surveyadmin']);
 
     const { body } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
@@ -69,7 +69,7 @@ export default (): void => {
 
   describe('with correct permissions', () => {
     beforeAll(async () => {
-      await setPermission('jobs-read');
+      await setPermission('jobs|read');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

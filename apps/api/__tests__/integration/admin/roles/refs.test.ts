@@ -22,7 +22,7 @@ export default (): void => {
   });
 
   it('should return 200 and refs', async () => {
-    await setPermission(['acl', 'roles-create']);
+    await setPermission(['acl', 'roles|create']);
 
     const { status, body } = await request(suite.app)
       .get(url)

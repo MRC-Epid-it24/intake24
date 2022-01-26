@@ -22,7 +22,7 @@ export default (): void => {
   });
 
   it('should return 200 and data', async () => {
-    await setPermission('tasks-create');
+    await setPermission('tasks|create');
 
     const { status, body } = await request(suite.app)
       .get(url)

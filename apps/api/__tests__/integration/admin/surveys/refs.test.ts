@@ -22,7 +22,7 @@ export default (): void => {
   });
 
   it('should return 200 and data', async () => {
-    await setPermission('surveys-create');
+    await setPermission('surveys|create');
 
     const { status, body } = await request(suite.app)
       .get(url)
@@ -30,6 +30,6 @@ export default (): void => {
       .set('Authorization', suite.bearer.user);
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['languages', 'locales', 'schemes']);
+    expect(body).toContainAllKeys(['languages', 'locales', 'schemes', 'feedbackSchemes']);
   });
 };
