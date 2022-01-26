@@ -1,17 +1,47 @@
 <template>
   <div>
-    <div class="text-h3 text-center mb-4">Summary of your diet</div>
-    <div class="text-h5 text-center mb-4">Active or moderately active lifestyle</div>
+    <div class="text-h3 text-center mb-4">{{ $t('feedback.physicalData.summary') }}</div>
+    <div class="text-h6 text-center mb-4">{{ userInfo.physicalActivityLevel.name }}</div>
     <v-row justify="center">
-      <v-col cols="auto">
-        Weight: {{ userInfo.physicalData.weightKg }} kg<br />
-        Height: {{ userInfo.physicalData.heightCm }} cm<br />
-        <v-btn link :to="{ name: 'feedback-physical-data', params: { surveyId } }">
-          Change my info
+      <v-col cols="auto" class="d-flex flex-column">
+        <div>
+          {{ $t('feedback.physicalData.weight', { weight: userInfo.physicalData.weightKg }) }}
+        </div>
+        <div>
+          {{ $t('feedback.physicalData.height', { height: userInfo.physicalData.heightCm }) }}
+        </div>
+        <div>
+          {{
+            $t('feedback.physicalData.weightTarget', {
+              target: $t(
+                `feedback.physicalData.weightTargets.${userInfo.physicalData.weightTarget}`
+              ),
+            })
+          }}
+        </div>
+      </v-col>
+      <v-divider vertical class="d-none d-sm-block"></v-divider>
+      <v-col cols="auto" class="d-flex flex-column">
+        <v-btn
+          link
+          class="mb-2"
+          color="primary"
+          outlined
+          :title="$t('feedback.physicalData.change')"
+          :to="{ name: 'feedback-physical-data', params: { surveyId } }"
+        >
+          {{ $t('feedback.physicalData.change') }}
+        </v-btn>
+        <v-btn
+          link
+          color="primary"
+          outlined
+          :title="$t('feedback.physicalData.recall')"
+          :to="{ name: 'survey-home', params: { surveyId } }"
+        >
+          {{ $t('feedback.physicalData.recall') }}
         </v-btn>
       </v-col>
-      <v-divider vertical></v-divider>
-      <v-col cols="auto"></v-col>
     </v-row>
   </div>
 </template>

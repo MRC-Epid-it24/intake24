@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
-import { henryCoefficientsData, weightTargetsData } from '@intake24/common/feedback';
+import { defaultHenryCoefficients, weightTargetsData } from '@intake24/common/feedback';
 
 export default (): void => {
   const url = '/api/feedback';
@@ -27,7 +27,7 @@ export default (): void => {
       'physicalActivityLevels',
       'weightTargets',
     ]);
-    expect(body.henryCoefficients).toStrictEqual(henryCoefficientsData);
+    expect(body.henryCoefficients).toStrictEqual(defaultHenryCoefficients);
     expect(body.weightTargets).toStrictEqual(weightTargetsData);
   });
 };

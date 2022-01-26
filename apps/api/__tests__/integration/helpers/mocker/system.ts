@@ -14,6 +14,7 @@ import {
   CreateRespondentRequest,
 } from '@intake24/common/types/http/admin';
 import {
+  FeedbackSchemeCreationAttributes,
   SchemeCreationAttributes,
   SchemeQuestionCreationAttributes,
   SchemeTypes,
@@ -22,6 +23,11 @@ import {
 } from '@intake24/common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
 import { customPromptQuestions } from '@intake24/common/prompts';
+import {
+  defaultHenryCoefficients,
+  defaultTopFoods,
+  feedbackTypes,
+} from '@intake24/common/feedback';
 
 const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
@@ -92,6 +98,19 @@ const respondent = (): CreateRespondentRequest => {
     passwordConfirm,
     phone,
     customFields,
+  };
+};
+
+const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
+  const name = faker.random.words(3);
+  const type = 'default';
+
+  return {
+    name,
+    type,
+    topFoods: defaultTopFoods,
+    foodGroups: [],
+    henryCoefficients: defaultHenryCoefficients,
   };
 };
 
@@ -167,7 +186,11 @@ const schemeQuestion = (): SchemeQuestionCreationAttributes => {
   };
 };
 
-const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest => {
+const survey = (
+  schemeId = 'default',
+  localeId = 'en_GB',
+  feedbackSchemeId = null
+): CreateSurveyRequest => {
   const id = slugify(nanoid(16), { strict: true });
   const name = faker.random.words(6);
   const state = surveyStates.NOT_STARTED;
@@ -216,6 +239,7 @@ const survey = (schemeId = 'default', localeId = 'en_GB'): CreateSurveyRequest =
     supportEmail,
     suspensionReason,
     feedbackEnabled,
+    feedbackSchemeId,
     feedbackStyle,
     numberOfSubmissionsForFeedback,
     storeUserSessionOnServer,

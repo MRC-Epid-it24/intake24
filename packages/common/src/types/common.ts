@@ -16,6 +16,10 @@ export type LocaleTranslation<T = string | null> = {
   [locale: string]: T;
 };
 
+export type RequiredLocaleTranslation = { en: string } & {
+  [locale: string]: string | null;
+};
+
 export type ValidationError = {
   location: string;
   msg: string;

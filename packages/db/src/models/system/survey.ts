@@ -27,6 +27,7 @@ import {
   SurveySubmission,
   UserSession,
   UserSurveyAlias,
+  FeedbackScheme,
 } from '.';
 
 @Scopes(() => ({
@@ -160,6 +161,12 @@ export default class Survey
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
+  })
+  public feedbackSchemeId!: string | null;
+
+  @Column({
+    allowNull: false,
     defaultValue: 'default',
     type: DataType.STRING(50),
   })
@@ -242,6 +249,9 @@ export default class Survey
 
   @HasOne(() => GenUserCounter, 'surveyId')
   public counter?: GenUserCounter;
+
+  @BelongsTo(() => FeedbackScheme, 'feedbackSchemeId')
+  public feedbackScheme?: FeedbackScheme;
 
   @BelongsTo(() => SystemLocale, 'localeId')
   public locale?: SystemLocale;

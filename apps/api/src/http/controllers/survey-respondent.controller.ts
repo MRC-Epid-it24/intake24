@@ -7,7 +7,7 @@ import {
 } from '@intake24/common/types/http';
 import { flattenSchemeWithSection, isMealSection } from '@intake24/common/schemes';
 import { merge } from '@intake24/common/util';
-import { Survey, User } from '@intake24/db';
+import { Survey, User, Scheme, FeedbackScheme } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { Controller } from './controller';
@@ -29,7 +29,9 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
   ): Promise<void> => {
     const { surveyId } = req.params;
 
-    const survey = await Survey.scope('scheme').findByPk(surveyId);
+    const survey = await Survey.findByPk(surveyId, {
+      include: [{ model: Scheme }, { model: FeedbackScheme }],
+    });
     if (!survey || !survey.scheme) throw new NotFoundError();
 
     const {
@@ -38,6 +40,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
       state,
       localeId,
       scheme,
+      feedbackScheme,
       numberOfSubmissionsForFeedback,
       storeUserSessionOnServer,
       suspensionReason,
@@ -76,6 +79,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
       state,
       localeId,
       scheme: { id: scheme.id, type: scheme.type, meals, questions },
+      feedbackScheme,
       numberOfSubmissionsForFeedback,
       storeUserSessionOnServer,
       suspensionReason,

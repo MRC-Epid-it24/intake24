@@ -2,6 +2,7 @@ import { LocaleMessages } from 'vue-i18n';
 import common from './common';
 import dashboard from './dashboard';
 import fdbs from './fdbs';
+import feedbackSchemes from './feedback-schemes';
 import foodGroups from './food-groups';
 import flags from './flags';
 import asServed from './as-served';
@@ -25,6 +26,7 @@ const messages: LocaleMessages = {
   common,
   dashboard,
   fdbs,
+  'feedback-schemes': feedbackSchemes,
   'food-groups': foodGroups,
   flags,
   'as-served': asServed,

@@ -4,6 +4,7 @@ import images from './images';
 import surveys from './surveys';
 import user from './user';
 
+import feedbackScheme from './feedback-scheme.controller';
 import job from './job.controller';
 import language from './language.controller';
 import locale from './locale.controller';
@@ -19,6 +20,7 @@ export * from './images';
 export * from './surveys';
 export * from './user';
 
+export * from './feedback-scheme.controller';
 export * from './job.controller';
 export * from './language.controller';
 export * from './locale.controller';
@@ -35,6 +37,7 @@ export default {
   images,
   surveys,
 
+  feedbackScheme,
   job,
   language,
   locale,

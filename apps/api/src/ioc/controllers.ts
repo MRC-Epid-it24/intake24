@@ -30,26 +30,35 @@ export default (container: AwilixContainer): void => {
     adminFoodController: asFunction(controllers.admin.foods.food),
     adminFoodGroupController: asFunction(controllers.admin.foods.foodGroup),
 
+    // Images
     asServedSetController: asFunction(controllers.admin.images.asServedSet),
     asServedImageController: asFunction(controllers.admin.images.asServedImage),
     guideImageController: asFunction(controllers.admin.images.guide),
     imageMapController: asFunction(controllers.admin.images.map),
+
+    // Localization
     languageController: asFunction(controllers.admin.language),
     localeController: asFunction(controllers.admin.locale),
     nutrientTableController: asFunction(controllers.admin.nutrientTable),
+
+    // Schemes
+    feedbackSchemeController: asFunction(controllers.admin.feedbackScheme),
     schemeController: asFunction(controllers.admin.scheme),
     schemeQuestionController: asFunction(controllers.admin.schemeQuestion),
 
+    // Survey MGMT
     adminSurveyController: asFunction(controllers.admin.surveys.survey),
     adminSurveyDataExportController: asFunction(controllers.admin.surveys.dataExport),
     adminSurveyMgmtController: asFunction(controllers.admin.surveys.mgmt),
     adminSurveyRespondentController: asFunction(controllers.admin.surveys.respondent),
     adminSurveySubmissionController: asFunction(controllers.admin.surveys.submission),
 
+    // System
     jobController: asFunction(controllers.admin.job),
     signInLogController: asFunction(controllers.admin.signInLog),
     taskController: asFunction(controllers.admin.task),
 
+    // ACL
     permissionController: asFunction(controllers.admin.acl.permission),
     roleController: asFunction(controllers.admin.acl.role),
     adminUserController: asFunction(controllers.admin.acl.user),

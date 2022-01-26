@@ -1,15 +1,7 @@
 import { ChartData as ChartJsData } from 'chart.js';
+import { TopFoods } from '@intake24/common/feedback';
 import { NutrientTypeIdEnum } from './character';
 import AggregateFoodStats from './aggregate-food-stats';
-
-export const colorMap: [string, string][] = [
-  ['ch-red', '#FF6384'],
-  ['ch-blue', '#36A2EB'],
-  ['ch-yellow', '#FFCE56'],
-  ['ch-lilac', '#9c27b0'],
-  ['ch-green', '#8bc34a'],
-  ['ch-grey', '#999999'],
-];
 
 export type ChartData = {
   value: number;
@@ -17,13 +9,18 @@ export type ChartData = {
   color: string;
 };
 
-export type TopFoodData = {
-  nutrientTypeId: string;
+export type TopFoodNutrient = {
+  id: string;
+  name: string;
   list: AggregateFoodStats[];
   chart: ChartData[];
-  chartJs?: ChartJsData;
+  chartJs: ChartJsData;
   total: number;
 };
+
+export interface TopFoodData extends TopFoods {
+  nutrients: TopFoodNutrient[];
+}
 
 export const filterAndSortFoodByNutrientTypeId = (
   nutrientTypeId: string,
@@ -46,35 +43,49 @@ export const summarizeOtherFood = (
 };
 
 export const getTopFoods = (
-  nutrients: string[],
+  topFoods: TopFoods,
   foods: AggregateFoodStats[],
-  max = 5
-): TopFoodData[] => {
-  return nutrients.map((nutrientTypeId) => {
-    const foodHighInNutrient = filterAndSortFoodByNutrientTypeId(nutrientTypeId, foods);
+  locale = 'en'
+): TopFoodData => {
+  const { max, colors, nutrientTypes } = topFoods;
+  if (!max || !nutrientTypes.length) return { ...topFoods, nutrients: [] };
+
+  const nutrients = nutrientTypes.map((nutrientType) => {
+    const { id } = nutrientType;
+    const name = nutrientType.name[locale] ?? nutrientType.name.en;
+
+    const foodHighInNutrient = filterAndSortFoodByNutrientTypeId(id, foods);
     const other = foodHighInNutrient.slice(max);
 
-    const list = foodHighInNutrient.slice(0, max).concat(summarizeOtherFood(nutrientTypeId, other));
+    const list = foodHighInNutrient.slice(0, max).concat(summarizeOtherFood(id, other));
 
-    const chart = list.map((food, index) => ({
-      value: food.getAverageIntake(nutrientTypeId),
-      label: food.name,
-      color: colorMap[index][1],
-    }));
+    const labels: string[] = [];
+    const data: number[] = [];
+    const backgroundColor: string[] = [];
 
-    const total = foods
-      .map((f) =>
-        nutrientTypeId === NutrientTypeIdEnum.Energy
-          ? f.getAverageEnergyIntake()
-          : f.getAverageIntake(nutrientTypeId)
-      )
-      .reduce((a, b) => a + b, 0);
+    const chart = list.map((food, index) => {
+      const label = food.name;
+      const value = food.getAverageIntake(id);
+      const color = colors[index];
+
+      labels.push(label);
+      data.push(value);
+      backgroundColor.push(color);
+
+      return { value, label, color };
+    });
+
+    const total = foods.map((f) => f.getAverageIntake(id)).reduce((a, b) => a + b, 0);
 
     return {
-      nutrientTypeId,
+      id,
+      name,
       list,
       chart,
+      chartJs: { labels, datasets: [{ data, backgroundColor }] },
       total: Math.round(total * 10) / 10,
     };
   });
+
+  return { ...topFoods, nutrients };
 };

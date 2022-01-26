@@ -1,3 +1,4 @@
+import { FeedbackSchemeAttributes } from '../models/system/feedback-schemes';
 import type { SchemeAttributes, SurveyState, UserSessionAttributes } from '../models';
 
 export type GenerateUserResponse = {
@@ -19,6 +20,7 @@ export type PublicSurveyEntryResponse = {
 };
 
 export type SchemeEntryResponse = Pick<SchemeAttributes, 'id' | 'type' | 'meals' | 'questions'>;
+export type FeedbackSchemeEntryResponse = FeedbackSchemeAttributes;
 
 export type SurveyEntryResponse = {
   id: string;
@@ -26,6 +28,7 @@ export type SurveyEntryResponse = {
   state: SurveyState;
   localeId: string;
   scheme: SchemeEntryResponse;
+  feedbackScheme?: FeedbackSchemeEntryResponse;
   numberOfSubmissionsForFeedback: number;
   storeUserSessionOnServer: boolean;
   suspensionReason: string | null;

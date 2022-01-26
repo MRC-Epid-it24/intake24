@@ -1,5 +1,7 @@
-export const feedbackStyles = ['default', 'playful'] as const;
-export type FeedbackStyle = typeof feedbackStyles[number];
+import { RequiredLocaleTranslation } from '../types';
+
+export const feedbackTypes = ['default', 'playful'] as const;
+export type FeedbackType = typeof feedbackTypes[number];
 
 export enum NutrientRuleType {
   PERCENTAGE_OF_ENERGY = 'percentage_of_energy',
@@ -31,6 +33,41 @@ export type WeightTargetCoefficient = {
   coefficient: number;
 };
 
+export type FoodGroup = {
+  name: string;
+  high: {
+    threshold: number;
+    message: RequiredLocaleTranslation;
+  } | null;
+  low: {
+    threshold: number;
+    message: RequiredLocaleTranslation;
+  } | null;
+  nutrients: string[];
+  tellMeMore: RequiredLocaleTranslation;
+};
+
+export type TopFoodNutrientType = {
+  id: string;
+  name: RequiredLocaleTranslation;
+};
+
+export type TopFoods = {
+  max: number;
+  colors: string[];
+  nutrientTypes: TopFoodNutrientType[];
+};
+
+export const defaultTopFoods: TopFoods = {
+  max: 5,
+  colors: ['#FF6384', '#36A2EB', '#FFCE56', '#9c27b0', '#8bc34a', '#999999'],
+  nutrientTypes: [
+    { id: '1', name: { en: 'Energy' } },
+    { id: '23', name: { en: 'Sugar' } },
+    { id: '50', name: { en: 'Saturated fat' } },
+  ],
+};
+
 export type HenryCoefficient = {
   sex: Sex;
   ageRange: [number, number];
@@ -39,8 +76,7 @@ export type HenryCoefficient = {
   constant: number;
 };
 
-// TODO: move to database?
-export const henryCoefficientsData: HenryCoefficient[] = [
+export const defaultHenryCoefficients: HenryCoefficient[] = [
   {
     sex: 'm',
     ageRange: [0, 3],

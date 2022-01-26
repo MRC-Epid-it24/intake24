@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
-import { Op, WhereOptions, SystemLocale, Scheme, Survey } from '@intake24/db';
+import { Op, WhereOptions, SystemLocale, Scheme, Survey, FeedbackScheme } from '@intake24/db';
 import {
   searchSortingAlgorithms,
   SurveyAttributes,
@@ -9,6 +9,7 @@ import {
 } from '@intake24/common/types/models';
 import { validateMeals } from '@intake24/common/validators';
 import { unique } from '@intake24/api/http/rules';
+import { feedbackTypes } from '@intake24/common/feedback';
 
 export const defaults: Schema = {
   name: {
@@ -143,10 +144,22 @@ export const defaults: Schema = {
     errorMessage: 'Enter true/false value.',
     isBoolean: true,
   },
+  feedbackSchemeId: {
+    in: ['body'],
+    errorMessage: 'Enter valid feedback scheme.',
+    isString: true,
+    optional: { options: { nullable: true } },
+    custom: {
+      options: async (value): Promise<void> => {
+        const feedbackScheme = await FeedbackScheme.findOne({ where: { id: value } });
+        if (!feedbackScheme) throw new Error('Enter valid feedback scheme.');
+      },
+    },
+  },
   feedbackStyle: {
     in: ['body'],
     errorMessage: 'Enter feedback style.',
-    isIn: { options: [['default']] },
+    isIn: { options: [feedbackTypes] },
     optional: true,
   },
   submissionNotificationUrl: {

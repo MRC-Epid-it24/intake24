@@ -9,9 +9,9 @@
           <td>{{ entry.name }}</td>
         </tr>
         <tr>
-          <th>{{ $t('surveys.locale') }}</th>
+          <th>{{ $t('locales._') }}</th>
           <td>{{ entry.localeId }}</td>
-          <th>{{ $t('surveys.scheme') }}</th>
+          <th>{{ $t('schemes._') }}</th>
           <td>{{ entry.schemeId }}</td>
         </tr>
         <tr>

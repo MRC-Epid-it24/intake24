@@ -6,7 +6,10 @@
         :user-info="userDemographic"
       ></user-demographic-info>
     </v-col>
-    <v-col cols="12">
+    <v-col cols="12" class="mt-4">
+      <!-- Day selector -->
+    </v-col>
+    <v-col cols="12" class="mt-4">
       <feedback-chart-area :food-data="topFoodData"></feedback-chart-area>
     </v-col>
   </v-row>
@@ -20,13 +23,11 @@ import {
   AggregateFoodStats,
   CharacterRules,
   FruitAndVegPortions,
-  NutrientTypeIdEnum,
   FoodGroupFeedback,
   UserDemographic,
   getTopFoods,
-  TopFoodData,
 } from '@intake24/survey/feedback';
-import { FiveADayFeedback } from '@intake24/common/types/http';
+import { FeedbackSchemeEntryResponse, FiveADayFeedback } from '@intake24/common/types/http';
 import UserDemographicInfo from '@intake24/survey/components/feedback/user-demographic-info.vue';
 import {
   FeedbackCardParameters,
@@ -34,7 +35,7 @@ import {
   FoodGroupCardParameters,
   PlayingCardDetails,
 } from '@intake24/survey/components/feedback/cards';
-import FeedbackChartArea from './feedback-chart-area.vue';
+import FeedbackChartArea from '../../components/feedback/feedback-chart-area.vue';
 
 export default Vue.extend({
   name: 'FeedbackHome',
@@ -53,25 +54,20 @@ export default Vue.extend({
       feedbackDicts: null as FeedbackDictionaries | null,
       userDemographic: null as UserDemographic | null,
 
-      // TODO: extract to feedback scheme
-      feedbackStyle: 'default',
-      showTopNumber: 5,
-      topFoodNutrients: [
-        NutrientTypeIdEnum.Energy,
-        NutrientTypeIdEnum.Sugar,
-        NutrientTypeIdEnum.SatdFat,
-      ],
-
       results: [] as FeedbackCardParameters[],
-      topFoodData: [] as TopFoodData[],
+      topFoodData: getTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], this.$i18n.locale),
 
       tellMeMoreVisible: false,
       tellMeMoreDetails: [] as PlayingCardDetails[],
       daysRecorded: undefined as number | undefined,
       currentDay: undefined as number | undefined,
-
-      followUpUrl: null,
     };
+  },
+
+  computed: {
+    feedbackScheme(): FeedbackSchemeEntryResponse | null {
+      return this.$store.state.survey.parameters.feedbackScheme;
+    },
   },
 
   async mounted() {
@@ -151,9 +147,10 @@ export default Vue.extend({
         foodGroupFeedback
       );
 
-      this.topFoodData = getTopFoods(this.topFoodNutrients, foods, this.showTopNumber);
+      const { feedbackScheme } = this;
+      if (!feedbackScheme) return;
 
-      // this.followUpUrl = dictionariesRes[0].followUpUrl;
+      this.topFoodData = getTopFoods(feedbackScheme.topFoods, foods, this.$i18n.locale);
     },
 
     buildFoodGroupFeedbackCards(
@@ -213,7 +210,8 @@ export default Vue.extend({
 
       this.results = characterRules
         .filter(
-          (cr) => !cr.displayInFeedbackStyle || cr.displayInFeedbackStyle === this.feedbackStyle
+          (cr) =>
+            !cr.displayInFeedbackStyle || cr.displayInFeedbackStyle === this.feedbackScheme?.type
         )
         .map((characterRule) => {
           const sentiment = characterRule.getSentiment(userDemographic, foods);
@@ -234,7 +232,7 @@ export default Vue.extend({
         // filter falsy does not narrow down the type
         .filter((sentiment) => sentiment) as FeedbackCardParameters[];
 
-      if (this.feedbackStyle === 'default') {
+      if (this.feedbackScheme?.type === 'default') {
         this.results.push(
           new FiveADayCardParameters(
             Math.round(fruitAndVegAverages.total * 10) / 10,

@@ -1,6 +1,14 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { WhereOptions, Language, SystemLocale, Scheme, Survey, PaginateQuery } from '@intake24/db';
+import {
+  WhereOptions,
+  Language,
+  SystemLocale,
+  Scheme,
+  Survey,
+  PaginateQuery,
+  FeedbackScheme,
+} from '@intake24/db';
 import {
   SurveyEntry,
   SurveyListEntry,
@@ -142,13 +150,14 @@ export default (): AdminSurveyController => {
     req: Request<{ surveyId: string }>,
     res: Response<SurveyRefs>
   ): Promise<void> => {
-    const [languages, locales, schemes] = await Promise.all([
+    const [languages, locales, schemes, feedbackSchemes] = await Promise.all([
       Language.scope('list').findAll(),
       SystemLocale.scope('list').findAll(),
       Scheme.findAll(),
+      FeedbackScheme.findAll(),
     ]);
 
-    res.json({ languages, locales, schemes });
+    res.json({ languages, locales, schemes, feedbackSchemes });
   };
 
   return {

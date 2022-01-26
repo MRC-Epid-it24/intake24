@@ -32,6 +32,7 @@ export type SurveyAttributes = {
   originatingUrl: string | null;
   description: string | null;
   feedbackEnabled: boolean;
+  feedbackSchemeId: string | null;
   feedbackStyle: string;
   submissionNotificationUrl: string | null;
   storeUserSessionOnServer: boolean;
@@ -56,6 +57,7 @@ export type SurveyCreationAttributes = Optional<
   | 'originatingUrl'
   | 'description'
   | 'feedbackEnabled'
+  | 'feedbackSchemeId'
   | 'feedbackStyle'
   | 'submissionNotificationUrl'
   | 'numberOfSubmissionsForFeedback'
@@ -88,6 +90,7 @@ export const updateSurveyFields = [
   'supportEmail',
   'description',
   'feedbackEnabled',
+  'feedbackSchemeId',
   'feedbackStyle',
   'submissionNotificationUrl',
   'storeUserSessionOnServer',

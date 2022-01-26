@@ -18,7 +18,7 @@ import {
 } from '@intake24/common/types/http/feedback';
 import {
   HenryCoefficient,
-  henryCoefficientsData,
+  defaultHenryCoefficients,
   WeightTargetCoefficient,
   weightTargetsData,
 } from '@intake24/common/feedback';
@@ -54,7 +54,7 @@ const feedbackService = () => {
     }));
   };
 
-  const getHenryCoefficients = async (): Promise<HenryCoefficient[]> => henryCoefficientsData;
+  const getHenryCoefficients = async (): Promise<HenryCoefficient[]> => defaultHenryCoefficients;
 
   const getNutrientTypes = async (): Promise<NutrientType[]> => {
     const nutrients = await FoodsNutrientType.findAll({

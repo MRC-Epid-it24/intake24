@@ -1,3 +1,4 @@
+import { FeedbackSchemeEntry } from './feedback-schemes';
 import { LanguageListEntry } from './languages';
 import { SurveyAttributes, SurveyCreationAttributes, Pagination } from '../../models';
 import { LocaleListEntry } from './locales';
@@ -28,4 +29,5 @@ export type SurveyRefs = {
   languages: LanguageListEntry[];
   locales: LocaleListEntry[];
   schemes: SchemeEntry[];
+  feedbackSchemes: FeedbackSchemeEntry[];
 };

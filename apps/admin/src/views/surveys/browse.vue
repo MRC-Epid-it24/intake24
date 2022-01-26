@@ -29,12 +29,12 @@ export default Vue.extend({
           value: 'name',
         },
         {
-          text: this.$t('surveys.locale'),
+          text: this.$t('locales._'),
           sortable: true,
           value: 'localeId',
         },
         {
-          text: this.$t('surveys.scheme'),
+          text: this.$t('schemes._'),
           sortable: true,
           value: 'schemeId',
         },

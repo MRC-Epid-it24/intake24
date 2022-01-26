@@ -46,6 +46,7 @@ import type {
   LanguageController,
   LocaleController,
   NutrientTableController,
+  FeedbackSchemeController,
   SchemeController,
   SchemeQuestionController,
   SignInLogController,
@@ -149,15 +150,24 @@ export interface IoC extends Jobs {
   adminCategoryController: AdminCategoryController;
   adminFoodController: AdminFoodController;
   adminFoodGroupController: AdminFoodGroupController;
+
+  // Images
   asServedSetController: AsServedSetController;
   asServedImageController: AsServedImageController;
   guideImageController: GuideImageController;
   imageMapController: ImageMapController;
+
+  // Localization
   languageController: LanguageController;
   localeController: LocaleController;
   nutrientTableController: NutrientTableController;
+
+  // Schemes
+  feedbackSchemeController: FeedbackSchemeController;
   schemeController: SchemeController;
   schemeQuestionController: SchemeQuestionController;
+
+  // Survey MGMT
   adminSurveyController: AdminSurveyController;
   adminSurveyDataExportController: AdminSurveyDataExportController;
   adminSurveyMgmtController: AdminSurveyMgmtController;

@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-constructor */
 /* eslint-disable max-classes-per-file */
-import { FeedbackStyle, Sentiment } from '@intake24/common/feedback';
+import { FeedbackType, Sentiment } from '@intake24/common/feedback';
 import DemographicGroup from './demographic-group';
 import DemographicResult from './demographic-result';
 import DemographicScaleSector from './demographic-scale-sector';
@@ -77,7 +77,7 @@ export class CharacterRules {
     readonly demographicGroups: ReadonlyArray<DemographicGroup>,
     readonly type: CharacterTypeEnum,
     readonly sentiments: CharacterSentiment[],
-    readonly displayInFeedbackStyle?: FeedbackStyle
+    readonly displayInFeedbackStyle?: FeedbackType
   ) {}
 
   getSentiment(
@@ -146,7 +146,7 @@ export class CharacterBuilder {
     readonly type: CharacterTypeEnum,
     readonly nutrientTypeIds: string[],
     readonly sentiments: CharacterSentiment[],
-    readonly displayInFeedbackStyle?: FeedbackStyle
+    readonly displayInFeedbackStyle?: FeedbackType
   ) {}
 }
 

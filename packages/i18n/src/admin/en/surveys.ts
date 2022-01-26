@@ -11,8 +11,6 @@ const surveys: LocaleMessageObject = {
 
   id: 'Survey ID',
   name: 'Survey name',
-  locale: 'Locale',
-  scheme: 'Scheme',
   states: {
     _: 'State',
     0: 'Not started',

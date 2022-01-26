@@ -30,7 +30,7 @@
                 v-model="form.localeId"
                 :items="refs.locales"
                 :error-messages="form.errors.get('localeId')"
-                :label="$t('surveys.locale')"
+                :label="$t('locales._')"
                 hide-details="auto"
                 item-value="id"
                 item-text="englishName"
@@ -53,7 +53,7 @@
                 v-model="form.schemeId"
                 :error-messages="form.errors.get('schemeId')"
                 :items="refs.schemes"
-                :label="$t('surveys.scheme')"
+                :label="$t('schemes._')"
                 hide-details="auto"
                 item-value="id"
                 item-text="name"
@@ -327,6 +327,20 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-select
+                  v-model="form.feedbackSchemeId"
+                  :error-messages="form.errors.get('feedbackSchemeId')"
+                  :items="availableFeedbackSchemes"
+                  :label="$t('feedback-schemes._')"
+                  hide-details="auto"
+                  item-value="id"
+                  item-text="name"
+                  name="feedbackSchemeId"
+                  outlined
+                  @change="form.errors.clear('feedbackSchemeId')"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-select
                   v-model="form.feedbackStyle"
                   :disabled="!form.feedbackEnabled"
                   :error-messages="form.errors.get('feedbackStyle')"
@@ -359,7 +373,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import { SchemeOverrides, defaultOverrides } from '@intake24/common/schemes';
 import {
   searchSortingAlgorithms,
@@ -372,6 +386,8 @@ import {
 import { pick } from 'lodash';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
+import { FormMixin } from '@intake24/admin/types';
+import { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
 
 export type SurveyForm = {
   id: string | null;
@@ -396,6 +412,7 @@ export type SurveyForm = {
   authUrlTokenLength: number | null;
   storeUserSessionOnServer: boolean;
   feedbackEnabled: boolean;
+  feedbackSchemeId: string | null;
   feedbackStyle: string;
   submissionNotificationUrl: string | null;
   numberOfSubmissionsForFeedback: number;
@@ -430,6 +447,7 @@ export const surveyForm: SurveyForm = {
   authUrlTokenLength: null,
   storeUserSessionOnServer: false,
   feedbackEnabled: false,
+  feedbackSchemeId: null,
   feedbackStyle: 'default',
   submissionNotificationUrl: null,
   numberOfSubmissionsForFeedback: 1,
@@ -443,7 +461,9 @@ export const surveyForm: SurveyForm = {
 
 export const staffSurveyForm: StaffSurveyForm = pick(surveyForm, staffUpdateSurveyFields);
 
-export default Vue.extend({
+type FeedbackSchemeListEntry = { id: string | null; name: string };
+
+export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>).extend({
   name: 'SurveyForm',
 
   mixins: [formMixin],
@@ -470,6 +490,14 @@ export default Vue.extend({
         text: this.$t(`surveys.feedback.styles.${value}`),
       })),
     };
+  },
+
+  computed: {
+    availableFeedbackSchemes(): FeedbackSchemeListEntry[] {
+      if (!this.refsLoaded) return [];
+
+      return [{ id: null, name: 'None' }, ...this.refs.feedbackSchemes];
+    },
   },
 
   watch: {

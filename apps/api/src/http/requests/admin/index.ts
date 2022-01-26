@@ -1,4 +1,5 @@
 import fdbs from './fdbs';
+import feedbackSchemes from './feedback-schemes';
 import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
@@ -14,6 +15,7 @@ import users from './users';
 
 export default {
   fdbs,
+  feedbackSchemes,
   jobs,
   languages,
   locales,
