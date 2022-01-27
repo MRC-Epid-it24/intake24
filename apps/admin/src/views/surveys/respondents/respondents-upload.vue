@@ -9,9 +9,12 @@
       </v-list-item>
     </template>
     <v-card>
-      <v-card-title>
-        <span class="text-h5">{{ $t(`surveys.respondents.upload.title`) }}</span>
-      </v-card-title>
+      <v-toolbar color="primary" dark flat>
+        <v-icon class="mr-3" dark>fa-upload</v-icon>
+        <v-toolbar-title>
+          {{ $t(`surveys.respondents.upload.title`) }}
+        </v-toolbar-title>
+      </v-toolbar>
       <v-form ref="form" @submit.prevent="submit">
         <v-card-text>
           <v-container>

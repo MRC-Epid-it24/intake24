@@ -76,9 +76,9 @@
     </v-list>
     <v-dialog v-model="dialog.show" max-width="600px" persistent>
       <v-card>
-        <v-card-title>
-          <v-icon class="mr-3" color="primary">fa-seedling</v-icon>
-          <span class="text-h5">
+        <v-toolbar color="primary" dark flat>
+          <v-icon class="mr-3" dark>fa-seedling</v-icon>
+          <v-toolbar-title>
             {{
               $t(
                 `feedback-schemes.top-foods.nutrientTypes.${
@@ -86,8 +86,8 @@
                 }`
               )
             }}
-          </span>
-        </v-card-title>
+          </v-toolbar-title>
+        </v-toolbar>
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
           <v-card-text>

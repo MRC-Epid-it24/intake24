@@ -13,10 +13,17 @@
             <v-list-item-avatar>
               <v-icon>fa-grip-vertical</v-icon>
             </v-list-item-avatar>
-            <v-list-item-icon class="mx-2 my-auto px-4 py-4" :style="{ backgroundColor: color }">
+            <v-list-item-icon
+              class="mx-2 my-auto px-4 py-4"
+              :style="{ backgroundColor: color, borderRadius: '50%' }"
+            >
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>{{ color }}</v-list-item-title>
+              <v-list-item-title class="font-weight-medium">
+                {{ color }} ({{
+                  idx + 1 < colors.length ? idx + 1 : $t('feedback-schemes.top-foods.colors.other')
+                }})
+              </v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn
@@ -33,12 +40,12 @@
     </v-list>
     <v-dialog v-model="dialog.show" max-width="600px" persistent>
       <v-card>
-        <v-card-title>
-          <v-icon class="mr-3" color="primary">fa-palette</v-icon>
-          <span class="text-h5">
+        <v-toolbar color="primary" dark flat>
+          <v-icon class="mr-3" dark>fa-palette</v-icon>
+          <v-toolbar-title>
             {{ $t('feedback-schemes.top-foods.colors.edit') }}
-          </span>
-        </v-card-title>
+          </v-toolbar-title>
+        </v-toolbar>
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
           <v-card-text>
@@ -85,7 +92,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     const dialog = (show = false) => ({
       show,
       index: -1,
-      color: '#ef6c00',
+      color: '#EF6C00',
     });
 
     return {

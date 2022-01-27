@@ -7,7 +7,7 @@
   >
     <v-card-title>{{ $t('feedback-schemes.top-foods.title') }}</v-card-title>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
-      <v-container>
+      <v-container fluid>
         <v-row>
           <v-col cols="12" md="6">
             <v-toolbar flat tile color="grey lighten-2">
@@ -15,18 +15,33 @@
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.top-foods.max.title') }}
               </v-toolbar-title>
-            </v-toolbar>
-            <v-card-text>
+              <v-spacer></v-spacer>
               <v-text-field
                 v-model.number="form.topFoods.max"
                 :error-messages="form.errors.get('topFoods.max')"
                 :label="$t('feedback-schemes.top-foods.max._')"
                 :rules="topFoodsMaxRules"
-                hide-details="auto"
-                name="name"
+                background-color="grey lighten-5"
+                dense
+                hide-details
+                name="topFoods.max"
                 outlined
+                single-line
+                :style="{ maxWidth: '75px' }"
               ></v-text-field>
-            </v-card-text>
+            </v-toolbar>
+            <template v-if="nonInputErrors.length">
+              <v-alert
+                v-for="error in nonInputErrors"
+                :key="error.param"
+                class="my-2"
+                dense
+                text
+                type="error"
+              >
+                {{ error.msg }}
+              </v-alert>
+            </template>
             <color-list v-model="form.topFoods.colors" :feedback-scheme-id="id"></color-list>
           </v-col>
           <v-divider vertical></v-divider>
@@ -76,6 +91,7 @@ export default (Vue as VueConstructor<Vue & FeedbackSchemeTopFoods>).extend({
         topFoods: defaultTopFoods,
         foodGroups: [],
       }),
+      nonInputErrorKeys: ['topFoods.max', 'topFoods.colors', 'topFoods.nutrientTypes'],
     };
   },
 
@@ -114,7 +130,7 @@ export default (Vue as VueConstructor<Vue & FeedbackSchemeTopFoods>).extend({
       } else if (size > this.form.topFoods.colors.length) {
         const newColors = Array.from<string>({
           length: size - this.form.topFoods.colors.length,
-        }).fill('#ef6c00');
+        }).fill('#EF6C00');
 
         this.form.topFoods.colors = [...this.form.topFoods.colors, ...newColors];
       }

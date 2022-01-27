@@ -31,6 +31,7 @@ const schemes: LocaleMessageObject = {
     create: 'New meal',
     edit: 'Edit meal',
     remove: 'Remove meal',
+    name: 'Meal name',
     reset: {
       _: 'Reset meals',
       text: 'Reset meals to default list',

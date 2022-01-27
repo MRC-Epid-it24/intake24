@@ -9,9 +9,12 @@
       </v-list-item>
     </template>
     <v-card>
-      <v-card-title>
-        <span class="text-h5">{{ $t(`surveys.respondents.authUrls.title`) }}</span>
-      </v-card-title>
+      <v-toolbar color="primary" dark flat>
+        <v-icon class="mr-3" dark>fa-download</v-icon>
+        <v-toolbar-title>
+          {{ $t(`surveys.respondents.authUrls.title`) }}
+        </v-toolbar-title>
+      </v-toolbar>
       <v-card-text>
         <v-container>
           <v-row justify="center">

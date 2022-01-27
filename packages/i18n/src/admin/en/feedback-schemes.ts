@@ -23,18 +23,19 @@ const feedbackSchemes: LocaleMessageObject = {
     title: 'Top foods',
     tab: 'Top foods',
     max: {
-      _: 'Number of foods',
-      title: 'Number of foods to display',
+      _: 'Foods number',
+      title: 'Number of foods',
       required: 'Value must be an integer',
     },
     colors: {
       _: 'Color',
       title: 'Color list',
       edit: 'Edit color',
+      other: 'Other food',
     },
     nutrientTypes: {
       _: 'Nutrient type',
-      title: 'Nutrient types to display',
+      title: 'Nutrient types',
       create: 'Add nutrient type',
       edit: 'Edit nutrient type',
       remove: 'Remove nutrient type',

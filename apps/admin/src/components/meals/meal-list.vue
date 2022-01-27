@@ -58,16 +58,16 @@
     </v-list>
     <v-dialog v-model="dialog.show" max-width="600px" persistent>
       <v-card>
-        <v-card-title>
-          <v-icon class="mr-3" color="primary">fa-hamburger</v-icon>
-          <span class="text-h5">
+        <v-toolbar color="primary" dark flat>
+          <v-icon class="mr-3" dark>fa-hamburger</v-icon>
+          <v-toolbar-title>
             {{ $t(`schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}
-          </span>
-        </v-card-title>
+          </v-toolbar-title>
+        </v-toolbar>
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
           <language-selector
-            :label="$t('schemes.questions.text')"
+            :label="$t('schemes.meals.name')"
             v-model="dialog.meal.name"
             flat
             :outlined="false"
@@ -76,7 +76,7 @@
               <v-text-field
                 v-model="dialog.meal.name[lang]"
                 :key="lang"
-                :label="$t('schemes.meals._')"
+                :label="$t('schemes.meals.name')"
                 :rules="rules(lang)"
                 hide-details="auto"
                 outlined
