@@ -16,7 +16,7 @@
         <v-col cols="12">
           <v-switch
             :input-value="other"
-            :label="$t('schemes.questions.other')"
+            :label="$t('survey-schemes.questions.other')"
             hide-details="auto"
             @change="update('other', $event)"
           ></v-switch>
@@ -24,13 +24,13 @@
         <v-col cols="12">
           <language-selector
             :default="[]"
-            :label="$t('schemes.questions.label')"
+            :label="$t('survey-schemes.questions.label')"
             :value="label"
             @input="update('label', $event)"
           >
             <template v-for="lang in Object.keys(label)" v-slot:[`lang.${lang}`]>
               <v-text-field
-                :label="$t('schemes.questions.label')"
+                :label="$t('survey-schemes.questions.label')"
                 :key="lang"
                 :value="label[lang]"
                 hide-details="auto"
@@ -43,7 +43,7 @@
       </v-row>
       <language-selector
         :default="[]"
-        :label="$t('schemes.questions.options.title')"
+        :label="$t('survey-schemes.questions.options.title')"
         :value="options"
         @input="update('options', $event)"
       >

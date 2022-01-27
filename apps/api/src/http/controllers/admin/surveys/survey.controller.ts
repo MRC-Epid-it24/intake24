@@ -4,8 +4,8 @@ import {
   WhereOptions,
   Language,
   SystemLocale,
-  Scheme,
   Survey,
+  SurveyScheme,
   PaginateQuery,
   FeedbackScheme,
 } from '@intake24/db';
@@ -37,7 +37,7 @@ export default (): AdminSurveyController => {
     const { surveyId } = req.params;
 
     const survey = await Survey.findByPk(surveyId, {
-      include: [{ model: SystemLocale }, { model: FeedbackScheme }, { model: Scheme }],
+      include: [{ model: SystemLocale }, { model: FeedbackScheme }, { model: SurveyScheme }],
     });
     if (!survey) throw new NotFoundError();
 
@@ -152,14 +152,14 @@ export default (): AdminSurveyController => {
     req: Request<{ surveyId: string }>,
     res: Response<SurveyRefs>
   ): Promise<void> => {
-    const [languages, locales, schemes, feedbackSchemes] = await Promise.all([
+    const [languages, locales, surveySchemes, feedbackSchemes] = await Promise.all([
       Language.scope('list').findAll(),
       SystemLocale.scope('list').findAll(),
-      Scheme.findAll(),
+      SurveyScheme.findAll(),
       FeedbackScheme.findAll(),
     ]);
 
-    res.json({ languages, locales, schemes, feedbackSchemes });
+    res.json({ languages, locales, surveySchemes, feedbackSchemes });
   };
 
   return {

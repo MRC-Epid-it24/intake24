@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
-import { Op, WhereOptions, SystemLocale, Scheme, Survey, FeedbackScheme } from '@intake24/db';
+import { Op, WhereOptions, SystemLocale, SurveyScheme, Survey, FeedbackScheme } from '@intake24/db';
 import {
   searchSortingAlgorithms,
   SurveyAttributes,
@@ -45,15 +45,15 @@ export const defaults: Schema = {
     isEmpty: { negated: true },
     toDate: true,
   },
-  schemeId: {
+  surveySchemeId: {
     in: ['body'],
     errorMessage: 'Enter valid survey scheme.',
     isString: true,
     isEmpty: { negated: true },
     custom: {
       options: async (value): Promise<void> => {
-        const scheme = await Scheme.findOne({ where: { id: value } });
-        if (!scheme) throw new Error('Enter valid scheme.');
+        const scheme = await SurveyScheme.findOne({ where: { id: value } });
+        if (!scheme) throw new Error('Enter valid survey scheme.');
       },
     },
   },

@@ -37,7 +37,7 @@ export default (): void => {
       'name',
       'state',
       'localeId',
-      'scheme',
+      'surveyScheme',
       'feedbackScheme',
       'numberOfSubmissionsForFeedback',
       'storeUserSessionOnServer',

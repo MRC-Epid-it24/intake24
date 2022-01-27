@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-switch
           :input-value="required"
-          :label="$t('schemes.questions.validation.required')"
+          :label="$t('survey-schemes.questions.validation.required')"
           hide-details="auto"
           @change="update('required', $event)"
         ></v-switch>
@@ -12,7 +12,7 @@
       <v-col cols="12">
         <language-selector
           :disabled="!required"
-          :label="$t('schemes.questions.validation.message')"
+          :label="$t('survey-schemes.questions.validation.message')"
           :value="message"
           @input="update('message', $event)"
         >
@@ -20,7 +20,7 @@
             <v-text-field
               :disabled="!required"
               :key="lang"
-              :label="$t('schemes.questions.validation.message')"
+              :label="$t('survey-schemes.questions.validation.message')"
               :value="message[lang]"
               hide-details="auto"
               outlined

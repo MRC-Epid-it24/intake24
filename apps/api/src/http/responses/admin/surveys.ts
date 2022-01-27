@@ -2,8 +2,8 @@ import { SurveyEntry, SurveyListEntry } from '@intake24/common/types/http/admin'
 import { Survey } from '@intake24/db';
 
 export const surveyListResponse = (survey: Survey): SurveyListEntry => {
-  const { id, name, localeId, schemeId, state } = survey;
-  return { id, name, localeId, schemeId, state };
+  const { id, name, localeId, surveySchemeId, state } = survey;
+  return { id, name, localeId, surveySchemeId, state };
 };
 
 export const surveyResponse = (survey: Survey): SurveyEntry => {

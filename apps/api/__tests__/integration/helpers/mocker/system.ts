@@ -15,19 +15,14 @@ import {
 } from '@intake24/common/types/http/admin';
 import {
   FeedbackSchemeCreationAttributes,
-  SchemeCreationAttributes,
-  SchemeQuestionCreationAttributes,
-  SchemeTypes,
+  SurveySchemeCreationAttributes,
+  SurveySchemeQuestionCreationAttributes,
   searchSortingAlgorithms,
   surveyStates,
 } from '@intake24/common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
 import { customPromptQuestions } from '@intake24/common/prompts';
-import {
-  defaultHenryCoefficients,
-  defaultTopFoods,
-  feedbackTypes,
-} from '@intake24/common/feedback';
+import { defaultHenryCoefficients, defaultTopFoods } from '@intake24/common/feedback';
 
 const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
@@ -155,22 +150,20 @@ const locale = (
   };
 };
 
-const scheme = (): SchemeCreationAttributes => {
-  const id = slugify(nanoid(16), { strict: true });
+const surveyScheme = (): SurveySchemeCreationAttributes => {
   const name = faker.random.words(3);
-  const type = SchemeTypes.DATA_DRIVEN;
+  const type = 'default';
 
   return {
-    id,
     name,
     type,
     questions: defaultQuestions,
     meals: defaultMeals,
-    export: defaultExport,
+    dataExport: defaultExport,
   };
 };
 
-const schemeQuestion = (): SchemeQuestionCreationAttributes => {
+const surveySchemeQuestion = (): SurveySchemeQuestionCreationAttributes => {
   const question = {
     ...customPromptQuestions[
       faker.datatype.number({ min: 0, max: customPromptQuestions.length - 1 })
@@ -187,7 +180,7 @@ const schemeQuestion = (): SchemeQuestionCreationAttributes => {
 };
 
 const survey = (
-  schemeId = 'default',
+  surveySchemeId = '1',
   localeId = 'en_GB',
   feedbackSchemeId = null
 ): CreateSurveyRequest => {
@@ -231,7 +224,7 @@ const survey = (
     state,
     startDate,
     endDate,
-    schemeId,
+    surveySchemeId,
     localeId,
     allowGenUsers,
     supportEmail,
@@ -281,12 +274,13 @@ const task = (): CreateTaskRequest => {
 };
 
 export default {
+  feedbackScheme,
   language,
   locale,
   permission,
   role,
-  scheme,
-  schemeQuestion,
+  surveyScheme,
+  surveySchemeQuestion,
   survey,
   submission,
   respondent,

@@ -14,8 +14,8 @@ import {
   UserSurveyAlias,
   SubmissionScope,
   submissionScope,
-  Scheme,
   FeedbackScheme,
+  SurveyScheme,
 } from '@intake24/db';
 import { randomUUID } from 'crypto';
 import { SurveyState } from '@intake24/common/types';
@@ -230,10 +230,10 @@ const surveyService = ({
    * @returns {(Promise<string | null>)}
    */
   const getFollowUpUrl = async (survey: Survey, userId: string): Promise<string | null> => {
-    const { id: surveyId, scheme } = survey;
-    if (!scheme) throw new NotFoundError();
+    const { id: surveyId, surveyScheme } = survey;
+    if (!surveyScheme) throw new NotFoundError();
 
-    const redirectPrompt = scheme.questions.submission.find(
+    const redirectPrompt = surveyScheme.questions.submission.find(
       (question) => question.component === 'redirect-prompt'
     );
     if (!redirectPrompt) return null;
@@ -307,15 +307,15 @@ const surveyService = ({
     input: SurveyState
   ): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.findByPk(surveyId, {
-      include: [{ model: Scheme, required: true }, { model: FeedbackScheme }],
+      include: [{ model: SurveyScheme, required: true }, { model: FeedbackScheme }],
     });
-    if (!survey || !survey.scheme) throw new NotFoundError();
+    if (!survey || !survey.surveyScheme) throw new NotFoundError();
 
     const {
       preMeals,
       postMeals,
       meals: { preFoods, postFoods },
-    } = survey.scheme.questions;
+    } = survey.surveyScheme.questions;
 
     const surveyCustomQuestions = [...preMeals, ...postMeals]
       .filter((question) => question.type === 'custom')
@@ -406,9 +406,9 @@ const surveyService = ({
 
   const followUp = async (surveyId: string, userId: string): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.findByPk(surveyId, {
-      include: [{ model: Scheme, required: true }, { model: FeedbackScheme }],
+      include: [{ model: SurveyScheme, required: true }, { model: FeedbackScheme }],
     });
-    if (!survey || !survey.scheme) throw new NotFoundError();
+    if (!survey || !survey.surveyScheme) throw new NotFoundError();
 
     const [followUpUrl, showFeedback] = await Promise.all([
       getFollowUpUrl(survey, userId),

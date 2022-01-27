@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const permissions = [
-        { name: 'schemes-data-export', display_name: 'Schemes data export' },
+        { name: 'schemes-data-export', display_name: 'Survey scheme data export' },
         { name: 'surveys-data-export', display_name: 'Survey data export' },
       ];
       await createPermissions(permissions, { queryInterface, transaction });

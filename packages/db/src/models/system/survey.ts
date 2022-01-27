@@ -23,7 +23,7 @@ import {
   GenUserCounter,
   SystemLocale,
   Permission,
-  Scheme,
+  SurveyScheme,
   SurveySubmission,
   UserSession,
   UserSurveyAlias,
@@ -33,7 +33,7 @@ import {
 @Scopes(() => ({
   counter: { include: [{ model: GenUserCounter }] },
   locale: { include: [{ model: SystemLocale }] },
-  scheme: { include: [{ model: Scheme }] },
+  surveyScheme: { include: [{ model: SurveyScheme }] },
   respondents: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
   clientErrors: { include: [{ model: ClientErrorReport }] },
@@ -80,9 +80,9 @@ export default class Survey
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(64),
+    type: DataType.BIGINT,
   })
-  public schemeId!: string;
+  public surveySchemeId!: string;
 
   @Column({
     allowNull: false,
@@ -243,8 +243,8 @@ export default class Survey
   @BelongsTo(() => SystemLocale, 'localeId')
   public locale?: SystemLocale;
 
-  @BelongsTo(() => Scheme, 'schemeId')
-  public scheme?: Scheme;
+  @BelongsTo(() => SurveyScheme, 'surveySchemeId')
+  public surveyScheme?: SurveyScheme;
 
   @HasMany(() => UserSurveyAlias, {
     onUpdate: 'CASCADE',

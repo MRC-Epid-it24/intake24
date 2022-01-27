@@ -8,7 +8,7 @@
           color="secondary"
           fab
           small
-          :title="$t('schemes.questions.templates.add')"
+          :title="$t('survey-schemes.questions.templates.add')"
         >
           <v-icon>fa-download</v-icon>
         </v-btn>
@@ -20,7 +20,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t('schemes.questions.templates.title') }}
+          {{ $t('survey-schemes.questions.templates.title') }}
         </v-toolbar-title>
       </v-toolbar>
       <v-card-text class="pa-6">
@@ -40,7 +40,7 @@
         </v-text-field>
         <v-alert v-if="questionAlreadyExists" text type="error">
           {{
-            $t('schemes.questions.templates.alreadyExists', {
+            $t('survey-schemes.questions.templates.alreadyExists', {
               questionId: selectedQuestion.questionId,
             })
           }}
@@ -69,7 +69,7 @@
           </v-list-item-group>
         </v-list>
         <v-alert v-else color="primary" text type="info">
-          {{ $t('schemes.questions.templates.none') }}
+          {{ $t('survey-schemes.questions.templates.none') }}
         </v-alert>
       </v-card-text>
       <v-card-actions>
@@ -198,7 +198,7 @@ export default (Vue as VueConstructor<Vue & LoadPromptDialog>).extend({
       const { search } = this;
 
       const { data } = await this.$http.get<PromptQuestion[]>(
-        `admin/schemes/${this.schemeId}/templates`,
+        `admin/survey-schemes/${this.schemeId}/templates`,
         { params: { search, limit: 5 } }
       );
 

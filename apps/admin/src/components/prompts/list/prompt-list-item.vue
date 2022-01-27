@@ -13,12 +13,12 @@
       <v-list-item-subtitle>
         <v-icon :color="isInSyncWithTemplate ? `success` : `warning`" left>fa-sync</v-icon>
         <span color="success">
-          {{ $t(`scheme-questions.sync.${isInSyncWithTemplate ? 'true' : 'false'}`) }}
+          {{ $t(`survey-scheme-questions.sync.${isInSyncWithTemplate ? 'true' : 'false'}`) }}
         </span>
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>
-      <v-btn icon :title="$t('schemes.questions.edit')" @click.stop="edit">
+      <v-btn icon :title="$t('survey-schemes.questions.edit')" @click.stop="edit">
         <v-icon color="primary lighten-1">$edit</v-icon>
       </v-btn>
     </v-list-item-action>
@@ -37,7 +37,7 @@
         </template>
         <v-list>
           <confirm-dialog
-            :label="$t('schemes.questions.move')"
+            :label="$t('survey-schemes.questions.move')"
             color="primary lighten-1"
             max-width="450px"
             @close="clearMoveToSection"
@@ -47,25 +47,25 @@
               <v-list-item link v-bind="attrs" v-on="on">
                 <v-list-item-title>
                   <v-icon left>fa-exchange-alt</v-icon>
-                  {{ $t('schemes.questions.move') }}
+                  {{ $t('survey-schemes.questions.move') }}
                 </v-list-item-title>
               </v-list-item>
             </template>
             <v-select
               v-model="moveToSection"
               :items="moveSections"
-              :label="$t('schemes.questions.section')"
+              :label="$t('survey-schemes.questions.section')"
               hide-details="auto"
               outlined
             ></v-select>
           </confirm-dialog>
           <save-as-template-dialog
-            v-if="can('scheme-questions|create')"
+            v-if="can('survey-schemes-questions|create')"
             :disabled="hasTemplate"
             :question="question"
           ></save-as-template-dialog>
           <confirm-dialog
-            :label="$t('scheme-questions.sync.synchronize')"
+            :label="$t('survey-scheme-questions.sync.synchronize')"
             color="primary lighten-1"
             max-width="450px"
             @confirm="sync"
@@ -79,17 +79,17 @@
               >
                 <v-list-item-title>
                   <v-icon left :disabled="!hasTemplate || isInSyncWithTemplate">fa-sync</v-icon>
-                  {{ $t('scheme-questions.sync.synchronize') }}
+                  {{ $t('survey-scheme-questions.sync.synchronize') }}
                 </v-list-item-title>
               </v-list-item>
             </template>
-            {{ $t('scheme-questions.sync.confirm') }}
+            {{ $t('survey-scheme-questions.sync.confirm') }}
           </confirm-dialog>
         </v-list>
       </v-menu>
     </v-list-item-action>
     <v-list-item-action>
-      <v-btn icon :title="$t('schemes.questions.remove')" @click.stop="remove">
+      <v-btn icon :title="$t('survey-schemes.questions.remove')" @click.stop="remove">
         <v-icon color="error">$delete</v-icon>
       </v-btn>
     </v-list-item-action>

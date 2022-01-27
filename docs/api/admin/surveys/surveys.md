@@ -256,6 +256,7 @@ Content-Type: application/json
         },
         ...
     ],
-    "schemes": [{...}]
+    "feedbackSchemes": [{...}],
+    "surveySchemes": [{...}]
 }
 ```

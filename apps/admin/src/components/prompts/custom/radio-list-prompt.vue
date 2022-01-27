@@ -17,7 +17,7 @@
           <v-select
             :value="orientation"
             :items="orientations"
-            :label="$t('schemes.questions.orientation._')"
+            :label="$t('survey-schemes.questions.orientation._')"
             hide-details="auto"
             outlined
             @change="update('orientation', $event)"
@@ -26,7 +26,7 @@
         <v-col cols="12">
           <v-switch
             :input-value="other"
-            :label="$t('schemes.questions.other')"
+            :label="$t('survey-schemes.questions.other')"
             hide-details="auto"
             @change="update('other', $event)"
           ></v-switch>
@@ -34,13 +34,13 @@
         <v-col cols="12">
           <language-selector
             :default="[]"
-            :label="$t('schemes.questions.label')"
+            :label="$t('survey-schemes.questions.label')"
             :value="label"
             @input="update('label', $event)"
           >
             <template v-for="lang in Object.keys(label)" v-slot:[`lang.${lang}`]>
               <v-text-field
-                :label="$t('schemes.questions.label')"
+                :label="$t('survey-schemes.questions.label')"
                 :key="lang"
                 :value="label[lang]"
                 hide-details="auto"
@@ -53,7 +53,7 @@
       </v-row>
       <language-selector
         :default="[]"
-        :label="$t('schemes.questions.options.title')"
+        :label="$t('survey-schemes.questions.options.title')"
         :value="options"
         @input="update('options', $event)"
       >
@@ -88,8 +88,8 @@ export default Vue.extend({
   data() {
     return {
       orientations: [
-        { text: this.$t('schemes.questions.orientation.column'), value: 'column' },
-        { text: this.$t('schemes.questions.orientation.row'), value: 'row' },
+        { text: this.$t('survey-schemes.questions.orientation.column'), value: 'column' },
+        { text: this.$t('survey-schemes.questions.orientation.row'), value: 'row' },
       ],
     };
   },

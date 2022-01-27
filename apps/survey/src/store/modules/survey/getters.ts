@@ -29,7 +29,7 @@ const getters: GetterTree<SurveyState, RootState> = {
   },
 
   defaultSchemeMeals: (state): Meals | undefined => {
-    return state.parameters?.scheme.meals;
+    return state.parameters?.surveyScheme.meals;
   },
 
   selection: (state): Selection | undefined => {

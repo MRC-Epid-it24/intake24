@@ -9,8 +9,8 @@ import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
 import nutrientTables from './nutrient-tables';
-import schemes from './schemes';
-import schemeQuestions from './scheme-questions';
+import surveySchemes from './survey-schemes';
+import surveySchemeQuestions from './survey-scheme-questions';
 import signInLogs from './sign-in-logs';
 import surveys from './surveys';
 import permissions from './permissions';
@@ -30,8 +30,8 @@ const views: Dictionary = {
   languages,
   locales,
   'nutrient-tables': nutrientTables,
-  schemes,
-  'scheme-questions': schemeQuestions,
+  'survey-schemes': surveySchemes,
+  'survey-scheme-questions': surveySchemeQuestions,
   'sign-in-logs': signInLogs,
   surveys,
   permissions,

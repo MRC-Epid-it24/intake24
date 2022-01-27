@@ -1,14 +1,14 @@
 <template>
   <v-tab-item key="content">
     <language-selector
-      :label="$t('schemes.questions.text')"
+      :label="$t('survey-schemes.questions.text')"
       :value="text"
       @input="update('text', $event)"
     >
       <template v-for="lang in Object.keys(text)" v-slot:[`lang.${lang}`]>
         <v-text-field
           :key="lang"
-          :label="$t('schemes.questions.text')"
+          :label="$t('survey-schemes.questions.text')"
           :rules="textRules"
           :value="text[lang]"
           hide-details="auto"
@@ -18,7 +18,7 @@
       </template>
     </language-selector>
     <language-selector
-      :label="$t('schemes.questions.description')"
+      :label="$t('survey-schemes.questions.description')"
       :value="description"
       @input="update('description', $event)"
     >

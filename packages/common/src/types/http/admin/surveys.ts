@@ -2,7 +2,7 @@ import { FeedbackSchemeEntry } from './feedback-schemes';
 import { LanguageListEntry } from './languages';
 import { SurveyAttributes, SurveyCreationAttributes, Pagination } from '../../models';
 import { LocaleListEntry } from './locales';
-import { SchemeEntry } from './schemes';
+import { SurveySchemeEntry } from './survey-schemes';
 
 export interface SurveyRequest extends Omit<SurveyCreationAttributes, 'startDate' | 'endDate'> {
   startDate: string;
@@ -15,7 +15,7 @@ export type UpdateSurveyRequest = Omit<SurveyRequest, 'id'>;
 
 export type SurveyListEntry = Pick<
   SurveyAttributes,
-  'id' | 'name' | 'localeId' | 'schemeId' | 'state'
+  'id' | 'name' | 'localeId' | 'surveySchemeId' | 'state'
 >;
 
 export type SurveysResponse = Pagination<SurveyListEntry>;
@@ -28,6 +28,6 @@ export interface SurveyEntry extends Omit<SurveyAttributes, 'startDate' | 'endDa
 export type SurveyRefs = {
   languages: LanguageListEntry[];
   locales: LocaleListEntry[];
-  schemes: SchemeEntry[];
+  surveySchemes: SurveySchemeEntry[];
   feedbackSchemes: FeedbackSchemeEntry[];
 };

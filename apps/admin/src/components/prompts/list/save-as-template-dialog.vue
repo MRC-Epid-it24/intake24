@@ -4,18 +4,18 @@
       <v-list-item link v-bind="attrs" v-on="on" :disabled="disabled">
         <v-list-item-title>
           <v-icon left :disabled="disabled">fa-save</v-icon>
-          {{ $t('schemes.questions.templates.saveAs._') }}
+          {{ $t('survey-schemes.questions.templates.saveAs._') }}
         </v-list-item-title>
       </v-list-item>
     </template>
     <v-card>
-      <v-card-title>{{ $t('schemes.questions.templates.saveAs.title') }}</v-card-title>
+      <v-card-title>{{ $t('survey-schemes.questions.templates.saveAs.title') }}</v-card-title>
       <v-card-text class="pa-6">
         <v-row>
           <v-col cols="12">
             <v-text-field
               v-model="form.question.id"
-              :label="$t('schemes.questions.id')"
+              :label="$t('survey-schemes.questions.id')"
               disabled
               hide-details="auto"
               name="id"
@@ -26,7 +26,7 @@
           <v-col cols="12">
             <v-text-field
               v-model="form.question.name"
-              :label="$t('schemes.questions.name')"
+              :label="$t('survey-schemes.questions.name')"
               disabled
               hide-details="auto"
               name="name"
@@ -55,7 +55,7 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="confirm">
-          <v-icon left>$success</v-icon>{{ $t('schemes.questions.templates.saveAs._') }}
+          <v-icon left>$success</v-icon>{{ $t('survey-schemes.questions.templates.saveAs._') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -66,7 +66,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { copy } from '@intake24/common/util';
 import pick from 'lodash/pick';
-import { SchemeQuestionEntry, SchemeRefs } from '@intake24/common/types/http/admin';
+import { SurveySchemeQuestionEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { PromptQuestion } from '@intake24/common/prompts';
 import { ValidationError } from '@intake24/common/types';
 import { MapRefsMixin } from '@intake24/admin/types';
@@ -78,7 +78,7 @@ export type SchemeQuestionForm = {
   question: PromptQuestion;
 };
 
-export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
+export default (Vue as VueConstructor<Vue & MapRefsMixin<SurveySchemeRefs>>).extend({
   name: 'SaveAsTemplateDialog',
 
   mixins: [mapRefs],
@@ -121,7 +121,9 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
     },
 
     async confirm() {
-      const { id, question } = await this.form.post<SchemeQuestionEntry>('admin/scheme-questions');
+      const { id, question } = await this.form.post<SurveySchemeQuestionEntry>(
+        'admin/survey-scheme-questions'
+      );
 
       const templates = copy(this.refs.templates);
       templates.push(question);
@@ -130,7 +132,8 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SchemeRefs>>).extend({
 
       this.close();
 
-      if (this.redirect) this.$router.push({ name: 'scheme-questions-detail', params: { id } });
+      if (this.redirect)
+        this.$router.push({ name: 'survey-scheme-questions-read', params: { id } });
     },
   },
 });

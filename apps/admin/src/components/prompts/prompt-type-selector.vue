@@ -2,17 +2,17 @@
   <v-tab-item :key="type">
     <v-container>
       <v-alert v-if="questions.length === 0" color="primary" text type="info">
-        {{ $t(`schemes.questions.${type}.noQuestions`) }}
+        {{ $t(`survey-schemes.questions.${type}.noQuestions`) }}
       </v-alert>
       <v-row v-else>
         <v-col v-for="question in questions" :key="question.id" cols="12" md="3">
           <v-item v-slot:default="{ active, toggle }" :value="question.component">
             <v-card :color="active ? 'primary' : ''" dark height="180" @click.stop="toggle">
               <v-card-title class="justify-center">
-                {{ $t(`schemes.prompts.${question.id}.title`) }}
+                {{ $t(`survey-schemes.prompts.${question.id}.title`) }}
               </v-card-title>
               <v-card-subtitle class="text-center">
-                {{ $t(`schemes.prompts.${question.id}.subtitle`) }}
+                {{ $t(`survey-schemes.prompts.${question.id}.subtitle`) }}
               </v-card-subtitle>
               <v-card-text v-show="active" class="text-center">
                 <v-icon x-large>fa-check-circle</v-icon>

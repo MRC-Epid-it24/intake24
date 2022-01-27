@@ -236,12 +236,16 @@ export default defineConfig({
               link: '/api/admin/nutrient-tables',
             },
             {
-              text: 'Schemes',
-              link: '/api/admin/schemes',
+              text: 'Feedback schemes',
+              link: '/api/admin/feedback-schemes',
             },
             {
-              text: 'Scheme questions',
-              link: '/api/admin/scheme-questions',
+              text: 'Survey schemes',
+              link: '/api/admin/survey-schemes',
+            },
+            {
+              text: 'Survey scheme questions',
+              link: '/api/admin/survey-scheme-questions',
             },
             {
               text: 'Sign-in logs',
@@ -369,12 +373,16 @@ export default defineConfig({
           text: 'Surveys MGMT',
           children: [
             {
-              text: 'Schemes',
-              link: '/admin/surveys/schemes',
+              text: 'Feedback schemes',
+              link: '/admin/surveys/feedback-schemes',
             },
             {
-              text: 'Scheme questions',
-              link: '/admin/surveys/scheme-questions',
+              text: 'Survey schemes',
+              link: '/admin/surveys/survey-schemes',
+            },
+            {
+              text: 'Survey scheme questions',
+              link: '/admin/surveys/survey-scheme-questions',
             },
             {
               text: 'Surveys',

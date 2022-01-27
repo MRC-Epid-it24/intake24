@@ -11,15 +11,15 @@
       @update:conditions="update('conditions', $event)"
     ></prompt-conditions>
     <v-tab-item key="options">
-      <v-card-title>{{ $t('schemes.redirect.url.title') }}</v-card-title>
-      <v-card-subtitle>{{ $t('schemes.redirect.url.subtitle') }}</v-card-subtitle>
+      <v-card-title>{{ $t('survey-schemes.redirect.url.title') }}</v-card-title>
+      <v-card-subtitle>{{ $t('survey-schemes.redirect.url.subtitle') }}</v-card-subtitle>
       <v-card-text>
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field
               :value="url"
-              :label="$t('schemes.redirect.url._')"
-              :hint="$t('schemes.redirect.url.hint')"
+              :label="$t('survey-schemes.redirect.url._')"
+              :hint="$t('survey-schemes.redirect.url.hint')"
               persistent-hint
               hide-details="auto"
               name="url"
@@ -31,7 +31,7 @@
             <v-select
               :value="identifier"
               :items="identifiers"
-              :label="$t('schemes.redirect.identifier._')"
+              :label="$t('survey-schemes.redirect.identifier._')"
               hide-details="auto"
               outlined
               @change="update('identifier', $event)"
@@ -39,13 +39,13 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-title>{{ $t('schemes.redirect.timer.title') }}</v-card-title>
+      <v-card-title>{{ $t('survey-schemes.redirect.timer.title') }}</v-card-title>
       <v-card-text>
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field
               :value="timer"
-              :label="$t('schemes.redirect.timer._')"
+              :label="$t('survey-schemes.redirect.timer._')"
               :rules="timerRules"
               hide-details="auto"
               name="timer"
@@ -98,7 +98,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   data() {
     return {
       identifiers: ['userId', 'username', 'token', 'custom'].map((value) => ({
-        text: this.$t(`schemes.redirect.identifier.options.${value}`),
+        text: this.$t(`survey-schemes.redirect.identifier.options.${value}`),
         value,
       })),
     };

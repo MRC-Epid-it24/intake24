@@ -9,7 +9,7 @@
           color="secondary"
           fab
           small
-          :title="$t('schemes.load')"
+          :title="$t('survey-schemes.load')"
         >
           <v-icon>fa-download</v-icon>
         </v-btn>
@@ -21,7 +21,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t('schemes.load') }}
+          {{ $t('survey-schemes.load') }}
         </v-toolbar-title>
       </v-toolbar>
       <v-card-text class="pa-6">
@@ -61,7 +61,7 @@
           </v-list-item-group>
         </v-list>
         <v-alert v-else color="primary" text type="info">
-          {{ $t('schemes.none') }}
+          {{ $t('survey-schemes.none') }}
         </v-alert>
       </v-card-text>
       <v-card-actions>
@@ -87,7 +87,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
-import { SchemeEntry, SchemesResponse } from '@intake24/common/types/http/admin';
+import { SurveySchemeEntry, SurveySchemesResponse } from '@intake24/common/types/http/admin';
 import { RecallQuestions } from '@intake24/common/schemes';
 import { Meal } from '@intake24/common/types';
 import { ExportSection } from '@intake24/common/types/models';
@@ -105,7 +105,7 @@ export default (Vue as VueConstructor<Vue & LoadSectionDialog>).extend({
       required: true,
     },
     section: {
-      type: String as () => 'export' | 'meals' | 'questions',
+      type: String as () => 'dataExport' | 'meals' | 'questions',
       required: true,
     },
   },
@@ -115,7 +115,7 @@ export default (Vue as VueConstructor<Vue & LoadSectionDialog>).extend({
       dialog: false,
       loading: false,
       search: null as string | null,
-      schemes: [] as SchemeEntry[],
+      schemes: [] as SurveySchemeEntry[],
       selectedId: undefined as string | undefined,
     };
   },
@@ -167,7 +167,7 @@ export default (Vue as VueConstructor<Vue & LoadSectionDialog>).extend({
       try {
         const {
           data: { data },
-        } = await this.$http.get<SchemesResponse>(`admin/schemes`, {
+        } = await this.$http.get<SurveySchemesResponse>(`admin/survey-schemes`, {
           params: { search: this.search, limit: 10 },
         });
 

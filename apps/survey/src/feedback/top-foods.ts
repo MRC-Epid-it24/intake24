@@ -1,6 +1,5 @@
 import { ChartData as ChartJsData } from 'chart.js';
 import { TopFoods } from '@intake24/common/feedback';
-import { NutrientTypeIdEnum } from './character';
 import AggregateFoodStats from './aggregate-food-stats';
 
 export type ChartData = {

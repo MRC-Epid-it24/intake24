@@ -2,6 +2,9 @@ import { Meal } from '../types';
 import { PromptQuestion, PromptQuestionWithSection } from '../prompts';
 import { ExportSection } from '../types/models';
 
+export const schemeTypes = ['default'] as const;
+export type SchemeType = typeof schemeTypes[number];
+
 export const surveySections = ['preMeals', 'postMeals', 'submission'] as const;
 export type SurveyQuestionSection = typeof surveySections[number];
 

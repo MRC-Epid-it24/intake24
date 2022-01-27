@@ -10,7 +10,7 @@
         small
         class="mx-3"
         color="secondary"
-        :title="$t('schemes.questions.create')"
+        :title="$t('survey-schemes.questions.create')"
         @click.stop="create"
       >
         <v-icon small>fa-plus</v-icon>
@@ -117,8 +117,8 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     title(): string {
       return this.$t(
         this.isOverrideMode
-          ? `schemes.overrides.questions.title`
-          : `schemes.questions.${this.section}.title`
+          ? `survey-schemes.overrides.questions.title`
+          : `survey-schemes.questions.${this.section}.title`
       ).toString();
     },
   },
@@ -154,7 +154,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
         .filter((item) => item !== this.section)
         .map((item) => ({
           value: item,
-          text: this.$t(`schemes.questions.${item}.title`).toString(),
+          text: this.$t(`survey-schemes.questions.${item}.title`).toString(),
         }));
     },
 

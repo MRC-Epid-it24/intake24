@@ -7,8 +7,8 @@ import {
   WhereOptions,
   Job,
   SystemNutrientType,
-  Scheme,
   Survey,
+  SurveyScheme,
   SurveySubmission,
   SurveySubmissionCustomField,
   SurveySubmissionFood,
@@ -210,13 +210,13 @@ const dataExportService = ({
     const { surveyId } = input;
 
     const survey = await Survey.findByPk(surveyId, {
-      include: [{ model: Scheme, required: true }],
+      include: [{ model: SurveyScheme, required: true }],
     });
-    if (!survey || !survey.scheme) throw new NotFoundError();
+    if (!survey || !survey.surveyScheme) throw new NotFoundError();
 
     const options = getSubmissionOptions(input);
 
-    const fields = await getExportFields(survey.scheme.export);
+    const fields = await getExportFields(survey.surveyScheme.dataExport);
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-data-export-${surveyId}-${timestamp}.csv`;
 

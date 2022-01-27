@@ -47,8 +47,8 @@ import type {
   LocaleController,
   NutrientTableController,
   FeedbackSchemeController,
-  SchemeController,
-  SchemeQuestionController,
+  SurveySchemeController,
+  SurveySchemeQuestionController,
   SignInLogController,
   AdminSurveyController,
   AdminSurveyDataExportController,
@@ -164,8 +164,8 @@ export interface IoC extends Jobs {
 
   // Schemes
   feedbackSchemeController: FeedbackSchemeController;
-  schemeController: SchemeController;
-  schemeQuestionController: SchemeQuestionController;
+  surveySchemeController: SurveySchemeController;
+  surveySchemeQuestionController: SurveySchemeQuestionController;
 
   // Survey MGMT
   adminSurveyController: AdminSurveyController;

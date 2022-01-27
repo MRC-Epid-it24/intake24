@@ -14,8 +14,8 @@ import locales from './locales';
 import nutrientTables from './nutrient-tables';
 import permissions from './permissions';
 import roles from './roles';
-import schemes from './schemes';
-import schemeQuestions from './scheme-questions';
+import surveySchemes from './survey-schemes';
+import surveySchemeQuestions from './survey-scheme-questions';
 import signInLogs from './sign-in-logs';
 import surveys from './surveys';
 import tasks from './tasks';
@@ -38,8 +38,8 @@ const messages: LocaleMessages = {
   'nutrient-tables': nutrientTables,
   permissions,
   roles,
-  schemes,
-  'scheme-questions': schemeQuestions,
+  'survey-schemes': surveySchemes,
+  'survey-scheme-questions': surveySchemeQuestions,
   'sign-in-logs': signInLogs,
   surveys,
   tasks,

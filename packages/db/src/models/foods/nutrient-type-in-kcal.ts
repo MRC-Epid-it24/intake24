@@ -1,4 +1,4 @@
-import { BelongsTo, Column, DataType, Table, ForeignKey } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import {
   NutrientTypeInKcalAttributes,
   NutrientTypeInKcalCreationAttributes,

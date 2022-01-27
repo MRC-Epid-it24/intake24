@@ -13,7 +13,7 @@ export * from './popularity-counters';
 export * from './refresh-tokens';
 export * from './roles';
 export * from './sign-in-log';
-export * from './schemes';
+export * from './survey-schemes';
 export * from './survey-submissions';
 export * from './surveys';
 export * from './tasks';

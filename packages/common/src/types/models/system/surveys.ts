@@ -19,7 +19,7 @@ export type SurveyAttributes = {
   state: SurveyState;
   startDate: Date;
   endDate: Date;
-  schemeId: string;
+  surveySchemeId: string;
   localeId: string;
   allowGenUsers: boolean;
   genUserKey: string | null;
@@ -75,7 +75,7 @@ export const updateSurveyFields = [
   'state',
   'startDate',
   'endDate',
-  'schemeId',
+  'surveySchemeId',
   'localeId',
   'allowGenUsers',
   'genUserKey',
@@ -108,7 +108,7 @@ export const staffUpdateSurveyFields = [
   'state',
   'startDate',
   'endDate',
-  'schemeId',
+  'surveySchemeId',
   'localeId',
   'supportEmail',
   'suspensionReason',

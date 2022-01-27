@@ -3,14 +3,14 @@
     <v-col cols="12">
       <v-toolbar flat tile>
         <v-toolbar-title class="font-weight-medium">
-          <div class="text-h6">{{ $t('schemes.questions.options._') }}</div>
+          <div class="text-h6">{{ $t('survey-schemes.questions.options._') }}</div>
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
           fab
           small
           color="secondary"
-          :title="$t('schemes.questions.options.add')"
+          :title="$t('survey-schemes.questions.options.add')"
           @click.stop="add"
         >
           <v-icon small>fa-plus</v-icon>
@@ -34,7 +34,7 @@
               <v-list-item-content>
                 <v-text-field
                   v-model="option.label"
-                  :label="$t('schemes.questions.options.label')"
+                  :label="$t('survey-schemes.questions.options.label')"
                   class="mr-3"
                   dense
                   hide-details="auto"
@@ -42,7 +42,7 @@
                 ></v-text-field>
                 <v-text-field
                   v-model="option.value"
-                  :label="$t('schemes.questions.options.value')"
+                  :label="$t('survey-schemes.questions.options.value')"
                   :rules="optionValueRules"
                   dense
                   hide-details="auto"
@@ -52,7 +52,7 @@
               <v-list-item-action>
                 <v-btn
                   icon
-                  :title="$t('schemes.questions.options.remove')"
+                  :title="$t('survey-schemes.questions.options.remove')"
                   @click.stop="remove(idx)"
                 >
                   <v-icon color="error">$delete</v-icon>

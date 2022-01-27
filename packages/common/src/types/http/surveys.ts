@@ -1,5 +1,9 @@
-import { FeedbackSchemeAttributes } from '../models/system/feedback-schemes';
-import type { SchemeAttributes, SurveyState, UserSessionAttributes } from '../models';
+import type {
+  FeedbackSchemeAttributes,
+  SurveySchemeAttributes,
+  SurveyState,
+  UserSessionAttributes,
+} from '../models';
 
 export type GenerateUserResponse = {
   userName: string;
@@ -19,7 +23,10 @@ export type PublicSurveyEntryResponse = {
   supportEmail: string;
 };
 
-export type SchemeEntryResponse = Pick<SchemeAttributes, 'id' | 'type' | 'meals' | 'questions'>;
+export type SchemeEntryResponse = Pick<
+  SurveySchemeAttributes,
+  'id' | 'type' | 'meals' | 'questions'
+>;
 export type FeedbackSchemeEntryResponse = FeedbackSchemeAttributes;
 
 export type SurveyEntryResponse = {
@@ -27,7 +34,7 @@ export type SurveyEntryResponse = {
   name: string;
   state: SurveyState;
   localeId: string;
-  scheme: SchemeEntryResponse;
+  surveyScheme: SchemeEntryResponse;
   feedbackScheme?: FeedbackSchemeEntryResponse;
   numberOfSubmissionsForFeedback: number;
   storeUserSessionOnServer: boolean;

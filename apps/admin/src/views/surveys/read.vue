@@ -11,7 +11,7 @@
         <tr>
           <th>{{ $t('locales._') }}</th>
           <td>{{ entry.locale.englishName }}</td>
-          <th>{{ $t('schemes._') }}</th>
+          <th>{{ $t('survey-schemes._') }}</th>
           <td>{{ entry.scheme.name }}</td>
         </tr>
         <tr>

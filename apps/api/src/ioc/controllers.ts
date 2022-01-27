@@ -43,8 +43,8 @@ export default (container: AwilixContainer): void => {
 
     // Schemes
     feedbackSchemeController: asFunction(controllers.admin.feedbackScheme),
-    schemeController: asFunction(controllers.admin.scheme),
-    schemeQuestionController: asFunction(controllers.admin.schemeQuestion),
+    surveySchemeController: asFunction(controllers.admin.surveyScheme),
+    surveySchemeQuestionController: asFunction(controllers.admin.surveySchemeQuestion),
 
     // Survey MGMT
     adminSurveyController: asFunction(controllers.admin.surveys.survey),

@@ -77,7 +77,7 @@ export default Vue.extend({
     },
 
     surveyScheme(): SchemeEntryResponse | null {
-      return this.$store.state.survey.parameters?.scheme;
+      return this.$store.state.survey.parameters?.surveyScheme;
     },
 
     surveyName(): SurveyEntryResponse | null {

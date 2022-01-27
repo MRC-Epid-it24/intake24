@@ -1,8 +1,8 @@
 import Redis from 'ioredis';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
-import { SchemeTypes } from '@intake24/common/types/models';
 import config from '@intake24/api/config';
 import {
+  // FeedbackScheme,
   FoodsLocale,
   FoodsNutrientType,
   FoodsNutrientUnit,
@@ -10,7 +10,7 @@ import {
   SystemLocale,
   SystemNutrientType,
   SystemNutrientUnit,
-  Scheme,
+  SurveyScheme,
   Survey,
   User,
   UserSurveyAlias,
@@ -26,7 +26,8 @@ export type MockData = {
   system: {
     language: Language;
     locale: SystemLocale;
-    scheme: Scheme;
+    // feedbackScheme: FeedbackScheme;
+    surveyScheme: SurveyScheme;
     survey: Survey;
     role: Role;
     admin: User;
@@ -114,22 +115,22 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'nutrient-tables|edit', displayName: 'Edit nutrient tables' },
     { name: 'nutrient-tables|delete', displayName: 'Delete nutrient tables' },
     { name: 'nutrient-tables|upload', displayName: 'Nutrient tables upload' },
-    { name: 'schemes|browse', displayName: 'Browse schemes' },
-    { name: 'schemes|read', displayName: 'Read schemes' },
-    { name: 'schemes|create', displayName: 'Create schemes' },
-    { name: 'schemes|edit', displayName: 'Edit schemes' },
-    { name: 'schemes|delete', displayName: 'Delete schemes' },
-    { name: 'schemes|data-export', displayName: 'Scheme data export' },
-    { name: 'schemes|questions', displayName: 'Scheme questions' },
-    { name: 'scheme-questions|browse', displayName: 'Browse scheme questions' },
-    { name: 'scheme-questions|read', displayName: 'Read scheme questions' },
-    { name: 'scheme-questions|create', displayName: 'Create scheme questions' },
-    { name: 'scheme-questions|edit', displayName: 'Edit scheme questions' },
-    { name: 'scheme-questions|delete', displayName: 'Delete scheme questions' },
-    { name: 'scheme-questions|sync', displayName: 'Sync scheme questions' },
     { name: 'sign-in-logs|browse', displayName: 'Browse sign-in logs' },
     { name: 'sign-in-logs|read', displayName: 'Read sign-in logs' },
     { name: 'sign-in-logs|delete', displayName: 'Delete sign-in logs' },
+    { name: 'survey-schemes|browse', displayName: 'Browse survey schemes' },
+    { name: 'survey-schemes|read', displayName: 'Read survey schemes' },
+    { name: 'survey-schemes|create', displayName: 'Create survey schemes' },
+    { name: 'survey-schemes|edit', displayName: 'Edit survey schemes' },
+    { name: 'survey-schemes|delete', displayName: 'Delete survey schemes' },
+    { name: 'survey-schemes|data-export', displayName: 'Survey scheme data export' },
+    { name: 'survey-schemes|questions', displayName: 'Survey scheme questions' },
+    { name: 'survey-scheme-questions|browse', displayName: 'Browse survey scheme questions' },
+    { name: 'survey-scheme-questions|read', displayName: 'Read survey scheme questions' },
+    { name: 'survey-scheme-questions|create', displayName: 'Create survey scheme questions' },
+    { name: 'survey-scheme-questions|edit', displayName: 'Edit survey scheme questions' },
+    { name: 'survey-scheme-questions|delete', displayName: 'Delete survey scheme questions' },
+    { name: 'survey-scheme-questions|sync', displayName: 'Sync survey scheme questions' },
     { name: 'surveys|browse', displayName: 'Browse surveys' },
     { name: 'surveys|read', displayName: 'Read surveys' },
     { name: 'surveys|create', displayName: 'Create surveys' },
@@ -227,13 +228,12 @@ export const initDatabase = async (): Promise<MockData> => {
     SystemNutrientType.bulkCreate(nutrientTypes),
   ]);
 
-  const scheme = await Scheme.create({
-    id: 'default',
+  const surveyScheme = await SurveyScheme.create({
     name: 'Default',
-    type: SchemeTypes.DATA_DRIVEN,
+    type: 'default',
     questions: defaultQuestions,
     meals: [...defaultMeals],
-    export: defaultExport,
+    dataExport: defaultExport,
   });
 
   const startDate = new Date();
@@ -246,7 +246,7 @@ export const initDatabase = async (): Promise<MockData> => {
     state: 0,
     startDate,
     endDate,
-    schemeId: scheme.id,
+    surveySchemeId: surveyScheme.id,
     localeId: systemLocale.id,
     allowGenUsers: false,
     supportEmail: 'testSupportEmail@example.com',
@@ -288,7 +288,8 @@ export const initDatabase = async (): Promise<MockData> => {
     system: {
       language,
       locale: systemLocale,
-      scheme,
+      // feedbackScheme,
+      surveyScheme,
       survey,
       role,
       admin,

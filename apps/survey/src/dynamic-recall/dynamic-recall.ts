@@ -12,13 +12,13 @@ export interface PromptInstance {
   section: SurveySection | MealSection;
 }
 
-function parseMealTime(time: string): MealTime {
-  const parts = time.split(':');
+export const parseMealTime = (time: string): MealTime => {
+  const [hours, minutes] = time.split(':');
   return {
-    hours: parseInt(parts[0], 10),
-    minutes: parseInt(parts[1], 10),
+    hours: parseInt(hours, 10),
+    minutes: parseInt(minutes, 10),
   };
-}
+};
 
 export const surveyInitialState: CurrentSurveyState = {
   schemeId: null,

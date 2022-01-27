@@ -15,8 +15,10 @@
     "node": "^14.17.0 || >=16.0.0"
   },
   "scripts": {
-    "db:migrate:foods": "npx sequelize db:migrate --options-path sequelize/foods/options.js",
-    "db:migrate:system": "npx sequelize db:migrate --options-path sequelize/system/options.js"
+    "db:foods:migrate": "npx sequelize db:migrate --options-path sequelize/foods/options.js",
+    "db:foods:migrate:undo": "npx sequelize db:migrate:undo --options-path sequelize/foods/options.js",
+    "db:system:migrate": "npx sequelize db:migrate --options-path sequelize/system/options.js",
+    "db:system:migrate:undo": "npx sequelize db:migrate:undo --options-path sequelize/system/options.js"
   },
   "dependencies": {
     "dotenv": "^14.2.0",

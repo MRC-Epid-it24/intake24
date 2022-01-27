@@ -50,16 +50,16 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.schemeId"
-                :error-messages="form.errors.get('schemeId')"
-                :items="refs.schemes"
-                :label="$t('schemes._')"
+                v-model="form.surveySchemeId"
+                :error-messages="form.errors.get('surveySchemeId')"
+                :items="refs.surveySchemes"
+                :label="$t('survey-schemes._')"
                 hide-details="auto"
                 item-value="id"
                 item-text="name"
-                name="schemeId"
+                name="surveySchemeId"
                 outlined
-                @change="form.errors.clear('schemeId')"
+                @change="form.errors.clear('surveySchemeId')"
               ></v-select>
             </v-col>
             <v-col cols="12" md="6">
@@ -371,7 +371,7 @@ export type SurveyForm = {
   name: string | null;
   state: SurveyState;
   localeId: string | null;
-  schemeId: string | null;
+  surveySchemeId: string | null;
   startDate: string | null;
   endDate: string | null;
   supportEmail: string | null;
@@ -406,7 +406,7 @@ export const surveyForm: SurveyForm = {
   name: null,
   state: 0,
   localeId: null,
-  schemeId: null,
+  surveySchemeId: null,
   startDate: null,
   endDate: null,
   supportEmail: null,

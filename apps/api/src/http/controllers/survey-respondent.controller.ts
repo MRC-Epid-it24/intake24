@@ -7,7 +7,7 @@ import {
 } from '@intake24/common/types/http';
 import { flattenSchemeWithSection, isMealSection } from '@intake24/common/schemes';
 import { merge } from '@intake24/common/util';
-import { Survey, User, Scheme, FeedbackScheme } from '@intake24/db';
+import { FeedbackScheme, Survey, SurveyScheme, User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { Controller } from './controller';
@@ -30,16 +30,16 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
     const { surveyId } = req.params;
 
     const survey = await Survey.findByPk(surveyId, {
-      include: [{ model: Scheme }, { model: FeedbackScheme }],
+      include: [{ model: SurveyScheme }, { model: FeedbackScheme }],
     });
-    if (!survey || !survey.scheme) throw new NotFoundError();
+    if (!survey || !survey.surveyScheme) throw new NotFoundError();
 
     const {
       id,
       name,
       state,
       localeId,
-      scheme,
+      surveyScheme,
       feedbackScheme,
       numberOfSubmissionsForFeedback,
       storeUserSessionOnServer,
@@ -47,8 +47,8 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
       overrides,
     } = survey;
 
-    let { meals } = scheme;
-    const { questions } = scheme;
+    let { meals } = surveyScheme;
+    const { questions } = surveyScheme;
 
     // Merge survey's scheme overrides
     // 1) Meals - override whole list
@@ -56,7 +56,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
 
     // 2) Questions - merge by Question ID
     if (overrides.questions.length) {
-      const flattenScheme = flattenSchemeWithSection(scheme.questions);
+      const flattenScheme = flattenSchemeWithSection(surveyScheme.questions);
       for (const question of overrides.questions) {
         const match = flattenScheme.find((item) => item.id === question.id);
         if (!match) continue;
@@ -78,7 +78,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
       name,
       state,
       localeId,
-      scheme: { id: scheme.id, type: scheme.type, meals, questions },
+      surveyScheme: { id: surveyScheme.id, type: surveyScheme.type, meals, questions },
       feedbackScheme,
       numberOfSubmissionsForFeedback,
       storeUserSessionOnServer,

@@ -1,6 +1,6 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
-    <v-card-title>{{ $t('schemes.overrides.questions.title') }}</v-card-title>
+    <v-card-title>{{ $t('survey-schemes.overrides.questions.title') }}</v-card-title>
     <v-card-subtitle>
       Override specific scheme question prompt. Changes will get merged by Question ID.
     </v-card-subtitle>
@@ -8,7 +8,7 @@
       v-bind="{ mode: 'override', questionIds, templates: questions }"
       :items.sync="form.overrides.questions"
     ></prompt-list>
-    <v-card-title>{{ $t('schemes.overrides.meals.title') }}</v-card-title>
+    <v-card-title>{{ $t('survey-schemes.overrides.meals.title') }}</v-card-title>
     <v-card-subtitle>
       Override scheme meal list. If left empty, scheme list is used. If any item added, whole list
       is used.
@@ -60,7 +60,7 @@ export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>)
     questions(): PromptQuestion[] {
       if (!this.entryLoaded || !this.refsLoaded) return [];
 
-      const scheme = this.refs.schemes.find((item) => item.id === this.entry.schemeId);
+      const scheme = this.refs.surveySchemes.find((item) => item.id === this.entry.surveySchemeId);
       if (!scheme) return [];
 
       return flattenScheme(scheme.questions);

@@ -30,6 +30,6 @@ export default (): void => {
       .set('Authorization', suite.bearer.user);
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['languages', 'locales', 'schemes', 'feedbackSchemes']);
+    expect(body).toContainAllKeys(['languages', 'locales', 'surveySchemes', 'feedbackSchemes']);
   });
 };

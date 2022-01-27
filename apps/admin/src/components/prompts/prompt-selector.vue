@@ -6,7 +6,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t(`schemes.questions.${dialog.index === -1 ? 'create' : 'edit'}`) }}
+          {{ $t(`survey-schemes.questions.${dialog.index === -1 ? 'create' : 'edit'}`) }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
@@ -33,7 +33,7 @@
                 <v-col cols="12" v-if="!isOverrideMode">
                   <v-card outlined>
                     <v-toolbar color="grey lighten-4" flat>
-                      <v-toolbar-title>{{ $t(`schemes.questions.type`) }}</v-toolbar-title>
+                      <v-toolbar-title>{{ $t(`survey-schemes.questions.type`) }}</v-toolbar-title>
                       <template v-slot:extension>
                         <v-tabs v-model="questionTypeTab">
                           <v-tab
@@ -41,7 +41,7 @@
                             :key="type"
                             class="font-weight-medium"
                           >
-                            {{ $t(`schemes.questions.${type}._`) }}
+                            {{ $t(`survey-schemes.questions.${type}._`) }}
                           </v-tab>
                         </v-tabs>
                       </template>
@@ -67,7 +67,7 @@
                     v-model="dialog.question.id"
                     :disabled="isOverrideMode"
                     :readonly="dialog.question.type !== 'custom'"
-                    :label="$t('schemes.questions.id')"
+                    :label="$t('survey-schemes.questions.id')"
                     :rules="questionIdRules"
                     hide-details="auto"
                     messages="Unique identifier, used e.g. in data-exports as header"
@@ -78,7 +78,7 @@
                   <v-text-field
                     v-model="dialog.question.name"
                     :disabled="isOverrideMode"
-                    :label="$t('schemes.questions.name')"
+                    :label="$t('survey-schemes.questions.name')"
                     hide-details="auto"
                     messages="Descriptive name for better orientation"
                     outlined
@@ -88,7 +88,7 @@
               <v-row class="justify-end">
                 <v-col cols="12" md="6">
                   <language-selector
-                    :label="$t('schemes.questions.localName')"
+                    :label="$t('survey-schemes.questions.localName')"
                     :value="dialog.question.props.localName"
                     @input="updateQuestionProps({ field: 'localName', value: $event })"
                   >
@@ -101,7 +101,7 @@
                         v-model="dialog.question.props.localName[lang]"
                         :rules="textRules"
                         :disabled="isOverrideMode"
-                        :label="$t('schemes.questions.localName')"
+                        :label="$t('survey-schemes.questions.localName')"
                         hide-details="auto"
                         messages="Localized name"
                         outlined

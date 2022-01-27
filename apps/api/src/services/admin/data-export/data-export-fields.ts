@@ -4,7 +4,7 @@ import { ExportField as BaseExportField } from '@intake24/common/types/models';
 import {
   NutrientTableCsvMappingField,
   SystemNutrientType,
-  Scheme,
+  SurveyScheme,
   SurveySubmissionFood,
   UserCustomField,
 } from '@intake24/db';
@@ -135,8 +135,8 @@ const dataExportFields = () => {
    *
    * @returns {Promise<ExportField[]>}
    */
-  const surveyCustom = async (scheme: Scheme): Promise<ExportField[]> => {
-    const { preMeals, postMeals, submission } = scheme.questions;
+  const surveyCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> => {
+    const { preMeals, postMeals, submission } = surveyScheme.questions;
     return [...preMeals, ...postMeals, ...submission]
       .filter(customQuestionFilter)
       .map(customQuestionMapper);
@@ -162,10 +162,10 @@ const dataExportFields = () => {
    *
    * @returns {Promise<ExportField[]>}
    */
-  const mealCustom = async (scheme: Scheme): Promise<ExportField[]> => {
+  const mealCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> => {
     const {
       meals: { preFoods, postFoods },
-    } = scheme.questions;
+    } = surveyScheme.questions;
 
     return [...preFoods, ...postFoods].filter(customQuestionFilter).map(customQuestionMapper);
   };
@@ -215,8 +215,8 @@ const dataExportFields = () => {
    *
    * @returns {Promise<ExportField[]>}
    */
-  const foodCustom = async (scheme: Scheme): Promise<ExportField[]> =>
-    scheme.questions.meals.foods.filter(customQuestionFilter).map(customQuestionMapper);
+  const foodCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> =>
+    surveyScheme.questions.meals.foods.filter(customQuestionFilter).map(customQuestionMapper);
 
   /**
    * Default food composition fields

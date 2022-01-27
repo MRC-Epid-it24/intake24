@@ -16,7 +16,7 @@
         <v-col cols="12">
           <v-switch
             :input-value="allowBrowsing"
-            :label="$t('schemes.foodSearch.allowBrowsing')"
+            :label="$t('survey-schemes.foodSearch.allowBrowsing')"
             hide-details="auto"
             @change="update('allowBrowsing', $event)"
           ></v-switch>
@@ -24,7 +24,7 @@
         <v-col cols="12">
           <v-switch
             :input-value="dualLanguage"
-            :label="$t('schemes.foodSearch.dualLanguage')"
+            :label="$t('survey-schemes.foodSearch.dualLanguage')"
             hide-details="auto"
             @change="update('dualLanguage', $event)"
           ></v-switch>

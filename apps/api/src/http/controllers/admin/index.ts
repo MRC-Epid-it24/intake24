@@ -9,8 +9,8 @@ import job from './job.controller';
 import language from './language.controller';
 import locale from './locale.controller';
 import nutrientTable from './nutrient-table.controller';
-import scheme from './scheme.controller';
-import schemeQuestion from './scheme-question.controller';
+import surveyScheme from './survey-scheme.controller';
+import surveySchemeQuestion from './survey-scheme-question.controller';
 import signInLog from './sign-in-log.controller';
 import task from './task.controller';
 
@@ -25,8 +25,8 @@ export * from './job.controller';
 export * from './language.controller';
 export * from './locale.controller';
 export * from './nutrient-table.controller';
-export * from './scheme.controller';
-export * from './scheme-question.controller';
+export * from './survey-scheme.controller';
+export * from './survey-scheme-question.controller';
 export * from './sign-in-log.controller';
 export * from './task.controller';
 
@@ -42,8 +42,8 @@ export default {
   language,
   locale,
   nutrientTable,
-  scheme,
-  schemeQuestion,
+  surveyScheme,
+  surveySchemeQuestion,
   signInLog,
   task,
 };

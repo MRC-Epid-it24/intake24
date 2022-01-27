@@ -4,25 +4,35 @@
       <v-icon class="mr-3" color="primary">fa-hamburger</v-icon>
       <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn fab small color="secondary" :title="$t('schemes.meals.create')" @click.stop="add">
+      <v-btn
+        fab
+        small
+        color="secondary"
+        :title="$t('survey-schemes.meals.create')"
+        @click.stop="add"
+      >
         <v-icon small>fa-plus</v-icon>
       </v-btn>
       <load-section-dialog :schemeId="schemeId" section="meals" @load="load"></load-section-dialog>
-      <confirm-dialog color="error" :label="$t('schemes.meals.reset._')" @confirm="resetList">
+      <confirm-dialog
+        color="error"
+        :label="$t('survey-schemes.meals.reset._')"
+        @confirm="resetList"
+      >
         <template v-slot:activator="{ attrs, on }">
           <v-btn
             class="ml-3"
             color="error"
             fab
             small
-            :title="$t('schemes.meals.reset._')"
+            :title="$t('survey-schemes.meals.reset._')"
             v-bind="attrs"
             v-on="on"
           >
             <v-icon small>fa-sync</v-icon>
           </v-btn>
         </template>
-        {{ $t('schemes.meals.reset.text') }}
+        {{ $t('survey-schemes.meals.reset.text') }}
       </confirm-dialog>
     </v-toolbar>
     <v-list two-line>
@@ -43,12 +53,12 @@
               <v-list-item-subtitle v-text="meal.time"></v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn icon :title="$t('schemes.meals.edit')" @click.stop="edit(idx, meal)">
+              <v-btn icon :title="$t('survey-schemes.meals.edit')" @click.stop="edit(idx, meal)">
                 <v-icon color="primary lighten-2">fa-ellipsis-v</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn icon :title="$t('schemes.meals.remove')" @click.stop="remove(idx)">
+              <v-btn icon :title="$t('survey-schemes.meals.remove')" @click.stop="remove(idx)">
                 <v-icon color="error">$delete</v-icon>
               </v-btn>
             </v-list-item-action>
@@ -61,13 +71,13 @@
         <v-toolbar color="primary" dark flat>
           <v-icon class="mr-3" dark>fa-hamburger</v-icon>
           <v-toolbar-title>
-            {{ $t(`schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}
+            {{ $t(`survey-schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
         </v-toolbar>
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
           <language-selector
-            :label="$t('schemes.meals.name')"
+            :label="$t('survey-schemes.meals.name')"
             v-model="dialog.meal.name"
             flat
             :outlined="false"
@@ -76,7 +86,7 @@
               <v-text-field
                 v-model="dialog.meal.name[lang]"
                 :key="lang"
-                :label="$t('schemes.meals.name')"
+                :label="$t('survey-schemes.meals.name')"
                 :rules="rules(lang)"
                 hide-details="auto"
                 outlined
@@ -162,7 +172,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
     title(): string {
       return this.$t(
-        this.isOverrideMode ? 'schemes.overrides.meals.title' : 'schemes.meals.title'
+        this.isOverrideMode ? 'survey-schemes.overrides.meals.title' : 'survey-schemes.meals.title'
       ).toString();
     },
   },
@@ -177,14 +187,14 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     rules(langId: string) {
       return [
         (value: string | null): boolean | string => {
-          if (!value) return this.$t('schemes.meals.validation.required').toString();
+          if (!value) return this.$t('survey-schemes.meals.validation.required').toString();
 
           const { index } = this.dialog;
           const match = this.meals.find(
             (meal, idx) => value === meal.name[langId] && index !== idx
           );
 
-          return match ? this.$t('schemes.meals.validation.unique').toString() : true;
+          return match ? this.$t('survey-schemes.meals.validation.unique').toString() : true;
         },
       ];
     },

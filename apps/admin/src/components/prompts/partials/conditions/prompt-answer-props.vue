@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" md="6">
     <v-text-field
-      :label="$t('schemes.conditions.promptId')"
+      :label="$t('survey-schemes.conditions.promptId')"
       :value="promptId"
       @input="update('promptId', $event)"
       hide-details="auto"

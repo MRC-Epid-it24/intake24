@@ -4,7 +4,7 @@
       <v-card v-show="dialog.show" class="mb-6" outlined>
         <v-toolbar color="grey lighten-4" flat>
           <v-toolbar-title>
-            {{ $t(`schemes.conditions.${isCreate ? 'create' : 'edit'}`) }}
+            {{ $t(`survey-schemes.conditions.${isCreate ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn class="font-weight-bold" color="error" @click.stop="cancel" text>
@@ -17,7 +17,7 @@
               <v-select
                 v-model="dialog.condition.type"
                 :items="conditionSelectList"
-                :label="$t('schemes.conditions.types._', {})"
+                :label="$t('survey-schemes.conditions.types._', {})"
                 hide-details="auto"
                 item-value="type"
                 outlined
@@ -28,7 +28,7 @@
               <v-select
                 v-model="dialog.condition.op"
                 :items="operationSelectList"
-                :label="$t('schemes.conditions.ops._')"
+                :label="$t('survey-schemes.conditions.ops._')"
                 hide-details="auto"
                 item-value="op"
                 outlined
@@ -46,7 +46,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="dialog.condition.value"
-                :label="$t('schemes.conditions.value')"
+                :label="$t('survey-schemes.conditions.value')"
                 hide-details="auto"
                 outlined
               ></v-text-field>
@@ -67,14 +67,14 @@
       <v-col cols="12">
         <v-toolbar flat tile>
           <v-toolbar-title class="font-weight-medium">
-            <div class="text-h6">{{ $t('schemes.conditions.title') }}</div>
+            <div class="text-h6">{{ $t('survey-schemes.conditions.title') }}</div>
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn
             fab
             small
             color="secondary"
-            :title="$t('schemes.conditions.create')"
+            :title="$t('survey-schemes.conditions.create')"
             @click.stop="add"
           >
             <v-icon small>fa-plus</v-icon>
@@ -97,9 +97,11 @@
                 </v-list-item-avatar>
                 <v-list-item-content class="font-weight-medium">
                   <code class="pa-5 large">
-                    {{ $t(`schemes.conditions.showIf`) }}
+                    {{ $t(`survey-schemes.conditions.showIf`) }}
                     '{{
-                      $t(`schemes.conditions.exTypes.${condition.type}`, { ...condition.props })
+                      $t(`survey-schemes.conditions.exTypes.${condition.type}`, {
+                        ...condition.props,
+                      })
                     }}'
                     <span :class="`fas fa-${opToIconMap[condition.op]} mx-2`"></span>
                     '{{ condition.value }}'
@@ -108,14 +110,18 @@
                 <v-list-item-action class="ml-2">
                   <v-btn
                     icon
-                    :title="$t('schemes.conditions.edit')"
+                    :title="$t('survey-schemes.conditions.edit')"
                     @click.stop="edit(idx, condition)"
                   >
                     <v-icon color="primary lighten-2">$edit</v-icon>
                   </v-btn>
                 </v-list-item-action>
                 <v-list-item-action class="ml-2">
-                  <v-btn icon :title="$t('schemes.conditions.remove')" @click.stop="remove(idx)">
+                  <v-btn
+                    icon
+                    :title="$t('survey-schemes.conditions.remove')"
+                    @click.stop="remove(idx)"
+                  >
                     <v-icon color="error">$delete</v-icon>
                   </v-btn>
                 </v-list-item-action>
@@ -237,13 +243,13 @@ export default Vue.extend({
     conditionSelectList(): { type: string; text: string }[] {
       return this.promptConditions.map(({ type }) => ({
         type,
-        text: this.$t(`schemes.conditions.types.${type}`).toString(),
+        text: this.$t(`survey-schemes.conditions.types.${type}`).toString(),
       }));
     },
     operationSelectList(): { op: string; text: string }[] {
       return Object.keys(conditionOps).map((op) => ({
         op,
-        text: this.$t(`schemes.conditions.ops.${op}`).toString(),
+        text: this.$t(`survey-schemes.conditions.ops.${op}`).toString(),
       }));
     },
     outputConditions(): Condition[] {
