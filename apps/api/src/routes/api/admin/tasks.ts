@@ -18,33 +18,16 @@ router.get(
   wrapAsync(taskController.refs)
 );
 
+router.use('/:taskId', validation.entry('taskId'));
+
 router
   .route('/:taskId')
-  .get(permission('tasks|read'), validation.entry('taskId'), wrapAsync(taskController.read))
-  .put(
-    permission('tasks|edit'),
-    validation.entry('taskId'),
-    validation.update,
-    wrapAsync(taskController.update)
-  )
-  .delete(
-    permission('tasks|delete'),
-    validation.entry('taskId'),
-    wrapAsync(taskController.destroy)
-  );
+  .get(permission('tasks|read'), wrapAsync(taskController.read))
+  .put(permission('tasks|edit'), validation.update, wrapAsync(taskController.update))
+  .delete(permission('tasks|delete'), wrapAsync(taskController.destroy));
 
-router.get(
-  '/:taskId/edit',
-  validation.entry('taskId'),
-  permission('tasks|edit'),
-  wrapAsync(taskController.edit)
-);
+router.get('/:taskId/edit', permission('tasks|edit'), wrapAsync(taskController.edit));
 
-router.post(
-  '/:taskId/run',
-  permission('tasks|edit'),
-  validation.entry('taskId'),
-  wrapAsync(taskController.run)
-);
+router.post('/:taskId/run', permission('tasks|edit'), wrapAsync(taskController.run));
 
 export default router;

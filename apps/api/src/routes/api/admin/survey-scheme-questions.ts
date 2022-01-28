@@ -30,6 +30,8 @@ router.get(
   wrapAsync(surveySchemeQuestionController.refs)
 );
 
+router.use('/:surveySchemeQuestionId', validation.entry('surveySchemeQuestionId'));
+
 router
   .route('/:surveySchemeQuestionId')
   .get(permission('survey-scheme-questions|read'), wrapAsync(surveySchemeQuestionController.read))

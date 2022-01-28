@@ -13,7 +13,7 @@ import { schemeTypes } from '@intake24/common/schemes';
 
 export const name: ParamSchema = {
   in: ['body'],
-  errorMessage: 'Scheme name must be unique string.',
+  errorMessage: 'Survey scheme name must be unique.',
   isString: true,
   isEmpty: { negated: true },
   custom: {

@@ -7,11 +7,10 @@ const { adminUserJobController } = ioc.cradle;
 const router = Router();
 
 router.route('').get(validation.browse, wrapAsync(adminUserJobController.browse));
-router.route('/:jobId').get(validation.entry('jobId'), wrapAsync(adminUserJobController.read));
-router.get(
-  '/:jobId/download',
-  validation.entry('jobId'),
-  wrapAsync(adminUserJobController.download)
-);
+
+router.use('/:jobId', validation.entry('jobId'));
+
+router.route('/:jobId').get(wrapAsync(adminUserJobController.read));
+router.get('/:jobId/download', wrapAsync(adminUserJobController.download));
 
 export default router;

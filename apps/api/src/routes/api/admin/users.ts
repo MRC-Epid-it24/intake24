@@ -20,26 +20,14 @@ router.get(
   wrapAsync(adminUserController.refs)
 );
 
+router.use('/:userId', validation.entry('userId'));
+
 router
   .route('/:userId')
-  .get(permission('users|read'), validation.entry('userId'), wrapAsync(adminUserController.read))
-  .put(
-    permission('users|edit'),
-    validation.entry('userId'),
-    validation.update,
-    wrapAsync(adminUserController.update)
-  )
-  .delete(
-    permission('users|delete'),
-    validation.entry('userId'),
-    wrapAsync(adminUserController.destroy)
-  );
+  .get(permission('users|read'), wrapAsync(adminUserController.read))
+  .put(permission('users|edit'), validation.update, wrapAsync(adminUserController.update))
+  .delete(permission('users|delete'), wrapAsync(adminUserController.destroy));
 
-router.get(
-  '/:userId/edit',
-  permission('users|edit'),
-  validation.entry('userId'),
-  wrapAsync(adminUserController.edit)
-);
+router.get('/:userId/edit', permission('users|edit'), wrapAsync(adminUserController.edit));
 
 export default router;

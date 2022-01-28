@@ -20,29 +20,17 @@ router.get(
   wrapAsync(permissionController.refs)
 );
 
+router.use('/:permissionId', validation.entry('permissionId'));
+
 router
   .route('/:permissionId')
-  .get(
-    permission('permissions|read'),
-    validation.entry('permissionId'),
-    wrapAsync(permissionController.read)
-  )
-  .put(
-    permission('permissions|edit'),
-    validation.entry('permissionId'),
-    validation.update,
-    wrapAsync(permissionController.update)
-  )
-  .delete(
-    permission('permissions|delete'),
-    validation.entry('permissionId'),
-    wrapAsync(permissionController.destroy)
-  );
+  .get(permission('permissions|read'), wrapAsync(permissionController.read))
+  .put(permission('permissions|edit'), validation.update, wrapAsync(permissionController.update))
+  .delete(permission('permissions|delete'), wrapAsync(permissionController.destroy));
 
 router.get(
   '/:permissionId/edit',
   permission('permissions|edit'),
-  validation.entry('permissionId'),
   wrapAsync(permissionController.edit)
 );
 

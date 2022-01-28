@@ -9,7 +9,7 @@ import { feedbackTypes } from '@intake24/common/feedback';
 
 export const name: ParamSchema = {
   in: ['body'],
-  errorMessage: 'Feedback scheme name must be unique string.',
+  errorMessage: 'Feedback scheme name must be unique.',
   isString: true,
   isEmpty: { negated: true },
   custom: {

@@ -20,26 +20,14 @@ router.get(
   wrapAsync(roleController.refs)
 );
 
+router.use('/:roleId', validation.entry('roleId'));
+
 router
   .route('/:roleId')
-  .get(permission('roles|read'), validation.entry('roleId'), wrapAsync(roleController.read))
-  .put(
-    permission('roles|edit'),
-    validation.entry('roleId'),
-    validation.update,
-    wrapAsync(roleController.update)
-  )
-  .delete(
-    permission('roles|delete'),
-    validation.entry('roleId'),
-    wrapAsync(roleController.destroy)
-  );
+  .get(permission('roles|read'), wrapAsync(roleController.read))
+  .put(permission('roles|edit'), validation.update, wrapAsync(roleController.update))
+  .delete(permission('roles|delete'), wrapAsync(roleController.destroy));
 
-router.get(
-  '/:roleId/edit',
-  permission('roles|edit'),
-  validation.entry('roleId'),
-  wrapAsync(roleController.edit)
-);
+router.get('/:roleId/edit', permission('roles|edit'), wrapAsync(roleController.edit));
 
 export default router;

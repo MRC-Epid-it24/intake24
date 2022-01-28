@@ -33,6 +33,8 @@ router.post(
   wrapAsync(feedbackSchemeController.copy)
 );
 
+router.use('/:feedbackSchemeId', validation.entry('feedbackSchemeId'));
+
 router
   .route('/:feedbackSchemeId')
   .get(permission('feedback-schemes|read'), wrapAsync(feedbackSchemeController.read))

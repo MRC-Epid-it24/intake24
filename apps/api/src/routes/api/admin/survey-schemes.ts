@@ -33,6 +33,8 @@ router.post(
   wrapAsync(surveySchemeController.copy)
 );
 
+router.use('/:surveySchemeId', validation.entry('surveySchemeId'));
+
 router
   .route('/:surveySchemeId')
   .get(permission('survey-schemes|read'), wrapAsync(surveySchemeController.read))

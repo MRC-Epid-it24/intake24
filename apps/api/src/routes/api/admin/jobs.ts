@@ -16,6 +16,8 @@ router.get(
   wrapAsync(jobController.refs)
 );
 
+router.use('/:jobId', validation.entry('jobId'));
+
 router
   .route('/:jobId')
   .get(permission('jobs|read'), validation.entry('jobId'), wrapAsync(jobController.read))
