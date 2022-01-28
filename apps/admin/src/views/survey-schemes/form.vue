@@ -4,6 +4,7 @@
       <copy-scheme-dialog
         v-if="isEdit && can('survey-schemes|edit')"
         :schemeId="id"
+        resource="survey-schemes"
       ></copy-scheme-dialog>
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
@@ -60,7 +61,7 @@ import formMixin from '@intake24/admin/components/entry/form-mixin';
 import MealList from '@intake24/admin/components/meals/meal-list.vue';
 import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
-import CopySchemeDialog from './copy-scheme-dialog.vue';
+import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 
 export type SurveySchemeForm = {
   id: string | null;

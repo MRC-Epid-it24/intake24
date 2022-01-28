@@ -1,10 +1,11 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <template v-slot:actions>
-      <!-- <copy-scheme-dialog
+      <copy-scheme-dialog
         v-if="isEdit && can('feedback-schemes|edit')"
         :schemeId="id"
-      ></copy-scheme-dialog> -->
+        resource="feedback-schemes"
+      ></copy-scheme-dialog>
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container>
@@ -54,7 +55,7 @@ import {
   FoodGroup,
   TopFoods,
 } from '@intake24/common/feedback';
-// import CopySchemeDialog from './copy-scheme-dialog.vue';
+import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 
 export type FeedbackSchemeForm = {
   id: string | null;
@@ -67,7 +68,7 @@ export type FeedbackSchemeForm = {
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SchemeForm',
 
-  // components: { CopySchemeDialog },
+  components: { CopySchemeDialog },
 
   mixins: [formMixin],
 

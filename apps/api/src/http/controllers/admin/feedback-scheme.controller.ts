@@ -104,7 +104,15 @@ export default (): FeedbackSchemeController => {
     const sourceFeedbackScheme = await FeedbackScheme.findByPk(sourceId);
     if (!sourceFeedbackScheme) throw new NotFoundError();
 
-    const feedbackScheme = await FeedbackScheme.create({ ...sourceFeedbackScheme.get(), name });
+    const { type, topFoods, foodGroups, henryCoefficients } = sourceFeedbackScheme;
+
+    const feedbackScheme = await FeedbackScheme.create({
+      name,
+      type,
+      topFoods,
+      foodGroups,
+      henryCoefficients,
+    });
 
     res.json(feedbackScheme);
   };

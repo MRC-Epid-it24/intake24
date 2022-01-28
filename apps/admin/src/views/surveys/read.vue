@@ -3,7 +3,7 @@
     <v-simple-table>
       <tbody>
         <tr>
-          <th>{{ $t('surveys._') }}</th>
+          <th>{{ $t('surveys.id') }}</th>
           <td>{{ entry.id }}</td>
           <th>{{ $t('surveys.name') }}</th>
           <td>{{ entry.name }}</td>
@@ -12,7 +12,7 @@
           <th>{{ $t('locales._') }}</th>
           <td>{{ entry.locale.englishName }}</td>
           <th>{{ $t('survey-schemes._') }}</th>
-          <td>{{ entry.scheme.name }}</td>
+          <td>{{ entry.surveyScheme.name }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.startDate') }}</th>

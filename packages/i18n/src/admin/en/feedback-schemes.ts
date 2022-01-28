@@ -11,6 +11,12 @@ const feedbackSchemes: LocaleMessageObject = {
 
   name: 'Name',
 
+  copy: {
+    _: 'Copy',
+    title: 'Copy feedback scheme',
+    name: 'New feedback scheme name',
+  },
+
   types: {
     _: 'Feedback type',
     title: 'Feedback types',

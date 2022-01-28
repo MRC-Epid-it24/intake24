@@ -4,11 +4,11 @@
       <v-btn
         v-bind="attrs"
         v-on="on"
-        :title="$t('survey-schemes.copy._')"
+        :title="$t(`${resource}.copy._`)"
         class="ml-3"
         color="primary"
       >
-        <v-icon left>fa-copy</v-icon> {{ $t('survey-schemes.copy._') }}
+        <v-icon left>fa-copy</v-icon> {{ $t(`${resource}.copy._`) }}
       </v-btn>
     </template>
     <v-card>
@@ -17,7 +17,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t('survey-schemes.copy.title') }}
+          {{ $t(`${resource}.copy.title`) }}
         </v-toolbar-title>
       </v-toolbar>
       <v-card-text class="pa-6">
@@ -26,7 +26,7 @@
             <v-text-field
               v-model="form.name"
               :error-messages="form.errors.get('name')"
-              :label="$t('survey-schemes.copy.name')"
+              :label="$t(`${resource}.copy.name`)"
               hide-details="auto"
               name="name"
               outlined
@@ -43,7 +43,7 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="confirm">
-          <v-icon left>$success</v-icon> {{ $t('survey-schemes.copy._') }}
+          <v-icon left>$success</v-icon> {{ $t(`${resource}.copy._`) }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -64,6 +64,10 @@ export default Vue.extend({
   name: 'CopySchemeDialog',
 
   props: {
+    resource: {
+      type: String as () => 'survey-scheme' | 'feedback-scheme',
+      required: true,
+    },
     schemeId: {
       type: String,
       required: true,
@@ -91,12 +95,13 @@ export default Vue.extend({
     },
 
     async confirm() {
+      const { resource } = this;
       const { name } = this.$route;
-      const { id } = await this.form.post<SurveySchemeEntry>('admin/survey-schemes/copy');
+      const { id } = await this.form.post<SurveySchemeEntry>(`admin/${resource}/copy`);
 
       this.close();
 
-      if (this.redirect) this.$router.push({ name: name ?? 'survey-schemes-read', params: { id } });
+      if (this.redirect) this.$router.push({ name: name ?? `${resource}-read`, params: { id } });
     },
   },
 });

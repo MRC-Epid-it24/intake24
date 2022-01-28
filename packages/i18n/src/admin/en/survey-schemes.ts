@@ -8,22 +8,23 @@ const surveySchemes: LocaleMessageObject = {
   create: 'Add survey scheme',
   edit: 'Edit survey scheme',
   delete: 'Delete survey scheme',
-  none: 'No scheme found',
+  none: 'No survey scheme found',
 
-  id: 'Scheme ID',
   name: 'Name',
 
   copy: {
     _: 'Copy',
-    title: 'Copy scheme',
-    id: 'New scheme ID',
-    name: 'New scheme name',
+    title: 'Copy survey scheme',
+    name: 'New survey scheme name',
   },
+
   load: 'Load section from scheme',
+
   types: {
     _: 'Type',
     default: 'Default',
   },
+
   meals: {
     _: 'Meal',
     title: 'Default meals',

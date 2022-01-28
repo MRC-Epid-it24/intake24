@@ -14,7 +14,7 @@
       is used.
     </v-card-subtitle>
     <meal-list
-      :schemeId="entry.schemeId"
+      :schemeId="entry.surveySchemeId"
       v-model="form.overrides.meals"
       mode="override"
     ></meal-list>
