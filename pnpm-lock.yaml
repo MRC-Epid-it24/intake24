@@ -341,7 +341,7 @@ importers:
       '@types/fs-extra': ^9.0.13
       '@types/lodash': ^4.14.178
       '@types/web-push': ^3.3.2
-      commander: ^8.3.0
+      commander: ^9.0.0
       dotenv: ^14.2.0
       dotenv-expand: ^6.0.1
       fork-ts-checker-webpack-plugin: ^7.0.0
@@ -355,7 +355,7 @@ importers:
       webpack-node-externals: ^3.0.0
       webpackbar: ^5.0.2
     dependencies:
-      commander: 8.3.0
+      commander: 9.0.0
       dotenv: 14.2.0
       dotenv-expand: 6.0.1
       fs-extra: 10.0.0
@@ -5587,6 +5587,12 @@ packages:
   /commander/8.3.0:
     resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
     engines: {node: '>= 12'}
+    dev: true
+
+  /commander/9.0.0:
+    resolution: {integrity: sha512-JJfP2saEKbQqvW+FI93OYUB4ByV5cizMpFMiiJI8xDbBvQvSkIk0VvQdn1CZ8mqAO8Loq2h0gYTYtDFUZUeERw==}
+    engines: {node: ^12.20.0 || >=14}
+    dev: false
 
   /common-tags/1.8.2:
     resolution: {integrity: sha512-gk/Z852D2Wtb//0I+kRFNKKE9dIIVirjoqPoA1wJU+XePVXZfGeBpk45+A1rKO4Q43prqWBNY/MiIeRLbPWUaA==}
