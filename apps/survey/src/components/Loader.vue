@@ -1,13 +1,13 @@
 <template>
   <div class="loader" :class="{ show: show }">
-    <img src="@/assets/loader.svg" alt="loader" />
+    <img src="@intake24/survey/assets/loader.svg" alt="loader" />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AppLoader',
 
   props: {

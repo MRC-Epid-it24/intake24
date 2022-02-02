@@ -29,6 +29,19 @@ const feedback: LocaleMessageObject = {
       gain_weight: 'Gain weight',
     },
   },
+
+  intake: 'Your {nutrient} intake is {amount} {unit}.',
+
+  unitDescription: {
+    percentage_of_energy:
+      'Feedback is based on the contribution of the corresponding nutrient to your energy intake.',
+    energy_divided_by_bmr:
+      'Feedback is based on your energy intake divided by BMR fitting into optimal intake.',
+    per_unit_of_weight:
+      'Feedback is based on your consumption of the corresponding nutrient per Kg of your weight fitting into optimal intake.',
+    range:
+      'Feedback is based on your consumption of the corresponding nutrient fitting into optimal intake.',
+  },
 };
 
 export default feedback;

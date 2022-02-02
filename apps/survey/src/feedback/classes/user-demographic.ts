@@ -1,17 +1,19 @@
-import { WeightTargetCoefficient } from '@intake24/common/feedback';
+import { HenryCoefficient, WeightTargetCoefficient } from '@intake24/common/feedback';
 import { UserPhysicalDataResponse } from '@intake24/common/types/http';
 import { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
+import { round } from '@intake24/common/util';
 import HenryCoefficientsCalculator from './henry-coefficient-calculator';
 
 export default class UserDemographic {
+  bmrCalculator: HenryCoefficientsCalculator;
+
   constructor(
     readonly physicalData: NonNullable<UserPhysicalDataResponse>,
     private readonly physicalActivityLevel: PhysicalActivityLevelAttributes,
     private readonly weightTarget: WeightTargetCoefficient,
-    private readonly bmrCalculator: HenryCoefficientsCalculator
+    private readonly henryCoefficients: HenryCoefficient[]
   ) {
-    this.physicalData = physicalData;
-    this.bmrCalculator = bmrCalculator;
+    this.bmrCalculator = HenryCoefficientsCalculator.fromJson(henryCoefficients);
   }
 
   clone(): UserDemographic {
@@ -19,7 +21,7 @@ export default class UserDemographic {
       this.physicalData,
       this.physicalActivityLevel,
       this.weightTarget,
-      this.bmrCalculator
+      this.henryCoefficients
     );
   }
 
@@ -28,15 +30,12 @@ export default class UserDemographic {
   }
 
   getBmr(): number {
-    return Math.round(this.bmrCalculator.getBMR(this) * 10) / 10;
+    return round(this.bmrCalculator.getBMR(this));
   }
 
   getEnergyRequirement(): number {
-    return (
-      Math.round(
-        (this.getBmr() * this.physicalActivityLevel.coefficient + this.weightTarget.coefficient) *
-          10
-      ) / 10
+    return round(
+      this.getBmr() * this.physicalActivityLevel.coefficient + this.weightTarget.coefficient
     );
   }
 }

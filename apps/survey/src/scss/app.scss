@@ -3,15 +3,19 @@
 @import "fontawesome";
 
 @media print {
-    .v-toolbar {
-        display: none !important;
-    }
+    .v-application {
+        background-color: #fff !important;
 
-    .v-navigation-drawer {
-        display: none !important;
-    }
+        .v-toolbar {
+            display: none !important;
+        }
 
-    .v-main {
-        padding: 0px !important;
+        .v-navigation-drawer {
+            display: none !important;
+        }
+
+        .v-main {
+            padding: 0px !important;
+        }
     }
 }

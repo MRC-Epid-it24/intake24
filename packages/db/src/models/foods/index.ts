@@ -15,13 +15,10 @@ export { default as DemographicGroupScaleSector } from './demographic-group-scal
 export { default as DrinkwareScale } from './drinkware-scale';
 export { default as DrinkwareSet } from './drinkware-set';
 export { default as DrinkwareVolumeSample } from './drinkware-volume-sample';
-export { default as FiveADayFeedback } from './five-a-day-feedback';
 export { default as Food } from './food';
 export { default as FoodAttribute } from './food-attribute';
 export { default as FoodCategory } from './food-category';
 export { default as FoodGroup } from './food-group';
-export { default as FoodGroupFeedback } from './food-group-feedback';
-export { default as FoodGroupFeedbackNutrient } from './food-group-feedback-nutrient';
 export { default as FoodGroupLocal } from './food-group-local';
 export { default as FoodLocal } from './food-local';
 export { default as FoodLocalList } from './food-local-list';

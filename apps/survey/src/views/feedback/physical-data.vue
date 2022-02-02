@@ -113,7 +113,7 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { userService, feedbackService } from '@intake24/survey/services';
 import { Sex, sexes, weightTargets } from '@intake24/common/feedback';
 import { PhysicalActivityLevel } from '@intake24/common/types/http';
@@ -122,7 +122,7 @@ import { Nullable, UserPhysicalDataAttributes } from '@intake24/common/types/mod
 
 export type SurveyFeedbackPhysicalDataForm = Nullable<Omit<UserPhysicalDataAttributes, 'userId'>>;
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FeedbackPhysicalData',
 
   props: {

@@ -1,10 +1,10 @@
 /* eslint-disable no-useless-constructor */
 /* eslint-disable max-classes-per-file */
 import { FeedbackType, Sentiment } from '@intake24/common/feedback';
+import AggregateFoodStats from './aggregate-food-stats';
 import DemographicGroup from './demographic-group';
 import DemographicResult from './demographic-result';
 import DemographicScaleSector from './demographic-scale-sector';
-import AggregateFoodStats from './aggregate-food-stats';
 import UserDemographic from './user-demographic';
 
 export enum CharacterTypeEnum {
@@ -12,7 +12,7 @@ export enum CharacterTypeEnum {
   BREAD = 'bread',
   CANDY = 'candy',
   SALMON = 'salmon',
-  SAUSAGE = 'sausage',
+  // SAUSAGE = 'sausage',
   EGG = 'egg',
   APPLE = 'apple',
   STRAWBERRY = 'strawberry',
@@ -61,15 +61,12 @@ export class CharacterSentiment {
   }
 }
 
-export class CharacterCardParameters {
-  readonly cardType = 'character';
-
-  constructor(
-    readonly characterType: CharacterTypeEnum,
-    readonly characterSentiment: CharacterSentiment,
-    readonly demographicResults: DemographicResult[]
-  ) {}
-}
+export type CharacterParameters = {
+  readonly card: 'character';
+  readonly type: CharacterTypeEnum;
+  readonly sentiment: CharacterSentiment;
+  readonly results: DemographicResult[];
+};
 
 export class CharacterRules {
   constructor(
@@ -83,18 +80,16 @@ export class CharacterRules {
   getSentiment(
     userDemographic: UserDemographic,
     foods: AggregateFoodStats[]
-  ): CharacterCardParameters | null {
-    const demographicGroups = this.getDemographicsGroups(userDemographic, foods);
+  ): CharacterParameters | null {
+    const results = this.getDemographicsGroups(userDemographic, foods);
 
-    const scaleSectors = demographicGroups
-      .map((dg) => {
-        return dg.resultedDemographicGroup.scaleSectors;
-      })
+    const scaleSectors = results
+      .map((dg) => dg.resultedDemographicGroup.scaleSectors)
       .reduce((a, b) => a.slice().concat(b), []);
 
     const sentiment = this.pickAverageSentiment(scaleSectors);
 
-    return sentiment ? new CharacterCardParameters(this.type, sentiment, demographicGroups) : null;
+    return sentiment ? { card: 'character', type: this.type, sentiment, results } : null;
   }
 
   private getDemographicsGroups(
@@ -106,7 +101,7 @@ export class CharacterRules {
     );
     return demographicGroups
       .map((dg) => dg.getResult(userDemographic, foods))
-      .filter((dg) => dg.resultedDemographicGroup.scaleSectors.length !== 0);
+      .filter((dg) => !!dg.resultedDemographicGroup.scaleSectors.length);
   }
 
   private pickAverageSentiment(scaleSectors: DemographicScaleSector[]): CharacterSentiment | null {
@@ -123,7 +118,7 @@ export class CharacterRules {
       Sentiment.HIGH,
       Sentiment.TOO_HIGH,
     ];
-    const presentEnums = enums.filter((en) => dgSenEnums.indexOf(en) > -1);
+    const presentEnums = enums.filter((en) => dgSenEnums.includes(en));
     const averageEnumIndex = Math.round(
       presentEnums.map((e) => enums.indexOf(e)).reduce((a, b) => a + b) / presentEnums.length
     );
@@ -136,7 +131,7 @@ export class CharacterRules {
   private getCharacterSentimentByDemographicSentiment(
     dSentiment: Sentiment
   ): CharacterSentiment | null {
-    const sentiments = this.sentiments.filter((s) => s.sentiment.indexOf(dSentiment) > -1);
+    const sentiments = this.sentiments.filter((s) => s.sentiment.includes(dSentiment));
     return sentiments.length ? sentiments[0] : null;
   }
 }

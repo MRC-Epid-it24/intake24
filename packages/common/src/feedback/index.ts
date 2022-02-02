@@ -1,4 +1,4 @@
-import { RequiredLocaleTranslation } from '../types';
+import { LocaleTranslation, RequiredLocaleTranslation } from '../types';
 
 export const feedbackTypes = ['default', 'playful'] as const;
 export type FeedbackType = typeof feedbackTypes[number];
@@ -33,19 +33,28 @@ export type WeightTargetCoefficient = {
   coefficient: number;
 };
 
-export type FoodGroup = {
-  name: string;
-  high: {
-    threshold: number;
-    message: RequiredLocaleTranslation;
-  } | null;
-  low: {
-    threshold: number;
-    message: RequiredLocaleTranslation;
-  } | null;
-  nutrients: string[];
-  tellMeMore: RequiredLocaleTranslation;
+export type FoodGroupThreshold = {
+  threshold: number;
+  message: LocaleTranslation;
 };
+
+export type BaseFeedback = {
+  name: RequiredLocaleTranslation;
+  description: LocaleTranslation;
+  high: FoodGroupThreshold | null;
+  low: FoodGroupThreshold | null;
+};
+
+export interface NutrientGroupFeedback extends BaseFeedback {
+  type: 'nutrient-group';
+  nutrients: string[];
+}
+
+export interface FiveADayFeedback extends BaseFeedback {
+  type: 'five-a-day';
+}
+
+export type FoodGroup = NutrientGroupFeedback | FiveADayFeedback;
 
 export type TopFoodNutrientType = {
   id: string;

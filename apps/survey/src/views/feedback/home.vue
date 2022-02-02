@@ -10,37 +10,34 @@
       <!-- Day selector -->
     </v-col>
     <v-col cols="12" class="mt-4">
-      <feedback-chart-area :food-data="topFoodData"></feedback-chart-area>
+      <feedback-card-area v-bind="{ results }"></feedback-card-area>
+    </v-col>
+    <v-col cols="12" class="mt-4">
+      <feedback-chart-area v-bind="{ topFoods }"></feedback-chart-area>
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import { feedbackService, FeedbackDictionaries } from '@intake24/survey/services';
-import { Sentiment } from '@intake24/common/feedback';
+import { UserDemographic, getTopFoods } from '@intake24/survey/feedback';
+import { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
 import {
-  AggregateFoodStats,
-  CharacterRules,
-  FruitAndVegPortions,
-  FoodGroupFeedback,
-  UserDemographic,
-  getTopFoods,
-} from '@intake24/survey/feedback';
-import { FeedbackSchemeEntryResponse, FiveADayFeedback } from '@intake24/common/types/http';
-import UserDemographicInfo from '@intake24/survey/components/feedback/user-demographic-info.vue';
+  FeedbackChartArea,
+  FeedbackCardArea,
+  UserDemographicInfo,
+} from '@intake24/survey/components/feedback';
+import { defineComponent } from '@vue/composition-api';
 import {
-  FeedbackCardParameters,
-  FiveADayCardParameters,
-  FoodGroupCardParameters,
-  PlayingCardDetails,
-} from '@intake24/survey/components/feedback/cards';
-import FeedbackChartArea from '../../components/feedback/feedback-chart-area.vue';
+  FeedbackParameters,
+  buildCharacterParams,
+  buildFoodGroupParams,
+} from '@intake24/survey/feedback/groups-builder';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FeedbackHome',
 
-  components: { UserDemographicInfo, FeedbackChartArea },
+  components: { FeedbackCardArea, FeedbackChartArea, UserDemographicInfo },
 
   props: {
     surveyId: {
@@ -54,14 +51,16 @@ export default Vue.extend({
       feedbackDicts: null as FeedbackDictionaries | null,
       userDemographic: null as UserDemographic | null,
 
-      results: [] as FeedbackCardParameters[],
-      topFoodData: getTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], this.$i18n.locale),
+      results: [] as FeedbackParameters[],
+      topFoods: getTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], this.$i18n.locale),
 
-      tellMeMoreVisible: false,
-      tellMeMoreDetails: [] as PlayingCardDetails[],
       daysRecorded: undefined as number | undefined,
       currentDay: undefined as number | undefined,
     };
+  },
+
+  setup() {
+    return { buildCharacterParams, buildFoodGroupParams };
   },
 
   computed: {
@@ -89,20 +88,20 @@ export default Vue.extend({
 
   methods: {
     buildView(day?: number): void {
-      const { feedbackDicts, surveyId } = this;
-      if (!feedbackDicts) {
+      const { feedbackDicts, feedbackScheme, surveyId } = this;
+      if (!feedbackDicts || !feedbackScheme) {
         this.$router.push({ name: 'feedback-error', params: { surveyId } });
         return;
       }
 
       const {
-        feedbackData: { fiveADay, physicalActivityLevels, weightTargets },
+        feedbackData: { physicalActivityLevels, weightTargets },
         surveyStats,
         physicalData,
-        bmrCalc,
         characterRules,
-        foodGroupFeedback,
       } = feedbackDicts;
+
+      const { foodGroups, type: feedbackType, henryCoefficients } = feedbackScheme;
 
       if (!physicalData) {
         this.$router.push({ name: 'feedback-physical-data', params: { surveyId } });
@@ -123,7 +122,7 @@ export default Vue.extend({
         physicalData,
         physicalActivityLevel,
         weightTarget,
-        bmrCalc
+        henryCoefficients
       );
 
       const submissionsCount = surveyStats.submissions.length;
@@ -138,109 +137,22 @@ export default Vue.extend({
       const averageIntake = surveyStats.getAverageIntake(this.currentDay);
       const fruitAndVegPortions = surveyStats.getFruitAndVegPortions(this.currentDay);
 
-      this.buildFeedbackCards(
+      const characterParams = this.buildCharacterParams(
         foods,
-        averageIntake,
-        fruitAndVegPortions,
         characterRules,
-        fiveADay,
-        foodGroupFeedback
+        this.userDemographic,
+        feedbackType
       );
 
-      const { feedbackScheme } = this;
-      if (!feedbackScheme) return;
+      const foodGroupParams = this.buildFoodGroupParams(
+        foodGroups,
+        averageIntake,
+        fruitAndVegPortions
+      );
 
-      this.topFoodData = getTopFoods(feedbackScheme.topFoods, foods, this.$i18n.locale);
-    },
+      this.results = [...characterParams, ...foodGroupParams];
 
-    buildFoodGroupFeedbackCards(
-      foodGroupsFeedback: FoodGroupFeedback[],
-      averageIntake: Map<string, number>
-    ): FoodGroupCardParameters[] {
-      return foodGroupsFeedback.map((feedback) => {
-        let groupIntake = feedback.nutrients.reduce((total, nutrientId) => {
-          const intake = averageIntake.get(nutrientId);
-          if (intake !== undefined) return total + intake;
-
-          return total;
-        }, 0);
-
-        groupIntake = Math.round(groupIntake * 10) / 10;
-
-        const lowerCaseName = feedback.name.toLowerCase();
-        const capitalisedName = feedback.name.charAt(0).toUpperCase() + feedback.name.substr(1);
-
-        let warning;
-
-        if (feedback.low && groupIntake < feedback.low.threshold) warning = feedback.low.message;
-        else if (feedback.high && groupIntake > feedback.high.threshold)
-          warning = feedback.high.message;
-
-        const details = new PlayingCardDetails(
-          `${capitalisedName} intake`,
-          groupIntake,
-          feedback.tellMeMoreText,
-          feedback.recommendedIntake,
-          'g',
-          // undefined,
-          '',
-          Sentiment.GOOD,
-          warning
-        );
-
-        return new FoodGroupCardParameters(
-          feedback.name,
-          groupIntake,
-          FoodGroupFeedback.getBackgroundClassForFoodGroup(feedback.nutrients),
-          details
-        );
-      });
-    },
-
-    buildFeedbackCards(
-      foods: AggregateFoodStats[],
-      averageIntake: Map<string, number>,
-      fruitAndVegAverages: FruitAndVegPortions,
-      characterRules: CharacterRules[],
-      fiveADayFeedback: FiveADayFeedback,
-      foodGroupsFeedback: FoodGroupFeedback[]
-    ): void {
-      const { userDemographic } = this;
-      if (!userDemographic) return;
-
-      this.results = characterRules
-        .filter(
-          (cr) =>
-            !cr.displayInFeedbackStyle || cr.displayInFeedbackStyle === this.feedbackScheme?.type
-        )
-        .map((characterRule) => {
-          const sentiment = characterRule.getSentiment(userDemographic, foods);
-          if (!sentiment) {
-            console.warn(
-              'Sentiment for character',
-              characterRule.type,
-              'nutrientTypeIds',
-              characterRule.nutrientTypeIds,
-              'resulted empty. Demographic groups',
-              characterRule.demographicGroups
-            );
-            return null;
-          }
-
-          return sentiment;
-        })
-        // filter falsy does not narrow down the type
-        .filter((sentiment) => sentiment) as FeedbackCardParameters[];
-
-      if (this.feedbackScheme?.type === 'default') {
-        this.results.push(
-          new FiveADayCardParameters(
-            Math.round(fruitAndVegAverages.total * 10) / 10,
-            fiveADayFeedback
-          )
-        );
-        this.results.push(...this.buildFoodGroupFeedbackCards(foodGroupsFeedback, averageIntake));
-      }
+      this.topFoods = getTopFoods(feedbackScheme.topFoods, foods, this.$i18n.locale);
     },
   },
 });

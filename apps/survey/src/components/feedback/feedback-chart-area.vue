@@ -1,7 +1,7 @@
 <template>
   <v-sheet color="white">
     <v-row justify="center" :no-gutters="isMobile">
-      <v-col v-for="nutrient in foodData.nutrients" class="mb-4" cols="auto" :key="nutrient.id">
+      <v-col v-for="nutrient in topFoods.nutrients" class="mb-4" cols="auto" :key="nutrient.id">
         <canvas :id="`chart-${nutrient.id}`"></canvas>
         <v-divider class="my-4"></v-divider>
         <div class="title">Highest in {{ nutrient.name }}</div>
@@ -9,7 +9,7 @@
           <v-list-item v-for="(item, index) in nutrient.list" :key="item.name">
             <v-list-item-icon
               class="font-weight-bold my-auto"
-              :style="{ color: `${foodData.colors[index]}` }"
+              :style="{ color: `${topFoods.colors[index]}` }"
             >
               {{ index + 1 }}
             </v-list-item-icon>
@@ -32,7 +32,7 @@ export default defineComponent({
   name: 'FeedbackChartArea',
 
   props: {
-    foodData: {
+    topFoods: {
       type: Object as () => TopFoodData,
       required: true,
     },
@@ -40,7 +40,7 @@ export default defineComponent({
 
   mounted() {
     setTimeout(() => {
-      for (const item of this.foodData.nutrients) {
+      for (const item of this.topFoods.nutrients) {
         const el = document.getElementById(`chart-${item.id}`) as HTMLCanvasElement;
 
         if (!el) {

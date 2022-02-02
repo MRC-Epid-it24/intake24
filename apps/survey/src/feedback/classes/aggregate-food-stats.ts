@@ -1,3 +1,4 @@
+import { round } from '@intake24/common/util';
 import { NutrientTypeIdEnum } from './character';
 
 export default class AggregateFoodStats {
@@ -15,7 +16,7 @@ export default class AggregateFoodStats {
   }
 
   getAverageIntake(nutrientTypeId: string): number {
-    return Math.round((this.averageIntake.get(nutrientTypeId) || 0) * 10) / 10;
+    return round(this.averageIntake.get(nutrientTypeId) || 0);
   }
 
   getAverageEnergyIntake(): number {

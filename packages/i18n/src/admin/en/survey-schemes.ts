@@ -189,7 +189,8 @@ const surveySchemes: LocaleMessageObject = {
     _: 'Scheme overrides',
     meals: {
       title: 'Scheme meals overrides',
-      subtitle: 'Override specific scheme question prompt. Changes will get merged by Question ID.',
+      subtitle:
+        'Override scheme meal list. If left empty, scheme list is used. If any item added, whole list is used.',
     },
     questions: {
       title: 'Scheme questions overrides',

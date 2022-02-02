@@ -4,8 +4,6 @@ export * from './brands';
 export * from './categories';
 export * from './demographic-groups';
 export * from './drinkware';
-export * from './five-a-day-feedback';
-export * from './food-groups-feedback';
 export * from './foods';
 export * from './guide-images';
 export * from './image-maps';

@@ -23,10 +23,10 @@ export default class DemographicRange {
   }
 
   toString(): string {
-    if (this.end > 999999) return `>${this.start}`;
+    if (this.end > 999999) return ` > ${this.start}`;
 
     if (this.start === this.end) return `${this.start}`;
 
-    return `${this.start}-${this.end}`;
+    return `${this.start} - ${this.end}`;
   }
 }

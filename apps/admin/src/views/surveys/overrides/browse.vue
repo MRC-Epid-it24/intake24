@@ -2,7 +2,7 @@
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <v-card-title>{{ $t('survey-schemes.overrides.questions.title') }}</v-card-title>
     <v-card-subtitle>
-      Override specific scheme question prompt. Changes will get merged by Question ID.
+      {{ $t('survey-schemes.overrides.questions.subtitle') }}
     </v-card-subtitle>
     <prompt-list
       v-bind="{ mode: 'override', questionIds, templates: questions }"
@@ -10,8 +10,7 @@
     ></prompt-list>
     <v-card-title>{{ $t('survey-schemes.overrides.meals.title') }}</v-card-title>
     <v-card-subtitle>
-      Override scheme meal list. If left empty, scheme list is used. If any item added, whole list
-      is used.
+      {{ $t('survey-schemes.overrides.meals.subtitle') }}
     </v-card-subtitle>
     <meal-list
       :schemeId="entry.surveySchemeId"

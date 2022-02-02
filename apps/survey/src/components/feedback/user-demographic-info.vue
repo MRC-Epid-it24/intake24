@@ -2,7 +2,7 @@
   <div>
     <div class="text-h3 text-center mb-4">{{ $t('feedback.physicalData.summary') }}</div>
     <div class="text-h6 text-center mb-4">{{ userInfo.physicalActivityLevel.name }}</div>
-    <v-row justify="center">
+    <v-row justify="center" align="center">
       <v-col cols="auto" class="d-flex flex-column">
         <div>
           {{ $t('feedback.physicalData.weight', { weight: userInfo.physicalData.weightKg }) }}
@@ -47,10 +47,10 @@
 </template>
 
 <script lang="ts">
-import UserDemographic from '@intake24/survey/feedback/user-demographic';
-import Vue from 'vue';
+import { UserDemographic } from '@intake24/survey/feedback';
+import { defineComponent } from '@vue/composition-api';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FeedbackUserDemographicInfo',
 
   props: {
