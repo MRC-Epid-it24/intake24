@@ -20,14 +20,10 @@ export default (): void => {
     expect(status).toBe(200);
     expect(body).toContainAllKeys([
       'demographicGroups',
-      // 'fiveADay', no data -> to be moved to scheme eventually
-      'foodGroups',
-      'henryCoefficients',
       'nutrientTypes',
       'physicalActivityLevels',
       'weightTargets',
     ]);
-    expect(body.henryCoefficients).toStrictEqual(defaultHenryCoefficients);
     expect(body.weightTargets).toStrictEqual(weightTargetsData);
   });
 };
