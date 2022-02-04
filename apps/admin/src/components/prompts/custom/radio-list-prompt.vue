@@ -70,10 +70,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import selectListPrompt from '../partials/select-list-prompt';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'RadioListPrompt',
 
   mixins: [selectListPrompt],
@@ -87,10 +87,10 @@ export default Vue.extend({
 
   data() {
     return {
-      orientations: [
-        { text: this.$t('survey-schemes.questions.orientation.column'), value: 'column' },
-        { text: this.$t('survey-schemes.questions.orientation.row'), value: 'row' },
-      ],
+      orientations: ['column', 'row'].map((value) => ({
+        text: this.$t(`survey-schemes.questions.orientation.${value}`),
+        value,
+      })),
     };
   },
 });

@@ -13,7 +13,7 @@
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon>fa-plus</v-icon>
+            <v-icon>$add</v-icon>
           </v-btn>
         </template>
         <v-list class="grey lighten-3">
@@ -55,23 +55,20 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
-import { SurveySchemeRefs, LanguageListEntry } from '@intake24/common/types/http/admin';
-import tinymce from '@intake24/admin/components/tinymce/tinymce';
-import mapRefs from '@intake24/admin/components/entry/map-refs';
-import { MapRefsMixin } from '@intake24/admin/types';
+import { LanguageListEntry } from '@intake24/common/types/http/admin';
+import { defineComponent, PropType } from '@vue/composition-api';
+import { LocaleTranslation } from '@intake24/common/types';
 
-export default (Vue as VueConstructor<Vue & MapRefsMixin<SurveySchemeRefs>>).extend({
+export default defineComponent({
   name: 'LanguageSelector',
-
-  mixins: [mapRefs, tinymce],
 
   props: {
     label: {
       type: String,
     },
     value: {
-      type: Object,
+      type: Object as PropType<LocaleTranslation>,
+      required: true,
     },
     default: {
       default: '',
@@ -101,27 +98,27 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SurveySchemeRefs>>).ext
     languages(): string[] {
       return Object.keys(this.value);
     },
-    // Language refs should through provide/injected or something (relies too much on entry reference)
+    allLanguages(): LanguageListEntry[] {
+      return (
+        this.$store.state.resource.entry.refs.languages ?? [
+          { id: 'en', englishName: 'English', localName: 'English', countryFlagCode: 'gb' },
+        ]
+      );
+    },
     availableLanguages(): LanguageListEntry[] {
-      if (!this.refsLoaded) return [];
-
-      return this.refs.languages.filter((lang) => !this.languages.includes(lang.id));
+      return this.allLanguages.filter((lang) => !this.languages.includes(lang.id));
     },
   },
 
   methods: {
     getLanguageFlag(langId: string) {
-      if (!this.refsLoaded) return 'gb';
-
-      const language = this.refs.languages.find((lang) => lang.id === langId);
+      const language = this.allLanguages.find((lang) => lang.id === langId);
 
       return language?.countryFlagCode ?? 'gb';
     },
 
     getLanguageName(langId: string) {
-      if (!this.refsLoaded) return 'English';
-
-      const language = this.refs.languages.find((lang) => lang.id === langId);
+      const language = this.allLanguages.find((lang) => lang.id === langId);
 
       return language?.englishName ?? 'English';
     },

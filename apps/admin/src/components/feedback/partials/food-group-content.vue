@@ -1,24 +1,24 @@
 <template>
   <v-tab-item key="content">
     <language-selector
-      :label="$t('survey-schemes.questions.text')"
-      :value="text"
-      @input="update('text', $event)"
+      :label="$t('feedback-schemes.food-groups.name')"
+      :value="name"
+      @input="update('name', $event)"
     >
-      <template v-for="lang in Object.keys(text)" v-slot:[`lang.${lang}`]>
+      <template v-for="lang in Object.keys(name)" v-slot:[`lang.${lang}`]>
         <v-text-field
           :key="lang"
-          :label="$t('survey-schemes.questions.text')"
-          :rules="textRules"
-          :value="text[lang]"
+          :label="$t('feedback-schemes.food-groups.name')"
+          :rules="nameRules"
+          :value="name[lang]"
           hide-details="auto"
           outlined
-          @input="updateLanguage('text', lang, $event)"
+          @input="updateLanguage('name', lang, $event)"
         ></v-text-field>
       </template>
     </language-selector>
     <language-selector
-      :label="$t('survey-schemes.questions.description')"
+      :label="$t('feedback-schemes.food-groups.description')"
       :value="description"
       @input="update('description', $event)"
     >
@@ -36,39 +36,39 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { LocaleTranslation } from '@intake24/common/types';
 import tinymce from '@intake24/admin/components/tinymce/tinymce';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { RuleCallback } from '@intake24/admin/types';
+import { FoodGroup } from '@intake24/common/feedback';
 
-export type LocaleTranslationKeys = 'text' | 'description';
+export type LocaleTranslationKeys = 'name' | 'description';
 
 export default defineComponent({
-  name: 'PromptContent',
+  name: 'FoodGroupContent',
 
   components: { LanguageSelector },
 
   mixins: [tinymce],
 
   props: {
-    text: {
-      type: Object as PropType<LocaleTranslation>,
+    name: {
+      type: Object as PropType<FoodGroup['name']>,
       required: true,
     },
-    textRequired: {
+    nameRequired: {
       type: Boolean,
       default: true,
     },
     description: {
-      type: Object as PropType<LocaleTranslation>,
+      type: Object as PropType<FoodGroup['description']>,
       required: true,
     },
   },
 
   computed: {
-    textRules(): RuleCallback[] {
-      return this.textRequired
-        ? [(value: string | null): boolean | string => !!value || 'Question text is required.']
+    nameRules(): RuleCallback[] {
+      return this.nameRequired
+        ? [(value: string | null): boolean | string => !!value || 'Food group name is required.']
         : [];
     },
   },

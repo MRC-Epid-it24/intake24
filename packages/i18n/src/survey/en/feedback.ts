@@ -30,7 +30,7 @@ const feedback: LocaleMessageObject = {
     },
   },
 
-  intake: 'Your {nutrient} intake is {amount} {unit}.',
+  intake: 'Your {nutrient} intake is {amount}.',
 
   unitDescription: {
     percentage_of_energy:

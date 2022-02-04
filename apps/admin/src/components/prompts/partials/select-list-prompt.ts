@@ -1,11 +1,11 @@
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { LocaleOptionList } from '@intake24/common/prompts';
 import { LocaleTranslation } from '@intake24/common/types';
+import { LanguageSelector } from '@intake24/admin/components/forms';
 import basePrompt from './base-prompt';
 import PromptListOptions from './prompt-list-options.vue';
-import LanguageSelector from './language-selector.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SelectListPrompt',
 
   components: { PromptListOptions, LanguageSelector },
@@ -14,10 +14,12 @@ export default Vue.extend({
 
   props: {
     options: {
-      type: Object as () => LocaleOptionList,
+      type: Object as PropType<LocaleOptionList>,
+      required: true,
     },
     label: {
-      type: Object as () => LocaleTranslation,
+      type: Object as PropType<LocaleTranslation>,
+      required: true,
     },
     other: {
       type: Boolean,

@@ -1,5 +1,11 @@
 <template>
-  <v-dialog v-model="dialog.show" fullscreen hide-overlay transition="dialog-bottom-transition">
+  <v-dialog
+    v-model="dialog.show"
+    fullscreen
+    hide-overlay
+    persistent
+    transition="dialog-bottom-transition"
+  >
     <v-card tile>
       <v-toolbar dark color="primary">
         <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
@@ -89,8 +95,7 @@
                 <v-col cols="12" md="6">
                   <language-selector
                     :label="$t('survey-schemes.questions.localName')"
-                    :value="dialog.question.props.localName"
-                    @input="updateQuestionProps({ field: 'localName', value: $event })"
+                    v-model="dialog.question.props.localName"
                   >
                     <template
                       v-for="lang in Object.keys(dialog.question.props.localName)"
@@ -133,24 +138,23 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType, ref } from '@vue/composition-api';
 import { copy, merge } from '@intake24/common/util';
-import Vue, { VueConstructor } from 'vue';
 import { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
-import { FormRefs, LocaleTranslation } from '@intake24/common/types';
 import {
   PromptQuestion,
   QuestionType,
   customPromptQuestions,
   portionSizePromptQuestions,
   standardPromptQuestions,
-  BasePromptProps,
 } from '@intake24/common/prompts';
 import { promptSettings } from '@intake24/admin/components/prompts';
 import customPrompts from '@intake24/admin/components/prompts/custom';
 import standardPrompts from '@intake24/admin/components/prompts/standard';
 import portionSizePrompts from '@intake24/admin/components/prompts/portion-size';
+import { RuleCallback } from '@intake24/admin/types';
 import PromptTypeSelector from './prompt-type-selector.vue';
-import LanguageSelector from './partials/language-selector.vue';
+import { LanguageSelector } from '../forms';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;
@@ -162,24 +166,19 @@ export type PromptQuestionDialog = {
   question: EditPromptQuestion;
 };
 
-type ChangeQuestionFieldLocale = {
-  field: keyof EditPromptQuestion;
-  value: LocaleTranslation;
-};
-
-export default (Vue as VueConstructor<Vue & FormRefs>).extend({
+export default defineComponent({
   name: 'QuestionListDialog',
 
   props: {
     mode: {
-      type: String as () => 'full' | 'override',
+      type: String as PropType<'full' | 'override'>,
       default: 'full',
     },
     section: {
-      type: String as () => SurveyQuestionSection | MealSection,
+      type: String as PropType<SurveyQuestionSection | MealSection>,
     },
     questionIds: {
-      type: Array as () => string[],
+      type: Array as PropType<string[]>,
       default: () => [],
     },
     textRequired: {
@@ -189,11 +188,17 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
   },
 
   components: {
+    LanguageSelector,
     PromptTypeSelector,
     ...customPrompts,
     ...standardPrompts,
     ...portionSizePrompts,
-    LanguageSelector,
+  },
+
+  setup() {
+    const form = ref<InstanceType<typeof HTMLFormElement>>();
+
+    return { form };
   },
 
   data() {
@@ -230,7 +235,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     isOverrideMode(): boolean {
       return this.mode === 'override';
     },
-    textRules() {
+    textRules(): RuleCallback[] {
       return this.textRequired
         ? [
             (value: string | null): boolean | string =>
@@ -244,13 +249,13 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
       return Object.entries(this.groupedPromptQuestions).reduce((acc, [key, value]) => {
         acc[key as QuestionType] = value.filter((prompt) =>
-          this.promptSettings[prompt.component].sections.includes(this.section)
+          this.promptSettings[prompt.component].sections.includes(section)
         );
         return acc;
       }, {} as Record<QuestionType, PromptQuestion[]>);
     },
 
-    questionIdRules() {
+    questionIdRules(): RuleCallback[] {
       return [
         (value: string | null): boolean | string => {
           const { origId } = this.dialog.question;
@@ -317,7 +322,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
 
     save() {
-      const isValid = this.$refs.form.validate();
+      const isValid = this.form?.validate();
       if (!isValid) return;
 
       const {
@@ -334,19 +339,11 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       this.tab = 0;
       this.questionTypeTab = 0;
       this.dialog = this.newDialog();
-      this.$refs.form.resetValidation();
+      this.form?.resetValidation();
     },
 
     validate() {
-      this.$refs.form.validate();
-    },
-
-    updateQuestionProps(changeField: ChangeQuestionFieldLocale) {
-      const newProps: BasePromptProps = {
-        ...this.dialog.question.props,
-        [changeField.field]: changeField.value,
-      };
-      this.dialog.question.props = newProps;
+      this.form?.validate();
     },
   },
 });

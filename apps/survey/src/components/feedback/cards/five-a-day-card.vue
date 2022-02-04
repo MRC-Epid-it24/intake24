@@ -2,10 +2,14 @@
   <v-card width="320px">
     <v-img height="180px" :src="backgroundImage"></v-img>
     <v-card-subtitle class="font-weight-medium">
-      <div class="mb-2">
-        {{ details.name }}
-        <span>{{ details.intake }} {{ details.unit }}.</span>
-      </div>
+      <i18n path="feedback.intake" tag="div" class="mb-2">
+        <template v-slot:nutrient>
+          <span>{{ details.name.en.toLowerCase() }}</span>
+        </template>
+        <template v-slot:amount>
+          <span>{{ details.intake }} {{ details.unit }}</span>
+        </template>
+      </i18n>
       <div :class="details.textClass">
         <v-icon left>{{ details.iconClass }}</v-icon>
         <span>{{ details.targetIntake.toString() }} {{ details.unit }}</span>

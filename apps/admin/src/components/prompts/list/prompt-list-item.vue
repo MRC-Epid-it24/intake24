@@ -97,24 +97,24 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { copy } from '@intake24/common/util';
 import isEqual from 'lodash/isEqual';
+import { defineComponent, PropType } from '@vue/composition-api';
+import { copy } from '@intake24/common/util';
 import { PromptQuestion } from '@intake24/common/prompts';
 import { ConfirmDialog } from '@intake24/ui';
 import { MoveSection } from './prompt-list.vue';
 import SaveAsTemplateDialog from './save-as-template-dialog.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'QuestionListItem',
 
   props: {
     mode: {
-      type: String as () => 'full' | 'override',
+      type: String as PropType<'full' | 'override'>,
       default: 'full',
     },
     question: {
-      type: Object as () => PromptQuestion,
+      type: Object as PropType<PromptQuestion>,
       required: true,
     },
     index: {
@@ -122,11 +122,11 @@ export default Vue.extend({
       required: true,
     },
     moveSections: {
-      type: Array as () => MoveSection[],
+      type: Array as PropType<MoveSection[]>,
       default: () => [],
     },
     templates: {
-      type: Array as () => PromptQuestion[],
+      type: Array as PropType<PromptQuestion[]>,
       default: () => [],
     },
   },

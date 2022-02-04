@@ -60,10 +60,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import selectListPrompt from '../partials/select-list-prompt';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'CheckboxListPrompt',
 
   mixins: [selectListPrompt],

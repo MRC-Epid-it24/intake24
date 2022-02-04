@@ -12,6 +12,7 @@ import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
 import nutrientTables from './nutrient-tables';
+import nutrientTypes from './nutrient-types';
 import permissions from './permissions';
 import roles from './roles';
 import surveySchemes from './survey-schemes';
@@ -36,6 +37,7 @@ const messages: LocaleMessages = {
   languages,
   locales,
   'nutrient-tables': nutrientTables,
+  'nutrient-types': nutrientTypes,
   permissions,
   roles,
   'survey-schemes': surveySchemes,

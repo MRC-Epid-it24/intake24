@@ -13,7 +13,7 @@
         :title="$t('survey-schemes.questions.create')"
         @click.stop="create"
       >
-        <v-icon small>fa-plus</v-icon>
+        <v-icon small>$add</v-icon>
       </v-btn>
       <load-prompt-dialog
         :schemeId="$route.params.id"
@@ -45,7 +45,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import isEqual from 'lodash/isEqual';
+import { defineComponent, PropType, ref } from '@vue/composition-api';
 import draggable from 'vuedraggable';
 import { PromptQuestion } from '@intake24/common/prompts';
 import { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
@@ -53,12 +54,6 @@ import { promptSettings } from '@intake24/admin/components/prompts';
 import LoadPromptDialog from './load-prompt-dialog.vue';
 import PromptListItem from './prompt-list-item.vue';
 import PromptSelector from '../prompt-selector.vue';
-
-export type Refs = {
-  $refs: {
-    selector: InstanceType<typeof PromptSelector>;
-  };
-};
 
 export type MoveSection = { value: string; text: string };
 
@@ -71,28 +66,28 @@ export interface PromptQuestionMoveEvent extends PromptQuestionEvent {
   section: MealSection | SurveyQuestionSection;
 }
 
-export default (Vue as VueConstructor<Vue & Refs>).extend({
+export default defineComponent({
   name: 'PromptList',
 
   props: {
     mode: {
-      type: String as () => 'full' | 'override',
+      type: String as PropType<'full' | 'override'>,
       default: 'full',
     },
     section: {
-      type: String as () => SurveyQuestionSection | MealSection,
+      type: String as PropType<SurveyQuestionSection | MealSection>,
     },
     questionIds: {
-      type: Array as () => string[],
+      type: Array as PropType<string[]>,
       default: () => [],
     },
     templates: {
-      type: Array as () => PromptQuestion[],
+      type: Array as PropType<PromptQuestion[]>,
       default: () => [],
     },
     items: {
-      type: Array as () => PromptQuestion[],
-      default: () => [],
+      type: Array as PropType<PromptQuestion[]>,
+      required: true,
     },
   },
 
@@ -101,6 +96,12 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     LoadPromptDialog,
     PromptListItem,
     PromptSelector,
+  },
+
+  setup() {
+    const selector = ref<InstanceType<typeof PromptSelector>>();
+
+    return { selector };
   },
 
   data() {
@@ -125,7 +126,12 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
 
   watch: {
     items(val) {
-      this.questions = val;
+      if (isEqual(val, this.questions)) return;
+
+      this.questions = [...val];
+    },
+    questions() {
+      this.update();
     },
   },
 
@@ -133,7 +139,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     create() {
       if (this.isOverrideMode) return;
 
-      this.$refs.selector.create();
+      this.selector?.create();
     },
 
     load(question: PromptQuestion) {
@@ -141,7 +147,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     },
 
     edit({ question, index }: PromptQuestionEvent) {
-      this.$refs.selector.edit(index, question);
+      this.selector?.edit(index, question);
     },
 
     save({ question, index }: PromptQuestionEvent) {
@@ -163,19 +169,16 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
 
       this.$emit('move', event);
       this.questions.splice(event.index, 1);
-      this.update();
     },
 
     remove(index: number) {
       this.questions.splice(index, 1);
-      this.update();
     },
 
     sync({ question, index }: PromptQuestionEvent) {
       if (this.isOverrideMode) return;
 
       this.questions.splice(index, 1, question);
-      this.update();
     },
 
     update() {

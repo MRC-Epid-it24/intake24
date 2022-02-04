@@ -1,5 +1,11 @@
 <template>
-  <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+  <v-dialog
+    v-model="dialog"
+    fullscreen
+    hide-overlay
+    persistent
+    transition="dialog-bottom-transition"
+  >
     <v-card tile v-if="dialog">
       <v-toolbar dark color="primary">
         <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="cancel">
@@ -18,7 +24,7 @@
       <v-container>
         <v-row>
           <v-col cols="12" md="6">
-            <v-card-title>Current export fields</v-card-title>
+            <v-card-title>{{ $t('survey-schemes.data-export.current') }}</v-card-title>
             <v-list two-line>
               <draggable v-model="fields">
                 <transition-group type="transition" name="drag-and-drop">
@@ -35,13 +41,13 @@
                     <v-list-item-content>
                       <v-list-item-subtitle class="mb-1">
                         <span class="text--primary"
-                          >{{ $t('survey-schemes.data-export.field.id') }}:</span
+                          >{{ $t('survey-schemes.data-export.fields.id') }}:</span
                         >
                         {{ field.id }}
                       </v-list-item-subtitle>
                       <v-list-item-subtitle>
                         <span class="text--primary">
-                          {{ $t('survey-schemes.data-export.field.label') }}:
+                          {{ $t('survey-schemes.data-export.fields.label') }}:
                         </span>
                         {{ field.label }}
                       </v-list-item-subtitle>
@@ -62,7 +68,7 @@
             </v-list>
           </v-col>
           <v-col cols="12" md="6">
-            <v-card-title>Available fields</v-card-title>
+            <v-card-title>{{ $t('survey-schemes.data-export.available') }}</v-card-title>
             <v-list two-line>
               <transition-group type="transition" name="drag-and-drop">
                 <v-list-item
@@ -74,20 +80,20 @@
                   <v-list-item-content>
                     <v-list-item-subtitle class="mb-1">
                       <span class="text--primary"
-                        >{{ $t('survey-schemes.data-export.field.id') }}:</span
+                        >{{ $t('survey-schemes.data-export.fields.id') }}:</span
                       >
                       {{ field.id }}
                     </v-list-item-subtitle>
                     <v-list-item-subtitle>
                       <span class="text--primary">
-                        {{ $t('survey-schemes.data-export.field.label') }}:
+                        {{ $t('survey-schemes.data-export.fields.label') }}:
                       </span>
                       {{ field.label }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-btn icon :title="$t('common.action.add')" @click.stop="add(field)">
-                      <v-icon color="blue darken-3">fa-plus</v-icon>
+                      <v-icon color="blue darken-3">$add</v-icon>
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>
@@ -98,13 +104,13 @@
       </v-container>
       <v-dialog v-model="editDialog.show" max-width="500px">
         <v-card>
-          <v-card-title>{{ $t('survey-schemes.data-export.field._') }}</v-card-title>
+          <v-card-title>{{ $t('survey-schemes.data-export.fields._') }}</v-card-title>
           <v-card-text>
             <v-row>
               <v-col cols="12">
                 <v-text-field
                   v-model="editDialog.field.id"
-                  :label="$t('survey-schemes.data-export.field.id')"
+                  :label="$t('survey-schemes.data-export.fields.id')"
                   disabled
                   hide-details="auto"
                   name="id"
@@ -114,7 +120,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="editDialog.field.label"
-                  :label="$t('survey-schemes.data-export.field.label')"
+                  :label="$t('survey-schemes.data-export.fields.label')"
                   hide-details="auto"
                   name="label"
                   outlined

@@ -13,7 +13,7 @@
           :title="$t('survey-schemes.questions.options.add')"
           @click.stop="add"
         >
-          <v-icon small>fa-plus</v-icon>
+          <v-icon small>$add</v-icon>
         </v-btn>
       </v-toolbar>
       <v-divider></v-divider>
@@ -67,19 +67,20 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import draggable from 'vuedraggable';
 import { ListOption } from '@intake24/common/prompts';
+import { RuleCallback } from '@intake24/admin/types';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PromptListOptions',
 
   components: { draggable },
 
   props: {
     options: {
-      type: Array as () => ListOption[],
-      default: () => [],
+      type: Array as PropType<ListOption[]>,
+      required: true,
     },
   },
   data() {
@@ -95,7 +96,7 @@ export default Vue.extend({
     outputOptions(): ListOption[] {
       return this.currentOptions.map(({ label, value }) => ({ label, value }));
     },
-    optionValueRules() {
+    optionValueRules(): RuleCallback[] {
       return [
         (value: string | null): boolean | string => {
           const values = this.currentOptions.filter((item) => item.value === value);

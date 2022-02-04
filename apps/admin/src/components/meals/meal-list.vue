@@ -11,7 +11,7 @@
         :title="$t('survey-schemes.meals.create')"
         @click.stop="add"
       >
-        <v-icon small>fa-plus</v-icon>
+        <v-icon small>$add</v-icon>
       </v-btn>
       <load-section-dialog :schemeId="schemeId" section="meals" @load="load"></load-section-dialog>
       <confirm-dialog
@@ -54,7 +54,7 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon :title="$t('survey-schemes.meals.edit')" @click.stop="edit(idx, meal)">
-                <v-icon color="primary lighten-2">fa-ellipsis-v</v-icon>
+                <v-icon color="primary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -117,13 +117,13 @@
 </template>
 
 <script lang="ts">
-import { copy } from '@intake24/common/util';
-import Vue, { VueConstructor } from 'vue';
+import { defineComponent, PropType, ref } from '@vue/composition-api';
 import draggable from 'vuedraggable';
-import { FormRefs, Meal, Meals } from '@intake24/common/types';
+import { copy } from '@intake24/common/util';
+import { Meal, Meals } from '@intake24/common/types';
 import { defaultMeals } from '@intake24/common/schemes';
 import { ConfirmDialog } from '@intake24/ui';
-import LanguageSelector from '@intake24/admin/components/prompts/partials/language-selector.vue';
+import { LanguageSelector } from '@intake24/admin/components/forms';
 import LoadSectionDialog from '@intake24/admin/components/prompts/load-section-dialog.vue';
 
 export type MealDialog = {
@@ -132,7 +132,7 @@ export type MealDialog = {
   meal: Meal;
 };
 
-export default (Vue as VueConstructor<Vue & FormRefs>).extend({
+export default defineComponent({
   name: 'MealList',
 
   props: {
@@ -141,15 +141,22 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       required: true,
     },
     mode: {
-      type: String as () => 'full' | 'override',
+      type: String as PropType<'full' | 'override'>,
       default: 'full',
     },
     value: {
-      type: Array as () => Meal[],
+      type: Array as PropType<Meal[]>,
+      required: true,
     },
   },
 
   components: { ConfirmDialog, draggable, LanguageSelector, LoadSectionDialog },
+
+  setup() {
+    const form = ref<InstanceType<typeof HTMLFormElement>>();
+
+    return { form };
+  },
 
   data() {
     const dialog = (show = false): MealDialog => ({
@@ -208,7 +215,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
     },
 
     save() {
-      const isValid = this.$refs.form.validate();
+      const isValid = this.form?.validate();
       if (!isValid) return;
 
       const { index, meal } = this.dialog;
@@ -225,7 +232,7 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
 
     reset() {
       this.dialog = this.newDialog();
-      this.$refs.form.resetValidation();
+      this.form?.resetValidation();
     },
 
     load(meals: Meals) {

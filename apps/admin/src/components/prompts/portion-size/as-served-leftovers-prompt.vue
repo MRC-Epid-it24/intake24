@@ -15,10 +15,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import basePrompt from '../partials/base-prompt';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AsServedLeftoversPrompt',
 
   mixins: [basePrompt],

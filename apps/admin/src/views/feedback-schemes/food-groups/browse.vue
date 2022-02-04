@@ -1,6 +1,7 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <v-card-title>{{ $t('feedback-schemes.food-groups.title') }}</v-card-title>
+    <food-group-list v-model="form.foodGroups"></food-group-list>
   </layout>
 </template>
 
@@ -10,10 +11,13 @@ import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
 import { defaultTopFoods } from '@intake24/common/feedback';
+import { FoodGroupList } from '@intake24/admin/components/feedback';
 import { FeedbackSchemeForm } from '../form.vue';
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'FeedbackSchemeFoodGroups',
+
+  components: { FoodGroupList },
 
   mixins: [formMixin],
 

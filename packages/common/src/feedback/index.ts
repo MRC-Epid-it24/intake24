@@ -47,7 +47,7 @@ export type BaseFeedback = {
 
 export interface NutrientGroupFeedback extends BaseFeedback {
   type: 'nutrient-group';
-  nutrients: string[];
+  nutrientTypes: string[];
 }
 
 export interface FiveADayFeedback extends BaseFeedback {

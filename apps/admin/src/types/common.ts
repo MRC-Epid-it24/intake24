@@ -5,3 +5,5 @@ export type RouteLeave = {
   to: Route | null;
   confirmed: boolean;
 };
+
+export type RuleCallback = (value: string | null) => boolean | string;

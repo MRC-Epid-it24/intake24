@@ -62,6 +62,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import isInteger from 'lodash/isInteger';
+import { RuleCallback } from '@intake24/admin/types';
 import basePrompt from '../partials/base-prompt';
 
 type Mixins = InstanceType<typeof basePrompt>;
@@ -87,9 +88,9 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   computed: {
-    timerRules() {
+    timerRules(): RuleCallback[] {
       return [
-        (value: string): boolean | string =>
+        (value: string | null): boolean | string =>
           isInteger(value) || 'Timer value needs to be a number.',
       ];
     },

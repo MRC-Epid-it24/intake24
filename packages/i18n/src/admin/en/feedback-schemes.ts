@@ -40,12 +40,6 @@ const feedbackSchemes: LocaleMessageObject = {
       other: 'Other food',
     },
     nutrientTypes: {
-      _: 'Nutrient type',
-      title: 'Nutrient types',
-      create: 'Add nutrient type',
-      edit: 'Edit nutrient type',
-      remove: 'Remove nutrient type',
-      label: 'Nutrient type label',
       reset: {
         _: 'Reset nutrient types',
         text: 'Reset nutrient types to default list',
@@ -61,6 +55,30 @@ const feedbackSchemes: LocaleMessageObject = {
     _: 'Food group',
     title: 'Food groups',
     tab: 'Food groups',
+    create: 'New food group',
+    edit: 'Edit food group',
+    remove: 'Remove food group',
+    type: 'Food group type',
+    name: 'Food group name',
+    description: 'Description',
+
+    thresholds: {
+      _: 'Threshold',
+      title: 'Thresholds',
+      low: 'Lower threshold limit',
+      high: 'Upper threshold limit',
+      enabled: 'Enable threshold',
+      message: 'Warning message',
+    },
+
+    'nutrient-group': {
+      title: 'Nutrient group',
+      subtitle: 'Feedback grouping intake24 values based on nutrient list.',
+    },
+    'five-a-day': {
+      title: 'Five A Day',
+      subtitle: 'Five A Day feedback',
+    },
   },
 };
 

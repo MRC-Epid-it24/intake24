@@ -78,8 +78,10 @@ const surveySchemes: LocaleMessageObject = {
     _: 'Data export',
     tab: 'Data export',
     title: 'Data export fields',
+    current: 'Current export fields',
+    available: 'Available export fields',
     edit: 'Edit fields',
-    field: {
+    fields: {
       _: 'Edit field label',
       id: 'Field ID',
       label: 'Field label',

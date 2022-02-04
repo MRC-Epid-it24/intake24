@@ -77,7 +77,7 @@
             :title="$t('survey-schemes.conditions.create')"
             @click.stop="add"
           >
-            <v-icon small>fa-plus</v-icon>
+            <v-icon small>$add</v-icon>
           </v-btn>
         </v-toolbar>
         <v-divider></v-divider>
@@ -135,7 +135,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { copy, merge } from '@intake24/common/util';
 import draggable from 'vuedraggable';
 import { Condition, ConditionOp, conditionOps } from '@intake24/common/prompts';
@@ -194,7 +194,7 @@ const promptConditions: Condition[] = [
   },
 ];
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PromptConditions',
 
   components: {
@@ -207,7 +207,7 @@ export default Vue.extend({
 
   props: {
     conditions: {
-      type: Array as () => Condition[],
+      type: Array as PropType<Condition[]>,
       required: true,
     },
   },

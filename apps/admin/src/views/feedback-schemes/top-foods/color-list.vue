@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-list two-line>
-      <draggable v-model="colors">
+      <draggable v-model="items">
         <transition-group type="transition" name="drag-and-drop">
           <v-list-item
-            v-for="(color, idx) in colors"
+            v-for="(color, idx) in items"
             :key="`${color}-${idx}`"
             link
             draggable
@@ -21,7 +21,7 @@
             <v-list-item-content>
               <v-list-item-title class="font-weight-medium">
                 {{ color }} ({{
-                  idx + 1 < colors.length ? idx + 1 : $t('feedback-schemes.top-foods.colors.other')
+                  idx + 1 < items.length ? idx + 1 : $t('feedback-schemes.top-foods.colors.other')
                 }})
               </v-list-item-title>
             </v-list-item-content>
@@ -31,7 +31,7 @@
                 :title="$t('feedback-schemes.top-foods.colors.edit')"
                 @click.stop="edit(idx, color)"
               >
-                <v-icon color="primary lighten-2">fa-ellipsis-v</v-icon>
+                <v-icon color="primary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
@@ -49,7 +49,7 @@
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
           <v-card-text>
-            <v-color-picker v-model="dialog.color" show-swatches></v-color-picker>
+            <v-color-picker v-model="dialog.item" show-swatches></v-color-picker>
           </v-card-text>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
@@ -67,12 +67,11 @@
 </template>
 
 <script lang="ts">
-import isEqual from 'lodash/isEqual';
-import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { FormRefs } from '@intake24/common/types';
+import { defineComponent, PropType } from '@vue/composition-api';
+import useTopFoodList from './top-food-list';
 
-export default (Vue as VueConstructor<Vue & FormRefs>).extend({
+export default defineComponent({
   name: 'TopFoodsColorList',
 
   props: {
@@ -81,58 +80,21 @@ export default (Vue as VueConstructor<Vue & FormRefs>).extend({
       required: true,
     },
     value: {
-      type: Array as () => string[],
+      type: Array as PropType<string[]>,
       required: true,
     },
   },
 
   components: { draggable },
 
-  data() {
-    const dialog = (show = false) => ({
-      show,
-      index: -1,
-      color: '#EF6C00',
-    });
+  setup(props, context) {
+    const { dialog, form, items, newDialog, edit, reset, save } = useTopFoodList(
+      props,
+      context,
+      '#EF6C00'
+    );
 
-    return {
-      dialog: dialog(),
-      newDialog: dialog,
-      colors: [...this.value],
-    };
-  },
-
-  watch: {
-    value(val) {
-      if (isEqual(val, this.colors)) return;
-
-      this.colors = [...val];
-    },
-    colors(val) {
-      this.$emit('input', val);
-    },
-  },
-
-  methods: {
-    edit(index: number, color: string) {
-      this.dialog = { show: true, index, color };
-    },
-
-    save() {
-      const isValid = this.$refs.form.validate();
-      if (!isValid) return;
-
-      const { index, color } = this.dialog;
-
-      if (index === -1) this.colors.push(color);
-      else this.colors.splice(index, 1, color);
-
-      this.reset();
-    },
-
-    reset() {
-      this.dialog = this.newDialog();
-    },
+    return { dialog, form, items, newDialog, edit, reset, save };
   },
 });
 </script>

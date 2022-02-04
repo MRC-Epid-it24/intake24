@@ -85,7 +85,7 @@
             rounded
             @click.stop="addField"
           >
-            <v-icon left>fa-plus</v-icon> {{ $t('nutrient-tables.mapping.fields.create') }}
+            <v-icon left>$add</v-icon> {{ $t('nutrient-tables.mapping.fields.create') }}
           </v-btn>
         </v-toolbar>
         <v-card-text>
@@ -149,7 +149,7 @@
             rounded
             @click.stop="addNutrient"
           >
-            <v-icon left>fa-plus</v-icon> {{ $t('nutrient-tables.mapping.nutrients.create') }}
+            <v-icon left>$add</v-icon> {{ $t('nutrient-tables.mapping.nutrients.create') }}
           </v-btn>
         </v-toolbar>
         <v-card-text>

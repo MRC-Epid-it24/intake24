@@ -59,8 +59,8 @@ export const buildNutrientGroupParams = (
 ): NutrientGroupParameters => {
   const { low, high } = foodGroup;
 
-  let intake = foodGroup.nutrients.reduce((total, nutrientId) => {
-    const nutrientIntake = averageIntake.get(nutrientId);
+  let intake = foodGroup.nutrientTypes.reduce((total, nutrientTypeId) => {
+    const nutrientIntake = averageIntake.get(nutrientTypeId);
     if (nutrientIntake !== undefined) return total + nutrientIntake;
 
     return total;

@@ -99,7 +99,7 @@
               @click.stop="addObject"
             >
               <v-btn color="secondary" fab x-large>
-                <v-icon>fa-plus</v-icon>
+                <v-icon>$add</v-icon>
               </v-btn>
             </v-card>
           </v-col>

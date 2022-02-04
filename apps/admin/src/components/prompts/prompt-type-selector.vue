@@ -25,19 +25,19 @@
   </v-tab-item>
 </template>
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { PromptQuestion, QuestionType } from '@intake24/common/prompts';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PromptTypeSelector',
 
   props: {
     type: {
-      type: String as () => QuestionType,
+      type: String as PropType<QuestionType>,
       required: true,
     },
     questions: {
-      type: Array as () => PromptQuestion[],
+      type: Array as PropType<PromptQuestion[]>,
       default: () => [],
     },
   },

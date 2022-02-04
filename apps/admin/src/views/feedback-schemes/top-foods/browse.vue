@@ -67,6 +67,7 @@ import debounce from 'lodash/debounce';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import { defaultTopFoods } from '@intake24/common/feedback';
+import { RuleCallback } from '@intake24/admin/types';
 import { FeedbackSchemeForm } from '../form.vue';
 import NutrientList from './nutrient-list.vue';
 import ColorList from './color-list.vue';
@@ -96,7 +97,7 @@ export default (Vue as VueConstructor<Vue & FeedbackSchemeTopFoods>).extend({
   },
 
   computed: {
-    topFoodsMaxRules() {
+    topFoodsMaxRules(): RuleCallback[] {
       return [
         (value: string | null): boolean | string => {
           return !Number.isInteger(value)

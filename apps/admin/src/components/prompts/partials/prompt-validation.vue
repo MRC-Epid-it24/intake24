@@ -34,11 +34,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import { LocaleTranslation } from '@intake24/common/types';
-import LanguageSelector from './language-selector.vue';
+import { LanguageSelector } from '@intake24/admin/components/forms';
+import { defineComponent, PropType } from '@vue/composition-api';
 
-export default Vue.extend({
+export type LocaleTranslationKeys = 'message';
+
+export default defineComponent({
   name: 'PromptValidation',
 
   components: { LanguageSelector },
@@ -46,9 +48,11 @@ export default Vue.extend({
   props: {
     required: {
       type: Boolean,
+      required: true,
     },
     message: {
-      type: Object as () => LocaleTranslation,
+      type: Object as PropType<LocaleTranslation>,
+      required: true,
     },
   },
 
@@ -56,7 +60,7 @@ export default Vue.extend({
     update(field: string, value: any) {
       this.$emit(`update:${field}`, value);
     },
-    updateLanguage(field: string, locale: string, value: any) {
+    updateLanguage(field: LocaleTranslationKeys, locale: string, value: any) {
       this.$emit(`update:${field}`, { ...this.$props[field], [locale]: value });
     },
   },

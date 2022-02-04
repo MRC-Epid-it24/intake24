@@ -9,7 +9,7 @@
         small
         :title="$t('fdbs.categories.add')"
       >
-        <v-icon>$create</v-icon>
+        <v-icon>$add</v-icon>
       </v-btn>
     </template>
     <v-card :loading="loading">

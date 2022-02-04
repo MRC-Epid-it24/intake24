@@ -12,6 +12,7 @@ export default new Vuetify({
       login: 'fas fa-sign-in-alt',
       logout: 'fas fa-sign-out-alt',
       user: 'fas fa-user-circle',
+      add: 'fas fa-plus',
       create: 'fas fa-plus',
       delete: 'fas fa-trash',
       edit: 'fas fa-edit',
