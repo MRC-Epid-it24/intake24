@@ -24,7 +24,7 @@
     "cronstrue": "^1.123.0",
     "date-fns": "^2.28.0",
     "dotenv": "^14.3.2",
-    "dotenv-expand": "^6.0.1",
+    "dotenv-expand": "^8.0.1",
     "express": "^4.17.2",
     "flag-icons": "^6.0.3",
     "helmet": "^5.0.2",
