@@ -69,7 +69,7 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.16.1",
     "sequelize-typescript": "^2.1.2",
-    "sharp": "^0.29.3",
+    "sharp": "^0.30.0",
     "slugify": "^1.6.5",
     "validator": "^13.7.0",
     "web-push": "^3.4.5"
