@@ -238,7 +238,7 @@ importers:
       rimraf: ^3.0.2
       sequelize: ^6.16.1
       sequelize-typescript: ^2.1.2
-      sharp: ^0.29.3
+      sharp: ^0.30.0
       slugify: ^1.6.5
       supertest: ^6.2.2
       ts-loader: ^9.2.6
@@ -292,7 +292,7 @@ importers:
       reflect-metadata: 0.1.13
       sequelize: 6.16.1_d55c69d03d0ded1d9995308b70394d8d
       sequelize-typescript: 2.1.2_d2a57150ab1bda58be41f322b314418e
-      sharp: 0.29.3
+      sharp: 0.30.0
       slugify: 1.6.5
       validator: 13.7.0
       web-push: 3.4.5
@@ -6269,12 +6269,6 @@ packages:
 
   /destroy/1.0.4:
     resolution: {integrity: sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=}
-
-  /detect-libc/1.0.3:
-    resolution: {integrity: sha1-+hN8S9aY7fVc1c0CrFWfkaTEups=}
-    engines: {node: '>=0.10'}
-    hasBin: true
-    dev: false
 
   /detect-libc/2.0.0:
     resolution: {integrity: sha512-S55LzUl8HUav8l9E2PBTlC5PAJrHK7tkM+XXFGD+fbsbkTzhCpG6K05LxJcUOEWzMa4v6ptcMZ9s3fOdJDu0Zw==}
@@ -12764,13 +12758,13 @@ packages:
       kind-of: 6.0.3
     dev: true
 
-  /sharp/0.29.3:
-    resolution: {integrity: sha512-fKWUuOw77E4nhpyzCCJR1ayrttHoFHBT2U/kR/qEMRhvPEcluG4BKj324+SCO1e84+knXHwhJ1HHJGnUt4ElGA==}
+  /sharp/0.30.0:
+    resolution: {integrity: sha512-L3m/l6yQFr3oGBUzcSAlN/R9yGFPYqM9FpMUe6Z4nHg4sWtP3hW1rcz+aaHklhD4wX5Jqh5PY9z+A1d4Qt3Hfg==}
     engines: {node: '>=12.13.0'}
     requiresBuild: true
     dependencies:
       color: 4.2.0
-      detect-libc: 1.0.3
+      detect-libc: 2.0.0
       node-addon-api: 4.3.0
       prebuild-install: 7.0.1
       semver: 7.3.5

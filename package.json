@@ -9,7 +9,7 @@
   "engines": {
     "node": "^14.17.0 || >=16.0.0"
   },
-  "packageManager": "pnpm@6.29.1",
+  "packageManager": "pnpm@6.30.0",
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
     "build": "pnpm build --filter ./apps",
