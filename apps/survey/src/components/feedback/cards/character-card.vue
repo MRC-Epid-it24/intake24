@@ -25,9 +25,9 @@
           <v-toolbar-title> Title </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn :title="$t('common.action.ok')" text @click.stop="close">
+            <!-- <v-btn :title="$t('common.action.ok')" text @click.stop="close">
               <v-icon left>$success</v-icon>
-            </v-btn>
+            </v-btn> -->
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text>

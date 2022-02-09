@@ -1,7 +1,6 @@
 import {
   DemographicGroup as FeedbackSchemeDemographicGroup,
   NutrientRuleType,
-  Sentiment,
   Sex,
 } from '@intake24/common/feedback';
 import { NutrientType } from '@intake24/common/types/http';

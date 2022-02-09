@@ -124,7 +124,6 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
     FoodLocal.findAll({
       where: {
         localeId,
-        // @ts-expect-error: Sequelize typings don't know about this type of syntax yet
         '$main->parentCategoryMappings.category_code$': null,
       },
       include: [

@@ -21,15 +21,15 @@
     "db:system:migrate:undo": "npx sequelize db:migrate:undo --options-path sequelize/system/options.js"
   },
   "dependencies": {
-    "dotenv": "^14.3.2",
+    "dotenv": "^16.0.0",
     "lodash": "^4.17.21",
     "mariadb": "^2.5.5",
-    "mssql": "^7.3.0",
+    "mssql": "^8.0.2",
     "nanoid": "^3.2.0",
-    "pg": "^8.7.1",
+    "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.12.5",
+    "sequelize": "^6.16.1",
     "sequelize-typescript": "^2.1.2"
   },
   "devDependencies": {

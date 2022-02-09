@@ -128,7 +128,6 @@ export default ({
 
     const where: WhereOptions<UserAttributes> = {
       email: { [Op.ne]: null },
-      // @ts-expect-error: Sequelize typings don't know about this type of syntax yet
       '$permissions.id$': { [Op.eq]: null },
     };
 
