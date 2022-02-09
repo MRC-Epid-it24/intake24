@@ -36,9 +36,9 @@
           <v-list-item
             v-for="(nutrientType, idx) in items"
             :key="nutrientType.id"
-            link
-            draggable
             class="drag-and-drop__item"
+            draggable
+            link
           >
             <v-list-item-avatar>
               <v-icon>fa-grip-vertical</v-icon>
@@ -122,7 +122,7 @@ import { defaultTopFoods, TopFoodNutrientType } from '@intake24/common/feedback'
 import { NutrientTypeAttributes } from '@intake24/common/types/models';
 import { defineComponent, PropType } from '@vue/composition-api';
 import { RuleCallback } from '@intake24/admin/types';
-import useTopFoodList from './top-food-list';
+import { useTopFoodList } from '..';
 
 export default defineComponent({
   name: 'TopFoodsNutrientTypeList',

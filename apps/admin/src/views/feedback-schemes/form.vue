@@ -52,8 +52,10 @@ import {
   defaultTopFoods,
   FeedbackType,
   feedbackTypes,
-  FoodGroup,
+  Card,
   TopFoods,
+  DemographicGroup,
+  HenryCoefficient,
 } from '@intake24/common/feedback';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 
@@ -62,7 +64,9 @@ export type FeedbackSchemeForm = {
   name: string | null;
   type: FeedbackType;
   topFoods: TopFoods;
-  foodGroups: FoodGroup[];
+  cards: Card[];
+  demographicGroups: DemographicGroup[];
+  henryCoefficients: HenryCoefficient[];
 };
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
@@ -79,7 +83,9 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         name: null,
         type: 'default',
         topFoods: defaultTopFoods,
-        foodGroups: [],
+        cards: [],
+        demographicGroups: [],
+        henryCoefficients: [],
       }),
       feedbackTypes: feedbackTypes.map((value) => ({
         value,

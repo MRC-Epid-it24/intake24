@@ -41,5 +41,5 @@ export type NutrientTableEntry = NutrientTableAttributes &
   >;
 
 export type NutrientTableRefs = {
-  nutrients: NutrientTypeAttributes[];
+  nutrientTypes: NutrientTypeAttributes[];
 };

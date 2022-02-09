@@ -13,8 +13,14 @@ import Locale from './locale';
 import LanguageTranslation from './language-translation';
 
 @Scopes(() => ({
-  public: { attributes: ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection'] },
-  list: { attributes: ['id', 'englishName', 'localName', 'countryFlagCode'] },
+  public: {
+    attributes: ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection'],
+    order: [['englishName', 'ASC']],
+  },
+  list: {
+    attributes: ['id', 'englishName', 'localName', 'countryFlagCode'],
+    order: [['englishName', 'ASC']],
+  },
   adminLocales: { include: [{ association: 'adminLocales' }] },
   surveyLocales: { include: [{ association: 'surveyLocales' }] },
 }))

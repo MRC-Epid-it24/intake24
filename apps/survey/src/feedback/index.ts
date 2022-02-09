@@ -1,3 +1,3 @@
 export * from './classes';
-export * from './groups-builder';
+export * from './cards-builder';
 export * from './top-foods';

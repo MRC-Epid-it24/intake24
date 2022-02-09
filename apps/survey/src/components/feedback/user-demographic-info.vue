@@ -47,15 +47,15 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from '@vue/composition-api';
 import { UserDemographic } from '@intake24/survey/feedback';
-import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
   name: 'FeedbackUserDemographicInfo',
 
   props: {
     userInfo: {
-      type: Object as () => UserDemographic,
+      type: Object as PropType<UserDemographic>,
       required: true,
     },
   },

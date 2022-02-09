@@ -174,7 +174,7 @@
                 <td class="py-2">
                   <v-select
                     v-model="nutrient.nutrientTypeId"
-                    :items="refs.nutrients"
+                    :items="refs.nutrientTypes"
                     :label="$t('nutrient-tables.mapping.nutrients.nutrient')"
                     dense
                     item-value="id"
@@ -381,7 +381,7 @@ export default (
 
     addNutrient() {
       this.form.csvMappingNutrients.push({
-        nutrientTypeId: this.refs.nutrients[0].id,
+        nutrientTypeId: this.refs.nutrientTypes[0].id,
         columnOffset: 'A',
       });
     },

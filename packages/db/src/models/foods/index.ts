@@ -10,8 +10,6 @@ export { default as CategoryCategory } from './category-category';
 export { default as CategoryLocal } from './category-local';
 export { default as CategoryPortionSizeMethod } from './category-portion-size-method';
 export { default as CategoryPortionSizeMethodParameter } from './category-portion-size-method-param';
-export { default as DemographicGroup } from './demographic-group';
-export { default as DemographicGroupScaleSector } from './demographic-group-scale-sector';
 export { default as DrinkwareScale } from './drinkware-scale';
 export { default as DrinkwareSet } from './drinkware-set';
 export { default as DrinkwareVolumeSample } from './drinkware-volume-sample';

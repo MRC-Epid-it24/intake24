@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { nanoid } from 'nanoid';
+import { randomString } from '@intake24/common/util';
 import { Op, User, UserPasswordReset } from '@intake24/db';
 import { ValidationError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
@@ -30,7 +30,7 @@ export default ({
     }
 
     const { id: userId } = user;
-    const token = nanoid(64);
+    const token = randomString(64);
 
     await Promise.all([
       UserPasswordReset.create({ userId, token }),

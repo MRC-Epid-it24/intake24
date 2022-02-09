@@ -1,8 +1,10 @@
-import { NutrientRuleType, Sentiment, Sex } from '@intake24/common/feedback';
 import {
-  DemographicGroup as DemographicGroupResponse,
-  NutrientType,
-} from '@intake24/common/types/http';
+  DemographicGroup as FeedbackSchemeDemographicGroup,
+  NutrientRuleType,
+  Sentiment,
+  Sex,
+} from '@intake24/common/feedback';
+import { NutrientType } from '@intake24/common/types/http';
 import DemographicScaleSector from './demographic-scale-sector';
 import AggregateFoodStats from './aggregate-food-stats';
 import DemographicRange from './demographic-range';
@@ -36,30 +38,31 @@ export default class DemographicGroup {
     age: DemographicRange | null,
     height: DemographicRange | null,
     weight: DemographicRange | null,
-    nutrientTypeKCalPerUnit: number | null,
     nutrient: NutrientType
   ) {
     this.id = id;
+    this.nutrientRuleType = nutrientRuleType;
+    this.scaleSectors = scaleSectors.map((s) => s.clone());
     this.sex = sex;
     this.age = age ? age.clone() : null;
     this.height = height ? height.clone() : null;
     this.weight = weight ? weight.clone() : null;
     this.nutrient = nutrient;
-    this.nutrientRuleType = nutrientRuleType;
-    this.nutrientTypeKCalPerUnit = nutrientTypeKCalPerUnit;
-    this.scaleSectors = scaleSectors.map((s) => s.clone());
+
+    this.nutrientTypeKCalPerUnit = nutrient.kcalPerUnit;
   }
 
-  static fromJson(group: DemographicGroupResponse, nutrient: NutrientType): DemographicGroup {
+  static fromJson(group: FeedbackSchemeDemographicGroup, nutrient: NutrientType): DemographicGroup {
+    const { age, height, weight } = group;
+
     return new DemographicGroup(
       group.id,
       group.nutrientRuleType,
       group.scaleSectors.map(DemographicScaleSector.fromJson),
       group.sex,
-      DemographicRange.fromJson(group.minAge, group.maxAge),
-      DemographicRange.fromJson(group.minHeight, group.maxHeight),
-      DemographicRange.fromJson(group.minWeight, group.maxWeight),
-      group.nutrientTypeInKcal?.kcalPerUnit ?? null,
+      age ? DemographicRange.fromJson(age.start, age.end) : null,
+      height ? DemographicRange.fromJson(height.start, height.end) : null,
+      weight ? DemographicRange.fromJson(weight.start, weight.end) : null,
       nutrient
     );
   }
@@ -73,7 +76,6 @@ export default class DemographicGroup {
       this.age,
       this.height,
       this.weight,
-      this.nutrientTypeKCalPerUnit,
       this.nutrient
     );
   }
@@ -123,20 +125,20 @@ export default class DemographicGroup {
       .map((f) => f.getAverageIntake(this.nutrient.id))
       .reduce((a, b) => a + b, 0);
 
-    if (this.nutrientRuleType === NutrientRuleType.ENERGY_DIVIDED_BY_BMR)
+    if (this.nutrientRuleType === 'energy_divided_by_bmr')
       return (consumption * 100) / userDemographic.getEnergyRequirement();
 
-    if (this.nutrientRuleType === NutrientRuleType.PER_UNIT_OF_WEIGHT)
+    if (this.nutrientRuleType === 'per_unit_of_weight')
       return consumption / userDemographic.physicalData.weightKg;
 
-    if (this.nutrientRuleType === NutrientRuleType.PERCENTAGE_OF_ENERGY) {
+    if (this.nutrientRuleType === 'percentage_of_energy') {
       const energy = foods.map((f) => f.getAverageEnergyIntake()).reduce((a, b) => a + b, 0);
       if (energy === 0) return 0;
 
       return (this.nutrientTypeKCalPerUnit ?? 0 * 100) / energy;
     }
 
-    if (this.nutrientRuleType === NutrientRuleType.RANGE) return consumption;
+    if (this.nutrientRuleType === 'range') return consumption;
 
     throw new Error(`Unknown nutrient rule type: ${this.nutrientRuleType}`);
   }
@@ -147,10 +149,10 @@ export default class DemographicGroup {
   }
 
   private getScaleSectorByBestSentiment(): DemographicScaleSector | undefined {
-    const excScaleSectors = this.scaleSectors.filter((ss) => ss.sentiment === Sentiment.EXCELLENT);
+    const excScaleSectors = this.scaleSectors.filter((ss) => ss.sentiment === 'excellent');
     if (excScaleSectors.length) return excScaleSectors[0];
 
-    const goodScaleSectors = this.scaleSectors.filter((ss) => ss.sentiment === Sentiment.GOOD);
+    const goodScaleSectors = this.scaleSectors.filter((ss) => ss.sentiment === 'good');
     if (goodScaleSectors.length) return goodScaleSectors[0];
 
     return undefined;
@@ -165,7 +167,6 @@ export default class DemographicGroup {
       this.age,
       this.height,
       this.weight,
-      this.nutrientTypeKCalPerUnit,
       this.nutrient
     );
   }

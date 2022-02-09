@@ -12,7 +12,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t(`feedback-schemes.food-groups.${dialog.index === -1 ? 'create' : 'edit'}`) }}
+          {{ $t(`feedback-schemes.cards.${dialog.index === -1 ? 'create' : 'edit'}`) }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
@@ -23,7 +23,7 @@
         <template v-slot:extension>
           <v-container>
             <v-tabs v-model="tab" background-color="primary" dark>
-              <v-tab v-for="item in foodGroupSettings[dialog.group.type].tabs" :key="item">
+              <v-tab v-for="item in cardSettings[dialog.card.type].tabs" :key="item">
                 {{ item }}
               </v-tab>
             </v-tabs>
@@ -39,23 +39,18 @@
                   <v-card outlined>
                     <v-toolbar color="grey lighten-4" flat>
                       <v-toolbar-title>
-                        {{ $t(`feedback-schemes.food-groups.type`) }}
+                        {{ $t(`feedback-schemes.cards.type`) }}
                       </v-toolbar-title>
                     </v-toolbar>
                     <v-item-group
                       active-class="secondary"
-                      v-model="dialog.group.type"
-                      @change="updatePromptProps"
+                      v-model="dialog.card.type"
+                      @change="updateCardProps"
                     >
                       <v-container>
                         <v-row>
-                          <v-col
-                            v-for="item in foodGroupDefaults"
-                            :key="item.type"
-                            cols="12"
-                            md="3"
-                          >
-                            <v-item v-slot:default="{ active, toggle }" :value="item.type">
+                          <v-col v-for="card in cardDefaults" :key="card.type" cols="12" md="3">
+                            <v-item v-slot:default="{ active, toggle }" :value="card.type">
                               <v-card
                                 :color="active ? 'primary' : ''"
                                 dark
@@ -63,10 +58,10 @@
                                 @click.stop="toggle"
                               >
                                 <v-card-title class="justify-center">
-                                  {{ $t(`feedback-schemes.food-groups.${item.type}.title`) }}
+                                  {{ $t(`feedback-schemes.cards.${card.type}.title`) }}
                                 </v-card-title>
                                 <v-card-subtitle class="text-center">
-                                  {{ $t(`feedback-schemes.food-groups.${item.type}.subtitle`) }}
+                                  {{ $t(`feedback-schemes.cards.${card.type}.subtitle`) }}
                                 </v-card-subtitle>
                                 <v-card-text v-show="active" class="text-center">
                                   <v-icon x-large>fa-check-circle</v-icon>
@@ -82,8 +77,8 @@
               </v-row>
             </v-tab-item>
             <component
-              :is="dialog.group.type"
-              v-bind.sync="dialog.group"
+              :is="dialog.card.type"
+              v-bind.sync="dialog.card"
               @validate="validate"
             ></component>
           </v-tabs-items>
@@ -103,23 +98,23 @@
 </template>
 
 <script lang="ts">
-import { copy, merge } from '@intake24/common/util';
-import { FoodGroup } from '@intake24/common/feedback';
+import { copy, merge, randomString } from '@intake24/common/util';
+import { Card } from '@intake24/common/feedback';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { defineComponent, ref } from '@vue/composition-api';
 import tinymce from '@intake24/admin/components/tinymce/tinymce';
 import { RuleCallback } from '@intake24/admin/types';
-import foodGroupTypes from './food-group-types';
-import { foodGroupDefaults, foodGroupSettings } from './food-group';
+import cardTypes from './card-types';
+import { cardDefaults, cardSettings } from './card';
 
-export type FoodGroupDialog = {
+export type CardDialog = {
   show: boolean;
   index: number;
-  group: FoodGroup;
+  card: Card;
 };
 
 export default defineComponent({
-  name: 'FoodGroupSelector',
+  name: 'CardSelector',
 
   props: {
     textRequired: {
@@ -130,7 +125,7 @@ export default defineComponent({
 
   components: {
     LanguageSelector,
-    ...foodGroupTypes,
+    ...cardTypes,
   },
 
   mixins: [tinymce],
@@ -142,17 +137,17 @@ export default defineComponent({
   },
 
   data() {
-    const dialog = (show = false): FoodGroupDialog => ({
+    const dialog = (show = false): CardDialog => ({
       show,
       index: -1,
-      group: copy(foodGroupDefaults[0]),
+      card: copy({ ...cardDefaults[0], id: randomString(6) }),
     });
 
     return {
       dialog: dialog(),
       newDialog: dialog,
-      foodGroupDefaults,
-      foodGroupSettings,
+      cardDefaults,
+      cardSettings,
       tab: 0,
     };
   },
@@ -160,7 +155,7 @@ export default defineComponent({
   computed: {
     textRules(): RuleCallback[] {
       return this.textRequired
-        ? [(value: string | null): boolean | string => !!value || 'Question name is required.']
+        ? [(value: string | null): boolean | string => !!value || 'Card name is required.']
         : [];
     },
   },
@@ -181,30 +176,34 @@ export default defineComponent({
       event.stopImmediatePropagation();
     },
 
-    updatePromptProps() {
+    updateCardProps() {
       const {
         show,
         index,
-        group: { type },
+        card: { type },
       } = this.dialog;
 
-      const group = this.foodGroupDefaults.find((item) => item.type === type);
-      if (!group) return;
+      const card = this.cardDefaults.find((item) => item.type === type);
+      if (!card) return;
 
-      this.dialog = { show, index, group: { ...copy(group) } };
+      this.dialog = { show, index, card: copy({ ...card, id: randomString(6) }) };
     },
 
     create() {
       this.dialog = this.newDialog(true);
     },
 
-    edit(index: number, group: FoodGroup) {
-      const promptDefaults = this.foodGroupDefaults.find((g) => g.type === group.type);
+    edit(index: number, card: Card) {
+      const defaults = this.cardDefaults.find((c) => c.type === card.type);
+      if (!defaults) {
+        console.warn(`Card defaults for card type '${card.type}' not found.`);
+        return;
+      }
 
       this.dialog = {
         show: true,
         index,
-        group: { ...merge<FoodGroup>(promptDefaults ?? {}, group) },
+        card: copy(merge<Card>(defaults, card)),
       };
     },
 
@@ -212,9 +211,9 @@ export default defineComponent({
       const isValid = this.form?.validate();
       if (!isValid) return;
 
-      const { index, group } = this.dialog;
+      const { index, card } = this.dialog;
 
-      this.$emit('save', { group, index });
+      this.$emit('save', { card, index });
 
       this.reset();
     },

@@ -1,5 +1,5 @@
 import { round } from '@intake24/common/util';
-import { NutrientTypeIdEnum } from './character';
+import { NutrientTypeIdEnum } from '@intake24/common/feedback';
 
 export default class AggregateFoodStats {
   readonly name: string;

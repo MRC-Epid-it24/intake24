@@ -1,6 +1,6 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
-    <v-toolbar flat tile color="grey lighten-5" bottom>
+    <v-toolbar flat tile color="grey lighten-5">
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.questions.title`) }}
       </v-toolbar-title>

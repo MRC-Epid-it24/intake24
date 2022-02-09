@@ -1,7 +1,7 @@
 import faker from 'faker';
-import { nanoid, customAlphabet } from 'nanoid';
 import slugify from 'slugify';
 import { randomUUID } from 'crypto';
+import { randomString } from '@intake24/common/util';
 import { jobTypes } from '@intake24/common/types';
 import {
   PermissionRequest,
@@ -22,7 +22,7 @@ import {
 } from '@intake24/common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
 import { customPromptQuestions } from '@intake24/common/prompts';
-import { defaultHenryCoefficients, defaultTopFoods } from '@intake24/common/feedback';
+import { defaultTopFoods } from '@intake24/common/feedback';
 
 const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
@@ -44,7 +44,7 @@ const role = (): RoleRequest => {
 const user = (): CreateUserRequest => {
   const name = faker.name.firstName();
   const email = faker.internet.email();
-  const password = nanoid(30);
+  const password = 'sUpErStRoNgPaSwOrD-123467890';
   const passwordConfirm = password;
   const phone = faker.phone.phoneNumber();
   const multiFactorAuthentication = false;
@@ -104,8 +104,9 @@ const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
     name,
     type,
     topFoods: defaultTopFoods,
-    foodGroups: [],
-    henryCoefficients: defaultHenryCoefficients,
+    cards: [],
+    demographicGroups: [],
+    henryCoefficients: [],
   };
 };
 
@@ -184,7 +185,7 @@ const survey = (
   localeId = 'en_GB',
   feedbackSchemeId = null
 ): CreateSurveyRequest => {
-  const id = slugify(nanoid(16), { strict: true });
+  const id = slugify(randomString(16), { strict: true });
   const name = faker.random.words(6);
   const state = surveyStates.NOT_STARTED;
   const startDate = new Date().toISOString().split('T')[0];
@@ -201,9 +202,7 @@ const survey = (
 
   const authUrlDomainOverride = faker.internet.url();
   const authUrlTokenCharset = [
-    ...new Set(
-      customAlphabet('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 30)().split('')
-    ),
+    ...new Set(randomString(30, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ').split('')),
   ].join('');
   const authUrlTokenLength = faker.datatype.number({ min: 10, max: 100 });
 

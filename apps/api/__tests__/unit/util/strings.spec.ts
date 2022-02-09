@@ -1,4 +1,4 @@
-import { isUrlAbsolute, generateToken, toSimpleName } from '@intake24/api/util';
+import { isUrlAbsolute, toSimpleName } from '@intake24/api/util';
 
 describe('String utilities', () => {
   describe('isUrlAbsolute', () => {
@@ -12,19 +12,6 @@ describe('String utilities', () => {
     it('should fail for relative URLs', () => {
       expect(isUrlAbsolute('relative')).toBe(false);
       expect(isUrlAbsolute('/relative')).toBe(false);
-    });
-  });
-
-  describe('generateToken', () => {
-    it('should produce token of defined ', () => {
-      expect(generateToken(10)).toHaveLength(10);
-    });
-
-    it('should produce token of defined alphabet', () => {
-      const token = generateToken(5, 'a');
-
-      expect(token).toHaveLength(5);
-      expect(token).toEqual('aaaaa');
     });
   });
 

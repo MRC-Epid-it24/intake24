@@ -302,6 +302,10 @@ export default defineComponent({
 
     edit(index: number, question: PromptQuestion) {
       const promptDefaults = this.promptQuestions.find((q) => q.component === question.component);
+      if (!promptDefaults) {
+        console.warn(`Prompt defaults for question type '${question.component}' not found.`);
+        return;
+      }
 
       switch (question.type) {
         case 'standard':
@@ -317,7 +321,7 @@ export default defineComponent({
       this.dialog = {
         show: true,
         index,
-        question: { origId: question.id, ...merge(promptDefaults ?? {}, question) },
+        question: { origId: question.id, ...merge(promptDefaults, question) },
       };
     },
 

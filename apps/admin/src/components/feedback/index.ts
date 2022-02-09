@@ -1,4 +1,8 @@
-export { default as FoodGroupList } from './food-group-list.vue';
-export { default as FoodGroupSelector } from './food-group-selector.vue';
+export * from './cards';
+export * from './demographic-groups';
+export * from './henry-coefficients';
+export * from './top-foods';
 
-export * from './food-group';
+export { default as useTopFoodList } from './top-food-list';
+
+export * from './top-food-list';

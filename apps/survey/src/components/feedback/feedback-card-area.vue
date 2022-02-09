@@ -1,14 +1,14 @@
 <template>
   <v-row justify="center" :no-gutters="isMobile">
-    <v-col v-for="(result, idx) in results" class="mb-4" cols="auto" :key="idx">
-      <component :is="`${result.card}-card`" :parameters="result"></component>
+    <v-col v-for="(card, idx) in cards" class="mb-4" cols="auto" :key="idx">
+      <component :is="`${card.type}-card`" :parameters="card"></component>
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { FeedbackParameters } from '@intake24/survey/feedback';
+import { defineComponent, PropType } from '@vue/composition-api';
+import { FeedbackCardParameters } from '@intake24/survey/feedback';
 import { cards } from './cards';
 
 export default defineComponent({
@@ -17,8 +17,8 @@ export default defineComponent({
   components: { ...cards },
 
   props: {
-    results: {
-      type: Array as () => FeedbackParameters[],
+    cards: {
+      type: Array as PropType<FeedbackCardParameters[]>,
       required: true,
     },
   },

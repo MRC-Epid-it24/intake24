@@ -1,7 +1,7 @@
 import faker from 'faker';
-import { nanoid } from 'nanoid';
 import slugify from 'slugify';
 import { randomUUID } from 'crypto';
+import { randomString } from '@intake24/common/util';
 import {
   CreateLocaleRequest,
   CreateAsServedSetInput,
@@ -11,7 +11,7 @@ import { downloadImage } from '../util';
 
 const food = (foodGroupId: string) => {
   return {
-    code: nanoid(8),
+    code: randomString(8),
     foodGroupId,
     name: faker.random.words(5),
     version: randomUUID(),
@@ -25,7 +25,7 @@ const foodGroup = () => {
 };
 
 const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInput> => {
-  const id = asServedSetId ?? nanoid(32);
+  const id = asServedSetId ?? randomString(32);
   const originalname = `${id}.jpg`;
 
   const filePath = await downloadImage('https://picsum.photos/1200/800.jpg', originalname);
@@ -65,7 +65,7 @@ const locale = (
 
 const nutrientTable = (): NutrientTableInput => {
   return {
-    id: slugify(nanoid(16), { strict: true }),
+    id: slugify(randomString(16), { strict: true }),
     description: faker.random.words(5),
     csvMapping: {
       idColumnOffset: faker.datatype.number(100),
@@ -75,15 +75,15 @@ const nutrientTable = (): NutrientTableInput => {
     },
     csvMappingFields: [
       {
-        fieldName: slugify(nanoid(16), { strict: true }),
+        fieldName: slugify(randomString(16), { strict: true }),
         columnOffset: faker.datatype.number(200),
       },
       {
-        fieldName: slugify(nanoid(16), { strict: true }),
+        fieldName: slugify(randomString(16), { strict: true }),
         columnOffset: faker.datatype.number(200),
       },
       {
-        fieldName: slugify(nanoid(16), { strict: true }),
+        fieldName: slugify(randomString(16), { strict: true }),
         columnOffset: faker.datatype.number(200),
       },
     ],

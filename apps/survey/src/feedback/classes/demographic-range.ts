@@ -8,8 +8,8 @@ export default class DemographicRange {
     this.end = end;
   }
 
-  static fromJson(start: number | null, end: number | null): DemographicRange | null {
-    if (start === null || end === null) return null;
+  static fromJson(start?: number | null, end?: number | null): DemographicRange | null {
+    if (typeof start !== 'number' || typeof end !== 'number') return null;
 
     return new DemographicRange(start, end);
   }

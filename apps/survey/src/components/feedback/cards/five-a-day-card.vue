@@ -1,10 +1,10 @@
 <template>
-  <v-card width="320px">
+  <v-card width="320px" height="100%">
     <v-img height="180px" :src="backgroundImage"></v-img>
     <v-card-subtitle class="font-weight-medium">
       <i18n path="feedback.intake" tag="div" class="mb-2">
         <template v-slot:nutrient>
-          <span>{{ details.name.en.toLowerCase() }}</span>
+          <span>{{ details.name.toLowerCase() }}</span>
         </template>
         <template v-slot:amount>
           <span>{{ details.intake }} {{ details.unit }}</span>
@@ -19,11 +19,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { Sentiment } from '@intake24/common/feedback';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { DemographicRange, FiveADayParameters } from '@intake24/survey/feedback';
 import {
   getIconClass,
+  getLocaleContent,
   getTextClass,
   getUnitFromNutrientRule,
   fiveADayImageMap,
@@ -35,36 +35,37 @@ export default defineComponent({
 
   props: {
     parameters: {
-      type: Object as () => FiveADayParameters,
+      type: Object as PropType<FiveADayParameters>,
       required: true,
     },
   },
 
-  data() {
-    return { fiveADayImageMap };
-  },
-
   setup() {
-    return { getIconClass, getTextClass, getUnitFromNutrientRule };
+    return {
+      fiveADayImageMap,
+      getIconClass,
+      getLocaleContent,
+      getTextClass,
+      getUnitFromNutrientRule,
+    };
   },
 
   computed: {
     details(): FeedbackDetails {
-      const { name, description, low, high, portions } = this.parameters;
-      const sentiment = Sentiment.GOOD;
+      const { name, description, low, high, unit, portions } = this.parameters;
+      const sentiment = 'good';
 
       return {
-        name,
-        description,
+        name: this.getLocaleContent<string>(name),
+        description: this.getLocaleContent(description),
         intake: portions,
         targetIntake: new DemographicRange(high?.threshold ?? 5, high?.threshold ?? 5),
-        unit: 'portions',
-        unitDescription:
-          'Number of portions is calculated based on your fruit and vegetable intake as explained below.',
+        unit: this.getLocaleContent<string>(unit.name),
+        unitDescription: this.getLocaleContent(unit.description),
         sentiment,
         textClass: this.getTextClass(sentiment),
         iconClass: this.getIconClass(sentiment),
-        warning: low && portions < low.threshold ? low.message : undefined,
+        warning: low && portions < low.threshold ? this.getLocaleContent(low.message) : undefined,
       };
     },
 

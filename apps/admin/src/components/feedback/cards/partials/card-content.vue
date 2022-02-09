@@ -1,14 +1,14 @@
 <template>
   <v-tab-item key="content">
     <language-selector
-      :label="$t('feedback-schemes.food-groups.name')"
+      :label="$t('feedback-schemes.cards.name')"
       :value="name"
       @input="update('name', $event)"
     >
       <template v-for="lang in Object.keys(name)" v-slot:[`lang.${lang}`]>
         <v-text-field
           :key="lang"
-          :label="$t('feedback-schemes.food-groups.name')"
+          :label="$t('feedback-schemes.cards.name')"
           :rules="nameRules"
           :value="name[lang]"
           hide-details="auto"
@@ -18,7 +18,7 @@
       </template>
     </language-selector>
     <language-selector
-      :label="$t('feedback-schemes.food-groups.description')"
+      :label="$t('feedback-schemes.cards.description')"
       :value="description"
       @input="update('description', $event)"
     >
@@ -39,12 +39,12 @@ import { defineComponent, PropType } from '@vue/composition-api';
 import tinymce from '@intake24/admin/components/tinymce/tinymce';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { RuleCallback } from '@intake24/admin/types';
-import { FoodGroup } from '@intake24/common/feedback';
+import { CustomCard } from '@intake24/common/feedback';
 
 export type LocaleTranslationKeys = 'name' | 'description';
 
 export default defineComponent({
-  name: 'FoodGroupContent',
+  name: 'CardContent',
 
   components: { LanguageSelector },
 
@@ -52,7 +52,7 @@ export default defineComponent({
 
   props: {
     name: {
-      type: Object as PropType<FoodGroup['name']>,
+      type: Object as PropType<CustomCard['name']>,
       required: true,
     },
     nameRequired: {
@@ -60,7 +60,7 @@ export default defineComponent({
       default: true,
     },
     description: {
-      type: Object as PropType<FoodGroup['description']>,
+      type: Object as PropType<CustomCard['description']>,
       required: true,
     },
   },
@@ -68,7 +68,10 @@ export default defineComponent({
   computed: {
     nameRules(): RuleCallback[] {
       return this.nameRequired
-        ? [(value: string | null): boolean | string => !!value || 'Food group name is required.']
+        ? [
+            (value: string | null): boolean | string =>
+              !!value || this.$t('feedback-schemes.cards.required').toString(),
+          ]
         : [];
     },
   },

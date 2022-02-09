@@ -85,7 +85,7 @@ export default (
     offsetToExcelColumn,
 
     getNutrientName(id: string): string {
-      const match = this.refs.nutrients.find((nutrient) => nutrient.id === id);
+      const match = this.refs.nutrientTypes.find((nutrient) => nutrient.id === id);
 
       return match?.description ?? id;
     },

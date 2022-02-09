@@ -1,10 +1,12 @@
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasOne, Scopes, Table } from 'sequelize-typescript';
 import { NutrientTypeAttributes } from '@intake24/common/types/models';
-import { DemographicGroup, FoodsNutrientUnit } from '.';
+import { FoodsNutrientUnit, NutrientTypeInKcal } from '.';
 import BaseModel from '../model';
 
 @Scopes(() => ({
   unit: { include: [{ model: FoodsNutrientUnit }] },
+  inKcal: { include: [{ model: NutrientTypeInKcal }] },
+  list: { order: [['id', 'ASC']] },
 }))
 @Table({
   modelName: 'NutrientType',
@@ -38,6 +40,6 @@ export default class NutrientType
   @BelongsTo(() => FoodsNutrientUnit, 'unitId')
   public unit?: FoodsNutrientUnit;
 
-  @HasMany(() => DemographicGroup, 'nutrientTypeId')
-  public demographicGroups?: DemographicGroup[];
+  @HasOne(() => NutrientTypeInKcal, 'nutrientTypeId')
+  public inKcal?: NutrientTypeInKcal;
 }

@@ -1,15 +1,16 @@
 <template>
   <div>
-    <food-group-content
+    <card-content
       v-bind="{ name, description }"
       @update:name="update('name', $event)"
       @update:description="update('description', $event)"
-    ></food-group-content>
-    <food-group-thresholds
+    ></card-content>
+    <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)"></card-unit>
+    <card-thresholds
       :thresholds="{ high, low }"
       @update:high="update('high', $event)"
       @update:low="update('low', $event)"
-    ></food-group-thresholds>
+    ></card-thresholds>
     <v-tab-item key="nutrients">
       <v-container>
         <v-row>
@@ -77,34 +78,39 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { NutrientGroupFeedback } from '@intake24/common/feedback';
+import { NutrientGroup } from '@intake24/common/feedback';
 import { NutrientTypeAttributes } from '@intake24/common/types/models';
-import FoodGroupContent from '../partials/food-group-content.vue';
-import FoodGroupThresholds from '../partials/food-group-thresholds.vue';
+import CardContent from '../partials/card-content.vue';
+import CardThresholds from '../partials/card-thresholds.vue';
+import CardUnit from '../partials/card-unit.vue';
 
 export default defineComponent({
-  name: 'NutrientGroup',
+  name: 'NutrientGroupCard',
 
-  components: { FoodGroupContent, FoodGroupThresholds },
+  components: { CardContent, CardThresholds, CardUnit },
 
   props: {
     name: {
-      type: Object as PropType<NutrientGroupFeedback['name']>,
+      type: Object as PropType<NutrientGroup['name']>,
       required: true,
     },
     description: {
-      type: Object as PropType<NutrientGroupFeedback['description']>,
+      type: Object as PropType<NutrientGroup['description']>,
       required: true,
     },
     high: {
-      type: Object as PropType<NutrientGroupFeedback['high']>,
+      type: Object as PropType<NutrientGroup['high']>,
     },
     low: {
-      type: Object as PropType<NutrientGroupFeedback['low']>,
+      type: Object as PropType<NutrientGroup['low']>,
+    },
+    unit: {
+      type: Object as PropType<NutrientGroup['unit']>,
+      required: true,
     },
     nutrientTypes: {
-      type: Array as PropType<NutrientGroupFeedback['nutrientTypes']>,
-      default: () => [],
+      type: Array as PropType<NutrientGroup['nutrientTypes']>,
+      required: true,
     },
   },
 
@@ -116,7 +122,7 @@ export default defineComponent({
 
   computed: {
     allNutrientTypes(): NutrientTypeAttributes[] {
-      return this.$store.state.resource.entry.refs.nutrients ?? [];
+      return this.$store.state.resource.entry.refs.nutrientTypes ?? [];
     },
     currentNutrientTypes(): NutrientTypeAttributes[] {
       return this.currentNutrientTypeIds.reduce<NutrientTypeAttributes[]>((acc, nutrientId) => {

@@ -1,5 +1,6 @@
 import { startOfDay, addMinutes, addDays } from 'date-fns';
-import { nanoid } from 'nanoid';
+import { randomUUID } from 'crypto';
+import { randomString } from '@intake24/common/util';
 import {
   Op,
   GenUserCounter,
@@ -17,7 +18,6 @@ import {
   FeedbackScheme,
   SurveyScheme,
 } from '@intake24/db';
-import { randomUUID } from 'crypto';
 import { SurveyState } from '@intake24/common/types';
 import { SurveyUserInfoResponse, SurveyFollowUpResponse } from '@intake24/common/types/http';
 import { PromptQuestion, RedirectPromptProps } from '@intake24/common/prompts';
@@ -63,7 +63,7 @@ const surveyService = ({
     else counter = await GenUserCounter.create({ surveyId, count: 1 });
 
     const userName = `${surveyId}${counter.count}`;
-    const password = nanoid(12);
+    const password = randomString(12);
 
     const respondent = await adminSurveyService.createRespondent(survey, { userName, password });
 
@@ -118,7 +118,7 @@ const surveyService = ({
 
     const { userId, urlAuthToken: authToken } = await adminSurveyService.createRespondent(survey, {
       userName,
-      password: nanoid(12),
+      password: randomString(12),
     });
 
     return { userId, redirect, authToken };

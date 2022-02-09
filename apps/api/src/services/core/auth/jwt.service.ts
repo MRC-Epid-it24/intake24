@@ -1,5 +1,5 @@
 import jwt, { Secret, SignOptions, VerifyOptions } from 'jsonwebtoken';
-import { nanoid } from 'nanoid';
+import { randomString } from '@intake24/common/util';
 import type { MFAProvider } from '@intake24/api/config';
 import { InternalServerError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
@@ -52,7 +52,7 @@ const jwtService = ({
     options: SignOptions = {}
   ): Promise<string> =>
     new Promise((resolve, reject) => {
-      const jwtid = nanoid(64);
+      const jwtid = randomString(64);
       jwt.sign(payload, secret, { jwtid, ...signOptions, ...options }, (err, encoded) =>
         err || !encoded ? reject(err ?? new Error('Unable to sign token.')) : resolve(encoded)
       );

@@ -1,16 +1,13 @@
 <template>
   <v-row justify="center" :no-gutters="isMobile">
-    <v-col cols="12" sm="9" md="8">
-      <user-demographic-info
-        v-if="userDemographic"
-        :user-info="userDemographic"
-      ></user-demographic-info>
+    <v-col v-if="userDemographic" cols="12" sm="9" md="8">
+      <user-demographic-info :user-info="userDemographic"></user-demographic-info>
     </v-col>
     <v-col cols="12" class="mt-4">
-      <!-- Day selector -->
+      <!-- Submission day selector -->
     </v-col>
     <v-col cols="12" class="mt-4">
-      <feedback-card-area v-bind="{ results }"></feedback-card-area>
+      <feedback-card-area v-bind="{ cards }"></feedback-card-area>
     </v-col>
     <v-col cols="12" class="mt-4">
       <feedback-chart-area v-bind="{ topFoods }"></feedback-chart-area>
@@ -19,20 +16,20 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from '@vue/composition-api';
 import { feedbackService, FeedbackDictionaries } from '@intake24/survey/services';
-import { UserDemographic, getTopFoods } from '@intake24/survey/feedback';
+import {
+  UserDemographic,
+  getTopFoods,
+  FeedbackCardParameters,
+  buildCardParams,
+} from '@intake24/survey/feedback';
 import { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
 import {
   FeedbackChartArea,
   FeedbackCardArea,
   UserDemographicInfo,
 } from '@intake24/survey/components/feedback';
-import { defineComponent } from '@vue/composition-api';
-import {
-  FeedbackParameters,
-  buildCharacterParams,
-  buildFoodGroupParams,
-} from '@intake24/survey/feedback/groups-builder';
 
 export default defineComponent({
   name: 'FeedbackHome',
@@ -51,7 +48,7 @@ export default defineComponent({
       feedbackDicts: null as FeedbackDictionaries | null,
       userDemographic: null as UserDemographic | null,
 
-      results: [] as FeedbackParameters[],
+      cards: [] as FeedbackCardParameters[],
       topFoods: getTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], this.$i18n.locale),
 
       daysRecorded: undefined as number | undefined,
@@ -60,7 +57,7 @@ export default defineComponent({
   },
 
   setup() {
-    return { buildCharacterParams, buildFoodGroupParams };
+    return { buildCardParams };
   },
 
   computed: {
@@ -70,12 +67,52 @@ export default defineComponent({
   },
 
   async mounted() {
-    const { surveyId } = this;
+    const { feedbackScheme, surveyId } = this;
+
+    if (!feedbackScheme) {
+      this.$router.push({ name: 'feedback-error', params: { surveyId } });
+      return;
+    }
 
     await this.$store.dispatch('loading/add', 'feedback-initial-load');
 
     try {
-      this.feedbackDicts = await feedbackService.getFeedbackResults(surveyId);
+      const { cards, demographicGroups, henryCoefficients } = feedbackScheme;
+
+      const feedbackDicts = await feedbackService.getFeedbackResults(
+        surveyId,
+        cards,
+        demographicGroups
+      );
+      if (!feedbackDicts) throw Error('Feedback data could not be loaded');
+
+      this.feedbackDicts = feedbackDicts;
+
+      const {
+        feedbackData: { physicalActivityLevels, weightTargets },
+        physicalData,
+      } = this.feedbackDicts;
+
+      if (!physicalData) {
+        this.$router.push({ name: 'feedback-physical-data', params: { surveyId } });
+        return;
+      }
+
+      const physicalActivityLevel = physicalActivityLevels.find(
+        ({ id }) => id === physicalData.physicalActivityLevelId
+      );
+      const weightTarget = weightTargets.find(({ id }) => id === physicalData.weightTarget);
+
+      if (!physicalActivityLevel) throw new Error('Unknown physical activity level.');
+      if (!weightTarget) throw new Error('Unknown weight target.');
+
+      this.userDemographic = new UserDemographic(
+        physicalData,
+        physicalActivityLevel,
+        weightTarget,
+        henryCoefficients
+      );
+
       this.buildView();
     } catch (err) {
       console.log(`error`);
@@ -88,42 +125,13 @@ export default defineComponent({
 
   methods: {
     buildView(day?: number): void {
-      const { feedbackDicts, feedbackScheme, surveyId } = this;
-      if (!feedbackDicts || !feedbackScheme) {
+      const { feedbackDicts, feedbackScheme, surveyId, userDemographic } = this;
+      if (!feedbackDicts || !feedbackScheme || !userDemographic) {
         this.$router.push({ name: 'feedback-error', params: { surveyId } });
         return;
       }
 
-      const {
-        feedbackData: { physicalActivityLevels, weightTargets },
-        surveyStats,
-        physicalData,
-        characterRules,
-      } = feedbackDicts;
-
-      const { foodGroups, type: feedbackType, henryCoefficients } = feedbackScheme;
-
-      if (!physicalData) {
-        this.$router.push({ name: 'feedback-physical-data', params: { surveyId } });
-        return;
-      }
-
-      this.currentDay = day;
-
-      const physicalActivityLevel = physicalActivityLevels.find(
-        ({ id }) => id === physicalData.physicalActivityLevelId
-      );
-      const weightTarget = weightTargets.find(({ id }) => id === physicalData.weightTarget);
-
-      if (!physicalActivityLevel) throw new Error('Unknown physical activity level');
-      if (!weightTarget) throw new Error('Unknown weight target');
-
-      this.userDemographic = new UserDemographic(
-        physicalData,
-        physicalActivityLevel,
-        weightTarget,
-        henryCoefficients
-      );
+      const { surveyStats, cards } = feedbackDicts;
 
       const submissionsCount = surveyStats.submissions.length;
       if (!submissionsCount) {
@@ -131,27 +139,18 @@ export default defineComponent({
         return;
       }
 
+      const foods = surveyStats.getReducedFoods(day);
+      const averageIntake = surveyStats.getAverageIntake(day);
+      const fruitAndVegPortions = surveyStats.getFruitAndVegPortions(day);
+
+      this.currentDay = day;
       this.daysRecorded = submissionsCount;
-
-      const foods = surveyStats.getReducedFoods(this.currentDay);
-      const averageIntake = surveyStats.getAverageIntake(this.currentDay);
-      const fruitAndVegPortions = surveyStats.getFruitAndVegPortions(this.currentDay);
-
-      const characterParams = this.buildCharacterParams(
+      this.cards = this.buildCardParams(cards, {
         foods,
-        characterRules,
-        this.userDemographic,
-        feedbackType
-      );
-
-      const foodGroupParams = this.buildFoodGroupParams(
-        foodGroups,
+        userDemographic,
         averageIntake,
-        fruitAndVegPortions
-      );
-
-      this.results = [...characterParams, ...foodGroupParams];
-
+        fruitAndVegPortions,
+      });
       this.topFoods = getTopFoods(feedbackScheme.topFoods, foods, this.$i18n.locale);
     },
   },

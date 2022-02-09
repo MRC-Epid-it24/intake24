@@ -1,3 +1,5 @@
+import { NutrientUnitAttributes } from './nutrient-units';
+
 export type NutrientTypeAttributes = {
   id: string;
   unitId: string;
@@ -11,3 +13,8 @@ export type NutrientTypeInKcalAttributes = {
 };
 
 export type NutrientTypeInKcalCreationAttributes = Omit<NutrientTypeInKcalAttributes, 'id'>;
+
+export type NutrientTypeAssociations = {
+  unit?: NutrientUnitAttributes;
+  inKcal?: NutrientTypeInKcalAttributes;
+};

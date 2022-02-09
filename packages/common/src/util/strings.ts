@@ -1,3 +1,18 @@
+import { nanoid, customAlphabet } from 'nanoid';
+
+/**
+ * Generate random string with optional custom size / alphabet
+ *
+ * @param {number} size
+ * @param {(string | null)} [alphabet]
+ * @returns {string}
+ */
+export const randomString = (size: number, alphabet?: string | null): string => {
+  if (!alphabet) return nanoid(size);
+
+  return customAlphabet(alphabet, size)();
+};
+
 export const offsetToExcelColumn = (offset: number | null): string | null => {
   if (offset === null) return null;
 

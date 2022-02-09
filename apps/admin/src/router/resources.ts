@@ -52,7 +52,7 @@ const resources: Resource[] = [
     icon: 'fas fa-comment-dots',
     api: 'admin/feedback-schemes',
     generateRoutes: true,
-    routes: [...routes, 'top-foods', 'food-groups'],
+    routes: [...routes, 'top-foods', 'cards', 'demographic-groups', 'henry-coefficients'],
   },
   {
     group: 'surveyMgmt',

@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { Chart } from 'chart.js';
 import { TopFoodData } from '@intake24/survey/feedback';
 
@@ -33,12 +33,14 @@ export default defineComponent({
 
   props: {
     topFoods: {
-      type: Object as () => TopFoodData,
+      type: Object as PropType<TopFoodData>,
       required: true,
     },
   },
 
   mounted() {
+    // TODO: sometimes charts won;t render -> investigate
+    // maybe re-render charts when elements are in viewport
     setTimeout(() => {
       for (const item of this.topFoods.nutrients) {
         const el = document.getElementById(`chart-${item.id}`) as HTMLCanvasElement;

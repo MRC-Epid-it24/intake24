@@ -83,9 +83,9 @@ export default ({
   };
 
   const refs = async (req: Request, res: Response<NutrientTableRefs>): Promise<void> => {
-    const nutrients = await FoodsNutrientType.findAll({ order: [['id', 'ASC']] });
+    const nutrientTypes = await FoodsNutrientType.scope('list').findAll();
 
-    res.json({ nutrients });
+    res.json({ nutrientTypes });
   };
 
   const upload = async (

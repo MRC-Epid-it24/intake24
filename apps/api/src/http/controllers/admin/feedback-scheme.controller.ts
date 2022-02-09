@@ -39,7 +39,14 @@ export default (): FeedbackSchemeController => {
 
   const store = async (req: Request, res: Response<FeedbackSchemeEntry>): Promise<void> => {
     const feedbackScheme = await FeedbackScheme.create(
-      pick(req.body, ['name', 'type', 'topFoods', 'foodGroups', 'henryCoefficients'])
+      pick(req.body, [
+        'name',
+        'type',
+        'topFoods',
+        'cards',
+        'demographicGroups',
+        'henryCoefficients',
+      ])
     );
 
     res.status(201).json(feedbackScheme);
@@ -65,7 +72,14 @@ export default (): FeedbackSchemeController => {
     if (!feedbackScheme) throw new NotFoundError();
 
     await feedbackScheme.update(
-      pick(req.body, ['name', 'type', 'topFoods', 'foodGroups', 'henryCoefficients'])
+      pick(req.body, [
+        'name',
+        'type',
+        'topFoods',
+        'cards',
+        'demographicGroups',
+        'henryCoefficients',
+      ])
     );
 
     res.json(feedbackScheme);
@@ -90,12 +104,12 @@ export default (): FeedbackSchemeController => {
   };
 
   const refs = async (req: Request, res: Response<FeedbackSchemeRefs>): Promise<void> => {
-    const [languages, nutrients] = await Promise.all([
+    const [languages, nutrientTypes] = await Promise.all([
       Language.scope('list').findAll(),
-      SystemNutrientType.findAll({ order: [['id', 'ASC']] }),
+      SystemNutrientType.scope('list').findAll(),
     ]);
 
-    res.json({ languages, nutrients });
+    res.json({ languages, nutrientTypes });
   };
 
   const copy = async (req: Request, res: Response<FeedbackSchemeEntry>): Promise<void> => {
@@ -104,13 +118,14 @@ export default (): FeedbackSchemeController => {
     const sourceFeedbackScheme = await FeedbackScheme.findByPk(sourceId);
     if (!sourceFeedbackScheme) throw new NotFoundError();
 
-    const { type, topFoods, foodGroups, henryCoefficients } = sourceFeedbackScheme;
+    const { type, topFoods, cards, demographicGroups, henryCoefficients } = sourceFeedbackScheme;
 
     const feedbackScheme = await FeedbackScheme.create({
       name,
       type,
       topFoods,
-      foodGroups,
+      cards,
+      demographicGroups,
       henryCoefficients,
     });
 

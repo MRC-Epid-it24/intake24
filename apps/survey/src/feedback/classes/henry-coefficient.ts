@@ -30,7 +30,7 @@ export default class HenryCoefficient {
   static fromJson(coefficient: HenryCoefficientRecord): HenryCoefficient {
     return new HenryCoefficient(
       coefficient.sex,
-      new DemographicRange(coefficient.ageRange[0], coefficient.ageRange[1]),
+      new DemographicRange(coefficient.age.start, coefficient.age.end),
       coefficient.weightCoefficient,
       coefficient.heightCoefficient,
       coefficient.constant

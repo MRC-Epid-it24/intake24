@@ -12,7 +12,8 @@ import { CreateRespondentInput, UpdateRespondentInput } from '@intake24/common/t
 import { UserCustomFieldAttributes } from '@intake24/common/types/models';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { toSimpleName, generateToken } from '@intake24/api/util';
+import { toSimpleName } from '@intake24/api/util';
+import { randomString } from '@intake24/common/util';
 import { surveyMgmt, surveyRespondent } from '../core/auth';
 
 const adminSurveyService = ({
@@ -114,7 +115,7 @@ const adminSurveyService = ({
         userId,
         surveyId,
         userName,
-        urlAuthToken: generateToken(authUrlTokenLength ?? size, authUrlTokenCharset ?? alphabet),
+        urlAuthToken: randomString(authUrlTokenLength ?? size, authUrlTokenCharset ?? alphabet),
       }),
       user.$add('permissions', surveyRespondentPermission),
       adminUserService.createPassword({ userId, password }),
@@ -164,7 +165,7 @@ const adminSurveyService = ({
         userId,
         surveyId,
         userName,
-        urlAuthToken: generateToken(urlTokenLength, urlTokenCharset),
+        urlAuthToken: randomString(urlTokenLength, urlTokenCharset),
       });
       userPermissions.push({ userId, permissionId });
       userPasswords.push({ userId, password });

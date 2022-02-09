@@ -5,6 +5,7 @@ import { SystemNutrientUnit } from '.';
 
 @Scopes(() => ({
   unit: { include: [{ model: SystemNutrientUnit }] },
+  list: { order: [['id', 'ASC']] },
 }))
 @Table({
   modelName: 'NutrientType',

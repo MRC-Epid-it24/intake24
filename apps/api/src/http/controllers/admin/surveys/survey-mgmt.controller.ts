@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { nanoid } from 'nanoid';
+import { randomString } from '@intake24/common/util';
 import { Op, WhereOptions, Permission, Survey, User, PaginateQuery } from '@intake24/db';
 import {
   SurveyMgmtAvailablePermissionsResponse,
@@ -63,7 +63,7 @@ export default ({
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    await adminUserService.create({ email, name, phone, password: nanoid(12), permissions });
+    await adminUserService.create({ email, name, phone, password: randomString(12), permissions });
 
     res.status(201).json();
   };

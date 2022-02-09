@@ -19,5 +19,5 @@ export type FeedbackSchemeListEntry = Pick<FeedbackSchemeAttributes, 'id' | 'nam
 
 export type FeedbackSchemeRefs = {
   languages: LanguageListEntry[];
-  nutrients: NutrientTypeAttributes[];
+  nutrientTypes: NutrientTypeAttributes[];
 };

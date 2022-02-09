@@ -1,49 +1,38 @@
-import { Sentiment } from '@intake24/common/feedback';
-import { DemographicGroupScaleSectorAttributes } from '@intake24/common/types/models';
+import { DemographicGroupScaleSector, Sentiment } from '@intake24/common/feedback';
+import { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
 import DemographicRange from './demographic-range';
 
 export default class DemographicScaleSector {
-  readonly id: string;
+  readonly name: RequiredLocaleTranslation;
 
-  readonly name: string;
-
-  readonly description: string | null;
+  readonly description: LocaleTranslation;
 
   readonly sentiment: Sentiment;
 
   readonly range: DemographicRange;
 
   constructor(
-    id: string,
-    name: string,
-    description: string | null,
-    sentiment: Sentiment,
-    range: DemographicRange
+    name: RequiredLocaleTranslation,
+    description: LocaleTranslation,
+    range: DemographicRange,
+    sentiment: Sentiment
   ) {
-    this.id = id;
     this.name = name;
-    this.sentiment = sentiment;
-    this.range = range;
     this.description = description;
+    this.range = range;
+    this.sentiment = sentiment;
   }
 
-  static fromJson(sector: DemographicGroupScaleSectorAttributes): DemographicScaleSector {
+  static fromJson(sector: DemographicGroupScaleSector): DemographicScaleSector {
     return new DemographicScaleSector(
-      sector.id,
       sector.name,
       sector.description,
-      sector.sentiment,
-      DemographicRange.fromJson(sector.minRange, sector.maxRange) as DemographicRange
+      DemographicRange.fromJson(sector.range.start, sector.range.end) as DemographicRange,
+      sector.sentiment
     );
   }
 
   clone(): DemographicScaleSector {
-    return new DemographicScaleSector(
-      this.id,
-      this.name,
-      this.description,
-      this.sentiment,
-      this.range
-    );
+    return new DemographicScaleSector(this.name, this.description, this.range, this.sentiment);
   }
 }

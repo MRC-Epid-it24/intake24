@@ -1,11 +1,15 @@
 import userService from '@intake24/survey/services/user.service';
 import { FeedbackData, UserPhysicalDataResponse } from '@intake24/common/types/http';
+import {
+  Card,
+  DemographicGroup as FeedbackSchemeDemographicGroup,
+} from '@intake24/common/feedback';
 import http from './http.service';
-import { CharacterRules, characterBuilders, DemographicGroup, SurveyStats } from '../feedback';
+import { CardWithCharRules, CharacterRules, DemographicGroup, SurveyStats } from '../feedback';
 
 export type FeedbackDictionaries = {
   feedbackData: FeedbackData;
-  characterRules: CharacterRules[];
+  cards: CardWithCharRules[];
   demographicGroups: DemographicGroup[];
   physicalData: UserPhysicalDataResponse;
   surveyStats: SurveyStats;
@@ -28,7 +32,11 @@ const feedbackService = () => {
     return data;
   };
 
-  const getFeedbackResults = async (surveyId: string): Promise<FeedbackDictionaries> => {
+  const getFeedbackResults = async (
+    surveyId: string,
+    cards: Card[],
+    groups: FeedbackSchemeDemographicGroup[]
+  ): Promise<FeedbackDictionaries> => {
     const [feedbackData, submissions, physicalData] = await Promise.all([
       getFeedbackData(),
       userService.submissions(surveyId),
@@ -37,38 +45,31 @@ const feedbackService = () => {
 
     const surveyStats = SurveyStats.fromJson(submissions);
 
-    const demographicGroups = feedbackData.demographicGroups.reduce<DemographicGroup[]>(
-      (acc, item) => {
-        const nutrientType = feedbackData.nutrientTypes.find((nt) => nt.id === item.nutrientTypeId);
+    const demographicGroups = groups.reduce<DemographicGroup[]>((acc, item) => {
+      const nutrientType = feedbackData.nutrientTypes.find((nt) => nt.id === item.nutrientTypeId);
 
-        if (nutrientType) {
-          const group = DemographicGroup.fromJson(item, nutrientType);
-          acc.push(group);
-        } else console.warn(`NutrientID: ${item.nutrientTypeId} for demographic group not found.`);
+      if (nutrientType) {
+        const group = DemographicGroup.fromJson(item, nutrientType);
+        acc.push(group);
+      } else console.warn(`NutrientID: ${item.nutrientTypeId} for demographic group not found.`);
 
-        return acc;
-      },
-      []
-    );
+      return acc;
+    }, []);
 
-    const characterRules = characterBuilders.map((characterBuilder) => {
-      const { nutrientTypeIds } = characterBuilder;
-      const groups = demographicGroups.filter((group) =>
+    const cardsWithCharacterRules = cards.map((card) => {
+      if (card.type !== 'character') return card;
+
+      const { nutrientTypeIds } = card;
+      const demGroups = demographicGroups.filter((group) =>
         nutrientTypeIds.includes(group.nutrient.id)
       );
 
-      return new CharacterRules(
-        nutrientTypeIds,
-        groups,
-        characterBuilder.type,
-        characterBuilder.sentiments,
-        characterBuilder.displayInFeedbackStyle
-      );
+      return new CharacterRules(card, demGroups);
     });
 
     return {
       feedbackData,
-      characterRules,
+      cards: cardsWithCharacterRules,
       demographicGroups,
       physicalData,
       surveyStats,

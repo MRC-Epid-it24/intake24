@@ -5,7 +5,12 @@
     v-if="entryLoaded & refsLoaded"
     @save="submit"
   >
-    <v-card-title>{{ $t('feedback-schemes.top-foods.title') }}</v-card-title>
+    <v-toolbar flat tile color="grey lighten-5">
+      <v-icon class="mr-3" color="primary">fas fa-sort-amount-down</v-icon>
+      <v-toolbar-title class="font-weight-medium">
+        {{ $t('feedback-schemes.top-foods.title') }}
+      </v-toolbar-title>
+    </v-toolbar>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container fluid>
         <v-row>
@@ -49,7 +54,7 @@
             <nutrient-list
               v-model="form.topFoods.nutrientTypes"
               :feedback-scheme-id="id"
-              :available-nutrient-types="refs.nutrients"
+              :available-nutrient-types="refs.nutrientTypes"
             ></nutrient-list>
           </v-col>
         </v-row>
@@ -68,9 +73,8 @@ import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import { defaultTopFoods } from '@intake24/common/feedback';
 import { RuleCallback } from '@intake24/admin/types';
+import { ColorList, NutrientList } from '@intake24/admin/components/feedback';
 import { FeedbackSchemeForm } from '../form.vue';
-import NutrientList from './nutrient-list.vue';
-import ColorList from './color-list.vue';
 
 type FeedbackSchemeTopFoods = {
   debouncedUpdateColorList: () => void;
@@ -90,7 +94,9 @@ export default (Vue as VueConstructor<Vue & FeedbackSchemeTopFoods>).extend({
         name: null,
         type: 'default',
         topFoods: defaultTopFoods,
-        foodGroups: [],
+        cards: [],
+        demographicGroups: [],
+        henryCoefficients: [],
       }),
       nonInputErrorKeys: ['topFoods.max', 'topFoods.colors', 'topFoods.nutrientTypes'],
     };

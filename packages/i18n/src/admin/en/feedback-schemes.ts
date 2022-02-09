@@ -17,6 +17,19 @@ const feedbackSchemes: LocaleMessageObject = {
     name: 'New feedback scheme name',
   },
 
+  age: {
+    _: 'Age',
+    range: 'Age range interval',
+    start: 'Age range start',
+    end: 'Age range end',
+  },
+
+  sexes: {
+    _: 'Sex',
+    m: 'Male',
+    f: 'Female',
+  },
+
   types: {
     _: 'Feedback type',
     title: 'Feedback types',
@@ -51,16 +64,30 @@ const feedbackSchemes: LocaleMessageObject = {
     },
   },
 
-  'food-groups': {
-    _: 'Food group',
-    title: 'Food groups',
-    tab: 'Food groups',
-    create: 'New food group',
-    edit: 'Edit food group',
-    remove: 'Remove food group',
-    type: 'Food group type',
-    name: 'Food group name',
+  cards: {
+    _: 'Card',
+    title: 'Cards',
+    tab: 'Cards',
+    create: 'New card',
+    edit: 'Edit card',
+    remove: 'Remove card',
+    type: 'Card type',
+    name: 'Card name',
+    required: 'Card name is required.',
     description: 'Description',
+
+    character: {
+      title: 'Character',
+      subtitle: 'Character / Nutrient card',
+    },
+    'nutrient-group': {
+      title: 'Nutrient group',
+      subtitle: 'Feedback grouping intake based on nutrient list',
+    },
+    'five-a-day': {
+      title: 'Five A Day',
+      subtitle: 'Five A Day feedback',
+    },
 
     thresholds: {
       _: 'Threshold',
@@ -71,14 +98,60 @@ const feedbackSchemes: LocaleMessageObject = {
       message: 'Warning message',
     },
 
-    'nutrient-group': {
-      title: 'Nutrient group',
-      subtitle: 'Feedback grouping intake24 values based on nutrient list.',
+    unit: {
+      name: 'Unit name',
+      description: 'Unit description',
+      required: 'Unit name is required.',
     },
-    'five-a-day': {
-      title: 'Five A Day',
-      subtitle: 'Five A Day feedback',
+
+    characterTypes: {
+      _: 'Character type',
+      battery: 'Battery',
+      bread: 'Bread',
+      candy: 'Candy',
+      salmon: 'Salmon',
+      sausage: 'Sausage',
+      egg: 'Egg',
+      apple: 'Apple',
+      strawberry: 'Strawberry',
+      burger: 'Burger',
+      fries: 'Fries',
+      milk: 'Milk',
+      iron: 'Iron',
+      folate: 'Folate',
+      co2: 'CO2',
     },
+
+    characterSentimentTypes: {
+      _: 'Character sentiment type',
+      title: 'Character sentiment types',
+      danger: 'Danger',
+      warning: 'Warning',
+      happy: 'Happy',
+      exciting: 'Exciting',
+    },
+  },
+
+  'demographic-groups': {
+    _: 'Demographic group',
+    title: 'Demographic groups',
+    tab: 'Demographic groups',
+    create: 'New demographic group',
+    edit: 'Edit demographic group',
+    remove: 'Remove demographic group',
+  },
+
+  'henry-coefficients': {
+    _: 'Henry coefficient',
+    title: 'Henry coefficients',
+    tab: 'Henry coefficients',
+    create: 'New henry coefficient',
+    edit: 'Edit henry coefficient',
+    remove: 'Remove henry coefficient',
+
+    constant: 'Constant',
+    weightCoefficient: 'Weight coefficient',
+    heightCoefficient: 'Height coefficient',
   },
 };
 

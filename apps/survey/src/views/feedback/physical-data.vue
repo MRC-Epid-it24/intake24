@@ -133,7 +133,7 @@ export default defineComponent({
   },
 
   data() {
-    const genderIcons = (gender: Sex): string => {
+    const genderIcon = (gender: Sex): string => {
       const icons: Record<Sex, string> = { m: 'fas fa-mars', f: 'fas fa-venus' };
       return icons[gender];
     };
@@ -151,7 +151,7 @@ export default defineComponent({
       sexes: sexes.map((value) => ({
         text: this.$t(`feedback.physicalData.sexes.${value}`),
         value,
-        icon: genderIcons(value),
+        icon: genderIcon(value),
       })),
       physicalActivityLevels: [] as PhysicalActivityLevel[],
       weightTargets: weightTargets.map((value) => ({
@@ -160,8 +160,6 @@ export default defineComponent({
       })),
     };
   },
-
-  computed: {},
 
   async mounted() {
     const { surveyId } = this;

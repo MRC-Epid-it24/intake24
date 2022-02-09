@@ -25,6 +25,7 @@
     "lodash": "^4.17.21",
     "mariadb": "^2.5.5",
     "mssql": "^7.3.0",
+    "nanoid": "^3.2.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",

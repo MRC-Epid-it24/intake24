@@ -1,10 +1,9 @@
-import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import {
   PhysicalActivityLevelAttributes,
   PhysicalActivityLevelCreationAttributes,
 } from '@intake24/common/types/models/foods';
 import BaseModel from '../model';
-import { DemographicGroup } from '.';
 
 @Table({
   modelName: 'PhysicalActivityLevel',
@@ -35,7 +34,4 @@ export default class PhysicalActivityLevel
     type: DataType.DOUBLE,
   })
   public coefficient!: number;
-
-  @HasMany(() => DemographicGroup, 'physicalActivityLevelId')
-  public demographicGroups?: DemographicGroup[];
 }

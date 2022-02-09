@@ -47,8 +47,8 @@ export default (): void => {
       .set('Authorization', suite.bearer.user);
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['nutrients']);
-    expect(body.nutrients).toBeArray();
-    expect(body.nutrients).not.toBeEmpty();
+    expect(body).toContainAllKeys(['nutrientTypes']);
+    expect(body.nutrientTypes).toBeArray();
+    expect(body.nutrientTypes).not.toBeEmpty();
   });
 };

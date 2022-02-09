@@ -2,7 +2,6 @@ export * from './as-served';
 export * from './attributes';
 export * from './brands';
 export * from './categories';
-export * from './demographic-groups';
 export * from './drinkware';
 export * from './foods';
 export * from './guide-images';

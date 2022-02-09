@@ -1,14 +1,18 @@
 import browse from './browse.vue';
 import form from './form.vue';
 import read from './read.vue';
-import foodGroups from './food-groups';
+import cards from './cards';
 import topFoods from './top-foods';
+import demographicGroups from './demographic-groups';
+import henryCoefficients from './henry-coefficients';
 
 export default {
   browse,
   create: form,
   read,
   edit: form,
-  'food-groups': foodGroups,
+  cards,
   'top-foods': topFoods,
+  'demographic-groups': demographicGroups,
+  'henry-coefficients': henryCoefficients,
 };

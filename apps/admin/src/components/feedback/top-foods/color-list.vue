@@ -69,7 +69,7 @@
 <script lang="ts">
 import draggable from 'vuedraggable';
 import { defineComponent, PropType } from '@vue/composition-api';
-import useTopFoodList from './top-food-list';
+import { useTopFoodList } from '..';
 
 export default defineComponent({
   name: 'TopFoodsColorList',

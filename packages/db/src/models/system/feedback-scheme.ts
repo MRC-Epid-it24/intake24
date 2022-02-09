@@ -1,19 +1,30 @@
-import { Column, DataType, HasMany, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import {
+  Column,
+  DataType,
+  HasMany,
+  Scopes,
+  Table,
+  CreatedAt,
+  UpdatedAt,
+} from 'sequelize-typescript';
 import {
   FeedbackSchemeAttributes,
   FeedbackSchemeCreationAttributes,
 } from '@intake24/common/types/models';
 import {
   defaultTopFoods,
-  defaultHenryCoefficients,
   FeedbackType,
-  FoodGroup,
+  Card,
   TopFoods,
   HenryCoefficient,
+  DemographicGroup,
 } from '@intake24/common/feedback';
 import BaseModel from '../model';
 import { Survey } from '.';
 
+@Scopes(() => ({
+  surveys: { include: [{ model: Survey }] },
+}))
 @Table({
   modelName: 'FeedbackScheme',
   tableName: 'feedback_schemes',
@@ -25,6 +36,7 @@ export default class FeedbackScheme
   implements FeedbackSchemeAttributes
 {
   @Column({
+    autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
@@ -61,28 +73,42 @@ export default class FeedbackScheme
     allowNull: false,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get foodGroups(): FoodGroup[] {
-    const val = this.getDataValue('foodGroups') as unknown;
+  get cards(): Card[] {
+    const val = this.getDataValue('cards') as unknown;
     return val ? JSON.parse(val as string) : [];
   }
 
-  set foodGroups(value: FoodGroup[]) {
+  set cards(value: Card[]) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('foodGroups', JSON.stringify(value ?? []));
+    this.setDataValue('cards', JSON.stringify(value ?? []));
   }
 
   @Column({
-    allowNull: true,
+    allowNull: false,
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  get demographicGroups(): DemographicGroup[] {
+    const val = this.getDataValue('demographicGroups') as unknown;
+    return val ? JSON.parse(val as string) : [];
+  }
+
+  set demographicGroups(value: DemographicGroup[]) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('demographicGroups', JSON.stringify(value ?? []));
+  }
+
+  @Column({
+    allowNull: false,
     type: DataType.TEXT({ length: 'long' }),
   })
   get henryCoefficients(): HenryCoefficient[] {
     const val = this.getDataValue('henryCoefficients') as unknown;
-    return val ? JSON.parse(val as string) : defaultHenryCoefficients;
+    return val ? JSON.parse(val as string) : [];
   }
 
   set henryCoefficients(value: HenryCoefficient[]) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('henryCoefficients', JSON.stringify(value ?? defaultHenryCoefficients));
+    this.setDataValue('henryCoefficients', JSON.stringify(value ?? []));
   }
 
   @CreatedAt
