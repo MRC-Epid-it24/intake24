@@ -94,6 +94,7 @@ export default (store: Store<RootState>): VueRouter => {
       component: views.survey.portionTest,
       meta: { module: 'survey', title: 'portionTest._' },
       beforeEnter: surveyParametersGuard(store),
+      props: true,
     },
 
     // Needs to be last as :token is param
@@ -102,6 +103,7 @@ export default (store: Store<RootState>): VueRouter => {
       name: 'survey-login-token',
       component: views.survey.login,
       meta: { module: 'login', title: 'login._' },
+      props: true,
     },
     // Catch any unmatched routes
     {

@@ -7,7 +7,6 @@
             <h2>{{ $t('common._') }}</h2>
           </v-card-title>
         </v-sheet>
-
         <v-card-subtitle class="text-center">
           {{ $t('login.subtitle') }}
         </v-card-subtitle>
@@ -78,6 +77,9 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    token: {
+      type: String,
+    },
   },
 
   data() {
@@ -108,40 +110,35 @@ export default defineComponent({
   },
 
   async mounted() {
-    const {
-      name,
-      params: { token },
-    } = this.$route;
+    const { surveyId, token } = this;
+    const { name } = this.$route;
 
     await this.fetchSurveyPublicInfo();
 
     if (this.invalidSurvey) return;
 
-    if (!this.loggedIn) {
+    if (name === 'survey-login-token' && token) {
       try {
-        await this.$store.dispatch('auth/refresh');
-
-        const { surveyId } = this;
+        await this.tokenLogin({ token });
         await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {
-        // continue
+        if (axios.isAxiosError(err)) this.status = err.response?.status ?? 0;
       }
       return;
     }
 
-    if (name === 'survey-login-token') {
+    if (!this.loggedIn) {
       try {
-        await this.token({ token });
-        await this.$router.push({ name: 'survey-home', params: { surveyId: this.surveyId } });
-        return;
+        await this.$store.dispatch('auth/refresh');
+        await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {
-        if (axios.isAxiosError(err)) this.status = err.response?.status ?? 0;
+        // continue
       }
     }
   },
 
   methods: {
-    ...mapActions('auth', ['login', 'token']),
+    ...mapActions('auth', { userPassLogin: 'login', tokenLogin: 'token' }),
 
     async fetchSurveyPublicInfo() {
       try {
@@ -154,7 +151,7 @@ export default defineComponent({
     async onLogin() {
       const { userName, password, surveyId } = this;
       try {
-        await this.login({ userName, password, surveyId });
+        await this.userPassLogin({ userName, password, surveyId });
         this.userName = '';
         this.password = '';
         await this.$router.push({ name: 'survey-home', params: { surveyId } });
