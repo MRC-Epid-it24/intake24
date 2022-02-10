@@ -7,20 +7,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { BasePromptProps, submitPromptProps } from '@intake24/common/prompts';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import BasePrompt from '../BasePrompt';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SubmitPrompt',
 
   mixins: [BasePrompt, Submit],
 
   props: {
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
+      required: true,
     },
   },
 

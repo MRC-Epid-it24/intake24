@@ -50,10 +50,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { QuantityValues } from '@intake24/common/prompts';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'QuantityCard',
   // Purpose: Card that renders whole, fraction, or both, quantity counters for food items
 

@@ -9,17 +9,19 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { FoodSearchResponse } from '@intake24/common/types/http';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FoodSearchResults',
+
   props: {
     results: {
-      type: Object as () => FoodSearchResponse,
+      type: Object as PropType<FoodSearchResponse>,
       required: true,
     },
   },
+
   methods: {
     selectFood(foodCode: string): void {
       this.$emit('food-selected', foodCode);

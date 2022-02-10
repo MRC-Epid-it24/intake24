@@ -3,13 +3,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'ValidInvalidIcon',
+
   props: {
     valid: Boolean,
   },
+
   methods: {
     getColor(): string {
       return this.valid ? 'success' : 'error';

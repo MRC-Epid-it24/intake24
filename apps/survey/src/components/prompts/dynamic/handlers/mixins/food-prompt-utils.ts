@@ -1,9 +1,9 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { mapGetters } from 'vuex';
 import { EncodedFood, LocaleTranslation } from '@intake24/common/types';
 import { UserPortionSizeMethod } from '@intake24/common/types/http';
 
-export default Vue.extend({
+export default defineComponent({
   computed: {
     ...mapGetters('survey', ['selectedFood', 'selectedMealIndex', 'selectedFoodIndex']),
 

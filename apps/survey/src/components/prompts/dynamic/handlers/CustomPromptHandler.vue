@@ -3,13 +3,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { mapGetters } from 'vuex';
 import { BasePromptProps } from '@intake24/common/prompts';
 import { CustomPromptAnswer } from '@intake24/common/types';
 import customPrompts from '@intake24/survey/components/prompts/custom';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'CustomPromptHandler',
   components: {
     ...customPrompts,
@@ -17,7 +17,7 @@ export default Vue.extend({
 
   props: {
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
     promptComponent: {

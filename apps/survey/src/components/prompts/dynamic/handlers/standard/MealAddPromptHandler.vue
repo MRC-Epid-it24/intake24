@@ -9,19 +9,19 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
 import { Meal } from '@intake24/common/types';
 import { mapGetters } from 'vuex';
 import MealAddPrompt from '@intake24/survey/components/prompts/standard/MealAddPrompt.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'MealAddPromptHandler',
   components: { MealAddPrompt },
 
   props: {
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
   },

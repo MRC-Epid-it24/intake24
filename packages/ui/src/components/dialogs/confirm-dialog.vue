@@ -48,9 +48,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'ConfirmDialog',
 
   props: {
@@ -78,6 +78,7 @@ export default Vue.extend({
     },
     label: {
       type: String,
+      required: true,
     },
     confirmText: {
       type: String,
@@ -119,10 +120,10 @@ export default Vue.extend({
       return this.confirmText ?? this.label;
     },
     cancelLabel(): string {
-      return this.cancelText ?? this.$t('common.action.cancel');
+      return this.cancelText ?? this.$t('common.action.cancel').toString();
     },
     titleLabel(): string {
-      return this.titleText ?? this.$t('common.action.confirm.title');
+      return this.titleText ?? this.$t('common.action.confirm.title').toString();
     },
   },
 

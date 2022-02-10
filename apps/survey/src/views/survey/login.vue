@@ -64,13 +64,13 @@
 
 <script lang="ts">
 import axios, { AxiosError } from 'axios';
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { mapActions, mapGetters } from 'vuex';
 import { PublicSurveyEntryResponse } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
 import surveySvc from '@intake24/survey/services/survey.service';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SurveyLogin',
 
   props: {

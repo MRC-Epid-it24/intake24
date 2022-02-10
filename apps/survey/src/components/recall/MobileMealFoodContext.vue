@@ -25,10 +25,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { ConfirmDialog } from '@intake24/ui';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'MealFoodMobileContextMenu',
 
   components: { ConfirmDialog },
@@ -42,10 +42,10 @@ export default Vue.extend({
   },
 
   computed: {
-    showMenu() {
+    showMenu(): boolean {
       return this.show;
     },
-    name() {
+    name(): string | undefined {
       return this.entityName;
     },
   },

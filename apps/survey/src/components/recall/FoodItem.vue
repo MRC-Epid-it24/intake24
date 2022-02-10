@@ -17,18 +17,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { FoodState } from '@intake24/common/types';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FoodItem',
+
   props: {
     // FIXME: Should be an array of objects of type UserFoodData or EncodedUserFoodData ???
-    foods: Array as () => FoodState[],
+    foods: Array as PropType<FoodState[]>,
   },
+
   data() {
     return {};
   },
+
   methods: {
     selectFood(foodIndex: number) {
       this.$emit('food-selected', foodIndex);

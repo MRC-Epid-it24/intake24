@@ -65,20 +65,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { AsServedSetResponse } from '@intake24/common/types/http/foods';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AsServedSelector',
+
   components: {
     ImagePlaceholder,
   },
+
   props: {
     asServedSetId: {
       type: String,
     },
   },
+
   data() {
     return {
       selectedObjectIdx: null as number | null,
@@ -88,6 +91,7 @@ export default Vue.extend({
       overlay: false as boolean,
     };
   },
+
   computed: {
     mainWeight(): string | null {
       if (!this.dataLoaded) return null;
@@ -97,6 +101,7 @@ export default Vue.extend({
       return `${this.asServedData.images[this.selectedObjectIdx].weight}g`;
     },
   },
+
   mounted() {
     this.fetchAsServedImageData();
   },

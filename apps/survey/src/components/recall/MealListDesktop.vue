@@ -41,24 +41,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import MealItem from './MealItem.vue';
 import ContextMenu from '../elements/ContextMenu.vue';
 
 export type RecallAction = 'add-meal';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'MealList',
 
-  components: {
-    MealItem,
-    ContextMenu,
-  },
+  components: { MealItem, ContextMenu },
+
   props: {
     surveyName: String,
     surveyId: String,
     meals: Array,
   },
+
   data() {
     return {
       menuRecallIcon: 'fas fa-angle-double-right',

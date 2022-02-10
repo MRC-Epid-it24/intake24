@@ -20,16 +20,19 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { mapGetters } from 'vuex';
 import { FoodState } from '@intake24/common/types';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FoodListMobileBottom',
 
   props: {
     // FIXME: Should be an array of objects of type UserFoodData or EncodedUserFoodData ???
-    foods: Array as () => FoodState[],
+    foods: {
+      type: Array as PropType<FoodState[]>,
+      default: () => [],
+    },
     loading: Boolean,
     mealIndex: Number || undefined,
   },
@@ -42,12 +45,12 @@ export default Vue.extend({
   computed: {
     ...mapGetters('survey', ['selectedFoodIndex']),
 
-    mealfoods() {
+    mealfoods(): FoodState[] {
       return this.foods;
     },
 
     active_tab: {
-      get() {
+      get(): number {
         return this.selectedFoodIndex + 1;
       },
 

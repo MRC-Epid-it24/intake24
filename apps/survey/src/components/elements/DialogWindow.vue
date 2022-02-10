@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialogState" width="500">
+  <v-dialog :value="dialog" width="500">
     <v-card>
       <v-card-title>
         {{ title }}
@@ -22,21 +22,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'DialogWindow',
 
   props: {
     title: String,
     message: String,
     type: String,
-    dialog: Boolean,
-  },
-
-  computed: {
-    dialogState() {
-      return this.dialog;
+    dialog: {
+      type: Boolean,
+      default: false,
     },
   },
 

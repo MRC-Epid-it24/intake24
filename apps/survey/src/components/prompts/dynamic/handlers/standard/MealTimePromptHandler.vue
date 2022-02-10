@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { mapGetters } from 'vuex';
 import { MealTimePromptProps } from '@intake24/common/prompts';
 import { MealTime } from '@intake24/common/types';
@@ -28,14 +28,14 @@ function mealTimeToString(time: MealTime): string {
   return `${time.hours}:${time.minutes}`;
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'MealTimePromptHandler',
 
   components: { MealTimePrompt },
 
   props: {
     promptProps: {
-      type: Object as () => MealTimePromptProps,
+      type: Object as PropType<MealTimePromptProps>,
       required: true,
     },
     submitTrigger: {

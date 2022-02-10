@@ -35,10 +35,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { mapGetters } from 'vuex';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SurveyError',
 
   props: {

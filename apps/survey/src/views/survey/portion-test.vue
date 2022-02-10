@@ -89,13 +89,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 // // import prompts from '@intake24/survey/components/prompts/';
 // import { portionSizeOptionPromptDefaultProps } from '@intake24/survey/common/prompts/promptDefaults';
 // import { PortionSizeOptionPromptProps } from '@intake24/common/types/promptProps';
 import portionPrompts from '@intake24/survey/components/prompts/portion';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PortionTest',
 
   // components: { ...prompts, portionSizeOption },

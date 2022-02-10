@@ -22,23 +22,22 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import ContextMenu from '../elements/ContextMenu.vue';
 import FoodItem from './FoodItem.vue';
 
 export type MealAction = 'edit-foods' | 'edit-time';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'MealItem',
 
-  components: {
-    ContextMenu,
-    FoodItem,
-  },
+  components: { ContextMenu, FoodItem },
+
   props: {
     meal: Object,
     mealIndex: Number,
   },
+
   data() {
     return {
       menuMealIcon: 'far fa-edit',

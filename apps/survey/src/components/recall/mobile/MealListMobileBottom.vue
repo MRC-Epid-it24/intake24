@@ -18,16 +18,19 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { FoodState } from '@intake24/common/types';
 
-export default Vue.extend({
+export default defineComponent({
   // components: { MealItemMobile },
   name: 'MealListMobileBottom',
 
   props: {
     meals: Array,
-    selectedMealIndex: Number,
+    selectedMealIndex: {
+      type: Number,
+      default: 0,
+    },
   },
 
   data() {

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { Dictionary, LocaleTranslation } from '@intake24/common/types';
 
 export type LocaleContent = {
@@ -10,7 +10,7 @@ export type LocaleContent = {
   ): string;
 };
 
-export default Vue.extend({
+export default defineComponent({
   methods: {
     getLocaleContent<T>(content: LocaleTranslation<T> | string): T | string {
       if (typeof content === 'string') return content;

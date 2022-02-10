@@ -42,14 +42,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import ReviewMeal from '@intake24/survey/components/recall/mobile/review/ReviewMeal.vue';
 import SurveyProgress from '@intake24/survey/components/recall/mobile/review/SurveyProgress.vue';
 // import ContextMenu from '@intake24/survey/components/elements/ContextMenu.vue';
 
 export type RecallAction = 'add-meal';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'Review',
 
   components: {

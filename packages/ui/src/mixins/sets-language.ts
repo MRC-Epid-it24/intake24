@@ -1,6 +1,6 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 
-export default Vue.extend({
+export default defineComponent({
   methods: {
     isRrlLocale(languageId: string): boolean {
       return ['ar'].includes(languageId);

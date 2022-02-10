@@ -3,11 +3,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import RecallMobile from './recall-mobile.vue';
 import RecallDesktop from './recall-desktop.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'RecallContainer',
 
   components: { RecallDesktop, RecallMobile },

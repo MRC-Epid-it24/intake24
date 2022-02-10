@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { BasePromptProps, submitPromptProps } from '@intake24/common/prompts';
 import { LocaleTranslation, replaceInTranslation } from '@intake24/common/types';
@@ -30,17 +30,21 @@ import foodSearchService from '@intake24/survey/services/foods.service';
 import FoodSearchResults from '@intake24/survey/components/elements/FoodSearchResults.vue';
 import BasePrompt from '../BasePrompt';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FoodSearchPrompt',
+
   components: { FoodSearchResults },
+
   mixins: [BasePrompt, Submit],
 
   props: {
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
+      required: true,
     },
     initialSearchTerm: {
       type: String,
+      default: '',
     },
   },
 

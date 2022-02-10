@@ -7,21 +7,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { mapGetters } from 'vuex';
 import { FoodSearchPromptProps } from '@intake24/common/prompts';
 import { FoodState } from '@intake24/common/types';
 import { UserFoodData } from '@intake24/common/types/http';
 import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FoodSearchPromptHandler',
 
   components: { FoodSearchPrompt },
 
   props: {
     promptProps: {
-      type: Object as () => FoodSearchPromptProps,
+      type: Object as PropType<FoodSearchPromptProps>,
       required: true,
     },
   },

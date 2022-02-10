@@ -25,24 +25,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import ReviewFood from '@intake24/survey/components/recall/mobile/review/ReviewFood.vue';
 import ContextMenu from '@intake24/survey/components/elements/ContextMenu.vue';
 
 export type MealAction = 'edit-foods' | 'edit-time';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'ReviewMeal',
 
-  components: {
-    ReviewFood,
-    ContextMenu,
-  },
+  components: { ReviewFood, ContextMenu },
+
   props: {
     meal: Object,
     mealIndex: Number,
     active: Boolean,
   },
+
   data() {
     return {
       menuMealIcon: 'far fa-edit',
@@ -58,6 +57,7 @@ export default Vue.extend({
       ],
     };
   },
+
   methods: {
     chooseMeal(mealName: string) {
       this.$emit('breadcrumbMeal', mealName);

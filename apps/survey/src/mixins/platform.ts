@@ -1,6 +1,6 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 
-export default Vue.extend({
+export default defineComponent({
   // TODO: confirm the logic when to swap the more mobile/tablet friendly look
   computed: {
     isMobile(): boolean {

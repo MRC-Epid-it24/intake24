@@ -18,17 +18,20 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'ContextMenu',
+
   props: {
     icon: String,
     menu: Array,
   },
+
   data() {
     return {};
   },
+
   methods: {
     onClick(action: string) {
       this.$emit('context-menu-action', action);

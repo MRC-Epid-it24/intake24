@@ -32,21 +32,22 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
 import BasePrompt from '../BasePrompt';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'MealAddPrompt',
 
   mixins: [BasePrompt],
 
   props: {
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
+      required: true,
     },
     list: {
-      type: Array as () => string[],
+      type: Array as PropType<string[]>,
     },
   },
 
@@ -62,11 +63,13 @@ export default Vue.extend({
       if (text) return text;
       return '';
     },
+
     description(): string {
       const description = this.promptProps.description[this.$i18n.locale];
       if (description) return description;
       return '';
     },
+
     listofmeals(): string[] {
       if (this.list) return this.list;
       return [];
