@@ -2,7 +2,7 @@
   include_vars: '../instances/{{ instance }}/shared/config.json'
 
 - name: Update pm2 to latest
-  command: npm install -g pm2
+  command: pnpm add -g pm2
 
 - name: Update in-memory pm2 code
   become_user: '{{ app.user }}'
@@ -28,12 +28,17 @@
   args:
     chdir: '{{ app.directory }}/apps/api'
 
-- name: Run foods database migrations
-  become_user: '{{ app.user }}'
-  command: pnpm db:migrate:foods
-  when: migrations.foods
-
 - name: Run system database migrations
   become_user: '{{ app.user }}'
-  command: pnpm db:migrate:system
+  command: pnpm db:system:migrate
+  args:
+    chdir: '{{ app.directory }}'
   when: migrations.system
+
+- name: Run foods database migrations
+  become_user: '{{ app.user }}'
+  command: pnpm db:foods:migrate
+  args:
+    chdir: '{{ app.directory }}'
+  when: migrations.foods
+

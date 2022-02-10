@@ -33,3 +33,5 @@
 - name: Install dependencies
   become_user: '{{ app.user }}'
   command: pnpm install
+  args:
+    chdir: '{{ app.directory }}'
