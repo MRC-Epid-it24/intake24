@@ -1,10 +1,13 @@
-import { Column, DataType, Table } from 'sequelize-typescript';
+import { Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import {
   PhysicalActivityLevelAttributes,
   PhysicalActivityLevelCreationAttributes,
 } from '@intake24/common/types/models/foods';
 import BaseModel from '../model';
 
+@Scopes(() => ({
+  list: { order: [['id', 'ASC']] },
+}))
 @Table({
   modelName: 'PhysicalActivityLevel',
   tableName: 'physical_activity_levels',

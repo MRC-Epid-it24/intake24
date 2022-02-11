@@ -1,3 +1,4 @@
+import { PhysicalActivityLevelAttributes } from '../../models/foods/physical-activity-levels';
 import {
   FeedbackSchemeAttributes,
   // FeedbackSchemeCreationAttributes,
@@ -20,4 +21,5 @@ export type FeedbackSchemeListEntry = Pick<FeedbackSchemeAttributes, 'id' | 'nam
 export type FeedbackSchemeRefs = {
   languages: LanguageListEntry[];
   nutrientTypes: NutrientTypeAttributes[];
+  physicalActivityLevels: PhysicalActivityLevelAttributes[];
 };

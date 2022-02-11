@@ -119,9 +119,9 @@ export default defineComponent({
           .filter(({ id }) => nutrientTypeIds.includes(id))
           .map((item) => item.description);
 
-        return `${this.$t(
-          `feedback-schemes.cards.characterTypes.${characterType}`
-        )} | ${nutrients.join(' | ')}`;
+        return `${this.$t(`feedback-schemes.characterTypes.${characterType}`)} | ${nutrients.join(
+          ' | '
+        )}`;
       }
 
       return card.name.en;

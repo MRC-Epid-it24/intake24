@@ -17,11 +17,25 @@ const feedbackSchemes: LocaleMessageObject = {
     name: 'New feedback scheme name',
   },
 
+  ranges: {
+    _: 'Range',
+    start: 'Start',
+    end: 'End',
+  },
+
   age: {
     _: 'Age',
     range: 'Age range interval',
     start: 'Age range start',
     end: 'Age range end',
+  },
+
+  height: {
+    _: 'Height',
+  },
+
+  weight: {
+    _: 'Weight',
   },
 
   sexes: {
@@ -30,11 +44,65 @@ const feedbackSchemes: LocaleMessageObject = {
     f: 'Female',
   },
 
+  sentiments: {
+    _: 'Sentiment',
+    title: 'Sentiments',
+    too_low: 'Too low',
+    low: 'Low',
+    bit_low: 'Bit low',
+    good: 'Good',
+    excellent: 'Excellent',
+    high: 'High',
+    bit_high: 'Bit high',
+    too_high: 'Too high',
+  },
+
+  characterTypes: {
+    _: 'Character type',
+    battery: 'Battery',
+    bread: 'Bread',
+    candy: 'Candy',
+    salmon: 'Salmon',
+    sausage: 'Sausage',
+    egg: 'Egg',
+    apple: 'Apple',
+    strawberry: 'Strawberry',
+    burger: 'Burger',
+    fries: 'Fries',
+    milk: 'Milk',
+    iron: 'Iron',
+    folate: 'Folate',
+    co2: 'CO2',
+  },
+
+  characterSentimentTypes: {
+    _: 'Character sentiment type',
+    title: 'Character sentiment types',
+    danger: 'Danger',
+    warning: 'Warning',
+    happy: 'Happy',
+    exciting: 'Exciting',
+  },
+
   types: {
     _: 'Feedback type',
     title: 'Feedback types',
     default: 'Default',
     playful: 'Playful',
+  },
+
+  nutrientRuleTypes: {
+    _: 'Nutrient rule type',
+    title: 'Nutrient rule types',
+    energy_divided_by_bmr: 'Energy divided by BMR',
+    percentage_of_energy: 'Percentage of energy',
+    per_unit_of_weight: 'Per unit of weight',
+    range: 'Range',
+  },
+
+  physicalActivityLevels: {
+    _: 'Physical activity level',
+    title: 'Physical activity levels',
   },
 
   'top-foods': {
@@ -103,33 +171,6 @@ const feedbackSchemes: LocaleMessageObject = {
       description: 'Unit description',
       required: 'Unit name is required.',
     },
-
-    characterTypes: {
-      _: 'Character type',
-      battery: 'Battery',
-      bread: 'Bread',
-      candy: 'Candy',
-      salmon: 'Salmon',
-      sausage: 'Sausage',
-      egg: 'Egg',
-      apple: 'Apple',
-      strawberry: 'Strawberry',
-      burger: 'Burger',
-      fries: 'Fries',
-      milk: 'Milk',
-      iron: 'Iron',
-      folate: 'Folate',
-      co2: 'CO2',
-    },
-
-    characterSentimentTypes: {
-      _: 'Character sentiment type',
-      title: 'Character sentiment types',
-      danger: 'Danger',
-      warning: 'Warning',
-      happy: 'Happy',
-      exciting: 'Exciting',
-    },
   },
 
   'demographic-groups': {
@@ -139,6 +180,13 @@ const feedbackSchemes: LocaleMessageObject = {
     create: 'New demographic group',
     edit: 'Edit demographic group',
     remove: 'Remove demographic group',
+
+    sectors: {
+      _: 'Scale sector',
+      title: 'Scale sectors',
+      add: 'Add scale sector',
+      remove: 'Remove scale sector',
+    },
   },
 
   'henry-coefficients': {

@@ -79,6 +79,7 @@
               hide-details="auto"
               item-text="description"
               item-value="id"
+              name="nutrientTypeId"
               outlined
               @change="updateNutrientLabel"
             ></v-select>

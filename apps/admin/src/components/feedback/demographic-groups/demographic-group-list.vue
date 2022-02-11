@@ -56,27 +56,129 @@
         </transition-group>
       </draggable>
     </v-list>
-    <v-dialog v-model="dialog.show" max-width="600px" persistent>
+    <v-dialog
+      v-model="dialog.show"
+      fullscreen
+      hide-overlay
+      persistent
+      transition="dialog-bottom-transition"
+    >
       <v-card>
-        <v-toolbar color="primary" dark flat>
-          <v-icon class="mr-3" dark>fas fa-people-arrows</v-icon>
+        <v-toolbar color="primary" dark>
+          <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
+            <v-icon>$cancel</v-icon>
+          </v-btn>
           <v-toolbar-title>
-            {{ $t('feedback-schemes.demographic-groups.edit') }}
+            <v-icon class="mr-3" dark>fas fa-people-arrows</v-icon>
+            {{
+              $t(`feedback-schemes.demographic-groups.${dialog.index === -1 ? 'create' : 'edit'}`)
+            }}
           </v-toolbar-title>
-        </v-toolbar>
-        <v-divider></v-divider>
-        <v-form ref="form" @submit.prevent="save">
-          <!-- <v-card-text>
-          </v-card-text> -->
-          <v-card-actions>
-            <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn :title="$t('common.action.ok')" dark text @click.stop="save">
               <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
             </v-btn>
-          </v-card-actions>
+          </v-toolbar-items>
+          <template v-slot:extension>
+            <v-container>
+              <v-tabs v-model="tab" background-color="primary" dark>
+                <v-tab v-for="item in ['general', 'sectors']" :key="item">
+                  {{ item }}
+                </v-tab>
+              </v-tabs>
+            </v-container>
+          </template>
+        </v-toolbar>
+        <v-form ref="form" @submit.prevent="save">
+          <v-container>
+            <v-tabs-items v-model="tab" class="pt-1">
+              <v-tab-item key="general">
+                <v-card-title>
+                  {{ 'General' }}
+                </v-card-title>
+                <v-row>
+                  <v-col cols="12" md="6">
+                    <v-select
+                      v-model="dialog.item.nutrientTypeId"
+                      :items="nutrientTypes"
+                      :label="$t('nutrient-types._')"
+                      hide-details="auto"
+                      item-text="description"
+                      item-value="id"
+                      name="nutrientTypeId"
+                      outlined
+                      prepend-icon="fas fa-seedling"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-select
+                      v-model="dialog.item.nutrientRuleType"
+                      :items="nutrientRuleTypes"
+                      :label="$t('feedback-schemes.nutrientRuleTypes._')"
+                      hide-details="auto"
+                      name="nutrientRuleType"
+                      outlined
+                      prepend-icon="fas fa-divide"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-select
+                      v-model="dialog.item.sex"
+                      :items="sexes"
+                      :label="$t('feedback-schemes.sexes._')"
+                      hide-details="auto"
+                      name="sex"
+                      outlined
+                      prepend-icon="fas fa-genderless"
+                    >
+                      <template v-slot:item="{ item }">
+                        <span :class="`${item.icon} mr-3`"></span>
+                        {{ item.text }}
+                      </template>
+                      <template v-slot:selection="{ item }">
+                        <span :class="`${item.icon} mr-3`"></span>
+                        {{ item.text }}
+                      </template>
+                    </v-select>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-select
+                      v-model="dialog.item.physicalActivityLevelId"
+                      :items="physicalActivityLevels"
+                      :label="$t('feedback-schemes.physicalActivityLevels._')"
+                      hide-details="auto"
+                      item-text="name"
+                      item-value="id"
+                      name="physicalActivityLevelId"
+                      outlined
+                      prepend-icon="fas fa-running"
+                    ></v-select>
+                  </v-col>
+                  <v-col v-for="item in ['age', 'height', 'weight']" :key="item" cols="12" md="6">
+                    <demographic-group-range
+                      v-model="dialog.item[item]"
+                      :type="item"
+                    ></demographic-group-range>
+                  </v-col>
+                </v-row>
+              </v-tab-item>
+              <v-tab-item key="sectors">
+                <demographic-group-sectors
+                  v-model="dialog.item.scaleSectors"
+                ></demographic-group-sectors>
+              </v-tab-item>
+            </v-tabs-items>
+            <v-card-actions>
+              <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
+                <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
+                <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
+              </v-btn>
+            </v-card-actions>
+          </v-container>
         </v-form>
       </v-card>
     </v-dialog>
@@ -85,11 +187,16 @@
 
 <script lang="ts">
 import draggable from 'vuedraggable';
-import { defineComponent, PropType } from '@vue/composition-api';
-import { DemographicGroup } from '@intake24/common/feedback';
-import { NutrientTypeAttributes } from '@intake24/common/types/models';
+import { defineComponent, PropType, ref } from '@vue/composition-api';
+import { DemographicGroup, nutrientRuleTypes, sexes } from '@intake24/common/feedback';
+import {
+  NutrientTypeAttributes,
+  PhysicalActivityLevelAttributes,
+} from '@intake24/common/types/models';
 import { demographicGroupDefaults } from './demographic-group';
 import { useTopFoodList } from '..';
+import DemographicGroupRange from './demographic-group-range.vue';
+import DemographicGroupSectors from './demographic-group-sectors.vue';
 
 export default defineComponent({
   name: 'DemographicGroupList',
@@ -105,27 +212,46 @@ export default defineComponent({
     },
   },
 
-  components: { draggable },
+  components: { draggable, DemographicGroupRange, DemographicGroupSectors },
 
   setup(props, context) {
-    const { dialog, form, items, newDialog, edit, remove, reset, save } = useTopFoodList(
+    const { dialog, form, items, newDialog, add, edit, remove, reset, save } = useTopFoodList(
       props,
       context,
       demographicGroupDefaults
     );
 
-    return { dialog, form, items, newDialog, edit, remove, reset, save };
+    const tab = ref(0);
+
+    return { dialog, form, items, tab, add, newDialog, edit, remove, reset, save };
+  },
+
+  data() {
+    return {
+      nutrientRuleTypes: nutrientRuleTypes.map((value) => ({
+        text: this.$t(`feedback-schemes.nutrientRuleTypes.${value}`),
+        value,
+      })),
+      sexes: sexes.map((value) => ({
+        text: this.$t(`feedback-schemes.sexes.${value}`),
+        value,
+        icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
+      })),
+    };
   },
 
   computed: {
-    allNutrientTypes(): NutrientTypeAttributes[] {
+    nutrientTypes(): NutrientTypeAttributes[] {
       return this.$store.state.resource.entry.refs.nutrientTypes ?? [];
+    },
+    physicalActivityLevels(): PhysicalActivityLevelAttributes[] {
+      return this.$store.state.resource.entry.refs.physicalActivityLevels ?? [];
     },
   },
 
   methods: {
     getListItemTitle(group: DemographicGroup): string {
-      const nutrient = this.allNutrientTypes.find(({ id }) => group.nutrientTypeId === id);
+      const nutrient = this.nutrientTypes.find(({ id }) => group.nutrientTypeId === id);
 
       return [nutrient?.description, group.scaleSectors[0].name.en].filter(Boolean).join(' | ');
     },

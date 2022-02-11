@@ -1,5 +1,11 @@
-/* eslint-disable import/prefer-default-export */
-import { DemographicGroup } from '@intake24/common/feedback';
+import { DemographicGroup, DemographicGroupScaleSector } from '@intake24/common/feedback';
+
+export const demographicGroupScaleSectorDefaults: DemographicGroupScaleSector = {
+  name: { en: 'Energy' },
+  description: { en: null },
+  range: { start: 0, end: 10 },
+  sentiment: 'good',
+};
 
 export const demographicGroupDefaults: DemographicGroup = {
   id: 'demographic-group',
@@ -11,12 +17,5 @@ export const demographicGroupDefaults: DemographicGroup = {
   nutrientTypeId: '1',
   physicalActivityLevelId: '1',
   sex: null,
-  scaleSectors: [
-    {
-      name: { en: 'Energy' },
-      description: { en: null },
-      range: { start: 0, end: 10 },
-      sentiment: 'good',
-    },
-  ],
+  scaleSectors: [{ ...demographicGroupScaleSectorDefaults }],
 };

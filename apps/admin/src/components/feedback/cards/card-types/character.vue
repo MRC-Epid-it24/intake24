@@ -3,7 +3,7 @@
     <v-tab-item key="content">
       <v-select
         :items="characterTypes"
-        :label="$t('feedback-schemes.cards.characterTypes._')"
+        :label="$t('feedback-schemes.characterTypes._')"
         :value="characterType"
         hide-details="auto"
         name="characterType"
@@ -40,7 +40,7 @@ export default defineComponent({
     return {
       characterTypes: characterTypes.map((value) => ({
         value,
-        text: this.$t(`feedback-schemes.cards.characterTypes.${value}`),
+        text: this.$t(`feedback-schemes.characterTypes.${value}`),
       })),
     };
   },
