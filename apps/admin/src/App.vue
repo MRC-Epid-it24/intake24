@@ -184,6 +184,11 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
 
   async mounted() {
     if (!this.loggedIn && this.$route.name === 'login') {
+      const { state, code } = this.$route.query;
+
+      // MFA verification -> do not refresh yet
+      if ([state, code].every((item) => typeof item === 'string' && item.length)) return;
+
       try {
         await this.$store.dispatch('auth/refresh');
         await this.$router.push({ name: 'dashboard' });
