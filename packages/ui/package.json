@@ -27,7 +27,7 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@vue/runtime-dom": "^3.2.30"
+    "@vue/runtime-dom": "^3.2.31"
   },
   "bundledDependencies": [
     "@intake24/admin"
