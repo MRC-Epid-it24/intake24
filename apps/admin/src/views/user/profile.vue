@@ -123,8 +123,9 @@
 <script lang="ts">
 import { LanguageAttributes } from '@intake24/common/types/models';
 import Vue, { VueConstructor } from 'vue';
-import { mapGetters } from 'vuex';
 import { setsLanguage } from '@intake24/ui';
+import { mapState } from 'pinia';
+import { useUser } from '@intake24/admin/stores';
 import UserPassword from './password.vue';
 
 type Mixins = InstanceType<typeof setsLanguage>;
@@ -144,7 +145,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   computed: {
-    ...mapGetters('user', ['profile', 'permissions', 'roles']),
+    ...mapState(useUser, ['profile', 'permissions', 'roles']),
   },
 
   async mounted() {

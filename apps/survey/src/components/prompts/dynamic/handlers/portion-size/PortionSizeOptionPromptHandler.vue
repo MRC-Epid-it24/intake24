@@ -8,10 +8,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
-import { EncodedFood } from '@intake24/common/types';
 import { UserPortionSizeMethod } from '@intake24/common/types/http';
 import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
+import { mapActions } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;
@@ -25,7 +27,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
   props: {
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
   },
@@ -37,13 +39,19 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   methods: {
+    ...mapActions(useSurvey, ['updateFood']),
+
     onOptionSelected(option: number) {
-      this.$store.commit('survey/updateFood', {
-        mealIndex: this.selectedMealIndex,
-        foodIndex: this.selectedFoodIndex,
-        update: (state: EncodedFood) => {
-          state.portionSizeMethodIndex = option;
-        },
+      const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
+      if (mealIndex === undefined || foodIndex === undefined) {
+        console.warn('No selected meal/food, meal/food index undefined');
+        return;
+      }
+
+      this.updateFood({
+        mealIndex,
+        foodIndex,
+        food: { portionSizeMethodIndex: option },
       });
 
       this.$emit('complete');

@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { DirectWeightPromptProps, directWeightPromptDefaultProps } from '@intake24/common/prompts';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
@@ -34,7 +35,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => DirectWeightPromptProps,
+      type: Object as PropType<DirectWeightPromptProps>,
+      required: true,
     },
   },
 

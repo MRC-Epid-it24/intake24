@@ -33,9 +33,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
 import isEmpty from 'lodash/isEmpty';
 import { Dictionary } from '@intake24/common/types';
+import { useResource } from '@intake24/admin/stores';
 
 export default Vue.extend({
   name: 'DataTableFilter',
@@ -56,7 +57,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters({ activeFilter: 'resource/filter' }),
+    ...mapState(useResource, { activeFilter: 'getFilter' }),
   },
 
   watch: {

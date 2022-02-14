@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
 import { Dictionary } from '@intake24/common/types';
 import { Pagination, PaginationMeta } from '@intake24/common/types/models';
 import { ConfirmDialog } from '@intake24/ui';
@@ -79,6 +79,7 @@ import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import handlesLoading from '@intake24/admin/mixins/handles-loading';
 import hasResource from '@intake24/admin/mixins/has-resource';
 import DataTableFilter from '@intake24/admin/components/datatable/data-table-filter.vue';
+import { useResource } from '@intake24/admin/stores';
 
 type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof hasResource>;
 
@@ -123,7 +124,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   computed: {
-    ...mapGetters({ filter: 'resource/filter' }),
+    ...mapState(useResource, { filter: 'getFilter' }),
     tracked(): string[] | number[] {
       return this.selected.map((item) => item[this.trackBy]);
     },
@@ -140,6 +141,11 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   methods: {
+    ...mapActions(useResource, {
+      setResourceFilter: 'setFilter',
+      resetResourceFilter: 'resetFilter',
+    }),
+
     async fetch() {
       const { page, limit } = this;
 
@@ -160,12 +166,12 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
     },
 
     async setFilter(data: Dictionary) {
-      await this.$store.dispatch(`resource/setFilter`, data);
+      await this.setResourceFilter(data);
       this.fetch();
     },
 
     async resetFilter() {
-      await this.$store.dispatch(`resource/resetFilter`);
+      await this.resetResourceFilter();
       this.fetch();
     },
 

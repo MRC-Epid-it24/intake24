@@ -53,8 +53,14 @@ export default defineComponent({
   components: { MealItem, ContextMenu },
 
   props: {
-    surveyName: String,
-    surveyId: String,
+    surveyName: {
+      type: String,
+      required: true,
+    },
+    surveyId: {
+      type: String,
+      required: true,
+    },
     meals: Array,
   },
 

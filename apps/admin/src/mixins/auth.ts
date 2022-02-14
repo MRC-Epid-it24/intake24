@@ -1,6 +1,7 @@
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import { mapActions } from 'pinia';
+import { useUser } from '@intake24/admin/stores';
 
 export default Vue.extend({
-  computed: mapGetters('user', ['can']),
+  methods: mapActions(useUser, ['can']),
 });

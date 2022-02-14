@@ -64,15 +64,16 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { copy } from '@intake24/common/util';
 import pick from 'lodash/pick';
+import { mapActions } from 'pinia';
+import { copy } from '@intake24/common/util';
 import { SurveySchemeQuestionEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { PromptQuestion } from '@intake24/common/prompts';
 import { ValidationError } from '@intake24/common/types';
 import { MapRefsMixin } from '@intake24/admin/types';
 import { form } from '@intake24/admin/helpers';
-
 import mapRefs from '@intake24/admin/components/entry/map-refs';
+import { useEntry } from '@intake24/admin/stores';
 
 export type SchemeQuestionForm = {
   question: PromptQuestion;
@@ -112,6 +113,8 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SurveySchemeRefs>>).ext
   },
 
   methods: {
+    ...mapActions(useEntry, ['updateRefs']),
+
     close() {
       this.dialog = false;
     },
@@ -128,7 +131,7 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SurveySchemeRefs>>).ext
       const templates = copy(this.refs.templates);
       templates.push(question);
 
-      await this.$store.dispatch('resource/entry/updateRefs', { ...copy(this.refs), templates });
+      this.updateRefs({ ...copy(this.refs), templates });
 
       this.close();
 

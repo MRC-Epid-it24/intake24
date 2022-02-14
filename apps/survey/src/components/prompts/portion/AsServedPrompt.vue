@@ -88,8 +88,8 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-
 import { basePromptProps, BasePromptProps } from '@intake24/common/prompts';
 import { LocaleTranslation } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
@@ -110,11 +110,11 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
     foodName: {
-      type: Object as () => LocaleTranslation,
+      type: Object as PropType<LocaleTranslation>,
       required: true,
     },
     asServedSetId: {

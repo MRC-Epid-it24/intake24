@@ -30,6 +30,8 @@ import {
   FeedbackCardArea,
   UserDemographicInfo,
 } from '@intake24/survey/components/feedback';
+import { mapState } from 'pinia';
+import { useLoading, useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'FeedbackHome',
@@ -61,8 +63,9 @@ export default defineComponent({
   },
 
   computed: {
-    feedbackScheme(): FeedbackSchemeEntryResponse | null {
-      return this.$store.state.survey.parameters.feedbackScheme;
+    ...mapState(useSurvey, ['parameters']),
+    feedbackScheme(): FeedbackSchemeEntryResponse | undefined {
+      return this.parameters?.feedbackScheme;
     },
   },
 
@@ -74,7 +77,8 @@ export default defineComponent({
       return;
     }
 
-    await this.$store.dispatch('loading/add', 'feedback-initial-load');
+    const loading = useLoading();
+    loading.addItem('feedback-initial-load');
 
     try {
       const { cards, demographicGroups, henryCoefficients } = feedbackScheme;
@@ -115,11 +119,11 @@ export default defineComponent({
 
       this.buildView();
     } catch (err) {
-      console.log(`error`);
-      await this.$store.dispatch('feedback/setError', err);
+      console.log(err);
+      // await this.$store.dispatch('feedback/setError', err);
       this.$router.push({ name: 'feedback-error', params: { surveyId } });
     } finally {
-      await this.$store.dispatch('loading/remove', 'feedback-initial-load');
+      loading.removeItem('feedback-initial-load');
     }
   },
 

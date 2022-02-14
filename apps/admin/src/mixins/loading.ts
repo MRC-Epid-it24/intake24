@@ -1,6 +1,7 @@
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useLoading } from '@intake24/admin/stores';
 
 export default Vue.extend({
-  computed: mapGetters('loading', { isAppLoading: 'isLoading' }),
+  computed: mapState(useLoading, { isAppLoading: 'isLoading' }),
 });

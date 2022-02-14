@@ -8,9 +8,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
-import { EncodedFood, StandardPortionUnit } from '@intake24/common/types';
+import { StandardPortionUnit } from '@intake24/common/types';
 import StandardPortionPrompt from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
+import { mapActions } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;
@@ -29,7 +32,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
   props: {
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
   },
@@ -57,21 +60,29 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   methods: {
+    ...mapActions(useSurvey, ['updateFood']),
+
     onStandardPortionSelected(data: StandardPortionData) {
       const { conversionFactor } = this.selectedPortionSize;
 
-      this.$store.commit('survey/updateFood', {
-        mealIndex: this.selectedMealIndex,
-        foodIndex: this.selectedFoodIndex,
-        update: (state: EncodedFood) => {
-          state.portionSize = {
+      const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
+      if (mealIndex === undefined || foodIndex === undefined) {
+        console.warn('No selected meal/food, meal/food index undefined');
+        return;
+      }
+
+      this.updateFood({
+        mealIndex,
+        foodIndex,
+        food: {
+          portionSize: {
             method: 'standard-portion',
             unit: data.unit,
             quantity: data.quantity,
             servingWeight:
               data.unit.weight * (data.quantity.whole + data.quantity.fraction) * conversionFactor,
             leftoversWeight: 0, // standard portion does not allow estimating leftovers
-          };
+          },
         },
       });
 

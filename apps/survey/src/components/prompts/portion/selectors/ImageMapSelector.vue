@@ -17,6 +17,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
@@ -43,7 +44,8 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => ImageMapSelectorProps,
+      type: Object as PropType<ImageMapSelectorProps>,
+      required: true,
     },
   },
 

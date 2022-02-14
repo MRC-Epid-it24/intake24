@@ -80,18 +80,13 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue, { VueConstructor } from 'vue';
+import { defineComponent, ref, reactive } from '@vue/composition-api';
 import VueRecaptcha from 'vue-recaptcha';
-import { mapActions } from 'vuex';
+import { mapActions } from 'pinia';
 import surveySvc from '@intake24/survey/services/survey.service';
+import { useAuth } from '@intake24/survey/stores';
 
-type GenerateUserRefs = {
-  $refs: {
-    reCaptcha: InstanceType<typeof VueRecaptcha>;
-  };
-};
-
-export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
+export default defineComponent({
   name: 'GenerateUser',
 
   props: {
@@ -101,21 +96,41 @@ export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
     },
   },
 
+  setup() {
+    const reCaptcha = ref<InstanceType<typeof VueRecaptcha>>();
+
+    return reactive({
+      loading: false,
+      status: null as number | null,
+      userName: '',
+      password: '',
+      reCaptcha: {
+        ref: reCaptcha,
+        enabled: process.env.VUE_APP_RECAPTCHA_ENABLED === 'true',
+        siteKey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
+        token: null as string | null,
+      },
+    });
+  },
+
   components: { VueRecaptcha },
 
-  data() {
+  /* data() {
     return {
       loading: false,
       status: null as number | null,
       userName: '',
       password: '',
-      reCaptchaToken: null as string | null,
       reCaptcha: {
-        enabled: process.env.VUE_APP_RECAPTCHA_ENABLED === 'true',
-        siteKey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
+        ref
+        settings: {
+          enabled: process.env.VUE_APP_RECAPTCHA_ENABLED === 'true',
+          siteKey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
+        },
+        token: null as string | null,
       },
     };
-  },
+  }, */
 
   computed: {
     canContinue(): boolean {
@@ -124,15 +139,15 @@ export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
   },
 
   methods: {
-    ...mapActions('auth', ['login']),
+    ...mapActions(useAuth, ['login']),
 
     resetReCaptcha() {
-      this.reCaptchaToken = null;
-      this.$refs.reCaptcha.reset();
+      this.reCaptcha.token = null;
+      this.reCaptcha.ref?.reset();
     },
 
     onCaptchaVerified(token: string) {
-      this.reCaptchaToken = token;
+      this.reCaptcha.token = token;
       this.generateUser();
     },
 
@@ -141,10 +156,10 @@ export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
     },
 
     async generateUser() {
-      const { reCaptchaToken } = this;
+      const { enabled, token } = this.reCaptcha;
 
-      if (this.reCaptcha.enabled === true && !reCaptchaToken) {
-        this.$refs.reCaptcha.execute();
+      if (enabled && !token) {
+        this.reCaptcha.ref?.execute();
         return;
       }
 
@@ -152,7 +167,7 @@ export default (Vue as VueConstructor<Vue & GenerateUserRefs>).extend({
 
       try {
         const { userName, password } = await surveySvc.generateUser(this.surveyId, {
-          reCaptchaToken,
+          reCaptchaToken: token,
         });
 
         this.status = 200;

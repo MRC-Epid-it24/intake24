@@ -80,6 +80,7 @@
 import { defineComponent, PropType } from '@vue/composition-api';
 import { NutrientGroup } from '@intake24/common/feedback';
 import { NutrientTypeAttributes } from '@intake24/common/types/models';
+import { useEntry } from '@intake24/admin/stores';
 import CardContent from '../partials/card-content.vue';
 import CardThresholds from '../partials/card-thresholds.vue';
 import CardUnit from '../partials/card-unit.vue';
@@ -122,7 +123,7 @@ export default defineComponent({
 
   computed: {
     allNutrientTypes(): NutrientTypeAttributes[] {
-      return this.$store.state.resource.entry.refs.nutrientTypes ?? [];
+      return useEntry().refs.nutrientTypes ?? [];
     },
     currentNutrientTypes(): NutrientTypeAttributes[] {
       return this.currentNutrientTypeIds.reduce<NutrientTypeAttributes[]>((acc, nutrientId) => {

@@ -1,11 +1,12 @@
 import { defineComponent } from '@vue/composition-api';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
 import { EncodedFood, LocaleTranslation } from '@intake24/common/types';
 import { UserPortionSizeMethod } from '@intake24/common/types/http';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   computed: {
-    ...mapGetters('survey', ['selectedFood', 'selectedMealIndex', 'selectedFoodIndex']),
+    ...mapState(useSurvey, ['selectedFood', 'selectedMealIndex', 'selectedFoodIndex']),
 
     encodedSelectedFood(): EncodedFood {
       const { selectedFood } = this;

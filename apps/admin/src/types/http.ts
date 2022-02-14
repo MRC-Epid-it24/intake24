@@ -1,7 +1,5 @@
 import { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import Router from 'vue-router';
-import { Store } from 'vuex';
-import { RootState } from '@intake24/admin/types/vuex';
 
 export type SubscribeCallback = (err?: AxiosError) => void;
 
@@ -11,7 +9,7 @@ export interface HttpRequestConfig<T = any> extends AxiosRequestConfig<T> {
 
 export interface HttpClient {
   axios: AxiosInstance;
-  init(router: Router, store: Store<RootState>): void;
+  init(router: Router): void;
   get<T = any, R = AxiosResponse<T>>(url: string, config?: HttpRequestConfig): Promise<R>;
   post<T = any, R = AxiosResponse<T>>(
     url: string,
@@ -35,7 +33,7 @@ export interface HttpClient {
     data?: any,
     config?: HttpRequestConfig
   ): Promise<R>;
-  mountInterceptors(router: Router, store: Store<RootState>): void;
-  mountBearerInterceptor(store: Store<RootState>): void;
-  mount401Interceptor(router: Router, store: Store<RootState>): void;
+  mountInterceptors(router: Router): void;
+  mountBearerInterceptor(): void;
+  mount401Interceptor(router: Router): void;
 }

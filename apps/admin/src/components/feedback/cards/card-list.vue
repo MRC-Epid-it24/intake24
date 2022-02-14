@@ -64,6 +64,7 @@ import isEqual from 'lodash/isEqual';
 import draggable from 'vuedraggable';
 import { Card } from '@intake24/common/feedback';
 import { NutrientTypeAttributes } from '@intake24/common/types/models';
+import { useEntry } from '@intake24/admin/stores';
 import CardSelector from './card-selector.vue';
 
 export type CardEvent = {
@@ -95,7 +96,7 @@ export default defineComponent({
 
   computed: {
     allNutrientTypes(): NutrientTypeAttributes[] {
-      return this.$store.state.resource.entry.refs.nutrientTypes ?? [];
+      return useEntry().refs.nutrientTypes ?? [];
     },
   },
 

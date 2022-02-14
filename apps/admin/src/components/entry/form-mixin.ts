@@ -1,11 +1,13 @@
 import Vue, { VueConstructor } from 'vue';
-import { copy } from '@intake24/common/util';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
+import { mapActions } from 'pinia';
+import { copy } from '@intake24/common/util';
 import { Dictionary, ValidationError } from '@intake24/common/types';
 import { FormMixin } from '@intake24/admin/types';
 import { form } from '@intake24/admin/helpers';
-import SubmitFooter from '@intake24/admin/components/forms/submit-footer.vue';
+import { SubmitFooter } from '@intake24/admin/components/forms';
+import { useEntry } from '@intake24/admin/stores';
 import fetchEntry from './fetch-entry';
 import hasEntry from './has-entry';
 import Layout from './layout.vue';
@@ -72,6 +74,8 @@ export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
   },
 
   methods: {
+    ...mapActions(useEntry, ['updateEntry']),
+
     toForm(data: Dictionary) {
       this.setOriginalEntry(data);
       this.form.load(data);
@@ -94,7 +98,7 @@ export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
         this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }).toString());
       }
 
-      await this.$store.dispatch('resource/entry/update', data);
+      await this.updateEntry(data);
     },
 
     clearError(event: KeyboardEvent) {

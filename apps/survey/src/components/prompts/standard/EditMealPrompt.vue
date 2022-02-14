@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
 import { FoodState } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';
@@ -57,11 +58,11 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
 
   props: {
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
     foodList: {
-      type: Array as () => FoodState[],
+      type: Array as PropType<FoodState[]>,
       required: true,
     },
     mealName: {

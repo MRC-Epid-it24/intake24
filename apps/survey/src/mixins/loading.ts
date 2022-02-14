@@ -1,6 +1,7 @@
 import { defineComponent } from '@vue/composition-api';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useLoading } from '../stores';
 
 export default defineComponent({
-  computed: mapGetters('loading', { isAppLoading: 'isLoading' }),
+  computed: mapState(useLoading, { isAppLoading: 'isLoading' }),
 });

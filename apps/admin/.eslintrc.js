@@ -25,6 +25,7 @@ module.exports = {
   },
   rules: {
     'import/no-cycle': 'warn',
+    'import/prefer-default-export': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-await-in-loop': 'off',

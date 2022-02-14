@@ -119,6 +119,7 @@ import { Sex, sexes, weightTargets } from '@intake24/common/feedback';
 import { PhysicalActivityLevel } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
 import { Nullable, UserPhysicalDataAttributes } from '@intake24/common/types/models';
+import { useLoading } from '@intake24/survey/stores';
 
 export type SurveyFeedbackPhysicalDataForm = Nullable<Omit<UserPhysicalDataAttributes, 'userId'>>;
 
@@ -164,7 +165,8 @@ export default defineComponent({
   async mounted() {
     const { surveyId } = this;
 
-    await this.$store.dispatch('loading/add', 'feedback-physical-data');
+    const loading = useLoading();
+    loading.addItem('feedback-physical-data');
 
     try {
       const [physicalData, feedbackData] = await Promise.all([
@@ -178,10 +180,10 @@ export default defineComponent({
       }
       this.physicalActivityLevels = feedbackData.physicalActivityLevels;
     } catch (err) {
-      await this.$store.dispatch('feedback/setError', err);
+      // await this.$store.dispatch('feedback/setError', err);
       this.$router.push({ name: 'feedback-error', params: { surveyId } });
     } finally {
-      await this.$store.dispatch('loading/remove', 'feedback-physical-data');
+      loading.removeItem('feedback-physical-data');
     }
   },
 

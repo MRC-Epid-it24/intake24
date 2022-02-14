@@ -1,30 +1,31 @@
 import Router from 'vue-router';
-import { Store } from 'vuex';
-import { RootState } from '@intake24/admin/types';
 import resources from './resources';
+import { useAuth, useResource, useUser } from '../stores';
 
-export default (router: Router, store: Store<RootState>): void => {
+export default (router: Router): void => {
   router.beforeEach(async (to, from, next) => {
     const { meta: { perm, public: unrestricted } = {} } = to;
 
+    const auth = useAuth();
+
     // Login page
     if (unrestricted) {
-      if (store.getters['auth/loggedIn']) next({ name: 'dashboard' });
+      if (auth.loggedIn) next({ name: 'dashboard' });
       else next();
       return;
     }
 
     // Get logged-in user information if not yet loaded
-    if (!store.getters['auth/loggedIn']) await store.dispatch('auth/refresh', { withErr: false });
+    if (!auth.loggedIn) await auth.refresh(false);
 
     // Any other page (requires to be logged in)
-    if (!store.getters['auth/loggedIn']) {
+    if (!auth.loggedIn) {
       next({ name: 'login' });
       return;
     }
 
     // Check correct permissions if any
-    if (perm && !store.getters['user/can'](perm)) {
+    if (perm && !useUser().can(perm)) {
       next({ name: 'dashboard' });
       return;
     }
@@ -39,7 +40,9 @@ export default (router: Router, store: Store<RootState>): void => {
     const name = module.parent ?? module.current;
     const resource = resources.find((item) => item.name === name);
 
-    if (!store.getters['resource/name'] !== name)
-      await store.dispatch('resource/update', { name, api: resource?.api ?? `admin/${name}` });
+    const resourceStore = useResource();
+
+    if (!resourceStore.name !== name)
+      resourceStore.update({ name, api: resource?.api ?? `admin/${name}` });
   });
 };

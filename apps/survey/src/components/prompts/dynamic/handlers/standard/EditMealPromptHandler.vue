@@ -13,8 +13,9 @@
 import { defineComponent, PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
 import { FoodState } from '@intake24/common/types';
-import { mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
 import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'MealAddPromptHandler',
@@ -29,7 +30,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('survey', ['defaultSchemeMeals', 'selectedMeal', 'selectedMealIndex']),
+    ...mapState(useSurvey, ['defaultSchemeMeals', 'selectedMeal', 'selectedMealIndex']),
 
     // foodsList(): string[] {
     //   if (this.defaultSchemeMeals.length === 0) return [];
@@ -42,13 +43,25 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions(useSurvey, ['setFoods', 'deleteMeal']),
+
     onAnswer(newFoods: FoodState[]) {
-      this.$store.commit('survey/setFoods', { mealIndex: this.selectedMealIndex, foods: newFoods });
+      if (this.selectedMealIndex === undefined) {
+        console.warn('No selected meal, meal index undefined');
+        return;
+      }
+
+      this.setFoods({ mealIndex: this.selectedMealIndex, foods: newFoods });
       this.$emit('complete');
     },
 
     onAbort() {
-      this.$store.commit('survey/deleteMeal', this.selectedMealIndex);
+      if (this.selectedMealIndex === undefined) {
+        console.warn('No selected meal, meal index undefined');
+        return;
+      }
+
+      this.deleteMeal(this.selectedMealIndex);
       this.$emit('complete');
     },
   },

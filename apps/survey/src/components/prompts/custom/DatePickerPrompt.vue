@@ -17,6 +17,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { DatePickerPromptProps, datePickerPromptProps } from '@intake24/common/prompts';
 import BasePrompt, { Prompt } from '../BasePrompt';
@@ -28,7 +29,8 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   props: {
     promptProps: {
-      type: Object as () => DatePickerPromptProps,
+      type: Object as PropType<DatePickerPromptProps>,
+      required: true,
     },
     value: {
       type: String,

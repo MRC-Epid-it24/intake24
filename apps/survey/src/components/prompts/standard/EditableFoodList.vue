@@ -38,6 +38,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { FoodState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
@@ -50,7 +51,7 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
 
   props: {
     foodList: {
-      type: Array as () => FoodState[],
+      type: Array as PropType<FoodState[]>,
       required: true,
     },
     drinks: {

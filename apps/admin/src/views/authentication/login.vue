@@ -53,8 +53,9 @@
 <script lang="ts">
 import axios, { AxiosError } from 'axios';
 import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex';
 import { Errors } from '@intake24/common/util';
+import { mapActions, mapState } from 'pinia';
+import { useAuth } from '@intake24/admin/stores';
 
 export default Vue.extend({
   name: 'AppLogin',
@@ -68,15 +69,14 @@ export default Vue.extend({
     };
   },
 
-  computed: mapGetters('auth', ['loggedIn', 'mfaRequestUrl']),
+  computed: {
+    ...mapState(useAuth, ['loggedIn', 'mfaRequestUrl']),
+  },
 
   async mounted() {
     // Check for MFA response
     const { state, code } = this.$route.query;
-
-    if ([state, code].some((item) => typeof item !== 'string' || !item.length)) {
-      return;
-    }
+    if (typeof state !== 'string' || typeof code !== 'string') return;
 
     try {
       await this.verify({ state, code });
@@ -89,7 +89,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions('auth', ['login', 'verify']),
+    ...mapActions(useAuth, ['login', 'verify']),
 
     async onLogin() {
       const { email, password } = this;

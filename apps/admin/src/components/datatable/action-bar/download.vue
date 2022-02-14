@@ -2,7 +2,7 @@
   <v-btn
     color="primary"
     icon
-    :href="`${url.api}/${route}/${item.id}`"
+    :href="`${app.api}/${route}/${item.id}`"
     target="_blank"
     :title="$t('common.action.read')"
   >
@@ -12,7 +12,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useApp } from '@intake24/admin/stores';
 import ActionMixin from './action-mixin';
 
 export default Vue.extend({
@@ -20,7 +21,7 @@ export default Vue.extend({
 
   mixins: [ActionMixin],
 
-  computed: mapGetters(['url']),
+  computed: mapState(useApp, ['app']),
 });
 </script>
 

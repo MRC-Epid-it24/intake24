@@ -8,11 +8,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
 import { FoodSearchPromptProps } from '@intake24/common/prompts';
 import { FoodState } from '@intake24/common/types';
 import { UserFoodData } from '@intake24/common/types/http';
 import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'FoodSearchPromptHandler',
@@ -27,7 +28,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('survey', ['selectedFood', 'selectedMealIndex', 'selectedFoodIndex']),
+    ...mapState(useSurvey, ['selectedFood', 'selectedMealIndex', 'selectedFoodIndex']),
 
     selectedFoodDescription(): string {
       const { selectedFood } = this;
@@ -44,8 +45,15 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions(useSurvey, ['replaceFood']),
+
     onFoodSelected(data: UserFoodData) {
-      const currentState: FoodState | undefined = this.$store.getters['survey/selectedFood'];
+      if (this.selectedMealIndex === undefined || this.selectedFoodIndex === undefined) {
+        console.warn('No selected food/meal, food/meal index undefined');
+        return;
+      }
+
+      const currentState = this.selectedFood;
 
       // Automatically select the only portion size method available to avoid triggering
       // redundant portion size option prompt
@@ -60,7 +68,7 @@ export default defineComponent({
         flags: currentState?.flags ?? [],
       };
 
-      this.$store.commit('survey/replaceFood', {
+      this.replaceFood({
         mealIndex: this.selectedMealIndex,
         foodIndex: this.selectedFoodIndex,
         food: newState,

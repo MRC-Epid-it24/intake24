@@ -106,7 +106,6 @@
 import groupBy from 'lodash/groupBy';
 import pluralize from 'pluralize';
 import Vue, { VueConstructor } from 'vue';
-import { mapGetters } from 'vuex';
 import { Location } from 'vue-router';
 import { Dictionary } from '@intake24/common/types';
 import { ConfirmDialog, pwaUpdate, setsLanguage } from '@intake24/ui';
@@ -114,6 +113,8 @@ import Loader from '@intake24/admin/components/loader.vue';
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import webPush from '@intake24/admin/components/web-push/web-push';
 import resources from '@intake24/admin/router/resources';
+import { mapState } from 'pinia';
+import { useApp, useAuth, useEntry } from '@intake24/admin/stores';
 
 export interface AppComponent {
   sidebar: boolean;
@@ -149,7 +150,10 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   },
 
   computed: {
-    ...mapGetters({ app: 'app', loggedIn: 'auth/loggedIn' }),
+    ...mapState(useApp, ['app']),
+    ...mapState(useAuth, ['loggedIn']),
+    ...mapState(useEntry, { entry: 'data' }),
+
     breadcrumbs(): Breadcrumbs[] {
       const { meta: { module, action } = {}, params } = this.$route;
       if (!module || !action) return [];
@@ -157,12 +161,13 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
       const { current, parent } = module;
       return this.buildBreadCrumb(current, action, params, parent);
     },
+
     title() {
       if (this.$route.meta?.title) return this.$t(this.$route.meta.title);
 
       if (!this.module) return this.app.name;
 
-      const { id, name } = this.$store.state.resource.entry.data;
+      const { id, name } = this.entry;
 
       return name ?? id ?? this.$t(`${this.module}.title`);
     },
@@ -178,6 +183,8 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   },
 
   async created() {
+    this.$http.init(this.$router);
+
     const userLanguage = this.$ls.get('language', navigator.language || navigator.userLanguage);
     await this.setLanguage('admin', userLanguage);
   },
@@ -190,7 +197,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
       if ([state, code].every((item) => typeof item === 'string' && item.length)) return;
 
       try {
-        await this.$store.dispatch('auth/refresh');
+        await useAuth().refresh();
         await this.$router.push({ name: 'dashboard' });
       } catch (err) {
         // continue
@@ -211,7 +218,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
     },
 
     async logout() {
-      await this.$store.dispatch('auth/logout', { invalidate: true });
+      await useAuth().logout(true);
       await this.$router.push({ name: 'login' });
     },
 
@@ -242,7 +249,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
         return items;
       }
 
-      const { name: entryName, id: entryId } = this.$store.state.resource.entry.data;
+      const { name: entryName, id: entryId } = this.entry;
 
       items.push({
         ...defaults,

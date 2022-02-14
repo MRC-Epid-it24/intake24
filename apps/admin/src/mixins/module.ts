@@ -1,6 +1,7 @@
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useResource } from '../stores';
 
 export default Vue.extend({
-  computed: mapGetters({ module: 'resource/name' }),
+  computed: mapState(useResource, { module: 'name' }),
 });

@@ -1,8 +1,8 @@
 import Vue from 'vue';
-import { mapState, mapGetters } from 'vuex';
-import { SchemeEntryResponse, SurveyEntryResponse } from '@intake24/common/types/http';
+import { mapState } from 'pinia';
+import { SchemeEntryResponse } from '@intake24/common/types/http';
 import { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
-import { MealState, Selection, FoodState, LocaleTranslation } from '@intake24/common/types';
+import { Selection, FoodState, LocaleTranslation } from '@intake24/common/types';
 import { ComponentType } from '@intake24/common/prompts';
 import DynamicRecall, { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
@@ -12,7 +12,6 @@ import standardHandlers from '@intake24/survey/components/prompts/dynamic/handle
 import portionSizeHandlers from '@intake24/survey/components/prompts/dynamic/handlers/portion-size';
 import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
 import { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
-import { MealUndo, FoodUndo } from '@intake24/survey/types/vuex';
 
 // Mobile
 import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
@@ -21,6 +20,7 @@ import MealFoodMobileContextMenu from '@intake24/survey/components/recall/Mobile
 import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
 import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
 import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
+import { FoodUndo, MealUndo, useSurvey } from '@intake24/survey/stores';
 
 export default Vue.extend({
   name: 'Recall',
@@ -40,7 +40,10 @@ export default Vue.extend({
   },
 
   data: () => {
+    const survey = useSurvey();
+
     return {
+      survey,
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
       clickedPrompt: null as ComponentType | null,
@@ -58,7 +61,22 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters('survey', ['selectedMeal', 'selectedFood', 'selectedMealIndex']),
+    ...mapState(useSurvey, ['selectedMeal', 'selectedFood', 'selectedMealIndex']),
+
+    ...mapState(useSurvey, {
+      meals(state) {
+        return state.data.meals.map((meal) => ({
+          name: meal.name,
+          time: meal.time
+            ? timeDoubleDigitsConvertor(meal.time.hours)
+                .concat(':')
+                .concat(timeDoubleDigitsConvertor(meal.time.minutes))
+            : ``,
+          // FIXME: Foods is type of Encoded USer Food Data or Uswr Food Data. at the mpment FoodItem.vue component is expecting object iwth name and searchTerm properties.
+          foods: meal.foods,
+        }));
+      },
+    }),
 
     handlerComponent(): string {
       const prompt = this.currentPrompt?.prompt;
@@ -76,20 +94,20 @@ export default Vue.extend({
       }
     },
 
-    surveyScheme(): SchemeEntryResponse | null {
-      return this.$store.state.survey.parameters?.surveyScheme;
+    surveyScheme(): SchemeEntryResponse | undefined {
+      return this.survey.parameters?.surveyScheme;
     },
 
-    surveyName(): SurveyEntryResponse | null {
-      return this.$store.state.survey.parameters?.name;
+    surveyName(): string | undefined {
+      return this.survey.parameters?.name;
     },
 
-    surveyId(): SurveyEntryResponse | null {
-      return this.$store.state.survey.parameters?.id;
+    surveyId(): string | undefined {
+      return this.survey.parameters?.id;
     },
 
     undo(): MealUndo | FoodUndo | null {
-      return this.$store.state.survey.undo;
+      return this.survey.undo;
     },
 
     showMealList(): boolean {
@@ -116,34 +134,17 @@ export default Vue.extend({
       }
       return '';
     },
-
-    ...mapState({
-      meals(state: any) {
-        return state.survey.data.meals.map((meal: MealState) => {
-          return {
-            name: meal.name,
-            time: meal.time
-              ? timeDoubleDigitsConvertor(meal.time.hours)
-                  .concat(':')
-                  .concat(timeDoubleDigitsConvertor(meal.time.minutes))
-              : ``,
-            // FIXME: Foods is type of Encoded USer Food Data or Uswr Food Data. at the mpment FoodItem.vue component is expecting object iwth name and searchTerm properties.
-            foods: meal.foods,
-          };
-        });
-      },
-    }),
   },
 
   async created() {
-    if (this.surveyScheme === null) {
+    if (!this.surveyScheme) {
       console.error('Survey scheme must be known at this point');
       return;
     }
 
-    this.recallController = new DynamicRecall(this.surveyScheme, this.$store);
+    this.recallController = new DynamicRecall(this.surveyScheme, this.survey);
 
-    await this.recallController.initialiseSurvey();
+    await this.recallController.initialiseSurvey(this.$i18n.locale);
   },
 
   async mounted() {
@@ -154,12 +155,12 @@ export default Vue.extend({
     setSelection(newSelection: Selection) {
       // Prevent the currently active prompt from crashing if it expects a different selection type
       this.currentPrompt = null;
-      this.$store.commit('survey/setSelection', newSelection);
+      this.survey.setSelection(newSelection);
     },
 
     clearUndo() {
       // FIXME: Stop components from re-rendering after clearing objectrs in vuex store.
-      this.$store.commit('survey/clearUndo');
+      this.survey.clearUndo();
     },
 
     showMealPrompt(mealIndex: number, promptSection: MealSection, promptType: ComponentType) {

@@ -4,8 +4,8 @@ import { serialize } from 'object-to-formdata';
 import type { Dictionary } from '@intake24/common/types';
 import { copy, merge, Errors, getObjectNestedKeys } from '@intake24/common/util';
 import http from '@intake24/admin/services/http.service';
-import store from '@intake24/admin/store';
 import type { HttpRequestConfig } from '@intake24/admin/types/http';
+import { useLoading } from '../stores';
 
 export interface FormConfig<T> {
   status?: string;
@@ -84,7 +84,8 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
     async submit<R>(url: string, method: Method, config: HttpRequestConfig = {}): Promise<R> {
       const { withErr, ...rest } = config;
       const loadStr = `form-${url}`;
-      store.commit('loading/add', loadStr);
+      const loading = useLoading();
+      loading.addItem(loadStr);
 
       const { transform } = this.config;
       const output =
@@ -103,7 +104,9 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
 
             if (withErr) reject(err.response.data);
           })
-          .finally(() => store.commit('loading/remove', loadStr));
+          .finally(() => {
+            loading.removeItem(loadStr);
+          });
       });
     },
 

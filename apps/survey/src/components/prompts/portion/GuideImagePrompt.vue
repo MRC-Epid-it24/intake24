@@ -95,6 +95,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
 import { VImg } from 'vuetify/lib';
@@ -124,11 +125,11 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
     foodName: {
-      type: Object as () => LocaleTranslation,
+      type: Object as PropType<LocaleTranslation>,
       required: true,
     },
     guideImageId: {

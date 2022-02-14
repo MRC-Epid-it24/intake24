@@ -1,9 +1,10 @@
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useEntry } from '@intake24/admin/stores';
 
 export default Vue.extend({
-  computed: mapGetters({
-    refs: 'resource/entry/refs',
-    refsLoaded: 'resource/entry/refsLoaded',
+  computed: mapState(useEntry, {
+    refs: 'refs',
+    refsLoaded: 'refsLoaded',
   }),
 });

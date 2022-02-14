@@ -54,6 +54,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 import {
@@ -80,7 +81,8 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => AssociatedFoodsPanelProps,
+      type: Object as PropType<AssociatedFoodsPanelProps>,
+      required: true,
     },
     // assocPromptData: {
     //   type: Object as () => UserAssociatedFoodPrompt,

@@ -162,7 +162,7 @@ export default defineComponent({
     const dialog = (show = false): MealDialog => ({
       show,
       index: -1,
-      meal: { name: { en: null }, time: '8:00' },
+      meal: { name: { en: '' }, time: '8:00' },
     });
 
     return {

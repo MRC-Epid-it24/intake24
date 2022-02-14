@@ -15,14 +15,16 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
 import breadcrumbs, {
   BreadCrumbsContent,
   BrdCrumbs,
 } from '@intake24/survey/components/mixins/breadcrumbs';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default (Vue as VueConstructor<Vue & BreadCrumbsContent>).extend({
   name: 'RecallBreadCrumbsMobile',
+
   props: ['promptName'],
 
   mixins: [breadcrumbs],
@@ -34,7 +36,7 @@ export default (Vue as VueConstructor<Vue & BreadCrumbsContent>).extend({
   },
 
   computed: {
-    ...mapGetters('survey', ['selectedMeal', 'selectedMealIndex', 'selectedFood']),
+    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex', 'selectedFood']),
 
     brds(): BrdCrumbs[] {
       return this.getBreadCrumbs(this.promptName).filter((el) => !el.disabled);

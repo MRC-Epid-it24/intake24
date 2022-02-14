@@ -26,8 +26,9 @@
 </template>
 
 <script lang="ts">
+import { useSurvey } from '@intake24/survey/stores';
 import { defineComponent } from '@vue/composition-api';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
 
 export default defineComponent({
   name: 'BottomNavigationMobile',
@@ -44,7 +45,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('survey', ['selectedMeal', 'selectedFood']),
+    ...mapState(useSurvey, ['selectedMeal', 'selectedFood']),
   },
 
   methods: {

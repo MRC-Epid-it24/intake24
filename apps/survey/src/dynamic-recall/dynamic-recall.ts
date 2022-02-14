@@ -1,11 +1,10 @@
-import { Store } from 'vuex';
 import { PromptQuestion } from '@intake24/common/prompts';
 import { MealSection, SurveySection } from '@intake24/common/schemes';
 import { MealTime, SurveyState as CurrentSurveyState } from '@intake24/common/types';
 import { SchemeEntryResponse } from '@intake24/common/types/http';
 import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
-import { RootStateWithModules, SurveyState } from '@intake24/survey/types/vuex';
 import SelectionManager from '@intake24/survey/dynamic-recall/selection-manager';
+import type { SurveyStore } from '../stores';
 
 export interface PromptInstance {
   prompt: PromptQuestion;
@@ -42,19 +41,15 @@ export default class DynamicRecall {
 
   private selectionManager;
 
-  constructor(surveyScheme: SchemeEntryResponse, store: Store<RootStateWithModules>) {
+  constructor(surveyScheme: SchemeEntryResponse, store: SurveyStore) {
     this.surveyScheme = surveyScheme;
     this.store = store;
     this.promptManager = new PromptManager(surveyScheme);
     this.selectionManager = new SelectionManager(store, this.promptManager);
   }
 
-  private getSurveyState(): SurveyState {
-    return this.store.state.survey;
-  }
-
-  async initialiseSurvey() {
-    if (!this.store.getters['survey/hasStarted']) {
+  async initialiseSurvey(locale: string) {
+    if (!this.store.hasStarted) {
       console.debug('Current survey data is null, starting new survey');
 
       const initialState: CurrentSurveyState = {
@@ -62,7 +57,7 @@ export default class DynamicRecall {
         schemeId: this.surveyScheme.id,
         startTime: new Date(),
         meals: this.surveyScheme.meals.map((meal) => ({
-          name: meal.name.en!,
+          name: meal.name[locale] ?? meal.name.en,
           localName: meal.name, // FIXME: pick correct locale and handle nulls
           defaultTime: parseMealTime(meal.time),
           time: undefined,
@@ -72,12 +67,12 @@ export default class DynamicRecall {
         })),
       };
 
-      await this.store.dispatch('survey/setState', initialState);
+      await this.store.setState(initialState);
     }
   }
 
   getNextPromptForCurrentSelection(): PromptInstance | undefined {
-    const surveyState = this.getSurveyState();
+    const surveyState = this.store.$state;
     const recallState = surveyState.data;
 
     if (recallState.selection.element === null) {
@@ -130,7 +125,7 @@ export default class DynamicRecall {
     console.debug(`Next selection: ${JSON.stringify(nextSelection)}`);
 
     if (nextSelection) {
-      this.store.commit('survey/setSelection', nextSelection);
+      this.store.setSelection(nextSelection);
       return this.getNextPromptForCurrentSelection();
     }
 

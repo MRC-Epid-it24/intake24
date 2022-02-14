@@ -52,6 +52,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { BasePromptProps, basePromptProps } from '@intake24/common/prompts';
 import { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
@@ -68,15 +69,15 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
     foodName: {
-      type: Object as () => LocaleTranslation,
+      type: Object as PropType<LocaleTranslation>,
       required: true,
     },
     availableMethods: {
-      type: Array as () => UserPortionSizeMethod[],
+      type: Array as PropType<UserPortionSizeMethod[]>,
       required: true,
     },
   },

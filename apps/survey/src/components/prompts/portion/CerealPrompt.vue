@@ -92,6 +92,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import {
   CerealPromptProps,
@@ -117,11 +118,11 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => CerealPromptProps,
+      type: Object as PropType<CerealPromptProps>,
       required: true,
     },
     foodName: {
-      type: Object as () => LocaleTranslation,
+      type: Object as PropType<LocaleTranslation>,
       required: true,
     },
     foodCode: {

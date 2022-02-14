@@ -84,11 +84,12 @@
 </template>
 
 <script lang="ts">
+import { mapState } from 'pinia';
 import Vue, { VueConstructor } from 'vue';
-import { mapGetters } from 'vuex';
 import { TranslateResult } from 'vue-i18n';
 import Loader from '@intake24/survey/components/Loader.vue';
 import { ConfirmDialog, pwaUpdate, setsLanguage } from '@intake24/ui';
+import { useAuth } from './stores';
 
 export interface AppComponent {
   sidebar: boolean;
@@ -111,7 +112,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   },
 
   computed: {
-    ...mapGetters('auth', ['loggedIn']),
+    ...mapState(useAuth, ['loggedIn']),
 
     surveyId(): string {
       return this.$route.params.surveyId;
@@ -134,6 +135,8 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   },
 
   async created() {
+    this.$http.init(this.$router);
+
     const userLanguage = this.$ls.get('language', navigator.language || navigator.userLanguage);
     await this.setLanguage('survey', userLanguage);
   },
@@ -144,7 +147,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
     },
 
     async logout() {
-      await this.$store.dispatch('auth/logout', { invalidate: true });
+      await useAuth().logout(true);
       const { surveyId } = this.$route.params;
       await this.$router.push(
         surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' }

@@ -35,8 +35,9 @@
 </template>
 
 <script lang="ts">
+import { useSurvey } from '@intake24/survey/stores';
 import { defineComponent } from '@vue/composition-api';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
 
 export default defineComponent({
   name: 'SurveyError',
@@ -49,7 +50,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('survey', ['error']),
+    ...mapState(useSurvey, ['error']),
   },
 });
 </script>

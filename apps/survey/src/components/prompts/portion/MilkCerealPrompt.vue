@@ -110,6 +110,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { MilkCerealPromptProps, milkCerealPromptDefaultProps } from '@intake24/common/prompts';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
@@ -131,7 +132,8 @@ export default (Vue as VueConstructor<Vue & Portion & ExpansionPanelControls>).e
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => MilkCerealPromptProps,
+      type: Object as PropType<MilkCerealPromptProps>,
+      required: true,
     },
   },
 

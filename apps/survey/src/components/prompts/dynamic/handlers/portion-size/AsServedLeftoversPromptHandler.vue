@@ -8,10 +8,13 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
-import { EncodedFood, SelectedAsServedImage } from '@intake24/common/types';
+import { SelectedAsServedImage } from '@intake24/common/types';
 import { AsServedParameters } from '@intake24/common/types/http';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
+import { mapActions } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;
@@ -25,7 +28,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
   props: {
     promptProps: {
-      type: Object as () => BasePromptProps,
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
   },
@@ -40,23 +43,36 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   methods: {
+    ...mapActions(useSurvey, ['updateFoodCallback']),
+
     onAsServedSelected(selected: SelectedAsServedImage) {
       const { conversionFactor } = this.selectedPortionSize;
 
-      this.$store.commit('survey/updateFood', {
-        mealIndex: this.selectedMealIndex,
-        foodIndex: this.selectedFoodIndex,
+      const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
+      if (mealIndex === undefined || foodIndex === undefined) {
+        console.warn('No selected meal/food, meal/food index undefined');
+        return;
+      }
+
+      /* this.updateFoodCallback({
+        mealIndex,
+        foodIndex,
         update: (state: EncodedFood) => {
-          state.portionSize = {
-            method: 'as-served',
-            serving:
-              state.portionSize?.method === 'as-served' ? state.portionSize?.serving ?? null : null,
-            leftovers: selected,
-            servingWeight: state.portionSize?.servingWeight ?? null,
-            leftoversWeight: selected.weight * conversionFactor,
+          state = {
+            ...state,
+            portionSize: {
+              method: 'as-served',
+              serving:
+                state.portionSize?.method === 'as-served'
+                  ? state.portionSize?.serving ?? null
+                  : null,
+              leftovers: selected,
+              servingWeight: state.portionSize?.servingWeight ?? null,
+              leftoversWeight: selected.weight * conversionFactor,
+            },
           };
         },
-      });
+      }); */
 
       this.$emit('complete');
     },

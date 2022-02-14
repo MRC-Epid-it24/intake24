@@ -21,8 +21,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
 import { FoodState } from '@intake24/common/types';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'FoodListMobileBottom',
@@ -43,7 +44,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('survey', ['selectedFoodIndex']),
+    ...mapState(useSurvey, ['selectedFoodIndex']),
 
     mealfoods(): FoodState[] {
       return this.foods;
@@ -51,7 +52,7 @@ export default defineComponent({
 
     active_tab: {
       get(): number {
-        return this.selectedFoodIndex + 1;
+        return this.selectedFoodIndex || 0 + 1;
       },
 
       set(id: number) {

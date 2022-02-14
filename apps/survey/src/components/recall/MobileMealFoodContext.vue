@@ -27,6 +27,8 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import { ConfirmDialog } from '@intake24/ui';
+import { mapActions } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'MealFoodMobileContextMenu',
@@ -51,9 +53,12 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions(useSurvey, { storeDeleteMeal: 'deleteMeal', storeDeleteFood: 'deleteFood' }),
+
     toggleMenu() {
       this.$emit('toggleMobileMealContext');
     },
+
     onContextMenuAction(action: string) {
       this.$emit('meal-action', {
         mealIndex: this.$props.entityIndex,
@@ -66,17 +71,27 @@ export default defineComponent({
       if (!this.entityType) this.deleteMeal();
       else this.deleteFood();
     },
+
     deleteMeal() {
-      this.$store.commit('survey/deleteMeal', this.$props.entityIndex);
+      const { entityIndex } = this;
+      if (entityIndex === undefined) {
+        console.log(`Missing entityIndex`);
+        return;
+      }
+
+      this.storeDeleteMeal(entityIndex);
       this.$emit('toggleMobileMealContext');
       this.$emit('complete');
     },
 
     deleteFood() {
-      this.$store.commit('survey/deleteFood', {
-        mealIndex: this.$props.mealIndex,
-        foodIndex: this.$props.entityIndex,
-      });
+      const { mealIndex, entityIndex: foodIndex } = this;
+      if (mealIndex === undefined || foodIndex === undefined) {
+        console.log(`Missing mealIndex / foodIndex`);
+        return;
+      }
+
+      this.storeDeleteFood({ mealIndex, foodIndex });
       this.$emit('toggleMobileMealContext');
     },
   },

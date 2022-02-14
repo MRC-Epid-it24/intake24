@@ -12,8 +12,9 @@
 import { defineComponent, PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
 import { Meal } from '@intake24/common/types';
-import { mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
 import MealAddPrompt from '@intake24/survey/components/prompts/standard/MealAddPrompt.vue';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'MealAddPromptHandler',
@@ -27,17 +28,22 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('survey', ['defaultSchemeMeals']),
+    ...mapState(useSurvey, ['defaultSchemeMeals']),
 
     mealsList(): string[] {
-      if (this.defaultSchemeMeals.length === 0) return [];
-      return this.defaultSchemeMeals.map((meal: Meal) => meal.name[this.$i18n.locale]);
+      return (
+        this.defaultSchemeMeals?.map(
+          (meal: Meal) => meal.name[this.$i18n.locale] ?? meal.name.en
+        ) ?? []
+      );
     },
   },
 
   methods: {
+    ...mapActions(useSurvey, ['addMeal']),
+
     onAnswer(newMeal: string) {
-      this.$store.commit('survey/addMeal', newMeal);
+      this.addMeal(newMeal, this.$i18n.locale);
       this.$emit('complete');
     },
 

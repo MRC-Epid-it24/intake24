@@ -48,14 +48,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, PropType } from '@vue/composition-api';
 
 export default defineComponent({
   name: 'ConfirmDialog',
 
   props: {
     activatorClass: {
-      type: Array as () => string[],
+      type: Array as PropType<string[]>,
       default: () => [],
     },
     color: {

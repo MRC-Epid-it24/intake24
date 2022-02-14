@@ -193,6 +193,8 @@ import {
   NutrientTypeAttributes,
   PhysicalActivityLevelAttributes,
 } from '@intake24/common/types/models';
+import { useEntry } from '@intake24/admin/stores';
+import { FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { demographicGroupDefaults } from './demographic-group';
 import { useTopFoodList } from '..';
 import DemographicGroupRange from './demographic-group-range.vue';
@@ -242,10 +244,10 @@ export default defineComponent({
 
   computed: {
     nutrientTypes(): NutrientTypeAttributes[] {
-      return this.$store.state.resource.entry.refs.nutrientTypes ?? [];
+      return useEntry().refs.nutrientTypes ?? [];
     },
     physicalActivityLevels(): PhysicalActivityLevelAttributes[] {
-      return this.$store.state.resource.entry.refs.physicalActivityLevels ?? [];
+      return useEntry().refs.physicalActivityLevels ?? [];
     },
   },
 

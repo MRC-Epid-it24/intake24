@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
 import { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
 import { Dictionary } from '@intake24/common/types';
@@ -51,6 +51,7 @@ import ActionBar from '@intake24/admin/components/datatable/action-bar/action-ba
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import handlesLoading from '@intake24/admin/mixins/handles-loading';
 import hasResource from '@intake24/admin/mixins/has-resource';
+import { useResource } from '@intake24/admin/stores';
 import DataTableFilter from './data-table-filter.vue';
 
 type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof hasResource>;
@@ -90,7 +91,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   computed: {
-    ...mapGetters({ filter: 'resource/filter' }),
+    ...mapState(useResource, { filter: 'getFilter' }),
     api(): string {
       return this.apiUrl ?? this.resource.api;
     },
@@ -109,6 +110,10 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   methods: {
+    ...mapActions(useResource, {
+      setResourceFilter: 'setFilter',
+      resetResourceFilter: 'resetFilter',
+    }),
     async fetch() {
       const {
         page,
@@ -137,13 +142,13 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
     async setFilter(data: Dictionary) {
       // this.clearSelected();
-      await this.$store.dispatch(`resource/setFilter`, data);
+      await this.setResourceFilter(data);
       this.fetch();
     },
 
     async resetFilter() {
       // this.clearSelected();
-      await this.$store.dispatch(`resource/resetFilter`);
+      await this.resetResourceFilter();
       this.fetch();
     },
 

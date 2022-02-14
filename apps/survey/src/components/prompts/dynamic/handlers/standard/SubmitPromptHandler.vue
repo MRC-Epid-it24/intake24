@@ -6,6 +6,8 @@
 import { defineComponent, PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
 import SubmitPrompt from '@intake24/survey/components/prompts/standard/SubmitPrompt.vue';
+import { mapActions } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'SubmitPromptHandler',
@@ -24,8 +26,10 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions(useSurvey, ['submitRecall']),
+
     async submit() {
-      await this.$store.dispatch('survey/submitRecall');
+      await this.submitRecall();
       this.$emit('complete');
     },
   },

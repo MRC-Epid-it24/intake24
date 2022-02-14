@@ -1,31 +1,29 @@
-import { Store } from 'vuex';
 import { Selection } from '@intake24/common/types';
 import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
-import { RootStateWithModules } from '@intake24/survey/types/vuex';
+import type { SurveyStore } from '../stores';
 
 export default class SelectionManager {
   private store;
 
   private promptManager;
 
-  constructor(store: Store<RootStateWithModules>, promptManager: PromptManager) {
+  constructor(store: SurveyStore, promptManager: PromptManager) {
     this.store = store;
     this.promptManager = promptManager;
   }
 
   private mealPromptsAvailable(mealIndex: number): boolean {
-    return this.promptManager.nextPreFoodsPrompt(this.store.state.survey, mealIndex) !== undefined;
+    return this.promptManager.nextPreFoodsPrompt(this.store.$state, mealIndex) !== undefined;
   }
 
   private foodPromptsAvailable(mealIndex: number, foodIndex: number): boolean {
     return (
-      this.promptManager.nextFoodsPrompt(this.store.state.survey, mealIndex, foodIndex) !==
-      undefined
+      this.promptManager.nextFoodsPrompt(this.store.$state, mealIndex, foodIndex) !== undefined
     );
   }
 
   private tryAnyFood(mealIndex: number): Selection | undefined {
-    const currentState = this.store.getters['survey/currentState'];
+    const { currentState } = this.store;
 
     for (let foodIndex = 0; foodIndex < currentState.meals[mealIndex].foods.length; ++foodIndex) {
       if (this.foodPromptsAvailable(mealIndex, foodIndex))
@@ -43,7 +41,7 @@ export default class SelectionManager {
   }
 
   private tryFoodInAnyMeal(): Selection | undefined {
-    const currentState = this.store.getters['survey/currentState'];
+    const { currentState } = this.store;
 
     for (let mealIndex = 0; mealIndex < currentState.meals.length; mealIndex++) {
       const selection = this.tryAnyFood(mealIndex);
@@ -54,7 +52,7 @@ export default class SelectionManager {
   }
 
   private tryAnyMeal(): Selection | undefined {
-    const currentState = this.store.getters['survey/currentState'];
+    const { currentState } = this.store;
 
     for (let mealIndex = 0; mealIndex < currentState.meals.length; mealIndex++) {
       if (this.mealPromptsAvailable(mealIndex))

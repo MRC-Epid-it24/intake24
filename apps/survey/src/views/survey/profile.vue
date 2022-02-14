@@ -51,9 +51,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
 import { setsLanguage } from '@intake24/ui';
 import { LanguageAttributes } from '@intake24/common/types/models';
+import { useUser } from '@intake24/survey/stores';
 
 type Mixins = InstanceType<typeof setsLanguage>;
 
@@ -77,7 +78,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   computed: {
-    ...mapGetters('user', ['profile']),
+    ...mapState(useUser, ['profile']),
   },
 
   async mounted() {

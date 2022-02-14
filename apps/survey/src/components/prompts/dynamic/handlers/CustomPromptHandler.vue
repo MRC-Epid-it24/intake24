@@ -4,16 +4,16 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
 import { BasePromptProps } from '@intake24/common/prompts';
 import { CustomPromptAnswer } from '@intake24/common/types';
 import customPrompts from '@intake24/survey/components/prompts/custom';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'CustomPromptHandler',
-  components: {
-    ...customPrompts,
-  },
+
+  components: { ...customPrompts },
 
   props: {
     promptProps: {
@@ -30,8 +30,14 @@ export default defineComponent({
     },
   },
 
+  setup() {
+    const survey = useSurvey();
+
+    return { survey };
+  },
+
   computed: {
-    ...mapGetters('survey', ['selection']),
+    ...mapState(useSurvey, ['selection']),
   },
 
   methods: {
@@ -41,13 +47,13 @@ export default defineComponent({
         switch (this.selection.element.type) {
           case 'food': {
             if (this.promptComponent === 'info-prompt')
-              this.$store.commit('survey/setFoodFlag', {
+              this.survey.setFoodFlag({
                 mealIndex: this.selection.element.mealIndex,
                 foodIndex: this.selection.element.foodIndex,
                 flag: `${this.promptId}-acknowledged`,
               });
             else
-              this.$store.commit('survey/setFoodCustomPromptAnswer', {
+              this.survey.setFoodCustomPromptAnswer({
                 mealIndex: this.selection.element.mealIndex,
                 foodIndex: this.selection.element.foodIndex,
                 promptId: this.promptId,
@@ -57,12 +63,12 @@ export default defineComponent({
           }
           case 'meal': {
             if (this.promptComponent === 'info-prompt')
-              this.$store.commit('survey/setMealFlag', {
+              this.survey.setMealFlag({
                 mealIndex: this.selection.element.mealIndex,
                 flag: `${this.promptId}-acknowledged`,
               });
             else
-              this.$store.commit('survey/setMealCustomPromptAnswer', {
+              this.survey.setMealCustomPromptAnswer({
                 mealIndex: this.selection.element.mealIndex,
                 promptId: this.promptId,
                 answer,
@@ -72,12 +78,8 @@ export default defineComponent({
           }
         }
       } else if (this.promptComponent === 'info-prompt')
-        this.$store.commit('survey/setSurveyFlag', `${this.promptId}-acknowledged`);
-      else
-        this.$store.commit('survey/setCustomPromptAnswer', {
-          promptId: this.promptId,
-          answer,
-        });
+        this.survey.setSurveyFlag(`${this.promptId}-acknowledged`);
+      else this.survey.setCustomPromptAnswer({ promptId: this.promptId, answer });
 
       this.$emit('complete');
     },

@@ -11,22 +11,14 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
 import { MealTimePromptProps } from '@intake24/common/prompts';
 import { MealTime } from '@intake24/common/types';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
+import { useSurvey } from '@intake24/survey/stores';
+import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
 
-function parseMealTime(time: string): MealTime {
-  const parts = time.split(':');
-  return {
-    hours: parseInt(parts[0], 10),
-    minutes: parseInt(parts[1], 10),
-  };
-}
-
-function mealTimeToString(time: MealTime): string {
-  return `${time.hours}:${time.minutes}`;
-}
+const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minutes}`;
 
 export default defineComponent({
   name: 'MealTimePromptHandler',
@@ -44,21 +36,27 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('survey', ['selectedMeal', 'selectedMealIndex']),
+    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex']),
 
     defaultTime(): string {
-      if (this.selectedMeal === undefined) throw new Error('A meal must be selected');
+      if (!this.selectedMeal) throw new Error('A meal must be selected');
 
-      if (this.selectedMeal.time === undefined)
-        return mealTimeToString(this.selectedMeal.defaultTime);
+      if (!this.selectedMeal.time) return mealTimeToString(this.selectedMeal.defaultTime);
 
       return mealTimeToString(this.selectedMeal.time);
     },
   },
 
   methods: {
+    ...mapActions(useSurvey, ['setMealTime', 'deleteMeal']),
+
     onAnswer(mealTime: string) {
-      this.$store.commit('survey/setMealTime', {
+      if (this.selectedMealIndex === undefined) {
+        console.warn('No selected meal, meal index undefined');
+        return;
+      }
+
+      this.setMealTime({
         mealIndex: this.selectedMealIndex,
         time: parseMealTime(mealTime),
       });
@@ -67,7 +65,12 @@ export default defineComponent({
     },
 
     onRemoveMeal() {
-      this.$store.commit('survey/deleteMeal', this.selectedMealIndex);
+      if (this.selectedMealIndex === undefined) {
+        console.warn('No selected meal, meal index undefined');
+        return;
+      }
+
+      this.deleteMeal(this.selectedMealIndex);
       this.$emit('complete');
     },
   },

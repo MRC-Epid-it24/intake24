@@ -1,7 +1,6 @@
 import { ComponentType, Condition, conditionOps, PromptQuestion } from '@intake24/common/prompts';
 import { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import { SchemeEntryResponse } from '@intake24/common/types/http';
-import { SurveyState } from '@intake24/survey/types/vuex';
 import {
   asServedLeftoversComplete,
   asServedServingComplete,
@@ -9,6 +8,7 @@ import {
   portionSizeMethodSelected,
   standardPortionComplete,
 } from './portion-size-checks';
+import type { SurveyState } from '../stores';
 
 const checkRecallNumber = (state: SurveyState, condition: Condition) => {
   if (state.user === null) {

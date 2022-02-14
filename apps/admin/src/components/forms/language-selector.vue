@@ -58,6 +58,7 @@
 import { LanguageListEntry } from '@intake24/common/types/http/admin';
 import { defineComponent, PropType } from '@vue/composition-api';
 import { LocaleTranslation } from '@intake24/common/types';
+import { useEntry } from '@intake24/admin/stores';
 
 export default defineComponent({
   name: 'LanguageSelector',
@@ -100,7 +101,7 @@ export default defineComponent({
     },
     allLanguages(): LanguageListEntry[] {
       return (
-        this.$store.state.resource.entry.refs.languages ?? [
+        useEntry().refs.languages ?? [
           { id: 'en', englishName: 'English', localName: 'English', countryFlagCode: 'gb' },
         ]
       );

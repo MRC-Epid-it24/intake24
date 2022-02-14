@@ -19,4 +19,5 @@ export * from './survey-respondents';
 export * from './survey-submissions';
 export * from './surveys';
 export * from './tasks';
+export * from './user';
 export * from './users';

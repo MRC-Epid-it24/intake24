@@ -19,6 +19,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import {
   LeftoverQuestionPromptProps,
@@ -35,7 +36,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   props: {
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as () => LeftoverQuestionPromptProps,
+      type: Object as PropType<LeftoverQuestionPromptProps>,
+      required: true,
     },
   },
 

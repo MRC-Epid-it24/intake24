@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { TimePickerPromptProps, timePickerPromptProps } from '@intake24/common/prompts';
 import BasePrompt, { Prompt } from '../BasePrompt';
@@ -29,7 +30,8 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   props: {
     promptProps: {
-      type: Object as () => TimePickerPromptProps,
+      type: Object as PropType<TimePickerPromptProps>,
+      required: true,
     },
     value: {
       type: String,

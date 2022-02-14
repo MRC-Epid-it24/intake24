@@ -1,11 +1,12 @@
 import Vue from 'vue';
-import { mapActions } from 'vuex';
+import { mapActions } from 'pinia';
+import { useLoading } from '@intake24/admin/stores';
 
 export default Vue.extend({
   methods: {
-    ...mapActions('loading', {
-      addLoading: 'add',
-      removeLoading: 'remove',
+    ...mapActions(useLoading, {
+      addLoading: 'addItem',
+      removeLoading: 'removeItem',
       resetLoading: 'reset',
     }),
 

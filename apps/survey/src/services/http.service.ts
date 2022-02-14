@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosResponse, Method } from 'axios';
+import trim from 'lodash/trim';
 import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/survey/types/http';
+import { useAuth } from '../stores';
 
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];
@@ -10,15 +12,18 @@ const onTokenRefreshed = (errRefreshing?: AxiosError) =>
   tokenSubscribers.map((cb) => cb(errRefreshing));
 
 const httpClient: HttpClient = {
-  // Axios typings issue, remove when fixed
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  axios: axios.create({ headers: { common: { 'X-Requested-With': 'XMLHttpRequest' } } }),
+  axios: axios.create({
+    baseURL: [process.env.VUE_APP_API_HOST, process.env.VUE_APP_API_URL]
+      .map((item) => trim(item, '/'))
+      .join('/'),
+    // Axios typings issue, remove when fixed
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    headers: { common: { 'X-Requested-With': 'XMLHttpRequest' } },
+  }),
 
-  init(router, store) {
-    this.axios.defaults.baseURL = store.getters.app.api;
-
-    this.mountInterceptors(router, store);
+  init(router) {
+    this.mountInterceptors(router);
   },
 
   async get(url: string, config: HttpRequestConfig = {}) {
@@ -72,14 +77,14 @@ const httpClient: HttpClient = {
     });
   },
 
-  mountInterceptors(router, store) {
-    this.mountBearerInterceptor(store);
-    this.mount401Interceptor(router, store);
+  mountInterceptors(router) {
+    this.mountBearerInterceptor();
+    this.mount401Interceptor(router);
   },
 
-  mountBearerInterceptor(store) {
+  mountBearerInterceptor() {
     this.axios.interceptors.request.use((request) => {
-      const accessToken = store.getters['auth/accessToken'];
+      const { accessToken } = useAuth();
 
       if (accessToken) {
         const { headers = {} } = request;
@@ -91,7 +96,9 @@ const httpClient: HttpClient = {
     });
   },
 
-  mount401Interceptor(router, store) {
+  mount401Interceptor(router) {
+    const auth = useAuth();
+
     this.axios.interceptors.response.use(
       (response) => response,
       async (err: AxiosError) => {
@@ -105,7 +112,7 @@ const httpClient: HttpClient = {
         if (config.url?.includes('auth/refresh')) {
           isRefreshing = false;
 
-          await store.dispatch('auth/logout');
+          await auth.logout();
           const { name, params: { surveyId } = {} } = router.currentRoute;
 
           if (surveyId && name !== 'survey-login')
@@ -117,8 +124,8 @@ const httpClient: HttpClient = {
         if (!isRefreshing) {
           isRefreshing = true;
 
-          store
-            .dispatch('auth/refresh')
+          auth
+            .refresh()
             .then(() => {
               isRefreshing = false;
               onTokenRefreshed();

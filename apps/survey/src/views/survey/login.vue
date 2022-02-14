@@ -64,10 +64,11 @@
 <script lang="ts">
 import axios, { AxiosError } from 'axios';
 import { defineComponent } from '@vue/composition-api';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
 import { PublicSurveyEntryResponse } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
 import surveySvc from '@intake24/survey/services/survey.service';
+import { useAuth } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'SurveyLogin',
@@ -94,7 +95,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('auth', ['loggedIn']),
+    ...mapState(useAuth, ['loggedIn']),
 
     invalidCredentials(): boolean {
       return this.status === 401;
@@ -129,7 +130,7 @@ export default defineComponent({
 
     if (!this.loggedIn) {
       try {
-        await this.$store.dispatch('auth/refresh');
+        await this.refresh();
         await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {
         // continue
@@ -138,7 +139,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions('auth', { userPassLogin: 'login', tokenLogin: 'token' }),
+    ...mapActions(useAuth, { userPassLogin: 'login', tokenLogin: 'token', refresh: 'refresh' }),
 
     async fetchSurveyPublicInfo() {
       try {
