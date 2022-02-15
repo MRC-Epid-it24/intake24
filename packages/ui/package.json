@@ -23,8 +23,7 @@
     "vue-ls": "^4.1.0",
     "vue-router": "^3.5.3",
     "vue-toasted": "^1.1.28",
-    "vuetify": "^2.6.3",
-    "vuex": "^3.6.2"
+    "vuetify": "^2.6.3"
   },
   "devDependencies": {
     "@vue/runtime-dom": "^3.2.31"

@@ -585,7 +585,6 @@ importers:
       vue-router: ^3.5.3
       vue-toasted: ^1.1.28
       vuetify: ^2.6.3
-      vuex: ^3.6.2
     dependencies:
       '@vue/composition-api': 1.4.6_vue@2.6.14
       vue: 2.6.14
@@ -594,7 +593,6 @@ importers:
       vue-router: 3.5.3
       vue-toasted: 1.1.28
       vuetify: 2.6.3_vue@2.6.14
-      vuex: 3.6.2_vue@2.6.14
     devDependencies:
       '@vue/runtime-dom': 3.2.31
 
@@ -14398,14 +14396,6 @@ packages:
     resolution: {integrity: sha512-Zfiz2DZnp1DvxqGaSCGqGjv4mPNAurJJ5Xwy7bzNzIySGLlRdlO8UH6aNWnSgfaAsLP3voxadSGDm6tKM8Ys7w==}
     peerDependencies:
       vue: ^2.6.4
-    dependencies:
-      vue: 2.6.14
-    dev: false
-
-  /vuex/3.6.2_vue@2.6.14:
-    resolution: {integrity: sha512-ETW44IqCgBpVomy520DT5jf8n0zoCac+sxWnn+hMe/CzaSejb/eVw2YToiXYX+Ex/AuHHia28vWTq4goAexFbw==}
-    peerDependencies:
-      vue: ^2.0.0
     dependencies:
       vue: 2.6.14
     dev: false
