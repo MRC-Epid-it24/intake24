@@ -3,8 +3,9 @@ import {
   FeedbackSchemeAttributes,
   // FeedbackSchemeCreationAttributes,
 } from '../../models/system/feedback-schemes';
-import { NutrientTypeAttributes, Pagination } from '../../models';
+import { Pagination } from '../../models';
 import { LanguageListEntry } from './languages';
+import { NutrientTypeEntry } from './nutrient-types';
 
 /* export type FeedbackSchemeRequest = FeedbackSchemeCreationAttributes;
 
@@ -20,6 +21,6 @@ export type FeedbackSchemeListEntry = Pick<FeedbackSchemeAttributes, 'id' | 'nam
 
 export type FeedbackSchemeRefs = {
   languages: LanguageListEntry[];
-  nutrientTypes: NutrientTypeAttributes[];
+  nutrientTypes: NutrientTypeEntry[];
   physicalActivityLevels: PhysicalActivityLevelAttributes[];
 };

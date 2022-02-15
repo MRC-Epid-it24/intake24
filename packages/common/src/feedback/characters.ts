@@ -1,3 +1,4 @@
+import { LocaleTranslation } from '../types';
 import { Sentiment } from './shared';
 
 export enum NutrientTypeIdEnum {
@@ -42,7 +43,7 @@ export type CharacterSentimentType = typeof characterSentimentTypes[number];
 export type CharacterSentiment = {
   sentiment: Sentiment[];
   sentimentType: CharacterSentimentType;
-  title: string;
+  name: LocaleTranslation;
 };
 
 export type Character = {

@@ -611,7 +611,18 @@ module.exports = {
       await foods.close();
 
       const demographicGroups = [];
-      const cards = characters.map((character) => ({ id: nanoid(6), ...character }));
+      const cards = characters.map((character) => {
+        const { sentiments, ...rest } = character;
+
+        return {
+          id: nanoid(6),
+          ...rest,
+          sentiments: sentiments.map(({ title, ...restSentiment }) => ({
+            ...restSentiment,
+            name: { en: title || null },
+          })),
+        };
+      });
 
       const formatRange = (start, end) => {
         if (start === null && end === null) return null;

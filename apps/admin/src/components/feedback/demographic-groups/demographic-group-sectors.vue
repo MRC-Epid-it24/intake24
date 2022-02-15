@@ -8,7 +8,6 @@
       <v-icon left>fas fa-scale-balanced</v-icon>
       {{ `${$t(`feedback-schemes.demographic-groups.sectors._`)} ${index + 1}` }}
     </v-tab>
-
     <v-tab-item v-for="(sector, index) in sectors" :key="index">
       <v-card tile>
         <v-card-title>
@@ -69,6 +68,8 @@
                   <editor :init="tinymceInit" :key="lang" v-model="sector.description[lang]" />
                 </template>
               </language-selector>
+            </v-col>
+            <v-col cols="12">
               <v-btn
                 block
                 color="error"
@@ -137,8 +138,11 @@ export default defineComponent({
 
       this.sectors = [...val];
     },
-    sectors() {
-      this.update();
+    sectors: {
+      handler() {
+        this.update();
+      },
+      deep: true,
     },
   },
 

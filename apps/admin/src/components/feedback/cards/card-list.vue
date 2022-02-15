@@ -63,7 +63,7 @@ import { defineComponent, PropType, ref } from '@vue/composition-api';
 import isEqual from 'lodash/isEqual';
 import draggable from 'vuedraggable';
 import { Card } from '@intake24/common/feedback';
-import { NutrientTypeAttributes } from '@intake24/common/types/models';
+import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
 import CardSelector from './card-selector.vue';
 
@@ -95,7 +95,7 @@ export default defineComponent({
   },
 
   computed: {
-    allNutrientTypes(): NutrientTypeAttributes[] {
+    allNutrientTypes(): NutrientTypeEntry[] {
       return useEntry().refs.nutrientTypes ?? [];
     },
   },

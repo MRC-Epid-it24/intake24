@@ -84,7 +84,7 @@
             <v-container>
               <v-tabs v-model="tab" background-color="primary" dark>
                 <v-tab v-for="item in ['general', 'sectors']" :key="item">
-                  {{ item }}
+                  {{ $t(`feedback-schemes.demographic-groups.tabs.${item}`) }}
                 </v-tab>
               </v-tabs>
             </v-container>
@@ -94,79 +94,80 @@
           <v-container>
             <v-tabs-items v-model="tab" class="pt-1">
               <v-tab-item key="general">
-                <v-card-title>
-                  {{ 'General' }}
-                </v-card-title>
-                <v-row>
-                  <v-col cols="12" md="6">
-                    <v-select
-                      v-model="dialog.item.nutrientTypeId"
-                      :items="nutrientTypes"
-                      :label="$t('nutrient-types._')"
-                      hide-details="auto"
-                      item-text="description"
-                      item-value="id"
-                      name="nutrientTypeId"
-                      outlined
-                      prepend-icon="fas fa-seedling"
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-select
-                      v-model="dialog.item.nutrientRuleType"
-                      :items="nutrientRuleTypes"
-                      :label="$t('feedback-schemes.nutrientRuleTypes._')"
-                      hide-details="auto"
-                      name="nutrientRuleType"
-                      outlined
-                      prepend-icon="fas fa-divide"
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-select
-                      v-model="dialog.item.sex"
-                      :items="sexes"
-                      :label="$t('feedback-schemes.sexes._')"
-                      hide-details="auto"
-                      name="sex"
-                      outlined
-                      prepend-icon="fas fa-genderless"
-                    >
-                      <template v-slot:item="{ item }">
-                        <span :class="`${item.icon} mr-3`"></span>
-                        {{ item.text }}
-                      </template>
-                      <template v-slot:selection="{ item }">
-                        <span :class="`${item.icon} mr-3`"></span>
-                        {{ item.text }}
-                      </template>
-                    </v-select>
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-select
-                      v-model="dialog.item.physicalActivityLevelId"
-                      :items="physicalActivityLevels"
-                      :label="$t('feedback-schemes.physicalActivityLevels._')"
-                      hide-details="auto"
-                      item-text="name"
-                      item-value="id"
-                      name="physicalActivityLevelId"
-                      outlined
-                      prepend-icon="fas fa-running"
-                    ></v-select>
-                  </v-col>
-                  <v-col v-for="item in ['age', 'height', 'weight']" :key="item" cols="12" md="6">
-                    <demographic-group-range
-                      v-model="dialog.item[item]"
-                      :type="item"
-                    ></demographic-group-range>
-                  </v-col>
-                </v-row>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" md="6">
+                      <v-select
+                        v-model="dialog.item.nutrientTypeId"
+                        :items="nutrientTypes"
+                        :label="$t('nutrient-types._')"
+                        hide-details="auto"
+                        item-text="description"
+                        item-value="id"
+                        name="nutrientTypeId"
+                        outlined
+                        prepend-icon="fas fa-seedling"
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-select
+                        v-model="dialog.item.nutrientRuleType"
+                        :items="nutrientRuleTypes"
+                        :label="$t('feedback-schemes.nutrientRuleTypes._')"
+                        hide-details="auto"
+                        name="nutrientRuleType"
+                        outlined
+                        prepend-icon="fas fa-divide"
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-select
+                        v-model="dialog.item.sex"
+                        :items="sexes"
+                        :label="$t('feedback-schemes.sexes._')"
+                        hide-details="auto"
+                        name="sex"
+                        outlined
+                        prepend-icon="fas fa-genderless"
+                      >
+                        <template v-slot:item="{ item }">
+                          <span :class="`${item.icon} mr-3`"></span>
+                          {{ item.text }}
+                        </template>
+                        <template v-slot:selection="{ item }">
+                          <span :class="`${item.icon} mr-3`"></span>
+                          {{ item.text }}
+                        </template>
+                      </v-select>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-select
+                        v-model="dialog.item.physicalActivityLevelId"
+                        :items="physicalActivityLevels"
+                        :label="$t('feedback-schemes.physicalActivityLevels._')"
+                        hide-details="auto"
+                        item-text="name"
+                        item-value="id"
+                        name="physicalActivityLevelId"
+                        outlined
+                        prepend-icon="fas fa-running"
+                      ></v-select>
+                    </v-col>
+                    <v-col v-for="item in ['age', 'height', 'weight']" :key="item" cols="12" md="6">
+                      <demographic-group-range
+                        v-model="dialog.item[item]"
+                        :type="item"
+                      ></demographic-group-range>
+                    </v-col>
+                  </v-row>
+                </v-container>
               </v-tab-item>
               <v-tab-item key="sectors">
-                <demographic-group-sectors
-                  v-model="dialog.item.scaleSectors"
-                ></demographic-group-sectors>
+                <v-container>
+                  <demographic-group-sectors
+                    v-model="dialog.item.scaleSectors"
+                  ></demographic-group-sectors>
+                </v-container>
               </v-tab-item>
             </v-tabs-items>
             <v-card-actions>
@@ -189,10 +190,8 @@
 import draggable from 'vuedraggable';
 import { defineComponent, PropType, ref } from '@vue/composition-api';
 import { DemographicGroup, nutrientRuleTypes, sexes } from '@intake24/common/feedback';
-import {
-  NutrientTypeAttributes,
-  PhysicalActivityLevelAttributes,
-} from '@intake24/common/types/models';
+import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
 import { useEntry } from '@intake24/admin/stores';
 import { demographicGroupDefaults } from './demographic-group';
 import { useTopFoodList } from '..';
@@ -242,7 +241,7 @@ export default defineComponent({
   },
 
   computed: {
-    nutrientTypes(): NutrientTypeAttributes[] {
+    nutrientTypes(): NutrientTypeEntry[] {
       return useEntry().refs.nutrientTypes ?? [];
     },
     physicalActivityLevels(): PhysicalActivityLevelAttributes[] {

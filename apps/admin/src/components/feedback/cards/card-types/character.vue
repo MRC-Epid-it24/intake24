@@ -1,25 +1,56 @@
 <template>
-  <div>
-    <v-tab-item key="content">
-      <v-select
-        :items="characterTypes"
-        :label="$t('feedback-schemes.characterTypes._')"
-        :value="characterType"
-        hide-details="auto"
-        name="characterType"
-        outlined
-        @change="update('characterType', $event)"
-      ></v-select>
-    </v-tab-item>
-  </div>
+  <v-tab-item key="content">
+    <v-container>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-select
+            :items="characterTypes"
+            :label="$t('feedback-schemes.characterTypes._')"
+            :value="characterType"
+            hide-details="auto"
+            name="characterType"
+            outlined
+            @change="update('characterType', $event)"
+          ></v-select>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-select
+            :items="nutrientTypes"
+            :label="$t('nutrient-types._')"
+            :value="nutrientTypeIds"
+            hide-details="auto"
+            item-text="description"
+            item-value="id"
+            multiple
+            name="nutrientTypeIds"
+            outlined
+            prepend-icon="fas fa-seedling"
+            @change="update('nutrientTypeIds', $event)"
+          ></v-select>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-card-title>{{ $t('feedback-schemes.sentiments.title') }}</v-card-title>
+    <v-container>
+      <character-sentiments
+        :value="sentiments"
+        @update:sentiments="update('sentiments', $event)"
+      ></character-sentiments>
+    </v-container>
+  </v-tab-item>
 </template>
 
 <script lang="ts">
+import { useEntry } from '@intake24/admin/stores';
 import { Character, characterTypes } from '@intake24/common/feedback';
+import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { defineComponent, PropType } from '@vue/composition-api';
+import CharacterSentiments from '../partials/character-sentiments.vue';
 
 export default defineComponent({
   name: 'CharacterCard',
+
+  components: { CharacterSentiments },
 
   props: {
     characterType: {
@@ -43,6 +74,12 @@ export default defineComponent({
         text: this.$t(`feedback-schemes.characterTypes.${value}`),
       })),
     };
+  },
+
+  computed: {
+    nutrientTypes(): NutrientTypeEntry[] {
+      return useEntry().refs.nutrientTypes ?? [];
+    },
   },
 
   methods: {

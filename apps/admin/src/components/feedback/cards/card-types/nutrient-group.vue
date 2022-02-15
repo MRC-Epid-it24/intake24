@@ -79,7 +79,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import { NutrientGroup } from '@intake24/common/feedback';
-import { NutrientTypeAttributes } from '@intake24/common/types/models';
+import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
 import CardContent from '../partials/card-content.vue';
 import CardThresholds from '../partials/card-thresholds.vue';
@@ -122,11 +122,11 @@ export default defineComponent({
   },
 
   computed: {
-    allNutrientTypes(): NutrientTypeAttributes[] {
+    allNutrientTypes(): NutrientTypeEntry[] {
       return useEntry().refs.nutrientTypes ?? [];
     },
-    currentNutrientTypes(): NutrientTypeAttributes[] {
-      return this.currentNutrientTypeIds.reduce<NutrientTypeAttributes[]>((acc, nutrientId) => {
+    currentNutrientTypes(): NutrientTypeEntry[] {
+      return this.currentNutrientTypeIds.reduce<NutrientTypeEntry[]>((acc, nutrientId) => {
         const match = this.allNutrientTypes.find((nutrient) => nutrient.id === nutrientId);
 
         if (match) acc.push(match);
@@ -134,7 +134,7 @@ export default defineComponent({
         return acc;
       }, []);
     },
-    availableNutrientTypes(): NutrientTypeAttributes[] {
+    availableNutrientTypes(): NutrientTypeEntry[] {
       return this.allNutrientTypes.filter(
         (nutrient) => !this.currentNutrientTypeIds.includes(nutrient.id)
       );

@@ -31,27 +31,27 @@ export const cardDefaults: Card[] = [
       {
         sentiment: ['too_low', 'low'],
         sentimentType: 'danger',
-        title: 'Your battery needs a boost',
+        name: { en: 'Your battery needs a boost' },
       },
       {
         sentiment: ['bit_low'],
         sentimentType: 'warning',
-        title: 'Your battery needs a boost',
+        name: { en: 'Your battery needs a boost' },
       },
       {
         sentiment: ['good', 'excellent'],
         sentimentType: 'exciting',
-        title: "Your're so energetic",
+        name: { en: "Your're so energetic" },
       },
       {
         sentiment: ['bit_high'],
         sentimentType: 'warning',
-        title: 'Energy overload',
+        name: { en: 'Energy overload' },
       },
       {
         sentiment: ['high', 'too_high'],
         sentimentType: 'danger',
-        title: 'Energy overload',
+        name: { en: 'Energy overload' },
       },
     ],
   },

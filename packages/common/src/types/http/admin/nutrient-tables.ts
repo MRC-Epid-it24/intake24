@@ -4,9 +4,9 @@ import {
   NutrientTableCsvMappingAttributes,
   NutrientTableCsvMappingFieldAttributes,
   NutrientTableCsvMappingNutrientAttributes,
-  NutrientTypeAttributes,
   Pagination,
 } from '../../models';
+import { NutrientTypeEntry } from './nutrient-types';
 
 export type NutrientTableCsvMappingInput = Omit<
   NutrientTableCsvMappingAttributes,
@@ -41,5 +41,5 @@ export type NutrientTableEntry = NutrientTableAttributes &
   >;
 
 export type NutrientTableRefs = {
-  nutrientTypes: NutrientTypeAttributes[];
+  nutrientTypes: NutrientTypeEntry[];
 };

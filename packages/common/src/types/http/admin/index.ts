@@ -7,6 +7,7 @@ export * from './image-maps';
 export * from './jobs';
 export * from './languages';
 export * from './locales';
+export * from './nutrient-types';
 export * from './nutrient-tables';
 export * from './permissions';
 export * from './roles';

@@ -47,6 +47,8 @@ const feedbackSchemes: LocaleMessageObject = {
   sentiments: {
     _: 'Sentiment',
     title: 'Sentiments',
+    add: 'Add sentiment',
+    remove: 'Remove sentiment',
     too_low: 'Too low',
     low: 'Low',
     bit_low: 'Bit low',
@@ -144,9 +146,17 @@ const feedbackSchemes: LocaleMessageObject = {
     required: 'Card name is required.',
     description: 'Description',
 
+    tabs: {
+      general: 'General',
+      content: 'Content',
+      unit: 'Unit',
+      thresholds: 'Thresholds',
+      nutrients: 'Nutrients',
+    },
+
     character: {
       title: 'Character',
-      subtitle: 'Character / Nutrient card',
+      subtitle: 'Character / Nutrient',
     },
     'nutrient-group': {
       title: 'Nutrient group',
@@ -180,6 +190,11 @@ const feedbackSchemes: LocaleMessageObject = {
     create: 'New demographic group',
     edit: 'Edit demographic group',
     remove: 'Remove demographic group',
+
+    tabs: {
+      general: 'General',
+      sectors: 'Scale sectors',
+    },
 
     sectors: {
       _: 'Scale sector',
