@@ -32,6 +32,7 @@
     // Bump after Vue.js v3 upgrade
     "@tinymce/tinymce-vue",
     "vue",
+    "vue-i18n",
     "vue-router",
     "vue-recaptcha", // might be upgraded sooner, but needs composition API
     "sass",

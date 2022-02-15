@@ -59,7 +59,7 @@
             <v-divider class="mt-4"></v-divider>
             <div class="pa-2 text-caption">
               <vue-recaptcha
-                ref="reCaptcha"
+                ref="reCaptchaRef"
                 size="invisible"
                 :sitekey="reCaptcha.siteKey"
                 @verify="onCaptchaVerified"
@@ -97,7 +97,7 @@ export default defineComponent({
   },
 
   setup() {
-    const reCaptcha = ref<InstanceType<typeof VueRecaptcha>>();
+    const reCaptchaRef = ref<InstanceType<typeof VueRecaptcha>>();
 
     return reactive({
       loading: false,
@@ -105,32 +105,15 @@ export default defineComponent({
       userName: '',
       password: '',
       reCaptcha: {
-        ref: reCaptcha,
         enabled: process.env.VUE_APP_RECAPTCHA_ENABLED === 'true',
         siteKey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
         token: null as string | null,
       },
+      reCaptchaRef,
     });
   },
 
   components: { VueRecaptcha },
-
-  /* data() {
-    return {
-      loading: false,
-      status: null as number | null,
-      userName: '',
-      password: '',
-      reCaptcha: {
-        ref
-        settings: {
-          enabled: process.env.VUE_APP_RECAPTCHA_ENABLED === 'true',
-          siteKey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
-        },
-        token: null as string | null,
-      },
-    };
-  }, */
 
   computed: {
     canContinue(): boolean {
@@ -143,7 +126,7 @@ export default defineComponent({
 
     resetReCaptcha() {
       this.reCaptcha.token = null;
-      this.reCaptcha.ref?.reset();
+      this.reCaptchaRef?.reset();
     },
 
     onCaptchaVerified(token: string) {
@@ -159,7 +142,7 @@ export default defineComponent({
       const { enabled, token } = this.reCaptcha;
 
       if (enabled && !token) {
-        this.reCaptcha.ref?.execute();
+        this.reCaptchaRef?.execute();
         return;
       }
 
