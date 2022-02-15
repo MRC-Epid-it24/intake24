@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
@@ -65,8 +65,8 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
   props: {
     actions: {
-      type: Array as () => string[],
-      default: (): string[] => ['create', 'read', 'edit', 'delete'],
+      type: Array as PropType<string[]>,
+      default: () => ['create', 'read', 'edit', 'delete'],
     },
     apiUrl: {
       type: String,

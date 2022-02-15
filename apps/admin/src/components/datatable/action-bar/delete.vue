@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { ConfirmDialog } from '@intake24/ui';
 import ActionMixin from './action-mixin';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'DeleteAction',
 
   components: { ConfirmDialog },

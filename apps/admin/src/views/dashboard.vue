@@ -5,10 +5,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import WebPush from '@intake24/admin/components/web-push/web-push.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AppDashboard',
 
   components: { WebPush },

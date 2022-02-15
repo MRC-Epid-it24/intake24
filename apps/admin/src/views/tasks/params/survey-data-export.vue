@@ -18,9 +18,9 @@
 
 <script lang="ts">
 import { TaskRefs } from '@intake24/common/types/http/admin';
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SurveyDataExport',
 
   props: {
@@ -29,7 +29,7 @@ export default Vue.extend({
       required: true,
     },
     refs: {
-      type: Object as () => TaskRefs,
+      type: Object as PropType<TaskRefs>,
       required: true,
     },
   },

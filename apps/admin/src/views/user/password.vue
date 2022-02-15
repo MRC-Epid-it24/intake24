@@ -72,10 +72,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { form } from '@intake24/admin/helpers';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'UserPassword',
 
   data() {

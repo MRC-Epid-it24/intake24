@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { Resource } from '@intake24/admin/types';
 import MenuItem from './menu-item.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'MenuTree',
 
   components: { MenuItem },
@@ -34,7 +34,7 @@ export default Vue.extend({
       required: true,
     },
     resources: {
-      type: Array as () => Resource[],
+      type: Array as PropType<Resource[]>,
       required: true,
     },
   },

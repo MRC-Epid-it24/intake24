@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import upperFirst from 'lodash/upperFirst';
 import Delete from './delete.vue';
 import Read from './read.vue';
@@ -37,8 +37,8 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
 
   props: {
     actions: {
-      type: Array as () => string[],
-      default: (): string[] => ['read', 'edit', 'delete'],
+      type: Array as PropType<string[]>,
+      default: () => ['read', 'edit', 'delete'],
     },
     item: {
       type: Object,

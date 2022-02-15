@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import { Dictionary } from '@intake24/common/types';
 import { Pagination, PaginationMeta } from '@intake24/common/types/models';
@@ -104,8 +104,8 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       default: 'imageUrl',
     },
     actions: {
-      type: Array as () => string[],
-      default: (): string[] => ['create', 'read', 'edit', 'delete'],
+      type: Array as PropType<string[]>,
+      default: () => ['create', 'read', 'edit', 'delete'],
     },
     trackBy: {
       type: String,

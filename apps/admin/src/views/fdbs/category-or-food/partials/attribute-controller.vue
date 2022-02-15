@@ -91,7 +91,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import isEqual from 'lodash/isEqual';
 import {
   Attributes,
@@ -108,16 +108,16 @@ const defaultAttributes: Attributes = {
   useInRecipes: 0,
 };
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AttributeController',
 
   props: {
     value: {
-      type: Object as () => Nullable<Attributes>,
+      type: Object as PropType<Nullable<Attributes>>,
       required: true,
     },
     errors: {
-      type: Object as () => typeof Errors,
+      type: Object as PropType<typeof Errors>,
       required: true,
     },
   },

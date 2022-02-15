@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
 import { PromptQuestion } from '@intake24/common/prompts';
@@ -110,11 +110,11 @@ export default (Vue as VueConstructor<Vue & LoadPromptDialog>).extend({
       required: true,
     },
     questionIds: {
-      type: Array as () => string[],
+      type: Array as PropType<string[]>,
       default: () => [],
     },
     items: {
-      type: Array as () => PromptQuestion[] | undefined,
+      type: Array as PropType<PromptQuestion[]> | undefined,
     },
   },
 

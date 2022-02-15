@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import { Location } from 'vue-router';
 import upperFirst from 'lodash/upperFirst';
 import { ConfirmDialog } from '@intake24/ui';
@@ -52,11 +52,11 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
 
   props: {
     actions: {
-      type: Array as () => string[],
-      default: (): string[] => ['create', 'read', 'edit', 'delete'],
+      type: Array as PropType<string[]>,
+      default: () => ['create', 'read', 'edit', 'delete'],
     },
     selected: {
-      type: Array as () => (number | string)[],
+      type: Array as PropType<(number | string)[]>,
       required: true,
     },
     api: {

@@ -95,8 +95,8 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   },
 
   computed: {
-    sectionRefFields(): ExportField[] | undefined {
-      if (!this.selected) return undefined;
+    sectionRefFields(): ExportField[] {
+      if (!this.selected) return [];
 
       return this.exportRefs[this.selected.id];
     },

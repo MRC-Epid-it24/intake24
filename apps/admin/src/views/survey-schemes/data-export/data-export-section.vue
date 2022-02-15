@@ -140,19 +140,20 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import draggable from 'vuedraggable';
 import { ExportSection, ExportField } from '@intake24/common/types/models';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'DataExportSection',
 
   props: {
     section: {
-      type: Object as () => ExportSection | null,
+      type: Object as PropType<ExportSection>,
     },
     refFields: {
-      type: Array as () => ExportField[],
+      type: Array as PropType<ExportField[]>,
+      default: () => [],
     },
   },
 
@@ -171,8 +172,6 @@ export default Vue.extend({
 
   computed: {
     availableFields(): ExportField[] {
-      if (!this.refFields) return [];
-
       const currentFieldIds = this.fields.map((field) => field.id);
       return this.refFields.filter((field) => !currentFieldIds.includes(field.id));
     },

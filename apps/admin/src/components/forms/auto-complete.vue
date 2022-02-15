@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import debounce from 'lodash/debounce';
 import { Dictionary } from '@intake24/common/types';
 
@@ -82,7 +82,7 @@ export default (Vue as VueConstructor<Vue & AutoComplete>).extend({
       type: String,
     },
     selected: {
-      type: Object as () => Dictionary,
+      type: Object as PropType<Dictionary>,
     },
     responseObject: {
       type: String,

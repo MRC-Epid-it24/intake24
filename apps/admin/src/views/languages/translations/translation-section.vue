@@ -1,5 +1,6 @@
 <script lang="ts">
-import Vue, { CreateElement, VNode, VNodeChildren } from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
+import { CreateElement, VNode, VNodeChildren } from 'vue';
 import { LanguageTranslationAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';
 import {
@@ -22,14 +23,15 @@ import { LocaleMessageObject } from 'vue-i18n';
 import { VCardTitle } from 'vuetify/lib/components';
 import IntersectableSkeleton from './intersectable-skeleton.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'TranslationSection',
 
   components: { IntersectableSkeleton },
 
   props: {
     translation: {
-      type: Object as () => LanguageTranslationAttributes | null,
+      type: Object as PropType<LanguageTranslationAttributes>,
+      required: true,
     },
   },
 

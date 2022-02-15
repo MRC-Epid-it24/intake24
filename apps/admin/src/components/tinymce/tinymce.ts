@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import trimEnd from 'lodash/trimEnd';
 
 import 'tinymce/tinymce';
@@ -20,7 +20,7 @@ import 'tinymce/plugins/table';
 
 import Editor from '@tinymce/tinymce-vue';
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     const baseUrl = trimEnd(process.env.VUE_APP_BASE_URL ?? '', '/');
 

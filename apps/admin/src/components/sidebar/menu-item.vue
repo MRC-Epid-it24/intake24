@@ -10,15 +10,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { Resource } from '@intake24/admin/types';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'MenuItem',
 
   props: {
     item: {
-      type: Object as () => Resource,
+      type: Object as PropType<Resource>,
       required: true,
     },
     active: {

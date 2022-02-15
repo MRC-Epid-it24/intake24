@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { ValidationError } from '@intake24/common/types';
 import { form } from '@intake24/admin/helpers';
 
@@ -77,7 +77,7 @@ type PasswordResetForm = {
   passwordConfirm: string | null;
 };
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PasswordReset',
 
   data() {

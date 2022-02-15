@@ -110,7 +110,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import {
   GuideImageEntry,
   GuideImageEntryObject,
@@ -152,7 +152,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       default: false,
     },
     entry: {
-      type: Object as () => GuideImageEntry | ImageMapEntry,
+      type: Object as PropType<GuideImageEntry | ImageMapEntry>,
       required: true,
     },
   },

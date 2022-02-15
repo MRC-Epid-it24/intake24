@@ -1,7 +1,7 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { formatDate } from '@intake24/admin/util';
 
-export default Vue.extend({
+export default defineComponent({
   methods: {
     formatDate(date: Date | string | null, format?: string) {
       if (!date) return date;

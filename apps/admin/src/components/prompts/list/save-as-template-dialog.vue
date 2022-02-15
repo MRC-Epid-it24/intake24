@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import pick from 'lodash/pick';
 import { mapActions } from 'pinia';
 import { copy } from '@intake24/common/util';
@@ -90,7 +90,7 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SurveySchemeRefs>>).ext
       default: false,
     },
     question: {
-      type: Object as () => PromptQuestion,
+      type: Object as PropType<PromptQuestion>,
       required: true,
     },
   },

@@ -1,6 +1,6 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     action: {
       type: String,
@@ -19,7 +19,7 @@ export default Vue.extend({
     icon(): string {
       return `$${this.action}`;
     },
-    route(): string {
+    route(): string | null | undefined {
       return this.routePrefix ?? this.$route.name;
     },
   },

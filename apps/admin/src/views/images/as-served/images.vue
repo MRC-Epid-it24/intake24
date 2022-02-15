@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import { copy } from '@intake24/common/util';
 import { AsServedImageEntry } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
@@ -100,7 +100,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       required: true,
     },
     items: {
-      type: Array as () => AsServedImageEntry[],
+      type: Array as PropType<AsServedImageEntry[]>,
       required: true,
     },
     disabled: {

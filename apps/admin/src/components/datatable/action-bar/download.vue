@@ -11,12 +11,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import { useApp } from '@intake24/admin/stores';
 import ActionMixin from './action-mixin';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'DownloadAction',
 
   mixins: [ActionMixin],

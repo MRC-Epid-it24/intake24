@@ -32,13 +32,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import isEqual from 'lodash/isEqual';
 import { CategoryAttributes } from '@intake24/common/types/models';
 import { Errors } from '@intake24/common/util';
 import LoadCategoryDialog from './add-category-dialog.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'CategoryController',
 
   components: { LoadCategoryDialog },
@@ -49,11 +49,11 @@ export default Vue.extend({
       required: true,
     },
     value: {
-      type: Array as () => CategoryAttributes[],
+      type: Array as PropType<CategoryAttributes[]>,
       required: true,
     },
     errors: {
-      type: Object as () => typeof Errors,
+      type: Object as PropType<typeof Errors>,
       required: true,
     },
   },

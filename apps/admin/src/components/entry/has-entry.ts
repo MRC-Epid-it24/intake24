@@ -1,7 +1,7 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import hasResource from '@intake24/admin/mixins/has-resource';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     id: {
       type: String,

@@ -194,7 +194,6 @@ import {
   PhysicalActivityLevelAttributes,
 } from '@intake24/common/types/models';
 import { useEntry } from '@intake24/admin/stores';
-import { FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { demographicGroupDefaults } from './demographic-group';
 import { useTopFoodList } from '..';
 import DemographicGroupRange from './demographic-group-range.vue';

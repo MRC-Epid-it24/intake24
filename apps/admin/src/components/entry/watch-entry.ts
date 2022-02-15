@@ -1,8 +1,8 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { Route } from 'vue-router';
 import { copy } from '@intake24/common/util';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'WatchEntry',
 
   data() {

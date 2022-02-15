@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import has from 'lodash/has';
 import { ConfirmDialog } from '@intake24/ui';
 import hasResource from '@intake24/admin/mixins/has-resource';
@@ -109,7 +109,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       required: true,
     },
     routeLeave: {
-      type: Object as () => RouteLeave,
+      type: Object as PropType<RouteLeave>,
       default: () => ({
         dialog: false,
         to: null,

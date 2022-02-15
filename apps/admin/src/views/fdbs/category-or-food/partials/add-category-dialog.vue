@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
 import { CategoriesResponse, CategoryListEntry } from '@intake24/common/types/http/admin';
@@ -98,7 +98,7 @@ export default (Vue as VueConstructor<Vue & AddCategoryDialog>).extend({
 
   props: {
     currentList: {
-      type: Array as () => CategoryAttributes[],
+      type: Array as PropType<CategoryAttributes[]>,
       default: () => [],
     },
     limit: {

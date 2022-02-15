@@ -1,8 +1,8 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { mapActions } from 'pinia';
 import { useLoading } from '@intake24/admin/stores';
 
-export default Vue.extend({
+export default defineComponent({
   methods: {
     ...mapActions(useLoading, {
       addLoading: 'addItem',

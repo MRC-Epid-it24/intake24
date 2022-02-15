@@ -51,15 +51,15 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { JobEntry } from '@intake24/common/types/http/admin';
 
-export default (Vue as VueConstructor<Vue>).extend({
+export default defineComponent({
   name: 'PollsJobList',
 
   props: {
     jobs: {
-      type: Array as () => JobEntry[],
+      type: Array as PropType<JobEntry[]>,
       default: () => [],
     },
   },

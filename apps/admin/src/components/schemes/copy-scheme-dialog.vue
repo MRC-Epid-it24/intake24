@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 
@@ -60,7 +60,7 @@ export type CopySchemeForm = {
   name: string | null;
 };
 
-export default Vue.extend({
+export default defineComponent({
   name: 'CopySchemeDialog',
 
   props: {

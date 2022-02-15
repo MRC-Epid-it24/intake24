@@ -1,10 +1,10 @@
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { JobEntry } from '@intake24/common/types/http/admin';
 import { JobType } from '@intake24/common/types';
 import { downloadFile } from '@intake24/admin/util/fs';
 import PollsJobList from './polls-job-list.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: { PollsJobList },
 
   data() {

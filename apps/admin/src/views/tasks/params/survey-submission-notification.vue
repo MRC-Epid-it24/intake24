@@ -27,10 +27,10 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from '@vue/composition-api';
 import { TaskRefs } from '@intake24/common/types/http/admin';
-import Vue from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SurveySubmissionNotification',
 
   props: {
@@ -43,7 +43,7 @@ export default Vue.extend({
       required: true,
     },
     refs: {
-      type: Object as () => TaskRefs,
+      type: Object as PropType<TaskRefs>,
       required: true,
     },
   },

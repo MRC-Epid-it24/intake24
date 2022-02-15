@@ -51,13 +51,13 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from '@vue/composition-api';
 import axios, { AxiosError } from 'axios';
-import Vue from 'vue';
-import { Errors } from '@intake24/common/util';
 import { mapActions, mapState } from 'pinia';
+import { Errors } from '@intake24/common/util';
 import { useAuth } from '@intake24/admin/stores';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AppLogin',
 
   data() {
