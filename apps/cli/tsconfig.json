@@ -7,7 +7,8 @@
     "baseUrl": ".",
     "paths": {
       "@intake24/cli/*": ["src/*"],
-      "@intake24/common/*": ["../../packages/common/src/*"]
+      "@intake24/common/*": ["../../packages/common/src/*"],
+      "@intake24/i18n": ["../../packages/i18n/src"],
     },
   },
   "include": [

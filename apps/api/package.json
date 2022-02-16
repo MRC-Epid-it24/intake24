@@ -30,7 +30,6 @@
     "@duosecurity/duo_universal": "^2.0.0",
     "awilix": "^6.1.0",
     "axios": "^0.26.0",
-    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.1",
     "bullmq": "^1.71.0",
     "connect-redis": "^6.1.1",
@@ -75,7 +74,6 @@
     "web-push": "^3.4.5"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.2",
     "@types/connect-redis": "^0.0.18",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.12",

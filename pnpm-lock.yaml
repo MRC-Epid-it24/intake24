@@ -168,7 +168,6 @@ importers:
   apps/api:
     specifiers:
       '@duosecurity/duo_universal': ^2.0.0
-      '@types/bcryptjs': ^2.4.2
       '@types/connect-redis': ^0.0.18
       '@types/cookie-parser': ^1.4.2
       '@types/cors': ^2.8.12
@@ -194,7 +193,6 @@ importers:
       '@types/web-push': ^3.3.2
       awilix: ^6.1.0
       axios: ^0.26.0
-      bcryptjs: ^2.4.3
       body-parser: ^1.19.1
       bullmq: ^1.71.0
       connect-redis: ^6.1.1
@@ -253,7 +251,6 @@ importers:
       '@duosecurity/duo_universal': 2.0.0
       awilix: 6.1.0
       axios: 0.26.0
-      bcryptjs: 2.4.3
       body-parser: 1.19.1
       bullmq: 1.71.0
       connect-redis: 6.1.1
@@ -297,7 +294,6 @@ importers:
       validator: 13.7.0
       web-push: 3.4.5
     devDependencies:
-      '@types/bcryptjs': 2.4.2
       '@types/connect-redis': 0.0.18
       '@types/cookie-parser': 1.4.2
       '@types/cors': 2.8.12
@@ -505,9 +501,11 @@ importers:
 
   packages/common:
     specifiers:
+      '@types/bcryptjs': ^2.4.2
       '@types/lodash': ^4.14.178
       ajv: ^8.10.0
       ajv-formats: ^2.1.1
+      bcryptjs: ^2.4.3
       deepmerge: ^4.2.2
       execa: ^5.1.1
       fast-copy: ^2.1.1
@@ -518,11 +516,13 @@ importers:
     dependencies:
       ajv: 8.10.0
       ajv-formats: 2.1.1
+      bcryptjs: 2.4.3
       deepmerge: 4.2.2
       fast-copy: 2.1.1
       lodash: 4.17.21
       nanoid: 3.2.0
     devDependencies:
+      '@types/bcryptjs': 2.4.2
       '@types/lodash': 4.14.178
       execa: 5.1.1
       fs-extra: 10.0.0
@@ -7595,7 +7595,6 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.3
-    dev: false
 
   /fork-ts-checker-webpack-plugin/6.5.0_633903e1613e85a8e1311e3596634477:
     resolution: {integrity: sha512-cS178Y+xxtIjEUorcHddKS7yCMlrDPV31mt47blKKRfMd70Kxu5xruAFE2o9sDY6wVC5deuob/u/alD04YYHnw==}
@@ -8287,7 +8286,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.8
+      follow-redirects: 1.14.8_debug@4.3.3
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug

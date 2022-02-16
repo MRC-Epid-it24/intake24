@@ -4,7 +4,7 @@ import { CreateUserInput, UpdateUserInput } from '@intake24/common/types/http/ad
 import { CustomField } from '@intake24/common/types';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { defaultAlgorithm } from '@intake24/api/util/passwords';
+import { defaultAlgorithm } from '@intake24/common/util/passwords';
 import { toSimpleName } from '@intake24/api/util';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '../core/auth';
 

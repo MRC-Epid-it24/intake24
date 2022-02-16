@@ -1,7 +1,7 @@
 import './bootstrap';
 import { Command } from 'commander';
 import pkg from '../package.json';
-import { GenerateEnv } from './commands';
+import { GenerateEnv, HashPassword } from './commands';
 
 const run = async () => {
   const program = new Command();
@@ -17,12 +17,22 @@ const run = async () => {
       await GenerateEnv(cmd);
     });
 
+  program
+    .command('hash-password')
+    .description(
+      'Generate a BCrypt password hash to create/update user passwords manually in the database.'
+    )
+    .argument('<password>', 'Plain text password to hash.')
+    .action(async (pwd) => {
+      await HashPassword(pwd);
+    });
+
   await program.parseAsync(process.argv);
 };
 
 run()
   .catch((err) => {
-    console.error(err instanceof Error ? err.message : err);
+    console.error(err instanceof Error ? err.stack : err);
 
     process.exitCode = process.exitCode ?? 1;
     process.exit();
