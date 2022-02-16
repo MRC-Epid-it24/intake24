@@ -18,6 +18,7 @@
       "@intake24/cli/*": ["apps/cli/src/*"],
       "@intake24/survey/*": ["apps/survey/src/*"],
       "@intake24/common/*": ["packages/common/src/*"],
+      "@intake24/common-backend/*": ["packages/common-backend/src/*"],
       "@intake24/*": ["packages/*/src"]
     },
     "types": [
