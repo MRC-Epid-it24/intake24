@@ -8,6 +8,7 @@ const config: Config.InitialOptions = {
     '^@intake24/api/(.*)$': '<rootDir>/src/$1',
     '^@intake24/api-tests/(.*)$': '<rootDir>/__tests__/$1',
     '^@intake24/common/(.*)$': '<rootDir>/../../packages/common/src/$1',
+    '^@intake24/common-backend/(.*)$': '<rootDir>/../../packages/common-backend/src/$1',
     '^@intake24/(.*?)$': '<rootDir>/../../packages/$1/src',
   },
   rootDir: '.',
