@@ -67,7 +67,7 @@ export default (app: Express, { config }: Ops): void => {
   app.use(staticContentHelmet);
 
   // Register images folder if locally hosted
-  if (!isUrlAbsolute(urls.images))
+  if (urls.images.startsWith(urls.base))
     app.use('/images', express.static(config.filesystem.local.images, { index: false }));
 
   // Check if any site is hosted locally
