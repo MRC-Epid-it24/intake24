@@ -60,9 +60,9 @@ const prompts: LocaleMessageObject = {
       'For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>' +
       '  <p>You can press Enter on your keyboard or the "add a food/drink" button to go to the next line as you type.</p>' +
       '  <p><strong>Do not</strong> enter how much you had, just the food names.',
-    food: 'Food',
+    food: 'Food & Drinks',
     drinks: 'Drinks',
-    addFood: 'Add a food',
+    addFood: 'Add a food/drinks',
     addDrink: 'Add a drink',
     deleteMeal: 'Delete {meal}',
     deleteFoodFromMeal: 'Delete {food}',
