@@ -1,0 +1,43 @@
+{
+  "artificialDelayMilliseconds": 300,
+  "keepExistingTerminalsOpen": false,
+  "runOnStartup": true,
+  "terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "GIT",
+          "commands": ["git status"],
+          "shouldRunCommands": true
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "API",
+          "commands": ["cd apps/api/", "clear"],
+          "shouldRunCommands": true
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "ADMIN",
+          "commands": ["cd apps/admin/", "clear"],
+          "shouldRunCommands": true
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "SURVEY",
+          "commands": ["cd apps/survey/", "clear"],
+          "shouldRunCommands": true
+        }
+      ]
+    }
+  ]
+}
