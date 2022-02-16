@@ -1,7 +1,7 @@
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import redisStore from 'connect-redis';
-import express, { Express } from 'express';
+import { Express } from 'express';
 import expressSession from 'express-session';
 import morgan from 'morgan';
 import nunjucks from 'nunjucks';
@@ -26,13 +26,6 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
 
   // Cookie parser
   app.use(cookieParser(secret));
-
-  // Register global public folder
-  app.use(express.static(config.filesystem.local.public, { index: false }));
-
-  // Register images folder
-  // TODO: this should only be registered when hosted locally
-  app.use('/images', express.static(config.filesystem.local.images, { index: false }));
 
   // Http logger
   app.use(morgan(isDev ? 'dev' : 'combined', { stream }));
