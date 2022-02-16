@@ -501,11 +501,9 @@ importers:
 
   packages/common:
     specifiers:
-      '@types/bcryptjs': ^2.4.2
       '@types/lodash': ^4.14.178
       ajv: ^8.10.0
       ajv-formats: ^2.1.1
-      bcryptjs: ^2.4.3
       deepmerge: ^4.2.2
       execa: ^5.1.1
       fast-copy: ^2.1.1
@@ -516,17 +514,24 @@ importers:
     dependencies:
       ajv: 8.10.0
       ajv-formats: 2.1.1
-      bcryptjs: 2.4.3
       deepmerge: 4.2.2
       fast-copy: 2.1.1
       lodash: 4.17.21
       nanoid: 3.2.0
     devDependencies:
-      '@types/bcryptjs': 2.4.2
       '@types/lodash': 4.14.178
       execa: 5.1.1
       fs-extra: 10.0.0
       typescript-json-validator: 2.4.2
+
+  packages/common-backend:
+    specifiers:
+      '@types/bcryptjs': ^2.4.2
+      bcryptjs: ^2.4.3
+    dependencies:
+      bcryptjs: 2.4.3
+    devDependencies:
+      '@types/bcryptjs': 2.4.2
 
   packages/db:
     specifiers:

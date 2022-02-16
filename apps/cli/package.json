@@ -43,6 +43,7 @@
     "webpackbar": "^5.0.2"
   },
   "bundledDependencies": [
-    "@intake24/common"
+    "@intake24/common",
+    "@intake24/common-backend"
   ]
 }

@@ -1,4 +1,4 @@
-import { PasswordShiro } from '@intake24/common/util/passwords';
+import { PasswordShiro } from '@intake24/common-backend/util/passwords';
 
 describe('PasswordShiro', () => {
   it('should throw when new password created', async () => {
