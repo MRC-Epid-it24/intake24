@@ -2,11 +2,11 @@
   include_vars: '../instances/{{ instance }}/shared/config.json'
 
 - name: Update pm2 to latest
-  command: pnpm add -g pm2
+  command: npm install -g pm2
 
-- name: Update in-memory pm2 code
+- name: Update pm2 in-memory code
   become_user: '{{ app.user }}'
-  command: pm2 updatePM2
+  command: pm2 update
 
 - name: Copy .env config file
   become_user: '{{ app.user }}'

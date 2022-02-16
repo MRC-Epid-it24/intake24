@@ -1,14 +1,22 @@
 [Unit]
-Description=Intake24 API Server
+Description=Intake24 API Server (PM2)
 After=network.target
 
 [Service]
-Type=simple
+Type=forking
 User={{ app.user }}
 Group={{ app.group }}
-Restart=on-failure
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Environment=PM2_HOME=/home/{{ app.user }}/.pm2
+PIDFile=/home/{{ app.user }}/.pm2/pm2.pid
 WorkingDirectory={{ app.directory }}/apps/api
-ExecStart=/usr/bin/pm2 start ecosystem.config.js
+Restart=on-failure
+
+ExecStart=/usr/lib/node_modules/pm2/bin/pm2 resurrect
+ExecReload=/usr/lib/node_modules/pm2/bin/pm2 reload all
+ExecStop=/usr/lib/node_modules/pm2/bin/pm2 kill
 
 [Install]
 WantedBy=multi-user.target
