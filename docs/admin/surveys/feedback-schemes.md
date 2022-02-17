@@ -16,4 +16,33 @@ Edit tab allows to modify selected feedback scheme.
 
 ## Top foods
 
-## Food groups
+Settings to populate top foods feedback section. It controls top foods lists and nutrient composition pie charts.
+
+### Number of foods
+
+- allows to set number of top foods to display + rest as `other food`
+- preferred colors can be assigned to each food, which will be displayed both in lists & pie charts
+
+### Nutrient types
+
+- list of nutrient types to be displayed, which translates to number of lists & pie charts per nutrient type
+
+## Cards
+
+List of cards to be included in feedback.
+
+There are couple of feedback card types that can be used:
+
+- `Character` - Assigns nutrient types, which gets matched with demographic groups.
+
+- `Nutrient group` - Allows to define group of nutrients & thresholds to provide aggregated intake.
+
+- `Five a day` - Defines `five-a-day` feedback for fruit & vegetables.
+
+## Demographic groups
+
+List of demographic groups definitions, which are used for matching with character cards based on the defined criteria.
+
+## Henry coefficients
+
+List of Henry coefficients used for calculations.

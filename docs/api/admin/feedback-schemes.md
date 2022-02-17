@@ -43,7 +43,9 @@ Content-Type: application/json
     "name": string,
     "type": 'default',
     "topFoods": {...},
-    "foodGroups": [{...}]
+    "cards": [{...}],
+    "demographicGroups": [{...}],
+    "henryCoefficients": [{...}],
 }
 ```
 
@@ -96,7 +98,9 @@ Content-Type: application/json
     "name": string,
     "type": 'default',
     "topFoods": {...},
-    "foodGroups": [{...}]
+    "cards": [{...}],
+    "demographicGroups": [{...}],
+    "henryCoefficients": [{...}],
 }
 ```
 
