@@ -1,9 +1,17 @@
 <template>
-  <v-card elevation="1">
+  <v-card elevation="0">
     <v-card-title>{{
       drinks ? $t('prompts.editMeal.drinks') : $t('prompts.editMeal.food')
     }}</v-card-title>
-    <v-card-text>
+    <v-card-text justify="center">
+      <v-text-field
+        :placeholder="$t('prompts.editMeal.food')"
+        @keypress.enter.stop="addFood"
+        ref="foodsDrinksInput"
+        outlined
+        @focusout="onEditFocusLost"
+        v-model="newFoodDescription"
+      ></v-text-field>
       <v-list v-if="editableList.length > 0">
         <v-list-item
           :ripple="false"
@@ -14,7 +22,6 @@
           <v-text-field
             v-if="editIndex === idx"
             v-model="editableList[idx].description"
-            ref="textField"
             @keypress.enter.stop="addFood"
             @focusout="onEditFocusLost"
           ></v-text-field>
@@ -27,8 +34,14 @@
         </v-list-item>
       </v-list>
     </v-card-text>
-    <v-card-actions>
-      <v-btn depressed @click="addFood">
+    <v-card-actions :class="isNotDesktop && 'justify-center'">
+      <v-btn
+        @click="addFood"
+        color="secondary"
+        elevation="2"
+        x-large
+        :disabled="newFoodDescription.length === 0"
+      >
         {{ drinks ? $t('prompts.editMeal.addDrink') : $t('prompts.editMeal.addFood') }}
         <v-icon right>fa-edit</v-icon>
       </v-btn>
@@ -75,6 +88,7 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
 
         if (editEntry.type === 'free-text' && editEntry.description.trim().length === 0) return;
       }
+      if (this.newFoodDescription.length === 0) return;
 
       this.editableList.push({
         type: 'free-text',
@@ -84,12 +98,15 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
       });
 
       this.edit(this.editableList.length - 1);
+      this.newFoodDescription = '';
+      this.$emit('food-added');
     },
 
     deleteFood() {
       if (this.editIndex != null) {
         this.editableList.splice(this.editIndex, 1);
         this.editIndex = null;
+        this.$emit('food-deleted', this.editableList.length);
       }
     },
 

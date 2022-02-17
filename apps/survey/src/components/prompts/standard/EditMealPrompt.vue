@@ -1,10 +1,13 @@
 <template>
   <prompt-layout :text="promptText" :description="promptDescription">
     <v-col sm="10" xs="12" class="px-0 px-sm-3">
-      <editable-food-list :food-list="foods" :drinks="false" ref="foodList" />
-    </v-col>
-    <v-col sm="10" xs="12" class="px-0 px-sm-3">
-      <editable-food-list :food-list="drinks" :drinks="true" ref="drinksList" />
+      <editable-food-list
+        :food-list="foodsDrinks"
+        :drinks="false"
+        ref="foodList"
+        @food-added="onAdd"
+        @food-deleted="onDelete"
+      />
     </v-col>
     <template v-slot:actions>
       <confirm-dialog
@@ -21,6 +24,7 @@
       </confirm-dialog>
       <v-btn
         :block="isMobile"
+        :disabled="continueSwitch"
         :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
         class="px-5"
         color="success"
@@ -45,7 +49,6 @@ import BasePrompt, { Prompt } from '../BasePrompt';
 type Refs = {
   $refs: {
     foodList: HasEditableFoodList;
-    drinksList: HasEditableFoodList;
   };
 };
 
@@ -71,6 +74,12 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
     },
   },
 
+  data() {
+    return {
+      continueSwitch: true,
+    };
+  },
+
   computed: {
     promptText() {
       return this.getLocaleString(this.promptProps.text, 'prompts.editMeal.text', {
@@ -81,22 +90,23 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
     promptDescription() {
       return this.getLocaleString(this.promptProps.description, 'prompts.editMeal.description');
     },
-
-    foods() {
-      return this.foodList.filter((food) => !food.flags.includes('is-drink'));
-    },
-
-    drinks() {
-      return this.foodList.filter((food) => food.flags.includes('is-drink'));
+    foodsDrinks() {
+      return this.foodList;
+      // return this.foodList.filter((food) => !food.flags.includes('is-drink'));
     },
   },
 
   methods: {
+    onAdd() {
+      this.$data.continueSwitch = false;
+    },
+    onDelete(value: number) {
+      console.log(value);
+      if (value === 0) this.$data.continueSwitch = true;
+    },
     submit() {
       const editedFoods = this.$refs.foodList.editableList;
-      const editedMeals = this.$refs.drinksList.editableList;
-
-      this.$emit('finishMeal', editedFoods.concat(editedMeals));
+      this.$emit('finishMeal', editedFoods);
     },
 
     removeMeal() {
