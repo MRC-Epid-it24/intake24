@@ -44,9 +44,7 @@ export const nutrientGroupImageMap: Record<string, any> = {
 
 export const getLocaleContent = <T>(
   content: RequiredLocaleTranslation | LocaleTranslation<T>
-): string | T => {
-  return content[i18n.locale] ?? content.en;
-};
+): string | T => content[i18n.locale] ?? content.en;
 
 export const getTextClass = (sentiment: Sentiment): string => {
   if (['too_low', 'low', 'high', 'too_high'].includes(sentiment)) return 'danger--text';

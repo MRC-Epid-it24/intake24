@@ -30,7 +30,7 @@ export const useResource = defineStore('resource', {
     },
   },
   actions: {
-    async update({ name, api }: { name: string; api: string }) {
+    update({ name, api }: { name: string; api: string }) {
       this.name = name;
       this.api = api;
     },

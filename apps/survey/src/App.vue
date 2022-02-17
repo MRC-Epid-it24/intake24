@@ -67,10 +67,7 @@
       </template>
     </v-app-bar>
     <v-main>
-      <v-container :class="{ 'pa-0': isMobile }">
-        <!-- <h2 v-if="loggedIn" class="ma-2 text-dark">{{ title }}</h2> -->
-        <router-view></router-view>
-      </v-container>
+      <router-view></router-view>
     </v-main>
     <v-snackbar :value="updateExists" :timeout="-1" color="primary">
       {{ $t('common.sw.check') }}

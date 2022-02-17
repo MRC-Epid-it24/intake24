@@ -1,5 +1,7 @@
 <template>
-  <component :is="layout"></component>
+  <v-container :class="{ 'px-0': isMobile }">
+    <component :is="layout"></component>
+  </v-container>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" class="pt-2">
+  <v-row :no-gutters="isNotDesktop" class="pt-2" justify="center">
     <v-col v-if="showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
       <meal-list
         :surveyName="surveyName"

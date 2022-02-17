@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" class="pt-2">
+  <v-row :no-gutters="isMobile" class="pt-2" justify="center">
     <recall-bread-crumbs-mobile :promptName="activePrompt"></recall-bread-crumbs-mobile>
     <v-col cols="12" lg="9" class="content" v-if="bottomNavTab !== 1">
       <transition name="component-fade" mode="out-in">

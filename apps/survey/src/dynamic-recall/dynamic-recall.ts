@@ -13,10 +13,8 @@ export interface PromptInstance {
 
 export const parseMealTime = (time: string): MealTime => {
   const [hours, minutes] = time.split(':');
-  return {
-    hours: parseInt(hours, 10),
-    minutes: parseInt(minutes, 10),
-  };
+
+  return { hours: parseInt(hours, 10), minutes: parseInt(minutes, 10) };
 };
 
 export const surveyInitialState: CurrentSurveyState = {

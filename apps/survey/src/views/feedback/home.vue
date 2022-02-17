@@ -1,18 +1,20 @@
 <template>
-  <v-row justify="center" :no-gutters="isMobile">
-    <v-col v-if="userDemographic" cols="12" sm="9" md="8">
-      <user-demographic-info :user-info="userDemographic"></user-demographic-info>
-    </v-col>
-    <v-col cols="12" class="mt-4">
-      <!-- Submission day selector -->
-    </v-col>
-    <v-col cols="12" class="mt-4">
-      <feedback-card-area v-bind="{ cards }"></feedback-card-area>
-    </v-col>
-    <v-col cols="12" class="mt-4">
-      <feedback-chart-area v-bind="{ topFoods }"></feedback-chart-area>
-    </v-col>
-  </v-row>
+  <v-container class="px-0" fluid>
+    <v-row justify="center" no-gutters>
+      <v-col v-if="userDemographic" cols="12" sm="9" md="8">
+        <user-demographic-info :user-info="userDemographic"></user-demographic-info>
+      </v-col>
+      <v-col cols="12" class="mt-4">
+        <!-- Submission day selector -->
+      </v-col>
+      <v-col cols="12" class="mt-4">
+        <feedback-card-area v-bind="{ cards }"></feedback-card-area>
+      </v-col>
+      <v-col cols="12" class="mt-4">
+        <feedback-chart-area v-bind="{ topFoods }"></feedback-chart-area>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">

@@ -2,19 +2,20 @@
   <v-card width="320px" height="100%">
     <v-img height="180px" :src="backgroundImage"></v-img>
     <v-card-subtitle class="font-weight-medium">
-      <i18n path="feedback.intake" tag="div" class="mb-2">
+      <i18n path="feedback.intake.your" tag="div" class="mb-2">
         <template v-slot:nutrient>
-          <span>{{ details.name.toLowerCase() }}</span>
+          <span>{{ detail.name.toLowerCase() }}</span>
         </template>
         <template v-slot:amount>
-          <span>{{ details.intake }} {{ details.unit }}</span>
+          <span>{{ detail.intake }} {{ detail.unit }}</span>
         </template>
       </i18n>
-      <div :class="details.textClass">
-        <v-icon left>{{ details.iconClass }}</v-icon>
-        <span>{{ details.targetIntake.toString() }} {{ details.unit }}</span>
+      <div :class="detail.textClass">
+        <v-icon left>{{ detail.iconClass }}</v-icon>
+        <span>{{ detail.targetIntake.toString() }} {{ detail.unit }}</span>
       </div>
     </v-card-subtitle>
+    <tell-me-more v-bind="{ detail }"></tell-me-more>
   </v-card>
 </template>
 
@@ -30,9 +31,12 @@ import {
   nutrientGroupImageMap,
   FeedbackDetails,
 } from './card-utils';
+import TellMeMore from './tell-me-more.vue';
 
 export default defineComponent({
   name: 'NutrientGroupCard',
+
+  components: { TellMeMore },
 
   props: {
     parameters: {
@@ -52,7 +56,7 @@ export default defineComponent({
   },
 
   computed: {
-    details(): FeedbackDetails {
+    detail(): FeedbackDetails {
       const { name, description, low, high, unit, intake, targetIntake } = this.parameters;
       const sentiment = 'good';
 
@@ -84,8 +88,6 @@ export default defineComponent({
       return '';
     },
   },
-
-  methods: {},
 });
 </script>
 
