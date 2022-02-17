@@ -124,6 +124,7 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
       this.$nextTick(() => {
         // FIXME: must be a better way to avoid type errors
         const textField = this.$refs.textField as HTMLInputElement[];
+        if (textField === undefined) return;
         textField[0].focus();
       });
     },
