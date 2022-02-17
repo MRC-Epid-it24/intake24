@@ -1,5 +1,5 @@
 import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
-import type { QuantityValues } from '../prompts';
+import type { ComponentType, QuantityValues } from '../prompts';
 import { UserFoodData } from './http';
 import { PortionSizeMethodId } from './models';
 
@@ -104,13 +104,28 @@ export interface Selection {
   mode: SelectionMode;
 }
 
+export type PromptAnswerResponce = FoodState[] | MealTime | FoodEntry | PortionSizeState | null;
+
+export interface PromptAnswer {
+  response: PromptAnswerResponce;
+  modified: boolean;
+  new: boolean;
+  prompt: ComponentType | undefined;
+  mealIndex: number | undefined;
+  foodIndex: number | undefined;
+}
+
 export type SurveyState = {
   schemeId: string | null;
   startTime: Date | null;
   endTime: Date | null;
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-
+  tempPromptAnswer?: PromptAnswer;
   selection: Selection;
   meals: MealState[];
 };
+
+export interface HasOnAnswer {
+  onAnswer(value?: PromptAnswerResponce): void;
+}
