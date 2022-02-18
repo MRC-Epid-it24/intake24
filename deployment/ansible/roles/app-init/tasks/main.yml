@@ -1,37 +1,37 @@
-- name: Include shared vars
+- name: '{{ app|upper }} | Include shared vars'
   include_vars: '../instances/{{ instance }}/shared/config.json'
 
-- name: Create / check group
+- name: '{{ app|upper }} | Create / check group'
   group:
-    name: '{{ app.group }}'
+    name: '{{ env.group }}'
     state: present
 
-- name: Create / check user
+- name: '{{ app|upper }} | Create / check user'
   user:
-    name: '{{ app.user }}'
-    group: '{{ app.group }}'
+    name: '{{ env.user }}'
+    group: '{{ env.group }}'
 
-- name: Install pnpm to latest
+- name: '{{ app|upper }} | Install pnpm to latest'
   command: npm install -g pnpm
 
-- name: Create / check application directory
+- name: '{{ app|upper }} | Create / check application directory'
   file:
-    path: '{{ app.directory }}'
+    path: '{{ env.directory }}'
     state: directory
-    owner: '{{ app.user }}'
-    group: '{{ app.group }}'
+    owner: '{{ env.user }}'
+    group: '{{ env.group }}'
 
-- name: Checkout source from git repository
-  become_user: '{{ app.user }}'
+- name: '{{ app|upper }} | Checkout source from git repository'
+  become_user: '{{ env.user }}'
   git:
-    dest: '{{ app.directory }}'
+    dest: '{{ env.directory }}'
     repo: '{{ git.repository }}'
     version: '{{ git.branch }}'
     force: yes
     accept_hostkey: true
 
-- name: Install dependencies
-  become_user: '{{ app.user }}'
+- name: '{{ app|upper }} | Install dependencies'
+  become_user: '{{ env.user }}'
   command: pnpm install
   args:
-    chdir: '{{ app.directory }}'
+    chdir: '{{ env.directory }}'

@@ -1,0 +1,32 @@
+---
+- hosts: api
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'api'
+  roles:
+    - role: app-init
+    - role: app-api
+    - role: app-service
+
+- hosts: admin
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'admin'
+  roles:
+    - role: app-init
+    - role: app-spa
+    - role: app-service
+      when: apps.admin.service.deploy | bool
+
+- hosts: survey
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'survey'
+  roles:
+    - role: app-init
+    - role: app-spa
+    - role: app-service
+      when: apps.survey.service.deploy | bool

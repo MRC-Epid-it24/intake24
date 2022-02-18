@@ -3,9 +3,43 @@
     "repository": "https://github.com/MRC-Epid-it24/intake24.git",
     "branch": "master"
   },
-  "app": {
+  "env": {
     "directory": "/opt/intake24",
     "user": "intake24",
     "group": "intake24"
+  },
+  "apps": {
+    "api": {
+      "path": "apps/api",
+      "env_file": "../instances/{{ instance }}/app-api/.env",
+      "pm2_file": "../instances/{{ instance }}/app-api/pm2.js",
+      "migrations": {
+        "foods": true,
+        "system": true
+      },
+      "service": {
+        "deploy": true,
+        "template": "app-api",
+        "name": "v4-api-server"
+      }
+    },
+    "admin": {
+      "path": "apps/admin",
+      "env_file": "../instances/{{ instance }}/app-admin/.env",
+      "service": {
+        "deploy": false,
+        "template": "app-admin",
+        "name": "v4-admin-site"
+      }
+    },
+    "survey": {
+      "path": "apps/survey",
+      "env_file": "../instances/{{ instance }}/app-survey/.env",
+      "service": {
+        "deploy": false,
+        "template": "app-survey",
+        "name": "v4-survey-site"
+      }
+    }
   }
 }

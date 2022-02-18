@@ -1,44 +1,40 @@
-- name: Include shared vars
-  include_vars: '../instances/{{ instance }}/shared/config.json'
-
-- name: Update pm2 to latest
+- name: '{{ app|upper }} | Update pm2 to latest'
   command: npm install -g pm2
 
-- name: Update pm2 in-memory code
-  become_user: '{{ app.user }}'
+- name: '{{ app|upper }} | Update pm2 in-memory code'
+  become_user: '{{ env.user }}'
   command: pm2 update
 
-- name: Copy .env config file
-  become_user: '{{ app.user }}'
+- name: '{{ app|upper }} | Copy .env config file'
+  become_user: '{{ env.user }}'
   copy:
-    src: '{{ env_file }}'
-    dest: '{{ app.directory }}/apps/api/.env'
+    src: '{{ apps[app].env_file }}'
+    dest: '{{ env.directory }}/{{ apps[app].path }}/.env'
     mode: '644'
 
-- name: Copy pm2 config file
-  become_user: '{{ app.user }}'
+- name: '{{ app|upper }} | Copy pm2 config file'
+  become_user: '{{ env.user }}'
   copy:
-    src: '{{ pm2_file }}'
-    dest: '{{ app.directory }}/apps/api/ecosystem.config.js'
+    src: '{{ apps[app].pm2_file }}'
+    dest: '{{ env.directory }}/{{ apps[app].path }}/ecosystem.config.js'
     mode: '644'
 
-- name: Build API server
-  become_user: '{{ app.user }}'
+- name: '{{ app|upper }} | Build API server'
+  become_user: '{{ env.user }}'
   command: pnpm build
   args:
-    chdir: '{{ app.directory }}/apps/api'
+    chdir: '{{ env.directory }}/{{ apps[app].path }}'
 
-- name: Run system database migrations
-  become_user: '{{ app.user }}'
+- name: '{{ app|upper }} | Run system database migrations'
+  become_user: '{{ env.user }}'
   command: pnpm db:system:migrate
   args:
-    chdir: '{{ app.directory }}'
-  when: migrations.system
+    chdir: '{{ env.directory }}'
+  when: apps[app].migrations.system
 
-- name: Run foods database migrations
-  become_user: '{{ app.user }}'
+- name: '{{ app|upper }} | Run foods database migrations'
+  become_user: '{{ env.user }}'
   command: pnpm db:foods:migrate
   args:
-    chdir: '{{ app.directory }}'
-  when: migrations.foods
-
+    chdir: '{{ env.directory }}'
+  when: apps[app].migrations.foods

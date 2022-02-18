@@ -4,10 +4,10 @@ After=network.target
 
 [Service]
 Type=simple
-User={{ app.user }}
-Group={{ app.group }}
+User={{ env.user }}
+Group={{ env.group }}
 Restart=on-failure
-WorkingDirectory={{ app.directory }}/apps/survey
+WorkingDirectory={{ env.directory }}/apps/survey
 ExecStart=/usr/bin/node server/index.js
 
 [Install]

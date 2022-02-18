@@ -4,14 +4,14 @@ After=network.target
 
 [Service]
 Type=forking
-User={{ app.user }}
-Group={{ app.group }}
+User={{ env.user }}
+Group={{ env.group }}
 LimitNOFILE=infinity
 LimitNPROC=infinity
 LimitCORE=infinity
-Environment=PM2_HOME=/home/{{ app.user }}/.pm2
-PIDFile=/home/{{ app.user }}/.pm2/pm2.pid
-WorkingDirectory={{ app.directory }}/apps/api
+Environment=PM2_HOME=/home/{{ env.user }}/.pm2
+PIDFile=/home/{{ env.user }}/.pm2/pm2.pid
+WorkingDirectory={{ env.directory }}/apps/api
 Restart=on-failure
 
 ExecStart=/usr/lib/node_modules/pm2/bin/pm2 resurrect

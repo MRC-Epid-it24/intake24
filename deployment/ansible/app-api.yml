@@ -2,6 +2,8 @@
 - hosts: api
   remote_user: deploy
   become: true
+  vars:
+    app: 'api'
   roles:
     - role: app-init
     - role: app-api

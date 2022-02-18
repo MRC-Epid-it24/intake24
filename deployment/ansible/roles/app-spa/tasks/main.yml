@@ -1,0 +1,12 @@
+- name: '{{ app|upper }} | Copy .env config file'
+  become_user: '{{ env.user }}'
+  copy:
+    src: '{{ apps[app].env_file }}'
+    dest: '{{ env.directory }}/{{ apps[app].path }}/.env'
+    mode: '644'
+
+- name: '{{ app|upper }} | Build client application'
+  become_user: '{{ env.user }}'
+  command: pnpm build
+  args:
+    chdir: '{{ env.directory }}/{{ apps[app].path }}'

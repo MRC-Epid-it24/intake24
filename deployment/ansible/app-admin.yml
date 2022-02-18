@@ -2,8 +2,10 @@
 - hosts: admin
   remote_user: deploy
   become: true
+  vars:
+    app: 'admin'
   roles:
     - role: app-init
-    - role: app-admin
+    - role: app-spa
     - role: app-service
-      when: service.deploy | bool
+      when: apps.admin.service.deploy | bool
