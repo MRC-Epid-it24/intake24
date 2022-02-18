@@ -31,7 +31,6 @@ export default defineComponent({
   props: {
     translation: {
       type: Object as PropType<LanguageTranslationAttributes>,
-      required: true,
     },
   },
 
@@ -130,7 +129,8 @@ export default defineComponent({
       const items = Object.keys(translations);
       if (!items.length || this.translation === null) return [];
 
-      const { section } = this.translation;
+      const section = this.translation?.section;
+      if (!section) return [];
 
       const inputs = items.map((item) => {
         const fullPath = [section, ...path, item].join('.');

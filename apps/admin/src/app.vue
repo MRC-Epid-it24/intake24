@@ -27,7 +27,7 @@
         :resources="resources.fdb"
       ></menu-tree>
       <menu-tree
-        v-if="can(['languages-browse', 'locales-browse'])"
+        v-if="can(['languages|browse', 'locales|browse'])"
         icon="fas fa-fw fa-globe"
         name="local"
         :resources="resources.local"

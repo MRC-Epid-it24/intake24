@@ -2,7 +2,7 @@ import './registerServiceWorker';
 import './bootstrap';
 import Vue from 'vue';
 import pinia from './stores/bootstrap';
-import App from './App.vue';
+import App from './app.vue';
 import i18n from './i18n';
 import http from './services/http.service';
 import router from './router';
