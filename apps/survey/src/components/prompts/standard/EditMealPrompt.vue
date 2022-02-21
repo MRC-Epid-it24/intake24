@@ -24,7 +24,7 @@
       </confirm-dialog>
       <v-btn
         :block="isMobile"
-        :disabled="continueSwitch"
+        :disabled="!continueComputedSwitch"
         :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
         class="px-5"
         color="success"
@@ -40,11 +40,13 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
+import { mapState } from 'pinia';
 import { BasePromptProps } from '@intake24/common/prompts';
 import { FoodState } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';
+import { useSurvey } from '@intake24/survey/stores';
+import BasePrompt, { Prompt } from '@intake24/survey/components/prompts/BasePrompt';
 import EditableFoodList, { HasEditableFoodList } from './EditableFoodList.vue';
-import BasePrompt, { Prompt } from '../BasePrompt';
 
 type Refs = {
   $refs: {
@@ -72,15 +74,15 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
       type: String,
       required: true,
     },
-  },
-
-  data() {
-    return {
-      continueSwitch: true,
-    };
+    promptComponent: {
+      type: String,
+      required: true,
+    },
   },
 
   computed: {
+    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
+
     promptText() {
       return this.getLocaleString(this.promptProps.text, 'prompts.editMeal.text', {
         meal: this.mealName.toLocaleLowerCase(),
@@ -90,19 +92,51 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
     promptDescription() {
       return this.getLocaleString(this.promptProps.description, 'prompts.editMeal.description');
     },
-    foodsDrinks() {
+    foodsDrinks(): FoodState[] {
+      if (this.foodList.length > 0) return this.foodList;
+      const tempFoodDrinks = this.currentTempPromptAnswer;
+      if (
+        tempFoodDrinks &&
+        tempFoodDrinks.prompt === this.promptComponent &&
+        tempFoodDrinks.mealIndex === this.selectedMealIndex &&
+        tempFoodDrinks.response
+      ) {
+        return tempFoodDrinks.response as FoodState[];
+      }
       return this.foodList;
       // return this.foodList.filter((food) => !food.flags.includes('is-drink'));
+    },
+    continueComputedSwitch: {
+      get(): boolean {
+        const tempList = this.foodsDrinks as FoodState[];
+        return tempList.length > 0;
+      },
     },
   },
 
   methods: {
-    onAdd() {
-      this.$data.continueSwitch = false;
+    onAdd(editableList: FoodState) {
+      // this.continueComputedSwitch = false;
+      // console.log(this.continueComputedSwitch);
+      this.$emit('tempChanging', {
+        response: editableList,
+        modified: true,
+        new: false,
+        mealIndex: this.selectedMealIndex,
+        foodIndex: this.selectedFoodIndex,
+        prompt: this.promptComponent,
+      });
     },
     onDelete(value: number) {
-      console.log(value);
-      if (value === 0) this.$data.continueSwitch = true;
+      if (value === 0)
+        this.$emit('tempChanging', {
+          response: null,
+          modified: true,
+          new: false,
+          mealIndex: this.selectedMealIndex,
+          foodIndex: this.selectedFoodIndex,
+          prompt: this.promptComponent,
+        });
     },
     submit() {
       const editedFoods = this.$refs.foodList.editableList;

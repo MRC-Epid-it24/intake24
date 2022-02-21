@@ -10,6 +10,7 @@
         <component
           v-if="currentPrompt"
           :is="handlerComponent"
+          ref="promptHandle"
           :promptComponent="currentPrompt.prompt.component"
           :promptId="currentPrompt.prompt.id"
           :promptProps="currentPrompt.prompt.props"
@@ -65,6 +66,8 @@
 </template>
 
 <script lang="ts">
+import { mapState } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 import { FoodState } from '@intake24/common/types';
 import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
 import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
@@ -102,6 +105,10 @@ export default Recall.extend({
     };
   },
 
+  computed: {
+    ...mapState(useSurvey, ['selectedMeal', 'selectedFood', 'currentTempPromptAnswer']),
+  },
+
   methods: {
     // FIXME: Should use nested router for this
     onBottomNavChange(tab: number) {
@@ -110,6 +117,8 @@ export default Recall.extend({
       } else if (tab === 2) {
         this.submitTrigger = true;
         // this.submitTrigger = false;
+        // TODO: WIP - FIX- ME Call the Prompt method from the parent. Check for Prompt Types
+        // this.$refs.promptHandle.onAnswer(this.currentTempPromptAnswer.response as FoodState[]);
         this.nextPrompt();
       }
     },

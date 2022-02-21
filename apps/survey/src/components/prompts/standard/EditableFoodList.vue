@@ -99,7 +99,7 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
 
       this.edit(this.editableList.length - 1);
       this.newFoodDescription = '';
-      this.$emit('food-added');
+      this.$emit('food-added', copy(this.editableList));
     },
 
     deleteFood() {

@@ -3,21 +3,24 @@
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
     :food-list="foods"
+    :prompt-component="promptComponent"
     @finishMeal="onAnswer"
     @abortMeal="onAbort"
+    @tempChanging="onTempChange"
   >
   </edit-meal-prompt>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
-import { FoodState } from '@intake24/common/types';
+import { FoodState, HasOnAnswer, PromptAnswer } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
 import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 
-export default defineComponent({
+export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
   name: 'MealAddPromptHandler',
 
   components: { EditMealPrompt },
@@ -25,6 +28,10 @@ export default defineComponent({
   props: {
     promptProps: {
       type: Object as PropType<BasePromptProps>,
+      required: true,
+    },
+    promptComponent: {
+      type: String,
       required: true,
     },
   },
@@ -43,7 +50,11 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['setFoods', 'deleteMeal']),
+    ...mapActions(useSurvey, ['setFoods', 'deleteMeal', 'setTempPromptAnswer']),
+
+    onTempChange(tempFoodDrinks: PromptAnswer) {
+      this.setTempPromptAnswer(tempFoodDrinks);
+    },
 
     onAnswer(newFoods: FoodState[]) {
       if (this.selectedMealIndex === undefined) {

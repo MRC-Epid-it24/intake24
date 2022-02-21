@@ -23,6 +23,14 @@ export const surveyInitialState: CurrentSurveyState = {
   endTime: null,
   flags: [],
   customPromptAnswers: {},
+  tempPromptAnswer: {
+    response: null,
+    modified: false,
+    new: true,
+    mealIndex: undefined,
+    foodIndex: undefined,
+    prompt: undefined,
+  },
   selection: {
     element: null,
     mode: 'auto',

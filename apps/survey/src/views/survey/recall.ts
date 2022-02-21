@@ -1,8 +1,8 @@
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import { mapState } from 'pinia';
 import { SchemeEntryResponse } from '@intake24/common/types/http';
 import { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
-import { Selection, FoodState, LocaleTranslation } from '@intake24/common/types';
+import { Selection, FoodState, LocaleTranslation, HasOnAnswer } from '@intake24/common/types';
 import { ComponentType } from '@intake24/common/prompts';
 import DynamicRecall, { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
@@ -22,7 +22,13 @@ import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/Bo
 import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
 import { FoodUndo, MealUndo, useSurvey } from '@intake24/survey/stores';
 
-export default Vue.extend({
+type Refs = {
+  $refs: {
+    promptHandle: HasOnAnswer;
+  };
+};
+
+export default (Vue as VueConstructor<Vue & Refs>).extend({
   name: 'Recall',
 
   components: {

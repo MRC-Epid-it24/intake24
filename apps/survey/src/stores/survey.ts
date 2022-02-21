@@ -6,6 +6,7 @@ import {
   MealState,
   CustomPromptAnswer,
   MealTime,
+  PromptAnswer,
   Selection,
   SurveyState as CurrentSurveyState,
   EncodedFood,
@@ -57,6 +58,7 @@ export const useSurvey = defineStore('survey', {
     undo: null,
     error: null,
   }),
+  persist: true,
   getters: {
     parametersLoaded: (state) => !!state.parameters && !!state.user,
     currentState: (state) => state.data,
@@ -66,6 +68,9 @@ export const useSurvey = defineStore('survey', {
     defaultSchemeMeals: (state) => state.parameters?.surveyScheme.meals,
     selection: (state) => state.data.selection,
     selectedMealIndex: (state) => state.data.selection.element?.mealIndex,
+    currentTempPromptAnswer: (state): PromptAnswer | undefined => {
+      return state.data.tempPromptAnswer;
+    },
     selectedMeal: (state) => {
       const mealIndex = state.data.selection.element?.mealIndex;
       const { meals } = state.data;
@@ -312,6 +317,10 @@ export const useSurvey = defineStore('survey', {
 
     setFoods(data: { mealIndex: number; foods: FoodState[] }) {
       this.data.meals[data.mealIndex].foods = data.foods;
+    },
+    setTempPromptAnswer(data: PromptAnswer) {
+      if (!data) return;
+      this.data.tempPromptAnswer = data;
     },
   },
 });

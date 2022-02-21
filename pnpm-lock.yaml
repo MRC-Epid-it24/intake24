@@ -432,6 +432,7 @@ importers:
       nan: ^2.15.0
       nunjucks: ^3.2.3
       pinia: ^2.0.11
+      pinia-plugin-persistedstate: ^1.2.2
       popper.js: ^1.16.1
       regenerator-runtime: ^0.13.9
       register-service-worker: ^1.7.2
@@ -466,6 +467,7 @@ importers:
       nan: 2.15.0
       nunjucks: 3.2.3
       pinia: 2.0.11_655d775a15defa68a16dd638740579b5
+      pinia-plugin-persistedstate: 1.2.2_pinia@2.0.11
       popper.js: 1.16.1
       regenerator-runtime: 0.13.9
       register-service-worker: 1.7.2
@@ -7600,6 +7602,7 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.3
+    dev: false
 
   /fork-ts-checker-webpack-plugin/6.5.0_633903e1613e85a8e1311e3596634477:
     resolution: {integrity: sha512-cS178Y+xxtIjEUorcHddKS7yCMlrDPV31mt47blKKRfMd70Kxu5xruAFE2o9sDY6wVC5deuob/u/alD04YYHnw==}
@@ -8291,7 +8294,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.8_debug@4.3.3
+      follow-redirects: 1.14.8
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -11185,6 +11188,14 @@ packages:
     resolution: {integrity: sha1-5aSs0sEB/fPZpNB/DbxNtJ3SgXY=}
     engines: {node: '>=4'}
     dev: true
+
+  /pinia-plugin-persistedstate/1.2.2_pinia@2.0.11:
+    resolution: {integrity: sha512-qm/fYlkA0p7E3spL0bjSxxl2nm3szGNsIGKlWAbHddMvR48prWi7qYmtmVFIERCpbdCYVSmq5AvGIrGbWzkVzw==}
+    peerDependencies:
+      pinia: ^2.0.0
+    dependencies:
+      pinia: 2.0.11_655d775a15defa68a16dd638740579b5
+    dev: false
 
   /pinia/2.0.11_655d775a15defa68a16dd638740579b5:
     resolution: {integrity: sha512-JzcmnMqu28PNWOjDgEDK6fTrIzX8eQZKPPKvu/fpHdpXARUj1xeVdFi3YFIMOWswqaBd589cpmAMdSSTryI9iw==}
@@ -14795,7 +14806,7 @@ packages:
       consola: 2.15.3
       pretty-time: 1.1.0
       std-env: 3.0.1
-      webpack: 5.68.0
+      webpack: 5.68.0_webpack-cli@4.9.2
     dev: true
 
   /websocket-driver/0.7.4:
