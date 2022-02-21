@@ -69,13 +69,13 @@
 <script lang="ts">
 import draggable from 'vuedraggable';
 import { defineComponent, PropType } from '@vue/composition-api';
-import { useTopFoodList } from '..';
+import { useList } from '..';
 
 export default defineComponent({
   name: 'TopFoodsColorList',
 
   props: {
-    feedbackSchemeId: {
+    schemeId: {
       type: String,
       required: true,
     },
@@ -88,10 +88,10 @@ export default defineComponent({
   components: { draggable },
 
   setup(props, context) {
-    const { dialog, form, items, newDialog, edit, reset, save } = useTopFoodList(
+    const { dialog, form, items, newDialog, edit, reset, save } = useList(
       props,
       context,
-      '#EF6C00'
+      () => '#EF6C00'
     );
 
     return { dialog, form, items, newDialog, edit, reset, save };

@@ -2,9 +2,9 @@
   <v-card flat tile>
     <v-toolbar flat tile color="grey lighten-5">
       <v-icon class="mr-3" color="primary">fas fa-cloud-meatball</v-icon>
-      <v-toolbar-title class="font-weight-medium">{{
-        $t('feedback-schemes.cards.title')
-      }}</v-toolbar-title>
+      <v-toolbar-title class="font-weight-medium">
+        {{ $t('feedback-schemes.cards.title') }}
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         fab
@@ -16,6 +16,12 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
+      <load-section-dialog
+        :schemeId="schemeId"
+        schemeType="feedback"
+        section="cards"
+        @load="load"
+      ></load-section-dialog>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="cards">
@@ -65,6 +71,7 @@ import draggable from 'vuedraggable';
 import { Card } from '@intake24/common/feedback';
 import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
+import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import CardSelector from './card-selector.vue';
 
 export type CardEvent = {
@@ -76,6 +83,10 @@ export default defineComponent({
   name: 'CardList',
 
   props: {
+    schemeId: {
+      type: String,
+      required: true,
+    },
     value: {
       type: Array as PropType<Card[]>,
       required: true,
@@ -85,6 +96,7 @@ export default defineComponent({
   components: {
     draggable,
     CardSelector,
+    LoadSectionDialog,
   },
 
   setup(props) {
@@ -132,8 +144,8 @@ export default defineComponent({
       this.selector?.create();
     },
 
-    load(card: Card) {
-      this.cards.push(card);
+    load(cards: Card[]) {
+      this.cards = [...cards];
     },
 
     edit({ card, index }: CardEvent) {

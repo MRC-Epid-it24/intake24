@@ -2,7 +2,7 @@
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <henry-coefficient-list
       v-model="form.henryCoefficients"
-      :feedback-scheme-id="id"
+      :scheme-id="id"
     ></henry-coefficient-list>
   </layout>
 </template>

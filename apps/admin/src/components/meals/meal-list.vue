@@ -13,7 +13,12 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
-      <load-section-dialog :schemeId="schemeId" section="meals" @load="load"></load-section-dialog>
+      <load-section-dialog
+        schemeType="survey"
+        :schemeId="schemeId"
+        section="meals"
+        @load="load"
+      ></load-section-dialog>
       <confirm-dialog
         color="error"
         :label="$t('survey-schemes.meals.reset._')"
@@ -124,7 +129,7 @@ import { Meal, Meals } from '@intake24/common/types';
 import { defaultMeals } from '@intake24/common/schemes';
 import { ConfirmDialog } from '@intake24/ui';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import LoadSectionDialog from '@intake24/admin/components/prompts/load-section-dialog.vue';
+import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 
 export type MealDialog = {
   show: boolean;

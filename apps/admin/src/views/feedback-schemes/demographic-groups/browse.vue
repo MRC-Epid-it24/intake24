@@ -2,7 +2,7 @@
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <demographic-group-list
       v-model="form.demographicGroups"
-      :feedback-scheme-id="id"
+      :scheme-id="id"
     ></demographic-group-list>
   </layout>
 </template>

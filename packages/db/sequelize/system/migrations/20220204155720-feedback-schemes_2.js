@@ -630,6 +630,18 @@ module.exports = {
         return { start: start || 0, end: end || 0 };
       };
 
+      const formatSectorName = (name) => {
+        if (!name) return '';
+
+        const sectorName = name
+          .replace(/your/gi, '')
+          .replace(/intake is/gi, '')
+          .trim()
+          .toLowerCase();
+
+        return `${sectorName.charAt(0).toUpperCase()}${sectorName.slice(1)}`;
+      };
+
       for (const dbDemographicGroup of dbDemographicGroups) {
         const {
           id,
@@ -648,14 +660,7 @@ module.exports = {
         const scaleSectors = dbDemographicGroupScaleSectors
           .filter((dgScaleSector) => dgScaleSector.demographic_group_id === id)
           .map(({ name, description, sentiment, min_range, max_range }) => ({
-            name: {
-              en:
-                name
-                  .replace(/your/gi, '')
-                  .replace(/intake is/gi, '')
-                  .trim()
-                  .toLowerCase() || '',
-            },
+            name: { en: formatSectorName(name) },
             description: { en: description || null },
             range: formatRange(min_range, max_range),
             sentiment,
@@ -744,7 +749,9 @@ module.exports = {
               id: feedbackScheme.id,
               cards: JSON.stringify(cards),
               demographicGroups: JSON.stringify(demographicGroups),
-              henryCoefficients: JSON.stringify(henryCoefficients),
+              henryCoefficients: JSON.stringify(
+                henryCoefficients.map((coefficient) => ({ ...coefficient, id: nanoid(6) }))
+              ),
             },
             transaction,
           }

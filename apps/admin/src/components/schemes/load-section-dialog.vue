@@ -9,7 +9,7 @@
           color="secondary"
           fab
           small
-          :title="$t('survey-schemes.load')"
+          :title="$t(`${schemeType}-schemes.load`)"
         >
           <v-icon>fa-download</v-icon>
         </v-btn>
@@ -21,7 +21,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t('survey-schemes.load') }}
+          {{ $t(`${schemeType}-schemes.load`) }}
         </v-toolbar-title>
       </v-toolbar>
       <v-card-text class="pa-6">
@@ -39,7 +39,7 @@
           @keyup.enter="fetch"
         >
         </v-text-field>
-        <v-list v-if="schemes.length" min-height="350px" two-line>
+        <v-list v-if="schemes.length" min-height="350px">
           <v-list-item-group v-model="selectedId">
             <template v-for="(scheme, idx) in schemes">
               <v-list-item :key="scheme.id" :value="scheme.id">
@@ -51,8 +51,7 @@
                     <v-icon>fa-route</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
-                    <v-list-item-title>{{ scheme.id }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ scheme.name }}</v-list-item-subtitle>
+                    <v-list-item-title>{{ scheme.name }}</v-list-item-title>
                   </v-list-item-content>
                 </template>
               </v-list-item>
@@ -61,7 +60,7 @@
           </v-list-item-group>
         </v-list>
         <v-alert v-else color="primary" text type="info">
-          {{ $t('survey-schemes.none') }}
+          {{ $t(`${schemeType}-schemes.none`) }}
         </v-alert>
       </v-card-text>
       <v-card-actions>
@@ -84,49 +83,94 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue, { PropType, VueConstructor } from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
-import { SurveySchemeEntry, SurveySchemesResponse } from '@intake24/common/types/http/admin';
-import { RecallQuestions } from '@intake24/common/schemes';
-import { Meal } from '@intake24/common/types';
-import { ExportSection } from '@intake24/common/types/models';
+import {
+  FeedbackSchemeEntry,
+  FeedbackSchemesResponse,
+  SurveySchemeEntry,
+  SurveySchemesResponse,
+} from '@intake24/common/types/http/admin';
 
 type LoadSectionDialog = {
   debouncedFetch: () => void;
 };
 
+export type SchemeEntry = FeedbackSchemeEntry | SurveySchemeEntry;
+
+const feedbackSchemeSections = [
+  'topFoods',
+  'cards',
+  'demographicGroups',
+  'henryCoefficients',
+] as const;
+
+export type FeedbackSchemeSection = typeof feedbackSchemeSections[number];
+
+export const isFeedbackSchemeEntry = (entry: any): entry is FeedbackSchemeEntry => {
+  const entryKeys = Object.keys(entry);
+  return feedbackSchemeSections.every((section) => entryKeys.includes(section));
+};
+
+export const isFeedbackSchemeSection = (section: any): section is FeedbackSchemeSection =>
+  feedbackSchemeSections.includes(section);
+
+const surveySchemeSections = ['dataExport', 'meals', 'questions'] as const;
+
+export type SurveySchemeSection = typeof surveySchemeSections[number];
+
+export const isSurveySchemeEntry = (entry: any): entry is SurveySchemeEntry => {
+  const entryKeys = Object.keys(entry);
+  return surveySchemeSections.every((section) => entryKeys.includes(section));
+};
+
+export const isSurveySchemeSection = (section: any): section is SurveySchemeSection =>
+  surveySchemeSections.includes(section);
+
 export default (Vue as VueConstructor<Vue & LoadSectionDialog>).extend({
   name: 'LoadSectionDialog',
 
   props: {
+    schemeType: {
+      type: String as PropType<'feedback' | 'survey'>,
+      required: true,
+    },
     schemeId: {
       type: String,
       required: true,
     },
     section: {
-      type: String as () => 'dataExport' | 'meals' | 'questions',
+      type: String as PropType<FeedbackSchemeSection | SurveySchemeSection>,
       required: true,
     },
   },
 
   data() {
     return {
+      feedbackSchemeSections,
+      surveySchemeSections,
       dialog: false,
       loading: false,
       search: null as string | null,
-      schemes: [] as SurveySchemeEntry[],
+      schemes: [] as SchemeEntry[],
       selectedId: undefined as string | undefined,
     };
   },
 
   computed: {
-    selectedSection(): RecallQuestions | Meal[] | ExportSection[] | undefined {
-      const { selectedId } = this;
+    selectedSection(): any | undefined {
+      const { section, selectedId } = this;
       if (!selectedId) return undefined;
 
       const scheme = this.schemes.find((item) => item.id === selectedId);
-      return scheme ? scheme[this.section] : undefined;
+      if (!scheme) return undefined;
+
+      if (isFeedbackSchemeEntry(scheme) && isFeedbackSchemeSection(section)) return scheme[section];
+
+      if (isSurveySchemeEntry(scheme) && isSurveySchemeSection(section)) return scheme[section];
+
+      return undefined;
     },
   },
 
@@ -167,11 +211,14 @@ export default (Vue as VueConstructor<Vue & LoadSectionDialog>).extend({
       try {
         const {
           data: { data },
-        } = await this.$http.get<SurveySchemesResponse>(`admin/survey-schemes`, {
-          params: { search: this.search, limit: 10 },
-        });
+        } = await this.$http.get<FeedbackSchemesResponse | SurveySchemesResponse>(
+          `admin/${this.schemeType}-schemes`,
+          { params: { search: this.search, limit: 10 } }
+        );
 
-        this.schemes = data.filter((item) => item.id !== this.schemeId).slice(0, 5);
+        this.schemes = (data as SchemeEntry[])
+          .filter((item) => item.id !== this.schemeId)
+          .slice(0, 5);
       } finally {
         this.loading = false;
       }

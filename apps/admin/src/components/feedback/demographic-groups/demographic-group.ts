@@ -1,4 +1,5 @@
 import { DemographicGroup, DemographicGroupScaleSector } from '@intake24/common/feedback';
+import { copy, randomString } from '@intake24/common/util';
 
 export const demographicGroupScaleSectorDefaults: DemographicGroupScaleSector = {
   name: { en: 'Energy' },
@@ -19,3 +20,6 @@ export const demographicGroupDefaults: DemographicGroup = {
   sex: null,
   scaleSectors: [{ ...demographicGroupScaleSectorDefaults }],
 };
+
+export const getDemographicGroupDefaults = (): DemographicGroup =>
+  copy({ ...demographicGroupDefaults, id: randomString(6) });

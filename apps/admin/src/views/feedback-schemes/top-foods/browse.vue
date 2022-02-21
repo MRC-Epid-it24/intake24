@@ -10,6 +10,13 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.top-foods.title') }}
       </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <load-section-dialog
+        :schemeId="id"
+        schemeType="feedback"
+        section="topFoods"
+        @load="loadFromScheme"
+      ></load-section-dialog>
     </v-toolbar>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container fluid>
@@ -47,13 +54,13 @@
                 {{ error.msg }}
               </v-alert>
             </template>
-            <color-list v-model="form.topFoods.colors" :feedback-scheme-id="id"></color-list>
+            <color-list v-model="form.topFoods.colors" :scheme-id="id"></color-list>
           </v-col>
           <v-divider vertical></v-divider>
           <v-col cols="12" md="6">
             <nutrient-list
               v-model="form.topFoods.nutrientTypes"
-              :feedback-scheme-id="id"
+              :scheme-id="id"
               :available-nutrient-types="refs.nutrientTypes"
             ></nutrient-list>
           </v-col>
@@ -71,9 +78,10 @@ import Vue, { VueConstructor } from 'vue';
 import debounce from 'lodash/debounce';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
-import { defaultTopFoods } from '@intake24/common/feedback';
+import { defaultTopFoods, TopFoods } from '@intake24/common/feedback';
 import { RuleCallback } from '@intake24/admin/types';
 import { ColorList, NutrientList } from '@intake24/admin/components/feedback';
+import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { FeedbackSchemeForm } from '../form.vue';
 
 type FeedbackSchemeTopFoods = {
@@ -83,7 +91,7 @@ type FeedbackSchemeTopFoods = {
 export default (Vue as VueConstructor<Vue & FeedbackSchemeTopFoods>).extend({
   name: 'FeedbackSchemeTopFoods',
 
-  components: { ColorList, NutrientList },
+  components: { ColorList, NutrientList, LoadSectionDialog },
 
   mixins: [formMixin],
 
@@ -141,6 +149,10 @@ export default (Vue as VueConstructor<Vue & FeedbackSchemeTopFoods>).extend({
 
         this.form.topFoods.colors = [...this.form.topFoods.colors, ...newColors];
       }
+    },
+
+    loadFromScheme(topFoods: TopFoods) {
+      this.form.topFoods = { ...topFoods };
     },
   },
 });

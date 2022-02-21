@@ -123,13 +123,13 @@ import { defaultTopFoods, TopFoodNutrientType } from '@intake24/common/feedback'
 import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { defineComponent, PropType } from '@vue/composition-api';
 import { RuleCallback } from '@intake24/admin/types';
-import { useTopFoodList } from '..';
+import { useList } from '..';
 
 export default defineComponent({
   name: 'TopFoodsNutrientTypeList',
 
   props: {
-    feedbackSchemeId: {
+    schemeId: {
       type: String,
       required: true,
     },
@@ -143,15 +143,15 @@ export default defineComponent({
     },
   },
 
-  components: { ConfirmDialog, draggable, LanguageSelector /* , LoadSectionDialog */ },
+  components: { ConfirmDialog, draggable, LanguageSelector },
 
   setup(props, context) {
-    const defaultItem = {
+    const defaultItem = () => ({
       id: props.availableNutrientTypes[0].id,
       name: { en: props.availableNutrientTypes[0].description },
-    };
+    });
 
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } = useTopFoodList(
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } = useList(
       props,
       context,
       defaultItem

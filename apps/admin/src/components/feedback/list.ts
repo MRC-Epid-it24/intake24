@@ -3,11 +3,11 @@ import { ref, SetupContext, toRefs, UnwrapRef, UnwrapRefSimple, watch } from '@v
 import { copy } from '@intake24/common/util';
 
 export type ListProps<T> = {
-  feedbackSchemeId: string;
+  schemeId: string;
   value: T[];
 };
 
-export default <T>(props: ListProps<T>, context: SetupContext, newValue: T) => {
+export default <T>(props: ListProps<T>, context: SetupContext, newValue: () => T) => {
   const { value } = toRefs(props);
   const form = ref<InstanceType<typeof HTMLFormElement>>();
 
@@ -16,13 +16,13 @@ export default <T>(props: ListProps<T>, context: SetupContext, newValue: T) => {
   const newDialog = (show = false) => ({
     show,
     index: -1,
-    item: newValue as UnwrapRef<T>,
+    item: newValue() as UnwrapRef<T>,
   });
 
   const dialog = ref({
     show: false,
     index: -1,
-    item: newValue,
+    item: newValue(),
   });
 
   watch(value, (val) => {

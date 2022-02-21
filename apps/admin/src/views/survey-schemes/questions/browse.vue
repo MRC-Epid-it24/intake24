@@ -6,6 +6,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <load-section-dialog
+        schemeType="survey"
         :schemeId="id"
         section="questions"
         @load="loadFromScheme"
@@ -76,7 +77,7 @@ import { PromptQuestion } from '@intake24/common/prompts';
 import { Dictionary } from '@intake24/common/types';
 import { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
-import LoadSectionDialog from '@intake24/admin/components/prompts/load-section-dialog.vue';
+import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import PromptList, {
   PromptQuestionMoveEvent,
 } from '@intake24/admin/components/prompts/list/prompt-list.vue';

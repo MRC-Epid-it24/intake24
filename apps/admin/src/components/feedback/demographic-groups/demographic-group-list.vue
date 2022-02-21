@@ -15,6 +15,12 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
+      <load-section-dialog
+        :schemeId="schemeId"
+        schemeType="feedback"
+        section="demographicGroups"
+        @load="load"
+      ></load-section-dialog>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="items">
@@ -193,8 +199,9 @@ import { DemographicGroup, nutrientRuleTypes, sexes } from '@intake24/common/fee
 import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
 import { useEntry } from '@intake24/admin/stores';
-import { demographicGroupDefaults } from './demographic-group';
-import { useTopFoodList } from '..';
+import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { getDemographicGroupDefaults } from './demographic-group';
+import { useList } from '..';
 import DemographicGroupRange from './demographic-group-range.vue';
 import DemographicGroupSectors from './demographic-group-sectors.vue';
 
@@ -202,7 +209,7 @@ export default defineComponent({
   name: 'DemographicGroupList',
 
   props: {
-    feedbackSchemeId: {
+    schemeId: {
       type: String,
       required: true,
     },
@@ -212,18 +219,18 @@ export default defineComponent({
     },
   },
 
-  components: { draggable, DemographicGroupRange, DemographicGroupSectors },
+  components: { draggable, DemographicGroupRange, DemographicGroupSectors, LoadSectionDialog },
 
   setup(props, context) {
-    const { dialog, form, items, newDialog, add, edit, remove, reset, save } = useTopFoodList(
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } = useList(
       props,
       context,
-      demographicGroupDefaults
+      getDemographicGroupDefaults
     );
 
     const tab = ref(0);
 
-    return { dialog, form, items, tab, add, newDialog, edit, remove, reset, save };
+    return { dialog, form, items, tab, add, newDialog, edit, load, remove, reset, save };
   },
 
   data() {

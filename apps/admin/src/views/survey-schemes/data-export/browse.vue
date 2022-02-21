@@ -14,6 +14,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <load-section-dialog
+        schemeType="survey"
         :schemeId="id"
         section="dataExport"
         @load="loadFromScheme"
@@ -66,7 +67,7 @@ import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/
 import { ExportField, ExportSection } from '@intake24/common/types/models';
 import { SurveySchemeExportRefsResponse } from '@intake24/common/types/http/admin';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
-import LoadSectionDialog from '@intake24/admin/components/prompts/load-section-dialog.vue';
+import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
 import DataExportSection from './data-export-section.vue';

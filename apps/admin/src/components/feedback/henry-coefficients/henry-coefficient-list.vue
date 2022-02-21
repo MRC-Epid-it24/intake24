@@ -15,13 +15,19 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
+      <load-section-dialog
+        :schemeId="schemeId"
+        schemeType="feedback"
+        section="henryCoefficients"
+        @load="load"
+      ></load-section-dialog>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="items">
         <transition-group type="transition" name="drag-and-drop">
           <v-list-item
             v-for="(coefficient, idx) in items"
-            :key="`${coefficient.sex}-${coefficient.age.start}-${coefficient.age.end}-${idx}`"
+            :key="coefficient.id"
             link
             draggable
             class="drag-and-drop__item"
@@ -165,14 +171,15 @@
 import draggable from 'vuedraggable';
 import { defineComponent, PropType } from '@vue/composition-api';
 import { HenryCoefficient, Sex, sexes } from '@intake24/common/feedback';
-import { henryCoefficientDefaults } from './henry-coefficient';
-import { useTopFoodList } from '..';
+import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { getHenryCoefficientDefaults } from './henry-coefficient';
+import { useList } from '..';
 
 export default defineComponent({
   name: 'HenryCoefficientList',
 
   props: {
-    feedbackSchemeId: {
+    schemeId: {
       type: String,
       required: true,
     },
@@ -182,16 +189,16 @@ export default defineComponent({
     },
   },
 
-  components: { draggable },
+  components: { draggable, LoadSectionDialog },
 
   setup(props, context) {
-    const { dialog, form, items, newDialog, add, edit, remove, reset, save } = useTopFoodList(
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } = useList(
       props,
       context,
-      henryCoefficientDefaults
+      getHenryCoefficientDefaults
     );
 
-    return { dialog, form, items, newDialog, add, edit, remove, reset, save };
+    return { dialog, form, items, newDialog, add, edit, load, remove, reset, save };
   },
 
   data() {
