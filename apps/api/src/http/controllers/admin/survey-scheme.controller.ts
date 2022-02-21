@@ -43,8 +43,8 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
   ): Promise<void> => {
     const surveySchemes = await SurveyScheme.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['id', 'name'],
-      order: [['id', 'ASC']],
+      columns: ['name'],
+      order: [['name', 'ASC']],
     });
 
     res.json(surveySchemes);

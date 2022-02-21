@@ -36,7 +36,7 @@ export default (): FeedbackSchemeController => {
   ): Promise<void> => {
     const feedbackSchemes = await FeedbackScheme.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['id', 'name'],
+      columns: ['name'],
       order: [['name', 'ASC']],
     });
 
