@@ -58,7 +58,7 @@ export const useSurvey = defineStore('survey', {
     undo: null,
     error: null,
   }),
-  persist: true,
+  persist: { key: `${process.env.VUE_APP_PREFIX ?? ''}survey` },
   getters: {
     parametersLoaded: (state) => !!state.parameters && !!state.user,
     currentState: (state) => state.data,
