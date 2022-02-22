@@ -50,7 +50,12 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['setFoods', 'deleteMeal', 'setTempPromptAnswer']),
+    ...mapActions(useSurvey, [
+      'setFoods',
+      'deleteMeal',
+      'setTempPromptAnswer',
+      'clearTempPromptAnswer',
+    ]),
 
     onTempChange(tempFoodDrinks: PromptAnswer) {
       this.setTempPromptAnswer(tempFoodDrinks);
@@ -64,6 +69,7 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
 
       this.setFoods({ mealIndex: this.selectedMealIndex, foods: newFoods });
       this.$emit('complete');
+      this.clearTempPromptAnswer();
     },
 
     onAbort() {

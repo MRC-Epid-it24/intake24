@@ -322,6 +322,16 @@ export const useSurvey = defineStore('survey', {
       if (!data) return;
       this.data.tempPromptAnswer = data;
     },
+    clearTempPromptAnswer() {
+      this.setTempPromptAnswer({
+        response: null,
+        modified: false,
+        new: true,
+        mealIndex: undefined,
+        foodIndex: undefined,
+        prompt: undefined,
+      });
+    },
   },
 });
 

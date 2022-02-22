@@ -118,8 +118,18 @@ export default Recall.extend({
         this.submitTrigger = true;
         // this.submitTrigger = false;
         // TODO: WIP - FIX- ME Call the Prompt method from the parent. Check for Prompt Types
-        // this.$refs.promptHandle.onAnswer(this.currentTempPromptAnswer.response as FoodState[]);
-        this.nextPrompt();
+        if (this.currentTempPromptAnswer?.response) {
+          // console.log(
+          //   'Submitting from ',
+          //   this.currentPrompt?.prompt,
+          //   'with data: ',
+          //   JSON.stringify(this.currentTempPromptAnswer.response)
+          // );
+          this.$refs.promptHandle.onAnswer(this.currentTempPromptAnswer.response as FoodState[]);
+        } else {
+          // console.log('Triggering nextPromt without onAnswer from a child');
+          this.nextPrompt();
+        }
       }
     },
 
