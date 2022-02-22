@@ -16,8 +16,10 @@ import {
   UserSurveyAlias,
   Permission,
   Role,
+  FeedbackScheme,
 } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
+import { defaultTopFoods } from '@intake24/common/feedback';
 
 export type MockData = {
   foods: {
@@ -26,7 +28,7 @@ export type MockData = {
   system: {
     language: Language;
     locale: SystemLocale;
-    // feedbackScheme: FeedbackScheme;
+    feedbackScheme: FeedbackScheme;
     surveyScheme: SurveyScheme;
     survey: Survey;
     role: Role;
@@ -235,13 +237,23 @@ export const initDatabase = async (): Promise<MockData> => {
     SystemNutrientType.bulkCreate(nutrientTypes),
   ]);
 
-  const surveyScheme = await SurveyScheme.create({
-    name: 'Default',
-    type: 'default',
-    questions: defaultQuestions,
-    meals: [...defaultMeals],
-    dataExport: defaultExport,
-  });
+  const [feedbackScheme, surveyScheme] = await Promise.all([
+    FeedbackScheme.create({
+      name: 'Default',
+      type: 'default',
+      topFoods: { ...defaultTopFoods },
+      cards: [],
+      demographicGroups: [],
+      henryCoefficients: [],
+    }),
+    SurveyScheme.create({
+      name: 'Default',
+      type: 'default',
+      questions: defaultQuestions,
+      meals: [...defaultMeals],
+      dataExport: defaultExport,
+    }),
+  ]);
 
   const startDate = new Date();
   const endDate = new Date();
@@ -253,6 +265,7 @@ export const initDatabase = async (): Promise<MockData> => {
     state: 0,
     startDate,
     endDate,
+    feedbackSchemeId: feedbackScheme.id,
     surveySchemeId: surveyScheme.id,
     localeId: systemLocale.id,
     allowGenUsers: false,
@@ -295,7 +308,7 @@ export const initDatabase = async (): Promise<MockData> => {
     system: {
       language,
       locale: systemLocale,
-      // feedbackScheme,
+      feedbackScheme,
       surveyScheme,
       survey,
       role,

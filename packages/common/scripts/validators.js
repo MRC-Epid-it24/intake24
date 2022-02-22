@@ -10,23 +10,42 @@ const execa = require('execa');
  */
 
 const validators = [
-  // Schemes
+  // Feedback schemes
+  {
+    type: 'Cards',
+    srcFile: 'src/feedback/cards.ts',
+    destFile: 'src/validators/feedback-schemes/cards.validator.ts',
+    params: '--useNamedExport',
+  },
+  {
+    type: 'DemographicGroups',
+    srcFile: 'src/feedback/demographic-groups.ts',
+    destFile: 'src/validators/feedback-schemes/demographic-groups.validator.ts',
+    params: '--useNamedExport',
+  },
+  {
+    type: 'HenryCoefficients',
+    srcFile: 'src/feedback/henry-coefficients.ts',
+    destFile: 'src/validators/feedback-schemes/henry-coefficients.validator.ts',
+    params: '--useNamedExport',
+  },
+  // Survey schemes
   {
     type: 'Meals',
     srcFile: 'src/types/meals.ts',
-    destFile: 'src/validators/schemes/meals.validator.ts',
+    destFile: 'src/validators/survey-schemes/meals.validator.ts',
     params: '--useNamedExport',
   },
   {
     type: 'RecallQuestions',
     srcFile: 'src/schemes/index.ts',
-    destFile: 'src/validators/schemes/recall-questions.validator.ts',
+    destFile: 'src/validators/survey-schemes/recall-questions.validator.ts',
     params: '--useNamedExport',
   },
   {
     type: 'ExportSections',
-    srcFile: 'src/types/models/system/schemes.ts',
-    destFile: 'src/validators/schemes/export-sections.validator.ts',
+    srcFile: 'src/types/models/system/survey-schemes.ts',
+    destFile: 'src/validators/survey-schemes/export-sections.validator.ts',
     params: '--useNamedExport --noExtraProps',
   },
   // Images

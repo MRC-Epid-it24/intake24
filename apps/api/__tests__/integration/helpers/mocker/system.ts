@@ -105,8 +105,39 @@ const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
     type,
     topFoods: defaultTopFoods,
     cards: [],
-    demographicGroups: [],
-    henryCoefficients: [],
+    demographicGroups: [
+      {
+        id: 'JzytAW',
+        type: 'demographic-group',
+        age: { start: 12, end: 1000 },
+        height: null,
+        weight: null,
+        nutrientRuleType: 'percentage_of_energy',
+        nutrientTypeId: '49',
+        physicalActivityLevelId: null,
+        sex: null,
+        scaleSectors: [
+          {
+            name: { en: 'Total fat' },
+            description: {
+              en: '<p>It is recommended that the energy (or calories)...</p>',
+            },
+            range: { start: 0, end: 100 },
+            sentiment: 'good',
+          },
+        ],
+      },
+    ],
+    henryCoefficients: [
+      {
+        id: 'Jds83o',
+        sex: 'm',
+        age: { start: 0, end: 3 },
+        weightCoefficient: 28.2,
+        heightCoefficient: 859,
+        constant: -371,
+      },
+    ],
   };
 };
 

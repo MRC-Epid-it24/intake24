@@ -16,7 +16,10 @@ export type DemographicGroup = {
   weight: Range | null;
   nutrientRuleType: NutrientRuleType;
   nutrientTypeId: string;
-  physicalActivityLevelId: string;
+  physicalActivityLevelId: string | null;
   scaleSectors: DemographicGroupScaleSector[];
   sex: Sex | null;
 };
+
+// Type for validator
+export type DemographicGroups = DemographicGroup[];

@@ -8,3 +8,6 @@ export type HenryCoefficient = {
   heightCoefficient: number;
   constant: number;
 };
+
+// Type for validator
+export type HenryCoefficients = HenryCoefficient[];

@@ -29,4 +29,7 @@ export interface FiveADay extends CustomCard {
 
 export type Card = Character | NutrientGroup | FiveADay;
 
+// Type for validator
+export type Cards = Cards[];
+
 export type CardType = Card['type'];
