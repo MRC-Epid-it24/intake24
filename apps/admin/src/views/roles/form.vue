@@ -36,16 +36,16 @@
               ></v-textarea>
             </v-col>
           </v-row>
-          <h4 class="my-3" for="permissions">{{ $t('permissions.title') }}</h4>
+          <v-card-title>{{ $t('permissions.title') }}</v-card-title>
           <v-row>
-            <v-col v-for="(pModule, key) in permissions" :key="key" cols="4">
+            <v-col key="global" cols="4">
               <v-card height="100%">
                 <v-card-title>
-                  <h6>{{ key === 'general' ? $t('common.misc') : $t(`${key}.title`) }}</h6>
+                  <h6>{{ $t('permissions.groups.global') }}</h6>
                 </v-card-title>
                 <v-card-text>
                   <v-switch
-                    v-for="perm in pModule"
+                    v-for="perm in permissions.global"
                     :key="perm.id"
                     v-model="form.permissions"
                     :label="perm.displayName"
@@ -56,6 +56,31 @@
               </v-card>
             </v-col>
           </v-row>
+          <template v-for="group in ['resources', 'surveys', 'fdbs']">
+            <v-card-title cols="12" :key="`${group}-title`">
+              <v-card-title>{{ $t(`permissions.groups.${group}`) }}</v-card-title>
+            </v-card-title>
+            <v-row :key="`${group}-content`">
+              <v-col v-for="(pModule, key) in permissions[group]" :key="key" cols="4">
+                <v-card height="100%">
+                  <v-card-title>
+                    <h6 v-if="group === 'resources'">{{ $t(`${key}.title`) }}</h6>
+                    <h6 v-else>{{ $t(`${group}._`) }} {{ key }}</h6>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-switch
+                      v-for="perm in pModule"
+                      :key="perm.id"
+                      v-model="form.permissions"
+                      :label="perm.displayName"
+                      :value="perm.id"
+                      :disabled="!can(perm.name)"
+                    ></v-switch>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </template>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
       </v-form>
@@ -64,9 +89,8 @@
 </template>
 
 <script lang="ts">
-import groupBy from 'lodash/groupBy';
 import Vue, { VueConstructor } from 'vue';
-import { RoleEntry } from '@intake24/common/types/http/admin';
+import { PermissionListEntry, RoleEntry, RoleRefs } from '@intake24/common/types/http/admin';
 import { FormMixin } from '@intake24/admin/types';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
@@ -79,7 +103,16 @@ type RoleForm = {
   permissions: string[];
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin>).extend({
+type PermissionGroup = Record<string, PermissionListEntry[]>;
+
+type PermissionGroups = {
+  global: PermissionListEntry[];
+  resources: PermissionGroup;
+  surveys: PermissionGroup;
+  fdbs: PermissionGroup;
+};
+
+export default (Vue as VueConstructor<Vue & FormMixin<RoleEntry, RoleRefs>>).extend({
   name: 'RoleForm',
 
   mixins: [formMixin],
@@ -98,15 +131,47 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   computed: {
     permissions() {
-      return groupBy(this.refs.permissions, (item) => {
-        if (item.name.match(/[a-zA-Z0-9]+-[a-zA-Z0-9]+/g)) return item.name.split('-')[0];
+      const groups: PermissionGroups = {
+        global: [],
+        resources: {},
+        surveys: {},
+        fdbs: {},
+      };
 
-        if (item.name.match(/[a-zA-Z0-9]+\/[a-zA-Z0-9]+/g)) return item.name.split('/')[0];
+      if (!this.refs.permissions) return groups;
 
-        return 'general';
-        // const chunks = item.name.split('-');
-        // return chunks.length === 1 ? 'general' : chunks[0];
+      this.refs.permissions.forEach((permission) => {
+        if (permission.name.includes('|')) {
+          const key = permission.name.split('|')[0];
+          if (!(key in groups.resources)) groups.resources[key] = [];
+
+          groups.resources[key].push(permission);
+          return;
+        }
+
+        if (permission.name.includes('/')) {
+          const [first, second] = permission.name.split('/');
+          let key;
+          let section: 'surveys' | 'fdbs';
+
+          if (permission.name.startsWith('fdbm/')) {
+            key = second;
+            section = 'fdbs';
+          } else {
+            key = first;
+            section = 'surveys';
+          }
+
+          if (!(key in groups[section])) groups[section][key] = [];
+
+          groups[section][key].push(permission);
+          return;
+        }
+
+        groups.global.push(permission);
       });
+
+      return groups;
     },
   },
 

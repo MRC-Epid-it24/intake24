@@ -10,7 +10,7 @@
     <v-simple-table>
       <tbody>
         <tr>
-          <th>{{ $t('feedback-schemes.name') }}</th>
+          <th>{{ $t('common.name') }}</th>
           <td>{{ entry.name }}</td>
         </tr>
         <tr>

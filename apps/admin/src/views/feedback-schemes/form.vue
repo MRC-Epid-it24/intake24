@@ -15,7 +15,7 @@
               <v-text-field
                 v-model="form.name"
                 :error-messages="form.errors.get('name')"
-                :label="$t('feedback-schemes.name')"
+                :label="$t('common.name')"
                 hide-details="auto"
                 name="name"
                 outlined

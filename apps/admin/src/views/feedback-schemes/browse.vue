@@ -15,7 +15,7 @@ export default Vue.extend({
     return {
       headers: [
         {
-          text: this.$t('feedback-schemes.name'),
+          text: this.$t('common.name'),
           sortable: true,
           value: 'name',
         },

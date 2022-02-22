@@ -9,6 +9,13 @@ const permissions: LocaleMessageObject = {
   edit: 'Edit permission',
   delete: 'Delete permission',
 
+  groups: {
+    global: 'Global',
+    resources: 'Resources',
+    surveys: 'Surveys',
+    fdbs: 'Food databases',
+  },
+
   survey: {
     admin: 'Survey admin',
     staff: 'Survey staff',

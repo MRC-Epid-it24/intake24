@@ -1,7 +1,7 @@
 import { LocaleMessageObject } from 'vue-i18n';
 
 const fdbs: LocaleMessageObject = {
-  _: 'Food databases',
+  _: 'Food database',
   id: 'FoodDB ID',
   title: 'Food databases',
   read: 'FoodDB detail',
