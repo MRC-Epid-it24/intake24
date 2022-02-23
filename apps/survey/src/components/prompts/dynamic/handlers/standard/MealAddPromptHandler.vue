@@ -56,10 +56,12 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
     onAnswer(newMeal: string) {
       this.addMeal(newMeal, this.$i18n.locale);
       this.$emit('complete');
+      this.clearTempPromptAnswer();
     },
 
     onAbort() {
       this.$emit('complete');
+      this.clearTempPromptAnswer();
     },
   },
 });

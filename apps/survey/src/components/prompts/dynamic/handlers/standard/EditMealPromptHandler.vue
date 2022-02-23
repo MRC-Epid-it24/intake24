@@ -80,6 +80,7 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
 
       this.deleteMeal(this.selectedMealIndex);
       this.$emit('complete');
+      this.clearTempPromptAnswer();
     },
   },
 });
