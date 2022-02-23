@@ -36,7 +36,7 @@ export default defineComponent({
   data() {
     return {
       entity: 'meal',
-      activeTab: this.selectedMealIndex + 1,
+      activeTab: this.selectedMealIndex,
     };
   },
 
@@ -46,6 +46,13 @@ export default defineComponent({
     },
     emitAddMeal(action: string) {
       this.$emit('recall-action', action);
+    },
+  },
+  watch: {
+    selectedMealIndex: {
+      handler(value: number) {
+        this.activeTab = value;
+      },
     },
   },
 });
