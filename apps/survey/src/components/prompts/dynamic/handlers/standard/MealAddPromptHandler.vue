@@ -1,28 +1,35 @@
 <template>
   <meal-add-prompt
     :prompt-props="promptProps"
+    :prompt-component="promptComponent"
     :list="mealsList"
     @addMeal="onAnswer"
     @abortMeal="onAbort"
+    @tempChanging="onTempChange"
   >
   </meal-add-prompt>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
-import { Meal } from '@intake24/common/types';
+import { Meal, HasOnAnswer, PromptAnswer } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
 import MealAddPrompt from '@intake24/survey/components/prompts/standard/MealAddPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 
-export default defineComponent({
+export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
   name: 'MealAddPromptHandler',
   components: { MealAddPrompt },
 
   props: {
     promptProps: {
       type: Object as PropType<BasePromptProps>,
+      required: true,
+    },
+    promptComponent: {
+      type: String,
       required: true,
     },
   },
@@ -40,7 +47,11 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['addMeal']),
+    ...mapActions(useSurvey, ['addMeal', 'setTempPromptAnswer']),
+
+    onTempChange(tempNewMeal: PromptAnswer) {
+      this.setTempPromptAnswer(tempNewMeal);
+    },
 
     onAnswer(newMeal: string) {
       this.addMeal(newMeal, this.$i18n.locale);

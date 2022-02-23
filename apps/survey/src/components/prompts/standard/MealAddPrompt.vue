@@ -20,6 +20,7 @@
       <v-btn
         :block="isMobile"
         :class="{ 'ma-0': isMobile, 'mb-2': isMobile }"
+        :disabled="!currentValue"
         class="px-5"
         color="success"
         large
@@ -33,6 +34,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
+import { mapState } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 import { BasePromptProps } from '@intake24/common/prompts';
 import BasePrompt from '../BasePrompt';
 
@@ -49,6 +52,10 @@ export default defineComponent({
     list: {
       type: Array as PropType<string[]>,
     },
+    promptComponent: {
+      type: String,
+      required: true,
+    },
   },
 
   data() {
@@ -58,6 +65,8 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
+
     text(): string {
       const text = this.promptProps.text[this.$i18n.locale];
       if (text) return text;
@@ -83,6 +92,20 @@ export default defineComponent({
 
     abortMeal() {
       this.$emit('abortMeal');
+    },
+  },
+  watch: {
+    currentValue: {
+      handler(value: string) {
+        this.$emit('tempChanging', {
+          response: value,
+          modified: true,
+          new: false,
+          mealIndex: this.selectedMealIndex,
+          foodIndex: this.selectedFoodIndex,
+          prompt: this.promptComponent,
+        });
+      },
     },
   },
 });

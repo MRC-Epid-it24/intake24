@@ -104,7 +104,6 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
         return tempFoodDrinks.response as FoodState[];
       }
       return this.foodList;
-      // return this.foodList.filter((food) => !food.flags.includes('is-drink'));
     },
     continueComputedSwitch: {
       get(): boolean {
@@ -116,8 +115,6 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
 
   methods: {
     onAdd(editableList: FoodState) {
-      // this.continueComputedSwitch = false;
-      // console.log(this.continueComputedSwitch);
       this.$emit('tempChanging', {
         response: editableList,
         modified: true,

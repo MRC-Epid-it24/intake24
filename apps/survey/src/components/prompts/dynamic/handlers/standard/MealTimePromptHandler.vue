@@ -49,9 +49,15 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
       if (!this.selectedMeal) throw new Error('A meal must be selected');
 
       if (this.selectedMeal.time) return mealTimeToString(this.selectedMeal.time);
-
-      if (this.currentTempPromptAnswer?.response)
-        return this.currentTempPromptAnswer.response.toString();
+      const tempTime = this.currentTempPromptAnswer;
+      if (
+        tempTime?.response &&
+        tempTime.prompt === this.promptComponent &&
+        tempTime.mealIndex === this.selectedMealIndex
+      ) {
+        console.log(tempTime);
+        return tempTime.response.toString();
+      }
 
       return mealTimeToString(this.selectedMeal.defaultTime);
     },
