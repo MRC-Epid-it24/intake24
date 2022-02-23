@@ -4,23 +4,26 @@
     :prompt-props="promptProps"
     :submitTrigger="submitTrigger"
     :value="defaultTime"
+    :prompt-component="promptComponent"
     @answer="onAnswer"
     @removeMeal="onRemoveMeal"
+    @tempChanging="onTempChange"
   ></meal-time-prompt>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { mapActions, mapState } from 'pinia';
 import { MealTimePromptProps } from '@intake24/common/prompts';
-import { MealTime } from '@intake24/common/types';
+import { MealTime, HasOnAnswer, PromptAnswer } from '@intake24/common/types';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
 
 const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minutes}`;
 
-export default defineComponent({
+export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
   name: 'MealTimePromptHandler',
 
   components: { MealTimePrompt },
@@ -33,22 +36,34 @@ export default defineComponent({
     submitTrigger: {
       type: Boolean,
     },
+    promptComponent: {
+      type: String,
+      required: true,
+    },
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex']),
+    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex', 'currentTempPromptAnswer']),
 
     defaultTime(): string {
       if (!this.selectedMeal) throw new Error('A meal must be selected');
 
-      if (!this.selectedMeal.time) return mealTimeToString(this.selectedMeal.defaultTime);
+      if (this.selectedMeal.time) return mealTimeToString(this.selectedMeal.time);
 
-      return mealTimeToString(this.selectedMeal.time);
+      if (this.currentTempPromptAnswer?.response)
+        return this.currentTempPromptAnswer.response.toString();
+
+      return mealTimeToString(this.selectedMeal.defaultTime);
     },
   },
 
   methods: {
-    ...mapActions(useSurvey, ['setMealTime', 'deleteMeal']),
+    ...mapActions(useSurvey, [
+      'setMealTime',
+      'deleteMeal',
+      'setTempPromptAnswer',
+      'clearTempPromptAnswer',
+    ]),
 
     onAnswer(mealTime: string) {
       if (this.selectedMealIndex === undefined) {
@@ -62,6 +77,7 @@ export default defineComponent({
       });
       this.$emit('resetPromptTrigger');
       this.$emit('complete');
+      this.clearTempPromptAnswer();
     },
 
     onRemoveMeal() {
@@ -72,6 +88,10 @@ export default defineComponent({
 
       this.deleteMeal(this.selectedMealIndex);
       this.$emit('complete');
+    },
+
+    onTempChange(tempTime: PromptAnswer) {
+      this.setTempPromptAnswer(tempTime);
     },
   },
 });

@@ -39,8 +39,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { mapState } from 'pinia';
 import { PropType } from '@vue/composition-api';
 import { MealTimePromptProps } from '@intake24/common/prompts';
+import { useSurvey } from '@intake24/survey/stores';
 import { ConfirmDialog } from '@intake24/ui';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
@@ -66,6 +68,10 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     submitTrigger: {
       type: Boolean,
     },
+    promptComponent: {
+      type: String,
+      required: true,
+    },
   },
 
   data() {
@@ -77,6 +83,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   computed: {
+    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
     hasErrors(): boolean {
       return !!this.errors.length;
     },
@@ -122,6 +129,19 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       },
       deep: false,
       immediate: true,
+    },
+    currentValue: {
+      handler(value: string) {
+        console.log(value);
+        this.$emit('tempChanging', {
+          response: value,
+          modified: true,
+          new: false,
+          mealIndex: this.selectedMealIndex,
+          foodIndex: undefined,
+          prompt: this.promptComponent,
+        });
+      },
     },
   },
 });
