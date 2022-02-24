@@ -6,7 +6,7 @@
         <v-tab
           v-for="(meal, idx) in meals"
           :key="idx + meal.name"
-          @change="emitFoodsList(idx, meal.name, meal.foods, entity)"
+          @click="emitFoodsList(idx, meal.name, meal.foods, entity)"
         >
           {{ meal.name }}
           <v-icon x-small v-if="meal.time.length === 0">far fa-question-circle </v-icon>
@@ -19,6 +19,8 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
+import { mapState } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 import { FoodState } from '@intake24/common/types';
 
 export default defineComponent({
@@ -27,22 +29,35 @@ export default defineComponent({
 
   props: {
     meals: Array,
-    selectedMealIndex: {
-      type: Number,
-      default: 0,
-    },
+    // selectedMealIndex: {
+    //   type: Number,
+    //   default: 0,
+    // },
   },
 
   data() {
     return {
       entity: 'meal',
-      activeTab: this.selectedMealIndex,
+      // activeTab: this.selectedMealIndex,
     };
+  },
+
+  computed: {
+    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex']),
+
+    activeTab: {
+      get(): number {
+        return this.selectedMealIndex || 0;
+      },
+      set(id: number) {
+        return id;
+      },
+    },
   },
 
   methods: {
     emitFoodsList(mealIndex: number, name: string, foods: FoodState[], entity: string) {
-      this.$emit('mealSelected', { mealIndex, name, foods, entity });
+      this.$emit('meal-selected', { mealIndex, name, foods, entity });
     },
     emitAddMeal(action: string) {
       this.$emit('recall-action', action);
@@ -51,6 +66,7 @@ export default defineComponent({
   watch: {
     selectedMealIndex: {
       handler(value: number) {
+        console.log('Meal Index changed', value);
         this.activeTab = value;
       },
     },

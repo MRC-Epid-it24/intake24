@@ -31,7 +31,7 @@
         v-show="meals.length > 0"
         :meals="meals"
         :selectedMealIndex="selectedMealIndex"
-        @mealSelected="onMealSelected"
+        @meal-selected="onMealFoodMobileClick"
         @recall-action="onRecallAction"
       >
       </meal-list-mobile-bottom>

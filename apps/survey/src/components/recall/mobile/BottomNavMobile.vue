@@ -13,7 +13,7 @@
     <v-btn
       :disabled="!this.continue"
       @click="onItemClick(2)"
-      :color="this.continue ? 'green' : 'primary'"
+      :color="this.continue ? 'success' : 'primary'"
     >
       <span>Next question</span>
       <v-icon>$next</v-icon>
