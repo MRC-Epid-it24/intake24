@@ -124,16 +124,15 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs>).extend({
         prompt: this.promptComponent,
       });
     },
-    onDelete(value: number) {
-      if (value === 0)
-        this.$emit('tempChanging', {
-          response: null,
-          modified: true,
-          new: false,
-          mealIndex: this.selectedMealIndex,
-          foodIndex: this.selectedFoodIndex,
-          prompt: this.promptComponent,
-        });
+    onDelete(value: number, editableList: FoodState) {
+      this.$emit('tempChanging', {
+        response: value === 0 ? null : editableList,
+        modified: true,
+        new: false,
+        mealIndex: this.selectedMealIndex,
+        foodIndex: this.selectedFoodIndex,
+        prompt: this.promptComponent,
+      });
     },
     submit() {
       const editedFoods = this.$refs.foodList.editableList;

@@ -10,7 +10,11 @@
       <v-icon>$survey</v-icon>
     </v-btn>
 
-    <v-btn :disabled="!this.continue" @click="onItemClick(2)">
+    <v-btn
+      :disabled="!this.continue"
+      @click="onItemClick(2)"
+      :color="this.continue ? 'green' : 'primary'"
+    >
       <span>Next question</span>
       <v-icon>$next</v-icon>
     </v-btn>

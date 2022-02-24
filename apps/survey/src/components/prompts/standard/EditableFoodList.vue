@@ -106,7 +106,7 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
       if (this.editIndex != null) {
         this.editableList.splice(this.editIndex, 1);
         this.editIndex = null;
-        this.$emit('food-deleted', this.editableList.length);
+        this.$emit('food-deleted', this.editableList.length, copy(this.editableList));
       }
     },
 
