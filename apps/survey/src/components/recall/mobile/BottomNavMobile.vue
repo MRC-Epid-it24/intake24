@@ -1,23 +1,16 @@
 <template>
-  <v-bottom-navigation
-    app
-    fixed
-    grow
-    @change="onItemClick"
-    :color="color"
-    background-color="secondary"
-  >
-    <v-btn>
+  <v-bottom-navigation app fixed grow :color="color" background-color="secondary">
+    <v-btn @click="onItemClick(0)">
       <span>Add meal</span>
       <v-icon>$plus</v-icon>
     </v-btn>
 
-    <v-btn>
+    <v-btn @click="onItemClick(1)">
       <span>Review</span>
       <v-icon>$survey</v-icon>
     </v-btn>
 
-    <v-btn :disabled="!this.continue">
+    <v-btn :disabled="!this.continue" @click="onItemClick(2)">
       <span>Next question</span>
       <v-icon>$next</v-icon>
     </v-btn>
