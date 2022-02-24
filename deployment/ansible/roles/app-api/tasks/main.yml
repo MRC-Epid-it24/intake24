@@ -10,7 +10,7 @@
   copy:
     src: '{{ apps[app].env_file }}'
     dest: '{{ env.directory }}/{{ apps[app].path }}/.env'
-    mode: '644'
+    mode: '600'
 
 - name: '{{ app|upper }} | Copy pm2 config file'
   become_user: '{{ env.user }}'

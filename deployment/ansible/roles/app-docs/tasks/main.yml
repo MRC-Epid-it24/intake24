@@ -3,7 +3,7 @@
   copy:
     src: '{{ env_file }}'
     dest: '{{ env.directory }}/apps/docs/.env'
-    mode: '644'
+    mode: '600'
 
 - name: Build client application
   become_user: '{{ env.user }}'
