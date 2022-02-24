@@ -1,8 +1,10 @@
 <template>
   <div>
-    <div class="text-h3 text-center mb-4">{{ $t('feedback.physicalData.summary') }}</div>
-    <div class="text-h6 text-center mb-4">{{ userInfo.physicalActivityLevel.name }}</div>
-    <v-row justify="center" align="center">
+    <div class="text-h4 font-weight-medium text-center mb-4">
+      {{ $t('feedback.physicalData.summary') }}
+    </div>
+    <div class="text-subtitle-1 text-center mb-4">{{ userInfo.physicalActivityLevel.name }}</div>
+    <v-row justify="space-around" align="center" class="mt-4">
       <v-col cols="auto" class="d-flex flex-column">
         <div>
           {{ $t('feedback.physicalData.weight', { weight: userInfo.physicalData.weightKg }) }}

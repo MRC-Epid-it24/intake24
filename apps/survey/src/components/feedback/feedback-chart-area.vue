@@ -1,26 +1,24 @@
 <template>
-  <v-sheet color="white">
-    <v-row justify="center" :no-gutters="isMobile">
-      <v-col v-for="nutrient in topFoods.nutrients" class="mb-4" cols="auto" :key="nutrient.id">
-        <canvas :id="`chart-${nutrient.id}`"></canvas>
-        <v-divider class="my-4"></v-divider>
-        <div class="title">Highest in {{ nutrient.name }}</div>
-        <v-list max-width="300px" dense>
-          <v-list-item v-for="(item, index) in nutrient.list" :key="item.name">
-            <v-list-item-icon
-              class="font-weight-bold my-auto"
-              :style="{ color: `${topFoods.colors[index]}` }"
-            >
-              {{ index + 1 }}
-            </v-list-item-icon>
-            <v-list-item-content class="d-flex flex-row">
-              <div>{{ item.name }}</div>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-col>
-    </v-row>
-  </v-sheet>
+  <v-row justify="center" :no-gutters="isMobile">
+    <v-col v-for="nutrient in topFoods.nutrients" class="mb-4" cols="auto" :key="nutrient.id">
+      <canvas :id="`chart-${nutrient.id}`"></canvas>
+      <v-divider class="my-4"></v-divider>
+      <div class="title">Highest in {{ nutrient.name }}</div>
+      <v-list max-width="300px" dense>
+        <v-list-item v-for="(item, index) in nutrient.list" :key="item.name">
+          <v-list-item-icon
+            class="font-weight-bold my-auto"
+            :style="{ color: `${topFoods.colors[index]}` }"
+          >
+            {{ index + 1 }}
+          </v-list-item-icon>
+          <v-list-item-content class="d-flex flex-row">
+            <div>{{ item.name }}</div>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">

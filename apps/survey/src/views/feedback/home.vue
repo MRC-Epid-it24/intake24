@@ -1,19 +1,53 @@
 <template>
-  <v-container class="px-0" fluid>
-    <v-row justify="center" no-gutters>
-      <v-col v-if="userDemographic" cols="12" sm="9" md="8">
-        <user-demographic-info :user-info="userDemographic"></user-demographic-info>
-      </v-col>
-      <v-col cols="12" class="mt-4">
-        <!-- Submission day selector -->
-      </v-col>
-      <v-col cols="12" class="mt-4">
-        <feedback-card-area v-bind="{ cards }"></feedback-card-area>
-      </v-col>
-      <v-col cols="12" class="mt-4">
-        <feedback-chart-area v-bind="{ topFoods }"></feedback-chart-area>
-      </v-col>
-    </v-row>
+  <v-container class="pa-0" fluid>
+    <v-sheet v-if="userDemographic" color="white">
+      <v-row :no-gutters="isMobile" justify="center">
+        <v-col cols="12" md="6">
+          <user-demographic-info :user-info="userDemographic" class="pa-4"></user-demographic-info>
+        </v-col>
+      </v-row>
+      <v-row :no-gutters="isMobile" justify="center" class="pa-4">
+        <v-col cols="12" md="6">
+          <v-divider></v-divider>
+          <v-expansion-panels flat focusable tile>
+            <v-expansion-panel>
+              <v-expansion-panel-header class="text-subtitle-1 font-weight-medium">
+                {{ $t('feedback.submissions.title') }} ({{ selectedSubmissions.length }})
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-list flat>
+                  <v-list-item-group v-model="selectedSubmissions" multiple @change="buildFeedback">
+                    <v-list-item
+                      v-for="submission in submissions"
+                      :key="submission.id"
+                      :value="submission.id"
+                      active-class="blue--text text--darken-3"
+                      dense
+                    >
+                      <template v-slot:default="{ active }">
+                        <v-list-item-action class="my-0">
+                          <v-checkbox :input-value="active" color="blue darken-3"></v-checkbox>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            {{ `${$t('feedback.submissions._')} #${submission.number}` }} |
+                            {{ `${submission.endDate}` }}
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-col>
+      </v-row>
+    </v-sheet>
+    <feedback-card-area v-bind="{ cards }" class="pa-4"></feedback-card-area>
+    <v-sheet color="white">
+      <feedback-chart-area v-bind="{ topFoods }" class="pa-4"></feedback-chart-area>
+    </v-sheet>
   </v-container>
 </template>
 
@@ -35,6 +69,13 @@ import {
 import { mapState } from 'pinia';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 
+export type Submission = {
+  id: string;
+  number: number;
+  endDate: string;
+  endTime: string;
+};
+
 export default defineComponent({
   name: 'FeedbackHome',
 
@@ -55,8 +96,7 @@ export default defineComponent({
       cards: [] as FeedbackCardParameters[],
       topFoods: getTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], this.$i18n.locale),
 
-      daysRecorded: undefined as number | undefined,
-      currentDay: undefined as number | undefined,
+      selectedSubmissions: [] as string[],
     };
   },
 
@@ -66,8 +106,28 @@ export default defineComponent({
 
   computed: {
     ...mapState(useSurvey, ['parameters']),
+
     feedbackScheme(): FeedbackSchemeEntryResponse | undefined {
       return this.parameters?.feedbackScheme;
+    },
+
+    submissions(): Submission[] {
+      const submissions = this.feedbackDicts?.surveyStats?.submissions ?? [];
+
+      return submissions.map(({ id, endTime }, index) => ({
+        id,
+        number: index + 1,
+        endDate: endTime.toLocaleDateString(),
+        endTime: endTime.toLocaleString(),
+      }));
+    },
+  },
+
+  watch: {
+    submissions(val: Submission[], oldVal: Submission[]) {
+      if (oldVal.length) return;
+
+      this.selectedSubmissions = this.submissions.map(({ id }) => id);
     },
   },
 
@@ -119,7 +179,7 @@ export default defineComponent({
         henryCoefficients
       );
 
-      this.buildView();
+      this.buildFeedback();
     } catch (err) {
       console.log(err);
       // await this.$store.dispatch('feedback/setError', err);
@@ -130,8 +190,15 @@ export default defineComponent({
   },
 
   methods: {
-    buildView(day?: number): void {
-      const { feedbackDicts, feedbackScheme, surveyId, userDemographic } = this;
+    buildFeedback() {
+      const {
+        feedbackDicts,
+        feedbackScheme,
+        selectedSubmissions,
+        submissions,
+        surveyId,
+        userDemographic,
+      } = this;
       if (!feedbackDicts || !feedbackScheme || !userDemographic) {
         this.$router.push({ name: 'feedback-error', params: { surveyId } });
         return;
@@ -145,12 +212,14 @@ export default defineComponent({
         return;
       }
 
-      const foods = surveyStats.getReducedFoods(day);
-      const averageIntake = surveyStats.getAverageIntake(day);
-      const fruitAndVegPortions = surveyStats.getFruitAndVegPortions(day);
+      const selected = selectedSubmissions.length
+        ? selectedSubmissions
+        : submissions.map(({ id }) => id);
 
-      this.currentDay = day;
-      this.daysRecorded = submissionsCount;
+      const foods = surveyStats.getReducedFoods(selected);
+      const averageIntake = surveyStats.getAverageIntake(selected);
+      const fruitAndVegPortions = surveyStats.getFruitAndVegPortions(selected);
+
       this.cards = this.buildCardParams(cards, {
         foods,
         userDemographic,

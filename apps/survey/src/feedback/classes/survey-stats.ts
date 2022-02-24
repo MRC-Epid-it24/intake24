@@ -29,9 +29,9 @@ export default class SurveyStats {
 
   // Returns a flat array of all food records for the selected day or for all days
   // if no day is selected
-  private getFoods(day?: number): SurveyFood[] {
+  private getFoods(selected: string[]): SurveyFood[] {
     return this.submissions
-      .filter((submission, index) => day == null || day === index)
+      .filter((submission) => selected.includes(submission.id))
       .map((submission) => submission.getFoods())
       .reduce((acc, foods) => acc.concat(foods), []);
   }
@@ -58,8 +58,8 @@ export default class SurveyStats {
     return total;
   }
 
-  getFruitAndVegPortions(day?: number): FruitAndVegPortions {
-    const averages = this.getAverageIntake(day);
+  getFruitAndVegPortions(selected: string[]): FruitAndVegPortions {
+    const averages = this.getAverageIntake(selected);
 
     const juicesTotal = SurveyStats.getTotalForSubset(averages, this.JUICE_NUTRIENT_IDS);
     const beansAndPulsesTotal = SurveyStats.getTotalForSubset(
@@ -86,8 +86,8 @@ export default class SurveyStats {
     };
   }
 
-  getAverageIntake(day?: number): Map<string, number> {
-    const foods = this.getFoods(day);
+  getAverageIntake(selected: string[]): Map<string, number> {
+    const foods = this.getFoods(selected);
     const averageIntake = new Map<string, number>();
 
     foods.forEach((food) =>
@@ -104,20 +104,15 @@ export default class SurveyStats {
       })
     );
 
-    if (day == null) {
-      Array.from(averageIntake.keys()).forEach((nutrientId) => {
-        averageIntake.set(
-          nutrientId,
-          (averageIntake.get(nutrientId) as number) / this.submissions.length
-        );
-      });
-    }
+    Array.from(averageIntake.keys()).forEach((nutrientId) => {
+      averageIntake.set(nutrientId, (averageIntake.get(nutrientId) as number) / selected.length);
+    });
 
     return averageIntake;
   }
 
-  getReducedFoods(day?: number): AggregateFoodStats[] {
-    const foods = this.getFoods(day);
+  getReducedFoods(selected: string[]): AggregateFoodStats[] {
+    const foods = this.getFoods(selected);
 
     const uniqueFoodCodes = Array.from(new Set(foods.map((f) => f.code)));
 
@@ -126,9 +121,8 @@ export default class SurveyStats {
       const matchingFoods = foods.filter((f) => f.code === code);
       matchingFoods.forEach((f) => {
         Array.from(f.nutrientIdConsumptionMap.keys()).forEach((k) => {
-          if (!totalConsumptionMap.has(k)) {
-            totalConsumptionMap.set(k, 0);
-          }
+          if (!totalConsumptionMap.has(k)) totalConsumptionMap.set(k, 0);
+
           totalConsumptionMap.set(
             k,
             (totalConsumptionMap.get(k) as number) + (f.nutrientIdConsumptionMap.get(k) as number)
@@ -138,10 +132,7 @@ export default class SurveyStats {
       // We need to get average consumption per day.
       // At the moment we do that by getting average consumption of nutrient per one submission
       Array.from(totalConsumptionMap.keys()).forEach((k) => {
-        totalConsumptionMap.set(
-          k,
-          (totalConsumptionMap.get(k) as number) / (day == null ? this.submissions.length : 1)
-        );
+        totalConsumptionMap.set(k, (totalConsumptionMap.get(k) as number) / selected.length);
       });
       const firstFood = matchingFoods[0];
       return new AggregateFoodStats(firstFood.localName, totalConsumptionMap);

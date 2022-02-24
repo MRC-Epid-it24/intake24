@@ -1,114 +1,116 @@
 <template>
-  <v-row justify="center" :no-gutters="isMobile">
-    <v-col cols="12" sm="9" md="8">
-      <v-card :flat="isMobile" :tile="isMobile">
-        <v-card-title>{{ $t('feedback.physicalData.title') }}</v-card-title>
-        <v-card-subtitle>{{ $t('feedback.physicalData.subtitle') }}</v-card-subtitle>
-        <v-card-text class="pa-4">
-          <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="submit">
-            <v-row>
-              <v-col cols="12" lg="6">
-                <v-select
-                  v-model="form.sex"
-                  :error-messages="errors.get('sex')"
-                  :items="sexes"
-                  :label="$t('feedback.physicalData.sexes._')"
-                  hide-details="auto"
-                  name="sex"
-                  outlined
-                  prepend-icon="fa-genderless"
-                  @change="errors.clear('sex')"
-                >
-                  <template v-slot:item="{ item }">
-                    <span :class="`${item.icon} mr-3`"></span>
-                    {{ item.text }}
-                  </template>
-                  <template v-slot:selection="{ item }">
-                    <span :class="`${item.icon} mr-3`"></span>
-                    {{ item.text }}
-                  </template>
-                </v-select>
-              </v-col>
-              <v-col cols="12" lg="6">
-                <v-text-field
-                  v-model="form.birthdate"
-                  :error-messages="errors.get('birthdate')"
-                  :label="$t('feedback.physicalData.birthdate')"
-                  hide-details="auto"
-                  name="birthdate"
-                  outlined
-                  prepend-icon="fa-birthday-cake"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" lg="6">
-                <v-text-field
-                  v-model="form.heightCm"
-                  :error-messages="errors.get('heightCm')"
-                  :label="$t('feedback.physicalData.heightCm')"
-                  hide-details="auto"
-                  name="heightCm"
-                  outlined
-                  prepend-icon="fa-arrows-alt-v"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" lg="6">
-                <v-text-field
-                  v-model="form.weightKg"
-                  :error-messages="errors.get('weightKg')"
-                  :label="$t('feedback.physicalData.weightKg')"
-                  hide-details="auto"
-                  name="weightKg"
-                  outlined
-                  prepend-icon="fa-weight"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" lg="6">
-                <v-select
-                  v-model="form.physicalActivityLevelId"
-                  :error-messages="errors.get('physicalActivityLevelId')"
-                  :items="physicalActivityLevels"
-                  :label="$t('feedback.physicalData.physicalActivityLevelId')"
-                  hide-details="auto"
-                  item-value="id"
-                  item-text="name"
-                  name="physicalActivityLevelId"
-                  outlined
-                  prepend-icon="fa-running"
-                  @change="errors.clear('physicalActivityLevelId')"
-                ></v-select>
-              </v-col>
-              <v-col cols="12" lg="6">
-                <v-select
-                  v-model="form.weightTarget"
-                  :error-messages="errors.get('weightTarget')"
-                  :items="weightTargets"
-                  :label="$t('feedback.physicalData.weightTargets._')"
-                  hide-details="auto"
-                  name="weightTarget"
-                  outlined
-                  prepend-icon="fa-crosshairs"
-                  @change="errors.clear('weightTarget')"
-                ></v-select>
-              </v-col>
-            </v-row>
-            <v-row justify="center" class="mt-3">
-              <v-col cols="12" sm="6" md="5" lg="4">
-                <v-btn
-                  x-large
-                  type="submit"
-                  color="secondary"
-                  block
-                  :title="$t('common.action.submit')"
-                >
-                  {{ $t('common.action.submit') }}
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-container :class="{ 'pa-0': isMobile }">
+    <v-row justify="center" :no-gutters="isMobile">
+      <v-col cols="12" sm="9" md="8">
+        <v-card :flat="isMobile" :tile="isMobile">
+          <v-card-title>{{ $t('feedback.physicalData.title') }}</v-card-title>
+          <v-card-subtitle>{{ $t('feedback.physicalData.subtitle') }}</v-card-subtitle>
+          <v-card-text class="pa-4">
+            <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="submit">
+              <v-row>
+                <v-col cols="12" lg="6">
+                  <v-select
+                    v-model="form.sex"
+                    :error-messages="errors.get('sex')"
+                    :items="sexes"
+                    :label="$t('feedback.physicalData.sexes._')"
+                    hide-details="auto"
+                    name="sex"
+                    outlined
+                    prepend-icon="fa-genderless"
+                    @change="errors.clear('sex')"
+                  >
+                    <template v-slot:item="{ item }">
+                      <span :class="`${item.icon} mr-3`"></span>
+                      {{ item.text }}
+                    </template>
+                    <template v-slot:selection="{ item }">
+                      <span :class="`${item.icon} mr-3`"></span>
+                      {{ item.text }}
+                    </template>
+                  </v-select>
+                </v-col>
+                <v-col cols="12" lg="6">
+                  <v-text-field
+                    v-model="form.birthdate"
+                    :error-messages="errors.get('birthdate')"
+                    :label="$t('feedback.physicalData.birthdate')"
+                    hide-details="auto"
+                    name="birthdate"
+                    outlined
+                    prepend-icon="fa-birthday-cake"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" lg="6">
+                  <v-text-field
+                    v-model="form.heightCm"
+                    :error-messages="errors.get('heightCm')"
+                    :label="$t('feedback.physicalData.heightCm')"
+                    hide-details="auto"
+                    name="heightCm"
+                    outlined
+                    prepend-icon="fa-arrows-alt-v"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" lg="6">
+                  <v-text-field
+                    v-model="form.weightKg"
+                    :error-messages="errors.get('weightKg')"
+                    :label="$t('feedback.physicalData.weightKg')"
+                    hide-details="auto"
+                    name="weightKg"
+                    outlined
+                    prepend-icon="fa-weight"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" lg="6">
+                  <v-select
+                    v-model="form.physicalActivityLevelId"
+                    :error-messages="errors.get('physicalActivityLevelId')"
+                    :items="physicalActivityLevels"
+                    :label="$t('feedback.physicalData.physicalActivityLevelId')"
+                    hide-details="auto"
+                    item-value="id"
+                    item-text="name"
+                    name="physicalActivityLevelId"
+                    outlined
+                    prepend-icon="fa-running"
+                    @change="errors.clear('physicalActivityLevelId')"
+                  ></v-select>
+                </v-col>
+                <v-col cols="12" lg="6">
+                  <v-select
+                    v-model="form.weightTarget"
+                    :error-messages="errors.get('weightTarget')"
+                    :items="weightTargets"
+                    :label="$t('feedback.physicalData.weightTargets._')"
+                    hide-details="auto"
+                    name="weightTarget"
+                    outlined
+                    prepend-icon="fa-crosshairs"
+                    @change="errors.clear('weightTarget')"
+                  ></v-select>
+                </v-col>
+              </v-row>
+              <v-row justify="center" class="mt-3">
+                <v-col cols="12" sm="6" md="5" lg="4">
+                  <v-btn
+                    x-large
+                    type="submit"
+                    color="secondary"
+                    block
+                    :title="$t('common.action.submit')"
+                  >
+                    {{ $t('common.action.submit') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">

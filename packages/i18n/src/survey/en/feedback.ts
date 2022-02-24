@@ -30,6 +30,11 @@ const feedback: LocaleMessageObject = {
     },
   },
 
+  submissions: {
+    _: 'Submission',
+    title: 'Submissions',
+  },
+
   intake: {
     your: 'Your {nutrient} intake is {amount}.',
     estimated: 'Estimated intake',
