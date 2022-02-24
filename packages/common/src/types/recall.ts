@@ -104,7 +104,13 @@ export interface Selection {
   mode: SelectionMode;
 }
 
-export type PromptAnswerResponce = FoodState[] | string | FoodEntry | PortionSizeState | null;
+export type PromptAnswerResponce =
+  | FoodState[]
+  | string
+  | FoodEntry
+  | PortionSizeState
+  | null
+  | number;
 
 export interface PromptAnswer {
   response: PromptAnswerResponce;

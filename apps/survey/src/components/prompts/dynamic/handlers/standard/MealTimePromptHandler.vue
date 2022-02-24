@@ -15,7 +15,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
 import { mapActions, mapState } from 'pinia';
-import { MealTimePromptProps } from '@intake24/common/prompts';
+import { ComponentType, MealTimePromptProps } from '@intake24/common/prompts';
 import { MealTime, HasOnAnswer, PromptAnswer } from '@intake24/common/types';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
@@ -43,7 +43,12 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex', 'currentTempPromptAnswer']),
+    ...mapState(useSurvey, [
+      'selectedMeal',
+      'selectedMealIndex',
+      'selectedFoodIndex',
+      'currentTempPromptAnswer',
+    ]),
 
     defaultTime(): string {
       if (!this.selectedMeal) throw new Error('A meal must be selected');
@@ -55,10 +60,8 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
         tempTime.prompt === this.promptComponent &&
         tempTime.mealIndex === this.selectedMealIndex
       ) {
-        console.log(tempTime);
         return tempTime.response.toString();
       }
-
       return mealTimeToString(this.selectedMeal.defaultTime);
     },
   },
@@ -76,7 +79,6 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
         console.warn('No selected meal, meal index undefined');
         return;
       }
-
       this.setMealTime({
         mealIndex: this.selectedMealIndex,
         time: parseMealTime(mealTime),
@@ -99,6 +101,23 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
 
     onTempChange(tempTime: PromptAnswer) {
       this.setTempPromptAnswer(tempTime);
+    },
+  },
+
+  watch: {
+    defaultTime: {
+      immediate: true,
+      handler(value: string) {
+        console.log('Applying defaultt time');
+        this.setTempPromptAnswer({
+          response: value,
+          modified: true,
+          new: false,
+          mealIndex: this.selectedMealIndex,
+          foodIndex: this.selectedFoodIndex,
+          prompt: this.promptComponent as ComponentType,
+        });
+      },
     },
   },
 });

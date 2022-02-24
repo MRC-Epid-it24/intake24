@@ -2,7 +2,8 @@
   <as-served-prompt
     v-bind="{ foodName, promptProps }"
     :as-served-set-id="parameters['serving-image-set']"
-    @as-served-selected="onAsServedSelected"
+    :prompt-component="promptComponent"
+    @as-served-selected="onAnswer"
   ></as-served-prompt>
 </template>
 
@@ -10,7 +11,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
-import { SelectedAsServedImage } from '@intake24/common/types';
+import { SelectedAsServedImage, HasOnAnswer, PromptAnswer } from '@intake24/common/types';
 import { AsServedParameters } from '@intake24/common/types/http';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import { mapActions } from 'pinia';
@@ -19,7 +20,7 @@ import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;
 
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default (Vue as VueConstructor<Vue & Mixins & HasOnAnswer>).extend({
   name: 'AsServedPromptHandler',
 
   components: { AsServedPrompt },
@@ -29,6 +30,10 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   props: {
     promptProps: {
       type: Object as PropType<BasePromptProps>,
+      required: true,
+    },
+    promptComponent: {
+      type: String,
       required: true,
     },
   },
@@ -43,9 +48,18 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateFood', 'updateFoodCallback']),
+    ...mapActions(useSurvey, [
+      'updateFood',
+      'updateFoodCallback',
+      'setTempPromptAnswer',
+      'clearTempPromptAnswer',
+    ]),
 
-    onAsServedSelected(selected: SelectedAsServedImage) {
+    onTempChange(tempFoodDrinks: PromptAnswer) {
+      this.setTempPromptAnswer(tempFoodDrinks);
+    },
+
+    onAnswer(selected: SelectedAsServedImage) {
       const { conversionFactor } = this.selectedPortionSize;
 
       const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
@@ -70,6 +84,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       }); */
 
       this.$emit('complete');
+      this.clearTempPromptAnswer();
     },
   },
 });

@@ -1,7 +1,9 @@
 <template>
   <portion-size-option-prompt
     v-bind="{ foodName, promptProps, availableMethods }"
-    @option-selected="onOptionSelected"
+    :prompt-component="promptComponent"
+    @option-selected="onAnswer"
+    @tempChanging="onTempChange"
   >
   </portion-size-option-prompt>
 </template>
@@ -10,6 +12,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
+import { HasOnAnswer, PromptAnswer } from '@intake24/common/types';
 import { UserPortionSizeMethod } from '@intake24/common/types/http';
 import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import { mapActions } from 'pinia';
@@ -18,7 +21,7 @@ import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;
 
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default (Vue as VueConstructor<Vue & Mixins & HasOnAnswer>).extend({
   name: 'PortionSizeOptionPromptHandler',
 
   components: { PortionSizeOptionPrompt },
@@ -30,6 +33,10 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       type: Object as PropType<BasePromptProps>,
       required: true,
     },
+    promptComponent: {
+      type: String,
+      required: true,
+    },
   },
 
   computed: {
@@ -39,9 +46,13 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateFood']),
+    ...mapActions(useSurvey, ['updateFood', 'setTempPromptAnswer', 'clearTempPromptAnswer']),
 
-    onOptionSelected(option: number) {
+    onTempChange(portionSize: PromptAnswer) {
+      this.setTempPromptAnswer(portionSize);
+    },
+
+    onAnswer(option: number) {
       const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
       if (mealIndex === undefined || foodIndex === undefined) {
         console.warn('No selected meal/food, meal/food index undefined');
@@ -55,6 +66,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       });
 
       this.$emit('complete');
+      this.clearTempPromptAnswer();
     },
   },
 });

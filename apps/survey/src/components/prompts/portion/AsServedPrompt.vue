@@ -121,6 +121,10 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       type: String,
       required: true,
     },
+    promptComponent: {
+      type: String,
+      required: true,
+    },
   },
 
   data() {

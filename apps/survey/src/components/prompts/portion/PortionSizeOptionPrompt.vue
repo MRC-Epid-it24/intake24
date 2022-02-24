@@ -3,8 +3,8 @@
     <template v-slot:headerText>
       {{ $t('portion.option.label', { food: localeDescription }) }}
     </template>
-    <v-sheet>
-      <v-row class="mt-2">
+    <v-sheet class="ma-2">
+      <v-row class="mt-2 ma-2">
         <v-col
           v-for="(method, index) in availableMethods"
           :key="index"
@@ -38,11 +38,11 @@
           <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="ma-2">
         <v-col>
           <v-form ref="form" @submit.prevent="submit">
             <!-- Should be disabled if nothing selected? -->
-            <continue @click="submit" :disabled="currentValue === -1"></continue>
+            <continue @click="submit" :disabled="currentValue === -1" class="px-2"></continue>
           </v-form>
         </v-col>
       </v-row>
@@ -52,13 +52,17 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import { mapState } from 'pinia';
 import { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
+import { useSurvey } from '@intake24/survey/stores';
 import { BasePromptProps, basePromptProps } from '@intake24/common/prompts';
 import { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 import { LocaleTranslation } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
+
+type Response = null | number;
 
 // For user to select which portion size estimation method they want to use
 export default (Vue as VueConstructor<Vue & Portion>).extend({
@@ -80,6 +84,10 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       type: Array as PropType<UserPortionSizeMethod[]>,
       required: true,
     },
+    promptComponent: {
+      type: String,
+      required: true,
+    },
   },
 
   data() {
@@ -91,6 +99,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   },
 
   computed: {
+    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
+
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
@@ -100,11 +110,28 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   },
 
   methods: {
+    onChange(index: number) {
+      let response: Response = null;
+      if (index !== -1) {
+        response = this.currentValue;
+      }
+      this.$emit('tempChanging', {
+        response,
+        modified: true,
+        new: false,
+        mealIndex: this.selectedMealIndex,
+        foodIndex: this.selectedFoodIndex,
+        prompt: this.promptComponent,
+      });
+    },
+
     selectMethod(index: number) {
       if (this.currentValue === index) {
         this.currentValue = -1;
+        this.onChange(this.currentValue);
       } else {
         this.currentValue = index;
+        this.onChange(this.currentValue);
         this.clearErrors();
       }
     },
@@ -139,6 +166,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
 
     submit() {
       this.$emit('option-selected', this.currentValue);
+      this.onChange(this.currentValue);
     },
   },
 });

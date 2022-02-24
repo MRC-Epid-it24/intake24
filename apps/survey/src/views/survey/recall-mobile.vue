@@ -106,7 +106,13 @@ export default Recall.extend({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedFood', 'currentTempPromptAnswer']),
+    ...mapState(useSurvey, [
+      'selectedMeal',
+      'selectedFood',
+      'selectedMealIndex',
+      'selectedFoodIndex',
+      'currentTempPromptAnswer',
+    ]),
   },
 
   methods: {
@@ -115,19 +121,19 @@ export default Recall.extend({
       if (tab === 0) {
         this.onRecallAction('add-meal');
       } else if (tab === 2) {
-        this.submitTrigger = true;
+        // this.submitTrigger = true;
         // this.submitTrigger = false;
         // TODO: WIP - FIX- ME Call the Prompt method from the parent. Check for Prompt Types
-        if (this.currentTempPromptAnswer?.response) {
-          // console.log(
-          //   'Submitting from ',
-          //   this.currentPrompt?.prompt,
-          //   'with data: ',
-          //   JSON.stringify(this.currentTempPromptAnswer.response)
-          // );
-          this.$refs.promptHandle.onAnswer(this.currentTempPromptAnswer.response as FoodState[]);
+        const tempAnswer = this.currentTempPromptAnswer;
+        if (
+          tempAnswer &&
+          tempAnswer.response !== null &&
+          tempAnswer.prompt === this.currentPrompt?.prompt.component &&
+          tempAnswer.mealIndex === this.selectedMealIndex &&
+          (this.selectedFoodIndex === undefined || tempAnswer.foodIndex === this.selectedFoodIndex)
+        ) {
+          this.$refs.promptHandle.onAnswer(tempAnswer.response);
         } else {
-          // console.log('Triggering nextPromt without onAnswer from a child');
           this.nextPrompt();
         }
       }

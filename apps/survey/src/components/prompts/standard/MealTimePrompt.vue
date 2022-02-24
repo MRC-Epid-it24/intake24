@@ -123,16 +123,8 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     },
   },
   watch: {
-    submitTrigger: {
-      handler(trigger: boolean) {
-        if (trigger) this.submit();
-      },
-      deep: false,
-      immediate: true,
-    },
     currentValue: {
       handler(value: string) {
-        console.log(value);
         this.$emit('tempChanging', {
           response: value,
           modified: true,

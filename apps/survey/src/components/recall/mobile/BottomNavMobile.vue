@@ -3,7 +3,6 @@
     app
     fixed
     grow
-    v-model="$props.bottomNavTab"
     @change="onItemClick"
     :color="color"
     background-color="secondary"
