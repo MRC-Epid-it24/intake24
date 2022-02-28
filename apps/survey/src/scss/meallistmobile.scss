@@ -38,12 +38,26 @@
   bottom: 56px;
   left: 0;
   width: 100%;
-  z-index: 1;
+  z-index: 9;
 }
+
+.sticky_toolbar {
+	border-top: 1px solid #cecdcdde;
+}
+
+.meail_badge {
+	position:relative;
+	z-index:9;
+}
+
 .v-tab {
   font-size: x-small;
   font-weight: bold;
 }
+
+.v-tab ::v-deep p {
+	margin-bottom: 3px;
+  }
 
 @media only screen and (max-width: 1264px) {
 	.content {

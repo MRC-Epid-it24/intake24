@@ -1,16 +1,25 @@
 <template>
-  <v-card flat>
-    <v-toolbar flat dense>
-      <v-tabs show-arrows icons-and-text center-active touch v-model="activeTab">
-        <v-tabs-slider color="primary"></v-tabs-slider>
+  <v-card flat class="sticky_toolbar_card">
+    <v-toolbar flat bottom class="sticky_toolbar">
+      <v-tabs slider-size="4" icons-and-text center-active touch v-model="activeTab" height="60px">
+        <v-tabs-slider color="success"></v-tabs-slider>
         <v-tab
           v-for="(meal, idx) in meals"
           :key="idx + meal.name"
           @click="emitFoodsList(idx, meal.name, meal.foods, entity)"
         >
-          {{ meal.name }}
-          <v-icon x-small v-if="meal.time.length === 0">far fa-question-circle </v-icon>
-          <p v-else>{{ meal.time }}</p>
+          <v-badge
+            class="meail_badge"
+            color="grey"
+            :content="meal.foods.length"
+            :value="meal.foods.length > 0"
+            left
+            bordered
+          >
+            <p v-if="meal.time.length === 0"><v-icon x-small>far fa-question-circle </v-icon></p>
+            <p v-else>{{ meal.time }}</p>
+            {{ meal.name }}
+          </v-badge>
         </v-tab>
       </v-tabs>
     </v-toolbar>
