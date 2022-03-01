@@ -103,6 +103,7 @@ const common: LocaleMessageObject = {
 
   not: {
     provided: 'Not provided',
+    selected: 'Not selected',
   },
 };
 

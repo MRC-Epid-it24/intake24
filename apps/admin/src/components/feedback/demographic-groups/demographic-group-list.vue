@@ -239,11 +239,14 @@ export default defineComponent({
         text: this.$t(`feedback-schemes.nutrientRuleTypes.${value}`),
         value,
       })),
-      sexes: sexes.map((value) => ({
-        text: this.$t(`feedback-schemes.sexes.${value}`),
-        value,
-        icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
-      })),
+      sexes: [
+        { text: this.$t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
+        ...sexes.map((value) => ({
+          text: this.$t(`feedback-schemes.sexes.${value}`),
+          value,
+          icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
+        })),
+      ],
     };
   },
 
@@ -252,7 +255,10 @@ export default defineComponent({
       return useEntry().refs.nutrientTypes ?? [];
     },
     physicalActivityLevels(): PhysicalActivityLevelAttributes[] {
-      return useEntry().refs.physicalActivityLevels ?? [];
+      return [
+        { name: this.$t('common.not.selected'), id: null },
+        ...(useEntry().refs.physicalActivityLevels ?? []),
+      ];
     },
   },
 
