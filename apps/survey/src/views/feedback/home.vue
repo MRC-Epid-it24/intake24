@@ -1,12 +1,12 @@
 <template>
   <v-container class="pa-0" fluid>
     <v-sheet v-if="userDemographic" color="white">
-      <v-row :no-gutters="isMobile" justify="center">
+      <v-row no-gutters justify="center">
         <v-col cols="12" md="6">
           <user-demographic-info :user-info="userDemographic" class="pa-4"></user-demographic-info>
         </v-col>
       </v-row>
-      <v-row :no-gutters="isMobile" justify="center" class="pa-4">
+      <v-row no-gutters justify="center" class="pa-4">
         <v-col cols="12" md="6">
           <v-divider></v-divider>
           <v-expansion-panels flat focusable tile>
@@ -44,9 +44,9 @@
         </v-col>
       </v-row>
     </v-sheet>
-    <feedback-card-area v-bind="{ cards }" class="pa-4"></feedback-card-area>
+    <feedback-card-area v-bind="{ cards }" class="feedback-area"></feedback-card-area>
     <v-sheet color="white">
-      <feedback-chart-area v-bind="{ topFoods }" class="pa-4"></feedback-chart-area>
+      <feedback-chart-area v-bind="{ topFoods }" class="feedback-area"></feedback-chart-area>
     </v-sheet>
   </v-container>
 </template>
@@ -232,4 +232,12 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.feedback-area {
+  padding: 16px 0 !important;
+
+  @media print {
+    padding: 0 !important;
+  }
+}
+</style>

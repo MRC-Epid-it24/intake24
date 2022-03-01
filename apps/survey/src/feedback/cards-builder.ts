@@ -17,7 +17,7 @@ export interface FiveADayParameters extends FiveADay {
 
 export interface NutrientGroupParameters extends NutrientGroup {
   readonly intake: number;
-  readonly targetIntake: DemographicRange;
+  readonly recommendedIntake: DemographicRange;
 }
 
 export type FeedbackCardParameters =
@@ -67,9 +67,9 @@ export const buildNutrientGroupParams = (
   }, 0);
   intake = round(intake);
 
-  const targetIntake = new DemographicRange(low?.threshold ?? 0, high?.threshold ?? 1000);
+  const recommendedIntake = new DemographicRange(low?.threshold ?? 0, high?.threshold ?? 1000);
 
-  return { ...foodGroup, intake, targetIntake };
+  return { ...foodGroup, intake, recommendedIntake };
 };
 
 export const buildFiveADayParams = (

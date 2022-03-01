@@ -1,7 +1,20 @@
 <template>
-  <v-row justify="center" :no-gutters="isMobile">
-    <v-col v-for="(card, idx) in cards" class="mb-4" cols="auto" :key="idx">
-      <component :is="`${card.type}-card`" :parameters="card"></component>
+  <v-row justify="center" no-gutters>
+    <v-col v-for="card in cards" :key="card.id" class="pa-4 d-print-none" cols="auto">
+      <generic-card :parameters="card"></generic-card>
+    </v-col>
+    <v-col
+      v-for="(card, idx) in cards"
+      :key="`print-${card.id}`"
+      cols="12"
+      class="d-none d-print-block"
+    >
+      <generic-print-card :parameters="card"></generic-print-card>
+      <v-divider
+        v-if="idx + 1 < cards.length"
+        :key="`print-div-${card.id}`"
+        class="mb-4 mx-4"
+      ></v-divider>
     </v-col>
   </v-row>
 </template>
@@ -9,12 +22,12 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import { FeedbackCardParameters } from '@intake24/survey/feedback';
-import { cards } from './cards';
+import { GenericCard, GenericPrintCard } from './cards';
 
 export default defineComponent({
   name: 'FeedbackCardArea',
 
-  components: { ...cards },
+  components: { GenericCard, GenericPrintCard },
 
   props: {
     cards: {

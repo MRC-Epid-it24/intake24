@@ -20,9 +20,9 @@
             <span class="font-weight-medium">{{ $t('feedback.intake.estimated') }}: </span>
             <span :class="detail.textClass">{{ detail.intake }} {{ detail.unit }}</span>
           </div>
-          <div class="subtitle-1">
-            <span class="font-weight-medium">{{ $t('feedback.intake.optimal') }}: </span>
-            {{ detail.targetIntake.toString() }}
+          <div v-if="detail.recommendedIntake" class="subtitle-1">
+            <span class="font-weight-medium">{{ $t('feedback.intake.recommended') }}: </span>
+            {{ detail.recommendedIntake.toString() }}
             {{ detail.unit }}
           </div>
         </v-card-text>
@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { FeedbackDetails } from './card-utils';
+import { FeedbackDetails } from '.';
 
 export default defineComponent({
   name: 'FeedbackCharacterCard',

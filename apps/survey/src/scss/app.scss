@@ -3,6 +3,10 @@
 @import "fontawesome";
 
 @media print {
+    @page {
+        margin: 15mm 10mm;
+    }
+    
     .v-application {
         background-color: #fff !important;
 

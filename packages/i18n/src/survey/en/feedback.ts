@@ -38,7 +38,7 @@ const feedback: LocaleMessageObject = {
   intake: {
     your: 'Your {nutrient} intake is {amount}.',
     estimated: 'Estimated intake',
-    optimal: 'Optimal intake',
+    recommended: 'Recommended intake',
     tellMeMore: 'Tell me more',
   },
 

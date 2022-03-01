@@ -12,10 +12,12 @@ import DemographicScaleSector from './demographic-scale-sector';
 import UserDemographic from './user-demographic';
 
 export type CharacterParameters = {
+  readonly id: string;
   readonly type: 'character';
   readonly characterType: CharacterType;
   readonly sentiment: CharacterSentiment;
   readonly results: DemographicResult[];
+  readonly showRecommendations: boolean;
 };
 
 export class CharacterRules implements Character {
@@ -29,16 +31,19 @@ export class CharacterRules implements Character {
 
   readonly sentiments: CharacterSentiment[];
 
+  readonly showRecommendations: boolean;
+
   readonly demographicGroups: DemographicGroup[];
 
   constructor(
-    { id, characterType, nutrientTypeIds, sentiments }: Character,
+    { id, characterType, nutrientTypeIds, sentiments, showRecommendations }: Character,
     demographicGroups: DemographicGroup[]
   ) {
     this.id = id;
     this.characterType = characterType;
     this.nutrientTypeIds = nutrientTypeIds;
     this.sentiments = sentiments;
+    this.showRecommendations = showRecommendations;
 
     this.demographicGroups = demographicGroups;
   }
@@ -47,6 +52,8 @@ export class CharacterRules implements Character {
     userDemographic: UserDemographic,
     foods: AggregateFoodStats[]
   ): CharacterParameters | null {
+    const { characterType, id, showRecommendations } = this;
+
     const results = this.getDemographicsGroups(userDemographic, foods);
 
     const scaleSectors = results
@@ -56,7 +63,7 @@ export class CharacterRules implements Character {
     const sentiment = this.pickAverageSentiment(scaleSectors);
 
     return sentiment
-      ? { type: 'character', characterType: this.characterType, sentiment, results }
+      ? { id, type: 'character', characterType, results, sentiment, showRecommendations }
       : null;
   }
 
