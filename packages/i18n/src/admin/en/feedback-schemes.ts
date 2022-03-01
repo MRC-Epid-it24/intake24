@@ -141,9 +141,11 @@ const feedbackSchemes: LocaleMessageObject = {
     edit: 'Edit card',
     remove: 'Remove card',
     type: 'Card type',
+    options: 'Card options',
     name: 'Card name',
     required: 'Card name is required.',
     description: 'Description',
+    showRecommendations: 'Show feedback recommendations',
 
     tabs: {
       general: 'General',

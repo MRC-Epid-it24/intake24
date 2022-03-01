@@ -27,6 +27,7 @@ export const cardDefaults: Card[] = [
     type: 'character',
     characterType: 'battery',
     nutrientTypeIds: ['1'],
+    showRecommendations: false,
     sentiments: [
       {
         sentiment: ['too_low', 'low'],
@@ -73,6 +74,7 @@ export const cardDefaults: Card[] = [
       description: { en: null },
     },
     nutrientTypes: [],
+    showRecommendations: false,
   },
   {
     id: 'five-a-day',
@@ -91,5 +93,6 @@ export const cardDefaults: Card[] = [
       name: { en: '' },
       description: { en: null },
     },
+    showRecommendations: false,
   },
 ];

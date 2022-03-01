@@ -52,4 +52,5 @@ export type Character = {
   characterType: CharacterType;
   nutrientTypeIds: string[];
   sentiments: CharacterSentiment[];
+  showRecommendations: boolean;
 };

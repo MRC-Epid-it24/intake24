@@ -34,47 +34,67 @@
         <v-container>
           <v-tabs-items v-model="tab" class="pt-1">
             <v-tab-item key="general">
-              <v-row>
-                <v-col cols="12">
-                  <v-card outlined>
-                    <v-toolbar color="grey lighten-4" flat>
-                      <v-toolbar-title>
-                        {{ $t(`feedback-schemes.cards.type`) }}
-                      </v-toolbar-title>
-                    </v-toolbar>
-                    <v-item-group
-                      active-class="secondary"
-                      v-model="dialog.card.type"
-                      @change="updateCardProps"
-                    >
-                      <v-container>
-                        <v-row>
-                          <v-col v-for="card in cardDefaults" :key="card.type" cols="12" md="3">
-                            <v-item v-slot:default="{ active, toggle }" :value="card.type">
-                              <v-card
-                                :color="active ? 'primary' : ''"
-                                dark
-                                height="180"
-                                @click.stop="toggle"
-                              >
-                                <v-card-title class="justify-center">
-                                  {{ $t(`feedback-schemes.cards.${card.type}.title`) }}
-                                </v-card-title>
-                                <v-card-subtitle class="text-center">
-                                  {{ $t(`feedback-schemes.cards.${card.type}.subtitle`) }}
-                                </v-card-subtitle>
-                                <v-card-text v-show="active" class="text-center">
-                                  <v-icon x-large>fa-check-circle</v-icon>
-                                </v-card-text>
-                              </v-card>
-                            </v-item>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-item-group>
-                  </v-card>
-                </v-col>
-              </v-row>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-card outlined>
+                      <v-toolbar color="grey lighten-4" flat>
+                        <v-toolbar-title>
+                          <v-icon left>fas fa-cloud-meatball</v-icon>
+                          {{ $t(`feedback-schemes.cards.type`) }}
+                        </v-toolbar-title>
+                      </v-toolbar>
+                      <v-item-group
+                        active-class="secondary"
+                        v-model="dialog.card.type"
+                        @change="updateCardProps"
+                      >
+                        <v-container>
+                          <v-row>
+                            <v-col v-for="card in cardDefaults" :key="card.type" cols="12" md="3">
+                              <v-item v-slot:default="{ active, toggle }" :value="card.type">
+                                <v-card
+                                  :color="active ? 'primary' : ''"
+                                  dark
+                                  height="180"
+                                  @click.stop="toggle"
+                                >
+                                  <v-card-title class="justify-center">
+                                    {{ $t(`feedback-schemes.cards.${card.type}.title`) }}
+                                  </v-card-title>
+                                  <v-card-subtitle class="text-center">
+                                    {{ $t(`feedback-schemes.cards.${card.type}.subtitle`) }}
+                                  </v-card-subtitle>
+                                  <v-card-text v-show="active" class="text-center">
+                                    <v-icon x-large>fa-check-circle</v-icon>
+                                  </v-card-text>
+                                </v-card>
+                              </v-item>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-item-group>
+                    </v-card>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-card outlined>
+                      <v-toolbar color="grey lighten-4" flat>
+                        <v-toolbar-title>
+                          <v-icon left>fas fa-gears</v-icon>
+                          {{ $t(`feedback-schemes.cards.options`) }}
+                        </v-toolbar-title>
+                      </v-toolbar>
+                      <v-card-text>
+                        <v-switch
+                          v-model="dialog.card.showRecommendations"
+                          :label="$t('feedback-schemes.cards.showRecommendations')"
+                          hide-details="auto"
+                        ></v-switch>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-container>
             </v-tab-item>
             <component
               :is="dialog.card.type"

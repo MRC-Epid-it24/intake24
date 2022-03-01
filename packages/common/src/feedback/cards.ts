@@ -16,6 +16,7 @@ export type CustomCard = {
     name: RequiredLocaleTranslation;
     description: LocaleTranslation;
   };
+  showRecommendations: boolean;
 };
 
 export interface NutrientGroup extends CustomCard {

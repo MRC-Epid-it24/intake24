@@ -621,6 +621,7 @@ module.exports = {
             ...restSentiment,
             name: { en: title || null },
           })),
+          showRecommendations: false,
         };
       });
 
@@ -713,6 +714,7 @@ module.exports = {
               ? { name: { en: 'g' }, description: { en: null } }
               : { name: { en: '' }, description: { en: null } },
           nutrientTypes,
+          showRecommendations: false,
         });
       }
 
@@ -732,6 +734,7 @@ module.exports = {
               en: 'Number of portions is calculated based on your fruit and vegetable intake as explained below.',
             },
           },
+          showRecommendations: false,
         });
       }
 
