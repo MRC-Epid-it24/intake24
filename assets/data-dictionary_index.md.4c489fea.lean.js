@@ -1,1 +1,0 @@
-import{_ as a,c as t,o as e,a as i}from"./app.5684b170.js";const p='{"title":"Data Dictionary","description":"","frontmatter":{},"headers":[{"level":2,"title":"Dictionaries","slug":"dictionaries"}],"relativePath":"data-dictionary/index.md"}',r={},n=i("",5),s=[n];function o(c,d,h,l,_,u){return e(),t("div",null,s)}var f=a(r,[["render",o]]);export{p as __pageData,f as default};
