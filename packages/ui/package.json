@@ -29,6 +29,7 @@
     "@vue/runtime-dom": "^3.2.31"
   },
   "bundledDependencies": [
-    "@intake24/admin"
+    "@intake24/admin",
+    "@intake24/common"
   ]
 }

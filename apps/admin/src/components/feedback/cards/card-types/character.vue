@@ -11,7 +11,14 @@
             name="characterType"
             outlined
             @change="update('characterType', $event)"
-          ></v-select>
+          >
+            <template v-slot:item="{ item }">
+              <v-avatar tile class="mr-4 my-2">
+                <v-img :src="characterImageMap[item.value]" :alt="item.value"></v-img>
+              </v-avatar>
+              {{ $t(`feedback-schemes.characterTypes.${item.value}`) }}
+            </template>
+          </v-select>
         </v-col>
         <v-col cols="12" md="6">
           <v-select
@@ -44,6 +51,7 @@
 import { useEntry } from '@intake24/admin/stores';
 import { Character, characterTypes } from '@intake24/common/feedback';
 import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import { characterImageMap } from '@intake24/ui';
 import { defineComponent, PropType } from '@vue/composition-api';
 import CharacterSentiments from '../partials/character-sentiments.vue';
 
@@ -73,6 +81,7 @@ export default defineComponent({
         value,
         text: this.$t(`feedback-schemes.characterTypes.${value}`),
       })),
+      characterImageMap,
     };
   },
 
