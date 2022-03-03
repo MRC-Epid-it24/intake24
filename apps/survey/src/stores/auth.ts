@@ -44,11 +44,11 @@ export const useAuth = defineStore('auth', {
         this.accessToken = accessToken;
         useUser().load(accessToken);
 
-        Promise.resolve();
-      } catch (err: any) {
+        return Promise.resolve();
+      } catch (err) {
         if (axios.isAxiosError(err)) this.error = err;
 
-        Promise.reject(err);
+        return Promise.reject(err);
       } finally {
         loading.removeItem('login');
       }
@@ -62,12 +62,11 @@ export const useAuth = defineStore('auth', {
 
         useUser().load(accessToken);
 
-        Promise.resolve();
+        return Promise.resolve();
       } catch (err) {
         if (axios.isAxiosError(err)) this.error = err;
 
-        if (withErr) Promise.reject(err);
-        else Promise.resolve();
+        return withErr ? Promise.reject(err) : Promise.resolve();
       }
     },
 

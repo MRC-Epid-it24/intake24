@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import authSvc, { LoginRequest, MFAVerifyRequest } from '@intake24/admin/services/auth.service';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useLoading } from './loading';
 import { useUser } from './user';
 
@@ -30,10 +30,11 @@ export const useAuth = defineStore('auth', {
         if ('accessToken' in data) await this.successfulLogin(data.accessToken);
         else this.mfaRequest(data.mfaRequestUrl);
 
-        Promise.resolve();
-      } catch (err: any) {
-        this.error = err;
-        Promise.reject(err);
+        return Promise.resolve();
+      } catch (err) {
+        if (axios.isAxiosError(err)) this.error = err;
+
+        return Promise.reject(err);
       } finally {
         loading.removeItem('login');
       }
@@ -46,10 +47,12 @@ export const useAuth = defineStore('auth', {
       try {
         const accessToken = await authSvc.verify(request);
         await this.successfulLogin(accessToken);
-        Promise.resolve();
-      } catch (err: any) {
-        this.error = err;
-        Promise.reject(err);
+
+        return Promise.resolve();
+      } catch (err) {
+        if (axios.isAxiosError(err)) this.error = err;
+
+        return Promise.reject(err);
       } finally {
         loading.removeItem('verify');
       }
@@ -63,12 +66,11 @@ export const useAuth = defineStore('auth', {
         const userState = useUser();
         if (!userState.loaded) await userState.request();
 
-        Promise.resolve();
-      } catch (err: any) {
-        this.error = err;
+        return Promise.resolve();
+      } catch (err) {
+        if (axios.isAxiosError(err)) this.error = err;
 
-        if (withErr) Promise.reject(err);
-        else Promise.resolve();
+        return withErr ? Promise.reject(err) : Promise.resolve();
       }
     },
 

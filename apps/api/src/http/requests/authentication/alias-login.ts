@@ -5,7 +5,7 @@ export default validate(
   checkSchema({
     userName: {
       in: ['body'],
-      errorMessage: 'Email must be filled in.',
+      errorMessage: 'Username must be filled in.',
       isString: true,
       isEmpty: { negated: true },
     },
