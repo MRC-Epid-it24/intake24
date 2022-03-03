@@ -18,6 +18,8 @@ const dialectOptions: Record<Dialect, Dictionary> = {
   mssql: {},
   postgres: {},
   sqlite: {},
+  db2: {},
+  snowflake: {},
 };
 
 const foods = {

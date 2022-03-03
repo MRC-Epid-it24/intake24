@@ -24,4 +24,4 @@ Edit tab allows to modify selected locale.
 
 ## Deletion
 
-Locale deletion won't be permitted if there are surveys using it. User firstly needs to be re-assign the surveys to use different locale.
+Locale deletion won't be permitted if there are surveys using it. User firstly needs to update the surveys to use different locale.

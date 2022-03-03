@@ -1,8 +1,8 @@
 # Languages
 
-Intake24 bundles by default on English default texts. Additional languages can be defined in following sections.
+Intake24 bundles only English texts by default. Additional languages can be defined in following sections. Additional languages can be added to source code and bundled or defined in database.
 
-Languages are then associated with locales and they in list of available languages in frontend UI (`admin tool` or `survey recall`).
+Languages are then associated with locales and they are displayed as a list of available languages in frontend UI (`admin tool` or `survey recall`).
 
 ## Detail
 
@@ -56,4 +56,4 @@ See below example of when original in-built structure was simple string and new 
 
 ## Deletion
 
-Language deletion won't be permitted if there are locales using it. User firstly needs to be re-assign the locales to use different language.
+Language deletion won't be permitted if there are locales using it. User firstly needs to update the locales to use different language.

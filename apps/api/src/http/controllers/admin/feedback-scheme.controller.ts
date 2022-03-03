@@ -13,6 +13,7 @@ import {
   FeedbackSchemeRefs,
 } from '@intake24/common/types/http/admin';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
 import { Controller, CrudActions } from '../controller';
 
 export type FeedbackSchemeController = Controller<CrudActions | 'copy'>;
@@ -43,7 +44,10 @@ export default (): FeedbackSchemeController => {
     res.json(feedbackSchemes);
   };
 
-  const store = async (req: Request, res: Response<FeedbackSchemeEntry>): Promise<void> => {
+  const store = async (
+    req: Request<any, any, FeedbackSchemeCreationAttributes>,
+    res: Response<FeedbackSchemeEntry>
+  ): Promise<void> => {
     const feedbackScheme = await FeedbackScheme.create(
       pick(req.body, [
         'name',

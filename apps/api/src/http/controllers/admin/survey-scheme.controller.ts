@@ -14,7 +14,11 @@ import {
   SurveySchemesResponse,
   SurveySchemeExportRefsResponse,
 } from '@intake24/common/types/http/admin';
-import { ExportField, ExportSectionId } from '@intake24/common/types/models';
+import {
+  ExportField,
+  ExportSectionId,
+  SurveySchemeCreationAttributes,
+} from '@intake24/common/types/models';
 import type { IoC } from '@intake24/api/ioc';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { PromptQuestion } from '@intake24/common/prompts';
@@ -50,9 +54,12 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     res.json(surveySchemes);
   };
 
-  const store = async (req: Request, res: Response<SurveySchemeEntry>): Promise<void> => {
+  const store = async (
+    req: Request<any, any, SurveySchemeCreationAttributes>,
+    res: Response<SurveySchemeEntry>
+  ): Promise<void> => {
     const surveyScheme = await SurveyScheme.create(
-      pick(req.body, ['id', 'name', 'type', 'questions', 'meals', 'dataExport'])
+      pick(req.body, ['name', 'type', 'questions', 'meals', 'dataExport'])
     );
 
     res.status(201).json(surveyScheme);
