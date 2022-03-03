@@ -53,12 +53,15 @@ export const useSurvey = defineStore('survey', {
   state: (): SurveyState => ({
     parameters: null,
     user: null,
-    data: Vue.ls.get(LS_KEY_STATE, surveyInitialState),
-    history: Vue.ls.get(LS_KEY_HISTORY, []),
+    data: surveyInitialState,
+    history: [],
     undo: null,
     error: null,
   }),
-  persist: { key: `${process.env.VUE_APP_PREFIX ?? ''}survey` },
+  persist: {
+    key: `${process.env.VUE_APP_PREFIX ?? ''}survey`,
+    paths: ['data', 'history'],
+  },
   getters: {
     parametersLoaded: (state) => !!state.parameters && !!state.user,
     currentState: (state) => state.data,
