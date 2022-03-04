@@ -1,52 +1,58 @@
 <template>
-  <v-card :flat="isMobile" :tile="isMobile">
-    <v-list two-line subheader>
-      <v-subheader>{{ $t('profile.info') }}</v-subheader>
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-icon class="primary" dark>fa-id-badge</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title>{{ $t('profile.provider') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ profile.provider.provider || $t('common.not.provided') }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-icon class="primary" dark>fa-key</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title>{{ $t('profile.providerId') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ profile.provider.providerKey || $t('common.not.provided') }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-    <v-divider></v-divider>
-    <v-list subheader two-line flat>
-      <v-subheader>{{ $t('profile.settings') }}</v-subheader>
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-icon class="primary" dark>fa-language</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-select
-            v-model="language"
-            :items="languages"
-            :label="$t('profile.languages._')"
-            item-text="englishName"
-            item-value="id"
-            hide-details="auto"
-            outlined
-            @change="updateLanguage"
-          ></v-select>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-  </v-card>
+  <v-container :class="{ 'pa-0': isMobile }">
+    <v-row justify="center" :no-gutters="isMobile">
+      <v-col cols="12" sm="9" md="8">
+        <v-card :flat="isMobile" :tile="isMobile">
+          <v-list two-line subheader>
+            <v-subheader>{{ $t('profile.info') }}</v-subheader>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-icon class="primary" dark>fa-id-badge</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('profile.provider') }}</v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ profile.provider.provider || $t('common.not.provided') }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-icon class="primary" dark>fa-key</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('profile.providerId') }}</v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ profile.provider.providerKey || $t('common.not.provided') }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <v-list subheader two-line flat>
+            <v-subheader>{{ $t('profile.settings') }}</v-subheader>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-icon class="primary" dark>fa-language</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-select
+                  v-model="language"
+                  :items="languages"
+                  :label="$t('profile.languages._')"
+                  item-text="englishName"
+                  item-value="id"
+                  hide-details="auto"
+                  outlined
+                  @change="updateLanguage"
+                ></v-select>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">

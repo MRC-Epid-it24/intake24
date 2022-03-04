@@ -1,7 +1,13 @@
 <template>
   <v-row justify="center">
     <v-col cols="auto">
-      <v-card class="mt-10" outlined raised max-width="30rem" :loading="loading">
+      <v-card
+        :class="{ 'mt-10': !isMobile }"
+        :flat="isMobile"
+        :tile="isMobile"
+        :loading="loading"
+        max-width="32rem"
+      >
         <v-sheet class="d-flex justify-center" color="deep-orange lighten-5" tile>
           <v-card-title>
             <h2>{{ $t('login.title') }}</h2>
@@ -26,22 +32,15 @@
           >
             {{ $t('survey.generateUser._') }}
           </v-btn>
-          <v-sheet v-if="status === 200" class="pa-5 my-5" color="deep-orange lighten-5">
-            <h4 class="my-2">{{ $t('common.username') }}: {{ userName }}</h4>
-            <h4 class="my-2">{{ $t('common.password') }}: {{ password }}</h4>
-          </v-sheet>
-          <v-alert v-if="status === 403" type="error" dark>
-            {{ $t('survey.generateUser.403', { surveyId }) }}
-          </v-alert>
-          <v-alert v-if="status === 404" type="error" dark>
-            {{ $t('survey.generateUser.404', { surveyId }) }}
-          </v-alert>
-          <v-alert v-if="status === 422" type="error" dark>
-            {{ $t('survey.generateUser.422') }}
-          </v-alert>
-          <v-alert v-if="status === 429" type="error" dark>
-            {{ $t('survey.generateUser.429') }}
-          </v-alert>
+          <template v-if="status">
+            <v-sheet v-if="status === 200" class="pa-5 my-5" color="deep-orange lighten-5">
+              <h4 class="my-2">{{ $t('common.username') }}: {{ userName }}</h4>
+              <h4 class="my-2">{{ $t('common.password') }}: {{ password }}</h4>
+            </v-sheet>
+            <v-alert v-else type="error" dark>
+              {{ $t(`survey.generateUser.${status}`, { surveyId }) }}
+            </v-alert>
+          </template>
           <p>
             If you close your browser window you can get back to your survey using the following
             <a :href="`/${surveyId}`">link</a>.

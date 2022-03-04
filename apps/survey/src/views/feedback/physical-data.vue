@@ -95,13 +95,14 @@
               <v-row justify="center" class="mt-3">
                 <v-col cols="12" sm="6" md="5" lg="4">
                   <v-btn
-                    x-large
-                    type="submit"
+                    :disabled="errors.any()"
+                    :title="$t('common.action.continue')"
                     color="secondary"
                     block
-                    :title="$t('common.action.submit')"
+                    type="submit"
+                    x-large
                   >
-                    {{ $t('common.action.submit') }}
+                    {{ $t('common.action.continue') }}
                   </v-btn>
                 </v-col>
               </v-row>

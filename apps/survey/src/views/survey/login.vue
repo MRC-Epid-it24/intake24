@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-col cols="auto">
-      <v-card class="mt-10" outlined raised max-width="30rem">
+      <v-card :class="{ 'mt-10': !isMobile }" :flat="isMobile" :tile="isMobile" max-width="32rem">
         <v-sheet class="d-flex justify-center" color="deep-orange lighten-5" tile>
           <v-card-title>
             <h2>{{ $t('common._') }}</h2>
