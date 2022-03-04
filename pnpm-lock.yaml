@@ -439,6 +439,7 @@ importers:
       resolve-url-loader: ^5.0.0
       sass: ~1.32.13
       sass-loader: ~10.2.1
+      svg-gauge: ^1.0.6
       vue: ^2.6.14
       vue-cli-plugin-vuetify: ^2.4.7
       vue-i18n: ^8.27.0
@@ -471,6 +472,7 @@ importers:
       popper.js: 1.16.1
       regenerator-runtime: 0.13.9
       register-service-worker: 1.7.2
+      svg-gauge: 1.0.6
       vue: 2.6.14
       vue-i18n: 8.27.0
       vue-ls: 4.1.0
@@ -7605,18 +7607,6 @@ packages:
       debug:
         optional: true
 
-  /follow-redirects/1.14.9_debug@4.3.3:
-    resolution: {integrity: sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dependencies:
-      debug: 4.3.3
-    dev: true
-
   /fork-ts-checker-webpack-plugin/6.5.0_35c0e56c0bc548d0cc95663634017ddc:
     resolution: {integrity: sha512-cS178Y+xxtIjEUorcHddKS7yCMlrDPV31mt47blKKRfMd70Kxu5xruAFE2o9sDY6wVC5deuob/u/alD04YYHnw==}
     engines: {node: '>=10', yarn: '>=1.0.0'}
@@ -8271,7 +8261,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.9_debug@4.3.3
+      follow-redirects: 1.14.9
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -13351,6 +13341,10 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /svg-gauge/1.0.6:
+    resolution: {integrity: sha512-gRkznVhtS18eOM/GMPDXAvrLZOpqzNVDg4bFAPAEjiDKd1tZHFIe8Bwt3G6TFg/H+pFboetPPI+zoV+bOL26QQ==}
+    dev: false
+
   /svg-tags/1.0.0:
     resolution: {integrity: sha1-WPcc7jvVGbWdSyqEO2x95krAR2Q=}
     dev: true
@@ -14708,7 +14702,7 @@ packages:
       consola: 2.15.3
       pretty-time: 1.1.0
       std-env: 3.0.1
-      webpack: 5.70.0
+      webpack: 5.70.0_webpack-cli@4.9.2
     dev: true
 
   /websocket-driver/0.7.4:

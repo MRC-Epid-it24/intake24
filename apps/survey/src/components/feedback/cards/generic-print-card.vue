@@ -3,7 +3,7 @@
     <v-container fluid class="pa-0">
       <v-row no-gutters>
         <v-col cols="4">
-          <v-img :src="backgroundImage" class="ml-4" contain eager></v-img>
+          <v-img :src="backgroundImage" class="ml-4" :aspect-ratio="4 / 3" eager></v-img>
         </v-col>
         <v-col cols class="d-flex flex-column">
           <v-card-title class="font-weight-medium py-0">{{ detail.name }}</v-card-title>

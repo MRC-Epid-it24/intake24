@@ -1,6 +1,7 @@
 <template>
   <v-card width="320px" height="100%" class="d-flex flex-column">
-    <v-img max-height="180px" :src="backgroundImage"></v-img>
+    <v-img :src="backgroundImage" :aspect-ratio="16 / 9"></v-img>
+    <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div>
     <v-card-subtitle class="font-weight-medium">
       <i18n path="feedback.intake.your" tag="div" class="mb-2">
         <template v-slot:nutrient>
@@ -20,7 +21,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from '@vue/composition-api';
+import SvgGauge, { GaugeInstance } from 'svg-gauge';
+import { computed, defineComponent, PropType, ref, toRefs } from '@vue/composition-api';
 import { FeedbackCardParameters } from '@intake24/survey/feedback';
 import { getDetails, getBackgroundImage } from '.';
 import TellMeMore from './tell-me-more.vue';
@@ -38,17 +40,90 @@ export default defineComponent({
   },
 
   setup(props) {
-    const detail = computed(() => getDetails[props.parameters.type](props.parameters));
+    const { parameters } = toRefs(props);
+
+    const gaugeRef = ref<InstanceType<typeof Element>>();
+    const gaugeInstance = ref<GaugeInstance>();
+
+    const detail = computed(() => getDetails[parameters.value.type](parameters.value));
     const backgroundImage = computed(() =>
-      getBackgroundImage[props.parameters.type](props.parameters)
+      getBackgroundImage[parameters.value.type](parameters.value)
     );
 
+    const colorMap = computed(() => [
+      '#E64A19',
+      '#E64A19',
+      '#EF6C00',
+      '#EEFF41',
+      '#B2FF59',
+      '#43A047',
+    ]);
+
+    const isFiveADay = parameters.value.type === 'five-a-day';
+
     return {
-      detail,
       backgroundImage,
+      colorMap,
+      detail,
+      isFiveADay,
+      gaugeRef,
+      gaugeInstance,
     };
+  },
+
+  watch: {
+    'parameters.portions': {
+      handler(val) {
+        if (typeof val !== 'number') return;
+
+        this.renderGauge(val);
+      },
+    },
+  },
+
+  mounted() {
+    this.renderGauge(this.detail.intake);
+  },
+
+  methods: {
+    renderGauge(value: number) {
+      if (!this.isFiveADay || !this.gaugeRef) return;
+
+      if (!this.gaugeInstance) {
+        this.gaugeInstance = SvgGauge(this.gaugeRef, {
+          max: 5,
+          radius: 40,
+          dialStartAngle: 180,
+          dialEndAngle: 0,
+          showValue: false,
+          color: (currentValue: number) => this.colorMap[Math.round(currentValue)],
+        });
+      }
+
+      this.gaugeInstance.setValue(value);
+    },
   },
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.gauge-container {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  .gauge {
+    .dial {
+      stroke: #eee7;
+      stroke-width: 15;
+      fill: rgba(0, 0, 0, 0);
+    }
+
+    .value {
+      stroke-width: 15;
+      fill: rgba(0, 0, 0, 0);
+    }
+  }
+}
+</style>
