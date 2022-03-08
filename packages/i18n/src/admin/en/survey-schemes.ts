@@ -300,6 +300,10 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Food database search',
       subtitle: 'Choose a food from the database that best matches the description',
     },
+    'associated-foods-prompt': {
+      title: 'Associated foods',
+      subtitle: 'Suggest foods typically consumed together',
+    },
     'portion-size-option-prompt': {
       title: 'Portion size estimation method',
       subtitle:

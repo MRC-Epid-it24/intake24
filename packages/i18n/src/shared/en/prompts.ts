@@ -70,6 +70,10 @@ const prompts: LocaleMessageObject = {
     editMeal: 'Edit {meal}',
     editTime: 'Change Time',
   },
+  associatedFoods: {
+    text: 'Did you have X with your food ',
+    description: 'Associated foods description',
+  },
 };
 
 export default prompts;

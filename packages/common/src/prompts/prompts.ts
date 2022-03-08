@@ -24,6 +24,7 @@ export const standardComponentTypes = [
   'food-search-prompt',
   'meal-add-prompt',
   'edit-meal-prompt',
+  'associated-foods-prompt',
 ] as const;
 
 export type StandardComponentType = typeof standardComponentTypes[number];

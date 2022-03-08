@@ -59,6 +59,11 @@ export const foodSearchPromptProps: FoodSearchPromptProps = copy({
   localName: { en: 'Search Food' },
 });
 
+export const associatedFoodsPromptProps: BasePromptProps = copy({
+  ...basePromptProps,
+  localName: { en: 'Associated foods' },
+});
+
 export const standardPromptQuestions: PromptQuestion[] = [
   {
     component: 'meal-time-prompt',
@@ -94,6 +99,13 @@ export const standardPromptQuestions: PromptQuestion[] = [
     id: 'food-search-prompt',
     name: 'Food search prompt',
     props: copy(foodSearchPromptProps),
+  },
+  {
+    component: 'associated-foods-prompt',
+    type: 'standard',
+    id: 'associated-foods-prompt',
+    name: 'Associated foods prompt',
+    props: copy(associatedFoodsPromptProps),
   },
   {
     component: 'meal-add-prompt',
