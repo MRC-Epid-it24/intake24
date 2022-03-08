@@ -9,13 +9,7 @@ export const conditionTypes = [
 
 export type ConditionType = typeof conditionTypes[number];
 
-export type ConditionOp = 'eq' | 'ne' | 'gte' | 'gt' | 'lte' | 'lt';
-
 export type ConditionOpInput = [number | string, number | string | (number | string)[]];
-
-export type ConditionOpCallback = (input: ConditionOpInput) => boolean;
-
-export type ConditionOps = Record<ConditionOp, ConditionOpCallback>;
 
 const toNumber = (values: ConditionOpInput) =>
   values.flat().map((value) => (typeof value === 'string' ? parseFloat(value) : value));
@@ -23,7 +17,7 @@ const toNumber = (values: ConditionOpInput) =>
 const toString = (values: ConditionOpInput) =>
   values.flat().map((value) => value?.toString() || '');
 
-export const conditionOps: ConditionOps = {
+export const conditionOps = {
   eq: (values: ConditionOpInput) => {
     const [value, ...answer] = toString(values);
     return answer.length === 1 ? value === answer[0] : answer.includes(value);
@@ -49,6 +43,10 @@ export const conditionOps: ConditionOps = {
     return value < answer;
   },
 };
+
+export type ConditionOps = typeof conditionOps;
+
+export type ConditionOp = keyof ConditionOps;
 
 export interface Condition<T = Dictionary> {
   type: ConditionType;
