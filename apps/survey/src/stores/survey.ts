@@ -86,6 +86,17 @@ export const useSurvey = defineStore('survey', {
 
       return state.data.meals[element.mealIndex].foods[element.foodIndex];
     },
+    selectedFoodData: (state) => {
+      const { element } = state.data.selection;
+
+      if (element === null || element.type !== 'food') return undefined;
+
+      const food = state.data.meals[element.mealIndex].foods[element.foodIndex];
+
+      if (food.type !== 'encoded-food') return undefined;
+
+      return food.data;
+    },
     selectedFoodIndex: (state) => {
       const { element } = state.data.selection;
 
