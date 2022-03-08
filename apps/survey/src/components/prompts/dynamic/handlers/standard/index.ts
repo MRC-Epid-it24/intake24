@@ -4,6 +4,7 @@ import MealAddPromptHandler from './MealAddPromptHandler.vue';
 import EditMealPromptHandler from './EditMealPromptHandler.vue';
 import SubmitPromptHandler from './SubmitPromptHandler.vue';
 import ReviewConfirmPromptHandler from './ReviewConfirmPromptHandler.vue';
+import AssociatedFoodsPromptHandler from './AssociatedFoodsPromptHandler.vue';
 
 export default {
   MealTimePromptHandler,
@@ -12,4 +13,5 @@ export default {
   EditMealPromptHandler,
   SubmitPromptHandler,
   ReviewConfirmPromptHandler,
+  AssociatedFoodsPromptHandler,
 };

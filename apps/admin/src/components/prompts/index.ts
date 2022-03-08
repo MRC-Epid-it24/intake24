@@ -85,6 +85,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['preFoods'],
   },
+  'associated-foods-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
   // Portion size
   'portion-size-option-prompt': {
     tabs: [...baseTab],
