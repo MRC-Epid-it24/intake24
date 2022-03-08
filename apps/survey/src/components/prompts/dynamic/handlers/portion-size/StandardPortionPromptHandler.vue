@@ -1,7 +1,9 @@
 <template>
   <standard-portion-prompt
     v-bind="{ foodName, promptProps, standardUnits }"
-    @standard-portion-selected="onStandardPortionSelected"
+    :prompt-component="promptComponent"
+    @standard-portion-selected="onAnswer"
+    @tempChanging="onTempChange"
   >
   </standard-portion-prompt>
 </template>
@@ -10,7 +12,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
 import { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
-import { StandardPortionUnit } from '@intake24/common/types';
+import { HasOnAnswer, PromptAnswer, StandardPortionUnit } from '@intake24/common/types';
 import StandardPortionPrompt from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
 import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
@@ -23,7 +25,7 @@ interface StandardPortionData {
   quantity: QuantityValues;
 }
 
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default (Vue as VueConstructor<Vue & Mixins & HasOnAnswer>).extend({
   name: 'StandardPortionPromptHandler',
 
   components: { StandardPortionPrompt },
@@ -33,6 +35,10 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   props: {
     promptProps: {
       type: Object as PropType<BasePromptProps>,
+      required: true,
+    },
+    promptComponent: {
+      type: String,
       required: true,
     },
   },
@@ -60,9 +66,13 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateFood']),
+    ...mapActions(useSurvey, ['updateFood', 'setTempPromptAnswer', 'clearTempPromptAnswer']),
 
-    onStandardPortionSelected(data: StandardPortionData) {
+    onTempChange(tempStandardPortion: PromptAnswer) {
+      this.setTempPromptAnswer(tempStandardPortion);
+    },
+
+    onAnswer(data: StandardPortionData) {
       const { conversionFactor } = this.selectedPortionSize;
 
       const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
@@ -87,6 +97,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       });
 
       this.$emit('complete');
+      this.clearTempPromptAnswer();
     },
   },
 });

@@ -15,13 +15,16 @@
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-radio-group class="py-0" v-model="selectedUnitIndex">
+            <v-radio-group
+              class="py-0"
+              :value="selectedUnitIndex"
+              @change="onSelectMethod(selectedUnitIndex, $event)"
+            >
               <v-radio
                 v-for="(opt, i) in standardUnits"
                 :key="i"
                 :value="i"
                 :label="optionLabel(opt.name)"
-                @change="onSelectMethod"
               ></v-radio>
             </v-radio-group>
           </v-expansion-panel-content>
@@ -64,6 +67,8 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
+import { mapState } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 import { QuantityValues, ValidatedPromptProps } from '@intake24/common/prompts';
 import { LocaleTranslation, StandardPortionUnit } from '@intake24/common/types';
 import ErrorAlert from '@intake24/survey/components/elements/ErrorAlert.vue';
@@ -92,6 +97,10 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       type: Array as PropType<StandardPortionUnit[]>,
       required: true,
     },
+    promptComponent: {
+      type: String,
+      required: true,
+    },
   },
 
   data() {
@@ -108,6 +117,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   },
 
   computed: {
+    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
+
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
@@ -122,9 +133,23 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
         unit: this.$t(`standardUnits.${unit}_estimate_in`),
       });
     },
-    onSelectMethod() {
+    onSelectMethod(unit: number, event: number) {
       this.clearErrors();
       this.panelOpen = 1;
+      console.log(unit, event);
+      this.selectedUnitIndex = event;
+      this.$emit('tempChanging', {
+        response: {
+          method: 'standard-portion',
+          unit: this.standardUnits[this.selectedUnitIndex],
+          quantity: this.quantityValue,
+        },
+        modified: true,
+        new: false,
+        mealIndex: this.selectedMealIndex,
+        foodIndex: this.selectedFoodIndex,
+        prompt: this.promptComponent,
+      });
     },
     clearErrors() {
       this.errors = [];
@@ -137,6 +162,18 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     },
     onUpdateQuantity(value: QuantityValues) {
       this.quantityValue = value;
+      this.$emit('tempChanging', {
+        response: {
+          method: 'standard-portion',
+          unit: this.standardUnits[this.selectedUnitIndex],
+          quantity: this.quantityValue,
+        },
+        modified: true,
+        new: false,
+        mealIndex: this.selectedMealIndex,
+        foodIndex: this.selectedFoodIndex,
+        prompt: this.promptComponent,
+      });
     },
     submit() {
       if (!this.isValid()) {
