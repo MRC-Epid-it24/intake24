@@ -21,7 +21,7 @@
         >
           <v-text-field
             v-if="editIndex === idx"
-            v-model="editableList[idx].description"
+            :value="foodDisplayName(editableList[idx])"
             @keypress.enter.stop="addFood"
             @focusout="onEditFocusLost"
           ></v-text-field>

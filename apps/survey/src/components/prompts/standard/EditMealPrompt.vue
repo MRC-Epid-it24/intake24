@@ -1,6 +1,6 @@
 <template>
   <prompt-layout :text="promptText" :description="promptDescription">
-    <v-col sm="10" xs="12" class="px-0 px-sm-3">
+    <v-col sm="10" xs="12" md="8" lg="8" class="px-0 px-sm-3">
       <editable-food-list
         :food-list="foodsDrinks"
         :drinks="false"
