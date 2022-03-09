@@ -86,6 +86,11 @@ export default (Vue as VueConstructor<Vue & Mixins & HasOnAnswer>).extend({
       this.$emit('complete');
       this.clearTempPromptAnswer();
     },
+
+    onPartialAnswer(selected: SelectedAsServedImage) {
+      console.log('Called onPartialAnswer first');
+      this.onAnswer(selected);
+    },
   },
 });
 </script>

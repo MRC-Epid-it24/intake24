@@ -27,6 +27,7 @@ export const surveyInitialState: CurrentSurveyState = {
     response: null,
     modified: false,
     new: true,
+    finished: false,
     mealIndex: undefined,
     foodIndex: undefined,
     prompt: undefined,

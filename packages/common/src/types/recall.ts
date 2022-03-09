@@ -116,6 +116,7 @@ export interface PromptAnswer {
   response: PromptAnswerResponce;
   modified: boolean;
   new: boolean;
+  finished: boolean;
   prompt: ComponentType | undefined;
   mealIndex: number | undefined;
   foodIndex: number | undefined;
@@ -133,5 +134,10 @@ export type SurveyState = {
 };
 
 export interface HasOnAnswer {
+  onPartialAnswer(value?: PromptAnswerResponce): void;
   onAnswer(value?: PromptAnswerResponce): void;
+}
+
+export interface HasPartialAnswerTriggerHandler {
+  partialAnswerHandler(): void;
 }

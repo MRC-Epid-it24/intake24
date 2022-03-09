@@ -56,7 +56,7 @@
 
         <v-row class="pa-2 mt-0">
           <v-col>
-            <v-btn color="success" @click="submit()">Continue</v-btn>
+            <v-btn color="success" block @click="submit()">{{ $t('common.action.continue') }}</v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -145,6 +145,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
           quantity: this.quantityValue,
         },
         modified: true,
+        finished: false,
         new: false,
         mealIndex: this.selectedMealIndex,
         foodIndex: this.selectedFoodIndex,
@@ -169,6 +170,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
           quantity: this.quantityValue,
         },
         modified: true,
+        finished: true,
         new: false,
         mealIndex: this.selectedMealIndex,
         foodIndex: this.selectedFoodIndex,

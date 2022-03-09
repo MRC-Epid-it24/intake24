@@ -129,6 +129,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
           response: value,
           modified: true,
           new: false,
+          finished: true,
           mealIndex: this.selectedMealIndex,
           foodIndex: undefined,
           prompt: this.promptComponent,

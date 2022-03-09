@@ -99,6 +99,11 @@ export default (Vue as VueConstructor<Vue & Mixins & HasOnAnswer>).extend({
       this.$emit('complete');
       this.clearTempPromptAnswer();
     },
+
+    onPartialAnswer(data: StandardPortionData) {
+      console.log('Called onPartialAnswer');
+      this.onAnswer(data);
+    },
   },
 });
 </script>

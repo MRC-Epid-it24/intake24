@@ -88,6 +88,11 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
       this.clearTempPromptAnswer();
     },
 
+    onPartialAnswer(mealTime: string) {
+      console.log('Called onPartialAnswer');
+      this.onAnswer(mealTime);
+    },
+
     onRemoveMeal() {
       if (this.selectedMealIndex === undefined) {
         console.warn('No selected meal, meal index undefined');
@@ -113,6 +118,7 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
           response: value,
           modified: true,
           new: false,
+          finished: true,
           mealIndex: this.selectedMealIndex,
           foodIndex: this.selectedFoodIndex,
           prompt: this.promptComponent as ComponentType,

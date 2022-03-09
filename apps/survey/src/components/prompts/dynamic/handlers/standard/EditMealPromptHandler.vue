@@ -72,6 +72,11 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
       this.clearTempPromptAnswer();
     },
 
+    onPartialAnswer(newFoods: FoodState[]) {
+      console.log('Called onPartialAnswer');
+      this.onAnswer(newFoods);
+    },
+
     onAbort() {
       if (this.selectedMealIndex === undefined) {
         console.warn('No selected meal, meal index undefined');

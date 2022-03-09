@@ -58,6 +58,11 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
       this.$emit('complete');
       this.clearTempPromptAnswer();
     },
+    
+    onPartialAnswer(newMeal: string) {
+      console.log('Called onPartialAnswer first');
+      this.onAnswer(newMeal);
+    },
 
     onAbort() {
       this.$emit('complete');

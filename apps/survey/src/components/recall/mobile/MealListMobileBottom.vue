@@ -1,7 +1,7 @@
 <template>
   <v-card flat class="sticky_toolbar_card">
     <v-toolbar flat bottom class="sticky_toolbar">
-      <v-tabs slider-size="4" icons-and-text center-active touch v-model="activeTab" height="60px">
+      <v-tabs slider-size="4" icons-and-text center-active touch v-model="activeTab" height="56px">
         <v-tabs-slider color="success"></v-tabs-slider>
         <v-tab
           v-for="(meal, idx) in meals"

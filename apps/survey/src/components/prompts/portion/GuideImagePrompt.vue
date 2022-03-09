@@ -6,7 +6,7 @@
       </template>
       <v-row>
         <v-col>
-          <v-expansion-panels v-model="panelOpen">
+          <v-expansion-panels v-model="panelOpen" flat>
             <!-- Step 1: Select guide -->
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
@@ -51,7 +51,7 @@
                 <v-row>
                   <v-col>
                     <!-- TODO: Value from image map/canvas -->
-                    <v-btn color="success" @click="onSelectGuide()">
+                    <v-btn color="success" block @click="onSelectGuide()">
                       {{ $t('common.action.continue') }}
                     </v-btn>
                   </v-col>
@@ -68,7 +68,7 @@
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-row>
+                <v-row align="center" justify="center">
                   <v-col>
                     <quantity-card :whole="true" :fraction="true" @update-quantity="updateQuantity">
                     </quantity-card>
@@ -79,7 +79,7 @@
                     <v-alert color="error" v-if="hasErrors">
                       <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
                     </v-alert>
-                    <v-btn color="success" @click="submit">
+                    <v-btn color="success" @click="submit" block>
                       {{ $t('portion.common.confirmButton') }}
                     </v-btn>
                   </v-col>
@@ -96,12 +96,14 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
+import { mapState } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
 import { VImg } from 'vuetify/lib';
 import { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import { GuideImageResponse } from '@intake24/common/types/http/foods';
-import { LocaleTranslation } from '@intake24/common/types';
+import { LocaleTranslation, HasPartialAnswerTriggerHandler } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
@@ -115,7 +117,9 @@ type Refs = {
   debouncedImgResize: () => void;
 };
 
-export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
+export default (
+  Vue as VueConstructor<Vue & HasPartialAnswerTriggerHandler & Portion & Refs>
+).extend({
   name: 'GuideImagePrompt',
 
   mixins: [BasePortion, localeContent],
@@ -133,6 +137,10 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
       required: true,
     },
     guideImageId: {
+      type: String,
+      required: true,
+    },
+    promptComponent: {
       type: String,
       required: true,
     },
@@ -155,6 +163,8 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
   },
 
   computed: {
+    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
+
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
@@ -213,6 +223,21 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
     selectObject(idx: number) {
       this.selectedObjectIdx = idx;
       console.log(this.guideImageData.weights[idx]);
+      this.$emit('tempChanging', {
+        modified: true,
+        new: false,
+        finished: false,
+        mealIndex: this.selectedMealIndex,
+        foodIndex: this.selectedFoodIndex,
+        prompt: this.promptComponent,
+        response: {
+          object: {
+            id: this.selectedObjectIdx,
+            weight: this.guideImageData.weights[this.selectedObjectIdx],
+          },
+          quantity: this.quantityValue,
+        },
+      });
     },
 
     onSelectGuide() {
@@ -248,8 +273,13 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
       this.selectedQuantity = true; // Barely see the change of icon before transition
       this.panelOpen = -1; // Closes all panels
     },
+
     updateQuantity(value: QuantityValues) {
       this.quantityValue = value;
+    },
+
+    partialAnswerHandler() {
+      this.onSelectGuide();
     },
   },
 });

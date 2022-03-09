@@ -132,7 +132,9 @@ export default Recall.extend({
           tempAnswer.mealIndex === this.selectedMealIndex &&
           (this.selectedFoodIndex === undefined || tempAnswer.foodIndex === this.selectedFoodIndex)
         ) {
-          this.$refs.promptHandle.onAnswer(tempAnswer.response);
+          if (tempAnswer.finished === false)
+            this.$refs.promptHandle.onPartialAnswer(tempAnswer.response);
+          else this.$refs.promptHandle.onAnswer(tempAnswer.response);
         } else {
           this.nextPrompt();
         }

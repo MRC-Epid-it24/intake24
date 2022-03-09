@@ -118,6 +118,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       this.$emit('tempChanging', {
         response,
         modified: true,
+        finished: true,
         new: false,
         mealIndex: this.selectedMealIndex,
         foodIndex: this.selectedFoodIndex,

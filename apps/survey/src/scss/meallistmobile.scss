@@ -1,18 +1,18 @@
 .v-card ::v-deep .v-slide-group__next {
-	display: none !important;
-	flex: none;
+  display: none !important;
+  flex: none;
 }
 
-.v-card ::v-deep .v-slide-group__prev  {
-	display: none !important;
+.v-card ::v-deep .v-slide-group__prev {
+  display: none !important;
 }
 
 .v-card ::v-deep .v-slide-group__prev--disabled {
-	display: none !important;
+  display: none !important;
 }
 
 .v-card ::v-deep .add_button {
-	background-color: #ff87376e;
+  background-color: #ff87376e;
 }
 
 /* Style the meal bar */
@@ -26,11 +26,11 @@
 }
 
 .v-row ::v-deep .undoAlert {
-	position: absolute;
-	z-index: 10;
-	top: 1rem;
-	width: 80%;
-	max-width:300px
+  position: absolute;
+  z-index: 10;
+  top: 1rem;
+  width: 80%;
+  max-width: 300px;
 }
 
 .stickybottom {
@@ -42,12 +42,12 @@
 }
 
 .sticky_toolbar {
-	border-top: 1px solid #cecdcdde;
+  border-top: 1px solid #cecdcdde;
 }
 
 .meail_badge {
-	position:relative;
-	z-index:9;
+  position: relative;
+  z-index: 9;
 }
 
 .v-tab {
@@ -56,28 +56,30 @@
 }
 
 .v-tab ::v-deep p {
-	margin-bottom: 3px;
-  }
+  margin-bottom: 3px;
+}
+
+.v-tab--active {
+  background-color: bisque;
+}
 
 @media only screen and (max-width: 1264px) {
-	.content {
-		margin-top: 3rem;
-		margin-bottom: 3rem;
-	}
+  .content {
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+  }
 
-	html {
-		overflow: hidden !important;
-	}
+  html {
+    overflow: hidden !important;
+  }
 }
 
 .scrollable {
-	flex-grow: 1;
+  flex-grow: 1;
   overflow-y: auto;
 }
 
- .v-card ::v-deep .v-tab{
-	font-size: x-small;
-	font-weight: bold;
+.v-card ::v-deep .v-tab {
+  font-size: x-small;
+  font-weight: bold;
 }
-
-

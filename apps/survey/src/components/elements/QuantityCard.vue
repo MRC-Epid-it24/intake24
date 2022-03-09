@@ -1,7 +1,7 @@
 <template>
-  <v-row>
+  <v-row align="center" justify="center">
     <v-col v-if="whole" md="auto">
-      <v-card align="center" class="px-4">
+      <v-card align="center" justify="center" class="px-4">
         <v-row>
           <v-col>
             <v-btn text icon @click="modifyWhole(1)">
@@ -25,7 +25,7 @@
       {{ $t('portion.common.quantityAnd') }}
     </v-col>
     <v-col v-if="fraction" md="auto">
-      <v-card align="center" class="px-4">
+      <v-card align="center" justify="center" class="px-4">
         <v-row>
           <v-col>
             <v-btn text icon @click="modifyFrac(0.25)">
@@ -45,7 +45,6 @@
         </v-row>
       </v-card>
     </v-col>
-    <v-spacer></v-spacer>
   </v-row>
 </template>
 

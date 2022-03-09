@@ -321,15 +321,17 @@ export const useSurvey = defineStore('survey', {
     setFoods(data: { mealIndex: number; foods: FoodState[] }) {
       this.data.meals[data.mealIndex].foods = data.foods;
     },
-    setTempPromptAnswer(data: PromptAnswer) {
+    setTempPromptAnswer(data: PromptAnswer, updatedTempData?: Partial<PromptAnswer>) {
       if (!data) return;
-      this.data.tempPromptAnswer = data;
+      if (!updatedTempData) this.data.tempPromptAnswer = data;
+      else this.data.tempPromptAnswer = { ...data, ...updatedTempData };
     },
     clearTempPromptAnswer() {
       this.setTempPromptAnswer({
         response: null,
         modified: false,
         new: true,
+        finished: false,
         mealIndex: undefined,
         foodIndex: undefined,
         prompt: undefined,

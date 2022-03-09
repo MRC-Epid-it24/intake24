@@ -1,7 +1,7 @@
 <template>
   <v-container px-0>
-    <v-card>
-      <v-row>
+    <v-card elevation="0">
+      <v-row class="mb-3">
         <v-col>
           <v-card-text>
             <slot name="headerText"></slot>
