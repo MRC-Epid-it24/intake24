@@ -47,20 +47,28 @@ export interface StandardPortionState extends PortionSizeStateBase {
 
 export type PortionSizeState = AsServedState | GuideImageState | StandardPortionState;
 
-export interface FreeTextFood {
-  type: 'free-text';
-  description: string;
+export interface AssociatedFoodsState {
+  confirmed: boolean | undefined;
+}
+
+export interface AbstractFoodState {
   flags: string[];
+  // eslint-disable-next-line no-use-before-define
+  linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
 }
 
-export interface EncodedFood {
+export interface FreeTextFood extends AbstractFoodState {
+  type: 'free-text';
+  description: string;
+}
+
+export interface EncodedFood extends AbstractFoodState {
   type: 'encoded-food';
   data: UserFoodData;
-  flags: string[];
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
-  customPromptAnswers: Dictionary<CustomPromptAnswer>;
+  associatedFoods: AssociatedFoodsState[];
 }
 
 export type FoodState = FreeTextFood | EncodedFood;

@@ -95,6 +95,7 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
         description: this.newFoodDescription,
         flags: this.drinks ? ['is-drink'] : [],
         customPromptAnswers: {},
+        linkedFoods: [],
       });
 
       this.edit(this.editableList.length - 1);

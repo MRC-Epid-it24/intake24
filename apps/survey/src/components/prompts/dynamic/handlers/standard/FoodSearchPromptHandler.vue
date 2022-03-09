@@ -66,6 +66,10 @@ export default defineComponent({
         portionSize: null,
         customPromptAnswers: currentState?.customPromptAnswers ?? {},
         flags: currentState?.flags ?? [],
+        linkedFoods: [],
+        associatedFoods: data.associatedFoodPrompts.map(() => {
+          return { confirmed: undefined };
+        }),
       };
 
       this.replaceFood({
