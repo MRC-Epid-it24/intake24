@@ -1,6 +1,23 @@
 <template>
   <v-row :no-gutters="isMobile" class="pt-2" justify="center">
     <recall-bread-crumbs-mobile :promptName="activePrompt"></recall-bread-crumbs-mobile>
+    <transition type="fade" mode="out-in">
+      <v-alert
+        elevation="2"
+        transition="slide-x-reverse-transition"
+        dense
+        color="bisque"
+        border="left"
+        type="warning"
+        class="alert ma-2"
+        :value="alert"
+      >
+        <span class="alert-text">
+          I'm a dense alert placeholder with the <strong>border</strong> prop and a <strong>type</strong> of
+          warning
+        </span>
+      </v-alert>
+    </transition>
     <v-col cols="12" lg="9" class="content" v-if="bottomNavTab !== 1">
       <transition name="component-fade" mode="out-in">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
@@ -102,6 +119,7 @@ export default Recall.extend({
         foodContext: false,
       },
       submitTrigger: false,
+      alert: false,
     };
   },
 

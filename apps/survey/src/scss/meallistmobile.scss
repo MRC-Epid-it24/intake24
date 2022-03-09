@@ -41,6 +41,19 @@
   z-index: 9;
 }
 
+.alert {
+  position: fixed;
+  top: 5rem;
+  left: 0;
+  width: 100%;
+  z-index: 9;
+  background-color: rgb(230, 186, 134);
+}
+
+.alert-text {
+	color: rgb(105, 103, 103);
+}
+
 .sticky_toolbar {
   border-top: 1px solid #cecdcdde;
 }
