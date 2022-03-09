@@ -71,8 +71,10 @@ const prompts: LocaleMessageObject = {
     editTime: 'Change Time',
   },
   associatedFoods: {
-    text: 'Did you have X with your food ',
-    description: 'Associated foods description',
+    text: 'Did you have any of these with your {food}?',
+    description: 'These foods are often consumed together.',
+    yes: 'Yes, I had some',
+    no: 'No, I did not',
   },
 };
 

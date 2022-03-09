@@ -48,6 +48,7 @@ export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
 
     localeDescription(): string | null {
       const { description } = this;
+      if (!description) return null;
       return typeof description === 'string' ? description : this.getLocaleContent(description);
     },
 

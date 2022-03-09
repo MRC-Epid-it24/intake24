@@ -2,7 +2,8 @@
   <associated-foods-prompt
     :prompt-props="promptProps"
     :prompt-component="promptComponent"
-    :associated-food="associatedFoods[0]"
+    :associated-foods="associatedFoods"
+    :food-name="foodName"
   >
   </associated-foods-prompt>
 </template>
@@ -34,7 +35,8 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
 
   computed: {
     ...mapState(useSurvey, {
-      associatedFoods: (store) => store.selectedFoodData?.associatedFoodPrompts,
+      associatedFoods: (store) => store.selectedEncodedFood?.data.associatedFoodPrompts,
+      foodName: (store) => store.selectedEncodedFood?.data.localName,
     }),
   },
 });

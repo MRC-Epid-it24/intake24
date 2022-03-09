@@ -1,24 +1,49 @@
 <template>
   <prompt-layout :text="text" :description="description">
-    {{ this.foodName }}
-
-    {{ this.associatedFood.categoryCode }}
-
-    {{ this.associatedFood.foodCode }}
+    <v-card-actions :class="isNotDesktop && 'justify-center'">
+      <v-row>
+        <v-col>
+          <v-expansion-panels v-model="panelOpen">
+            <v-expansion-panel v-for="(assocFood, index) in this.associatedFoods" :key="index">
+              <v-expansion-panel-header disable-icon-rotate>
+                {{ assocFood.promptText }}
+                <template v-slot:actions>
+                  <valid-invalid-icon
+                    :valid="promptState[index].confirmed !== undefined"
+                  ></valid-invalid-icon>
+                </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-btn-toggle
+                  :value="promptState[index].confirmed"
+                  @change="updatePromptState(index, $event)"
+                >
+                  <v-btn value="false"> {{ $t('prompts.associatedFoods.no') }}</v-btn>
+                  <v-btn value="true"> {{ $t('prompts.associatedFoods.yes') }}</v-btn>
+                </v-btn-toggle>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-col>
+      </v-row>
+    </v-card-actions>
   </prompt-layout>
 </template>
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { PropType } from '@vue/composition-api';
-import { BasePromptProps, MealTimePromptProps } from '@intake24/common/prompts';
+import { BasePromptProps } from '@intake24/common/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 import { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
+import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'AssociatedFoodsPrompt',
+
+  components: { ValidInvalidIcon },
 
   mixins: [BasePrompt],
 
@@ -30,8 +55,8 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     foodName: {
       type: String,
     },
-    associatedFood: {
-      type: Object as PropType<UserAssociatedFoodPrompt>,
+    associatedFoods: {
+      type: Array as PropType<Array<UserAssociatedFoodPrompt>>,
     },
     promptComponent: {
       type: String,
@@ -41,17 +66,33 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   data() {
     return {
-      errors: [] as string[],
+      panelOpen: true,
     };
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
+    ...mapState(useSurvey, {
+      promptState: (state) => {
+        const food = state.selectedEncodedFood!;
+
+        return (
+          food.associatedFoods ??
+          food.data.associatedFoodPrompts.map(() => {
+            return { confirmed: undefined };
+          })
+        );
+      },
+      selectedFoodIndex: (state) => state.selectedFoodIndex,
+      selectedMealIndex: (state) => state.selectedMealIndex,
+    }),
+
     text(): string {
       const text = this.promptProps.text[this.$i18n.locale];
       return text
         ? text.replace('{food}', this.foodName ?? '')
-        : this.$t('prompts.associatedFoods.text', { meal: this.foodName }).toString();
+        : this.$t('prompts.associatedFoods.text', {
+            food: this.foodName?.toLocaleLowerCase(),
+          }).toString();
     },
     description(): string {
       const description = this.promptProps.description[this.$i18n.locale];
@@ -62,6 +103,26 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   methods: {
+    ...mapActions(useSurvey, ['updateAssociatedFoodsPrompt']),
+
+    updatePromptState(index: number, value: boolean | undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.updateAssociatedFoodsPrompt({
+        mealIndex: this.selectedMealIndex!,
+        foodIndex: this.selectedFoodIndex!,
+        promptIndex: index,
+        promptState: { confirmed: value },
+      });
+    },
+
+    accept() {
+      console.log('accept');
+    },
+
+    reject() {
+      console.log('reject');
+    },
+
     submit() {
       this.$emit('answer', null);
     },
