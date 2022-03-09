@@ -15,7 +15,7 @@
       @click="onItemClick(2)"
       :color="this.continue ? 'success' : 'primary'"
     >
-      <span>Next question</span>
+      <span>{{ $t('common.action.continue') }}</span>
       <v-icon>$next</v-icon>
     </v-btn>
   </v-bottom-navigation>

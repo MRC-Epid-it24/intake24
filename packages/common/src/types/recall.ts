@@ -141,3 +141,9 @@ export interface HasOnAnswer {
 export interface HasPartialAnswerTriggerHandler {
   partialAnswerHandler(): void;
 }
+
+export type PromptHandlerRefs = {
+  $refs: {
+    promptHandleChild: HasPartialAnswerTriggerHandler;
+  };
+};
