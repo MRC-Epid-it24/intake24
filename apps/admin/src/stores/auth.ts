@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import authSvc, { LoginRequest, MFAVerifyRequest } from '@intake24/admin/services/auth.service';
+import authService, { LoginRequest, MFAVerifyRequest } from '@intake24/admin/services/auth.service';
 import axios, { AxiosError } from 'axios';
 import { useLoading } from './loading';
 import { useUser } from './user';
@@ -25,7 +25,7 @@ export const useAuth = defineStore('auth', {
       loading.addItem('login');
 
       try {
-        const data = await authSvc.login(payload);
+        const data = await authService.login(payload);
 
         if ('accessToken' in data) await this.successfulLogin(data.accessToken);
         else this.mfaRequest(data.mfaRequestUrl);
@@ -45,7 +45,7 @@ export const useAuth = defineStore('auth', {
       loading.addItem('verify');
 
       try {
-        const accessToken = await authSvc.verify(request);
+        const accessToken = await authService.verify(request);
         await this.successfulLogin(accessToken);
 
         return Promise.resolve();
@@ -60,7 +60,7 @@ export const useAuth = defineStore('auth', {
 
     async refresh(withErr = true) {
       try {
-        this.accessToken = await authSvc.refresh();
+        this.accessToken = await authService.refresh();
         this.error = null;
 
         const userState = useUser();
@@ -75,7 +75,7 @@ export const useAuth = defineStore('auth', {
     },
 
     async logout(invalidate?: boolean) {
-      if (invalidate) await authSvc.logout();
+      if (invalidate) await authService.logout();
 
       useLoading().$reset();
       useUser().$reset();

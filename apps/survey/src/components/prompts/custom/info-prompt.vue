@@ -9,17 +9,17 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-import { BasePromptProps, infoPromptProps } from '@intake24/common/prompts';
+import { infoPromptProps, InfoPromptProps } from '@intake24/common/prompts';
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({
-  name: 'InfoPage',
+  name: 'InfoPrompt',
 
   mixins: [BasePrompt],
 
   props: {
     promptProps: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as PropType<InfoPromptProps>,
       required: true,
     },
   },

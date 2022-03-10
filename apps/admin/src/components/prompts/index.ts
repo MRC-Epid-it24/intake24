@@ -47,6 +47,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...validatedTab],
     sections: [...allSection],
   },
+  'yes-no-prompt': {
+    tabs: [...baseTab],
+    sections: [...allSection],
+  },
   // Standard
   'meal-time-prompt': {
     tabs: [...baseTab],

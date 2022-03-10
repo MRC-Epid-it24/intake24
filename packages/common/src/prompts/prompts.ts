@@ -11,6 +11,7 @@ export const customComponentTypes = [
   'checkbox-list-prompt',
   'radio-list-prompt',
   'textarea-prompt',
+  'yes-no-prompt',
 ] as const;
 
 export type CustomComponentType = typeof customComponentTypes[number];

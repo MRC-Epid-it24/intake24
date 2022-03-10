@@ -267,6 +267,10 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Free text',
       subtitle: 'Ask to enter a free text answer or description',
     },
+    'yes-no-prompt': {
+      title: 'Yes / No choice',
+      subtitle: 'Ask to choose yes or no',
+    },
     'food-search-prompt': {
       title: 'Food database search',
       subtitle: 'Choose a food from the database that best matches the description',

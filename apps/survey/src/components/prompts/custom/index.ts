@@ -1,9 +1,10 @@
-import CheckboxListPrompt from './CheckboxListPrompt.vue';
-import DatePickerPrompt from './DatePickerPrompt.vue';
-import InfoPrompt from './InfoPrompt.vue';
-import RadioListPrompt from './RadioListPrompt.vue';
-import TextareaPrompt from './TextareaPrompt.vue';
-import TimePickerPrompt from './TimePickerPrompt.vue';
+import CheckboxListPrompt from './checkbox-list-prompt.vue';
+import DatePickerPrompt from './date-picker-prompt.vue';
+import InfoPrompt from './info-prompt.vue';
+import RadioListPrompt from './radio-list-prompt.vue';
+import TextareaPrompt from './textarea-prompt.vue';
+import TimePickerPrompt from './time-picker-prompt.vue';
+import YesNoPrompt from './yes-no-prompt.vue';
 
 export default {
   CheckboxListPrompt,
@@ -12,4 +13,5 @@ export default {
   RadioListPrompt,
   TextareaPrompt,
   TimePickerPrompt,
+  YesNoPrompt,
 };

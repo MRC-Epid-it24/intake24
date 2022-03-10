@@ -36,6 +36,8 @@ const common: LocaleMessageObject = {
     ok: 'OK',
     reload: 'Reload',
     submit: 'Submit',
+    yes: 'Yes',
+    no: 'No',
   },
 
   errors: {

@@ -40,10 +40,6 @@ export default {
     return accessToken;
   },
 
-  /* async password(email: string, recaptchaResponse: string): Promise<string> {
-    
-  }, */
-
   /**
    * Refresh access token and store the access token to token service.
    *

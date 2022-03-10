@@ -4,6 +4,7 @@ import CheckboxListPrompt from './checkbox-list-prompt.vue';
 import RadioListPrompt from './radio-list-prompt.vue';
 import TimePickerPrompt from './time-picker-prompt.vue';
 import TextareaPrompt from './textarea-prompt.vue';
+import YesNoPrompt from './yes-no-prompt.vue';
 
 export default {
   DatePickerPrompt,
@@ -12,4 +13,5 @@ export default {
   RadioListPrompt,
   TimePickerPrompt,
   TextareaPrompt,
+  YesNoPrompt,
 };

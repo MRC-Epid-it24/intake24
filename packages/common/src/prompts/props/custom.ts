@@ -37,7 +37,11 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
   other: boolean;
 }
 
-export const infoPromptProps: BasePromptProps = copy(basePromptProps);
+export type InfoPromptProps = BasePromptProps;
+export type YesNoPromptProps = BasePromptProps;
+
+export const infoPromptProps: InfoPromptProps = copy(basePromptProps);
+export const yesNoPromptProps: YesNoPromptProps = copy(basePromptProps);
 
 export const datePickerPromptProps: DatePickerPromptProps = copy({
   ...basePromptProps,
@@ -121,5 +125,12 @@ export const customPromptQuestions: PromptQuestion[] = [
     id: 'textarea-prompt',
     name: 'Textarea prompt',
     props: copy(textareaPromptProps),
+  },
+  {
+    component: 'yes-no-prompt',
+    type: 'custom',
+    id: 'yes-no-prompt',
+    name: 'Yes / No prompt',
+    props: copy(yesNoPromptProps),
   },
 ];
