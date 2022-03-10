@@ -1,31 +1,34 @@
 <template>
-  <v-card flat tile>
-    <v-container fluid class="pa-0">
-      <v-row no-gutters>
-        <v-col cols="4">
-          <v-img :src="backgroundImage" class="ml-4" :aspect-ratio="4 / 3" eager></v-img>
-        </v-col>
-        <v-col cols class="d-flex flex-column">
-          <v-card-title class="font-weight-medium py-0">{{ detail.name }}</v-card-title>
-          <v-card-text class="d-flex flex-column py-0">
-            <div class="subtitle-1">
-              <span class="font-weight-medium">{{ $t('feedback.intake.estimated') }}: </span>
+  <v-container fluid class="pa-0">
+    <v-row no-gutters class="print-card-header mt-2">
+      <v-col cols="4">
+        <v-img :src="backgroundImage" class="ml-4" :aspect-ratio="4 / 3" eager></v-img>
+      </v-col>
+      <v-col cols class="d-flex flex-column">
+        <v-card-title class="font-weight-medium py-0">{{ detail.name }}</v-card-title>
+        <v-card-text class="d-flex flex-column py-0 font-weight-medium">
+          <i18n path="feedback.intake.your" tag="div" class="mb-2">
+            <template v-slot:nutrient>
+              <span>{{ detail.name.toLowerCase() }}</span>
+            </template>
+            <template v-slot:amount>
               <span :class="detail.textClass">{{ detail.intake }} {{ detail.unit }}</span>
-            </div>
-            <div v-if="detail.recommendedIntake" class="subtitle-1">
-              <span class="font-weight-medium">{{ $t('feedback.intake.recommended') }}: </span>
-              {{ detail.recommendedIntake.toString() }}
-              {{ detail.unit }}
-            </div>
-            <div class="mt-auto" v-html="detail.unitDescription"></div>
-          </v-card-text>
-        </v-col>
-        <v-col cols="12">
-          <v-card-text v-html="detail.description"></v-card-text>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-card>
+            </template>
+          </i18n>
+          <div v-if="detail.recommendedIntake" :class="detail.textClass">
+            <v-icon left>{{ detail.iconClass }}</v-icon>
+            <span>{{ detail.recommendedIntake.toString() }} {{ detail.unit }}</span>
+          </div>
+          <div class="mt-auto" v-html="detail.unitDescription"></div>
+        </v-card-text>
+      </v-col>
+    </v-row>
+    <v-row no-gutters>
+      <v-col cols="12">
+        <v-card-text v-html="detail.description"></v-card-text>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -57,4 +60,11 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+@media print {
+  .print-card-header {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+</style>

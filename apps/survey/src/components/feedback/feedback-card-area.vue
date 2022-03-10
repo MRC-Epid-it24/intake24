@@ -1,22 +1,14 @@
 <template>
-  <v-row justify="center" no-gutters>
-    <v-col v-for="card in cards" :key="card.id" class="pa-4 d-print-none" cols="auto">
-      <generic-card :parameters="card"></generic-card>
-    </v-col>
-    <v-col
-      v-for="(card, idx) in cards"
-      :key="`print-${card.id}`"
-      cols="12"
-      class="d-none d-print-block"
-    >
+  <div>
+    <v-row justify="center" no-gutters class="d-print-none">
+      <v-col v-for="card in cards" :key="card.id" class="pa-4" cols="auto">
+        <generic-card :parameters="card"></generic-card>
+      </v-col>
+    </v-row>
+    <div v-for="card in cards" :key="`print-${card.id}`" class="d-none d-print-block">
       <generic-print-card :parameters="card"></generic-print-card>
-      <v-divider
-        v-if="idx + 1 < cards.length"
-        :key="`print-div-${card.id}`"
-        class="mb-4 mx-4"
-      ></v-divider>
-    </v-col>
-  </v-row>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -38,4 +30,11 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@media print {
+  .print-card {
+    page-break-after: page;
+    break-after: page;
+  }
+}
+</style>

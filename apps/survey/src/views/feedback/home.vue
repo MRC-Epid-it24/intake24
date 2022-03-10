@@ -1,12 +1,15 @@
 <template>
   <v-container class="pa-0" fluid>
-    <v-sheet v-if="userDemographic" color="white">
-      <v-row no-gutters justify="center">
-        <v-col cols="12" md="6">
-          <user-demographic-info :user-info="userDemographic" class="pa-4"></user-demographic-info>
+    <v-sheet color="white">
+      <div class="text-h4 font-weight-medium text-center py-4">
+        {{ $t('feedback.title') }}
+      </div>
+      <v-row no-gutters justify="center" class="pa-4 d-print-none">
+        <v-col v-if="userDemographic" cols="12" md="6">
+          <user-demographic-info :user-info="userDemographic"></user-demographic-info>
         </v-col>
       </v-row>
-      <v-row no-gutters justify="center" class="pa-4">
+      <v-row no-gutters justify="center" class="pa-4 d-print-none">
         <v-col cols="12" md="6">
           <v-divider></v-divider>
           <v-expansion-panels flat focusable tile>
@@ -41,6 +44,13 @@
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify="center" class="px-4">
+        <v-col cols="auto">
+          <v-alert text color="blue darken-3" icon="fas fa-circle-exclamation">
+            {{ $t('feedback.missingFoods') }}
+          </v-alert>
         </v-col>
       </v-row>
     </v-sheet>

@@ -1,14 +1,17 @@
 import { LocaleMessageObject } from 'vue-i18n';
 
 const feedback: LocaleMessageObject = {
-  _: 'Feedback',
+  _: 'Intake24 feedback',
+  title: 'Results from your Intake24 recalls',
+  missingFoods:
+    'Please note, any foods you reported as missing will not be included in your dietary feedback',
 
   physicalData: {
     title: 'About you',
     subtitle: 'We only need few details about you',
     change: 'Change my info',
     recall: 'Record another day',
-    summary: 'Summary of your diet',
+
     sexes: {
       _: 'Sex',
       m: 'Male',

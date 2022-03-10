@@ -7,7 +7,7 @@
       <v-list max-width="300px" dense>
         <v-list-item v-for="(item, index) in nutrient.list" :key="item.name">
           <v-list-item-icon
-            class="font-weight-bold my-auto"
+            class="font-weight-bold my-auto mr-2"
             :style="{ color: `${topFoods.colors[index]}` }"
           >
             {{ index + 1 }}
@@ -37,7 +37,7 @@ export default defineComponent({
   },
 
   mounted() {
-    // TODO: sometimes charts won;t render -> investigate
+    // TODO: sometimes charts won't render -> investigate (maybe only HMR issue)
     // maybe re-render charts when elements are in viewport
     setTimeout(() => {
       for (const item of this.topFoods.nutrients) {
@@ -51,7 +51,7 @@ export default defineComponent({
         const myChart = new Chart(el, {
           type: 'doughnut',
           data: item.chartJs,
-          options: { plugins: { legend: { position: 'bottom' } } },
+          options: { plugins: { legend: { display: false } } },
         });
       }
     }, 1000);
