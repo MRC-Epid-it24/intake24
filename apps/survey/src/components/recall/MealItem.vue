@@ -43,11 +43,11 @@ export default defineComponent({
       menuMealIcon: 'far fa-edit',
       menuMeal: [
         {
-          name: 'Add or remove foods',
+          name: this.$t('recall.menu.meal.editFoodInMeal'),
           action: 'edit-foods',
         },
         {
-          name: 'Change meal time',
+          name: this.$t('recall.menu.meal.editMealTime'),
           action: 'edit-time',
         },
       ],
