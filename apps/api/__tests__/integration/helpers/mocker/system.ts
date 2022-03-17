@@ -1,4 +1,4 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import slugify from 'slugify';
 import { randomUUID } from 'crypto';
 import { randomString } from '@intake24/common/util';

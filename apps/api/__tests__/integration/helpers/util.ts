@@ -1,5 +1,5 @@
 import axios from 'axios';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import fs, { ReadStream } from 'fs-extra';
 import { Parser } from 'json2csv';
 import { times } from 'lodash';

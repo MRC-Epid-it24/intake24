@@ -17,7 +17,7 @@ CAT2 (no portion size methods in en_GB)
     |- FOOD5 (no portion size methods in en_GB, portionSizeMethods[5] in en_AU)
  */
 
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 import {
   UserPortionSizeMethod,

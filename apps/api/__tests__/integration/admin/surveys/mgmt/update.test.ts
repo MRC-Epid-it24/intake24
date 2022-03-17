@@ -1,4 +1,4 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import request from 'supertest';
 import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { Op, Permission, Survey } from '@intake24/db';
