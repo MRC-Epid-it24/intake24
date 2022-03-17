@@ -174,7 +174,6 @@ importers:
       '@types/cors': ^2.8.12
       '@types/dompurify': ^2.3.3
       '@types/express': ^4.17.13
-      '@types/faker': ^5.5.9
       '@types/ioredis': ^4.28.8
       '@types/jsdom': ^16.2.14
       '@types/json2csv': ^5.0.3
@@ -187,7 +186,7 @@ importers:
       '@types/nunjucks': ^3.2.1
       '@types/passport': ^1.0.7
       '@types/passport-jwt': ^3.0.6
-      '@types/sharp': ^0.29.5
+      '@types/sharp': ^0.30.0
       '@types/supertest': ^2.0.11
       '@types/validator': ^13.7.1
       '@types/web-push': ^3.3.2
@@ -299,7 +298,6 @@ importers:
       '@types/cors': 2.8.12
       '@types/dompurify': 2.3.3
       '@types/express': 4.17.13
-      '@types/faker': 5.5.9
       '@types/ioredis': 4.28.8
       '@types/jsdom': 16.2.14
       '@types/json2csv': 5.0.3
@@ -312,7 +310,7 @@ importers:
       '@types/nunjucks': 3.2.1
       '@types/passport': 1.0.7
       '@types/passport-jwt': 3.0.6
-      '@types/sharp': 0.29.5
+      '@types/sharp': 0.30.0
       '@types/supertest': 2.0.11
       '@types/validator': 13.7.1
       '@types/web-push': 3.3.2
@@ -2934,10 +2932,6 @@ packages:
       '@types/serve-static': 1.13.10
     dev: true
 
-  /@types/faker/5.5.9:
-    resolution: {integrity: sha512-uCx6mP3UY5SIO14XlspxsGjgaemrxpssJI0Ol+GfhxtcKpv9pgRZYsS4eeKeHVLje6Qtc8lGszuBI461+gVZBA==}
-    dev: true
-
   /@types/fs-extra/9.0.13:
     resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
     dependencies:
@@ -3216,8 +3210,8 @@ packages:
       '@types/node': 17.0.21
     dev: true
 
-  /@types/sharp/0.29.5:
-    resolution: {integrity: sha512-3TC+S3H5RwnJmLYMHrcdfNjz/CaApKmujjY9b6PU/pE6n0qfooi99YqXGWoW8frU9EWYj/XTI35Pzxa+ThAZ5Q==}
+  /@types/sharp/0.30.0:
+    resolution: {integrity: sha512-bZ0Y/JVlrOyqwlBMJ2taEgnwFavjLnyZmLOLecmOesuG5kR2Lx9b2fM4osgfVjLJi8UlE+t3R1JzRVMxF6MbfA==}
     dependencies:
       '@types/node': 17.0.21
     dev: true
@@ -4645,7 +4639,7 @@ packages:
   /axios/0.21.4_debug@4.3.3:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.14.9_debug@4.3.3
+      follow-redirects: 1.14.9
     transitivePeerDependencies:
       - debug
     dev: false
@@ -4653,7 +4647,7 @@ packages:
   /axios/0.23.0:
     resolution: {integrity: sha512-NmvAE4i0YAv5cKq8zlDoPd1VLKAqX5oLuZKs8xkJa4qi6RGn0uhCYFjWtHHC9EM/MwOwYWOs53W+V0aqEXq1sg==}
     dependencies:
-      follow-redirects: 1.14.9_debug@4.3.3
+      follow-redirects: 1.14.9
     transitivePeerDependencies:
       - debug
     dev: false
@@ -4661,7 +4655,7 @@ packages:
   /axios/0.26.1:
     resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
     dependencies:
-      follow-redirects: 1.14.9_debug@4.3.3
+      follow-redirects: 1.14.9
     transitivePeerDependencies:
       - debug
     dev: false
@@ -7609,7 +7603,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-    dev: true
 
   /follow-redirects/1.14.9_debug@4.3.3:
     resolution: {integrity: sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==}
@@ -7621,6 +7614,7 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.3
+    dev: true
 
   /fork-ts-checker-webpack-plugin/6.5.0_fcde1b5840cddf6d82dd0db3046b41af:
     resolution: {integrity: sha512-cS178Y+xxtIjEUorcHddKS7yCMlrDPV31mt47blKKRfMd70Kxu5xruAFE2o9sDY6wVC5deuob/u/alD04YYHnw==}
