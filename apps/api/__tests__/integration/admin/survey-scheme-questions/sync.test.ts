@@ -6,7 +6,7 @@ import {
 import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { SurveyScheme, SurveySchemeQuestion } from '@intake24/db';
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/admin/survey-scheme-questions';
 
   let url: string;
@@ -47,37 +47,21 @@ export default (): void => {
     invalidUrl = `${baseUrl}/999999/sync`;
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).post(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('post', url);
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission('survey-scheme-questions|sync');
     });
 
     it('should return 422 for missing input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['surveySchemeId', 'section', 'question']);
+      await suite.sharedTests.assertMissingInput('post', url, [
+        'surveySchemeId',
+        'section',
+        'question',
+      ]);
     });
 
     it('should return 422 for invalid input data', async () => {
@@ -97,43 +81,28 @@ export default (): void => {
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .post(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(syncInput);
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('post', invalidUrl, syncInput);
     });
 
     it(`should return 404 when scheme record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .post(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ ...syncInput, surveySchemeId: '987654' });
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
+        ...syncInput,
+        surveySchemeId: '987654',
+      });
     });
 
     it(`should return 404 when question is not in correct section`, async () => {
-      const { status } = await request(suite.app)
-        .post(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ ...syncInput, section: 'postMeals' });
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
+        ...syncInput,
+        section: 'postMeals',
+      });
     });
 
     it(`should return 404 when question ID is not found in scheme questions set`, async () => {
-      const { status } = await request(suite.app)
-        .post(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ ...syncInput, question: { ...syncInput.question, id: 'invalidQuestionId' } });
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
+        ...syncInput,
+        question: { ...syncInput.question, id: 'invalidQuestionId' },
+      });
     });
 
     it('should return 200 and data', async () => {

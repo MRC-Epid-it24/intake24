@@ -1,35 +1,21 @@
-import request from 'supertest';
 import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
 
-export default (): void => {
+export default () => {
   const url = '/api/admin/feedback-schemes/refs';
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('get', url);
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
+  describe('authenticated / authorized', () => {
+    it('should return 200 and refs', async () => {
+      await setPermission('feedback-schemes|create');
 
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  it('should return 200 and refs', async () => {
-    await setPermission('feedback-schemes|create');
-
-    const { status, body } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(200);
-    expect(body).toContainAllKeys(['languages', 'nutrientTypes', 'physicalActivityLevels']);
+      await suite.sharedTests.assertReferencesResult('get', url, [
+        'languages',
+        'nutrientTypes',
+        'physicalActivityLevels',
+      ]);
+    });
   });
 };

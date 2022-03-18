@@ -7,7 +7,7 @@ import { omit, pick } from 'lodash';
 import ioc from '@intake24/api/ioc';
 import { CustomField } from '@intake24/common/types';
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/admin/surveys';
 
   let url: string;
@@ -38,10 +38,8 @@ export default (): void => {
     invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999/edit`;
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('get', url);
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
@@ -91,26 +89,16 @@ export default (): void => {
   it(`should return 404 when record doesn't exist`, async () => {
     await setPermission(['surveys|respondents', 'surveyadmin']);
 
-    const { status } = await request(suite.app)
-      .get(invalidSurveyUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(404);
+    await suite.sharedTests.assertMissingRecord('get', invalidSurveyUrl);
   });
 
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission(['surveys|respondents', surveyStaff(survey.id)]);
     });
 
     it(`should return 404 when user record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .get(invalidRespondentUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('get', invalidRespondentUrl);
     });
 
     it('should return 200 and data', async () => {

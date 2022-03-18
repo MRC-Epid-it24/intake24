@@ -16,7 +16,7 @@ import tasks from './tasks/index.test';
 import user from './user/index.test';
 import users from './users/index.test';
 
-export default (): void => {
+export default () => {
   describe('/api/admin/fdbs', fdbs);
   describe('/api/admin/feedback-schemes', feedbackSchemes);
   describe('/api/admin/food-groups', foodGroups);

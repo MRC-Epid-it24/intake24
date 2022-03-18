@@ -3,7 +3,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 import { UserPhysicalDataAttributes } from '@intake24/common/types/models/system';
 import { UserPhysicalData } from '@intake24/db';
 
-export default (): void => {
+export default () => {
   let url: string;
 
   let userPhysicalData: UserPhysicalDataAttributes;
@@ -25,9 +25,7 @@ export default (): void => {
   });
 
   it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+    await suite.sharedTests.assertMissingAuthentication('get', url);
   });
 
   it('should return null when no physical data for user', async () => {

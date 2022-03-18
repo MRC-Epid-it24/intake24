@@ -3,7 +3,7 @@ import request from 'supertest';
 import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { surveyStaff } from '@intake24/api/services/core/auth';
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/admin/surveys';
 
   let url: string;
@@ -20,21 +20,8 @@ export default (): void => {
     invalidUrl = `${baseUrl}/invalid-survey-id/respondents/upload`;
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).post(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
-  });
-
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('post', url);
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
@@ -81,20 +68,13 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission(['surveys|respondents', surveyStaff(suite.data.system.survey.id)]);
     });
 
     it('should return 422 for missing input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['file']);
+      await suite.sharedTests.assertMissingInput('post', url, ['file']);
     });
 
     it('should return 422 for invalid input data', async () => {

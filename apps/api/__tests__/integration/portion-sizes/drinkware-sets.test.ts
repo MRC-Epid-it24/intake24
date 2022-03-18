@@ -1,15 +1,13 @@
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/portion-sizes/drinkware-sets';
   const url = `${baseUrl}/?id[]=SetOne&id[]=SetTwo`;
   const invalidUrl = `${baseUrl}/?id[]=InvalidSet`;
 
   it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+    await suite.sharedTests.assertMissingAuthentication('get', url);
   });
 
   it('should return 200 and empty array when no query provided', async () => {

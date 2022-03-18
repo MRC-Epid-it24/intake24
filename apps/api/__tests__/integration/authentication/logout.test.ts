@@ -2,7 +2,7 @@ import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import securityConfig from '@intake24/api/config/security';
 
-export default (): void => {
+export default () => {
   const url = '/api/auth/logout';
 
   it('Should return 200 and empty refresh cookie', async () => {

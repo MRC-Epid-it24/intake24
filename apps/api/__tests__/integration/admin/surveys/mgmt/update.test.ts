@@ -7,7 +7,7 @@ import ioc from '@intake24/api/ioc';
 
 const { adminSurveyService } = ioc.cradle;
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/admin/surveys';
 
   let url: string;
@@ -49,10 +49,8 @@ export default (): void => {
     };
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).patch(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('patch', url);
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
@@ -102,28 +100,16 @@ export default (): void => {
   it(`should return 404 when record doesn't exist`, async () => {
     await setPermission(['surveys|mgmt', 'surveyadmin']);
 
-    const { status } = await request(suite.app)
-      .get(invalidSurveyUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(404);
+    await suite.sharedTests.assertMissingRecord('get', invalidSurveyUrl);
   });
 
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission(['surveys|mgmt', 'surveyadmin']);
     });
 
     it('should return 422 for missing input data', async () => {
-      const { status, body } = await request(suite.app)
-        .patch(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['permissions']);
+      await suite.sharedTests.assertMissingInput('patch', url, ['permissions']);
     });
 
     it('should return 422 for invalid input data', async () => {
@@ -156,13 +142,7 @@ export default (): void => {
     });
 
     it(`should return 404 when user record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .patch(invalidUserUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(input);
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('patch', invalidUserUrl, input);
     });
 
     it('should return 200 and empty response body', async () => {

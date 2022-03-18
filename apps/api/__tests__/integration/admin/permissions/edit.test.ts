@@ -4,7 +4,7 @@ import { PermissionRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { Permission } from '@intake24/db';
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/admin/permissions';
 
   let url: string;
@@ -21,10 +21,8 @@ export default (): void => {
     invalidUrl = `${baseUrl}/999999/edit`;
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('get', url);
   });
 
   it('should return 403 when missing permission', async () => {
@@ -38,18 +36,13 @@ export default (): void => {
     expect(status).toBe(403);
   });
 
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission(['acl', 'permissions|edit']);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .get(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('get', invalidUrl);
     });
 
     it('should return 200 and data', async () => {

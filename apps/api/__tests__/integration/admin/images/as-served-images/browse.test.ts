@@ -1,52 +1,26 @@
-import request from 'supertest';
 import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
 
-export default (): void => {
+export default () => {
   const url = '/api/admin/images/as-served/asServedSetForImages/images';
-  const invalidUrl = '/api/admin/images/as-served/InvalidasServedSetForImages/images';
+  const invalidUrl = '/api/admin/images/as-served/InvalidAsServedSetForImages/images';
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('get', url);
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission('as-served|browse');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .get(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('get', invalidUrl);
     });
 
-    it('should return 200 and data/refs list', async () => {
+    it('should return 200 and paginated results', async () => {
       await setPermission('as-served|browse');
 
-      const { status, body } = await request(suite.app)
-        .get(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(200);
-      expect(body).toContainAllKeys(['data', 'meta']);
-      expect(body.data).toBeArray();
+      await suite.sharedTests.assertPaginatedResult('get', url, true);
     });
   });
 };

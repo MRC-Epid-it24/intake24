@@ -2,13 +2,11 @@ import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
 
-export default (): void => {
+export default () => {
   const url = '/api/portion-sizes/weight';
 
   it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+    await suite.sharedTests.assertMissingAuthentication('get', url);
   });
 
   it(`should return 200 and record`, async () => {

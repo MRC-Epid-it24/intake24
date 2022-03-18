@@ -4,7 +4,7 @@ import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import fsConfig from '@intake24/api/config/filesystem';
 
-export default (): void => {
+export default () => {
   it('GET / should render when SPA app if deployed', async () => {
     const exists = fs.existsSync(path.resolve(fsConfig.local.public, 'survey', 'index.html'));
 

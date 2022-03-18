@@ -4,7 +4,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 import { UserSessionCreationAttributes } from '@intake24/common/types/models/system';
 import { SurveyState } from '@intake24/common/types';
 
-export default (): void => {
+export default () => {
   let url: string;
   let invalidUrl: string;
 
@@ -34,9 +34,7 @@ export default (): void => {
   });
 
   it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).post(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+    await suite.sharedTests.assertMissingAuthentication('post', url);
   });
 
   it(`should return 403 when survey record (+survey permissions) doesn't exist`, async () => {

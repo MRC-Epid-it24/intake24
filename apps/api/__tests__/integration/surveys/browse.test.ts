@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
-export default (): void => {
+export default () => {
   const url = '/api/surveys';
 
   it('should return 200 and public survey list', async () => {

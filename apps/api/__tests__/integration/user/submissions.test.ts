@@ -2,7 +2,7 @@ import request from 'supertest';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { SurveySubmission } from '@intake24/db';
 
-export default (): void => {
+export default () => {
   let url: string;
   let surveyId: string;
   let userId: string;
@@ -21,9 +21,7 @@ export default (): void => {
   });
 
   it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+    await suite.sharedTests.assertMissingAuthentication('get', url);
   });
 
   it('should return 422 for missing surveyId query parameter', async () => {

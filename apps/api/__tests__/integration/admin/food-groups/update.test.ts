@@ -4,7 +4,7 @@ import { FoodGroupCreationAttributes } from '@intake24/common/types/models';
 import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { FoodGroup } from '@intake24/db';
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/admin/food-groups';
 
   let url: string;
@@ -27,37 +27,17 @@ export default (): void => {
     invalidUrl = `${baseUrl}/999999`;
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).put(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('put', url);
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
-    const { status } = await request(suite.app)
-      .put(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission('food-groups|edit');
     });
 
     it('should return 422 for missing input data', async () => {
-      const { status, body } = await request(suite.app)
-        .put(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name']);
+      await suite.sharedTests.assertMissingInput('put', url, ['name']);
     });
 
     it('should return 422 for invalid input data', async () => {
@@ -73,13 +53,7 @@ export default (): void => {
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .put(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(updateInput);
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('put', invalidUrl, updateInput);
     });
 
     it('should return 200 and data', async () => {

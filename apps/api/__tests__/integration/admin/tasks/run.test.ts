@@ -3,7 +3,7 @@ import { TaskRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { Task } from '@intake24/db';
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/admin/tasks';
 
   let url: string;
@@ -20,35 +20,17 @@ export default (): void => {
     invalidUrl = `${baseUrl}/999999/run`;
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).post(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('post', url);
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission('tasks|edit');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .post(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('post', invalidUrl);
     });
 
     it('should return 200 and data', async () => {

@@ -2,7 +2,7 @@ import request from 'supertest';
 import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { Job } from '@intake24/db';
 
-export default (): void => {
+export default () => {
   const url = '/api/admin/user/jobs';
   let input: { startDate: string; endDate: string };
 
@@ -14,10 +14,8 @@ export default (): void => {
     };
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication', async () => {
+    await suite.sharedTests.assertMissingAuthentication('get', url);
   });
 
   it('should return 200 and data list', async () => {

@@ -7,7 +7,7 @@ import {
   NutrientTableCsvMappingNutrient,
 } from '@intake24/db';
 
-export default (): void => {
+export default () => {
   const url = '/api/admin/nutrient-tables/refs';
 
   beforeAll(async () => {
@@ -21,34 +21,13 @@ export default (): void => {
     });
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
-  });
-
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('get', url);
   });
 
   it('should return 200 and refs', async () => {
     await setPermission('nutrient-tables|create');
 
-    const { status, body } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(200);
-    expect(body).toContainAllKeys(['nutrientTypes']);
-    expect(body.nutrientTypes).toBeArray();
-    expect(body.nutrientTypes).not.toBeEmpty();
+    await suite.sharedTests.assertReferencesResult('get', url, ['nutrientTypes']);
   });
 };

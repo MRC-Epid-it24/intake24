@@ -3,7 +3,7 @@ import request from 'supertest';
 import { FoodGroupCreationAttributes } from '@intake24/common/types/models';
 import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
 
-export default (): void => {
+export default () => {
   const url = '/api/admin/food-groups';
 
   let input: FoodGroupCreationAttributes;
@@ -14,37 +14,17 @@ export default (): void => {
     output = { ...input };
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).post(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('post', url);
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission('food-groups|create');
     });
 
     it('should return 422 for missing input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name']);
+      await suite.sharedTests.assertMissingInput('post', url, ['name']);
     });
 
     it('should return 422 for invalid input data', async () => {

@@ -5,12 +5,12 @@ import { Survey, SurveySubmission } from '@intake24/db';
 import { surveyStaff } from '@intake24/api/services/core/auth';
 import ioc from '@intake24/api/ioc';
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/admin/surveys';
 
   let url: string;
   let invalidSurveyUrl: string;
-  let invalidRespondentUrl: string;
+  let invalidSubmissionUrl: string;
 
   let survey: Survey;
 
@@ -33,13 +33,11 @@ export default (): void => {
 
     url = `${baseUrl}/${survey.id}/submissions/${submission.id}`;
     invalidSurveyUrl = `${baseUrl}/invalid-survey-id/submissions/${submission.id}`;
-    invalidRespondentUrl = `${baseUrl}/${survey.id}/submissions/${randomUUID()}`;
+    invalidSubmissionUrl = `${baseUrl}/${survey.id}/submissions/${randomUUID()}`;
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).delete(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('delete', url);
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
@@ -89,36 +87,20 @@ export default (): void => {
   it(`should return 404 when record doesn't exist`, async () => {
     await setPermission(['surveys|submissions', 'surveyadmin']);
 
-    const { status } = await request(suite.app)
-      .delete(invalidSurveyUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(404);
+    await suite.sharedTests.assertMissingRecord('delete', invalidSurveyUrl);
   });
 
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission(['surveys|submissions', surveyStaff(survey.id)]);
     });
 
     it(`should return 404 when submission record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .delete(invalidRespondentUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('delete', invalidSubmissionUrl);
     });
 
     it('should return 204 and no content', async () => {
-      const { status, body } = await request(suite.app)
-        .delete(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(204);
-      expect(body).toBeEmpty();
+      await suite.sharedTests.assertRecordDeleted('delete', url);
     });
   });
 };

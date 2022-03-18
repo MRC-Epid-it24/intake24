@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import request from 'supertest';
 import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/admin/images/as-served';
 
   const fileName = 'asServedSet_005.jpg';
@@ -22,45 +22,21 @@ export default (): void => {
       .attach('selectionImage', fs.createReadStream(suite.files.images.jpg), fileName);
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).delete(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('delete', url);
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission([]);
-
-    const { status } = await request(suite.app)
-      .delete(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission('as-served|delete');
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .delete(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(404);
+      await suite.sharedTests.assertMissingRecord('delete', invalidUrl);
     });
 
     it('should return 204 and no content', async () => {
-      const { status, body } = await request(suite.app)
-        .delete(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(204);
-      expect(body).toBeEmpty();
+      await suite.sharedTests.assertRecordDeleted('delete', url);
     });
   });
 };

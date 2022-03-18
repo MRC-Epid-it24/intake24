@@ -1,13 +1,11 @@
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
-export default (): void => {
+export default () => {
   const url = '/api/user/password';
 
   it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).post(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+    await suite.sharedTests.assertMissingAuthentication('post', url);
   });
 
   it('should return 422 for missing input data', async () => {

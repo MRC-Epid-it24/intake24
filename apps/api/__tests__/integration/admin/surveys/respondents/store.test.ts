@@ -6,7 +6,7 @@ import { surveyStaff } from '@intake24/api/services/core/auth';
 import { pick } from 'lodash';
 import { CustomField } from '@intake24/common/types';
 
-export default (): void => {
+export default () => {
   const baseUrl = '/api/admin/surveys';
 
   let url: string;
@@ -36,10 +36,8 @@ export default (): void => {
     };
   });
 
-  it('should return 401 when no / invalid token', async () => {
-    const { status } = await request(suite.app).post(url).set('Accept', 'application/json');
-
-    expect(status).toBe(401);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('post', url);
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
@@ -89,29 +87,20 @@ export default (): void => {
   it(`should return 404 when record doesn't exist`, async () => {
     await setPermission(['surveys|respondents', 'surveyadmin']);
 
-    const { status } = await request(suite.app)
-      .post(invalidSurveyUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user)
-      .send(input);
-
-    expect(status).toBe(404);
+    await suite.sharedTests.assertMissingRecord('post', invalidSurveyUrl, input);
   });
 
-  describe('with correct permissions', () => {
+  describe('authenticated / authorized', () => {
     beforeAll(async () => {
       await setPermission(['surveys|respondents', surveyStaff(survey.id)]);
     });
 
     it('should return 422 for missing input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['userName', 'password', 'passwordConfirm']);
+      await suite.sharedTests.assertMissingInput('post', url, [
+        'userName',
+        'password',
+        'passwordConfirm',
+      ]);
     });
 
     it('should return 422 for invalid input data', async () => {
