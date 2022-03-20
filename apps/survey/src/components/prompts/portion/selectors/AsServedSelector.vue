@@ -55,8 +55,8 @@
           {{ $t('portion.common.moreButton') }}
         </v-btn>
       </v-col>
-      <v-col align="center">
-        <v-btn color="success" @click="servingCompleted()">
+      <v-col align="center" xs="12" md="4" class="ma-2">
+        <v-btn color="success" @click="servingCompleted()" block>
           {{ $t('portion.common.confirmButton') }}
         </v-btn>
       </v-col>

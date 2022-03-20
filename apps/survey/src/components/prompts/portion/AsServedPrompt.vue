@@ -5,7 +5,7 @@
     </template>
     <v-row>
       <v-col>
-        <v-expansion-panels v-model="panelOpen">
+        <v-expansion-panels v-model="panelOpen" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t('portion.asServed.portionHeader') }}
@@ -77,8 +77,8 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col>
-        <v-btn @click="submit()" :color="submitButtonStyle()">
+      <v-col xs="12" md="3">
+        <v-btn @click="submit()" :color="submitButtonStyle()" block>
           {{ $t('common.action.continue') }}
         </v-btn>
       </v-col>
@@ -89,15 +89,17 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
+import { mapState } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 import { merge } from '@intake24/common/util';
 import { basePromptProps, BasePromptProps } from '@intake24/common/prompts';
-import { LocaleTranslation } from '@intake24/common/types';
+import { HasPartialAnswerTriggerHandler, LocaleTranslation } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
 import BasePortion, { Portion } from './BasePortion';
 
-export default (Vue as VueConstructor<Vue & Portion>).extend({
+export default (Vue as VueConstructor<Vue & HasPartialAnswerTriggerHandler & Portion>).extend({
   name: 'AsServedPrompt',
 
   components: {
@@ -144,6 +146,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   },
 
   computed: {
+    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
+
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
@@ -159,6 +163,18 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
         this.leftoverCompleteStatus = true;
         this.clearErrors();
         this.setPanelOpen(1);
+        this.$emit('tempChanging', {
+          modified: true,
+          new: false,
+          finished: true,
+          mealIndex: this.selectedMealIndex,
+          foodIndex: this.selectedFoodIndex,
+          prompt: this.promptComponent,
+          response: {
+            serving: this.asServedData,
+            leftovers: false,
+          },
+        });
       } else {
         this.leftoverCompleteStatus = false;
       }
@@ -205,6 +221,18 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       this.asServedData = status;
       this.servingCompleteStatus = true;
       if (this.isValid()) this.clearErrors();
+      this.$emit('tempChanging', {
+        modified: true,
+        new: false,
+        finished: false,
+        mealIndex: this.selectedMealIndex,
+        foodIndex: this.selectedFoodIndex,
+        prompt: this.promptComponent,
+        response: {
+          serving: this.asServedData,
+          leftovers: this.leftoverData,
+        },
+      });
       this.setPanelOpen(0);
     },
     setLeftoverStatus(status: Record<string, unknown>) {
@@ -212,6 +240,18 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       this.leftoverData = status;
       this.leftoverCompleteStatus = true;
       if (this.isValid()) this.clearErrors();
+      this.$emit('tempChanging', {
+        modified: true,
+        new: false,
+        finished: true,
+        mealIndex: this.selectedMealIndex,
+        foodIndex: this.selectedFoodIndex,
+        prompt: this.promptComponent,
+        response: {
+          serving: this.asServedData,
+          leftovers: this.leftoverData,
+        },
+      });
       this.setPanelOpen(1);
     },
     isValid(): boolean {
@@ -239,6 +279,8 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
         this.setErrors();
         return;
       }
+      console.log('As-Served: ', this.asServedData);
+      console.log('As-Served: ', this.leftoverData);
       // We can submit only as served (with no leftover)
       // Edge case: asServed and leftover completed, but leftoverPrompt answer changed to no afterwards (caught below)
       if (this.asServedData && !this.leftoverPromptAnswer) {
@@ -250,6 +292,10 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
         this.$emit('as-served-serving', this.asServedData);
         this.$emit('as-served-leftover', this.leftoverData);
       }
+    },
+
+    partialAnswerHandler() {
+      this.setPanelOpen(this.panelOpen);
     },
   },
 });

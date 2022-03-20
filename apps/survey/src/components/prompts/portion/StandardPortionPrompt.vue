@@ -4,7 +4,6 @@
       <template v-slot:headerText>
         {{ localeDescription }}
       </template>
-      {{ this.selectedUnitIndex }}
       <v-expansion-panels v-model="panelOpen">
         <v-expansion-panel>
           <v-expansion-panel-header disable-icon-rotate>

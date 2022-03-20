@@ -16,11 +16,15 @@ import { PropType } from '@vue/composition-api';
 import { mapState, mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
-import { SelectedGuideImageObject, HasOnAnswer, PromptAnswer, PromptHandlerRefs } from '@intake24/common/types';
+import {
+  SelectedGuideImageObject,
+  HasOnAnswer,
+  PromptAnswer,
+  PromptHandlerRefs,
+} from '@intake24/common/types';
 import { GuideImageParameters } from '@intake24/common/types/http';
 import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
-
 
 type Mixins = InstanceType<typeof foodPromptUtils>;
 

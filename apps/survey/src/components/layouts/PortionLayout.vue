@@ -1,5 +1,5 @@
 <template>
-  <v-container px-0>
+  <v-container px-2>
     <v-card elevation="0">
       <v-row class="mb-3">
         <v-col>
