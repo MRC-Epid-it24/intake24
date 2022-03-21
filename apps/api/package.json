@@ -15,15 +15,17 @@
     "node": "^14.17.0 || >=16.0.0"
   },
   "scripts": {
-    "build": "pnpm clean && webpack --env NODE_ENV=production",
-    "clean": "rimraf dist",
+    "build": "pnpm build:clean && webpack --env NODE_ENV=production",
+    "build:clean": "rimraf dist",
     "dev": "webpack --env NODE_ENV=development",
     "start": "node dist/server.js",
     "lint": "eslint --ext .js,.ts src/ __tests__/",
     "lint:fix": "pnpm lint -- --fix",
     "test:unit": "jest --testMatch '**/__tests__/unit/**/*.spec.ts'",
+    "test:unit:coverage": "pnpm test:unit -- --coverage",
     "test:unit:watch": "pnpm test:unit -- --watch",
     "test:integration": "jest ./__tests__/integration/index.test.ts --runInBand",
+    "test:integration:coverage": "pnpm test:integration -- --coverage",
     "test:integration:watch": "pnpm test:integration -- --watch"
   },
   "dependencies": {

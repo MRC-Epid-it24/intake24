@@ -26,7 +26,9 @@
     "lint:fix": "pnpm lint -- --fix",
     "test:unit": "jest",
     "test:unit:watch": "pnpm test:unit -- --watch",
-    "test:integration": "pnpm test:integration --filter ./apps/api"
+    "test:unit:coverage": "pnpm test:unit -- --coverage",
+    "test:integration": "pnpm test:integration --filter ./apps/api",
+    "test:integration:coverage": "pnpm test:integration:coverage --filter ./apps/api"
   },
   "repository": {
     "type": "git",

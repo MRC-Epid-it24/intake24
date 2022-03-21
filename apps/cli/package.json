@@ -15,10 +15,11 @@
     "node": "^14.17.0 || >=16.0.0"
   },
   "scripts": {
-    "build": "pnpm clean && webpack --env NODE_ENV=production",
-    "clean": "rimraf dist",
+    "build": "pnpm build:clean && webpack --env NODE_ENV=production",
+    "build:clean": "rimraf dist",
     "dev": "webpack --env NODE_ENV=development",
     "cli": "node dist/cli.js",
+    "cli:dev": "ts-node -r tsconfig-paths/register src/index.ts",
     "lint": "eslint --ext .js,.ts src/",
     "lint:fix": "pnpm lint -- --fix"
   },
