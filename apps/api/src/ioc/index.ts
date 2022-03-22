@@ -9,6 +9,7 @@ import type {
   FileSystemConfig,
   MailConfig,
   QueueConfig,
+  RateLimiterConfig,
   SecurityConfig,
   ServicesConfig,
   SessionConfig,
@@ -88,6 +89,7 @@ import type {
   Filesystem,
   Mailer,
   Pusher,
+  RateLimiter,
   Scheduler,
   Session,
   // MFA Providers
@@ -111,6 +113,7 @@ export interface IoC extends Jobs {
   logConfig: LogConfig;
   mailConfig: MailConfig;
   queueConfig: QueueConfig;
+  rateLimiterConfig: RateLimiterConfig;
   securityConfig: SecurityConfig;
   servicesConfig: ServicesConfig;
   sessionConfig: SessionConfig;
@@ -191,6 +194,7 @@ export interface IoC extends Jobs {
   logger: Logger;
   mailer: Mailer;
   pusher: Pusher;
+  rateLimiter: RateLimiter;
   scheduler: Scheduler;
   session: Session;
 
@@ -251,6 +255,7 @@ const configureContainer = () => {
     logConfig: asValue(config.log),
     mailConfig: asValue(config.mail),
     queueConfig: asValue(config.queue),
+    rateLimiterConfig: asValue(config.rateLimiter),
     securityConfig: asValue(config.security),
     servicesConfig: asValue(config.services),
     sessionConfig: asValue(config.session),

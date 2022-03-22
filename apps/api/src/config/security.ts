@@ -31,8 +31,7 @@ export type MultiFactorAuthentication = {
 };
 
 export type PasswordsConfig = {
-  expire: number;
-  throttle: number;
+  expiresIn: number;
 };
 
 export type AuthTokensConfig = {
@@ -93,15 +92,14 @@ const securityConfig: SecurityConfig = {
     },
   },
   passwords: {
-    expire: 60,
-    throttle: 60,
+    expiresIn: ms(process.env.PASSWORDS_EXPIRES_IN || '1h'),
   },
   authTokens: {
-    size: 21,
-    alphabet: null,
+    size: parseInt(process.env.AUTH_TOKENS_SIZE || '21', 10),
+    alphabet: process.env.AUTH_TOKENS_ALPHABET || null,
   },
   signInLog: {
-    enabled: true,
+    enabled: !process.env.SIGN_IN_LOG_ENABLED || process.env.SIGN_IN_LOG_ENABLED === 'true',
   },
 };
 

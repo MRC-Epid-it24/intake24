@@ -44,7 +44,7 @@ export default ({
     const { email, password, token } = req.body;
 
     const expiredAt = new Date();
-    expiredAt.setMinutes(expiredAt.getMinutes() - securityConfig.passwords.expire);
+    expiredAt.setMilliseconds(expiredAt.getMilliseconds() - securityConfig.passwords.expiresIn);
 
     const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 

@@ -17,6 +17,9 @@ export default async (): Promise<void> => {
   // Pusher
   await ioc.cradle.pusher.init();
 
+  // Rate limiter
+  ioc.cradle.rateLimiter.init();
+
   // Scheduler
   await ioc.cradle.scheduler.init();
 

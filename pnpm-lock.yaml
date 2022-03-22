@@ -230,6 +230,7 @@ importers:
       passport-jwt: ^4.0.0
       pg: ^8.7.3
       pg-hstore: ^2.3.4
+      rate-limit-redis: ^3.0.1
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
       sequelize: ^6.17.0
@@ -284,6 +285,7 @@ importers:
       passport-jwt: 4.0.0
       pg: 8.7.3
       pg-hstore: 2.3.4
+      rate-limit-redis: 3.0.1_express-rate-limit@6.3.0
       reflect-metadata: 0.1.13
       sequelize: 6.17.0_8af47fe669b26ca059b1e9f15fd781e7
       sequelize-typescript: 2.1.3_60a8bd5907c8e0946a7308a766e0cbac
@@ -12075,6 +12077,15 @@ packages:
   /range-parser/1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
+
+  /rate-limit-redis/3.0.1_express-rate-limit@6.3.0:
+    resolution: {integrity: sha512-L6yhOUBrAZ8VEMX9DwlM3X6hfm8yq+gBO4LoOW7+JgmNq59zE7QmLz4v5VnwYPvLeSh/e7PDcrzUI3UumJw1iw==}
+    engines: {node: '>= 14.5.0'}
+    peerDependencies:
+      express-rate-limit: ^6
+    dependencies:
+      express-rate-limit: 6.3.0_express@4.17.3
+    dev: false
 
   /raw-body/2.4.3:
     resolution: {integrity: sha512-UlTNLIcu0uzb4D2f4WltY6cVjLi+/jEN4lgEUj3E04tpMDpUlkBo/eSn6zou9hum2VMNpCCUone0O0WeJim07g==}

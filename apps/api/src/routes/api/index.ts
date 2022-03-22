@@ -10,26 +10,28 @@ import subscriptions from './subscriptions';
 import surveys from './surveys';
 import user from './user';
 
-const router = Router();
+export default () => {
+  const router = Router();
 
-// Unauthenticated
-router.use('/auth', authentication);
-router.use('/password', password);
-router.use('/i18n', i18n);
+  // Unauthenticated
+  router.use('/auth', authentication());
+  router.use('/password', password());
+  router.use('/i18n', i18n);
 
-// Admin
-router.use('/admin', admin);
+  // Admin
+  router.use('/admin', admin);
 
-// Survey / User
-router.use('/feedback', feedback);
-router.use('/foods', foods);
-router.use('/portion-sizes', portionSizes);
-router.use('/subscriptions', subscriptions);
-router.use('/surveys', surveys);
-router.use('/user', user);
+  // Survey / User
+  router.use('/feedback', feedback);
+  router.use('/foods', foods);
+  router.use('/portion-sizes', portionSizes);
+  router.use('/subscriptions', subscriptions);
+  router.use('/surveys', surveys());
+  router.use('/user', user);
 
-router.all('*', (req: Request, res: Response): void => {
-  res.status(404).json('Invalid route');
-});
+  router.all('*', (req: Request, res: Response): void => {
+    res.status(404).json('Invalid route');
+  });
 
-export default router;
+  return router;
+};

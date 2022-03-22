@@ -8,7 +8,7 @@ import sharedTests, { SharedTests } from './shared-tests';
 
 export type Bearers = Record<'superuser' | 'user' | 'respondent', string>;
 
-const { config, logger, db, cache, scheduler, session } = ioc.cradle;
+const { config, logger, db, cache, rateLimiter, scheduler, session } = ioc.cradle;
 
 class IntegrationSuite {
   public config;
@@ -18,6 +18,8 @@ class IntegrationSuite {
   public db;
 
   public cache;
+
+  public rateLimiter;
 
   public scheduler;
 
@@ -38,6 +40,7 @@ class IntegrationSuite {
     this.logger = logger;
     this.db = db;
     this.cache = cache;
+    this.rateLimiter = rateLimiter;
     this.scheduler = scheduler;
     this.session = session;
   }
@@ -66,7 +69,7 @@ class IntegrationSuite {
   /**
    * Close all I/O connections
    * - databases
-   * - redis (cache & queue system)
+   * - redis clients (cache / queue / rate limiter / session)
    * - worker threads (food index)
    *
    * @memberof IntegrationSuite
@@ -74,20 +77,20 @@ class IntegrationSuite {
   public async close() {
     // Close redis store connections
     this.cache.close();
+    this.rateLimiter.close();
     this.session.close();
 
     // Close redis queue connections
     await this.scheduler.close();
 
-    await this.scheduler.close();
     await this.db.foods.close();
     await this.db.system.close();
     await foodIndex.close();
 
     const { downloads, uploads, images } = this.config.filesystem.local;
-    [downloads, uploads, images].forEach((folder) => {
-      fs.rm(folder, { recursive: true });
-    });
+    await Promise.all(
+      [downloads, uploads, images].map((folder) => fs.rm(folder, { recursive: true }))
+    );
   }
 }
 

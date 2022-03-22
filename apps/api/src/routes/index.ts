@@ -47,7 +47,7 @@ export default (app: Express, { config }: Ops): void => {
   /*
    * API routes - exclude CSP & cross origin policies
    */
-  app.use('/api', apiHelmet, api);
+  app.use('/api', apiHelmet, api());
 
   // Sites
   const { urls } = config.app;

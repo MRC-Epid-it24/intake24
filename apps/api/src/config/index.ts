@@ -6,6 +6,7 @@ import cache, { CacheConfig } from './cache';
 import filesystem, { FileSystemConfig } from './filesystem';
 import mail, { MailConfig } from './mail';
 import queue, { QueueConfig } from './queue';
+import rateLimiter, { RateLimiterConfig } from './rate-limiter';
 import security, { SecurityConfig } from './security';
 import services, { ServicesConfig } from './services';
 import session, { SessionConfig } from './session';
@@ -16,6 +17,7 @@ export * from './cache';
 export * from './filesystem';
 export * from './mail';
 export * from './queue';
+export * from './rate-limiter';
 export * from './security';
 export * from './services';
 export * from './session';
@@ -29,6 +31,7 @@ export type Config = {
   log: LogConfig;
   mail: MailConfig;
   queue: QueueConfig;
+  rateLimiter: RateLimiterConfig;
   security: SecurityConfig;
   services: ServicesConfig;
   session: SessionConfig;
@@ -43,6 +46,7 @@ const config: Config = {
   log,
   mail,
   queue,
+  rateLimiter,
   security,
   services,
   session,

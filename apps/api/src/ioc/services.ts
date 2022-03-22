@@ -14,6 +14,7 @@ import {
   Filesystem,
   Mailer,
   Pusher,
+  RateLimiter,
   Scheduler,
   Session,
   adminCategoryService,
@@ -74,6 +75,7 @@ export default (container: AwilixContainer): void => {
     logger: asValue(logger),
     mailer: asClass(Mailer).singleton(),
     pusher: asClass(Pusher).singleton(),
+    rateLimiter: asClass(RateLimiter).singleton(),
     scheduler: asClass(Scheduler).singleton(),
     session: asClass(Session).singleton(),
 

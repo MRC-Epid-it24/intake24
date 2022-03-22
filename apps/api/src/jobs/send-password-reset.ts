@@ -46,11 +46,11 @@ export default class SendPasswordReset extends BaseJob<SendPasswordResetParams> 
       : `${trim(base, '/')}/${trim(admin, '/')}`;
 
     const url = `${domain}/password/reset/${this.params.token}`;
-    const { expire: expiresAt } = this.securityConfig.passwords;
+    const { expiresIn } = this.securityConfig.passwords;
 
     const html = nunjucks.render('mail/password-reset.html', {
       title: 'Password reset',
-      expiresAt,
+      expiresIn,
       action: { url, text: 'Reset password' },
     });
 

@@ -3,15 +3,32 @@ import validation from '@intake24/api/http/requests/authentication';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
-const { authenticationController } = ioc.cradle;
+export default () => {
+  const { authenticationController, rateLimiter } = ioc.cradle;
 
-const router = Router();
+  const router = Router();
 
-router.post('/login', validation.emailLogin, wrapAsync(authenticationController.emailLogin));
-router.post('/login/alias', validation.aliasLogin, wrapAsync(authenticationController.aliasLogin));
-router.post('/login/token', wrapAsync(authenticationController.tokenLogin));
-router.post('/login/verify', validation.mfaVerify, wrapAsync(authenticationController.verify));
-router.post('/refresh', wrapAsync(authenticationController.refresh));
-router.post('/logout', wrapAsync(authenticationController.logout));
+  const loginRateLimiter = rateLimiter.createMiddleware('login', {
+    message: 'Too many failed login attempts, please try again later.',
+    skipSuccessfulRequests: true,
+  });
 
-export default router;
+  router.post(
+    '/login',
+    loginRateLimiter,
+    validation.emailLogin,
+    wrapAsync(authenticationController.emailLogin)
+  );
+  router.post(
+    '/login/alias',
+    loginRateLimiter,
+    validation.aliasLogin,
+    wrapAsync(authenticationController.aliasLogin)
+  );
+  router.post('/login/token', loginRateLimiter, wrapAsync(authenticationController.tokenLogin));
+  router.post('/login/verify', validation.mfaVerify, wrapAsync(authenticationController.verify));
+  router.post('/refresh', wrapAsync(authenticationController.refresh));
+  router.post('/logout', wrapAsync(authenticationController.logout));
+
+  return router;
+};
