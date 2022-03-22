@@ -1,19 +1,29 @@
 {
-	"folders": [
-		{
-			"path": "deployment"
-		},
-		{
-			"path": "apps/api"
-		},
-		{
-			"path": "packages"
-		}
-	],
-	"settings": {
-		"eslint.workingDirectories": [
-			{ "directory": "./packages/common", "changeProcessCWD": true },
-			{ "directory": "./apps/api", "changeProcessCWD": true },
-		]
-	}
+  "folders": [
+    { "path": "deployment" },
+    { "path": "apps/api" },
+    { "path": "packages/common" },
+    { "path": "packages/common-backend" },
+    { "path": "packages/db" },
+    { "path": "packages/i18n" },
+    { "path": "packages/services" },
+    { "path": "packages/ui" }
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      { "directory": "apps/api" },
+      { "directory": "packages/common" },
+      { "directory": "packages/common-backend" },
+      { "directory": "packages/db" },
+      { "directory": "packages/i18n" },
+      { "directory": "packages/services" },
+      { "directory": "packages/ui" }
+    ],
+    "search.exclude": {
+      "coverage": true,
+      "dist": true,
+      "node_modules": true,
+      "tmp": true
+    }
+  }
 }

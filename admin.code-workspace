@@ -1,16 +1,22 @@
 {
-	"folders": [
-		{
-			"path": "apps/admin"
-		},
-		{
-			"path": "packages"
-		}
-	],
-	"settings": {
-		"eslint.workingDirectories": [
-			{ "directory": "./packages/common", "changeProcessCWD": true },
-			{ "directory": "./apps/admin", "changeProcessCWD": true },
-		]
-	}
+  "folders": [
+    { "path": "apps/admin" },
+    { "path": "packages/common" },
+    { "path": "packages/i18n" },
+    { "path": "packages/ui" }
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      { "directory": "apps/admin" },
+      { "directory": "packages/common" },
+      { "directory": "packages/i18n" },
+      { "directory": "packages/ui" }
+    ],
+    "search.exclude": {
+      "coverage": true,
+      "dist": true,
+      "node_modules": true,
+      "tmp": true
+    }
+  }
 }
