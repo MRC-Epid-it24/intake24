@@ -190,6 +190,10 @@ export default defineConfig({
               link: '/api/password',
             },
             {
+              text: 'Internationalization',
+              link: '/api/i18n',
+            },
+            {
               text: 'Subscriptions',
               link: '/api/subscriptions',
             },

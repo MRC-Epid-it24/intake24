@@ -1,3 +1,4 @@
+import { I18nLanguageEntry } from '@intake24/common/types/http';
 import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
@@ -13,7 +14,7 @@ export default defineComponent({
       try {
         const {
           data: { messages, textDirection },
-        } = await this.$http.get(`i18n/${languageId}`, { params: { app } });
+        } = await this.$http.get<I18nLanguageEntry>(`i18n/${languageId}`, { params: { app } });
 
         if (Object.keys(messages).length) this.$root.$i18n.setLocaleMessage(languageId, messages);
 

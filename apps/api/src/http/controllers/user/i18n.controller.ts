@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import { Language, LanguageTranslation } from '@intake24/db';
+import type { LocaleMessageObject } from '@intake24/i18n';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
 import { Controller } from '../controller';
 
 export type UserI18nController = Controller<'browse' | 'entry'>;
 
 export default (): UserI18nController => {
-  const browse = async (req: Request, res: Response): Promise<void> => {
+  const browse = async (req: Request, res: Response<I18nLanguageListEntry[]>): Promise<void> => {
     const languages = await Language.scope('list').findAll();
 
     res.json(languages);
@@ -14,7 +16,7 @@ export default (): UserI18nController => {
 
   const entry = async (
     req: Request<{ languageId: string }, any, any, { app: string }>,
-    res: Response
+    res: Response<I18nLanguageEntry>
   ): Promise<void> => {
     const {
       params: { languageId },
@@ -36,13 +38,10 @@ export default (): UserI18nController => {
     const response = {
       ...language.get(),
       messages:
-        language.translations?.reduce<Record<string, string | object>>(
-          (acc, { section, messages }) => {
-            acc[section] = messages;
-            return acc;
-          },
-          {}
-        ) ?? {},
+        language.translations?.reduce<LocaleMessageObject>((acc, { section, messages }) => {
+          acc[section] = messages;
+          return acc;
+        }, {}) ?? {},
     };
 
     res.json(response);
