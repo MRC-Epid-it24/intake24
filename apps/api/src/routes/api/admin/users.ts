@@ -4,30 +4,32 @@ import validation from '@intake24/api/http/requests/admin/users';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
-const { adminUserController } = ioc.cradle;
-const router = Router();
+export default () => {
+  const { adminUserController } = ioc.cradle;
+  const router = Router();
 
-router.use(permission('acl'));
+  router.use(permission('acl'));
 
-router
-  .route('')
-  .post(permission('users|create'), validation.store, wrapAsync(adminUserController.store))
-  .get(permission('users|browse'), validation.browse, wrapAsync(adminUserController.browse));
+  router
+    .route('')
+    .post(permission('users|create'), validation.store, wrapAsync(adminUserController.store))
+    .get(permission('users|browse'), validation.browse, wrapAsync(adminUserController.browse));
 
-router.get(
-  '/refs',
-  anyPermission(['users|create', 'users|read', 'users|edit']),
-  wrapAsync(adminUserController.refs)
-);
+  router.get(
+    '/refs',
+    anyPermission(['users|create', 'users|read', 'users|edit']),
+    wrapAsync(adminUserController.refs)
+  );
 
-router.use('/:userId', validation.entry('userId'));
+  router.use('/:userId', validation.entry('userId'));
 
-router
-  .route('/:userId')
-  .get(permission('users|read'), wrapAsync(adminUserController.read))
-  .put(permission('users|edit'), validation.update, wrapAsync(adminUserController.update))
-  .delete(permission('users|delete'), wrapAsync(adminUserController.destroy));
+  router
+    .route('/:userId')
+    .get(permission('users|read'), wrapAsync(adminUserController.read))
+    .put(permission('users|edit'), validation.update, wrapAsync(adminUserController.update))
+    .delete(permission('users|delete'), wrapAsync(adminUserController.destroy));
 
-router.get('/:userId/edit', permission('users|edit'), wrapAsync(adminUserController.edit));
+  router.get('/:userId/edit', permission('users|edit'), wrapAsync(adminUserController.edit));
 
-export default router;
+  return router;
+};

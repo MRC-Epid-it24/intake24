@@ -6,19 +6,21 @@ import { wrapAsync } from '@intake24/api/util';
 import physicalData from './physical-data';
 import submissions from './submissions';
 
-const { userProfileController } = ioc.cradle;
+export default () => {
+  const { userProfileController } = ioc.cradle;
 
-const router = Router();
+  const router = Router();
 
-authenticate(router, 'user');
+  authenticate(router, 'user');
 
-router.post(
-  '/password',
-  validation.updatePassword,
-  wrapAsync(userProfileController.updatePassword)
-);
+  router.post(
+    '/password',
+    validation.updatePassword,
+    wrapAsync(userProfileController.updatePassword)
+  );
 
-router.use('/physical-data', physicalData);
-router.use('/submissions', submissions);
+  router.use('/physical-data', physicalData());
+  router.use('/submissions', submissions());
 
-export default router;
+  return router;
+};

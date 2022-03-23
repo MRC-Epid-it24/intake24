@@ -5,16 +5,19 @@ import { canManageFoodDatabase, permission } from '@intake24/api/http/middleware
 import categories from './categories';
 import foods from './foods';
 
-const router = Router();
+export default () => {
+  const router = Router();
 
-const { adminFoodDatabaseController } = ioc.cradle;
+  const { adminFoodDatabaseController } = ioc.cradle;
 
-router.get('', permission('fdbs|browse'), wrapAsync(adminFoodDatabaseController.browse));
+  router.get('', permission('fdbs|browse'), wrapAsync(adminFoodDatabaseController.browse));
 
-router.use('/:localeId', canManageFoodDatabase());
+  router.use('/:localeId', canManageFoodDatabase());
 
-router.get('/:localeId', permission('fdbs|read'), wrapAsync(adminFoodDatabaseController.read));
-router.use('/:localeId/categories', categories);
-router.use('/:localeId/foods', foods);
+  router.get('/:localeId', permission('fdbs|read'), wrapAsync(adminFoodDatabaseController.read));
 
-export default router;
+  router.use('/:localeId/categories', categories());
+  router.use('/:localeId/foods', foods());
+
+  return router;
+};

@@ -3,12 +3,13 @@ import { authenticate } from '@intake24/api/http/middleware/acl';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
-const { feedbackController } = ioc.cradle;
+export default () => {
+  const { feedbackController } = ioc.cradle;
 
-const router = Router();
+  const router = Router();
 
-authenticate(router, 'user');
+  authenticate(router, 'user');
 
-router.get('/', wrapAsync(feedbackController.data));
-
-export default router;
+  router.get('/', wrapAsync(feedbackController.data));
+  return router;
+};

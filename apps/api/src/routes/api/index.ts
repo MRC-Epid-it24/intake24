@@ -16,18 +16,18 @@ export default () => {
   // Unauthenticated
   router.use('/auth', authentication());
   router.use('/password', password());
-  router.use('/i18n', i18n);
+  router.use('/i18n', i18n());
 
   // Admin
-  router.use('/admin', admin);
+  router.use('/admin', admin());
 
   // Survey / User
-  router.use('/feedback', feedback);
-  router.use('/foods', foods);
-  router.use('/portion-sizes', portionSizes);
-  router.use('/subscriptions', subscriptions);
+  router.use('/feedback', feedback());
+  router.use('/foods', foods());
+  router.use('/portion-sizes', portionSizes());
+  router.use('/subscriptions', subscriptions());
   router.use('/surveys', surveys());
-  router.use('/user', user);
+  router.use('/user', user());
 
   router.all('*', (req: Request, res: Response): void => {
     res.status(404).json('Invalid route');

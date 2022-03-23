@@ -27,7 +27,7 @@ export default () => {
     wrapAsync(surveyController.createUser)
   );
 
-  router.use('/:surveyId', surveyRespondents);
+  router.use('/:surveyId', surveyRespondents());
 
   return router;
 };

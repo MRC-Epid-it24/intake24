@@ -4,17 +4,19 @@ import { authenticate } from '@intake24/api/http/middleware/acl';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
-const { subscriptionController } = ioc.cradle;
+export default () => {
+  const { subscriptionController } = ioc.cradle;
 
-const router = Router();
+  const router = Router();
 
-authenticate(router, 'user');
+  authenticate(router, 'user');
 
-router
-  .route('')
-  .post(validation.subscribe, wrapAsync(subscriptionController.subscribe))
-  .delete(wrapAsync(subscriptionController.unsubscribe));
+  router
+    .route('')
+    .post(validation.subscribe, wrapAsync(subscriptionController.subscribe))
+    .delete(wrapAsync(subscriptionController.unsubscribe));
 
-router.post('/push', wrapAsync(subscriptionController.push));
+  router.post('/push', wrapAsync(subscriptionController.push));
 
-export default router;
+  return router;
+};

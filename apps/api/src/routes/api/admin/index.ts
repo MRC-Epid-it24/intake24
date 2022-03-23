@@ -19,26 +19,28 @@ import tasks from './tasks';
 import user from './user';
 import users from './users';
 
-const router = Router();
+export default () => {
+  const router = Router();
 
-authenticate(router, 'admin');
+  authenticate(router, 'admin');
 
-router.use('/fdbs', fdbs);
-router.use('/feedback-schemes', feedbackSchemes);
-router.use('/food-groups', foodGroups);
-router.use('/images', images);
-router.use('/jobs', jobs);
-router.use('/languages', languages);
-router.use('/locales', locales);
-router.use('/nutrient-tables', nutrientTables);
-router.use('/permissions', permissions);
-router.use('/roles', roles);
-router.use('/survey-schemes', surveySchemes);
-router.use('/survey-scheme-questions', surveySchemeQuestions);
-router.use('/sign-in-logs', signInLogs);
-router.use('/surveys', surveys);
-router.use('/tasks', tasks);
-router.use('/user', user);
-router.use('/users', users);
+  router.use('/fdbs', fdbs());
+  router.use('/feedback-schemes', feedbackSchemes());
+  router.use('/food-groups', foodGroups());
+  router.use('/images', images());
+  router.use('/jobs', jobs());
+  router.use('/languages', languages());
+  router.use('/locales', locales());
+  router.use('/nutrient-tables', nutrientTables());
+  router.use('/permissions', permissions());
+  router.use('/roles', roles());
+  router.use('/survey-schemes', surveySchemes());
+  router.use('/survey-scheme-questions', surveySchemeQuestions());
+  router.use('/sign-in-logs', signInLogs());
+  router.use('/surveys', surveys());
+  router.use('/tasks', tasks());
+  router.use('/user', user());
+  router.use('/users', users());
 
-export default router;
+  return router;
+};
