@@ -2,9 +2,9 @@
 
 Path: `apps/api/src/config/session.ts`
 
-[Redis](https://redis.io) is used as session driver.
+[Redis](https://redis.io) is used as session store driver.
 
-Redis is also used for other parts of system (cache, queue), they have separate connection settings, so they can be configured independently if needed.
+Redis is also used for other parts of system (cache, queue, rate limiter), they have separate connection settings, so they can be configured independently if needed.
 
 ## Redis instance
 

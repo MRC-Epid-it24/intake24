@@ -134,6 +134,10 @@ export default defineConfig({
               link: '/config/api/queue',
             },
             {
+              text: 'Rate limiter',
+              link: '/config/api/rate-limiter',
+            },
+            {
               text: 'Security',
               link: '/config/api/security',
             },

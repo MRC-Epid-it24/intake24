@@ -44,10 +44,13 @@ describe('API', () => {
   // describe('Root', root);
 
   describe('/api/auth', authentication);
-  describe('/api/subscriptions', subscriptions);
+  // TODO: describe('/api/password', password);
+  // TODO: describe('/api/i18n', i18n);
   describe('/api/feedback', feedback);
-  describe('/api/surveys', surveys);
+  // TODO: describe('/api/foods', foods);
   describe('/api/portion-sizes', portionSizes);
+  describe('/api/subscriptions', subscriptions);
+  describe('/api/surveys', surveys);
   describe('/api/user', user);
 
   describe('/api/admin', admin);

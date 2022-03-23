@@ -192,14 +192,7 @@ Settings for password restore functionality.
 Password reset link expiration in **minutes**.
 
 * object-path: `passwords.expire`
-* type: `number`
-* default: `60`
-
-### Throttle
-
-Rate limit setting for password request. It allows 1 request per `throttle` value. Value is set in **seconds**.
-
-* object-path: `passwords.throttle`
+* dotenv var: `PASSWORDS_EXPIRES_IN`
 * type: `number`
 * default: `60`
 
@@ -212,6 +205,7 @@ Settings for generation of random authentication tokens.
 Size of the tokens - string's length.
 
 * object-path: `authTokens.size`
+* dotenv var: `AUTH_TOKENS_SIZE`
 * type: `number`
 * default: `21`
 
@@ -220,6 +214,7 @@ Size of the tokens - string's length.
 String of custom alphabet - character set to be used for token generation.
 
 * object-path: `authTokens.alphabet`
+* dotenv var: `AUTH_TOKENS_ALPHABET`
 * type: `string | null`
 * default: `null`
 
@@ -232,5 +227,6 @@ Settings for sign-in logging.
 Enable/disable database logging of sign-in attempts.
 
 * object-path: `signInLog.enabled`
+* dotenv var: `SIGN_IN_LOG_ENABLED`
 * type: `boolean`
 * default: `true`
