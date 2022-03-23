@@ -3,7 +3,8 @@
     v-bind="{ foodName, promptProps }"
     :as-served-set-id="parameters['serving-image-set']"
     :prompt-component="promptComponent"
-    @as-served-selected="onAnswer"
+    @as-served-serving="onAnswer"
+    @as-served-leftovers="onAnswer"
     @tempChanging="onTempChange"
   ></as-served-prompt>
 </template>
@@ -73,7 +74,10 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
       else this.setTempPromptAnswer(tempGuidPromptAnswer);
     },
 
-    onAnswer(selected: SelectedAsServedImage) {
+    onAnswer(data: {
+      selectedServing: SelectedAsServedImage;
+      selectedLeftovers: SelectedAsServedImage | false;
+    }) {
       const { conversionFactor } = this.selectedPortionSize;
 
       const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
@@ -81,7 +85,6 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
         console.warn('No selected meal/food, meal/food index undefined');
         return;
       }
-      console.log('This is sstate: ', selected);
       this.updateFoodCallback({
         mealIndex,
         foodIndex,
@@ -89,13 +92,12 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
           if (state.type === 'encoded-food') {
             state.portionSize = {
               method: 'as-served',
-              serving:
-                state.portionSize?.method === 'as-served'
-                  ? state.portionSize?.serving ?? null
-                  : null,
-              leftovers: selected,
-              servingWeight: state.portionSize?.servingWeight ?? null,
-              leftoversWeight: selected.weight * conversionFactor,
+              serving: data.selectedServing,
+              leftovers: data.selectedLeftovers || null,
+              servingWeight: data.selectedServing.weight ?? null,
+              leftoversWeight: data.selectedLeftovers
+                ? data.selectedLeftovers.weight * conversionFactor
+                : null,
             };
           }
         },

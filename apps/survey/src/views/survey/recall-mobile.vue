@@ -13,8 +13,8 @@
         :value="alert"
       >
         <span class="alert-text">
-          I'm a dense alert placeholder with the <strong>border</strong> prop and a <strong>type</strong> of
-          warning
+          I'm a dense alert placeholder with the <strong>border</strong> prop and a
+          <strong>type</strong> of warning
         </span>
       </v-alert>
     </transition>

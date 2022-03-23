@@ -299,7 +299,6 @@ export const useSurvey = defineStore('survey', {
       const foodState = this.data.meals[data.mealIndex].foods[data.foodIndex];
 
       data.update(foodState);
-      console.log('This is after update: ', foodState);
 
       const spliced = this.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1)[0];
       this.data.meals[data.mealIndex].foods.splice(data.foodIndex, 0, spliced);

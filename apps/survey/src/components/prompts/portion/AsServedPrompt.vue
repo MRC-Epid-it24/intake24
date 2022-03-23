@@ -10,6 +10,10 @@
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t('portion.asServed.portionHeader') }}
               <template v-slot:actions>
+                <as-served-weight
+                  :weight="servingWeight"
+                  :valid="servingCompleteStatus"
+                ></as-served-weight>
                 <valid-invalid-icon :valid="servingCompleteStatus"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
@@ -33,6 +37,10 @@
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
               <template v-slot:actions>
+                <as-served-weight
+                  :weight="leftoversWeight"
+                  :valid="leftoverCompleteStatus"
+                ></as-served-weight>
                 <valid-invalid-icon :valid="leftoverCompleteStatus"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
@@ -93,9 +101,14 @@ import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import { merge } from '@intake24/common/util';
 import { basePromptProps, BasePromptProps } from '@intake24/common/prompts';
-import { HasPartialAnswerTriggerHandler, LocaleTranslation } from '@intake24/common/types';
+import {
+  HasPartialAnswerTriggerHandler,
+  LocaleTranslation,
+  SelectedAsServedImage,
+} from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
+import AsServedWeight from '@intake24/survey/components/elements/AsServedWeight.vue';
 import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
 import BasePortion, { Portion } from './BasePortion';
 
@@ -105,6 +118,7 @@ export default (Vue as VueConstructor<Vue & HasPartialAnswerTriggerHandler & Por
   components: {
     ValidInvalidIcon,
     AsServedSelector,
+    AsServedWeight,
   },
 
   mixins: [BasePortion, localeContent],
@@ -137,11 +151,14 @@ export default (Vue as VueConstructor<Vue & HasPartialAnswerTriggerHandler & Por
       leftoverPromptAnswer: null as unknown,
       // selectionImageData: {} as AsServedSetResponse,
       servingIdx: null as number | null,
-      asServedData: null as unknown,
-      leftoverData: null as unknown,
+      asServedData: null as SelectedAsServedImage | null,
+      leftoverData: null as SelectedAsServedImage | null,
       servingCompleteStatus: false as boolean, // Used to control the icons
       leftoverCompleteStatus: false as boolean, // Used to control the icons
       dataLoaded: false as boolean,
+      servingWeight: 0 as number,
+      leftoversWeight: 0 as number,
+      finished: false,
     };
   },
 
@@ -157,6 +174,7 @@ export default (Vue as VueConstructor<Vue & HasPartialAnswerTriggerHandler & Por
     leftoverAnswer(answer: boolean) {
       // Controls display of leftover selector
       this.leftoverPromptAnswer = answer;
+      this.finished = true;
       if (answer === false) {
         // 'no' answer makes form valid, so make ready for submit
         this.leftoverData = null;
@@ -171,8 +189,8 @@ export default (Vue as VueConstructor<Vue & HasPartialAnswerTriggerHandler & Por
           foodIndex: this.selectedFoodIndex,
           prompt: this.promptComponent,
           response: {
-            serving: this.asServedData,
-            leftovers: false,
+            selectedServing: this.asServedData,
+            selectedLeftovers: false,
           },
         });
       } else {
@@ -216,40 +234,43 @@ export default (Vue as VueConstructor<Vue & HasPartialAnswerTriggerHandler & Por
         }
       }
     },
-    setServingStatus(status: Record<string, unknown>) {
+    setServingStatus(status: SelectedAsServedImage) {
       // Trigger by $emit from Serving (AsServedSelector)
-      this.asServedData = status;
+      this.asServedData = status || null;
       this.servingCompleteStatus = true;
+      this.servingWeight = this.asServedData.weight;
       if (this.isValid()) this.clearErrors();
       this.$emit('tempChanging', {
         modified: true,
         new: false,
-        finished: false,
+        finished: this.finished,
         mealIndex: this.selectedMealIndex,
         foodIndex: this.selectedFoodIndex,
         prompt: this.promptComponent,
         response: {
-          serving: this.asServedData,
-          leftovers: this.leftoverData,
+          selectedServing: this.asServedData,
+          selectedLeftovers: this.leftoverData,
         },
       });
       this.setPanelOpen(0);
     },
-    setLeftoverStatus(status: Record<string, unknown>) {
+    setLeftoverStatus(status: SelectedAsServedImage) {
       // Trigger by $emit from Leftover (AsServedSelector)
-      this.leftoverData = status;
+      this.leftoverData = status || null;
       this.leftoverCompleteStatus = true;
+      this.leftoversWeight = this.leftoverData.weight;
       if (this.isValid()) this.clearErrors();
+      this.finished = true;
       this.$emit('tempChanging', {
         modified: true,
         new: false,
-        finished: true,
+        finished: this.finished,
         mealIndex: this.selectedMealIndex,
         foodIndex: this.selectedFoodIndex,
         prompt: this.promptComponent,
         response: {
-          serving: this.asServedData,
-          leftovers: this.leftoverData,
+          selectedServing: this.asServedData,
+          selectedLeftovers: this.leftoverData,
         },
       });
       this.setPanelOpen(1);
@@ -279,18 +300,21 @@ export default (Vue as VueConstructor<Vue & HasPartialAnswerTriggerHandler & Por
         this.setErrors();
         return;
       }
-      console.log('As-Served: ', this.asServedData);
-      console.log('As-Served: ', this.leftoverData);
       // We can submit only as served (with no leftover)
       // Edge case: asServed and leftover completed, but leftoverPrompt answer changed to no afterwards (caught below)
       if (this.asServedData && !this.leftoverPromptAnswer) {
         // console.log("submitting only as served, leftover no");
-        this.$emit('as-served-serving', this.asServedData);
+        this.$emit('as-served-leftovers', {
+          selectedServing: this.asServedData,
+          selectedLeftovers: false,
+        });
       } else if (this.asServedData && this.leftoverData) {
         // Submit both as served & leftover
         // console.log("submitting as served, leftover yes");
-        this.$emit('as-served-serving', this.asServedData);
-        this.$emit('as-served-leftover', this.leftoverData);
+        this.$emit('as-served-leftovers', {
+          selectedServing: this.asServedData,
+          selectedLeftovers: this.leftoverData,
+        });
       }
     },
 
