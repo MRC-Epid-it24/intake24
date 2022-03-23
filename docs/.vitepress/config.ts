@@ -186,6 +186,10 @@ export default defineConfig({
               link: '/api/authentication',
             },
             {
+              text: 'Password recovery',
+              link: '/api/password',
+            },
+            {
               text: 'Subscriptions',
               link: '/api/subscriptions',
             },
