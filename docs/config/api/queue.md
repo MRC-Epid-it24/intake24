@@ -8,23 +8,23 @@ Queueing system is handled by [Redis](https://redis.io) & [bullmq](https://githu
 
 ### Host
 
-* object-path: `redis.host`
-* dotenv var: `QUEUE_REDIS_HOST`
-* type: `string`
-* default: `'localhost'`
+- object-path: `redis.host`
+- dotenv var: `QUEUE_REDIS_HOST`
+- type: `string`
+- default: `'localhost'`
 
 ### Port
 
-* object-path: `redis.port`
-* dotenv var: `QUEUE_REDIS_PORT`
-* type: `number`
-* default: `6379`
+- object-path: `redis.port`
+- dotenv var: `QUEUE_REDIS_PORT`
+- type: `number`
+- default: `6379`
 
 ### Workers
 
 Number of workers to spawn for job queue
 
-* object-path: `workers`
-* dotenv var: `QUEUE_WORKERS`
-* type: `number`
-* default: `3`
+- object-path: `workers`
+- dotenv var: `QUEUE_WORKERS`
+- type: `number`
+- default: `3`

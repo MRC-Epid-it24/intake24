@@ -21,10 +21,10 @@ Edit tab allows to modify selected survey.
 - `Start date` - Start date of the survey
 
 - `End date` - End date of the survey
-  
 - `Support email` - Email which gets displayed to participant in footer
 
 - `State` - Survey state
+
   - `Not started` - Respondent won't be allowed to complete a recall
   - `Active` - Respondent will be allowed to complete a recall
   - `Suspended` - Respondent won't be allowed to complete a recall
@@ -53,7 +53,6 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 
 - API endpoint can be used to create new respondent accounts. See [API docs](/api/respondent/surveys-public#create-user) for more details.
 
-
 ### Submission webhooks
 
 - `Submission notification URL` - Webhook to be called when recall data submitted. Internally it dispatches [SurveySubmissionNotification](/admin/system/job-types#surveysubmissionnotification) job.
@@ -75,7 +74,6 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 ### Submission limits
 
 - `Maximum allowed submissions per calendar day` - maximum number of recalls allowed within the survey per day
-  
 - `Maximum allowed total submissions` - maximum total number of recalls allowed within the survey
 
 - `Minimum interval between submissions (seconds)` - the shortest minimal internal between two following submission by same respondent
@@ -106,7 +104,7 @@ New question cannot be added or existing question cannot be removed from the sch
 
 ### Scheme meals overrides
 
-Scheme meals overrides section allows to override whole `default meal list`. If it is left empty, original one from scheme is used. If any entry is 
+Scheme meals overrides section allows to override whole `default meal list`. If it is left empty, original one from scheme is used. If any entry is
 
 ::: warning
 

@@ -1,14 +1,16 @@
 # Introduction
 
 REST-based API endpoints use:
-* mostly in `application/json` content-type
-* file-based endpoints use `multipart/form-data` content type
+
+- mostly in `application/json` content-type
+- file-based endpoints use `multipart/form-data` content type
 
 # Usage
 
 Protected endpoints require to supply access token (obtained during login) in `Authorization` http header.
 
 ## Header format
+
 ```
 Authorization: Bearer {accessToken}
 ```

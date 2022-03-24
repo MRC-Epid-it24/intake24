@@ -1,4 +1,4 @@
-# Password recovery 
+# Password recovery
 
 Routes to handle user's password recovery.
 

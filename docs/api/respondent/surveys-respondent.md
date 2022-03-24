@@ -28,7 +28,7 @@ Content-Type: application/json
   "description": string?,
   "finalPageHtml": string?,
   "uxEventSettings": {
-    "enableSearchEvents": boolean, 
+    "enableSearchEvents": boolean,
     "enableAssociatedFoodsEvents": boolean
   },
   "storeUserSessionOnServer": boolean,
@@ -80,7 +80,7 @@ where:
 
 **maximumTotalSubmissionsReached** means that the user is not allowed to complete any more recalls (used to display the correct error page in case the dietary feedback redirect is disabled),
 
-**maximumDailySubmissionsReached** means that the user is not allowed to complete any more recalls *today* but they could do so tomorrow. "Today" is defined as the current day in the user's local time zone.
+**maximumDailySubmissionsReached** means that the user is not allowed to complete any more recalls _today_ but they could do so tomorrow. "Today" is defined as the current day in the user's local time zone.
 
 ## Get user session
 
@@ -183,8 +183,7 @@ where:
 
 **surveyId** is the survey ID,
 
-**recall** is a completed dietary recall in JSON format. 
-
+**recall** is a completed dietary recall in JSON format.
 
 ### Response
 
@@ -194,14 +193,14 @@ Same as survey follow-up:
 200 OK
 
 {
-  "followUpUrl": string | null, 
+  "followUpUrl": string | null,
   "showFeedback": boolean
 }
 ```
 
 ## Request assistance
 
-Notify people having support role for the survey to give the respondent a call to help them complete their recall. 
+Notify people having support role for the survey to give the respondent a call to help them complete their recall.
 
 [v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/system/user/HelpController.scala#L68-L138)
 
@@ -216,14 +215,14 @@ Content-Type: application/json
 {
   "name": string,
   "phone": string
-} 
+}
 ```
 
 where:
 
 **surveyId** is the survey ID,
 
-**name** and **phone** are the respondent's contact details (as entered into the assistance request form by the 
+**name** and **phone** are the respondent's contact details (as entered into the assistance request form by the
 respondent).
 
 ### Response

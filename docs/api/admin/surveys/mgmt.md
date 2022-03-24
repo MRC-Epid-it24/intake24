@@ -118,8 +118,8 @@ Content-Type: application/json
 
 Assign list of survey management roles to specified user
 
-* `{surveyId}/staff`
-* `{surveyId}/support`
+- `{surveyId}/staff`
+- `{surveyId}/support`
 
 ### Request
 

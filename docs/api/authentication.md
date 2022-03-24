@@ -4,8 +4,8 @@ Current authentication system is based on JWT tokens.
 
 It is designed to work with SPA applications:
 
-* Survey / Feedback frontend
-* Admin tool
+- Survey / Feedback frontend
+- Admin tool
 
 Login endpoints issue JWT `access tokens` in response body. `Access token` is short-lived JWT and should be included in header to authorize given request.
 

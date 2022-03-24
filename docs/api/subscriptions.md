@@ -1,4 +1,4 @@
-# Web Push notifications 
+# Web Push notifications
 
 Web Push notifications subscriptions management
 

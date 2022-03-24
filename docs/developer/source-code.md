@@ -5,6 +5,7 @@ Install `git` if you don't already have it.
 ## Repository
 
 Clone the repository
+
 ```sh
 git clone https://github.com/MRC-Epid-it24/intake24
 ```
@@ -42,6 +43,7 @@ npm install -g pnpm
 ```
 
 Install all dependencies from root-level
+
 ```sh
 pnpm install
 ```

@@ -22,6 +22,8 @@
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs",
+    "docs:lint": "prettier --check docs/**/*.md",
+    "docs:lint:fix": "prettier --write docs/**/*.md",
     "lint": "eslint --ext .ts apps/*/src/**/*.ts apps/*/__tests__/**/*.ts packages/*/src/**/*.ts packages/*/__tests__/**/*.ts",
     "lint:fix": "pnpm lint -- --fix",
     "test:unit": "jest",

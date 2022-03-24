@@ -5,6 +5,7 @@ This section briefly describes how to configure, build and start the Intake24 co
 ## Repository
 
 Clone the repository
+
 ```sh
 git clone https://github.com/MRC-Epid-it24/intake24
 ```
@@ -36,6 +37,7 @@ nano .env
 ```
 
 Build all applications
+
 - run command either from top-level to build all `api`, `cli`, `admin` and `survey`.
 - run command from `apps/{app}` folder to build specific application
 
@@ -76,10 +78,11 @@ pnpm start
 ```
 
 :::tip For production, consider
-1) Deploying as dedicated service. Refer to your OS environment how to set that up.
-2) User process manager, e.g. [PM2](https://pm2.keymetrics.io)
-3) Deploy behind proper http server, e.g. [Nginx](https://www.nginx.com), [Apache](https://www.apache.org) etc.
-:::
+
+1. Deploying as dedicated service. Refer to your OS environment how to set that up.
+2. User process manager, e.g. [PM2](https://pm2.keymetrics.io)
+3. Deploy behind proper http server, e.g. [Nginx](https://www.nginx.com), [Apache](https://www.apache.org) etc.
+   :::
 
 Deployment section / ansible scripts provide examples how to use dedicated service on Ubuntu and run it behind Nginx reverse proxy.
 

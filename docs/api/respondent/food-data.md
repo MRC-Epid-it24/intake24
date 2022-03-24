@@ -13,7 +13,7 @@ Get portion size estimation options, associated foods and related data for a foo
 ### Request
 
 ```http
-GET /api/foods/{locale}/{code}    
+GET /api/foods/{locale}/{code}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -49,7 +49,7 @@ where
   ],
   "portionSizeMethods": [
     {
-      "method": "standard-portion" | "as-served" | "guide-image" | "cereal" 
+      "method": "standard-portion" | "as-served" | "guide-image" | "cereal"
                 | "drink-scale" | "milk-on-cereal" | "milk-in-a-hot-drink" | "pizza",
       "description": string,
       "imageUrl": string,
@@ -84,7 +84,7 @@ where
 
 <div class="nested-description">
 
-**foodOrCategoryCode** is an array of 2 elements where the first element is either 0 or 1. If the 
+**foodOrCategoryCode** is an array of 2 elements where the first element is either 0 or 1. If the
 first element is 0, then the second element is a food code, or, if the first element is 1, the second
 element is a category code,
 
@@ -100,20 +100,20 @@ element is a category code,
 
 <div class="nested-description">
 
-**method** is ID of the portion size estimation method to use. See the 
+**method** is ID of the portion size estimation method to use. See the
 [portion size methods](../../developer/portion-size.html) guide for the list of currently supported methods.
 
-**description** is the description of this portion size estimation option for the selection screen (localised 
+**description** is the description of this portion size estimation option for the selection screen (localised
 string key),
 
 **imageUrl** is the link to the image for the selection screen,
 
 **useForRecipes** controls whether this portion size estimation option is appropriate for recipe ingredients,
 
-**conversionFactor** is the multiplier for the final potion weight calculation (e.g. when portion size images 
+**conversionFactor** is the multiplier for the final potion weight calculation (e.g. when portion size images
 do not represent the exact food but something similar that could have different density),
 
-**parameters** is the object with fields specific to the portion size method. See the 
+**parameters** is the object with fields specific to the portion size method. See the
 [portion size methods](../../developer/portion-size.html) guide for details.
 
 </div>
@@ -167,7 +167,7 @@ where
 
 **weight** is the weight (in grams) of the food in this image
 
-</div>  
+</div>
 
 ## Get multiple as served image sets data
 
@@ -212,7 +212,7 @@ Same as the regular as served data response, but returns an array of as served s
 ## Get guide image data
 
 Get definition of an image map which is an image of multiple objects from which one can be selected. Every object
-has an associated weight that is used for portion size weight calculations. 
+has an associated weight that is used for portion size weight calculations.
 
 ### Request
 
@@ -273,17 +273,16 @@ where
 **overlayUrl** is the URL of the transparent image with the object's outline used to highlight the
 current selection. The image has the same dimensions as the main image.
 
-**outline** is the coordinates of the vertices of a polyline outline around the object used to detect 
-which object in the image was clicked/tapped. The coordinates come in `(x, y)` pairs (i.e. the length of the 
+**outline** is the coordinates of the vertices of a polyline outline around the object used to detect
+which object in the image was clicked/tapped. The coordinates come in `(x, y)` pairs (i.e. the length of the
 array is always even) and are normalized such that the `x` coordinates are in the range `[0, 1]` and `y`
-coordinates are in the range `[0, image width / image height]`.   
+coordinates are in the range `[0, image width / image height]`.
 
 </div>
    
 </div>
 
 **weights** is the map of selectable object indices to weights in grams.
-
 
 ## Get multiple guide image data
 
@@ -342,7 +341,7 @@ Same as a guide image (see above), but without the weights:
   ]
 }
 ```
-    
+
 ## Get multiple image maps data
 
 Same as above, but returns several image maps at once.
@@ -411,7 +410,7 @@ where
 **id** is the drink scale ID.
 
 **guideImageId** is the ID of the image map (called guide due to legacy reasons) for the drinkware selection screen,
-e.g. an image with glasses of different shapes and sizes from which the respondent is asked to select one 
+e.g. an image with glasses of different shapes and sizes from which the respondent is asked to select one
 they would like to use.
 
 **scales** is the list of sliding scale image definitions corresponding to objects in the image map `guideImageId`,
@@ -433,7 +432,7 @@ to represent the liquid level,
 **emptyLevel** is the offset in pixels from the bottom of the base image where the sliding scale starts (i.e. the
 bottom of the glass/mug/cup),
 
-**fullLevel** is the offset in pixels from the bottom of the base image where the sliding scale ends (i.e. the top of 
+**fullLevel** is the offset in pixels from the bottom of the base image where the sliding scale ends (i.e. the top of
 the glass/mug/cup),
 
 **volumeSamples** is an array with the liquid volume samples taken at different fill levels, where:
@@ -443,20 +442,19 @@ the glass/mug/cup),
 **fill** is the normalised fill level, from `0` (corresponding to the bottom of the glass) to `1` (corresponding
 to the top of the glass),
 
-**volume** is the volume of liquid measured at this fill level 
+**volume** is the volume of liquid measured at this fill level
 
-</div> 
+</div>
 
 </div>
 
 :::tip
-The volume of the liquid is calculated by taking the current normalised fill level (i.e. 
+The volume of the liquid is calculated by taking the current normalised fill level (i.e.
 `(current slider position - emptyLevel) / (fullLevel - emptyLevel)`) and interpolating between
 the nearest two sample points from the `volumeSamples` array.
 
 See [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/api/foods/DrinkScale.java#L47-L63).  
 :::
-
 
 ## Get multiple drinkware sets data
 
@@ -506,9 +504,9 @@ Same as the regular drinkware set data response, but returns an array of drinkwa
 ]
 ```
 
-## Weight entry dummy 
+## Weight entry dummy
 
-Dummy endpoint for manual weight entry estimation method. The method has no parameters and this request is needed to 
+Dummy endpoint for manual weight entry estimation method. The method has no parameters and this request is needed to
 get the image URL for the portion size option selection screen.
 
 ### Request
@@ -540,7 +538,7 @@ where only the **imageUrl** parameter is meaningful and everything else is const
 ## Get automatic associated foods suggestions
 
 Get the automatically generated associated foods based on the pairwise associations algorithm. This method will
-always suggest categories (as opposed to manually set up associated foods that can point to individual foods as 
+always suggest categories (as opposed to manually set up associated foods that can point to individual foods as
 well as categories).
 
 [v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/food/user/FoodDataController.scala#L154-L186)
@@ -549,7 +547,7 @@ well as categories).
 
 ```http
 GET /api/foods/associated/{locale}?f={foodCode}&f={foodCode}...
-    
+
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 ```
@@ -558,7 +556,7 @@ where
 
 **locale** is the current locale ID,
 
-**f** is the list of food codes in the meal (can be repeated) 
+**f** is the list of food codes in the meal (can be repeated)
 
 ### Response
 
@@ -577,4 +575,4 @@ where
 
 **code** is the Intake24 category code,
 
-**localDescription** is the name of the category in the local language, 
+**localDescription** is the name of the category in the local language,

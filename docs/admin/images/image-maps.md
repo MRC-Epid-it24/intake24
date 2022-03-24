@@ -19,6 +19,7 @@ Edit tab allows to modify selected image map.
 After record is created, object areas can be defined on image.
 
 Object area editor supports following functions:
+
 - click on `plus` button adds new object
 - to modify an object area, firstly select the object by clicking either or canvas object area or on the object's toolbar header
 - description can be attached to each object area

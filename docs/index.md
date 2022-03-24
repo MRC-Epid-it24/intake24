@@ -10,7 +10,7 @@ features:
   - title: 🌏 Admin tool
     details: Admin tool
   - title: 🌏 Recall & feedback
-    details: Recall & feedback 
+    details: Recall & feedback
 #  - title: 🌏 CLI
 #    details: Description
 footer: Made by Intake24 with ❤️

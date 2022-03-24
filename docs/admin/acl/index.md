@@ -2,22 +2,22 @@
 
 Access control list (`ACL`) implementation is based on three models:
 
-* `user`
-* `role`
-* `permission`
+- `user`
+- `role`
+- `permission`
 
 ## Database structure
 
 Relations between the models are defined as follows:
 
-* `many-to-many` between `user` and `role`
-* `many-to-many` between `user` and `permission`
-* `many-to-many` between `role` and `permission`
+- `many-to-many` between `user` and `role`
+- `many-to-many` between `user` and `permission`
+- `many-to-many` between `role` and `permission`
 
 This allows to grant permissions to users in two ways:
 
-* directly associate `permission` with `user`
-* associate `permission` with `user` through `role` (acting as grouping record for a set of permissions)
+- directly associate `permission` with `user`
+- associate `permission` with `user` through `role` (acting as grouping record for a set of permissions)
 
 Permissions need to be implemented on system-level and are usually distributed as database migration. Under normal circumstances, user won't need to create / modify / delete permission list.
 
@@ -25,15 +25,14 @@ Permissions need to be implemented on system-level and are usually distributed a
 
 Permissions are resource-based and use `slug` naming convention. It is formed from resource name and action. Base actions are `browse`, `read`, `create`, `edit`, `delete`. Other resource-specific actions follows similar convention.
 
-| Permission        | Description                                            |
-| ----------------- | ------------------------------------------------------ |
-| resource-browse   | Allows to browse / list resource records               |
-| resource-read     | Allows to read details about the resource record       |
-| resource-create   | Allows to create new resource record                   |
-| resource-edit     | Allows to modify existing resource record              |
-| resource-delete   | Allows to delete existing resource record              |
-| resource-action   | Allows to perform specific action for resource record  |
-
+| Permission      | Description                                           |
+| --------------- | ----------------------------------------------------- |
+| resource-browse | Allows to browse / list resource records              |
+| resource-read   | Allows to read details about the resource record      |
+| resource-create | Allows to create new resource record                  |
+| resource-edit   | Allows to modify existing resource record             |
+| resource-delete | Allows to delete existing resource record             |
+| resource-action | Allows to perform specific action for resource record |
 
 ## Special purpose permissions
 

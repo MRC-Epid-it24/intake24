@@ -4,11 +4,11 @@ Intake24 dietary recall system
 
 It is comprised of following parts:
 
-* Survey/Recall interface
-* Admin interface
-* API Service
-* Databases containing: system data and food data
-* CLI
+- Survey/Recall interface
+- Admin interface
+- API Service
+- Databases containing: system data and food data
+- CLI
 
 ## Survey/Recall interface
 

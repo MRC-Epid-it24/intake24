@@ -3,6 +3,7 @@
 Jobs types available in system.
 
 Available jobs:
+
 - CleanRedisStore
 
 ## CleanRedisStore
@@ -23,7 +24,7 @@ Available jobs:
 
 ## SyncLanguageTranslations
 
-`SyncLanguageTranslations` synchronizes database language translation records with built-in English translation. 
+`SyncLanguageTranslations` synchronizes database language translation records with built-in English translation.
 
 :::tip Built-in translations update
 This needs to be run if object structure changes, so all database records are synced to use same structure.
@@ -51,14 +52,14 @@ This needs to be run if object structure changes, so all database records are sy
 
 **Available columns**
 
-| Column       | Description  | Record           |
-| ------------ | ------------ | ---------------- |
-| userName     | Required     | UserSurveyAlias  |
-| password     | Required     | UserSurveyAlias  |
-| name         | Optional     | User             |
-| email        | Optional     | User             |
-| phone        | Optional     | User             |
-| *            | Optional     | UserCustomField  |
+| Column   | Description | Record          |
+| -------- | ----------- | --------------- |
+| userName | Required    | UserSurveyAlias |
+| password | Required    | UserSurveyAlias |
+| name     | Optional    | User            |
+| email    | Optional    | User            |
+| phone    | Optional    | User            |
+| \*       | Optional    | UserCustomField |
 
 :::tip User custom fields
 Any additional column not listed above, will get stored as `UserCustomField` record, which is `key` -> `value` record in database table.

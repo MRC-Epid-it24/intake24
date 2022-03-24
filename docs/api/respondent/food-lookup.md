@@ -55,11 +55,12 @@ where
 **existing** is an optional list of food codes representing other foods in the same meal, used by the search result
 ranking algorithm (more than one can be specified by repeating the query parameter multiple times),
 
-**limit** is an optional maximum number of results to return, defaults to 50 
+**limit** is an optional maximum number of results to return, defaults to 50
 
 **algorithm** is an optional id of the search result ranking algorithm to use, defaults to "paRules". Can be one of:
+
 - "paRules": pairwise association rules, a machine learning based algorithm
-- "popularity": simple algorithm based on the number of times foods were selected   
+- "popularity": simple algorithm based on the number of times foods were selected
 
 ### Response
 
@@ -67,7 +68,7 @@ ranking algorithm (more than one can be specified by repeating the query paramet
 {
   "foods": {
      "code": string,
-     "localDescription": string  
+     "localDescription": string
   },
   "categories": {
     "code": string,
@@ -84,11 +85,11 @@ where
 
 **code** is the Intake24 food or category code,
 
-**localDescription** is the food/category name from the food database in the local language for survey 
+**localDescription** is the food/category name from the food database in the local language for survey
 
 ## Food lookup (for recipes)
 
-Same as normal lookup but expands the search results to foods marked for use in recipes (e.g. raw ingredients).   
+Same as normal lookup but expands the search results to foods marked for use in recipes (e.g. raw ingredients).
 
 [v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/food/user/FoodLookupController.scala#L95-L100)
 
@@ -145,6 +146,7 @@ Authorization: Bearer {accessToken}
 where **locale** is the current survey's locale ID.
 
 ### Response
+
 ```json
 [
   {
@@ -175,13 +177,13 @@ GET /api/categories/{locale}/{code}?alg={algorithmId}&existing={existingFoodCode
 Authorization: Bearer {accessToken}
 ```
 
-where 
+where
 
 **locale** is the current survey's locale ID,
 
 **code** is the Intake24 category code,
 
-**algorithmId** (optional) is the algorithm to use for sorting the food/subcategory listings, can be `popularity` or 
+**algorithmId** (optional) is the algorithm to use for sorting the food/subcategory listings, can be `popularity` or
 `paRules`,
 
 **existing** (optional) is the list of foods in the same meal for `paRules` based ranking.
@@ -200,7 +202,7 @@ where
   "categories": [
     {
       "code": string,
-      "localDescription": string  
+      "localDescription": string
     },
     ...
   ]
@@ -215,7 +217,7 @@ where
 
 **code** is the Intake24 food code,
 
-**localDescription** is the name of the food in the local language, 
+**localDescription** is the name of the food in the local language,
 
 </div>
 
@@ -225,6 +227,6 @@ where
 
 **code** is the Intake24 category code,
 
-**localDescription** is the name of the category in the local language, 
+**localDescription** is the name of the category in the local language,
 
 </div>

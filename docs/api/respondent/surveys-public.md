@@ -26,12 +26,12 @@ Content-Type: application/json
     "localeId": string
   }
 ]
-``` 
+```
 
 ## Public survey parameters
 
 Publicly accessible API end-point.
- 
+
 Returns survey parameters necessary to render the survey login page such as the language settings and the support e-mail.
 
 ### Request
@@ -55,13 +55,13 @@ Content-Type: application/json
 }
 ```
 
-where: 
+where:
 
 **originatingURL** is a feature for integrating with external systems. In v3 respondents are redirected to this URL
 in case of authentication failure so the external system can perform the authentication for them. A better solution
-should be used for v4.  
+should be used for v4.
 
-## Generate user  
+## Generate user
 
 Publicly accessible API end-point.
 
@@ -94,7 +94,7 @@ Content-Type: application/json
 }
 ```
 
-## Create user  
+## Create user
 
 Publicly accessible API end-point.
 
@@ -102,8 +102,8 @@ Create a new user account with a specific user name and a unique redirect URL if
 Currently used for integration with external survey systems.
 
 :::warning
-This function presents a vulnerability similar to the generate user function. The JWT signing is done on the 
-client side by the current users of this function and can therefore be easily extracted. 
+This function presents a vulnerability similar to the generate user function. The JWT signing is done on the
+client side by the current users of this function and can therefore be easily extracted.
 :::
 
 ### Request
@@ -122,6 +122,7 @@ JWT payload expects following claims:
 - `redirect` - Unique respondent username within the survey
 
 JWT Payload object
+
 ```json
 {
   "user": string,
@@ -135,8 +136,8 @@ JWT Payload object
 200 OK
 
 {
-  "userId": number, 
-  "redirect": string, 
+  "userId": number,
+  "redirect": string,
   "authToken": string
 }
 ```

@@ -29,18 +29,20 @@ Questions tab allows to design dietary survey recall flow and define details abo
 Questions are categorized to sections and they are asked in specified fixed order. See table below.
 
 #### Recall sections
-| Name             | Description                                                    |
-| ---------------- | ----------------------------------------------------           |
-| 1. Pre-meal      | Questions asked about whole recall before dietary data entered |
-| 2. Pre-foods     | Questions asked about meal before foods were entered           |
-| 3. Foods         | Questions asked about the foods                                |
-| 4. Post-foods    | Questions asked about meal after foods were entered            |
-| 5. Post-meal     | Questions asked about whole recall after dietary data          |
-| 6. Submission    | Questions asked during data submissions                        | 
+
+| Name          | Description                                                    |
+| ------------- | -------------------------------------------------------------- |
+| 1. Pre-meal   | Questions asked about whole recall before dietary data entered |
+| 2. Pre-foods  | Questions asked about meal before foods were entered           |
+| 3. Foods      | Questions asked about the foods                                |
+| 4. Post-foods | Questions asked about meal after foods were entered            |
+| 5. Post-meal  | Questions asked about whole recall after dietary data          |
+| 6. Submission | Questions asked during data submissions                        |
 
 Whole question sections group can be loaded from another scheme using `load from scheme` button.
 
 When question section is selected, list of questions appear below:
+
 - New questions can be added
 - Questions can be removed
 - List of questions can be re-arranged by drag & drop
@@ -53,6 +55,7 @@ When question section is selected, list of questions appear below:
 Full screen modal opens when create or edit action triggered.
 
 Top level toolbar has:
+
 - Cancel button on the left - changes are discarded
 - Confirm button on the right - changes are confirmed, but not yet saved to server's database
 - Tab list with:
@@ -69,7 +72,6 @@ General tab defines administrative fields
 - `question type` - Type of question that is asked. Questions are further categorized to `custom`, `standard` and `portion size` groups
 - `question id` - ID assigned to question, which must be unique within the question list
 - `question name` - User friendly name for better orientation. It's only for admin use, it is not displayed to respondent
-
 
 #### Content tab
 
@@ -88,19 +90,20 @@ Data export tab allows to define fields, which will get exported to flattened CS
 There is a fixed list of possible data export sections
 
 #### Sections
-| Name                     | Description |
-| ------------------------ | ----------- |
-| User record fields       |             |
-| User custom fields       |             |
-| Survey record fields     |             |
-| Survey custom fields     |             |
-| Meal record fields       |             |
-| Meal custom fields       |             |
-| Food record fields       |             |
-| Food custom fields       |             |
-| Food composition fields  |             |
-| Food nutrient fields     |             |
-| Portion size fields      |             |
+
+| Name                    | Description |
+| ----------------------- | ----------- |
+| User record fields      |             |
+| User custom fields      |             |
+| Survey record fields    |             |
+| Survey custom fields    |             |
+| Meal record fields      |             |
+| Meal custom fields      |             |
+| Food record fields      |             |
+| Food custom fields      |             |
+| Food composition fields |             |
+| Food nutrient fields    |             |
+| Portion size fields     |             |
 
 Sections can be re-arranged by drag & drop and they will appear accordingly in export file.
 

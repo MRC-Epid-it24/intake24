@@ -2,7 +2,6 @@
 
 Command line interface to run specific scripts / tasks is implemented as standalone app `apps/cli`.
 
-
 ## Installation
 
 Navigate to application folder

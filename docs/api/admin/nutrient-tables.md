@@ -175,8 +175,8 @@ Content-Type: application/json
 
 Endpoint accepts two types of CSV files.
 
-* NDB mapping
-* NDB nutrient data
+- NDB mapping
+- NDB nutrient data
 
 Upload is submitted as job and response returns `JobResponse` entry
 

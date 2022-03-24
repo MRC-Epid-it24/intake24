@@ -29,4 +29,3 @@ When setting up survey-related users, it's better to handle permissions through 
 - `Email notifications` - To be clarified
 
 - `SMS notifications` - To be clarified
-

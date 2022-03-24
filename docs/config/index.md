@@ -16,17 +16,17 @@ Configuration files are stored in `src/config` directory of `application` or `pa
 
 Configuration is structured to following sections:
 
-* [Application](/config/api/application)
-* [Access Control List (ACL)](/config/api/acl)
-* [Cache](/config/api/cache)
-* [Database](/config/api/database)
-* [Filesystem](/config/api/filesystem)
-* [Mail](/config/api/mail)
-* [Logging](/config/api/log)
-* [Queue](/config/api/queue)
-* [Security](/config/api/security)
-* [Services](/config/api/services)
-* [Session](/config/api/session)
+- [Application](/config/api/application)
+- [Access Control List (ACL)](/config/api/acl)
+- [Cache](/config/api/cache)
+- [Database](/config/api/database)
+- [Filesystem](/config/api/filesystem)
+- [Mail](/config/api/mail)
+- [Logging](/config/api/log)
+- [Queue](/config/api/queue)
+- [Security](/config/api/security)
+- [Services](/config/api/services)
+- [Session](/config/api/session)
 
 # Admin client
 

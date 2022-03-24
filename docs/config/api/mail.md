@@ -4,8 +4,8 @@ Path: `apps/api/src/config/mail.ts`
 
 Mail implementation supports following transports:
 
-* `SMTP` - SMTP protocol
-* `Log` - logs messages to `stdout` (for debugging purposes)
+- `SMTP` - SMTP protocol
+- `Log` - logs messages to `stdout` (for debugging purposes)
 
 Implementation is using [nodemailer](https://nodemailer.com).
 
@@ -13,71 +13,71 @@ Implementation is using [nodemailer](https://nodemailer.com).
 
 Selected mailer transport
 
-* object-path: `mailer`
-* dotenv var: `MAIL_MAILER`
-* type: `'smtp' | 'log'`
-* default: `'log'`
+- object-path: `mailer`
+- dotenv var: `MAIL_MAILER`
+- type: `'smtp' | 'log'`
+- default: `'log'`
 
 ## SMTP transport
 
 ### Host
 
-* object-path: `mailers.smtp.host`
-* dotenv var: `MAIL_HOST`
-* type: `string`
-* default: `'localhost'`
+- object-path: `mailers.smtp.host`
+- dotenv var: `MAIL_HOST`
+- type: `string`
+- default: `'localhost'`
 
 ### Port
 
-* object-path: `mailers.smtp.port`
-* dotenv var: `MAIL_PORT`
-* type: `number`
-* default: `25`
+- object-path: `mailers.smtp.port`
+- dotenv var: `MAIL_PORT`
+- type: `number`
+- default: `25`
 
 ### Secure
 
-* object-path: `mailers.smtp.secure`
-* dotenv var: `MAIL_SECURE`
-* type: `boolean`
-* default: `false`
+- object-path: `mailers.smtp.secure`
+- dotenv var: `MAIL_SECURE`
+- type: `boolean`
+- default: `false`
 
 ### ignoreTLS
 
-* object-path: `mailers.smtp.ignoreTLS`
-* dotenv var: `MAIL_IGNORE_TLS`
-* type: `boolean`
-* default: `false`
+- object-path: `mailers.smtp.ignoreTLS`
+- dotenv var: `MAIL_IGNORE_TLS`
+- type: `boolean`
+- default: `false`
 
 ### Authentication
 
 #### Username
 
-* object-path: `mailers.smtp.auth.username`
-* dotenv var: `MAIL_USERNAME`
-* type: `string | null`
-* default: `null`
+- object-path: `mailers.smtp.auth.username`
+- dotenv var: `MAIL_USERNAME`
+- type: `string | null`
+- default: `null`
 
 #### Password
 
-* object-path: `mailers.smtp.auth.pass`
-* dotenv var: `MAIL_PASSWORD`
-* type: `string | null`
-* default: `null`
+- object-path: `mailers.smtp.auth.pass`
+- dotenv var: `MAIL_PASSWORD`
+- type: `string | null`
+- default: `null`
 
 ## From
 
-* object-path: `from`
+- object-path: `from`
 
 ### Address
 
-* object-path: `from.address`
-* dotenv var: `MAIL_FROM_ADDRESS`
-* type: `string`
-* default: `'example@domain.com'`
+- object-path: `from.address`
+- dotenv var: `MAIL_FROM_ADDRESS`
+- type: `string`
+- default: `'example@domain.com'`
 
 ### Name
 
-* object-path: `from.name`
-* dotenv var: `MAIL_FROM_NAME`
-* type: `string`
-* default: `'Intake24'`
+- object-path: `from.name`
+- dotenv var: `MAIL_FROM_NAME`
+- type: `string`
+- default: `'Intake24'`
