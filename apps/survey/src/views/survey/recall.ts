@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { SchemeEntryResponse } from '@intake24/common/types/http';
 import { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import { Selection, FoodState, LocaleTranslation, HasOnAnswer } from '@intake24/common/types';
@@ -158,6 +158,8 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
   },
 
   methods: {
+    ...mapActions(useSurvey, ['deleteMeal', 'clearTempPromptAnswer']),
+
     setSelection(newSelection: Selection) {
       // Prevent the currently active prompt from crashing if it expects a different selection type
       this.currentPrompt = null;
@@ -214,7 +216,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       };
     },
 
-    onMealAction(payload: { action: MealAction; mealIndex: number }) {
+    async onMealAction(payload: { action: MealAction; mealIndex: number }) {
       // eslint-disable-next-line default-case
       switch (payload.action) {
         case 'edit-foods':
@@ -225,6 +227,10 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
           break;
         case 'delete-meal':
           console.log('About to delete the Meal: ', payload.mealIndex);
+          this.showMealPrompt(payload.mealIndex, 'preFoods', 'edit-meal-prompt');
+          this.deleteMeal(payload.mealIndex);
+          await this.nextPrompt();
+          this.clearTempPromptAnswer();
           break;
       }
     },
