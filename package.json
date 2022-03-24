@@ -37,7 +37,8 @@
     "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
-    "*.md": "pnpm docs:lint:fix"
+    "*.md": "prettier --write",
+    "*.ts": "eslint --fix"
   },
   "repository": {
     "type": "git",
