@@ -223,6 +223,9 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
         case 'edit-time':
           this.showMealPrompt(payload.mealIndex, 'preFoods', 'meal-time-prompt');
           break;
+        case 'delete-meal':
+          console.log('About to delete the Meal: ', payload.mealIndex);
+          break;
       }
     },
 

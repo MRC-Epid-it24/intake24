@@ -6,6 +6,7 @@
       </v-list-item-title>
       <context-menu
         :menu="menuMeal"
+        :entityName="meal.name"
         :icon="menuMealIcon"
         @context-menu-action="onContextMenuAction"
       ></context-menu>
@@ -26,7 +27,7 @@ import { defineComponent } from '@vue/composition-api';
 import ContextMenu from '../elements/ContextMenu.vue';
 import FoodItem from './FoodItem.vue';
 
-export type MealAction = 'edit-foods' | 'edit-time';
+export type MealAction = 'edit-foods' | 'edit-time' | 'delete-meal';
 
 export default defineComponent({
   name: 'MealItem',
@@ -45,10 +46,17 @@ export default defineComponent({
         {
           name: this.$t('recall.menu.meal.editFoodInMeal'),
           action: 'edit-foods',
+          dialog: false,
         },
         {
           name: this.$t('recall.menu.meal.editMealTime'),
           action: 'edit-time',
+          dialog: false,
+        },
+        {
+          name: this.$t('recall.menu.meal.deleteMeal'),
+          action: 'delete-meal',
+          dialog: true,
         },
       ],
     };
