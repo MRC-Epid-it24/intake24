@@ -10,7 +10,7 @@ import{_ as e,c as s,o,a}from"./app.954531fb.js";const k='{"title":"Food databas
 </code></pre></div><p>where</p><p><strong>description</strong> is the food description as entered by the user,</p><p><strong>existing</strong> is an optional list of food codes representing other foods in the same meal, used by the search result ranking algorithm (more than one can be specified by repeating the query parameter multiple times),</p><p><strong>limit</strong> is an optional maximum number of results to return, defaults to 50</p><p><strong>algorithm</strong> is an optional id of the search result ranking algorithm to use, defaults to &quot;paRules&quot;. Can be one of:</p><ul><li>&quot;paRules&quot;: pairwise association rules, a machine learning based algorithm</li><li>&quot;popularity&quot;: simple algorithm based on the number of times foods were selected</li></ul><h3 id="response-1" tabindex="-1">Response <a class="header-anchor" href="#response-1" aria-hidden="true">#</a></h3><div class="language-json"><pre><code><span class="token punctuation">{</span>
   <span class="token property">&quot;foods&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
      <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> string<span class="token punctuation">,</span>
-     <span class="token property">&quot;localDescription&quot;</span><span class="token operator">:</span> string  
+     <span class="token property">&quot;localDescription&quot;</span><span class="token operator">:</span> string
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
   <span class="token property">&quot;categories&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
     <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> string<span class="token punctuation">,</span>
@@ -47,7 +47,7 @@ import{_ as e,c as s,o,a}from"./app.954531fb.js";const k='{"title":"Food databas
   <span class="token property">&quot;categories&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token punctuation">{</span>
       <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> string<span class="token punctuation">,</span>
-      <span class="token property">&quot;localDescription&quot;</span><span class="token operator">:</span> string  
+      <span class="token property">&quot;localDescription&quot;</span><span class="token operator">:</span> string
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
     ...
   <span class="token punctuation">]</span>

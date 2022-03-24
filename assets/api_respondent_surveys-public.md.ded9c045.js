@@ -44,8 +44,8 @@ import{_ as e,c as s,o as n,a}from"./app.954531fb.js";const v='{"title":"Surveys
 </code></pre></div><h3 id="response-3" tabindex="-1">Response <a class="header-anchor" href="#response-3" aria-hidden="true">#</a></h3><div class="language-json"><pre><code><span class="token number">200</span> OK
 
 <span class="token punctuation">{</span>
-  <span class="token property">&quot;userId&quot;</span><span class="token operator">:</span> number<span class="token punctuation">,</span> 
-  <span class="token property">&quot;redirect&quot;</span><span class="token operator">:</span> string<span class="token punctuation">,</span> 
+  <span class="token property">&quot;userId&quot;</span><span class="token operator">:</span> number<span class="token punctuation">,</span>
+  <span class="token property">&quot;redirect&quot;</span><span class="token operator">:</span> string<span class="token punctuation">,</span>
   <span class="token property">&quot;authToken&quot;</span><span class="token operator">:</span> string
 <span class="token punctuation">}</span>
 </code></pre></div><ul><li><p><code>userId</code> - Internal Intake24 user ID</p></li><li><p><code>redirect</code> - Redirect URL decoded from the input token</p></li><li><p><code>authToken</code> - Authentication token for the new user</p></li></ul>`,39),r=[p];function o(i,u,c,l,d,h){return n(),s("div",null,r)}var g=e(t,[["render",o]]);export{v as __pageData,g as default};

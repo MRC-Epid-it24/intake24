@@ -12,7 +12,7 @@ import{_ as s,c as e,o as n,a}from"./app.954531fb.js";const v='{"title":"Surveys
   <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> string?<span class="token punctuation">,</span>
   <span class="token property">&quot;finalPageHtml&quot;</span><span class="token operator">:</span> string?<span class="token punctuation">,</span>
   <span class="token property">&quot;uxEventSettings&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">&quot;enableSearchEvents&quot;</span><span class="token operator">:</span> boolean<span class="token punctuation">,</span> 
+    <span class="token property">&quot;enableSearchEvents&quot;</span><span class="token operator">:</span> boolean<span class="token punctuation">,</span>
     <span class="token property">&quot;enableAssociatedFoodsEvents&quot;</span><span class="token operator">:</span> boolean
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
   <span class="token property">&quot;storeUserSessionOnServer&quot;</span><span class="token operator">:</span> boolean<span class="token punctuation">,</span>
@@ -79,7 +79,7 @@ import{_ as s,c as e,o as n,a}from"./app.954531fb.js";const v='{"title":"Surveys
 </span></code></pre></div><p>where:</p><p><strong>surveyId</strong> is the survey ID,</p><p><strong>recall</strong> is a completed dietary recall in JSON format.</p><h3 id="response-5" tabindex="-1">Response <a class="header-anchor" href="#response-5" aria-hidden="true">#</a></h3><p>Same as survey follow-up:</p><div class="language-json"><pre><code><span class="token number">200</span> OK
 
 <span class="token punctuation">{</span>
-  <span class="token property">&quot;followUpUrl&quot;</span><span class="token operator">:</span> string | <span class="token null keyword">null</span><span class="token punctuation">,</span> 
+  <span class="token property">&quot;followUpUrl&quot;</span><span class="token operator">:</span> string | <span class="token null keyword">null</span><span class="token punctuation">,</span>
   <span class="token property">&quot;showFeedback&quot;</span><span class="token operator">:</span> boolean
 <span class="token punctuation">}</span>
 </code></pre></div><h2 id="request-assistance" tabindex="-1">Request assistance <a class="header-anchor" href="#request-assistance" aria-hidden="true">#</a></h2><p>Notify people having support role for the survey to give the respondent a call to help them complete their recall.</p><p><a href="https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/system/user/HelpController.scala#L68-L138" target="_blank" rel="noopener noreferrer">v3 implementation</a></p><h3 id="request-6" tabindex="-1">Request <a class="header-anchor" href="#request-6" aria-hidden="true">#</a></h3><div class="language-http"><pre><code>POST /api/surveys/{surveyId}/request-callback
@@ -90,6 +90,6 @@ import{_ as s,c as e,o as n,a}from"./app.954531fb.js";const v='{"title":"Surveys
 <span class="token punctuation">{</span>
   <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> string<span class="token punctuation">,</span>
   <span class="token property">&quot;phone&quot;</span><span class="token operator">:</span> string
-<span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
 </span></code></pre></div><p>where:</p><p><strong>surveyId</strong> is the survey ID,</p><p><strong>name</strong> and <strong>phone</strong> are the respondent&#39;s contact details (as entered into the assistance request form by the respondent).</p><h3 id="response-6" tabindex="-1">Response <a class="header-anchor" href="#response-6" aria-hidden="true">#</a></h3><div class="language-json"><pre><code><span class="token number">200</span> OK
 </code></pre></div>`,61),p=[o];function r(l,c,u,i,d,h){return n(),e("div",null,p)}var y=s(t,[["render",r]]);export{v as __pageData,y as default};
