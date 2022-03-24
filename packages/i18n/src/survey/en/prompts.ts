@@ -49,6 +49,7 @@ const prompts: LocaleMessageObject = {
     yes: 'Add Meal',
     no: 'Abort adding',
     hint: 'hit enter when finished typing',
+    noMeal: 'No Meals remaining, please add at least one',
   },
   mealDelete: {
     title: 'Delete Meal/Food',

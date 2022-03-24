@@ -1,5 +1,8 @@
 <template>
   <prompt-layout :text="text" :description="description">
+    <v-col md="8" sm="12" v-show="this.hasMeals === 0">
+      <h4>{{ $t('prompts.mealAdding.noMeal') }}</h4>
+    </v-col>
     <v-col md="8" sm="12">
       <v-form ref="form" @submit.prevent="submit">
         <v-combobox
@@ -65,7 +68,12 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
+    ...mapState(useSurvey, [
+      'selectedMealIndex',
+      'selectedFoodIndex',
+      'currentTempPromptAnswer',
+      'hasMeals',
+    ]),
 
     text(): string {
       const text = this.promptProps.text[this.$i18n.locale];

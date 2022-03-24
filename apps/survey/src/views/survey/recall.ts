@@ -67,7 +67,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedFood', 'selectedMealIndex']),
+    ...mapState(useSurvey, ['selectedMeal', 'selectedFood', 'selectedMealIndex', 'hasMeals']),
 
     ...mapState(useSurvey, {
       meals(state) {
@@ -229,8 +229,8 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
           console.log('About to delete the Meal: ', payload.mealIndex);
           this.showMealPrompt(payload.mealIndex, 'preFoods', 'edit-meal-prompt');
           this.deleteMeal(payload.mealIndex);
-          await this.nextPrompt();
           this.clearTempPromptAnswer();
+          await this.nextPrompt();
           break;
       }
     },
@@ -309,7 +309,11 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       if (nextPrompt === undefined) {
         // TODO: handle completion
         console.log('No prompts remaining');
-        this.currentPrompt = null;
+        if (this.hasMeals === 0) {
+          this.onRecallAction('add-meal');
+        } else {
+          this.currentPrompt = null;
+        }
       } else {
         console.log(`Switching prompt to ${nextPrompt.prompt.component}`);
         this.currentPrompt = nextPrompt;

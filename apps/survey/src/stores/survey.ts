@@ -68,6 +68,7 @@ export const useSurvey = defineStore('survey', {
     hasStarted: (state) => !!state.data.startTime,
     hasFinished: (state) => !!state.data.endTime,
     meals: (state) => state.data.meals,
+    hasMeals: (state) => state.data.meals.length,
     defaultSchemeMeals: (state) => state.parameters?.surveyScheme.meals,
     selection: (state) => state.data.selection,
     selectedMealIndex: (state) => state.data.selection.element?.mealIndex,

@@ -47,7 +47,7 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['addMeal', 'setTempPromptAnswer']),
+    ...mapActions(useSurvey, ['addMeal', 'setTempPromptAnswer', 'clearTempPromptAnswer']),
 
     onTempChange(tempNewMeal: PromptAnswer) {
       this.setTempPromptAnswer(tempNewMeal);
@@ -58,7 +58,7 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
       this.$emit('complete');
       this.clearTempPromptAnswer();
     },
-    
+
     onPartialAnswer(newMeal: string) {
       console.log('Called onPartialAnswer first');
       this.onAnswer(newMeal);
