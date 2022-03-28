@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { FeedbackCardParameters } from '@intake24/survey/feedback';
+import { FeedbackCardParameters } from '@intake24/ui/feedback';
 import { GenericCard, GenericPrintCard } from './cards';
 
 export default defineComponent({

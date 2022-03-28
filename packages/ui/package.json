@@ -2,7 +2,7 @@
   "name": "@intake24/ui",
   "version": "1.0.0",
   "private": true,
-  "description": "Intake24 UI components",
+  "description": "Intake24 UI shared code",
   "author": "",
   "license": "Apache-2.0",
   "repository": {
@@ -17,6 +17,10 @@
   "scripts": {},
   "dependencies": {
     "@vue/composition-api": "^1.4.9",
+    "axios": "^0.26.1",
+    "chart.js": "^3.7.1",
+    "lodash": "^4.17.21",
+    "svg-gauge": "^1.0.6",
     "vue": "^2.6.14",
     "vue-i18n": "^8.27.0",
     "vue-ls": "^4.2.0",
@@ -25,10 +29,12 @@
     "vuetify": "^2.6.4"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.180",
     "@vue/runtime-dom": "^3.2.31"
   },
   "bundledDependencies": [
-    "@intake24/admin",
-    "@intake24/common"
+    "@intake24/common",
+    "@intake24/i18n",
+    "@intake24/ui"
   ]
 }

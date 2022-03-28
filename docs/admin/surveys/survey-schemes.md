@@ -79,7 +79,7 @@ Content tab defines respondent facing content
 
 - `question name` - Very short question name, used to be displayed in frontend UI breadcrumb component
 - `question text` - Main question text to be asked
-- `question name` - Any question details, allows to embed `html` content
+- `question description` - Any question details, allows to embed `html` content
 
 All three fields can be localized to various languages
 

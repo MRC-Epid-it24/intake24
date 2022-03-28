@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Permission } from '@intake24/admin/types';
+import { Permission } from '@intake24/ui/types';
 import http from '@intake24/admin/services/http.service';
 import { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
 import { useLoading } from './loading';

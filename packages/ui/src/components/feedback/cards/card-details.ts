@@ -1,11 +1,11 @@
-import i18n from '@intake24/survey/i18n';
+import { surveyVueI18n as i18n } from '@intake24/i18n';
 import { CardType, NutrientRuleType, Sentiment } from '@intake24/common/feedback';
 import {
   CharacterParameters,
   DemographicRange,
   FiveADayParameters,
   NutrientGroupParameters,
-} from '@intake24/survey/feedback';
+} from '@intake24/ui/feedback';
 import { RequiredLocaleTranslation, LocaleTranslation } from '@intake24/common/types';
 import { round } from '@intake24/common/util';
 

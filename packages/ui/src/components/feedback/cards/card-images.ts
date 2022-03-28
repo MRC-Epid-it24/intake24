@@ -1,5 +1,5 @@
 import { CardType } from '@intake24/common/feedback';
-import { CharacterParameters, NutrientGroupParameters } from '@intake24/survey/feedback';
+import { CharacterParameters, NutrientGroupParameters } from '@intake24/ui/feedback';
 import { characterImageMap, fiveADayImageMap, nutrientGroupImageMap } from '@intake24/ui';
 
 export const characterBackgroundImage = (parameters: CharacterParameters): string =>

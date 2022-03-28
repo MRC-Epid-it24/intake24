@@ -24,7 +24,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import { Chart } from 'chart.js';
-import { TopFoodData } from '@intake24/survey/feedback';
+import { TopFoodData } from '@intake24/ui/feedback';
 
 export default defineComponent({
   name: 'FeedbackChartArea',

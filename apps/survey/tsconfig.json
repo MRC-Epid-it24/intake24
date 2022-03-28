@@ -8,12 +8,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "types": [
-      "jest",
-      "jest-extended",
-      "vuetify",
-      "webpack-env"
-    ],
+    "types": ["jest", "jest-extended", "vuetify", "webpack-env"],
     "paths": {
       "@intake24/survey/*": ["src/*"],
       "@intake24/common/*": ["../../packages/common/src/*"],
@@ -21,22 +16,15 @@
       "@intake24/ui/*": ["../../packages/ui/src/*"],
       "@intake24/*": ["../../packages/*/src"]
     },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost",
-      "webworker"
-    ]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost", "webworker"]
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
     "__tests__/**/*.ts",
-    "__tests__/**/*.tsx"
+    "__tests__/**/*.tsx",
+    "../../packages/ui/src/feedback/user.service.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

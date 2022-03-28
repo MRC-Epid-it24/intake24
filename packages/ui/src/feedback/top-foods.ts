@@ -1,5 +1,6 @@
 import { ChartData as ChartJsData } from 'chart.js';
 import { TopFoods } from '@intake24/common/feedback';
+import { round } from '@intake24/common/util';
 import { AggregateFoodStats } from './classes';
 
 export type ChartData = {
@@ -41,7 +42,7 @@ export const summarizeOtherFood = (
   return [new AggregateFoodStats('Other food', new Map([[nutrientTypeId, total]]))];
 };
 
-export const getTopFoods = (
+export const buildTopFoods = (
   topFoods: TopFoods,
   foods: AggregateFoodStats[],
   locale = 'en'
@@ -82,7 +83,7 @@ export const getTopFoods = (
       list,
       chart,
       chartJs: { labels, datasets: [{ data, backgroundColor }] },
-      total: Math.round(total * 10) / 10,
+      total: round(total),
     };
   });
 

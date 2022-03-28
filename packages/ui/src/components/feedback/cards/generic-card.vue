@@ -23,7 +23,7 @@
 <script lang="ts">
 import SvgGauge, { GaugeInstance } from 'svg-gauge';
 import { computed, defineComponent, PropType, ref, toRefs } from '@vue/composition-api';
-import { FeedbackCardParameters } from '@intake24/survey/feedback';
+import { FeedbackCardParameters } from '@intake24/ui/feedback';
 import { getDetails, getBackgroundImage } from '.';
 import TellMeMore from './tell-me-more.vue';
 

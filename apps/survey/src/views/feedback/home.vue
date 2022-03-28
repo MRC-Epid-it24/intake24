@@ -63,20 +63,21 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { feedbackService, FeedbackDictionaries } from '@intake24/survey/services';
+import { mapState } from 'pinia';
 import {
-  UserDemographic,
-  getTopFoods,
   FeedbackCardParameters,
+  FeedbackDictionaries,
+  UserDemographic,
+  buildTopFoods,
   buildCardParams,
-} from '@intake24/survey/feedback';
+} from '@intake24/ui/feedback';
 import { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
 import {
   FeedbackChartArea,
   FeedbackCardArea,
   UserDemographicInfo,
-} from '@intake24/survey/components/feedback';
-import { mapState } from 'pinia';
+} from '@intake24/ui/components/feedback';
+import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 
 export type Submission = {
@@ -104,14 +105,10 @@ export default defineComponent({
       userDemographic: null as UserDemographic | null,
 
       cards: [] as FeedbackCardParameters[],
-      topFoods: getTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], this.$i18n.locale),
+      topFoods: buildTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], this.$i18n.locale),
 
       selectedSubmissions: [] as string[],
     };
-  },
-
-  setup() {
-    return { buildCardParams };
   },
 
   computed: {
@@ -153,41 +150,23 @@ export default defineComponent({
     loading.addItem('feedback-initial-load');
 
     try {
-      const { cards, demographicGroups, henryCoefficients } = feedbackScheme;
+      const { cards, demographicGroups: groups, henryCoefficients } = feedbackScheme;
 
-      const feedbackDicts = await feedbackService.getFeedbackResults(
-        surveyId,
-        cards,
-        demographicGroups
-      );
-      if (!feedbackDicts) throw Error('Feedback data could not be loaded');
-
-      this.feedbackDicts = feedbackDicts;
-
-      const {
-        feedbackData: { physicalActivityLevels, weightTargets },
-        physicalData,
-      } = this.feedbackDicts;
-
+      const { physicalData, submissions } = await this.getUserData(surveyId);
       if (!physicalData) {
         this.$router.push({ name: 'feedback-physical-data', params: { surveyId } });
         return;
       }
 
-      const physicalActivityLevel = physicalActivityLevels.find(
-        ({ id }) => id === physicalData.physicalActivityLevelId
-      );
-      const weightTarget = weightTargets.find(({ id }) => id === physicalData.weightTarget);
-
-      if (!physicalActivityLevel) throw new Error('Unknown physical activity level.');
-      if (!weightTarget) throw new Error('Unknown weight target.');
-
-      this.userDemographic = new UserDemographic(
+      const { feedbackDicts, userDemographic } = await feedbackService.getFeedbackResults({
+        cards,
+        groups,
+        henryCoefficients,
         physicalData,
-        physicalActivityLevel,
-        weightTarget,
-        henryCoefficients
-      );
+        submissions,
+      });
+      this.feedbackDicts = feedbackDicts;
+      this.userDemographic = userDemographic;
 
       this.buildFeedback();
     } catch (err) {
@@ -200,6 +179,15 @@ export default defineComponent({
   },
 
   methods: {
+    async getUserData(surveyId: string) {
+      const [physicalData, submissions] = await Promise.all([
+        userService.fetchPhysicalData(),
+        userService.submissions(surveyId),
+      ]);
+
+      return { physicalData, submissions };
+    },
+
     buildFeedback() {
       const {
         feedbackDicts,
@@ -209,6 +197,7 @@ export default defineComponent({
         surveyId,
         userDemographic,
       } = this;
+
       if (!feedbackDicts || !feedbackScheme || !userDemographic) {
         this.$router.push({ name: 'feedback-error', params: { surveyId } });
         return;
@@ -230,13 +219,13 @@ export default defineComponent({
       const averageIntake = surveyStats.getAverageIntake(selected);
       const fruitAndVegPortions = surveyStats.getFruitAndVegPortions(selected);
 
-      this.cards = this.buildCardParams(cards, {
+      this.cards = buildCardParams(cards, {
         foods,
         userDemographic,
         averageIntake,
         fruitAndVegPortions,
       });
-      this.topFoods = getTopFoods(feedbackScheme.topFoods, foods, this.$i18n.locale);
+      this.topFoods = buildTopFoods(feedbackScheme.topFoods, foods, this.$i18n.locale);
     },
   },
 });

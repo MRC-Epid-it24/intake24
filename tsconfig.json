@@ -19,13 +19,9 @@
       "@intake24/survey/*": ["apps/survey/src/*"],
       "@intake24/common/*": ["packages/common/src/*"],
       "@intake24/common-backend/*": ["packages/common-backend/src/*"],
+      "@intake24/ui/*": ["packages/ui/src/*"],
       "@intake24/*": ["packages/*/src"]
     },
-    "types": [
-      "node",
-      "jest",
-      "jest-extended",
-      "webpack-env"
-    ]
+    "types": ["node", "jest", "jest-extended", "webpack-env"]
   }
 }

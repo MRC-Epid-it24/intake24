@@ -8,23 +8,13 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "types": [
-      "jest",
-      "jest-extended",
-      "vuetify",
-      "webpack-env"
-    ],
+    "types": ["jest", "jest-extended", "vuetify", "webpack-env"],
     "paths": {
+      "@intake24/ui/*": ["src/*"],
       "@intake24/common/*": ["../common/src/*"],
       "@intake24/*": ["../*/src"]
     },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost",
-      "webworker"
-    ]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost", "webworker"]
   },
   "include": [
     "src/**/*.ts",
@@ -33,7 +23,5 @@
     "__tests__/**/*.ts",
     "__tests__/**/*.tsx"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

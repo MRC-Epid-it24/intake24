@@ -1,9 +1,10 @@
 import './registerServiceWorker';
 import './bootstrap';
+import '@intake24/ui/bootstrap';
 import Vue from 'vue';
+import { adminVueI18n as i18n } from '@intake24/i18n';
 import pinia from './stores/bootstrap';
 import App from './app.vue';
-import i18n from './i18n';
 import http from './services/http.service';
 import router from './router';
 import guards from './router/guards';

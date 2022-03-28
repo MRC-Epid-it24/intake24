@@ -55,7 +55,9 @@
 
         <v-row class="pa-2 mt-0">
           <v-col>
-            <v-btn color="success" block @click="submit()">{{ $t('common.action.continue') }}</v-btn>
+            <v-btn color="success" block @click="submit()">
+              {{ $t('common.action.continue') }}
+            </v-btn>
           </v-col>
         </v-row>
       </v-card>

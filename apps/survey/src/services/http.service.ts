@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse, Method } from 'axios';
 import trim from 'lodash/trim';
-import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/survey/types/http';
+import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
 import { useAuth } from '../stores';
 
 let isRefreshing = false;

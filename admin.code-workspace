@@ -18,5 +18,8 @@
       "node_modules": true,
       "tmp": true
     }
+  },
+  "extensions": {
+    "recommendations": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "octref.vetur"]
   }
 }

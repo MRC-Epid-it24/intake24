@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse, Method } from 'axios';
 import Vue from 'vue';
 import trim from 'lodash/trim';
-import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/admin/types/http';
+import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
 import { useAuth } from '../stores';
 
 let isRefreshing = false;

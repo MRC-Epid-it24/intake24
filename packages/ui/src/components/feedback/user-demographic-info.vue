@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { UserDemographic } from '@intake24/survey/feedback';
+import { UserDemographic } from '@intake24/ui/feedback';
 
 export default defineComponent({
   name: 'FeedbackUserDemographicInfo',
