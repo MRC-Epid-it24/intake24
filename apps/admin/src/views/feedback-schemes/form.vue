@@ -6,6 +6,7 @@
         :schemeId="id"
         resource="feedback-schemes"
       ></copy-scheme-dialog>
+      <preview :feedbackScheme="currentFeedbackScheme"></preview>
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container>
@@ -58,6 +59,8 @@ import {
   HenryCoefficient,
 } from '@intake24/common/feedback';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
+import { Preview } from '@intake24/admin/components/feedback';
+import { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 
 export type FeedbackSchemeForm = {
   id: string | null;
@@ -69,10 +72,10 @@ export type FeedbackSchemeForm = {
   henryCoefficients: HenryCoefficient[];
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin>).extend({
+export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).extend({
   name: 'SchemeForm',
 
-  components: { CopySchemeDialog },
+  components: { CopySchemeDialog, Preview },
 
   mixins: [formMixin],
 
@@ -92,6 +95,12 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         text: this.$t(`feedback-schemes.types.${value}`),
       })),
     };
+  },
+
+  computed: {
+    currentFeedbackScheme(): FeedbackSchemeEntry {
+      return { ...this.entry, ...this.form.getData(true) } as FeedbackSchemeEntry;
+    },
   },
 });
 </script>

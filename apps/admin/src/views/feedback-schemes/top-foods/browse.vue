@@ -5,6 +5,9 @@
     v-if="entryLoaded & refsLoaded"
     @save="submit"
   >
+    <template v-slot:actions>
+      <preview :feedbackScheme="currentFeedbackScheme"></preview>
+    </template>
     <v-toolbar flat tile color="grey lighten-5">
       <v-icon class="mr-3" color="primary">fas fa-sort-amount-down</v-icon>
       <v-toolbar-title class="font-weight-medium">
@@ -79,19 +82,22 @@ import debounce from 'lodash/debounce';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import { defaultTopFoods, TopFoods } from '@intake24/common/feedback';
-import { RuleCallback } from '@intake24/admin/types';
-import { ColorList, NutrientList } from '@intake24/admin/components/feedback';
+import { FormMixin, RuleCallback } from '@intake24/admin/types';
+import { ColorList, NutrientList, Preview } from '@intake24/admin/components/feedback';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import { FeedbackSchemeForm } from '../form.vue';
 
 type FeedbackSchemeTopFoods = {
   debouncedUpdateColorList: () => void;
 };
 
-export default (Vue as VueConstructor<Vue & FeedbackSchemeTopFoods>).extend({
+export default (
+  Vue as VueConstructor<Vue & FeedbackSchemeTopFoods & FormMixin<FeedbackSchemeEntry>>
+).extend({
   name: 'FeedbackSchemeTopFoods',
 
-  components: { ColorList, NutrientList, LoadSectionDialog },
+  components: { ColorList, NutrientList, LoadSectionDialog, Preview },
 
   mixins: [formMixin],
 
@@ -119,6 +125,9 @@ export default (Vue as VueConstructor<Vue & FeedbackSchemeTopFoods>).extend({
             : true;
         },
       ];
+    },
+    currentFeedbackScheme(): FeedbackSchemeEntry {
+      return { ...this.entry, ...this.form.getData(true) } as FeedbackSchemeEntry;
     },
   },
 

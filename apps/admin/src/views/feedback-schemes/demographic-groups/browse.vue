@@ -1,5 +1,8 @@
 <template>
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+    <template v-slot:actions>
+      <preview :feedbackScheme="currentFeedbackScheme"></preview>
+    </template>
     <demographic-group-list
       v-model="form.demographicGroups"
       :scheme-id="id"
@@ -13,13 +16,14 @@ import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
 import { defaultTopFoods } from '@intake24/common/feedback';
-import { DemographicGroupList } from '@intake24/admin/components/feedback';
+import { DemographicGroupList, Preview } from '@intake24/admin/components/feedback';
+import { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import { FeedbackSchemeForm } from '../form.vue';
 
-export default (Vue as VueConstructor<Vue & FormMixin>).extend({
+export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).extend({
   name: 'FeedbackSchemeDemographicGroups',
 
-  components: { DemographicGroupList },
+  components: { DemographicGroupList, Preview },
 
   mixins: [formMixin],
 
@@ -35,6 +39,12 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
         henryCoefficients: [],
       }),
     };
+  },
+
+  computed: {
+    currentFeedbackScheme(): FeedbackSchemeEntry {
+      return { ...this.entry, ...this.form.getData(true) } as FeedbackSchemeEntry;
+    },
   },
 });
 </script>

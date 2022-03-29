@@ -16,6 +16,11 @@ const feedbackSchemes: LocaleMessageObject = {
     name: 'New feedback scheme name',
   },
 
+  preview: {
+    _: 'Preview',
+    title: 'Feedback preview',
+  },
+
   ranges: {
     _: 'Range',
     start: 'Start',

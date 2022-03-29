@@ -36,25 +36,52 @@ export default defineComponent({
     },
   },
 
+  data() {
+    return {
+      charts: {} as Record<string, Chart>,
+    };
+  },
+
+  watch: {
+    topFoods: {
+      handler() {
+        setTimeout(() => {
+          this.renderOrUpdateCharts();
+        }, 500);
+      },
+      deep: true,
+    },
+  },
+
   mounted() {
-    // TODO: sometimes charts won't render -> investigate (maybe only HMR issue)
-    // maybe re-render charts when elements are in viewport
     setTimeout(() => {
+      this.renderOrUpdateCharts();
+    }, 500);
+  },
+
+  methods: {
+    renderOrUpdateCharts() {
       for (const item of this.topFoods.nutrients) {
         const el = document.getElementById(`chart-${item.id}`) as HTMLCanvasElement;
-
         if (!el) {
-          console.log(`element not found`);
-          return;
+          console.warn(`FeedbackChartArea: chart element not found.`);
+          continue;
         }
 
-        const myChart = new Chart(el, {
-          type: 'doughnut',
-          data: item.chartJs,
-          options: { plugins: { legend: { display: false } } },
-        });
+        const chart = this.charts[item.id];
+        if (!chart) {
+          this.charts[item.id] = new Chart(el, {
+            type: 'doughnut',
+            data: item.chartJs,
+            options: { plugins: { legend: { display: false } } },
+          });
+          continue;
+        }
+
+        chart.data = { ...item.chartJs };
+        chart.update();
       }
-    }, 1000);
+    },
   },
 });
 </script>

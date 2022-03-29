@@ -6,6 +6,7 @@
         :schemeId="id"
         resource="feedback-schemes"
       ></copy-scheme-dialog>
+      <preview :feedbackScheme="entry"></preview>
     </template>
     <v-simple-table>
       <tbody>
@@ -27,11 +28,12 @@ import Vue, { VueConstructor } from 'vue';
 import { DetailMixin } from '@intake24/admin/types';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
+import { Preview } from '@intake24/admin/components/feedback';
 
 export default (Vue as VueConstructor<Vue & DetailMixin>).extend({
   name: 'FeedbackSchemeDetail',
 
-  components: { CopySchemeDialog },
+  components: { CopySchemeDialog, Preview },
 
   mixins: [detailMixin],
 });
