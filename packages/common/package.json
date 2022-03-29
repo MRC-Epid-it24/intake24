@@ -18,12 +18,12 @@
     "validators": "node scripts/validators.js"
   },
   "dependencies": {
-    "ajv": "^8.10.0",
+    "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "deepmerge": "^4.2.2",
     "fast-copy": "^2.1.1",
     "lodash": "^4.17.21",
-    "nanoid": "^3.3.1"
+    "nanoid": "^3.3.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.180",
