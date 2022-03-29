@@ -5,7 +5,7 @@ import {
   UpdateLanguageRequest,
 } from '@intake24/common/types/http/admin';
 import type { IoC } from '@intake24/api/ioc';
-import { admin, survey, mergeTranslations, compareMessageKeys } from '@intake24/i18n';
+import { admin, survey, shared, mergeTranslations, compareMessageKeys } from '@intake24/i18n';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import {
   LanguageTranslationAttributes,
@@ -54,7 +54,20 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
       messages: survey.en[section],
     }));
 
-    const languageMessages = [...adminLanguageTranslations, ...surveyLanguageTranslations];
+    const sharedLanguageTranslations: LanguageTranslationCreationAttributes[] = Object.keys(
+      shared.en
+    ).map((section) => ({
+      languageId,
+      application: 'shared',
+      section,
+      messages: shared.en[section],
+    }));
+
+    const languageMessages = [
+      ...adminLanguageTranslations,
+      ...surveyLanguageTranslations,
+      ...sharedLanguageTranslations,
+    ];
 
     if (languageMessages.length) await LanguageTranslation.bulkCreate(languageMessages);
   };
@@ -190,7 +203,7 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
       const inserts: LanguageTranslationCreationAttributes[] = [];
       const promises: PromiseLike<any>[] = [];
 
-      const defaultAppMessages = { admin, survey };
+      const defaultAppMessages = { admin, survey, shared };
 
       for (const [app, appMessages] of Object.entries(defaultAppMessages)) {
         const application = app as Application;

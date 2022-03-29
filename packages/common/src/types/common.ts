@@ -2,7 +2,7 @@ export type Dictionary<T = any> = { [key: string]: T };
 
 export type Environment = 'development' | 'test' | 'production';
 
-export const applications = ['admin', 'survey'] as const;
+export const applications = ['admin', 'survey', 'shared'] as const;
 
 export type Application = typeof applications[number];
 
