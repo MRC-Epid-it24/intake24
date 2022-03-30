@@ -1,3 +1,4 @@
+import { pick } from 'lodash';
 import type { Request, Response } from 'express';
 import { Language, LanguageTranslation, FindOptions } from '@intake24/db';
 import type { LocaleMessageObject } from '@intake24/i18n';
@@ -39,7 +40,7 @@ export default (): UserI18nController => {
     if (!language) throw new NotFoundError();
 
     const response = {
-      ...language.get(),
+      ...pick(language, ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection']),
       messages:
         language.translations?.reduce<LocaleMessageObject>((acc, { section, messages }) => {
           acc[section] = messages;
