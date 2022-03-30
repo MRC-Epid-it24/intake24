@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import {
   PaginateQuery,
@@ -7,14 +7,14 @@ import {
   Language,
   PhysicalActivityLevel,
 } from '@intake24/db';
-import {
+import type {
   FeedbackSchemeEntry,
   FeedbackSchemesResponse,
   FeedbackSchemeRefs,
 } from '@intake24/common/types/http/admin';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
-import { Controller, CrudActions } from '../controller';
+import type { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
+import type { Controller, CrudActions } from '../controller';
 
 export type FeedbackSchemeController = Controller<CrudActions | 'copy'>;
 

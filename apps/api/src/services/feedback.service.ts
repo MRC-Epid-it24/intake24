@@ -5,9 +5,9 @@ import {
   NutrientTypeInKcal,
   PhysicalActivityLevel,
 } from '@intake24/db';
-import { NutrientType } from '@intake24/common/types/http/feedback';
+import type { NutrientType } from '@intake24/common/types/http/feedback';
 import { WeightTargetCoefficient, weightTargetsData } from '@intake24/common/feedback';
-import { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
+import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
 
 const feedbackService = () => {
   const getNutrientTypes = async (): Promise<NutrientType[]> => {

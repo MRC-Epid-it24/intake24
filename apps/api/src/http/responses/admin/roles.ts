@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { RoleEntry } from '@intake24/common/types/http/admin';
+import type { RoleEntry } from '@intake24/common/types/http/admin';
 import { Role } from '@intake24/db';
 
 export const roleEntryResponse = (role: Role): RoleEntry => ({

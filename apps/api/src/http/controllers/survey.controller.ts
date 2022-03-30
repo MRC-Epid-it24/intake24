@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import {
+import type { Request, Response } from 'express';
+import type {
   PublicSurveyEntryResponse,
   PublicSurveyListResponse,
   GenerateUserResponse,
@@ -7,8 +7,8 @@ import {
 import { Survey } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { RespondentFromJWT } from '@intake24/api/services';
-import { Controller } from './controller';
+import type { RespondentFromJWT } from '@intake24/api/services';
+import type { Controller } from './controller';
 
 export type SurveyController = Controller<'browse' | 'entry' | 'generateUser' | 'createUser'>;
 

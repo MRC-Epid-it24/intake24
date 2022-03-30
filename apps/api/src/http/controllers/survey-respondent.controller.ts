@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import {
+import type { Request, Response } from 'express';
+import type {
   SurveyEntryResponse,
   SurveyFollowUpResponse,
   SurveyUserInfoResponse,
@@ -10,7 +10,7 @@ import { merge } from '@intake24/common/util';
 import { FeedbackScheme, Survey, SurveyScheme, User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { Controller } from './controller';
+import type { Controller } from './controller';
 
 export type SurveyRespondentController = Controller<
   | 'parameters'

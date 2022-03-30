@@ -55,8 +55,14 @@ const sourceImageService = ({
       try {
         await fs.unlink(path.join(imagesPath, sourceImage.path));
         await fs.unlink(path.join(imagesPath, sourceImage.thumbnailPath));
-      } catch (err: any) {
-        logger.warn(`destroy: ${err.message}`);
+      } catch (err) {
+        if (err instanceof Error) {
+          const { message, name, stack } = err;
+          logger.error(stack ?? `${name}: ${message}`);
+          return;
+        }
+
+        logger.error(err);
       }
     }
   };

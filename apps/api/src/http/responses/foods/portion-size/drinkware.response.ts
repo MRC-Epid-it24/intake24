@@ -1,4 +1,4 @@
-import { DrinkwareSetResponse, DrinkwareScaleResponse } from '@intake24/common/types/http';
+import type { DrinkwareSetResponse, DrinkwareScaleResponse } from '@intake24/common/types/http';
 import { DrinkwareScale, DrinkwareSet } from '@intake24/db';
 import { InternalServerError } from '@intake24/api/http/errors';
 

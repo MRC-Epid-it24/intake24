@@ -1,7 +1,7 @@
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import redisStore from 'connect-redis';
-import { Express } from 'express';
+import type { Express } from 'express';
 import expressSession from 'express-session';
 import morgan from 'morgan';
 import nunjucks from 'nunjucks';

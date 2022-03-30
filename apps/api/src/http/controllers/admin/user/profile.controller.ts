@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { User } from '@intake24/db';
 import type { Controller } from '@intake24/api/http/controllers';
-import { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
+import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
 
 export type AdminUserProfileController = Controller<'index'>;
 

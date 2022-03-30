@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { asValue } from 'awilix';
-import { Router, Request, Response, NextFunction } from 'express';
+import type { Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { User } from '@intake24/db';
 import { ForbiddenError } from '@intake24/api/http/errors';

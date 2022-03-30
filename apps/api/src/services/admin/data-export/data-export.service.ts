@@ -162,8 +162,8 @@ const dataExportService = ({
       }
 
       inputStream.push(null);
-    } catch (err: any) {
-      inputStream.destroy(err);
+    } catch (err) {
+      inputStream.destroy(err instanceof Error ? err : undefined);
     }
   };
 

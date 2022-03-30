@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import {
+import type { Request, Response } from 'express';
+import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
   SurveySchemeQuestionsResponse,
@@ -8,7 +8,7 @@ import { isMealSection, MealSection, SurveyQuestionSection } from '@intake24/com
 import { Language, SurveyScheme, SurveySchemeQuestion, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
-import { Controller, CrudActions } from '../controller';
+import type { Controller, CrudActions } from '../controller';
 
 export type SurveySchemeQuestionController = Controller<CrudActions | 'sync'>;
 

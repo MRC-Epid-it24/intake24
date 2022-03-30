@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import type { Request } from 'express';
 import { checkSchema } from 'express-validator';
 import { Op, WhereOptions, User } from '@intake24/db';
 import validate from '@intake24/api/http/requests/validate';

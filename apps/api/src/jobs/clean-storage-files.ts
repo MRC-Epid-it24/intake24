@@ -1,7 +1,7 @@
-import { Job } from 'bullmq';
+import type { Job } from 'bullmq';
 import fs from 'fs-extra';
 import path from 'path';
-import { CleanStorageFilesParams } from '@intake24/common/types';
+import type { CleanStorageFilesParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import { addTime } from '@intake24/api/util';
 import { LocalLocation } from '@intake24/api/config/filesystem';

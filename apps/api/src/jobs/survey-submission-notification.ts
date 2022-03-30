@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { Job } from 'bullmq';
-import { Dictionary, SurveySubmissionNotificationParams } from '@intake24/common/types';
+import type { Job } from 'bullmq';
+import type { Dictionary, SurveySubmissionNotificationParams } from '@intake24/common/types';
 import { Survey, SurveySubmission, submissionScope } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';

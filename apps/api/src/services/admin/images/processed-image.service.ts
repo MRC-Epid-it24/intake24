@@ -30,8 +30,12 @@ const processedImageService = ({
 
     try {
       await fs.access(path.join(imagesPath, sourceImage.path), fs.constants.F_OK);
-    } catch (err: any) {
-      logger.error(`resolveSourceImage: ${err.message}`);
+    } catch (err) {
+      if (err instanceof Error) {
+        const { message, name, stack } = err;
+        logger.error(stack ?? `${name}: ${message}`);
+      } else logger.error(err);
+
       throw new NotFoundError();
     }
 
@@ -145,8 +149,14 @@ const processedImageService = ({
 
     try {
       await fs.unlink(path.join(imagesPath, processedImage.path));
-    } catch (err: any) {
-      logger.warn(`destroy: ${err.message}`);
+    } catch (err) {
+      if (err instanceof Error) {
+        const { message, name, stack } = err;
+        logger.error(stack ?? `${name}: ${message}`);
+        return;
+      }
+
+      logger.error(err);
     }
 
     const { includeSources } = options;

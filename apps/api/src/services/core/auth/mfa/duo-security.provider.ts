@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import type { Request } from 'express';
 import { Client } from '@duosecurity/duo_universal';
 import { User } from '@intake24/db';
 import { UnauthorizedError } from '@intake24/api/http/errors';

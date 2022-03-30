@@ -1,5 +1,5 @@
-import { Request } from 'express';
-import { Schema } from 'express-validator';
+import type { Request } from 'express';
+import type { Schema } from 'express-validator';
 import ioc from '@intake24/api/ioc';
 
 const defaults: Schema = {

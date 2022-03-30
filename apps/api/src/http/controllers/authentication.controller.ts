@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-import { LoginResponse, MFAResponse, RefreshResponse } from '@intake24/common/types/http';
+import type { Request, Response } from 'express';
+import type { LoginResponse, MFAResponse, RefreshResponse } from '@intake24/common/types/http';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { Tokens } from '@intake24/api/services/core/auth';
-import { Controller } from './controller';
+import type { Controller } from './controller';
 
 export type AuthenticationController = Controller<
   'emailLogin' | 'aliasLogin' | 'tokenLogin' | 'verify' | 'refresh' | 'logout'

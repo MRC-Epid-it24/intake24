@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import {
+import type {
   LanguageEntry,
   LanguagesResponse,
   LanguageTranslationsResponse,
@@ -8,7 +8,7 @@ import {
 import { Language, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { Controller, CrudActions } from '../controller';
+import type { Controller, CrudActions } from '../controller';
 
 export type LanguageController = Controller<CrudActions | 'getTranslations' | 'updateTranslations'>;
 

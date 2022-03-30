@@ -1,4 +1,4 @@
-import { ConnectionOptions, Job, Queue, QueueScheduler, Worker } from 'bullmq';
+import type { ConnectionOptions, Job, Queue, QueueScheduler, Worker } from 'bullmq';
 
 export interface QueueHandler<T = any> {
   readonly name: string;

@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import {
+import type { Request, Response } from 'express';
+import type {
   AsServedSetResponse,
   DrinkwareSetResponse,
   WeightResponse,
@@ -10,7 +10,7 @@ import {
   drinkwareResponse,
   imageMapsResponse,
 } from '@intake24/api/http/responses/foods';
-import { Controller } from './controller';
+import type { Controller } from './controller';
 
 export type PortionSizeController = Controller<
   | 'asServedSet'

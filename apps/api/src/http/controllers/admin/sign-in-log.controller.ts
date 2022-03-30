@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-import { SignInLogEntry, SignInLogsResponse } from '@intake24/common/types/http/admin';
+import type { Request, Response } from 'express';
+import type { SignInLogEntry, SignInLogsResponse } from '@intake24/common/types/http/admin';
 import { SignInLog, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
-import { Controller } from '../controller';
+import type { Controller } from '../controller';
 
 export type SignInLogController = Controller<'browse' | 'read' | 'destroy' | 'refs'>;
 

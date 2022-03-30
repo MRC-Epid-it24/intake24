@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/types/http/admin';
+import type { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/types/http/admin';
 import { FoodsLocale, Language, SystemLocale, PaginateQuery } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { Controller, CrudActions } from '../controller';
+import type { Controller, CrudActions } from '../controller';
 
 export type LocaleController = Controller<CrudActions>;
 

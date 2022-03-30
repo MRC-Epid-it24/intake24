@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import {
   FindOptions,
@@ -8,21 +8,21 @@ import {
   SurveySchemeQuestion,
   PaginateQuery,
 } from '@intake24/db';
-import {
+import type {
   SurveySchemeEntry,
   SurveySchemeRefs,
   SurveySchemesResponse,
   SurveySchemeExportRefsResponse,
 } from '@intake24/common/types/http/admin';
-import {
+import type {
   ExportField,
   ExportSectionId,
   SurveySchemeCreationAttributes,
 } from '@intake24/common/types/models';
 import type { IoC } from '@intake24/api/ioc';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { PromptQuestion } from '@intake24/common/prompts';
-import { Controller, CrudActions } from '../controller';
+import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Controller, CrudActions } from '../controller';
 
 export type SurveySchemeController = Controller<
   CrudActions | 'copy' | 'templates' | 'dataExportRefs'

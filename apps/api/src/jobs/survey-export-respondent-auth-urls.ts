@@ -1,10 +1,10 @@
-import { Job } from 'bullmq';
+import type { Job } from 'bullmq';
 import { format as formatDate } from 'date-fns';
 import fs from 'fs-extra';
 import json2csv, { Transform } from 'json2csv';
 import { trimEnd } from 'lodash';
 import path from 'path';
-import { SurveyExportRespondentAuthUrlsParams } from '@intake24/common/types';
+import type { SurveyExportRespondentAuthUrlsParams } from '@intake24/common/types';
 import { Job as DbJob, Survey, UserSurveyAlias } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';

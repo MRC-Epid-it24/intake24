@@ -1,4 +1,4 @@
-import {
+import type {
   UserAssociatedFoodPrompt,
   UserFoodData,
 } from '@intake24/common/types/http/foods/user-food-data';

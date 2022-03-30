@@ -1,5 +1,5 @@
 import ms from 'ms';
-import { RedisOptions } from 'ioredis';
+import type { RedisOptions } from 'ioredis';
 
 export type RateLimit = {
   window: number;

@@ -1,4 +1,4 @@
-import { RedisOptions } from 'ioredis';
+import type { RedisOptions } from 'ioredis';
 
 export type CacheConfig = {
   redis: RedisOptions;

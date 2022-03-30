@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import {
+import type {
   GuideImageEntry,
   GuideImageRefs,
   GuideImageListEntry,
@@ -10,7 +10,7 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { GuideImage, ImageMap, PaginateQuery } from '@intake24/db';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
-import { Controller, CrudActions } from '../../controller';
+import type { Controller, CrudActions } from '../../controller';
 
 export type GuideImageController = Controller<CrudActions>;
 

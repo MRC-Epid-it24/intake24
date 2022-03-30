@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { Schema } from 'express-validator';
+import type { Schema } from 'express-validator';
 
 export const paginate: Schema = {
   page: {

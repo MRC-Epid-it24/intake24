@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import {
+import type {
   JobEntry,
   SurveyRespondentEntry,
   SurveyRespondentsResponse,
@@ -9,7 +9,7 @@ import { Survey, User, UserCustomField, UserSurveyAlias, PaginateQuery } from '@
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { userRespondentResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
-import { Controller, CrudActions } from '../../controller';
+import type { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyRespondentController = Controller<
   Exclude<CrudActions, 'create' | 'refs'> | 'upload' | 'exportAuthUrls'

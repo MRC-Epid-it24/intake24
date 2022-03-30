@@ -1,5 +1,5 @@
-import { Request } from 'express';
-import { Schema } from 'express-validator';
+import type { Request } from 'express';
+import type { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions, Task } from '@intake24/db';
 import { cron, jobExists, unique } from '@intake24/api/http/rules';

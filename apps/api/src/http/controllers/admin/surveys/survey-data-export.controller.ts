@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-import { JobEntry } from '@intake24/common/types/http/admin';
+import type { Request, Response } from 'express';
+import type { JobEntry } from '@intake24/common/types/http/admin';
 import { Survey, User } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { Controller } from '../../controller';
+import type { Controller } from '../../controller';
 
 export type AdminSurveyDataExportController = Controller<'sync' | 'queue'>;
 

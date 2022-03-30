@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import validator from 'validator';
 import {
@@ -8,13 +8,13 @@ import {
   PaginateQuery,
   submissionScope,
 } from '@intake24/db';
-import {
+import type {
   SurveySubmissionEntry,
   SurveySubmissionsResponse,
 } from '@intake24/common/types/http/admin';
 import { SurveySubmissionAttributes } from '@intake24/common/types/models';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { Controller } from '../../controller';
+import type { Controller } from '../../controller';
 
 export type AdminSurveySubmissionController = Controller<'browse' | 'entry' | 'destroy'>;
 

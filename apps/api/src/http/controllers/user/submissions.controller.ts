@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { User } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
-import { SurveySubmissionEntry } from '@intake24/common/types/http';
-import { Controller } from '../controller';
+import type { SurveySubmissionEntry } from '@intake24/common/types/http';
+import type { Controller } from '../controller';
 
 export type UserSubmissionsController = Controller<'submissions'>;
 

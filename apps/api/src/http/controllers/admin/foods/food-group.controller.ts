@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { FoodGroupEntry, FoodGroupsResponse } from '@intake24/common/types/http/admin';
+import type { FoodGroupEntry, FoodGroupsResponse } from '@intake24/common/types/http/admin';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { PaginateQuery, Food, FoodGroup } from '@intake24/db';
-import { Controller, CrudActions } from '../../controller';
+import type { Controller, CrudActions } from '../../controller';
 
 export type AdminFoodGroupController = Controller<CrudActions>;
 

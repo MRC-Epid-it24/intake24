@@ -1,4 +1,4 @@
-import { UserPortionSizeMethod } from '@intake24/common/types/http/foods/user-food-data';
+import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods/user-food-data';
 import {
   CategoryLocal,
   CategoryPortionSizeMethod,

@@ -1,5 +1,5 @@
 import webPush, { RequestOptions, SendResult, WebPushError } from 'web-push';
-import { SubscriptionType } from '@intake24/common/types/models';
+import type { SubscriptionType } from '@intake24/common/types/models';
 import { UserSubscription } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 
@@ -70,7 +70,7 @@ export default class Pusher {
           options
         );
         results.push(result);
-      } catch (err: any) {
+      } catch (err) {
         if (err instanceof WebPushError && err.statusCode === 410) {
           subscription.destroy().catch((dbErr) => {
             const { message, name, stack } = dbErr;
@@ -79,8 +79,13 @@ export default class Pusher {
           continue;
         }
 
-        const { message, name, stack } = err;
-        this.logger.error(stack ?? `${name}: ${message}`);
+        if (err instanceof Error) {
+          const { message, name, stack } = err;
+          this.logger.error(stack ?? `${name}: ${message}`);
+          continue;
+        }
+
+        this.logger.error(err);
       }
     }
 

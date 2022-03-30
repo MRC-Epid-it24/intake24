@@ -1,5 +1,5 @@
-import { Job } from 'bullmq';
-import { CleanRedisStoreParams } from '@intake24/common/types';
+import type { Job } from 'bullmq';
+import type { CleanRedisStoreParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import type { RedisStore } from '@intake24/api/services';
 import BaseJob from './job';

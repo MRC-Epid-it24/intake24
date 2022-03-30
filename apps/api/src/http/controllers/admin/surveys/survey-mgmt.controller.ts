@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { randomString } from '@intake24/common/util';
 import { Op, WhereOptions, Permission, Survey, User, PaginateQuery } from '@intake24/db';
-import {
+import type {
   SurveyMgmtAvailablePermissionsResponse,
   SurveyMgmtAvailableUsersResponse,
   SurveyMgmtResponse,
@@ -12,8 +12,8 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { permissionListResponse, userMgmtResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
 import { surveyMgmt } from '@intake24/api/services/core/auth';
-import { UserAttributes } from '@intake24/common/types/models';
-import { Controller } from '../../controller';
+import type { UserAttributes } from '@intake24/common/types/models';
+import type { Controller } from '../../controller';
 
 export type AdminSurveyMgmtController = Controller<
   'browse' | 'availablePermissions' | 'availableUsers' | 'store' | 'update'

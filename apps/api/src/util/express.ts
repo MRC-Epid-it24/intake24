@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, RequestHandler } from 'express';
+import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import type { AsyncRequestHandler } from '@intake24/api/http/controllers';
 
 export const unless =

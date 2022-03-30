@@ -1,4 +1,4 @@
-import { Schema } from 'express-validator';
+import type { Schema } from 'express-validator';
 
 const defaults: Schema = {
   description: {

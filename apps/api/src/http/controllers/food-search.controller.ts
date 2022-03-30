@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import foodIndex, { IndexNotReadyError } from '@intake24/api/food-index';
-import { Controller } from './controller';
+import type { Controller } from './controller';
 
 export type FoodSearchController = Controller<
   'lookup' | 'recipe' | 'category' | 'splitDescription'

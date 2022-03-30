@@ -1,5 +1,5 @@
 import RedisStatic, { Redis, RedisOptions } from 'ioredis';
-import { Logger } from '@intake24/services';
+import type { Logger } from '@intake24/services';
 
 export type RedisStoreOps = {
   config: RedisOptions;

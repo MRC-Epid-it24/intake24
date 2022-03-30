@@ -3,7 +3,7 @@ import {
   NutrientTableCsvMappingNutrientInput,
 } from '@intake24/common/types/http/admin';
 import { validateCsvMappingFields, validateCsvMappingNutrients } from '@intake24/common/validators';
-import { Schema } from 'express-validator';
+import type { Schema } from 'express-validator';
 
 const defaults: Schema = {
   description: {

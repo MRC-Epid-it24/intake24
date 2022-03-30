@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import type { Request } from 'express';
 import { Op, Permission, User, UserPassword, UserSurveyAlias } from '@intake24/db';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import { supportedAlgorithms } from '@intake24/common-backend/util/passwords';
@@ -212,9 +212,12 @@ const authenticationService = ({
       if (!valid) throw new UnauthorizedError();
 
       return await jwtService.issueTokens(userId, subject);
-    } catch (err: any) {
-      const { message, name, stack } = err;
-      logger.error(stack ?? `${name}: ${message}`);
+    } catch (err) {
+      if (err instanceof Error) {
+        const { message, name, stack } = err;
+        logger.error(stack ?? `${name}: ${message}`);
+      } else logger.error(err);
+
       throw new UnauthorizedError();
     }
   };

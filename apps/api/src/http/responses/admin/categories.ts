@@ -1,6 +1,9 @@
 import { CategoryLocal, FoodLocal } from '@intake24/db';
 import { InternalServerError } from '@intake24/api/http/errors';
-import { CategoryContentsResponse, CategoryListEntry } from '@intake24/common/types/http/admin';
+import type {
+  CategoryContentsResponse,
+  CategoryListEntry,
+} from '@intake24/common/types/http/admin';
 import { foodsResponse } from './foods';
 
 export const categoryResponse = (category: CategoryLocal): CategoryListEntry => {

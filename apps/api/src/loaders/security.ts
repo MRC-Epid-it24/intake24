@@ -1,5 +1,5 @@
 import cors from 'cors';
-import { Express } from 'express';
+import type { Express } from 'express';
 import type { Ops } from '@intake24/api/app';
 
 export default async (app: Express, { config }: Ops): Promise<void> => {

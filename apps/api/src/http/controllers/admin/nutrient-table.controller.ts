@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import {
+import type { Request, Response } from 'express';
+import type {
   NutrientTableInput,
   NutrientTableEntry,
   NutrientTableRefs,
@@ -10,7 +10,7 @@ import { FoodsNutrientType, NutrientTable, User, PaginateQuery } from '@intake24
 import type { IoC } from '@intake24/api/ioc';
 import { ValidationError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
-import { Controller, CrudActions } from '../controller';
+import type { Controller, CrudActions } from '../controller';
 
 export type NutrientTableController = Controller<CrudActions | 'upload'>;
 

@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { User, UserPassword } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
-import { Controller } from '../controller';
+import type { Controller } from '../controller';
 import { ValidationError } from '../../errors';
 
 export type UserProfileController = Controller<'updatePassword'>;

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import {
   WhereOptions,
@@ -9,7 +9,7 @@ import {
   PaginateQuery,
   FeedbackScheme,
 } from '@intake24/db';
-import {
+import type {
   SurveyEntry,
   SurveyListEntry,
   SurveyRefs,
@@ -25,7 +25,7 @@ import {
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses/admin';
 import { staffSuffix, surveyAdmin } from '@intake24/api/services/core/auth';
-import { Controller, CrudActions } from '../../controller';
+import type { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyController = Controller<CrudActions | 'patch' | 'put'>;
 

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 
 export default (req: Request, res: Response, next: NextFunction): void => {

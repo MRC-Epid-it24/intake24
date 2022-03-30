@@ -1,7 +1,7 @@
-import { Job } from 'bullmq';
+import type { Job } from 'bullmq';
 import { trim } from 'lodash';
 import nunjucks from 'nunjucks';
-import { SendPasswordResetParams } from '@intake24/common/types';
+import type { SendPasswordResetParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import { isUrlAbsolute } from '@intake24/api/util';
 import BaseJob from './job';

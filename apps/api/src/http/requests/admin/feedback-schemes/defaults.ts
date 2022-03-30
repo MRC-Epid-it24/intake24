@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import type { Request } from 'express';
 import { ParamSchema, Schema } from 'express-validator';
 import has from 'lodash/has';
 import validator from 'validator';

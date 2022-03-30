@@ -1,5 +1,5 @@
-import { Job } from 'bullmq';
-import { PurgeRefreshTokensParams } from '@intake24/common/types';
+import type { Job } from 'bullmq';
+import type { PurgeRefreshTokensParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import BaseJob from './job';
 

@@ -1,4 +1,4 @@
-import { Express, Request, Response, NextFunction } from 'express';
+import type { Express, Request, Response, NextFunction } from 'express';
 import { MulterError } from 'multer';
 import { DatabaseError } from '@intake24/db';
 import type { Ops } from '@intake24/api/app';

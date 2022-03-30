@@ -7,10 +7,10 @@ import {
   QueueScheduler,
   Worker,
 } from 'bullmq';
-import { JobData, JobParams, JobType } from '@intake24/common/types';
+import type { JobData, JobParams, JobType } from '@intake24/common/types';
 import { Job as DbJob } from '@intake24/db';
 import ioc, { IoC } from '@intake24/api/ioc';
-import { Job } from '@intake24/api/jobs';
+import type { Job } from '@intake24/api/jobs';
 import { QueueHandler } from './queue-handler';
 import { PushPayload } from '..';
 

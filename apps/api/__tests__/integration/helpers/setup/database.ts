@@ -2,7 +2,7 @@ import Redis from 'ioredis';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
 import config from '@intake24/api/config';
 import {
-  // FeedbackScheme,
+  FeedbackScheme,
   FoodsLocale,
   FoodsNutrientType,
   FoodsNutrientUnit,
@@ -16,7 +16,6 @@ import {
   UserSurveyAlias,
   Permission,
   Role,
-  FeedbackScheme,
 } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 import { defaultTopFoods } from '@intake24/common/feedback';

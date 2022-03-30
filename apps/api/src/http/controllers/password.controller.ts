@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { randomString } from '@intake24/common/util';
 import { Op, User, UserPasswordReset } from '@intake24/db';
 import { ValidationError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { Controller } from './controller';
+import type { Controller } from './controller';
 
 export type PasswordController = Controller<'request' | 'reset'>;
 

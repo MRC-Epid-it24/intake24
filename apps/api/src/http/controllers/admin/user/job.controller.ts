@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import fs from 'fs-extra';
 import { pick } from 'lodash';
 import path from 'path';
 import { Op, WhereOptions, Job, User, PaginateQuery } from '@intake24/db';
-import { JobEntry, JobsResponse } from '@intake24/common/types/http/admin';
-import { JobAttributes } from '@intake24/common/types/models';
+import type { JobEntry, JobsResponse } from '@intake24/common/types/http/admin';
+import type { JobAttributes } from '@intake24/common/types/models';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { Controller } from '@intake24/api/http/controllers';

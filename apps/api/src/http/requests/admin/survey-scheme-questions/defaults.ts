@@ -1,5 +1,5 @@
-import { Request } from 'express';
-import { Schema } from 'express-validator';
+import type { Request } from 'express';
+import type { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions, SurveySchemeQuestion } from '@intake24/db';
 
