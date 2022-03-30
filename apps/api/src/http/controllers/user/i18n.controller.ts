@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { Language, LanguageTranslation } from '@intake24/db';
+import { Language, LanguageTranslation, FindOptions } from '@intake24/db';
 import type { LocaleMessageObject } from '@intake24/i18n';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
@@ -23,16 +23,19 @@ export default (): UserI18nController => {
       query: { app },
     } = req;
 
-    const language = await Language.scope('public').findByPk(languageId, {
+    const options: FindOptions = {
       include: [
-        {
-          model: LanguageTranslation,
-          where: { application: app },
-          required: false,
-          separate: true,
-        },
+        { model: LanguageTranslation, where: { application: [app, 'shared'] }, required: false },
       ],
-    });
+    };
+
+    let language = await Language.scope('public').findByPk(languageId, options);
+
+    if (!language && languageId.includes('-')) {
+      const [fallback] = languageId.split('-');
+      language = await Language.scope('public').findByPk(fallback, options);
+    }
+
     if (!language) throw new NotFoundError();
 
     const response = {

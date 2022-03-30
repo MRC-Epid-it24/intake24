@@ -28,6 +28,7 @@ const languages: LocaleMessageObject = {
     applications: {
       admin: 'Admin',
       survey: 'Survey',
+      shared: 'Shared',
     },
     sections: {
       breadcrumbs: 'Breadcrumbs',
@@ -38,7 +39,7 @@ const languages: LocaleMessageObject = {
       profile: 'Profile',
       prompts: 'Prompts',
       recall: 'Recall',
-      standardUnits: 'Standard units',
+      'standard-units': 'Standard units',
       survey: 'Survey',
     },
   },
