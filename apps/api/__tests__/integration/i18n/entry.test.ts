@@ -11,14 +11,15 @@ export default () => {
   const invalidUrl = `${baseUrl}/${invalidLanguage}?app=${app}`;
 
   it('should return 422 for missing input data', async () => {
-    await suite.sharedTests.assertMissingInput('get', `${baseUrl}/${language}`, ['app']);
+    await suite.sharedTests.assertMissingInput('get', `${baseUrl}/${language}`, ['app'], {
+      bearer: undefined,
+    });
   });
 
   it(`should return 422 when invalid input query/params`, async () => {
     const { status, body } = await request(suite.app)
       .get(`${baseUrl}/not-a-locale?app=invalid`)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
+      .set('Accept', 'application/json');
 
     expect(status).toBe(422);
     expect(body).toContainAllKeys(['errors', 'success']);
@@ -26,14 +27,13 @@ export default () => {
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    await suite.sharedTests.assertMissingRecord('get', invalidUrl);
+    await suite.sharedTests.assertMissingRecord('get', invalidUrl, undefined, {
+      bearer: undefined,
+    });
   });
 
   it('should return 200 and language record', async () => {
-    const { status, body } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
+    const { status, body } = await request(suite.app).get(url).set('Accept', 'application/json');
 
     expect(status).toBe(200);
     expect(body).toContainAllKeys([
@@ -49,8 +49,7 @@ export default () => {
   it('should return 200 and fallback language record', async () => {
     const { status, body } = await request(suite.app)
       .get(`${baseUrl}/en-GB?app=${app}`)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
+      .set('Accept', 'application/json');
 
     expect(status).toBe(200);
     expect(body).toContainAllKeys([

@@ -16,7 +16,7 @@ export default () => {
     it('should return 200 and paginated results', async () => {
       await setPermission('food-groups|browse');
 
-      await suite.sharedTests.assertPaginatedResult('get', url);
+      await suite.sharedTests.assertPaginatedResult('get', url, false);
     });
   });
 };

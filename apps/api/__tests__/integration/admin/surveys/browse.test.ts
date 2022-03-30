@@ -24,6 +24,6 @@ export default () => {
   it('should return 200 and paginated results', async () => {
     await setPermission(['surveys|browse', 'surveyadmin']);
 
-    await suite.sharedTests.assertPaginatedResult('get', url);
+    await suite.sharedTests.assertPaginatedResult('get', url, false);
   });
 };
