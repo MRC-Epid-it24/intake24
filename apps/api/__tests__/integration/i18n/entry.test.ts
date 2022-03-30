@@ -16,7 +16,7 @@ export default () => {
     });
   });
 
-  it(`should return 422 when invalid input query/params`, async () => {
+  it(`should return 422 for invalid input data`, async () => {
     const { status, body } = await request(suite.app)
       .get(`${baseUrl}/not-a-locale?app=invalid`)
       .set('Accept', 'application/json');

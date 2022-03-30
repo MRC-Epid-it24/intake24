@@ -43,9 +43,7 @@ export default ({
   const reset = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { email, password, token } = req.body;
 
-    const expiredAt = new Date();
-    expiredAt.setMilliseconds(expiredAt.getMilliseconds() - securityConfig.passwords.expiresIn);
-
+    const expiredAt = new Date(Date.now() - securityConfig.passwords.expiresIn);
     const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
     const passwordReset = await UserPasswordReset.findOne({

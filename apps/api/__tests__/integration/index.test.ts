@@ -6,6 +6,7 @@ import admin from './admin/index.test';
 import authentication from './authentication/index.test';
 import feedback from './feedback/index.test';
 import i18n from './i18n/index.test';
+import password from './password/index.test';
 import portionSizes from './portion-sizes/index.test';
 import subscriptions from './subscriptions/index.test';
 import surveys from './surveys/index.test';
@@ -45,7 +46,7 @@ describe('API', () => {
   // describe('Root', root);
 
   describe('/api/auth', authentication);
-  // TODO: describe('/api/password', password);
+  describe('/api/password', password);
   describe('/api/i18n', i18n);
   describe('/api/feedback', feedback);
   // TODO: describe('/api/foods', foods);
