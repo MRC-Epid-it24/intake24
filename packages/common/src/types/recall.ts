@@ -47,8 +47,13 @@ export interface StandardPortionState extends PortionSizeStateBase {
 
 export type PortionSizeState = AsServedState | GuideImageState | StandardPortionState;
 
-export interface AssociatedFoodsState {
+export interface AssociatedFoodPromptState {
   confirmed: boolean | undefined;
+}
+
+export interface AssociatedFoodsState {
+  activePrompt: number;
+  prompts: AssociatedFoodPromptState[];
 }
 
 export interface AbstractFoodState {
@@ -68,7 +73,7 @@ export interface EncodedFood extends AbstractFoodState {
   data: UserFoodData;
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
-  associatedFoods: AssociatedFoodsState[];
+  associatedFoods: AssociatedFoodsState;
 }
 
 export type FoodState = FreeTextFood | EncodedFood;

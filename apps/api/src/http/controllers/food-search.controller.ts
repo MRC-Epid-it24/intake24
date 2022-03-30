@@ -36,6 +36,8 @@ export default (): FoodSearchController => {
 
   const category = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
+    const { code } = req.query;
+
     res.json();
   };
 
