@@ -7,7 +7,7 @@ export default (container: AwilixContainer): void => {
     passwordController: asFunction(controllers.password),
     subscriptionController: asFunction(controllers.subscription),
 
-    userI18nController: asFunction(controllers.user.i18n),
+    userI18nController: asFunction(controllers.i18n),
     userProfileController: asFunction(controllers.user.profile),
     userPhysicalDataController: asFunction(controllers.user.physicalData),
     userSubmissionsController: asFunction(controllers.user.submissions),

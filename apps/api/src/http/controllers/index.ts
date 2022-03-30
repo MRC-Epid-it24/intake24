@@ -1,9 +1,10 @@
 import admin from './admin';
 import authentication from './authentication.controller';
-import password from './password.controller';
 import feedback from './feedback.controller';
 import foodSearch from './food-search.controller';
 import food from './food.controller';
+import i18n from './i18n.controller';
+import password from './password.controller';
 import portionSize from './portion-size.controller';
 import subscription from './subscription.controller';
 import survey from './survey.controller';
@@ -16,6 +17,7 @@ export * from './authentication.controller';
 export * from './feedback.controller';
 export * from './food-search.controller';
 export * from './food.controller';
+export * from './i18n.controller';
 export * from './portion-size.controller';
 export * from './password.controller';
 export * from './subscription.controller';
@@ -30,6 +32,7 @@ export default {
   feedback,
   foodSearch,
   food,
+  i18n,
   portionSize,
   subscription,
   survey,
