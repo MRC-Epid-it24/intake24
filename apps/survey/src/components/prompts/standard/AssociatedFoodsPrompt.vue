@@ -3,23 +3,27 @@
     <v-card-actions :class="isNotDesktop && 'justify-center'">
       <v-row>
         <v-col>
-          <v-expansion-panels v-model="panelOpen">
-            <v-expansion-panel v-for="(assocFood, index) in this.associatedFoods" :key="index">
+          <v-expansion-panels v-model="activePrompt">
+            <v-expansion-panel v-for="(assocFood, index) in associatedFoodPrompts" :key="index">
               <v-expansion-panel-header disable-icon-rotate>
                 {{ assocFood.promptText }}
                 <template v-slot:actions>
                   <valid-invalid-icon
-                    :valid="promptState[index].confirmed !== undefined"
+                    :valid="associatedFoodsState.prompts[index].confirmed !== undefined"
                   ></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-btn-toggle
-                  :value="promptState[index].confirmed"
+                  :value="associatedFoodsState.prompts[index].confirmed"
                   @change="updatePromptState(index, $event)"
                 >
                   <v-btn value="false"> {{ $t('prompts.associatedFoods.no') }}</v-btn>
                   <v-btn value="true"> {{ $t('prompts.associatedFoods.yes') }}</v-btn>
+
+                  <food-browser>
+
+                  </food-browser>
                 </v-btn-toggle>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -64,27 +68,23 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     },
   },
 
-  data() {
-    return {
-      panelOpen: true,
-    };
-  },
-
   computed: {
     ...mapState(useSurvey, {
-      promptState: (state) => {
-        const food = state.selectedEncodedFood!;
-
-        return (
-          food.associatedFoods ??
-          food.data.associatedFoodPrompts.map(() => {
-            return { confirmed: undefined };
-          })
-        );
-      },
+      associatedFoodPrompts: (state) => state.selectedEncodedFood?.data.associatedFoodPrompts,
+      associatedFoodsState: (state) => state.selectedEncodedFood?.associatedFoods,
       selectedFoodIndex: (state) => state.selectedFoodIndex,
       selectedMealIndex: (state) => state.selectedMealIndex,
     }),
+
+    activePrompt: {
+      get(): number | undefined {
+        return this.associatedFoodsState?.activePrompt;
+      },
+
+      set(value: number) {
+        this.updateActivePrompt(value);
+      },
+    },
 
     text(): string {
       const text = this.promptProps.text[this.$i18n.locale];
@@ -103,7 +103,16 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateAssociatedFoodsPrompt']),
+    ...mapActions(useSurvey, ['updateAssociatedFoodsPrompt', 'updateActiveAssociatedFoodsPrompt']),
+
+    updateActivePrompt(index: number) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.updateActiveAssociatedFoodsPrompt({
+        mealIndex: this.selectedMealIndex!,
+        foodIndex: this.selectedFoodIndex!,
+        activePromptIndex: index,
+      });
+    },
 
     updatePromptState(index: number, value: boolean | undefined) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

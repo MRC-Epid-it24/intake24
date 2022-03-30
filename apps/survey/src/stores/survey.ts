@@ -11,6 +11,7 @@ import {
   EncodedFood,
   FreeTextFood,
   AssociatedFoodsState,
+  AssociatedFoodPromptState,
 } from '@intake24/common/types';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
@@ -313,16 +314,33 @@ export const useSurvey = defineStore('survey', {
       this.data.meals[mealIndex].foods.splice(foodIndex, 1, { ...foodState, ...food });
     },
 
-    updateAssociatedFoodsPrompt(data: {
+    updateActiveAssociatedFoodsPrompt(data: {
       mealIndex: number;
       foodIndex: number;
-      promptIndex: number;
-      promptState: AssociatedFoodsState;
+      activePromptIndex: number;
     }) {
       const currentFoodState = this.data.meals[data.mealIndex].foods[data.foodIndex] as EncodedFood;
       const newState = copy(currentFoodState);
 
-      newState.associatedFoods[data.promptIndex] = data.promptState;
+      newState.associatedFoods.activePrompt = data.activePromptIndex;
+
+      this.updateFood({
+        mealIndex: data.mealIndex,
+        foodIndex: data.foodIndex,
+        food: newState,
+      });
+    },
+
+    updateAssociatedFoodsPrompt(data: {
+      mealIndex: number;
+      foodIndex: number;
+      promptIndex: number;
+      promptState: AssociatedFoodPromptState;
+    }) {
+      const currentFoodState = this.data.meals[data.mealIndex].foods[data.foodIndex] as EncodedFood;
+      const newState = copy(currentFoodState);
+
+      newState.associatedFoods.prompts[data.promptIndex] = data.promptState;
 
       this.updateFood({
         mealIndex: data.mealIndex,
