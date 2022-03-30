@@ -271,6 +271,9 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
         case 'add-meal':
           this.showSurveyPrompt('preMeals', 'meal-add-prompt');
           break;
+        case 'review-confirm':
+          this.showSurveyPrompt('submission', 'review-confirm-prompt');
+          break;
       }
     },
 

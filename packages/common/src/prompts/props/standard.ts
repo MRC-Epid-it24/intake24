@@ -39,6 +39,11 @@ export const submitPromptProps: BasePromptProps = copy({
   localName: { en: 'Submit' },
 });
 
+export const reviewConfirmPromptProps: BasePromptProps = copy({
+  ...basePromptProps,
+  localName: { en: 'Review and Confirm' },
+});
+
 export const redirectPromptProps: RedirectPromptProps = copy({
   ...basePromptProps,
   url: null,
@@ -68,6 +73,13 @@ export const standardPromptQuestions: PromptQuestion[] = [
     id: 'submit-prompt',
     name: 'Submit prompt',
     props: copy(submitPromptProps),
+  },
+  {
+    component: 'review-confirm-prompt',
+    type: 'standard',
+    id: 'review-confirm-prompt',
+    name: 'Review and Confirm prompt',
+    props: copy(reviewConfirmPromptProps),
   },
   {
     component: 'redirect-prompt',

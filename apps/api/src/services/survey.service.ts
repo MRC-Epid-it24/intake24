@@ -331,6 +331,7 @@ const surveyService = ({
      * - response to user is not delayed by processing bigger amount of data
      * - it depends, whether we want to throw any errors / discrepancies back to user
      * - all submission data should be validated in frontend, user probably won't be able to do any corrections unless specifically allowed?
+     * - critical data (inserted in DB) should be also validated in backend
      */
 
     // Survey submission

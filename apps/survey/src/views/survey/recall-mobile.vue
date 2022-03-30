@@ -138,6 +138,8 @@ export default Recall.extend({
     onBottomNavChange(tab: number) {
       if (tab === 0) {
         this.onRecallAction('add-meal');
+      } else if (tab === 1) {
+        this.onRecallAction('review-confirm');
       } else if (tab === 2) {
         // this.submitTrigger = true;
         // this.submitTrigger = false;

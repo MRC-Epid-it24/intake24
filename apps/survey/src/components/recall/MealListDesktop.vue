@@ -45,7 +45,7 @@ import { defineComponent } from '@vue/composition-api';
 import MealItem from './MealItem.vue';
 import ContextMenu from '../elements/ContextMenu.vue';
 
-export type RecallAction = 'add-meal';
+export type RecallAction = 'add-meal' | 'review-confirm';
 
 export default defineComponent({
   name: 'MealList',

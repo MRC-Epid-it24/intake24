@@ -29,6 +29,8 @@ const checkSurveyStandardConditions = (state: SurveyState, prompt: PromptQuestio
       return !state.data.endTime;
     case 'meal-add-prompt':
       return false;
+    case 'review-confirm-prompt':
+      return false;
     default:
       return state.data.customPromptAnswers[prompt.id] === undefined;
   }

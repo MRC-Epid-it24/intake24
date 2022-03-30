@@ -19,6 +19,7 @@ export type CustomComponentType = typeof customComponentTypes[number];
 export const standardComponentTypes = [
   'meal-time-prompt',
   'submit-prompt',
+  'review-confirm-prompt',
   'redirect-prompt',
   'food-search-prompt',
   'meal-add-prompt',

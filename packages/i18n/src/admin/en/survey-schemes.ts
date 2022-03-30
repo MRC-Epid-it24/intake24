@@ -239,6 +239,10 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Submit',
       subtitle: 'Confirm completion and submit recall',
     },
+    'review-confirm-prompt': {
+      title: 'Review and Confirm',
+      subtitle: 'Review and Confirm completion and progress of the recall',
+    },
     'redirect-prompt': {
       title: 'Redirect',
       subtitle: 'Redirect user to external site',

@@ -61,6 +61,10 @@ export const promptSettings: PromptSettings = {
     // sections: ['submission'],
     sections: [...allSection],
   },
+  'review-confirm-prompt': {
+    tabs: [...baseTab],
+    sections: ['submission'],
+  },
   'redirect-prompt': {
     tabs: [...baseTab, 'options'],
     sections: ['submission'],

@@ -135,7 +135,7 @@ export default class DynamicRecall {
       this.store.setSelection(nextSelection);
       return this.getNextPromptForCurrentSelection();
     }
-
+    console.log('Returning undefiened: ', nextSelection);
     return undefined;
   }
 }

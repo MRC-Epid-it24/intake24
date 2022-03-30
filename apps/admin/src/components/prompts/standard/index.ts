@@ -4,6 +4,7 @@ import MealAddPrompt from './meal-add-prompt.vue';
 import MealTimePrompt from './meal-time-prompt.vue';
 import RedirectPrompt from './redirect-prompt.vue';
 import SubmitPrompt from './submit-prompt.vue';
+import ReviewConfirmPrompt from './review-confirm-prompt.vue';
 
 export default {
   EditMealPrompt,
@@ -12,4 +13,5 @@ export default {
   MealTimePrompt,
   RedirectPrompt,
   SubmitPrompt,
+  ReviewConfirmPrompt,
 };
