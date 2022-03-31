@@ -133,11 +133,9 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     },
 
     activePrompt(): string | LocaleTranslation {
-      if (this.currentPrompt) {
-        return this.currentPrompt.prompt.props.localName
-          ? this.currentPrompt.prompt.props.localName
-          : this.currentPrompt.prompt.name;
-      }
+      if (this.currentPrompt)
+        return this.currentPrompt.prompt.props.name ?? this.currentPrompt.prompt.name;
+
       return '';
     },
   },

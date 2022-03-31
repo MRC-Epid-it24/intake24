@@ -1,14 +1,31 @@
 <template>
   <v-tab-item key="content">
     <language-selector
-      :label="$t('survey-schemes.questions.text')"
+      :label="$t('survey-schemes.questions.name._')"
+      :value="name"
+      @input="update('name', $event)"
+    >
+      <template v-for="lang in Object.keys(name)" v-slot:[`lang.${lang}`]>
+        <v-text-field
+          :key="lang"
+          :label="$t('survey-schemes.questions.name._')"
+          :rules="nameRules"
+          :value="name[lang]"
+          hide-details="auto"
+          outlined
+          @input="updateLanguage('name', lang, $event)"
+        ></v-text-field>
+      </template>
+    </language-selector>
+    <language-selector
+      :label="$t('survey-schemes.questions.text._')"
       :value="text"
       @input="update('text', $event)"
     >
       <template v-for="lang in Object.keys(text)" v-slot:[`lang.${lang}`]>
         <v-text-field
           :key="lang"
-          :label="$t('survey-schemes.questions.text')"
+          :label="$t('survey-schemes.questions.text._')"
           :rules="textRules"
           :value="text[lang]"
           hide-details="auto"
@@ -18,7 +35,7 @@
       </template>
     </language-selector>
     <language-selector
-      :label="$t('survey-schemes.questions.description')"
+      :label="$t('survey-schemes.questions.description._')"
       :value="description"
       @input="update('description', $event)"
     >
@@ -41,7 +58,7 @@ import tinymce from '@intake24/admin/components/tinymce/tinymce';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { RuleCallback } from '@intake24/admin/types';
 
-export type LocaleTranslationKeys = 'text' | 'description';
+export type LocaleTranslationKeys = 'name' | 'text' | 'description';
 
 export default defineComponent({
   name: 'PromptContent',
@@ -51,6 +68,10 @@ export default defineComponent({
   mixins: [tinymce],
 
   props: {
+    name: {
+      type: Object as PropType<LocaleTranslation>,
+      required: true,
+    },
     text: {
       type: Object as PropType<LocaleTranslation>,
       required: true,
@@ -66,9 +87,18 @@ export default defineComponent({
   },
 
   computed: {
+    nameRules(): RuleCallback[] {
+      return [
+        (value: string | null): boolean | string =>
+          !!value || this.$t('survey-schemes.questions.name.required').toString(),
+      ];
+    },
     textRules(): RuleCallback[] {
       return this.textRequired
-        ? [(value: string | null): boolean | string => !!value || 'Question text is required.']
+        ? [
+            (value: string | null): boolean | string =>
+              !!value || this.$t('survey-schemes.questions.text.required').toString(),
+          ]
         : [];
     },
   },

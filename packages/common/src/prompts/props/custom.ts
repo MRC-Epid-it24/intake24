@@ -40,47 +40,51 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
 export type InfoPromptProps = BasePromptProps;
 export type YesNoPromptProps = BasePromptProps;
 
-export const infoPromptProps: InfoPromptProps = copy(basePromptProps);
+export const infoPromptProps: InfoPromptProps = copy({
+  ...basePromptProps,
+  name: { en: 'Info / confirmation' },
+});
+
 export const yesNoPromptProps: YesNoPromptProps = copy(basePromptProps);
 
 export const datePickerPromptProps: DatePickerPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
-  localName: { en: 'Pick Date' },
+  name: { en: 'Pick Date' },
 });
 
 export const timePickerPromptProps: TimePickerPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
+  name: { en: 'Pick Time' },
   format: '24hr',
-  localName: { en: 'Pick Time' },
 });
 
 export const checkboxListPromptProps: CheckboxListPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
+  name: { en: 'Checkbox List' },
   label: { en: null },
   options: { en: [] },
   other: false,
-  localName: { en: 'Checkbox List' },
 });
 
 export const radioListPromptProps: RadioListPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
+  name: { en: 'Radio List' },
   label: { en: null },
   options: { en: [] },
   orientation: 'column',
   other: false,
-  localName: { en: 'Radio List' },
 });
 
 export const textareaPromptProps: TextareaPromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
+  name: { en: 'Fill Text' },
   label: { en: null },
   hint: { en: null },
-  localName: { en: 'Fill Text' },
 });
 
 export const customPromptQuestions: PromptQuestion[] = [
@@ -89,7 +93,7 @@ export const customPromptQuestions: PromptQuestion[] = [
     type: 'custom',
     id: 'info-prompt',
     name: 'Info / confirmation prompt',
-    props: copy({ ...basePromptProps, localName: { en: 'Info / confirmation' } }),
+    props: copy(infoPromptProps),
   },
   {
     component: 'date-picker-prompt',

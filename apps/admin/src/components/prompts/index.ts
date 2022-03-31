@@ -1,6 +1,10 @@
 import { ComponentType } from '@intake24/common/prompts';
 import { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 
+export { default as customPrompts } from './custom';
+export { default as portionSizePrompts } from './portion-size';
+export { default as standardPrompts } from './standard';
+
 const baseTab = ['general', 'content', 'conditions'];
 const validatedTab = [...baseTab, 'validation'];
 const listTab = [...validatedTab, 'options'];

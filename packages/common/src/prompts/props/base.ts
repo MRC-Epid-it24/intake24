@@ -2,10 +2,10 @@ import type { LocaleTranslation } from '../../types';
 import type { Condition } from '../conditions';
 
 export interface BasePromptProps {
+  name: LocaleTranslation;
   text: LocaleTranslation;
   description: LocaleTranslation;
   conditions: Condition[];
-  localName: LocaleTranslation;
 }
 
 export interface PromptValidationProps {
@@ -18,10 +18,10 @@ export interface PromptValidationProps {
 export interface ValidatedPromptProps extends BasePromptProps, PromptValidationProps {}
 
 export const basePromptProps: BasePromptProps = {
+  name: { en: null },
   text: { en: null },
   description: { en: null },
   conditions: [],
-  localName: { en: null },
 };
 
 export const promptValidation: PromptValidationProps = {

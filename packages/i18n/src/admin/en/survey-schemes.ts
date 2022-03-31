@@ -134,11 +134,33 @@ const surveySchemes: LocaleMessageObject = {
       subtitle:
         'Questions asked about meals after the portion size estimation is complete for all foods in the meal.',
     },
-    id: 'Question ID',
-    name: 'Question name',
-    localName: 'Question localized name',
+    internal: {
+      _: 'Internal identifiers',
+      id: {
+        _: 'Question ID',
+        hint: 'Internal unique identifier, used e.g. in data-exports as header',
+      },
+      name: {
+        _: 'Question Name',
+        hint: 'Internal descriptive name for better orientation ',
+      },
+    },
     type: 'Question type',
     component: 'Question component',
+    name: {
+      _: 'Question Name',
+      hint: 'Short question name (e.g. for breadcrumbs)',
+      required: 'Question name is required.',
+    },
+    text: {
+      _: 'Question text',
+      hint: 'Main question text',
+      required: 'Question text is required.',
+    },
+    description: {
+      _: 'Question description',
+      hint: 'Additional question information',
+    },
     custom: {
       _: 'Custom',
       noQuestions: 'No custom questions available for this section',
@@ -151,8 +173,6 @@ const surveySchemes: LocaleMessageObject = {
       _: 'Portion size',
       noQuestions: 'No portion size questions available for this section',
     },
-    text: 'Question text',
-    description: 'Question description',
     label: 'Options list label',
     other: 'Allow custom other option',
     orientation: {

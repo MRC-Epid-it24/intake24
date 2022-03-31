@@ -40,7 +40,7 @@ const prompts: LocaleMessageObject = {
       required: 'Please select time you had the meal.',
     },
   },
-  portionoption: {
+  portionOption: {
     validation: {
       required: 'Please select how the portion will be measured.',
     },

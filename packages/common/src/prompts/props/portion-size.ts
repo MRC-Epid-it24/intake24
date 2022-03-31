@@ -1,7 +1,7 @@
 import { copy } from '@intake24/common/util';
 import { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import type { PromptQuestion, QuantityValues } from '..';
-import { basePromptProps, ValidatedPromptProps } from './base';
+import { basePromptProps, promptValidation, ValidatedPromptProps } from './base';
 
 export type LeftoverQuestionPromptProps = ValidatedPromptProps;
 
@@ -42,25 +42,13 @@ export interface ImageMapSelectorEmit {
 // Default props
 
 export const drinkScalePromptDefaultProps: DrinkScalePromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  localName: { en: '' },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
+  ...basePromptProps,
+  ...promptValidation,
 };
 
 export const standardPortionPromptDefaultProps: StandardPortionPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  localName: { en: '' },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
+  ...basePromptProps,
+  ...promptValidation,
   quantityValue: {
     whole: 1,
     fraction: 0,
@@ -68,72 +56,36 @@ export const standardPortionPromptDefaultProps: StandardPortionPromptProps = {
 };
 
 export const cerealPromptDefaultProps: CerealPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  localName: { en: '' },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
+  ...basePromptProps,
+  ...promptValidation,
 };
 
 export const milkCerealPromptDefaultProps: MilkCerealPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  localName: { en: '' },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
+  ...basePromptProps,
+  ...promptValidation,
 };
 
 export const pizzaPromptDefaultProps: PizzaPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  localName: { en: '' },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
+  ...basePromptProps,
+  ...promptValidation,
   typeImageMapId: 'gpizza',
   thicknessImageMapId: 'gpthick',
   slicePrefix: 'gpiz',
 };
 
 export const milkHotDrinkPromptDefaultProps: MilkHotDrinkPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  localName: { en: '' },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
+  ...basePromptProps,
+  ...promptValidation,
 };
 
 export const directWeightPromptDefaultProps: DirectWeightPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  localName: { en: '' },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
+  ...basePromptProps,
+  ...promptValidation,
 };
 
 export const leftoverQuestionPromptDefaultProps: LeftoverQuestionPromptProps = {
-  text: { en: null },
-  description: { en: null },
-  conditions: [],
-  localName: { en: '' },
-  validation: {
-    required: false,
-    message: { en: null },
-  },
+  ...basePromptProps,
+  ...promptValidation,
 };
 
 export const associatedFoodPanelDefaultProps: AssociatedFoodsPanelProps = {
@@ -151,34 +103,34 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'portion-size-option-prompt',
     name: 'Choose portion size method',
-    props: copy({ ...basePromptProps, localName: { en: 'Choose Portion Method' } }),
+    props: copy({ ...basePromptProps, name: { en: 'Choose Portion Method' } }),
   },
   {
     component: 'as-served-prompt',
     type: 'portion-size',
     id: 'as-served-prompt',
     name: 'As served',
-    props: copy({ ...basePromptProps, localName: { en: 'As served' } }),
+    props: copy({ ...basePromptProps, name: { en: 'As served' } }),
   },
   {
     component: 'as-served-leftovers-prompt',
     type: 'portion-size',
     id: 'as-served-leftovers-prompt',
     name: 'As served (leftovers)',
-    props: copy({ ...basePromptProps, localName: { en: 'Leftovers' } }),
+    props: copy({ ...basePromptProps, name: { en: 'Leftovers' } }),
   },
   {
     component: 'guide-image-prompt',
     type: 'portion-size',
     id: 'guide-image-prompt',
     name: 'Guide image',
-    props: copy({ ...basePromptProps, localName: { en: 'Guide image' } }),
+    props: copy({ ...basePromptProps, name: { en: 'Guide image' } }),
   },
   {
     component: 'standard-portion-prompt',
     type: 'portion-size',
     id: 'standard-portion-prompt',
     name: 'Standard portion',
-    props: copy({ ...basePromptProps, localName: { en: 'Standart portion' } }),
+    props: copy({ ...basePromptProps, name: { en: 'Standard portion' } }),
   },
 ];

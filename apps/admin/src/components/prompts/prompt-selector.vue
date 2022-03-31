@@ -36,10 +36,49 @@
           <v-tabs-items v-model="tab" class="pt-1">
             <v-tab-item key="general">
               <v-row>
+                <v-col cols="12">
+                  <v-card outlined>
+                    <v-toolbar color="grey lighten-4" flat>
+                      <v-toolbar-title>
+                        <v-icon left>fas fa-fingerprint</v-icon>
+                        {{ $t('survey-schemes.questions.internal._') }}
+                      </v-toolbar-title>
+                    </v-toolbar>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" md="6">
+                          <v-text-field
+                            v-model="dialog.question.id"
+                            :disabled="isOverrideMode"
+                            :readonly="dialog.question.type !== 'custom'"
+                            :label="$t('survey-schemes.questions.internal.id._')"
+                            :rules="questionIdRules"
+                            hide-details="auto"
+                            :messages="$t('survey-schemes.questions.internal.id.hint')"
+                            outlined
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="6">
+                          <v-text-field
+                            v-model="dialog.question.name"
+                            :disabled="isOverrideMode"
+                            :label="$t('survey-schemes.questions.internal.name._')"
+                            hide-details="auto"
+                            :messages="$t('survey-schemes.questions.internal.name.hint')"
+                            outlined
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card>
+                </v-col>
                 <v-col cols="12" v-if="!isOverrideMode">
                   <v-card outlined>
                     <v-toolbar color="grey lighten-4" flat>
-                      <v-toolbar-title>{{ $t(`survey-schemes.questions.type`) }}</v-toolbar-title>
+                      <v-toolbar-title>
+                        <v-icon left>fas fa-circle-question</v-icon>
+                        {{ $t(`survey-schemes.questions.type`) }}
+                      </v-toolbar-title>
                       <template v-slot:extension>
                         <v-tabs v-model="questionTypeTab">
                           <v-tab
@@ -67,52 +106,6 @@
                       </v-tabs-items>
                     </v-item-group>
                   </v-card>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="dialog.question.id"
-                    :disabled="isOverrideMode"
-                    :readonly="dialog.question.type !== 'custom'"
-                    :label="$t('survey-schemes.questions.id')"
-                    :rules="questionIdRules"
-                    hide-details="auto"
-                    messages="Unique identifier, used e.g. in data-exports as header"
-                    outlined
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="dialog.question.name"
-                    :disabled="isOverrideMode"
-                    :label="$t('survey-schemes.questions.name')"
-                    hide-details="auto"
-                    messages="Descriptive name for better orientation"
-                    outlined
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row class="justify-end">
-                <v-col cols="12" md="6">
-                  <language-selector
-                    :label="$t('survey-schemes.questions.localName')"
-                    v-model="dialog.question.props.localName"
-                  >
-                    <template
-                      v-for="lang in Object.keys(dialog.question.props.localName)"
-                      v-slot:[`lang.${lang}`]
-                    >
-                      <v-text-field
-                        :key="lang"
-                        v-model="dialog.question.props.localName[lang]"
-                        :rules="textRules"
-                        :disabled="isOverrideMode"
-                        :label="$t('survey-schemes.questions.localName')"
-                        hide-details="auto"
-                        messages="Localized name"
-                        outlined
-                      ></v-text-field>
-                    </template>
-                  </language-selector>
                 </v-col>
               </v-row>
             </v-tab-item>
@@ -148,10 +141,12 @@ import {
   portionSizePromptQuestions,
   standardPromptQuestions,
 } from '@intake24/common/prompts';
-import { promptSettings } from '@intake24/admin/components/prompts';
-import customPrompts from '@intake24/admin/components/prompts/custom';
-import standardPrompts from '@intake24/admin/components/prompts/standard';
-import portionSizePrompts from '@intake24/admin/components/prompts/portion-size';
+import {
+  promptSettings,
+  customPrompts,
+  portionSizePrompts,
+  standardPrompts,
+} from '@intake24/admin/components/prompts';
 import { RuleCallback } from '@intake24/admin/types';
 import PromptTypeSelector from './prompt-type-selector.vue';
 import { LanguageSelector } from '../forms';
@@ -180,10 +175,6 @@ export default defineComponent({
     questionIds: {
       type: Array as PropType<string[]>,
       default: () => [],
-    },
-    textRequired: {
-      type: Boolean,
-      default: true,
     },
   },
 
@@ -234,14 +225,6 @@ export default defineComponent({
   computed: {
     isOverrideMode(): boolean {
       return this.mode === 'override';
-    },
-    textRules(): RuleCallback[] {
-      return this.textRequired
-        ? [
-            (value: string | null): boolean | string =>
-              !!value || 'Question localized name is required.',
-          ]
-        : [];
     },
     availablePromptQuestions(): Record<QuestionType, PromptQuestion[]> {
       const { section } = this;

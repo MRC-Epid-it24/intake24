@@ -5,7 +5,7 @@ import PromptContent from './prompt-content.vue';
 import PromptConditions from './prompt-conditions.vue';
 import PromptValidation from './prompt-validation.vue';
 
-export type LocaleTranslationKeys = 'text' | 'description';
+export type LocaleTranslationKeys = 'name' | 'text' | 'description';
 
 export default defineComponent({
   name: 'BasePrompt',
@@ -13,6 +13,10 @@ export default defineComponent({
   components: { PromptContent, PromptConditions, PromptValidation },
 
   props: {
+    name: {
+      type: Object as PropType<LocaleTranslation>,
+      required: true,
+    },
     text: {
       type: Object as PropType<LocaleTranslation>,
       required: true,
