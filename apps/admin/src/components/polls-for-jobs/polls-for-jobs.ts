@@ -45,6 +45,8 @@ export default defineComponent({
     async startPolling(now = false, ms = 2000) {
       if (now) await this.status();
 
+      if (this.polling !== null) return;
+
       this.polling = setInterval(async () => {
         await this.status();
       }, ms);
