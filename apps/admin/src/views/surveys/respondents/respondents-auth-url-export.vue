@@ -3,14 +3,14 @@
     <template v-slot:activator="{ on, attrs }">
       <v-list-item key="authUrls" v-bind="attrs" v-on="on" link>
         <v-list-item-title>
-          <v-icon class="mr-2">fa-download</v-icon>
+          <v-icon left>fa-download</v-icon>
           {{ $t('surveys.respondents.authUrls._') }}
         </v-list-item-title>
       </v-list-item>
     </template>
     <v-card>
       <v-toolbar color="primary" dark flat>
-        <v-icon class="mr-3" dark>fa-download</v-icon>
+        <v-icon dark left>fa-download</v-icon>
         <v-toolbar-title>
           {{ $t(`surveys.respondents.authUrls.title`) }}
         </v-toolbar-title>
@@ -20,7 +20,7 @@
           <v-row justify="center">
             <v-col cols="12" sm="8" md="6">
               <v-btn color="secondary" x-large block @click="submit" :disabled="jobInProgress">
-                <v-icon class="mr-2">fa-download</v-icon>
+                <v-icon left>fa-download</v-icon>
                 {{ $t('surveys.respondents.authUrls.submit') }}
               </v-btn>
             </v-col>

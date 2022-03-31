@@ -1,7 +1,7 @@
 <template>
   <v-card flat tile>
     <v-toolbar flat tile color="grey lighten-2">
-      <v-icon class="mr-3" color="primary">far fa-question-circle</v-icon>
+      <v-icon left color="primary">far fa-question-circle</v-icon>
       <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn

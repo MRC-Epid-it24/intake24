@@ -1,7 +1,7 @@
 <template>
   <v-card flat tile>
     <v-toolbar flat tile color="grey lighten-2">
-      <v-icon class="mr-3" color="primary">fa-seedling</v-icon>
+      <v-icon left color="primary">fa-seedling</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('nutrient-types.title') }}
       </v-toolbar-title>
@@ -63,7 +63,7 @@
     <v-dialog v-model="dialog.show" max-width="600px" persistent>
       <v-card>
         <v-toolbar color="primary" dark flat>
-          <v-icon class="mr-3" dark>fa-seedling</v-icon>
+          <v-icon left dark>fa-seedling</v-icon>
           <v-toolbar-title>
             {{ $t(`nutrient-types.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>

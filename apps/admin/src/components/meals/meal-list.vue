@@ -1,7 +1,7 @@
 <template>
   <v-card flat tile>
     <v-toolbar flat tile color="grey lighten-2">
-      <v-icon class="mr-3" color="primary">fa-hamburger</v-icon>
+      <v-icon left color="primary">fa-hamburger</v-icon>
       <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
@@ -74,7 +74,7 @@
     <v-dialog v-model="dialog.show" max-width="600px" persistent>
       <v-card>
         <v-toolbar color="primary" dark flat>
-          <v-icon class="mr-3" dark>fa-hamburger</v-icon>
+          <v-icon left dark>fa-hamburger</v-icon>
           <v-toolbar-title>
             {{ $t(`survey-schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>

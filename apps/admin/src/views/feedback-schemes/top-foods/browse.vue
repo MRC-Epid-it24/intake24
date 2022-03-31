@@ -9,7 +9,7 @@
       <preview :feedbackScheme="currentFeedbackScheme"></preview>
     </template>
     <v-toolbar flat tile color="grey lighten-5">
-      <v-icon class="mr-3" color="primary">fas fa-sort-amount-down</v-icon>
+      <v-icon left color="primary">fas fa-sort-amount-down</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.top-foods.title') }}
       </v-toolbar-title>
@@ -26,7 +26,7 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-toolbar flat tile color="grey lighten-2">
-              <v-icon class="mr-3" color="primary">fa-palette</v-icon>
+              <v-icon left color="primary">fa-palette</v-icon>
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.top-foods.max.title') }}
               </v-toolbar-title>

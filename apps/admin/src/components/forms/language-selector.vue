@@ -46,7 +46,7 @@
             text
             @click.stop="remove(languages[selected])"
           >
-            <v-icon class="mr-2">$delete</v-icon> {{ $t('common.action.delete') }}
+            <v-icon left>$delete</v-icon> {{ $t('common.action.delete') }}
           </v-btn>
         </v-card-actions>
       </v-tab-item>

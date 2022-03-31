@@ -41,7 +41,7 @@
     <v-dialog v-model="dialog.show" max-width="600px" persistent>
       <v-card>
         <v-toolbar color="primary" dark flat>
-          <v-icon class="mr-3" dark>fa-palette</v-icon>
+          <v-icon dark left>fa-palette</v-icon>
           <v-toolbar-title>
             {{ $t('feedback-schemes.top-foods.colors.edit') }}
           </v-toolbar-title>

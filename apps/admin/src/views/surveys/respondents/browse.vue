@@ -10,7 +10,7 @@
         <v-dialog v-model="dialog" max-width="600px">
           <template v-slot:activator="{ attrs, on }">
             <v-btn class="font-weight-bold" color="primary" text v-bind="attrs" v-on="on">
-              <v-icon class="mr-2">fa-user-plus</v-icon> {{ $t('surveys.respondents.add') }}
+              <v-icon left>fa-user-plus</v-icon> {{ $t('surveys.respondents.add') }}
             </v-btn>
           </template>
           <v-card :loading="loading">

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar flat tile color="grey lighten-5">
-      <v-icon class="mr-3" color="primary">fas fa-square-root-alt</v-icon>
+      <v-icon left color="primary">fas fa-square-root-alt</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.henry-coefficients.title') }}
       </v-toolbar-title>
@@ -68,7 +68,7 @@
     <v-dialog v-model="dialog.show" max-width="600px" persistent>
       <v-card>
         <v-toolbar color="primary" dark flat>
-          <v-icon class="mr-3" dark>fas fa-square-root-alt</v-icon>
+          <v-icon dark left>fas fa-square-root-alt</v-icon>
           <v-toolbar-title>
             {{
               $t(`feedback-schemes.henry-coefficients.${dialog.index === -1 ? 'create' : 'edit'}`)

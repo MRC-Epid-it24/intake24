@@ -3,14 +3,14 @@
     <template v-slot:activator="{ on, attrs }">
       <v-list-item key="respondentsUpload" v-bind="attrs" v-on="on" link>
         <v-list-item-title>
-          <v-icon class="mr-2">fa-upload</v-icon>
+          <v-icon left>fa-upload</v-icon>
           {{ $t('surveys.respondents.upload._') }}
         </v-list-item-title>
       </v-list-item>
     </template>
     <v-card>
       <v-toolbar color="primary" dark flat>
-        <v-icon class="mr-3" dark>fa-upload</v-icon>
+        <v-icon dark left>fa-upload</v-icon>
         <v-toolbar-title>
           {{ $t(`surveys.respondents.upload.title`) }}
         </v-toolbar-title>
@@ -33,7 +33,7 @@
               </v-col>
               <v-col cols="12" sm="auto">
                 <v-btn type="submit" color="secondary" x-large block :disabled="jobInProgress">
-                  <v-icon class="mr-2">fa-upload</v-icon>
+                  <v-icon left>fa-upload</v-icon>
                   {{ $t('surveys.respondents.upload.submit') }}
                 </v-btn>
               </v-col>

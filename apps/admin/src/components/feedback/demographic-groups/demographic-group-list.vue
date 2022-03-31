@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar flat tile color="grey lighten-5">
-      <v-icon class="mr-3" color="primary">fas fa-people-arrows</v-icon>
+      <v-icon left color="primary">fas fa-people-arrows</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.demographic-groups.title') }}
       </v-toolbar-title>
@@ -75,7 +75,7 @@
             <v-icon>$cancel</v-icon>
           </v-btn>
           <v-toolbar-title>
-            <v-icon class="mr-3" dark>fas fa-people-arrows</v-icon>
+            <v-icon dark left>fas fa-people-arrows</v-icon>
             {{
               $t(`feedback-schemes.demographic-groups.${dialog.index === -1 ? 'create' : 'edit'}`)
             }}

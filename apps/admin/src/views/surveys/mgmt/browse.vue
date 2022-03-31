@@ -12,7 +12,7 @@
               v-on="on"
               @click.stop="add"
             >
-              <v-icon class="mr-2">fa-user-plus</v-icon> {{ $t('surveys.mgmt.add') }}
+              <v-icon left>fa-user-plus</v-icon> {{ $t('surveys.mgmt.add') }}
             </v-btn>
           </template>
           <v-card :loading="isLoading">
