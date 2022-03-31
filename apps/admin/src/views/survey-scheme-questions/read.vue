@@ -3,11 +3,11 @@
     <v-simple-table>
       <tbody>
         <tr>
-          <th>{{ $t('survey-schemes.questions.id') }}</th>
+          <th>{{ $t('survey-schemes.questions.internal.id._') }}</th>
           <td>{{ entry.question.id }}</td>
         </tr>
         <tr>
-          <th>{{ $t('survey-schemes.questions.name') }}</th>
+          <th>{{ $t('survey-schemes.questions.internal.name._') }}</th>
           <td>{{ entry.question.name }}</td>
         </tr>
         <tr>

@@ -22,12 +22,12 @@ export default Vue.extend({
     return {
       headers: [
         {
-          text: this.$t('survey-schemes.questions.id'),
+          text: this.$t('survey-schemes.questions.internal.id._'),
           sortable: true,
           value: 'questionId',
         },
         {
-          text: this.$t('survey-schemes.questions.name'),
+          text: this.$t('survey-schemes.questions.internal.name._'),
           sortable: true,
           value: 'name',
         },

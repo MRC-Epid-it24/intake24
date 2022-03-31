@@ -15,7 +15,8 @@
           <v-col cols="12">
             <v-text-field
               v-model="form.question.id"
-              :label="$t('survey-schemes.questions.id')"
+              :label="$t('survey-schemes.questions.internal.id._')"
+              :messages="$t('survey-schemes.questions.internal.id.hint')"
               disabled
               hide-details="auto"
               name="id"
@@ -26,7 +27,8 @@
           <v-col cols="12">
             <v-text-field
               v-model="form.question.name"
-              :label="$t('survey-schemes.questions.name')"
+              :label="$t('survey-schemes.questions.internal.name._')"
+              :messages="$t('survey-schemes.questions.internal.name.hint')"
               disabled
               hide-details="auto"
               name="name"
