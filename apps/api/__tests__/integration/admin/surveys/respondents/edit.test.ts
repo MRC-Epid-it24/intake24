@@ -2,7 +2,7 @@ import request from 'supertest';
 import { CreateRespondentRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { Survey, UserSurveyAlias } from '@intake24/db';
-import { surveyStaff } from '@intake24/api/services/core/auth';
+import { surveyStaff } from '@intake24/common/acl';
 import { omit, pick } from 'lodash';
 import ioc from '@intake24/api/ioc';
 import { CustomField } from '@intake24/common/types';

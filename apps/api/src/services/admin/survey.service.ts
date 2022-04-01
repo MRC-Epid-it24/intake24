@@ -14,7 +14,7 @@ import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
-import { surveyMgmt, surveyRespondent } from '../core/auth';
+import { surveyMgmt, surveyRespondent } from '@intake24/common/acl';
 
 const adminSurveyService = ({
   adminUserService,

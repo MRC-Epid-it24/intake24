@@ -2,7 +2,7 @@ import request from 'supertest';
 import { CreateSurveyRequest, SurveyRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
-import { surveyStaff } from '@intake24/api/services/core/auth';
+import { surveyStaff } from '@intake24/common/acl';
 
 const refreshSurveyRecord = async (input: CreateSurveyRequest): Promise<Survey> => {
   const { id } = input;

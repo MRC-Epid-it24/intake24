@@ -2,7 +2,7 @@ import request from 'supertest';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
-import { surveyStaff } from '@intake24/api/services/core/auth';
+import { surveyStaff } from '@intake24/common/acl';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
