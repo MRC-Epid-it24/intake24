@@ -1,3 +1,4 @@
+import { TextDirection } from '../../common';
 import { LanguageAttributes, LanguageTranslationAttributes, Pagination } from '../../models';
 
 export type LanguageRequest = {
@@ -5,7 +6,7 @@ export type LanguageRequest = {
   englishName: string;
   localName: string;
   countryFlagCode: string;
-  textDirection: string;
+  textDirection: TextDirection;
 };
 
 export type CreateLanguageRequest = LanguageRequest;
