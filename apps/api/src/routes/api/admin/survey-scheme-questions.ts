@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { anyPermission, permission } from '@intake24/api/http/middleware/acl';
+import { anyPermission, permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/survey-scheme-questions';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';

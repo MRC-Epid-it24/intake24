@@ -2,7 +2,7 @@ import { Router } from 'express';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 import validation from '@intake24/api/http/requests/admin/fdbs/categories';
-import { permission } from '@intake24/api/http/middleware/acl';
+import { permission } from '@intake24/api/http/middleware';
 
 export default () => {
   const { adminCategoryController } = ioc.cradle;

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { anyPermission, permission } from '@intake24/api/http/middleware/acl';
+import { anyPermission, permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/images/as-served';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';

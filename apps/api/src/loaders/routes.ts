@@ -1,7 +1,7 @@
 import type { Express } from 'express';
 import { body } from 'express-validator';
 import type { Ops } from '@intake24/api/app';
-import errors from '@intake24/api/http/middleware/errors';
+import { errors } from '@intake24/api/http/middleware';
 import { sanitize, trimStrings } from '@intake24/api/http/rules';
 import routes from '@intake24/api/routes';
 import authentication from './authentication';
