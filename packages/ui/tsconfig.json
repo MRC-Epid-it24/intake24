@@ -10,8 +10,8 @@
     "baseUrl": ".",
     "types": ["jest", "jest-extended", "vuetify", "webpack-env"],
     "paths": {
-      "@intake24/ui/*": ["src/*"],
       "@intake24/common/*": ["../common/src/*"],
+      "@intake24/ui/*": ["src/*"],
       "@intake24/*": ["../*/src"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost", "webworker"]
