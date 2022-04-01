@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Prompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
-import { surveyVueI18n as i18n } from '@intake24/i18n';
+import i18n from '@intake24/survey/i18n';
 
 // Vue.ls is not accessible so test falls over, need to refactor VueI18n.
 // Useful: https://github.com/kazupon/vue-i18n/issues/323#issuecomment-463228178

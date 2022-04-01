@@ -20,6 +20,8 @@
     "axios": "^0.26.1",
     "chart.js": "^3.7.1",
     "lodash": "^4.17.21",
+    "pinia": "^2.0.12",
+    "pinia-plugin-persistedstate": "^1.5.1",
     "svg-gauge": "^1.0.6",
     "vue": "^2.6.14",
     "vue-i18n": "^8.27.1",

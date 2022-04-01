@@ -15,7 +15,7 @@ import {
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { copy } from '@intake24/common/util';
-import { useLoading } from './loading';
+import { useLoading } from '@intake24/ui/stores';
 import { surveyService } from '../services';
 
 export type MealUndo = {

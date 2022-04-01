@@ -1,5 +1,6 @@
 import { I18nLanguageEntry } from '@intake24/common/types/http';
 import { defineComponent } from '@vue/composition-api';
+import { useApp } from '../stores';
 
 export default defineComponent({
   methods: {
@@ -18,10 +19,7 @@ export default defineComponent({
 
         if (Object.keys(messages).length) this.$root.$i18n.setLocaleMessage(languageId, messages);
 
-        this.$root.$i18n.locale = languageId;
-        this.$ls.set('language', languageId);
-        this.$vuetify.rtl = textDirection === 'rtl';
-
+        this.updateAppWithLanguage(languageId, textDirection === 'rtl');
         languageSet = true;
       } catch {
         //
@@ -31,10 +29,23 @@ export default defineComponent({
 
       // If language not updated, try local data
       if (Object.keys(this.$root.$i18n.messages).includes(languageId)) {
-        this.$root.$i18n.locale = languageId;
-        this.$ls.set('language', languageId);
-        this.$vuetify.rtl = this.isRrlLocale(languageId);
+        this.updateAppWithLanguage(languageId);
       }
+    },
+
+    updateAppWithLanguage(languageId: string, isRtl?: boolean) {
+      const appStore = useApp();
+
+      appStore.setLanguage(languageId);
+      this.$root.$i18n.locale = languageId;
+      this.$vuetify.rtl = typeof isRtl !== 'undefined' ? isRtl : this.isRrlLocale(languageId);
+
+      /*
+       * TODO
+       * - update http headers
+       * - update document lang element
+       *
+       */
     },
   },
 });

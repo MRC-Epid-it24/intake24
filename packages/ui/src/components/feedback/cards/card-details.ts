@@ -1,4 +1,3 @@
-import { surveyVueI18n as i18n } from '@intake24/i18n';
 import { CardType, NutrientRuleType, Sentiment } from '@intake24/common/feedback';
 import {
   CharacterParameters,
@@ -8,6 +7,8 @@ import {
 } from '@intake24/ui/feedback';
 import { RequiredLocaleTranslation, LocaleTranslation } from '@intake24/common/types';
 import { round } from '@intake24/common/util';
+import { useApp } from '@intake24/ui/stores';
+import { shared } from '@intake24/i18n';
 
 export type FeedbackDetails = {
   readonly name: string;
@@ -23,8 +24,9 @@ export type FeedbackDetails = {
 };
 
 export const getLocaleContent = <T>(
-  content: RequiredLocaleTranslation | LocaleTranslation<T>
-): string | T => content[i18n.locale] ?? content.en;
+  content: RequiredLocaleTranslation | LocaleTranslation<T>,
+  locale: string
+): string | T => content[locale] ?? content.en;
 
 export const getTextClass = (sentiment: Sentiment): string => {
   if (['too_low', 'low', 'high', 'too_high'].includes(sentiment)) return 'danger--text';
@@ -76,16 +78,23 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
     } = result;
 
     const { name, description, sentiment, range } = scaleSectors[0];
+    const { lang } = useApp();
+
+    // TODO: resolve this better from local application i18n
+    const feedbackMsgs = shared[lang] ?? shared.en;
+    const unitDescription = (feedbackMsgs.feedback.unitDescription as Record<string, string>)[
+      nutrientRuleType
+    ];
 
     return {
-      name: getLocaleContent<string>(name),
-      description: getLocaleContent(description),
+      name: getLocaleContent<string>(name, lang),
+      description: getLocaleContent(description, lang),
       intake: round(intake),
       recommendedIntake: showRecommendations
         ? new DemographicRange(round(range.start), round(range.end))
         : null,
       unit: getUnitFromNutrientRule(nutrientRuleType, nutrient.unit),
-      unitDescription: i18n.t(`feedback.unitDescription.${nutrientRuleType}`).toString(),
+      unitDescription,
       sentiment,
       textClass: getTextClass(sentiment),
       iconClass: getIconClass(sentiment),
@@ -99,19 +108,21 @@ const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
   const { name, description, low, high, unit, portions, showRecommendations } = parameters;
   const sentiment = 'good';
 
+  const { lang } = useApp();
+
   return {
-    name: getLocaleContent<string>(name),
-    description: getLocaleContent(description),
+    name: getLocaleContent<string>(name, lang),
+    description: getLocaleContent(description, lang),
     intake: portions,
     recommendedIntake: showRecommendations
       ? new DemographicRange(high?.threshold ?? 5, high?.threshold ?? 5)
       : null,
-    unit: getLocaleContent<string>(unit.name),
-    unitDescription: getLocaleContent(unit.description),
+    unit: getLocaleContent<string>(unit.name, lang),
+    unitDescription: getLocaleContent(unit.description, lang),
     sentiment,
     textClass: getTextClass(sentiment),
     iconClass: getIconClass(sentiment),
-    warning: low && portions < low.threshold ? getLocaleContent(low.message) : undefined,
+    warning: low && portions < low.threshold ? getLocaleContent(low.message, lang) : undefined,
   };
 };
 
@@ -120,20 +131,22 @@ const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDe
     parameters;
   const sentiment = 'good';
 
+  const { lang } = useApp();
+
   let warning;
 
-  if (low && intake < low.threshold) warning = getLocaleContent(low.message);
-  else if (high && intake > high.threshold) warning = getLocaleContent(high.message);
+  if (low && intake < low.threshold) warning = getLocaleContent(low.message, lang);
+  else if (high && intake > high.threshold) warning = getLocaleContent(high.message, lang);
 
   return {
-    name: getLocaleContent<string>(name),
-    description: getLocaleContent(description),
+    name: getLocaleContent<string>(name, lang),
+    description: getLocaleContent(description, lang),
     intake: round(intake),
     recommendedIntake: showRecommendations
       ? new DemographicRange(round(recommendedIntake.start), round(recommendedIntake.end))
       : null,
-    unit: getLocaleContent<string>(unit.name),
-    unitDescription: getLocaleContent(unit.description),
+    unit: getLocaleContent<string>(unit.name, lang),
+    unitDescription: getLocaleContent(unit.description, lang),
     sentiment,
     textClass: getTextClass(sentiment),
     iconClass: getIconClass(sentiment),

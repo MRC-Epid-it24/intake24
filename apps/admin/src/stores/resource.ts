@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import http from '@intake24/admin/services/http.service';
 import { Dictionary } from '@intake24/common/types';
 import { AxiosError } from 'axios';
-import { useLoading } from './loading';
+import { useLoading } from '@intake24/ui/stores';
 
 export const FILTER_LS_KEY = 'filter';
 

@@ -31,4 +31,13 @@ export const useApp = defineStore('app', {
       },
     },
   }),
+  persist: {
+    key: `${process.env.VUE_APP_PREFIX ?? ''}app`,
+    paths: ['lang'],
+  },
+  actions: {
+    async setLanguage(language: string) {
+      this.lang = language;
+    },
+  },
 });

@@ -34,6 +34,7 @@
     "nanoid": "^3.3.2",
     "object-to-formdata": "^4.4.2",
     "pinia": "^2.0.12",
+    "pinia-plugin-persistedstate": "^1.5.1",
     "pluralize": "^8.0.0",
     "regenerator-runtime": "^0.13.9",
     "register-service-worker": "^1.7.2",

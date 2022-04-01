@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import authService, { LoginRequest, MFAVerifyRequest } from '@intake24/admin/services/auth.service';
 import axios, { AxiosError } from 'axios';
-import { useLoading } from './loading';
+import { useLoading } from '@intake24/ui/stores';
 import { useUser } from './user';
 
 export type AuthState = {

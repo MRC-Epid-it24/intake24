@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import axios, { AxiosError } from 'axios';
-import { useLoading } from './loading';
+import { useLoading } from '@intake24/ui/stores';
 import { useUser } from './user';
 import authSvc, { LoginRequest, TokenRequest } from '../services/auth.service';
 
