@@ -1,6 +1,6 @@
 import { orderBy } from 'lodash';
-import { PromptQuestion } from '@intake24/common/prompts';
-import { ExportField as BaseExportField } from '@intake24/common/types/models';
+import type { PromptQuestion } from '@intake24/common/prompts';
+import type { ExportField as BaseExportField } from '@intake24/common/types/models';
 import {
   NutrientTableCsvMappingField,
   SystemNutrientType,
@@ -270,6 +270,25 @@ const dataExportFields = () => {
     { id: 'milkVolumePercentage', label: 'Milk Volume Percentage' },
     { id: 'objectIndex', label: 'Object Index' },
     { id: 'objectWeight', label: 'Object Weight' },
+    {
+      id: 'portionWeight',
+      label: 'Portion Weight',
+      value: (foodEntry) => {
+        const servingWeightVal = foodEntry.portionSizes?.find(
+          (item) => item.name === 'servingWeight'
+        )?.value;
+        const leftoversWeightVal = foodEntry.portionSizes?.find(
+          (item) => item.name === 'leftoversWeight'
+        )?.value;
+        if (!servingWeightVal || !leftoversWeightVal) return undefined;
+
+        const servingWeight = parseFloat(servingWeightVal);
+        const leftoversWeight = parseFloat(leftoversWeightVal);
+        if (Number.isNaN(servingWeight) || Number.isNaN(leftoversWeight)) return undefined;
+
+        return servingWeight - leftoversWeight;
+      },
+    },
     { id: 'quantity', label: 'Quantity' },
     { id: 'reason', label: 'Reason' },
     { id: 'serving-image-set', label: 'As served Image Set' },

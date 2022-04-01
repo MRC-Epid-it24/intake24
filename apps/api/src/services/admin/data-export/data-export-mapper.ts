@@ -1,7 +1,8 @@
 import json2csv from 'json2csv';
 import { SurveySubmissionFood } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
-import { ExportField, ExportFieldTransform } from './data-export-fields';
+import { arrayToObject } from '@intake24/common/util';
+import type { ExportField, ExportFieldTransform } from './data-export-fields';
 
 export type ExportFieldInfo = json2csv.FieldInfo<SurveySubmissionFood>;
 
@@ -187,8 +188,22 @@ const dataExportMapper = ({ dataExportFields }: Pick<IoC, 'dataExportFields'>) =
    * @param {ExportField[]} fields
    * @returns {Promise<ExportFieldInfo[]>}
    */
-  const portionSizes = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getCustomRecordFields(fields, portionSizeValue);
+  const portionSizes = async (fields: ExportField[]): Promise<ExportFieldInfo[]> => {
+    const portionSizeFields = await dataExportFields.portionSizes();
+
+    const psfMap = portionSizeFields.reduce<Record<string, string | ExportFieldTransform>>(
+      (acc, { id, value }) => {
+        if (value) acc[id] = value;
+        return acc;
+      },
+      {}
+    );
+
+    return fields.map((field) => ({
+      label: field.label,
+      value: psfMap[field.id] ?? portionSizeValue(field),
+    }));
+  };
 
   return {
     user,
