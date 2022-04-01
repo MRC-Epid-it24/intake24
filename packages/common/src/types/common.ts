@@ -29,6 +29,9 @@ export type ValidationError = {
 
 export type ValidationErrorResult = Record<string, ValidationError>;
 
+export const textDirections = ['ltr', 'rtl'] as const;
+export type TextDirection = typeof textDirections[number];
+
 export interface FormRefs {
   $refs: {
     form: HTMLFormElement;

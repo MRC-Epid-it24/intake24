@@ -3,6 +3,7 @@ import type { Schema } from 'express-validator';
 import { Op, WhereOptions, Language } from '@intake24/db';
 import { unique } from '@intake24/api/http/rules';
 import { LanguageAttributes } from '@intake24/common/types/models';
+import { textDirections } from '@intake24/common/types';
 
 const defaults: Schema = {
   englishName: {
@@ -55,7 +56,7 @@ const defaults: Schema = {
     errorMessage: `Enter 'ltr' ot 'rlt' values.`,
     isString: true,
     isEmpty: { negated: true },
-    isIn: { options: [['rtl', 'ltr']] },
+    isIn: { options: [textDirections] },
   },
 };
 

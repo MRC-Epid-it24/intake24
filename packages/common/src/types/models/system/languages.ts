@@ -1,12 +1,12 @@
 import type { LocaleMessageObject } from '@intake24/i18n';
-import type { Application } from '../..';
+import type { Application, TextDirection } from '../..';
 
 export type LanguageAttributes = {
   id: string;
   englishName: string;
   localName: string;
   countryFlagCode: string;
-  textDirection: string;
+  textDirection: TextDirection;
   createdAt: Date;
   updatedAt: Date;
 };

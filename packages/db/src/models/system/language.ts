@@ -8,6 +8,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { LanguageAttributes, LanguageCreationAttributes } from '@intake24/common/types/models';
+import { TextDirection } from '@intake24/common/types';
 import BaseModel from '../model';
 import Locale from './locale';
 import LanguageTranslation from './language-translation';
@@ -63,7 +64,7 @@ export default class Language
     defaultValue: 'ltr',
     type: DataType.STRING(16),
   })
-  public textDirection!: string;
+  public textDirection!: TextDirection;
 
   @CreatedAt
   @Column
