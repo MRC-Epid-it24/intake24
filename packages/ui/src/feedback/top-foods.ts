@@ -25,12 +25,11 @@ export interface TopFoodData extends TopFoods {
 export const filterAndSortFoodByNutrientTypeId = (
   nutrientTypeId: string,
   foods: AggregateFoodStats[]
-): AggregateFoodStats[] => {
-  return foods
+): AggregateFoodStats[] =>
+  foods
     .map((food) => food.clone())
     .filter((f) => f.getAverageIntake(nutrientTypeId) > 0)
     .sort((a, b) => b.getAverageIntake(nutrientTypeId) - a.getAverageIntake(nutrientTypeId));
-};
 
 export const summarizeOtherFood = (
   nutrientTypeId: string,

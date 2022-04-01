@@ -1,5 +1,5 @@
 <template>
-  <v-chip v-if="this.valid" small :color="getColor()">{{ getWeigth() }}</v-chip>
+  <v-chip v-if="valid" small :color="getColor()">{{ getWeigth() }}</v-chip>
 </template>
 
 <script lang="ts">

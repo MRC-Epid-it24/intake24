@@ -26,7 +26,7 @@
               <v-row>
                 <v-col>
                   <as-served-selector
-                    :asServedSetId="this.asServedSetId"
+                    :asServedSetId="asServedSetId"
                     @as-served-selector-submit="setServingStatus($event)"
                   ></as-served-selector>
                 </v-col>
@@ -67,7 +67,7 @@
                 <v-col>
                   <!-- This currently is taking asServed data, not the leftover data -->
                   <as-served-selector
-                    :asServedSetId="this.asServedSetId"
+                    :asServedSetId="asServedSetId"
                     @as-served-selector-submit="setLeftoverStatus($event)"
                   ></as-served-selector>
                 </v-col>

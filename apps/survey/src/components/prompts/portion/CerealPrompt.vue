@@ -32,7 +32,7 @@
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <as-served-selector
-                  :asServedSetId="this.cerealType"
+                  :asServedSetId="cerealType"
                   @as-served-selector-submit="setAsServedStatus($event)"
                 ></as-served-selector>
                 <!-- cereal_hoopA -->
@@ -66,7 +66,7 @@
                 <v-row v-show="displayLeftovers">
                   <v-col>
                     <as-served-selector
-                      :asServedSetId="this.cerealType"
+                      :asServedSetId="cerealType"
                       @as-served-selector-submit="setLeftoverStatus($event)"
                     ></as-served-selector>
                   </v-col>
