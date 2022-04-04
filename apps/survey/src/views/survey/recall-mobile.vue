@@ -35,6 +35,7 @@
           :submitTrigger="submitTrigger"
           @complete="nextPrompt"
           @resetPromptTrigger="resetTrigger"
+          @meal-food-selected="onMealFoodMobileClick"
         ></component>
       </transition>
     </v-col>
