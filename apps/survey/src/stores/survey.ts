@@ -325,4 +325,6 @@ export const useSurvey = defineStore('survey', {
   },
 });
 
-export type SurveyStore = ReturnType<typeof useSurvey>;
+export type SurveyStoreDef = typeof useSurvey;
+
+export type SurveyStore = ReturnType<SurveyStoreDef>;

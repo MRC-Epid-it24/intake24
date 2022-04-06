@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import type { Permission } from '@intake24/ui/types';
-import http from '@intake24/admin/services/http.service';
+import { httpService } from '@intake24/admin/services';
 import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
 import { useLoading } from '@intake24/ui/stores';
 import { useResource } from './resource';
@@ -59,7 +59,7 @@ export const useUser = defineStore('user', {
       try {
         const {
           data: { profile, permissions, roles },
-        } = await http.get<AdminUserProfileResponse>('admin/user');
+        } = await httpService.get<AdminUserProfileResponse>('admin/user');
 
         this.profile = { ...profile };
         this.permissions = [...permissions];
@@ -76,3 +76,7 @@ export const useUser = defineStore('user', {
     },
   },
 });
+
+export type UserStoreDef = typeof useUser;
+
+export type UserStore = ReturnType<UserStoreDef>;

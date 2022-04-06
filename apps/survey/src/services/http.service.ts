@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse, Method } from 'axios';
 import trim from 'lodash/trim';
 import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
-import { useAuth } from '../stores';
+import type { AuthStoreDef } from '../stores';
 
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];
@@ -22,8 +22,8 @@ const httpClient: HttpClient = {
     headers: { common: { 'X-Requested-With': 'XMLHttpRequest' } },
   }),
 
-  init(router) {
-    this.mountInterceptors(router);
+  init(router, useAuth: AuthStoreDef) {
+    this.mountInterceptors(router, useAuth);
   },
 
   async get(url: string, config: HttpRequestConfig = {}) {
@@ -77,12 +77,12 @@ const httpClient: HttpClient = {
     });
   },
 
-  mountInterceptors(router) {
-    this.mountBearerInterceptor();
-    this.mount401Interceptor(router);
+  mountInterceptors(router, useAuth: AuthStoreDef) {
+    this.mountBearerInterceptor(useAuth);
+    this.mount401Interceptor(router, useAuth);
   },
 
-  mountBearerInterceptor() {
+  mountBearerInterceptor(useAuth: AuthStoreDef) {
     this.axios.interceptors.request.use((request) => {
       const { accessToken } = useAuth();
 
@@ -96,7 +96,7 @@ const httpClient: HttpClient = {
     });
   },
 
-  mount401Interceptor(router) {
+  mount401Interceptor(router, useAuth: AuthStoreDef) {
     const auth = useAuth();
 
     this.axios.interceptors.response.use(

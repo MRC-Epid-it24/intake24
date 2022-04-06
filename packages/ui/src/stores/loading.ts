@@ -21,3 +21,7 @@ export const useLoading = defineStore('loading', {
     },
   },
 });
+
+export type LoadingStoreDef = typeof useLoading;
+
+export type LoadingStore = ReturnType<LoadingStoreDef>;

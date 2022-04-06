@@ -9,7 +9,10 @@ export interface HttpRequestConfig<T = any> extends AxiosRequestConfig<T> {
 
 export interface HttpClient {
   axios: AxiosInstance;
-  init(router: Router): void;
+  init(router: Router, authStore: unknown): void;
+  mountInterceptors(router: Router, authStore: unknown): void;
+  mountBearerInterceptor(authStore: unknown): void;
+  mount401Interceptor(router: Router, authStore: unknown): void;
   get<T = any, R = AxiosResponse<T>>(url: string, config?: HttpRequestConfig): Promise<R>;
   post<T = any, R = AxiosResponse<T>>(
     url: string,
@@ -33,7 +36,4 @@ export interface HttpClient {
     data?: any,
     config?: HttpRequestConfig
   ): Promise<R>;
-  mountInterceptors(router: Router): void;
-  mountBearerInterceptor(): void;
-  mount401Interceptor(router: Router): void;
 }

@@ -97,3 +97,7 @@ export const useAuth = defineStore('auth', {
     },
   },
 });
+
+export type AuthStoreDef = typeof useAuth;
+
+export type AuthStore = ReturnType<AuthStoreDef>;

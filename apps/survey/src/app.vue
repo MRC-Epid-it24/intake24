@@ -132,7 +132,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   },
 
   async created() {
-    this.$http.init(this.$router);
+    this.$http.init(this.$router, useAuth);
 
     await this.setLanguage('survey');
   },

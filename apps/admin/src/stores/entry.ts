@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 import type { Dictionary } from '@intake24/common/types';
 import axios, { AxiosError } from 'axios';
-import { useLoading, useResource } from '.';
+import { useLoading } from '@intake24/ui/stores';
+import { useResource } from './resource';
 import http from '../services/http.service';
 
 export type EntryState = {
@@ -87,3 +88,7 @@ export const useEntry = defineStore('entry', {
     },
   },
 });
+
+export type EntryStoreDef = typeof useEntry;
+
+export type EntryStore = ReturnType<EntryStoreDef>;

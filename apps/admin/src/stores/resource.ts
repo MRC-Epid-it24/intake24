@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import http from '@intake24/admin/services/http.service';
+import { httpService } from '@intake24/admin/services';
 import type { Dictionary } from '@intake24/common/types';
 import type { AxiosError } from 'axios';
 import { useLoading } from '@intake24/ui/stores';
@@ -42,7 +42,7 @@ export const useResource = defineStore('resource', {
       loading.addItem(`${name}/refs`);
 
       try {
-        const { data } = await http.get(`${name}/refs`, { withErr: true });
+        const { data } = await httpService.get(`${name}/refs`, { withErr: true });
         this.refs = data;
       } catch (err: any) {
         this.error = err;
@@ -65,3 +65,7 @@ export const useResource = defineStore('resource', {
     },
   },
 });
+
+export type ResourceStoreDef = typeof useResource;
+
+export type ResourceStore = ReturnType<ResourceStoreDef>;

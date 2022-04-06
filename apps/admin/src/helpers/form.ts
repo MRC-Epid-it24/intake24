@@ -3,7 +3,7 @@ import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 import type { Dictionary } from '@intake24/common/types';
 import { copy, merge, Errors, getObjectNestedKeys } from '@intake24/common/util';
-import http from '@intake24/admin/services/http.service';
+import { httpService } from '@intake24/admin/services';
 import type { HttpRequestConfig } from '@intake24/ui/types/http';
 import { useLoading } from '../stores';
 
@@ -92,7 +92,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
         transform && !this.config.multipart ? transform(this.getData() as T) : this.getData();
 
       return new Promise((resolve, reject) => {
-        http
+        httpService
           .request<R>(url, method, output, { withErr: true, ...rest })
           .then((res) => {
             const { data } = res;
