@@ -1,0 +1,22 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.validate": ["vue", "vue-html", "html", "javascript", "javascriptreact", "typescript"],
+  "eslint.workingDirectories": [
+    { "directory": "apps/api" },
+    { "directory": "packages/common" },
+    { "directory": "packages/common-backend" },
+    { "directory": "packages/db" },
+    { "directory": "packages/i18n" },
+    { "directory": "packages/services" },
+    { "directory": "packages/ui" }
+  ],
+  "files.eol": "\n",
+  "search.exclude": {
+    "coverage": true,
+    "dist": true,
+    "node_modules": true,
+    "tmp": true
+  }
+}

@@ -10,6 +10,10 @@
     { "path": "packages/ui" }
   ],
   "settings": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "eslint.validate": ["vue", "vue-html", "html", "javascript", "javascriptreact", "typescript"],
     "eslint.workingDirectories": [
       { "directory": "apps/api" },
       { "directory": "packages/common" },
@@ -19,6 +23,7 @@
       { "directory": "packages/services" },
       { "directory": "packages/ui" }
     ],
+    "files.eol": "\n",
     "search.exclude": {
       "coverage": true,
       "dist": true,
