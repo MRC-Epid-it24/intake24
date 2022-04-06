@@ -1,11 +1,8 @@
-import Vue from 'vue';
 import { defineStore } from 'pinia';
 import http from '@intake24/admin/services/http.service';
 import type { Dictionary } from '@intake24/common/types';
 import type { AxiosError } from 'axios';
 import { useLoading } from '@intake24/ui/stores';
-
-export const FILTER_LS_KEY = 'filter';
 
 export type ListState = {
   name: string;
@@ -20,9 +17,13 @@ export const useResource = defineStore('resource', {
     name: 'dashboard',
     api: 'admin/dashboard',
     refs: {},
-    filter: Vue.ls.get(FILTER_LS_KEY, {}),
+    filter: {},
     error: null,
   }),
+  persist: {
+    key: `${process.env.VUE_APP_PREFIX ?? ''}resource`,
+    paths: ['filter'],
+  },
   getters: {
     getFilter: (state) => {
       const { name } = state;
@@ -55,14 +56,12 @@ export const useResource = defineStore('resource', {
         ...this.filter,
         [this.name]: filter,
       };
-      Vue.ls.set(FILTER_LS_KEY, this.filter, 24 * 60 * 60 * 1000);
     },
 
     async resetFilter() {
       const { [this.name]: remove, ...rest } = this.filter;
 
       this.filter = { ...rest };
-      Vue.ls.set(FILTER_LS_KEY, this.filter, 24 * 60 * 60 * 1000);
     },
   },
 });

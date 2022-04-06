@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueCompositionAPI from '@vue/composition-api';
-import Storage from 'vue-ls';
+// import Storage from 'vue-ls';
 import Toasted from 'vue-toasted';
 import authMixin from './mixins/auth';
 import isMobile from './mixins/is-mobile';
@@ -9,9 +9,9 @@ import moduleMixin from './mixins/module';
 
 Vue.use(VueCompositionAPI);
 
-const options = { namespace: process.env.VUE_APP_PREFIX };
+/* const options = { namespace: process.env.VUE_APP_PREFIX };
 Vue.use(Storage, options);
-Vue.ls.setOptions(options);
+Vue.ls.setOptions(options); */
 
 Vue.use(Toasted, {
   duration: 10000,

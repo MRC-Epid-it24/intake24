@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import axios, { AxiosError } from 'axios';
 import { defineStore } from 'pinia';
 import {
@@ -44,10 +43,6 @@ export interface SurveyState {
   undo: MealUndo | FoodUndo | null;
   error: AxiosError | null;
 }
-
-export const LS_KEY_STATE = 'state';
-export const LS_KEY_HISTORY = 'history';
-export const LS_LIFETIME = 12 * 60 * 60 * 1000;
 
 export const useSurvey = defineStore('survey', {
   state: (): SurveyState => ({
@@ -125,7 +120,6 @@ export const useSurvey = defineStore('survey', {
 
     async clearState() {
       this.setState(surveyInitialState);
-      this.clearLocalStorageState();
     },
 
     async clearUndo() {
@@ -140,17 +134,6 @@ export const useSurvey = defineStore('survey', {
       oldValue: CurrentSurveyState;
     }) {
       this.history.unshift({ timestamp: new Date(), data: copy(oldValue) });
-      this.saveLocalStorageState();
-    },
-
-    saveLocalStorageState() {
-      Vue.ls.set(LS_KEY_STATE, this.data, LS_LIFETIME);
-      Vue.ls.set(LS_KEY_HISTORY, this.history, LS_LIFETIME);
-    },
-
-    clearLocalStorageState() {
-      Vue.ls.remove(LS_KEY_STATE);
-      Vue.ls.remove(LS_KEY_HISTORY);
     },
 
     async submitRecall() {
