@@ -55,11 +55,11 @@ module.exports = {
           },
           created_at: {
             type: Sequelize.DATE,
-            allowNull: true,
+            allowNull: false,
           },
           updated_at: {
             type: Sequelize.DATE,
-            allowNull: true,
+            allowNull: false,
           },
         },
         { transaction }
@@ -78,7 +78,7 @@ module.exports = {
       });
 
       await queryInterface.sequelize.query(
-        'INSERT INTO users (id, "name", email, phone, simple_name, email_notifications, sms_notifications, multi_factor_authentication, created_at, updated_at) SELECT id, "name", email, phone, simple_name, email_notifications, sms_notifications, multi_factor_authentication, created_at, updated_at FROM v3_users',
+        'INSERT INTO users (id, "name", email, phone, simple_name, email_notifications, sms_notifications, multi_factor_authentication, created_at, updated_at) SELECT id, "name", email, phone, simple_name, email_notifications, sms_notifications, multi_factor_authentication, current_timestamp, current_timestamp FROM v3_users',
         { transaction }
       );
 

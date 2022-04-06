@@ -2,9 +2,9 @@ const { createPermissions } = require('../../utils.js');
 
 const permissions = [
   { name: 'feedback-schemes|copy', display_name: 'Copy feedback schemes' },
-  { name: 'feedback-schemes|security', display_name: 'Feedback schemes security' },
+  { name: 'feedback-schemes|securables', display_name: 'Feedback schemes security' },
   { name: 'survey-schemes|copy', display_name: 'Copy survey schemes' },
-  { name: 'survey-schemes|security', display_name: 'Survey schemes security' },
+  { name: 'survey-schemes|securables', display_name: 'Survey schemes security' },
 
   { name: 'users', display_name: 'Users resource access' },
   { name: 'roles', display_name: 'Roles resource access' },
