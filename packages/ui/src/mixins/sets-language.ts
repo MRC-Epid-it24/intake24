@@ -8,28 +8,20 @@ export default defineComponent({
       return ['ar'].includes(languageId);
     },
 
-    async setLanguage(app: 'admin' | 'survey', languageId: string) {
-      let languageSet = false;
+    async setLanguage(app: 'admin' | 'survey', languageId?: string) {
+      const language = languageId || navigator.language || navigator.userLanguage;
 
-      // Fetch locale messages
       try {
         const {
-          data: { messages, textDirection },
-        } = await this.$http.get<I18nLanguageEntry>(`i18n/${languageId}`, { params: { app } });
+          data: { id, messages, textDirection },
+        } = await this.$http.get<I18nLanguageEntry>(`i18n/${language}`, { params: { app } });
 
-        if (Object.keys(messages).length) this.$root.$i18n.setLocaleMessage(languageId, messages);
+        if (Object.keys(messages).length) this.$root.$i18n.setLocaleMessage(id, messages);
 
-        this.updateAppWithLanguage(languageId, textDirection === 'rtl');
-        languageSet = true;
+        this.updateAppWithLanguage(id, textDirection === 'rtl');
       } catch {
-        //
-      }
-
-      if (languageSet) return;
-
-      // If language not updated, try local data
-      if (Object.keys(this.$root.$i18n.messages).includes(languageId)) {
-        this.updateAppWithLanguage(languageId);
+        if (Object.keys(this.$root.$i18n.messages).includes(language))
+          this.updateAppWithLanguage(language);
       }
     },
 
@@ -39,13 +31,8 @@ export default defineComponent({
       appStore.setLanguage(languageId);
       this.$root.$i18n.locale = languageId;
       this.$vuetify.rtl = typeof isRtl !== 'undefined' ? isRtl : this.isRrlLocale(languageId);
-
-      /*
-       * TODO
-       * - update http headers
-       * - update document lang element
-       *
-       */
+      document.querySelector('html')?.setAttribute('lang', languageId);
+      this.$http.axios.defaults.headers.common['Accept-Language'] = languageId;
     },
   },
 });

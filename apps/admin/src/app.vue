@@ -187,12 +187,7 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
   async created() {
     this.$http.init(this.$router);
 
-    const userLanguage = this.$ls.get('language', navigator.language || navigator.userLanguage);
-    // TODO: not the most elegant solution. Forcing fallback to broader language locales if browser is set to the regional one (like, en-US or en-GB)
-    await this.setLanguage(
-      'admin',
-      userLanguage.includes('-') ? userLanguage.split('-')[0] : userLanguage
-    );
+    await this.setLanguage('admin');
   },
 
   async mounted() {

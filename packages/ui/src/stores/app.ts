@@ -17,7 +17,7 @@ export type AppState = {
 
 export const useApp = defineStore('app', {
   state: (): AppState => ({
-    lang: document.documentElement.lang.substring(0, 2),
+    lang: navigator.language || navigator.userLanguage,
     app: {
       name: process.env.VUE_APP_NAME,
       host: window.location.host,
