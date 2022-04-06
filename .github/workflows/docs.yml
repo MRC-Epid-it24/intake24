@@ -22,7 +22,7 @@ jobs:
           version: 6
 
       - name: Use Node.js
-        uses: actions/setup-node@v3.0.0
+        uses: actions/setup-node@v3.1.0
         with:
           node-version: 16.x
           cache: 'pnpm'
@@ -37,7 +37,7 @@ jobs:
         run: echo "docs.intake24.co.uk" > docs/.vitepress/dist/CNAME
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
           branch: ghp-docs
           folder: docs/.vitepress/dist
