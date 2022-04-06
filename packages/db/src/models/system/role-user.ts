@@ -15,12 +15,14 @@ export default class RoleUser
 {
   @ForeignKey(() => Role)
   @Column({
+    allowNull: true,
     type: DataType.BIGINT,
   })
   public roleId!: string;
 
   @ForeignKey(() => User)
   @Column({
+    allowNull: true,
     type: DataType.BIGINT,
   })
   public userId!: string;

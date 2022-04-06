@@ -1,26 +1,33 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import pluralize from 'pluralize';
+import { singular } from 'pluralize';
 import views from '@intake24/admin/views';
 import resources from './resources';
+import type { Resource } from '../types';
+
+export interface GenerateRoutesOps extends Resource {
+  parent?: string;
+}
 
 const generateResourceRoutes = (
   resourceName: string,
   pathSegments: string[],
   viewsPath: any,
-  parent?: string
+  options: GenerateRoutesOps
 ) => {
+  const { parent, securable } = options;
   const routerRoutes: RouteConfig[] = [];
 
   const resourceRoutes = Object.keys(viewsPath);
   const name = parent ? `${parent}-${resourceName}` : resourceName;
   const title = parent ? `${parent}.${resourceName}` : resourceName;
-  const identifier = parent ? `${pluralize.singular(resourceName)}Id` : 'id';
+  const identifier = parent ? `${singular(resourceName)}Id` : 'id';
 
   const meta = { module: { current: resourceName, parent } };
 
   resourceRoutes.forEach((action) => {
-    const perm = parent ? `${parent}|${resourceName}` : `${resourceName}|${action}`;
+    let perm = parent ? `${parent}|${resourceName}` : `${resourceName}|${action}`;
+    if (securable) perm = options.name;
 
     if (action === 'browse') {
       routerRoutes.push({
@@ -38,7 +45,7 @@ const generateResourceRoutes = (
         path: [...pathSegments, action].join('/'),
         name: `${name}-${action}`,
         component: viewsPath[action],
-        meta: { ...meta, action, title: `${title}.${action}`, perm },
+        meta: { ...meta, action, title: `${title}.${action}`, perm: `${name}|create` },
         props: true,
       });
       return;
@@ -58,7 +65,10 @@ const generateResourceRoutes = (
 
     if (typeof viewsPath[action] === 'object') {
       routerRoutes.push(
-        ...generateResourceRoutes(action, [...pathSegments, ':id', action], viewsPath[action], name)
+        ...generateResourceRoutes(action, [...pathSegments, ':id', action], viewsPath[action], {
+          ...options,
+          parent: name,
+        })
       );
     }
   });
@@ -156,7 +166,7 @@ resources.forEach((item) => {
   const resourceViews = pathSegments.reduce((acc, seg) => acc[seg], views);
 
   const [first, ...rest] = pathSegments;
-  routes.push(...generateResourceRoutes(name, [`/${first}`, ...rest], resourceViews));
+  routes.push(...generateResourceRoutes(name, [`/${first}`, ...rest], resourceViews, item));
 });
 
 const router = new VueRouter({

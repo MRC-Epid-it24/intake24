@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 import { surveyStaff } from '@intake24/common/acl';
 import { StaffUpdateSurveyFields, staffUpdateSurveyFields } from '@intake24/common/types/models';
@@ -39,7 +39,7 @@ export default () => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys|edit');
+    await suite.util.setPermission('surveys|edit');
 
     const { status } = await request(suite.app)
       .patch(url)
@@ -50,7 +50,7 @@ export default () => {
   });
 
   it(`should return 403 when missing survey-specific permission`, async () => {
-    await setPermission('surveys|overrides');
+    await suite.util.setPermission('surveys|overrides');
 
     const { status } = await request(suite.app)
       .patch(url)
@@ -61,7 +61,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-edit' or 'surveys-override' (surveyStaff)`, async () => {
-    await setPermission(surveyStaff(survey.id));
+    await suite.util.setPermission(surveyStaff(survey.id));
 
     const { status } = await request(suite.app)
       .patch(url)
@@ -72,7 +72,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-edit' or 'surveys-override' (surveyadmin)`, async () => {
-    await setPermission('surveyadmin');
+    await suite.util.setPermission('surveyadmin');
 
     const { status } = await request(suite.app)
       .patch(url)
@@ -84,7 +84,7 @@ export default () => {
 
   describe('with correct permissions (surveyStaff)', () => {
     beforeAll(async () => {
-      await setPermission(['surveys|edit', surveyStaff(survey.id)]);
+      await suite.util.setPermission(['surveys|edit', surveyStaff(survey.id)]);
     });
 
     it('should return 200 when no input provided (fields are optional for patch)', async () => {

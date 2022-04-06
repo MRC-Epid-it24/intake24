@@ -8,8 +8,8 @@ import locales from './locales/index.test';
 import nutrientTables from './nutrient-tables/index.test';
 import permissions from './permissions/index.test';
 import roles from './roles/index.test';
-import schemes from './survey-schemes/index.test';
-import schemeQuestions from './survey-scheme-questions/index.test';
+import surveySchemes from './survey-schemes/index.test';
+import surveySchemeQuestions from './survey-scheme-questions/index.test';
 import signInLogs from './sign-in-logs/index.test';
 import surveys from './surveys/index.test';
 import tasks from './tasks/index.test';
@@ -17,6 +17,7 @@ import user from './user/index.test';
 import users from './users/index.test';
 
 export default () => {
+  describe('/api/admin/food-groups', foodGroups);
   describe('/api/admin/fdbs', fdbs);
   describe('/api/admin/feedback-schemes', feedbackSchemes);
   describe('/api/admin/food-groups', foodGroups);
@@ -27,9 +28,9 @@ export default () => {
   describe('/api/admin/nutrient-tables', nutrientTables);
   describe('/api/admin/permissions', permissions);
   describe('/api/admin/roles', roles);
-  describe('/api/admin/survey-schemes', schemes);
-  describe('/api/admin/survey-scheme-questions', schemeQuestions);
   describe('/api/admin/sign-in-logs', signInLogs);
+  describe('/api/admin/survey-schemes', surveySchemes);
+  describe('/api/admin/survey-scheme-questions', surveySchemeQuestions);
   describe('/api/admin/surveys', surveys);
   describe('/api/admin/tasks', tasks);
   describe('/api/admin/user', user);

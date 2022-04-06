@@ -1,10 +1,11 @@
 import request from 'supertest';
 import { JobEntry } from '@intake24/common/types/http/admin';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 import { sleep } from '@intake24/api/util';
 
 export default () => {
   const baseUrl = '/api/admin/jobs';
+  const permissions = ['jobs', 'jobs|read'];
 
   let url: string;
   let invalidUrl: string;
@@ -19,7 +20,7 @@ export default () => {
       endDate: endDate.toISOString().split('T')[0],
     };
 
-    await setPermission(['surveys|data-export', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|data-export', 'surveyadmin']);
 
     const { body } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
@@ -29,7 +30,7 @@ export default () => {
 
     job = body;
 
-    await setPermission([]);
+    await suite.util.setPermission([]);
 
     url = `${baseUrl}/${job.id}/download`;
     invalidUrl = `${baseUrl}/999999/download`;
@@ -51,12 +52,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('jobs|read');
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

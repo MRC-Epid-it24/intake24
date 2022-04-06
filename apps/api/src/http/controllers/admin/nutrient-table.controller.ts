@@ -99,7 +99,7 @@ export default ({
     } = req;
     const { id: userId } = req.user as User;
 
-    if (!file) throw new ValidationError('file', 'Missing file.');
+    if (!file) throw new ValidationError('Missing file.', { param: 'file' });
 
     const job = await nutrientTableService.uploadCsvFile(nutrientTableId, {
       type,

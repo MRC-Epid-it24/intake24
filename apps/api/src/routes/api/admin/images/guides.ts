@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { anyPermission, permission } from '@intake24/api/http/middleware';
+import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/images/guides';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
@@ -7,6 +7,8 @@ import { wrapAsync } from '@intake24/api/util';
 export default () => {
   const { guideImageController } = ioc.cradle;
   const router = Router();
+
+  router.use(permission('guide-images'));
 
   router
     .route('')
@@ -21,11 +23,7 @@ export default () => {
       wrapAsync(guideImageController.browse)
     );
 
-  router.get(
-    '/refs',
-    anyPermission(['guide-images|create', 'guide-images|read', 'guide-images|edit']),
-    wrapAsync(guideImageController.refs)
-  );
+  router.get('/refs', wrapAsync(guideImageController.refs));
 
   router
     .route('/:guideImageId')

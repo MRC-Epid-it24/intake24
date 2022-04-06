@@ -11,7 +11,6 @@ import { useEntry } from '@intake24/admin/stores';
 import fetchEntry from './fetch-entry';
 import hasEntry from './has-entry';
 import Layout from './layout.vue';
-import mapEntry from './map-entry';
 import mapRefs from './map-refs';
 import watchEntry from './watch-entry';
 
@@ -22,7 +21,7 @@ export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
 
   components: { Layout, SubmitFooter },
 
-  mixins: [fetchEntry, hasEntry, mapEntry, mapRefs, watchEntry],
+  mixins: [fetchEntry, hasEntry, mapRefs, watchEntry],
 
   provide: () => ({
     editsResource: true,
@@ -61,12 +60,6 @@ export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
       const updated = pick(this.form.getData(true), commonKeys);
 
       return !isEqual(original, updated);
-    },
-    isCreate(): boolean {
-      return this.id === 'create';
-    },
-    isEdit(): boolean {
-      return !this.isCreate;
     },
     nonInputErrors(): ValidationError[] {
       return Object.values(pick(this.form.errors.all(), this.nonInputErrorKeys));

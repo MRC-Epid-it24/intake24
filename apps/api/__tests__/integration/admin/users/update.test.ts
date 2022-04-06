@@ -2,12 +2,13 @@ import { omit, pick, times } from 'lodash';
 import request from 'supertest';
 import { CustomField } from '@intake24/common/types';
 import { CreateUserRequest, UpdateUserRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
 import { Permission, Role, User } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/users';
+  const permissions = ['acl', 'users', 'users|edit'];
 
   let url: string;
   let invalidUrl: string;
@@ -25,8 +26,8 @@ export default () => {
     };
 
     const permissionInput = times(3, () => mocker.system.permission());
-    const permissions = await Permission.bulkCreate(permissionInput);
-    updateInput.permissions = permissions.map((item) => item.id);
+    const permissionsRecords = await Permission.bulkCreate(permissionInput);
+    updateInput.permissions = permissionsRecords.map((item) => item.id);
 
     const roleInput = times(2, () => mocker.system.role());
     const roles = await Role.bulkCreate(roleInput);
@@ -39,23 +40,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('put', url);
+    await suite.sharedTests.assert401and403('put', url, { permissions });
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission('acl');
-
-    const { status } = await request(suite.app)
-      .put(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission(['acl', 'users|edit']);
+      await suite.util.setPermission(permissions);
     });
 
     it('should return 422 for missing input data', async () => {

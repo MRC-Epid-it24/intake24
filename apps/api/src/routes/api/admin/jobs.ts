@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { anyPermission, permission } from '@intake24/api/http/middleware';
+import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/jobs';
 import { wrapAsync } from '@intake24/api/util';
 import ioc from '@intake24/api/ioc';
@@ -9,15 +9,13 @@ export default () => {
 
   const router = Router();
 
+  router.use(permission('jobs'));
+
   router
     .route('')
     .get(permission('jobs|browse'), validation.browse, wrapAsync(jobController.browse));
 
-  router.get(
-    '/refs',
-    anyPermission(['jobs|create', 'jobs|read', 'jobs|edit']),
-    wrapAsync(jobController.refs)
-  );
+  router.get('/refs', wrapAsync(jobController.refs));
 
   router.use('/:jobId', validation.entry('jobId'));
 

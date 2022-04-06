@@ -1,10 +1,11 @@
 import { pick } from 'lodash';
 import request from 'supertest';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 import { GuideImageEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/images/guides';
+  const permissions = ['guide-images', 'guide-images|edit'];
 
   const input = {
     id: 'guideImage_003',
@@ -31,9 +32,9 @@ export default () => {
     await suite.sharedTests.assert401and403('get', url);
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('guide-images|edit');
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

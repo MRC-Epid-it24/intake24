@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { anyPermission, permission } from '@intake24/api/http/middleware';
+import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/fdbs/groups';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
@@ -7,6 +7,8 @@ import { wrapAsync } from '@intake24/api/util';
 export default () => {
   const { adminFoodGroupController } = ioc.cradle;
   const router = Router();
+
+  router.use(permission('food-groups'));
 
   router
     .route('')
@@ -21,11 +23,7 @@ export default () => {
       wrapAsync(adminFoodGroupController.browse)
     );
 
-  router.get(
-    '/refs',
-    anyPermission(['food-groups|create', 'food-groups|read', 'food-groups|edit']),
-    wrapAsync(adminFoodGroupController.refs)
-  );
+  router.get('/refs', wrapAsync(adminFoodGroupController.refs));
 
   router.use('/:foodGroupId', validation.entry('foodGroupId'));
 

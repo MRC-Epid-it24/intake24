@@ -17,7 +17,7 @@
         <slot name="actions"></slot>
         <v-spacer></v-spacer>
         <confirm-dialog
-          v-if="!isCreate && can({ action: 'delete' })"
+          v-if="canHandleEntry('delete')"
           :label="$t('common.action.delete')"
           color="error"
           icon-left="$delete"
@@ -48,7 +48,7 @@
         </v-card-title>
         <v-card-text class="px-6 py-4 d-flex justify-center">
           <div class="subtitle-1">
-            You're about leave the page with unsaved changes. Do you want to continue?
+            {{ $t('common.action.confirm.msg') }}
           </div>
         </v-card-text>
         <v-container class="pa-6">
@@ -85,6 +85,7 @@ import has from 'lodash/has';
 import { ConfirmDialog } from '@intake24/ui';
 import hasResource from '@intake24/admin/mixins/has-resource';
 import { RouteLeave } from '@intake24/admin/types';
+import { Dictionary } from '@intake24/common/types';
 
 type Mixins = InstanceType<typeof hasResource>;
 
@@ -105,7 +106,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       required: true,
     },
     entry: {
-      type: Object,
+      type: Object as PropType<Dictionary>,
       required: true,
     },
     routeLeave: {
@@ -125,11 +126,22 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
     tabs(): string[] {
       if (this.isCreate) return ['create'];
 
-      return this.resource.routes.filter((item) => item !== 'create' && this.can({ action: item }));
+      const { securables, ownerId } = this.entry;
+
+      return this.resource.routes.filter(
+        (item) => item !== 'create' && this.can({ action: item, securables, ownerId })
+      );
     },
   },
 
   methods: {
+    canHandleEntry(action: string) {
+      if (this.isCreate) return false;
+
+      const { securables, ownerId } = this.entry;
+      return this.can({ action, securables, ownerId });
+    },
+
     tabTitle(tab: string) {
       const check = has(this.$i18n.messages[this.$i18n.locale], `${this.module}.${tab}.tab`);
       return this.$t(check ? `${this.module}.${tab}.tab` : `common.action.${tab}`);

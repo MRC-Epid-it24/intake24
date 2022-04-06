@@ -57,7 +57,7 @@ export default ({
     } = req;
     const user = req.user as User;
 
-    if (!file) throw new ValidationError('image', 'File not found.');
+    if (!file) throw new ValidationError('File not found.', { param: 'image' });
 
     let asServedSet = await asServedService.createSet({ id, description, file, uploader: user.id });
     asServedSet = await portionSizeService.getAsServedSet(asServedSet.id);

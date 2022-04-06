@@ -1,10 +1,11 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { SurveySchemeCreationAttributes } from '@intake24/common/types/models';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/survey-schemes';
+  const permissions = ['survey-schemes', 'survey-schemes|create'];
 
   let input: SurveySchemeCreationAttributes;
   let output: SurveySchemeCreationAttributes;
@@ -15,12 +16,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('post', url);
+    await suite.sharedTests.assert401and403('post', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('survey-schemes|create');
+      await suite.util.setPermission(permissions);
     });
 
     it('should return 422 for missing input data', async () => {
@@ -59,6 +60,7 @@ export default () => {
         .send(input);
 
       expect(pick(body, Object.keys(output))).toEqual(output);
+      expect(body.ownerId).toBe(suite.data.system.user.id);
       expect(status).toBe(201);
     });
 

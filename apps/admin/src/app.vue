@@ -40,12 +40,7 @@
       ></menu-tree>
       <menu-tree
         v-if="
-          can([
-            'feedback-schemes|browse',
-            'survey-schemes|browse',
-            'scheme-questions|browse',
-            'surveys|browse',
-          ])
+          can(['feedback-schemes', 'survey-schemes', 'scheme-questions|browse', 'surveys|browse'])
         "
         icon="fas fa-fw fa-tools"
         name="surveyMgmt"

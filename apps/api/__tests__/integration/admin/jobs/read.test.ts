@@ -1,10 +1,11 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { JobEntry } from '@intake24/common/types/http/admin';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/jobs';
+  const permissions = ['jobs', 'jobs|read'];
 
   let url: string;
   let invalidUrl: string;
@@ -32,12 +33,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('jobs|read');
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

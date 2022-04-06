@@ -20,8 +20,11 @@ import {
 export const registerACLScope = (req: Request, res: Response, next: NextFunction): void => {
   req.scope = ioc.createScope<IoC>();
 
+  const user = req.user as User;
+
   req.scope.register({
-    currentUser: asValue(req.user as User),
+    currentUser: asValue(user),
+    userId: asValue(user.id),
   });
 
   next();

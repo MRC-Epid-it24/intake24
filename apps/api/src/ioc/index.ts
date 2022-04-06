@@ -14,7 +14,7 @@ import type {
   ServicesConfig,
   SessionConfig,
 } from '@intake24/api/config';
-import { Database, DatabaseConfig, DatabasesInterface } from '@intake24/db';
+import { Database, DatabaseConfig, DatabasesInterface, models } from '@intake24/db';
 import type { Logger, LogConfig } from '@intake24/services';
 import type {
   AuthenticationController,
@@ -122,7 +122,9 @@ export interface IoC extends Jobs {
   environment: Environment;
   imagesBaseUrl: string;
 
+  // Authenticated / scoped user vars
   currentUser: User;
+  userId: string;
 
   // Controllers
   authenticationController: AuthenticationController;
@@ -189,6 +191,7 @@ export interface IoC extends Jobs {
 
   // System services
   db: DatabasesInterface;
+  models: typeof models;
   cache: Cache;
   filesystem: Filesystem;
   logger: Logger;
@@ -263,6 +266,7 @@ const configureContainer = () => {
     imagesBaseUrl: asValue(config.app.urls.images),
 
     db: asClass(Database).singleton(),
+    models: asValue(models),
   });
 
   controllers(container);

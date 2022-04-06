@@ -23,7 +23,7 @@ export default ({
       !userPassword ||
       !(await authenticationService.verifyPassword(passwordCurrent, userPassword))
     )
-      throw new ValidationError('passwordCurrent', 'Enter your current valid password.');
+      throw new ValidationError('Enter your current valid password.', { param: 'passwordCurrent' });
 
     await adminUserService.updatePassword(id, password);
 

@@ -5,6 +5,7 @@ export interface Resource {
   api: string;
   icon: string;
   title?: string;
+  securable?: boolean;
   generateRoutes: boolean;
   routes: string[];
 }

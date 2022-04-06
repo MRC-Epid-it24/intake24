@@ -53,8 +53,8 @@ export default ({
 
     if (!passwordReset)
       throw new ValidationError(
-        'token',
-        `It looks like this link is invalid / expired. Please check your email or request another link.`
+        `It looks like this link is invalid / expired. Please check your email or request another link.`,
+        { param: 'token' }
       );
 
     const { userId } = passwordReset;

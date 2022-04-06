@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/surveys';
@@ -9,7 +9,7 @@ export default () => {
   });
 
   it('should return 200 and empty list when no survey-permissions', async () => {
-    await setPermission('surveys|browse');
+    await suite.util.setPermission('surveys|browse');
 
     const { status, body } = await request(suite.app)
       .get(url)
@@ -22,8 +22,8 @@ export default () => {
   });
 
   it('should return 200 and paginated results', async () => {
-    await setPermission(['surveys|browse', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|browse', 'surveyadmin']);
 
-    await suite.sharedTests.assertPaginatedResult('get', url, false);
+    await suite.sharedTests.assertPaginatedResult('get', url, { result: true });
   });
 };

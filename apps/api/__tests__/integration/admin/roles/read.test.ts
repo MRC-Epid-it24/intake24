@@ -1,11 +1,12 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { RoleRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Role } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/roles';
+  const permissions = ['acl', 'roles', 'roles|read'];
 
   let url: string;
   let invalidUrl: string;
@@ -22,23 +23,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission('acl');
-
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission(['acl', 'roles|read']);
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

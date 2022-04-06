@@ -1,9 +1,10 @@
 import request from 'supertest';
 import { JobEntry } from '@intake24/common/types/http/admin';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/jobs';
+  const permissions = ['jobs', 'jobs|delete'];
 
   let url: string;
   let invalidUrl: string;
@@ -31,12 +32,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('delete', url);
+    await suite.sharedTests.assert401and403('delete', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('jobs|delete');
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

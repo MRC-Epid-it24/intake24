@@ -1,10 +1,11 @@
 import request from 'supertest';
 import { LocaleAttributes } from '@intake24/common/types/models';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 import { FoodsLocale, SystemLocale } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
+  const permissions = ['locales', 'locales|delete'];
 
   let url: string;
   let invalidUrl: string;
@@ -33,12 +34,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('delete', url);
+    await suite.sharedTests.assert401and403('delete', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('locales|delete');
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

@@ -8,7 +8,7 @@ import { dbLogger } from '@intake24/services';
 
 const db = new SequelizeTS({
   ...workerData.dbConnectionInfo,
-  models: models.foods,
+  models: Object.values(models.foods),
   logging: config.env === 'development' ? dbLogger : false,
 });
 

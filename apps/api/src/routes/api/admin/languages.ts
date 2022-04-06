@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { anyPermission, permission } from '@intake24/api/http/middleware';
+import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/languages';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
@@ -8,16 +8,14 @@ export default () => {
   const { languageController } = ioc.cradle;
   const router = Router();
 
+  router.use(permission('languages'));
+
   router
     .route('')
     .post(permission('languages|create'), validation.store, wrapAsync(languageController.store))
     .get(permission('languages|browse'), validation.browse, wrapAsync(languageController.browse));
 
-  router.get(
-    '/refs',
-    anyPermission(['languages|create', 'languages|read', 'languages|edit']),
-    wrapAsync(languageController.refs)
-  );
+  router.get('/refs', wrapAsync(languageController.refs));
 
   router
     .route('/:languageId')

@@ -5,6 +5,7 @@ import ioc from '@intake24/api/ioc';
 import foodIndex from '@intake24/api/food-index';
 import { initDatabase, initFiles, wipeRedis, MockData, MockFiles } from '.';
 import sharedTests, { SharedTests } from './shared-tests';
+import util, { Util } from './util';
 
 export type Bearers = Record<'superuser' | 'user' | 'respondent', string>;
 
@@ -35,6 +36,8 @@ class IntegrationSuite {
 
   public sharedTests!: SharedTests;
 
+  public util!: Util;
+
   constructor() {
     this.config = config;
     this.logger = logger;
@@ -63,7 +66,11 @@ class IntegrationSuite {
     // Grab mock files
     this.files = await initFiles();
 
+    // Shared tests
     this.sharedTests = sharedTests(this);
+
+    // Utilities
+    this.util = util(this);
   }
 
   /**

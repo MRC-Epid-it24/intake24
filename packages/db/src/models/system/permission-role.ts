@@ -18,12 +18,14 @@ export default class PermissionUser
 {
   @ForeignKey(() => Permission)
   @Column({
+    allowNull: true,
     type: DataType.BIGINT,
   })
   public permissionId!: string;
 
   @ForeignKey(() => Role)
   @Column({
+    allowNull: true,
     type: DataType.BIGINT,
   })
   public roleId!: string;

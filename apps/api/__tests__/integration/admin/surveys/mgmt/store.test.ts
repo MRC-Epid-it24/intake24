@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import request from 'supertest';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Op, Permission, Survey } from '@intake24/db';
 import { surveyStaff } from '@intake24/common/acl';
 import ioc from '@intake24/api/ioc';
@@ -50,7 +50,7 @@ export default () => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys|mgmt');
+    await suite.util.setPermission('surveys|mgmt');
 
     const { status } = await request(suite.app)
       .post(url)
@@ -61,7 +61,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-mgmt' permission (surveyadmin)`, async () => {
-    await setPermission('surveyadmin');
+    await suite.util.setPermission('surveyadmin');
 
     const { status } = await request(suite.app)
       .post(url)
@@ -72,7 +72,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-mgmt' permission (surveyStaff)`, async () => {
-    await setPermission(surveyStaff(survey.id));
+    await suite.util.setPermission(surveyStaff(survey.id));
 
     const { status } = await request(suite.app)
       .post(url)
@@ -83,7 +83,7 @@ export default () => {
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
-    await setPermission(['surveys|mgmt', surveyStaff(survey.id)]);
+    await suite.util.setPermission(['surveys|mgmt', surveyStaff(survey.id)]);
 
     const { status } = await request(suite.app)
       .post(invalidSurveyUrl)
@@ -93,9 +93,9 @@ export default () => {
     expect(status).toBe(403);
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission(['surveys|mgmt', surveyStaff(survey.id)]);
+      await suite.util.setPermission(['surveys|mgmt', surveyStaff(survey.id)]);
     });
 
     it('should return 422 for missing input data', async () => {

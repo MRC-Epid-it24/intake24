@@ -74,7 +74,7 @@ export default (): AdminFoodGroupController => {
     const foodGroup = await FoodGroup.findByPk(foodGroupId, { include: [{ model: Food }] });
     if (!foodGroup) throw new NotFoundError();
 
-    if (foodGroup.foods?.length)
+    if (!foodGroup.foods || foodGroup.foods.length)
       throw new ForbiddenError(
         'Food group cannot be deleted. There are foods using this food group.'
       );

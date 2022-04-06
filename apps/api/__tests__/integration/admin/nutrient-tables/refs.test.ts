@@ -1,5 +1,4 @@
-import request from 'supertest';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import {
   NutrientTable,
   NutrientTableCsvMapping,
@@ -9,6 +8,7 @@ import {
 
 export default () => {
   const url = '/api/admin/nutrient-tables/refs';
+  const permissions = ['nutrient-tables'];
 
   beforeAll(async () => {
     const input = mocker.foods.nutrientTable();
@@ -26,7 +26,7 @@ export default () => {
   });
 
   it('should return 200 and refs', async () => {
-    await setPermission('nutrient-tables|create');
+    await suite.util.setPermission(permissions);
 
     await suite.sharedTests.assertReferencesResult('get', url, ['nutrientTypes']);
   });

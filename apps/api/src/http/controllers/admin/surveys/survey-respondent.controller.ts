@@ -124,7 +124,7 @@ export default ({
     } = req;
     const { id: userId } = req.user as User;
 
-    if (!file) throw new ValidationError('file', 'File not found.');
+    if (!file) throw new ValidationError('File not found.', { param: 'file' });
 
     const job = await adminSurveyService.importRespondents(surveyId, userId, file);
 

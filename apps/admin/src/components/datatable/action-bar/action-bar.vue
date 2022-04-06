@@ -55,7 +55,8 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
 
   computed: {
     currentActions(): string[] {
-      return this.actions.filter((action) => this.can({ action }));
+      const { ownerId, securables } = this.item;
+      return this.actions.filter((action) => this.can({ action, ownerId, securables }));
     },
     route(): string {
       return this.routePrefix ?? this.$route.name;

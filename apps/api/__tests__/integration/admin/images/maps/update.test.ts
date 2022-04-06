@@ -1,11 +1,12 @@
 import fs from 'fs-extra';
 import { pick } from 'lodash';
 import request from 'supertest';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 import { ImageMapEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/images/maps';
+  const permissions = ['image-maps', 'image-maps|edit'];
 
   const fileName = 'imageMap_004.jpg';
   const id = 'imageMap_004';
@@ -45,12 +46,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('put', url);
+    await suite.sharedTests.assert401and403('put', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('image-maps|edit');
+      await suite.util.setPermission(permissions);
     });
 
     it('should return 422 for missing input data', async () => {

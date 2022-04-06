@@ -39,6 +39,7 @@ export { default as UserCustomField } from './user-custom-field';
 export { default as UserPassword } from './user-password';
 export { default as UserPasswordReset } from './user-password-reset';
 export { default as UserPhysicalData } from './user-physical-data';
+export { default as UserSecurable } from './user-securable';
 export { default as UserSession } from './user-session';
 export { default as UserSubscription } from './user-subscription';
 export { default as UserSurveyAlias } from './user-survey-alias';

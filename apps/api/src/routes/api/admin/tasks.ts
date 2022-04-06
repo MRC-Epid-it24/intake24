@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { anyPermission, permission } from '@intake24/api/http/middleware';
+import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/tasks';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
@@ -8,16 +8,14 @@ export default () => {
   const { taskController } = ioc.cradle;
   const router = Router();
 
+  router.use(permission('tasks'));
+
   router
     .route('')
     .post(permission('tasks|create'), validation.store, wrapAsync(taskController.store))
     .get(permission('tasks|browse'), validation.browse, wrapAsync(taskController.browse));
 
-  router.get(
-    '/refs',
-    anyPermission(['tasks|create', 'tasks|read', 'tasks|edit']),
-    wrapAsync(taskController.refs)
-  );
+  router.get('/refs', wrapAsync(taskController.refs));
 
   router.use('/:taskId', validation.entry('taskId'));
 

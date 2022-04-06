@@ -1,9 +1,10 @@
 import fs from 'fs-extra';
 import request from 'supertest';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/images/maps';
+  const permissions = ['image-maps', 'image-maps|delete'];
 
   const fileName = 'imageMap_005.jpg';
   const id = 'imageMap_005';
@@ -23,12 +24,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('delete', url);
+    await suite.sharedTests.assert401and403('delete', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('image-maps|delete');
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

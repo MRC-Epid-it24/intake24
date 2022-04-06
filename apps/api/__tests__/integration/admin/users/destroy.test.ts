@@ -1,11 +1,11 @@
-import request from 'supertest';
 import { CreateUserRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
 import { User } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/users';
+  const permissions = ['acl', 'users', 'users|delete'];
 
   let url: string;
   let invalidUrl: string;
@@ -22,12 +22,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('delete', url);
+    await suite.sharedTests.assert401and403('delete', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission(['acl', 'users|delete']);
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

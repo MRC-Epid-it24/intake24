@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { JobEntry } from '@intake24/common/types/http/admin';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 import { sleep } from '@intake24/api/util';
 
 export default () => {
@@ -19,7 +19,7 @@ export default () => {
       endDate: endDate.toISOString().split('T')[0],
     };
 
-    await setPermission(['surveys|data-export', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|data-export', 'surveyadmin']);
 
     const { body } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
@@ -29,7 +29,7 @@ export default () => {
 
     job = body;
 
-    await setPermission([]);
+    await suite.util.setPermission([]);
 
     url = `${baseUrl}/${job.id}/download`;
     invalidUrl = `${baseUrl}/999999/download`;

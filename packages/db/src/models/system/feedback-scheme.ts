@@ -1,4 +1,6 @@
 import {
+  BelongsTo,
+  BelongsToMany,
   Column,
   DataType,
   HasMany,
@@ -7,7 +9,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import {
+import type {
   FeedbackSchemeAttributes,
   FeedbackSchemeCreationAttributes,
 } from '@intake24/common/types/models';
@@ -19,8 +21,8 @@ import {
   HenryCoefficient,
   DemographicGroup,
 } from '@intake24/common/feedback';
-import BaseModel from '../model';
-import { Survey } from '.';
+import { BaseModel, Securable } from '..';
+import { Survey, User, UserSecurable } from '.';
 
 @Scopes(() => ({
   surveys: { include: [{ model: Survey }] },
@@ -33,7 +35,7 @@ import { Survey } from '.';
 })
 export default class FeedbackScheme
   extends BaseModel<FeedbackSchemeAttributes, FeedbackSchemeCreationAttributes>
-  implements FeedbackSchemeAttributes
+  implements FeedbackSchemeAttributes, Securable
 {
   @Column({
     autoIncrement: true,
@@ -111,6 +113,12 @@ export default class FeedbackScheme
     this.setDataValue('henryCoefficients', JSON.stringify(value ?? []));
   }
 
+  @Column({
+    allowNull: true,
+    type: DataType.BIGINT,
+  })
+  public ownerId!: string | null;
+
   @CreatedAt
   @Column
   public readonly createdAt!: Date;
@@ -119,6 +127,30 @@ export default class FeedbackScheme
   @Column
   public readonly updatedAt!: Date;
 
+  @BelongsTo(() => User, 'ownerId')
+  public owner?: User | null;
+
   @HasMany(() => Survey, 'feedbackSchemeId')
   public surveys?: Survey[];
+
+  @BelongsToMany(() => User, {
+    through: {
+      model: () => UserSecurable,
+      unique: false,
+      scope: {
+        securable_type: 'FeedbackScheme',
+      },
+    },
+    foreignKey: 'securableId',
+    otherKey: 'userId',
+    constraints: false,
+  })
+  public securableUsers?: User[];
+
+  @HasMany(() => UserSecurable, {
+    foreignKey: 'securableId',
+    constraints: false,
+    scope: { securable_type: 'FeedbackScheme' },
+  })
+  public securables?: UserSecurable[];
 }

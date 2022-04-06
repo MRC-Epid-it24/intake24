@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Dictionary } from '@intake24/common/types';
+import type { Dictionary } from '@intake24/common/types';
 import axios, { AxiosError } from 'axios';
 import { useLoading, useResource } from '.';
 import http from '../services/http.service';

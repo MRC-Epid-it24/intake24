@@ -20,6 +20,7 @@ export * from './tasks';
 export * from './user-passwords';
 export * from './user-password-resets';
 export * from './user-physical-data';
+export * from './user-securables';
 export * from './user-sessions';
 export * from './user-subscriptions';
 export * from './user-survey-aliases';

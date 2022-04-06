@@ -5,10 +5,7 @@ import type { DatabaseType, DatabaseConfig } from './config';
 import * as foods from './models/foods';
 import * as system from './models/system';
 
-export const models = {
-  foods: Object.values(foods),
-  system: Object.values(system),
-};
+export const models = { foods, system };
 
 export type BaseDatabasesInterface = Record<DatabaseType, Sequelize>;
 
@@ -47,7 +44,7 @@ export class Database implements DatabasesInterface {
 
       this[database] = new Sequelize({
         ...dbConf,
-        models: models[database],
+        models: Object.values(models[database]),
         logging: isDev
           ? (sql: string): void => {
               this.logger.debug(sql);

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { anyPermission, permission } from '@intake24/api/http/middleware';
+import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/roles';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
@@ -8,18 +8,14 @@ export default () => {
   const { roleController } = ioc.cradle;
   const router = Router();
 
-  router.use(permission('acl'));
+  router.use(permission(['acl', 'roles']));
 
   router
     .route('')
     .post(permission('roles|create'), validation.store, wrapAsync(roleController.store))
     .get(permission('roles|browse'), validation.browse, wrapAsync(roleController.browse));
 
-  router.get(
-    '/refs',
-    anyPermission(['roles|create', 'roles|read', 'roles|edit']),
-    wrapAsync(roleController.refs)
-  );
+  router.get('/refs', wrapAsync(roleController.refs));
 
   router.use('/:roleId', validation.entry('roleId'));
 

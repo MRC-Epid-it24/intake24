@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 import { surveyStaff } from '@intake24/common/acl';
 
@@ -30,7 +30,7 @@ export default () => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys|submissions');
+    await suite.util.setPermission('surveys|submissions');
 
     const { status } = await request(suite.app)
       .get(url)
@@ -41,7 +41,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-submissions' permission (surveyadmin)`, async () => {
-    await setPermission('surveyadmin');
+    await suite.util.setPermission('surveyadmin');
 
     const { status } = await request(suite.app)
       .get(url)
@@ -52,7 +52,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-submissions' permission (surveyStaff)`, async () => {
-    await setPermission(surveyStaff(survey.id));
+    await suite.util.setPermission(surveyStaff(survey.id));
 
     const { status } = await request(suite.app)
       .get(url)
@@ -63,7 +63,7 @@ export default () => {
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
-    await setPermission(['surveys|submissions', surveyStaff(survey.id)]);
+    await suite.util.setPermission(['surveys|submissions', surveyStaff(survey.id)]);
 
     const { status } = await request(suite.app)
       .get(invalidUrl)
@@ -74,14 +74,14 @@ export default () => {
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    await setPermission(['surveys|submissions', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|submissions', 'surveyadmin']);
 
     await suite.sharedTests.assertMissingRecord('get', invalidUrl);
   });
 
   it('should return 200 and paginated results', async () => {
-    await setPermission(['surveys|submissions', surveyStaff(survey.id)]);
+    await suite.util.setPermission(['surveys|submissions', surveyStaff(survey.id)]);
 
-    await suite.sharedTests.assertPaginatedResult('get', url, true);
+    await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
   });
 };

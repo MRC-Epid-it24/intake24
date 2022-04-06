@@ -1,11 +1,11 @@
-import { pick } from 'lodash';
 import request from 'supertest';
 import { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite, SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { FeedbackScheme } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/feedback-schemes';
+  const permissions = ['feedback-schemes', 'feedback-schemes|edit'];
 
   let url: string;
   let invalidUrl: string;
@@ -14,47 +14,45 @@ export default () => {
   let updateInput: FeedbackSchemeCreationAttributes;
   let scheme: FeedbackScheme;
 
+  let securable: SetSecurableOptions;
+
   beforeAll(async () => {
     input = mocker.system.feedbackScheme();
     updateInput = mocker.system.feedbackScheme();
-
     scheme = await FeedbackScheme.create(input);
+
+    securable = { securableId: scheme.id, securableType: 'FeedbackScheme' };
 
     url = `${baseUrl}/${scheme.id}`;
     invalidUrl = `${baseUrl}/999999`;
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('put', url);
+    await suite.sharedTests.assert401and403('patch', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('feedback-schemes|edit');
+      await suite.util.setPermission(permissions);
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('put', url, [
-        'name',
-        'type',
-        'topFoods.max',
-        'topFoods.colors',
-        'topFoods.nutrientTypes',
-        // 'cards',
-        'demographicGroups',
-        'henryCoefficients',
-      ]);
+      await suite.sharedTests.assertMissingInput('patch', url, []);
     });
 
     it('should return 422 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
-        .put(url)
+        .patch(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .send({
           name: [],
           type: 'invalidType',
-          topFoods: [],
+          topFoods: {
+            max: false,
+            colors: 10,
+            nutrientTypes: {},
+          },
           // cards: 'notAnArray',
           demographicGroups: [
             {
@@ -81,18 +79,33 @@ export default () => {
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
-      await suite.sharedTests.assertMissingRecord('put', invalidUrl, updateInput);
+      await suite.sharedTests.assertMissingRecord('patch', invalidUrl, updateInput);
     });
 
     it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .put(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(updateInput);
+      await suite.sharedTests.assertRecordUpdated('patch', url, updateInput);
+    });
+  });
 
-      expect(status).toBe(200);
-      expect(pick(body, Object.keys(updateInput))).toEqual(updateInput);
+  describe('authenticated / securables authorized', () => {
+    beforeAll(async () => {
+      await suite.util.setPermission(['feedback-schemes']);
+    });
+
+    it('should return 200 and data when securable set', async () => {
+      await suite.util.setSecurable({ ...securable, action: ['edit'] });
+      const updateInput2 = mocker.system.feedbackScheme();
+
+      await suite.sharedTests.assertRecordUpdated('patch', url, updateInput2);
+    });
+
+    it('should return 200 and data when owner set', async () => {
+      await suite.util.setSecurable(securable);
+      await scheme.update({ ownerId: suite.data.system.user.id });
+
+      const updateInput3 = mocker.system.feedbackScheme();
+
+      await suite.sharedTests.assertRecordUpdated('patch', url, updateInput3);
     });
   });
 };

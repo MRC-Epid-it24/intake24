@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 import { surveyStaff } from '@intake24/common/acl';
 
@@ -33,7 +33,7 @@ export default () => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys|read');
+    await suite.util.setPermission('surveys|read');
 
     const { status } = await request(suite.app)
       .get(url)
@@ -44,7 +44,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-read' permission (surveyadmin)`, async () => {
-    await setPermission('surveyadmin');
+    await suite.util.setPermission('surveyadmin');
 
     const { status } = await request(suite.app)
       .get(url)
@@ -55,7 +55,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-read' permission (surveyStaff)`, async () => {
-    await setPermission(surveyStaff(survey.id));
+    await suite.util.setPermission(surveyStaff(survey.id));
 
     const { status } = await request(suite.app)
       .get(url)
@@ -66,13 +66,13 @@ export default () => {
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    await setPermission(['surveys|read', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|read', 'surveyadmin']);
 
     await suite.sharedTests.assertMissingRecord('get', invalidUrl);
   });
 
   it('should return 200 and data/refs (surveyadmin)', async () => {
-    await setPermission(['surveys|read', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|read', 'surveyadmin']);
 
     const { status, body } = await request(suite.app)
       .get(url)
@@ -84,7 +84,7 @@ export default () => {
   });
 
   it('should return 200 and data/refs (surveyStaff)', async () => {
-    await setPermission(['surveys|read', surveyStaff(survey.id)]);
+    await suite.util.setPermission(['surveys|read', surveyStaff(survey.id)]);
 
     const { status, body } = await request(suite.app)
       .get(url)

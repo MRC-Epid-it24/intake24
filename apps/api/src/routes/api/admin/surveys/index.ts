@@ -12,6 +12,9 @@ export default () => {
   const { adminSurveyController } = ioc.cradle;
   const router = Router();
 
+  // TODO: activate nd align with securable concept
+  // router.use(permission('surveys'));
+
   router
     .route('')
     .post(permission('surveys|create'), validation.store, wrapAsync(adminSurveyController.store))

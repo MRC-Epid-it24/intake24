@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 import { surveyStaff } from '@intake24/common/acl';
 
@@ -38,7 +38,7 @@ export default () => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys|edit');
+    await suite.util.setPermission('surveys|edit');
 
     const { status } = await request(suite.app)
       .put(url)
@@ -49,7 +49,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-edit' permission (surveyadmin)`, async () => {
-    await setPermission('surveyadmin');
+    await suite.util.setPermission('surveyadmin');
 
     const { status } = await request(suite.app)
       .put(url)
@@ -60,7 +60,7 @@ export default () => {
   });
 
   it(`should return 403 when missing surveyadmin`, async () => {
-    await setPermission(['surveys|edit', surveyStaff(survey.id)]);
+    await suite.util.setPermission(['surveys|edit', surveyStaff(survey.id)]);
 
     const { status } = await request(suite.app)
       .put(url)
@@ -70,9 +70,9 @@ export default () => {
     expect(status).toBe(403);
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission(['surveys|edit', 'surveyadmin']);
+      await suite.util.setPermission(['surveys|edit', 'surveyadmin']);
     });
 
     it('should return 422 for missing input data', async () => {

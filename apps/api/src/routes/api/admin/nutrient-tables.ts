@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { anyPermission, permission } from '@intake24/api/http/middleware';
+import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/nutrient-tables';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
@@ -9,6 +9,8 @@ export default () => {
   const { fsConfig, nutrientTableController } = ioc.cradle;
   const router = Router();
   const upload = multer({ dest: fsConfig.local.uploads });
+
+  router.use(permission('nutrient-tables'));
 
   router
     .route('')
@@ -23,11 +25,7 @@ export default () => {
       wrapAsync(nutrientTableController.browse)
     );
 
-  router.get(
-    '/refs',
-    anyPermission(['nutrient-tables|create', 'nutrient-tables|read', 'nutrient-tables|edit']),
-    wrapAsync(nutrientTableController.refs)
-  );
+  router.get('/refs', wrapAsync(nutrientTableController.refs));
 
   router
     .route('/:nutrientTableId')

@@ -1,6 +1,17 @@
 import { nanoid, customAlphabet } from 'nanoid';
 
 /**
+ * Convert string to kebab case
+ *
+ * @param {string} string
+ */
+export const kebabCase = (string: string) =>
+  string
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+
+/**
  * Generate random string with optional custom size / alphabet
  *
  * @param {number} size

@@ -1,11 +1,12 @@
 import fs from 'fs-extra';
 import { pick } from 'lodash';
 import request from 'supertest';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 import { AsServedSetEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/images/as-served';
+  const permissions = ['as-served', 'as-served|edit'];
 
   const fileName = 'asServedSet_004.jpg';
   const id = 'asServedSet_004';
@@ -47,12 +48,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('put', url);
+    await suite.sharedTests.assert401and403('put', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('as-served|edit');
+      await suite.util.setPermission(permissions);
     });
 
     it('should return 422 for missing input data', async () => {

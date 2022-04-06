@@ -1,5 +1,4 @@
-import request from 'supertest';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { NutrientTableInput } from '@intake24/common/types/http/admin';
 import {
   NutrientTable,
@@ -10,6 +9,7 @@ import {
 
 export default () => {
   const baseUrl = '/api/admin/nutrient-tables';
+  const permissions = ['nutrient-tables', 'nutrient-tables|delete'];
 
   let url: string;
   let invalidUrl: string;
@@ -33,12 +33,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('delete', url);
+    await suite.sharedTests.assert401and403('delete', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('nutrient-tables|delete');
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

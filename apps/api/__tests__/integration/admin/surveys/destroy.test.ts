@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { CreateSurveyRequest, SurveyRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 import { surveyStaff } from '@intake24/common/acl';
 
@@ -40,7 +40,7 @@ export default () => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys|delete');
+    await suite.util.setPermission('surveys|delete');
 
     const { status } = await request(suite.app)
       .delete(url)
@@ -51,7 +51,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-delete' permission (surveyadmin)`, async () => {
-    await setPermission('surveyadmin');
+    await suite.util.setPermission('surveyadmin');
 
     const { status } = await request(suite.app)
       .delete(url)
@@ -62,7 +62,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-delete' permission (surveyStaff)`, async () => {
-    await setPermission(surveyStaff(survey.id));
+    await suite.util.setPermission(surveyStaff(survey.id));
 
     const { status } = await request(suite.app)
       .delete(url)
@@ -73,21 +73,21 @@ export default () => {
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    await setPermission(['surveys|delete', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|delete', 'surveyadmin']);
 
     await suite.sharedTests.assertMissingRecord('delete', invalidUrl);
   });
 
   it('should return 204 and no content (surveyadmin)', async () => {
     survey = await refreshSurveyRecord(input);
-    await setPermission(['surveys|delete', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|delete', 'surveyadmin']);
 
     await suite.sharedTests.assertRecordDeleted('delete', url);
   });
 
   it('should return 204 and no content (surveyStaff)', async () => {
     survey = await refreshSurveyRecord(input);
-    await setPermission(['surveys|delete', surveyStaff(survey.id)]);
+    await suite.util.setPermission(['surveys|delete', surveyStaff(survey.id)]);
 
     await suite.sharedTests.assertRecordDeleted('delete', url);
   });

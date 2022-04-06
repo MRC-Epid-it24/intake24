@@ -1,6 +1,7 @@
 import type { PromptQuestion } from '../../../prompts';
 import type { RecallQuestions, SchemeType } from '../../../schemes';
 import type { Meal } from '../..';
+import type { OmitAndOptional } from '../model';
 
 export type ExportSectionId =
   | 'user'
@@ -34,13 +35,15 @@ export type SurveySchemeAttributes = {
   questions: RecallQuestions;
   meals: Meal[];
   dataExport: ExportSection[];
+  ownerId: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export type SurveySchemeCreationAttributes = Omit<
+export type SurveySchemeCreationAttributes = OmitAndOptional<
   SurveySchemeAttributes,
-  'id' | 'createdAt' | 'updatedAt'
+  'id' | 'createdAt' | 'updatedAt',
+  'ownerId'
 >;
 
 export type SurveySchemeQuestionAttributes = {
@@ -56,3 +59,11 @@ export type SurveySchemeQuestionCreationAttributes = Omit<
   SurveySchemeQuestionAttributes,
   'id' | 'createdAt' | 'updatedAt'
 >;
+
+export const updateSurveySchemeFields = [
+  'name',
+  'type',
+  'questions',
+  'meals',
+  'dataExport',
+] as const;

@@ -2,11 +2,11 @@
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <template v-slot:actions>
       <copy-scheme-dialog
-        v-if="isEdit && can('feedback-schemes|edit')"
+        v-if="canHandleEntry('copy')"
         :schemeId="id"
         resource="feedback-schemes"
       ></copy-scheme-dialog>
-      <preview :feedbackScheme="currentFeedbackScheme"></preview>
+      <preview v-if="!isCreate" :feedbackScheme="currentFeedbackScheme"></preview>
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container>
@@ -50,7 +50,6 @@ import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
 import {
-  defaultTopFoods,
   FeedbackType,
   feedbackTypes,
   Card,
@@ -72,6 +71,8 @@ export type FeedbackSchemeForm = {
   henryCoefficients: HenryCoefficient[];
 };
 
+export type PatchFeedbackSchemeForm = Pick<FeedbackSchemeForm, 'name' | 'type'>;
+
 export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).extend({
   name: 'SchemeForm',
 
@@ -81,14 +82,10 @@ export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).ext
 
   data() {
     return {
-      form: form<FeedbackSchemeForm>({
-        id: null,
+      editMethod: 'patch',
+      form: form<PatchFeedbackSchemeForm>({
         name: null,
         type: 'default',
-        topFoods: defaultTopFoods,
-        cards: [],
-        demographicGroups: [],
-        henryCoefficients: [],
       }),
       feedbackTypes: feedbackTypes.map((value) => ({
         value,

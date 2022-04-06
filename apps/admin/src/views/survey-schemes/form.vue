@@ -2,7 +2,7 @@
   <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
     <template v-slot:actions>
       <copy-scheme-dialog
-        v-if="isEdit && can('survey-schemes|edit')"
+        v-if="canHandleEntry('copy')"
         :schemeId="id"
         resource="survey-schemes"
       ></copy-scheme-dialog>

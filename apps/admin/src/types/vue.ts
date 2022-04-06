@@ -6,14 +6,13 @@ export interface FetchEntryMixin {
   fetch: () => Promise<void>;
 }
 
-export interface HasEntryMixin {
+export interface HasEntryMixin<E = Dictionary> {
   id: string;
-  resource: Resource;
-}
-
-export interface MapEntryMixin<E = Dictionary> {
   entry: E;
   entryLoaded: boolean;
+  resource: Resource;
+  isEdit: boolean;
+  isCreate: boolean;
 }
 
 export interface MapRefsMixin<R = Dictionary> {
@@ -22,8 +21,7 @@ export interface MapRefsMixin<R = Dictionary> {
 }
 
 export type EntryMixin<E = Dictionary, R = Dictionary> = FetchEntryMixin &
-  HasEntryMixin &
-  MapEntryMixin<E> &
+  HasEntryMixin<E> &
   MapRefsMixin<R>;
 
 export interface FormMixin<E = Dictionary, R = Dictionary> extends EntryMixin<E, R> {
@@ -33,8 +31,6 @@ export interface FormMixin<E = Dictionary, R = Dictionary> extends EntryMixin<E,
   // originalEntry: Dictionary;
   // routeLeave: RouteLeave;
   // computed
-  isEdit: boolean;
-  isCreate: boolean;
   nonInputErrors: ValidationError[];
   // methods
   setOriginalEntry: (data: Dictionary) => void;

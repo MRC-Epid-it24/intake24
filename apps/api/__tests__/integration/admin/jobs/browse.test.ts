@@ -1,8 +1,10 @@
 import request from 'supertest';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/jobs';
+  const permissions = ['jobs', 'jobs|browse'];
+
   let input: { startDate: string; endDate: string };
 
   beforeAll(async () => {
@@ -24,8 +26,8 @@ export default () => {
   });
 
   it('should return 200 and paginated results', async () => {
-    await setPermission('jobs|browse');
+    await suite.util.setPermission(permissions);
 
-    await suite.sharedTests.assertPaginatedResult('get', url, false);
+    await suite.sharedTests.assertPaginatedResult('get', url, { result: true });
   });
 };

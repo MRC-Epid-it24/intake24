@@ -1,10 +1,11 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { LanguageCreationAttributes } from '@intake24/common/types/models';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/languages';
+  const permissions = ['languages', 'languages|create'];
 
   let input: LanguageCreationAttributes;
   let output: LanguageCreationAttributes;
@@ -21,12 +22,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('post', url);
+    await suite.sharedTests.assert401and403('post', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('languages|create');
+      await suite.util.setPermission(permissions);
     });
 
     it('should return 422 for missing input data', async () => {

@@ -1,4 +1,4 @@
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import {
   NutrientTable,
   NutrientTableCsvMapping,
@@ -8,6 +8,7 @@ import {
 
 export default () => {
   const url = '/api/admin/nutrient-tables';
+  const permissions = ['nutrient-tables', 'nutrient-tables|browse'];
 
   beforeAll(async () => {
     const input = mocker.foods.nutrientTable();
@@ -21,12 +22,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
   it('should return 200 and paginated results', async () => {
-    await setPermission('nutrient-tables|browse');
+    await suite.util.setPermission(permissions);
 
-    await suite.sharedTests.assertPaginatedResult('get', url, false);
+    await suite.sharedTests.assertPaginatedResult('get', url, { result: true });
   });
 };

@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { JobEntry } from '@intake24/common/types/http/admin';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/user/jobs';
@@ -19,7 +19,7 @@ export default () => {
       endDate: endDate.toISOString().split('T')[0],
     };
 
-    await setPermission(['surveys|data-export', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|data-export', 'surveyadmin']);
 
     const { body } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
@@ -27,7 +27,7 @@ export default () => {
       .set('Authorization', suite.bearer.user)
       .send(input);
 
-    await setPermission([]);
+    await suite.util.setPermission([]);
 
     job = body;
 

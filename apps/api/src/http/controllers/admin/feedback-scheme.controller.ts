@@ -5,40 +5,52 @@ import {
   FeedbackScheme,
   SystemNutrientType,
   Language,
+  Op,
   PhysicalActivityLevel,
+  securableScope,
 } from '@intake24/db';
 import type {
   FeedbackSchemeEntry,
   FeedbackSchemesResponse,
   FeedbackSchemeRefs,
 } from '@intake24/common/types/http/admin';
-import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import type { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
+import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import {
+  FeedbackSchemeCreationAttributes,
+  updateFeedbackSchemeFields,
+} from '@intake24/common/types/models';
+import { kebabCase } from '@intake24/common/util';
 import type { Controller, CrudActions } from '../controller';
 
-export type FeedbackSchemeController = Controller<CrudActions | 'copy'>;
+export type FeedbackSchemeController = Controller<
+  Exclude<CrudActions, 'edit'> | 'patch' | 'put' | 'copy'
+>;
 
 export default (): FeedbackSchemeController => {
-  const entry = async (
-    req: Request<{ feedbackSchemeId: string }>,
-    res: Response<FeedbackSchemeEntry>
-  ): Promise<void> => {
-    const { feedbackSchemeId } = req.params;
-
-    const feedbackScheme = await FeedbackScheme.findByPk(feedbackSchemeId);
-    if (!feedbackScheme) throw new NotFoundError();
-
-    res.json(feedbackScheme);
-  };
-
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<FeedbackSchemesResponse>
   ): Promise<void> => {
+    const { aclService, userId } = req.scope.cradle;
+
+    if (await aclService.hasPermission('feedback-schemes|browse')) {
+      const feedbackSchemes = await FeedbackScheme.paginate({
+        query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+        columns: ['name'],
+        order: [['name', 'ASC']],
+      });
+
+      res.json(feedbackSchemes);
+      return;
+    }
+
     const feedbackSchemes = await FeedbackScheme.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name'],
       order: [['name', 'ASC']],
+      where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
+      ...securableScope(userId),
+      subQuery: false,
     });
 
     res.json(feedbackSchemes);
@@ -48,16 +60,12 @@ export default (): FeedbackSchemeController => {
     req: Request<any, any, FeedbackSchemeCreationAttributes>,
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
-    const feedbackScheme = await FeedbackScheme.create(
-      pick(req.body, [
-        'name',
-        'type',
-        'topFoods',
-        'cards',
-        'demographicGroups',
-        'henryCoefficients',
-      ])
-    );
+    const { userId } = req.scope.cradle;
+
+    const feedbackScheme = await FeedbackScheme.create({
+      ...pick(req.body, updateFeedbackSchemeFields),
+      ownerId: userId,
+    });
 
     res.status(201).json(feedbackScheme);
   };
@@ -65,51 +73,102 @@ export default (): FeedbackSchemeController => {
   const read = async (
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<FeedbackSchemeEntry>
-  ): Promise<void> => entry(req, res);
+  ): Promise<void> => {
+    const { feedbackSchemeId } = req.params;
+    const { aclService, userId } = req.scope.cradle;
 
-  const edit = async (
-    req: Request<{ feedbackSchemeId: string }>,
-    res: Response<FeedbackSchemeEntry>
-  ): Promise<void> => entry(req, res);
+    const feedbackScheme = await FeedbackScheme.findByPk(feedbackSchemeId, securableScope(userId));
+    if (!feedbackScheme) throw new NotFoundError();
+
+    const hasAccess = await aclService.canAccessRecord(feedbackScheme, 'read');
+    if (!hasAccess) throw new ForbiddenError();
+
+    res.json(feedbackScheme);
+  };
 
   const update = async (
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
     const { feedbackSchemeId } = req.params;
+    const { aclService, userId } = req.scope.cradle;
 
-    const feedbackScheme = await FeedbackScheme.findByPk(feedbackSchemeId);
+    const feedbackScheme = await FeedbackScheme.findByPk(feedbackSchemeId, securableScope(userId));
     if (!feedbackScheme) throw new NotFoundError();
 
-    await feedbackScheme.update(
-      pick(req.body, [
-        'name',
-        'type',
-        'topFoods',
-        'cards',
-        'demographicGroups',
-        'henryCoefficients',
-      ])
-    );
+    const hasAccess = await aclService.canAccessRecord(feedbackScheme, 'edit');
+    if (!hasAccess) throw new ForbiddenError();
+
+    await feedbackScheme.update(pick(req.body, updateFeedbackSchemeFields));
 
     res.json(feedbackScheme);
   };
+
+  const patch = async (
+    req: Request<{ feedbackSchemeId: string }>,
+    res: Response<FeedbackSchemeEntry>
+  ): Promise<void> => {
+    const { feedbackSchemeId } = req.params;
+    const { aclService, userId } = req.scope.cradle;
+
+    const feedbackScheme = await FeedbackScheme.findByPk(feedbackSchemeId, securableScope(userId));
+    if (!feedbackScheme) throw new NotFoundError();
+
+    const hasAccess = await aclService.canAccessRecord(feedbackScheme, 'edit');
+    if (!hasAccess) throw new ForbiddenError();
+
+    const keysToUpdate: string[] = [];
+
+    if (feedbackScheme.ownerId === userId) {
+      keysToUpdate.push(...updateFeedbackSchemeFields);
+    } else {
+      const actions = await aclService.getAccessActions(feedbackScheme, 'feedback-schemes');
+
+      if (actions.includes('edit')) keysToUpdate.push('name', 'type');
+
+      ['topFoods', 'cards', 'demographicGroups', 'henryCoefficients'].forEach((item) => {
+        if (actions.includes(kebabCase(item))) keysToUpdate.push(item);
+      });
+    }
+
+    const updateInput = pick(req.body, keysToUpdate);
+    if (!Object.keys(updateInput).length) throw new ValidationError('Missing body');
+
+    await feedbackScheme.update(updateInput);
+
+    res.json(feedbackScheme);
+  };
+
+  const put = async (
+    req: Request<{ feedbackSchemeId: string }>,
+    res: Response<FeedbackSchemeEntry>
+  ): Promise<void> => update(req, res);
 
   const destroy = async (
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
     const { feedbackSchemeId } = req.params;
+    const { aclService, userId } = req.scope.cradle;
 
-    const feedbackScheme = await FeedbackScheme.scope('surveys').findByPk(feedbackSchemeId);
+    const feedbackScheme = await FeedbackScheme.scope('surveys').findByPk(
+      feedbackSchemeId,
+      securableScope(userId)
+    );
     if (!feedbackScheme) throw new NotFoundError();
 
-    if (feedbackScheme.surveys?.length)
+    const hasAccess = await aclService.canAccessRecord(feedbackScheme, 'delete');
+    if (!hasAccess) throw new ForbiddenError();
+
+    if (!feedbackScheme.surveys || feedbackScheme.surveys.length)
       throw new ForbiddenError(
         'Feedback scheme cannot be deleted. There are surveys using this feedback scheme.'
       );
 
     await feedbackScheme.destroy();
+
+    // TODO: delete securable records
+
     res.status(204).json();
   };
 
@@ -125,9 +184,13 @@ export default (): FeedbackSchemeController => {
 
   const copy = async (req: Request, res: Response<FeedbackSchemeEntry>): Promise<void> => {
     const { sourceId, name } = req.body;
+    const { aclService, userId } = req.scope.cradle;
 
-    const sourceFeedbackScheme = await FeedbackScheme.findByPk(sourceId);
+    const sourceFeedbackScheme = await FeedbackScheme.findByPk(sourceId, securableScope(userId));
     if (!sourceFeedbackScheme) throw new NotFoundError();
+
+    const hasAccess = await aclService.canAccessRecord(sourceFeedbackScheme, 'copy');
+    if (!hasAccess) throw new ForbiddenError();
 
     const { type, topFoods, cards, demographicGroups, henryCoefficients } = sourceFeedbackScheme;
 
@@ -138,6 +201,7 @@ export default (): FeedbackSchemeController => {
       cards,
       demographicGroups,
       henryCoefficients,
+      ownerId: userId,
     });
 
     res.json(feedbackScheme);
@@ -147,8 +211,9 @@ export default (): FeedbackSchemeController => {
     browse,
     store,
     read,
-    edit,
     update,
+    patch,
+    put,
     destroy,
     refs,
     copy,

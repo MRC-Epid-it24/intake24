@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { anyPermission, permission } from '@intake24/api/http/middleware';
+import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/images/as-served';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
@@ -10,6 +10,8 @@ export default () => {
   const { fsConfig, asServedSetController } = ioc.cradle;
   const router = Router();
   const upload = multer({ dest: fsConfig.local.uploads });
+
+  router.use(permission('as-served'));
 
   router
     .route('')
@@ -25,11 +27,7 @@ export default () => {
       wrapAsync(asServedSetController.browse)
     );
 
-  router.get(
-    '/refs',
-    anyPermission(['as-served|create', 'as-served|read', 'as-served|edit']),
-    wrapAsync(asServedSetController.refs)
-  );
+  router.get('/refs', wrapAsync(asServedSetController.refs));
 
   router
     .route('/:asServedSetId')

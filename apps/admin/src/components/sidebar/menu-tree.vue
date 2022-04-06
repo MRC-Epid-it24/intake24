@@ -47,7 +47,7 @@ export default defineComponent({
 
   computed: {
     items(): Resource[] {
-      return this.resources.filter((item) => this.can(`${item.name}|browse`));
+      return this.resources.filter((item) => this.can(item.name));
     },
   },
 });

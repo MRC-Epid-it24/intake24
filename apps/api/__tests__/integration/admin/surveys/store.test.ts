@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/surveys';
@@ -18,9 +18,9 @@ export default () => {
     await suite.sharedTests.assert401and403('post', url);
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('surveys|create');
+      await suite.util.setPermission('surveys|create');
     });
 
     it('should return 422 for missing input data', async () => {

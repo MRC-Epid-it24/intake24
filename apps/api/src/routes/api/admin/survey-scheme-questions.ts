@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { anyPermission, permission } from '@intake24/api/http/middleware';
+import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/survey-scheme-questions';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
@@ -7,6 +7,8 @@ import { wrapAsync } from '@intake24/api/util';
 export default () => {
   const { surveySchemeQuestionController } = ioc.cradle;
   const router = Router();
+
+  router.use(permission('survey-scheme-questions'));
 
   router
     .route('')
@@ -21,15 +23,7 @@ export default () => {
       wrapAsync(surveySchemeQuestionController.browse)
     );
 
-  router.get(
-    '/refs',
-    anyPermission([
-      'survey-scheme-questions|create',
-      'survey-scheme-questions|read',
-      'survey-scheme-questions|edit',
-    ]),
-    wrapAsync(surveySchemeQuestionController.refs)
-  );
+  router.get('/refs', wrapAsync(surveySchemeQuestionController.refs));
 
   router.use('/:surveySchemeQuestionId', validation.entry('surveySchemeQuestionId'));
 

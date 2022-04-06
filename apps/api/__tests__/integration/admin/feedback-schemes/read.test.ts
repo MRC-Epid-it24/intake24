@@ -1,11 +1,10 @@
-import { pick } from 'lodash';
-import request from 'supertest';
 import { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite, SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { FeedbackScheme } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/feedback-schemes';
+  const permissions = ['feedback-schemes', 'feedback-schemes|read'];
 
   let url: string;
   let invalidUrl: string;
@@ -14,22 +13,26 @@ export default () => {
   let output: FeedbackSchemeCreationAttributes;
   let scheme: FeedbackScheme;
 
+  let securable: SetSecurableOptions;
+
   beforeAll(async () => {
     input = mocker.system.feedbackScheme();
     scheme = await FeedbackScheme.create(input);
     output = { ...input };
+
+    securable = { securableId: scheme.id, securableType: 'FeedbackScheme' };
 
     url = `${baseUrl}/${scheme.id}`;
     invalidUrl = `${baseUrl}/999999`;
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('feedback-schemes|read');
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
@@ -37,13 +40,26 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .get(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
+      await suite.sharedTests.assertRecord('get', url, output);
+    });
+  });
 
-      expect(status).toBe(200);
-      expect(pick(body, Object.keys(output))).toEqual(output);
+  describe('authenticated / securables authorized', () => {
+    beforeAll(async () => {
+      await suite.util.setPermission(['feedback-schemes']);
+    });
+
+    it('should return 200 and data when securable set', async () => {
+      await suite.util.setSecurable({ ...securable, action: ['read'] });
+
+      await suite.sharedTests.assertRecord('get', url, output);
+    });
+
+    it('should return 200 and data when owner set', async () => {
+      await suite.util.setSecurable(securable);
+      await scheme.update({ ownerId: suite.data.system.user.id });
+
+      await suite.sharedTests.assertRecord('get', url, output);
     });
   });
 };

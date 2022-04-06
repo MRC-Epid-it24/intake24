@@ -2,10 +2,11 @@ import { CustomField } from '@intake24/common/types';
 import { pick, omit } from 'lodash';
 import request from 'supertest';
 import { CreateUserRequest, UpdateUserRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/users';
+  const permissions = ['acl', 'users', 'users|create'];
 
   let input: CreateUserRequest;
   let output: Omit<UpdateUserRequest, 'permissions' | 'roles'>;
@@ -19,23 +20,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('post', url);
+    await suite.sharedTests.assert401and403('post', url, { permissions });
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission('acl');
-
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission(['acl', 'users|create']);
+      await suite.util.setPermission(permissions);
     });
 
     it('should return 422 for missing input data', async () => {

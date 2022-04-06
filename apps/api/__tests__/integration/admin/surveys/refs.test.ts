@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/surveys/refs';
@@ -9,7 +9,7 @@ export default () => {
   });
 
   it('should return 200 and data', async () => {
-    await setPermission('surveys|create');
+    await suite.util.setPermission('surveys|create');
 
     const { status, body } = await request(suite.app)
       .get(url)

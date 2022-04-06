@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { CreateRespondentRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey, UserSurveyAlias } from '@intake24/db';
 import { surveyStaff } from '@intake24/common/acl';
 import { omit, pick } from 'lodash';
@@ -43,7 +43,7 @@ export default () => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await setPermission('surveys|respondents');
+    await suite.util.setPermission('surveys|respondents');
 
     const { status } = await request(suite.app)
       .get(url)
@@ -54,7 +54,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-respondents' permission (surveyadmin)`, async () => {
-    await setPermission('surveyadmin');
+    await suite.util.setPermission('surveyadmin');
 
     const { status } = await request(suite.app)
       .get(url)
@@ -65,7 +65,7 @@ export default () => {
   });
 
   it(`should return 403 when missing 'surveys-respondents' permission (surveyStaff)`, async () => {
-    await setPermission(surveyStaff(survey.id));
+    await suite.util.setPermission(surveyStaff(survey.id));
 
     const { status } = await request(suite.app)
       .get(url)
@@ -76,7 +76,7 @@ export default () => {
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
-    await setPermission(['surveys|respondents', surveyStaff(survey.id)]);
+    await suite.util.setPermission(['surveys|respondents', surveyStaff(survey.id)]);
 
     const { status } = await request(suite.app)
       .get(invalidSurveyUrl)
@@ -87,14 +87,14 @@ export default () => {
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    await setPermission(['surveys|respondents', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|respondents', 'surveyadmin']);
 
     await suite.sharedTests.assertMissingRecord('get', invalidSurveyUrl);
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission(['surveys|respondents', surveyStaff(survey.id)]);
+      await suite.util.setPermission(['surveys|respondents', surveyStaff(survey.id)]);
     });
 
     it(`should return 404 when user record doesn't exist`, async () => {

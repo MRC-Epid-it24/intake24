@@ -1,13 +1,14 @@
 import { defineStore } from 'pinia';
-import { Permission } from '@intake24/ui/types';
+import type { Permission } from '@intake24/ui/types';
 import http from '@intake24/admin/services/http.service';
-import { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
+import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
 import { useLoading } from '@intake24/ui/stores';
-import { useResource } from '.';
+import { useResource } from './resource';
 
 export interface UserState {
   status: string;
   profile: {
+    id: string;
     email: string | null;
     name: string | null;
     phone: string | null;
@@ -36,9 +37,19 @@ export const useUser = defineStore('user', {
           : permission.some((item) => this.permissions.includes(item));
       }
 
-      const { resource, action } = permission;
       const { name } = useResource();
-      return this.permissions.includes(`${resource ?? name}|${action}`);
+      const { resource = name, action, ownerId, securables = [] } = permission;
+
+      if (action) {
+        if (this.permissions.includes(`${resource}|${action}`)) return true;
+
+        if (securables.length && !!securables.find((securable) => securable.action === action))
+          return true;
+      }
+
+      if (ownerId && ownerId === this.profile?.id) return true;
+
+      return false;
     },
     async request() {
       this.status = 'loading';

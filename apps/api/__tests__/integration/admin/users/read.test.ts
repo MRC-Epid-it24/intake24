@@ -2,12 +2,13 @@ import { pick, omit } from 'lodash';
 import request from 'supertest';
 import { CustomField } from '@intake24/common/types';
 import { CreateUserRequest, UpdateUserRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { User } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 
 export default () => {
   const baseUrl = '/api/admin/users';
+  const permissions = ['acl', 'users', 'users|read'];
 
   let url: string;
   let invalidUrl: string;
@@ -26,23 +27,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
-  it('should return 403 when missing permission', async () => {
-    await setPermission('acl');
-
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
-  });
-
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission(['acl', 'users|read']);
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

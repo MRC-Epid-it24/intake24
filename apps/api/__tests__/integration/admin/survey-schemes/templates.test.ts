@@ -1,10 +1,11 @@
 import request from 'supertest';
 import { SurveySchemeCreationAttributes } from '@intake24/common/types/models';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { SurveyScheme } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/survey-schemes';
+  const permissions = ['survey-schemes', 'survey-schemes|questions'];
 
   let url: string;
   let invalidUrl: string;
@@ -21,12 +22,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('survey-schemes|edit');
+      await suite.util.setPermission(permissions);
     });
 
     it('should return 422 for invalid query input data (#1)', async () => {

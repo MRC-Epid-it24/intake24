@@ -63,7 +63,7 @@ export default ({
     } = req;
     const user = req.user as User;
 
-    if (!file) throw new ValidationError('image', 'File not found.');
+    if (!file) throw new ValidationError('File not found.', { param: 'image' });
 
     const asServedSet = await AsServedSet.findByPk(asServedSetId);
     if (!asServedSet) throw new NotFoundError();

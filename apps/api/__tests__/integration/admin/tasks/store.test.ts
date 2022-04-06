@@ -1,10 +1,11 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { TaskRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/tasks';
+  const permissions = ['tasks', 'tasks|create'];
 
   let input: TaskRequest;
   let output: TaskRequest;
@@ -15,12 +16,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('post', url);
+    await suite.sharedTests.assert401and403('post', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('tasks|create');
+      await suite.util.setPermission(permissions);
     });
 
     it('should return 422 for missing input data', async () => {

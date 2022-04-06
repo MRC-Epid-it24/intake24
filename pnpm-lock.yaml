@@ -236,6 +236,7 @@ importers:
       passport-jwt: ^4.0.0
       pg: ^8.7.3
       pg-hstore: ^2.3.4
+      pluralize: ^8.0.0
       rate-limit-redis: ^3.0.1
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
@@ -291,6 +292,7 @@ importers:
       passport-jwt: 4.0.0
       pg: 8.7.3
       pg-hstore: 2.3.4
+      pluralize: 8.0.0
       rate-limit-redis: 3.0.1_express-rate-limit@6.3.0
       reflect-metadata: 0.1.13
       sequelize: 6.17.0_8af47fe669b26ca059b1e9f15fd781e7
@@ -4706,7 +4708,7 @@ packages:
   /axios/0.26.1:
     resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
     dependencies:
-      follow-redirects: 1.14.9
+      follow-redirects: 1.14.9_debug@4.3.4
     transitivePeerDependencies:
       - debug
     dev: false
@@ -7687,6 +7689,7 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dev: true
 
   /follow-redirects/1.14.9_debug@4.3.4:
     resolution: {integrity: sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==}

@@ -92,6 +92,8 @@ type FeedbackSchemeTopFoods = {
   debouncedUpdateColorList: () => void;
 };
 
+export type FeedbackSchemeTopFoodsForm = Pick<FeedbackSchemeForm, 'topFoods'>;
+
 export default (
   Vue as VueConstructor<Vue & FeedbackSchemeTopFoods & FormMixin<FeedbackSchemeEntry>>
 ).extend({
@@ -103,15 +105,8 @@ export default (
 
   data() {
     return {
-      form: form<FeedbackSchemeForm>({
-        id: null,
-        name: null,
-        type: 'default',
-        topFoods: defaultTopFoods,
-        cards: [],
-        demographicGroups: [],
-        henryCoefficients: [],
-      }),
+      editMethod: 'patch',
+      form: form<FeedbackSchemeTopFoodsForm>({ topFoods: defaultTopFoods }),
       nonInputErrorKeys: ['topFoods.max', 'topFoods.colors', 'topFoods.nutrientTypes'],
     };
   },

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { anyPermission, permission } from '@intake24/api/http/middleware';
+import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/users';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
@@ -8,18 +8,14 @@ export default () => {
   const { adminUserController } = ioc.cradle;
   const router = Router();
 
-  router.use(permission('acl'));
+  router.use(permission(['acl', 'users']));
 
   router
     .route('')
     .post(permission('users|create'), validation.store, wrapAsync(adminUserController.store))
     .get(permission('users|browse'), validation.browse, wrapAsync(adminUserController.browse));
 
-  router.get(
-    '/refs',
-    anyPermission(['users|create', 'users|read', 'users|edit']),
-    wrapAsync(adminUserController.refs)
-  );
+  router.get('/refs', wrapAsync(adminUserController.refs));
 
   router.use('/:userId', validation.entry('userId'));
 

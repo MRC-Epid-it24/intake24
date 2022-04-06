@@ -1,27 +1,16 @@
-import request from 'supertest';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/permissions';
+  const permissions = ['acl', 'permissions', 'permissions|browse'];
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
-  });
-
-  it(`should return 403 when user doesn't have 'permissions-browse'`, async () => {
-    await setPermission('acl');
-
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
   it('should return 200 and paginated results', async () => {
-    await setPermission(['acl', 'permissions|browse']);
+    await suite.util.setPermission(permissions);
 
-    await suite.sharedTests.assertPaginatedResult('get', url, false);
+    await suite.sharedTests.assertPaginatedResult('get', url, { result: true });
   });
 };

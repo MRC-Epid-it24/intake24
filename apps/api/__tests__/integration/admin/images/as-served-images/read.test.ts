@@ -1,12 +1,13 @@
 import fs from 'fs-extra';
 import { pick } from 'lodash';
 import request from 'supertest';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 import { AsServedImageEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/images/as-served/asServedSetForImages/images';
   const invalidBaseUrl = '/api/admin/images/as-served/InvalidAsServedSetForImages/images';
+  const permissions = ['as-served', 'as-served|read'];
 
   const fileName = 'asServedImage_002.jpg';
   const weight = 10;
@@ -32,12 +33,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('as-served|read');
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when parent record doesn't exist`, async () => {

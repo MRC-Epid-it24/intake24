@@ -1,4 +1,6 @@
 import {
+  BelongsTo,
+  BelongsToMany,
   Column,
   DataType,
   HasMany,
@@ -8,7 +10,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { Meal } from '@intake24/common/types';
-import {
+import type {
   SurveySchemeAttributes,
   SurveySchemeCreationAttributes,
   ExportSection,
@@ -20,8 +22,8 @@ import {
   RecallQuestions,
   SchemeType,
 } from '@intake24/common/schemes';
-import BaseModel from '../model';
-import { Survey } from '.';
+import { BaseModel, Securable } from '..';
+import { Survey, User, UserSecurable } from '.';
 
 @Scopes(() => ({
   list: { attributes: ['id', 'name'] },
@@ -35,7 +37,7 @@ import { Survey } from '.';
 })
 export default class SurveyScheme
   extends BaseModel<SurveySchemeAttributes, SurveySchemeCreationAttributes>
-  implements SurveySchemeAttributes
+  implements SurveySchemeAttributes, Securable
 {
   @Column({
     autoIncrement: true,
@@ -99,6 +101,12 @@ export default class SurveyScheme
     this.setDataValue('dataExport', JSON.stringify(value ?? defaultExport));
   }
 
+  @Column({
+    allowNull: true,
+    type: DataType.BIGINT,
+  })
+  public ownerId!: string | null;
+
   @CreatedAt
   @Column
   public readonly createdAt!: Date;
@@ -107,6 +115,30 @@ export default class SurveyScheme
   @Column
   public readonly updatedAt!: Date;
 
+  @BelongsTo(() => User, 'ownerId')
+  public owner?: User | null;
+
   @HasMany(() => Survey, 'surveySchemeId')
   public surveys?: Survey[];
+
+  @BelongsToMany(() => User, {
+    through: {
+      model: () => UserSecurable,
+      unique: false,
+      scope: {
+        securable_type: 'SurveyScheme',
+      },
+    },
+    foreignKey: 'securableId',
+    otherKey: 'userId',
+    constraints: false,
+  })
+  public securableUsers?: User[];
+
+  @HasMany(() => UserSecurable, {
+    foreignKey: 'securableId',
+    constraints: false,
+    scope: { securable_type: 'SurveyScheme' },
+  })
+  public securables?: UserSecurable[];
 }

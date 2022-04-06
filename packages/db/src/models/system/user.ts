@@ -14,6 +14,7 @@ import { UserAttributes, UserCreationAttributes } from '@intake24/common/types/m
 import BaseModel from '../model';
 import {
   ClientErrorReport,
+  FeedbackScheme,
   Job,
   Permission,
   PermissionUser,
@@ -21,11 +22,13 @@ import {
   Role,
   RoleUser,
   SignInLog,
+  SurveyScheme,
   SurveySubmission,
   UserCustomField,
   UserPassword,
   UserPasswordReset,
   UserPhysicalData,
+  UserSecurable,
   UserSession,
   UserSubscription,
   UserSurveyAlias,
@@ -164,6 +167,28 @@ export default class User
 
   @HasMany(() => RefreshToken, 'userId')
   public tokens?: RefreshToken[];
+
+  @BelongsToMany(() => FeedbackScheme, {
+    through: {
+      model: () => UserSecurable,
+      unique: false,
+    },
+    foreignKey: 'userId',
+    otherKey: 'securableId',
+    constraints: false,
+  })
+  public feedbackSchemes?: FeedbackScheme[];
+
+  @BelongsToMany(() => SurveyScheme, {
+    through: {
+      model: () => UserSecurable,
+      unique: false,
+    },
+    foreignKey: 'userId',
+    otherKey: 'securableId',
+    constraints: false,
+  })
+  public surveySchemes?: SurveyScheme[];
 
   public allRoles(): Role[] {
     return uniqBy(this.roles, 'name');

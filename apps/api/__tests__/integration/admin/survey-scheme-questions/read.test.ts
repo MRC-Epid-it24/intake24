@@ -1,11 +1,12 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { SurveySchemeQuestionCreationAttributes } from '@intake24/common/types/models';
-import { mocker, suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { SurveySchemeQuestion } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/survey-scheme-questions';
+  const permissions = ['survey-scheme-questions', 'survey-scheme-questions|read'];
 
   let url: string;
   let invalidUrl: string;
@@ -24,12 +25,12 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
-  describe('authenticated / authorized', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await setPermission('survey-scheme-questions|read');
+      await suite.util.setPermission(permissions);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

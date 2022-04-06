@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { suite, setPermission } from '@intake24/api-tests/integration/helpers';
+import { suite } from '@intake24/api-tests/integration/helpers';
 import { Job } from '@intake24/db';
 
 export default () => {
@@ -27,14 +27,14 @@ export default () => {
       .send(input);
 
     // Test user job
-    await setPermission(['surveys|data-export', 'surveyadmin']);
+    await suite.util.setPermission(['surveys|data-export', 'surveyadmin']);
     await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user)
       .send(input);
 
-    await setPermission([]);
+    await suite.util.setPermission([]);
 
     const { status, body } = await request(suite.app)
       .get(url)
