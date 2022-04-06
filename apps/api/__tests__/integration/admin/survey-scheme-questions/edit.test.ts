@@ -1,5 +1,3 @@
-import { pick } from 'lodash';
-import request from 'supertest';
 import { SurveySchemeQuestionCreationAttributes } from '@intake24/common/types/models';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { SurveySchemeQuestion } from '@intake24/db';
@@ -38,13 +36,7 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .get(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(200);
-      expect(pick(body, Object.keys(output))).toEqual(output);
+      await suite.sharedTests.assertRecord('get', url, output);
     });
   });
 };

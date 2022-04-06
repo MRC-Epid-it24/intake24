@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import request from 'supertest';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
@@ -74,24 +73,12 @@ export default () => {
   it('should return 200 and data/refs (surveyadmin)', async () => {
     await suite.util.setPermission(['surveys|read', 'surveyadmin']);
 
-    const { status, body } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(200);
-    expect(pick(body, Object.keys(output))).toEqual(output);
+    await suite.sharedTests.assertRecord('get', url, output);
   });
 
   it('should return 200 and data/refs (surveyStaff)', async () => {
     await suite.util.setPermission(['surveys|read', surveyStaff(survey.id)]);
 
-    const { status, body } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(200);
-    expect(pick(body, Object.keys(output))).toEqual(output);
+    await suite.sharedTests.assertRecord('get', url, output);
   });
 };

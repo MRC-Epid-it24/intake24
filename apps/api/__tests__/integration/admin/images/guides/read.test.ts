@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import { GuideImageEntry } from '@intake24/common/types/http/admin';
@@ -42,13 +41,7 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .get(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(200);
-      expect(pick(body, Object.keys(output))).toEqual(output);
+      await suite.sharedTests.assertRecord('get', url, output);
     });
   });
 };

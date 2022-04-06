@@ -46,13 +46,7 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .get(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(200);
-      expect(pick(body, Object.keys(job))).toEqual(job);
+      await suite.sharedTests.assertRecord('get', url, job);
     });
   });
 };

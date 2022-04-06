@@ -128,7 +128,11 @@ const sharedTests = (suite: typeof Suite) => {
     const { body, status } = await call.send();
 
     expect(status).toBe(200);
-    expect(pick(body, Object.keys(output))).toEqual(output);
+
+    if (typeof output === 'boolean') {
+      if (output) expect(body).not.toBeEmpty();
+      else expect(body).toBeEmpty();
+    } else expect(pick(body, Object.keys(output))).toEqual(output);
   };
 
   const assertRecordUpdated = async (method: Method, url: string, data: any, ops?: Options) => {
