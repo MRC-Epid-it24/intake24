@@ -240,7 +240,7 @@ importers:
       rate-limit-redis: ^3.0.1
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
-      sequelize: ^6.17.0
+      sequelize: ^6.18.0
       sequelize-typescript: ^2.1.3
       sharp: ^0.30.3
       slugify: ^1.6.5
@@ -295,8 +295,8 @@ importers:
       pluralize: 8.0.0
       rate-limit-redis: 3.0.1_express-rate-limit@6.3.0
       reflect-metadata: 0.1.13
-      sequelize: 6.17.0_8af47fe669b26ca059b1e9f15fd781e7
-      sequelize-typescript: 2.1.3_d89d1c790ea5a8893a066e55d840d190
+      sequelize: 6.18.0_8af47fe669b26ca059b1e9f15fd781e7
+      sequelize-typescript: 2.1.3_eca2c9379dc20019e46e316b0288aad5
       sharp: 0.30.3
       slugify: 1.6.5
       validator: 13.7.0
@@ -552,7 +552,7 @@ importers:
       pg: ^8.7.3
       pg-hstore: ^2.3.4
       reflect-metadata: ^0.1.13
-      sequelize: ^6.17.0
+      sequelize: ^6.18.0
       sequelize-cli: ^6.4.1
       sequelize-typescript: ^2.1.3
     dependencies:
@@ -564,8 +564,8 @@ importers:
       pg: 8.7.3
       pg-hstore: 2.3.4
       reflect-metadata: 0.1.13
-      sequelize: 6.17.0_8af47fe669b26ca059b1e9f15fd781e7
-      sequelize-typescript: 2.1.3_d89d1c790ea5a8893a066e55d840d190
+      sequelize: 6.18.0_8af47fe669b26ca059b1e9f15fd781e7
+      sequelize-typescript: 2.1.3_eca2c9379dc20019e46e316b0288aad5
     devDependencies:
       '@types/lodash': 4.14.181
       '@types/pg': 8.6.5
@@ -12807,7 +12807,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     dev: false
 
-  /sequelize-typescript/2.1.3_d89d1c790ea5a8893a066e55d840d190:
+  /sequelize-typescript/2.1.3_eca2c9379dc20019e46e316b0288aad5:
     resolution: {integrity: sha512-0mejGAaLywuCoOOLSXCQs2sMBNudU/QtWZkGY5VT2dfTHToXZi5bOxCa3/CukNNk7wJwXnLuIdeHdlqjvVoj1g==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
@@ -12820,11 +12820,11 @@ packages:
       '@types/validator': 13.7.2
       glob: 7.2.0
       reflect-metadata: 0.1.13
-      sequelize: 6.17.0_8af47fe669b26ca059b1e9f15fd781e7
+      sequelize: 6.18.0_8af47fe669b26ca059b1e9f15fd781e7
     dev: false
 
-  /sequelize/6.17.0_8af47fe669b26ca059b1e9f15fd781e7:
-    resolution: {integrity: sha512-AZus+0YZDq91Zg0hzDaO5atTzHgJruI23V8nBlAhkLuI81Z53nSRdAe/4R1A6vGOZ/RfCLP9idF4tfQnoAsM5A==}
+  /sequelize/6.18.0_8af47fe669b26ca059b1e9f15fd781e7:
+    resolution: {integrity: sha512-x8TW8ovqG8ljZq0Uow1mtMq44hSKPefWEC590R9IWgF2dajEHvKJJpXo1FiRPfj6spOHWOnmOs1Xbb1JPG3Ifg==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       ibm_db: '*'
