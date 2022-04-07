@@ -131,7 +131,9 @@ export default () => {
     });
 
     it(`should return 404 when user record doesn't exist`, async () => {
-      await suite.sharedTests.assertMissingRecord('patch', invalidRespondentUrl, updateInput);
+      await suite.sharedTests.assertMissingRecord('patch', invalidRespondentUrl, {
+        input: updateInput,
+      });
     });
 
     it('should return 200 and data', async () => {

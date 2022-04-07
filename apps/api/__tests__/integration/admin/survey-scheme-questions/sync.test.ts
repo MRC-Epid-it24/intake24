@@ -82,39 +82,29 @@ export default () => {
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
-      await suite.sharedTests.assertMissingRecord('post', invalidUrl, syncInput);
+      await suite.sharedTests.assertMissingRecord('post', invalidUrl, { input: syncInput });
     });
 
     it(`should return 404 when scheme record doesn't exist`, async () => {
       await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
-        ...syncInput,
-        surveySchemeId: '987654',
+        input: { ...syncInput, surveySchemeId: '987654' },
       });
     });
 
     it(`should return 404 when question is not in correct section`, async () => {
       await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
-        ...syncInput,
-        section: 'postMeals',
+        input: { ...syncInput, section: 'postMeals' },
       });
     });
 
     it(`should return 404 when question ID is not found in scheme questions set`, async () => {
       await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
-        ...syncInput,
-        question: { ...syncInput.question, id: 'invalidQuestionId' },
+        input: { ...syncInput, question: { ...syncInput.question, id: 'invalidQuestionId' } },
       });
     });
 
     it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(syncInput);
-
-      expect(status).toBe(200);
-      expect(body).toBeEmpty();
+      await suite.sharedTests.assertAcknowledged('post', url, { input: syncInput });
     });
   });
 };

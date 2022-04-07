@@ -87,7 +87,7 @@ export default () => {
   it(`should return 404 when record doesn't exist`, async () => {
     await suite.util.setPermission(['surveys|respondents', 'surveyadmin']);
 
-    await suite.sharedTests.assertMissingRecord('post', invalidSurveyUrl, input);
+    await suite.sharedTests.assertMissingRecord('post', invalidSurveyUrl, { input });
   });
 
   describe('authenticated / resource authorized', () => {

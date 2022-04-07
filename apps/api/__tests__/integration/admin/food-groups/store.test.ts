@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import request from 'supertest';
 import { FoodGroupCreationAttributes } from '@intake24/common/types/models';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
@@ -41,14 +40,7 @@ export default () => {
     });
 
     it('should return 201 and new resource', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(input);
-
-      expect(status).toBe(201);
-      expect(pick(body, Object.keys(output))).toEqual(output);
+      await suite.sharedTests.assertRecordInserted('post', url, output, { input });
     });
 
     it('should return 422 for duplicate name', async () => {

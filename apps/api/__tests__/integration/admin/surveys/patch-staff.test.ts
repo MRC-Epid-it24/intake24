@@ -159,14 +159,7 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .patch(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(updateInput);
-
-      expect(status).toBe(200);
-      expect(pick(body, Object.keys(output))).toEqual(output);
+      await suite.sharedTests.assertRecordUpdated('patch', url, output, { input: updateInput });
     });
   });
 };

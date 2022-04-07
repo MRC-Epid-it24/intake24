@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import request from 'supertest';
 import { JobEntry } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
@@ -44,12 +43,6 @@ export default () => {
   });
 
   it('should return 200 and data resource', async () => {
-    const { status, body } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(200);
-    expect(pick(body, Object.keys(job))).toEqual(job);
+    await suite.sharedTests.assertRecord('get', url, job);
   });
 };

@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { TaskRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Task } from '@intake24/db';
@@ -35,13 +34,7 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(200);
-      expect(body).toBeEmpty();
+      await suite.sharedTests.assertAcknowledged('post', url);
     });
   });
 };

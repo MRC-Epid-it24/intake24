@@ -63,7 +63,7 @@ export default () => {
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
-      await suite.sharedTests.assertMissingRecord('put', invalidUrl, updateInput);
+      await suite.sharedTests.assertMissingRecord('put', invalidUrl, { input: updateInput });
     });
 
     it('should return 200 and data', async () => {

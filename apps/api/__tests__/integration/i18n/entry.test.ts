@@ -27,9 +27,7 @@ export default () => {
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    await suite.sharedTests.assertMissingRecord('get', invalidUrl, undefined, {
-      bearer: undefined,
-    });
+    await suite.sharedTests.assertMissingRecord('get', invalidUrl, { bearer: undefined });
   });
 
   it('should return 200 and language record', async () => {

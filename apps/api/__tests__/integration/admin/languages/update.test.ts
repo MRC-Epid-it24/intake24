@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import request from 'supertest';
 import { LanguageCreationAttributes } from '@intake24/common/types/models';
 import { suite } from '@intake24/api-tests/integration/helpers';
@@ -82,18 +81,11 @@ export default () => {
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
-      await suite.sharedTests.assertMissingRecord('put', invalidUrl, updateInput);
+      await suite.sharedTests.assertMissingRecord('put', invalidUrl, { input: updateInput });
     });
 
     it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .put(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(updateInput);
-
-      expect(status).toBe(200);
-      expect(pick(body, Object.keys(output))).toEqual(output);
+      await suite.sharedTests.assertRecordUpdated('put', url, output, { input: updateInput });
     });
   });
 };
