@@ -131,6 +131,33 @@ Content-Type: application/json
 204 No Content
 ```
 
+## Copy survey scheme
+
+Create a new copy of specified source survey scheme
+
+### Request
+
+```http
+POST /api/admin/survey-schemes/:surveySchemeId/copy
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+    "name": string
+}
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    ...
+}
+```
+
 ## Survey scheme references
 
 Get survey scheme references
@@ -160,34 +187,6 @@ Content-Type: application/json
         ...
     ],
     "templates": PromptQuestion[]
-}
-```
-
-## Copy survey scheme
-
-Create a new copy of specified source survey scheme
-
-### Request
-
-```http
-POST /api/admin/survey-schemes/copy
-
-Authorization: Bearer {accessToken}
-Content-Type: application/json
-
-{
-    "sourceId": string,
-    "name": string
-}
-```
-
-### Response
-
-```json
-200 OK
-
-{
-    ...
 }
 ```
 

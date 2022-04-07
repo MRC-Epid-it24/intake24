@@ -133,6 +133,33 @@ Content-Type: application/json
 204 No Content
 ```
 
+## Copy feedback scheme
+
+Create a new copy of specified source feedback scheme
+
+### Request
+
+```http
+POST /api/admin/feedback-schemes/:feedbackSchemeId/copy
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+    "name": string
+}
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    ...
+}
+```
+
 ## Feedback scheme references
 
 Get feedback scheme references
@@ -169,33 +196,5 @@ Content-Type: application/json
         },
         ...
     ]
-}
-```
-
-## Copy feedback scheme
-
-Create a new copy of specified source feedback scheme
-
-### Request
-
-```http
-POST /api/admin/feedback-schemes/copy
-
-Authorization: Bearer {accessToken}
-Content-Type: application/json
-
-{
-    "sourceId": string,
-    "name": string
-}
-```
-
-### Response
-
-```json
-200 OK
-
-{
-    ...
 }
 ```
