@@ -94,7 +94,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { FoodLocalEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
-import AutoComplete from '@intake24/admin/components/forms/auto-complete.vue';
+import { AutoComplete } from '@intake24/admin/components/forms';
 import categoryOrFood from './category-or-food';
 import AttributeController from './partials/attribute-controller.vue';
 import CategoryController from './partials/category-controller.vue';

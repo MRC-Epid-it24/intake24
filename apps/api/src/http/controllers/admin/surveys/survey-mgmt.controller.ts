@@ -140,8 +140,8 @@ export default ({
       attributes: ['id', 'name', 'email'],
       where: { ...where, [Op.or]: { name: op, email: op } },
       order: [['email', 'ASC']],
-      // TODO: sequelize bug -> limit malforms (double-wrapped select) the query or find out correct syntax?
-      // limit: 10,
+      limit: 10,
+      subQuery: false,
       include: [
         {
           model: Permission,

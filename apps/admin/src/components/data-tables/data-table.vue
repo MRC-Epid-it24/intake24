@@ -47,11 +47,11 @@ import { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
 import { Dictionary } from '@intake24/common/types';
 import { Pagination, PaginationMeta } from '@intake24/common/types/models';
-import ActionBar from '@intake24/admin/components/datatable/action-bar/action-bar.vue';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import handlesLoading from '@intake24/admin/mixins/handles-loading';
 import hasResource from '@intake24/admin/mixins/has-resource';
 import { useResource } from '@intake24/admin/stores';
+import ActionBar from './action-bar/action-bar.vue';
 import DataTableFilter from './data-table-filter.vue';
 
 type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof hasResource>;

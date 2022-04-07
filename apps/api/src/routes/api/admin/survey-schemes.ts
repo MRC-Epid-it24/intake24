@@ -3,6 +3,7 @@ import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/survey-schemes';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
+import securables from './securables';
 
 export default () => {
   const { surveySchemeController } = ioc.cradle;
@@ -42,6 +43,8 @@ export default () => {
     wrapAsync(surveySchemeController.templates)
   );
   router.get('/:surveySchemeId/data-export', wrapAsync(surveySchemeController.dataExportRefs));
+
+  router.use('/:surveySchemeId/securables', securables(surveySchemeController.securables));
 
   return router;
 };

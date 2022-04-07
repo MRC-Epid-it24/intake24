@@ -33,3 +33,9 @@ export const foodDatabaseMaintainer = (localeId: string): string =>
 export const foodDatabasePermissions = (localeId: string): string[] => [
   foodDatabaseMaintainer(localeId),
 ];
+
+export const securableTypes = ['FeedbackScheme', 'SurveyScheme'] as const;
+
+export type SecurableType = typeof securableTypes[number];
+
+export const isSecurableType = (type: any): type is SecurableType => securableTypes.includes(type);

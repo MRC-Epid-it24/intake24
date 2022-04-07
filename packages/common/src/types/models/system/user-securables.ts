@@ -1,4 +1,4 @@
-export type SecurableType = 'FeedbackScheme' | 'SurveyScheme';
+import { SecurableType } from '../../../acl';
 
 export type UserSecurableAttributes = {
   userId: string;

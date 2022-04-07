@@ -1,4 +1,5 @@
 import { LocaleMessageObject } from 'vue-i18n';
+import securables from './securables';
 
 const surveySchemes: LocaleMessageObject = {
   _: 'Survey scheme',
@@ -321,6 +322,8 @@ const surveySchemes: LocaleMessageObject = {
       subtitle: 'Use the "standard portion" method to estimate the portion size',
     },
   },
+
+  securables,
 };
 
 export default surveySchemes;

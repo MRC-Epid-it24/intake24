@@ -8,6 +8,7 @@ import {
   Op,
   PhysicalActivityLevel,
   securableScope,
+  PaginateOptions,
 } from '@intake24/db';
 import type {
   FeedbackSchemeEntry,
@@ -21,33 +22,54 @@ import {
 } from '@intake24/common/types/models';
 import { kebabCase } from '@intake24/common/util';
 import type { Controller, CrudActions } from '../controller';
+import securableController, { SecurableController } from './securable.controller';
 
-export type FeedbackSchemeController = Controller<
-  Exclude<CrudActions, 'edit'> | 'patch' | 'put' | 'copy'
->;
+export interface FeedbackSchemeController
+  extends Controller<Exclude<CrudActions, 'edit'> | 'patch' | 'put' | 'copy'> {
+  securables: SecurableController;
+}
 
 export default (): FeedbackSchemeController => {
+  const getAndCheckAccess = async (
+    req: Request<{ feedbackSchemeId: string }>,
+    action: string,
+    scope?: string
+  ): Promise<FeedbackScheme> => {
+    const { feedbackSchemeId } = req.params;
+    const { aclService, userId } = req.scope.cradle;
+
+    const feedbackScheme = await FeedbackScheme.scope(scope).findByPk(
+      feedbackSchemeId,
+      securableScope(userId)
+    );
+    if (!feedbackScheme) throw new NotFoundError();
+
+    const hasAccess = await aclService.canAccessRecord(feedbackScheme, action);
+    if (!hasAccess) throw new ForbiddenError();
+
+    return feedbackScheme;
+  };
+
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<FeedbackSchemesResponse>
   ): Promise<void> => {
     const { aclService, userId } = req.scope.cradle;
 
-    if (await aclService.hasPermission('feedback-schemes|browse')) {
-      const feedbackSchemes = await FeedbackScheme.paginate({
-        query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-        columns: ['name'],
-        order: [['name', 'ASC']],
-      });
+    const paginateOptions: PaginateOptions = {
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name'],
+      order: [['name', 'ASC']],
+    };
 
+    if (await aclService.hasPermission('feedback-schemes|browse')) {
+      const feedbackSchemes = await FeedbackScheme.paginate(paginateOptions);
       res.json(feedbackSchemes);
       return;
     }
 
     const feedbackSchemes = await FeedbackScheme.paginate({
-      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['name'],
-      order: [['name', 'ASC']],
+      ...paginateOptions,
       where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
       ...securableScope(userId),
       subQuery: false,
@@ -74,14 +96,7 @@ export default (): FeedbackSchemeController => {
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
-    const { feedbackSchemeId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
-
-    const feedbackScheme = await FeedbackScheme.findByPk(feedbackSchemeId, securableScope(userId));
-    if (!feedbackScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(feedbackScheme, 'read');
-    if (!hasAccess) throw new ForbiddenError();
+    const feedbackScheme = await getAndCheckAccess(req, 'read');
 
     res.json(feedbackScheme);
   };
@@ -90,14 +105,7 @@ export default (): FeedbackSchemeController => {
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
-    const { feedbackSchemeId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
-
-    const feedbackScheme = await FeedbackScheme.findByPk(feedbackSchemeId, securableScope(userId));
-    if (!feedbackScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(feedbackScheme, 'edit');
-    if (!hasAccess) throw new ForbiddenError();
+    const feedbackScheme = await getAndCheckAccess(req, 'edit');
 
     await feedbackScheme.update(pick(req.body, updateFeedbackSchemeFields));
 
@@ -108,15 +116,9 @@ export default (): FeedbackSchemeController => {
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
-    const { feedbackSchemeId } = req.params;
     const { aclService, userId } = req.scope.cradle;
 
-    const feedbackScheme = await FeedbackScheme.findByPk(feedbackSchemeId, securableScope(userId));
-    if (!feedbackScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(feedbackScheme, 'edit');
-    if (!hasAccess) throw new ForbiddenError();
-
+    const feedbackScheme = await getAndCheckAccess(req, 'edit');
     const keysToUpdate: string[] = [];
 
     if (feedbackScheme.ownerId === userId) {
@@ -148,17 +150,7 @@ export default (): FeedbackSchemeController => {
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { feedbackSchemeId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
-
-    const feedbackScheme = await FeedbackScheme.scope('surveys').findByPk(
-      feedbackSchemeId,
-      securableScope(userId)
-    );
-    if (!feedbackScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(feedbackScheme, 'delete');
-    if (!hasAccess) throw new ForbiddenError();
+    const feedbackScheme = await getAndCheckAccess(req, 'delete', 'surveys');
 
     if (!feedbackScheme.surveys || feedbackScheme.surveys.length)
       throw new ForbiddenError(
@@ -217,5 +209,6 @@ export default (): FeedbackSchemeController => {
     destroy,
     refs,
     copy,
+    securables: securableController(FeedbackScheme),
   };
 };

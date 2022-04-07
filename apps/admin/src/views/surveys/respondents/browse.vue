@@ -1,6 +1,6 @@
 <template>
   <layout v-bind="{ id, entry }" v-if="entryLoaded">
-    <data-table
+    <embedded-data-table
       :headers="headers"
       :api="`admin/surveys/${id}/respondents`"
       ref="table"
@@ -143,7 +143,7 @@
           {{ $t('common.action.confirm.delete', { name: item.userName }) }}
         </confirm-dialog>
       </template>
-    </data-table>
+    </embedded-data-table>
   </layout>
 </template>
 
@@ -157,13 +157,13 @@ import { ConfirmDialog } from '@intake24/ui';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import { form } from '@intake24/admin/helpers';
 import { EntryMixin } from '@intake24/admin/types';
-import DataTable from '../data-table.vue';
+import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import RespondentsUpload from './respondents-upload.vue';
 import RespondentsAuthUrlExport from './respondents-auth-url-export.vue';
 
 export type RespondentsRefs = {
   $refs: {
-    table: InstanceType<typeof DataTable>;
+    table: InstanceType<typeof EmbeddedDataTable>;
   };
 };
 
@@ -180,7 +180,7 @@ export type SurveyRespondentsForm = {
 export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).extend({
   name: 'SurveyRespondents',
 
-  components: { ConfirmDialog, DataTable, RespondentsAuthUrlExport, RespondentsUpload },
+  components: { ConfirmDialog, EmbeddedDataTable, RespondentsAuthUrlExport, RespondentsUpload },
 
   mixins: [detailMixin],
 

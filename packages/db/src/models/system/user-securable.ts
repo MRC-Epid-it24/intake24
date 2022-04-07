@@ -1,6 +1,6 @@
 import { Column, DataType, ForeignKey, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { SecurableType } from '@intake24/common/acl';
 import {
-  SecurableType,
   UserSecurableAttributes,
   UserSecurableCreationAttributes,
 } from '@intake24/common/types/models';

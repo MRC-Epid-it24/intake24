@@ -179,6 +179,12 @@ export default class User
   })
   public feedbackSchemes?: FeedbackScheme[];
 
+  @HasMany(() => UserSecurable, {
+    foreignKey: 'userId',
+    constraints: false,
+  })
+  public securables?: UserSecurable[];
+
   @BelongsToMany(() => SurveyScheme, {
     through: {
       model: () => UserSecurable,

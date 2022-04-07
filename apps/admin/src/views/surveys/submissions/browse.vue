@@ -1,6 +1,6 @@
 <template>
   <layout v-bind="{ id, entry }" v-if="entryLoaded">
-    <data-table :headers="headers" :api="baseAPI" ref="table">
+    <embedded-data-table :headers="headers" :api="baseAPI" ref="table">
       <template v-slot:[`item.startTime`]="{ item }">
         {{ formatDate(item.startTime) }}
       </template>
@@ -21,7 +21,7 @@
           {{ $t('common.action.confirm.delete', { name: item.id }) }}
         </confirm-dialog>
       </template>
-    </data-table>
+    </embedded-data-table>
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card tile>
         <v-toolbar dark color="primary">
@@ -47,18 +47,18 @@ import { ConfirmDialog } from '@intake24/ui';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import { EntryMixin } from '@intake24/admin/types';
 import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
-import DataTable from '../data-table.vue';
+import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 
 export type SurveySubmissionsRefs = {
   $refs: {
-    table: InstanceType<typeof DataTable>;
+    table: InstanceType<typeof EmbeddedDataTable>;
   };
 };
 
 export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>).extend({
   name: 'SurveySubmissions',
 
-  components: { ConfirmDialog, DataTable },
+  components: { ConfirmDialog, EmbeddedDataTable },
 
   mixins: [detailMixin, FormatsDateTime],
 

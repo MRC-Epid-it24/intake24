@@ -78,7 +78,7 @@ import { ConfirmDialog } from '@intake24/ui';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import handlesLoading from '@intake24/admin/mixins/handles-loading';
 import hasResource from '@intake24/admin/mixins/has-resource';
-import DataTableFilter from '@intake24/admin/components/datatable/data-table-filter.vue';
+import { DataTableFilter } from '@intake24/admin/components/data-tables';
 import { useResource } from '@intake24/admin/stores';
 
 type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof hasResource>;

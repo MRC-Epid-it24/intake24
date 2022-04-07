@@ -53,7 +53,14 @@ const resources: Resource[] = [
     api: 'admin/feedback-schemes',
     securable: true,
     generateRoutes: true,
-    routes: [...routes, 'top-foods', 'cards', 'demographic-groups', 'henry-coefficients'],
+    routes: [
+      ...routes,
+      'top-foods',
+      'cards',
+      'demographic-groups',
+      'henry-coefficients',
+      'securables',
+    ],
   },
   {
     group: 'surveyMgmt',
@@ -62,7 +69,7 @@ const resources: Resource[] = [
     api: 'admin/survey-schemes',
     securable: true,
     generateRoutes: true,
-    routes: [...routes, 'questions', 'data-export'],
+    routes: [...routes, 'questions', 'data-export', 'securables'],
   },
   {
     group: 'surveyMgmt',

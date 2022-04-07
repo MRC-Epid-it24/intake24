@@ -8,6 +8,7 @@ import {
   SurveySchemeQuestion,
   PaginateQuery,
   securableScope,
+  PaginateOptions,
 } from '@intake24/db';
 import type {
   SurveySchemeEntry,
@@ -26,33 +27,56 @@ import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/ht
 import type { PromptQuestion } from '@intake24/common/prompts';
 import { kebabCase } from '@intake24/common/util';
 import type { Controller, CrudActions } from '../controller';
+import securableController, { SecurableController } from './securable.controller';
 
-export type SurveySchemeController = Controller<
-  Exclude<CrudActions, 'edit'> | 'patch' | 'put' | 'copy' | 'templates' | 'dataExportRefs'
->;
+export interface SurveySchemeController
+  extends Controller<
+    Exclude<CrudActions, 'edit'> | 'patch' | 'put' | 'copy' | 'templates' | 'dataExportRefs'
+  > {
+  securables: SecurableController;
+}
 
 export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySchemeController => {
+  const getAndCheckAccess = async (
+    req: Request<{ surveySchemeId: string }>,
+    action: string,
+    scope?: string
+  ): Promise<SurveyScheme> => {
+    const { surveySchemeId } = req.params;
+    const { aclService, userId } = req.scope.cradle;
+
+    const surveyScheme = await SurveyScheme.scope(scope).findByPk(
+      surveySchemeId,
+      securableScope(userId)
+    );
+    if (!surveyScheme) throw new NotFoundError();
+
+    const hasAccess = await aclService.canAccessRecord(surveyScheme, action);
+    if (!hasAccess) throw new ForbiddenError();
+
+    return surveyScheme;
+  };
+
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveySchemesResponse>
   ): Promise<void> => {
     const { aclService, userId } = req.scope.cradle;
 
-    if (await aclService.hasPermission('survey-schemes|browse')) {
-      const surveySchemes = await SurveyScheme.paginate({
-        query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-        columns: ['name'],
-        order: [['name', 'ASC']],
-      });
+    const paginateOptions: PaginateOptions = {
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name'],
+      order: [['name', 'ASC']],
+    };
 
+    if (await aclService.hasPermission('survey-schemes|browse')) {
+      const surveySchemes = await SurveyScheme.paginate(paginateOptions);
       res.json(surveySchemes);
       return;
     }
 
     const surveySchemes = await SurveyScheme.paginate({
-      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['name'],
-      order: [['name', 'ASC']],
+      ...paginateOptions,
       where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
       ...securableScope(userId),
       subQuery: false,
@@ -79,14 +103,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     req: Request<{ surveySchemeId: string }>,
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
-    const { surveySchemeId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
-
-    const surveyScheme = await SurveyScheme.findByPk(surveySchemeId, securableScope(userId));
-    if (!surveyScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(surveyScheme, 'read');
-    if (!hasAccess) throw new ForbiddenError();
+    const surveyScheme = await getAndCheckAccess(req, 'read');
 
     res.json(surveyScheme);
   };
@@ -95,14 +112,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     req: Request<{ surveySchemeId: string }>,
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
-    const { surveySchemeId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
-
-    const surveyScheme = await SurveyScheme.findByPk(surveySchemeId, securableScope(userId));
-    if (!surveyScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(surveyScheme, 'edit');
-    if (!hasAccess) throw new ForbiddenError();
+    const surveyScheme = await getAndCheckAccess(req, 'edit');
 
     await surveyScheme.update(pick(req.body, updateSurveySchemeFields));
 
@@ -113,15 +123,9 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     req: Request<{ surveySchemeId: string }>,
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
-    const { surveySchemeId } = req.params;
     const { aclService, userId } = req.scope.cradle;
 
-    const surveyScheme = await SurveyScheme.findByPk(surveySchemeId, securableScope(userId));
-    if (!surveyScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(surveyScheme, 'edit');
-    if (!hasAccess) throw new ForbiddenError();
-
+    const surveyScheme = await getAndCheckAccess(req, 'edit');
     const keysToUpdate: string[] = [];
 
     if (surveyScheme.ownerId === userId) {
@@ -153,17 +157,7 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     req: Request<{ surveySchemeId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { surveySchemeId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
-
-    const surveyScheme = await SurveyScheme.scope('surveys').findByPk(
-      surveySchemeId,
-      securableScope(userId)
-    );
-    if (!surveyScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(surveyScheme, 'delete');
-    if (!hasAccess) throw new ForbiddenError();
+    const surveyScheme = await getAndCheckAccess(req, 'delete', 'surveys');
 
     if (!surveyScheme.surveys || surveyScheme.surveys.length)
       throw new ForbiddenError('Scheme cannot be deleted. There are surveys using this scheme.');
@@ -270,5 +264,6 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     copy,
     templates,
     dataExportRefs,
+    securables: securableController(SurveyScheme),
   };
 };

@@ -5,6 +5,7 @@ import cards from './cards';
 import topFoods from './top-foods';
 import demographicGroups from './demographic-groups';
 import henryCoefficients from './henry-coefficients';
+import securables from './securables';
 
 export default {
   browse,
@@ -15,4 +16,5 @@ export default {
   'top-foods': topFoods,
   'demographic-groups': demographicGroups,
   'henry-coefficients': henryCoefficients,
+  securables,
 };

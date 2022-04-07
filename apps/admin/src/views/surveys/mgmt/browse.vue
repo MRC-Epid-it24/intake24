@@ -1,6 +1,6 @@
 <template>
   <layout v-bind="{ id, entry }" v-if="entryLoaded">
-    <data-table :headers="headers" :api="`admin/surveys/${id}/mgmt`" ref="table">
+    <embedded-data-table :headers="headers" :api="`admin/surveys/${id}/mgmt`" ref="table">
       <template v-slot:header-add>
         <v-dialog v-model="dialog" max-width="600px">
           <template v-slot:activator="{ on, attrs }">
@@ -159,7 +159,7 @@
           <v-icon dark>$edit</v-icon>
         </v-btn>
       </template>
-    </data-table>
+    </embedded-data-table>
   </layout>
 </template>
 
@@ -174,8 +174,8 @@ import {
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import { form } from '@intake24/admin/helpers';
 import { EntryMixin } from '@intake24/admin/types';
-import AutoComplete from '@intake24/admin/components/forms/auto-complete.vue';
-import DataTable from '../data-table.vue';
+import { AutoComplete } from '@intake24/admin/components/forms';
+import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 
 type SurveyMgmtForm = {
   userId: string | null;
@@ -188,14 +188,14 @@ type SurveyMgmtForm = {
 type SurveyMgmt = {
   debouncedFetchUsers: () => void;
   $refs: {
-    table: InstanceType<typeof DataTable>;
+    table: InstanceType<typeof EmbeddedDataTable>;
   };
 };
 
 export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmt>).extend({
   name: 'SurveyMgmt',
 
-  components: { AutoComplete, DataTable },
+  components: { AutoComplete, EmbeddedDataTable },
 
   mixins: [detailMixin],
 

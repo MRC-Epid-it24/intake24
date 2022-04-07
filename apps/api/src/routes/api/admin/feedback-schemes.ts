@@ -3,6 +3,7 @@ import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/feedback-schemes';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
+import securables from './securables';
 
 export default () => {
   const { feedbackSchemeController } = ioc.cradle;
@@ -35,6 +36,8 @@ export default () => {
     .get(wrapAsync(feedbackSchemeController.read))
     .patch(validation.patch, wrapAsync(feedbackSchemeController.patch))
     .delete(wrapAsync(feedbackSchemeController.destroy));
+
+  router.use('/:feedbackSchemeId/securables', securables(feedbackSchemeController.securables));
 
   return router;
 };

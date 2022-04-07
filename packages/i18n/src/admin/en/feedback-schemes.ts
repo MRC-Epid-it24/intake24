@@ -1,4 +1,5 @@
 import { LocaleMessageObject } from 'vue-i18n';
+import securables from './securables';
 
 const feedbackSchemes: LocaleMessageObject = {
   _: 'Feedback scheme',
@@ -222,6 +223,8 @@ const feedbackSchemes: LocaleMessageObject = {
     weightCoefficient: 'Weight coefficient',
     heightCoefficient: 'Height coefficient',
   },
+
+  securables,
 };
 
 export default feedbackSchemes;

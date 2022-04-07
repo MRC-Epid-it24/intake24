@@ -15,7 +15,7 @@ export default (Vue as VueConstructor<Vue & HasEntryMixin>).extend({
   },
 
   async created() {
-    this.fetch();
+    await this.fetch();
   },
 
   methods: {

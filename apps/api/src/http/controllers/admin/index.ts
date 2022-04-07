@@ -25,6 +25,7 @@ export * from './job.controller';
 export * from './language.controller';
 export * from './locale.controller';
 export * from './nutrient-table.controller';
+export * from './securable.controller';
 export * from './survey-scheme.controller';
 export * from './survey-scheme-question.controller';
 export * from './sign-in-log.controller';
