@@ -9,6 +9,7 @@ import {
   PhysicalActivityLevel,
   securableScope,
   PaginateOptions,
+  UserSecurable,
 } from '@intake24/db';
 import type {
   FeedbackSchemeEntry,
@@ -160,15 +161,19 @@ export default (): FeedbackSchemeController => {
     res: Response<undefined>
   ): Promise<void> => {
     const feedbackScheme = await getAndCheckAccess(req, 'delete', 'surveys');
+    const { id: securableId, surveys } = feedbackScheme;
 
-    if (!feedbackScheme.surveys || feedbackScheme.surveys.length)
+    if (!surveys || surveys.length)
       throw new ForbiddenError(
         'Feedback scheme cannot be deleted. There are surveys using this feedback scheme.'
       );
 
-    await feedbackScheme.destroy();
-
-    // TODO: delete securable records
+    await Promise.all([
+      UserSecurable.destroy({
+        where: { securableId, securableType: 'FeedbackScheme' },
+      }),
+      feedbackScheme.destroy(),
+    ]);
 
     res.status(204).json();
   };

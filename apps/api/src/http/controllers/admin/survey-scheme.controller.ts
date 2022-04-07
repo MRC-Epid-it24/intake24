@@ -9,6 +9,7 @@ import {
   PaginateQuery,
   securableScope,
   PaginateOptions,
+  UserSecurable,
 } from '@intake24/db';
 import type {
   SurveySchemeEntry,
@@ -165,13 +166,17 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     res: Response<undefined>
   ): Promise<void> => {
     const surveyScheme = await getAndCheckAccess(req, 'delete', 'surveys');
+    const { id: securableId, surveys } = surveyScheme;
 
-    if (!surveyScheme.surveys || surveyScheme.surveys.length)
+    if (!surveys || surveys.length)
       throw new ForbiddenError('Scheme cannot be deleted. There are surveys using this scheme.');
 
-    await surveyScheme.destroy();
-
-    // TODO: delete securable records
+    await Promise.all([
+      UserSecurable.destroy({
+        where: { securableId, securableType: 'SurveyScheme' },
+      }),
+      surveyScheme.destroy(),
+    ]);
 
     res.status(204).json();
   };
