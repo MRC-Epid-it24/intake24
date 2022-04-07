@@ -7,6 +7,7 @@ type Method = 'get' | 'post' | 'patch' | 'put' | 'delete';
 type Options = {
   bearer?: 'superuser' | 'user' | 'respondent';
   permissions?: string[];
+  input?: any;
 };
 
 interface PaginatedOptions extends Options {
@@ -16,19 +17,23 @@ interface PaginatedOptions extends Options {
 const sharedTests = (suite: typeof Suite) => {
   const defaultOptions: Options = { bearer: 'user' };
 
-  const assertMissingAuthentication = async (method: Method, url: string) => {
-    const { status } = await request(suite.app)[method](url).set('Accept', 'application/json');
+  const assertMissingAuthentication = async (method: Method, url: string, ops?: Options) => {
+    const { input } = { ...defaultOptions, ...ops };
+
+    const call = request(suite.app)[method](url).set('Accept', 'application/json');
+
+    const { status } = await call.send(input);
 
     expect(status).toBe(401);
   };
 
   const assertMissingAuthorization = async (method: Method, url: string, ops?: Options) => {
-    const { bearer } = { ...defaultOptions, ...ops };
+    const { bearer, input } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
 
-    const { status } = await call.send();
+    const { status } = await call.send(input);
 
     expect(status).toBe(403);
   };

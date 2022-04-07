@@ -22,13 +22,6 @@ export default () => {
 
   router.get('/refs', wrapAsync(feedbackSchemeController.refs));
 
-  router.post(
-    '/copy',
-    permission('feedback-schemes|copy'),
-    validation.copy,
-    wrapAsync(feedbackSchemeController.copy)
-  );
-
   router.use('/:feedbackSchemeId', validation.entry('feedbackSchemeId'));
 
   router
@@ -36,6 +29,9 @@ export default () => {
     .get(wrapAsync(feedbackSchemeController.read))
     .patch(validation.patch, wrapAsync(feedbackSchemeController.patch))
     .delete(wrapAsync(feedbackSchemeController.destroy));
+
+  router.get('/:feedbackSchemeId/edit', wrapAsync(feedbackSchemeController.edit));
+  router.post('/:feedbackSchemeId/copy', validation.copy, wrapAsync(feedbackSchemeController.copy));
 
   router.use('/:feedbackSchemeId/securables', securables(feedbackSchemeController.securables));
 

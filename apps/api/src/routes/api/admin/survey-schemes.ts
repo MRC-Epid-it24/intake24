@@ -22,13 +22,6 @@ export default () => {
 
   router.get('/refs', wrapAsync(surveySchemeController.refs));
 
-  router.post(
-    '/copy',
-    permission('survey-schemes|copy'),
-    validation.copy,
-    wrapAsync(surveySchemeController.copy)
-  );
-
   router.use('/:surveySchemeId', validation.entry('surveySchemeId'));
 
   router
@@ -37,6 +30,8 @@ export default () => {
     .patch(validation.patch, wrapAsync(surveySchemeController.patch))
     .delete(wrapAsync(surveySchemeController.destroy));
 
+  router.get('/:surveySchemeId/edit', wrapAsync(surveySchemeController.edit));
+  router.post('/:surveySchemeId/copy', validation.copy, wrapAsync(surveySchemeController.copy));
   router.get(
     '/:surveySchemeId/templates',
     validation.templates,

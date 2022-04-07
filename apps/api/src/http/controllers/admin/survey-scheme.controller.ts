@@ -30,9 +30,7 @@ import type { Controller, CrudActions } from '../controller';
 import securableController, { SecurableController } from './securable.controller';
 
 export interface SurveySchemeController
-  extends Controller<
-    Exclude<CrudActions, 'edit'> | 'patch' | 'put' | 'copy' | 'templates' | 'dataExportRefs'
-  > {
+  extends Controller<CrudActions | 'patch' | 'put' | 'copy' | 'templates' | 'dataExportRefs'> {
   securables: SecurableController;
 }
 
@@ -108,6 +106,15 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     res.json(surveyScheme);
   };
 
+  const edit = async (
+    req: Request<{ surveySchemeId: string }>,
+    res: Response<SurveySchemeEntry>
+  ): Promise<void> => {
+    const surveyScheme = await getAndCheckAccess(req, 'edit');
+
+    res.json(surveyScheme);
+  };
+
   const update = async (
     req: Request<{ surveySchemeId: string }>,
     res: Response<SurveySchemeEntry>
@@ -169,29 +176,34 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     res.status(204).json();
   };
 
+  const copy = async (
+    req: Request<{ surveySchemeId: string }>,
+    res: Response<SurveySchemeEntry>
+  ): Promise<void> => {
+    const surveyScheme = await getAndCheckAccess(req, 'copy');
+
+    const { name } = req.body;
+    const { userId } = req.scope.cradle;
+    const { type, questions, meals, dataExport } = surveyScheme;
+
+    const surveySchemeCopy = await SurveyScheme.create({
+      name,
+      type,
+      questions,
+      meals,
+      dataExport,
+      ownerId: userId,
+    });
+
+    res.json(surveySchemeCopy);
+  };
+
   const refs = async (req: Request, res: Response<SurveySchemeRefs>): Promise<void> => {
     const languages = await Language.scope('list').findAll();
     const questions = await SurveySchemeQuestion.findAll({ attributes: ['question'] });
     const templates = questions.map((schemeQuestion) => schemeQuestion.question);
 
     res.json({ languages, templates });
-  };
-
-  const copy = async (req: Request, res: Response<SurveySchemeEntry>): Promise<void> => {
-    const { sourceId, name } = req.body;
-    const { aclService, userId } = req.scope.cradle;
-
-    const sourceSurveyScheme = await SurveyScheme.findByPk(sourceId, securableScope(userId));
-    if (!sourceSurveyScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(sourceSurveyScheme, 'copy');
-    if (!hasAccess) throw new ForbiddenError();
-
-    const { type, questions, meals, dataExport } = sourceSurveyScheme;
-
-    const surveyScheme = await SurveyScheme.create({ name, type, questions, meals, dataExport });
-
-    res.json(surveyScheme);
   };
 
   const templates = async (
@@ -256,12 +268,13 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     browse,
     store,
     read,
+    edit,
     update,
     patch,
     put,
     destroy,
-    refs,
     copy,
+    refs,
     templates,
     dataExportRefs,
     securables: securableController(SurveyScheme),

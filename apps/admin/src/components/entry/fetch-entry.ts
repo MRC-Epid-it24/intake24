@@ -10,7 +10,7 @@ export default (Vue as VueConstructor<Vue & HasEntryMixin>).extend({
       return;
     }
 
-    await this.fetch();
+    await this.fetch(to.params.id);
     next();
   },
 
@@ -21,8 +21,8 @@ export default (Vue as VueConstructor<Vue & HasEntryMixin>).extend({
   methods: {
     ...mapActions(useEntry, ['requestEntry']),
 
-    async fetch(): Promise<void> {
-      await this.requestEntry({ id: this.id });
+    async fetch(id?: string): Promise<void> {
+      await this.requestEntry({ id: id ?? this.id });
     },
   },
 });

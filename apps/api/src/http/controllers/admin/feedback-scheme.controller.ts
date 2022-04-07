@@ -25,7 +25,7 @@ import type { Controller, CrudActions } from '../controller';
 import securableController, { SecurableController } from './securable.controller';
 
 export interface FeedbackSchemeController
-  extends Controller<Exclude<CrudActions, 'edit'> | 'patch' | 'put' | 'copy'> {
+  extends Controller<CrudActions | 'patch' | 'put' | 'copy'> {
   securables: SecurableController;
 }
 
@@ -101,6 +101,15 @@ export default (): FeedbackSchemeController => {
     res.json(feedbackScheme);
   };
 
+  const edit = async (
+    req: Request<{ feedbackSchemeId: string }>,
+    res: Response<FeedbackSchemeEntry>
+  ): Promise<void> => {
+    const feedbackScheme = await getAndCheckAccess(req, 'edit');
+
+    res.json(feedbackScheme);
+  };
+
   const update = async (
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<FeedbackSchemeEntry>
@@ -164,6 +173,29 @@ export default (): FeedbackSchemeController => {
     res.status(204).json();
   };
 
+  const copy = async (
+    req: Request<{ feedbackSchemeId: string }>,
+    res: Response<FeedbackSchemeEntry>
+  ): Promise<void> => {
+    const feedbackScheme = await getAndCheckAccess(req, 'copy');
+
+    const { name } = req.body;
+    const { userId } = req.scope.cradle;
+    const { type, topFoods, cards, demographicGroups, henryCoefficients } = feedbackScheme;
+
+    const feedbackSchemeCopy = await FeedbackScheme.create({
+      name,
+      type,
+      topFoods,
+      cards,
+      demographicGroups,
+      henryCoefficients,
+      ownerId: userId,
+    });
+
+    res.json(feedbackSchemeCopy);
+  };
+
   const refs = async (req: Request, res: Response<FeedbackSchemeRefs>): Promise<void> => {
     const [languages, nutrientTypes, physicalActivityLevels] = await Promise.all([
       Language.scope('list').findAll(),
@@ -174,41 +206,17 @@ export default (): FeedbackSchemeController => {
     res.json({ languages, nutrientTypes, physicalActivityLevels });
   };
 
-  const copy = async (req: Request, res: Response<FeedbackSchemeEntry>): Promise<void> => {
-    const { sourceId, name } = req.body;
-    const { aclService, userId } = req.scope.cradle;
-
-    const sourceFeedbackScheme = await FeedbackScheme.findByPk(sourceId, securableScope(userId));
-    if (!sourceFeedbackScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(sourceFeedbackScheme, 'copy');
-    if (!hasAccess) throw new ForbiddenError();
-
-    const { type, topFoods, cards, demographicGroups, henryCoefficients } = sourceFeedbackScheme;
-
-    const feedbackScheme = await FeedbackScheme.create({
-      name,
-      type,
-      topFoods,
-      cards,
-      demographicGroups,
-      henryCoefficients,
-      ownerId: userId,
-    });
-
-    res.json(feedbackScheme);
-  };
-
   return {
     browse,
     store,
     read,
+    edit,
     update,
     patch,
     put,
     destroy,
-    refs,
     copy,
+    refs,
     securables: securableController(FeedbackScheme),
   };
 };

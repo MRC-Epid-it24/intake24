@@ -1,15 +1,19 @@
 import { checkSchema } from 'express-validator';
 import validate from '@intake24/api/http/requests/validate';
-import { name } from './defaults';
+import { unique } from '@intake24/api/http/rules';
+import { SurveyScheme } from '@intake24/db';
 
 export default validate(
   checkSchema({
-    sourceId: {
+    name: {
       in: ['body'],
-      errorMessage: 'Invalid source Survey scheme ID.',
+      errorMessage: 'Feedback scheme name must be unique.',
       isString: true,
       isEmpty: { negated: true },
+      custom: {
+        options: async (value): Promise<void> =>
+          unique({ model: SurveyScheme, condition: { field: 'name', value } }),
+      },
     },
-    name,
   })
 );

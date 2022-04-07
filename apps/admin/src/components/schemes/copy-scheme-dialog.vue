@@ -56,7 +56,6 @@ import { SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 
 export type CopySchemeForm = {
-  sourceId: string;
   name: string | null;
 };
 
@@ -76,10 +75,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<CopySchemeForm>({
-        sourceId: this.schemeId,
-        name: null,
-      }),
+      form: form<CopySchemeForm>({ name: null }),
       dialog: false,
       redirect: true,
     };
@@ -95,9 +91,9 @@ export default defineComponent({
     },
 
     async confirm() {
-      const { resource } = this;
+      const { resource, schemeId } = this;
       const { name } = this.$route;
-      const { id } = await this.form.post<SurveySchemeEntry>(`admin/${resource}/copy`);
+      const { id } = await this.form.post<SurveySchemeEntry>(`admin/${resource}/${schemeId}/copy`);
 
       this.close();
 
