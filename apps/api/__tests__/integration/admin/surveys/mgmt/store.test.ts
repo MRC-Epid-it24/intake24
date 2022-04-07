@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker';
-import request from 'supertest';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Op, Permission, Survey } from '@intake24/db';
 import { surveyStaff } from '@intake24/common/acl';
@@ -52,45 +51,25 @@ export default () => {
   it('should return 403 when missing survey-specific permission', async () => {
     await suite.util.setPermission('surveys|mgmt');
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url);
   });
 
   it(`should return 403 when missing 'surveys-mgmt' permission (surveyadmin)`, async () => {
     await suite.util.setPermission('surveyadmin');
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url);
   });
 
   it(`should return 403 when missing 'surveys-mgmt' permission (surveyStaff)`, async () => {
     await suite.util.setPermission(surveyStaff(survey.id));
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url);
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
     await suite.util.setPermission(['surveys|mgmt', surveyStaff(survey.id)]);
 
-    const { status } = await request(suite.app)
-      .post(invalidSurveyUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', invalidSurveyUrl);
   });
 
   describe('authenticated / resource authorized', () => {
@@ -99,22 +78,16 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, ['email', 'permissions']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['email', 'permissions']);
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
+      await suite.sharedTests.assertInvalidInput('post', url, ['email', 'permissions'], {
+        input: {
           email: 'this-is-not-an-email',
           permissions: { name: 'not a valid permission' },
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['email', 'permissions']);
+        },
+      });
     });
 
     it('should return 422 for incorrect permissions / existing email account', async () => {
@@ -123,29 +96,16 @@ export default () => {
         max: nonSurveyPermissionIds.length,
       });
 
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
+      await suite.sharedTests.assertInvalidInput('post', url, ['email', 'permissions'], {
+        input: {
           email: suite.data.system.user.email,
           permissions: [nonSurveyPermissionIds[invalidPermissionIdx]],
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['email', 'permissions']);
+        },
+      });
     });
 
     it('should return 201 and empty response body', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(input);
-
-      expect(status).toBe(201);
-      expect(body).toBeEmpty();
+      await suite.sharedTests.assertAcknowledged('post', url, { code: 201, input });
     });
   });
 };

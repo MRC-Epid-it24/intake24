@@ -29,7 +29,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, [
+      await suite.sharedTests.assertInvalidInput('post', url, [
         'password',
         'passwordConfirm',
         'permissions',
@@ -38,33 +38,32 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          email: 'invalidEmailFormat',
-          multiFactorAuthentication: 10,
-          emailNotifications: 'string',
-          smsNotifications: [100],
-          customFields: 'invalidCustomFields',
-          permissions: [1, 'invalidId', 2],
-          roles: [1, 'invalidId', 2],
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
-        'email',
-        'password',
-        'passwordConfirm',
-        'multiFactorAuthentication',
-        'emailNotifications',
-        'smsNotifications',
-        'customFields',
-        'permissions',
-        'roles',
-      ]);
+      await suite.sharedTests.assertInvalidInput(
+        'post',
+        url,
+        [
+          'email',
+          'password',
+          'passwordConfirm',
+          'multiFactorAuthentication',
+          'emailNotifications',
+          'smsNotifications',
+          'customFields',
+          'permissions',
+          'roles',
+        ],
+        {
+          input: {
+            email: 'invalidEmailFormat',
+            multiFactorAuthentication: 10,
+            emailNotifications: 'string',
+            smsNotifications: [100],
+            customFields: 'invalidCustomFields',
+            permissions: [1, 'invalidId', 2],
+            roles: [1, 'invalidId', 2],
+          },
+        }
+      );
     });
 
     it('should return 201 and new resource', async () => {
@@ -94,15 +93,9 @@ export default () => {
     });
 
     it('should return 422 for duplicate email', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.system.user(), email: input.email });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['email']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['email'], {
+        input: { ...mocker.system.user(), email: input.email },
+      });
     });
   });
 };

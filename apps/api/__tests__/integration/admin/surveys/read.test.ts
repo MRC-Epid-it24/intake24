@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
@@ -34,34 +33,19 @@ export default () => {
   it('should return 403 when missing survey-specific permission', async () => {
     await suite.util.setPermission('surveys|read');
 
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('get', url);
   });
 
   it(`should return 403 when missing 'surveys-read' permission (surveyadmin)`, async () => {
     await suite.util.setPermission('surveyadmin');
 
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('get', url);
   });
 
   it(`should return 403 when missing 'surveys-read' permission (surveyStaff)`, async () => {
     await suite.util.setPermission(surveyStaff(survey.id));
 
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('get', url);
   });
 
   it(`should return 404 when record doesn't exist`, async () => {

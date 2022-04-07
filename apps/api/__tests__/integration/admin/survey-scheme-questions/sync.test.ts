@@ -1,4 +1,3 @@
-import request from 'supertest';
 import {
   SurveySchemeCreationAttributes,
   SurveySchemeQuestionCreationAttributes,
@@ -58,7 +57,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, [
+      await suite.sharedTests.assertInvalidInput('post', url, [
         'surveySchemeId',
         'section',
         'question',
@@ -66,19 +65,18 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          surveySchemeId: ['123456'],
-          section: 'notValidSchemeSection',
-          question: { name: 'missingProps' },
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['surveySchemeId', 'section', 'question']);
+      await suite.sharedTests.assertInvalidInput(
+        'post',
+        url,
+        ['surveySchemeId', 'section', 'question'],
+        {
+          input: {
+            surveySchemeId: ['123456'],
+            section: 'notValidSchemeSection',
+            question: { name: 'missingProps' },
+          },
+        }
+      );
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

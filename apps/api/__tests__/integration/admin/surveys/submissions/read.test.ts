@@ -1,5 +1,3 @@
-import request from 'supertest';
-import { pick } from 'lodash';
 import { randomUUID } from 'crypto';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey, SurveySubmission } from '@intake24/db';
@@ -60,45 +58,25 @@ export default () => {
   it('should return 403 when missing survey-specific permission', async () => {
     await suite.util.setPermission('surveys|submissions');
 
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('get', url);
   });
 
   it(`should return 403 when missing 'surveys-submissions' permission (surveyadmin)`, async () => {
     await suite.util.setPermission('surveyadmin');
 
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('get', url);
   });
 
   it(`should return 403 when missing 'surveys-submissions' permission (surveyStaff)`, async () => {
     await suite.util.setPermission(surveyStaff(survey.id));
 
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('get', url);
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
     await suite.util.setPermission(['surveys|submissions', surveyStaff(survey.id)]);
 
-    const { status } = await request(suite.app)
-      .get(invalidSurveyUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('get', invalidSurveyUrl);
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
@@ -117,13 +95,7 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .get(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(200);
-      expect(pick(body, Object.keys(output))).toEqual(output);
+      await suite.sharedTests.assertRecord('get', url, output);
     });
   });
 };

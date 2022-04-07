@@ -27,34 +27,19 @@ export default () => {
   it('should return 403 when missing survey-specific permission', async () => {
     await suite.util.setPermission('surveys|respondents');
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url);
   });
 
   it(`should return 403 when missing 'surveys-respondents' permission (surveyadmin)`, async () => {
     await suite.util.setPermission('surveyadmin');
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url);
   });
 
   it(`should return 403 when missing 'surveys-respondents' permission (surveyStaff)`, async () => {
     await suite.util.setPermission(surveyStaff(suite.data.system.survey.id));
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url);
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
@@ -63,12 +48,7 @@ export default () => {
       surveyStaff(suite.data.system.survey.id),
     ]);
 
-    const { status } = await request(suite.app)
-      .post(invalidUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', invalidUrl);
   });
 
   describe('authenticated / resource authorized', () => {
@@ -80,7 +60,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, ['file']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['file']);
     });
 
     it('should return 422 for invalid input data', async () => {

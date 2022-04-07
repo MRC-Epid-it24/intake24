@@ -43,45 +43,25 @@ export default () => {
   it('should return 403 when missing survey-specific permission', async () => {
     await suite.util.setPermission('surveys|respondents');
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url);
   });
 
   it(`should return 403 when missing 'surveys-respondents' permission (surveyadmin)`, async () => {
     await suite.util.setPermission('surveyadmin');
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url);
   });
 
   it(`should return 403 when missing 'surveys-respondents' permission (surveyStaff)`, async () => {
     await suite.util.setPermission(surveyStaff(survey.id));
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url);
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
     await suite.util.setPermission(['surveys|respondents', surveyStaff(survey.id)]);
 
-    const { status } = await request(suite.app)
-      .post(invalidSurveyUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', invalidSurveyUrl);
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
@@ -96,7 +76,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, [
+      await suite.sharedTests.assertInvalidInput('post', url, [
         'userName',
         'password',
         'passwordConfirm',
@@ -104,31 +84,22 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          userName: 'test-respondent@example.com',
-          password: 'notacomplexpassword',
-          passwordConfirm: 'notMatchingPassword',
-          name: ['test respondent'],
-          email: false,
-          phone: [new Date()],
-          customFields: 'not-a-custom-field',
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
-        'userName',
-        'password',
-        'passwordConfirm',
-        'name',
-        'email',
-        'phone',
-        'customFields',
-      ]);
+      await suite.sharedTests.assertInvalidInput(
+        'post',
+        url,
+        ['userName', 'password', 'passwordConfirm', 'name', 'email', 'phone', 'customFields'],
+        {
+          input: {
+            userName: 'test-respondent@example.com',
+            password: 'notacomplexpassword',
+            passwordConfirm: 'notMatchingPassword',
+            name: ['test respondent'],
+            email: false,
+            phone: [new Date()],
+            customFields: 'not-a-custom-field',
+          },
+        }
+      );
     });
 
     it('should return 201 and new resource', async () => {
@@ -158,15 +129,9 @@ export default () => {
     });
 
     it('should return 422 for duplicate username', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.system.respondent(), userName: input.userName });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['userName']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['userName'], {
+        input: { ...mocker.system.respondent(), userName: input.userName },
+      });
     });
   });
 };

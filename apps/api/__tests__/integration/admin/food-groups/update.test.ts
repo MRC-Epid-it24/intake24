@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { FoodGroupCreationAttributes } from '@intake24/common/types/models';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { FoodGroup } from '@intake24/db';
@@ -37,19 +36,13 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('put', url, ['name']);
+      await suite.sharedTests.assertInvalidInput('put', url, ['name']);
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .put(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ name: { name: 'Food group' } });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name']);
+      await suite.sharedTests.assertInvalidInput('put', url, ['name'], {
+        input: { name: { name: 'Food group' } },
+      });
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

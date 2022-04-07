@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { LocaleAttributes } from '@intake24/common/types/models';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import { FoodsLocale, SystemLocale } from '@intake24/db';
@@ -58,7 +57,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('put', url, [
+      await suite.sharedTests.assertInvalidInput('put', url, [
         'englishName',
         'localName',
         'respondentLanguageId',
@@ -69,31 +68,30 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .put(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          englishName: { name: 'United Kingdom' },
-          localName: ['United Kingdom'],
-          respondentLanguageId: 10,
-          adminLanguageId: 'nonLocaleString',
-          countryFlagCode: false,
-          prototypeLocaleId: 'nonExistingLocale',
-          textDirection: 'wrongDirection',
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
-        'englishName',
-        'localName',
-        'respondentLanguageId',
-        'adminLanguageId',
-        'countryFlagCode',
-        'prototypeLocaleId',
-        'textDirection',
-      ]);
+      await suite.sharedTests.assertInvalidInput(
+        'put',
+        url,
+        [
+          'englishName',
+          'localName',
+          'respondentLanguageId',
+          'adminLanguageId',
+          'countryFlagCode',
+          'prototypeLocaleId',
+          'textDirection',
+        ],
+        {
+          input: {
+            englishName: { name: 'United Kingdom' },
+            localName: ['United Kingdom'],
+            respondentLanguageId: 10,
+            adminLanguageId: 'nonLocaleString',
+            countryFlagCode: false,
+            prototypeLocaleId: 'nonExistingLocale',
+            textDirection: 'wrongDirection',
+          },
+        }
+      );
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

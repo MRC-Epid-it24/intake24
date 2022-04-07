@@ -25,7 +25,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, [
+      await suite.sharedTests.assertInvalidInput('post', url, [
         'name',
         'type',
         'topFoods.max',
@@ -38,38 +38,32 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          name: [],
-          type: 'invalidType',
-          topFoods: [],
-          // cards: 'notAnArray',
-          demographicGroups: [
-            {
-              nutrientTypeId: '49',
-              physicalActivityLevelId: null,
-              sex: null,
-              scaleSectors: [
-                {
-                  name: { en: 'Total fat' },
-                  description: {
-                    en: '<p>It is recommended that the energy (or calories)...</p>',
-                  },
-                  range: { start: 0, end: 100 },
-                  sentiment: 'good',
+      const invalidInput = {
+        name: [],
+        type: 'invalidType',
+        topFoods: [],
+        // cards: 'notAnArray',
+        demographicGroups: [
+          {
+            nutrientTypeId: '49',
+            physicalActivityLevelId: null,
+            sex: null,
+            scaleSectors: [
+              {
+                name: { en: 'Total fat' },
+                description: {
+                  en: '<p>It is recommended that the energy (or calories)...</p>',
                 },
-              ],
-            },
-          ],
-          henryCoefficients: [{ weightCoefficient: 28.2, heightCoefficient: 859 }],
-        });
+                range: { start: 0, end: 100 },
+                sentiment: 'good',
+              },
+            ],
+          },
+        ],
+        henryCoefficients: [{ weightCoefficient: 28.2, heightCoefficient: 859 }],
+      };
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
+      const fields = [
         'name',
         'type',
         'topFoods.max',
@@ -78,7 +72,9 @@ export default () => {
         // 'cards',
         'demographicGroups',
         'henryCoefficients',
-      ]);
+      ];
+
+      await suite.sharedTests.assertInvalidInput('post', url, fields, { input: invalidInput });
     });
 
     it('should return 201 and new resource', async () => {
@@ -94,15 +90,9 @@ export default () => {
     });
 
     it('should return 422 for duplicate name', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.system.feedbackScheme(), name: input.name });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
+        input: { ...mocker.system.feedbackScheme(), name: input.name },
+      });
     });
   });
 };

@@ -56,22 +56,16 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('put', url, ['description', 'images']);
+      await suite.sharedTests.assertInvalidInput('put', url, ['description', 'images']);
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .put(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
+      await suite.sharedTests.assertInvalidInput('put', url, ['description', 'images'], {
+        input: {
           description: ['invalid description'],
           images: 'notValidObjects',
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['description', 'images']);
+        },
+      });
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

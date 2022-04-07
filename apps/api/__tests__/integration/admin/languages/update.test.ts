@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { LanguageCreationAttributes } from '@intake24/common/types/models';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import { Language } from '@intake24/db';
@@ -50,7 +49,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('put', url, [
+      await suite.sharedTests.assertInvalidInput('put', url, [
         'englishName',
         'localName',
         'countryFlagCode',
@@ -59,25 +58,19 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .put(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          englishName: { name: 'United Kingdom' },
-          localName: ['United Kingdom'],
-          countryFlagCode: false,
-          textDirection: 'wrongDirection',
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
-        'englishName',
-        'localName',
-        'countryFlagCode',
-        'textDirection',
-      ]);
+      await suite.sharedTests.assertInvalidInput(
+        'put',
+        url,
+        ['englishName', 'localName', 'countryFlagCode', 'textDirection'],
+        {
+          input: {
+            englishName: { name: 'United Kingdom' },
+            localName: ['United Kingdom'],
+            countryFlagCode: false,
+            textDirection: 'wrongDirection',
+          },
+        }
+      );
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

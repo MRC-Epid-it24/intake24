@@ -33,7 +33,7 @@ export default () => {
   });
 
   it('should return 422 for missing input data', async () => {
-    await suite.sharedTests.assertMissingInput(
+    await suite.sharedTests.assertInvalidInput(
       'post',
       url,
       ['email', 'token', 'password', 'passwordConfirm'],

@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
 import { mocker, suite, SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { FeedbackScheme } from '@intake24/db';
@@ -37,36 +36,30 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('patch', url, []);
+      await suite.sharedTests.assertInvalidInput('patch', url, []);
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .patch(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          name: [],
-          type: 'invalidType',
-          topFoods: {
-            max: false,
-            colors: 10,
-            nutrientTypes: {},
+      const invalidInput = {
+        name: [],
+        type: 'invalidType',
+        topFoods: {
+          max: false,
+          colors: 10,
+          nutrientTypes: {},
+        },
+        // cards: 'notAnArray',
+        demographicGroups: [
+          {
+            nutrientRuleType: 'percentage_of_energy',
+            nutrientTypeId: '49',
+            physicalActivityLevelId: null,
           },
-          // cards: 'notAnArray',
-          demographicGroups: [
-            {
-              nutrientRuleType: 'percentage_of_energy',
-              nutrientTypeId: '49',
-              physicalActivityLevelId: null,
-            },
-          ],
-          henryCoefficients: [{ age: { start: 0, end: 3 }, constant: -371 }],
-        });
+        ],
+        henryCoefficients: [{ age: { start: 0, end: 3 }, constant: -371 }],
+      };
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
+      const fields = [
         'name',
         'type',
         'topFoods.max',
@@ -75,7 +68,9 @@ export default () => {
         // 'cards',
         'demographicGroups',
         'henryCoefficients',
-      ]);
+      ];
+
+      await suite.sharedTests.assertInvalidInput('patch', url, fields, { input: invalidInput });
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

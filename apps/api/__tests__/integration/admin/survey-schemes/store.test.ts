@@ -25,7 +25,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, [
+      await suite.sharedTests.assertInvalidInput('post', url, [
         'name',
         'type',
         'meals',
@@ -35,21 +35,20 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          name: [],
-          type: 'invalidType',
-          meals: 5,
-          questions: [],
-          dataExport: 'notExportScheme',
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name', 'type', 'meals', 'questions', 'dataExport']);
+      await suite.sharedTests.assertInvalidInput(
+        'post',
+        url,
+        ['name', 'type', 'meals', 'questions', 'dataExport'],
+        {
+          input: {
+            name: [],
+            type: 'invalidType',
+            meals: 5,
+            questions: [],
+            dataExport: 'notExportScheme',
+          },
+        }
+      );
     });
 
     it('should return 201 and new resource', async () => {
@@ -65,15 +64,9 @@ export default () => {
     });
 
     it('should return 422 for duplicate name', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.system.surveyScheme(), name: input.name });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
+        input: { ...mocker.system.surveyScheme(), name: input.name },
+      });
     });
   });
 };

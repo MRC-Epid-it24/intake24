@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { SurveySchemeCreationAttributes } from '@intake24/common/types/models';
 import { mocker, suite, SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { SurveyScheme } from '@intake24/db';
@@ -37,25 +36,24 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('patch', url, []);
+      await suite.sharedTests.assertInvalidInput('patch', url, []);
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .patch(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          name: [],
-          type: {},
-          meals: 10,
-          questions: 'invalidQuestions',
-          dataExport: 5,
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name', 'type', 'meals', 'questions', 'dataExport']);
+      await suite.sharedTests.assertInvalidInput(
+        'patch',
+        url,
+        ['name', 'type', 'meals', 'questions', 'dataExport'],
+        {
+          input: {
+            name: [],
+            type: {},
+            meals: 10,
+            questions: 'invalidQuestions',
+            dataExport: 5,
+          },
+        }
+      );
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

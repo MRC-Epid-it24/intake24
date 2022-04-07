@@ -42,33 +42,19 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, ['name']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['name']);
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ name: { name: 'objectName' } });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
+        input: { name: { name: 'objectName' } },
+      });
     });
 
     it('should return 422 for same id/name provided', async () => {
       const { name } = surveyScheme;
 
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ name });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['name'], { input: { name } });
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

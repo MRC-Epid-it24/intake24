@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { LanguageCreationAttributes } from '@intake24/common/types/models';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
@@ -30,7 +29,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, [
+      await suite.sharedTests.assertInvalidInput('post', url, [
         'id',
         'englishName',
         'localName',
@@ -40,27 +39,20 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          id: null,
-          englishName: { key: 'name' },
-          localName: ['dddsds', 'dffd'],
-          countryFlagCode: 10,
-          textDirection: 'wrongDirection',
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
-        'id',
-        'englishName',
-        'localName',
-        'countryFlagCode',
-        'textDirection',
-      ]);
+      await suite.sharedTests.assertInvalidInput(
+        'post',
+        url,
+        ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection'],
+        {
+          input: {
+            id: null,
+            englishName: { key: 'name' },
+            localName: ['dddsds', 'dffd'],
+            countryFlagCode: 10,
+            textDirection: 'wrongDirection',
+          },
+        }
+      );
     });
 
     it('should return 201 and new resource', async () => {
@@ -68,21 +60,15 @@ export default () => {
     });
 
     it('should return 422 for duplicate id', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
+      await suite.sharedTests.assertInvalidInput('post', url, ['id'], {
+        input: {
           id: input.id,
           englishName: 'Spanish - Dominican Republic',
           localName: 'Spanish - Dominican Republic',
           countryFlagCode: 'es-do',
           textDirection: 'ltr',
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['id']);
+        },
+      });
     });
   });
 };

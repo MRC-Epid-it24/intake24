@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
@@ -11,14 +10,7 @@ export default () => {
   it('should return 200 and empty list when no survey-permissions', async () => {
     await suite.util.setPermission('surveys|browse');
 
-    const { status, body } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(200);
-    expect(body).toContainAllKeys(['data', 'meta']);
-    expect(body.data).toBeArrayOfSize(0);
+    await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
   });
 
   it('should return 200 and paginated results', async () => {

@@ -49,35 +49,34 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('put', url, ['permissions', 'roles']);
+      await suite.sharedTests.assertInvalidInput('put', url, ['permissions', 'roles']);
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .put(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          email: 'invalidEmailFormat',
-          multiFactorAuthentication: 10,
-          emailNotifications: 'string',
-          smsNotifications: [100],
-          customFields: [{ name: 'fieldName', missingValueKey: false }],
-          permissions: [1, 'invalidId', 2],
-          roles: [1, 'invalidId', 2],
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
-        'email',
-        'multiFactorAuthentication',
-        'emailNotifications',
-        'smsNotifications',
-        'customFields',
-        'permissions',
-        'roles',
-      ]);
+      await suite.sharedTests.assertInvalidInput(
+        'put',
+        url,
+        [
+          'email',
+          'multiFactorAuthentication',
+          'emailNotifications',
+          'smsNotifications',
+          'customFields',
+          'permissions',
+          'roles',
+        ],
+        {
+          input: {
+            email: 'invalidEmailFormat',
+            multiFactorAuthentication: 10,
+            emailNotifications: 'string',
+            smsNotifications: [100],
+            customFields: [{ name: 'fieldName', missingValueKey: false }],
+            permissions: [1, 'invalidId', 2],
+            roles: [1, 'invalidId', 2],
+          },
+        }
+      );
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

@@ -29,7 +29,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, [
+      await suite.sharedTests.assertInvalidInput('post', url, [
         'id',
         'description',
         'csvMapping.rowOffset',
@@ -41,29 +41,28 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          id: null,
-          description: [],
-          csvMapping: { missingProps: false },
-          csvMappingFields: [{ invalidField: 'fieldname' }],
-          csvMappingNutrients: [{ invalidField: 'fieldname' }],
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
-        'id',
-        'description',
-        'csvMapping.rowOffset',
-        'csvMapping.idColumnOffset',
-        'csvMapping.descriptionColumnOffset',
-        'csvMappingFields',
-        'csvMappingNutrients',
-      ]);
+      await suite.sharedTests.assertInvalidInput(
+        'post',
+        url,
+        [
+          'id',
+          'description',
+          'csvMapping.rowOffset',
+          'csvMapping.idColumnOffset',
+          'csvMapping.descriptionColumnOffset',
+          'csvMappingFields',
+          'csvMappingNutrients',
+        ],
+        {
+          input: {
+            id: null,
+            description: [],
+            csvMapping: { missingProps: false },
+            csvMappingFields: [{ invalidField: 'fieldname' }],
+            csvMappingNutrients: [{ invalidField: 'fieldname' }],
+          },
+        }
+      );
     });
 
     it('should return 201 and new resource', async () => {
@@ -115,15 +114,7 @@ export default () => {
     });
 
     it('should return 422 for duplicate id', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(input);
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['id']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['id'], { input });
     });
   });
 };

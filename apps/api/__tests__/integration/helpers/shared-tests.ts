@@ -54,18 +54,18 @@ const sharedTests = (suite: typeof Suite) => {
     }
   };
 
-  const assertMissingInput = async (
+  const assertInvalidInput = async (
     method: Method,
     url: string,
     fields: string[],
     ops?: Options
   ) => {
-    const { bearer, code = 422 } = { ...defaultOptions, ...ops };
+    const { bearer, code = 422, input } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
-    const { status, body } = await call.send();
+    const { status, body } = await call.send(input);
 
     expect(status).toBe(code);
     expect(body).toContainAllKeys(['errors', 'success']);
@@ -137,6 +137,18 @@ const sharedTests = (suite: typeof Suite) => {
     expect(body).toBeEmpty();
   };
 
+  const assertBuffer = async (method: Method, url: string, ops?: Options) => {
+    const { bearer, code = 200, input } = { ...defaultOptions, ...ops };
+
+    const call = request(suite.app)[method](url).set('Accept', 'application/json');
+
+    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    const { body, status } = await call.send(input);
+
+    expect(status).toBe(code);
+    expect(body).toBeInstanceOf(Buffer);
+  };
+
   const assertRecord = async (method: Method, url: string, output: any, ops?: Options) => {
     const { bearer, code = 200, input } = { ...defaultOptions, ...ops };
 
@@ -185,11 +197,12 @@ const sharedTests = (suite: typeof Suite) => {
     assertMissingAuthentication,
     assertMissingAuthorization,
     assert401and403,
-    assertMissingInput,
+    assertInvalidInput,
     assertMissingRecord,
     assertPaginatedResult,
     assertReferencesResult,
     assertAcknowledged,
+    assertBuffer,
     assertRecord,
     assertRecordInserted,
     assertRecordUpdated,

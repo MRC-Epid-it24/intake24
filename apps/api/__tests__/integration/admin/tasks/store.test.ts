@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { TaskRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
@@ -24,7 +23,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, [
+      await suite.sharedTests.assertInvalidInput('post', url, [
         'name',
         'job',
         'cron',
@@ -34,29 +33,21 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          name: [0, 1],
-          job: 'invalid-job',
-          cron: 'invalid-cron-entry',
-          active: 'not-a-boolean',
-          description: { text: 'should just be string' },
-          params: 1,
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
-        'name',
-        'job',
-        'cron',
-        'active',
-        'description',
-        'params',
-      ]);
+      await suite.sharedTests.assertInvalidInput(
+        'post',
+        url,
+        ['name', 'job', 'cron', 'active', 'description', 'params'],
+        {
+          input: {
+            name: [0, 1],
+            job: 'invalid-job',
+            cron: 'invalid-cron-entry',
+            active: 'not-a-boolean',
+            description: { text: 'should just be string' },
+            params: 1,
+          },
+        }
+      );
     });
 
     it('should return 201 and new resource', async () => {
@@ -64,15 +55,7 @@ export default () => {
     });
 
     it('should return 422 for duplicate name', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(input);
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['name'], { input });
     });
   });
 };

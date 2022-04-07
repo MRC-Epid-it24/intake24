@@ -65,13 +65,7 @@ export default () => {
     });
 
     it('should return 200 and data resource', async () => {
-      const { status, body } = await request(suite.app)
-        .get(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(200);
-      expect(body).toBeInstanceOf(Buffer);
+      await suite.sharedTests.assertBuffer('get', url);
     });
   });
 };

@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
@@ -23,7 +22,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, [
+      await suite.sharedTests.assertInvalidInput('post', url, [
         'id',
         'name',
         'state',
@@ -39,37 +38,31 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          id: null,
-          name: [2, 0],
-          state: 10,
-          startDate: 'notValidDate',
-          endDate: 100,
-          surveySchemeId: '999999',
-          locale: 10,
-          supportEmail: 'thisIsNotValidEmail',
-          allowGenUsers: 'no',
-          numberOfSubmissionsForFeedback: 'number',
-          storeUserSessionOnServer: 'yes',
-          maximumDailySubmissions: 'NaN',
-          minimumSubmissionInterval: { nan: 5 },
-          authUrlTokenCharset: 'abcabc',
-          authUrlTokenLength: 'this is not a number',
-          searchSortingAlgorithm: 'invalid-search-algorithm',
-          searchMatchScoreWeight: 500,
-          overrides: {
-            meals: ['shouldBeProperlyFormatMealList'],
-            questions: 'invalidQuestions',
-          },
-        });
+      const invalidInput = {
+        id: null,
+        name: [2, 0],
+        state: 10,
+        startDate: 'notValidDate',
+        endDate: 100,
+        surveySchemeId: '999999',
+        locale: 10,
+        supportEmail: 'thisIsNotValidEmail',
+        allowGenUsers: 'no',
+        numberOfSubmissionsForFeedback: 'number',
+        storeUserSessionOnServer: 'yes',
+        maximumDailySubmissions: 'NaN',
+        minimumSubmissionInterval: { nan: 5 },
+        authUrlTokenCharset: 'abcabc',
+        authUrlTokenLength: 'this is not a number',
+        searchSortingAlgorithm: 'invalid-search-algorithm',
+        searchMatchScoreWeight: 500,
+        overrides: {
+          meals: ['shouldBeProperlyFormatMealList'],
+          questions: 'invalidQuestions',
+        },
+      };
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
+      const fields = [
         'id',
         'name',
         'state',
@@ -88,7 +81,9 @@ export default () => {
         'searchSortingAlgorithm',
         'searchMatchScoreWeight',
         'overrides',
-      ]);
+      ];
+
+      await suite.sharedTests.assertInvalidInput('post', url, fields, { input: invalidInput });
     });
 
     it('should return 201 and new resource', async () => {
@@ -96,27 +91,15 @@ export default () => {
     });
 
     it('should return 422 for duplicate id', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.system.survey(), id: input.id });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['id']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['id'], {
+        input: { ...mocker.system.survey(), id: input.id },
+      });
     });
 
     it('should return 422 for duplicate name', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({ ...mocker.system.survey(), name: input.name });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['name']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
+        input: { ...mocker.system.survey(), name: input.name },
+      });
     });
   });
 };

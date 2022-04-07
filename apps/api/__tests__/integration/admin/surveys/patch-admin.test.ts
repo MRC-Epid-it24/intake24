@@ -40,45 +40,25 @@ export default () => {
   it('should return 403 when missing survey-specific permission', async () => {
     await suite.util.setPermission('surveys|edit');
 
-    const { status } = await request(suite.app)
-      .patch(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('patch', url);
   });
 
   it(`should return 403 when missing survey-specific permission`, async () => {
     await suite.util.setPermission('surveys|overrides');
 
-    const { status } = await request(suite.app)
-      .patch(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('patch', url);
   });
 
   it(`should return 403 when missing 'surveys-edit' or 'surveys-override' (surveyStaff)`, async () => {
     await suite.util.setPermission(surveyStaff(survey.id));
 
-    const { status } = await request(suite.app)
-      .patch(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('patch', url);
   });
 
   it(`should return 403 when missing 'surveys-edit' or 'surveys-override' (surveyadmin)`, async () => {
     await suite.util.setPermission('surveyadmin');
 
-    const { status } = await request(suite.app)
-      .patch(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('patch', url);
   });
 
   describe('with correct permissions (surveyadmin)', () => {
@@ -97,36 +77,30 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .patch(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          name: { name: 'survey name' },
-          state: 10,
-          startDate: 'notValidDate',
-          endDate: 100,
-          surveySchemeId: '999999',
-          localeId: 10,
-          supportEmail: 'thisIsNotValidEmail',
-          allowGenUsers: 'no',
-          numberOfSubmissionsForFeedback: 'number',
-          storeUserSessionOnServer: 'yes',
-          maximumDailySubmissions: 'NaN',
-          minimumSubmissionInterval: { nan: 5 },
-          authUrlTokenCharset: ['an array charset'],
-          authUrlTokenLength: 1,
-          searchSortingAlgorithm: false,
-          searchMatchScoreWeight: { number: 20 },
-          overrides: {
-            meals: ['shouldBeProperlyFormatMealList'],
-            questions: { value: 'not a valid overrides object' },
-          },
-        });
+      const invalidInput = {
+        name: { name: 'survey name' },
+        state: 10,
+        startDate: 'notValidDate',
+        endDate: 100,
+        surveySchemeId: '999999',
+        localeId: 10,
+        supportEmail: 'thisIsNotValidEmail',
+        allowGenUsers: 'no',
+        numberOfSubmissionsForFeedback: 'number',
+        storeUserSessionOnServer: 'yes',
+        maximumDailySubmissions: 'NaN',
+        minimumSubmissionInterval: { nan: 5 },
+        authUrlTokenCharset: ['an array charset'],
+        authUrlTokenLength: 1,
+        searchSortingAlgorithm: false,
+        searchMatchScoreWeight: { number: 20 },
+        overrides: {
+          meals: ['shouldBeProperlyFormatMealList'],
+          questions: { value: 'not a valid overrides object' },
+        },
+      };
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
+      const fields = [
         'name',
         'state',
         'startDate',
@@ -144,7 +118,9 @@ export default () => {
         'searchSortingAlgorithm',
         'searchMatchScoreWeight',
         'overrides',
-      ]);
+      ];
+
+      await suite.sharedTests.assertInvalidInput('patch', url, fields, { input: invalidInput });
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
@@ -152,7 +128,7 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      await suite.sharedTests.assertRecordUpdated('put', url, output, { input: updateInput });
+      await suite.sharedTests.assertRecordUpdated('patch', url, output, { input: updateInput });
     });
   });
 };

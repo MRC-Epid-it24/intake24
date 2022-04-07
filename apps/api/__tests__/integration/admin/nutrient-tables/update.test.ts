@@ -54,7 +54,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('put', url, [
+      await suite.sharedTests.assertInvalidInput('put', url, [
         'description',
         'csvMapping.rowOffset',
         'csvMapping.idColumnOffset',
@@ -65,27 +65,26 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .put(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          description: [],
-          csvMapping: { missingProps: false },
-          csvMappingFields: [{ invalidField: 'fieldname' }],
-          csvMappingNutrients: [{ invalidField: 'fieldname' }],
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
-        'description',
-        'csvMapping.rowOffset',
-        'csvMapping.idColumnOffset',
-        'csvMapping.descriptionColumnOffset',
-        'csvMappingFields',
-        'csvMappingNutrients',
-      ]);
+      await suite.sharedTests.assertInvalidInput(
+        'put',
+        url,
+        [
+          'description',
+          'csvMapping.rowOffset',
+          'csvMapping.idColumnOffset',
+          'csvMapping.descriptionColumnOffset',
+          'csvMappingFields',
+          'csvMappingNutrients',
+        ],
+        {
+          input: {
+            description: [],
+            csvMapping: { missingProps: false },
+            csvMappingFields: [{ invalidField: 'fieldname' }],
+            csvMappingNutrients: [{ invalidField: 'fieldname' }],
+          },
+        }
+      );
     });
 
     it(`should return 404 when record doesn't exist`, async () => {

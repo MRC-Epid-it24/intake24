@@ -52,45 +52,25 @@ export default () => {
   it('should return 403 when missing survey-specific permission', async () => {
     await suite.util.setPermission('surveys|respondents');
 
-    const { status } = await request(suite.app)
-      .patch(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('patch', url);
   });
 
   it(`should return 403 when missing 'surveys-respondents' permission (surveyadmin)`, async () => {
     await suite.util.setPermission('surveyadmin');
 
-    const { status } = await request(suite.app)
-      .patch(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('patch', url);
   });
 
   it(`should return 403 when missing 'surveys-respondents' permission (surveyStaff)`, async () => {
     await suite.util.setPermission(surveyStaff(survey.id));
 
-    const { status } = await request(suite.app)
-      .patch(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('patch', url);
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
     await suite.util.setPermission(['surveys|respondents', surveyStaff(survey.id)]);
 
-    const { status } = await request(suite.app)
-      .patch(invalidSurveyUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('patch', invalidSurveyUrl);
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
@@ -105,29 +85,21 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .patch(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
-          password: 'notacomplexpassword',
-          passwordConfirm: 'notMatchingPassword',
-          name: ['test respondent'],
-          email: false,
-          phone: [new Date()],
-          customFields: 'not-a-custom-field',
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys([
-        'password',
-        'passwordConfirm',
-        'name',
-        'email',
-        'phone',
-        'customFields',
-      ]);
+      await suite.sharedTests.assertInvalidInput(
+        'patch',
+        url,
+        ['password', 'passwordConfirm', 'name', 'email', 'phone', 'customFields'],
+        {
+          input: {
+            password: 'notacomplexpassword',
+            passwordConfirm: 'notMatchingPassword',
+            name: ['test respondent'],
+            email: false,
+            phone: [new Date()],
+            customFields: 'not-a-custom-field',
+          },
+        }
+      );
     });
 
     it(`should return 404 when user record doesn't exist`, async () => {

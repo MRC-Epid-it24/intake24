@@ -1,4 +1,3 @@
-import request from 'supertest';
 import { randomUUID } from 'crypto';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey, SurveySubmission } from '@intake24/db';
@@ -43,45 +42,25 @@ export default () => {
   it('should return 403 when missing survey-specific permission', async () => {
     await suite.util.setPermission('surveys|submissions');
 
-    const { status } = await request(suite.app)
-      .delete(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('delete', url);
   });
 
   it(`should return 403 when missing 'surveys-submissions' permission (surveyadmin)`, async () => {
     await suite.util.setPermission('surveyadmin');
 
-    const { status } = await request(suite.app)
-      .delete(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('delete', url);
   });
 
   it(`should return 403 when missing 'surveys-submissions' permission (surveyStaff)`, async () => {
     await suite.util.setPermission(surveyStaff(survey.id));
 
-    const { status } = await request(suite.app)
-      .delete(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('delete', url);
   });
 
   it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
     await suite.util.setPermission(['surveys|submissions', surveyStaff(survey.id)]);
 
-    const { status } = await request(suite.app)
-      .delete(invalidSurveyUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.user);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('delete', invalidSurveyUrl);
   });
 
   it(`should return 404 when record doesn't exist`, async () => {

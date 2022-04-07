@@ -11,7 +11,7 @@ export default () => {
   const invalidUrl = `${baseUrl}/${invalidLanguage}?app=${app}`;
 
   it('should return 422 for missing input data', async () => {
-    await suite.sharedTests.assertMissingInput('get', `${baseUrl}/${language}`, ['app'], {
+    await suite.sharedTests.assertInvalidInput('get', `${baseUrl}/${language}`, ['app'], {
       bearer: undefined,
     });
   });

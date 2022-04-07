@@ -37,23 +37,17 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertMissingInput('post', url, ['id', 'description', 'imageMapId']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description', 'imageMapId']);
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send({
+      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description', 'imageMapId'], {
+        input: {
           id: './guideImage_001',
           imageMapId: 'nonExistingImageMapId',
           description: { key: 'invalidDescription' },
-        });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['id', 'description', 'imageMapId']);
+        },
+      });
     });
 
     it('should return 201 and new resource', async () => {
@@ -61,15 +55,7 @@ export default () => {
     });
 
     it('should return 422 for duplicate id', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(input);
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['id']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['id'], { input });
     });
   });
 };
