@@ -1,4 +1,6 @@
 import slugify from 'slugify';
+import trim from 'lodash/trim';
+import trimEnd from 'lodash/trimEnd';
 import validator from 'validator';
 
 export const btoa = (object: any): string => Buffer.from(JSON.stringify(object)).toString('base64');
@@ -35,3 +37,19 @@ export const isStringBigInt = (value: any): boolean => {
  */
 export const isUrlAbsolute = (url: string, options?: validator.IsURLOptions): boolean =>
   validator.isURL(url, options);
+
+/**
+ * Get survey frontend URL
+ *
+ * @param {string} base
+ * @param {string} survey
+ * @param {string} [override]
+ * @returns {string}
+ */
+export const getSurveyUrl = (base: string, survey: string, override?: string | null): string => {
+  if (override) return trimEnd(override, '/');
+
+  if (isUrlAbsolute(survey)) return trimEnd(survey, '/');
+
+  return [base, survey].map((item) => trim(item, '/')).join('/');
+};

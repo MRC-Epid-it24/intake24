@@ -93,15 +93,6 @@ const routes: RouteConfig[] = [
     beforeEnter: surveyParametersGuard,
     props: true,
   },
-
-  // Needs to be last as :token is param
-  {
-    path: '/:surveyId/:token',
-    name: 'survey-login-token',
-    component: views.survey.login,
-    meta: { module: 'login', title: 'login._' },
-    props: true,
-  },
   // Catch any unmatched routes
   {
     path: '*',

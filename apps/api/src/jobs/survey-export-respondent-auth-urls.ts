@@ -2,13 +2,12 @@ import type { Job } from 'bullmq';
 import { format as formatDate } from 'date-fns';
 import fs from 'fs-extra';
 import json2csv, { Transform } from 'json2csv';
-import { trimEnd } from 'lodash';
 import path from 'path';
 import type { SurveyExportRespondentAuthUrlsParams } from '@intake24/common/types';
 import { Job as DbJob, Survey, UserSurveyAlias } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { addTime } from '@intake24/api/util';
+import { addTime, getSurveyUrl } from '@intake24/api/util';
 import BaseJob from './job';
 
 export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExportRespondentAuthUrlsParams> {
@@ -64,9 +63,11 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
       throw new NotFoundError(`Job ${this.name}: Survey record not found (${surveyId}).`);
 
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
-    const baseFrontendURL = trimEnd(
-      survey.authUrlDomainOverride ?? this.appConfig.urls.survey,
-      '/'
+
+    const baseFrontendURL = getSurveyUrl(
+      this.appConfig.urls.base,
+      this.appConfig.urls.survey,
+      survey.authUrlDomainOverride
     );
 
     const fields: json2csv.FieldInfo<UserSurveyAlias>[] = [
@@ -74,8 +75,13 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
       { label: 'Username', value: 'userName' },
       { label: 'AuthenticationCode', value: (row: UserSurveyAlias) => row.urlAuthToken },
       {
-        label: 'AuthenticationURL',
-        value: (row: UserSurveyAlias) => `${baseFrontendURL}/${surveyId}/${row.urlAuthToken}`,
+        label: 'SurveyAuthenticationURL',
+        value: (row: UserSurveyAlias) => `${baseFrontendURL}/${surveyId}?token=${row.urlAuthToken}`,
+      },
+      {
+        label: 'FeedbackAuthenticationURL',
+        value: (row: UserSurveyAlias) =>
+          `${baseFrontendURL}/${surveyId}/feedback?token=${row.urlAuthToken}`,
       },
     ];
 

@@ -37,6 +37,7 @@ export const globalGuard: NavigationGuard = async (to, from, next) => {
   const {
     meta: { module } = {},
     params: { surveyId },
+    query: { token, ...restQuery },
   } = to;
 
   const auth = useAuth();
@@ -45,6 +46,19 @@ export const globalGuard: NavigationGuard = async (to, from, next) => {
   if (module === 'public') {
     next();
     return;
+  }
+
+  // Try logging-in if we have token
+  if (typeof token === 'string' && token && !auth.loggedIn) {
+    try {
+      await auth.logout(true);
+      await auth.token({ token });
+      next({ name: to.name ?? 'survey-home', params: { surveyId }, query: restQuery });
+      return;
+    } catch {
+      next({ name: 'survey-login', params: { surveyId } });
+      return;
+    }
   }
 
   // Login pages (credentials / token)

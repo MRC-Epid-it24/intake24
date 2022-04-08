@@ -27,6 +27,7 @@ import type {
   SurveyController,
   SurveyRespondentController,
   // User
+  UserFeedbackController,
   UserI18nController,
   UserPhysicalDataController,
   UserProfileController,
@@ -132,6 +133,7 @@ export interface IoC extends Jobs {
   subscriptionController: SubscriptionController;
 
   // User
+  userFeedbackController: UserFeedbackController;
   userI18nController: UserI18nController;
   userProfileController: UserProfileController;
   userPhysicalDataController: UserPhysicalDataController;

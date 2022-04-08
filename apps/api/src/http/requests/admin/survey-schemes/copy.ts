@@ -7,7 +7,7 @@ export default validate(
   checkSchema({
     name: {
       in: ['body'],
-      errorMessage: 'Feedback scheme name must be unique.',
+      errorMessage: 'Survey scheme name must be unique.',
       isString: true,
       isEmpty: { negated: true },
       custom: {

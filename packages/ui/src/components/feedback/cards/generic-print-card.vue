@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0">
+  <v-container fluid class="print-card pa-0">
     <v-row no-gutters class="print-card-header mt-2">
       <v-col cols="4">
         <v-img :src="backgroundImage" class="ml-4" :aspect-ratio="4 / 3" eager></v-img>
@@ -62,9 +62,20 @@ export default defineComponent({
 
 <style lang="scss">
 @media print {
-  .print-card-header {
-    page-break-inside: avoid;
-    break-inside: avoid;
+  .print-card {
+    // For card per-page
+    // page-break-after: page;
+    // break-after: page;
+
+    * {
+      -webkit-print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    .print-card-header {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
   }
 }
 </style>

@@ -38,6 +38,11 @@ const feedback: LocaleMessageObject = {
     title: 'Submissions',
   },
 
+  topFoods: {
+    title: 'Highest in ...',
+    chart: 'Highest in {nutrient}',
+  },
+
   intake: {
     your: 'Your {nutrient} intake is {amount}.',
     estimated: 'Estimated intake',

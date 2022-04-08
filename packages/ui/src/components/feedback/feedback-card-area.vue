@@ -30,11 +30,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-@media print {
-  .print-card {
-    page-break-after: page;
-    break-after: page;
-  }
-}
-</style>
+<style lang="scss"></style>

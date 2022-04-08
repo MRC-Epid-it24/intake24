@@ -78,9 +78,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    token: {
-      type: String,
-    },
   },
 
   data() {
@@ -111,22 +108,11 @@ export default defineComponent({
   },
 
   async mounted() {
-    const { surveyId, token } = this;
-    const { name } = this.$route;
+    const { surveyId } = this;
 
     await this.fetchSurveyPublicInfo();
 
     if (this.invalidSurvey) return;
-
-    if (name === 'survey-login-token' && token) {
-      try {
-        await this.tokenLogin({ token });
-        await this.$router.push({ name: 'survey-home', params: { surveyId } });
-      } catch (err) {
-        if (axios.isAxiosError(err)) this.status = err.response?.status ?? 0;
-      }
-      return;
-    }
 
     if (!this.loggedIn) {
       try {
@@ -139,7 +125,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useAuth, { userPassLogin: 'login', tokenLogin: 'token', refresh: 'refresh' }),
+    ...mapActions(useAuth, { userPassLogin: 'login', refresh: 'refresh' }),
 
     async fetchSurveyPublicInfo() {
       try {

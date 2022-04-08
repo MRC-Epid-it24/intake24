@@ -3,7 +3,7 @@
     <v-col v-for="nutrient in topFoods.nutrients" class="mb-4" cols="auto" :key="nutrient.id">
       <canvas :id="`chart-${nutrient.id}`"></canvas>
       <v-divider class="my-4"></v-divider>
-      <div class="title">Highest in {{ nutrient.name }}</div>
+      <div class="title">{{ $t('feedback.topFoods.chart', { nutrient: nutrient.name }) }}</div>
       <v-list max-width="300px" dense>
         <v-list-item v-for="(item, index) in nutrient.list" :key="item.name">
           <v-list-item-icon
@@ -42,12 +42,18 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    matchesPrintMedia(): boolean {
+      return window.matchMedia('print').matches;
+    },
+  },
+
   watch: {
     topFoods: {
       handler() {
         setTimeout(() => {
           this.renderOrUpdateCharts();
-        }, 500);
+        }, 100);
       },
       deep: true,
     },
@@ -56,7 +62,7 @@ export default defineComponent({
   mounted() {
     setTimeout(() => {
       this.renderOrUpdateCharts();
-    }, 500);
+    }, 100);
   },
 
   methods: {
@@ -73,7 +79,7 @@ export default defineComponent({
           this.charts[item.id] = new Chart(el, {
             type: 'doughnut',
             data: item.chartJs,
-            options: { plugins: { legend: { display: false } } },
+            options: { plugins: { legend: { display: false } }, animation: false },
           });
           continue;
         }
