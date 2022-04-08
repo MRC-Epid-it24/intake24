@@ -44,7 +44,7 @@ export const securableDefs = {
     'demographic-groups',
     'henry-coefficients',
   ] as const,
-  SurveyScheme: [...standardSecurableActions, 'questions', 'data-export'],
+  SurveyScheme: [...standardSecurableActions, 'questions', 'data-export'] as const,
 };
 
 export type SecurableType = keyof typeof securableDefs;

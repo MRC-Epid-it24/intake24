@@ -204,7 +204,7 @@ import { ConfirmDialog } from '@intake24/ui';
 import { form } from '@intake24/admin/helpers';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import { securableToResource } from '@intake24/common/util';
-import { standardSecurableActions, SecurableType } from '@intake24/common/acl';
+import { securableDefs, SecurableType } from '@intake24/common/acl';
 import { ValidationError } from '@intake24/common/types';
 import { defineComponent, PropType, ref } from '@vue/composition-api';
 import { EmbeddedDataTable } from '../data-tables';
@@ -242,12 +242,12 @@ export default defineComponent({
   data() {
     const { securableType } = this;
     const resource = securableToResource(securableType);
-    const actions = standardSecurableActions[securableType];
+    const actions = securableDefs[securableType];
 
     return {
       resource,
       actions,
-      standardSecurableActions,
+      securableDefs,
       headers: [
         {
           text: this.$t('users.email'),
