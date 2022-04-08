@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-container fluid>
-      <v-row>
-        <v-col cols="12" sm="auto">
+      <v-row justify="center">
+        <v-col cols="12" sm="auto" align-self="center">
           <slot name="header-add"></slot>
         </v-col>
         <v-col cols="12" sm>
@@ -88,8 +88,8 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
 
   watch: {
     options: {
-      handler(val, oldVal) {
-        if (!isEqual(val, oldVal)) this.fetch();
+      async handler(val, oldVal) {
+        if (!isEqual(val, oldVal)) await this.fetch();
       },
       deep: true,
     },
@@ -128,17 +128,17 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
       this.tracked = this.selected.map((item) => item[this.trackBy]);
     },
 
-    setFilter() {
-      this.fetch();
+    async setFilter() {
+      await this.fetch();
     },
 
-    resetFilter() {
+    async resetFilter() {
       this.search = '';
-      this.fetch();
+      await this.fetch();
     },
 
     async onRefresh() {
-      this.fetch();
+      await this.fetch();
     },
   },
 });

@@ -1,15 +1,23 @@
 import { nanoid, customAlphabet } from 'nanoid';
+import { plural } from 'pluralize';
+import { isSecurableType } from '../acl';
 
 /**
  * Convert string to kebab case
  *
  * @param {string} string
  */
-export const kebabCase = (string: string) =>
+export const kebabCase = (string: string): string =>
   string
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     .replace(/[\s_]+/g, '-')
     .toLowerCase();
+
+export const securableToResource = (securable: any): string => {
+  if (!isSecurableType(securable)) throw Error(`Invalid securable type: ${securable}`);
+
+  return kebabCase(plural(securable));
+};
 
 /**
  * Generate random string with optional custom size / alphabet

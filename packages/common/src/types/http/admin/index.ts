@@ -11,6 +11,7 @@ export * from './nutrient-types';
 export * from './nutrient-tables';
 export * from './permissions';
 export * from './roles';
+export * from './securables';
 export * from './survey-schemes';
 export * from './survey-scheme-questions';
 export * from './sign-in-logs';

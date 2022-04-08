@@ -6,9 +6,10 @@ import locales from './locales';
 import nutrientTables from './nutrient-tables';
 import permissions from './permissions';
 import roles from './roles';
-import schemeQuestions from './survey-scheme-questions';
-import schemes from './survey-schemes';
+import securables from './securables';
 import signInLogs from './sign-in-logs';
+import surveySchemeQuestions from './survey-scheme-questions';
+import surveySchemes from './survey-schemes';
 import surveys from './surveys';
 import tasks from './tasks';
 import users from './users';
@@ -22,9 +23,10 @@ export default {
   nutrientTables,
   permissions,
   roles,
-  schemeQuestions,
-  schemes,
+  securables,
   signInLogs,
+  surveySchemeQuestions,
+  surveySchemes,
   surveys,
   tasks,
   users,

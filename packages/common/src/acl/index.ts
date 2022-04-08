@@ -34,8 +34,25 @@ export const foodDatabasePermissions = (localeId: string): string[] => [
   foodDatabaseMaintainer(localeId),
 ];
 
-export const securableTypes = ['FeedbackScheme', 'SurveyScheme'] as const;
+export const standardSecurableActions = ['read', 'edit', 'delete', 'securables'] as const;
 
-export type SecurableType = typeof securableTypes[number];
+export const securableDefs = {
+  FeedbackScheme: [
+    ...standardSecurableActions,
+    'top-foods',
+    'cards',
+    'demographic-groups',
+    'henry-coefficients',
+  ] as const,
+  SurveyScheme: [...standardSecurableActions, 'questions', 'data-export'],
+};
+
+export type SecurableType = keyof typeof securableDefs;
+
+export const securableTypes = Object.keys(securableDefs) as SecurableType[];
+
+export type FeedbackSchemeSecurableActions = typeof securableDefs.FeedbackScheme[number];
+
+export type SurveySchemeSecurableActions = typeof securableDefs.FeedbackScheme[number];
 
 export const isSecurableType = (type: any): type is SecurableType => securableTypes.includes(type);

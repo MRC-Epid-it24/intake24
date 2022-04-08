@@ -1,8 +1,7 @@
 import { Permission, Role, Securable, User } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/acl';
-import { plural } from 'pluralize';
-import { kebabCase } from '@intake24/common/util';
+import { securableToResource } from '@intake24/common/util';
 
 const aclService = ({
   aclConfig,
@@ -92,7 +91,7 @@ const aclService = ({
   };
 
   const canAccessRecord = async (record: Securable, action: string): Promise<boolean> => {
-    const resource = kebabCase(plural(record.constructor.name));
+    const resource = securableToResource(record.constructor.name);
 
     const checkPermission = await hasPermission(`${resource}|${action}`);
     if (checkPermission) return true;

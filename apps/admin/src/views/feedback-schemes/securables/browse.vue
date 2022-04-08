@@ -1,6 +1,6 @@
 <template>
   <layout v-bind="{ id, entry }" v-if="entryLoaded">
-    <securables resource="feedback-schemes" :resourceId="id"></securables>
+    <securables securableType="FeedbackScheme" :resourceId="id"></securables>
   </layout>
 </template>
 

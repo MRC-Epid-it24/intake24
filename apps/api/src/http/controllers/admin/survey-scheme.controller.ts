@@ -35,7 +35,9 @@ export interface SurveySchemeController
   securables: SecurableController;
 }
 
-export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySchemeController => {
+export default (ioc: IoC): SurveySchemeController => {
+  const { dataExportFields } = ioc;
+
   const getAndCheckAccess = async (
     req: Request<{ surveySchemeId: string }>,
     action: string,
@@ -282,6 +284,6 @@ export default ({ dataExportFields }: Pick<IoC, 'dataExportFields'>): SurveySche
     refs,
     templates,
     dataExportRefs,
-    securables: securableController(SurveyScheme),
+    securables: securableController({ ioc, securable: SurveyScheme }),
   };
 };

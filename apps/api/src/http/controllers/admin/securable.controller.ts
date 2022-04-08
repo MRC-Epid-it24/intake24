@@ -1,6 +1,6 @@
+import type { IoC } from '@intake24/api/ioc';
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { plural } from 'pluralize';
 import {
   ModelStatic,
   Op,
@@ -11,17 +11,32 @@ import {
   UserSecurable,
 } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { kebabCase } from '@intake24/common/util';
+import { randomString, securableToResource } from '@intake24/common/util';
 import { isSecurableType } from '@intake24/common/acl';
+import {
+  CreateUserWithSecurables,
+  UsersWithSecurablesResponse,
+  AvailableUsersWithSecurablesResponse,
+  UserSecurableListEntry,
+} from '@intake24/common/types/http/admin';
+import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
 import type { Controller } from '../controller';
 
-export type SecurableController = Controller<'browse' | 'update' | 'destroy' | 'availableUsers'>;
+export type SecurableController = Controller<
+  'browse' | 'store' | 'update' | 'destroy' | 'availableUsers'
+>;
 
-export default (securable: ModelStatic<Securable>): SecurableController => {
+export default ({
+  securable,
+  ioc: { adminUserService },
+}: {
+  ioc: IoC;
+  securable: ModelStatic<Securable>;
+}): SecurableController => {
   const securableType = securable.name;
   if (!isSecurableType(securableType)) throw Error('Invalid securable type');
 
-  const resource = kebabCase(plural(securableType));
+  const resource = securableToResource(securableType);
   const paramId = `${securableType[0].toLowerCase()}${securableType.substring(1)}Id`;
 
   const getAndCheckAccess = async (req: Request, action: string): Promise<Securable> => {
@@ -42,25 +57,52 @@ export default (securable: ModelStatic<Securable>): SecurableController => {
 
   const browse = async (
     req: Request<Record<string, string>, any, any, PaginateQuery>,
-    res: Response
+    res: Response<UsersWithSecurablesResponse>
   ): Promise<void> => {
     await getAndCheckAccess(req as Request, 'securables');
 
     const { [paramId]: securableId } = req.params;
 
-    const users = await User.paginate({
+    const users = await User.paginate<UserSecurableListEntry>({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'email', 'simpleName'],
       attributes: ['id', 'email', 'name'],
       order: [['email', 'ASC']],
       include: [{ association: 'securables', where: { securableType, securableId } }],
+      transform: userSecurablesResponse,
     });
 
     res.json(users);
   };
 
+  const store = async (
+    req: Request<Record<string, string>, any, CreateUserWithSecurables>,
+    res: Response<undefined>
+  ): Promise<void> => {
+    await getAndCheckAccess(req, 'securables');
+
+    const {
+      params: { [paramId]: securableId },
+      body: { email, name, phone, actions },
+    } = req;
+
+    const { id: userId } = await adminUserService.create({
+      email,
+      name,
+      phone,
+      password: randomString(12),
+    });
+
+    if (actions.length) {
+      const records = actions.map((action) => ({ userId, securableId, securableType, action }));
+      await UserSecurable.bulkCreate(records);
+    }
+
+    res.status(201).json();
+  };
+
   const update = async (
-    req: Request<Record<string, string>, any, { actions: string[] }>,
+    req: Request<Record<string, string>, any, Pick<CreateUserWithSecurables, 'actions'>>,
     res: Response<undefined>
   ): Promise<void> => {
     const {
@@ -70,14 +112,25 @@ export default (securable: ModelStatic<Securable>): SecurableController => {
 
     const [, user] = await Promise.all([
       getAndCheckAccess(req, 'securables'),
-      User.findOne({ where: { id: userId, email: { [Op.ne]: null } } }),
+      User.findOne({
+        where: { id: userId, email: { [Op.ne]: null } },
+        include: [
+          { association: 'securables', required: false, where: { securableType, securableId } },
+        ],
+      }),
     ]);
     if (!user) throw new NotFoundError();
 
-    const records = actions.map((action) => ({ userId, securableId, securableType, action }));
+    if (actions.length) {
+      const currentActions = user.securables?.map((sec) => sec.action).sort() ?? [];
+      const actionsMatch = actions.sort().every((action, idx) => action === currentActions[idx]);
 
-    await UserSecurable.destroy({ where: { userId, securableId, securableType } });
-    await UserSecurable.bulkCreate(records);
+      if (!actionsMatch) {
+        const records = actions.map((action) => ({ userId, securableId, securableType, action }));
+        await UserSecurable.destroy({ where: { userId, securableId, securableType } });
+        await UserSecurable.bulkCreate(records);
+      }
+    }
 
     res.json();
   };
@@ -100,7 +153,7 @@ export default (securable: ModelStatic<Securable>): SecurableController => {
 
   const availableUsers = async (
     req: Request<Record<string, string>, any, any, PaginateQuery>,
-    res: Response
+    res: Response<AvailableUsersWithSecurablesResponse>
   ): Promise<void> => {
     await getAndCheckAccess(req as Request, 'securables');
 
@@ -144,6 +197,7 @@ export default (securable: ModelStatic<Securable>): SecurableController => {
 
   return {
     browse,
+    store,
     update,
     destroy,
     availableUsers,

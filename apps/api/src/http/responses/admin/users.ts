@@ -2,6 +2,7 @@ import type {
   UserEntry,
   UserMgmtListEntry,
   SurveyRespondentEntry,
+  UserSecurableListEntry,
 } from '@intake24/common/types/http/admin';
 import { User, UserSurveyAlias } from '@intake24/db';
 import { permissionListResponse } from './permissions';
@@ -39,4 +40,10 @@ export const userMgmtResponse = (user: User): UserMgmtListEntry => {
     email,
     permissions: permissions ? permissions.map(permissionListResponse) : [],
   };
+};
+
+export const userSecurablesResponse = (user: User): UserSecurableListEntry => {
+  const { id, name, email, securables = [] } = user;
+
+  return { id, name, email, securables };
 };
