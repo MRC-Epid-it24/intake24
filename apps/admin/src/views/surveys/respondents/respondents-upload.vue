@@ -80,7 +80,6 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
     close() {
       this.form.reset();
       this.dialog = false;
-      this.$emit('list:update');
     },
 
     async submit() {

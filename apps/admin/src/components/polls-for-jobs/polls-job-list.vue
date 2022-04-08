@@ -26,15 +26,15 @@
             </v-list-item-action>
             <v-list-item-action>
               <v-progress-circular
-                v-if="job.progress !== 1"
+                v-if="(job.progress || 0) !== 1"
                 :rotate="-90"
                 :size="45"
                 :width="6"
-                :value="Math.ceil(job.progress * 100)"
+                :value="Math.ceil((job.progress || 0) * 100)"
                 color="orange darken-3"
               >
                 <span class="font-weight-bold text--secondary">
-                  {{ Math.ceil(job.progress * 100) }}
+                  {{ Math.ceil((job.progress || 0) * 100) }}
                 </span>
               </v-progress-circular>
               <template v-else>

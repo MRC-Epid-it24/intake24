@@ -55,17 +55,13 @@ export default (Vue as VueConstructor<Vue & mixins>).extend({
     };
   },
 
-  beforeDestroy() {
-    this.stopPolling();
-  },
-
   methods: {
     async submit() {
       if (this.jobInProgress) return;
 
-      const {
-        data: { data },
-      } = await this.$http.post(`admin/surveys/${this.surveyId}/respondents/export-auth-urls`);
+      const { data } = await this.$http.post(
+        `admin/surveys/${this.surveyId}/respondents/export-auth-urls`
+      );
 
       this.jobs.unshift(data);
       this.startPolling();
