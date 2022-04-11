@@ -165,10 +165,8 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import debounce from 'lodash/debounce';
 import {
   SurveyMgmtAvailablePermissionsResponse,
-  SurveyMgmtAvailableUsersResponse,
   UserMgmtListEntry,
 } from '@intake24/common/types/http/admin';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
@@ -186,7 +184,6 @@ type SurveyMgmtForm = {
 };
 
 type SurveyMgmt = {
-  debouncedFetchUsers: () => void;
   $refs: {
     table: InstanceType<typeof EmbeddedDataTable>;
   };
@@ -228,7 +225,6 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmt>).extend({
         },
       ],
       dialog: false,
-      search: null,
       tab: 0,
       selected: {},
       form: form<SurveyMgmtForm>({
@@ -239,7 +235,6 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmt>).extend({
         permissions: [],
       }),
       isLoading: false,
-      users: [] as SurveyMgmtAvailableUsersResponse,
       permissions: [] as SurveyMgmtAvailablePermissionsResponse,
     };
   },
@@ -251,18 +246,6 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmt>).extend({
     isNew(): boolean {
       return this.tab === 1;
     },
-  },
-
-  watch: {
-    search() {
-      this.debouncedFetchUsers();
-    },
-  },
-
-  created() {
-    this.debouncedFetchUsers = debounce(() => {
-      this.fetchUsers();
-    }, 500);
   },
 
   async mounted() {
@@ -300,22 +283,6 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveyMgmt>).extend({
       const { name } = event.target as HTMLInputElement;
 
       if (name) this.form.errors.clear(name);
-    },
-
-    async fetchUsers() {
-      if (this.isLoading) return;
-
-      this.isLoading = true;
-
-      try {
-        const { data } = await this.$http.get<SurveyMgmtAvailableUsersResponse>(
-          `admin/surveys/${this.id}/mgmt/users`,
-          { params: { search: this.search } }
-        );
-        this.users = data;
-      } finally {
-        this.isLoading = false;
-      }
     },
 
     async save() {
