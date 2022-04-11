@@ -36,7 +36,7 @@ const jwtService = ({
 }: Pick<IoC, 'jwtRotationService' | 'securityConfig'>) => {
   const { issuer, access, refresh } = securityConfig.jwt;
   const signOptions: SignOptions = { issuer };
-  const verifyOptions: VerifyOptions = { audience: 'refresh', issuer };
+  const refreshVerifyOptions: VerifyOptions = { audience: 'refresh', issuer };
 
   /**
    * Sign a token
@@ -116,12 +116,20 @@ const jwtService = ({
    */
   const verifyRefreshToken = async (token: string): Promise<TokenPayload> =>
     new Promise((resolve, reject) => {
-      jwt.verify(token, refresh.secret, verifyOptions, (err, decoded) =>
+      jwt.verify(token, refresh.secret, refreshVerifyOptions, (err, decoded) =>
         err || !decoded
           ? reject(err ?? new Error('Unable to verify refresh token.'))
           : resolve(decoded as TokenPayload)
       );
     });
+
+  /**
+   * Decode token
+   *
+   * @param {string} token
+   * @returns {TokenPayload}
+   */
+  const decodeToken = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;
 
   /**
    * Issue JWT tokens and log for rotation
@@ -146,6 +154,7 @@ const jwtService = ({
     signAccessToken,
     signRefreshToken,
     signTokens,
+    decodeToken,
     verifyRefreshToken,
     issueTokens,
   };
