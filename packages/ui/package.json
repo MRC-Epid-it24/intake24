@@ -20,6 +20,7 @@
     "axios": "^0.26.1",
     "chart.js": "^3.7.1",
     "js-file-download": "^0.4.12",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "pinia": "^2.0.13",
     "pinia-plugin-persistedstate": "^1.5.1",

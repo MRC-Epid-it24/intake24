@@ -1,6 +1,6 @@
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
-import { surveyStaff } from '@intake24/common/acl';
+import { surveyStaff } from '@intake24/common/security';
 import ioc from '@intake24/api/ioc';
 
 export default () => {

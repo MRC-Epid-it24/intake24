@@ -1,4 +1,4 @@
-import { SecurableType } from '../../../acl';
+import { SecurableType } from '../../../security';
 
 export type UserSecurableAttributes = {
   userId: string;

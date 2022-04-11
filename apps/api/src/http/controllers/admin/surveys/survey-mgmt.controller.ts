@@ -11,7 +11,7 @@ import type {
 import { NotFoundError } from '@intake24/api/http/errors';
 import { permissionListResponse, userMgmtResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
-import { surveyMgmt } from '@intake24/common/acl';
+import { surveyMgmt } from '@intake24/common/security';
 import type { UserAttributes } from '@intake24/common/types/models';
 import type { Controller } from '../../controller';
 

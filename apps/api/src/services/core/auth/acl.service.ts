@@ -1,6 +1,6 @@
 import { Permission, Role, Securable, User } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
-import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/acl';
+import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import { securableToResource } from '@intake24/common/util';
 
 const aclService = ({

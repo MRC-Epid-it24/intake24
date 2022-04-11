@@ -204,7 +204,7 @@ import { ConfirmDialog } from '@intake24/ui';
 import { form } from '@intake24/admin/helpers';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import { securableToResource } from '@intake24/common/util';
-import { securableDefs, SecurableType } from '@intake24/common/acl';
+import { securableDefs, SecurableType } from '@intake24/common/security';
 import { ValidationError } from '@intake24/common/types';
 import { defineComponent, PropType, ref } from '@vue/composition-api';
 import { EmbeddedDataTable } from '../data-tables';

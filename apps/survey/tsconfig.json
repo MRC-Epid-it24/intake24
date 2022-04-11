@@ -23,8 +23,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "__tests__/**/*.ts",
-    "__tests__/**/*.tsx",
-    "../../packages/ui/src/feedback/user.service.ts"
+    "__tests__/**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia';
+import type { Subject } from '@intake24/common/security';
+import { tokenService } from '@intake24/ui/services';
 import type { Permission } from '@intake24/ui/types';
 import { httpService } from '@intake24/admin/services';
 import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
@@ -6,7 +8,10 @@ import { useLoading } from '@intake24/ui/stores';
 import { useResource } from './resource';
 
 export interface UserState {
-  status: string;
+  payload: {
+    userId: string;
+    subject: Subject;
+  } | null;
   profile: {
     id: string;
     email: string | null;
@@ -19,7 +24,7 @@ export interface UserState {
 
 export const useUser = defineStore('user', {
   state: (): UserState => ({
-    status: '',
+    payload: null,
     profile: null,
     permissions: [],
     roles: [],
@@ -51,8 +56,8 @@ export const useUser = defineStore('user', {
 
       return false;
     },
+
     async request() {
-      this.status = 'loading';
       const loading = useLoading();
       loading.addItem('user');
 
@@ -64,15 +69,21 @@ export const useUser = defineStore('user', {
         this.profile = { ...profile };
         this.permissions = [...permissions];
         this.roles = [...roles];
-        this.status = 'success';
 
-        Promise.resolve();
-      } catch (err: any) {
-        this.status = 'error';
-        Promise.reject(err);
+        return Promise.resolve();
+      } catch (err) {
+        return Promise.reject(err);
       } finally {
         loading.removeItem('user');
       }
+    },
+
+    loadPayload(accessToken: string) {
+      const { userId, sub } = tokenService.decodeAccessToken(accessToken);
+
+      const subject: Subject = JSON.parse(atob(sub));
+
+      this.payload = { userId, subject };
     },
   },
 });

@@ -20,6 +20,26 @@ export const useAuth = defineStore('auth', {
     loggedIn: (state) => !!state.accessToken,
   },
   actions: {
+    setAccessToken(token: string) {
+      useUser().loadPayload(token);
+      this.accessToken = token;
+    },
+
+    async successfulLogin(accessToken: string) {
+      this.setAccessToken(accessToken);
+      this.error = null;
+      this.mfaRequestUrl = null;
+
+      const userState = useUser();
+      if (!userState.loaded) await userState.request();
+    },
+
+    mfaRequest(url: string) {
+      this.error = null;
+      this.accessToken = null;
+      this.mfaRequestUrl = url;
+    },
+
     async login(payload: LoginRequest) {
       const loading = useLoading();
       loading.addItem('login');
@@ -60,11 +80,8 @@ export const useAuth = defineStore('auth', {
 
     async refresh(withErr = true) {
       try {
-        this.accessToken = await authService.refresh();
-        this.error = null;
-
-        const userState = useUser();
-        if (!userState.loaded) await userState.request();
+        const accessToken = await authService.refresh();
+        this.successfulLogin(accessToken);
 
         return Promise.resolve();
       } catch (err) {
@@ -80,20 +97,6 @@ export const useAuth = defineStore('auth', {
       useLoading().$reset();
       useUser().$reset();
       this.$reset();
-    },
-
-    async successfulLogin(accessToken: string) {
-      this.error = null;
-      this.mfaRequestUrl = null;
-      this.accessToken = accessToken;
-
-      await useUser().request();
-    },
-
-    mfaRequest(url: string) {
-      this.error = null;
-      this.accessToken = null;
-      this.mfaRequestUrl = url;
     },
   },
 });

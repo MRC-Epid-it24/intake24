@@ -3,7 +3,8 @@ import { Client } from '@duosecurity/duo_universal';
 import { User } from '@intake24/db';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import type { LoginMeta, Subject, Tokens } from '..';
+import { Subject } from '@intake24/common/security';
+import type { LoginMeta, Tokens } from '..';
 import type { MFALoginCredentials, MFAProvider, MFARequest, MFAVerifyCredentials } from '.';
 
 const regenerate = (req: Request): Promise<void> =>

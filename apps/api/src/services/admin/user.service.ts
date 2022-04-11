@@ -6,7 +6,7 @@ import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { defaultAlgorithm } from '@intake24/common-backend/util/passwords';
 import { toSimpleName } from '@intake24/api/util';
-import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/acl';
+import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 
 export type UserPasswordInput = {
   userId: string;

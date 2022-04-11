@@ -16,7 +16,7 @@ import {
   SurveyState,
 } from '@intake24/common/types/models';
 import { defaultOverrides, SchemeOverrides } from '@intake24/common/schemes';
-import { surveyPermissions } from '@intake24/common/acl';
+import { surveyPermissions } from '@intake24/common/security';
 import BaseModel from '../model';
 import {
   ClientErrorReport,

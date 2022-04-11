@@ -10,7 +10,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { LocaleAttributes, LocaleCreationAttributes } from '@intake24/common/types/models';
-import { foodDatabasePermissions } from '@intake24/common/acl';
+import { foodDatabasePermissions } from '@intake24/common/security';
 import BaseModel from '../model';
 import { Language, Permission, Survey } from '.';
 

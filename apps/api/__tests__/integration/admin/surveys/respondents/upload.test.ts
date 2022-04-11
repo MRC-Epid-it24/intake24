@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
-import { surveyStaff } from '@intake24/common/acl';
+import { surveyStaff } from '@intake24/common/security';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';

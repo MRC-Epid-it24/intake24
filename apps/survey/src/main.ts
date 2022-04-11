@@ -8,14 +8,18 @@ import App from './app.vue';
 import http from './services/http.service';
 import router from './router';
 import vuetify from './plugins/vuetify';
+import { useAuth } from './stores';
 
 Vue.prototype.$http = http;
 Vue.config.productionTip = false;
 
-new Vue({
+const vue = new Vue({
   i18n,
   pinia,
   router,
   vuetify,
   render: (h) => h(App),
-}).$mount('#app');
+});
+
+vue.$http.init(router, useAuth);
+vue.$mount('#app');

@@ -5,7 +5,7 @@ import { Parser } from 'json2csv';
 import { times } from 'lodash';
 import path from 'path';
 import { Permission, Role, User, UserSecurable } from '@intake24/db';
-import type { SecurableType } from '@intake24/common/acl';
+import type { SecurableType } from '@intake24/common/security';
 import ioc from '@intake24/api/ioc';
 import type Suite from './integration-suite';
 

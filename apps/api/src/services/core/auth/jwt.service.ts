@@ -1,34 +1,14 @@
 import jwt, { Secret, SignOptions, VerifyOptions } from 'jsonwebtoken';
 import { randomString } from '@intake24/common/util';
-import type { MFAProvider } from '@intake24/api/config';
+import { SignPayload, Subject, TokenPayload } from '@intake24/common/security';
 import { InternalServerError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { btoa } from '@intake24/api/util';
-
-export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken';
-
-export type Subject = {
-  provider: SubjectProvider | MFAProvider;
-  providerKey: string;
-};
 
 export type Tokens = {
   accessToken: string;
   refreshToken: string;
 };
-
-export type SignPayload = {
-  userId: string;
-};
-
-export interface TokenPayload extends SignPayload {
-  sub: string;
-  jti: string;
-  aud: string;
-  iss: string;
-  iat: number;
-  exp: number;
-}
 
 const jwtService = ({
   jwtRotationService,

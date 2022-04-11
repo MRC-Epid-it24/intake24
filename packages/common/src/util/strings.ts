@@ -1,6 +1,6 @@
 import { nanoid, customAlphabet } from 'nanoid';
 import { plural } from 'pluralize';
-import { isSecurableType } from '../acl';
+import { isSecurableType } from '../security';
 
 /**
  * Convert string to kebab case

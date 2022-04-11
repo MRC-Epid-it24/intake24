@@ -1,9 +1,12 @@
+import { Subject } from '@intake24/common/security';
 import { defineStore } from 'pinia';
-import { tokenService } from '../services';
-import { UserPayload } from '../types/auth';
+import { tokenService } from '@intake24/ui/services';
 
 export type UserState = {
-  profile: UserPayload | null;
+  profile: {
+    userId: string;
+    subject: Subject;
+  } | null;
 };
 
 export const useUser = defineStore('user', {
@@ -15,10 +18,11 @@ export const useUser = defineStore('user', {
   },
   actions: {
     load(accessToken: string) {
-      const decoded = tokenService.decodeAccessToken(accessToken);
-      if (!decoded) return;
+      const { userId, sub } = tokenService.decodeAccessToken(accessToken);
 
-      this.profile = { ...this.profile, ...decoded };
+      const subject: Subject = JSON.parse(atob(sub));
+
+      this.profile = { userId, subject };
     },
   },
 });

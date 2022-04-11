@@ -1,3 +1,4 @@
+import type { MFAProvider } from '@intake24/common/security';
 import ms from 'ms';
 import type { CookieSettings, SameSiteCookieOptions } from './common';
 
@@ -12,8 +13,6 @@ export type JwtAuthentication = {
   refresh: JwtTokenSettings;
   cookie: CookieSettings;
 };
-
-export type MFAProvider = 'duo';
 
 export type DuoProvider = {
   clientId: string;

@@ -24,7 +24,7 @@ import {
 } from '@intake24/common/types/models';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses/admin';
-import { staffSuffix, surveyAdmin } from '@intake24/common/acl';
+import { staffSuffix, surveyAdmin } from '@intake24/common/security';
 import type { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyController = Controller<CrudActions | 'patch' | 'put'>;

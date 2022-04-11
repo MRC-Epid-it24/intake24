@@ -22,12 +22,9 @@ export const useAuth = defineStore('auth', {
     loggedIn: (state) => !!state.accessToken,
   },
   actions: {
-    async login(payload: LoginRequest) {
-      await this.authenticate({ type: 'login', payload });
-    },
-
-    async token(payload: TokenRequest) {
-      await this.authenticate({ type: 'token', payload });
+    setAccessToken(token: string) {
+      useUser().load(token);
+      this.accessToken = token;
     },
 
     async authenticate(payload: AuthenticatePayload) {
@@ -40,9 +37,8 @@ export const useAuth = defineStore('auth', {
             ? await authSvc.login(payload.payload)
             : await authSvc.token(payload.payload);
 
+        this.setAccessToken(accessToken);
         this.error = null;
-        this.accessToken = accessToken;
-        useUser().load(accessToken);
 
         return Promise.resolve();
       } catch (err) {
@@ -54,13 +50,20 @@ export const useAuth = defineStore('auth', {
       }
     },
 
+    async login(payload: LoginRequest) {
+      await this.authenticate({ type: 'login', payload });
+    },
+
+    async token(payload: TokenRequest) {
+      await this.authenticate({ type: 'token', payload });
+    },
+
     async refresh(withErr = true) {
       try {
         const accessToken = await authSvc.refresh();
-        this.accessToken = accessToken;
-        this.error = null;
 
-        useUser().load(accessToken);
+        this.setAccessToken(accessToken);
+        this.error = null;
 
         return Promise.resolve();
       } catch (err) {

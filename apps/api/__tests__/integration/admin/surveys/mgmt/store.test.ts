@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Op, Permission, Survey } from '@intake24/db';
-import { surveyStaff } from '@intake24/common/acl';
+import { surveyStaff } from '@intake24/common/security';
 import ioc from '@intake24/api/ioc';
 
 const { adminSurveyService } = ioc.cradle;

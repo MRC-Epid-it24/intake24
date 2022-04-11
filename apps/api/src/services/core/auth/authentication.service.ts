@@ -3,7 +3,8 @@ import { Op, Permission, User, UserPassword, UserSurveyAlias } from '@intake24/d
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import { supportedAlgorithms } from '@intake24/common-backend/util/passwords';
 import type { IoC } from '@intake24/api/ioc';
-import type { Subject, Tokens } from '.';
+import { Subject } from '@intake24/common/security';
+import type { Tokens } from '.';
 import type { MFARequest } from './mfa';
 
 export type EmailLoginCredentials = {

@@ -11,7 +11,7 @@ import {
   surveyStaff,
   surveyAdmin,
   foodsAdmin,
-} from '@intake24/common/acl';
+} from '@intake24/common/security';
 
 /*
  * This middleware should be placed after authentication

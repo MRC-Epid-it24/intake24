@@ -5,7 +5,7 @@ import {
 } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey, UserSurveyAlias } from '@intake24/db';
-import { surveyStaff } from '@intake24/common/acl';
+import { surveyStaff } from '@intake24/common/security';
 import { omit, pick } from 'lodash';
 import ioc from '@intake24/api/ioc';
 import { CustomField } from '@intake24/common/types';
