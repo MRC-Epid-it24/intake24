@@ -37,7 +37,7 @@ import { FeedbackCardParameters } from '@intake24/ui/feedback';
 import { getDetails, getBackgroundImage } from '.';
 
 export default defineComponent({
-  name: 'GenericPrintCard',
+  name: 'PrintCard',
 
   props: {
     parameters: {

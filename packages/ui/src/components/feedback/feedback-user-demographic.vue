@@ -77,7 +77,7 @@ import { downloadFile } from '@intake24/ui/util';
 import { useLoading } from '@intake24/ui/stores';
 
 export default defineComponent({
-  name: 'FeedbackUserDemographicInfo',
+  name: 'FeedbackUserDemographic',
 
   props: {
     userInfo: {

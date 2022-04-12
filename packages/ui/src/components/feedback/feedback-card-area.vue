@@ -2,11 +2,11 @@
   <div>
     <v-row justify="center" no-gutters class="d-print-none">
       <v-col v-for="card in cards" :key="card.id" class="pa-4" cols="auto">
-        <generic-card :parameters="card"></generic-card>
+        <screen-card :parameters="card"></screen-card>
       </v-col>
     </v-row>
     <div v-for="card in cards" :key="`print-${card.id}`" class="d-none d-print-block">
-      <generic-print-card :parameters="card"></generic-print-card>
+      <print-card :parameters="card"></print-card>
     </div>
   </div>
 </template>
@@ -14,12 +14,12 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import { FeedbackCardParameters } from '@intake24/ui/feedback';
-import { GenericCard, GenericPrintCard } from './cards';
+import { PrintCard, ScreenCard } from './cards';
 
 export default defineComponent({
   name: 'FeedbackCardArea',
 
-  components: { GenericCard, GenericPrintCard },
+  components: { PrintCard, ScreenCard },
 
   props: {
     cards: {

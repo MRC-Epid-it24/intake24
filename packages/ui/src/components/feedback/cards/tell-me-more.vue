@@ -43,10 +43,10 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { FeedbackDetails } from '.';
+import { FeedbackDetails } from './card-details';
 
 export default defineComponent({
-  name: 'FeedbackCharacterCard',
+  name: 'TellMeMore',
 
   props: {
     detail: {

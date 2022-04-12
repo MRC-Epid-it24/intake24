@@ -28,7 +28,7 @@ import { getDetails, getBackgroundImage } from '.';
 import TellMeMore from './tell-me-more.vue';
 
 export default defineComponent({
-  name: 'GenericCard',
+  name: 'ScreenCard',
 
   components: { TellMeMore },
 
