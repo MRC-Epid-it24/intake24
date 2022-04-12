@@ -81,7 +81,7 @@ export const useAuth = defineStore('auth', {
     async refresh(withErr = true) {
       try {
         const accessToken = await authService.refresh();
-        this.successfulLogin(accessToken);
+        await this.successfulLogin(accessToken);
 
         return Promise.resolve();
       } catch (err) {
