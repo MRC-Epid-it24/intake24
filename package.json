@@ -38,7 +38,7 @@
   },
   "lint-staged": {
     "*.md": "prettier --write",
-    "*.ts": "eslint --fix"
+    "*.{ts,vue}": "eslint --fix"
   },
   "repository": {
     "type": "git",
