@@ -119,7 +119,6 @@ const defaultParams: JobParamsList = {
   CleanRedisStore: { store: 'cache' },
   CleanStorageFiles: {},
   PurgeRefreshTokens: {},
-  SyncLanguageTranslations: {},
   NutrientTableImportMapping: {
     nutrientTableId: '',
     file: '',
@@ -127,6 +126,11 @@ const defaultParams: JobParamsList = {
   NutrientTableImportData: {
     nutrientTableId: '',
     file: '',
+  },
+  SendRespondentFeedback: {
+    surveyId: '',
+    userId: '',
+    to: '',
   },
   SendPasswordReset: {
     email: '',
@@ -146,6 +150,7 @@ const defaultParams: JobParamsList = {
     surveyId: '',
     submissionId: '',
   },
+  SyncLanguageTranslations: {},
 };
 
 export default (Vue as VueConstructor<Vue & FormMixin<TaskEntry, TaskRefs>>).extend({

@@ -107,6 +107,7 @@ export type JobParamsList = {
   NutrientTableImportMapping: NutrientTableImportMappingParams;
   NutrientTableImportData: NutrientTableImportDataParams;
   SendPasswordReset: SendPasswordResetParams;
+  SendRespondentFeedback: SendRespondentFeedbackParams;
   SurveyDataExport: SurveyDataExportParams;
   SurveyExportRespondentAuthUrls: SurveyExportRespondentAuthUrlsParams;
   SurveyImportRespondents: SurveyImportRespondentsParams;
