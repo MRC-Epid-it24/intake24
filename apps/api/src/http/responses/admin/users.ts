@@ -3,6 +3,7 @@ import type {
   UserMgmtListEntry,
   SurveyRespondentEntry,
   UserSecurableListEntry,
+  SurveyRespondentListEntry,
 } from '@intake24/common/types/http/admin';
 import { User, UserSurveyAlias } from '@intake24/db';
 import { permissionListResponse } from './permissions';
@@ -29,6 +30,12 @@ export const userRespondentResponse = (alias: UserSurveyAlias): SurveyRespondent
   } = alias;
 
   return { userId, surveyId, userName, urlAuthToken, name, email, phone, customFields };
+};
+
+export const userRespondentListResponse = (alias: UserSurveyAlias): SurveyRespondentListEntry => {
+  const { userId, userName, surveyId, urlAuthToken } = alias;
+
+  return { userId, surveyId, userName, urlAuthToken };
 };
 
 export const userMgmtResponse = (user: User): UserMgmtListEntry => {

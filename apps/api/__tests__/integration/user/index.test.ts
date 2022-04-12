@@ -8,4 +8,6 @@ export default () => {
   describe('POST /api/user/physical-data', setPhysicalData);
   describe('GET /api/user/submissions', submissions);
   describe('GET /api/user/password', password);
+  // describe('GET /api/user/feedback', downloadFeedback);
+  // describe('POST /api/user/feedback', emailFeedback);
 };

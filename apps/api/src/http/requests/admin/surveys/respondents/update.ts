@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 import validate from '@intake24/api/http/requests/validate';
-import { identifiers, password as passFields } from '../defaults';
+import { identifiers, password as passFields } from '../../users/defaults';
 
 const { password, passwordConfirm } = passFields;
 

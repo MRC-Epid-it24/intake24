@@ -43,22 +43,25 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  v-model="form.file"
+                  v-model="form.email"
                   :error-messages="form.errors.get('email')"
                   :label="$t('users.email')"
                   hide-details="auto"
-                  name="file"
+                  name="email"
                   outlined
                   prepend-icon="fas fa-envelope"
-                  @change="form.errors.clear('email')"
+                  @input="form.errors.clear('email')"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="auto">
                 <v-radio-group
                   v-model="form.copy"
+                  :error-messages="form.errors.get('copy')"
                   :label="$t('surveys.respondents.feedback.email.copy._')"
                   mandatory
+                  name="copy"
                   row
+                  @change="form.errors.clear('copy')"
                 >
                   <v-radio :label="$t('surveys.respondents.feedback.email.copy.none')" value="none">
                   </v-radio>
@@ -133,7 +136,7 @@ export default defineComponent({
       loading.addItem('respondent-feedback-download');
 
       try {
-        const res = await this.$http.get(`${this.apiUrl}/download`, {
+        const res = await this.$http.get(this.apiUrl, {
           responseType: 'arraybuffer',
           headers: { accept: 'application/pdf' },
         });
@@ -151,7 +154,7 @@ export default defineComponent({
     },
 
     async email() {
-      await this.form.post(`${this.apiUrl}/email`);
+      await this.form.post(this.apiUrl);
     },
   },
 });

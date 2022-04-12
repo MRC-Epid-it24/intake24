@@ -7,7 +7,7 @@ import type { SurveyExportRespondentAuthUrlsParams } from '@intake24/common/type
 import { Job as DbJob, Survey, UserSurveyAlias } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { addTime, getSurveyUrl } from '@intake24/api/util';
+import { addTime, getFrontEndUrl } from '@intake24/api/util';
 import BaseJob from './job';
 
 export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExportRespondentAuthUrlsParams> {
@@ -64,7 +64,7 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
 
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
 
-    const baseFrontendURL = getSurveyUrl(
+    const baseFrontendURL = getFrontEndUrl(
       this.appConfig.urls.base,
       this.appConfig.urls.survey,
       survey.authUrlDomainOverride

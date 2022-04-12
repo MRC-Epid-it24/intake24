@@ -7,17 +7,29 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { Survey, User, UserCustomField, UserSurveyAlias, PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
-import { userRespondentResponse } from '@intake24/api/http/responses/admin';
+import {
+  userRespondentResponse,
+  userRespondentListResponse,
+} from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
 import type { Controller, CrudActions } from '../../controller';
 
 export type AdminSurveyRespondentController = Controller<
-  Exclude<CrudActions, 'create' | 'refs'> | 'upload' | 'exportAuthUrls'
+  | Exclude<CrudActions, 'create' | 'refs'>
+  | 'upload'
+  | 'exportAuthUrls'
+  | 'downloadFeedback'
+  | 'emailFeedback'
 >;
 
 export default ({
   adminSurveyService,
-}: Pick<IoC, 'adminSurveyService'>): AdminSurveyRespondentController => {
+  feedbackService,
+  scheduler,
+}: Pick<
+  IoC,
+  'adminSurveyService' | 'feedbackService' | 'scheduler'
+>): AdminSurveyRespondentController => {
   const entry = async (
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<SurveyRespondentEntry>
@@ -47,7 +59,7 @@ export default ({
       columns: ['userName'],
       where: { surveyId },
       order: [['userName', 'ASC']],
-      transform: userRespondentResponse,
+      transform: userRespondentListResponse,
     });
 
     res.json(respondents);
@@ -143,6 +155,44 @@ export default ({
     res.json(job);
   };
 
+  const downloadFeedback = async (
+    req: Request<{ surveyId: string; userId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
+    const { surveyId, userId } = req.params;
+
+    const { pdfStream, filename } = await feedbackService.getFeedbackStream(surveyId, userId);
+
+    res.set('content-type', 'application/pdf');
+    res.set('content-disposition', `attachment; filename=${filename}`);
+
+    pdfStream.pipe(res);
+  };
+
+  const emailFeedback = async (
+    req: Request<{ surveyId: string; userId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
+    const {
+      params: { surveyId, userId },
+      body: { email, copy },
+    } = req;
+    const user = req.user as User;
+
+    await scheduler.jobs.addJob(
+      { type: 'SendRespondentFeedback', userId },
+      {
+        surveyId,
+        userId,
+        to: email,
+        cc: copy === 'cc' && user.email ? user.email : undefined,
+        bcc: copy === 'bcc' && user.email ? user.email : undefined,
+      }
+    );
+
+    res.json();
+  };
+
   return {
     browse,
     store,
@@ -152,5 +202,7 @@ export default ({
     destroy,
     upload,
     exportAuthUrls,
+    downloadFeedback,
+    emailFeedback,
   };
 };

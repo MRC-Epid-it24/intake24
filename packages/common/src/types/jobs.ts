@@ -14,15 +14,16 @@ export type JobData<T = any> = { params: T };
 export const jobTypes = [
   'CleanRedisStore',
   'CleanStorageFiles',
-  'PurgeRefreshTokens',
-  'SendPasswordReset',
-  'SyncLanguageTranslations',
   'NutrientTableImportMapping',
   'NutrientTableImportData',
+  'PurgeRefreshTokens',
+  'SendPasswordReset',
+  'SendRespondentFeedback',
   'SurveyDataExport',
   'SurveyExportRespondentAuthUrls',
   'SurveyImportRespondents',
   'SurveySubmissionNotification',
+  'SyncLanguageTranslations',
 ] as const;
 
 export type JobType = typeof jobTypes[number];
@@ -41,6 +42,14 @@ export type PurgeRefreshTokensParams = EmptyJobParams;
 export type SendPasswordResetParams = {
   email: string;
   token: string;
+};
+
+export type SendRespondentFeedbackParams = {
+  surveyId: string;
+  userId: string;
+  to: string;
+  cc?: string;
+  bcc?: string;
 };
 
 export type SyncLanguageTranslationsParams = EmptyJobParams;
@@ -84,6 +93,7 @@ export type JobParams =
   | NutrientTableImportMappingParams
   | NutrientTableImportDataParams
   | SendPasswordResetParams
+  | SendRespondentFeedbackParams
   | SurveyDataExportParams
   | SurveyExportRespondentAuthUrlsParams
   | SurveyImportRespondentsParams

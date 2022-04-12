@@ -1,7 +1,3 @@
-export type Dictionary<T = any> = { [key: string]: T };
-
-export type Environment = 'development' | 'test' | 'production';
-
 export const applications = ['admin', 'survey', 'shared'] as const;
 
 export type Application = typeof applications[number];
@@ -10,6 +6,14 @@ export type CustomField = {
   name: string;
   value: string;
 };
+
+export type Dictionary<T = any> = { [key: string]: T };
+
+export const emailCopy = ['cc', 'bcc', 'none'] as const;
+
+export type EmailCopy = typeof emailCopy[number];
+
+export type Environment = 'development' | 'test' | 'production';
 
 export type LocaleTranslation<T = string | null> = {
   en: T;

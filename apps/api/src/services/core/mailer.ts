@@ -28,12 +28,7 @@ export default class Mailer {
 
     switch (mailer) {
       case 'smtp':
-        options = {
-          ...this.mailConfig.mailers[mailer],
-          pool: true,
-          debug: isDev,
-          logger: isDev,
-        };
+        options = { ...this.mailConfig.mailers[mailer], pool: true, logger: isDev };
         break;
       case 'log':
       default:

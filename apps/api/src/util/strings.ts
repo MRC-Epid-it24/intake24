@@ -39,17 +39,21 @@ export const isUrlAbsolute = (url: string, options?: validator.IsURLOptions): bo
   validator.isURL(url, options);
 
 /**
- * Get survey frontend URL
+ * Get frontend URL
  *
  * @param {string} base
- * @param {string} survey
+ * @param {string} frontend
  * @param {string} [override]
  * @returns {string}
  */
-export const getSurveyUrl = (base: string, survey: string, override?: string | null): string => {
+export const getFrontEndUrl = (
+  base: string,
+  frontend: string,
+  override?: string | null
+): string => {
   if (override) return trimEnd(override, '/');
 
-  if (isUrlAbsolute(survey)) return trimEnd(survey, '/');
+  if (isUrlAbsolute(frontend)) return trimEnd(frontend, '/');
 
-  return [base, survey].map((item) => trim(item, '/')).join('/');
+  return [base, frontend].map((item) => trim(item, '/')).join('/');
 };

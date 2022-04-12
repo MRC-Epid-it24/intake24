@@ -2,7 +2,7 @@ import type { Request } from 'express';
 import { checkSchema } from 'express-validator';
 import validate from '@intake24/api/http/requests/validate';
 import { UserSurveyAlias } from '@intake24/db';
-import { identifiers, password } from '../defaults';
+import { identifiers, password } from '../../users/defaults';
 
 export default validate(
   checkSchema({

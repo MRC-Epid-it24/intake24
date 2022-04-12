@@ -2,9 +2,10 @@ import { JobType } from '@intake24/common/types';
 import CleanRedisStore from './clean-redis-store';
 import CleanStorageFiles from './clean-storage-files';
 import PurgeRefreshTokens from './purge-refresh-tokens';
-import SendPasswordReset from './send-password-reset';
 import NutrientTableImportData from './nutrient-table-import-data';
 import NutrientTableImportMapping from './nutrient-table-import-mapping';
+import SendPasswordReset from './send-password-reset';
+import SendRespondentFeedback from './send-respondent-feedback';
 import SurveyDataExport from './survey-data-export';
 import SurveyExportRespondentAuthUrls from './survey-export-respondent-auth-urls';
 import SurveyImportRespondents from './survey-import-respondents';
@@ -20,6 +21,7 @@ const jobs = {
   CleanRedisStore,
   CleanStorageFiles,
   PurgeRefreshTokens,
+  SendRespondentFeedback,
   SendPasswordReset,
   SyncLanguageTranslations,
   // Nutrient tables

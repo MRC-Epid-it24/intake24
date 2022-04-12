@@ -1,9 +1,8 @@
 import type { Job } from 'bullmq';
-import { trim } from 'lodash';
 import nunjucks from 'nunjucks';
 import type { SendPasswordResetParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
-import { isUrlAbsolute } from '@intake24/api/util';
+import { getFrontEndUrl } from '@intake24/api/util';
 import BaseJob from './job';
 
 export default class SendPasswordReset extends BaseJob<SendPasswordResetParams> {
@@ -41,10 +40,7 @@ export default class SendPasswordReset extends BaseJob<SendPasswordResetParams> 
     this.logger.debug('Job started.');
 
     const { base, admin } = this.appConfig.urls;
-    const domain = isUrlAbsolute(admin)
-      ? trim(admin, '/')
-      : `${trim(base, '/')}/${trim(admin, '/')}`;
-
+    const domain = getFrontEndUrl(base, admin);
     const url = `${domain}/password/reset/${this.params.token}`;
     const { expiresIn } = this.securityConfig.passwords;
 

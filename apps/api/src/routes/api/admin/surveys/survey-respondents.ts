@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { permission } from '@intake24/api/http/middleware';
-import validation from '@intake24/api/http/requests/admin/users/respondents';
+import validation from '@intake24/api/http/requests/admin/surveys/respondents';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
@@ -25,6 +25,8 @@ export default () => {
   );
   router.post('/export-auth-urls', wrapAsync(adminSurveyRespondentController.exportAuthUrls));
 
+  router.use('/:userId', validation.entry('userId'));
+
   router
     .route('/:userId')
     .get(wrapAsync(adminSurveyRespondentController.read))
@@ -32,6 +34,11 @@ export default () => {
     .delete(wrapAsync(adminSurveyRespondentController.destroy));
 
   router.get('/:userId/edit', wrapAsync(adminSurveyRespondentController.edit));
+
+  router
+    .route('/:userId/feedback')
+    .get(wrapAsync(adminSurveyRespondentController.downloadFeedback))
+    .post(validation.emailFeedback, wrapAsync(adminSurveyRespondentController.emailFeedback));
 
   return router;
 };

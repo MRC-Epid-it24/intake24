@@ -16,6 +16,12 @@ export default class FeedbackPdfGenerator {
     return { browser, page };
   }
 
+  /**
+   * Get PDf buffer
+   *
+   * @returns
+   * @memberof FeedbackPdfGenerator
+   */
   async getPdf() {
     const { browser, page } = await this.loadFeedback();
 
@@ -30,6 +36,12 @@ export default class FeedbackPdfGenerator {
     return pdfBuffer;
   }
 
+  /**
+   * Get PDF stream
+   *
+   * @returns
+   * @memberof FeedbackPdfGenerator
+   */
   async getPdfStream() {
     const { browser, page } = await this.loadFeedback();
 
@@ -48,5 +60,26 @@ export default class FeedbackPdfGenerator {
       });
 
     return pdfBuffer;
+  }
+
+  /**
+   * Generate PDF file to disk
+   *
+   * @param {string} path
+   * @memberof FeedbackPdfGenerator
+   */
+  async getPdfFile(path: string) {
+    const { browser, page } = await this.loadFeedback();
+
+    await page.pdf({
+      path,
+      format: 'a4',
+      displayHeaderFooter: true,
+      printBackground: true,
+    });
+
+    await browser.close();
+
+    return path;
   }
 }
