@@ -4,18 +4,19 @@ import { PollsForJobs } from '@intake24/admin/components/polls-for-jobs';
 type mixins = InstanceType<typeof PollsForJobs>;
 
 export default (Vue as VueConstructor<Vue & mixins>).extend({
+  props: {
+    surveyId: {
+      type: String,
+      required: true,
+    },
+  },
+
   mixins: [PollsForJobs],
 
   data() {
     return {
       dialog: false,
     };
-  },
-
-  computed: {
-    surveyId(): string {
-      return this.$route.params.id;
-    },
   },
 
   watch: {

@@ -124,12 +124,22 @@
             </v-btn>
           </template>
           <v-list>
-            <respondents-upload></respondents-upload>
-            <respondents-auth-url-export></respondents-auth-url-export>
+            <respondents-upload :surveyId="id"></respondents-upload>
+            <respondents-auth-url-export :surveyId="id"></respondents-auth-url-export>
           </v-list>
         </v-menu>
       </template>
       <template v-slot:[`item.action`]="{ item }">
+        <v-menu close-on-content-click close-on-click offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn class="font-weight-bold" color="primary" v-bind="attrs" v-on="on" icon>
+              <v-icon>fa-ellipsis-v</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <respondent-feedback :surveyId="id" :user="item"></respondent-feedback>
+          </v-list>
+        </v-menu>
         <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
           <v-icon dark>$edit</v-icon>
         </v-btn>
@@ -158,6 +168,7 @@ import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import { form } from '@intake24/admin/helpers';
 import { EntryMixin } from '@intake24/admin/types';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import RespondentFeedback from './respondent-feedback.vue';
 import RespondentsUpload from './respondents-upload.vue';
 import RespondentsAuthUrlExport from './respondents-auth-url-export.vue';
 
@@ -180,7 +191,13 @@ export type SurveyRespondentsForm = {
 export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).extend({
   name: 'SurveyRespondents',
 
-  components: { ConfirmDialog, EmbeddedDataTable, RespondentsAuthUrlExport, RespondentsUpload },
+  components: {
+    ConfirmDialog,
+    EmbeddedDataTable,
+    RespondentFeedback,
+    RespondentsAuthUrlExport,
+    RespondentsUpload,
+  },
 
   mixins: [detailMixin],
 

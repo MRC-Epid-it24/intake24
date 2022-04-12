@@ -17,9 +17,7 @@ const httpClient: HttpClient = {
     baseURL: [process.env.VUE_APP_API_HOST, process.env.VUE_APP_API_URL]
       .map((item) => trim(item, '/'))
       .join('/'),
-    // Axios typings issue, remove when fixed
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error: Axios typings issue, remove when fixed
     headers: { common: { 'X-Requested-With': 'XMLHttpRequest' } },
   }),
 

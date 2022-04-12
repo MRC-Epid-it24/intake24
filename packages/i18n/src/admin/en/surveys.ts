@@ -93,6 +93,23 @@ const surveys: LocaleMessageObject = {
       submit: 'Generate file',
       download: 'Download',
     },
+    feedback: {
+      _: 'Feedback',
+      title: `Respondent's feedback`,
+      open: `Open`,
+      download: `Download`,
+      email: {
+        title: 'Email feedback to respondent',
+        recipient: 'Recipient email',
+        sent: 'Send',
+        copy: {
+          _: 'Copy me: ',
+          cc: 'CC',
+          bcc: 'BCC',
+          none: 'None',
+        },
+      },
+    },
   },
   submissions: {
     _: 'Submission',
