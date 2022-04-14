@@ -197,7 +197,7 @@ importers:
       awilix: ^7.0.2
       axios: ^0.26.1
       body-parser: ^1.20.0
-      bullmq: ^1.80.0
+      bullmq: ^1.80.1
       connect-redis: ^6.1.3
       cookie-parser: ^1.4.6
       cors: ^2.8.5
@@ -257,7 +257,7 @@ importers:
       awilix: 7.0.2
       axios: 0.26.1
       body-parser: 1.20.0
-      bullmq: 1.80.0
+      bullmq: 1.80.1
       connect-redis: 6.1.3
       cookie-parser: 1.4.6
       cors: 2.8.5
@@ -4695,7 +4695,7 @@ packages:
   /axios/0.21.4_debug@4.3.4:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.14.9
+      follow-redirects: 1.14.9_debug@4.3.4
     transitivePeerDependencies:
       - debug
     dev: false
@@ -4703,7 +4703,7 @@ packages:
   /axios/0.23.0:
     resolution: {integrity: sha512-NmvAE4i0YAv5cKq8zlDoPd1VLKAqX5oLuZKs8xkJa4qi6RGn0uhCYFjWtHHC9EM/MwOwYWOs53W+V0aqEXq1sg==}
     dependencies:
-      follow-redirects: 1.14.9
+      follow-redirects: 1.14.9_debug@4.3.4
     transitivePeerDependencies:
       - debug
     dev: false
@@ -4711,7 +4711,7 @@ packages:
   /axios/0.26.1:
     resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
     dependencies:
-      follow-redirects: 1.14.9
+      follow-redirects: 1.14.9_debug@4.3.4
     transitivePeerDependencies:
       - debug
     dev: false
@@ -5117,8 +5117,8 @@ packages:
     resolution: {integrity: sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=}
     dev: true
 
-  /bullmq/1.80.0:
-    resolution: {integrity: sha512-oz7GZIg7gAGIIlLQ3KdpYSA5WSz5205pQHyGwOtQof9MmkOf+Kmo6sxqr+BiQrjhFOrB6JLSCqS3EGEbMA34MA==}
+  /bullmq/1.80.1:
+    resolution: {integrity: sha512-n4pmRVZefKVOXvV6Hok9KBagABLHxffzbVFwFCL6yQemey/D+6F7tZi2UREMS3y4voo6R1lG/0D0xEMg6dVSwA==}
     dependencies:
       cron-parser: 4.3.0
       get-port: 5.1.1
@@ -7711,6 +7711,7 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dev: true
 
   /follow-redirects/1.14.9_debug@4.3.4:
     resolution: {integrity: sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==}
@@ -7722,7 +7723,6 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.4
-    dev: true
 
   /fork-ts-checker-webpack-plugin/6.5.1_af975665b77ba08c9ef178ae75766f4e:
     resolution: {integrity: sha512-x1wumpHOEf4gDROmKTaB6i4/Q6H3LwmjVO7fIX47vBwlZbtPjU33hgoMuD/Q/y6SU8bnuYSoN6ZQOLshGp0T/g==}
