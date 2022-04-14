@@ -64,7 +64,7 @@ Content-Type: application/json
         {
           "userId": string,
           "surveyId": string,
-          "userName": string,
+          "username": string,
           "urlAuthToken": string
         }
       ],

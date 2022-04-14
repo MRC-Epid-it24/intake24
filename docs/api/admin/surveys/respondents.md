@@ -44,7 +44,7 @@ Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "userName": string,
+    "username": string,
     "name": string? | null,
     "email": string? | null,
     "phone": string? | null,
@@ -67,7 +67,7 @@ Content-Type: application/json
 {
     "userId": string,
     "surveyId": string,
-    "userName": string,
+    "username": string,
     "urlAuthToken": string,
     "name": string | null,
     "email": string | null,
@@ -102,7 +102,7 @@ Content-Type: application/json
 {
     "userId": string,
     "surveyId": string,
-    "userName": string,
+    "username": string,
     "urlAuthToken": string,
     "name": string | null,
     "email": string | null,
@@ -145,7 +145,7 @@ Content-Type: application/json
 {
     "userId": string,
     "surveyId": string,
-    "userName": string,
+    "username": string,
     "urlAuthToken": string,
     "name": string | null,
     "email": string | null,
@@ -176,6 +176,49 @@ Content-Type: application/json
 
 ```json
 204 No Content
+```
+
+## Download feedback
+
+Download feedback as PDF. Returns stream as `application/pdf`.
+
+### Request
+
+```http
+GET /api/admin/surveys/:surveyId/respondents/:userId/feedback
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+```
+
+## Email feedback
+
+Email feedback as PDF attachment.
+
+### Request
+
+```http
+POST /api/admin/surveys/:surveyId/respondents/:userId/feedback
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+    "email": string,
+    "copy": 'none' | 'cc' | 'bcc'
+}
+```
+
+### Response
+
+```json
+200 OK
 ```
 
 ## Export authentication URLs

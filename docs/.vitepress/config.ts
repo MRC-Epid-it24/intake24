@@ -268,10 +268,6 @@ export default defineConfig({
               link: '/api/admin/surveys/surveys',
             },
             {
-              text: 'Survey management',
-              link: '/api/admin/surveys/mgmt',
-            },
-            {
               text: 'Survey respondents',
               link: '/api/admin/surveys/respondents',
             },

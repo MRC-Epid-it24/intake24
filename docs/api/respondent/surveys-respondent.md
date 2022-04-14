@@ -9,7 +9,7 @@ Returns survey parameters such as the scheme ID, current status, custom HTML con
 ### Request
 
 ```http
-GET /api/surveys/{surveyId}/parameters
+GET /api/surveys/{slug}/parameters
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -43,7 +43,7 @@ Returns a subset of personal data for the current user that is relevant to the r
 ### Request
 
 ```http
-GET /api/surveys/{surveyId}/user-info?tzOffset={tzOffset}
+GET /api/surveys/{slug}/user-info?tzOffset={tzOffset}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -89,7 +89,7 @@ Get survey user session (current recall state), if any. Functionality is control
 ### Request
 
 ```http
-GET /api/surveys/{surveyId}/session
+GET /api/surveys/{slug}/session
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -101,7 +101,7 @@ Content-Type: application/json
 200 OK
 
 {
-  "userId": number,
+  "userId": string,
   "surveyId": string,
   "sessionData": {...}
 }
@@ -114,7 +114,7 @@ Save survey user session (current recall state) on server. Functionality is cont
 ### Request
 
 ```http
-POST /api/surveys/{surveyId}/session
+POST /api/surveys/{slug}/session
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -130,7 +130,7 @@ Content-Type: application/json
 200 OK
 
 {
-  "userId": number,
+  "userId": string,
   "surveyId": string,
   "sessionData": {...}
 }
@@ -143,7 +143,7 @@ Returns actions available at the end of the recall which can be a link to the ne
 ### Request
 
 ```http
-GET /api/surveys/{surveyId}/follow-up
+GET /api/surveys/{slug}/follow-up
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -169,7 +169,7 @@ Submit a completed recall.
 ### Request
 
 ```http
-POST /api/surveys/{surveyId}/submissions
+POST /api/surveys/{slug}/submissions
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -178,12 +178,6 @@ Content-Type: application/json
   "recall": {...}
 }
 ```
-
-where:
-
-**surveyId** is the survey ID,
-
-**recall** is a completed dietary recall in JSON format.
 
 ### Response
 
@@ -207,7 +201,7 @@ Notify people having support role for the survey to give the respondent a call t
 ### Request
 
 ```http
-POST /api/surveys/{surveyId}/request-callback
+POST /api/surveys/{slug}/request-callback
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -220,7 +214,7 @@ Content-Type: application/json
 
 where:
 
-**surveyId** is the survey ID,
+**slug** is the survey ID,
 
 **name** and **phone** are the respondent's contact details (as entered into the assistance request form by the
 respondent).

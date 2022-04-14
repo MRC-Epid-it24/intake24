@@ -71,9 +71,9 @@ POST /api/login/alias
 Content-Type: application/json
 
 {
-    "userName": string,
+    "username": string,
     "password": string,
-    "surveyId": string
+    "survey": string
 }
 ```
 

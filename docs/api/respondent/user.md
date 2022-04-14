@@ -2,6 +2,25 @@
 
 User API endpoints accessible to authentication user.
 
+## Feedback download
+
+Download feedback as PDF. Returns stream as `application/pdf`.
+
+### Request
+
+```http
+GET /api/user/feedback
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+```
+
 ## Get physical data
 
 Get user's physical data.
@@ -107,7 +126,7 @@ Content-Type: application/json
           {
             "userId": string,
             "surveyId": string,
-            "userName": string,
+            "username": string,
             "urlAuthToken": string
           },
           ...
