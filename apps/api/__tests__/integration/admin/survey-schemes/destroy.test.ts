@@ -43,7 +43,7 @@ export default () => {
       await suite.util.setPermission(['survey-schemes']);
     });
 
-    it('should return 200 and data when securable set', async () => {
+    it('should return 204 and no content when securable set', async () => {
       const { id } = await SurveyScheme.create(mocker.system.surveyScheme());
       await suite.util.setSecurable({
         securableId: id,
@@ -54,7 +54,7 @@ export default () => {
       await suite.sharedTests.assertRecordDeleted('delete', `${baseUrl}/${id}`);
     });
 
-    it('should return 200 and data when owner set', async () => {
+    it('should return 204 and no content when owner set', async () => {
       const { id } = await SurveyScheme.create({
         ...mocker.system.surveyScheme(),
         ownerId: suite.data.system.user.id,

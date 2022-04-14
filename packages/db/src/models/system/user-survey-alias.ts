@@ -1,5 +1,17 @@
-import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
-import { UserSurveyAliasAttributes } from '@intake24/common/types/models';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Scopes,
+  Table,
+  CreatedAt,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import {
+  UserSurveyAliasAttributes,
+  UserSurveyAliasCreationAttributes,
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { Survey, User } from '.';
 
@@ -10,16 +22,21 @@ import { Survey, User } from '.';
   modelName: 'UserSurveyAlias',
   tableName: 'user_survey_aliases',
   freezeTableName: true,
-  timestamps: false,
   underscored: true,
 })
 export default class UserSurveyAlias
-  extends BaseModel<UserSurveyAliasAttributes>
+  extends BaseModel<UserSurveyAliasAttributes, UserSurveyAliasCreationAttributes>
   implements UserSurveyAliasAttributes
 {
   @Column({
-    allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
+    type: DataType.BIGINT,
+  })
+  public id!: string;
+
+  @Column({
+    allowNull: false,
     type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
@@ -27,9 +44,8 @@ export default class UserSurveyAlias
 
   @Column({
     allowNull: false,
-    primaryKey: true,
-    type: DataType.STRING(64),
-    unique: 'survey_id_user_name_unique',
+    type: DataType.BIGINT,
+    unique: 'survey_id_username_unique',
   })
   @ForeignKey(() => Survey)
   public surveyId!: string;
@@ -38,9 +54,9 @@ export default class UserSurveyAlias
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(256),
-    unique: 'survey_id_user_name_unique',
+    unique: 'survey_id_username_unique',
   })
-  public userName!: string;
+  public username!: string;
 
   @Column({
     allowNull: false,
@@ -49,9 +65,17 @@ export default class UserSurveyAlias
   })
   public urlAuthToken!: string;
 
+  @CreatedAt
+  @Column
+  public readonly createdAt!: Date;
+
+  @UpdatedAt
+  @Column
+  public readonly updatedAt!: Date;
+
   @BelongsTo(() => User, 'userId')
   public user?: User;
 
   @BelongsTo(() => Survey, 'surveyId')
-  public survey?: Survey[];
+  public survey?: Survey;
 }

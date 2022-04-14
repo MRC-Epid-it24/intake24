@@ -15,6 +15,7 @@ import type {
 import { SurveySubmissionAttributes } from '@intake24/common/types/models';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { Controller } from '../../controller';
+import { getAndCheckSurveyAccess } from './survey.controller';
 
 export type AdminSurveySubmissionController = Controller<'browse' | 'entry' | 'destroy'>;
 
@@ -23,13 +24,13 @@ export default (): AdminSurveySubmissionController => {
     req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveySubmissionsResponse>
   ): Promise<void> => {
+    const { id: surveyId } = await getAndCheckSurveyAccess(
+      req as Request<{ surveyId: string }>,
+      'submissions'
+    );
     const {
-      params: { surveyId },
       query: { search },
     } = req;
-
-    const survey = await Survey.findByPk(surveyId);
-    if (!survey) throw new NotFoundError();
 
     const where: WhereOptions<SurveySubmissionAttributes> = { surveyId };
     if (typeof search === 'string' && search) {
@@ -50,7 +51,8 @@ export default (): AdminSurveySubmissionController => {
     req: Request<{ surveyId: string; submissionId: string }>,
     res: Response<SurveySubmissionEntry>
   ): Promise<void> => {
-    const { surveyId, submissionId } = req.params;
+    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'submissions');
+    const { submissionId } = req.params;
 
     const scope = submissionScope({ surveyId });
     const submission = await SurveySubmission.findOne({
@@ -66,7 +68,8 @@ export default (): AdminSurveySubmissionController => {
     req: Request<{ surveyId: string; submissionId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { surveyId, submissionId } = req.params;
+    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'submissions');
+    const { submissionId } = req.params;
 
     const submission = await SurveySubmission.findOne({ where: { id: submissionId, surveyId } });
     if (!submission) throw new NotFoundError();

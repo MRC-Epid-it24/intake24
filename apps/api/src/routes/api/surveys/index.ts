@@ -14,20 +14,16 @@ export default () => {
   });
 
   router.get('', wrapAsync(surveyController.browse));
-  router.get('/:surveyId', wrapAsync(surveyController.entry));
+  router.get('/:slug', wrapAsync(surveyController.entry));
   router.post(
-    '/:surveyId/generate-user',
+    '/:slug/generate-user',
     generateUserLimiter,
     validation.generateUser,
     wrapAsync(surveyController.generateUser)
   );
-  router.post(
-    '/:surveyId/create-user',
-    validation.createUser,
-    wrapAsync(surveyController.createUser)
-  );
+  router.post('/:slug/create-user', validation.createUser, wrapAsync(surveyController.createUser));
 
-  router.use('/:surveyId', surveyRespondents());
+  router.use('/:slug', surveyRespondents());
 
   return router;
 };

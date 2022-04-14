@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
-import { UserAttributes } from '@intake24/common/types/models';
-import { OmitAndOptional, Optional } from '../model';
+import { UserAttributes } from './users';
+import { OmitAndOptional } from '../model';
 
 export type SurveySubmissionAttributes = {
   id: string;
@@ -11,6 +11,8 @@ export type SurveySubmissionAttributes = {
   submissionTime: Date;
   log: string | null;
   uxSessionId: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type SurveySubmissionAssociations = {
@@ -19,7 +21,11 @@ export type SurveySubmissionAssociations = {
   meals?: SurveySubmissionMealAttributes[];
 };
 
-export type SurveySubmissionCreationAttributes = Optional<SurveySubmissionAttributes, 'log'>;
+export type SurveySubmissionCreationAttributes = OmitAndOptional<
+  SurveySubmissionAttributes,
+  'createdAt' | 'updatedAt',
+  'log'
+>;
 
 export type SurveySubmissionCustomFieldAttributes = {
   id: string;

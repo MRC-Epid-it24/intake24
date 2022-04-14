@@ -14,7 +14,7 @@ export default () => {
     payload = { user: 'userIdentifier001', redirect: 'https://redirect-me.here' };
     token = jwt.sign(payload, secret, { expiresIn: '15m' });
 
-    url = `/api/surveys/${suite.data.system.survey.id}/create-user`;
+    url = `/api/surveys/${suite.data.system.survey.slug}/create-user`;
     invalidUrl = `/api/surveys/invalid-survey/create-user`;
   });
 

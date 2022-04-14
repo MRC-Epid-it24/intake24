@@ -1,4 +1,13 @@
-import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Scopes,
+  Table,
+  CreatedAt,
+  UpdatedAt,
+} from 'sequelize-typescript';
 import {
   ClientErrorReportAttributes,
   ClientErrorReportCreationAttributes,
@@ -15,7 +24,6 @@ import { Survey, User } from '.';
   modelName: 'ClientErrorReport',
   tableName: 'client_error_reports',
   freezeTableName: true,
-  timestamps: false,
   underscored: true,
 })
 export default class ClientErrorReport
@@ -38,15 +46,10 @@ export default class ClientErrorReport
 
   @Column({
     allowNull: true,
-    type: DataType.STRING(64),
+    type: DataType.BIGINT,
   })
   @ForeignKey(() => Survey)
   public surveyId!: string | null;
-
-  @Column({
-    allowNull: false,
-  })
-  public reportedAt!: Date;
 
   @Column({
     allowNull: false,
@@ -80,6 +83,14 @@ export default class ClientErrorReport
     defaultValue: true,
   })
   public new!: boolean;
+
+  @CreatedAt
+  @Column
+  public readonly createdAt!: Date;
+
+  @UpdatedAt
+  @Column
+  public readonly updatedAt!: Date;
 
   @BelongsTo(() => User, 'userId')
   public user?: User;

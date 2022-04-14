@@ -71,11 +71,11 @@ const dataExportFields = () => {
       value: (food) => food.meal?.submission?.user?.simpleName,
     },
     {
-      id: 'userName',
-      label: 'Survey Alias / UserName',
+      id: 'username',
+      label: 'Survey Alias / username',
       value: (food) => {
         const aliases = food.meal?.submission?.user?.aliases;
-        return aliases && aliases.length ? aliases[0].userName : undefined;
+        return aliases && aliases.length ? aliases[0].username : undefined;
       },
     },
   ];

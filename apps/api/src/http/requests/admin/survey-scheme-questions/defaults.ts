@@ -21,8 +21,6 @@ const defaults: Schema = {
         const questions = await SurveySchemeQuestion.findAll({ where: except });
         const match = questions.find((q) => q.question.id === value.id);
         if (match) throw new Error(`Scheme question ID (${value.id}) already used.`);
-
-        Promise.resolve();
       },
     },
   },

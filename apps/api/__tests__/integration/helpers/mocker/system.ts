@@ -18,7 +18,6 @@ import {
   SurveySchemeCreationAttributes,
   SurveySchemeQuestionCreationAttributes,
   searchSortingAlgorithms,
-  surveyStates,
 } from '@intake24/common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
 import { customPromptQuestions } from '@intake24/common/prompts';
@@ -74,7 +73,7 @@ const user = (): CreateUserRequest => {
 };
 
 const respondent = (): CreateRespondentRequest => {
-  const userName = faker.internet.userName();
+  const username = faker.internet.userName();
   const name = faker.name.firstName();
   const email = faker.internet.email();
   const password = 'sUpErStRoNgPaSwOrD-123467890';
@@ -86,7 +85,7 @@ const respondent = (): CreateRespondentRequest => {
   ];
 
   return {
-    userName,
+    username,
     name,
     email,
     password,
@@ -216,9 +215,9 @@ const survey = (
   localeId = 'en_GB',
   feedbackSchemeId = null
 ): CreateSurveyRequest => {
-  const id = slugify(randomString(16), { strict: true });
+  const slug = slugify(randomString(16), { strict: true });
   const name = faker.random.words(6);
-  const state = surveyStates.NOT_STARTED;
+  const state = 'notStarted';
   const startDate = new Date().toISOString().split('T')[0];
   const endDate = faker.date.future(1).toISOString().split('T')[0];
   const allowGenUsers = faker.datatype.boolean();
@@ -243,13 +242,13 @@ const survey = (
     ];
   const searchMatchScoreWeight = faker.datatype.number({ min: 0, max: 100 });
 
-  const overrides = {
+  const surveySchemeOverrides = {
     meals: [{ name: { en: faker.random.words(3) }, time: '8:00' }],
     questions: [],
   };
 
   return {
-    id,
+    slug,
     name,
     state,
     startDate,
@@ -269,7 +268,7 @@ const survey = (
     authUrlTokenLength,
     searchSortingAlgorithm,
     searchMatchScoreWeight,
-    overrides,
+    surveySchemeOverrides,
   };
 };
 

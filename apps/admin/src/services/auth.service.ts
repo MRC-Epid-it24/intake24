@@ -1,9 +1,10 @@
-import { LoginResponse, MFAResponse } from '@intake24/common/types/http';
+import {
+  EmailLoginRequest,
+  LoginResponse,
+  MFAVerifyRequest,
+  MFAResponse,
+} from '@intake24/common/types/http';
 import http from './http.service';
-
-export type LoginRequest = { email: string; password: string };
-
-export type MFAVerifyRequest = { code: string; state: string };
 
 export type AuthResponse = LoginResponse | MFAResponse;
 
@@ -11,10 +12,10 @@ export default {
   /**
    * Login the user and store the access token to token service.
    *
-   * @param {LoginRequest} request
+   * @param {EmailLoginRequest} request
    * @returns {Promise<AuthResponse>}
    */
-  async login(request: LoginRequest): Promise<AuthResponse> {
+  async login(request: EmailLoginRequest): Promise<AuthResponse> {
     const { data } = await http.post<AuthResponse>('auth/login', request, {
       withCredentials: true,
     });

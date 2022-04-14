@@ -11,8 +11,8 @@ const securables: LocaleMessageObject = {
   create: 'Create new user',
 
   actions: {
-    _: 'Action',
-    title: 'Actions',
+    _: 'Resource action',
+    title: 'Resource actions',
     read: 'Read record',
     edit: 'Edit record',
     delete: 'Delete record',
@@ -27,6 +27,12 @@ const securables: LocaleMessageObject = {
     // Survey scheme
     questions: 'Questions',
     'data-export': 'Data export',
+
+    // Survey
+    overrides: 'Overrides',
+    respondents: 'Respondents',
+    submissions: 'Submissions',
+    support: 'Support',
   },
 };
 

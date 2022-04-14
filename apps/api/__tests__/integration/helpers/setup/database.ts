@@ -52,7 +52,6 @@ export const setupPermissions = async (): Promise<void> => {
   const permissions = [
     { name: 'acl', displayName: 'Access Control List' },
     { name: 'globalsupport', displayName: 'Global Support' },
-    { name: 'surveyadmin', displayName: 'Survey Admin' },
     { name: 'foodsadmin', displayName: 'Food DB Admin' },
     { name: 'users', displayName: 'Users resource access' },
     { name: 'users|browse', displayName: 'Browse users' },
@@ -165,10 +164,10 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'surveys|edit', displayName: 'Edit surveys' },
     { name: 'surveys|delete', displayName: 'Delete surveys' },
     { name: 'surveys|data-export', displayName: 'Survey data export' },
-    { name: 'surveys|mgmt', displayName: 'Survey management' },
     { name: 'surveys|overrides', displayName: 'Survey scheme overrides' },
     { name: 'surveys|respondents', displayName: 'Survey respondents' },
     { name: 'surveys|submissions', displayName: 'Survey submissions' },
+    { name: 'surveys|security', displayName: 'Surveys security' },
     { name: 'tasks', displayName: 'Tasks resource access' },
     { name: 'tasks|browse', displayName: 'Browse tasks' },
     { name: 'tasks|read', displayName: 'Read tasks' },
@@ -280,9 +279,9 @@ export const initDatabase = async (): Promise<MockData> => {
   endDate.setDate(endDate.getDate() + 7);
 
   const survey = await Survey.create({
-    id: 'test-survey',
+    slug: 'test-survey',
     name: 'Test Survey Name',
-    state: 0,
+    state: 'notStarted',
     startDate,
     endDate,
     feedbackSchemeId: feedbackScheme.id,
@@ -291,7 +290,7 @@ export const initDatabase = async (): Promise<MockData> => {
     allowGenUsers: false,
     supportEmail: 'testSupportEmail@example.com',
     storeUserSessionOnServer: false,
-    overrides: { meals: [], questions: [] },
+    surveySchemeOverrides: { meals: [], questions: [] },
   });
 
   await setupPermissions();
@@ -316,8 +315,8 @@ export const initDatabase = async (): Promise<MockData> => {
     roles: [role.id],
   });
 
-  const respondent = await ioc.cradle.adminSurveyService.createRespondent('test-survey', {
-    userName: 'testRespondent',
+  const respondent = await ioc.cradle.adminSurveyService.createRespondent(survey, {
+    username: 'testRespondent',
     password: 'testRespondentPassword',
   });
 

@@ -35,7 +35,7 @@ const users: LocaleMessageObject = {
     _: 'User alias',
     title: 'User aliases',
     surveyId: 'Survey ID',
-    userName: 'Username',
+    username: 'Username',
     urlAuthToken: 'URL Auth Token',
     none: 'No survey alias defined',
   },

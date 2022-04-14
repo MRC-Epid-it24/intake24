@@ -8,7 +8,7 @@ export default validate(
   checkSchema({
     ...identifiers,
     ...password,
-    userName: {
+    username: {
       in: ['body'],
       errorMessage: 'Username must be a unique string (no emails).',
       isString: true,
@@ -17,7 +17,7 @@ export default validate(
         options: async (value, { req }): Promise<void> => {
           const { surveyId } = (req as Request).params;
 
-          const entry = await UserSurveyAlias.findOne({ where: { surveyId, userName: value } });
+          const entry = await UserSurveyAlias.findOne({ where: { surveyId, username: value } });
           if (entry) throw new Error('Current username is already in use within this study.');
         },
       },

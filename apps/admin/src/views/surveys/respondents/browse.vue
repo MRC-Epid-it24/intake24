@@ -33,12 +33,12 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="form.userName"
+                        v-model="form.username"
                         :disabled="!isCreate"
-                        :error-messages="form.errors.get('userName')"
+                        :error-messages="form.errors.get('username')"
                         :label="$t('users.username')"
                         hide-details="auto"
-                        name="userName"
+                        name="username"
                         outlined
                         prepend-icon="fas fa-user-secret"
                       ></v-text-field>
@@ -150,7 +150,7 @@
           icon-left="$delete"
           @confirm="remove(item)"
         >
-          {{ $t('common.action.confirm.delete', { name: item.userName }) }}
+          {{ $t('common.action.confirm.delete', { name: item.username }) }}
         </confirm-dialog>
       </template>
     </embedded-data-table>
@@ -180,7 +180,7 @@ export type RespondentsRefs = {
 
 export type SurveyRespondentsForm = {
   userId: string | null;
-  userName: string | null;
+  username: string | null;
   password: string | null;
   passwordConfirm: string | null;
   name: string | null;
@@ -211,9 +211,9 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
           align: 'start',
         },
         {
-          text: this.$t('users.aliases.userName'),
+          text: this.$t('users.aliases.username'),
           sortable: true,
-          value: 'userName',
+          value: 'username',
           align: 'start',
         },
         {
@@ -233,7 +233,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       loading: false,
       form: form<SurveyRespondentsForm>({
         userId: null,
-        userName: null,
+        username: null,
         password: null,
         passwordConfirm: null,
         name: null,
@@ -292,13 +292,13 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
 
     async save() {
       if (this.form.userId) {
-        const { userName: name } = await this.form.patch<SurveyRespondentEntry>(
+        const { username: name } = await this.form.patch<SurveyRespondentEntry>(
           `admin/surveys/${this.id}/respondents/${this.form.userId}`
         );
 
         this.$toasted.success(this.$t('common.msg.updated', { name }).toString());
       } else {
-        const { userName: name } = await this.form.post<SurveyRespondentEntry>(
+        const { username: name } = await this.form.post<SurveyRespondentEntry>(
           `admin/surveys/${this.id}/respondents`
         );
 
@@ -309,7 +309,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       await this.updateTable();
     },
 
-    async remove({ userName: name, userId }: SurveyRespondentListEntry) {
+    async remove({ username: name, userId }: SurveyRespondentListEntry) {
       await this.$http.delete(`admin/surveys/${this.id}/respondents/${userId}`);
       this.$toasted.success(this.$t('common.msg.deleted', { name }).toString());
 

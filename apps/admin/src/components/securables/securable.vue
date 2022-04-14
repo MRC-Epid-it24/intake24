@@ -250,19 +250,19 @@ export default defineComponent({
       securableDefs,
       headers: [
         {
-          text: this.$t('users.email'),
-          sortable: true,
-          value: 'email',
-          align: 'start',
-        },
-        {
           text: this.$t('users.name'),
           sortable: true,
           value: 'name',
           align: 'start',
         },
         {
-          text: this.$t(`${resource}.securables.actions`),
+          text: this.$t('users.email'),
+          sortable: true,
+          value: 'email',
+          align: 'start',
+        },
+        {
+          text: this.$t(`${resource}.securables.actions._`),
           sortable: false,
           value: 'securables',
           align: 'start',

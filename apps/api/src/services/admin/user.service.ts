@@ -1,4 +1,4 @@
-import { Op, User, UserCustomField, UserPassword } from '@intake24/db';
+import { Op, Permission, User, UserCustomField, UserPassword } from '@intake24/db';
 import { UserPasswordAttributes } from '@intake24/common/types/models';
 import { CreateUserInput, UpdateUserInput } from '@intake24/common/types/http/admin';
 import { CustomField } from '@intake24/common/types';
@@ -193,13 +193,47 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
    */
   const destroy = async (userId: string): Promise<void> => {
     const user = await User.scope('submissions').findByPk(userId);
-
     if (!user) throw new NotFoundError();
 
     if (user.submissions?.length)
       throw new ForbiddenError('User cannot be deleted. It already contains submission data.');
 
     await user.destroy();
+  };
+
+  /**
+   * Add permission(s) to user record by permission name(s)
+   *
+   * @param {(string | User)} userId
+   * @param {(string | string[])} permissionName
+   */
+  const addPermissionByName = async (userId: string | User, permissionName: string | string[]) => {
+    const user = typeof userId === 'string' ? await User.findByPk(userId) : userId;
+    if (!user) throw new NotFoundError();
+
+    const permission = await Permission.findOne({ where: { name: permissionName } });
+    if (!permission) throw new NotFoundError();
+
+    await Promise.all([user.$add('permissions', permission), flushACLCache(user.id)]);
+  };
+
+  /**
+   * Remove permission(s) from user record by permission name(s)
+   *
+   * @param {(string | User)} userId
+   * @param {(string | string[])} permissionName
+   */
+  const removePermissionByName = async (
+    userId: string | User,
+    permissionName: string | string[]
+  ) => {
+    const user = typeof userId === 'string' ? await User.findByPk(userId) : userId;
+    if (!user) throw new NotFoundError();
+
+    const permission = await Permission.findOne({ where: { name: permissionName } });
+    if (!permission) throw new NotFoundError();
+
+    await Promise.all([user.$remove('permissions', permission), flushACLCache(user.id)]);
   };
 
   return {
@@ -211,6 +245,8 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
     update,
     destroy,
     flushACLCache,
+    addPermissionByName,
+    removePermissionByName,
   };
 };
 

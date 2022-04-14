@@ -1,14 +1,16 @@
-import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite, SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
-import { surveyStaff } from '@intake24/common/security';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
+  const permissions = ['surveys', 'surveys|respondents'];
 
   let url: string;
   let invalidUrl: string;
 
   let survey: Survey;
+
+  let securable: SetSecurableOptions;
 
   beforeAll(async () => {
     const surveyInput = mocker.system.survey();
@@ -18,47 +20,46 @@ export default () => {
       endDate: new Date(surveyInput.endDate),
     });
 
+    securable = { securableId: survey.id, securableType: 'Survey' };
+
     url = `${baseUrl}/${survey.id}/respondents`;
-    invalidUrl = `${baseUrl}/invalid-survey-id/respondents`;
+    invalidUrl = `${baseUrl}/999999/respondents`;
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url);
+    await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
-  it('should return 403 when missing survey-specific permission', async () => {
-    await suite.util.setPermission('surveys|respondents');
+  describe('authenticated / resource authorized', () => {
+    beforeAll(async () => {
+      await suite.util.setPermission(permissions);
+    });
 
-    await suite.sharedTests.assertMissingAuthorization('get', url);
+    it(`should return 404 when record doesn't exist`, async () => {
+      await suite.sharedTests.assertMissingRecord('get', invalidUrl);
+    });
+
+    it('should return 200 and paginated results', async () => {
+      await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
+    });
   });
 
-  it(`should return 403 when missing 'surveys-respondents' permission (surveyadmin)`, async () => {
-    await suite.util.setPermission('surveyadmin');
+  describe('authenticated / securables authorized', () => {
+    beforeAll(async () => {
+      await suite.util.setPermission(['surveys']);
+    });
 
-    await suite.sharedTests.assertMissingAuthorization('get', url);
-  });
+    it('should return 200 and data when securable set', async () => {
+      await suite.util.setSecurable({ ...securable, action: ['respondents'] });
 
-  it(`should return 403 when missing 'surveys-respondents' permission (surveyStaff)`, async () => {
-    await suite.util.setPermission(surveyStaff(survey.id));
+      await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
+    });
 
-    await suite.sharedTests.assertMissingAuthorization('get', url);
-  });
+    it('should return 200 and data when owner set', async () => {
+      await suite.util.setSecurable(securable);
+      await survey.update({ ownerId: suite.data.system.user.id });
 
-  it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
-    await suite.util.setPermission(['surveys|respondents', surveyStaff(survey.id)]);
-
-    await suite.sharedTests.assertMissingAuthorization('get', invalidUrl);
-  });
-
-  it(`should return 404 when record doesn't exist`, async () => {
-    await suite.util.setPermission(['surveys|respondents', 'surveyadmin']);
-
-    await suite.sharedTests.assertMissingRecord('get', invalidUrl);
-  });
-
-  it('should return 200 and paginated results', async () => {
-    await suite.util.setPermission(['surveys|respondents', surveyStaff(survey.id)]);
-
-    await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
+      await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
+    });
   });
 };

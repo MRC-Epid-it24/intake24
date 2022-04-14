@@ -86,7 +86,7 @@ export default ({
       body: { email, name, phone, actions },
     } = req;
 
-    const { id: userId } = await adminUserService.create({
+    const user = await adminUserService.create({
       email,
       name,
       phone,
@@ -94,8 +94,17 @@ export default ({
     });
 
     if (actions.length) {
-      const records = actions.map((action) => ({ userId, securableId, securableType, action }));
-      await UserSecurable.bulkCreate(records);
+      const records = actions.map((action) => ({
+        userId: user.id,
+        securableId,
+        securableType,
+        action,
+      }));
+
+      await Promise.all([
+        UserSecurable.bulkCreate(records),
+        adminUserService.addPermissionByName(user, resource),
+      ]);
     }
 
     res.status(201).json();
@@ -128,8 +137,16 @@ export default ({
       if (!actionsMatch) {
         const records = actions.map((action) => ({ userId, securableId, securableType, action }));
         await UserSecurable.destroy({ where: { userId, securableId, securableType } });
-        await UserSecurable.bulkCreate(records);
+        Promise.all([
+          UserSecurable.bulkCreate(records),
+          adminUserService.addPermissionByName(user, resource),
+        ]);
       }
+    } else {
+      await Promise.all([
+        UserSecurable.destroy({ where: { userId, securableId, securableType } }),
+        adminUserService.removePermissionByName(user, resource),
+      ]);
     }
 
     res.json();
@@ -146,7 +163,10 @@ export default ({
     ]);
     if (!user) throw new NotFoundError();
 
-    await UserSecurable.destroy({ where: { userId, securableId, securableType } });
+    await Promise.all([
+      UserSecurable.destroy({ where: { userId, securableId, securableType } }),
+      adminUserService.removePermissionByName(user, resource),
+    ]);
 
     res.json();
   };

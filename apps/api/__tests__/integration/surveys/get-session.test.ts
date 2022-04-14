@@ -1,15 +1,15 @@
 import request from 'supertest';
 import { pick } from 'lodash';
 import { suite } from '@intake24/api-tests/integration/helpers';
-import { UserSessionCreationAttributes } from '@intake24/common/types/models';
-import { UserSession } from '@intake24/db';
+import { UserSurveySessionCreationAttributes } from '@intake24/common/types/models';
+import { UserSurveySession } from '@intake24/db';
 
 export default () => {
   let url: string;
   let invalidUrl: string;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.id}/session`;
+    url = `/api/surveys/${suite.data.system.survey.slug}/session`;
     invalidUrl = `/api/surveys/invalid-survey/session`;
   });
 
@@ -55,7 +55,7 @@ export default () => {
       const { userId } = suite.data.system.respondent;
       const surveyId = suite.data.system.survey.id;
 
-      const input: UserSessionCreationAttributes = {
+      const input: UserSurveySessionCreationAttributes = {
         userId,
         surveyId,
         sessionData: {
@@ -68,7 +68,7 @@ export default () => {
           selection: { element: null, mode: 'auto' },
         },
       };
-      await UserSession.create(input);
+      await UserSurveySession.create(input);
 
       const { status, body } = await request(suite.app)
         .get(url)

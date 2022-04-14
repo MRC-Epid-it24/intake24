@@ -10,14 +10,14 @@ export default () => {
 
     expect(status).toBe(422);
     expect(body).toContainAllKeys(['errors', 'success']);
-    expect(body.errors).toContainAllKeys(['userName', 'password', 'surveyId']);
+    expect(body.errors).toContainAllKeys(['username', 'password', 'survey']);
   });
 
   it('Invalid credentials should return 401', async () => {
     const { status } = await request(suite.app).post(url).set('Accept', 'application/json').send({
-      userName: 'testRespondent',
+      username: 'testRespondent',
       password: 'invalidPassword',
-      surveyId: 'test-survey',
+      survey: 'test-survey',
     });
 
     expect(status).toBe(401);
@@ -25,9 +25,9 @@ export default () => {
 
   it('Valid credentials should return 200, access token & refresh cookie', async () => {
     const res = await request(suite.app).post(url).set('Accept', 'application/json').send({
-      userName: 'testRespondent',
+      username: 'testRespondent',
       password: 'testRespondentPassword',
-      surveyId: 'test-survey',
+      survey: 'test-survey',
     });
 
     expect(res.status).toBe(200);

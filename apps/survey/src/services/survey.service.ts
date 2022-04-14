@@ -19,10 +19,10 @@ export default {
     payload: GenerateUserPayload
   ): Promise<GenerateUserResponse> => {
     const {
-      data: { userName, password },
+      data: { username, password },
     } = await http.post<GenerateUserResponse>(`surveys/${surveyId}/generate-user`, payload);
 
-    return { userName, password };
+    return { username, password };
   },
 
   surveyPublicList: async (): Promise<PublicSurveyListResponse> => {

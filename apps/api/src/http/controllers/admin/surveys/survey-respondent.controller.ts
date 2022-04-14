@@ -13,6 +13,7 @@ import {
 } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
 import type { Controller, CrudActions } from '../../controller';
+import { getAndCheckSurveyAccess } from './survey.controller';
 
 export type AdminSurveyRespondentController = Controller<
   | Exclude<CrudActions, 'create' | 'refs'>
@@ -34,7 +35,8 @@ export default ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
-    const { surveyId, userId } = req.params;
+    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const { userId } = req.params;
 
     const respondent = await UserSurveyAlias.findOne({
       where: { userId, surveyId },
@@ -49,16 +51,16 @@ export default ({
     req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveyRespondentsResponse>
   ): Promise<void> => {
-    const { surveyId } = req.params;
-
-    const survey = await Survey.findByPk(surveyId);
-    if (!survey) throw new NotFoundError();
+    const { id: surveyId } = await getAndCheckSurveyAccess(
+      req as Request<{ surveyId: string }>,
+      'respondents'
+    );
 
     const respondents = await UserSurveyAlias.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['userName'],
+      columns: ['username'],
       where: { surveyId },
-      order: [['userName', 'ASC']],
+      order: [['username', 'ASC']],
       transform: userRespondentListResponse,
     });
 
@@ -69,14 +71,11 @@ export default ({
     req: Request<{ surveyId: string }>,
     res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
-    const { surveyId } = req.params;
-
-    const survey = await Survey.findByPk(surveyId);
-    if (!survey) throw new NotFoundError();
+    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
 
     const respondent = await adminSurveyService.createRespondent(
       surveyId,
-      pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
+      pick(req.body, ['name', 'email', 'phone', 'username', 'password', 'customFields'])
     );
 
     await respondent.reload({
@@ -100,12 +99,13 @@ export default ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
-    const { surveyId, userId } = req.params;
+    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const { userId } = req.params;
 
     const respondent = await adminSurveyService.updateRespondent(
       surveyId,
       userId,
-      pick(req.body, ['name', 'email', 'phone', 'userName', 'password', 'customFields'])
+      pick(req.body, ['name', 'email', 'phone', 'username', 'password', 'customFields'])
     );
 
     await respondent.reload({
@@ -119,7 +119,8 @@ export default ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { surveyId, userId } = req.params;
+    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const { userId } = req.params;
 
     await adminSurveyService.deleteRespondent(surveyId, userId);
 
@@ -130,10 +131,9 @@ export default ({
     req: Request<{ surveyId: string }>,
     res: Response<JobEntry>
   ): Promise<void> => {
-    const {
-      file,
-      params: { surveyId },
-    } = req;
+    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+
+    const { file } = req;
     const { id: userId } = req.user as User;
 
     if (!file) throw new ValidationError('File not found.', { param: 'file' });
@@ -147,7 +147,7 @@ export default ({
     req: Request<{ surveyId: string }>,
     res: Response<JobEntry>
   ): Promise<void> => {
-    const { surveyId } = req.params;
+    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
     const { id: userId } = req.user as User;
 
     const job = await adminSurveyService.exportAuthenticationUrls(surveyId, userId);
@@ -159,7 +159,8 @@ export default ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { surveyId, userId } = req.params;
+    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const { userId } = req.params;
 
     const { pdfStream, filename } = await feedbackService.getFeedbackStream(surveyId, userId);
 
@@ -173,8 +174,10 @@ export default ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
+    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+
     const {
-      params: { surveyId, userId },
+      params: { userId },
       body: { email, copy },
     } = req;
     const user = req.user as User;

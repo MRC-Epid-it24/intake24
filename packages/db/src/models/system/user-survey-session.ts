@@ -1,21 +1,21 @@
 import { BelongsTo, Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import {
-  UserSessionAttributes,
-  UserSessionCreationAttributes,
+  UserSurveySessionAttributes,
+  UserSurveySessionCreationAttributes,
 } from '@intake24/common/types/models';
 import { SurveyState } from '@intake24/common/types';
 import BaseModel from '../model';
 import { Survey, User } from '.';
 
 @Table({
-  modelName: 'UserSession',
-  tableName: 'user_sessions',
+  modelName: 'UserSurveySession',
+  tableName: 'user_survey_sessions',
   freezeTableName: true,
   underscored: true,
 })
-export default class UserSession
-  extends BaseModel<UserSessionAttributes, UserSessionCreationAttributes>
-  implements UserSessionAttributes
+export default class UserSurveySession
+  extends BaseModel<UserSurveySessionAttributes, UserSurveySessionCreationAttributes>
+  implements UserSurveySessionAttributes
 {
   @Column({
     allowNull: false,
@@ -27,7 +27,7 @@ export default class UserSession
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: DataType.STRING(64),
+    type: DataType.BIGINT,
   })
   public surveyId!: string;
 

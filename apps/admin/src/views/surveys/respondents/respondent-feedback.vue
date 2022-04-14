@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
+  <v-dialog v-model="dialog" max-width="600px" persistent>
     <template v-slot:activator="{ on, attrs }">
       <v-list-item key="respondentsUpload" v-bind="attrs" v-on="on" link>
         <v-list-item-title>
@@ -142,7 +142,7 @@ export default defineComponent({
         });
         downloadFile(
           res,
-          `Intake24-${this.surveyId}-${this.user.userName}-${new Date()
+          `Intake24-${this.surveyId}-${this.user.username}-${new Date()
             .toISOString()
             .substring(0, 10)}.pdf`
         );

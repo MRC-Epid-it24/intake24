@@ -10,7 +10,7 @@ export default () => {
   let output: PublicSurveyEntryResponse;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.id}`;
+    url = `/api/surveys/${suite.data.system.survey.slug}`;
     invalidUrl = `/api/surveys/invalid-survey`;
 
     output = pick(suite.data.system.survey, [

@@ -1,5 +1,16 @@
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { GenUserCounterAttributes } from '@intake24/common/types/models';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  Scopes,
+  Table,
+  CreatedAt,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import {
+  GenUserCounterAttributes,
+  GenUserCounterCreationAttributes,
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { Survey } from '.';
 
@@ -10,17 +21,16 @@ import { Survey } from '.';
   modelName: 'GenUserCounter',
   tableName: 'gen_user_counters',
   freezeTableName: true,
-  timestamps: false,
   underscored: true,
 })
 export default class GenUserCounter
-  extends BaseModel<GenUserCounterAttributes>
+  extends BaseModel<GenUserCounterAttributes, GenUserCounterCreationAttributes>
   implements GenUserCounterAttributes
 {
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: DataType.STRING(32),
+    type: DataType.BIGINT,
   })
   public surveyId!: string;
 
@@ -30,6 +40,14 @@ export default class GenUserCounter
     defaultValue: 0,
   })
   public count!: number;
+
+  @CreatedAt
+  @Column
+  public readonly createdAt!: Date;
+
+  @UpdatedAt
+  @Column
+  public readonly updatedAt!: Date;
 
   @BelongsTo(() => Survey, 'surveyId')
   public survey?: Survey;

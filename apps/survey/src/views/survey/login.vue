@@ -19,8 +19,8 @@
             <v-row>
               <v-col cols="12" class="mb-3">
                 <v-text-field
-                  v-model="userName"
-                  :error-messages="errors.get('userName')"
+                  v-model="username"
+                  :error-messages="errors.get('username')"
                   :label="$t('common.username')"
                   hide-details="auto"
                   required
@@ -82,7 +82,7 @@ export default defineComponent({
 
   data() {
     return {
-      userName: '',
+      username: '',
       password: '',
       showPassword: false,
       status: null as number | null,
@@ -136,10 +136,10 @@ export default defineComponent({
     },
 
     async onLogin() {
-      const { userName, password, surveyId } = this;
+      const { username, password, surveyId } = this;
       try {
-        await this.userPassLogin({ userName, password, surveyId });
-        this.userName = '';
+        await this.userPassLogin({ username, password, survey: surveyId });
+        this.username = '';
         this.password = '';
         await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {

@@ -22,20 +22,21 @@ export const userEntryResponse = (user: User): UserEntry => {
 
 export const userRespondentResponse = (alias: UserSurveyAlias): SurveyRespondentEntry => {
   const {
+    id,
     userId,
-    userName,
+    username,
     surveyId,
     urlAuthToken,
     user: { name = null, email = null, phone = null, customFields = [] } = {},
   } = alias;
 
-  return { userId, surveyId, userName, urlAuthToken, name, email, phone, customFields };
+  return { id, userId, surveyId, username, urlAuthToken, name, email, phone, customFields };
 };
 
 export const userRespondentListResponse = (alias: UserSurveyAlias): SurveyRespondentListEntry => {
-  const { userId, userName, surveyId, urlAuthToken } = alias;
+  const { id, userId, username, surveyId, urlAuthToken } = alias;
 
-  return { userId, surveyId, userName, urlAuthToken };
+  return { id, userId, surveyId, username, urlAuthToken };
 };
 
 export const userMgmtResponse = (user: User): UserMgmtListEntry => {

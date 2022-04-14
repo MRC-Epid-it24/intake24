@@ -1,13 +1,9 @@
 import type { SchemeOverrides } from '../../../schemes';
-import { Optional } from '../model';
+import { OmitAndOptional } from '../model';
 
-export const surveyStates = {
-  NOT_STARTED: 0,
-  ACTIVE: 1,
-  SUSPENDED: 2,
-} as const;
+export const surveyStates = ['notStarted', 'active', 'suspended'] as const;
 
-export type SurveyState = typeof surveyStates[keyof typeof surveyStates];
+export type SurveyState = typeof surveyStates[number];
 
 export const searchSortingAlgorithms = ['paRules', 'popularity', 'globalPop', 'fixed'] as const;
 
@@ -15,37 +11,40 @@ export type SearchSortingAlgorithm = typeof searchSortingAlgorithms[number];
 
 export type SurveyAttributes = {
   id: string;
+  slug: string;
   name: string;
   state: SurveyState;
   startDate: Date;
   endDate: Date;
-  surveySchemeId: string;
   localeId: string;
+  surveySchemeId: string;
+  feedbackSchemeId: string | null;
   allowGenUsers: boolean;
   genUserKey: string | null;
-  authUrlDomainOverride: string | null;
-  authUrlTokenCharset: string | null;
-  authUrlTokenLength: number | null;
+  supportEmail: string;
   suspensionReason: string | null;
   surveyMonkeyUrl: string | null;
-  supportEmail: string;
   originatingUrl: string | null;
-  description: string | null;
-  feedbackSchemeId: string | null;
   submissionNotificationUrl: string | null;
   storeUserSessionOnServer: boolean;
   numberOfSubmissionsForFeedback: number;
-  finalPageHtml: string | null;
+  authUrlDomainOverride: string | null;
+  authUrlTokenCharset: string | null;
+  authUrlTokenLength: number | null;
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
   searchSortingAlgorithm: SearchSortingAlgorithm;
   searchMatchScoreWeight: number;
-  overrides: SchemeOverrides;
+  surveySchemeOverrides: SchemeOverrides;
+  ownerId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
-export type SurveyCreationAttributes = Optional<
+export type SurveyCreationAttributes = OmitAndOptional<
   SurveyAttributes,
+  'id' | 'createdAt' | 'updatedAt',
   | 'genUserKey'
   | 'authUrlDomainOverride'
   | 'authUrlTokenCharset'
@@ -53,20 +52,19 @@ export type SurveyCreationAttributes = Optional<
   | 'suspensionReason'
   | 'surveyMonkeyUrl'
   | 'originatingUrl'
-  | 'description'
   | 'feedbackSchemeId'
   | 'submissionNotificationUrl'
   | 'numberOfSubmissionsForFeedback'
-  | 'finalPageHtml'
   | 'maximumDailySubmissions'
   | 'maximumTotalSubmissions'
   | 'minimumSubmissionInterval'
   | 'searchSortingAlgorithm'
   | 'searchMatchScoreWeight'
+  | 'ownerId'
 >;
 
 // TODO: to review
-export type Deprecated = 'surveyMonkeyUrl' | 'originatingUrl' | 'description' | 'finalPageHtml';
+export type Deprecated = 'surveyMonkeyUrl' | 'originatingUrl';
 
 export type SurveyAttributesKeys = keyof Omit<SurveyAttributes, Deprecated>;
 
@@ -75,31 +73,30 @@ export const updateSurveyFields = [
   'state',
   'startDate',
   'endDate',
-  'surveySchemeId',
   'localeId',
+  'surveySchemeId',
+  'feedbackSchemeId',
   'allowGenUsers',
   'genUserKey',
-  'authUrlDomainOverride',
-  'authUrlTokenCharset',
-  'authUrlTokenLength',
   'suspensionReason',
   'supportEmail',
-  'description',
-  'feedbackSchemeId',
   'submissionNotificationUrl',
   'storeUserSessionOnServer',
   'numberOfSubmissionsForFeedback',
+  'authUrlDomainOverride',
+  'authUrlTokenCharset',
+  'authUrlTokenLength',
   'maximumDailySubmissions',
   'maximumTotalSubmissions',
   'minimumSubmissionInterval',
   'searchSortingAlgorithm',
   'searchMatchScoreWeight',
-  'overrides',
+  'surveySchemeOverrides',
 ] as const;
 
 export type UpdateSurveyFields = typeof updateSurveyFields[number];
 
-export const createSurveyFields = ['id', ...updateSurveyFields] as const;
+export const createSurveyFields = ['slug', ...updateSurveyFields] as const;
 
 export type CreateSurveyFields = typeof updateSurveyFields[number];
 
@@ -108,14 +105,15 @@ export const staffUpdateSurveyFields = [
   'state',
   'startDate',
   'endDate',
-  'surveySchemeId',
   'localeId',
+  'surveySchemeId',
+  'feedbackSchemeId',
   'supportEmail',
   'suspensionReason',
 ] as const;
 
 export type StaffUpdateSurveyFields = typeof staffUpdateSurveyFields[number];
 
-export const overridesFields = ['overrides'] as const;
+export const overridesFields = ['surveySchemeOverrides'] as const;
 
 export type OverridesFields = typeof overridesFields[number];

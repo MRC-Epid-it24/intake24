@@ -35,7 +35,7 @@ export default (ioc: IoC): FeedbackSchemeController => {
   const getAndCheckAccess = async (
     req: Request<{ feedbackSchemeId: string }>,
     action: string,
-    scope?: string
+    scope?: string | string[]
   ): Promise<FeedbackScheme> => {
     const { feedbackSchemeId } = req.params;
     const { aclService, userId } = req.scope.cradle;

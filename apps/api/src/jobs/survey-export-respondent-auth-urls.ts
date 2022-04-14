@@ -72,7 +72,7 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
 
     const fields: json2csv.FieldInfo<UserSurveyAlias>[] = [
       { label: 'UserID', value: 'userId' },
-      { label: 'Username', value: 'userName' },
+      { label: 'Username', value: 'username' },
       { label: 'AuthenticationCode', value: (row: UserSurveyAlias) => row.urlAuthToken },
       {
         label: 'SurveyAuthenticationURL',

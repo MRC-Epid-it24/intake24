@@ -2,8 +2,7 @@ import createDOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
 
 const dom = new JSDOM('');
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+// @ts-expect-error type issue
 const DOMPurify = createDOMPurify(dom.window);
 
 const sanitizeInput = (input: any) => {

@@ -1,26 +1,16 @@
 import type { Request } from 'express';
-import { Op, Permission, User, UserPassword, UserSurveyAlias } from '@intake24/db';
+import { Op, Permission, Survey, User, UserPassword, UserSurveyAlias } from '@intake24/db';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import { supportedAlgorithms } from '@intake24/common-backend/util/passwords';
 import type { IoC } from '@intake24/api/ioc';
-import { Subject } from '@intake24/common/security';
+import { Subject, surveyRespondent } from '@intake24/common/security';
+import {
+  AliasLoginRequest,
+  EmailLoginRequest,
+  TokenLoginRequest,
+} from '@intake24/common/types/http';
 import type { Tokens } from '.';
 import type { MFARequest } from './mfa';
-
-export type EmailLoginCredentials = {
-  email: string;
-  password: string;
-};
-
-export type AliasLoginCredentials = {
-  userName: string;
-  password: string;
-  surveyId: string;
-};
-
-export type TokenLoginCredentials = {
-  token: string;
-};
 
 export type LoginCredentials = {
   user: User | null;
@@ -126,12 +116,12 @@ const authenticationService = ({
   /**
    * Email login to Administration application
    *
-   * @param {EmailLoginCredentials} credentials
+   * @param {EmailLoginRequest} credentials
    * @param {LoginMeta} meta
    * @returns {(Promise<Tokens | MFARequest>)}
    */
   const emailLogin = async (
-    credentials: EmailLoginCredentials,
+    credentials: EmailLoginRequest,
     meta: LoginMeta
   ): Promise<Tokens | MFARequest> => {
     const { email, password } = credentials;
@@ -153,25 +143,25 @@ const authenticationService = ({
   /**
    * Survey alias login to respondent applications
    *
-   * @param {AliasLoginCredentials} credentials
+   * @param {AliasLoginRequest} credentials
    * @param {LoginMeta} meta
    * @returns {Promise<Tokens>}
    */
-  const aliasLogin = async (
-    credentials: AliasLoginCredentials,
-    meta: LoginMeta
-  ): Promise<Tokens> => {
-    const { userName, password, surveyId } = credentials;
+  const aliasLogin = async (credentials: AliasLoginRequest, meta: LoginMeta): Promise<Tokens> => {
+    const { username, password, survey: slug } = credentials;
+
+    const survey = await Survey.findOne({ where: { slug } });
+    if (!survey) throw new UnauthorizedError('Invalid survey for provided credentials.');
 
     const user = await User.findOne({
       include: [
-        { model: Permission, where: { name: `${surveyId}/respondent` } },
+        { model: Permission, where: { name: surveyRespondent(slug) } },
         { model: UserPassword },
-        { model: UserSurveyAlias, where: { userName, surveyId } },
+        { model: UserSurveyAlias, where: { username, surveyId: survey.id } },
       ],
     });
 
-    const subject: Subject = { provider: 'surveyAlias', providerKey: `${surveyId}#${userName}` };
+    const subject: Subject = { provider: 'surveyAlias', providerKey: `${slug}#${username}` };
 
     return login({ user, password, subject }, meta);
   };
@@ -179,11 +169,11 @@ const authenticationService = ({
   /**
    * URL-embedded token login to respondent applications
    *
-   * @param {TokenLoginCredentials} credentials
+   * @param {TokenLoginRequest} credentials
    * @param {LoginMeta} meta
    * @returns {Promise<Tokens>}
    */
-  const tokenLogin = async ({ token }: TokenLoginCredentials, meta: LoginMeta): Promise<Tokens> => {
+  const tokenLogin = async ({ token }: TokenLoginRequest, meta: LoginMeta): Promise<Tokens> => {
     const user = await User.findOne({
       include: [
         { model: UserSurveyAlias, where: { urlAuthToken: token } },

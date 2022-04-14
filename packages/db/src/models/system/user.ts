@@ -22,6 +22,7 @@ import {
   Role,
   RoleUser,
   SignInLog,
+  Survey,
   SurveyScheme,
   SurveySubmission,
   UserCustomField,
@@ -29,7 +30,7 @@ import {
   UserPasswordReset,
   UserPhysicalData,
   UserSecurable,
-  UserSession,
+  UserSurveySession,
   UserSubscription,
   UserSurveyAlias,
 } from '.';
@@ -153,8 +154,8 @@ export default class User
   @BelongsToMany(() => Role, () => RoleUser)
   public roles?: Role[];
 
-  @HasMany(() => UserSession, 'userId')
-  public sessions?: UserSession[];
+  @HasMany(() => UserSurveySession, 'userId')
+  public sessions?: UserSurveySession[];
 
   @HasMany(() => SignInLog, 'userId')
   public signInLog?: SignInLog[];
@@ -195,6 +196,17 @@ export default class User
     constraints: false,
   })
   public surveySchemes?: SurveyScheme[];
+
+  @BelongsToMany(() => Survey, {
+    through: {
+      model: () => UserSecurable,
+      unique: false,
+    },
+    foreignKey: 'userId',
+    otherKey: 'securableId',
+    constraints: false,
+  })
+  public surveys?: Survey[];
 
   public allRoles(): Role[] {
     return uniqBy(this.roles, 'name');

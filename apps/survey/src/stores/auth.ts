@@ -1,16 +1,17 @@
 import { defineStore } from 'pinia';
 import axios, { AxiosError } from 'axios';
 import { useLoading } from '@intake24/ui/stores';
+import { AliasLoginRequest, TokenLoginRequest } from '@intake24/common/types/http';
 import { useUser } from './user';
-import authSvc, { LoginRequest, TokenRequest } from '../services/auth.service';
+import { authService } from '../services';
 
 export type AuthState = {
   accessToken: string | null;
   error: AxiosError | null;
 };
 
-export type LoginPayload = { type: 'login'; payload: LoginRequest };
-export type TokenPayload = { type: 'token'; payload: TokenRequest };
+export type LoginPayload = { type: 'login'; payload: AliasLoginRequest };
+export type TokenPayload = { type: 'token'; payload: TokenLoginRequest };
 export type AuthenticatePayload = LoginPayload | TokenPayload;
 
 export const useAuth = defineStore('auth', {
@@ -34,8 +35,8 @@ export const useAuth = defineStore('auth', {
       try {
         const accessToken =
           payload.type === 'login'
-            ? await authSvc.login(payload.payload)
-            : await authSvc.token(payload.payload);
+            ? await authService.login(payload.payload)
+            : await authService.token(payload.payload);
 
         this.setAccessToken(accessToken);
         this.error = null;
@@ -50,17 +51,17 @@ export const useAuth = defineStore('auth', {
       }
     },
 
-    async login(payload: LoginRequest) {
+    async login(payload: AliasLoginRequest) {
       await this.authenticate({ type: 'login', payload });
     },
 
-    async token(payload: TokenRequest) {
+    async token(payload: TokenLoginRequest) {
       await this.authenticate({ type: 'token', payload });
     },
 
     async refresh(withErr = true) {
       try {
-        const accessToken = await authSvc.refresh();
+        const accessToken = await authService.refresh();
 
         this.setAccessToken(accessToken);
         this.error = null;
@@ -74,7 +75,7 @@ export const useAuth = defineStore('auth', {
     },
 
     async logout(invalidate?: boolean) {
-      if (invalidate) await authSvc.logout();
+      if (invalidate) await authService.logout();
 
       useLoading().$reset();
       useUser().$reset();

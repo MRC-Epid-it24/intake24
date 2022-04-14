@@ -85,8 +85,9 @@ const resources: Resource[] = [
     name: 'surveys',
     icon: 'fas fa-poll',
     api: 'admin/surveys',
+    securable: true,
     generateRoutes: true,
-    routes: [...routes, 'overrides', 'respondents', 'mgmt', 'submissions', 'data-export'],
+    routes: [...routes, 'overrides', 'respondents', 'submissions', 'data-export', 'securables'],
   },
   // Images
   {

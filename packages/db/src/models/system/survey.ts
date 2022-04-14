@@ -2,12 +2,15 @@ import {
   AfterCreate,
   AfterDestroy,
   BelongsTo,
+  BelongsToMany,
   Column,
   DataType,
   HasOne,
   HasMany,
   Scopes,
   Table,
+  CreatedAt,
+  UpdatedAt,
 } from 'sequelize-typescript';
 import {
   SearchSortingAlgorithm,
@@ -20,19 +23,22 @@ import { surveyPermissions } from '@intake24/common/security';
 import BaseModel from '../model';
 import {
   ClientErrorReport,
+  FeedbackScheme,
   GenUserCounter,
   SystemLocale,
   Permission,
   SurveyScheme,
   SurveySubmission,
-  UserSession,
+  UserSecurable,
+  UserSurveySession,
   UserSurveyAlias,
-  FeedbackScheme,
+  User,
 } from '.';
 
 @Scopes(() => ({
   counter: { include: [{ model: GenUserCounter }] },
   locale: { include: [{ model: SystemLocale }] },
+  feedbackScheme: { include: [{ model: FeedbackScheme }] },
   surveyScheme: { include: [{ model: SurveyScheme }] },
   respondents: { include: [{ model: UserSurveyAlias }] },
   submissions: { include: [{ model: SurveySubmission }] },
@@ -42,7 +48,6 @@ import {
   modelName: 'Survey',
   tableName: 'surveys',
   freezeTableName: true,
-  timestamps: false,
   underscored: true,
 })
 export default class Survey
@@ -50,10 +55,18 @@ export default class Survey
   implements SurveyAttributes
 {
   @Column({
+    allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
-    type: DataType.STRING(64),
+    type: DataType.BIGINT,
   })
   public id!: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(128),
+  })
+  public slug!: string;
 
   @Column({
     allowNull: false,
@@ -64,7 +77,7 @@ export default class Survey
 
   @Column({
     allowNull: false,
-    type: DataType.INTEGER,
+    type: DataType.STRING(64),
   })
   public state!: SurveyState;
 
@@ -144,15 +157,6 @@ export default class Survey
   })
   public originatingUrl!: string | null;
 
-  // V4 Deprecated
-  // description was used to hold content of "welcome page"
-  // "welcome page" will be a customizable question in scheme
-  @Column({
-    allowNull: true,
-    type: DataType.TEXT,
-  })
-  public description!: string | null;
-
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
@@ -175,15 +179,6 @@ export default class Survey
     allowNull: false,
   })
   public storeUserSessionOnServer!: boolean;
-
-  // V4 Deprecated
-  // finalPageHtml was used to hold content of "final page"
-  // "final page" will be a customizable question in scheme
-  @Column({
-    allowNull: true,
-    type: DataType.TEXT,
-  })
-  public finalPageHtml!: string | null;
 
   @Column({
     allowNull: false,
@@ -221,15 +216,32 @@ export default class Survey
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get overrides(): SchemeOverrides {
-    const val = this.getDataValue('overrides') as unknown;
+  get surveySchemeOverrides(): SchemeOverrides {
+    const val = this.getDataValue('surveySchemeOverrides') as unknown;
     return val ? JSON.parse(val as string) : defaultOverrides;
   }
 
-  set overrides(value: SchemeOverrides) {
+  set surveySchemeOverrides(value: SchemeOverrides) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('overrides', JSON.stringify(value ?? defaultOverrides));
+    this.setDataValue('surveySchemeOverrides', JSON.stringify(value ?? defaultOverrides));
   }
+
+  @Column({
+    allowNull: true,
+    type: DataType.BIGINT,
+  })
+  public ownerId!: string | null;
+
+  @CreatedAt
+  @Column
+  public readonly createdAt!: Date;
+
+  @UpdatedAt
+  @Column
+  public readonly updatedAt!: Date;
+
+  @BelongsTo(() => User, 'ownerId')
+  public owner?: User | null;
 
   @HasMany(() => ClientErrorReport, 'surveyId')
   public clientErrors?: ClientErrorReport[];
@@ -254,11 +266,32 @@ export default class Survey
   })
   public respondents?: UserSurveyAlias[];
 
-  @HasMany(() => UserSession, 'surveyId')
-  public sessions?: UserSession[];
+  @HasMany(() => UserSurveySession, 'surveyId')
+  public sessions?: UserSurveySession[];
 
   @HasMany(() => SurveySubmission, 'surveyId')
   public submissions?: SurveySubmission[];
+
+  @BelongsToMany(() => User, {
+    through: {
+      model: () => UserSecurable,
+      unique: false,
+      scope: {
+        securable_type: 'Survey',
+      },
+    },
+    foreignKey: 'securableId',
+    otherKey: 'userId',
+    constraints: false,
+  })
+  public securableUsers?: User[];
+
+  @HasMany(() => UserSecurable, {
+    foreignKey: 'securableId',
+    constraints: false,
+    scope: { securable_type: 'Survey' },
+  })
+  public securables?: UserSecurable[];
 
   @AfterCreate
   static async createSurveyPermissions(instance: Survey): Promise<void> {

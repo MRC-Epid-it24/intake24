@@ -67,14 +67,14 @@
       <thead>
         <tr>
           <th>{{ $t('users.aliases.surveyId') }}</th>
-          <th>{{ $t('users.aliases.userName') }}</th>
+          <th>{{ $t('users.aliases.username') }}</th>
           <th>{{ $t('users.aliases.urlAuthToken') }}</th>
         </tr>
       </thead>
       <tbody v-if="entry.aliases.length">
         <tr v-for="alias in entry.aliases" :key="alias.name">
           <th>{{ alias.surveyId }}</th>
-          <th>{{ alias.userName }}</th>
+          <th>{{ alias.username }}</th>
           <td>{{ alias.urlAuthToken }}</td>
         </tr>
       </tbody>

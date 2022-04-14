@@ -1,13 +1,16 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import {
-  WhereOptions,
+  FeedbackScheme,
   Language,
+  Op,
+  PaginateQuery,
+  PaginateOptions,
+  securableScope,
   SystemLocale,
   Survey,
   SurveyScheme,
-  PaginateQuery,
-  FeedbackScheme,
+  UserSecurable,
 } from '@intake24/db';
 import type {
   SurveyEntry,
@@ -18,62 +21,74 @@ import type {
 import {
   createSurveyFields,
   overridesFields,
-  staffUpdateSurveyFields,
   updateSurveyFields,
-  SurveyAttributes,
 } from '@intake24/common/types/models';
-import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses/admin';
-import { staffSuffix, surveyAdmin } from '@intake24/common/security';
+import { kebabCase } from '@intake24/common/util';
+import type { IoC } from '@intake24/api/ioc';
 import type { Controller, CrudActions } from '../../controller';
+import securableController, { SecurableController } from '../securable.controller';
 
-export type AdminSurveyController = Controller<CrudActions | 'patch' | 'put'>;
+const actionToFieldsMap: Record<'overrides', readonly string[]> = {
+  overrides: overridesFields,
+};
 
-export default (): AdminSurveyController => {
-  const entry = async (
-    req: Request<{ surveyId: string }>,
-    res: Response<SurveyEntry>
-  ): Promise<void> => {
-    const { surveyId } = req.params;
+export interface AdminSurveyController extends Controller<CrudActions | 'patch' | 'put'> {
+  securables: SecurableController;
+}
 
-    const survey = await Survey.findByPk(surveyId, {
-      include: [{ model: SystemLocale }, { model: FeedbackScheme }, { model: SurveyScheme }],
-    });
-    if (!survey) throw new NotFoundError();
+export const getAndCheckSurveyAccess = async (
+  req: Request<{ surveyId: string }>,
+  action: string,
+  scope?: string | string[]
+): Promise<Survey> => {
+  const { surveyId } = req.params;
+  const { aclService, userId } = req.scope.cradle;
 
-    res.json(surveyResponse(survey));
-  };
+  const survey = await Survey.scope(scope).findByPk(surveyId, securableScope(userId));
+  if (!survey) throw new NotFoundError();
 
+  const hasAccess = await aclService.canAccessRecord(survey, action);
+  if (!hasAccess) throw new ForbiddenError();
+
+  return survey;
+};
+
+export default (ioc: IoC): AdminSurveyController => {
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveysResponse>
   ): Promise<void> => {
-    const permissions = (await req.scope.cradle.aclService.getPermissions()).map(
-      (permission) => permission.name
-    );
+    const { aclService, userId } = req.scope.cradle;
 
-    const where: WhereOptions<SurveyAttributes> = {};
-    if (!permissions.includes(surveyAdmin)) {
-      const surveys = permissions
-        .filter((permission) => permission.endsWith(staffSuffix))
-        .map((permission) => permission.replace(staffSuffix, ''));
+    const paginateOptions: PaginateOptions = {
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['slug', 'name'],
+      order: [['name', 'ASC']],
+      transform: surveyListResponse,
+    };
 
-      where.id = surveys;
+    if (await aclService.hasPermission('surveys|browse')) {
+      const surveys = await Survey.paginate<SurveyListEntry>(paginateOptions);
+      res.json(surveys);
+      return;
     }
 
     const surveys = await Survey.paginate<SurveyListEntry>({
-      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['id', 'name'],
-      where,
-      order: [['id', 'ASC']],
-      transform: surveyListResponse,
+      ...paginateOptions,
+      where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
+      ...securableScope(userId),
+      subQuery: false,
     });
 
     res.json(surveys);
   };
 
   const store = async (req: Request, res: Response<SurveyEntry>): Promise<void> => {
-    const survey = await Survey.create(pick(req.body, createSurveyFields));
+    const { userId } = req.scope.cradle;
+
+    const survey = await Survey.create({ ...pick(req.body, createSurveyFields), ownerId: userId });
 
     res.status(201).json(surveyResponse(survey));
   };
@@ -81,18 +96,31 @@ export default (): AdminSurveyController => {
   const read = async (
     req: Request<{ surveyId: string }>,
     res: Response<SurveyEntry>
-  ): Promise<void> => entry(req, res);
+  ): Promise<void> => {
+    const survey = await getAndCheckSurveyAccess(req, 'read', [
+      'locale',
+      'feedbackScheme',
+      'surveyScheme',
+    ]);
+
+    res.json(surveyResponse(survey));
+  };
 
   const edit = async (
     req: Request<{ surveyId: string }>,
     res: Response<SurveyEntry>
-  ): Promise<void> => entry(req, res);
+  ): Promise<void> => {
+    const survey = await getAndCheckSurveyAccess(req, 'edit', [
+      'locale',
+      'feedbackScheme',
+      'surveyScheme',
+    ]);
+
+    res.json(surveyResponse(survey));
+  };
 
   const update = async (req: Request<{ surveyId: string }>, res: Response<SurveyEntry>) => {
-    const { surveyId } = req.params;
-
-    const survey = await Survey.findByPk(surveyId);
-    if (!survey) throw new NotFoundError();
+    const survey = await getAndCheckSurveyAccess(req, 'edit');
 
     await survey.update(pick(req.body, updateSurveyFields));
 
@@ -102,26 +130,28 @@ export default (): AdminSurveyController => {
   const patch = async (
     req: Request<{ surveyId: string }>,
     res: Response<SurveyEntry>
-    // eslint-disable-next-line consistent-return
   ): Promise<void> => {
-    const { surveyId } = req.params;
-    const { aclService } = req.scope.cradle;
+    const { aclService, userId } = req.scope.cradle;
 
-    if (await aclService.hasPermission(surveyAdmin)) {
-      return update(req, res);
-    }
-
-    const survey = await Survey.findByPk(surveyId);
-    if (!survey) throw new NotFoundError();
-
+    const survey = await getAndCheckSurveyAccess(req, 'edit');
     const keysToUpdate: string[] = [];
 
-    if (await aclService.hasPermission('surveys|edit'))
-      keysToUpdate.push(...staffUpdateSurveyFields);
+    if (survey.ownerId === userId) {
+      keysToUpdate.push(...updateSurveyFields);
+    } else {
+      const actions = await aclService.getAccessActions(survey, 'surveys');
 
-    if (await aclService.hasPermission('surveys|overrides')) keysToUpdate.push(...overridesFields);
+      if (actions.includes('edit')) keysToUpdate.push(...updateSurveyFields);
 
-    if (keysToUpdate.length) await survey.update(pick(req.body, keysToUpdate));
+      (Object.keys(actionToFieldsMap) as (keyof typeof actionToFieldsMap)[]).forEach((item) => {
+        if (actions.includes(kebabCase(item))) keysToUpdate.push(...actionToFieldsMap[item]);
+      });
+    }
+
+    const updateInput = pick(req.body, keysToUpdate);
+    if (!Object.keys(updateInput).length) throw new ValidationError('Missing body');
+
+    await survey.update(updateInput);
 
     res.json(surveyResponse(survey));
   };
@@ -135,15 +165,16 @@ export default (): AdminSurveyController => {
     req: Request<{ surveyId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { surveyId } = req.params;
+    const survey = await getAndCheckSurveyAccess(req, 'delete', 'submissions');
+    const { id: securableId, submissions } = survey;
 
-    const survey = await Survey.scope('submissions').findByPk(surveyId);
-    if (!survey) throw new NotFoundError();
-
-    if (survey.submissions?.length)
+    if (!submissions || submissions.length)
       throw new ForbiddenError('Survey cannot be deleted. It already contains submission data.');
 
-    await survey.destroy();
+    await Promise.all([
+      UserSecurable.destroy({ where: { securableId, securableType: 'Survey' } }),
+      survey.destroy(),
+    ]);
 
     res.status(204).json();
   };
@@ -172,5 +203,6 @@ export default (): AdminSurveyController => {
     put,
     destroy,
     refs,
+    securables: securableController({ ioc, securable: Survey }),
   };
 };

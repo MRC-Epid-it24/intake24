@@ -11,7 +11,7 @@ import {
   SurveySubmissionMealCustomField,
   User,
   UserCustomField,
-  UserSession,
+  UserSurveySession,
   UserSurveyAlias,
   SubmissionScope,
   submissionScope,
@@ -48,24 +48,25 @@ const surveyService = ({
   /**
    * Generate random survey respondent
    *
-   * @param {string} surveyId
+   * @param {string} slug
    * @returns {Promise<RespondentWithPassword>}
    */
-  const generateRespondent = async (surveyId: string): Promise<RespondentWithPassword> => {
-    const survey = await Survey.scope('counter').findByPk(surveyId);
-
+  const generateRespondent = async (slug: string): Promise<RespondentWithPassword> => {
+    const survey = await Survey.scope('counter').findOne({ where: { slug } });
     if (!survey) throw new NotFoundError();
 
-    if (!survey.allowGenUsers || survey.genUserKey) throw new ForbiddenError();
+    const { id: surveyId, allowGenUsers, genUserKey } = survey;
+
+    if (!allowGenUsers || genUserKey) throw new ForbiddenError();
 
     let { counter } = survey;
     if (counter) await counter.increment('count');
     else counter = await GenUserCounter.create({ surveyId, count: 1 });
 
-    const userName = `${surveyId}${counter.count}`;
+    const username = `${slug}${counter.count}`;
     const password = randomString(12);
 
-    const respondent = await adminSurveyService.createRespondent(survey, { userName, password });
+    const respondent = await adminSurveyService.createRespondent(survey, { username, password });
 
     return { respondent, password };
   };
@@ -73,24 +74,26 @@ const surveyService = ({
   /**
    * Generate respondent based on supplied JWT payload
    *
-   * @param {string} surveyId
+   * @param {string} slug
    * @param {string} params
    * @returns {Promise<RespondentFromJWT>}
    */
   const createRespondentWithJWT = async (
-    surveyId: string,
+    slug: string,
     params: string
   ): Promise<RespondentFromJWT> => {
-    const survey = await Survey.findByPk(surveyId);
+    const survey = await Survey.findOne({ where: { slug } });
     if (!survey) throw new NotFoundError();
 
-    if (!survey.allowGenUsers || !survey.genUserKey)
+    const { id: surveyId, allowGenUsers, genUserKey } = survey;
+
+    if (!allowGenUsers || !genUserKey)
       throw new ForbiddenError(`Survey doesn't support user generation`);
 
     let decoded;
 
     try {
-      decoded = await jwt.verify(params, survey.genUserKey, {
+      decoded = await jwt.verify(params, genUserKey, {
         algorithms: ['HS256', 'HS512'],
       });
     } catch (err) {
@@ -103,13 +106,13 @@ const surveyService = ({
     if (!decoded || typeof decoded === 'string')
       throw new ApplicationError('Malformed token payload');
 
-    const { user: userName, redirect } = decoded;
-    if (!userName || typeof userName !== 'string')
+    const { user: username, redirect } = decoded;
+    if (!username || typeof username !== 'string')
       throw new ApplicationError('Missing claim: user');
     if (!redirect || typeof redirect !== 'string')
       throw new ApplicationError('Missing claim: redirect');
 
-    const alias = await UserSurveyAlias.findOne({ where: { surveyId, userName } });
+    const alias = await UserSurveyAlias.findOne({ where: { surveyId, username } });
     if (alias) {
       const { userId, urlAuthToken: authToken } = alias;
 
@@ -117,7 +120,7 @@ const surveyService = ({
     }
 
     const { userId, urlAuthToken: authToken } = await adminSurveyService.createRespondent(survey, {
-      userName,
+      username,
       password: randomString(12),
     });
 
@@ -127,20 +130,20 @@ const surveyService = ({
   /**
    * User information for survey
    *
-   * @param {string} surveyId
+   * @param {string} slug
    * @param {User} user
    * @param {number} tzOffset
    * @returns {Promise<SurveyUserInfoResponse>}
    */
   const userInfo = async (
-    surveyId: string,
+    slug: string,
     { id: userId, name }: User,
     tzOffset: number
   ): Promise<SurveyUserInfoResponse> => {
-    const survey = await Survey.findByPk(surveyId);
+    const survey = await Survey.findOne({ where: { slug } });
     if (!survey) throw new NotFoundError();
 
-    const { maximumTotalSubmissions, maximumDailySubmissions } = survey;
+    const { id: surveyId, maximumTotalSubmissions, maximumDailySubmissions } = survey;
 
     const clientStartOfDay = addMinutes(startOfDay(new Date()), tzOffset * -1);
     const clientEndOfDay = addDays(clientStartOfDay, 1);
@@ -171,17 +174,19 @@ const surveyService = ({
   /**
    * Get respondent's survey session / recall state
    *
-   * @param {string} surveyId
+   * @param {string} slug
    * @param {string} userId
-   * @returns {Promise<UserSession>}
+   * @returns {Promise<UserSurveySession>}
    */
-  const getSession = async (surveyId: string, userId: string): Promise<UserSession> => {
-    const survey = await Survey.findByPk(surveyId);
+  const getSession = async (slug: string, userId: string): Promise<UserSurveySession> => {
+    const survey = await Survey.findOne({ where: { slug } });
     if (!survey) throw new NotFoundError();
 
-    if (!survey.storeUserSessionOnServer) throw new ForbiddenError();
+    const { id: surveyId, storeUserSessionOnServer } = survey;
 
-    const session = await UserSession.findOne({ where: { userId, surveyId } });
+    if (!storeUserSessionOnServer) throw new ForbiddenError();
+
+    const session = await UserSurveySession.findOne({ where: { userId, surveyId } });
     if (!session) throw new NotFoundError();
 
     return session;
@@ -190,22 +195,24 @@ const surveyService = ({
   /**
    * Save respondent's survey session / recall state
    *
-   * @param {string} surveyId
+   * @param {string} slug
    * @param {string} userId
    * @param {SurveyState} sessionData
-   * @returns {Promise<UserSession>}
+   * @returns {Promise<UserSurveySession>}
    */
   const setSession = async (
-    surveyId: string,
+    slug: string,
     userId: string,
     sessionData: SurveyState
-  ): Promise<UserSession> => {
-    const survey = await Survey.findByPk(surveyId);
+  ): Promise<UserSurveySession> => {
+    const survey = await Survey.findOne({ where: { slug } });
     if (!survey) throw new NotFoundError();
 
-    if (!survey.storeUserSessionOnServer) throw new ForbiddenError();
+    const { id: surveyId, storeUserSessionOnServer } = survey;
 
-    const [session] = await UserSession.upsert(
+    if (!storeUserSessionOnServer) throw new ForbiddenError();
+
+    const [session] = await UserSurveySession.upsert(
       { userId, surveyId, sessionData },
       { fields: ['sessionData'] }
     );
@@ -257,7 +264,7 @@ const surveyService = ({
         identifierValue = user.id;
         break;
       case 'username':
-        identifierValue = aliases.length ? aliases[0].userName : null;
+        identifierValue = aliases.length ? aliases[0].username : null;
         break;
       case 'token':
         identifierValue = aliases.length ? aliases[0].urlAuthToken : null;
@@ -283,12 +290,10 @@ const surveyService = ({
    * @returns {Promise<boolean>}
    */
   const canShowFeedback = async (survey: Survey, userId: string): Promise<boolean> => {
-    const { feedbackScheme, numberOfSubmissionsForFeedback } = survey;
+    const { id: surveyId, feedbackScheme, numberOfSubmissionsForFeedback } = survey;
     if (!feedbackScheme) return false;
 
-    const submissions = await SurveySubmission.count({
-      where: { surveyId: survey.id, userId },
-    });
+    const submissions = await SurveySubmission.count({ where: { surveyId, userId } });
 
     return numberOfSubmissionsForFeedback >= submissions;
   };
@@ -296,26 +301,32 @@ const surveyService = ({
   /**
    * Submit survey recall
    *
-   * @param {string} surveyId
+   * @param {string} slug
    * @param {string} userId
    * @param {RecallState} input
    * @returns {Promise<void>}
    */
   const submit = async (
-    surveyId: string,
+    slug: string,
     userId: string,
     input: SurveyState
   ): Promise<SurveyFollowUpResponse> => {
-    const survey = await Survey.findByPk(surveyId, {
+    const survey = await Survey.findOne({
+      where: { slug },
       include: [{ model: SurveyScheme, required: true }, { model: FeedbackScheme }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
 
     const {
-      preMeals,
-      postMeals,
-      meals: { preFoods, postFoods },
-    } = survey.surveyScheme.questions;
+      id: surveyId,
+      surveyScheme: {
+        questions: {
+          preMeals,
+          postMeals,
+          meals: { preFoods, postFoods },
+        },
+      },
+    } = survey;
 
     const surveyCustomQuestions = [...preMeals, ...postMeals]
       .filter((question) => question.type === 'custom')
@@ -405,8 +416,9 @@ const surveyService = ({
     return { followUpUrl, showFeedback };
   };
 
-  const followUp = async (surveyId: string, userId: string): Promise<SurveyFollowUpResponse> => {
-    const survey = await Survey.findByPk(surveyId, {
+  const followUp = async (slug: string, userId: string): Promise<SurveyFollowUpResponse> => {
+    const survey = await Survey.findOne({
+      where: { slug },
       include: [{ model: SurveyScheme, required: true }, { model: FeedbackScheme }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();

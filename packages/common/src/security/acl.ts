@@ -2,30 +2,14 @@ export const ACL_PERMISSIONS_KEY = 'acl:permissions';
 export const ACL_ROLES_KEY = 'acl:roles';
 
 export const respondentSuffix = '/respondent';
-export const staffSuffix = '/staff';
-export const supportSuffix = '/support';
 export const foodDatabaseMaintainerPrefix = 'fdbm/';
 
 export const globalsupport = 'globalsupport';
-export const surveyAdmin = 'surveyadmin';
 export const foodsAdmin = 'foodsadmin';
 
-export const surveyStaff = (surveyId: string): string => `${surveyId}${staffSuffix}`;
+export const surveyRespondent = (surveySlug: string): string => `${surveySlug}${respondentSuffix}`;
 
-export const surveySupport = (surveyId: string): string => `${surveyId}${supportSuffix}`;
-
-export const surveyMgmt = (surveyId: string): string[] => [
-  surveyStaff(surveyId),
-  surveySupport(surveyId),
-];
-
-export const surveyRespondent = (surveyId: string): string => `${surveyId}${respondentSuffix}`;
-
-export const surveyPermissions = (surveyId: string): string[] => [
-  surveyRespondent(surveyId),
-  surveyStaff(surveyId),
-  surveySupport(surveyId),
-];
+export const surveyPermissions = (surveySlug: string): string[] => [surveyRespondent(surveySlug)];
 
 export const foodDatabaseMaintainer = (localeId: string): string =>
   `${foodDatabaseMaintainerPrefix}${localeId}`;
@@ -45,6 +29,14 @@ export const securableDefs = {
     'henry-coefficients',
   ] as const,
   SurveyScheme: [...standardSecurableActions, 'questions', 'data-export'] as const,
+  Survey: [
+    ...standardSecurableActions,
+    'overrides',
+    'respondents',
+    'submissions',
+    'data-export',
+    'support',
+  ] as const,
 };
 
 export type SecurableType = keyof typeof securableDefs;

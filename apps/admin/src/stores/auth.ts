@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import authService, { LoginRequest, MFAVerifyRequest } from '@intake24/admin/services/auth.service';
+import { authService } from '@intake24/admin/services';
 import axios, { AxiosError } from 'axios';
 import { useLoading } from '@intake24/ui/stores';
+import { EmailLoginRequest, MFAVerifyRequest } from '@intake24/common/types/http';
 import { useUser } from './user';
 
 export type AuthState = {
@@ -40,7 +41,7 @@ export const useAuth = defineStore('auth', {
       this.mfaRequestUrl = url;
     },
 
-    async login(payload: LoginRequest) {
+    async login(payload: EmailLoginRequest) {
       const loading = useLoading();
       loading.addItem('login');
 

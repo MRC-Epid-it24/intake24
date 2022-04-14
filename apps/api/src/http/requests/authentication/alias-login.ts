@@ -3,7 +3,7 @@ import validate from '@intake24/api/http/requests/validate';
 
 export default validate(
   checkSchema({
-    userName: {
+    username: {
       in: ['body'],
       errorMessage: 'Username must be filled in.',
       isString: true,
@@ -15,7 +15,7 @@ export default validate(
       isString: true,
       isEmpty: { negated: true },
     },
-    surveyId: {
+    survey: {
       in: ['body'],
       errorMessage: 'Survey must be selected.',
       isString: true,

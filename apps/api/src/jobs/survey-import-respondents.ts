@@ -122,13 +122,13 @@ export default class SurveyImportRespondents extends StreamLockJob<SurveyImportR
     if (requiredFields.some((field) => !csvFields.includes(field)))
       throw new Error(`Missing some of the required fields (${requiredFields.join(',')}).`);
 
-    const userName = this.content.map((item) => item.username);
+    const username = this.content.map((item) => item.username);
     const { surveyId } = this.params;
 
     // Check for unique aliases within survey
-    const aliases = await UserSurveyAlias.findAll({ where: { surveyId, userName } });
+    const aliases = await UserSurveyAlias.findAll({ where: { surveyId, username } });
     if (aliases.length) {
-      const existingAliases = aliases.map((alias) => alias.userName);
+      const existingAliases = aliases.map((alias) => alias.username);
       throw new Error(`Following usernames already exist in survey: ${existingAliases.join(', ')}`);
     }
 
@@ -212,7 +212,7 @@ export default class SurveyImportRespondents extends StreamLockJob<SurveyImportR
       }, []);
 
       return {
-        userName: username,
+        username,
         password,
         name,
         email,

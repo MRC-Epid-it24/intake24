@@ -31,8 +31,8 @@ describe('API', () => {
       .post('/api/auth/login/alias')
       .set('Accept', 'application/json')
       .send({
-        surveyId: 'test-survey',
-        userName: 'testRespondent',
+        survey: 'test-survey',
+        username: 'testRespondent',
         password: 'testRespondentPassword',
       });
 

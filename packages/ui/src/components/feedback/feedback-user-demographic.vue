@@ -99,7 +99,7 @@ export default defineComponent({
 
       try {
         const res = await this.$http.get(`user/feedback`, {
-          params: { surveyId: this.surveyId },
+          params: { survey: this.surveyId },
           responseType: 'arraybuffer',
           headers: { accept: 'application/pdf' },
         });

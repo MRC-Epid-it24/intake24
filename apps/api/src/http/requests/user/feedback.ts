@@ -3,9 +3,9 @@ import validate from '@intake24/api/http/requests/validate';
 
 export default validate(
   checkSchema({
-    surveyId: {
+    survey: {
       in: ['query'],
-      errorMessage: 'SurveyID must be a string',
+      errorMessage: 'Survey must be a string',
       isString: true,
     },
   })

@@ -12,8 +12,6 @@ export default validate(
 
           if (path.extname(file.originalname).toLowerCase() !== '.csv')
             throw new Error(`Invalid file type - expecting CSV (comma-delimited) file.`);
-
-          return Promise.resolve();
         },
       },
     },

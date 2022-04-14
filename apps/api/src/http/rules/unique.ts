@@ -25,6 +25,4 @@ export default async ({ model, condition, options = {} }: UniqueOptions): Promis
 
   const entry = await cModel.findOne(findOptions);
   if (entry) throw new Error('Current value is already in use.');
-
-  Promise.resolve();
 };

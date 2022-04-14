@@ -11,8 +11,6 @@ export default validate(
         options: async (value: any): Promise<void> => {
           // TODO: add proper validator once SurveyState implementation finalized in frontend
           if (!isPlainObject(value)) throw new Error('Enter valid session data object.');
-
-          Promise.resolve();
         },
       },
     },

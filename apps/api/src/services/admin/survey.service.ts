@@ -14,7 +14,7 @@ import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
-import { surveyMgmt, surveyRespondent } from '@intake24/common/security';
+import { surveyRespondent } from '@intake24/common/security';
 
 const adminSurveyService = ({
   adminUserService,
@@ -24,11 +24,11 @@ const adminSurveyService = ({
   /**
    * Fetch survey-specific respondent permission instance or create one
    *
-   * @param {string} surveyId
+   * @param {string} slug
    * @returns {Promise<Permission>}
    */
-  const getSurveyRespondentPermission = async (surveyId: string): Promise<Permission> => {
-    const name = surveyRespondent(surveyId);
+  const getSurveyRespondentPermission = async (slug: string): Promise<Permission> => {
+    const name = surveyRespondent(slug);
     const [permission] = await Permission.findOrCreate({
       where: { name },
       defaults: { name, displayName: name },
@@ -36,22 +36,6 @@ const adminSurveyService = ({
 
     return permission;
   };
-
-  /**
-   * Fetch survey-specific management permission instances
-   *
-   * @param {string} surveyId
-   * @param {(string | string[])} [scope=[]]
-   * @returns {Promise<Permission[]>}
-   */
-  const getSurveyMgmtPermissions = async (
-    surveyId: string,
-    scope: string | string[] = []
-  ): Promise<Permission[]> =>
-    Permission.scope(scope).findAll({
-      where: { name: surveyMgmt(surveyId) },
-      order: [['name', 'ASC']],
-    });
 
   /**
    * Get survey resource permissions
@@ -64,22 +48,6 @@ const adminSurveyService = ({
   ): Promise<Permission[]> =>
     Permission.scope(scope).findAll({
       where: { name: { [Op.startsWith]: 'surveys-' } },
-      order: [['name', 'ASC']],
-    });
-
-  /**
-   * Get survey permissions
-   *
-   * @param {string} surveyId
-   * @param {(string | string[])} [scope=[]]
-   * @returns {Promise<Permission[]>}
-   */
-  const getSurveyPermissions = async (
-    surveyId: string,
-    scope: string | string[] = []
-  ): Promise<Permission[]> =>
-    Permission.scope(scope).findAll({
-      where: { name: { [Op.or]: [surveyMgmt(surveyId), { [Op.startsWith]: 'surveys-' }] } },
       order: [['name', 'ASC']],
     });
 
@@ -97,8 +65,8 @@ const adminSurveyService = ({
     const surveyEntry = typeof survey === 'string' ? await Survey.findByPk(survey) : survey;
     if (!surveyEntry) throw new NotFoundError();
 
-    const { id: surveyId, authUrlTokenCharset, authUrlTokenLength } = surveyEntry;
-    const { password, userName, ...rest } = input;
+    const { id: surveyId, slug, authUrlTokenCharset, authUrlTokenLength } = surveyEntry;
+    const { password, username, ...rest } = input;
 
     const user = await User.create(
       { ...rest, simpleName: toSimpleName(rest.name) },
@@ -108,13 +76,13 @@ const adminSurveyService = ({
     const { id: userId } = user;
     const { size, alphabet } = securityConfig.authTokens;
 
-    const surveyRespondentPermission = await getSurveyRespondentPermission(surveyId);
+    const surveyRespondentPermission = await getSurveyRespondentPermission(slug);
 
     const [respondent] = await Promise.all([
       UserSurveyAlias.create({
         userId,
         surveyId,
-        userName,
+        username,
         urlAuthToken: randomString(authUrlTokenLength ?? size, authUrlTokenCharset ?? alphabet),
       }),
       user.$add('permissions', surveyRespondentPermission),
@@ -138,7 +106,7 @@ const adminSurveyService = ({
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    const { id: permissionId } = await getSurveyRespondentPermission(surveyId);
+    const { id: permissionId } = await getSurveyRespondentPermission(survey.slug);
     const { size, alphabet } = securityConfig.authTokens;
 
     const urlTokenCharset = survey.authUrlTokenCharset ?? alphabet;
@@ -150,7 +118,7 @@ const adminSurveyService = ({
     const userPermissions = [];
 
     for (const input of inputs) {
-      const { customFields, password, userName, ...rest } = input;
+      const { customFields, password, username, ...rest } = input;
       // User records are created one-by-one
       // This is to keep it MySQL+others-like compatible, where bulk operation doesn't return generated IDs
       const { id: userId } = await User.create({ ...rest, simpleName: toSimpleName(rest.name) });
@@ -164,7 +132,7 @@ const adminSurveyService = ({
       userAliases.push({
         userId,
         surveyId,
-        userName,
+        username,
         urlAuthToken: randomString(urlTokenLength, urlTokenCharset),
       });
       userPermissions.push({ userId, permissionId });
@@ -223,12 +191,13 @@ const adminSurveyService = ({
    * @returns {Promise<void>}
    */
   const deleteRespondent = async (surveyId: string, userId: string | number): Promise<void> => {
+    const survey = await Survey.findByPk(surveyId);
     const user = await User.scope('submissions').findOne({
       where: { id: userId },
       include: [{ model: UserSurveyAlias, where: { surveyId } }],
     });
 
-    if (!user) throw new NotFoundError();
+    if (!survey || !user) throw new NotFoundError();
 
     if (user.submissions?.length)
       throw new ForbiddenError('User cannot be deleted. It already contains submission data.');
@@ -237,7 +206,7 @@ const adminSurveyService = ({
     if (user.email) {
       await Promise.all([
         UserSurveyAlias.destroy({ where: { surveyId, userId } }),
-        user.$remove('permissions', await getSurveyRespondentPermission(surveyId)),
+        user.$remove('permissions', await getSurveyRespondentPermission(survey.slug)),
       ]);
     } else {
       // Wipe the whole user records
@@ -286,9 +255,7 @@ const adminSurveyService = ({
 
   return {
     getSurveyRespondentPermission,
-    getSurveyMgmtPermissions,
     getSurveyResourcePermissions,
-    getSurveyPermissions,
     createRespondent,
     createRespondents,
     updateRespondent,

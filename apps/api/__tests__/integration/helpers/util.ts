@@ -104,10 +104,10 @@ export const downloadImage = async (url: string, filename: string): Promise<stri
 export const generateCSV = async (filename: string): Promise<string> => {
   const filePath = path.resolve(fsConfig.local.downloads, filename);
 
-  const fields = ['userName', 'password', 'email', 'name', 'phone'];
+  const fields = ['username', 'password', 'email', 'name', 'phone'];
 
   const data = times(10, () => ({
-    userName: faker.internet.userName(),
+    username: faker.internet.userName(),
     password: faker.internet.password(),
     email: faker.internet.email(),
     name: faker.name.firstName(),

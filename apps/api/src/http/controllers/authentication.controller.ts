@@ -54,12 +54,9 @@ export default ({
   };
 
   const aliasLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
-    const { userName, password, surveyId } = req.body;
+    const { username, password, survey } = req.body;
 
-    const tokens = await authenticationService.aliasLogin(
-      { userName, password, surveyId },
-      { req }
-    );
+    const tokens = await authenticationService.aliasLogin({ username, password, survey }, { req });
 
     await sendTokenResponse(tokens, res);
   };

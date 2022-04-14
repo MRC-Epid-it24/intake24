@@ -5,6 +5,7 @@ import {
   FoodsNutrientUnit,
   NutrientTypeInKcal,
   PhysicalActivityLevel,
+  Survey,
   UserSurveyAlias,
 } from '@intake24/db';
 import type { NutrientType } from '@intake24/common/types/http/feedback';
@@ -35,14 +36,20 @@ const feedbackService = ({ appConfig, fsConfig }: Pick<IoC, 'appConfig' | 'fsCon
   const getWeightTargets = async (): Promise<WeightTargetCoefficient[]> => weightTargetsData;
 
   const getFeedbackLinks = async (surveyId: string, userId: string) => {
-    const alias = await UserSurveyAlias.findOne({ where: { surveyId, userId } });
-    if (!alias) throw new NotFoundError();
+    const alias = await UserSurveyAlias.findOne({
+      where: { surveyId, userId },
+      include: [{ model: Survey, attributes: ['id', 'slug'] }],
+    });
+    if (!alias || !alias.survey) throw new NotFoundError();
 
-    const { urlAuthToken } = alias;
+    const {
+      urlAuthToken,
+      survey: { slug },
+    } = alias;
     const { base, survey } = appConfig.urls;
     const baseUrl = getFrontEndUrl(base, survey);
-    const url = `${baseUrl}/${surveyId}/feedback?token=${urlAuthToken}`;
-    const filename = `Intake24-${surveyId}-${alias.userName}-${new Date()
+    const url = `${baseUrl}/${slug}/feedback?token=${urlAuthToken}`;
+    const filename = `Intake24-${slug}-${alias.username}-${new Date()
       .toISOString()
       .substring(0, 10)}.pdf`;
 

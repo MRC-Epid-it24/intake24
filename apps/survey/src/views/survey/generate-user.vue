@@ -34,7 +34,7 @@
           </v-btn>
           <template v-if="status">
             <v-sheet v-if="status === 200" class="pa-5 my-5" color="deep-orange lighten-5">
-              <h4 class="my-2">{{ $t('common.username') }}: {{ userName }}</h4>
+              <h4 class="my-2">{{ $t('common.username') }}: {{ username }}</h4>
               <h4 class="my-2">{{ $t('common.password') }}: {{ password }}</h4>
             </v-sheet>
             <v-alert v-else type="error" dark>
@@ -101,7 +101,7 @@ export default defineComponent({
     return reactive({
       loading: false,
       status: null as number | null,
-      userName: '',
+      username: '',
       password: '',
       reCaptcha: {
         enabled: process.env.VUE_APP_RECAPTCHA_ENABLED === 'true',
@@ -148,12 +148,12 @@ export default defineComponent({
       this.loading = true;
 
       try {
-        const { userName, password } = await surveySvc.generateUser(this.surveyId, {
+        const { username, password } = await surveySvc.generateUser(this.surveyId, {
           reCaptchaToken: token,
         });
 
         this.status = 200;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
       } catch (err) {
         if (axios.isAxiosError(err)) this.status = err.response?.status ?? 0;
@@ -165,10 +165,10 @@ export default defineComponent({
     },
 
     async onLogin() {
-      const { userName, password, surveyId } = this;
+      const { username, password, surveyId } = this;
       try {
-        await this.login({ userName, password, surveyId });
-        this.userName = '';
+        await this.login({ username, password, survey: surveyId });
+        this.username = '';
         this.password = '';
         await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {

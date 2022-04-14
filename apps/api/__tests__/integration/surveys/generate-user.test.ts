@@ -6,7 +6,7 @@ export default () => {
   let invalidUrl: string;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.id}/generate-user`;
+    url = `/api/surveys/${suite.data.system.survey.slug}/generate-user`;
     invalidUrl = `/api/surveys/invalid-survey/generate-user`;
   });
 
@@ -50,6 +50,6 @@ export default () => {
       .send({ reCaptchaToken: 'reCaptchaToken' });
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['userName', 'password']);
+    expect(body).toContainAllKeys(['username', 'password']);
   });
 };

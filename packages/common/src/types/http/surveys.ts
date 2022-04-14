@@ -2,11 +2,11 @@ import type {
   FeedbackSchemeAttributes,
   SurveySchemeAttributes,
   SurveyState,
-  UserSessionAttributes,
+  UserSurveySessionAttributes,
 } from '../models';
 
 export type GenerateUserResponse = {
-  userName: string;
+  username: string;
   password: string;
 };
 export type PublicSurveyListResponse = {
@@ -50,7 +50,7 @@ export type SurveyUserInfoResponse = {
   maximumDailySubmissionsReached: boolean;
 };
 
-export type SurveyUserSessionResponse = UserSessionAttributes;
+export type SurveyUserSessionResponse = UserSurveySessionAttributes;
 
 export type SurveyFollowUpResponse = {
   followUpUrl: string | null;

@@ -18,7 +18,7 @@ export default () => {
       endDate: endDate.toISOString().split('T')[0],
     };
 
-    await suite.util.setPermission(['surveys|data-export', 'surveyadmin']);
+    await suite.util.setPermission(['surveys', 'surveys|data-export']);
 
     const { body } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)

@@ -6,7 +6,7 @@
     </v-card-subtitle>
     <prompt-list
       v-bind="{ mode: 'override', questionIds, templates: questions }"
-      :items.sync="form.overrides.questions"
+      :items.sync="form.surveySchemeOverrides.questions"
     ></prompt-list>
     <v-card-title>{{ $t('survey-schemes.overrides.meals.title') }}</v-card-title>
     <v-card-subtitle>
@@ -14,7 +14,7 @@
     </v-card-subtitle>
     <meal-list
       :schemeId="entry.surveySchemeId"
-      v-model="form.overrides.meals"
+      v-model="form.surveySchemeOverrides.meals"
       mode="override"
     ></meal-list>
     <v-container fluid>
@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { defaultOverrides, flattenScheme } from '@intake24/common/schemes';
+import { defaultOverrides, flattenScheme, SchemeOverrides } from '@intake24/common/schemes';
 import { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
 import { PromptQuestion } from '@intake24/common/prompts';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
@@ -37,9 +37,8 @@ import MealList from '@intake24/admin/components/meals/meal-list.vue';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
-import { SurveyForm } from '../form.vue';
 
-export type SurveyOverridesForm = Pick<SurveyForm, 'overrides'>;
+export type SurveyOverridesForm = { surveySchemeOverrides: SchemeOverrides };
 
 export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>).extend({
   name: 'SurveySchemeOverrides',
@@ -51,7 +50,7 @@ export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>)
   data() {
     return {
       editMethod: 'patch',
-      form: form<SurveyOverridesForm>({ overrides: defaultOverrides }),
+      form: form<SurveyOverridesForm>({ surveySchemeOverrides: defaultOverrides }),
     };
   },
 
@@ -66,7 +65,7 @@ export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>)
     },
 
     questionIds(): string[] {
-      return this.form.overrides.questions.map((question) => question.id);
+      return this.form.surveySchemeOverrides.questions.map((question) => question.id);
     },
   },
 });

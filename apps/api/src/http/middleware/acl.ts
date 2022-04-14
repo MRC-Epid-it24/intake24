@@ -1,17 +1,11 @@
 /* eslint-disable @typescript-eslint/no-shadow */
+import { User } from '@intake24/db';
 import { asValue } from 'awilix';
 import type { Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import { User } from '@intake24/db';
 import { ForbiddenError } from '@intake24/api/http/errors';
 import ioc, { IoC } from '@intake24/api/ioc';
-import {
-  foodDatabaseMaintainer,
-  surveyRespondent,
-  surveyStaff,
-  surveyAdmin,
-  foodsAdmin,
-} from '@intake24/common/security';
+import { foodDatabaseMaintainer, surveyRespondent, foodsAdmin } from '@intake24/common/security';
 
 /*
  * This middleware should be placed after authentication
@@ -76,23 +70,12 @@ export const canManageFoodDatabase = () => {
   };
 };
 
-export const canManageSurvey = () => {
-  return (req: Request, res: Response, next: NextFunction): void => {
-    const { surveyId } = req.params;
-
-    req.scope.cradle.aclService
-      .hasAnyPermission([surveyAdmin, surveyStaff(surveyId)])
-      .then((result) => (result ? next() : next(new ForbiddenError())))
-      .catch((err) => next(err));
-  };
-};
-
 export const isSurveyRespondent = () => {
   return (req: Request, res: Response, next: NextFunction): void => {
-    const { surveyId } = req.params;
+    const { slug } = req.params;
 
     req.scope.cradle.aclService
-      .hasPermission(surveyRespondent(surveyId))
+      .hasPermission(surveyRespondent(slug))
       .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };

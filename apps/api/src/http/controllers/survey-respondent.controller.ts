@@ -24,12 +24,13 @@ export type SurveyRespondentController = Controller<
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondentController => {
   const parameters = async (
-    req: Request<{ surveyId: string }>,
+    req: Request<{ slug: string }>,
     res: Response<SurveyEntryResponse>
   ): Promise<void> => {
-    const { surveyId } = req.params;
+    const { slug } = req.params;
 
-    const survey = await Survey.findByPk(surveyId, {
+    const survey = await Survey.findOne({
+      where: { slug },
       include: [{ model: SurveyScheme }, { model: FeedbackScheme }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
@@ -44,7 +45,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
       numberOfSubmissionsForFeedback,
       storeUserSessionOnServer,
       suspensionReason,
-      overrides,
+      surveySchemeOverrides,
     } = survey;
 
     let { meals } = surveyScheme;
@@ -52,12 +53,12 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
 
     // Merge survey's scheme overrides
     // 1) Meals - override whole list
-    if (overrides.meals.length) meals = [...overrides.meals];
+    if (surveySchemeOverrides.meals.length) meals = [...surveySchemeOverrides.meals];
 
     // 2) Questions - merge by Question ID
-    if (overrides.questions.length) {
+    if (surveySchemeOverrides.questions.length) {
       const flattenScheme = flattenSchemeWithSection(surveyScheme.questions);
-      for (const question of overrides.questions) {
+      for (const question of surveySchemeOverrides.questions) {
         const match = flattenScheme.find((item) => item.id === question.id);
         if (!match) continue;
 
@@ -87,73 +88,73 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
   };
 
   const userInfo = async (
-    req: Request<{ surveyId: string }, any, any, { tzOffset: number }>,
+    req: Request<{ slug: string }, any, any, { tzOffset: number }>,
     res: Response<SurveyUserInfoResponse>
   ): Promise<void> => {
     const {
-      params: { surveyId },
+      params: { slug },
       query: { tzOffset },
     } = req;
     const user = req.user as User;
 
-    const userResponse = await surveyService.userInfo(surveyId, user, tzOffset);
+    const userResponse = await surveyService.userInfo(slug, user, tzOffset);
 
     res.json(userResponse);
   };
 
   const getSession = async (
-    req: Request<{ surveyId: string }>,
+    req: Request<{ slug: string }>,
     res: Response<SurveyUserSessionResponse>
   ): Promise<void> => {
     const { id: userId } = req.user as User;
-    const { surveyId } = req.params;
+    const { slug } = req.params;
 
-    const session = await surveyService.getSession(surveyId, userId);
+    const session = await surveyService.getSession(slug, userId);
 
     res.json(session);
   };
 
   const setSession = async (
-    req: Request<{ surveyId: string }>,
+    req: Request<{ slug: string }>,
     res: Response<SurveyUserSessionResponse>
   ): Promise<void> => {
     const { id: userId } = req.user as User;
-    const { surveyId } = req.params;
+    const { slug } = req.params;
     const { sessionData } = req.body;
 
-    const session = await surveyService.setSession(surveyId, userId, sessionData);
+    const session = await surveyService.setSession(slug, userId, sessionData);
 
     res.json(session);
   };
 
   // TODO: implement
-  const requestHelp = async (req: Request<{ surveyId: string }>, res: Response): Promise<void> => {
-    // const { surveyId } = req.params;
+  const requestHelp = async (req: Request<{ slug: string }>, res: Response): Promise<void> => {
+    // const { slug } = req.params;
 
     res.json();
   };
 
   const submissions = async (
-    req: Request<{ surveyId: string }>,
+    req: Request<{ slug: string }>,
     res: Response<SurveyFollowUpResponse>
   ): Promise<void> => {
-    const { surveyId } = req.params;
+    const { slug } = req.params;
     const { id: userId } = req.user as User;
     const { submission } = req.body;
 
-    const followUpInfo = await surveyService.submit(surveyId, userId, submission);
+    const followUpInfo = await surveyService.submit(slug, userId, submission);
 
     res.json(followUpInfo);
   };
 
   const followUp = async (
-    req: Request<{ surveyId: string }>,
+    req: Request<{ slug: string }>,
     res: Response<SurveyFollowUpResponse>
   ): Promise<void> => {
-    const { surveyId } = req.params;
+    const { slug } = req.params;
     const { id: userId } = req.user as User;
 
-    const followUpInfo = await surveyService.followUp(surveyId, userId);
+    const followUpInfo = await surveyService.followUp(slug, userId);
 
     res.json(followUpInfo);
   };

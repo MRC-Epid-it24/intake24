@@ -2,12 +2,10 @@ import browse from './browse.test';
 import store from './store.test';
 import read from './read.test';
 import edit from './edit.test';
-import patchAdmin from './patch-admin.test';
-import patchStaff from './patch-staff.test';
-import put from './put.test';
+import patch from './patch.test';
+// import put from './put.test';
 import destroy from './destroy.test';
 import refs from './refs.test';
-import mgmt from './mgmt/index.test';
 import dataExport from './data-export/index.test';
 import respondents from './respondents/index.test';
 import submissions from './submissions/index.test';
@@ -18,17 +16,9 @@ export default () => {
   describe('GET /api/admin/surveys/refs', refs);
   describe('GET /api/admin/surveys/:surveyId', read);
   describe('GET /api/admin/surveys/:surveyId/edit', edit);
-  describe('PATCH /api/admin/surveys/:surveyId', patchAdmin);
-  describe('PATCH /api/admin/surveys/:surveyId', patchStaff);
-  describe('PUT /api/admin/surveys/:surveyId', put);
+  describe('PATCH /api/admin/surveys/:surveyId', patch);
+  // describe('PUT /api/admin/surveys/:surveyId', put);
   describe('DELETE /api/admin/surveys/:surveyId', destroy);
-
-  // Surveys user management
-  describe('GET /api/admin/surveys/:surveyId/mgmt', mgmt.browse);
-  describe('POST /api/admin/surveys/:surveyId/mgmt', mgmt.store);
-  describe('GET /api/admin/surveys/:surveyId/mgmt/permissions', mgmt.availablePermissions);
-  describe('GET /api/admin/surveys/:surveyId/mgmt/users', mgmt.availableUsers);
-  describe('PATCH /api/admin/surveys/:surveyId/mgmt/:userId', mgmt.update);
 
   // Surveys respondents
   describe('GET /api/admin/surveys/:surveyId/respondents', respondents.browse);

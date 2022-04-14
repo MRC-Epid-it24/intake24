@@ -6,12 +6,12 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
+                v-model="form.slug"
                 :disabled="isEdit"
-                :error-messages="form.errors.get('id')"
+                :error-messages="form.errors.get('slug')"
                 :label="$t('surveys.id')"
                 hide-details="auto"
-                name="id"
+                name="slug"
                 outlined
               ></v-text-field>
             </v-col>
@@ -351,7 +351,6 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { SchemeOverrides, defaultOverrides } from '@intake24/common/schemes';
 import {
   searchSortingAlgorithms,
   SearchSortingAlgorithm,
@@ -365,71 +364,70 @@ import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
 import { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
+import { defaultOverrides, SchemeOverrides } from '@intake24/common/schemes';
 
 export type SurveyForm = {
   id: string | null;
+  slug: string | null;
   name: string | null;
   state: SurveyState;
   localeId: string | null;
   surveySchemeId: string | null;
+  feedbackSchemeId: string | null;
   startDate: string | null;
   endDate: string | null;
   supportEmail: string | null;
   suspensionReason: string | null;
+  storeUserSessionOnServer: boolean;
+  numberOfSubmissionsForFeedback: number;
+  submissionNotificationUrl: string | null;
   /*
   surveyMonkeyUrl: string | null;
   originatingUrl: string | null;
-  description: string | null;
-  finalPageHtml: string | null;
    */
   allowGenUsers: boolean;
   genUserKey: string | null;
   authUrlDomainOverride: string | null;
   authUrlTokenCharset: string | null;
   authUrlTokenLength: number | null;
-  storeUserSessionOnServer: boolean;
-  feedbackSchemeId: string | null;
-  numberOfSubmissionsForFeedback: number;
-  submissionNotificationUrl: string | null;
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
   searchSortingAlgorithm: SearchSortingAlgorithm;
   searchMatchScoreWeight: number;
-  overrides: SchemeOverrides;
+  surveySchemeOverrides: SchemeOverrides;
 };
 
 export type StaffSurveyForm = Pick<SurveyForm, StaffUpdateSurveyFields>;
 
 export const surveyForm: SurveyForm = {
   id: null,
+  slug: null,
   name: null,
-  state: 0,
+  state: 'notStarted',
   localeId: null,
   surveySchemeId: null,
+  feedbackSchemeId: null,
   startDate: null,
   endDate: null,
   supportEmail: null,
   suspensionReason: null,
+  storeUserSessionOnServer: false,
+  numberOfSubmissionsForFeedback: 1,
+  submissionNotificationUrl: null,
   /* surveyMonkeyUrl: null,
-  originatingUrl: null,
-  description: null,
-  finalPageHtml: null, */
+  originatingUrl: null, */
   allowGenUsers: false,
   genUserKey: null,
   authUrlDomainOverride: null,
   authUrlTokenCharset: null,
   authUrlTokenLength: null,
-  storeUserSessionOnServer: false,
-  feedbackSchemeId: null,
-  numberOfSubmissionsForFeedback: 1,
-  submissionNotificationUrl: null,
   maximumDailySubmissions: 3,
   maximumTotalSubmissions: null,
   minimumSubmissionInterval: 600,
   searchSortingAlgorithm: 'paRules',
   searchMatchScoreWeight: 20,
-  overrides: defaultOverrides,
+  surveySchemeOverrides: defaultOverrides,
 };
 
 export const staffSurveyForm: StaffSurveyForm = pick(surveyForm, staffUpdateSurveyFields);
@@ -450,7 +448,7 @@ export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>)
       editMethod: 'patch',
       form: form<SurveyForm>(surveyForm),
       showGenUserKey: false,
-      surveyStates: Object.values(surveyStates).map((value) => ({
+      surveyStates: surveyStates.map((value) => ({
         value,
         text: this.$t(`surveys.states.${value}`),
       })),

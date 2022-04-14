@@ -50,7 +50,6 @@ export default (container: AwilixContainer): void => {
     // Survey MGMT
     adminSurveyController: asFunction(controllers.admin.surveys.survey),
     adminSurveyDataExportController: asFunction(controllers.admin.surveys.dataExport),
-    adminSurveyMgmtController: asFunction(controllers.admin.surveys.mgmt),
     adminSurveyRespondentController: asFunction(controllers.admin.surveys.respondent),
     adminSurveySubmissionController: asFunction(controllers.admin.surveys.submission),
 

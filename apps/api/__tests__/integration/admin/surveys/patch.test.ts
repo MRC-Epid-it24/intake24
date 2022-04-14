@@ -1,27 +1,31 @@
-import { pick } from 'lodash';
-import request from 'supertest';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite, SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
-import { surveyStaff } from '@intake24/common/security';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
+  const permissions = ['surveys', 'surveys|edit'];
 
   let url: string;
   let invalidUrl: string;
 
   let input: SurveyRequest;
   let updateInput: SurveyRequest;
-  let output: SurveyRequest;
   let survey: Survey;
+
+  let securable: SetSecurableOptions;
+
+  let refreshSurveyRecord: () => SurveyRequest;
 
   beforeAll(async () => {
     input = mocker.system.survey();
     updateInput = mocker.system.survey();
 
-    const { id } = input;
-    output = { ...updateInput, id, supportEmail: updateInput.supportEmail.toLowerCase() };
+    refreshSurveyRecord = () => {
+      const mock = mocker.system.survey();
+      const { slug } = input;
+      return { ...mock, slug, supportEmail: mock.supportEmail.toLowerCase() };
+    };
 
     survey = await Survey.create({
       ...input,
@@ -29,51 +33,23 @@ export default () => {
       endDate: new Date(input.endDate),
     });
 
+    securable = { securableId: survey.id, securableType: 'Survey' };
+
     url = `${baseUrl}/${survey.id}`;
     invalidUrl = `${baseUrl}/999999`;
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('patch', url);
+    await suite.sharedTests.assert401and403('patch', url, { permissions });
   });
 
-  it('should return 403 when missing survey-specific permission', async () => {
-    await suite.util.setPermission('surveys|edit');
-
-    await suite.sharedTests.assertMissingAuthorization('patch', url);
-  });
-
-  it(`should return 403 when missing survey-specific permission`, async () => {
-    await suite.util.setPermission('surveys|overrides');
-
-    await suite.sharedTests.assertMissingAuthorization('patch', url);
-  });
-
-  it(`should return 403 when missing 'surveys-edit' or 'surveys-override' (surveyStaff)`, async () => {
-    await suite.util.setPermission(surveyStaff(survey.id));
-
-    await suite.sharedTests.assertMissingAuthorization('patch', url);
-  });
-
-  it(`should return 403 when missing 'surveys-edit' or 'surveys-override' (surveyadmin)`, async () => {
-    await suite.util.setPermission('surveyadmin');
-
-    await suite.sharedTests.assertMissingAuthorization('patch', url);
-  });
-
-  describe('with correct permissions (surveyadmin)', () => {
+  describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission(['surveys|edit', 'surveyadmin']);
+      await suite.util.setPermission(permissions);
     });
 
-    it('should return 200 when no input provided (fields are optional for patch)', async () => {
-      const { status, body } = await request(suite.app)
-        .patch(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(200);
-      expect(pick(body, Object.keys(input))).toEqual(input);
+    it('should return 422 for missing input data', async () => {
+      await suite.sharedTests.assertInvalidInput('patch', url, []);
     });
 
     it('should return 422 for invalid input data', async () => {
@@ -94,7 +70,7 @@ export default () => {
         authUrlTokenLength: 1,
         searchSortingAlgorithm: false,
         searchMatchScoreWeight: { number: 20 },
-        overrides: {
+        surveySchemeOverrides: {
           meals: ['shouldBeProperlyFormatMealList'],
           questions: { value: 'not a valid overrides object' },
         },
@@ -117,7 +93,7 @@ export default () => {
         'authUrlTokenLength',
         'searchSortingAlgorithm',
         'searchMatchScoreWeight',
-        'overrides',
+        'surveySchemeOverrides',
       ];
 
       await suite.sharedTests.assertInvalidInput('patch', url, fields, { input: invalidInput });
@@ -128,7 +104,32 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      await suite.sharedTests.assertRecordUpdated('patch', url, output, { input: updateInput });
+      const updateInput1 = refreshSurveyRecord();
+
+      await suite.sharedTests.assertRecordUpdated('patch', url, updateInput1);
+    });
+  });
+
+  describe('authenticated / securables authorized', () => {
+    beforeAll(async () => {
+      await suite.util.setPermission(['surveys']);
+    });
+
+    it('should return 200 and data when securable set', async () => {
+      await suite.util.setSecurable({ ...securable, action: ['edit'] });
+
+      const updateInput2 = refreshSurveyRecord();
+
+      await suite.sharedTests.assertRecordUpdated('patch', url, updateInput2);
+    });
+
+    it('should return 200 and data when owner set', async () => {
+      await suite.util.setSecurable(securable);
+      await survey.update({ ownerId: suite.data.system.user.id });
+
+      const updateInput3 = refreshSurveyRecord();
+
+      await suite.sharedTests.assertRecordUpdated('patch', url, updateInput3);
     });
   });
 };

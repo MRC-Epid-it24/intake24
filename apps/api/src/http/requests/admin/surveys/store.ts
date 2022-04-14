@@ -3,11 +3,11 @@ import slugify from 'slugify';
 import { Survey } from '@intake24/db';
 import validate from '@intake24/api/http/requests/validate';
 import { identifierSafeChars, unique } from '@intake24/api/http/rules';
-import { defaults, overrides } from './defaults';
+import { defaults, surveySchemeOverrides } from './defaults';
 
 export default validate(
   checkSchema({
-    id: {
+    slug: {
       in: ['body'],
       errorMessage: 'Survey ID must be unique string (charset [a-zA-Z0-9-_]).',
       isString: true,
@@ -17,7 +17,7 @@ export default validate(
         options: async (value): Promise<void> =>
           unique({
             model: Survey,
-            condition: { field: 'id', value: slugify(value, { strict: true }) },
+            condition: { field: 'slug', value: slugify(value, { strict: true }) },
           }),
       },
       customSanitizer: {
@@ -25,6 +25,6 @@ export default validate(
       },
     },
     ...defaults,
-    overrides,
+    surveySchemeOverrides,
   })
 );

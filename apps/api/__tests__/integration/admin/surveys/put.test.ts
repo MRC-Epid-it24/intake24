@@ -1,7 +1,6 @@
 import { SurveyRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
-import { surveyStaff } from '@intake24/common/security';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
@@ -18,8 +17,8 @@ export default () => {
     input = mocker.system.survey();
     updateInput = mocker.system.survey();
 
-    const { id } = input;
-    output = { ...updateInput, id, supportEmail: updateInput.supportEmail.toLowerCase() };
+    const { slug } = input;
+    output = { ...updateInput, slug, supportEmail: updateInput.supportEmail.toLowerCase() };
 
     survey = await Survey.create({
       ...input,
@@ -48,7 +47,7 @@ export default () => {
   });
 
   it(`should return 403 when missing surveyadmin`, async () => {
-    await suite.util.setPermission(['surveys|edit', surveyStaff(survey.id)]);
+    // await suite.util.setPermission(['surveys|edit', surveyStaff(survey.id)]);
 
     await suite.sharedTests.assertMissingAuthorization('put', url);
   });
@@ -69,7 +68,7 @@ export default () => {
         'supportEmail',
         'allowGenUsers',
         'storeUserSessionOnServer',
-        'overrides',
+        'surveySchemeOverrides',
       ]);
     });
 
@@ -91,7 +90,7 @@ export default () => {
         authUrlTokenLength: 1,
         searchSortingAlgorithm: false,
         searchMatchScoreWeight: { number: 20 },
-        overrides: {
+        surveySchemeOverrides: {
           meals: ['shouldBeProperlyFormatMealList'],
           questions: { value: 'not a valid overrides object' },
         },
@@ -114,7 +113,7 @@ export default () => {
         'authUrlTokenLength',
         'searchSortingAlgorithm',
         'searchMatchScoreWeight',
-        'overrides',
+        'surveySchemeOverrides',
       ];
 
       await suite.sharedTests.assertInvalidInput('put', url, fields, { input: invalidInput });

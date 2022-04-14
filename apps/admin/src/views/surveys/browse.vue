@@ -21,7 +21,7 @@ export default Vue.extend({
         {
           text: this.$t('surveys.id'),
           sortable: true,
-          value: 'id',
+          value: 'slug',
         },
         {
           text: this.$t('surveys.name'),

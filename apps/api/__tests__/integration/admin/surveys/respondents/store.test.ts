@@ -1,13 +1,43 @@
 import request from 'supertest';
 import { CreateRespondentRequest } from '@intake24/common/types/http/admin';
-import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite, SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
-import { surveyStaff } from '@intake24/common/security';
 import { pick } from 'lodash';
 import { CustomField } from '@intake24/common/types';
 
+const assertRespondentResponse = async (
+  url: string,
+  input: CreateRespondentRequest,
+  output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>
+) => {
+  const { status, body } = await request(suite.app)
+    .post(url)
+    .set('Accept', 'application/json')
+    .set('Authorization', suite.bearer.user)
+    .send(input);
+
+  expect(status).toBe(201);
+
+  // Extract custom fields for non-order specific comparison
+  const { customFields: resCustomFields, ...data } = body;
+  const { customFields: outputCustomFields, ...restOutput } = output;
+
+  // 1) match the output
+  expect(pick(data, Object.keys(restOutput))).toEqual(restOutput);
+
+  // 2) non-order specific custom field comparison
+  if (outputCustomFields) {
+    const fields: CustomField[] = resCustomFields.map(({ name, value }: CustomField) => ({
+      name,
+      value,
+    }));
+    expect(fields).toIncludeSameMembers(outputCustomFields);
+  }
+};
+
 export default () => {
   const baseUrl = '/api/admin/surveys';
+  const permissions = ['surveys', 'surveys|respondents'];
 
   let url: string;
   let invalidSurveyUrl: string;
@@ -17,6 +47,8 @@ export default () => {
   let input: CreateRespondentRequest;
   let output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>;
 
+  let securable: SetSecurableOptions;
+
   beforeAll(async () => {
     const surveyInput = mocker.system.survey();
     survey = await Survey.create({
@@ -25,8 +57,10 @@ export default () => {
       endDate: new Date(surveyInput.endDate),
     });
 
+    securable = { securableId: survey.id, securableType: 'Survey' };
+
     url = `${baseUrl}/${survey.id}/respondents`;
-    invalidSurveyUrl = `${baseUrl}/invalid-survey-id/respondents`;
+    invalidSurveyUrl = `${baseUrl}/999999/respondents`;
 
     input = mocker.system.respondent();
     const { email, password, passwordConfirm, ...rest } = input;
@@ -37,47 +71,21 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('post', url);
-  });
-
-  it('should return 403 when missing survey-specific permission', async () => {
-    await suite.util.setPermission('surveys|respondents');
-
-    await suite.sharedTests.assertMissingAuthorization('post', url);
-  });
-
-  it(`should return 403 when missing 'surveys-respondents' permission (surveyadmin)`, async () => {
-    await suite.util.setPermission('surveyadmin');
-
-    await suite.sharedTests.assertMissingAuthorization('post', url);
-  });
-
-  it(`should return 403 when missing 'surveys-respondents' permission (surveyStaff)`, async () => {
-    await suite.util.setPermission(surveyStaff(survey.id));
-
-    await suite.sharedTests.assertMissingAuthorization('post', url);
-  });
-
-  it(`should return 403 when record doesn't exist -> no survey permission created yet`, async () => {
-    await suite.util.setPermission(['surveys|respondents', surveyStaff(survey.id)]);
-
-    await suite.sharedTests.assertMissingAuthorization('post', invalidSurveyUrl);
-  });
-
-  it(`should return 404 when record doesn't exist`, async () => {
-    await suite.util.setPermission(['surveys|respondents', 'surveyadmin']);
-
-    await suite.sharedTests.assertMissingRecord('post', invalidSurveyUrl, { input });
+    await suite.sharedTests.assert401and403('post', url, { input, permissions });
   });
 
   describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission(['surveys|respondents', surveyStaff(survey.id)]);
+      await suite.util.setPermission(permissions);
+    });
+
+    it(`should return 404 when record doesn't exist`, async () => {
+      await suite.sharedTests.assertMissingRecord('post', invalidSurveyUrl, { input });
     });
 
     it('should return 422 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, [
-        'userName',
+        'username',
         'password',
         'passwordConfirm',
       ]);
@@ -87,10 +95,10 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['userName', 'password', 'passwordConfirm', 'name', 'email', 'phone', 'customFields'],
+        ['username', 'password', 'passwordConfirm', 'name', 'email', 'phone', 'customFields'],
         {
           input: {
-            userName: 'test-respondent@example.com',
+            username: 'test-respondent@example.com',
             password: 'notacomplexpassword',
             passwordConfirm: 'notMatchingPassword',
             name: ['test respondent'],
@@ -103,35 +111,40 @@ export default () => {
     });
 
     it('should return 201 and new resource', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .send(input);
-
-      expect(status).toBe(201);
-
-      // Extract custom fields for non-order specific comparison
-      const { customFields: resCustomFields, ...data } = body;
-      const { customFields: outputCustomFields, ...restOutput } = output;
-
-      // 1) match the output
-      expect(pick(data, Object.keys(restOutput))).toEqual(restOutput);
-
-      // 2) non-order specific custom field comparison
-      if (outputCustomFields) {
-        const fields: CustomField[] = resCustomFields.map(({ name, value }: CustomField) => ({
-          name,
-          value,
-        }));
-        expect(fields).toIncludeSameMembers(outputCustomFields);
-      }
+      await assertRespondentResponse(url, input, output);
     });
 
     it('should return 422 for duplicate username', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['userName'], {
-        input: { ...mocker.system.respondent(), userName: input.userName },
+      await suite.sharedTests.assertInvalidInput('post', url, ['username'], {
+        input: { ...mocker.system.respondent(), username: input.username },
       });
+    });
+  });
+
+  describe('authenticated / securables authorized', () => {
+    beforeAll(async () => {
+      await suite.util.setPermission(['surveys']);
+    });
+
+    it('should return 200 and data when securable set', async () => {
+      await suite.util.setSecurable({ ...securable, action: ['respondents'] });
+
+      const input2 = mocker.system.respondent();
+      const { email, password, passwordConfirm, ...rest } = input2;
+      const output2 = { ...rest, email: email ? email.toLowerCase() : undefined };
+
+      await assertRespondentResponse(url, input2, output2);
+    });
+
+    it('should return 200 and data when owner set', async () => {
+      await suite.util.setSecurable(securable);
+      await survey.update({ ownerId: suite.data.system.user.id });
+
+      const input3 = mocker.system.respondent();
+      const { email, password, passwordConfirm, ...rest } = input3;
+      const output3 = { ...rest, email: email ? email.toLowerCase() : undefined };
+
+      await assertRespondentResponse(url, input3, output3);
     });
   });
 };

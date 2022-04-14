@@ -28,8 +28,8 @@ export const defaults: Schema = {
   state: {
     in: ['body'],
     errorMessage: 'Enter valid survey state.',
-    toInt: true,
-    isIn: { options: [Object.values(surveyStates)] },
+    isString: true,
+    isIn: { options: [surveyStates] },
   },
   startDate: {
     in: ['body'],
@@ -132,12 +132,6 @@ export const defaults: Schema = {
     isString: true,
     optional: { options: { nullable: true } },
   }, */
-  /* description: {
-    in: ['body'],
-    errorMessage: 'Description must be a string.',
-    isString: true,
-    optional: { options: { nullable: true } },
-  }, */
   feedbackSchemeId: {
     in: ['body'],
     errorMessage: 'Enter valid feedback scheme.',
@@ -167,12 +161,6 @@ export const defaults: Schema = {
     toInt: true,
     optional: true,
   },
-  /* finalPageHtml: {
-    in: ['body'],
-    errorMessage: 'Final page html must be a string.',
-    isString: true,
-    optional: { options: { nullable: true } },
-  }, */
   maximumDailySubmissions: {
     errorMessage: 'Value has to be a number.',
     isInt: true,
@@ -204,7 +192,7 @@ export const defaults: Schema = {
   },
 };
 
-export const overrides: ParamSchema = {
+export const surveySchemeOverrides: ParamSchema = {
   in: ['body'],
   errorMessage: 'Enter valid scheme overrides.',
   custom: {

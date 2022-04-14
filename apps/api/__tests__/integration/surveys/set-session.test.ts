@@ -1,21 +1,18 @@
 import request from 'supertest';
 import { pick } from 'lodash';
 import { suite } from '@intake24/api-tests/integration/helpers';
-import { UserSessionCreationAttributes } from '@intake24/common/types/models/system';
+import { UserSurveySessionCreationAttributes } from '@intake24/common/types/models/system';
 import { SurveyState } from '@intake24/common/types';
 
 export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: UserSessionCreationAttributes;
+  let input: Pick<UserSurveySessionCreationAttributes, 'sessionData'>;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.id}/session`;
+    url = `/api/surveys/${suite.data.system.survey.slug}/session`;
     invalidUrl = `/api/surveys/invalid-survey/session`;
-
-    const { userId } = suite.data.system.respondent;
-    const surveyId = suite.data.system.survey.id;
 
     const sessionData: SurveyState = {
       schemeId: 'schemeId',
@@ -30,7 +27,7 @@ export default () => {
       meals: [],
     };
 
-    input = { userId, surveyId, sessionData };
+    input = { sessionData };
   });
 
   it('should return 401 when no / invalid token', async () => {

@@ -10,7 +10,7 @@ import type {
   UserPasswordAttributes,
   UserPasswordResetAttributes,
   UserPhysicalDataAttributes,
-  UserSessionAttributes,
+  UserSurveySessionAttributes,
   UserSubscriptionAttributes,
   UserSurveyAliasAttributes,
 } from '.';
@@ -59,7 +59,7 @@ export type UserAssociations = {
   permissions?: PermissionAttributes[];
   physicalData?: UserPhysicalDataAttributes;
   roles?: RoleAttributes[];
-  sessions?: UserSessionAttributes[];
+  sessions?: UserSurveySessionAttributes[];
   signInLog?: SignInLogAttributes[];
   submissions?: SurveySubmissionAttributes[];
   subscription?: UserSubscriptionAttributes[];

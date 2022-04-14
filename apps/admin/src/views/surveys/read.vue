@@ -4,7 +4,7 @@
       <tbody>
         <tr>
           <th>{{ $t('surveys.id') }}</th>
-          <td>{{ entry.id }}</td>
+          <td>{{ entry.slug }}</td>
           <th>{{ $t('surveys.name') }}</th>
           <td>{{ entry.name }}</td>
         </tr>

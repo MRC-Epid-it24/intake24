@@ -14,18 +14,19 @@ export type SurveyController = Controller<'browse' | 'entry' | 'generateUser' | 
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController => {
   const browse = async (req: Request, res: Response<PublicSurveyListResponse[]>): Promise<void> => {
-    const surveys = await Survey.findAll({ attributes: ['id', 'name', 'localeId'] });
+    const surveys = await Survey.findAll({ attributes: ['id', 'slug', 'name', 'localeId'] });
 
     res.json(surveys);
   };
 
   const entry = async (
-    req: Request<{ surveyId: string }>,
+    req: Request<{ slug: string }>,
     res: Response<PublicSurveyEntryResponse>
   ): Promise<void> => {
-    const { surveyId } = req.params;
+    const { slug } = req.params;
 
-    const survey = await Survey.findByPk(surveyId, {
+    const survey = await Survey.findOne({
+      where: { slug },
       attributes: ['id', 'name', 'localeId', 'originatingUrl', 'supportEmail'],
     });
     if (!survey) throw new NotFoundError();
@@ -34,29 +35,29 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
   };
 
   const generateUser = async (
-    req: Request<{ surveyId: string }>,
+    req: Request<{ slug: string }>,
     res: Response<GenerateUserResponse>
   ): Promise<void> => {
-    const { surveyId } = req.params;
+    const { slug } = req.params;
 
     const {
-      respondent: { userName },
+      respondent: { username },
       password,
-    } = await surveyService.generateRespondent(surveyId);
+    } = await surveyService.generateRespondent(slug);
 
-    res.json({ userName, password });
+    res.json({ username, password });
   };
 
   const createUser = async (
-    req: Request<{ surveyId: string }, any, any, { params: string }>,
+    req: Request<{ slug: string }, any, any, { params: string }>,
     res: Response<RespondentFromJWT>
   ): Promise<void> => {
     const {
-      params: { surveyId },
+      params: { slug },
       query: { params },
     } = req;
 
-    const data = await surveyService.createRespondentWithJWT(surveyId, params);
+    const data = await surveyService.createRespondentWithJWT(slug, params);
 
     res.json(data);
   };

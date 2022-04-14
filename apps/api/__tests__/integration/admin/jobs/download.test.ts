@@ -20,8 +20,6 @@ export default () => {
       endDate: endDate.toISOString().split('T')[0],
     };
 
-    await suite.util.setPermission(['surveys|data-export', 'surveyadmin']);
-
     const { body } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
       .set('Accept', 'application/json')
@@ -29,8 +27,6 @@ export default () => {
       .send(input);
 
     job = body;
-
-    await suite.util.setPermission([]);
 
     url = `${baseUrl}/${job.id}/download`;
     invalidUrl = `${baseUrl}/999999/download`;

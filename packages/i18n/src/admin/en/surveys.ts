@@ -1,4 +1,5 @@
 import { LocaleMessageObject } from 'vue-i18n';
+import securables from './securables';
 
 const surveys: LocaleMessageObject = {
   _: 'Survey',
@@ -13,9 +14,9 @@ const surveys: LocaleMessageObject = {
   name: 'Survey name',
   states: {
     _: 'State',
-    0: 'Not started',
-    1: 'Active',
-    2: 'Suspended',
+    notStarted: 'Not started',
+    active: 'Active',
+    suspended: 'Suspended',
   },
   startDate: 'Start date',
   endDate: 'End date',
@@ -60,15 +61,6 @@ const surveys: LocaleMessageObject = {
     _: 'Data export',
     tab: 'Data export',
     title: 'Data Export options',
-  },
-  mgmt: {
-    _: 'Management',
-    tab: 'Management',
-    title: 'Survey management',
-    add: 'New staff / support',
-    edit: 'Edit staff access',
-    search: 'Search for user',
-    create: 'Create new user',
   },
   overrides: {
     _: 'Scheme overrides',
@@ -121,6 +113,8 @@ const surveys: LocaleMessageObject = {
     endTime: 'End Time',
     submissionTime: 'Submission Time',
   },
+
+  securables,
 };
 
 export default surveys;

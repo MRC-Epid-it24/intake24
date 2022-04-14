@@ -1,6 +1,11 @@
 import { FeedbackSchemeEntry } from './feedback-schemes';
 import { LanguageListEntry } from './languages';
-import { SurveyAttributes, SurveyCreationAttributes, Pagination } from '../../models';
+import {
+  SurveyAttributes,
+  SurveyCreationAttributes,
+  Pagination,
+  UserSecurableAttributes,
+} from '../../models';
 import { LocaleListEntry } from './locales';
 import { SurveySchemeEntry } from './survey-schemes';
 
@@ -11,12 +16,12 @@ export interface SurveyRequest extends Omit<SurveyCreationAttributes, 'startDate
 
 export type CreateSurveyRequest = SurveyRequest;
 
-export type UpdateSurveyRequest = Omit<SurveyRequest, 'id'>;
+export type UpdateSurveyRequest = SurveyRequest;
 
-export type SurveyListEntry = Pick<
-  SurveyAttributes,
-  'id' | 'name' | 'localeId' | 'surveySchemeId' | 'state'
->;
+export interface SurveyListEntry
+  extends Pick<SurveyAttributes, 'id' | 'slug' | 'name' | 'localeId' | 'surveySchemeId' | 'state'> {
+  securables: UserSecurableAttributes[];
+}
 
 export type SurveysResponse = Pagination<SurveyListEntry>;
 

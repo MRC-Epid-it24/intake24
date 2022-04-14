@@ -27,7 +27,7 @@ export default () => {
       .send(input);
 
     // Test user job
-    await suite.util.setPermission(['surveys|data-export', 'surveyadmin']);
+    await suite.util.setPermission(['surveys', 'surveys|data-export']);
     await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
       .set('Accept', 'application/json')

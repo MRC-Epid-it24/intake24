@@ -1,17 +1,10 @@
+import { AliasLoginRequest, TokenLoginRequest } from '@intake24/common/types/http';
 import http from './http.service';
-
-export type LoginRequest = {
-  userName: string;
-  password: string;
-  surveyId: string;
-};
-
-export type TokenRequest = { token: string };
 
 export type AuthResponse = { accessToken: string };
 
 export default {
-  async login(request: LoginRequest): Promise<string> {
+  async login(request: AliasLoginRequest): Promise<string> {
     const {
       data: { accessToken },
     } = await http.post<AuthResponse>('auth/login/alias', request, { withCredentials: true });
@@ -19,7 +12,7 @@ export default {
     return accessToken;
   },
 
-  async token(request: TokenRequest): Promise<string> {
+  async token(request: TokenLoginRequest): Promise<string> {
     const {
       data: { accessToken },
     } = await http.post<AuthResponse>(`auth/login/token`, request, { withCredentials: true });

@@ -12,9 +12,9 @@ export default {
     return data;
   },
 
-  submissions: async (surveyId: string | string[]): Promise<SurveySubmissionEntry[]> => {
+  submissions: async (survey: string | string[]): Promise<SurveySubmissionEntry[]> => {
     const { data } = await http.get<SurveySubmissionEntry[]>(`user/submissions`, {
-      params: { surveyId },
+      params: { survey },
     });
     return data;
   },
