@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.181",
-    "@vue/runtime-dom": "^3.2.31"
+    "@vue/runtime-dom": "^3.2.33"
   },
   "bundledDependencies": [
     "@intake24/common",
