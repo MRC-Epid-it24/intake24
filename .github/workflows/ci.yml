@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.1
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.1
@@ -40,7 +40,7 @@ jobs:
           version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.1.0
+        uses: actions/setup-node@v3.1.1
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -99,7 +99,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.1
 
       - name: Create foods/system databases
         run: |
@@ -112,7 +112,7 @@ jobs:
           version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.1.0
+        uses: actions/setup-node@v3.1.1
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -319,7 +319,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.1
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.1
@@ -327,7 +327,7 @@ jobs:
           version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.1.0
+        uses: actions/setup-node@v3.1.1
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -353,7 +353,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.1
       
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.1
@@ -361,7 +361,7 @@ jobs:
           version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.1.0
+        uses: actions/setup-node@v3.1.1
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
