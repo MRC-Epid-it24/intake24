@@ -90,10 +90,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
+import orderBy from 'lodash/orderBy';
 import { PermissionListEntry, RoleEntry, RoleRefs } from '@intake24/common/types/http/admin';
 import { FormMixin } from '@intake24/admin/types';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
+import resources from '@intake24/admin/router/resources';
 
 type RoleForm = {
   id: string | null;
@@ -138,15 +140,18 @@ export default (Vue as VueConstructor<Vue & FormMixin<RoleEntry, RoleRefs>>).ext
         fdbs: {},
       };
 
-      if (!this.refs.permissions) return groups;
+      const { permissions } = this.refs;
+      if (!permissions) return groups;
 
-      this.refs.permissions.forEach((permission) => {
-        if (permission.name.includes('|')) {
+      const resourceNames = resources.map(({ name }) => name);
+
+      return orderBy(permissions, 'name').reduce((acc, permission) => {
+        if (permission.name.includes('|') || resourceNames.includes(permission.name)) {
           const key = permission.name.split('|')[0];
-          if (!(key in groups.resources)) groups.resources[key] = [];
+          if (!(key in acc.resources)) acc.resources[key] = [];
 
-          groups.resources[key].push(permission);
-          return;
+          acc.resources[key].push(permission);
+          return acc;
         }
 
         if (permission.name.includes('/')) {
@@ -162,16 +167,15 @@ export default (Vue as VueConstructor<Vue & FormMixin<RoleEntry, RoleRefs>>).ext
             section = 'surveys';
           }
 
-          if (!(key in groups[section])) groups[section][key] = [];
+          if (!(key in acc[section])) acc[section][key] = [];
 
-          groups[section][key].push(permission);
-          return;
+          acc[section][key].push(permission);
+          return acc;
         }
 
-        groups.global.push(permission);
-      });
-
-      return groups;
+        acc.global.push(permission);
+        return acc;
+      }, groups);
     },
   },
 

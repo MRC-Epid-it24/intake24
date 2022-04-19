@@ -46,6 +46,8 @@ export const securableTypes = Object.keys(securableDefs) as SecurableType[];
 
 export type FeedbackSchemeSecurableActions = typeof securableDefs.FeedbackScheme[number];
 
-export type SurveySchemeSecurableActions = typeof securableDefs.FeedbackScheme[number];
+export type SurveySchemeSecurableActions = typeof securableDefs.SurveyScheme[number];
+
+export type SurveySecurableActions = typeof securableDefs.Survey[number];
 
 export const isSecurableType = (type: any): type is SecurableType => securableTypes.includes(type);
