@@ -16,6 +16,7 @@ const securables: LocaleMessageObject = {
     read: 'Read record',
     edit: 'Edit record',
     delete: 'Delete record',
+    copy: 'Copy record',
     securables: 'Security',
 
     // Feedback scheme

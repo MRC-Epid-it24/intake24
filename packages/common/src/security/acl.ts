@@ -23,6 +23,7 @@ export const standardSecurableActions = ['read', 'edit', 'delete', 'securables']
 export const securableDefs = {
   FeedbackScheme: [
     ...standardSecurableActions,
+    'copy',
     'top-foods',
     'cards',
     'demographic-groups',
@@ -31,6 +32,7 @@ export const securableDefs = {
   SurveyScheme: [...standardSecurableActions, 'questions', 'data-export'] as const,
   Survey: [
     ...standardSecurableActions,
+    'copy',
     'overrides',
     'respondents',
     'submissions',
