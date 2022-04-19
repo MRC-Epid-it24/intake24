@@ -1,6 +1,5 @@
 import { Meal } from '../types';
 import { PromptQuestion, PromptQuestionWithSection } from '../prompts';
-import { ExportSection } from '../types/models';
 
 export const schemeTypes = ['default'] as const;
 export type SchemeType = typeof schemeTypes[number];
@@ -56,6 +55,31 @@ export const defaultMeals: Meal[] = [
   { name: { en: 'Dinner' }, time: '18:00' },
   { name: { en: 'Evening snack' }, time: '20:00' },
 ];
+
+export type ExportSectionId =
+  | 'user'
+  | 'userCustom'
+  | 'survey'
+  | 'surveyCustom'
+  | 'meal'
+  | 'mealCustom'
+  | 'food'
+  | 'foodCustom'
+  | 'foodNutrients'
+  | 'foodFields'
+  | 'portionSizes';
+
+export type ExportField = {
+  id: string;
+  label: string;
+};
+
+export type ExportSection = {
+  id: ExportSectionId;
+  fields: ExportField[];
+};
+
+export type ExportSections = ExportSection[];
 
 export const defaultExport: ExportSection[] = [
   { id: 'user', fields: [] },

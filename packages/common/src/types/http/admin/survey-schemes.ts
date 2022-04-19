@@ -1,11 +1,6 @@
 import { PromptQuestion } from '../../../prompts';
-import {
-  ExportField,
-  ExportSectionId,
-  Pagination,
-  SurveySchemeAttributes,
-  SurveySchemeCreationAttributes,
-} from '../../models';
+import { ExportField, ExportSectionId } from '../../../schemes';
+import { Pagination, SurveySchemeAttributes, SurveySchemeCreationAttributes } from '../../models';
 import { LanguageListEntry } from './languages';
 
 export type SurveySchemeRequest = SurveySchemeCreationAttributes;

@@ -1,6 +1,6 @@
 import { orderBy } from 'lodash';
 import type { PromptQuestion } from '@intake24/common/prompts';
-import type { ExportField as BaseExportField } from '@intake24/common/types/models';
+import type { ExportField as BaseExportField } from '@intake24/common/schemes';
 import {
   NutrientTableCsvMappingField,
   SystemNutrientType,

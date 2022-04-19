@@ -25,7 +25,7 @@ import {
   StreamFindOptions,
 } from '@intake24/db';
 import { Readable } from 'stream';
-import type { ExportSection } from '@intake24/common/types/models';
+import type { ExportSection } from '@intake24/common/schemes';
 import type { SurveyDataExportParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';

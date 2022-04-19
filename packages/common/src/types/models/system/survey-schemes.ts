@@ -1,32 +1,7 @@
 import type { PromptQuestion } from '../../../prompts';
-import type { RecallQuestions, SchemeType } from '../../../schemes';
+import type { ExportSection, RecallQuestions, SchemeType } from '../../../schemes';
 import type { Meal } from '../..';
 import type { OmitAndOptional } from '../model';
-
-export type ExportSectionId =
-  | 'user'
-  | 'userCustom'
-  | 'survey'
-  | 'surveyCustom'
-  | 'meal'
-  | 'mealCustom'
-  | 'food'
-  | 'foodCustom'
-  | 'foodNutrients'
-  | 'foodFields'
-  | 'portionSizes';
-
-export type ExportField = {
-  id: string;
-  label: string;
-};
-
-export type ExportSection = {
-  id: ExportSectionId;
-  fields: ExportField[];
-};
-
-export type ExportSections = ExportSection[];
 
 export type SurveySchemeAttributes = {
   id: string;

@@ -13,12 +13,12 @@ import { Meal } from '@intake24/common/types';
 import type {
   SurveySchemeAttributes,
   SurveySchemeCreationAttributes,
-  ExportSection,
 } from '@intake24/common/types/models';
 import {
   defaultExport,
   defaultMeals,
   defaultQuestions,
+  ExportSection,
   RecallQuestions,
   SchemeType,
 } from '@intake24/common/schemes';

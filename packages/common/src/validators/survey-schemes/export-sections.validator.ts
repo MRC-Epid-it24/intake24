@@ -1,6 +1,6 @@
 import { inspect } from 'util';
 import Ajv, { ValidateFunction as AjvValidateFunction } from 'ajv';
-import { ExportSections } from '../../types/models/system/survey-schemes';
+import { ExportSections } from '../../schemes';
 
 export const ajv = new Ajv({
   allErrors: true,
