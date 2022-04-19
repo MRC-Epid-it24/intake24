@@ -54,9 +54,9 @@ import {
   RecallQuestions,
   SchemeType,
   schemeTypes,
+  ExportSection,
 } from '@intake24/common/schemes';
 import { Meal } from '@intake24/common/types';
-import { ExportSection } from '@intake24/common/types/models';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import MealList from '@intake24/admin/components/meals/meal-list.vue';
 import { form } from '@intake24/admin/helpers';

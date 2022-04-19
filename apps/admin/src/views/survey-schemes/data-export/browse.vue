@@ -63,8 +63,13 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
-import { ExportField, ExportSection } from '@intake24/common/types/models';
+import {
+  defaultExport,
+  defaultMeals,
+  defaultQuestions,
+  ExportField,
+  ExportSection,
+} from '@intake24/common/schemes';
 import { SurveySchemeExportRefsResponse } from '@intake24/common/types/http/admin';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';

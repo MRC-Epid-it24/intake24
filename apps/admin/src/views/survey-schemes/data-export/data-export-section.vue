@@ -142,7 +142,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import draggable from 'vuedraggable';
-import { ExportSection, ExportField } from '@intake24/common/types/models';
+import { ExportSection, ExportField } from '@intake24/common/schemes';
 
 export default defineComponent({
   name: 'DataExportSection',
