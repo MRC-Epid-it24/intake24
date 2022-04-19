@@ -29,10 +29,9 @@ export const securableDefs = {
     'demographic-groups',
     'henry-coefficients',
   ] as const,
-  SurveyScheme: [...standardSecurableActions, 'questions', 'data-export'] as const,
+  SurveyScheme: [...standardSecurableActions, 'copy', 'questions', 'data-export'] as const,
   Survey: [
     ...standardSecurableActions,
-    'copy',
     'overrides',
     'respondents',
     'submissions',
