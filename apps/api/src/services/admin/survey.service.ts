@@ -178,7 +178,7 @@ const adminSurveyService = ({
     if (customFields && user.customFields)
       await adminUserService.updateUserCustomFields(userId, user.customFields, customFields);
 
-    await adminUserService.flushACLCache(user.id);
+    await adminUserService.flushUserACLCache(user.id);
 
     return user.aliases[0];
   };

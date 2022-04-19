@@ -1,4 +1,4 @@
-import { Op, Permission, User, UserCustomField, UserPassword } from '@intake24/db';
+import { Op, Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
 import { UserPasswordAttributes } from '@intake24/common/types/models';
 import { CreateUserInput, UpdateUserInput } from '@intake24/common/types/http/admin';
 import { CustomField } from '@intake24/common/types';
@@ -20,9 +20,21 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
    * @param {string} userId
    * @returns {Promise<void>}
    */
-  const flushACLCache = async (userId: string): Promise<void> => {
+  const flushUserACLCache = async (userId: string): Promise<void> => {
     const keys = [`${ACL_PERMISSIONS_KEY}:${userId}`, `${ACL_ROLES_KEY}:${userId}`];
     await cache.forget(keys);
+  };
+
+  /**
+   * Flush ACL cache for specified role
+   *
+   * @param {string} roleId
+   * @returns {Promise<void>}
+   */
+  const flushRoleACLCache = async (roleId: string): Promise<void> => {
+    const roleUsers = await RoleUser.findAll({ where: { roleId } });
+
+    await Promise.all(roleUsers.map(({ userId }) => flushUserACLCache(userId)));
   };
 
   /**
@@ -180,7 +192,7 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
     if (customFields && user.customFields)
       await updateUserCustomFields(userId, user.customFields, customFields);
 
-    await flushACLCache(user.id);
+    await flushUserACLCache(user.id);
 
     return user;
   };
@@ -214,7 +226,7 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
     const permission = await Permission.findOne({ where: { name: permissionName } });
     if (!permission) throw new NotFoundError();
 
-    await Promise.all([user.$add('permissions', permission), flushACLCache(user.id)]);
+    await Promise.all([user.$add('permissions', permission), flushUserACLCache(user.id)]);
   };
 
   /**
@@ -233,10 +245,12 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
     const permission = await Permission.findOne({ where: { name: permissionName } });
     if (!permission) throw new NotFoundError();
 
-    await Promise.all([user.$remove('permissions', permission), flushACLCache(user.id)]);
+    await Promise.all([user.$remove('permissions', permission), flushUserACLCache(user.id)]);
   };
 
   return {
+    flushUserACLCache,
+    flushRoleACLCache,
     createPassword,
     createPasswords,
     updateUserCustomFields,
@@ -244,7 +258,6 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
     create,
     update,
     destroy,
-    flushACLCache,
     addPermissionByName,
     removePermissionByName,
   };

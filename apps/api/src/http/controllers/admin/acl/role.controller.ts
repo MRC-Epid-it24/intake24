@@ -9,7 +9,10 @@ import { pick } from 'lodash';
 
 export type RoleController = Controller<CrudActions>;
 
-export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
+export default ({
+  aclConfig,
+  adminUserService,
+}: Pick<IoC, 'aclConfig' | 'adminUserService'>): RoleController => {
   const entry = async (
     req: Request<{ roleId: string }>,
     res: Response<RoleEntry>
@@ -40,7 +43,10 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
     const role = await Role.create({ name, displayName, description });
     await role.$set('permissions', permissions);
 
-    await role.reload({ include: [{ model: Permission }] });
+    await Promise.all([
+      role.reload({ include: [{ model: Permission }] }),
+      adminUserService.flushRoleACLCache(role.id),
+    ]);
 
     res.status(201).json(roleEntryResponse(role));
   };
@@ -70,7 +76,10 @@ export default ({ aclConfig }: Pick<IoC, 'aclConfig'>): RoleController => {
       role.name === aclConfig.roles.superuser ? permissions : req.body.permissions
     );
 
-    await role.reload({ include: [{ model: Permission }] });
+    await Promise.all([
+      role.reload({ include: [{ model: Permission }] }),
+      adminUserService.flushRoleACLCache(role.id),
+    ]);
 
     res.json(roleEntryResponse(role));
   };
