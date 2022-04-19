@@ -205,8 +205,11 @@ export default (ioc: IoC): SurveySchemeController => {
   };
 
   const refs = async (req: Request, res: Response<SurveySchemeRefs>): Promise<void> => {
-    const languages = await Language.scope('list').findAll();
-    const questions = await SurveySchemeQuestion.findAll({ attributes: ['question'] });
+    const [languages, questions] = await Promise.all([
+      Language.scope('list').findAll(),
+      SurveySchemeQuestion.findAll({ attributes: ['question'] }),
+    ]);
+
     const templates = questions.map((schemeQuestion) => schemeQuestion.question);
 
     res.json({ languages, templates });
