@@ -105,7 +105,7 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" md="6">
-                      <v-select
+                      <v-autocomplete
                         v-model="dialog.item.nutrientTypeId"
                         :items="nutrientTypes"
                         :label="$t('nutrient-types._')"
@@ -115,7 +115,7 @@
                         name="nutrientTypeId"
                         outlined
                         prepend-icon="fas fa-seedling"
-                      ></v-select>
+                      ></v-autocomplete>
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-select

@@ -77,7 +77,7 @@
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
           <v-card-text>
-            <v-select
+            <v-autocomplete
               v-model="dialog.item.id"
               :items="availableNutrientTypes"
               :label="$t('nutrient-types._')"
@@ -87,8 +87,10 @@
               item-value="id"
               name="nutrientTypeId"
               outlined
+              prepend-icon="fas fa-seedling"
               @change="updateNutrientLabel"
-            ></v-select>
+            >
+            </v-autocomplete>
           </v-card-text>
           <language-selector
             :label="$t('nutrient-types.label')"

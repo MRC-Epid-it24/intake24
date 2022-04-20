@@ -21,7 +21,7 @@
           </v-select>
         </v-col>
         <v-col cols="12" md="6">
-          <v-select
+          <v-autocomplete
             :items="nutrientTypes"
             :label="$t('nutrient-types._')"
             :value="nutrientTypeIds"
@@ -32,8 +32,10 @@
             name="nutrientTypeIds"
             outlined
             prepend-icon="fas fa-seedling"
-            @change="update('nutrientTypeIds', $event)"
-          ></v-select>
+            :search-input.sync="nutrientTypeIdSearchInput"
+            @change="updateNutrientTypeId($event)"
+          >
+          </v-autocomplete>
         </v-col>
       </v-row>
     </v-container>
@@ -82,6 +84,7 @@ export default defineComponent({
         text: this.$t(`feedback-schemes.characterTypes.${value}`),
       })),
       characterImageMap,
+      nutrientTypeIdSearchInput: null as null | string,
     };
   },
 
@@ -94,6 +97,11 @@ export default defineComponent({
   methods: {
     update(field: string, value: any) {
       this.$emit(`update:${field}`, value);
+    },
+
+    updateNutrientTypeId(value: string[]) {
+      this.update('nutrientTypeIds', value);
+      this.nutrientTypeIdSearchInput = null;
     },
   },
 });
