@@ -26,7 +26,7 @@
       <draggable v-model="items">
         <transition-group type="transition" name="drag-and-drop">
           <v-list-item
-            v-for="(coefficient, idx) in items"
+            v-for="(coefficient, index) in items"
             :key="coefficient.id"
             link
             draggable
@@ -47,19 +47,21 @@
               <v-btn
                 icon
                 :title="$t('feedback-schemes.henry-coefficients.edit')"
-                @click.stop="edit(idx, coefficient)"
+                @click.stop="edit(index, coefficient)"
               >
                 <v-icon color="primary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn
+              <confirm-dialog
+                :label="$t('feedback-schemes.henry-coefficients.remove')"
+                color="error"
                 icon
-                :title="$t('feedback-schemes.henry-coefficients.remove')"
-                @click.stop="remove(idx)"
+                icon-left="$delete"
+                @confirm="remove(index)"
               >
-                <v-icon color="error">$delete</v-icon>
-              </v-btn>
+                {{ $t('common.action.confirm.delete', { name: getListItemTitle(coefficient) }) }}
+              </confirm-dialog>
             </v-list-item-action>
           </v-list-item>
         </transition-group>
@@ -172,6 +174,7 @@ import draggable from 'vuedraggable';
 import { defineComponent, PropType } from '@vue/composition-api';
 import { HenryCoefficient, Sex, sexes } from '@intake24/common/feedback';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { ConfirmDialog } from '@intake24/ui';
 import { getHenryCoefficientDefaults } from './henry-coefficient';
 import { useList } from '..';
 
@@ -189,7 +192,7 @@ export default defineComponent({
     },
   },
 
-  components: { draggable, LoadSectionDialog },
+  components: { ConfirmDialog, draggable, LoadSectionDialog },
 
   setup(props, context) {
     const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } = useList(

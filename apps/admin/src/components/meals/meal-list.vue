@@ -44,7 +44,7 @@
       <draggable v-model="meals">
         <transition-group type="transition" name="drag-and-drop">
           <v-list-item
-            v-for="(meal, idx) in meals"
+            v-for="(meal, index) in meals"
             :key="meal.name.en"
             link
             draggable
@@ -58,14 +58,20 @@
               <v-list-item-subtitle v-text="meal.time"></v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn icon :title="$t('survey-schemes.meals.edit')" @click.stop="edit(idx, meal)">
+              <v-btn icon :title="$t('survey-schemes.meals.edit')" @click.stop="edit(index, meal)">
                 <v-icon color="primary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn icon :title="$t('survey-schemes.meals.remove')" @click.stop="remove(idx)">
-                <v-icon color="error">$delete</v-icon>
-              </v-btn>
+              <confirm-dialog
+                :label="$t('survey-schemes.meals.remove')"
+                color="error"
+                icon
+                icon-left="$delete"
+                @confirm="remove(index)"
+              >
+                {{ $t('common.action.confirm.delete', { name: meal.name.en }) }}
+              </confirm-dialog>
             </v-list-item-action>
           </v-list-item>
         </transition-group>

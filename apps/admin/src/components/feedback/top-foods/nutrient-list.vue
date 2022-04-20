@@ -52,9 +52,15 @@
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn icon :title="$t('nutrient-types.remove')" @click.stop="remove(idx)">
-                <v-icon color="error">$delete</v-icon>
-              </v-btn>
+              <confirm-dialog
+                :label="$t('nutrient-types.remove')"
+                color="error"
+                icon
+                icon-left="$delete"
+                @confirm="remove(idx)"
+              >
+                {{ $t('common.action.confirm.delete', { name: nutrientType.name.en }) }}
+              </confirm-dialog>
             </v-list-item-action>
           </v-list-item>
         </transition-group>

@@ -26,7 +26,7 @@
       <draggable v-model="items">
         <transition-group type="transition" name="drag-and-drop">
           <v-list-item
-            v-for="(group, idx) in items"
+            v-for="(group, index) in items"
             :key="group.id"
             link
             draggable
@@ -44,19 +44,21 @@
               <v-btn
                 icon
                 :title="$t('feedback-schemes.demographic-groups.edit')"
-                @click.stop="edit(idx, group)"
+                @click.stop="edit(index, group)"
               >
                 <v-icon color="primary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn
+              <confirm-dialog
+                :label="$t('feedback-schemes.demographic-groups.remove')"
+                color="error"
                 icon
-                :title="$t('feedback-schemes.demographic-groups.remove')"
-                @click.stop="remove(idx)"
+                icon-left="$delete"
+                @confirm="remove(index)"
               >
-                <v-icon color="error">$delete</v-icon>
-              </v-btn>
+                {{ $t('common.action.confirm.delete', { name: getListItemTitle(group) }) }}
+              </confirm-dialog>
             </v-list-item-action>
           </v-list-item>
         </transition-group>
@@ -199,6 +201,7 @@ import { DemographicGroup, nutrientRuleTypes, sexes } from '@intake24/common/fee
 import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
 import { useEntry } from '@intake24/admin/stores';
+import { ConfirmDialog } from '@intake24/ui';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { getDemographicGroupDefaults } from './demographic-group';
 import { useList } from '..';
@@ -219,7 +222,13 @@ export default defineComponent({
     },
   },
 
-  components: { draggable, DemographicGroupRange, DemographicGroupSectors, LoadSectionDialog },
+  components: {
+    ConfirmDialog,
+    draggable,
+    DemographicGroupRange,
+    DemographicGroupSectors,
+    LoadSectionDialog,
+  },
 
   setup(props, context) {
     const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } = useList(

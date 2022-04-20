@@ -89,9 +89,15 @@
       </v-menu>
     </v-list-item-action>
     <v-list-item-action>
-      <v-btn icon :title="$t('survey-schemes.questions.remove')" @click.stop="remove">
-        <v-icon color="error">$delete</v-icon>
-      </v-btn>
+      <confirm-dialog
+        :label="$t('survey-schemes.questions.remove')"
+        color="error"
+        icon
+        icon-left="$delete"
+        @confirm="remove"
+      >
+        {{ $t('common.action.confirm.delete', { name: question.name }) }}
+      </confirm-dialog>
     </v-list-item-action>
   </v-list-item>
 </template>

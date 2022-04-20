@@ -52,9 +52,15 @@
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn icon :title="$t('feedback-schemes.cards.remove')" @click.stop="remove(index)">
-                <v-icon color="error">$delete</v-icon>
-              </v-btn>
+              <confirm-dialog
+                :label="$t('feedback-schemes.cards.remove')"
+                color="error"
+                icon
+                icon-left="$delete"
+                @confirm="remove(index)"
+              >
+                {{ $t('common.action.confirm.delete', { name: getListItemTitle(card) }) }}
+              </confirm-dialog>
             </v-list-item-action>
           </v-list-item>
         </transition-group>
@@ -69,6 +75,7 @@ import { defineComponent, PropType, ref } from '@vue/composition-api';
 import isEqual from 'lodash/isEqual';
 import draggable from 'vuedraggable';
 import { Card } from '@intake24/common/feedback';
+import { ConfirmDialog } from '@intake24/ui';
 import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
@@ -96,6 +103,7 @@ export default defineComponent({
   components: {
     draggable,
     CardSelector,
+    ConfirmDialog,
     LoadSectionDialog,
   },
 
