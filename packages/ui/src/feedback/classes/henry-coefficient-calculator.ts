@@ -18,18 +18,16 @@ export default class HenryCoefficientsCalculator {
   getBMR(userDemographic: UserDemographic): number {
     const coefficients = this.coefficients.filter((c) => c.matchesUserDemographic(userDemographic));
 
-    if (!coefficients.length) {
+    if (!coefficients.length)
       throw new Error('Henry coefficients matching user demographic were not found');
-    } else {
-      return HenryCoefficientsCalculator.calculateBMR(userDemographic, coefficients[0]);
-    }
+
+    return HenryCoefficientsCalculator.calculateBMR(userDemographic, coefficients[0]);
   }
 
   private static calculateBMR(userDemographic: UserDemographic, hCoef: HenryCoefficient): number {
-    return (
-      hCoef.weightCoefficient * userDemographic.physicalData.weightKg +
-      hCoef.heightCoefficient * (userDemographic.physicalData.heightCm / 100) +
-      hCoef.constant
-    );
+    const { heightCoefficient, weightCoefficient, constant } = hCoef;
+    const { heightCm, weightKg } = userDemographic.physicalData;
+
+    return weightCoefficient * weightKg + heightCoefficient * (heightCm / 100) + constant;
   }
 }

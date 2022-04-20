@@ -16,15 +16,6 @@ export default class UserDemographic {
     this.bmrCalculator = HenryCoefficientsCalculator.fromJson(henryCoefficients);
   }
 
-  clone(): UserDemographic {
-    return new UserDemographic(
-      this.physicalData,
-      this.physicalActivityLevel,
-      this.weightTarget,
-      this.henryCoefficients
-    );
-  }
-
   getAge(): number {
     return new Date().getFullYear() - this.physicalData.birthdate;
   }
