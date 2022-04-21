@@ -53,7 +53,9 @@ module.exports = {
     },
     workboxPluginMode: 'GenerateSW',
     workboxOptions: {
+      cleanupOutdatedCaches: true,
       importScripts: ['js/web-push.js'],
+      skipWaiting: true,
     },
   },
   productionSourceMap: false,

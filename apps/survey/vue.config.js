@@ -51,6 +51,11 @@ module.exports = {
       theme_color: '#263238',
       background_color: '#FFFFFF',
     },
+    workboxPluginMode: 'GenerateSW',
+    workboxOptions: {
+      cleanupOutdatedCaches: true,
+      skipWaiting: true,
+    },
   },
   productionSourceMap: false,
   transpileDependencies: ['vuetify'],

@@ -6,6 +6,7 @@ const env = dotenv.config();
 dotenvExpand.expand(env);
 
 const express = require('express');
+const fs = require('fs');
 const helmet = require('helmet');
 const path = require('path');
 
@@ -48,7 +49,18 @@ const startApp = async () => {
 
   app.use(express.static(config.static, { index: false }));
 
-  app.get('*', (req, res) => res.sendFile(path.resolve(config.static, 'index.html')));
+  app.get('*', (req, res) => {
+    const index = path.resolve(config.static, 'index.html');
+
+    fs.access(index, fs.constants.F_OK, (err) => {
+      if (err) {
+        res.status(404).send();
+        return;
+      }
+
+      res.sendFile(index);
+    });
+  });
 
   // Start listening
   app.listen(config.port, config.url, (err) => {
