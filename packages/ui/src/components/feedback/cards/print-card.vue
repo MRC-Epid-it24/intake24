@@ -12,12 +12,12 @@
               <span>{{ detail.name.toLowerCase() }}</span>
             </template>
             <template v-slot:amount>
-              <span :class="detail.textClass">{{ detail.intake }} {{ detail.unit }}</span>
+              <span :class="detail.textClass">{{ formatOutput(detail.intake, detail.unit) }}</span>
             </template>
           </i18n>
           <div v-if="detail.recommendedIntake" :class="detail.textClass">
             <v-icon left>{{ detail.iconClass }}</v-icon>
-            <span>{{ detail.recommendedIntake.toString() }} {{ detail.unit }}</span>
+            <span>{{ formatOutput(detail.recommendedIntake, detail.unit) }}</span>
           </div>
           <div class="mt-auto" v-html="detail.unitDescription"></div>
         </v-card-text>
@@ -34,7 +34,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from '@vue/composition-api';
 import { FeedbackCardParameters } from '@intake24/ui/feedback';
-import { getDetails, getBackgroundImage } from '.';
+import { formatOutput, getDetails, getBackgroundImage } from '.';
 
 export default defineComponent({
   name: 'PrintCard',
@@ -55,6 +55,7 @@ export default defineComponent({
     return {
       detail,
       backgroundImage,
+      formatOutput,
     };
   },
 });

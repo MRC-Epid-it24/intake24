@@ -68,6 +68,10 @@ export const getUnitFromNutrientRule = (
   }
 };
 
+export const formatOutput = (value: number, unit: string): string => {
+  return unit === '%' ? `${value}${unit}` : `${value} ${unit}`;
+};
+
 const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails => {
   const { results, showRecommendations } = parameters;
 

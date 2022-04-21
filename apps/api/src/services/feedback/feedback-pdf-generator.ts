@@ -10,8 +10,8 @@ export default class FeedbackPdfGenerator {
   async loadFeedback() {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
-    await page.goto(this.url, { waitUntil: 'networkidle0' });
     await page.emulateMediaType('print');
+    await page.goto(this.url, { waitUntil: 'networkidle0' });
 
     return { browser, page };
   }

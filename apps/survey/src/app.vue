@@ -88,14 +88,9 @@ import Loader from '@intake24/survey/components/Loader.vue';
 import { ConfirmDialog, pwaUpdate, setsLanguage } from '@intake24/ui';
 import { useAuth } from './stores';
 
-export interface AppComponent {
-  sidebar: boolean;
-  toggleSidebar: () => void;
-}
-
 type Mixins = InstanceType<typeof pwaUpdate> & InstanceType<typeof setsLanguage>;
 
-export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
+export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'App',
 
   components: { ConfirmDialog, Loader },

@@ -1,6 +1,5 @@
 import './registerServiceWorker';
 import './bootstrap';
-import '@intake24/ui/bootstrap';
 import Vue from 'vue';
 import pinia from '@intake24/ui/stores/bootstrap';
 import i18n from './i18n';

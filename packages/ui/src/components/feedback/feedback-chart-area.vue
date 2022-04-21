@@ -1,33 +1,41 @@
 <template>
-  <v-row justify="center" :no-gutters="isMobile">
-    <v-col v-for="nutrient in topFoods.nutrients" class="mb-4" cols="auto" :key="nutrient.id">
-      <canvas :id="`chart-${nutrient.id}`"></canvas>
-      <v-divider class="my-4"></v-divider>
-      <div class="title">{{ $t('feedback.topFoods.chart', { nutrient: nutrient.name }) }}</div>
-      <v-list max-width="300px" dense>
-        <v-list-item v-for="(item, index) in nutrient.list" :key="item.name">
-          <v-list-item-icon
-            class="font-weight-bold my-auto mr-2"
-            :style="{ color: `${topFoods.colors[index]}` }"
-          >
-            {{ index + 1 }}
-          </v-list-item-icon>
-          <v-list-item-content class="d-flex flex-row">
-            <div>{{ item.name }}</div>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-col>
-  </v-row>
+  <div>
+    <v-row class="d-print-none" justify="center" no-gutters>
+      <v-col
+        v-for="chart in charts"
+        :key="`screen-${chart.id}`"
+        class="chart-wrapper"
+        cols="12"
+        md="6"
+        xl="4"
+      >
+        <v-chart class="chart" autoresize :option="chart"></v-chart>
+      </v-col>
+    </v-row>
+    <div class="d-none d-print-block">
+      <div class="chart-print-wrapper" v-for="chart in charts" :key="`print-${chart.id}`">
+        <v-chart class="chart-print" autoresize :option="chart"></v-chart>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { Chart } from 'chart.js';
 import { TopFoodData } from '@intake24/ui/feedback';
+import { use } from 'echarts/core';
+import type { EChartsOption } from 'echarts';
+import { SVGRenderer } from 'echarts/renderers';
+import { PieChart } from 'echarts/charts';
+import { TitleComponent, TooltipComponent } from 'echarts/components';
+import VChart from 'vue-echarts';
+
+use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
 
 export default defineComponent({
   name: 'FeedbackChartArea',
+
+  components: { VChart },
 
   props: {
     topFoods: {
@@ -36,60 +44,103 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      charts: {} as Record<string, Chart>,
-    };
-  },
-
   computed: {
+    charts() {
+      const { colors, nutrients } = this.topFoods;
+
+      const chartOptions: EChartsOption[] = nutrients.map((nutrient) => {
+        const { id, name, unit, chart } = nutrient;
+
+        return {
+          textStyle: {
+            fontFamily: `"Open Sans", sans-serif`,
+          },
+          id,
+          title: {
+            text: this.$t('feedback.topFoods.chart', { nutrient: name }).toString(),
+            left: 'center',
+            textStyle: {
+              fontWeight: 'bolder',
+              fontSize: 18,
+            },
+          },
+          left: 'center',
+          tooltip: {
+            trigger: 'item',
+            formatter: `{a} <br/>{b}: {c} ${unit} ({d}%)`,
+          },
+          series: [
+            {
+              id,
+              name,
+              type: 'pie',
+              radius: ['35%', '70%'],
+              color: colors,
+              data: chart,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 0,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)',
+                },
+              },
+              itemStyle: {
+                borderRadius: 5,
+                borderColor: '#fff',
+                borderWidth: 2,
+              },
+              label: {
+                alignTo: 'edge',
+                formatter: `{b}\n{times|{c} ${unit} ({d}%)}`,
+                minMargin: 5,
+                edgeDistance: 10,
+                lineHeight: 15,
+                rich: {
+                  times: {
+                    fontSize: 12,
+                    color: '#999',
+                  },
+                },
+              },
+              labelLine: {
+                length: 15,
+                length2: 0,
+                maxSurfaceAngle: 80,
+              },
+            },
+          ],
+        };
+      });
+
+      return chartOptions;
+    },
     matchesPrintMedia(): boolean {
       return window.matchMedia('print').matches;
-    },
-  },
-
-  watch: {
-    topFoods: {
-      handler() {
-        setTimeout(() => {
-          this.renderOrUpdateCharts();
-        }, 100);
-      },
-      deep: true,
-    },
-  },
-
-  mounted() {
-    setTimeout(() => {
-      this.renderOrUpdateCharts();
-    }, 100);
-  },
-
-  methods: {
-    renderOrUpdateCharts() {
-      for (const item of this.topFoods.nutrients) {
-        const el = document.getElementById(`chart-${item.id}`) as HTMLCanvasElement;
-        if (!el) {
-          console.warn(`FeedbackChartArea: chart element not found.`);
-          continue;
-        }
-
-        const chart = this.charts[item.id];
-        if (!chart) {
-          this.charts[item.id] = new Chart(el, {
-            type: 'doughnut',
-            data: item.chartJs,
-            options: { plugins: { legend: { display: false } }, animation: false },
-          });
-          continue;
-        }
-
-        chart.data = { ...item.chartJs };
-        chart.update();
-      }
     },
   },
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.chart {
+  height: 450px;
+}
+
+.chart-print-wrapper {
+  height: 450px;
+  width: 100%;
+}
+
+.chart-print {
+  height: 450px;
+  width: 680px;
+  margin: auto;
+}
+
+@media print {
+  .chart-print-wrapper {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+</style>

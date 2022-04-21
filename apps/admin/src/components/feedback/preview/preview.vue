@@ -65,7 +65,7 @@ export default defineComponent({
       ...previewData,
 
       cards: [] as FeedbackCardParameters[],
-      topFoods: buildTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], this.$i18n.locale),
+      topFoods: buildTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], [], this.$i18n.locale),
     };
   },
 
@@ -100,7 +100,10 @@ export default defineComponent({
 
       if (!feedbackDicts || !userDemographic) return;
 
-      const { surveyStats } = feedbackDicts;
+      const {
+        surveyStats,
+        feedbackData: { nutrientTypes },
+      } = feedbackDicts;
 
       const selected = submissions.map(({ id }) => id);
 
@@ -114,7 +117,7 @@ export default defineComponent({
         averageIntake,
         fruitAndVegPortions,
       });
-      this.topFoods = buildTopFoods(topFoods, foods, this.$i18n.locale);
+      this.topFoods = buildTopFoods(topFoods, foods, nutrientTypes, this.$i18n.locale);
     },
 
     close() {

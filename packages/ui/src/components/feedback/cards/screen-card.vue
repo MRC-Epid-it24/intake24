@@ -8,12 +8,12 @@
           <span>{{ detail.name.toLowerCase() }}</span>
         </template>
         <template v-slot:amount>
-          <span :class="detail.textClass">{{ detail.intake }} {{ detail.unit }}</span>
+          <span :class="detail.textClass">{{ formatOutput(detail.intake, detail.unit) }}</span>
         </template>
       </i18n>
       <div v-if="detail.recommendedIntake" :class="detail.textClass">
         <v-icon left>{{ detail.iconClass }}</v-icon>
-        <span>{{ detail.recommendedIntake.toString() }} {{ detail.unit }}</span>
+        <span>{{ formatOutput(detail.recommendedIntake, detail.unit) }}</span>
       </div>
     </v-card-subtitle>
     <tell-me-more v-bind="{ detail }" class="mt-auto"></tell-me-more>
@@ -24,7 +24,7 @@
 import SvgGauge, { GaugeInstance } from 'svg-gauge';
 import { computed, defineComponent, PropType, ref, toRefs } from '@vue/composition-api';
 import { FeedbackCardParameters } from '@intake24/ui/feedback';
-import { getDetails, getBackgroundImage } from '.';
+import { formatOutput, getDetails, getBackgroundImage } from '.';
 import TellMeMore from './tell-me-more.vue';
 
 export default defineComponent({
@@ -65,9 +65,10 @@ export default defineComponent({
       backgroundImage,
       colorMap,
       detail,
-      isFiveADay,
+      formatOutput,
       gaugeRef,
       gaugeInstance,
+      isFiveADay,
     };
   },
 

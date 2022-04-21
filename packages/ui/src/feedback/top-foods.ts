@@ -1,20 +1,19 @@
-import { ChartData as ChartJsData } from 'chart.js';
 import { TopFoods } from '@intake24/common/feedback';
+import { NutrientType } from '@intake24/common/types/http';
 import { round } from '@intake24/common/util';
 import { AggregateFoodStats } from './classes';
 
 export type ChartData = {
+  name: string;
   value: number;
-  label: string;
-  color: string;
 };
 
 export type TopFoodNutrient = {
   id: string;
   name: string;
+  unit: string;
   list: AggregateFoodStats[];
   chart: ChartData[];
-  chartJs: ChartJsData;
   total: number;
 };
 
@@ -44,13 +43,18 @@ export const summarizeOtherFood = (
 export const buildTopFoods = (
   topFoods: TopFoods,
   foods: AggregateFoodStats[],
+  nutrientTypes: NutrientType[] = [],
   locale = 'en'
 ): TopFoodData => {
-  const { max, colors, nutrientTypes } = topFoods;
-  if (!max || !nutrientTypes.length) return { ...topFoods, nutrients: [] };
+  const { max } = topFoods;
+  if (!max || !topFoods.nutrientTypes.length) return { ...topFoods, nutrients: [] };
 
-  const nutrients = nutrientTypes.map((nutrientType) => {
-    const { id } = nutrientType;
+  const nutrients = topFoods.nutrientTypes.map((nutrientType) => {
+    const nt = nutrientTypes.find((item) => item.id === nutrientType.id);
+    if (!nt)
+      throw new Error(`Invalid nutrient type (${nutrientType.id}) defined in feedback top foods.`);
+
+    const { id, unit } = nt;
     const name = nutrientType.name[locale] ?? nutrientType.name.en;
 
     const foodHighInNutrient = filterAndSortFoodByNutrientTypeId(id, foods);
@@ -58,30 +62,16 @@ export const buildTopFoods = (
 
     const list = foodHighInNutrient.slice(0, max).concat(summarizeOtherFood(id, other));
 
-    const labels: string[] = [];
-    const data: number[] = [];
-    const backgroundColor: string[] = [];
-
-    const chart = list.map((food, index) => {
-      const label = food.name;
-      const value = food.getAverageIntake(id);
-      const color = colors[index];
-
-      labels.push(label);
-      data.push(value);
-      backgroundColor.push(color);
-
-      return { value, label, color };
-    });
+    const chart = list.map((food) => ({ name: food.name, value: food.getAverageIntake(id) }));
 
     const total = foods.map((f) => f.getAverageIntake(id)).reduce((a, b) => a + b, 0);
 
     return {
       id,
       name,
+      unit,
       list,
       chart,
-      chartJs: { labels, datasets: [{ data, backgroundColor }] },
       total: round(total),
     };
   });
