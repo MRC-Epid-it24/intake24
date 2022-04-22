@@ -16,6 +16,22 @@
     mode: '600'
   when: site.ssl.enabled
 
+- name: Ensure includes dir exists
+  file:
+    path: /etc/nginx/includes
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+- name: Copy includes dir content
+  copy:
+    src: '{{ site.includes_dir }}/'
+    dest: '/etc/nginx/includes/'
+    owner: root
+    group: root
+    mode: '644'
+
 - name: Copy {{ site.name }} nginx site config
   copy:
     src: '{{ site.config_file }}'

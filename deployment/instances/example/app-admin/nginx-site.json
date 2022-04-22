@@ -2,6 +2,7 @@
   "site": {
      "name": "admin-site",
      "config_file": "../instances/{{ instance }}/app-admin/nginx-site",
+     "includes_dir": "../instances/{{ instance }}/nginx/includes",
      "ssl": {
        "enabled": false,
        "public_cert": "../instances/{{ instance }}/app-admin/example.com.crt",

@@ -2,6 +2,7 @@
   "site": {
      "name": "survey-site",
      "config_file": "../instances/{{ instance }}/app-survey/nginx-site",
+     "includes_dir": "../instances/{{ instance }}/nginx/includes",
      "ssl": {
        "enabled": false,
        "public_cert": "../instances/{{ instance }}/app-survey/example.com.crt",

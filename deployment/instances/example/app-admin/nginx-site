@@ -13,16 +13,38 @@ server {
 
   server_name 192.168.1.1;
 
+  client_max_body_size 10M;
+
   ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
   ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
 
+  root /opt/intake24/apps/admin/dist/;
+  index index.html;
+
   location / {
-    proxy_pass http://localhost:3300/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Forwarded-Host  $host;
-    proxy_set_header X-Forwarded-Port  $server_port;
+    alias /opt/intake24/apps/admin/dist/;
+    include includes/security_headers_spa;
+
+    try_files $uri $uri/ index.html =404;
   }
+
+  location =/index.html {
+    include includes/security_headers_spa;
+    add_header Cache-Control "max-age=0, no-cache, no-store, must-revalidate";
+  }
+
+  location ~* \.(?:css|js|jpg|png|svg)$ {
+    include includes/security_headers_spa;
+    add_header Cache-Control "public, max-age=86400";
+  }
+
+  # location / {
+  #   proxy_pass http://localhost:3300/;
+  #   proxy_set_header Host $host;
+  #   proxy_set_header X-Real-IP $remote_addr;
+  #   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  #   proxy_set_header X-Forwarded-Proto $scheme;
+  #   proxy_set_header X-Forwarded-Host  $host;
+  #   proxy_set_header X-Forwarded-Port  $server_port;
+  # }
 }

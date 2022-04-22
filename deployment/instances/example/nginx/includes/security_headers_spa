@@ -1,0 +1,3 @@
+include includes/security_headers_generic;
+include includes/security_headers_cop;
+include includes/security_headers_csp;
