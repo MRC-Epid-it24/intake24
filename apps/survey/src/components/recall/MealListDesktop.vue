@@ -3,7 +3,7 @@
     <v-list dense nav class="flex-grow-1 flex-shrink-0">
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="title"> Recall </v-list-item-title>
+          <v-list-item-title class="title"> {{ $t('recall._') }} </v-list-item-title>
           <v-list-item-subtitle>
             {{ surveyName }}
           </v-list-item-subtitle>
@@ -37,6 +37,18 @@
         </v-list-item>
       </v-card-text>
     </v-list>
+    <v-card-action>
+      <v-hover v-slot="{ hover }">
+        <v-btn
+          :color="hover ? 'success' : 'inherit'"
+          elevation="0"
+          block
+          @click="onRecallAction('add-meal')"
+        >
+          {{ $t('recall.menu.recall.addMeal') }}
+        </v-btn>
+      </v-hover>
+    </v-card-action>
   </v-card>
 </template>
 

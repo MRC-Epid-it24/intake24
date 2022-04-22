@@ -11,6 +11,9 @@ const recall: LocaleMessageObject = {
       editMealTime: 'Edit/Change Time',
       deleteMeal: 'Delete Meal',
     },
+    recall: {
+      addMeal: 'Add Meal',
+    },
   },
 };
 
