@@ -23,12 +23,13 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import { TopFoodData } from '@intake24/ui/feedback';
-import { use } from 'echarts/core';
 import type { EChartsOption } from 'echarts';
-import { SVGRenderer } from 'echarts/renderers';
+import { use } from 'echarts/core';
 import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent } from 'echarts/components';
+import { SVGRenderer } from 'echarts/renderers';
 import VChart from 'vue-echarts';
+import { round } from '@intake24/common/util';
 
 use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
 
@@ -49,7 +50,7 @@ export default defineComponent({
       const { colors, nutrients } = this.topFoods;
 
       const chartOptions: EChartsOption[] = nutrients.map((nutrient) => {
-        const { id, name, unit, chart } = nutrient;
+        const { id, name, unit, data } = nutrient;
 
         return {
           textStyle: {
@@ -67,7 +68,10 @@ export default defineComponent({
           left: 'center',
           tooltip: {
             trigger: 'item',
-            formatter: `{a} <br/>{b}: {c} ${unit} ({d}%)`,
+            formatter: ({ seriesName, name: itemName, value, percent }: any) =>
+              `<strong>${seriesName}</strong> <br/> ${itemName}: ${round(
+                value
+              )} ${unit} (${Math.round(percent ?? 0)}%)`,
           },
           series: [
             {
@@ -76,7 +80,7 @@ export default defineComponent({
               type: 'pie',
               radius: ['35%', '70%'],
               color: colors,
-              data: chart,
+              data,
               emphasis: {
                 itemStyle: {
                   shadowBlur: 0,
@@ -91,7 +95,10 @@ export default defineComponent({
               },
               label: {
                 alignTo: 'edge',
-                formatter: `{b}\n{times|{c} ${unit} ({d}%)}`,
+                formatter: ({ name: itemName, value, percent }) =>
+                  `${itemName} \n {times|${round(
+                    typeof value === 'number' ? value : 0
+                  )} ${unit} (${Math.round(percent ?? 0)}%)}`,
                 minMargin: 5,
                 edgeDistance: 10,
                 lineHeight: 15,
@@ -114,6 +121,7 @@ export default defineComponent({
 
       return chartOptions;
     },
+
     matchesPrintMedia(): boolean {
       return window.matchMedia('print').matches;
     },

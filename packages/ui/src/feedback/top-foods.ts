@@ -12,8 +12,7 @@ export type TopFoodNutrient = {
   id: string;
   name: string;
   unit: string;
-  list: AggregateFoodStats[];
-  chart: ChartData[];
+  data: ChartData[];
   total: number;
 };
 
@@ -62,7 +61,7 @@ export const buildTopFoods = (
 
     const list = foodHighInNutrient.slice(0, max).concat(summarizeOtherFood(id, other));
 
-    const chart = list.map((food) => ({ name: food.name, value: food.getAverageIntake(id) }));
+    const data = list.map((food) => ({ name: food.name, value: food.getAverageIntake(id) }));
 
     const total = foods.map((f) => f.getAverageIntake(id)).reduce((a, b) => a + b, 0);
 
@@ -70,8 +69,7 @@ export const buildTopFoods = (
       id,
       name,
       unit,
-      list,
-      chart,
+      data,
       total: round(total),
     };
   });
