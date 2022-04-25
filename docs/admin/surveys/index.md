@@ -33,7 +33,11 @@ Edit tab allows to modify selected survey.
 
 - `Store user session on server` - If enabled, user partial submission data are sent to server for store and retrieval. If disabled, user partial submission data are only stored locally in client browser,
 
-### Automatic user generation
+### Users settings
+
+- `Allow user personal identifiers` - `on` / `off` control to allow persistance of `email` / `name` / `phone` fields in database for respondent account
+
+- `Allow user custom fields` - `on` / `off` control to allow persistance of `user custom fields`
 
 - `Allow user generation` - `on` / `off` control to allow automatic user generation
 
@@ -74,15 +78,14 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 ### Submission limits
 
 - `Maximum allowed submissions per calendar day` - maximum number of recalls allowed within the survey per day
+
 - `Maximum allowed total submissions` - maximum total number of recalls allowed within the survey
 
 - `Minimum interval between submissions (seconds)` - the shortest minimal internal between two following submission by same respondent
 
 ### Feedback settings
 
-- `Feedback enabled` - `on` / `off` control to enable feedback feature
-
-- `Feedback style` - only `default` at the moment, more to be implemented in future
+- `Feedback scheme` - associated feedback scheme. If not set, feedback feature is disabled.
 
 - `Number of submissions for feedback` - minimal number of submissions per respondent account to allow to access the feedback
 
@@ -121,16 +124,6 @@ Survey respondents section allows to:
 2. Bulk import respondents using CSV file. See [`SurveyImportRespondents`](/admin/system/job-types#surveyimportrespondents) for more details about CSV file structure.
 
 3. Download respondents authentication details in CSV file
-
-## Management
-
-Survey management section allows to:
-
-1. Create / view / search / edit / remove staff users
-
-2. Grant access to study sections
-
-3. Nominate staff users to receive support requests
 
 ## Submissions
 
