@@ -225,6 +225,7 @@
                 :error-messages="form.errors.get('genUserKey')"
                 :label="$t('surveys.users.genUserKey')"
                 :type="showGenUserKey ? 'text' : 'password'"
+                autocomplete="new-password"
                 class="mt-4"
                 hide-details="auto"
                 name="genUserKey"
@@ -373,7 +374,6 @@ import {
   surveyStates,
   SurveyState,
 } from '@intake24/common/types/models';
-import { pick } from 'lodash';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
