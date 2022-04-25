@@ -1,8 +1,7 @@
 import type { Request, Response } from 'express';
 import type { JobEntry } from '@intake24/common/types/http/admin';
-import { securableScope, Survey, User } from '@intake24/db';
+import { User } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
-import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { Controller } from '../../controller';
 import { getAndCheckSurveyAccess } from './survey.controller';
 

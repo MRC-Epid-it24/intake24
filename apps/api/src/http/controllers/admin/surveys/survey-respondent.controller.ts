@@ -5,7 +5,7 @@ import type {
   SurveyRespondentEntry,
   SurveyRespondentsResponse,
 } from '@intake24/common/types/http/admin';
-import { Survey, User, UserCustomField, UserSurveyAlias, PaginateQuery } from '@intake24/db';
+import { User, UserCustomField, UserSurveyAlias, PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import {
   userRespondentResponse,
