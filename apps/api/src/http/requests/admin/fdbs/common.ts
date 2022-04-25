@@ -6,7 +6,7 @@ export const attributes: Schema = {
   'main.attributes.readyMealOption': {
     in: ['body'],
     errorMessage: 'Ready meal option has to be true or false.',
-    isBoolean: true,
+    isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
   'main.attributes.reasonableAmount': {
@@ -18,7 +18,7 @@ export const attributes: Schema = {
   'main.attributes.sameAsBeforeOption': {
     in: ['body'],
     errorMessage: 'Same as before option has to be true or false.',
-    isBoolean: true,
+    isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
   'main.attributes.useInRecipes': {

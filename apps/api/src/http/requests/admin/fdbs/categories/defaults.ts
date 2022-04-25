@@ -47,7 +47,7 @@ const defaults: Schema = {
   'main.isHidden': {
     in: ['body'],
     errorMessage: 'Enter true/false values.',
-    isBoolean: true,
+    isBoolean: { options: { strict: true } },
   },
 };
 

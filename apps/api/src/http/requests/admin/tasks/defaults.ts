@@ -37,7 +37,7 @@ const defaults: Schema = {
   active: {
     in: ['body'],
     errorMessage: 'Active field needs can only be true/false.',
-    isBoolean: true,
+    isBoolean: { options: { strict: true } },
     toBoolean: true,
   },
   description: {

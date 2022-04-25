@@ -37,6 +37,8 @@ export type SurveyAttributes = {
   searchSortingAlgorithm: SearchSortingAlgorithm;
   searchMatchScoreWeight: number;
   surveySchemeOverrides: SchemeOverrides;
+  userPersonalIdentifiers: boolean;
+  userCustomFields: boolean;
   ownerId: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -60,6 +62,8 @@ export type SurveyCreationAttributes = OmitAndOptional<
   | 'minimumSubmissionInterval'
   | 'searchSortingAlgorithm'
   | 'searchMatchScoreWeight'
+  | 'userPersonalIdentifiers'
+  | 'userCustomFields'
   | 'ownerId'
 >;
 
@@ -92,6 +96,8 @@ export const updateSurveyFields = [
   'searchSortingAlgorithm',
   'searchMatchScoreWeight',
   'surveySchemeOverrides',
+  'userPersonalIdentifiers',
+  'userCustomFields',
 ] as const;
 
 export type UpdateSurveyFields = typeof updateSurveyFields[number];
@@ -100,7 +106,7 @@ export const createSurveyFields = ['slug', ...updateSurveyFields] as const;
 
 export type CreateSurveyFields = typeof updateSurveyFields[number];
 
-export const staffUpdateSurveyFields = [
+/* export const staffUpdateSurveyFields = [
   'name',
   'state',
   'startDate',
@@ -112,7 +118,7 @@ export const staffUpdateSurveyFields = [
   'suspensionReason',
 ] as const;
 
-export type StaffUpdateSurveyFields = typeof staffUpdateSurveyFields[number];
+export type StaffUpdateSurveyFields = typeof staffUpdateSurveyFields[number]; */
 
 export const overridesFields = ['surveySchemeOverrides'] as const;
 

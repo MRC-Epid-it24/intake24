@@ -80,19 +80,19 @@ export const user: Schema = {
   emailNotifications: {
     in: ['body'],
     errorMessage: 'Enter true/false value.',
-    isBoolean: true,
+    isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
   smsNotifications: {
     in: ['body'],
     errorMessage: 'Enter true/false value.',
-    isBoolean: true,
+    isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
   multiFactorAuthentication: {
     in: ['body'],
     errorMessage: 'Enter true/false value.',
-    isBoolean: true,
+    isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
 };

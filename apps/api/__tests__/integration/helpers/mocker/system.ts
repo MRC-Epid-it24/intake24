@@ -247,6 +247,9 @@ const survey = (
     questions: [],
   };
 
+  const userPersonalIdentifiers = faker.datatype.boolean();
+  const userCustomFields = faker.datatype.boolean();
+
   return {
     slug,
     name,
@@ -269,6 +272,8 @@ const survey = (
     searchSortingAlgorithm,
     searchMatchScoreWeight,
     surveySchemeOverrides,
+    userPersonalIdentifiers,
+    userCustomFields,
   };
 };
 

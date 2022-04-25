@@ -72,7 +72,7 @@ export const defaults: Schema = {
   allowGenUsers: {
     in: ['body'],
     errorMessage: 'Enter true/false value.',
-    isBoolean: true,
+    isBoolean: { options: { strict: true } },
   },
   genUserKey: {
     in: ['body'],
@@ -153,7 +153,7 @@ export const defaults: Schema = {
   storeUserSessionOnServer: {
     in: ['body'],
     errorMessage: 'Enter true/false value.',
-    isBoolean: true,
+    isBoolean: { options: { strict: true } },
   },
   numberOfSubmissionsForFeedback: {
     errorMessage: 'Value has to be a number.',
@@ -188,6 +188,18 @@ export const defaults: Schema = {
     errorMessage: 'Search match score weight has to be between 0-100.',
     isInt: { options: { min: 0, max: 100 } },
     toInt: true,
+    optional: true,
+  },
+  userPersonalIdentifiers: {
+    in: ['body'],
+    errorMessage: 'Enter true/false value.',
+    isBoolean: { options: { strict: true } },
+    optional: true,
+  },
+  userCustomFields: {
+    in: ['body'],
+    errorMessage: 'Enter true/false value.',
+    isBoolean: { options: { strict: true } },
     optional: true,
   },
 };

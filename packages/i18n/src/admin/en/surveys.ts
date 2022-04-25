@@ -27,10 +27,12 @@ const surveys: LocaleMessageObject = {
     tokenCharset: 'Token character set',
     tokenLength: 'Token length',
   },
-  genUsers: {
-    _: 'User generation settings',
-    allow: 'Allow user generation',
-    secret: 'JWT secret for user generation',
+  users: {
+    _: 'Users settings',
+    allowGenUsers: 'Allow user generation',
+    genUserKey: 'JWT secret for user generation',
+    personalIdentifiers: 'Allow personal identifiers',
+    customFields: 'Allow user custom fields',
   },
   search: {
     _: 'Search options',

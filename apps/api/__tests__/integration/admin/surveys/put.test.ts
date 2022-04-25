@@ -94,6 +94,8 @@ export default () => {
           meals: ['shouldBeProperlyFormatMealList'],
           questions: { value: 'not a valid overrides object' },
         },
+        userPersonalIdentifiers: [true],
+        userCustomFields: 'not a boolean',
       };
 
       const fields = [
@@ -114,6 +116,8 @@ export default () => {
         'searchSortingAlgorithm',
         'searchMatchScoreWeight',
         'surveySchemeOverrides',
+        'userPersonalIdentifiers',
+        'userCustomFields',
       ];
 
       await suite.sharedTests.assertInvalidInput('put', url, fields, { input: invalidInput });

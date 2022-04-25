@@ -63,6 +63,8 @@ export default () => {
           meals: ['shouldBeProperlyFormatMealList'],
           questions: 'invalidQuestions',
         },
+        userPersonalIdentifiers: { name: false },
+        userCustomFields: 20,
       };
 
       const fields = [
@@ -84,6 +86,8 @@ export default () => {
         'searchSortingAlgorithm',
         'searchMatchScoreWeight',
         'surveySchemeOverrides',
+        'userPersonalIdentifiers',
+        'userCustomFields',
       ];
 
       await suite.sharedTests.assertInvalidInput('post', url, fields, { input: invalidInput });

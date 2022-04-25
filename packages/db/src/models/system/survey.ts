@@ -227,6 +227,20 @@ export default class Survey
   }
 
   @Column({
+    allowNull: false,
+    defaultValue: false,
+    type: DataType.BOOLEAN,
+  })
+  public userPersonalIdentifiers!: boolean;
+
+  @Column({
+    allowNull: false,
+    defaultValue: false,
+    type: DataType.BOOLEAN,
+  })
+  public userCustomFields!: boolean;
+
+  @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
