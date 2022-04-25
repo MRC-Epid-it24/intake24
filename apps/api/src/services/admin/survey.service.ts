@@ -9,7 +9,7 @@ import {
   UserSurveyAlias,
 } from '@intake24/db';
 import { CreateRespondentInput, UpdateRespondentInput } from '@intake24/common/types/http/admin';
-import { UserCustomFieldAttributes } from '@intake24/common/types/models';
+import { UserCreationAttributes, UserCustomFieldAttributes } from '@intake24/common/types/models';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';
@@ -65,12 +65,18 @@ const adminSurveyService = ({
     const surveyEntry = typeof survey === 'string' ? await Survey.findByPk(survey) : survey;
     if (!surveyEntry) throw new NotFoundError();
 
-    const { id: surveyId, slug, authUrlTokenCharset, authUrlTokenLength } = surveyEntry;
-    const { password, username, ...rest } = input;
+    const {
+      id: surveyId,
+      slug,
+      authUrlTokenCharset,
+      authUrlTokenLength,
+      userCustomFields,
+      userPersonalIdentifiers,
+    } = surveyEntry;
+    const { name, email, phone, customFields, password, username } = input;
 
     const user = await User.create(
-      { ...rest, simpleName: toSimpleName(rest.name) },
-      { include: [UserCustomField] }
+      userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {}
     );
 
     const { id: userId } = user;
@@ -78,18 +84,23 @@ const adminSurveyService = ({
 
     const surveyRespondentPermission = await getSurveyRespondentPermission(slug);
 
-    const [respondent] = await Promise.all([
-      UserSurveyAlias.create({
-        userId,
-        surveyId,
-        username,
-        urlAuthToken: randomString(authUrlTokenLength ?? size, authUrlTokenCharset ?? alphabet),
-      }),
-      user.$add('permissions', surveyRespondentPermission),
-      adminUserService.createPassword({ userId, password }),
-    ]);
+    const [respondent] = await Promise.all(
+      [
+        UserSurveyAlias.create({
+          userId,
+          surveyId,
+          username,
+          urlAuthToken: randomString(authUrlTokenLength ?? size, authUrlTokenCharset ?? alphabet),
+        }),
+        user.$add('permissions', surveyRespondentPermission),
+        adminUserService.createPassword({ userId, password }),
+        userCustomFields && customFields?.length
+          ? UserCustomField.bulkCreate(customFields.map((field) => ({ ...field, userId })))
+          : null,
+      ].filter(Boolean)
+    );
 
-    return respondent;
+    return respondent as UserSurveyAlias;
   };
 
   /**
@@ -109,44 +120,48 @@ const adminSurveyService = ({
     const { id: permissionId } = await getSurveyRespondentPermission(survey.slug);
     const { size, alphabet } = securityConfig.authTokens;
 
+    const { userCustomFields, userPersonalIdentifiers } = survey;
+
     const urlTokenCharset = survey.authUrlTokenCharset ?? alphabet;
     const urlTokenLength = survey.authUrlTokenLength ?? size;
 
-    const userAliases = [];
-    const userCustomFields: Omit<UserCustomFieldAttributes, 'id'>[] = [];
-    const userPasswords = [];
-    const userPermissions = [];
+    const aliasRecords = [];
+    const customFieldsRecords: Omit<UserCustomFieldAttributes, 'id'>[] = [];
+    const passwordRecords = [];
+    const permissionRecords = [];
 
     for (const input of inputs) {
-      const { customFields, password, username, ...rest } = input;
+      const { name, email, phone, customFields, password, username } = input;
       // User records are created one-by-one
       // This is to keep it MySQL+others-like compatible, where bulk operation doesn't return generated IDs
-      const { id: userId } = await User.create({ ...rest, simpleName: toSimpleName(rest.name) });
+      const { id: userId } = await User.create(
+        userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {}
+      );
 
-      if (customFields && customFields.length) {
+      if (userCustomFields && customFields?.length) {
         customFields.forEach((field) => {
-          userCustomFields.push({ ...field, userId });
+          customFieldsRecords.push({ ...field, userId });
         });
       }
 
-      userAliases.push({
+      aliasRecords.push({
         userId,
         surveyId,
         username,
         urlAuthToken: randomString(urlTokenLength, urlTokenCharset),
       });
-      userPermissions.push({ userId, permissionId });
-      userPasswords.push({ userId, password });
+      passwordRecords.push({ userId, password });
+      permissionRecords.push({ userId, permissionId });
     }
 
-    const [userAliasRecords] = await Promise.all([
-      UserSurveyAlias.bulkCreate(userAliases),
-      PermissionUser.bulkCreate(userPermissions),
-      adminUserService.createPasswords(userPasswords),
-      UserCustomField.bulkCreate(userCustomFields),
+    const [aliases] = await Promise.all([
+      UserSurveyAlias.bulkCreate(aliasRecords),
+      adminUserService.createPasswords(passwordRecords),
+      PermissionUser.bulkCreate(permissionRecords),
+      UserCustomField.bulkCreate(customFieldsRecords),
     ]);
 
-    return userAliasRecords;
+    return aliases;
   };
 
   /**
@@ -162,23 +177,30 @@ const adminSurveyService = ({
     userId: string,
     input: UpdateRespondentInput
   ): Promise<UserSurveyAlias> => {
-    const survey = await Survey.findByPk(surveyId);
-    const user = await User.scope('customFields').findOne({
-      include: [{ model: UserSurveyAlias, where: { userId, surveyId } }],
-    });
+    const [survey, user] = await Promise.all([
+      Survey.findByPk(surveyId),
+      User.scope('customFields').findOne({
+        include: [{ model: UserSurveyAlias, where: { userId, surveyId } }],
+      }),
+    ]);
 
-    if (!survey || !user || !user.aliases) throw new NotFoundError();
+    if (!survey || !user?.aliases) throw new NotFoundError();
 
-    const { customFields, password, ...rest } = input;
+    const { userCustomFields, userPersonalIdentifiers } = survey;
+    const { name, email, phone, customFields, password } = input;
 
-    await user.update({ ...rest, simpleName: toSimpleName(rest.name) });
-    if (password) await adminUserService.updatePassword(user.id, password);
-
-    // Update custom fields
-    if (customFields && user.customFields)
-      await adminUserService.updateUserCustomFields(userId, user.customFields, customFields);
-
-    await adminUserService.flushUserACLCache(user.id);
+    await Promise.all(
+      [
+        userPersonalIdentifiers
+          ? user.update({ name, email, phone, simpleName: toSimpleName(name) })
+          : null,
+        password ? adminUserService.updatePassword(user.id, password) : null,
+        userCustomFields && customFields && user.customFields
+          ? adminUserService.updateUserCustomFields(userId, user.customFields, customFields)
+          : null,
+        adminUserService.flushUserACLCache(user.id),
+      ].filter(Boolean)
+    );
 
     return user.aliases[0];
   };
@@ -191,15 +213,17 @@ const adminSurveyService = ({
    * @returns {Promise<void>}
    */
   const deleteRespondent = async (surveyId: string, userId: string | number): Promise<void> => {
-    const survey = await Survey.findByPk(surveyId);
-    const user = await User.scope('submissions').findOne({
-      where: { id: userId },
-      include: [{ model: UserSurveyAlias, where: { surveyId } }],
-    });
+    const [survey, user] = await Promise.all([
+      Survey.findByPk(surveyId),
+      User.scope('submissions').findOne({
+        where: { id: userId },
+        include: [{ model: UserSurveyAlias, where: { surveyId } }],
+      }),
+    ]);
 
     if (!survey || !user) throw new NotFoundError();
 
-    if (user.submissions?.length)
+    if (!user.submissions || user.submissions.length)
       throw new ForbiddenError('User cannot be deleted. It already contains submission data.');
 
     // System-wide account - delete only access to study
@@ -209,7 +233,7 @@ const adminSurveyService = ({
         user.$remove('permissions', await getSurveyRespondentPermission(survey.slug)),
       ]);
     } else {
-      // Wipe the whole user records
+      // Wipe the whole user record
       await user.destroy();
     }
   };

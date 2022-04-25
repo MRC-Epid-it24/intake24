@@ -56,6 +56,8 @@ export default () => {
       ...surveyInput,
       startDate: new Date(surveyInput.startDate),
       endDate: new Date(surveyInput.endDate),
+      userCustomFields: true,
+      userPersonalIdentifiers: true,
     });
 
     securable = { securableId: survey.id, securableType: 'Survey' };

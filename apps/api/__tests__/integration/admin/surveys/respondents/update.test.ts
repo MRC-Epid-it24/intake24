@@ -62,6 +62,8 @@ export default () => {
       ...surveyInput,
       startDate: new Date(surveyInput.startDate),
       endDate: new Date(surveyInput.endDate),
+      userCustomFields: true,
+      userPersonalIdentifiers: true,
     });
 
     securable = { securableId: survey.id, securableType: 'Survey' };
@@ -155,6 +157,38 @@ export default () => {
       };
 
       await assertRespondentResponse(url, updateInput3);
+    });
+  });
+
+  describe('respondent-related survey settings', () => {
+    it('should not persist user PID information when disabled in survey settings', async () => {
+      await survey.update({ userCustomFields: true, userPersonalIdentifiers: false });
+      const pidRespondent = mocker.system.respondent();
+
+      const { body, status } = await request(suite.app)
+        .patch(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .send(pidRespondent);
+
+      expect(status).toBe(200);
+      expect(body.email).not.toEqual(pidRespondent.email);
+      expect(body.name).not.toEqual(pidRespondent.name);
+      expect(body.phone).not.toEqual(pidRespondent.phone);
+    });
+
+    it('should not persist user custom fields when disabled in survey settings', async () => {
+      await survey.update({ userCustomFields: false, userPersonalIdentifiers: true });
+      const cfRespondent = mocker.system.respondent();
+
+      const { body, status } = await request(suite.app)
+        .patch(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .send(cfRespondent);
+
+      expect(status).toBe(200);
+      expect(body.customFields).not.toEqual(cfRespondent.customFields);
     });
   });
 };

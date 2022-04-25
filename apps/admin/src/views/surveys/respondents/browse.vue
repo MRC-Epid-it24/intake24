@@ -69,39 +69,41 @@
                         type="password"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="form.name"
-                        :error-messages="form.errors.get('name')"
-                        :label="$t('users.name')"
-                        hide-details="auto"
-                        name="name"
-                        outlined
-                        prepend-icon="fas fa-user"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="form.email"
-                        :error-messages="form.errors.get('email')"
-                        :label="$t('users.email')"
-                        hide-details="auto"
-                        name="email"
-                        outlined
-                        prepend-icon="fas fa-at"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="form.phone"
-                        :error-messages="form.errors.get('phone')"
-                        :label="$t('users.phone')"
-                        hide-details="auto"
-                        name="phone"
-                        outlined
-                        prepend-icon="fas fa-phone"
-                      ></v-text-field>
-                    </v-col>
+                    <template v-if="entry.userPersonalIdentifiers">
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="form.name"
+                          :error-messages="form.errors.get('name')"
+                          :label="$t('users.name')"
+                          hide-details="auto"
+                          name="name"
+                          outlined
+                          prepend-icon="fas fa-user"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="form.email"
+                          :error-messages="form.errors.get('email')"
+                          :label="$t('users.email')"
+                          hide-details="auto"
+                          name="email"
+                          outlined
+                          prepend-icon="fas fa-at"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="form.phone"
+                          :error-messages="form.errors.get('phone')"
+                          :label="$t('users.phone')"
+                          hide-details="auto"
+                          name="phone"
+                          outlined
+                          prepend-icon="fas fa-phone"
+                        ></v-text-field>
+                      </v-col>
+                    </template>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -117,7 +119,7 @@
             </v-form>
           </v-card>
         </v-dialog>
-        <v-menu :close-on-content-click="true" :close-on-click="true" offset-y>
+        <v-menu close-on-content-click close-on-click offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn class="font-weight-bold" color="primary" v-bind="attrs" v-on="on" icon>
               <v-icon>fa-ellipsis-v</v-icon>
