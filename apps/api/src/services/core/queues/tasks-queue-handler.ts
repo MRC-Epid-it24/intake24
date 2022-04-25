@@ -27,6 +27,11 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
     this.logger = logger.child({ service: 'TasksQueueHandler' });
   }
 
+  private logEventError(err: Error) {
+    const { message, name, stack } = err;
+    this.logger.error(stack ?? `${name}: ${message}`);
+  }
+
   /**
    * Initialize TasksQueueHandler
    *
@@ -36,11 +41,13 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
    */
   public async init(connection: ConnectionOptions): Promise<void> {
     this.scheduler = new QueueScheduler(this.name, { connection });
+    this.scheduler.on('error', (err) => this.logEventError(err));
 
     this.queue = new Queue(this.name, {
       connection,
       defaultJobOptions: { removeOnComplete: true, removeOnFail: true },
     });
+    this.queue.on('error', (err) => this.logEventError(err));
 
     const worker = new Worker(this.name, this.processor, { connection });
 
@@ -51,10 +58,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
       .on('failed', (job, err) => {
         this.logger.error(`${this.name}: ${job.name} | ${job.id} has failed with ${err.message}`);
       })
-      .on('error', (err) => {
-        const { message, name, stack } = err;
-        this.logger.error(stack ?? `${name}: ${message}`);
-      });
+      .on('error', (err) => this.logEventError(err));
 
     this.workers.push(worker);
 
@@ -71,15 +75,12 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
    * @memberof TasksQueueHandler
    */
   public async close(): Promise<void> {
-    await this.scheduler.close();
-    await this.scheduler.disconnect();
-    await this.queue.close();
-    await this.queue.disconnect();
-
     for (const worker of this.workers) {
       await worker.close();
-      await worker.disconnect();
     }
+
+    await this.scheduler.close();
+    await this.queue.close();
   }
 
   async processor(job: BullJob<JobData>): Promise<void> {

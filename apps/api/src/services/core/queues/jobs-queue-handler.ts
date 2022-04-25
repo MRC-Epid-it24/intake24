@@ -54,6 +54,11 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     this.pusher = pusher;
   }
 
+  private logEventError(err: Error) {
+    const { message, name, stack } = err;
+    this.logger.error(stack ?? `${name}: ${message}`);
+  }
+
   /**
    * Initialize JobsQueueHandler
    *
@@ -63,20 +68,20 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    */
   public async init(connection: ConnectionOptions): Promise<void> {
     this.scheduler = new QueueScheduler(this.name, { connection });
+    this.scheduler.on('error', (err) => this.logEventError(err));
 
     this.queue = new Queue(this.name, { connection, defaultJobOptions: { delay: 500 } });
+    this.queue.on('error', (err) => this.logEventError(err));
 
     this.queueEvents = new QueueEvents(this.name, { connection });
+    this.queueEvents.on('error', (err) => this.logEventError(err));
 
     this.registerQueueEvents();
 
     for (let i = 0; i < this.config.workers; i++) {
       const worker = new Worker(this.name, this.processor, { connection });
 
-      worker.on('error', (err) => {
-        const { message, name, stack } = err;
-        this.logger.error(stack ?? `${name}: ${message}`);
-      });
+      worker.on('error', (err) => this.logEventError(err));
 
       this.workers.push(worker);
     }
@@ -91,17 +96,13 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   public async close(): Promise<void> {
-    await this.scheduler.close();
-    await this.scheduler.disconnect();
-    await this.queue.close();
-    await this.queue.disconnect();
-    await this.queueEvents.close();
-    await this.queueEvents.disconnect();
-
     for (const worker of this.workers) {
       await worker.close();
-      await worker.disconnect();
     }
+
+    await this.scheduler.close();
+    await this.queue.close();
+    await this.queueEvents.close();
   }
 
   /**
