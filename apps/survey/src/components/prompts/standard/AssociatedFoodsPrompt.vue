@@ -14,7 +14,7 @@
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-btn-toggle v-model="prompts[index]">
+                <v-btn-toggle v-model="prompts[index].confirmed" @change="updatePrompt(index)">
                   <v-btn value="false"> {{ $t('prompts.associatedFoods.no') }}</v-btn>
                   <v-btn value="true"> {{ $t('prompts.associatedFoods.yes') }}</v-btn>
                 </v-btn-toggle>
@@ -36,7 +36,6 @@ import { useSurvey } from '@intake24/survey/stores';
 import { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import { AssociatedFoodPromptState } from '@intake24/common/types';
-import { copy } from '@intake24/common/util';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
@@ -64,10 +63,13 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   data() {
+    console.log('ENEN DURAYIN');
+    console.log(useSurvey().associatedFoodsForSelection());
+    console.log(useSurvey().selectedFoodId);
     return {
       store: useSurvey(),
-      activePrompt: useSurvey().selectedEncodedFood?.associatedFoods.activePrompt || 0,
-      prompts: copy(useSurvey().selectedEncodedFood?.associatedFoods.prompts) || [],
+      activePrompt: useSurvey().associatedFoodsForSelection()!.activePrompt,
+      prompts: useSurvey().associatedFoodsForSelection()!.prompts,
     };
   },
 
@@ -85,11 +87,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
       set(value: number) {
         this.activePrompt = value;
-        this.store.updateActiveAssociatedFoodsPrompt({
-          mealIndex: this.selectedMealIndex!,
-          foodIndex: this.selectedFoodIndex!,
-          activePromptIndex: this.activePrompt,
-        });
+        this.store.updateActiveAssociatedFoodsPrompt(this.activePrompt);
       },
     },
 
@@ -109,25 +107,17 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     },
   },
 
+  beforeCreate() {
+    useSurvey().initAssociatedFoodPrompts();
+  },
+
   methods: {
     ...mapActions(useSurvey, ['updateAssociatedFoodsPrompt', 'updateActiveAssociatedFoodsPrompt']),
 
-    updateActivePrompt(index: number) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.updateActiveAssociatedFoodsPrompt({
-        mealIndex: this.selectedMealIndex!,
-        foodIndex: this.selectedFoodIndex!,
-        activePromptIndex: index,
-      });
-    },
-
-    updatePromptState(index: number, value: boolean | undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.updateAssociatedFoodsPrompt({
-        mealIndex: this.selectedMealIndex!,
-        foodIndex: this.selectedFoodIndex!,
+    updatePrompt(index: number) {
+      this.store.updateAssociatedFoodsPrompt({
         promptIndex: index,
-        promptState: { confirmed: value },
+        promptState: this.prompts[index],
       });
     },
 

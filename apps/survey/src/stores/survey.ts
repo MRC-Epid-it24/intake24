@@ -18,6 +18,7 @@ import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-reca
 import { copy } from '@intake24/common/util';
 import { useLoading } from '@intake24/ui/stores';
 import { recallLog } from '@intake24/survey/stores/recall-log';
+import Vue from 'vue';
 import { surveyService } from '../services';
 
 export type MealUndo = {
@@ -105,6 +106,16 @@ export const useSurvey = defineStore('survey', {
       if (element === null || element.type !== 'food') return undefined;
 
       return element.foodIndex;
+    },
+    selectedFoodId(): number | undefined {
+      return this.selectedFood?.id;
+    },
+    associatedFoodsForSelection(): () => AssociatedFoodsState | undefined {
+      return () => {
+        const id = this.selectedFoodId;
+        if (id === undefined) return undefined;
+        return this.data.associatedFoods[id];
+      };
     },
   },
   actions: {
@@ -314,39 +325,66 @@ export const useSurvey = defineStore('survey', {
       this.data.meals[mealIndex].foods.splice(foodIndex, 1, { ...foodState, ...food });
     },
 
-    updateActiveAssociatedFoodsPrompt(data: {
-      mealIndex: number;
-      foodIndex: number;
-      activePromptIndex: number;
-    }) {
-      const currentFoodState = this.data.meals[data.mealIndex].foods[data.foodIndex] as EncodedFood;
-      const newState = copy(currentFoodState);
+    initAssociatedFoodPrompts() {
+      console.log('SIGEIN');
+      const food = this.selectedEncodedFood;
 
-      newState.associatedFoods.activePrompt = data.activePromptIndex;
+      if (food === undefined) {
+        console.warn('Expected an encoded food to be selected at this point');
+        return;
+      }
 
-      this.updateFood({
-        mealIndex: data.mealIndex,
-        foodIndex: data.foodIndex,
-        food: newState,
-      });
+      console.log('SIGEIN ID', food.id);
+
+      if (this.data.associatedFoods[food.id] === undefined) {
+        Vue.set(this.data.associatedFoods, food.id, {
+          activePrompt: 0,
+          prompts: food.data.associatedFoodPrompts.map(() => {
+            return { confirmed: undefined };
+          }),
+        });
+      }
+
+      console.log('SIGEIN WW', this.data.associatedFoods[food.id]);
+    },
+
+    updateActiveAssociatedFoodsPrompt(promptIndex: number) {
+      const id = this.selectedFoodId;
+
+      if (id === undefined) {
+        console.warn('Expected a food to be selected at this point');
+        return;
+      }
+
+      console.log('updateActiveAssociatedFoodsPrompt', id, promptIndex);
+
+      const t = copy(this.data.associatedFoods[id]);
+      t.activePrompt = promptIndex;
+      Vue.set(this.data.associatedFoods, id, t);
     },
 
     updateAssociatedFoodsPrompt(data: {
-      mealIndex: number;
-      foodIndex: number;
       promptIndex: number;
       promptState: AssociatedFoodPromptState;
     }) {
-      const currentFoodState = this.data.meals[data.mealIndex].foods[data.foodIndex] as EncodedFood;
-      const newState = copy(currentFoodState);
+      const id = this.selectedFoodId;
 
-      newState.associatedFoods.prompts[data.promptIndex] = data.promptState;
+      if (id === undefined) {
+        console.warn('Expected a food to be selected at this point');
+        return;
+      }
 
-      this.updateFood({
-        mealIndex: data.mealIndex,
-        foodIndex: data.foodIndex,
-        food: newState,
-      });
+      Vue.set(this.data.associatedFoods[id].prompts, data.promptIndex, data.promptState);
+    },
+
+    commitAssociatedFoods() {
+      const food = this.selectedEncodedFood;
+      if (food === undefined) {
+        console.warn('Expected an encoded food to be selected at this point');
+        return;
+      }
+
+      food.associatedFoodsComplete = true;
     },
 
     addFood(data: { mealIndex: number; food: FoodState }) {
