@@ -72,12 +72,7 @@ export default defineComponent({
         customPromptAnswers: currentState?.customPromptAnswers ?? {},
         flags: currentState?.flags ?? [],
         linkedFoods: [],
-        associatedFoods: {
-          activePrompt: 0,
-          prompts: data.associatedFoodPrompts.map(() => {
-            return { confirmed: undefined };
-          }),
-        },
+        associatedFoodsComplete: false,
       };
 
       this.replaceFood({

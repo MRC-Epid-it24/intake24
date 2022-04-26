@@ -74,7 +74,7 @@ export interface EncodedFood extends AbstractFoodState {
   data: UserFoodData;
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
-  associatedFoods: AssociatedFoodsState;
+  associatedFoodsComplete: boolean;
 }
 
 export type FoodState = FreeTextFood | EncodedFood;
@@ -142,6 +142,7 @@ export type SurveyState = {
   endTime: Date | null;
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
+  associatedFoods: { [key: number]: AssociatedFoodsState };
   tempPromptAnswer?: PromptAnswer;
   selection: Selection;
   meals: MealState[];

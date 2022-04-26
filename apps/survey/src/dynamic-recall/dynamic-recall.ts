@@ -32,6 +32,7 @@ export const surveyInitialState: CurrentSurveyState = {
     foodIndex: undefined,
     prompt: undefined,
   },
+  associatedFoods: {},
   selection: {
     element: null,
     mode: 'auto',

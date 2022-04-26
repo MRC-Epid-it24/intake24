@@ -238,6 +238,15 @@ const checkFoodStandardConditions = (
       return false;
     }
 
+    case 'associated-foods-prompt': {
+      if (selectedFood.type !== 'encoded-food') return false;
+
+      return (
+        selectedFood.data.associatedFoodPrompts.length !== 0 &&
+        !selectedFood.associatedFoodsComplete
+      );
+    }
+
     default: {
       if (selectedFood.customPromptAnswers[prompt.id] === undefined) {
         recallLog().promptCheck(
