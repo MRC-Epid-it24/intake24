@@ -7,15 +7,15 @@ import {
   QueueScheduler,
   Worker,
 } from 'bullmq';
-import type { JobData, JobParams, JobType } from '@intake24/common/types';
+import type { JobData, JobParams, JobParamsList, JobType } from '@intake24/common/types';
 import { Job as DbJob } from '@intake24/db';
 import ioc, { IoC } from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
 import { QueueHandler } from './queue-handler';
 import { PushPayload } from '..';
 
-export type JobInput = {
-  type: JobType;
+export type JobInput<T extends JobType> = {
+  type: T;
   userId?: string | null;
 };
 
@@ -225,15 +225,16 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   /**
    * Add job to queue
    *
-   * @param {JobInput} input
+   * @template T
+   * @param {JobInput<T>} input
    * @param {JobParams} [params]
    * @param {JobsOptions} [options={}]
    * @returns {Promise<DbJob>}
    * @memberof JobsQueueHandler
    */
-  public async addJob(
-    input: JobInput,
-    params?: JobParams,
+  public async addJob<T extends JobType>(
+    input: JobInput<T>,
+    params?: JobParamsList[T],
     options: JobsOptions = {}
   ): Promise<DbJob> {
     const job = await DbJob.create(input);
