@@ -2,7 +2,7 @@
 
 - [Node.js](https://nodejs.org) runtime environment. System is tested with latest LTS (14.x | 16.x).
 
-- [PNPM](https://pnpm.io) Package manager with support for workspaces & mono-repository setup, which is encouraged to use for now.
+- [PNPM](https://pnpm.io) Package manager with support for workspaces & mono-repository setup.
 
 Intake24 system has three main components:
 
@@ -12,17 +12,19 @@ Intake24 system has three main components:
 
 Source code is written in Typescript and can be flexibly deployed to various environments. Source code also provides ansible roles for deployment to Ubuntu-based OS. [Deployment](/deployment/) section describes in detail how to use ansible scripts. For custom deployment, there are few requirements to consider.
 
-### API Server
+## API Server
 
-- Backend database engine. API server is using [sequelize](https://sequelize.org/master) ORM so any of supported dialects can be used.
+- Backend database engine. API server is using [sequelize](https://sequelize.org) ORM so any of supported dialects can be used.
 
 ::: tip
 Older version (v3) has been written only for Postgres and there are still few Postgres specifics that needs to be ported to dialect-agnostic code. Please contact Intake24 dev team for more details about current state of DB engines support.
 :::
 
-- [Redis](https://redis.io) is used for caching and queueing system.
+- [Redis](https://redis.io) is used for cache / queue / rate-limit / session services.
 
-### Admin & Survey applications
+- [Puppeteer](https://github.com/puppeteer/puppeteer) is used for PDF generation. Make sure your OS has all necessary components to run headless Chrome.
+
+## Admin & Survey applications
 
 Both Admin and Survey frontend applications are SPA (Single page application) written in Vue.js framework.
 
