@@ -33,6 +33,26 @@ const feedback: LocaleMessageObject = {
     },
   },
 
+  outputs: {
+    title: 'Outputs',
+    download: {
+      _: 'Download',
+      title: 'Download feedback as PDF',
+      subtitle:
+        'Download a copy of your feedback as PDF file. It will take a couple of seconds, bear with us.',
+      send: 'Submit request',
+      sent: 'Feedback PDF file has been saved.',
+    },
+    email: {
+      _: 'Email',
+      title: 'Send feedback to email',
+      send: 'Submit request',
+      sent: 'We have sent your feedback to provided email address.',
+    },
+    retry: 'Feedback output has been recently requested, please try again in {secs} s.',
+    print: 'Print',
+  },
+
   submissions: {
     _: 'Submission',
     title: 'Submissions',

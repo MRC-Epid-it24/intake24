@@ -6,7 +6,7 @@ export type RateLimit = {
   max: number;
 };
 
-export type RateLimits = Record<'login' | 'password' | 'generateUser', RateLimit>;
+export type RateLimits = Record<'login' | 'password' | 'generateUser' | 'feedback', RateLimit>;
 
 export interface RateLimiterConfig extends RateLimits {
   redis: RedisOptions;
@@ -29,6 +29,10 @@ const rateLimiterConfig: RateLimiterConfig = {
   generateUser: {
     window: ms(process.env.RATE_LIMITER_GEN_USER_WINDOW || '5m'),
     max: parseInt(process.env.RATE_LIMITER_GEN_USER_MAX || '1', 10),
+  },
+  feedback: {
+    window: ms(process.env.RATE_LIMITER_FEEDBACK_WINDOW || '1m'),
+    max: parseInt(process.env.RATE_LIMITER_FEEDBACK_MAX || '1', 10),
   },
 };
 

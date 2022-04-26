@@ -12,6 +12,7 @@ const common: LocaleMessageObject = {
 
   username: 'Username',
   email: 'Email',
+  emailConfirm: 'Confirm email',
   password: 'Password',
 
   help: 'Help',
@@ -25,6 +26,7 @@ const common: LocaleMessageObject = {
 
   action: {
     cancel: 'Cancel',
+    close: 'Close',
     continue: 'Continue',
     confirm: {
       _: 'Confirm',
@@ -33,9 +35,7 @@ const common: LocaleMessageObject = {
       yes: 'Yes',
       no: 'No',
     },
-    download: 'Download',
     ok: 'OK',
-    print: 'Print',
     reload: 'Reload',
     submit: 'Submit',
     yes: 'Yes',

@@ -4,9 +4,12 @@ import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { Controller } from '../controller';
 
-export type UserFeedbackController = Controller<'download'>;
+export type UserFeedbackController = Controller<'download' | 'email'>;
 
-export default ({ feedbackService }: Pick<IoC, 'feedbackService'>): UserFeedbackController => {
+export default ({
+  feedbackService,
+  scheduler,
+}: Pick<IoC, 'feedbackService' | 'scheduler'>): UserFeedbackController => {
   const download = async (
     req: Request<any, any, any, { survey: string }>,
     res: Response<Buffer>
@@ -25,5 +28,26 @@ export default ({ feedbackService }: Pick<IoC, 'feedbackService'>): UserFeedback
     pdfStream.pipe(res);
   };
 
-  return { download };
+  const email = async (
+    req: Request<any, any, any, { survey: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
+    const {
+      body: { email: to },
+      query: { survey: slug },
+    } = req;
+    const { id: userId } = req.user as User;
+
+    const survey = await Survey.findOne({ where: { slug } });
+    if (!survey) throw new NotFoundError();
+
+    await scheduler.jobs.addJob(
+      { type: 'SendRespondentFeedback', userId },
+      { surveyId: survey.id, userId, to }
+    );
+
+    res.json();
+  };
+
+  return { download, email };
 };

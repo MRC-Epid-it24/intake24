@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { defineComponent } from '@vue/composition-api';
 import { mapActions, mapState } from 'pinia';
 import { PublicSurveyEntryResponse } from '@intake24/common/types/http';
@@ -144,7 +144,7 @@ export default defineComponent({
         await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          const { response: { status = 0, data = {} } = {} } = err as AxiosError<any>;
+          const { response: { status = 0, data = {} } = {} } = err;
           this.status = status;
 
           if (status === 422 && 'errors' in data) this.errors.record(data.errors);

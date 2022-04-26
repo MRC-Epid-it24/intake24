@@ -5,7 +5,7 @@ export default validate(
   checkSchema({
     survey: {
       in: ['query'],
-      errorMessage: 'Missing survey parameter',
+      errorMessage: 'Missing survey parameter.',
       isString: true,
     },
   })

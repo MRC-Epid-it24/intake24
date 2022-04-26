@@ -5,8 +5,12 @@
         {{ $t('feedback.title') }}
       </div>
       <v-row no-gutters justify="center" class="pa-4 d-print-none">
-        <v-col v-if="userDemographic" cols="12" md="6">
-          <feedback-user-demographic :user-info="userDemographic"></feedback-user-demographic>
+        <v-col v-if="userDemographic" cols="12" md="7">
+          <v-row justify="space-around" class="mt-4">
+            <feedback-user-info v-bind="{ surveyId, userDemographic }"></feedback-user-info>
+            <v-divider vertical class="d-none d-sm-block"></v-divider>
+            <feedback-outputs v-bind="{ surveyId }"></feedback-outputs>
+          </v-row>
         </v-col>
       </v-row>
       <v-row no-gutters justify="center" class="pa-4 d-print-none">
@@ -75,7 +79,8 @@ import { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
 import {
   FeedbackChartArea,
   FeedbackCardArea,
-  FeedbackUserDemographic,
+  FeedbackOutputs,
+  FeedbackUserInfo,
 } from '@intake24/ui/components/feedback';
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
@@ -90,7 +95,7 @@ export type Submission = {
 export default defineComponent({
   name: 'FeedbackHome',
 
-  components: { FeedbackCardArea, FeedbackChartArea, FeedbackUserDemographic },
+  components: { FeedbackCardArea, FeedbackChartArea, FeedbackOutputs, FeedbackUserInfo },
 
   props: {
     surveyId: {
