@@ -37,7 +37,7 @@
         </v-list-item>
       </v-card-text>
     </v-list>
-    <v-card-action>
+    <v-card-actions>
       <v-hover v-slot="{ hover }">
         <v-btn
           :color="hover ? 'success' : 'inherit'"
@@ -48,7 +48,7 @@
           {{ $t('recall.menu.recall.addMeal') }}
         </v-btn>
       </v-hover>
-    </v-card-action>
+    </v-card-actions>
   </v-card>
 </template>
 
