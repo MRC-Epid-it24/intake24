@@ -45,10 +45,14 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['replaceFood']),
+    ...mapActions(useSurvey, ['replaceFood', 'getNextFoodId']),
 
     onFoodSelected(data: UserFoodData) {
-      if (this.selectedMealIndex === undefined || this.selectedFoodIndex === undefined) {
+      if (
+        this.selectedMealIndex === undefined ||
+        this.selectedFoodIndex === undefined ||
+        this.selectedFood === undefined
+      ) {
         console.warn('No selected food/meal, food/meal index undefined');
         return;
       }
@@ -60,6 +64,7 @@ export default defineComponent({
       const portionSizeMethodIndex = data.portionSizeMethods.length === 1 ? 0 : null;
 
       const newState: FoodState = {
+        id: this.selectedFood.id,
         type: 'encoded-food',
         data,
         portionSizeMethodIndex,

@@ -57,6 +57,7 @@ export interface AssociatedFoodsState {
 }
 
 export interface AbstractFoodState {
+  id: number;
   flags: string[];
   // eslint-disable-next-line no-use-before-define
   linkedFoods: FoodState[];
@@ -144,6 +145,7 @@ export type SurveyState = {
   tempPromptAnswer?: PromptAnswer;
   selection: Selection;
   meals: MealState[];
+  nextFoodId: number;
 };
 
 export interface HasOnAnswer {

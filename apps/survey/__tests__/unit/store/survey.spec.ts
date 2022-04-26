@@ -38,6 +38,7 @@ function initialState(): SurveyState {
       mode: 'auto',
     },
     meals: dummyMeals(3),
+    nextFoodId: 0,
   };
 }
 
