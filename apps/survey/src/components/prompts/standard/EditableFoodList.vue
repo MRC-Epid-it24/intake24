@@ -52,8 +52,10 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
-import { FoodState } from '@intake24/common/types';
+import { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
+import { mapActions, mapState } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
 
 export interface HasEditableFoodList {
   editableList: FoodState[];
@@ -82,6 +84,8 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
   },
 
   methods: {
+    ...mapActions(useSurvey, ['getNextFoodId']),
+
     addFood() {
       if (this.editIndex != null) {
         const editEntry = this.editableList[this.editIndex];
@@ -90,13 +94,16 @@ export default (Vue as VueConstructor<Vue & HasEditableFoodList>).extend({
       }
       if (this.newFoodDescription.length === 0) return;
 
-      this.editableList.push({
+      const newFood: FreeTextFood = {
+        id: this.getNextFoodId(),
         type: 'free-text',
         description: this.newFoodDescription,
         flags: this.drinks ? ['is-drink'] : [],
         customPromptAnswers: {},
         linkedFoods: [],
-      });
+      };
+
+      this.editableList.push(newFood);
 
       this.edit(this.editableList.length - 1);
       this.newFoodDescription = '';

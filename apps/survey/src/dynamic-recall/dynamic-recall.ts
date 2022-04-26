@@ -37,6 +37,7 @@ export const surveyInitialState: CurrentSurveyState = {
     mode: 'auto',
   },
   meals: [],
+  nextFoodId: 0,
 };
 
 export default class DynamicRecall {
