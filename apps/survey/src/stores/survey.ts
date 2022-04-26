@@ -372,6 +372,9 @@ export const useSurvey = defineStore('survey', {
         prompt: undefined,
       });
     },
+    getNextFoodId(): number {
+      return this.data.nextFoodId++;
+    },
   },
 });
 
