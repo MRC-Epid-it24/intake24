@@ -3,27 +3,20 @@
     <v-card-actions :class="isNotDesktop && 'justify-center'">
       <v-row>
         <v-col>
-          <v-expansion-panels v-model="activePrompt">
+          <v-expansion-panels v-model="activePromptModel">
             <v-expansion-panel v-for="(assocFood, index) in associatedFoodPrompts" :key="index">
               <v-expansion-panel-header disable-icon-rotate>
                 {{ assocFood.promptText }}
                 <template v-slot:actions>
                   <valid-invalid-icon
-                    :valid="associatedFoodsState.prompts[index].confirmed !== undefined"
+                    :valid="prompts[index].confirmed !== undefined"
                   ></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-btn-toggle
-                  :value="associatedFoodsState.prompts[index].confirmed"
-                  @change="updatePromptState(index, $event)"
-                >
+                <v-btn-toggle v-model="prompts[index]">
                   <v-btn value="false"> {{ $t('prompts.associatedFoods.no') }}</v-btn>
                   <v-btn value="true"> {{ $t('prompts.associatedFoods.yes') }}</v-btn>
-
-                  <food-browser>
-
-                  </food-browser>
                 </v-btn-toggle>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -42,6 +35,8 @@ import { BasePromptProps } from '@intake24/common/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 import { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
+import { AssociatedFoodPromptState } from '@intake24/common/types';
+import { copy } from '@intake24/common/util';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
@@ -68,21 +63,33 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     },
   },
 
+  data() {
+    return {
+      store: useSurvey(),
+      activePrompt: useSurvey().selectedEncodedFood?.associatedFoods.activePrompt || 0,
+      prompts: copy(useSurvey().selectedEncodedFood?.associatedFoods.prompts) || [],
+    };
+  },
+
   computed: {
     ...mapState(useSurvey, {
       associatedFoodPrompts: (state) => state.selectedEncodedFood?.data.associatedFoodPrompts,
-      associatedFoodsState: (state) => state.selectedEncodedFood?.associatedFoods,
       selectedFoodIndex: (state) => state.selectedFoodIndex,
       selectedMealIndex: (state) => state.selectedMealIndex,
     }),
 
-    activePrompt: {
-      get(): number | undefined {
-        return this.associatedFoodsState?.activePrompt;
+    activePromptModel: {
+      get(): number {
+        return this.activePrompt;
       },
 
       set(value: number) {
-        this.updateActivePrompt(value);
+        this.activePrompt = value;
+        this.store.updateActiveAssociatedFoodsPrompt({
+          mealIndex: this.selectedMealIndex!,
+          foodIndex: this.selectedFoodIndex!,
+          activePromptIndex: this.activePrompt,
+        });
       },
     },
 
