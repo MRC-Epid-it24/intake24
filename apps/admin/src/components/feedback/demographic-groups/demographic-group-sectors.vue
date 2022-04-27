@@ -92,7 +92,7 @@
 import isEqual from 'lodash/isEqual';
 import { defineComponent, PropType } from '@vue/composition-api';
 import { DemographicGroupScaleSector, sentiments } from '@intake24/common/feedback';
-import tinymce from '@intake24/admin/components/tinymce/tinymce';
+import { tinymce } from '@intake24/admin/components/tinymce';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { copy } from '@intake24/common/util';
 import { RuleCallback } from '@intake24/admin/types';

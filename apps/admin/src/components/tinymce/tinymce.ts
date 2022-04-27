@@ -30,6 +30,7 @@ export default defineComponent({
         skin_url: `${baseUrl}/css/tinymce/ui/oxide`,
         // TODO: this should point to frontend stylesheet
         content_css: `${baseUrl}/css/tinymce/content/default/content.min.css`,
+        directionality: this.$vuetify.rtl ? 'rtl' : 'ltr',
         default_link_target: '_blank',
         height: 400,
         menubar: false,
