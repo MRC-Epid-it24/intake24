@@ -37,7 +37,7 @@ import{_ as s,c as e,o as a,a as n}from"./app.df7875f4.js";const v='{"title":"Su
 <span class="token punctuation">{</span>
     ...
 <span class="token punctuation">}</span>
-</code></pre></div><h2 id="update-survey-scheme" tabindex="-1">Update survey scheme <a class="header-anchor" href="#update-survey-scheme" aria-hidden="true">#</a></h2><p>Update survey scheme entry</p><h3 id="request-3" tabindex="-1">Request <a class="header-anchor" href="#request-3" aria-hidden="true">#</a></h3><div class="language-http"><pre><code>PUT /api/admin/survey-schemes/:surveySchemeId
+</code></pre></div><h2 id="update-survey-scheme" tabindex="-1">Update survey scheme <a class="header-anchor" href="#update-survey-scheme" aria-hidden="true">#</a></h2><p>Update survey scheme entry</p><h3 id="request-3" tabindex="-1">Request <a class="header-anchor" href="#request-3" aria-hidden="true">#</a></h3><div class="language-http"><pre><code>PATCH /api/admin/survey-schemes/:surveySchemeId
 
 <span class="token header"><span class="token header-name keyword">Authorization</span><span class="token punctuation">:</span> <span class="token header-value">Bearer {accessToken}</span></span>
 <span class="token header"><span class="token header-name keyword">Content-Type</span><span class="token punctuation">:</span> <span class="token header-value">application/json</span></span>
