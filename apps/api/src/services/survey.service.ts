@@ -2,8 +2,9 @@ import { startOfDay, addMinutes, addDays } from 'date-fns';
 import { randomUUID } from 'crypto';
 import { randomString } from '@intake24/common/util';
 import {
-  Op,
+  FindOptions,
   GenUserCounter,
+  Op,
   Survey,
   SurveySubmission,
   SurveySubmissionCustomField,
@@ -224,11 +225,15 @@ const surveyService = ({
   /**
    * Get user's submissions
    *
-   * @param {SubmissionScope} options
+   * @param {SubmissionScope} scopeOptions
+   * @param {FindOptions} [options={}]
    * @returns {Promise<SurveySubmission[]>}
    */
-  const getSubmissions = async (options: SubmissionScope): Promise<SurveySubmission[]> =>
-    SurveySubmission.findAll(submissionScope(options));
+  const getSubmissions = async (
+    scopeOptions: SubmissionScope,
+    options: FindOptions = {}
+  ): Promise<SurveySubmission[]> =>
+    SurveySubmission.findAll(submissionScope(scopeOptions, options));
 
   /**
    * Resolve follow-up URL, if any

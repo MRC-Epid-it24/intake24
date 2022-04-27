@@ -31,7 +31,7 @@ const feedbackService = ({ appConfig, fsConfig }: Pick<IoC, 'appConfig' | 'fsCon
   };
 
   const getPhysicalActivityLevels = async (): Promise<PhysicalActivityLevelAttributes[]> =>
-    PhysicalActivityLevel.findAll({ order: [['id', 'ASC']] });
+    PhysicalActivityLevel.findAll({ order: [['id', 'ASC']], raw: true });
 
   const getWeightTargets = async (): Promise<WeightTargetCoefficient[]> => weightTargetsData;
 
