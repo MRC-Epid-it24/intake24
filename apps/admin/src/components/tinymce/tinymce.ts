@@ -2,20 +2,21 @@ import { defineComponent } from '@vue/composition-api';
 import trimEnd from 'lodash/trimEnd';
 
 import 'tinymce/tinymce';
+
 import 'tinymce/icons/default';
+
 import 'tinymce/themes/silver';
+import 'tinymce/models/dom';
+
 import 'tinymce/plugins/advlist';
 import 'tinymce/plugins/autolink';
 import 'tinymce/plugins/code';
 import 'tinymce/plugins/fullscreen';
-import 'tinymce/plugins/hr';
 import 'tinymce/plugins/image';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/media';
-import 'tinymce/plugins/paste';
 import 'tinymce/plugins/preview';
-import 'tinymce/plugins/print';
 import 'tinymce/plugins/table';
 
 import Editor from '@tinymce/tinymce-vue';
@@ -34,7 +35,15 @@ export default defineComponent({
         menubar: false,
         paste_as_text: true,
         plugins: [
-          'advlist autolink code fullscreen hr image link lists media paste preview print table',
+          'advlist',
+          'autolink',
+          'code',
+          'fullscreen',
+          'image',
+          'lists',
+          'media',
+          'preview',
+          'table',
         ],
         toolbar:
           'undo redo | formatselect | bold italic strikethrough | forecolor backcolor | hr | link image media | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | preview fullscreen code',

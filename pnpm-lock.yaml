@@ -100,7 +100,7 @@ importers:
       register-service-worker: ^1.7.2
       sass: ~1.32.13
       sass-loader: ~10.2.1
-      tinymce: ^5.10.4
+      tinymce: ^6.0.2
       vue: ^2.6.14
       vue-cli-plugin-vuetify: ^2.4.8
       vue-i18n: ^8.27.1
@@ -135,7 +135,7 @@ importers:
       pluralize: 8.0.0
       regenerator-runtime: 0.13.9
       register-service-worker: 1.7.2
-      tinymce: 5.10.4
+      tinymce: 6.0.2
       vue: 2.6.14
       vue-i18n: 8.27.1
       vue-ls: 4.2.0
@@ -13956,8 +13956,8 @@ packages:
       next-tick: 1.1.0
     dev: true
 
-  /tinymce/5.10.4:
-    resolution: {integrity: sha512-L0ivAhGu7bEo6cUBrCzhtKlkIQqG2sTcL+uu7soMSxrECQIC5VwUnzp9HCEf+fRl36q6zavLV48lf8jelj+gXA==}
+  /tinymce/6.0.2:
+    resolution: {integrity: sha512-i4OEzcTF6mGxZ+scumOoWiaI9HYn6uya980hJ+9jwnhgLbhBb+73ar2t9Ewfkns3DTl2Ez3r1pQs2tpT+ka29Q==}
     dev: false
 
   /tmpl/1.0.5:
