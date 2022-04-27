@@ -22,7 +22,7 @@ export default ({
     if (!survey) throw new NotFoundError();
 
     const data = await cache.remember(`user:submissions:${userId}`, '1d', async () =>
-      surveyService.getSubmissions({ userId, surveyId: survey.id }, { raw: true, nest: true })
+      surveyService.getSubmissions({ userId, surveyId: survey.id })
     );
 
     res.json(data as SurveySubmissionEntry[]);
