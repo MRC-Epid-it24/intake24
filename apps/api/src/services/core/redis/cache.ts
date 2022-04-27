@@ -1,4 +1,5 @@
 import ms from 'ms';
+import stringify from 'safe-stable-stringify';
 import type { IoC } from '@intake24/api/ioc';
 import HasRedisClient from './redis-store';
 
@@ -42,7 +43,7 @@ export default class Cache extends HasRedisClient {
    * @memberof Cache
    */
   async set(key: string, value: any, expiresIn?: number | string): Promise<boolean> {
-    const args: [string, string, string?, number?] = [key, JSON.stringify(value)];
+    const args: [string, string, string?, number?] = [key, stringify(value)];
     if (expiresIn)
       args.push('px', typeof expiresIn === 'string' ? ms(expiresIn) : expiresIn * 1000);
 
