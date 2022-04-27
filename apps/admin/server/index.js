@@ -44,6 +44,9 @@ const startApp = async () => {
           ],
         },
       },
+      crossOriginEmbedderPolicy: false,
+      crossOriginOpenerPolicy: false,
+      crossOriginResourcePolicy: false,
     })
   );
 

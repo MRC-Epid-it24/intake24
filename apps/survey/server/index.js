@@ -40,6 +40,9 @@ const startApp = () => {
           ],
         },
       },
+      crossOriginEmbedderPolicy: false,
+      crossOriginOpenerPolicy: false,
+      crossOriginResourcePolicy: false,
     })
   );
 

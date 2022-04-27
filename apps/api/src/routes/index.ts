@@ -40,7 +40,9 @@ const staticContentHelmet = helmet({
       ],
     },
   },
-  crossOriginResourcePolicy: { policy: 'cross-origin' },
+  crossOriginEmbedderPolicy: false,
+  crossOriginOpenerPolicy: false,
+  crossOriginResourcePolicy: false,
 });
 
 export default (app: Express, { config }: Ops): void => {
