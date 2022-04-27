@@ -36,7 +36,7 @@ export default () => {
   router.use('/:surveyId/respondents', surveyRespondents());
   router.use('/:surveyId/submissions', surveySubmissions());
 
-  router.use('/:surveyId/securables', securables(adminSurveyController.securables));
+  router.use('/:surveyId/securables', securables('Survey', adminSurveyController.securables));
 
   return router;
 };

@@ -39,7 +39,10 @@ export default () => {
   );
   router.get('/:surveySchemeId/data-export', wrapAsync(surveySchemeController.dataExportRefs));
 
-  router.use('/:surveySchemeId/securables', securables(surveySchemeController.securables));
+  router.use(
+    '/:surveySchemeId/securables',
+    securables('SurveyScheme', surveySchemeController.securables)
+  );
 
   return router;
 };

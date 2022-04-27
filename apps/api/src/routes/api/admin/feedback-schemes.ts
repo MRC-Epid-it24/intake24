@@ -33,7 +33,10 @@ export default () => {
   router.get('/:feedbackSchemeId/edit', wrapAsync(feedbackSchemeController.edit));
   router.post('/:feedbackSchemeId/copy', validation.copy, wrapAsync(feedbackSchemeController.copy));
 
-  router.use('/:feedbackSchemeId/securables', securables(feedbackSchemeController.securables));
+  router.use(
+    '/:feedbackSchemeId/securables',
+    securables('FeedbackScheme', feedbackSchemeController.securables)
+  );
 
   return router;
 };

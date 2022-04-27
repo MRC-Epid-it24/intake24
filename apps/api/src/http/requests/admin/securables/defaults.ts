@@ -1,20 +1,18 @@
 import type { Schema } from 'express-validator';
+import { SecurableType, securableDefs } from '@intake24/common/security';
 
-const defaults: Schema = {
+export default (securable: SecurableType): Schema => ({
   actions: {
     in: ['body'],
     custom: {
       options: async (value): Promise<void> => {
-        // TODO: validate action per securable type
         if (
           !Array.isArray(value) ||
           !value.length ||
-          value.some((action) => typeof action !== 'string')
+          value.some((action) => !securableDefs[securable].includes(action))
         )
-          throw new Error('Invalid securable action');
+          throw new Error('Invalid securable action.');
       },
     },
   },
-};
-
-export default defaults;
+});
