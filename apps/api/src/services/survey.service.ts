@@ -43,8 +43,9 @@ export type RespondentFromJWT = {
 
 const surveyService = ({
   adminSurveyService,
+  cache,
   scheduler,
-}: Pick<IoC, 'adminSurveyService' | 'scheduler'>) => {
+}: Pick<IoC, 'adminSurveyService' | 'cache' | 'scheduler'>) => {
   /**
    * Generate random survey respondent
    *
@@ -326,6 +327,7 @@ const surveyService = ({
           meals: { preFoods, postFoods },
         },
       },
+      submissionNotificationUrl,
     } = survey;
 
     const surveyCustomQuestions = [...preMeals, ...postMeals]
@@ -401,12 +403,18 @@ const surveyService = ({
       // TODO: process foods
     }
 
-    if (survey.submissionNotificationUrl) {
-      await scheduler.jobs.addJob(
-        { type: 'SurveySubmissionNotification', userId },
-        { surveyId, submissionId: surveySubmissionId }
-      );
-    }
+    // Clean user submissions cache and dispatch submission webhook if any
+    await Promise.all(
+      [
+        cache.forget(`user:submissions:${userId}`),
+        submissionNotificationUrl
+          ? scheduler.jobs.addJob(
+              { type: 'SurveySubmissionNotification', userId },
+              { surveyId, submissionId: surveySubmissionId }
+            )
+          : null,
+      ].map(Boolean)
+    );
 
     const [followUpUrl, showFeedback] = await Promise.all([
       getFollowUpUrl(survey, userId),

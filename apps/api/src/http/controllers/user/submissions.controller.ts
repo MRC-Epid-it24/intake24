@@ -7,7 +7,10 @@ import type { Controller } from '../controller';
 
 export type UserSubmissionsController = Controller<'submissions'>;
 
-export default ({ surveyService }: Pick<IoC, 'surveyService'>): UserSubmissionsController => {
+export default ({
+  cache,
+  surveyService,
+}: Pick<IoC, 'cache' | 'surveyService'>): UserSubmissionsController => {
   const submissions = async (
     req: Request<any, any, any, { survey: string | string[] }>,
     res: Response<SurveySubmissionEntry[]>
@@ -18,7 +21,9 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): UserSubmissionsC
     const survey = await Survey.findOne({ where: { slug } });
     if (!survey) throw new NotFoundError();
 
-    const data = await surveyService.getSubmissions({ userId, surveyId: survey.id });
+    const data = await cache.remember(`user:submissions:${userId}`, '1d', async () =>
+      surveyService.getSubmissions({ userId, surveyId: survey.id })
+    );
 
     res.json(data as SurveySubmissionEntry[]);
   };
