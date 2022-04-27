@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
-import { Survey, User } from '@intake24/db';
+import { FeedbackScheme, Survey, User } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
-import { NotFoundError } from '@intake24/api/http/errors';
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { Controller } from '../controller';
 
 export type UserFeedbackController = Controller<'download' | 'email'>;
@@ -17,8 +17,10 @@ export default ({
     const { survey: slug } = req.query;
     const { id: userId } = req.user as User;
 
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findOne({ where: { slug }, include: [{ model: FeedbackScheme }] });
     if (!survey) throw new NotFoundError();
+
+    if (!survey.feedbackScheme?.outputs.includes('download')) throw new ForbiddenError();
 
     const { pdfStream } = await feedbackService.getFeedbackStream(survey.id, userId);
     const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
@@ -38,8 +40,10 @@ export default ({
     } = req;
     const { id: userId } = req.user as User;
 
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findOne({ where: { slug }, include: [{ model: FeedbackScheme }] });
     if (!survey) throw new NotFoundError();
+
+    if (!survey.feedbackScheme?.outputs.includes('email')) throw new ForbiddenError();
 
     await scheduler.jobs.addJob(
       { type: 'SendRespondentFeedback', userId },

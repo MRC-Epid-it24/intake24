@@ -1,6 +1,9 @@
 export const feedbackTypes = ['default', 'playful'] as const;
 export type FeedbackType = typeof feedbackTypes[number];
 
+export const feedbackOutputs = ['download', 'email', 'print'] as const;
+export type FeedbackOutput = typeof feedbackOutputs[number];
+
 export const nutrientRuleTypes = [
   'energy_divided_by_bmr',
   'percentage_of_energy',

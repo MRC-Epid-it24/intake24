@@ -5,7 +5,7 @@ import validator from 'validator';
 import { Op, WhereOptions, FeedbackScheme } from '@intake24/db';
 import { FeedbackSchemeAttributes } from '@intake24/common/types/models';
 import { unique } from '@intake24/api/http/rules';
-import { feedbackTypes } from '@intake24/common/feedback';
+import { feedbackOutputs, feedbackTypes } from '@intake24/common/feedback';
 import { validateDemographicGroups, validateHenryCoefficients } from '@intake24/common/validators';
 
 export const name: ParamSchema = {
@@ -37,9 +37,18 @@ export const defaults: Schema = {
     isEmpty: { negated: true },
     isIn: { options: [feedbackTypes] },
   },
+  outputs: {
+    in: ['body'],
+    custom: {
+      options: async (value): Promise<void> => {
+        if (!Array.isArray(value) || value.some((action) => !feedbackOutputs.includes(action)))
+          throw new Error('Invalid feedback output.');
+      },
+    },
+  },
   'topFoods.max': {
     in: ['body'],
-    errorMessage: 'Top foods number must be integer',
+    errorMessage: 'Top foods number must be integer.',
     isInt: true,
     toInt: true,
   },

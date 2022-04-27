@@ -15,6 +15,7 @@ import type {
 } from '@intake24/common/types/models';
 import {
   defaultTopFoods,
+  FeedbackOutput,
   FeedbackType,
   Card,
   TopFoods,
@@ -56,6 +57,20 @@ export default class FeedbackScheme
     type: DataType.STRING(64),
   })
   public type!: FeedbackType;
+
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT,
+  })
+  get outputs(): FeedbackOutput[] {
+    const val = this.getDataValue('outputs') as unknown;
+    return val ? JSON.parse(val as string) : [];
+  }
+
+  set outputs(value: FeedbackOutput[]) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('outputs', JSON.stringify(value ?? []));
+  }
 
   @Column({
     allowNull: false,

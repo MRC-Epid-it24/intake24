@@ -18,6 +18,12 @@
           <th>{{ $t('feedback-schemes.types._') }}</th>
           <td>{{ entry.type }}</td>
         </tr>
+        <tr>
+          <th>{{ $t('feedback-schemes.outputs.title') }}</th>
+          <td>
+            {{ entry.outputs.map((output) => $t(`feedback-schemes.outputs.${output}`)).join(', ') }}
+          </td>
+        </tr>
       </tbody>
     </v-simple-table>
   </layout>

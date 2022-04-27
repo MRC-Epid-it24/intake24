@@ -43,6 +43,7 @@ export default () => {
       const invalidInput = {
         name: [],
         type: 'invalidType',
+        outputs: 'not an array of outputs',
         topFoods: {
           max: false,
           colors: 10,
@@ -62,6 +63,7 @@ export default () => {
       const fields = [
         'name',
         'type',
+        'outputs',
         'topFoods.max',
         'topFoods.colors',
         'topFoods.nutrientTypes',

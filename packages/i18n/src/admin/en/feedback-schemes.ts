@@ -11,6 +11,21 @@ const feedbackSchemes: LocaleMessageObject = {
   load: 'Load section from feedback scheme',
   none: 'No feedback scheme found',
 
+  types: {
+    _: 'Feedback type',
+    title: 'Feedback types',
+    default: 'Default',
+    playful: 'Playful',
+  },
+
+  outputs: {
+    _: 'Output',
+    title: 'Outputs',
+    print: 'Print',
+    email: 'Email',
+    download: 'Download',
+  },
+
   copy: {
     _: 'Copy',
     title: 'Copy feedback scheme',
@@ -89,13 +104,6 @@ const feedbackSchemes: LocaleMessageObject = {
     warning: 'Warning',
     happy: 'Happy',
     exciting: 'Exciting',
-  },
-
-  types: {
-    _: 'Feedback type',
-    title: 'Feedback types',
-    default: 'Default',
-    playful: 'Playful',
   },
 
   nutrientRuleTypes: {

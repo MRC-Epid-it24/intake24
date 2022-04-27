@@ -28,6 +28,7 @@ export default () => {
       await suite.sharedTests.assertInvalidInput('post', url, [
         'name',
         'type',
+        'outputs',
         'topFoods.max',
         'topFoods.colors',
         'topFoods.nutrientTypes',
@@ -41,6 +42,7 @@ export default () => {
       const invalidInput = {
         name: [],
         type: 'invalidType',
+        outputs: ['print', 'invalid', 'download'],
         topFoods: [],
         // cards: 'notAnArray',
         demographicGroups: [
@@ -66,6 +68,7 @@ export default () => {
       const fields = [
         'name',
         'type',
+        'outputs',
         'topFoods.max',
         'topFoods.colors',
         'topFoods.nutrientTypes',

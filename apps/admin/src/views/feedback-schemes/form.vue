@@ -34,6 +34,19 @@
                 @change="form.errors.clear('type')"
               ></v-select>
             </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.outputs"
+                :items="feedbackOutputs"
+                :error-messages="form.errors.get('outputs')"
+                :label="$t('feedback-schemes.outputs.title')"
+                hide-details="auto"
+                multiple
+                name="outputs"
+                outlined
+                @change="form.errors.clear('outputs')"
+              ></v-select>
+            </v-col>
           </v-row>
         </v-card-text>
       </v-container>
@@ -50,6 +63,8 @@ import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
 import {
+  FeedbackOutput,
+  feedbackOutputs,
   FeedbackType,
   feedbackTypes,
   Card,
@@ -65,13 +80,14 @@ export type FeedbackSchemeForm = {
   id: string | null;
   name: string | null;
   type: FeedbackType;
+  outputs: FeedbackOutput[];
   topFoods: TopFoods;
   cards: Card[];
   demographicGroups: DemographicGroup[];
   henryCoefficients: HenryCoefficient[];
 };
 
-export type PatchFeedbackSchemeForm = Pick<FeedbackSchemeForm, 'name' | 'type'>;
+export type PatchFeedbackSchemeForm = Pick<FeedbackSchemeForm, 'name' | 'type' | 'outputs'>;
 
 export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).extend({
   name: 'SchemeForm',
@@ -86,10 +102,15 @@ export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).ext
       form: form<PatchFeedbackSchemeForm>({
         name: null,
         type: 'default',
+        outputs: [...feedbackOutputs],
       }),
       feedbackTypes: feedbackTypes.map((value) => ({
         value,
         text: this.$t(`feedback-schemes.types.${value}`),
+      })),
+      feedbackOutputs: feedbackOutputs.map((value) => ({
+        value,
+        text: this.$t(`feedback-schemes.outputs.${value}`),
       })),
     };
   },

@@ -35,27 +35,23 @@ export const submissionScope = ({
     include: [
       {
         model: User,
-        include: [
-          { model: UserSurveyAlias, where, required: false },
-          { model: UserCustomField, separate: true },
-        ],
+        include: [{ model: UserSurveyAlias, where, required: false }, { model: UserCustomField }],
       },
-      { model: SurveySubmissionCustomField, separate: true },
+      { model: SurveySubmissionCustomField },
       {
         model: SurveySubmissionMeal,
-        separate: true,
         include: [
-          { model: SurveySubmissionMealCustomField, separate: true },
+          { model: SurveySubmissionMealCustomField },
           {
             model: SurveySubmissionFood,
             separate: true,
             include: [
               { model: SurveySubmissionFoodCustomField },
-              { model: SurveySubmissionField, separate: true },
+              { model: SurveySubmissionField },
               {
                 model: SurveySubmissionNutrient,
                 separate: true,
-                include: [{ model: SystemNutrientType, required: true }],
+                include: [{ model: SystemNutrientType }],
               },
               { model: SurveySubmissionPortionSizeField, separate: true },
             ],

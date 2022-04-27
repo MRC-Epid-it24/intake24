@@ -42,7 +42,15 @@ Content-Type: application/json
 {
     "name": string,
     "type": 'default',
-    "topFoods": {...},
+    "outputs": ['download', 'email', 'print'],
+    "topFoods": {
+        max: 2,
+        colors: ['#FF6384', '#36A2EB', ...],
+        nutrientTypes: [
+            { id: '1', name: { en: 'Energy' } },
+            ...
+        ],
+    },
     "cards": [{...}],
     "demographicGroups": [{...}],
     "henryCoefficients": [{...}],
@@ -89,7 +97,7 @@ Update feedback scheme entry
 ### Request
 
 ```http
-PUT /api/admin/feedback-schemes/:feedbackSchemeId
+PATCH /api/admin/feedback-schemes/:feedbackSchemeId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -97,7 +105,15 @@ Content-Type: application/json
 {
     "name": string,
     "type": 'default',
-    "topFoods": {...},
+    "outputs": ['download', 'email', 'print'],
+    "topFoods": {
+        max: 2,
+        colors: ['#FF6384', '#36A2EB', ...],
+        nutrientTypes: [
+            { id: '1', name: { en: 'Energy' } },
+            ...
+        ],
+    },
     "cards": [{...}],
     "demographicGroups": [{...}],
     "henryCoefficients": [{...}],

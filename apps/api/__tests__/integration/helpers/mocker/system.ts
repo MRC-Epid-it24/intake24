@@ -21,7 +21,7 @@ import {
 } from '@intake24/common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
 import { customPromptQuestions } from '@intake24/common/prompts';
-import { defaultTopFoods } from '@intake24/common/feedback';
+import { defaultTopFoods, feedbackOutputs } from '@intake24/common/feedback';
 
 const permission = (): PermissionRequest => {
   const displayName = faker.random.words(2);
@@ -102,6 +102,7 @@ const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
   return {
     name,
     type,
+    outputs: [...feedbackOutputs],
     topFoods: defaultTopFoods,
     cards: [],
     demographicGroups: [

@@ -88,7 +88,7 @@ Update survey scheme entry
 ### Request
 
 ```http
-PUT /api/admin/survey-schemes/:surveySchemeId
+PATCH /api/admin/survey-schemes/:surveySchemeId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

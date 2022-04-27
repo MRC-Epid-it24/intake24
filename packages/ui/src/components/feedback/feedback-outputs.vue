@@ -4,6 +4,7 @@
       {{ $t('feedback.outputs.title') }}
     </div>
     <v-btn
+      v-if="outputs.includes('print')"
       link
       class="mb-3"
       color="primary"
@@ -14,7 +15,7 @@
       <v-icon left>fas fa-print</v-icon>
       {{ $t('feedback.outputs.print') }}
     </v-btn>
-    <v-dialog v-model="email.dialog" max-width="450px">
+    <v-dialog v-if="outputs.includes('email')" v-model="email.dialog" max-width="450px">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           v-bind="attrs"
@@ -96,7 +97,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="download.dialog" max-width="450px">
+    <v-dialog v-if="outputs.includes('download')" v-model="download.dialog" max-width="450px">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           v-bind="attrs"
@@ -162,15 +163,20 @@
 
 <script lang="ts">
 import axios from 'axios';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { Errors } from '@intake24/common/util';
 import { downloadFile } from '@intake24/ui/util';
 import { useLoading } from '@intake24/ui/stores';
+import { FeedbackOutput } from '@intake24/common/feedback';
 
 export default defineComponent({
   name: 'FeedbackOutputs',
 
   props: {
+    outputs: {
+      type: Array as PropType<FeedbackOutput[]>,
+      default: () => [],
+    },
     surveyId: {
       type: String,
       required: true,

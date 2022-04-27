@@ -17,7 +17,7 @@ import {
   Role,
 } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
-import { defaultTopFoods } from '@intake24/common/feedback';
+import { defaultTopFoods, feedbackOutputs } from '@intake24/common/feedback';
 
 export type MockData = {
   foods: {
@@ -260,6 +260,7 @@ export const initDatabase = async (): Promise<MockData> => {
     FeedbackScheme.create({
       name: 'Default',
       type: 'default',
+      outputs: [...feedbackOutputs],
       topFoods: { ...defaultTopFoods },
       cards: [],
       demographicGroups: [],

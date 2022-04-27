@@ -5,11 +5,21 @@
         {{ $t('feedback.title') }}
       </div>
       <v-row no-gutters justify="center" class="pa-4 d-print-none">
-        <v-col v-if="userDemographic" cols="12" md="7">
+        <v-col cols="12" md="7">
           <v-row justify="space-around" class="mt-4">
-            <feedback-user-info v-bind="{ surveyId, userDemographic }"></feedback-user-info>
-            <v-divider vertical class="d-none d-sm-block"></v-divider>
-            <feedback-outputs v-bind="{ surveyId }"></feedback-outputs>
+            <feedback-user-info
+              v-bind="{ surveyId, userDemographic }"
+              v-if="userDemographic"
+            ></feedback-user-info>
+            <v-divider
+              v-if="userDemographic && !!outputs.length"
+              vertical
+              class="d-none d-sm-block"
+            ></v-divider>
+            <feedback-outputs
+              v-bind="{ outputs, surveyId }"
+              v-if="!!outputs.length"
+            ></feedback-outputs>
           </v-row>
         </v-col>
       </v-row>
@@ -84,6 +94,7 @@ import {
 } from '@intake24/ui/components/feedback';
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
+import { FeedbackOutput } from '@intake24/common/feedback';
 
 export type Submission = {
   id: string;
@@ -121,6 +132,10 @@ export default defineComponent({
 
     feedbackScheme(): FeedbackSchemeEntryResponse | undefined {
       return this.parameters?.feedbackScheme;
+    },
+
+    outputs(): FeedbackOutput[] {
+      return this.feedbackScheme?.outputs ?? [];
     },
 
     submissions(): Submission[] {

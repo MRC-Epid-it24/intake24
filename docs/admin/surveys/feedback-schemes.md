@@ -14,6 +14,8 @@ Edit tab allows to modify selected feedback scheme.
 
 - `Type` - Placeholder at the moment for future to allow to define various types of feedback schemes
 
+- `Outputs` - List of outputs that are allowed / offered to user. Possible outputs are `print`, `download` and `email`.
+
 ## Top foods
 
 Settings to populate top foods feedback section. It controls top foods lists and nutrient composition pie charts.

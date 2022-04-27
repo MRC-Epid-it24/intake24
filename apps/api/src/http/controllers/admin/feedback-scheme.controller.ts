@@ -137,7 +137,7 @@ export default (ioc: IoC): FeedbackSchemeController => {
     } else {
       const actions = await aclService.getAccessActions(feedbackScheme, 'feedback-schemes');
 
-      if (actions.includes('edit')) keysToUpdate.push('name', 'type');
+      if (actions.includes('edit')) keysToUpdate.push('name', 'type', 'outputs');
 
       ['topFoods', 'cards', 'demographicGroups', 'henryCoefficients'].forEach((item) => {
         if (actions.includes(kebabCase(item))) keysToUpdate.push(item);
@@ -187,11 +187,12 @@ export default (ioc: IoC): FeedbackSchemeController => {
 
     const { name } = req.body;
     const { userId } = req.scope.cradle;
-    const { type, topFoods, cards, demographicGroups, henryCoefficients } = feedbackScheme;
+    const { type, outputs, topFoods, cards, demographicGroups, henryCoefficients } = feedbackScheme;
 
     const feedbackSchemeCopy = await FeedbackScheme.create({
       name,
       type,
+      outputs,
       topFoods,
       cards,
       demographicGroups,
