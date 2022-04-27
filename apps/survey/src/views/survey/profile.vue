@@ -12,7 +12,7 @@
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.provider') }}</v-list-item-title>
                 <v-list-item-subtitle>
-                  {{ profile.provider.provider || $t('common.not.provided') }}
+                  {{ profile.subject.provider || $t('common.not.provided') }}
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -23,7 +23,7 @@
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.providerId') }}</v-list-item-title>
                 <v-list-item-subtitle>
-                  {{ profile.provider.providerKey || $t('common.not.provided') }}
+                  {{ profile.subject.providerKey || $t('common.not.provided') }}
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
