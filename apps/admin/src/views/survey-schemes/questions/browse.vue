@@ -62,8 +62,6 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import {
-  defaultExport,
-  defaultMeals,
   defaultQuestions,
   flattenScheme,
   isMealSection,
@@ -85,6 +83,8 @@ import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
 import { SurveySchemeForm } from '../form.vue';
 
+export type SurveySchemeQuestionsForm = Pick<SurveySchemeForm, 'questions'>;
+
 export default (Vue as VueConstructor<Vue & FormMixin<SurveySchemeEntry, SurveySchemeRefs>>).extend(
   {
     name: 'SurveySchemeQuestions',
@@ -95,14 +95,8 @@ export default (Vue as VueConstructor<Vue & FormMixin<SurveySchemeEntry, SurveyS
 
     data() {
       return {
-        form: form<SurveySchemeForm>({
-          id: null,
-          name: null,
-          type: 'default',
-          questions: defaultQuestions,
-          meals: defaultMeals,
-          dataExport: defaultExport,
-        }),
+        editMethod: 'patch',
+        form: form<SurveySchemeQuestionsForm>({ questions: defaultQuestions }),
         sections: {
           survey: surveySections,
           meal: mealSections,

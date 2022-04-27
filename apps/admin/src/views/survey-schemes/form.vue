@@ -48,9 +48,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import {
-  defaultExport,
   defaultMeals,
-  defaultQuestions,
   RecallQuestions,
   SchemeType,
   schemeTypes,
@@ -72,6 +70,8 @@ export type SurveySchemeForm = {
   dataExport: ExportSection[];
 };
 
+export type PatchSurveySchemeForm = Pick<SurveySchemeForm, 'name' | 'type' | 'meals'>;
+
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SurveySchemeForm',
 
@@ -81,13 +81,11 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   data() {
     return {
-      form: form<SurveySchemeForm>({
-        id: null,
+      editMethod: 'patch',
+      form: form<PatchSurveySchemeForm>({
         name: null,
         type: 'default',
-        questions: defaultQuestions,
         meals: defaultMeals,
-        dataExport: defaultExport,
       }),
       schemeTypes: schemeTypes.map((value) => ({
         value,

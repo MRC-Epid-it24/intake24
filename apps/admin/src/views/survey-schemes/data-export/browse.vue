@@ -63,13 +63,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
-import {
-  defaultExport,
-  defaultMeals,
-  defaultQuestions,
-  ExportField,
-  ExportSection,
-} from '@intake24/common/schemes';
+import { defaultExport, ExportField, ExportSection } from '@intake24/common/schemes';
 import { SurveySchemeExportRefsResponse } from '@intake24/common/types/http/admin';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
@@ -77,6 +71,8 @@ import { form } from '@intake24/admin/helpers';
 import { FormMixin } from '@intake24/admin/types';
 import DataExportSection from './data-export-section.vue';
 import { SurveySchemeForm } from '../form.vue';
+
+export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;
 
 export default (Vue as VueConstructor<Vue & FormMixin>).extend({
   name: 'SurveySchemeDataExport',
@@ -87,14 +83,8 @@ export default (Vue as VueConstructor<Vue & FormMixin>).extend({
 
   data() {
     return {
-      form: form<SurveySchemeForm>({
-        id: null,
-        name: null,
-        type: 'default',
-        questions: defaultQuestions,
-        meals: defaultMeals,
-        dataExport: defaultExport,
-      }),
+      editMethod: 'patch',
+      form: form<SurveySchemeDataExportForm>({ dataExport: defaultExport }),
       selected: null as ExportSection | null,
       exportRefs: {} as SurveySchemeExportRefsResponse,
     };
