@@ -70,7 +70,7 @@ export default defineComponent({
 
     * {
       -webkit-print-color-adjust: exact !important;
-      color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
 
     .print-card-header {
