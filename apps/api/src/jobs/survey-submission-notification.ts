@@ -58,7 +58,10 @@ export default class SurveySubmissionNotification extends BaseJob<SurveySubmissi
 
     const headers: Dictionary = {};
     if (genUserKey) {
-      const token = await this.jwtService.sign({ submissionId }, genUserKey, { expiresIn: '1m' });
+      const token = await this.jwtService.sign({ submissionId }, genUserKey, {
+        audience: submissionNotificationUrl,
+        expiresIn: '1m',
+      });
       headers.authorization = `Bearer ${token}`;
     }
 
