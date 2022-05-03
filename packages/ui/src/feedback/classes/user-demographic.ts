@@ -5,19 +5,35 @@ import { round } from '@intake24/common/util';
 import HenryCoefficientsCalculator from './henry-coefficient-calculator';
 
 export default class UserDemographic {
-  bmrCalculator: HenryCoefficientsCalculator;
+  readonly physicalData: NonNullable<UserPhysicalDataResponse>;
+
+  private readonly henryCoefficients: HenryCoefficient[];
+
+  private readonly physicalActivityLevel?: PhysicalActivityLevelAttributes;
+
+  private readonly weightTarget?: WeightTargetCoefficient;
+
+  private readonly bmrCalculator: HenryCoefficientsCalculator;
 
   constructor(
-    readonly physicalData: NonNullable<UserPhysicalDataResponse>,
-    private readonly physicalActivityLevel: PhysicalActivityLevelAttributes,
-    private readonly weightTarget: WeightTargetCoefficient,
-    private readonly henryCoefficients: HenryCoefficient[]
+    physicalData: NonNullable<UserPhysicalDataResponse>,
+    henryCoefficients: HenryCoefficient[],
+    physicalActivityLevel?: PhysicalActivityLevelAttributes,
+    weightTarget?: WeightTargetCoefficient
   ) {
+    this.physicalData = physicalData;
+    this.henryCoefficients = henryCoefficients;
+    this.physicalActivityLevel = physicalActivityLevel;
+    this.weightTarget = weightTarget;
+
     this.bmrCalculator = HenryCoefficientsCalculator.fromJson(henryCoefficients);
   }
 
   getAge(): number {
-    return new Date().getFullYear() - this.physicalData.birthdate;
+    const { birthdate } = this.physicalData;
+    if (birthdate === null) throw new Error('Cannot calculate age without birthdate.');
+
+    return new Date().getFullYear() - birthdate;
   }
 
   getBmr(): number {
@@ -25,8 +41,13 @@ export default class UserDemographic {
   }
 
   getEnergyRequirement(): number {
-    return round(
-      this.getBmr() * this.physicalActivityLevel.coefficient + this.weightTarget.coefficient
-    );
+    const { physicalActivityLevel, weightTarget } = this;
+
+    if (!physicalActivityLevel)
+      throw new Error('Cannot calculate energy requirement without physicalActivityLevel.');
+    if (!weightTarget)
+      throw new Error('Cannot calculate energy requirement without physicalActivityLevel.');
+
+    return round(this.getBmr() * physicalActivityLevel.coefficient + weightTarget.coefficient);
   }
 }

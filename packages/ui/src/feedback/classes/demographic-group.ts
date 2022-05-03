@@ -109,11 +109,14 @@ export default class DemographicGroup {
   }
 
   matchesUserDemographic(userDemographic: UserDemographic): boolean {
+    const { sex, heightCm, weightKg } = userDemographic.physicalData;
+    const age = userDemographic.getAge();
+
     const result = [
-      this.sex ? this.sex === userDemographic.physicalData.sex : true,
-      this.age ? this.age.contains(userDemographic.getAge()) : true,
-      this.height ? this.height.contains(userDemographic.physicalData.heightCm) : true,
-      this.weight ? this.weight.contains(userDemographic.physicalData.weightKg) : true,
+      !!(this.sex === null || (this.sex !== null && this.sex === sex)),
+      !!(this.age === null || (this.age !== null && this.age.contains(age))),
+      !!(this.height === null || (this.height !== null && this.height.contains(heightCm))),
+      !!(this.weight === null || (this.weight !== null && this.weight.contains(weightKg))),
     ].reduce((a, b) => a && b);
 
     return result;
@@ -127,8 +130,14 @@ export default class DemographicGroup {
     if (this.nutrientRuleType === 'energy_divided_by_bmr')
       return (consumption * 100) / userDemographic.getEnergyRequirement();
 
-    if (this.nutrientRuleType === 'per_unit_of_weight')
-      return consumption / userDemographic.physicalData.weightKg;
+    if (this.nutrientRuleType === 'per_unit_of_weight') {
+      const { weightKg } = userDemographic.physicalData;
+
+      if (weightKg === null)
+        throw new Error(`Cannot calculate 'per_unit_of_weight' nutrient rule type without weight.`);
+
+      return consumption / weightKg;
+    }
 
     if (this.nutrientRuleType === 'percentage_of_energy') {
       const energy = foods.map((f) => f.getAverageEnergyIntake()).reduce((a, b) => a + b, 0);

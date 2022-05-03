@@ -16,6 +16,8 @@ Edit tab allows to modify selected feedback scheme.
 
 - `Outputs` - List of outputs that are allowed / offered to user. Possible outputs are `print`, `download` and `email`.
 
+- `Physical data inputs` - List of physical data inputs / identifiers, which are required to be collected for feedback calculation
+
 ## Top foods
 
 Settings to populate top foods feedback section. It controls top foods lists and nutrient composition pie charts.
@@ -43,8 +45,8 @@ There are couple of feedback card types that can be used:
 
 ## Demographic groups
 
-List of demographic groups definitions, which are used for matching with character cards based on the defined criteria.
+List of demographic groups definitions, which are used for matching with `character` cards based on the defined criteria.
 
 ## Henry coefficients
 
-List of Henry coefficients used for calculations.
+List of Henry coefficients used for calculations (BMR etc).

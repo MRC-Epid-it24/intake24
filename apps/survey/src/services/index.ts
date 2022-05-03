@@ -9,4 +9,7 @@ export { default as httpService } from './http.service';
 export { default as surveyService } from './survey.service';
 export { default as userService } from './user.service';
 
+export * from './survey.service';
+export * from './user.service';
+
 export const feedbackService = createFeedbackService(http);

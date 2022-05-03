@@ -42,6 +42,11 @@ const common: LocaleMessageObject = {
     no: 'No',
   },
 
+  not: {
+    provided: 'Not provided',
+    selected: 'Not selected',
+  },
+
   errors: {
     expansionIncomplete: 'Please complete all sections marked with !',
   },

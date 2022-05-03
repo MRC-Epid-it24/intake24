@@ -21,6 +21,7 @@ import {
   TopFoods,
   HenryCoefficient,
   DemographicGroup,
+  FeedbackPhysicalDataField,
 } from '@intake24/common/feedback';
 import { BaseModel, Securable } from '..';
 import { Survey, User, UserSecurable } from '.';
@@ -70,6 +71,20 @@ export default class FeedbackScheme
   set outputs(value: FeedbackOutput[]) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('outputs', JSON.stringify(value ?? []));
+  }
+
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT,
+  })
+  get physicalDataFields(): FeedbackPhysicalDataField[] {
+    const val = this.getDataValue('physicalDataFields') as unknown;
+    return val ? JSON.parse(val as string) : [];
+  }
+
+  set physicalDataFields(value: FeedbackPhysicalDataField[]) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('physicalDataFields', JSON.stringify(value ?? []));
   }
 
   @Column({

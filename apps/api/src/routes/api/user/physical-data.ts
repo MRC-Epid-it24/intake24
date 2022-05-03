@@ -10,8 +10,8 @@ export default () => {
 
   router
     .route('')
-    .get(wrapAsync(userPhysicalDataController.getPhysicalData))
-    .post(validation.physicalData, wrapAsync(userPhysicalDataController.setPhysicalData));
+    .get(validation.getPhysicalData, wrapAsync(userPhysicalDataController.getPhysicalData))
+    .post(validation.setPhysicalData, wrapAsync(userPhysicalDataController.setPhysicalData));
 
   return router;
 };

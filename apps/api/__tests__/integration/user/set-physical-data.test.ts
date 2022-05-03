@@ -1,18 +1,26 @@
-import request from 'supertest';
-import { suite } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import { feedbackPhysicalDataFields } from '@intake24/common/feedback';
 import { UserPhysicalDataAttributes } from '@intake24/common/types/models/system';
-import { PhysicalActivityLevel } from '@intake24/db';
+import { FeedbackScheme, PhysicalActivityLevel, Survey } from '@intake24/db';
 
 export default () => {
-  let url: string;
+  const url = '/api/user/physical-data';
 
-  let createUserPhysicalData: UserPhysicalDataAttributes;
-  let updateUserPhysicalData: UserPhysicalDataAttributes;
+  let createUserPhysicalData: Omit<UserPhysicalDataAttributes, 'userId'>;
+  let updateUserPhysicalData: Omit<UserPhysicalDataAttributes, 'userId'>;
+
+  let feedbackScheme: FeedbackScheme;
+  let survey: Survey;
 
   beforeAll(async () => {
-    url = '/api/user/physical-data';
+    const surveyInput = mocker.system.survey();
+    survey = await Survey.create({
+      ...surveyInput,
+      startDate: new Date(surveyInput.startDate),
+      endDate: new Date(surveyInput.endDate),
+    });
 
-    const { userId } = suite.data.system.respondent;
+    feedbackScheme = await FeedbackScheme.create(mocker.system.feedbackScheme());
 
     await PhysicalActivityLevel.bulkCreate([
       { name: 'test one', coefficient: 10 },
@@ -20,7 +28,6 @@ export default () => {
     ]);
 
     createUserPhysicalData = {
-      userId,
       sex: 'm',
       weightKg: 85,
       heightCm: 182,
@@ -30,7 +37,6 @@ export default () => {
     };
 
     updateUserPhysicalData = {
-      userId,
       sex: 'f',
       weightKg: 72,
       heightCm: 176,
@@ -41,54 +47,81 @@ export default () => {
   });
 
   it('should return 401 when no / invalid token', async () => {
-    await suite.sharedTests.assertMissingAuthentication('post', url);
+    await suite.sharedTests.assertMissingAuthentication('post', url, { bearer: 'respondent' });
   });
 
   it('should return 422 for invalid input data', async () => {
-    const { status, body } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent)
-      .send({
-        sex: 'invalidGender',
-        weightKg: 'notANumber',
-        heightCm: ['notANumber'],
-        birthdate: 'shouldBeAYear',
-        physicalActivityLevelId: false,
-        weightTarget: 2020,
-      });
+    await suite.sharedTests.assertInvalidInput(
+      'post',
+      `${url}?survey=${survey.slug}`,
+      ['sex', 'weightKg', 'heightCm', 'birthdate', 'physicalActivityLevelId', 'weightTarget'],
+      {
+        bearer: 'respondent',
+        input: {
+          sex: 'invalidGender',
+          weightKg: 'notANumber',
+          heightCm: ['notANumber'],
+          birthdate: 'shouldBeAYear',
+          physicalActivityLevelId: false,
+          weightTarget: 2020,
+        },
+      }
+    );
+  });
 
-    expect(status).toBe(422);
-    expect(body).toContainAllKeys(['errors', 'success']);
-    expect(body.errors).toContainAllKeys([
-      'sex',
-      'weightKg',
-      'heightCm',
-      'birthdate',
-      'physicalActivityLevelId',
-      'weightTarget',
+  it('should return 404 for invalid survey', async () => {
+    await suite.sharedTests.assertMissingRecord('post', `${url}?survey=nonExistingSurvey`, {
+      bearer: 'respondent',
+      input: createUserPhysicalData,
+    });
+  });
+
+  it('should return 403 when no feedback scheme assigned', async () => {
+    await suite.sharedTests.assertMissingAuthorization('post', `${url}?survey=${survey.slug}`, {
+      bearer: 'respondent',
+      input: createUserPhysicalData,
+    });
+  });
+
+  it('should return 422 when feedback scheme specifies physicalDataFields and they are missing', async () => {
+    await Promise.all([
+      survey.update({ feedbackSchemeId: feedbackScheme.id }),
+      feedbackScheme.update({ physicalDataFields: [...feedbackPhysicalDataFields] }),
     ]);
+
+    await suite.sharedTests.assertInvalidInput(
+      'post',
+      `${url}?survey=${survey.slug}`,
+      ['sex', 'weightKg', 'heightCm', 'birthdate', 'physicalActivityLevelId', 'weightTarget'],
+      {
+        bearer: 'respondent',
+        input: {
+          sex: null,
+          weightKg: null,
+          heightCm: null,
+          birthdate: null,
+          physicalActivityLevelId: null,
+          weightTarget: null,
+        },
+      }
+    );
   });
 
   it('should return 200 and user physical data', async () => {
-    const { status, body } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent)
-      .send(createUserPhysicalData);
-
-    expect(status).toBe(200);
-    expect(body).toStrictEqual(createUserPhysicalData);
+    await suite.sharedTests.assertRecordUpdated(
+      'post',
+      `${url}?survey=${survey.slug}`,
+      createUserPhysicalData,
+      { bearer: 'respondent' }
+    );
   });
 
   it('should return 200 and updated user physical data', async () => {
-    const { status, body } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent)
-      .send(updateUserPhysicalData);
-
-    expect(status).toBe(200);
-    expect(body).toStrictEqual(updateUserPhysicalData);
+    await suite.sharedTests.assertRecordUpdated(
+      'post',
+      `${url}?survey=${survey.slug}`,
+      updateUserPhysicalData,
+      { bearer: 'respondent' }
+    );
   });
 };

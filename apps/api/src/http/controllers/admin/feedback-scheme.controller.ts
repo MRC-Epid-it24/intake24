@@ -19,6 +19,8 @@ import type {
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import {
   FeedbackSchemeCreationAttributes,
+  editFeedbackSchemeFields,
+  perCardFeedbackSchemeFields,
   updateFeedbackSchemeFields,
 } from '@intake24/common/types/models';
 import { kebabCase } from '@intake24/common/util';
@@ -137,9 +139,9 @@ export default (ioc: IoC): FeedbackSchemeController => {
     } else {
       const actions = await aclService.getAccessActions(feedbackScheme, 'feedback-schemes');
 
-      if (actions.includes('edit')) keysToUpdate.push('name', 'type', 'outputs');
+      if (actions.includes('edit')) keysToUpdate.push(...editFeedbackSchemeFields);
 
-      ['topFoods', 'cards', 'demographicGroups', 'henryCoefficients'].forEach((item) => {
+      perCardFeedbackSchemeFields.forEach((item) => {
         if (actions.includes(kebabCase(item))) keysToUpdate.push(item);
       });
     }
@@ -170,9 +172,7 @@ export default (ioc: IoC): FeedbackSchemeController => {
       );
 
     await Promise.all([
-      UserSecurable.destroy({
-        where: { securableId, securableType: 'FeedbackScheme' },
-      }),
+      UserSecurable.destroy({ where: { securableId, securableType: 'FeedbackScheme' } }),
       feedbackScheme.destroy(),
     ]);
 
@@ -187,12 +187,21 @@ export default (ioc: IoC): FeedbackSchemeController => {
 
     const { name } = req.body;
     const { userId } = req.scope.cradle;
-    const { type, outputs, topFoods, cards, demographicGroups, henryCoefficients } = feedbackScheme;
+    const {
+      type,
+      outputs,
+      physicalDataFields,
+      topFoods,
+      cards,
+      demographicGroups,
+      henryCoefficients,
+    } = feedbackScheme;
 
     const feedbackSchemeCopy = await FeedbackScheme.create({
       name,
       type,
       outputs,
+      physicalDataFields,
       topFoods,
       cards,
       demographicGroups,

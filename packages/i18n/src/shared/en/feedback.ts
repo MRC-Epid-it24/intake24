@@ -17,6 +17,8 @@ const feedback: LocaleMessageObject = {
       m: 'Male',
       f: 'Female',
     },
+    sex: 'Sex: {sex}',
+    age: 'Age: {age}',
     birthdate: 'Year of birth',
     height: 'Height: {height} cm',
     heightCm: 'Height in centimeters',

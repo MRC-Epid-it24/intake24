@@ -9,45 +9,55 @@ const yearMax = year;
 
 export default validate(
   checkSchema({
+    survey: {
+      in: ['query'],
+      errorMessage: 'Invalid survey parameter.',
+      isString: true,
+      optional: true,
+    },
     sex: {
       in: ['body'],
       errorMessage: 'Enter valid gender.',
       isIn: { options: [sexes] },
+      optional: { options: { nullable: true } },
     },
     weightKg: {
       in: ['body'],
       errorMessage: 'Weight must be in 0-300 range.',
       isFloat: { options: { min: 0, max: 300 } },
       toFloat: true,
+      optional: { options: { nullable: true } },
     },
     heightCm: {
       in: ['body'],
       errorMessage: 'Height must be in 0-300 range.',
       isFloat: { options: { min: 0, max: 300 } },
       toFloat: true,
+      optional: { options: { nullable: true } },
     },
     birthdate: {
       in: ['body'],
       errorMessage: `Birth date must be year between ${yearMin} and ${yearMax}.`,
       isInt: { options: { min: yearMin, max: yearMax } },
       toInt: true,
+      optional: { options: { nullable: true } },
     },
     physicalActivityLevelId: {
       in: ['body'],
       errorMessage: 'Enter valid physical activity Level id.',
-      isEmpty: { negated: true },
       custom: {
         options: async (value): Promise<void> => {
           const level = await PhysicalActivityLevel.findOne({ where: { id: value } });
           if (!level) throw new Error('Enter valid physical activity Level id.');
         },
       },
+      optional: { options: { nullable: true } },
     },
     weightTarget: {
       in: ['body'],
       errorMessage: 'Enter valid weight target.',
-      isEmpty: { negated: true },
       isIn: { options: [weightTargets] },
+      optional: { options: { nullable: true } },
     },
   })
 );

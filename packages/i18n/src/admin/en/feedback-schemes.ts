@@ -26,6 +26,19 @@ const feedbackSchemes: LocaleMessageObject = {
     download: 'Download',
   },
 
+  physicalDataFields: {
+    _: 'Physical data fields',
+    title: 'Physical data fields',
+    required: `Physical data field {field} is needed to calculate feedback.`,
+    notRequired: `Physical data field {field} is not needed, it can be removed.`,
+    sex: 'Sex',
+    weightKg: 'Weight',
+    heightCm: 'Height',
+    physicalActivityLevelId: 'Physical activity level',
+    birthdate: 'Birth date',
+    weightTarget: 'Weight target',
+  },
+
   copy: {
     _: 'Copy',
     title: 'Copy feedback scheme',

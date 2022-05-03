@@ -3,15 +3,16 @@
     <div class="text-subtitle-1 font-weight-medium text-uppercase">
       {{ $t('feedback.physicalData.title') }}
     </div>
-    <div class="text-subtitle-2">
+    <div v-if="userDemographic.physicalActivityLevel" class="text-subtitle-2">
       {{ userDemographic.physicalActivityLevel.name }}
     </div>
-    <div class="text-subtitle-2">
-      {{ $t('feedback.physicalData.weight', { weight: userDemographic.physicalData.weightKg }) }}
-      |
-      {{ $t('feedback.physicalData.height', { height: userDemographic.physicalData.heightCm }) }}
+    <div v-if="ageAndSex.length" class="text-subtitle-2">
+      {{ ageAndSex.join(' | ') }}
     </div>
-    <div class="text-subtitle-2">
+    <div v-if="weightAndHeight.length" class="text-subtitle-2">
+      {{ weightAndHeight.join(' | ') }}
+    </div>
+    <div v-if="userDemographic.physicalData.weightTarget" class="text-subtitle-2">
       {{
         $t('feedback.physicalData.weightTarget', {
           target: $t(
@@ -24,7 +25,6 @@
       link
       class="mt-2"
       color="primary"
-      block
       outlined
       :title="$t('feedback.physicalData.change')"
       :to="{ name: 'feedback-physical-data', params: { surveyId } }"
@@ -61,6 +61,39 @@ export default defineComponent({
     userDemographic: {
       type: Object as PropType<UserDemographic>,
       required: true,
+    },
+  },
+
+  computed: {
+    ageAndSex(): string[] {
+      const items = [];
+      const { sex, birthdate } = this.userDemographic.physicalData;
+
+      if (sex !== null)
+        items.push(
+          this.$t('feedback.physicalData.sex', {
+            sex: this.$t(`feedback.physicalData.sexes.${sex}`),
+          }).toString()
+        );
+
+      if (birthdate !== null)
+        items.push(
+          this.$t('feedback.physicalData.age', { age: this.userDemographic.getAge() }).toString()
+        );
+
+      return items;
+    },
+    weightAndHeight(): string[] {
+      const items = [];
+      const { heightCm, weightKg } = this.userDemographic.physicalData;
+
+      if (heightCm !== null)
+        items.push(this.$t('feedback.physicalData.height', { height: heightCm }).toString());
+
+      if (weightKg !== null)
+        items.push(this.$t('feedback.physicalData.weight', { weight: weightKg }).toString());
+
+      return items;
     },
   },
 });

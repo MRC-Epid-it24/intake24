@@ -44,6 +44,7 @@ export default () => {
         name: [],
         type: 'invalidType',
         outputs: 'not an array of outputs',
+        physicalDataFields: true,
         topFoods: {
           max: false,
           colors: 10,
@@ -64,6 +65,7 @@ export default () => {
         'name',
         'type',
         'outputs',
+        'physicalDataFields',
         'topFoods.max',
         'topFoods.colors',
         'topFoods.nutrientTypes',

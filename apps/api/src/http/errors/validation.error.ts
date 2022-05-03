@@ -3,19 +3,25 @@ import { ValidationError as ExpressValidationError } from 'express-validator';
 export default class ValidationError extends Error {
   public errors: { [name: string]: ExpressValidationError } = {};
 
-  constructor(msg: string, error?: Partial<ExpressValidationError>) {
+  constructor(
+    msg: string,
+    error?: Partial<ExpressValidationError> | Partial<ExpressValidationError>[]
+  ) {
     super(msg);
 
-    if (!error || !error.param) return;
+    if (!error) return;
 
-    const { param } = error;
+    (Array.isArray(error) ? error : [error]).forEach((item) => {
+      const { param } = item;
+      if (!param) return;
 
-    this.errors[param] = {
-      param,
-      msg,
-      location: 'body',
-      value: null,
-      ...error,
-    };
+      this.errors[param] = {
+        param,
+        msg,
+        location: 'body',
+        value: null,
+        ...item,
+      };
+    });
   }
 }

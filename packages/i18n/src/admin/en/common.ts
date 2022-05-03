@@ -102,6 +102,8 @@ const common: LocaleMessageObject = {
 
   redirect: 'Redirect to new entry',
 
+  selected: '{count} items selected',
+
   not: {
     provided: 'Not provided',
     selected: 'Not selected',

@@ -1,15 +1,26 @@
 import request from 'supertest';
-import { suite } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { UserPhysicalDataAttributes } from '@intake24/common/types/models/system';
-import { UserPhysicalData } from '@intake24/db';
+import { FeedbackScheme, UserPhysicalData, Survey } from '@intake24/db';
+import { feedbackPhysicalDataFields } from '@intake24/common/feedback';
 
 export default () => {
-  let url: string;
+  const url = '/api/user/physical-data';
 
   let userPhysicalData: UserPhysicalDataAttributes;
 
+  let feedbackScheme: FeedbackScheme;
+  let survey: Survey;
+
   beforeAll(async () => {
-    url = '/api/user/physical-data';
+    const surveyInput = mocker.system.survey();
+    survey = await Survey.create({
+      ...surveyInput,
+      startDate: new Date(surveyInput.startDate),
+      endDate: new Date(surveyInput.endDate),
+    });
+
+    feedbackScheme = await FeedbackScheme.create(mocker.system.feedbackScheme());
 
     const { userId } = suite.data.system.respondent;
 
@@ -25,12 +36,31 @@ export default () => {
   });
 
   it('should return 401 when no / invalid token', async () => {
-    await suite.sharedTests.assertMissingAuthentication('get', url);
+    await suite.sharedTests.assertMissingAuthentication('get', `${url}?survey=${survey.slug}`, {
+      bearer: 'respondent',
+    });
+  });
+
+  it('should return 404 for invalid survey', async () => {
+    await suite.sharedTests.assertMissingRecord('get', `${url}?survey=nonExistingSurvey`, {
+      bearer: 'respondent',
+    });
+  });
+
+  it('should return 403 when no feedback scheme assigned', async () => {
+    await suite.sharedTests.assertMissingAuthorization('get', `${url}?survey=${survey.slug}`, {
+      bearer: 'respondent',
+    });
   });
 
   it('should return null when no physical data for user', async () => {
+    await Promise.all([
+      survey.update({ feedbackSchemeId: feedbackScheme.id }),
+      feedbackScheme.update({ physicalDataFields: [...feedbackPhysicalDataFields] }),
+    ]);
+
     const { status, body } = await request(suite.app)
-      .get(url)
+      .get(`${url}?survey=${survey.slug}`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.respondent);
 
@@ -38,19 +68,8 @@ export default () => {
     expect(body).toBeNull();
   });
 
-  describe('with user physical data created', () => {
-    beforeAll(async () => {
-      await UserPhysicalData.create(userPhysicalData);
-    });
-
-    it('should return 200 and user physical data', async () => {
-      const { status, body } = await request(suite.app)
-        .get(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.respondent);
-
-      expect(status).toBe(200);
-      expect(body).toStrictEqual(userPhysicalData);
-    });
+  it('should return 200 and user physical data', async () => {
+    await UserPhysicalData.create(userPhysicalData);
+    await suite.sharedTests.assertRecord('get', url, userPhysicalData, { bearer: 'respondent' });
   });
 };

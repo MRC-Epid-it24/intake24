@@ -11,6 +11,7 @@
                 <v-col cols="12" lg="6">
                   <v-select
                     v-model="form.sex"
+                    :disabled="canShowPhysicalDataField('sex')"
                     :error-messages="errors.get('sex')"
                     :items="sexes"
                     :label="$t('feedback.physicalData.sexes._')"
@@ -33,6 +34,7 @@
                 <v-col cols="12" lg="6">
                   <v-text-field
                     v-model="form.birthdate"
+                    :disabled="canShowPhysicalDataField('birthdate')"
                     :error-messages="errors.get('birthdate')"
                     :label="$t('feedback.physicalData.birthdate')"
                     hide-details="auto"
@@ -44,6 +46,7 @@
                 <v-col cols="12" lg="6">
                   <v-text-field
                     v-model="form.heightCm"
+                    :disabled="canShowPhysicalDataField('heightCm')"
                     :error-messages="errors.get('heightCm')"
                     :label="$t('feedback.physicalData.heightCm')"
                     hide-details="auto"
@@ -55,6 +58,7 @@
                 <v-col cols="12" lg="6">
                   <v-text-field
                     v-model="form.weightKg"
+                    :disabled="canShowPhysicalDataField('weightKg')"
                     :error-messages="errors.get('weightKg')"
                     :label="$t('feedback.physicalData.weightKg')"
                     hide-details="auto"
@@ -66,6 +70,7 @@
                 <v-col cols="12" lg="6">
                   <v-select
                     v-model="form.physicalActivityLevelId"
+                    :disabled="canShowPhysicalDataField('physicalActivityLevelId')"
                     :error-messages="errors.get('physicalActivityLevelId')"
                     :items="physicalActivityLevels"
                     :label="$t('feedback.physicalData.physicalActivityLevelId')"
@@ -81,6 +86,7 @@
                 <v-col cols="12" lg="6">
                   <v-select
                     v-model="form.weightTarget"
+                    :disabled="canShowPhysicalDataField('weightTarget')"
                     :error-messages="errors.get('weightTarget')"
                     :items="weightTargets"
                     :label="$t('feedback.physicalData.weightTargets._')"
@@ -116,15 +122,17 @@
 
 <script lang="ts">
 import axios from 'axios';
+import { mapState } from 'pinia';
 import { defineComponent } from '@vue/composition-api';
-import { userService, feedbackService } from '@intake24/survey/services';
-import { Sex, sexes, weightTargets } from '@intake24/common/feedback';
-import { PhysicalActivityLevel } from '@intake24/common/types/http';
+import { userService, feedbackService, UserPhysicalDataInput } from '@intake24/survey/services';
+import { FeedbackPhysicalDataField, Sex, sexes, weightTargets } from '@intake24/common/feedback';
+import { FeedbackSchemeEntryResponse, PhysicalActivityLevel } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
-import { Nullable, UserPhysicalDataAttributes } from '@intake24/common/types/models';
-import { useLoading } from '@intake24/survey/stores';
+import { useLoading, useSurvey } from '@intake24/survey/stores';
 
-export type SurveyFeedbackPhysicalDataForm = Nullable<Omit<UserPhysicalDataAttributes, 'userId'>>;
+export interface NullablePhysicalActivityLevel extends Omit<PhysicalActivityLevel, 'id'> {
+  id: string | null;
+}
 
 export default defineComponent({
   name: 'FeedbackPhysicalData',
@@ -150,19 +158,35 @@ export default defineComponent({
         weightKg: null,
         physicalActivityLevelId: null,
         weightTarget: null,
-      } as SurveyFeedbackPhysicalDataForm,
+      } as UserPhysicalDataInput,
       errors: new Errors(),
-      sexes: sexes.map((value) => ({
-        text: this.$t(`feedback.physicalData.sexes.${value}`),
-        value,
-        icon: genderIcon(value),
-      })),
-      physicalActivityLevels: [] as PhysicalActivityLevel[],
-      weightTargets: weightTargets.map((value) => ({
-        text: this.$t(`feedback.physicalData.weightTargets.${value}`),
-        value,
-      })),
+      sexes: [
+        { text: this.$t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
+        ...sexes.map((value) => ({
+          text: this.$t(`feedback.physicalData.sexes.${value}`),
+          value,
+          icon: genderIcon(value),
+        })),
+      ],
+      physicalActivityLevels: [
+        { id: null, name: this.$t('common.not.selected').toString(), coefficient: 0 },
+      ] as NullablePhysicalActivityLevel[],
+      weightTargets: [
+        { text: this.$t('common.not.selected'), value: null },
+        ...weightTargets.map((value) => ({
+          text: this.$t(`feedback.physicalData.weightTargets.${value}`),
+          value,
+        })),
+      ],
     };
+  },
+
+  computed: {
+    ...mapState(useSurvey, ['parameters']),
+
+    feedbackScheme(): FeedbackSchemeEntryResponse | undefined {
+      return this.parameters?.feedbackScheme;
+    },
   },
 
   async mounted() {
@@ -181,9 +205,11 @@ export default defineComponent({
         const { userId, ...rest } = physicalData;
         this.form = { ...rest };
       }
-      this.physicalActivityLevels = feedbackData.physicalActivityLevels;
+      this.physicalActivityLevels = [
+        { id: null, name: this.$t('common.not.selected').toString(), coefficient: 0 },
+        ...feedbackData.physicalActivityLevels,
+      ];
     } catch (err) {
-      // await this.$store.dispatch('feedback/setError', err);
       this.$router.push({ name: 'feedback-error', params: { surveyId } });
     } finally {
       loading.removeItem('feedback-physical-data');
@@ -191,11 +217,15 @@ export default defineComponent({
   },
 
   methods: {
+    canShowPhysicalDataField(field: FeedbackPhysicalDataField): boolean {
+      return !this.feedbackScheme?.physicalDataFields.includes(field);
+    },
+
     async submit() {
       const { surveyId } = this;
 
       try {
-        await userService.savePhysicalData(this.form);
+        await userService.savePhysicalData(surveyId, this.form);
         this.$router.push({ name: 'feedback-home', params: { surveyId } });
       } catch (err) {
         if (!axios.isAxiosError(err)) {

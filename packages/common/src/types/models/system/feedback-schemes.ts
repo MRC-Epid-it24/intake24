@@ -1,6 +1,7 @@
 import type {
   DemographicGroup,
   FeedbackOutput,
+  FeedbackPhysicalDataField,
   FeedbackType,
   Card,
   HenryCoefficient,
@@ -13,6 +14,7 @@ export type FeedbackSchemeAttributes = {
   name: string;
   type: FeedbackType;
   outputs: FeedbackOutput[];
+  physicalDataFields: FeedbackPhysicalDataField[];
   topFoods: TopFoods;
   cards: Card[];
   demographicGroups: DemographicGroup[];
@@ -32,13 +34,14 @@ export const updateFeedbackSchemeFields = [
   'name',
   'type',
   'outputs',
+  'physicalDataFields',
   'topFoods',
   'cards',
   'demographicGroups',
   'henryCoefficients',
 ] as const;
 
-export const editFeedbackSchemeFields = ['name', 'type', 'outputs'] as const;
+export const editFeedbackSchemeFields = ['name', 'type', 'outputs', 'physicalDataFields'] as const;
 
 export const perCardFeedbackSchemeFields = [
   'topFoods',

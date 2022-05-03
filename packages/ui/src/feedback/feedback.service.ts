@@ -53,14 +53,11 @@ const createFeedbackService = (httpClient: HttpClient) => {
     );
     const weightTarget = weightTargets.find(({ id }) => id === physicalData.weightTarget);
 
-    if (!physicalActivityLevel) throw new Error('Unknown physical activity level.');
-    if (!weightTarget) throw new Error('Unknown weight target.');
-
     return new UserDemographic(
       physicalData,
+      henryCoefficients,
       physicalActivityLevel,
-      weightTarget,
-      henryCoefficients
+      weightTarget
     );
   };
 

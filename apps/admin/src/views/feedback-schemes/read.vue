@@ -19,6 +19,16 @@
           <td>{{ entry.type }}</td>
         </tr>
         <tr>
+          <th>{{ $t('feedback-schemes.physicalDataFields.title') }}</th>
+          <td>
+            {{
+              entry.physicalDataFields
+                .map((field) => $t(`feedback-schemes.physicalDataFields.${field}`))
+                .join(', ')
+            }}
+          </td>
+        </tr>
+        <tr>
           <th>{{ $t('feedback-schemes.outputs.title') }}</th>
           <td>
             {{ entry.outputs.map((output) => $t(`feedback-schemes.outputs.${output}`)).join(', ') }}

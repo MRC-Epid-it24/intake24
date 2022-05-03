@@ -29,6 +29,7 @@ export default () => {
         'name',
         'type',
         'outputs',
+        'physicalDataFields',
         'topFoods.max',
         'topFoods.colors',
         'topFoods.nutrientTypes',
@@ -43,6 +44,7 @@ export default () => {
         name: [],
         type: 'invalidType',
         outputs: ['print', 'invalid', 'download'],
+        physicalDataFields: ['sex', 'invalid', 'weightKg'],
         topFoods: [],
         // cards: 'notAnArray',
         demographicGroups: [
@@ -69,6 +71,7 @@ export default () => {
         'name',
         'type',
         'outputs',
+        'physicalDataFields',
         'topFoods.max',
         'topFoods.colors',
         'topFoods.nutrientTypes',

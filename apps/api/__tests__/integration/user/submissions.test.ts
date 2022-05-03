@@ -3,14 +3,12 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { SurveySubmission } from '@intake24/db';
 
 export default () => {
-  let url: string;
+  const url = '/api/user/submissions';
   let surveyId: string;
   let surveySlug: string;
   let userId: string;
 
   beforeAll(async () => {
-    url = '/api/user/submissions';
-
     surveyId = suite.data.system.survey.id;
     surveySlug = suite.data.system.survey.slug;
     userId = suite.data.system.respondent.userId;
@@ -23,27 +21,17 @@ export default () => {
   });
 
   it('should return 401 when no / invalid token', async () => {
-    await suite.sharedTests.assertMissingAuthentication('get', url);
+    await suite.sharedTests.assertMissingAuthentication('get', url, { bearer: 'respondent' });
   });
 
   it('should return 422 for missing surveyId query parameter', async () => {
-    const { status, body } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
-
-    expect(status).toBe(422);
-    expect(body).toContainAllKeys(['errors', 'success']);
-    expect(body.errors).toContainAllKeys(['survey']);
+    await suite.sharedTests.assertInvalidInput('get', url, ['survey'], { bearer: 'respondent' });
   });
 
   it('should return 404 for invalid survey', async () => {
-    const { status } = await request(suite.app)
-      .get(`${url}?survey=nonExistingSurvey`)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
-
-    expect(status).toBe(404);
+    await suite.sharedTests.assertMissingRecord('get', `${url}?survey=nonExistingSurvey`, {
+      bearer: 'respondent',
+    });
   });
 
   it('should return 200 and array of submissions', async () => {

@@ -173,7 +173,10 @@ export default defineComponent({
       const { cards, demographicGroups: groups, henryCoefficients } = feedbackScheme;
 
       const { physicalData, submissions } = await this.getUserData(surveyId);
-      if (!physicalData) {
+      if (
+        !physicalData ||
+        feedbackScheme.physicalDataFields.some((item) => physicalData[item] === null)
+      ) {
         this.$router.push({ name: 'feedback-physical-data', params: { surveyId } });
         return;
       }
@@ -191,7 +194,6 @@ export default defineComponent({
       this.buildFeedback();
     } catch (err) {
       console.log(err);
-      // await this.$store.dispatch('feedback/setError', err);
       this.$router.push({ name: 'feedback-error', params: { surveyId } });
     } finally {
       loading.removeItem('feedback-initial-load');

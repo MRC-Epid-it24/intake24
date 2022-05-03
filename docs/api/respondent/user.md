@@ -9,7 +9,7 @@ Download feedback as PDF. Returns stream as `application/pdf`.
 ### Request
 
 ```http
-GET /api/user/feedback?survey={survey}
+GET /api/user/feedback?survey={survey-slug}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -57,7 +57,7 @@ Update user's physical data.
 ### Request
 
 ```http
-POST /api/user/physical-data
+POST /api/user/physical-data?survey={survey-slug}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -95,7 +95,7 @@ User submissions for specific survey
 ### Request
 
 ```http
-GET /api/user/submissions?survey={survey}
+GET /api/user/submissions?survey={survey-slug}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

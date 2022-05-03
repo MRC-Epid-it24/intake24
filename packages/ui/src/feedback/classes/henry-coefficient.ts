@@ -1,6 +1,5 @@
 import { HenryCoefficient as HenryCoefficientRecord, Sex } from '@intake24/common/feedback';
 import DemographicRange from './demographic-range';
-import type UserDemographic from './user-demographic';
 
 export default class HenryCoefficient {
   readonly sex: Sex;
@@ -47,7 +46,7 @@ export default class HenryCoefficient {
     );
   }
 
-  matchesUserDemographic(ud: UserDemographic): boolean {
-    return this.sex === ud.physicalData.sex && this.ageRange.contains(ud.getAge());
+  matchesUserDemographic(sex: Sex | null, age: number | null): boolean {
+    return this.sex === sex && typeof age === 'number' && this.ageRange.contains(age);
   }
 }

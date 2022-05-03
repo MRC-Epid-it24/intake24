@@ -18,7 +18,9 @@ export default class DemographicRange {
     return new DemographicRange(this.start, this.end);
   }
 
-  contains(n: number): boolean {
+  contains(n: number | null): boolean {
+    if (n === null) return false;
+
     return n >= this.start && n < this.end;
   }
 

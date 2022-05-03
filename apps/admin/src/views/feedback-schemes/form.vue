@@ -45,7 +45,70 @@
                 name="outputs"
                 outlined
                 @change="form.errors.clear('outputs')"
-              ></v-select>
+              >
+                <template v-slot:selection="{ item, index }">
+                  <template v-if="index === 0">
+                    <span v-if="form.outputs.length === 1">{{ item.text }}</span>
+                    <span v-if="form.outputs.length > 1">
+                      {{ $t('common.selected', { count: form.outputs.length }) }}
+                    </span>
+                  </template>
+                </template>
+              </v-select>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.physicalDataFields"
+                :items="feedbackPhysicalDataFields"
+                :error-messages="form.errors.get('physicalDataFields')"
+                :label="$t('feedback-schemes.physicalDataFields.title')"
+                hide-details="auto"
+                multiple
+                name="physicalDataFields"
+                outlined
+                @change="form.errors.clear('physicalDataFields')"
+              >
+                <template v-slot:selection="{ item, index }">
+                  <template v-if="index === 0">
+                    <span v-if="form.physicalDataFields.length === 1">{{ item.text }}</span>
+                    <span v-if="form.physicalDataFields.length > 1">
+                      {{ $t('common.selected', { count: form.physicalDataFields.length }) }}
+                    </span>
+                  </template>
+                </template>
+              </v-select>
+            </v-col>
+            <v-col>
+              <template v-for="(value, key) in requiredPhysicalDataFields">
+                <v-alert
+                  v-if="!value && form.physicalDataFields.includes(key)"
+                  :key="key"
+                  text
+                  type="info"
+                >
+                  <i18n path="feedback-schemes.physicalDataFields.notRequired" tag="div">
+                    <template v-slot:field>
+                      <span class="font-weight-medium">
+                        "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
+                      </span>
+                    </template>
+                  </i18n>
+                </v-alert>
+                <v-alert
+                  v-if="value && !form.physicalDataFields.includes(key)"
+                  :key="key"
+                  text
+                  type="warning"
+                >
+                  <i18n path="feedback-schemes.physicalDataFields.required" tag="div">
+                    <template v-slot:field>
+                      <span class="font-weight-medium">
+                        "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
+                      </span>
+                    </template>
+                  </i18n>
+                </v-alert>
+              </template>
             </v-col>
           </v-row>
         </v-card-text>
@@ -65,6 +128,8 @@ import { FormMixin } from '@intake24/admin/types';
 import {
   FeedbackOutput,
   feedbackOutputs,
+  FeedbackPhysicalDataField,
+  feedbackPhysicalDataFields,
   FeedbackType,
   feedbackTypes,
   Card,
@@ -81,13 +146,17 @@ export type FeedbackSchemeForm = {
   name: string | null;
   type: FeedbackType;
   outputs: FeedbackOutput[];
+  physicalDataFields: FeedbackPhysicalDataField[];
   topFoods: TopFoods;
   cards: Card[];
   demographicGroups: DemographicGroup[];
   henryCoefficients: HenryCoefficient[];
 };
 
-export type PatchFeedbackSchemeForm = Pick<FeedbackSchemeForm, 'name' | 'type' | 'outputs'>;
+export type PatchFeedbackSchemeForm = Pick<
+  FeedbackSchemeForm,
+  'name' | 'type' | 'outputs' | 'physicalDataFields'
+>;
 
 export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).extend({
   name: 'SchemeForm',
@@ -103,6 +172,7 @@ export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).ext
         name: null,
         type: 'default',
         outputs: [...feedbackOutputs],
+        physicalDataFields: [...feedbackPhysicalDataFields],
       }),
       feedbackTypes: feedbackTypes.map((value) => ({
         value,
@@ -112,12 +182,44 @@ export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).ext
         value,
         text: this.$t(`feedback-schemes.outputs.${value}`),
       })),
+      feedbackPhysicalDataFields: feedbackPhysicalDataFields.map((value) => ({
+        value,
+        text: this.$t(`feedback-schemes.physicalDataFields.${value}`),
+      })),
     };
   },
 
   computed: {
     currentFeedbackScheme(): FeedbackSchemeEntry {
       return { ...this.entry, ...this.form.getData(true) } as FeedbackSchemeEntry;
+    },
+    requiredPhysicalDataFields(): any {
+      const flags: Record<FeedbackPhysicalDataField, boolean> = {
+        sex: false,
+        weightKg: false,
+        heightCm: false,
+        physicalActivityLevelId: false,
+        birthdate: false,
+        weightTarget: false,
+      };
+
+      return this.entry.demographicGroups.reduce((acc, group) => {
+        if (group.nutrientRuleType === 'energy_divided_by_bmr') {
+          Object.keys(acc).forEach((key) => {
+            acc[key as FeedbackPhysicalDataField] = true;
+          });
+          return acc;
+        }
+
+        if (group.age) acc.birthdate = true;
+        if (group.sex) acc.sex = true;
+        if (group.weight) acc.weightKg = true;
+        if (group.height) acc.heightCm = true;
+        if (group.physicalActivityLevelId) acc.physicalActivityLevelId = true;
+        if (group.nutrientRuleType === 'per_unit_of_weight') acc.weightKg = true;
+
+        return acc;
+      }, flags);
     },
   },
 });

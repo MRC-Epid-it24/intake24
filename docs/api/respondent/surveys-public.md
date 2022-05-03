@@ -37,7 +37,7 @@ Returns survey parameters necessary to render the survey login page such as the 
 ### Request
 
 ```http
-GET /api/surveys/{slug}
+GET /api/surveys/{survey-slug}
 
 Content-Type: application/json
 ```
@@ -74,7 +74,7 @@ This functionality has to be allowed in survey settings. It is using reCaptcha c
 ### Request
 
 ```http
-POST /api/surveys/{slug}/generate-user
+POST /api/surveys/{survey-slug}/generate-user
 
 Content-Type: application/json
 
@@ -109,7 +109,7 @@ client side by the current users of this function and can therefore be easily ex
 ### Request
 
 ```http
-POST /api/surveys/{slug}/create-user?params={token}
+POST /api/surveys/{survey-slug}/create-user?params={token}
 
 Content-Type: application/json
 ```
