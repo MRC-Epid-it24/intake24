@@ -30,7 +30,7 @@
     "fs-extra": "^10.1.0",
     "lodash": "^4.17.21",
     "nanoid": "^3.3.4",
-    "web-push": "^3.4.5"
+    "web-push": "^3.5.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
@@ -39,6 +39,7 @@
     "fork-ts-checker-webpack-plugin": "^7.2.11",
     "ts-loader": "^9.3.0",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
+    "typescript": "^4.6.4",
     "webpack": "^5.72.0",
     "webpack-node-externals": "^3.0.0",
     "webpackbar": "^5.0.2"

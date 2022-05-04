@@ -12,7 +12,7 @@
     group: '{{ env.group }}'
 
 - name: '{{ app|upper }} | Install pnpm to latest'
-  command: npm install -g pnpm
+  command: npm install -g pnpm@6
 
 - name: '{{ app|upper }} | Create / check application directory'
   file:
