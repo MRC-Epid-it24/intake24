@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import axios, { AxiosError } from 'axios';
 import { useLoading } from '@intake24/ui/stores';
 import { AliasLoginRequest, TokenLoginRequest } from '@intake24/common/types/http';
 import { useUser } from './user';
@@ -7,7 +6,7 @@ import { authService } from '../services';
 
 export type AuthState = {
   accessToken: string | null;
-  error: AxiosError | null;
+  error: Error | null;
 };
 
 export type LoginPayload = { type: 'login'; payload: AliasLoginRequest };
@@ -43,7 +42,7 @@ export const useAuth = defineStore('auth', {
 
         return Promise.resolve();
       } catch (err) {
-        if (axios.isAxiosError(err)) this.error = err;
+        if (err instanceof Error) this.error = err;
 
         return Promise.reject(err);
       } finally {
@@ -68,7 +67,7 @@ export const useAuth = defineStore('auth', {
 
         return Promise.resolve();
       } catch (err) {
-        if (axios.isAxiosError(err)) this.error = err;
+        if (err instanceof Error) this.error = err;
 
         return withErr ? Promise.reject(err) : Promise.resolve();
       }

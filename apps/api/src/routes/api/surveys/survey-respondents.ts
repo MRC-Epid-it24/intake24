@@ -9,7 +9,7 @@ export default () => {
 
   const router = Router({ mergeParams: true });
 
-  authenticate(router, 'user');
+  authenticate(router, 'survey');
   router.use(isSurveyRespondent());
 
   router.get('/parameters', wrapAsync(surveyRespondentController.parameters));

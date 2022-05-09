@@ -9,6 +9,7 @@ import {
   EmailLoginRequest,
   TokenLoginRequest,
 } from '@intake24/common/types/http';
+import { FrontEnd } from '@intake24/common/types';
 import type { Tokens } from '.';
 import type { MFARequest } from './mfa';
 
@@ -16,6 +17,7 @@ export type LoginCredentials = {
   user: User | null;
   password: string;
   subject: Subject;
+  frontEnd: FrontEnd;
 };
 
 export type LoginMeta = {
@@ -78,8 +80,11 @@ const authenticationService = ({
    * @param {LoginMeta} meta
    * @returns {Promise<Tokens>}
    */
-  const login = async (credentials: LoginCredentials, { req }: LoginMeta): Promise<Tokens> => {
-    const { user, password, subject } = credentials;
+  const processLogin = async (
+    credentials: LoginCredentials,
+    { req }: LoginMeta
+  ): Promise<Tokens> => {
+    const { user, password, subject, frontEnd } = credentials;
     const {
       ip: remoteAddress,
       headers: { 'user-agent': userAgent },
@@ -110,17 +115,17 @@ const authenticationService = ({
 
     await signInService.log({ ...signInLog, successful: true });
 
-    return jwtService.issueTokens(user.id, subject);
+    return jwtService.issueTokens(user.id, subject, frontEnd);
   };
 
   /**
-   * Email login to Administration application
+   * Email login to admin application
    *
    * @param {EmailLoginRequest} credentials
    * @param {LoginMeta} meta
    * @returns {(Promise<Tokens | MFARequest>)}
    */
-  const emailLogin = async (
+  const adminLogin = async (
     credentials: EmailLoginRequest,
     meta: LoginMeta
   ): Promise<Tokens | MFARequest> => {
@@ -137,11 +142,32 @@ const authenticationService = ({
 
     const subject: Subject = { provider: 'email', providerKey: email };
 
-    return login({ user, password, subject }, meta);
+    return processLogin({ user, password, subject, frontEnd: 'admin' }, meta);
   };
 
   /**
-   * Survey alias login to respondent applications
+   * Email login to respondent application
+   *
+   * @param {EmailLoginRequest} credentials
+   * @param {LoginMeta} meta
+   * @returns {Promise<Tokens>}
+   */
+  const emailLogin = async (credentials: EmailLoginRequest, meta: LoginMeta): Promise<Tokens> => {
+    const { email, password } = credentials;
+
+    const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
+    const user = await User.findOne({
+      where: { email: { [op]: email } },
+      include: [{ model: UserPassword, required: true }],
+    });
+
+    const subject: Subject = { provider: 'email', providerKey: email };
+
+    return processLogin({ user, password, subject, frontEnd: 'survey' }, meta);
+  };
+
+  /**
+   * Survey alias login to respondent application
    *
    * @param {AliasLoginRequest} credentials
    * @param {LoginMeta} meta
@@ -163,11 +189,11 @@ const authenticationService = ({
 
     const subject: Subject = { provider: 'surveyAlias', providerKey: `${slug}#${username}` };
 
-    return login({ user, password, subject }, meta);
+    return processLogin({ user, password, subject, frontEnd: 'survey' }, meta);
   };
 
   /**
-   * URL-embedded token login to respondent applications
+   * URL-embedded token login to respondent application
    *
    * @param {TokenLoginRequest} credentials
    * @param {LoginMeta} meta
@@ -183,18 +209,19 @@ const authenticationService = ({
 
     const subject: Subject = { provider: 'URLToken', providerKey: token };
 
-    return login({ user, password: '', subject }, meta);
+    return processLogin({ user, password: '', subject, frontEnd: 'survey' }, meta);
   };
 
   /**
    * Issue new access token using refresh token
    *
    * @param {string} token
+   * @param {FrontEnd} frontEnd
    * @returns {Promise<Tokens>}
    */
-  const refresh = async (token: string): Promise<Tokens> => {
+  const refresh = async (token: string, frontEnd: FrontEnd): Promise<Tokens> => {
     try {
-      const { userId, sub: subject } = await jwtService.verifyRefreshToken(token);
+      const { userId, sub: subject } = await jwtService.verifyRefreshToken(token, frontEnd);
 
       const user = await User.findByPk(userId);
       if (!user) throw new UnauthorizedError();
@@ -202,7 +229,7 @@ const authenticationService = ({
       const valid = await jwtRotationService.verifyAndRevoke(token);
       if (!valid) throw new UnauthorizedError();
 
-      return await jwtService.issueTokens(userId, subject);
+      return await jwtService.issueTokens(userId, subject, frontEnd);
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
@@ -215,7 +242,7 @@ const authenticationService = ({
 
   return {
     verifyPassword,
-    login,
+    adminLogin,
     emailLogin,
     aliasLogin,
     tokenLogin,

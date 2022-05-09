@@ -3,20 +3,19 @@ import type { LoginResponse, MFAResponse, RefreshResponse } from '@intake24/comm
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { Tokens } from '@intake24/api/services/core/auth';
-import type { Controller } from './controller';
+import type { Controller } from '../controller';
 
-export type AuthenticationController = Controller<
-  'emailLogin' | 'aliasLogin' | 'tokenLogin' | 'refresh' | 'logout'
->;
+export type AdminAuthenticationController = Controller<'login' | 'verify' | 'refresh' | 'logout'>;
 
 export default ({
   authenticationService,
   jwtRotationService,
+  mfaProvider,
   securityConfig,
 }: Pick<
   IoC,
   'authenticationService' | 'jwtRotationService' | 'mfaProvider' | 'securityConfig'
->): AuthenticationController => {
+>): AdminAuthenticationController => {
   /**
    * Successful login response helper
    * - attach refresh token as secure cookie
@@ -27,51 +26,47 @@ export default ({
    */
   const sendTokenResponse = (tokens: Tokens, res: Response<LoginResponse>) => {
     const { accessToken, refreshToken } = tokens;
-    const { name, httpOnly, maxAge, path, secure, sameSite } = securityConfig.jwt.survey.cookie;
+    const { name, httpOnly, maxAge, path, secure, sameSite } = securityConfig.jwt.admin.cookie;
 
     res
       .cookie(name, refreshToken, { maxAge, httpOnly, path, sameSite, secure })
       .json({ accessToken });
   };
 
-  const emailLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
+  const login = async (req: Request, res: Response<LoginResponse | MFAResponse>): Promise<void> => {
     const { email, password } = req.body;
 
-    const result = await authenticationService.emailLogin({ email, password }, { req });
+    const result = await authenticationService.adminLogin({ email, password }, { req });
+    if ('mfaRequestUrl' in result) {
+      res.json(result);
+      return;
+    }
 
     sendTokenResponse(result, res);
   };
 
-  const aliasLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
-    const { username, password, survey } = req.body;
+  const verify = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
+    const { code, state } = req.body;
 
-    const tokens = await authenticationService.aliasLogin({ username, password, survey }, { req });
-
-    sendTokenResponse(tokens, res);
-  };
-
-  const tokenLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
-    const { token } = req.body;
-
-    if (typeof token !== 'string' || !token) throw new UnauthorizedError();
-
-    const tokens = await authenticationService.tokenLogin({ token }, { req });
-
-    sendTokenResponse(tokens, res);
+    try {
+      const tokens = await mfaProvider.verify({ code, state }, { req });
+      sendTokenResponse(tokens, res);
+    } finally {
+      delete req.session.duo;
+    }
   };
 
   const refresh = async (req: Request, res: Response<RefreshResponse>): Promise<void> => {
-    const { name } = securityConfig.jwt.survey.cookie;
+    const { name } = securityConfig.jwt.admin.cookie;
     const refreshToken = req.cookies[name];
     if (!refreshToken) throw new UnauthorizedError();
 
-    const tokens = await authenticationService.refresh(refreshToken, 'survey');
-
+    const tokens = await authenticationService.refresh(refreshToken, 'admin');
     sendTokenResponse(tokens, res);
   };
 
   const logout = async (req: Request, res: Response): Promise<void> => {
-    const { name, httpOnly, path, secure, sameSite } = securityConfig.jwt.survey.cookie;
+    const { name, httpOnly, path, secure, sameSite } = securityConfig.jwt.admin.cookie;
 
     const refreshToken = req.cookies[name];
     if (refreshToken) await jwtRotationService.revoke(refreshToken);
@@ -80,9 +75,8 @@ export default ({
   };
 
   return {
-    emailLogin,
-    aliasLogin,
-    tokenLogin,
+    login,
+    verify,
     refresh,
     logout,
   };

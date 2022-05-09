@@ -13,7 +13,14 @@ export default () => {
   let token: string;
 
   beforeAll(async () => {
-    const { id, email: userEmail } = suite.data.system.user;
+    const user = await ioc.cradle.adminUserService.create({
+      email: 'testUserReset@example.com',
+      password: 'testUserResetPassword',
+      permissions: [],
+      roles: [],
+    });
+
+    const { id, email: userEmail } = user;
     if (!userEmail) throw Error('User email not found.');
 
     userId = id;

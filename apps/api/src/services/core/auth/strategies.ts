@@ -2,17 +2,27 @@ import { PassportStatic } from 'passport';
 import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
 import security from '@intake24/api/config/security';
 import { User } from '@intake24/db';
+import { FrontEnd } from '@intake24/common/types';
 
-const { issuer, access } = security.jwt;
+const { issuer, secret } = security.jwt;
 
-export const opts: StrategyOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: access.secret,
-  issuer,
+export const opts: Record<FrontEnd, StrategyOptions> = {
+  admin: {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: secret,
+    issuer,
+    audience: 'access',
+  },
+  survey: {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: secret,
+    issuer,
+    audience: 'access',
+  },
 };
 
-export const buildJwtStrategy = (): Strategy =>
-  new Strategy(opts, async ({ userId }, done) => {
+export const buildJwtStrategy = (frontEnd: FrontEnd): Strategy =>
+  new Strategy(opts[frontEnd], async ({ userId }, done) => {
     try {
       const user = await User.findByPk(userId);
       done(null, user ?? false);
@@ -22,6 +32,6 @@ export const buildJwtStrategy = (): Strategy =>
   });
 
 export default (passport: PassportStatic): void => {
-  passport.use('user', buildJwtStrategy());
-  passport.use('admin', buildJwtStrategy());
+  passport.use('survey', buildJwtStrategy('survey'));
+  passport.use('admin', buildJwtStrategy('admin'));
 };

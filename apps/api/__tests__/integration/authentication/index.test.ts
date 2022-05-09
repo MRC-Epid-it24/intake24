@@ -8,7 +8,6 @@ export default () => {
   describe('POST /api/auth/login', login);
   describe('POST /api/auth/login/alias', loginAlias);
   describe('POST /api/auth/login/token', loginToken);
-  // describe('POST /api/auth/login/verify', verify);
   describe('POST /api/auth/login/refresh', refresh);
   describe('POST /api/auth/login/logout', logout);
 };

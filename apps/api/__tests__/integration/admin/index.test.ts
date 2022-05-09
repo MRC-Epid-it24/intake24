@@ -1,3 +1,4 @@
+import authentication from './authentication/index.test';
 import fdbs from './fdbs/index.test';
 import feedbackSchemes from './feedback-schemes/index.test';
 import foodGroups from './food-groups/index.test';
@@ -17,7 +18,7 @@ import user from './user/index.test';
 import users from './users/index.test';
 
 export default () => {
-  describe('/api/admin/food-groups', foodGroups);
+  describe('/api/admin/auth', authentication);
   describe('/api/admin/fdbs', fdbs);
   describe('/api/admin/feedback-schemes', feedbackSchemes);
   describe('/api/admin/food-groups', foodGroups);

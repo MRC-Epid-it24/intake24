@@ -18,7 +18,7 @@ export const useUser = defineStore('user', {
   },
   actions: {
     load(accessToken: string) {
-      const { userId, sub } = tokenService.decodeAccessToken(accessToken);
+      const { userId, sub } = tokenService.decodeAccessToken(accessToken, 'survey');
 
       const subject: Subject = JSON.parse(atob(sub));
 

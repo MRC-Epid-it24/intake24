@@ -204,6 +204,10 @@ export default defineConfig({
           collapsable: false,
           children: [
             {
+              text: 'Authentication',
+              link: '/api/admin/authentication',
+            },
+            {
               text: 'User profile',
               link: '/api/admin/user/profile',
             },
@@ -298,32 +302,36 @@ export default defineConfig({
           ],
         },
         {
-          text: 'Respondent',
+          text: 'Survey',
           collapsable: false,
           children: [
             {
+              text: 'Authentication',
+              link: '/api/survey/authentication',
+            },
+            {
               text: 'Surveys - public',
-              link: '/api/respondent/surveys-public',
+              link: '/api/survey/surveys-public',
             },
             {
               text: 'Surveys - respondent',
-              link: '/api/respondent/surveys-respondent',
+              link: '/api/survey/surveys-respondent',
             },
             {
               text: 'Food database lookup',
-              link: '/api/respondent/food-lookup',
+              link: '/api/survey/food-lookup',
             },
             {
               text: 'Portion size data',
-              link: '/api/respondent/food-data',
+              link: '/api/survey/food-data',
             },
             {
               text: 'Feedback',
-              link: '/api/respondent/feedback',
+              link: '/api/survey/feedback',
             },
             {
               text: 'User',
-              link: '/api/respondent/user',
+              link: '/api/survey/user',
             },
           ],
         },

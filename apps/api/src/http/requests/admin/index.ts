@@ -1,3 +1,4 @@
+import authentication from './authentication';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
 import jobs from './jobs';
@@ -15,6 +16,7 @@ import tasks from './tasks';
 import users from './users';
 
 export default {
+  authentication,
   fdbs,
   feedbackSchemes,
   jobs,

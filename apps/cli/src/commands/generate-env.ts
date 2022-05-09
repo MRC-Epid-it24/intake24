@@ -15,7 +15,8 @@ export default async (cmd: GenerateEnvArgs): Promise<void> => {
       replacements: [
         { key: 'APP_SECRET', value: nanoid(64) },
         { key: 'JWT_ACCESS_SECRET', value: nanoid(64) },
-        { key: 'JWT_REFRESH_SECRET', value: nanoid(64) },
+        { key: 'JWT_ADMIN_REFRESH_SECRET', value: nanoid(64) },
+        { key: 'JWT_SURVEY_REFRESH_SECRET', value: nanoid(64) },
         { key: 'WEBPUSH_PUBLIC_KEY', value: vapidKeys.publicKey },
         { key: 'WEBPUSH_PRIVATE_KEY', value: vapidKeys.privateKey },
       ],

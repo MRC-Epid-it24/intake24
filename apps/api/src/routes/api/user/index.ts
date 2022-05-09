@@ -12,7 +12,7 @@ export default () => {
 
   const router = Router();
 
-  authenticate(router, 'user');
+  authenticate(router, 'survey');
 
   router.post(
     '/password',

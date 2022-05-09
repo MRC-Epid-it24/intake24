@@ -17,24 +17,21 @@ describe('API', () => {
     await suite.init();
 
     // Get access tokens for superuser, user (admin tool), respondent (survey frontend)
-    const superuserRes = await request(suite.app)
-      .post('/api/auth/login')
-      .set('Accept', 'application/json')
-      .send({ email: 'testAdmin@example.com', password: 'testAdminPassword' });
-
-    const userRes = await request(suite.app)
-      .post('/api/auth/login')
-      .set('Accept', 'application/json')
-      .send({ email: 'testUser@example.com', password: 'testUserPassword' });
-
-    const respondentRes = await request(suite.app)
-      .post('/api/auth/login/alias')
-      .set('Accept', 'application/json')
-      .send({
+    const [superuserRes, userRes, respondentRes] = await Promise.all([
+      request(suite.app)
+        .post('/api/admin/auth/login')
+        .set('Accept', 'application/json')
+        .send({ email: 'testAdmin@example.com', password: 'testAdminPassword' }),
+      request(suite.app)
+        .post('/api/admin/auth/login')
+        .set('Accept', 'application/json')
+        .send({ email: 'testUser@example.com', password: 'testUserPassword' }),
+      request(suite.app).post('/api/auth/login/alias').set('Accept', 'application/json').send({
         survey: 'test-survey',
         username: 'testRespondent',
         password: 'testRespondentPassword',
-      });
+      }),
+    ]);
 
     suite.bearer = {
       superuser: `Bearer ${superuserRes.body.accessToken}`,

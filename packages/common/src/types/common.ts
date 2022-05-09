@@ -1,4 +1,8 @@
-export const applications = ['admin', 'survey', 'shared'] as const;
+export const frontEnds = ['admin', 'survey'] as const;
+
+export type FrontEnd = typeof frontEnds[number];
+
+export const applications = [...frontEnds, 'shared'] as const;
 
 export type Application = typeof applications[number];
 

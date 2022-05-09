@@ -26,7 +26,6 @@ export default () => {
     wrapAsync(authenticationController.aliasLogin)
   );
   router.post('/login/token', loginRateLimiter, wrapAsync(authenticationController.tokenLogin));
-  router.post('/login/verify', validation.mfaVerify, wrapAsync(authenticationController.verify));
   router.post('/refresh', wrapAsync(authenticationController.refresh));
   router.post('/logout', wrapAsync(authenticationController.logout));
 

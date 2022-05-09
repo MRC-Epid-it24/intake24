@@ -3,7 +3,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 import securityConfig from '@intake24/api/config/security';
 
 export default () => {
-  const url = '/api/auth/refresh';
+  const url = '/api/admin/auth/refresh';
 
   it('Missing refresh token cookie should should return 401', async () => {
     const { status } = await request(suite.app).post(url).set('Accept', 'application/json');
@@ -15,31 +15,31 @@ export default () => {
     const { status } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .set('Cookie', [`${securityConfig.jwt.survey.cookie.name}=invalidToken`]);
+      .set('Cookie', [`${securityConfig.jwt.admin.cookie.name}=invalidToken`]);
 
     expect(status).toBe(401);
   });
 
   it('Valid refresh token should return 200, access token & refresh cookie', async () => {
     const loginRes = await request(suite.app)
-      .post('/api/auth/login')
+      .post('/api/admin/auth/login')
       .set('Accept', 'application/json')
       .send({ email: 'testUser@example.com', password: 'testUserPassword' });
 
     const refreshToken = loginRes
       .get('Set-Cookie')[0]
       .split(';')[0]
-      .replace(`${securityConfig.jwt.survey.cookie.name}=`, '');
+      .replace(`${securityConfig.jwt.admin.cookie.name}=`, '');
 
     const res = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .set('Cookie', [`${securityConfig.jwt.survey.cookie.name}=${refreshToken}`]);
+      .set('Cookie', [`${securityConfig.jwt.admin.cookie.name}=${refreshToken}`]);
 
     const newRefreshToken = res
       .get('Set-Cookie')[0]
       .split(';')[0]
-      .replace(`${securityConfig.jwt.survey.cookie.name}=`, '');
+      .replace(`${securityConfig.jwt.admin.cookie.name}=`, '');
 
     expect(refreshToken).not.toBe(newRefreshToken);
 
@@ -50,7 +50,7 @@ export default () => {
     expect(
       res
         .get('Set-Cookie')
-        .some((cookie) => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name)
+        .some((cookie) => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name)
     ).toBeTrue();
   });
 };

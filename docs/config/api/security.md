@@ -30,9 +30,10 @@ JSON web tokens (`JWT`) settings
 
 ### Issuer
 
-Issuer for signing JWT tokens
+Issuer claim for signing JWT tokens
 
 - object-path: `jwt.issuer`
+- dotenv var: `JWT_ISSUER`
 - type: `string`
 - default: `'intake24'`
 
@@ -44,74 +45,185 @@ Secret to sign JWT access token
 - dotenv var: `JWT_ACCESS_SECRET`
 - type: `string`
 
-### Access token lifetime
+### Admin application settings
+
+JWT settings for admin frontend application.
+
+#### Access token audience
+
+Audience claim to sign JWT access token
+
+- object-path: `jwt.admin.access.audience`
+- type: `string[]`
+- default: `['admin', 'access']`
+
+#### Access token lifetime
 
 Lifetime of JWT access token. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
 
-- object-path: `jwt.access.lifetime`
-- dotenv var: `JWT_ACCESS_LIFETIME`
+- object-path: `jwt.admin.access.lifetime`
+- dotenv var: `JWT_ADMIN_ACCESS_LIFETIME`
 - type: `string`
 - default: `'15m'`
 
-### Refresh token secret
+#### Refresh token secret
 
 Secret to sign JWT refresh token
 
-- object-path: `jwt.refresh.secret`
-- dotenv var: `JWT_REFRESH_SECRET`
+- object-path: `jwt.admin.refresh.secret`
+- dotenv var: `JWT_ADMIN_REFRESH_SECRET`
 - type: `string`
 
-### Refresh token lifetime
+#### Refresh token audience
+
+Audience claim to sign JWT refresh token
+
+- object-path: `jwt.admin.refresh.audience`
+- type: `string[]`
+- default: `['admin', 'refresh']`
+
+#### Refresh token lifetime
 
 Lifetime of JWT refresh token. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
 
-- object-path: `jwt.refresh.lifetime`
-- dotenv var: `JWT_REFRESH_LIFETIME`
+- object-path: `jwt.admin.refresh.lifetime`
+- dotenv var: `JWT_ADMIN_REFRESH_LIFETIME`
 - type: `string`
 - default: `'1d'`
 
-## JWT Refresh token cookie
+#### JWT Refresh token cookie
 
 Refresh token is stored in `http-only` cookie in client's browser. There are several properties to configure refresh token cookie.
 
-### Cookie name
+#### Cookie name
 
-- object-path: `jwt.cookie.name`
+- object-path: `jwt.admin.cookie.name`
 - type: `string`
-- default: `it24_refresh_token`
+- default: `it24a_refresh_token`
 
-### Cookie maxAge
+#### Cookie maxAge
 
 Lifetime of cookie. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
 
-- object-path: `jwt.cookie.maxAge`
-- default: `jwt.refresh.lifetime` value
+- object-path: `jwt.admin.cookie.maxAge`
+- default: `jwt.admin.refresh.lifetime` value
 - type: `string`
 
-### Cookie httpOnly
+#### Cookie httpOnly
 
-- object-path: `jwt.cookie.httpOnly`
+- object-path: `jwt.admin.cookie.httpOnly`
 - type: `boolean`
 - default: `true`
 
-### Cookie path
+#### Cookie path
 
-- object-path: `jwt.cookie.path`
-- dotenv var: `JWT_COOKIE_PATH`
+- object-path: `jwt.admin.cookie.path`
+- dotenv var: `JWT_ADMIN_COOKIE_PATH`
 - type: `string`
-- default: `'/api/auth'`
+- default: `'/api/admin/auth'`
 
-### Cookie sameSite
+#### Cookie sameSite
 
-- object-path: `jwt.cookie.sameSite`
-- dotenv var: `JWT_COOKIE_SAMESITE`
+- object-path: `jwt.admin.cookie.sameSite`
+- dotenv var: `JWT_ADMIN_COOKIE_SAMESITE`
 - type: `boolean | 'lax' | 'strict' | 'none'`
 - default: `'lax'`
 
-### Cookie secure
+#### Cookie secure
 
-- object-path: `jwt.cookie.httpOnly`
-- dotenv var: `JWT_COOKIE_SECURE`
+- object-path: `jwt.admin.cookie.secure`
+- dotenv var: `JWT_ADMIN_COOKIE_SECURE`
+- type: `boolean`
+- default: `false`
+
+### Survey application settings
+
+JWT settings for survey frontend application.
+
+#### Access token audience
+
+Audience claim to sign JWT access token
+
+- object-path: `jwt.survey.access.audience`
+- type: `string[]`
+- default: `['survey', 'access']`
+
+#### Access token lifetime
+
+Lifetime of JWT access token. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
+
+- object-path: `jwt.survey.access.lifetime`
+- dotenv var: `JWT_SURVEY_ACCESS_LIFETIME`
+- type: `string`
+- default: `'15m'`
+
+#### Refresh token secret
+
+Secret to sign JWT refresh token
+
+- object-path: `jwt.survey.refresh.secret`
+- dotenv var: `JWT_SURVEY_REFRESH_SECRET`
+- type: `string`
+
+#### Refresh token audience
+
+Audience claim to sign JWT refresh token
+
+- object-path: `jwt.survey.refresh.audience`
+- type: `string[]`
+- default: `['survey', 'refresh']`
+
+#### Refresh token lifetime
+
+Lifetime of JWT refresh token. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
+
+- object-path: `jwt.survey.refresh.lifetime`
+- dotenv var: `JWT_SURVEY_REFRESH_LIFETIME`
+- type: `string`
+- default: `'1d'`
+
+#### JWT Refresh token cookie
+
+Refresh token is stored in `http-only` cookie in client's browser. There are several properties to configure refresh token cookie.
+
+#### Cookie name
+
+- object-path: `jwt.survey.cookie.name`
+- type: `string`
+- default: `it24s_refresh_token`
+
+#### Cookie maxAge
+
+Lifetime of cookie. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
+
+- object-path: `jwt.survey.cookie.maxAge`
+- default: `jwt.survey.refresh.lifetime` value
+- type: `string`
+
+#### Cookie httpOnly
+
+- object-path: `jwt.survey.cookie.httpOnly`
+- type: `boolean`
+- default: `true`
+
+#### Cookie path
+
+- object-path: `jwt.survey.cookie.path`
+- dotenv var: `JWT_SURVEY_COOKIE_PATH`
+- type: `string`
+- default: `'/api/auth'`
+
+#### Cookie sameSite
+
+- object-path: `jwt.survey.cookie.sameSite`
+- dotenv var: `JWT_SURVEY_COOKIE_SAMESITE`
+- type: `boolean | 'lax' | 'strict' | 'none'`
+- default: `'lax'`
+
+#### Cookie secure
+
+- object-path: `jwt.survey.cookie.secure`
+- dotenv var: `JWT_SURVEY_COOKIE_SECURE`
 - type: `boolean`
 - default: `false`
 

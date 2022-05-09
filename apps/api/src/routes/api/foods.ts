@@ -8,7 +8,7 @@ export default () => {
 
   const router = Router();
 
-  authenticate(router, 'user');
+  authenticate(router, 'survey');
 
   // Food search
   router.get('/:localeId', wrapAsync(foodSearchController.lookup));

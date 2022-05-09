@@ -166,7 +166,7 @@ export default ({
 
     const subject: Subject = { provider: 'email', providerKey: email };
 
-    return jwtService.issueTokens(user.id, subject);
+    return jwtService.issueTokens(user.id, subject, 'admin');
   };
 
   return {

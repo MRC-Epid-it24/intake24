@@ -79,7 +79,7 @@ export const useUser = defineStore('user', {
     },
 
     loadPayload(accessToken: string) {
-      const { userId, sub } = tokenService.decodeAccessToken(accessToken);
+      const { userId, sub } = tokenService.decodeAccessToken(accessToken, 'admin');
 
       const subject: Subject = JSON.parse(atob(sub));
 

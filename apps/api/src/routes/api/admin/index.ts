@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from '@intake24/api/http/middleware';
 
+import authentication from './authentication';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
 import foodGroups from './food-groups';
@@ -21,6 +22,8 @@ import users from './users';
 
 export default () => {
   const router = Router();
+
+  router.use('/auth', authentication());
 
   authenticate(router, 'admin');
 

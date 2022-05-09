@@ -33,6 +33,7 @@ import type {
   UserProfileController,
   UserSubmissionsController,
   // Admin
+  AdminAuthenticationController,
   AdminUserController,
   AdminUserProfileController,
   AdminUserJobController,
@@ -149,6 +150,7 @@ export interface IoC extends Jobs {
   feedbackController: FeedbackController;
 
   // Admin controllers
+  adminAuthenticationController: AdminAuthenticationController;
   adminUserProfileController: AdminUserProfileController;
   adminUserJobController: AdminUserJobController;
 

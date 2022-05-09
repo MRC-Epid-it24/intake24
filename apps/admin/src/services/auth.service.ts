@@ -16,7 +16,7 @@ export default {
    * @returns {Promise<AuthResponse>}
    */
   async login(request: EmailLoginRequest): Promise<AuthResponse> {
-    const { data } = await http.post<AuthResponse>('auth/login', request, {
+    const { data } = await http.post<AuthResponse>('admin/auth/login', request, {
       withCredentials: true,
     });
 
@@ -33,7 +33,7 @@ export default {
     const {
       data: { accessToken },
     } = await http.post<LoginResponse>(
-      'auth/login/verify',
+      'admin/auth/verify',
       { code, state },
       { withCredentials: true }
     );
@@ -49,7 +49,7 @@ export default {
   async refresh(): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<LoginResponse>('auth/refresh', null, { withCredentials: true });
+    } = await http.post<LoginResponse>('admin/auth/refresh', null, { withCredentials: true });
 
     return accessToken;
   },
@@ -60,6 +60,6 @@ export default {
    * @returns {Promise<void>}
    */
   async logout(): Promise<void> {
-    await http.post('auth/logout', null, { withCredentials: true });
+    await http.post('admin/auth/logout', null, { withCredentials: true });
   },
 };

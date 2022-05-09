@@ -14,7 +14,7 @@ export type SignPayload = {
 export interface TokenPayload extends SignPayload {
   sub: string;
   jti: string;
-  aud: string;
+  aud: string[];
   iss: string;
   iat: number;
   exp: number;

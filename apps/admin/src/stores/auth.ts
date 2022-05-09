@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { authService } from '@intake24/admin/services';
-import axios, { AxiosError } from 'axios';
 import { useLoading } from '@intake24/ui/stores';
 import { EmailLoginRequest, MFAVerifyRequest } from '@intake24/common/types/http';
 import { useUser } from './user';
@@ -8,7 +7,7 @@ import { useUser } from './user';
 export type AuthState = {
   accessToken: string | null;
   mfaRequestUrl: string | null;
-  error: AxiosError | null;
+  error: Error | null;
 };
 
 export const useAuth = defineStore('auth', {
@@ -53,7 +52,7 @@ export const useAuth = defineStore('auth', {
 
         return Promise.resolve();
       } catch (err) {
-        if (axios.isAxiosError(err)) this.error = err;
+        if (err instanceof Error) this.error = err;
 
         return Promise.reject(err);
       } finally {
@@ -71,7 +70,7 @@ export const useAuth = defineStore('auth', {
 
         return Promise.resolve();
       } catch (err) {
-        if (axios.isAxiosError(err)) this.error = err;
+        if (err instanceof Error) this.error = err;
 
         return Promise.reject(err);
       } finally {
@@ -86,7 +85,7 @@ export const useAuth = defineStore('auth', {
 
         return Promise.resolve();
       } catch (err) {
-        if (axios.isAxiosError(err)) this.error = err;
+        if (err instanceof Error) this.error = err;
 
         return withErr ? Promise.reject(err) : Promise.resolve();
       }

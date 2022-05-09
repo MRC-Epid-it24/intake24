@@ -5,13 +5,20 @@ import type { CookieSettings, SameSiteCookieOptions } from './common';
 export type JwtTokenSettings = {
   secret: string;
   lifetime: string;
+  audience: string[];
+};
+
+export type JwtFrontEndSettings = {
+  access: Omit<JwtTokenSettings, 'secret'>;
+  refresh: JwtTokenSettings;
+  cookie: CookieSettings;
 };
 
 export type JwtAuthentication = {
   issuer: string;
-  access: JwtTokenSettings;
-  refresh: JwtTokenSettings;
-  cookie: CookieSettings;
+  secret: string;
+  admin: JwtFrontEndSettings;
+  survey: JwtFrontEndSettings;
 };
 
 export type DuoProvider = {
@@ -60,22 +67,45 @@ const securityConfig: SecurityConfig = {
   },
   proxy: process.env.PROXY ? process.env.PROXY.split(',') : false,
   jwt: {
-    issuer: 'intake24',
-    access: {
-      secret: process.env.JWT_ACCESS_SECRET ?? '',
-      lifetime: process.env.JWT_ACCESS_LIFETIME || '15m',
+    issuer: process.env.JWT_ISSUER ?? 'intake24',
+    secret: process.env.JWT_ACCESS_SECRET ?? '',
+    admin: {
+      access: {
+        audience: ['admin', 'access'],
+        lifetime: process.env.JWT_ADMIN_ACCESS_LIFETIME || '15m',
+      },
+      refresh: {
+        audience: ['admin', 'refresh'],
+        secret: process.env.JWT_ADMIN_REFRESH_SECRET ?? '',
+        lifetime: process.env.JWT_ADMIN_REFRESH_LIFETIME || '1d',
+      },
+      cookie: {
+        name: 'it24a_refresh_token',
+        maxAge: ms(process.env.JWT_ADMIN_REFRESH_LIFETIME || '1d'),
+        httpOnly: true,
+        path: process.env.JWT_ADMIN_COOKIE_PATH || '/api/admin/auth',
+        sameSite: (process.env.JWT_ADMIN_COOKIE_SAMESITE || 'lax') as SameSiteCookieOptions,
+        secure: process.env.JWT_ADMIN_COOKIE_SECURE === 'true',
+      },
     },
-    refresh: {
-      secret: process.env.JWT_REFRESH_SECRET ?? '',
-      lifetime: process.env.JWT_REFRESH_LIFETIME || '1d',
-    },
-    cookie: {
-      name: 'it24_refresh_token',
-      maxAge: ms(process.env.JWT_REFRESH_LIFETIME || '1d'),
-      httpOnly: true,
-      path: process.env.JWT_COOKIE_PATH || '/api/auth',
-      sameSite: (process.env.JWT_COOKIE_SAMESITE || 'lax') as SameSiteCookieOptions,
-      secure: process.env.JWT_COOKIE_SECURE === 'true',
+    survey: {
+      access: {
+        audience: ['survey', 'access'],
+        lifetime: process.env.JWT_SURVEY_ACCESS_LIFETIME || '15m',
+      },
+      refresh: {
+        audience: ['survey', 'refresh'],
+        secret: process.env.JWT_SURVEY_REFRESH_SECRET ?? '',
+        lifetime: process.env.JWT_SURVEY_REFRESH_LIFETIME || '1d',
+      },
+      cookie: {
+        name: 'it24s_refresh_token',
+        maxAge: ms(process.env.JWT_SURVEY_REFRESH_LIFETIME || '1d'),
+        httpOnly: true,
+        path: process.env.JWT_SURVEY_COOKIE_PATH || '/api/auth',
+        sameSite: (process.env.JWT_SURVEY_COOKIE_SAMESITE || 'lax') as SameSiteCookieOptions,
+        secure: process.env.JWT_SURVEY_COOKIE_SECURE === 'true',
+      },
     },
   },
   mfa: {
