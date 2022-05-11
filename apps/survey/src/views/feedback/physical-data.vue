@@ -121,7 +121,7 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { mapState } from 'pinia';
 import { defineComponent } from '@vue/composition-api';
 import { userService, feedbackService, UserPhysicalDataInput } from '@intake24/survey/services';
@@ -233,7 +233,7 @@ export default defineComponent({
           return;
         }
 
-        const { response: { status = 0, data = {} } = {} } = err;
+        const { response: { status = 0, data = {} } = {} } = err as AxiosError<any>;
         if (status === 422 && 'errors' in data) this.errors.record(data.errors);
       }
     },

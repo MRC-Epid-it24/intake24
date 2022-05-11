@@ -1,9 +1,9 @@
-import { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import Router from 'vue-router';
 
 export type SubscribeCallback = (err?: AxiosError) => void;
 
-export interface HttpRequestConfig<T = any> extends AxiosRequestConfig<T> {
+export interface HttpRequestConfig<D = any> extends AxiosRequestConfig<D> {
   withErr?: boolean;
 }
 
@@ -13,27 +13,28 @@ export interface HttpClient {
   mountInterceptors(router: Router, authStore: unknown): void;
   mountBearerInterceptor(authStore: unknown): void;
   mount401Interceptor(router: Router, authStore: unknown): void;
-  get<T = any, R = AxiosResponse<T>>(url: string, config?: HttpRequestConfig): Promise<R>;
-  post<T = any, R = AxiosResponse<T>>(
+  get<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    data?: any,
-    config?: HttpRequestConfig
+    config?: HttpRequestConfig<D>
   ): Promise<R>;
-  put<T = any, R = AxiosResponse<T>>(
+  post<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    data?: any,
-    config?: HttpRequestConfig
+    data?: D,
+    config?: HttpRequestConfig<D>
   ): Promise<R>;
-  patch<T = any, R = AxiosResponse<T>>(
+  put<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    data?: any,
-    config?: HttpRequestConfig
+    data?: D,
+    config?: HttpRequestConfig<D>
   ): Promise<R>;
-  delete<T = any, R = AxiosResponse<T>>(url: string, config?: HttpRequestConfig): Promise<R>;
-  request<T = any, R = AxiosResponse<T>>(
+  patch<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    method: Method,
-    data?: any,
-    config?: HttpRequestConfig
+    data?: D,
+    config?: HttpRequestConfig<D>
   ): Promise<R>;
+  delete<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    config?: HttpRequestConfig<D>
+  ): Promise<R>;
+  request<T = any, R = AxiosResponse<T>, D = any>(config: HttpRequestConfig<D>): Promise<R>;
 }

@@ -1,4 +1,4 @@
-import { AxiosError, Method } from 'axios';
+import { AxiosError } from 'axios';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 import type { Dictionary } from '@intake24/common/types';
@@ -27,11 +27,11 @@ export interface FormDef<T = Dictionary> {
   hasErrors(): boolean;
   reset(): void;
   getData(object?: boolean): T | FormData;
-  submit<R>(url: string, method: Method, config?: HttpRequestConfig): Promise<R>;
+  submit<R>(config: HttpRequestConfig): Promise<R>;
   post<R>(url: string, config?: HttpRequestConfig): Promise<R>;
-  get<R>(url: string): Promise<R>;
-  patch<R>(url: string): Promise<R>;
-  put<R>(url: string): Promise<R>;
+  get<R>(url: string, config?: HttpRequestConfig): Promise<R>;
+  patch<R>(url: string, config?: HttpRequestConfig): Promise<R>;
+  put<R>(url: string, config?: HttpRequestConfig): Promise<R>;
   onSuccess(): void;
   onFail(err: AxiosError): void;
 }
@@ -81,9 +81,9 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
       return this.config.multipart ? serialize<T>(this.data) : this.data;
     },
 
-    async submit<R>(url: string, method: Method, config: HttpRequestConfig = {}): Promise<R> {
+    async submit<R>(config: HttpRequestConfig): Promise<R> {
       const { withErr, ...rest } = config;
-      const loadStr = `form-${url}`;
+      const loadStr = `form-${config.url}`;
       const loading = useLoading();
       loading.addItem(loadStr);
 
@@ -93,7 +93,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
 
       return new Promise((resolve, reject) => {
         httpService
-          .request<R>(url, method, output, { withErr: true, ...rest })
+          .request<R>({ data: output, withErr: true, ...rest })
           .then((res) => {
             const { data } = res;
             this.onSuccess();
@@ -110,20 +110,21 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
       });
     },
 
-    async post<R>(url: string, config: HttpRequestConfig = {}): Promise<R> {
-      return this.submit<R>(url, 'post', config);
+    async post<R>(url: string, config?: HttpRequestConfig): Promise<R> {
+      return this.submit<R>({ url, method: 'post', ...config });
     },
 
-    async get<R>(url: string): Promise<R> {
-      return this.submit<R>(url, 'get');
+    async get<R>(url: string, config?: HttpRequestConfig): Promise<R> {
+      return this.submit<R>({ url, method: 'get', ...config });
     },
 
-    async patch<R>(url: string): Promise<R> {
-      return this.submit<R>(url, 'patch');
+    async patch<R>(url: string, config?: HttpRequestConfig): Promise<R> {
+      console.log(config);
+      return this.submit<R>({ url, method: 'patch', ...config });
     },
 
-    async put<R>(url: string): Promise<R> {
-      return this.submit<R>(url, 'put');
+    async put<R>(url: string, config?: HttpRequestConfig): Promise<R> {
+      return this.submit<R>({ url, method: 'put', ...config });
     },
 
     onSuccess(): void {

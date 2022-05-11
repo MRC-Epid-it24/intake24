@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse, Method } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import trim from 'lodash/trim';
 import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
 import type { AuthStoreDef } from '../stores';
@@ -24,42 +24,32 @@ const httpClient: HttpClient = {
     this.mountInterceptors(router, useAuth);
   },
 
-  async get(url: string, config: HttpRequestConfig = {}) {
-    return this.request(url, 'get', {}, config);
+  async get(url, config) {
+    return this.request({ url, method: 'get', ...config });
   },
 
-  async post(url: string, data = {}, config: HttpRequestConfig = {}) {
-    return this.request(url, 'post', data, config);
+  async post(url, data, config) {
+    return this.request({ url, method: 'post', data, ...config });
   },
 
-  async put(url: string, data = {}, config: HttpRequestConfig = {}) {
-    return this.request(url, 'put', data, config);
+  async put(url, data, config) {
+    return this.request({ url, method: 'put', data, ...config });
   },
 
-  async patch(url: string, data = {}, config: HttpRequestConfig = {}) {
-    return this.request(url, 'patch', data, config);
+  async patch(url, data, config) {
+    return this.request({ url, method: 'patch', data, ...config });
   },
 
-  async delete(url: string, config: HttpRequestConfig = {}) {
-    return this.request(url, 'delete', {}, config);
+  async delete(url, config) {
+    return this.request({ url, method: 'delete', ...config });
   },
 
-  async request<T = any, R = AxiosResponse<T>>(
-    url: string,
-    method: Method,
-    data = {},
-    config: HttpRequestConfig = {}
-  ): Promise<R> {
+  async request<T = any, R = AxiosResponse<T>, D = any>(config: HttpRequestConfig<D>): Promise<R> {
     // const { withErr, ...rest } = config;
 
     return new Promise((resolve, reject) => {
       this.axios
-        .request<T, R>({
-          url,
-          method,
-          data,
-          ...config,
-        })
+        .request<T, R, D>(config)
         .then((res) => resolve(res))
         .catch((err) => {
           /* const { response } = err;

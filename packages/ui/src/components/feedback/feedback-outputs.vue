@@ -162,7 +162,7 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { defineComponent, PropType } from '@vue/composition-api';
 import { Errors } from '@intake24/common/util';
 import { downloadFile } from '@intake24/ui/util';
@@ -260,7 +260,7 @@ export default defineComponent({
         this.message = null;
 
         if (axios.isAxiosError(err)) {
-          const { response: { status, data = {}, headers = {} } = {} } = err;
+          const { response: { status, data = {}, headers = {} } = {} } = err as AxiosError<any>;
 
           if (status === 422 && 'errors' in data) this.email.errors.record(data.errors);
 
