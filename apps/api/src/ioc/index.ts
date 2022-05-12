@@ -124,8 +124,8 @@ export interface IoC extends Jobs {
   imagesBaseUrl: string;
 
   // Authenticated / scoped user vars
-  currentUser: User;
-  userId: string;
+  // currentUser: User;
+  // userId: string;
 
   // Controllers
   authenticationController: AuthenticationController;
@@ -209,7 +209,7 @@ export interface IoC extends Jobs {
 
   // Authentication
   authenticationService: AuthenticationService;
-  aclService: ACLService;
+  // aclService: ACLService;
   jwtService: JwtService;
   jwtRotationService: JwtRotationService;
   signInService: SignInService;
@@ -245,6 +245,12 @@ export interface IoC extends Jobs {
   surveyService: SurveyService;
   adminUserService: AdminUserService;
   userService: UserService;
+}
+
+export interface RequestIoC extends IoC {
+  currentUser: User;
+  userId: string;
+  aclService: ACLService;
 }
 
 const configureContainer = () => {

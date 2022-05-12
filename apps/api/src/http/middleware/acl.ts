@@ -4,7 +4,7 @@ import { asValue } from 'awilix';
 import type { Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { ForbiddenError } from '@intake24/api/http/errors';
-import ioc, { IoC } from '@intake24/api/ioc';
+import ioc, { RequestIoC } from '@intake24/api/ioc';
 import { foodDatabaseMaintainer, surveyRespondent, foodsAdmin } from '@intake24/common/security';
 
 /*
@@ -12,7 +12,7 @@ import { foodDatabaseMaintainer, surveyRespondent, foodsAdmin } from '@intake24/
  * It assumes successfully authenticated user on request scope hence the assertion to User
  */
 export const registerACLScope = (req: Request, res: Response, next: NextFunction): void => {
-  req.scope = ioc.createScope<IoC>();
+  req.scope = ioc.createScope<RequestIoC>();
 
   const user = req.user as User;
 

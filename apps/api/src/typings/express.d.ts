@@ -1,10 +1,10 @@
 import type { AwilixContainer } from 'awilix';
-import type { IoC } from '@intake24/api/ioc';
+import type { RequestIoC } from '@intake24/api/ioc';
 
 declare global {
   namespace Express {
     export interface Request {
-      scope: AwilixContainer<IoC>;
+      scope: AwilixContainer<RequestIoC>;
     }
   }
 }
