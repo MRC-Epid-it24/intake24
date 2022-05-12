@@ -28,6 +28,11 @@ export default () => {
     .route('/:feedbackSchemeId')
     .get(wrapAsync(feedbackSchemeController.read))
     .patch(validation.patch, wrapAsync(feedbackSchemeController.patch))
+    .put(
+      permission('feedback-schemes|edit'),
+      validation.put,
+      wrapAsync(feedbackSchemeController.put)
+    )
     .delete(wrapAsync(feedbackSchemeController.destroy));
 
   router.get('/:feedbackSchemeId/edit', wrapAsync(feedbackSchemeController.edit));

@@ -26,8 +26,8 @@ export default () => {
   router
     .route('/:surveyId')
     .get(wrapAsync(adminSurveyController.read))
-    .put(validation.put, wrapAsync(adminSurveyController.put))
     .patch(validation.patch, wrapAsync(adminSurveyController.patch))
+    .put(permission('surveys|edit'), validation.put, wrapAsync(adminSurveyController.put))
     .delete(wrapAsync(adminSurveyController.destroy));
 
   router.get('/:surveyId/edit', wrapAsync(adminSurveyController.edit));

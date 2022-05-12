@@ -1,6 +1,8 @@
+import { pick } from 'lodash';
 import { SurveyRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite, SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
+import { guardedSurveyFields } from '@intake24/common/types/models';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
@@ -110,7 +112,11 @@ export default () => {
     it('should return 200 and data', async () => {
       const updateInput1 = refreshSurveyRecord();
 
-      await suite.sharedTests.assertRecordUpdated('patch', url, updateInput1);
+      await suite.sharedTests.assertRecordUpdated('patch', url, {
+        ...updateInput1,
+        userCustomFields: false,
+        userPersonalIdentifiers: false,
+      });
     });
   });
 
@@ -119,21 +125,37 @@ export default () => {
       await suite.util.setPermission(['surveys']);
     });
 
-    it('should return 200 and data when securable set', async () => {
+    beforeEach(async () => {
+      await survey.reload();
+    });
+
+    it('should return 200 and data when securable set (except guarded fields)', async () => {
       await suite.util.setSecurable({ ...securable, action: ['edit'] });
 
       const updateInput2 = refreshSurveyRecord();
+      const guarded = pick(survey, guardedSurveyFields);
 
-      await suite.sharedTests.assertRecordUpdated('patch', url, updateInput2);
+      await suite.sharedTests.assertRecordUpdated(
+        'patch',
+        url,
+        { ...updateInput2, ...guarded },
+        { input: updateInput2 }
+      );
     });
 
-    it('should return 200 and data when owner set', async () => {
+    it('should return 200 and data when owner set (except guarded fields)', async () => {
       await suite.util.setSecurable(securable);
       await survey.update({ ownerId: suite.data.system.user.id });
 
       const updateInput3 = refreshSurveyRecord();
+      const guarded = pick(survey, guardedSurveyFields);
 
-      await suite.sharedTests.assertRecordUpdated('patch', url, updateInput3);
+      await suite.sharedTests.assertRecordUpdated(
+        'patch',
+        url,
+        { ...updateInput3, ...guarded },
+        { input: updateInput3 }
+      );
     });
   });
 };

@@ -19,6 +19,8 @@ import type {
 } from '@intake24/common/types/http/admin';
 import {
   SurveySchemeCreationAttributes,
+  createSurveySchemeFields,
+  perCardSurveySchemeFields,
   updateSurveySchemeFields,
 } from '@intake24/common/types/models';
 import type { IoC } from '@intake24/api/ioc';
@@ -92,7 +94,7 @@ export default (ioc: IoC): SurveySchemeController => {
     const { userId } = req.scope.cradle;
 
     const surveyScheme = await SurveyScheme.create({
-      ...pick(req.body, ['name', 'type', 'questions', 'meals', 'dataExport']),
+      ...pick(req.body, createSurveySchemeFields),
       ownerId: userId,
     });
 
@@ -123,7 +125,7 @@ export default (ioc: IoC): SurveySchemeController => {
   ): Promise<void> => {
     const surveyScheme = await getAndCheckAccess(req, 'edit');
 
-    await surveyScheme.update(pick(req.body, updateSurveySchemeFields));
+    await surveyScheme.update(pick(req.body, createSurveySchemeFields));
 
     res.json(surveyScheme);
   };
@@ -135,17 +137,20 @@ export default (ioc: IoC): SurveySchemeController => {
     const { aclService, userId } = req.scope.cradle;
 
     const surveyScheme = await getAndCheckAccess(req, 'edit');
+
     const keysToUpdate: string[] = [];
+    const [resourceActions, securableActions] = await Promise.all([
+      aclService.getResourceAccessActions('survey-schemes'),
+      aclService.getSecurableAccessActions(surveyScheme),
+    ]);
 
-    if (surveyScheme.ownerId === userId) {
-      keysToUpdate.push(...updateSurveySchemeFields);
+    if (resourceActions.includes('edit') || surveyScheme.ownerId === userId) {
+      keysToUpdate.push(...createSurveySchemeFields);
     } else {
-      const actions = await aclService.getAccessActions(surveyScheme, 'survey-schemes');
+      if (securableActions.includes('edit')) keysToUpdate.push(...updateSurveySchemeFields);
 
-      if (actions.includes('edit')) keysToUpdate.push('name', 'type');
-
-      ['questions', 'meals', 'dataExport'].forEach((item) => {
-        if (actions.includes(kebabCase(item))) keysToUpdate.push(item);
+      perCardSurveySchemeFields.forEach((item) => {
+        if (securableActions.includes(kebabCase(item))) keysToUpdate.push(item);
       });
     }
 

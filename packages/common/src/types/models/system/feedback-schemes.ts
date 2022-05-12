@@ -35,13 +35,9 @@ export const updateFeedbackSchemeFields = [
   'type',
   'outputs',
   'physicalDataFields',
-  'topFoods',
-  'cards',
-  'demographicGroups',
-  'henryCoefficients',
 ] as const;
 
-export const editFeedbackSchemeFields = ['name', 'type', 'outputs', 'physicalDataFields'] as const;
+export type UpdateFeedbackSchemeField = typeof updateFeedbackSchemeFields[number];
 
 export const perCardFeedbackSchemeFields = [
   'topFoods',
@@ -49,3 +45,12 @@ export const perCardFeedbackSchemeFields = [
   'demographicGroups',
   'henryCoefficients',
 ] as const;
+
+export type PerCardFeedbackSchemeField = typeof perCardFeedbackSchemeFields[number];
+
+export const createFeedbackSchemeFields = [
+  ...updateFeedbackSchemeFields,
+  ...perCardFeedbackSchemeFields,
+] as const;
+
+export type CreateFeedbackSchemeField = typeof createFeedbackSchemeFields[number];

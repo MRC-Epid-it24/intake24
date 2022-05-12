@@ -72,6 +72,8 @@ export type Deprecated = 'surveyMonkeyUrl' | 'originatingUrl';
 
 export type SurveyAttributesKeys = keyof Omit<SurveyAttributes, Deprecated>;
 
+export const guardedSurveyFields = ['userPersonalIdentifiers', 'userCustomFields'] as const;
+
 export const updateSurveyFields = [
   'name',
   'state',
@@ -96,15 +98,13 @@ export const updateSurveyFields = [
   'searchSortingAlgorithm',
   'searchMatchScoreWeight',
   'surveySchemeOverrides',
-  'userPersonalIdentifiers',
-  'userCustomFields',
 ] as const;
 
-export type UpdateSurveyFields = typeof updateSurveyFields[number];
+export type UpdateSurveyField = typeof updateSurveyFields[number];
 
-export const createSurveyFields = ['slug', ...updateSurveyFields] as const;
+export const createSurveyFields = ['slug', ...updateSurveyFields, ...guardedSurveyFields] as const;
 
-export type CreateSurveyFields = typeof updateSurveyFields[number];
+export type CreateSurveyField = typeof createSurveyFields[number];
 
 /* export const staffUpdateSurveyFields = [
   'name',
@@ -122,4 +122,4 @@ export type StaffUpdateSurveyFields = typeof staffUpdateSurveyFields[number]; */
 
 export const overridesFields = ['surveySchemeOverrides'] as const;
 
-export type OverridesFields = typeof overridesFields[number];
+export type OverridesField = typeof overridesFields[number];

@@ -28,6 +28,7 @@ export default () => {
     .route('/:surveySchemeId')
     .get(wrapAsync(surveySchemeController.read))
     .patch(validation.patch, wrapAsync(surveySchemeController.patch))
+    .put(permission('survey-schemes|edit'), validation.put, wrapAsync(surveySchemeController.put))
     .delete(wrapAsync(surveySchemeController.destroy));
 
   router.get('/:surveySchemeId/edit', wrapAsync(surveySchemeController.edit));

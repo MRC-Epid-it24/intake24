@@ -19,7 +19,7 @@ import type {
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import {
   FeedbackSchemeCreationAttributes,
-  editFeedbackSchemeFields,
+  createFeedbackSchemeFields,
   perCardFeedbackSchemeFields,
   updateFeedbackSchemeFields,
 } from '@intake24/common/types/models';
@@ -89,7 +89,7 @@ export default (ioc: IoC): FeedbackSchemeController => {
     const { userId } = req.scope.cradle;
 
     const feedbackScheme = await FeedbackScheme.create({
-      ...pick(req.body, updateFeedbackSchemeFields),
+      ...pick(req.body, createFeedbackSchemeFields),
       ownerId: userId,
     });
 
@@ -120,7 +120,7 @@ export default (ioc: IoC): FeedbackSchemeController => {
   ): Promise<void> => {
     const feedbackScheme = await getAndCheckAccess(req, 'edit');
 
-    await feedbackScheme.update(pick(req.body, updateFeedbackSchemeFields));
+    await feedbackScheme.update(pick(req.body, createFeedbackSchemeFields));
 
     res.json(feedbackScheme);
   };
@@ -132,17 +132,20 @@ export default (ioc: IoC): FeedbackSchemeController => {
     const { aclService, userId } = req.scope.cradle;
 
     const feedbackScheme = await getAndCheckAccess(req, 'edit');
+
     const keysToUpdate: string[] = [];
+    const [resourceActions, securableActions] = await Promise.all([
+      aclService.getResourceAccessActions('feedback-schemes'),
+      aclService.getSecurableAccessActions(feedbackScheme),
+    ]);
 
-    if (feedbackScheme.ownerId === userId) {
-      keysToUpdate.push(...updateFeedbackSchemeFields);
+    if (resourceActions.includes('edit') || feedbackScheme.ownerId === userId) {
+      keysToUpdate.push(...createFeedbackSchemeFields);
     } else {
-      const actions = await aclService.getAccessActions(feedbackScheme, 'feedback-schemes');
-
-      if (actions.includes('edit')) keysToUpdate.push(...editFeedbackSchemeFields);
+      if (securableActions.includes('edit')) keysToUpdate.push(...updateFeedbackSchemeFields);
 
       perCardFeedbackSchemeFields.forEach((item) => {
-        if (actions.includes(kebabCase(item))) keysToUpdate.push(item);
+        if (securableActions.includes(kebabCase(item))) keysToUpdate.push(item);
       });
     }
 

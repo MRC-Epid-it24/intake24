@@ -20,6 +20,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import {
   createSurveyFields,
+  guardedSurveyFields,
   overridesFields,
   updateSurveyFields,
 } from '@intake24/common/types/models';
@@ -122,7 +123,9 @@ export default (ioc: IoC): AdminSurveyController => {
   const update = async (req: Request<{ surveyId: string }>, res: Response<SurveyEntry>) => {
     const survey = await getAndCheckSurveyAccess(req, 'edit');
 
-    await survey.update(pick(req.body, updateSurveyFields));
+    await survey.update(
+      pick(req.body, [...updateSurveyFields, ...overridesFields, ...guardedSurveyFields])
+    );
 
     res.json(surveyResponse(survey));
   };
@@ -134,17 +137,23 @@ export default (ioc: IoC): AdminSurveyController => {
     const { aclService, userId } = req.scope.cradle;
 
     const survey = await getAndCheckSurveyAccess(req, 'edit');
+
     const keysToUpdate: string[] = [];
+    const [resourceActions, securableActions] = await Promise.all([
+      aclService.getResourceAccessActions('surveys'),
+      aclService.getSecurableAccessActions(survey),
+    ]);
 
-    if (survey.ownerId === userId) {
-      keysToUpdate.push(...updateSurveyFields);
+    if (resourceActions.includes('edit')) {
+      keysToUpdate.push(...updateSurveyFields, ...overridesFields, ...guardedSurveyFields);
+    } else if (survey.ownerId === userId) {
+      keysToUpdate.push(...updateSurveyFields, ...overridesFields);
     } else {
-      const actions = await aclService.getAccessActions(survey, 'surveys');
-
-      if (actions.includes('edit')) keysToUpdate.push(...updateSurveyFields);
+      if (securableActions.includes('edit')) keysToUpdate.push(...updateSurveyFields);
 
       (Object.keys(actionToFieldsMap) as (keyof typeof actionToFieldsMap)[]).forEach((item) => {
-        if (actions.includes(kebabCase(item))) keysToUpdate.push(...actionToFieldsMap[item]);
+        if (securableActions.includes(kebabCase(item)))
+          keysToUpdate.push(...actionToFieldsMap[item]);
       });
     }
 
