@@ -36,7 +36,7 @@ use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
 export default defineComponent({
   name: 'FeedbackChartArea',
 
-  components: { VChart },
+  components: { 'v-chart': VChart as any },
 
   props: {
     topFoods: {

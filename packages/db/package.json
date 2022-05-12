@@ -21,7 +21,7 @@
     "db:system:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/system/options.js"
   },
   "dependencies": {
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.1",
     "lodash": "^4.17.21",
     "mariadb": "^3.0.0",
     "mssql": "^8.1.0",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
-    "@types/node": "^17.0.31",
+    "@types/node": "^17.0.32",
     "@types/pg": "^8.6.5",
     "@types/validator": "^13.7.2",
     "sequelize-cli": "^6.4.1"
