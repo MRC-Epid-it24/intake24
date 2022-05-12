@@ -27,16 +27,22 @@
           <td>{{ $t(`surveys.states.${entry.state}`) }}</td>
         </tr>
         <tr>
-          <th>{{ $t('surveys.genUsers.allow') }}</th>
-          <td>{{ entry.allowGenUsers }}</td>
-          <th>{{ $t('surveys.genUsers.secret') }}</th>
+          <th>{{ $t('surveys.users.allowGenUsers') }}</th>
+          <td>{{ $t(`common.${entry.allowGenUsers}`) }}</td>
+          <th>{{ $t('surveys.users.genUserKey') }}</th>
           <td>{{ entry.genUserKey }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('surveys.users.personalIdentifiers') }}</th>
+          <td>{{ $t(`common.${entry.userPersonalIdentifiers}`) }}</td>
+          <th>{{ $t('surveys.users.customFields') }}</th>
+          <td>{{ $t(`common.${entry.userCustomFields}`) }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.submissionNotificationUrl') }}</th>
           <td>{{ entry.submissionNotificationUrl }}</td>
           <th>{{ $t('surveys.storeUserSessionOnServer') }}</th>
-          <td>{{ entry.storeUserSessionOnServer }}</td>
+          <td>{{ $t(`common.${entry.storeUserSessionOnServer}`) }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.submissionLimits.maxDaily') }}</th>
@@ -48,19 +54,11 @@
           <th>{{ $t('surveys.submissionLimits.minInterval') }}</th>
           <td colspan="3">{{ entry.minimumSubmissionInterval }}</td>
         </tr>
-        <tr>
-          <th>{{ $t('surveys.storeUserSessionOnServer') }}</th>
-          <td colspan="3">{{ entry.storeUserSessionOnServer }}</td>
-        </tr>
         <tr v-if="entry.feedbackScheme">
           <th>{{ $t('feedback-schemes._') }}</th>
           <td>{{ entry.feedbackScheme.name }}</td>
           <th>{{ $t('surveys.feedback.numberOfSubmissions') }}</th>
           <td>{{ entry.numberOfSubmissionsForFeedback }}</td>
-        </tr>
-        <tr>
-          <th>{{ $t('surveys.feedback.enabled') }}</th>
-          <td colspan="3">{{ $t('common.no') }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.authUrl.domainOverride') }}</th>
