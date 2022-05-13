@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
 const env = dotenv.config();
-dotenvExpand(env);
+dotenvExpand.expand(env);
 
 const publicPath = process.env.SERVER_STATIC;
 
@@ -12,8 +12,7 @@ mix
   .setPublicPath(publicPath)
   .scripts(
     [
-      'node_modules/jquery/dist/jquery.slim.min.js',
-      'node_modules/popper.js/dist/umd/popper.min.js',
+      'node_modules/@popperjs/core/dist/umd/popper.min.js',
       'node_modules/bootstrap/dist/js/bootstrap.min.js',
     ],
     `${publicPath}/site.js`
