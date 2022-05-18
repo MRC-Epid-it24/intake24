@@ -347,6 +347,15 @@ export default class PromptManager {
     });
   }
 
+  nextSubmissionPrompt(state: SurveyState): PromptQuestion | undefined {
+    return this.scheme.questions.submission.find((question) => {
+      return (
+        checkSurveyStandardConditions(state, question) &&
+        checkSurveyCustomConditions(state, question)
+      );
+    });
+  }
+
   /**
    * Set next Prompt in the Survey based on the type of the prompt component
    * @param state state of the Survey

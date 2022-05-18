@@ -16,7 +16,9 @@ import BasePrompt from '../BasePrompt';
 export default defineComponent({
   name: 'SubmitPrompt',
 
-  mixins: [BasePrompt, Submit],
+  mixins: [BasePrompt],
+
+  components: { submit: Submit },
 
   props: {
     promptProps: {

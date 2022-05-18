@@ -326,15 +326,12 @@ export const useSurvey = defineStore('survey', {
     },
 
     initAssociatedFoodPrompts() {
-      console.log('SIGEIN');
       const food = this.selectedEncodedFood;
 
       if (food === undefined) {
         console.warn('Expected an encoded food to be selected at this point');
         return;
       }
-
-      console.log('SIGEIN ID', food.id);
 
       if (this.data.associatedFoods[food.id] === undefined) {
         Vue.set(this.data.associatedFoods, food.id, {
@@ -344,8 +341,6 @@ export const useSurvey = defineStore('survey', {
           }),
         });
       }
-
-      console.log('SIGEIN WW', this.data.associatedFoods[food.id]);
     },
 
     updateActiveAssociatedFoodsPrompt(promptIndex: number) {
@@ -356,7 +351,7 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      console.log('updateActiveAssociatedFoodsPrompt', id, promptIndex);
+      console.debug('updateActiveAssociatedFoodsPrompt', id, promptIndex);
 
       const t = copy(this.data.associatedFoods[id]);
       t.activePrompt = promptIndex;

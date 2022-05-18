@@ -63,7 +63,7 @@ const prompts: LocaleMessageObject = {
       '  <p><strong>Do not</strong> enter how much you had, just the food names.',
     food: 'Food & Drinks',
     drinks: 'Drinks',
-    addFood: 'Add a food/drinks',
+    addFood: 'Add food/drink',
     addDrink: 'Add a drink',
     deleteMeal: 'Delete {meal}',
     deleteFoodFromMeal: 'Delete {food}',
