@@ -65,8 +65,6 @@ export default defineComponent({
 
   components: { MealItem, ContextMenu },
 
-  mixins: [WhyDidYouRender],
-
   props: {
     surveyName: {
       type: String,

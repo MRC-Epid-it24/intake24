@@ -13,7 +13,7 @@ import { defineComponent, PropType } from '@vue/composition-api';
 import { FoodSearchResponse } from '@intake24/common/types/http';
 
 export default defineComponent({
-  name: 'FoodBrowser',
+  name: 'CategoryContents',
 
   props: {
     results: {
