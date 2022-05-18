@@ -122,6 +122,14 @@ export default class DynamicRecall {
     return undefined;
   }
 
+  getNextSubmissionPrompt(): PromptInstance | undefined {
+    const nextPrompt = this.promptManager.nextSubmissionPrompt(this.store.$state);
+    if (nextPrompt) {
+      return { prompt: nextPrompt, section: 'submission' };
+    }
+    return undefined;
+  }
+
   getNextPrompt(): PromptInstance | undefined {
     const nextPrompt = this.getNextPromptForCurrentSelection();
 
@@ -137,7 +145,9 @@ export default class DynamicRecall {
       this.store.setSelection(nextSelection);
       return this.getNextPromptForCurrentSelection();
     }
-    console.log('Returning undefiened: ', nextSelection);
-    return undefined;
+
+    console.debug(`No food or meal has any prompts remaining`);
+
+    return this.getNextSubmissionPrompt();
   }
 }

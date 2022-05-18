@@ -131,7 +131,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
   methods: {
     optionLabel(unit: string) {
       return this.$t('portion.standardPortion.optionLabel', {
-        unit: this.$t(`standardUnits.${unit}_estimate_in`),
+        unit: this.$t(`portion.standardUnits.${unit}_estimate_in`),
       });
     },
     onSelectMethod(unit: number, event: number) {

@@ -101,6 +101,10 @@ const portion: LocaleMessageObject = {
       required: 'Please select an option from the list',
     },
   },
+  standardUnits: {
+    berries_estimate_in: 'berries',
+    punnets_estimate_in: 'punnets',
+  },
   cereal: {
     label: 'Please select the bowl that looks most like the one you used.',
   },

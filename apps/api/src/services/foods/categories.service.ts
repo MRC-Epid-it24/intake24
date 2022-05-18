@@ -6,6 +6,10 @@ const categoriesService = () => {
     localeId: string,
     categoryCode: string | undefined
   ): Promise<CategoryContents> => {
+    /*
+
+     */
+
     return {
       categories: [],
       foods: [],
