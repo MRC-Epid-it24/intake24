@@ -23,7 +23,7 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "pinia": "^2.0.14",
-    "pinia-plugin-persistedstate": "^1.5.1",
+    "pinia-plugin-persistedstate": "^1.5.2",
     "svg-gauge": "^1.0.6",
     "vue": "^2.6.14",
     "vue-echarts": "^6.0.3",
@@ -31,12 +31,12 @@
     "vue-ls": "^4.2.0",
     "vue-router": "^3.5.3",
     "vue-toasted": "^1.1.28",
-    "vuetify": "^2.6.5"
+    "vuetify": "^2.6.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
-    "@types/webpack-env": "1.16.4",
-    "@vue/runtime-dom": "^3.2.33"
+    "@types/webpack-env": "1.17.0",
+    "@vue/runtime-dom": "^3.2.34"
   },
   "bundledDependencies": [
     "@intake24/common",
