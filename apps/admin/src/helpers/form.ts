@@ -119,7 +119,6 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
     },
 
     async patch<R>(url: string, config?: HttpRequestConfig): Promise<R> {
-      console.log(config);
       return this.submit<R>({ url, method: 'patch', ...config });
     },
 

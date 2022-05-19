@@ -100,7 +100,7 @@ export default defineComponent({
   data() {
     return {
       characterSentimentDefaults,
-      sentiments: this.value,
+      sentiments: [...this.value],
       availableSentiments: sentiments.map((value) => ({
         text: this.$t(`feedback-schemes.sentiments.${value}`),
         value,
@@ -136,7 +136,7 @@ export default defineComponent({
     },
 
     update() {
-      this.$emit('update', this.sentiments);
+      this.$emit('update:sentiments', this.sentiments);
     },
   },
 });
