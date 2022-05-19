@@ -5,13 +5,13 @@
       {{ $t(`feedback-schemes.sentiments.add`) }}
     </v-btn>
     <v-tab v-for="(sentiment, index) in sentiments" :key="index">
-      <v-icon left>fas face-smile</v-icon>
+      <v-icon left>fas fa-face-smile</v-icon>
       {{ `${$t(`feedback-schemes.sentiments._`)} ${index + 1}` }}
     </v-tab>
     <v-tab-item v-for="(sentiment, index) in sentiments" :key="index">
       <v-card tile>
         <v-card-title>
-          <v-icon left>fas face-smile</v-icon>
+          <v-icon left>fas fa-face-smile</v-icon>
           {{ `${$t(`feedback-schemes.sentiments._`)} ${index + 1}` }}
         </v-card-title>
         <v-container fluid>
