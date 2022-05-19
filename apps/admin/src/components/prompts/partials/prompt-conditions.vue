@@ -67,7 +67,7 @@
       <v-col cols="12">
         <v-toolbar flat tile>
           <v-toolbar-title class="font-weight-medium">
-            <div class="text-h6">{{ $t('survey-schemes.conditions.title') }}</div>
+            <div class="text-h5">{{ $t('survey-schemes.conditions.title') }}</div>
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn

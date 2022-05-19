@@ -1,9 +1,9 @@
 <template>
   <v-container class="pa-0" fluid>
     <v-sheet color="white">
-      <div class="text-h4 font-weight-medium text-center py-4">
+      <h1 class="text-h1 font-weight-medium text-center">
         {{ $t('feedback.title') }}
-      </div>
+      </h1>
       <v-row no-gutters justify="center" class="pa-4 d-print-none">
         <v-col cols="12" md="7">
           <v-row justify="space-around" class="mt-4">

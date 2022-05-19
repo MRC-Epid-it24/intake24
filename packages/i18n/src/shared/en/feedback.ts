@@ -61,7 +61,7 @@ const feedback: LocaleMessageObject = {
   },
 
   topFoods: {
-    title: 'Highest in ...',
+    title: 'Foods contributing most to selected nutrient intakes',
     chart: 'Highest in {nutrient}',
   },
 

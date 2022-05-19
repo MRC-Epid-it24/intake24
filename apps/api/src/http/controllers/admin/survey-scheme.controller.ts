@@ -178,9 +178,7 @@ export default (ioc: IoC): SurveySchemeController => {
       throw new ForbiddenError('Scheme cannot be deleted. There are surveys using this scheme.');
 
     await Promise.all([
-      UserSecurable.destroy({
-        where: { securableId, securableType: 'SurveyScheme' },
-      }),
+      UserSecurable.destroy({ where: { securableId, securableType: 'SurveyScheme' } }),
       surveyScheme.destroy(),
     ]);
 

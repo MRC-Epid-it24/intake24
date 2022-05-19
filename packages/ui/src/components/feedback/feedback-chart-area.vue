@@ -1,5 +1,8 @@
 <template>
   <div>
+    <h2 class="text-h2 font-weight-medium text-center mb-4">
+      {{ $t('feedback.topFoods.title') }}
+    </h2>
     <v-row class="d-print-none" justify="center" no-gutters>
       <v-col
         v-for="chart in charts"

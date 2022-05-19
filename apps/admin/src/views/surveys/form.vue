@@ -187,7 +187,7 @@
             </v-col>
           </v-row>
           <v-divider class="my-6"></v-divider>
-          <div class="text-h6 mb-4">{{ $t('surveys.users._') }}</div>
+          <div class="text-h5 mb-4">{{ $t('surveys.users._') }}</div>
           <v-row>
             <v-col cols="12" md="6">
               <v-switch
@@ -235,7 +235,7 @@
             </v-col>
           </v-row>
           <v-divider class="my-6"></v-divider>
-          <div class="text-h6 mb-4">{{ $t('surveys.search._') }}</div>
+          <div class="text-h5 mb-4">{{ $t('surveys.search._') }}</div>
           <v-row>
             <v-col cols="12" md="6">
               <v-select
@@ -263,7 +263,7 @@
             </v-col>
           </v-row>
           <v-divider class="my-6"></v-divider>
-          <div class="text-h6 mb-4">{{ $t('surveys.authUrl._') }}</div>
+          <div class="text-h5 mb-4">{{ $t('surveys.authUrl._') }}</div>
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
@@ -297,7 +297,7 @@
             </v-col>
           </v-row>
           <v-divider class="my-6"></v-divider>
-          <div class="text-h6 mb-4">{{ $t('surveys.submissionLimits._') }}</div>
+          <div class="text-h5 mb-4">{{ $t('surveys.submissionLimits._') }}</div>
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
@@ -331,7 +331,7 @@
             </v-col>
           </v-row>
           <v-divider class="my-6"></v-divider>
-          <div class="text-h6 mb-4">{{ $t('surveys.feedback._') }}</div>
+          <div class="text-h5 mb-4">{{ $t('surveys.feedback._') }}</div>
           <v-row>
             <v-col cols="12" md="6">
               <v-select

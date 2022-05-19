@@ -6,7 +6,7 @@
           <h2>{{ $t('users.password.reset._') }}</h2>
         </v-card-title>
         <v-card-text v-if="submitted">
-          <p class="text-h6 ma-4">{{ $t('users.password.reset.sent') }}</p>
+          <p class="text-h5 ma-4">{{ $t('users.password.reset.sent') }}</p>
           <p class="text-subtitle-2 ma-4">
             Please check your inbox (including spam / junk folder).
           </p>

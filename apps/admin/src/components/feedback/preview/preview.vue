@@ -22,9 +22,9 @@
         <v-toolbar-title>{{ $t('feedback-schemes.preview.title') }}</v-toolbar-title>
       </v-toolbar>
       <v-container class="pa-0" fluid>
-        <div class="text-h4 font-weight-medium text-center py-4">
+        <h1 class="text-h1 font-weight-medium text-center">
           {{ $t('feedback.title') }}
-        </div>
+        </h1>
         <feedback-card-area v-bind="{ cards }" class="feedback-area"></feedback-card-area>
         <feedback-chart-area v-bind="{ topFoods }" class="feedback-area"></feedback-chart-area>
       </v-container>
