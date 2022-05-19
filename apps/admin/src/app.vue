@@ -116,12 +116,6 @@ import resources from '@intake24/admin/router/resources';
 import { mapState } from 'pinia';
 import { useApp, useAuth, useEntry } from '@intake24/admin/stores';
 
-export interface AppComponent {
-  sidebar: boolean;
-  toggleSidebar: () => void;
-  buildBreadCrumb(module: string, action: string, params: Dictionary, parent?: string): any[];
-}
-
 type Breadcrumbs = {
   disabled?: boolean;
   exact?: boolean;
@@ -135,7 +129,7 @@ type Mixins = InstanceType<typeof pwaUpdate> &
   InstanceType<typeof setsLanguage> &
   InstanceType<typeof webPush>;
 
-export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
+export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'App',
 
   components: { ConfirmDialog, Loader, MenuTree },
@@ -162,14 +156,14 @@ export default (Vue as VueConstructor<Vue & AppComponent & Mixins>).extend({
       return this.buildBreadCrumb(current, action, params, parent);
     },
 
-    title() {
-      if (this.$route.meta?.title) return this.$t(this.$route.meta.title);
+    title(): string {
+      if (this.$route.meta?.title) return this.$t(this.$route.meta.title).toString();
 
       if (!this.module) return this.app.name;
 
       const { id, name } = this.entry;
 
-      return name ?? id ?? this.$t(`${this.module}.title`);
+      return name ?? id ?? this.$t(`${this.module}.title`).toString();
     },
   },
 
