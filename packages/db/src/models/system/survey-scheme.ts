@@ -26,7 +26,7 @@ import { BaseModel, Securable } from '..';
 import { Survey, User, UserSecurable } from '.';
 
 @Scopes(() => ({
-  list: { attributes: ['id', 'name'] },
+  list: { attributes: ['id', 'name'], order: [['name', 'ASC']] },
   surveys: { include: [{ model: Survey }] },
 }))
 @Table({

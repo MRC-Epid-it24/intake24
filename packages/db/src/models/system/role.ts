@@ -12,7 +12,7 @@ import BaseModel from '../model';
 import { Permission, PermissionRole, RoleUser, User } from '.';
 
 @Scopes(() => ({
-  list: { attributes: ['id', 'name', 'displayName'] },
+  list: { attributes: ['id', 'name', 'displayName'], order: [['name', 'ASC']] },
   permissions: { include: [{ model: Permission, through: { attributes: [] } }] },
   users: { include: [{ model: User, through: { attributes: [] } }] },
 }))

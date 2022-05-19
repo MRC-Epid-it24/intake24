@@ -195,8 +195,8 @@ export default (ioc: IoC): AdminSurveyController => {
     const [languages, locales, surveySchemes, feedbackSchemes] = await Promise.all([
       Language.scope('list').findAll(),
       SystemLocale.scope('list').findAll(),
-      SurveyScheme.findAll(),
-      FeedbackScheme.findAll(),
+      SurveyScheme.findAll({ order: [['name', 'ASC']] }),
+      FeedbackScheme.findAll({ order: [['name', 'ASC']] }),
     ]);
 
     res.json({ languages, locales, surveySchemes, feedbackSchemes });

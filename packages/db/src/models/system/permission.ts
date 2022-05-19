@@ -21,7 +21,7 @@ export const addPermissionsToAdmin = async (permissions: Permission[]): Promise<
 };
 
 @Scopes(() => ({
-  list: { attributes: ['id', 'name', 'displayName'] },
+  list: { attributes: ['id', 'name', 'displayName'], order: [['name', 'ASC']] },
   roles: { include: [{ model: Role, through: { attributes: [] } }] },
   rolesUsers: { include: [{ model: Role, include: [{ model: User }] }] },
   users: { include: [{ model: User, through: { attributes: [] } }] },

@@ -15,7 +15,10 @@ import BaseModel from '../model';
 import { Language, Permission, Survey } from '.';
 
 @Scopes(() => ({
-  list: { attributes: ['id', 'englishName', 'localName', 'countryFlagCode'] },
+  list: {
+    attributes: ['id', 'englishName', 'localName', 'countryFlagCode'],
+    order: [['englishName', 'ASC']],
+  },
   adminLanguage: { include: [{ model: Language, as: 'adminLanguage' }] },
   surveyLanguage: { include: [{ model: Language, as: 'surveyLanguage' }] },
   surveys: { include: [{ model: Survey }] },
