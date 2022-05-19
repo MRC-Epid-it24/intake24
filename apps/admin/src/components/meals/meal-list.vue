@@ -54,8 +54,8 @@
               <v-icon>fa-grip-vertical</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title v-text="meal.name.en"></v-list-item-title>
-              <v-list-item-subtitle v-text="meal.time"></v-list-item-subtitle>
+              <v-list-item-title>{{ meal.name.en }}</v-list-item-title>
+              <v-list-item-subtitle>{{ meal.time }}</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon :title="$t('survey-schemes.meals.edit')" @click.stop="edit(index, meal)">

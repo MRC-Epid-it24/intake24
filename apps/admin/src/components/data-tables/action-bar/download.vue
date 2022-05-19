@@ -6,7 +6,7 @@
     target="_blank"
     :title="$t('common.action.read')"
   >
-    <v-icon dark v-text="icon"></v-icon>
+    <v-icon dark>{{ icon }}</v-icon>
   </v-btn>
 </template>
 

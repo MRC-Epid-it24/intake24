@@ -40,9 +40,9 @@
               <v-icon>fa-grip-vertical</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title
-                v-text="$t(`survey-schemes.data-export.sections.${section.id}`)"
-              ></v-list-item-title>
+              <v-list-item-title>
+                {{ $t(`survey-schemes.data-export.sections.${section.id}`) }}
+              </v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn

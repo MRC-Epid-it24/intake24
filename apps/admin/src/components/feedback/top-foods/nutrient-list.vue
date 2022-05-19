@@ -44,7 +44,7 @@
               <v-icon>fa-grip-vertical</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title v-text="nutrientType.name.en"></v-list-item-title>
+              <v-list-item-title>{{ nutrientType.name.en }} </v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon :title="$t('nutrient-types.edit')" @click.stop="edit(idx, nutrientType)">

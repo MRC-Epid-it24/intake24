@@ -27,10 +27,9 @@
                     {{ meal.localName[$i18n.locale] }}
                   </v-list-item-title>
                   <v-list-item-action>
-                    <v-list-item-action-text
-                      v-if="meal.time"
-                      v-text="stringTime(meal.time)"
-                    ></v-list-item-action-text>
+                    <v-list-item-action-text v-if="meal.time">
+                      {{ stringTime(meal.time) }}
+                    </v-list-item-action-text>
                     <v-icon x-small v-else>far fa-question-circle </v-icon>
                   </v-list-item-action>
                 </template>
@@ -38,9 +37,10 @@
                   <v-list-item v-for="(food, i) in meal.foods" :key="i" link>
                     <v-list-item-title
                       class="text-wrap"
-                      v-text="foodDisplayName(food)"
                       @click="chooseFood(i, idx, foodDisplayName(food), 'food')"
-                    ></v-list-item-title>
+                    >
+                      {{ foodDisplayName(food) }}
+                    </v-list-item-title>
                     <v-list-item-action>
                       <v-icon x-small v-if="food.data" color="sucess">fa-check</v-icon>
                     </v-list-item-action>

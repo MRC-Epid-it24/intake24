@@ -5,7 +5,7 @@
     :title="$t('common.action.edit')"
     @click.stop="onClick"
   >
-    <v-icon left v-text="icon"></v-icon> {{ $t('common.action.edit') }}
+    <v-icon left>{{ icon }}</v-icon> {{ $t('common.action.edit') }}
   </v-btn>
 </template>
 

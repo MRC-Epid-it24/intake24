@@ -30,7 +30,7 @@
               <v-icon>fa-trash</v-icon>
             </v-btn>
           </v-list-item-icon>
-          <v-list-item-title v-else v-text="foodDisplayName(food)"></v-list-item-title>
+          <v-list-item-title v-else>{{ foodDisplayName(food) }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-card-text>

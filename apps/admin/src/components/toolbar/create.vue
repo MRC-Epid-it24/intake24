@@ -4,7 +4,7 @@
     :to="{ name: `${route}-create`, params: { id: 'create' } }"
     :title="$t(`${module}.create`)"
   >
-    <v-icon left v-text="icon"></v-icon> {{ $t(`${module}.create`) }}
+    <v-icon left>{{ icon }}</v-icon> {{ $t(`${module}.create`) }}
   </v-btn>
 </template>
 

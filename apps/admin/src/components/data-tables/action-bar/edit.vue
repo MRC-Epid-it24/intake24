@@ -5,7 +5,7 @@
     :to="{ name: `${route}-edit`, params: { id: item.id } }"
     :title="$t('common.action.edit')"
   >
-    <v-icon dark v-text="icon"></v-icon>
+    <v-icon dark>{{ icon }}</v-icon>
   </v-btn>
 </template>
 
