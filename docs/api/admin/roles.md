@@ -22,7 +22,8 @@ Content-Type: application/json
 200 OK
 
 {
-    ...
+    "data": [{...}],
+    "meta": {...}
 }
 ```
 
@@ -42,7 +43,7 @@ Content-Type: application/json
     "name": string,
     "displayName": string,
     "description": string,
-    "permissions": number[]
+    "permissions": string[]
 }
 ```
 
@@ -95,7 +96,7 @@ Content-Type: application/json
     "name": string,
     "displayName": string,
     "description": string,
-    "permissions": number[]
+    "permissions": string[]
 }
 ```
 

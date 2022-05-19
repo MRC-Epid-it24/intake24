@@ -55,8 +55,8 @@ Content-Type: application/json
         },
         ...
     ],
-    "permissions": number[],
-    "roles": number[]
+    "permissions": string[],
+    "roles": string[]
 }
 ```
 
@@ -118,8 +118,8 @@ Content-Type: application/json
             "value": string
         }
     ],
-    "permissions": number[],
-    "roles": number[]
+    "permissions": string[],
+    "roles": string[]
 }
 ```
 
