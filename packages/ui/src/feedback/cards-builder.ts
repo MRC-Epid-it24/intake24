@@ -35,23 +35,7 @@ export type BuildCardOps = {
 export const buildCharacterParams = (
   characterRule: CharacterRules,
   { foods, userDemographic }: BuildCardOps
-): FeedbackCardParameters | null => {
-  const sentiment = characterRule.getSentiment(userDemographic, foods);
-  if (!sentiment) {
-    const { characterType, nutrientTypeIds, demographicGroups } = characterRule;
-    console.warn(
-      'Sentiment for character',
-      characterType,
-      'nutrientTypeIds',
-      nutrientTypeIds,
-      'resulted empty. Demographic groups',
-      demographicGroups
-    );
-    return null;
-  }
-
-  return sentiment;
-};
+): FeedbackCardParameters | null => characterRule.getSentiment(userDemographic, foods);
 
 export const buildNutrientGroupParams = (
   foodGroup: NutrientGroup,

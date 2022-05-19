@@ -15,7 +15,7 @@ export type CharacterParameters = {
   readonly id: string;
   readonly type: 'character';
   readonly characterType: CharacterType;
-  readonly sentiment: CharacterSentiment;
+  readonly sentiment: CharacterSentiment | null;
   readonly results: DemographicResult[];
   readonly showRecommendations: boolean;
 };
@@ -60,11 +60,11 @@ export class CharacterRules implements Character {
       .map((dg) => dg.resultedDemographicGroup.scaleSectors)
       .reduce((a, b) => a.slice().concat(b), []);
 
+    if (!scaleSectors.length) return null;
+
     const sentiment = this.pickAverageSentiment(scaleSectors);
 
-    return sentiment
-      ? { id, type: 'character', characterType, results, sentiment, showRecommendations }
-      : null;
+    return { id, type: 'character', characterType, results, sentiment, showRecommendations };
   }
 
   private getDemographicsGroups(

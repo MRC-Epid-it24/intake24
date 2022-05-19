@@ -32,7 +32,7 @@
               </div>
               <div>
                 <v-text-field
-                  v-model="sector.range.start"
+                  v-model.number="sector.range.start"
                   :label="$t('feedback-schemes.ranges.start')"
                   class="mb-4"
                   dense
@@ -40,7 +40,7 @@
                   outlined
                 ></v-text-field>
                 <v-text-field
-                  v-model="sector.range.end"
+                  v-model.number="sector.range.end"
                   :label="$t('feedback-schemes.ranges.end')"
                   dense
                   hide-details="auto"

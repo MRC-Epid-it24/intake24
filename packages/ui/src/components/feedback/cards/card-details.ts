@@ -17,8 +17,8 @@ export type FeedbackDetails = {
   readonly recommendedIntake: DemographicRange | null;
   readonly unit: string;
   readonly unitDescription: string | null;
-  readonly sentiment: Sentiment;
-  readonly textClass: string;
+  readonly sentiment: Sentiment | null;
+  readonly textClass?: string;
   readonly iconClass: string;
   readonly warning?: string | null;
 };
@@ -28,7 +28,9 @@ export const getLocaleContent = <T>(
   locale: string
 ): string | T => content[locale] ?? content.en;
 
-export const getTextClass = (sentiment: Sentiment): string => {
+export const getTextClass = (sentiment: Sentiment | null): string | undefined => {
+  if (!sentiment) return undefined;
+
   if (['too_low', 'low', 'high', 'too_high'].includes(sentiment)) return 'danger--text';
 
   if (['bit_low', 'bit_high'].includes(sentiment)) return 'warning--text';
@@ -36,19 +38,21 @@ export const getTextClass = (sentiment: Sentiment): string => {
   return 'success--text';
 };
 
-export const getIconClass = (sentiment: Sentiment): string => {
+export const getIconClass = (sentiment: Sentiment | null): string => {
+  const defaultIcon = 'fas fa-crosshairs';
+
   const icons: Record<Sentiment, string> = {
     too_low: 'fas fa-angle-double-down',
     low: 'fas fa-angle-double-down',
     bit_low: 'fas fa-angle-down',
-    good: 'fas fa-crosshairs',
-    excellent: 'fas fa-crosshairs',
+    good: defaultIcon,
+    excellent: defaultIcon,
     bit_high: 'fas fa-angle-up',
     high: 'fas fa-angle-double-up',
     too_high: 'fas fa-angle-double-up',
   };
 
-  return icons[sentiment];
+  return sentiment ? icons[sentiment] : defaultIcon;
 };
 
 export const getUnitFromNutrientRule = (
@@ -73,7 +77,7 @@ export const formatOutput = (value: number, unit: string): string => {
 };
 
 const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails => {
-  const { results, showRecommendations } = parameters;
+  const { sentiment: charSentiment, results, showRecommendations } = parameters;
 
   const details = results.map((result) => {
     const {
@@ -81,7 +85,7 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
       resultedDemographicGroup: { nutrientRuleType, nutrient, scaleSectors },
     } = result;
 
-    const { name, description, sentiment, range } = scaleSectors[0];
+    const { name, description, range, sentiment } = scaleSectors[0];
     const { lang } = useApp();
 
     // TODO: resolve this better from local application i18n
@@ -100,8 +104,8 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
       unit: getUnitFromNutrientRule(nutrientRuleType, nutrient.unit),
       unitDescription,
       sentiment,
-      textClass: getTextClass(sentiment),
-      iconClass: getIconClass(sentiment),
+      textClass: getTextClass(charSentiment ? sentiment : null),
+      iconClass: getIconClass(charSentiment ? sentiment : null),
     };
   });
 
@@ -110,7 +114,7 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
 
 const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
   const { name, description, low, high, unit, portions, showRecommendations } = parameters;
-  const sentiment = 'good';
+  const sentiment = null;
 
   const { lang } = useApp();
 
@@ -124,7 +128,6 @@ const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
     unit: getLocaleContent<string>(unit.name, lang),
     unitDescription: getLocaleContent(unit.description, lang),
     sentiment,
-    textClass: getTextClass(sentiment),
     iconClass: getIconClass(sentiment),
     warning: low && portions < low.threshold ? getLocaleContent(low.message, lang) : undefined,
   };
@@ -133,7 +136,7 @@ const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
 const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDetails => {
   const { name, description, low, high, unit, intake, recommendedIntake, showRecommendations } =
     parameters;
-  const sentiment = 'good';
+  const sentiment = null;
 
   const { lang } = useApp();
 
@@ -152,7 +155,6 @@ const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDe
     unit: getLocaleContent<string>(unit.name, lang),
     unitDescription: getLocaleContent(unit.description, lang),
     sentiment,
-    textClass: getTextClass(sentiment),
     iconClass: getIconClass(sentiment),
     warning,
   };
