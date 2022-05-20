@@ -17,7 +17,14 @@
               class="d-none d-sm-block"
             ></v-divider>
             <feedback-outputs
-              v-bind="{ outputs, surveyId }"
+              v-bind="{
+                outputs,
+                submissions:
+                  submissions.length !== selectedSubmissions.length
+                    ? selectedSubmissions
+                    : undefined,
+                surveyId,
+              }"
               v-if="!!outputs.length"
             ></feedback-outputs>
           </v-row>
@@ -123,6 +130,7 @@ export default defineComponent({
       cards: [] as FeedbackCardParameters[],
       topFoods: buildTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], [], this.$i18n.locale),
 
+      submissions: [] as Submission[],
       selectedSubmissions: [] as string[],
     };
   },
@@ -136,25 +144,6 @@ export default defineComponent({
 
     outputs(): FeedbackOutput[] {
       return this.feedbackScheme?.outputs ?? [];
-    },
-
-    submissions(): Submission[] {
-      const submissions = this.feedbackDicts?.surveyStats?.submissions ?? [];
-
-      return submissions.map(({ id, endTime }, index) => ({
-        id,
-        number: index + 1,
-        endDate: endTime.toLocaleDateString(),
-        endTime: endTime.toLocaleString(),
-      }));
-    },
-  },
-
-  watch: {
-    submissions(val: Submission[], oldVal: Submission[]) {
-      if (oldVal.length) return;
-
-      this.selectedSubmissions = this.submissions.map(({ id }) => id);
     },
   },
 
@@ -188,9 +177,17 @@ export default defineComponent({
         physicalData,
         submissions,
       });
+
       this.feedbackDicts = feedbackDicts;
       this.userDemographic = userDemographic;
+      this.submissions = submissions.map(({ id, endTime }, index) => ({
+        id,
+        number: index + 1,
+        endDate: new Date(endTime).toLocaleDateString(),
+        endTime: new Date(endTime).toLocaleString(),
+      }));
 
+      this.initSelectedSubmissions();
       this.buildFeedback();
     } catch (err) {
       console.log(err);
@@ -201,6 +198,25 @@ export default defineComponent({
   },
 
   methods: {
+    async initSelectedSubmissions() {
+      const { submissions } = this.$route.query;
+      const submissionIds = this.submissions.map(({ id }) => id);
+
+      if (Array.isArray(submissions)) {
+        this.selectedSubmissions = submissionIds.filter((id) => id && submissions.includes(id));
+        await this.$router.replace(this.$route.path);
+        return;
+      }
+
+      if (typeof submissions === 'string') {
+        this.selectedSubmissions = [submissions];
+        await this.$router.replace(this.$route.path);
+        return;
+      }
+
+      this.selectedSubmissions = submissionIds;
+    },
+
     async getUserData(surveyId: string) {
       const [physicalData, submissions] = await Promise.all([
         userService.fetchPhysicalData(),

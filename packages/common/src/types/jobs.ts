@@ -47,6 +47,7 @@ export type SendPasswordResetParams = {
 export type SendRespondentFeedbackParams = {
   surveyId: string;
   userId: string;
+  submissions?: string[];
   to: string;
   cc?: string;
   bcc?: string;

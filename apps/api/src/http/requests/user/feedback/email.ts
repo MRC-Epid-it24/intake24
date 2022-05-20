@@ -1,13 +1,10 @@
 import { checkSchema } from 'express-validator';
 import validate from '@intake24/api/http/requests/validate';
+import defaults from './defaults';
 
 export default validate(
   checkSchema({
-    survey: {
-      in: ['query'],
-      errorMessage: 'Missing survey parameter.',
-      isString: true,
-    },
+    ...defaults,
     email: {
       in: ['body'],
       errorMessage: 'Enter valid email address.',

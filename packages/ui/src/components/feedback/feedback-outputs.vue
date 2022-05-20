@@ -181,6 +181,9 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    submissions: {
+      type: Array as PropType<string[]>,
+    },
   },
 
   data() {
@@ -220,8 +223,10 @@ export default defineComponent({
       loading.addItem('feedback-download');
 
       try {
+        const { surveyId: survey, submissions } = this;
+
         const res = await this.$http.get(`user/feedback`, {
-          params: { survey: this.surveyId },
+          params: { survey, submissions },
           responseType: 'arraybuffer',
           headers: { accept: 'application/pdf' },
         });
@@ -249,10 +254,11 @@ export default defineComponent({
       try {
         const {
           email: { form },
-          surveyId,
+          surveyId: survey,
+          submissions,
         } = this;
 
-        await this.$http.post(`user/feedback`, { ...form }, { params: { survey: surveyId } });
+        await this.$http.post(`user/feedback`, { ...form }, { params: { survey, submissions } });
 
         this.email.form = { email: '', emailConfirm: '' };
         this.message = this.$t('feedback.outputs.email.sent').toString();

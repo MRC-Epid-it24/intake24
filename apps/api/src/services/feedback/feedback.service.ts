@@ -1,4 +1,5 @@
-import { resolve } from 'path';
+import { resolve } from 'node:path';
+import { URLSearchParams } from 'node:url';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
   FoodsNutrientType,
@@ -35,7 +36,7 @@ const feedbackService = ({ appConfig, fsConfig }: Pick<IoC, 'appConfig' | 'fsCon
 
   const getWeightTargets = async (): Promise<WeightTargetCoefficient[]> => weightTargetsData;
 
-  const getFeedbackLinks = async (surveyId: string, userId: string) => {
+  const getFeedbackLinks = async (surveyId: string, userId: string, submissions: string[] = []) => {
     const alias = await UserSurveyAlias.findOne({
       where: { surveyId, userId },
       include: [{ model: Survey, attributes: ['id', 'slug'] }],
@@ -43,35 +44,44 @@ const feedbackService = ({ appConfig, fsConfig }: Pick<IoC, 'appConfig' | 'fsCon
     if (!alias || !alias.survey) throw new NotFoundError();
 
     const {
+      username,
       urlAuthToken,
       survey: { slug },
     } = alias;
+
     const { base, survey } = appConfig.urls;
     const baseUrl = getFrontEndUrl(base, survey);
-    const url = `${baseUrl}/${slug}/feedback?token=${urlAuthToken}`;
-    const filename = `Intake24-${slug}-${alias.username}-${new Date()
+    const query = new URLSearchParams([
+      ['token', urlAuthToken],
+      ...submissions.map<[string, string]>((submission) => ['submissions', submission]),
+    ]).toString();
+
+    const url = `${baseUrl}/${slug}/feedback?${query}`;
+    const filename = `Intake24-${slug}-${username}-${new Date()
       .toISOString()
       .substring(0, 10)}.pdf`;
 
     return { url, filename };
   };
 
-  const getFeedbackStream = async (surveyId: string, userId: string) => {
-    const { url, filename } = await getFeedbackLinks(surveyId, userId);
+  const getFeedbackStream = async (
+    surveyId: string,
+    userId: string,
+    submissions: string[] = []
+  ) => {
+    const { url, filename } = await getFeedbackLinks(surveyId, userId, submissions);
 
-    const pdfGenerator = new FeedbackPdfGenerator(url);
-    const pdfStream = await pdfGenerator.getPdfStream();
+    const pdfStream = await new FeedbackPdfGenerator(url).getPdfStream();
 
     return { pdfStream, filename, url };
   };
 
-  const getFeedbackFile = async (surveyId: string, userId: string) => {
-    const { url, filename } = await getFeedbackLinks(surveyId, userId);
+  const getFeedbackFile = async (surveyId: string, userId: string, submissions: string[] = []) => {
+    const { url, filename } = await getFeedbackLinks(surveyId, userId, submissions);
 
     const path = resolve(fsConfig.local.downloads, filename);
 
-    const pdfGenerator = new FeedbackPdfGenerator(url);
-    await pdfGenerator.getPdfFile(path);
+    await new FeedbackPdfGenerator(url).getPdfFile(path);
 
     return { path, filename, url };
   };

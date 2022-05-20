@@ -11,10 +11,10 @@ export default ({
   scheduler,
 }: Pick<IoC, 'feedbackService' | 'scheduler'>): UserFeedbackController => {
   const download = async (
-    req: Request<any, any, any, { survey: string }>,
+    req: Request<any, any, any, { survey: string; submissions?: string[] }>,
     res: Response<Buffer>
   ): Promise<void> => {
-    const { survey: slug } = req.query;
+    const { survey: slug, submissions } = req.query;
     const { id: userId } = req.user as User;
 
     const survey = await Survey.findOne({ where: { slug }, include: [{ model: FeedbackScheme }] });
@@ -22,7 +22,7 @@ export default ({
 
     if (!survey.feedbackScheme?.outputs.includes('download')) throw new ForbiddenError();
 
-    const { pdfStream } = await feedbackService.getFeedbackStream(survey.id, userId);
+    const { pdfStream } = await feedbackService.getFeedbackStream(survey.id, userId, submissions);
     const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
 
     res.set('content-type', 'application/pdf');
@@ -31,12 +31,12 @@ export default ({
   };
 
   const email = async (
-    req: Request<any, any, any, { survey: string }>,
+    req: Request<any, any, any, { survey: string; submissions?: string[] }>,
     res: Response<undefined>
   ): Promise<void> => {
     const {
       body: { email: to },
-      query: { survey: slug },
+      query: { survey: slug, submissions },
     } = req;
     const { id: userId } = req.user as User;
 
@@ -47,7 +47,7 @@ export default ({
 
     await scheduler.jobs.addJob(
       { type: 'SendRespondentFeedback', userId },
-      { surveyId: survey.id, userId, to }
+      { surveyId: survey.id, userId, to, submissions }
     );
 
     res.json();
