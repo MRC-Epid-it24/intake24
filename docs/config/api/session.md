@@ -60,7 +60,7 @@ Lifetime of cookie. Defined as `ms-formatted` string, see [ms](https://github.co
 - object-path: `cookie.path`
 - dotenv var: `SESSION_COOKIE_PATH`
 - type: `string`
-- default: `'/api/auth'`
+- default: `'/api/admin/auth'`
 
 ### Cookie sameSite
 
