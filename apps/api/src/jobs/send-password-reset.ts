@@ -1,4 +1,5 @@
 import type { Job } from 'bullmq';
+import ms from 'ms';
 import nunjucks from 'nunjucks';
 import type { SendPasswordResetParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
@@ -45,8 +46,8 @@ export default class SendPasswordReset extends BaseJob<SendPasswordResetParams> 
     const { expiresIn } = this.securityConfig.passwords;
 
     const html = nunjucks.render('mail/password-reset.html', {
-      title: 'Password reset',
-      expiresIn,
+      title: 'Intake24: Password reset',
+      expiresIn: ms(expiresIn, { long: true }),
       action: { url, text: 'Reset password' },
     });
 
