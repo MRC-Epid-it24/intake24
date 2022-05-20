@@ -62,7 +62,7 @@ const feedbackService = ({ appConfig, fsConfig }: Pick<IoC, 'appConfig' | 'fsCon
     const pdfGenerator = new FeedbackPdfGenerator(url);
     const pdfStream = await pdfGenerator.getPdfStream();
 
-    return { pdfStream, filename };
+    return { pdfStream, filename, url };
   };
 
   const getFeedbackFile = async (surveyId: string, userId: string) => {
@@ -73,7 +73,7 @@ const feedbackService = ({ appConfig, fsConfig }: Pick<IoC, 'appConfig' | 'fsCon
     const pdfGenerator = new FeedbackPdfGenerator(url);
     await pdfGenerator.getPdfFile(path);
 
-    return { path, filename };
+    return { path, filename, url };
   };
 
   return {

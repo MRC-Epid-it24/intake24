@@ -38,8 +38,11 @@ export default class SendRespondentFeedback extends BaseJob<SendRespondentFeedba
     const { surveyId, userId, to, cc, bcc } = this.params;
     const subject = 'Intake24: My dietary feedback';
     const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
-    const { path } = await this.feedbackService.getFeedbackFile(surveyId, userId);
-    const html = nunjucks.render('mail/feedback.html', { title: subject });
+    const { path, url } = await this.feedbackService.getFeedbackFile(surveyId, userId);
+    const html = nunjucks.render('mail/feedback.html', {
+      title: subject,
+      action: { url, text: 'Download feedback' },
+    });
 
     await this.mailer.sendMail({
       to,

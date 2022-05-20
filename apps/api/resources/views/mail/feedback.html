@@ -1,8 +1,11 @@
-{% extends "mail/layout.html" %} {% block body %}
-<p>Hello,</p>
-<p>please find enclosed your feedback based on the recalls you have provided.</p>
+{% extends "mail/layouts/layout.html" %}
+{% block body %}
+<p>Dear Participant,</p>
+<p>Please find attached your feedback based on the recalls you have completed using Intake24.</p>
+<p>You can revisit your feedback here.</p>
+{% include "mail/partials/action-button.html" %}
 <p>
-  Have a nice day :)<br />
-  Intake24
+Kind regards,<br />
+Intake24 Team
 </p>
 {% endblock %}
