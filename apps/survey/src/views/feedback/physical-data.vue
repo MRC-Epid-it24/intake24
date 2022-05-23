@@ -8,10 +8,9 @@
           <v-card-text class="pa-4">
             <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="submit">
               <v-row>
-                <v-col cols="12" lg="6">
+                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('sex')">
                   <v-select
                     v-model="form.sex"
-                    :disabled="canShowPhysicalDataField('sex')"
                     :error-messages="errors.get('sex')"
                     :items="sexes"
                     :label="$t('feedback.physicalData.sexes._')"
@@ -31,10 +30,9 @@
                     </template>
                   </v-select>
                 </v-col>
-                <v-col cols="12" lg="6">
+                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('birthdate')">
                   <v-text-field
                     v-model="form.birthdate"
-                    :disabled="canShowPhysicalDataField('birthdate')"
                     :error-messages="errors.get('birthdate')"
                     :label="$t('feedback.physicalData.birthdate')"
                     hide-details="auto"
@@ -43,10 +41,9 @@
                     prepend-icon="fa-birthday-cake"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" lg="6">
+                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('heightCm')">
                   <v-text-field
                     v-model="form.heightCm"
-                    :disabled="canShowPhysicalDataField('heightCm')"
                     :error-messages="errors.get('heightCm')"
                     :label="$t('feedback.physicalData.heightCm')"
                     hide-details="auto"
@@ -55,10 +52,9 @@
                     prepend-icon="fa-arrows-alt-v"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" lg="6">
+                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('weightKg')">
                   <v-text-field
                     v-model="form.weightKg"
-                    :disabled="canShowPhysicalDataField('weightKg')"
                     :error-messages="errors.get('weightKg')"
                     :label="$t('feedback.physicalData.weightKg')"
                     hide-details="auto"
@@ -67,10 +63,9 @@
                     prepend-icon="fa-weight"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" lg="6">
+                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('physicalActivityLevelId')">
                   <v-select
                     v-model="form.physicalActivityLevelId"
-                    :disabled="canShowPhysicalDataField('physicalActivityLevelId')"
                     :error-messages="errors.get('physicalActivityLevelId')"
                     :items="physicalActivityLevels"
                     :label="$t('feedback.physicalData.physicalActivityLevelId')"
@@ -83,10 +78,9 @@
                     @change="errors.clear('physicalActivityLevelId')"
                   ></v-select>
                 </v-col>
-                <v-col cols="12" lg="6">
+                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('weightTarget')">
                   <v-select
                     v-model="form.weightTarget"
-                    :disabled="canShowPhysicalDataField('weightTarget')"
                     :error-messages="errors.get('weightTarget')"
                     :items="weightTargets"
                     :label="$t('feedback.physicalData.weightTargets._')"
@@ -99,10 +93,11 @@
                 </v-col>
               </v-row>
               <v-row justify="center" class="mt-3">
-                <v-col cols="12" sm="6" md="5" lg="4">
+                <v-col cols="12" sm="auto">
                   <v-btn
                     :disabled="errors.any()"
                     :title="$t('common.action.continue')"
+                    class="px-10"
                     color="secondary"
                     block
                     type="submit"
@@ -217,8 +212,8 @@ export default defineComponent({
   },
 
   methods: {
-    canShowPhysicalDataField(field: FeedbackPhysicalDataField): boolean {
-      return !this.feedbackScheme?.physicalDataFields.includes(field);
+    collectPhysicalDataField(field: FeedbackPhysicalDataField): boolean {
+      return !!this.feedbackScheme?.physicalDataFields.includes(field);
     },
 
     async submit() {
