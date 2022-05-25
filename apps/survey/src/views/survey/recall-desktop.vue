@@ -8,6 +8,7 @@
         @meal-action="onMealAction"
         @recall-action="onRecallAction"
         @food-selected="onFoodSelected"
+        @meal-selected="onMealSelected"
       >
       </meal-list>
     </v-col>
