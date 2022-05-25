@@ -334,6 +334,7 @@ export const useSurvey = defineStore('survey', {
       }
 
       if (this.data.associatedFoods[food.id] === undefined) {
+        console.log('Associated foods undefined');
         Vue.set(this.data.associatedFoods, food.id, {
           activePrompt: 0,
           prompts: food.data.associatedFoodPrompts.map(() => {
@@ -369,7 +370,9 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      Vue.set(this.data.associatedFoods[id].prompts, data.promptIndex, data.promptState);
+      const t = copy(this.data.associatedFoods[id]);
+      Vue.set(t.prompts, data.promptIndex, data.promptState);
+      Vue.set(this.data.associatedFoods, id, t);
     },
 
     commitAssociatedFoods() {

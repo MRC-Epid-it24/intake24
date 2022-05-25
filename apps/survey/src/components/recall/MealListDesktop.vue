@@ -30,6 +30,7 @@
               :meal-index="idx"
               @meal-action="onMealAction"
               @food-selected="onFoodSelected"
+              @meal-selected="onMealSelected"
               @breadcrumbMeal="chooseMealUp(meal.name)"
               @breadcrumbFood="chooseFoodUp"
             ></meal-item>
@@ -104,6 +105,9 @@ export default defineComponent({
     onFoodSelected(payload: { mealIndex: number; foodIndex: number }) {
       this.$emit('food-selected', payload);
     },
+    onMealSelected(payload: { mealIndex: number }) {
+      this.$emit('meal-selected', payload);
+    },
   },
 });
 </script>
@@ -111,3 +115,4 @@ export default defineComponent({
 <style lang="scss">
 @import '../../scss/meallist.scss';
 </style>
+s
