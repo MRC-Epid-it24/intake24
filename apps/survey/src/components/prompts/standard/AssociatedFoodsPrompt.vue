@@ -35,7 +35,6 @@ import { BasePromptProps } from '@intake24/common/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 import { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import { AssociatedFoodPromptState } from '@intake24/common/types';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
@@ -63,13 +62,12 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   data() {
-    console.log('ENEN DURAYIN');
-    console.log(useSurvey().associatedFoodsForSelection());
-    console.log(useSurvey().selectedFoodId);
+    const store = useSurvey();
+    console.debug(`In data(): activePrompt = ${store.associatedFoodsForSelection()!.activePrompt}`);
     return {
-      store: useSurvey(),
-      activePrompt: useSurvey().associatedFoodsForSelection()!.activePrompt,
-      prompts: useSurvey().associatedFoodsForSelection()!.prompts,
+      store,
+      activePrompt: store.associatedFoodsForSelection()!.activePrompt,
+      prompts: store.associatedFoodsForSelection()!.prompts,
     };
   },
 

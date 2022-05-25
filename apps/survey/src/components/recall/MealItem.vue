@@ -63,6 +63,9 @@ export default defineComponent({
   methods: {
     chooseMeal(mealName: string) {
       this.$emit('breadcrumbMeal', mealName);
+      this.$emit('meal-selected', {
+        mealIndex: this.mealIndex,
+      });
     },
     chooseFood(foodName: string) {
       this.$emit('breadcrumbFood', foodName);
