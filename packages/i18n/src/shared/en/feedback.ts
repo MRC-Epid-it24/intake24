@@ -2,7 +2,7 @@ import { LocaleMessageObject } from 'vue-i18n';
 
 const feedback: LocaleMessageObject = {
   _: 'Intake24 feedback',
-  title: 'Results from your Intake24 recalls',
+  title: 'Feedback from your Intake24 recalls',
   missingFoods:
     'Please note, any foods you reported as missing will not be included in your dietary feedback',
 
@@ -56,12 +56,13 @@ const feedback: LocaleMessageObject = {
   },
 
   submissions: {
-    _: 'Submission',
-    title: 'Submissions',
+    _: 'Recall day',
+    title: 'Recall days',
+    all: 'all',
   },
 
   topFoods: {
-    title: 'Foods contributing most to selected nutrient intakes',
+    title: 'Foods contributing most to your nutrient intakes',
     chart: 'Highest in {nutrient}',
   },
 

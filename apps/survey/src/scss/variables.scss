@@ -29,20 +29,26 @@ $icon-size-dense: 18px;
 $headings: (
   'h1': (
     'size': 2rem,
+    'line-height': 2.5rem,
   ),
   'h2': (
-    'size': 1.8rem,
+    'size': 1.75rem,
+    'line-height': 2rem,
   ),
   'h3': (
-    'size': 1.6rem,
+    'size': 1.5rem,
+    'line-height': 2rem,
   ),
   'h4': (
-    'size': 1.4rem,
+    'size': 1.3rem,
+    'line-height': 1.5rem,
   ),
   'h5': (
     'size': 1.2rem,
+    'line-height': 1.5rem,
   ),
   'h6': (
     'size': 1rem,
+    'line-height': 1.5rem,
   )
 );

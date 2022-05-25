@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-h2 font-weight-medium text-center mb-4">
+    <h2 class="text-h2 font-weight-medium text-center mb-6">
       {{ $t('feedback.topFoods.title') }}
     </h2>
     <v-row class="d-print-none" justify="center" no-gutters>

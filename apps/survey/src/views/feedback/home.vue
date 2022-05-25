@@ -1,12 +1,13 @@
 <template>
   <v-container class="pa-0" fluid>
-    <v-sheet color="white">
-      <h1 class="text-h1 font-weight-medium text-center">
-        {{ $t('feedback.title') }}
+    <v-sheet color="white py-4">
+      <h1 v-if="surveyName" class="text-h1 font-weight-medium text-center mb-4">
+        {{ surveyName }}
       </h1>
+      <h2 class="text-h2 font-weight-medium text-center mb-4">{{ $t('feedback.title') }}</h2>
       <v-row no-gutters justify="center" class="pa-4 d-print-none">
         <v-col cols="12" md="7">
-          <v-row justify="space-around" class="mt-4">
+          <v-row justify="space-around">
             <feedback-user-info
               v-bind="{ surveyId, userDemographic }"
               v-if="userDemographic"
@@ -36,13 +37,18 @@
           <v-expansion-panels flat focusable tile>
             <v-expansion-panel>
               <v-expansion-panel-header class="text-subtitle-1 font-weight-medium">
-                {{ $t('feedback.submissions.title') }} ({{ selectedSubmissions.length }})
+                {{ $t('feedback.submissions.title') }}
+                ({{
+                  submissions.length === selectedSubmissions.length
+                    ? $t('feedback.submissions.all')
+                    : selectedSubmissions.length
+                }})
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-list flat>
                   <v-list-item-group v-model="selectedSubmissions" multiple @change="buildFeedback">
                     <v-list-item
-                      v-for="submission in submissions"
+                      v-for="(submission, idx) in submissions"
                       :key="submission.id"
                       :value="submission.id"
                       active-class="blue--text text--darken-3"
@@ -54,8 +60,8 @@
                         </v-list-item-action>
                         <v-list-item-content>
                           <v-list-item-title>
-                            {{ `${$t('feedback.submissions._')} #${submission.number}` }} |
-                            {{ `${submission.endDate}` }}
+                            {{ `${$t('feedback.submissions._')} #${idx + 1}` }} |
+                            {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
                           </v-list-item-title>
                         </v-list-item-content>
                       </template>
@@ -69,7 +75,7 @@
       </v-row>
       <v-row no-gutters justify="center" class="px-4">
         <v-col cols="auto">
-          <v-alert text color="blue darken-3" icon="fas fa-circle-exclamation">
+          <v-alert text class="mb-0" color="blue darken-3" icon="fas fa-circle-exclamation">
             {{ $t('feedback.missingFoods') }}
           </v-alert>
         </v-col>
@@ -88,6 +94,7 @@ import { mapState } from 'pinia';
 import {
   FeedbackCardParameters,
   FeedbackDictionaries,
+  SurveySubmission,
   UserDemographic,
   buildTopFoods,
   buildCardParams,
@@ -102,13 +109,6 @@ import {
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 import { FeedbackOutput } from '@intake24/common/feedback';
-
-export type Submission = {
-  id: string;
-  number: number;
-  endDate: string;
-  endTime: string;
-};
 
 export default defineComponent({
   name: 'FeedbackHome',
@@ -130,7 +130,6 @@ export default defineComponent({
       cards: [] as FeedbackCardParameters[],
       topFoods: buildTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], [], this.$i18n.locale),
 
-      submissions: [] as Submission[],
       selectedSubmissions: [] as string[],
     };
   },
@@ -144,6 +143,14 @@ export default defineComponent({
 
     outputs(): FeedbackOutput[] {
       return this.feedbackScheme?.outputs ?? [];
+    },
+
+    surveyName(): string | undefined {
+      return this.parameters?.name;
+    },
+
+    submissions(): SurveySubmission[] {
+      return this.feedbackDicts?.surveyStats.submissions ?? [];
     },
   },
 
@@ -180,12 +187,6 @@ export default defineComponent({
 
       this.feedbackDicts = feedbackDicts;
       this.userDemographic = userDemographic;
-      this.submissions = submissions.map(({ id, endTime }, index) => ({
-        id,
-        number: index + 1,
-        endDate: new Date(endTime).toLocaleDateString(),
-        endTime: new Date(endTime).toLocaleString(),
-      }));
 
       this.initSelectedSubmissions();
       this.buildFeedback();
