@@ -21,27 +21,27 @@ export const mealTimePromptProps: MealTimePromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
   format: '24hr',
-  localName: { en: 'Edit Time' },
+  name: { en: 'Edit Time' },
 });
 
 export const mealAddPromptProps: BasePromptProps = copy({
   ...basePromptProps,
-  localName: { en: 'Add Meal' },
+  name: { en: 'Add Meal' },
 });
 
 export const editMealPromptProps: BasePromptProps = copy({
   ...basePromptProps,
-  localName: { en: 'Edit Meal' },
+  name: { en: 'Edit Meal' },
 });
 
 export const submitPromptProps: BasePromptProps = copy({
   ...basePromptProps,
-  localName: { en: 'Submit' },
+  name: { en: 'Submit' },
 });
 
 export const reviewConfirmPromptProps: BasePromptProps = copy({
   ...basePromptProps,
-  localName: { en: 'Review and Confirm' },
+  name: { en: 'Review and Confirm' },
 });
 
 export const redirectPromptProps: RedirectPromptProps = copy({
@@ -49,19 +49,19 @@ export const redirectPromptProps: RedirectPromptProps = copy({
   url: null,
   identifier: 'username',
   timer: 0,
-  localName: { en: 'Redirect' },
+  name: { en: 'Redirect' },
 });
 
 export const foodSearchPromptProps: FoodSearchPromptProps = copy({
   ...basePromptProps,
   allowBrowsing: true,
   dualLanguage: false,
-  localName: { en: 'Search Food' },
+  name: { en: 'Search Food' },
 });
 
 export const associatedFoodsPromptProps: BasePromptProps = copy({
   ...basePromptProps,
-  localName: { en: 'Associated foods' },
+  name: { en: 'Associated foods' },
 });
 
 export const standardPromptQuestions: PromptQuestion[] = [
