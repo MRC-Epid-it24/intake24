@@ -317,6 +317,15 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Guide image',
       subtitle: 'Use the "guide image" method to estimate the portion size',
     },
+    'drink-scale-prompt': {
+      title: 'Drink Scale',
+      subtitle: 'Use the "drink scale" method to estimate the amount of liquid consumed',
+    },
+    'drinkware-prompt': {
+      title: 'Drink estimation portion',
+      subtitle:
+        'Use the "drinkware" method to  choose estimation reference for the amount of liquid consumed',
+    },
     'standard-portion-prompt': {
       title: 'Standard portion',
       subtitle: 'Use the "standard portion" method to estimate the portion size',

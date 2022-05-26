@@ -127,6 +127,20 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     props: copy({ ...basePromptProps, name: { en: 'Guide image' } }),
   },
   {
+    component: 'drinkware-prompt',
+    type: 'portion-size',
+    id: 'drinkware-prompt',
+    name: 'Drinkware',
+    props: copy({ ...basePromptProps, name: { en: 'Drinkware' } }),
+  },
+  {
+    component: 'drink-scale-prompt',
+    type: 'portion-size',
+    id: 'drink-scale-prompt',
+    name: 'Drink Scale',
+    props: copy({ ...basePromptProps, name: { en: 'Drink Scale' } }),
+  },
+  {
     component: 'standard-portion-prompt',
     type: 'portion-size',
     id: 'standard-portion-prompt',

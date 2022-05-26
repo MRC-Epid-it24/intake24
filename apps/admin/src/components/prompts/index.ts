@@ -102,6 +102,14 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['foods'],
   },
+  'drink-scale-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
+  'drinkware-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
   'standard-portion-prompt': {
     tabs: [...baseTab],
     sections: ['foods'],

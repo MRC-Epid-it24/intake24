@@ -34,6 +34,8 @@ export const portionSizeComponentTypes = [
   'as-served-leftovers-prompt',
   'guide-image-prompt',
   'standard-portion-prompt',
+  'drink-scale-prompt',
+  'drinkware-prompt',
 ] as const;
 
 export type PortionSizeComponentType = typeof portionSizeComponentTypes[number];
