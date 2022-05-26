@@ -10,6 +10,7 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
 
   // Trusted proxies
   app.set('trust proxy', proxy);
+  app.set('etag', false);
 
   // CORS
   app.use(cors({ origin, credentials: true }));
