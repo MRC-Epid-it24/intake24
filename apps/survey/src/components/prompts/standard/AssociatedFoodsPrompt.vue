@@ -3,20 +3,18 @@
     <v-card-actions :class="isNotDesktop && 'justify-center'">
       <v-row>
         <v-col>
-          <v-expansion-panels v-model="activePromptModel">
-            <v-expansion-panel v-for="(assocFood, index) in associatedFoodPrompts" :key="index">
+          <v-expansion-panels v-model="activePrompt" @change="updatePrompts">
+            <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
               <v-expansion-panel-header disable-icon-rotate>
-                {{ assocFood.promptText }}
+                {{ associatedFoodPrompts[index].promptText }}
                 <template v-slot:actions>
-                  <valid-invalid-icon
-                    :valid="prompts[index].confirmed !== undefined"
-                  ></valid-invalid-icon>
+                  <valid-invalid-icon :valid="prompt.confirmed !== undefined"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-btn-toggle v-model="prompts[index].confirmed" @change="updatePrompt(index)">
-                  <v-btn value="false"> {{ $t('prompts.associatedFoods.no') }}</v-btn>
-                  <v-btn value="true"> {{ $t('prompts.associatedFoods.yes') }}</v-btn>
+                <v-btn-toggle v-model="prompt.confirmed" @change="updatePrompts">
+                  <v-btn :value="false">{{ $t('prompts.associatedFoods.no') }}</v-btn>
+                  <v-btn :value="true">{{ $t('prompts.associatedFoods.yes') }}</v-btn>
                 </v-btn-toggle>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -29,12 +27,11 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { mapActions, mapState } from 'pinia';
 import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
-import { useSurvey } from '@intake24/survey/stores';
-import { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
+import { AssociatedFoodsState, EncodedFood } from '@intake24/common/types';
+import { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
@@ -45,48 +42,44 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   mixins: [BasePrompt],
 
   props: {
+    promptComponent: {
+      type: String,
+      required: true,
+    },
     promptProps: {
       type: Object as PropType<BasePromptProps>,
       required: true,
     },
-    foodName: {
-      type: String,
-    },
     associatedFoods: {
-      type: Array as PropType<Array<UserAssociatedFoodPrompt>>,
+      type: Object as PropType<{ [key: number]: AssociatedFoodsState }>,
+      required: true,
     },
-    promptComponent: {
-      type: String,
+    food: {
+      type: Object as PropType<EncodedFood>,
       required: true,
     },
   },
 
   data() {
-    const store = useSurvey();
-    console.debug(`In data(): activePrompt = ${store.associatedFoodsForSelection()!.activePrompt}`);
+    const assocFoodEntry = this.associatedFoods[this.food.id] ?? {};
+    const {
+      activePrompt = 0,
+      prompts = this.food.data.associatedFoodPrompts.map(() => ({ confirmed: undefined })),
+    } = assocFoodEntry;
+
     return {
-      store,
-      activePrompt: store.associatedFoodsForSelection()!.activePrompt,
-      prompts: store.associatedFoodsForSelection()!.prompts,
+      activePrompt,
+      prompts,
     };
   },
 
   computed: {
-    ...mapState(useSurvey, {
-      associatedFoodPrompts: (state) => state.selectedEncodedFood?.data.associatedFoodPrompts,
-      selectedFoodIndex: (state) => state.selectedFoodIndex,
-      selectedMealIndex: (state) => state.selectedMealIndex,
-    }),
+    associatedFoodPrompts(): UserAssociatedFoodPrompt[] {
+      return this.food.data.associatedFoodPrompts;
+    },
 
-    activePromptModel: {
-      get(): number {
-        return this.activePrompt;
-      },
-
-      set(value: number) {
-        this.activePrompt = value;
-        this.store.updateActiveAssociatedFoodsPrompt(this.activePrompt);
-      },
+    foodName(): string {
+      return this.food.data.localName;
     },
 
     text(): string {
@@ -105,26 +98,10 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     },
   },
 
-  beforeCreate() {
-    useSurvey().initAssociatedFoodPrompts();
-  },
-
   methods: {
-    ...mapActions(useSurvey, ['updateAssociatedFoodsPrompt', 'updateActiveAssociatedFoodsPrompt']),
-
-    updatePrompt(index: number) {
-      this.store.updateAssociatedFoodsPrompt({
-        promptIndex: index,
-        promptState: this.prompts[index],
-      });
-    },
-
-    accept() {
-      console.log('accept');
-    },
-
-    reject() {
-      console.log('reject');
+    updatePrompts() {
+      const { activePrompt, prompts } = this;
+      this.$emit('update', { activePrompt, prompts });
     },
 
     submit() {

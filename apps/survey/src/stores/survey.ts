@@ -325,54 +325,9 @@ export const useSurvey = defineStore('survey', {
       this.data.meals[mealIndex].foods.splice(foodIndex, 1, { ...foodState, ...food });
     },
 
-    initAssociatedFoodPrompts() {
-      const food = this.selectedEncodedFood;
-
-      if (food === undefined) {
-        console.warn('Expected an encoded food to be selected at this point');
-        return;
-      }
-
-      if (this.data.associatedFoods[food.id] === undefined) {
-        console.log('Associated foods undefined');
-        Vue.set(this.data.associatedFoods, food.id, {
-          activePrompt: 0,
-          prompts: food.data.associatedFoodPrompts.map(() => {
-            return { confirmed: undefined };
-          }),
-        });
-      }
-    },
-
-    updateActiveAssociatedFoodsPrompt(promptIndex: number) {
-      const id = this.selectedFoodId;
-
-      if (id === undefined) {
-        console.warn('Expected a food to be selected at this point');
-        return;
-      }
-
-      console.debug('updateActiveAssociatedFoodsPrompt', id, promptIndex);
-
-      const t = copy(this.data.associatedFoods[id]);
-      t.activePrompt = promptIndex;
-      Vue.set(this.data.associatedFoods, id, t);
-    },
-
-    updateAssociatedFoodsPrompt(data: {
-      promptIndex: number;
-      promptState: AssociatedFoodPromptState;
-    }) {
-      const id = this.selectedFoodId;
-
-      if (id === undefined) {
-        console.warn('Expected a food to be selected at this point');
-        return;
-      }
-
-      const t = copy(this.data.associatedFoods[id]);
-      Vue.set(t.prompts, data.promptIndex, data.promptState);
-      Vue.set(this.data.associatedFoods, id, t);
+    updateAssociatedFoods(foodId: number, data: AssociatedFoodsState) {
+      console.log(`updating store assoc...`);
+      this.data.associatedFoods = { ...this.data.associatedFoods, [foodId]: { ...data } };
     },
 
     commitAssociatedFoods() {
