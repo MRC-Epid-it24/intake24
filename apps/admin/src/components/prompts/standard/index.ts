@@ -1,3 +1,4 @@
+import AssociatedFoodsPrompt from './associated-foods-prompt.vue';
 import EditMealPrompt from './edit-meal-prompt.vue';
 import FoodSearchPrompt from './food-search-prompt.vue';
 import MealAddPrompt from './meal-add-prompt.vue';
@@ -7,6 +8,7 @@ import SubmitPrompt from './submit-prompt.vue';
 import ReviewConfirmPrompt from './review-confirm-prompt.vue';
 
 export default {
+  AssociatedFoodsPrompt,
   EditMealPrompt,
   FoodSearchPrompt,
   MealAddPrompt,
