@@ -9,7 +9,7 @@
   "engines": {
     "node": "^14.17.0 || >=16.0.0"
   },
-  "packageManager": "pnpm@6.32.15",
+  "packageManager": "pnpm@6.32.19",
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
     "prepare": "pnpm simple-git-hooks",
