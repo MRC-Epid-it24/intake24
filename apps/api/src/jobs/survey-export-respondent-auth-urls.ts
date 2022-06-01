@@ -100,10 +100,16 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
         flags: 'w+',
       });
 
-      aliases.on('error', (err) => reject(err));
+      aliases.on('error', (err) => {
+        clearInterval(progressInterval);
+        reject(err);
+      });
 
       transform
-        .on('error', (err) => reject(err))
+        .on('error', (err) => {
+          clearInterval(progressInterval);
+          reject(err);
+        })
         .on('data', () => {
           counter++;
         })

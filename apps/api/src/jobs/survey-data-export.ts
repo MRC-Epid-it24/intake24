@@ -78,10 +78,16 @@ export default class SurveyDataExport extends BaseJob<SurveyDataExportParams> {
       const foods = this.dataExportService.getSubmissionsWithStream(options);
       const transform = new Transform({ fields, defaultValue: EMPTY, withBOM: true });
 
-      foods.on('error', (err) => reject(err));
+      foods.on('error', (err) => {
+        clearInterval(progressInterval);
+        reject(err);
+      });
 
       transform
-        .on('error', (err) => reject(err))
+        .on('error', (err) => {
+          clearInterval(progressInterval);
+          reject(err);
+        })
         .on('data', () => {
           counter++;
         })
