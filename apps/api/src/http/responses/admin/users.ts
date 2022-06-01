@@ -1,12 +1,5 @@
-import type {
-  UserEntry,
-  UserMgmtListEntry,
-  SurveyRespondentEntry,
-  UserSecurableListEntry,
-  SurveyRespondentListEntry,
-} from '@intake24/common/types/http/admin';
-import { User, UserSurveyAlias } from '@intake24/db';
-import { permissionListResponse } from './permissions';
+import type { UserEntry, UserSecurableListEntry } from '@intake24/common/types/http/admin';
+import type { User } from '@intake24/db';
 
 export const userEntryResponse = (user: User): UserEntry => {
   const { aliases = [], customFields = [], permissions = [], roles = [] } = user;
@@ -17,36 +10,6 @@ export const userEntryResponse = (user: User): UserEntry => {
     customFields,
     permissions,
     roles,
-  };
-};
-
-export const userRespondentResponse = (alias: UserSurveyAlias): SurveyRespondentEntry => {
-  const {
-    id,
-    userId,
-    username,
-    surveyId,
-    urlAuthToken,
-    user: { name = null, email = null, phone = null, customFields = [] } = {},
-  } = alias;
-
-  return { id, userId, surveyId, username, urlAuthToken, name, email, phone, customFields };
-};
-
-export const userRespondentListResponse = (alias: UserSurveyAlias): SurveyRespondentListEntry => {
-  const { id, userId, username, surveyId, urlAuthToken } = alias;
-
-  return { id, userId, surveyId, username, urlAuthToken };
-};
-
-export const userMgmtResponse = (user: User): UserMgmtListEntry => {
-  const { id, name, email, permissions } = user;
-
-  return {
-    id,
-    name,
-    email,
-    permissions: permissions ? permissions.map(permissionListResponse) : [],
   };
 };
 

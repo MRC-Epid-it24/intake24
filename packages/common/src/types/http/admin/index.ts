@@ -16,7 +16,6 @@ export * from './survey-schemes';
 export * from './survey-scheme-questions';
 export * from './sign-in-logs';
 export * from './source-images';
-export * from './survey-mgmt';
 export * from './survey-respondents';
 export * from './survey-submissions';
 export * from './surveys';

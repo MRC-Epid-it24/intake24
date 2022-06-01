@@ -86,10 +86,14 @@ const surveys: LocaleMessageObject = {
       title: 'Survey respondents authentication URLs',
       submit: 'Generate file',
       download: 'Download',
+      surveyAuthUrl: 'Survey URL',
+      feedbackAuthUrl: 'Feedback URL',
+      copiedToClipboard: 'URL copied to clipboard.',
     },
     feedback: {
       _: 'Feedback',
       title: `Respondent's feedback`,
+      details: 'Respondent details',
       open: `Open`,
       download: `Download`,
       email: {

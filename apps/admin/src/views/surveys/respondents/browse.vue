@@ -131,6 +131,22 @@
           </v-list>
         </v-menu>
       </template>
+      <template v-slot:[`item.surveyAuthUrl`]="{ item }">
+        <v-btn icon link :href="item.surveyAuthUrl" target="_blank">
+          <v-icon>fas fa-arrow-up-right-from-square</v-icon>
+        </v-btn>
+        <v-btn icon @click="toClipboard(item.surveyAuthUrl)">
+          <v-icon>fas fa-clipboard</v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:[`item.feedbackAuthUrl`]="{ item }">
+        <v-btn icon link :href="item.feedbackAuthUrl" target="_blank">
+          <v-icon>fas fa-arrow-up-right-from-square</v-icon>
+        </v-btn>
+        <v-btn icon @click="toClipboard(item.feedbackAuthUrl)">
+          <v-icon>fas fa-clipboard</v-icon>
+        </v-btn>
+      </template>
       <template v-slot:[`item.action`]="{ item }">
         <v-menu close-on-content-click close-on-click offset-y>
           <template v-slot:activator="{ on, attrs }">
@@ -207,12 +223,6 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
     return {
       headers: [
         {
-          text: this.$t('users.id'),
-          sortable: true,
-          value: 'userId',
-          align: 'start',
-        },
-        {
           text: this.$t('users.aliases.username'),
           sortable: true,
           value: 'username',
@@ -220,8 +230,20 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
         },
         {
           text: this.$t('users.aliases.urlAuthToken'),
-          sortable: true,
+          sortable: false,
           value: 'urlAuthToken',
+          align: 'start',
+        },
+        {
+          text: this.$t('surveys.respondents.authUrls.surveyAuthUrl'),
+          sortable: false,
+          value: 'surveyAuthUrl',
+          align: 'start',
+        },
+        {
+          text: this.$t('surveys.respondents.authUrls.feedbackAuthUrl'),
+          sortable: false,
+          value: 'feedbackAuthUrl',
           align: 'start',
         },
         {
@@ -316,6 +338,11 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
       this.$toasted.success(this.$t('common.msg.deleted', { name }).toString());
 
       await this.updateTable();
+    },
+
+    toClipboard(data: string) {
+      navigator.clipboard.writeText(data);
+      this.$toasted.info(this.$t('surveys.respondents.authUrls.copiedToClipboard').toString());
     },
   },
 });

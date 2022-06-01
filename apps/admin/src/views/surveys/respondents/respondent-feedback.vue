@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px" persistent>
+  <v-dialog v-model="dialog" max-width="600px">
     <template v-slot:activator="{ on, attrs }">
       <v-list-item key="respondentsUpload" v-bind="attrs" v-on="on" link>
         <v-list-item-title>
@@ -15,11 +15,22 @@
           {{ $t(`surveys.respondents.feedback.title`) }}
         </v-toolbar-title>
       </v-toolbar>
+      <v-card-title>
+        {{ $t(`surveys.respondents.feedback.details`) }}
+      </v-card-title>
+      <v-simple-table class="mx-4">
+        <tbody>
+          <tr>
+            <th>{{ $t(`users.username`) }}</th>
+            <th>{{ user.username }}</th>
+          </tr>
+        </tbody>
+      </v-simple-table>
       <v-container>
         <v-card-text>
           <v-row>
             <v-col cols="12" sm="6">
-              <v-btn block outlined x-large disabled>
+              <v-btn block outlined x-large :href="user.feedbackAuthUrl" target="_blank">
                 <v-icon left>fas fa-up-right-from-square</v-icon>
                 {{ $t(`surveys.respondents.feedback.open`) }}
               </v-btn>

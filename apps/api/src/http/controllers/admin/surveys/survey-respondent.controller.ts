@@ -3,15 +3,13 @@ import { pick } from 'lodash';
 import type {
   JobEntry,
   SurveyRespondentEntry,
+  SurveyRespondentListEntry,
   SurveyRespondentsResponse,
 } from '@intake24/common/types/http/admin';
 import { User, UserCustomField, UserSurveyAlias, PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
-import {
-  userRespondentResponse,
-  userRespondentListResponse,
-} from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
+import { respondentResponse } from '@intake24/api/http/responses/admin';
 import type { Controller, CrudActions } from '../../controller';
 import { getAndCheckSurveyAccess } from './survey.controller';
 
@@ -24,18 +22,23 @@ export type AdminSurveyRespondentController = Controller<
 >;
 
 export default ({
+  appConfig,
   adminSurveyService,
   feedbackService,
   scheduler,
 }: Pick<
   IoC,
-  'adminSurveyService' | 'feedbackService' | 'scheduler'
+  'appConfig' | 'adminSurveyService' | 'feedbackService' | 'scheduler'
 >): AdminSurveyRespondentController => {
   const entry = async (
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const {
+      id: surveyId,
+      slug,
+      authUrlDomainOverride,
+    } = await getAndCheckSurveyAccess(req, 'respondents');
     const { userId } = req.params;
 
     const respondent = await UserSurveyAlias.findOne({
@@ -44,24 +47,29 @@ export default ({
     });
     if (!respondent) throw new NotFoundError();
 
-    res.json(userRespondentResponse(respondent));
+    const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);
+
+    res.json(respondentRes.entry(respondent));
   };
 
   const browse = async (
     req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveyRespondentsResponse>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(
-      req as Request<{ surveyId: string }>,
-      'respondents'
-    );
+    const {
+      id: surveyId,
+      slug,
+      authUrlDomainOverride,
+    } = await getAndCheckSurveyAccess(req as Request<{ surveyId: string }>, 'respondents');
 
-    const respondents = await UserSurveyAlias.paginate({
+    const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);
+
+    const respondents = await UserSurveyAlias.paginate<SurveyRespondentListEntry>({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['username'],
       where: { surveyId },
       order: [['username', 'ASC']],
-      transform: userRespondentListResponse,
+      transform: respondentRes.list,
     });
 
     res.json(respondents);
@@ -71,7 +79,11 @@ export default ({
     req: Request<{ surveyId: string }>,
     res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const {
+      id: surveyId,
+      slug,
+      authUrlDomainOverride,
+    } = await getAndCheckSurveyAccess(req, 'respondents');
 
     const respondent = await adminSurveyService.createRespondent(
       surveyId,
@@ -82,7 +94,9 @@ export default ({
       include: [{ model: User, include: [{ model: UserCustomField }] }],
     });
 
-    res.status(201).json(userRespondentResponse(respondent));
+    const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);
+
+    res.status(201).json(respondentRes.entry(respondent));
   };
 
   const read = async (
@@ -99,7 +113,11 @@ export default ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const {
+      id: surveyId,
+      slug,
+      authUrlDomainOverride,
+    } = await getAndCheckSurveyAccess(req, 'respondents');
     const { userId } = req.params;
 
     const respondent = await adminSurveyService.updateRespondent(
@@ -112,7 +130,9 @@ export default ({
       include: [{ model: User, include: [{ model: UserCustomField }] }],
     });
 
-    res.json(userRespondentResponse(respondent));
+    const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);
+
+    res.json(respondentRes.entry(respondent));
   };
 
   const destroy = async (

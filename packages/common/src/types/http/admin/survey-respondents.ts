@@ -7,9 +7,15 @@ export interface SurveyRespondentEntry
   email: string | null;
   phone: string | null;
   customFields: CustomField[];
+  surveyAuthUrl: string;
+  feedbackAuthUrl: string;
 }
 
-export type SurveyRespondentListEntry = Omit<UserSurveyAliasAttributes, 'createdAt' | 'updatedAt'>;
+export interface SurveyRespondentListEntry
+  extends Omit<UserSurveyAliasAttributes, 'createdAt' | 'updatedAt'> {
+  surveyAuthUrl: string;
+  feedbackAuthUrl: string;
+}
 
 export type SurveyRespondentsResponse = Pagination<SurveyRespondentListEntry>;
 

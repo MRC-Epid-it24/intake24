@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { FoodLocal } from '@intake24/db';
+import type { FoodLocal } from '@intake24/db';
 import { InternalServerError } from '@intake24/api/http/errors';
 import type { FoodListEntry } from '@intake24/common/types/http/admin';
 

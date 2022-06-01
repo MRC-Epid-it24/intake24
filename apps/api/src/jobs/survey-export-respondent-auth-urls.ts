@@ -7,7 +7,7 @@ import type { SurveyExportRespondentAuthUrlsParams } from '@intake24/common/type
 import { Job as DbJob, Survey, UserSurveyAlias } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { frontEndUrlService } from '@intake24/api/services';
+import { surveyUrlService } from '@intake24/api/services';
 import { addTime } from '@intake24/api/util';
 import BaseJob from './job';
 
@@ -64,7 +64,7 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
       throw new NotFoundError(`Job ${this.name}: Survey record not found (${surveyId}).`);
 
     const { slug, authUrlDomainOverride } = survey;
-    const urlService = frontEndUrlService(this.appConfig.urls, slug, authUrlDomainOverride);
+    const urlService = surveyUrlService(this.appConfig.urls, slug, authUrlDomainOverride);
 
     const fields: json2csv.FieldInfo<UserSurveyAlias>[] = [
       { label: 'UserID', value: 'userId' },
@@ -72,11 +72,11 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
       { label: 'AuthenticationCode', value: (row: UserSurveyAlias) => row.urlAuthToken },
       {
         label: 'SurveyAuthenticationURL',
-        value: (row: UserSurveyAlias) => urlService.getSurveyRespondentUrl(row.urlAuthToken),
+        value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken),
       },
       {
         label: 'FeedbackAuthenticationURL',
-        value: (row: UserSurveyAlias) => urlService.getFeedbackRespondentUrl(row.urlAuthToken),
+        value: (row: UserSurveyAlias) => urlService.getFeedbackUrl(row.urlAuthToken),
       },
     ];
 
