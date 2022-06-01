@@ -5,7 +5,7 @@ import type { Express } from 'express';
 import expressSession from 'express-session';
 import morgan from 'morgan';
 import nunjucks from 'nunjucks';
-import path from 'path';
+import path from 'node:path';
 import type { Ops } from '@intake24/api/app';
 import ioc from '@intake24/api/ioc';
 import { httpLogger as stream } from '@intake24/services';

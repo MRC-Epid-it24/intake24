@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import fs, { ReadStream } from 'fs-extra';
 import { Parser } from 'json2csv';
 import { times } from 'lodash';
-import path from 'path';
+import path from 'node:path';
 import { Permission, Role, User, UserSecurable } from '@intake24/db';
 import type { SecurableType } from '@intake24/common/security';
 import ioc from '@intake24/api/ioc';

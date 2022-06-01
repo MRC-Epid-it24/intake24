@@ -1,7 +1,7 @@
 import type { Job } from 'bullmq';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import type { CustomField, SurveyImportRespondentsParams } from '@intake24/common/types';
 import { User, UserSurveyAlias } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';

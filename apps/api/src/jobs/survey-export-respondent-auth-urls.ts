@@ -2,7 +2,7 @@ import type { Job } from 'bullmq';
 import { format as formatDate } from 'date-fns';
 import fs from 'fs-extra';
 import json2csv, { Transform } from 'json2csv';
-import path from 'path';
+import path from 'node:path';
 import type { SurveyExportRespondentAuthUrlsParams } from '@intake24/common/types';
 import { Job as DbJob, Survey, UserSurveyAlias } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';

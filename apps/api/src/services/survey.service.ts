@@ -1,5 +1,5 @@
 import { startOfDay, addMinutes, addDays } from 'date-fns';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { randomString } from '@intake24/common/util';
 import {
   FindOptions,

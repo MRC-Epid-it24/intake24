@@ -1,6 +1,6 @@
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import sharp from 'sharp';
 import { ProcessedImagePurposes } from '@intake24/common/types/models';
 import { ProcessedImage, SourceImage } from '@intake24/db';

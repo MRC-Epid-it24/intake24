@@ -1,7 +1,7 @@
 import type { Job } from 'bullmq';
 import fs from 'fs-extra';
 import { Transform } from 'json2csv';
-import path from 'path';
+import path from 'node:path';
 import type { SurveyDataExportParams } from '@intake24/common/types';
 import { Job as DbJob } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';

@@ -1,7 +1,7 @@
 import type { Job } from 'bullmq';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import type { NutrientTableImportDataParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import {

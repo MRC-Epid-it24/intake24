@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'fs-extra';
 import fsConfig from '@intake24/api/config/filesystem';
 
 const router = Router();

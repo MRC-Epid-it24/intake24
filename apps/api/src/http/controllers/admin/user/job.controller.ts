@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import fs from 'fs-extra';
 import { pick } from 'lodash';
-import path from 'path';
+import path from 'node:path';
 import { Op, WhereOptions, Job, User, PaginateQuery } from '@intake24/db';
 import type { JobEntry, JobsResponse } from '@intake24/common/types/http/admin';
 import type { JobAttributes } from '@intake24/common/types/models';
