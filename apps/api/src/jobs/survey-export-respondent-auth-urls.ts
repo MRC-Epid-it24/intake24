@@ -62,12 +62,12 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
     if (!survey)
       throw new NotFoundError(`Job ${this.name}: Survey record not found (${surveyId}).`);
 
+    const { slug, authUrlDomainOverride } = survey;
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
-
     const baseFrontendURL = getFrontEndUrl(
       this.appConfig.urls.base,
       this.appConfig.urls.survey,
-      survey.authUrlDomainOverride
+      authUrlDomainOverride
     );
 
     const fields: json2csv.FieldInfo<UserSurveyAlias>[] = [
@@ -76,16 +76,16 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExport
       { label: 'AuthenticationCode', value: (row: UserSurveyAlias) => row.urlAuthToken },
       {
         label: 'SurveyAuthenticationURL',
-        value: (row: UserSurveyAlias) => `${baseFrontendURL}/${surveyId}?token=${row.urlAuthToken}`,
+        value: (row: UserSurveyAlias) => `${baseFrontendURL}/${slug}?token=${row.urlAuthToken}`,
       },
       {
         label: 'FeedbackAuthenticationURL',
         value: (row: UserSurveyAlias) =>
-          `${baseFrontendURL}/${surveyId}/feedback?token=${row.urlAuthToken}`,
+          `${baseFrontendURL}/${slug}/feedback?token=${row.urlAuthToken}`,
       },
     ];
 
-    const filename = `intake24-${surveyId}-auth-urls-${timestamp}.csv`;
+    const filename = `intake24-${slug}-auth-urls-${timestamp}.csv`;
 
     const total = await UserSurveyAlias.count({ where: { surveyId } });
     const aliases = UserSurveyAlias.findAllWithStream({ where: { surveyId } });
