@@ -81,8 +81,12 @@
         </v-col>
       </v-row>
     </v-sheet>
-    <feedback-card-area v-bind="{ cards }" class="feedback-area"></feedback-card-area>
-    <v-sheet color="white">
+    <feedback-card-area
+      v-if="cards.length"
+      v-bind="{ cards }"
+      class="feedback-area"
+    ></feedback-card-area>
+    <v-sheet color="white" v-if="topFoods.nutrients.length">
       <feedback-chart-area v-bind="{ topFoods }" class="feedback-area"></feedback-chart-area>
     </v-sheet>
   </v-container>
