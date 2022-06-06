@@ -57,6 +57,6 @@ module.exports = {
       skipWaiting: true,
     },
   },
-  productionSourceMap: false,
+  productionSourceMap: process.env.PRODUCTION_SOURCE_MAP === 'true',
   transpileDependencies: ['vuetify'],
 };
