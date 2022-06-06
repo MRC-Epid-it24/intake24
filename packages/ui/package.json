@@ -36,7 +36,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.182",
     "@types/webpack-env": "1.17.0",
-    "@vue/runtime-dom": "^3.2.36"
+    "@vue/runtime-dom": "^3.2.37"
   },
   "bundledDependencies": [
     "@intake24/common",
