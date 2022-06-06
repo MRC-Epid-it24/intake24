@@ -6,15 +6,17 @@ const env = dotenv.config();
 dotenvExpand.expand(env);
 
 const express = require('express');
-const fs = require('fs');
 const helmet = require('helmet');
-const path = require('path');
+const nunjucks = require('nunjucks');
 
 const config = require('./config');
+const appRoutes = require('./routes/app');
+const siteRoutes = require('./routes/site');
 
-const startApp = async () => {
+const startApp = () => {
   const app = express();
 
+  // Security HTTP headers
   app.use(
     helmet({
       contentSecurityPolicy: {
@@ -22,12 +24,6 @@ const startApp = async () => {
           defaultSrc: ["'self'"],
           connectSrc: ["'self'", config.api.host],
           fontSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
-          frameSrc: [
-            "'self'",
-            'https://www.google.com',
-            'https://youtube.com',
-            'https://www.youtube.com',
-          ],
           imgSrc: ["'self'", 'blob:', 'data:', config.api.host],
           scriptSrc: [
             "'self'",
@@ -50,25 +46,29 @@ const startApp = async () => {
     })
   );
 
+  // Templating engine
+  nunjucks.configure(`${__dirname}/views`, { autoescape: true, express: app });
+
+  // Base static public path
   app.use(express.static(config.static, { index: false }));
 
-  app.get('*', (req, res) => {
-    const index = path.resolve(config.static, 'index.html');
+  // Survey App
+  app.use(config.app.namespace, appRoutes);
 
-    fs.access(index, fs.constants.F_OK, (err) => {
-      if (err) {
-        res.status(404).send();
-        return;
-      }
+  // Register static site pages if enabled
+  if (config.site.enable && !['', '/'].includes(config.app.namespace)) app.use('', siteRoutes);
 
-      res.sendFile(index);
-    });
+  // Error middleware
+  app.use((err, req, res, next) => {
+    const { message, name, stack } = err;
+    console.error(stack || `${name}: ${message}`);
+    res.status(500).render('errors/500.html');
   });
 
   // Start listening
   app.listen(config.port, config.url, (err) => {
     if (err) {
-      console.log(err);
+      console.error(err);
       return;
     }
     console.log(`${config.name} is listening on port ${config.port}!`);
