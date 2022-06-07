@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import type { Schema } from 'express-validator';
 
 export const paginate: Schema = {

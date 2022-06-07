@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import jwt, { JwtPayload, Secret, VerifyOptions } from 'jsonwebtoken';
 
 export const verify = async <T = JwtPayload>(

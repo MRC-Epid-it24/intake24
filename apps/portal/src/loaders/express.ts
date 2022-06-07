@@ -1,9 +1,10 @@
 import type { Express } from 'express';
 import morgan from 'morgan';
-import nunjucks from 'nunjucks';
+import { FileSystemLoader, Environment } from 'nunjucks';
 import { resolve } from 'node:path';
 import { httpLogger as stream } from '@intake24/services';
 import type { Ops } from '../app';
+import { mix } from '../util';
 
 export default async (app: Express, { config }: Ops): Promise<void> => {
   const {
@@ -15,12 +16,19 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
   app.use(morgan(isDev ? 'dev' : 'combined', { stream }));
 
   // Templates
-  app.engine('njk', nunjucks.render);
-  app.set('view engine', 'njk');
+  const nunjucksFileLoader = new FileSystemLoader(
+    [resolve(publicPath), resolve('resources/views')],
+    { noCache: isDev }
+  );
 
-  nunjucks.configure([resolve(publicPath), resolve('resources/views')], {
+  const nunjucksEnv = new Environment(nunjucksFileLoader, {
     autoescape: true,
-    express: app,
-    noCache: isDev,
+    web: { useCache: !isDev },
   });
+
+  nunjucksEnv.express(app);
+  nunjucksEnv.addGlobal('mix', mix);
+
+  app.engine('njk', nunjucksEnv.render);
+  app.set('view engine', 'njk');
 };

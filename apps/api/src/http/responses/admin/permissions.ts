@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import type { PermissionListEntry } from '@intake24/common/types/http/admin';
 import type { Permission } from '@intake24/db';
 

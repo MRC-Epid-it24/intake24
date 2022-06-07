@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import type { RoleEntry } from '@intake24/common/types/http/admin';
 import type { Role } from '@intake24/db';
 

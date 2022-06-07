@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 export const arrayToObject = <
   T extends object /* Record<PropertyKey, unknown> */,
   K extends keyof T

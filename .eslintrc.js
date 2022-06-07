@@ -29,6 +29,7 @@ module.exports = defineConfig({
     'prettier/prettier': 'error',
     'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
     'import/no-cycle': 'warn',
+    'import/prefer-default-export': 'off',
     'no-await-in-loop': 'off',
     'no-continue': 'off',
     'no-console': 'warn',
