@@ -46,6 +46,9 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
   );
 
   // Templates
+  app.engine('njk', nunjucks.render);
+  app.set('view engine', 'njk');
+
   nunjucks.configure([path.resolve('public'), path.resolve('resources/views')], {
     autoescape: true,
     express: app,

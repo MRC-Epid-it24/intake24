@@ -15,6 +15,9 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
   app.use(morgan(isDev ? 'dev' : 'combined', { stream }));
 
   // Templates
+  app.engine('njk', nunjucks.render);
+  app.set('view engine', 'njk');
+
   nunjucks.configure([resolve(publicPath), resolve('resources/views')], {
     autoescape: true,
     express: app,

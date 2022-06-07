@@ -9,12 +9,12 @@
     "directory": "apps/portal"
   },
   "scripts": {
-    "build": "pnpm build:back && pnpm build:front",
+    "build": "run-p build:back build:front",
     "build:back": "pnpm build:back:clean && webpack --env NODE_ENV=production",
     "build:front": "mix --production",
     "build:back:clean": "rimraf dist",
     "build:front:clean": "rimraf public",
-    "dev": "pnpm dev:back && dev build:front",
+    "dev": "run-p dev:back dev:front",
     "dev:back": "webpack --env NODE_ENV=development",
     "dev:front": "mix -- watch",
     "start": "node dist/server.js"
@@ -40,6 +40,7 @@
     "laravel-mix": "^6.0.48",
     "nodemon": "^2.0.16",
     "nodemon-webpack-plugin": "^4.7.1",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.4.14",
     "resolve-url-loader": "^5.0.0",
     "rimraf": "^3.0.2",
