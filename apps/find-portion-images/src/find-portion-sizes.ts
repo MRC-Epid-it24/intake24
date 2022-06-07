@@ -280,6 +280,7 @@ async function findPortionSizeImages(
       include: [
         {
           model: FoodLocal,
+          as: 'locals',
           where: { localeId: config.locale },
           include: [
             {

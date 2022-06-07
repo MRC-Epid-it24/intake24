@@ -16,6 +16,13 @@
                   <v-btn :value="false">{{ $t('prompts.associatedFoods.no') }}</v-btn>
                   <v-btn :value="true">{{ $t('prompts.associatedFoods.yes') }}</v-btn>
                 </v-btn-toggle>
+                <v-expand-transition>
+                  <div v-show="prompt.confirmed === true">
+                    <FoodBrowser
+                      :root-category="associatedFoodPrompts[index].categoryCode"
+                    ></FoodBrowser>
+                  </div>
+                </v-expand-transition>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -32,12 +39,13 @@ import { BasePromptProps } from '@intake24/common/prompts';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import { AssociatedFoodsState, EncodedFood } from '@intake24/common/types';
 import { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
+import FoodBrowser from '@intake24/survey/components/elements/FoodBrowser.vue';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'AssociatedFoodsPrompt',
 
-  components: { ValidInvalidIcon },
+  components: { FoodBrowser, ValidInvalidIcon },
 
   mixins: [BasePrompt],
 

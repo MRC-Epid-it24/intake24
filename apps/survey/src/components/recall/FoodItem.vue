@@ -31,7 +31,7 @@ export default defineComponent({
   },
 
   methods: {
-    selectFood(foodIndex: number) {
+    emitFoodSelected(foodIndex: number) {
       this.$emit('food-selected', foodIndex);
     },
     foodDisplayName(food: FoodState): string {

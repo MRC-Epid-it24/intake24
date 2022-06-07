@@ -3,6 +3,7 @@ import admin from './admin';
 import authentication from './authentication';
 import feedback from './feedback';
 import foods from './foods';
+import categories from './categories';
 import i18n from './i18n';
 import password from './password';
 import portionSizes from './portion-sizes';
@@ -24,6 +25,7 @@ export default () => {
   // Survey / User
   router.use('/feedback', feedback());
   router.use('/foods', foods());
+  router.use('/categories', categories());
   router.use('/portion-sizes', portionSizes());
   router.use('/subscriptions', subscriptions());
   router.use('/surveys', surveys());
