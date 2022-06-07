@@ -75,4 +75,6 @@ const startApp = async () => {
   });
 };
 
-startApp();
+(async () => {
+  await startApp();
+})();

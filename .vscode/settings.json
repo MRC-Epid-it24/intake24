@@ -5,6 +5,7 @@
   "eslint.validate": ["vue", "vue-html", "html", "javascript", "javascriptreact", "typescript"],
   "eslint.workingDirectories": [
     { "directory": "apps/api" },
+    { "directory": "apps/portal" },
     { "directory": "packages/common" },
     { "directory": "packages/common-backend" },
     { "directory": "packages/db" },

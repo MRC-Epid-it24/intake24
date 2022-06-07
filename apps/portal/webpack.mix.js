@@ -5,7 +5,7 @@ const dotenvExpand = require('dotenv-expand');
 const env = dotenv.config();
 dotenvExpand.expand(env);
 
-const publicPath = process.env.SERVER_STATIC;
+const publicPath = process.env.PUBLIC_DIR || 'public';
 
 mix
   .disableNotifications()
@@ -17,7 +17,9 @@ mix
     ],
     `${publicPath}/site.js`
   )
-  .sass('server/assets/scss/site.scss', `${publicPath}/site.css`)
-  .copy('server/assets/images', `${publicPath}/images`)
-  .copy('server/assets/output-samples', `${publicPath}/output-samples`);
-// .copy('server/assets/papers', `${publicPath}/papers`);
+  .sass('assets/scss/site.scss', `${publicPath}/site.css`)
+  .copy('assets/images', `${publicPath}/images`)
+  .copy('assets/output-samples', `${publicPath}/output-samples`);
+// .copy('assets/papers', `${publicPath}/papers`);
+
+if (mix.inProduction) mix.version();

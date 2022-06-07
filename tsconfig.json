@@ -16,6 +16,7 @@
       "@intake24/api-tests/*": ["apps/api/__tests__/*"],
       "@intake24/admin/*": ["apps/admin/src/*"],
       "@intake24/cli/*": ["apps/cli/src/*"],
+      "@intake24/portal/*": ["apps/portal/src/*"],
       "@intake24/survey/*": ["apps/survey/src/*"],
       "@intake24/common/*": ["packages/common/src/*"],
       "@intake24/common-backend/*": ["packages/common-backend/src/*"],
