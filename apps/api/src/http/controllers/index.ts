@@ -3,6 +3,7 @@ import authentication from './authentication.controller';
 import feedback from './feedback.controller';
 import foodSearch from './food-search.controller';
 import food from './food.controller';
+import categories from './categories.controller';
 import i18n from './i18n.controller';
 import password from './password.controller';
 import portionSize from './portion-size.controller';
@@ -32,6 +33,7 @@ export default {
   feedback,
   foodSearch,
   food,
+  categories,
   i18n,
   portionSize,
   subscription,

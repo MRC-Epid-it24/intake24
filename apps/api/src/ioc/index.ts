@@ -100,6 +100,8 @@ import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services
 import type { Jobs } from '@intake24/api/jobs';
 import type { User } from '@intake24/db';
 import type { Environment } from '@intake24/common/types';
+import { CategoryContentsService } from '@intake24/api/services/foods/category-contents.service';
+import { CategoriesController } from '@intake24/api/http/controllers/categories.controller';
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';
@@ -141,6 +143,7 @@ export interface IoC extends Jobs {
 
   // Survey controllers
   foodController: FoodController;
+  categoriesController: CategoriesController;
   foodSearchController: FoodSearchController;
   portionSizeController: PortionSizeController;
   surveyController: SurveyController;
@@ -232,6 +235,9 @@ export interface IoC extends Jobs {
   // Foods
   foodDataService: FoodDataService;
   portionSizeService: PortionSizeService;
+
+  // Categories
+  categoryContentsService: CategoryContentsService;
 
   // Images
   processedImageService: ProcessedImageService;

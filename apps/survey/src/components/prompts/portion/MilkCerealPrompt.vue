@@ -199,7 +199,7 @@ export default (Vue as VueConstructor<Vue & Portion & ExpansionPanelControls>).e
     setDisplayQuestions(value: boolean) {
       this.displayQuestions = value;
     },
-    selectFood(value: string) {
+    emitFoodSelected(value: string) {
       this.foodValue = value;
       this.foodSelected = true;
       this.setPanelOpen(1);

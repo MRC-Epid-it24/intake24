@@ -18,11 +18,13 @@ import {
   Category,
   FoodCategory,
   FoodGroup,
+  FoodLocalList,
 } from '.';
+import Locale from './locale';
 
 @Scopes(() => ({
   attributes: { include: [{ model: FoodAttribute }] },
-  locals: { include: [{ model: FoodLocal }] },
+  locals: { include: [{ model: FoodLocal, as: 'locals' }] },
   brand: { include: [{ model: Brand }] },
 }))
 @Table({
@@ -70,6 +72,9 @@ export default class Food extends BaseModel<FoodAttributes> implements FoodAttri
   @BelongsToMany(() => Category, () => FoodCategory)
   public parentCategories?: Category[];
 
+  @BelongsToMany(() => Locale, () => FoodLocalList, 'foodCode', 'localeId')
+  public locales?: Locale[];
+
   @HasMany(() => FoodCategory, 'foodCode')
   public parentCategoryMappings?: FoodCategory[];
 
@@ -81,4 +86,7 @@ export default class Food extends BaseModel<FoodAttributes> implements FoodAttri
 
   @HasMany(() => FoodLocal, 'foodCode')
   public locals?: FoodLocal[];
+
+  @HasMany(() => FoodLocal, 'foodCode')
+  public prototypeLocals?: FoodLocal[];
 }

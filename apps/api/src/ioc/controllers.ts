@@ -16,6 +16,7 @@ export default (container: AwilixContainer): void => {
     foodController: asFunction(controllers.food),
     foodSearchController: asFunction(controllers.foodSearch),
     portionSizeController: asFunction(controllers.portionSize),
+    categoriesController: asFunction(controllers.categories),
     surveyController: asFunction(controllers.survey),
     surveyRespondentController: asFunction(controllers.surveyRespondent),
 

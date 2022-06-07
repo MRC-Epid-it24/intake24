@@ -36,6 +36,7 @@ import {
 } from '@intake24/api/services';
 
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
+import categoryContentsService from '@intake24/api/services/foods/category-contents.service';
 
 export default (container: AwilixContainer): void => {
   container.register({
@@ -55,6 +56,7 @@ export default (container: AwilixContainer): void => {
     feedbackService: asFunction(feedbackService),
     foodDataService: asFunction(foodDataService),
     portionSizeService: asFunction(portionSizeService),
+    categoryContentsService: asFunction(categoryContentsService),
 
     adminCategoryService: asFunction(adminCategoryService),
     adminFoodService: asFunction(adminFoodService),

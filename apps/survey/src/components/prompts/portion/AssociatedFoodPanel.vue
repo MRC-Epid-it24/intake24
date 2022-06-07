@@ -171,7 +171,7 @@ export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
     // setDisplayQuestions(value: boolean) {
     //   this.displayQuestions = value;
     // },
-    selectFood(value: UserFoodData) {
+    emitFoodSelected(value: UserFoodData) {
       this.selectedFoodData = value;
       this.foodSearchComplete = true;
       this.setPanelOpen(1);

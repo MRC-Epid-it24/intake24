@@ -64,6 +64,8 @@ export default () => {
           endTime: new Date(),
           flags: [],
           meals: [],
+          nextFoodId: 0,
+          associatedFoods: {},
           customPromptAnswers: {},
           selection: { element: null, mode: 'auto' },
         },

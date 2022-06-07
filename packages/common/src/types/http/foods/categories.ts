@@ -7,5 +7,5 @@ export interface CategoryHeader {
 
 export interface CategoryContents {
   foods: FoodHeader[];
-  categories: CategoryHeader[];
+  subcategories: CategoryHeader[];
 }

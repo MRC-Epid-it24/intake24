@@ -73,4 +73,7 @@ export default class Category
 
   @HasMany(() => CategoryLocal, 'categoryCode')
   public locals?: CategoryLocal[];
+
+  @HasMany(() => CategoryLocal, 'categoryCode')
+  public prototypeLocals?: CategoryLocal[];
 }
