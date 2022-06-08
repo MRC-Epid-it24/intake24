@@ -5,6 +5,16 @@
   "private": true,
   "author": "",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MRC-Epid-it24/intake24.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/MRC-Epid-it24/intake24/issues"
+  },
+  "homepage": "https://docs.intake24.co.uk",
+  "type": "module",
   "main": "index.js",
   "engines": {
     "node": "^14.17.0 || >=16.0.0"
@@ -41,15 +51,6 @@
     "*.md": "prettier --write",
     "*.{ts,vue}": "eslint --fix"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MRC-Epid-it24/intake24.git"
-  },
-  "keywords": [],
-  "bugs": {
-    "url": "https://github.com/MRC-Epid-it24/intake24/issues"
-  },
-  "homepage": "https://docs.intake24.co.uk",
   "workspaces": [
     "apps/*",
     "packages/*"

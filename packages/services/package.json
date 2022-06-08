@@ -10,6 +10,7 @@
     "url": "https://github.com/MRC-Epid-it24/intake24.git",
     "directory": "packages/services"
   },
+  "type": "module",
   "main": "src/index.ts",
   "engines": {
     "node": "^14.17.0 || >=16.0.0"

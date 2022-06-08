@@ -27,9 +27,6 @@
     // Manual
     "node",
 
-    // Breaking changes
-    "execa", // ESM-only since 6.x.x
-
     // Bump after Vue.js v3 upgrade
     "@tinymce/tinymce-vue",
     "vue",

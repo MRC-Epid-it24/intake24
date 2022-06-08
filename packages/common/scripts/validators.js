@@ -1,5 +1,6 @@
-const fs = require('fs-extra');
-const execa = require('execa');
+/* eslint-disable import/no-extraneous-dependencies */
+import fs from 'fs-extra';
+import { execaCommand } from 'execa';
 
 /*
  * Generate type JSON validators used in API server to validate requests
@@ -11,12 +12,12 @@ const execa = require('execa');
 
 const validators = [
   // Feedback schemes
-  {
+  /* {
     type: 'Cards',
     srcFile: 'src/feedback/cards.ts',
     destFile: 'src/validators/feedback-schemes/cards.validator.ts',
     params: '--useNamedExport',
-  },
+  }, */
   {
     type: 'DemographicGroups',
     srcFile: 'src/feedback/demographic-groups.ts',
@@ -86,7 +87,7 @@ const validators = [
 (async () => {
   try {
     for (const validator of validators) {
-      await execa.command(
+      await execaCommand(
         `npx typescript-json-validator ${validator.srcFile} ${validator.type} ${validator.params}`
       );
 

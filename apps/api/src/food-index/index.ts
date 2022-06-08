@@ -11,7 +11,7 @@ export class IndexNotReadyError extends Error {}
 export default {
   async init(): Promise<void> {
     // eslint-disable-next-line no-new
-    indexWorker = new Worker('./dist/foodIndexBuilder.js', {
+    indexWorker = new Worker('./dist/foodIndexBuilder.cjs', {
       workerData: { dbConnectionInfo: config.database[config.app.env].foods },
     });
 

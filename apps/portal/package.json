@@ -8,6 +8,11 @@
     "url": "https://github.com/MRC-Epid-it24/intake24.git",
     "directory": "apps/portal"
   },
+  "type": "module",
+  "main": "src/index.ts",
+  "engines": {
+    "node": "^14.17.0 || >=16.0.0"
+  },
   "scripts": {
     "build": "run-p build:back build:front",
     "build:back": "pnpm build:back:clean && webpack --env NODE_ENV=production",
@@ -19,7 +24,7 @@
     "dev:front": "mix -- watch",
     "lint": "eslint --ext .js,.ts src/ __tests__/",
     "lint:fix": "pnpm lint -- --fix",
-    "start": "node dist/server.js",
+    "start": "node dist/server.cjs",
     "test:unit": "jest --testMatch **/__tests__/unit/**/*.spec.ts",
     "test:unit:coverage": "pnpm test:unit -- --coverage",
     "test:unit:watch": "pnpm test:unit -- --watch",

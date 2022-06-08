@@ -8,6 +8,7 @@
     "url": "https://github.com/MRC-Epid-it24/intake24.git",
     "directory": "apps/admin"
   },
+  "type": "module",
   "scripts": {
     "build": "vue-cli-service build",
     "dev": "vue-cli-service serve",
@@ -30,7 +31,7 @@
     "helmet": "^5.1.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
-    "nanoid": "^3.3.4",
+    "nanoid": "^4.0.0",
     "object-to-formdata": "^4.4.2",
     "pinia": "^2.0.14",
     "pinia-plugin-persistedstate": "^1.6.1",

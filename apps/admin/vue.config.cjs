@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const childProcess = require('child_process');
 const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -20,7 +19,7 @@ module.exports = {
     plugins: process.env.WEBPACK_ANALYZE_BUNDLE === 'true' ? [new BundleAnalyzerPlugin()] : [],
     resolve: {
       alias: {
-        '@intake24/survey': path.resolve(__dirname, 'src'),
+        '@intake24/admin': path.resolve(__dirname, 'src'),
         '@intake24/common': path.resolve(__dirname, '../../packages/common/src'),
         '@intake24/i18n': path.resolve(__dirname, '../../packages/i18n/src'),
         '@intake24/ui': path.resolve(__dirname, '../../packages/ui/src'),
@@ -28,7 +27,7 @@ module.exports = {
     },
   },
   devServer: {
-    port: 8200,
+    port: 8100,
     proxy: {
       '/api': {
         target: 'http://localhost:3100',
@@ -54,6 +53,7 @@ module.exports = {
     workboxPluginMode: 'GenerateSW',
     workboxOptions: {
       cleanupOutdatedCaches: true,
+      importScripts: ['js/web-push.js'],
       skipWaiting: true,
     },
   },

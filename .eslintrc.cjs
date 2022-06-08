@@ -1,4 +1,5 @@
 // @ts-check
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { defineConfig } = require('eslint-define-config');
 
 module.exports = defineConfig({
@@ -29,6 +30,12 @@ module.exports = defineConfig({
     'prettier/prettier': 'error',
     'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
     'import/no-cycle': 'warn',
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: ['**/__tests__/**/*.ts', '**/*.config.cjs'],
+      },
+    ],
     'import/prefer-default-export': 'off',
     'no-await-in-loop': 'off',
     'no-continue': 'off',
@@ -44,7 +51,7 @@ module.exports = defineConfig({
   },
   overrides: [
     {
-      files: ['**/*.js'],
+      files: ['**/*.cjs'],
       rules: {
         '@typescript-eslint/no-var-requires': 'off',
       },

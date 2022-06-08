@@ -9,12 +9,12 @@ module.exports = (env) => {
   const { NODE_ENV = 'development' } = env;
   const isDev = NODE_ENV === 'development';
 
-  const plugins = [new ForkTsCheckerWebpackPlugin(), new WebpackBar({ name: 'Portal' })];
+  const plugins = [new ForkTsCheckerWebpackPlugin(), new WebpackBar({ name: 'Server' })];
 
   if (isDev)
     plugins.push(
       new NodemonPlugin({
-        script: './dist/server.js',
+        script: './dist/server.cjs',
         watch: path.resolve('./dist'),
         nodeArgs: ['--trace-warnings', '--inspect=5959'],
       })
@@ -24,10 +24,11 @@ module.exports = (env) => {
     context: __dirname,
     entry: {
       server: path.resolve('./src/index.ts'),
+      foodIndexBuilder: path.resolve('./src/food-index/workers/index-builder.ts'),
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: '[name].js',
+      filename: '[name].cjs',
     },
     mode: NODE_ENV,
     target: 'node',
@@ -37,7 +38,7 @@ module.exports = (env) => {
     optimization: {
       minimize: false,
     },
-    externals: [nodeExternals()],
+    externals: [nodeExternals(), { sharp: 'commonjs sharp' }],
     resolve: {
       extensions: ['.tsx', '.ts', '.js', '.json'],
       plugins: [

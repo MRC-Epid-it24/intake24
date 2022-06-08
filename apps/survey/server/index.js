@@ -1,16 +1,10 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
-
-const env = dotenv.config();
-dotenvExpand.expand(env);
-
-const express = require('express');
-const fs = require('fs');
-const helmet = require('helmet');
-const path = require('path');
-
-const config = require('./config');
+/* eslint-disable import/extensions */
+import './bootstrap.js';
+import express from 'express';
+import fs from 'fs';
+import helmet from 'helmet';
+import path from 'path';
+import config from './config.js';
 
 const startApp = async () => {
   const app = express();

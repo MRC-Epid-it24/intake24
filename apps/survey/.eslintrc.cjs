@@ -24,7 +24,17 @@ module.exports = {
     },
   },
   rules: {
+    // .prettierrc seems to be ignored
+    // Git defaults to CRLF line breaks on Windows, override the default "lf" setting here
+    // to avoid having to mess with Git and editor defaults on Windows
+    'prettier/prettier': ['warn', { endOfLine: 'auto' }],
     'import/no-cycle': 'warn',
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: ['**/__tests__/**/*.ts', '**/*.config.cjs'],
+      },
+    ],
     'import/prefer-default-export': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -45,5 +55,6 @@ module.exports = {
       files: ['__tests__/**/*.{j,t}s?(x)', '__tests__/**/*.spec.{j,t}s?(x)'],
       env: { jest: true },
     },
+    { files: ['*.mix.js'], rules: { '@typescript-eslint/no-var-requires': 'off' } },
   ],
 };
