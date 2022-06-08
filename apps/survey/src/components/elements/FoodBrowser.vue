@@ -1,25 +1,35 @@
 <template>
-  <div>
-    <v-card flat v-if="requestFailed">
-      <v-card-text>
-        <v-alert type="error">Something went wrong :(</v-alert>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn large @click="browseCategory(retryCode)">Try again</v-btn>
-      </v-card-actions>
-    </v-card>
+  <v-row>
+    <v-col class="pl-0 pr-0">
+      <v-card flat v-if="requestFailed">
+        <v-card-text>
+          <v-alert type="error">Something went wrong :(</v-alert>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn large @click="browseCategory(retryCode)">Try again</v-btn>
+        </v-card-actions>
+      </v-card>
 
-    <v-row v-if="requestInProgress">
-      <v-progress-circular indeterminate></v-progress-circular>
-    </v-row>
+      <v-container v-if="navigationHistory.length > 1">
+        <v-btn large text @click="onNavigateBack()"
+          ><span class="fa fa-chevron-left mr-2"></span> Back to '{{
+            navigationHistory[navigationHistory.length - 2].description
+          }}'</v-btn
+        >
+      </v-container>
 
-    <CategoryContentsView
-      :contents="currentCategoryContents"
-      v-if="currentCategoryContents && !requestInProgress"
-      @category-selected="onCategorySelected"
-      @food-selected="onFoodSelected"
-    ></CategoryContentsView>
-  </div>
+      <v-container class="text-center" v-if="requestInProgress">
+        <v-progress-circular indeterminate></v-progress-circular>
+      </v-container>
+
+      <CategoryContentsView
+        :contents="currentCategoryContents"
+        v-if="currentCategoryContents && !requestInProgress"
+        @category-selected="onCategorySelected"
+        @food-selected="onFoodSelected"
+      ></CategoryContentsView>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -39,8 +49,8 @@ export default defineComponent({
 
   data() {
     return {
+      navigationHistory: [] as CategoryHeader[],
       retryCode: this.rootCategory,
-      currentCategory: undefined as CategoryHeader | undefined,
       currentCategoryContents: undefined as CategoryContents | undefined,
       requestInProgress: true,
       requestFailed: false,
@@ -59,6 +69,7 @@ export default defineComponent({
         (contents) => {
           this.requestInProgress = false;
           this.requestFailed = false;
+          this.navigationHistory.push(contents.header);
           this.currentCategoryContents = contents;
         },
         (error) => {
@@ -75,6 +86,18 @@ export default defineComponent({
 
     onFoodSelected(foodCode: string): void {
       this.$emit('food-selected', foodCode);
+    },
+
+    onNavigateBack(): void {
+      if (this.navigationHistory.length < 2) {
+        console.warn('Navigation history length should be at least 2 at this point');
+      } else {
+        const previousCategory = this.navigationHistory.splice(
+          this.navigationHistory.length - 2,
+          2
+        );
+        this.browseCategory(previousCategory[0].code);
+      }
     },
   },
 });

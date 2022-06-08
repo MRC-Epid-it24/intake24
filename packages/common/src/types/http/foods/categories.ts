@@ -6,6 +6,7 @@ export interface CategoryHeader {
 }
 
 export interface CategoryContents {
+  header: CategoryHeader;
   foods: FoodHeader[];
   subcategories: CategoryHeader[];
 }
