@@ -31,8 +31,8 @@
     "test:unit": "jest",
     "test:unit:watch": "pnpm test:unit -- --watch",
     "test:unit:coverage": "pnpm test:unit -- --coverage",
-    "test:integration": "pnpm --filter @intake24/api test:integration",
-    "test:integration:coverage": "pnpm --filter @intake24/api test:integration:coverage"
+    "test:integration": "pnpm --filter * test:integration",
+    "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"

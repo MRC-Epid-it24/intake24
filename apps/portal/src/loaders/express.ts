@@ -8,7 +8,8 @@ import { mix } from '../util';
 
 export default async (app: Express, { config }: Ops): Promise<void> => {
   const {
-    app: { env, public: publicPath },
+    app: { env },
+    filesystem: { local },
   } = config;
   const isDev = env === 'development';
 
@@ -17,7 +18,7 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
 
   // Templates
   const nunjucksFileLoader = new FileSystemLoader(
-    [resolve(publicPath), resolve('resources/views')],
+    [resolve(local.public), resolve('resources/views')],
     { noCache: isDev }
   );
 

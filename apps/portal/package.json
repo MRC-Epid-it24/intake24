@@ -11,13 +11,21 @@
   "scripts": {
     "build": "run-p build:back build:front",
     "build:back": "pnpm build:back:clean && webpack --env NODE_ENV=production",
-    "build:front": "mix --production",
     "build:back:clean": "rimraf dist",
+    "build:front": "mix --production",
     "build:front:clean": "rimraf public",
     "dev": "run-p dev:back dev:front",
     "dev:back": "webpack --env NODE_ENV=development",
     "dev:front": "mix -- watch",
-    "start": "node dist/server.js"
+    "lint": "eslint --ext .js,.ts src/ __tests__/",
+    "lint:fix": "pnpm lint -- --fix",
+    "start": "node dist/server.js",
+    "test:unit": "jest --testMatch **/__tests__/unit/**/*.spec.ts",
+    "test:unit:coverage": "pnpm test:unit -- --coverage",
+    "test:unit:watch": "pnpm test:unit -- --watch",
+    "test:integration": "jest ./__tests__/integration/index.test.ts --runInBand",
+    "test:integration:coverage": "pnpm test:integration -- --coverage",
+    "test:integration:watch": "pnpm test:integration -- --watch"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.1.1",
@@ -28,13 +36,12 @@
     "dotenv-expand": "^8.0.3",
     "express": "^4.18.1",
     "helmet": "^5.1.0",
-    "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "nunjucks": "^3.2.3"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.182",
     "@types/morgan": "^1.9.3",
+    "@types/supertest": "^2.0.12",
     "@types/webpack-env": "1.17.0",
     "fork-ts-checker-webpack-plugin": "^7.2.11",
     "laravel-mix": "^6.0.48",
@@ -46,6 +53,7 @@
     "rimraf": "^3.0.2",
     "sass": "~1.32.13",
     "sass-loader": "~10.2.1",
+    "supertest": "^6.2.3",
     "ts-loader": "^9.3.0",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "typescript": "^4.7.3",

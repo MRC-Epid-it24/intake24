@@ -27,7 +27,7 @@ export default (app: Express, { config }: Ops): void => {
     })
   );
 
-  app.use(express.static(config.app.public, { index: false }));
+  app.use(express.static(config.filesystem.local.public, { index: false }));
 
   app.use(site);
 };
