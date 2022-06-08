@@ -16,8 +16,12 @@
   },
   "scripts": {},
   "dependencies": {
+    "nodemailer": "^6.7.5",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.4"
   },
   "bundledDependencies": [
     "@intake24/common"

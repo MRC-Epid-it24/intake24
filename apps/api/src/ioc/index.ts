@@ -7,7 +7,6 @@ import type {
   CacheConfig,
   Config,
   FileSystemConfig,
-  MailConfig,
   QueueConfig,
   RateLimiterConfig,
   SecurityConfig,
@@ -15,7 +14,7 @@ import type {
   SessionConfig,
 } from '@intake24/api/config';
 import { Database, DatabaseConfig, DatabasesInterface, models } from '@intake24/db';
-import type { Logger, LogConfig } from '@intake24/services';
+import type { Logger, LogConfig, Mailer, MailConfig } from '@intake24/services';
 import type {
   AuthenticationController,
   PasswordController,
@@ -88,7 +87,6 @@ import type {
   UserService,
   Cache,
   Filesystem,
-  Mailer,
   Pusher,
   RateLimiter,
   Scheduler,

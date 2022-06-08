@@ -1,5 +1,5 @@
 import { asClass, asFunction, asValue, AwilixContainer } from 'awilix';
-import { logger } from '@intake24/services';
+import { logger, Mailer } from '@intake24/services';
 import {
   authenticationService,
   aclService,
@@ -12,7 +12,6 @@ import {
   dataExportService,
   Cache,
   Filesystem,
-  Mailer,
   Pusher,
   RateLimiter,
   Scheduler,

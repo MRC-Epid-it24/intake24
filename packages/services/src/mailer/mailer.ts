@@ -1,7 +1,15 @@
 import nodemailer, { SendMailOptions, Transporter } from 'nodemailer';
-import type { IoC } from '@intake24/api/ioc';
+import type { Environment } from '@intake24/common/types';
+import type { Logger } from '@intake24/services';
+import type { MailConfig } from './config';
 
-export default class Mailer {
+export type MailerOps = {
+  environment: Environment;
+  mailConfig: MailConfig;
+  logger: Logger;
+};
+
+export class Mailer {
   private readonly environment;
 
   private readonly mailConfig;
@@ -10,11 +18,7 @@ export default class Mailer {
 
   private transporter!: Transporter;
 
-  constructor({
-    environment,
-    mailConfig,
-    logger,
-  }: Pick<IoC, 'environment' | 'mailConfig' | 'logger'>) {
+  constructor({ environment, mailConfig, logger }: MailerOps) {
     this.environment = environment;
     this.mailConfig = mailConfig;
     this.logger = logger.child({ service: 'Mailer' });
