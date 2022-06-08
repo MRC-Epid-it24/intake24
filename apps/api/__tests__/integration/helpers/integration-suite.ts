@@ -96,7 +96,7 @@ class IntegrationSuite {
 
     const { downloads, uploads, images } = this.config.filesystem.local;
     await Promise.all(
-      [downloads, uploads, images].map((folder) => fs.rm(folder, { recursive: true }))
+      [downloads, uploads, images].map((folder) => fs.rm(folder, { recursive: true, force: true }))
     );
   }
 }
