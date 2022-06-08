@@ -5,23 +5,30 @@
         <v-col>
           <v-expansion-panels v-model="activePrompt" @change="updatePrompts">
             <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
-              <v-expansion-panel-header disable-icon-rotate>
+              <v-expansion-panel-header color="#f5f5f5" disable-icon-rotate class="text-body-1">
                 {{ associatedFoodPrompts[index].promptText }}
                 <template v-slot:actions>
                   <valid-invalid-icon :valid="prompt.confirmed !== undefined"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-btn-toggle v-model="prompt.confirmed" @change="updatePrompts">
-                  <v-btn :value="false">{{ $t('prompts.associatedFoods.no') }}</v-btn>
-                  <v-btn :value="true">{{ $t('prompts.associatedFoods.yes') }}</v-btn>
-                </v-btn-toggle>
+              <v-expansion-panel-content class="pl-0">
+                <v-container class="pl-0">
+                  <v-btn-toggle v-model="prompt.confirmed" @change="updatePrompts">
+                    <v-btn :value="false">{{ $t('prompts.associatedFoods.no') }}</v-btn>
+                    <v-btn :value="true">{{ $t('prompts.associatedFoods.yes') }}</v-btn>
+                  </v-btn-toggle>
+                </v-container>
                 <v-expand-transition>
-                  <div v-show="prompt.confirmed === true">
-                    <FoodBrowser
-                      :root-category="associatedFoodPrompts[index].categoryCode"
-                    ></FoodBrowser>
-                  </div>
+                  <v-card flat v-show="prompt.confirmed === true">
+                    <v-card-title class="pl-0 pa-2" style="border-bottom: 1px solid lightgray"
+                      >Please select an item from this category:</v-card-title
+                    >
+                    <v-card-text class="pl-0">
+                      <FoodBrowser
+                        :root-category="associatedFoodPrompts[index].categoryCode"
+                      ></FoodBrowser>
+                    </v-card-text>
+                  </v-card>
                 </v-expand-transition>
               </v-expansion-panel-content>
             </v-expansion-panel>

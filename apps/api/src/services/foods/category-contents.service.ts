@@ -1,4 +1,4 @@
-import { CategoryContents } from '@intake24/common/types/http';
+import { CategoryContents, CategoryHeader } from '@intake24/common/types/http';
 import {
   Category,
   CategoryLocal,
@@ -24,8 +24,60 @@ const categoryContentsService = () => {
   }
 
   return {
+    async getLocaleInfo(localeId: string): Promise<Locale> {
+      const locale = await Locale.findOne({
+        where: { id: localeId },
+        attributes: ['prototypeLocaleId'],
+      });
+
+      if (locale === null) {
+        throw new NotFoundError(`Locale ${localeId} not found`);
+      }
+
+      return locale;
+    },
+
+    async getCategoryHeader(
+      localeId: string,
+      prototypeLocaleId: string | null,
+      categoryCode: string
+    ): Promise<CategoryHeader> {
+      const category = await Category.findOne({
+        where: { code: categoryCode },
+        attributes: ['code'],
+        include: [
+          {
+            model: CategoryLocal,
+            as: 'locals',
+            where: { localeId },
+            required: false,
+          },
+          {
+            model: CategoryLocal,
+            as: 'prototypeLocals',
+            where: { localeId: prototypeLocaleId },
+            required: false,
+          },
+        ],
+      });
+
+      if (category === null) {
+        throw new NotFoundError(`Category ${categoryCode} not found`);
+      }
+
+      return {
+        code: categoryCode,
+        description:
+          category.locals?.[0].name ??
+          category.prototypeLocals?.[0].name ??
+          '# Description missing!',
+      };
+    },
+
     async getCategoryContents(localeId: string, categoryCode: string): Promise<CategoryContents> {
       /*
+      v3 implementation
+
       SELECT code, description, coalesce(fl.local_description, flp.local_description) as local_description
         FROM foods_categories
            INNER JOIN foods_local_lists ON foods_categories.food_code = foods_local_lists.food_code AND foods_local_lists.locale_id = {locale_id}
@@ -37,16 +89,11 @@ const categoryContentsService = () => {
      ORDER BY coalesce(fl.local_description, flp.local_description)
      LIMIT 30 */
 
-      const locale = await Locale.findOne({
-        where: { id: localeId },
-        attributes: ['prototypeLocaleId'],
-      });
-
-      if (locale === null) {
-        throw new NotFoundError(`Locale ${localeId} not found`);
-      }
+      const locale = await this.getLocaleInfo(localeId);
 
       const { prototypeLocaleId } = locale;
+
+      const header = await this.getCategoryHeader(localeId, prototypeLocaleId, categoryCode);
 
       const category = await Category.findOne({
         where: { code: categoryCode },
@@ -124,8 +171,13 @@ const categoryContentsService = () => {
       });
 
       return {
-        foods: filterUndefined(foodHeaders),
-        subcategories: filterUndefined(categoryHeaders),
+        header,
+        foods: filterUndefined(foodHeaders).sort((a, b) =>
+          a.description.localeCompare(b.description)
+        ),
+        subcategories: filterUndefined(categoryHeaders).sort((a, b) =>
+          a.description.localeCompare(b.description)
+        ),
       };
     },
   };

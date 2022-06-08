@@ -1,7 +1,7 @@
 <template>
   <v-list v-if="foods.length > 0">
     <v-list-item v-for="(food, i) in foods" :key="i" link>
-      <v-list-item-title class="text-wrap" @click="selectFood(i)">
+      <v-list-item-title class="text-wrap" @click="emitFoodSelected(i)">
         {{ foodDisplayName(food) }}
       </v-list-item-title>
       <v-list-item-action>
