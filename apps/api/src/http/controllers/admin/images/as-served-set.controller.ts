@@ -39,7 +39,7 @@ export default ({
     req: Request<any, any, any, PaginateQuery>,
     res: Response<AsServedSetsResponse>
   ): Promise<void> => {
-    const asServedSets = await AsServedSet.paginate<AsServedSetListEntry>({
+    const asServedSets = await AsServedSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
       order: [['id', 'ASC']],

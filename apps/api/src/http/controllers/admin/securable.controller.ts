@@ -63,7 +63,7 @@ export default ({
 
     const { [paramId]: securableId } = req.params;
 
-    const users = await User.paginate<UserSecurableListEntry>({
+    const users = await User.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'email', 'simpleName'],
       attributes: ['id', 'email', 'name'],

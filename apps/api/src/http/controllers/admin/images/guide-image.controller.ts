@@ -40,7 +40,7 @@ export default ({
     req: Request<any, any, any, PaginateQuery>,
     res: Response<GuideImagesResponse>
   ): Promise<void> => {
-    const guideImages = await GuideImage.paginate<GuideImageListEntry>({
+    const guideImages = await GuideImage.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
       order: [['id', 'ASC']],

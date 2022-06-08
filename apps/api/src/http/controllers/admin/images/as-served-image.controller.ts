@@ -40,7 +40,7 @@ export default ({
     const asServedSet = await AsServedSet.findByPk(asServedSetId);
     if (!asServedSet) throw new NotFoundError();
 
-    const asServedImages = await AsServedImage.paginate<AsServedImageEntry>({
+    const asServedImages = await AsServedImage.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id'],
       order: [['id', 'ASC']],

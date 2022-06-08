@@ -37,7 +37,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
       options.where = { ...options.where, [Op.or]: ops };
     }
 
-    return CategoryLocal.paginate<CategoryListEntry>({
+    return CategoryLocal.paginate({
       query,
       transform: categoryResponse,
       ...options,

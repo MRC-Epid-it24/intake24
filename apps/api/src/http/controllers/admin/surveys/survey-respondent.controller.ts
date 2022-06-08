@@ -64,7 +64,7 @@ export default ({
 
     const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);
 
-    const respondents = await UserSurveyAlias.paginate<SurveyRespondentListEntry>({
+    const respondents = await UserSurveyAlias.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['username'],
       where: { surveyId },

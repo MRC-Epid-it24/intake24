@@ -12,10 +12,13 @@ export type PaginateQuery = {
   search?: string;
 };
 
-export interface PaginateOptions<TAttributes = any> extends FindOptions<TAttributes> {
+export type PaginateTransform = (item: any) => any;
+
+export interface PaginateOptions<TAttributes = any, T extends PaginateTransform = any>
+  extends FindOptions<TAttributes> {
   query: PaginateQuery;
   columns?: string[];
-  transform?: (item: any) => any;
+  transform?: T;
 }
 
 // Sequelize options not indexable
@@ -42,17 +45,17 @@ export default class Model<
    * Paginate results of Model.findAll
    *
    * @static
+   * @template T
    * @template R
-   * @template M
    * @param {BaseModelStatic<R extends Model ? R : Model>} this
-   * @param {Paginate} { req, columns = [], transform, ...params }
-   * @returns {Promise<Pagination<R>>}
+   * @param {PaginateOptions<any, T>} { query, columns = [], transform, ...params }
+   * @returns {Promise<Pagination<T extends PaginateTransform ? ReturnType<T> : R>>}
    * @memberof Model
    */
-  public static async paginate<R = Model>(
+  public static async paginate<T extends PaginateTransform, R = Model>(
     this: BaseModelStatic<R extends Model ? R : Model>,
-    { query, columns = [], transform, ...params }: PaginateOptions
-  ): Promise<Pagination<R>> {
+    { query, columns = [], transform, ...params }: PaginateOptions<any, T>
+  ): Promise<Pagination<T extends PaginateTransform ? ReturnType<T> : R>> {
     const { page = 1, limit = 50, sort, search } = query;
 
     const offset = limit * (page - 1);
@@ -87,7 +90,7 @@ export default class Model<
 
     const records = await model.findAll(options);
 
-    const data = (transform ? records.map(transform) : records) as R[];
+    const data = transform ? records.map(transform) : records;
 
     const meta: PaginationMeta = {
       from: offset + 1,

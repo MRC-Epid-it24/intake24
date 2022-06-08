@@ -36,7 +36,7 @@ export default ({
     req: Request<any, any, any, PaginateQuery>,
     res: Response<ImageMapsResponse>
   ): Promise<void> => {
-    const images = await ImageMap.paginate<ImageMapListEntry>({
+    const images = await ImageMap.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
       order: [['id', 'ASC']],

@@ -71,12 +71,12 @@ export default (ioc: IoC): AdminSurveyController => {
     };
 
     if (await aclService.hasPermission('surveys|browse')) {
-      const surveys = await Survey.paginate<SurveyListEntry>(paginateOptions);
+      const surveys = await Survey.paginate(paginateOptions);
       res.json(surveys);
       return;
     }
 
-    const surveys = await Survey.paginate<SurveyListEntry>({
+    const surveys = await Survey.paginate({
       ...paginateOptions,
       where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
       ...securableScope(userId),
