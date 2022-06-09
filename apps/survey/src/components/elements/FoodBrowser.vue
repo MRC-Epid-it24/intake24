@@ -34,7 +34,12 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { CategoryContents, CategoryHeader, FoodSearchResponse } from '@intake24/common/types/http';
+import {
+  CategoryContents,
+  CategoryHeader,
+  FoodHeader,
+  FoodSearchResponse,
+} from '@intake24/common/types/http';
 
 import CategoryContentsView from '@intake24/survey/components/elements/CategoryContentsView.vue';
 import categoriesService from '@intake24/survey/services/categories.service';
@@ -84,8 +89,8 @@ export default defineComponent({
       this.browseCategory(category.code);
     },
 
-    onFoodSelected(foodCode: string): void {
-      this.$emit('food-selected', foodCode);
+    onFoodSelected(food: FoodHeader): void {
+      this.$emit('food-selected', food);
     },
 
     onNavigateBack(): void {

@@ -1,6 +1,6 @@
 import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
 import type { ComponentType, QuantityValues } from '../prompts';
-import { UserFoodData } from './http';
+import { FoodHeader, UserFoodData } from './http';
 import { PortionSizeMethodId } from './models';
 
 export type CustomPromptAnswer = string | string[] | number | number[];
@@ -49,6 +49,7 @@ export type PortionSizeState = AsServedState | GuideImageState | StandardPortion
 
 export interface AssociatedFoodPromptState {
   confirmed: boolean | undefined;
+  selectedFood: FoodHeader | undefined;
 }
 
 export interface AssociatedFoodsState {

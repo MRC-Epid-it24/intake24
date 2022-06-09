@@ -8,7 +8,12 @@
               <v-expansion-panel-header color="#f5f5f5" disable-icon-rotate class="text-body-1">
                 {{ associatedFoodPrompts[index].promptText }}
                 <template v-slot:actions>
-                  <valid-invalid-icon :valid="prompt.confirmed !== undefined"></valid-invalid-icon>
+                  <valid-invalid-icon
+                    :valid="
+                      prompt.confirmed === false ||
+                      (prompt.confirmed === true && prompt.selectedFood !== undefined)
+                    "
+                  ></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content class="pl-0">
@@ -18,14 +23,27 @@
                     <v-btn :value="true">{{ $t('prompts.associatedFoods.yes') }}</v-btn>
                   </v-btn-toggle>
                 </v-container>
+                <v-card flat v-if="prompt.confirmed === true && prompt.selectedFood !== undefined">
+                  <v-card-title
+                    ><span class="fa fa-check mr-2"></span
+                    >{{ prompt.selectedFood.description }}</v-card-title
+                  >
+                  <v-card-actions>
+                    <v-btn @click="prompt.selectedFood = undefined">Select a different food </v-btn>
+                  </v-card-actions>
+                </v-card>
                 <v-expand-transition>
-                  <v-card flat v-show="prompt.confirmed === true">
+                  <v-card
+                    flat
+                    v-show="prompt.confirmed === true && prompt.selectedFood === undefined"
+                  >
                     <v-card-title class="pl-0 pa-2" style="border-bottom: 1px solid lightgray"
                       >Please select an item from this category:</v-card-title
                     >
                     <v-card-text class="pl-0">
                       <FoodBrowser
                         :root-category="associatedFoodPrompts[index].categoryCode"
+                        @food-selected="(food) => onFoodSelected(food, index)"
                       ></FoodBrowser>
                     </v-card-text>
                   </v-card>
@@ -44,8 +62,12 @@ import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import { AssociatedFoodsState, EncodedFood } from '@intake24/common/types';
-import { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
+import {
+  AssociatedFoodPromptState,
+  AssociatedFoodsState,
+  EncodedFood,
+} from '@intake24/common/types';
+import { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import FoodBrowser from '@intake24/survey/components/elements/FoodBrowser.vue';
 import BasePrompt, { Prompt } from '../BasePrompt';
 
@@ -77,10 +99,14 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   data() {
     const assocFoodEntry = this.associatedFoods[this.food.id] ?? {};
-    const {
-      activePrompt = 0,
-      prompts = this.food.data.associatedFoodPrompts.map(() => ({ confirmed: undefined })),
-    } = assocFoodEntry;
+
+    const initialPromptsState: AssociatedFoodPromptState[] =
+      this.food.data.associatedFoodPrompts.map(() => ({
+        confirmed: undefined,
+        selectedFood: undefined,
+      }));
+
+    const { activePrompt = 0, prompts = initialPromptsState } = assocFoodEntry;
 
     return {
       activePrompt,
@@ -114,6 +140,14 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   methods: {
+    onFoodSelected(food: FoodHeader, promptIndex: number): void {
+      console.log(food.description);
+      Vue.set(this.prompts, promptIndex, {
+        confirmed: true,
+        selectedFood: food,
+      });
+    },
+
     updatePrompts() {
       const { activePrompt, prompts } = this;
       this.$emit('update', { activePrompt, prompts });
