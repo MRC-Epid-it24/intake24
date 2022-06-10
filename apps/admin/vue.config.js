@@ -27,6 +27,24 @@ module.exports = {
       },
     },
   },
+  chainWebpack: (config) => {
+    config.module
+      .rule('svg-flags')
+      .after('svg')
+      .test(/flag-icons(.*)\.(svg)(\?.*)?$/)
+      .set('type', 'asset/resource')
+      .set('generator', {
+        filename: 'img/flag-icons/[name].[hash:8][ext]',
+      })
+      .end()
+      .rule('images-feedback')
+      .after('images')
+      .test(/feedback(.*)\.(png|jpe?g|gif|webp|avif)(\?.*)?$/)
+      .set('type', 'asset')
+      .set('generator', {
+        filename: 'img/feedback/[name].[hash:8][ext]',
+      });
+  },
   devServer: {
     port: 8100,
     proxy: {

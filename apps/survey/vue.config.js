@@ -27,6 +27,16 @@ module.exports = {
       },
     },
   },
+  chainWebpack: (config) => {
+    config.module
+      .rule('images-feedback')
+      .after('images')
+      .test(/feedback(.*)\.(png|jpe?g|gif|webp|avif)(\?.*)?$/)
+      .set('type', 'asset')
+      .set('generator', {
+        filename: 'img/feedback/[name].[hash:8][ext]',
+      });
+  },
   devServer: {
     port: 8200,
     proxy: {
