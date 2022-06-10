@@ -9,11 +9,12 @@
     "directory": "apps/portal"
   },
   "scripts": {
-    "build": "run-p build:back build:front",
+    "build": "run-p build:back build:front build:sitemap",
     "build:back": "pnpm build:back:clean && webpack --env NODE_ENV=production",
     "build:back:clean": "rimraf dist",
     "build:front": "mix --production",
     "build:front:clean": "rimraf public",
+    "build:sitemap": "node scripts/sitemap.mjs",
     "dev": "run-p dev:back dev:front",
     "dev:back": "webpack --env NODE_ENV=development",
     "dev:front": "mix -- watch",
@@ -37,7 +38,8 @@
     "express": "^4.18.1",
     "helmet": "^5.1.0",
     "morgan": "^1.10.0",
-    "nunjucks": "^3.2.3"
+    "nunjucks": "^3.2.3",
+    "sitemap": "^7.1.1"
   },
   "devDependencies": {
     "@types/morgan": "^1.9.3",
