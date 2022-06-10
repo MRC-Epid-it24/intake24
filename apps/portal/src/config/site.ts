@@ -9,12 +9,12 @@ export type SiteConfig = {
 };
 
 const siteConfig: SiteConfig = {
-  content: process.env.SERVER_SITE_CONTENT || '',
-  demoURL: `${process.env.SERVER_APP_NAMESPACE}/demo?genUser`,
-  videoURL: process.env.SERVER_SITE_VIDEO || '',
+  content: process.env.SITE_CONTENT || '',
+  demoURL: `${process.env.SITE_APP}/demo?genUser`,
+  videoURL: process.env.SITE_VIDEO || '',
   support: {
-    email: '',
-    phone: '',
+    email: process.env.SITE_EMAIL || '',
+    phone: process.env.SITE_PHONE || '',
   },
 };
 

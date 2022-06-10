@@ -34,7 +34,6 @@ h1, h2, h3, h4, h4, h6 {
 	width: 100%;
 	background: rgba(0, 0, 0, 0.075);
 	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-	height: 50px;
 
 	a {
 		color: white;
@@ -61,15 +60,12 @@ h1, h2, h3, h4, h4, h6 {
 	li > .dropdown-menu {
 		background-color: rgba(156, 121, 101, 0.9);
 	}
-}
 
-.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(0,0,0,1);
-}
-
-.dropdown-menu > li > a {
-	color: #ffffff;
+	.dropdown-menu .dropdown-item:hover {
+		color: #ffffff;
+		background-color: rgba(255, 255, 255, 0.2);
+		border-color: rgba(0,0,0,1);
+	}
 }
 
 .home-banner {
@@ -89,6 +85,8 @@ h1, h2, h3, h4, h4, h6 {
 	}
 	
 	p {
+		font-size: 21px;
+		font-weight: 300;
 		max-width: 500px;
 	}
 }
@@ -114,4 +112,9 @@ ul.dash > li:before {
 
 .btn-success {
 	margin-bottom: 5px;
+}
+
+.img-feedback {
+	width: 90%;
+	margin-left: 5%;
 }

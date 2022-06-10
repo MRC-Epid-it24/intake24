@@ -15,19 +15,19 @@
   </head>
 
   <body>
-    <nav id="navbar" class="navbar navbar-expand-md navbar-fixed-top navbar-dark">
-      <a class="navbar-brand" href="/">Intake24</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto p-3">
+    <nav id="navbar" class="navbar navbar-expand-md navbar-fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">Intake24</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto">
           <li class="nav-item">
             <a class="nav-link" href="/recall">Dietary recall</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Features
               </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -39,7 +39,7 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/feedback">Feedback</a>
+            <a class="nav-link" href="/feedback">Participant feedback</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/publications">Publications</a>
@@ -49,9 +49,10 @@
           </li>
         </ul>
       </div>
+      </div>
     </nav>
 
-    <div class="jumbotron home-banner">
+    <div class="jumbotron home-banner mb-5">
       <div class="container">
         <h1>Welcome to Intake24</h1>
         <p>
@@ -60,7 +61,7 @@
           interviewer-led recalls at a significantly lower cost.
         </p>
         <p>
-          <a class="btn btn-success btn-lg" href="{{ demoURL }}" role="button">Try a demo &raquo;</a>
+          <a class="btn btn-success btn-lg" href="{{ demoURL }}" role="button" target="_blank">Try a demo &raquo;</a>
           <a class="btn btn-success btn-lg" href="{{ videoURL }}" role="button" target="_blank">
             Watch a video &raquo;
           </a>
