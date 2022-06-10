@@ -72,6 +72,7 @@ module.exports = {
     workboxPluginMode: 'GenerateSW',
     workboxOptions: {
       cleanupOutdatedCaches: true,
+      exclude: [/\.map$/, /^manifest.*\.js$/, /index.html/],
       importScripts: ['js/web-push.js'],
       skipWaiting: true,
     },

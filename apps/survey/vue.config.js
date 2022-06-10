@@ -64,6 +64,7 @@ module.exports = {
     workboxPluginMode: 'GenerateSW',
     workboxOptions: {
       cleanupOutdatedCaches: true,
+      exclude: [/\.map$/, /^manifest.*\.js$/, /index.html/],
       skipWaiting: true,
     },
   },
