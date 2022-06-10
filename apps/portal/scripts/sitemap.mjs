@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
-import { createWriteStream } from 'fs';
+import fs from 'fs-extra';
 import { resolve } from 'path';
 import { SitemapStream } from 'sitemap';
 import { Readable } from 'stream';
@@ -8,12 +8,13 @@ import { Readable } from 'stream';
 const env = dotenv.config();
 dotenvExpand.expand(env);
 
-const hostname = process.env.APP_URL;
-if (!hostname) throw new Error('Missing hostname');
-
-const publicPath = process.env.FS_PUBLIC || 'public';
-
 try {
+  const hostname = process.env.APP_URL;
+  if (!hostname) throw new Error('Missing hostname');
+
+  const publicPath = process.env.FS_PUBLIC || 'public';
+  await fs.ensureDir(resolve(publicPath));
+
   const stream = new SitemapStream({ hostname });
 
   const links = [
@@ -33,7 +34,7 @@ try {
 
   Readable.from(links)
     .pipe(stream)
-    .pipe(createWriteStream(resolve(`${publicPath}/sitemap.xml`)))
+    .pipe(fs.createWriteStream(resolve(`${publicPath}/sitemap.xml`)))
     .on('error', (err) => {
       throw err;
     });
