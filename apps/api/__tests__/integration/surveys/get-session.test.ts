@@ -65,8 +65,9 @@ export default () => {
           flags: [],
           meals: [],
           nextFoodId: 0,
-          associatedFoods: {},
+          nextMealId: 0,
           customPromptAnswers: {},
+          continueButtonEnabled: false,
           selection: { element: null, mode: 'auto' },
         },
       };

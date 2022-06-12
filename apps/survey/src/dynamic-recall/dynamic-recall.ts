@@ -23,6 +23,7 @@ export const surveyInitialState: CurrentSurveyState = {
   endTime: null,
   flags: [],
   customPromptAnswers: {},
+  continueButtonEnabled: false,
   tempPromptAnswer: {
     response: null,
     modified: false,
@@ -32,13 +33,13 @@ export const surveyInitialState: CurrentSurveyState = {
     foodIndex: undefined,
     prompt: undefined,
   },
-  associatedFoods: {},
   selection: {
     element: null,
     mode: 'auto',
   },
   meals: [],
   nextFoodId: 0,
+  nextMealId: 0,
 };
 
 export default class DynamicRecall {
@@ -66,6 +67,7 @@ export default class DynamicRecall {
         schemeId: this.surveyScheme.id,
         startTime: new Date(),
         meals: this.surveyScheme.meals.map((meal) => ({
+          id: this.store.getNextMealId(),
           name: meal.name[locale] ?? meal.name.en,
           localName: meal.name, // FIXME: pick correct locale and handle nulls
           defaultTime: parseMealTime(meal.time),

@@ -2,7 +2,12 @@ import Vue, { VueConstructor } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import { SchemeEntryResponse } from '@intake24/common/types/http';
 import { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
-import { Selection, FoodState, LocaleTranslation, HasOnAnswer } from '@intake24/common/types';
+import {
+  Selection,
+  FoodState,
+  LocaleTranslation,
+  RecallPromptHandler,
+} from '@intake24/common/types';
 import { ComponentType } from '@intake24/common/prompts';
 import DynamicRecall, { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
@@ -24,7 +29,7 @@ import { FoodUndo, MealUndo, useSurvey } from '@intake24/survey/stores';
 
 type Refs = {
   $refs: {
-    promptHandle: HasOnAnswer;
+    promptHandle: RecallPromptHandler;
   };
 };
 
@@ -156,7 +161,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['deleteMeal', 'clearTempPromptAnswer']),
+    ...mapActions(useSurvey, ['deleteMeal', 'setContinueButtonEnabled']),
 
     setSelection(newSelection: Selection) {
       // Prevent the currently active prompt from crashing if it expects a different selection type
@@ -316,7 +321,8 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
           this.currentPrompt = null;
         }
       } else {
-        console.log(`Switching prompt to ${nextPrompt.prompt.component}`);
+        this.setContinueButtonEnabled(false);
+        console.debug(`Switching prompt to ${nextPrompt.prompt.component}`);
         this.currentPrompt = nextPrompt;
       }
     },

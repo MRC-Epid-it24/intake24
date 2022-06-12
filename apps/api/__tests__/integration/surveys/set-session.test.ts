@@ -20,8 +20,9 @@ export default () => {
       endTime: new Date(),
       flags: ['flag-1', 'flag-2'],
       customPromptAnswers: {},
-      associatedFoods: {},
+      continueButtonEnabled: false,
       nextFoodId: 0,
+      nextMealId: 0,
       selection: {
         element: null,
         mode: 'auto',

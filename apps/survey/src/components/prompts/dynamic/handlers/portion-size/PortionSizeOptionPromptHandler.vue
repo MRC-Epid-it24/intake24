@@ -2,8 +2,8 @@
   <portion-size-option-prompt
     v-bind="{ foodName, promptProps, availableMethods }"
     :prompt-component="promptComponent"
-    @option-selected="onAnswer"
-    @tempChanging="onTempChange"
+    v-on="$listeners"
+    @update="onUpdate"
   >
   </portion-size-option-prompt>
 </template>
@@ -12,7 +12,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
-import { HasOnAnswer, PromptAnswer } from '@intake24/common/types';
+import { RecallPromptHandler } from '@intake24/common/types';
 import { UserPortionSizeMethod } from '@intake24/common/types/http';
 import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import { mapActions } from 'pinia';
@@ -21,7 +21,7 @@ import foodPromptUtils from '../mixins/food-prompt-utils';
 
 type Mixins = InstanceType<typeof foodPromptUtils>;
 
-export default (Vue as VueConstructor<Vue & Mixins & HasOnAnswer>).extend({
+export default (Vue as VueConstructor<Vue & Mixins & RecallPromptHandler>).extend({
   name: 'PortionSizeOptionPromptHandler',
 
   components: { PortionSizeOptionPrompt },
@@ -45,14 +45,20 @@ export default (Vue as VueConstructor<Vue & Mixins & HasOnAnswer>).extend({
     },
   },
 
-  methods: {
-    ...mapActions(useSurvey, ['updateFood', 'setTempPromptAnswer', 'clearTempPromptAnswer']),
+  data() {
+    return {
+      option: 0,
+    };
+  },
 
-    onTempChange(portionSize: PromptAnswer) {
-      this.setTempPromptAnswer(portionSize);
+  methods: {
+    ...mapActions(useSurvey, ['updateFood']),
+
+    onUpdate(option: number) {
+      this.option = option;
     },
 
-    onAnswer(option: number) {
+    commitAnswer() {
       const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
       if (mealIndex === undefined || foodIndex === undefined) {
         console.warn('No selected meal/food, meal/food index undefined');
@@ -62,11 +68,8 @@ export default (Vue as VueConstructor<Vue & Mixins & HasOnAnswer>).extend({
       this.updateFood({
         mealIndex,
         foodIndex,
-        food: { portionSizeMethodIndex: option },
+        food: { portionSizeMethodIndex: this.option },
       });
-
-      this.$emit('complete');
-      this.clearTempPromptAnswer();
     },
   },
 });

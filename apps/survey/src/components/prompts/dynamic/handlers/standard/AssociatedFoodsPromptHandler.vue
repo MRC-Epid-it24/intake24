@@ -3,8 +3,8 @@
     v-bind="{
       promptProps,
       promptComponent,
-      associatedFoods,
-      food,
+      associatedFoodsState: associatedFoodsState,
+      food: selectedEncodedFood,
     }"
     @update="updatePrompts"
   >
@@ -15,12 +15,13 @@
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
-import { AssociatedFoodsState, HasOnAnswer } from '@intake24/common/types';
+import { AssociatedFoodsState, RecallPromptHandler } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';
+import { useAssociatedFoodsState } from '@intake24/survey/stores/associated-foods';
 
-export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
+export default (Vue as VueConstructor<Vue & RecallPromptHandler>).extend({
   name: 'AssociatedFoodsPromptHandler',
 
   components: { AssociatedFoodsPrompt },
@@ -37,23 +38,26 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
   },
 
   computed: {
-    ...mapState(useSurvey, {
-      food: (state) => state.selectedEncodedFood,
-      associatedFoods: (state) => state.data.associatedFoods,
-    }),
+    ...mapState(useSurvey, ['selectedEncodedFood']),
+    ...mapState(useAssociatedFoodsState, ['associatedFoodsState']),
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateAssociatedFoods']),
+    ...mapActions(useAssociatedFoodsState, ['updateAssociatedFoods']),
 
     updatePrompts(state: AssociatedFoodsState) {
-      const id = this.food?.id;
+      const id = this.selectedEncodedFood?.id;
+
       if (id === undefined) {
         console.warn('Expected an encoded food to be selected at this point');
         return;
       }
 
       this.updateAssociatedFoods(id, state);
+    },
+
+    commitAnswer(): void {
+      console.log('bleh');
     },
   },
 });

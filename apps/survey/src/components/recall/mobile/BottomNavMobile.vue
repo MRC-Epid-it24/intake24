@@ -1,5 +1,12 @@
 <template>
-  <v-bottom-navigation app fixed grow :color="color" background-color="secondary">
+  <v-bottom-navigation
+    app
+    fixed
+    grow
+    :color="color"
+    background-color="secondary"
+    v-model="tabIndex"
+  >
     <v-btn @click="onItemClick(0)">
       <span>Add meal</span>
       <v-icon>$plus</v-icon>
@@ -11,7 +18,7 @@
     </v-btn>
 
     <v-btn
-      :disabled="!this.continue"
+      :disabled="!isContinueEnabled()"
       @click="onItemClick(2)"
       :color="this.continue ? 'success' : 'primary'"
     >
@@ -32,15 +39,21 @@ export default defineComponent({
 
   props: {
     bottomNavigation: Number,
+    continueButtonEnabled: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data(): {
+    tabIndex: number;
     activeItem: string;
     color: string;
     promptAnswer: PromptAnswer | null;
     continue: boolean;
   } {
     return {
+      tabIndex: 2,
       activeItem: 'meal',
       color: '#ffffff',
       promptAnswer: null,
@@ -50,13 +63,16 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedFood', 'currentTempPromptAnswer']),
+    ...mapState(useSurvey, ['selectedMeal', 'selectedFood']),
   },
 
   methods: {
     onItemClick(tab: number) {
       if (!tab) this.$emit('navigation-item-click', this.$props.bottomNavigation);
       this.$emit('navigation-item-click', tab);
+    },
+    isContinueEnabled() {
+      return this.continueButtonEnabled || this.tabIndex !== 2;
     },
   },
   watch: {

@@ -2,12 +2,10 @@
   <meal-time-prompt
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
-    :submitTrigger="submitTrigger"
-    :value="defaultTime"
-    :prompt-component="promptComponent"
-    @answer="onAnswer"
-    @removeMeal="onRemoveMeal"
-    @tempChanging="onTempChange"
+    :initial-time="initialTime"
+    v-on="$listeners"
+    @update="onUpdate"
+    @remove-meal="onRemoveMeal"
   ></meal-time-prompt>
 </template>
 
@@ -15,15 +13,15 @@
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
 import { mapActions, mapState } from 'pinia';
-import { ComponentType, MealTimePromptProps } from '@intake24/common/prompts';
-import { MealTime, HasOnAnswer, PromptAnswer } from '@intake24/common/types';
+import { MealTimePromptProps } from '@intake24/common/prompts';
+import { MealTime, RecallPromptHandler } from '@intake24/common/types';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
 
 const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minutes}`;
 
-export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
+export default (Vue as VueConstructor<Vue & RecallPromptHandler>).extend({
   name: 'MealTimePromptHandler',
 
   components: { MealTimePrompt },
@@ -42,55 +40,30 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
     },
   },
 
+  data() {
+    const store = useSurvey();
+
+    if (!store.selectedMeal) throw new Error('A meal must be selected');
+
+    const initialTime = store.selectedMeal.time
+      ? mealTimeToString(store.selectedMeal.time)
+      : mealTimeToString(store.selectedMeal.defaultTime);
+
+    return {
+      initialTime,
+      currentTime: initialTime,
+    };
+  },
+
   computed: {
-    ...mapState(useSurvey, [
-      'selectedMeal',
-      'selectedMealIndex',
-      'selectedFoodIndex',
-      'currentTempPromptAnswer',
-    ]),
-
-    defaultTime(): string {
-      if (!this.selectedMeal) throw new Error('A meal must be selected');
-
-      if (this.selectedMeal.time) return mealTimeToString(this.selectedMeal.time);
-      const tempTime = this.currentTempPromptAnswer;
-      if (
-        tempTime?.response &&
-        tempTime.prompt === this.promptComponent &&
-        tempTime.mealIndex === this.selectedMealIndex
-      ) {
-        return tempTime.response.toString();
-      }
-      return mealTimeToString(this.selectedMeal.defaultTime);
-    },
+    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex', 'selectedFoodIndex']),
   },
 
   methods: {
-    ...mapActions(useSurvey, [
-      'setMealTime',
-      'deleteMeal',
-      'setTempPromptAnswer',
-      'clearTempPromptAnswer',
-    ]),
+    ...mapActions(useSurvey, ['setMealTime', 'deleteMeal']),
 
-    onAnswer(mealTime: string) {
-      if (this.selectedMealIndex === undefined) {
-        console.warn('No selected meal, meal index undefined');
-        return;
-      }
-      this.setMealTime({
-        mealIndex: this.selectedMealIndex,
-        time: parseMealTime(mealTime),
-      });
-      this.$emit('resetPromptTrigger');
-      this.$emit('complete');
-      this.clearTempPromptAnswer();
-    },
-
-    onPartialAnswer(mealTime: string) {
-      console.log('Called onPartialAnswer');
-      this.onAnswer(mealTime);
+    onUpdate(mealTime: string) {
+      this.currentTime = mealTime;
     },
 
     onRemoveMeal() {
@@ -101,29 +74,17 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
 
       this.deleteMeal(this.selectedMealIndex);
       this.$emit('complete');
-      this.clearTempPromptAnswer();
     },
 
-    onTempChange(tempTime: PromptAnswer) {
-      this.setTempPromptAnswer(tempTime);
-    },
-  },
-
-  watch: {
-    defaultTime: {
-      immediate: true,
-      handler(value: string) {
-        console.log('Applying defaultt time');
-        this.setTempPromptAnswer({
-          response: value,
-          modified: true,
-          new: false,
-          finished: true,
-          mealIndex: this.selectedMealIndex,
-          foodIndex: this.selectedFoodIndex,
-          prompt: this.promptComponent as ComponentType,
-        });
-      },
+    commitAnswer() {
+      if (this.selectedMealIndex === undefined) {
+        console.warn('No selected meal, meal index undefined');
+        return;
+      }
+      this.setMealTime({
+        mealIndex: this.selectedMealIndex,
+        time: parseMealTime(this.currentTime),
+      });
     },
   },
 });

@@ -36,12 +36,28 @@ export default defineComponent({
     return { survey };
   },
 
+  data() {
+    return {
+      answer: undefined as CustomPromptAnswer | undefined,
+    };
+  },
+
   computed: {
     ...mapState(useSurvey, ['selection']),
   },
 
   methods: {
     onAnswer(answer: CustomPromptAnswer) {
+      this.answer = answer;
+      this.$emit('complete');
+    },
+
+    commitAnswer() {
+      if (this.answer === undefined) {
+        console.warn('Did not expect answer to be undefined');
+        return;
+      }
+
       if (this.selection !== undefined && this.selection.element !== null) {
         // eslint-disable-next-line default-case
         switch (this.selection.element.type) {
@@ -57,7 +73,7 @@ export default defineComponent({
                 mealIndex: this.selection.element.mealIndex,
                 foodIndex: this.selection.element.foodIndex,
                 promptId: this.promptId,
-                answer,
+                answer: this.answer,
               });
             break;
           }
@@ -71,7 +87,7 @@ export default defineComponent({
               this.survey.setMealCustomPromptAnswer({
                 mealIndex: this.selection.element.mealIndex,
                 promptId: this.promptId,
-                answer,
+                answer: this.answer,
               });
 
             break;
@@ -79,9 +95,7 @@ export default defineComponent({
         }
       } else if (this.promptComponent === 'info-prompt')
         this.survey.setSurveyFlag(`${this.promptId}-acknowledged`);
-      else this.survey.setCustomPromptAnswer({ promptId: this.promptId, answer });
-
-      this.$emit('complete');
+      else this.survey.setCustomPromptAnswer({ promptId: this.promptId, answer: this.answer });
     },
   },
 });

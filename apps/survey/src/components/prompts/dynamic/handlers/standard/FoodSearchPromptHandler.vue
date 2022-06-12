@@ -10,12 +10,13 @@
 import { defineComponent, PropType } from '@vue/composition-api';
 import { mapActions, mapState } from 'pinia';
 import { FoodSearchPromptProps } from '@intake24/common/prompts';
-import { FoodState } from '@intake24/common/types';
+import { FoodState, RecallPromptHandler } from '@intake24/common/types';
 import { UserFoodData } from '@intake24/common/types/http';
 import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
+import Vue, { VueConstructor } from 'vue';
 
-export default defineComponent({
+export default (Vue as VueConstructor<Vue & RecallPromptHandler>).extend({
   name: 'FoodSearchPromptHandler',
 
   components: { FoodSearchPrompt },
@@ -25,6 +26,12 @@ export default defineComponent({
       type: Object as PropType<FoodSearchPromptProps>,
       required: true,
     },
+  },
+
+  data() {
+    return {
+      foodData: undefined as UserFoodData | undefined,
+    };
   },
 
   computed: {
@@ -48,6 +55,11 @@ export default defineComponent({
     ...mapActions(useSurvey, ['replaceFood', 'getNextFoodId']),
 
     onFoodSelected(data: UserFoodData) {
+      this.foodData = data;
+      this.$emit('complete');
+    },
+
+    commitAnswer() {
       if (
         this.selectedMealIndex === undefined ||
         this.selectedFoodIndex === undefined ||
@@ -57,16 +69,21 @@ export default defineComponent({
         return;
       }
 
+      if (this.foodData === undefined) {
+        console.warn('foodData is undefined');
+        return;
+      }
+
       const currentState = this.selectedFood;
 
       // Automatically select the only portion size method available to avoid triggering
       // redundant portion size option prompt
-      const portionSizeMethodIndex = data.portionSizeMethods.length === 1 ? 0 : null;
+      const portionSizeMethodIndex = this.foodData.portionSizeMethods.length === 1 ? 0 : null;
 
       const newState: FoodState = {
         id: this.selectedFood.id,
         type: 'encoded-food',
-        data,
+        data: this.foodData,
         portionSizeMethodIndex,
         portionSize: null,
         customPromptAnswers: currentState?.customPromptAnswers ?? {},
@@ -80,8 +97,6 @@ export default defineComponent({
         foodIndex: this.selectedFoodIndex,
         food: newState,
       });
-
-      this.$emit('complete');
     },
   },
 });

@@ -115,15 +115,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
       if (index !== -1) {
         response = this.currentValue;
       }
-      this.$emit('tempChanging', {
-        response,
-        modified: true,
-        finished: true,
-        new: false,
-        mealIndex: this.selectedMealIndex,
-        foodIndex: this.selectedFoodIndex,
-        prompt: this.promptComponent,
-      });
+      this.$emit('update', response);
     },
 
     selectMethod(index: number) {
@@ -166,8 +158,7 @@ export default (Vue as VueConstructor<Vue & Portion>).extend({
     },
 
     submit() {
-      this.$emit('option-selected', this.currentValue);
-      this.onChange(this.currentValue);
+      this.$emit('complete');
     },
   },
 });

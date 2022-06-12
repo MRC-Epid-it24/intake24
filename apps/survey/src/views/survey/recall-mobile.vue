@@ -33,7 +33,8 @@
           :promptProps="currentPrompt.prompt.props"
           :key="Math.random()"
           :submitTrigger="submitTrigger"
-          @complete="nextPrompt"
+          @completion-update="onCompletionUpdate"
+          @complete="onComplete"
           @resetPromptTrigger="resetTrigger"
           @meal-food-selected="onMealFoodMobileClick"
         ></component>
@@ -56,7 +57,11 @@
     </v-col>
 
     <transition type="fade">
-      <bottom-navigation-mobile v-if="showMealList" @navigation-item-click="onBottomNavChange" />
+      <bottom-navigation-mobile
+        v-if="showMealList"
+        @navigation-item-click="onBottomNavChange"
+        :continue-button-enabled="continueButtonEnabled"
+      />
     </transition>
 
     <!-- Context menu for Meal or Food with actions options -->
@@ -72,7 +77,7 @@
       :entityType="mobileMealFoodContextMenu.foodContext"
       @toggleMobileMealContext="onMobileMealFoodContextMenu"
       @meal-action="onMealAction"
-      @complete="nextPrompt"
+      @complete="onComplete"
     ></meal-food-mobile-context-menu>
 
     <info-alert
@@ -112,6 +117,7 @@ export default Recall.extend({
 
   data: () => {
     return {
+      continueButtonEnabled: false,
       bottomNavTab: 2,
       mobileMealFoodContextMenu: {
         show: false,
@@ -142,23 +148,7 @@ export default Recall.extend({
       } else if (tab === 1) {
         this.onRecallAction('review-confirm');
       } else if (tab === 2) {
-        // this.submitTrigger = true;
-        // this.submitTrigger = false;
-        // TODO: WIP - FIX- ME Call the Prompt method from the parent. Check for Prompt Types
-        const tempAnswer = this.currentTempPromptAnswer;
-        if (
-          tempAnswer &&
-          tempAnswer.response !== null &&
-          tempAnswer.prompt === this.currentPrompt?.prompt.component &&
-          tempAnswer.mealIndex === this.selectedMealIndex &&
-          (this.selectedFoodIndex === undefined || tempAnswer.foodIndex === this.selectedFoodIndex)
-        ) {
-          if (tempAnswer.finished === false)
-            this.$refs.promptHandle.onPartialAnswer(tempAnswer.response);
-          else this.$refs.promptHandle.onAnswer(tempAnswer.response);
-        } else {
-          this.nextPrompt();
-        }
+        this.onComplete();
       }
     },
 
@@ -195,6 +185,16 @@ export default Recall.extend({
 
     onMobileMealFoodContextMenu() {
       this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
+    },
+
+    onComplete() {
+      this.$refs.promptHandle.commitAnswer();
+      this.continueButtonEnabled = false;
+      this.nextPrompt();
+    },
+
+    onCompletionUpdate(promptComplete: boolean) {
+      this.continueButtonEnabled = promptComplete;
     },
   },
 });

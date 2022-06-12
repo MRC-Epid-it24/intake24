@@ -91,6 +91,7 @@ export interface MealTime {
 }
 
 export interface MealState {
+  id: number;
   name: string;
   localName: LocaleTranslation;
   defaultTime: MealTime;
@@ -143,12 +144,17 @@ export type SurveyState = {
   endTime: Date | null;
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-  associatedFoods: { [key: number]: AssociatedFoodsState };
+  continueButtonEnabled: boolean;
   tempPromptAnswer?: PromptAnswer;
   selection: Selection;
   meals: MealState[];
   nextFoodId: number;
+  nextMealId: number;
 };
+
+export interface RecallPromptHandler {
+  commitAnswer(): void;
+}
 
 export interface HasOnAnswer {
   onPartialAnswer(value?: PromptAnswerResponce): void;

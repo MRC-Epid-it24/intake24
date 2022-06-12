@@ -87,7 +87,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       type: Object as PropType<BasePromptProps>,
       required: true,
     },
-    associatedFoods: {
+    associatedFoodsState: {
       type: Object as PropType<{ [key: number]: AssociatedFoodsState }>,
       required: true,
     },
@@ -98,7 +98,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
   },
 
   data() {
-    const assocFoodEntry = this.associatedFoods[this.food.id] ?? {};
+    const assocFoodEntry = this.associatedFoodsState[this.food.id] ?? {};
 
     const initialPromptsState: AssociatedFoodPromptState[] =
       this.food.data.associatedFoodPrompts.map(() => ({

@@ -1,12 +1,13 @@
 <template>
   <edit-meal-prompt
+    ref="prompt"
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
     :food-list="foods"
     :prompt-component="promptComponent"
-    @finishMeal="onAnswer"
-    @abortMeal="onAbort"
-    @tempChanging="onTempChange"
+    :v-on="$listeners"
+    @delete-meal="onDeleteMeal"
+    @update="onUpdate"
   >
   </edit-meal-prompt>
 </template>
@@ -15,12 +16,20 @@
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
 import { BasePromptProps } from '@intake24/common/prompts';
-import { FoodState, HasOnAnswer, PromptAnswer } from '@intake24/common/types';
+import { FoodState, RecallPromptHandler } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
-import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
+import EditMealPrompt, {
+  EditMealPromptMethods,
+} from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
+import { useEditMealState } from '@intake24/survey/stores/edit-meal';
 
-export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
+type Refs = {
+  $refs: {
+    prompt: EditMealPromptMethods;
+  };
+};
+export default (Vue as VueConstructor<Vue & RecallPromptHandler & Refs>).extend({
   name: 'MealAddPromptHandler',
 
   components: { EditMealPrompt },
@@ -39,53 +48,54 @@ export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
   computed: {
     ...mapState(useSurvey, ['defaultSchemeMeals', 'selectedMeal', 'selectedMealIndex']),
 
-    // foodsList(): string[] {
-    //   if (this.defaultSchemeMeals.length === 0) return [];
-    //   return this.defaultSchemeMeals.map((meal: Meal) => meal.name[this.$i18n.locale]);
-    // },
     foods(): FoodState[] {
-      if (this.selectedMeal === undefined) throw new Error('A meal must be specified');
-      return this.selectedMeal.foods;
+      if (this.selectedMeal === undefined) {
+        console.warn('Expected a meal to be selected');
+        return [];
+      }
+
+      const storedState = useEditMealState().mealState[this.selectedMeal.id];
+      return storedState ?? this.selectedMeal.foods;
     },
   },
 
+  mounted() {
+    this.$emit('completion-update', this.foods.length > 0);
+  },
+
   methods: {
-    ...mapActions(useSurvey, [
-      'setFoods',
-      'deleteMeal',
-      'setTempPromptAnswer',
-      'clearTempPromptAnswer',
-    ]),
+    ...mapActions(useSurvey, ['setFoods', 'deleteMeal']),
+    ...mapActions(useEditMealState, ['updateMealState', 'clearMealState']),
 
-    onTempChange(tempFoodDrinks: PromptAnswer) {
-      this.setTempPromptAnswer(tempFoodDrinks);
-    },
-
-    onAnswer(newFoods: FoodState[]) {
-      if (this.selectedMealIndex === undefined) {
-        console.warn('No selected meal, meal index undefined');
-        return;
+    onUpdate(foodList: FoodState[]) {
+      if (this.selectedMeal === undefined) {
+        console.warn('Expected a meal to be selected');
+      } else {
+        this.updateMealState(this.selectedMeal.id, foodList);
+        this.$emit('completion-update', foodList.length > 0);
       }
-
-      this.setFoods({ mealIndex: this.selectedMealIndex, foods: newFoods });
-      this.$emit('complete');
-      this.clearTempPromptAnswer();
     },
 
-    onPartialAnswer(newFoods: FoodState[]) {
-      console.log('Called onPartialAnswer');
-      this.onAnswer(newFoods);
-    },
-
-    onAbort() {
-      if (this.selectedMealIndex === undefined) {
+    onDeleteMeal() {
+      if (this.selectedMealIndex === undefined || this.selectedMeal === undefined) {
         console.warn('No selected meal, meal index undefined');
         return;
       }
 
       this.deleteMeal(this.selectedMealIndex);
-      this.$emit('complete');
-      this.clearTempPromptAnswer();
+      this.clearMealState(this.selectedMeal.id);
+    },
+
+    commitAnswer() {
+      const foods = this.$refs.prompt?.foodsDrinks();
+
+      if (this.selectedMealIndex === undefined || this.selectedMeal === undefined) {
+        console.warn('No selected meal, meal index undefined');
+        return;
+      }
+
+      this.setFoods({ mealIndex: this.selectedMealIndex, foods });
+      this.clearMealState(this.selectedMeal.id);
     },
   },
 });

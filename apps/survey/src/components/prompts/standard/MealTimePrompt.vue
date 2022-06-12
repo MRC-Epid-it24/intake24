@@ -2,10 +2,12 @@
   <prompt-layout :text="text" :description="description">
     <v-form ref="form" @submit.prevent="submit">
       <v-time-picker
-        v-model="currentValue"
+        :value="initialTime"
+        :v-model="currentValue"
         :format="promptProps.format"
         :landscape="!isMobile"
         full-width
+        @change="onTimeChanged"
         @input="clearErrors"
       ></v-time-picker>
       <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
@@ -61,29 +63,27 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     mealName: {
       type: String,
     },
-    value: {
+    initialTime: {
       type: String,
       default: null,
-    },
-    submitTrigger: {
-      type: Boolean,
-    },
-    promptComponent: {
-      type: String,
-      required: true,
     },
   },
 
   data() {
     return {
-      currentValue: this.value,
+      currentValue: this.initialTime,
       validation: this.promptProps.validation,
       errors: [] as string[],
     };
   },
 
+  mounted() {
+    // Any time is acceptable
+    this.$emit('completion-update', true);
+  },
+
   computed: {
-    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
+    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex']),
     hasErrors(): boolean {
       return !!this.errors.length;
     },
@@ -107,7 +107,11 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
     },
 
     removeMeal() {
-      this.$emit('removeMeal');
+      this.$emit('remove-meal');
+    },
+
+    onTimeChanged(time: string) {
+      this.$emit('update', time);
     },
 
     submit() {
@@ -119,22 +123,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
         return;
       }
 
-      this.$emit('answer', this.currentValue);
-    },
-  },
-  watch: {
-    currentValue: {
-      handler(value: string) {
-        this.$emit('tempChanging', {
-          response: value,
-          modified: true,
-          new: false,
-          finished: true,
-          mealIndex: this.selectedMealIndex,
-          foodIndex: undefined,
-          prompt: this.promptComponent,
-        });
-      },
+      this.$emit('complete');
     },
   },
 });

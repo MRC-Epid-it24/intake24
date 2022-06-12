@@ -5,6 +5,7 @@ const store = useSurvey();
 
 function dummyMeal(name: string): MealState {
   return {
+    id: 0,
     name,
     localName: { en: name },
     customPromptAnswers: {},
@@ -32,13 +33,14 @@ function initialState(): SurveyState {
     endTime: null,
     flags: [],
     customPromptAnswers: {},
-    associatedFoods: {},
+    continueButtonEnabled: false,
     selection: {
       element: null,
       mode: 'auto',
     },
     meals: dummyMeals(3),
     nextFoodId: 0,
+    nextMealId: 0,
   };
 }
 

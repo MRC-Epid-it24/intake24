@@ -10,15 +10,12 @@ import {
   SurveyState as CurrentSurveyState,
   EncodedFood,
   FreeTextFood,
-  AssociatedFoodsState,
-  AssociatedFoodPromptState,
 } from '@intake24/common/types';
 import { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { copy } from '@intake24/common/util';
 import { useLoading } from '@intake24/ui/stores';
 import { recallLog } from '@intake24/survey/stores/recall-log';
-import Vue from 'vue';
 import { surveyService } from '../services';
 
 export type MealUndo = {
@@ -110,12 +107,8 @@ export const useSurvey = defineStore('survey', {
     selectedFoodId(): number | undefined {
       return this.selectedFood?.id;
     },
-    associatedFoodsForSelection(): () => AssociatedFoodsState | undefined {
-      return () => {
-        const id = this.selectedFoodId;
-        if (id === undefined) return undefined;
-        return this.data.associatedFoods[id];
-      };
+    continueButtonEnabled: (state) => {
+      return state.data.continueButtonEnabled;
     },
   },
   actions: {
@@ -240,6 +233,7 @@ export const useSurvey = defineStore('survey', {
 
     addMeal(mealName: string, locale: string) {
       const newMeal: MealState = {
+        id: this.getNextMealId(),
         name: mealName,
         localName: { en: mealName },
         defaultTime: { hours: 0, minutes: 0 },
@@ -325,21 +319,6 @@ export const useSurvey = defineStore('survey', {
       this.data.meals[mealIndex].foods.splice(foodIndex, 1, { ...foodState, ...food });
     },
 
-    updateAssociatedFoods(foodId: number, data: AssociatedFoodsState) {
-      console.log(`updating store assoc...`);
-      this.data.associatedFoods = { ...this.data.associatedFoods, [foodId]: { ...data } };
-    },
-
-    commitAssociatedFoods() {
-      const food = this.selectedEncodedFood;
-      if (food === undefined) {
-        console.warn('Expected an encoded food to be selected at this point');
-        return;
-      }
-
-      food.associatedFoodsComplete = true;
-    },
-
     addFood(data: { mealIndex: number; food: FoodState }) {
       this.data.meals[data.mealIndex].foods.push(data.food);
     },
@@ -365,6 +344,12 @@ export const useSurvey = defineStore('survey', {
     },
     getNextFoodId(): number {
       return this.data.nextFoodId++;
+    },
+    getNextMealId(): number {
+      return this.data.nextMealId++;
+    },
+    setContinueButtonEnabled(enabled: boolean): void {
+      this.data.continueButtonEnabled = enabled;
     },
   },
 });
