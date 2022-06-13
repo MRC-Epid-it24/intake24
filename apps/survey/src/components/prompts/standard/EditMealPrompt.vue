@@ -40,7 +40,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { PropType } from '@vue/composition-api';
-import { mapActions, mapState } from 'pinia';
+import { mapState } from 'pinia';
 import { BasePromptProps } from '@intake24/common/prompts';
 import { FoodState } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';

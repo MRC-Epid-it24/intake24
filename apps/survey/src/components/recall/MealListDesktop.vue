@@ -55,7 +55,6 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import WhyDidYouRender from '@intake24/survey/components/mixins/whyDidYouRender';
 import MealItem from './MealItem.vue';
 import ContextMenu from '../elements/ContextMenu.vue';
 

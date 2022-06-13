@@ -55,7 +55,7 @@ export const useSurvey = defineStore('survey', {
     error: null,
   }),
   persist: {
-    key: `${process.env.VUE_APP_PREFIX ?? ''}survey`,
+    key: `${import.meta.env.VITE_APP_PREFIX ?? ''}survey`,
     paths: ['data', 'history'],
   },
   getters: {

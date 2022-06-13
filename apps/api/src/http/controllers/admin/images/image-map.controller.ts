@@ -1,10 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import type {
-  ImageMapEntry,
-  ImageMapListEntry,
-  ImageMapsResponse,
-} from '@intake24/common/types/http/admin';
+import type { ImageMapEntry, ImageMapsResponse } from '@intake24/common/types/http/admin';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { ImageMap, User, PaginateQuery } from '@intake24/db';

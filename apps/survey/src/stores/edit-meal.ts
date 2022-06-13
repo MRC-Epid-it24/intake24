@@ -10,7 +10,7 @@ export const useEditMealState = defineStore('edit-meal-state', {
     mealState: {},
   }),
   persist: {
-    key: `${process.env.VUE_APP_PREFIX ?? ''}edit_meal`,
+    key: `${import.meta.env.VITE_APP_PREFIX ?? ''}edit_meal`,
   },
   actions: {
     updateMealState(mealId: number, data: FoodState[]) {

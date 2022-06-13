@@ -25,7 +25,9 @@
     </v-row>
     <v-row no-gutters>
       <v-col cols="12">
-        <v-card-text v-html="detail.description"></v-card-text>
+        <v-card-text>
+          <div v-html="detail.description"></div>
+        </v-card-text>
       </v-col>
     </v-row>
   </v-container>

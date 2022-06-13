@@ -3,7 +3,6 @@ import { pick } from 'lodash';
 import type {
   JobEntry,
   SurveyRespondentEntry,
-  SurveyRespondentListEntry,
   SurveyRespondentsResponse,
 } from '@intake24/common/types/http/admin';
 import { User, UserCustomField, UserSurveyAlias, PaginateQuery } from '@intake24/db';

@@ -23,7 +23,7 @@ import Editor from '@tinymce/tinymce-vue';
 
 export default defineComponent({
   data() {
-    const baseUrl = trimEnd(process.env.VUE_APP_BASE_URL ?? '', '/');
+    const baseUrl = trimEnd(import.meta.env.VITE_APP_BASE_URL ?? '', '/');
 
     return {
       tinymceInit: {

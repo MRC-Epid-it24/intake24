@@ -19,20 +19,20 @@ export const useApp = defineStore('app', {
   state: (): AppState => ({
     lang: navigator.language || navigator.userLanguage,
     app: {
-      name: process.env.VUE_APP_NAME,
+      name: import.meta.env.VITE_APP_NAME,
       host: window.location.host,
-      api: [process.env.VUE_APP_API_HOST, process.env.VUE_APP_API_URL]
+      api: [import.meta.env.VITE_APP_API_HOST, import.meta.env.VITE_APP_API_URL]
         .map((item) => trim(item, '/'))
         .join('/'),
       build: {
-        version: process.env.VUE_APP_BUILD_VERSION,
-        revision: process.env.VUE_APP_BUILD_REVISION,
-        date: process.env.VUE_APP_BUILD_DATE,
+        version: import.meta.env.VITE_APP_BUILD_VERSION,
+        revision: import.meta.env.VITE_APP_BUILD_REVISION,
+        date: import.meta.env.VITE_APP_BUILD_DATE,
       },
     },
   }),
   persist: {
-    key: `${process.env.VUE_APP_PREFIX ?? ''}app`,
+    key: `${import.meta.env.VITE_APP_PREFIX ?? ''}app`,
     paths: ['lang'],
   },
   actions: {

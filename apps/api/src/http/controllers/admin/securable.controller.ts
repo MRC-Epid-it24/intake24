@@ -17,7 +17,6 @@ import {
   CreateUserWithSecurables,
   UsersWithSecurablesResponse,
   AvailableUsersWithSecurablesResponse,
-  UserSecurableListEntry,
 } from '@intake24/common/types/http/admin';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
 import type { Controller } from '../controller';

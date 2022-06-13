@@ -20,7 +20,7 @@ export const useAssociatedFoodsState = defineStore('associatedFoodsState', {
     associatedFoodsState: {},
   }),
   persist: {
-    key: `${process.env.VUE_APP_PREFIX ?? ''}associated-foods`,
+    key: `${import.meta.env.VITE_APP_PREFIX ?? ''}associated-foods`,
   },
   actions: {
     updateAssociatedFoods(mealId: number, data: MealAssociatedFoodsState) {

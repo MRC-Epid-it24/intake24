@@ -1,27 +1,33 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "noImplicitThis": true,
+    "strict": true,
     "jsx": "preserve",
+    "isolatedModules": true,
+    // "preserveValueImports": true,
+    // "importsNotUsedAsValues": "error",
     "importHelpers": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
     "baseUrl": ".",
-    "types": ["jest", "jest-extended", "vuetify", "webpack-env"],
+    "types": ["jest", "jest-extended", "vite/client", "vite-plugin-pwa/client", "vuetify"],
     "paths": {
       "@intake24/common/*": ["../common/src/*"],
       "@intake24/ui/*": ["src/*"],
       "@intake24/*": ["../*/src"]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost", "webworker"]
+    "lib": ["esnext", "dom", "dom.iterable", "webworker"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "__tests__/**/*.ts",
-    "__tests__/**/*.tsx"
-  ],
+  "include": ["src/**/*", "src/**/*.vue"],
   "exclude": ["node_modules"]
 }

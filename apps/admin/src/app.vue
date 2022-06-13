@@ -91,13 +91,7 @@
         <router-view></router-view>
       </v-container>
     </v-main>
-    <v-snackbar :value="updateExists" :timeout="-1" color="primary">
-      {{ $t('common.sw.check') }}
-      <template v-slot:action="{ attrs }">
-        <v-btn dark text v-bind="attrs" @click="refreshApp">{{ $t('common.sw.update') }}</v-btn>
-      </template>
-    </v-snackbar>
-
+    <service-worker></service-worker>
     <!-- <v-footer app> </v-footer> -->
   </v-app>
 </template>
@@ -108,7 +102,7 @@ import pluralize from 'pluralize';
 import Vue, { VueConstructor } from 'vue';
 import { Location } from 'vue-router';
 import { Dictionary } from '@intake24/common/types';
-import { ConfirmDialog, pwaUpdate, setsLanguage } from '@intake24/ui';
+import { ConfirmDialog, setsLanguage, ServiceWorker } from '@intake24/ui';
 import Loader from '@intake24/admin/components/loader.vue';
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import webPush from '@intake24/admin/components/web-push/web-push';
@@ -125,16 +119,14 @@ type Breadcrumbs = {
   to?: string | Location;
 };
 
-type Mixins = InstanceType<typeof pwaUpdate> &
-  InstanceType<typeof setsLanguage> &
-  InstanceType<typeof webPush>;
+type Mixins = InstanceType<typeof setsLanguage> & InstanceType<typeof webPush>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'App',
 
-  components: { ConfirmDialog, Loader, MenuTree },
+  components: { ConfirmDialog, Loader, MenuTree, ServiceWorker },
 
-  mixins: [pwaUpdate, setsLanguage, webPush],
+  mixins: [setsLanguage, webPush],
 
   data() {
     return {

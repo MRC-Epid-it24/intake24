@@ -90,8 +90,8 @@ export default (Vue as VueConstructor<Vue & PasswordRequestRefs>).extend({
         recaptcha: null,
       }),
       recaptcha: {
-        enabled: process.env.VUE_APP_RECAPTCHA_ENABLED === 'true',
-        sitekey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
+        enabled: import.meta.env.VITE_APP_RECAPTCHA_ENABLED === 'true',
+        sitekey: import.meta.env.VITE_APP_RECAPTCHA_SITEKEY,
       },
       submitted: false,
     };

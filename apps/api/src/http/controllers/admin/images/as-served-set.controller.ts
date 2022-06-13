@@ -1,10 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import type {
-  AsServedSetEntry,
-  AsServedSetsResponse,
-  AsServedSetListEntry,
-} from '@intake24/common/types/http/admin';
+import type { AsServedSetEntry, AsServedSetsResponse } from '@intake24/common/types/http/admin';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { AsServedSet, User, PaginateQuery } from '@intake24/db';

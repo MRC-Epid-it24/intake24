@@ -12,12 +12,12 @@
         md="6"
         xl="4"
       >
-        <v-chart class="chart" autoresize :option="chart"></v-chart>
+        <chart class="chart" autoresize :option="chart"></chart>
       </v-col>
     </v-row>
     <div class="d-none d-print-block">
       <div class="chart-print-wrapper" v-for="chart in charts" :key="`print-${chart.id}`">
-        <v-chart class="chart-print" autoresize :option="chart"></v-chart>
+        <chart class="chart-print" autoresize :option="chart"></chart>
       </div>
     </div>
   </div>
@@ -31,7 +31,7 @@ import { use } from 'echarts/core';
 import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent } from 'echarts/components';
 import { SVGRenderer } from 'echarts/renderers';
-import VChart from 'vue-echarts';
+import Chart from 'vue-echarts';
 import { round } from '@intake24/common/util';
 
 use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
@@ -39,7 +39,7 @@ use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
 export default defineComponent({
   name: 'FeedbackChartArea',
 
-  components: { 'v-chart': VChart as any },
+  components: { chart: Chart as any },
 
   props: {
     topFoods: {

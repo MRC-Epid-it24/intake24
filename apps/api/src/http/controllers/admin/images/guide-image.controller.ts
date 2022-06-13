@@ -3,7 +3,6 @@ import { pick } from 'lodash';
 import type {
   GuideImageEntry,
   GuideImageRefs,
-  GuideImageListEntry,
   GuideImagesResponse,
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';

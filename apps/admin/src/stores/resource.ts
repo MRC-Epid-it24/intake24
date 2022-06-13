@@ -21,7 +21,7 @@ export const useResource = defineStore('resource', {
     error: null,
   }),
   persist: {
-    key: `${process.env.VUE_APP_PREFIX ?? ''}resource`,
+    key: `${import.meta.env.VITE_APP_PREFIX ?? ''}resource`,
     paths: ['filter'],
   },
   getters: {

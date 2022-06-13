@@ -1,30 +1,15 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../packages/ui/tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "jsx": "preserve",
-    "importHelpers": true,
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
     "baseUrl": ".",
-    "types": ["jest", "jest-extended", "vuetify", "webpack-env"],
     "paths": {
       "@intake24/admin/*": ["src/*"],
       "@intake24/common/*": ["../../packages/common/src/*"],
       "@intake24/i18n/*": ["../../packages/i18n/src/*"],
       "@intake24/ui/*": ["../../packages/ui/src/*"],
       "@intake24/*": ["../../packages/*/src"]
-    },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost", "webworker"]
+    }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "__tests__/**/*.ts",
-    "__tests__/**/*.tsx"
-  ],
+  "include": ["src/**/*", "src/**/*.vue"],
   "exclude": ["node_modules"]
 }

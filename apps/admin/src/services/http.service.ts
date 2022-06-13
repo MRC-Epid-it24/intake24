@@ -14,7 +14,7 @@ const onTokenRefreshed = (errRefreshing?: AxiosError) =>
 
 const httpClient: HttpClient = {
   axios: axios.create({
-    baseURL: [process.env.VUE_APP_API_HOST, process.env.VUE_APP_API_URL]
+    baseURL: [import.meta.env.VITE_APP_API_HOST, import.meta.env.VITE_APP_API_URL]
       .map((item) => trim(item, '/'))
       .join('/'),
     // @ts-expect-error: Axios typings issue, remove when fixed

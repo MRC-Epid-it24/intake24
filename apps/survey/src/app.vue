@@ -45,8 +45,7 @@
     <v-app-bar app flat dark color="secondary" permanent hide-on-scroll>
       <template v-if="loggedIn">
         <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
-        <v-img class="mx-2" src="@/assets/logo.svg" max-height="30" max-width="150" contain>
-        </v-img>
+        <v-img class="mx-2" :src="logo" max-height="30" max-width="150" contain> </v-img>
         <v-spacer></v-spacer>
         <v-btn v-if="surveyId" text :to="{ name: 'survey-profile', params: { surveyId } }">
           <span class="mr-2" v-if="!isNotDesktop">{{ $t('profile._') }}</span>
@@ -69,13 +68,7 @@
     <v-main>
       <router-view></router-view>
     </v-main>
-    <v-snackbar :value="updateExists" :timeout="-1" color="primary">
-      {{ $t('common.sw.check') }}
-      <template v-slot:action="{ attrs }">
-        <v-btn dark text v-bind="attrs" @click="refreshApp">{{ $t('common.sw.update') }}</v-btn>
-      </template>
-    </v-snackbar>
-
+    <service-worker></service-worker>
     <!-- <v-footer app> </v-footer> -->
   </v-app>
 </template>
@@ -84,21 +77,23 @@
 import { mapState } from 'pinia';
 import Vue, { VueConstructor } from 'vue';
 import { TranslateResult } from 'vue-i18n';
+import logo from '@intake24/survey/assets/logo.svg';
 import Loader from '@intake24/survey/components/Loader.vue';
-import { ConfirmDialog, pwaUpdate, setsLanguage } from '@intake24/ui';
+import { ConfirmDialog, ServiceWorker, setsLanguage } from '@intake24/ui';
 import { useAuth } from './stores';
 
-type Mixins = InstanceType<typeof pwaUpdate> & InstanceType<typeof setsLanguage>;
+type Mixins = InstanceType<typeof setsLanguage>;
 
 export default (Vue as VueConstructor<Vue & Mixins>).extend({
   name: 'App',
 
-  components: { ConfirmDialog, Loader },
+  components: { ConfirmDialog, Loader, ServiceWorker },
 
-  mixins: [pwaUpdate, setsLanguage],
+  mixins: [setsLanguage],
 
   data() {
     return {
+      logo,
       sidebar: true,
     };
   },

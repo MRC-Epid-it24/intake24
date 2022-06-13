@@ -12,12 +12,7 @@ import {
   SurveyScheme,
   UserSecurable,
 } from '@intake24/db';
-import type {
-  SurveyEntry,
-  SurveyListEntry,
-  SurveyRefs,
-  SurveysResponse,
-} from '@intake24/common/types/http/admin';
+import type { SurveyEntry, SurveyRefs, SurveysResponse } from '@intake24/common/types/http/admin';
 import {
   createSurveyFields,
   guardedSurveyFields,

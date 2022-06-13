@@ -28,8 +28,6 @@ import { FoodSearchResponse } from '@intake24/common/types/http';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import FoodSearchResults from '@intake24/survey/components/elements/FoodSearchResults.vue';
-import { mapActions } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({

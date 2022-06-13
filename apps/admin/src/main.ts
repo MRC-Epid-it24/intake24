@@ -1,4 +1,3 @@
-import './registerServiceWorker';
 import './bootstrap';
 import Vue from 'vue';
 import pinia from '@intake24/ui/stores/bootstrap';

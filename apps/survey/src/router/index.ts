@@ -104,7 +104,7 @@ const routes: RouteConfig[] = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.VUE_APP_BASE_URL ?? '/',
+  base: import.meta.env.VITE_APP_BASE_URL ?? '/',
   routes,
 });
 

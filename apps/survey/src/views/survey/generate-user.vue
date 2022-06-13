@@ -104,8 +104,8 @@ export default defineComponent({
       username: '',
       password: '',
       reCaptcha: {
-        enabled: process.env.VUE_APP_RECAPTCHA_ENABLED === 'true',
-        siteKey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
+        enabled: import.meta.env.VITE_APP_RECAPTCHA_ENABLED === 'true',
+        siteKey: import.meta.env.VITE_APP_RECAPTCHA_SITEKEY,
         token: null as string | null,
       },
       reCaptchaRef,
