@@ -62,6 +62,7 @@ export default defineConfig(({ mode }) => {
       createVuePlugin(),
       Components({
         resolvers: [VuetifyResolver()],
+        directoryAsNamespace: true,
       }),
       VitePluginFonts({
         google: {

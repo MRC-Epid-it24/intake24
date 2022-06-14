@@ -114,4 +114,3 @@ export default defineComponent({
 <style lang="scss">
 @import '../../scss/meallist.scss';
 </style>
-s
