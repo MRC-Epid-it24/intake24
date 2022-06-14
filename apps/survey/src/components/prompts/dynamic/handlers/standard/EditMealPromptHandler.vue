@@ -8,6 +8,7 @@
     :v-on="$listeners"
     @delete-meal="onDeleteMeal"
     @update="onUpdate"
+    @complete="onCompletion"
   >
   </edit-meal-prompt>
 </template>
@@ -91,11 +92,18 @@ export default (Vue as VueConstructor<Vue & RecallPromptHandler & Refs>).extend(
 
       if (this.selectedMealIndex === undefined || this.selectedMeal === undefined) {
         console.warn('No selected meal, meal index undefined');
-        return;
+        return false;
       }
 
       this.setFoods({ mealIndex: this.selectedMealIndex, foods });
       this.clearMealState(this.selectedMeal.id);
+      return true;
+    },
+
+    onCompletion() {
+      const commitFoodAndDrinks = this.commitAnswer();
+      if (commitFoodAndDrinks) this.$emit('complete');
+      else console.log('No Food was commited as an Answer: ', commitFoodAndDrinks);
     },
   },
 });
