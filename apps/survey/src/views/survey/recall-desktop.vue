@@ -22,11 +22,13 @@
         <component
           v-if="currentPrompt"
           :is="handlerComponent"
+          ref="promptHandle"
           :promptComponent="currentPrompt.prompt.component"
           :promptId="currentPrompt.prompt.id"
           :promptProps="currentPrompt.prompt.props"
           :key="Math.random()"
-          @complete="nextPrompt"
+          @completion-update="onCompletionUpdate"
+          @complete="onComplete"
         ></component>
       </transition>
     </v-col>
@@ -54,6 +56,25 @@ export default Recall.extend({
     RecallBreadCrumbs,
     CustomPromptHandler,
     InfoAlert,
+  },
+
+  data: () => {
+    return {
+      continueButtonEnabled: false,
+      submitTrigger: false,
+    };
+  },
+
+  methods: {
+    onComplete() {
+      this.$refs.promptHandle.commitAnswer();
+      this.continueButtonEnabled = false;
+      this.nextPrompt();
+    },
+
+    onCompletionUpdate(promptComplete: boolean) {
+      this.continueButtonEnabled = promptComplete;
+    },
   },
 });
 </script>
