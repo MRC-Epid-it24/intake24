@@ -10,7 +10,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { mapActions, mapState } from 'pinia';
 import type { MealTimePromptProps } from '@intake24/common/prompts';

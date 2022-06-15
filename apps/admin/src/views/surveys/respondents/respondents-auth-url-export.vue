@@ -39,7 +39,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import respondentsJob from './respondents-job';
 
 type mixins = InstanceType<typeof respondentsJob>;

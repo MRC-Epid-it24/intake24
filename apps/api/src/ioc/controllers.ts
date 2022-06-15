@@ -1,4 +1,5 @@
-import { asFunction, AwilixContainer } from 'awilix';
+import type { AwilixContainer } from 'awilix';
+import { asFunction } from 'awilix';
 import controllers from '@intake24/api/http/controllers';
 
 export default (container: AwilixContainer): void => {

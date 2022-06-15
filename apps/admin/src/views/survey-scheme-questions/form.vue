@@ -54,8 +54,10 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
-import { customPromptQuestions, PromptQuestion } from '@intake24/common/prompts';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
+import type { PromptQuestion } from '@intake24/common/prompts';
+import { customPromptQuestions } from '@intake24/common/prompts';
 import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,

@@ -32,7 +32,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import isEqual from 'lodash/isEqual';
 import type { CategoryAttributes } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';

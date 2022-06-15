@@ -16,11 +16,14 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-import { DatePickerPromptProps, datePickerPromptProps } from '@intake24/common/prompts';
-import BasePrompt, { Prompt } from '../BasePrompt';
+import type { DatePickerPromptProps } from '@intake24/common/prompts';
+import { datePickerPromptProps } from '@intake24/common/prompts';
+import type { Prompt } from '../BasePrompt';
+import BasePrompt from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'DatePickerPrompt',

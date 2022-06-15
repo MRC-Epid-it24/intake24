@@ -1,4 +1,5 @@
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import { mapActions } from 'pinia';
 import type { HasEntryMixin } from '@intake24/admin/types';
 import { useEntry } from '@intake24/admin/stores';

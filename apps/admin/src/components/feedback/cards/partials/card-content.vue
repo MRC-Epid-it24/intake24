@@ -35,7 +35,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { tinymce } from '@intake24/admin/components/tinymce';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { RuleCallback } from '@intake24/admin/types';

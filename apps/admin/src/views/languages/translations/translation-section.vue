@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import type { CreateElement, VNode, VNodeChildren } from 'vue';
 import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';

@@ -1,6 +1,7 @@
 import { pick } from 'lodash';
 import type { Request, Response } from 'express';
-import { Language, LanguageTranslation, FindOptions } from '@intake24/db';
+import type { FindOptions } from '@intake24/db';
+import { Language, LanguageTranslation } from '@intake24/db';
 import type { LocaleMessageObject } from '@intake24/i18n';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';

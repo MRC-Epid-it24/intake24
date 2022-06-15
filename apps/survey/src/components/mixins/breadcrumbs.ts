@@ -1,8 +1,10 @@
 import { mapState } from 'pinia';
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { TranslateResult } from 'vue-i18n';
 import type { FoodState, LocaleTranslation } from '@intake24/common/types';
-import localeContent, { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
+import type { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
 import { useSurvey } from '@intake24/survey/stores';
 
 export type BrdCrumbs = {

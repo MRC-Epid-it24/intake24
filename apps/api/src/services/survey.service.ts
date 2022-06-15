@@ -1,8 +1,8 @@
 import { startOfDay, addMinutes, addDays } from 'date-fns';
 import { randomUUID } from 'node:crypto';
 import { randomString } from '@intake24/common/util';
+import type { FindOptions, SubmissionScope } from '@intake24/db';
 import {
-  FindOptions,
   GenUserCounter,
   Op,
   Survey,
@@ -14,7 +14,6 @@ import {
   UserCustomField,
   UserSurveySession,
   UserSurveyAlias,
-  SubmissionScope,
   submissionScope,
   FeedbackScheme,
   SurveyScheme,

@@ -144,7 +144,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { CustomField } from '@intake24/common/types';
 import type { UserEntry } from '@intake24/common/types/http/admin';
 import formMixin from '@intake24/admin/components/entry/form-mixin';

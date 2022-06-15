@@ -61,9 +61,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import draggable from 'vuedraggable';
-import { defaultExport, ExportField, ExportSection } from '@intake24/common/schemes';
+import type { ExportField, ExportSection } from '@intake24/common/schemes';
+import { defaultExport } from '@intake24/common/schemes';
 import type { SurveySchemeExportRefsResponse } from '@intake24/common/types/http/admin';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';

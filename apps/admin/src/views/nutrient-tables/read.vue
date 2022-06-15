@@ -68,7 +68,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
 import { offsetToExcelColumn } from '@intake24/common/util';
 import type { DetailMixin } from '@intake24/admin/types';

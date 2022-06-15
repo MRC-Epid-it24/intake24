@@ -61,13 +61,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import isEqual from 'lodash/isEqual';
-import {
-  flattenSchemeWithSection,
-  MealSection,
-  SurveyQuestionSection,
-} from '@intake24/common/schemes';
+import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import { flattenSchemeWithSection } from '@intake24/common/schemes';
 import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,

@@ -7,9 +7,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-import { BasePromptProps, submitPromptProps } from '@intake24/common/prompts';
+import type { BasePromptProps } from '@intake24/common/prompts';
+import { submitPromptProps } from '@intake24/common/prompts';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import BasePrompt from '../BasePrompt';
 

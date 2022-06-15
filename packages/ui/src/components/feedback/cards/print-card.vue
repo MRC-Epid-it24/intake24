@@ -34,7 +34,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { computed, defineComponent } from '@vue/composition-api';
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 import { formatOutput, getDetails, getBackgroundImage } from '.';
 

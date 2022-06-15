@@ -38,7 +38,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import has from 'lodash/has';
 import isEqual from 'lodash/isEqual';
 import type {

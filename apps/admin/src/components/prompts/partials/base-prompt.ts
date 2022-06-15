@@ -1,4 +1,5 @@
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import type { Condition, PromptValidationProps } from '@intake24/common/prompts';
 import type { LocaleTranslation } from '@intake24/common/types';
 import PromptContent from './prompt-content.vue';

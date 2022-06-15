@@ -77,7 +77,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import type { NutrientGroup } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';

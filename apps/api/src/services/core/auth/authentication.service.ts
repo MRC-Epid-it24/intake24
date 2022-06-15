@@ -3,7 +3,8 @@ import { Op, Permission, Survey, User, UserPassword, UserSurveyAlias } from '@in
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import { supportedAlgorithms } from '@intake24/common-backend/util/passwords';
 import type { IoC } from '@intake24/api/ioc';
-import { Subject, surveyRespondent } from '@intake24/common/security';
+import type { Subject } from '@intake24/common/security';
+import { surveyRespondent } from '@intake24/common/security';
 import type {
   AliasLoginRequest,
   EmailLoginRequest,

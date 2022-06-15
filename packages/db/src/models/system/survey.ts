@@ -18,7 +18,8 @@ import type {
   SurveyCreationAttributes,
   SurveyState,
 } from '@intake24/common/types/models';
-import { defaultOverrides, SchemeOverrides } from '@intake24/common/schemes';
+import type { SchemeOverrides } from '@intake24/common/schemes';
+import { defaultOverrides } from '@intake24/common/schemes';
 import { surveyPermissions } from '@intake24/common/security';
 import BaseModel from '../model';
 import {

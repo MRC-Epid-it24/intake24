@@ -1,11 +1,10 @@
+import type { Transaction, Job } from '@intake24/db';
 import {
   Op,
-  Transaction,
   NutrientTable,
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
-  Job,
 } from '@intake24/db';
 import type {
   NutrientTableEntry,

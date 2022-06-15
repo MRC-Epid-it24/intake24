@@ -223,7 +223,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
 import { excelColumnToOffset, offsetToExcelColumn } from '@intake24/common/util';
 import formMixin from '@intake24/admin/components/entry/form-mixin';

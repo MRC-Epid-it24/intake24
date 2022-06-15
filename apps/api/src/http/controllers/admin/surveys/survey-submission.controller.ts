@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import validator from 'validator';
-import { WhereOptions, SurveySubmission, PaginateQuery, submissionScope } from '@intake24/db';
+import type { WhereOptions, PaginateQuery } from '@intake24/db';
+import { SurveySubmission, submissionScope } from '@intake24/db';
 import type {
   SurveySubmissionEntry,
   SurveySubmissionsResponse,

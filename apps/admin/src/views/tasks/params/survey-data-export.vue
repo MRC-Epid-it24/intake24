@@ -18,7 +18,8 @@
 
 <script lang="ts">
 import type { TaskRefs } from '@intake24/common/types/http/admin';
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
   name: 'SurveyDataExport',

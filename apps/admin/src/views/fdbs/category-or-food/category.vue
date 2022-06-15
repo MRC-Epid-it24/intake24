@@ -90,7 +90,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { CategoryLocalEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 import categoryOrFood from './category-or-food';

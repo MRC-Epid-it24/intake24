@@ -23,6 +23,7 @@ import type {
   UserPortionSizeMethod,
   UserPortionSizeMethodParameters,
 } from '@intake24/common/types/http/foods/user-food-data';
+import type { SequelizeTS } from '@intake24/db';
 import {
   Category,
   CategoryCategory,
@@ -35,7 +36,6 @@ import {
   FoodLocal,
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
-  SequelizeTS,
 } from '@intake24/db';
 import {
   toDatabasePortionSizeMethod,

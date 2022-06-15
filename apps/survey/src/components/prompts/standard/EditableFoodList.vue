@@ -50,7 +50,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import type { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';

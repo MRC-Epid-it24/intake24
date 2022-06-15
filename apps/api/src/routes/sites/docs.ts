@@ -1,4 +1,5 @@
-import { Request, Response, Router } from 'express';
+import type { Request, Response } from 'express';
+import { Router } from 'express';
 import path from 'node:path';
 import fs from 'fs-extra';
 import fsConfig from '@intake24/api/config/filesystem';

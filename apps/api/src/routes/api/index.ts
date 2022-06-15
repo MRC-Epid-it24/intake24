@@ -1,4 +1,5 @@
-import { Request, Response, Router } from 'express';
+import type { Request, Response } from 'express';
+import { Router } from 'express';
 import admin from './admin';
 import authentication from './authentication';
 import feedback from './feedback';

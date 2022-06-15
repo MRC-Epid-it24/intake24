@@ -1,4 +1,4 @@
-import { MealState, SurveyState } from '@intake24/common/types';
+import type { MealState, SurveyState } from '@intake24/common/types';
 import { useSurvey } from '@intake24/survey/stores';
 
 const store = useSurvey();

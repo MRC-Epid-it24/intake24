@@ -1,6 +1,7 @@
 import { copy } from '@intake24/common/util';
 import type { PromptQuestion } from '..';
-import { basePromptProps, BasePromptProps, promptValidation, ValidatedPromptProps } from './base';
+import type { BasePromptProps, ValidatedPromptProps } from './base';
+import { basePromptProps, promptValidation } from './base';
 
 export interface MealTimePromptProps extends ValidatedPromptProps {
   format: 'ampm' | '24hr';

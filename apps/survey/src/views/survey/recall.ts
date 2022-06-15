@@ -1,4 +1,5 @@
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import { mapActions, mapState } from 'pinia';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
@@ -9,9 +10,11 @@ import type {
   RecallPromptHandler,
 } from '@intake24/common/types';
 import type { ComponentType } from '@intake24/common/prompts';
-import DynamicRecall, { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
-import MealList, { RecallAction } from '@intake24/survey/components/recall/MealListDesktop.vue';
+import type { RecallAction } from '@intake24/survey/components/recall/MealListDesktop.vue';
+import MealList from '@intake24/survey/components/recall/MealListDesktop.vue';
 import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import standardHandlers from '@intake24/survey/components/prompts/dynamic/handlers/standard';
 import portionSizeHandlers from '@intake24/survey/components/prompts/dynamic/handlers/portion-size';
@@ -25,7 +28,8 @@ import MealFoodMobileContextMenu from '@intake24/survey/components/recall/Mobile
 import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
 import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
 import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
-import { FoodUndo, MealUndo, useSurvey } from '@intake24/survey/stores';
+import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
+import { useSurvey } from '@intake24/survey/stores';
 
 type Refs = {
   $refs: {

@@ -1,15 +1,8 @@
 import type { IoC } from '@intake24/api/ioc';
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import {
-  ModelStatic,
-  Op,
-  PaginateQuery,
-  securableScope,
-  Securable,
-  User,
-  UserSecurable,
-} from '@intake24/db';
+import type { ModelStatic, PaginateQuery, Securable } from '@intake24/db';
+import { Op, securableScope, User, UserSecurable } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { randomString, securableToResource } from '@intake24/common/util';
 import { isSecurableType } from '@intake24/common/security';

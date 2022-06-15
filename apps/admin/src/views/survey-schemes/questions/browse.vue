@@ -60,25 +60,23 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
+import type { SurveyQuestionSection, MealSection, RecallQuestions } from '@intake24/common/schemes';
 import {
   defaultQuestions,
   flattenScheme,
   isMealSection,
   mealSections,
   surveySections,
-  SurveyQuestionSection,
-  MealSection,
-  RecallQuestions,
 } from '@intake24/common/schemes';
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { Dictionary } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
-import PromptList, {
-  PromptQuestionMoveEvent,
-} from '@intake24/admin/components/prompts/list/prompt-list.vue';
+import type { PromptQuestionMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
+import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { form } from '@intake24/admin/helpers';
 import type { FormMixin } from '@intake24/admin/types';
 import type { SurveySchemeForm } from '../form.vue';

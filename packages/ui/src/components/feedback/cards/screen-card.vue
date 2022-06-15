@@ -21,8 +21,10 @@
 </template>
 
 <script lang="ts">
-import SvgGauge, { GaugeInstance } from 'svg-gauge';
-import { computed, defineComponent, PropType, ref, toRefs } from '@vue/composition-api';
+import type { GaugeInstance } from 'svg-gauge';
+import SvgGauge from 'svg-gauge';
+import type { PropType } from '@vue/composition-api';
+import { computed, defineComponent, ref, toRefs } from '@vue/composition-api';
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 import { formatOutput, getDetails, getBackgroundImage } from '.';
 import TellMeMore from './tell-me-more.vue';

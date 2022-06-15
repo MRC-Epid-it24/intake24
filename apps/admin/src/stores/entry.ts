@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { Dictionary } from '@intake24/common/types';
-import axios, { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
 import { useLoading } from '@intake24/ui/stores';
 import { useResource } from './resource';
 import http from '../services/http.service';

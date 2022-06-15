@@ -58,7 +58,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
@@ -69,7 +70,8 @@ import type {
 } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import FoodBrowser from '@intake24/survey/components/elements/FoodBrowser.vue';
-import BasePrompt, { Prompt } from '../BasePrompt';
+import type { Prompt } from '../BasePrompt';
+import BasePrompt from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'AssociatedFoodsPrompt',

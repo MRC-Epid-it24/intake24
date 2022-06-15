@@ -122,7 +122,8 @@
 
 <script lang="ts">
 import type { LanguageAttributes } from '@intake24/common/types/models';
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import { setsLanguage } from '@intake24/ui';
 import { mapState } from 'pinia';
 import { useUser } from '@intake24/admin/stores';

@@ -4,7 +4,8 @@ import type { CustomField } from '@intake24/common/types';
 import type { CreateUserRequest, UpdateUserRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
-import { Permission, Role, User } from '@intake24/db';
+import type { User } from '@intake24/db';
+import { Permission, Role } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/users';

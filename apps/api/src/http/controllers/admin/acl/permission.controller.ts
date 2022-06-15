@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import type { PermissionEntry, PermissionsResponse } from '@intake24/common/types/http/admin';
-import { Permission, PaginateQuery } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
+import { Permission } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { Controller, CrudActions } from '@intake24/api/http/controllers';
 

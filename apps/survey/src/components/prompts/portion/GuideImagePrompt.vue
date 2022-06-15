@@ -94,7 +94,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
@@ -107,7 +108,8 @@ import type { LocaleTranslation, HasPartialAnswerTriggerHandler } from '@intake2
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
-import BasePortion, { Portion } from './BasePortion';
+import type { Portion } from './BasePortion';
+import BasePortion from './BasePortion';
 
 type Refs = {
   $refs: {

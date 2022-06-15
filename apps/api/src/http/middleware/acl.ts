@@ -4,7 +4,8 @@ import { asValue } from 'awilix';
 import type { Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { ForbiddenError } from '@intake24/api/http/errors';
-import ioc, { RequestIoC } from '@intake24/api/ioc';
+import type { RequestIoC } from '@intake24/api/ioc';
+import ioc from '@intake24/api/ioc';
 import { foodDatabaseMaintainer, surveyRespondent, foodsAdmin } from '@intake24/common/security';
 
 /*

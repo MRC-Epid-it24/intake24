@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
+import type { FindOptions, PaginateQuery } from '@intake24/db';
 import {
-  FindOptions,
   Op,
   Brand,
   Food,
@@ -9,7 +9,6 @@ import {
   FoodLocal,
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
-  PaginateQuery,
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { FoodInput } from '@intake24/common/types/http/admin';

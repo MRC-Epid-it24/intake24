@@ -1,4 +1,5 @@
-import { ConnectionOptions, Job as BullJob, Queue, QueueScheduler, Worker } from 'bullmq';
+import type { ConnectionOptions, Job as BullJob } from 'bullmq';
+import { Queue, QueueScheduler, Worker } from 'bullmq';
 import type { JobData, RepeatableBullJob } from '@intake24/common/types';
 import { Task } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';

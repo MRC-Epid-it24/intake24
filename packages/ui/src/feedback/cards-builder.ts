@@ -1,13 +1,13 @@
 import type { CardType, FiveADay, NutrientGroup } from '@intake24/common/feedback';
 import { round } from '@intake24/common/util';
-import {
+import type {
   AggregateFoodStats,
   CharacterParameters,
   CharacterRules,
-  DemographicRange,
   FruitAndVegPortions,
   UserDemographic,
 } from './classes';
+import { DemographicRange } from './classes';
 
 export type CardWithCharRules = CharacterRules | FiveADay | NutrientGroup;
 

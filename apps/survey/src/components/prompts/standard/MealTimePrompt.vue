@@ -40,13 +40,15 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import { mapState } from 'pinia';
 import type { PropType } from '@vue/composition-api';
 import type { MealTimePromptProps } from '@intake24/common/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 import { ConfirmDialog } from '@intake24/ui';
-import BasePrompt, { Prompt } from '../BasePrompt';
+import type { Prompt } from '../BasePrompt';
+import BasePrompt from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'MealTimePrompt',

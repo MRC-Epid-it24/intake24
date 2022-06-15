@@ -1,7 +1,8 @@
 import { copy } from '@intake24/common/util';
 import type { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import type { PromptQuestion, QuantityValues } from '..';
-import { basePromptProps, promptValidation, ValidatedPromptProps } from './base';
+import type { ValidatedPromptProps } from './base';
+import { basePromptProps, promptValidation } from './base';
 
 export type LeftoverQuestionPromptProps = ValidatedPromptProps;
 

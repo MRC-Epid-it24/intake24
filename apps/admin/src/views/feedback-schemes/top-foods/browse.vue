@@ -77,11 +77,13 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import debounce from 'lodash/debounce';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
-import { defaultTopFoods, TopFoods } from '@intake24/common/feedback';
+import type { TopFoods } from '@intake24/common/feedback';
+import { defaultTopFoods } from '@intake24/common/feedback';
 import type { FormMixin, RuleCallback } from '@intake24/admin/types';
 import { ColorList, NutrientList, Preview } from '@intake24/admin/components/feedback';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';

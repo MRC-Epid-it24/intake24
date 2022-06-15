@@ -14,7 +14,8 @@ import type { FoodState, RecallPromptHandler } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 
 export default (Vue as VueConstructor<Vue & RecallPromptHandler>).extend({
   name: 'FoodSearchPromptHandler',

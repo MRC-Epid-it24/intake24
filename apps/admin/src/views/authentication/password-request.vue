@@ -63,7 +63,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import VueRecaptcha from 'vue-recaptcha';
 import { form } from '@intake24/admin/helpers';
 

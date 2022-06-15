@@ -94,7 +94,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import cronstrue from 'cronstrue';
 import type { JobParams, JobParamsList, JobType } from '@intake24/common/types';
 import type { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';

@@ -1,4 +1,5 @@
-import RedisStatic, { Redis, RedisOptions } from 'ioredis';
+import type { Redis, RedisOptions } from 'ioredis';
+import RedisStatic from 'ioredis';
 import type { Logger } from '@intake24/services';
 
 export type RedisStoreOps = {

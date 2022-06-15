@@ -1,11 +1,10 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import type { PaginateQuery, PaginateOptions } from '@intake24/db';
 import {
   FeedbackScheme,
   Language,
   Op,
-  PaginateQuery,
-  PaginateOptions,
   securableScope,
   SystemLocale,
   Survey,
@@ -24,7 +23,8 @@ import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses
 import { kebabCase } from '@intake24/common/util';
 import type { IoC } from '@intake24/api/ioc';
 import type { Controller, CrudActions } from '../../controller';
-import securableController, { SecurableController } from '../securable.controller';
+import type { SecurableController } from '../securable.controller';
+import securableController from '../securable.controller';
 
 const actionToFieldsMap: Record<'overrides', readonly string[]> = {
   overrides: overridesFields,

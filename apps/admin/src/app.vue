@@ -99,7 +99,8 @@
 <script lang="ts">
 import groupBy from 'lodash/groupBy';
 import pluralize from 'pluralize';
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { Location } from 'vue-router';
 import type { Dictionary } from '@intake24/common/types';
 import { ConfirmDialog, setsLanguage, ServiceWorker } from '@intake24/ui';

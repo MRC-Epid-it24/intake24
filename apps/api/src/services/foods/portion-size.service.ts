@@ -1,5 +1,5 @@
+import type { Includeable } from '@intake24/db';
 import {
-  Includeable,
   AsServedImage,
   AsServedSet,
   DrinkwareScale,

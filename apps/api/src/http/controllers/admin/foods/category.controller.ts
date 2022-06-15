@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import type { IoC } from '@intake24/api/ioc';
-import { CategoryLocal, PaginateQuery } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
+import { CategoryLocal } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type {
   CategoryLocalEntry,

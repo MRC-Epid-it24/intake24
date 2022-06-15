@@ -70,7 +70,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor, PropType } from 'vue';
+import type { VueConstructor, PropType } from 'vue';
+import Vue from 'vue';
 import { mapActions, mapState } from 'pinia';
 import type { Dictionary } from '@intake24/common/types';
 import type { Pagination, PaginationMeta } from '@intake24/common/types/models';

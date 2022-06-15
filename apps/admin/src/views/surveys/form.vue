@@ -367,18 +367,16 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
-import {
-  searchSortingAlgorithms,
-  SearchSortingAlgorithm,
-  surveyStates,
-  SurveyState,
-} from '@intake24/common/types/models';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
+import type { SearchSortingAlgorithm, SurveyState } from '@intake24/common/types/models';
+import { searchSortingAlgorithms, surveyStates } from '@intake24/common/types/models';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import type { FormMixin } from '@intake24/admin/types';
 import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
-import { defaultOverrides, SchemeOverrides } from '@intake24/common/schemes';
+import type { SchemeOverrides } from '@intake24/common/schemes';
+import { defaultOverrides } from '@intake24/common/schemes';
 
 export type SurveyForm = {
   id: string | null;

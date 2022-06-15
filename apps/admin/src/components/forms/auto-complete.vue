@@ -22,7 +22,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor, PropType } from 'vue';
+import type { VueConstructor, PropType } from 'vue';
+import Vue from 'vue';
 import debounce from 'lodash/debounce';
 import type { Dictionary } from '@intake24/common/types';
 

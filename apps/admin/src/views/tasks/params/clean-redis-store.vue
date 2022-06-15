@@ -17,7 +17,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import type { TaskRefs } from '@intake24/common/types/http/admin';
 
 export default defineComponent({

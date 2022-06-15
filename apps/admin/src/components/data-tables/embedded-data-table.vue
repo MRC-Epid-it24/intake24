@@ -43,7 +43,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
 import type { Dictionary } from '@intake24/common/types';

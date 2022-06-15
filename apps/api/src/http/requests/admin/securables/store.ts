@@ -1,7 +1,9 @@
 import type { Request } from 'express';
 import { checkSchema } from 'express-validator';
-import { Op, WhereOptions, User } from '@intake24/db';
-import validate, { ValidationMiddleware } from '@intake24/api/http/requests/validate';
+import type { WhereOptions } from '@intake24/db';
+import { Op, User } from '@intake24/db';
+import type { ValidationMiddleware } from '@intake24/api/http/requests/validate';
+import validate from '@intake24/api/http/requests/validate';
 import { unique } from '@intake24/api/http/rules';
 import type { UserAttributes } from '@intake24/common/types/models';
 import type { SecurableType } from '@intake24/common/security';

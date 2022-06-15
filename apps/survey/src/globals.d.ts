@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Vue from 'vue';
-import { HttpClient } from '@intake24/ui/types';
+import type { HttpClient } from '@intake24/ui/types';
 
 declare module 'vue/types/vue' {
   interface Vue {

@@ -4,8 +4,10 @@ import type {
   SurveySchemeQuestionRefs,
   SurveySchemeQuestionsResponse,
 } from '@intake24/common/types/http/admin';
-import { isMealSection, MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
-import { Language, SurveyScheme, SurveySchemeQuestion, PaginateQuery } from '@intake24/db';
+import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import { isMealSection } from '@intake24/common/schemes';
+import type { PaginateQuery } from '@intake24/db';
+import { Language, SurveyScheme, SurveySchemeQuestion } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
 import type { Controller, CrudActions } from '../controller';

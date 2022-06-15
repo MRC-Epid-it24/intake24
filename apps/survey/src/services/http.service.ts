@@ -1,4 +1,5 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import type { AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
 import trim from 'lodash/trim';
 import type { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
 import type { AuthStoreDef } from '../stores';

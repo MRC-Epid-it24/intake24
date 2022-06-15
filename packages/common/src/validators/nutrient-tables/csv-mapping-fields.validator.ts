@@ -1,5 +1,6 @@
 import { inspect } from 'util';
-import Ajv, { ValidateFunction as AjvValidateFunction } from 'ajv';
+import type { ValidateFunction as AjvValidateFunction } from 'ajv';
+import Ajv from 'ajv';
 import type { NutrientTableCsvMappingFieldsInput } from '../../types/http/admin/nutrient-tables';
 
 export const ajv = new Ajv({

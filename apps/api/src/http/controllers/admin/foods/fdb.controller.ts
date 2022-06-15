@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { PaginateQuery, FoodsLocale, SystemLocale, WhereOptions } from '@intake24/db';
+import type { PaginateQuery, WhereOptions } from '@intake24/db';
+import { FoodsLocale, SystemLocale } from '@intake24/db';
 import type { LocaleEntry, LocalesResponse } from '@intake24/common/types/http/admin';
 import type { LocaleAttributes } from '@intake24/common/types/models';
 import { foodDatabaseMaintainerPrefix, foodsAdmin } from '@intake24/common/security';

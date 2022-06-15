@@ -1,4 +1,5 @@
-import jwt, { JwtPayload, Secret, VerifyOptions } from 'jsonwebtoken';
+import type { JwtPayload, Secret, VerifyOptions } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 export const verify = async <T = JwtPayload>(
   token: string,

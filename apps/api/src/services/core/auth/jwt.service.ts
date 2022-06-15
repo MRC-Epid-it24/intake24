@@ -1,4 +1,5 @@
-import jwt, { Secret, SignOptions } from 'jsonwebtoken';
+import type { Secret, SignOptions } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { randomString } from '@intake24/common/util';
 import type { SignPayload, Subject, TokenPayload } from '@intake24/common/security';
 import { InternalServerError } from '@intake24/api/http/errors';

@@ -1,7 +1,8 @@
 import type { Request } from 'express';
 import type { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
-import { Op, WhereOptions, SurveySchemeQuestion } from '@intake24/db';
+import type { WhereOptions } from '@intake24/db';
+import { Op, SurveySchemeQuestion } from '@intake24/db';
 
 const defaults: Schema = {
   question: {

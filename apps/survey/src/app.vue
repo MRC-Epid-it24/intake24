@@ -75,7 +75,8 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { TranslateResult } from 'vue-i18n';
 import logo from '@intake24/survey/assets/logo.svg';
 import Loader from '@intake24/survey/components/Loader.vue';

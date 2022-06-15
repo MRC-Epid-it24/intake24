@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
 import type { ValidationError as ExpressValidationError } from 'express-validator';
 import { pick } from 'lodash';
-import { FeedbackScheme, Survey, User } from '@intake24/db';
+import type { User } from '@intake24/db';
+import { FeedbackScheme, Survey } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import type { UserPhysicalDataResponse } from '@intake24/common/types/http';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';

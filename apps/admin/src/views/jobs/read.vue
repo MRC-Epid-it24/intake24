@@ -60,7 +60,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { JobEntry } from '@intake24/common/types/http/admin';
 import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';

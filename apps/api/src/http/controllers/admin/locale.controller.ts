@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import type { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/types/http/admin';
-import { FoodsLocale, Language, SystemLocale, PaginateQuery } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
+import { FoodsLocale, Language, SystemLocale } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { Controller, CrudActions } from '../controller';
 

@@ -12,6 +12,10 @@ module.exports = {
   ],
   rules: {
     'vue/multi-word-component-names': 'warn',
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      { prefer: 'type-imports', disallowTypeAnnotations: false },
+    ],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-shadow': 'error',
     '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],

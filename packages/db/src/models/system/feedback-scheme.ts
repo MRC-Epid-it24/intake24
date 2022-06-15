@@ -13,8 +13,7 @@ import type {
   FeedbackSchemeAttributes,
   FeedbackSchemeCreationAttributes,
 } from '@intake24/common/types/models';
-import {
-  defaultTopFoods,
+import type {
   FeedbackOutput,
   FeedbackType,
   Card,
@@ -23,7 +22,9 @@ import {
   DemographicGroup,
   FeedbackPhysicalDataField,
 } from '@intake24/common/feedback';
-import { BaseModel, Securable } from '..';
+import { defaultTopFoods } from '@intake24/common/feedback';
+import type { Securable } from '..';
+import { BaseModel } from '..';
 import { Survey, User, UserSecurable } from '.';
 
 @Scopes(() => ({

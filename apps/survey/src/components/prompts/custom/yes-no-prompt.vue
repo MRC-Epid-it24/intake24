@@ -29,9 +29,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-import { yesNoPromptProps, YesNoPromptProps } from '@intake24/common/prompts';
+import type { YesNoPromptProps } from '@intake24/common/prompts';
+import { yesNoPromptProps } from '@intake24/common/prompts';
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({

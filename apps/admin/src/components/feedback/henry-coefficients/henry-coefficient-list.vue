@@ -171,8 +171,10 @@
 
 <script lang="ts">
 import draggable from 'vuedraggable';
-import { defineComponent, PropType } from '@vue/composition-api';
-import { HenryCoefficient, Sex, sexes } from '@intake24/common/feedback';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
+import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
+import { sexes } from '@intake24/common/feedback';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { ConfirmDialog } from '@intake24/ui';
 import { getHenryCoefficientDefaults } from './henry-coefficient';

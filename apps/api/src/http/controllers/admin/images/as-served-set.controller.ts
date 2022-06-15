@@ -3,7 +3,8 @@ import { pick } from 'lodash';
 import type { AsServedSetEntry, AsServedSetsResponse } from '@intake24/common/types/http/admin';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { AsServedSet, User, PaginateQuery } from '@intake24/db';
+import type { User, PaginateQuery } from '@intake24/db';
+import { AsServedSet } from '@intake24/db';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import type { Controller, CrudActions } from '../../controller';
 

@@ -15,7 +15,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import type { FoodState } from '@intake24/common/types';
 
 export default defineComponent({

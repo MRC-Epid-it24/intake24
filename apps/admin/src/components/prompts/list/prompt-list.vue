@@ -46,7 +46,8 @@
 
 <script lang="ts">
 import isEqual from 'lodash/isEqual';
-import { defineComponent, PropType, ref } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 import draggable from 'vuedraggable';
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';

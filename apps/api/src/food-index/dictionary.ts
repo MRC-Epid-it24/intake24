@@ -1,9 +1,9 @@
+import type { WordInterpretation } from '@intake24/api/food-index/interpreted-word';
 import {
   AltSpelling,
   ExactMatch,
   InterpretedWord,
   Synonym,
-  WordInterpretation,
 } from '@intake24/api/food-index/interpreted-word';
 import { LevenshteinTransducer } from '@intake24/api/food-index/levenshtein';
 

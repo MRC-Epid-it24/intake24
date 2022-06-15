@@ -128,7 +128,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 import draggable from 'vuedraggable';
 import { copy } from '@intake24/common/util';
 import type { Meal, Meals } from '@intake24/common/types';

@@ -11,7 +11,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { Meal, HasOnAnswer, PromptAnswer } from '@intake24/common/types';

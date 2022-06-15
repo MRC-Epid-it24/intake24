@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
+import type { RouteConfig } from 'vue-router';
+import VueRouter from 'vue-router';
 import views from '@intake24/survey/views';
 import { globalGuard, surveyParametersGuard, surveyParametersErrorGuard } from './guards';
 

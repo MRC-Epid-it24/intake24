@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-expressions */
-import { PhraseIndex, PhraseWithKey } from '@intake24/api/food-index/phrase-index';
+import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
+import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import Metaphone3Encoder from '@intake24/api/food-index/metaphone-encoder';
 import EnglishWordOps from '@intake24/api/food-index/english-word-ops';
 import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/interpreted-phrase';

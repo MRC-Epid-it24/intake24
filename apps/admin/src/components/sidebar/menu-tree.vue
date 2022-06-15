@@ -12,7 +12,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import type { Resource } from '@intake24/admin/types';
 import MenuItem from './menu-item.vue';
 

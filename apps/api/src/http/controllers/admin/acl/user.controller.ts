@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import type { UserEntry, UserRefs, UsersResponse } from '@intake24/common/types/http/admin';
-import { Permission, Role, User, PaginateQuery } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
+import { Permission, Role, User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { userEntryResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';

@@ -38,15 +38,18 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';
 import { useSurvey } from '@intake24/survey/stores';
-import BasePrompt, { Prompt } from '@intake24/survey/components/prompts/BasePrompt';
-import EditableFoodList, { HasEditableFoodList } from './EditableFoodList.vue';
+import type { Prompt } from '@intake24/survey/components/prompts/BasePrompt';
+import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
+import type { HasEditableFoodList } from './EditableFoodList.vue';
+import EditableFoodList from './EditableFoodList.vue';
 
 type Refs = {
   $refs: {

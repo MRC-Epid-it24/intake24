@@ -28,8 +28,10 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
-import { defaultOverrides, flattenScheme, SchemeOverrides } from '@intake24/common/schemes';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
+import type { SchemeOverrides } from '@intake24/common/schemes';
+import { defaultOverrides, flattenScheme } from '@intake24/common/schemes';
 import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
 import type { PromptQuestion } from '@intake24/common/prompts';
 import formMixin from '@intake24/admin/components/entry/form-mixin';

@@ -1,4 +1,5 @@
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { DetailMixin } from '@intake24/admin/types';
 import fetchEntry from './fetch-entry';
 import hasEntry from './has-entry';

@@ -1,5 +1,5 @@
+import type { FindOptions, PaginateQuery } from '@intake24/db';
 import {
-  FindOptions,
   Op,
   QueryTypes,
   Category,
@@ -9,7 +9,6 @@ import {
   CategoryPortionSizeMethodParameter,
   Food,
   FoodLocal,
-  PaginateQuery,
 } from '@intake24/db';
 import type { CategoryInput, CategoryListEntry } from '@intake24/common/types/http/admin';
 import type { IoC } from '@intake24/api/ioc';

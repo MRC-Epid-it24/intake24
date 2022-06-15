@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable @typescript-eslint/ban-types */
-import { CountOptions, FindOptions, Op } from 'sequelize';
+import type { CountOptions, FindOptions } from 'sequelize';
+import { Op } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 import { Readable } from 'stream';
 import type { Pagination, PaginationMeta } from '@intake24/common/types/models';

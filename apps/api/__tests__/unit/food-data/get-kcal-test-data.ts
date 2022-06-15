@@ -1,3 +1,4 @@
+import type { SequelizeTS } from '@intake24/db';
 import {
   Food,
   FoodGroup,
@@ -8,7 +9,6 @@ import {
   NutrientTableRecordNutrient,
   FoodsNutrientType,
   FoodsNutrientUnit,
-  SequelizeTS,
 } from '@intake24/db';
 
 export default async (foodDatabase: SequelizeTS) => {

@@ -14,12 +14,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import { mapState } from 'pinia';
-import breadcrumbs, {
-  BreadCrumbsContent,
-  BrdCrumbs,
-} from '@intake24/survey/components/mixins/breadcrumbs';
+import type { BreadCrumbsContent, BrdCrumbs } from '@intake24/survey/components/mixins/breadcrumbs';
+import breadcrumbs from '@intake24/survey/components/mixins/breadcrumbs';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default (Vue as VueConstructor<Vue & BreadCrumbsContent>).extend({

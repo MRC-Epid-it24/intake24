@@ -72,7 +72,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor, PropType } from 'vue';
+import type { VueConstructor, PropType } from 'vue';
+import Vue from 'vue';
 import { copy } from '@intake24/common/util';
 import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';

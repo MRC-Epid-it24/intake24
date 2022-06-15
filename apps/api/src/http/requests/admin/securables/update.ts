@@ -1,5 +1,6 @@
 import { checkSchema } from 'express-validator';
-import validate, { ValidationMiddleware } from '@intake24/api/http/requests/validate';
+import type { ValidationMiddleware } from '@intake24/api/http/requests/validate';
+import validate from '@intake24/api/http/requests/validate';
 import type { SecurableType } from '@intake24/common/security';
 import defaults from './defaults';
 

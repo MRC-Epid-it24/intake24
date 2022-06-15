@@ -1,5 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import VueI18n, { I18nOptions } from 'vue-i18n';
+import type { I18nOptions } from 'vue-i18n';
+import VueI18n from 'vue-i18n';
 import TextareaPrompt from '@intake24/survey/components/prompts/custom/textarea-prompt.vue';
 
 const localVue = createLocalVue();

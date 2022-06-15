@@ -1,6 +1,6 @@
+import type { Job } from '@intake24/db';
 import {
   Op,
-  Job,
   Permission,
   PermissionUser,
   Survey,

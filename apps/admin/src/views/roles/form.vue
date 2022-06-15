@@ -89,7 +89,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import orderBy from 'lodash/orderBy';
 import type { PermissionListEntry, RoleEntry, RoleRefs } from '@intake24/common/types/http/admin';
 import type { FormMixin } from '@intake24/admin/types';

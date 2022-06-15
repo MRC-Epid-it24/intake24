@@ -110,7 +110,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor, PropType } from 'vue';
+import type { VueConstructor, PropType } from 'vue';
+import Vue from 'vue';
 import type {
   GuideImageEntry,
   GuideImageEntryObject,

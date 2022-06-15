@@ -67,7 +67,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import draggable from 'vuedraggable';
 import type { ListOption } from '@intake24/common/prompts';
 import type { RuleCallback } from '@intake24/admin/types';

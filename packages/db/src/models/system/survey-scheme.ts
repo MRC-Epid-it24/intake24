@@ -14,15 +14,10 @@ import type {
   SurveySchemeAttributes,
   SurveySchemeCreationAttributes,
 } from '@intake24/common/types/models';
-import {
-  defaultExport,
-  defaultMeals,
-  defaultQuestions,
-  ExportSection,
-  RecallQuestions,
-  SchemeType,
-} from '@intake24/common/schemes';
-import { BaseModel, Securable } from '..';
+import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/schemes';
+import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
+import type { Securable } from '..';
+import { BaseModel } from '..';
 import { Survey, User, UserSecurable } from '.';
 
 @Scopes(() => ({

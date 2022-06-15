@@ -14,12 +14,15 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-import { MilkHotDrinkPromptProps, milkHotDrinkPromptDefaultProps } from '@intake24/common/prompts';
+import type { MilkHotDrinkPromptProps } from '@intake24/common/prompts';
+import { milkHotDrinkPromptDefaultProps } from '@intake24/common/prompts';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
-import BasePortion, { Portion } from './BasePortion';
+import type { Portion } from './BasePortion';
+import BasePortion from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({
   name: 'MilkHotDrinkPrompt',

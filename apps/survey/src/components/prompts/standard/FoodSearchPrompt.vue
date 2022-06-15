@@ -20,10 +20,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-import { BasePromptProps, submitPromptProps } from '@intake24/common/prompts';
-import { LocaleTranslation, replaceInTranslation } from '@intake24/common/types';
+import type { BasePromptProps } from '@intake24/common/prompts';
+import { submitPromptProps } from '@intake24/common/prompts';
+import type { LocaleTranslation } from '@intake24/common/types';
+import { replaceInTranslation } from '@intake24/common/types';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import foodSearchService from '@intake24/survey/services/foods.service';

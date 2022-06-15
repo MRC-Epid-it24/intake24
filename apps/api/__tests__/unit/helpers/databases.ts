@@ -1,7 +1,8 @@
 // Minimal set of dependencies required to get a database connection, no need to pull in
 // stuff like redis, mail etc. as in integration suite
 
-import { databaseConfig, Database, DatabasesInterface } from '@intake24/db';
+import type { DatabasesInterface } from '@intake24/db';
+import { databaseConfig, Database } from '@intake24/db';
 import { logger } from '@intake24/services';
 import appConfig from '@intake24/api/config/app';
 

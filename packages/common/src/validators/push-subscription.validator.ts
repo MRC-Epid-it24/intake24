@@ -1,5 +1,6 @@
 import { inspect } from 'util';
-import Ajv, { ValidateFunction as AjvValidateFunction } from 'ajv';
+import type { ValidateFunction as AjvValidateFunction } from 'ajv';
+import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import type { PushSubscription } from '../types/models/system/user-subscriptions';
 

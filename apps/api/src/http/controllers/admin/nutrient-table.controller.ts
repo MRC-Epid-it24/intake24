@@ -6,7 +6,8 @@ import type {
   NutrientTablesResponse,
   JobEntry,
 } from '@intake24/common/types/http/admin';
-import { FoodsNutrientType, NutrientTable, User, PaginateQuery } from '@intake24/db';
+import type { User, PaginateQuery } from '@intake24/db';
+import { FoodsNutrientType, NutrientTable } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import { ValidationError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';

@@ -66,7 +66,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
@@ -75,7 +76,8 @@ import type { LocaleTranslation, StandardPortionUnit } from '@intake24/common/ty
 import ErrorAlert from '@intake24/survey/components/elements/ErrorAlert.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
-import BasePortion, { Portion } from './BasePortion';
+import type { Portion } from './BasePortion';
+import BasePortion from './BasePortion';
 
 export default (Vue as VueConstructor<Vue & Portion>).extend({
   name: 'StandardPortionPrompt',

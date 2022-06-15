@@ -200,12 +200,14 @@
 
 <script lang="ts">
 import pick from 'lodash/pick';
-import { defineComponent, PropType, ref } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 import { ConfirmDialog } from '@intake24/ui';
 import { form } from '@intake24/admin/helpers';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import { securableToResource } from '@intake24/common/util';
-import { securableDefs, SecurableType } from '@intake24/common/security';
+import type { SecurableType } from '@intake24/common/security';
+import { securableDefs } from '@intake24/common/security';
 import type { ValidationError } from '@intake24/common/types';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 import { EmbeddedDataTable } from '../data-tables';

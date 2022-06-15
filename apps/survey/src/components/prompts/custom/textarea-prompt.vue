@@ -17,11 +17,14 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-import { TextareaPromptProps, textareaPromptProps } from '@intake24/common/prompts';
-import BasePrompt, { Prompt } from '../BasePrompt';
+import type { TextareaPromptProps } from '@intake24/common/prompts';
+import { textareaPromptProps } from '@intake24/common/prompts';
+import type { Prompt } from '../BasePrompt';
+import BasePrompt from '../BasePrompt';
 
 export default (Vue as VueConstructor<Vue & Prompt>).extend({
   name: 'TextareaPrompt',

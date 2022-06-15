@@ -1,6 +1,7 @@
 import type { Request } from 'express';
 import type { Schema } from 'express-validator';
-import { Op, WhereOptions, Language } from '@intake24/db';
+import type { WhereOptions } from '@intake24/db';
+import { Op, Language } from '@intake24/db';
 import { unique } from '@intake24/api/http/rules';
 import type { LanguageAttributes } from '@intake24/common/types/models';
 import { textDirections } from '@intake24/common/types';

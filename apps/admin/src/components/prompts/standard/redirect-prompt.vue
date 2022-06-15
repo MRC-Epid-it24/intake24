@@ -60,7 +60,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import isInteger from 'lodash/isInteger';
 import type { RuleCallback } from '@intake24/admin/types';
 import basePrompt from '../partials/base-prompt';

@@ -46,14 +46,10 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
-import {
-  defaultMeals,
-  RecallQuestions,
-  SchemeType,
-  schemeTypes,
-  ExportSection,
-} from '@intake24/common/schemes';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
+import type { RecallQuestions, SchemeType, ExportSection } from '@intake24/common/schemes';
+import { defaultMeals, schemeTypes } from '@intake24/common/schemes';
 import type { Meal } from '@intake24/common/types';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import MealList from '@intake24/admin/components/meals/meal-list.vue';

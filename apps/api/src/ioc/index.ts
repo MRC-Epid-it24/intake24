@@ -13,7 +13,7 @@ import type {
   ServicesConfig,
   SessionConfig,
 } from '@intake24/api/config';
-import { Database, DatabaseConfig, DatabasesInterface, models } from '@intake24/db';
+import { Database, models } from '@intake24/db';
 import type { Logger, LogConfig, Mailer, MailConfig } from '@intake24/services';
 import type {
   AuthenticationController,
@@ -98,7 +98,7 @@ import type {
 } from '@intake24/api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import type { Jobs } from '@intake24/api/jobs';
-import type { User } from '@intake24/db';
+import type { User, DatabaseConfig, DatabasesInterface } from '@intake24/db';
 import type { Environment } from '@intake24/common/types';
 import controllers from './controllers';
 import jobs from './jobs';

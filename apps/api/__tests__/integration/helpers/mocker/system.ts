@@ -13,12 +13,12 @@ import type {
   CreateLanguageRequest,
   CreateRespondentRequest,
 } from '@intake24/common/types/http/admin';
-import {
+import type {
   FeedbackSchemeCreationAttributes,
   SurveySchemeCreationAttributes,
   SurveySchemeQuestionCreationAttributes,
-  searchSortingAlgorithms,
 } from '@intake24/common/types/models';
+import { searchSortingAlgorithms } from '@intake24/common/types/models';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
 import { customPromptQuestions } from '@intake24/common/prompts';
 import {

@@ -27,7 +27,7 @@ import { logger } from '@intake24/services';
 import * as fs from 'fs';
 import dotenv from 'dotenv';
 import validate from './config.validator';
-import Config from './config';
+import type Config from './config';
 
 dotenv.config();
 

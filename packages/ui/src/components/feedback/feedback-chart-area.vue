@@ -24,7 +24,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import type { TopFoodData } from '@intake24/ui/feedback';
 import type { EChartsOption } from 'echarts';
 import { use } from 'echarts/core';

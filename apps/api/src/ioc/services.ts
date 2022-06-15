@@ -1,4 +1,5 @@
-import { asClass, asFunction, asValue, AwilixContainer } from 'awilix';
+import type { AwilixContainer } from 'awilix';
+import { asClass, asFunction, asValue } from 'awilix';
 import { logger, Mailer } from '@intake24/services';
 import {
   authenticationService,

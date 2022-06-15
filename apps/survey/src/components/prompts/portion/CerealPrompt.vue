@@ -91,19 +91,18 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-import {
-  CerealPromptProps,
-  cerealPromptDefaultProps,
-  ImageMapSelectorEmit,
-} from '@intake24/common/prompts';
+import type { CerealPromptProps, ImageMapSelectorEmit } from '@intake24/common/prompts';
+import { cerealPromptDefaultProps } from '@intake24/common/prompts';
 import type { LocaleTranslation } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
 import ImageMapSelector from '@intake24/survey/components/prompts/portion/selectors/ImageMapSelector.vue';
-import BaseExpansionPortion, { ExpansionPortion } from './BaseExpansionPortion';
+import type { ExpansionPortion } from './BaseExpansionPortion';
+import BaseExpansionPortion from './BaseExpansionPortion';
 
 export default (Vue as VueConstructor<Vue & ExpansionPortion>).extend({
   name: 'CerealPrompt',

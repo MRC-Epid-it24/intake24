@@ -1,4 +1,5 @@
-import { ComponentType, Condition, conditionOps, PromptQuestion } from '@intake24/common/prompts';
+import type { ComponentType, Condition, PromptQuestion } from '@intake24/common/prompts';
+import { conditionOps } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import {

@@ -16,17 +16,20 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
 import type { VImg } from 'vuetify/lib';
-import { ImageMapSelectorProps, imageMapSelectorDefaultProps } from '@intake24/common/prompts';
+import type { ImageMapSelectorProps } from '@intake24/common/prompts';
+import { imageMapSelectorDefaultProps } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import type { ImageMapEmit } from '@intake24/common/types/http/foods';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
-import BasePortion, { Portion } from '../BasePortion';
+import type { Portion } from '../BasePortion';
+import BasePortion from '../BasePortion';
 
 type Refs = {
   $refs: {

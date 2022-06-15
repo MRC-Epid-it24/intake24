@@ -41,7 +41,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor, PropType } from 'vue';
+import type { VueConstructor, PropType } from 'vue';
+import Vue from 'vue';
 import { mapActions, mapState } from 'pinia';
 import type { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';

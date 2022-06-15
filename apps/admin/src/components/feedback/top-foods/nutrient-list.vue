@@ -127,9 +127,11 @@
 import draggable from 'vuedraggable';
 import { ConfirmDialog } from '@intake24/ui';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { defaultTopFoods, TopFoodNutrientType } from '@intake24/common/feedback';
+import type { TopFoodNutrientType } from '@intake24/common/feedback';
+import { defaultTopFoods } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import type { RuleCallback } from '@intake24/admin/types';
 import { useList } from '..';
 

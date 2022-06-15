@@ -5,7 +5,8 @@ import type {
   LanguagesResponse,
   LanguageTranslationsResponse,
 } from '@intake24/common/types/http/admin';
-import { Language, PaginateQuery } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
+import { Language } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { Controller, CrudActions } from '../controller';

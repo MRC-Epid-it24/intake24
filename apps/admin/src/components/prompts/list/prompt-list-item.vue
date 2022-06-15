@@ -104,7 +104,8 @@
 
 <script lang="ts">
 import isEqual from 'lodash/isEqual';
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { copy } from '@intake24/common/util';
 import type { PromptQuestion } from '@intake24/common/prompts';
 import { ConfirmDialog } from '@intake24/ui';

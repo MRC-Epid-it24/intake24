@@ -36,7 +36,8 @@
 <script lang="ts">
 import type { LocaleTranslation } from '@intake24/common/types';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 
 export type LocaleTranslationKeys = 'message';
 

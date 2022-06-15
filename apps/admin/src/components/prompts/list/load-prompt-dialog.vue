@@ -92,7 +92,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor, PropType } from 'vue';
+import type { VueConstructor, PropType } from 'vue';
+import Vue from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
 import type { PromptQuestion } from '@intake24/common/prompts';

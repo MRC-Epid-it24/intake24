@@ -11,7 +11,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { mapState, mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';

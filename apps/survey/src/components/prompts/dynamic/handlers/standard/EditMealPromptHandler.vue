@@ -14,14 +14,14 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState, RecallPromptHandler } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
-import EditMealPrompt, {
-  EditMealPromptMethods,
-} from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
+import type { EditMealPromptMethods } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
+import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import { useEditMealState } from '@intake24/survey/stores/edit-meal';
 

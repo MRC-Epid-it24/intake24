@@ -1,6 +1,7 @@
 import type { Request } from 'express';
 import type { Schema } from 'express-validator';
-import { Op, WhereOptions, FoodGroup } from '@intake24/db';
+import type { WhereOptions } from '@intake24/db';
+import { Op, FoodGroup } from '@intake24/db';
 import type { FoodGroupAttributes } from '@intake24/common/types/models';
 import { unique } from '@intake24/api/http/rules';
 

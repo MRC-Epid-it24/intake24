@@ -1,7 +1,11 @@
-import { logConfig as log, LogConfig, mailConfig as mail, MailConfig } from '@intake24/services';
-import app, { AppConfig } from './app';
-import filesystem, { FileSystemConfig } from './filesystem';
-import site, { SiteConfig } from './site';
+import type { LogConfig, MailConfig } from '@intake24/services';
+import { logConfig as log, mailConfig as mail } from '@intake24/services';
+import type { AppConfig } from './app';
+import app from './app';
+import type { FileSystemConfig } from './filesystem';
+import filesystem from './filesystem';
+import type { SiteConfig } from './site';
+import site from './site';
 
 export * from './app';
 export * from './filesystem';

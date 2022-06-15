@@ -17,10 +17,12 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import type { LocaleTranslation } from '@intake24/common/types';
-import localeContent, { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
+import type { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
 
 export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
   name: 'PortionLayout',

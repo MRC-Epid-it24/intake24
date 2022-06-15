@@ -1,11 +1,6 @@
 import type { CardType } from '@intake24/common/feedback';
-import {
-  CharacterParameters,
-  NutrientGroupParameters,
-  characterImageMap,
-  fiveADayImageMap,
-  nutrientGroupImageMap,
-} from '@intake24/ui/feedback';
+import type { CharacterParameters, NutrientGroupParameters } from '@intake24/ui/feedback';
+import { characterImageMap, fiveADayImageMap, nutrientGroupImageMap } from '@intake24/ui/feedback';
 
 export const characterBackgroundImage = (parameters: CharacterParameters): string =>
   characterImageMap[parameters.characterType];

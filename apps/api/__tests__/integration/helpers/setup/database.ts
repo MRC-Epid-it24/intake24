@@ -1,5 +1,6 @@
 import Redis from 'ioredis';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
+import type { User, UserSurveyAlias } from '@intake24/db';
 import {
   FeedbackScheme,
   FoodsLocale,
@@ -11,8 +12,6 @@ import {
   SystemNutrientUnit,
   SurveyScheme,
   Survey,
-  User,
-  UserSurveyAlias,
   Permission,
   Role,
 } from '@intake24/db';

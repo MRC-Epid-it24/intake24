@@ -1,14 +1,12 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import type { FindOptions, PaginateQuery, PaginateOptions } from '@intake24/db';
 import {
-  FindOptions,
   Op,
   Language,
   SurveyScheme,
   SurveySchemeQuestion,
-  PaginateQuery,
   securableScope,
-  PaginateOptions,
   UserSecurable,
 } from '@intake24/db';
 import type {
@@ -17,8 +15,8 @@ import type {
   SurveySchemesResponse,
   SurveySchemeExportRefsResponse,
 } from '@intake24/common/types/http/admin';
+import type { SurveySchemeCreationAttributes } from '@intake24/common/types/models';
 import {
-  SurveySchemeCreationAttributes,
   createSurveySchemeFields,
   perCardSurveySchemeFields,
   updateSurveySchemeFields,
@@ -29,7 +27,8 @@ import type { PromptQuestion } from '@intake24/common/prompts';
 import { kebabCase } from '@intake24/common/util';
 import type { ExportField, ExportSectionId } from '@intake24/common/schemes';
 import type { Controller, CrudActions } from '../controller';
-import securableController, { SecurableController } from './securable.controller';
+import type { SecurableController } from './securable.controller';
+import securableController from './securable.controller';
 
 export interface SurveySchemeController
   extends Controller<CrudActions | 'patch' | 'put' | 'copy' | 'templates' | 'dataExportRefs'> {

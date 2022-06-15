@@ -65,7 +65,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor, PropType } from 'vue';
+import type { VueConstructor, PropType } from 'vue';
+import Vue from 'vue';
 import pick from 'lodash/pick';
 import { mapActions } from 'pinia';
 import { copy } from '@intake24/common/util';

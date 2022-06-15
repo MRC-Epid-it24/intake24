@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { faker } from '@faker-js/faker';
-import fs, { ReadStream } from 'fs-extra';
+import type { ReadStream } from 'fs-extra';
+import fs from 'fs-extra';
 import { Parser } from 'json2csv';
 import { times } from 'lodash';
 import path from 'node:path';

@@ -135,10 +135,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { copy, merge } from '@intake24/common/util';
 import draggable from 'vuedraggable';
-import { Condition, ConditionOp, conditionOps } from '@intake24/common/prompts';
+import type { Condition, ConditionOp } from '@intake24/common/prompts';
+import { conditionOps } from '@intake24/common/prompts';
 import PromptAnswerProps from '@intake24/admin/components/prompts/partials/conditions/prompt-answer-props.vue';
 import RecallNumberProps from '@intake24/admin/components/prompts/partials/conditions/recall-number-props.vue';
 

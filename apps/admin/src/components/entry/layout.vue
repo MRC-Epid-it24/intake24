@@ -80,7 +80,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor, PropType } from 'vue';
+import type { VueConstructor, PropType } from 'vue';
+import Vue from 'vue';
 import has from 'lodash/has';
 import { ConfirmDialog } from '@intake24/ui';
 import hasResource from '@intake24/admin/mixins/has-resource';

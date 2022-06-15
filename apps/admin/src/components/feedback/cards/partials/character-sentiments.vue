@@ -69,13 +69,10 @@
 
 <script lang="ts">
 import isEqual from 'lodash/isEqual';
-import { defineComponent, PropType } from '@vue/composition-api';
-import {
-  Character,
-  characterSentimentTypes,
-  CharacterSentiment,
-  sentiments,
-} from '@intake24/common/feedback';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
+import type { Character, CharacterSentiment } from '@intake24/common/feedback';
+import { characterSentimentTypes, sentiments } from '@intake24/common/feedback';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { copy } from '@intake24/common/util';
 

@@ -1,5 +1,6 @@
 import type { PassportStatic } from 'passport';
-import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
+import type { StrategyOptions } from 'passport-jwt';
+import { Strategy, ExtractJwt } from 'passport-jwt';
 import security from '@intake24/api/config/security';
 import { User } from '@intake24/db';
 import type { FrontEnd } from '@intake24/common/types';

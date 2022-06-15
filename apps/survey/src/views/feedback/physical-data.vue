@@ -116,11 +116,14 @@
 </template>
 
 <script lang="ts">
-import axios, { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
 import { mapState } from 'pinia';
 import { defineComponent } from '@vue/composition-api';
-import { userService, feedbackService, UserPhysicalDataInput } from '@intake24/survey/services';
-import { FeedbackPhysicalDataField, Sex, sexes, weightTargets } from '@intake24/common/feedback';
+import type { UserPhysicalDataInput } from '@intake24/survey/services';
+import { userService, feedbackService } from '@intake24/survey/services';
+import type { FeedbackPhysicalDataField, Sex } from '@intake24/common/feedback';
+import { sexes, weightTargets } from '@intake24/common/feedback';
 import type {
   FeedbackSchemeEntryResponse,
   PhysicalActivityLevel,

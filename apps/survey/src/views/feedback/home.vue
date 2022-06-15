@@ -95,14 +95,13 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import { mapState } from 'pinia';
-import {
+import type {
   FeedbackCardParameters,
   FeedbackDictionaries,
   SurveySubmission,
   UserDemographic,
-  buildTopFoods,
-  buildCardParams,
 } from '@intake24/ui/feedback';
+import { buildTopFoods, buildCardParams } from '@intake24/ui/feedback';
 import type { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
 import {
   FeedbackChartArea,

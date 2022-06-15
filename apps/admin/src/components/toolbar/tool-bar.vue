@@ -28,8 +28,9 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor, PropType } from 'vue';
-import { Location } from 'vue-router';
+import type { VueConstructor, PropType } from 'vue';
+import Vue from 'vue';
+import type { Location } from 'vue-router';
 import upperFirst from 'lodash/upperFirst';
 import { ConfirmDialog } from '@intake24/ui';
 import Create from './create.vue';

@@ -10,7 +10,8 @@ import {
   UserSurveyAlias,
 } from '@intake24/db';
 import type { NutrientType } from '@intake24/common/types/http/feedback';
-import { WeightTargetCoefficient, weightTargetsData } from '@intake24/common/feedback';
+import type { WeightTargetCoefficient } from '@intake24/common/feedback';
+import { weightTargetsData } from '@intake24/common/feedback';
 import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
 import type { IoC } from '@intake24/api/ioc';
 import { getFrontEndUrl } from '@intake24/api/util';

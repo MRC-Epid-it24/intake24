@@ -41,7 +41,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import type { VueConstructor } from 'vue';
+import Vue from 'vue';
 import type { SurveySubmissionEntry } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';

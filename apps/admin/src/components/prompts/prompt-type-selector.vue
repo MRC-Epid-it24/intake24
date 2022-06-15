@@ -25,7 +25,8 @@
   </v-tab-item>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import type { PromptQuestion, QuestionType } from '@intake24/common/prompts';
 
 export default defineComponent({

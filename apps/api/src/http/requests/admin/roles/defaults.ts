@@ -1,6 +1,7 @@
 import type { Request } from 'express';
 import type { Schema } from 'express-validator';
-import { Op, WhereOptions, Role } from '@intake24/db';
+import type { WhereOptions } from '@intake24/db';
+import { Op, Role } from '@intake24/db';
 import { identifierSafeChars, unique } from '@intake24/api/http/rules';
 import type { RoleAttributes } from '@intake24/common/types/models';
 

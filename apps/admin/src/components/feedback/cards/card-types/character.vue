@@ -51,10 +51,12 @@
 
 <script lang="ts">
 import { useEntry } from '@intake24/admin/stores';
-import { Character, characterTypes } from '@intake24/common/feedback';
+import type { Character } from '@intake24/common/feedback';
+import { characterTypes } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { characterImageMap } from '@intake24/ui/feedback';
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import CharacterSentiments from '../partials/character-sentiments.vue';
 
 export default defineComponent({

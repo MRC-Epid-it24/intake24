@@ -1,5 +1,6 @@
 import { inspect } from 'util';
-import Ajv, { ValidateFunction as AjvValidateFunction } from 'ajv';
+import type { ValidateFunction as AjvValidateFunction } from 'ajv';
+import Ajv from 'ajv';
 import type { HenryCoefficients } from '../../feedback/henry-coefficients';
 
 export const ajv = new Ajv({

@@ -1,15 +1,9 @@
-import {
-  ConnectionOptions,
-  Job as BullJob,
-  JobsOptions,
-  Queue,
-  QueueEvents,
-  QueueScheduler,
-  Worker,
-} from 'bullmq';
+import type { ConnectionOptions, JobsOptions } from 'bullmq';
+import { Job as BullJob, Queue, QueueEvents, QueueScheduler, Worker } from 'bullmq';
 import type { JobData, JobParams, JobParamsList, JobType } from '@intake24/common/types';
 import { Job as DbJob } from '@intake24/db';
-import ioc, { IoC } from '@intake24/api/ioc';
+import type { IoC } from '@intake24/api/ioc';
+import ioc from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
 import type { QueueHandler } from './queue-handler';
 import type { PushPayload } from '..';

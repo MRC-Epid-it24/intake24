@@ -91,14 +91,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import isEqual from 'lodash/isEqual';
-import {
-  Attributes,
-  AttributeType,
-  Nullable,
-  useInRecipeTypes,
-} from '@intake24/common/types/models';
+import type { Attributes, AttributeType, Nullable } from '@intake24/common/types/models';
+import { useInRecipeTypes } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';
 
 const defaultAttributes: Attributes = {

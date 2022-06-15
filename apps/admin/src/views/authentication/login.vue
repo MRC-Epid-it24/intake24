@@ -52,7 +52,8 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import axios, { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
 import { mapActions, mapState } from 'pinia';
 import { Errors } from '@intake24/common/util';
 import { useAuth } from '@intake24/admin/stores';

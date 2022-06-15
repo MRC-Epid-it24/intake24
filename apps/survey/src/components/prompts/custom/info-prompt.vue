@@ -7,9 +7,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-import { infoPromptProps, InfoPromptProps } from '@intake24/common/prompts';
+import type { InfoPromptProps } from '@intake24/common/prompts';
+import { infoPromptProps } from '@intake24/common/prompts';
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({
