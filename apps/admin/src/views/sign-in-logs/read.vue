@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { SignInLogEntry } from '@intake24/common/types/http/admin';
+import type { SignInLogEntry } from '@intake24/common/types/http/admin';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
 import type { DetailMixin } from '@intake24/admin/types';

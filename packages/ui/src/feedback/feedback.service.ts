@@ -3,14 +3,14 @@ import type {
   SurveySubmissionEntry,
   UserPhysicalDataResponse,
 } from '@intake24/common/types/http';
-import {
+import type {
   Card,
   DemographicGroup as FeedbackSchemeDemographicGroup,
   HenryCoefficient,
 } from '@intake24/common/feedback';
-import { HttpClient } from '../types/http';
+import type { HttpClient } from '../types/http';
 import { CharacterRules, DemographicGroup, SurveyStats, UserDemographic } from './classes';
-import { CardWithCharRules } from './cards-builder';
+import type { CardWithCharRules } from './cards-builder';
 
 export type FeedbackDictionaries = {
   feedbackData: FeedbackData;

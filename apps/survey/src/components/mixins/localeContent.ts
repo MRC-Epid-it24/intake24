@@ -1,5 +1,5 @@
 import { defineComponent } from '@vue/composition-api';
-import { Dictionary, LocaleTranslation } from '@intake24/common/types';
+import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
 
 export type LocaleContent = {
   getLocaleContent<T>(content: LocaleTranslation<T>): T;

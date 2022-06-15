@@ -10,7 +10,7 @@
     "jsx": "preserve",
     "isolatedModules": true,
     // "preserveValueImports": true,
-    // "importsNotUsedAsValues": "error",
+    "importsNotUsedAsValues": "error",
     "importHelpers": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { FeedbackDetails } from './card-details';
+import type { FeedbackDetails } from './card-details';
 
 export default defineComponent({
   name: 'TellMeMore',

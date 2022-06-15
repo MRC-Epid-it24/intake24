@@ -1,4 +1,4 @@
-import { Subject } from '@intake24/common/security';
+import type { Subject } from '@intake24/common/security';
 import { defineStore } from 'pinia';
 import { tokenService } from '@intake24/ui/services';
 

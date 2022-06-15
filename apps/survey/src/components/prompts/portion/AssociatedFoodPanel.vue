@@ -54,16 +54,16 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
-import { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
+import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 import {
   AssociatedFoodsPanelProps,
   associatedFoodPanelDefaultProps,
   FoodSearchPromptProps,
   BasePromptProps,
 } from '@intake24/common/prompts';
-import { LocaleTranslation } from '@intake24/common/types';
+import type { LocaleTranslation } from '@intake24/common/types';
 import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
 import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import BaseExpansionPortion, { ExpansionPortion } from './BaseExpansionPortion';

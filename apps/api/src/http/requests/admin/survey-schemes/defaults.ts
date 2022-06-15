@@ -1,8 +1,8 @@
 import type { Request } from 'express';
-import { ParamSchema, Schema } from 'express-validator';
+import type { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions, SurveyScheme } from '@intake24/db';
-import { SurveySchemeAttributes } from '@intake24/common/types/models';
+import type { SurveySchemeAttributes } from '@intake24/common/types/models';
 import {
   validateMeals,
   // validateRecallQuestions,

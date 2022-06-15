@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
-import {
+import type {
   UserPasswordResetAttributes,
   UserPasswordResetCreationAttributes,
 } from '@intake24/common/types/models';

@@ -1,9 +1,9 @@
 import { pick, omit } from 'lodash';
 import request from 'supertest';
-import { CustomField } from '@intake24/common/types';
-import { CreateUserRequest, UpdateUserRequest } from '@intake24/common/types/http/admin';
+import type { CustomField } from '@intake24/common/types';
+import type { CreateUserRequest, UpdateUserRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import { User } from '@intake24/db';
+import type { User } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 
 export default () => {

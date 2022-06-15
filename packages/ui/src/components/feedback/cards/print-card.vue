@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from '@vue/composition-api';
-import { FeedbackCardParameters } from '@intake24/ui/feedback';
+import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 import { formatOutput, getDetails, getBackgroundImage } from '.';
 
 export default defineComponent({

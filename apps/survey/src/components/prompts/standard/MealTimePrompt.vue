@@ -42,8 +42,8 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { mapState } from 'pinia';
-import { PropType } from '@vue/composition-api';
-import { MealTimePromptProps } from '@intake24/common/prompts';
+import type { PropType } from '@vue/composition-api';
+import type { MealTimePromptProps } from '@intake24/common/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 import { ConfirmDialog } from '@intake24/ui';
 import BasePrompt, { Prompt } from '../BasePrompt';

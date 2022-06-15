@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { MealState, MealTime } from '@intake24/common/types';
+import type { MealState, MealTime } from '@intake24/common/types';
 import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
 
 export default defineComponent({

@@ -10,7 +10,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { UserAttributes, UserCreationAttributes } from '@intake24/common/types/models';
+import type { UserAttributes, UserCreationAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import {
   ClientErrorReport,

@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { TaskRefs } from '@intake24/common/types/http/admin';
+import type { TaskRefs } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'SurveySubmissionNotification',

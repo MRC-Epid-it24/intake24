@@ -7,8 +7,8 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { LanguageAttributes, LanguageCreationAttributes } from '@intake24/common/types/models';
-import { TextDirection } from '@intake24/common/types';
+import type { LanguageAttributes, LanguageCreationAttributes } from '@intake24/common/types/models';
+import type { TextDirection } from '@intake24/common/types';
 import BaseModel from '../model';
 import Locale from './locale';
 import LanguageTranslation from './language-translation';

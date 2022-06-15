@@ -1,4 +1,4 @@
-import { LocaleMessageObject } from 'vue-i18n';
+import type { LocaleMessageObject } from 'vue-i18n';
 
 const login: LocaleMessageObject = {
   _: 'Intake24 Login',

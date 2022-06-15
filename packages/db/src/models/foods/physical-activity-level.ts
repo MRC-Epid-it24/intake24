@@ -1,5 +1,5 @@
 import { Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import {
+import type {
   PhysicalActivityLevelAttributes,
   PhysicalActivityLevelCreationAttributes,
 } from '@intake24/common/types/models/foods';

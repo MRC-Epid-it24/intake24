@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { LocaleTranslation } from '@intake24/common/types';
+import type { LocaleTranslation } from '@intake24/common/types';
 import localeContent, { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
 
 export default (Vue as VueConstructor<Vue & LocaleContent>).extend({

@@ -1,6 +1,6 @@
 import { inspect } from 'util';
 import Ajv, { ValidateFunction as AjvValidateFunction } from 'ajv';
-import { ImageMapInputObjects } from '../../types/http/admin/image-maps';
+import type { ImageMapInputObjects } from '../../types/http/admin/image-maps';
 
 export const ajv = new Ajv({
   allErrors: true,

@@ -177,14 +177,14 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import {
+import type {
   SurveyRespondentEntry,
   SurveyRespondentListEntry,
 } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import { form } from '@intake24/admin/helpers';
-import { EntryMixin } from '@intake24/admin/types';
+import type { EntryMixin } from '@intake24/admin/types';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import RespondentFeedback from './respondent-feedback.vue';
 import RespondentsUpload from './respondents-upload.vue';

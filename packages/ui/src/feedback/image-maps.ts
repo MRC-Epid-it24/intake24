@@ -1,4 +1,4 @@
-import { CharacterType } from '@intake24/common/feedback';
+import type { CharacterType } from '@intake24/common/feedback';
 
 import battery from '../assets/feedback/characters/energy.jpg';
 import bread from '../assets/feedback/characters/carbs.jpg';

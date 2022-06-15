@@ -1,4 +1,4 @@
-import {
+import type {
   SurveySchemeCreationAttributes,
   SurveySchemeQuestionCreationAttributes,
 } from '@intake24/common/types/models';

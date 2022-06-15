@@ -1,8 +1,8 @@
 import request from 'supertest';
 import { pick } from 'lodash';
 import { suite } from '@intake24/api-tests/integration/helpers';
-import { UserSurveySessionCreationAttributes } from '@intake24/common/types/models/system';
-import { SurveyState } from '@intake24/common/types';
+import type { UserSurveySessionCreationAttributes } from '@intake24/common/types/models/system';
+import type { SurveyState } from '@intake24/common/types';
 
 export default () => {
   let url: string;

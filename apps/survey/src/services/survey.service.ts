@@ -1,5 +1,5 @@
-import { SurveyState } from '@intake24/common/types';
-import {
+import type { SurveyState } from '@intake24/common/types';
+import type {
   GenerateUserResponse,
   PublicSurveyEntryResponse,
   PublicSurveyListResponse,

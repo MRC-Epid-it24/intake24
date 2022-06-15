@@ -9,7 +9,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Meal } from '@intake24/common/types';
+import type { Meal } from '@intake24/common/types';
 import type {
   SurveySchemeAttributes,
   SurveySchemeCreationAttributes,

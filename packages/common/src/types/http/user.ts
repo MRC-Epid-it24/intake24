@@ -1,5 +1,5 @@
-import { UserAttributes, SurveySubmissionAttributes } from '@intake24/common/types/models';
-import {
+import type { UserAttributes, SurveySubmissionAttributes } from '@intake24/common/types/models';
+import type {
   SurveySubmissionPortionSizeFieldAttributes,
   SurveySubmissionNutrientAttributes,
   SurveySubmissionFoodAttributes,

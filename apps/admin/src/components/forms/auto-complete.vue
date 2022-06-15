@@ -24,7 +24,7 @@
 <script lang="ts">
 import Vue, { VueConstructor, PropType } from 'vue';
 import debounce from 'lodash/debounce';
-import { Dictionary } from '@intake24/common/types';
+import type { Dictionary } from '@intake24/common/types';
 
 type AutoComplete = {
   debouncedFetchItems: () => void;

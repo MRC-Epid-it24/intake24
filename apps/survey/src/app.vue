@@ -76,7 +76,7 @@
 <script lang="ts">
 import { mapState } from 'pinia';
 import Vue, { VueConstructor } from 'vue';
-import { TranslateResult } from 'vue-i18n';
+import type { TranslateResult } from 'vue-i18n';
 import logo from '@intake24/survey/assets/logo.svg';
 import Loader from '@intake24/survey/components/Loader.vue';
 import { ConfirmDialog, ServiceWorker, setsLanguage } from '@intake24/ui';

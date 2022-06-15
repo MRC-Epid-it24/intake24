@@ -1,7 +1,7 @@
 import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
 import type { ComponentType, QuantityValues } from '../prompts';
-import { FoodHeader, UserFoodData } from './http';
-import { PortionSizeMethodId } from './models';
+import type { FoodHeader, UserFoodData } from './http';
+import type { PortionSizeMethodId } from './models';
 
 export type CustomPromptAnswer = string | string[] | number | number[];
 

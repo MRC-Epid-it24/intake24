@@ -1,10 +1,10 @@
-import {
+import type {
   Pagination,
   SurveySchemeQuestionAttributes,
   SurveySchemeQuestionCreationAttributes,
 } from '../../models';
-import { LanguageListEntry } from './languages';
-import { SurveySchemeEntry } from './survey-schemes';
+import type { LanguageListEntry } from './languages';
+import type { SurveySchemeEntry } from './survey-schemes';
 
 export type SurveySchemeQuestionRequest = SurveySchemeQuestionCreationAttributes;
 

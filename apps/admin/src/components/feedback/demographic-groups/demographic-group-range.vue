@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { Range } from '@intake24/common/feedback';
+import type { Range } from '@intake24/common/feedback';
 
 export type RangeType = 'age' | 'height' | 'weight';
 

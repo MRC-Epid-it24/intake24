@@ -1,5 +1,5 @@
 import { Column, DataType, Table } from 'sequelize-typescript';
-import { PopularityCounterAttributes } from '@intake24/common/types/models';
+import type { PopularityCounterAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 
 @Table({

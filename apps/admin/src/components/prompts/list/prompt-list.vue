@@ -48,8 +48,8 @@
 import isEqual from 'lodash/isEqual';
 import { defineComponent, PropType, ref } from '@vue/composition-api';
 import draggable from 'vuedraggable';
-import { PromptQuestion } from '@intake24/common/prompts';
-import { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
+import type { PromptQuestion } from '@intake24/common/prompts';
+import type { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
 import { promptSettings } from '@intake24/admin/components/prompts';
 import LoadPromptDialog from './load-prompt-dialog.vue';
 import PromptListItem from './prompt-list-item.vue';

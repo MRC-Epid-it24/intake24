@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { JobEntry } from '@intake24/common/types/http/admin';
+import type { JobEntry } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import { sleep } from '@intake24/api/util';
 

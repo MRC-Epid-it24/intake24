@@ -78,8 +78,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { NutrientGroup } from '@intake24/common/feedback';
-import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import type { NutrientGroup } from '@intake24/common/feedback';
+import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
 import CardContent from '../partials/card-content.vue';
 import CardThresholds from '../partials/card-thresholds.vue';

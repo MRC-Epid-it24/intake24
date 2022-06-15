@@ -7,13 +7,13 @@ import {
   NutrientTableCsvMappingNutrient,
   Job,
 } from '@intake24/db';
-import {
+import type {
   NutrientTableEntry,
   NutrientTableInput,
   NutrientTableCsvMappingFieldInput,
   NutrientTableCsvMappingNutrientInput,
 } from '@intake24/common/types/http/admin';
-import { JobType } from '@intake24/common/types';
+import type { JobType } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
 

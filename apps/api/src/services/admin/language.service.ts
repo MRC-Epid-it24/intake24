@@ -1,5 +1,5 @@
 import { Language, LanguageTranslation } from '@intake24/db';
-import {
+import type {
   CreateLanguageRequest,
   LanguageEntry,
   UpdateLanguageRequest,
@@ -7,11 +7,11 @@ import {
 import type { IoC } from '@intake24/api/ioc';
 import { admin, survey, shared, mergeTranslations, compareMessageKeys } from '@intake24/i18n';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import {
+import type {
   LanguageTranslationAttributes,
   LanguageTranslationCreationAttributes,
 } from '@intake24/common/types/models';
-import { Application } from '@intake24/common/types';
+import type { Application } from '@intake24/common/types';
 
 const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
   const logger = globalLogger.child({ service: 'languageService' });

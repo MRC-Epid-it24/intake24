@@ -92,7 +92,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { FoodLocalEntry } from '@intake24/common/types/http/admin';
+import type { FoodLocalEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import categoryOrFood from './category-or-food';

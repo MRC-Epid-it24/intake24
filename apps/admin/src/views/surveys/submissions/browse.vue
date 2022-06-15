@@ -42,10 +42,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { SurveySubmissionEntry } from '@intake24/common/types/http/admin';
+import type { SurveySubmissionEntry } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
-import { EntryMixin } from '@intake24/admin/types';
+import type { EntryMixin } from '@intake24/admin/types';
 import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 

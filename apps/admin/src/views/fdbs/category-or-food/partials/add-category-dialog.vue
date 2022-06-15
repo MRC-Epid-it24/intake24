@@ -86,8 +86,8 @@
 import Vue, { VueConstructor, PropType } from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
-import { CategoriesResponse, CategoryListEntry } from '@intake24/common/types/http/admin';
-import { CategoryAttributes } from '@intake24/common/types/models';
+import type { CategoriesResponse, CategoryListEntry } from '@intake24/common/types/http/admin';
+import type { CategoryAttributes } from '@intake24/common/types/models';
 
 type AddCategoryDialog = {
   debouncedFetch: () => void;

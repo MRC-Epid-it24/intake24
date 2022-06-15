@@ -10,11 +10,11 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { BasePromptProps } from '@intake24/common/prompts';
+import type { BasePromptProps } from '@intake24/common/prompts';
 import ReviewConfirmPrompt from '@intake24/survey/components/prompts/standard/ReviewConfirmPrompt.vue';
 import { mapActions, mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
-import { FoodState } from '@intake24/common/types';
+import type { FoodState } from '@intake24/common/types';
 
 export default defineComponent({
   name: 'ReviewConfirmPromptHandler',

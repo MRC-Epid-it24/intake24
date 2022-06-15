@@ -31,7 +31,9 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from '@vue/composition-api';
+
+export default defineComponent({
   name: 'SurveyProgress',
 
   props: {
@@ -49,5 +51,5 @@ export default {
       return 'primary';
     },
   },
-};
+});
 </script>

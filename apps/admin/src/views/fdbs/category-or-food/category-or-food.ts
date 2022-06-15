@@ -1,7 +1,7 @@
 import Vue, { VueConstructor } from 'vue';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
-import { CategoryLocalEntry, FoodLocalEntry } from '@intake24/common/types/http/admin';
+import type { CategoryLocalEntry, FoodLocalEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 import watchEntry from '@intake24/admin/components/entry/watch-entry';
 import { getObjectNestedKeys } from '@intake24/common/util';

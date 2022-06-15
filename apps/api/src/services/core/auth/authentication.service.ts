@@ -4,12 +4,12 @@ import { UnauthorizedError } from '@intake24/api/http/errors';
 import { supportedAlgorithms } from '@intake24/common-backend/util/passwords';
 import type { IoC } from '@intake24/api/ioc';
 import { Subject, surveyRespondent } from '@intake24/common/security';
-import {
+import type {
   AliasLoginRequest,
   EmailLoginRequest,
   TokenLoginRequest,
 } from '@intake24/common/types/http';
-import { FrontEnd } from '@intake24/common/types';
+import type { FrontEnd } from '@intake24/common/types';
 import type { Tokens } from '.';
 import type { MFARequest } from './mfa';
 

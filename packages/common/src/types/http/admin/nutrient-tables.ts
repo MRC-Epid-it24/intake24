@@ -1,4 +1,4 @@
-import {
+import type {
   NutrientTableAssociations,
   NutrientTableAttributes,
   NutrientTableCsvMappingAttributes,
@@ -6,7 +6,7 @@ import {
   NutrientTableCsvMappingNutrientAttributes,
   Pagination,
 } from '../../models';
-import { NutrientTypeEntry } from './nutrient-types';
+import type { NutrientTypeEntry } from './nutrient-types';
 
 export type NutrientTableCsvMappingInput = Omit<
   NutrientTableCsvMappingAttributes,

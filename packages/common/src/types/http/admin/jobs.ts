@@ -1,4 +1,4 @@
-import { JobAttributes, Pagination } from '../../models';
+import type { JobAttributes, Pagination } from '../../models';
 
 export type JobsResponse = Pagination<JobAttributes>;
 

@@ -1,7 +1,7 @@
 import { Op, Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
-import { UserPasswordAttributes } from '@intake24/common/types/models';
-import { CreateUserInput, UpdateUserInput } from '@intake24/common/types/http/admin';
-import { CustomField } from '@intake24/common/types';
+import type { UserPasswordAttributes } from '@intake24/common/types/models';
+import type { CreateUserInput, UpdateUserInput } from '@intake24/common/types/http/admin';
+import type { CustomField } from '@intake24/common/types';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { defaultAlgorithm } from '@intake24/common-backend/util/passwords';

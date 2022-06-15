@@ -52,9 +52,9 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import cronstrue from 'cronstrue';
-import { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';
+import type { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
-import { DetailMixin } from '@intake24/admin/types';
+import type { DetailMixin } from '@intake24/admin/types';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
 

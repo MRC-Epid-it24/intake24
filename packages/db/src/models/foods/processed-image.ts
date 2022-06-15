@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-import {
+import type {
   ProcessedImageAttributes,
   ProcessedImageCreationAttributes,
   ProcessedImagePurpose,

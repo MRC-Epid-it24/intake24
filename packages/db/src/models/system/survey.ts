@@ -12,7 +12,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import {
+import type {
   SearchSortingAlgorithm,
   SurveyAttributes,
   SurveyCreationAttributes,

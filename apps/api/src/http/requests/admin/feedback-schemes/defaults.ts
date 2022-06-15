@@ -1,9 +1,9 @@
 import type { Request } from 'express';
-import { ParamSchema, Schema } from 'express-validator';
+import type { ParamSchema, Schema } from 'express-validator';
 import has from 'lodash/has';
 import validator from 'validator';
 import { Op, WhereOptions, FeedbackScheme } from '@intake24/db';
-import { FeedbackSchemeAttributes } from '@intake24/common/types/models';
+import type { FeedbackSchemeAttributes } from '@intake24/common/types/models';
 import { unique } from '@intake24/api/http/rules';
 import {
   feedbackOutputs,

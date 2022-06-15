@@ -2,7 +2,7 @@ import type { Request } from 'express';
 import type { Schema } from 'express-validator';
 import { Op, WhereOptions, Language, SystemLocale } from '@intake24/db';
 import { unique } from '@intake24/api/http/rules';
-import { LocaleAttributes } from '@intake24/common/types/models';
+import type { LocaleAttributes } from '@intake24/common/types/models';
 
 const defaults: Schema = {
   englishName: {

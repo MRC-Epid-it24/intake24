@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { mocker, suite, SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { Survey, SurveySubmission } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
-import { SurveySubmissionCreationAttributes } from '@intake24/common/types/models';
+import type { SurveySubmissionCreationAttributes } from '@intake24/common/types/models';
 
 interface SurveyOutput
   extends Omit<SurveySubmissionCreationAttributes, 'startTime' | 'endTime' | 'submissionTime'> {

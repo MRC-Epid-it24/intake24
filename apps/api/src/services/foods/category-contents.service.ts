@@ -1,4 +1,4 @@
-import { CategoryContents, CategoryHeader } from '@intake24/common/types/http';
+import type { CategoryContents, CategoryHeader } from '@intake24/common/types/http';
 import {
   Category,
   CategoryLocal,

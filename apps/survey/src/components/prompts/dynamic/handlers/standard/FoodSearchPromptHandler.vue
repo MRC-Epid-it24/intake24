@@ -7,11 +7,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { mapActions, mapState } from 'pinia';
-import { FoodSearchPromptProps } from '@intake24/common/prompts';
-import { FoodState, RecallPromptHandler } from '@intake24/common/types';
-import { UserFoodData } from '@intake24/common/types/http';
+import type { FoodSearchPromptProps } from '@intake24/common/prompts';
+import type { FoodState, RecallPromptHandler } from '@intake24/common/types';
+import type { UserFoodData } from '@intake24/common/types/http';
 import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import Vue, { VueConstructor } from 'vue';

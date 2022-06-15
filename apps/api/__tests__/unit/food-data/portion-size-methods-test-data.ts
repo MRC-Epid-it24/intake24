@@ -19,7 +19,7 @@ CAT2 (no portion size methods in en_GB)
 
 import { faker } from '@faker-js/faker';
 
-import {
+import type {
   UserPortionSizeMethod,
   UserPortionSizeMethodParameters,
 } from '@intake24/common/types/http/foods/user-food-data';

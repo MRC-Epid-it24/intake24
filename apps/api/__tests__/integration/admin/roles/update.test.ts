@@ -1,6 +1,6 @@
 import { pick, times } from 'lodash';
 import request from 'supertest';
-import { RoleRequest } from '@intake24/common/types/http/admin';
+import type { RoleRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Role, Permission } from '@intake24/db';
 

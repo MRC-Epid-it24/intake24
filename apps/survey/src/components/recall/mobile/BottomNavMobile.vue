@@ -32,7 +32,7 @@
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import { defineComponent } from '@vue/composition-api';
-import { PromptAnswer } from '@intake24/common/types';
+import type { PromptAnswer } from '@intake24/common/types';
 
 export default defineComponent({
   name: 'BottomNavigationMobile',

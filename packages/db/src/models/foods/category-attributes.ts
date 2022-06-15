@@ -1,6 +1,6 @@
 import { Column, DataType, Table, Scopes, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Category } from '@intake24/db';
-import {
+import type {
   CategoryAttributeAttributes,
   CategoryAttributeCreationAttributes,
   UseInRecipeType,

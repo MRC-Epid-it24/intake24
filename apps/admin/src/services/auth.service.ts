@@ -1,4 +1,4 @@
-import {
+import type {
   EmailLoginRequest,
   LoginResponse,
   MFAVerifyRequest,

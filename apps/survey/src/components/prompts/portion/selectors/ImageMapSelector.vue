@@ -17,14 +17,14 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
-import { VImg } from 'vuetify/lib';
+import type { VImg } from 'vuetify/lib';
 import { ImageMapSelectorProps, imageMapSelectorDefaultProps } from '@intake24/common/prompts';
-import { ImageMapResponse } from '@intake24/common/types/http';
-import { ImageMapEmit } from '@intake24/common/types/http/foods';
+import type { ImageMapResponse } from '@intake24/common/types/http';
+import type { ImageMapEmit } from '@intake24/common/types/http/foods';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import BasePortion, { Portion } from '../BasePortion';
 

@@ -66,7 +66,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { AsServedSetResponse } from '@intake24/common/types/http/foods';
+import type { AsServedSetResponse } from '@intake24/common/types/http/foods';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 
 export default defineComponent({

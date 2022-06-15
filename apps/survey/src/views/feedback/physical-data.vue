@@ -121,7 +121,10 @@ import { mapState } from 'pinia';
 import { defineComponent } from '@vue/composition-api';
 import { userService, feedbackService, UserPhysicalDataInput } from '@intake24/survey/services';
 import { FeedbackPhysicalDataField, Sex, sexes, weightTargets } from '@intake24/common/feedback';
-import { FeedbackSchemeEntryResponse, PhysicalActivityLevel } from '@intake24/common/types/http';
+import type {
+  FeedbackSchemeEntryResponse,
+  PhysicalActivityLevel,
+} from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 

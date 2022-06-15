@@ -1,4 +1,4 @@
-import { CardType, FiveADay, NutrientGroup } from '@intake24/common/feedback';
+import type { CardType, FiveADay, NutrientGroup } from '@intake24/common/feedback';
 import { round } from '@intake24/common/util';
 import {
   AggregateFoodStats,

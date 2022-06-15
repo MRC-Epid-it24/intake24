@@ -1,5 +1,5 @@
-import { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import Router from 'vue-router';
+import type { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import type Router from 'vue-router';
 
 export type SubscribeCallback = (err?: AxiosError) => void;
 

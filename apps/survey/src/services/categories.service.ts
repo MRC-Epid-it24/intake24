@@ -1,4 +1,4 @@
-import { CategoryContents } from '@intake24/common/types/http';
+import type { CategoryContents } from '@intake24/common/types/http';
 import http from './http.service';
 
 export default {

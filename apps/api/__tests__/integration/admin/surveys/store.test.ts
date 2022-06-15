@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
 import request from 'supertest';
-import { SurveyRequest } from '@intake24/common/types/http/admin';
+import type { SurveyRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {

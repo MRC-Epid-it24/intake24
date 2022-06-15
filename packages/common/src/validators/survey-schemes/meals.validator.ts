@@ -1,6 +1,6 @@
 import { inspect } from 'util';
 import Ajv, { ValidateFunction as AjvValidateFunction } from 'ajv';
-import { Meals } from '../../types/meals';
+import type { Meals } from '../../types/meals';
 
 export const ajv = new Ajv({
   allErrors: true,

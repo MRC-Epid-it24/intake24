@@ -96,13 +96,13 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import cronstrue from 'cronstrue';
-import { JobParams, JobParamsList, JobType } from '@intake24/common/types';
-import { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';
+import type { JobParams, JobParamsList, JobType } from '@intake24/common/types';
+import type { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
-import { FormMixin } from '@intake24/admin/types';
+import type { FormMixin } from '@intake24/admin/types';
 import paramComponents from './params';
 
 type TaskForm = {

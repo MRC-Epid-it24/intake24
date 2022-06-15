@@ -27,7 +27,7 @@ import type { IoC } from '@intake24/api/ioc';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import type { PromptQuestion } from '@intake24/common/prompts';
 import { kebabCase } from '@intake24/common/util';
-import { ExportField, ExportSectionId } from '@intake24/common/schemes';
+import type { ExportField, ExportSectionId } from '@intake24/common/schemes';
 import type { Controller, CrudActions } from '../controller';
 import securableController, { SecurableController } from './securable.controller';
 

@@ -5,11 +5,11 @@ import {
   Sentiment,
   sentiments as defaultSentiments,
 } from '@intake24/common/feedback';
-import AggregateFoodStats from './aggregate-food-stats';
-import DemographicGroup from './demographic-group';
-import DemographicResult from './demographic-result';
-import DemographicScaleSector from './demographic-scale-sector';
-import UserDemographic from './user-demographic';
+import type AggregateFoodStats from './aggregate-food-stats';
+import type DemographicGroup from './demographic-group';
+import type DemographicResult from './demographic-result';
+import type DemographicScaleSector from './demographic-scale-sector';
+import type UserDemographic from './user-demographic';
 
 export type CharacterParameters = {
   readonly id: string;

@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { IoC } from '@intake24/api/ioc';
+import type { IoC } from '@intake24/api/ioc';
 import type { Controller } from './controller';
 
 export type CategoriesController = Controller<'browse' | 'browseRoot'>;

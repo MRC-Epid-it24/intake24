@@ -1,4 +1,4 @@
-import { NutrientUnitAttributes } from './nutrient-units';
+import type { NutrientUnitAttributes } from './nutrient-units';
 
 export type NutrientTypeAttributes = {
   id: string;

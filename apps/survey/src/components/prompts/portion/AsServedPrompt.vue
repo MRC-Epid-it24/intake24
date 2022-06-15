@@ -96,12 +96,12 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import { merge } from '@intake24/common/util';
 import { basePromptProps, BasePromptProps } from '@intake24/common/prompts';
-import {
+import type {
   HasPartialAnswerTriggerHandler,
   LocaleTranslation,
   SelectedAsServedImage,

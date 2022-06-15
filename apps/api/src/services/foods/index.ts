@@ -1,3 +1,4 @@
+export * from './category-contents.service';
 export * from './food-data.service';
 export * from './portion-size.service';
 

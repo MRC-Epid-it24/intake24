@@ -1,11 +1,11 @@
-import {
+import type {
   CategoryAttributes,
   CategoryAssociations,
   CategoryLocalAttributes,
   Pagination,
   Attributes,
 } from '../../models';
-import { FoodListEntry } from './foods';
+import type { FoodListEntry } from './foods';
 
 export type CategoryInput = {
   name: string;

@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import {
+import type {
   SurveySubmissionMissingFoodAttributes,
   SurveySubmissionMissingFoodCreationAttributes,
 } from '@intake24/common/types/models';

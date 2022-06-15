@@ -1,7 +1,7 @@
-import { PromptQuestion } from '@intake24/common/prompts';
-import { MealSection, SurveySection } from '@intake24/common/schemes';
-import { MealTime, SurveyState as CurrentSurveyState } from '@intake24/common/types';
-import { SchemeEntryResponse } from '@intake24/common/types/http';
+import type { PromptQuestion } from '@intake24/common/prompts';
+import type { MealSection, SurveySection } from '@intake24/common/schemes';
+import type { MealTime, SurveyState as CurrentSurveyState } from '@intake24/common/types';
+import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
 import SelectionManager from '@intake24/survey/dynamic-recall/selection-manager';
 import type { SurveyStore } from '../stores';

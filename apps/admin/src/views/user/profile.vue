@@ -121,7 +121,7 @@
 </template>
 
 <script lang="ts">
-import { LanguageAttributes } from '@intake24/common/types/models';
+import type { LanguageAttributes } from '@intake24/common/types/models';
 import Vue, { VueConstructor } from 'vue';
 import { setsLanguage } from '@intake24/ui';
 import { mapState } from 'pinia';

@@ -1,4 +1,4 @@
-import { FoodGroupCreationAttributes } from '@intake24/common/types/models';
+import type { FoodGroupCreationAttributes } from '@intake24/common/types/models';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { FoodGroup } from '@intake24/db';
 

@@ -1,8 +1,8 @@
-import {
+import type {
   NutrientTableRecordCreationAttributes,
   NutrientTableRecordAttributes,
 } from './nutrient-table-records';
-import {
+import type {
   NutrientTableCsvMappingAttributes,
   NutrientTableCsvMappingCreationAttributes,
   NutrientTableCsvMappingFieldAttributes,

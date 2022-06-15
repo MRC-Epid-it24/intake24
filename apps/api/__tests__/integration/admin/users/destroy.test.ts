@@ -1,7 +1,7 @@
-import { CreateUserRequest } from '@intake24/common/types/http/admin';
+import type { CreateUserRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
-import { User } from '@intake24/db';
+import type { User } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/users';

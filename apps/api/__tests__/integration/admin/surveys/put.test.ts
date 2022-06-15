@@ -1,4 +1,4 @@
-import { SurveyRequest } from '@intake24/common/types/http/admin';
+import type { SurveyRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 

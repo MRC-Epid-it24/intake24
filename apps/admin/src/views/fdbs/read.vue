@@ -42,13 +42,13 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import {
+import type {
   CategoryContentsResponse,
   CategoryListEntry,
   FoodListEntry,
   RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
-import { DetailMixin } from '@intake24/admin/types';
+import type { DetailMixin } from '@intake24/admin/types';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 
 export interface CategoryListEntryItem extends CategoryListEntry {

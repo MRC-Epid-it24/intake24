@@ -1,11 +1,11 @@
-import { CardType, NutrientRuleType, Sentiment } from '@intake24/common/feedback';
+import type { CardType, NutrientRuleType, Sentiment } from '@intake24/common/feedback';
 import {
   CharacterParameters,
   DemographicRange,
   FiveADayParameters,
   NutrientGroupParameters,
 } from '@intake24/ui/feedback';
-import { RequiredLocaleTranslation, LocaleTranslation } from '@intake24/common/types';
+import type { RequiredLocaleTranslation, LocaleTranslation } from '@intake24/common/types';
 import { round } from '@intake24/common/util';
 import { useApp } from '@intake24/ui/stores';
 import { shared } from '@intake24/i18n';

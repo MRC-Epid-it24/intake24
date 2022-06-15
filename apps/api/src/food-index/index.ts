@@ -1,5 +1,5 @@
 import { Worker } from 'worker_threads';
-import { FoodSearchResponse } from '@intake24/common/types/http';
+import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
 
 let indexReady = false;

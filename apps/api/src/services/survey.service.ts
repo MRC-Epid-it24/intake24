@@ -21,7 +21,7 @@ import {
 } from '@intake24/db';
 import type { SurveyState } from '@intake24/common/types';
 import type { SurveyUserInfoResponse, SurveyFollowUpResponse } from '@intake24/common/types/http';
-import { type PromptQuestion, RedirectPromptProps } from '@intake24/common/prompts';
+import type { PromptQuestion, RedirectPromptProps } from '@intake24/common/prompts';
 import {
   ApplicationError,
   ForbiddenError,

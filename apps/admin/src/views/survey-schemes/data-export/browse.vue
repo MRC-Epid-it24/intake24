@@ -64,13 +64,13 @@
 import Vue, { VueConstructor } from 'vue';
 import draggable from 'vuedraggable';
 import { defaultExport, ExportField, ExportSection } from '@intake24/common/schemes';
-import { SurveySchemeExportRefsResponse } from '@intake24/common/types/http/admin';
+import type { SurveySchemeExportRefsResponse } from '@intake24/common/types/http/admin';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { form } from '@intake24/admin/helpers';
-import { FormMixin } from '@intake24/admin/types';
+import type { FormMixin } from '@intake24/admin/types';
 import DataExportSection from './data-export-section.vue';
-import { SurveySchemeForm } from '../form.vue';
+import type { SurveySchemeForm } from '../form.vue';
 
 export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;
 

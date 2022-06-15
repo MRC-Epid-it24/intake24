@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { FoodState } from '@intake24/common/types';
+import type { FoodState } from '@intake24/common/types';
 
 export interface EditMealState {
   mealState: { [key: number]: FoodState[] };

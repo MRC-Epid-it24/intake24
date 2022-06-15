@@ -1,5 +1,5 @@
 import { Column, DataType, Table } from 'sequelize-typescript';
-import { PACoOccurrenceAttributes } from '@intake24/common/types/models';
+import type { PACoOccurrenceAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 
 @Table({

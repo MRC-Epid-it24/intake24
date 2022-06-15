@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { LocaleTranslation } from '@intake24/common/types';
+import type { LocaleTranslation } from '@intake24/common/types';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { defineComponent, PropType } from '@vue/composition-api';
 

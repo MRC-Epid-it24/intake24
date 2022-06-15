@@ -8,8 +8,11 @@ import {
   UserCustomField,
   UserSurveyAlias,
 } from '@intake24/db';
-import { CreateRespondentInput, UpdateRespondentInput } from '@intake24/common/types/http/admin';
-import { UserCustomFieldAttributes } from '@intake24/common/types/models';
+import type {
+  CreateRespondentInput,
+  UpdateRespondentInput,
+} from '@intake24/common/types/http/admin';
+import type { UserCustomFieldAttributes } from '@intake24/common/types/models';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';

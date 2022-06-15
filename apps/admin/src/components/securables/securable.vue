@@ -206,7 +206,7 @@ import { form } from '@intake24/admin/helpers';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import { securableToResource } from '@intake24/common/util';
 import { securableDefs, SecurableType } from '@intake24/common/security';
-import { ValidationError } from '@intake24/common/types';
+import type { ValidationError } from '@intake24/common/types';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 import { EmbeddedDataTable } from '../data-tables';
 

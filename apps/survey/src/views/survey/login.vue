@@ -65,7 +65,7 @@
 import axios, { AxiosError } from 'axios';
 import { defineComponent } from '@vue/composition-api';
 import { mapActions, mapState } from 'pinia';
-import { PublicSurveyEntryResponse } from '@intake24/common/types/http';
+import type { PublicSurveyEntryResponse } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
 import surveySvc from '@intake24/survey/services/survey.service';
 import { useAuth } from '@intake24/survey/stores';

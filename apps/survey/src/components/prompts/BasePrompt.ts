@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import { FormRefs } from '@intake24/common/types';
+import type { FormRefs } from '@intake24/common/types';
 import Continue from '@intake24/survey/components/prompts/actions/Continue.vue';
 import PromptLayout from '@intake24/survey/components/layouts/PromptLayout.vue';
 import localeContent, { LocaleContent } from '@intake24/survey/components/mixins/localeContent';

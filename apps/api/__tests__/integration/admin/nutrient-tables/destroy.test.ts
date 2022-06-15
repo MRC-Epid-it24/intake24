@@ -1,5 +1,5 @@
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import { NutrientTableInput } from '@intake24/common/types/http/admin';
+import type { NutrientTableInput } from '@intake24/common/types/http/admin';
 import {
   NutrientTable,
   NutrientTableCsvMapping,

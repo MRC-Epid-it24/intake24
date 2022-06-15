@@ -1,5 +1,5 @@
-import { Meal } from '../types';
-import { PromptQuestion, PromptQuestionWithSection } from '../prompts';
+import type { Meal } from '../types';
+import type { PromptQuestion, PromptQuestionWithSection } from '../prompts';
 
 export const schemeTypes = ['default'] as const;
 export type SchemeType = typeof schemeTypes[number];

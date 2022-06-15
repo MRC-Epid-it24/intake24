@@ -1,7 +1,7 @@
 import { mapState } from 'pinia';
 import Vue, { VueConstructor } from 'vue';
-import { TranslateResult } from 'vue-i18n';
-import { FoodState, LocaleTranslation } from '@intake24/common/types';
+import type { TranslateResult } from 'vue-i18n';
+import type { FoodState, LocaleTranslation } from '@intake24/common/types';
 import localeContent, { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
 import { useSurvey } from '@intake24/survey/stores';
 

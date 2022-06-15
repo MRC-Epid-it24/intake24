@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { CreateElement, VNode, VNodeChildren } from 'vue';
-import { LanguageTranslationAttributes } from '@intake24/common/types/models';
+import type { CreateElement, VNode, VNodeChildren } from 'vue';
+import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';
 import {
   VBtn,
@@ -19,7 +19,7 @@ import {
 } from 'vuetify/lib';
 import has from 'lodash/has';
 import pick from 'lodash/pick';
-import { LocaleMessageObject } from 'vue-i18n';
+import type { LocaleMessageObject } from 'vue-i18n';
 import { VCardTitle } from 'vuetify/lib/components';
 import IntersectableSkeleton from './intersectable-skeleton.vue';
 

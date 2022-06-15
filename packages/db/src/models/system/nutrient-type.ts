@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
-import { NutrientTypeAttributes } from '@intake24/common/types/models';
+import type { NutrientTypeAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { SystemNutrientUnit } from '.';
 

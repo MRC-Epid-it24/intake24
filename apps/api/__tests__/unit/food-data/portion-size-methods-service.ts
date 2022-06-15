@@ -2,7 +2,7 @@ import {
   createTestData,
   generatedPortionSizeMethods,
 } from '@intake24/api-tests/unit/food-data/portion-size-methods-test-data';
-import { DatabasesInterface } from '@intake24/db';
+import type { DatabasesInterface } from '@intake24/db';
 import portionSizeMethodsService, {
   PortionSizeMethodsService,
 } from '@intake24/api/services/foods/portion-size-methods-service';

@@ -124,7 +124,7 @@
 import Vue, { VueConstructor } from 'vue';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
-import { FormMixin } from '@intake24/admin/types';
+import type { FormMixin } from '@intake24/admin/types';
 import {
   FeedbackOutput,
   feedbackOutputs,
@@ -139,7 +139,7 @@ import {
 } from '@intake24/common/feedback';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { Preview } from '@intake24/admin/components/feedback';
-import { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 
 export type FeedbackSchemeForm = {
   id: string | null;

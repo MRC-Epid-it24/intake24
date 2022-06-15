@@ -95,7 +95,7 @@ import { DemographicGroupScaleSector, sentiments } from '@intake24/common/feedba
 import { tinymce } from '@intake24/admin/components/tinymce';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { copy } from '@intake24/common/util';
-import { RuleCallback } from '@intake24/admin/types';
+import type { RuleCallback } from '@intake24/admin/types';
 import { demographicGroupScaleSectorDefaults } from '.';
 
 export default defineComponent({

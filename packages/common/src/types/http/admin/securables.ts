@@ -1,6 +1,6 @@
 import type { UserListEntry } from '.';
 import type { Pagination, UserSecurableAttributes } from '../../models';
-import { CreateUserInput } from './users';
+import type { CreateUserInput } from './users';
 
 export interface CreateUserWithSecurables
   extends Pick<CreateUserInput, 'email' | 'name' | 'phone'> {

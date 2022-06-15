@@ -1,4 +1,4 @@
-import { SurveySchemeQuestionCreationAttributes } from '@intake24/common/types/models';
+import type { SurveySchemeQuestionCreationAttributes } from '@intake24/common/types/models';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { SurveySchemeQuestion } from '@intake24/db';
 

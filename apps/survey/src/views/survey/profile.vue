@@ -59,7 +59,7 @@
 import Vue, { VueConstructor } from 'vue';
 import { mapState } from 'pinia';
 import { setsLanguage } from '@intake24/ui';
-import { LanguageAttributes } from '@intake24/common/types/models';
+import type { LanguageAttributes } from '@intake24/common/types/models';
 import { useUser } from '@intake24/survey/stores';
 
 type Mixins = InstanceType<typeof setsLanguage>;

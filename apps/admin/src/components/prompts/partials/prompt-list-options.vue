@@ -69,8 +69,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import draggable from 'vuedraggable';
-import { ListOption } from '@intake24/common/prompts';
-import { RuleCallback } from '@intake24/admin/types';
+import type { ListOption } from '@intake24/common/prompts';
+import type { RuleCallback } from '@intake24/admin/types';
 
 export default defineComponent({
   name: 'PromptListOptions',

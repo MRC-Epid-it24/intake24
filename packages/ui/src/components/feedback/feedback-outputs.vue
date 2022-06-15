@@ -167,7 +167,7 @@ import { defineComponent, PropType } from '@vue/composition-api';
 import { Errors } from '@intake24/common/util';
 import { downloadFile } from '@intake24/ui/util';
 import { useLoading } from '@intake24/ui/stores';
-import { FeedbackOutput } from '@intake24/common/feedback';
+import type { FeedbackOutput } from '@intake24/common/feedback';
 
 export default defineComponent({
   name: 'FeedbackOutputs',

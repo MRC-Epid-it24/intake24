@@ -10,7 +10,10 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import config from '@intake24/api/config/acl';
-import { PermissionAttributes, PermissionCreationAttributes } from '@intake24/common/types/models';
+import type {
+  PermissionAttributes,
+  PermissionCreationAttributes,
+} from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { PermissionRole, PermissionUser, Role, User } from '.';
 

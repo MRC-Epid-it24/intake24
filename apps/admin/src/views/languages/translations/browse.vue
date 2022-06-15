@@ -41,10 +41,13 @@
 import Vue, { VueConstructor } from 'vue';
 import has from 'lodash/has';
 import isEqual from 'lodash/isEqual';
-import { LanguageEntry, LanguageTranslationsResponse } from '@intake24/common/types/http/admin';
-import { LanguageTranslationAttributes } from '@intake24/common/types/models';
+import type {
+  LanguageEntry,
+  LanguageTranslationsResponse,
+} from '@intake24/common/types/http/admin';
+import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';
-import { DetailMixin } from '@intake24/admin/types';
+import type { DetailMixin } from '@intake24/admin/types';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import watchEntry from '@intake24/admin/components/entry/watch-entry';
 import TranslationSection from './translation-section.vue';

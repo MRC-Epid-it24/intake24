@@ -1,4 +1,4 @@
-import { Dictionary } from '@intake24/common/types';
+import type { Dictionary } from '@intake24/common/types';
 import { getObjectNestedKeys } from '@intake24/common/util';
 
 /**

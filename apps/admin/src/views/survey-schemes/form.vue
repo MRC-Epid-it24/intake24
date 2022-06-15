@@ -54,11 +54,11 @@ import {
   schemeTypes,
   ExportSection,
 } from '@intake24/common/schemes';
-import { Meal } from '@intake24/common/types';
+import type { Meal } from '@intake24/common/types';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import MealList from '@intake24/admin/components/meals/meal-list.vue';
 import { form } from '@intake24/admin/helpers';
-import { FormMixin } from '@intake24/admin/types';
+import type { FormMixin } from '@intake24/admin/types';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 
 export type SurveySchemeForm = {

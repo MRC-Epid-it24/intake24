@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { authService } from '@intake24/admin/services';
 import { useLoading } from '@intake24/ui/stores';
-import { EmailLoginRequest, MFAVerifyRequest } from '@intake24/common/types/http';
+import type { EmailLoginRequest, MFAVerifyRequest } from '@intake24/common/types/http';
 import { useUser } from './user';
 
 export type AuthState = {

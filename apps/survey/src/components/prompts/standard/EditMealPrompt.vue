@@ -39,10 +39,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { mapState } from 'pinia';
-import { BasePromptProps } from '@intake24/common/prompts';
-import { FoodState } from '@intake24/common/types';
+import type { BasePromptProps } from '@intake24/common/prompts';
+import type { FoodState } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';
 import { useSurvey } from '@intake24/survey/stores';
 import BasePrompt, { Prompt } from '@intake24/survey/components/prompts/BasePrompt';

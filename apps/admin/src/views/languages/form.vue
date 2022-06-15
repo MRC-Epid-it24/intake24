@@ -82,7 +82,7 @@ import Vue, { VueConstructor } from 'vue';
 import orderBy from 'lodash/orderBy';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
-import { FormMixin } from '@intake24/admin/types';
+import type { FormMixin } from '@intake24/admin/types';
 
 type LanguageForm = {
   id: string | null;

@@ -106,9 +106,9 @@
 import isEqual from 'lodash/isEqual';
 import { defineComponent, PropType } from '@vue/composition-api';
 import { copy } from '@intake24/common/util';
-import { PromptQuestion } from '@intake24/common/prompts';
+import type { PromptQuestion } from '@intake24/common/prompts';
 import { ConfirmDialog } from '@intake24/ui';
-import { MoveSection } from './prompt-list.vue';
+import type { MoveSection } from './prompt-list.vue';
 import SaveAsTemplateDialog from './save-as-template-dialog.vue';
 
 export default defineComponent({

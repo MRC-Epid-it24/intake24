@@ -44,7 +44,7 @@ import isEqual from 'lodash/isEqual';
 import { defineComponent, PropType } from '@vue/composition-api';
 import { tinymce } from '@intake24/admin/components/tinymce';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { CustomCard } from '@intake24/common/feedback';
+import type { CustomCard } from '@intake24/common/feedback';
 
 export default defineComponent({
   name: 'CardThresholds',

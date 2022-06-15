@@ -1,4 +1,4 @@
-import { LocaleMessageObject } from 'vue-i18n';
+import type { LocaleMessageObject } from 'vue-i18n';
 
 const common: LocaleMessageObject = {
   _: 'Intake24 Admin Tool',

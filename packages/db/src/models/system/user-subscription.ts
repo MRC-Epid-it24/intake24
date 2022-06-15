@@ -7,7 +7,7 @@ import {
   UpdatedAt,
   Table,
 } from 'sequelize-typescript';
-import {
+import type {
   PushSubscription,
   SubscriptionType,
   UserSubscriptionAttributes,

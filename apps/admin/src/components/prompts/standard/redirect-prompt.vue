@@ -62,7 +62,7 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import isInteger from 'lodash/isInteger';
-import { RuleCallback } from '@intake24/admin/types';
+import type { RuleCallback } from '@intake24/admin/types';
 import basePrompt from '../partials/base-prompt';
 
 type Mixins = InstanceType<typeof basePrompt>;

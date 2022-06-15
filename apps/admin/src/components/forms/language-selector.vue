@@ -55,9 +55,9 @@
 </template>
 
 <script lang="ts">
-import { LanguageListEntry } from '@intake24/common/types/http/admin';
+import type { LanguageListEntry } from '@intake24/common/types/http/admin';
 import { defineComponent, PropType } from '@vue/composition-api';
-import { LocaleTranslation } from '@intake24/common/types';
+import type { LocaleTranslation } from '@intake24/common/types';
 import { useEntry } from '@intake24/admin/stores';
 
 export default defineComponent({

@@ -13,9 +13,9 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
-import { BasePromptProps } from '@intake24/common/prompts';
-import { AssociatedFoodsState, RecallPromptHandler } from '@intake24/common/types';
+import type { PropType } from '@vue/composition-api';
+import type { BasePromptProps } from '@intake24/common/prompts';
+import type { AssociatedFoodsState, RecallPromptHandler } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';

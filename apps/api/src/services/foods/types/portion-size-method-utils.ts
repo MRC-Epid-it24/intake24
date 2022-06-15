@@ -1,10 +1,9 @@
-import {
+import type {
   UserPortionSizeMethod,
   UserPortionSizeMethodParameters,
 } from '@intake24/common/types/http/foods/user-food-data';
-import { PortionSizeMethodId } from '@intake24/common/types/models';
-import { CategoryPortionSizeMethod, FoodPortionSizeMethod } from '@intake24/db';
-
+import type { PortionSizeMethodId } from '@intake24/common/types/models';
+import type { CategoryPortionSizeMethod, FoodPortionSizeMethod } from '@intake24/db';
 import {
   toUserCategoryPortionSizeMethodParameters,
   toUserPortionSizeMethodParameters,

@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { FiveADay } from '@intake24/common/feedback';
+import type { FiveADay } from '@intake24/common/feedback';
 import CardContent from '../partials/card-content.vue';
 import CardThresholds from '../partials/card-thresholds.vue';
 import CardUnit from '../partials/card-unit.vue';

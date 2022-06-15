@@ -1,4 +1,4 @@
-import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
+import type { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
 
 function countCombinations(words: Array<InterpretedWord>): number {
   return words.reduce((acc, next) => acc * next.interpretations.length, 1);

@@ -53,10 +53,10 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { LocaleTranslation } from '@intake24/common/types';
+import type { LocaleTranslation } from '@intake24/common/types';
 import { tinymce } from '@intake24/admin/components/tinymce';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { RuleCallback } from '@intake24/admin/types';
+import type { RuleCallback } from '@intake24/admin/types';
 
 export type LocaleTranslationKeys = 'name' | 'text' | 'description';
 

@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue';
-import { DetailMixin } from '@intake24/admin/types';
+import type { DetailMixin } from '@intake24/admin/types';
 import fetchEntry from './fetch-entry';
 import hasEntry from './has-entry';
 import Layout from './layout.vue';

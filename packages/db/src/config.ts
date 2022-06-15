@@ -1,5 +1,5 @@
-import { Dictionary, Environment } from '@intake24/common/types';
-import { Dialect, Options } from 'sequelize';
+import type { Dictionary, Environment } from '@intake24/common/types';
+import type { Dialect, Options } from 'sequelize';
 
 export type DatabaseType = 'foods' | 'system';
 

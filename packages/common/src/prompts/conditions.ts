@@ -1,4 +1,4 @@
-import { Dictionary } from '../types/common';
+import type { Dictionary } from '../types/common';
 
 export const conditionTypes = [
   'surveyPromptAnswer',

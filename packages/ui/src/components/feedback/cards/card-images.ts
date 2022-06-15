@@ -1,4 +1,4 @@
-import { CardType } from '@intake24/common/feedback';
+import type { CardType } from '@intake24/common/feedback';
 import {
   CharacterParameters,
   NutrientGroupParameters,

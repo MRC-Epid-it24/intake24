@@ -11,8 +11,8 @@ import type { JobData, JobParams, JobParamsList, JobType } from '@intake24/commo
 import { Job as DbJob } from '@intake24/db';
 import ioc, { IoC } from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
-import { QueueHandler } from './queue-handler';
-import { PushPayload } from '..';
+import type { QueueHandler } from './queue-handler';
+import type { PushPayload } from '..';
 
 export type JobInput<T extends JobType> = {
   type: T;

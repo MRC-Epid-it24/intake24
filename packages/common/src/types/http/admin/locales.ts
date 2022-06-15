@@ -1,5 +1,5 @@
-import { LocaleAttributes, Pagination } from '../../models';
-import { LanguageListEntry } from './languages';
+import type { LocaleAttributes, Pagination } from '../../models';
+import type { LanguageListEntry } from './languages';
 
 export type LocaleRequest = {
   id: string;

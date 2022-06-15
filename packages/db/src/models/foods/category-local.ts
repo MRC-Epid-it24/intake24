@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
-import {
+import type {
   CategoryLocalAttributes,
   CategoryLocalCreationAttributes,
 } from '@intake24/common/types/models';

@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import fs from 'fs-extra';
 import path from 'node:path';
 import sharp from 'sharp';
-import { UploadSourceImageInput, SourceImageType } from '@intake24/common/types/http/admin';
+import type { UploadSourceImageInput, SourceImageType } from '@intake24/common/types/http/admin';
 import { SourceImage } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 

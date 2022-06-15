@@ -1,5 +1,5 @@
-import { ImageMapAttributes, ImageMapObjectAttributes, Pagination } from '../../models';
-import { UploadSourceImageInput } from './source-images';
+import type { ImageMapAttributes, ImageMapObjectAttributes, Pagination } from '../../models';
+import type { UploadSourceImageInput } from './source-images';
 
 export type ImageMapEntryObject = Pick<
   ImageMapObjectAttributes,

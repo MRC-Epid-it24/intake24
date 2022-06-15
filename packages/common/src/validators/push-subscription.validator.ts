@@ -1,7 +1,7 @@
 import { inspect } from 'util';
 import Ajv, { ValidateFunction as AjvValidateFunction } from 'ajv';
 import addFormats from 'ajv-formats';
-import { PushSubscription } from '../types/models/system/user-subscriptions';
+import type { PushSubscription } from '../types/models/system/user-subscriptions';
 
 export const ajv = new Ajv({
   allErrors: true,

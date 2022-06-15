@@ -59,15 +59,15 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
-import { BasePromptProps } from '@intake24/common/prompts';
+import type { PropType } from '@vue/composition-api';
+import type { BasePromptProps } from '@intake24/common/prompts';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import {
+import type {
   AssociatedFoodPromptState,
   AssociatedFoodsState,
   EncodedFood,
 } from '@intake24/common/types';
-import { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
+import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import FoodBrowser from '@intake24/survey/components/elements/FoodBrowser.vue';
 import BasePrompt, { Prompt } from '../BasePrompt';
 

@@ -1,4 +1,4 @@
-import { RequiredLocaleTranslation } from '../types';
+import type { RequiredLocaleTranslation } from '../types';
 
 export type TopFoodNutrientType = {
   id: string;

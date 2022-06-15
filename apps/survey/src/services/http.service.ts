@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import trim from 'lodash/trim';
-import { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
+import type { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
 import type { AuthStoreDef } from '../stores';
 
 let isRefreshing = false;

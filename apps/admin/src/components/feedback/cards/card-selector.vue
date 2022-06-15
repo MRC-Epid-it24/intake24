@@ -119,11 +119,11 @@
 
 <script lang="ts">
 import { copy, merge, randomString } from '@intake24/common/util';
-import { Card } from '@intake24/common/feedback';
+import type { Card } from '@intake24/common/feedback';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { defineComponent, ref } from '@vue/composition-api';
 import { tinymce } from '@intake24/admin/components/tinymce';
-import { RuleCallback } from '@intake24/admin/types';
+import type { RuleCallback } from '@intake24/admin/types';
 import cardTypes from './card-types';
 import { cardDefaults, cardSettings } from './card';
 

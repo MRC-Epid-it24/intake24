@@ -74,9 +74,9 @@
 import { defineComponent, PropType, ref } from '@vue/composition-api';
 import isEqual from 'lodash/isEqual';
 import draggable from 'vuedraggable';
-import { Card } from '@intake24/common/feedback';
+import type { Card } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
-import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import CardSelector from './card-selector.vue';

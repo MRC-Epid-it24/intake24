@@ -1,4 +1,4 @@
-import {
+import type {
   NutrientTableCsvMappingFieldInput,
   NutrientTableCsvMappingNutrientInput,
 } from '@intake24/common/types/http/admin';

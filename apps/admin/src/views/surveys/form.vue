@@ -154,7 +154,7 @@
                 @change="form.errors.clear('state')"
               ></v-select>
             </v-col>
-            <v-col cols="12" v-show="form.state === 2">
+            <v-col cols="12" v-show="form.state === 'suspended'">
               <v-text-field
                 v-model="form.suspensionReason"
                 :error-messages="form.errors.get('suspensionReason')"
@@ -376,8 +376,8 @@ import {
 } from '@intake24/common/types/models';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
-import { FormMixin } from '@intake24/admin/types';
-import { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
+import type { FormMixin } from '@intake24/admin/types';
+import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
 import { defaultOverrides, SchemeOverrides } from '@intake24/common/schemes';
 
 export type SurveyForm = {

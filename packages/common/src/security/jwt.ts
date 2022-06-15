@@ -1,4 +1,4 @@
-import { MFAProvider } from './mfa';
+import type { MFAProvider } from './mfa';
 
 export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken';
 

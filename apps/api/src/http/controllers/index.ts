@@ -15,6 +15,7 @@ import user from './user';
 export * from './admin';
 export * from './controller';
 export * from './authentication.controller';
+export * from './categories.controller';
 export * from './feedback.controller';
 export * from './food-search.controller';
 export * from './food.controller';

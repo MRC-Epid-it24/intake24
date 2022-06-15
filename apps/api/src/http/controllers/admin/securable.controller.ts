@@ -13,7 +13,7 @@ import {
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { randomString, securableToResource } from '@intake24/common/util';
 import { isSecurableType } from '@intake24/common/security';
-import {
+import type {
   CreateUserWithSecurables,
   UsersWithSecurablesResponse,
   AvailableUsersWithSecurablesResponse,

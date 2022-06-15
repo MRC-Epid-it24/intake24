@@ -1,6 +1,6 @@
-import { HenryCoefficient, WeightTargetCoefficient } from '@intake24/common/feedback';
-import { UserPhysicalDataResponse } from '@intake24/common/types/http';
-import { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
+import type { HenryCoefficient, WeightTargetCoefficient } from '@intake24/common/feedback';
+import type { UserPhysicalDataResponse } from '@intake24/common/types/http';
+import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
 import { round } from '@intake24/common/util';
 import HenryCoefficientsCalculator from './henry-coefficient-calculator';
 

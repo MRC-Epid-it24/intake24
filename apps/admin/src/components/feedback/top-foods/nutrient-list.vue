@@ -128,9 +128,9 @@ import draggable from 'vuedraggable';
 import { ConfirmDialog } from '@intake24/ui';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { defaultTopFoods, TopFoodNutrientType } from '@intake24/common/feedback';
-import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { defineComponent, PropType } from '@vue/composition-api';
-import { RuleCallback } from '@intake24/admin/types';
+import type { RuleCallback } from '@intake24/admin/types';
 import { useList } from '..';
 
 export default defineComponent({

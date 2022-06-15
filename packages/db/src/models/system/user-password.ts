@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
-import { UserPasswordAttributes } from '@intake24/common/types/models';
+import type { UserPasswordAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { User } from '.';
 

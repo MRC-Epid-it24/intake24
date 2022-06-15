@@ -56,14 +56,14 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { customPromptQuestions, PromptQuestion } from '@intake24/common/prompts';
-import {
+import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
 } from '@intake24/common/types/http/admin';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import PromptSelector from '@intake24/admin/components/prompts/prompt-selector.vue';
 import { form } from '@intake24/admin/helpers';
-import { FormMixin } from '@intake24/admin/types';
+import type { FormMixin } from '@intake24/admin/types';
 
 export type SchemeQuestionForm = {
   question: PromptQuestion;

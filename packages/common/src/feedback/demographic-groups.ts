@@ -1,5 +1,5 @@
-import { LocaleTranslation, RequiredLocaleTranslation } from '../types';
-import { NutrientRuleType, Range, Sentiment, Sex } from './shared';
+import type { LocaleTranslation, RequiredLocaleTranslation } from '../types';
+import type { NutrientRuleType, Range, Sentiment, Sex } from './shared';
 
 export type DemographicGroupScaleSector = {
   name: RequiredLocaleTranslation;

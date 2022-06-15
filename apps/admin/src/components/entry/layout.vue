@@ -84,8 +84,8 @@ import Vue, { VueConstructor, PropType } from 'vue';
 import has from 'lodash/has';
 import { ConfirmDialog } from '@intake24/ui';
 import hasResource from '@intake24/admin/mixins/has-resource';
-import { RouteLeave } from '@intake24/admin/types';
-import { Dictionary } from '@intake24/common/types';
+import type { RouteLeave } from '@intake24/admin/types';
+import type { Dictionary } from '@intake24/common/types';
 
 type Mixins = InstanceType<typeof hasResource>;
 

@@ -1,4 +1,4 @@
-import { Express } from 'express';
+import type { Express } from 'express';
 import fs from 'fs-extra';
 import app from '@intake24/api/app';
 import ioc from '@intake24/api/ioc';

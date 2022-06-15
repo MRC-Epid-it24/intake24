@@ -100,8 +100,8 @@
 import groupBy from 'lodash/groupBy';
 import pluralize from 'pluralize';
 import Vue, { VueConstructor } from 'vue';
-import { Location } from 'vue-router';
-import { Dictionary } from '@intake24/common/types';
+import type { Location } from 'vue-router';
+import type { Dictionary } from '@intake24/common/types';
 import { ConfirmDialog, setsLanguage, ServiceWorker } from '@intake24/ui';
 import Loader from '@intake24/admin/components/loader.vue';
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';

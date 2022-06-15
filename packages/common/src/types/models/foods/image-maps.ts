@@ -1,4 +1,4 @@
-import { Optional } from '../model';
+import type { Optional } from '../model';
 
 export type ImageMapAttributes = {
   id: string;

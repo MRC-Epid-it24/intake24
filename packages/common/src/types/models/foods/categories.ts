@@ -1,5 +1,5 @@
-import { CategoryAttributeAttributes } from './attributes';
-import { Optional } from '../model';
+import type { CategoryAttributeAttributes } from './attributes';
+import type { Optional } from '../model';
 
 export type CategoryAttributes = {
   code: string;

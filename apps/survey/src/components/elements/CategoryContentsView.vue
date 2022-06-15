@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
+import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
 
 export default defineComponent({
   name: 'CategoryContentsView',

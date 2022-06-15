@@ -1,6 +1,6 @@
 import deepmerge from 'deepmerge';
 import copy from 'fast-copy';
-import { Dictionary } from '../types';
+import type { Dictionary } from '../types';
 
 export { default as copy } from 'fast-copy';
 

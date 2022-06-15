@@ -67,7 +67,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { ValidationError } from '@intake24/common/types';
+import type { ValidationError } from '@intake24/common/types';
 import { form } from '@intake24/admin/helpers';
 
 type PasswordResetForm = {

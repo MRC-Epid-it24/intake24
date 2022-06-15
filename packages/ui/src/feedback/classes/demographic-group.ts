@@ -1,14 +1,14 @@
-import {
+import type {
   DemographicGroup as FeedbackSchemeDemographicGroup,
   NutrientRuleType,
   Sex,
 } from '@intake24/common/feedback';
-import { NutrientType } from '@intake24/common/types/http';
+import type { NutrientType } from '@intake24/common/types/http';
 import DemographicScaleSector from './demographic-scale-sector';
-import AggregateFoodStats from './aggregate-food-stats';
+import type AggregateFoodStats from './aggregate-food-stats';
 import DemographicRange from './demographic-range';
 import DemographicResult from './demographic-result';
-import UserDemographic from './user-demographic';
+import type UserDemographic from './user-demographic';
 
 export default class DemographicGroup {
   readonly id: string;

@@ -19,6 +19,7 @@ import type {
   AuthenticationController,
   PasswordController,
   SubscriptionController,
+  CategoriesController,
   FeedbackController,
   FoodController,
   FoodSearchController,
@@ -77,6 +78,7 @@ import type {
   PortionSizeService,
   ProcessedImageService,
   SourceImageService,
+  CategoryContentsService,
   FoodDataService,
   LanguageService,
   NutrientTableService,
@@ -98,8 +100,6 @@ import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services
 import type { Jobs } from '@intake24/api/jobs';
 import type { User } from '@intake24/db';
 import type { Environment } from '@intake24/common/types';
-import { CategoryContentsService } from '@intake24/api/services/foods/category-contents.service';
-import { CategoriesController } from '@intake24/api/http/controllers/categories.controller';
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';

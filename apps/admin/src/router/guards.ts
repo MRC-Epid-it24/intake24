@@ -1,4 +1,4 @@
-import Router from 'vue-router';
+import type Router from 'vue-router';
 import resources from './resources';
 import { useAuth, useResource, useUser } from '../stores';
 

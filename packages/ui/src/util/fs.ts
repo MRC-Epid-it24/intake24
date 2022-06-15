@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
 import jsFileDownload from 'js-file-download';
 
 export const fileUrl = (file: string, path?: string) => new URL(file, path ?? import.meta.url).href;

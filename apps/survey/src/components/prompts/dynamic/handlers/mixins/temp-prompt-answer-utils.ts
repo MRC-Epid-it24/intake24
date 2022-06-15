@@ -1,7 +1,7 @@
 import { defineComponent } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
-import { PromptAnswer } from '@intake24/common/types';
+import type { PromptAnswer } from '@intake24/common/types';
 
 type PromptType = 'food' | 'meal';
 

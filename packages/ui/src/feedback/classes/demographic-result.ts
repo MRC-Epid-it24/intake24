@@ -1,4 +1,4 @@
-import DemographicGroup from './demographic-group';
+import type DemographicGroup from './demographic-group';
 
 export default class DemographicResult {
   readonly resultedDemographicGroup: DemographicGroup;

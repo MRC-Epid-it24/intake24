@@ -1,5 +1,5 @@
 import type { Request } from 'express';
-import { ParamSchema, Schema } from 'express-validator';
+import type { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import { Op, WhereOptions, SystemLocale, SurveyScheme, Survey, FeedbackScheme } from '@intake24/db';
 import {

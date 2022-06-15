@@ -1,4 +1,4 @@
-import { OmitAndOptional } from '../model';
+import type { OmitAndOptional } from '../model';
 
 export type NutrientTableRecordNutrientAttributes = {
   id: string;

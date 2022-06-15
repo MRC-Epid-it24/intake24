@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { DetailMixin } from '@intake24/admin/types';
+import type { DetailMixin } from '@intake24/admin/types';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 
 export default (Vue as VueConstructor<Vue & DetailMixin>).extend({

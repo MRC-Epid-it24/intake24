@@ -131,7 +131,7 @@
 import { defineComponent, PropType, ref } from '@vue/composition-api';
 import draggable from 'vuedraggable';
 import { copy } from '@intake24/common/util';
-import { Meal, Meals } from '@intake24/common/types';
+import type { Meal, Meals } from '@intake24/common/types';
 import { defaultMeals } from '@intake24/common/schemes';
 import { ConfirmDialog } from '@intake24/ui';
 import { LanguageSelector } from '@intake24/admin/components/forms';

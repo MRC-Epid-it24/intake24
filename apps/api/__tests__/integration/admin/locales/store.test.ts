@@ -1,4 +1,4 @@
-import { LocaleAttributes } from '@intake24/common/types/models';
+import type { LocaleAttributes } from '@intake24/common/types/models';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {

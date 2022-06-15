@@ -82,11 +82,11 @@ import debounce from 'lodash/debounce';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 import { defaultTopFoods, TopFoods } from '@intake24/common/feedback';
-import { FormMixin, RuleCallback } from '@intake24/admin/types';
+import type { FormMixin, RuleCallback } from '@intake24/admin/types';
 import { ColorList, NutrientList, Preview } from '@intake24/admin/components/feedback';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
-import { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
-import { FeedbackSchemeForm } from '../form.vue';
+import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import type { FeedbackSchemeForm } from '../form.vue';
 
 type FeedbackSchemeTopFoods = {
   debouncedUpdateColorList: () => void;

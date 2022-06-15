@@ -1,11 +1,11 @@
-import { PhysicalActivityLevelAttributes } from '../../models/foods/physical-activity-levels';
-import {
+import type { PhysicalActivityLevelAttributes } from '../../models/foods/physical-activity-levels';
+import type {
   FeedbackSchemeAttributes,
   // FeedbackSchemeCreationAttributes,
 } from '../../models/system/feedback-schemes';
-import { Pagination } from '../../models';
-import { LanguageListEntry } from './languages';
-import { NutrientTypeEntry } from './nutrient-types';
+import type { Pagination } from '../../models';
+import type { LanguageListEntry } from './languages';
+import type { NutrientTypeEntry } from './nutrient-types';
 
 /* export type FeedbackSchemeRequest = FeedbackSchemeCreationAttributes;
 

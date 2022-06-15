@@ -57,9 +57,13 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { JobEntry, NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
-import { JobType } from '@intake24/common/types';
-import { DetailMixin } from '@intake24/admin/types';
+import type {
+  JobEntry,
+  NutrientTableEntry,
+  NutrientTableRefs,
+} from '@intake24/common/types/http/admin';
+import type { JobType } from '@intake24/common/types';
+import type { DetailMixin } from '@intake24/admin/types';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import { PollsForJobs } from '@intake24/admin/components/polls-for-jobs';
 import { form } from '@intake24/admin/helpers';

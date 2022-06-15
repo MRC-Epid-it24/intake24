@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 import type { Dictionary } from '@intake24/common/types';

@@ -1,4 +1,4 @@
-import { LocaleMessageObject } from 'vue-i18n';
+import type { LocaleMessageObject } from 'vue-i18n';
 
 const standardUnits: LocaleMessageObject = {
   one_inch_pieces_estimate_in: '1 inch pieces',

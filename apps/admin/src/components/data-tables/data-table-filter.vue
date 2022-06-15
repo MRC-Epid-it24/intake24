@@ -35,7 +35,7 @@
 import { defineComponent } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import isEmpty from 'lodash/isEmpty';
-import { Dictionary } from '@intake24/common/types';
+import type { Dictionary } from '@intake24/common/types';
 import { useResource } from '@intake24/admin/stores';
 
 export default defineComponent({

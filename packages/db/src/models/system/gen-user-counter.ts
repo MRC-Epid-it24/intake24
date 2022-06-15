@@ -7,7 +7,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import {
+import type {
   GenUserCounterAttributes,
   GenUserCounterCreationAttributes,
 } from '@intake24/common/types/models';

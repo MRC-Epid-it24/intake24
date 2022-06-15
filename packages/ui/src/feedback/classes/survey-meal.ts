@@ -1,4 +1,4 @@
-import { SurveySubmissionMealEntry } from '@intake24/common/types/http';
+import type { SurveySubmissionMealEntry } from '@intake24/common/types/http';
 import SurveyFood from './survey-food';
 
 export default class SurveyMeal {

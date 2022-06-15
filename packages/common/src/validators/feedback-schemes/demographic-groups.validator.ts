@@ -1,6 +1,6 @@
 import { inspect } from 'util';
 import Ajv, { ValidateFunction as AjvValidateFunction } from 'ajv';
-import { DemographicGroups } from '../../feedback/demographic-groups';
+import type { DemographicGroups } from '../../feedback/demographic-groups';
 
 export const ajv = new Ajv({
   allErrors: true,

@@ -1,4 +1,4 @@
-import { Express } from 'express';
+import type { Express } from 'express';
 import app from '@intake24/portal/app';
 import config from '@intake24/portal/config';
 import { logger } from '@intake24/portal/services';

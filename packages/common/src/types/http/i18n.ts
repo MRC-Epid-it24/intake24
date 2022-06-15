@@ -1,4 +1,4 @@
-import { LanguageTranslationAttributes, LanguageAttributes } from '../models/system/languages';
+import type { LanguageTranslationAttributes, LanguageAttributes } from '../models/system/languages';
 
 export type I18nLanguageListEntry = Pick<
   LanguageAttributes,

@@ -7,7 +7,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { RoleAttributes, RoleCreationAttributes } from '@intake24/common/types/models';
+import type { RoleAttributes, RoleCreationAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 import { Permission, PermissionRole, RoleUser, User } from '.';
 

@@ -1,5 +1,5 @@
-import json2csv from 'json2csv';
-import { SurveySubmissionFood } from '@intake24/db';
+import type json2csv from 'json2csv';
+import type { SurveySubmissionFood } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import type { ExportField, ExportFieldTransform } from './data-export-fields';
 

@@ -14,10 +14,10 @@
 import Vue, { VueConstructor } from 'vue';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
-import { FormMixin } from '@intake24/admin/types';
+import type { FormMixin } from '@intake24/admin/types';
 import { HenryCoefficientList, Preview } from '@intake24/admin/components/feedback';
-import { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
-import { FeedbackSchemeForm } from '../form.vue';
+import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import type { FeedbackSchemeForm } from '../form.vue';
 
 export type FeedbackSchemeHenryCoefficientsForm = Pick<FeedbackSchemeForm, 'henryCoefficients'>;
 

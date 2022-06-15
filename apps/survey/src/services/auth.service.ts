@@ -1,4 +1,4 @@
-import { AliasLoginRequest, TokenLoginRequest } from '@intake24/common/types/http';
+import type { AliasLoginRequest, TokenLoginRequest } from '@intake24/common/types/http';
 import http from './http.service';
 
 export type AuthResponse = { accessToken: string };

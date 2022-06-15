@@ -1,5 +1,5 @@
 import request from 'supertest';
-import {
+import type {
   CreateRespondentRequest,
   UpdateRespondentRequest,
 } from '@intake24/common/types/http/admin';
@@ -7,7 +7,7 @@ import { mocker, suite, SetSecurableOptions } from '@intake24/api-tests/integrat
 import { Survey, UserSurveyAlias } from '@intake24/db';
 import { omit, pick } from 'lodash';
 import ioc from '@intake24/api/ioc';
-import { CustomField } from '@intake24/common/types';
+import type { CustomField } from '@intake24/common/types';
 
 const assertRespondentResponse = async (
   url: string,

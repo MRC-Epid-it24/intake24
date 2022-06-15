@@ -11,10 +11,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { mapActions, mapState } from 'pinia';
-import { MealTimePromptProps } from '@intake24/common/prompts';
-import { MealTime, RecallPromptHandler } from '@intake24/common/types';
+import type { MealTimePromptProps } from '@intake24/common/prompts';
+import type { MealTime, RecallPromptHandler } from '@intake24/common/types';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';

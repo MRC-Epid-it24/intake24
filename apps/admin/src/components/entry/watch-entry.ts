@@ -1,5 +1,5 @@
 import { defineComponent } from '@vue/composition-api';
-import { Route } from 'vue-router';
+import type { Route } from 'vue-router';
 import { copy } from '@intake24/common/util';
 
 export default defineComponent({

@@ -8,10 +8,10 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
-import { BasePromptProps } from '@intake24/common/prompts';
-import { SelectedAsServedImage } from '@intake24/common/types';
-import { AsServedParameters } from '@intake24/common/types/http';
+import type { PropType } from '@vue/composition-api';
+import type { BasePromptProps } from '@intake24/common/prompts';
+import type { SelectedAsServedImage } from '@intake24/common/types';
+import type { AsServedParameters } from '@intake24/common/types/http';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';

@@ -1,4 +1,4 @@
-import { LocaleMessages } from 'vue-i18n';
+import type { LocaleMessages } from 'vue-i18n';
 import validation from './validation';
 
 const messages: LocaleMessages = {

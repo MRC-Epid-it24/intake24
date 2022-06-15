@@ -67,11 +67,11 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
-import { QuantityValues, ValidatedPromptProps } from '@intake24/common/prompts';
-import { LocaleTranslation, StandardPortionUnit } from '@intake24/common/types';
+import type { QuantityValues, ValidatedPromptProps } from '@intake24/common/prompts';
+import type { LocaleTranslation, StandardPortionUnit } from '@intake24/common/types';
 import ErrorAlert from '@intake24/survey/components/elements/ErrorAlert.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
 import localeContent from '@intake24/survey/components/mixins/localeContent';

@@ -1,5 +1,5 @@
 import { copy } from '@intake24/common/util';
-import { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
+import type { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import type { PromptQuestion, QuantityValues } from '..';
 import { basePromptProps, promptValidation, ValidatedPromptProps } from './base';
 

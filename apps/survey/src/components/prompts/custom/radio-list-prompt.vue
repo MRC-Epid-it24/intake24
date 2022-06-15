@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { RadioListPromptProps, radioListPromptProps } from '@intake24/common/prompts';
 import BasePrompt, { Prompt } from '../BasePrompt';

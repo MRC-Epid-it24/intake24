@@ -1,4 +1,4 @@
-import { Range, Sex } from './shared';
+import type { Range, Sex } from './shared';
 
 export type HenryCoefficient = {
   id: string;

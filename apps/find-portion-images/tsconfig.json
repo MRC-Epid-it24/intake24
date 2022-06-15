@@ -7,21 +7,8 @@
       "@intake24/api/*": ["../api/src/*"],
       "@intake24/*": ["../../packages/*/src"]
     },
-    "types": [
-      "node",
-      "webpack-env"
-    ],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "types": ["node", "webpack-env"]
   },
-  "include": [
-    "src/**/*.ts",
-  ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/*.spec.ts",
-    "**/*.test.ts",
-    ".vscode"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.test.ts", ".vscode"]
 }

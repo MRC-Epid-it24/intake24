@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import { User } from '@intake24/db';
+import type { User } from '@intake24/db';
 import { asValue } from 'awilix';
 import type { Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';

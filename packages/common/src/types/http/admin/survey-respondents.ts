@@ -1,4 +1,4 @@
-import { CustomField } from '../..';
+import type { CustomField } from '../..';
 import type { Pagination, UserSurveyAliasAttributes } from '../../models';
 
 export interface SurveyRespondentEntry

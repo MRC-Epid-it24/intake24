@@ -95,15 +95,15 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
-import { VImg } from 'vuetify/lib';
-import { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
-import { GuideImageResponse } from '@intake24/common/types/http/foods';
-import { LocaleTranslation, HasPartialAnswerTriggerHandler } from '@intake24/common/types';
+import type { VImg } from 'vuetify/lib';
+import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
+import type { GuideImageResponse } from '@intake24/common/types/http/foods';
+import type { LocaleTranslation, HasPartialAnswerTriggerHandler } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';

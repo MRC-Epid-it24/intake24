@@ -43,10 +43,10 @@
 <script lang="ts">
 import Vue, { VueConstructor, PropType } from 'vue';
 import { mapActions, mapState } from 'pinia';
-import { DataOptions } from 'vuetify';
+import type { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
-import { Dictionary } from '@intake24/common/types';
-import { Pagination, PaginationMeta } from '@intake24/common/types/models';
+import type { Dictionary } from '@intake24/common/types';
+import type { Pagination, PaginationMeta } from '@intake24/common/types/models';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import handlesLoading from '@intake24/admin/mixins/handles-loading';
 import hasResource from '@intake24/admin/mixins/has-resource';

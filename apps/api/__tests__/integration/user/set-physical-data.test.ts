@@ -1,6 +1,6 @@
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { feedbackPhysicalDataFields } from '@intake24/common/feedback';
-import { UserPhysicalDataAttributes } from '@intake24/common/types/models/system';
+import type { UserPhysicalDataAttributes } from '@intake24/common/types/models/system';
 import { FeedbackScheme, PhysicalActivityLevel, Survey } from '@intake24/db';
 
 export default () => {

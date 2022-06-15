@@ -51,8 +51,8 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
-import { FoodState, FreeTextFood } from '@intake24/common/types';
+import type { PropType } from '@vue/composition-api';
+import type { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';

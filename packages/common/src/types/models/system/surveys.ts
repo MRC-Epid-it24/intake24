@@ -1,5 +1,5 @@
 import type { SchemeOverrides } from '../../../schemes';
-import { OmitAndOptional } from '../model';
+import type { OmitAndOptional } from '../model';
 
 export const surveyStates = ['notStarted', 'active', 'suspended'] as const;
 

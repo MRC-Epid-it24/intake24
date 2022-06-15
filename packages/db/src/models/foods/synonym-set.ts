@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import {
+import type {
   SynonymSetsAttributes,
   SynonymSetsAttributesCreationAttributes,
 } from '@intake24/common/types/models/foods';

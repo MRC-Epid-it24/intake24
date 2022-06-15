@@ -24,7 +24,7 @@ import { defineComponent, PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { BasePromptProps, submitPromptProps } from '@intake24/common/prompts';
 import { LocaleTranslation, replaceInTranslation } from '@intake24/common/types';
-import { FoodSearchResponse } from '@intake24/common/types/http';
+import type { FoodSearchResponse } from '@intake24/common/types/http';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import FoodSearchResults from '@intake24/survey/components/elements/FoodSearchResults.vue';

@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { PaginateQuery, FoodsLocale, SystemLocale, WhereOptions } from '@intake24/db';
 import type { LocaleEntry, LocalesResponse } from '@intake24/common/types/http/admin';
-import { LocaleAttributes } from '@intake24/common/types/models';
+import type { LocaleAttributes } from '@intake24/common/types/models';
 import { foodDatabaseMaintainerPrefix, foodsAdmin } from '@intake24/common/security';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { Controller, CrudActions } from '../../controller';

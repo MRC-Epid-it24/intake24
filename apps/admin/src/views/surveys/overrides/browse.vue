@@ -30,13 +30,13 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { defaultOverrides, flattenScheme, SchemeOverrides } from '@intake24/common/schemes';
-import { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
-import { PromptQuestion } from '@intake24/common/prompts';
+import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
+import type { PromptQuestion } from '@intake24/common/prompts';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import MealList from '@intake24/admin/components/meals/meal-list.vue';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { form } from '@intake24/admin/helpers';
-import { FormMixin } from '@intake24/admin/types';
+import type { FormMixin } from '@intake24/admin/types';
 
 export type SurveyOverridesForm = { surveySchemeOverrides: SchemeOverrides };
 

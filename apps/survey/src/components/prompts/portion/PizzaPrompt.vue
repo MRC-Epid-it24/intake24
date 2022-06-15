@@ -98,14 +98,14 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import {
   PizzaPromptProps,
   pizzaPromptDefaultProps,
   ImageMapSelectorProps,
 } from '@intake24/common/prompts';
-import { ImageMapEmit } from '@intake24/common/types/http/foods';
+import type { ImageMapEmit } from '@intake24/common/types/http/foods';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';

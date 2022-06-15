@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { TopFoodData } from '@intake24/ui/feedback';
+import type { TopFoodData } from '@intake24/ui/feedback';
 import type { EChartsOption } from 'echarts';
 import { use } from 'echarts/core';
 import { PieChart } from 'echarts/charts';

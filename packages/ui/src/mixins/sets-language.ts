@@ -1,4 +1,4 @@
-import { I18nLanguageEntry } from '@intake24/common/types/http';
+import type { I18nLanguageEntry } from '@intake24/common/types/http';
 import { defineComponent } from '@vue/composition-api';
 import { useApp } from '../stores';
 

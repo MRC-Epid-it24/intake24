@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { Resource } from '@intake24/admin/types';
+import type { Resource } from '@intake24/admin/types';
 
 export default defineComponent({
   name: 'MenuItem',

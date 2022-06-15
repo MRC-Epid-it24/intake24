@@ -1,13 +1,13 @@
-import { FeedbackSchemeEntry } from './feedback-schemes';
-import { LanguageListEntry } from './languages';
-import {
+import type { FeedbackSchemeEntry } from './feedback-schemes';
+import type { LanguageListEntry } from './languages';
+import type {
   SurveyAttributes,
   SurveyCreationAttributes,
   Pagination,
   UserSecurableAttributes,
 } from '../../models';
-import { LocaleListEntry } from './locales';
-import { SurveySchemeEntry } from './survey-schemes';
+import type { LocaleListEntry } from './locales';
+import type { SurveySchemeEntry } from './survey-schemes';
 
 export interface SurveyRequest extends Omit<SurveyCreationAttributes, 'startDate' | 'endDate'> {
   startDate: string;

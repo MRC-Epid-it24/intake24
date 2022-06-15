@@ -1,4 +1,4 @@
-import { FoodHeader } from '@intake24/common/types/http';
+import type { FoodHeader } from '@intake24/common/types/http';
 
 export interface CategoryHeader {
   code: string;

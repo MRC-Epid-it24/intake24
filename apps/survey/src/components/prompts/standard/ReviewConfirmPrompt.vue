@@ -63,9 +63,9 @@
 import { defineComponent, PropType } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
-import { FoodState, MealState, MealTime } from '@intake24/common/types';
+import type { FoodState, MealState, MealTime } from '@intake24/common/types';
 import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
-import { BasePromptProps } from '@intake24/common/prompts';
+import type { BasePromptProps } from '@intake24/common/prompts';
 import SurveyProgressBar from '@intake24/survey/components/elements/SurveyProgressBar.vue';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import BasePrompt from '../BasePrompt';

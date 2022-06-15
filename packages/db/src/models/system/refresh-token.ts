@@ -8,7 +8,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import {
+import type {
   RefreshTokenAttributes,
   RefreshTokenCreationAttributes,
 } from '@intake24/common/types/models';

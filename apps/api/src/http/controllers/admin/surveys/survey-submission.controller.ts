@@ -6,7 +6,7 @@ import type {
   SurveySubmissionEntry,
   SurveySubmissionsResponse,
 } from '@intake24/common/types/http/admin';
-import { SurveySubmissionAttributes } from '@intake24/common/types/models';
+import type { SurveySubmissionAttributes } from '@intake24/common/types/models';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { Controller } from '../../controller';
 import { getAndCheckSurveyAccess } from './survey.controller';

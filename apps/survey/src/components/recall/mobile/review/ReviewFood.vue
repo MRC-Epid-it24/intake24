@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { FoodState } from '@intake24/common/types';
+import type { FoodState } from '@intake24/common/types';
 
 export default defineComponent({
   name: 'ReviewFood',

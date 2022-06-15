@@ -1,4 +1,4 @@
-import { DemographicGroup, DemographicGroupScaleSector } from '@intake24/common/feedback';
+import type { DemographicGroup, DemographicGroupScaleSector } from '@intake24/common/feedback';
 import { copy, randomString } from '@intake24/common/util';
 
 export const demographicGroupScaleSectorDefaults: DemographicGroupScaleSector = {

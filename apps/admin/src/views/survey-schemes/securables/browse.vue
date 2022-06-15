@@ -7,8 +7,8 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
-import { DetailMixin } from '@intake24/admin/types';
-import { SurveySchemeEntry } from '@intake24/common/types/http/admin';
+import type { DetailMixin } from '@intake24/admin/types';
+import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { Securables } from '@intake24/admin/components/securables';
 
 export default (Vue as VueConstructor<Vue & DetailMixin<SurveySchemeEntry>>).extend({

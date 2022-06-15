@@ -1,4 +1,4 @@
-import { NutrientTypeAttributes, Pagination } from '../../models';
+import type { NutrientTypeAttributes, Pagination } from '../../models';
 
 export type NutrientTypesResponse = Pagination<NutrientTypeAttributes>;
 

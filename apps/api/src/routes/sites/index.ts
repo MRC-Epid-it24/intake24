@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import type { Router } from 'express';
 import admin from './admin';
 import docs from './docs';
 import survey from './survey';

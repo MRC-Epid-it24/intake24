@@ -55,8 +55,8 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { GuideImageEntry } from '@intake24/common/types/http/admin';
-import { FormMixin } from '@intake24/admin/types';
+import type { GuideImageEntry } from '@intake24/common/types/http/admin';
+import type { FormMixin } from '@intake24/admin/types';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 

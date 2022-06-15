@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { ValidationError as ExpressValidationError } from 'express-validator';
+import type { ValidationError as ExpressValidationError } from 'express-validator';
 import { pick } from 'lodash';
 import { FeedbackScheme, Survey, User } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { FoodHeader } from '@intake24/common/types/http';
+import type { FoodHeader } from '@intake24/common/types/http';
 
 export interface AssociatedFoodPromptState {
   confirmed: boolean | undefined;

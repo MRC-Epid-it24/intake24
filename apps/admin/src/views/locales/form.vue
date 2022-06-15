@@ -149,10 +149,10 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import orderBy from 'lodash/orderBy';
-import { LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
+import type { LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
-import { FormMixin } from '@intake24/admin/types';
+import type { FormMixin } from '@intake24/admin/types';
 
 type LocaleForm = {
   id: string | null;

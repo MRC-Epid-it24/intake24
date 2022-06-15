@@ -1,5 +1,5 @@
-import { PhysicalActivityLevelAttributes } from '../models/foods';
-import { WeightTargetCoefficient } from '../../feedback';
+import type { PhysicalActivityLevelAttributes } from '../models/foods';
+import type { WeightTargetCoefficient } from '../../feedback';
 
 export type NutrientType = {
   id: string;

@@ -68,12 +68,12 @@ import {
   MealSection,
   SurveyQuestionSection,
 } from '@intake24/common/schemes';
-import {
+import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
 } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
-import { DetailMixin } from '@intake24/admin/types';
+import type { DetailMixin } from '@intake24/admin/types';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 
 export type SchemeStatus = {

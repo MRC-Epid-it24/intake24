@@ -3,7 +3,7 @@ import type {
   ImageMapResponse,
   ImageMapObjectResponse,
 } from '@intake24/common/types/http';
-import { GuideImage, ImageMap, ImageMapObject } from '@intake24/db';
+import type { GuideImage, ImageMap, ImageMapObject } from '@intake24/db';
 import { InternalServerError } from '@intake24/api/http/errors';
 
 export interface ImageMapsResponse {

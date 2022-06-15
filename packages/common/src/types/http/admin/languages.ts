@@ -1,5 +1,5 @@
-import { TextDirection } from '../../common';
-import { LanguageAttributes, LanguageTranslationAttributes, Pagination } from '../../models';
+import type { TextDirection } from '../../common';
+import type { LanguageAttributes, LanguageTranslationAttributes, Pagination } from '../../models';
 
 export type LanguageRequest = {
   id: string;

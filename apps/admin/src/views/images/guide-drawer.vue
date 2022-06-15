@@ -111,7 +111,7 @@
 
 <script lang="ts">
 import Vue, { VueConstructor, PropType } from 'vue';
-import {
+import type {
   GuideImageEntry,
   GuideImageEntryObject,
   ImageMapEntry,
@@ -119,7 +119,7 @@ import {
 } from '@intake24/common/types/http/admin';
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
-import { VImg } from 'vuetify/lib';
+import type { VImg } from 'vuetify/lib';
 import { ConfirmDialog } from '@intake24/ui';
 
 type Refs = {

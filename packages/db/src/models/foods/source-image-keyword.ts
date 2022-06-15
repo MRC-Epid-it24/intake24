@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { SourceImageKeywordAttributes } from '@intake24/common/types/models/foods';
+import type { SourceImageKeywordAttributes } from '@intake24/common/types/models/foods';
 import BaseModel from '../model';
 import { SourceImage } from '.';
 

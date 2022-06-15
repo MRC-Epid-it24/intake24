@@ -1,5 +1,5 @@
-import { LocaleTranslation } from '../types';
-import { Sentiment } from './shared';
+import type { LocaleTranslation } from '../types';
+import type { Sentiment } from './shared';
 
 export enum NutrientTypeIdEnum {
   Energy = '1',

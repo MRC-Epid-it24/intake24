@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
-import {
+import type {
   FoodPortionSizeMethodAttributes,
   FoodPortionSizeMethodCreationAttributes,
   PortionSizeMethodId,

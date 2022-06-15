@@ -15,9 +15,9 @@
 
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
-import { BasePromptProps } from '@intake24/common/prompts';
-import { FoodState, RecallPromptHandler } from '@intake24/common/types';
+import type { PropType } from '@vue/composition-api';
+import type { BasePromptProps } from '@intake24/common/prompts';
+import type { FoodState, RecallPromptHandler } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
 import EditMealPrompt, {
   EditMealPromptMethods,

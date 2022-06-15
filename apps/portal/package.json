@@ -13,7 +13,6 @@
     "build:back": "pnpm build:back:clean && webpack --env NODE_ENV=production",
     "build:back:clean": "rimraf dist",
     "build:front": "mix --production",
-    "build:front:clean": "rimraf public",
     "build:sitemap": "node scripts/sitemap.mjs",
     "dev": "run-p dev:back dev:front",
     "dev:back": "webpack --env NODE_ENV=development",

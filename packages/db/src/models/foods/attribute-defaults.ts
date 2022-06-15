@@ -1,5 +1,5 @@
 import { Column, DataType, Table } from 'sequelize-typescript';
-import {
+import type {
   AttributeDefaultsAttributes,
   AttributeDefaultsCreationAttributes,
   UseInRecipeType,

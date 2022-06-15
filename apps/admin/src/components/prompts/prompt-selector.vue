@@ -133,7 +133,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref } from '@vue/composition-api';
 import { copy, merge } from '@intake24/common/util';
-import { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
+import type { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
 import {
   PromptQuestion,
   QuestionType,
@@ -147,7 +147,7 @@ import {
   portionSizePrompts,
   standardPrompts,
 } from '@intake24/admin/components/prompts';
-import { RuleCallback } from '@intake24/admin/types';
+import type { RuleCallback } from '@intake24/admin/types';
 import PromptTypeSelector from './prompt-type-selector.vue';
 import { LanguageSelector } from '../forms';
 

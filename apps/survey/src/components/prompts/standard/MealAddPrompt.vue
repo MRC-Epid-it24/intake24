@@ -39,7 +39,7 @@
 import { defineComponent, PropType } from '@vue/composition-api';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
-import { BasePromptProps } from '@intake24/common/prompts';
+import type { BasePromptProps } from '@intake24/common/prompts';
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({

@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
-import { TokenPayload } from '@intake24/common/security';
-import { FrontEnd } from '@intake24/common/types';
+import type { TokenPayload } from '@intake24/common/security';
+import type { FrontEnd } from '@intake24/common/types';
 
 export default {
   decodeAccessToken(accessToken: string, frontEnd: FrontEnd): TokenPayload {

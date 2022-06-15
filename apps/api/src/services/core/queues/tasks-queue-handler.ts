@@ -5,7 +5,7 @@ import type { IoC } from '@intake24/api/ioc';
 import ioc from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
 import { sleep } from '@intake24/api/util';
-import { QueueHandler } from './queue-handler';
+import type { QueueHandler } from './queue-handler';
 
 export default class TasksQueueHandler implements QueueHandler<JobData> {
   readonly name = 'it24-tasks';

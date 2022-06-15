@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
-import { PublicSurveyEntryResponse } from '@intake24/common/types/http';
+import type { PublicSurveyEntryResponse } from '@intake24/common/types/http';
 
 export default () => {
   let url: string;

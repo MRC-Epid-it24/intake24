@@ -1,6 +1,6 @@
 import { inspect } from 'util';
 import Ajv, { ValidateFunction as AjvValidateFunction } from 'ajv';
-import { GuideImageInputObjects } from '../../types/http/admin/guide-images';
+import type { GuideImageInputObjects } from '../../types/http/admin/guide-images';
 
 export const ajv = new Ajv({
   allErrors: true,

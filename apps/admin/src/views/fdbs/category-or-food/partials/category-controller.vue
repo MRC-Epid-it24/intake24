@@ -34,8 +34,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import isEqual from 'lodash/isEqual';
-import { CategoryAttributes } from '@intake24/common/types/models';
-import { Errors } from '@intake24/common/util';
+import type { CategoryAttributes } from '@intake24/common/types/models';
+import type { Errors } from '@intake24/common/util';
 import LoadCategoryDialog from './add-category-dialog.vue';
 
 export default defineComponent({

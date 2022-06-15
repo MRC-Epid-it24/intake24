@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
-import { AsServedImageEntry } from '@intake24/common/types/http/admin';
+import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/images/as-served/asServedSetForImages/images';

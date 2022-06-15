@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import { pick } from 'lodash';
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
-import { AsServedSetEntry } from '@intake24/common/types/http/admin';
+import type { AsServedSetEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/images/as-served';

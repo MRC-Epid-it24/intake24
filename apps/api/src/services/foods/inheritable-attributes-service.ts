@@ -1,4 +1,4 @@
-import { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
+import type { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
 import { AttributeDefaults, CategoryAttribute, FoodAttribute } from '@intake24/db';
 import {
   getCategoryParentCategories,

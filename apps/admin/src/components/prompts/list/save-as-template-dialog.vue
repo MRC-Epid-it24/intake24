@@ -69,10 +69,13 @@ import Vue, { VueConstructor, PropType } from 'vue';
 import pick from 'lodash/pick';
 import { mapActions } from 'pinia';
 import { copy } from '@intake24/common/util';
-import { SurveySchemeQuestionEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
-import { PromptQuestion } from '@intake24/common/prompts';
-import { ValidationError } from '@intake24/common/types';
-import { MapRefsMixin } from '@intake24/admin/types';
+import type {
+  SurveySchemeQuestionEntry,
+  SurveySchemeRefs,
+} from '@intake24/common/types/http/admin';
+import type { PromptQuestion } from '@intake24/common/prompts';
+import type { ValidationError } from '@intake24/common/types';
+import type { MapRefsMixin } from '@intake24/admin/types';
 import { form } from '@intake24/admin/helpers';
 import mapRefs from '@intake24/admin/components/entry/map-refs';
 import { useEntry } from '@intake24/admin/stores';

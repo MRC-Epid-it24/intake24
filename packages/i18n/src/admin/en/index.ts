@@ -1,4 +1,4 @@
-import { LocaleMessages } from 'vue-i18n';
+import type { LocaleMessages } from 'vue-i18n';
 import common from './common';
 import dashboard from './dashboard';
 import fdbs from './fdbs';

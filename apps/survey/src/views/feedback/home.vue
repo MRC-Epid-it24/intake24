@@ -103,7 +103,7 @@ import {
   buildTopFoods,
   buildCardParams,
 } from '@intake24/ui/feedback';
-import { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
+import type { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
 import {
   FeedbackChartArea,
   FeedbackCardArea,
@@ -112,7 +112,7 @@ import {
 } from '@intake24/ui/components/feedback';
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
-import { FeedbackOutput } from '@intake24/common/feedback';
+import type { FeedbackOutput } from '@intake24/common/feedback';
 
 export default defineComponent({
   name: 'FeedbackHome',

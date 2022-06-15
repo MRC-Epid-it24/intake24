@@ -1,6 +1,6 @@
-import { SurveySubmissionEntry } from '@intake24/common/types/http';
+import type { SurveySubmissionEntry } from '@intake24/common/types/http';
 import AggregateFoodStats from './aggregate-food-stats';
-import SurveyFood from './survey-food';
+import type SurveyFood from './survey-food';
 import SurveySubmission from './survey-submission';
 
 export type FruitAndVegPortions = {

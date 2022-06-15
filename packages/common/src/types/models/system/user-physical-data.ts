@@ -1,4 +1,4 @@
-import { Sex, WeightTarget } from '../../../feedback';
+import type { Sex, WeightTarget } from '../../../feedback';
 
 export type UserPhysicalDataAttributes = {
   userId: string;

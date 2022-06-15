@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { User } from '@intake24/db';
+import type { User } from '@intake24/db';
 import type { Controller } from '@intake24/api/http/controllers';
 import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
 

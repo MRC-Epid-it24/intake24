@@ -5,8 +5,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import { mapState } from 'pinia';
-import { BasePromptProps } from '@intake24/common/prompts';
-import { CustomPromptAnswer } from '@intake24/common/types';
+import type { BasePromptProps } from '@intake24/common/prompts';
+import type { CustomPromptAnswer } from '@intake24/common/types';
 import customPrompts from '@intake24/survey/components/prompts/custom';
 import { useSurvey } from '@intake24/survey/stores';
 

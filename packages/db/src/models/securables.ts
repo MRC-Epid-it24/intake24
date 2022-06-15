@@ -1,5 +1,5 @@
-import { Model as BaseModel } from 'sequelize-typescript';
-import { UserSecurableAttributes } from '@intake24/common/types/models';
+import type { Model as BaseModel } from 'sequelize-typescript';
+import type { UserSecurableAttributes } from '@intake24/common/types/models';
 
 export interface Securable extends BaseModel {
   ownerId: string | null;

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
-import { GuideImageEntry } from '@intake24/common/types/http/admin';
+import type { GuideImageEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/images/guides';

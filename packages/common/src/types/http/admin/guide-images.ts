@@ -1,5 +1,5 @@
-import { ImageMapListEntry, ImageMapEntryObject, ImageMapEntry } from './image-maps';
-import { ImageMapAttributes, Pagination } from '../../models';
+import type { ImageMapListEntry, ImageMapEntryObject, ImageMapEntry } from './image-maps';
+import type { ImageMapAttributes, Pagination } from '../../models';
 
 export interface GuideImageEntryObject extends ImageMapEntryObject {
   weight: number;

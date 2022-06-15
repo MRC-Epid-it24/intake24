@@ -86,7 +86,7 @@
 import Vue, { PropType, VueConstructor } from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
-import {
+import type {
   FeedbackSchemeEntry,
   FeedbackSchemesResponse,
   SurveySchemeEntry,

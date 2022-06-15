@@ -3,7 +3,7 @@ import slugify from 'slugify';
 import { randomUUID } from 'node:crypto';
 import { randomString } from '@intake24/common/util';
 import { jobTypes } from '@intake24/common/types';
-import {
+import type {
   PermissionRequest,
   RoleRequest,
   CreateLocaleRequest,

@@ -95,7 +95,7 @@
 import Vue, { VueConstructor, PropType } from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
-import { PromptQuestion } from '@intake24/common/prompts';
+import type { PromptQuestion } from '@intake24/common/prompts';
 
 type LoadPromptDialog = {
   debouncedFetch: () => void;

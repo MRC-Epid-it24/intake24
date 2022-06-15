@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
-import { JobEntry } from '@intake24/common/types/http/admin';
+import type { JobEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'PollsJobList',

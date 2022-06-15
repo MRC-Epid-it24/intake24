@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { defineStore } from 'pinia';
-import {
+import type {
   FoodState,
   MealState,
   CustomPromptAnswer,
@@ -11,7 +11,7 @@ import {
   EncodedFood,
   FreeTextFood,
 } from '@intake24/common/types';
-import { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
+import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { copy } from '@intake24/common/util';
 import { useLoading } from '@intake24/ui/stores';

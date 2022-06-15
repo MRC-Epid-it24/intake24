@@ -1,4 +1,4 @@
-import { ValidationError as ExpressValidationError } from 'express-validator';
+import type { ValidationError as ExpressValidationError } from 'express-validator';
 
 export default class ValidationError extends Error {
   public errors: { [name: string]: ExpressValidationError } = {};

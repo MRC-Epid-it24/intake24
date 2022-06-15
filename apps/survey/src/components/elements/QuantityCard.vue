@@ -50,7 +50,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { QuantityValues } from '@intake24/common/prompts';
+import type { QuantityValues } from '@intake24/common/prompts';
 
 export default defineComponent({
   name: 'QuantityCard',

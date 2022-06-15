@@ -1,6 +1,6 @@
 import { BelongsTo, Column, DataType, ForeignKey, Table, Scopes } from 'sequelize-typescript';
 import { FoodsLocale, Food, Category } from '@intake24/db';
-import {
+import type {
   AssociatedFoodAttributes,
   AssociatedFoodCreationAttributes,
 } from '@intake24/common/types/models';

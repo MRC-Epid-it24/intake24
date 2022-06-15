@@ -6,7 +6,7 @@ import {
   NutrientTableRecordField,
   NutrientTableRecordNutrient,
 } from '@intake24/db';
-import {
+import type {
   NutrientTableRecordAttributes,
   NutrientTableRecordCreationAttributes,
 } from '@intake24/common/types/models';

@@ -107,7 +107,7 @@ import { defineComponent, PropType } from '@vue/composition-api';
 import { form } from '@intake24/admin/helpers';
 import { useLoading } from '@intake24/ui/stores';
 import { downloadFile } from '@intake24/ui/util';
-import { SurveyRespondentEntry } from '@intake24/common/types/http/admin';
+import type { SurveyRespondentEntry } from '@intake24/common/types/http/admin';
 
 type RespondentFeedback = {
   email: string | null;

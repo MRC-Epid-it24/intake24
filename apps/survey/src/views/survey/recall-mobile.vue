@@ -91,7 +91,7 @@
 <script lang="ts">
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
-import { FoodState } from '@intake24/common/types';
+import type { FoodState } from '@intake24/common/types';
 import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
 import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
 import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';

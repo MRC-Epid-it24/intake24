@@ -1,6 +1,6 @@
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 import { CategoryPortionSizeMethodParameter } from '@intake24/db';
-import {
+import type {
   PortionSizeMethodId,
   CategoryPortionSizeMethodAttributes,
   CategoryPortionSizeMethodCreationAttributes,

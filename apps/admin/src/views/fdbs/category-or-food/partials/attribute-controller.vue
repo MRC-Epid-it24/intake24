@@ -99,7 +99,7 @@ import {
   Nullable,
   useInRecipeTypes,
 } from '@intake24/common/types/models';
-import { Errors } from '@intake24/common/util';
+import type { Errors } from '@intake24/common/util';
 
 const defaultAttributes: Attributes = {
   sameAsBeforeOption: false,

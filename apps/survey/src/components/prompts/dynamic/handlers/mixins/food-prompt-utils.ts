@@ -1,7 +1,7 @@
 import { defineComponent } from '@vue/composition-api';
 import { mapState } from 'pinia';
-import { EncodedFood, LocaleTranslation } from '@intake24/common/types';
-import { UserPortionSizeMethod } from '@intake24/common/types/http';
+import type { EncodedFood, LocaleTranslation } from '@intake24/common/types';
+import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({

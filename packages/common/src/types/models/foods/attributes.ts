@@ -1,4 +1,4 @@
-import { Nullable, OmitAndOptional } from '../model';
+import type { Nullable, OmitAndOptional } from '../model';
 
 export const useInRecipeTypes = {
   USE_ANYWHERE: 0,

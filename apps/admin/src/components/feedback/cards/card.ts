@@ -1,4 +1,4 @@
-import { Card, CardType } from '@intake24/common/feedback';
+import type { Card, CardType } from '@intake24/common/feedback';
 
 const baseTab = ['general', 'content'];
 const customTab = [...baseTab, 'unit', 'thresholds'];

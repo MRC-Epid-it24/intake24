@@ -1,6 +1,6 @@
 import { defineComponent } from '@vue/composition-api';
-import { JobEntry } from '@intake24/common/types/http/admin';
-import { JobType } from '@intake24/common/types';
+import type { JobEntry } from '@intake24/common/types/http/admin';
+import type { JobType } from '@intake24/common/types';
 import { downloadFile } from '@intake24/ui/util';
 import PollsJobList from './polls-job-list.vue';
 

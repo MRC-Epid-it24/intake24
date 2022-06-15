@@ -53,12 +53,12 @@
 <script lang="ts">
 import Vue, { VueConstructor } from 'vue';
 import { mapState } from 'pinia';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from '@vue/composition-api';
 import { merge } from '@intake24/common/util';
 import { useSurvey } from '@intake24/survey/stores';
 import { BasePromptProps, basePromptProps } from '@intake24/common/prompts';
-import { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
-import { LocaleTranslation } from '@intake24/common/types';
+import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
+import type { LocaleTranslation } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import BasePortion, { Portion } from './BasePortion';
 

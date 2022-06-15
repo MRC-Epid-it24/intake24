@@ -4,7 +4,7 @@ import path from 'node:path';
 import type { CleanStorageFilesParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import { addTime } from '@intake24/api/util';
-import { LocalLocation } from '@intake24/api/config/filesystem';
+import type { LocalLocation } from '@intake24/api/config/filesystem';
 import BaseJob from './job';
 
 export default class CleanStorageFiles extends BaseJob<CleanStorageFilesParams> {

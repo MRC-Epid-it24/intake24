@@ -198,8 +198,8 @@
 import draggable from 'vuedraggable';
 import { defineComponent, PropType, ref } from '@vue/composition-api';
 import { DemographicGroup, nutrientRuleTypes, sexes } from '@intake24/common/feedback';
-import { NutrientTypeEntry } from '@intake24/common/types/http/admin';
-import { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
+import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
 import { useEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';

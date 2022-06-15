@@ -1,4 +1,4 @@
-import { ParamSchema } from 'express-validator';
+import type { ParamSchema } from 'express-validator';
 import { isNaN, toNumber } from 'lodash';
 import { Permission, Role } from '@intake24/db';
 

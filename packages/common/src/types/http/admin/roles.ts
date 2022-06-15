@@ -1,5 +1,5 @@
-import { RoleAttributes, RoleAssociations, Pagination } from '../../models';
-import { PermissionListEntry } from './permissions';
+import type { RoleAttributes, RoleAssociations, Pagination } from '../../models';
+import type { PermissionListEntry } from './permissions';
 
 export type RoleRequest = {
   name: string;
