@@ -4,9 +4,6 @@ const { defineConfig } = require('eslint-define-config');
 module.exports = defineConfig({
   root: true,
   env: {
-    browser: false,
-    commonjs: true,
-    es6: true,
     node: true,
   },
   parserOptions: {
