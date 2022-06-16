@@ -10,6 +10,10 @@ export interface CreateUserWithSecurables
   actions: string[];
 }
 
+export type UpdateSecurableOwnerRequest = {
+  userId: string | null;
+};
+
 export interface UserSecurableListEntry extends UserListEntry {
   securables: UserSecurableAttributes[];
 }

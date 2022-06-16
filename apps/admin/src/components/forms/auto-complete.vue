@@ -17,7 +17,7 @@
       value,
     }"
     :search-input.sync="search"
-    @input="$emit('input', $event)"
+    @input="input($event)"
   ></v-autocomplete>
 </template>
 
@@ -135,6 +135,12 @@ export default (Vue as VueConstructor<Vue & AutoComplete>).extend({
       } finally {
         this.isLoading = false;
       }
+    },
+
+    input(value: any) {
+      const object = this.items.find((item) => item[this.itemValue] === value);
+      this.$emit('input', value);
+      this.$emit('update:object', object);
     },
 
     resolveResponseObject(data: any) {

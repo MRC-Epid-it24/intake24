@@ -10,6 +10,11 @@ const securables: LocaleMessageObject = {
   search: 'Search for user',
   create: 'Create new user',
 
+  owner: {
+    _: 'Owner',
+    title: 'Ownership',
+  },
+
   actions: {
     _: 'Resource action',
     title: 'Resource actions',

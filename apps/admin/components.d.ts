@@ -76,7 +76,11 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView'];
     SchemesCopySchemeDialog: typeof import('./src/components/schemes/copy-scheme-dialog.vue')['default'];
     SchemesLoadSectionDialog: typeof import('./src/components/schemes/load-section-dialog.vue')['default'];
+    SecurablesOwnerDialog: typeof import('./src/components/securables/owner-dialog.vue')['default'];
     SecurablesSecurable: typeof import('./src/components/securables/securable.vue')['default'];
+    'SecurablesSecurable copy': typeof import('./src/components/securables/securable copy.vue')['default'];
+    SecurablesUserDialog: typeof import('./src/components/securables/user-dialog.vue')['default'];
+    'SecurablesUserDialog copy': typeof import('./src/components/securables/user-dialog copy.vue')['default'];
     SidebarMenuItem: typeof import('./src/components/sidebar/menu-item.vue')['default'];
     SidebarMenuTree: typeof import('./src/components/sidebar/menu-tree.vue')['default'];
     ToolbarCreate: typeof import('./src/components/toolbar/create.vue')['default'];

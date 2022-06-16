@@ -13,6 +13,7 @@ export default (securable: SecurableType, controller: SecurableController) => {
     .post(validation.store(securable), wrapAsync(controller.store));
 
   router.get('/users', validation.browse, wrapAsync(controller.availableUsers));
+  router.post('/owner', validation.owner, wrapAsync(controller.owner));
 
   router.use('/:userId', validation.entry('userId'));
 

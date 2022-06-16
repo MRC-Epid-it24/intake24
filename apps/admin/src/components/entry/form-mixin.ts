@@ -68,7 +68,7 @@ export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
   },
 
   methods: {
-    ...mapActions(useEntry, ['updateEntry']),
+    ...mapActions(useEntry, ['setEntry']),
 
     toForm(data: Dictionary) {
       this.setOriginalEntry(data);
@@ -92,7 +92,7 @@ export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
         this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }).toString());
       }
 
-      await this.updateEntry(data);
+      this.setEntry(data);
     },
 
     clearError(event: KeyboardEvent) {

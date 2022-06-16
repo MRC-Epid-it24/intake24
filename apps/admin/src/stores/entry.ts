@@ -41,7 +41,7 @@ export const useEntry = defineStore('entry', {
 
       try {
         const { data } = await http.get(`${api}/${id}`, { params: query });
-        await this.updateEntry(data);
+        this.setEntry(data);
         await this.requestRefs();
       } catch (err: any) {
         this.error = err;
@@ -75,8 +75,12 @@ export const useEntry = defineStore('entry', {
       this.data = { ...{ id: null } };
     },
 
-    async updateEntry(data?: Dictionary) {
+    setEntry(data?: Dictionary) {
       if (data) this.data = { ...(data ?? { id: null }) };
+    },
+
+    updateEntry(data: Partial<Dictionary>) {
+      this.data = { ...this.data, ...data };
     },
 
     clearRefs() {

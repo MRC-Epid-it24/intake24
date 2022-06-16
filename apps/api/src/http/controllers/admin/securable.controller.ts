@@ -10,12 +10,13 @@ import type {
   CreateUserWithSecurables,
   UsersWithSecurablesResponse,
   AvailableUsersWithSecurablesResponse,
+  UpdateSecurableOwnerRequest,
 } from '@intake24/common/types/http/admin';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
 import type { Controller } from '../controller';
 
 export type SecurableController = Controller<
-  'browse' | 'store' | 'update' | 'destroy' | 'availableUsers'
+  'browse' | 'store' | 'update' | 'destroy' | 'availableUsers' | 'owner'
 >;
 
 export default ({
@@ -128,8 +129,9 @@ export default ({
 
       if (!actionsMatch) {
         const records = actions.map((action) => ({ userId, securableId, securableType, action }));
+
         await UserSecurable.destroy({ where: { userId, securableId, securableType } });
-        Promise.all([
+        await Promise.all([
           UserSecurable.bulkCreate(records),
           adminUserService.addPermissionByName(user, resource),
         ]);
@@ -207,11 +209,27 @@ export default ({
     res.json(users);
   };
 
+  const owner = async (
+    req: Request<Record<string, string>, any, UpdateSecurableOwnerRequest>,
+    res: Response<undefined>
+  ): Promise<void> => {
+    const securableRecord = await getAndCheckAccess(req, 'securables');
+
+    const {
+      body: { userId },
+    } = req;
+
+    await securableRecord.update({ ownerId: userId });
+
+    res.json();
+  };
+
   return {
     browse,
     store,
     update,
     destroy,
     availableUsers,
+    owner,
   };
 };

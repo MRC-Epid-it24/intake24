@@ -8,6 +8,7 @@ import type {
   TopFoods,
 } from '../../../feedback';
 import type { OmitAndOptional } from '../model';
+import type { UserAttributes } from './users';
 
 export type FeedbackSchemeAttributes = {
   id: string;
@@ -29,6 +30,10 @@ export type FeedbackSchemeCreationAttributes = OmitAndOptional<
   'id' | 'createdAt' | 'updatedAt',
   'ownerId'
 >;
+
+export type FeedbackSchemeAssociations = {
+  owner?: UserAttributes[];
+};
 
 export const updateFeedbackSchemeFields = [
   'name',
