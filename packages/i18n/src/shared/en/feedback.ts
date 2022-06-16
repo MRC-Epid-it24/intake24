@@ -75,13 +75,13 @@ const feedback: LocaleMessageObject = {
 
   unitDescription: {
     percentage_of_energy:
-      'Feedback is based on the contribution of the corresponding nutrient to your energy intake.',
+      'Feedback is based on the contribution of this nutrient to your energy intake and how it compares with recommendations.',
     energy_divided_by_bmr:
-      'Feedback is based on your energy intake divided by BMR fitting into optimal intake.',
+      'Feedback is based on your energy intake divided by BMR and how this compares to recommendations.',
     per_unit_of_weight:
-      'Feedback is based on your consumption of the corresponding nutrient per Kg of your weight fitting into optimal intake.',
+      'Feedback is based on your intake of this nutrient per kg of your body weight and how this compares with recommendations.',
     range:
-      'Feedback is based on your consumption of the corresponding nutrient fitting into optimal intake.',
+      'Feedback is based on your intake of this nutrient and how it compares with recommendations.',
   },
 };
 
