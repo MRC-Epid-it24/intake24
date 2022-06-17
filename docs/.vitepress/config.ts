@@ -3,9 +3,7 @@ import { description } from '../../package.json';
 
 export default defineConfig({
   title: 'Intake24',
-
   description,
-
   lang: 'en',
 
   head: [
@@ -13,6 +11,8 @@ export default defineConfig({
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],
   ],
+
+  vite: { server: { port: 8400 } },
 
   themeConfig: {
     repo: 'MRC-Epid-it24/intake24',
@@ -256,16 +256,28 @@ export default defineConfig({
               link: '/api/admin/feedback-schemes',
             },
             {
+              text: 'Permissions',
+              link: '/api/admin/permissions',
+            },
+            {
+              text: 'Roles',
+              link: '/api/admin/roles',
+            },
+            {
+              text: 'Securables',
+              link: '/api/admin/securables',
+            },
+            {
+              text: 'Sign-in logs',
+              link: '/api/admin/sign-in-logs',
+            },
+            {
               text: 'Survey schemes',
               link: '/api/admin/survey-schemes',
             },
             {
               text: 'Survey scheme questions',
               link: '/api/admin/survey-scheme-questions',
-            },
-            {
-              text: 'Sign-in logs',
-              link: '/api/admin/sign-in-logs',
             },
             {
               text: 'Surveys',
@@ -290,14 +302,6 @@ export default defineConfig({
             {
               text: 'Users',
               link: '/api/admin/users',
-            },
-            {
-              text: 'Roles',
-              link: '/api/admin/roles',
-            },
-            {
-              text: 'Permissions',
-              link: '/api/admin/permissions',
             },
           ],
         },
@@ -412,6 +416,14 @@ export default defineConfig({
             {
               text: 'Introduction',
               link: '/admin/acl/',
+            },
+            {
+              text: 'Resources',
+              link: '/admin/acl/resources',
+            },
+            {
+              text: 'Securables',
+              link: '/admin/acl/securables',
             },
             {
               text: 'Permissions',
