@@ -79,10 +79,9 @@ export default defineComponent({
 
   setup() {
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
-    const ownerDialog = ref<InstanceType<typeof OwnerDialog>>();
     const userDialog = ref<InstanceType<typeof UserDialog>>();
 
-    return { table, ownerDialog, userDialog };
+    return { table, userDialog };
   },
 
   data() {
@@ -130,20 +129,12 @@ export default defineComponent({
   },
 
   methods: {
-    addUser() {
-      this.userDialog?.add();
-    },
-
     editUser(item: UserSecurableListEntry) {
       this.userDialog?.edit(item);
     },
 
     async removeUser(userId: string) {
       await this.userDialog?.remove(userId);
-    },
-
-    editOwner() {
-      this.ownerDialog?.edit();
     },
 
     async updateTable() {

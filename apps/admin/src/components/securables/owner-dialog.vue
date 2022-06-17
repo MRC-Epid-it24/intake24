@@ -14,8 +14,13 @@
         <v-toolbar-title>
           {{ $t(`${resource}.securables.owner.title`) }}
         </v-toolbar-title>
+        <template v-slot:extension>
+          <div class="mx-auto">
+            <v-icon left>fa-search</v-icon>{{ $t(`${resource}.securables.search`) }}
+          </div>
+        </template>
       </v-toolbar>
-      <v-form ref="form" @keydown.native="clearError" @submit.prevent="save">
+      <v-form ref="form" @submit.prevent="save">
         <v-container>
           <v-card-text>
             <v-row>
@@ -96,29 +101,23 @@ export default defineComponent({
   data() {
     return {
       dialog: false,
-      form: form<OwnerDialogForm>({
-        userId: this.owner?.id ?? null,
-      }),
+      form: form<OwnerDialogForm>({ userId: null }),
       internalOwner: this.owner ? { ...this.owner } : undefined,
       isLoading: false,
     };
   },
 
-  methods: {
-    edit() {
-      this.dialog = true;
-    },
+  watch: {
+    dialog(val: boolean) {
+      if (!val) return;
 
+      this.form.userId = this.owner?.id ?? null;
+    },
+  },
+
+  methods: {
     reset() {
       this.dialog = false;
-      this.form.reset();
-      this.selected = null;
-    },
-
-    clearError(event: KeyboardEvent) {
-      const { name } = event.target as HTMLInputElement;
-
-      if (name) this.form.errors.clear(name);
     },
 
     async save() {

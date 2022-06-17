@@ -119,7 +119,7 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SurveySchemeRefs>>).ext
   },
 
   methods: {
-    ...mapActions(useEntry, ['updateRefs']),
+    ...mapActions(useEntry, ['setRefs']),
 
     close() {
       this.dialog = false;
@@ -137,7 +137,7 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SurveySchemeRefs>>).ext
       const templates = copy(this.refs.templates);
       templates.push(question);
 
-      this.updateRefs({ ...copy(this.refs), templates });
+      this.setRefs({ ...copy(this.refs), templates });
 
       this.close();
 

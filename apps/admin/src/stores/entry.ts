@@ -59,7 +59,7 @@ export const useEntry = defineStore('entry', {
 
       try {
         const { data } = await http.get(`${api}/refs`);
-        this.updateRefs(data);
+        this.setRefs(data);
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status !== 404) this.error = err;
       } finally {
@@ -87,7 +87,7 @@ export const useEntry = defineStore('entry', {
       this.refs = {};
     },
 
-    updateRefs(refs?: Dictionary) {
+    setRefs(refs?: Dictionary) {
       if (refs) this.refs = { ...refs };
     },
   },
