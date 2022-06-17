@@ -20,13 +20,13 @@ Source code is written in Typescript and can be flexibly deployed to various env
 Older version (v3) has been written only for Postgres and there are still few Postgres specifics that needs to be ported to dialect-agnostic code. Please contact Intake24 dev team for more details about current state of DB engines support.
 :::
 
-- [Redis](https://redis.io) is used for cache / queue / rate-limit / session services.
+- [Redis](https://redis.io) is used for `cache` / `queue` / `rate-limit` / `session` services.
 
-- [Puppeteer](https://github.com/puppeteer/puppeteer) is used for PDF generation. Make sure your OS has all necessary components to run headless Chrome.
+- [Puppeteer](https://github.com/puppeteer/puppeteer) is used for PDF generation. Make sure OS has all necessary components to run headless Chrome.
 
-## Admin & Survey applications
+## Admin & Survey apps
 
-Both Admin and Survey frontend applications are SPA (Single page application) written in Vue.js framework.
+Both Admin and Survey frontend applications are SPA (Single page application) written in Vue.js framework and [Vite](https://vitejs.dev) is used as build tool.
 
 They can be deployed to:
 
@@ -35,5 +35,5 @@ They can be deployed to:
 3. You can use any type of 3rd party provider like e.g. AWS S3, Heroku, Netlify etc.
 
 :::tip
-Please see [Vue CLI](https://cli.vuejs.org/guide/deployment.html#general-guidelines) docs for more details how to deploy Vue.js applications.
+Please see [Vite](https://vitejs.dev) docs for more details how to deploy Vue.js applications.
 :::

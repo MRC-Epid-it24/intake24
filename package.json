@@ -1,7 +1,11 @@
 {
   "name": "intake24",
   "version": "1.0.0",
-  "description": "Intake24 dietary recall system",
+  "description": "Dietary recall system",
+  "keywords": [
+    "Intake24",
+    "Dietary recall system"
+  ],
   "private": true,
   "author": "",
   "license": "Apache-2.0",
@@ -45,7 +49,6 @@
     "type": "git",
     "url": "git+https://github.com/MRC-Epid-it24/intake24.git"
   },
-  "keywords": [],
   "bugs": {
     "url": "https://github.com/MRC-Epid-it24/intake24/issues"
   },

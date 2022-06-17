@@ -1,0 +1,8 @@
+:root {
+  --c-brand: #EF6C00;
+  --c-brand-light: #F57C00;
+}
+
+a {
+  font-weight: 600;
+}
