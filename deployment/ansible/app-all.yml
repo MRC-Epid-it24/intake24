@@ -8,6 +8,18 @@
     - role: app-init
     - role: app-api
     - role: app-service
+      when: apps.api.service.deploy | bool
+
+- hosts: portal
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'portal'
+  roles:
+    - role: app-init
+    - role: app-portal
+    - role: app-service
+      when: apps.portal.service.deploy | bool
 
 - hosts: admin
   remote_user: deploy

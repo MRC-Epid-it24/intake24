@@ -1,0 +1,10 @@
+---
+- hosts: portal
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'portal'
+  roles:
+    - role: app-init
+    - role: app-portal
+    - role: app-service
