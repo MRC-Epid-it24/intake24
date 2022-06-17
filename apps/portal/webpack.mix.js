@@ -18,8 +18,10 @@ mix
     `${publicPath}/site.js`
   )
   .sass('assets/scss/site.scss', `${publicPath}/site.css`)
+  .options({
+    processCssUrls: false,
+  })
   .copy('assets/img', `${publicPath}/img`)
   .copy('assets/output-samples', `${publicPath}/output-samples`);
-// .copy('assets/papers', `${publicPath}/papers`);
 
 if (mix.inProduction) mix.version();
