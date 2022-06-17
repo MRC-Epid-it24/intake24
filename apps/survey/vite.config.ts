@@ -43,7 +43,7 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    base: process.env.BASE_URL || '/',
+    base: env.BASE_URL || '/',
     build: {
       emptyOutDir: true,
       outDir: env.OUTPUT_DIR || 'dist',
