@@ -21,7 +21,16 @@ process.env.VITE_APP_BUILD_DATE = new Date().toISOString();
 const themeColor = '#EF6C00';
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
+  const {
+    BASE_URL: base = '/',
+    OUTPUT_DIR: outDir = 'dist',
+    PRODUCTION_SOURCE_MAP,
+    VITE_APP_NAME: appName,
+    VITE_APP_RECAPTCHA_ENABLED,
+  } = loadEnv(mode, process.cwd(), '');
+
+  const reCaptchaEnabled = !!(VITE_APP_RECAPTCHA_ENABLED === 'true');
+  const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
 
   return {
     resolve: {
@@ -43,10 +52,11 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    base: env.BASE_URL || '/',
+    base,
     build: {
       emptyOutDir: true,
-      outDir: env.OUTPUT_DIR || 'dist',
+      outDir,
+      sourcemap,
     },
     server: {
       port: 8100,
@@ -78,12 +88,11 @@ export default defineConfig(({ mode }) => {
       createHtmlPlugin({
         inject: {
           data: {
-            title: env.VITE_APP_NAME,
+            title: appName,
             themeColor,
-            reCaptcha:
-              env.VITE_APP_RECAPTCHA_ENABLED === 'true'
-                ? `<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>`
-                : '',
+            reCaptcha: reCaptchaEnabled
+              ? `<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>`
+              : '',
           },
         },
       }),
@@ -91,8 +100,8 @@ export default defineConfig(({ mode }) => {
         registerType: 'autoUpdate',
         includeAssets: [/* 'favicon.svg',*/ 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
         manifest: {
-          name: env.VITE_APP_NAME,
-          short_name: env.VITE_APP_NAME,
+          name: appName,
+          short_name: appName,
           description: pkg.description,
           theme_color: themeColor,
           icons: [
