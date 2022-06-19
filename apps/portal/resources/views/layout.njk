@@ -2,23 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="Intake24 is a web-based 24 hour dietary recall system"/>
-    <meta
-      name="keywords"
-      content="intake24, diet, dietary, recall, nutrition, calories, food, 24 hour, twenty four hour"
-/>
+    <meta name="description" content="Intake24 - web-based 24 hour dietary recall system">
+    <meta name="keywords" content="intake24, diet, dietary, recall, nutrition, calories, food, 24 hour, twenty four hour">
+    <link rel="canonical" href="https:/intake24.org">
+    <meta property="og:title" content="Intake24">
+    <meta property="og:description" content="Intake24 - web-based 24 hour dietary recall system">
+    <meta property="og:url" content="https:/intake24.org">
+    <meta name="twitter:title" content="Intake24">
+    <meta name="copyright" content="Newcastle University & University of Cambridge">
     <meta name="author" content="Newcastle University & University of Cambridge"/>
+    <link rel="icon" href="/img/favicon.ico" type="image/png" sizes="16x16">
     <link rel="stylesheet" href="{{ mix('/site.css') }}">
     <title>Intake24</title>
   </head>
 
   <body>
-    <nav id="navbar" class="navbar navbar-expand-md navbar-fixed-top">
-      <div class="container">
+    <nav id="navbar" class="navbar navbar-light navbar-expand-md navbar-fixed-top">
+      <div class="container-md">
         <a class="navbar-brand" href="/">Intake24</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -53,7 +56,7 @@
     </nav>
 
     <div class="jumbotron home-banner mb-5">
-      <div class="container">
+      <div class="container-md">
         <h1>Welcome to Intake24</h1>
         <p>
           Intake24 is an open-source self-completed computerised dietary recall system based on
@@ -69,7 +72,7 @@
       </div>
     </div>
 
-    <div id="content" class="container">
+    <div id="content" class="container-md">
       {% block body %}{% endblock %}
       <hr>
       <footer class="small">
