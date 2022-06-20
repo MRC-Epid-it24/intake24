@@ -29,6 +29,6 @@ export default {
   },
 
   async logout(): Promise<void> {
-    await http.post('auth/logout');
+    await http.post('auth/logout', null, { withCredentials: true });
   },
 };
