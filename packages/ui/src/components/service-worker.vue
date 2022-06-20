@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar :value="offlineReady || needRefresh" :timeout="-1" color="primary">
+  <v-snackbar :value="needRefresh" :timeout="-1" color="primary">
     {{ $t('common.sw.check') }}
     <template v-slot:action="{ attrs }">
       <v-btn dark text v-bind="attrs" @click="updateServiceWorker">
@@ -58,7 +58,7 @@ export default defineComponent({
       this.needRefresh = false;
     },
     onOfflineReadyFn() {
-      console.log('sw: onOfflineReady.');
+      console.log('sw: Offline content is ready.');
     },
     onNeedRefreshFn() {
       console.log('sw: New content is available.');
