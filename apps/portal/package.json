@@ -48,7 +48,7 @@
     "fork-ts-checker-webpack-plugin": "^7.2.11",
     "laravel-mix": "^6.0.49",
     "nodemon": "^2.0.16",
-    "nodemon-webpack-plugin": "^4.7.1",
+    "nodemon-webpack-plugin": "^4.8.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.14",
     "resolve-url-loader": "^5.0.0",
@@ -58,7 +58,7 @@
     "supertest": "^6.2.3",
     "ts-loader": "^9.3.0",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
-    "typescript": "^4.7.3",
+    "typescript": "^4.7.4",
     "webpack": "^5.73.0",
     "webpack-node-externals": "^3.0.0",
     "webpackbar": "^5.0.2"
