@@ -46,6 +46,12 @@ const staticContentHelmet = helmet({
   crossOriginResourcePolicy: false,
 });
 
+const catchRestAs404 = (app: Express) => {
+  app.all('*', (req: Request, res: Response): void => {
+    res.status(404).json('Invalid route');
+  });
+};
+
 export default (app: Express, { config }: Ops): void => {
   /*
    * API routes - exclude CSP & cross origin policies
@@ -58,9 +64,7 @@ export default (app: Express, { config }: Ops): void => {
   // No content hosted locally -> 404
   const localContent = Object.keys(urls).some((url) => !isUrlAbsolute(url));
   if (!localContent) {
-    app.all('*', (req: Request, res: Response): void => {
-      res.status(404).json('Invalid route');
-    });
+    catchRestAs404(app);
     return;
   }
 
@@ -76,9 +80,7 @@ export default (app: Express, { config }: Ops): void => {
   // Check if any site is hosted locally
   const localSite = Object.keys(sites).some((site) => !isUrlAbsolute(urls[site as Site]));
   if (!localSite) {
-    app.all('*', (req: Request, res: Response): void => {
-      res.status(404).json('Invalid route');
-    });
+    catchRestAs404(app);
     return;
   }
 
@@ -90,9 +92,5 @@ export default (app: Express, { config }: Ops): void => {
     if (!isUrlAbsolute(urls[site as Site])) app.use(urls[site as Site], route);
   });
 
-  /*
-   * TODO: keep root for static / portal content
-   * TEMP: redirect to survey app for now
-   */
-  if (!isUrlAbsolute(urls.survey)) app.get('*', (req, res) => res.redirect(urls.survey));
+  catchRestAs404(app);
 };
