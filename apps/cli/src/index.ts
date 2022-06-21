@@ -1,7 +1,7 @@
 import './bootstrap';
 import { Command } from 'commander';
 import pkg from '../package.json';
-import { GenerateEnv, HashPassword } from './commands';
+import { GenerateEnv, GenerateKey, GenerateVapidKeys, HashPassword } from './commands';
 
 const run = async () => {
   const program = new Command();
@@ -15,6 +15,21 @@ const run = async () => {
     .option('-f, --force', 'override existing .env files')
     .action(async (cmd) => {
       await GenerateEnv(cmd);
+    });
+
+  program
+    .command('generate-key')
+    .description('Generate random key with 64 chars default length.')
+    .option('-l, --length [length]', 'key length', '64')
+    .action(async (cmd) => {
+      await GenerateKey(cmd);
+    });
+
+  program
+    .command('generate-vapid-keys')
+    .description('Generate VAPID key pair.')
+    .action(async () => {
+      await GenerateVapidKeys();
     });
 
   program
