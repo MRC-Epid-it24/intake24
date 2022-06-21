@@ -10,7 +10,7 @@ export type SiteConfig = {
 
 const siteConfig: SiteConfig = {
   content: process.env.SITE_CONTENT || '',
-  demoURL: `${process.env.SITE_APP}/demo?genUser`,
+  demoURL: process.env.SITE_DEMO || '',
   videoURL: process.env.SITE_VIDEO || '',
   support: {
     email: process.env.SITE_EMAIL || '',

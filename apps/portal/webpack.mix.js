@@ -21,7 +21,6 @@ mix
   .options({
     processCssUrls: false,
   })
-  .copy('assets/img', `${publicPath}/img`)
-  .copy('assets/output-samples', `${publicPath}/output-samples`);
+  .copy('assets/img', `${publicPath}/img`);
 
 if (mix.inProduction) mix.version();
