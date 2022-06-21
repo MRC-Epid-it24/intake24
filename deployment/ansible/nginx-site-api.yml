@@ -2,5 +2,7 @@
 - hosts: api
   remote_user: deploy
   become: true
+  vars:
+    app: 'api'
   roles:
-    - nginx-site
+    - role: nginx-site

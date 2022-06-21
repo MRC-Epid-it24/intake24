@@ -1,22 +1,29 @@
-- name: Copy {{ site.name }} certificate
+- name: '{{ app|upper }} | Include shared vars'
+  include_vars: '../instances/{{ instance }}/shared/config.json'
+
+- name: '{{ app|upper }} NGINX site | Set full site name'
+  set_fact: 
+    site_name: '{{ env.prefix }}-{{ apps[app].site.name }}'
+
+- name: '{{ app|upper }} NGINX site | Copy {{ site_name }} certificate'
   copy:
-    src: '{{ site.ssl.public_cert }}'
+    src: '{{ apps[app].site.ssl.public_cert }}'
     dest: '/etc/ssl/certs/'
     owner: root
     group: root
     mode: '644'
-  when: site.ssl.enabled
+  when: apps[app].site.ssl.enabled
 
-- name: Copy {{ site.name }} private key
+- name: '{{ app|upper }} NGINX site | Copy {{ site_name }} private key'
   copy:
-    src: '{{ site.ssl.private_key }}'
+    src: '{{ apps[app].site.ssl.private_key }}'
     dest: '/etc/ssl/private/'
     owner: root
     group: root
     mode: '600'
-  when: site.ssl.enabled
+  when: apps[app].site.ssl.enabled
 
-- name: Ensure includes dir exists
+- name: '{{ app|upper }} NGINX site | Ensure includes dir exists'
   file:
     path: /etc/nginx/includes
     state: directory
@@ -24,29 +31,27 @@
     group: root
     mode: '755'
 
-- name: Copy includes dir content
+- name: '{{ app|upper }} NGINX site | Copy includes dir content'
   copy:
-    src: '{{ site.includes_dir }}/'
+    src: '{{ apps[app].site.includes_dir }}/'
     dest: '/etc/nginx/includes/'
     owner: root
     group: root
     mode: '644'
 
-- name: Copy {{ site.name }} nginx site config
+- name: '{{ app|upper }} NGINX site | Copy {{ site_name }} nginx site config'
   copy:
-    src: '{{ site.config_file }}'
-    dest: '/etc/nginx/sites-available/{{ site.name }}'
+    src: '{{ apps[app].site.config_file }}'
+    dest: '/etc/nginx/sites-available/{{ site_name }}'
     owner: root
     group: root
     mode: '644'
 
-- name: Enable {{ site.name }} site
+- name: '{{ app|upper }} NGINX site | Enable {{ site_name }} site'
   file:
-    src: '/etc/nginx/sites-available/{{ site.name }}'
-    dest: '/etc/nginx/sites-enabled/{{ site.name }}'
+    src: '/etc/nginx/sites-available/{{ site_name }}'
+    dest: '/etc/nginx/sites-enabled/{{ site_name }}'
     state: link
 
-- name: Restart nginx
-  service:
-    name: nginx
-    state: restarted
+- name: '{{ app|upper }} NGINX site | Reload nginx'
+  shell: 'nginx -s reload'

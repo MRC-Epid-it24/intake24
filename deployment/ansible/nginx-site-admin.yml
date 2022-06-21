@@ -2,5 +2,7 @@
 - hosts: admin
   remote_user: deploy
   become: true
+  vars:
+    app: 'admin'
   roles:
-    - nginx-site
+    - role: nginx-site

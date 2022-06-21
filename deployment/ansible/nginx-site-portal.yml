@@ -1,8 +1,8 @@
 ---
-- hosts: survey
+- hosts: portal
   remote_user: deploy
   become: true
   vars:
-    app: 'survey'
+    app: 'portal'
   roles:
     - role: nginx-site

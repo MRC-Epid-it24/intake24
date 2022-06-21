@@ -1,6 +1,6 @@
 - name: '{{ app|upper }} | Set full service name'
   set_fact: 
-    service_name: '{{ env.user }}-{{ apps[app].service.name }}'
+    service_name: '{{ env.prefix }}-{{ apps[app].service.name }}'
 
 - name: '{{ app|upper }} | Copy systemd service file'
   template:

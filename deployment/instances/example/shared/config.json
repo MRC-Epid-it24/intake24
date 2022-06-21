@@ -6,7 +6,8 @@
   "env": {
     "directory": "/opt/intake24",
     "user": "intake24",
-    "group": "intake24"
+    "group": "intake24",
+    "prefix": "intake24"
   },
   "apps": {
     "api": {
@@ -20,7 +21,17 @@
       "service": {
         "deploy": true,
         "template": "app-api",
-        "name": "v4-api-server"
+        "name": "api"
+      },
+      "site": {
+        "name": "api",
+        "config_file": "../instances/{{ instance }}/app-api/nginx-site",
+        "includes_dir": "../instances/{{ instance }}/nginx/includes",
+        "ssl": {
+          "enabled": false,
+          "public_cert": "../instances/{{ instance }}/certs/example.com.pem",
+          "private_key": "../instances/{{ instance }}/certs/example.com.key"
+        }
       }
     },
     "portal": {
@@ -29,7 +40,17 @@
       "service": {
         "deploy": true,
         "template": "app-portal",
-        "name": "v4-portal-site"
+        "name": "portal"
+      },
+      "site": {
+        "name": "portal",
+        "config_file": "../instances/{{ instance }}/app-portal/nginx-site",
+        "includes_dir": "../instances/{{ instance }}/nginx/includes",
+        "ssl": {
+          "enabled": false,
+          "public_cert": "../instances/{{ instance }}/certs/example.com.pem",
+          "private_key": "../instances/{{ instance }}/certs/example.com.key"
+        }
       }
     },
     "admin": {
@@ -38,7 +59,17 @@
       "service": {
         "deploy": false,
         "template": "app-admin",
-        "name": "v4-admin-site"
+        "name": "admin"
+      },
+      "site": {
+        "name": "admin",
+        "config_file": "../instances/{{ instance }}/app-admin/nginx-site",
+        "includes_dir": "../instances/{{ instance }}/nginx/includes",
+        "ssl": {
+          "enabled": false,
+          "public_cert": "../instances/{{ instance }}/certs/example.com.pem",
+          "private_key": "../instances/{{ instance }}/certs/example.com.key"
+        }
       }
     },
     "survey": {
@@ -47,7 +78,17 @@
       "service": {
         "deploy": false,
         "template": "app-survey",
-        "name": "v4-survey-site"
+        "name": "survey"
+      },
+      "site": {
+        "name": "survey",
+        "config_file": "../instances/{{ instance }}/app-survey/nginx-site",
+        "includes_dir": "../instances/{{ instance }}/nginx/includes",
+        "ssl": {
+          "enabled": false,
+          "public_cert": "../instances/{{ instance }}/certs/example.com.pem",
+          "private_key": "../instances/{{ instance }}/certs/example.com.key"
+        }
       }
     }
   }
