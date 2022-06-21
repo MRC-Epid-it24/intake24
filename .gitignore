@@ -28,6 +28,7 @@ tmp
 # Local env files
 .env*
 !.env-template
+!deployment/instances/**/.env
 
 # Editor directories and files
 .idea

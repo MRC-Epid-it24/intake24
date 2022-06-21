@@ -1,12 +1,12 @@
 {
   "site": {
-     "name": "api-site",
-     "config_file": "../instances/{{ instance }}/app-api/nginx-site",
-     "includes_dir": "../instances/{{ instance }}/nginx/includes",
-     "ssl": {
-       "enabled": false,
-       "public_cert": "../instances/{{ instance }}/app-api/example.com.crt",
-       "private_key": "../instances/{{ instance }}/app-api/example.com.key"
-      }
+    "name": "api-site",
+    "config_file": "../instances/{{ instance }}/app-api/nginx-site",
+    "includes_dir": "../instances/{{ instance }}/nginx/includes",
+    "ssl": {
+      "enabled": false,
+      "public_cert": "../instances/{{ instance }}/app-api/example.com.crt",
+      "private_key": "../instances/{{ instance }}/app-api/example.com.key"
+    }
   }
 }

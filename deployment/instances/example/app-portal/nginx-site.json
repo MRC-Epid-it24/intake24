@@ -1,0 +1,12 @@
+{
+  "site": {
+    "name": "portal-site",
+    "config_file": "../instances/{{ instance }}/app-portal/nginx-site",
+    "includes_dir": "../instances/{{ instance }}/nginx/includes",
+    "ssl": {
+      "enabled": false,
+      "public_cert": "../instances/{{ instance }}/app-portal/example.com.crt",
+      "private_key": "../instances/{{ instance }}/app-portal/example.com.key"
+    }
+  }
+}

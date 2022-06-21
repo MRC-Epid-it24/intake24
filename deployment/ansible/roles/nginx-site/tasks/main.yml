@@ -1,7 +1,7 @@
 - name: Copy {{ site.name }} certificate
   copy:
     src: '{{ site.ssl.public_cert }}'
-    dest: '/etc/ssl/certs/{{ site.name }}.crt'
+    dest: '/etc/ssl/certs/'
     owner: root
     group: root
     mode: '644'
@@ -10,7 +10,7 @@
 - name: Copy {{ site.name }} private key
   copy:
     src: '{{ site.ssl.private_key }}'
-    dest: '/etc/ssl/private/{{ site.name }}.key'
+    dest: '/etc/ssl/private/'
     owner: root
     group: root
     mode: '600'
