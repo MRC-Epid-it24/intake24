@@ -1,8 +1,7 @@
 import type { SurveyState } from '@intake24/common/types';
 import type {
   GenerateUserResponse,
-  PublicSurveyEntryResponse,
-  PublicSurveyListResponse,
+  PublicSurveyEntry,
   SurveyEntryResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
@@ -25,14 +24,14 @@ export default {
     return { username, password };
   },
 
-  surveyPublicList: async (): Promise<PublicSurveyListResponse> => {
-    const { data } = await http.get<PublicSurveyListResponse>(`surveys`);
+  surveyPublicList: async (): Promise<PublicSurveyEntry[]> => {
+    const { data } = await http.get<PublicSurveyEntry[]>(`surveys`);
 
     return data;
   },
 
-  surveyPublicInfo: async (surveyId: string): Promise<PublicSurveyEntryResponse> => {
-    const { data } = await http.get<PublicSurveyEntryResponse>(`surveys/${surveyId}`);
+  surveyPublicInfo: async (surveyId: string): Promise<PublicSurveyEntry> => {
+    const { data } = await http.get<PublicSurveyEntry>(`surveys/${surveyId}`);
 
     return data;
   },

@@ -1,37 +1,34 @@
 import type { Request, Response } from 'express';
-import type {
-  PublicSurveyEntryResponse,
-  PublicSurveyListResponse,
-  GenerateUserResponse,
-} from '@intake24/common/types/http';
+import type { PublicSurveyEntry, GenerateUserResponse } from '@intake24/common/types/http';
 import { Survey } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { RespondentFromJWT } from '@intake24/api/services';
 import type { Controller } from './controller';
+import { publicSurveyEntryResponse } from '../responses';
 
 export type SurveyController = Controller<'browse' | 'entry' | 'generateUser' | 'createUser'>;
 
 export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController => {
-  const browse = async (req: Request, res: Response<PublicSurveyListResponse[]>): Promise<void> => {
-    const surveys = await Survey.findAll({ attributes: ['id', 'slug', 'name', 'localeId'] });
+  const browse = async (req: Request, res: Response<PublicSurveyEntry[]>): Promise<void> => {
+    const surveys = await Survey.findAll({
+      where: { allowGenUsers: true, genUserKey: null },
+      order: [['name', 'ASC']],
+    });
 
-    res.json(surveys);
+    res.json(surveys.map(publicSurveyEntryResponse));
   };
 
   const entry = async (
     req: Request<{ slug: string }>,
-    res: Response<PublicSurveyEntryResponse>
+    res: Response<PublicSurveyEntry>
   ): Promise<void> => {
     const { slug } = req.params;
 
-    const survey = await Survey.findOne({
-      where: { slug },
-      attributes: ['id', 'name', 'localeId', 'originatingUrl', 'supportEmail'],
-    });
+    const survey = await Survey.findOne({ where: { slug } });
     if (!survey) throw new NotFoundError();
 
-    res.json(survey);
+    res.json(publicSurveyEntryResponse(survey));
   };
 
   const generateUser = async (

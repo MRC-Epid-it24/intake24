@@ -2,8 +2,14 @@ import type { LocaleMessageObject } from 'vue-i18n';
 
 const common: LocaleMessageObject = {
   _: 'Intake24',
+  home: 'Home',
   dashboard: 'Dashboard',
   register: 'Registration',
+  welcome: {
+    _: 'Welcome to Intake24',
+    subtitle:
+      'Intake24 is an open-source self-completed computerised dietary recall system based on multiple-pass 24-hour recall.',
+  },
   login: 'Sign in',
   logout: {
     _: 'Sign out',

@@ -1,25 +1,19 @@
-import { pick } from 'lodash';
 import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
-import type { PublicSurveyEntryResponse } from '@intake24/common/types/http';
+import type { PublicSurveyEntry } from '@intake24/common/types/http';
+import { publicSurveyEntryResponse } from '@intake24/api/http/responses';
 
 export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let output: PublicSurveyEntryResponse;
+  let output: PublicSurveyEntry;
 
   beforeAll(async () => {
     url = `/api/surveys/${suite.data.system.survey.slug}`;
     invalidUrl = `/api/surveys/invalid-survey`;
 
-    output = pick(suite.data.system.survey, [
-      'id',
-      'name',
-      'localeId',
-      'originatingUrl',
-      'supportEmail',
-    ]);
+    output = publicSurveyEntryResponse(suite.data.system.survey);
   });
 
   it(`should return 404 when record doesn't exist`, async () => {

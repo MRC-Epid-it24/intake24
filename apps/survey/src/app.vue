@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-if="loggedIn" v-model="sidebar" app>
+    <v-navigation-drawer v-model="sidebar" app>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="my-1">{{ $t('common._') }}</v-list-item-title>
@@ -10,42 +10,59 @@
       <v-divider></v-divider>
       <v-list dense nav>
         <v-list-item-group>
-          <v-list-item v-if="surveyId" :to="{ name: 'survey-recall', params: { surveyId } }" link>
-            <v-list-item-action>
-              <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>{{ $t('recall.dynamic') }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
           <v-list-item
-            v-if="surveyId"
-            :to="{ name: 'survey-portion-test', params: { surveyId } }"
+            :to="
+              loggedIn && surveyId
+                ? { name: 'survey-home', params: { surveyId } }
+                : { name: 'home' }
+            "
             link
           >
             <v-list-item-action>
-              <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
+              <v-icon>fas fa-fw fa-home</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>Portions test</v-list-item-title>
+              <v-list-item-title>{{ $t('common.home') }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item v-if="surveyId" :to="{ name: 'feedback-home', params: { surveyId } }" link>
-            <v-list-item-action>
-              <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>{{ $t('feedback._') }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          <template v-if="loggedIn">
+            <v-list-item v-if="surveyId" :to="{ name: 'survey-recall', params: { surveyId } }" link>
+              <v-list-item-action>
+                <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('recall.dynamic') }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item
+              v-if="surveyId"
+              :to="{ name: 'survey-portion-test', params: { surveyId } }"
+              link
+            >
+              <v-list-item-action>
+                <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Portions test</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item v-if="surveyId" :to="{ name: 'feedback-home', params: { surveyId } }" link>
+              <v-list-item-action>
+                <v-icon>fas fa-comments</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('feedback._') }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
 
     <v-app-bar app flat dark color="secondary" permanent hide-on-scroll>
+      <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
       <template v-if="loggedIn">
-        <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
-        <v-img class="mx-2" :src="logo" max-height="30" max-width="150" contain> </v-img>
+        <v-img class="mx-2" :src="logo" max-height="30" max-width="150" contain></v-img>
         <v-spacer></v-spacer>
         <v-btn v-if="surveyId" text :to="{ name: 'survey-profile', params: { surveyId } }">
           <span class="mr-2" v-if="!isNotDesktop">{{ $t('profile._') }}</span>
@@ -62,7 +79,7 @@
         </confirm-dialog>
       </template>
       <template v-else>
-        <v-toolbar-title>{{ $t('common._') }}</v-toolbar-title>
+        <v-app-bar-title>{{ $t('common._') }}</v-app-bar-title>
       </template>
     </v-app-bar>
     <v-main>
@@ -95,7 +112,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
   data() {
     return {
       logo,
-      sidebar: true,
+      sidebar: false,
     };
   },
 

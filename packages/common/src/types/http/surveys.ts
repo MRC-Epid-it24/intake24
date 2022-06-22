@@ -9,18 +9,15 @@ export type GenerateUserResponse = {
   username: string;
   password: string;
 };
-export type PublicSurveyListResponse = {
-  id: string;
-  name: string;
-  localeId: string;
-};
 
-export type PublicSurveyEntryResponse = {
+export type PublicSurveyEntry = {
   id: string;
+  slug: string;
   name: string;
   localeId: string;
   originatingUrl: string | null;
   supportEmail: string;
+  openAccess: boolean;
 };
 
 export type SchemeEntryResponse = Pick<
