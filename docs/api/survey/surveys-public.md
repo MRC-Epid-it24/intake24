@@ -22,8 +22,12 @@ Content-Type: application/json
 [
   {
     "id": string,
+    "slug": string,
     "name": string,
-    "localeId": string
+    "localeId": string,
+    "originatingUrl": string | null,
+    "supportEmail": string,
+    "openAccess": boolean,
   }
 ]
 ```
@@ -48,11 +52,14 @@ Content-Type: application/json
 200 OK
 
 {
-  "localeId": string,
-  "respondentLanguageId": string,
-  "supportEmail": string,
-  "originatingURL": string?
-}
+    "id": string,
+    "slug": string,
+    "name": string,
+    "localeId": string,
+    "originatingUrl": string | null,
+    "supportEmail": string,
+    "openAccess": boolean,
+  }
 ```
 
 where:
@@ -102,8 +109,9 @@ Create a new user account with a specific user name and a unique redirect URL if
 Currently used for integration with external survey systems.
 
 :::warning
-This function presents a vulnerability similar to the generate user function. The JWT signing is done on the
-client side by the current users of this function and can therefore be easily extracted.
+This functionality can present possible vulnerability if implemented incorrectly.
+
+Secret for the JWT generation is stored server-side in survey settings. Client implementation should store the secret securely at their end. E.g. if the client implementation is done in frontend javascript done, such secret can then be extracted and misused.
 :::
 
 ### Request

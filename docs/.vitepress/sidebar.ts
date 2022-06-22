@@ -18,21 +18,6 @@ export const sidebar = {
         },
       ],
     },
-    // TODO: extract to own section
-    {
-      text: 'CLI',
-      collapsable: false,
-      children: [
-        {
-          text: 'Introduction',
-          link: '/overview/cli/',
-        },
-        {
-          text: 'Generate .env files',
-          link: '/overview/cli/generate-env',
-        },
-      ],
-    },
   ],
   '/config/': [
     {
@@ -416,6 +401,42 @@ export const sidebar = {
         {
           text: 'Introduction',
           link: '/survey/',
+        },
+      ],
+    },
+  ],
+  '/portal/': [
+    {
+      text: 'Portal',
+      collapsable: false,
+      children: [
+        {
+          text: 'Introduction',
+          link: '/Portal/',
+        },
+      ],
+    },
+  ],
+  '/cli/': [
+    {
+      text: 'CLI',
+      collapsable: false,
+      children: [
+        {
+          text: 'Introduction',
+          link: '/cli/',
+        },
+        {
+          text: 'Generate .env files',
+          link: '/cli/generate-env',
+        },
+        {
+          text: 'Generate key / secret',
+          link: '/cli/generate-key',
+        },
+        {
+          text: 'Generate VAPID keys',
+          link: '/cli/generate-vapid-keys',
         },
       ],
     },

@@ -1,6 +1,6 @@
 # Introduction
 
-Command line interface to run specific scripts / tasks is implemented as standalone app `apps/cli`.
+Command line interface to run specific scripts / tasks. It is implemented as standalone app `apps/cli`.
 
 ## Installation
 
@@ -16,7 +16,25 @@ Build the project for production
 pnpm build
 ```
 
-or for development (with file watching and reloads)
+Run CLI
+
+```sh
+pnpm cli
+```
+
+:::tip
+CLI can also be executed from top-level running `pnpm cli`
+:::
+
+Run CLI in development mode
+
+Run through `ts-node`.
+
+```sh
+pnpm cli:dev
+```
+
+For development (with file watching and reloads)
 
 ```sh
 pnpm dev

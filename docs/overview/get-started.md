@@ -38,7 +38,7 @@ nano .env
 
 Build all applications
 
-- run command either from top-level to build all `api`, `cli`, `admin` and `survey`.
+- run command either from top-level to build all applications (`api`, `cli`, `admin`, `portal` and `survey`).
 - run command from `apps/{app}` folder to build specific application
 
 ```sh
@@ -46,7 +46,7 @@ pnpm build
 ```
 
 :::tip Environment variables
-Code is using `.env ` environment files. Each project contains a template file (`.env-template`). If you're setting up fresh project, you can run CLI command, which generates all the files and couple of required specific keys. Follow the [CLI instructions](/overview/cli/) and how to run [generate-env](/overview/cli/generate-env).
+Code is using `.env ` environment files. Each project contains a template file (`.env-template`). If you're setting up fresh project, you can run CLI command, which generates all the files and couple of required specific keys. Follow the [CLI instructions](/cli/) and how to run [generate-env](/cli/generate-env).
 
 Some of the environment variables are either bundled in or used to configure build of SPA applications. Make sure you set up those `.env` file before running build for SPAs.
 :::

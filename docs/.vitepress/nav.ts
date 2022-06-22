@@ -20,6 +20,14 @@ export const nav = [
     link: '/survey/',
   },
   {
+    text: 'Portal',
+    link: '/portal/',
+  },
+  {
+    text: 'CLI',
+    link: '/cli/',
+  },
+  {
     text: 'Data Dictionary',
     link: '/data-dictionary/',
   },

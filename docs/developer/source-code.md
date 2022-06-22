@@ -21,11 +21,13 @@ Applications are in `apps` folder. Shared components are in `packages` folder.
 │  └─ api -> API Server
 │  └─ admin -> Admin tool
 │  └─ cli -> Command line interface
+│  └─ portal -> Portal website
 │  └─ survey -> Survey application
 ├─ deployment - Ansible playbooks / scripts for deployment
 ├─ docs -> Documentation
 └─ packages
-   └─ common (common shared code)
+   └─ common (shared code)
+   └─ common-backend (backend shared code)
    └─ db (database layer)
    └─ i18n (translations)
    └─ services (shared services for apps)
@@ -34,9 +36,9 @@ Applications are in `apps` folder. Shared components are in `packages` folder.
 
 ## Dependencies
 
-Intake24 components are set up with `pnpm`.
+Intake24 dpendencies are set up with `pnpm`.
 
-Install `pnpm` using built-in `npm` or see [pnpm docs](https://pnpm.io) for further options.
+Install `pnpm` using built-in `npm` or see [pnpm docs](https://pnpm.io) for further installation options.
 
 ```sh
 npm install -g pnpm

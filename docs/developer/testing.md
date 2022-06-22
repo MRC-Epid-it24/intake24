@@ -24,9 +24,9 @@ Tests are always located in `__tests__` folder in each `app` or `package` and us
         └─ my-function3.spec.ts
 ```
 
-Unit tests in `apps` folders
+## Unit tests
 
-Use following commands to run unit tests across repository and trigger tests in `__tests__` folders and `__tests__/unit` folders for package and apps, respectively. `Jest` will search for all files with `.spec.ts` extension.
+Use following commands to run unit tests across repository and trigger tests in `__tests__` folders and `__tests__/unit` folders for `packages` and `apps`, respectively. `Jest` will search for all files with `.spec.ts` extension.
 
 ```sh
 pnpm test:unit
@@ -34,12 +34,12 @@ pnpm test:unit
 pnpm test:unit:watch
 ```
 
-Integration tests can be run with following commands. At the moment, there are only API Server integration tests, so it re-triggers the api internal npm command.
+## Integration tests
+
+Integration tests can be run with following commands. At the moment, there are `API Server` and `Portal` integration tests, so it re-triggers the `app` internal command.
 
 ```sh
 pnpm test:integration
-
-pnpm test:integration:watch
 ```
 
 ## API Server
@@ -85,7 +85,7 @@ pnpm test:integration:watch
 
 ## Admin & Survey apps
 
-Frontends use Vue.js Jest implementation, so you can run tests with:
+Front-ends use Vue.js Jest implementation, so you can run tests with:
 
 ```sh
 pnpm test

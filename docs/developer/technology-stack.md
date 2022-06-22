@@ -4,8 +4,8 @@
 
 There are two frontend apps:
 
-- survey client
-- admin client
+- `admin` client
+- `survey` client
 
 Both built on same tech stack:
 
