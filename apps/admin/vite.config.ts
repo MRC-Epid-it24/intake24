@@ -25,12 +25,14 @@ export default defineConfig(({ mode }) => {
     BASE_URL: base = '/',
     OUTPUT_DIR: outDir = 'dist',
     PRODUCTION_SOURCE_MAP,
+    DISABLE_PWA,
     VITE_APP_NAME: appName,
     VITE_APP_RECAPTCHA_ENABLED,
   } = loadEnv(mode, process.cwd(), '');
 
   const reCaptchaEnabled = !!(VITE_APP_RECAPTCHA_ENABLED === 'true');
   const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
+  const disablePwa = !!(DISABLE_PWA === 'true');
 
   return {
     resolve: {
@@ -97,6 +99,7 @@ export default defineConfig(({ mode }) => {
         },
       }),
       VitePWA({
+        disable: disablePwa,
         registerType: 'autoUpdate',
         includeAssets: [/* 'favicon.svg',*/ 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
         manifest: {
