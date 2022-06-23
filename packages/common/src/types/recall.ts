@@ -1,7 +1,7 @@
 import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
 import type { ComponentType, QuantityValues } from '../prompts';
-import type { FoodHeader, UserFoodData } from './http';
-import type { PortionSizeMethodId } from './models';
+import { FoodHeader, UserFoodData } from './http';
+import { PortionSizeMethodId } from './models';
 
 export type CustomPromptAnswer = string | string[] | number | number[];
 
@@ -120,7 +120,7 @@ export interface Selection {
   mode: SelectionMode;
 }
 
-export type PromptAnswerResponse =
+export type PromptAnswerResponce =
   | FoodState[]
   | string
   | FoodEntry
@@ -129,7 +129,7 @@ export type PromptAnswerResponse =
   | number;
 
 export interface PromptAnswer {
-  response: PromptAnswerResponse;
+  response: PromptAnswerResponce;
   modified: boolean;
   new: boolean;
   finished: boolean;
@@ -155,18 +155,3 @@ export type SurveyState = {
 export interface RecallPromptHandler {
   commitAnswer(): void;
 }
-
-export interface HasOnAnswer {
-  onPartialAnswer(value?: PromptAnswerResponse): void;
-  onAnswer(value?: PromptAnswerResponse): void;
-}
-
-export interface HasPartialAnswerTriggerHandler {
-  partialAnswerHandler(): void;
-}
-
-export type PromptHandlerRefs = {
-  $refs: {
-    promptHandleChild: HasPartialAnswerTriggerHandler;
-  };
-};
