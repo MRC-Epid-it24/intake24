@@ -14,17 +14,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import type { PropType } from 'vue';
-import type { BasePromptProps } from '@intake24/common/prompts';
-import type { FoodState } from '@intake24/common/types';
+import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
+import { BasePromptProps } from '@intake24/common/prompts';
+import { FoodState, RecallPromptHandler } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
-import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
+import EditMealPrompt, {
+  EditMealPromptMethods,
+} from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-import { useEditMealState } from '@intake24/survey/stores/edit-meal';
+import {
+  createPromptHandlerMixin,
+  PromptHandlerUtils,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
 
-export default defineComponent({
+type Refs = {
+  $refs: {
+    prompt: EditMealPromptMethods;
+  };
+};
+
+interface PromptState {
+  foods: FoodState[];
+}
+
+export default (
+  Vue as VueConstructor<Vue & RecallPromptHandler & Refs & PromptHandlerUtils<PromptState>>
+).extend({
   name: 'MealAddPromptHandler',
+
+  mixins: [createPromptHandlerMixin<PromptState>('edit-meal-prompt')],
 
   components: { EditMealPrompt },
 
@@ -37,12 +56,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
-  },
-
-  setup() {
-    const prompt = ref<InstanceType<typeof EditMealPrompt>>();
-
-    return { prompt };
+    promptId: {
+      type: String,
+      required: true,
+    },
   },
 
   computed: {
@@ -54,8 +71,8 @@ export default defineComponent({
         return [];
       }
 
-      const storedState = useEditMealState().mealState[this.selectedMeal.id];
-      return storedState ?? this.selectedMeal.foods;
+      const storedState = this.getStoredState(this.selectedMeal.id, this.promptId);
+      return storedState?.foods ?? this.selectedMeal.foods;
     },
   },
 
@@ -65,13 +82,12 @@ export default defineComponent({
 
   methods: {
     ...mapActions(useSurvey, ['setFoods', 'deleteMeal']),
-    ...mapActions(useEditMealState, ['updateMealState', 'clearMealState']),
 
     onUpdate(foodList: FoodState[]) {
       if (this.selectedMeal === undefined) {
         console.warn('Expected a meal to be selected');
       } else {
-        this.updateMealState(this.selectedMeal.id, foodList);
+        this.updateStoredState(this.selectedMeal.id, this.promptId, { foods: foodList });
         this.$emit('completion-update', foodList.length > 0);
       }
     },
@@ -83,11 +99,11 @@ export default defineComponent({
       }
 
       this.deleteMeal(this.selectedMealIndex);
-      this.clearMealState(this.selectedMeal.id);
+      this.clearStoredState(this.selectedMeal.id, this.promptId);
     },
 
     commitAnswer() {
-      const foods = this.prompt?.foodsDrinks();
+      const foods = this.$refs.prompt?.foodsDrinks();
 
       if (this.selectedMealIndex === undefined || this.selectedMeal === undefined) {
         console.warn('No selected meal, meal index undefined');
@@ -95,7 +111,7 @@ export default defineComponent({
       }
 
       this.setFoods({ mealIndex: this.selectedMealIndex, foods });
-      this.clearMealState(this.selectedMeal.id);
+      this.clearStoredState(this.selectedMeal.id, this.promptId);
       return true;
     },
 

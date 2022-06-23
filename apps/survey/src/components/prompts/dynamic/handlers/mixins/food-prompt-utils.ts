@@ -4,6 +4,11 @@ import type { EncodedFood, LocaleTranslation } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
 
+export interface PromptStateEvents<T> {
+  update(newValue: T): void;
+  complete(): void;
+}
+
 export default defineComponent({
   computed: {
     ...mapState(useSurvey, ['selectedFood', 'selectedMealIndex', 'selectedFoodIndex']),

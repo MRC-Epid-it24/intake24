@@ -89,8 +89,8 @@ export default defineComponent({
       type: Object as PropType<BasePromptProps>,
       required: true,
     },
-    associatedFoodsState: {
-      type: Object as PropType<{ [key: number]: AssociatedFoodsState }>,
+    initialState: {
+      type: Object as PropType<AssociatedFoodsState>,
       required: true,
     },
     food: {
@@ -100,19 +100,9 @@ export default defineComponent({
   },
 
   data() {
-    const assocFoodEntry = this.associatedFoodsState[this.food.id] ?? {};
-
-    const initialPromptsState: AssociatedFoodPromptState[] =
-      this.food.data.associatedFoodPrompts.map(() => ({
-        confirmed: undefined,
-        selectedFood: undefined,
-      }));
-
-    const { activePrompt = 0, prompts = initialPromptsState } = assocFoodEntry;
-
     return {
-      activePrompt,
-      prompts,
+      activePrompt: this.initialState.activePrompt,
+      prompts: this.initialState.prompts,
     };
   },
 
