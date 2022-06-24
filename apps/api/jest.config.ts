@@ -17,7 +17,7 @@ const config: Config.InitialOptions = {
   rootDir: '.',
   roots: ['<rootDir>/src', '<rootDir>/__tests__'],
   testEnvironment: 'node',
-  testMatch: ['**/__tests__/**/*.(spec|test).ts'],
+  testMatch: ['**/__tests__/**/*.spec.ts'],
   testTimeout: 10000,
 };
 
