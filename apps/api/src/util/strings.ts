@@ -36,7 +36,7 @@ export const isStringBigInt = (value: any): boolean => {
  * @returns {boolean}
  */
 export const isUrlAbsolute = (url: string, options?: validator.IsURLOptions): boolean =>
-  validator.isURL(url, options);
+  validator.isURL(url, { require_protocol: true, require_tld: false, ...options });
 
 /**
  * Get frontend URL

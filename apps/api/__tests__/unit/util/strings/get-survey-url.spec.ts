@@ -13,6 +13,12 @@ describe('getFrontEndUrl', () => {
     );
   });
 
+  it('should use absolute localhost frontend URL if provided and clean leading/trailing slashes', () => {
+    expect(getFrontEndUrl('http://localhost:3100/', 'http://localhost:3200/')).toBe(
+      'http://localhost:3200'
+    );
+  });
+
   it('should use override URL is provided and clean leading/trailing slashes', () => {
     expect(
       getFrontEndUrl(
