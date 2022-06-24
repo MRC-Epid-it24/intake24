@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="mb-4">{{ $t('user._') }}</h2>
-    <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
+    <v-card v-if="profile" :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
       <v-list two-line subheader>
         <v-subheader>{{ $t('user.info') }}</v-subheader>
         <v-list-item>

@@ -194,6 +194,7 @@ importers:
       '@types/pluralize': ^0.0.29
       '@types/sharp': ^0.30.4
       '@types/supertest': ^2.0.12
+      '@types/ua-parser-js': ^0.7.36
       '@types/validator': ^13.7.3
       '@types/web-push': ^3.3.2
       awilix: ^7.0.3
@@ -249,6 +250,7 @@ importers:
       tsconfig-paths: ^4.0.0
       tsconfig-paths-webpack-plugin: ^3.5.2
       typescript: ^4.7.4
+      ua-parser-js: ^1.0.2
       validator: ^13.7.0
       web-push: ^3.5.0
       webpack: ^5.73.0
@@ -300,6 +302,7 @@ importers:
       sequelize-typescript: 2.1.3_99a3b19c741f4714ae1302f3a5e4c1b6
       sharp: 0.30.6
       slugify: 1.6.5
+      ua-parser-js: 1.0.2
       validator: 13.7.0
       web-push: 3.5.0
     devDependencies:
@@ -327,6 +330,7 @@ importers:
       '@types/pluralize': 0.0.29
       '@types/sharp': 0.30.4
       '@types/supertest': 2.0.12
+      '@types/ua-parser-js': 0.7.36
       '@types/validator': 13.7.3
       '@types/web-push': 3.3.2
       fork-ts-checker-webpack-plugin: 7.2.11_typescript@4.7.4+webpack@5.73.0
@@ -3053,7 +3057,7 @@ packages:
   /@types/es-aggregate-error/1.0.2:
     resolution: {integrity: sha512-erqUpFXksaeR2kejKnhnjZjbFxUpGZx4Z7ydNL9ie8tEhXPiZTsLeUDJ6aR1F8j5wWUAtOAQWUqkc7givBJbBA==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.0.0
     dev: false
 
   /@types/eslint-scope/3.7.3:
@@ -3258,7 +3262,7 @@ packages:
   /@types/node-fetch/2.6.2:
     resolution: {integrity: sha512-DHqhlq5jeESLy19TYhLakJ07kNumXWjcDdxXsLUMJZ6ue8VZJj4kLPQVE/2mdHh3xZziNF1xppu5lwmS53HR+A==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.0.0
       form-data: 3.0.1
     dev: false
 
@@ -3275,7 +3279,6 @@ packages:
 
   /@types/node/18.0.0:
     resolution: {integrity: sha512-cHlGmko4gWLVI27cGJntjs/Sj8th9aYwplmZFwmmgYQQvL5NUsgVJG7OddLvNfLqYS31KFN0s3qlaD9qCaxACA==}
-    dev: true
 
   /@types/nodemailer/6.4.4:
     resolution: {integrity: sha512-Ksw4t7iliXeYGvIQcSIgWQ5BLuC/mljIEbjf615svhZL10PE9t+ei8O9gDaD3FPCasUJn9KTLwz2JFJyiiyuqw==}
@@ -3286,7 +3289,7 @@ packages:
   /@types/nodemon/1.19.1:
     resolution: {integrity: sha512-3teAFqCFba3W9zk4dAGUZ+rW/nrQBrSGXWyK9HfJuWxmITk2z2d3u/5cy7oFqNG2fZxPwSAWkP+a8q/QC6UU5Q==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.0.0
     dev: true
 
   /@types/nunjucks/3.2.1:
@@ -3431,8 +3434,12 @@ packages:
   /@types/tunnel/0.0.3:
     resolution: {integrity: sha512-sOUTGn6h1SfQ+gbgqC364jLFBw2lnFqkgF3q0WovEHRLMrVD1sd5aufqi/aJObLekJO+Aq5z646U4Oxy6shXMA==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.0.0
     dev: false
+
+  /@types/ua-parser-js/0.7.36:
+    resolution: {integrity: sha512-N1rW+njavs70y2cApeIw1vLMYXRwfBy+7trgavGuuTfOd7j1Yh7QTRc/yqsPl6ncokt72ZXuxEU0PiCp9bSwNQ==}
+    dev: true
 
   /@types/validator/13.7.3:
     resolution: {integrity: sha512-DNviAE5OUcZ5s+XEQHRhERLg8fOp8gSgvyJ4aaFASx5wwaObm+PBwTIMXiOFm1QrSee5oYwEAYb7LMzX2O88gA==}
@@ -3467,7 +3474,7 @@ packages:
     resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==}
     requiresBuild: true
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.0.0
     dev: false
     optional: true
 
@@ -8490,7 +8497,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.0.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
@@ -12605,6 +12612,10 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /ua-parser-js/1.0.2:
+    resolution: {integrity: sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg==}
+    dev: false
+
   /uid-safe/2.1.5:
     resolution: {integrity: sha512-KPHm4VL5dDXKz01UuEd88Df+KzynaohSL9fBh096KWAxSKZQDI2uBrVqtvRM4rwrIrRRKsdLNML/lnaaVSRioA==}
     engines: {node: '>= 0.8'}
@@ -13588,7 +13599,7 @@ packages:
   /wkx/0.5.0:
     resolution: {integrity: sha512-Xng/d4Ichh8uN4l0FToV/258EjMGU9MGcA0HV2d9B/ZpZB3lqQm7nkOdZdm5GhKtLLhAE7PiVQwN4eN+2YJJUg==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.0.0
     dev: false
 
   /word-wrap/1.2.3:

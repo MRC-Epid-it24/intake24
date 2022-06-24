@@ -31,8 +31,8 @@ Configuration is structured to following sections:
 
 # Admin client
 
-Admin client is [Vue.js](https://vuejs.org) based application and scaffolded with [vue-cli](https://cli.vuejs.org). Docs outline specific settings for deployment of the application. But feel free to dive in to [vue-cli](https://cli.vuejs.org) docs if any further modifications are required.
+Admin client is [Vue.js](https://vuejs.org) based application and scaffolded with [vite](https://vitejs.dev/). Docs outline specific settings for deployment of the application. But feel free to dive in to [vite](https://vitejs.dev/) docs if any further modifications are required.
 
 # Survey client
 
-Survey client is [Vue.js](https://vuejs.org) based application and scaffolded with [vue-cli](https://cli.vuejs.org). Docs outline specific settings for deployment of the application. But feel free to dive in to [vue-cli](https://cli.vuejs.org) docs if any further modifications are required.
+Survey client is [Vue.js](https://vuejs.org) based application and scaffolded with [vite](https://vitejs.dev/). Docs outline specific settings for deployment of the application. But feel free to dive in to [vite](https://vitejs.dev/) docs if any further modifications are required.

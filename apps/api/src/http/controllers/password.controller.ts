@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import { randomString } from '@intake24/common/util';
 import { Op, User, UserPasswordReset } from '@intake24/db';
 import { ValidationError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
@@ -9,33 +8,14 @@ export type PasswordController = Controller<'request' | 'reset'>;
 
 export default ({
   adminUserService,
-  logger,
   scheduler,
   securityConfig,
-}: Pick<
-  IoC,
-  'adminUserService' | 'logger' | 'securityConfig' | 'scheduler'
->): PasswordController => {
+}: Pick<IoC, 'adminUserService' | 'securityConfig' | 'scheduler'>): PasswordController => {
   const request = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { email } = req.body;
+    const userAgent = req.headers['user-agent'];
 
-    const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
-    const user = await User.findOne({ where: { email: { [op]: email } } });
-
-    // Silently fail not to inform potential scanners of email existence in database
-    if (!user) {
-      logger.warn(`Password reset: email address (${email}) not found in database.`);
-      res.json();
-      return;
-    }
-
-    const { id: userId } = user;
-    const token = randomString(64);
-
-    await Promise.all([
-      UserPasswordReset.create({ userId, token }),
-      scheduler.jobs.addJob({ type: 'SendPasswordReset', userId }, { email, token }),
-    ]);
+    await scheduler.jobs.addJob({ type: 'SendPasswordReset' }, { email, userAgent });
 
     res.json();
   };

@@ -41,7 +41,7 @@ export type PurgeRefreshTokensParams = EmptyJobParams;
 
 export type SendPasswordResetParams = {
   email: string;
-  token: string;
+  userAgent?: string;
 };
 
 export type SendRespondentFeedbackParams = {
