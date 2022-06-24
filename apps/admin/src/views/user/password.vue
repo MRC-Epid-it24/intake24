@@ -24,6 +24,7 @@
                 :error-messages="form.errors.get('passwordCurrent')"
                 :label="$t('users.password.current')"
                 :type="showPassword.current ? 'text' : 'password'"
+                autocomplete="current-password"
                 hide-details="auto"
                 name="passwordCurrent"
                 required
@@ -38,6 +39,7 @@
                 :error-messages="form.errors.get('password')"
                 :label="$t('users.password.new')"
                 :type="showPassword.password ? 'text' : 'password'"
+                autocomplete="new-password"
                 hide-details="auto"
                 name="password"
                 required
@@ -52,6 +54,7 @@
                 :error-messages="form.errors.get('passwordConfirm')"
                 :label="$t('users.password.confirm')"
                 :type="showPassword.confirm ? 'text' : 'password'"
+                autocomplete="new-password"
                 hide-details="auto"
                 name="passwordConfirm"
                 required

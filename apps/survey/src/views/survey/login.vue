@@ -26,6 +26,7 @@
                     v-model="username"
                     :error-messages="errors.get('username')"
                     :label="$t('common.username')"
+                    autocomplete="username"
                     hide-details="auto"
                     required
                     outlined
@@ -38,6 +39,7 @@
                     :error-messages="errors.get('password')"
                     :label="$t('common.password')"
                     :type="showPassword ? 'text' : 'password'"
+                    autocomplete="current-password"
                     hide-details="auto"
                     required
                     outlined

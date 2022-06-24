@@ -13,6 +13,7 @@
                   v-model="form.email"
                   :error-messages="form.errors.get('email')"
                   :label="$t('users.email')"
+                  autocomplete="current-password"
                   hide-details="auto"
                   required
                   outlined
@@ -23,6 +24,7 @@
                   v-model="form.password"
                   :error-messages="form.errors.get('password')"
                   :label="$t('users.password._')"
+                  autocomplete="new-password"
                   hide-details="auto"
                   required
                   outlined
@@ -34,6 +36,7 @@
                   v-model="form.passwordConfirm"
                   :error-messages="form.errors.get('passwordConfirm')"
                   :label="$t('users.password.confirm')"
+                  autocomplete="new-password"
                   hide-details="auto"
                   required
                   outlined

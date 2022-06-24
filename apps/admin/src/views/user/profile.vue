@@ -42,7 +42,9 @@
             <v-icon class="primary" dark>fa-key</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title><user-password></user-password></v-list-item-title>
+            <v-list-item-title>
+              <user-password></user-password>
+            </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

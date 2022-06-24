@@ -13,6 +13,7 @@
                   v-model="email"
                   :error-messages="errors.get('email')"
                   :label="$t('users.email')"
+                  autocomplete="email"
                   hide-details="auto"
                   required
                   outlined
@@ -25,6 +26,7 @@
                   :error-messages="errors.get('password')"
                   :label="$t('users.password._')"
                   :type="showPassword ? 'text' : 'password'"
+                  autocomplete="current-password"
                   hide-details="auto"
                   required
                   outlined

@@ -37,6 +37,7 @@
                         :disabled="!isCreate"
                         :error-messages="form.errors.get('username')"
                         :label="$t('users.username')"
+                        autocomplete="username"
                         hide-details="auto"
                         name="username"
                         outlined
