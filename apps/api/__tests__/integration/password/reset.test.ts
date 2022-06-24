@@ -2,6 +2,7 @@ import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
 import { UserPasswordReset } from '@intake24/db';
+import { sleep } from '@intake24/api/util';
 
 let dateNowSpy: jest.SpyInstance;
 
@@ -33,6 +34,7 @@ export default () => {
       .set('Accept', 'application/json')
       .send({ email, recaptcha: 'recaptchaToken' });
 
+    await sleep(1000); // TODO: this should wait until the job is done
     const reset = await UserPasswordReset.findOne({ where: { userId } });
     if (!reset) throw Error('Password reset not created.');
 
