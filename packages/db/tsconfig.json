@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@intake24/common/*": ["../common/src/*"],
+      "@intake24/db/*": ["src/*"],
       "@intake24/*": ["../*/src"]
     }
   },
