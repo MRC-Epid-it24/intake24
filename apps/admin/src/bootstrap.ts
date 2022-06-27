@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueCompositionAPI from '@vue/composition-api';
+import { Intersect, Resize } from 'vuetify/lib/directives';
 import Toasted from 'vue-toasted';
 import authMixin from './mixins/auth';
 import isMobile from './mixins/is-mobile';
@@ -19,3 +20,6 @@ Vue.mixin(authMixin);
 Vue.mixin(isMobile);
 Vue.mixin(loadingMixin);
 Vue.mixin(moduleMixin);
+
+Vue.directive('intersect', Intersect);
+Vue.directive('resize', Resize);
