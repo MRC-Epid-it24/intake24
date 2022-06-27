@@ -102,6 +102,7 @@ import { useSurvey } from '@intake24/survey/stores';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
 import type { VImg } from 'vuetify/lib';
+import { Resize } from 'vuetify/lib/directives';
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import type { LocaleTranslation, HasPartialAnswerTriggerHandler } from '@intake24/common/types';
@@ -127,6 +128,7 @@ export default (
   mixins: [BasePortion, localeContent],
 
   components: { ImagePlaceholder, QuantityCard },
+  directives: { Resize },
 
   props: {
     // Generic object 'props' used to store all props for each prompt
