@@ -105,12 +105,17 @@ import type { VImg } from 'vuetify/lib';
 import { Resize } from 'vuetify/lib/directives';
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
-import type { LocaleTranslation, HasPartialAnswerTriggerHandler } from '@intake24/common/types';
+import type {
+  LocaleTranslation,
+  HasPartialAnswerTriggerHandler,
+  GuideImageState,
+} from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
 import type { Portion } from './BasePortion';
 import BasePortion from './BasePortion';
+import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
 
 type Refs = {
   $refs: {
@@ -148,6 +153,10 @@ export default (
       type: String,
       required: true,
     },
+    conversionFactor: {
+      type: Number,
+      required: true,
+    },
   },
 
   data() {
@@ -168,6 +177,7 @@ export default (
 
   computed: {
     ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
+    ...mapState(useFoodGuideImageState, ['selectedObjectIndex']),
 
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
@@ -203,6 +213,7 @@ export default (
 
   mounted() {
     this.fetchGuideImageData();
+    this.selectedObjectIdx = this.selectedObjectIndex(this.selectedFoodIndex) ?? null;
   },
 
   methods: {
@@ -224,24 +235,42 @@ export default (
       this.debouncedImgResize();
     },
 
+    onObjectClick(idx: number): GuideImageState {
+      return {
+        method: 'guide-image',
+        servingWeight:
+          this.guideImageData.weights[idx + 1] *
+          (this.quantityValue.whole + this.quantityValue.fraction) *
+          this.conversionFactor,
+        leftoversWeight: 0, // Guide image does not allow estimating leftovers
+        object: {
+          id: idx + 1,
+          weight: this.guideImageData.weights[idx + 1],
+        },
+        quantity: this.quantityValue,
+      };
+    },
+
     selectObject(idx: number) {
       this.selectedObjectIdx = idx;
-      console.log(this.guideImageData.weights[idx]);
-      this.$emit('tempChanging', {
-        modified: true,
-        new: false,
-        finished: false,
-        mealIndex: this.selectedMealIndex,
-        foodIndex: this.selectedFoodIndex,
-        prompt: this.promptComponent,
-        response: {
-          object: {
-            id: this.selectedObjectIdx,
-            weight: this.guideImageData.weights[this.selectedObjectIdx],
-          },
-          quantity: this.quantityValue,
-        },
-      });
+      console.log('Idx+1 : ', this.guideImageData.weights[idx + 1]); // weights array starts from 1
+      const portionSizeState = this.onObjectClick(idx);
+      this.$emit('update', { portionSize: portionSizeState, objectIdx: idx + 1 });
+      // this.$emit('tempChanging', {
+      //   modified: true,
+      //   new: false,
+      //   finished: false,
+      //   mealIndex: this.selectedMealIndex,
+      //   foodIndex: this.selectedFoodIndex,
+      //   prompt: this.promptComponent,
+      //   response: {
+      //     object: {
+      //       id: this.selectedObjectIdx,
+      //       weight: this.guideImageData.weights[this.selectedObjectIdx],
+      //     },
+      //     quantity: this.quantityValue,
+      //   },
+      // });
     },
 
     onSelectGuide() {

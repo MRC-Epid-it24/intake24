@@ -4,8 +4,10 @@
     v-bind="{ foodName, promptProps }"
     :guide-image-id="parameters['guide-image-id']"
     :prompt-component="promptComponent"
+    :conversionFactor="selectedPortionSize.conversionFactor"
     @guide-image-selected="onAnswer"
     @tempChanging="onTempChange"
+    @update="onUpdate"
   >
   </guide-image-prompt>
 </template>
@@ -16,12 +18,15 @@ import Vue from 'vue';
 import type { PropType } from '@vue/composition-api';
 import { mapState, mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
+import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type {
   SelectedGuideImageObject,
   HasOnAnswer,
   PromptAnswer,
   PromptHandlerRefs,
+  EncodedFood,
+  GuideImageState,
 } from '@intake24/common/types';
 import type { GuideImageParameters } from '@intake24/common/types/http';
 import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
@@ -53,7 +58,7 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
   },
 
   computed: {
-    ...mapState(useSurvey, ['currentTempPromptAnswer']),
+    ...mapState(useSurvey, ['currentTempPromptAnswer', 'selectedFood', 'selectedMealIndex']),
 
     parameters(): GuideImageParameters {
       if (this.selectedPortionSize.method !== 'guide-image')
@@ -65,6 +70,28 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
 
   methods: {
     ...mapActions(useSurvey, ['updateFood', 'setTempPromptAnswer', 'clearTempPromptAnswer']),
+    ...mapActions(useFoodGuideImageState, ['updateFoodState', 'clearFoodState']),
+
+    onUpdate(data: { portionSize: GuideImageState; objectIdx: number }) {
+      if (this.selectedFood === undefined || this.selectedMealIndex === undefined) {
+        console.warn('Expected a food to be selected');
+      } else if (this.selectedFood.type === 'encoded-food') {
+        const guidedFood: EncodedFood = { ...this.selectedFood, portionSize: data.portionSize };
+        this.updateFoodState(
+          this.selectedMealIndex,
+          this.selectedFood.id,
+          guidedFood,
+          data.objectIdx
+        );
+        console.log(guidedFood);
+        // this.$emit('completion-update', encodedFood !== undefined);
+      } else
+        console.log(
+          'Food is not of correct type. "Encoded-food" required but ',
+          this.selectedFood.type,
+          ' recieved.'
+        );
+    },
 
     onTempChange(
       tempGuidPromptAnswer: PromptAnswer,
