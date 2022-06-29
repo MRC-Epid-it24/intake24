@@ -67,11 +67,6 @@ export const useFoodGuideImageState = defineStore('guide-image-state', {
       };
       this.foodState = { ...this.foodState, [foodId]: newGuideState };
     },
-    // updateFoodStateStep(mealId: number, foodId: number, panelOpen = 0) {
-    //   const newGuideFoodState = { ...this.foodState[foodId], panelOpen: panelOpen };
-    //   console.log(newGuideFoodState);
-    //   this.foodState = { ...this.foodState, [foodId]: newGuideFoodState };
-    // },
     clearFoodState(foodId: number) {
       this.foodState = { ...this.foodState };
       delete this.foodState[foodId];

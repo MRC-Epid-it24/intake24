@@ -1,7 +1,7 @@
 <template>
   <guide-image-prompt
     ref="promptHandleChild"
-    v-bind="{ foodName, promptProps, selectedFoodIndex, selectedMealIndex }"
+    v-bind="{ foodName, promptProps, selectedFoodIndex, selectedMealIndex, guideFoods }"
     :guide-image-id="parameters['guide-image-id']"
     :prompt-component="promptComponent"
     :conversionFactor="selectedPortionSize.conversionFactor"
@@ -74,13 +74,17 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
     },
 
     guideFoods(): GuideImageEncodedFood | Record<string, never> {
-      if (this.selectedMeal === undefined || this.selectedFood === undefined) {
+      if (this.selectedFood === undefined) {
         console.warn('Expected a meal and a food to be selected');
         return {};
       }
 
       const storedState = useFoodGuideImageState().foodState[this.selectedFood.id];
-      return storedState ?? {};
+      // console.log('Stored State: ', storedState);
+      if (!storedState) return {};
+      console.log(this.selectedMealIndex, storedState.mealId);
+      return storedState.mealId === this.selectedMealIndex ? storedState : {};
+      // return storedState ?? {};
     },
   },
 

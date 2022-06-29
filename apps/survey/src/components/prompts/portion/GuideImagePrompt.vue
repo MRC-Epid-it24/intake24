@@ -116,6 +116,7 @@ import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue'
 import type { Portion } from './BasePortion';
 import BasePortion from './BasePortion';
 import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
+import type { GuideImageEncodedFood } from '@intake24/survey/stores/guide-image';
 
 type Refs = {
   $refs: {
@@ -163,6 +164,10 @@ export default (
     selectedMealIndex: {
       type: Number,
     },
+    guideFoods: {
+      type: Object as PropType<GuideImageEncodedFood>,
+      required: true,
+    },
   },
 
   data() {
@@ -182,7 +187,6 @@ export default (
   },
 
   computed: {
-    ...mapState(useSurvey, ['currentTempPromptAnswer']),
     ...mapState(useFoodGuideImageState, ['selectedObjectIndex', 'selectedPanelState']),
 
     localeDescription(): string | null {
@@ -219,9 +223,9 @@ export default (
 
   mounted() {
     this.fetchGuideImageData();
-    console.log('Mounted: ', this.selectedFoodIndex, ' - ', this.selectedMealIndex);
     this.selectedObjectIdx = this.selectedObjectIndex(this.selectedFoodIndex) ?? null;
     this.panelOpen = this.selectedPanelState(this.selectedFoodIndex);
+    console.log(this.guideFoods);
   },
 
   methods: {
