@@ -5,10 +5,11 @@ export interface GuideImageEncodedFood {
   objectIdx: number | null;
   food: EncodedFood;
   mealId: number | undefined;
+  panelOpen: number;
 }
 
 export interface FoodGuideImageState {
-  foodState: { [key: number]: GuideImageEncodedFood };
+  foodState: { [key: number]: GuideImageEncodedFood | Record<string, never> };
 }
 
 export const useFoodGuideImageState = defineStore('guide-image-state', {
@@ -21,7 +22,9 @@ export const useFoodGuideImageState = defineStore('guide-image-state', {
   getters: {
     selectedObjectIndex: (state) => {
       return (foodId: number | undefined) => {
+        console.log('This is ID Food Obj: ', foodId);
         if (foodId === undefined) return null;
+        if (!state.foodState[foodId]) return null;
         if (
           state.foodState[foodId].food.portionSize !== null &&
           state.foodState[foodId].food.portionSize?.method === 'guide-image'
@@ -32,22 +35,43 @@ export const useFoodGuideImageState = defineStore('guide-image-state', {
         return null;
       };
     },
+    selectedPanelState: (state) => {
+      return (foodId: number | undefined) => {
+        console.log('This is ID Food Panel: ', foodId);
+        if (foodId === undefined) return 0;
+        if (!state.foodState[foodId]) return 0;
+        if (
+          state.foodState[foodId].food.portionSize !== null &&
+          state.foodState[foodId].food.portionSize?.method === 'guide-image'
+        ) {
+          const panelState = state.foodState[foodId].panelOpen;
+          return panelState ?? 0;
+        }
+        return 0;
+      };
+    },
   },
   actions: {
     updateFoodState(
       mealId: number,
       foodId: number,
       data: EncodedFood,
-      objIdx: number | null = null
+      objIdx: number | null = null,
+      panelOpen = 0
     ) {
       const newGuideState: GuideImageEncodedFood = {
         objectIdx: objIdx,
         food: data,
         mealId: mealId,
+        panelOpen: panelOpen,
       };
-      console.log('State-Guide: ', newGuideState);
       this.foodState = { ...this.foodState, [foodId]: newGuideState };
     },
+    // updateFoodStateStep(mealId: number, foodId: number, panelOpen = 0) {
+    //   const newGuideFoodState = { ...this.foodState[foodId], panelOpen: panelOpen };
+    //   console.log(newGuideFoodState);
+    //   this.foodState = { ...this.foodState, [foodId]: newGuideFoodState };
+    // },
     clearFoodState(foodId: number) {
       this.foodState = { ...this.foodState };
       delete this.foodState[foodId];

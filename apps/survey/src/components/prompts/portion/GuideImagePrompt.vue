@@ -157,6 +157,12 @@ export default (
       type: Number,
       required: true,
     },
+    selectedFoodIndex: {
+      type: Number,
+    },
+    selectedMealIndex: {
+      type: Number,
+    },
   },
 
   data() {
@@ -176,8 +182,8 @@ export default (
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
-    ...mapState(useFoodGuideImageState, ['selectedObjectIndex']),
+    ...mapState(useSurvey, ['currentTempPromptAnswer']),
+    ...mapState(useFoodGuideImageState, ['selectedObjectIndex', 'selectedPanelState']),
 
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
@@ -213,7 +219,9 @@ export default (
 
   mounted() {
     this.fetchGuideImageData();
+    console.log('Mounted: ', this.selectedFoodIndex, ' - ', this.selectedMealIndex);
     this.selectedObjectIdx = this.selectedObjectIndex(this.selectedFoodIndex) ?? null;
+    this.panelOpen = this.selectedPanelState(this.selectedFoodIndex);
   },
 
   methods: {
@@ -255,27 +263,23 @@ export default (
       this.selectedObjectIdx = idx;
       console.log('Idx+1 : ', this.guideImageData.weights[idx + 1]); // weights array starts from 1
       const portionSizeState = this.onObjectClick(idx);
-      this.$emit('update', { portionSize: portionSizeState, objectIdx: idx + 1 });
-      // this.$emit('tempChanging', {
-      //   modified: true,
-      //   new: false,
-      //   finished: false,
-      //   mealIndex: this.selectedMealIndex,
-      //   foodIndex: this.selectedFoodIndex,
-      //   prompt: this.promptComponent,
-      //   response: {
-      //     object: {
-      //       id: this.selectedObjectIdx,
-      //       weight: this.guideImageData.weights[this.selectedObjectIdx],
-      //     },
-      //     quantity: this.quantityValue,
-      //   },
-      // });
+      this.$emit('update', {
+        portionSize: portionSizeState,
+        objectIdx: idx + 1,
+        panelOpen: this.panelOpen,
+      });
     },
 
     onSelectGuide() {
       this.selectedGuide = !this.selectedGuide;
       this.panelOpen = 1;
+      if (!this.selectedObjectIdx) return;
+      const portionSizeState = this.onObjectClick(this.selectedObjectIdx);
+      this.$emit('update', {
+        portionSize: portionSizeState,
+        objectIdx: this.selectedObjectIdx + 1,
+        panelOpen: this.panelOpen,
+      });
     },
     clearErrors() {
       this.errors = [];

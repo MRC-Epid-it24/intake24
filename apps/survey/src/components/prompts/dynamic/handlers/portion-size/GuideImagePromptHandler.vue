@@ -1,7 +1,7 @@
 <template>
   <guide-image-prompt
     ref="promptHandleChild"
-    v-bind="{ foodName, promptProps }"
+    v-bind="{ foodName, promptProps, selectedFoodIndex, selectedMealIndex }"
     :guide-image-id="parameters['guide-image-id']"
     :prompt-component="promptComponent"
     :conversionFactor="selectedPortionSize.conversionFactor"
@@ -20,6 +20,7 @@ import { mapState, mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
+import type { GuideImageEncodedFood } from '@intake24/survey/stores/guide-image';
 import type {
   SelectedGuideImageObject,
   HasOnAnswer,
@@ -58,7 +59,12 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
   },
 
   computed: {
-    ...mapState(useSurvey, ['currentTempPromptAnswer', 'selectedFood', 'selectedMealIndex']),
+    ...mapState(useSurvey, [
+      'currentTempPromptAnswer',
+      'selectedFood',
+      'selectedMealIndex',
+      'selectedFoodIndex',
+    ]),
 
     parameters(): GuideImageParameters {
       if (this.selectedPortionSize.method !== 'guide-image')
@@ -66,24 +72,40 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
 
       return this.selectedPortionSize.parameters as unknown as GuideImageParameters;
     },
+
+    guideFoods(): GuideImageEncodedFood | Record<string, never> {
+      if (this.selectedMeal === undefined || this.selectedFood === undefined) {
+        console.warn('Expected a meal and a food to be selected');
+        return {};
+      }
+
+      const storedState = useFoodGuideImageState().foodState[this.selectedFood.id];
+      return storedState ?? {};
+    },
   },
 
   methods: {
     ...mapActions(useSurvey, ['updateFood', 'setTempPromptAnswer', 'clearTempPromptAnswer']),
     ...mapActions(useFoodGuideImageState, ['updateFoodState', 'clearFoodState']),
 
-    onUpdate(data: { portionSize: GuideImageState; objectIdx: number }) {
+    onUpdate(data: { portionSize: GuideImageState; objectIdx: number; panelOpen: number }) {
       if (this.selectedFood === undefined || this.selectedMealIndex === undefined) {
         console.warn('Expected a food to be selected');
-      } else if (this.selectedFood.type === 'encoded-food') {
-        const guidedFood: EncodedFood = { ...this.selectedFood, portionSize: data.portionSize };
+        return;
+      }
+      if (this.selectedFood.type === 'encoded-food') {
+        const inputGuidedFood: EncodedFood = {
+          ...this.selectedFood,
+          portionSize: data.portionSize,
+        };
         this.updateFoodState(
           this.selectedMealIndex,
           this.selectedFood.id,
-          guidedFood,
-          data.objectIdx
+          inputGuidedFood,
+          data.objectIdx,
+          data.panelOpen
         );
-        console.log(guidedFood);
+        console.log(inputGuidedFood);
         // this.$emit('completion-update', encodedFood !== undefined);
       } else
         console.log(
