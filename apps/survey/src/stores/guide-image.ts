@@ -59,17 +59,20 @@ export const useFoodGuideImageState = defineStore('guide-image-state', {
       objIdx: number | null = null,
       panelOpen = 0
     ) {
+      console.log('food id: ', foodId, ' meal id: ', mealId);
       const newGuideState: GuideImageEncodedFood = {
         objectIdx: objIdx,
         food: data,
         mealId: mealId,
         panelOpen: panelOpen,
       };
+      console.info('To store in locale Storage: ', newGuideState);
       this.foodState = { ...this.foodState, [foodId]: newGuideState };
     },
     clearFoodState(foodId: number) {
       this.foodState = { ...this.foodState };
       delete this.foodState[foodId];
+      localStorage.removeItem(`${import.meta.env.VITE_APP_PREFIX ?? ''}guide_image`); // deleting whole storage for guided image for now.
     },
   },
 });

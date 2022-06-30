@@ -247,6 +247,16 @@ export default (
       this.debouncedImgResize();
     },
 
+    onUpdate() {
+      if (this.selectedObjectIdx == null) return;
+      const portionSizeState = this.onObjectClick(this.selectedObjectIdx);
+      this.$emit('update', {
+        portionSize: portionSizeState,
+        objectIdx: this.selectedObjectIdx + 1,
+        panelOpen: this.panelOpen,
+      });
+    },
+
     onObjectClick(idx: number): GuideImageState {
       return {
         method: 'guide-image',
@@ -266,28 +276,19 @@ export default (
     selectObject(idx: number) {
       this.selectedObjectIdx = idx;
       console.log('Idx+1 : ', this.guideImageData.weights[idx + 1]); // weights array starts from 1
-      const portionSizeState = this.onObjectClick(idx);
-      this.$emit('update', {
-        portionSize: portionSizeState,
-        objectIdx: idx + 1,
-        panelOpen: this.panelOpen,
-      });
+      this.onUpdate();
     },
 
     onSelectGuide() {
       this.selectedGuide = !this.selectedGuide;
       this.panelOpen = 1;
-      if (!this.selectedObjectIdx) return;
-      const portionSizeState = this.onObjectClick(this.selectedObjectIdx);
-      this.$emit('update', {
-        portionSize: portionSizeState,
-        objectIdx: this.selectedObjectIdx + 1,
-        panelOpen: this.panelOpen,
-      });
+      this.onUpdate();
     },
+
     clearErrors() {
       this.errors = [];
     },
+
     isValid() {
       if (this.selectedGuide) {
         return true;
@@ -303,13 +304,16 @@ export default (
 
       if (this.selectedObjectIdx === null) throw new Error('Selected object id is null');
 
-      this.$emit('guide-image-selected', {
-        object: {
-          id: this.selectedObjectIdx,
-          weight: this.guideImageData.weights[this.selectedObjectIdx],
-        },
-        quantity: this.quantityValue,
-      });
+      this.$emit(
+        'guide-image-selected'
+        // {
+        //   object: {
+        //     id: this.selectedObjectIdx,
+        //     weight: this.guideImageData.weights[this.selectedObjectIdx],
+        //   },
+        //   quantity: this.quantityValue,
+        // }
+      );
 
       this.selectedQuantity = true; // Barely see the change of icon before transition
       this.panelOpen = -1; // Closes all panels
@@ -317,6 +321,7 @@ export default (
 
     updateQuantity(value: QuantityValues) {
       this.quantityValue = value;
+      this.onUpdate();
     },
 
     partialAnswerHandler() {

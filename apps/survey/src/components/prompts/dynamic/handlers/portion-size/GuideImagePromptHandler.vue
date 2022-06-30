@@ -6,7 +6,6 @@
     :prompt-component="promptComponent"
     :conversionFactor="selectedPortionSize.conversionFactor"
     @guide-image-selected="onAnswer"
-    @tempChanging="onTempChange"
     @update="onUpdate"
   >
   </guide-image-prompt>
@@ -74,12 +73,12 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
     },
 
     guideFoods(): GuideImageEncodedFood | Record<string, never> {
-      if (this.selectedFood === undefined) {
+      if (this.selectedFood === undefined || this.selectedFoodIndex === undefined) {
         console.warn('Expected a meal and a food to be selected');
         return {};
       }
 
-      const storedState = useFoodGuideImageState().foodState[this.selectedFood.id];
+      const storedState = useFoodGuideImageState().foodState[this.selectedFoodIndex];
       // console.log('Stored State: ', storedState);
       if (!storedState) return {};
       console.log(this.selectedMealIndex, storedState.mealId);
@@ -89,11 +88,15 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateFood', 'setTempPromptAnswer', 'clearTempPromptAnswer']),
+    ...mapActions(useSurvey, ['updateFood']),
     ...mapActions(useFoodGuideImageState, ['updateFoodState', 'clearFoodState']),
 
     onUpdate(data: { portionSize: GuideImageState; objectIdx: number; panelOpen: number }) {
-      if (this.selectedFood === undefined || this.selectedMealIndex === undefined) {
+      if (
+        this.selectedFood == undefined ||
+        this.selectedMealIndex === undefined ||
+        this.selectedFoodIndex === undefined
+      ) {
         console.warn('Expected a food to be selected');
         return;
       }
@@ -104,7 +107,7 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
         };
         this.updateFoodState(
           this.selectedMealIndex,
-          this.selectedFood.id,
+          this.selectedFoodIndex,
           inputGuidedFood,
           data.objectIdx,
           data.panelOpen
@@ -119,51 +122,80 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
         );
     },
 
-    onTempChange(
-      tempGuidPromptAnswer: PromptAnswer,
-      tempUpdatedGuidPromptAnswer?: Partial<PromptAnswer>
-    ) {
-      if (tempUpdatedGuidPromptAnswer)
-        this.setTempPromptAnswer(tempGuidPromptAnswer, tempUpdatedGuidPromptAnswer);
-      else this.setTempPromptAnswer(tempGuidPromptAnswer);
+    onAnswer() {
+      console.log('guide: emitting complete');
+      this.$emit('complete');
     },
 
-    onAnswer(data: GuideImageData) {
-      const { conversionFactor } = this.selectedPortionSize;
-
+    commitAnswer() {
       const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
-      if (mealIndex === undefined || foodIndex === undefined) {
-        console.warn('No selected meal/food, meal/food index undefined');
+      if (
+        mealIndex === undefined ||
+        foodIndex === undefined ||
+        this.guideFoods.food.portionSize == null
+      ) {
+        console.warn(
+          'No selected meal/food, meal/food index undefined or portionSixe method is not set'
+        );
         return;
       }
-
+      console.log('guide: submitting answer');
       this.updateFood({
         mealIndex,
         foodIndex,
         food: {
-          portionSize: {
-            method: 'guide-image',
-            servingWeight:
-              data.object.weight *
-              (data.quantity.whole + data.quantity.fraction) *
-              conversionFactor,
-            leftoversWeight: 0, // Guide image does not allow estimating leftovers
-            object: data.object,
-            quantity: data.quantity,
-          },
+          portionSize: this.guideFoods.food.portionSize,
         },
       });
-
-      this.$emit('complete');
-      this.clearTempPromptAnswer();
+      console.log('guide: clearing store');
+      this.clearFoodState(foodIndex);
     },
 
-    onPartialAnswer(data: GuideImageData) {
-      console.log('Called onPartialAnswer first');
-      if (this.currentTempPromptAnswer)
-        this.onTempChange(this.currentTempPromptAnswer, { finished: true });
-      this.$refs.promptHandleChild?.partialAnswerHandler();
-    },
+    // onTempChange(
+    //   tempGuidPromptAnswer: PromptAnswer,
+    //   tempUpdatedGuidPromptAnswer?: Partial<PromptAnswer>
+    // ) {
+    //   if (tempUpdatedGuidPromptAnswer)
+    //     this.setTempPromptAnswer(tempGuidPromptAnswer, tempUpdatedGuidPromptAnswer);
+    //   else this.setTempPromptAnswer(tempGuidPromptAnswer);
+    // },
+
+    // onAnswer(data: GuideImageData) {
+    //   const { conversionFactor } = this.selectedPortionSize;
+
+    //   const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
+    //   if (mealIndex === undefined || foodIndex === undefined) {
+    //     console.warn('No selected meal/food, meal/food index undefined');
+    //     return;
+    //   }
+
+    //   this.updateFood({
+    //     mealIndex,
+    //     foodIndex,
+    //     food: {
+    //       portionSize: {
+    //         method: 'guide-image',
+    //         servingWeight:
+    //           data.object.weight *
+    //           (data.quantity.whole + data.quantity.fraction) *
+    //           conversionFactor,
+    //         leftoversWeight: 0, // Guide image does not allow estimating leftovers
+    //         object: data.object,
+    //         quantity: data.quantity,
+    //       },
+    //     },
+    //   });
+
+    //   this.$emit('complete');
+    //   this.clearTempPromptAnswer();
+    // },
+
+    // onPartialAnswer(data: GuideImageData) {
+    //   console.log('Called onPartialAnswer first');
+    //   if (this.currentTempPromptAnswer)
+    //     this.onTempChange(this.currentTempPromptAnswer, { finished: true });
+    //   this.$refs.promptHandleChild?.partialAnswerHandler();
+    // },
   },
 });
 </script>
