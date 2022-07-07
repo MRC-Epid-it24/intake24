@@ -32,4 +32,6 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
 
   app.engine('njk', nunjucksEnv.render);
   app.set('view engine', 'njk');
+
+  app.disable('x-powered-by');
 };

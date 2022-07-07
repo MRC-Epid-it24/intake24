@@ -15,6 +15,8 @@ const config = require('./config');
 const startApp = async () => {
   const app = express();
 
+  app.disable('x-powered-by');
+
   app.use(
     helmet({
       contentSecurityPolicy: {

@@ -8,8 +8,13 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
     proxy,
   } = config.security;
 
+  // X-powered-by header
+  app.disable('x-powered-by');
+
   // Trusted proxies
   app.set('trust proxy', proxy);
+
+  // E-tags
   app.set('etag', false);
 
   // CORS
