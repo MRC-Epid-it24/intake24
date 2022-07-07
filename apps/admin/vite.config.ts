@@ -62,6 +62,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 8100,
+      host: '0.0.0.0',
       proxy: {
         '/api': {
           target: 'http://localhost:3100',
