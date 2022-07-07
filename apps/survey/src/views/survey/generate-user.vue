@@ -146,9 +146,9 @@ export default defineComponent({
       this.reCaptchaRef?.reset();
     },
 
-    onCaptchaVerified(token: string) {
+    async onCaptchaVerified(token: string) {
       this.reCaptcha.token = token;
-      this.generateUser();
+      await this.generateUser();
     },
 
     onCaptchaExpired() {

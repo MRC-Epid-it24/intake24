@@ -40,22 +40,24 @@
               {{ $t('users.password.reset.send') }}
             </v-btn>
           </v-card-actions>
-          <v-divider class="mx-6"></v-divider>
-          <v-card-text class="px-6 pb-6 text-caption">
-            <vue-recaptcha
-              v-if="recaptcha.enabled"
-              ref="recaptcha"
-              size="invisible"
-              :sitekey="recaptcha.sitekey"
-              @verify="onCaptchaVerified"
-              @expired="onCaptchaExpired"
-            >
-            </vue-recaptcha>
-            This site is protected by reCAPTCHA and the Google
-            <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
-            <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a>
-            apply.
-          </v-card-text>
+          <template v-if="recaptcha.enabled">
+            <v-divider class="mx-6"></v-divider>
+            <v-card-text class="px-6 pb-6 text-caption">
+              <vue-recaptcha
+                :load-recaptcha-script="false"
+                :sitekey="recaptcha.sitekey"
+                ref="reCaptchaRef"
+                size="invisible"
+                @verify="onCaptchaVerified"
+                @expired="onCaptchaExpired"
+              >
+              </vue-recaptcha>
+              This site is protected by reCAPTCHA and the Google
+              <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
+              <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a>
+              apply.
+            </v-card-text>
+          </template>
         </v-form>
       </v-card>
     </v-col>
@@ -63,29 +65,24 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import VueRecaptcha from 'vue-recaptcha';
 import { form } from '@intake24/admin/helpers';
-
-type PasswordRequestRefs = {
-  $refs: {
-    recaptcha: InstanceType<typeof VueRecaptcha>;
-  };
-};
 
 type PasswordRequestForm = {
   email: string | null;
   recaptcha: string | null;
 };
 
-export default (Vue as VueConstructor<Vue & PasswordRequestRefs>).extend({
+export default defineComponent({
   name: 'PasswordRequest',
 
   components: { VueRecaptcha },
 
-  data() {
-    return {
+  setup() {
+    const reCaptchaRef = ref<InstanceType<typeof VueRecaptcha>>();
+
+    return reactive({
       form: form<PasswordRequestForm>({
         email: null,
         recaptcha: null,
@@ -94,27 +91,24 @@ export default (Vue as VueConstructor<Vue & PasswordRequestRefs>).extend({
         enabled: import.meta.env.VITE_APP_RECAPTCHA_ENABLED === 'true',
         sitekey: import.meta.env.VITE_APP_RECAPTCHA_SITEKEY,
       },
+      reCaptchaRef,
       submitted: false,
-    };
+    });
   },
 
   methods: {
-    async submit() {
-      if (this.recaptcha.enabled === true && !this.form.recaptcha) {
-        this.$refs.recaptcha.execute();
-        return;
-      }
-
-      this.sendRequest();
+    resetReCaptcha() {
+      this.form.recaptcha = null;
+      this.reCaptchaRef?.reset();
     },
 
-    onCaptchaVerified(token: string) {
+    async onCaptchaVerified(token: string) {
       this.form.recaptcha = token;
-      this.sendRequest();
+      await this.sendRequest();
     },
 
     onCaptchaExpired() {
-      this.$refs.recaptcha.reset();
+      this.resetReCaptcha();
     },
 
     async sendRequest() {
@@ -127,9 +121,17 @@ export default (Vue as VueConstructor<Vue & PasswordRequestRefs>).extend({
           this.$toasted.error(this.$t('users.password.reset.recaptcha').toString());
         }
       } finally {
-        if (this.$refs.recaptcha) this.$refs.recaptcha.reset();
-        this.form.recaptcha = null;
+        this.resetReCaptcha();
       }
+    },
+
+    async submit() {
+      if (this.recaptcha.enabled === true && !this.form.recaptcha) {
+        this.reCaptchaRef?.execute();
+        return;
+      }
+
+      await this.sendRequest();
     },
   },
 });

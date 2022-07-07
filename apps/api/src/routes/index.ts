@@ -21,9 +21,11 @@ const staticContentHelmet = helmet({
       fontSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
       frameSrc: [
         "'self'",
-        'https://www.google.com',
         'https://youtube.com',
         'https://www.youtube.com',
+        'https://www.google.com',
+        'https://www.google.com/recaptcha/',
+        'https://recaptcha.google.com/recaptcha/',
       ],
       imgSrc: ["'self'", 'blob:', 'data:'],
       scriptSrc: [
@@ -35,8 +37,6 @@ const staticContentHelmet = helmet({
       styleSrc: [
         "'self'",
         'https://fonts.googleapis.com',
-        'https://www.google.com/recaptcha/',
-        'https://recaptcha.google.com/recaptcha/',
         "'unsafe-inline'", // TODO: review for Vuetify theming
       ],
     },
