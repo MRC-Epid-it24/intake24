@@ -40,7 +40,7 @@ use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
 export default defineComponent({
   name: 'FeedbackChartArea',
 
-  components: { chart: Chart as any },
+  components: { Chart },
 
   props: {
     topFoods: {
