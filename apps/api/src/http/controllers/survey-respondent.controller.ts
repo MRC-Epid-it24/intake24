@@ -77,6 +77,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
 
     res.json({
       id,
+      slug,
       name,
       state,
       localeId,

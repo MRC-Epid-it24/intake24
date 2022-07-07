@@ -112,7 +112,7 @@ export const generateCSV = async (filename: string): Promise<string> => {
     password: faker.internet.password(),
     email: faker.internet.email(),
     name: faker.name.firstName(),
-    phone: faker.phone.phoneNumber(),
+    phone: faker.phone.number(),
   }));
 
   const json2csvParser = new Parser({ fields });

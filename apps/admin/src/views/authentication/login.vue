@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { mapActions, mapState } from 'pinia';

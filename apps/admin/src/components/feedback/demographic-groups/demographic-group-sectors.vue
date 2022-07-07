@@ -90,8 +90,8 @@
 
 <script lang="ts">
 import isEqual from 'lodash/isEqual';
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import type { DemographicGroupScaleSector } from '@intake24/common/feedback';
 import { sentiments } from '@intake24/common/feedback';
 import { tinymce } from '@intake24/admin/components/tinymce';

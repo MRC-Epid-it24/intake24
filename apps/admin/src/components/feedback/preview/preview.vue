@@ -33,8 +33,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { FeedbackChartArea, FeedbackCardArea } from '@intake24/ui/components/feedback';
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 import { buildTopFoods, buildCardParams } from '@intake24/ui/feedback';

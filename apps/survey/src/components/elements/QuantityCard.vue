@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import type { QuantityValues } from '@intake24/common/prompts';
 
 export default defineComponent({

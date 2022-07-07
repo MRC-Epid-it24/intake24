@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
 import { useApp } from '@intake24/admin/stores';
 import ActionMixin from './action-mixin';

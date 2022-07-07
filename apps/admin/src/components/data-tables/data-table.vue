@@ -41,8 +41,8 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import type { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
@@ -55,9 +55,7 @@ import { useResource } from '@intake24/admin/stores';
 import ActionBar from './action-bar/action-bar.vue';
 import DataTableFilter from './data-table-filter.vue';
 
-type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof hasResource>;
-
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'DataTable',
 
   components: { ActionBar, DataTableFilter, ToolBar },

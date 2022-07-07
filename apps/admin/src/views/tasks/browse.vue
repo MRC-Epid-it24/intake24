@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import cronstrue from 'cronstrue';
 import { DataTable } from '@intake24/admin/components/data-tables';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'TaskList',
 
   components: { DataTable },

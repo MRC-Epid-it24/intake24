@@ -82,12 +82,10 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { DetailMixin } from '@intake24/admin/types';
+import { defineComponent } from 'vue';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 
-export default (Vue as VueConstructor<Vue & DetailMixin>).extend({
+export default defineComponent({
   name: 'SurveyDetail',
 
   mixins: [detailMixin],

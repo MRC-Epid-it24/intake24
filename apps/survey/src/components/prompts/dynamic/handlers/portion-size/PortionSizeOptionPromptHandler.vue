@@ -9,20 +9,16 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { RecallPromptHandler } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
-type Mixins = InstanceType<typeof foodPromptUtils>;
-
-export default (Vue as VueConstructor<Vue & Mixins & RecallPromptHandler>).extend({
+export default defineComponent({
   name: 'PortionSizeOptionPromptHandler',
 
   components: { PortionSizeOptionPrompt },

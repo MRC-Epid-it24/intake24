@@ -23,8 +23,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import type { MealState, MealTime } from '@intake24/common/types';
 import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
 

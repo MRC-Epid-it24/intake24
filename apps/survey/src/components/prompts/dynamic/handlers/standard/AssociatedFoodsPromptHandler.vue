@@ -3,7 +3,7 @@
     v-bind="{
       promptProps,
       promptComponent,
-      associatedFoodsState: associatedFoodsState,
+      associatedFoodsState,
       food: selectedEncodedFood,
     }"
     @update="updatePrompts"
@@ -12,17 +12,16 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { AssociatedFoodsState, RecallPromptHandler } from '@intake24/common/types';
+import type { AssociatedFoodsState } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';
 import { useAssociatedFoodsState } from '@intake24/survey/stores/associated-foods';
 
-export default (Vue as VueConstructor<Vue & RecallPromptHandler>).extend({
+export default defineComponent({
   name: 'AssociatedFoodsPromptHandler',
 
   components: { AssociatedFoodsPrompt },

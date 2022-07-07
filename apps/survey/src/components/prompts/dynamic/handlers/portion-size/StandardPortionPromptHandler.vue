@@ -9,24 +9,21 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
-import type { HasOnAnswer, PromptAnswer, StandardPortionUnit } from '@intake24/common/types';
+import type { PromptAnswer, StandardPortionUnit } from '@intake24/common/types';
 import StandardPortionPrompt from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
 import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import foodPromptUtils from '../mixins/food-prompt-utils';
-
-type Mixins = InstanceType<typeof foodPromptUtils>;
 
 interface StandardPortionData {
   unit: StandardPortionUnit;
   quantity: QuantityValues;
 }
 
-export default (Vue as VueConstructor<Vue & Mixins & HasOnAnswer>).extend({
+export default defineComponent({
   name: 'StandardPortionPromptHandler',
 
   components: { StandardPortionPrompt },

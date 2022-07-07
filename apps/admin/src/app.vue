@@ -99,8 +99,7 @@
 <script lang="ts">
 import groupBy from 'lodash/groupBy';
 import pluralize from 'pluralize';
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { Location } from 'vue-router';
 import type { Dictionary } from '@intake24/common/types';
 import { ConfirmDialog, setsLanguage, ServiceWorker } from '@intake24/ui';
@@ -120,9 +119,7 @@ type Breadcrumbs = {
   to?: string | Location;
 };
 
-type Mixins = InstanceType<typeof setsLanguage> & InstanceType<typeof webPush>;
-
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'App',
 
   components: { ConfirmDialog, Loader, MenuTree, ServiceWorker },

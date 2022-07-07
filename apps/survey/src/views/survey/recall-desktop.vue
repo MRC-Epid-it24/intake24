@@ -42,14 +42,17 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
 import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import MealListDesktop from '@intake24/survey/components/recall/MealListDesktop.vue';
 import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
 import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
 import Recall from './recall';
 
-export default Recall.extend({
+export default defineComponent({
   name: 'DynamicRecallDesktop',
+
+  mixins: [Recall],
 
   components: {
     MealListDesktop,
@@ -67,7 +70,7 @@ export default Recall.extend({
 
   methods: {
     onComplete() {
-      this.$refs.promptHandle.commitAnswer();
+      this.promptHandle?.commitAnswer();
       this.continueButtonEnabled = false;
       this.nextPrompt();
     },

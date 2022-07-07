@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import type { ValidationError } from '@intake24/common/types';
 import { form } from '@intake24/admin/helpers';
 

@@ -7,17 +7,16 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import type { FoodSearchPromptProps } from '@intake24/common/prompts';
-import type { FoodState, RecallPromptHandler } from '@intake24/common/types';
+import type { FoodState } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
 
-export default (Vue as VueConstructor<Vue & RecallPromptHandler>).extend({
+export default defineComponent({
   name: 'FoodSearchPromptHandler',
 
   components: { FoodSearchPrompt },

@@ -10,6 +10,15 @@ export interface GenerateRoutesOps extends Resource {
   parent?: string;
 }
 
+const isVueComponent = (object: any) => {
+  if (typeof object === 'function') return true;
+
+  const { render } = object;
+  if (render && typeof render === 'function') return true;
+
+  return false;
+};
+
 const generateResourceRoutes = (
   resourceName: string,
   pathSegments: string[],
@@ -52,7 +61,7 @@ const generateResourceRoutes = (
       return;
     }
 
-    if (typeof viewsPath[action] === 'function') {
+    if (isVueComponent(viewsPath[action])) {
       routerRoutes.push({
         path: [...pathSegments, `:${identifier}`, action === 'read' ? undefined : action]
           .filter(Boolean)
@@ -62,6 +71,7 @@ const generateResourceRoutes = (
         meta: { ...meta, action, perm },
         props: true,
       });
+      return;
     }
 
     if (typeof viewsPath[action] === 'object') {

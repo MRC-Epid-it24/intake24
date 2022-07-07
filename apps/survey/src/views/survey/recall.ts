@@ -1,5 +1,4 @@
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent, ref } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
@@ -31,13 +30,7 @@ import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
 import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
 import { useSurvey } from '@intake24/survey/stores';
 
-type Refs = {
-  $refs: {
-    promptHandle: RecallPromptHandler;
-  };
-};
-
-export default (Vue as VueConstructor<Vue & Refs>).extend({
+export default defineComponent({
   name: 'Recall',
 
   components: {
@@ -52,6 +45,12 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
     InfoAlert,
     ...standardHandlers,
     ...portionSizeHandlers,
+  },
+
+  setup() {
+    const promptHandle = ref<RecallPromptHandler>();
+
+    return { promptHandle };
   },
 
   data: () => {

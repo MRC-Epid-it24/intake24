@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
 import { DataTable } from '@intake24/admin/components/data-tables';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SignInLogList',
 
   components: { DataTable },

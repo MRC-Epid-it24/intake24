@@ -46,8 +46,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
-import { defineComponent, ref } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { ConfirmDialog } from '@intake24/ui';
 import { securableToResource } from '@intake24/common/util';
 import type { SecurableType } from '@intake24/common/security';

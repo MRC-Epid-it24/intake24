@@ -51,10 +51,9 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
-import type { PropType } from '@vue/composition-api';
+import type { PropType } from 'vue';
 import { merge } from '@intake24/common/util';
 import { useSurvey } from '@intake24/survey/stores';
 import type { BasePromptProps } from '@intake24/common/prompts';
@@ -62,13 +61,12 @@ import { basePromptProps } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 import type { LocaleTranslation } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
-import type { Portion } from './BasePortion';
 import BasePortion from './BasePortion';
 
 type Response = null | number;
 
 // For user to select which portion size estimation method they want to use
-export default (Vue as VueConstructor<Vue & Portion>).extend({
+export default defineComponent({
   name: 'PortionSizeOptionPrompt',
 
   mixins: [BasePortion, localeContent],

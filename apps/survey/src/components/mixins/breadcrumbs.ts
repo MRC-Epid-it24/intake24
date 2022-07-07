@@ -1,9 +1,7 @@
 import { mapState } from 'pinia';
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { TranslateResult } from 'vue-i18n';
 import type { FoodState, LocaleTranslation } from '@intake24/common/types';
-import type { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -12,12 +10,9 @@ export type BrdCrumbs = {
   disabled: boolean;
 };
 
-export type BreadCrumbsContent = {
-  getBreadCrumbs(promptName: LocaleTranslation): BrdCrumbs[];
-};
-
-export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
+export default defineComponent({
   mixins: [localeContent],
+
   computed: {
     ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex', 'selectedFood']),
   },

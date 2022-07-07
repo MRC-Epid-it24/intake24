@@ -95,27 +95,21 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import { merge } from '@intake24/common/util';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import { basePromptProps } from '@intake24/common/prompts';
-import type {
-  HasPartialAnswerTriggerHandler,
-  LocaleTranslation,
-  SelectedAsServedImage,
-} from '@intake24/common/types';
+import type { LocaleTranslation, SelectedAsServedImage } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import AsServedWeight from '@intake24/survey/components/elements/AsServedWeight.vue';
 import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
-import type { Portion } from './BasePortion';
 import BasePortion from './BasePortion';
 
-export default (Vue as VueConstructor<Vue & HasPartialAnswerTriggerHandler & Portion>).extend({
+export default defineComponent({
   name: 'AsServedPrompt',
 
   components: {

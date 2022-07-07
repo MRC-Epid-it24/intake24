@@ -81,7 +81,7 @@
 
 <script lang="ts">
 import axios from 'axios';
-import { defineComponent, ref, reactive } from '@vue/composition-api';
+import { defineComponent, ref, reactive } from 'vue';
 import VueRecaptcha from 'vue-recaptcha';
 import { mapActions } from 'pinia';
 import surveySvc from '@intake24/survey/services/survey.service';

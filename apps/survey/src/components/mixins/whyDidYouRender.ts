@@ -1,4 +1,4 @@
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 
 function createWatchers(this: Vue) {
   // eslint-disable-next-line guard-for-in

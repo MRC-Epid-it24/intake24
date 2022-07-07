@@ -43,16 +43,13 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
 import type { Dictionary } from '@intake24/common/types';
 import handlesLoading from '@intake24/admin/mixins/handles-loading';
 
-type mixins = InstanceType<typeof handlesLoading>;
-
-export default (Vue as VueConstructor<Vue & mixins>).extend({
+export default defineComponent({
   name: 'SurveyDataTable',
 
   mixins: [handlesLoading],

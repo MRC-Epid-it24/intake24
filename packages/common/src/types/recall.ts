@@ -120,7 +120,7 @@ export interface Selection {
   mode: SelectionMode;
 }
 
-export type PromptAnswerResponce =
+export type PromptAnswerResponse =
   | FoodState[]
   | string
   | FoodEntry
@@ -129,7 +129,7 @@ export type PromptAnswerResponce =
   | number;
 
 export interface PromptAnswer {
-  response: PromptAnswerResponce;
+  response: PromptAnswerResponse;
   modified: boolean;
   new: boolean;
   finished: boolean;
@@ -157,8 +157,8 @@ export interface RecallPromptHandler {
 }
 
 export interface HasOnAnswer {
-  onPartialAnswer(value?: PromptAnswerResponce): void;
-  onAnswer(value?: PromptAnswerResponce): void;
+  onPartialAnswer(value?: PromptAnswerResponse): void;
+  onAnswer(value?: PromptAnswerResponse): void;
 }
 
 export interface HasPartialAnswerTriggerHandler {

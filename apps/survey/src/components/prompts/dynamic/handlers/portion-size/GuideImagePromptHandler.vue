@@ -12,34 +12,19 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { mapState, mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
-import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
+import type { BasePromptProps } from '@intake24/common/prompts';
 import type { GuideImageEncodedFood } from '@intake24/survey/stores/guide-image';
-import type {
-  SelectedGuideImageObject,
-  HasOnAnswer,
-  PromptAnswer,
-  PromptHandlerRefs,
-  EncodedFood,
-  GuideImageState,
-} from '@intake24/common/types';
+import type { EncodedFood, GuideImageState } from '@intake24/common/types';
 import type { GuideImageParameters } from '@intake24/common/types/http';
 import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
-type Mixins = InstanceType<typeof foodPromptUtils>;
-
-interface GuideImageData {
-  object: SelectedGuideImageObject;
-  quantity: QuantityValues;
-}
-
-export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAnswer>).extend({
+export default defineComponent({
   name: 'GuideImagePromptHandler',
 
   components: { GuideImagePrompt },

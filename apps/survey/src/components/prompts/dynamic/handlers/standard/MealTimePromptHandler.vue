@@ -10,19 +10,18 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import type { MealTimePromptProps } from '@intake24/common/prompts';
-import type { MealTime, RecallPromptHandler } from '@intake24/common/types';
+import type { MealTime } from '@intake24/common/types';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
 
 const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minutes}`;
 
-export default (Vue as VueConstructor<Vue & RecallPromptHandler>).extend({
+export default defineComponent({
   name: 'MealTimePromptHandler',
 
   components: { MealTimePrompt },

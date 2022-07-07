@@ -16,9 +16,8 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent, ref } from 'vue';
+import type { PropType } from 'vue';
 import { merge } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
@@ -28,18 +27,9 @@ import { imageMapSelectorDefaultProps } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import type { ImageMapEmit } from '@intake24/common/types/http/foods';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
-import type { Portion } from '../BasePortion';
 import BasePortion from '../BasePortion';
 
-type Refs = {
-  $refs: {
-    img: InstanceType<typeof VImg>;
-    svg: SVGElement;
-  };
-  debouncedImgResize: () => void;
-};
-
-export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
+export default defineComponent({
   name: 'ImageMapSelector',
 
   mixins: [BasePortion, localeContent],
@@ -50,6 +40,13 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
       type: Object as PropType<ImageMapSelectorProps>,
       required: true,
     },
+  },
+
+  setup() {
+    const img = ref<InstanceType<typeof VImg>>();
+    const svg = ref<SVGElement>();
+
+    return { img, svg };
   },
 
   data() {
@@ -110,11 +107,18 @@ export default (Vue as VueConstructor<Vue & Portion & Refs>).extend({
       }
     },
     updateSvgDimensions() {
-      const { width, height } = this.$refs.img.$el.getBoundingClientRect();
+      const el = this.img?.$el;
+      if (!el) {
+        console.warn(`GuideImagePrompt: could not update SVG dimensions.`);
+        return;
+      }
+
+      const { width, height } = el.getBoundingClientRect();
       this.width = width;
       this.height = height;
     },
     onImgResize() {
+      //@ts-expect-error fix debounced types
       this.debouncedImgResize();
     },
     selectObject(idx: number) {

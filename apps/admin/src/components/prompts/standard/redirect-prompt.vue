@@ -60,15 +60,12 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import isInteger from 'lodash/isInteger';
 import type { RuleCallback } from '@intake24/admin/types';
 import basePrompt from '../partials/base-prompt';
 
-type Mixins = InstanceType<typeof basePrompt>;
-
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'RedirectPrompt',
 
   mixins: [basePrompt],

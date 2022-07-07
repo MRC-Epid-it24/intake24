@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import MealItem from './MealItem.vue';
 import ContextMenu from '../elements/ContextMenu.vue';
 

@@ -109,20 +109,17 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { merge } from '@intake24/common/util';
 import type { MilkCerealPromptProps } from '@intake24/common/prompts';
 import { milkCerealPromptDefaultProps } from '@intake24/common/prompts';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
-import type { ExpansionPanelControls } from '@intake24/survey/components/mixins/expansionPanelControls';
 import expansionPanelControls from '@intake24/survey/components/mixins/expansionPanelControls';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import type { Portion } from './BasePortion';
 import BasePortion from './BasePortion';
 
-export default (Vue as VueConstructor<Vue & Portion & ExpansionPanelControls>).extend({
+export default defineComponent({
   name: 'MilkCerealPrompt',
 
   components: {

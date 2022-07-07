@@ -1,10 +1,7 @@
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { PollsForJobs } from '@intake24/admin/components/polls-for-jobs';
 
-type mixins = InstanceType<typeof PollsForJobs>;
-
-export default (Vue as VueConstructor<Vue & mixins>).extend({
+export default defineComponent({
   props: {
     surveyId: {
       type: String,

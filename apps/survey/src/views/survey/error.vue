@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { useSurvey } from '@intake24/survey/stores';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
 
 export default defineComponent({

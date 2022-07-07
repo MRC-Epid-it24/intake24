@@ -94,46 +94,30 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent, ref } from 'vue';
+import type { PropType } from 'vue';
 import { mapState } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
 import type { VImg } from 'vuetify/lib';
 import { Resize } from 'vuetify/lib/directives';
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
-import type {
-  LocaleTranslation,
-  HasPartialAnswerTriggerHandler,
-  GuideImageState,
-} from '@intake24/common/types';
+import type { LocaleTranslation, GuideImageState } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
-import type { Portion } from './BasePortion';
 import BasePortion from './BasePortion';
 import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
 import type { GuideImageEncodedFood } from '@intake24/survey/stores/guide-image';
 
-type Refs = {
-  $refs: {
-    img: InstanceType<typeof VImg>;
-    svg: SVGElement;
-  };
-  debouncedImgResize: () => void;
-};
-
-export default (
-  Vue as VueConstructor<Vue & HasPartialAnswerTriggerHandler & Portion & Refs>
-).extend({
+export default defineComponent({
   name: 'GuideImagePrompt',
 
   mixins: [BasePortion, localeContent],
 
   components: { ImagePlaceholder, QuantityCard },
+
   directives: { Resize },
 
   props: {
@@ -168,6 +152,13 @@ export default (
       type: Object as PropType<GuideImageEncodedFood>,
       required: true,
     },
+  },
+
+  setup() {
+    const img = ref<InstanceType<typeof VImg>>();
+    const svg = ref<SVGElement>();
+
+    return { img, svg };
   },
 
   data() {
@@ -238,12 +229,19 @@ export default (
     },
 
     updateSvgDimensions() {
-      const { width, height } = this.$refs.img.$el.getBoundingClientRect();
+      const el = this.img?.$el;
+      if (!el) {
+        console.warn(`GuideImagePrompt: could not update SVG dimensions.`);
+        return;
+      }
+
+      const { width, height } = el.getBoundingClientRect();
       this.width = width;
       this.height = height;
     },
 
     onImgResize() {
+      //@ts-expect-error fix debounced types
       this.debouncedImgResize();
     },
 

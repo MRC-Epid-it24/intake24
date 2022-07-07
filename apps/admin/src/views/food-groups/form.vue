@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import formMixin from '@intake24/admin/components/entry/form-mixin';
 import { form } from '@intake24/admin/helpers';
 
@@ -32,7 +32,7 @@ type FoodGroupForm = {
   name: string | null;
 };
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FoodGroupForm',
 
   mixins: [formMixin],

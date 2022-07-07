@@ -14,14 +14,13 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
-import type { BreadCrumbsContent, BrdCrumbs } from '@intake24/survey/components/mixins/breadcrumbs';
+import type { BrdCrumbs } from '@intake24/survey/components/mixins/breadcrumbs';
 import breadcrumbs from '@intake24/survey/components/mixins/breadcrumbs';
 import { useSurvey } from '@intake24/survey/stores';
 
-export default (Vue as VueConstructor<Vue & BreadCrumbsContent>).extend({
+export default defineComponent({
   name: 'RecallBreadCrumbsMobile',
 
   props: ['promptName'],

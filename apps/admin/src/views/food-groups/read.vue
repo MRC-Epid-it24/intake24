@@ -12,10 +12,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FoodGroupDetail',
 
   mixins: [detailMixin],

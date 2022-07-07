@@ -97,9 +97,8 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { merge } from '@intake24/common/util';
 import type { PizzaPromptProps, ImageMapSelectorProps } from '@intake24/common/prompts';
 import { pizzaPromptDefaultProps } from '@intake24/common/prompts';
@@ -109,10 +108,9 @@ import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidI
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
 // import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import ImageMapSelector from '@intake24/survey/components/prompts/portion/selectors/ImageMapSelector.vue';
-import type { Portion } from './BasePortion';
 import BasePortion from './BasePortion';
 
-export default (Vue as VueConstructor<Vue & Portion>).extend({
+export default defineComponent({
   name: 'PizzaPrompt',
 
   components: {

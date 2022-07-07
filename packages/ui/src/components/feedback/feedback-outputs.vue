@@ -164,8 +164,8 @@
 <script lang="ts">
 import type { AxiosError } from 'axios';
 import axios from 'axios';
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { Errors } from '@intake24/common/util';
 import { downloadFile } from '@intake24/ui/util';
 import { useLoading } from '@intake24/ui/stores';

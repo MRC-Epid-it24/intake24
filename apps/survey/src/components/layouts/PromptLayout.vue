@@ -20,13 +20,11 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { LocaleTranslation } from '@intake24/common/types';
-import type { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 
-export default (Vue as VueConstructor<Vue & LocaleContent>).extend({
+export default defineComponent({
   name: 'PromptLayout',
 
   mixins: [localeContent],

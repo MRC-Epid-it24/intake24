@@ -28,6 +28,9 @@
     },
     "lib": ["esnext", "dom", "dom.iterable", "webworker"]
   },
+  "vueCompilerOptions": {
+    "target": 2.7
+  },
   "include": ["src/**/*", "src/**/*.vue"],
   "exclude": ["node_modules"]
 }

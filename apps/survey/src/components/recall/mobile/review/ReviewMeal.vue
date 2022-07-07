@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import ReviewFood from '@intake24/survey/components/recall/mobile/review/ReviewFood.vue';
 import ContextMenu from '@intake24/survey/components/elements/ContextMenu.vue';
 

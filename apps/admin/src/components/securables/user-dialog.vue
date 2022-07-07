@@ -163,8 +163,8 @@
 
 <script lang="ts">
 import pick from 'lodash/pick';
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { form } from '@intake24/admin/helpers';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import type { ValidationError } from '@intake24/common/types';

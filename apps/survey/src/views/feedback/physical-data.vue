@@ -119,7 +119,7 @@
 import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { mapState } from 'pinia';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import type { UserPhysicalDataInput } from '@intake24/survey/services';
 import { userService, feedbackService } from '@intake24/survey/services';
 import type { FeedbackPhysicalDataField, Sex } from '@intake24/common/feedback';

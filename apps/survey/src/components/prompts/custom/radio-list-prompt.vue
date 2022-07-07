@@ -36,16 +36,14 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { merge } from '@intake24/common/util';
 import type { RadioListPromptProps } from '@intake24/common/prompts';
 import { radioListPromptProps } from '@intake24/common/prompts';
-import type { Prompt } from '../BasePrompt';
 import BasePrompt from '../BasePrompt';
 
-export default (Vue as VueConstructor<Vue & Prompt>).extend({
+export default defineComponent({
   name: 'RadioListPrompt',
 
   mixins: [BasePrompt],

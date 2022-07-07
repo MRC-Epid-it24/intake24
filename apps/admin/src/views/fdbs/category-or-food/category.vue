@@ -90,17 +90,14 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { CategoryLocalEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 import categoryOrFood from './category-or-food';
 import AttributeController from './partials/attribute-controller.vue';
 import CategoryController from './partials/category-controller.vue';
 
-type Mixins = InstanceType<typeof categoryOrFood>;
-
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'CategoryEntry',
 
   components: { AttributeController, CategoryController },

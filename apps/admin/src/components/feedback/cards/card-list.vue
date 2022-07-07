@@ -71,8 +71,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
-import { defineComponent, ref } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent, ref } from 'vue';
 import isEqual from 'lodash/isEqual';
 import draggable from 'vuedraggable';
 import type { Card } from '@intake24/common/feedback';

@@ -1,4 +1,4 @@
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import resources from '@intake24/admin/router/resources';
 import type { Resource } from '@intake24/admin/types';
 

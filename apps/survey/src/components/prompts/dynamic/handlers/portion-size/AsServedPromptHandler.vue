@@ -3,6 +3,7 @@
     v-bind="{ foodName, promptProps }"
     :as-served-set-id="parameters['serving-image-set']"
     :prompt-component="promptComponent"
+    ref="prompt"
     @as-served-serving="onAnswer"
     @as-served-leftovers="onAnswer"
     @tempChanging="onTempChange"
@@ -10,26 +11,17 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent, ref } from 'vue';
+import type { PropType } from 'vue';
 import { mapState, mapActions } from 'pinia';
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type {
-  SelectedAsServedImage,
-  HasOnAnswer,
-  PromptAnswer,
-  PromptHandlerRefs,
-  FoodState,
-} from '@intake24/common/types';
+import type { SelectedAsServedImage, PromptAnswer, FoodState } from '@intake24/common/types';
 import type { AsServedParameters } from '@intake24/common/types/http';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
-type Mixins = InstanceType<typeof foodPromptUtils>;
-
-export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAnswer>).extend({
+export default defineComponent({
   name: 'AsServedPromptHandler',
 
   components: { AsServedPrompt },
@@ -45,6 +37,12 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
       type: String,
       required: true,
     },
+  },
+
+  setup() {
+    const prompt = ref<InstanceType<typeof AsServedPrompt>>();
+
+    return { prompt };
   },
 
   computed: {
@@ -112,7 +110,7 @@ export default (Vue as VueConstructor<Vue & PromptHandlerRefs & Mixins & HasOnAn
       console.log('Called onPartialAnswer first');
       // if (this.currentTempPromptAnswer?.response)
       //   this.onTempChange(this.currentTempPromptAnswer, { finished: true });
-      this.$refs.promptHandleChild?.partialAnswerHandler();
+      this.prompt?.partialAnswerHandler();
     },
   },
 });

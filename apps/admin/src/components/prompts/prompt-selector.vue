@@ -131,8 +131,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
-import { defineComponent, ref } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { copy, merge } from '@intake24/common/util';
 import type { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
 import type { PromptQuestion, QuestionType } from '@intake24/common/prompts';

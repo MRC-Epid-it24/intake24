@@ -39,14 +39,11 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { SignInLogEntry } from '@intake24/common/types/http/admin';
+import { defineComponent } from 'vue';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
-import type { DetailMixin } from '@intake24/admin/types';
 
-export default (Vue as VueConstructor<Vue & DetailMixin<SignInLogEntry>>).extend({
+export default defineComponent({
   name: 'SignInLogDetail',
 
   mixins: [detailMixin, FormatsDateTime],

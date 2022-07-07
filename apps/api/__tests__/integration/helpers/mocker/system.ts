@@ -49,7 +49,7 @@ const user = (): CreateUserRequest => {
   const email = faker.internet.email();
   const password = 'sUpErStRoNgPaSwOrD-123467890';
   const passwordConfirm = password;
-  const phone = faker.phone.phoneNumber();
+  const phone = faker.phone.number();
   const multiFactorAuthentication = false;
   const emailNotifications = faker.datatype.boolean();
   const smsNotifications = faker.datatype.boolean();
@@ -82,7 +82,7 @@ const respondent = (): CreateRespondentRequest => {
   const email = faker.internet.email();
   const password = 'sUpErStRoNgPaSwOrD-123467890';
   const passwordConfirm = password;
-  const phone = faker.phone.phoneNumber();
+  const phone = faker.phone.number();
   const customFields = [
     { name: faker.random.words(1), value: faker.random.words(5) },
     { name: faker.random.words(1), value: faker.random.words(5) },

@@ -58,9 +58,9 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
+import { defineComponent } from 'vue';
 import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import type { PropType } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import type {
@@ -70,10 +70,10 @@ import type {
 } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import FoodBrowser from '@intake24/survey/components/elements/FoodBrowser.vue';
-import type { Prompt } from '../BasePrompt';
+
 import BasePrompt from '../BasePrompt';
 
-export default (Vue as VueConstructor<Vue & Prompt>).extend({
+export default defineComponent({
   name: 'AssociatedFoodsPrompt',
 
   components: { FoodBrowser, ValidInvalidIcon },

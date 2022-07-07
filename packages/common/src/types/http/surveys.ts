@@ -28,6 +28,7 @@ export type FeedbackSchemeEntryResponse = FeedbackSchemeAttributes;
 
 export type SurveyEntryResponse = {
   id: string;
+  slug: string;
   name: string;
   state: SurveyState;
   localeId: string;

@@ -157,7 +157,7 @@ export const useSurvey = defineStore('survey', {
 
     async submitRecall() {
       this.data.endTime = new Date();
-      const surveyId = this.parameters?.id;
+      const surveyId = this.parameters?.slug;
 
       if (!surveyId) {
         console.error(`Survey parameters not loaded. Cannot submit the survey.`);

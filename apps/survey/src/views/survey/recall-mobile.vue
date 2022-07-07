@@ -89,6 +89,7 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import type { FoodState } from '@intake24/common/types';
@@ -102,8 +103,10 @@ import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/Bo
 import Review from '@intake24/survey/components/recall/mobile/review/Review.vue';
 import Recall from './recall';
 
-export default Recall.extend({
+export default defineComponent({
   name: 'RecallMobile',
+
+  mixins: [Recall],
 
   components: {
     Review,
@@ -188,7 +191,7 @@ export default Recall.extend({
     },
 
     onComplete() {
-      this.$refs.promptHandle.commitAnswer();
+      this.promptHandle?.commitAnswer();
       this.continueButtonEnabled = false;
       this.nextPrompt();
     },

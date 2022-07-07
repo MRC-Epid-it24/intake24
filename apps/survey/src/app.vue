@@ -92,17 +92,14 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { TranslateResult } from 'vue-i18n';
 import logo from '@intake24/survey/assets/logo.svg';
 import Loader from '@intake24/survey/components/Loader.vue';
 import { ConfirmDialog, ServiceWorker, setsLanguage } from '@intake24/ui';
 import { useAuth } from './stores';
 
-type Mixins = InstanceType<typeof setsLanguage>;
-
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'App',
 
   components: { ConfirmDialog, Loader, ServiceWorker },

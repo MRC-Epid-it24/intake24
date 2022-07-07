@@ -130,8 +130,8 @@ import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { TopFoodNutrientType } from '@intake24/common/feedback';
 import { defaultTopFoods } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import type { RuleCallback } from '@intake24/admin/types';
 import { useList } from '..';
 

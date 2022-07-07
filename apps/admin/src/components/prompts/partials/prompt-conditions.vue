@@ -135,8 +135,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { copy, merge } from '@intake24/common/util';
 import draggable from 'vuedraggable';
 import type { Condition, ConditionOp } from '@intake24/common/prompts';

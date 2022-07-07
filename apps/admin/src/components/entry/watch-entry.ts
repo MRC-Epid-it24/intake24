@@ -1,4 +1,4 @@
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import type { Route } from 'vue-router';
 import { copy } from '@intake24/common/util';
 

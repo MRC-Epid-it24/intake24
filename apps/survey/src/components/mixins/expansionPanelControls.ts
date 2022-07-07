@@ -1,9 +1,4 @@
-import { defineComponent } from '@vue/composition-api';
-
-export type ExpansionPanelControls = {
-  panelOpenId: number;
-  setPanelOpen<T>(newPanelId: number): T;
-};
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   data() {

@@ -4,7 +4,7 @@
       <editable-food-list
         :food-list="foodList"
         :drinks="false"
-        ref="foodList"
+        ref="editableFoodList"
         @food-added="onUpdate"
         @food-deleted="onUpdate"
       />
@@ -38,30 +38,17 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent, ref } from 'vue';
+import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';
 import { useSurvey } from '@intake24/survey/stores';
-import type { Prompt } from '@intake24/survey/components/prompts/BasePrompt';
 import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
-import type { HasEditableFoodList } from './EditableFoodList.vue';
 import EditableFoodList from './EditableFoodList.vue';
 
-type Refs = {
-  $refs: {
-    foodList: HasEditableFoodList;
-  };
-};
-
-export interface EditMealPromptMethods {
-  foodsDrinks(): FoodState[];
-}
-
-export default (Vue as VueConstructor<Vue & Prompt & Refs & EditMealPromptMethods>).extend({
+export default defineComponent({
   name: 'EditMealPrompt',
 
   components: { EditableFoodList, ConfirmDialog },
@@ -87,6 +74,12 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs & EditMealPromptMethod
     },
   },
 
+  setup() {
+    const editableFoodList = ref<InstanceType<typeof EditableFoodList>>();
+
+    return { editableFoodList };
+  },
+
   computed: {
     ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
 
@@ -103,7 +96,7 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs & EditMealPromptMethod
 
   methods: {
     onUpdate() {
-      const editedFoods = this.$refs.foodList.editableList;
+      const editedFoods = this.editableFoodList?.editableList;
       this.$emit('update', editedFoods);
     },
 
@@ -115,8 +108,8 @@ export default (Vue as VueConstructor<Vue & Prompt & Refs & EditMealPromptMethod
       this.$emit('delete-meal');
     },
 
-    foodsDrinks(): FoodState[] {
-      return this.$refs.foodList.editableList;
+    foodsDrinks() {
+      return this.editableFoodList?.editableList;
     },
   },
 });

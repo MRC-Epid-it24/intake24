@@ -16,7 +16,6 @@
   },
   "scripts": {},
   "dependencies": {
-    "@vue/composition-api": "^1.6.3",
     "axios": "^0.27.2",
     "echarts": "^5.3.3",
     "js-file-download": "^0.4.12",
@@ -24,20 +23,19 @@
     "lodash": "^4.17.21",
     "pinia": "^2.0.14",
     "pinia-plugin-persistedstate": "^1.6.1",
-    "svg-gauge": "^1.0.6",
-    "vue": "^2.6.14",
-    "vue-echarts": "^6.1.0",
+    "svg-gauge": "^1.0.7",
+    "vue": "^2.7.3",
+    "vue-echarts": "^6.2.2",
     "vue-i18n": "^8.27.2",
     "vue-router": "^3.5.4",
     "vue-toasted": "^1.1.28",
-    "vuetify": "^2.6.6"
+    "vuetify": "^2.6.7"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
     "@types/node": "^17.0.45",
-    "@vue/runtime-dom": "^3.2.37",
     "vite": "^2.9.13",
-    "vite-plugin-pwa": "^0.12.0"
+    "vite-plugin-pwa": "^0.12.2"
   },
   "bundledDependencies": [
     "@intake24/common",

@@ -1,4 +1,4 @@
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import type { JobEntry } from '@intake24/common/types/http/admin';
 import type { JobType } from '@intake24/common/types';
 import { downloadFile } from '@intake24/ui/util';

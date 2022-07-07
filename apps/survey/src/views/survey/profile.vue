@@ -56,16 +56,13 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
 import { setsLanguage } from '@intake24/ui';
 import type { LanguageAttributes } from '@intake24/common/types/models';
 import { useUser } from '@intake24/survey/stores';
 
-type Mixins = InstanceType<typeof setsLanguage>;
-
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'SurveyUserProfile',
 
   mixins: [setsLanguage],

@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
 import isEmpty from 'lodash/isEmpty';
 import type { Dictionary } from '@intake24/common/types';

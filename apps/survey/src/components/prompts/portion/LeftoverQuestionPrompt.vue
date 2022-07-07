@@ -18,17 +18,15 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { merge } from '@intake24/common/util';
 import type { LeftoverQuestionPromptProps } from '@intake24/common/prompts';
 import { leftoverQuestionPromptDefaultProps } from '@intake24/common/prompts';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
-import type { Portion } from './BasePortion';
 import BasePortion from './BasePortion';
 
-export default (Vue as VueConstructor<Vue & Portion>).extend({
+export default defineComponent({
   name: 'LeftoverQuestionPrompt',
 
   mixins: [BasePortion, localeContent],

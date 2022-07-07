@@ -41,13 +41,10 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import webPush from './web-push';
 
-type Mixins = InstanceType<typeof webPush>;
-
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'WebPush',
 
   mixins: [webPush],

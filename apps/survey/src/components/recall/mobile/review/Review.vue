@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import ReviewMeal from '@intake24/survey/components/recall/mobile/review/ReviewMeal.vue';
 import SurveyProgress from '@intake24/survey/components/recall/mobile/review/SurveyProgress.vue';
 // import ContextMenu from '@intake24/survey/components/elements/ContextMenu.vue';

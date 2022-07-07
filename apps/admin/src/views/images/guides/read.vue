@@ -5,14 +5,11 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { GuideImageEntry } from '@intake24/common/types/http/admin';
-import type { DetailMixin } from '@intake24/admin/types';
+import { defineComponent } from 'vue';
 import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import GuideDrawer from '../guide-drawer.vue';
 
-export default (Vue as VueConstructor<Vue & DetailMixin<GuideImageEntry>>).extend({
+export default defineComponent({
   name: 'GuideImageDetail',
 
   components: { GuideDrawer },

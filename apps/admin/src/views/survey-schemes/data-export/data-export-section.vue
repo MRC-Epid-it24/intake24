@@ -140,8 +140,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 import type { ExportSection, ExportField } from '@intake24/common/schemes';
 

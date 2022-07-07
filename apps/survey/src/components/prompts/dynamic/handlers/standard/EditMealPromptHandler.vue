@@ -14,23 +14,16 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent, ref } from 'vue';
+import type { PropType } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { FoodState, RecallPromptHandler } from '@intake24/common/types';
+import type { FoodState } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
-import type { EditMealPromptMethods } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import { useEditMealState } from '@intake24/survey/stores/edit-meal';
 
-type Refs = {
-  $refs: {
-    prompt: EditMealPromptMethods;
-  };
-};
-export default (Vue as VueConstructor<Vue & RecallPromptHandler & Refs>).extend({
+export default defineComponent({
   name: 'MealAddPromptHandler',
 
   components: { EditMealPrompt },
@@ -44,6 +37,12 @@ export default (Vue as VueConstructor<Vue & RecallPromptHandler & Refs>).extend(
       type: String,
       required: true,
     },
+  },
+
+  setup() {
+    const prompt = ref<InstanceType<typeof EditMealPrompt>>();
+
+    return { prompt };
   },
 
   computed: {
@@ -88,7 +87,7 @@ export default (Vue as VueConstructor<Vue & RecallPromptHandler & Refs>).extend(
     },
 
     commitAnswer() {
-      const foods = this.$refs.prompt?.foodsDrinks();
+      const foods = this.prompt?.foodsDrinks();
 
       if (this.selectedMealIndex === undefined || this.selectedMeal === undefined) {
         console.warn('No selected meal, meal index undefined');

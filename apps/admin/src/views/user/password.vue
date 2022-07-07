@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { form } from '@intake24/admin/helpers';
 
 export default defineComponent({

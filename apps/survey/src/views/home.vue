@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { surveyService } from '../services';
 
 export default defineComponent({

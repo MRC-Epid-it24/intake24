@@ -39,13 +39,10 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import respondentsJob from './respondents-job';
 
-type mixins = InstanceType<typeof respondentsJob>;
-
-export default (Vue as VueConstructor<Vue & mixins>).extend({
+export default defineComponent({
   name: 'RespondentsAuthUrlExport',
 
   mixins: [respondentsJob],

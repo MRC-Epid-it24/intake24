@@ -1,4 +1,4 @@
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { formatDate } from '@intake24/admin/util';
 
 export default defineComponent({

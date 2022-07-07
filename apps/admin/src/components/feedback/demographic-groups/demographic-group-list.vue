@@ -196,8 +196,8 @@
 
 <script lang="ts">
 import draggable from 'vuedraggable';
-import type { PropType } from '@vue/composition-api';
-import { defineComponent, ref } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent, ref } from 'vue';
 import type { DemographicGroup } from '@intake24/common/feedback';
 import { nutrientRuleTypes, sexes } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';

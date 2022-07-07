@@ -1,4 +1,4 @@
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { mapActions } from 'pinia';
 import { useLoading } from '@intake24/admin/stores';
 

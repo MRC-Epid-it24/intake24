@@ -1,13 +1,10 @@
 import Vue from 'vue';
-import VueCompositionAPI from '@vue/composition-api';
 import { Intersect, Resize } from 'vuetify/lib/directives';
 import Toasted from 'vue-toasted';
 import authMixin from './mixins/auth';
 import isMobile from './mixins/is-mobile';
 import loadingMixin from './mixins/loading';
 import moduleMixin from './mixins/module';
-
-Vue.use(VueCompositionAPI);
 
 Vue.use(Toasted, {
   duration: 10000,

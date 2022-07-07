@@ -91,8 +91,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
 import type { Attributes, AttributeType, Nullable } from '@intake24/common/types/models';
 import { useInRecipeTypes } from '@intake24/common/types/models';

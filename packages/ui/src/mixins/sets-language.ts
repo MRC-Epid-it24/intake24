@@ -1,5 +1,5 @@
 import type { I18nLanguageEntry } from '@intake24/common/types/http';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { useApp } from '../stores';
 
 export default defineComponent({

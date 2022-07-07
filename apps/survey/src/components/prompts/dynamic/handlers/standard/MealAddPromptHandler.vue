@@ -11,17 +11,17 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { Meal, HasOnAnswer, PromptAnswer } from '@intake24/common/types';
+import type { Meal, PromptAnswer } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
 import MealAddPrompt from '@intake24/survey/components/prompts/standard/MealAddPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 
-export default (Vue as VueConstructor<Vue & HasOnAnswer>).extend({
+export default defineComponent({
   name: 'MealAddPromptHandler',
+
   components: { MealAddPrompt },
 
   props: {

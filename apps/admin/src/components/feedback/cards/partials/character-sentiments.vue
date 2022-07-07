@@ -69,8 +69,8 @@
 
 <script lang="ts">
 import isEqual from 'lodash/isEqual';
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import type { Character, CharacterSentiment } from '@intake24/common/feedback';
 import { characterSentimentTypes, sentiments } from '@intake24/common/feedback';
 import { LanguageSelector } from '@intake24/admin/components/forms';

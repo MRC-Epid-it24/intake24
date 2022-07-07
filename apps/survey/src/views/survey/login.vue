@@ -78,7 +78,7 @@
 <script lang="ts">
 import type { AxiosError } from 'axios';
 import axios from 'axios';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';

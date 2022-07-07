@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import Gallery from '@intake24/admin/components/gallery/gallery.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AsServedList',
 
   components: { Gallery },

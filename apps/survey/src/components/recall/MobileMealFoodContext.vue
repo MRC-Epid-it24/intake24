@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import { ConfirmDialog } from '@intake24/ui';
 import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';

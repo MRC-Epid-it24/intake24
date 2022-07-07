@@ -17,16 +17,15 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { PropType } from '@vue/composition-api';
+import { defineComponent, ref } from 'vue';
+import type { PropType } from 'vue';
 import { merge } from '@intake24/common/util';
 import type { TextareaPromptProps } from '@intake24/common/prompts';
 import { textareaPromptProps } from '@intake24/common/prompts';
-import type { Prompt } from '../BasePrompt';
 import BasePrompt from '../BasePrompt';
+import type { VForm } from 'vuetify/lib';
 
-export default (Vue as VueConstructor<Vue & Prompt>).extend({
+export default defineComponent({
   name: 'TextareaPrompt',
 
   mixins: [BasePrompt],
@@ -40,6 +39,12 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
       type: String,
       default: null,
     },
+  },
+
+  setup() {
+    const form = ref<InstanceType<typeof VForm>>();
+
+    return { form };
   },
 
   data() {
@@ -61,7 +66,7 @@ export default (Vue as VueConstructor<Vue & Prompt>).extend({
 
   methods: {
     submit() {
-      const isValid = this.$refs.form.validate();
+      const isValid = this.form?.validate();
       if (!isValid) return;
 
       this.$emit('answer', this.currentValue);

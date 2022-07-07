@@ -1,5 +1,4 @@
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import type { CategoryLocalEntry, FoodLocalEntry } from '@intake24/common/types/http/admin';
@@ -7,11 +6,9 @@ import { form } from '@intake24/admin/helpers';
 import watchEntry from '@intake24/admin/components/entry/watch-entry';
 import { getObjectNestedKeys } from '@intake24/common/util';
 
-type Mixins = InstanceType<typeof watchEntry>;
-
 export type Entry = CategoryLocalEntry | FoodLocalEntry;
 
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'CategoryOrFoodEntryMixin',
 
   mixins: [watchEntry],

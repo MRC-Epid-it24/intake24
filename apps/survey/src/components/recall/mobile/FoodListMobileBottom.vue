@@ -20,8 +20,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
 import type { FoodState } from '@intake24/common/types';
 import { useSurvey } from '@intake24/survey/stores';

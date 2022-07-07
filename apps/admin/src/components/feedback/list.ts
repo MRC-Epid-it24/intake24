@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual';
-import type { SetupContext, UnwrapRef, UnwrapRefSimple } from '@vue/composition-api';
-import { ref, toRefs, watch } from '@vue/composition-api';
+import type { SetupContext, UnwrapRef, UnwrapRefSimple } from 'vue';
+import { ref, toRefs, watch } from 'vue';
 import { copy } from '@intake24/common/util';
 
 export type ListProps<T> = {

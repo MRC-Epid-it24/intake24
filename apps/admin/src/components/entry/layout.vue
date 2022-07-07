@@ -80,17 +80,15 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import has from 'lodash/has';
 import { ConfirmDialog } from '@intake24/ui';
 import hasResource from '@intake24/admin/mixins/has-resource';
 import type { RouteLeave } from '@intake24/admin/types';
 import type { Dictionary } from '@intake24/common/types';
 
-type Mixins = InstanceType<typeof hasResource>;
-
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'EntryLayout',
 
   components: { ConfirmDialog },

@@ -47,8 +47,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from '@vue/composition-api';
-import { defineComponent } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import type { UserDemographic } from '@intake24/ui/feedback';
 
 export default defineComponent({
