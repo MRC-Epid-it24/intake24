@@ -36,28 +36,20 @@
             </v-row>
           </v-card-text>
           <v-card-actions class="px-6 pb-6">
-            <v-btn type="submit" color="secondary" xLarge width="100%">
+            <v-btn type="submit" block color="secondary" xLarge>
               {{ $t('users.password.reset.send') }}
             </v-btn>
           </v-card-actions>
-          <template v-if="recaptcha.enabled">
-            <v-divider class="mx-6"></v-divider>
-            <v-card-text class="px-6 pb-6 text-caption">
-              <vue-recaptcha
-                :load-recaptcha-script="false"
-                :sitekey="recaptcha.sitekey"
-                ref="reCaptchaRef"
-                size="invisible"
-                @verify="onCaptchaVerified"
-                @expired="onCaptchaExpired"
-              >
-              </vue-recaptcha>
-              This site is protected by reCAPTCHA and the Google
-              <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
-              <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a>
-              apply.
-            </v-card-text>
-          </template>
+          <div v-if="captcha.enabled">
+            <v-divider class="mx-6 mt-3"></v-divider>
+            <component
+              :is="captcha.provider"
+              :sitekey="captcha.sitekey"
+              ref="captchaRef"
+              @verified="verified"
+              @expired="expired"
+            ></component>
+          </div>
         </v-form>
       </v-card>
     </v-col>
@@ -66,49 +58,50 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue';
-import VueRecaptcha from 'vue-recaptcha';
+import { HCaptcha, ReCaptcha } from '@intake24/ui';
 import { form } from '@intake24/admin/helpers';
 
 type PasswordRequestForm = {
   email: string | null;
-  recaptcha: string | null;
+  captcha: string | null;
 };
 
 export default defineComponent({
   name: 'PasswordRequest',
 
-  components: { VueRecaptcha },
+  components: { HCaptcha, ReCaptcha },
 
   setup() {
-    const reCaptchaRef = ref<InstanceType<typeof VueRecaptcha>>();
+    const captchaRef = ref<InstanceType<typeof HCaptcha | typeof ReCaptcha>>();
 
     return reactive({
       form: form<PasswordRequestForm>({
         email: null,
-        recaptcha: null,
+        captcha: null,
       }),
-      recaptcha: {
-        enabled: import.meta.env.VITE_APP_RECAPTCHA_ENABLED === 'true',
-        sitekey: import.meta.env.VITE_APP_RECAPTCHA_SITEKEY,
+      captcha: {
+        enabled: !!import.meta.env.VITE_APP_CAPTCHA_PROVIDER,
+        provider: import.meta.env.VITE_APP_CAPTCHA_PROVIDER,
+        sitekey: import.meta.env.VITE_APP_CAPTCHA_SITEKEY as string,
       },
-      reCaptchaRef,
+      captchaRef,
       submitted: false,
     });
   },
 
   methods: {
-    resetReCaptcha() {
-      this.form.recaptcha = null;
-      this.reCaptchaRef?.reset();
+    resetCaptcha() {
+      this.form.captcha = null;
+      this.captchaRef?.reset();
     },
 
-    async onCaptchaVerified(token: string) {
-      this.form.recaptcha = token;
+    async verified(token: string) {
+      this.form.captcha = token;
       await this.sendRequest();
     },
 
-    onCaptchaExpired() {
-      this.resetReCaptcha();
+    expired() {
+      this.resetCaptcha();
     },
 
     async sendRequest() {
@@ -116,18 +109,18 @@ export default defineComponent({
         await this.form.post('password', { withErr: true });
         this.submitted = true;
       } catch (err) {
-        if (this.form.errors.has('recaptcha')) {
-          this.form.errors.clear('recaptcha');
-          this.$toasted.error(this.$t('users.password.reset.recaptcha').toString());
+        if (this.form.errors.has('captcha')) {
+          this.form.errors.clear('captcha');
+          this.$toasted.error(this.$t('users.password.reset.captcha').toString());
         }
       } finally {
-        this.resetReCaptcha();
+        this.resetCaptcha();
       }
     },
 
     async submit() {
-      if (this.recaptcha.enabled === true && !this.form.recaptcha) {
-        this.reCaptchaRef?.execute();
+      if (this.captcha.enabled === true && !this.form.captcha) {
+        this.captchaRef?.execute();
         return;
       }
 
@@ -137,8 +130,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.grecaptcha-badge {
-  visibility: hidden;
-}
-</style>
+<style lang="scss"></style>

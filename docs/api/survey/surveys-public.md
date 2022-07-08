@@ -75,7 +75,7 @@ Publicly accessible API end-point.
 Automatically create a new user account with a respondent role and random credentials if allowed by the survey settings.
 
 :::tip
-This functionality has to be allowed in survey settings. It is using reCaptcha challenge and is rate-limited.
+This functionality has to be allowed in survey settings. It is using captcha challenge and is rate-limited.
 :::
 
 ### Request
@@ -86,7 +86,7 @@ POST /api/surveys/{survey-slug}/generate-user
 Content-Type: application/json
 
 {
-    "reCaptchaToken": string
+    "captcha": string
 }
 ```
 

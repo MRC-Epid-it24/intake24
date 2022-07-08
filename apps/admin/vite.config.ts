@@ -1,6 +1,7 @@
 import childProcess from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath, URL } from 'node:url';
+
 import vue from '@vitejs/plugin-vue2';
 import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
@@ -8,7 +9,10 @@ import { defineConfig, loadEnv } from 'vite';
 import { VitePluginFonts } from 'vite-plugin-fonts';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
+
 import pkg from './package.json';
+import { isCaptchaProvider } from '../../packages/common/src/types';
+import { resolveCaptchaScript } from '../../packages/ui/src/captcha/util';
 
 // Set build info for application
 process.env.VITE_APP_BUILD_VERSION = pkg.version;
@@ -27,12 +31,14 @@ export default defineConfig(({ mode }) => {
     PRODUCTION_SOURCE_MAP,
     DISABLE_PWA,
     VITE_APP_NAME: appName,
-    VITE_APP_RECAPTCHA_ENABLED,
+    VITE_APP_CAPTCHA_PROVIDER: captchaProvider,
   } = loadEnv(mode, process.cwd(), '');
 
-  const reCaptchaEnabled = !!(VITE_APP_RECAPTCHA_ENABLED === 'true');
   const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
   const disablePwa = !!(DISABLE_PWA === 'true');
+
+  if (captchaProvider && !isCaptchaProvider(captchaProvider))
+    throw new Error('Invalid Captcha provider');
 
   return {
     resolve: {
@@ -93,9 +99,7 @@ export default defineConfig(({ mode }) => {
           data: {
             title: appName,
             themeColor,
-            reCaptcha: reCaptchaEnabled
-              ? `<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>`
-              : '',
+            captcha: resolveCaptchaScript(captchaProvider),
           },
         },
       }),

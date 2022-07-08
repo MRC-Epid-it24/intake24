@@ -14,7 +14,7 @@ export default () => {
     const { status } = await request(suite.app)
       .post(invalidUrl)
       .set('Accept', 'application/json')
-      .send({ reCaptchaToken: 'reCaptchaToken' });
+      .send({ captcha: 'captchaToken' });
 
     expect(status).toBe(404);
   });
@@ -25,7 +25,7 @@ export default () => {
     const { status } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ reCaptchaToken: 'reCaptchaToken' });
+      .send({ captcha: 'captchaToken' });
 
     expect(status).toBe(403);
   });
@@ -36,7 +36,7 @@ export default () => {
     const { status } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ reCaptchaToken: 'reCaptchaToken' });
+      .send({ captcha: 'captchaToken' });
 
     expect(status).toBe(403);
   });
@@ -47,7 +47,7 @@ export default () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ reCaptchaToken: 'reCaptchaToken' });
+      .send({ captcha: 'captchaToken' });
 
     expect(status).toBe(200);
     expect(body).toContainAllKeys(['username', 'password']);

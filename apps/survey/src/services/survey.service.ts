@@ -9,7 +9,7 @@ import type {
 import http from './http.service';
 
 export type GenerateUserPayload = {
-  reCaptchaToken: string | null;
+  captcha: string | null;
 };
 
 export default {

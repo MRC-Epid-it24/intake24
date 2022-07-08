@@ -49,7 +49,7 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 
 - Anyone can generate new respondent account using following survey URL: `survey-app.domain.com/:surveyId/generate-user`.
 
-- API endpoint is rate limited and protected by Google reCaptcha to minimize the misuses
+- API endpoint is rate limited and protected by captcha to minimize the misuses
 
 - This is useful for `demo-like` surveys.
 

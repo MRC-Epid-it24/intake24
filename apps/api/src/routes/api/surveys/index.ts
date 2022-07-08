@@ -11,6 +11,7 @@ export default () => {
 
   const generateUserLimiter = rateLimiter.createMiddleware('generateUser', {
     message: 'New user has just been generated, please try again later.',
+    skipFailedRequests: true,
   });
 
   router.get('', wrapAsync(surveyController.browse));

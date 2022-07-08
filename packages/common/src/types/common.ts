@@ -6,6 +6,13 @@ export const applications = [...frontEnds, 'shared'] as const;
 
 export type Application = typeof applications[number];
 
+export const captchaProviders = ['h-captcha', 're-captcha'] as const;
+
+export type CaptchaProvider = typeof captchaProviders[number];
+
+export const isCaptchaProvider = (provider: any): provider is CaptchaProvider =>
+  captchaProviders.includes(provider);
+
 export type CustomField = {
   name: string;
   value: string;
@@ -39,12 +46,6 @@ export type ValidationErrorResult = Record<string, ValidationError>;
 
 export const textDirections = ['ltr', 'rtl'] as const;
 export type TextDirection = typeof textDirections[number];
-
-export interface FormRefs {
-  $refs: {
-    form: HTMLFormElement;
-  };
-}
 
 // TODO (performance): better done when the current locale is already known rather than processing all strings
 export function replaceInTranslation(

@@ -6,10 +6,10 @@ Routes to handle user's password recovery.
 
 Request a password reset. It sends an email to user with password recovery link.
 
-- route can be protected with [Google reCAPTCHA](https://developers.google.com/recaptcha/intro), see [API Services Config](/config/api/services#google-recaptcha) for more details.
+- route can be protected with captcha, see [API Services Config](/config/api/services#captcha) for more details.
 - route is rate-limited, see [API Rate Limiter Config](/config/api/rate-limiter#password).
 
-Field `recaptcha` can be omitted if `Google reCAPTCHA` is disabled.
+Field `captcha` can be omitted if `captcha` is disabled.
 
 ### Request
 
@@ -20,7 +20,7 @@ Content-Type: application/json
 
 {
     "email": string,
-    "recaptcha"?: string
+    "captcha"?: string
 }
 ```
 

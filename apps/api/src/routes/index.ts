@@ -18,24 +18,30 @@ const staticContentHelmet = helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
+      connectSrc: ["'self'", 'https://hcaptcha.com', 'https://*.hcaptcha.com'],
       fontSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
       frameSrc: [
         "'self'",
-        'https://youtube.com',
-        'https://www.youtube.com',
-        'https://www.google.com',
+        'https://hcaptcha.com',
+        'https://*.hcaptcha.com',
         'https://www.google.com/recaptcha/',
         'https://recaptcha.google.com/recaptcha/',
+        'https://youtube.com',
+        'https://www.youtube.com',
       ],
       imgSrc: ["'self'", 'blob:', 'data:'],
       scriptSrc: [
         "'self'",
-        'https://storage.googleapis.com',
+        'https://hcaptcha.com',
+        'https://*.hcaptcha.com',
         'https://www.google.com/recaptcha/',
         'https://www.gstatic.com/recaptcha/',
+        'https://storage.googleapis.com',
       ],
       styleSrc: [
         "'self'",
+        'https://hcaptcha.com',
+        'https://*.hcaptcha.com',
         'https://fonts.googleapis.com',
         "'unsafe-inline'", // TODO: review for Vuetify theming
       ],

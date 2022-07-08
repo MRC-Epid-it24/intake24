@@ -1,16 +1,16 @@
 import { checkSchema } from 'express-validator';
 import validate from '@intake24/api/http/requests/validate';
-import { reCaptcha } from '@intake24/api/http/rules';
+import { captcha } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';
 
 const config = ioc.resolve('servicesConfig');
 
 export default validate(
   checkSchema({
-    reCaptchaToken: {
+    captcha: {
       in: ['body'],
       custom: {
-        options: async (value): Promise<void> => reCaptcha(value, config.reCaptcha),
+        options: async (value): Promise<void> => captcha(value, config.captcha),
       },
     },
   })

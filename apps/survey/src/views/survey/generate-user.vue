@@ -50,29 +50,22 @@
               If you think you will be able to complete the survey in one sitting, please ignore
               this and continue.
             </p>
-            <v-card-actions class="px-0">
-              <v-btn block color="secondary" xLarge :disabled="!canContinue" @click="login">
-                {{ $t('common.action.continue') }}
-              </v-btn>
-            </v-card-actions>
-            <template v-if="reCaptcha.enabled">
-              <v-divider class="mt-4"></v-divider>
-              <div class="pa-2 text-caption">
-                <vue-recaptcha
-                  ref="reCaptchaRef"
-                  size="invisible"
-                  :sitekey="reCaptcha.siteKey"
-                  @verify="onCaptchaVerified"
-                  @expired="onCaptchaExpired"
-                >
-                </vue-recaptcha>
-                This site is protected by reCAPTCHA and the Google
-                <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
-                <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a>
-                apply.
-              </div>
-            </template>
           </v-card-text>
+          <v-card-actions class="px-6 pb-6">
+            <v-btn block color="secondary" xLarge :disabled="!canContinue" @click="login">
+              {{ $t('common.action.continue') }}
+            </v-btn>
+          </v-card-actions>
+          <div v-if="captcha.enabled">
+            <v-divider class="mx-6 mt-3"></v-divider>
+            <component
+              :is="captcha.provider"
+              :sitekey="captcha.sitekey"
+              ref="captchaRef"
+              @verified="verified"
+              @expired="expired"
+            ></component>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -82,14 +75,16 @@
 <script lang="ts">
 import axios from 'axios';
 import { defineComponent, ref, reactive } from 'vue';
-import VueRecaptcha from 'vue-recaptcha';
 import { mapActions } from 'pinia';
 import surveySvc from '@intake24/survey/services/survey.service';
 import { useAuth } from '@intake24/survey/stores';
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
+import { HCaptcha, ReCaptcha } from '@intake24/ui';
 
 export default defineComponent({
   name: 'GenerateUser',
+
+  components: { HCaptcha, ReCaptcha },
 
   props: {
     surveyId: {
@@ -99,7 +94,7 @@ export default defineComponent({
   },
 
   setup() {
-    const reCaptchaRef = ref<InstanceType<typeof VueRecaptcha>>();
+    const captchaRef = ref<InstanceType<typeof HCaptcha | typeof ReCaptcha>>();
 
     return reactive({
       loading: false,
@@ -107,16 +102,15 @@ export default defineComponent({
       survey: null as PublicSurveyEntry | null,
       username: '',
       password: '',
-      reCaptcha: {
-        enabled: import.meta.env.VITE_APP_RECAPTCHA_ENABLED === 'true',
-        siteKey: import.meta.env.VITE_APP_RECAPTCHA_SITEKEY,
+      captcha: {
+        enabled: !!import.meta.env.VITE_APP_CAPTCHA_PROVIDER,
+        provider: import.meta.env.VITE_APP_CAPTCHA_PROVIDER,
+        sitekey: import.meta.env.VITE_APP_CAPTCHA_SITEKEY as string,
         token: null as string | null,
       },
-      reCaptchaRef,
+      captchaRef,
     });
   },
-
-  components: { VueRecaptcha },
 
   computed: {
     canContinue(): boolean {
@@ -127,7 +121,13 @@ export default defineComponent({
   async mounted() {
     await this.fetchSurveyPublicInfo();
 
-    if (this.survey?.openAccess === false) this.status = 403;
+    const { survey } = this;
+    if (!survey) {
+      this.status = 404;
+      return;
+    }
+
+    if (survey.openAccess === false) this.status = 403;
   },
 
   methods: {
@@ -141,25 +141,25 @@ export default defineComponent({
       }
     },
 
-    resetReCaptcha() {
-      this.reCaptcha.token = null;
-      this.reCaptchaRef?.reset();
+    resetCaptcha() {
+      this.captcha.token = null;
+      this.captchaRef?.reset();
     },
 
-    async onCaptchaVerified(token: string) {
-      this.reCaptcha.token = token;
+    async verified(token: string) {
+      this.captcha.token = token;
       await this.generateUser();
     },
 
-    onCaptchaExpired() {
-      this.resetReCaptcha();
+    expired() {
+      this.resetCaptcha();
     },
 
     async generateUser() {
-      const { enabled, token } = this.reCaptcha;
+      const { enabled, token } = this.captcha;
 
       if (enabled && !token) {
-        this.reCaptchaRef?.execute();
+        this.captchaRef?.execute();
         return;
       }
 
@@ -167,7 +167,7 @@ export default defineComponent({
 
       try {
         const { username, password } = await surveySvc.generateUser(this.surveyId, {
-          reCaptchaToken: token,
+          captcha: token,
         });
 
         this.status = 200;
@@ -178,7 +178,7 @@ export default defineComponent({
       } finally {
         this.loading = false;
 
-        this.resetReCaptcha();
+        this.resetCaptcha();
       }
     },
 
@@ -198,8 +198,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.grecaptcha-badge {
-  visibility: hidden;
-}
-</style>
+<style lang="scss"></style>

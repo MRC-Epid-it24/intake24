@@ -24,7 +24,7 @@ const users: LocaleMessageObject = {
     changed: 'Password has been changed.',
     reset: {
       _: 'Reset password',
-      recaptcha: 'Invalid reCAPTCHA challenge',
+      captcha: 'Invalid captcha challenge',
       send: 'Send request',
       sent: 'Link to restore your password has been sent to provided email address.',
     },

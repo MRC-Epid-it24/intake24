@@ -32,7 +32,7 @@ export default () => {
     await request(suite.app)
       .post('/api/password')
       .set('Accept', 'application/json')
-      .send({ email, recaptcha: 'recaptchaToken' });
+      .send({ email, captcha: 'captchaToken' });
 
     await sleep(1000); // TODO: this should wait until the job is done
     const reset = await UserPasswordReset.findOne({ where: { userId } });

@@ -22,25 +22,30 @@ const startApp = async () => {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          connectSrc: ["'self'", config.api.host],
+          connectSrc: ["'self'", 'https://hcaptcha.com', 'https://*.hcaptcha.com', config.api.host],
           fontSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
           frameSrc: [
             "'self'",
-            'https://youtube.com',
-            'https://www.youtube.com',
-            'https://www.google.com',
+            'https://hcaptcha.com',
+            'https://*.hcaptcha.com',
             'https://www.google.com/recaptcha/',
             'https://recaptcha.google.com/recaptcha/',
+            'https://youtube.com',
+            'https://www.youtube.com',
           ],
           imgSrc: ["'self'", 'blob:', 'data:', config.api.host],
           scriptSrc: [
             "'self'",
-            'https://storage.googleapis.com',
+            'https://hcaptcha.com',
+            'https://*.hcaptcha.com',
             'https://www.google.com/recaptcha/',
             'https://www.gstatic.com/recaptcha/',
+            'https://storage.googleapis.com',
           ],
           styleSrc: [
             "'self'",
+            'https://hcaptcha.com',
+            'https://*.hcaptcha.com',
             'https://fonts.googleapis.com',
             "'unsafe-inline'", // TODO: review for Vuetify theming
           ],

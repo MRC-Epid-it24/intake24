@@ -2,23 +2,30 @@
 
 Path: `apps/api/src/config/services.ts`
 
-## Google reCAPTCHA
+## CAPTCHA
 
-Password recovery can be protected by [Google reCAPTCHA](https://developers.google.com/recaptcha/intro). V2 (invisible) is currently implemented.
+Password recovery and user generation can be protected by captcha services.
 
-### Enabled
+Implemented providers:
 
-Determines whether the reCAPTCHA is enabled or not.
+- [hCAPTCHA](https://hcaptcha.com)
+- [Google reCAPTCHA](https://developers.google.com/recaptcha/intro)
 
-- object-path: `recaptcha.enabled`
-- dotenv var: `RECAPTCHA_ENABLED`
-- type: `boolean`
-- default: `false`
+V2 (invisible) version is currently implemented.
+
+### Provider
+
+Captcha provider to use. Captcha will be disabled if left empty.
+
+- object-path: `captcha.provider`
+- dotenv var: `CAPTCHA_PROVIDER`
+- type: `h-captcha | re-captcha`
+- default: `''`
 
 ### Secret key
 
-- object-path: `recaptcha.secret`
-- dotenv var: `RECAPTCHA_SECRET`
+- object-path: `captcha.secret`
+- dotenv var: `CAPTCHA_SECRET`
 - type: `string`
 - default: `''`
 

@@ -5,7 +5,7 @@ export default () => {
   const url = '/api/password';
 
   it('should return 422 for missing input data', async () => {
-    await suite.sharedTests.assertInvalidInput('post', url, ['email', 'recaptcha'], {
+    await suite.sharedTests.assertInvalidInput('post', url, ['email', 'captcha'], {
       bearer: undefined,
     });
   });
@@ -14,18 +14,18 @@ export default () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ email: 'notAnEmail', recaptcha: [] });
+      .send({ email: 'notAnEmail', captcha: [] });
 
     expect(status).toBe(422);
     expect(body).toContainAllKeys(['errors', 'success']);
-    expect(body.errors).toContainAllKeys(['email', 'recaptcha']);
+    expect(body.errors).toContainAllKeys(['email', 'captcha']);
   });
 
   it('should return 200 for valid email', async () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ email: 'testUser@example.com', recaptcha: 'recaptchaToken' });
+      .send({ email: 'testUser@example.com', captcha: 'captchaToken' });
 
     expect(status).toBe(200);
     expect(body).toBeEmpty();
@@ -35,7 +35,7 @@ export default () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ email: 'emailNotInDatabase@example.com', recaptcha: 'recaptchaToken' });
+      .send({ email: 'emailNotInDatabase@example.com', captcha: 'captchaToken' });
 
     expect(status).toBe(200);
     expect(body).toBeEmpty();
