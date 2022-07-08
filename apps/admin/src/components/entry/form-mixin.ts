@@ -8,7 +8,7 @@ import type { Dictionary, ValidationError } from '@intake24/common/types';
 import type { FormMixin } from '@intake24/admin/types';
 import { form } from '@intake24/admin/helpers';
 import { SubmitFooter } from '@intake24/admin/components/forms';
-import { useEntry } from '@intake24/admin/stores';
+import { useEntry, useMessages } from '@intake24/admin/stores';
 import fetchEntry from './fetch-entry';
 import hasEntry from './has-entry';
 import Layout from './layout.vue';
@@ -82,14 +82,14 @@ export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
         data = await this.form[this.editMethod](`${this.resource.api}/${this.id}`);
 
         const { id, name } = data;
-        this.$toasted.success(this.$t('common.msg.updated', { name: name ?? id }).toString());
+        useMessages().success(this.$t('common.msg.updated', { name: name ?? id }).toString());
       } else {
         data = await this.form.post(`${this.resource.api}`);
 
         const { id, name } = data;
         this.$router.push({ name: `${this.resource.name}-edit`, params: { id } });
 
-        this.$toasted.success(this.$t('common.msg.stored', { name: name ?? id }).toString());
+        useMessages().success(this.$t('common.msg.stored', { name: name ?? id }).toString());
       }
 
       this.setEntry(data);

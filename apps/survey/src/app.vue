@@ -86,6 +86,7 @@
       <router-view></router-view>
     </v-main>
     <service-worker></service-worker>
+    <message-box></message-box>
     <!-- <v-footer app> </v-footer> -->
   </v-app>
 </template>
@@ -96,13 +97,13 @@ import { defineComponent } from 'vue';
 import type { TranslateResult } from 'vue-i18n';
 import logo from '@intake24/survey/assets/logo.svg';
 import Loader from '@intake24/survey/components/Loader.vue';
-import { ConfirmDialog, ServiceWorker, setsLanguage } from '@intake24/ui';
+import { ConfirmDialog, MessageBox, setsLanguage, ServiceWorker } from '@intake24/ui';
 import { useAuth } from './stores';
 
 export default defineComponent({
   name: 'App',
 
-  components: { ConfirmDialog, Loader, ServiceWorker },
+  components: { ConfirmDialog, Loader, MessageBox, ServiceWorker },
 
   mixins: [setsLanguage],
 

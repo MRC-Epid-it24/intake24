@@ -10,13 +10,13 @@ export const useLoading = defineStore('loading', {
     isLoading: (state) => !!state.items.length,
   },
   actions: {
-    async addItem(item: string) {
+    addItem(item: string) {
       this.items.push(item);
     },
-    async removeItem(item: string) {
+    removeItem(item: string) {
       this.items = this.items.filter((i) => i !== item);
     },
-    async reset() {
+    reset() {
       this.$reset();
     },
   },

@@ -191,6 +191,7 @@ import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import RespondentFeedback from './respondent-feedback.vue';
 import RespondentsUpload from './respondents-upload.vue';
 import RespondentsAuthUrlExport from './respondents-auth-url-export.vue';
+import { useMessages } from '@intake24/ui/stores';
 
 export type RespondentsRefs = {
   $refs: {
@@ -322,13 +323,13 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
           `admin/surveys/${this.id}/respondents/${this.form.userId}`
         );
 
-        this.$toasted.success(this.$t('common.msg.updated', { name }).toString());
+        useMessages().success(this.$t('common.msg.updated', { name }).toString());
       } else {
         const { username: name } = await this.form.post<SurveyRespondentEntry>(
           `admin/surveys/${this.id}/respondents`
         );
 
-        this.$toasted.success(this.$t('common.msg.stored', { name }).toString());
+        useMessages().success(this.$t('common.msg.stored', { name }).toString());
       }
 
       this.dialog = false;
@@ -337,14 +338,14 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
 
     async remove({ username: name, userId }: SurveyRespondentListEntry) {
       await this.$http.delete(`admin/surveys/${this.id}/respondents/${userId}`);
-      this.$toasted.success(this.$t('common.msg.deleted', { name }).toString());
+      useMessages().success(this.$t('common.msg.deleted', { name }).toString());
 
       await this.updateTable();
     },
 
     toClipboard(data: string) {
       navigator.clipboard.writeText(data);
-      this.$toasted.info(this.$t('surveys.respondents.authUrls.copiedToClipboard').toString());
+      useMessages().info(this.$t('surveys.respondents.authUrls.copiedToClipboard').toString());
     },
   },
 });

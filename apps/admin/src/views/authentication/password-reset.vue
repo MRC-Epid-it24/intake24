@@ -72,6 +72,7 @@
 import { defineComponent } from 'vue';
 import type { ValidationError } from '@intake24/common/types';
 import { form } from '@intake24/admin/helpers';
+import { useMessages } from '@intake24/ui/stores';
 
 type PasswordResetForm = {
   token: string;
@@ -113,7 +114,7 @@ export default defineComponent({
   methods: {
     async submit() {
       await this.form.post('password/reset');
-      this.$toasted.success(this.$t('users.password.changed').toString());
+      useMessages().success(this.$t('users.password.changed').toString());
       this.$router.push({ name: 'login' });
     },
   },

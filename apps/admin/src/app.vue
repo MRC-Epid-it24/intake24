@@ -92,6 +92,7 @@
       </v-container>
     </v-main>
     <service-worker></service-worker>
+    <message-box></message-box>
     <!-- <v-footer app> </v-footer> -->
   </v-app>
 </template>
@@ -102,7 +103,7 @@ import pluralize from 'pluralize';
 import { defineComponent } from 'vue';
 import type { Location } from 'vue-router';
 import type { Dictionary } from '@intake24/common/types';
-import { ConfirmDialog, setsLanguage, ServiceWorker } from '@intake24/ui';
+import { ConfirmDialog, MessageBox, setsLanguage, ServiceWorker } from '@intake24/ui';
 import Loader from '@intake24/admin/components/loader.vue';
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import webPush from '@intake24/admin/components/web-push/web-push';
@@ -122,7 +123,7 @@ type Breadcrumbs = {
 export default defineComponent({
   name: 'App',
 
-  components: { ConfirmDialog, Loader, MenuTree, ServiceWorker },
+  components: { ConfirmDialog, Loader, MenuTree, MessageBox, ServiceWorker },
 
   mixins: [setsLanguage, webPush],
 

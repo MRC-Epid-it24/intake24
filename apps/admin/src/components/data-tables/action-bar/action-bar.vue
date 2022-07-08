@@ -16,6 +16,7 @@
 <script lang="ts">
 import type { VueConstructor, PropType } from 'vue';
 import Vue from 'vue';
+import { useMessages } from '@intake24/admin/stores';
 import upperFirst from 'lodash/upperFirst';
 import Delete from './delete.vue';
 import Read from './read.vue';
@@ -78,7 +79,7 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
 
     onSuccess(action: string): void {
       const { id, name } = this.item;
-      this.$toasted.success(this.$t(`common.msg.${action}`, { name: name ?? id }).toString());
+      useMessages().success(this.$t(`common.msg.${action}`, { name: name ?? id }).toString());
       this.$emit('refresh');
     },
   },

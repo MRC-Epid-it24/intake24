@@ -5,6 +5,7 @@ import type { CategoryLocalEntry, FoodLocalEntry } from '@intake24/common/types/
 import { form } from '@intake24/admin/helpers';
 import watchEntry from '@intake24/admin/components/entry/watch-entry';
 import { getObjectNestedKeys } from '@intake24/common/util';
+import { useMessages } from '@intake24/ui/stores';
 
 export type Entry = CategoryLocalEntry | FoodLocalEntry;
 
@@ -91,7 +92,7 @@ export default defineComponent({
 
       const { name, main: { name: englishName = 'record' } = {} } = data;
 
-      this.$toasted.success(
+      useMessages().success(
         this.$t('common.msg.updated', { name: name ?? englishName }).toString()
       );
     },

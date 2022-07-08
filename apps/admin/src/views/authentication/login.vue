@@ -58,7 +58,7 @@ import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { mapActions, mapState } from 'pinia';
 import { Errors } from '@intake24/common/util';
-import { useAuth } from '@intake24/admin/stores';
+import { useAuth, useMessages } from '@intake24/admin/stores';
 
 export default defineComponent({
   name: 'AppLogin',
@@ -87,7 +87,7 @@ export default defineComponent({
       if (this.loggedIn) await this.$router.push({ name: 'dashboard' });
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 401)
-        this.$toasted.error('Invalid MFA authentication.');
+        useMessages().error('Invalid MFA authentication.');
     }
   },
 
@@ -113,7 +113,7 @@ export default defineComponent({
 
           if (status === 422 && 'errors' in data) this.errors.record(data.errors);
 
-          if (status === 401) this.$toasted.error('Invalid authentication credentials provided.');
+          if (status === 401) useMessages().error('Invalid authentication credentials provided.');
         }
       }
     },

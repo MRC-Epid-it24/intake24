@@ -1,4 +1,4 @@
-export { useApp, useLoading } from '@intake24/ui/stores';
+export { useApp, useLoading, useMessages } from '@intake24/ui/stores';
 
 export * from './auth';
 export * from './entry';

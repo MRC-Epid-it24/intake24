@@ -70,8 +70,8 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import type { Dictionary } from '@intake24/common/types';
 import type { Pagination, PaginationMeta } from '@intake24/common/types/models';
@@ -80,11 +80,9 @@ import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import handlesLoading from '@intake24/admin/mixins/handles-loading';
 import hasResource from '@intake24/admin/mixins/has-resource';
 import { DataTableFilter } from '@intake24/admin/components/data-tables';
-import { useResource } from '@intake24/admin/stores';
+import { useMessages, useResource } from '@intake24/admin/stores';
 
-type Mixins = InstanceType<typeof handlesLoading> & InstanceType<typeof hasResource>;
-
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'ImageGallery',
 
   components: { ConfirmDialog, DataTableFilter, ToolBar },
@@ -184,7 +182,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
       const { id, name } = item;
 
       await this.$http.delete(`${this.resource.api}/${id}`);
-      this.$toasted.success(this.$t('common.msg.deleted', { name: name ?? id }).toString());
+      useMessages().success(this.$t('common.msg.deleted', { name: name ?? id }).toString());
       this.refresh();
     },
   },

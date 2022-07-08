@@ -49,6 +49,7 @@ import detailMixin from '@intake24/admin/components/entry/detail-mixin';
 import type { EntryMixin } from '@intake24/admin/types';
 import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { useMessages } from '@intake24/ui/stores';
 
 export type SurveySubmissionsRefs = {
   $refs: {
@@ -130,7 +131,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>)
 
     async remove(submissionId: string) {
       await this.$http.delete(`${this.baseAPI}/${submissionId}`);
-      this.$toasted.success(this.$t(`common.msg.deleted`, { name: submissionId }).toString());
+      useMessages().success(this.$t(`common.msg.deleted`, { name: submissionId }).toString());
       await this.$refs.table.fetch();
     },
   },

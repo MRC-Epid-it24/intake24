@@ -85,6 +85,7 @@ import { defineComponent } from 'vue';
 import has from 'lodash/has';
 import { ConfirmDialog } from '@intake24/ui';
 import hasResource from '@intake24/admin/mixins/has-resource';
+import { useMessages } from '@intake24/admin/stores';
 import type { RouteLeave } from '@intake24/admin/types';
 import type { Dictionary } from '@intake24/common/types';
 
@@ -170,7 +171,7 @@ export default defineComponent({
       const { id, name } = this.entry;
 
       await this.$http.delete(`${this.resource.api}/${this.id}`);
-      this.$toasted.success(this.$t('common.msg.deleted', { name: name ?? id }).toString());
+      useMessages().success(this.$t('common.msg.deleted', { name: name ?? id }).toString());
       await this.$router.push({ name: this.resource.name });
     },
   },

@@ -80,6 +80,7 @@ import surveySvc from '@intake24/survey/services/survey.service';
 import { useAuth } from '@intake24/survey/stores';
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import { HCaptcha, ReCaptcha } from '@intake24/ui';
+import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
   name: 'GenerateUser',
@@ -191,7 +192,7 @@ export default defineComponent({
         await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 401)
-          this.$toasted.error(this.$t('login.err.invalidCredentials').toString());
+          useMessages().error(this.$t('login.err.invalidCredentials').toString());
       }
     },
   },

@@ -36,6 +36,7 @@ import { ConfirmDialog } from '@intake24/ui';
 import Create from './create.vue';
 import Read from './read.vue';
 import Edit from './edit.vue';
+import { useMessages } from '@intake24/ui/stores';
 
 interface Actionable {
   [key: string]: () => Promise<void>;
@@ -102,13 +103,13 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
       if (!id) return;
 
       await this.$http.delete(this.api, { params: { id } });
-      this.$toasted.success(this.$t('common.msg.multi.deleted').toString());
+      useMessages().success(this.$t('common.msg.multi.deleted').toString());
       this.onDraw();
     },
 
     getOneSelected() {
       if (this.selected.length !== 1) {
-        this.$toasted.info(this.$t('Select one item to view/edit details.').toString());
+        useMessages().info(this.$t('Select one item to view/edit details.').toString());
         return false;
       }
       return this.selected[0];
@@ -116,7 +117,7 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
 
     getAtLeastOneSelected() {
       if (!this.selected.length) {
-        this.$toasted.info(this.$t('Select at least one item.').toString());
+        useMessages().info(this.$t('Select at least one item.').toString());
         return false;
       }
       return this.selected;

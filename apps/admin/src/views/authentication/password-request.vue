@@ -60,6 +60,7 @@
 import { defineComponent, reactive, ref } from 'vue';
 import { HCaptcha, ReCaptcha } from '@intake24/ui';
 import { form } from '@intake24/admin/helpers';
+import { useMessages } from '@intake24/ui/stores';
 
 type PasswordRequestForm = {
   email: string | null;
@@ -111,7 +112,7 @@ export default defineComponent({
       } catch (err) {
         if (this.form.errors.has('captcha')) {
           this.form.errors.clear('captcha');
-          this.$toasted.error(this.$t('users.password.reset.captcha').toString());
+          useMessages().error(this.$t('users.password.reset.captcha').toString());
         }
       } finally {
         this.resetCaptcha();

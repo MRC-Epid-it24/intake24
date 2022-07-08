@@ -36,7 +36,7 @@ export const useApp = defineStore('app', {
     paths: ['lang'],
   },
   actions: {
-    async setLanguage(language: string) {
+    setLanguage(language: string) {
       this.lang = language;
     },
   },

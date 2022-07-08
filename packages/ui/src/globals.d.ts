@@ -2,7 +2,6 @@ import type VueI18n from 'vue-i18n';
 import type { HttpClient, Permission } from '@intake24/ui/types';
 import type { Route } from 'vue-router';
 import type VueRouter from 'vue-router';
-import type { Toasted } from 'vue-toasted';
 import type { Framework } from 'vuetify';
 import type { HttpClient, Permission } from './types';
 
@@ -33,9 +32,6 @@ declare module 'vue' {
     // Vue Router
     $router: VueRouter;
     $route: Route;
-
-    // Vue toasted
-    $toasted: Toasted;
 
     // Vuetify
     $vuetify: Framework;
