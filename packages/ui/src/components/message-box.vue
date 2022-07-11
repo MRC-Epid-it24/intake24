@@ -39,12 +39,6 @@ export default defineComponent({
     },
   },
 
-  watch: {
-    messages() {
-      console.log(`messages`);
-    },
-  },
-
   methods: {
     calculateMargin(index: number) {
       return `${index * 60}px`;

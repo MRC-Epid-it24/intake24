@@ -5,19 +5,23 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { ImageMapEntry } from '@intake24/common/types/http/admin';
-import type { DetailMixin } from '@intake24/admin/types';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import GuideDrawer from '../guide-drawer.vue';
 
-export default (Vue as VueConstructor<Vue & DetailMixin<ImageMapEntry>>).extend({
+export default defineComponent({
   name: 'ImageMapDetail',
 
   components: { GuideDrawer },
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<ImageMapEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 });
 </script>
 

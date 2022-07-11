@@ -41,25 +41,29 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type {
   CategoryContentsResponse,
   CategoryListEntry,
   FoodListEntry,
   RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
-import type { DetailMixin } from '@intake24/admin/types';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 
 export interface CategoryListEntryItem extends CategoryListEntry {
   children: (CategoryListEntryItem | FoodListEntry)[];
 }
 
-export default (Vue as VueConstructor<Vue & DetailMixin>).extend({
+export default defineComponent({
   name: 'FoodDBDetail',
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     return {

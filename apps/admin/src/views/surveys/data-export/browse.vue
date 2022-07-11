@@ -102,25 +102,27 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { JobEntry } from '@intake24/common/types/http/admin';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { defineComponent } from 'vue';
+import type { JobEntry, SurveyEntry } from '@intake24/common/types/http/admin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { PollsForJobs } from '@intake24/admin/components/polls-for-jobs';
 import { form } from '@intake24/admin/helpers';
-import type { DetailMixin } from '@intake24/admin/types';
-
-type mixins = InstanceType<typeof PollsForJobs>;
 
 type SurveyDataExportForm = {
   startDate: string | null;
   endDate: string | null;
 };
 
-export default (Vue as VueConstructor<Vue & DetailMixin & mixins>).extend({
+export default defineComponent({
   name: 'SurveyDataExport',
 
   mixins: [detailMixin, PollsForJobs],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<SurveyEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     return {

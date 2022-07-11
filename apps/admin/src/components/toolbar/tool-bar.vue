@@ -16,7 +16,7 @@
       <confirm-dialog
         v-if="currentActions.includes('delete')"
         :disabled="!selected.length"
-        :label="$t('common.action.delete')"
+        :label="$t('common.action.delete').toString()"
         color="error"
         icon-left="$delete"
         @confirm="onDelete"
@@ -28,8 +28,8 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import type { Location } from 'vue-router';
 import upperFirst from 'lodash/upperFirst';
 import { ConfirmDialog } from '@intake24/ui';
@@ -38,11 +38,7 @@ import Read from './read.vue';
 import Edit from './edit.vue';
 import { useMessages } from '@intake24/ui/stores';
 
-interface Actionable {
-  [key: string]: () => Promise<void>;
-}
-
-export default (Vue as VueConstructor<Vue & Actionable>).extend({
+export default defineComponent({
   name: 'ToolBar',
 
   components: {
@@ -74,14 +70,15 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
     currentActions(): string[] {
       return this.actions.filter((action) => this.can({ action }));
     },
-    route(): string {
+    route(): string | null | undefined {
       return this.routePrefix ?? this.$route.name;
     },
   },
 
   methods: {
-    onAction(action: string) {
-      this[`on${upperFirst(action)}`]();
+    async onAction(action: string) {
+      //@ts-expect-error types
+      await this[`on${upperFirst(action)}`]();
     },
 
     async onRead() {

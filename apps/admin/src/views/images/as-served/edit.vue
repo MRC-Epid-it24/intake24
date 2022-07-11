@@ -53,11 +53,9 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { AsServedSetEntry, AsServedImageInput } from '@intake24/common/types/http/admin';
-import type { FormMixin } from '@intake24/admin/types';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
 import AsServedImages from './images.vue';
 
@@ -67,12 +65,18 @@ type EditAsServedSetForm = {
   images: AsServedImageInput[];
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin<AsServedSetEntry>>).extend({
+export default defineComponent({
   name: 'EditAsServedSetForm',
 
   components: { AsServedImages },
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<AsServedSetEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     return {

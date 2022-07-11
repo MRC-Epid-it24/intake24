@@ -12,7 +12,7 @@
       <v-col cols="12">
         <language-selector
           :disabled="!required"
-          :label="$t('survey-schemes.questions.validation.message')"
+          :label="$t('survey-schemes.questions.validation.message').toString()"
           :value="message"
           @input="update('message', $event)"
         >

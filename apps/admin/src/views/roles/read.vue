@@ -21,12 +21,19 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import type { RoleEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'RoleDetail',
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<RoleEntry>(props.id);
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 });
 </script>
 

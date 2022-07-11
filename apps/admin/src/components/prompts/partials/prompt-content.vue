@@ -1,7 +1,7 @@
 <template>
   <v-tab-item key="content">
     <language-selector
-      :label="$t('survey-schemes.questions.name._')"
+      :label="$t('survey-schemes.questions.name._').toString()"
       :value="name"
       @input="update('name', $event)"
     >
@@ -18,7 +18,7 @@
       </template>
     </language-selector>
     <language-selector
-      :label="$t('survey-schemes.questions.text._')"
+      :label="$t('survey-schemes.questions.text._').toString()"
       :value="text"
       @input="update('text', $event)"
     >
@@ -35,7 +35,7 @@
       </template>
     </language-selector>
     <language-selector
-      :label="$t('survey-schemes.questions.description._')"
+      :label="$t('survey-schemes.questions.description._').toString()"
       :value="description"
       @input="update('description', $event)"
     >

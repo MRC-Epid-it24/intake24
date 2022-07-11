@@ -1,10 +1,8 @@
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mapActions } from 'pinia';
-import type { HasEntryMixin } from '@intake24/admin/types';
 import { useEntry } from '@intake24/admin/stores';
 
-export default (Vue as VueConstructor<Vue & HasEntryMixin>).extend({
+export default defineComponent({
   async beforeRouteUpdate(to, from, next) {
     if (from.params.id === to.params.id) {
       next();
@@ -23,7 +21,7 @@ export default (Vue as VueConstructor<Vue & HasEntryMixin>).extend({
     ...mapActions(useEntry, ['requestEntry']),
 
     async fetch(id?: string): Promise<void> {
-      await this.requestEntry({ id: id ?? this.id });
+      await this.requestEntry({ id: id ?? this.$route.params.id });
     },
   },
 });

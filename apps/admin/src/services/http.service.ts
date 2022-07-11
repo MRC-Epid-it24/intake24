@@ -1,9 +1,9 @@
 import type { AxiosError, AxiosResponse } from 'axios';
 import axios from 'axios';
-import Vue from 'vue';
 import trim from 'lodash/trim';
 import type { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
 import type { AuthStoreDef } from '../stores';
+import { useMessages } from '../stores';
 
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];
@@ -59,7 +59,7 @@ const httpClient: HttpClient = {
             const {
               data: { message },
             } = response;
-            Vue.toasted.error(message ?? err.message);
+            useMessages().error(message ?? err.message);
           }
 
           return reject(err);

@@ -50,7 +50,7 @@
               <v-spacer></v-spacer>
               <confirm-dialog
                 v-if="can({ action: 'delete' })"
-                :label="$t('common.action.delete')"
+                :label="$t('common.action.delete').toString()"
                 color="error"
                 icon
                 icon-left="$delete"
@@ -77,8 +77,7 @@ import type { Dictionary } from '@intake24/common/types';
 import type { Pagination, PaginationMeta } from '@intake24/common/types/models';
 import { ConfirmDialog } from '@intake24/ui';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
-import handlesLoading from '@intake24/admin/mixins/handles-loading';
-import hasResource from '@intake24/admin/mixins/has-resource';
+import { handlesLoading, resource } from '@intake24/admin/mixins';
 import { DataTableFilter } from '@intake24/admin/components/data-tables';
 import { useMessages, useResource } from '@intake24/admin/stores';
 
@@ -87,7 +86,7 @@ export default defineComponent({
 
   components: { ConfirmDialog, DataTableFilter, ToolBar },
 
-  mixins: [handlesLoading, hasResource],
+  mixins: [handlesLoading, resource],
 
   props: {
     title: {

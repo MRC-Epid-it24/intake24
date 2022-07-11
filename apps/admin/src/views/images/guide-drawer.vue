@@ -49,7 +49,7 @@
                   <v-spacer></v-spacer>
                   <confirm-dialog
                     v-if="isImageMap && !disabled"
-                    :label="$t('guide-images.objects.delete')"
+                    :label="$t('guide-images.objects.delete').toString()"
                     color="error"
                     icon
                     :icon-color="active ? `white` : `error`"
@@ -110,8 +110,8 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent, ref } from 'vue';
 import type {
   GuideImageEntry,
   GuideImageEntryObject,
@@ -123,16 +123,6 @@ import debounce from 'lodash/debounce';
 import type { VImg } from 'vuetify/lib';
 import { ConfirmDialog } from '@intake24/ui';
 
-type Refs = {
-  $refs: {
-    img: InstanceType<typeof VImg>;
-    svg: SVGElement;
-  };
-  debouncedImgResize: () => void;
-  debouncedImageMapObjects: () => void;
-  debouncedGuideImageObjects: () => void;
-};
-
 interface Objects extends Omit<GuideImageEntryObject, 'id' | 'outlineCoordinates'> {
   id: number;
 }
@@ -142,7 +132,7 @@ type PathCoords = number[][][];
 const distance = ([sourceX, sourceY]: number[], [targetX, targetY]: number[]) =>
   Math.sqrt((sourceX - targetX) ** 2 + (sourceY - targetY) ** 2);
 
-export default (Vue as VueConstructor<Vue & Refs>).extend({
+export default defineComponent({
   name: 'GuideDrawer',
 
   components: { ConfirmDialog },
@@ -156,6 +146,13 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       type: Object as PropType<GuideImageEntry | ImageMapEntry>,
       required: true,
     },
+  },
+
+  setup() {
+    const img = ref<InstanceType<typeof VImg>>();
+    const svg = ref<SVGElement>();
+
+    return { img, svg };
   },
 
   data() {
@@ -227,9 +224,11 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
 
   watch: {
     imageMapObjects() {
+      //@ts-expect-error debounced
       this.debouncedImageMapObjects();
     },
     guideImageObjects() {
+      //@ts-expect-error debounced
       this.debouncedGuideImageObjects();
     },
   },
@@ -250,12 +249,19 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
 
   methods: {
     updateSvgDimensions() {
-      const { width, height } = this.$refs.img.$el.getBoundingClientRect();
+      const el = this.img?.$el;
+      if (!el) {
+        console.warn(`GuideDrawer: could not update SVG dimensions.`);
+        return;
+      }
+
+      const { width, height } = el.getBoundingClientRect();
       this.width = width;
       this.height = height;
     },
 
     onImgResize() {
+      //@ts-expect-error debounced
       this.debouncedImgResize();
     },
 
@@ -320,7 +326,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
 
       const { offsetX, offsetY } = event;
       this.updateNode(selectedObjectIdx, index, [offsetX, offsetY]);
-      this.$refs.svg.addEventListener('mousemove', this.moveNode);
+      this.svg?.addEventListener('mousemove', this.moveNode);
     },
 
     moveNode(event: any) {
@@ -336,7 +342,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
 
     dropNode() {
       this.selectedNodeIdx = null;
-      this.$refs.svg.removeEventListener('mousemove', this.moveNode);
+      this.svg?.removeEventListener('mousemove', this.moveNode);
     },
   },
 });

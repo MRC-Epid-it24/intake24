@@ -16,7 +16,7 @@
     "build-only": "vite build",
     "start": "node server/index.js",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path ../../.gitignore"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.1.1",
@@ -55,8 +55,8 @@
     "vite": "^2.9.14",
     "vite-plugin-fonts": "^0.5.0",
     "vite-plugin-html": "^3.2.0",
-    "vite-plugin-pwa": "^0.12.2",
-    "vue-tsc": "^0.38.3",
+    "vite-plugin-pwa": "^0.12.3",
+    "vue-tsc": "^0.38.4",
     "workbox-window": "^6.5.3"
   },
   "bundledDependencies": [

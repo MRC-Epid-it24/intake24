@@ -38,8 +38,7 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import has from 'lodash/has';
 import isEqual from 'lodash/isEqual';
 import type {
@@ -48,14 +47,11 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';
-import type { DetailMixin } from '@intake24/admin/types';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import watchEntry from '@intake24/admin/components/entry/watch-entry';
 import TranslationSection from './translation-section.vue';
 
-type Mixins = InstanceType<typeof watchEntry>;
-
-export default (Vue as VueConstructor<Vue & DetailMixin<LanguageEntry> & Mixins>).extend({
+export default defineComponent({
   name: 'LanguageTranslations',
 
   provide: () => ({
@@ -65,6 +61,12 @@ export default (Vue as VueConstructor<Vue & DetailMixin<LanguageEntry> & Mixins>
   components: { TranslationSection },
 
   mixins: [detailMixin, watchEntry],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<LanguageEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     return {

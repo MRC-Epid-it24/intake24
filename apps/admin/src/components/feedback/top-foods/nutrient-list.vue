@@ -11,7 +11,7 @@
       </v-btn>
       <confirm-dialog
         color="error"
-        :label="$t('feedback-schemes.top-foods.nutrientTypes.reset._')"
+        :label="$t('feedback-schemes.top-foods.nutrientTypes.reset._').toString()"
         @confirm="resetList"
       >
         <template v-slot:activator="{ attrs, on }">
@@ -53,7 +53,7 @@
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
-                :label="$t('nutrient-types.remove')"
+                :label="$t('nutrient-types.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"
@@ -93,7 +93,7 @@
             </v-autocomplete>
           </v-card-text>
           <language-selector
-            :label="$t('nutrient-types.label')"
+            :label="$t('nutrient-types.label').toString()"
             v-model="dialog.item.name"
             flat
             :outlined="false"

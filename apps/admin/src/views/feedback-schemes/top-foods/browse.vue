@@ -77,33 +77,35 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import debounce from 'lodash/debounce';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
 import type { TopFoods } from '@intake24/common/feedback';
 import { defaultTopFoods } from '@intake24/common/feedback';
-import type { FormMixin, RuleCallback } from '@intake24/admin/types';
+import type { RuleCallback } from '@intake24/admin/types';
 import { ColorList, NutrientList, Preview } from '@intake24/admin/components/feedback';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
-import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import type { FeedbackSchemeForm } from '../form.vue';
-
-type FeedbackSchemeTopFoods = {
-  debouncedUpdateColorList: () => void;
-};
 
 export type FeedbackSchemeTopFoodsForm = Pick<FeedbackSchemeForm, 'topFoods'>;
 
-export default (
-  Vue as VueConstructor<Vue & FeedbackSchemeTopFoods & FormMixin<FeedbackSchemeEntry>>
-).extend({
+export default defineComponent({
   name: 'FeedbackSchemeTopFoods',
 
   components: { ColorList, NutrientList, LoadSectionDialog, Preview },
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+      FeedbackSchemeEntry,
+      FeedbackSchemeRefs
+    >(props.id);
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 
   data() {
     return {
@@ -131,6 +133,7 @@ export default (
   watch: {
     'form.topFoods.max': {
       handler() {
+        //@ts-expect-error fix debounced types
         this.debouncedUpdateColorList();
       },
     },

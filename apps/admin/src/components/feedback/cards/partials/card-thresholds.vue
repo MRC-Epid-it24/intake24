@@ -24,7 +24,7 @@
                 v-model.number="item.threshold"
               ></v-slider>
               <language-selector
-                :label="$t('feedback-schemes.cards.thresholds.message')"
+                :label="$t('feedback-schemes.cards.thresholds.message').toString()"
                 v-model="item.message"
               >
                 <template v-for="lang in Object.keys(item.message)" v-slot:[`lang.${lang}`]>

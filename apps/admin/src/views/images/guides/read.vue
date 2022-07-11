@@ -6,8 +6,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import GuideDrawer from '../guide-drawer.vue';
+import type { GuideImageEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'GuideImageDetail',
@@ -15,6 +16,12 @@ export default defineComponent({
   components: { GuideDrawer },
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<GuideImageEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 });
 </script>
 

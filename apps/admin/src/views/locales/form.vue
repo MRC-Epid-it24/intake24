@@ -147,13 +147,11 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import orderBy from 'lodash/orderBy';
 import type { LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
 
 type LocaleForm = {
   id: string | null;
@@ -166,10 +164,18 @@ type LocaleForm = {
   textDirection: string;
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin<LocaleEntry, LocaleRefs>>).extend({
+export default defineComponent({
   name: 'LocaleForm',
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<LocaleEntry, LocaleRefs>(
+      props.id
+    );
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 
   data() {
     return {

@@ -1,28 +1,25 @@
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import { mapActions } from 'pinia';
 import { copy } from '@intake24/common/util';
 import type { Dictionary, ValidationError } from '@intake24/common/types';
-import type { FormMixin } from '@intake24/admin/types';
 import { form } from '@intake24/admin/helpers';
 import { SubmitFooter } from '@intake24/admin/components/forms';
 import { useEntry, useMessages } from '@intake24/admin/stores';
 import fetchEntry from './fetch-entry';
 import hasEntry from './has-entry';
 import Layout from './layout.vue';
-import mapRefs from './map-refs';
 import watchEntry from './watch-entry';
 
-type Mixins = InstanceType<typeof watchEntry>;
+type Method = 'get' | 'post' | 'patch' | 'put' | 'delete';
 
-export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
+export default defineComponent({
   name: 'FormMixin',
 
   components: { Layout, SubmitFooter },
 
-  mixins: [fetchEntry, hasEntry, mapRefs, watchEntry],
+  mixins: [fetchEntry, hasEntry, watchEntry],
 
   provide: () => ({
     editsResource: true,
@@ -30,8 +27,8 @@ export default (Vue as VueConstructor<Vue & FormMixin & Mixins>).extend({
 
   data() {
     return {
-      editMethod: 'put',
-      form: form({}),
+      editMethod: 'put' as Method,
+      form: form<Dictionary>({}),
       nonInputErrorKeys: [] as string[],
     };
   },

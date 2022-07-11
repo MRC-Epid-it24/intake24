@@ -72,8 +72,8 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { copy } from '@intake24/common/util';
 import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
@@ -84,13 +84,7 @@ type AsServedImageForm = {
   weight: number;
 };
 
-type Refs = {
-  $refs: {
-    fileInput: HTMLInputElement;
-  };
-};
-
-export default (Vue as VueConstructor<Vue & Refs>).extend({
+export default defineComponent({
   name: 'AsServedImages',
 
   components: { ConfirmDialog },
@@ -108,6 +102,12 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
       type: Boolean,
       default: false,
     },
+  },
+
+  setup() {
+    const fileInput = ref<InstanceType<typeof HTMLInputElement>>();
+
+    return { fileInput };
   },
 
   data() {
@@ -140,7 +140,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
         { once: true }
       );
 
-      this.$refs.fileInput.click();
+      this.fileInput?.click();
     },
 
     async onFileChanged(e: Event) {
@@ -154,7 +154,7 @@ export default (Vue as VueConstructor<Vue & Refs>).extend({
         this.images.push(data);
       } finally {
         this.loading = false;
-        this.$refs.fileInput.value = '';
+        if (this.fileInput) this.fileInput.value = '';
       }
     },
 

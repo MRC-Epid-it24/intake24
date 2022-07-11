@@ -88,15 +88,20 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { DetailMixin } from '@intake24/admin/types';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { defineComponent } from 'vue';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import type { UserEntry, UserRefs } from '@intake24/common/types/http/admin';
 
-export default (Vue as VueConstructor<Vue & DetailMixin>).extend({
+export default defineComponent({
   name: 'UserDetail',
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<UserEntry, UserRefs>(props.id);
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 });
 </script>
 

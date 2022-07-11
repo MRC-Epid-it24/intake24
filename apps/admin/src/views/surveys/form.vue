@@ -367,13 +367,11 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { SearchSortingAlgorithm, SurveyState } from '@intake24/common/types/models';
 import { searchSortingAlgorithms, surveyStates } from '@intake24/common/types/models';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
 import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
 import type { SchemeOverrides } from '@intake24/common/schemes';
 import { defaultOverrides } from '@intake24/common/schemes';
@@ -446,10 +444,18 @@ export const surveyForm: SurveyForm = {
 
 type FeedbackSchemeListEntry = { id: string | null; name: string };
 
-export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>).extend({
+export default defineComponent({
   name: 'SurveyForm',
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<SurveyEntry, SurveyRefs>(
+      props.id
+    );
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 
   data() {
     return {

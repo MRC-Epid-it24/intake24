@@ -46,16 +46,15 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { RecallQuestions, SchemeType, ExportSection } from '@intake24/common/schemes';
 import { defaultMeals, schemeTypes } from '@intake24/common/schemes';
 import type { Meal } from '@intake24/common/types';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import MealList from '@intake24/admin/components/meals/meal-list.vue';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
+import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 
 export type SurveySchemeForm = {
   id: string | null;
@@ -68,12 +67,21 @@ export type SurveySchemeForm = {
 
 export type PatchSurveySchemeForm = Pick<SurveySchemeForm, 'name' | 'type' | 'meals'>;
 
-export default (Vue as VueConstructor<Vue & FormMixin>).extend({
+export default defineComponent({
   name: 'SurveySchemeForm',
 
   components: { CopySchemeDialog, MealList },
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { canHandleEntry, entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+      SurveySchemeEntry,
+      SurveySchemeRefs
+    >(props.id);
+
+    return { canHandleEntry, entry, entryLoaded, refs, refsLoaded };
+  },
 
   data() {
     return {

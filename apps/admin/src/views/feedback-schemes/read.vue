@@ -40,19 +40,24 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { DetailMixin } from '@intake24/admin/types';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { defineComponent } from 'vue';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { Preview } from '@intake24/admin/components/feedback';
+import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 
-export default (Vue as VueConstructor<Vue & DetailMixin>).extend({
+export default defineComponent({
   name: 'FeedbackSchemeDetail',
 
   components: { CopySchemeDialog, Preview },
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { canHandleEntry, entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props.id);
+
+    return { canHandleEntry, entry, entryLoaded };
+  },
 });
 </script>
 

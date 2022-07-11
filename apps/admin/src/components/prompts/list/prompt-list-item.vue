@@ -37,7 +37,7 @@
         </template>
         <v-list>
           <confirm-dialog
-            :label="$t('survey-schemes.questions.move')"
+            :label="$t('survey-schemes.questions.move').toString()"
             color="primary lighten-1"
             max-width="450px"
             @close="clearMoveToSection"
@@ -65,7 +65,7 @@
             :question="question"
           ></save-as-template-dialog>
           <confirm-dialog
-            :label="$t('survey-scheme-questions.sync.synchronize')"
+            :label="$t('survey-scheme-questions.sync.synchronize').toString()"
             color="primary lighten-1"
             max-width="450px"
             @confirm="sync"
@@ -90,7 +90,7 @@
     </v-list-item-action>
     <v-list-item-action>
       <confirm-dialog
-        :label="$t('survey-schemes.questions.remove')"
+        :label="$t('survey-schemes.questions.remove').toString()"
         color="error"
         icon
         icon-left="$delete"

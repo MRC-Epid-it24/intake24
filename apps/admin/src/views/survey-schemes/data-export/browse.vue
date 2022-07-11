@@ -61,27 +61,34 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 import type { ExportField, ExportSection } from '@intake24/common/schemes';
 import { defaultExport } from '@intake24/common/schemes';
-import type { SurveySchemeExportRefsResponse } from '@intake24/common/types/http/admin';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import type {
+  SurveySchemeEntry,
+  SurveySchemeExportRefsResponse,
+} from '@intake24/common/types/http/admin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
 import DataExportSection from './data-export-section.vue';
 import type { SurveySchemeForm } from '../form.vue';
 
 export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;
 
-export default (Vue as VueConstructor<Vue & FormMixin>).extend({
+export default defineComponent({
   name: 'SurveySchemeDataExport',
 
   components: { draggable, DataExportSection, LoadSectionDialog },
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<SurveySchemeEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     return {

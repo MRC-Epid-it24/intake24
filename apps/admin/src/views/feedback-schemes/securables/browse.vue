@@ -5,19 +5,23 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
-import type { DetailMixin } from '@intake24/admin/types';
-import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import { defineComponent } from 'vue';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { Securables } from '@intake24/admin/components/securables';
+import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 
-export default (Vue as VueConstructor<Vue & DetailMixin<FeedbackSchemeEntry>>).extend({
+export default defineComponent({
   name: 'FeedbackSchemeSecurables',
 
   components: { Securables },
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 });
 </script>
 

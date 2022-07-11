@@ -54,37 +54,38 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent, ref } from 'vue';
 import type { PromptQuestion } from '@intake24/common/prompts';
 import { customPromptQuestions } from '@intake24/common/prompts';
 import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
 } from '@intake24/common/types/http/admin';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import PromptSelector from '@intake24/admin/components/prompts/prompt-selector.vue';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
 
 export type SchemeQuestionForm = {
   question: PromptQuestion;
 };
 
-export type Refs = {
-  $refs: {
-    selector: InstanceType<typeof PromptSelector>;
-  };
-};
-
-export default (
-  Vue as VueConstructor<Vue & FormMixin<SurveySchemeQuestionEntry, SurveySchemeQuestionRefs> & Refs>
-).extend({
+export default defineComponent({
   name: 'SchemeQuestionForm',
 
   components: { PromptSelector },
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+      SurveySchemeQuestionEntry,
+      SurveySchemeQuestionRefs
+    >(props.id);
+
+    const selector = ref<InstanceType<typeof PromptSelector>>();
+
+    return { entry, entryLoaded, refs, refsLoaded, selector };
+  },
 
   data() {
     return {
@@ -103,7 +104,7 @@ export default (
 
   methods: {
     edit() {
-      this.$refs.selector.edit(0, this.form.question);
+      this.selector?.edit(0, this.form.question);
     },
 
     save({ question }: { question: PromptQuestion; index: number }) {

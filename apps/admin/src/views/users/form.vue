@@ -144,13 +144,11 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { CustomField } from '@intake24/common/types';
-import type { UserEntry } from '@intake24/common/types/http/admin';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import type { UserEntry, UserRefs } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 
 type UserForm = {
   id: string | null;
@@ -167,10 +165,16 @@ type UserForm = {
   roles: string[];
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin<UserEntry>>).extend({
+export default defineComponent({
   name: 'UserForm',
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<UserEntry, UserRefs>(props.id);
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 
   data() {
     return {

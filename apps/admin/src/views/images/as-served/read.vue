@@ -25,19 +25,23 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { AsServedSetEntry } from '@intake24/common/types/http/admin';
-import type { DetailMixin } from '@intake24/admin/types';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import AsServedImages from './images.vue';
 
-export default (Vue as VueConstructor<Vue & DetailMixin<AsServedSetEntry>>).extend({
+export default defineComponent({
   name: 'AsServedDetail',
 
   components: { AsServedImages },
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<AsServedSetEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 });
 </script>
 

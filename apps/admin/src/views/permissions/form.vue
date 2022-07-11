@@ -44,9 +44,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { defineComponent } from 'vue';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
+import type { PermissionEntry } from '@intake24/common/types/http/admin';
 
 type PermissionForm = {
   id: string | null;
@@ -55,10 +56,16 @@ type PermissionForm = {
   description: string | null;
 };
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PermissionForm',
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<PermissionEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     return {

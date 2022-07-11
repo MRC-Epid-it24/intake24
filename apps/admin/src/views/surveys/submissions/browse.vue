@@ -41,13 +41,11 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { SurveySubmissionEntry } from '@intake24/common/types/http/admin';
+import { defineComponent, ref } from 'vue';
+import type { SurveyEntry, SurveySubmissionEntry } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
-import type { EntryMixin } from '@intake24/admin/types';
-import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formatsDateTime } from '@intake24/admin/mixins';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -57,12 +55,20 @@ export type SurveySubmissionsRefs = {
   };
 };
 
-export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>).extend({
+export default defineComponent({
   name: 'SurveySubmissions',
 
   components: { ConfirmDialog, EmbeddedDataTable },
 
-  mixins: [detailMixin, FormatsDateTime],
+  mixins: [detailMixin, formatsDateTime],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<SurveyEntry>(props.id);
+
+    const table = ref<InstanceType<typeof EmbeddedDataTable>>();
+
+    return { entry, entryLoaded, refs, refsLoaded, table };
+  },
 
   data() {
     return {
@@ -132,7 +138,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & SurveySubmissionsRefs>)
     async remove(submissionId: string) {
       await this.$http.delete(`${this.baseAPI}/${submissionId}`);
       useMessages().success(this.$t(`common.msg.deleted`, { name: submissionId }).toString());
-      await this.$refs.table.fetch();
+      await this.table?.fetch();
     },
   },
 });

@@ -18,7 +18,7 @@
       </template>
     </language-selector>
     <language-selector
-      :label="$t('feedback-schemes.cards.description')"
+      :label="$t('feedback-schemes.cards.description').toString()"
       :value="description"
       @input="update('description', $event)"
     >

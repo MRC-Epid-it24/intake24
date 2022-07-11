@@ -102,9 +102,11 @@ export default defineComponent({
     },
     high: {
       type: Object as PropType<NutrientGroup['high']>,
+      required: true,
     },
     low: {
       type: Object as PropType<NutrientGroup['low']>,
+      required: true,
     },
     unit: {
       type: Object as PropType<NutrientGroup['unit']>,

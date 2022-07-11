@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
+import { formatsDateTime } from '@intake24/admin/mixins';
 import { DataTable } from '@intake24/admin/components/data-tables';
 
 export default defineComponent({
@@ -17,7 +17,7 @@ export default defineComponent({
 
   components: { DataTable },
 
-  mixins: [FormatsDateTime],
+  mixins: [formatsDateTime],
 
   data() {
     return {

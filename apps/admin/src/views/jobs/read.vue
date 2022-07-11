@@ -60,19 +60,21 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
+import { formatsDateTime } from '@intake24/admin/mixins';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import type { JobEntry } from '@intake24/common/types/http/admin';
-import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
-import type { DetailMixin } from '@intake24/admin/types';
 
-type Mixins = InstanceType<typeof FormatsDateTime>;
-
-export default (Vue as VueConstructor<Vue & DetailMixin<JobEntry> & Mixins>).extend({
+export default defineComponent({
   name: 'JobDetail',
 
-  mixins: [FormatsDateTime, detailMixin],
+  mixins: [formatsDateTime, detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<JobEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 });
 </script>
 

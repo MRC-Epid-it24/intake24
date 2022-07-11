@@ -92,17 +92,13 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
 import type { PromptQuestion } from '@intake24/common/prompts';
 
-type LoadPromptDialog = {
-  debouncedFetch: () => void;
-};
-
-export default (Vue as VueConstructor<Vue & LoadPromptDialog>).extend({
+export default defineComponent({
   name: 'LoadPromptDialog',
 
   props: {
@@ -147,6 +143,7 @@ export default (Vue as VueConstructor<Vue & LoadPromptDialog>).extend({
       if (val && !this.questions.length) await this.fetch();
     },
     search() {
+      //@ts-expect-error debounced
       this.debouncedFetch();
     },
   },

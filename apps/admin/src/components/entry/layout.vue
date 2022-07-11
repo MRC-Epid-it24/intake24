@@ -18,7 +18,7 @@
         <v-spacer></v-spacer>
         <confirm-dialog
           v-if="canHandleEntry('delete')"
-          :label="$t('common.action.delete')"
+          :label="$t('common.action.delete').toString()"
           color="error"
           icon-left="$delete"
           @confirm="remove"
@@ -84,7 +84,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import has from 'lodash/has';
 import { ConfirmDialog } from '@intake24/ui';
-import hasResource from '@intake24/admin/mixins/has-resource';
+import { resource } from '@intake24/admin/mixins';
 import { useMessages } from '@intake24/admin/stores';
 import type { RouteLeave } from '@intake24/admin/types';
 import type { Dictionary } from '@intake24/common/types';
@@ -94,7 +94,7 @@ export default defineComponent({
 
   components: { ConfirmDialog },
 
-  mixins: [hasResource],
+  mixins: [resource],
 
   inject: {
     editsResource: { default: false },

@@ -28,26 +28,32 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { SchemeOverrides } from '@intake24/common/schemes';
 import { defaultOverrides, flattenScheme } from '@intake24/common/schemes';
 import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
 import type { PromptQuestion } from '@intake24/common/prompts';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import MealList from '@intake24/admin/components/meals/meal-list.vue';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
 
 export type SurveyOverridesForm = { surveySchemeOverrides: SchemeOverrides };
 
-export default (Vue as VueConstructor<Vue & FormMixin<SurveyEntry, SurveyRefs>>).extend({
+export default defineComponent({
   name: 'SurveySchemeOverrides',
 
   components: { MealList, PromptList },
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<SurveyEntry, SurveyRefs>(
+      props.id
+    );
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 
   data() {
     return {

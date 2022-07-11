@@ -14,8 +14,8 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { useMessages } from '@intake24/admin/stores';
 import upperFirst from 'lodash/upperFirst';
 import Delete from './delete.vue';
@@ -23,11 +23,7 @@ import Read from './read.vue';
 import Download from './download.vue';
 import Edit from './edit.vue';
 
-interface Actionable {
-  [key: string]: () => Promise<void>;
-}
-
-export default (Vue as VueConstructor<Vue & Actionable>).extend({
+export default defineComponent({
   name: 'ActionBar',
 
   components: {
@@ -60,14 +56,15 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
       const { ownerId, securables } = this.item;
       return this.actions.filter((action) => this.can({ action, ownerId, securables }));
     },
-    route(): string {
+    route(): string | null | undefined {
       return this.routePrefix ?? this.$route.name;
     },
   },
 
   methods: {
-    onAction(action: string): void {
-      this[`on${upperFirst(action)}`]();
+    async onAction(action: string): Promise<void> {
+      //@ts-expect-error types
+      await this[`on${upperFirst(action)}`]();
     },
 
     async onDelete(): Promise<void> {
@@ -77,7 +74,7 @@ export default (Vue as VueConstructor<Vue & Actionable>).extend({
       this.onSuccess('deleted');
     },
 
-    onSuccess(action: string): void {
+    async onSuccess(action: string): Promise<void> {
       const { id, name } = this.item;
       useMessages().success(this.$t(`common.msg.${action}`, { name: name ?? id }).toString());
       this.$emit('refresh');

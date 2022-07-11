@@ -68,19 +68,24 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
 import { offsetToExcelColumn } from '@intake24/common/util';
-import type { DetailMixin } from '@intake24/admin/types';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 
-export default (
-  Vue as VueConstructor<Vue & DetailMixin<NutrientTableEntry, NutrientTableRefs>>
-).extend({
+export default defineComponent({
   name: 'NutrientTableDetail',
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+      NutrientTableEntry,
+      NutrientTableRefs
+    >(props.id);
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 
   methods: {
     offsetToExcelColumn,

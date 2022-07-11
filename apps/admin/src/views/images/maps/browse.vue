@@ -1,12 +1,12 @@
 <template>
-  <gallery title="id" subtitle="description"> </gallery>
+  <gallery title="id" subtitle="description"></gallery>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import Gallery from '@intake24/admin/components/gallery/gallery.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'ImageMapList',
 
   components: { Gallery },

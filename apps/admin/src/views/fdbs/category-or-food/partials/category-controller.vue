@@ -54,7 +54,7 @@ export default defineComponent({
       required: true,
     },
     errors: {
-      type: Object as PropType<typeof Errors>,
+      type: Object as PropType<Errors>,
       required: true,
     },
   },

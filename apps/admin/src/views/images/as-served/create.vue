@@ -44,12 +44,10 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type { AsServedSetEntry } from '@intake24/common/types/http/admin';
-import type { FormMixin } from '@intake24/admin/types';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { defineComponent } from 'vue';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
+import type { AsServedSetEntry } from '@intake24/common/types/http/admin';
 
 type CreateAsServedSetForm = {
   id: string | null;
@@ -57,10 +55,16 @@ type CreateAsServedSetForm = {
   selectionImage: File | null;
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin<AsServedSetEntry>>).extend({
+export default defineComponent({
   name: 'CreateAsServedSetForm',
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<AsServedSetEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     return {

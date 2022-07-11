@@ -60,8 +60,7 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { SurveyQuestionSection, MealSection, RecallQuestions } from '@intake24/common/schemes';
 import {
   defaultQuestions,
@@ -73,97 +72,103 @@ import {
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { Dictionary } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import type { PromptQuestionMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
 import type { SurveySchemeForm } from '../form.vue';
 
 export type SurveySchemeQuestionsForm = Pick<SurveySchemeForm, 'questions'>;
 
-export default (Vue as VueConstructor<Vue & FormMixin<SurveySchemeEntry, SurveySchemeRefs>>).extend(
-  {
-    name: 'SurveySchemeQuestions',
+export default defineComponent({
+  name: 'SurveySchemeQuestions',
 
-    components: { LoadSectionDialog, PromptList },
+  components: { LoadSectionDialog, PromptList },
 
-    mixins: [formMixin],
+  mixins: [formMixin],
 
-    data() {
-      return {
-        editMethod: 'patch',
-        form: form<SurveySchemeQuestionsForm>({ questions: defaultQuestions }),
-        sections: {
-          survey: surveySections,
-          meal: mealSections,
-        },
-        section: 'preMeals' as MealSection | SurveyQuestionSection,
-      };
-    },
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+      SurveySchemeEntry,
+      SurveySchemeRefs
+    >(props.id);
 
-    computed: {
-      selected: {
-        get(): PromptQuestion[] {
-          const { section } = this;
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 
-          return isMealSection(section)
-            ? this.form.questions.meals[section]
-            : this.form.questions[section];
-        },
-        set(value: PromptQuestion[]): void {
-          const { section } = this;
-
-          if (isMealSection(section)) {
-            this.form.questions.meals[section] = value;
-            return;
-          }
-
-          this.form.questions[section] = value;
-        },
+  data() {
+    return {
+      editMethod: 'patch',
+      form: form<SurveySchemeQuestionsForm>({ questions: defaultQuestions }),
+      sections: {
+        survey: surveySections,
+        meal: mealSections,
       },
-      questionIds(): string[] {
-        const scheme = flattenScheme(this.form.questions);
+      section: 'preMeals' as MealSection | SurveyQuestionSection,
+    };
+  },
 
-        return scheme.map((question) => question.id);
+  computed: {
+    selected: {
+      get(): PromptQuestion[] {
+        const { section } = this;
+
+        return isMealSection(section)
+          ? this.form.questions.meals[section]
+          : this.form.questions[section];
       },
-      templates(): PromptQuestion[] {
-        if (!this.refsLoaded) return [];
-
-        return this.refs.templates.filter((template) => this.questionIds.includes(template.id));
-      },
-    },
-
-    methods: {
-      /*
-       * formMixin override
-       */
-      toForm(data: Dictionary) {
-        const { questions, ...rest } = data;
-        const input = { ...rest, questions: { ...defaultQuestions, ...questions } };
-
-        this.setOriginalEntry(input);
-        this.form.load(input);
-      },
-
-      move(event: PromptQuestionMoveEvent) {
-        const { section, question } = event;
+      set(value: PromptQuestion[]): void {
+        const { section } = this;
 
         if (isMealSection(section)) {
-          this.form.questions.meals[section].push(question);
+          this.form.questions.meals[section] = value;
           return;
         }
 
-        this.form.questions[section].push(question);
-      },
-
-      loadFromScheme(questions: RecallQuestions) {
-        this.form.questions = { ...questions };
+        this.form.questions[section] = value;
       },
     },
-  }
-);
+    questionIds(): string[] {
+      const scheme = flattenScheme(this.form.questions);
+
+      return scheme.map((question) => question.id);
+    },
+    templates(): PromptQuestion[] {
+      if (!this.refsLoaded) return [];
+
+      return this.refs.templates.filter((template) => this.questionIds.includes(template.id));
+    },
+  },
+
+  methods: {
+    /*
+     * formMixin override
+     */
+    toForm(data: Dictionary) {
+      const { questions, ...rest } = data;
+      const input = { ...rest, questions: { ...defaultQuestions, ...questions } };
+
+      this.setOriginalEntry(input);
+      this.form.load(input);
+    },
+
+    move(event: PromptQuestionMoveEvent) {
+      const { section, question } = event;
+
+      if (isMealSection(section)) {
+        this.form.questions.meals[section].push(question);
+        return;
+      }
+
+      this.form.questions[section].push(question);
+    },
+
+    loadFromScheme(questions: RecallQuestions) {
+      this.form.questions = { ...questions };
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped></style>

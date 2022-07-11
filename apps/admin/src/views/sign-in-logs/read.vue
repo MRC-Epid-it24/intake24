@@ -40,13 +40,20 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
-import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formatsDateTime } from '@intake24/admin/mixins';
+import type { SignInLogEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'SignInLogDetail',
 
-  mixins: [detailMixin, FormatsDateTime],
+  mixins: [detailMixin, formatsDateTime],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<SignInLogEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 });
 </script>
 

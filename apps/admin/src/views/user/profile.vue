@@ -124,16 +124,13 @@
 
 <script lang="ts">
 import type { LanguageAttributes } from '@intake24/common/types/models';
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { setsLanguage } from '@intake24/ui';
 import { mapState } from 'pinia';
 import { useUser } from '@intake24/admin/stores';
 import UserPassword from './password.vue';
 
-type Mixins = InstanceType<typeof setsLanguage>;
-
-export default (Vue as VueConstructor<Vue & Mixins>).extend({
+export default defineComponent({
   name: 'UserProfile',
 
   components: { UserPassword },
@@ -142,7 +139,7 @@ export default (Vue as VueConstructor<Vue & Mixins>).extend({
 
   data() {
     return {
-      language: this.$root.$i18n.locale,
+      language: this.$root?.$i18n.locale,
       languages: [] as LanguageAttributes[],
     };
   },

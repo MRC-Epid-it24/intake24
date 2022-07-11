@@ -21,7 +21,7 @@
       ></load-section-dialog>
       <confirm-dialog
         color="error"
-        :label="$t('survey-schemes.meals.reset._')"
+        :label="$t('survey-schemes.meals.reset._').toString()"
         @confirm="resetList"
       >
         <template v-slot:activator="{ attrs, on }">
@@ -64,7 +64,7 @@
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
-                :label="$t('survey-schemes.meals.remove')"
+                :label="$t('survey-schemes.meals.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"
@@ -88,7 +88,7 @@
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
           <language-selector
-            :label="$t('survey-schemes.meals.name')"
+            :label="$t('survey-schemes.meals.name').toString()"
             v-model="dialog.meal.name"
             flat
             :outlined="false"

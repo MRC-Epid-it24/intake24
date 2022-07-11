@@ -54,7 +54,7 @@
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
-                :label="$t('feedback-schemes.henry-coefficients.remove')"
+                :label="$t('feedback-schemes.henry-coefficients.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"

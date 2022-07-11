@@ -36,7 +36,7 @@
               ></v-select>
             </v-col>
             <v-col cols="12">
-              <language-selector v-model="sentiment.name" :label="$t('common.name')">
+              <language-selector v-model="sentiment.name" :label="$t('common.name').toString()">
                 <template v-for="lang in Object.keys(sentiment.name)" v-slot:[`lang.${lang}`]>
                   <v-text-field
                     v-model="sentiment.name[lang]"

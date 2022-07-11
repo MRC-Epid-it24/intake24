@@ -1,7 +1,5 @@
 import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
-import { useEntry } from '@intake24/admin/stores';
-import hasResource from '@intake24/admin/mixins/has-resource';
+import { resource } from '@intake24/admin/mixins';
 
 export default defineComponent({
   props: {
@@ -11,28 +9,14 @@ export default defineComponent({
     },
   },
 
-  mixins: [hasResource],
+  mixins: [resource],
 
   computed: {
-    ...mapState(useEntry, {
-      entry: 'data',
-      entryLoaded: 'dataLoaded',
-    }),
     isCreate(): boolean {
       return this.id === 'create';
     },
     isEdit(): boolean {
       return !this.isCreate;
-    },
-  },
-
-  methods: {
-    canHandleEntry(action: string): boolean {
-      if (this.isCreate) return false;
-
-      const { securables, ownerId } = this.entry;
-
-      return this.can({ action, securables, ownerId });
     },
   },
 });

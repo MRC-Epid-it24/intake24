@@ -78,12 +78,11 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import orderBy from 'lodash/orderBy';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
+import type { LanguageEntry } from '@intake24/common/types/http/admin';
 
 type LanguageForm = {
   id: string | null;
@@ -93,10 +92,16 @@ type LanguageForm = {
   textDirection: string;
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin>).extend({
+export default defineComponent({
   name: 'LanguageForm',
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<LanguageEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     return {

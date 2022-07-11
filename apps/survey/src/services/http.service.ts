@@ -58,7 +58,7 @@ const httpClient: HttpClient = {
             const {
               data: { message },
             } = response;
-            Vue.toasted.error(message ?? err.message);
+            useMessages().error(message ?? err.message);
           } */
 
           return reject(err);

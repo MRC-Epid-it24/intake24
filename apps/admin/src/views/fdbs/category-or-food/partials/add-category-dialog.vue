@@ -83,18 +83,14 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
 import type { CategoriesResponse, CategoryListEntry } from '@intake24/common/types/http/admin';
 import type { CategoryAttributes } from '@intake24/common/types/models';
 
-type AddCategoryDialog = {
-  debouncedFetch: () => void;
-};
-
-export default (Vue as VueConstructor<Vue & AddCategoryDialog>).extend({
+export default defineComponent({
   name: 'AddCategoryDialog',
 
   props: {
@@ -142,6 +138,7 @@ export default (Vue as VueConstructor<Vue & AddCategoryDialog>).extend({
       if (val && !this.items.length) await this.fetch();
     },
     search() {
+      //@ts-expect-error debounced
       this.debouncedFetch();
     },
   },

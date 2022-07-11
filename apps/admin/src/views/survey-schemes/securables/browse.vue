@@ -5,19 +5,23 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
-import type { DetailMixin } from '@intake24/admin/types';
-import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
+import { defineComponent } from 'vue';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { Securables } from '@intake24/admin/components/securables';
+import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
 
-export default (Vue as VueConstructor<Vue & DetailMixin<SurveySchemeEntry>>).extend({
+export default defineComponent({
   name: 'SurveySchemeSecurables',
 
   components: { Securables },
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<SurveySchemeEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 });
 </script>
 

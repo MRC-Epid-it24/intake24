@@ -22,16 +22,12 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import debounce from 'lodash/debounce';
 import type { Dictionary } from '@intake24/common/types';
 
-type AutoComplete = {
-  debouncedFetchItems: () => void;
-};
-
-export default (Vue as VueConstructor<Vue & AutoComplete>).extend({
+export default defineComponent({
   name: 'AutoComplete',
 
   props: {
@@ -106,6 +102,7 @@ export default (Vue as VueConstructor<Vue & AutoComplete>).extend({
     search(val) {
       if (!val) return;
 
+      //@ts-expect-error debounced
       this.debouncedFetchItems();
     },
     selected(val) {

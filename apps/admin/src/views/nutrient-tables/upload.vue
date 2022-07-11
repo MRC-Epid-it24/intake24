@@ -56,32 +56,28 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import type {
-  JobEntry,
-  NutrientTableEntry,
-  NutrientTableRefs,
-} from '@intake24/common/types/http/admin';
+import { defineComponent } from 'vue';
+import type { JobEntry, NutrientTableEntry } from '@intake24/common/types/http/admin';
 import type { JobType } from '@intake24/common/types';
-import type { DetailMixin } from '@intake24/admin/types';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { PollsForJobs } from '@intake24/admin/components/polls-for-jobs';
 import { form } from '@intake24/admin/helpers';
-
-type Mixins = InstanceType<typeof PollsForJobs>;
 
 type UploadForm = {
   file: File | null;
   type: string;
 };
 
-export default (
-  Vue as VueConstructor<Vue & DetailMixin<NutrientTableEntry, NutrientTableRefs> & Mixins>
-).extend({
+export default defineComponent({
   name: 'NutrientTableUpload',
 
   mixins: [detailMixin, PollsForJobs],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<NutrientTableEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     const jobType: JobType[] = ['NutrientTableImportMapping', 'NutrientTableImportData'];

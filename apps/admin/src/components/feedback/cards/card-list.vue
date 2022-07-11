@@ -53,7 +53,7 @@
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
-                :label="$t('feedback-schemes.cards.remove')"
+                :label="$t('feedback-schemes.cards.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"

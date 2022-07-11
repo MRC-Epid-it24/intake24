@@ -64,7 +64,7 @@ export default defineComponent({
 
   props: {
     resource: {
-      type: String as () => 'survey-scheme' | 'feedback-scheme',
+      type: String as () => 'survey-schemes' | 'feedback-schemes',
       required: true,
     },
     schemeId: {

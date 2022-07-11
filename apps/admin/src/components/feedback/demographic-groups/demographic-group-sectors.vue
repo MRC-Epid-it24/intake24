@@ -49,7 +49,7 @@
               </div>
             </v-col>
             <v-col cols="12">
-              <language-selector v-model="sector.name" :label="$t('common.name')">
+              <language-selector v-model="sector.name" :label="$t('common.name').toString()">
                 <template v-for="lang in Object.keys(sector.name)" v-slot:[`lang.${lang}`]>
                   <v-text-field
                     v-model="sector.name[lang]"
@@ -63,7 +63,10 @@
               </language-selector>
             </v-col>
             <v-col cols="12">
-              <language-selector :label="$t('common.description')" v-model="sector.description">
+              <language-selector
+                :label="$t('common.description').toString()"
+                v-model="sector.description"
+              >
                 <template v-for="lang in Object.keys(sector.description)" v-slot:[`lang.${lang}`]>
                   <editor :init="tinymceInit" :key="lang" v-model="sector.description[lang]" />
                 </template>

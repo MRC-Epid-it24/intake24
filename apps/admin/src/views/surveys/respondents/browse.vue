@@ -177,16 +177,15 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent, ref } from 'vue';
 import type {
+  SurveyEntry,
   SurveyRespondentEntry,
   SurveyRespondentListEntry,
 } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
-import type { EntryMixin } from '@intake24/admin/types';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import RespondentFeedback from './respondent-feedback.vue';
 import RespondentsUpload from './respondents-upload.vue';
@@ -209,7 +208,7 @@ export type SurveyRespondentsForm = {
   phone: string | null;
 };
 
-export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).extend({
+export default defineComponent({
   name: 'SurveyRespondents',
 
   components: {
@@ -221,6 +220,14 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
   },
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<SurveyEntry>(props.id);
+
+    const table = ref<InstanceType<typeof EmbeddedDataTable>>();
+
+    return { entry, entryLoaded, table };
+  },
 
   data() {
     return {
@@ -314,7 +321,7 @@ export default (Vue as VueConstructor<Vue & EntryMixin & RespondentsRefs>).exten
     },
 
     async updateTable() {
-      await this.$refs.table.fetch();
+      await this.table?.fetch();
     },
 
     async save() {

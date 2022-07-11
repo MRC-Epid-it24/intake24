@@ -1,6 +1,6 @@
 <template>
   <confirm-dialog
-    :label="$t('common.action.delete')"
+    :label="$t('common.action.delete').toString()"
     color="error"
     icon
     icon-left="$delete"

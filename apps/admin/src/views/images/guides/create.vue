@@ -54,11 +54,9 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { GuideImageEntry } from '@intake24/common/types/http/admin';
-import type { FormMixin } from '@intake24/admin/types';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
 
 type CreateGuideImageForm = {
@@ -67,10 +65,16 @@ type CreateGuideImageForm = {
   description: string | null;
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin<GuideImageEntry>>).extend({
+export default defineComponent({
   name: 'CreateGuideImageForm',
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<GuideImageEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     return {

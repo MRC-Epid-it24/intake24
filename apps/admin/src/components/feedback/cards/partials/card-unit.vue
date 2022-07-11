@@ -1,6 +1,9 @@
 <template>
   <v-tab-item key="unit">
-    <language-selector :label="$t('feedback-schemes.cards.unit.name')" v-model="internalUnit.name">
+    <language-selector
+      :label="$t('feedback-schemes.cards.unit.name').toString()"
+      v-model="internalUnit.name"
+    >
       <template v-for="lang in Object.keys(internalUnit.name)" v-slot:[`lang.${lang}`]>
         <v-text-field
           v-model="internalUnit.name[lang]"
@@ -13,7 +16,7 @@
       </template>
     </language-selector>
     <language-selector
-      :label="$t('feedback-schemes.cards.unit.description')"
+      :label="$t('feedback-schemes.cards.unit.description').toString()"
       v-model="internalUnit.name"
     >
       <template v-for="lang in Object.keys(internalUnit.description)" v-slot:[`lang.${lang}`]>

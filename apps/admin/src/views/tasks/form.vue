@@ -94,16 +94,14 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import cronstrue from 'cronstrue';
 import type { JobParams, JobParamsList, JobType } from '@intake24/common/types';
 import type { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
-import FormatsDateTime from '@intake24/admin/mixins/formats-date-time';
-import type { FormMixin } from '@intake24/admin/types';
+import { formatsDateTime } from '@intake24/admin/mixins';
 import paramComponents from './params';
 
 type TaskForm = {
@@ -135,7 +133,6 @@ const defaultParams: JobParamsList = {
   },
   SendPasswordReset: {
     email: '',
-    token: '',
   },
   SurveyDataExport: {
     surveyId: '',
@@ -154,12 +151,18 @@ const defaultParams: JobParamsList = {
   SyncLanguageTranslations: {},
 };
 
-export default (Vue as VueConstructor<Vue & FormMixin<TaskEntry, TaskRefs>>).extend({
+export default defineComponent({
   name: 'TaskForm',
 
   components: { ConfirmDialog, ...paramComponents },
 
-  mixins: [FormatsDateTime, formMixin],
+  mixins: [formatsDateTime, formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<TaskEntry, TaskRefs>(props.id);
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 
   data() {
     return {

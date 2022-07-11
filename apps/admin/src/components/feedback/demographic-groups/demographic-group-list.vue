@@ -51,7 +51,7 @@
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
-                :label="$t('feedback-schemes.demographic-groups.remove')"
+                :label="$t('feedback-schemes.demographic-groups.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"

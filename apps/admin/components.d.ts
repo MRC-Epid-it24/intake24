@@ -3,6 +3,8 @@
 // Read more: https://github.com/vuejs/core/pull/3399
 import '@vue/runtime-core';
 
+export {};
+
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     DataTablesActionBarActionBar: typeof import('./src/components/data-tables/action-bar/action-bar.vue')['default'];
@@ -156,5 +158,3 @@ declare module '@vue/runtime-core' {
     WebPushWebPush: typeof import('./src/components/web-push/web-push.vue')['default'];
   }
 }
-
-export {};

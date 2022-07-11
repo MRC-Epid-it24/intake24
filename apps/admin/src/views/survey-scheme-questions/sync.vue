@@ -61,8 +61,7 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import { flattenSchemeWithSection } from '@intake24/common/schemes';
@@ -71,8 +70,7 @@ import type {
   SurveySchemeQuestionRefs,
 } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
-import type { DetailMixin } from '@intake24/admin/types';
-import detailMixin from '@intake24/admin/components/entry/detail-mixin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 
 export type SchemeStatus = {
   id: string;
@@ -81,14 +79,21 @@ export type SchemeStatus = {
   synced: boolean;
 };
 
-export default (
-  Vue as VueConstructor<Vue & DetailMixin<SurveySchemeQuestionEntry, SurveySchemeQuestionRefs>>
-).extend({
+export default defineComponent({
   name: 'SchemeQuestionSync',
 
   components: { ConfirmDialog },
 
   mixins: [detailMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+      SurveySchemeQuestionEntry,
+      SurveySchemeQuestionRefs
+    >(props.id);
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 
   computed: {
     schemes(): SchemeStatus[] {

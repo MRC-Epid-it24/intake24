@@ -65,30 +65,24 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor, PropType } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
+import { mapState } from 'pinia';
 import pick from 'lodash/pick';
 import { mapActions } from 'pinia';
 import { copy } from '@intake24/common/util';
-import type {
-  SurveySchemeQuestionEntry,
-  SurveySchemeRefs,
-} from '@intake24/common/types/http/admin';
+import type { SurveySchemeQuestionEntry } from '@intake24/common/types/http/admin';
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { ValidationError } from '@intake24/common/types';
-import type { MapRefsMixin } from '@intake24/admin/types';
 import { form } from '@intake24/admin/helpers';
-import mapRefs from '@intake24/admin/components/entry/map-refs';
 import { useEntry } from '@intake24/admin/stores';
 
 export type SchemeQuestionForm = {
   question: PromptQuestion;
 };
 
-export default (Vue as VueConstructor<Vue & MapRefsMixin<SurveySchemeRefs>>).extend({
+export default defineComponent({
   name: 'SaveAsTemplateDialog',
-
-  mixins: [mapRefs],
 
   props: {
     disabled: {
@@ -113,6 +107,7 @@ export default (Vue as VueConstructor<Vue & MapRefsMixin<SurveySchemeRefs>>).ext
   },
 
   computed: {
+    ...mapState(useEntry, ['refs']),
     nonInputErrors(): ValidationError[] {
       return Object.values(pick(this.form.errors.all(), this.nonInputErrorKeys));
     },

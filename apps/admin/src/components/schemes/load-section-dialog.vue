@@ -83,8 +83,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType, VueConstructor } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
 import type {
@@ -93,10 +93,6 @@ import type {
   SurveySchemeEntry,
   SurveySchemesResponse,
 } from '@intake24/common/types/http/admin';
-
-type LoadSectionDialog = {
-  debouncedFetch: () => void;
-};
 
 export type SchemeEntry = FeedbackSchemeEntry | SurveySchemeEntry;
 
@@ -129,7 +125,7 @@ export const isSurveySchemeEntry = (entry: any): entry is SurveySchemeEntry => {
 export const isSurveySchemeSection = (section: any): section is SurveySchemeSection =>
   surveySchemeSections.includes(section);
 
-export default (Vue as VueConstructor<Vue & LoadSectionDialog>).extend({
+export default defineComponent({
   name: 'LoadSectionDialog',
 
   props: {
@@ -180,6 +176,7 @@ export default (Vue as VueConstructor<Vue & LoadSectionDialog>).extend({
       if (val && !this.schemes.length) await this.fetch();
     },
     search() {
+      //@ts-expect-error debounced
       this.debouncedFetch();
     },
   },

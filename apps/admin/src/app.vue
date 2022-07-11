@@ -66,7 +66,7 @@
           <span class="mr-2">{{ $t('user._') }}</span>
           <v-icon>$user</v-icon>
         </v-btn>
-        <confirm-dialog :label="$t('common.logout._')" @confirm="logout">
+        <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">
           <template v-slot:activator="{ attrs, on }">
             <v-btn text v-bind="attrs" v-on="on">
               <span>{{ $t('common.logout._') }}</span>

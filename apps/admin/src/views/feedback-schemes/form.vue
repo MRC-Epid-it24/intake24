@@ -121,11 +121,9 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { defineComponent } from 'vue';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
 import type {
   FeedbackOutput,
   FeedbackPhysicalDataField,
@@ -161,12 +159,18 @@ export type PatchFeedbackSchemeForm = Pick<
   'name' | 'type' | 'outputs' | 'physicalDataFields'
 >;
 
-export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).extend({
+export default defineComponent({
   name: 'SchemeForm',
 
   components: { CopySchemeDialog, Preview },
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { canHandleEntry, entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props.id);
+
+    return { canHandleEntry, entry, entryLoaded };
+  },
 
   data() {
     return {

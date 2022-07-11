@@ -11,23 +11,27 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { defineComponent } from 'vue';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
 import { DemographicGroupList, Preview } from '@intake24/admin/components/feedback';
 import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import type { FeedbackSchemeForm } from '../form.vue';
 
 export type FeedbackSchemeDemographicGroupsForm = Pick<FeedbackSchemeForm, 'demographicGroups'>;
 
-export default (Vue as VueConstructor<Vue & FormMixin<FeedbackSchemeEntry>>).extend({
+export default defineComponent({
   name: 'FeedbackSchemeDemographicGroups',
 
   components: { DemographicGroupList, Preview },
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props.id);
+
+    return { entry, entryLoaded };
+  },
 
   data() {
     return {

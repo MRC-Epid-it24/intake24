@@ -36,7 +36,7 @@
     "@types/lodash": "^4.14.182",
     "@types/node": "^17.0.45",
     "vite": "^2.9.14",
-    "vite-plugin-pwa": "^0.12.2"
+    "vite-plugin-pwa": "^0.12.3"
   },
   "bundledDependencies": [
     "@intake24/common",

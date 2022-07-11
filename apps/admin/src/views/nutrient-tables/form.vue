@@ -223,13 +223,11 @@
 </template>
 
 <script lang="ts">
-import type { VueConstructor } from 'vue';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
 import { excelColumnToOffset, offsetToExcelColumn } from '@intake24/common/util';
-import formMixin from '@intake24/admin/components/entry/form-mixin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
-import type { FormMixin } from '@intake24/admin/types';
 
 export type CsvMappingField = { fieldName: string; columnOffset: string };
 export type CsvMappingNutrient = { nutrientTypeId: string; columnOffset: string };
@@ -299,12 +297,19 @@ export const transformOut = (data: NutrientTableForm) => {
   };
 };
 
-export default (
-  Vue as VueConstructor<Vue & FormMixin<NutrientTableEntry, NutrientTableRefs>>
-).extend({
+export default defineComponent({
   name: 'NutrientTableForm',
 
   mixins: [formMixin],
+
+  setup(props) {
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+      NutrientTableEntry,
+      NutrientTableRefs
+    >(props.id);
+
+    return { entry, entryLoaded, refs, refsLoaded };
+  },
 
   data() {
     return {
