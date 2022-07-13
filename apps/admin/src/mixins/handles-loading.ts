@@ -12,11 +12,11 @@ export default defineComponent({
 
     async withLoading<T = any>(promise: Promise<T>, id = null) {
       const name = `${this.module}/${id ?? Math.round(Math.random() * 100)}`;
-      await this.addLoading(name);
+      this.addLoading(name);
       try {
         return await promise;
       } finally {
-        await this.removeLoading(name);
+        this.removeLoading(name);
       }
     },
   },

@@ -1,42 +1,31 @@
 {
-  "extends": [
-    "config:base",
-    "schedule:earlyMondays"
-  ],
-  "labels": ["dependencies"],
-  "pin": false,
-  "packageRules": [
+  extends: ['config:base', 'schedule:earlyMondays'],
+  labels: ['dependencies'],
+  pin: false,
+  packageRules: [
     {
-      "matchPackagePatterns": [
-        "*"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "excludePackageNames": [
-        "sequelize", // occasional breaking changes due to JS->TS codebase port since 6.12.x
-        "typescript"
-        ],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
-    }
+      matchPackagePatterns: ['*'],
+      matchUpdateTypes: ['minor', 'patch'],
+      excludePackageNames: ['typescript'],
+      groupName: 'all non-major dependencies',
+      groupSlug: 'all-minor-patch',
+    },
   ],
-  "rangeStrategy": "bump",
-  "ignoreDeps": [
+  rangeStrategy: 'bump',
+  ignoreDeps: [
     // Manual
-    "node",
+    'node',
 
     // Breaking changes
-    "execa", // ESM-only since 6.x.x
+    'execa', // ESM-only since 6.x.x
 
     // Bump after Vue.js v3 upgrade
-    "@tinymce/tinymce-vue",
-    "vue",
-    "vue-i18n",
-    "vue-router",
-    "vue-recaptcha", // might be upgraded sooner, but needs composition API
-    "sass",
-    "sass-loader"
-  ]
+    '@tinymce/tinymce-vue',
+    'vue',
+    'vue-i18n',
+    'vue-router',
+    'vue-recaptcha',
+    'sass',
+    'sass-loader',
+  ],
 }
