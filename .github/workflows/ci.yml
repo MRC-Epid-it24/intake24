@@ -40,7 +40,7 @@ jobs:
           version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.4.0
+        uses: actions/setup-node@v3.4.1
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -112,7 +112,7 @@ jobs:
           version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.4.0
+        uses: actions/setup-node@v3.4.1
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -196,7 +196,7 @@ jobs:
   #         version: 6
 
   #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v2.5.1
+  #       uses: actions/setup-node@v3.4.1
   #       with:
   #         node-version: ${{ matrix.node-version }}
   #         cache: 'pnpm'
@@ -283,7 +283,7 @@ jobs:
   #         version: 6
 
   #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v2.5.1
+  #       uses: actions/setup-node@v3.4.1
   #       with:
   #         node-version: ${{ matrix.node-version }}
   #         cache: 'pnpm'
@@ -327,7 +327,7 @@ jobs:
           version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.4.0
+        uses: actions/setup-node@v3.4.1
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -361,7 +361,7 @@ jobs:
           version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.4.0
+        uses: actions/setup-node@v3.4.1
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -398,7 +398,7 @@ jobs:
           version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.4.0
+        uses: actions/setup-node@v3.4.1
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -432,7 +432,7 @@ jobs:
           version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.4.0
+        uses: actions/setup-node@v3.4.1
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'

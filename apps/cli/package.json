@@ -12,7 +12,7 @@
   },
   "main": "src/index.ts",
   "engines": {
-    "node": "^14.17.0 || >=16.0.0"
+    "node": ">=14.20.0"
   },
   "scripts": {
     "build": "pnpm build:clean && webpack --env NODE_ENV=production",
@@ -24,7 +24,7 @@
     "lint:fix": "pnpm lint -- --fix"
   },
   "dependencies": {
-    "commander": "^9.3.0",
+    "commander": "^9.4.0",
     "dotenv": "^16.0.1",
     "dotenv-expand": "^8.0.3",
     "fs-extra": "^10.1.0",

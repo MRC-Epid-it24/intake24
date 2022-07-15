@@ -12,12 +12,12 @@
   },
   "main": "src/index.ts",
   "engines": {
-    "node": "^14.17.0 || >=16.0.0"
+    "node": ">=14.20.0"
   },
   "scripts": {},
   "dependencies": {
     "lodash": "^4.17.21",
-    "vue": "^2.7.5",
+    "vue": "^2.7.6",
     "vue-i18n": "^8.27.2"
   },
   "devDependencies": {
