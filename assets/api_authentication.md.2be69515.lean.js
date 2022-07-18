@@ -1,1 +1,0 @@
-import{_ as e,c as n,o as a,a as t}from"./app.e79dd453.js";const k='{"title":"Authentication","description":"","frontmatter":{},"headers":[],"relativePath":"api/authentication.md"}',s={},o=t("",7),i=[o];function c(d,r,p,h,l,u){return a(),n("div",null,i)}var m=e(s,[["render",c]]);export{k as __pageData,m as default};

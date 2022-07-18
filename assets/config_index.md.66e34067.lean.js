@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as i,a as t}from"./app.e79dd453.js";const v='{"title":"Introduction","description":"","frontmatter":{},"headers":[],"relativePath":"config/index.md"}',r={},o=t("",13),n=[o];function c(l,s,d,p,f,h){return i(),a("div",null,n)}var m=e(r,[["render",c]]);export{v as __pageData,m as default};
