@@ -6,7 +6,7 @@ Browse paginated language list
 
 ### Request
 
-```http
+```json
 GET /api/admin/languages
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new language entry
 
 ### Request
 
-```http
+```json
 POST /api/admin/languages
 
 Authorization: Bearer {accessToken}
@@ -64,7 +64,7 @@ Get language entry
 
 ### Request
 
-```http
+```json
 GET /api/admin/languages/:languageId
 
 Authorization: Bearer {accessToken}
@@ -87,7 +87,7 @@ Update language entry
 
 ### Request
 
-```http
+```json
 PUT /api/admin/languages/:languageId
 
 Authorization: Bearer {accessToken}
@@ -117,7 +117,7 @@ Delete language entry
 
 ### Request
 
-```http
+```json
 DELETE /api/admin/languages/:languageId
 
 Authorization: Bearer {accessToken}
@@ -136,7 +136,7 @@ Get language translations
 
 ### Request
 
-```http
+```json
 GET /api/admin/languages/:languageId/translations
 
 Authorization: Bearer {accessToken}
@@ -168,7 +168,7 @@ Update language translations
 
 ### Request
 
-```http
+```json
 POST /api/admin/languages/:languageId/translations
 
 Authorization: Bearer {accessToken}

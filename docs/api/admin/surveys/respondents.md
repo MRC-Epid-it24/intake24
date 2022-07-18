@@ -10,7 +10,7 @@ List includes users with `{surveyId}/respondent` role.
 
 ### Request
 
-```http
+```json
 GET /api/admin/surveys/:surveyId/respondents
     ?search={searchText}
     &page={page}
@@ -37,7 +37,7 @@ Create new survey respondent
 
 ### Request
 
-```http
+```json
 POST /api/admin/surveys/:surveyId/respondents
 
 Authorization: Bearer {accessToken}
@@ -87,7 +87,7 @@ Get survey respondent record
 
 ### Request
 
-```http
+```json
 GET /api/admin/surveys/:surveyId/respondents/:userId
 
 Authorization: Bearer {accessToken}
@@ -122,7 +122,7 @@ Update survey respondent
 
 ### Request
 
-```http
+```json
 PATCH /api/admin/surveys/:surveyId/respondents/:userId
 
 Authorization: Bearer {accessToken}
@@ -165,7 +165,7 @@ Delete respondent
 
 ### Request
 
-```http
+```json
 DELETE /api/admin/surveys/:surveyId/respondents/:userId
 
 Authorization: Bearer {accessToken}
@@ -184,7 +184,7 @@ Download feedback as PDF. Returns stream as `application/pdf`.
 
 ### Request
 
-```http
+```json
 GET /api/admin/surveys/:surveyId/respondents/:userId/feedback
 
 Authorization: Bearer {accessToken}
@@ -203,7 +203,7 @@ Email feedback as PDF attachment.
 
 ### Request
 
-```http
+```json
 POST /api/admin/surveys/:surveyId/respondents/:userId/feedback
 
 Authorization: Bearer {accessToken}
@@ -227,7 +227,7 @@ Submits a job to generate CSV file with authentication URLs.
 
 ### Request
 
-```http
+```json
 POST /api/admin/surveys/:surveyId/respondents/export-auth-urls
 
 Authorization: Bearer {accessToken}
@@ -252,7 +252,7 @@ Submits a job to import respondent from CSV file.
 
 ### Request
 
-```http
+```json
 POST /api/admin/surveys/:surveyId/respondents/upload
 
 Authorization: Bearer {accessToken}

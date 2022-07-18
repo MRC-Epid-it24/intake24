@@ -75,7 +75,7 @@ If survey settings specify JWT secret, signed JWT token is attached as Bearer in
 
 #### Request
 
-```http
+```json
 POST https://my-submission-notification-url.example.com
 
 Authorization: Bearer {token}

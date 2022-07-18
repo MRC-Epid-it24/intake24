@@ -6,7 +6,7 @@ Browse paginated role list
 
 ### Request
 
-```http
+```json
 GET /api/admin/roles
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new role entry
 
 ### Request
 
-```http
+```json
 POST /api/admin/roles
 
 Authorization: Bearer {accessToken}
@@ -63,7 +63,7 @@ Get role entry
 
 ### Request
 
-```http
+```json
 GET /api/admin/roles/:roleId
 
 Authorization: Bearer {accessToken}
@@ -86,7 +86,7 @@ Update role entry
 
 ### Request
 
-```http
+```json
 PUT /api/admin/roles/:roleId
 
 Authorization: Bearer {accessToken}
@@ -116,7 +116,7 @@ Delete role entry
 
 ### Request
 
-```http
+```json
 DELETE /api/admin/roles/:roleId
 
 Authorization: Bearer {accessToken}
@@ -135,7 +135,7 @@ Get role references
 
 ### Request
 
-```http
+```json
 GET /api/admin/roles/refs
 
 Authorization: Bearer {accessToken}

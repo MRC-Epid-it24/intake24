@@ -13,7 +13,7 @@ Field `captcha` can be omitted if `captcha` is disabled.
 
 ### Request
 
-```http
+```json
 POST /api/password
 
 Content-Type: application/json
@@ -38,7 +38,7 @@ Field `token` value is received with password recovery email. It is valid to lim
 
 ### Request
 
-```http
+```json
 POST /api/password/reset
 
 Content-Type: application/json

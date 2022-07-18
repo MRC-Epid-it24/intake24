@@ -19,7 +19,7 @@ Authorization: Bearer {accessToken}
 
 ### Request
 
-```http
+```json
 GET /api/endpoint
 
 Authorization: Bearer {accessToken}

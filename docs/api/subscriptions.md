@@ -8,7 +8,7 @@ Subscribe logged-in user to receive web-push notifications. It expects the subsc
 
 ### Request
 
-```http
+```json
 POST /api/subscriptions
 
 Content-Type: application/json
@@ -36,7 +36,7 @@ Unsubscribe logged-in user from receiving web-push notifications
 
 ### Request
 
-```http
+```json
 DELETE /api/subscriptions
 
 Content-Type: application/json
@@ -54,7 +54,7 @@ Send `test` Push notification to logged-in user
 
 ### Request
 
-```http
+```json
 POST /api/subscriptions/push
 
 Content-Type: application/json

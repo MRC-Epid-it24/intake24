@@ -6,7 +6,7 @@ Browse paginated task list
 
 ### Request
 
-```http
+```json
 GET /api/admin/tasks
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new task entry
 
 ### Request
 
-```http
+```json
 POST /api/admin/tasks
 
 Authorization: Bearer {accessToken}
@@ -64,7 +64,7 @@ Get task entry
 
 ### Request
 
-```http
+```json
 GET /api/admin/tasks/:taskId
 
 Authorization: Bearer {accessToken}
@@ -87,7 +87,7 @@ Update task entry
 
 ### Request
 
-```http
+```json
 PUT /api/admin/tasks/:taskId
 
 Authorization: Bearer {accessToken}
@@ -118,7 +118,7 @@ Delete task entry
 
 ### Request
 
-```http
+```json
 DELETE /api/admin/tasks/:taskId
 
 Authorization: Bearer {accessToken}
@@ -137,7 +137,7 @@ Trigger task pushing into the job queue
 
 ### Request
 
-```http
+```json
 POST /api/admin/tasks/:taskId/run
 
 Authorization: Bearer {accessToken}
@@ -156,7 +156,7 @@ Get task references
 
 ### Request
 
-```http
+```json
 GET /api/admin/tasks/refs
 
 Authorization: Bearer {accessToken}

@@ -8,7 +8,7 @@ Login with email / password
 
 ### Request
 
-```http
+```json
 POST /api/auth/login
 
 Content-Type: application/json
@@ -49,7 +49,7 @@ Login with username / password
 
 ### Request
 
-```http
+```json
 POST /api/auth/login/alias
 
 Content-Type: application/json
@@ -77,7 +77,7 @@ Login with token
 
 ### Request
 
-```http
+```json
 POST /api/auth/login/token
 
 Content-Type: application/json
@@ -105,7 +105,7 @@ API server expects `refresh token` sent as cookie. Cookie name can differ based 
 
 ### Request
 
-```http
+```json
 POST /api/auth/refresh
 
 Content-Type: application/json
@@ -129,7 +129,7 @@ Clears `http-only` cookie which stores `refresh token` and revokes `refresh toke
 
 ### Request
 
-```http
+```json
 POST /api/auth/logout
 
 Content-Type: application/json

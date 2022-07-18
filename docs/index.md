@@ -1,17 +1,43 @@
 ---
-home: true
-title: 'Intake24'
-actionText: Get Started
-actionLink: /overview/
+layout: home
+sidebar: false
+
+title: Intake24
+
+hero:
+  name: Intake24
+  tagline: |
+    Dietary recall system
+    Multiple-pass 24-hour recall
+  image:
+    light:
+      src: /logo.png
+      alt: Intake24
+    dark:
+      src: /logo.png
+      alt: Intake24
+  actions:
+    - theme: brand
+      text: Get Started
+      link: /overview/
+    - theme: alt
+      text: View on Github
+      link: https://github.com/MRC-Epid-it24/intake24
 
 features:
-  - title: 🌏 API Server
+  - icon: 🌏
+    title: Overview
+    details: Intro / Requirements / Guides
+  - icon: 🌏
+    title: API Server
     details: API Server
-  - title: 🌏 Admin tool
+  - icon: 🌏
+    title: Admin tool
     details: Admin tool
-  - title: 🌏 Recall & feedback
+  - icon: 🌏
+    title: Recall & feedback
     details: Recall & feedback
-#  - title: 🌏 CLI
-#    details: Description
-footer: Made by Intake24 with ❤️
+  - icon: 🌏
+    title: CLI
+    details: Command line interface
 ---

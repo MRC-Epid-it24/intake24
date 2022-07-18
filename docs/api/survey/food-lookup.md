@@ -10,7 +10,7 @@ Detects multiple foods entered as a single entry and returns a suggested split i
 
 ### Request
 
-```http
+```json
 GET /api/foods/{locale}/split-description?desc={description}
 
 Authorization: Bearer {accessToken}
@@ -42,7 +42,7 @@ Returns a list of foods from the food database that match the description as ent
 
 ### Request
 
-```http
+```json
 GET /api/foods/{locale}/lookup?desc={description}&existing={existing}&limit={limit}&alg={algorithm}
 
 Authorization: Bearer {accessToken}
@@ -95,7 +95,7 @@ Same as normal lookup but expands the search results to foods marked for use in 
 
 ### Request
 
-```http
+```json
 GET /api/foods/{locale}/lookup-for-recipes?desc={description}&existing={existing}&limit={limit}&alg={algorithm}
 
 Authorization: Bearer {accessToken}
@@ -115,7 +115,7 @@ Same as normal lookup but limits the search results to foods that are contained 
 
 ### Request
 
-```http
+```json
 GET /api/foods/{locale}/lookup-in-category?desc={description}&category={category}existing={existing}&limit={limit}&alg={algorithm}
 
 Authorization: Bearer {accessToken}
@@ -137,7 +137,7 @@ Get the list of root categories in the current locale for the "browse all foods"
 
 ### Request
 
-```http
+```json
 GET /api/categories/{locale}
 
 Authorization: Bearer {accessToken}
@@ -171,7 +171,7 @@ Get the category contents, i.e. foods and subcategories listed under the given c
 
 ### Request
 
-```http
+```json
 GET /api/categories/{locale}/{code}?alg={algorithmId}&existing={existingFoodCode}
 
 Authorization: Bearer {accessToken}

@@ -6,7 +6,7 @@ Browse paginated locale list
 
 ### Request
 
-```http
+```json
 GET /api/admin/locales
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new locale entry
 
 ### Request
 
-```http
+```json
 POST /api/admin/locales
 
 Authorization: Bearer {accessToken}
@@ -67,7 +67,7 @@ Get locale entry
 
 ### Request
 
-```http
+```json
 GET /api/admin/locales/:localeId
 
 Authorization: Bearer {accessToken}
@@ -90,7 +90,7 @@ Update locale entry
 
 ### Request
 
-```http
+```json
 PUT /api/admin/locales/:localeId
 
 Authorization: Bearer {accessToken}
@@ -123,7 +123,7 @@ Delete locale entry
 
 ### Request
 
-```http
+```json
 DELETE /api/admin/locales/:localeId
 
 Authorization: Bearer {accessToken}
@@ -142,7 +142,7 @@ Get locale references
 
 ### Request
 
-```http
+```json
 GET /api/admin/locales/refs
 
 Authorization: Bearer {accessToken}

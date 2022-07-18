@@ -6,7 +6,7 @@ Submits a job to generate CSV file with submission data.
 
 ### Request
 
-```http
+```json
 POST /api/admin/surveys/:surveyId/data-export
 
 Authorization: Bearer {accessToken}
@@ -31,7 +31,7 @@ Download CSV file with submission data.
 
 ### Request
 
-```http
+```json
 POST /api/admin/surveys/:surveyId/data-export/sync
 
 Authorization: Bearer {accessToken}

@@ -6,7 +6,7 @@ Get logged-in user profile data
 
 ### Request
 
-```http
+```json
 GET /api/admin/user
 
 Authorization: Bearer {accessToken}

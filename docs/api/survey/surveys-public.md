@@ -8,7 +8,7 @@ Publicly accessible survey list. Returns list of public surveys.
 
 ### Request
 
-```http
+```json
 GET /api/surveys
 
 Content-Type: application/json
@@ -40,7 +40,7 @@ Returns survey parameters necessary to render the survey login page such as the 
 
 ### Request
 
-```http
+```json
 GET /api/surveys/{survey-slug}
 
 Content-Type: application/json
@@ -80,7 +80,7 @@ This functionality has to be allowed in survey settings. It is using captcha cha
 
 ### Request
 
-```http
+```json
 POST /api/surveys/{survey-slug}/generate-user
 
 Content-Type: application/json
@@ -116,7 +116,7 @@ Secret for the JWT generation is stored server-side in survey settings. Client i
 
 ### Request
 
-```http
+```json
 POST /api/surveys/{survey-slug}/create-user?params={token}
 
 Content-Type: application/json

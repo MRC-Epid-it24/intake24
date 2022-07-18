@@ -18,11 +18,11 @@ export default defineConfig({
   vite: { server: { port: 8400 } },
 
   themeConfig: {
-    repo: 'MRC-Epid-it24/intake24',
     logo: '/logo.png' ,
-    docsDir: 'docs',
-    editLinks: false,
     nav,
     sidebar,
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/MRC-Epid-it24/intake24' },
+    ],
   },
 });

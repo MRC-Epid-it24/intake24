@@ -36,7 +36,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/lodash": "^4.14.182",
     "@types/web-push": "^3.3.2",
-    "fork-ts-checker-webpack-plugin": "^7.2.12",
+    "fork-ts-checker-webpack-plugin": "^7.2.13",
     "ts-loader": "^9.3.1",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "typescript": "^4.7.4",

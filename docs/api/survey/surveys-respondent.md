@@ -8,7 +8,7 @@ Returns survey parameters such as the scheme ID, current status, custom HTML con
 
 ### Request
 
-```http
+```json
 GET /api/surveys/{survey-slug}/parameters
 
 Authorization: Bearer {accessToken}
@@ -42,7 +42,7 @@ Returns a subset of personal data for the current user that is relevant to the r
 
 ### Request
 
-```http
+```json
 GET /api/surveys/{survey-slug}/user-info?tzOffset={tzOffset}
 
 Authorization: Bearer {accessToken}
@@ -88,7 +88,7 @@ Get survey user session (current recall state), if any. Functionality is control
 
 ### Request
 
-```http
+```json
 GET /api/surveys/{survey-slug}/session
 
 Authorization: Bearer {accessToken}
@@ -113,7 +113,7 @@ Save survey user session (current recall state) on server. Functionality is cont
 
 ### Request
 
-```http
+```json
 POST /api/surveys/{survey-slug}/session
 
 Authorization: Bearer {accessToken}
@@ -142,7 +142,7 @@ Returns actions available at the end of the recall which can be a link to the ne
 
 ### Request
 
-```http
+```json
 GET /api/surveys/{survey-slug}/follow-up
 
 Authorization: Bearer {accessToken}
@@ -168,7 +168,7 @@ Submit a completed recall.
 
 ### Request
 
-```http
+```json
 POST /api/surveys/{survey-slug}/submissions
 
 Authorization: Bearer {accessToken}
@@ -200,7 +200,7 @@ Notify people having support role for the survey to give the respondent a call t
 
 ### Request
 
-```http
+```json
 POST /api/surveys/{survey-slug}/request-callback
 
 Authorization: Bearer {accessToken}

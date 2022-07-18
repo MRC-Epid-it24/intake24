@@ -1,6 +1,10 @@
 :root {
-  --c-brand: #EF6C00;
-  --c-brand-light: #F57C00;
+  --vp-c-accent: #FF6D00;
+  --vp-c-brand: #EF6C00;
+  --vp-c-brand-light: #FB8C00;
+  --vp-c-brand-lighter: #F57C00;
+  --vp-c-brand-dark: #E65100;
+  --vp-c-brand-darker: #E65100;
 }
 
 a {

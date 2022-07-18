@@ -6,7 +6,7 @@ Browse paginated nutrient tables list
 
 ### Request
 
-```http
+```json
 GET /api/admin/nutrient-tables
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new nutrient table entry
 
 ### Request
 
-```http
+```json
 POST /api/admin/nutrient-tables
 
 Authorization: Bearer {accessToken}
@@ -69,7 +69,7 @@ Get nutrient table entry
 
 ### Request
 
-```http
+```json
 GET /api/admin/nutrient-tables/:nutrientTableId
 
 Authorization: Bearer {accessToken}
@@ -92,7 +92,7 @@ Update nutrient table entry
 
 ### Request
 
-```http
+```json
 PUT /api/admin/nutrient-tables/:nutrientTableId
 
 Authorization: Bearer {accessToken}
@@ -128,7 +128,7 @@ Delete nutrient table entry
 
 ### Request
 
-```http
+```json
 DELETE /api/admin/nutrient-tables/:nutrientTableId
 
 Authorization: Bearer {accessToken}
@@ -147,7 +147,7 @@ Get nutrient table references
 
 ### Request
 
-```http
+```json
 GET /api/admin/nutrient-tables/refs
 
 Authorization: Bearer {accessToken}
@@ -182,7 +182,7 @@ Upload is submitted as job and response returns `JobResponse` entry
 
 ### Request
 
-```http
+```json
 POST /api/admin/nutrient-tables/:nutrientTableId/upload
 
 Authorization: Bearer {accessToken}

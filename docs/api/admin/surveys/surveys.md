@@ -6,7 +6,7 @@ Browse paginated survey list
 
 ### Request
 
-```http
+```json
 GET /api/admin/surveys
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new survey entry
 
 ### Request
 
-```http
+```json
 POST /api/admin/surveys
 
 Authorization: Bearer {accessToken}
@@ -84,7 +84,7 @@ Get survey entry
 
 ### Request
 
-```http
+```json
 GET /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
@@ -107,7 +107,7 @@ Update survey entry
 
 ### Request
 
-```http
+```json
 PUT /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
@@ -157,7 +157,7 @@ Update survey entry - patch / partial update
 
 ### Request
 
-```http
+```json
 PATCH /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
@@ -207,7 +207,7 @@ Delete survey entry
 
 ### Request
 
-```http
+```json
 DELETE /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
@@ -226,7 +226,7 @@ Get survey references
 
 ### Request
 
-```http
+```json
 GET /api/admin/surveys/refs
 
 Authorization: Bearer {accessToken}

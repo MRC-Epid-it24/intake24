@@ -8,7 +8,7 @@ Get feedback related reference data
 
 ### Request
 
-```http
+```json
 GET /api/feedback
 
 Authorization: Bearer {accessToken}

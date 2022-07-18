@@ -12,7 +12,7 @@ Get portion size estimation options, associated foods and related data for a foo
 
 ### Request
 
-```http
+```json
 GET /api/foods/{locale}/{code}
 
 Authorization: Bearer {accessToken}
@@ -124,7 +124,7 @@ Get as served image definitions for the given as served set.
 
 ### Request
 
-```http
+```json
 GET /api/portion-sizes/as-served-sets/{id}
 
 Authorization: Bearer {accessToken}
@@ -175,7 +175,7 @@ Same as above, but fetches data for multiple as served image sets at once.
 
 ### Request
 
-```http
+```json
 GET /api/portion-sizes/as-served-sets/?id[]={id}
 
 Authorization: Bearer {accessToken}
@@ -216,7 +216,7 @@ has an associated weight that is used for portion size weight calculations.
 
 ### Request
 
-```http
+```json
 GET /api/portion-sizes/guide-images/{id}
 
 Authorization: Bearer {accessToken}
@@ -290,7 +290,7 @@ Same as above, but returns several guide images at once.
 
 ### Request
 
-```http
+```json
 GET /api/portion-sizes/guide-images/?id[]={id}
 
 Authorization: Bearer {accessToken}
@@ -311,7 +311,7 @@ whose final weight also depends on pizza thickness and type.
 
 ### Request
 
-```http
+```json
 GET /api/portion-sizes/image-maps/{id}
 
 Authorization: Bearer {accessToken}
@@ -348,7 +348,7 @@ Same as above, but returns several image maps at once.
 
 ### Request
 
-```http
+```json
 GET /api/portion-sizes/image-maps/?id[]={id}
 
 Authorization: Bearer {accessToken}
@@ -367,7 +367,7 @@ Get the definition of "sliding scale" which is the portion size estimation for h
 
 ### Request
 
-```http
+```json
 GET /api/portion-sizes/drinkware-sets/{id}
 
 Authorization: Bearer {accessToken}
@@ -462,7 +462,7 @@ Same as above, but fetches data for multiple drinkware sets at once.
 
 ### Request
 
-```http
+```json
 GET /api/portion-sizes/drinkware-sets/?id[]={id}
 
 Authorization: Bearer {accessToken}
@@ -511,7 +511,7 @@ get the image URL for the portion size option selection screen.
 
 ### Request
 
-```http
+```json
 GET /api/portion-sizes/weight
 
 Authorization: Bearer {accessToken}
@@ -545,7 +545,7 @@ well as categories).
 
 ### Request
 
-```http
+```json
 GET /api/foods/associated/{locale}?f={foodCode}&f={foodCode}...
 
 Authorization: Bearer {accessToken}

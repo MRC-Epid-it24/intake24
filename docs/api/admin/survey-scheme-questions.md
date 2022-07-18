@@ -8,7 +8,7 @@ Browse paginated survey scheme questions list
 
 ### Request
 
-```http
+```json
 GET /api/admin/survey-scheme-questions
     ?search={searchText}
     &page={page}
@@ -35,7 +35,7 @@ Create new survey scheme question entry
 
 ### Request
 
-```http
+```json
 POST /api/admin/survey-scheme-questions
 
 Authorization: Bearer {accessToken}
@@ -62,7 +62,7 @@ Get survey scheme question entry
 
 ### Request
 
-```http
+```json
 GET /api/admin/survey-scheme-questions/:surveySchemeQuestionId
 
 Authorization: Bearer {accessToken}
@@ -85,7 +85,7 @@ Update survey scheme question entry
 
 ### Request
 
-```http
+```json
 PUT /api/admin/survey-scheme-questions/:surveySchemeQuestionId
 
 Authorization: Bearer {accessToken}
@@ -112,7 +112,7 @@ Delete survey scheme question entry
 
 ### Request
 
-```http
+```json
 DELETE /api/admin/survey-scheme-questions/:surveySchemeQuestionId
 
 Authorization: Bearer {accessToken}
@@ -131,7 +131,7 @@ Get survey scheme question references
 
 ### Request
 
-```http
+```json
 GET /api/admin/survey-scheme-questions/refs
 
 Authorization: Bearer {accessToken}
@@ -164,7 +164,7 @@ Synchronize scheme question template with specific question in scheme section
 
 ### Request
 
-```http
+```json
 POST /api/admin/survey-scheme-questions/:surveySchemeQuestionId/sync
 
 Authorization: Bearer {accessToken}

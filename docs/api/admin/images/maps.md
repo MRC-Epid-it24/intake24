@@ -6,7 +6,7 @@ Browse paginated image map list
 
 ### Request
 
-```http
+```json
 GET /api/admin/images/maps
     ?search={searchText}
     &page={page}
@@ -40,7 +40,7 @@ Create new image map entry
 
 ### Request
 
-```http
+```json
 POST /api/admin/images/maps
 
 Authorization: Bearer {accessToken}
@@ -79,7 +79,7 @@ Get image map entry
 
 ### Request
 
-```http
+```json
 GET /api/admin/images/maps/:imageMapId
 
 Authorization: Bearer {accessToken}
@@ -112,7 +112,7 @@ Update image map entry
 
 ### Request
 
-```http
+```json
 PUT /api/admin/images/maps/:imageMapId
 
 Authorization: Bearer {accessToken}
@@ -157,7 +157,7 @@ Delete image map entry
 
 ### Request
 
-```http
+```json
 DELETE /api/admin/images/maps/:imageMapId
 
 Authorization: Bearer {accessToken}

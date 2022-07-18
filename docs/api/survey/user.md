@@ -8,7 +8,7 @@ Download feedback as PDF. Returns stream as `application/pdf`.
 
 ### Request
 
-```http
+```json
 GET /api/user/feedback?survey={survey-slug}
 
 Authorization: Bearer {accessToken}
@@ -27,7 +27,7 @@ Get user's physical data.
 
 ### Request
 
-```http
+```json
 GET /api/user/physical-data
 
 Authorization: Bearer {accessToken}
@@ -56,7 +56,7 @@ Update user's physical data.
 
 ### Request
 
-```http
+```json
 POST /api/user/physical-data?survey={survey-slug}
 
 Authorization: Bearer {accessToken}
@@ -94,7 +94,7 @@ User submissions for specific survey
 
 ### Request
 
-```http
+```json
 GET /api/user/submissions?survey={survey-slug}
 
 Authorization: Bearer {accessToken}
@@ -181,7 +181,7 @@ Update password of authenticated user
 
 ### Request
 
-```http
+```json
 POST /api/user/password
 
 Authorization: Bearer {accessToken}

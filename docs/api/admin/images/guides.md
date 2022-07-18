@@ -6,7 +6,7 @@ Browse paginated guide image list
 
 ### Request
 
-```http
+```json
 GET /api/admin/images/guides
     ?search={searchText}
     &page={page}
@@ -40,7 +40,7 @@ Create new guide image entry
 
 ### Request
 
-```http
+```json
 POST /api/admin/images/guides
 
 Authorization: Bearer {accessToken}
@@ -81,7 +81,7 @@ Get guide image entry
 
 ### Request
 
-```http
+```json
 GET /api/admin/images/guides/:guideImageId
 
 Authorization: Bearer {accessToken}
@@ -116,7 +116,7 @@ Update guide image entry
 
 ### Request
 
-```http
+```json
 PUT /api/admin/images/guides/:guideImageId
 
 Authorization: Bearer {accessToken}
@@ -162,7 +162,7 @@ Delete guide image entry
 
 ### Request
 
-```http
+```json
 DELETE /api/admin/images/guides/:guideImageId
 
 Authorization: Bearer {accessToken}
@@ -181,7 +181,7 @@ Get guide image references
 
 ### Request
 
-```http
+```json
 GET /api/admin/images/guides/refs
 
 Authorization: Bearer {accessToken}

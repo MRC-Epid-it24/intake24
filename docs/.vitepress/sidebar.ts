@@ -3,7 +3,7 @@ export const sidebar = {
     {
       text: 'Overview',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/overview/',
@@ -23,7 +23,7 @@ export const sidebar = {
     {
       text: 'Configuration',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/config/',
@@ -33,7 +33,7 @@ export const sidebar = {
     {
       text: 'API server',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Application',
           link: '/config/api/application',
@@ -87,7 +87,7 @@ export const sidebar = {
     {
       text: 'Admin client',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/config/admin/',
@@ -97,7 +97,7 @@ export const sidebar = {
     {
       text: 'Survey client',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/config/survey/',
@@ -109,7 +109,7 @@ export const sidebar = {
     {
       text: 'Global',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/api/',
@@ -135,7 +135,7 @@ export const sidebar = {
     {
       text: 'Admin',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Authentication',
           link: '/api/admin/authentication',
@@ -241,7 +241,7 @@ export const sidebar = {
     {
       text: 'Survey',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Authentication',
           link: '/api/survey/authentication',
@@ -277,7 +277,7 @@ export const sidebar = {
     {
       text: 'Admin',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/admin/',
@@ -290,7 +290,7 @@ export const sidebar = {
     },
     {
       text: 'Localization',
-      children: [
+      items: [
         {
           text: 'Languages',
           link: '/admin/localization/languages',
@@ -303,7 +303,7 @@ export const sidebar = {
     },
     {
       text: 'Images',
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/admin/images/',
@@ -324,7 +324,7 @@ export const sidebar = {
     },
     {
       text: 'Surveys MGMT',
-      children: [
+      items: [
         {
           text: 'Feedback schemes',
           link: '/admin/surveys/feedback-schemes',
@@ -345,7 +345,7 @@ export const sidebar = {
     },
     {
       text: 'Access control list',
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/admin/acl/',
@@ -374,7 +374,7 @@ export const sidebar = {
     },
     {
       text: 'System',
-      children: [
+      items: [
         {
           text: 'Job types',
           link: '/admin/system/job-types',
@@ -397,7 +397,7 @@ export const sidebar = {
   '/survey/': [
     {
       text: 'Survey',
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/survey/',
@@ -409,7 +409,7 @@ export const sidebar = {
     {
       text: 'Portal',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/Portal/',
@@ -421,7 +421,7 @@ export const sidebar = {
     {
       text: 'CLI',
       collapsable: false,
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/cli/',
@@ -444,7 +444,7 @@ export const sidebar = {
   '/deployment/': [
     {
       text: 'Deployment',
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/deployment/',
@@ -455,7 +455,7 @@ export const sidebar = {
   '/data-dictionary/': [
     {
       text: 'Data Dictionary',
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/data-dictionary/',
@@ -474,7 +474,7 @@ export const sidebar = {
   '/developer/': [
     {
       text: 'Developer resources',
-      children: [
+      items: [
         {
           text: 'Introduction',
           link: '/developer/',
