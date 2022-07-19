@@ -38,8 +38,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import type { PropType } from 'vue';
+import Vue from 'vue';
+import type { PropType, VueConstructor } from 'vue';
 import { mapState } from 'pinia';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
@@ -47,8 +47,17 @@ import { ConfirmDialog } from '@intake24/ui';
 import { useSurvey } from '@intake24/survey/stores';
 import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
 import EditableFoodList from './EditableFoodList.vue';
+import type { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
+import type { EditableFoodListType } from '@intake24/survey/components/prompts/standard/EditableFoodList.vue';
 
-export default defineComponent({
+interface EditMealPromptType {
+  $refs: {
+    editableFoodList: EditableFoodListType;
+  };
+  foodsDrinks(): FoodState[];
+}
+
+export default (Vue as VueConstructor<Vue & LocaleContent & EditMealPromptType>).extend({
   name: 'EditMealPrompt',
 
   components: { EditableFoodList, ConfirmDialog },
@@ -74,12 +83,6 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    const editableFoodList = ref<InstanceType<typeof EditableFoodList>>();
-
-    return { editableFoodList };
-  },
-
   computed: {
     ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
 
@@ -96,7 +99,7 @@ export default defineComponent({
 
   methods: {
     onUpdate() {
-      const editedFoods = this.editableFoodList?.editableList;
+      const editedFoods = this.$refs.editableFoodList.editableList;
       this.$emit('update', editedFoods);
     },
 
@@ -109,7 +112,7 @@ export default defineComponent({
     },
 
     foodsDrinks() {
-      return this.editableFoodList?.editableList;
+      return this.$refs.editableFoodList.editableList;
     },
   },
 });

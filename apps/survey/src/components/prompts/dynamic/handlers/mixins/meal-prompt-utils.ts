@@ -1,9 +1,10 @@
-import { defineComponent } from '@vue/composition-api';
 import { mapState } from 'pinia';
-import { MealState } from '@intake24/common/types';
+import type { MealState } from '@intake24/common/types';
 import { useSurvey } from '@intake24/survey/stores';
+import { defineComponent } from 'vue';
 
-const mixin = defineComponent({
+// export default (Vue as VueConstructor<Vue & MealPromptUtilsType>).extend({
+const component = defineComponent({
   computed: {
     ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex']),
 
@@ -25,6 +26,6 @@ const mixin = defineComponent({
   },
 });
 
-export default mixin;
+export default component;
 
-export type MealPromptUtilsType = InstanceType<typeof mixin>;
+export type MealPromptUtilsType = InstanceType<typeof component>;

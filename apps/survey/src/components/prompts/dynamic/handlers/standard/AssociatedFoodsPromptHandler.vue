@@ -12,18 +12,17 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
-import { BasePromptProps } from '@intake24/common/prompts';
-import { AssociatedFoodsState, RecallPromptHandler } from '@intake24/common/types';
+import type { PropType, VueConstructor } from 'vue';
+import Vue from 'vue';
+
+import type { BasePromptProps } from '@intake24/common/prompts';
+import type { AssociatedFoodsState, RecallPromptHandler } from '@intake24/common/types';
 import { mapActions, mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';
-import {
-  createPromptHandlerMixin,
-  PromptHandlerUtils,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
-import { FoodHeader } from '@intake24/common/types/http';
+import type { PromptHandlerUtils } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import type { FoodHeader } from '@intake24/common/types/http';
 
 interface AssociatedFoodPromptState {
   confirmed: boolean | undefined;

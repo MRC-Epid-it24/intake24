@@ -1,7 +1,7 @@
-import { reactive } from '@vue/composition-api';
-import { defineStore, StoreDefinition } from 'pinia';
-import Vue, { VueConstructor } from 'vue';
-import { ComponentType } from '@intake24/common/prompts';
+import type { StoreDefinition } from 'pinia';
+import { defineStore } from 'pinia';
+import type { ComponentType } from '@intake24/common/prompts';
+import Vue, { defineComponent } from 'vue';
 
 export interface PromptHandlerUtils<T> {
   loadInitialState(foodOrMealId: number, promptId: string, defaultValue: T): void;
@@ -42,7 +42,7 @@ function getOrCreatePromptStateStore<T extends object>(promptType: ComponentType
             ...this.prompts,
             [foodOrMealId]: {
               ...this.prompts[foodOrMealId],
-              [promptId]: reactive(data),
+              [promptId]: data,
             },
           };
         },
@@ -61,10 +61,8 @@ function getOrCreatePromptStateStore<T extends object>(promptType: ComponentType
   return storeDef;
 }
 
-export function createPromptHandlerMixin<T extends object>(
-  promptType: ComponentType
-): VueConstructor<Vue & PromptHandlerUtils<T>> {
-  return (Vue as VueConstructor<Vue & PromptHandlerUtils<T>>).extend({
+export function createPromptHandlerMixin<T extends object>(promptType: ComponentType) {
+  return defineComponent({
     data() {
       const storeDef = getOrCreatePromptStateStore<T>(promptType);
 
@@ -76,7 +74,7 @@ export function createPromptHandlerMixin<T extends object>(
 
     computed: {
       initialState(): T | null {
-        return this.initialStateInternal;
+        return this.initialStateInternal as T | null;
       },
     },
 
