@@ -3,7 +3,6 @@
     v-bind="{ foodName, promptProps }"
     :as-served-set-id="parameters['serving-image-set']"
     :prompt-component="promptComponent"
-    ref="prompt"
     @as-served-serving="onAnswer"
     @as-served-leftovers="onAnswer"
     @tempChanging="onTempChange"
@@ -11,22 +10,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import type { PropType } from 'vue';
+import Vue, { VueConstructor } from 'vue';
+import { PropType } from '@vue/composition-api';
 import { mapState, mapActions } from 'pinia';
-import type { BasePromptProps } from '@intake24/common/prompts';
-import type { SelectedAsServedImage, PromptAnswer, FoodState } from '@intake24/common/types';
-import type { AsServedParameters } from '@intake24/common/types/http';
+import { BasePromptProps } from '@intake24/common/prompts';
+import { SelectedAsServedImage, PromptAnswer, FoodState } from '@intake24/common/types';
+import { AsServedParameters } from '@intake24/common/types/http';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-import foodPromptUtils from '../mixins/food-prompt-utils';
+import FoodPromptUtils, { FoodPromptUtilsType } from '../mixins/food-prompt-utils';
+import {
+  createPromptHandlerMixin,
+  PromptHandlerUtils,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
 
-export default defineComponent({
+interface PromptState {
+  selectedServing: SelectedAsServedImage;
+  selectedLeftovers: SelectedAsServedImage | false;
+}
+
+export default (
+  Vue as VueConstructor<Vue & FoodPromptUtilsType & PromptHandlerUtils<PromptState>>
+).extend({
   name: 'AsServedPromptHandler',
 
   components: { AsServedPrompt },
 
-  mixins: [foodPromptUtils],
+  mixins: [FoodPromptUtils, createPromptHandlerMixin<PromptState>('as-served-prompt')],
 
   props: {
     promptProps: {
@@ -37,12 +47,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
-  },
-
-  setup() {
-    const prompt = ref<InstanceType<typeof AsServedPrompt>>();
-
-    return { prompt };
+    promptId: {
+      type: String,
+      required: true,
+    },
   },
 
   computed: {
@@ -110,7 +118,7 @@ export default defineComponent({
       console.log('Called onPartialAnswer first');
       // if (this.currentTempPromptAnswer?.response)
       //   this.onTempChange(this.currentTempPromptAnswer, { finished: true });
-      this.prompt?.partialAnswerHandler();
+      this.$refs.promptHandleChild?.partialAnswerHandler();
     },
   },
 });
