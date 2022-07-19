@@ -11,8 +11,7 @@ import { createHtmlPlugin } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
 
 import pkg from './package.json';
-import { isCaptchaProvider } from '../../packages/common/src/types';
-import { resolveCaptchaScript } from '../../packages/ui/src/captcha/util';
+import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/ui-build';
 
 // Set build info for application
 process.env.VITE_APP_BUILD_VERSION = pkg.version;
