@@ -5,11 +5,11 @@
         {{ $t('fdbs.categories.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <load-category-dialog
+      <add-category-dialog
         :localeId="localeId"
         :currentList="categories"
         @add="add"
-      ></load-category-dialog>
+      ></add-category-dialog>
     </v-toolbar>
     <v-list>
       <v-list-item-group>
@@ -37,12 +37,12 @@ import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
 import type { CategoryAttributes } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';
-import LoadCategoryDialog from './add-category-dialog.vue';
+import { AddCategoryDialog } from '.';
 
 export default defineComponent({
-  name: 'CategoryController',
+  name: 'CategoryList',
 
-  components: { LoadCategoryDialog },
+  components: { AddCategoryDialog },
 
   props: {
     localeId: {

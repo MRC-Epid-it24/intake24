@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import type {
   CategoryAttributes,
   FoodAttributeAttributes,
@@ -15,6 +16,8 @@ export type FoodAttributes = {
 
 export type FoodAssociations = {
   attributes?: FoodAttributeAttributes;
+  associatedFoods?: AssociatedFoodAttributes;
+  foodGroup?: FoodGroupAttributes;
   parentCategories?: CategoryAttributes[];
 };
 

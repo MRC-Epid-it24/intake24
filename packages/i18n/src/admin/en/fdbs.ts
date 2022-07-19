@@ -69,6 +69,13 @@ const fdbs: LocaleMessageObject = {
       '2': 'Use only as recipe ingredient',
     },
   },
+  nutrients: {
+    _: 'Nutrient table record',
+    title: 'Nutrient table records',
+    add: 'Add nutrient table record',
+    alreadyIncluded: `Nutrient table record '{id}' is already included in current list.`,
+    none: 'No nutrient table record found for provided search.',
+  },
 };
 
 export default fdbs;

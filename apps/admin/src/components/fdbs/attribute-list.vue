@@ -106,7 +106,7 @@ const defaultAttributes: Attributes = {
 };
 
 export default defineComponent({
-  name: 'AttributeController',
+  name: 'AttributeList',
 
   props: {
     value: {

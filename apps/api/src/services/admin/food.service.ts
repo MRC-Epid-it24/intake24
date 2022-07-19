@@ -9,6 +9,7 @@ import {
   FoodLocal,
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
+  NutrientTableRecord,
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { FoodInput } from '@intake24/common/types/http/admin';
@@ -18,7 +19,7 @@ const adminFoodService = () => {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<FoodLocalAttributes> = {
       where: { localeId },
-      include: [{ model: Food }],
+      include: [{ model: Food, required: true }],
     };
     const { search } = query;
 
@@ -56,6 +57,7 @@ const adminFoodService = () => {
             },
           ],
         },
+        { model: NutrientTableRecord, through: { attributes: [] } },
         {
           model: FoodPortionSizeMethod,
           separate: true,

@@ -31,9 +31,7 @@
           clearable
           hide-details="auto"
           outlined
-          @click:append="fetch"
           @click:clear="clear"
-          @keyup.enter="fetch"
         >
         </v-text-field>
         <v-alert v-if="itemAlreadyIncluded" text type="error">
@@ -84,11 +82,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { copy } from '@intake24/common/util';
-import debounce from 'lodash/debounce';
-import type { CategoriesResponse, CategoryListEntry } from '@intake24/common/types/http/admin';
+import type { CategoryListEntry } from '@intake24/common/types/http/admin';
 import type { CategoryAttributes } from '@intake24/common/types/models';
+import { useFetchList } from './use-fetch-list';
 
 export default defineComponent({
   name: 'AddCategoryDialog',
@@ -98,24 +96,21 @@ export default defineComponent({
       type: Array as PropType<CategoryAttributes[]>,
       default: () => [],
     },
-    limit: {
-      type: Number,
-      default: 5,
-    },
     localeId: {
       type: String,
       required: true,
     },
   },
 
-  data() {
-    return {
-      dialog: false,
-      loading: false,
-      search: null as string | null,
-      items: [] as CategoryListEntry[],
-      selected: [] as string[],
-    };
+  setup(props) {
+    const selected = ref<string[]>([]);
+
+    const { dialog, loading, search, items, fetch, clear } = useFetchList(
+      'admin/fdbs/:id/categories',
+      props.localeId
+    );
+
+    return { dialog, loading, items, search, selected, fetch, clear };
   },
 
   computed: {
@@ -133,22 +128,6 @@ export default defineComponent({
     },
   },
 
-  watch: {
-    async dialog(val: boolean) {
-      if (val && !this.items.length) await this.fetch();
-    },
-    search() {
-      //@ts-expect-error debounced
-      this.debouncedFetch();
-    },
-  },
-
-  created() {
-    this.debouncedFetch = debounce(() => {
-      this.fetch();
-    }, 500);
-  },
-
   methods: {
     close() {
       this.selected = [];
@@ -164,29 +143,6 @@ export default defineComponent({
 
       this.$emit('add', copy(this.selectedItems));
       this.close();
-    },
-
-    async fetch() {
-      this.loading = true;
-
-      try {
-        const { limit, search } = this;
-
-        const {
-          data: { data },
-        } = await this.$http.get<CategoriesResponse>(`admin/fdbs/${this.localeId}/categories`, {
-          params: { search, limit },
-        });
-
-        this.items = data;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async clear() {
-      this.search = null;
-      await this.fetch();
     },
   },
 });

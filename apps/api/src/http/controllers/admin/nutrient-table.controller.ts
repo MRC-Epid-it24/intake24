@@ -4,16 +4,17 @@ import type {
   NutrientTableEntry,
   NutrientTableRefs,
   NutrientTablesResponse,
+  NutrientTableRecordsResponse,
   JobEntry,
 } from '@intake24/common/types/http/admin';
 import type { User, PaginateQuery } from '@intake24/db';
-import { FoodsNutrientType, NutrientTable } from '@intake24/db';
+import { NutrientTableRecord, FoodsNutrientType, NutrientTable } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import { ValidationError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
 import type { Controller, CrudActions } from '../controller';
 
-export type NutrientTableController = Controller<CrudActions | 'upload'>;
+export type NutrientTableController = Controller<CrudActions | 'upload' | 'records'>;
 
 export default ({
   nutrientTableService,
@@ -111,6 +112,24 @@ export default ({
     res.json(job);
   };
 
+  const records = async (
+    req: Request<{ nutrientTableId: string }, any, any, PaginateQuery>,
+    res: Response<NutrientTableRecordsResponse>
+  ): Promise<void> => {
+    const {
+      params: { nutrientTableId },
+    } = req;
+
+    const nutrientTableRecords = await NutrientTableRecord.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name', 'localName'],
+      where: { nutrientTableId },
+      order: [['id', 'ASC']],
+    });
+
+    res.json(nutrientTableRecords);
+  };
+
   return {
     browse,
     store,
@@ -120,5 +139,6 @@ export default ({
     destroy,
     refs,
     upload,
+    records,
   };
 };

@@ -1,4 +1,4 @@
-import { Column, DataType, HasMany, HasOne, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, HasOne, Scopes, Table } from 'sequelize-typescript';
 import type {
   NutrientTableAttributes,
   NutrientTableCreationAttributes,
@@ -11,6 +11,9 @@ import {
 } from '.';
 import BaseModel from '../model';
 
+@Scopes(() => ({
+  list: { order: [['id', 'ASC']] },
+}))
 @Table({
   modelName: 'NutrientTable',
   tableName: 'nutrient_tables',

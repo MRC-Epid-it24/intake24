@@ -10,7 +10,7 @@ const resources: Resource[] = [
     icon: 'fas fa-drumstick-bite',
     api: 'admin/fdbs',
     generateRoutes: false,
-    routes: [...routes],
+    routes: ['read'],
   },
   {
     group: 'fdb',

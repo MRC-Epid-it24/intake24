@@ -12,6 +12,8 @@ export default () => {
 
   router.get('', permission('fdbs|browse'), wrapAsync(adminFoodDatabaseController.browse));
 
+  router.get('/refs', wrapAsync(adminFoodDatabaseController.refs));
+
   router.use('/:localeId', canManageFoodDatabase());
 
   router.get('/:localeId', permission('fdbs|read'), wrapAsync(adminFoodDatabaseController.read));

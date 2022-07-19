@@ -34,8 +34,8 @@
                 <auto-complete
                   v-model="form.main.foodGroupId"
                   :error-messages="form.errors.get('main.foodGroupId')"
-                  :selected="entry.main.foodGroup"
-                  :label="$t('fdbs.foods.global.foodGroup')"
+                  :selected="entry?.main?.foodGroup"
+                  :label="$t('fdbs.foods.global.foodGroup').toString()"
                   responseObject="data"
                   api="admin/food-groups"
                   name="main.foodGroup"
@@ -66,17 +66,23 @@
             </v-row>
           </v-card-text>
         </v-card>
-        <attribute-controller
+        <attribute-list
           v-model="form.main.attributes"
           :errors="form.errors"
           class="mb-6"
-        ></attribute-controller>
-        <category-controller
+        ></attribute-list>
+        <category-list
           v-model="form.main.parentCategories"
           :errors="form.errors"
           :localeId="id"
           class="mb-6"
-        ></category-controller>
+        ></category-list>
+        <nutrient-list
+          v-model="form.nutrientRecords"
+          :errors="form.errors"
+          :nutrientTables="refs?.nutrientTables ?? []"
+          class="mb-6"
+        ></nutrient-list>
       </v-form>
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
@@ -96,13 +102,12 @@ import type { FoodLocalEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import categoryOrFood from './category-or-food';
-import AttributeController from './partials/attribute-controller.vue';
-import CategoryController from './partials/category-controller.vue';
+import { NutrientList } from '@intake24/admin/components/fdbs';
 
 export default defineComponent({
   name: 'FoodEntry',
 
-  components: { AttributeController, AutoComplete, CategoryController },
+  components: { AutoComplete, NutrientList },
 
   mixins: [categoryOrFood],
 
@@ -126,6 +131,7 @@ export default defineComponent({
             parentCategories: [],
             portionSizeMethods: [],
           },
+          nutrientRecords: [],
         },
         { extractNestedKeys: true }
       ),

@@ -1,14 +1,20 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import type { PaginateQuery, WhereOptions } from '@intake24/db';
-import { FoodsLocale, SystemLocale } from '@intake24/db';
-import type { LocaleEntry, LocalesResponse } from '@intake24/common/types/http/admin';
+import { NutrientTable, FoodsLocale, SystemLocale } from '@intake24/db';
+import type {
+  FoodDatabaseEntry,
+  FoodDatabaseRefs,
+  LocalesResponse,
+} from '@intake24/common/types/http/admin';
 import type { LocaleAttributes } from '@intake24/common/types/models';
 import { foodDatabaseMaintainerPrefix, foodsAdmin } from '@intake24/common/security';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { Controller, CrudActions } from '../../controller';
 
-export type AdminFoodDatabaseController = Controller<Extract<CrudActions, 'browse' | 'read'>>;
+export type AdminFoodDatabaseController = Controller<
+  Extract<CrudActions, 'browse' | 'read' | 'refs'>
+>;
 
 export default (): AdminFoodDatabaseController => {
   const browse = async (
@@ -39,7 +45,7 @@ export default (): AdminFoodDatabaseController => {
 
   const read = async (
     req: Request<{ localeId: string }>,
-    res: Response<LocaleEntry>
+    res: Response<FoodDatabaseEntry>
   ): Promise<void> => {
     const { localeId } = req.params;
 
@@ -52,5 +58,11 @@ export default (): AdminFoodDatabaseController => {
     res.json(systemLocale);
   };
 
-  return { browse, read };
+  const refs = async (req: Request, res: Response<FoodDatabaseRefs>): Promise<void> => {
+    const nutrientTables = await NutrientTable.scope('list').findAll();
+
+    res.json({ nutrientTables });
+  };
+
+  return { browse, read, refs };
 };

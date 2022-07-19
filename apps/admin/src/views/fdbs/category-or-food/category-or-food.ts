@@ -1,9 +1,15 @@
 import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
-import type { CategoryLocalEntry, FoodLocalEntry } from '@intake24/common/types/http/admin';
+import type {
+  CategoryLocalEntry,
+  FoodLocalEntry,
+  FoodDatabaseEntry,
+  FoodDatabaseRefs,
+} from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
-import watchEntry from '@intake24/admin/components/entry/watch-entry';
+import { useStoreEntry, watchEntry } from '@intake24/admin/components/entry';
+import { AttributeList, CategoryList } from '@intake24/admin/components/fdbs';
 import { getObjectNestedKeys } from '@intake24/common/util';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -11,6 +17,8 @@ export type Entry = CategoryLocalEntry | FoodLocalEntry;
 
 export default defineComponent({
   name: 'CategoryOrFoodEntryMixin',
+
+  components: { AttributeList, CategoryList },
 
   mixins: [watchEntry],
 
@@ -23,6 +31,12 @@ export default defineComponent({
       type: String,
       required: true,
     },
+  },
+
+  setup(props) {
+    const { refs } = useStoreEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props.id);
+
+    return { refs };
   },
 
   data() {

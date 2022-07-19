@@ -72,7 +72,7 @@ pnpm lint:fix
 
 ## Renovate
 
-Repository is set up with [renovate bot](https://github.com/renovatebot/renovate), which checks the dependecies prepare PRs. It runs on weekly basis and can be configured using [`.github/renovate.json5`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/renovate.json5) config file.
+Repository is set up with [renovate bot](https://github.com/renovatebot/renovate), which checks the dependencies and prepares PRs. It runs on weekly basis and can be configured using [`.github/renovate.json5`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/renovate.json5) config file.
 
 ## Continuous integration
 

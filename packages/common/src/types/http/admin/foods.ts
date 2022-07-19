@@ -29,7 +29,8 @@ export type FoodListEntry = {
 
 export type FoodsResponse = Pagination<FoodLocalAttributes>;
 
-export type FoodEntry = FoodAttributes & Pick<FoodAssociations, 'attributes' | 'parentCategories'>;
+export type FoodEntry = FoodAttributes &
+  Pick<FoodAssociations, 'attributes' | 'foodGroup' | 'parentCategories'>;
 
 export interface FoodLocalEntry extends FoodLocalAttributes {
   main?: FoodEntry;

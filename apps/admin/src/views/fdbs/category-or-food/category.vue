@@ -65,17 +65,17 @@
             </v-row>
           </v-card-text>
         </v-card>
-        <attribute-controller
+        <attribute-list
           v-model="form.main.attributes"
           :errors="form.errors"
           class="mb-6"
-        ></attribute-controller>
-        <category-controller
+        ></attribute-list>
+        <category-list
           v-model="form.main.parentCategories"
           :errors="form.errors"
           :localeId="id"
           class="mb-6"
-        ></category-controller>
+        ></category-list>
       </v-form>
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
@@ -94,13 +94,9 @@ import { defineComponent } from 'vue';
 import type { CategoryLocalEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 import categoryOrFood from './category-or-food';
-import AttributeController from './partials/attribute-controller.vue';
-import CategoryController from './partials/category-controller.vue';
 
 export default defineComponent({
   name: 'CategoryEntry',
-
-  components: { AttributeController, CategoryController },
 
   mixins: [categoryOrFood],
 
