@@ -10,36 +10,23 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
-import { BasePromptProps } from '@intake24/common/prompts';
-import { RecallPromptHandler } from '@intake24/common/types';
-import { UserPortionSizeMethod } from '@intake24/common/types/http';
+import type { PropType, VueConstructor } from 'vue';
+import { defineComponent } from 'vue';
+
+import type { BasePromptProps } from '@intake24/common/prompts';
+import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
-import FoodPromptUtils, { FoodPromptUtilsType } from '../mixins/food-prompt-utils';
-import {
-  createPromptHandlerMixin,
-  PromptHandlerUtils,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
-import MealPromptUtils, {
-  MealPromptUtilsType,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
+import FoodPromptUtils from '../mixins/food-prompt-utils';
+import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 
 interface PortionSizeOptionState {
   option: number | null;
 }
 
-export default (
-  Vue as VueConstructor<
-    Vue &
-      FoodPromptUtilsType &
-      MealPromptUtilsType &
-      RecallPromptHandler &
-      PromptHandlerUtils<PortionSizeOptionState>
-  >
-).extend({
+export default defineComponent({
   name: 'PortionSizeOptionPromptHandler',
 
   components: { PortionSizeOptionPrompt },

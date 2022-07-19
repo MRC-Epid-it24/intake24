@@ -14,38 +14,31 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
-import { BasePromptProps } from '@intake24/common/prompts';
-import { FoodState, RecallPromptHandler } from '@intake24/common/types';
-import { mapActions, mapState } from 'pinia';
-import EditMealPrompt, {
-  EditMealPromptMethods,
-} from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
-import { useSurvey } from '@intake24/survey/stores';
-import {
-  createPromptHandlerMixin,
-  PromptHandlerUtils,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
-import MealPromptUtils, {
-  MealPromptUtilsType,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
+import type { PropType, VueConstructor } from 'vue';
+import Vue, { defineComponent } from 'vue';
 
-type Refs = {
-  $refs: {
-    prompt: EditMealPromptMethods;
-  };
-};
+import type { BasePromptProps } from '@intake24/common/prompts';
+import type { FoodState, RecallPromptHandler } from '@intake24/common/types';
+import { mapActions, mapState } from 'pinia';
+import type { EditMealPromptType } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
+import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
+import { useSurvey } from '@intake24/survey/stores';
+import type { PromptHandlerUtils } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import type { MealPromptUtilsType } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
+import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 
 interface EditMealState {
   foods: FoodState[];
 }
 
-export default (
-  Vue as VueConstructor<
-    Vue & RecallPromptHandler & Refs & PromptHandlerUtils<EditMealState> & MealPromptUtilsType
-  >
-).extend({
+interface Refs {
+  $refs: {
+    prompt: EditMealPromptType;
+  };
+}
+
+export default defineComponent({
   name: 'MealAddPromptHandler',
 
   mixins: [MealPromptUtils, createPromptHandlerMixin<EditMealState>('edit-meal-prompt')],

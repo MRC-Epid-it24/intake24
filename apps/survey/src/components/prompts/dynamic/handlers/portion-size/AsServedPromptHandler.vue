@@ -10,28 +10,23 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
-import { PropType } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
-import { BasePromptProps } from '@intake24/common/prompts';
-import { SelectedAsServedImage, PromptAnswer, FoodState } from '@intake24/common/types';
-import { AsServedParameters } from '@intake24/common/types/http';
+import type { BasePromptProps } from '@intake24/common/prompts';
+import type { SelectedAsServedImage, PromptAnswer, FoodState } from '@intake24/common/types';
+import type { AsServedParameters } from '@intake24/common/types/http';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-import FoodPromptUtils, { FoodPromptUtilsType } from '../mixins/food-prompt-utils';
-import {
-  createPromptHandlerMixin,
-  PromptHandlerUtils,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import FoodPromptUtils from '../mixins/food-prompt-utils';
+import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
 
 interface PromptState {
   selectedServing: SelectedAsServedImage;
   selectedLeftovers: SelectedAsServedImage | false;
 }
 
-export default (
-  Vue as VueConstructor<Vue & FoodPromptUtilsType & PromptHandlerUtils<PromptState>>
-).extend({
+export default defineComponent({
   name: 'AsServedPromptHandler',
 
   components: { AsServedPrompt },
@@ -118,7 +113,7 @@ export default (
       console.log('Called onPartialAnswer first');
       // if (this.currentTempPromptAnswer?.response)
       //   this.onTempChange(this.currentTempPromptAnswer, { finished: true });
-      this.$refs.promptHandleChild?.partialAnswerHandler();
+      //this.$refs.promptHandleChild?.partialAnswerHandler();
     },
   },
 });
