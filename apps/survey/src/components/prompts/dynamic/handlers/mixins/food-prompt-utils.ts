@@ -4,14 +4,17 @@ import type { EncodedFood, LocaleTranslation } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
 
-export interface PromptStateEvents<T> {
-  update(newValue: T): void;
-  complete(): void;
-}
-
-export default defineComponent({
+const mixin = defineComponent({
   computed: {
     ...mapState(useSurvey, ['selectedFood', 'selectedMealIndex', 'selectedFoodIndex']),
+
+    selectedFoodIndexRequired(): number {
+      const foodIndex = this.selectedFoodIndex;
+
+      if (foodIndex === undefined) throw new Error('A food must be selected at this point');
+
+      return foodIndex;
+    },
 
     encodedSelectedFood(): EncodedFood {
       const { selectedFood } = this;
@@ -42,3 +45,7 @@ export default defineComponent({
     },
   },
 });
+
+export type FoodPromptUtilsType = InstanceType<typeof mixin>;
+
+export default mixin;

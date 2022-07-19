@@ -89,13 +89,17 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    initialValue: {
+      type: Number,
+      required: false,
+    },
   },
 
   data() {
     return {
       ...merge(basePromptProps, this.promptProps),
       errors: [] as string[],
-      currentValue: -1,
+      currentValue: this.initialValue,
     };
   },
 

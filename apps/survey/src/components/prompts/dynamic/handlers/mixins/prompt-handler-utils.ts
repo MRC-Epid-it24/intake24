@@ -4,11 +4,15 @@ import Vue, { VueConstructor } from 'vue';
 import { ComponentType } from '@intake24/common/prompts';
 
 export interface PromptHandlerUtils<T> {
-  getStoredState(foodOrMealId: number, promptId: string): T | undefined;
+  loadInitialState(foodOrMealId: number, promptId: string, defaultValue: T): void;
 
   updateStoredState(foodOrMealId: number, promptId: string, newValue: T): void;
 
   clearStoredState(foodOrMealId: number, promptId: string): void;
+
+  setCompletionState(complete: boolean): void;
+
+  initialState: T | null;
 
   complete(): void;
 }
@@ -65,21 +69,34 @@ export function createPromptHandlerMixin<T extends object>(
       const storeDef = getOrCreatePromptStateStore<T>(promptType);
 
       return {
-        store: storeDef(),
+        initialStateInternal: null as T | null,
+        stateStore: storeDef(),
       };
+    },
+
+    computed: {
+      initialState(): T | null {
+        return this.initialStateInternal;
+      },
     },
 
     methods: {
       updateStoredState(foodOrMealId: number, promptId: string, data: T) {
-        this.store.updateState(foodOrMealId, promptId, data);
+        this.stateStore.updateState(foodOrMealId, promptId, data);
       },
 
-      getStoredState(foodOrMealId: number, promptId: string): T | undefined {
-        return this.store.prompts[foodOrMealId]?.[promptId];
+      loadInitialState(foodOrMealId: number, promptId: string, defaultValue: T): void {
+        const storedState = this.stateStore.prompts[foodOrMealId]?.[promptId];
+
+        this.initialStateInternal = storedState ?? defaultValue;
       },
 
       clearStoredState(foodOrMealId: number, promptId: string) {
-        this.store.clearState(foodOrMealId, promptId);
+        this.stateStore.clearState(foodOrMealId, promptId);
+      },
+
+      setCompletionState(complete: boolean) {
+        this.$emit('completion-update', complete);
       },
     },
   });

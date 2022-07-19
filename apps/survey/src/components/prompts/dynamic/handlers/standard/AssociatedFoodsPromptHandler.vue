@@ -67,20 +67,12 @@ export default (
     if (selectedFood === undefined) {
       console.warn('Expected an encoded food to be selected at this point');
     } else {
-      this.initialState = this.getStoredState(selectedFood.id, this.promptId) ?? {
+      const defaultState = {
         activePrompt: 0,
         prompts: selectedFood.data.associatedFoodPrompts.map(() => initialPromptState()),
       };
+      this.loadInitialState(selectedFood.id, this.promptId, defaultState);
     }
-  },
-
-  data() {
-    return {
-      initialState: {
-        activePrompt: 0,
-        prompts: [],
-      } as AssociatedFoodsState,
-    };
   },
 
   computed: {

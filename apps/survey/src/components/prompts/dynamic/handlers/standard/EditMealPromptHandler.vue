@@ -3,7 +3,7 @@
     ref="prompt"
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
-    :food-list="foods"
+    :food-list="initialState.foods"
     :prompt-component="promptComponent"
     :v-on="$listeners"
     @delete-meal="onDeleteMeal"
@@ -27,6 +27,9 @@ import {
   createPromptHandlerMixin,
   PromptHandlerUtils,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import MealPromptUtils, {
+  MealPromptUtilsType,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 
 type Refs = {
   $refs: {
@@ -34,16 +37,18 @@ type Refs = {
   };
 };
 
-interface PromptState {
+interface EditMealState {
   foods: FoodState[];
 }
 
 export default (
-  Vue as VueConstructor<Vue & RecallPromptHandler & Refs & PromptHandlerUtils<PromptState>>
+  Vue as VueConstructor<
+    Vue & RecallPromptHandler & Refs & PromptHandlerUtils<EditMealState> & MealPromptUtilsType
+  >
 ).extend({
   name: 'MealAddPromptHandler',
 
-  mixins: [createPromptHandlerMixin<PromptState>('edit-meal-prompt')],
+  mixins: [MealPromptUtils, createPromptHandlerMixin<EditMealState>('edit-meal-prompt')],
 
   components: { EditMealPrompt },
 
@@ -62,56 +67,42 @@ export default (
     },
   },
 
+  created() {
+    this.loadInitialState(this.selectedMealRequired.id, this.promptId, {
+      foods: this.selectedMealRequired.foods,
+    });
+  },
+
   computed: {
     ...mapState(useSurvey, ['defaultSchemeMeals', 'selectedMeal', 'selectedMealIndex']),
-
-    foods(): FoodState[] {
-      if (this.selectedMeal === undefined) {
-        console.warn('Expected a meal to be selected');
-        return [];
-      }
-
-      const storedState = this.getStoredState(this.selectedMeal.id, this.promptId);
-      return storedState?.foods ?? this.selectedMeal.foods;
-    },
   },
 
   mounted() {
-    this.$emit('completion-update', this.foods.length > 0);
+    this.$emit(
+      'completion-update',
+      this.initialState != null && this.initialState.foods.length > 0
+    );
   },
 
   methods: {
     ...mapActions(useSurvey, ['setFoods', 'deleteMeal']),
 
     onUpdate(foodList: FoodState[]) {
-      if (this.selectedMeal === undefined) {
-        console.warn('Expected a meal to be selected');
-      } else {
-        this.updateStoredState(this.selectedMeal.id, this.promptId, { foods: foodList });
-        this.$emit('completion-update', foodList.length > 0);
-      }
+      this.updateStoredState(this.selectedMealRequired.id, this.promptId, { foods: foodList });
+      this.setCompletionState(foodList.length > 0);
+      // this.$emit('completion-update', foodList.length > 0);
     },
 
     onDeleteMeal() {
-      if (this.selectedMealIndex === undefined || this.selectedMeal === undefined) {
-        console.warn('No selected meal, meal index undefined');
-        return;
-      }
-
-      this.deleteMeal(this.selectedMealIndex);
-      this.clearStoredState(this.selectedMeal.id, this.promptId);
+      this.deleteMeal(this.selectedMealIndexRequired);
+      this.clearStoredState(this.selectedMealRequired.id, this.promptId);
     },
 
     commitAnswer() {
       const foods = this.$refs.prompt?.foodsDrinks();
 
-      if (this.selectedMealIndex === undefined || this.selectedMeal === undefined) {
-        console.warn('No selected meal, meal index undefined');
-        return false;
-      }
-
-      this.setFoods({ mealIndex: this.selectedMealIndex, foods });
-      this.clearStoredState(this.selectedMeal.id, this.promptId);
+      this.setFoods({ mealIndex: this.selectedMealIndexRequired, foods });
+      this.clearStoredState(this.selectedMealRequired.id, this.promptId);
       return true;
     },
 
