@@ -20,8 +20,7 @@
     "dev": "webpack --env NODE_ENV=development",
     "cli": "node dist/cli.js",
     "cli:dev": "ts-node -r tsconfig-paths/register src/index.ts",
-    "lint": "eslint --ext .js,.ts src/",
-    "lint:fix": "pnpm lint -- --fix"
+    "lint": "eslint --ext .js,.ts src/ --fix"
   },
   "dependencies": {
     "commander": "^9.4.0",

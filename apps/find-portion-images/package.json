@@ -14,8 +14,7 @@
     "development": "cross-env NODE_ENV=development webpack",
     "dev": "pnpm development",
     "find": "cross-env NODE_PATH=../api/node_modules node dist/findPortionSizes.js",
-    "lint": "eslint --ext .js,.ts src/",
-    "lint:fix": "pnpm lint -- --fix"
+    "lint": "eslint --ext .js,.ts src/ --fix"
   },
   "engines": {
     "node": ">=14.20.0"
