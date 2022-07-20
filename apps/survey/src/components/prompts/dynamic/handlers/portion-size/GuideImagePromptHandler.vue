@@ -64,8 +64,11 @@ export default defineComponent({
       }
 
       const storedState = useFoodGuideImageState().foodState[this.selectedFoodIndex];
+      // console.log('Stored State: ', storedState);
       if (!storedState) return {};
+      console.log(this.selectedMealIndex, storedState.mealId);
       return storedState.mealId === this.selectedMealIndex ? storedState : {};
+      // return storedState ?? {};
     },
   },
 
@@ -94,6 +97,8 @@ export default defineComponent({
           data.objectIdx,
           data.panelOpen
         );
+        console.log(inputGuidedFood);
+        // this.$emit('validation-update', encodedFood !== undefined);
       } else
         console.log(
           'Food is not of correct type. "Encoded-food" required but ',
@@ -103,6 +108,7 @@ export default defineComponent({
     },
 
     onAnswer() {
+      console.log('guide: emitting complete');
       this.$emit('complete');
     },
 
@@ -118,6 +124,7 @@ export default defineComponent({
         );
         return;
       }
+      console.log('guide: submitting answer');
       this.updateFood({
         mealIndex,
         foodIndex,
@@ -125,8 +132,55 @@ export default defineComponent({
           portionSize: this.guideFoods.food.portionSize,
         },
       });
+      console.log('guide: clearing store');
       this.clearFoodState(foodIndex);
     },
+
+    // onTempChange(
+    //   tempGuidPromptAnswer: PromptAnswer,
+    //   tempUpdatedGuidPromptAnswer?: Partial<PromptAnswer>
+    // ) {
+    //   if (tempUpdatedGuidPromptAnswer)
+    //     this.setTempPromptAnswer(tempGuidPromptAnswer, tempUpdatedGuidPromptAnswer);
+    //   else this.setTempPromptAnswer(tempGuidPromptAnswer);
+    // },
+
+    // onAnswer(data: GuideImageData) {
+    //   const { conversionFactor } = this.selectedPortionSize;
+
+    //   const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
+    //   if (mealIndex === undefined || foodIndex === undefined) {
+    //     console.warn('No selected meal/food, meal/food index undefined');
+    //     return;
+    //   }
+
+    //   this.updateFood({
+    //     mealIndex,
+    //     foodIndex,
+    //     food: {
+    //       portionSize: {
+    //         method: 'guide-image',
+    //         servingWeight:
+    //           data.object.weight *
+    //           (data.quantity.whole + data.quantity.fraction) *
+    //           conversionFactor,
+    //         leftoversWeight: 0, // Guide image does not allow estimating leftovers
+    //         object: data.object,
+    //         quantity: data.quantity,
+    //       },
+    //     },
+    //   });
+
+    //   this.$emit('complete');
+    //   this.clearTempPromptAnswer();
+    // },
+
+    // onPartialAnswer(data: GuideImageData) {
+    //   console.log('Called onPartialAnswer first');
+    //   if (this.currentTempPromptAnswer)
+    //     this.onTempChange(this.currentTempPromptAnswer, { finished: true });
+    //   this.$refs.promptHandleChild?.partialAnswerHandler();
+    // },
   },
 });
 </script>

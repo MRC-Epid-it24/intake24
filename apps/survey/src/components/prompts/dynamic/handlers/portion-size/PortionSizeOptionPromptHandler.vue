@@ -67,7 +67,7 @@ export default defineComponent({
   created() {
     this.loadInitialState(this.encodedSelectedFood.id, this.promptId, { option: null });
     this.option = this.initialState?.option ?? null;
-    this.setCompletionState(this.option !== null);
+    this.setValidationState(this.option !== null);
   },
 
   methods: {
@@ -76,7 +76,7 @@ export default defineComponent({
     onUpdate(option: number | null) {
       this.updateStoredState(this.encodedSelectedFood.id, this.promptId, { option });
       this.option = option;
-      this.setCompletionState(this.option !== null);
+      this.setValidationState(this.option !== null);
     },
 
     commitAnswer() {

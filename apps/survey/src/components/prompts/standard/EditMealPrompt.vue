@@ -24,7 +24,7 @@
       </confirm-dialog>
       <v-btn
         :block="isMobile"
-        :disabled="foodList.length === 0"
+        :disabled="!continueEnabled"
         :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
         class="px-5"
         color="success"
@@ -38,8 +38,8 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import type { PropType, VueConstructor } from 'vue';
+import { defineComponent, ref } from 'vue';
+import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
@@ -47,17 +47,9 @@ import { ConfirmDialog } from '@intake24/ui';
 import { useSurvey } from '@intake24/survey/stores';
 import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
 import EditableFoodList from './EditableFoodList.vue';
-import type { LocaleContent } from '@intake24/survey/components/mixins/localeContent';
 import type { EditableFoodListType } from '@intake24/survey/components/prompts/standard/EditableFoodList.vue';
 
-interface EditMealPromptType {
-  $refs: {
-    editableFoodList: EditableFoodListType;
-  };
-  foodsDrinks(): FoodState[];
-}
-
-export default (Vue as VueConstructor<Vue & LocaleContent & EditMealPromptType>).extend({
+const component = defineComponent({
   name: 'EditMealPrompt',
 
   components: { EditableFoodList, ConfirmDialog },
@@ -77,43 +69,57 @@ export default (Vue as VueConstructor<Vue & LocaleContent & EditMealPromptType>)
       type: String,
       required: true,
     },
+    continueEnabled: {
+      type: Boolean,
+      required: true,
+    },
     promptComponent: {
       type: String,
       required: true,
     },
   },
 
+  setup() {
+    const editableFoodList = ref<EditableFoodListType>();
+
+    return { editableFoodList };
+  },
+
   computed: {
     ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
 
-    promptText() {
+    promptText(): string {
       return this.getLocaleString(this.promptProps.text, 'prompts.editMeal.text', {
         meal: this.mealName.toLocaleLowerCase(),
       });
     },
 
-    promptDescription() {
+    promptDescription(): string {
       return this.getLocaleString(this.promptProps.description, 'prompts.editMeal.description');
     },
   },
 
   methods: {
     onUpdate() {
-      const editedFoods = this.$refs.editableFoodList.editableList;
+      const editedFoods = this.editableFoodList?.editableList;
       this.$emit('update', editedFoods);
     },
 
     onContinue() {
-      this.$emit('complete');
+      this.$emit('continue');
     },
 
     onDeleteMeal() {
       this.$emit('delete-meal');
     },
 
-    foodsDrinks() {
-      return this.$refs.editableFoodList.editableList;
+    foodsDrinks(): FoodState[] {
+      return this.editableFoodList!.editableList;
     },
   },
 });
+
+export default component;
+
+export type EditMealPromptType = InstanceType<typeof component>;
 </script>

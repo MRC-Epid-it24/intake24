@@ -79,7 +79,7 @@ export default defineComponent({
 
   mounted() {
     // Any time is acceptable
-    this.$emit('completion-update', true);
+    this.$emit('validation-update', true);
   },
 
   computed: {

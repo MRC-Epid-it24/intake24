@@ -27,8 +27,8 @@
           :promptId="currentPrompt.prompt.id"
           :promptProps="currentPrompt.prompt.props"
           :key="Math.random()"
-          @completion-update="onCompletionUpdate"
-          @complete="onComplete"
+          @validation-update="onValidationUpdate"
+          @continue="onContinue"
         ></component>
       </transition>
     </v-col>
@@ -69,14 +69,14 @@ export default defineComponent({
   },
 
   methods: {
-    onComplete() {
+    onContinue() {
       this.promptHandle?.commitAnswer();
       this.continueButtonEnabled = false;
       this.nextPrompt();
     },
 
-    onCompletionUpdate(promptComplete: boolean) {
-      this.continueButtonEnabled = promptComplete;
+    onValidationUpdate(answerValid: boolean) {
+      this.continueButtonEnabled = answerValid;
     },
   },
 });
