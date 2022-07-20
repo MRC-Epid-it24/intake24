@@ -44,12 +44,14 @@ export default class RefreshToken
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
     defaultValue: false,
   })
   public revoked!: boolean;
 
   @Column({
     allowNull: false,
+    type: DataType.DATE,
   })
   public expiresAt!: Date;
 

@@ -51,6 +51,7 @@ export default class ProcessedImage
 
   @Column({
     allowNull: false,
+    type: DataType.DATE,
     defaultValue: () => new Date(),
   })
   public createdAt!: Date;

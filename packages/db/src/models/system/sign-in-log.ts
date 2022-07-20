@@ -35,6 +35,7 @@ export default class SignInLog
 
   @Column({
     allowNull: false,
+    type: DataType.DATE,
     defaultValue: () => new Date(),
   })
   public date!: Date;

@@ -48,6 +48,7 @@ export default class SourceImage
 
   @Column({
     allowNull: false,
+    type: DataType.DATE,
     defaultValue: () => new Date(),
   })
   public uploadedAt!: Date;

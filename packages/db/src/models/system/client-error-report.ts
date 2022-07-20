@@ -80,6 +80,7 @@ export default class ClientErrorReport
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
     defaultValue: true,
   })
   public new!: boolean;

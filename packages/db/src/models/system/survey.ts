@@ -84,11 +84,13 @@ export default class Survey
 
   @Column({
     allowNull: false,
+    type: DataType.DATE,
   })
   public startDate!: Date;
 
   @Column({
     allowNull: false,
+    type: DataType.DATE,
   })
   public endDate!: Date;
 
@@ -166,6 +168,7 @@ export default class Survey
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
     defaultValue: 1,
   })
   public numberOfSubmissionsForFeedback!: number;
@@ -178,11 +181,13 @@ export default class Survey
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
   })
   public storeUserSessionOnServer!: boolean;
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
     defaultValue: 3,
   })
   public maximumDailySubmissions!: number;
@@ -195,6 +200,7 @@ export default class Survey
 
   @Column({
     allowNull: false,
+    type: DataType.INTEGER,
     defaultValue: 600,
   })
   public minimumSubmissionInterval!: number;

@@ -41,6 +41,7 @@ export default class Task
 
   @Column({
     allowNull: false,
+    type: DataType.BOOLEAN,
     defaultValue: false,
   })
   public active!: boolean;

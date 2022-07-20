@@ -38,6 +38,7 @@ export default class Category
   @Column({
     allowNull: false,
     defaultValue: false,
+    type: DataType.BOOLEAN,
   })
   public isHidden!: boolean;
 
