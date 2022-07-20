@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card v-if="isEntryLoaded" flat>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form :disabled="disabled" @keydown.native="clearError" @submit.prevent="submit">
         <v-card class="mb-6" outlined>
           <v-toolbar color="grey lighten-4" flat>
             <v-toolbar-title class="font-weight-medium">
@@ -68,17 +68,20 @@
         </v-card>
         <attribute-list
           v-model="form.main.attributes"
+          :disabled="disabled"
           :errors="form.errors"
           class="mb-6"
         ></attribute-list>
         <category-list
           v-model="form.main.parentCategories"
+          :disabled="disabled"
           :errors="form.errors"
           :localeId="id"
           class="mb-6"
         ></category-list>
         <nutrient-list
           v-model="form.nutrientRecords"
+          :disabled="disabled"
           :errors="form.errors"
           :nutrientTables="refs?.nutrientTables ?? []"
           class="mb-6"
@@ -86,7 +89,9 @@
       </v-form>
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
-        <v-btn outlined color="primary" @click="submit"> <v-icon left>fa-save</v-icon>SAVE </v-btn>
+        <v-btn outlined color="primary" type="submit" @click="submit">
+          <v-icon left>fa-save</v-icon> SAVE
+        </v-btn>
       </v-card-actions>
     </v-card>
     <v-skeleton-loader

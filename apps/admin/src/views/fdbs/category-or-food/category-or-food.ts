@@ -45,6 +45,7 @@ export default defineComponent({
       type: 'categories' as 'categories' | 'foods',
       entry: null as Entry | null,
       form: form({}, { extractNestedKeys: true }),
+      disabled: !this.can({ action: 'edit' }),
     };
   },
 

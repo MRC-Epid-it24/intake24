@@ -6,6 +6,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <add-category-dialog
+        v-if="!disabled"
         :localeId="localeId"
         :currentList="categories"
         @add="add"
@@ -18,7 +19,7 @@
             <v-list-item-content>
               <v-list-item-title>{{ category.code }} | {{ category.name }}</v-list-item-title>
             </v-list-item-content>
-            <v-list-item-action>
+            <v-list-item-action v-if="!disabled">
               <v-btn color="error" icon @click="remove(category.code)">
                 <v-icon>$delete</v-icon>
               </v-btn>
@@ -45,16 +46,20 @@ export default defineComponent({
   components: { AddCategoryDialog },
 
   props: {
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    errors: {
+      type: Object as PropType<Errors>,
+      required: true,
+    },
     localeId: {
       type: String,
       required: true,
     },
     value: {
       type: Array as PropType<CategoryAttributes[]>,
-      required: true,
-    },
-    errors: {
-      type: Object as PropType<Errors>,
       required: true,
     },
   },

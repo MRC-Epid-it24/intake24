@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card v-if="isEntryLoaded" flat>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form :disabled="disabled" @keydown.native="clearError" @submit.prevent="submit">
         <v-card class="mb-6" outlined>
           <v-toolbar color="grey lighten-4" flat>
             <v-toolbar-title class="font-weight-medium">
@@ -67,11 +67,13 @@
         </v-card>
         <attribute-list
           v-model="form.main.attributes"
+          :disabled="disabled"
           :errors="form.errors"
           class="mb-6"
         ></attribute-list>
         <category-list
           v-model="form.main.parentCategories"
+          :disabled="disabled"
           :errors="form.errors"
           :localeId="id"
           class="mb-6"

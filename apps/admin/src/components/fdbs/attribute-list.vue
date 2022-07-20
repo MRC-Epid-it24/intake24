@@ -8,7 +8,7 @@
     <v-card-text>
       <v-row>
         <v-col cols="auto">
-          <v-btn outlined @click="toggleInherit('sameAsBeforeOption')">
+          <v-btn :disabled="disabled" outlined @click="toggleInherit('sameAsBeforeOption')">
             {{ title('sameAsBeforeOption') }}
           </v-btn>
         </v-col>
@@ -27,7 +27,7 @@
       </v-row>
       <v-row>
         <v-col cols="auto" align-self="center">
-          <v-btn outlined @click="toggleInherit('readyMealOption')">
+          <v-btn :disabled="disabled" outlined @click="toggleInherit('readyMealOption')">
             {{ title('readyMealOption') }}
           </v-btn>
         </v-col>
@@ -46,7 +46,7 @@
       </v-row>
       <v-row>
         <v-col cols="auto" align-self="center">
-          <v-btn outlined @click="toggleInherit('reasonableAmount')">
+          <v-btn :disabled="disabled" outlined @click="toggleInherit('reasonableAmount')">
             {{ title('reasonableAmount') }}
           </v-btn>
         </v-col>
@@ -66,7 +66,7 @@
       </v-row>
       <v-row>
         <v-col cols="auto" align-self="center">
-          <v-btn outlined @click="toggleInherit('useInRecipes')">
+          <v-btn :disabled="disabled" outlined @click="toggleInherit('useInRecipes')">
             {{ title('useInRecipes') }}
           </v-btn>
         </v-col>
@@ -109,12 +109,16 @@ export default defineComponent({
   name: 'AttributeList',
 
   props: {
-    value: {
-      type: Object as PropType<Nullable<Attributes>>,
-      required: true,
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     errors: {
       type: Object as PropType<Errors>,
+      required: true,
+    },
+    value: {
+      type: Object as PropType<Nullable<Attributes>>,
       required: true,
     },
   },

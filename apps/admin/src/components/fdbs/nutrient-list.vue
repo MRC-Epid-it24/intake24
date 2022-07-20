@@ -6,6 +6,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <add-nutrient-dialog
+        v-if="!disabled"
         :currentList="records"
         :nutrientTables="nutrientTables"
         @add="add"
@@ -24,7 +25,7 @@
                 {{ record.name }}
               </v-list-item-subtitle>
             </v-list-item-content>
-            <v-list-item-action>
+            <v-list-item-action v-if="!disabled">
               <v-btn color="error" icon @click="remove(record.id)">
                 <v-icon>$delete</v-icon>
               </v-btn>
@@ -52,6 +53,10 @@ export default defineComponent({
   components: { AddNutrientDialog },
 
   props: {
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     errors: {
       type: Object as PropType<Errors>,
       required: true,
