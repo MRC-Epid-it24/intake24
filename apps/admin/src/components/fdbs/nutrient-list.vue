@@ -78,13 +78,13 @@ export default defineComponent({
   },
 
   watch: {
-    value(val: NutrientTableRecordAttributes[], oldVal: NutrientTableRecordAttributes[]) {
-      if (isEqual(oldVal, val)) return;
+    value(val: NutrientTableRecordAttributes[]) {
+      if (isEqual(this.records, this.value)) return;
 
       this.records = [...val];
     },
-    records(val: NutrientTableRecordAttributes[], oldVal: NutrientTableRecordAttributes[]) {
-      if (isEqual(oldVal, val)) return;
+    records(val: NutrientTableRecordAttributes[]) {
+      if (isEqual(this.records, this.value)) return;
 
       this.$emit('input', [...val]);
     },

@@ -1,4 +1,4 @@
-import { Category } from '@intake24/db';
+import { Category, NutrientTableRecord } from '@intake24/db';
 import { useInRecipeTypes } from '@intake24/common/types/models';
 import type { Schema } from 'express-validator';
 
@@ -43,7 +43,29 @@ export const categories: Schema = {
         const code = value.map((item) => item.code);
 
         const availableCategories = await Category.count({ where: { code } });
-        if (availableCategories !== value.length) throw new Error('Invalid categories.');
+        if (availableCategories !== value.length)
+          throw new Error('Enter valid list of categories.');
+      },
+    },
+  },
+};
+
+export const nutrients: Schema = {
+  nutrientRecords: {
+    in: ['body'],
+    errorMessage: 'Enter valid list of nutrient records',
+    custom: {
+      options: async (value): Promise<void> => {
+        if (!Array.isArray(value) || value.some(({ id }) => !id || typeof id !== 'string'))
+          throw new Error('Enter valid list of nutrient records');
+
+        if (!value.length) return;
+
+        const id = value.map((item) => item.id);
+
+        const availableRecords = await NutrientTableRecord.count({ where: { id } });
+        if (availableRecords !== value.length)
+          throw new Error('Enter valid list of nutrient records');
       },
     },
   },

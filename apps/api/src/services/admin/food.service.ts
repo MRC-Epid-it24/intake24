@@ -78,7 +78,8 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     const { attributes } = main;
     if (!attributes) throw new NotFoundError();
 
-    const categories = (input.main.parentCategories ?? []).map((cat) => cat.code);
+    const categories = (input.main.parentCategories ?? []).map(({ code }) => code);
+    const nutrientRecords = (input.nutrientRecords ?? []).map(({ id }) => id);
 
     await db.foods.transaction(async (transaction) => {
       await Promise.all([
@@ -94,6 +95,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
           { transaction }
         ),
         main.$set('parentCategories', categories, { transaction }),
+        foodLocal.$set('nutrientRecords', nutrientRecords, { transaction }),
       ]);
 
       if (main.code !== input.main.code)

@@ -72,18 +72,20 @@ export default defineComponent({
 
   watch: {
     value(val: CategoryAttributes[]) {
-      this.categories = [...val];
+      if (isEqual(this.categories, this.value)) return;
+
+      this.records = [...val];
     },
-    categories(val: CategoryAttributes[], oldVal: CategoryAttributes[]) {
-      if (isEqual(oldVal, val)) return;
+    categories(val: CategoryAttributes[]) {
+      if (isEqual(this.categories, this.value)) return;
 
       this.$emit('input', [...val]);
     },
   },
 
   methods: {
-    add(items: any[]) {
-      this.categories = [...this.categories, ...items];
+    add(items: CategoryAttributes[]) {
+      this.categories.push(...items);
     },
 
     remove(code: string) {

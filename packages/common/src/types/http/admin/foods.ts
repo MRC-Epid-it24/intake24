@@ -5,6 +5,7 @@ import type {
   FoodAttributes,
   FoodGroupAttributes,
   FoodLocalAttributes,
+  NutrientTableRecordAttributes,
   Pagination,
 } from '../../models';
 
@@ -17,6 +18,7 @@ export type FoodInput = {
     attributes: Attributes;
     parentCategories: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
+  nutrientRecords: Pick<NutrientTableRecordAttributes, 'id'>[];
 };
 
 export type FoodListEntry = {
