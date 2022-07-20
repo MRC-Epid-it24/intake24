@@ -181,22 +181,28 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
 
     const categories = (input.main.parentCategories ?? []).map((cat) => cat.code);
 
-    await Promise.all([
-      categoryLocal.update(pick(input, ['name'])),
-      main.update(pick(input.main, ['name', 'isHidden'])),
-      attributes.update(
-        pick(input.main.attributes, [
-          'sameAsBeforeOption',
-          'readyMealOption',
-          'reasonableAmount',
-          'useInRecipes',
-        ])
-      ),
-      main.$set('parentCategories', categories),
-    ]);
+    await db.foods.transaction(async (transaction) => {
+      await Promise.all([
+        categoryLocal.update(pick(input, ['name']), { transaction }),
+        main.update(pick(input.main, ['name', 'isHidden']), { transaction }),
+        attributes.update(
+          pick(input.main.attributes, [
+            'sameAsBeforeOption',
+            'readyMealOption',
+            'reasonableAmount',
+            'useInRecipes',
+          ]),
+          { transaction }
+        ),
+        main.$set('parentCategories', categories, { transaction }),
+      ]);
 
-    if (main.code !== input.main.code)
-      await Category.update({ code: input.main.code }, { where: { code: main.code } });
+      if (main.code !== input.main.code)
+        await Category.update(
+          { code: input.main.code },
+          { where: { code: main.code }, transaction }
+        );
+    });
 
     return getCategory(categoryId, localeId);
   };

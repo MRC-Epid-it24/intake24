@@ -14,8 +14,9 @@ import {
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { FoodInput } from '@intake24/common/types/http/admin';
 import type { FoodLocalAttributes } from '@intake24/common/types/models';
+import type { IoC } from '@intake24/api/ioc';
 
-const adminFoodService = () => {
+const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<FoodLocalAttributes> = {
       where: { localeId },
@@ -79,22 +80,25 @@ const adminFoodService = () => {
 
     const categories = (input.main.parentCategories ?? []).map((cat) => cat.code);
 
-    await Promise.all([
-      foodLocal.update(pick(input, ['name'])),
-      main.update(pick(input.main, ['name', 'foodGroupId'])),
-      attributes.update(
-        pick(input.main.attributes, [
-          'sameAsBeforeOption',
-          'readyMealOption',
-          'reasonableAmount',
-          'useInRecipes',
-        ])
-      ),
-      main.$set('parentCategories', categories),
-    ]);
+    await db.foods.transaction(async (transaction) => {
+      await Promise.all([
+        foodLocal.update(pick(input, ['name']), { transaction }),
+        main.update(pick(input.main, ['name', 'foodGroupId']), { transaction }),
+        attributes.update(
+          pick(input.main.attributes, [
+            'sameAsBeforeOption',
+            'readyMealOption',
+            'reasonableAmount',
+            'useInRecipes',
+          ]),
+          { transaction }
+        ),
+        main.$set('parentCategories', categories, { transaction }),
+      ]);
 
-    if (main.code !== input.main.code)
-      await Food.update({ code: input.main.code }, { where: { code: main.code } });
+      if (main.code !== input.main.code)
+        await Food.update({ code: input.main.code }, { where: { code: main.code }, transaction });
+    });
 
     return getFood(foodId, localeId);
   };

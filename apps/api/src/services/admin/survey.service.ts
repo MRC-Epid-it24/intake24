@@ -21,9 +21,10 @@ import { surveyRespondent } from '@intake24/common/security';
 
 const adminSurveyService = ({
   adminUserService,
+  db,
   securityConfig,
   scheduler,
-}: Pick<IoC, 'adminUserService' | 'securityConfig' | 'scheduler'>) => {
+}: Pick<IoC, 'adminUserService' | 'db' | 'securityConfig' | 'scheduler'>) => {
   /**
    * Fetch survey-specific respondent permission instance or create one
    *
@@ -78,32 +79,44 @@ const adminSurveyService = ({
     } = surveyEntry;
     const { name, email, phone, customFields, password, username } = input;
 
-    const user = await User.create(
-      userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {}
-    );
+    return db.system.transaction(async (transaction) => {
+      const user = await User.create(
+        userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {},
+        { transaction }
+      );
 
-    const { id: userId } = user;
-    const { size, alphabet } = securityConfig.authTokens;
+      const { id: userId } = user;
+      const { size, alphabet } = securityConfig.authTokens;
 
-    const surveyRespondentPermission = await getSurveyRespondentPermission(slug);
+      const surveyRespondentPermission = await getSurveyRespondentPermission(slug);
 
-    const [respondent] = await Promise.all(
-      [
-        UserSurveyAlias.create({
-          userId,
-          surveyId,
-          username,
-          urlAuthToken: randomString(authUrlTokenLength ?? size, authUrlTokenCharset ?? alphabet),
-        }),
-        user.$add('permissions', surveyRespondentPermission),
-        adminUserService.createPassword({ userId, password }),
-        userCustomFields && customFields?.length
-          ? UserCustomField.bulkCreate(customFields.map((field) => ({ ...field, userId })))
-          : null,
-      ].filter(Boolean)
-    );
+      const [respondent] = await Promise.all(
+        [
+          UserSurveyAlias.create(
+            {
+              userId,
+              surveyId,
+              username,
+              urlAuthToken: randomString(
+                authUrlTokenLength ?? size,
+                authUrlTokenCharset ?? alphabet
+              ),
+            },
+            { transaction }
+          ),
+          user.$add('permissions', surveyRespondentPermission, { transaction }),
+          adminUserService.createPassword({ userId, password }, transaction),
+          userCustomFields && customFields?.length
+            ? UserCustomField.bulkCreate(
+                customFields.map((field) => ({ ...field, userId })),
+                { transaction }
+              )
+            : null,
+        ].filter(Boolean)
+      );
 
-    return respondent as UserSurveyAlias;
+      return respondent as UserSurveyAlias;
+    });
   };
 
   /**
@@ -128,43 +141,46 @@ const adminSurveyService = ({
     const urlTokenCharset = survey.authUrlTokenCharset ?? alphabet;
     const urlTokenLength = survey.authUrlTokenLength ?? size;
 
-    const aliasRecords = [];
-    const customFieldsRecords: Omit<UserCustomFieldAttributes, 'id'>[] = [];
-    const passwordRecords = [];
-    const permissionRecords = [];
+    return db.system.transaction(async (transaction) => {
+      const aliasRecords = [];
+      const customFieldsRecords: Omit<UserCustomFieldAttributes, 'id'>[] = [];
+      const passwordRecords = [];
+      const permissionRecords = [];
 
-    for (const input of inputs) {
-      const { name, email, phone, customFields, password, username } = input;
-      // User records are created one-by-one
-      // This is to keep it MySQL+others-like compatible, where bulk operation doesn't return generated IDs
-      const { id: userId } = await User.create(
-        userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {}
-      );
+      for (const input of inputs) {
+        const { name, email, phone, customFields, password, username } = input;
+        // User records are created one-by-one
+        // This is to keep it MySQL+others-like compatible, where bulk operation doesn't return generated IDs
+        const { id: userId } = await User.create(
+          userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {},
+          { transaction }
+        );
 
-      if (userCustomFields && customFields?.length) {
-        customFields.forEach((field) => {
-          customFieldsRecords.push({ ...field, userId });
+        if (userCustomFields && customFields?.length) {
+          customFields.forEach((field) => {
+            customFieldsRecords.push({ ...field, userId });
+          });
+        }
+
+        aliasRecords.push({
+          userId,
+          surveyId,
+          username,
+          urlAuthToken: randomString(urlTokenLength, urlTokenCharset),
         });
+        passwordRecords.push({ userId, password });
+        permissionRecords.push({ userId, permissionId });
       }
 
-      aliasRecords.push({
-        userId,
-        surveyId,
-        username,
-        urlAuthToken: randomString(urlTokenLength, urlTokenCharset),
-      });
-      passwordRecords.push({ userId, password });
-      permissionRecords.push({ userId, permissionId });
-    }
+      const [aliases] = await Promise.all([
+        UserSurveyAlias.bulkCreate(aliasRecords, { transaction }),
+        adminUserService.createPasswords(passwordRecords, transaction),
+        PermissionUser.bulkCreate(permissionRecords, { transaction }),
+        UserCustomField.bulkCreate(customFieldsRecords, { transaction }),
+      ]);
 
-    const [aliases] = await Promise.all([
-      UserSurveyAlias.bulkCreate(aliasRecords),
-      adminUserService.createPasswords(passwordRecords),
-      PermissionUser.bulkCreate(permissionRecords),
-      UserCustomField.bulkCreate(customFieldsRecords),
-    ]);
-
-    return aliases;
+      return aliases;
+    });
   };
 
   /**
@@ -189,21 +205,28 @@ const adminSurveyService = ({
 
     if (!survey || !user?.aliases) throw new NotFoundError();
 
-    const { userCustomFields, userPersonalIdentifiers } = survey;
-    const { name, email, phone, customFields, password } = input;
+    await db.system.transaction(async (transaction) => {
+      const { userCustomFields, userPersonalIdentifiers } = survey;
+      const { name, email, phone, customFields, password } = input;
 
-    await Promise.all(
-      [
-        userPersonalIdentifiers
-          ? user.update({ name, email, phone, simpleName: toSimpleName(name) })
-          : null,
-        password ? adminUserService.updatePassword(user.id, password) : null,
-        userCustomFields && customFields && user.customFields
-          ? adminUserService.updateUserCustomFields(userId, user.customFields, customFields)
-          : null,
-        adminUserService.flushUserACLCache(user.id),
-      ].filter(Boolean)
-    );
+      await Promise.all(
+        [
+          userPersonalIdentifiers
+            ? user.update({ name, email, phone, simpleName: toSimpleName(name) }, { transaction })
+            : null,
+          password ? adminUserService.updatePassword(user.id, password, transaction) : null,
+          userCustomFields && customFields && user.customFields
+            ? adminUserService.updateUserCustomFields(
+                userId,
+                user.customFields,
+                customFields,
+                transaction
+              )
+            : null,
+          adminUserService.flushUserACLCache(user.id),
+        ].filter(Boolean)
+      );
+    });
 
     return user.aliases[0];
   };
@@ -231,10 +254,14 @@ const adminSurveyService = ({
 
     // System-wide account - delete only access to study
     if (user.email) {
-      await Promise.all([
-        UserSurveyAlias.destroy({ where: { surveyId, userId } }),
-        user.$remove('permissions', await getSurveyRespondentPermission(survey.slug)),
-      ]);
+      await db.system.transaction(async (transaction) => {
+        await Promise.all([
+          UserSurveyAlias.destroy({ where: { surveyId, userId }, transaction }),
+          user.$remove('permissions', await getSurveyRespondentPermission(survey.slug), {
+            transaction,
+          }),
+        ]);
+      });
     } else {
       // Wipe the whole user record
       await user.destroy();

@@ -1,3 +1,4 @@
+import type { Transaction } from '@intake24/db';
 import { Op, Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
 import type { UserPasswordAttributes } from '@intake24/common/types/models';
 import type { CreateUserInput, UpdateUserInput } from '@intake24/common/types/http/admin';
@@ -13,7 +14,7 @@ export type UserPasswordInput = {
   password: string;
 };
 
-const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
+const adminUserService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
   /**
    * Flush ACL cache for specified user
    *
@@ -40,27 +41,38 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
   /**
    * Create password record
    *
-   * @param {UserPasswordInput} input
+   * @param {UserPasswordInput} { userId, password }
+   * @param {Transaction} [transaction]
    * @returns {Promise<UserPassword>}
    */
-  const createPassword = async ({ userId, password }: UserPasswordInput): Promise<UserPassword> => {
+  const createPassword = async (
+    { userId, password }: UserPasswordInput,
+    transaction?: Transaction
+  ): Promise<UserPassword> => {
     const { salt, hash } = await defaultAlgorithm.hash(password);
 
-    return UserPassword.create({
-      userId,
-      passwordSalt: salt,
-      passwordHash: hash,
-      passwordHasher: defaultAlgorithm.id,
-    });
+    return UserPassword.create(
+      {
+        userId,
+        passwordSalt: salt,
+        passwordHash: hash,
+        passwordHasher: defaultAlgorithm.id,
+      },
+      { transaction }
+    );
   };
 
   /**
    * Bulk-create password records
    *
    * @param {UserPasswordInput[]} inputs
+   * @param {Transaction} [transaction]
    * @returns {Promise<UserPassword[]>}
    */
-  const createPasswords = async (inputs: UserPasswordInput[]): Promise<UserPassword[]> => {
+  const createPasswords = async (
+    inputs: UserPasswordInput[],
+    transaction?: Transaction
+  ): Promise<UserPassword[]> => {
     const records: UserPasswordAttributes[] = [];
 
     for (const input of inputs) {
@@ -75,7 +87,7 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
       });
     }
 
-    return UserPassword.bulkCreate(records);
+    return UserPassword.bulkCreate(records, { transaction });
   };
 
   /**
@@ -87,16 +99,21 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
    * @param {string} userId
    * @param {UserCustomField[]} userCustomFields
    * @param {CustomField[]} customFields
+   * @param {Transaction} [transaction]
    * @returns {Promise<void>}
    */
   const updateUserCustomFields = async (
     userId: string,
     userCustomFields: UserCustomField[],
-    customFields: CustomField[]
+    customFields: CustomField[],
+    transaction?: Transaction
   ): Promise<void> => {
     // 1) remove fields that are not present
     const customFieldNames = customFields.map((field) => field.name);
-    await UserCustomField.destroy({ where: { userId, name: { [Op.notIn]: customFieldNames } } });
+    await UserCustomField.destroy({
+      where: { userId, name: { [Op.notIn]: customFieldNames } },
+      transaction,
+    });
 
     if (!customFields.length) return;
 
@@ -107,12 +124,12 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
 
       // 2) add new field
       if (matchIdx === -1) {
-        await UserCustomField.create({ ...customField, userId });
+        await UserCustomField.create({ ...customField, userId }, { transaction });
         continue;
       }
 
       // 3) update existing fields
-      await userCustomFields[matchIdx].update({ value });
+      await userCustomFields[matchIdx].update({ value }, { transaction });
     }
   };
 
@@ -121,19 +138,27 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
    *
    * @param {string} userId
    * @param {string} password
+   * @param {Transaction} [transaction]
    * @returns {Promise<UserPassword>}
    */
-  const updatePassword = async (userId: string, password: string): Promise<UserPassword> => {
+  const updatePassword = async (
+    userId: string,
+    password: string,
+    transaction?: Transaction
+  ): Promise<UserPassword> => {
     const userPassword = await UserPassword.findByPk(userId);
     if (!userPassword) throw new NotFoundError();
 
     const { salt, hash } = await defaultAlgorithm.hash(password);
 
-    return userPassword.update({
-      passwordSalt: salt,
-      passwordHash: hash,
-      passwordHasher: defaultAlgorithm.id,
-    });
+    return userPassword.update(
+      {
+        passwordSalt: salt,
+        passwordHash: hash,
+        passwordHasher: defaultAlgorithm.id,
+      },
+      { transaction }
+    );
   };
 
   /**
@@ -150,18 +175,20 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
   const create = async (input: CreateUserInput): Promise<User> => {
     const { password, permissions = [], roles = [], ...rest } = input;
 
-    const user = await User.create(
-      { ...rest, simpleName: toSimpleName(rest.name) },
-      { include: [UserCustomField] }
-    );
+    return db.system.transaction(async (transaction) => {
+      const user = await User.create(
+        { ...rest, simpleName: toSimpleName(rest.name) },
+        { include: [UserCustomField], transaction }
+      );
 
-    await Promise.all([
-      createPassword({ userId: user.id, password }),
-      user.$set('permissions', permissions),
-      user.$set('roles', roles),
-    ]);
+      await Promise.all([
+        createPassword({ userId: user.id, password }, transaction),
+        user.$set('permissions', permissions, { transaction }),
+        user.$set('roles', roles, { transaction }),
+      ]);
 
-    return user;
+      return user;
+    });
   };
 
   /**
@@ -182,17 +209,19 @@ const adminUserService = ({ cache }: Pick<IoC, 'cache'>) => {
 
     const { customFields, permissions = [], roles = [], ...rest } = input;
 
-    await Promise.all([
-      user.update({ ...rest, simpleName: toSimpleName(rest.name) }),
-      user.$set('permissions', permissions),
-      user.$set('roles', roles),
-    ]);
+    await db.system.transaction(async (transaction) => {
+      await Promise.all([
+        user.update({ ...rest, simpleName: toSimpleName(rest.name) }, { transaction }),
+        user.$set('permissions', permissions, { transaction }),
+        user.$set('roles', roles, { transaction }),
+      ]);
 
-    // Update custom fields
-    if (customFields && user.customFields)
-      await updateUserCustomFields(userId, user.customFields, customFields);
+      // Update custom fields
+      if (customFields && user.customFields)
+        await updateUserCustomFields(userId, user.customFields, customFields, transaction);
 
-    await flushUserACLCache(user.id);
+      await flushUserACLCache(user.id);
+    });
 
     return user;
   };
