@@ -50,18 +50,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import type { PropType, VueConstructor } from 'vue';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import type { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 
-export interface EditableFoodListType {
-  editableList: FoodState[];
-}
-
-export default (Vue as VueConstructor<Vue & EditableFoodListType>).extend({
+const component = defineComponent({
   name: 'EditableFoodList',
 
   props: {
@@ -77,7 +73,7 @@ export default (Vue as VueConstructor<Vue & EditableFoodListType>).extend({
 
   data() {
     return {
-      editableList: copy(this.foodList),
+      editableList: copy(this.foodList) as FoodState[],
       newFoodDescription: '',
       editIndex: null as number | null,
     };
@@ -151,4 +147,8 @@ export default (Vue as VueConstructor<Vue & EditableFoodListType>).extend({
     },
   },
 });
+
+export default component;
+
+export type EditableFoodListType = InstanceType<typeof component>;
 </script>

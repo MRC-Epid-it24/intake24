@@ -47,6 +47,7 @@ function getOrCreatePromptStateStore<T extends object>(promptType: ComponentType
           };
         },
         clearState(foodOrMealId: number, promptId: string) {
+          console.log('CLEAR STATE');
           Vue.delete(this.prompts[foodOrMealId], promptId);
           this.prompts = Object.fromEntries(
             Object.entries(this.prompts).filter((e) => Object.keys(e[1]).length !== 0)
@@ -67,6 +68,7 @@ export function createPromptHandlerMixin<T extends object>(promptType: Component
       const storeDef = getOrCreatePromptStateStore<T>(promptType);
 
       return {
+        continueEnabled: false,
         initialStateInternal: null as T | null,
         stateStore: storeDef(),
       };
@@ -93,8 +95,9 @@ export function createPromptHandlerMixin<T extends object>(promptType: Component
         this.stateStore.clearState(foodOrMealId, promptId);
       },
 
-      setCompletionState(complete: boolean) {
-        this.$emit('completion-update', complete);
+      setValidationState(valid: boolean) {
+        this.continueEnabled = valid;
+        this.$emit('validation-update', valid);
       },
     },
   });

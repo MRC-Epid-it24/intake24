@@ -33,8 +33,8 @@
           :promptProps="currentPrompt.prompt.props"
           :key="Math.random()"
           :submitTrigger="submitTrigger"
-          @completion-update="onCompletionUpdate"
-          @complete="onComplete"
+          @validation-update="onValidationUpdate"
+          @continue="onContinue"
           @resetPromptTrigger="resetTrigger"
           @meal-food-selected="onMealFoodMobileClick"
         ></component>
@@ -77,7 +77,7 @@
       :entityType="mobileMealFoodContextMenu.foodContext"
       @toggleMobileMealContext="onMobileMealFoodContextMenu"
       @meal-action="onMealAction"
-      @complete="onComplete"
+      @continue="onContinue"
     ></meal-food-mobile-context-menu>
 
     <info-alert
@@ -151,7 +151,7 @@ export default defineComponent({
       } else if (tab === 1) {
         this.onRecallAction('review-confirm');
       } else if (tab === 2) {
-        this.onComplete();
+        this.onContinue();
       }
     },
 
@@ -190,14 +190,14 @@ export default defineComponent({
       this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
     },
 
-    onComplete() {
+    onContinue() {
       this.promptHandle?.commitAnswer();
       this.continueButtonEnabled = false;
       this.nextPrompt();
     },
 
-    onCompletionUpdate(promptComplete: boolean) {
-      this.continueButtonEnabled = promptComplete;
+    onValidationUpdate(answerValid: boolean) {
+      this.continueButtonEnabled = answerValid;
     },
   },
 });

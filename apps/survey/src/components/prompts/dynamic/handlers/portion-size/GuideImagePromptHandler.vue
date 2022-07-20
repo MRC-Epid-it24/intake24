@@ -98,7 +98,7 @@ export default defineComponent({
           data.panelOpen
         );
         console.log(inputGuidedFood);
-        // this.$emit('completion-update', encodedFood !== undefined);
+        // this.$emit('validation-update', encodedFood !== undefined);
       } else
         console.log(
           'Food is not of correct type. "Encoded-food" required but ',
