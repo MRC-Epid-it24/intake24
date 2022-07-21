@@ -42,7 +42,7 @@
         <v-col>
           <v-form ref="form" @submit.prevent="submit">
             <!-- Should be disabled if nothing selected? -->
-            <continue @click="submit" :disabled="currentValue === -1" class="px-2"></continue>
+            <continue @click="submit" :disabled="!continueEnabled" class="px-2"></continue>
           </v-form>
         </v-col>
       </v-row>
@@ -93,6 +93,10 @@ export default defineComponent({
       type: Number,
       required: false,
     },
+    continueEnabled: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data() {
@@ -118,7 +122,7 @@ export default defineComponent({
     onChange(index: number) {
       let response: Response = null;
       if (index !== -1) {
-        response = this.currentValue;
+        response = this.currentValue === undefined ? null : this.currentValue;
       }
       this.$emit('update', response);
     },
@@ -163,7 +167,7 @@ export default defineComponent({
     },
 
     submit() {
-      this.$emit('complete');
+      this.$emit('continue');
     },
   },
 });

@@ -1,5 +1,5 @@
 <template>
-  <v-container :class="{ 'px-0': isMobile }">
+  <v-container :class="{ 'pa-0': isMobile }">
     <component :is="layout"></component>
   </v-container>
 </template>

@@ -3,7 +3,8 @@
     v-bind="{ foodName, promptProps, availableMethods }"
     :prompt-component="promptComponent"
     :initial-value="option"
-    v-on="$listeners"
+    :continue-enabled="this.continueEnabled"
+    @continue="$emit('continue')"
     @update="onUpdate"
   >
   </portion-size-option-prompt>
@@ -67,6 +68,10 @@ export default defineComponent({
   created() {
     this.loadInitialState(this.encodedSelectedFood.id, this.promptId, { option: null });
     this.option = this.initialState?.option ?? null;
+  },
+
+  mounted() {
+    console.log(this.option);
     this.setValidationState(this.option !== null);
   },
 

@@ -3,7 +3,7 @@
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
     :initial-time="initialTime"
-    v-on="$listeners"
+    @continue="$emit('continue')"
     @update="onUpdate"
     @remove-meal="onRemoveMeal"
   ></meal-time-prompt>
@@ -18,6 +18,7 @@ import type { MealTime } from '@intake24/common/types';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
 
 const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minutes}`;
 
@@ -25,6 +26,8 @@ export default defineComponent({
   name: 'MealTimePromptHandler',
 
   components: { MealTimePrompt },
+
+  mixins: [createPromptHandlerMixin<never>('meal-time-prompt')],
 
   props: {
     promptProps: {
@@ -38,6 +41,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+  },
+
+  mounted() {
+    this.setValidationState(true);
   },
 
   data() {

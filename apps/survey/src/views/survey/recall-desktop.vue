@@ -13,7 +13,7 @@
       </meal-list>
     </v-col>
 
-    <v-col cols="12" lg="9" class="content">
+    <v-col cols="12" lg="9" class="content mt-0">
       <recall-bread-crumbs v-if="showMealList" :promptName="activePrompt"></recall-bread-crumbs>
       <transition name="component-fade" mode="out-in">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch

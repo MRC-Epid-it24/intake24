@@ -1,11 +1,6 @@
 <template>
-  <v-toolbar
-    flat
-    dense
-    class="brdcrmbs"
-    style="overflow-y: hidden; overflow-x: scroll; white-space: nowrap"
-  >
-    <v-breadcrumbs :items="brds">
+  <v-toolbar flat dense class="brdcrmbs" style="overflow-y: hidden; white-space: nowrap">
+    <v-breadcrumbs :items="brds" class="pl-1">
       <template v-slot:divider>
         <v-icon>{{ forwardIcon }}</v-icon>
       </template>
