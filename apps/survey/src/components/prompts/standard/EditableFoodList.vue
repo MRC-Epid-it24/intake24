@@ -1,52 +1,55 @@
 <template>
-  <v-card elevation="0">
-    <v-card-title>{{
-      drinks ? $t('prompts.editMeal.drinks') : $t('prompts.editMeal.food')
-    }}</v-card-title>
-    <v-card-text justify="center">
-      <v-text-field
-        :placeholder="$t('prompts.editMeal.food')"
-        @keypress.enter.stop="addFood"
-        ref="foodsDrinksInput"
-        outlined
-        @focusout="onEditFocusLost"
-        v-model="newFoodDescription"
-      ></v-text-field>
-      <v-list v-if="editableList.length > 0">
-        <v-list-item
-          :ripple="false"
-          v-for="(food, idx) in editableList"
-          :key="idx"
-          @click="edit(idx)"
+  <div>
+    <h3 class="mb-4">{{ drinks ? $t('prompts.editMeal.drinks') : $t('prompts.editMeal.food') }}</h3>
+
+    <v-row>
+      <v-col cols="8">
+        <v-text-field
+          :placeholder="$t('prompts.editMeal.food')"
+          @keypress.enter.stop="addFood"
+          ref="foodsDrinksInput"
+          outlined
+          @focusout="onEditFocusLost"
+          v-model="newFoodDescription"
+          hide-details
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-btn
+          @click="addFood"
+          color="success"
+          elevation="2"
+          x-large
+          :disabled="newFoodDescription.length === 0"
         >
-          <v-text-field
-            v-if="editIndex === idx"
-            :value="foodDisplayName(editableList[idx])"
-            @keypress.enter.stop="addFood"
-            @focusout="onEditFocusLost"
-          ></v-text-field>
-          <v-list-item-icon v-if="editIndex === idx">
-            <v-btn icon @click="deleteFood">
-              <v-icon>fa-trash</v-icon>
-            </v-btn>
-          </v-list-item-icon>
-          <v-list-item-title v-else>{{ foodDisplayName(food) }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-card-text>
-    <v-card-actions :class="isNotDesktop && 'justify-center'">
-      <v-btn
-        @click="addFood"
-        color="secondary"
-        elevation="2"
-        x-large
-        :disabled="newFoodDescription.length === 0"
+          <v-icon style="transform: scaleX(-1)" class="mr-2">fa-arrow-turn-down</v-icon>
+          {{ drinks ? $t('prompts.editMeal.addDrink') : $t('prompts.editMeal.addFood') }}
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-list v-if="editableList.length > 0">
+      <v-list-item
+        :ripple="false"
+        v-for="(food, idx) in editableList"
+        :key="idx"
+        @click="edit(idx)"
       >
-        {{ drinks ? $t('prompts.editMeal.addDrink') : $t('prompts.editMeal.addFood') }}
-        <v-icon right>fa-edit</v-icon>
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+        <v-text-field
+          v-if="editIndex === idx"
+          :value="foodDisplayName(editableList[idx])"
+          @keypress.enter.stop="addFood"
+          @focusout="onEditFocusLost"
+        ></v-text-field>
+        <v-list-item-icon v-if="editIndex === idx">
+          <v-btn icon @click="deleteFood">
+            <v-icon>fa-trash</v-icon>
+          </v-btn>
+        </v-list-item-icon>
+        <v-list-item-title v-else>{{ foodDisplayName(food) }}</v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </div>
 </template>
 
 <script lang="ts">

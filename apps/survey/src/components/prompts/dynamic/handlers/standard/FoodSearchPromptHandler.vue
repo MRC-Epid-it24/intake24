@@ -15,11 +15,14 @@ import type { UserFoodData } from '@intake24/common/types/http';
 import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import type { PropType } from 'vue';
+import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
 
 export default defineComponent({
   name: 'FoodSearchPromptHandler',
 
   components: { FoodSearchPrompt },
+
+  mixins: [createPromptHandlerMixin<never>('food-search-prompt')],
 
   props: {
     promptProps: {
@@ -56,7 +59,7 @@ export default defineComponent({
 
     onFoodSelected(data: UserFoodData) {
       this.foodData = data;
-      this.$emit('complete');
+      this.$emit('continue');
     },
 
     commitAnswer() {

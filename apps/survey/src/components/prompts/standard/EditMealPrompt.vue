@@ -1,6 +1,6 @@
 <template>
   <prompt-layout :text="promptText" :description="promptDescription">
-    <v-col sm="10" xs="12" md="8" lg="8" class="px-0 px-sm-3">
+    <v-col xs="12" sm="10" md="8" class="px-0 px-sm-3">
       <editable-food-list
         :food-list="foodList"
         :drinks="false"
@@ -26,8 +26,8 @@
         :block="isMobile"
         :disabled="!continueEnabled"
         :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
-        class="px-5"
         color="success"
+        class="px-5"
         large
         @click="onContinue"
       >

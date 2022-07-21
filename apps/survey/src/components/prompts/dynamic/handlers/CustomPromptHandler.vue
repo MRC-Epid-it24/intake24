@@ -50,7 +50,7 @@ export default defineComponent({
   methods: {
     onAnswer(answer: CustomPromptAnswer) {
       this.answer = answer;
-      this.$emit('complete');
+      this.$emit('continue');
     },
 
     commitAnswer() {

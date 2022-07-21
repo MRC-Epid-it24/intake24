@@ -1,5 +1,5 @@
 <template>
-  <v-row :no-gutters="isMobile" class="pt-2" justify="center">
+  <v-row :no-gutters="isMobile" class="pt-0" justify="center">
     <recall-bread-crumbs-mobile :promptName="activePrompt"></recall-bread-crumbs-mobile>
     <transition type="fade" mode="out-in">
       <v-alert
@@ -18,7 +18,7 @@
         </span>
       </v-alert>
     </transition>
-    <v-col cols="12" lg="9" class="content" v-if="bottomNavTab !== 1">
+    <v-col cols="12" lg="9" class="content mt-0" v-if="bottomNavTab !== 1">
       <transition name="component-fade" mode="out-in">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
         even if the next prompt uses the same component type, probably should be something like an internal counter,

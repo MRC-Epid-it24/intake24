@@ -77,11 +77,6 @@ export default defineComponent({
     };
   },
 
-  mounted() {
-    // Any time is acceptable
-    this.$emit('validation-update', true);
-  },
-
   computed: {
     ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex']),
     hasErrors(): boolean {
@@ -123,7 +118,7 @@ export default defineComponent({
         return;
       }
 
-      this.$emit('complete');
+      this.$emit('continue');
     },
   },
 });
