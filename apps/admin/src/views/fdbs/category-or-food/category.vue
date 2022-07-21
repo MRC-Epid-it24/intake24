@@ -81,13 +81,16 @@
       </v-form>
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
-        <v-btn outlined color="primary" @click="submit"> <v-icon left>fa-save</v-icon>SAVE</v-btn>
+        <v-btn outlined color="primary" @click="submit">
+          <v-icon left>$save</v-icon> {{ $t(`common.action.save`) }}
+        </v-btn>
       </v-card-actions>
     </v-card>
     <v-skeleton-loader
       v-else
       type="card-heading, list-item-three-line@3, actions"
     ></v-skeleton-loader>
+    <confirm-leave-dialog v-model="routeLeave"></confirm-leave-dialog>
   </div>
 </template>
 
@@ -95,10 +98,13 @@
 import { defineComponent } from 'vue';
 import type { CategoryLocalEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
+import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import categoryOrFood from './category-or-food';
 
 export default defineComponent({
   name: 'CategoryEntry',
+
+  components: { ConfirmLeaveDialog },
 
   mixins: [categoryOrFood],
 

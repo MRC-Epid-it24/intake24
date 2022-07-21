@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue';
-import type { Route } from 'vue-router';
+import type { NavigationGuardNext, Route } from 'vue-router';
 import { copy } from '@intake24/common/util';
 
 export default defineComponent({
@@ -16,18 +16,12 @@ export default defineComponent({
     };
   },
 
-  beforeRouteLeave(to, from, next) {
-    if (this.routeLeave.confirmed) {
-      this.routeLeave = { dialog: false, to: null, confirmed: false };
-      next();
-      return;
-    }
+  beforeRouteUpdate(to, from, next) {
+    this.beforeRouteCheck(to, from, next);
+  },
 
-    if (this.entryChanged) {
-      this.routeLeave = { dialog: true, to, confirmed: false };
-      return;
-    }
-    next();
+  beforeRouteLeave(to, from, next) {
+    this.beforeRouteCheck(to, from, next);
   },
 
   computed: {
@@ -42,6 +36,21 @@ export default defineComponent({
   methods: {
     setOriginalEntry(data: any) {
       this.originalEntry = copy(data);
+    },
+
+    beforeRouteCheck(to: Route, from: Route, next: NavigationGuardNext) {
+      if (this.routeLeave.confirmed) {
+        this.routeLeave = { dialog: false, to: null, confirmed: false };
+        next();
+        return;
+      }
+
+      if (this.entryChanged) {
+        this.routeLeave = { dialog: true, to, confirmed: false };
+        return;
+      }
+
+      next();
     },
   },
 });

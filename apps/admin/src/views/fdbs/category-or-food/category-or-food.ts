@@ -88,6 +88,7 @@ export default defineComponent({
       if (entryId === 'no-category') return;
 
       this.loading = true;
+      this.entry = null;
 
       try {
         const { data } = await this.$http.get<Entry>(`admin/fdbs/${id}/${type}/${entryId}`);

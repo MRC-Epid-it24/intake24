@@ -41,41 +41,10 @@
       <slot></slot>
     </v-card>
     <slot name="addons"></slot>
-    <v-dialog :value="routeLeave.dialog" max-width="350px" @input="handleLeave">
-      <v-card>
-        <v-card-title class="h2 justify-center">
-          {{ $t('common.action.confirm.title') }}
-        </v-card-title>
-        <v-card-text class="px-6 py-4 d-flex justify-center">
-          <div class="subtitle-1">
-            {{ $t('common.action.confirm.msg') }}
-          </div>
-        </v-card-text>
-        <v-container class="pa-6">
-          <v-btn
-            color="warning"
-            :title="$t('common.action.continue')"
-            block
-            class="mb-2"
-            dark
-            large
-            @click.stop="confirmLeave"
-          >
-            {{ $t('common.action.continue') }}
-          </v-btn>
-          <v-btn
-            color="warning"
-            :title="$t('common.action.cancel')"
-            block
-            outlined
-            large
-            @click.stop="cancelLeave"
-          >
-            {{ $t('common.action.cancel') }}
-          </v-btn>
-        </v-container>
-      </v-card>
-    </v-dialog>
+    <confirm-leave-dialog
+      :value="routeLeave"
+      @input="$emit('update:routeLeave', $event)"
+    ></confirm-leave-dialog>
   </div>
 </template>
 
@@ -88,11 +57,12 @@ import { resource } from '@intake24/admin/mixins';
 import { useMessages } from '@intake24/admin/stores';
 import type { RouteLeave } from '@intake24/admin/types';
 import type { Dictionary } from '@intake24/common/types';
+import ConfirmLeaveDialog from './confirm-leave-dialog.vue';
 
 export default defineComponent({
   name: 'EntryLayout',
 
-  components: { ConfirmDialog },
+  components: { ConfirmDialog, ConfirmLeaveDialog },
 
   mixins: [resource],
 
@@ -145,26 +115,6 @@ export default defineComponent({
     tabTitle(tab: string) {
       const check = has(this.$i18n.messages[this.$i18n.locale], `${this.module}.${tab}.tab`);
       return this.$t(check ? `${this.module}.${tab}.tab` : `common.action.${tab}`);
-    },
-
-    handleLeave(value: boolean) {
-      if (value) return;
-
-      this.cancelLeave();
-    },
-
-    cancelLeave() {
-      this.$emit('update:routeLeave', { dialog: false, to: null, confirmed: false });
-    },
-
-    confirmLeave() {
-      const { dialog, to } = this.routeLeave;
-
-      if (!to) return;
-
-      this.$emit('update:routeLeave', { dialog, to, confirmed: true });
-      // TODO: vue-router RawLocation and Route types are incompatible (RawLocation:name cannot be null)
-      this.$router.push({ ...to, name: to.name ?? undefined });
     },
 
     async remove(): Promise<void> {

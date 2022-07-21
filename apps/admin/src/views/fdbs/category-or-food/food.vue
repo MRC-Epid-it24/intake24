@@ -90,7 +90,7 @@
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
         <v-btn outlined color="primary" type="submit" @click="submit">
-          <v-icon left>fa-save</v-icon> SAVE
+          <v-icon left>$save</v-icon> {{ $t(`common.action.save`) }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -98,6 +98,7 @@
       v-else
       type="card-heading, list-item-three-line@3, actions"
     ></v-skeleton-loader>
+    <confirm-leave-dialog v-model="routeLeave"></confirm-leave-dialog>
   </div>
 </template>
 
@@ -105,6 +106,7 @@
 import { defineComponent } from 'vue';
 import type { FoodLocalEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
+import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import categoryOrFood from './category-or-food';
 import { NutrientList } from '@intake24/admin/components/fdbs';
@@ -112,7 +114,7 @@ import { NutrientList } from '@intake24/admin/components/fdbs';
 export default defineComponent({
   name: 'FoodEntry',
 
-  components: { AutoComplete, NutrientList },
+  components: { AutoComplete, ConfirmLeaveDialog, NutrientList },
 
   mixins: [categoryOrFood],
 
