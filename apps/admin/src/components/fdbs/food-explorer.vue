@@ -1,30 +1,32 @@
 <template>
-  <v-treeview
-    :active.sync="active"
-    :items="items"
-    :load-children="fetchCategoryContent"
-    :open.sync="open"
-    activatable
-    color="secondary"
-    dense
-    item-text="name"
-    transition
-  >
-    <template v-slot:prepend="{ item }">
-      <v-icon v-if="!item.children">fa-drumstick-bite</v-icon>
-    </template>
-    <template v-slot:label="{ item }">
-      <router-link
-        :to="{
-          name: `fdbs-${item.children ? 'categories' : 'foods'}`,
-          params: { id: localeId, entryId: item.id },
-        }"
-        class="text-decoration-none"
-      >
-        {{ item.name }}
-      </router-link>
-    </template>
-  </v-treeview>
+  <div>
+    <v-switch v-model="showGlobalName" :label="$t('fdbs.showGlobalName')" class="mt-0"> </v-switch>
+    <v-treeview
+      :active.sync="active"
+      :items="items"
+      :load-children="fetchCategoryContent"
+      :open.sync="open"
+      activatable
+      color="secondary"
+      dense
+      transition
+    >
+      <template v-slot:prepend="{ item }">
+        <v-icon v-if="!item.children">fa-drumstick-bite</v-icon>
+      </template>
+      <template v-slot:label="{ item }">
+        <router-link
+          :to="{
+            name: `fdbs-${item.children ? 'categories' : 'foods'}`,
+            params: { id: localeId, entryId: item.id },
+          }"
+          class="text-decoration-none"
+        >
+          {{ item[itemText] }}
+        </router-link>
+      </template>
+    </v-treeview>
+  </div>
 </template>
 
 <script lang="ts">
@@ -55,7 +57,14 @@ export default defineComponent({
       active: [] as string[],
       open: [] as string[],
       items: [] as CategoryListEntry[],
+      showGlobalName: false,
     };
+  },
+
+  computed: {
+    itemText(): string {
+      return this.showGlobalName ? 'englishName' : 'name';
+    },
   },
 
   async mounted() {

@@ -46,7 +46,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   const getRootCategories = async (localeId: string) => {
     // TODO: verify for other dialects
     const query = `SELECT DISTINCT
-      c.code, c.name as englishName, c.is_hidden as isHidden, cl.id, cl.locale_id as localeId, cl.name  
+      c.code, c.name as "englishName", c.is_hidden as "isHidden", cl.id, cl.locale_id as "localeId", cl.name  
       FROM categories c
       LEFT JOIN categories_categories cc ON c.code = cc.subcategory_code
       LEFT JOIN category_locals cl ON c.code = cl.category_code

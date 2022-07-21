@@ -9,6 +9,8 @@ const fdbs: LocaleMessageObject = {
   edit: 'Edit FoodDB',
   delete: 'Delete FoodDB',
 
+  showGlobalName: 'Show global name',
+
   categories: {
     _: 'Category',
     title: 'Categories',
