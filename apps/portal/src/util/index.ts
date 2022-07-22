@@ -1,1 +1,1 @@
-export * from './mix';
+export * from './vite';

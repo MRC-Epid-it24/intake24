@@ -4,7 +4,7 @@ import { FileSystemLoader, Environment } from 'nunjucks';
 import { resolve } from 'node:path';
 import { httpLogger as stream } from '@intake24/services';
 import type { Ops } from '../app';
-import { mix } from '../util';
+import { vite } from '../util';
 
 export default async (app: Express, { config }: Ops): Promise<void> => {
   const {
@@ -28,7 +28,7 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
   });
 
   nunjucksEnv.express(app);
-  nunjucksEnv.addGlobal('mix', mix);
+  nunjucksEnv.addGlobal('vite', vite);
 
   app.engine('njk', nunjucksEnv.render);
   app.set('view engine', 'njk');
