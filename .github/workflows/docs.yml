@@ -34,7 +34,7 @@ jobs:
         run: pnpm docs:build
 
       - name: Set CNAME
-        run: echo "docs.intake24.co.uk" > docs/.vitepress/dist/CNAME
+        run: echo "docs.intake24.org" > docs/.vitepress/dist/CNAME
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.4

@@ -31,7 +31,7 @@ Both Admin and Survey frontend applications are SPA (Single page application) wr
 They can be deployed to:
 
 1. Same domain site as API Server - if relative path is configured, API server automatically registers the routes to serve the application. Please see [Configuration](/config/) section for more details.
-2. Different domain sites, CORS needs to be configured properly. There are simple http server scripts to serve the applications.
+2. For different domain sites, CORS needs to be configured properly. There are simple http server scripts to serve the applications.
 3. You can use any type of 3rd party provider like e.g. AWS S3, Heroku, Netlify etc.
 
 :::tip
