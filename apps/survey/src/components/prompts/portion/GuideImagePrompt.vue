@@ -89,6 +89,14 @@
           </v-expansion-panels>
         </v-col>
       </v-row>
+      <v-row class="ma-2">
+        <v-col>
+          <v-form ref="form" @submit.prevent="submit">
+            <!-- Should be disabled if nothing selected? -->
+            <continue @click="submit" :disabled="!continueEnabled" class="px-2"></continue>
+          </v-form>
+        </v-col>
+      </v-row>
     </portion-layout>
   </v-container>
 </template>
@@ -96,7 +104,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import type { PropType } from 'vue';
-import { mapState } from 'pinia';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
 import type { VImg } from 'vuetify/lib';
@@ -108,8 +115,14 @@ import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
 import BasePortion from './BasePortion';
-import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
-import type { GuideImageEncodedFood } from '@intake24/survey/stores/guide-image';
+
+export interface GuideImagePromptState {
+  portionSize: GuideImageState;
+  objectConfirmed: boolean;
+  quantityConfirmed: boolean;
+  objectIdx: number | undefined;
+  panelOpen: number;
+}
 
 export default defineComponent({
   name: 'GuideImagePrompt',
@@ -142,14 +155,12 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    selectedFoodIndex: {
-      type: Number,
+    initialState: {
+      type: Object as PropType<GuideImagePromptState>,
+      required: true,
     },
-    selectedMealIndex: {
-      type: Number,
-    },
-    guideFoods: {
-      type: Object as PropType<GuideImageEncodedFood>,
+    continueEnabled: {
+      type: Boolean,
       required: true,
     },
   },
@@ -162,24 +173,24 @@ export default defineComponent({
   },
 
   data() {
+    const selectedIndex = this.initialState.portionSize.object?.id;
+
     return {
       errors: [] as string[],
-      selectedGuide: false, // TODO: Model this correctly
-      selectedQuantity: false,
-      panelOpen: 0,
-
+      selectedGuide: this.initialState.objectConfirmed && selectedIndex !== undefined,
+      selectedQuantity: this.initialState.quantityConfirmed,
       guideImageData: {} as GuideImageResponse,
       width: 0,
       height: 0,
-      selectedObjectIdx: null as number | null,
+      selectedObjectIdx: selectedIndex !== undefined ? selectedIndex - 1 : 0,
       selectedNodeIdx: null as number | null,
-      quantityValue: { whole: 1, fraction: 0 } as QuantityValues,
+
+      panelOpen: this.initialState.panelOpen,
+      quantityValue: this.initialState.portionSize.quantity,
     };
   },
 
   computed: {
-    ...mapState(useFoodGuideImageState, ['selectedObjectIndex', 'selectedPanelState']),
-
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
@@ -214,9 +225,6 @@ export default defineComponent({
 
   mounted() {
     this.fetchGuideImageData();
-    this.selectedObjectIdx = this.selectedObjectIndex(this.selectedFoodIndex) ?? null;
-    this.panelOpen = this.selectedPanelState(this.selectedFoodIndex);
-    console.log(this.guideFoods);
   },
 
   methods: {
@@ -247,15 +255,20 @@ export default defineComponent({
 
     onUpdate() {
       if (this.selectedObjectIdx == null) return;
-      const portionSizeState = this.onObjectClick(this.selectedObjectIdx);
-      this.$emit('update', {
+      const portionSizeState = this.getCurrentState(this.selectedObjectIdx);
+
+      const update: GuideImagePromptState = {
         portionSize: portionSizeState,
+        objectConfirmed: this.selectedGuide,
+        quantityConfirmed: this.selectedQuantity,
         objectIdx: this.selectedObjectIdx + 1,
         panelOpen: this.panelOpen,
-      });
+      };
+
+      this.$emit('update', update);
     },
 
-    onObjectClick(idx: number): GuideImageState {
+    getCurrentState(idx: number): GuideImageState {
       return {
         method: 'guide-image',
         servingWeight:
@@ -278,7 +291,7 @@ export default defineComponent({
     },
 
     onSelectGuide() {
-      this.selectedGuide = !this.selectedGuide;
+      this.selectedGuide = true;
       this.panelOpen = 1;
       this.onUpdate();
     },
@@ -300,21 +313,9 @@ export default defineComponent({
         return;
       }
 
-      if (this.selectedObjectIdx === null) throw new Error('Selected object id is null');
+      if (this.selectedObjectIdx === undefined) throw new Error('Selected object id is null');
 
-      this.$emit(
-        'guide-image-selected'
-        // {
-        //   object: {
-        //     id: this.selectedObjectIdx,
-        //     weight: this.guideImageData.weights[this.selectedObjectIdx],
-        //   },
-        //   quantity: this.quantityValue,
-        // }
-      );
-
-      this.selectedQuantity = true; // Barely see the change of icon before transition
-      this.panelOpen = -1; // Closes all panels
+      this.$emit('continue');
     },
 
     updateQuantity(value: QuantityValues) {

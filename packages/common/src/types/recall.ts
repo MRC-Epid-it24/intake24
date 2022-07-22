@@ -30,7 +30,7 @@ export interface SelectedGuideImageObject {
 export interface GuideImageState extends PortionSizeStateBase {
   method: 'guide-image';
   object: SelectedGuideImageObject | null;
-  quantity: QuantityValues | null;
+  quantity: QuantityValues;
 }
 
 export interface StandardPortionUnit {

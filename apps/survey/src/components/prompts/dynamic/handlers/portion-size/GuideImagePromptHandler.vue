@@ -5,7 +5,9 @@
     :guide-image-id="parameters['guide-image-id']"
     :prompt-component="promptComponent"
     :conversionFactor="selectedPortionSize.conversionFactor"
-    @guide-image-selected="onAnswer"
+    :initial-state="initialState"
+    :continue-enabled="continueEnabled"
+    @continue="$emit('continue')"
     @update="onUpdate"
   >
   </guide-image-prompt>
@@ -19,17 +21,18 @@ import { useSurvey } from '@intake24/survey/stores';
 import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { GuideImageEncodedFood } from '@intake24/survey/stores/guide-image';
-import type { EncodedFood, GuideImageState } from '@intake24/common/types';
 import type { GuideImageParameters } from '@intake24/common/types/http';
+import type { GuideImagePromptState } from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
+import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
 
 export default defineComponent({
   name: 'GuideImagePromptHandler',
 
   components: { GuideImagePrompt },
 
-  mixins: [foodPromptUtils],
+  mixins: [foodPromptUtils, createPromptHandlerMixin<GuideImagePromptState>('guide-image-prompt')],
 
   props: {
     promptProps: {
@@ -40,6 +43,30 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    promptId: {
+      type: String,
+      required: true,
+    },
+  },
+
+  created() {
+    this.loadInitialState(this.encodedSelectedFood.id, this.promptId, {
+      portionSize: {
+        method: 'guide-image',
+        object: null,
+        quantity: { whole: 1, fraction: 0 },
+        servingWeight: 0,
+        leftoversWeight: 0,
+      },
+      objectConfirmed: false,
+      quantityConfirmed: false,
+      objectIdx: undefined,
+      panelOpen: 0,
+    });
+  },
+
+  mounted() {
+    this.setValidationState(this.isValid(this.initialState));
   },
 
   computed: {
@@ -76,40 +103,15 @@ export default defineComponent({
     ...mapActions(useSurvey, ['updateFood']),
     ...mapActions(useFoodGuideImageState, ['updateFoodState', 'clearFoodState']),
 
-    onUpdate(data: { portionSize: GuideImageState; objectIdx: number; panelOpen: number }) {
-      if (
-        this.selectedFood == undefined ||
-        this.selectedMealIndex === undefined ||
-        this.selectedFoodIndex === undefined
-      ) {
-        console.warn('Expected a food to be selected');
-        return;
-      }
-      if (this.selectedFood.type === 'encoded-food') {
-        const inputGuidedFood: EncodedFood = {
-          ...this.selectedFood,
-          portionSize: data.portionSize,
-        };
-        this.updateFoodState(
-          this.selectedMealIndex,
-          this.selectedFoodIndex,
-          inputGuidedFood,
-          data.objectIdx,
-          data.panelOpen
-        );
-        console.log(inputGuidedFood);
-        // this.$emit('validation-update', encodedFood !== undefined);
-      } else
-        console.log(
-          'Food is not of correct type. "Encoded-food" required but ',
-          this.selectedFood.type,
-          ' recieved.'
-        );
+    isValid(state: GuideImagePromptState): boolean {
+      if (state === null) return false;
+
+      return state.objectIdx !== undefined && state.objectConfirmed && state.quantityConfirmed;
     },
 
-    onAnswer() {
-      console.log('guide: emitting complete');
-      this.$emit('complete');
+    onUpdate(newState: GuideImagePromptState) {
+      this.updateStoredState(this.encodedSelectedFood.id, this.promptId, newState);
+      this.setValidationState(this.isValid(newState));
     },
 
     commitAnswer() {
@@ -132,8 +134,7 @@ export default defineComponent({
           portionSize: this.guideFoods.food.portionSize,
         },
       });
-      console.log('guide: clearing store');
-      this.clearFoodState(foodIndex);
+      this.clearStoredState(this.selectedFoodIndexRequired, this.promptId);
     },
 
     // onTempChange(
