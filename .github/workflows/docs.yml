@@ -37,7 +37,7 @@ jobs:
         run: echo "docs.intake24.org" > docs/.vitepress/dist/CNAME
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.3.4
+        uses: JamesIves/github-pages-deploy-action@v4.4.0
         with:
           branch: ghp-docs
           folder: docs/.vitepress/dist
