@@ -48,7 +48,7 @@
     "fast-csv": "^4.3.6",
     "fs-extra": "^10.1.0",
     "helmet": "^5.1.1",
-    "ioredis": "^4.28.5",
+    "ioredis": "^5.2.2",
     "jsdom": "^20.0.0",
     "json2csv": "^5.0.7",
     "jsonwebtoken": "^8.5.1",
