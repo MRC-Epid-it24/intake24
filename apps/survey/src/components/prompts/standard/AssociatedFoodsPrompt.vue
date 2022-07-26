@@ -54,12 +54,9 @@
         </v-col>
       </v-row>
     </v-card-actions>
-    <v-row class="ma-2">
+    <v-row class="mt-2">
       <v-col>
-        <v-form ref="form" @submit.prevent="submit">
-          <!-- Should be disabled if nothing selected? -->
-          <continue @click="onContinue" :disabled="!continueEnabled" class="px-2"></continue>
-        </v-form>
+        <continue @click="onContinue" :disabled="!continueEnabled" class="px-2"></continue>
       </v-col>
     </v-row>
   </prompt-layout>
@@ -71,11 +68,7 @@ import Vue from 'vue';
 import type { PropType } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import type {
-  AssociatedFoodPromptState,
-  AssociatedFoodsState,
-  EncodedFood,
-} from '@intake24/common/types';
+import type { AssociatedFoodsState, EncodedFood } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import FoodBrowser from '@intake24/survey/components/elements/FoodBrowser.vue';
 
