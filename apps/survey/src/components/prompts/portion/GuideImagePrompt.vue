@@ -216,7 +216,6 @@ export default defineComponent({
     this.fetchGuideImageData();
     this.selectedObjectIdx = this.selectedObjectIndex(this.selectedFoodIndex) ?? null;
     this.panelOpen = this.selectedPanelState(this.selectedFoodIndex);
-    console.log(this.guideFoods);
   },
 
   methods: {
@@ -273,7 +272,6 @@ export default defineComponent({
 
     selectObject(idx: number) {
       this.selectedObjectIdx = idx;
-      console.log('Idx+1 : ', this.guideImageData.weights[idx + 1]); // weights array starts from 1
       this.onUpdate();
     },
 

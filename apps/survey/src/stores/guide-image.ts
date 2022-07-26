@@ -22,7 +22,6 @@ export const useFoodGuideImageState = defineStore('guide-image-state', {
   getters: {
     selectedObjectIndex: (state) => {
       return (foodId: number | undefined) => {
-        console.log('This is ID Food Obj: ', foodId);
         if (foodId === undefined) return null;
         if (!state.foodState[foodId]) return null;
         if (
@@ -37,7 +36,6 @@ export const useFoodGuideImageState = defineStore('guide-image-state', {
     },
     selectedPanelState: (state) => {
       return (foodId: number | undefined) => {
-        console.log('This is ID Food Panel: ', foodId);
         if (foodId === undefined) return 0;
         if (!state.foodState[foodId]) return 0;
         if (
@@ -59,14 +57,12 @@ export const useFoodGuideImageState = defineStore('guide-image-state', {
       objIdx: number | null = null,
       panelOpen = 0
     ) {
-      console.log('food id: ', foodId, ' meal id: ', mealId);
       const newGuideState: GuideImageEncodedFood = {
         objectIdx: objIdx,
         food: data,
         mealId: mealId,
         panelOpen: panelOpen,
       };
-      console.info('To store in locale Storage: ', newGuideState);
       this.foodState = { ...this.foodState, [foodId]: newGuideState };
     },
     clearFoodState(foodId: number) {
