@@ -54,6 +54,14 @@
         </v-col>
       </v-row>
     </v-card-actions>
+    <v-row class="ma-2">
+      <v-col>
+        <v-form ref="form" @submit.prevent="submit">
+          <!-- Should be disabled if nothing selected? -->
+          <continue @click="onContinue" :disabled="!continueEnabled" class="px-2"></continue>
+        </v-form>
+      </v-col>
+    </v-row>
   </prompt-layout>
 </template>
 
@@ -95,6 +103,10 @@ export default defineComponent({
     },
     food: {
       type: Object as PropType<EncodedFood>,
+      required: true,
+    },
+    continueEnabled: {
+      type: Boolean,
       required: true,
     },
   },
@@ -145,8 +157,8 @@ export default defineComponent({
       this.$emit('update', { activePrompt, prompts });
     },
 
-    submit() {
-      this.$emit('answer', null);
+    onContinue() {
+      this.$emit('continue');
     },
   },
 });

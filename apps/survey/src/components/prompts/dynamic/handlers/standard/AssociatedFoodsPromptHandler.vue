@@ -6,21 +6,22 @@
       initialState,
       food: selectedEncodedFood,
     }"
+    :continue-enabled="continueEnabled"
+    @continue="$emit('continue')"
     @update="updatePrompts"
   >
   </associated-foods-prompt>
 </template>
 
 <script lang="ts">
-import type { PropType, VueConstructor } from 'vue';
-import Vue from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { AssociatedFoodsState, RecallPromptHandler } from '@intake24/common/types';
-import { mapActions, mapState } from 'pinia';
+import type { AssociatedFoodsState } from '@intake24/common/types';
+import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';
-import type { PromptHandlerUtils } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
 import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
 import type { FoodHeader } from '@intake24/common/types/http';
 
@@ -36,9 +37,7 @@ function initialPromptState(): AssociatedFoodPromptState {
   };
 }
 
-export default (
-  Vue as VueConstructor<Vue & RecallPromptHandler & PromptHandlerUtils<AssociatedFoodsState>>
-).extend({
+export default defineComponent({
   name: 'AssociatedFoodsPromptHandler',
 
   mixins: [createPromptHandlerMixin<AssociatedFoodsState>('associated-foods-prompt')],
@@ -74,11 +73,25 @@ export default (
     }
   },
 
+  mounted() {
+    this.setValidationState(this.isValid(this.initialState));
+  },
+
   computed: {
     ...mapState(useSurvey, ['selectedEncodedFood']),
   },
 
   methods: {
+    isValid(state: AssociatedFoodsState | null): boolean {
+      if (state === null) return false;
+
+      return state.prompts.every(
+        (prompt) =>
+          prompt.confirmed === false ||
+          (prompt.confirmed === true && prompt.selectedFood !== undefined)
+      );
+    },
+
     updatePrompts(state: AssociatedFoodsState) {
       const id = this.selectedEncodedFood?.id;
 
@@ -88,6 +101,8 @@ export default (
       }
 
       this.updateStoredState(id, this.promptId, state);
+      console.log('bobozon');
+      this.setValidationState(this.isValid(state));
     },
 
     commitAnswer(): void {

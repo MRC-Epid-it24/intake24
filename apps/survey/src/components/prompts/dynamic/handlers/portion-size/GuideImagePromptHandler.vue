@@ -103,7 +103,7 @@ export default defineComponent({
     ...mapActions(useSurvey, ['updateFood']),
     ...mapActions(useFoodGuideImageState, ['updateFoodState', 'clearFoodState']),
 
-    isValid(state: GuideImagePromptState): boolean {
+    isValid(state: GuideImagePromptState | null): boolean {
       if (state === null) return false;
 
       return state.objectIdx !== undefined && state.objectConfirmed && state.quantityConfirmed;
