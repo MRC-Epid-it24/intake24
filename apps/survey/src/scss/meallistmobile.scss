@@ -1,31 +1,26 @@
-.v-card ::v-deep .v-slide-group__next {
+.v-card :deep(.v-slide-group__next) {
   display: none !important;
   flex: none;
 }
 
-.v-card ::v-deep .v-slide-group__prev {
+.v-card :deep(.v-slide-group__prev) {
   display: none !important;
 }
 
-.v-card ::v-deep .v-slide-group__prev--disabled {
+.v-card :deep(.v-slide-group__prev--disabled) {
   display: none !important;
 }
 
-.v-card ::v-deep .add_button {
+.v-card :deep(.add_button) {
   background-color: #ff87376e;
 }
-
-/* Style the meal bar */
-// .v-card ::v-deep .mealbar {
-//   overflow: auto;
-// }
 
 /* Style the food bar */
 .foodbar {
   overflow: auto;
 }
 
-.v-row ::v-deep .undoAlert {
+.v-row :deep(.undoAlert) {
   position: absolute;
   z-index: 10;
   top: 1rem;
@@ -68,7 +63,7 @@
   font-weight: bold;
 }
 
-.v-tab ::v-deep p {
+.v-tab :deep(p) {
   margin-bottom: 3px;
 }
 
@@ -92,7 +87,7 @@
   overflow-y: auto;
 }
 
-.v-card ::v-deep .v-tab {
+.v-card :deep(.v-tab) {
   font-size: x-small;
   font-weight: bold;
 }
