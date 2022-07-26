@@ -10,5 +10,8 @@
       "@intake24/*": ["../../packages/*/src"]
     }
   },
+  "vueCompilerOptions": {
+    "target": 2.7,
+  },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

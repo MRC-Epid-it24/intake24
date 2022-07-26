@@ -31,5 +31,8 @@
       "@intake24/*": ["packages/*/src"]
     },
     "types": ["node", "jest", "jest-extended", "webpack-env"]
+  },
+  "vueCompilerOptions": {
+    "target": 2.7,
   }
 }
