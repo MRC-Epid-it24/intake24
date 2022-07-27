@@ -1,16 +1,19 @@
 <template>
-  <v-list v-if="foods.length > 0">
-    <v-list-item v-for="(food, i) in foods" :key="i" link>
-      <v-list-item-title class="text-wrap" @click="emitFoodSelected(i)">
-        {{ foodDisplayName(food) }}
-      </v-list-item-title>
-      <v-list-item-action>
-        <v-icon x-small v-if="food.code" color="green darken-2">fa-check</v-icon>
-      </v-list-item-action>
-      <v-list-item-action>
-        <v-icon x-small v-if="food.portionSizeMethod" color="green darken-2">fa-check</v-icon>
-      </v-list-item-action>
-    </v-list-item>
+  <v-list v-if="foods.length > 0" :class="{ 'pa-0': linked }">
+    <div v-for="(food, i) in foods" :key="i" :class="{ 'ml-4': linked }">
+      <v-list-item link>
+        <v-list-item-title class="text-wrap" @click="emitFoodSelected(food.id)">
+          {{ foodDisplayName(food) }}
+        </v-list-item-title>
+        <v-list-item-action>
+          <v-icon x-small v-if="food.code" color="green darken-2">fa-check</v-icon>
+        </v-list-item-action>
+        <v-list-item-action>
+          <v-icon x-small v-if="food.portionSizeMethod" color="green darken-2">fa-check</v-icon>
+        </v-list-item-action>
+      </v-list-item>
+      <food-item :foods="food.linkedFoods" @food-selected="onLinkedFoodSelected" linked></food-item>
+    </div>
   </v-list>
 </template>
 
@@ -25,6 +28,8 @@ export default defineComponent({
   props: {
     // FIXME: Should be an array of objects of type UserFoodData or EncodedUserFoodData ???
     foods: Array as PropType<FoodState[]>,
+
+    linked: Boolean,
   },
 
   data() {
@@ -32,8 +37,12 @@ export default defineComponent({
   },
 
   methods: {
-    emitFoodSelected(foodIndex: number) {
-      this.$emit('food-selected', foodIndex);
+    onLinkedFoodSelected(foodId: number) {
+      this.emitFoodSelected(foodId);
+    },
+
+    emitFoodSelected(foodId: number) {
+      this.$emit('food-selected', foodId);
     },
     foodDisplayName(food: FoodState): string {
       if (food.type === 'free-text') return food.description;

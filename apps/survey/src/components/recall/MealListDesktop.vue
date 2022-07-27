@@ -27,7 +27,7 @@
           <v-list-item-content>
             <meal-item
               :meal="meal"
-              :meal-index="idx"
+              :meal-id="meal.id"
               @meal-action="onMealAction"
               @food-selected="onFoodSelected"
               @meal-selected="onMealSelected"
@@ -54,9 +54,11 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import MealItem from './MealItem.vue';
 import ContextMenu from '../elements/ContextMenu.vue';
+import type { MealState } from '@intake24/common/types';
 
 export type RecallAction = 'add-meal' | 'review-confirm';
 
@@ -74,7 +76,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    meals: Array,
+    meals: {
+      type: Array as PropType<MealState[]>,
+      required: true,
+    },
   },
 
   data() {
@@ -101,11 +106,11 @@ export default defineComponent({
     onRecallAction(action: string) {
       this.$emit('recall-action', action);
     },
-    onFoodSelected(payload: { mealIndex: number; foodIndex: number }) {
-      this.$emit('food-selected', payload);
+    onFoodSelected(foodId: number) {
+      this.$emit('food-selected', foodId);
     },
-    onMealSelected(payload: { mealIndex: number }) {
-      this.$emit('meal-selected', payload);
+    onMealSelected(mealId: number) {
+      this.$emit('meal-selected', mealId);
     },
   },
 });

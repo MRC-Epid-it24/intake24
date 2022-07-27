@@ -1,5 +1,5 @@
 <template>
-  <v-list-group :value="meal.time.length > 0 ? true : false">
+  <v-list-group :value="mealTimeString.length > 0 ? true : false">
     <template v-slot:activator>
       <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal(meal.name)">
         {{ meal.name }}
@@ -11,8 +11,8 @@
         @context-menu-action="onContextMenuAction"
       ></context-menu>
       <v-list-item-action>
-        <v-list-item-action-text v-if="meal.time.length > 0">
-          {{ meal.time }}
+        <v-list-item-action-text v-if="mealTimeString.length > 0">
+          {{ mealTimeString }}
         </v-list-item-action-text>
         <v-icon x-small v-else>far fa-question-circle </v-icon>
       </v-list-item-action>
@@ -22,9 +22,12 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import ContextMenu from '../elements/ContextMenu.vue';
 import FoodItem from './FoodItem.vue';
+import type { MealState } from '@intake24/common/types';
+import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
 
 export type MealAction = 'edit-foods' | 'edit-time' | 'delete-meal';
 
@@ -34,8 +37,10 @@ export default defineComponent({
   components: { ContextMenu, FoodItem },
 
   props: {
-    meal: Object,
-    mealIndex: Number,
+    meal: {
+      type: Object as PropType<MealState>,
+      required: true,
+    },
   },
 
   data() {
@@ -60,12 +65,20 @@ export default defineComponent({
       ],
     };
   },
+
+  computed: {
+    mealTimeString(): string {
+      return this.meal.time
+        ? timeDoubleDigitsConvertor(this.meal.time.hours)
+            .concat(':')
+            .concat(timeDoubleDigitsConvertor(this.meal.time.minutes))
+        : '';
+    },
+  },
   methods: {
     chooseMeal(mealName: string) {
       this.$emit('breadcrumbMeal', mealName);
-      this.$emit('meal-selected', {
-        mealIndex: this.mealIndex,
-      });
+      this.$emit('meal-selected', this.meal.id);
     },
     chooseFood(foodName: string) {
       this.$emit('breadcrumbFood', foodName);
@@ -76,11 +89,8 @@ export default defineComponent({
         action,
       });
     },
-    onFoodSelected(foodIndex: number) {
-      this.$emit('food-selected', {
-        mealIndex: this.mealIndex,
-        foodIndex,
-      });
+    onFoodSelected(foodId: number) {
+      this.$emit('food-selected', foodId);
     },
   },
 });

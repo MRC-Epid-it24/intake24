@@ -75,22 +75,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealOptional', 'hasMeals']),
-
-    ...mapState(useSurvey, {
-      meals(state) {
-        return state.data.meals.map((meal) => ({
-          name: meal.name,
-          time: meal.time
-            ? timeDoubleDigitsConvertor(meal.time.hours)
-                .concat(':')
-                .concat(timeDoubleDigitsConvertor(meal.time.minutes))
-            : ``,
-          // FIXME: Foods is type of Encoded USer Food Data or Uswr Food Data. at the mpment FoodItem.vue component is expecting object iwth name and searchTerm properties.
-          foods: meal.foods,
-        }));
-      },
-    }),
+    ...mapState(useSurvey, ['selectedMealOptional', 'hasMeals', 'meals']),
 
     handlerComponent(): string {
       const prompt = this.currentPrompt?.prompt;
@@ -282,11 +267,11 @@ export default defineComponent({
       this.activeItem = item;
     },
 
-    async onMealSelected(payload: { mealIndex: number }) {
+    async onMealSelected(mealId: number) {
       this.setSelection({
         element: {
           type: 'meal',
-          mealIndex: payload.mealIndex,
+          mealId,
         },
         mode: 'manual',
       });
@@ -294,11 +279,12 @@ export default defineComponent({
       await this.nextPrompt();
     },
 
-    async onFoodSelected(payload: { foodId: number }) {
+    async onFoodSelected(foodId: number) {
+      console.log(foodId);
       this.setSelection({
         element: {
           type: 'food',
-          foodId: payload.foodId,
+          foodId,
         },
         mode: 'manual',
       });
