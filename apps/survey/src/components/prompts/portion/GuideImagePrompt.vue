@@ -261,12 +261,8 @@ export default defineComponent({
     },
 
     onUpdate() {
-      if (this.selectedObjectIdx == null) {
-        console.info('Selected object is Null: ', this.selectedObjectIdx);
-        return;
-      }
+      if (this.selectedObjectIdx == null) return;
       const portionSizeState = this.getCurrentState(this.selectedObjectIdx);
-      console.info('Selected with portionSize State: ', portionSizeState);
 
       const update: GuideImagePromptState = {
         portionSize: portionSizeState,
@@ -275,7 +271,6 @@ export default defineComponent({
         objectIdx: this.selectedObjectIdx + 1,
         panelOpen: this.panelOpen,
       };
-      console.info('GuideImagePrompt: Emmiting update');
       this.$emit('update', update);
     },
 
@@ -297,7 +292,6 @@ export default defineComponent({
 
     selectObject(idx: number) {
       this.selectedObjectIdx = idx;
-      console.log('Idx+1 : ', this.guideImageData.weights[idx + 1]); // weights array starts from 1
       this.onUpdate();
     },
 
@@ -331,7 +325,6 @@ export default defineComponent({
 
     updateQuantity(value: QuantityValues) {
       this.quantityValue = value;
-      console.info('Quantity updated');
       this.selectedQuantity = false;
       this.onUpdate();
     },
