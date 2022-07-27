@@ -11,6 +11,11 @@ export interface GuideImageParameters {
   'guide-image-id': string;
 }
 
+export interface DrinkScaleParameters {
+  'drinkware-image-id': string;
+  'drinkscale-image-id': string;
+}
+
 export interface UserPortionSizeMethod {
   method: PortionSizeMethodId;
   description: string;
