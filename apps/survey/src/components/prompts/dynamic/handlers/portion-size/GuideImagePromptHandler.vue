@@ -20,9 +20,12 @@ import { mapState, mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { GuideImageEncodedFood } from '@intake24/survey/stores/guide-image';
+// import type { GuideImageEncodedFood } from '@intake24/survey/stores/guide-image';
 import type { GuideImageParameters } from '@intake24/common/types/http';
-import type { GuideImagePromptState } from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
+import type {
+  GuideImagePromptState,
+  GuideImageEncodedFood,
+} from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
 import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
@@ -91,7 +94,6 @@ export default defineComponent({
       }
 
       const storedState = useFoodGuideImageState().foodState[this.selectedFoodIndex];
-      // console.log('Stored State: ', storedState);
       if (!storedState) return {};
       console.log(this.selectedMealIndex, storedState.mealId);
       return storedState.mealId === this.selectedMealIndex ? storedState : {};
@@ -105,11 +107,15 @@ export default defineComponent({
 
     isValid(state: GuideImagePromptState | null): boolean {
       if (state === null) return false;
-
+      console.info(
+        'GIHandler isValid: ',
+        state.objectIdx !== undefined && state.objectConfirmed && state.quantityConfirmed
+      );
       return state.objectIdx !== undefined && state.objectConfirmed && state.quantityConfirmed;
     },
 
     onUpdate(newState: GuideImagePromptState) {
+      console.info('GIHandler: ', newState);
       this.updateStoredState(this.encodedSelectedFood.id, this.promptId, newState);
       this.setValidationState(this.isValid(newState));
     },
@@ -119,10 +125,13 @@ export default defineComponent({
       if (
         mealIndex === undefined ||
         foodIndex === undefined ||
-        this.guideFoods.food.portionSize == null
+        this.initialStateInternal?.portionSize == null
       ) {
         console.warn(
-          'No selected meal/food, meal/food index undefined or portionSixe method is not set'
+          'No selected meal/food, meal/food index undefined or portionSixe method is not set',
+          mealIndex,
+          foodIndex,
+          this.initialStateInternal
         );
         return;
       }
@@ -131,9 +140,10 @@ export default defineComponent({
         mealIndex,
         foodIndex,
         food: {
-          portionSize: this.guideFoods.food.portionSize,
+          portionSize: this.initialStateInternal.portionSize,
         },
       });
+      this.$emit('complete');
       this.clearStoredState(this.selectedFoodIndexRequired, this.promptId);
     },
 

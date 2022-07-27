@@ -79,7 +79,7 @@
                     <v-alert color="error" v-if="hasErrors">
                       <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
                     </v-alert>
-                    <v-btn color="success" @click="submit" block>
+                    <v-btn color="success" @click="confirmQuantity" block>
                       {{ $t('portion.common.confirmButton') }}
                     </v-btn>
                   </v-col>
@@ -110,7 +110,7 @@ import type { VImg } from 'vuetify/lib';
 import { Resize } from 'vuetify/lib/directives';
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
-import type { LocaleTranslation, GuideImageState } from '@intake24/common/types';
+import type { LocaleTranslation, GuideImageState, EncodedFood } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
@@ -121,6 +121,13 @@ export interface GuideImagePromptState {
   objectConfirmed: boolean;
   quantityConfirmed: boolean;
   objectIdx: number | undefined;
+  panelOpen: number;
+}
+
+export interface GuideImageEncodedFood {
+  objectIdx: number | null;
+  food: EncodedFood;
+  mealId: number | undefined;
   panelOpen: number;
 }
 
@@ -254,8 +261,12 @@ export default defineComponent({
     },
 
     onUpdate() {
-      if (this.selectedObjectIdx == null) return;
+      if (this.selectedObjectIdx == null) {
+        console.info('Selected object is Null: ', this.selectedObjectIdx);
+        return;
+      }
       const portionSizeState = this.getCurrentState(this.selectedObjectIdx);
+      console.info('Selected with portionSize State: ', portionSizeState);
 
       const update: GuideImagePromptState = {
         portionSize: portionSizeState,
@@ -264,7 +275,7 @@ export default defineComponent({
         objectIdx: this.selectedObjectIdx + 1,
         panelOpen: this.panelOpen,
       };
-
+      console.info('GuideImagePrompt: Emmiting update');
       this.$emit('update', update);
     },
 
@@ -320,6 +331,13 @@ export default defineComponent({
 
     updateQuantity(value: QuantityValues) {
       this.quantityValue = value;
+      console.info('Quantity updated');
+      this.selectedQuantity = false;
+      this.onUpdate();
+    },
+    confirmQuantity() {
+      this.selectedQuantity = true;
+      this.panelOpen = -1;
       this.onUpdate();
     },
 
