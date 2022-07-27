@@ -92,8 +92,8 @@ export default class DynamicRecall {
     } else {
       switch (recallState.selection.element.type) {
         case 'meal': {
-          const { mealIndex } = recallState.selection.element;
-          const mealPrompt = this.promptManager.nextPreFoodsPrompt(surveyState, mealIndex);
+          const { mealId } = recallState.selection.element;
+          const mealPrompt = this.promptManager.nextPreFoodsPrompt(surveyState, mealId);
 
           // TODO: handle post-foods prompts
 
@@ -105,8 +105,8 @@ export default class DynamicRecall {
           break;
         }
         case 'food': {
-          const { mealIndex, foodIndex } = recallState.selection.element;
-          const foodPrompt = this.promptManager.nextFoodsPrompt(surveyState, mealIndex, foodIndex);
+          const { foodId } = recallState.selection.element;
+          const foodPrompt = this.promptManager.nextFoodsPrompt(surveyState, foodId);
 
           if (foodPrompt)
             return {

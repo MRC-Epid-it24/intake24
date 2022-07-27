@@ -104,13 +104,12 @@ export interface MealState {
 
 export interface SelectedMeal {
   type: 'meal';
-  mealIndex: number;
+  mealId: number;
 }
 
 export interface SelectedFood {
   type: 'food';
-  mealIndex: number;
-  foodIndex: number;
+  foodId: number;
 }
 
 export type SelectionMode = 'manual' | 'auto';
@@ -153,5 +152,5 @@ export type SurveyState = {
 };
 
 export interface RecallPromptHandler {
-  commitAnswer(): void;
+  commitAnswer(): Promise<void>;
 }

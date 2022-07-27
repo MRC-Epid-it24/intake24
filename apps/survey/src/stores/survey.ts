@@ -18,6 +18,16 @@ import { copy } from '@intake24/common/util';
 import { useLoading } from '@intake24/ui/stores';
 import { recallLog } from '@intake24/survey/stores/recall-log';
 import { surveyService } from '../services';
+import Vue from 'vue';
+import {
+  findFood,
+  findMeal,
+  getFoodIndex,
+  getFoodIndexRequired,
+  getMealIndex,
+  getMealIndexForSelection,
+  getMealIndexRequired,
+} from '@intake24/survey/stores/meal-food-utils';
 
 export type MealUndo = {
   type: 'meal';
@@ -46,6 +56,17 @@ export interface SurveyState {
   error: AxiosError | null;
 }
 
+export interface MealFoodIndex {
+  mealIndex: number;
+  foodIndex: number;
+  linkedFoodIndex: number | undefined;
+}
+
+export interface FoodIndex {
+  foodIndex: number;
+  linkedFoodIndex: number | undefined;
+}
+
 export const useSurvey = defineStore('survey', {
   state: (): SurveyState => ({
     parameters: null,
@@ -68,45 +89,40 @@ export const useSurvey = defineStore('survey', {
     hasMeals: (state) => state.data.meals.length,
     defaultSchemeMeals: (state) => state.parameters?.surveyScheme.meals,
     selection: (state) => state.data.selection,
-    selectedMealIndex: (state) => state.data.selection.element?.mealIndex,
     currentTempPromptAnswer: (state): PromptAnswer | undefined => {
       return state.data.tempPromptAnswer;
     },
-    selectedMeal: (state) => {
-      const mealIndex = state.data.selection.element?.mealIndex;
-      const { meals } = state.data;
+    selectedMealOptional: (state) => {
+      const { element } = state.data.selection;
+
+      if (element === null || element.type !== 'meal') return undefined;
+
+      const meals = state.data.meals;
+      const mealIndex = getMealIndex(meals, element.mealId);
 
       if (mealIndex === undefined) return undefined;
+
       return meals[mealIndex];
     },
+
     undoEntity: (state) => state.undo,
-    selectedFood: (state) => {
+    selectedFoodOptional: (state) => {
       const { element } = state.data.selection;
 
       if (element === null || element.type !== 'food') return undefined;
 
-      return state.data.meals[element.mealIndex].foods[element.foodIndex];
-    },
-    selectedEncodedFood: (state) => {
-      const { element } = state.data.selection;
+      const meals = state.data.meals;
 
-      if (element === null || element.type !== 'food') return undefined;
+      const foodIndex = getFoodIndex(meals, element.foodId);
 
-      const food = state.data.meals[element.mealIndex].foods[element.foodIndex];
+      if (foodIndex === undefined) return undefined;
 
-      if (food.type !== 'encoded-food') return undefined;
-
-      return food;
-    },
-    selectedFoodIndex: (state) => {
-      const { element } = state.data.selection;
-
-      if (element === null || element.type !== 'food') return undefined;
-
-      return element.foodIndex;
-    },
-    selectedFoodId(): number | undefined {
-      return this.selectedFood?.id;
+      if (foodIndex.linkedFoodIndex === undefined)
+        return meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
+      else
+        return meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods[
+          foodIndex.linkedFoodIndex
+        ];
     },
     continueButtonEnabled: (state) => {
       return state.data.continueButtonEnabled;
@@ -194,38 +210,67 @@ export const useSurvey = defineStore('survey', {
       this.data.flags.push(data);
     },
 
-    setMealTime(data: { mealIndex: number; time: MealTime }) {
+    setMealTime(data: { mealId: number; time: MealTime }) {
+      const mealIndex = getMealIndexRequired(this.data.meals, data.mealId);
+
       // Roundabout way of changing a property of object in an array so Vue can track
       // changes
-      const item = this.data.meals.splice(data.mealIndex, 1);
+      const item = this.data.meals.splice(mealIndex, 1);
       item[0].time = data.time;
-      this.data.meals.splice(data.mealIndex, 0, item[0]);
+      this.data.meals.splice(mealIndex, 0, item[0]);
     },
 
-    deleteMeal(mealIndex: number) {
-      const mealUndo: MealState[] = this.data.meals.splice(mealIndex, 1);
-      if (mealUndo.length !== 0) {
+    deleteMeal(mealId: number) {
+      /*
+      Undo system needs review & a more general solution
+
+       const mealUndo: MealState[] = this.data.meals.splice(mealIndex, 1);
+       if (mealUndo.length !== 0) {
         this.undo = { type: 'meal', index: mealIndex, value: mealUndo[0] };
+      }*/
+
+      function getAlternativeMealSelection(meals: MealState[], mealIndex: number): Selection {
+        // Try selecting next meal first
+
+        if (mealIndex < meals.length - 1) {
+          return {
+            mode: 'auto',
+            element: {
+              type: 'meal',
+              mealId: meals[mealIndex + 1].id,
+            },
+          };
+        }
+
+        // Try selecting previous meal otherwise
+
+        if (mealIndex > 0) {
+          return {
+            mode: 'auto',
+            element: {
+              type: 'meal',
+              mealId: meals[mealIndex - 1].id,
+            },
+          };
+        }
+
+        // If neither exists (i.e. only one food in the list) select nothing
+
+        return {
+          mode: 'auto',
+          element: null,
+        };
       }
-      const selectedElement = this.data.selection.element;
 
-      if (selectedElement === null) return;
+      const selectionMealIndex = getMealIndexForSelection(this.data.meals, this.data.selection);
 
-      const selectedMealIndex = selectedElement.mealIndex;
+      const mealIndex = getMealIndexRequired(this.data.meals, mealId);
 
-      if (selectedMealIndex < mealIndex) return;
-
-      if (selectedMealIndex > mealIndex) {
-        selectedElement.mealIndex -= 1;
-        return;
+      if (selectionMealIndex === mealIndex) {
+        this.data.selection = getAlternativeMealSelection(this.data.meals, mealIndex);
       }
 
-      this.data.selection.mode = 'auto';
-      selectedElement.type = 'meal'; // if a food from the deleted meal was selected make sure new selection is a meal
-
-      if (selectedElement.mealIndex === this.data.meals.length) selectedElement.mealIndex -= 1;
-
-      if (selectedElement.mealIndex < 0) this.data.selection.element = null;
+      Vue.delete(this.data.meals, mealIndex);
     },
 
     undoDeleteMeal(data: { mealIndex: number; meal: MealState }) {
@@ -247,44 +292,71 @@ export const useSurvey = defineStore('survey', {
       this.data.meals.push(newMeal);
     },
 
-    setMealFlag(data: { mealIndex: number; flag: string }) {
-      if (this.data.meals[data.mealIndex].flags.includes(data.flag)) return;
+    setMealFlag(data: { mealId: number; flag: string }) {
+      const meal = findMeal(this.data.meals, data.mealId);
 
-      this.data.meals[data.mealIndex].flags.push(data.flag);
+      if (meal.flags.includes(data.flag)) return;
+
+      meal.flags.push(data.flag);
     },
 
     setMealCustomPromptAnswer(data: {
-      mealIndex: number;
+      mealId: number;
       promptId: string;
       answer: CustomPromptAnswer;
     }) {
-      this.data.meals[data.mealIndex].customPromptAnswers = {
-        ...this.data.meals[data.mealIndex].customPromptAnswers,
+      const meal = findMeal(this.data.meals, data.mealId);
+
+      meal.customPromptAnswers = {
+        ...meal.customPromptAnswers,
         [data.promptId]: data.answer,
       };
     },
 
     setFoodCustomPromptAnswer(data: {
-      mealIndex: number;
-      foodIndex: number;
+      foodId: number;
       promptId: string;
       answer: CustomPromptAnswer;
     }) {
-      this.data.meals[data.mealIndex].foods[data.foodIndex].customPromptAnswers[data.promptId] =
-        data.answer;
+      const food = findFood(this.data.meals, data.foodId);
+
+      food.customPromptAnswers[data.promptId] = data.answer;
     },
 
-    setFoodFlag(data: { mealIndex: number; foodIndex: number; flag: string }) {
-      if (this.data.meals[data.mealIndex].foods[data.foodIndex].flags.includes(data.flag)) return;
+    setFoodFlag(data: { foodId: number; flag: string }) {
+      const food = findFood(this.data.meals, data.foodId);
 
-      this.data.meals[data.mealIndex].foods[data.foodIndex].flags.push(data.flag);
+      if (food.flags.includes(data.flag)) return;
+
+      food.flags.push(data.flag);
     },
 
-    replaceFood(data: { mealIndex: number; foodIndex: number; food: FoodState }) {
-      this.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1, data.food);
+    replaceFood(data: { foodId: number; food: FoodState }) {
+      const foodIndex = getFoodIndexRequired(this.data.meals, data.foodId);
+
+      if (foodIndex.linkedFoodIndex === undefined) {
+        this.data.meals[foodIndex.mealIndex].foods.splice(foodIndex.foodIndex, 1, data.food);
+      } else {
+        this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods.splice(
+          foodIndex.linkedFoodIndex,
+          1,
+          data.food
+        );
+      }
     },
 
-    deleteFood(data: { mealIndex: number; foodIndex: number }) {
+    updateFood(data: {
+      foodId: number;
+      update: Partial<Omit<FreeTextFood, 'type'>> | Partial<Omit<EncodedFood, 'type'>>;
+    }) {
+      const foodState = findFood(this.meals, data.foodId);
+      this.replaceFood({ foodId: data.foodId, food: { ...foodState, ...data.update } });
+    },
+
+    deleteFood(data: { foodId: number }) {
+      /*
+      Undo system needs review & a more general solution
+
       const foodUndo: FoodState[] = this.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1);
       if (foodUndo.length !== 0) {
         this.undo = {
@@ -293,55 +365,39 @@ export const useSurvey = defineStore('survey', {
           mealIndex: data.mealIndex,
           value: foodUndo[0],
         };
+      }*/
+
+      const foodIndex = getFoodIndexRequired(this.data.meals, data.foodId);
+
+      if (foodIndex.linkedFoodIndex === undefined) {
+        this.data.meals[foodIndex.mealIndex].foods.splice(foodIndex.foodIndex, 1);
+      } else {
+        this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods.splice(
+          foodIndex.linkedFoodIndex,
+          1
+        );
       }
+
+      // FIXME: update selection
+      this.data.selection = {
+        mode: 'auto',
+        element: null,
+      };
     },
 
-    updateFoodCallback(data: {
-      mealIndex: number;
-      foodIndex: number;
-      update: (state: FoodState) => void;
-    }) {
-      const foodState = this.data.meals[data.mealIndex].foods[data.foodIndex];
-
-      data.update(foodState);
-
-      const spliced = this.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1)[0];
-      this.data.meals[data.mealIndex].foods.splice(data.foodIndex, 0, spliced);
+    updateFoodCallback(data: { foodId: number; update: (state: FoodState) => FoodState }) {
+      const food = findFood(this.data.meals, data.foodId);
+      this.replaceFood({ foodId: data.foodId, food: data.update(food) });
     },
 
-    updateFood(data: {
-      mealIndex: number;
-      foodIndex: number;
-      food: Partial<Omit<FreeTextFood, 'type'>> | Partial<Omit<EncodedFood, 'type'>>;
-    }) {
-      const { mealIndex, foodIndex, food } = data;
-
-      const foodState = this.data.meals[mealIndex].foods[foodIndex];
-      this.data.meals[mealIndex].foods.splice(foodIndex, 1, { ...foodState, ...food });
+    addFood(data: { mealId: number; food: FoodState }) {
+      const mealIndex = getMealIndexRequired(this.data.meals, data.mealId);
+      this.data.meals[mealIndex].foods.push(data.food);
     },
 
-    addFood(data: { mealIndex: number; food: FoodState }) {
-      this.data.meals[data.mealIndex].foods.push(data.food);
-    },
-
-    setFoods(data: { mealIndex: number; foods: FoodState[] }) {
-      this.data.meals[data.mealIndex].foods = data.foods;
-    },
-    setTempPromptAnswer(data: PromptAnswer, updatedTempData?: Partial<PromptAnswer>) {
-      if (!data) return;
-      if (!updatedTempData) this.data.tempPromptAnswer = data;
-      else this.data.tempPromptAnswer = { ...data, ...updatedTempData };
-    },
-    clearTempPromptAnswer() {
-      this.setTempPromptAnswer({
-        response: null,
-        modified: false,
-        new: true,
-        finished: false,
-        mealIndex: undefined,
-        foodIndex: undefined,
-        prompt: undefined,
-      });
+    setFoods(data: { mealId: number; foods: FoodState[] }) {
+      const mealIndex = getMealIndexRequired(this.data.meals, data.mealId);
+      this.data.meals[mealIndex].foods = data.foods;
     },
     getNextFoodId(): number {
       return this.data.nextFoodId++;

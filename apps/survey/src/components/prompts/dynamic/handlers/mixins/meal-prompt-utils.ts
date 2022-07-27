@@ -3,25 +3,17 @@ import type { MealState } from '@intake24/common/types';
 import { useSurvey } from '@intake24/survey/stores';
 import { defineComponent } from 'vue';
 
-// export default (Vue as VueConstructor<Vue & MealPromptUtilsType>).extend({
+export function requireMeal(meal: MealState | undefined): MealState {
+  if (meal === undefined) throw new Error('Expected a meal to be selected');
+  return meal;
+}
+
 const component = defineComponent({
   computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex']),
+    ...mapState(useSurvey, ['selectedMealOptional']),
 
-    selectedMealRequired(): MealState {
-      const selectedMeal = this.selectedMeal;
-
-      if (selectedMeal === undefined) throw new Error('Expected a meal to be selected');
-
-      return selectedMeal;
-    },
-
-    selectedMealIndexRequired(): number {
-      const selectedMealIndex = this.selectedMealIndex;
-
-      if (selectedMealIndex === undefined) throw new Error('Expected a meal to be selected');
-
-      return selectedMealIndex;
+    selectedMeal(): MealState {
+      return requireMeal(this.selectedMealOptional);
     },
   },
 });

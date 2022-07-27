@@ -8,10 +8,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
 import type { BrdCrumbs } from '@intake24/survey/components/mixins/breadcrumbs';
 import breadcrumbs from '@intake24/survey/components/mixins/breadcrumbs';
-import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'RecallBreadCrumbs',
@@ -21,8 +19,6 @@ export default defineComponent({
   mixins: [breadcrumbs],
 
   computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex', 'selectedFood']),
-
     brds(): BrdCrumbs[] {
       return this.getBreadCrumbs(this.promptName).filter((el) => !el.disabled);
     },

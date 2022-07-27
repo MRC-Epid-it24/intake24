@@ -3,20 +3,6 @@ import { defineStore } from 'pinia';
 import type { ComponentType } from '@intake24/common/prompts';
 import Vue, { defineComponent } from 'vue';
 
-export interface PromptHandlerUtils<T> {
-  loadInitialState(foodOrMealId: number, promptId: string, defaultValue: T): void;
-
-  updateStoredState(foodOrMealId: number, promptId: string, newValue: T): void;
-
-  clearStoredState(foodOrMealId: number, promptId: string): void;
-
-  setCompletionState(complete: boolean): void;
-
-  initialState: T | null;
-
-  complete(): void;
-}
-
 interface FoodOrMealPromptsState<T> {
   prompts: {
     [key: number]: { [key: string]: T };
@@ -62,7 +48,7 @@ function getOrCreatePromptStateStore<T extends object>(promptType: ComponentType
   return storeDef;
 }
 
-export function createPromptHandlerMixin<T extends object>(promptType: ComponentType) {
+export function createPromptStoreMixin<T extends object>(promptType: ComponentType) {
   return defineComponent({
     data() {
       const storeDef = getOrCreatePromptStateStore<T>(promptType);

@@ -75,7 +75,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedFood', 'selectedMealIndex', 'hasMeals']),
+    ...mapState(useSurvey, ['selectedMealOptional', 'hasMeals']),
 
     ...mapState(useSurvey, {
       meals(state) {
@@ -133,11 +133,7 @@ export default defineComponent({
     },
 
     foods(): FoodState[] | [] {
-      return this.selectedMeal ? this.selectedMeal.foods : [];
-    },
-
-    mealIndex(): number | undefined {
-      return this.selectedMealIndex;
+      return this.selectedMealOptional ? this.selectedMealOptional.foods : [];
     },
 
     activePrompt(): string | LocaleTranslation {
@@ -177,11 +173,11 @@ export default defineComponent({
       this.survey.clearUndo();
     },
 
-    showMealPrompt(mealIndex: number, promptSection: MealSection, promptType: ComponentType) {
+    showMealPrompt(mealId: number, promptSection: MealSection, promptType: ComponentType) {
       this.setSelection({
         element: {
           type: 'meal',
-          mealIndex,
+          mealId,
         },
         mode: 'manual',
       });
@@ -222,20 +218,19 @@ export default defineComponent({
       };
     },
 
-    async onMealAction(payload: { action: MealAction; mealIndex: number }) {
+    async onMealAction(payload: { action: MealAction; mealId: number }) {
       // eslint-disable-next-line default-case
       switch (payload.action) {
         case 'edit-foods':
-          this.showMealPrompt(payload.mealIndex, 'preFoods', 'edit-meal-prompt');
+          this.showMealPrompt(payload.mealId, 'preFoods', 'edit-meal-prompt');
           break;
         case 'edit-time':
-          this.showMealPrompt(payload.mealIndex, 'preFoods', 'meal-time-prompt');
+          this.showMealPrompt(payload.mealId, 'preFoods', 'meal-time-prompt');
           break;
         case 'delete-meal':
-          console.log('About to delete the Meal: ', payload.mealIndex);
-          this.showMealPrompt(payload.mealIndex, 'preFoods', 'edit-meal-prompt');
-          this.deleteMeal(payload.mealIndex);
-          this.clearTempPromptAnswer();
+          console.log('About to delete the Meal: ', payload.mealId);
+          this.showMealPrompt(payload.mealId, 'preFoods', 'edit-meal-prompt');
+          this.deleteMeal(payload.mealId);
           await this.nextPrompt();
           break;
       }
@@ -299,12 +294,11 @@ export default defineComponent({
       await this.nextPrompt();
     },
 
-    async onFoodSelected(payload: { mealIndex: number; foodIndex: number }) {
+    async onFoodSelected(payload: { foodId: number }) {
       this.setSelection({
         element: {
           type: 'food',
-          mealIndex: payload.mealIndex,
-          foodIndex: payload.foodIndex,
+          foodId: payload.foodId,
         },
         mode: 'manual',
       });

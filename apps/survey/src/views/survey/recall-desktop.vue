@@ -69,10 +69,10 @@ export default defineComponent({
   },
 
   methods: {
-    onContinue() {
-      this.promptHandle?.commitAnswer();
+    async onContinue() {
       this.continueButtonEnabled = false;
-      this.nextPrompt();
+      await this.promptHandle?.commitAnswer();
+      await this.nextPrompt();
     },
 
     onValidationUpdate(answerValid: boolean) {

@@ -14,13 +14,12 @@ export default defineComponent({
   mixins: [localeContent],
 
   computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex', 'selectedFood']),
+    ...mapState(useSurvey, ['selectedMealOptional', 'selectedFoodOptional']),
   },
 
   methods: {
     // FIXME: need to return based on users locale. For now either english or localDescription
     getFood(food: FoodState): string {
-      if (!food) return '';
       if (food.type === 'free-text') return food.description;
       if (food.type === 'encoded-food')
         return food.data.localName ? food.data.englishName : food.data.localName;
@@ -28,8 +27,8 @@ export default defineComponent({
     },
 
     getBreadCrumbs(promptName: LocaleTranslation): BrdCrumbs[] {
-      const localMealName: string | null = this.selectedMeal
-        ? this.getLocaleContent(this.selectedMeal.localName)
+      const localMealName: string | null = this.selectedMealOptional
+        ? this.getLocaleContent(this.selectedMealOptional.localName)
         : null;
       return [
         {
@@ -37,7 +36,9 @@ export default defineComponent({
           disabled: !this.selectedMeal,
         },
         {
-          text: this.selectedFood ? this.getFood(this.selectedFood) : this.$t('breadcrumbs.food'),
+          text: this.selectedFoodOptional
+            ? this.getFood(this.selectedFoodOptional)
+            : this.$t('breadcrumbs.food'),
           disabled: !this.selectedFood,
         },
         {

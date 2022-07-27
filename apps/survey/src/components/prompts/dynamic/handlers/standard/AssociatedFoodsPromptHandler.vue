@@ -4,7 +4,7 @@
       promptProps,
       promptComponent,
       initialState,
-      food: selectedEncodedFood,
+      food: encodedSelectedFood,
     }"
     :continue-enabled="continueEnabled"
     @continue="$emit('continue')"
@@ -18,12 +18,15 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { AssociatedFoodsState } from '@intake24/common/types';
-import { mapState } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
+import type { AssociatedFoodsState, EncodedFood } from '@intake24/common/types';
 import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';
-import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
-import type { FoodHeader } from '@intake24/common/types/http';
+import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
+import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
+import FoodPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/food-prompt-utils';
+import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
+import { mapActions } from 'pinia';
+import { useSurvey } from '@intake24/survey/stores';
+import foodSearchService from '@intake24/survey/services/foods.service';
 
 interface AssociatedFoodPromptState {
   confirmed: boolean | undefined;
@@ -40,7 +43,11 @@ function initialPromptState(): AssociatedFoodPromptState {
 export default defineComponent({
   name: 'AssociatedFoodsPromptHandler',
 
-  mixins: [createPromptHandlerMixin<AssociatedFoodsState>('associated-foods-prompt')],
+  mixins: [
+    createPromptStoreMixin<AssociatedFoodsState>('associated-foods-prompt'),
+    FoodPromptUtils,
+    MealPromptUtils,
+  ],
 
   components: { AssociatedFoodsPrompt },
 
@@ -59,29 +66,29 @@ export default defineComponent({
     },
   },
 
-  created() {
-    const selectedFood = this.selectedEncodedFood;
+  data() {
+    return {
+      currentState: [] as AssociatedFoodPromptState[],
+    };
+  },
 
-    if (selectedFood === undefined) {
-      console.warn('Expected an encoded food to be selected at this point');
-    } else {
-      const defaultState = {
-        activePrompt: 0,
-        prompts: selectedFood.data.associatedFoodPrompts.map(() => initialPromptState()),
-      };
-      this.loadInitialState(selectedFood.id, this.promptId, defaultState);
-    }
+  created() {
+    const { encodedSelectedFood } = this;
+
+    const defaultState = {
+      activePrompt: 0,
+      prompts: encodedSelectedFood.data.associatedFoodPrompts.map(() => initialPromptState()),
+    };
+    this.loadInitialState(encodedSelectedFood.id, this.promptId, defaultState);
   },
 
   mounted() {
     this.setValidationState(this.isValid(this.initialState));
   },
 
-  computed: {
-    ...mapState(useSurvey, ['selectedEncodedFood']),
-  },
-
   methods: {
+    ...mapActions(useSurvey, ['updateFood', 'getNextFoodId']),
+
     isValid(state: AssociatedFoodsState | null): boolean {
       if (state === null) return false;
 
@@ -93,28 +100,55 @@ export default defineComponent({
     },
 
     updatePrompts(state: AssociatedFoodsState) {
-      const id = this.selectedEncodedFood?.id;
-
-      if (id === undefined) {
-        console.warn('Expected an encoded food to be selected at this point');
-        return;
-      }
-
-      this.updateStoredState(id, this.promptId, state);
-      console.log('bobozon');
+      this.updateStoredState(this.encodedSelectedFood.id, this.promptId, state);
       this.setValidationState(this.isValid(state));
+      this.currentState = state.prompts;
     },
 
-    commitAnswer(): void {
-      const id = this.selectedEncodedFood?.id;
+    async fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
+      //TODO: Show loading
 
-      if (id === undefined) {
-        console.warn('Expected an encoded food to be selected at this point');
-        return;
-      }
+      return Promise.all(
+        headers.map((header) => {
+          return foodSearchService.getData('en_GB', header.code);
+        })
+      );
+    },
 
-      this.clearStoredState(id, this.promptId);
-      console.log('bleh');
+    async commitAnswer() {
+      this.clearStoredState(this.encodedSelectedFood.id, this.promptId);
+
+      const headers: FoodHeader[] = [];
+
+      this.currentState.forEach((prompt) => {
+        if (prompt.confirmed && prompt.selectedFood !== undefined) {
+          headers.push(prompt.selectedFood);
+        }
+      });
+
+      const foodData = await this.fetchFoodData(headers);
+
+      const linkedFoods: EncodedFood[] = foodData.map((data) => {
+        return {
+          type: 'encoded-food',
+          id: this.getNextFoodId(),
+          flags: [],
+          linkedFoods: [],
+          customPromptAnswers: {},
+          data,
+          portionSizeMethodIndex: null,
+          portionSize: null,
+          associatedFoodsComplete: false,
+        };
+      });
+
+      this.updateFood({
+        foodId: this.encodedSelectedFood.id,
+        update: {
+          associatedFoodsComplete: true,
+          linkedFoods: linkedFoods,
+        },
+      });
     },
   },
 });

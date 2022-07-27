@@ -1,6 +1,7 @@
 import type { Selection } from '@intake24/common/types';
 import type PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
 import type { SurveyStore } from '../stores';
+import { getMealIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 
 export default class SelectionManager {
   private store;
@@ -12,26 +13,25 @@ export default class SelectionManager {
     this.promptManager = promptManager;
   }
 
-  private mealPromptsAvailable(mealIndex: number): boolean {
-    return this.promptManager.nextPreFoodsPrompt(this.store.$state, mealIndex) !== undefined;
+  private mealPromptsAvailable(mealId: number): boolean {
+    return this.promptManager.nextPreFoodsPrompt(this.store.$state, mealId) !== undefined;
   }
 
-  private foodPromptsAvailable(mealIndex: number, foodIndex: number): boolean {
-    return (
-      this.promptManager.nextFoodsPrompt(this.store.$state, mealIndex, foodIndex) !== undefined
-    );
+  private foodPromptsAvailable(foodId: number): boolean {
+    return this.promptManager.nextFoodsPrompt(this.store.$state, foodId) !== undefined;
   }
 
-  private tryAnyFood(mealIndex: number): Selection | undefined {
+  private tryAnyFood(mealId: number): Selection | undefined {
+    // FIXME: linked foods
     const { currentState } = this.store;
+    const mealIndex = getMealIndexRequired(currentState.meals, mealId);
 
     for (let foodIndex = 0; foodIndex < currentState.meals[mealIndex].foods.length; ++foodIndex) {
-      if (this.foodPromptsAvailable(mealIndex, foodIndex))
+      if (this.foodPromptsAvailable(currentState.meals[mealIndex].foods[foodIndex].id))
         return {
           element: {
             type: 'food',
-            mealIndex,
-            foodIndex,
+            foodId: currentState.meals[mealIndex].foods[foodIndex].id,
           },
           mode: 'auto',
         };
@@ -59,7 +59,7 @@ export default class SelectionManager {
         return {
           element: {
             type: 'meal',
-            mealIndex,
+            mealId: currentState.meals[mealIndex].id,
           },
           mode: 'auto',
         };

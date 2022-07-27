@@ -11,6 +11,13 @@ import {
 } from './portion-size-checks';
 import type { SurveyState } from '../stores';
 import { recallLog } from '../stores';
+import {
+  findFood,
+  findMeal,
+  getFoodByIndex,
+  getFoodIndexRequired,
+} from '@intake24/survey/stores/meal-food-utils';
+import type { FoodState, MealState } from '@intake24/common/types';
 
 const checkRecallNumber = (state: SurveyState, condition: Condition) => {
   if (state.user === null) {
@@ -55,39 +62,41 @@ const checkSurveyCustomConditions = (state: SurveyState, prompt: PromptQuestion)
   });
 
 const checkMealStandardConditions = (
-  state: SurveyState,
-  mealIndex: number,
+  surveyState: SurveyState,
+  mealState: MealState,
   prompt: PromptQuestion
 ): boolean => {
-  if (prompt.component === 'meal-time-prompt')
-    return state.data.meals[mealIndex].time === undefined;
+  if (prompt.component === 'meal-time-prompt') return mealState.time === undefined;
 
-  if (prompt.component === 'edit-meal-prompt')
-    return state.data.meals[mealIndex].foods.length === 0;
+  if (prompt.component === 'edit-meal-prompt') return mealState.foods.length === 0;
 
   switch (prompt.component) {
     case 'info-prompt':
-      return !state.data.meals[mealIndex].flags.includes(`${prompt.id}-acknowledged`);
+      return mealState.flags.includes(`${prompt.id}-acknowledged`);
     default:
-      return state.data.meals[mealIndex].customPromptAnswers[prompt.id] === undefined;
+      return mealState.customPromptAnswers[prompt.id] === undefined;
   }
 };
 
-const checkMealCustomConditions = (state: SurveyState, mealIndex: number, prompt: PromptQuestion) =>
+const checkMealCustomConditions = (
+  surveyState: SurveyState,
+  mealState: MealState,
+  prompt: PromptQuestion
+) =>
   prompt.props.conditions.every((condition) => {
     switch (condition.type) {
       case 'surveyPromptAnswer':
         return conditionOps[condition.op]([
           condition.value,
-          state.data.customPromptAnswers[condition.props.promptId],
+          surveyState.data.customPromptAnswers[condition.props.promptId],
         ]);
       case 'mealPromptAnswer':
         return conditionOps[condition.op]([
           condition.value,
-          state.data.meals[mealIndex].customPromptAnswers[condition.props.promptId],
+          mealState.customPromptAnswers[condition.props.promptId],
         ]);
       case 'recallNumber':
-        return checkRecallNumber(state, condition);
+        return checkRecallNumber(surveyState, condition);
       default:
         console.error(`Unexpected condition type: ${condition.type}`);
         return false;
@@ -95,19 +104,13 @@ const checkMealCustomConditions = (state: SurveyState, mealIndex: number, prompt
   });
 
 const checkFoodStandardConditions = (
-  state: SurveyState,
-  mealIndex: number,
-  foodIndex: number,
+  surveyState: SurveyState,
+  foodState: FoodState,
   prompt: PromptQuestion
 ): boolean => {
-  const selectedFood = state.data.meals[mealIndex].foods[foodIndex];
-
-  if (selectedFood === undefined)
-    throw new Error('This function must only be called when a food is selected');
-
   switch (prompt.component) {
     case 'info-prompt': {
-      if (selectedFood.flags.includes(`${prompt.id}-acknowledged`)) {
+      if (foodState.flags.includes(`${prompt.id}-acknowledged`)) {
         recallLog().promptCheck('info-prompt', false, `${prompt.id}-acknowledged flag set`);
         return false;
       }
@@ -116,7 +119,7 @@ const checkFoodStandardConditions = (
     }
 
     case 'food-search-prompt': {
-      if (selectedFood.type === 'free-text') {
+      if (foodState.type === 'free-text') {
         recallLog().promptCheck(
           'food-search-prompt',
           true,
@@ -127,13 +130,13 @@ const checkFoodStandardConditions = (
       recallLog().promptCheck(
         'food-search-prompt',
         false,
-        `Selected food entry type is ${selectedFood.type}`
+        `Selected food entry type is ${foodState.type}`
       );
       return false;
     }
 
     case 'portion-size-option-prompt': {
-      if (selectedFood.type === 'encoded-food' && selectedFood.portionSizeMethodIndex === null) {
+      if (foodState.type === 'encoded-food' && foodState.portionSizeMethodIndex === null) {
         recallLog().promptCheck(
           'portion-size-option-prompt',
           true,
@@ -144,7 +147,7 @@ const checkFoodStandardConditions = (
       recallLog().promptCheck(
         'portion-size-option-prompt',
         false,
-        selectedFood.type === 'encoded-food'
+        foodState.type === 'encoded-food'
           ? 'Portion size method already selected'
           : 'Entry type is not encoded-food'
       );
@@ -153,8 +156,8 @@ const checkFoodStandardConditions = (
 
     case 'as-served-prompt': {
       if (
-        portionSizeMethodSelected(selectedFood, 'as-served') &&
-        !asServedServingComplete(selectedFood)
+        portionSizeMethodSelected(foodState, 'as-served') &&
+        !asServedServingComplete(foodState)
       ) {
         recallLog().promptCheck(
           'as-served-prompt',
@@ -166,7 +169,7 @@ const checkFoodStandardConditions = (
       recallLog().promptCheck(
         'as-served-prompt',
         false,
-        portionSizeMethodSelected(selectedFood, 'as-served')
+        portionSizeMethodSelected(foodState, 'as-served')
           ? 'As served portion size estimation not selected'
           : 'As served portion size estimation already complete'
       );
@@ -175,8 +178,8 @@ const checkFoodStandardConditions = (
 
     case 'as-served-leftovers-prompt': {
       if (
-        portionSizeMethodSelected(selectedFood, 'as-served') &&
-        !asServedLeftoversComplete(selectedFood)
+        portionSizeMethodSelected(foodState, 'as-served') &&
+        !asServedLeftoversComplete(foodState)
       ) {
         recallLog().promptCheck(
           'as-served-leftovers-prompt',
@@ -188,7 +191,7 @@ const checkFoodStandardConditions = (
       recallLog().promptCheck(
         'as-served-leftovers-prompt',
         false,
-        portionSizeMethodSelected(selectedFood, 'as-served')
+        portionSizeMethodSelected(foodState, 'as-served')
           ? 'As served leftovers estimation already complete'
           : 'As served portion size estimation not selected'
       );
@@ -196,10 +199,7 @@ const checkFoodStandardConditions = (
     }
 
     case 'guide-image-prompt': {
-      if (
-        portionSizeMethodSelected(selectedFood, 'guide-image') &&
-        !guideImageComplete(selectedFood)
-      ) {
+      if (portionSizeMethodSelected(foodState, 'guide-image') && !guideImageComplete(foodState)) {
         recallLog().promptCheck(
           'guide-image-prompt',
           true,
@@ -210,7 +210,7 @@ const checkFoodStandardConditions = (
       recallLog().promptCheck(
         'guide-image-prompt',
         false,
-        portionSizeMethodSelected(selectedFood, 'guide-image')
+        portionSizeMethodSelected(foodState, 'guide-image')
           ? 'Guide image estimation already complete'
           : 'Guide image estimation not selected'
       );
@@ -219,8 +219,8 @@ const checkFoodStandardConditions = (
 
     case 'standard-portion-prompt': {
       if (
-        portionSizeMethodSelected(selectedFood, 'standard-portion') &&
-        !standardPortionComplete(selectedFood)
+        portionSizeMethodSelected(foodState, 'standard-portion') &&
+        !standardPortionComplete(foodState)
       ) {
         recallLog().promptCheck(
           'standard-portion-prompt',
@@ -232,7 +232,7 @@ const checkFoodStandardConditions = (
       recallLog().promptCheck(
         'standard-portion-prompt',
         false,
-        portionSizeMethodSelected(selectedFood, 'standard-portion')
+        portionSizeMethodSelected(foodState, 'standard-portion')
           ? 'Standard portion estimation already complete'
           : 'Standard portion estimation not selected'
       );
@@ -240,16 +240,15 @@ const checkFoodStandardConditions = (
     }
 
     case 'associated-foods-prompt': {
-      if (selectedFood.type !== 'encoded-food') return false;
+      if (foodState.type !== 'encoded-food') return false;
 
       return (
-        selectedFood.data.associatedFoodPrompts.length !== 0 &&
-        !selectedFood.associatedFoodsComplete
+        foodState.data.associatedFoodPrompts.length !== 0 && !foodState.associatedFoodsComplete
       );
     }
 
     default: {
-      if (selectedFood.customPromptAnswers[prompt.id] === undefined) {
+      if (foodState.customPromptAnswers[prompt.id] === undefined) {
         recallLog().promptCheck(
           prompt.component,
           true,
@@ -268,9 +267,9 @@ const checkFoodStandardConditions = (
 };
 
 const checkFoodCustomConditions = (
-  state: SurveyState,
-  mealIndex: number,
-  foodIndex: number,
+  surveyState: SurveyState,
+  mealState: MealState,
+  foodState: FoodState,
   prompt: PromptQuestion
 ) =>
   prompt.props.conditions.every((condition) => {
@@ -278,22 +277,20 @@ const checkFoodCustomConditions = (
       case 'surveyPromptAnswer':
         return conditionOps[condition.op]([
           condition.value,
-          state.data.customPromptAnswers[condition.props.promptId],
+          surveyState.data.customPromptAnswers[condition.props.promptId],
         ]);
       case 'mealPromptAnswer':
         return conditionOps[condition.op]([
           condition.value,
-          state.data.meals[mealIndex].customPromptAnswers[condition.props.promptId],
+          mealState.customPromptAnswers[condition.props.promptId],
         ]);
       case 'foodPromptAnswer':
         return conditionOps[condition.op]([
           condition.value,
-          state.data.meals[mealIndex].foods[foodIndex].customPromptAnswers[
-            condition.props.promptId
-          ],
+          foodState.customPromptAnswers[condition.props.promptId],
         ]);
       case 'recallNumber':
-        return checkRecallNumber(state, condition);
+        return checkRecallNumber(surveyState, condition);
       default:
         console.error(`Unexpected condition type: ${condition.type}`);
         return false;
@@ -326,24 +323,26 @@ export default class PromptManager {
     return this.scheme.questions[section].find((question) => question.component === type);
   }
 
-  nextPreFoodsPrompt(state: SurveyState, mealIndex: number): PromptQuestion | undefined {
+  nextPreFoodsPrompt(state: SurveyState, mealId: number): PromptQuestion | undefined {
+    const mealState = findMeal(state.data.meals, mealId);
+
     return this.scheme.questions.meals.preFoods.find((question) => {
       return (
-        checkMealStandardConditions(state, mealIndex, question) &&
-        checkMealCustomConditions(state, mealIndex, question)
+        checkMealStandardConditions(state, mealState, question) &&
+        checkMealCustomConditions(state, mealState, question)
       );
     });
   }
 
-  nextFoodsPrompt(
-    state: SurveyState,
-    mealIndex: number,
-    foodIndex: number
-  ): PromptQuestion | undefined {
+  nextFoodsPrompt(state: SurveyState, foodId: number): PromptQuestion | undefined {
+    const foodIndex = getFoodIndexRequired(state.data.meals, foodId);
+    const foodState = getFoodByIndex(state.data.meals, foodIndex);
+    const mealState = state.data.meals[foodIndex.mealIndex];
+
     return this.scheme.questions.meals.foods.find((question) => {
       return (
-        checkFoodStandardConditions(state, mealIndex, foodIndex, question) &&
-        checkFoodCustomConditions(state, mealIndex, foodIndex, question)
+        checkFoodStandardConditions(state, foodState, question) &&
+        checkFoodCustomConditions(state, mealState, foodState, question)
       );
     });
   }

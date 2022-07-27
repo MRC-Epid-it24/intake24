@@ -18,7 +18,10 @@ import type { MealTime } from '@intake24/common/types';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
-import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
+import MealPromptUtils, {
+  requireMeal,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 
 const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minutes}`;
 
@@ -27,7 +30,7 @@ export default defineComponent({
 
   components: { MealTimePrompt },
 
-  mixins: [createPromptHandlerMixin<never>('meal-time-prompt')],
+  mixins: [createPromptStoreMixin<never>('meal-time-prompt'), MealPromptUtils],
 
   props: {
     promptProps: {
@@ -49,21 +52,16 @@ export default defineComponent({
 
   data() {
     const store = useSurvey();
+    const selectedMeal = requireMeal(store.selectedMealOptional);
 
-    if (!store.selectedMeal) throw new Error('A meal must be selected');
-
-    const initialTime = store.selectedMeal.time
-      ? mealTimeToString(store.selectedMeal.time)
-      : mealTimeToString(store.selectedMeal.defaultTime);
+    const initialTime = selectedMeal.time
+      ? mealTimeToString(selectedMeal.time)
+      : mealTimeToString(selectedMeal.defaultTime);
 
     return {
       initialTime,
       currentTime: initialTime,
     };
-  },
-
-  computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex', 'selectedFoodIndex']),
   },
 
   methods: {
@@ -74,22 +72,13 @@ export default defineComponent({
     },
 
     onRemoveMeal() {
-      if (this.selectedMealIndex === undefined) {
-        console.warn('No selected meal, meal index undefined');
-        return;
-      }
-
-      this.deleteMeal(this.selectedMealIndex);
+      this.deleteMeal(this.selectedMeal.id);
       this.$emit('complete');
     },
 
-    commitAnswer() {
-      if (this.selectedMealIndex === undefined) {
-        console.warn('No selected meal, meal index undefined');
-        return;
-      }
+    async commitAnswer() {
       this.setMealTime({
-        mealIndex: this.selectedMealIndex,
+        mealId: this.selectedMeal.id,
         time: parseMealTime(this.currentTime),
       });
     },

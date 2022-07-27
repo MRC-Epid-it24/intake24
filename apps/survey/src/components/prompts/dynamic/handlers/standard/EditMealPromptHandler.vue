@@ -23,7 +23,7 @@ import { mapActions, mapState } from 'pinia';
 import type { EditMealPromptType } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
 import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 
 interface EditMealState {
@@ -33,7 +33,7 @@ interface EditMealState {
 export default defineComponent({
   name: 'EditMealPromptHandler',
 
-  mixins: [MealPromptUtils, createPromptHandlerMixin<EditMealState>('edit-meal-prompt')],
+  mixins: [MealPromptUtils, createPromptStoreMixin<EditMealState>('edit-meal-prompt')],
 
   components: { EditMealPrompt },
 
@@ -59,13 +59,15 @@ export default defineComponent({
   },
 
   created() {
-    this.loadInitialState(this.selectedMealRequired.id, this.promptId, {
-      foods: this.selectedMealRequired.foods,
+    const selectedMeal = this.selectedMeal;
+
+    this.loadInitialState(selectedMeal.id, this.promptId, {
+      foods: selectedMeal.foods,
     });
   },
 
   computed: {
-    ...mapState(useSurvey, ['defaultSchemeMeals', 'selectedMeal', 'selectedMealIndex']),
+    ...mapState(useSurvey, ['defaultSchemeMeals']),
   },
 
   mounted() {
@@ -76,20 +78,20 @@ export default defineComponent({
     ...mapActions(useSurvey, ['setFoods', 'deleteMeal']),
 
     onUpdate(foodList: FoodState[]) {
-      this.updateStoredState(this.selectedMealRequired.id, this.promptId, { foods: foodList });
+      this.updateStoredState(this.selectedMeal.id, this.promptId, { foods: foodList });
       this.setValidationState(foodList.length > 0);
     },
 
     onDeleteMeal() {
-      this.deleteMeal(this.selectedMealIndexRequired);
-      this.clearStoredState(this.selectedMealRequired.id, this.promptId);
+      this.deleteMeal(this.selectedMeal.id);
+      this.clearStoredState(this.selectedMeal.id, this.promptId);
     },
 
-    commitAnswer() {
+    async commitAnswer() {
       const foods = this.prompt!.foodsDrinks();
 
-      this.setFoods({ mealIndex: this.selectedMealIndexRequired, foods });
-      this.clearStoredState(this.selectedMealRequired.id, this.promptId);
+      this.setFoods({ mealId: this.selectedMeal.id, foods });
+      this.clearStoredState(this.selectedMeal.id, this.promptId);
     },
   },
 });

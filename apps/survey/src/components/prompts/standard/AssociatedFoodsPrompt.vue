@@ -29,7 +29,7 @@
                     >{{ prompt.selectedFood.description }}</v-card-title
                   >
                   <v-card-actions>
-                    <v-btn @click="prompt.selectedFood = undefined">Select a different food </v-btn>
+                    <v-btn @click="onSelectDifferentFood(prompt)">Select a different food </v-btn>
                   </v-card-actions>
                 </v-card>
                 <v-expand-transition>
@@ -68,7 +68,11 @@ import Vue from 'vue';
 import type { PropType } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import type { AssociatedFoodsState, EncodedFood } from '@intake24/common/types';
+import type {
+  AssociatedFoodPromptState,
+  AssociatedFoodsState,
+  EncodedFood,
+} from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import FoodBrowser from '@intake24/survey/components/elements/FoodBrowser.vue';
 
@@ -137,12 +141,17 @@ export default defineComponent({
   },
 
   methods: {
+    onSelectDifferentFood(prompt: AssociatedFoodPromptState) {
+      prompt.selectedFood = undefined;
+      this.updatePrompts();
+    },
+
     onFoodSelected(food: FoodHeader, promptIndex: number): void {
-      console.log(food.description);
       Vue.set(this.prompts, promptIndex, {
         confirmed: true,
         selectedFood: food,
       });
+      this.updatePrompts();
     },
 
     updatePrompts() {

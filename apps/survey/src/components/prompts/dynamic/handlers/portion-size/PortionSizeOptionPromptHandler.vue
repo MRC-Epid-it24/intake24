@@ -20,7 +20,7 @@ import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion
 import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import FoodPromptUtils from '../mixins/food-prompt-utils';
-import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
 import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 
 interface PortionSizeOptionState {
@@ -35,7 +35,7 @@ export default defineComponent({
   mixins: [
     FoodPromptUtils,
     MealPromptUtils,
-    createPromptHandlerMixin<PortionSizeOptionState>('portion-size-option-prompt'),
+    createPromptStoreMixin<PortionSizeOptionState>('portion-size-option-prompt'),
   ],
 
   props: {
@@ -76,7 +76,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateFood']),
+    ...mapActions(useSurvey, ['replaceFood']),
 
     onUpdate(option: number | null) {
       this.updateStoredState(this.encodedSelectedFood.id, this.promptId, { option });
@@ -85,10 +85,11 @@ export default defineComponent({
     },
 
     commitAnswer() {
-      this.updateFood({
-        mealIndex: this.selectedMealIndexRequired,
-        foodIndex: this.selectedFoodIndexRequired,
-        food: { portionSizeMethodIndex: this.option },
+      const { encodedSelectedFood } = this;
+
+      this.replaceFood({
+        foodId: encodedSelectedFood.id,
+        food: { ...encodedSelectedFood, portionSizeMethodIndex: this.option },
       });
 
       this.clearStoredState(this.encodedSelectedFood.id, this.promptId);

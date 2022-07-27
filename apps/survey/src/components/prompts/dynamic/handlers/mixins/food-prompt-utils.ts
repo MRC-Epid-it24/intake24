@@ -1,25 +1,24 @@
 import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
-import type { EncodedFood, LocaleTranslation } from '@intake24/common/types';
+import type { EncodedFood, FoodState, LocaleTranslation } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
 
 const mixin = defineComponent({
   computed: {
-    ...mapState(useSurvey, ['selectedFood', 'selectedMealIndex', 'selectedFoodIndex']),
+    ...mapState(useSurvey, ['selectedFoodOptional']),
 
-    selectedFoodIndexRequired(): number {
-      const foodIndex = this.selectedFoodIndex;
+    selectedFood(): FoodState {
+      const { selectedFoodOptional } = this;
 
-      if (foodIndex === undefined) throw new Error('A food must be selected at this point');
+      if (selectedFoodOptional === undefined)
+        throw new Error('This prompt requires a food to be selected');
 
-      return foodIndex;
+      return selectedFoodOptional;
     },
 
     encodedSelectedFood(): EncodedFood {
       const { selectedFood } = this;
-
-      if (selectedFood === undefined) throw new Error('This prompt requires a food to be selected');
 
       if (selectedFood.type !== 'encoded-food')
         throw new Error('This selected food must be an encoded food');

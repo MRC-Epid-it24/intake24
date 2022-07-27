@@ -1,7 +1,7 @@
 <template>
   <guide-image-prompt
     ref="promptHandleChild"
-    v-bind="{ foodName, promptProps, selectedFoodIndex, selectedMealIndex }"
+    v-bind="{ foodName, promptProps }"
     :guide-image-id="parameters['guide-image-id']"
     :prompt-component="promptComponent"
     :conversionFactor="selectedPortionSize.conversionFactor"
@@ -16,22 +16,26 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { mapState, mapActions } from 'pinia';
+import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import type { BasePromptProps } from '@intake24/common/prompts';
-// import type { GuideImageEncodedFood } from '@intake24/survey/stores/guide-image';
 import type { GuideImageParameters } from '@intake24/common/types/http';
 import type { GuideImagePromptState } from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
-import foodPromptUtils from '../mixins/food-prompt-utils';
-import { createPromptHandlerMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-utils';
+import FoodPromptUtils from '../mixins/food-prompt-utils';
+import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
+import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 
 export default defineComponent({
   name: 'GuideImagePromptHandler',
 
   components: { GuideImagePrompt },
 
-  mixins: [foodPromptUtils, createPromptHandlerMixin<GuideImagePromptState>('guide-image-prompt')],
+  mixins: [
+    FoodPromptUtils,
+    MealPromptUtils,
+    createPromptStoreMixin<GuideImagePromptState>('guide-image-prompt'),
+  ],
 
   props: {
     promptProps: {
@@ -68,14 +72,13 @@ export default defineComponent({
     this.setValidationState(this.isValid(this.initialState));
   },
 
-  computed: {
-    ...mapState(useSurvey, [
-      'currentTempPromptAnswer',
-      'selectedFood',
-      'selectedMealIndex',
-      'selectedFoodIndex',
-    ]),
+  data() {
+    return {
+      currentState: null as GuideImagePromptState | null,
+    };
+  },
 
+  computed: {
     parameters(): GuideImageParameters {
       if (this.selectedPortionSize.method !== 'guide-image')
         throw new Error('Selected portion size method must be "guide-image"');
@@ -89,37 +92,27 @@ export default defineComponent({
 
     isValid(state: GuideImagePromptState | null): boolean {
       if (state === null) return false;
+
       return state.objectIdx !== undefined && state.objectConfirmed && state.quantityConfirmed;
     },
 
     onUpdate(newState: GuideImagePromptState) {
+      this.currentState = newState;
       this.updateStoredState(this.encodedSelectedFood.id, this.promptId, newState);
       this.setValidationState(this.isValid(newState));
     },
 
-    commitAnswer() {
-      const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
-      if (
-        mealIndex === undefined ||
-        foodIndex === undefined ||
-        this.initialStateInternal?.portionSize == null
-      ) {
-        console.warn(
-          'No selected meal/food, meal/food index undefined or portionSixe method is not set',
-          mealIndex,
-          foodIndex,
-          this.initialStateInternal
-        );
-        return;
-      }
+    async commitAnswer() {
+      if (this.currentState === null) throw new Error('currentState is null');
+
       this.updateFood({
-        mealIndex,
-        foodIndex,
-        food: {
-          portionSize: this.initialStateInternal.portionSize,
+        foodId: this.selectedFood.id,
+        update: {
+          portionSize: this.currentState.portionSize,
         },
       });
-      this.clearStoredState(this.selectedFoodIndexRequired, this.promptId);
+
+      this.clearStoredState(this.selectedFood.id, this.promptId);
     },
   },
 });
