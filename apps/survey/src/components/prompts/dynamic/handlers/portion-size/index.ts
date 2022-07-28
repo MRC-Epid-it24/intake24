@@ -1,4 +1,5 @@
 import GuideImagePromptHandler from './GuideImagePromptHandler.vue';
+import DrinkScalePromptHandler from './DrinkScalePromptHandler.vue';
 import StandardPortionPromptHandler from './StandardPortionPromptHandler.vue';
 import AsServedPromptHandler from './AsServedPromptHandler.vue';
 import PortionSizeOptionPromptHandler from './PortionSizeOptionPromptHandler.vue';
@@ -10,4 +11,5 @@ export default {
   AsServedLeftoversPromptHandler,
   GuideImagePromptHandler,
   StandardPortionPromptHandler,
+  DrinkScalePromptHandler,
 };

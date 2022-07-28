@@ -12,8 +12,9 @@ export interface GuideImageParameters {
 }
 
 export interface DrinkScaleParameters {
-  'drinkware-image-id': string;
-  'drinkscale-image-id': string;
+  'drinkware-id': string;
+  'initial-fill-level': string;
+  'skip-fill-level': string;
 }
 
 export interface UserPortionSizeMethod {

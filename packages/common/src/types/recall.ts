@@ -33,6 +33,21 @@ export interface GuideImageState extends PortionSizeStateBase {
   quantity: QuantityValues;
 }
 
+export interface DrinkScaleState extends PortionSizeStateBase {
+  method: 'drink-scale';
+  object: SelectedGuideImageObject | null;
+  leftoversLevel: number;
+  initialFillLevel: string;
+  fillLevel: number;
+  skipFillLevel: string;
+  imageUrl: string;
+  leftoversWeight: number;
+  drinkwareId: string;
+  containerIndex: number;
+  leftovers: boolean;
+  servingWeight: number;
+}
+
 export interface StandardPortionUnit {
   name: string;
   weight: number;
@@ -45,7 +60,11 @@ export interface StandardPortionState extends PortionSizeStateBase {
   quantity: QuantityValues | null;
 }
 
-export type PortionSizeState = AsServedState | GuideImageState | StandardPortionState;
+export type PortionSizeState =
+  | AsServedState
+  | GuideImageState
+  | StandardPortionState
+  | DrinkScaleState;
 
 export interface AssociatedFoodPromptState {
   confirmed: boolean | undefined;
