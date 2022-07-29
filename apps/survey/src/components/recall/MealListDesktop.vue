@@ -100,7 +100,7 @@ export default defineComponent({
     chooseFoodUp(e: string) {
       this.$emit('breadcrimbFoodUp', e);
     },
-    onMealAction(payload: { mealIndex: number; action: string }) {
+    onMealAction(payload: { mealId: number; action: string }) {
       this.$emit('meal-action', payload);
     },
     onRecallAction(action: string) {

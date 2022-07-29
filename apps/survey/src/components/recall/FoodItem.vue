@@ -1,9 +1,9 @@
 <template>
   <v-list v-if="foods.length > 0" :class="{ 'pa-0': linked }">
     <div v-for="(food, i) in foods" :key="i" :class="{ 'ml-4': linked }">
-      <v-list-item link>
-        <v-list-item-title class="text-wrap" @click="emitFoodSelected(food.id)">
-          {{ foodDisplayName(food) }}
+      <v-list-item class="ma-0 small" link>
+        <v-list-item-title class="text-wrap" @click="emitFoodSelected(food.id)"
+          ><span :class="{ 'linked-food-title': linked }"> {{ foodDisplayName(food) }}</span>
         </v-list-item-title>
         <v-list-item-action>
           <v-icon x-small v-if="food.code" color="green darken-2">fa-check</v-icon>
@@ -16,6 +16,11 @@
     </div>
   </v-list>
 </template>
+
+<style>
+.linked-food-title {
+}
+</style>
 
 <script lang="ts">
 import type { PropType } from 'vue';

@@ -85,7 +85,7 @@ export default defineComponent({
     },
     onContextMenuAction(action: string) {
       this.$emit('meal-action', {
-        mealIndex: this.mealIndex,
+        mealId: this.meal.id,
         action,
       });
     },
