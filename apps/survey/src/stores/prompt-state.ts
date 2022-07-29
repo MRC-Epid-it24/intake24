@@ -7,8 +7,8 @@
 
 import { defineStore } from 'pinia';
 
-import { FoodState } from '@intake24/common/types';
-import { FoodHeader } from '@intake24/common/types/http';
+import type { FoodState } from '@intake24/common/types';
+import type { FoodHeader } from '@intake24/common/types/http';
 
 export interface AssociatedFoodPromptState {
   confirmed: boolean | undefined;
