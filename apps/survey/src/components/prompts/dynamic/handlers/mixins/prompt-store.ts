@@ -2,6 +2,7 @@ import type { StoreDefinition } from 'pinia';
 import { defineStore } from 'pinia';
 import type { ComponentType } from '@intake24/common/prompts';
 import Vue, { defineComponent } from 'vue';
+import { size } from 'lodash';
 
 interface FoodOrMealPromptsState<T> {
   prompts: {
@@ -15,12 +16,14 @@ function getOrCreatePromptStateStore<T extends object>(promptType: ComponentType
   let storeDef = stores.get(promptType);
 
   if (storeDef === undefined) {
+    const storageKey = `${import.meta.env.VITE_APP_PREFIX ?? ''}${promptType}-state`;
+
     storeDef = defineStore(`${promptType}-state`, {
       state: (): FoodOrMealPromptsState<T> => ({
         prompts: {},
       }),
       persist: {
-        key: `${import.meta.env.VITE_APP_PREFIX ?? ''}${promptType}-state`,
+        key: storageKey,
       },
       actions: {
         updateState(foodOrMealId: number, promptId: string, data: T) {
@@ -33,11 +36,12 @@ function getOrCreatePromptStateStore<T extends object>(promptType: ComponentType
           };
         },
         clearState(foodOrMealId: number, promptId: string) {
-          console.log('CLEAR STATE');
           Vue.delete(this.prompts[foodOrMealId], promptId);
           this.prompts = Object.fromEntries(
             Object.entries(this.prompts).filter((e) => Object.keys(e[1]).length !== 0)
           );
+          // Don't clog local storage with empty entries
+          if (size(this.prompts) === 0) localStorage.removeItem(storageKey);
         },
       },
     });
