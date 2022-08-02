@@ -2,18 +2,12 @@ import type { Request, Response } from 'express';
 import type { User } from '@intake24/db';
 import { UserPassword } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller } from '../controller';
 import { ValidationError } from '../../errors';
 
-export type UserProfileController = Controller<'updatePassword'>;
-
-export default ({
+const userProfileController = ({
   adminUserService,
   authenticationService,
-}: Pick<
-  IoC,
-  'adminUserService' | 'authenticationService' | 'surveyService' | 'userService'
->): UserProfileController => {
+}: Pick<IoC, 'adminUserService' | 'authenticationService'>) => {
   const updatePassword = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { id } = req.user as User;
     const { passwordCurrent, password } = req.body;
@@ -33,3 +27,7 @@ export default ({
 
   return { updatePassword };
 };
+
+export default userProfileController;
+
+export type UserProfileController = ReturnType<typeof userProfileController>;

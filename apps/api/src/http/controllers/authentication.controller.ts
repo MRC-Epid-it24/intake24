@@ -3,20 +3,15 @@ import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { Tokens } from '@intake24/api/services/core/auth';
-import type { Controller } from './controller';
 
-export type AuthenticationController = Controller<
-  'emailLogin' | 'aliasLogin' | 'tokenLogin' | 'refresh' | 'logout'
->;
-
-export default ({
+const authenticationController = ({
   authenticationService,
   jwtRotationService,
   securityConfig,
 }: Pick<
   IoC,
   'authenticationService' | 'jwtRotationService' | 'mfaProvider' | 'securityConfig'
->): AuthenticationController => {
+>) => {
   /**
    * Successful login response helper
    * - attach refresh token as secure cookie
@@ -87,3 +82,7 @@ export default ({
     logout,
   };
 };
+
+export default authenticationController;
+
+export type AuthenticationController = ReturnType<typeof authenticationController>;

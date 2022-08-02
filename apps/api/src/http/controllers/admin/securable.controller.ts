@@ -13,19 +13,14 @@ import type {
   UpdateSecurableOwnerRequest,
 } from '@intake24/common/types/http/admin';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
-import type { Controller } from '../controller';
 
-export type SecurableController = Controller<
-  'browse' | 'store' | 'update' | 'destroy' | 'availableUsers' | 'owner'
->;
-
-export default ({
+const securableController = ({
   securable,
   ioc: { adminUserService },
 }: {
   ioc: IoC;
   securable: ModelStatic<Securable>;
-}): SecurableController => {
+}) => {
   const securableType = securable.name;
   if (!isSecurableType(securableType)) throw Error('Invalid securable type');
 
@@ -233,3 +228,7 @@ export default ({
     owner,
   };
 };
+
+export default securableController;
+
+export type SecurableController = ReturnType<typeof securableController>;

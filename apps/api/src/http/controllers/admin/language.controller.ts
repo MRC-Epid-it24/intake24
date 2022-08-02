@@ -9,11 +9,8 @@ import type { PaginateQuery } from '@intake24/db';
 import { Language } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller, CrudActions } from '../controller';
 
-export type LanguageController = Controller<CrudActions | 'getTranslations' | 'updateTranslations'>;
-
-export default ({ languageService }: Pick<IoC, 'languageService'>): LanguageController => {
+const languageController = ({ languageService }: Pick<IoC, 'languageService'>) => {
   const entry = async (
     req: Request<{ languageId: string }>,
     res: Response<LanguageEntry>
@@ -122,3 +119,7 @@ export default ({ languageService }: Pick<IoC, 'languageService'>): LanguageCont
     updateTranslations,
   };
 };
+
+export default languageController;
+
+export type LanguageController = ReturnType<typeof languageController>;

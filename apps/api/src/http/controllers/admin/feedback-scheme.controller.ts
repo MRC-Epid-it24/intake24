@@ -24,16 +24,9 @@ import {
 } from '@intake24/common/types/models';
 import { kebabCase } from '@intake24/common/util';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller, CrudActions } from '../controller';
-import type { SecurableController } from './securable.controller';
 import securableController from './securable.controller';
 
-export interface FeedbackSchemeController
-  extends Controller<CrudActions | 'patch' | 'put' | 'copy'> {
-  securables: SecurableController;
-}
-
-export default (ioc: IoC): FeedbackSchemeController => {
+const feedbackSchemeController = (ioc: IoC) => {
   const getAndCheckAccess = async (
     req: Request<{ feedbackSchemeId: string }>,
     action: string,
@@ -239,3 +232,7 @@ export default (ioc: IoC): FeedbackSchemeController => {
     securables: securableController({ ioc, securable: FeedbackScheme }),
   };
 };
+
+export default feedbackSchemeController;
+
+export type FeedbackSchemeController = ReturnType<typeof feedbackSchemeController>;

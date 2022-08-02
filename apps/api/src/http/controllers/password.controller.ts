@@ -2,15 +2,12 @@ import type { Request, Response } from 'express';
 import { Op, User, UserPasswordReset } from '@intake24/db';
 import { ValidationError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller } from './controller';
 
-export type PasswordController = Controller<'request' | 'reset'>;
-
-export default ({
+const passwordController = ({
   adminUserService,
   scheduler,
   securityConfig,
-}: Pick<IoC, 'adminUserService' | 'securityConfig' | 'scheduler'>): PasswordController => {
+}: Pick<IoC, 'adminUserService' | 'securityConfig' | 'scheduler'>) => {
   const request = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { email } = req.body;
     const userAgent = req.headers['user-agent'];
@@ -46,3 +43,7 @@ export default ({
 
   return { request, reset };
 };
+
+export default passwordController;
+
+export type PasswordController = ReturnType<typeof passwordController>;

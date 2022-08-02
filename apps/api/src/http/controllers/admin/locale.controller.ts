@@ -4,11 +4,8 @@ import type { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/
 import type { PaginateQuery } from '@intake24/db';
 import { FoodsLocale, Language, SystemLocale } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import type { Controller, CrudActions } from '../controller';
 
-export type LocaleController = Controller<CrudActions>;
-
-export default (): LocaleController => {
+const localeController = () => {
   const entry = async (
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
@@ -132,3 +129,7 @@ export default (): LocaleController => {
     refs,
   };
 };
+
+export default localeController;
+
+export type LocaleController = ReturnType<typeof localeController>;

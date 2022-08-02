@@ -1,12 +1,9 @@
 import type { Request, Response } from 'express';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller } from './controller';
 
-export type CategoriesController = Controller<'browse' | 'browseRoot'>;
-
-export default ({
+const categoriesController = ({
   categoryContentsService,
-}: Pick<IoC, 'categoryContentsService'>): CategoriesController => {
+}: Pick<IoC, 'categoryContentsService'>) => {
   const browseRoot = async (req: Request, res: Response): Promise<void> => {
     const { localeId, code } = req.params;
 
@@ -43,3 +40,7 @@ export default ({
     browseRoot,
   };
 };
+
+export default categoriesController;
+
+export type CategoriesController = ReturnType<typeof categoriesController>;

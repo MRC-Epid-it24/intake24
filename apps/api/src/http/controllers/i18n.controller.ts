@@ -5,11 +5,8 @@ import { Language, LanguageTranslation } from '@intake24/db';
 import type { LocaleMessageObject } from '@intake24/i18n';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
-import type { Controller } from './controller';
 
-export type UserI18nController = Controller<'browse' | 'entry'>;
-
-export default (): UserI18nController => {
+const userI18nController = () => {
   const browse = async (req: Request, res: Response<I18nLanguageListEntry[]>): Promise<void> => {
     const languages = await Language.scope('list').findAll();
 
@@ -54,3 +51,7 @@ export default (): UserI18nController => {
 
   return { browse, entry };
 };
+
+export default userI18nController;
+
+export type UserI18nController = ReturnType<typeof userI18nController>;

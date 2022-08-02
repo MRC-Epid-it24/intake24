@@ -2,16 +2,11 @@ import type { Request, Response } from 'express';
 import type { IoC } from '@intake24/api/ioc';
 import { InvalidIdError } from '@intake24/api/services/foods';
 import { NotFoundError } from '@intake24/api/http/errors';
-import type { Controller } from './controller';
 
-export type FoodController = Controller<
-  'entry' | 'entryWithSource' | 'brands' | 'associatedFoods' | 'composition'
->;
-
-export default ({
+const foodController = ({
   foodDataService,
   imagesBaseUrl,
-}: Pick<IoC, 'foodDataService' | 'imagesBaseUrl'>): FoodController => {
+}: Pick<IoC, 'foodDataService' | 'imagesBaseUrl'>) => {
   const entry = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
 
@@ -59,3 +54,7 @@ export default ({
     composition,
   };
 };
+
+export default foodController;
+
+export type FoodController = ReturnType<typeof foodController>;

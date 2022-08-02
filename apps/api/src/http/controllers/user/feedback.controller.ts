@@ -3,14 +3,11 @@ import type { User } from '@intake24/db';
 import { FeedbackScheme, Survey } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import type { Controller } from '../controller';
 
-export type UserFeedbackController = Controller<'download' | 'email'>;
-
-export default ({
+const userFeedbackController = ({
   feedbackService,
   scheduler,
-}: Pick<IoC, 'feedbackService' | 'scheduler'>): UserFeedbackController => {
+}: Pick<IoC, 'feedbackService' | 'scheduler'>) => {
   const download = async (
     req: Request<any, any, any, { survey: string; submissions?: string[] }>,
     res: Response<Buffer>
@@ -56,3 +53,7 @@ export default ({
 
   return { download, email };
 };
+
+export default userFeedbackController;
+
+export type UserFeedbackController = ReturnType<typeof userFeedbackController>;

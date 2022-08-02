@@ -11,19 +11,8 @@ import type { User } from '@intake24/db';
 import { FeedbackScheme, Survey, SurveyScheme } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller } from './controller';
 
-export type SurveyRespondentController = Controller<
-  | 'parameters'
-  | 'userInfo'
-  | 'getSession'
-  | 'setSession'
-  | 'requestHelp'
-  | 'submissions'
-  | 'followUp'
->;
-
-export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondentController => {
+const surveyRespondentController = ({ surveyService }: Pick<IoC, 'surveyService'>) => {
   const parameters = async (
     req: Request<{ slug: string }>,
     res: Response<SurveyEntryResponse>
@@ -171,3 +160,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyRespondent
     followUp,
   };
 };
+
+export default surveyRespondentController;
+
+export type SurveyRespondentController = ReturnType<typeof surveyRespondentController>;

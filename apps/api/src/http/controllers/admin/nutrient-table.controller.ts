@@ -12,13 +12,8 @@ import { NutrientTableRecord, FoodsNutrientType, NutrientTable } from '@intake24
 import type { IoC } from '@intake24/api/ioc';
 import { ValidationError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
-import type { Controller, CrudActions } from '../controller';
 
-export type NutrientTableController = Controller<CrudActions | 'upload' | 'records'>;
-
-export default ({
-  nutrientTableService,
-}: Pick<IoC, 'nutrientTableService'>): NutrientTableController => {
+const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTableService'>) => {
   const entry = async (
     req: Request<{ nutrientTableId: string }>,
     res: Response<NutrientTableEntry>
@@ -142,3 +137,7 @@ export default ({
     records,
   };
 };
+
+export default nutrientTableController;
+
+export type NutrientTableController = ReturnType<typeof nutrientTableController>;

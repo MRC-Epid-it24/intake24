@@ -10,13 +10,8 @@ import type {
 import type { LocaleAttributes } from '@intake24/common/types/models';
 import { foodDatabaseMaintainerPrefix, foodsAdmin } from '@intake24/common/security';
 import { NotFoundError } from '@intake24/api/http/errors';
-import type { Controller, CrudActions } from '../../controller';
 
-export type AdminFoodDatabaseController = Controller<
-  Extract<CrudActions, 'browse' | 'read' | 'refs'>
->;
-
-export default (): AdminFoodDatabaseController => {
+const adminFoodDatabaseController = () => {
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<LocalesResponse>
@@ -66,3 +61,7 @@ export default (): AdminFoodDatabaseController => {
 
   return { browse, read, refs };
 };
+
+export default adminFoodDatabaseController;
+
+export type AdminFoodDatabaseController = ReturnType<typeof adminFoodDatabaseController>;

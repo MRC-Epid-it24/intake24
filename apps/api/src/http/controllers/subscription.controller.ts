@@ -2,11 +2,8 @@ import type { Request, Response } from 'express';
 import type { User } from '@intake24/db';
 import { UserSubscription } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller } from './controller';
 
-export type SubscriptionController = Controller<'push' | 'subscribe' | 'unsubscribe'>;
-
-export default ({ pusher }: Pick<IoC, 'pusher'>): SubscriptionController => {
+const subscriptionController = ({ pusher }: Pick<IoC, 'pusher'>) => {
   const push = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.user as User;
 
@@ -43,3 +40,7 @@ export default ({ pusher }: Pick<IoC, 'pusher'>): SubscriptionController => {
 
   return { push, subscribe, unsubscribe };
 };
+
+export default subscriptionController;
+
+export type SubscriptionController = ReturnType<typeof subscriptionController>;

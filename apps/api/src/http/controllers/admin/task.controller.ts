@@ -7,11 +7,8 @@ import type { User, PaginateQuery } from '@intake24/db';
 import { Task } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller, CrudActions } from '../controller';
 
-export type TaskController = Controller<CrudActions | 'run'>;
-
-export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
+const taskController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   const entry = async (
     req: Request<{ taskId: string }>,
     res: Response<TaskEntry>
@@ -117,3 +114,7 @@ export default ({ scheduler }: Pick<IoC, 'scheduler'>): TaskController => {
     run,
   };
 };
+
+export default taskController;
+
+export type TaskController = ReturnType<typeof taskController>;

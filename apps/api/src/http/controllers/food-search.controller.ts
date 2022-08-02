@@ -1,12 +1,7 @@
 import type { Request, Response } from 'express';
 import foodIndex, { IndexNotReadyError } from '@intake24/api/food-index';
-import type { Controller } from './controller';
 
-export type FoodSearchController = Controller<
-  'lookup' | 'recipe' | 'category' | 'splitDescription'
->;
-
-export default (): FoodSearchController => {
+const foodSearchController = () => {
   const lookup = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
 
@@ -53,3 +48,7 @@ export default (): FoodSearchController => {
     splitDescription,
   };
 };
+
+export default foodSearchController;
+
+export type FoodSearchController = ReturnType<typeof foodSearchController>;

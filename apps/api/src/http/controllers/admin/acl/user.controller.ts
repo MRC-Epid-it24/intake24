@@ -6,11 +6,8 @@ import { Permission, Role, User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { userEntryResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller, CrudActions } from '@intake24/api/http/controllers';
 
-export type AdminUserController = Controller<CrudActions>;
-
-export default ({ adminUserService }: Pick<IoC, 'adminUserService'>): AdminUserController => {
+const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>) => {
   const entry = async (
     req: Request<{ userId: string }>,
     res: Response<UserEntry>
@@ -129,3 +126,7 @@ export default ({ adminUserService }: Pick<IoC, 'adminUserService'>): AdminUserC
     refs,
   };
 };
+
+export default adminUserController;
+
+export type AdminUserController = ReturnType<typeof adminUserController>;

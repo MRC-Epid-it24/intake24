@@ -4,11 +4,8 @@ import type { PermissionEntry, PermissionsResponse } from '@intake24/common/type
 import type { PaginateQuery } from '@intake24/db';
 import { Permission } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import type { Controller, CrudActions } from '@intake24/api/http/controllers';
 
-export type PermissionController = Controller<CrudActions>;
-
-export default (): PermissionController => {
+const permissionController = () => {
   const entry = async (
     req: Request<{ permissionId: string }>,
     res: Response<PermissionEntry>
@@ -93,3 +90,7 @@ export default (): PermissionController => {
     refs,
   };
 };
+
+export default permissionController;
+
+export type PermissionController = ReturnType<typeof permissionController>;

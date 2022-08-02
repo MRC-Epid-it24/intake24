@@ -5,9 +5,3 @@ export type AsyncRequestHandler = (
   res: Response,
   next: NextFunction
 ) => Promise<void>;
-
-export type Controller<T extends string | number | symbol> = Record<T, AsyncRequestHandler>;
-
-export type CrudActions = 'browse' | 'store' | 'read' | 'edit' | 'update' | 'destroy' | 'refs';
-
-export type CrudController = Controller<CrudActions>;

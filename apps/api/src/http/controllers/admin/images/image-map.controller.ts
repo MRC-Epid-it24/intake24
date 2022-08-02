@@ -6,15 +6,12 @@ import type { IoC } from '@intake24/api/ioc';
 import type { User, PaginateQuery } from '@intake24/db';
 import { ImageMap } from '@intake24/db';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
-import type { Controller, CrudActions } from '../../controller';
 
-export type ImageMapController = Controller<CrudActions>;
-
-export default ({
+const imageMapController = ({
   imagesBaseUrl,
   imageMapService,
   portionSizeService,
-}: Pick<IoC, 'imagesBaseUrl' | 'imageMapService' | 'portionSizeService'>): ImageMapController => {
+}: Pick<IoC, 'imagesBaseUrl' | 'imageMapService' | 'portionSizeService'>) => {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const entry = async (
@@ -106,3 +103,7 @@ export default ({
     refs,
   };
 };
+
+export default imageMapController;
+
+export type ImageMapController = ReturnType<typeof imageMapController>;

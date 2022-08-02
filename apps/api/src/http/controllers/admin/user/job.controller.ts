@@ -8,11 +8,8 @@ import type { JobEntry, JobsResponse } from '@intake24/common/types/http/admin';
 import type { JobAttributes } from '@intake24/common/types/models';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller } from '@intake24/api/http/controllers';
 
-export type AdminUserJobController = Controller<'browse' | 'read' | 'download'>;
-
-export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): AdminUserJobController => {
+const adminUserJobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
   const browse = async (
     req: Request<any, any, any, PaginateQuery & { type?: string }>,
     res: Response<JobsResponse>
@@ -79,3 +76,7 @@ export default ({ fsConfig }: Pick<IoC, 'fsConfig'>): AdminUserJobController => 
     download,
   };
 };
+
+export default adminUserJobController;
+
+export type AdminUserJobController = ReturnType<typeof adminUserJobController>;

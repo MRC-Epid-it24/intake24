@@ -4,11 +4,8 @@ import type { FoodGroupEntry, FoodGroupsResponse } from '@intake24/common/types/
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { PaginateQuery } from '@intake24/db';
 import { Food, FoodGroup } from '@intake24/db';
-import type { Controller, CrudActions } from '../../controller';
 
-export type AdminFoodGroupController = Controller<CrudActions>;
-
-export default (): AdminFoodGroupController => {
+const adminFoodGroupController = () => {
   const entry = async (req: Request, res: Response<FoodGroupEntry>): Promise<void> => {
     const { foodGroupId } = req.params;
 
@@ -98,3 +95,7 @@ export default (): AdminFoodGroupController => {
     refs,
   };
 };
+
+export default adminFoodGroupController;
+
+export type AdminFoodGroupController = ReturnType<typeof adminFoodGroupController>;

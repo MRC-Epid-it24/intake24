@@ -6,18 +6,12 @@ import type { IoC } from '@intake24/api/ioc';
 import type { User, PaginateQuery } from '@intake24/db';
 import { AsServedSet } from '@intake24/db';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
-import type { Controller, CrudActions } from '../../controller';
 
-export type AsServedSetController = Controller<CrudActions>;
-
-export default ({
+const asServedSetController = ({
   imagesBaseUrl,
   asServedService,
   portionSizeService,
-}: Pick<
-  IoC,
-  'imagesBaseUrl' | 'asServedService' | 'portionSizeService'
->): AsServedSetController => {
+}: Pick<IoC, 'imagesBaseUrl' | 'asServedService' | 'portionSizeService'>) => {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const entry = async (
@@ -109,3 +103,7 @@ export default ({
     refs,
   };
 };
+
+export default asServedSetController;
+
+export type AsServedSetController = ReturnType<typeof asServedSetController>;

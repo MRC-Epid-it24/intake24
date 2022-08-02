@@ -22,17 +22,11 @@ import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/ht
 import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses/admin';
 import { kebabCase } from '@intake24/common/util';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller, CrudActions } from '../../controller';
-import type { SecurableController } from '../securable.controller';
 import securableController from '../securable.controller';
 
 const actionToFieldsMap: Record<'overrides', readonly string[]> = {
   overrides: overridesFields,
 };
-
-export interface AdminSurveyController extends Controller<CrudActions | 'patch' | 'put'> {
-  securables: SecurableController;
-}
 
 export const getAndCheckSurveyAccess = async (
   req: Request<{ surveyId: string }>,
@@ -51,7 +45,7 @@ export const getAndCheckSurveyAccess = async (
   return survey;
 };
 
-export default (ioc: IoC): AdminSurveyController => {
+const adminSurveyController = (ioc: IoC) => {
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveysResponse>
@@ -210,3 +204,7 @@ export default (ioc: IoC): AdminSurveyController => {
     securables: securableController({ ioc, securable: Survey }),
   };
 };
+
+export default adminSurveyController;
+
+export type AdminSurveyController = ReturnType<typeof adminSurveyController>;

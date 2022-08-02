@@ -4,11 +4,8 @@ import type { PaginateQuery } from '@intake24/db';
 import { SignInLog } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
-import type { Controller } from '../controller';
 
-export type SignInLogController = Controller<'browse' | 'read' | 'destroy' | 'refs'>;
-
-export default (): SignInLogController => {
+const signInLogController = () => {
   const entry = async (
     req: Request<{ signInLogId: string }>,
     res: Response<SignInLogEntry>
@@ -63,3 +60,7 @@ export default (): SignInLogController => {
     refs,
   };
 };
+
+export default signInLogController;
+
+export type SignInLogController = ReturnType<typeof signInLogController>;

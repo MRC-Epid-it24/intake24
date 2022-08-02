@@ -11,15 +11,8 @@ import type {
   CategoriesResponse,
 } from '@intake24/common/types/http/admin';
 import { categoryContentsResponse } from '@intake24/api/http/responses/admin/categories';
-import type { Controller, CrudActions } from '../../controller';
 
-export type AdminCategoryController = Controller<
-  Exclude<CrudActions, 'edit' | 'refs'> | 'root' | 'contents'
->;
-
-export default ({
-  adminCategoryService,
-}: Pick<IoC, 'adminCategoryService'>): AdminCategoryController => {
+const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCategoryService'>) => {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
     res: Response<CategoriesResponse>
@@ -123,3 +116,7 @@ export default ({
     contents,
   };
 };
+
+export default adminCategoryController;
+
+export type AdminCategoryController = ReturnType<typeof adminCategoryController>;

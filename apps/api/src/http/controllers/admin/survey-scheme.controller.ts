@@ -26,16 +26,9 @@ import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/ht
 import type { PromptQuestion } from '@intake24/common/prompts';
 import { kebabCase } from '@intake24/common/util';
 import type { ExportField, ExportSectionId } from '@intake24/common/schemes';
-import type { Controller, CrudActions } from '../controller';
-import type { SecurableController } from './securable.controller';
 import securableController from './securable.controller';
 
-export interface SurveySchemeController
-  extends Controller<CrudActions | 'patch' | 'put' | 'copy' | 'templates' | 'dataExportRefs'> {
-  securables: SecurableController;
-}
-
-export default (ioc: IoC): SurveySchemeController => {
+const surveySchemeController = (ioc: IoC) => {
   const { dataExportFields } = ioc;
 
   const getAndCheckAccess = async (
@@ -291,3 +284,7 @@ export default (ioc: IoC): SurveySchemeController => {
     securables: securableController({ ioc, securable: SurveyScheme }),
   };
 };
+
+export default surveySchemeController;
+
+export type SurveySchemeController = ReturnType<typeof surveySchemeController>;

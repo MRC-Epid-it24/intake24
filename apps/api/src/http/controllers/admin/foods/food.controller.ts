@@ -5,11 +5,8 @@ import type { PaginateQuery } from '@intake24/db';
 import { FoodLocal } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { FoodLocalEntry, FoodsResponse } from '@intake24/common/types/http/admin';
-import type { Controller, CrudActions } from '../../controller';
 
-export type AdminFoodController = Controller<Exclude<CrudActions, 'edit' | 'refs'>>;
-
-export default ({ adminFoodService }: Pick<IoC, 'adminFoodService'>): AdminFoodController => {
+const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>) => {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
     res: Response<FoodsResponse>
@@ -77,3 +74,7 @@ export default ({ adminFoodService }: Pick<IoC, 'adminFoodService'>): AdminFoodC
     destroy,
   };
 };
+
+export default adminFoodController;
+
+export type AdminFoodController = ReturnType<typeof adminFoodController>;

@@ -4,12 +4,9 @@ import { Survey } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { RespondentFromJWT } from '@intake24/api/services';
-import type { Controller } from './controller';
 import { publicSurveyEntryResponse } from '../responses';
 
-export type SurveyController = Controller<'browse' | 'entry' | 'generateUser' | 'createUser'>;
-
-export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController => {
+const surveyController = ({ surveyService }: Pick<IoC, 'surveyService'>) => {
   const browse = async (req: Request, res: Response<PublicSurveyEntry[]>): Promise<void> => {
     const surveys = await Survey.findAll({
       where: { allowGenUsers: true, genUserKey: null },
@@ -66,3 +63,7 @@ export default ({ surveyService }: Pick<IoC, 'surveyService'>): SurveyController
     createUser,
   };
 };
+
+export default surveyController;
+
+export type SurveyController = ReturnType<typeof surveyController>;

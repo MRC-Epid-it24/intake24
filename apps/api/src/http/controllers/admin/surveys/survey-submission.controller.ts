@@ -9,12 +9,9 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { SurveySubmissionAttributes } from '@intake24/common/types/models';
 import { NotFoundError } from '@intake24/api/http/errors';
-import type { Controller } from '../../controller';
 import { getAndCheckSurveyAccess } from './survey.controller';
 
-export type AdminSurveySubmissionController = Controller<'browse' | 'entry' | 'destroy'>;
-
-export default (): AdminSurveySubmissionController => {
+const adminSurveySubmissionController = () => {
   const browse = async (
     req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveySubmissionsResponse>
@@ -80,3 +77,7 @@ export default (): AdminSurveySubmissionController => {
     destroy,
   };
 };
+
+export default adminSurveySubmissionController;
+
+export type AdminSurveySubmissionController = ReturnType<typeof adminSurveySubmissionController>;

@@ -10,24 +10,11 @@ import {
   drinkwareResponse,
   imageMapsResponse,
 } from '@intake24/api/http/responses/foods';
-import type { Controller } from './controller';
 
-export type PortionSizeController = Controller<
-  | 'asServedSet'
-  | 'asServedSets'
-  | 'drinkwareSet'
-  | 'drinkwareSets'
-  | 'guideImage'
-  | 'guideImages'
-  | 'imageMap'
-  | 'imageMaps'
-  | 'weight'
->;
-
-export default ({
+const portionSizeController = ({
   imagesBaseUrl,
   portionSizeService,
-}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService'>): PortionSizeController => {
+}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService'>) => {
   const asServedSet = async (req: Request, res: Response<AsServedSetResponse>): Promise<void> => {
     const { id } = req.params;
 
@@ -123,3 +110,7 @@ export default ({
     weight,
   };
 };
+
+export default portionSizeController;
+
+export type PortionSizeController = ReturnType<typeof portionSizeController>;

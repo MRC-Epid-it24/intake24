@@ -5,15 +5,12 @@ import { Permission, Role } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { roleEntryResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller, CrudActions } from '@intake24/api/http/controllers';
 import { pick } from 'lodash';
 
-export type RoleController = Controller<CrudActions>;
-
-export default ({
+const roleController = ({
   aclConfig,
   adminUserService,
-}: Pick<IoC, 'aclConfig' | 'adminUserService'>): RoleController => {
+}: Pick<IoC, 'aclConfig' | 'adminUserService'>) => {
   const entry = async (
     req: Request<{ roleId: string }>,
     res: Response<RoleEntry>
@@ -114,3 +111,7 @@ export default ({
     refs,
   };
 };
+
+export default roleController;
+
+export type RoleController = ReturnType<typeof roleController>;

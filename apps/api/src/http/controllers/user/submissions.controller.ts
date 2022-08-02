@@ -4,14 +4,11 @@ import { Survey } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import type { SurveySubmissionEntry } from '@intake24/common/types/http';
 import { NotFoundError } from '@intake24/api/http/errors';
-import type { Controller } from '../controller';
 
-export type UserSubmissionsController = Controller<'submissions'>;
-
-export default ({
+const userSubmissionsController = ({
   cache,
   surveyService,
-}: Pick<IoC, 'cache' | 'surveyService'>): UserSubmissionsController => {
+}: Pick<IoC, 'cache' | 'surveyService'>) => {
   const submissions = async (
     req: Request<any, any, any, { survey: string | string[] }>,
     res: Response<SurveySubmissionEntry[]>
@@ -31,3 +28,7 @@ export default ({
 
   return { submissions };
 };
+
+export default userSubmissionsController;
+
+export type UserSubmissionsController = ReturnType<typeof userSubmissionsController>;

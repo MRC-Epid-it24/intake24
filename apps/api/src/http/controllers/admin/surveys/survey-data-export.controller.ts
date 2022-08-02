@@ -2,14 +2,9 @@ import type { Request, Response } from 'express';
 import type { JobEntry } from '@intake24/common/types/http/admin';
 import type { User } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
-import type { Controller } from '../../controller';
 import { getAndCheckSurveyAccess } from './survey.controller';
 
-export type AdminSurveyDataExportController = Controller<'sync' | 'queue'>;
-
-export default ({
-  dataExportService,
-}: Pick<IoC, 'dataExportService'>): AdminSurveyDataExportController => {
+const adminSurveyDataExportController = ({ dataExportService }: Pick<IoC, 'dataExportService'>) => {
   const sync = async (req: Request<{ surveyId: string }>, res: Response<Buffer>): Promise<void> => {
     const { id: surveyId } = await getAndCheckSurveyAccess(req, 'data-export');
     const { startDate, endDate } = req.body;
@@ -43,3 +38,7 @@ export default ({
     queue,
   };
 };
+
+export default adminSurveyDataExportController;
+
+export type AdminSurveyDataExportController = ReturnType<typeof adminSurveyDataExportController>;

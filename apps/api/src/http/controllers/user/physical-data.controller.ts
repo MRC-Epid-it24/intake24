@@ -6,11 +6,8 @@ import { FeedbackScheme, Survey } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import type { UserPhysicalDataResponse } from '@intake24/common/types/http';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
-import type { Controller } from '../controller';
 
-export type UserPhysicalDataController = Controller<'getPhysicalData' | 'setPhysicalData'>;
-
-export default ({ userService }: Pick<IoC, 'userService'>): UserPhysicalDataController => {
+const userPhysicalDataController = ({ userService }: Pick<IoC, 'userService'>) => {
   const getPhysicalData = async (
     req: Request<any, any, any, { survey?: string }>,
     res: Response<UserPhysicalDataResponse>
@@ -84,3 +81,7 @@ export default ({ userService }: Pick<IoC, 'userService'>): UserPhysicalDataCont
     setPhysicalData,
   };
 };
+
+export default userPhysicalDataController;
+
+export type UserPhysicalDataController = ReturnType<typeof userPhysicalDataController>;

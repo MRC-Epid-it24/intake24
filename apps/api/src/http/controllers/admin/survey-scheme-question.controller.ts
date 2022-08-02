@@ -10,11 +10,8 @@ import type { PaginateQuery } from '@intake24/db';
 import { Language, SurveyScheme, SurveySchemeQuestion } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { pick } from 'lodash';
-import type { Controller, CrudActions } from '../controller';
 
-export type SurveySchemeQuestionController = Controller<CrudActions | 'sync'>;
-
-export default (): SurveySchemeQuestionController => {
+const surveySchemeQuestionController = () => {
   const entry = async (
     req: Request<{ surveySchemeQuestionId: string }>,
     res: Response<SurveySchemeQuestionEntry>
@@ -145,3 +142,7 @@ export default (): SurveySchemeQuestionController => {
     sync,
   };
 };
+
+export default surveySchemeQuestionController;
+
+export type SurveySchemeQuestionController = ReturnType<typeof surveySchemeQuestionController>;

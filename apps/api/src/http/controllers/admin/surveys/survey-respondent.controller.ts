@@ -10,26 +10,14 @@ import { User, UserCustomField, UserSurveyAlias } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { respondentResponse } from '@intake24/api/http/responses/admin';
-import type { Controller, CrudActions } from '../../controller';
 import { getAndCheckSurveyAccess } from './survey.controller';
 
-export type AdminSurveyRespondentController = Controller<
-  | Exclude<CrudActions, 'create' | 'refs'>
-  | 'upload'
-  | 'exportAuthUrls'
-  | 'downloadFeedback'
-  | 'emailFeedback'
->;
-
-export default ({
+const adminSurveyRespondentController = ({
   appConfig,
   adminSurveyService,
   feedbackService,
   scheduler,
-}: Pick<
-  IoC,
-  'appConfig' | 'adminSurveyService' | 'feedbackService' | 'scheduler'
->): AdminSurveyRespondentController => {
+}: Pick<IoC, 'appConfig' | 'adminSurveyService' | 'feedbackService' | 'scheduler'>) => {
   const entry = async (
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<SurveyRespondentEntry>
@@ -229,3 +217,7 @@ export default ({
     emailFeedback,
   };
 };
+
+export default adminSurveyRespondentController;
+
+export type AdminSurveyRespondentController = ReturnType<typeof adminSurveyRespondentController>;
