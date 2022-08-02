@@ -21,7 +21,7 @@
                   <v-col>
                     <div class="guides-drawer" v-if="dataLoaded">
                       <v-img
-                        ref="img"
+                        ref="imgGuide"
                         v-resize="onImgResize"
                         :src="
                           guideImageData.imageMap.baseImageUrl.replace(
@@ -69,11 +69,10 @@
               <v-expansion-panel-content>
                 <v-row>
                   <v-col>
-                    <div class="guides-drawer" v-if="dataLoaded">
+                    <div class="drink-scale-drawer" v-if="dataLoaded">
                       <v-img
-                        ref="img"
+                        ref="imgDrink"
                         v-resize="onImgResize"
-                        class="align-end"
                         :src="
                           selectionImageUrl.replace(
                             'http://localhost:3100',
@@ -84,6 +83,19 @@
                         <template v-slot:placeholder>
                           <image-placeholder></image-placeholder>
                         </template>
+                      </v-img>
+                      <v-img
+                        ref="imgOverlay"
+                        :height="heightOverlay"
+                        :width="widthOverlay"
+                        class="overlay align-end"
+                        :src="
+                          selectedImageOverlayUrl.replace(
+                            'http://localhost:3100',
+                            'https://api.intake24.org'
+                          )
+                        "
+                      >
                         <v-row class="drink-slider">
                           <v-spacer></v-spacer>
                           <v-col xs="2" sm="1" class="d-flex justify-end mr-auto">
@@ -149,7 +161,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import type { PropType } from 'vue';
+import type { PropType, Ref } from 'vue';
 import type { VImg } from 'vuetify/lib';
 import { Resize } from 'vuetify/lib/directives';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
@@ -218,10 +230,12 @@ export default defineComponent({
   },
 
   setup() {
-    const img = ref<InstanceType<typeof VImg>>();
+    const imgGuide = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
+    const imgDrink = ref<InstanceType<typeof VImg>>();
+    const imgOverlay = ref<InstanceType<typeof VImg>>();
 
-    return { img, svg };
+    return { imgGuide, svg, imgDrink, imgOverlay };
   },
 
   data() {
@@ -235,19 +249,25 @@ export default defineComponent({
       selectedObjectIdx: selectedIndex !== undefined ? selectedIndex - 1 : 0,
       selectedNodeIdx: null as number | null,
       selectionImageUrl: '',
-      quantityValue: this.initialState.portionSize.quantity,
+      selectedImageOverlayUrl: '',
+      // quantityValue: this.initialState.portionSize.quantity,
       panelOpen: 0, // ID which panel is open
       sliderValue: 75,
       drinkwareSetData: {} as DrinkwareSetResponse,
       guideImageData: {} as GuideImageResponse,
       width: 0,
       height: 0,
+      widthOverlay: 0,
+      heightOverlay: 0,
     };
   },
 
   created() {
-    this.debouncedImgResize = debounce(() => {
+    this.debouncedGuideImgResize = debounce(() => {
       this.updateSvgDimensions();
+    }, 500);
+    this.debouncedDrinkScaleImgResize = debounce(() => {
+      this.updateOverlayDimensions();
     }, 500);
   },
 
@@ -300,19 +320,34 @@ export default defineComponent({
     },
 
     updateSvgDimensions() {
-      const el = this.img?.$el;
+      const el = this.imgGuide?.$el;
       if (!el) {
         console.warn(`GuideImagePrompt: could not update SVG dimensions.`);
         return;
       }
-
       const { width, height } = el.getBoundingClientRect();
       this.width = width;
       this.height = height;
     },
-    onImgResize() {
+
+    updateOverlayDimensions() {
+      const el = this.imgDrink?.$el;
+      if (!el) {
+        console.warn(`DrinkScalePrompt: could not update IMG dimensions. ${el}`);
+        return;
+      }
+
+      const { width, height } = el.getBoundingClientRect();
+      this.widthOverlay = width;
+      this.heightOverlay = height;
+    },
+
+    onImgResize(imgRef: string) {
       //@ts-expect-error fix debounced types
-      this.debouncedImgResize();
+      this.debouncedGuideImgResize();
+
+      //@ts-expect-error fix debounced types
+      this.debouncedDrinkScaleImgResize();
     },
 
     // drinkScalePolygons(selectedObjectIdx: number): string[] {
@@ -366,6 +401,7 @@ export default defineComponent({
     selectObject(idx: number) {
       this.selectedObjectIdx = idx;
       this.selectionImageUrl = this.drinkwareSetData.scales[idx].baseImageUrl;
+      this.selectedImageOverlayUrl = this.drinkwareSetData.scales[idx].overlayImageUrl;
       this.onUpdate();
     },
 
@@ -421,6 +457,32 @@ export default defineComponent({
     left: 0;
 
     .guides-drawer-polygon {
+      cursor: pointer;
+      fill: transparent;
+
+      &.active,
+      &:hover {
+        fill: #0d47a1;
+        fill-opacity: 0.4;
+        stroke-width: 8;
+        stroke: #0d47a1;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-opacity: 0.5;
+      }
+    }
+  }
+}
+
+.drink-scale-drawer {
+  position: relative;
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    .drink-scale-drawer-overlay {
       cursor: pointer;
       fill: transparent;
 
