@@ -66,7 +66,6 @@ export default defineConfig(({ mode }) => {
       sourcemap,
     },
     server: {
-      host: '0.0.0.0',
       port: 8200,
       host: '0.0.0.0',
       proxy: {
