@@ -49,7 +49,7 @@ import isEqual from 'lodash/isEqual';
 import type { Dictionary } from '@intake24/common/types';
 import type { Pagination, PaginationMeta } from '@intake24/common/types/models';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
-import { handlesLoading, resource } from '@intake24/admin/mixins';
+import { resource } from '@intake24/admin/mixins';
 import { useResource } from '@intake24/admin/stores';
 import ActionBar from './action-bar/action-bar.vue';
 import DataTableFilter from './data-table-filter.vue';
@@ -59,7 +59,7 @@ export default defineComponent({
 
   components: { ActionBar, DataTableFilter, ToolBar },
 
-  mixins: [handlesLoading, resource],
+  mixins: [resource],
 
   props: {
     actions: {
@@ -125,12 +125,10 @@ export default defineComponent({
       try {
         const {
           data: { data, meta },
-        } = await this.withLoading(
-          this.$http.get<Pagination>(this.api, {
-            params: { limit, page, sort, ...this.filter },
-          })
-        );
-
+        } = await this.$http.get<Pagination>(this.api, {
+          params: { limit, page, sort, ...this.filter },
+          withLoading: true,
+        });
         this.items = data;
         this.meta = { ...meta };
       } catch {

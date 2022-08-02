@@ -47,12 +47,9 @@ import { defineComponent } from 'vue';
 import type { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
 import type { Dictionary } from '@intake24/common/types';
-import handlesLoading from '@intake24/admin/mixins/handles-loading';
 
 export default defineComponent({
   name: 'SurveyDataTable',
-
-  mixins: [handlesLoading],
 
   props: {
     api: {
@@ -111,9 +108,10 @@ export default defineComponent({
       try {
         const {
           data: { data, meta },
-        } = await this.withLoading(
-          this.$http.get(this.api, { params: { limit, page, search, sort } })
-        );
+        } = await this.$http.get(this.api, {
+          params: { limit, page, search, sort },
+          withLoading: true,
+        });
 
         this.items = data;
         this.meta = { ...meta };

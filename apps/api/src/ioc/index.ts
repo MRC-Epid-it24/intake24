@@ -47,6 +47,7 @@ import type {
   ImageMapController,
   JobController,
   LanguageController,
+  LanguageTranslationController,
   LocaleController,
   NutrientTableController,
   FeedbackSchemeController,
@@ -168,6 +169,7 @@ export interface IoC extends Jobs {
 
   // Localization
   languageController: LanguageController;
+  languageTranslationController: LanguageTranslationController;
   localeController: LocaleController;
   nutrientTableController: NutrientTableController;
 

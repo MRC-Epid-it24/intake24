@@ -1,10 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import type {
-  LanguageEntry,
-  LanguagesResponse,
-  LanguageTranslationsResponse,
-} from '@intake24/common/types/http/admin';
+import type { LanguageEntry, LanguagesResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { Language } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -82,31 +78,6 @@ const languageController = ({ languageService }: Pick<IoC, 'languageService'>) =
     throw new NotFoundError();
   };
 
-  const getTranslations = async (
-    req: Request<{ languageId: string }>,
-    res: Response<LanguageTranslationsResponse>
-  ): Promise<void> => {
-    const { languageId } = req.params;
-
-    const translations = await languageService.getLanguageTranslations(languageId);
-
-    res.json(translations);
-  };
-
-  const updateTranslations = async (
-    req: Request<{ languageId: string }>,
-    res: Response<LanguageTranslationsResponse>
-  ): Promise<void> => {
-    const {
-      body: { translations },
-      params: { languageId },
-    } = req;
-
-    const translation = await languageService.updateLanguageTranslations(languageId, translations);
-
-    res.json(translation);
-  };
-
   return {
     browse,
     store,
@@ -115,8 +86,6 @@ const languageController = ({ languageService }: Pick<IoC, 'languageService'>) =
     update,
     destroy,
     refs,
-    getTranslations,
-    updateTranslations,
   };
 };
 

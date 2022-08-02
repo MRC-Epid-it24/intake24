@@ -28,18 +28,21 @@ export default class LanguageTranslation
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
+    unique: 'language_translations_unique',
   })
   public languageId!: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
+    unique: 'language_translations_unique',
   })
   public application!: Application;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
+    unique: 'language_translations_unique',
   })
   public section!: string;
 

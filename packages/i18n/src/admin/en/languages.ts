@@ -23,7 +23,10 @@ const languages: LocaleMessageObject = {
     _: 'Translation',
     title: 'Translations',
     tab: 'Translations',
+    create: 'Initialize translations',
     edit: 'Edit section',
+    delete: 'Delete language translations',
+    sync: 'Synchronize language translations',
     path: 'Key path',
     applications: {
       admin: 'Admin',

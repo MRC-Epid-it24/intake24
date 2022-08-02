@@ -126,6 +126,7 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'languages|create', displayName: 'Create languages' },
     { name: 'languages|edit', displayName: 'Edit languages' },
     { name: 'languages|delete', displayName: 'Delete languages' },
+    { name: 'languages|translations', displayName: 'Language translations' },
     { name: 'locales', displayName: 'Locales resource access' },
     { name: 'locales|browse', displayName: 'Browse locales' },
     { name: 'locales|read', displayName: 'Read locales' },

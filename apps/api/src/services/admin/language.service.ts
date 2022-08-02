@@ -1,3 +1,4 @@
+import type { WhereOptions } from '@intake24/db';
 import { Language, LanguageTranslation } from '@intake24/db';
 import type {
   CreateLanguageRequest,
@@ -28,6 +29,21 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
 
     return language;
   };
+
+  /**
+   * Get language translations set
+   *
+   * @param {string} languageId
+   * @returns {Promise<LanguageTranslation[]>}
+   */
+  const getLanguageTranslations = async (languageId: string): Promise<LanguageTranslation[]> =>
+    LanguageTranslation.findAll({
+      where: { languageId },
+      order: [
+        ['application', 'ASC'],
+        ['section', 'ASC'],
+      ],
+    });
 
   /**
    * Initialize language translations set
@@ -70,6 +86,23 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
     ];
 
     if (languageMessages.length) await LanguageTranslation.bulkCreate(languageMessages);
+  };
+
+  /**
+   * Get or initialize language translations set
+   *
+   * @param {string} languageId
+   * @returns {Promise<LanguageTranslation[]>}
+   */
+  const getOrCreateLanguageTranslations = async (
+    languageId: string
+  ): Promise<LanguageTranslation[]> => {
+    const translations = await getLanguageTranslations(languageId);
+    if (translations.length) return translations;
+
+    await createLanguageTranslations(languageId);
+
+    return getLanguageTranslations(languageId);
   };
 
   /**
@@ -123,30 +156,15 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
   };
 
   /**
-   * Get language translations set
-   *
-   * @param {string} languageId
-   * @returns {Promise<LanguageTranslation[]>}
-   */
-  const getLanguageTranslations = async (languageId: string): Promise<LanguageTranslation[]> =>
-    LanguageTranslation.findAll({
-      where: { languageId },
-      order: [
-        ['application', 'ASC'],
-        ['section', 'ASC'],
-      ],
-    });
-
-  /**
    * Update language translations set
    *
    * @param {string} languageId
-   * @param {LanguageTranslationAttributes[]} inputs
+   * @param {(Pick<LanguageTranslationAttributes, 'id' | 'messages'>[])} inputs
    * @returns {Promise<LanguageTranslation[]>}
    */
   const updateLanguageTranslations = async (
     languageId: string,
-    inputs: LanguageTranslationAttributes[]
+    inputs: Pick<LanguageTranslationAttributes, 'id' | 'messages'>[]
   ): Promise<LanguageTranslation[]> => {
     const language = await Language.findByPk(languageId, {
       include: [
@@ -179,15 +197,27 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
   };
 
   /**
+   * Delete language translations set
+   *
+   * @param {string} languageId
+   * @returns {Promise<number>}
+   */
+  const deleteLanguageTranslations = async (languageId: string): Promise<number> =>
+    LanguageTranslation.destroy({ where: { languageId } });
+
+  /**
    * Synchronize language translations
    * - inserts missing sections
    * - merges current translations with default ones
    *
+   * @param {(string | string[])} [id]
    * @returns {Promise<void>}
    */
-  const syncLanguageTranslations = async (): Promise<void> => {
-    const languages = await Language.findAll({ include: [{ model: LanguageTranslation }] });
+  const syncLanguageTranslations = async (id?: string | string[]): Promise<void> => {
+    const where: WhereOptions<LanguageTranslationAttributes> = {};
+    if (id) where.id = id;
 
+    const languages = await Language.findAll({ where, include: [{ model: LanguageTranslation }] });
     if (!languages.length) return;
 
     for (const language of languages) {
@@ -237,12 +267,14 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
 
   return {
     getLanguage,
-    createLanguageTranslations,
     createLanguage,
     updateLanguage,
     deleteLanguage,
+    createLanguageTranslations,
     getLanguageTranslations,
+    getOrCreateLanguageTranslations,
     updateLanguageTranslations,
+    deleteLanguageTranslations,
     syncLanguageTranslations,
   };
 };

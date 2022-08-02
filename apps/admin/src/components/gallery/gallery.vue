@@ -77,7 +77,7 @@ import type { Dictionary } from '@intake24/common/types';
 import type { Pagination, PaginationMeta } from '@intake24/common/types/models';
 import { ConfirmDialog } from '@intake24/ui';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
-import { handlesLoading, resource } from '@intake24/admin/mixins';
+import { resource } from '@intake24/admin/mixins';
 import { DataTableFilter } from '@intake24/admin/components/data-tables';
 import { useMessages, useResource } from '@intake24/admin/stores';
 
@@ -86,7 +86,7 @@ export default defineComponent({
 
   components: { ConfirmDialog, DataTableFilter, ToolBar },
 
-  mixins: [handlesLoading, resource],
+  mixins: [resource],
 
   props: {
     title: {
@@ -150,12 +150,10 @@ export default defineComponent({
       try {
         const {
           data: { data, meta },
-        } = await this.withLoading(
-          this.$http.get<Pagination>(this.resource.api, {
-            params: { limit, page, ...this.filter },
-          })
-        );
-
+        } = await this.$http.get<Pagination>(this.resource.api, {
+          params: { limit, page, ...this.filter },
+          withLoading: true,
+        });
         this.items = data;
         this.meta = { ...meta };
       } catch {

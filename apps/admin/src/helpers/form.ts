@@ -83,9 +83,6 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
 
     async submit<R>(config: HttpRequestConfig): Promise<R> {
       const { withErr, ...rest } = config;
-      const loadStr = `form-${config.url}`;
-      const loading = useLoading();
-      loading.addItem(loadStr);
 
       const { transform } = this.config;
       const output =
@@ -93,7 +90,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
 
       return new Promise((resolve, reject) => {
         httpService
-          .request<R>({ data: output, withErr: true, ...rest })
+          .request<R>({ data: output, withErr: true, withLoading: true, ...rest })
           .then((res) => {
             const { data } = res;
             this.onSuccess();
@@ -103,9 +100,6 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
             this.onFail(err);
 
             if (withErr) reject(err.response.data);
-          })
-          .finally(() => {
-            loading.removeItem(loadStr);
           });
       });
     },

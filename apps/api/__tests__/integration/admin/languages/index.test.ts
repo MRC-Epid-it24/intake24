@@ -4,6 +4,7 @@ import read from './read.test';
 import edit from './edit.test';
 import update from './update.test';
 import destroy from './destroy.test';
+import translations from './translations/index.test';
 
 export default () => {
   describe('GET /api/admin/languages', browse);
@@ -13,6 +14,9 @@ export default () => {
   describe('PUT /api/admin/languages/:languageId', update);
   describe('DELETE /api/admin/languages/:languageId', destroy);
 
-  // describe('GET /api/admin/languages/:languageId/translations', getTranslations);
-  // describe('POST /api/admin/languages/:languageId/translations', updateTranslations);
+  describe('GET /api/admin/languages/:languageId/translations', translations.browse);
+  describe('POST /api/admin/languages/:languageId/translations', translations.store);
+  describe('PUT /api/admin/languages/:languageId/translations', translations.update);
+  describe('DELETE /api/admin/languages/:languageId/translations', translations.destroy);
+  // describe('POST /api/admin/languages/:languageId/translations/sync', translations.sync);
 };

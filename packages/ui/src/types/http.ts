@@ -5,6 +5,7 @@ export type SubscribeCallback = (err?: AxiosError) => void;
 
 export interface HttpRequestConfig<D = any> extends AxiosRequestConfig<D> {
   withErr?: boolean;
+  withLoading?: boolean;
 }
 
 export interface HttpClient {

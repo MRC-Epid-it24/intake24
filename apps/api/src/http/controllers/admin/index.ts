@@ -9,6 +9,7 @@ import authentication from './authentication.controller';
 import feedbackScheme from './feedback-scheme.controller';
 import job from './job.controller';
 import language from './language.controller';
+import languageTranslation from './language-translation.controller';
 import locale from './locale.controller';
 import nutrientTable from './nutrient-table.controller';
 import surveyScheme from './survey-scheme.controller';
@@ -26,6 +27,7 @@ export * from './authentication.controller';
 export * from './feedback-scheme.controller';
 export * from './job.controller';
 export * from './language.controller';
+export * from './language-translation.controller';
 export * from './locale.controller';
 export * from './nutrient-table.controller';
 export * from './securable.controller';
@@ -44,6 +46,7 @@ export default {
   feedbackScheme,
   job,
   language,
+  languageTranslation,
   locale,
   nutrientTable,
   surveyScheme,

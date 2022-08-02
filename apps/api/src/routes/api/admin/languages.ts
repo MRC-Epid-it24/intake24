@@ -3,6 +3,7 @@ import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/languages';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
+import languageTranslations from './language-translations';
 
 export default () => {
   const { languageController } = ioc.cradle;
@@ -25,14 +26,7 @@ export default () => {
 
   router.get('/:languageId/edit', permission('languages|edit'), wrapAsync(languageController.edit));
 
-  router
-    .route('/:languageId/translations')
-    .get(permission('languages|translations'), wrapAsync(languageController.getTranslations))
-    .post(
-      permission('languages|translations'),
-      validation.translations,
-      wrapAsync(languageController.updateTranslations)
-    );
+  router.use('/:languageId/translations', languageTranslations());
 
   return router;
 };

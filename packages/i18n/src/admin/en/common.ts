@@ -69,6 +69,7 @@ const common: LocaleMessageObject = {
     restore: 'Restore',
     save: 'Save',
     submit: 'Submit',
+    sync: 'Synchronize',
     transfer: 'Transfer',
     upload: 'Upload',
     confirm: {
