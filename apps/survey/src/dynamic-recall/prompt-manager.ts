@@ -8,6 +8,7 @@ import {
   guideImageComplete,
   portionSizeMethodSelected,
   standardPortionComplete,
+  drinkScaleComplete,
 } from './portion-size-checks';
 import type { SurveyState } from '../stores';
 import { recallLog } from '../stores';
@@ -213,6 +214,25 @@ const checkFoodStandardConditions = (
         portionSizeMethodSelected(foodState, 'guide-image')
           ? 'Guide image estimation already complete'
           : 'Guide image estimation not selected'
+      );
+      return false;
+    }
+
+    case 'drink-scale-prompt': {
+      if (portionSizeMethodSelected(foodState, 'drink-scale') && !drinkScaleComplete(foodState)) {
+        recallLog().promptCheck(
+          'drink-scale-prompt',
+          true,
+          'Drink Scale selected but estimation not yet complete'
+        );
+        return true;
+      }
+      recallLog().promptCheck(
+        'drink-scale-prompt',
+        false,
+        portionSizeMethodSelected(foodState, 'drink-scale')
+          ? 'Drink Scale estimation already complete'
+          : 'Drink Scale estimation not selected'
       );
       return false;
     }

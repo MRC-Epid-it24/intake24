@@ -74,6 +74,27 @@ export function guideImageComplete(selectedFood: FoodState): boolean {
   return false;
 }
 
+export function drinkScaleComplete(selectedFood: FoodState): boolean {
+  if (selectedFood.type !== 'encoded-food') return false;
+
+  if (selectedFood.portionSize != null) {
+    if (selectedFood.portionSize.method !== 'drink-scale') {
+      console.warn(
+        `Selected portion size method is "drink-scale" but portion size data is for ${selectedFood.portionSize.method}`
+      );
+      return false;
+    }
+
+    return (
+      selectedFood.portionSize.object != null &&
+      selectedFood.portionSize.servingWeight != null &&
+      selectedFood.portionSize.drinkwareId != null
+    );
+  }
+
+  return false;
+}
+
 export function standardPortionComplete(selectedFood: FoodState): boolean {
   if (selectedFood.type !== 'encoded-food') return false;
 
