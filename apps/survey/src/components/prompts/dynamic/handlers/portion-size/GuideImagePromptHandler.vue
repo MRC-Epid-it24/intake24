@@ -5,7 +5,7 @@
     :guide-image-id="parameters['guide-image-id']"
     :prompt-component="promptComponent"
     :conversionFactor="selectedPortionSize.conversionFactor"
-    :initial-state="initialState"
+    :initial-state="initialStateNotNull"
     :continue-enabled="continueEnabled"
     @continue="$emit('continue')"
     @update="onUpdate"
@@ -23,8 +23,9 @@ import type { GuideImageParameters } from '@intake24/common/types/http';
 import type { GuideImagePromptState } from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import FoodPromptUtils from '../mixins/food-prompt-utils';
-import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
+
 import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
+import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
 
 export default defineComponent({
   name: 'GuideImagePromptHandler',
@@ -34,7 +35,7 @@ export default defineComponent({
   mixins: [
     FoodPromptUtils,
     MealPromptUtils,
-    createPromptStoreMixin<GuideImagePromptState>('guide-image-prompt'),
+    createPromptHandlerStoreMixin<GuideImagePromptState>('guide-image-prompt'),
   ],
 
   props: {
@@ -46,36 +47,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    promptId: {
-      type: String,
-      required: true,
-    },
-  },
-
-  created() {
-    this.loadInitialState(this.encodedSelectedFood.id, this.promptId, {
-      portionSize: {
-        method: 'guide-image',
-        object: null,
-        quantity: { whole: 1, fraction: 0 },
-        servingWeight: 0,
-        leftoversWeight: 0,
-      },
-      objectConfirmed: false,
-      quantityConfirmed: false,
-      objectIdx: undefined,
-      panelOpen: 0,
-    });
-  },
-
-  mounted() {
-    this.setValidationState(this.isValid(this.initialState));
-  },
-
-  data() {
-    return {
-      currentState: null as GuideImagePromptState | null,
-    };
   },
 
   computed: {
@@ -90,16 +61,34 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
 
+    getFoodOrMealId() {
+      return this.selectedFood.id;
+    },
+
+    getInitialState(): GuideImagePromptState {
+      return (
+        this.encodedSelectedFood.id,
+        this.promptId,
+        {
+          portionSize: {
+            method: 'guide-image',
+            object: null,
+            quantity: { whole: 1, fraction: 0 },
+            servingWeight: 0,
+            leftoversWeight: 0,
+          },
+          objectConfirmed: false,
+          quantityConfirmed: false,
+          objectIdx: undefined,
+          panelOpen: 0,
+        }
+      );
+    },
+
     isValid(state: GuideImagePromptState | null): boolean {
       if (state === null) return false;
 
       return state.objectIdx !== undefined && state.objectConfirmed && state.quantityConfirmed;
-    },
-
-    onUpdate(newState: GuideImagePromptState) {
-      this.currentState = newState;
-      this.updateStoredState(this.encodedSelectedFood.id, this.promptId, newState);
-      this.setValidationState(this.isValid(newState));
     },
 
     async commitAnswer() {
@@ -112,7 +101,7 @@ export default defineComponent({
         },
       });
 
-      this.clearStoredState(this.selectedFood.id, this.promptId);
+      this.clearStoredState();
     },
   },
 });

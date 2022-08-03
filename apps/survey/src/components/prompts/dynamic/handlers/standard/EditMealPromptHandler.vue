@@ -3,7 +3,7 @@
     ref="prompt"
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
-    :food-list="initialState.foods"
+    :food-list="initialState.foods || []"
     :prompt-component="promptComponent"
     :continue-enabled="continueEnabled"
     @continue="$emit('continue')"
@@ -23,8 +23,8 @@ import { mapActions, mapState } from 'pinia';
 import type { EditMealPromptType } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
 import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
+import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
 
 interface EditMealState {
   foods: FoodState[];
@@ -33,7 +33,7 @@ interface EditMealState {
 export default defineComponent({
   name: 'EditMealPromptHandler',
 
-  mixins: [MealPromptUtils, createPromptStoreMixin<EditMealState>('edit-meal-prompt')],
+  mixins: [MealPromptUtils, createPromptHandlerStoreMixin<EditMealState>('edit-meal-prompt')],
 
   components: { EditMealPrompt },
 
@@ -58,40 +58,37 @@ export default defineComponent({
     return { prompt };
   },
 
-  created() {
-    const selectedMeal = this.selectedMeal;
-
-    this.loadInitialState(selectedMeal.id, this.promptId, {
-      foods: selectedMeal.foods,
-    });
-  },
-
   computed: {
     ...mapState(useSurvey, ['defaultSchemeMeals']),
-  },
-
-  mounted() {
-    this.setValidationState(this.initialState != null && this.initialState.foods.length > 0);
   },
 
   methods: {
     ...mapActions(useSurvey, ['setFoods', 'deleteMeal']),
 
-    onUpdate(foodList: FoodState[]) {
-      this.updateStoredState(this.selectedMeal.id, this.promptId, { foods: foodList });
-      this.setValidationState(foodList.length > 0);
+    getInitialState(): EditMealState {
+      return {
+        foods: this.selectedMeal.foods,
+      };
+    },
+
+    getFoodOrMealId(): number {
+      return this.selectedMeal.id;
+    },
+
+    isValid(state: EditMealState | null) {
+      return state != null && state.foods.length > 0;
     },
 
     onDeleteMeal() {
       this.deleteMeal(this.selectedMeal.id);
-      this.clearStoredState(this.selectedMeal.id, this.promptId);
+      this.clearStoredState();
     },
 
     async commitAnswer() {
       const foods = this.prompt!.foodsDrinks();
 
       this.setFoods({ mealId: this.selectedMeal.id, foods });
-      this.clearStoredState(this.selectedMeal.id, this.promptId);
+      this.clearStoredState();
     },
   },
 });

@@ -86,8 +86,6 @@ const component = defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
-
     promptText(): string {
       return this.getLocaleString(this.promptProps.text, 'prompts.editMeal.text', {
         meal: this.mealName.toLocaleLowerCase(),
@@ -102,7 +100,7 @@ const component = defineComponent({
   methods: {
     onUpdate() {
       const editedFoods = this.editableFoodList?.editableList;
-      this.$emit('update', editedFoods);
+      this.$emit('update', { foods: editedFoods });
     },
 
     onContinue() {

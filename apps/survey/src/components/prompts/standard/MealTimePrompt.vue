@@ -2,7 +2,7 @@
   <prompt-layout :text="text" :description="description">
     <v-form ref="form" @submit.prevent="submit">
       <v-time-picker
-        :value="initialTime"
+        :value="initialTimeString"
         :v-model="currentValue"
         :format="promptProps.format"
         :landscape="!isMobile"
@@ -41,12 +41,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
 import type { PropType } from 'vue';
 import type { MealTimePromptProps } from '@intake24/common/prompts';
-import { useSurvey } from '@intake24/survey/stores';
 import { ConfirmDialog } from '@intake24/ui';
 import BasePrompt from '../BasePrompt';
+import type { MealTime } from '@intake24/common/types';
+import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
+
+const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minutes}`;
 
 export default defineComponent({
   name: 'MealTimePrompt',
@@ -64,21 +66,24 @@ export default defineComponent({
       type: String,
     },
     initialTime: {
-      type: String,
-      default: null,
+      type: Object as PropType<MealTime>,
+      required: true,
     },
   },
 
   data() {
     return {
-      currentValue: this.initialTime,
+      currentValue: mealTimeToString(this.initialTime),
       validation: this.promptProps.validation,
       errors: [] as string[],
     };
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex']),
+    initialTimeString(): string {
+      return mealTimeToString(this.initialTime);
+    },
+
     hasErrors(): boolean {
       return !!this.errors.length;
     },
@@ -106,7 +111,7 @@ export default defineComponent({
     },
 
     onTimeChanged(time: string) {
-      this.$emit('update', time);
+      this.$emit('update', parseMealTime(time));
     },
 
     submit() {

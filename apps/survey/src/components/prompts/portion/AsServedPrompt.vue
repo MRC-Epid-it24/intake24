@@ -97,8 +97,6 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
 import { merge } from '@intake24/common/util';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import { basePromptProps } from '@intake24/common/prompts';
@@ -160,8 +158,6 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
-
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },

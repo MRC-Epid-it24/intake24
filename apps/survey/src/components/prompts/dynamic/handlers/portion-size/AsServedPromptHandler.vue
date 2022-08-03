@@ -12,14 +12,14 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import { mapState, mapActions } from 'pinia';
+import { mapActions } from 'pinia';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { SelectedAsServedImage, PromptAnswer, FoodState } from '@intake24/common/types';
 import type { AsServedParameters } from '@intake24/common/types/http';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import FoodPromptUtils from '../mixins/food-prompt-utils';
-import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
+import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
 
 interface PromptState {
   selectedServing: SelectedAsServedImage;
@@ -31,7 +31,7 @@ export default defineComponent({
 
   components: { AsServedPrompt },
 
-  mixins: [FoodPromptUtils, createPromptStoreMixin<PromptState>('as-served-prompt')],
+  mixins: [FoodPromptUtils, createPromptHandlerStoreMixin<PromptState>('as-served-prompt')],
 
   props: {
     promptProps: {
@@ -42,15 +42,9 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    promptId: {
-      type: String,
-      required: true,
-    },
   },
 
   computed: {
-    ...mapState(useSurvey, ['currentTempPromptAnswer']),
-
     parameters(): AsServedParameters {
       if (this.selectedPortionSize.method !== 'as-served')
         throw new Error('Selected portion size method must be "as-served"');
@@ -60,21 +54,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, [
-      'updateFood',
-      'updateFoodCallback',
-      'setTempPromptAnswer',
-      'clearTempPromptAnswer',
-    ]),
-
-    onTempChange(
-      tempGuidPromptAnswer: PromptAnswer,
-      tempUpdatedGuidPromptAnswer?: Partial<PromptAnswer>
-    ) {
-      if (tempUpdatedGuidPromptAnswer)
-        this.setTempPromptAnswer(tempGuidPromptAnswer, tempUpdatedGuidPromptAnswer);
-      else this.setTempPromptAnswer(tempGuidPromptAnswer);
-    },
+    ...mapActions(useSurvey, ['updateFood', 'updateFoodCallback']),
 
     onAnswer(data: {
       selectedServing: SelectedAsServedImage;
@@ -107,13 +87,6 @@ export default defineComponent({
 
       this.$emit('complete');
       this.clearTempPromptAnswer();
-    },
-
-    onPartialAnswer(data: SelectedAsServedImage) {
-      console.log('Called onPartialAnswer first');
-      // if (this.currentTempPromptAnswer?.response)
-      //   this.onTempChange(this.currentTempPromptAnswer, { finished: true });
-      //this.$refs.promptHandleChild?.partialAnswerHandler();
     },
   },
 });

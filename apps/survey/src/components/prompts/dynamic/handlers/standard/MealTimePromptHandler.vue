@@ -2,7 +2,7 @@
   <meal-time-prompt
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
-    :initial-time="initialTime"
+    :initial-time="getInitialState()"
     @continue="$emit('continue')"
     @update="onUpdate"
     @remove-meal="onRemoveMeal"
@@ -17,20 +17,16 @@ import type { MealTimePromptProps } from '@intake24/common/prompts';
 import type { MealTime } from '@intake24/common/types';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
-import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
-import MealPromptUtils, {
-  requireMeal,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 
-const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minutes}`;
+import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
+import { createPromptHandlerNoStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-no-store';
 
 export default defineComponent({
   name: 'MealTimePromptHandler',
 
   components: { MealTimePrompt },
 
-  mixins: [createPromptStoreMixin<never>('meal-time-prompt'), MealPromptUtils],
+  mixins: [MealPromptUtils, createPromptHandlerNoStoreMixin<MealTime>()],
 
   props: {
     promptProps: {
@@ -46,29 +42,15 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    this.setValidationState(true);
-  },
-
-  data() {
-    const store = useSurvey();
-    const selectedMeal = requireMeal(store.selectedMealOptional);
-
-    const initialTime = selectedMeal.time
-      ? mealTimeToString(selectedMeal.time)
-      : mealTimeToString(selectedMeal.defaultTime);
-
-    return {
-      initialTime,
-      currentTime: initialTime,
-    };
-  },
-
   methods: {
     ...mapActions(useSurvey, ['setMealTime', 'deleteMeal']),
 
-    onUpdate(mealTime: string) {
-      this.currentTime = mealTime;
+    isValid(): boolean {
+      return true;
+    },
+
+    getInitialState(): MealTime {
+      return this.selectedMeal.time ?? this.selectedMeal.defaultTime;
     },
 
     onRemoveMeal() {
@@ -79,7 +61,7 @@ export default defineComponent({
     async commitAnswer() {
       this.setMealTime({
         mealId: this.selectedMeal.id,
-        time: parseMealTime(this.currentTime),
+        time: this.currentStateNotNull,
       });
     },
   },

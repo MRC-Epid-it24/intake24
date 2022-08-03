@@ -65,6 +65,10 @@ import BasePortion from './BasePortion';
 
 type Response = null | number;
 
+export interface PortionSizeOptionState {
+  option: number | null;
+}
+
 // For user to select which portion size estimation method they want to use
 export default defineComponent({
   name: 'PortionSizeOptionPrompt',
@@ -90,7 +94,7 @@ export default defineComponent({
       required: true,
     },
     initialValue: {
-      type: Number,
+      type: Object as PropType<PortionSizeOptionState>,
       required: false,
     },
     continueEnabled: {
@@ -103,13 +107,11 @@ export default defineComponent({
     return {
       ...merge(basePromptProps, this.promptProps),
       errors: [] as string[],
-      currentValue: this.initialValue,
+      currentValue: this.initialValue?.option,
     };
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
-
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
@@ -124,7 +126,9 @@ export default defineComponent({
       if (index !== -1) {
         response = this.currentValue === undefined ? null : this.currentValue;
       }
-      this.$emit('update', response);
+      this.$emit('update', {
+        option: response,
+      });
     },
 
     selectMethod(index: number) {

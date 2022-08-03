@@ -25,14 +25,17 @@ import type { DrinkScaleParameters } from '@intake24/common/types/http';
 import type { DrinkScalePromptState } from '@intake24/survey/components/prompts/portion/DrinkScalePrompt.vue';
 import DrinkScalePrompt from '@intake24/survey/components/prompts/portion/DrinkScalePrompt.vue';
 import foodPromptUtils from '../mixins/food-prompt-utils';
-import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
+import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
 
 export default defineComponent({
   name: 'DrinkScalePromptHandler',
 
   components: { DrinkScalePrompt },
 
-  mixins: [foodPromptUtils, createPromptStoreMixin<DrinkScalePromptState>('drink-scale-prompt')],
+  mixins: [
+    foodPromptUtils,
+    createPromptHandlerStoreMixin<DrinkScalePromptState>('drink-scale-prompt'),
+  ],
 
   props: {
     promptProps: {

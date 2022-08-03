@@ -3,12 +3,12 @@
     v-bind="{
       promptProps,
       promptComponent,
-      initialState,
       food: encodedSelectedFood,
     }"
+    :initial-state="initialStateNotNull"
     :continue-enabled="continueEnabled"
     @continue="$emit('continue')"
-    @update="updatePrompts"
+    @update="onUpdate"
   >
   </associated-foods-prompt>
 </template>
@@ -20,13 +20,14 @@ import { defineComponent } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { AssociatedFoodsState, EncodedFood } from '@intake24/common/types';
 import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';
-import { createPromptStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-store';
+
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
 import FoodPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/food-prompt-utils';
 import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import foodSearchService from '@intake24/survey/services/foods.service';
+import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
 
 interface AssociatedFoodPromptState {
   confirmed: boolean | undefined;
@@ -44,7 +45,7 @@ export default defineComponent({
   name: 'AssociatedFoodsPromptHandler',
 
   mixins: [
-    createPromptStoreMixin<AssociatedFoodsState>('associated-foods-prompt'),
+    createPromptHandlerStoreMixin<AssociatedFoodsState>('associated-foods-prompt'),
     FoodPromptUtils,
     MealPromptUtils,
   ],
@@ -66,28 +67,21 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      currentState: [] as AssociatedFoodPromptState[],
-    };
-  },
-
-  created() {
-    const { encodedSelectedFood } = this;
-
-    const defaultState = {
-      activePrompt: 0,
-      prompts: encodedSelectedFood.data.associatedFoodPrompts.map(() => initialPromptState()),
-    };
-    this.loadInitialState(encodedSelectedFood.id, this.promptId, defaultState);
-  },
-
-  mounted() {
-    this.setValidationState(this.isValid(this.initialState));
-  },
-
   methods: {
     ...mapActions(useSurvey, ['updateFood', 'getNextFoodId']),
+
+    getInitialState(): AssociatedFoodsState {
+      return {
+        activePrompt: 0,
+        prompts: this.encodedSelectedFood.data.associatedFoodPrompts.map(() =>
+          initialPromptState()
+        ),
+      };
+    },
+
+    getFoodOrMealId() {
+      return this.selectedFood.id;
+    },
 
     isValid(state: AssociatedFoodsState | null): boolean {
       if (state === null) return false;
@@ -97,12 +91,6 @@ export default defineComponent({
           prompt.confirmed === false ||
           (prompt.confirmed === true && prompt.selectedFood !== undefined)
       );
-    },
-
-    updatePrompts(state: AssociatedFoodsState) {
-      this.updateStoredState(this.encodedSelectedFood.id, this.promptId, state);
-      this.setValidationState(this.isValid(state));
-      this.currentState = state.prompts;
     },
 
     async fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
@@ -116,11 +104,11 @@ export default defineComponent({
     },
 
     async commitAnswer() {
-      this.clearStoredState(this.encodedSelectedFood.id, this.promptId);
+      this.clearStoredState();
 
       const headers: FoodHeader[] = [];
 
-      this.currentState.forEach((prompt) => {
+      this.currentStateNotNull.prompts.forEach((prompt) => {
         if (prompt.confirmed && prompt.selectedFood !== undefined) {
           headers.push(prompt.selectedFood);
         }
