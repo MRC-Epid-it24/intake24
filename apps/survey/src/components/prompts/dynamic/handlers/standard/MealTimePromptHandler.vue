@@ -12,7 +12,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { mapActions, mapState } from 'pinia';
+import { mapActions } from 'pinia';
 import type { MealTimePromptProps } from '@intake24/common/prompts';
 import type { MealTime } from '@intake24/common/types';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';

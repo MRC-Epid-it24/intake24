@@ -13,7 +13,6 @@ import {
 import type { SurveyState } from '../stores';
 import { recallLog } from '../stores';
 import {
-  findFood,
   findMeal,
   getFoodByIndex,
   getFoodIndexRequired,

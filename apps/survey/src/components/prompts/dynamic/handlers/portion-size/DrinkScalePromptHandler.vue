@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { mapState, mapActions } from 'pinia';
+import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
 import type { BasePromptProps } from '@intake24/common/prompts';

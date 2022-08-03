@@ -5,7 +5,6 @@ import type { Dictionary } from '@intake24/common/types';
 import { copy, merge, Errors, getObjectNestedKeys } from '@intake24/common/util';
 import { httpService } from '@intake24/admin/services';
 import type { HttpRequestConfig } from '@intake24/ui/types/http';
-import { useLoading } from '../stores';
 
 export interface FormConfig<T> {
   status?: string;

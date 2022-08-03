@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts">
-import type { PropType, VueConstructor } from 'vue';
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
