@@ -28,6 +28,10 @@ module.exports = defineConfig({
     'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
     'import/no-cycle': 'warn',
     'import/prefer-default-export': 'off',
+    'import/no-extraneous-dependencies': [
+      'error',
+      { devDependencies: ['scripts/*.ts', '**/*.config.ts'] },
+    ],
     'no-await-in-loop': 'off',
     'no-continue': 'off',
     'no-console': 'warn',

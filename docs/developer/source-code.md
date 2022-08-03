@@ -2,13 +2,13 @@
 
 Install `git` if you don't already have it.
 
-## Repository
-
 Clone the repository
 
 ```sh
 git clone https://github.com/MRC-Epid-it24/intake24
 ```
+
+## Repository structure
 
 Repository is set as mono-repository with [workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces).
 
@@ -36,7 +36,7 @@ Applications are in `apps` folder. Shared components are in `packages` folder.
 
 ## Dependencies
 
-Intake24 dpendencies are set up with `pnpm`.
+Intake24 dependencies are set up with `pnpm`.
 
 Install `pnpm` using built-in `npm` or see [pnpm docs](https://pnpm.io) for further installation options.
 
@@ -50,6 +50,12 @@ Install all dependencies from root-level
 pnpm install
 ```
 
+## Commit convention
+
+Commit messages are restricted to follow `conventional-changelog` convention, adapted from [Angular's commit convention](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
+
+Please see [./github/commit-convention.md](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/commit-convention.md) for more details.
+
 ## Code style
 
 Project is set up with [eslint](https://eslint.org/) and [prettier](https://prettier.io/) to help to keep clean and maintainable code.
@@ -58,27 +64,23 @@ Both integrate very well with most of the IDEs. You will probably just need to i
 
 You can also run it manually from root-level or in each `app` / `package`.
 
-Run linting
+Run linting and try to fix as much as possible automatically
 
 ```sh
 pnpm lint
 ```
 
-Run linting and try to fix as much as possible automatically
-
-```sh
-pnpm lint:fix
-```
+Lint step also runs for each file, when changes are committed.
 
 ## Renovate
 
-Repository is set up with [renovate bot](https://github.com/renovatebot/renovate), which checks the dependencies and prepares PRs. It runs on weekly basis and can be configured using [`.github/renovate.json5`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/renovate.json5) config file.
+Repository is set up with [renovate bot](https://github.com/renovatebot/renovate), which checks the dependencies and prepares PRs. It runs on weekly basis and can be configured through [`.github/renovate.json5`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/renovate.json5) config file.
 
 ## Continuous integration
 
 ### Build
 
-Main [Build CI](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/workflows/ci.yml) action is triggered on source code change and it runs build / tests / lint steps for each components to ensure all is working as expected.
+Main [CI](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/workflows/ci.yml) action is triggered on source code change and it runs lint / build / tests / steps for each components to ensure all is working as expected.
 
 ### Documentation
 
