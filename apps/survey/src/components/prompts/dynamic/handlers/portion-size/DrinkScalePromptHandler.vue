@@ -82,7 +82,6 @@ export default defineComponent({
         {
           portionSize: {
             method: 'drink-scale',
-            object: null,
             leftoversLevel: 0,
             initialFillLevel: '0.9',
             fillLevel: 0,
@@ -95,8 +94,11 @@ export default defineComponent({
             servingWeight: 0,
           },
           objectConfirmed: false,
-          drinkScaleAmount: false,
+          drinkConfirmed: false,
+          leftoversConfirmed: false,
           objectIdx: undefined,
+          drinkOverlayUrl: '',
+          maxDrinkSliderValue: 100,
           panelOpen: 0,
         }
       );
@@ -105,7 +107,7 @@ export default defineComponent({
     isValid(state: DrinkScalePromptState | null): boolean {
       if (state === null) return false;
 
-      return state.objectIdx !== undefined && state.objectConfirmed && state.drinkScaleAmount;
+      return state.objectIdx !== undefined && state.objectConfirmed && state.drinkConfirmed;
     },
 
     getFoodOrMealId() {
@@ -121,7 +123,7 @@ export default defineComponent({
           portionSize: this.currentState.portionSize,
         },
       });
-
+      console.log(`Drink Scale: Food updated - ${JSON.stringify(this.currentState.portionSize)}`);
       this.clearStoredState();
     },
   },

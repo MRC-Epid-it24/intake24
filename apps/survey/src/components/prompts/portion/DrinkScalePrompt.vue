@@ -62,8 +62,8 @@
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.drinkScale.sliderLabel', { food: localeDescription }) }}
                 <template v-slot:actions>
-                  <v-icon color="success" v-if="drinkScaleAmount">fas fa-fw fa-check</v-icon>
-                  <v-icon color="error" v-if="!drinkScaleAmount">fas fa-fw fa-exclamation</v-icon>
+                  <v-icon color="success" v-if="selectedDrink">fas fa-fw fa-check</v-icon>
+                  <v-icon color="error" v-if="!selectedDrink">fas fa-fw fa-exclamation</v-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
@@ -143,7 +143,7 @@
                     </v-btn>
                   </v-col>
                   <v-col>
-                    <v-btn color="success" @click="submit()">
+                    <v-btn color="success" @click="confirmAmount">
                       {{ $t('portion.drinkScale.confirmFullButton') }}
                     </v-btn>
                   </v-col>
@@ -153,9 +153,12 @@
           </v-expansion-panels>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="ma-2">
         <v-col>
-          <v-card></v-card>
+          <v-form ref="form" @submit.prevent="submit">
+            <!-- Should be disabled if nothing selected? -->
+            <continue @click="submit" :disabled="!continueEnabled" class="px-2"></continue>
+          </v-form>
         </v-col>
       </v-row>
     </portion-layout>
@@ -181,8 +184,11 @@ import BasePortion from './BasePortion';
 export interface DrinkScalePromptState {
   portionSize: DrinkScaleState;
   objectConfirmed: boolean;
-  drinkScaleAmount: boolean;
+  drinkConfirmed: boolean;
+  leftoversConfirmed: boolean;
   objectIdx: number | undefined;
+  drinkOverlayUrl: string;
+  maxDrinkSliderValue: number;
   panelOpen: number;
 }
 
@@ -242,21 +248,27 @@ export default defineComponent({
   },
 
   data() {
-    const selectedIndex = this.initialState.portionSize.object?.id;
+    const selectedIndex = this.initialState.portionSize.containerIndex;
+    const selectedOverlayImage = this.initialState.drinkOverlayUrl;
+    const selectedImage = this.initialState.portionSize.imageUrl;
+    const selectedSliderValue = this.initialState.portionSize.servingWeight;
+    const selectedMaxSliderValue = this.initialState.maxDrinkSliderValue;
 
     return {
       ...merge(drinkScalePromptDefaultProps, this.promptProps),
       errors: [] as string[],
       selectedGuide: this.initialState.objectConfirmed && selectedIndex !== undefined,
+      selectedDrink: this.initialState.drinkConfirmed,
+      selectedLeftovers: this.initialState.leftoversConfirmed,
       drinkScaleAmount: false,
-      selectedObjectIdx: selectedIndex !== undefined ? selectedIndex - 1 : 0,
+      selectedObjectIdx: selectedIndex ?? 0,
       selectedNodeIdx: null as number | null,
-      selectionImageUrl: '',
-      selectedImageOverlayUrl: '',
-      // quantityValue: this.initialState.portionSize.quantity,
+      selectionImageUrl: selectedImage ?? '',
+      selectedImageOverlayUrl: selectedOverlayImage ?? '',
       panelOpen: 0, // ID which panel is open
-      sliderValue: 75,
-      maxSliderValue: 100,
+      // View properties
+      sliderValue: selectedSliderValue ?? 75,
+      maxSliderValue: selectedMaxSliderValue ?? 100,
       drinkwareSetData: {} as DrinkwareSetResponse,
       guideImageData: {} as GuideImageResponse,
       width: 0,
@@ -354,29 +366,17 @@ export default defineComponent({
       this.debouncedDrinkScaleImgResize();
     },
 
-    // drinkScalePolygons(selectedObjectIdx: number): string[] {
-    //   if (!this.dataLoaded) return [];
-
-    //   const { width } = this;
-
-    //   return this.drinkwareSetData.scales.imageMap.objects.map((object) => {
-    //     return chunk(
-    //       object.outline.map((coord) => coord * width),
-    //       2
-    //     )
-    //       .map((node) => node.join(','))
-    //       .join(' ');
-    //   });
-    // },
-
     onUpdate() {
       const portionSizeState = this.getCurrentState(this.selectedObjectIdx);
 
       const update: DrinkScalePromptState = {
         portionSize: portionSizeState,
         objectConfirmed: this.selectedGuide,
-        drinkScaleAmount: this.drinkScaleAmount,
+        drinkConfirmed: this.selectedDrink,
+        leftoversConfirmed: this.selectedLeftovers,
         objectIdx: this.selectedObjectIdx + 1,
+        drinkOverlayUrl: this.selectedImageOverlayUrl,
+        maxDrinkSliderValue: this.maxSliderValue,
         panelOpen: this.panelOpen,
       };
       this.$emit('update', update);
@@ -387,10 +387,6 @@ export default defineComponent({
         method: 'drink-scale',
         servingWeight: this.sliderValue,
         leftoversWeight: 0, // Guide image does not allow estimating leftovers
-        object: {
-          id: idx + 1,
-          weight: 61,
-        },
         leftoversLevel: 0,
         initialFillLevel: this.initialFillLevel ?? '0.9',
         fillLevel: parseInt(this.initialFillLevel) ?? 0,
@@ -403,6 +399,7 @@ export default defineComponent({
     },
 
     selectObject(idx: number) {
+      if (idx !== this.selectedObjectIdx) this.selectedDrink = false;
       this.selectedObjectIdx = idx;
       this.selectionImageUrl = this.drinkwareSetData.scales[idx].baseImageUrl;
       this.selectedImageOverlayUrl = this.drinkwareSetData.scales[idx].overlayImageUrl;
@@ -421,9 +418,10 @@ export default defineComponent({
       } else {
         this.sliderValue += value;
       }
+      this.selectedDrink = false;
     },
     onSelectGuide() {
-      this.selectedGuide = !this.selectedGuide;
+      this.selectedGuide = true;
       this.panelOpen = 1;
     },
     clearErrors() {
@@ -435,13 +433,20 @@ export default defineComponent({
       }
       return false;
     },
+
+    confirmAmount() {
+      this.selectedDrink = true;
+      this.panelOpen = -1;
+      this.onUpdate();
+    },
+
     submit() {
       if (!this.isValid()) {
         this.errors = [this.$t('portion.drinkScale.validation.required').toString()];
+        console.log(`Can't submit DrinkScale`);
         return;
       }
       this.drinkScaleAmount = true; // This sets the icon on the panel, UI sugar
-      this.panelOpen = -1; // Close panels if no errors
       console.log('DrinkScale Prompt Completed');
       this.$emit('continue');
     },

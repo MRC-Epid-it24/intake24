@@ -35,7 +35,6 @@ export interface GuideImageState extends PortionSizeStateBase {
 
 export interface DrinkScaleState extends PortionSizeStateBase {
   method: 'drink-scale';
-  object: SelectedGuideImageObject | null;
   leftoversLevel: number;
   initialFillLevel: string;
   fillLevel: number;
