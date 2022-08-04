@@ -210,7 +210,7 @@ export default defineComponent({
     },
 
     // TODO: Implement emission type
-    setLeftoverStatus(status: Record<string, unknown>) {
+    onLeftoversUpdate(status: Record<string, unknown>) {
       this.leftoverComplete = true;
       this.setPanelOpen(-1);
     },

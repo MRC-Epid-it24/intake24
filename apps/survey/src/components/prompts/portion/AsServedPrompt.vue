@@ -5,13 +5,13 @@
     </template>
     <v-row>
       <v-col>
-        <v-expansion-panels v-model="panelOpen" flat>
+        <v-expansion-panels v-model="panelOpen" @change="onActivePanelChanged" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t('portion.asServed.portionHeader') }}
               <template v-slot:actions>
                 <as-served-weight
-                  :weight="servingWeight"
+                  :weight="asServedData?.weight"
                   :valid="servingCompleteStatus"
                 ></as-served-weight>
                 <valid-invalid-icon :valid="servingCompleteStatus"></valid-invalid-icon>
@@ -27,7 +27,9 @@
                 <v-col>
                   <as-served-selector
                     :asServedSetId="asServedSetId"
-                    @as-served-selector-submit="setServingStatus($event)"
+                    :initial-state="initialState.servingImage?.index"
+                    @update="onServingUpdate"
+                    @confirm="onServingConfirmed"
                   ></as-served-selector>
                 </v-col>
               </v-row>
@@ -38,7 +40,7 @@
               {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
               <template v-slot:actions>
                 <as-served-weight
-                  :weight="leftoversWeight"
+                  :weight="leftoverPromptAnswer ? leftoverData?.weight : 0"
                   :valid="leftoverCompleteStatus"
                 ></as-served-weight>
                 <valid-invalid-icon :valid="leftoverCompleteStatus"></valid-invalid-icon>
@@ -68,7 +70,9 @@
                   <!-- This currently is taking asServed data, not the leftover data -->
                   <as-served-selector
                     :asServedSetId="asServedSetId"
-                    @as-served-selector-submit="setLeftoverStatus($event)"
+                    :initial-state="initialState.leftoversImage?.index"
+                    @update="onLeftoversUpdate"
+                    @confirm="onLeftoversConfirmed"
                   ></as-served-selector>
                 </v-col>
               </v-row>
@@ -86,9 +90,9 @@
     </v-row>
     <v-row>
       <v-col xs="12" md="3">
-        <v-btn @click="submit()" :color="submitButtonStyle()" block>
+        <continue @click="submit()" :disabled="!continueEnabled">
           {{ $t('common.action.continue') }}
-        </v-btn>
+        </continue>
       </v-col>
     </v-row>
   </portion-layout>
@@ -100,12 +104,25 @@ import { defineComponent } from 'vue';
 import { merge } from '@intake24/common/util';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import { basePromptProps } from '@intake24/common/prompts';
-import type { LocaleTranslation, SelectedAsServedImage } from '@intake24/common/types';
+import type {
+  AsServedState,
+  LocaleTranslation,
+  SelectedAsServedImage,
+} from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import AsServedWeight from '@intake24/survey/components/elements/AsServedWeight.vue';
 import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
 import BasePortion from './BasePortion';
+
+export interface AsServedPromptState {
+  activePanel: number | null;
+  servingImage: SelectedAsServedImage | null;
+  servingImageSelected: boolean;
+  leftoversConfirmed: boolean | null;
+  leftoversImage: SelectedAsServedImage | null;
+  leftoversImageSelected: boolean;
+}
 
 export default defineComponent({
   name: 'AsServedPrompt',
@@ -136,23 +153,30 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    initialState: {
+      type: Object as PropType<AsServedPromptState>,
+      required: true,
+    },
+    continueEnabled: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data() {
     return {
       ...merge(basePromptProps, this.promptProps),
       errors: [] as string[],
-      panelOpen: 0 as number,
-      leftoverPromptAnswer: null as unknown,
+      panelOpen: this.initialState.activePanel,
+      leftoverPromptAnswer: this.initialState.leftoversConfirmed,
       // selectionImageData: {} as AsServedSetResponse,
-      servingIdx: null as number | null,
-      asServedData: null as SelectedAsServedImage | null,
-      leftoverData: null as SelectedAsServedImage | null,
-      servingCompleteStatus: false as boolean, // Used to control the icons
-      leftoverCompleteStatus: false as boolean, // Used to control the icons
+      servingIdx: this.initialState.servingImage?.index,
+      asServedData: this.initialState.servingImage,
+      leftoverData: this.initialState.leftoversImage,
+      servingCompleteStatus: this.initialState.servingImageSelected,
+      leftoverCompleteStatus:
+        this.initialState.leftoversConfirmed === false || this.initialState.leftoversImageSelected,
       dataLoaded: false as boolean,
-      servingWeight: 0 as number,
-      leftoversWeight: 0 as number,
       finished: false,
     };
   },
@@ -166,29 +190,9 @@ export default defineComponent({
   methods: {
     leftoverAnswer(answer: boolean) {
       // Controls display of leftover selector
+      this.leftoverCompleteStatus = !answer;
       this.leftoverPromptAnswer = answer;
-      this.finished = true;
-      if (answer === false) {
-        // 'no' answer makes form valid, so make ready for submit
-        this.leftoverData = null;
-        this.leftoverCompleteStatus = true;
-        this.clearErrors();
-        this.setPanelOpen(1);
-        this.$emit('tempChanging', {
-          modified: true,
-          new: false,
-          finished: true,
-          mealIndex: this.selectedMealIndex,
-          foodIndex: this.selectedFoodIndex,
-          prompt: this.promptComponent,
-          response: {
-            selectedServing: this.asServedData,
-            selectedLeftovers: false,
-          },
-        });
-      } else {
-        this.leftoverCompleteStatus = false;
-      }
+      this.emitUpdate();
     },
     leftoverButtonStyle(buttonValue: string): string {
       // Make button green for currently selection option
@@ -201,10 +205,7 @@ export default defineComponent({
       }
       return '';
     },
-    submitButtonStyle(): string {
-      if (this.servingCompleteStatus && this.leftoverCompleteStatus) return 'success';
-      return '';
-    },
+
     setPanelOpen(panelIdComplete: number) {
       if (this.isValid()) {
         this.panelOpen = -1;
@@ -227,47 +228,36 @@ export default defineComponent({
         }
       }
     },
-    setServingStatus(status: SelectedAsServedImage) {
-      // Trigger by $emit from Serving (AsServedSelector)
-      this.asServedData = status || null;
+    onServingUpdate(update: SelectedAsServedImage | null) {
+      this.asServedData = update;
+      this.servingWeight = this.asServedData?.weight || 0;
+      if (this.isValid()) this.clearErrors();
+      this.emitUpdate();
+    },
+
+    onServingConfirmed() {
       this.servingCompleteStatus = true;
-      this.servingWeight = this.asServedData.weight;
-      if (this.isValid()) this.clearErrors();
-      this.$emit('tempChanging', {
-        modified: true,
-        new: false,
-        finished: this.finished,
-        mealIndex: this.selectedMealIndex,
-        foodIndex: this.selectedFoodIndex,
-        prompt: this.promptComponent,
-        response: {
-          selectedServing: this.asServedData,
-          selectedLeftovers: this.leftoverData,
-        },
-      });
       this.setPanelOpen(0);
+      this.emitUpdate();
     },
-    setLeftoverStatus(status: SelectedAsServedImage) {
-      // Trigger by $emit from Leftover (AsServedSelector)
-      this.leftoverData = status || null;
-      this.leftoverCompleteStatus = true;
-      this.leftoversWeight = this.leftoverData.weight;
+
+    onLeftoversUpdate(update: SelectedAsServedImage | null) {
+      this.leftoverData = update;
+      this.leftoversWeight = this.leftoverData?.weight || 0;
       if (this.isValid()) this.clearErrors();
-      this.finished = true;
-      this.$emit('tempChanging', {
-        modified: true,
-        new: false,
-        finished: this.finished,
-        mealIndex: this.selectedMealIndex,
-        foodIndex: this.selectedFoodIndex,
-        prompt: this.promptComponent,
-        response: {
-          selectedServing: this.asServedData,
-          selectedLeftovers: this.leftoverData,
-        },
-      });
-      this.setPanelOpen(1);
+      this.emitUpdate();
     },
+
+    onLeftoversConfirmed() {
+      this.leftoverCompleteStatus = true;
+      this.setPanelOpen(1);
+      this.emitUpdate();
+    },
+
+    onActivePanelChanged() {
+      this.emitUpdate();
+    },
+
     isValid(): boolean {
       // Haven't filled in asServed, or answered leftover
       if (!this.asServedData || this.leftoverPromptAnswer === null) return false;
@@ -293,26 +283,26 @@ export default defineComponent({
         this.setErrors();
         return;
       }
-      // We can submit only as served (with no leftover)
-      // Edge case: asServed and leftover completed, but leftoverPrompt answer changed to no afterwards (caught below)
-      if (this.asServedData && !this.leftoverPromptAnswer) {
-        // console.log("submitting only as served, leftover no");
-        this.$emit('as-served-leftovers', {
-          selectedServing: this.asServedData,
-          selectedLeftovers: false,
-        });
-      } else if (this.asServedData && this.leftoverData) {
-        // Submit both as served & leftover
-        // console.log("submitting as served, leftover yes");
-        this.$emit('as-served-leftovers', {
-          selectedServing: this.asServedData,
-          selectedLeftovers: this.leftoverData,
-        });
-      }
+
+      this.$emit('continue');
     },
 
+    // what's this for?
     partialAnswerHandler() {
-      this.setPanelOpen(this.panelOpen);
+      this.setPanelOpen(this.panelOpen || 0);
+    },
+
+    emitUpdate() {
+      const newState: AsServedPromptState = {
+        activePanel: this.panelOpen,
+        servingImage: this.asServedData,
+        servingImageSelected: this.servingCompleteStatus,
+        leftoversConfirmed: this.leftoverPromptAnswer,
+        leftoversImage: this.leftoverData,
+        leftoversImageSelected: this.leftoverCompleteStatus,
+      };
+
+      this.$emit('update', newState);
     },
   },
 });

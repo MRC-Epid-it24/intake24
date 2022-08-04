@@ -56,7 +56,7 @@
         </v-btn>
       </v-col>
       <v-col align="center" xs="12" md="4" class="ma-2">
-        <v-btn color="success" @click="servingCompleted()" block>
+        <v-btn color="success" @click="emitConfirm()" block>
           {{ $t('portion.common.confirmButton') }}
         </v-btn>
       </v-col>
@@ -68,6 +68,7 @@
 import { defineComponent } from 'vue';
 import type { AsServedSetResponse } from '@intake24/common/types/http/foods';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
+import type { SelectedAsServedImage } from '@intake24/common/types';
 
 export default defineComponent({
   name: 'AsServedSelector',
@@ -80,11 +81,14 @@ export default defineComponent({
     asServedSetId: {
       type: String,
     },
+    initialState: {
+      type: Number,
+    },
   },
 
   data() {
     return {
-      selectedObjectIdx: null as number | null,
+      selectedObjectIdx: this.initialState,
       asServedData: {} as AsServedSetResponse,
       dataLoaded: false as boolean,
       // Prototyping
@@ -96,7 +100,7 @@ export default defineComponent({
     mainWeight(): string | null {
       if (!this.dataLoaded) return null;
 
-      if (this.selectedObjectIdx === null) return null;
+      if (this.selectedObjectIdx === undefined) return null;
 
       return `${this.asServedData.images[this.selectedObjectIdx].weight}g`;
     },
@@ -116,11 +120,12 @@ export default defineComponent({
         this.setDataLoaded();
         this.setDefaultSelection();
       } catch (e) {
+        //FIXME: proper error handling
         console.log(e);
       }
     },
     getMainImage(): string {
-      if (this.selectedObjectIdx === null) {
+      if (this.selectedObjectIdx === undefined) {
         return '';
       }
       return this.dataLoaded ? this.asServedData.images[this.selectedObjectIdx].mainImageUrl : '';
@@ -129,17 +134,20 @@ export default defineComponent({
       this.dataLoaded = true;
     },
     setDefaultSelection() {
-      // Variable length image sets: set default selected to middle value
-      this.selectedObjectIdx = Math.floor(this.asServedData.images.length / 2);
+      if (this.selectedObjectIdx === undefined) {
+        // Variable length image sets: set default selected to middle value
+        this.selectedObjectIdx = Math.floor(this.asServedData.images.length / 2);
+      }
     },
     setSelection(idx: number) {
       this.selectedObjectIdx = idx;
+      this.emitUpdate();
     },
     isSelected(idx: number): string {
       return idx === this.selectedObjectIdx ? 'selectedThumb rounded-lg' : '';
     },
     hadMoreInput() {
-      if (this.selectedObjectIdx === null) {
+      if (this.selectedObjectIdx === undefined) {
         return;
       }
 
@@ -153,9 +161,10 @@ export default defineComponent({
         this.selectedObjectIdx =
           this.selectedObjectIdx + 1 === maxLength ? maxLength : this.selectedObjectIdx + 1;
       }
+      this.emitUpdate();
     },
     hadLessInput() {
-      if (this.selectedObjectIdx === null) {
+      if (this.selectedObjectIdx === undefined) {
         return;
       }
       if (this.selectedObjectIdx - 1 < 0) {
@@ -166,6 +175,7 @@ export default defineComponent({
       } else {
         this.selectedObjectIdx = this.selectedObjectIdx - 1 === 0 ? 0 : this.selectedObjectIdx - 1;
       }
+      this.emitUpdate();
     },
     getFirstThumbnail(): string {
       if (this.selectedObjectIdx === null) {
@@ -183,12 +193,20 @@ export default defineComponent({
         ? this.asServedData.images[this.asServedData.images.length - 1].thumbnailUrl
         : '';
     },
-    servingCompleted() {
+    emitUpdate() {
+      const newState: SelectedAsServedImage | null =
+        this.selectedObjectIdx === undefined
+          ? null
+          : {
+              index: this.selectedObjectIdx,
+              weight: this.asServedData.images[this.selectedObjectIdx].weight,
+            };
+
+      this.$emit('update', newState);
+    },
+    emitConfirm() {
       if (this.selectedObjectIdx === null) return;
-      this.$emit('as-served-selector-submit', {
-        imageIndex: this.selectedObjectIdx,
-        weight: this.asServedData.images[this.selectedObjectIdx].weight,
-      });
+      this.$emit('confirm');
     },
   },
 });

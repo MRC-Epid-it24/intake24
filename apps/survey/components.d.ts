@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
     ElementsErrorAlert: typeof import('./src/components/elements/ErrorAlert.vue')['default'];
     ElementsFoodBrowser: typeof import('./src/components/elements/FoodBrowser.vue')['default'];
     ElementsFoodSearchResults: typeof import('./src/components/elements/FoodSearchResults.vue')['default'];
+    ElementsGuideImagePanel: typeof import('./src/components/elements/GuideImagePanel.vue')['default'];
     ElementsImagePlaceholder: typeof import('./src/components/elements/ImagePlaceholder.vue')['default'];
     ElementsInfoAlert: typeof import('./src/components/elements/InfoAlert.vue')['default'];
     ElementsMealItem: typeof import('./src/components/elements/MealItem.vue')['default'];

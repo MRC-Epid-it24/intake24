@@ -3,9 +3,10 @@
     v-bind="{ foodName, promptProps }"
     :as-served-set-id="parameters['serving-image-set']"
     :prompt-component="promptComponent"
-    @as-served-serving="onAnswer"
-    @as-served-leftovers="onAnswer"
-    @tempChanging="onTempChange"
+    :initial-state="initialStateNotNull"
+    :continue-enabled="continueEnabled"
+    @update="onUpdate"
+    @continue="$emit('continue')"
   ></as-served-prompt>
 </template>
 
@@ -14,24 +15,19 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import { mapActions } from 'pinia';
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { SelectedAsServedImage, PromptAnswer, FoodState } from '@intake24/common/types';
 import type { AsServedParameters } from '@intake24/common/types/http';
+import type { AsServedPromptState } from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 import FoodPromptUtils from '../mixins/food-prompt-utils';
 import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
-
-interface PromptState {
-  selectedServing: SelectedAsServedImage;
-  selectedLeftovers: SelectedAsServedImage | false;
-}
 
 export default defineComponent({
   name: 'AsServedPromptHandler',
 
   components: { AsServedPrompt },
 
-  mixins: [FoodPromptUtils, createPromptHandlerStoreMixin<PromptState>('as-served-prompt')],
+  mixins: [FoodPromptUtils, createPromptHandlerStoreMixin<AsServedPromptState>('as-served-prompt')],
 
   props: {
     promptProps: {
@@ -54,39 +50,49 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateFood', 'updateFoodCallback']),
+    ...mapActions(useSurvey, ['updateFood']),
 
-    onAnswer(data: {
-      selectedServing: SelectedAsServedImage;
-      selectedLeftovers: SelectedAsServedImage | false;
-    }) {
-      const { conversionFactor } = this.selectedPortionSize;
+    getFoodOrMealId(): number {
+      return this.selectedFood.id;
+    },
 
-      const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
-      if (mealIndex === undefined || foodIndex === undefined) {
-        console.warn('No selected meal/food, meal/food index undefined');
-        return;
-      }
-      this.updateFoodCallback({
-        mealIndex,
-        foodIndex,
-        update: (state: FoodState) => {
-          if (state.type === 'encoded-food') {
-            state.portionSize = {
-              method: 'as-served',
-              serving: data.selectedServing,
-              leftovers: data.selectedLeftovers || null,
-              servingWeight: data.selectedServing.weight ?? null,
-              leftoversWeight: data.selectedLeftovers
-                ? data.selectedLeftovers.weight * conversionFactor
-                : null,
-            };
-          }
+    getInitialState(): AsServedPromptState {
+      return {
+        activePanel: 0,
+        servingImage: null,
+        servingImageSelected: false,
+        leftoversConfirmed: null,
+        leftoversImageSelected: false,
+        leftoversImage: null,
+      };
+    },
+
+    isValid(state: AsServedPromptState): boolean {
+      const servingValid = state.servingImage !== null && state.servingImageSelected;
+      const leftoversConfirmedAndValid =
+        state.leftoversConfirmed === true &&
+        state.leftoversImage !== null &&
+        state.leftoversImageSelected;
+      const leftoversSkipped = state.leftoversConfirmed === false;
+
+      return servingValid && (leftoversSkipped || leftoversConfirmedAndValid);
+    },
+
+    async commitAnswer() {
+      const currentState = this.currentStateNotNull;
+
+      this.updateFood({
+        foodId: this.selectedFood.id,
+        update: {
+          portionSize: {
+            method: 'as-served',
+            serving: currentState.servingImage,
+            leftovers: currentState.leftoversImage,
+            servingWeight: currentState.servingImage?.weight || 0,
+            leftoversWeight: currentState.leftoversImage?.weight || 0,
+          },
         },
       });
-
-      this.$emit('complete');
-      this.clearTempPromptAnswer();
     },
   },
 });
