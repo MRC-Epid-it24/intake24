@@ -6,7 +6,7 @@
     :drinkware-id="parameters['drinkware-id']"
     :skip-fill-level="parameters['skip-fill-level']"
     :prompt-component="promptComponent"
-    :initial-state="initialState"
+    :initial-state="initialStateNotNull"
     :continue-enabled="continueEnabled"
     @continue="$emit('continue')"
     @update="onUpdate"
@@ -52,30 +52,6 @@ export default defineComponent({
     },
   },
 
-  created() {
-    this.loadInitialState(this.encodedSelectedFood.id, this.promptId, {
-      // Placeholders for testying state
-      portionSize: {
-        method: 'drink-scale',
-        object: null,
-        leftoversLevel: 0,
-        initialFillLevel: '0.9',
-        fillLevel: 0,
-        skipFillLevel: 'false',
-        imageUrl: '',
-        leftoversWeight: 0,
-        drinkwareId: '',
-        containerIndex: 0,
-        leftovers: false,
-        servingWeight: 0,
-      },
-      objectConfirmed: false,
-      drinkScaleAmount: false,
-      objectIdx: undefined,
-      panelOpen: 0,
-    });
-  },
-
   mounted() {
     this.setValidationState(this.isValid(this.initialState));
   },
@@ -99,15 +75,41 @@ export default defineComponent({
     ...mapActions(useSurvey, ['updateFood']),
     ...mapActions(useFoodGuideImageState, ['updateFoodState', 'clearFoodState']),
 
+    getInitialState(): DrinkScalePromptState {
+      return (
+        this.encodedSelectedFood.id,
+        this.promptId,
+        {
+          portionSize: {
+            method: 'drink-scale',
+            object: null,
+            leftoversLevel: 0,
+            initialFillLevel: '0.9',
+            fillLevel: 0,
+            skipFillLevel: 'false',
+            imageUrl: '',
+            leftoversWeight: 0,
+            drinkwareId: '',
+            containerIndex: 0,
+            leftovers: false,
+            servingWeight: 0,
+          },
+          objectConfirmed: false,
+          drinkScaleAmount: false,
+          objectIdx: undefined,
+          panelOpen: 0,
+        }
+      );
+    },
+
     isValid(state: DrinkScalePromptState | null): boolean {
       if (state === null) return false;
 
-      return state.objectIdx !== undefined && state.objectConfirmed && state.quantityConfirmed;
+      return state.objectIdx !== undefined && state.objectConfirmed && state.drinkScaleAmount;
     },
 
-    onUpdate(newState: DrinkScalePromptState) {
-      this.updateStoredState(this.encodedSelectedFood.id, this.promptId, newState);
-      this.setValidationState(this.isValid(newState));
+    getFoodOrMealId() {
+      return this.selectedFood.id;
     },
 
     async commitAnswer() {
@@ -120,7 +122,7 @@ export default defineComponent({
         },
       });
 
-      this.clearStoredState(this.selectedFood.id, this.promptId);
+      this.clearStoredState();
     },
   },
 });
