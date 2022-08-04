@@ -25,3 +25,28 @@ Edit tab allows to modify selected locale.
 ## Deletion
 
 Locale deletion won't be permitted if there are surveys using it. User firstly needs to update the surveys to use different locale.
+
+## Split lists
+
+Split list entries management
+
+Entry has following fields:
+
+- `First word` - first word
+- `Words` - space delimited list of words
+
+## Split words
+
+Split words entries management
+
+Entry has following fields:
+
+- `Words` - space delimited list of words
+
+## Synonym sets
+
+Synonym sets entries management
+
+Entry has following fields:
+
+- `Synonyms` - space delimited list of synonyms

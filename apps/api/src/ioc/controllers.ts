@@ -43,7 +43,12 @@ export default (container: AwilixContainer): void => {
     // Localization
     languageController: asFunction(controllers.admin.language),
     languageTranslationController: asFunction(controllers.admin.languageTranslation),
-    localeController: asFunction(controllers.admin.locale),
+
+    // Locales
+    localeController: asFunction(controllers.admin.locales.locale),
+    localeSplitListController: asFunction(controllers.admin.locales.splitList),
+    localeSplitWordController: asFunction(controllers.admin.locales.splitWord),
+    localeSynonymSetController: asFunction(controllers.admin.locales.synonymSet),
     nutrientTableController: asFunction(controllers.admin.nutrientTable),
 
     // Schemes

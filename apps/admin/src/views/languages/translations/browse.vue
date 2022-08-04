@@ -5,10 +5,11 @@
         {{ $t('languages.translations.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items v-if="translations.length">
+      <template v-if="translations.length">
         <confirm-dialog
           :label="$t('common.action.sync').toString()"
           color="secondary"
+          fab
           icon
           icon-left="fas fa-rotate"
           @confirm="sync"
@@ -18,13 +19,14 @@
         <confirm-dialog
           :label="$t('common.action.delete').toString()"
           color="error"
+          fab
           icon
           icon-left="$delete"
           @confirm="remove"
         >
           {{ $t('languages.translations.delete') }}
         </confirm-dialog>
-      </v-toolbar-items>
+      </template>
     </v-toolbar>
     <v-list v-if="translations.length" two-line>
       <v-list-item

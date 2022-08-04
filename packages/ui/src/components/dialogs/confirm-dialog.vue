@@ -9,6 +9,7 @@
           :class="activatorClass"
           :color="iconColor ? iconColor : color"
           :disabled="disabled"
+          :fab="fab"
           :icon="icon"
           :title="label"
         >
@@ -64,6 +65,10 @@ export default defineComponent({
       default: 'secondary',
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    fab: {
       type: Boolean,
       default: false,
     },

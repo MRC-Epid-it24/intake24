@@ -2,7 +2,7 @@
 import { Column, DataType, HasMany, Table, BelongsTo } from 'sequelize-typescript';
 import type { LocaleAttributes, LocaleCreationAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
-import { AssociatedFood } from '.';
+import { AssociatedFood, SplitList, SplitWord, SynonymSet } from '.';
 
 @Table({
   modelName: 'Locale',
@@ -72,4 +72,13 @@ export default class Locale
 
   @HasMany(() => AssociatedFood, 'localeId')
   public associatedFoods?: AssociatedFood[];
+
+  @HasMany(() => SplitList, 'localeId')
+  public splitLists?: SplitList[];
+
+  @HasMany(() => SplitWord, 'localeId')
+  public splitWords?: SplitWord[];
+
+  @HasMany(() => SynonymSet, 'localeId')
+  public synonymSets?: SynonymSet[];
 }

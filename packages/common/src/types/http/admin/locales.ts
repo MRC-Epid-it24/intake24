@@ -1,4 +1,13 @@
-import type { LocaleAttributes, Pagination } from '../../models';
+import type {
+  LocaleAttributes,
+  Pagination,
+  SplitListAttributes,
+  SplitListCreationAttributes,
+  SplitWordAttributes,
+  SplitWordCreationAttributes,
+  SynonymSetsAttributes,
+  SynonymSetsCreationAttributes,
+} from '../../models';
 import type { LanguageListEntry } from './languages';
 
 export type LocaleRequest = {
@@ -29,3 +38,18 @@ export type LocaleRefs = {
   languages: LanguageListEntry[];
   locales: LocaleListEntry[];
 };
+
+export interface LocaleSplitListInput extends SplitListCreationAttributes {
+  id?: string;
+}
+export type LocaleSplitList = SplitListAttributes;
+
+export interface LocaleSplitWordInput extends SplitWordCreationAttributes {
+  id?: string;
+}
+export type LocaleSplitWord = SplitWordAttributes;
+
+export interface LocaleSynonymSetInput extends SynonymSetsCreationAttributes {
+  id?: string;
+}
+export type LocaleSynonymSet = SynonymSetsAttributes;

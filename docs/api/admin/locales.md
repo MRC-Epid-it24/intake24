@@ -174,3 +174,204 @@ Content-Type: application/json
     ]
 }
 ```
+
+## Get split lists
+
+Get split lists entries
+
+### Request
+
+```json
+GET /api/admin/locales/:localeId/split-lists
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+[
+    {
+        "id": string,
+        "localeId": string,
+        "firstWord": string,
+        "words": string,
+    },
+    ...
+]
+```
+
+## Set split lists
+
+Set split lists entries
+
+### Request
+
+```json
+POST /api/admin/locales/:localeId/split-lists
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+[
+    {
+        "id": string,
+        "localeId": string,
+        "firstWord": string,
+        "words": string
+    },
+    ...
+]
+
+```
+
+### Response
+
+```json
+200 OK
+
+[
+    {
+        "id": string,
+        "localeId": string,
+        "firstWord": string,
+        "words": string
+    },
+    ...
+]
+```
+
+## Get split words
+
+Get split words entries
+
+### Request
+
+```json
+GET /api/admin/locales/:localeId/split-words
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+[
+    {
+        "id": string,
+        "localeId": string,
+        "words": string
+    },
+    ...
+]
+```
+
+## Set split words
+
+Set split words entries
+
+### Request
+
+```json
+POST /api/admin/locales/:localeId/split-words
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+[
+    {
+        "id": string,
+        "localeId": string,
+        "words": string
+    },
+    ...
+]
+
+```
+
+### Response
+
+```json
+200 OK
+
+[
+    {
+        "id": string,
+        "localeId": string,
+        "words": string
+    },
+    ...
+]
+```
+
+## Get synonym sets
+
+Get synonym sets entries
+
+### Request
+
+```json
+GET /api/admin/locales/:localeId/synonym-sets
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+[
+    {
+        "id": string,
+        "localeId": string,
+        "synonyms": string
+    },
+    ...
+]
+```
+
+## Set synonym sets
+
+Set synonym sets entries
+
+### Request
+
+```json
+POST /api/admin/locales/:localeId/synonym-sets
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+[
+    {
+        "id": string,
+        "localeId": string,
+        "synonyms": string
+    },
+    ...
+]
+
+```
+
+### Response
+
+```json
+200 OK
+
+[
+    {
+        "id": string,
+        "localeId": string,
+        "synonyms": string
+    },
+    ...
+]
+```

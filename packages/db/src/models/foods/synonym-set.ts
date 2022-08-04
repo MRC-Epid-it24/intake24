@@ -1,7 +1,7 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import type {
   SynonymSetsAttributes,
-  SynonymSetsAttributesCreationAttributes,
+  SynonymSetsCreationAttributes,
 } from '@intake24/common/types/models/foods';
 import BaseModel from '../model';
 import { FoodsLocale } from '.';
@@ -14,7 +14,7 @@ import { FoodsLocale } from '.';
   underscored: true,
 })
 export default class SynonymSet
-  extends BaseModel<SynonymSetsAttributes, SynonymSetsAttributesCreationAttributes>
+  extends BaseModel<SynonymSetsAttributes, SynonymSetsCreationAttributes>
   implements SynonymSetsAttributes
 {
   @Column({

@@ -3,6 +3,9 @@ import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/locales';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
+import splitLists from './split-lists';
+import splitWords from './split-words';
+import synonymSets from './synonym-sets';
 
 export default () => {
   const { localeController } = ioc.cradle;
@@ -24,6 +27,10 @@ export default () => {
     .delete(permission('locales|delete'), wrapAsync(localeController.destroy));
 
   router.get('/:localeId/edit', permission('locales|edit'), wrapAsync(localeController.edit));
+
+  router.use('/:localeId/split-lists', splitLists());
+  router.use('/:localeId/split-words', splitWords());
+  router.use('/:localeId/synonym-sets', synonymSets());
 
   return router;
 };

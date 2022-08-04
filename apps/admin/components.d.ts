@@ -15,10 +15,8 @@ declare module '@vue/runtime-core' {
     DataTablesDataTable: typeof import('./src/components/data-tables/data-table.vue')['default'];
     DataTablesDataTableFilter: typeof import('./src/components/data-tables/data-table-filter.vue')['default'];
     DataTablesEmbeddedDataTable: typeof import('./src/components/data-tables/embedded-data-table.vue')['default'];
-    EntryCategoryOrFoodLayout: typeof import('./src/components/entry/category-or-food-layout.vue')['default'];
     EntryConfirmLeaveDialog: typeof import('./src/components/entry/confirm-leave-dialog.vue')['default'];
     EntryLayout: typeof import('./src/components/entry/layout.vue')['default'];
-    EntryLeaveDialog: typeof import('./src/components/entry/leave-dialog.vue')['default'];
     FdbsAddCategoryDialog: typeof import('./src/components/fdbs/add-category-dialog.vue')['default'];
     FdbsAddNutrientDialog: typeof import('./src/components/fdbs/add-nutrient-dialog.vue')['default'];
     FdbsAttributeList: typeof import('./src/components/fdbs/attribute-list.vue')['default'];

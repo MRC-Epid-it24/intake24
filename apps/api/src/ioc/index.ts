@@ -49,11 +49,14 @@ import type {
   LanguageController,
   LanguageTranslationController,
   LocaleController,
+  LocaleSplitListController,
+  LocaleSplitWordController,
+  LocaleSynonymSetController,
   NutrientTableController,
   FeedbackSchemeController,
+  SignInLogController,
   SurveySchemeController,
   SurveySchemeQuestionController,
-  SignInLogController,
   AdminSurveyController,
   AdminSurveyDataExportController,
   AdminSurveyRespondentController,
@@ -82,6 +85,7 @@ import type {
   CategoryContentsService,
   FoodDataService,
   LanguageService,
+  LocaleService,
   NutrientTableService,
   DataExportFields,
   DataExportMapper,
@@ -171,6 +175,9 @@ export interface IoC extends Jobs {
   languageController: LanguageController;
   languageTranslationController: LanguageTranslationController;
   localeController: LocaleController;
+  localeSplitListController: LocaleSplitListController;
+  localeSplitWordController: LocaleSplitWordController;
+  localeSynonymSetController: LocaleSynonymSetController;
   nutrientTableController: NutrientTableController;
 
   // Schemes
@@ -228,6 +235,7 @@ export interface IoC extends Jobs {
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;
   languageService: LanguageService;
+  localeService: LocaleService;
   nutrientTableService: NutrientTableService;
 
   feedbackService: FeedbackService;

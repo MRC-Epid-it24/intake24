@@ -43,7 +43,7 @@ const resources: Resource[] = [
     icon: 'fas fa-map-marked-alt',
     api: 'admin/locales',
     generateRoutes: true,
-    routes: [...routes],
+    routes: [...routes, 'split-lists', 'split-words', 'synonym-sets'],
   },
   // Surveys
   {

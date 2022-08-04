@@ -4,4 +4,4 @@ export type SynonymSetsAttributes = {
   synonyms: string;
 };
 
-export type SynonymSetsAttributesCreationAttributes = Omit<SynonymSetsAttributes, 'id'>;
+export type SynonymSetsCreationAttributes = Omit<SynonymSetsAttributes, 'id'>;

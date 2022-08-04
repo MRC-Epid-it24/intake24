@@ -27,6 +27,7 @@ import {
   processedImageService,
   sourceImageService,
   languageService,
+  localeService,
   nutrientTableService,
   foodDataService,
   portionSizeService,
@@ -61,6 +62,7 @@ export default (container: AwilixContainer): void => {
     adminCategoryService: asFunction(adminCategoryService),
     adminFoodService: asFunction(adminFoodService),
     languageService: asFunction(languageService),
+    localeService: asFunction(localeService),
     nutrientTableService: asFunction(nutrientTableService),
 
     dataExportFields: asFunction(dataExportFields),
