@@ -104,9 +104,12 @@
                               class="full-height-slider ma-0"
                               v-model="sliderValue"
                               :hint="$t('portion.drinkScale.lessFullButton')"
-                              max="100"
+                              :max="maxSliderValue"
                               min="0"
                               vertical
+                              color="#0d47a1"
+                              thumb-color="primary"
+                              @end="onUpdate"
                             ></v-slider>
                           </v-col>
                         </v-row>
@@ -253,6 +256,7 @@ export default defineComponent({
       // quantityValue: this.initialState.portionSize.quantity,
       panelOpen: 0, // ID which panel is open
       sliderValue: 75,
+      maxSliderValue: 100,
       drinkwareSetData: {} as DrinkwareSetResponse,
       guideImageData: {} as GuideImageResponse,
       width: 0,
@@ -283,7 +287,7 @@ export default defineComponent({
       return !!this.errors.length;
     },
     drinkMilliliters(): string {
-      return `${this.sliderValue}ml`;
+      return `${this.sliderValue} ml`;
     },
     dataLoaded(): boolean {
       return !!Object.keys(this.guideImageData).length;
@@ -381,15 +385,15 @@ export default defineComponent({
     getCurrentState(idx: number): DrinkScaleState {
       return {
         method: 'drink-scale',
-        servingWeight: 60,
+        servingWeight: this.sliderValue,
         leftoversWeight: 0, // Guide image does not allow estimating leftovers
         object: {
           id: idx + 1,
           weight: 61,
         },
         leftoversLevel: 0,
-        initialFillLevel: '0.9',
-        fillLevel: 0,
+        initialFillLevel: this.initialFillLevel ?? '0.9',
+        fillLevel: parseInt(this.initialFillLevel) ?? 0,
         skipFillLevel: 'false',
         imageUrl: this.selectionImageUrl,
         drinkwareId: this.drinkwareId,
@@ -402,13 +406,16 @@ export default defineComponent({
       this.selectedObjectIdx = idx;
       this.selectionImageUrl = this.drinkwareSetData.scales[idx].baseImageUrl;
       this.selectedImageOverlayUrl = this.drinkwareSetData.scales[idx].overlayImageUrl;
+      this.maxSliderValue = this.drinkwareSetData.scales[idx].fullLevel;
+      this.sliderValue = this.maxSliderValue - this.maxSliderValue * 0.1;
       this.onUpdate();
     },
 
     modifySliderValue(value: number) {
       // Handle upper and lower bounds, otherwise assign.
-      if (this.sliderValue + value > 100) {
-        this.sliderValue = 100;
+      const maxLevel = this.drinkwareSetData.scales[this.selectedObjectIdx].fullLevel;
+      if (this.sliderValue + value > maxLevel) {
+        this.sliderValue = maxLevel;
       } else if (this.sliderValue + value < 0) {
         this.sliderValue = 0;
       } else {
@@ -423,22 +430,20 @@ export default defineComponent({
       this.errors = [];
     },
     isValid() {
-      if (this.selectedGuide) {
+      if (this.sliderValue > 0) {
         return true;
       }
       return false;
     },
     submit() {
       if (!this.isValid()) {
-        this.errors = [
-          this.getLocaleContent(this.validation.message) ??
-            this.$t('portion.guideImage.validation.required').toString(),
-        ];
+        this.errors = [this.$t('portion.drinkScale.validation.required').toString()];
         return;
       }
-      this.$emit('DrinkScale completed');
       this.drinkScaleAmount = true; // This sets the icon on the panel, UI sugar
       this.panelOpen = -1; // Close panels if no errors
+      console.log('DrinkScale Prompt Completed');
+      this.$emit('continue');
     },
   },
 });
@@ -481,22 +486,6 @@ export default defineComponent({
     position: absolute;
     top: 0;
     left: 0;
-
-    .drink-scale-drawer-overlay {
-      cursor: pointer;
-      fill: transparent;
-
-      &.active,
-      &:hover {
-        fill: #0d47a1;
-        fill-opacity: 0.4;
-        stroke-width: 8;
-        stroke: #0d47a1;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-opacity: 0.5;
-      }
-    }
   }
 }
 </style>

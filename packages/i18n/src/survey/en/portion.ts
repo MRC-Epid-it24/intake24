@@ -92,6 +92,9 @@ const portion: LocaleMessageObject = {
     moreFullButton: 'It was more full',
     confirmFullButton: 'It was that full',
     sliderHint: 'Slide this to indicate how full your cup or glass was.',
+    validation: {
+      required: 'Please select the amount you had or the closest match to it.',
+    },
   },
   standardPortion: {
     portionMethodLabel: 'How would you like to estimate your portion size?',
