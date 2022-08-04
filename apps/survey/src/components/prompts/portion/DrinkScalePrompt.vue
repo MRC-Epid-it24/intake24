@@ -17,37 +17,12 @@
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-row>
-                  <v-col>
-                    <div class="guides-drawer" v-if="dataLoaded">
-                      <v-img
-                        ref="imgGuide"
-                        v-resize="onImgResize"
-                        :src="
-                          guideImageData.imageMap.baseImageUrl.replace(
-                            'http://localhost:3100',
-                            'https://api.intake24.org'
-                          )
-                        "
-                      >
-                        <template v-slot:placeholder>
-                          <image-placeholder></image-placeholder>
-                        </template>
-                      </v-img>
-                      <svg ref="svg" :height="height" :width="width">
-                        <polygon
-                          v-for="(polygon, idx) in polygons"
-                          :key="idx"
-                          class="guides-drawer-polygon"
-                          :class="{ active: idx === selectedObjectIdx }"
-                          :points="polygon"
-                          @click.stop="selectObject(idx)"
-                          @keypress.stop="selectObject(idx)"
-                        ></polygon>
-                      </svg>
-                    </div>
-                  </v-col>
-                </v-row>
+                <guide-image-panel
+                  v-if="dataLoaded"
+                  :guide-image-api-response="guideImageData"
+                  :selectedIndex="selectedObjectIdx"
+                  @guide-object="selectObject"
+                ></guide-image-panel>
                 <v-row>
                   <v-col>
                     <v-btn color="success" @click="onSelectGuide()">
@@ -171,6 +146,7 @@ import type { PropType, Ref } from 'vue';
 import type { VImg } from 'vuetify/lib';
 import { Resize } from 'vuetify/lib/directives';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
+import GuideImagePanel from '@intake24/survey/components/elements/GuideImagePanel.vue';
 import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
 import { merge } from '@intake24/common/util';
@@ -197,7 +173,7 @@ export default defineComponent({
 
   mixins: [BasePortion, localeContent],
 
-  components: { ImagePlaceholder },
+  components: { ImagePlaceholder, GuideImagePanel },
 
   directives: { Resize },
 
