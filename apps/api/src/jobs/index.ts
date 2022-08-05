@@ -2,6 +2,8 @@ import type { JobType } from '@intake24/common/types';
 import CleanRedisStore from './clean-redis-store';
 import CleanStorageFiles from './clean-storage-files';
 import PurgeRefreshTokens from './purge-refresh-tokens';
+import LanguageSyncTranslations from './language-sync-translations';
+import LocaleCopyPairwiseAssociations from './locale-copy-pairwise-associations';
 import NutrientTableImportData from './nutrient-table-import-data';
 import NutrientTableImportMapping from './nutrient-table-import-mapping';
 import SendPasswordReset from './send-password-reset';
@@ -10,7 +12,6 @@ import SurveyDataExport from './survey-data-export';
 import SurveyExportRespondentAuthUrls from './survey-export-respondent-auth-urls';
 import SurveyImportRespondents from './survey-import-respondents';
 import SurveySubmissionNotification from './survey-submission-notification';
-import SyncLanguageTranslations from './sync-language-translations';
 
 export * from './job';
 export { default as Job } from './job';
@@ -23,7 +24,10 @@ const jobs = {
   PurgeRefreshTokens,
   SendRespondentFeedback,
   SendPasswordReset,
-  SyncLanguageTranslations,
+  // Languages
+  LanguageSyncTranslations,
+  // Locales
+  LocaleCopyPairwiseAssociations,
   // Nutrient tables
   NutrientTableImportData,
   NutrientTableImportMapping,

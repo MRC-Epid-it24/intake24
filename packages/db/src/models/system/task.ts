@@ -1,5 +1,5 @@
 import { Table, Column, CreatedAt, DataType, UpdatedAt } from 'sequelize-typescript';
-import type { JobParams, JobType } from '@intake24/common/types';
+import type { JobTypeParams, JobType } from '@intake24/common/types';
 import type { TaskAttributes, TaskCreationAttributes } from '@intake24/common/types/models';
 import BaseModel from '../model';
 
@@ -56,12 +56,12 @@ export default class Task
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get params(): JobParams {
+  get params(): JobTypeParams {
     const val = this.getDataValue('params') as unknown;
     return val ? JSON.parse(val as string) : {};
   }
 
-  set params(value: JobParams) {
+  set params(value: JobTypeParams) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('params', JSON.stringify(value ?? {}));
   }

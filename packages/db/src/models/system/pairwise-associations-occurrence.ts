@@ -17,7 +17,7 @@ export default class PAOccurrence
     primaryKey: true,
     type: DataType.STRING(64),
   })
-  public locale!: string;
+  public localeId!: string;
 
   @Column({
     allowNull: false,

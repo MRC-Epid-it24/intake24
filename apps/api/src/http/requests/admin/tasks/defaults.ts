@@ -3,8 +3,9 @@ import type { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 import type { WhereOptions } from '@intake24/db';
 import { Op, Task } from '@intake24/db';
-import { cron, jobExists, unique } from '@intake24/api/http/rules';
+import { cron, unique } from '@intake24/api/http/rules';
 import type { TaskAttributes } from '@intake24/common/types/models';
+import { jobTypes } from '@intake24/common/types';
 
 const defaults: Schema = {
   name: {
@@ -26,7 +27,7 @@ const defaults: Schema = {
     errorMessage: 'Invalid JOB entry.',
     isEmpty: { negated: true },
     isString: true,
-    custom: { options: jobExists },
+    isIn: { options: [jobTypes] },
   },
   cron: {
     in: ['body'],

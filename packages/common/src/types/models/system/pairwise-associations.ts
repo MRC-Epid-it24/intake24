@@ -1,17 +1,17 @@
 export type PAOccurrenceAttributes = {
-  locale: string;
+  localeId: string;
   foodCode: string;
   occurrences: number;
 };
 
 export type PACoOccurrenceAttributes = {
-  locale: string;
+  localeId: string;
   antecedentFoodCode: string;
   consequentFoodCode: string;
   occurrences: number;
 };
 
 export type PAOccurrenceTransactionCountAttributes = {
-  locale: string;
+  localeId: string;
   transactionsCount: number;
 };

@@ -8,7 +8,7 @@
               <v-icon class="grey" dark>fa-running</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ $t(`jobs.types.${job.type}`) }}</v-list-item-title>
+              <v-list-item-title>{{ $t(`jobs.types.${job.type}._`) }}</v-list-item-title>
               <v-list-item-subtitle>
                 {{ $t('common.startedAt') }}:
                 {{ job.startedAt ? new Date(job.startedAt).toLocaleString() : $t('common.na') }}

@@ -47,6 +47,12 @@ const locales: LocaleMessageObject = {
 
     synonyms: 'Synonyms (space-delimited)',
   },
+
+  tasks: {
+    _: 'Locale task',
+    title: 'Locale tasks',
+    tab: 'tasks',
+  },
 };
 
 export default locales;

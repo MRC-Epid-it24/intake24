@@ -1,3 +1,5 @@
+import pick from 'lodash/pick';
+
 // Not defined in bull-mq
 export type RepeatableBullJob = {
   key: string;
@@ -14,6 +16,8 @@ export type JobData<T = any> = { params: T };
 export const jobTypes = [
   'CleanRedisStore',
   'CleanStorageFiles',
+  'LanguageSyncTranslations',
+  'LocaleCopyPairwiseAssociations',
   'NutrientTableImportMapping',
   'NutrientTableImportData',
   'PurgeRefreshTokens',
@@ -23,7 +27,6 @@ export const jobTypes = [
   'SurveyExportRespondentAuthUrls',
   'SurveyImportRespondents',
   'SurveySubmissionNotification',
-  'SyncLanguageTranslations',
 ] as const;
 
 export type JobType = typeof jobTypes[number];
@@ -32,88 +35,101 @@ export const isValidJob = (job: any): boolean => jobTypes.includes(job);
 
 export type EmptyJobParams = Record<string, never>;
 
-export type CleanRedisStoreParams = {
-  store: 'cache' | 'session';
+export type JobParams = {
+  CleanRedisStore: {
+    store: 'cache' | 'session';
+  };
+  CleanStorageFiles: EmptyJobParams;
+  LanguageSyncTranslations: EmptyJobParams;
+  LocaleCopyPairwiseAssociations: {
+    sourceLocaleId: string;
+    targetLocaleId: string;
+  };
+  NutrientTableImportMapping: {
+    nutrientTableId: string;
+    file: string;
+  };
+  NutrientTableImportData: {
+    nutrientTableId: string;
+    file: string;
+  };
+  PurgeRefreshTokens: EmptyJobParams;
+  SendPasswordReset: {
+    email: string;
+    userAgent?: string;
+  };
+  SendRespondentFeedback: {
+    surveyId: string;
+    userId: string;
+    submissions?: string[];
+    to: string;
+    cc?: string;
+    bcc?: string;
+  };
+  SurveyDataExport: {
+    id?: string | string[];
+    surveyId: string;
+    startDate?: Date;
+    endDate?: Date;
+    userId?: string;
+  };
+  SurveyExportRespondentAuthUrls: {
+    surveyId: string;
+  };
+  SurveyImportRespondents: {
+    surveyId: string;
+    file: string;
+  };
+  SurveySubmissionNotification: {
+    surveyId: string;
+    submissionId: string;
+  };
 };
 
-export type CleanStorageFilesParams = EmptyJobParams;
-export type PurgeRefreshTokensParams = EmptyJobParams;
+export type JobTypeParams = JobParams[keyof JobParams];
 
-export type SendPasswordResetParams = {
-  email: string;
-  userAgent?: string;
+export type GetJobParams<P extends keyof JobParams> = JobParams[P];
+
+export const defaultJobsParams: JobParams = {
+  CleanRedisStore: { store: 'cache' },
+  CleanStorageFiles: {},
+  LanguageSyncTranslations: {},
+  LocaleCopyPairwiseAssociations: {
+    sourceLocaleId: '',
+    targetLocaleId: '',
+  },
+  NutrientTableImportMapping: {
+    nutrientTableId: '',
+    file: '',
+  },
+  NutrientTableImportData: {
+    nutrientTableId: '',
+    file: '',
+  },
+  PurgeRefreshTokens: {},
+  SendRespondentFeedback: {
+    surveyId: '',
+    userId: '',
+    to: '',
+  },
+  SendPasswordReset: {
+    email: '',
+  },
+  SurveyDataExport: {
+    surveyId: '',
+  },
+  SurveyExportRespondentAuthUrls: {
+    surveyId: '',
+  },
+  SurveyImportRespondents: {
+    surveyId: '',
+    file: '',
+  },
+  SurveySubmissionNotification: {
+    surveyId: '',
+    submissionId: '',
+  },
 };
 
-export type SendRespondentFeedbackParams = {
-  surveyId: string;
-  userId: string;
-  submissions?: string[];
-  to: string;
-  cc?: string;
-  bcc?: string;
-};
-
-export type SyncLanguageTranslationsParams = EmptyJobParams;
-
-export type NutrientTableImportMappingParams = {
-  nutrientTableId: string;
-  file: string;
-};
-
-export type NutrientTableImportDataParams = {
-  nutrientTableId: string;
-  file: string;
-};
-
-export type SurveyDataExportParams = {
-  id?: string | string[];
-  surveyId: string;
-  startDate?: Date;
-  endDate?: Date;
-  userId?: string;
-};
-
-export type SurveyExportRespondentAuthUrlsParams = {
-  surveyId: string;
-};
-
-export type SurveyImportRespondentsParams = {
-  surveyId: string;
-  file: string;
-};
-
-export type SurveySubmissionNotificationParams = {
-  surveyId: string;
-  submissionId: string;
-};
-
-export type JobParams =
-  | CleanRedisStoreParams
-  | CleanStorageFilesParams
-  | PurgeRefreshTokensParams
-  | NutrientTableImportMappingParams
-  | NutrientTableImportDataParams
-  | SendPasswordResetParams
-  | SendRespondentFeedbackParams
-  | SurveyDataExportParams
-  | SurveyExportRespondentAuthUrlsParams
-  | SurveyImportRespondentsParams
-  | SurveySubmissionNotificationParams
-  | SyncLanguageTranslationsParams;
-
-export type JobParamsList = {
-  CleanRedisStore: CleanRedisStoreParams;
-  CleanStorageFiles: CleanStorageFilesParams;
-  PurgeRefreshTokens: PurgeRefreshTokensParams;
-  NutrientTableImportMapping: NutrientTableImportMappingParams;
-  NutrientTableImportData: NutrientTableImportDataParams;
-  SendPasswordReset: SendPasswordResetParams;
-  SendRespondentFeedback: SendRespondentFeedbackParams;
-  SurveyDataExport: SurveyDataExportParams;
-  SurveyExportRespondentAuthUrls: SurveyExportRespondentAuthUrlsParams;
-  SurveyImportRespondents: SurveyImportRespondentsParams;
-  SurveySubmissionNotification: SurveySubmissionNotificationParams;
-  SyncLanguageTranslations: SyncLanguageTranslationsParams;
-};
-
-export type GetJobParams<P extends keyof JobParamsList> = JobParamsList[P];
+export const pickJobParams = <T extends keyof JobParams>(object: object, job: T): JobParams[T] =>
+  pick(object, Object.keys(defaultJobsParams[job])) as JobParams[T];

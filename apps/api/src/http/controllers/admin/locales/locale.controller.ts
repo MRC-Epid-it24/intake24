@@ -1,11 +1,13 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import type { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/types/http/admin';
-import type { PaginateQuery } from '@intake24/db';
+import type { Job, PaginateQuery, User } from '@intake24/db';
 import { FoodsLocale, Language, SystemLocale } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
+import { pickJobParams } from '@intake24/common/types';
 
-const localeController = () => {
+const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
   const entry = async (
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
@@ -119,6 +121,25 @@ const localeController = () => {
     res.json({ languages, locales });
   };
 
+  const tasks = async (req: Request<{ localeId: string }>, res: Response<Job>): Promise<void> => {
+    const {
+      body: { job, params },
+      params: { localeId },
+    } = req;
+    const { id: userId } = req.user as User;
+
+    const locale = await SystemLocale.findByPk(localeId);
+    if (!locale) throw new NotFoundError();
+
+    const jobEntry = await localeService.queueLocaleTask({
+      userId,
+      job,
+      params: { ...pickJobParams(params, job), sourceLocaleId: localeId },
+    });
+
+    res.json(jobEntry);
+  };
+
   return {
     browse,
     store,
@@ -127,6 +148,7 @@ const localeController = () => {
     update,
     destroy,
     refs,
+    tasks,
   };
 };
 

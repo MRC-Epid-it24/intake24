@@ -3,7 +3,7 @@ import ms from 'ms';
 import nunjucks from 'nunjucks';
 import { Op } from 'sequelize';
 import parser from 'ua-parser-js';
-import type { SendPasswordResetParams } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import { randomString } from '@intake24/common/util';
 import { getFrontEndUrl } from '@intake24/api/util';
@@ -14,7 +14,7 @@ const getAgentInfo = (agent: { name?: string; version?: string }): string | unde
   return agent.name && agent.version ? `${agent.name} (${agent.version})` : undefined;
 };
 
-export default class SendPasswordReset extends BaseJob<SendPasswordResetParams> {
+export default class SendPasswordReset extends BaseJob<JobParams['SendPasswordReset']> {
   readonly name = 'SendPasswordReset';
 
   private readonly appConfig;

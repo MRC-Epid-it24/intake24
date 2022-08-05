@@ -1,13 +1,13 @@
 import type { Job } from 'bullmq';
 import fs from 'fs-extra';
 import path from 'node:path';
-import type { CleanStorageFilesParams } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import { addTime } from '@intake24/api/util';
 import type { LocalLocation } from '@intake24/api/config/filesystem';
 import BaseJob from './job';
 
-export default class CleanStorageFiles extends BaseJob<CleanStorageFilesParams> {
+export default class CleanStorageFiles extends BaseJob<JobParams['CleanStorageFiles']> {
   readonly name = 'CleanStorageFiles';
 
   private readonly config;

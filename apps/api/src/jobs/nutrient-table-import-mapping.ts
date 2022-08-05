@@ -2,7 +2,7 @@ import type { Job } from 'bullmq';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import path from 'node:path';
-import type { NutrientTableImportMappingParams } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 import { excelColumnToOffset } from '@intake24/common/util/strings';
 import type { IoC } from '@intake24/api/ioc';
 import { NutrientTable, NutrientTableCsvMappingNutrient, FoodsNutrientType } from '@intake24/db';
@@ -15,7 +15,9 @@ export type CSVRow = {
 
 const requiredFields = ['Intake24 nutrient ID', 'NDB spreadsheet column index'];
 
-export default class NutrientTableImportMapping extends StreamLockJob<NutrientTableImportMappingParams> {
+export default class NutrientTableImportMapping extends StreamLockJob<
+  JobParams['NutrientTableImportMapping']
+> {
   readonly name = 'NutrientTableImportMapping';
 
   private file!: string;

@@ -14,15 +14,52 @@ const jobs: LocaleMessageObject = {
 
   types: {
     _: 'Job types',
-    CleanStorageFiles: 'Clean storage files',
-    PurgeRefreshTokens: 'Purge expired refresh tokens',
-    NutrientTableImportMapping: 'Nutrient tables - import NDB mapping',
-    NutrientTableImportData: 'Nutrient tables - import NDB data',
-    SendPasswordReset: 'Send password reset',
-    SurveyDataExport: 'Surveys - data export',
-    SurveyExportRespondentAuthUrls: 'Surveys - export respondent authentication URLs ',
-    SurveyImportRespondents: 'Surveys - import respondents',
-    SurveySubmissionNotification: 'Surveys - submission notification',
+    CleanRedisStore: {
+      _: 'Clean redis store',
+      stores: {
+        _: 'Redis store',
+        cache: 'Cache',
+        session: 'Session',
+      },
+    },
+    CleanStorageFiles: {
+      _: 'Clean storage files',
+    },
+    PurgeRefreshTokens: {
+      _: 'Purge expired refresh tokens',
+    },
+    LanguageSyncTranslations: {
+      _: 'Language - Synchronize translations',
+    },
+    LocaleCopyPairwiseAssociations: {
+      _: 'Locale - Copy pairwise associations',
+      sourceLocaleId: 'Source Locale ID',
+      targetLocaleId: 'Target Locale ID',
+    },
+    NutrientTableImportMapping: {
+      _: 'Nutrient table - import NDB mapping',
+    },
+    NutrientTableImportData: {
+      _: 'Nutrient table - import NDB data',
+    },
+    SendPasswordReset: {
+      _: 'Send password reset',
+    },
+    SendRespondentFeedback: {
+      _: 'Send respondent feedback',
+    },
+    SurveyDataExport: {
+      _: 'Survey - data export',
+    },
+    SurveyExportRespondentAuthUrls: {
+      _: 'Survey - export respondent authentication URLs ',
+    },
+    SurveyImportRespondents: {
+      _: 'Survey - import respondents',
+    },
+    SurveySubmissionNotification: {
+      _: 'Survey - submission notification',
+    },
   },
 };
 

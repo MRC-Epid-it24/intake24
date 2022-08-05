@@ -60,7 +60,7 @@ import { defineComponent } from 'vue';
 import type { JobEntry, NutrientTableEntry } from '@intake24/common/types/http/admin';
 import type { JobType } from '@intake24/common/types';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { PollsForJobs } from '@intake24/admin/components/polls-for-jobs';
+import { PollsForJobs } from '@intake24/admin/components/jobs';
 import { form } from '@intake24/admin/helpers';
 
 type UploadForm = {
@@ -81,11 +81,7 @@ export default defineComponent({
 
   data() {
     const jobType: JobType[] = ['NutrientTableImportMapping', 'NutrientTableImportData'];
-
-    const jobTypeList = jobType.map((item) => ({
-      value: item,
-      text: this.$t(`jobs.types.${item}`),
-    }));
+    const jobTypeList = jobType.map((value) => ({ value, text: this.$t(`jobs.types.${value}._`) }));
 
     return {
       form: form<UploadForm>(

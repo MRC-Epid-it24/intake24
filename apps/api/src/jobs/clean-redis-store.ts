@@ -1,10 +1,10 @@
 import type { Job } from 'bullmq';
-import type { CleanRedisStoreParams } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import type { RedisStore } from '@intake24/api/services';
 import BaseJob from './job';
 
-export default class CleanRedisStore extends BaseJob<CleanRedisStoreParams> {
+export default class CleanRedisStore extends BaseJob<JobParams['CleanRedisStore']> {
   readonly name = 'CleanRedisStore';
 
   private readonly stores: Record<'cache' | 'session', RedisStore>;

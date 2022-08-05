@@ -1,11 +1,11 @@
 import type { Job } from 'bullmq';
 import fs from 'fs-extra';
 import nunjucks from 'nunjucks';
-import type { SendRespondentFeedbackParams } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import BaseJob from './job';
 
-export default class SendRespondentFeedback extends BaseJob<SendRespondentFeedbackParams> {
+export default class SendRespondentFeedback extends BaseJob<JobParams['SendRespondentFeedback']> {
   readonly name = 'SendRespondentFeedback';
 
   private readonly feedbackService;

@@ -28,6 +28,13 @@ export default () => {
 
   router.get('/:localeId/edit', permission('locales|edit'), wrapAsync(localeController.edit));
 
+  router.post(
+    '/:localeId/tasks',
+    permission('locales|tasks'),
+    validation.tasks,
+    wrapAsync(localeController.tasks)
+  );
+
   router.use('/:localeId/split-lists', splitLists());
   router.use('/:localeId/split-words', splitWords());
   router.use('/:localeId/synonym-sets', synonymSets());

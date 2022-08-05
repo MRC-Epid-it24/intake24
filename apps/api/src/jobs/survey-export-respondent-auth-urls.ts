@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import type json2csv from 'json2csv';
 import { Transform } from 'json2csv';
 import path from 'node:path';
-import type { SurveyExportRespondentAuthUrlsParams } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 import { Job as DbJob, Survey, UserSurveyAlias } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
@@ -12,7 +12,9 @@ import { surveyUrlService } from '@intake24/api/services';
 import { addTime } from '@intake24/api/util';
 import BaseJob from './job';
 
-export default class SurveyExportRespondentAuthUrls extends BaseJob<SurveyExportRespondentAuthUrlsParams> {
+export default class SurveyExportRespondentAuthUrls extends BaseJob<
+  JobParams['SurveyExportRespondentAuthUrls']
+> {
   readonly name = 'SurveyExportRespondentAuthUrls';
 
   private dbJob!: DbJob;

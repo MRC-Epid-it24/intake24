@@ -11,7 +11,7 @@ export { default as SystemNutrientType } from './nutrient-type';
 export { default as SystemNutrientUnit } from './nutrient-unit';
 export { default as PAOccurrence } from './pairwise-associations-occurrence';
 export { default as PACoOccurrence } from './pairwise-associations-co-occurrence';
-export { default as PAOccurrenceTransactionCountAttributes } from './pairwise-associations-occurrences-transactions-count';
+export { default as PAOccurrenceTransactionCount } from './pairwise-associations-occurrences-transactions-count';
 export { default as Permission } from './permission';
 export { default as PermissionRole } from './permission-role';
 export { default as PermissionUser } from './permission-user';

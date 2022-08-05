@@ -1,6 +1,6 @@
 import type { ConnectionOptions, JobsOptions } from 'bullmq';
 import { Job as BullJob, Queue, QueueEvents, QueueScheduler, Worker } from 'bullmq';
-import type { JobData, JobParams, JobParamsList, JobType } from '@intake24/common/types';
+import type { JobData, JobTypeParams, JobParams, JobType } from '@intake24/common/types';
 import { Job as DbJob } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
 import ioc from '@intake24/api/ioc';
@@ -203,12 +203,16 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    *
    * @private
    * @param {DbJob} job
-   * @param {JobParams} [params]
+   * @param {JobTypeParams} [params]
    * @param {JobsOptions} [options={}]
    * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
-  private async queueJob(job: DbJob, params?: JobParams, options: JobsOptions = {}): Promise<void> {
+  private async queueJob(
+    job: DbJob,
+    params?: JobTypeParams,
+    options: JobsOptions = {}
+  ): Promise<void> {
     const { id, type } = job;
 
     await this.queue.add(type, { params }, { ...options, jobId: id });
@@ -221,14 +225,14 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    *
    * @template T
    * @param {JobInput<T>} input
-   * @param {JobParams} [params]
+   * @param {JobTypeParams} [params]
    * @param {JobsOptions} [options={}]
    * @returns {Promise<DbJob>}
    * @memberof JobsQueueHandler
    */
   public async addJob<T extends JobType>(
     input: JobInput<T>,
-    params?: JobParamsList[T],
+    params?: JobParams[T],
     options: JobsOptions = {}
   ): Promise<DbJob> {
     const job = await DbJob.create(input);

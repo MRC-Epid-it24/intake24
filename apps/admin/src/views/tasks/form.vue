@@ -3,7 +3,7 @@
     <template v-slot:actions>
       <confirm-dialog
         v-if="!isCreate && can({ action: 'edit' })"
-        :label="$t('tasks.run._')"
+        :label="$t('tasks.run._').toString()"
         :activatorClass="['ml-2']"
         color="secondary"
         iconLeft="fas fa-play"
@@ -30,7 +30,7 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="form.job"
-                :items="refs.jobs"
+                :items="jobs"
                 :error-messages="form.errors.get('job')"
                 :label="$t('tasks.job')"
                 hide-details="auto"
@@ -83,8 +83,11 @@
           <component
             v-if="Object.keys(form.params).length"
             :is="form.job"
-            v-bind.sync="form.params"
+            v-model="form.params"
+            :error="form.errors.get('params')"
             :refs="refs"
+            name="params"
+            @input="form.errors.clear('params')"
           ></component>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
@@ -96,13 +99,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import cronstrue from 'cronstrue';
-import type { JobParams, JobParamsList, JobType } from '@intake24/common/types';
+import { defaultJobsParams } from '@intake24/common/types';
+import type { JobTypeParams, JobType } from '@intake24/common/types';
 import type { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
 import { formatsDateTime } from '@intake24/admin/mixins';
-import paramComponents from './params';
+import { jobParams } from '@intake24/admin/components/jobs';
 
 type TaskForm = {
   id: string | null;
@@ -111,50 +115,13 @@ type TaskForm = {
   cron: string | null;
   active: boolean;
   description: string | null;
-  params: JobParams;
-};
-
-const defaultParams: JobParamsList = {
-  CleanRedisStore: { store: 'cache' },
-  CleanStorageFiles: {},
-  PurgeRefreshTokens: {},
-  NutrientTableImportMapping: {
-    nutrientTableId: '',
-    file: '',
-  },
-  NutrientTableImportData: {
-    nutrientTableId: '',
-    file: '',
-  },
-  SendRespondentFeedback: {
-    surveyId: '',
-    userId: '',
-    to: '',
-  },
-  SendPasswordReset: {
-    email: '',
-  },
-  SurveyDataExport: {
-    surveyId: '',
-  },
-  SurveyExportRespondentAuthUrls: {
-    surveyId: '',
-  },
-  SurveyImportRespondents: {
-    surveyId: '',
-    file: '',
-  },
-  SurveySubmissionNotification: {
-    surveyId: '',
-    submissionId: '',
-  },
-  SyncLanguageTranslations: {},
+  params: JobTypeParams;
 };
 
 export default defineComponent({
   name: 'TaskForm',
 
-  components: { ConfirmDialog, ...paramComponents },
+  components: { ConfirmDialog, ...jobParams },
 
   mixins: [formatsDateTime, formMixin],
 
@@ -175,7 +142,7 @@ export default defineComponent({
         description: null,
         params: {},
       }),
-      defaultParams,
+      defaultJobsParams,
     };
   },
 
@@ -189,12 +156,21 @@ export default defineComponent({
         return this.$t('tasks.invalidCron').toString();
       }
     },
+
+    jobs(): { text: string; value: string }[] {
+      if (!this.refsLoaded) return [];
+
+      return this.refs.jobs.map((value) => ({
+        value,
+        text: this.$t(`jobs.types.${value}._`).toString(),
+      }));
+    },
   },
 
   methods: {
     toForm(data: TaskEntry) {
       const { params, ...rest } = data;
-      const input = { ...rest, params: { ...defaultParams[rest.job], ...params } };
+      const input = { ...rest, params: { ...defaultJobsParams[rest.job], ...params } };
 
       this.setOriginalEntry(input);
       this.form.load(input);
@@ -211,7 +187,7 @@ export default defineComponent({
         return;
       }
 
-      this.form.params = { ...this.defaultParams[this.form.job] };
+      this.form.params = { ...this.defaultJobsParams[this.form.job] };
     },
 
     async triggerJob() {

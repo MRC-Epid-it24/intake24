@@ -44,9 +44,15 @@ declare module '@vue/runtime-core' {
     FormsSubmitFooter: typeof import('./src/components/forms/submit-footer.vue')['default'];
     GalleryGallery: typeof import('./src/components/gallery/gallery.vue')['default'];
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default'];
+    JobsParamsCleanRedisStore: typeof import('./src/components/jobs/params/clean-redis-store.vue')['default'];
+    JobsParamsLocaleCopyPairwiseAssociations: typeof import('./src/components/jobs/params/locale-copy-pairwise-associations.vue')['default'];
+    JobsParamsSurveyDataExport: typeof import('./src/components/jobs/params/survey-data-export.vue')['default'];
+    JobsParamsSurveyExportRespondentAuthUrls: typeof import('./src/components/jobs/params/survey-export-respondent-auth-urls.vue')['default'];
+    JobsParamsSurveyImportRespondents: typeof import('./src/components/jobs/params/survey-import-respondents.vue')['default'];
+    JobsParamsSurveySubmissionNotification: typeof import('./src/components/jobs/params/survey-submission-notification.vue')['default'];
+    JobsPollsJobList: typeof import('./src/components/jobs/polls-job-list.vue')['default'];
     Loader: typeof import('./src/components/loader.vue')['default'];
     MealsMealList: typeof import('./src/components/meals/meal-list.vue')['default'];
-    PollsForJobsPollsJobList: typeof import('./src/components/polls-for-jobs/polls-job-list.vue')['default'];
     PromptsCustomCheckboxListPrompt: typeof import('./src/components/prompts/custom/checkbox-list-prompt.vue')['default'];
     PromptsCustomDatePickerPrompt: typeof import('./src/components/prompts/custom/date-picker-prompt.vue')['default'];
     PromptsCustomInfoPrompt: typeof import('./src/components/prompts/custom/info-prompt.vue')['default'];

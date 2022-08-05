@@ -105,7 +105,7 @@
 import { defineComponent } from 'vue';
 import type { JobEntry, SurveyEntry } from '@intake24/common/types/http/admin';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { PollsForJobs } from '@intake24/admin/components/polls-for-jobs';
+import { PollsForJobs } from '@intake24/admin/components/jobs';
 import { form } from '@intake24/admin/helpers';
 
 type SurveyDataExportForm = {

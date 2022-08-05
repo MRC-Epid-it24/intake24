@@ -1,4 +1,4 @@
-import type { JobParams, JobType } from '../../jobs';
+import type { JobTypeParams, JobType } from '../../jobs';
 import type { OmitAndOptional } from '..';
 
 export type TaskAttributes = {
@@ -8,7 +8,7 @@ export type TaskAttributes = {
   cron: string;
   active: boolean;
   description: string | null;
-  params: JobParams;
+  params: JobTypeParams;
   createdAt: Date;
   updatedAt: Date;
 };

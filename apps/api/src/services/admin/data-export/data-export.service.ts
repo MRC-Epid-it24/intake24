@@ -23,13 +23,13 @@ import {
 } from '@intake24/db';
 import { Readable } from 'stream';
 import type { ExportSection } from '@intake24/common/schemes';
-import type { SurveyDataExportParams } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { ExportFieldInfo } from './data-export-mapper';
 import { EMPTY } from './data-export-fields';
 
-export type DataExportInput = SurveyDataExportParams;
+export type DataExportInput = JobParams['SurveyDataExport'];
 
 export type SubmissionFindOptions = Record<'foods' | 'missingFoods', StreamFindOptions>;
 
@@ -217,8 +217,10 @@ const dataExportService = ({
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-data-export-${surveyId}-${timestamp}.csv`;
 
-    const totalFoods = await SurveySubmissionFood.count(options.foods);
-    const totalMissingFoods = await SurveySubmissionMissingFood.count(options.missingFoods);
+    const [totalFoods, totalMissingFoods] = await Promise.all([
+      SurveySubmissionFood.count(options.foods),
+      SurveySubmissionMissingFood.count(options.missingFoods),
+    ]);
 
     return { options, fields, filename, total: totalFoods + totalMissingFoods };
   };

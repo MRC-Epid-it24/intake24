@@ -136,6 +136,7 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'locales|split-lists', displayName: 'Locale split lists' },
     { name: 'locales|split-words', displayName: 'Locale split words' },
     { name: 'locales|synonym-sets', displayName: 'Locale synonym sets' },
+    { name: 'locales|tasks', displayName: 'Locale tasks' },
     { name: 'nutrient-tables', displayName: 'Nutrient tables resource access' },
     { name: 'nutrient-tables|browse', displayName: 'Browse nutrient tables' },
     { name: 'nutrient-tables|read', displayName: 'Read nutrient tables' },

@@ -4,6 +4,7 @@ import read from './read.vue';
 import splitLists from './split-lists';
 import splitWords from './split-words';
 import synonymSets from './synonym-sets';
+import tasks from './tasks';
 
 export default {
   browse,
@@ -13,4 +14,5 @@ export default {
   'split-lists': splitLists,
   'split-words': splitWords,
   'synonym-sets': synonymSets,
+  tasks,
 };

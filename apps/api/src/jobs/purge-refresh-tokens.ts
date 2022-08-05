@@ -1,9 +1,9 @@
 import type { Job } from 'bullmq';
-import type { PurgeRefreshTokensParams } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 import type { IoC } from '@intake24/api/ioc';
 import BaseJob from './job';
 
-export default class PurgeRefreshTokens extends BaseJob<PurgeRefreshTokensParams> {
+export default class PurgeRefreshTokens extends BaseJob<JobParams['PurgeRefreshTokens']> {
   readonly name = 'PurgeRefreshTokens';
 
   private readonly jwtRotationService;
