@@ -1,6 +1,7 @@
 <template>
   <as-served-prompt
-    v-bind="{ foodName, promptProps }"
+    :prompt-props="promptProps"
+    :food-name="foodName()"
     :as-served-set-id="parameters['leftovers-image-set']"
     @as-served-selected="onAsServedSelected"
   ></as-served-prompt>
@@ -33,10 +34,10 @@ export default defineComponent({
 
   computed: {
     parameters(): AsServedParameters {
-      if (this.selectedPortionSize.method !== 'as-served')
+      if (this.selectedPortionSize().method !== 'as-served')
         throw new Error('Selected portion size method must be "as-served"');
 
-      return this.selectedPortionSize.parameters as unknown as AsServedParameters;
+      return this.selectedPortionSize().parameters as unknown as AsServedParameters;
     },
   },
 
@@ -44,7 +45,7 @@ export default defineComponent({
     ...mapActions(useSurvey, ['updateFoodCallback']),
 
     onAsServedSelected(selected: SelectedAsServedImage) {
-      const { conversionFactor } = this.selectedPortionSize;
+      const { conversionFactor } = this.selectedPortionSize();
 
       const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
       if (mealIndex === undefined || foodIndex === undefined) {

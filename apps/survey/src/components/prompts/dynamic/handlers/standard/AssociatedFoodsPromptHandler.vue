@@ -3,7 +3,7 @@
     v-bind="{
       promptProps,
       promptComponent,
-      food: encodedSelectedFood,
+      food: encodedSelectedFood(),
     }"
     :initial-state="initialStateNotNull"
     :continue-enabled="continueEnabled"
@@ -73,14 +73,14 @@ export default defineComponent({
     getInitialState(): AssociatedFoodsState {
       return {
         activePrompt: 0,
-        prompts: this.encodedSelectedFood.data.associatedFoodPrompts.map(() =>
+        prompts: this.encodedSelectedFood().data.associatedFoodPrompts.map(() =>
           initialPromptState()
         ),
       };
     },
 
     getFoodOrMealId() {
-      return this.selectedFood.id;
+      return this.selectedFood().id;
     },
 
     isValid(state: AssociatedFoodsState | null): boolean {
@@ -131,7 +131,7 @@ export default defineComponent({
       });
 
       this.updateFood({
-        foodId: this.encodedSelectedFood.id,
+        foodId: this.encodedSelectedFood().id,
         update: {
           associatedFoodsComplete: true,
           linkedFoods: linkedFoods,

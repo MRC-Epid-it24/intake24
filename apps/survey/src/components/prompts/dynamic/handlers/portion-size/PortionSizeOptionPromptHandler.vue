@@ -1,6 +1,7 @@
 <template>
   <portion-size-option-prompt
-    v-bind="{ foodName, promptProps, availableMethods }"
+    v-bind="{ promptProps, availableMethods }"
+    :food-name="foodName()"
     :prompt-component="promptComponent"
     :initial-value="this.initialState"
     :continue-enabled="this.continueEnabled"
@@ -49,7 +50,7 @@ export default defineComponent({
 
   computed: {
     availableMethods(): UserPortionSizeMethod[] {
-      return this.encodedSelectedFood.data.portionSizeMethods;
+      return this.encodedSelectedFood().data.portionSizeMethods;
     },
   },
 
@@ -58,7 +59,7 @@ export default defineComponent({
 
     getInitialState(): PortionSizeOptionState {
       return {
-        option: this.encodedSelectedFood.portionSizeMethodIndex,
+        option: this.encodedSelectedFood().portionSizeMethodIndex,
       };
     },
 
@@ -67,11 +68,11 @@ export default defineComponent({
     },
 
     getFoodOrMealId(): number {
-      return this.selectedFood.id;
+      return this.selectedFood().id;
     },
 
     commitAnswer() {
-      const { encodedSelectedFood } = this;
+      const encodedSelectedFood = this.encodedSelectedFood();
 
       this.replaceFood({
         foodId: encodedSelectedFood.id,

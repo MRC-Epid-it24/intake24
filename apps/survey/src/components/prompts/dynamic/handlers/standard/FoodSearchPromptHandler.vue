@@ -18,13 +18,14 @@ import type { PropType } from 'vue';
 
 import FoodPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/food-prompt-utils';
 import PromptHandlerStateless from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-stateless';
+import WhyDidYouRender from '@intake24/survey/components/mixins/whyDidYouRender';
 
 export default defineComponent({
   name: 'FoodSearchPromptHandler',
 
   components: { FoodSearchPrompt },
 
-  mixins: [PromptHandlerStateless, FoodPromptUtils],
+  mixins: [PromptHandlerStateless, FoodPromptUtils, WhyDidYouRender],
 
   props: {
     promptProps: {
@@ -41,7 +42,7 @@ export default defineComponent({
 
   computed: {
     selectedFoodDescription(): string {
-      const { selectedFood } = this;
+      const selectedFood = this.selectedFood();
 
       if (selectedFood.type !== 'free-text')
         throw new Error(
@@ -70,7 +71,7 @@ export default defineComponent({
         return;
       }
 
-      const { selectedFood } = this;
+      const selectedFood = this.selectedFood();
 
       // Automatically select the only portion size method available to avoid triggering
       // redundant portion size option prompt

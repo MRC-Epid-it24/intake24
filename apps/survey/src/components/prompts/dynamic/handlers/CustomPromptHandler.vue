@@ -10,9 +10,14 @@ import type { BasePromptProps } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import customPrompts from '@intake24/survey/components/prompts/custom';
 import { useSurvey } from '@intake24/survey/stores';
+import FoodPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/food-prompt-utils';
+import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
+import PromptHandlerStateless from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-stateless';
 
 export default defineComponent({
   name: 'CustomPromptHandler',
+
+  mixins: [FoodPromptUtils, MealPromptUtils, PromptHandlerStateless],
 
   components: { ...customPrompts },
 
@@ -48,6 +53,10 @@ export default defineComponent({
   },
 
   methods: {
+    isValid(): boolean {
+      return true;
+    },
+
     onAnswer(answer: CustomPromptAnswer) {
       this.answer = answer;
       this.$emit('continue');
@@ -65,14 +74,12 @@ export default defineComponent({
           case 'food': {
             if (this.promptComponent === 'info-prompt')
               this.survey.setFoodFlag({
-                mealIndex: this.selection.element.mealIndex,
-                foodIndex: this.selection.element.foodIndex,
+                foodId: this.selectedFood.id,
                 flag: `${this.promptId}-acknowledged`,
               });
             else
               this.survey.setFoodCustomPromptAnswer({
-                mealIndex: this.selection.element.mealIndex,
-                foodIndex: this.selection.element.foodIndex,
+                foodId: this.selectedFood.id,
                 promptId: this.promptId,
                 answer: this.answer,
               });
@@ -81,12 +88,12 @@ export default defineComponent({
           case 'meal': {
             if (this.promptComponent === 'info-prompt')
               this.survey.setMealFlag({
-                mealIndex: this.selection.element.mealIndex,
+                mealId: this.selectedMeal.id,
                 flag: `${this.promptId}-acknowledged`,
               });
             else
               this.survey.setMealCustomPromptAnswer({
-                mealIndex: this.selection.element.mealIndex,
+                mealId: this.selectedMeal.id,
                 promptId: this.promptId,
                 answer: this.answer,
               });
