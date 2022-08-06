@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 export { default as AsServedImage } from './as-served-image';
 export { default as AsServedSet } from './as-served-set';
 export { default as AssociatedFood } from './associated-foods';

@@ -104,11 +104,7 @@ import { defineComponent } from 'vue';
 import { merge } from '@intake24/common/util';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import { basePromptProps } from '@intake24/common/prompts';
-import type {
-  AsServedState,
-  LocaleTranslation,
-  SelectedAsServedImage,
-} from '@intake24/common/types';
+import type { LocaleTranslation, SelectedAsServedImage } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import AsServedWeight from '@intake24/survey/components/elements/AsServedWeight.vue';

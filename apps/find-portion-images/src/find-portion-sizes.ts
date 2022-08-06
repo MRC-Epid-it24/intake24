@@ -275,6 +275,7 @@ async function findPortionSizeImages(
 
   let offset = 0;
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const currentBatch = await Food.findAll({
       include: [

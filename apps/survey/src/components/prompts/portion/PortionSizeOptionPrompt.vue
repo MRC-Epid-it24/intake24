@@ -52,10 +52,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
 import type { PropType } from 'vue';
 import { merge } from '@intake24/common/util';
-import { useSurvey } from '@intake24/survey/stores';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import { basePromptProps } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';

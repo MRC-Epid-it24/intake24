@@ -71,7 +71,7 @@ export default defineComponent({
           this.navigationHistory.push(contents.header);
           this.currentCategoryContents = contents;
         },
-        (error) => {
+        () => {
           this.requestInProgress = false;
           this.requestFailed = true;
         }

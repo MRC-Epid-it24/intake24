@@ -2,7 +2,7 @@ import type { StoreDefinition } from 'pinia';
 import { defineStore } from 'pinia';
 import type { ComponentType } from '@intake24/common/prompts';
 import type { UnwrapRef } from 'vue';
-import Vue, { defineComponent, reactive, unref } from 'vue';
+import Vue, { defineComponent, reactive } from 'vue';
 import { size } from 'lodash';
 
 interface FoodOrMealPromptsState<T> {

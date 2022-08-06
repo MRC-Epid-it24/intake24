@@ -41,7 +41,6 @@ import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
 import { Resize } from 'vuetify/lib/directives';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
-import type { DebouncedFunc } from 'lodash';
 
 export default defineComponent({
   name: 'GuideImagePanel',

@@ -40,11 +40,9 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import type { PropType } from 'vue';
-import { mapState } from 'pinia';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';
-import { useSurvey } from '@intake24/survey/stores';
 import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
 import EditableFoodList from './EditableFoodList.vue';
 import type { EditableFoodListType } from '@intake24/survey/components/prompts/standard/EditableFoodList.vue';

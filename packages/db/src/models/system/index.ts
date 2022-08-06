@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 export { default as ClientErrorReport } from './client-error-report';
 export { default as FixedFoodRanking } from './fixed-food-ranking';
 export { default as FeedbackScheme } from './feedback-scheme';

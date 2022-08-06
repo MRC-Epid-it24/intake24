@@ -142,7 +142,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import type { PropType, Ref } from 'vue';
+import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
 import { Resize } from 'vuetify/lib/directives';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
