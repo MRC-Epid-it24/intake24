@@ -1,5 +1,4 @@
 import childProcess from 'node:child_process';
-import path from 'node:path';
 import { fileURLToPath, URL } from 'node:url';
 
 import vue from '@vitejs/plugin-vue2';
@@ -16,7 +15,7 @@ import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/ui-build
 // Set build info for application
 process.env.VITE_APP_BUILD_VERSION = pkg.version;
 process.env.VITE_APP_BUILD_REVISION = childProcess
-  .execSync('git rev-parse --short HEAD', { cwd: path.resolve(__dirname, '..') })
+  .execSync('git rev-parse --short HEAD')
   .toString()
   .trim();
 process.env.VITE_APP_BUILD_DATE = new Date().toISOString();
