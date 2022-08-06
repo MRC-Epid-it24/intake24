@@ -49,6 +49,8 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
+          <v-divider></v-divider>
+          <app-info></app-info>
         </v-card>
       </v-col>
     </v-row>
@@ -58,12 +60,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
-import { setsLanguage } from '@intake24/ui';
-import type { LanguageAttributes } from '@intake24/common/types/models';
+import { AppInfo, setsLanguage } from '@intake24/ui';
 import { useUser } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'SurveyUserProfile',
+
+  components: { AppInfo },
 
   mixins: [setsLanguage],
 
@@ -74,20 +77,8 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      language: this.$i18n.locale,
-      languages: [] as LanguageAttributes[],
-    };
-  },
-
   computed: {
     ...mapState(useUser, ['profile']),
-  },
-
-  async mounted() {
-    const { data } = await this.$http.get('i18n');
-    this.languages = data;
   },
 
   methods: {

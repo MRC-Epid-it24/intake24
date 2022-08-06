@@ -118,39 +118,28 @@
           </v-list>
         </v-col>
       </v-row>
+      <v-divider></v-divider>
+      <app-info></app-info>
     </v-card>
   </div>
 </template>
 
 <script lang="ts">
-import type { LanguageAttributes } from '@intake24/common/types/models';
 import { defineComponent } from 'vue';
-import { setsLanguage } from '@intake24/ui';
 import { mapState } from 'pinia';
+import { AppInfo, setsLanguage } from '@intake24/ui';
 import { useUser } from '@intake24/admin/stores';
 import UserPassword from './password.vue';
 
 export default defineComponent({
   name: 'UserProfile',
 
-  components: { UserPassword },
+  components: { AppInfo, UserPassword },
 
   mixins: [setsLanguage],
 
-  data() {
-    return {
-      language: this.$root?.$i18n.locale,
-      languages: [] as LanguageAttributes[],
-    };
-  },
-
   computed: {
     ...mapState(useUser, ['profile', 'permissions', 'roles']),
-  },
-
-  async mounted() {
-    const { data } = await this.$http.get('i18n');
-    this.languages = data;
   },
 
   methods: {

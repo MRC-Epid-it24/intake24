@@ -1,8 +1,20 @@
-import type { I18nLanguageEntry } from '@intake24/common/types/http';
+import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
 import { defineComponent } from 'vue';
 import { useApp } from '../stores';
 
 export default defineComponent({
+  data() {
+    return {
+      language: this.$root.$i18n.locale,
+      languages: [] as I18nLanguageListEntry[],
+    };
+  },
+
+  async mounted() {
+    const { data } = await this.$http.get<I18nLanguageListEntry[]>('i18n');
+    this.languages = data;
+  },
+
   methods: {
     fallbackLanguages(): string[] {
       const { fallbackLocale } = this.$root.$i18n;
