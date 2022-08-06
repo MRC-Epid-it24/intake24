@@ -1,8 +1,10 @@
 import { Column, DataType, Scopes, Table } from 'sequelize-typescript';
+
 import type {
   PhysicalActivityLevelAttributes,
   PhysicalActivityLevelCreationAttributes,
 } from '@intake24/common/types/models/foods';
+
 import BaseModel from '../model';
 
 @Scopes(() => ({

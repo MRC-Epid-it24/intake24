@@ -1,9 +1,11 @@
 import type { Express } from 'express';
 import { body, query } from 'express-validator';
+
 import type { Ops } from '@intake24/api/app';
 import { errors } from '@intake24/api/http/middleware';
 import { createSanitizer } from '@intake24/api/http/rules';
 import routes from '@intake24/api/routes';
+
 import authentication from './authentication';
 
 export default async (app: Express, ops: Ops): Promise<void> => {

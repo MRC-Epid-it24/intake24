@@ -1,5 +1,6 @@
 import type { SurveySubmissionEntry } from '@intake24/common/types/http/user';
 import type { UserPhysicalDataAttributes } from '@intake24/common/types/models';
+
 import submissionsJson from './submissions.json';
 
 export const physicalData: UserPhysicalDataAttributes = {

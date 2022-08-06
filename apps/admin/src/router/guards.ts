@@ -1,6 +1,7 @@
 import type Router from 'vue-router';
-import resources from './resources';
+
 import { useAuth, useResource, useUser } from '../stores';
+import resources from './resources';
 
 export default (router: Router): void => {
   router.beforeEach(async (to, from, next) => {

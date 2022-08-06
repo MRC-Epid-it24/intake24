@@ -1,4 +1,4 @@
-import type { RoleAttributes, RoleAssociations, Pagination } from '../../models';
+import type { Pagination, RoleAssociations, RoleAttributes } from '../../models';
 import type { PermissionListEntry } from './permissions';
 
 export type RoleRequest = {

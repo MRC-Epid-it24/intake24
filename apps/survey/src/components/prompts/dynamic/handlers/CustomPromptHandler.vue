@@ -4,15 +4,16 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import customPrompts from '@intake24/survey/components/prompts/custom';
-import { useSurvey } from '@intake24/survey/stores';
 import FoodPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/food-prompt-utils';
 import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 import PromptHandlerStateless from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-stateless';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'CustomPromptHandler',

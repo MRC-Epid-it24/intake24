@@ -79,9 +79,11 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
 import type { NutrientGroup } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
+
 import CardContent from '../partials/card-content.vue';
 import CardThresholds from '../partials/card-thresholds.vue';
 import CardUnit from '../partials/card-unit.vue';

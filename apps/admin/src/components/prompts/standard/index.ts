@@ -4,8 +4,8 @@ import FoodSearchPrompt from './food-search-prompt.vue';
 import MealAddPrompt from './meal-add-prompt.vue';
 import MealTimePrompt from './meal-time-prompt.vue';
 import RedirectPrompt from './redirect-prompt.vue';
-import SubmitPrompt from './submit-prompt.vue';
 import ReviewConfirmPrompt from './review-confirm-prompt.vue';
+import SubmitPrompt from './submit-prompt.vue';
 
 export default {
   AssociatedFoodsPrompt,

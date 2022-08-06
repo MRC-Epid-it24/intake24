@@ -1,4 +1,4 @@
-import { generateCSV, downloadImage } from '../util';
+import { downloadImage, generateCSV } from '../util';
 
 export type MockFiles = {
   data: {

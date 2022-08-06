@@ -93,10 +93,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
+import { defineComponent } from 'vue';
+
 import type { PromptQuestion } from '@intake24/common/prompts';
+import { copy } from '@intake24/common/util';
 
 export default defineComponent({
   name: 'LoadPromptDialog',

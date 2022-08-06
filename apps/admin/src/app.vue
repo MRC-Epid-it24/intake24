@@ -98,18 +98,19 @@
 </template>
 
 <script lang="ts">
+import type { Location } from 'vue-router';
 import groupBy from 'lodash/groupBy';
+import { mapState } from 'pinia';
 import pluralize from 'pluralize';
 import { defineComponent } from 'vue';
-import type { Location } from 'vue-router';
+
 import type { Dictionary } from '@intake24/common/types';
-import { ConfirmDialog, MessageBox, setsLanguage, ServiceWorker } from '@intake24/ui';
 import Loader from '@intake24/admin/components/loader.vue';
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import webPush from '@intake24/admin/components/web-push/web-push';
 import resources from '@intake24/admin/router/resources';
-import { mapState } from 'pinia';
 import { useApp, useAuth, useEntry } from '@intake24/admin/stores';
+import { ConfirmDialog, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
 
 type Breadcrumbs = {
   disabled?: boolean;

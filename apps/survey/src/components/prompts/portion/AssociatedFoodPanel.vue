@@ -53,19 +53,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { merge } from '@intake24/common/util';
-import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
+import { defineComponent } from 'vue';
+
 import type {
   AssociatedFoodsPanelProps,
-  FoodSearchPromptProps,
   BasePromptProps,
+  FoodSearchPromptProps,
 } from '@intake24/common/prompts';
-import { associatedFoodPanelDefaultProps } from '@intake24/common/prompts';
 import type { LocaleTranslation } from '@intake24/common/types';
-import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
+import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
+import { associatedFoodPanelDefaultProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
 import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
+import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
+
 import BaseExpansionPortion from './BaseExpansionPortion';
 
 export default defineComponent({

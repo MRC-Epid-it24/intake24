@@ -170,15 +170,17 @@
 </template>
 
 <script lang="ts">
-import draggable from 'vuedraggable';
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+import draggable from 'vuedraggable';
+
 import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
-import { sexes } from '@intake24/common/feedback';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
-import { getHenryCoefficientDefaults } from './henry-coefficient';
+
 import { useList } from '..';
+import { getHenryCoefficientDefaults } from './henry-coefficient';
 
 export default defineComponent({
   name: 'HenryCoefficientList',

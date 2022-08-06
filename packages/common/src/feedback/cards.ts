@@ -1,5 +1,5 @@
-import type { Character } from './characters';
 import type { LocaleTranslation, RequiredLocaleTranslation } from '../types';
+import type { Character } from './characters';
 
 export type FoodGroupThreshold = {
   threshold: number;

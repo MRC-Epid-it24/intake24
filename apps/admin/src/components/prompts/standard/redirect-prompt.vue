@@ -60,9 +60,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import isInteger from 'lodash/isInteger';
+import { defineComponent } from 'vue';
+
 import type { RuleCallback } from '@intake24/admin/types';
+
 import basePrompt from '../partials/base-prompt';
 
 export default defineComponent({

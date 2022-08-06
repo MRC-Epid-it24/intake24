@@ -43,9 +43,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
+import { defineComponent } from 'vue';
+
 import type { Dictionary } from '@intake24/common/types';
 
 export default defineComponent({

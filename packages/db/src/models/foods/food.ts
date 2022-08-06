@@ -1,23 +1,25 @@
 import {
+  BelongsTo,
   BelongsToMany,
   Column,
   DataType,
-  HasOne,
   HasMany,
+  HasOne,
   Scopes,
   Table,
-  BelongsTo,
 } from 'sequelize-typescript';
+
 import type { FoodAttributes } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import {
   AssociatedFood,
-  FoodAttribute,
-  FoodLocal,
   Brand,
   Category,
+  FoodAttribute,
   FoodCategory,
   FoodGroup,
+  FoodLocal,
   FoodLocalList,
 } from '.';
 import Locale from './locale';

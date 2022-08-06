@@ -118,14 +118,16 @@
 </template>
 
 <script lang="ts">
-import { copy, merge, randomString } from '@intake24/common/util';
+import { defineComponent, ref } from 'vue';
+
+import type { RuleCallback } from '@intake24/admin/types';
 import type { Card } from '@intake24/common/feedback';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { defineComponent, ref } from 'vue';
 import { tinymce } from '@intake24/admin/components/tinymce';
-import type { RuleCallback } from '@intake24/admin/types';
-import cardTypes from './card-types';
+import { copy, merge, randomString } from '@intake24/common/util';
+
 import { cardDefaults, cardSettings } from './card';
+import cardTypes from './card-types';
 
 export type CardDialog = {
   show: boolean;

@@ -11,9 +11,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
+
 import { useApp } from '@intake24/admin/stores';
+
 import ActionMixin from './action-mixin';
 
 export default defineComponent({

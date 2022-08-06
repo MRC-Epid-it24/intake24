@@ -1,11 +1,12 @@
-import { json, urlencoded } from 'body-parser';
-import cookieParser from 'cookie-parser';
-import redisStore from 'connect-redis';
 import type { Express } from 'express';
+import { json, urlencoded } from 'body-parser';
+import redisStore from 'connect-redis';
+import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
 import morgan from 'morgan';
-import nunjucks from 'nunjucks';
 import path from 'node:path';
+import nunjucks from 'nunjucks';
+
 import type { Ops } from '@intake24/api/app';
 import ioc from '@intake24/api/ioc';
 import { httpLogger as stream } from '@intake24/services';

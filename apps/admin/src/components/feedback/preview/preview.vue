@@ -35,11 +35,13 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import { FeedbackChartArea, FeedbackCardArea } from '@intake24/ui/components/feedback';
-import type { FeedbackCardParameters } from '@intake24/ui/feedback';
-import { buildTopFoods, buildCardParams } from '@intake24/ui/feedback';
+
 import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 import { feedbackService } from '@intake24/admin/services';
+import { FeedbackCardArea, FeedbackChartArea } from '@intake24/ui/components/feedback';
+import { buildCardParams, buildTopFoods } from '@intake24/ui/feedback';
+
 import * as previewData from './preview-data';
 
 export type Submission = {

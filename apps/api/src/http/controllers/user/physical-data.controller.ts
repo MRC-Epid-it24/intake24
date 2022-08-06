@@ -1,11 +1,12 @@
 import type { Request, Response } from 'express';
 import type { ValidationError as ExpressValidationError } from 'express-validator';
 import { pick } from 'lodash';
-import type { User } from '@intake24/db';
-import { FeedbackScheme, Survey } from '@intake24/db';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { UserPhysicalDataResponse } from '@intake24/common/types/http';
+import type { User } from '@intake24/db';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import { FeedbackScheme, Survey } from '@intake24/db';
 
 const userPhysicalDataController = ({ userService }: Pick<IoC, 'userService'>) => {
   const getPhysicalData = async (

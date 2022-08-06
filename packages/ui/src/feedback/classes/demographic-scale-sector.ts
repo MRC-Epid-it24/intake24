@@ -1,5 +1,6 @@
 import type { DemographicGroupScaleSector, Sentiment } from '@intake24/common/feedback';
 import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
+
 import DemographicRange from './demographic-range';
 
 export default class DemographicScaleSector {

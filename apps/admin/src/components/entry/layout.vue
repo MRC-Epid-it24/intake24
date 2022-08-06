@@ -50,13 +50,15 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import has from 'lodash/has';
-import { ConfirmDialog } from '@intake24/ui';
-import { resource } from '@intake24/admin/mixins';
-import { useMessages } from '@intake24/admin/stores';
+import { defineComponent } from 'vue';
+
 import type { RouteLeave } from '@intake24/admin/types';
 import type { Dictionary } from '@intake24/common/types';
+import { resource } from '@intake24/admin/mixins';
+import { useMessages } from '@intake24/admin/stores';
+import { ConfirmDialog } from '@intake24/ui';
+
 import ConfirmLeaveDialog from './confirm-leave-dialog.vue';
 
 export default defineComponent({

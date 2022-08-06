@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import basePrompt from '../partials/base-prompt';
 
 export default defineComponent({

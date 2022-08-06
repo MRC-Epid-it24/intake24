@@ -14,7 +14,9 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
 import type { Resource } from '@intake24/admin/types';
+
 import MenuItem from './menu-item.vue';
 
 export default defineComponent({

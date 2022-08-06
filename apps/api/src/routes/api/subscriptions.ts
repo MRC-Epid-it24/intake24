@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import validation from '@intake24/api/http/requests/subscriptions';
+
 import { authenticate } from '@intake24/api/http/middleware';
+import validation from '@intake24/api/http/requests/subscriptions';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 

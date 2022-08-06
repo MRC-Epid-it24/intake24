@@ -147,8 +147,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import orderBy from 'lodash/orderBy';
+import { defineComponent } from 'vue';
+
 import type { LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';

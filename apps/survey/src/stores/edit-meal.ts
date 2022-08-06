@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 import type { FoodState } from '@intake24/common/types';
 
 export interface EditMealState {

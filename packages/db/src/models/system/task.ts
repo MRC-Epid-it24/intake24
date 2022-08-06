@@ -1,6 +1,8 @@
-import { Table, Column, CreatedAt, DataType, UpdatedAt } from 'sequelize-typescript';
-import type { JobTypeParams, JobType } from '@intake24/common/types';
+import { Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
+
+import type { JobType, JobTypeParams } from '@intake24/common/types';
 import type { TaskAttributes, TaskCreationAttributes } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 
 @Table({

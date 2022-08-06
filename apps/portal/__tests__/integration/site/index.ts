@@ -1,4 +1,5 @@
 import request from 'supertest';
+
 import { suite } from '../helpers';
 
 export default () => {

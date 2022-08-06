@@ -1,12 +1,14 @@
 import { faker } from '@faker-js/faker';
-import slugify from 'slugify';
 import { randomUUID } from 'node:crypto';
-import { randomString } from '@intake24/common/util';
+import slugify from 'slugify';
+
 import type {
-  CreateLocaleRequest,
   CreateAsServedSetInput,
+  CreateLocaleRequest,
   NutrientTableInput,
 } from '@intake24/common/types/http/admin';
+import { randomString } from '@intake24/common/util';
+
 import { downloadImage } from '../util';
 
 const food = (foodGroupId: string) => {

@@ -1,6 +1,6 @@
 import feedback from './feedback';
-import survey from './survey';
 import home from './home.vue';
+import survey from './survey';
 
 const views = {
   feedback,

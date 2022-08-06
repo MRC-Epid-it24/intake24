@@ -57,8 +57,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { JobEntry, NutrientTableEntry } from '@intake24/common/types/http/admin';
+
 import type { JobType } from '@intake24/common/types';
+import type { JobEntry, NutrientTableEntry } from '@intake24/common/types/http/admin';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { PollsForJobs } from '@intake24/admin/components/jobs';
 import { form } from '@intake24/admin/helpers';

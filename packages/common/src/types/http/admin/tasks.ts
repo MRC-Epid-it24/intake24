@@ -1,5 +1,5 @@
 import type { RepeatableBullJob } from '../../jobs';
-import type { TaskAttributes, TaskCreationAttributes, Pagination } from '../../models';
+import type { Pagination, TaskAttributes, TaskCreationAttributes } from '../../models';
 
 export type TaskRequest = TaskCreationAttributes;
 

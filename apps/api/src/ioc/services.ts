@@ -1,43 +1,43 @@
 import type { AwilixContainer } from 'awilix';
 import { asClass, asFunction, asValue } from 'awilix';
-import { logger, Mailer } from '@intake24/services';
+
 import {
-  authenticationService,
   aclService,
-  duoSecurityProvider,
-  jwtService,
-  jwtRotationService,
-  signInService,
-  dataExportFields,
-  dataExportMapper,
-  dataExportService,
-  Cache,
-  Filesystem,
-  Pusher,
-  RateLimiter,
-  Scheduler,
-  Session,
   adminCategoryService,
   adminFoodService,
   adminSurveyService,
   adminUserService,
   asServedService,
+  authenticationService,
+  Cache,
+  dataExportFields,
+  dataExportMapper,
+  dataExportService,
+  duoSecurityProvider,
+  feedbackService,
+  Filesystem,
+  foodDataService,
   guideImageService,
   imageMapService,
-  processedImageService,
-  sourceImageService,
+  jwtRotationService,
+  jwtService,
   languageService,
   localeService,
   nutrientTableService,
-  foodDataService,
   portionSizeService,
-  feedbackService,
+  processedImageService,
+  Pusher,
+  RateLimiter,
+  Scheduler,
+  Session,
+  signInService,
+  sourceImageService,
   surveyService,
   userService,
 } from '@intake24/api/services';
-
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import categoryContentsService from '@intake24/api/services/foods/category-contents.service';
+import { logger, Mailer } from '@intake24/services';
 
 export default (container: AwilixContainer): void => {
   container.register({

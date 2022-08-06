@@ -1,13 +1,13 @@
 import type {
+  AsServedImageEntry,
+  AsServedSetEntry,
+  AsServedSetListEntry,
   GuideImageEntry,
   GuideImageEntryObject,
   GuideImageListEntry,
   ImageMapEntry,
-  ImageMapListEntry,
   ImageMapEntryObject,
-  AsServedImageEntry,
-  AsServedSetEntry,
-  AsServedSetListEntry,
+  ImageMapListEntry,
 } from '@intake24/common/types/http/admin';
 import type {
   AsServedImage,

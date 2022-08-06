@@ -38,14 +38,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
 import type { PropType } from 'vue';
+import { defineComponent, ref } from 'vue';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
-import { ConfirmDialog } from '@intake24/ui';
-import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
-import EditableFoodList from './EditableFoodList.vue';
 import type { EditableFoodListType } from '@intake24/survey/components/prompts/standard/EditableFoodList.vue';
+import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
+import { ConfirmDialog } from '@intake24/ui';
+
+import EditableFoodList from './EditableFoodList.vue';
 
 const component = defineComponent({
   name: 'EditMealPrompt',

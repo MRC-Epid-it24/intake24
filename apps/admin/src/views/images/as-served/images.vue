@@ -74,10 +74,11 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
-import { copy } from '@intake24/common/util';
+
 import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
-import { ConfirmDialog } from '@intake24/ui';
 import { form } from '@intake24/admin/helpers';
+import { copy } from '@intake24/common/util';
+import { ConfirmDialog } from '@intake24/ui';
 
 type AsServedImageForm = {
   image: File | null;

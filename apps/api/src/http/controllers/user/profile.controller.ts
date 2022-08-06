@@ -1,7 +1,9 @@
 import type { Request, Response } from 'express';
+
+import type { IoC } from '@intake24/api/ioc';
 import type { User } from '@intake24/db';
 import { UserPassword } from '@intake24/db';
-import type { IoC } from '@intake24/api/ioc';
+
 import { ValidationError } from '../../errors';
 
 const userProfileController = ({

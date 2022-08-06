@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue';
+
 import { PollsForJobs } from '@intake24/admin/components/jobs';
 
 export default defineComponent({

@@ -4,11 +4,13 @@ import {
   CreatedAt,
   DataType,
   ForeignKey,
-  UpdatedAt,
   Table,
+  UpdatedAt,
 } from 'sequelize-typescript';
+
 import type { JobType } from '@intake24/common/types';
 import type { JobAttributes, JobCreationAttributes } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { User } from '.';
 

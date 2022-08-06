@@ -1,10 +1,11 @@
 import type { Request, Response } from 'express';
+
+import type { IoC } from '@intake24/api/ioc';
 import type {
   AsServedSetResponse,
   DrinkwareSetResponse,
   WeightResponse,
 } from '@intake24/common/types/http';
-import type { IoC } from '@intake24/api/ioc';
 import {
   asServedResponse,
   drinkwareResponse,

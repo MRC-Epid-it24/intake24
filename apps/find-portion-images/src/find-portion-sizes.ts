@@ -1,10 +1,14 @@
 /* eslint-disable max-classes-per-file */
 import commandLineArgs from 'command-line-args';
 import { createArrayCsvWriter } from 'csv-writer';
+import dotenv from 'dotenv';
+import * as fs from 'fs';
 
 import {
   AsServedImage,
   AsServedSet,
+  Database,
+  databaseConfig,
   Food,
   FoodLocal,
   FoodNutrient,
@@ -19,15 +23,11 @@ import {
   NutrientTableRecord,
   NutrientTableRecordNutrient,
   ProcessedImage,
-  databaseConfig,
-  Database,
 } from '@intake24/db';
-
 import { logger } from '@intake24/services';
-import * as fs from 'fs';
-import dotenv from 'dotenv';
-import validate from './config.validator';
+
 import type Config from './config';
+import validate from './config.validator';
 
 dotenv.config();
 

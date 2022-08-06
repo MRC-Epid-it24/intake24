@@ -1,4 +1,5 @@
 import type { HenryCoefficient as HenryCoefficientRecord, Sex } from '@intake24/common/feedback';
+
 import DemographicRange from './demographic-range';
 
 export default class HenryCoefficient {

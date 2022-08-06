@@ -66,16 +66,17 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
 import pick from 'lodash/pick';
+import { mapState } from 'pinia';
 import { mapActions } from 'pinia';
-import { copy } from '@intake24/common/util';
-import type { SurveySchemeQuestionEntry } from '@intake24/common/types/http/admin';
+import { defineComponent } from 'vue';
+
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { ValidationError } from '@intake24/common/types';
+import type { SurveySchemeQuestionEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 import { useEntry } from '@intake24/admin/stores';
+import { copy } from '@intake24/common/util';
 
 export type SchemeQuestionForm = {
   question: PromptQuestion;

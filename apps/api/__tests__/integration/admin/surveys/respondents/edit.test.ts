@@ -1,12 +1,13 @@
-import request from 'supertest';
-import type { CreateRespondentRequest } from '@intake24/common/types/http/admin';
-import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
-import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import type { UserSurveyAlias } from '@intake24/db';
-import { Survey } from '@intake24/db';
 import { omit, pick } from 'lodash';
-import ioc from '@intake24/api/ioc';
+import request from 'supertest';
+
+import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import type { CustomField } from '@intake24/common/types';
+import type { CreateRespondentRequest } from '@intake24/common/types/http/admin';
+import type { UserSurveyAlias } from '@intake24/db';
+import ioc from '@intake24/api/ioc';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import { Survey } from '@intake24/db';
 
 const assertRespondentResponse = async (
   url: string,

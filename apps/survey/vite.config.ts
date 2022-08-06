@@ -1,7 +1,6 @@
+import vue from '@vitejs/plugin-vue2';
 import childProcess from 'node:child_process';
 import { fileURLToPath, URL } from 'node:url';
-
-import vue from '@vitejs/plugin-vue2';
 import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig, loadEnv } from 'vite';
@@ -9,8 +8,8 @@ import { VitePluginFonts } from 'vite-plugin-fonts';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
 
-import pkg from './package.json';
 import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/ui-build';
+import pkg from './package.json';
 
 // Set build info for application
 process.env.VITE_APP_BUILD_VERSION = pkg.version;

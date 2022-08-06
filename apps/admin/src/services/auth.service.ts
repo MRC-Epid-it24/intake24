@@ -1,9 +1,10 @@
 import type {
   EmailLoginRequest,
   LoginResponse,
-  MFAVerifyRequest,
   MFAResponse,
+  MFAVerifyRequest,
 } from '@intake24/common/types/http';
+
 import http from './http.service';
 
 export type AuthResponse = LoginResponse | MFAResponse;

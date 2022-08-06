@@ -1,14 +1,16 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import validator from 'validator';
-import type { WhereOptions, PaginateQuery } from '@intake24/db';
-import { SurveySubmission, submissionScope } from '@intake24/db';
+
 import type {
   SurveySubmissionEntry,
   SurveySubmissionsResponse,
 } from '@intake24/common/types/http/admin';
 import type { SurveySubmissionAttributes } from '@intake24/common/types/models';
+import type { PaginateQuery, WhereOptions } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { submissionScope, SurveySubmission } from '@intake24/db';
+
 import { getAndCheckSurveyAccess } from './survey.controller';
 
 const adminSurveySubmissionController = () => {

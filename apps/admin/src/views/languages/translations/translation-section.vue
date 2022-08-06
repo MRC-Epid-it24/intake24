@@ -1,9 +1,10 @@
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import type { CreateElement, VNode, VNodeChildren } from 'vue';
-import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
-import { copy } from '@intake24/common/util';
+import type { LocaleMessageObject } from 'vue-i18n';
+import has from 'lodash/has';
+import pick from 'lodash/pick';
+import { defineComponent } from 'vue';
 import {
   VBtn,
   VCard,
@@ -18,10 +19,11 @@ import {
   VToolbarItems,
   VToolbarTitle,
 } from 'vuetify/lib';
-import has from 'lodash/has';
-import pick from 'lodash/pick';
-import type { LocaleMessageObject } from 'vue-i18n';
 import { VCardTitle } from 'vuetify/lib/components';
+
+import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
+import { copy } from '@intake24/common/util';
+
 import IntersectableSkeleton from './intersectable-skeleton.vue';
 
 export default defineComponent({

@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import type { MessageType } from '../stores';
 import { useMessages } from '../stores';
 

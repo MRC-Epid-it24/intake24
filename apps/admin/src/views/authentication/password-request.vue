@@ -58,8 +58,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue';
-import { HCaptcha, ReCaptcha } from '@intake24/ui';
+
 import { form } from '@intake24/admin/helpers';
+import { HCaptcha, ReCaptcha } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 type PasswordRequestForm = {

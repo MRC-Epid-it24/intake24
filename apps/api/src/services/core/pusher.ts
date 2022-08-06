@@ -1,8 +1,9 @@
 import type { RequestOptions, SendResult } from 'web-push';
 import webPush, { WebPushError } from 'web-push';
+
+import type { IoC } from '@intake24/api/ioc';
 import type { SubscriptionType } from '@intake24/common/types/models';
 import { UserSubscription } from '@intake24/db';
-import type { IoC } from '@intake24/api/ioc';
 
 export type SubscriptionInput = {
   userId: string;

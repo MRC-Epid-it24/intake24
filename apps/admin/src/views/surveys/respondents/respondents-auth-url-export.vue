@@ -40,6 +40,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import respondentsJob from './respondents-job';
 
 export default defineComponent({

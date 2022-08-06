@@ -32,9 +32,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
 import isEmpty from 'lodash/isEmpty';
+import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
+
 import type { Dictionary } from '@intake24/common/types';
 import { useResource } from '@intake24/admin/stores';
 

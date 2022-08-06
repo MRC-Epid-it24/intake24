@@ -84,15 +84,16 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-import { copy } from '@intake24/common/util';
 import debounce from 'lodash/debounce';
+import { defineComponent } from 'vue';
+
 import type {
   FeedbackSchemeEntry,
   FeedbackSchemesResponse,
   SurveySchemeEntry,
   SurveySchemesResponse,
 } from '@intake24/common/types/http/admin';
+import { copy } from '@intake24/common/util';
 
 export type SchemeEntry = FeedbackSchemeEntry | SurveySchemeEntry;
 

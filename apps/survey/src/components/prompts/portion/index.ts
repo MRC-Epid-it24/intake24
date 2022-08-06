@@ -1,15 +1,15 @@
-import PortionSizeOptionPrompt from './PortionSizeOptionPrompt.vue';
-import AsServedPrompt from './AsServedPrompt.vue';
 import AsServedLeftoverPrompt from './AsServedLeftoverPrompt.vue';
-import GuideImagePrompt from './GuideImagePrompt.vue';
-import DrinkScalePrompt from './DrinkScalePrompt.vue';
-import StandardPortionPrompt from './StandardPortionPrompt.vue';
+import AsServedPrompt from './AsServedPrompt.vue';
 import CerealPrompt from './CerealPrompt.vue';
-import MilkCerealPrompt from './MilkCerealPrompt.vue';
-import PizzaPrompt from './PizzaPrompt.vue';
-import MilkHotDrinkPrompt from './MilkHotDrinkPrompt.vue';
 import DirectWeightPrompt from './DirectWeightPrompt.vue';
+import DrinkScalePrompt from './DrinkScalePrompt.vue';
+import GuideImagePrompt from './GuideImagePrompt.vue';
 import LeftoverQuestionPrompt from './LeftoverQuestionPrompt.vue';
+import MilkCerealPrompt from './MilkCerealPrompt.vue';
+import MilkHotDrinkPrompt from './MilkHotDrinkPrompt.vue';
+import PizzaPrompt from './PizzaPrompt.vue';
+import PortionSizeOptionPrompt from './PortionSizeOptionPrompt.vue';
+import StandardPortionPrompt from './StandardPortionPrompt.vue';
 
 export default {
   PortionSizeOptionPrompt,

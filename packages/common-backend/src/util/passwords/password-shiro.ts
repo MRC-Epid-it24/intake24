@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
-import type { PasswordAlgorithm, HashedPassword } from '.';
+
+import type { HashedPassword, PasswordAlgorithm } from '.';
 
 export default class PasswordShiro implements PasswordAlgorithm {
   id = 'shiro-sha256';

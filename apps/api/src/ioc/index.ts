@@ -1,6 +1,5 @@
-import { createContainer, asClass, asValue } from 'awilix';
+import { asClass, asValue, createContainer } from 'awilix';
 
-import config from '@intake24/api/config';
 import type {
   ACLConfig,
   AppConfig,
@@ -13,36 +12,28 @@ import type {
   ServicesConfig,
   SessionConfig,
 } from '@intake24/api/config';
-import { Database, models } from '@intake24/db';
-import type { Logger, LogConfig, Mailer, MailConfig } from '@intake24/services';
 import type {
-  AuthenticationController,
-  PasswordController,
-  SubscriptionController,
-  CategoriesController,
-  FeedbackController,
-  FoodController,
-  FoodSearchController,
-  PortionSizeController,
-  SurveyController,
-  SurveyRespondentController,
-  // User
-  UserFeedbackController,
-  UserI18nController,
-  UserPhysicalDataController,
-  UserProfileController,
-  UserSubmissionsController,
   // Admin
   AdminAuthenticationController,
-  AdminUserController,
-  AdminUserProfileController,
-  AdminUserJobController,
-  AdminFoodDatabaseController,
   AdminCategoryController,
   AdminFoodController,
+  AdminFoodDatabaseController,
   AdminFoodGroupController,
-  AsServedSetController,
+  AdminSurveyController,
+  AdminSurveyDataExportController,
+  AdminSurveyRespondentController,
+  AdminSurveySubmissionController,
+  AdminUserController,
+  AdminUserJobController,
+  AdminUserProfileController,
   AsServedImageController,
+  AsServedSetController,
+  AuthenticationController,
+  CategoriesController,
+  FeedbackController,
+  FeedbackSchemeController,
+  FoodController,
+  FoodSearchController,
   GuideImageController,
   ImageMapController,
   JobController,
@@ -53,58 +44,68 @@ import type {
   LocaleSplitWordController,
   LocaleSynonymSetController,
   NutrientTableController,
-  FeedbackSchemeController,
+  PasswordController,
+  PermissionController,
+  PortionSizeController,
+  RoleController,
   SignInLogController,
+  SubscriptionController,
+  SurveyController,
+  SurveyRespondentController,
   SurveySchemeController,
   SurveySchemeQuestionController,
-  AdminSurveyController,
-  AdminSurveyDataExportController,
-  AdminSurveyRespondentController,
-  AdminSurveySubmissionController,
   TaskController,
-  PermissionController,
-  RoleController,
+  // User
+  UserFeedbackController,
+  UserI18nController,
+  UserPhysicalDataController,
+  UserProfileController,
+  UserSubmissionsController,
 } from '@intake24/api/http/controllers';
+import type { Jobs } from '@intake24/api/jobs';
 import type {
+  ACLService,
   AdminCategoryService,
   AdminFoodService,
   AdminSurveyService,
   AdminUserService,
-  AuthenticationService,
-  ACLService,
-  JwtService,
-  JwtRotationService,
-  SignInService,
   AsServedService,
-  FeedbackService,
-  GuideImageService,
-  ImageMapService,
-  PortionSizeService,
-  ProcessedImageService,
-  SourceImageService,
+  AuthenticationService,
+  Cache,
   CategoryContentsService,
-  FoodDataService,
-  LanguageService,
-  LocaleService,
-  NutrientTableService,
   DataExportFields,
   DataExportMapper,
   DataExportService,
-  SurveyService,
-  UserService,
-  Cache,
+  FeedbackService,
   Filesystem,
+  FoodDataService,
+  GuideImageService,
+  ImageMapService,
+  JwtRotationService,
+  JwtService,
+  LanguageService,
+  LocaleService,
+  // MFA Providers
+  MFAProvider,
+  NutrientTableService,
+  PortionSizeService,
+  ProcessedImageService,
   Pusher,
   RateLimiter,
   Scheduler,
   Session,
-  // MFA Providers
-  MFAProvider,
+  SignInService,
+  SourceImageService,
+  SurveyService,
+  UserService,
 } from '@intake24/api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
-import type { Jobs } from '@intake24/api/jobs';
-import type { User, DatabaseConfig, DatabasesInterface } from '@intake24/db';
 import type { Environment } from '@intake24/common/types';
+import type { DatabaseConfig, DatabasesInterface, User } from '@intake24/db';
+import type { LogConfig, Logger, MailConfig, Mailer } from '@intake24/services';
+import config from '@intake24/api/config';
+import { Database, models } from '@intake24/db';
+
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';

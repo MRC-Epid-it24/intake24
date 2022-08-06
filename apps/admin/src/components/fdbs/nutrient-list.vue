@@ -40,11 +40,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
+import { defineComponent } from 'vue';
+
+import type { FoodDatabaseRefs } from '@intake24/common/types/http/admin';
 import type { NutrientTableRecordAttributes } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';
-import type { FoodDatabaseRefs } from '@intake24/common/types/http/admin';
+
 import { AddNutrientDialog } from '.';
 
 export default defineComponent({

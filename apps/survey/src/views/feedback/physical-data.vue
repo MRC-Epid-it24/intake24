@@ -120,15 +120,16 @@ import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
-import type { UserPhysicalDataInput } from '@intake24/survey/services';
-import { userService, feedbackService } from '@intake24/survey/services';
+
 import type { FeedbackPhysicalDataField, Sex } from '@intake24/common/feedback';
-import { sexes, weightTargets } from '@intake24/common/feedback';
 import type {
   FeedbackSchemeEntryResponse,
   PhysicalActivityLevel,
 } from '@intake24/common/types/http';
+import type { UserPhysicalDataInput } from '@intake24/survey/services';
+import { sexes, weightTargets } from '@intake24/common/feedback';
 import { Errors } from '@intake24/common/util';
+import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 
 export interface NullablePhysicalActivityLevel extends Omit<PhysicalActivityLevel, 'id'> {

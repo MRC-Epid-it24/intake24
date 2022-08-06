@@ -1,7 +1,8 @@
 import request from 'supertest';
-import { suite } from '@intake24/api-tests/integration/helpers';
+
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import { publicSurveyEntryResponse } from '@intake24/api/http/responses';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   let url: string;

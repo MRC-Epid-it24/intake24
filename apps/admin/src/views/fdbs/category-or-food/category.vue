@@ -96,9 +96,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import type { CategoryLocalEntry } from '@intake24/common/types/http/admin';
-import { form } from '@intake24/admin/helpers';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
+import { form } from '@intake24/admin/helpers';
+
 import categoryOrFood from './category-or-food';
 
 export default defineComponent({

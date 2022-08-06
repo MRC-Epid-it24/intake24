@@ -68,9 +68,10 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import { form } from '@intake24/admin/helpers';
-import { AutoComplete } from '@intake24/admin/components/forms';
+
 import type { UserAttributes } from '@intake24/common/types/models';
+import { AutoComplete } from '@intake24/admin/components/forms';
+import { form } from '@intake24/admin/helpers';
 import { useEntry } from '@intake24/admin/stores';
 
 type OwnerDialogForm = {

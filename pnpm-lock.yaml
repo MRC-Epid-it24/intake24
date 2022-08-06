@@ -15,6 +15,7 @@ importers:
       eslint-config-prettier: ^8.5.0
       eslint-define-config: ^1.6.0
       eslint-plugin-prettier: ^4.2.1
+      eslint-plugin-simple-import-sort: ^7.0.0
       eslint-plugin-vue: ^9.3.0
       jest: ^28.1.3
       jest-extended: ^3.0.1
@@ -41,6 +42,7 @@ importers:
       eslint-config-prettier: 8.5.0_eslint@8.21.0
       eslint-define-config: 1.6.0
       eslint-plugin-prettier: 4.2.1_3fb4ba81a229f81fc7d96e86670e27e9
+      eslint-plugin-simple-import-sort: 7.0.0_eslint@8.21.0
       eslint-plugin-vue: 9.3.0_eslint@8.21.0
       jest: 28.1.3_fc3344f9e637a530709a7a5678c9b8a5
       jest-extended: 3.0.1_jest@28.1.3
@@ -73,6 +75,7 @@ importers:
       dotenv: ^16.0.1
       dotenv-expand: ^8.0.3
       eslint: ^8.21.0
+      eslint-plugin-simple-import-sort: ^7.0.0
       eslint-plugin-vue: ^9.3.0
       express: ^4.18.1
       flag-icons: ^6.6.4
@@ -134,6 +137,7 @@ importers:
       '@vue/eslint-config-typescript': 11.0.0_68bed5368fd9c3817be613fb811b8b0e
       '@vue/test-utils': 1.3.0_vue@2.7.8
       eslint: 8.21.0
+      eslint-plugin-simple-import-sort: 7.0.0_eslint@8.21.0
       eslint-plugin-vue: 9.3.0_eslint@8.21.0
       jsdom: 20.0.0
       npm-run-all: 4.1.5
@@ -494,6 +498,7 @@ importers:
       dotenv: ^16.0.1
       dotenv-expand: ^8.0.3
       eslint: ^8.21.0
+      eslint-plugin-simple-import-sort: ^7.0.0
       eslint-plugin-vue: ^9.3.0
       express: ^4.18.1
       helmet: ^5.1.1
@@ -542,6 +547,7 @@ importers:
       '@vue/vue2-jest': 28.0.1_abbb45b7a837f6d9d5186382ccd2cfee
       babel-jest: 28.1.3_@babel+core@7.18.10
       eslint: 8.21.0
+      eslint-plugin-simple-import-sort: 7.0.0_eslint@8.21.0
       eslint-plugin-vue: 9.3.0_eslint@8.21.0
       jsdom: 20.0.0
       npm-run-all: 4.1.5
@@ -5895,6 +5901,14 @@ packages:
       eslint-config-prettier: 8.5.0_eslint@8.21.0
       prettier: 2.7.1
       prettier-linter-helpers: 1.0.0
+    dev: true
+
+  /eslint-plugin-simple-import-sort/7.0.0_eslint@8.21.0:
+    resolution: {integrity: sha512-U3vEDB5zhYPNfxT5TYR7u01dboFZp+HNpnGhkDB2g/2E4wZ/g1Q9Ton8UwCLfRV9yAKyYqDh62oHOamvkFxsvw==}
+    peerDependencies:
+      eslint: '>=5.0.0'
+    dependencies:
+      eslint: 8.21.0
     dev: true
 
   /eslint-plugin-vue/9.3.0_eslint@8.21.0:

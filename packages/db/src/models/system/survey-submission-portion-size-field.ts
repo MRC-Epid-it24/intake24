@@ -1,8 +1,10 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+
 import type {
   SurveySubmissionPortionSizeFieldAttributes,
   SurveySubmissionPortionSizeFieldCreationAttributes,
 } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { SurveySubmissionFood } from '.';
 

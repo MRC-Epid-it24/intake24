@@ -1,6 +1,6 @@
+import laravel from 'laravel-vite-plugin';
 import path from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
-import laravel from 'laravel-vite-plugin';
 
 export default defineConfig(({ mode }) => {
   const { APP_HOST, APP_PORT } = loadEnv(mode, process.cwd(), '');

@@ -1,4 +1,5 @@
 import type { LocaleMessages } from 'vue-i18n';
+
 import feedback from './feedback';
 import prompts from './prompts';
 import standardUnits from './standard-units';

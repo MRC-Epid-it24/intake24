@@ -1,8 +1,9 @@
 import type { Request, Response } from 'express';
-import type { User } from '@intake24/db';
-import { FeedbackScheme, Survey } from '@intake24/db';
+
 import type { IoC } from '@intake24/api/ioc';
+import type { User } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import { FeedbackScheme, Survey } from '@intake24/db';
 
 const userFeedbackController = ({
   feedbackService,

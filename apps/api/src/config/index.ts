@@ -1,24 +1,25 @@
 import type { DatabaseConfig } from '@intake24/db';
-import { databaseConfig as database } from '@intake24/db';
 import type { LogConfig, MailConfig } from '@intake24/services';
+import { databaseConfig as database } from '@intake24/db';
 import { logConfig as log, mailConfig as mail } from '@intake24/services';
+
 import type { ACLConfig } from './acl';
-import acl from './acl';
 import type { AppConfig } from './app';
-import app from './app';
 import type { CacheConfig } from './cache';
-import cache from './cache';
 import type { FileSystemConfig } from './filesystem';
-import filesystem from './filesystem';
 import type { QueueConfig } from './queue';
-import queue from './queue';
 import type { RateLimiterConfig } from './rate-limiter';
-import rateLimiter from './rate-limiter';
 import type { SecurityConfig } from './security';
-import security from './security';
 import type { ServicesConfig } from './services';
-import services from './services';
 import type { SessionConfig } from './session';
+import acl from './acl';
+import app from './app';
+import cache from './cache';
+import filesystem from './filesystem';
+import queue from './queue';
+import rateLimiter from './rate-limiter';
+import security from './security';
+import services from './services';
 import session from './session';
 
 export * from './acl';

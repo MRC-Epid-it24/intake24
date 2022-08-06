@@ -1,5 +1,6 @@
-import type { Subject } from '@intake24/common/security';
 import { defineStore } from 'pinia';
+
+import type { Subject } from '@intake24/common/security';
 import { tokenService } from '@intake24/ui/services';
 
 export type UserState = {

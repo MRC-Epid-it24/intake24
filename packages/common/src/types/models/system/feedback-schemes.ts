@@ -1,9 +1,9 @@
 import type {
+  Card,
   DemographicGroup,
   FeedbackOutput,
   FeedbackPhysicalDataField,
   FeedbackType,
-  Card,
   HenryCoefficient,
   TopFoods,
 } from '../../../feedback';

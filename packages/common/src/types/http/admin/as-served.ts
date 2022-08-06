@@ -1,4 +1,4 @@
-import type { AsServedSetAttributes, AsServedImageAttributes, Pagination } from '../../models';
+import type { AsServedImageAttributes, AsServedSetAttributes, Pagination } from '../../models';
 import type { UploadSourceImageInput } from './source-images';
 
 export type AsServedImageInput = Pick<AsServedImageAttributes, 'id' | 'weight'>;

@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import { nanoid } from 'nanoid';
-import webPush from 'web-push';
 import path from 'path';
+import webPush from 'web-push';
 
 export type GenerateEnvArgs = { force?: boolean };
 

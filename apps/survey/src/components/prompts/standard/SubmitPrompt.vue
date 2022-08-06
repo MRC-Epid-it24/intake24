@@ -9,10 +9,12 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import { merge } from '@intake24/common/util';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
 import { submitPromptProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
+
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({

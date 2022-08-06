@@ -1,11 +1,11 @@
 import browse from './browse.vue';
-import form from './form.vue';
-import read from './read.vue';
 import dataExport from './data-export';
+import form from './form.vue';
 import overrides from './overrides';
+import read from './read.vue';
 import respondents from './respondents';
-import submissions from './submissions';
 import securables from './securables';
+import submissions from './submissions';
 
 export default {
   browse,

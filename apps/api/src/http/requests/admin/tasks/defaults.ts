@@ -1,11 +1,12 @@
 import type { Request } from 'express';
 import type { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
-import type { WhereOptions } from '@intake24/db';
-import { Op, Task } from '@intake24/db';
-import { cron, unique } from '@intake24/api/http/rules';
+
 import type { TaskAttributes } from '@intake24/common/types/models';
+import type { WhereOptions } from '@intake24/db';
+import { cron, unique } from '@intake24/api/http/rules';
 import { jobTypes } from '@intake24/common/types';
+import { Op, Task } from '@intake24/db';
 
 const defaults: Schema = {
   name: {

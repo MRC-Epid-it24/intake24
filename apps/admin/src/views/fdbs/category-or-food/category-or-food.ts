@@ -1,15 +1,16 @@
-import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
+import { defineComponent } from 'vue';
+
 import type {
   CategoryLocalEntry,
-  FoodLocalEntry,
   FoodDatabaseEntry,
   FoodDatabaseRefs,
+  FoodLocalEntry,
 } from '@intake24/common/types/http/admin';
-import { form } from '@intake24/admin/helpers';
 import { useStoreEntry, watchEntry } from '@intake24/admin/components/entry';
 import { AttributeList, CategoryList } from '@intake24/admin/components/fdbs';
+import { form } from '@intake24/admin/helpers';
 import { getObjectNestedKeys } from '@intake24/common/util';
 import { useMessages } from '@intake24/ui/stores';
 

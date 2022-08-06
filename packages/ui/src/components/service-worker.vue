@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { registerSW } from 'virtual:pwa-register';
+import { defineComponent } from 'vue';
 
 export type UpdateSW = ReturnType<typeof registerSW>;
 

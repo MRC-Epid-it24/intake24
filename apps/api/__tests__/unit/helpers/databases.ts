@@ -2,9 +2,9 @@
 // stuff like redis, mail etc. as in integration suite
 
 import type { DatabasesInterface } from '@intake24/db';
-import { databaseConfig, Database } from '@intake24/db';
-import { logger } from '@intake24/services';
 import appConfig from '@intake24/api/config/app';
+import { Database, databaseConfig } from '@intake24/db';
+import { logger } from '@intake24/services';
 
 let databases: DatabasesInterface;
 

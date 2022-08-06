@@ -122,25 +122,26 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+
 import type {
+  Card,
+  DemographicGroup,
   FeedbackOutput,
   FeedbackPhysicalDataField,
   FeedbackType,
-  Card,
-  TopFoods,
-  DemographicGroup,
   HenryCoefficient,
+  TopFoods,
 } from '@intake24/common/feedback';
+import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { Preview } from '@intake24/admin/components/feedback';
+import { CopySchemeDialog } from '@intake24/admin/components/schemes';
+import { form } from '@intake24/admin/helpers';
 import {
   feedbackOutputs,
   feedbackPhysicalDataFields,
   feedbackTypes,
 } from '@intake24/common/feedback';
-import { CopySchemeDialog } from '@intake24/admin/components/schemes';
-import { Preview } from '@intake24/admin/components/feedback';
-import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 
 export type FeedbackSchemeForm = {
   id: string | null;

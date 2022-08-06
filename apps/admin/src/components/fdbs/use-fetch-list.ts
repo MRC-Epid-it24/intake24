@@ -1,7 +1,8 @@
 import type { Ref } from 'vue';
-import { unref, ref, watch } from 'vue';
-import { httpService } from '@intake24/admin/services';
 import debounce from 'lodash/debounce';
+import { ref, unref, watch } from 'vue';
+
+import { httpService } from '@intake24/admin/services';
 
 export const useFetchList = (url: string, id: string | Ref<string>) => {
   const dialog = ref(false);

@@ -1,11 +1,12 @@
 import type { Secret, SignOptions } from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
-import { randomString } from '@intake24/common/util';
-import type { SignPayload, Subject, TokenPayload } from '@intake24/common/security';
-import { InternalServerError } from '@intake24/api/http/errors';
+
 import type { IoC } from '@intake24/api/ioc';
-import { btoa } from '@intake24/api/util';
+import type { SignPayload, Subject, TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
+import { InternalServerError } from '@intake24/api/http/errors';
+import { btoa } from '@intake24/api/util';
+import { randomString } from '@intake24/common/util';
 
 export type Tokens = {
   accessToken: string;

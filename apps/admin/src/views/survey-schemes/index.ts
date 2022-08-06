@@ -1,8 +1,8 @@
 import browse from './browse.vue';
-import form from './form.vue';
-import read from './read.vue';
-import questions from './questions';
 import dataExport from './data-export';
+import form from './form.vue';
+import questions from './questions';
+import read from './read.vue';
 import securables from './securables';
 
 export default {

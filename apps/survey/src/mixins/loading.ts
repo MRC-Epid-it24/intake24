@@ -1,5 +1,6 @@
-import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
+
 import { useLoading } from '../stores';
 
 export default defineComponent({

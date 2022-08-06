@@ -3,11 +3,13 @@ import ms from 'ms';
 import nunjucks from 'nunjucks';
 import { Op } from 'sequelize';
 import parser from 'ua-parser-js';
-import type { JobParams } from '@intake24/common/types';
+
 import type { IoC } from '@intake24/api/ioc';
-import { randomString } from '@intake24/common/util';
+import type { JobParams } from '@intake24/common/types';
 import { getFrontEndUrl } from '@intake24/api/util';
+import { randomString } from '@intake24/common/util';
 import { User, UserPasswordReset } from '@intake24/db';
+
 import BaseJob from './job';
 
 const getAgentInfo = (agent: { name?: string; version?: string }): string | undefined => {

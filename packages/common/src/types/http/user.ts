@@ -1,12 +1,13 @@
-import type { UserAttributes, SurveySubmissionAttributes } from '@intake24/common/types/models';
+import type { SurveySubmissionAttributes, UserAttributes } from '@intake24/common/types/models';
+
 import type {
-  SurveySubmissionPortionSizeFieldAttributes,
-  SurveySubmissionNutrientAttributes,
+  SurveySubmissionCustomFieldAttributes,
   SurveySubmissionFoodAttributes,
   SurveySubmissionFoodCustomFieldAttributes,
-  SurveySubmissionMealCustomFieldAttributes,
-  SurveySubmissionCustomFieldAttributes,
   SurveySubmissionMealAttributes,
+  SurveySubmissionMealCustomFieldAttributes,
+  SurveySubmissionNutrientAttributes,
+  SurveySubmissionPortionSizeFieldAttributes,
   UserPhysicalDataAttributes,
 } from '../models/system';
 

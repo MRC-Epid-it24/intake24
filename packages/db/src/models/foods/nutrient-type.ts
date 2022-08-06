@@ -1,7 +1,9 @@
 import { BelongsTo, Column, DataType, HasOne, Scopes, Table } from 'sequelize-typescript';
+
 import type { NutrientTypeAttributes } from '@intake24/common/types/models';
-import { FoodsNutrientUnit, NutrientTypeInKcal } from '.';
+
 import BaseModel from '../model';
+import { FoodsNutrientUnit, NutrientTypeInKcal } from '.';
 
 @Scopes(() => ({
   unit: { include: [{ model: FoodsNutrientUnit }] },

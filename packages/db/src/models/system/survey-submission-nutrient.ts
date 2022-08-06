@@ -1,10 +1,12 @@
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+
 import type {
   SurveySubmissionNutrientAttributes,
   SurveySubmissionNutrientCreationAttributes,
 } from '@intake24/common/types/models';
-import { SystemNutrientType, SurveySubmissionFood } from '.';
+
 import BaseModel from '../model';
+import { SurveySubmissionFood, SystemNutrientType } from '.';
 
 @Scopes(() => ({
   food: { include: [{ model: SurveySubmissionFood }] },

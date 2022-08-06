@@ -1,6 +1,6 @@
-import home from './home.vue';
 import error from './error.vue';
 import generateUser from './generate-user.vue';
+import home from './home.vue';
 import login from './login.vue';
 import portionTest from './portion-test.vue';
 import profile from './profile.vue';

@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
-import type { UserAttributes } from './users';
 import type { OmitAndOptional } from '../model';
+import type { UserAttributes } from './users';
 
 export type SurveySubmissionAttributes = {
   id: string;

@@ -53,6 +53,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
 import type { JobEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({

@@ -1,6 +1,7 @@
 import type { HenryCoefficient as HenryCoefficientRecord } from '@intake24/common/feedback';
-import HenryCoefficient from './henry-coefficient';
+
 import type UserDemographic from './user-demographic';
+import HenryCoefficient from './henry-coefficient';
 
 export default class HenryCoefficientsCalculator {
   private readonly coefficients: HenryCoefficient[];

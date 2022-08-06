@@ -1,23 +1,23 @@
-import {
-  copyPairwiseAssociationsQueries,
-  FoodsLocale,
-  Op,
-  PAOccurrence,
-  PACoOccurrence,
-  PAOccurrenceTransactionCount,
-  SplitList,
-  SplitWord,
-  SynonymSet,
-  SystemLocale,
-} from '@intake24/db';
+import type { IoC } from '@intake24/api/ioc';
+import type { JobParams, JobType, JobTypeParams } from '@intake24/common/types';
 import type {
   LocaleSplitListInput,
   LocaleSplitWordInput,
   LocaleSynonymSetInput,
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
-import type { IoC } from '@intake24/api/ioc';
-import type { JobParams, JobType, JobTypeParams } from '@intake24/common/types';
+import {
+  copyPairwiseAssociationsQueries,
+  FoodsLocale,
+  Op,
+  PACoOccurrence,
+  PAOccurrence,
+  PAOccurrenceTransactionCount,
+  SplitList,
+  SplitWord,
+  SynonymSet,
+  SystemLocale,
+} from '@intake24/db';
 
 export type CopyPairwiseAssociationsOps = JobParams['LocaleCopyPairwiseAssociations'];
 

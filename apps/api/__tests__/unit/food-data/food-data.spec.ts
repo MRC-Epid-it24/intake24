@@ -3,8 +3,8 @@
 // ESLint import ordering rules
 import '../../bootstrap';
 
-import helpersTests from './helpers';
 import getKcalTests from './get-kcal';
+import helpersTests from './helpers';
 import portionSizeMethodsServiceTests from './portion-size-methods-service';
 
 describe('Food data service', () => {

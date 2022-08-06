@@ -40,13 +40,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
+
 import type { MealTimePromptProps } from '@intake24/common/prompts';
-import { ConfirmDialog } from '@intake24/ui';
-import BasePrompt from '../BasePrompt';
 import type { MealTime } from '@intake24/common/types';
 import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import { ConfirmDialog } from '@intake24/ui';
+
+import BasePrompt from '../BasePrompt';
 
 const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minutes}`;
 

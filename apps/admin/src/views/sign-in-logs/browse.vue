@@ -12,8 +12,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { formatsDateTime } from '@intake24/admin/mixins';
+
 import { DataTable } from '@intake24/admin/components/data-tables';
+import { formatsDateTime } from '@intake24/admin/mixins';
 
 export default defineComponent({
   name: 'SignInLogList',

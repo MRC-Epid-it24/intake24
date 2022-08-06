@@ -4,11 +4,12 @@ import type {
   Sex,
 } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
-import DemographicScaleSector from './demographic-scale-sector';
+
 import type AggregateFoodStats from './aggregate-food-stats';
+import type UserDemographic from './user-demographic';
 import DemographicRange from './demographic-range';
 import DemographicResult from './demographic-result';
-import type UserDemographic from './user-demographic';
+import DemographicScaleSector from './demographic-scale-sector';
 
 export default class DemographicGroup {
   readonly id: string;

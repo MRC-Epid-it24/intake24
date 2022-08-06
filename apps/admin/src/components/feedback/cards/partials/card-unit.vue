@@ -27,13 +27,14 @@
 </template>
 
 <script lang="ts">
-import isEqual from 'lodash/isEqual';
 import type { PropType } from 'vue';
+import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
-import { tinymce } from '@intake24/admin/components/tinymce';
-import { LanguageSelector } from '@intake24/admin/components/forms';
+
 import type { RuleCallback } from '@intake24/admin/types';
 import type { CustomCard } from '@intake24/common/feedback';
+import { LanguageSelector } from '@intake24/admin/components/forms';
+import { tinymce } from '@intake24/admin/components/tinymce';
 import { copy } from '@intake24/common/util';
 
 export default defineComponent({

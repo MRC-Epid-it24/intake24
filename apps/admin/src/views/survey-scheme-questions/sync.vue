@@ -61,16 +61,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
+import { defineComponent } from 'vue';
+
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
-import { flattenSchemeWithSection } from '@intake24/common/schemes';
 import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
 } from '@intake24/common/types/http/admin';
-import { ConfirmDialog } from '@intake24/ui';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { flattenSchemeWithSection } from '@intake24/common/schemes';
+import { ConfirmDialog } from '@intake24/ui';
 
 export type SchemeStatus = {
   id: string;

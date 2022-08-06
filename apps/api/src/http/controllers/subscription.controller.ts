@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
+
+import type { IoC } from '@intake24/api/ioc';
 import type { User } from '@intake24/db';
 import { UserSubscription } from '@intake24/db';
-import type { IoC } from '@intake24/api/ioc';
 
 const subscriptionController = ({ pusher }: Pick<IoC, 'pusher'>) => {
   const push = async (req: Request, res: Response): Promise<void> => {

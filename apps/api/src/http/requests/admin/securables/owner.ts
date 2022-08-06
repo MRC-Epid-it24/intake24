@@ -1,6 +1,7 @@
 import { checkSchema } from 'express-validator';
-import { Op, User } from '@intake24/db';
+
 import validate from '@intake24/api/http/requests/validate';
+import { Op, User } from '@intake24/db';
 
 export default validate(
   checkSchema({

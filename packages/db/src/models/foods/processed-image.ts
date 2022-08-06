@@ -1,9 +1,11 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+
 import type {
   ProcessedImageAttributes,
   ProcessedImageCreationAttributes,
   ProcessedImagePurpose,
 } from '@intake24/common/types/models/foods';
+
 import BaseModel from '../model';
 import { AsServedImage, AsServedSet, ImageMap, SourceImage } from '.';
 

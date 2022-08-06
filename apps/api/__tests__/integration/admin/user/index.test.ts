@@ -1,5 +1,5 @@
-import profile from './profile/index.test';
 import jobs from './jobs/index.test';
+import profile from './profile/index.test';
 
 export default () => {
   describe('GET /api/admin/user', profile);

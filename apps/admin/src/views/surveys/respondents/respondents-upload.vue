@@ -54,8 +54,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import type { JobEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
+
 import respondentsJob from './respondents-job';
 
 type RespondentsUploadForm = {

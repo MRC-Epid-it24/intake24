@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
-import { Op, User, UserPasswordReset } from '@intake24/db';
-import { ValidationError } from '@intake24/api/http/errors';
+
 import type { IoC } from '@intake24/api/ioc';
+import { ValidationError } from '@intake24/api/http/errors';
+import { Op, User, UserPasswordReset } from '@intake24/db';
 
 const passwordController = ({
   adminUserService,

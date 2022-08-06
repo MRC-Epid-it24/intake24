@@ -1,10 +1,12 @@
 import type { AxiosError, AxiosResponse } from 'axios';
 import axios from 'axios';
 import trim from 'lodash/trim';
+
 import type { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
+import { randomString } from '@intake24/common/util';
+
 import type { AuthStoreDef } from '../stores';
 import { useLoading, useMessages } from '../stores';
-import { randomString } from '@intake24/common/util';
 
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];

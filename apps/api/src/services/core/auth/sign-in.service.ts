@@ -1,5 +1,6 @@
-import { SignInLog } from '@intake24/db';
 import type { IoC } from '@intake24/api/ioc';
+import { SignInLog } from '@intake24/db';
+
 import type { SignInAttempt } from '.';
 
 const signInService = ({

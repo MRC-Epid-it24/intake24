@@ -29,14 +29,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { SchemeOverrides } from '@intake24/common/schemes';
-import { defaultOverrides, flattenScheme } from '@intake24/common/schemes';
-import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
+
 import type { PromptQuestion } from '@intake24/common/prompts';
+import type { SchemeOverrides } from '@intake24/common/schemes';
+import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import MealList from '@intake24/admin/components/meals/meal-list.vue';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { form } from '@intake24/admin/helpers';
+import { defaultOverrides, flattenScheme } from '@intake24/common/schemes';
 
 export type SurveyOverridesForm = { surveySchemeOverrides: SchemeOverrides };
 

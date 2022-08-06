@@ -1,11 +1,12 @@
 import type { Request, Response } from 'express';
+import { pick } from 'lodash';
+
+import type { IoC } from '@intake24/api/ioc';
 import type { RoleEntry, RoleRefs, RolesResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
-import { Permission, Role } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { roleEntryResponse } from '@intake24/api/http/responses/admin';
-import type { IoC } from '@intake24/api/ioc';
-import { pick } from 'lodash';
+import { Permission, Role } from '@intake24/db';
 
 const roleController = ({
   aclConfig,

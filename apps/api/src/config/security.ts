@@ -1,5 +1,7 @@
-import type { MFAProvider } from '@intake24/common/security';
 import ms from 'ms';
+
+import type { MFAProvider } from '@intake24/common/security';
+
 import type { CookieSettings, SameSiteCookieOptions } from './common';
 
 export type JwtTokenSettings = {

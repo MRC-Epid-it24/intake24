@@ -6,8 +6,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import RecallMobile from './recall-mobile.vue';
+
 import RecallDesktop from './recall-desktop.vue';
+import RecallMobile from './recall-mobile.vue';
 
 export default defineComponent({
   name: 'RecallContainer',

@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
 import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'HCaptcha',

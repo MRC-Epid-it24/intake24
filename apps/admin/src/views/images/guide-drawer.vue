@@ -111,16 +111,17 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import type { VImg } from 'vuetify/lib';
+import chunk from 'lodash/chunk';
+import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
+
 import type {
   GuideImageEntry,
   GuideImageEntryObject,
   ImageMapEntry,
   ImageMapEntryObject,
 } from '@intake24/common/types/http/admin';
-import chunk from 'lodash/chunk';
-import debounce from 'lodash/debounce';
-import type { VImg } from 'vuetify/lib';
 import { ConfirmDialog } from '@intake24/ui';
 
 interface Objects extends Omit<GuideImageEntryObject, 'id' | 'outlineCoordinates'> {

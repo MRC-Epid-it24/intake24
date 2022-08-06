@@ -1,4 +1,5 @@
 import type { HttpClient, Permission } from '@intake24/ui/types';
+
 import type { HttpClient, Permission } from './types';
 
 declare module 'vue/types/vue' {

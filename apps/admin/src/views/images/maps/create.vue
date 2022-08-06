@@ -45,6 +45,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import type { ImageMapEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';

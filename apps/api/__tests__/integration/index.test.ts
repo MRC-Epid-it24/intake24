@@ -1,6 +1,9 @@
-import request from 'supertest';
 import '../bootstrap';
+
+import request from 'supertest';
+
 import { suite } from '@intake24/api-tests/integration/helpers';
+
 // import root from './root.test';
 import admin from './admin/index.test';
 import authentication from './authentication/index.test';

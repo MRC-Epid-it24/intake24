@@ -1,5 +1,5 @@
-import type { UserListEntry } from '.';
 import type { Pagination, UserSecurableAttributes } from '../../models';
+import type { UserListEntry } from '.';
 import type { CreateUserInput } from './users';
 
 export interface CreateUserWithSecurables

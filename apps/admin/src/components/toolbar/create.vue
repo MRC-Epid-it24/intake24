@@ -10,6 +10,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import ActionMixin from './action-mixin';
 
 export default defineComponent({

@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import type { User } from '@intake24/db';
+import type { NextFunction, Request, Response, Router } from 'express';
 import { asValue } from 'awilix';
-import type { Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import { ForbiddenError } from '@intake24/api/http/errors';
+
 import type { RequestIoC } from '@intake24/api/ioc';
+import type { User } from '@intake24/db';
+import { ForbiddenError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
-import { foodDatabaseMaintainer, surveyRespondent, foodsAdmin } from '@intake24/common/security';
+import { foodDatabaseMaintainer, foodsAdmin, surveyRespondent } from '@intake24/common/security';
 
 /*
  * This middleware should be placed after authentication

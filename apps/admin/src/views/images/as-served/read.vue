@@ -26,8 +26,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import type { AsServedSetEntry } from '@intake24/common/types/http/admin';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+
 import AsServedImages from './images.vue';
 
 export default defineComponent({

@@ -30,9 +30,10 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
 import { defineComponent } from 'vue';
+
 import type { PromptAnswer } from '@intake24/common/types';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'BottomNavigationMobile',

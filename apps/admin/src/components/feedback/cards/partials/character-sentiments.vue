@@ -68,12 +68,13 @@
 </template>
 
 <script lang="ts">
-import isEqual from 'lodash/isEqual';
 import type { PropType } from 'vue';
+import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
+
 import type { Character, CharacterSentiment } from '@intake24/common/feedback';
-import { characterSentimentTypes, sentiments } from '@intake24/common/feedback';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import { characterSentimentTypes, sentiments } from '@intake24/common/feedback';
 import { copy } from '@intake24/common/util';
 
 export const characterSentimentDefaults: CharacterSentiment = {

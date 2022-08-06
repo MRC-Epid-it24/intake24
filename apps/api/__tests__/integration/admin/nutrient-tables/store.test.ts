@@ -1,11 +1,12 @@
 import { pick } from 'lodash';
 import request from 'supertest';
-import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+
 import type {
   NutrientTableCsvMappingFieldInput,
   NutrientTableCsvMappingNutrientInput,
   NutrientTableInput,
 } from '@intake24/common/types/http/admin';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/nutrient-tables';

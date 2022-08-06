@@ -1,12 +1,14 @@
 import type { Request } from 'express';
 import { checkSchema } from 'express-validator';
-import type { WhereOptions } from '@intake24/db';
-import { Op, User } from '@intake24/db';
+
 import type { ValidationMiddleware } from '@intake24/api/http/requests/validate';
+import type { SecurableType } from '@intake24/common/security';
+import type { UserAttributes } from '@intake24/common/types/models';
+import type { WhereOptions } from '@intake24/db';
 import validate from '@intake24/api/http/requests/validate';
 import { unique } from '@intake24/api/http/rules';
-import type { UserAttributes } from '@intake24/common/types/models';
-import type { SecurableType } from '@intake24/common/security';
+import { Op, User } from '@intake24/db';
+
 import defaults from './defaults';
 
 export default (securable: SecurableType): ValidationMiddleware[] =>

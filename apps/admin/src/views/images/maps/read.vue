@@ -6,8 +6,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import type { ImageMapEntry } from '@intake24/common/types/http/admin';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+
 import GuideDrawer from '../guide-drawer.vue';
 
 export default defineComponent({

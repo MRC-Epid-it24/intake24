@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import validation from '@intake24/api/http/requests/password';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';

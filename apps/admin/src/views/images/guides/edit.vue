@@ -60,9 +60,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import type { GuideImageEntry, GuideImageEntryObject } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
+
 import GuideDrawer from '../guide-drawer.vue';
 
 type EditGuideImageForm = {

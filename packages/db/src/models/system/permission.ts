@@ -1,19 +1,21 @@
 import {
-  AfterCreate,
   AfterBulkCreate,
+  AfterCreate,
   BelongsToMany,
   Column,
+  CreatedAt,
   DataType,
   Scopes,
   Table,
-  CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import config from '@intake24/api/config/acl';
+
 import type {
   PermissionAttributes,
   PermissionCreationAttributes,
 } from '@intake24/common/types/models';
+import config from '@intake24/api/config/acl';
+
 import BaseModel from '../model';
 import { PermissionRole, PermissionUser, Role, User } from '.';
 

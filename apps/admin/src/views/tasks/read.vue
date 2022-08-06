@@ -50,12 +50,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import cronstrue from 'cronstrue';
-import { ConfirmDialog } from '@intake24/ui';
+import { defineComponent } from 'vue';
+
+import type { TaskEntry } from '@intake24/common/types/http/admin';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { formatsDateTime } from '@intake24/admin/mixins';
-import type { TaskEntry } from '@intake24/common/types/http/admin';
+import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
   name: 'TaskDetail',

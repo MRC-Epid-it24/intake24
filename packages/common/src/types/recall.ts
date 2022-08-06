@@ -1,4 +1,5 @@
 import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
+
 import type { ComponentType, QuantityValues } from '../prompts';
 import type { FoodHeader, UserFoodData } from './http';
 import type { PortionSizeMethodId } from './models';

@@ -7,6 +7,7 @@ import {
   Scopes,
   Table,
 } from 'sequelize-typescript';
+
 import type {
   FoodLocalAttributes,
   FoodLocalCreationAttributes,
@@ -14,10 +15,11 @@ import type {
 import {
   Food,
   FoodLocalList,
-  FoodsLocale,
-  FoodPortionSizeMethod,
   FoodNutrient,
+  FoodPortionSizeMethod,
+  FoodsLocale,
 } from '@intake24/db';
+
 import BaseModel from '../model';
 import NutrientTableRecord from './nutrient-table-record';
 

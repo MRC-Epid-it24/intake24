@@ -15,13 +15,15 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-import { useMessages } from '@intake24/admin/stores';
 import upperFirst from 'lodash/upperFirst';
+import { defineComponent } from 'vue';
+
+import { useMessages } from '@intake24/admin/stores';
+
 import Delete from './delete.vue';
-import Read from './read.vue';
 import Download from './download.vue';
 import Edit from './edit.vue';
+import Read from './read.vue';
 
 export default defineComponent({
   name: 'ActionBar',

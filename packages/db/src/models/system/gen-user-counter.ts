@@ -1,16 +1,18 @@
 import {
   BelongsTo,
   Column,
+  CreatedAt,
   DataType,
   Scopes,
   Table,
-  CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
+
 import type {
   GenUserCounterAttributes,
   GenUserCounterCreationAttributes,
 } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { Survey } from '.';
 

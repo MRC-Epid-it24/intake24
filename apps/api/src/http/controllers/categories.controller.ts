@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+
 import type { IoC } from '@intake24/api/ioc';
 
 const categoriesController = ({

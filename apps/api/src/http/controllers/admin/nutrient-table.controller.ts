@@ -1,17 +1,18 @@
 import type { Request, Response } from 'express';
+import { pick } from 'lodash';
+
+import type { IoC } from '@intake24/api/ioc';
 import type {
-  NutrientTableInput,
+  JobEntry,
   NutrientTableEntry,
+  NutrientTableInput,
+  NutrientTableRecordsResponse,
   NutrientTableRefs,
   NutrientTablesResponse,
-  NutrientTableRecordsResponse,
-  JobEntry,
 } from '@intake24/common/types/http/admin';
-import type { User, PaginateQuery } from '@intake24/db';
-import { NutrientTableRecord, FoodsNutrientType, NutrientTable } from '@intake24/db';
-import type { IoC } from '@intake24/api/ioc';
+import type { PaginateQuery, User } from '@intake24/db';
 import { ValidationError } from '@intake24/api/http/errors';
-import { pick } from 'lodash';
+import { FoodsNutrientType, NutrientTable, NutrientTableRecord } from '@intake24/db';
 
 const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTableService'>) => {
   const entry = async (

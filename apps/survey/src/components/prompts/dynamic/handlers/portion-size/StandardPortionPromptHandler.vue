@@ -9,13 +9,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
+import { mapActions } from 'pinia';
+import { defineComponent } from 'vue';
+
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { PromptAnswer, StandardPortionUnit } from '@intake24/common/types';
 import StandardPortionPrompt from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
-import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
+
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 interface StandardPortionData {

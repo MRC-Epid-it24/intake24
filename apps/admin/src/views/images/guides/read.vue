@@ -6,9 +6,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import GuideDrawer from '../guide-drawer.vue';
+
 import type { GuideImageEntry } from '@intake24/common/types/http/admin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+
+import GuideDrawer from '../guide-drawer.vue';
 
 export default defineComponent({
   name: 'GuideImageDetail',

@@ -1,4 +1,5 @@
 import jsonwebtoken from 'jsonwebtoken';
+
 import { jwt } from '@intake24/api/util';
 
 describe('jsonwebtoken promisified wrappers', () => {

@@ -17,13 +17,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
 import type { PropType } from 'vue';
-import { merge } from '@intake24/common/util';
+import type { VForm } from 'vuetify/lib';
+import { defineComponent, ref } from 'vue';
+
 import type { TextareaPromptProps } from '@intake24/common/prompts';
 import { textareaPromptProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
+
 import BasePrompt from '../BasePrompt';
-import type { VForm } from 'vuetify/lib';
 
 export default defineComponent({
   name: 'TextareaPrompt',

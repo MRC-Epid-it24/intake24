@@ -1,4 +1,5 @@
 import type { NavigationGuard } from 'vue-router';
+
 import { useAuth, useSurvey } from '../stores';
 
 export const surveyParametersGuard: NavigationGuard = async (to, from, next) => {

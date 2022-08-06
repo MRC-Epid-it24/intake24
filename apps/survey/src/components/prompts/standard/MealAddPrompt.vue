@@ -37,10 +37,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
+import { defineComponent } from 'vue';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
+import { useSurvey } from '@intake24/survey/stores';
+
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({

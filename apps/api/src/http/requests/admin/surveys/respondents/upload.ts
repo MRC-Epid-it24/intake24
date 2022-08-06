@@ -1,5 +1,6 @@
 import { checkSchema } from 'express-validator';
 import path from 'node:path';
+
 import validate from '@intake24/api/http/requests/validate';
 
 export default validate(

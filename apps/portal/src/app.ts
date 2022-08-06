@@ -1,6 +1,8 @@
 import type { Express } from 'express';
 import express from 'express';
+
 import type { Logger } from '@intake24/services';
+
 import type { Config } from './config';
 import loaders from './loaders';
 

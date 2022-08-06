@@ -1,4 +1,4 @@
-import type { PermissionAttributes, Pagination } from '../../models';
+import type { Pagination, PermissionAttributes } from '../../models';
 
 export type PermissionRequest = {
   name: string;

@@ -1,4 +1,5 @@
 import type { Includeable } from '@intake24/db';
+import { NotFoundError } from '@intake24/api/http/errors';
 import {
   AsServedImage,
   AsServedSet,
@@ -8,7 +9,6 @@ import {
   GuideImage,
   ImageMap,
 } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
 
 const portionSizeService = () => {
   /**

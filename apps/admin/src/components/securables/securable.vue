@@ -48,15 +48,17 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
-import { ConfirmDialog } from '@intake24/ui';
-import { securableToResource } from '@intake24/common/util';
+
 import type { SecurableType } from '@intake24/common/security';
-import { securableDefs } from '@intake24/common/security';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
-import { EmbeddedDataTable } from '../data-tables';
-import UserDialog from './user-dialog.vue';
+import { securableDefs } from '@intake24/common/security';
+import { securableToResource } from '@intake24/common/util';
+import { ConfirmDialog } from '@intake24/ui';
+
 import type { Owner } from './owner-dialog.vue';
+import { EmbeddedDataTable } from '../data-tables';
 import OwnerDialog from './owner-dialog.vue';
+import UserDialog from './user-dialog.vue';
 
 export default defineComponent({
   name: 'ResourceSecurables',

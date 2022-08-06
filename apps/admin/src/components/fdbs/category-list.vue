@@ -34,10 +34,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
+import { defineComponent } from 'vue';
+
 import type { CategoryAttributes } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';
+
 import { AddCategoryDialog } from '.';
 
 export default defineComponent({

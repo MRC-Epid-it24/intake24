@@ -67,9 +67,10 @@
 </template>
 
 <script lang="ts">
-import draggable from 'vuedraggable';
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+import draggable from 'vuedraggable';
+
 import { useList } from '..';
 
 export default defineComponent({

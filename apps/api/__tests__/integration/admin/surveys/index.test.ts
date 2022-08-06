@@ -1,13 +1,13 @@
 import browse from './browse.test';
-import store from './store.test';
-import read from './read.test';
-import edit from './edit.test';
-import patch from './patch.test';
+import dataExport from './data-export/index.test';
 // import put from './put.test';
 import destroy from './destroy.test';
+import edit from './edit.test';
+import patch from './patch.test';
+import read from './read.test';
 import refs from './refs.test';
-import dataExport from './data-export/index.test';
 import respondents from './respondents/index.test';
+import store from './store.test';
 import submissions from './submissions/index.test';
 
 export default () => {

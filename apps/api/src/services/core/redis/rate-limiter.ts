@@ -1,7 +1,9 @@
 import type { Options } from 'express-rate-limit';
 import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
+
 import type { IoC } from '@intake24/api/ioc';
+
 import HasRedisClient from './redis-store';
 
 export default class RateLimiter extends HasRedisClient {

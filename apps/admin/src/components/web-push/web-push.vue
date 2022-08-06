@@ -42,6 +42,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import webPush from './web-push';
 
 export default defineComponent({

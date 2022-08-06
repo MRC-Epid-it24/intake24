@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
-import type { LanguageTranslationsResponse } from '@intake24/common/types/http/admin';
+
 import type { IoC } from '@intake24/api/ioc';
+import type { LanguageTranslationsResponse } from '@intake24/common/types/http/admin';
 
 const languageTranslationController = ({ languageService }: Pick<IoC, 'languageService'>) => {
   const browse = async (

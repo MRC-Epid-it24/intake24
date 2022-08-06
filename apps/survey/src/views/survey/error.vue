@@ -35,9 +35,10 @@
 </template>
 
 <script lang="ts">
-import { useSurvey } from '@intake24/survey/stores';
-import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
+
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'SurveyError',

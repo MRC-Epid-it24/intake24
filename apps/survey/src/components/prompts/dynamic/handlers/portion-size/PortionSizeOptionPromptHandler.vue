@@ -13,18 +13,18 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import type { PortionSizeOptionState } from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
-import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
-import { mapActions } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
-import FoodPromptUtils from '../mixins/food-prompt-utils';
-
 import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
+import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
+import { useSurvey } from '@intake24/survey/stores';
+
+import FoodPromptUtils from '../mixins/food-prompt-utils';
 
 export default defineComponent({
   name: 'PortionSizeOptionPromptHandler',

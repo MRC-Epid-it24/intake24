@@ -1,7 +1,8 @@
-import type { TaskRefs } from '@intake24/common/types/http/admin';
-import type { JobTypeParams } from '@intake24/common/types';
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
+import type { JobTypeParams } from '@intake24/common/types';
+import type { TaskRefs } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'JobParams',

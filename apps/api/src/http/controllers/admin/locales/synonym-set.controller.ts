@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
-import type { LocaleSynonymSetInput, LocaleSynonymSet } from '@intake24/common/types/http/admin';
+
 import type { IoC } from '@intake24/api/ioc';
+import type { LocaleSynonymSet, LocaleSynonymSetInput } from '@intake24/common/types/http/admin';
 
 const localeSynonymSetController = ({ localeService }: Pick<IoC, 'localeService'>) => {
   const get = async (

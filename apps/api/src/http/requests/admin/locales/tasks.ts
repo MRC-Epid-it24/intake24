@@ -1,4 +1,5 @@
 import { checkSchema } from 'express-validator';
+
 import validate from '@intake24/api/http/requests/validate';
 import { pickJobParams } from '@intake24/common/types';
 

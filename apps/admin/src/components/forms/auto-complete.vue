@@ -23,8 +23,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import debounce from 'lodash/debounce';
+import { defineComponent } from 'vue';
+
 import type { Dictionary } from '@intake24/common/types';
 
 export default defineComponent({

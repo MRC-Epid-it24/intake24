@@ -1,9 +1,11 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import { NutrientTableRecord } from '@intake24/db';
+
 import type {
   NutrientTableRecordFieldAttributes,
   NutrientTableRecordFieldCreationAttributes,
 } from '@intake24/common/types/models';
+import { NutrientTableRecord } from '@intake24/db';
+
 import BaseModel from '../model';
 
 @Table({

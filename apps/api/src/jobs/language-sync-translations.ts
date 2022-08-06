@@ -1,6 +1,8 @@
 import type { Job } from 'bullmq';
-import type { JobParams } from '@intake24/common/types';
+
 import type { IoC } from '@intake24/api/ioc';
+import type { JobParams } from '@intake24/common/types';
+
 import BaseJob from './job';
 
 export default class LanguageSyncTranslations extends BaseJob<

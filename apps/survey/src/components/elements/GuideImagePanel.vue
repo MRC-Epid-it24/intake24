@@ -33,13 +33,14 @@
 </template>
 
 <script lang="ts">
-import type { GuideImageResponse } from '@intake24/common/types/http';
-import { defineComponent, ref } from 'vue';
-import chunk from 'lodash/chunk';
-import debounce from 'lodash/debounce';
 import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
+import chunk from 'lodash/chunk';
+import debounce from 'lodash/debounce';
+import { defineComponent, ref } from 'vue';
 import { Resize } from 'vuetify/lib/directives';
+
+import type { GuideImageResponse } from '@intake24/common/types/http';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 
 export default defineComponent({

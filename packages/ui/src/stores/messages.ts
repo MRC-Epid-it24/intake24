@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 import { randomString } from '@intake24/common/util';
 
 export const messageTypes = ['info', 'success', 'warning', 'error'];

@@ -1,6 +1,7 @@
 import type { TopFoods } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
 import { round } from '@intake24/common/util';
+
 import { AggregateFoodStats } from './classes';
 
 export type ChartData = {

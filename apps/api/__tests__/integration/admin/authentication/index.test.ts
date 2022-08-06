@@ -1,6 +1,6 @@
 import login from './login.test';
-import refresh from './refresh.test';
 import logout from './logout.test';
+import refresh from './refresh.test';
 
 export default () => {
   describe('POST /api/admin/auth/login', login);

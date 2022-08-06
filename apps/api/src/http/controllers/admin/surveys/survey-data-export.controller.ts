@@ -1,7 +1,9 @@
 import type { Request, Response } from 'express';
+
+import type { IoC } from '@intake24/api/ioc';
 import type { JobEntry } from '@intake24/common/types/http/admin';
 import type { User } from '@intake24/db';
-import type { IoC } from '@intake24/api/ioc';
+
 import { getAndCheckSurveyAccess } from './survey.controller';
 
 const adminSurveyDataExportController = ({ dataExportService }: Pick<IoC, 'dataExportService'>) => {

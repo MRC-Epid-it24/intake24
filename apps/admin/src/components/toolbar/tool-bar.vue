@@ -29,14 +29,16 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import type { Location } from 'vue-router';
 import upperFirst from 'lodash/upperFirst';
+import { defineComponent } from 'vue';
+
 import { ConfirmDialog } from '@intake24/ui';
-import Create from './create.vue';
-import Read from './read.vue';
-import Edit from './edit.vue';
 import { useMessages } from '@intake24/ui/stores';
+
+import Create from './create.vue';
+import Edit from './edit.vue';
+import Read from './read.vue';
 
 export default defineComponent({
   name: 'ToolBar',

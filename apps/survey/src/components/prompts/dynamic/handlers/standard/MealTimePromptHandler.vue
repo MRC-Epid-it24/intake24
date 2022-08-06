@@ -10,16 +10,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
+import { defineComponent } from 'vue';
+
 import type { MealTimePromptProps } from '@intake24/common/prompts';
 import type { MealTime } from '@intake24/common/types';
-import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
-import { useSurvey } from '@intake24/survey/stores';
-
 import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 import { createPromptHandlerNoStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-no-store';
+import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'MealTimePromptHandler',

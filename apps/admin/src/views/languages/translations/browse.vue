@@ -70,18 +70,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import has from 'lodash/has';
 import isEqual from 'lodash/isEqual';
+import { defineComponent } from 'vue';
+
 import type {
   LanguageEntry,
   LanguageTranslationsResponse,
 } from '@intake24/common/types/http/admin';
 import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
-import { copy } from '@intake24/common/util';
-import { ConfirmDialog } from '@intake24/ui';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import watchEntry from '@intake24/admin/components/entry/watch-entry';
+import { copy } from '@intake24/common/util';
+import { ConfirmDialog } from '@intake24/ui';
+
 import TranslationSection from './translation-section.vue';
 
 export default defineComponent({

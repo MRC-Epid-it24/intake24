@@ -1,7 +1,9 @@
-import type { NutrientTableCsvMappingAttributes } from '@intake24/common/types/models';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import { NutrientTable } from '.';
+
+import type { NutrientTableCsvMappingAttributes } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
+import { NutrientTable } from '.';
 
 @Table({
   modelName: 'NutrientTableCsvMapping',

@@ -1,5 +1,5 @@
-import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
 import { getParentLocale } from '@intake24/api/services/foods/common';
+import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
 
 import { initDatabases, releaseDatabases } from '../helpers/databases';
 import createLocales from './test-data-locales';

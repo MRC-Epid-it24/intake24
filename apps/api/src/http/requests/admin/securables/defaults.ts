@@ -1,4 +1,5 @@
 import type { Schema } from 'express-validator';
+
 import type { SecurableType } from '@intake24/common/security';
 import { securableDefs } from '@intake24/common/security';
 

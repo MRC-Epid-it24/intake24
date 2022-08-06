@@ -4,10 +4,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
 import SubmitPrompt from '@intake24/survey/components/prompts/standard/SubmitPrompt.vue';
-import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({

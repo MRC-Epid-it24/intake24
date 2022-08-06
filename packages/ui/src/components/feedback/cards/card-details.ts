@@ -1,14 +1,14 @@
 import type { CardType, NutrientRuleType, Sentiment } from '@intake24/common/feedback';
+import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
 import type {
   CharacterParameters,
   FiveADayParameters,
   NutrientGroupParameters,
 } from '@intake24/ui/feedback';
-import { DemographicRange } from '@intake24/ui/feedback';
-import type { RequiredLocaleTranslation, LocaleTranslation } from '@intake24/common/types';
 import { round } from '@intake24/common/util';
-import { useApp } from '@intake24/ui/stores';
 import { shared } from '@intake24/i18n';
+import { DemographicRange } from '@intake24/ui/feedback';
+import { useApp } from '@intake24/ui/stores';
 
 export type FeedbackDetails = {
   readonly name: string;

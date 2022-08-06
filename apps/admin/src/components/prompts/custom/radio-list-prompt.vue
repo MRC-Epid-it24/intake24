@@ -71,6 +71,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import selectListPrompt from '../partials/select-list-prompt';
 
 export default defineComponent({

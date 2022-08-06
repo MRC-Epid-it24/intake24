@@ -1,11 +1,11 @@
-import type { FeedbackSchemeEntry } from './feedback-schemes';
-import type { LanguageListEntry } from './languages';
 import type {
+  Pagination,
   SurveyAttributes,
   SurveyCreationAttributes,
-  Pagination,
   UserSecurableAttributes,
 } from '../../models';
+import type { FeedbackSchemeEntry } from './feedback-schemes';
+import type { LanguageListEntry } from './languages';
 import type { LocaleListEntry } from './locales';
 import type { SurveySchemeEntry } from './survey-schemes';
 

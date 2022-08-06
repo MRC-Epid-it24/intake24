@@ -42,11 +42,12 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+
 import type { SurveyEntry, SurveySubmissionEntry } from '@intake24/common/types/http/admin';
-import { ConfirmDialog } from '@intake24/ui';
+import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { formatsDateTime } from '@intake24/admin/mixins';
-import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 export type SurveySubmissionsRefs = {

@@ -1,9 +1,10 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+
 import type { PermissionEntry, PermissionsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
-import { Permission } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { Permission } from '@intake24/db';
 
 const permissionController = () => {
   const entry = async (

@@ -1,4 +1,5 @@
 import { checkSchema } from 'express-validator';
+
 import validate from '@intake24/api/http/requests/validate';
 import { sexes, weightTargets } from '@intake24/common/feedback';
 import { PhysicalActivityLevel } from '@intake24/db';

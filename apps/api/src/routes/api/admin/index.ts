@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { authenticate } from '@intake24/api/http/middleware';
 
 import authentication from './authentication';
@@ -12,9 +13,9 @@ import locales from './locales';
 import nutrientTables from './nutrient-tables';
 import permissions from './permissions';
 import roles from './roles';
-import surveySchemes from './survey-schemes';
-import surveySchemeQuestions from './survey-scheme-questions';
 import signInLogs from './sign-in-logs';
+import surveySchemeQuestions from './survey-scheme-questions';
+import surveySchemes from './survey-schemes';
 import surveys from './surveys';
 import tasks from './tasks';
 import user from './user';

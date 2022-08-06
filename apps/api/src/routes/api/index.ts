@@ -1,10 +1,11 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
+
 import admin from './admin';
 import authentication from './authentication';
+import categories from './categories';
 import feedback from './feedback';
 import foods from './foods';
-import categories from './categories';
 import i18n from './i18n';
 import password from './password';
 import portionSizes from './portion-sizes';

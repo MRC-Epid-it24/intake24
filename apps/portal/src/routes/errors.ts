@@ -1,4 +1,5 @@
-import type { Express, Request, Response, NextFunction } from 'express';
+import type { Express, NextFunction, Request, Response } from 'express';
+
 import type { Ops } from '../app';
 
 export default (app: Express, { logger }: Ops): void => {

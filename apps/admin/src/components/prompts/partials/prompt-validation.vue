@@ -34,10 +34,11 @@
 </template>
 
 <script lang="ts">
-import type { LocaleTranslation } from '@intake24/common/types';
-import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
+import type { LocaleTranslation } from '@intake24/common/types';
+import { LanguageSelector } from '@intake24/admin/components/forms';
 
 export type LocaleTranslationKeys = 'message';
 

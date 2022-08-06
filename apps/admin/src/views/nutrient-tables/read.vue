@@ -69,9 +69,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import type { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
-import { offsetToExcelColumn } from '@intake24/common/util';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { offsetToExcelColumn } from '@intake24/common/util';
 
 export default defineComponent({
   name: 'NutrientTableDetail',

@@ -63,8 +63,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
+
 import type { ExportField, ExportSection } from '@intake24/common/schemes';
-import { defaultExport } from '@intake24/common/schemes';
 import type {
   SurveySchemeEntry,
   SurveySchemeExportRefsResponse,
@@ -72,8 +72,10 @@ import type {
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { form } from '@intake24/admin/helpers';
-import DataExportSection from './data-export-section.vue';
+import { defaultExport } from '@intake24/common/schemes';
+
 import type { SurveySchemeForm } from '../form.vue';
+import DataExportSection from './data-export-section.vue';
 
 export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;
 

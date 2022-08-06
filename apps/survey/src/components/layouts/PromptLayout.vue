@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import type { LocaleTranslation } from '@intake24/common/types';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
 

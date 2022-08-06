@@ -1,6 +1,6 @@
 import { browse } from '../generic';
 import store from './store';
-import update from './update';
 import translations from './translations';
+import update from './update';
 
 export default { browse, store, update, translations };

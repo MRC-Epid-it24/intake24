@@ -77,16 +77,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import debounce from 'lodash/debounce';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
-import type { TopFoods } from '@intake24/common/feedback';
-import { defaultTopFoods } from '@intake24/common/feedback';
+import { defineComponent } from 'vue';
+
 import type { RuleCallback } from '@intake24/admin/types';
+import type { TopFoods } from '@intake24/common/feedback';
+import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { ColorList, NutrientList, Preview } from '@intake24/admin/components/feedback';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
-import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
+import { form } from '@intake24/admin/helpers';
+import { defaultTopFoods } from '@intake24/common/feedback';
+
 import type { FeedbackSchemeForm } from '../form.vue';
 
 export type FeedbackSchemeTopFoodsForm = Pick<FeedbackSchemeForm, 'topFoods'>;

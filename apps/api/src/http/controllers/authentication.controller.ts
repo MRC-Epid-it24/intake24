@@ -1,8 +1,9 @@
 import type { Request, Response } from 'express';
-import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http';
-import { UnauthorizedError } from '@intake24/api/http/errors';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { Tokens } from '@intake24/api/services/core/auth';
+import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http';
+import { UnauthorizedError } from '@intake24/api/http/errors';
 
 const authenticationController = ({
   authenticationService,

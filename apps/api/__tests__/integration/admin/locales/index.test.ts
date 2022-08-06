@@ -1,14 +1,14 @@
 import browse from './browse.test';
-import store from './store.test';
-import read from './read.test';
-import edit from './edit.test';
-import update from './update.test';
 import destroy from './destroy.test';
+import edit from './edit.test';
+import read from './read.test';
 import refs from './refs.test';
-import tasks from './tasks.test';
 import splitLists from './split-lists/index.test';
 import splitWords from './split-words/index.test';
+import store from './store.test';
 import synonymSets from './synonym-sets/index.test';
+import tasks from './tasks.test';
+import update from './update.test';
 
 export default () => {
   describe('GET /api/admin/locales', browse);

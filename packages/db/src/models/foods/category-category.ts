@@ -1,6 +1,8 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+
 import type { CategoryCategoryAttributes } from '@intake24/common/types/models';
 import { Category } from '@intake24/db';
+
 import BaseModel from '../model';
 
 @Table({

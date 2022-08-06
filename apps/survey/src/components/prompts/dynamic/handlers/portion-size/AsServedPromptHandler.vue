@@ -13,15 +13,17 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import { mapActions } from 'pinia';
+import { defineComponent } from 'vue';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { AsServedParameters } from '@intake24/common/types/http';
 import type { AsServedPromptState } from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
+import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
+
 import FoodPromptUtils from '../mixins/food-prompt-utils';
-import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
 
 export default defineComponent({
   name: 'AsServedPromptHandler',

@@ -1,8 +1,9 @@
 import type { Request } from 'express';
 import type { Schema } from 'express-validator';
+
 import type { FindOptions, WhereOptions } from '@intake24/db';
-import { Op, Food, FoodGroup, FoodLocal } from '@intake24/db';
 import { unique } from '@intake24/api/http/rules';
+import { Food, FoodGroup, FoodLocal, Op } from '@intake24/db';
 
 const defaults: Schema = {
   name: {

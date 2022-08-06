@@ -1,6 +1,13 @@
 import { resolve } from 'node:path';
 import { URLSearchParams } from 'node:url';
+
+import type { IoC } from '@intake24/api/ioc';
+import type { WeightTargetCoefficient } from '@intake24/common/feedback';
+import type { NutrientType } from '@intake24/common/types/http/feedback';
+import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { getFrontEndUrl } from '@intake24/api/util';
+import { weightTargetsData } from '@intake24/common/feedback';
 import {
   FoodsNutrientType,
   FoodsNutrientUnit,
@@ -9,12 +16,7 @@ import {
   Survey,
   UserSurveyAlias,
 } from '@intake24/db';
-import type { NutrientType } from '@intake24/common/types/http/feedback';
-import type { WeightTargetCoefficient } from '@intake24/common/feedback';
-import { weightTargetsData } from '@intake24/common/feedback';
-import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
-import type { IoC } from '@intake24/api/ioc';
-import { getFrontEndUrl } from '@intake24/api/util';
+
 import FeedbackPdfGenerator from './feedback-pdf-generator';
 
 const feedbackService = ({ appConfig, fsConfig }: Pick<IoC, 'appConfig' | 'fsConfig'>) => {

@@ -1,16 +1,17 @@
 import type { Request, Response } from 'express';
+
+import type { IoC } from '@intake24/api/ioc';
 import type {
   SurveyEntryResponse,
   SurveyFollowUpResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
+import type { User } from '@intake24/db';
+import { NotFoundError } from '@intake24/api/http/errors';
 import { flattenSchemeWithSection, isMealSection } from '@intake24/common/schemes';
 import { merge } from '@intake24/common/util';
-import type { User } from '@intake24/db';
 import { FeedbackScheme, Survey, SurveyScheme } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
-import type { IoC } from '@intake24/api/ioc';
 
 const surveyRespondentController = ({ surveyService }: Pick<IoC, 'surveyService'>) => {
   const parameters = async (

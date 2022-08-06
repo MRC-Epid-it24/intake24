@@ -36,8 +36,10 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
+
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
-import { formatOutput, getDetails, getBackgroundImage } from '.';
+
+import { formatOutput, getBackgroundImage, getDetails } from '.';
 
 export default defineComponent({
   name: 'PrintCard',

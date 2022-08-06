@@ -1,8 +1,10 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+
 import type {
   ImageMapObjectAttributes,
   ImageMapObjectCreationAttributes,
 } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { ImageMap, ProcessedImage } from '.';
 

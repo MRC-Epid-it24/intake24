@@ -1,5 +1,6 @@
 import type { RedisOptions } from 'ioredis';
 import ms from 'ms';
+
 import type { CookieSettings, SameSiteCookieOptions } from './common';
 
 export type SessionConfig = {

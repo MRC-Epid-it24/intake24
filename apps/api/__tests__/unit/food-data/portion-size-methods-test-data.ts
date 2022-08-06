@@ -25,6 +25,10 @@ import type {
 } from '@intake24/common/types/http/foods/user-food-data';
 import type { SequelizeTS } from '@intake24/db';
 import {
+  toDatabasePortionSizeMethod,
+  toDatabasePortionSizeMethodParameters,
+} from '@intake24/api/services/foods/types/portion-size-method-utils';
+import {
   Category,
   CategoryCategory,
   CategoryLocal,
@@ -37,10 +41,7 @@ import {
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
 } from '@intake24/db';
-import {
-  toDatabasePortionSizeMethod,
-  toDatabasePortionSizeMethodParameters,
-} from '@intake24/api/services/foods/types/portion-size-method-utils';
+
 import createLocales from './test-data-locales';
 
 // TODO: use actual portion size method IDs and parameters.

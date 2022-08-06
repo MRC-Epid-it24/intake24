@@ -47,14 +47,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { RecallQuestions, SchemeType, ExportSection } from '@intake24/common/schemes';
-import { defaultMeals, schemeTypes } from '@intake24/common/schemes';
+
+import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/schemes';
 import type { Meal } from '@intake24/common/types';
+import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import MealList from '@intake24/admin/components/meals/meal-list.vue';
-import { form } from '@intake24/admin/helpers';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
-import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
+import { form } from '@intake24/admin/helpers';
+import { defaultMeals, schemeTypes } from '@intake24/common/schemes';
 
 export type SurveySchemeForm = {
   id: string | null;

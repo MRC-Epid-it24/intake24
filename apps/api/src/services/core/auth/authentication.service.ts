@@ -1,16 +1,18 @@
 import type { Request } from 'express';
-import { Op, Permission, Survey, User, UserPassword, UserSurveyAlias } from '@intake24/db';
-import { UnauthorizedError } from '@intake24/api/http/errors';
-import { supportedAlgorithms } from '@intake24/common-backend/util/passwords';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { Subject } from '@intake24/common/security';
-import { surveyRespondent } from '@intake24/common/security';
+import type { FrontEnd } from '@intake24/common/types';
 import type {
   AliasLoginRequest,
   EmailLoginRequest,
   TokenLoginRequest,
 } from '@intake24/common/types/http';
-import type { FrontEnd } from '@intake24/common/types';
+import { UnauthorizedError } from '@intake24/api/http/errors';
+import { surveyRespondent } from '@intake24/common/security';
+import { supportedAlgorithms } from '@intake24/common-backend/util/passwords';
+import { Op, Permission, Survey, User, UserPassword, UserSurveyAlias } from '@intake24/db';
+
 import type { Tokens } from '.';
 import type { MFARequest } from './mfa';
 

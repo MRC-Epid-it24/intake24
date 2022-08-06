@@ -20,12 +20,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { merge } from '@intake24/common/util';
+import { defineComponent } from 'vue';
+
 import type { DirectWeightPromptProps } from '@intake24/common/prompts';
 import { directWeightPromptDefaultProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
+
 import BasePortion from './BasePortion';
 
 export default defineComponent({

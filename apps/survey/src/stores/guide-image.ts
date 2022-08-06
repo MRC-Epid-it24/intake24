@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 import type { EncodedFood } from '@intake24/common/types';
 
 export interface GuideImageEncodedFood {

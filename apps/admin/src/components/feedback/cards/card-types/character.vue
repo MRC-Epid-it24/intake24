@@ -50,13 +50,15 @@
 </template>
 
 <script lang="ts">
-import { useEntry } from '@intake24/admin/stores';
-import type { Character } from '@intake24/common/feedback';
-import { characterTypes } from '@intake24/common/feedback';
-import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
-import { characterImageMap } from '@intake24/ui/feedback';
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
+import type { Character } from '@intake24/common/feedback';
+import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import { useEntry } from '@intake24/admin/stores';
+import { characterTypes } from '@intake24/common/feedback';
+import { characterImageMap } from '@intake24/ui/feedback';
+
 import CharacterSentiments from '../partials/character-sentiments.vue';
 
 export default defineComponent({

@@ -42,15 +42,17 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-import { mapActions, mapState } from 'pinia';
 import type { DataOptions } from 'vuetify';
 import isEqual from 'lodash/isEqual';
+import { mapActions, mapState } from 'pinia';
+import { defineComponent } from 'vue';
+
 import type { Dictionary } from '@intake24/common/types';
 import type { Pagination, PaginationMeta } from '@intake24/common/types/models';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import { resource } from '@intake24/admin/mixins';
 import { useResource } from '@intake24/admin/stores';
+
 import ActionBar from './action-bar/action-bar.vue';
 import DataTableFilter from './data-table-filter.vue';
 

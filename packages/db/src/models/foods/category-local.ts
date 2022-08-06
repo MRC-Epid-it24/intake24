@@ -1,9 +1,11 @@
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
+
 import type {
   CategoryLocalAttributes,
   CategoryLocalCreationAttributes,
 } from '@intake24/common/types/models';
 import { Category, CategoryPortionSizeMethod, FoodsLocale } from '@intake24/db';
+
 import BaseModel from '../model';
 
 @Table({

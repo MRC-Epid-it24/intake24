@@ -1,9 +1,11 @@
-import { BelongsTo, Column, DataType, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
+
+import type { SurveyState } from '@intake24/common/types';
 import type {
   UserSurveySessionAttributes,
   UserSurveySessionCreationAttributes,
 } from '@intake24/common/types/models';
-import type { SurveyState } from '@intake24/common/types';
+
 import BaseModel from '../model';
 import { Survey, User } from '.';
 

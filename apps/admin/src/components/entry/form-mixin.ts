@@ -1,12 +1,14 @@
-import { defineComponent } from 'vue';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import { mapActions } from 'pinia';
-import { copy } from '@intake24/common/util';
+import { defineComponent } from 'vue';
+
 import type { Dictionary, ValidationError } from '@intake24/common/types';
-import { form } from '@intake24/admin/helpers';
 import { SubmitFooter } from '@intake24/admin/components/forms';
+import { form } from '@intake24/admin/helpers';
 import { useEntry, useMessages } from '@intake24/admin/stores';
+import { copy } from '@intake24/common/util';
+
 import fetchEntry from './fetch-entry';
 import hasEntry from './has-entry';
 import Layout from './layout.vue';

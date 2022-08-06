@@ -141,20 +141,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
 import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
-import { Resize } from 'vuetify/lib/directives';
-import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
-import GuideImagePanel from '@intake24/survey/components/elements/GuideImagePanel.vue';
-import debounce from 'lodash/debounce';
 import chunk from 'lodash/chunk';
-import { merge } from '@intake24/common/util';
+import debounce from 'lodash/debounce';
+import { defineComponent, ref } from 'vue';
+import { Resize } from 'vuetify/lib/directives';
+
 import type { DrinkScalePromptProps } from '@intake24/common/prompts';
-import { drinkScalePromptDefaultProps } from '@intake24/common/prompts';
+import type { DrinkScaleState, LocaleTranslation } from '@intake24/common/types';
 import type { DrinkwareSetResponse, GuideImageResponse } from '@intake24/common/types/http/foods';
-import type { LocaleTranslation, DrinkScaleState } from '@intake24/common/types';
+import { drinkScalePromptDefaultProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
+import GuideImagePanel from '@intake24/survey/components/elements/GuideImagePanel.vue';
+import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
+
 import BasePortion from './BasePortion';
 
 export interface DrinkScalePromptState {

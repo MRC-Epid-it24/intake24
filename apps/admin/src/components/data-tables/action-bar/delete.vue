@@ -12,7 +12,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import { ConfirmDialog } from '@intake24/ui';
+
 import ActionMixin from './action-mixin';
 
 export default defineComponent({

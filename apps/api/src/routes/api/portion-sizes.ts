@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { authenticate } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/foods';
 import ioc from '@intake24/api/ioc';

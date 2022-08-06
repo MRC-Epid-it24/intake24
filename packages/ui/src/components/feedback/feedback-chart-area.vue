@@ -24,15 +24,16 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-import type { TopFoodData } from '@intake24/ui/feedback';
 import type { EChartsOption } from 'echarts';
-import { use } from 'echarts/core';
+import type { PropType } from 'vue';
 import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent } from 'echarts/components';
+import { use } from 'echarts/core';
 import { SVGRenderer } from 'echarts/renderers';
+import { defineComponent } from 'vue';
 import Chart from 'vue-echarts';
+
+import type { TopFoodData } from '@intake24/ui/feedback';
 import { round } from '@intake24/common/util';
 
 use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);

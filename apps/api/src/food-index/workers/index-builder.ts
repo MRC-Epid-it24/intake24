@@ -1,10 +1,11 @@
 import { parentPort, workerData } from 'worker_threads';
-import { models, FoodLocal, FoodLocalList, SequelizeTS } from '@intake24/db';
-import config from '@intake24/api/config/app';
-import Metaphone3Encoder from '@intake24/api/food-index/metaphone-encoder';
+
 import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
-import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
+import config from '@intake24/api/config/app';
 import EnglishWordOps from '@intake24/api/food-index/english-word-ops';
+import Metaphone3Encoder from '@intake24/api/food-index/metaphone-encoder';
+import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
+import { FoodLocal, FoodLocalList, models, SequelizeTS } from '@intake24/db';
 import { dbLogger } from '@intake24/services';
 
 const db = new SequelizeTS({

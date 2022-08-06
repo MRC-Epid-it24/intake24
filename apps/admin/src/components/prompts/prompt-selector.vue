@@ -133,23 +133,25 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
-import { copy, merge } from '@intake24/common/util';
-import type { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
+
+import type { RuleCallback } from '@intake24/admin/types';
 import type { PromptQuestion, QuestionType } from '@intake24/common/prompts';
+import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import {
+  customPrompts,
+  portionSizePrompts,
+  promptSettings,
+  standardPrompts,
+} from '@intake24/admin/components/prompts';
 import {
   customPromptQuestions,
   portionSizePromptQuestions,
   standardPromptQuestions,
 } from '@intake24/common/prompts';
-import {
-  promptSettings,
-  customPrompts,
-  portionSizePrompts,
-  standardPrompts,
-} from '@intake24/admin/components/prompts';
-import type { RuleCallback } from '@intake24/admin/types';
-import PromptTypeSelector from './prompt-type-selector.vue';
+import { copy, merge } from '@intake24/common/util';
+
 import { LanguageSelector } from '../forms';
+import PromptTypeSelector from './prompt-type-selector.vue';
 
 export interface EditPromptQuestion extends PromptQuestion {
   origId?: string;

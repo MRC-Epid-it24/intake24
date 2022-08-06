@@ -1,10 +1,12 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+
 import type {
   NutrientTypeInKcalAttributes,
   NutrientTypeInKcalCreationAttributes,
 } from '@intake24/common/types/models';
-import { FoodsNutrientType } from '.';
+
 import BaseModel from '../model';
+import { FoodsNutrientType } from '.';
 
 @Table({
   modelName: 'NutrientTypeInKcal',

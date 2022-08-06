@@ -1,10 +1,12 @@
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+
 import type {
   NutrientTableCsvMappingFieldAttributes,
   NutrientTableCsvMappingFieldCreationAttributes,
 } from '@intake24/common/types/models';
-import { NutrientTable } from '.';
+
 import BaseModel from '../model';
+import { NutrientTable } from '.';
 
 @Table({
   modelName: 'NutrientTableCsvMappingField',

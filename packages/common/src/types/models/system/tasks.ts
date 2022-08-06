@@ -1,4 +1,4 @@
-import type { JobTypeParams, JobType } from '../../jobs';
+import type { JobType, JobTypeParams } from '../../jobs';
 import type { OmitAndOptional } from '..';
 
 export type TaskAttributes = {

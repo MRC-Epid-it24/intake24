@@ -10,9 +10,9 @@ import type {
   UserPasswordAttributes,
   UserPasswordResetAttributes,
   UserPhysicalDataAttributes,
-  UserSurveySessionAttributes,
   UserSubscriptionAttributes,
   UserSurveyAliasAttributes,
+  UserSurveySessionAttributes,
 } from '.';
 
 export type UserAttributes = {

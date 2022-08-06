@@ -53,12 +53,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { mapActions, mapState } from 'pinia';
-import { Errors } from '@intake24/common/util';
+import { defineComponent } from 'vue';
+
 import { useAuth, useMessages } from '@intake24/admin/stores';
+import { Errors } from '@intake24/common/util';
 
 export default defineComponent({
   name: 'AppLogin',

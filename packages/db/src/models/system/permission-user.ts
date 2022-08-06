@@ -1,8 +1,10 @@
-import { Column, DataType, ForeignKey, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript';
+
 import type {
   PermissionUserAttributes,
   PermissionUserCreationAttributes,
 } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { Permission, User } from '.';
 

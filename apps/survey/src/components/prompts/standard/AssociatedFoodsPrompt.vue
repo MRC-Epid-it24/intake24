@@ -63,11 +63,11 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import Vue from 'vue';
-import type { PropType } from 'vue';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
-import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 import type {
   AssociatedFoodPromptState,
   AssociatedFoodsState,
@@ -75,6 +75,7 @@ import type {
 } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import FoodBrowser from '@intake24/survey/components/elements/FoodBrowser.vue';
+import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
 
 import BasePrompt from '../BasePrompt';
 

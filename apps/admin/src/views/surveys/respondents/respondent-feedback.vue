@@ -105,10 +105,11 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
+import type { SurveyRespondentEntry } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 import { useLoading } from '@intake24/ui/stores';
 import { downloadFile } from '@intake24/ui/util';
-import type { SurveyRespondentEntry } from '@intake24/common/types/http/admin';
 
 type RespondentFeedback = {
   email: string | null;

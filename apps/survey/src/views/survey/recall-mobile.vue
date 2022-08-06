@@ -89,18 +89,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
-import type { FoodState } from '@intake24/common/types';
-import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
-import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
-import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
-import MealFoodMobileContextMenu from '@intake24/survey/components/recall/MobileMealFoodContext.vue';
+import { defineComponent } from 'vue';
 
+import type { FoodState } from '@intake24/common/types';
 import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
+import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
+import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
+import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
 import Review from '@intake24/survey/components/recall/mobile/review/Review.vue';
+import MealFoodMobileContextMenu from '@intake24/survey/components/recall/MobileMealFoodContext.vue';
+import { useSurvey } from '@intake24/survey/stores';
+
 import Recall from './recall';
 
 export default defineComponent({

@@ -1,6 +1,7 @@
 import { checkSchema } from 'express-validator';
-import { validatePushSubscription } from '@intake24/common/validators';
+
 import validate from '@intake24/api/http/requests/validate';
+import { validatePushSubscription } from '@intake24/common/validators';
 
 export default validate(
   checkSchema({

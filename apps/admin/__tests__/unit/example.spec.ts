@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import HelloWorld from '@intake24/admin/components/HelloWorld.vue';
 
 describe('HelloWorld.vue', () => {

@@ -91,15 +91,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { merge } from '@intake24/common/util';
+import { defineComponent } from 'vue';
+
 import type { CerealPromptProps, ImageMapSelectorEmit } from '@intake24/common/prompts';
-import { cerealPromptDefaultProps } from '@intake24/common/prompts';
 import type { LocaleTranslation } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
+import { cerealPromptDefaultProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
 import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
 import ImageMapSelector from '@intake24/survey/components/prompts/portion/selectors/ImageMapSelector.vue';
+
 import BaseExpansionPortion from './BaseExpansionPortion';
 
 export default defineComponent({

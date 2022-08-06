@@ -8,14 +8,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
+import { mapActions } from 'pinia';
+import { defineComponent } from 'vue';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { SelectedAsServedImage } from '@intake24/common/types';
 import type { AsServedParameters } from '@intake24/common/types/http';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
-import { mapActions } from 'pinia';
 import { useSurvey } from '@intake24/survey/stores';
+
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
 export default defineComponent({

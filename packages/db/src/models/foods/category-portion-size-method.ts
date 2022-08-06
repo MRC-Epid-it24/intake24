@@ -1,10 +1,12 @@
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
-import { CategoryPortionSizeMethodParameter } from '@intake24/db';
+
 import type {
-  PortionSizeMethodId,
   CategoryPortionSizeMethodAttributes,
   CategoryPortionSizeMethodCreationAttributes,
+  PortionSizeMethodId,
 } from '@intake24/common/types/models';
+import { CategoryPortionSizeMethodParameter } from '@intake24/db';
+
 import BaseModel from '../model';
 import CategoryLocal from './category-local';
 

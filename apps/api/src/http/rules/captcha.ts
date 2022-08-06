@@ -1,5 +1,6 @@
-import { URLSearchParams } from 'node:url';
 import axios from 'axios';
+import { URLSearchParams } from 'node:url';
+
 import type { Captcha } from '@intake24/api/config';
 import type { CaptchaProvider } from '@intake24/common/types';
 

@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { wrapAsync } from '@intake24/api/util';
-import validation from '@intake24/api/http/requests/admin/securables';
+
 import type { SecurableController } from '@intake24/api/http/controllers';
 import type { SecurableType } from '@intake24/common/security';
+import validation from '@intake24/api/http/requests/admin/securables';
+import { wrapAsync } from '@intake24/api/util';
 
 export default (securable: SecurableType, controller: SecurableController) => {
   const router = Router({ mergeParams: true });

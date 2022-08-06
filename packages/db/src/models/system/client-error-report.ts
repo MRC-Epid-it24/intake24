@@ -1,18 +1,20 @@
 import {
   BelongsTo,
   Column,
+  CreatedAt,
   DataType,
   ForeignKey,
   Scopes,
   Table,
-  CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
+
+import type { Dictionary } from '@intake24/common/types';
 import type {
   ClientErrorReportAttributes,
   ClientErrorReportCreationAttributes,
 } from '@intake24/common/types/models';
-import type { Dictionary } from '@intake24/common/types';
+
 import BaseModel from '../model';
 import { Survey, User } from '.';
 

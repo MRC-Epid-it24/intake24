@@ -5,6 +5,7 @@ import type {
   Sentiment,
 } from '@intake24/common/feedback';
 import { sentiments as defaultSentiments } from '@intake24/common/feedback';
+
 import type AggregateFoodStats from './aggregate-food-stats';
 import type DemographicGroup from './demographic-group';
 import type DemographicResult from './demographic-result';

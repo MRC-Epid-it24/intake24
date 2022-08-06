@@ -162,13 +162,14 @@
 </template>
 
 <script lang="ts">
-import pick from 'lodash/pick';
 import type { PropType } from 'vue';
+import pick from 'lodash/pick';
 import { defineComponent } from 'vue';
-import { form } from '@intake24/admin/helpers';
-import { AutoComplete } from '@intake24/admin/components/forms';
+
 import type { ValidationError } from '@intake24/common/types';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
+import { AutoComplete } from '@intake24/admin/components/forms';
+import { form } from '@intake24/admin/helpers';
 
 export type UserDialogForm = {
   userId: string | null;

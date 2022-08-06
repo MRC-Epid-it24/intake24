@@ -1,11 +1,14 @@
 import './bootstrap';
+
 import Vue from 'vue';
+
 import pinia from '@intake24/ui/stores/bootstrap';
-import i18n from './i18n';
+
 import App from './app.vue';
-import http from './services/http.service';
-import router from './router';
+import i18n from './i18n';
 import vuetify from './plugins/vuetify';
+import router from './router';
+import http from './services/http.service';
 import { useAuth } from './stores';
 
 Vue.prototype.$http = http;

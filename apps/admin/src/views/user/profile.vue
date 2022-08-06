@@ -125,10 +125,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
-import { AppInfo, setsLanguage } from '@intake24/ui';
+import { defineComponent } from 'vue';
+
 import { useUser } from '@intake24/admin/stores';
+import { AppInfo, setsLanguage } from '@intake24/ui';
+
 import UserPassword from './password.vue';
 
 export default defineComponent({

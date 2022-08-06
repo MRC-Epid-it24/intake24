@@ -1,6 +1,7 @@
 import type { Job as BullJob } from 'bullmq';
-import type { JobData } from '@intake24/common/types';
+
 import type { IoC } from '@intake24/api/ioc';
+import type { JobData } from '@intake24/common/types';
 
 export type JobProgress = { done: number; all: number };
 

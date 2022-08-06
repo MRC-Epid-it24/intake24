@@ -1,5 +1,7 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+
 import type { ImageMapAttributes } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { GuideImage, ImageMapObject, ProcessedImage } from '.';
 

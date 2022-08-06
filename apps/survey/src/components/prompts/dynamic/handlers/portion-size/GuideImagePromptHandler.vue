@@ -14,18 +14,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
+import { defineComponent } from 'vue';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { GuideImageParameters } from '@intake24/common/types/http';
 import type { GuideImagePromptState } from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
-import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
-import FoodPromptUtils from '../mixins/food-prompt-utils';
-
 import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
 import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
+import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
+import { useSurvey } from '@intake24/survey/stores';
+
+import FoodPromptUtils from '../mixins/food-prompt-utils';
 
 export default defineComponent({
   name: 'GuideImagePromptHandler',

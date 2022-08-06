@@ -2,20 +2,22 @@ import {
   BelongsTo,
   BelongsToMany,
   Column,
+  CreatedAt,
   DataType,
   HasMany,
   Scopes,
   Table,
-  CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
+
+import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/schemes';
 import type { Meal } from '@intake24/common/types';
 import type {
   SurveySchemeAttributes,
   SurveySchemeCreationAttributes,
 } from '@intake24/common/types/models';
-import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/schemes';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
+
 import type { Securable } from '..';
 import { BaseModel } from '..';
 import { Survey, User, UserSecurable } from '.';

@@ -15,6 +15,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 
 export default defineComponent({

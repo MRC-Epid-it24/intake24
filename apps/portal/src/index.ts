@@ -1,8 +1,10 @@
 import './bootstrap';
+
 import { logger } from '@intake24/services';
-import config from './config';
+
 import type { Ops } from './app';
 import app from './app';
+import config from './config';
 
 const startApp = async (ops: Ops): Promise<void> => {
   const {

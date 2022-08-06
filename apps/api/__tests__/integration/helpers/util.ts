@@ -1,13 +1,15 @@
-import axios from 'axios';
-import { faker } from '@faker-js/faker';
 import type { ReadStream } from 'fs-extra';
+import { faker } from '@faker-js/faker';
+import axios from 'axios';
 import fs from 'fs-extra';
 import { Parser } from 'json2csv';
 import { times } from 'lodash';
 import path from 'node:path';
-import { Permission, Role, User, UserSecurable } from '@intake24/db';
+
 import type { SecurableType } from '@intake24/common/security';
 import ioc from '@intake24/api/ioc';
+import { Permission, Role, User, UserSecurable } from '@intake24/db';
+
 import type Suite from './integration-suite';
 
 const { fsConfig } = ioc.cradle;

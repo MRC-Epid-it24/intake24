@@ -10,7 +10,20 @@ module.exports = {
     '@vue/eslint-config-typescript/recommended',
     '@vue/eslint-config-prettier',
   ],
+  plugins: ['simple-import-sort'],
   rules: {
+    'simple-import-sort/imports': [
+      'error',
+      {
+        groups: [
+          ['^\\u0000'],
+          ['^@?(?!intake24)\\w.*\\u0000$', '^@?(?!intake24)\\w'],
+          ['(?<=\\u0000)$', '^'],
+          ['^\\..*\\u0000$', '^\\.'],
+        ],
+      },
+    ],
+    'simple-import-sort/exports': 'error',
     'vue/multi-word-component-names': 'warn',
     '@typescript-eslint/consistent-type-imports': [
       'error',

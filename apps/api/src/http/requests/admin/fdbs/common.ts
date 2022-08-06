@@ -1,6 +1,7 @@
-import { Category, NutrientTableRecord } from '@intake24/db';
-import { useInRecipeTypes } from '@intake24/common/types/models';
 import type { Schema } from 'express-validator';
+
+import { useInRecipeTypes } from '@intake24/common/types/models';
+import { Category, NutrientTableRecord } from '@intake24/db';
 
 export const attributes: Schema = {
   'main.attributes.readyMealOption': {

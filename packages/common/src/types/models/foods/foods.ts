@@ -1,11 +1,11 @@
 /* eslint-disable no-use-before-define */
+import type { OmitAndOptional } from '../model';
 import type {
   CategoryAttributes,
   FoodAttributeAttributes,
   FoodNutrientAttributes,
   FoodPortionSizeMethodCreationAttributes,
 } from '.';
-import type { OmitAndOptional } from '../model';
 
 export type FoodAttributes = {
   code: string;

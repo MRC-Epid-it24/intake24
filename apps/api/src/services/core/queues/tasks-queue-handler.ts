@@ -1,11 +1,13 @@
 import type { ConnectionOptions, Job as BullJob } from 'bullmq';
 import { Queue, QueueScheduler, Worker } from 'bullmq';
-import type { JobData, RepeatableBullJob } from '@intake24/common/types';
-import { Task } from '@intake24/db';
+
 import type { IoC } from '@intake24/api/ioc';
-import ioc from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
+import type { JobData, RepeatableBullJob } from '@intake24/common/types';
+import ioc from '@intake24/api/ioc';
 import { sleep } from '@intake24/api/util';
+import { Task } from '@intake24/db';
+
 import type { QueueHandler } from './queue-handler';
 
 export default class TasksQueueHandler implements QueueHandler<JobData> {

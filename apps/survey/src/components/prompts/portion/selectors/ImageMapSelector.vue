@@ -16,17 +16,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
 import type { PropType } from 'vue';
-import { merge } from '@intake24/common/util';
-import debounce from 'lodash/debounce';
-import chunk from 'lodash/chunk';
 import type { VImg } from 'vuetify/lib';
+import chunk from 'lodash/chunk';
+import debounce from 'lodash/debounce';
+import { defineComponent, ref } from 'vue';
+
 import type { ImageMapSelectorProps } from '@intake24/common/prompts';
-import { imageMapSelectorDefaultProps } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import type { ImageMapEmit } from '@intake24/common/types/http/foods';
+import { imageMapSelectorDefaultProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
 import localeContent from '@intake24/survey/components/mixins/localeContent';
+
 import BasePortion from '../BasePortion';
 
 export default defineComponent({

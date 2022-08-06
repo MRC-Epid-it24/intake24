@@ -1,11 +1,12 @@
 import type { LocaleMessages } from 'vue-i18n';
+
+import asServed from './as-served';
 import common from './common';
 import dashboard from './dashboard';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
-import foodGroups from './food-groups';
 import flags from './flags';
-import asServed from './as-served';
+import foodGroups from './food-groups';
 import guideImages from './guide-images';
 import imageMaps from './image-maps';
 import jobs from './jobs';
@@ -15,9 +16,9 @@ import nutrientTables from './nutrient-tables';
 import nutrientTypes from './nutrient-types';
 import permissions from './permissions';
 import roles from './roles';
-import surveySchemes from './survey-schemes';
-import surveySchemeQuestions from './survey-scheme-questions';
 import signInLogs from './sign-in-logs';
+import surveySchemeQuestions from './survey-scheme-questions';
+import surveySchemes from './survey-schemes';
 import surveys from './surveys';
 import tasks from './tasks';
 import user from './user';

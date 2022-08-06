@@ -1,10 +1,11 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+
+import type { IoC } from '@intake24/api/ioc';
 import type { LanguageEntry, LanguagesResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
-import { Language } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import type { IoC } from '@intake24/api/ioc';
+import { Language } from '@intake24/db';
 
 const languageController = ({ languageService }: Pick<IoC, 'languageService'>) => {
   const entry = async (

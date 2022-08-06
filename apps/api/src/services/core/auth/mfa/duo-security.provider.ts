@@ -1,9 +1,11 @@
 import type { Request } from 'express';
 import { Client } from '@duosecurity/duo_universal';
-import { User } from '@intake24/db';
-import { UnauthorizedError } from '@intake24/api/http/errors';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { Subject } from '@intake24/common/security';
+import { UnauthorizedError } from '@intake24/api/http/errors';
+import { User } from '@intake24/db';
+
 import type { LoginMeta, Tokens } from '..';
 import type { MFALoginCredentials, MFAProvider, MFARequest, MFAVerifyCredentials } from '.';
 

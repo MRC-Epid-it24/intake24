@@ -1,10 +1,10 @@
-import MealTimePromptHandler from './MealTimePromptHandler.vue';
+import AssociatedFoodsPromptHandler from './AssociatedFoodsPromptHandler.vue';
+import EditMealPromptHandler from './EditMealPromptHandler.vue';
 import FoodSearchPromptHandler from './FoodSearchPromptHandler.vue';
 import MealAddPromptHandler from './MealAddPromptHandler.vue';
-import EditMealPromptHandler from './EditMealPromptHandler.vue';
-import SubmitPromptHandler from './SubmitPromptHandler.vue';
+import MealTimePromptHandler from './MealTimePromptHandler.vue';
 import ReviewConfirmPromptHandler from './ReviewConfirmPromptHandler.vue';
-import AssociatedFoodsPromptHandler from './AssociatedFoodsPromptHandler.vue';
+import SubmitPromptHandler from './SubmitPromptHandler.vue';
 
 export default {
   MealTimePromptHandler,

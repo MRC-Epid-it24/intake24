@@ -124,15 +124,17 @@
 </template>
 
 <script lang="ts">
-import draggable from 'vuedraggable';
-import { ConfirmDialog } from '@intake24/ui';
-import { LanguageSelector } from '@intake24/admin/components/forms';
-import type { TopFoodNutrientType } from '@intake24/common/feedback';
-import { defaultTopFoods } from '@intake24/common/feedback';
-import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+import draggable from 'vuedraggable';
+
 import type { RuleCallback } from '@intake24/admin/types';
+import type { TopFoodNutrientType } from '@intake24/common/feedback';
+import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import { LanguageSelector } from '@intake24/admin/components/forms';
+import { defaultTopFoods } from '@intake24/common/feedback';
+import { ConfirmDialog } from '@intake24/ui';
+
 import { useList } from '..';
 
 export default defineComponent({

@@ -58,10 +58,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
-import { AppInfo, setsLanguage } from '@intake24/ui';
+import { defineComponent } from 'vue';
+
 import { useUser } from '@intake24/survey/stores';
+import { AppInfo, setsLanguage } from '@intake24/ui';
 
 export default defineComponent({
   name: 'SurveyUserProfile',

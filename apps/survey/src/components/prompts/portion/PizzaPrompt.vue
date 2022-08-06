@@ -97,17 +97,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { merge } from '@intake24/common/util';
-import type { PizzaPromptProps, ImageMapSelectorProps } from '@intake24/common/prompts';
-import { pizzaPromptDefaultProps } from '@intake24/common/prompts';
+import { defineComponent } from 'vue';
+
+import type { ImageMapSelectorProps, PizzaPromptProps } from '@intake24/common/prompts';
 import type { ImageMapEmit } from '@intake24/common/types/http/foods';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
-import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
+import { pizzaPromptDefaultProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
+import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
 // import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import ImageMapSelector from '@intake24/survey/components/prompts/portion/selectors/ImageMapSelector.vue';
+
 import BasePortion from './BasePortion';
 
 export default defineComponent({

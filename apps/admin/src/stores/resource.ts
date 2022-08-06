@@ -1,7 +1,8 @@
-import { defineStore } from 'pinia';
-import { httpService } from '@intake24/admin/services';
-import type { Dictionary } from '@intake24/common/types';
 import type { AxiosError } from 'axios';
+import { defineStore } from 'pinia';
+
+import type { Dictionary } from '@intake24/common/types';
+import { httpService } from '@intake24/admin/services';
 import { useLoading } from '@intake24/ui/stores';
 
 export type ListState = {

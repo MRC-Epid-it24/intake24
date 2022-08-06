@@ -1,13 +1,7 @@
-import { defineComponent } from 'vue';
-import trimEnd from 'lodash/trimEnd';
-
 import 'tinymce/tinymce';
-
 import 'tinymce/icons/default';
-
 import 'tinymce/themes/silver';
 import 'tinymce/models/dom';
-
 import 'tinymce/plugins/advlist';
 import 'tinymce/plugins/autolink';
 import 'tinymce/plugins/code';
@@ -20,6 +14,8 @@ import 'tinymce/plugins/preview';
 import 'tinymce/plugins/table';
 
 import Editor from '@tinymce/tinymce-vue';
+import trimEnd from 'lodash/trimEnd';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   data() {

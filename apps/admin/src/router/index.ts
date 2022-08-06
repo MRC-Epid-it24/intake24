@@ -1,10 +1,12 @@
-import Vue from 'vue';
 import type { RouteConfig } from 'vue-router';
-import VueRouter from 'vue-router';
 import { singular } from 'pluralize';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+
 import views from '@intake24/admin/views';
-import resources from './resources';
+
 import type { Resource } from '../types';
+import resources from './resources';
 
 export interface GenerateRoutesOps extends Resource {
   parent?: string;

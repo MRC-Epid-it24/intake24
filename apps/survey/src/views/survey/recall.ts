@@ -1,33 +1,32 @@
-import { defineComponent, ref } from 'vue';
 import { mapActions, mapState } from 'pinia';
-import type { SchemeEntryResponse } from '@intake24/common/types/http';
+import { defineComponent, ref } from 'vue';
+
+import type { ComponentType } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import type {
-  Selection,
   FoodState,
   LocaleTranslation,
   RecallPromptHandler,
+  Selection,
 } from '@intake24/common/types';
-import type { ComponentType } from '@intake24/common/prompts';
-import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
-import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
-import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
-import type { RecallAction } from '@intake24/survey/components/recall/MealListDesktop.vue';
-import MealList from '@intake24/survey/components/recall/MealListDesktop.vue';
-import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
-import standardHandlers from '@intake24/survey/components/prompts/dynamic/handlers/standard';
-import portionSizeHandlers from '@intake24/survey/components/prompts/dynamic/handlers/portion-size';
-import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
+import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
-
+import type { RecallAction } from '@intake24/survey/components/recall/MealListDesktop.vue';
+import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
+import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
+import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
+import portionSizeHandlers from '@intake24/survey/components/prompts/dynamic/handlers/portion-size';
+import standardHandlers from '@intake24/survey/components/prompts/dynamic/handlers/standard';
+import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
+import MealList from '@intake24/survey/components/recall/MealListDesktop.vue';
+import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
+import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
+import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
 // Mobile
 import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
-import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
 import MealFoodMobileContextMenu from '@intake24/survey/components/recall/MobileMealFoodContext.vue';
-import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
-import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
-import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
-import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
+import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({

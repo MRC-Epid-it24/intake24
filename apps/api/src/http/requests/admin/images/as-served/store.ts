@@ -1,7 +1,9 @@
 import { checkSchema } from 'express-validator';
-import { AsServedSet } from '@intake24/db';
+
 import validate from '@intake24/api/http/requests/validate';
 import { identifierSafeChars, unique } from '@intake24/api/http/rules';
+import { AsServedSet } from '@intake24/db';
+
 import defaults from './defaults';
 
 export default validate(

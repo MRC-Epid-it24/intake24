@@ -54,8 +54,10 @@
 </template>
 
 <script lang="ts">
-import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import { defineComponent } from 'vue';
+
+import type { PublicSurveyEntry } from '@intake24/common/types/http';
+
 import { surveyService } from '../services';
 
 export default defineComponent({

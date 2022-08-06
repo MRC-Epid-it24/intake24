@@ -1,4 +1,9 @@
 import { BelongsTo, BelongsToMany, Column, DataType, HasMany, Table } from 'sequelize-typescript';
+
+import type {
+  NutrientTableRecordAttributes,
+  NutrientTableRecordCreationAttributes,
+} from '@intake24/common/types/models';
 import {
   FoodLocal,
   FoodNutrient,
@@ -6,10 +11,7 @@ import {
   NutrientTableRecordField,
   NutrientTableRecordNutrient,
 } from '@intake24/db';
-import type {
-  NutrientTableRecordAttributes,
-  NutrientTableRecordCreationAttributes,
-} from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 
 @Table({

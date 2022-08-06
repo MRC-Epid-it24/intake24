@@ -1,7 +1,9 @@
 import { defineComponent } from 'vue';
-import type { JobEntry } from '@intake24/common/types/http/admin';
+
 import type { JobType } from '@intake24/common/types';
+import type { JobEntry } from '@intake24/common/types/http/admin';
 import { downloadFile } from '@intake24/ui/util';
+
 import PollsJobList from './polls-job-list.vue';
 
 export default defineComponent({

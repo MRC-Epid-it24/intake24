@@ -2,15 +2,17 @@ import { uniqBy } from 'lodash';
 import {
   BelongsToMany,
   Column,
+  CreatedAt,
   DataType,
-  HasOne,
   HasMany,
+  HasOne,
   Scopes,
   Table,
-  CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
+
 import type { UserAttributes, UserCreationAttributes } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import {
   ClientErrorReport,
@@ -30,9 +32,9 @@ import {
   UserPasswordReset,
   UserPhysicalData,
   UserSecurable,
-  UserSurveySession,
   UserSubscription,
   UserSurveyAlias,
+  UserSurveySession,
 } from '.';
 
 @Scopes(() => ({

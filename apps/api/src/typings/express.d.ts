@@ -1,4 +1,5 @@
 import type { AwilixContainer } from 'awilix';
+
 import type { RequestIoC } from '@intake24/api/ioc';
 
 declare global {

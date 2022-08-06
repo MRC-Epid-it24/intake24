@@ -41,10 +41,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { CopySchemeDialog } from '@intake24/admin/components/schemes';
-import { Preview } from '@intake24/admin/components/feedback';
+
 import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { Preview } from '@intake24/admin/components/feedback';
+import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 
 export default defineComponent({
   name: 'FeedbackSchemeDetail',

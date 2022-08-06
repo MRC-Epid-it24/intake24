@@ -102,18 +102,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
 import type { PropType } from 'vue';
-import debounce from 'lodash/debounce';
-import chunk from 'lodash/chunk';
 import type { VImg } from 'vuetify/lib';
+import chunk from 'lodash/chunk';
+import debounce from 'lodash/debounce';
+import { defineComponent, ref } from 'vue';
 import { Resize } from 'vuetify/lib/directives';
+
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
+import type { EncodedFood, GuideImageState, LocaleTranslation } from '@intake24/common/types';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
-import type { LocaleTranslation, GuideImageState, EncodedFood } from '@intake24/common/types';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
+
 import BasePortion from './BasePortion';
 
 export interface GuideImagePromptState {

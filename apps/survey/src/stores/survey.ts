@@ -1,24 +1,22 @@
 import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { defineStore } from 'pinia';
+import Vue from 'vue';
+
 import type {
-  FoodState,
-  MealState,
   CustomPromptAnswer,
+  EncodedFood,
+  FoodState,
+  FreeTextFood,
+  MealState,
   MealTime,
   PromptAnswer,
   Selection,
   SurveyState as CurrentSurveyState,
-  EncodedFood,
-  FreeTextFood,
 } from '@intake24/common/types';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
-import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { copy } from '@intake24/common/util';
-import { useLoading } from '@intake24/ui/stores';
-import { recallLog } from '@intake24/survey/stores/recall-log';
-import { surveyService } from '../services';
-import Vue from 'vue';
+import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import {
   findFood,
   findMeal,
@@ -28,6 +26,10 @@ import {
   getMealIndexForSelection,
   getMealIndexRequired,
 } from '@intake24/survey/stores/meal-food-utils';
+import { recallLog } from '@intake24/survey/stores/recall-log';
+import { useLoading } from '@intake24/ui/stores';
+
+import { surveyService } from '../services';
 
 export type MealUndo = {
   type: 'meal';

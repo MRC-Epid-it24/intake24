@@ -44,6 +44,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
 import type { FeedbackDetails } from './card-details';
 
 export default defineComponent({

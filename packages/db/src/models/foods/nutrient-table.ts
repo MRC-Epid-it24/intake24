@@ -1,15 +1,17 @@
 import { Column, DataType, HasMany, HasOne, Scopes, Table } from 'sequelize-typescript';
+
 import type {
   NutrientTableAttributes,
   NutrientTableCreationAttributes,
 } from '@intake24/common/types/models';
+
+import BaseModel from '../model';
 import {
-  NutrientTableRecord,
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
+  NutrientTableRecord,
 } from '.';
-import BaseModel from '../model';
 
 @Scopes(() => ({
   list: { order: [['id', 'ASC']] },

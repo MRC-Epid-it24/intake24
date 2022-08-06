@@ -1,9 +1,9 @@
-import GuideImagePromptHandler from './GuideImagePromptHandler.vue';
-import DrinkScalePromptHandler from './DrinkScalePromptHandler.vue';
-import StandardPortionPromptHandler from './StandardPortionPromptHandler.vue';
-import AsServedPromptHandler from './AsServedPromptHandler.vue';
-import PortionSizeOptionPromptHandler from './PortionSizeOptionPromptHandler.vue';
 import AsServedLeftoversPromptHandler from './AsServedLeftoversPromptHandler.vue';
+import AsServedPromptHandler from './AsServedPromptHandler.vue';
+import DrinkScalePromptHandler from './DrinkScalePromptHandler.vue';
+import GuideImagePromptHandler from './GuideImagePromptHandler.vue';
+import PortionSizeOptionPromptHandler from './PortionSizeOptionPromptHandler.vue';
+import StandardPortionPromptHandler from './StandardPortionPromptHandler.vue';
 
 export default {
   PortionSizeOptionPromptHandler,

@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({

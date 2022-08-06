@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import { useApp } from '../stores';
 
 export default defineComponent({

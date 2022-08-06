@@ -1,17 +1,19 @@
 import {
   Column,
+  CreatedAt,
   DataType,
   HasMany,
   Scopes,
   Table,
-  CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import type { LanguageAttributes, LanguageCreationAttributes } from '@intake24/common/types/models';
+
 import type { TextDirection } from '@intake24/common/types';
+import type { LanguageAttributes, LanguageCreationAttributes } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
-import Locale from './locale';
 import LanguageTranslation from './language-translation';
+import Locale from './locale';
 
 @Scopes(() => ({
   public: {

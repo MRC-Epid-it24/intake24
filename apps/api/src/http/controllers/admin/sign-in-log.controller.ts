@@ -1,9 +1,10 @@
 import type { Request, Response } from 'express';
+import { pick } from 'lodash';
+
 import type { SignInLogEntry, SignInLogsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
-import { SignInLog } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { pick } from 'lodash';
+import { SignInLog } from '@intake24/db';
 
 const signInLogController = () => {
   const entry = async (

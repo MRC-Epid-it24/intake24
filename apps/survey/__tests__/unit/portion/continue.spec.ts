@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import Continue from '@intake24/survey/components/prompts/actions/Continue.vue';
 
 describe('Continue.vue', () => {

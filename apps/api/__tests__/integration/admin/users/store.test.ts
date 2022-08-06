@@ -1,6 +1,7 @@
-import type { CustomField } from '@intake24/common/types';
-import { pick, omit } from 'lodash';
+import { omit, pick } from 'lodash';
 import request from 'supertest';
+
+import type { CustomField } from '@intake24/common/types';
 import type { CreateUserRequest, UpdateUserRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 

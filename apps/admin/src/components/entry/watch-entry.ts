@@ -1,5 +1,6 @@
-import { defineComponent } from 'vue';
 import type { NavigationGuardNext, Route } from 'vue-router';
+import { defineComponent } from 'vue';
+
 import { copy } from '@intake24/common/util';
 
 export default defineComponent({

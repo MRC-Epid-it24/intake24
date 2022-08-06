@@ -1,8 +1,8 @@
-import type { SurveySubmissionAttributes } from '@intake24/common/types/models';
 import type { FindOptions, WhereOptions } from 'sequelize';
+
+import type { SurveySubmissionAttributes } from '@intake24/common/types/models';
+
 import {
-  User,
-  UserCustomField,
   SurveySubmissionCustomField,
   SurveySubmissionField,
   SurveySubmissionFood,
@@ -13,6 +13,8 @@ import {
   SurveySubmissionNutrient,
   SurveySubmissionPortionSizeField,
   SystemNutrientType,
+  User,
+  UserCustomField,
   UserSurveyAlias,
 } from '../models/system';
 

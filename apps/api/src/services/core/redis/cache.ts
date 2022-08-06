@@ -1,6 +1,8 @@
 import ms from 'ms';
 import stringify from 'safe-stable-stringify';
+
 import type { IoC } from '@intake24/api/ioc';
+
 import HasRedisClient from './redis-store';
 
 export default class Cache extends HasRedisClient {

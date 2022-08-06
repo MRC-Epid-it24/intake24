@@ -7,18 +7,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
+import { defineComponent } from 'vue';
+
 import type { FoodSearchPromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
-import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
-import { useSurvey } from '@intake24/survey/stores';
-import type { PropType } from 'vue';
-
+import WhyDidYouRender from '@intake24/survey/components/mixins/whyDidYouRender';
 import FoodPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/food-prompt-utils';
 import PromptHandlerStateless from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-stateless';
-import WhyDidYouRender from '@intake24/survey/components/mixins/whyDidYouRender';
+import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'FoodSearchPromptHandler',

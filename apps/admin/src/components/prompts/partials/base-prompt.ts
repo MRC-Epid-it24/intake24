@@ -1,9 +1,11 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
 import type { Condition, PromptValidationProps } from '@intake24/common/prompts';
 import type { LocaleTranslation } from '@intake24/common/types';
-import PromptContent from './prompt-content.vue';
+
 import PromptConditions from './prompt-conditions.vue';
+import PromptContent from './prompt-content.vue';
 import PromptValidation from './prompt-validation.vue';
 
 export type LocaleTranslationKeys = 'name' | 'text' | 'description';

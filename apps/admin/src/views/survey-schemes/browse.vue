@@ -4,6 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import { DataTable } from '@intake24/admin/components/data-tables';
 
 export default defineComponent({

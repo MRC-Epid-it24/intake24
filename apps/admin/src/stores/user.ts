@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia';
+
 import type { Subject } from '@intake24/common/security';
-import { tokenService } from '@intake24/ui/services';
+import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
 import type { Permission } from '@intake24/ui/types';
 import { httpService } from '@intake24/admin/services';
-import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
+import { tokenService } from '@intake24/ui/services';
 import { useLoading } from '@intake24/ui/stores';
+
 import { useResource } from './resource';
 
 export interface UserState {

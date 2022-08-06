@@ -4,11 +4,11 @@ import {
   FoodGroup,
   FoodLocal,
   FoodNutrient,
+  FoodsNutrientType,
+  FoodsNutrientUnit,
   NutrientTable,
   NutrientTableRecord,
   NutrientTableRecordNutrient,
-  FoodsNutrientType,
-  FoodsNutrientUnit,
 } from '@intake24/db';
 
 export default async (foodDatabase: SequelizeTS) => {

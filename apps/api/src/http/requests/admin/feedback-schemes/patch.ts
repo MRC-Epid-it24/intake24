@@ -1,6 +1,8 @@
 import type { Schema } from 'express-validator';
 import { checkSchema } from 'express-validator';
+
 import validate from '@intake24/api/http/requests/validate';
+
 import { defaults, name } from './defaults';
 
 const schema = Object.entries({ ...defaults, name }).reduce<Schema>((acc, [key, param]) => {

@@ -1,7 +1,7 @@
 import browse from './browse.test';
-import read from './read.test';
-import download from './download.test';
 import destroy from './destroy.test';
+import download from './download.test';
+import read from './read.test';
 
 export default () => {
   describe('GET /api/admin/jobs', browse);

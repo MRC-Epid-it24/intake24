@@ -1,5 +1,5 @@
 import type { CustomField } from '../..';
-import type { UserAttributes, UserAssociations, Pagination } from '../../models';
+import type { Pagination, UserAssociations, UserAttributes } from '../../models';
 import type { PermissionListEntry } from './permissions';
 import type { RoleListEntry } from './roles';
 

@@ -96,9 +96,11 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
-import { copy } from '@intake24/common/util';
+
 import type { FoodDatabaseRefs } from '@intake24/common/types/http/admin';
 import type { NutrientTableRecordAttributes } from '@intake24/common/types/models';
+import { copy } from '@intake24/common/util';
+
 import { useFetchList } from './use-fetch-list';
 
 export default defineComponent({

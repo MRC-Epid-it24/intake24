@@ -1,10 +1,12 @@
-import { defineStore } from 'pinia';
-import type { Dictionary } from '@intake24/common/types';
 import type { AxiosError } from 'axios';
 import axios from 'axios';
+import { defineStore } from 'pinia';
+
+import type { Dictionary } from '@intake24/common/types';
 import { useLoading } from '@intake24/ui/stores';
-import { useResource } from './resource';
+
 import http from '../services/http.service';
+import { useResource } from './resource';
 
 export type EntryState = {
   data: Dictionary;

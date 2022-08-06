@@ -1,23 +1,24 @@
 import type { ComponentType, Condition, PromptQuestion } from '@intake24/common/prompts';
-import { conditionOps } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import type { FoodState, MealState } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
-import {
-  asServedLeftoversComplete,
-  asServedServingComplete,
-  guideImageComplete,
-  portionSizeMethodSelected,
-  standardPortionComplete,
-  drinkScaleComplete,
-} from './portion-size-checks';
-import type { SurveyState } from '../stores';
-import { recallLog } from '../stores';
+import { conditionOps } from '@intake24/common/prompts';
 import {
   findMeal,
   getFoodByIndex,
   getFoodIndexRequired,
 } from '@intake24/survey/stores/meal-food-utils';
-import type { FoodState, MealState } from '@intake24/common/types';
+
+import type { SurveyState } from '../stores';
+import { recallLog } from '../stores';
+import {
+  asServedLeftoversComplete,
+  asServedServingComplete,
+  drinkScaleComplete,
+  guideImageComplete,
+  portionSizeMethodSelected,
+  standardPortionComplete,
+} from './portion-size-checks';
 
 const checkRecallNumber = (state: SurveyState, condition: Condition) => {
   if (state.user === null) {

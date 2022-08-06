@@ -55,8 +55,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+
 import type { PromptQuestion } from '@intake24/common/prompts';
-import { customPromptQuestions } from '@intake24/common/prompts';
 import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
@@ -64,6 +64,7 @@ import type {
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import PromptSelector from '@intake24/admin/components/prompts/prompt-selector.vue';
 import { form } from '@intake24/admin/helpers';
+import { customPromptQuestions } from '@intake24/common/prompts';
 
 export type SchemeQuestionForm = {
   question: PromptQuestion;

@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
-import type { LocaleSplitListInput, LocaleSplitList } from '@intake24/common/types/http/admin';
+
 import type { IoC } from '@intake24/api/ioc';
+import type { LocaleSplitList, LocaleSplitListInput } from '@intake24/common/types/http/admin';
 
 const localeSplitListController = ({ localeService }: Pick<IoC, 'localeService'>) => {
   const get = async (

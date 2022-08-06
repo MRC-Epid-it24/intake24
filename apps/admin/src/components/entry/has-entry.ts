@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue';
+
 import { resource } from '@intake24/admin/mixins';
 
 export default defineComponent({

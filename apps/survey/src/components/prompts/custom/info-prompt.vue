@@ -9,9 +9,11 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import { merge } from '@intake24/common/util';
+
 import type { InfoPromptProps } from '@intake24/common/prompts';
 import { infoPromptProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
+
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({

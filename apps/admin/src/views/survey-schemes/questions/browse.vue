@@ -61,7 +61,16 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { SurveyQuestionSection, MealSection, RecallQuestions } from '@intake24/common/schemes';
+
+import type { PromptQuestionMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
+import type { PromptQuestion } from '@intake24/common/prompts';
+import type { MealSection, RecallQuestions, SurveyQuestionSection } from '@intake24/common/schemes';
+import type { Dictionary } from '@intake24/common/types';
+import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
+import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
+import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { form } from '@intake24/admin/helpers';
 import {
   defaultQuestions,
   flattenScheme,
@@ -69,14 +78,7 @@ import {
   mealSections,
   surveySections,
 } from '@intake24/common/schemes';
-import type { PromptQuestion } from '@intake24/common/prompts';
-import type { Dictionary } from '@intake24/common/types';
-import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { LoadSectionDialog } from '@intake24/admin/components/schemes';
-import type { PromptQuestionMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
-import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
-import { form } from '@intake24/admin/helpers';
+
 import type { SurveySchemeForm } from '../form.vue';
 
 export type SurveySchemeQuestionsForm = Pick<SurveySchemeForm, 'questions'>;

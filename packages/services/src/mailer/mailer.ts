@@ -1,7 +1,9 @@
 import type { SendMailOptions, Transporter } from 'nodemailer';
 import nodemailer from 'nodemailer';
+
 import type { Environment } from '@intake24/common/types';
 import type { Logger } from '@intake24/services';
+
 import type { MailConfig } from './config';
 
 export type MailerOps = {

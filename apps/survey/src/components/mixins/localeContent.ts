@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue';
+
 import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
 
 export type LocaleContent = {

@@ -1,15 +1,16 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+
+import type { IoC } from '@intake24/api/ioc';
 import type {
   GuideImageEntry,
   GuideImageRefs,
   GuideImagesResponse,
 } from '@intake24/common/types/http/admin';
-import { NotFoundError } from '@intake24/api/http/errors';
-import type { IoC } from '@intake24/api/ioc';
 import type { PaginateQuery } from '@intake24/db';
-import { GuideImage, ImageMap } from '@intake24/db';
+import { NotFoundError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
+import { GuideImage, ImageMap } from '@intake24/db';
 
 const guideImageController = ({
   imagesBaseUrl,

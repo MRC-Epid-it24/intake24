@@ -1,7 +1,8 @@
 import '@intake24/api/bootstrap';
-import ioc from '@intake24/api/ioc';
+
 import type { Ops } from '@intake24/api/app';
 import app from '@intake24/api/app';
+import ioc from '@intake24/api/ioc';
 
 const appOps = { config: ioc.cradle.config, logger: ioc.cradle.logger };
 

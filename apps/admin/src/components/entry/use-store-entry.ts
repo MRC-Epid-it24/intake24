@@ -1,6 +1,7 @@
 import { computed } from 'vue';
-import { useEntry, useUser } from '@intake24/admin/stores';
+
 import type { Dictionary } from '@intake24/common/types';
+import { useEntry, useUser } from '@intake24/admin/stores';
 
 export const useStoreEntry = <T = Dictionary, R = Dictionary>(id: string) => {
   const entryStore = useEntry();

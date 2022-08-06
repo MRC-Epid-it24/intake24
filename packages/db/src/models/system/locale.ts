@@ -2,15 +2,17 @@
 import {
   AfterCreate,
   AfterDestroy,
+  BelongsTo,
   Column,
   DataType,
   HasMany,
   Scopes,
   Table,
-  BelongsTo,
 } from 'sequelize-typescript';
+
 import type { LocaleAttributes, LocaleCreationAttributes } from '@intake24/common/types/models';
 import { foodDatabasePermissions } from '@intake24/common/security';
+
 import BaseModel from '../model';
 import { Language, Permission, Survey } from '.';
 

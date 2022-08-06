@@ -1,4 +1,5 @@
 import { copy } from '@intake24/common/util';
+
 import type { PromptQuestion } from '..';
 import type { BasePromptProps, ValidatedPromptProps } from './base';
 import { basePromptProps, promptValidation } from './base';

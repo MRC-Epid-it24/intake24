@@ -1,15 +1,16 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import type { PaginateQuery, WhereOptions } from '@intake24/db';
-import { NutrientTable, FoodsLocale, SystemLocale } from '@intake24/db';
+
 import type {
   FoodDatabaseEntry,
   FoodDatabaseRefs,
   LocalesResponse,
 } from '@intake24/common/types/http/admin';
 import type { LocaleAttributes } from '@intake24/common/types/models';
-import { foodDatabaseMaintainerPrefix, foodsAdmin } from '@intake24/common/security';
+import type { PaginateQuery, WhereOptions } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { foodDatabaseMaintainerPrefix, foodsAdmin } from '@intake24/common/security';
+import { FoodsLocale, NutrientTable, SystemLocale } from '@intake24/db';
 
 const adminFoodDatabaseController = () => {
   const browse = async (

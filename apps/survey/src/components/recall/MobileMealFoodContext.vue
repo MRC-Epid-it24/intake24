@@ -25,10 +25,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { ConfirmDialog } from '@intake24/ui';
 import { mapActions } from 'pinia';
+import { defineComponent } from 'vue';
+
 import { useSurvey } from '@intake24/survey/stores';
+import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
   name: 'MealFoodMobileContextMenu',

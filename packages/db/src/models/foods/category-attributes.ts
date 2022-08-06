@@ -1,10 +1,12 @@
-import { Column, DataType, Table, Scopes, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { Category } from '@intake24/db';
+import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
+
 import type {
   CategoryAttributeAttributes,
   CategoryAttributeCreationAttributes,
   UseInRecipeType,
 } from '@intake24/common/types/models';
+import { Category } from '@intake24/db';
+
 import BaseModel from '../model';
 
 @Scopes(() => ({

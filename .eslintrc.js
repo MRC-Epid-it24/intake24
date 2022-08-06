@@ -16,9 +16,21 @@ module.exports = defineConfig({
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
-  plugins: ['prettier', '@typescript-eslint'],
+  plugins: ['prettier', 'simple-import-sort', '@typescript-eslint'],
   rules: {
     'prettier/prettier': 'error',
+    'simple-import-sort/imports': [
+      'error',
+      {
+        groups: [
+          ['^\\u0000'],
+          ['^@?(?!intake24)\\w.*\\u0000$', '^@?(?!intake24)\\w'],
+          ['(?<=\\u0000)$', '^'],
+          ['^\\..*\\u0000$', '^\\.'],
+        ],
+      },
+    ],
+    'simple-import-sort/exports': 'error',
     '@typescript-eslint/consistent-type-imports': [
       'error',
       { prefer: 'type-imports', disallowTypeAnnotations: false },

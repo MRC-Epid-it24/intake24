@@ -1,6 +1,7 @@
 import request from 'supertest';
-import { suite } from '@intake24/api-tests/integration/helpers';
+
 import securityConfig from '@intake24/api/config/security';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/auth/login/token';

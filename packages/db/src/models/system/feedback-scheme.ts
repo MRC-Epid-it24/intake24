@@ -2,27 +2,29 @@ import {
   BelongsTo,
   BelongsToMany,
   Column,
+  CreatedAt,
   DataType,
   HasMany,
   Scopes,
   Table,
-  CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
+
+import type {
+  Card,
+  DemographicGroup,
+  FeedbackOutput,
+  FeedbackPhysicalDataField,
+  FeedbackType,
+  HenryCoefficient,
+  TopFoods,
+} from '@intake24/common/feedback';
 import type {
   FeedbackSchemeAttributes,
   FeedbackSchemeCreationAttributes,
 } from '@intake24/common/types/models';
-import type {
-  FeedbackOutput,
-  FeedbackType,
-  Card,
-  TopFoods,
-  HenryCoefficient,
-  DemographicGroup,
-  FeedbackPhysicalDataField,
-} from '@intake24/common/feedback';
 import { defaultTopFoods } from '@intake24/common/feedback';
+
 import type { Securable } from '..';
 import { BaseModel } from '..';
 import { Survey, User, UserSecurable } from '.';

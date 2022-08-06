@@ -1,5 +1,7 @@
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+
 import type { NutrientUnitAttributes } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { FoodsNutrientType } from '.';
 

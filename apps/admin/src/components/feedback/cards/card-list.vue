@@ -72,14 +72,16 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
 import isEqual from 'lodash/isEqual';
+import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
+
 import type { Card } from '@intake24/common/feedback';
-import { ConfirmDialog } from '@intake24/ui';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
-import { useEntry } from '@intake24/admin/stores';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { useEntry } from '@intake24/admin/stores';
+import { ConfirmDialog } from '@intake24/ui';
+
 import CardSelector from './card-selector.vue';
 
 export type CardEvent = {

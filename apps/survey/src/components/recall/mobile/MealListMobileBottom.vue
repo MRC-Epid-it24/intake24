@@ -27,10 +27,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
+import { defineComponent } from 'vue';
+
 import type { FoodState } from '@intake24/common/types';
+import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   // components: { MealItemMobile },

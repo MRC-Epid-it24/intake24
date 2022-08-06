@@ -2,9 +2,9 @@ import type { Request } from 'express';
 import type { ParamSchema, Schema } from 'express-validator';
 import has from 'lodash/has';
 import validator from 'validator';
-import type { WhereOptions } from '@intake24/db';
-import { Op, FeedbackScheme } from '@intake24/db';
+
 import type { FeedbackSchemeAttributes } from '@intake24/common/types/models';
+import type { WhereOptions } from '@intake24/db';
 import { unique } from '@intake24/api/http/rules';
 import {
   feedbackOutputs,
@@ -12,6 +12,7 @@ import {
   feedbackTypes,
 } from '@intake24/common/feedback';
 import { validateDemographicGroups, validateHenryCoefficients } from '@intake24/common/validators';
+import { FeedbackScheme, Op } from '@intake24/db';
 
 export const name: ParamSchema = {
   in: ['body'],

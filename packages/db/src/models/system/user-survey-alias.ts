@@ -1,17 +1,19 @@
 import {
   BelongsTo,
   Column,
+  CreatedAt,
   DataType,
   ForeignKey,
   Scopes,
   Table,
-  CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
+
 import type {
   UserSurveyAliasAttributes,
   UserSurveyAliasCreationAttributes,
 } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { Survey, User } from '.';
 

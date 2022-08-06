@@ -1,4 +1,5 @@
 import '../bootstrap';
+
 import { suite } from './helpers';
 import site from './site';
 

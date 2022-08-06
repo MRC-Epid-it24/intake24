@@ -1,13 +1,13 @@
 import type {
-  NutrientTableRecordCreationAttributes,
-  NutrientTableRecordAttributes,
-} from './nutrient-table-records';
-import type {
   NutrientTableCsvMappingAttributes,
   NutrientTableCsvMappingCreationAttributes,
   NutrientTableCsvMappingFieldAttributes,
   NutrientTableCsvMappingNutrientAttributes,
 } from './nutrient-table-csv-mappings';
+import type {
+  NutrientTableRecordAttributes,
+  NutrientTableRecordCreationAttributes,
+} from './nutrient-table-records';
 
 export type NutrientTableAttributes = {
   id: string;

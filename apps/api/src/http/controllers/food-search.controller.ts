@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+
 import foodIndex, { IndexNotReadyError } from '@intake24/api/food-index';
 
 const foodSearchController = () => {

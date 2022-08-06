@@ -1,4 +1,5 @@
 import type { Dictionary } from '@intake24/common/types';
+
 import authentication from './authentication';
 import dashboard from './dashboard.vue';
 import fdbs from './fdbs';
@@ -9,12 +10,12 @@ import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
 import nutrientTables from './nutrient-tables';
-import surveySchemes from './survey-schemes';
-import surveySchemeQuestions from './survey-scheme-questions';
-import signInLogs from './sign-in-logs';
-import surveys from './surveys';
 import permissions from './permissions';
 import roles from './roles';
+import signInLogs from './sign-in-logs';
+import surveySchemeQuestions from './survey-scheme-questions';
+import surveySchemes from './survey-schemes';
+import surveys from './surveys';
 import tasks from './tasks';
 import user from './user';
 import users from './users';

@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia';
-import { useLoading } from '@intake24/ui/stores';
+
 import type { AliasLoginRequest, TokenLoginRequest } from '@intake24/common/types/http';
-import { useUser } from './user';
+import { useLoading } from '@intake24/ui/stores';
+
 import { authService } from '../services';
+import { useUser } from './user';
 
 export type AuthState = {
   accessToken: string | null;

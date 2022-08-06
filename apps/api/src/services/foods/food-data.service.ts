@@ -2,6 +2,8 @@ import type {
   UserAssociatedFoodPrompt,
   UserFoodData,
 } from '@intake24/common/types/http/foods/user-food-data';
+import { getParentLocale } from '@intake24/api/services/foods/common';
+import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
 import {
   AssociatedFood,
   Brand,
@@ -12,8 +14,7 @@ import {
   NutrientTableRecord,
   NutrientTableRecordNutrient,
 } from '@intake24/db';
-import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
-import { getParentLocale } from '@intake24/api/services/foods/common';
+
 import InheritableAttributesImpl from './inheritable-attributes-service';
 import PortionSizeMethodsImpl from './portion-size-methods-service';
 

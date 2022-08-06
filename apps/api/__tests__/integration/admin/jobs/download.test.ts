@@ -1,7 +1,8 @@
 import request from 'supertest';
+
 import type { JobEntry } from '@intake24/common/types/http/admin';
-import { suite } from '@intake24/api-tests/integration/helpers';
 import { sleep } from '@intake24/api/util';
+import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/jobs';

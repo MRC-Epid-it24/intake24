@@ -56,9 +56,11 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import MealItem from './MealItem.vue';
-import ContextMenu from '../elements/ContextMenu.vue';
+
 import type { MealState } from '@intake24/common/types';
+
+import ContextMenu from '../elements/ContextMenu.vue';
+import MealItem from './MealItem.vue';
 
 export type RecallAction = 'add-meal' | 'review-confirm';
 

@@ -61,9 +61,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { formatsDateTime } from '@intake24/admin/mixins';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+
 import type { JobEntry } from '@intake24/common/types/http/admin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formatsDateTime } from '@intake24/admin/mixins';
 
 export default defineComponent({
   name: 'JobDetail',

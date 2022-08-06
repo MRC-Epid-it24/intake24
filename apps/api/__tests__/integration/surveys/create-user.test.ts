@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import request from 'supertest';
+
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {

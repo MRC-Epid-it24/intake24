@@ -1,9 +1,11 @@
 import { Column, DataType, Table } from 'sequelize-typescript';
+
 import type {
   AttributeDefaultsAttributes,
   AttributeDefaultsCreationAttributes,
   UseInRecipeType,
 } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 
 @Table({

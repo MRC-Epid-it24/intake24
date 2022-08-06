@@ -32,8 +32,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+
 import type { LanguageEntry } from '@intake24/common/types/http/admin';
+import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 
 export default defineComponent({
   name: 'LocaleDetail',

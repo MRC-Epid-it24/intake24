@@ -32,11 +32,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { merge } from '@intake24/common/util';
+import { defineComponent } from 'vue';
+
 import type { CheckboxListPromptProps } from '@intake24/common/prompts';
 import { checkboxListPromptProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
+
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({

@@ -1,4 +1,5 @@
 import type { CategoryContents, CategoryHeader } from '@intake24/common/types/http';
+import { NotFoundError } from '@intake24/api/http/errors';
 import {
   Category,
   CategoryLocal,
@@ -7,7 +8,6 @@ import {
   FoodLocal,
   FoodsLocale as Locale,
 } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
 
 const categoryContentsService = () => {
   function filterUndefined(

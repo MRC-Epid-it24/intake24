@@ -1,7 +1,8 @@
 import { Router } from 'express';
+
+import validation from '@intake24/api/http/requests/i18n';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
-import validation from '@intake24/api/http/requests/i18n';
 
 export default () => {
   const { userI18nController } = ioc.cradle;

@@ -1,5 +1,7 @@
 import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
+
 import type { FoodNutrientAttributes } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { FoodLocal, NutrientTableRecord } from '.';
 

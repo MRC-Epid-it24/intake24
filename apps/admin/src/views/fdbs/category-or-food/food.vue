@@ -104,12 +104,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import type { FoodLocalEntry } from '@intake24/common/types/http/admin';
-import { form } from '@intake24/admin/helpers';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
-import { AutoComplete } from '@intake24/admin/components/forms';
-import categoryOrFood from './category-or-food';
 import { NutrientList } from '@intake24/admin/components/fdbs';
+import { AutoComplete } from '@intake24/admin/components/forms';
+import { form } from '@intake24/admin/helpers';
+
+import categoryOrFood from './category-or-food';
 
 export default defineComponent({
   name: 'FoodEntry',

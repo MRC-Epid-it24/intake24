@@ -1,18 +1,20 @@
 import {
   BelongsTo,
   Column,
+  CreatedAt,
   DataType,
   Scopes,
-  CreatedAt,
-  UpdatedAt,
   Table,
+  UpdatedAt,
 } from 'sequelize-typescript';
+
 import type {
   PushSubscription,
   SubscriptionType,
   UserSubscriptionAttributes,
   UserSubscriptionCreationAttributes,
 } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { User } from '.';
 

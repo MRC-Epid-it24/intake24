@@ -45,16 +45,18 @@
 </template>
 
 <script lang="ts">
-import isEqual from 'lodash/isEqual';
 import type { PropType } from 'vue';
+import isEqual from 'lodash/isEqual';
 import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
+
 import type { PromptQuestion } from '@intake24/common/prompts';
-import type { SurveyQuestionSection, MealSection } from '@intake24/common/schemes';
+import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import { promptSettings } from '@intake24/admin/components/prompts';
+
+import PromptSelector from '../prompt-selector.vue';
 import LoadPromptDialog from './load-prompt-dialog.vue';
 import PromptListItem from './prompt-list-item.vue';
-import PromptSelector from '../prompt-selector.vue';
 
 export type MoveSection = { value: string; text: string };
 

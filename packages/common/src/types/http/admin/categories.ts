@@ -1,9 +1,9 @@
 import type {
-  CategoryAttributes,
+  Attributes,
   CategoryAssociations,
+  CategoryAttributes,
   CategoryLocalAttributes,
   Pagination,
-  Attributes,
 } from '../../models';
 import type { FoodListEntry } from './foods';
 

@@ -131,12 +131,13 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
-import { copy } from '@intake24/common/util';
+
 import type { Meal, Meals } from '@intake24/common/types';
-import { defaultMeals } from '@intake24/common/schemes';
-import { ConfirmDialog } from '@intake24/ui';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { defaultMeals } from '@intake24/common/schemes';
+import { copy } from '@intake24/common/util';
+import { ConfirmDialog } from '@intake24/ui';
 
 export type MealDialog = {
   show: boolean;

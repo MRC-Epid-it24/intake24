@@ -92,12 +92,14 @@
 </template>
 
 <script lang="ts">
+import type { TranslateResult } from 'vue-i18n';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
-import type { TranslateResult } from 'vue-i18n';
+
 import logo from '@intake24/survey/assets/logo.svg';
 import Loader from '@intake24/survey/components/Loader.vue';
-import { ConfirmDialog, MessageBox, setsLanguage, ServiceWorker } from '@intake24/ui';
+import { ConfirmDialog, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
+
 import { useAuth } from './stores';
 
 export default defineComponent({

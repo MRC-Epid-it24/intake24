@@ -1,4 +1,5 @@
 import type { LocaleMessageObject } from '@intake24/i18n';
+
 import type { Application, TextDirection } from '../..';
 
 export type LanguageAttributes = {

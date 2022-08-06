@@ -92,15 +92,17 @@
 </template>
 
 <script lang="ts">
-import isEqual from 'lodash/isEqual';
 import type { PropType } from 'vue';
+import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
-import type { DemographicGroupScaleSector } from '@intake24/common/feedback';
-import { sentiments } from '@intake24/common/feedback';
-import { tinymce } from '@intake24/admin/components/tinymce';
-import { LanguageSelector } from '@intake24/admin/components/forms';
-import { copy } from '@intake24/common/util';
+
 import type { RuleCallback } from '@intake24/admin/types';
+import type { DemographicGroupScaleSector } from '@intake24/common/feedback';
+import { LanguageSelector } from '@intake24/admin/components/forms';
+import { tinymce } from '@intake24/admin/components/tinymce';
+import { sentiments } from '@intake24/common/feedback';
+import { copy } from '@intake24/common/util';
+
 import { demographicGroupScaleSectorDefaults } from '.';
 
 export default defineComponent({

@@ -22,15 +22,17 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import { merge } from '@intake24/common/util';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
-import { submitPromptProps } from '@intake24/common/prompts';
 import type { LocaleTranslation } from '@intake24/common/types';
-import { replaceInTranslation } from '@intake24/common/types';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
+import { submitPromptProps } from '@intake24/common/prompts';
+import { replaceInTranslation } from '@intake24/common/types';
+import { merge } from '@intake24/common/util';
+import FoodSearchResults from '@intake24/survey/components/elements/FoodSearchResults.vue';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import foodSearchService from '@intake24/survey/services/foods.service';
-import FoodSearchResults from '@intake24/survey/components/elements/FoodSearchResults.vue';
+
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({

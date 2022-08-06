@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-expressions */
 import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
-import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
-import Metaphone3Encoder from '@intake24/api/food-index/metaphone-encoder';
 import EnglishWordOps from '@intake24/api/food-index/english-word-ops';
 import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/interpreted-phrase';
 import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
+import Metaphone3Encoder from '@intake24/api/food-index/metaphone-encoder';
+import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 
 describe('Phrase index', () => {
   const phrases: Array<PhraseWithKey<string>> = [

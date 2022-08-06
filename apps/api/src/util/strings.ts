@@ -1,6 +1,6 @@
-import slugify from 'slugify';
 import trim from 'lodash/trim';
 import trimEnd from 'lodash/trimEnd';
+import slugify from 'slugify';
 import validator from 'validator';
 
 export const btoa = (object: any): string => Buffer.from(JSON.stringify(object)).toString('base64');

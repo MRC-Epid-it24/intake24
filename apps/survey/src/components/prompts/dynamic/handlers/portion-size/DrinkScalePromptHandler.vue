@@ -15,17 +15,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
-import { useSurvey } from '@intake24/survey/stores';
-import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
+import { defineComponent } from 'vue';
+
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { DrinkScaleParameters } from '@intake24/common/types/http';
 import type { DrinkScalePromptState } from '@intake24/survey/components/prompts/portion/DrinkScalePrompt.vue';
-import DrinkScalePrompt from '@intake24/survey/components/prompts/portion/DrinkScalePrompt.vue';
-import foodPromptUtils from '../mixins/food-prompt-utils';
 import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
+import DrinkScalePrompt from '@intake24/survey/components/prompts/portion/DrinkScalePrompt.vue';
+import { useSurvey } from '@intake24/survey/stores';
+import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
+
+import foodPromptUtils from '../mixins/food-prompt-utils';
 
 export default defineComponent({
   name: 'DrinkScalePromptHandler',

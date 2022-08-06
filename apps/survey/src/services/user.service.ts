@@ -1,4 +1,5 @@
-import type { UserPhysicalDataResponse, SurveySubmissionEntry } from '@intake24/common/types/http';
+import type { SurveySubmissionEntry, UserPhysicalDataResponse } from '@intake24/common/types/http';
+
 import http from './http.service';
 
 export type UserPhysicalDataInput = Omit<NonNullable<UserPhysicalDataResponse>, 'userId'>;

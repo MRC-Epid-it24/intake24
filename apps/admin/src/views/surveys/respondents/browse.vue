@@ -178,19 +178,21 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+
 import type {
   SurveyEntry,
   SurveyRespondentEntry,
   SurveyRespondentListEntry,
 } from '@intake24/common/types/http/admin';
-import { ConfirmDialog } from '@intake24/ui';
+import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
-import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
-import RespondentFeedback from './respondent-feedback.vue';
-import RespondentsUpload from './respondents-upload.vue';
-import RespondentsAuthUrlExport from './respondents-auth-url-export.vue';
+import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
+
+import RespondentFeedback from './respondent-feedback.vue';
+import RespondentsAuthUrlExport from './respondents-auth-url-export.vue';
+import RespondentsUpload from './respondents-upload.vue';
 
 export type RespondentsRefs = {
   $refs: {

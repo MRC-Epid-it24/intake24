@@ -1,6 +1,7 @@
 import pick from 'lodash/pick';
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+
 import { merge } from '@intake24/common/util';
 import { admin, shared } from '@intake24/i18n';
 

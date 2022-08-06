@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import WebPush from '@intake24/admin/components/web-push/web-push.vue';
 
 export default defineComponent({

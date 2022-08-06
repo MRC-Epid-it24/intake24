@@ -4,36 +4,38 @@ import {
   BelongsTo,
   BelongsToMany,
   Column,
+  CreatedAt,
   DataType,
-  HasOne,
   HasMany,
+  HasOne,
   Scopes,
   Table,
-  CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
+
+import type { SchemeOverrides } from '@intake24/common/schemes';
 import type {
   SearchSortingAlgorithm,
   SurveyAttributes,
   SurveyCreationAttributes,
   SurveyState,
 } from '@intake24/common/types/models';
-import type { SchemeOverrides } from '@intake24/common/schemes';
 import { defaultOverrides } from '@intake24/common/schemes';
 import { surveyPermissions } from '@intake24/common/security';
+
 import BaseModel from '../model';
 import {
   ClientErrorReport,
   FeedbackScheme,
   GenUserCounter,
-  SystemLocale,
   Permission,
   SurveyScheme,
   SurveySubmission,
-  UserSecurable,
-  UserSurveySession,
-  UserSurveyAlias,
+  SystemLocale,
   User,
+  UserSecurable,
+  UserSurveyAlias,
+  UserSurveySession,
 } from '.';
 
 @Scopes(() => ({

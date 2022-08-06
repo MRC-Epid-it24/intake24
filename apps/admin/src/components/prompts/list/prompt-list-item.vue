@@ -103,12 +103,14 @@
 </template>
 
 <script lang="ts">
-import isEqual from 'lodash/isEqual';
 import type { PropType } from 'vue';
+import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
-import { copy } from '@intake24/common/util';
+
 import type { PromptQuestion } from '@intake24/common/prompts';
+import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
+
 import type { MoveSection } from './prompt-list.vue';
 import SaveAsTemplateDialog from './save-as-template-dialog.vue';
 

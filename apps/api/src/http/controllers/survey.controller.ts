@@ -1,9 +1,11 @@
 import type { Request, Response } from 'express';
-import type { PublicSurveyEntry, GenerateUserResponse } from '@intake24/common/types/http';
-import { Survey } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { RespondentFromJWT } from '@intake24/api/services';
+import type { GenerateUserResponse, PublicSurveyEntry } from '@intake24/common/types/http';
+import { NotFoundError } from '@intake24/api/http/errors';
+import { Survey } from '@intake24/db';
+
 import { publicSurveyEntryResponse } from '../responses';
 
 const surveyController = ({ surveyService }: Pick<IoC, 'surveyService'>) => {

@@ -143,7 +143,8 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
-import type { ExportSection, ExportField } from '@intake24/common/schemes';
+
+import type { ExportField, ExportSection } from '@intake24/common/schemes';
 
 export default defineComponent({
   name: 'DataExportSection',

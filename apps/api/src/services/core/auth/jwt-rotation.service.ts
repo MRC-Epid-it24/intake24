@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
-import { Op, RefreshToken } from '@intake24/db';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { TokenPayload } from '@intake24/common/security';
+import { Op, RefreshToken } from '@intake24/db';
 
 export const decode = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;
 

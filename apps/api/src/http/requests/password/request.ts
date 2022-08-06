@@ -1,4 +1,5 @@
 import { checkSchema } from 'express-validator';
+
 import validate from '@intake24/api/http/requests/validate';
 import { captcha } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';

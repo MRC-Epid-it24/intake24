@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { FoodExplorer } from '@intake24/admin/components/fdbs';
 

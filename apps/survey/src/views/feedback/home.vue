@@ -93,25 +93,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
+
+import type { FeedbackOutput } from '@intake24/common/feedback';
+import type { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
 import type {
   FeedbackCardParameters,
   FeedbackDictionaries,
   SurveySubmission,
   UserDemographic,
 } from '@intake24/ui/feedback';
-import { buildTopFoods, buildCardParams } from '@intake24/ui/feedback';
-import type { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
+import { feedbackService, userService } from '@intake24/survey/services';
+import { useLoading, useSurvey } from '@intake24/survey/stores';
 import {
-  FeedbackChartArea,
   FeedbackCardArea,
+  FeedbackChartArea,
   FeedbackOutputs,
   FeedbackUserInfo,
 } from '@intake24/ui/components/feedback';
-import { feedbackService, userService } from '@intake24/survey/services';
-import { useLoading, useSurvey } from '@intake24/survey/stores';
-import type { FeedbackOutput } from '@intake24/common/feedback';
+import { buildCardParams, buildTopFoods } from '@intake24/ui/feedback';
 
 export default defineComponent({
   name: 'FeedbackHome',

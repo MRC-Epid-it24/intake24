@@ -1,9 +1,10 @@
 import type { Request, Response } from 'express';
-import type { User } from '@intake24/db';
-import { Survey } from '@intake24/db';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { SurveySubmissionEntry } from '@intake24/common/types/http';
+import type { User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { Survey } from '@intake24/db';
 
 const userSubmissionsController = ({
   cache,

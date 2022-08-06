@@ -1,6 +1,6 @@
 export { default as ClientErrorReport } from './client-error-report';
-export { default as FixedFoodRanking } from './fixed-food-ranking';
 export { default as FeedbackScheme } from './feedback-scheme';
+export { default as FixedFoodRanking } from './fixed-food-ranking';
 export { default as GenUserCounter } from './gen-user-counter';
 export { default as Job } from './job';
 export { default as Language } from './language';
@@ -8,8 +8,8 @@ export { default as LanguageTranslation } from './language-translation';
 export { default as SystemLocale } from './locale';
 export { default as SystemNutrientType } from './nutrient-type';
 export { default as SystemNutrientUnit } from './nutrient-unit';
-export { default as PAOccurrence } from './pairwise-associations-occurrence';
 export { default as PACoOccurrence } from './pairwise-associations-co-occurrence';
+export { default as PAOccurrence } from './pairwise-associations-occurrence';
 export { default as PAOccurrenceTransactionCount } from './pairwise-associations-occurrences-transactions-count';
 export { default as Permission } from './permission';
 export { default as PermissionRole } from './permission-role';

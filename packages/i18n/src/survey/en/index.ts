@@ -1,11 +1,12 @@
 import type { LocaleMessages } from 'vue-i18n';
+
+import breadcrumbs from './breadcrumbs';
 import common from './common';
 import login from './login';
-import profile from './profile';
 import portion from './portion';
+import profile from './profile';
 import recall from './recall';
 import survey from './survey';
-import breadcrumbs from './breadcrumbs';
 
 const messages: LocaleMessages = {
   common,

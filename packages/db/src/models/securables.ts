@@ -1,5 +1,6 @@
 import type { FindOptions } from 'sequelize';
 import type { Model as BaseModel } from 'sequelize-typescript';
+
 import type { UserSecurableAttributes } from '@intake24/common/types/models';
 
 export interface Securable extends BaseModel {

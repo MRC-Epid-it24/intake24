@@ -1,5 +1,6 @@
 import type { ParamSchema } from 'express-validator';
 import { isNaN, toNumber } from 'lodash';
+
 import { Permission, Role } from '@intake24/db';
 
 export const permissions: ParamSchema = {

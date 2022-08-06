@@ -195,18 +195,20 @@
 </template>
 
 <script lang="ts">
-import draggable from 'vuedraggable';
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
+import draggable from 'vuedraggable';
+
 import type { DemographicGroup } from '@intake24/common/feedback';
-import { nutrientRuleTypes, sexes } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
-import { useEntry } from '@intake24/admin/stores';
-import { ConfirmDialog } from '@intake24/ui';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
-import { getDemographicGroupDefaults } from './demographic-group';
+import { useEntry } from '@intake24/admin/stores';
+import { nutrientRuleTypes, sexes } from '@intake24/common/feedback';
+import { ConfirmDialog } from '@intake24/ui';
+
 import { useList } from '..';
+import { getDemographicGroupDefaults } from './demographic-group';
 import DemographicGroupRange from './demographic-group-range.vue';
 import DemographicGroupSectors from './demographic-group-sectors.vue';
 

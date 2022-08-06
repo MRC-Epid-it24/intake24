@@ -1,17 +1,19 @@
 import {
   BelongsTo,
   Column,
+  CreatedAt,
   DataType,
   HasMany,
   Scopes,
   Table,
-  CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
+
 import type {
   SurveySubmissionAttributes,
   SurveySubmissionCreationAttributes,
 } from '@intake24/common/types/models';
+
 import BaseModel from '../model';
 import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from '.';
 

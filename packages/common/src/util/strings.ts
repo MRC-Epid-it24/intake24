@@ -1,5 +1,6 @@
-import { nanoid, customAlphabet } from 'nanoid';
+import { customAlphabet, nanoid } from 'nanoid';
 import { plural } from 'pluralize';
+
 import { isSecurableType } from '../security';
 
 /**
