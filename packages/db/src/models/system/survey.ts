@@ -318,7 +318,7 @@ export default class Survey
 
   @AfterCreate
   static async createSurveyPermissions(instance: Survey): Promise<void> {
-    const permissions = surveyPermissions(instance.id).map((item) => ({
+    const permissions = surveyPermissions(instance.slug).map((item) => ({
       name: item,
       displayName: item,
       description: `Survey-specific permission (${item})`,
@@ -329,7 +329,7 @@ export default class Survey
 
   @AfterDestroy
   static async destroySurveyPermissions(instance: Survey): Promise<void> {
-    await Permission.destroy({ where: { name: surveyPermissions(instance.id) } });
+    await Permission.destroy({ where: { name: surveyPermissions(instance.slug) } });
   }
 
   // TODO: add BulkAfterCreate & BulkAfterDestroy if/when implemented in system
