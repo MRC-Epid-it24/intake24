@@ -337,7 +337,6 @@ export default defineComponent({
     },
 
     onImgResize(imgRef: string) {
-      //@ts-expect-error fix debounced types
       // this.debouncedGuideImgResize();
 
       //@ts-expect-error fix debounced types

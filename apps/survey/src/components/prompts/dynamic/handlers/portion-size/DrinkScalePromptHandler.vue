@@ -1,7 +1,8 @@
 <template>
   <drink-scale-prompt
     ref="promptHandleChild"
-    v-bind="{ foodName, promptProps }"
+    v-bind="{ promptProps }"
+    :food-name="foodName()"
     :initial-fill-level="parameters['initial-fill-level']"
     :drinkware-id="parameters['drinkware-id']"
     :skip-fill-level="parameters['skip-fill-level']"
@@ -66,10 +67,10 @@ export default defineComponent({
 
   computed: {
     parameters(): DrinkScaleParameters {
-      if (this.selectedPortionSize.method !== 'drink-scale')
+      if (this.selectedPortionSize().method !== 'drink-scale')
         throw new Error('Selected portion size method must be "drink-scale"');
 
-      return this.selectedPortionSize.parameters as unknown as DrinkScaleParameters;
+      return this.selectedPortionSize().parameters as unknown as DrinkScaleParameters;
     },
   },
 
@@ -79,7 +80,7 @@ export default defineComponent({
 
     getInitialState(): DrinkScalePromptState {
       return (
-        this.encodedSelectedFood.id,
+        this.encodedSelectedFood().id,
         this.promptId,
         {
           portionSize: {
@@ -113,14 +114,14 @@ export default defineComponent({
     },
 
     getFoodOrMealId() {
-      return this.selectedFood.id;
+      return this.selectedFood().id;
     },
 
     async commitAnswer() {
       if (this.currentState === null) throw new Error('currentState is null');
 
       this.updateFood({
-        foodId: this.selectedFood.id,
+        foodId: this.selectedFood().id,
         update: {
           portionSize: this.currentState.portionSize,
         },

@@ -1,10 +1,11 @@
 <template>
   <guide-image-prompt
     ref="promptHandleChild"
-    v-bind="{ foodName, promptProps }"
+    v-bind="{ promptProps }"
+    :food-name="foodName()"
     :guide-image-id="parameters['guide-image-id']"
     :prompt-component="promptComponent"
-    :conversionFactor="selectedPortionSize.conversionFactor"
+    :conversionFactor="selectedPortionSize().conversionFactor"
     :initial-state="initialStateNotNull"
     :continue-enabled="continueEnabled"
     @continue="$emit('continue')"
@@ -52,10 +53,10 @@ export default defineComponent({
 
   computed: {
     parameters(): GuideImageParameters {
-      if (this.selectedPortionSize.method !== 'guide-image')
+      if (this.selectedPortionSize().method !== 'guide-image')
         throw new Error('Selected portion size method must be "guide-image"');
 
-      return this.selectedPortionSize.parameters as unknown as GuideImageParameters;
+      return this.selectedPortionSize().parameters as unknown as GuideImageParameters;
     },
   },
 
@@ -63,12 +64,12 @@ export default defineComponent({
     ...mapActions(useSurvey, ['updateFood']),
 
     getFoodOrMealId() {
-      return this.selectedFood.id;
+      return this.selectedFood().id;
     },
 
     getInitialState(): GuideImagePromptState {
       return (
-        this.encodedSelectedFood.id,
+        this.encodedSelectedFood().id,
         this.promptId,
         {
           portionSize: {
@@ -96,7 +97,7 @@ export default defineComponent({
       if (this.currentState === null) throw new Error('currentState is null');
 
       this.updateFood({
-        foodId: this.selectedFood.id,
+        foodId: this.selectedFood().id,
         update: {
           portionSize: this.currentState.portionSize,
         },
