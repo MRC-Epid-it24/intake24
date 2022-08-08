@@ -15,11 +15,13 @@
           ref="imgOverlay"
           :height="heightOverlay"
           :width="widthOverlay"
-          class="overlay align-end"
+          class="overlay"
           :src="
             selectedImageOverlayUrl.replace('http://localhost:3100', 'https://api.intake24.org')
           "
         >
+        </v-img>
+        <v-container class="overlay slider-container">
           <v-row class="drink-slider">
             <v-spacer></v-spacer>
             <v-col xs="2" sm="1" class="d-flex justify-end mr-auto">
@@ -36,14 +38,14 @@
               ></v-slider>
             </v-col>
           </v-row>
-          <v-row>
+          <v-row class="drink-lable">
             <v-col class="d-flex justify-end mr-auto">
               <v-chip class="ma-2">
                 {{ drinkMilliliters }}
               </v-chip>
             </v-col>
           </v-row>
-        </v-img>
+        </v-container>
       </div>
     </v-col>
   </v-row>
@@ -84,6 +86,18 @@ export default defineComponent({
       required: true,
     },
     selectedMaxSliderValue: {
+      type: Number,
+      required: true,
+    },
+    selectedMinSliderValue: {
+      type: Number,
+      required: true,
+    },
+    selectedOriginImageHeight: {
+      type: Number,
+      required: true,
+    },
+    selectedOriginImageWidth: {
       type: Number,
       required: true,
     },
@@ -138,6 +152,7 @@ export default defineComponent({
       const { width, height } = el.getBoundingClientRect();
       this.widthOverlay = width;
       this.heightOverlay = height;
+      console.log(`${this.maxSliderValue}`);
     },
 
     onImgResize() {
@@ -150,7 +165,18 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .drink-slider {
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+.drink-lable {
+  height: 60px;
+  flex-grow: 0;
+  margin-top: 2px;
+}
+.slider-container {
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .drink-scale-drawer {
   position: relative;
@@ -159,6 +185,17 @@ export default defineComponent({
     position: absolute;
     top: 0;
     left: 0;
+  }
+}
+.v-input__control :deep(v-input__slot) {
+  height: 90% !important;
+}
+@media only screen and (max-width: 600px) {
+  .drink-slider :deep(.v-slider--vertical .v-slider__track-container) {
+    left: 80%;
+  }
+  .drink-slider :deep(.v-slider__thumb-container) {
+    left: 80%;
   }
 }
 </style>

@@ -103,6 +103,9 @@ export default defineComponent({
           drinkOverlayUrl: '',
           maxDrinkSliderValue: 100,
           panelOpen: 0,
+          minDrinkSliderValue: 0,
+          originalImageUrlHeight: 0,
+          originalImageUrlWidth: 0,
         }
       );
     },

@@ -49,6 +49,9 @@
                   :selected-image-overlay-url="selectedImageOverlayUrl"
                   :selected-slider-value="sliderValue"
                   :selected-max-slider-value="maxSliderValue"
+                  :selected-min-slider-value="minFillLevel"
+                  :selected-origin-image-height="originalImageUrlHeight"
+                  :selected-origin-image-width="originalImageUrlWidth"
                   @drink-scale-value="dragSlider"
                 >
                 </drink-scale-panel>
@@ -59,7 +62,7 @@
                     </v-alert>
                   </v-col>
                 </v-row>
-                <v-row>
+                <v-row class="jopa">
                   <v-col>
                     <v-btn @click="modifySliderValue(-10)">
                       {{ $t('portion.drinkScale.lessFullButton') }}
@@ -116,6 +119,9 @@ export interface DrinkScalePromptState {
   objectIdx: number | undefined;
   drinkOverlayUrl: string;
   maxDrinkSliderValue: number;
+  minDrinkSliderValue: number;
+  originalImageUrlHeight: number;
+  originalImageUrlWidth: number;
   panelOpen: number;
 }
 
@@ -169,24 +175,31 @@ export default defineComponent({
     const selectedImage = this.initialState.portionSize.imageUrl;
     const selectedSliderValue = this.initialState.portionSize.servingWeight;
     const selectedMaxSliderValue = this.initialState.maxDrinkSliderValue;
+    const selectedMinSliderValue = this.initialState.minDrinkSliderValue;
+    const selectedOriginalImageUrlHeight = this.initialState.originalImageUrlHeight;
+    const selectedOriginalImageUrlWidth = this.initialState.originalImageUrlWidth;
 
     return {
       ...merge(drinkScalePromptDefaultProps, this.promptProps),
       errors: [] as string[],
+      drinkwareSetData: {} as DrinkwareSetResponse,
+      guideImageData: {} as ImageMapResponse,
+      panelOpen: 0, // ID which panel is open
+      //First Panel
       selectedGuide: this.initialState.objectConfirmed && selectedIndex !== undefined,
       selectedDrink: this.initialState.drinkConfirmed,
       selectedLeftovers: this.initialState.leftoversConfirmed,
-      drinkScaleAmount: false,
       selectedObjectIdx: selectedIndex ?? 0,
       selectedNodeIdx: null as number | null,
-      selectionImageUrl: selectedImage ?? '',
-      selectedImageOverlayUrl: selectedOverlayImage ?? '',
-      panelOpen: 0, // ID which panel is open
-      // View properties
+      //Second Panel
       sliderValue: selectedSliderValue ?? 75,
       maxSliderValue: selectedMaxSliderValue ?? 100,
-      drinkwareSetData: {} as DrinkwareSetResponse,
-      guideImageData: {} as ImageMapResponse,
+      minFillLevel: selectedMinSliderValue ?? 0,
+      selectionImageUrl: selectedImage ?? '',
+      selectedImageOverlayUrl: selectedOverlayImage ?? '',
+      originalImageUrlHeight: selectedOriginalImageUrlHeight ?? 0,
+      originalImageUrlWidth: selectedOriginalImageUrlWidth ?? 0,
+      drinkScaleAmount: false,
     };
   },
 
@@ -232,7 +245,10 @@ export default defineComponent({
         objectIdx: this.selectedObjectIdx + 1,
         drinkOverlayUrl: this.selectedImageOverlayUrl,
         maxDrinkSliderValue: this.maxSliderValue,
+        minDrinkSliderValue: this.minFillLevel,
         panelOpen: this.panelOpen,
+        originalImageUrlHeight: this.originalImageUrlHeight,
+        originalImageUrlWidth: this.originalImageUrlWidth,
       };
       this.$emit('update', update);
     },
@@ -259,7 +275,11 @@ export default defineComponent({
       this.selectionImageUrl = this.drinkwareSetData.scales[idx].baseImageUrl;
       this.selectedImageOverlayUrl = this.drinkwareSetData.scales[idx].overlayImageUrl;
       this.maxSliderValue = this.drinkwareSetData.scales[idx].fullLevel;
+      this.minFillLevel = this.drinkwareSetData.scales[idx].emptyLevel;
       this.sliderValue = this.maxSliderValue - this.maxSliderValue * 0.1;
+      this.originalImageUrlHeight = this.drinkwareSetData.scales[idx].height;
+      this.originalImageUrlWidth = this.drinkwareSetData.scales[idx].width;
+
       this.onUpdate();
     },
 
