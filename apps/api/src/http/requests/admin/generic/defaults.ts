@@ -31,6 +31,6 @@ export const paginate: Schema = {
   search: {
     in: ['query'],
     isString: true,
-    optional: true,
+    optional: { options: { nullable: true } },
   },
 };
