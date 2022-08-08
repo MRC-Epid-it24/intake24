@@ -150,7 +150,11 @@ import { Resize } from 'vuetify/lib/directives';
 
 import type { DrinkScalePromptProps } from '@intake24/common/prompts';
 import type { DrinkScaleState, LocaleTranslation } from '@intake24/common/types';
-import type { DrinkwareSetResponse, GuideImageResponse } from '@intake24/common/types/http/foods';
+import type {
+  DrinkwareSetResponse,
+  GuideImageResponse,
+  ImageMapResponse,
+} from '@intake24/common/types/http/foods';
 import { drinkScalePromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import GuideImagePanel from '@intake24/survey/components/elements/GuideImagePanel.vue';
@@ -248,7 +252,7 @@ export default defineComponent({
       sliderValue: selectedSliderValue ?? 75,
       maxSliderValue: selectedMaxSliderValue ?? 100,
       drinkwareSetData: {} as DrinkwareSetResponse,
-      guideImageData: {} as GuideImageResponse,
+      guideImageData: {} as ImageMapResponse,
       // width: 0,
       // height: 0,
       widthOverlay: 0,
@@ -266,7 +270,7 @@ export default defineComponent({
   },
 
   mounted() {
-    this.fetchGuideImageData();
+    this.fetchDrinkScaleData();
   },
 
   computed: {
@@ -299,15 +303,15 @@ export default defineComponent({
   },
 
   methods: {
-    async fetchGuideImageData() {
+    async fetchDrinkScaleData() {
       const dataDrinkwareSet = await this.$http.get<DrinkwareSetResponse>(
         `portion-sizes/drinkware-sets/${this.drinkwareId}`
       );
 
       this.drinkwareSetData = { ...dataDrinkwareSet.data };
 
-      const dataGuideImage = await this.$http.get<GuideImageResponse>(
-        `portion-sizes/guide-images/${this.drinkwareSetData.guideImageId}`
+      const dataGuideImage = await this.$http.get<ImageMapResponse>(
+        `portion-sizes/image-maps/${this.drinkwareSetData.guideImageId}`
       );
 
       this.guideImageData = { ...dataGuideImage.data };

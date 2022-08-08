@@ -6,7 +6,7 @@
           ref="imgGuide"
           v-resize="onImgResize"
           :src="
-            guideImageApiResponse.imageMap.baseImageUrl.replace(
+            guideImageApiResponse.baseImageUrl.replace(
               'http://localhost:3100',
               'https://api.intake24.org'
             )
@@ -40,7 +40,7 @@ import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 import { Resize } from 'vuetify/lib/directives';
 
-import type { GuideImageResponse } from '@intake24/common/types/http';
+import type { ImageMapResponse } from '@intake24/common/types/http';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 
 export default defineComponent({
@@ -52,7 +52,7 @@ export default defineComponent({
 
   props: {
     guideImageApiResponse: {
-      type: Object as PropType<GuideImageResponse>,
+      type: Object as PropType<ImageMapResponse>,
       required: true,
     },
     selectedIndex: {
@@ -93,7 +93,7 @@ export default defineComponent({
 
       const { width } = this;
 
-      return this.guideImageData.imageMap.objects.map((object) => {
+      return this.guideImageData.objects.map((object) => {
         return chunk(
           object.outline.map((coord) => coord * width),
           2
