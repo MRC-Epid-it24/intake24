@@ -217,12 +217,12 @@ export default defineComponent({
   },
 
   setup() {
-    const imgGuide = ref<InstanceType<typeof VImg>>();
-    const svg = ref<SVGElement>();
+    // const imgGuide = ref<InstanceType<typeof VImg>>();
+    // const svg = ref<SVGElement>();
     const imgDrink = ref<InstanceType<typeof VImg>>();
     const imgOverlay = ref<InstanceType<typeof VImg>>();
 
-    return { imgGuide, svg, imgDrink, imgOverlay };
+    return { imgDrink, imgOverlay };
   },
 
   data() {
@@ -249,17 +249,17 @@ export default defineComponent({
       maxSliderValue: selectedMaxSliderValue ?? 100,
       drinkwareSetData: {} as DrinkwareSetResponse,
       guideImageData: {} as GuideImageResponse,
-      width: 0,
-      height: 0,
+      // width: 0,
+      // height: 0,
       widthOverlay: 0,
       heightOverlay: 0,
     };
   },
 
   created() {
-    this.debouncedGuideImgResize = debounce(() => {
-      this.updateSvgDimensions();
-    }, 500);
+    // this.debouncedGuideImgResize = debounce(() => {
+    //   this.updateSvgDimensions();
+    // }, 500);
     this.debouncedDrinkScaleImgResize = debounce(() => {
       this.updateOverlayDimensions();
     }, 500);
@@ -282,20 +282,20 @@ export default defineComponent({
     dataLoaded(): boolean {
       return !!Object.keys(this.guideImageData).length;
     },
-    polygons(): string[] {
-      if (!this.dataLoaded) return [];
+    // polygons(): string[] {
+    //   if (!this.dataLoaded) return [];
 
-      const { width } = this;
+    //   const { width } = this;
 
-      return this.guideImageData.imageMap.objects.map((object) => {
-        return chunk(
-          object.outline.map((coord) => coord * width),
-          2
-        )
-          .map((node) => node.join(','))
-          .join(' ');
-      });
-    },
+    //   return this.guideImageData.imageMap.objects.map((object) => {
+    //     return chunk(
+    //       object.outline.map((coord) => coord * width),
+    //       2
+    //     )
+    //       .map((node) => node.join(','))
+    //       .join(' ');
+    //   });
+    // },
   },
 
   methods: {
@@ -313,16 +313,16 @@ export default defineComponent({
       this.guideImageData = { ...dataGuideImage.data };
     },
 
-    updateSvgDimensions() {
-      const el = this.imgGuide?.$el;
-      if (!el) {
-        console.warn(`GuideImagePrompt: could not update SVG dimensions.`);
-        return;
-      }
-      const { width, height } = el.getBoundingClientRect();
-      this.width = width;
-      this.height = height;
-    },
+    // updateSvgDimensions() {
+    //   const el = this.imgGuide?.$el;
+    //   if (!el) {
+    //     console.warn(`GuideImagePrompt: could not update SVG dimensions.`);
+    //     return;
+    //   }
+    //   const { width, height } = el.getBoundingClientRect();
+    //   this.width = width;
+    //   this.height = height;
+    // },
 
     updateOverlayDimensions() {
       const el = this.imgDrink?.$el;
@@ -338,7 +338,7 @@ export default defineComponent({
 
     onImgResize(imgRef: string) {
       //@ts-expect-error fix debounced types
-      this.debouncedGuideImgResize();
+      // this.debouncedGuideImgResize();
 
       //@ts-expect-error fix debounced types
       this.debouncedDrinkScaleImgResize();
@@ -436,31 +436,31 @@ export default defineComponent({
 .drink-slider {
   height: 100%;
 }
-.guides-drawer {
-  position: relative;
+// .guides-drawer {
+//   position: relative;
 
-  svg {
-    position: absolute;
-    top: 0;
-    left: 0;
+//   svg {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
 
-    .guides-drawer-polygon {
-      cursor: pointer;
-      fill: transparent;
+//     .guides-drawer-polygon {
+//       cursor: pointer;
+//       fill: transparent;
 
-      &.active,
-      &:hover {
-        fill: #0d47a1;
-        fill-opacity: 0.4;
-        stroke-width: 8;
-        stroke: #0d47a1;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-opacity: 0.5;
-      }
-    }
-  }
-}
+//       &.active,
+//       &:hover {
+//         fill: #0d47a1;
+//         fill-opacity: 0.4;
+//         stroke-width: 8;
+//         stroke: #0d47a1;
+//         stroke-linecap: round;
+//         stroke-linejoin: round;
+//         stroke-opacity: 0.5;
+//       }
+//     }
+//   }
+// }
 
 .drink-scale-drawer {
   position: relative;
