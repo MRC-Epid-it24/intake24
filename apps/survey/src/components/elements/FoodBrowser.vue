@@ -41,9 +41,14 @@ import categoriesService from '@intake24/survey/services/categories.service';
 
 export default defineComponent({
   name: 'FoodBrowser',
+
   components: { CategoryContentsView },
 
   props: {
+    localeId: {
+      type: String,
+      required: true,
+    },
     rootCategory: String,
   },
 
@@ -65,7 +70,7 @@ export default defineComponent({
     browseCategory(categoryCode: string): void {
       this.requestInProgress = true;
       this.retryCode = categoryCode;
-      categoriesService.browse('en_GB', categoryCode).then(
+      categoriesService.browse(this.localeId, categoryCode).then(
         (contents) => {
           this.requestInProgress = false;
           this.requestFailed = false;

@@ -42,6 +42,7 @@
                     >
                     <v-card-text class="pl-0">
                       <FoodBrowser
+                        :locale-id="localeId"
                         :root-category="associatedFoodPrompts[index].categoryCode"
                         @food-selected="(food) => onFoodSelected(food, index)"
                       ></FoodBrowser>
@@ -87,6 +88,10 @@ export default defineComponent({
   mixins: [BasePrompt],
 
   props: {
+    localeId: {
+      type: String,
+      required: true,
+    },
     promptComponent: {
       type: String,
       required: true,

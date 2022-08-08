@@ -1,6 +1,6 @@
 <template>
   <food-search-prompt
-    :prompt-props="promptProps"
+    v-bind="{ localeId, promptProps }"
     :initial-search-term="selectedFoodDescription"
     @food-selected="onFoodSelected"
   ></food-search-prompt>

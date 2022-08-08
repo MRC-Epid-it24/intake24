@@ -43,6 +43,10 @@ export default defineComponent({
   mixins: [BasePrompt, Submit],
 
   props: {
+    localeId: {
+      type: String,
+      required: true,
+    },
     promptProps: {
       type: Object as PropType<BasePromptProps>,
       required: true,
@@ -78,7 +82,7 @@ export default defineComponent({
       this.requestInProgress = true;
       this.searchResults = null;
       try {
-        this.searchResults = await foodSearchService.search('en_GB', this.searchTerm);
+        this.searchResults = await foodSearchService.search(this.localeId, this.searchTerm);
       } catch (e) {
         this.requestFailed = true;
       }
@@ -89,7 +93,7 @@ export default defineComponent({
       this.requestInProgress = true;
       this.searchResults = null;
       try {
-        const foodData = await foodSearchService.getData('en_GB', code);
+        const foodData = await foodSearchService.getData(this.localeId, code);
         this.$emit('food-selected', foodData);
       } catch (e) {
         this.requestFailed = true;

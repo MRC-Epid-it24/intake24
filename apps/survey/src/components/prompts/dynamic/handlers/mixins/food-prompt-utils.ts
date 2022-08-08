@@ -7,7 +7,7 @@ import { useSurvey } from '@intake24/survey/stores';
 
 const mixin = defineComponent({
   computed: {
-    ...mapState(useSurvey, ['selectedFoodOptional']),
+    ...mapState(useSurvey, ['localeId', 'selectedFoodOptional']),
   },
 
   // These can't be computed fields because they seem to be updating eagerly on

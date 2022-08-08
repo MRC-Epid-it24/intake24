@@ -1,6 +1,7 @@
 <template>
   <associated-foods-prompt
     v-bind="{
+      localeId,
       promptProps,
       promptComponent,
       food: encodedSelectedFood(),
@@ -97,7 +98,7 @@ export default defineComponent({
 
       return Promise.all(
         headers.map((header) => {
-          return foodSearchService.getData('en_GB', header.code);
+          return foodSearchService.getData(this.localeId, header.code);
         })
       );
     },
