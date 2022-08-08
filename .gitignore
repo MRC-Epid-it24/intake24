@@ -19,6 +19,7 @@ tmp
 .vscode/*
 !.vscode/extensions.json
 .idea
+*.iml
 *.suo
 *.ntvs*
 *.njsproj
@@ -29,10 +30,6 @@ tmp
 .env*
 !.env-template
 !deployment/instances/**/.env
-
-# Editor directories and files
-.idea
-*.iml
 
 # Allow only pnpm lock file
 package-lock.json
