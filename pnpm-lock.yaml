@@ -220,7 +220,7 @@ importers:
       pg: ^8.7.3
       pg-hstore: ^2.3.4
       pluralize: ^8.0.0
-      puppeteer: ^15.5.0
+      puppeteer: ^16.1.0
       rate-limit-redis: ^3.0.1
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
@@ -279,7 +279,7 @@ importers:
       pg: 8.7.3
       pg-hstore: 2.3.4
       pluralize: 8.0.0
-      puppeteer: 15.5.0
+      puppeteer: 16.1.0
       rate-limit-redis: 3.0.1_express-rate-limit@6.5.1
       reflect-metadata: 0.1.13
       safe-stable-stringify: 2.3.1
@@ -9181,8 +9181,8 @@ packages:
     resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
     engines: {node: '>=6'}
 
-  /puppeteer/15.5.0:
-    resolution: {integrity: sha512-+vZPU8iBSdCx1Kn5hHas80fyo0TiVyMeqLGv/1dygX2HKhAZjO9YThadbRTCoTYq0yWw+w/CysldPsEekDtjDQ==}
+  /puppeteer/16.1.0:
+    resolution: {integrity: sha512-lhykJLbH2bbBaP3NfYI2Vj0T4ctrdfVdEVf8glZITPnLfqrJ0nfUzAYuIz5YcA79k5lmFKANIhEXex+jQChU3g==}
     engines: {node: '>=14.1.0'}
     requiresBuild: true
     dependencies:
@@ -9197,7 +9197,7 @@ packages:
       rimraf: 3.0.2
       tar-fs: 2.1.1
       unbzip2-stream: 1.4.3
-      ws: 8.8.0
+      ws: 8.8.1
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -11658,19 +11658,6 @@ packages:
       imurmurhash: 0.1.4
       signal-exit: 3.0.7
     dev: true
-
-  /ws/8.8.0:
-    resolution: {integrity: sha512-JDAgSYQ1ksuwqfChJusw1LSJ8BizJ2e/vVu5Lxjq3YvNJNlROv1ui4i+c/kUUrPheBvQl4c5UbERhTwKa6QBJQ==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: ^5.0.2
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dev: false
 
   /ws/8.8.1:
     resolution: {integrity: sha512-bGy2JzvzkPowEJV++hF07hAD6niYSr0JzBNo/J29WsB57A2r7Wlc1UFcTR9IzrPvuNVO4B8LGqF8qcpsVOhJCA==}
