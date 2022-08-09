@@ -1,0 +1,22 @@
+coverage
+deployment
+dist
+dist-ssr
+node_modules
+public
+sequelize
+storage
+tmp
+
+.eslintrc.js
+*.config.js
+
+# unplugin-vue-components *.d.ts files (generated with different code-style)
+components.d.ts
+
+# generated validators
+*.validator.ts
+
+# Exceptions
+apps/api/src/typings/worker-loader.d.ts
+apps/api/src/food-index/metaphone3.ts

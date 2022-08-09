@@ -1,8 +1,7 @@
-import { resolve } from 'node:path';
-
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import fs from 'fs-extra';
+import { resolve } from 'node:path';
 import { SitemapStream } from 'sitemap';
 import { Readable } from 'stream';
 

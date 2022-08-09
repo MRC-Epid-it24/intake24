@@ -29,7 +29,7 @@
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs",
     "docs:lint": "prettier --write docs/**/*.md",
-    "lint": "eslint . --ext .ts,.vue --fix --ignore-path .gitignore",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
     "test:unit": "jest",
     "test:unit:watch": "pnpm test:unit -- --watch",
     "test:unit:coverage": "pnpm test:unit -- --coverage",

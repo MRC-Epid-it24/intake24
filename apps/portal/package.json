@@ -17,7 +17,7 @@
     "dev": "run-p dev:back dev:front",
     "dev:back": "webpack --env NODE_ENV=development",
     "dev:front": "vite",
-    "lint": "eslint --ext .js,.ts src/ __tests__/ --fix",
+    "lint": "eslint . --ext .js,.ts --fix",
     "start": "node dist/server.js",
     "test:unit": "jest",
     "test:unit:coverage": "pnpm test:unit -- --coverage",

@@ -19,7 +19,7 @@
     "build:clean": "rimraf dist",
     "dev": "webpack --env NODE_ENV=development",
     "start": "node dist/server.js",
-    "lint": "eslint --ext .js,.ts src/ __tests__/ --fix",
+    "lint": "eslint . --ext .js,.ts --fix",
     "test:unit": "jest",
     "test:unit:coverage": "pnpm test:unit -- --coverage",
     "test:unit:watch": "pnpm test:unit -- --watch",
