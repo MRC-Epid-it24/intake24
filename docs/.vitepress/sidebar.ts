@@ -35,6 +35,10 @@ export const sidebar = {
       collapsable: false,
       items: [
         {
+          text: 'Introduction',
+          link: '/config/api/',
+        },
+        {
           text: 'Application',
           link: '/config/api/application',
         },

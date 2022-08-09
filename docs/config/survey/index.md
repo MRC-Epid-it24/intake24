@@ -1,3 +1,97 @@
-# Survey site
+# Survey client
 
-TODO
+Survey client is [Vue.js](https://vuejs.org) based application and scaffolded with [vite](https://vitejs.dev/). Docs outline specific settings for deployment of the application. But feel free to dive in to [vite](https://vitejs.dev/) docs if any further modifications are required.
+
+Basic configuration options can be set through `.env` file. Further vite configuration can be tweak through `vite.config.ts`.
+
+Environment file contains `common variables`, `server variables` and `SPA` variables. Optionally, `SPA` can be served using tiny http server (`server/index.js`).
+
+## Common variables
+
+### NODE_ENV
+
+Node environment. Defaults to `development`.
+
+### BASE_DIR
+
+Directory to build the SPA. Defaults to `dist`.
+
+### BASE_URL
+
+Base URL where to server the `SPA`. Defaults to `/`.
+
+### API_HOST
+
+API Server base URL. Defaults to `http://localhost:3100` for local development.
+
+## Server variables
+
+Only when serving `SPA` with locally provided http server (`server/index.js`).
+
+### SERVER_NAME
+
+Server name applications. Default to `Intake24 Survey Server`.
+
+### SERVER_URL
+
+Server host. Defaults to `localhost`.
+
+### SERVER_PORT
+
+Server port. Defaults to `3300`.
+
+### SERVER_STATIC
+
+Directory, which should be served as public by the http server. Defaults to `$BASE_DIR`.
+
+### SERVER_API_HOST
+
+API Server base URL. Defaults to `$API_HOST`.
+
+## SPA variables
+
+### OUTPUT_DIR
+
+Directory to build the SPA. Defaults to `$BASE_DIR`.
+
+### PRODUCTION_SOURCE_MAP
+
+Flag whether to include source maps to production build or not. Defaults to `false`.
+
+### DISABLE_PWA
+
+Flag whether to disable PWA functionality. Defaults to `false`.
+
+### VITE_APP_NAME
+
+SPA application name. Defaults to `Intake24 Survey`.
+
+### VITE_APP_API_HOST
+
+API Server base URL. Defaults to `$API_HOST`.
+
+### VITE_APP_API_URL
+
+API Server context URL to be appended to `VITE_APP_API_HOST`. Defaults to `api`.
+
+### VITE_APP_BASE_URL
+
+Base URL where to server the `SPA`. Defaults to `$BASE_URL`.
+
+### VITE_APP_PREFIX
+
+Prefix to be used for application data stored in browser storage. Defaults to `it24s`.
+
+### Captcha settings
+
+### VITE_APP_CAPTCHA_PROVIDER
+
+Captcha provider. Possible values `g-captcha` or `re-captcha`.
+
+### VITE_APP_CAPTCHA_SITEKEY
+
+Captcha provider sitekey. Please refer to your provider, how to obtain the key.
+
+### VITE_APP_WEBPUSH_PUBLIC_KEY
+
+Webpush public key for we-push notifications.

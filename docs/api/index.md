@@ -2,7 +2,7 @@
 
 REST-based API endpoints use:
 
-- mostly in `application/json` content-type
+- mostly `application/json` content-type
 - file-based endpoints use `multipart/form-data` content type
 
 # Usage

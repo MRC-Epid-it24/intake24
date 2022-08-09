@@ -8,10 +8,6 @@ Steps to getting a local instance running
 - Local servers need to be run for `api`, `admin` and `survey` from each respective folder:
 - To start `api` / `admin` / `survey`: `pnpm dev` for live reloads
 
-::: tip
-Authentication uses cookies, so separate browser sessions will be required to use both `admin` and `survey` interfaces at the same time.
-:::
-
 ## Useful tools
 
 - IDE for developing Node, Typescript, npm and associated tooling (e.g. VS Code)
@@ -19,7 +15,7 @@ Authentication uses cookies, so separate browser sessions will be required to us
 - Database browser (e.g. DBeaver) for exploring/manipulating PostgreSQL DB.
 
 ::: tip
-Intake24 requires node.js version 12 or newer, please make sure to check your node.js version before continuing.
+Intake24 requires node.js version 14 or newer, please make sure to check your node.js version before continuing.
 :::
 
 Clone the [Intake24 version 4 repository on GitHub](https://github.com/MRC-Epid-it24/intake24).
