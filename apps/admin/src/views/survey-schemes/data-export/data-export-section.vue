@@ -22,11 +22,11 @@
         </v-toolbar-items>
       </v-toolbar>
       <v-container>
-        <v-row>
+        <v-row class="mt-3">
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('survey-schemes.data-export.current') }}</v-card-title>
             <v-list two-line>
-              <draggable v-model="fields">
+              <draggable v-model="fields" handle=".drag-and-drop__handle">
                 <transition-group type="transition" name="drag-and-drop">
                   <v-list-item
                     v-for="(field, idx) in fields"
@@ -35,7 +35,7 @@
                     draggable
                     link
                   >
-                    <v-list-item-avatar size="32">
+                    <v-list-item-avatar size="32" class="drag-and-drop__handle">
                       <v-icon>fa-grip-vertical</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
@@ -67,6 +67,7 @@
               </draggable>
             </v-list>
           </v-col>
+          <v-divider vertical></v-divider>
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('survey-schemes.data-export.available') }}</v-card-title>
             <v-list two-line>

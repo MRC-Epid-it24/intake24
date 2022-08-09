@@ -20,9 +20,7 @@ import { defineComponent } from 'vue';
 
 import type { FiveADay } from '@intake24/common/feedback';
 
-import CardContent from '../partials/card-content.vue';
-import CardThresholds from '../partials/card-thresholds.vue';
-import CardUnit from '../partials/card-unit.vue';
+import { CardContent, CardThresholds, CardUnit } from '../partials';
 
 export default defineComponent({
   name: 'FiveADayCard',

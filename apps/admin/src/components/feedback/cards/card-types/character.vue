@@ -59,7 +59,7 @@ import { useEntry } from '@intake24/admin/stores';
 import { characterTypes } from '@intake24/common/feedback';
 import { characterImageMap } from '@intake24/ui/feedback';
 
-import CharacterSentiments from '../partials/character-sentiments.vue';
+import { CharacterSentiments } from '../partials';
 
 export default defineComponent({
   name: 'CharacterCard',

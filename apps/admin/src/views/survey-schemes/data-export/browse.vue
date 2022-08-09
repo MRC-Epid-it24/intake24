@@ -27,7 +27,7 @@
       @update="update"
     ></data-export-section>
     <v-list two-line>
-      <draggable v-model="form.dataExport">
+      <draggable v-model="form.dataExport" handle=".drag-and-drop__handle">
         <transition-group type="transition" name="drag-and-drop">
           <v-list-item
             v-for="section in form.dataExport"
@@ -36,7 +36,7 @@
             draggable
             class="drag-and-drop__item"
           >
-            <v-list-item-avatar>
+            <v-list-item-avatar class="drag-and-drop__handle">
               <v-icon>fa-grip-vertical</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>

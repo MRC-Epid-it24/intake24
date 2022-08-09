@@ -99,7 +99,7 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
           .catch((err) => {
             this.onFail(err);
 
-            if (withErr) reject(err.response.data);
+            if (withErr) reject(err);
           });
       });
     },
