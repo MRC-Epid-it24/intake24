@@ -55,10 +55,6 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    this.setValidationState(this.isValid(this.initialState));
-  },
-
   data() {
     return {
       currentState: null as DrinkScalePromptState | null,
@@ -112,7 +108,10 @@ export default defineComponent({
 
     isValid(state: DrinkScalePromptState | null): boolean {
       if (state === null) return false;
-
+      console.warn(
+        'Validation check: ',
+        state.objectIdx !== undefined && state.objectConfirmed && state.drinkConfirmed
+      );
       return state.objectIdx !== undefined && state.objectConfirmed && state.drinkConfirmed;
     },
 
@@ -129,7 +128,6 @@ export default defineComponent({
           portionSize: this.currentState.portionSize,
         },
       });
-      console.log(`Drink Scale: Food updated - ${JSON.stringify(this.currentState.portionSize)}`);
       this.clearStoredState();
     },
   },

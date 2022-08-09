@@ -86,7 +86,7 @@ export function drinkScaleComplete(selectedFood: FoodState): boolean {
     }
 
     return (
-      selectedFood.portionSize.object != null &&
+      selectedFood.portionSize.imageUrl != null &&
       selectedFood.portionSize.servingWeight != null &&
       selectedFood.portionSize.drinkwareId != null
     );
