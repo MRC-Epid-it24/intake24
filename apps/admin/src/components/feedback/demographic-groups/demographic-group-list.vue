@@ -23,7 +23,7 @@
       ></load-section-dialog>
     </v-toolbar>
     <v-list two-line>
-      <draggable v-model="items">
+      <draggable v-model="items" handle=".drag-and-drop__handle">
         <transition-group type="transition" name="drag-and-drop">
           <v-list-item
             v-for="(group, index) in items"
@@ -32,7 +32,7 @@
             draggable
             class="drag-and-drop__item"
           >
-            <v-list-item-avatar>
+            <v-list-item-avatar class="drag-and-drop__handle">
               <v-icon>fa-grip-vertical</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>

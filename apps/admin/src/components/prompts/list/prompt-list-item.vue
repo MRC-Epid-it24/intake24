@@ -1,6 +1,6 @@
 <template>
   <v-list-item class="drag-and-drop__item" draggable link>
-    <v-list-item-avatar>
+    <v-list-item-avatar class="drag-and-drop__handle">
       <v-icon>fa-grip-vertical</v-icon>
     </v-list-item-avatar>
     <v-list-item-content>

@@ -41,7 +41,7 @@
       </confirm-dialog>
     </v-toolbar>
     <v-list two-line>
-      <draggable v-model="meals">
+      <draggable v-model="meals" handle=".drag-and-drop__handle">
         <transition-group type="transition" name="drag-and-drop">
           <v-list-item
             v-for="(meal, index) in meals"
@@ -50,7 +50,7 @@
             draggable
             class="drag-and-drop__item"
           >
-            <v-list-item-avatar>
+            <v-list-item-avatar class="drag-and-drop__handle">
               <v-icon>fa-grip-vertical</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>

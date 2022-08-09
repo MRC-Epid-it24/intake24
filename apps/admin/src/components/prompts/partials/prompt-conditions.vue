@@ -82,7 +82,7 @@
         </v-toolbar>
         <v-divider></v-divider>
         <v-list dense>
-          <draggable v-model="currentConditions" @end="update">
+          <draggable v-model="currentConditions" handle=".drag-and-drop__handle" @end="update">
             <transition-group type="transition" name="drag-and-drop">
               <v-list-item
                 v-for="(condition, idx) in currentConditions"
@@ -92,7 +92,7 @@
                 draggable
                 link
               >
-                <v-list-item-avatar>
+                <v-list-item-avatar class="drag-and-drop__handle">
                   <v-icon>fa-grip-vertical</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content class="font-weight-medium">

@@ -9,8 +9,11 @@
 
 // Drag & drop lists
 .drag-and-drop__item {
-  cursor: move;
   border-bottom: 1px solid map-get($grey, 'lighten-3');
+
+  .drag-and-drop__handle {
+    cursor: move;
+  }
 }
 
 .drag-and-drop-move,

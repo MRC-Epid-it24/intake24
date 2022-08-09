@@ -23,7 +23,7 @@
       ></load-prompt-dialog>
     </v-toolbar>
     <v-list two-line>
-      <draggable v-model="questions" @end="update">
+      <draggable v-model="questions" handle=".drag-and-drop__handle" @end="update">
         <transition-group type="transition" name="drag-and-drop">
           <prompt-list-item
             v-for="(question, index) in questions"
