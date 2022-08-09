@@ -1,5 +1,9 @@
 import type { ComponentType, Condition, PromptQuestion } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import type {
+  MealQuestionSection,
+  MealSection,
+  SurveyQuestionSection,
+} from '@intake24/common/schemes';
 import type { FoodState, MealState } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import { conditionOps } from '@intake24/common/prompts';
@@ -324,14 +328,6 @@ export default class PromptManager {
     this.scheme = scheme;
   }
 
-  nextPreMealsPrompt(state: SurveyState): PromptQuestion | undefined {
-    return this.scheme.questions.preMeals.find(
-      (question) =>
-        checkSurveyStandardConditions(state, question) &&
-        checkSurveyCustomConditions(state, question)
-    );
-  }
-
   findMealPromptOfType(type: ComponentType, section: MealSection): PromptQuestion | undefined {
     return this.scheme.questions.meals[section].find((question) => question.component === type);
   }
@@ -343,10 +339,26 @@ export default class PromptManager {
     return this.scheme.questions[section].find((question) => question.component === type);
   }
 
-  nextPreFoodsPrompt(state: SurveyState, mealId: number): PromptQuestion | undefined {
+  nextSurveySectionPrompt(
+    state: SurveyState,
+    section: SurveyQuestionSection
+  ): PromptQuestion | undefined {
+    return this.scheme.questions[section].find((question) => {
+      return (
+        checkSurveyStandardConditions(state, question) &&
+        checkSurveyCustomConditions(state, question)
+      );
+    });
+  }
+
+  nextMealSectionPrompt(
+    state: SurveyState,
+    section: MealQuestionSection,
+    mealId: number
+  ): PromptQuestion | undefined {
     const mealState = findMeal(state.data.meals, mealId);
 
-    return this.scheme.questions.meals.preFoods.find((question) => {
+    return this.scheme.questions.meals[section].find((question) => {
       return (
         checkMealStandardConditions(state, mealState, question) &&
         checkMealCustomConditions(state, mealState, question)
@@ -363,15 +375,6 @@ export default class PromptManager {
       return (
         checkFoodStandardConditions(state, foodState, question) &&
         checkFoodCustomConditions(state, mealState, foodState, question)
-      );
-    });
-  }
-
-  nextSubmissionPrompt(state: SurveyState): PromptQuestion | undefined {
-    return this.scheme.questions.submission.find((question) => {
-      return (
-        checkSurveyStandardConditions(state, question) &&
-        checkSurveyCustomConditions(state, question)
       );
     });
   }

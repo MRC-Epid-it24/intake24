@@ -1,5 +1,9 @@
 <template>
-  <component :is="promptComponent" :prompt-props="promptProps" @answer="onAnswer"></component>
+  <component
+    :is="promptComponent"
+    v-bind="{ promptComponent, promptProps }"
+    @answer="onAnswer"
+  ></component>
 </template>
 
 <script lang="ts">

@@ -15,7 +15,9 @@ export default class SelectionManager {
   }
 
   private mealPromptsAvailable(mealId: number): boolean {
-    return this.promptManager.nextPreFoodsPrompt(this.store.$state, mealId) !== undefined;
+    return (
+      this.promptManager.nextMealSectionPrompt(this.store.$state, 'preFoods', mealId) !== undefined
+    );
   }
 
   private foodPromptsAvailable(foodId: number): boolean {

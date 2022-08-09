@@ -1,5 +1,5 @@
 import type { PromptQuestion } from '@intake24/common/prompts';
-import type { MealSection, SurveySection } from '@intake24/common/schemes';
+import type { MealSection, SurveyQuestionSection, SurveySection } from '@intake24/common/schemes';
 import type { MealTime, SurveyState as CurrentSurveyState } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
@@ -88,13 +88,17 @@ export default class DynamicRecall {
     const recallState = surveyState.data;
 
     if (recallState.selection.element === null) {
-      const nextPrompt = this.promptManager.nextPreMealsPrompt(surveyState);
+      const nextPrompt = this.promptManager.nextSurveySectionPrompt(surveyState, 'preMeals');
       if (nextPrompt) return { prompt: nextPrompt, section: 'preMeals' };
     } else {
       switch (recallState.selection.element.type) {
         case 'meal': {
           const { mealId } = recallState.selection.element;
-          const mealPrompt = this.promptManager.nextPreFoodsPrompt(surveyState, mealId);
+          const mealPrompt = this.promptManager.nextMealSectionPrompt(
+            surveyState,
+            'preFoods',
+            mealId
+          );
 
           // TODO: handle post-foods prompts
 
@@ -125,17 +129,15 @@ export default class DynamicRecall {
     return undefined;
   }
 
-  getNextSubmissionPrompt(): PromptInstance | undefined {
-    const nextPrompt = this.promptManager.nextSubmissionPrompt(this.store.$state);
-    if (nextPrompt) {
-      return { prompt: nextPrompt, section: 'submission' };
-    }
+  getNextSurveySectionPrompt(section: SurveyQuestionSection): PromptInstance | undefined {
+    const nextPrompt = this.promptManager.nextSurveySectionPrompt(this.store.$state, section);
+    if (nextPrompt) return { prompt: nextPrompt, section };
+
     return undefined;
   }
 
   getNextPrompt(): PromptInstance | undefined {
     const nextPrompt = this.getNextPromptForCurrentSelection();
-
     if (nextPrompt) return nextPrompt;
 
     console.debug('No prompts left for current selection');
@@ -151,6 +153,10 @@ export default class DynamicRecall {
 
     console.debug(`No food or meal has any prompts remaining`);
 
-    return this.getNextSubmissionPrompt();
+    // TODO: section doesn't seem to be cleared once finished with meals/foods
+    // nextPrompt = this.getNextSurveySectionPrompt('postMeals');
+    // if (nextPrompt) return nextPrompt;
+
+    return this.getNextSurveySectionPrompt('submission');
   }
 }
