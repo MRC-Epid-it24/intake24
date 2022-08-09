@@ -16,8 +16,10 @@
             left
             bordered
           >
-            <p v-if="meal.time.length === 0"><v-icon x-small>far fa-question-circle </v-icon></p>
-            <p v-else>{{ meal.time }}</p>
+            <p v-if="mealTimeString(meal.time).length === 0">
+              <v-icon x-small>far fa-question-circle </v-icon>
+            </p>
+            <p v-else>{{ mealTimeString(meal.time) }}</p>
             {{ meal.name }}
           </v-badge>
         </v-tab>
@@ -27,10 +29,12 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { FoodState } from '@intake24/common/types';
+import type { FoodState, MealState, MealTime } from '@intake24/common/types';
+import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
@@ -38,7 +42,7 @@ export default defineComponent({
   name: 'MealListMobileBottom',
 
   props: {
-    meals: Array,
+    meals: Array as PropType<MealState[]>,
     // selectedMealIndex: {
     //   type: Number,
     //   default: 0,
@@ -53,11 +57,11 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex']),
+    ...mapState(useSurvey, ['selectedMealOptional', 'selectedFoodOptional']),
 
     activeTab: {
       get(): number {
-        return this.selectedMealIndex || 0;
+        return this.selectedMealOptional?.id || 0;
       },
       set(id: number) {
         return id;
@@ -71,6 +75,14 @@ export default defineComponent({
     },
     emitAddMeal(action: string) {
       this.$emit('recall-action', action);
+    },
+
+    mealTimeString(time: MealTime | undefined): string {
+      return time
+        ? timeDoubleDigitsConvertor(time.hours)
+            .concat(':')
+            .concat(timeDoubleDigitsConvertor(time.minutes))
+        : '';
     },
   },
   watch: {
