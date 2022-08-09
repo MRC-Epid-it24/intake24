@@ -97,6 +97,7 @@ import type {
   SignInService,
   SourceImageService,
   SurveyService,
+  SurveySubmissionService,
   UserService,
 } from '@intake24/api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
@@ -257,8 +258,10 @@ export interface IoC extends Jobs {
 
   // Survey / user
   adminSurveyService: AdminSurveyService;
-  surveyService: SurveyService;
   adminUserService: AdminUserService;
+
+  surveyService: SurveyService;
+  surveySubmissionService: SurveySubmissionService;
   userService: UserService;
 }
 

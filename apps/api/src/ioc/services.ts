@@ -33,6 +33,7 @@ import {
   signInService,
   sourceImageService,
   surveyService,
+  surveySubmissionService,
   userService,
 } from '@intake24/api/services';
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
@@ -70,8 +71,10 @@ export default (container: AwilixContainer): void => {
     dataExportService: asFunction(dataExportService),
 
     adminSurveyService: asFunction(adminSurveyService),
-    surveyService: asFunction(surveyService),
     adminUserService: asFunction(adminUserService),
+
+    surveyService: asFunction(surveyService),
+    surveySubmissionService: asFunction(surveySubmissionService),
     userService: asFunction(userService),
 
     cache: asClass(Cache).singleton(),

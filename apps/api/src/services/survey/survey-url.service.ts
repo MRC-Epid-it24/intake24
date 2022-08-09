@@ -1,5 +1,5 @@
-import type { SiteUrls } from '../config';
-import { getFrontEndUrl } from '../util/strings';
+import type { SiteUrls } from '@intake24/api/config';
+import { getFrontEndUrl } from '@intake24/api/util/strings';
 
 const surveyUrlService = (
   urls: Pick<SiteUrls, 'base' | 'survey'>,

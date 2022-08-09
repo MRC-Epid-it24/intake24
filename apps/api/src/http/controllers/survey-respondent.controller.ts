@@ -13,7 +13,10 @@ import { flattenSchemeWithSection, isMealSection } from '@intake24/common/scheme
 import { merge } from '@intake24/common/util';
 import { FeedbackScheme, Survey, SurveyScheme } from '@intake24/db';
 
-const surveyRespondentController = ({ surveyService }: Pick<IoC, 'surveyService'>) => {
+const surveyRespondentController = ({
+  surveyService,
+  surveySubmissionService,
+}: Pick<IoC, 'surveyService' | 'surveySubmissionService'>) => {
   const parameters = async (
     req: Request<{ slug: string }>,
     res: Response<SurveyEntryResponse>
@@ -134,7 +137,7 @@ const surveyRespondentController = ({ surveyService }: Pick<IoC, 'surveyService'
     const { id: userId } = req.user as User;
     const { submission } = req.body;
 
-    const followUpInfo = await surveyService.submit(slug, userId, submission);
+    const followUpInfo = await surveySubmissionService.submit(slug, userId, submission);
 
     res.json(followUpInfo);
   };

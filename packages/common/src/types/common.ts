@@ -20,6 +20,10 @@ export type CustomField = {
 
 export type Dictionary<T = any> = { [key: string]: T };
 
+export type WithKey<K extends string | number | symbol> = {
+  [k in K]: string;
+};
+
 export const emailCopy = ['cc', 'bcc', 'none'] as const;
 
 export type EmailCopy = typeof emailCopy[number];
