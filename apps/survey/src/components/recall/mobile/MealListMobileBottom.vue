@@ -5,8 +5,8 @@
         <v-tabs-slider color="success"></v-tabs-slider>
         <v-tab
           v-for="(meal, idx) in meals"
-          :key="idx + meal.name"
-          @click="emitFoodsList(idx, meal.name, meal.foods, entity)"
+          :key="meal.id"
+          @click="emitFoodsList(idx, meal.name.en, meal.foods, entity)"
         >
           <v-badge
             class="meail_badge"
@@ -20,7 +20,7 @@
               <v-icon x-small>far fa-question-circle </v-icon>
             </p>
             <p v-else>{{ mealTimeString(meal.time) }}</p>
-            {{ meal.name }}
+            {{ getLocaleContent(meal.name) }}
           </v-badge>
         </v-tab>
       </v-tabs>
@@ -34,6 +34,7 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FoodState, MealState, MealTime } from '@intake24/common/types';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
 import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -48,6 +49,8 @@ export default defineComponent({
     //   default: 0,
     // },
   },
+
+  mixins: [localeContent],
 
   data() {
     return {

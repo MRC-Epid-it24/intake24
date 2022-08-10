@@ -17,21 +17,14 @@
       </v-list-item>
       <v-divider></v-divider>
       <v-card-text class="scroll-y" style="height: 40rem">
-        <v-list-item
-          :ripple="false"
-          :inactive="true"
-          v-for="(meal, idx) in meals"
-          :key="meal.name + idx"
-          link
-        >
+        <v-list-item :ripple="false" :inactive="true" v-for="meal in meals" :key="meal.id" link>
           <v-list-item-content>
             <meal-item
               :meal="meal"
-              :meal-id="meal.id"
               @meal-action="onMealAction"
               @food-selected="onFoodSelected"
               @meal-selected="onMealSelected"
-              @breadcrumbMeal="chooseMealUp(meal.name)"
+              @breadcrumbMeal="chooseMealUp(meal.name.en)"
               @breadcrumbFood="chooseFoodUp"
             ></meal-item>
           </v-list-item-content>

@@ -2,7 +2,7 @@
   <v-list-group :value="mealTimeString.length > 0 ? true : false">
     <template v-slot:activator>
       <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal">
-        {{ meal.name.en }}
+        {{ getLocaleContent(meal.name) }}
       </v-list-item-title>
       <context-menu
         :menu="menuMeal"
@@ -26,6 +26,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
+import localeContent from '@intake24/survey/components/mixins/localeContent';
 import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
 
 import ContextMenu from '../elements/ContextMenu.vue';
@@ -37,6 +38,8 @@ export default defineComponent({
   name: 'MealItem',
 
   components: { ContextMenu, FoodItem },
+
+  mixins: [localeContent],
 
   props: {
     meal: {
