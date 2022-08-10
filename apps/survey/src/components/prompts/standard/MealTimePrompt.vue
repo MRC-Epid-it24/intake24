@@ -15,15 +15,15 @@
     <template v-slot:actions>
       <confirm-dialog
         color="warning"
-        :label="$t('prompts.editMeal.deleteMeal', { meal: mealName })"
+        :label="$t('prompts.editMeal.deleteMeal', { meal: getLocalMealName }).toString()"
         @confirm="removeMeal"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn :block="isMobile" class="px-5" large v-bind="attrs" v-on="on">
-            {{ $t('prompts.mealTime.no', { meal: mealName }) }}
+            {{ $t('prompts.mealTime.no', { meal: getLocalMealName }) }}
           </v-btn>
         </template>
-        {{ $t('prompts.mealDelete.message', { meal: mealName }) }}
+        {{ $t('prompts.mealDelete.message', { meal: getLocalMealName }) }}
       </confirm-dialog>
       <v-btn
         :block="isMobile"
@@ -33,7 +33,7 @@
         large
         @click="submit"
       >
-        {{ $t('prompts.mealTime.yes', { meal: mealName }) }}
+        {{ $t('prompts.mealTime.yes', { meal: getLocalMealName }) }}
       </v-btn>
     </template>
   </prompt-layout>
@@ -44,7 +44,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealTimePromptProps } from '@intake24/common/prompts';
-import type { MealTime } from '@intake24/common/types';
+import type { MealTime, RequiredLocaleTranslation } from '@intake24/common/types';
 import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -65,7 +65,8 @@ export default defineComponent({
       required: true,
     },
     mealName: {
-      type: String,
+      type: Object as PropType<RequiredLocaleTranslation>,
+      required: true,
     },
     initialTime: {
       type: Object as PropType<MealTime>,
@@ -82,6 +83,9 @@ export default defineComponent({
   },
 
   computed: {
+    getLocalMealName(): string {
+      return this.getLocaleContent<string>(this.mealName);
+    },
     initialTimeString(): string {
       return mealTimeToString(this.initialTime);
     },
@@ -92,14 +96,14 @@ export default defineComponent({
     text(): string {
       const text = this.promptProps.text[this.$i18n.locale];
       return text
-        ? text.replace('{meal}', this.mealName ?? '')
-        : this.$t('prompts.mealTime.text', { meal: this.mealName }).toString();
+        ? text.replace('{meal}', this.getLocalMealName ?? '')
+        : this.$t('prompts.mealTime.text', { meal: this.getLocalMealName }).toString();
     },
     description(): string {
       const description = this.promptProps.description[this.$i18n.locale];
       return description
-        ? description.replace('{meal}', this.mealName ?? '')
-        : this.$t('prompts.mealTime.description', { meal: this.mealName }).toString();
+        ? description.replace('{meal}', this.getLocalMealName ?? '')
+        : this.$t('prompts.mealTime.description', { meal: this.getLocalMealName }).toString();
     },
   },
 

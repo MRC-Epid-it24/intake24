@@ -280,19 +280,16 @@ export const useSurvey = defineStore('survey', {
       this.data.meals.splice(data.mealIndex, 0, data.meal);
     },
 
-    addMeal(mealName: string, locale: string) {
-      const newMeal: MealState = {
+    addMeal(name: string, locale: string) {
+      this.data.meals.push({
         id: this.getNextMealId(),
-        name: mealName,
-        localName: { en: mealName },
+        name: { en: name, [locale]: name },
         defaultTime: { hours: 0, minutes: 0 },
         time: undefined,
         flags: [],
         foods: [],
         customPromptAnswers: {},
-      };
-      newMeal.localName[locale] = mealName;
-      this.data.meals.push(newMeal);
+      });
     },
 
     setMealFlag(data: { mealId: number; flag: string }) {

@@ -16,7 +16,7 @@
             }}</span>
           </v-card>
         </v-item>
-        <span class="text-caption">{{ item.localName[$i18n.locale] }}</span>
+        <span class="text-caption">{{ item.name[$i18n.locale] ?? item.name.en }}</span>
       </v-col>
     </v-row>
   </v-item-group>
@@ -31,8 +31,12 @@ import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDo
 
 export default defineComponent({
   name: 'SurveyProgressBar',
+
   props: {
-    meals: Array as PropType<MealState[]>,
+    meals: {
+      type: Array as PropType<MealState[]>,
+      required: true,
+    },
   },
 
   setup() {

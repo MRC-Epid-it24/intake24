@@ -11,7 +11,7 @@
             :ripple="false"
             :inactive="true"
             v-for="(meal, idx) in meals"
-            :key="meal.name + idx"
+            :key="meal.id"
             link
           >
             <v-list-item-icon>
@@ -22,9 +22,9 @@
                 <template v-slot:activator>
                   <v-list-item-title
                     class="font-weight-bold text-wrap"
-                    @click="chooseMeal(idx, meal.name, meal.foods, 'meal')"
+                    @click="chooseMeal(idx, meal.name.en, meal.foods, 'meal')"
                   >
-                    {{ meal.localName[$i18n.locale] }}
+                    {{ meal.name[$i18n.locale] }}
                   </v-list-item-title>
                   <v-list-item-action>
                     <v-list-item-action-text v-if="meal.time">
@@ -85,7 +85,10 @@ export default defineComponent({
       type: Object as PropType<BasePromptProps>,
       required: true,
     },
-    meals: Array as PropType<MealState[]>,
+    meals: {
+      type: Array as PropType<MealState[]>,
+      required: true,
+    },
     promptComponent: {
       type: String,
       required: true,

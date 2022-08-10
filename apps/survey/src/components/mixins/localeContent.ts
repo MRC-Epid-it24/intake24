@@ -1,19 +1,16 @@
 import { defineComponent } from 'vue';
 
-import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
-
-export type LocaleContent = {
-  getLocaleContent<T>(content: LocaleTranslation<T>): T;
-  getLocaleString(
-    content: LocaleTranslation<string | null>,
-    fallbackPath: string,
-    replace?: Dictionary<string>
-  ): string;
-};
+import type {
+  Dictionary,
+  LocaleTranslation,
+  RequiredLocaleTranslation,
+} from '@intake24/common/types';
 
 export default defineComponent({
   methods: {
-    getLocaleContent<T>(content: LocaleTranslation<T> | string): T | string {
+    getLocaleContent<T>(
+      content: LocaleTranslation<T> | RequiredLocaleTranslation | string
+    ): T | string {
       if (typeof content === 'string') return content;
       return content[this.$i18n.locale] ?? content.en;
     },

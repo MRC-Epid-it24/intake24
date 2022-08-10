@@ -59,7 +59,7 @@ export default class DynamicRecall {
     this.selectionManager = new SelectionManager(store, this.promptManager);
   }
 
-  async initialiseSurvey(locale: string) {
+  async initialiseSurvey() {
     if (!this.store.hasStarted) {
       console.debug('Current survey data is null, starting new survey');
 
@@ -69,8 +69,7 @@ export default class DynamicRecall {
         startTime: new Date(),
         meals: this.surveyScheme.meals.map((meal) => ({
           id: this.store.getNextMealId(),
-          name: meal.name[locale] ?? meal.name.en,
-          localName: meal.name, // FIXME: pick correct locale and handle nulls
+          name: meal.name,
           defaultTime: parseMealTime(meal.time),
           time: undefined,
           flags: [],

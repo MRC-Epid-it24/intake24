@@ -1,12 +1,12 @@
 <template>
   <v-list-group :value="mealTimeString.length > 0 ? true : false">
     <template v-slot:activator>
-      <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal(meal.name)">
-        {{ meal.name }}
+      <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal">
+        {{ meal.name.en }}
       </v-list-item-title>
       <context-menu
         :menu="menuMeal"
-        :entityName="meal.name"
+        :entity-name="meal.name.en"
         :icon="menuMealIcon"
         @context-menu-action="onContextMenuAction"
       ></context-menu>
@@ -78,8 +78,8 @@ export default defineComponent({
     },
   },
   methods: {
-    chooseMeal(mealName: string) {
-      this.$emit('breadcrumbMeal', mealName);
+    chooseMeal() {
+      this.$emit('breadcrumbMeal', this.meal.name.en);
       this.$emit('meal-selected', this.meal.id);
     },
     chooseFood(foodName: string) {

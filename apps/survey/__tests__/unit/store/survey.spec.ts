@@ -6,8 +6,7 @@ const store = useSurvey();
 function dummyMeal(name: string): MealState {
   return {
     id: 0,
-    name,
-    localName: { en: name },
+    name: { en: name },
     customPromptAnswers: {},
     defaultTime: { hours: 8, minutes: 0 },
     flags: [],

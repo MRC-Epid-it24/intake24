@@ -12,15 +12,15 @@
     <template v-slot:actions>
       <confirm-dialog
         color="warning"
-        :label="$t('prompts.editMeal.deleteMeal', { meal: mealName })"
+        :label="$t('prompts.editMeal.deleteMeal', { meal: getLocalMealName })"
         @confirm="onDeleteMeal"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn :block="isMobile" class="px-5" large v-bind="attrs" v-on="on">
-            {{ $t('prompts.editMeal.deleteMeal', { meal: mealName }) }}
+            {{ $t('prompts.editMeal.deleteMeal', { meal: getLocalMealName }) }}
           </v-btn>
         </template>
-        {{ $t('prompts.mealDelete.message', { meal: mealName }) }}
+        {{ $t('prompts.mealDelete.message', { meal: getLocalMealName }) }}
       </confirm-dialog>
       <v-btn
         :block="isMobile"
@@ -42,7 +42,7 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { FoodState } from '@intake24/common/types';
+import type { FoodState, RequiredLocaleTranslation } from '@intake24/common/types';
 import type { EditableFoodListType } from '@intake24/survey/components/prompts/standard/EditableFoodList.vue';
 import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
 import { ConfirmDialog } from '@intake24/ui';
@@ -66,7 +66,7 @@ const component = defineComponent({
       required: true,
     },
     mealName: {
-      type: String,
+      type: Object as PropType<RequiredLocaleTranslation>,
       required: true,
     },
     continueEnabled: {
@@ -86,9 +86,13 @@ const component = defineComponent({
   },
 
   computed: {
+    getLocalMealName(): string {
+      return this.getLocaleContent<string>(this.mealName);
+    },
+
     promptText(): string {
       return this.getLocaleString(this.promptProps.text, 'prompts.editMeal.text', {
-        meal: this.mealName.toLocaleLowerCase(),
+        meal: this.getLocalMealName.toLocaleLowerCase(),
       });
     },
 

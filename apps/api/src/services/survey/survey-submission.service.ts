@@ -89,6 +89,7 @@ const surveySubmissionService = ({
         const {
           data: { code, groupCode, readyMealOption, brandNames },
           linkedFoods,
+          portionSize,
         } = foodState;
 
         const foodRecord = foods.find((foodRecord) => foodRecord.foodCode === code);
@@ -129,7 +130,7 @@ const surveySubmissionService = ({
           localName,
           readyMeal: readyMealOption,
           searchTerm: '???', // TODO
-          portionSizeMethodId: '???', // TODO
+          portionSizeMethodId: portionSize ? portionSize.method : '???', // TODO
           reasonableAmount: true, // TODO
           foodGroupId,
           foodGroupEnglishName,
@@ -254,7 +255,7 @@ const surveySubmissionService = ({
     );
 
     // Survey meals
-    const mealInputs = surveyState.meals.map(({ name, time }) => ({
+    const mealInputs = surveyState.meals.map(({ name: { en: name }, time }) => ({
       surveySubmissionId,
       name,
       hours: time?.hours ?? 8,
@@ -338,6 +339,7 @@ const surveySubmissionService = ({
           SurveySubmissionFoodCustomField.bulkCreate(foodCustomFieldInputs),
           // TODO: PSMs
           // TODO: Nutrients
+          // TODO: Fields
         ]);
       }
     }

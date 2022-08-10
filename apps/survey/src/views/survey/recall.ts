@@ -136,7 +136,7 @@ export default defineComponent({
 
     this.recallController = new DynamicRecall(this.surveyScheme, this.survey);
 
-    await this.recallController.initialiseSurvey(this.$i18n.locale);
+    await this.recallController.initialiseSurvey();
   },
 
   async mounted() {

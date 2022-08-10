@@ -29,7 +29,7 @@ export default defineComponent({
 
     getBreadCrumbs(promptName: LocaleTranslation): BrdCrumbs[] {
       const localMealName: string | null = this.selectedMealOptional
-        ? this.getLocaleContent(this.selectedMealOptional.localName)
+        ? this.getLocaleContent(this.selectedMealOptional.name)
         : null;
       return [
         {

@@ -4,7 +4,7 @@
       <v-list-item-icon>
         <v-icon :color="active ? 'success' : 'grey'"> $meal</v-icon>
       </v-list-item-icon>
-      <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal(meal.name)">
+      <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal">
         {{ meal.name }}
       </v-list-item-title>
       <context-menu
@@ -24,8 +24,10 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { MealState } from '@intake24/common/types';
 import ContextMenu from '@intake24/survey/components/elements/ContextMenu.vue';
 import ReviewFood from '@intake24/survey/components/recall/mobile/review/ReviewFood.vue';
 
@@ -37,7 +39,10 @@ export default defineComponent({
   components: { ReviewFood, ContextMenu },
 
   props: {
-    meal: Object,
+    meal: {
+      type: Object as PropType<MealState>,
+      required: true,
+    },
     mealIndex: Number,
     active: Boolean,
   },
@@ -59,8 +64,8 @@ export default defineComponent({
   },
 
   methods: {
-    chooseMeal(mealName: string) {
-      this.$emit('breadcrumbMeal', mealName);
+    chooseMeal() {
+      this.$emit('breadcrumbMeal', this.meal.name.en);
     },
     chooseFood(foodName: string) {
       this.$emit('breadcrumbFood', foodName);

@@ -1,4 +1,4 @@
-import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
+import type { Dictionary, RequiredLocaleTranslation } from '@intake24/common/types';
 
 import type { ComponentType, QuantityValues } from '../prompts';
 import type { FoodHeader, UserFoodData } from './http';
@@ -111,8 +111,7 @@ export interface MealTime {
 
 export interface MealState {
   id: number;
-  name: string;
-  localName: LocaleTranslation;
+  name: RequiredLocaleTranslation;
   defaultTime: MealTime;
   time: MealTime | undefined;
   flags: string[];
@@ -138,7 +137,7 @@ export interface Selection {
   mode: SelectionMode;
 }
 
-export type PromptAnswerResponce =
+export type PromptAnswerResponse =
   | FoodState[]
   | string
   | FoodEntry
@@ -147,7 +146,7 @@ export type PromptAnswerResponce =
   | number;
 
 export interface PromptAnswer {
-  response: PromptAnswerResponce;
+  response: PromptAnswerResponse;
   modified: boolean;
   new: boolean;
   finished: boolean;
