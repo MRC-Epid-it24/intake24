@@ -18,7 +18,7 @@ import { defineComponent } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import { basePromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
+import { localeContent } from '@intake24/survey/components/mixins';
 
 import BasePortion from './BasePortion';
 

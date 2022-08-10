@@ -108,7 +108,7 @@ import { basePromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import AsServedWeight from '@intake24/survey/components/elements/AsServedWeight.vue';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
+import { localeContent } from '@intake24/survey/components/mixins';
 import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
 
 import BasePortion from './BasePortion';

@@ -34,8 +34,7 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FoodState, MealState, MealTime } from '@intake24/common/types';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
-import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
+import { localeContent, timeDoubleDigitsConvertor } from '@intake24/survey/components/mixins';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
@@ -43,7 +42,10 @@ export default defineComponent({
   name: 'MealListMobileBottom',
 
   props: {
-    meals: Array as PropType<MealState[]>,
+    meals: {
+      type: Array as PropType<MealState[]>,
+      required: true,
+    },
     // selectedMealIndex: {
     //   type: Number,
     //   default: 0,

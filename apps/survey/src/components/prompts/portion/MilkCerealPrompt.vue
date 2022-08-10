@@ -116,8 +116,7 @@ import type { MilkCerealPromptProps } from '@intake24/common/prompts';
 import { milkCerealPromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import expansionPanelControls from '@intake24/survey/components/mixins/expansionPanelControls';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
+import { expansionPanelControls, localeContent } from '@intake24/survey/components/mixins';
 
 import BasePortion from './BasePortion';
 

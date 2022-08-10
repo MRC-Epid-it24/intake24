@@ -3,8 +3,9 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FoodState, LocaleTranslation } from '@intake24/common/types';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
 import { useSurvey } from '@intake24/survey/stores';
+
+import localeContent from './localeContent';
 
 export type BrdCrumbs = {
   text: string | TranslateResult | null;

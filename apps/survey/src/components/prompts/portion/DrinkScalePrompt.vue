@@ -107,7 +107,7 @@ import { drinkScalePromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import DrinkScalePanel from '@intake24/survey/components/elements/DrinkScalePanel.vue';
 import GuideImagePanel from '@intake24/survey/components/elements/GuideImagePanel.vue';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
+import { localeContent } from '@intake24/survey/components/mixins';
 
 import BasePortion from './BasePortion';
 

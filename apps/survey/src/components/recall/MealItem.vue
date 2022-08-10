@@ -26,8 +26,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
-import timeDoubleDigitsConvertor from '@intake24/survey/components/mixins/timeDoubleDigitsConvertor';
+import { localeContent, timeDoubleDigitsConvertor } from '@intake24/survey/components/mixins';
 
 import ContextMenu from '../elements/ContextMenu.vue';
 import FoodItem from './FoodItem.vue';

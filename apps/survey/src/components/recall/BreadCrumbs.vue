@@ -10,7 +10,7 @@
 import { defineComponent } from 'vue';
 
 import type { BrdCrumbs } from '@intake24/survey/components/mixins/breadcrumbs';
-import breadcrumbs from '@intake24/survey/components/mixins/breadcrumbs';
+import { breadcrumbs } from '@intake24/survey/components/mixins';
 
 export default defineComponent({
   name: 'RecallBreadCrumbs',

@@ -106,7 +106,7 @@ import { pizzaPromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
 import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
+import { localeContent } from '@intake24/survey/components/mixins';
 // import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import ImageMapSelector from '@intake24/survey/components/prompts/portion/selectors/ImageMapSelector.vue';
 

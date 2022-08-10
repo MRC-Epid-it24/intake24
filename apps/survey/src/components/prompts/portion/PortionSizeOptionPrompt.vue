@@ -59,7 +59,7 @@ import type { LocaleTranslation } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 import { basePromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
+import { localeContent } from '@intake24/survey/components/mixins';
 
 import BasePortion from './BasePortion';
 

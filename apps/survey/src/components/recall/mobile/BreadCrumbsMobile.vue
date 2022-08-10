@@ -13,7 +13,7 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { BrdCrumbs } from '@intake24/survey/components/mixins/breadcrumbs';
-import breadcrumbs from '@intake24/survey/components/mixins/breadcrumbs';
+import { breadcrumbs } from '@intake24/survey/components/mixins';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({

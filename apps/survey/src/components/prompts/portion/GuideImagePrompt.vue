@@ -114,7 +114,7 @@ import type { EncodedFood, GuideImageState, LocaleTranslation } from '@intake24/
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
+import { localeContent } from '@intake24/survey/components/mixins';
 
 import BasePortion from './BasePortion';
 

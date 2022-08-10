@@ -74,7 +74,7 @@ import type { QuantityValues, ValidatedPromptProps } from '@intake24/common/prom
 import type { LocaleTranslation, StandardPortionUnit } from '@intake24/common/types';
 import ErrorAlert from '@intake24/survey/components/elements/ErrorAlert.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
+import { localeContent } from '@intake24/survey/components/mixins';
 import { useSurvey } from '@intake24/survey/stores';
 
 import BasePortion from './BasePortion';

@@ -23,7 +23,7 @@
 import { defineComponent } from 'vue';
 
 import type { LocaleTranslation } from '@intake24/common/types';
-import localeContent from '@intake24/survey/components/mixins/localeContent';
+import { localeContent } from '@intake24/survey/components/mixins';
 
 export default defineComponent({
   name: 'PromptLayout',
