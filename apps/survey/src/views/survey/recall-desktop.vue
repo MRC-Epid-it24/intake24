@@ -28,6 +28,7 @@
           :promptProps="currentPrompt.prompt.props"
           :key="Math.random()"
           @validation-update="onValidationUpdate"
+          @complete="onComplete"
           @continue="onContinue"
         ></component>
       </transition>
@@ -88,6 +89,16 @@ export default defineComponent({
       this.hideCurrentPrompt = true;
 
       await this.promptHandle?.commitAnswer();
+      await this.nextPrompt();
+
+      this.hideCurrentPrompt = false;
+    },
+
+    // Same as onContinue but don't commit, for alternative prompt actions such as delete meal
+    async onComplete() {
+      this.continueButtonEnabled = false;
+      this.hideCurrentPrompt = true;
+
       await this.nextPrompt();
 
       this.hideCurrentPrompt = false;
