@@ -1,6 +1,5 @@
 <script lang="ts">
-import type { PropType } from 'vue';
-import type { CreateElement, VNode, VNodeChildren } from 'vue';
+import type { CreateElement, PropType, VNode, VNodeChildren } from 'vue';
 import type { LocaleMessageObject } from 'vue-i18n';
 import has from 'lodash/has';
 import pick from 'lodash/pick';

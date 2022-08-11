@@ -10,8 +10,11 @@ module.exports = {
     '@vue/eslint-config-typescript/recommended',
     '@vue/eslint-config-prettier',
   ],
-  plugins: ['simple-import-sort'],
+  plugins: ['import', 'simple-import-sort'],
   rules: {
+    'import/first': 'error',
+    'import/newline-after-import': 'error',
+    'import/no-duplicates': 'error',
     'simple-import-sort/imports': [
       'error',
       {

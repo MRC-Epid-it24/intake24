@@ -56,8 +56,7 @@ import { defineComponent } from 'vue';
 import type { JobType, JobTypeParams } from '@intake24/common/types';
 import type { JobEntry, LocaleEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { PollsForJobs } from '@intake24/admin/components/jobs';
-import { jobParams } from '@intake24/admin/components/jobs';
+import { jobParams, PollsForJobs } from '@intake24/admin/components/jobs';
 import { form } from '@intake24/admin/helpers';
 import { defaultJobsParams } from '@intake24/common/types';
 

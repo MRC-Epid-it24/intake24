@@ -67,8 +67,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import pick from 'lodash/pick';
-import { mapState } from 'pinia';
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { PromptQuestion } from '@intake24/common/prompts';

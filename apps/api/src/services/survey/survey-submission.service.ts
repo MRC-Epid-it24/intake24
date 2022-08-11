@@ -11,7 +11,6 @@ import type {
 import type { SurveyFollowUpResponse } from '@intake24/common/types/http';
 import type { SurveySubmissionFoodCreationAttributes } from '@intake24/common/types/models';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { SurveySubmissionFoodCustomField } from '@intake24/db';
 import {
   FeedbackScheme,
   FoodGroup,
@@ -21,6 +20,7 @@ import {
   SurveySubmission,
   SurveySubmissionCustomField,
   SurveySubmissionFood,
+  SurveySubmissionFoodCustomField,
   SurveySubmissionMeal,
   SurveySubmissionMealCustomField,
 } from '@intake24/db';

@@ -33,14 +33,7 @@ export type RespondentFromJWT = {
   authToken: string;
 };
 
-const surveyService = ({
-  adminSurveyService,
-  cache,
-  logger: globalLogger,
-  scheduler,
-}: Pick<IoC, 'adminSurveyService' | 'cache' | 'logger' | 'scheduler'>) => {
-  const logger = globalLogger.child({ service: 'surveyService' });
-
+const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) => {
   /**
    * Generate random survey respondent
    *
