@@ -71,11 +71,17 @@ const checkMealStandardConditions = (
   mealState: MealState,
   prompt: PromptQuestion
 ): boolean => {
-  if (prompt.component === 'meal-time-prompt') return mealState.time === undefined;
-
-  if (prompt.component === 'edit-meal-prompt') return mealState.foods.length === 0;
-
   switch (prompt.component) {
+    case 'meal-time-prompt':
+      if (mealState.time === undefined) {
+        recallLog().promptCheck('meal-time-prompt', true, 'time is undefined');
+        return true;
+      } else {
+        recallLog().promptCheck('meal-time-prompt', false, 'time is defined');
+        return false;
+      }
+    case 'edit-meal-prompt':
+      return mealState.foods.length === 0;
     case 'info-prompt':
       return mealState.flags.includes(`${prompt.id}-acknowledged`);
     default:
