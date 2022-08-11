@@ -7,33 +7,40 @@
       <v-spacer></v-spacer>
       <add-nutrient-dialog
         v-if="!disabled"
-        :currentList="records"
+        :currentList="items"
         :nutrientTables="nutrientTables"
         @add="add"
       ></add-nutrient-dialog>
     </v-toolbar>
     <v-list two-line>
-      <v-list-item-group>
-        <template v-for="(record, idx) in records">
-          <v-list-item :key="record.id">
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ getNutrientTableName(record.nutrientTableId) }}
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                {{ $t('common.id') }}: {{ record.nutrientTableRecordId }} | {{ $t('common.name') }}:
-                {{ record.name }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-action v-if="!disabled">
-              <v-btn color="error" icon @click="remove(record.id)">
-                <v-icon>$delete</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-          <v-divider v-if="idx + 1 < records.length" :key="`div-${record.id}`"></v-divider>
-        </template>
-      </v-list-item-group>
+      <template v-for="(item, idx) in items">
+        <v-list-item :key="item.id">
+          <v-list-item-avatar>
+            <v-icon>fa-seedling</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ getNutrientTableName(item.nutrientTableId) }}
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              {{ $t('common.id') }}: {{ item.nutrientTableRecordId }} | {{ $t('common.name') }}:
+              {{ item.name }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action v-if="!disabled">
+            <confirm-dialog
+              :label="$t('fdbs.nutrients.remove').toString()"
+              color="error"
+              icon
+              icon-left="$delete"
+              @confirm="remove(item.id)"
+            >
+              {{ $t('common.action.confirm.delete', { name: item.name }) }}
+            </confirm-dialog>
+          </v-list-item-action>
+        </v-list-item>
+        <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
+      </template>
     </v-list>
   </v-card>
 </template>
@@ -46,13 +53,14 @@ import { defineComponent } from 'vue';
 import type { FoodDatabaseRefs } from '@intake24/common/types/http/admin';
 import type { NutrientTableRecordAttributes } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';
+import { ConfirmDialog } from '@intake24/ui';
 
 import { AddNutrientDialog } from '.';
 
 export default defineComponent({
   name: 'FoodCompositionList',
 
-  components: { AddNutrientDialog },
+  components: { AddNutrientDialog, ConfirmDialog },
 
   props: {
     disabled: {
@@ -75,18 +83,18 @@ export default defineComponent({
 
   data() {
     return {
-      records: [...this.value],
+      items: [...this.value],
     };
   },
 
   watch: {
     value(val: NutrientTableRecordAttributes[]) {
-      if (isEqual(this.records, this.value)) return;
+      if (isEqual(val, this.items)) return;
 
-      this.records = [...val];
+      this.items = [...val];
     },
-    records(val: NutrientTableRecordAttributes[]) {
-      if (isEqual(this.records, this.value)) return;
+    items(val: NutrientTableRecordAttributes[]) {
+      if (isEqual(val, this.value)) return;
 
       this.$emit('input', [...val]);
     },
@@ -94,11 +102,11 @@ export default defineComponent({
 
   methods: {
     add(item: NutrientTableRecordAttributes) {
-      this.records.push(item);
+      this.items.push(item);
     },
 
     remove(id: string) {
-      this.records = this.records.filter((records) => records.id !== id);
+      this.items = this.items.filter((item) => item.id !== id);
     },
 
     getNutrientTableName(id: string) {

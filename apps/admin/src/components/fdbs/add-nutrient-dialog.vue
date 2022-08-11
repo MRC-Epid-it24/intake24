@@ -97,7 +97,10 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { FoodDatabaseRefs } from '@intake24/common/types/http/admin';
+import type {
+  FoodDatabaseRefs,
+  NutrientTableRecordsResponse,
+} from '@intake24/common/types/http/admin';
 import type { NutrientTableRecordAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';
 
@@ -123,10 +126,9 @@ export default defineComponent({
     );
     const selectedRecordId = ref<string | null>(null);
 
-    const { dialog, loading, search, items, fetch, clear } = useFetchList(
-      'admin/nutrient-tables/:id/records',
-      selectedTableId
-    );
+    const { dialog, loading, search, items, fetch, clear } = useFetchList<
+      NutrientTableRecordsResponse['data'][number]
+    >('admin/nutrient-tables/:id/records', selectedTableId);
 
     return { dialog, loading, items, search, selectedRecordId, selectedTableId, fetch, clear };
   },
@@ -136,7 +138,7 @@ export default defineComponent({
       const { selectedRecordId } = this;
       if (!selectedRecordId) return null;
 
-      return this.items.find((item) => item.id === this.selectedRecordId);
+      return this.items.find((item) => item.id === selectedRecordId) ?? null;
     },
     itemAlreadyIncluded(): boolean {
       if (!this.currentList.length || !this.selectedRecordId) return false;

@@ -1,4 +1,4 @@
-import type { Optional } from '../model';
+import type { Optional } from '../../common';
 import type { CategoryAttributeAttributes } from './attributes';
 
 export type CategoryAttributes = {

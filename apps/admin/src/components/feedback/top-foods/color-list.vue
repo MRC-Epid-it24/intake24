@@ -71,7 +71,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
-import { useList } from '..';
+import { useListWithDialog } from '@intake24/admin/components/lists';
 
 export default defineComponent({
   name: 'TopFoodsColorList',
@@ -90,7 +90,7 @@ export default defineComponent({
   components: { draggable },
 
   setup(props, context) {
-    const { dialog, form, items, newDialog, edit, reset, save } = useList(
+    const { dialog, form, items, newDialog, edit, reset, save } = useListWithDialog(
       props,
       context,
       () => '#EF6C00'

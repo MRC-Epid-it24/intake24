@@ -84,7 +84,7 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { CategoryListEntry } from '@intake24/common/types/http/admin';
+import type { CategoriesResponse, CategoryListEntry } from '@intake24/common/types/http/admin';
 import type { CategoryAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';
 
@@ -107,10 +107,9 @@ export default defineComponent({
   setup(props) {
     const selected = ref<string[]>([]);
 
-    const { dialog, loading, search, items, fetch, clear } = useFetchList(
-      'admin/fdbs/:id/categories',
-      props.localeId
-    );
+    const { dialog, loading, search, items, fetch, clear } = useFetchList<
+      CategoriesResponse['data'][number]
+    >('admin/fdbs/:id/categories', props.localeId);
 
     return { dialog, loading, items, search, selected, fetch, clear };
   },

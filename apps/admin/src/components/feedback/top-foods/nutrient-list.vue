@@ -132,10 +132,9 @@ import type { RuleCallback } from '@intake24/admin/types';
 import type { TopFoodNutrientType } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import { useListWithDialog } from '@intake24/admin/components/lists';
 import { defaultTopFoods } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
-
-import { useList } from '..';
 
 export default defineComponent({
   name: 'TopFoodsNutrientTypeList',
@@ -163,11 +162,8 @@ export default defineComponent({
       name: { en: props.availableNutrientTypes[0].description },
     });
 
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } = useList(
-      props,
-      context,
-      defaultItem
-    );
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } =
+      useListWithDialog(props, context, defaultItem);
 
     return { dialog, form, items, newDialog, add, edit, load, remove, reset, save };
   },

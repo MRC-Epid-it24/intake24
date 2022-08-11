@@ -7,7 +7,7 @@ import type {
   HenryCoefficient,
   TopFoods,
 } from '../../../feedback';
-import type { OmitAndOptional } from '../model';
+import type { OmitAndOptional } from '../../common';
 import type { UserAttributes } from './users';
 
 export type FeedbackSchemeAttributes = {

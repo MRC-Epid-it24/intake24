@@ -1,4 +1,4 @@
-import type { OmitAndOptional } from '..';
+import type { OmitAndOptional } from '../../common';
 
 export type SignInLogAttributes = {
   id: string;

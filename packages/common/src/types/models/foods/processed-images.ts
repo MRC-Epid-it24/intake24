@@ -1,4 +1,4 @@
-import type { OmitAndOptional } from '../model';
+import type { OmitAndOptional } from '../../common';
 
 export enum ProcessedImagePurposes {
   AsServedMainImage = 1,

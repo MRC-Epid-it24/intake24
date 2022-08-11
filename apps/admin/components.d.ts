@@ -23,6 +23,8 @@ declare module '@vue/runtime-core' {
     FdbsCategoryList: typeof import('./src/components/fdbs/category-list.vue')['default']
     FdbsFoodExplorer: typeof import('./src/components/fdbs/food-explorer.vue')['default']
     FdbsNutrientList: typeof import('./src/components/fdbs/nutrient-list.vue')['default']
+    FdbsPortionSizeMethodList: typeof import('./src/components/fdbs/portion-size-method-list.vue')['default']
+    FdbsPortionSizeMethodSelector: typeof import('./src/components/fdbs/portion-size-method-selector.vue')['default']
     FeedbackCardsCardList: typeof import('./src/components/feedback/cards/card-list.vue')['default']
     FeedbackCardsCardSelector: typeof import('./src/components/feedback/cards/card-selector.vue')['default']
     FeedbackCardsCardTypesCharacter: typeof import('./src/components/feedback/cards/card-types/character.vue')['default']

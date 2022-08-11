@@ -12,7 +12,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t(`feedback-schemes.cards.${dialog.index === -1 ? 'create' : 'edit'}`) }}
+          {{ $t(`feedback-schemes.cards.${dialog.index === -1 ? 'add' : 'edit'}`) }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
@@ -211,7 +211,7 @@ export default defineComponent({
       this.dialog = { show, index, card: copy({ ...card, id: randomString(6) }) };
     },
 
-    create() {
+    add() {
       this.dialog = this.newDialog(true);
     },
 

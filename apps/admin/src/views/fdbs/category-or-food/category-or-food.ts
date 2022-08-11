@@ -9,7 +9,11 @@ import type {
   FoodLocalEntry,
 } from '@intake24/common/types/http/admin';
 import { useStoreEntry, watchEntry } from '@intake24/admin/components/entry';
-import { AttributeList, CategoryList } from '@intake24/admin/components/fdbs';
+import {
+  AttributeList,
+  CategoryList,
+  PortionSizeMethodList,
+} from '@intake24/admin/components/fdbs';
 import { form } from '@intake24/admin/helpers';
 import { getObjectNestedKeys } from '@intake24/common/util';
 import { useMessages } from '@intake24/ui/stores';
@@ -19,7 +23,7 @@ export type Entry = CategoryLocalEntry | FoodLocalEntry;
 export default defineComponent({
   name: 'CategoryOrFoodEntryMixin',
 
-  components: { AttributeList, CategoryList },
+  components: { AttributeList, CategoryList, PortionSizeMethodList },
 
   mixins: [watchEntry],
 

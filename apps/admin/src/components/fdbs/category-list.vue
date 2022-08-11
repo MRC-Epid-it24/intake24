@@ -8,26 +8,33 @@
       <add-category-dialog
         v-if="!disabled"
         :localeId="localeId"
-        :currentList="categories"
+        :currentList="items"
         @add="add"
       ></add-category-dialog>
     </v-toolbar>
     <v-list>
-      <v-list-item-group>
-        <template v-for="(category, idx) in categories">
-          <v-list-item :key="category.code">
-            <v-list-item-content>
-              <v-list-item-title>{{ category.code }} | {{ category.name }}</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action v-if="!disabled">
-              <v-btn color="error" icon @click="remove(category.code)">
-                <v-icon>$delete</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-          <v-divider v-if="idx + 1 < categories.length" :key="`div-${category.code}`"></v-divider>
-        </template>
-      </v-list-item-group>
+      <template v-for="(item, idx) in items">
+        <v-list-item :key="item.code">
+          <v-list-item-avatar>
+            <v-icon>fa-list</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-action v-if="!disabled">
+            <confirm-dialog
+              :label="$t('fdbs.categories.remove').toString()"
+              color="error"
+              icon
+              icon-left="$delete"
+              @confirm="remove(item.code)"
+            >
+              {{ $t('common.action.confirm.delete', { name: item.name }) }}
+            </confirm-dialog>
+          </v-list-item-action>
+        </v-list-item>
+        <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`"></v-divider>
+      </template>
     </v-list>
   </v-card>
 </template>
@@ -39,13 +46,14 @@ import { defineComponent } from 'vue';
 
 import type { CategoryAttributes } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';
+import { ConfirmDialog } from '@intake24/ui';
 
 import { AddCategoryDialog } from '.';
 
 export default defineComponent({
   name: 'CategoryList',
 
-  components: { AddCategoryDialog },
+  components: { AddCategoryDialog, ConfirmDialog },
 
   props: {
     disabled: {
@@ -68,18 +76,18 @@ export default defineComponent({
 
   data() {
     return {
-      categories: [...this.value],
+      items: [...this.value],
     };
   },
 
   watch: {
     value(val: CategoryAttributes[]) {
-      if (isEqual(this.categories, this.value)) return;
+      if (isEqual(val, this.items)) return;
 
-      this.records = [...val];
+      this.items = [...val];
     },
-    categories(val: CategoryAttributes[]) {
-      if (isEqual(this.categories, this.value)) return;
+    items(val: CategoryAttributes[]) {
+      if (isEqual(val, this.value)) return;
 
       this.$emit('input', [...val]);
     },
@@ -87,11 +95,11 @@ export default defineComponent({
 
   methods: {
     add(items: CategoryAttributes[]) {
-      this.categories.push(...items);
+      this.items.push(...items);
     },
 
     remove(code: string) {
-      this.categories = this.categories.filter((category) => category.code !== code);
+      this.items = this.items.filter((item) => item.code !== code);
     },
   },
 });

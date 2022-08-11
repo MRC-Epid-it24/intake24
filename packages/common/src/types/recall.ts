@@ -2,9 +2,22 @@ import type { Dictionary, RequiredLocaleTranslation } from '@intake24/common/typ
 
 import type { ComponentType, QuantityValues } from '../prompts';
 import type { FoodHeader, UserFoodData } from './http';
-import type { PortionSizeMethodId } from './models';
 
 export type CustomPromptAnswer = string | string[] | number | number[];
+
+export const portionSizeMethods = [
+  'as-served',
+  'guide-image',
+  'drink-scale',
+  'standard-portion',
+  'cereal',
+  'milk-on-cereal',
+  'pizza',
+  'milk-in-a-hot-drink',
+  'weight',
+];
+
+export type PortionSizeMethodId = typeof portionSizeMethods[number];
 
 export interface PortionSizeStateBase {
   method: PortionSizeMethodId;

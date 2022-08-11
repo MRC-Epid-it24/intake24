@@ -1,5 +1,5 @@
 import type { Dictionary } from '../../common';
-import type { OmitAndOptional } from '../model';
+import type { OmitAndOptional } from '../../common';
 
 export type ClientErrorReportAttributes = {
   id: string;

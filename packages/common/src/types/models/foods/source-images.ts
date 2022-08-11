@@ -1,4 +1,4 @@
-import type { OmitAndOptional } from '../model';
+import type { OmitAndOptional } from '../../common';
 
 export type SourceImageAttributes = {
   id: string;

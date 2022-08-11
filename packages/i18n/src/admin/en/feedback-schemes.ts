@@ -165,7 +165,7 @@ const feedbackSchemes: LocaleMessageObject = {
     _: 'Card',
     title: 'Cards',
     tab: 'Cards',
-    create: 'New card',
+    add: 'Add card',
     edit: 'Edit card',
     remove: 'Remove card',
     type: 'Card type',

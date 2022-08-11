@@ -11,8 +11,8 @@
         small
         class="mx-3"
         color="secondary"
-        :title="$t('feedback-schemes.cards.create')"
-        @click.stop="create"
+        :title="$t('feedback-schemes.cards.add')"
+        @click.stop="add"
       >
         <v-icon small>$add</v-icon>
       </v-btn>
@@ -66,7 +66,7 @@
         </transition-group>
       </draggable>
     </v-list>
-    <card-selector ref="selector" @save="save"> </card-selector>
+    <card-selector ref="selector" @save="save"></card-selector>
   </v-card>
 </template>
 
@@ -151,8 +151,8 @@ export default defineComponent({
       return card.name.en;
     },
 
-    create() {
-      this.selector?.create();
+    add() {
+      this.selector?.add();
     },
 
     load(cards: Card[]) {

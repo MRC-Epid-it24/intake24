@@ -1,7 +1,7 @@
 import type { PromptQuestion } from '../../../prompts';
 import type { ExportSection, RecallQuestions, SchemeType } from '../../../schemes';
 import type { Meal } from '../..';
-import type { OmitAndOptional } from '../model';
+import type { OmitAndOptional } from '../../common';
 
 export type SurveySchemeAttributes = {
   id: string;

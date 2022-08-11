@@ -4,11 +4,11 @@ import { ref, unref, watch } from 'vue';
 
 import { httpService } from '@intake24/admin/services';
 
-export const useFetchList = (url: string, id: string | Ref<string>) => {
+export const useFetchList = <T = any>(url: string, id: string | Ref<string>) => {
   const dialog = ref(false);
   const loading = ref(false);
   const search = ref<string | null>(null);
-  const items = ref<any[]>([]);
+  const items = ref<T[]>([]);
 
   const debouncedFetch = debounce(() => {
     fetch();

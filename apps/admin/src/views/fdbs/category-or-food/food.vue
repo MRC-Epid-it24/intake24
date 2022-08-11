@@ -86,6 +86,13 @@
           :nutrientTables="refs?.nutrientTables ?? []"
           class="mb-6"
         ></nutrient-list>
+        <portion-size-method-list
+          v-model="form.portionSizeMethods"
+          :disabled="disabled"
+          :errors="form.errors"
+          :localeId="id"
+          class="mb-6"
+        ></portion-size-method-list>
       </v-form>
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
@@ -138,9 +145,9 @@ export default defineComponent({
               useInRecipes: null,
             },
             parentCategories: [],
-            portionSizeMethods: [],
           },
           nutrientRecords: [],
+          portionSizeMethods: [],
         },
         { extractNestedKeys: true }
       ),

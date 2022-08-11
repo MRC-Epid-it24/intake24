@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import type { OmitAndOptional } from '../model';
+import type { OmitAndOptional } from '../../common';
 import type {
   CategoryAttributes,
   FoodAttributeAttributes,

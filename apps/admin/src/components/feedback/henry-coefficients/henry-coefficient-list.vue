@@ -175,11 +175,11 @@ import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
+import { useListWithDialog } from '@intake24/admin/components/lists';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
 
-import { useList } from '..';
 import { getHenryCoefficientDefaults } from './henry-coefficient';
 
 export default defineComponent({
@@ -199,11 +199,8 @@ export default defineComponent({
   components: { ConfirmDialog, draggable, LoadSectionDialog },
 
   setup(props, context) {
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } = useList(
-      props,
-      context,
-      getHenryCoefficientDefaults
-    );
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } =
+      useListWithDialog(props, context, getHenryCoefficientDefaults);
 
     return { dialog, form, items, newDialog, add, edit, load, remove, reset, save };
   },

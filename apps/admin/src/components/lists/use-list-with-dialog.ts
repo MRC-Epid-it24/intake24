@@ -1,4 +1,4 @@
-import type { SetupContext, UnwrapRef, UnwrapRefSimple } from 'vue';
+import type { Ref, SetupContext, UnwrapRef } from 'vue';
 import isEqual from 'lodash/isEqual';
 import { ref, toRefs, watch } from 'vue';
 
@@ -9,11 +9,17 @@ export type ListProps<T> = {
   value: T[];
 };
 
-export default <T>(props: ListProps<T>, context: SetupContext, newValue: () => T) => {
+// TODO: fix generic types
+
+export const useListWithDialog = <T>(
+  props: ListProps<T>,
+  context: SetupContext,
+  newValue: () => T
+) => {
   const { value } = toRefs(props);
   const form = ref<InstanceType<typeof HTMLFormElement>>();
 
-  const items = ref([...value.value]);
+  const items = ref([...value.value]) as Ref<UnwrapRef<T>[]>;
 
   const newDialog = (show = false) => ({
     show,
@@ -29,7 +35,7 @@ export default <T>(props: ListProps<T>, context: SetupContext, newValue: () => T
 
   watch(value, (val) => {
     if (isEqual(val, items.value)) return;
-    items.value = [...(val as UnwrapRefSimple<T[]>)];
+    items.value = [...(val as any)];
   });
 
   watch(items, () => {
@@ -44,7 +50,7 @@ export default <T>(props: ListProps<T>, context: SetupContext, newValue: () => T
     dialog.value = { show: true, index, item: copy(item) };
   };
 
-  const load = (list: UnwrapRefSimple<T>[]) => {
+  const load = (list: UnwrapRef<T>[]) => {
     items.value = [...list];
   };
 
@@ -63,8 +69,8 @@ export default <T>(props: ListProps<T>, context: SetupContext, newValue: () => T
 
     const { index, item } = dialog.value;
 
-    if (index === -1) items.value.push(item as UnwrapRefSimple<T>);
-    else items.value.splice(index, 1, item as UnwrapRefSimple<T>);
+    if (index === -1) items.value.push(item);
+    else items.value.splice(index, 1, item);
 
     reset();
   };

@@ -5,7 +5,7 @@
         <food-explorer :locale-id="id"></food-explorer>
       </v-col>
       <v-divider vertical></v-divider>
-      <v-col>
+      <v-col cols="7" lg="8" xl="8">
         <v-scroll-y-transition mode="out-in">
           <router-view></router-view>
         </v-scroll-y-transition>

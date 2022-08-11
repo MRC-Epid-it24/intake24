@@ -1,4 +1,4 @@
-import type { OmitAndOptional } from '..';
+import type { OmitAndOptional } from '../../common';
 import type {
   ClientErrorReportAttributes,
   JobAttributes,

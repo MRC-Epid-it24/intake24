@@ -1,13 +1,4 @@
-export type PortionSizeMethodId =
-  | 'as-served'
-  | 'guide-image'
-  | 'drink-scale'
-  | 'standard-portion'
-  | 'cereal'
-  | 'milk-on-cereal'
-  | 'pizza'
-  | 'milk-in-a-hot-drink'
-  | 'weight';
+import type { PortionSizeMethodId } from '../../recall';
 
 export type PortionSizeMethodParameterAttributes = {
   id: string;

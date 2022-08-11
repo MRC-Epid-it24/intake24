@@ -1,4 +1,4 @@
-import type { PortionSizeMethodId } from '../../models';
+import type { PortionSizeMethodId } from '../..';
 
 export type UserPortionSizeMethodParameters = { [name: string]: string };
 

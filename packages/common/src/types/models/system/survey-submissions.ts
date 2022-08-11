@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
-import type { OmitAndOptional } from '../model';
+import type { OmitAndOptional } from '../../common';
+import type { PortionSizeMethodId } from '../../recall';
 import type { UserAttributes } from './users';
 
 export type SurveySubmissionAttributes = {
@@ -76,7 +77,7 @@ export type SurveySubmissionFoodAttributes = {
   localName: string | null;
   readyMeal: boolean;
   searchTerm: string;
-  portionSizeMethodId: string;
+  portionSizeMethodId: PortionSizeMethodId;
   reasonableAmount: boolean;
   foodGroupId: string;
   foodGroupEnglishName: string;

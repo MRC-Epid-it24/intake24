@@ -202,12 +202,12 @@ import draggable from 'vuedraggable';
 import type { DemographicGroup } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
+import { useListWithDialog } from '@intake24/admin/components/lists';
 import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { useEntry } from '@intake24/admin/stores';
 import { nutrientRuleTypes, sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
 
-import { useList } from '..';
 import { getDemographicGroupDefaults } from './demographic-group';
 import DemographicGroupRange from './demographic-group-range.vue';
 import DemographicGroupSectors from './demographic-group-sectors.vue';
@@ -235,11 +235,8 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } = useList(
-      props,
-      context,
-      getDemographicGroupDefaults
-    );
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } =
+      useListWithDialog(props, context, getDemographicGroupDefaults);
 
     const tab = ref(0);
 
