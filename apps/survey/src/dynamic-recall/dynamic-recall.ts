@@ -225,7 +225,7 @@ export default class DynamicRecall {
     console.debug('Food/meal prompts complete');
 
     // Make sure post meals prompts are complete
-    nextPrompt = this.getNextSurveySectionPrompt('preMeals');
+    nextPrompt = this.getNextSurveySectionPrompt('postMeals');
     if (nextPrompt) return nextPrompt;
 
     console.debug('Post-meals prompts complete');
