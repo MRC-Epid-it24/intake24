@@ -5,7 +5,7 @@ import { ref, unref, watch } from 'vue';
 import type { Pagination } from '@intake24/common/types/models';
 import { httpService } from '@intake24/admin/services';
 
-export const useFetchList = <T = any>(url: string, id: string | Ref<string>) => {
+export const useFetchList = <T = any>(url: string, id?: string | Ref<string>) => {
   const dialog = ref(false);
   const loading = ref(false);
 
@@ -18,10 +18,12 @@ export const useFetchList = <T = any>(url: string, id: string | Ref<string>) => 
   const fetch = async () => {
     loading.value = true;
 
+    const apiUrl = id ? url.replace(':id', unref(id)) : url;
+
     try {
       const {
         data: { data, meta },
-      } = await httpService.get<Pagination<T>>(url.replace(':id', unref(id)), {
+      } = await httpService.get<Pagination<T>>(apiUrl, {
         params: { search: search.value, page: page.value, limit: 6 },
       });
 

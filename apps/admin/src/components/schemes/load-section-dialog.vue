@@ -34,31 +34,34 @@
           clearable
           hide-details="auto"
           outlined
-          @click:append="fetch"
           @click:clear="clear"
-          @keyup.enter="fetch"
         >
         </v-text-field>
-        <v-list v-if="schemes.length" min-height="350px">
-          <v-list-item-group v-model="selectedId">
-            <template v-for="(scheme, idx) in schemes">
-              <v-list-item :key="scheme.id" :value="scheme.id">
-                <template v-slot:default="{ active }">
-                  <v-list-item-action>
-                    <v-checkbox :input-value="active"></v-checkbox>
-                  </v-list-item-action>
-                  <v-list-item-avatar>
-                    <v-icon>fa-route</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ scheme.name }}</v-list-item-title>
-                  </v-list-item-content>
-                </template>
-              </v-list-item>
-              <v-divider v-if="idx + 1 < schemes.length" :key="`div-${scheme.id}`"></v-divider>
-            </template>
-          </v-list-item-group>
-        </v-list>
+        <template v-if="items.length">
+          <v-list min-height="350px" dense>
+            <v-list-item-group v-model="selected">
+              <template v-for="(item, idx) in items">
+                <v-list-item :key="item.id" :value="item.id">
+                  <template v-slot:default="{ active }">
+                    <v-list-item-action>
+                      <v-checkbox :input-value="active"></v-checkbox>
+                    </v-list-item-action>
+                    <v-list-item-avatar>
+                      <v-icon>fa-route</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item.name }}</v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </v-list-item>
+                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
+              </template>
+            </v-list-item-group>
+          </v-list>
+          <div class="text-center">
+            <v-pagination v-model="page" :length="lastPage" circle></v-pagination>
+          </div>
+        </template>
         <v-alert v-else color="primary" text type="info">
           {{ $t(`${schemeType}-schemes.none`) }}
         </v-alert>
@@ -71,7 +74,7 @@
         <v-btn
           class="font-weight-bold"
           color="blue darken-3"
-          :disabled="!selectedId"
+          :disabled="!selected"
           text
           @click.stop="confirm"
         >
@@ -84,16 +87,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import debounce from 'lodash/debounce';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
-import type {
-  FeedbackSchemeEntry,
-  FeedbackSchemesResponse,
-  SurveySchemeEntry,
-  SurveySchemesResponse,
-} from '@intake24/common/types/http/admin';
+import type { FeedbackSchemeEntry, SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
+
+import { useFetchList } from '../lists';
 
 export type SchemeEntry = FeedbackSchemeEntry | SurveySchemeEntry;
 
@@ -144,52 +143,46 @@ export default defineComponent({
     },
   },
 
-  data() {
+  setup(props) {
+    const selected = ref<string | undefined>();
+
+    const { dialog, loading, page, lastPage, search, items, fetch, clear } =
+      useFetchList<SchemeEntry>(`admin/${props.schemeType}-schemes`);
+
     return {
+      dialog,
+      loading,
+      items,
+      page,
+      lastPage,
+      search,
+      selected,
+      fetch,
+      clear,
       feedbackSchemeSections,
       surveySchemeSections,
-      dialog: false,
-      loading: false,
-      search: null as string | null,
-      schemes: [] as SchemeEntry[],
-      selectedId: undefined as string | undefined,
     };
   },
 
   computed: {
     selectedSection(): any | undefined {
-      const { section, selectedId } = this;
-      if (!selectedId) return undefined;
+      const { section, selected } = this;
+      if (!selected) return undefined;
 
-      const scheme = this.schemes.find((item) => item.id === selectedId);
-      if (!scheme) return undefined;
+      const item = this.items.find((item) => item.id === selected);
+      if (!item) return undefined;
 
-      if (isFeedbackSchemeEntry(scheme) && isFeedbackSchemeSection(section)) return scheme[section];
+      if (isFeedbackSchemeEntry(item) && isFeedbackSchemeSection(section)) return item[section];
 
-      if (isSurveySchemeEntry(scheme) && isSurveySchemeSection(section)) return scheme[section];
+      if (isSurveySchemeEntry(item) && isSurveySchemeSection(section)) return item[section];
 
       return undefined;
     },
   },
 
-  watch: {
-    async dialog(val) {
-      if (val && !this.schemes.length) await this.fetch();
-    },
-    search() {
-      //@ts-expect-error debounced
-      this.debouncedFetch();
-    },
-  },
-
-  created() {
-    this.debouncedFetch = debounce(() => {
-      this.fetch();
-    }, 500);
-  },
-
   methods: {
     close() {
+      this.selected = undefined;
       this.dialog = false;
     },
 
@@ -200,32 +193,8 @@ export default defineComponent({
     confirm() {
       if (!this.selectedSection) return;
 
-      this.close();
       this.$emit('load', copy(this.selectedSection));
-    },
-
-    async fetch() {
-      this.loading = true;
-
-      try {
-        const {
-          data: { data },
-        } = await this.$http.get<FeedbackSchemesResponse | SurveySchemesResponse>(
-          `admin/${this.schemeType}-schemes`,
-          { params: { search: this.search, limit: 10 } }
-        );
-
-        this.schemes = (data as SchemeEntry[])
-          .filter((item) => item.id !== this.schemeId)
-          .slice(0, 5);
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async clear() {
-      this.search = null;
-      await this.fetch();
+      this.close();
     },
   },
 });
