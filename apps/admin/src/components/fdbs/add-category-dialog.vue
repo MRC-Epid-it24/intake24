@@ -34,29 +34,34 @@
           @click:clear="clear"
         >
         </v-text-field>
-        <v-alert v-if="itemAlreadyIncluded" text type="error">
+        <v-alert v-if="isAlreadyIncluded" text type="error">
           {{ $t('fdbs.categories.alreadyIncluded', { code: selectedItems[0].code }) }}
         </v-alert>
-        <v-list v-if="items.length" min-height="350px" two-line>
-          <v-list-item-group v-model="selected" multiple>
-            <template v-for="(item, idx) in items">
-              <v-list-item :key="item.code" :value="item.code">
-                <template v-slot:default="{ active }">
-                  <v-list-item-action>
-                    <v-checkbox :input-value="active"></v-checkbox>
-                  </v-list-item-action>
-                  <v-list-item-avatar>
-                    <v-icon>fa-list</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
-                  </v-list-item-content>
-                </template>
-              </v-list-item>
-              <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`"></v-divider>
-            </template>
-          </v-list-item-group>
-        </v-list>
+        <template v-if="items.length">
+          <v-list min-height="350px" dense>
+            <v-list-item-group v-model="selected" multiple>
+              <template v-for="(item, idx) in items">
+                <v-list-item :key="item.code" :value="item.code">
+                  <template v-slot:default="{ active }">
+                    <v-list-item-action>
+                      <v-checkbox :input-value="active"></v-checkbox>
+                    </v-list-item-action>
+                    <v-list-item-avatar>
+                      <v-icon>fa-list</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </v-list-item>
+                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`"></v-divider>
+              </template>
+            </v-list-item-group>
+          </v-list>
+          <div class="text-center">
+            <v-pagination v-model="page" :length="lastPage" circle></v-pagination>
+          </div>
+        </template>
         <v-alert v-else color="primary" text type="info">
           {{ $t('fdbs.categories.none') }}
         </v-alert>
@@ -69,7 +74,7 @@
         <v-btn
           class="font-weight-bold"
           color="blue darken-3"
-          :disabled="!selected.length || itemAlreadyIncluded"
+          :disabled="!selected.length || isAlreadyIncluded"
           text
           @click.stop="confirm"
         >
@@ -88,15 +93,15 @@ import type { CategoriesResponse, CategoryListEntry } from '@intake24/common/typ
 import type { CategoryAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';
 
-import { useFetchList } from './use-fetch-list';
+import { useFetchList } from '../lists';
 
 export default defineComponent({
   name: 'AddCategoryDialog',
 
   props: {
-    currentList: {
+    currentItems: {
       type: Array as PropType<CategoryAttributes[]>,
-      default: () => [],
+      required: true,
     },
     localeId: {
       type: String,
@@ -107,11 +112,11 @@ export default defineComponent({
   setup(props) {
     const selected = ref<string[]>([]);
 
-    const { dialog, loading, search, items, fetch, clear } = useFetchList<
+    const { dialog, loading, page, lastPage, search, items, fetch, clear } = useFetchList<
       CategoriesResponse['data'][number]
     >('admin/fdbs/:id/categories', props.localeId);
 
-    return { dialog, loading, items, search, selected, fetch, clear };
+    return { dialog, loading, items, page, lastPage, search, selected, fetch, clear };
   },
 
   computed: {
@@ -121,9 +126,9 @@ export default defineComponent({
 
       return this.items.filter((item) => selected.includes(item.code));
     },
-    itemAlreadyIncluded(): boolean {
-      if (!this.currentList.length || !this.selectedItems.length) return false;
-      const codes = this.currentList.map((item) => item.code);
+    isAlreadyIncluded(): boolean {
+      if (!this.currentItems.length || !this.selectedItems.length) return false;
+      const codes = this.currentItems.map((item) => item.code);
 
       return this.selectedItems.some((item) => codes.includes(item.code));
     },

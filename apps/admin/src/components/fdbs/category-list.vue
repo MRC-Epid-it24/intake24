@@ -8,13 +8,13 @@
       <add-category-dialog
         v-if="!disabled"
         :localeId="localeId"
-        :currentList="items"
+        :currentItems="items"
         @add="add"
       ></add-category-dialog>
     </v-toolbar>
     <v-list>
       <template v-for="(item, idx) in items">
-        <v-list-item :key="item.code">
+        <v-list-item :key="item.code" link>
           <v-list-item-avatar>
             <v-icon>fa-list</v-icon>
           </v-list-item-avatar>

@@ -103,7 +103,7 @@ import { tinymce } from '@intake24/admin/components/tinymce';
 import { sentiments } from '@intake24/common/feedback';
 import { copy } from '@intake24/common/util';
 
-import { demographicGroupScaleSectorDefaults } from '.';
+import { demographicGroupScaleSectorDefaults } from './demographic-group';
 
 export default defineComponent({
   name: 'DemographicGroupSectors',

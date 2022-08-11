@@ -45,31 +45,36 @@
             </v-text-field>
           </v-col>
         </v-row>
-        <v-alert v-if="itemAlreadyIncluded" text type="error">
+        <v-alert v-if="isAlreadyIncluded" text type="error">
           {{ $t('fdbs.nutrients.alreadyIncluded', { id: selectedRecord?.id }) }}
         </v-alert>
-        <v-list v-if="items.length" min-height="350px" dense>
-          <v-list-item-group v-model="selectedRecordId">
-            <template v-for="(item, idx) in items">
-              <v-list-item :key="item.id" :value="item.id">
-                <template v-slot:default="{ active }">
-                  <v-list-item-action>
-                    <v-checkbox :input-value="active"></v-checkbox>
-                  </v-list-item-action>
-                  <v-list-item-avatar>
-                    <v-icon>fa-list</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{ item.nutrientTableRecordId }} | {{ item.name }}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </template>
-              </v-list-item>
-              <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
-            </template>
-          </v-list-item-group>
-        </v-list>
+        <template v-if="items.length">
+          <v-list min-height="350px" dense>
+            <v-list-item-group v-model="selectedRecordId">
+              <template v-for="(item, idx) in items">
+                <v-list-item :key="item.id" :value="item.id">
+                  <template v-slot:default="{ active }">
+                    <v-list-item-action>
+                      <v-checkbox :input-value="active"></v-checkbox>
+                    </v-list-item-action>
+                    <v-list-item-avatar>
+                      <v-icon>fa-list</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{ item.nutrientTableRecordId }} | {{ item.name }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </v-list-item>
+                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
+              </template>
+            </v-list-item-group>
+          </v-list>
+          <div class="text-center">
+            <v-pagination v-model="page" :length="lastPage" circle></v-pagination>
+          </div>
+        </template>
         <v-alert v-else color="primary" text type="info">
           {{ $t('fdbs.nutrients.none') }}
         </v-alert>
@@ -82,7 +87,7 @@
         <v-btn
           class="font-weight-bold"
           color="blue darken-3"
-          :disabled="!selectedRecordId || itemAlreadyIncluded"
+          :disabled="!selectedRecordId || isAlreadyIncluded"
           text
           @click.stop="confirm"
         >
@@ -104,15 +109,15 @@ import type {
 import type { NutrientTableRecordAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';
 
-import { useFetchList } from './use-fetch-list';
+import { useFetchList } from '../lists';
 
 export default defineComponent({
   name: 'AddNutrientDialog',
 
   props: {
-    currentList: {
+    currentItems: {
       type: Array as PropType<NutrientTableRecordAttributes[]>,
-      default: () => [],
+      required: true,
     },
     nutrientTables: {
       type: Array as PropType<FoodDatabaseRefs['nutrientTables']>,
@@ -126,11 +131,22 @@ export default defineComponent({
     );
     const selectedRecordId = ref<string | null>(null);
 
-    const { dialog, loading, search, items, fetch, clear } = useFetchList<
+    const { dialog, loading, page, lastPage, search, items, fetch, clear } = useFetchList<
       NutrientTableRecordsResponse['data'][number]
     >('admin/nutrient-tables/:id/records', selectedTableId);
 
-    return { dialog, loading, items, search, selectedRecordId, selectedTableId, fetch, clear };
+    return {
+      dialog,
+      loading,
+      items,
+      page,
+      lastPage,
+      search,
+      selectedRecordId,
+      selectedTableId,
+      fetch,
+      clear,
+    };
   },
 
   computed: {
@@ -140,10 +156,10 @@ export default defineComponent({
 
       return this.items.find((item) => item.id === selectedRecordId) ?? null;
     },
-    itemAlreadyIncluded(): boolean {
-      if (!this.currentList.length || !this.selectedRecordId) return false;
+    isAlreadyIncluded(): boolean {
+      if (!this.currentItems.length || !this.selectedRecordId) return false;
 
-      return !!this.currentList.find((item) => item.id === this.selectedRecordId);
+      return !!this.currentItems.find((item) => item.id === this.selectedRecordId);
     },
   },
 

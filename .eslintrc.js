@@ -18,9 +18,9 @@ module.exports = defineConfig({
   ],
   plugins: ['import', 'prettier', 'simple-import-sort', '@typescript-eslint'],
   rules: {
-    "import/first": "error",
-    "import/newline-after-import": "error",
-    "import/no-duplicates": "error",
+    'import/first': 'error',
+    'import/newline-after-import': 'error',
+    'import/no-duplicates': 'error',
     'prettier/prettier': 'error',
     'simple-import-sort/imports': [
       'error',

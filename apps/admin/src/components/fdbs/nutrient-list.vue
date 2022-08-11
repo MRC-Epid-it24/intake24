@@ -7,14 +7,14 @@
       <v-spacer></v-spacer>
       <add-nutrient-dialog
         v-if="!disabled"
-        :currentList="items"
+        :currentItems="items"
         :nutrientTables="nutrientTables"
         @add="add"
       ></add-nutrient-dialog>
     </v-toolbar>
     <v-list two-line>
       <template v-for="(item, idx) in items">
-        <v-list-item :key="item.id">
+        <v-list-item :key="item.id" link>
           <v-list-item-avatar>
             <v-icon>fa-seedling</v-icon>
           </v-list-item-avatar>
