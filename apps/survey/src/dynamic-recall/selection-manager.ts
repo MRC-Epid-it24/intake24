@@ -30,11 +30,12 @@ export default class SelectionManager {
     const mealIndex = getMealIndexRequired(currentState.meals, mealId);
 
     for (let foodIndex = 0; foodIndex < currentState.meals[mealIndex].foods.length; ++foodIndex) {
-      if (this.foodPromptsAvailable(currentState.meals[mealIndex].foods[foodIndex].id))
+      const foodId = currentState.meals[mealIndex].foods[foodIndex].id;
+      if (this.foodPromptsAvailable(foodId))
         return {
           element: {
             type: 'food',
-            foodId: currentState.meals[mealIndex].foods[foodIndex].id,
+            foodId,
           },
           mode: 'auto',
         };
@@ -47,7 +48,7 @@ export default class SelectionManager {
     const { currentState } = this.store;
 
     for (let mealIndex = 0; mealIndex < currentState.meals.length; mealIndex++) {
-      const selection = this.tryAnyFood(mealIndex);
+      const selection = this.tryAnyFood(currentState.meals[mealIndex].id);
 
       if (selection !== undefined) return selection;
     }
@@ -58,11 +59,13 @@ export default class SelectionManager {
     const { currentState } = this.store;
 
     for (let mealIndex = 0; mealIndex < currentState.meals.length; mealIndex++) {
-      if (this.mealPromptsAvailable(mealIndex))
+      const mealId = currentState.meals[mealIndex].id;
+
+      if (this.mealPromptsAvailable(mealId))
         return {
           element: {
             type: 'meal',
-            mealId: currentState.meals[mealIndex].id,
+            mealId,
           },
           mode: 'auto',
         };
@@ -70,7 +73,7 @@ export default class SelectionManager {
     return undefined;
   }
 
-  nextSelection(): Selection | undefined {
-    return this.tryFoodInAnyMeal() ?? this.tryAnyMeal();
+  nextSelection(): Selection {
+    return this.tryFoodInAnyMeal() ?? this.tryAnyMeal() ?? { mode: 'auto', element: null };
   }
 }
