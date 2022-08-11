@@ -79,12 +79,12 @@ export default defineComponent({
           case 'food': {
             if (this.promptComponent === 'info-prompt')
               this.survey.setFoodFlag({
-                foodId: this.selectedFood.id,
+                foodId: this.selectedFood().id,
                 flag: `${this.promptId}-acknowledged`,
               });
             else
               this.survey.setFoodCustomPromptAnswer({
-                foodId: this.selectedFood.id,
+                foodId: this.selectedFood().id,
                 promptId: this.promptId,
                 answer: this.answer,
               });
