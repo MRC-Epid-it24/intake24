@@ -80,16 +80,14 @@
               </v-row>
             </v-col>
             <v-divider vertical></v-divider>
-            <v-col cols="6"> </v-col>
+            <v-col cols="6">
+              <component
+                :is="dialog.item.method"
+                v-model="dialog.item.parameters"
+                @validate="validate"
+              ></component>
+            </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12"> </v-col>
-          </v-row>
-          <!-- <component
-            :is="dialog.item.method"
-            v-bind.sync="dialog.item"
-            @validate="validate"
-          ></component> -->
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
               <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
@@ -108,63 +106,11 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import type { Optional } from '@intake24/common/types';
-import type { PortionSizeMethodAttributes } from '@intake24/common/types/models';
 import { copy, merge, randomString } from '@intake24/common/util';
 
-import { portionSizeSelectionImages } from './portion-sizes';
-
-export type PortionSizeMethodDialog = {
-  show: boolean;
-  index: number;
-  item: PortionSizeMethodAttributes;
-};
-
-const psmDefaultAttributes: Omit<PortionSizeMethodAttributes, 'id' | 'method'> = {
-  description: '',
-  imageUrl: '',
-  useForRecipes: false,
-  conversionFactor: 1,
-};
-
-const psmDefaults: Optional<PortionSizeMethodAttributes, 'id'>[] = [
-  {
-    method: 'as-served',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'guide-image',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'drink-scale',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'standard-portion',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'cereal',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'milk-on-cereal',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'pizza',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'milk-in-a-hot-drink',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'weight',
-    ...psmDefaultAttributes,
-  },
-];
+import type { InternalPortionSizeMethodItem, PortionSizeMethodDialog } from './portion-sizes';
+import portionSizeParams from './parameters';
+import { portionSizeSelectionImages, psmDefaults } from './portion-sizes';
 
 export default defineComponent({
   name: 'PortionSizeMethodSelector',
@@ -177,7 +123,7 @@ export default defineComponent({
   },
 
   components: {
-    // ...portionSizeTypeParams,
+    ...portionSizeParams,
   },
 
   setup() {
@@ -190,12 +136,12 @@ export default defineComponent({
     const dialog = (show = false): PortionSizeMethodDialog => ({
       show,
       index: -1,
-      item: copy({ ...psmDefaults[0], id: randomString(6) }),
+      item: copy({ ...psmDefaults[0], _id: randomString(6) }),
     });
 
     const estimationMethods = psmDefaults.map(({ method: value }) => ({
       value,
-      text: this.$t(`fdbs.portionSizeMethods.methods.${value}`),
+      text: this.$t(`fdbs.portionSizeMethods.methods.${value}._`),
     }));
 
     const selections = Object.keys(portionSizeSelectionImages)
@@ -226,14 +172,14 @@ export default defineComponent({
       const item = this.psmDefaults.find((item) => item.method === method);
       if (!item) return;
 
-      this.dialog = { show, index, item: copy({ ...item, id: randomString(6) }) };
+      this.dialog = { show, index, item: copy({ ...item, _id: randomString(6) }) };
     },
 
     add() {
       this.dialog = this.newDialog(true);
     },
 
-    edit(index: number, item: PortionSizeMethodAttributes) {
+    edit(index: number, item: InternalPortionSizeMethodItem) {
       const defaults = this.psmDefaults.find((d) => d.method === item.method);
       if (!defaults) {
         console.warn(`Portion size method defaults for method '${item.method}' not found.`);
@@ -243,7 +189,7 @@ export default defineComponent({
       this.dialog = {
         show: true,
         index,
-        item: copy(merge<PortionSizeMethodAttributes>(defaults, item)),
+        item: copy(merge(defaults, item)),
       };
     },
 

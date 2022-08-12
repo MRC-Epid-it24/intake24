@@ -7,7 +7,7 @@
     </template>
     <v-card :loading="loading">
       <v-toolbar color="primary" dark flat>
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="cancel">
+        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="close">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -80,7 +80,7 @@
         </v-alert>
       </v-card-text>
       <v-card-actions>
-        <v-btn class="font-weight-bold" color="error" text @click.stop="cancel">
+        <v-btn class="font-weight-bold" color="error" text @click.stop="close">
           <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
         </v-btn>
         <v-spacer></v-spacer>
@@ -167,10 +167,6 @@ export default defineComponent({
     close() {
       this.selectedRecordId = null;
       this.dialog = false;
-    },
-
-    cancel() {
-      this.close();
     },
 
     confirm() {

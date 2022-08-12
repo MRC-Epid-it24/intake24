@@ -97,15 +97,38 @@ const fdbs: LocaleMessageObject = {
 
     methods: {
       _: 'Estimation method',
-      'as-served': 'As served',
-      'guide-image': 'Guide image',
-      'drink-scale': 'Drink scale',
-      'standard-portion': 'Standard portion',
-      cereal: 'Cereal',
-      'milk-on-cereal': 'Milk on cereal',
-      pizza: 'Pizza',
-      'milk-in-a-hot-drink': 'Milk in a hot drink',
-      weight: 'Weight',
+      parameters: 'parameters',
+      noParameters: 'Estimation method does not have any further parameters.',
+      'as-served': {
+        _: 'As served',
+        servingImageSet: 'Serving image set',
+        leftoverImageSet: 'Leftover image set',
+        removeLeftoverImageSet: 'Remove leftover image set',
+      },
+      'guide-image': {
+        _: 'Guide image',
+      },
+      'drink-scale': {
+        _: 'Drink scale',
+      },
+      'standard-portion': {
+        _: 'Standard portion',
+      },
+      cereal: {
+        _: 'Cereal',
+      },
+      'milk-on-cereal': {
+        _: 'Milk on cereal',
+      },
+      pizza: {
+        _: 'Pizza',
+      },
+      'milk-in-a-hot-drink': {
+        _: 'Milk in a hot drink',
+      },
+      weight: {
+        _: 'Weight',
+      },
     },
 
     selections: {

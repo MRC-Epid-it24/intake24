@@ -1,16 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn
-        v-bind="attrs"
-        v-on="on"
-        color="secondary"
-        fab
-        small
-        :title="$t('fdbs.categories.add')"
-      >
-        <v-icon>$add</v-icon>
-      </v-btn>
+      <slot name="activator" v-bind="{ on, attrs }"></slot>
     </template>
     <v-card :loading="loading">
       <v-toolbar color="primary" dark flat>
@@ -18,7 +9,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t('fdbs.categories.title') }}
+          {{ $t(`${resource}.title`) }}
         </v-toolbar-title>
       </v-toolbar>
       <v-card-text class="pa-6">
@@ -34,14 +25,11 @@
           @click:clear="clear"
         >
         </v-text-field>
-        <v-alert v-if="isAlreadyIncluded" text type="error">
-          {{ $t('fdbs.categories.alreadyIncluded', { code: selectedItems[0].code }) }}
-        </v-alert>
         <template v-if="items.length">
           <v-list min-height="350px" dense>
-            <v-list-item-group v-model="selected" multiple>
+            <v-list-item-group v-model="selectedItemId">
               <template v-for="(item, idx) in items">
-                <v-list-item :key="item.code" :value="item.code">
+                <v-list-item :key="item[itemId]" :value="item[itemId]">
                   <template v-slot:default="{ active }">
                     <v-list-item-action>
                       <v-checkbox :input-value="active"></v-checkbox>
@@ -50,11 +38,13 @@
                       <v-icon>fa-list</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
+                      <v-list-item-title>
+                        {{ item[itemId] }} | {{ item[itemName] }}
+                      </v-list-item-title>
                     </v-list-item-content>
                   </template>
                 </v-list-item>
-                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`"></v-divider>
+                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
               </template>
             </v-list-item-group>
           </v-list>
@@ -63,7 +53,7 @@
           </div>
         </template>
         <v-alert v-else color="primary" text type="info">
-          {{ $t('fdbs.categories.none') }}
+          {{ $t('common.search.none') }}
         </v-alert>
       </v-card-text>
       <v-card-actions>
@@ -74,7 +64,7 @@
         <v-btn
           class="font-weight-bold"
           color="blue darken-3"
-          :disabled="!selected.length || isAlreadyIncluded"
+          :disabled="!selectedItemId"
           text
           @click.stop="confirm"
         >
@@ -86,64 +76,72 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { CategoriesResponse, CategoryListEntry } from '@intake24/common/types/http/admin';
-import type { CategoryAttributes } from '@intake24/common/types/models';
+import { getResource } from '@intake24/admin/router/resources';
 import { copy } from '@intake24/common/util';
 
-import { useFetchList } from '../lists';
+import { useFetchList } from '../../lists';
 
 export default defineComponent({
-  name: 'AddCategoryDialog',
+  name: 'SelectResourceDialog',
 
   props: {
-    currentItems: {
-      type: Array as PropType<CategoryAttributes[]>,
-      required: true,
+    itemId: {
+      type: String,
+      default: 'id',
     },
-    localeId: {
+    itemName: {
+      type: String,
+      default: 'description',
+    },
+    resource: {
       type: String,
       required: true,
     },
   },
 
   setup(props) {
-    const selected = ref<string[]>([]);
+    const selectedItemId = ref<string | null>(null);
 
-    const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<
-      CategoriesResponse['data'][number]
-    >('admin/fdbs/:id/categories', props.localeId);
+    const resource = getResource(props.resource);
+    if (!resource) throw Error('Invalid resource');
 
-    return { dialog, loading, items, page, lastPage, search, selected, clear };
+    const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<any>(
+      resource.api
+    );
+
+    return {
+      dialog,
+      loading,
+      items,
+      page,
+      lastPage,
+      search,
+      selectedItemId,
+      clear,
+    };
   },
 
   computed: {
-    selectedItems(): CategoryListEntry[] {
-      const { selected } = this;
-      if (!selected.length) return [];
+    selectedRecord(): any | null {
+      const { selectedItemId } = this;
+      if (!selectedItemId) return null;
 
-      return this.items.filter((item) => selected.includes(item.code));
-    },
-    isAlreadyIncluded(): boolean {
-      if (!this.currentItems.length || !this.selectedItems.length) return false;
-      const codes = this.currentItems.map((item) => item.code);
-
-      return this.selectedItems.some((item) => codes.includes(item.code));
+      return this.items.find((item) => item.id === selectedItemId) ?? null;
     },
   },
 
   methods: {
     close() {
-      this.selected = [];
+      this.selectedRecordId = null;
       this.dialog = false;
     },
 
     confirm() {
-      if (!this.selectedItems.length) return;
+      if (!this.selectedRecord) return;
 
-      this.$emit('add', copy(this.selectedItems));
+      this.$emit('add', copy(this.selectedRecord));
       this.close();
     },
   },

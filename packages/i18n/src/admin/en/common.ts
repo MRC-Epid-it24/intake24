@@ -99,6 +99,7 @@ const common: LocaleMessageObject = {
     clear: 'Clear filter',
     count: 'Records count',
     selected: 'Records selected',
+    none: 'No records found',
   },
 
   redirect: 'Redirect to new entry',

@@ -2,7 +2,7 @@ import type { Resource } from '@intake24/admin/types';
 
 const routes: string[] = ['create', 'read', 'edit'];
 
-const resources: Resource[] = [
+export const resources: Resource[] = [
   // Food databases
   {
     group: 'fdb',
@@ -168,5 +168,7 @@ const resources: Resource[] = [
     routes: [...routes],
   },
 ];
+
+export const getResource = (name: string) => resources.find((resource) => resource.name === name);
 
 export default resources;

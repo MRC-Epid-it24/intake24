@@ -95,7 +95,8 @@ import type { PropType } from 'vue';
 import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 
-import type { Attributes, AttributeType, Nullable } from '@intake24/common/types/models';
+import type { Nullable } from '@intake24/common/types';
+import type { Attributes, AttributeType } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';
 import { useInRecipeTypes } from '@intake24/common/types/models';
 
