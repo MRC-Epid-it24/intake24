@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as s,a as n}from"./app.a5ef0a85.js";const y=JSON.parse('{"title":"Generate key / secret","description":"","frontmatter":{},"headers":[],"relativePath":"cli/generate-key.md"}'),t={name:"cli/generate-key.md"},c=n("",5),r=[c];function p(l,o,i,d,_,h){return s(),a("div",null,r)}var k=e(t,[["render",p]]);export{y as __pageData,k as default};
