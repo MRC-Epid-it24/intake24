@@ -48,6 +48,7 @@ declare module '@vue/runtime-core' {
     FeedbackTopFoodsNutrientList: typeof import('./src/components/feedback/top-foods/nutrient-list.vue')['default']
     FormsAutoComplete: typeof import('./src/components/forms/auto-complete.vue')['default']
     FormsLanguageSelector: typeof import('./src/components/forms/language-selector.vue')['default']
+    FormsSelectResource: typeof import('./src/components/forms/select-resource.vue')['default']
     FormsSubmitFooter: typeof import('./src/components/forms/submit-footer.vue')['default']
     GalleryGallery: typeof import('./src/components/gallery/gallery.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']

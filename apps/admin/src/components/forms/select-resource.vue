@@ -80,7 +80,7 @@ import { defineComponent, ref } from 'vue';
 
 import { copy } from '@intake24/common/util';
 
-import { useFetchList } from '../../lists';
+import { useFetchList } from '../lists';
 
 export default defineComponent({
   name: 'SelectResourceDialog',
@@ -97,6 +97,13 @@ export default defineComponent({
     resource: {
       type: String,
       required: true,
+    },
+    returnObject: {
+      type: Boolean,
+      default: false,
+    },
+    value: {
+      type: String,
     },
   },
 
@@ -120,7 +127,7 @@ export default defineComponent({
   },
 
   computed: {
-    selectedRecord(): any | null {
+    selectedItem(): any | null {
       const { selectedItemId } = this;
       if (!selectedItemId) return null;
 
@@ -130,14 +137,14 @@ export default defineComponent({
 
   methods: {
     close() {
-      this.selectedRecordId = null;
+      this.selectedItemId = null;
       this.dialog = false;
     },
 
     confirm() {
-      if (!this.selectedRecord) return;
+      if (!this.selectedItem) return;
 
-      this.$emit('add', copy(this.selectedRecord));
+      this.$emit('input', this.returnObject ? copy(this.selectedItem) : this.selectedItemId);
       this.close();
     },
   },

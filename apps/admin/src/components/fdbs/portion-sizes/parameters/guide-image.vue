@@ -1,27 +1,27 @@
 <template>
-  <v-list>
-    <v-list-item link>
-      <v-list-item-content>
-        {{ $t('fdbs.portionSizes.methods.guide-image._') }}
-      </v-list-item-content>
-      <v-list-item-action>
-        <select-resource-dialog resource="guide-images" @add="setGuideImage">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" v-on="on" link text :title="$t('common.search._')">
-              <v-icon left>fas fa-image</v-icon>
-              {{ selectedGuideImage ?? $t('common.not.selected') }}
-            </v-btn>
-          </template>
-        </select-resource-dialog>
-      </v-list-item-action>
-    </v-list-item>
-  </v-list>
+  <v-row>
+    <v-col cols="12">
+      <select-resource resource="guide-images" v-model="guideImageId">
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-bind="attrs"
+            v-on="on"
+            :label="$t('fdbs.portionSizes.methods.guide-image._')"
+            :value="guideImageId"
+            hide-details="auto"
+            name="guide-image-id"
+            prepend-inner-icon="fas fa-image"
+            outlined
+            readonly
+          ></v-text-field>
+        </template>
+      </select-resource>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
-import type { GuideImagesResponse } from '@intake24/common/types/http/admin';
 
 import selectsResource from './selectsResource';
 
@@ -31,14 +31,13 @@ export default defineComponent({
   mixins: [selectsResource],
 
   computed: {
-    selectedGuideImage(): string | undefined {
-      return this.items.find((item) => item.name === 'guide-image-id')?.value;
-    },
-  },
-
-  methods: {
-    setGuideImage(image: GuideImagesResponse['data'][number]) {
-      this.setParameter('guide-image-id', image.id);
+    guideImageId: {
+      get(): string | undefined {
+        return this.getParameter('guide-image-id')?.value;
+      },
+      set(value: string) {
+        this.setParameter('guide-image-id', value);
+      },
     },
   },
 });

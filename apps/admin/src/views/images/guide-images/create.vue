@@ -15,25 +15,26 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-select
+              <select-resource
+                resource="image-maps"
                 v-model="form.imageMapId"
-                :items="refs.imageMaps"
-                :label="$t('image-maps._')"
-                :error-messages="form.errors.get('imageMapId')"
-                item-value="id"
-                item-text="description"
-                hide-details="auto"
-                name="imageMapId"
-                outlined
-                @change="form.errors.clear('imageMapId')"
+                @input="form.errors.clear('imageMapId')"
               >
-                <template v-slot:item="{ item }">
-                  {{ `${item.id} (${item.description})` }}
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-bind="attrs"
+                    v-on="on"
+                    :error-messages="form.errors.get('imageMapId')"
+                    :label="$t('guide-images.id')"
+                    :value="form.imageMapId"
+                    hide-details="auto"
+                    name="imageMapId"
+                    clearable
+                    outlined
+                    readonly
+                  ></v-text-field>
                 </template>
-                <template v-slot:selection="{ item }">
-                  {{ `${item.id} (${item.description})` }}
-                </template>
-              </v-select>
+              </select-resource>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -58,6 +59,7 @@ import { defineComponent } from 'vue';
 
 import type { GuideImageEntry, GuideImageRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { SelectResource } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
 
 type CreateGuideImageForm = {
@@ -68,6 +70,8 @@ type CreateGuideImageForm = {
 
 export default defineComponent({
   name: 'CreateGuideImageForm',
+
+  components: { SelectResource },
 
   mixins: [formMixin],
 

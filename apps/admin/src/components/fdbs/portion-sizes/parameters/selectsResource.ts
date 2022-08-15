@@ -2,8 +2,9 @@ import type { PropType } from 'vue';
 import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 
+import { SelectResource } from '@intake24/admin/components/forms';
+
 import type { PortionSizeMethodParameterItem } from '..';
-import SelectResourceDialog from '../select-resource-dialog.vue';
 
 export default defineComponent({
   name: 'SelectsResource',
@@ -15,7 +16,7 @@ export default defineComponent({
     },
   },
 
-  components: { SelectResourceDialog },
+  components: { SelectResource },
 
   data() {
     return { items: [...this.value] };
