@@ -12,7 +12,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t(`fdbs.portionSizeMethods.${dialog.index === -1 ? 'add' : 'edit'}`) }}
+          {{ $t(`fdbs.portionSizes.${dialog.index === -1 ? 'add' : 'edit'}`) }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
@@ -24,13 +24,16 @@
       <v-form ref="form" @submit.prevent="save">
         <v-container>
           <v-row class="mt-2">
-            <v-col cols="6">
+            <v-col cols="12" md="6">
+              <v-card-title class="px-0">
+                {{ $t(`fdbs.portionSizes._`) }} {{ $t('fdbs.portionSizes.parameters') }}
+              </v-card-title>
               <v-row>
                 <v-col cols="12">
                   <v-select
                     v-model="dialog.item.description"
                     :items="selections"
-                    :label="$t('fdbs.portionSizeMethods.description')"
+                    :label="$t('fdbs.portionSizes.description')"
                     hide-details="auto"
                     name="method"
                     outlined
@@ -40,7 +43,7 @@
                 <v-col cols="12">
                   <v-text-field
                     v-model="dialog.item.imageUrl"
-                    :label="$t('fdbs.portionSizeMethods.imageUrl')"
+                    :label="$t('fdbs.portionSizes.imageUrl')"
                     clearable
                     hide-details="auto"
                     outlined
@@ -50,14 +53,14 @@
                 <v-col cols="12">
                   <v-switch
                     v-model="dialog.item.useForRecipes"
-                    :label="$t('fdbs.portionSizeMethods.useForRecipes')"
+                    :label="$t('fdbs.portionSizes.useForRecipes')"
                     hide-details="auto"
                   ></v-switch>
                 </v-col>
                 <v-col cols="12">
                   <v-slider
                     v-model="dialog.item.conversionFactor"
-                    :label="$t('fdbs.portionSizeMethods.conversionFactor')"
+                    :label="$t('fdbs.portionSizes.conversionFactor')"
                     :min="0.2"
                     :max="10"
                     :step="0.1"
@@ -69,7 +72,7 @@
                   <v-select
                     v-model="dialog.item.method"
                     :items="estimationMethods"
-                    :label="$t('fdbs.portionSizeMethods.methods._')"
+                    :label="$t('fdbs.portionSizes.methods._')"
                     hide-details="auto"
                     name="method"
                     outlined
@@ -80,7 +83,11 @@
               </v-row>
             </v-col>
             <v-divider vertical></v-divider>
-            <v-col cols="6">
+            <v-col cols="12" md="6">
+              <v-card-title class="px-0">
+                {{ $t(`fdbs.portionSizes.methods.${dialog.item.method}._`) }}
+                {{ $t('fdbs.portionSizes.parameters') }}
+              </v-card-title>
               <component
                 :is="dialog.item.method"
                 v-model="dialog.item.parameters"
@@ -141,13 +148,13 @@ export default defineComponent({
 
     const estimationMethods = psmDefaults.map(({ method: value }) => ({
       value,
-      text: this.$t(`fdbs.portionSizeMethods.methods.${value}._`),
+      text: this.$t(`fdbs.portionSizes.methods.${value}._`),
     }));
 
     const selections = Object.keys(portionSizeSelectionImages)
       .map((value) => ({
         value,
-        text: this.$t(`fdbs.portionSizeMethods.selections.${value}`),
+        text: this.$t(`fdbs.portionSizes.selections.${value}`),
       }))
       .sort((a, b) => (a.text > b.text ? 1 : -1));
 

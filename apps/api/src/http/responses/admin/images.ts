@@ -2,6 +2,7 @@ import type {
   AsServedImageEntry,
   AsServedSetEntry,
   AsServedSetListEntry,
+  DrinkwareSetListEntry,
   GuideImageEntry,
   GuideImageEntryObject,
   GuideImageListEntry,
@@ -12,25 +13,16 @@ import type {
 import type {
   AsServedImage,
   AsServedSet,
+  DrinkwareSet,
   GuideImage,
   ImageMap,
   ImageMapObject,
 } from '@intake24/db';
 import { InternalServerError } from '@intake24/api/http/errors';
 
-export interface ImageResponseCollection {
-  asServedImageEntryResponse: (item: AsServedImage) => AsServedImageEntry;
-  asServedSetListResponse: (item: AsServedSet) => AsServedSetListEntry;
-  asServedSetEntryResponse: (item: AsServedSet) => AsServedSetEntry;
-  guideListResponse: (item: GuideImage) => GuideImageListEntry;
-  guideEntryResponse: (item: GuideImage) => GuideImageEntry;
-  mapListResponse: (item: ImageMap) => ImageMapListEntry;
-  mapEntryResponse: (item: ImageMap) => ImageMapEntry;
-}
-
 type Weights = { [index: string]: number };
 
-export default (baseUrl: string): ImageResponseCollection => {
+const imageResponseCollection = (baseUrl: string) => {
   /**
    * As served image entry
    *
@@ -93,6 +85,26 @@ export default (baseUrl: string): ImageResponseCollection => {
       description,
       selectionImageUrl: `${baseUrl}/${selectionImage.path}`,
       images: images.map(asServedImageEntryResponse),
+    };
+  };
+
+  /**
+   * Drinkware set list entry
+   *
+   * @param {GuideImage} item
+   * @returns {DrinkwareSetListEntry}
+   */
+  const drinkwareListResponse = (item: DrinkwareSet): DrinkwareSetListEntry => {
+    const { id, description, guideImage, imageMap } = item;
+
+    let imageUrl: string | null = null;
+    if (guideImage?.selectionImage) imageUrl = `${baseUrl}/${guideImage.selectionImage.path}`;
+    else if (imageMap?.baseImage) imageUrl = `${baseUrl}/${imageMap.baseImage.path}`;
+
+    return {
+      id,
+      description,
+      imageUrl,
     };
   };
 
@@ -237,9 +249,14 @@ export default (baseUrl: string): ImageResponseCollection => {
     asServedImageEntryResponse,
     asServedSetListResponse,
     asServedSetEntryResponse,
+    drinkwareListResponse,
     guideListResponse,
     guideEntryResponse,
     mapListResponse,
     mapEntryResponse,
   };
 };
+
+export default imageResponseCollection;
+
+export type ImageResponseCollection = ReturnType<typeof imageResponseCollection>;

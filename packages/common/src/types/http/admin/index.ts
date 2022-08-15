@@ -1,5 +1,6 @@
 export * from './as-served';
 export * from './categories';
+export * from './drinkware-sets';
 export * from './fdbs';
 export * from './feedback-schemes';
 export * from './foods';

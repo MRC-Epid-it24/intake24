@@ -117,6 +117,15 @@ export const resources: Resource[] = [
     generateRoutes: true,
     routes: [...routes],
   },
+  {
+    group: 'images',
+    name: 'drinkware-sets',
+    path: 'images/drinkware',
+    icon: 'fas fa-mug-saucer',
+    api: 'admin/images/drinkware',
+    generateRoutes: true,
+    routes: [...routes],
+  },
   // System
   {
     group: 'system',

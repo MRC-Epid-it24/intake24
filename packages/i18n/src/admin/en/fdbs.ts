@@ -83,22 +83,22 @@ const fdbs: LocaleMessageObject = {
     none: 'No nutrient table record found for provided search.',
   },
 
-  portionSizeMethods: {
+  portionSizes: {
     _: 'Portion size method',
     title: 'Portion size methods',
     add: 'Add portion size method',
     edit: 'Edit portion size method',
     remove: 'Remove portion size method',
 
-    description: 'Description URL',
+    parameters: 'parameters',
+    noParameters: 'Method does not have any further parameters.',
+    description: 'Description',
     imageUrl: 'Image URL',
     useForRecipes: 'Use for recipes',
     conversionFactor: 'Conversion factor',
 
     methods: {
       _: 'Estimation method',
-      parameters: 'parameters',
-      noParameters: 'Estimation method does not have any further parameters.',
       'as-served': {
         _: 'As served',
         servingImageSet: 'Serving image set',
@@ -110,6 +110,9 @@ const fdbs: LocaleMessageObject = {
       },
       'drink-scale': {
         _: 'Drink scale',
+        drinkwareSet: 'Drinkware set',
+        initialLevel: 'Initial fill level',
+        skipFillLevelPrompt: 'Skip fill level prompt',
       },
       'standard-portion': {
         _: 'Standard portion',

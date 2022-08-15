@@ -1,12 +1,8 @@
 <template>
-  <v-list subheader>
-    <v-subheader>
-      {{ $t('fdbs.portionSizeMethods.methods.as-served._') }}
-      {{ $t('fdbs.portionSizeMethods.methods.parameters') }}
-    </v-subheader>
+  <v-list>
     <v-list-item link>
       <v-list-item-content>
-        {{ $t('fdbs.portionSizeMethods.methods.as-served.servingImageSet') }}
+        {{ $t('fdbs.portionSizes.methods.as-served.servingImageSet') }}
       </v-list-item-content>
       <v-list-item-action>
         <select-resource-dialog resource="as-served" @add="setServingImageSet">
@@ -20,9 +16,9 @@
       </v-list-item-action>
     </v-list-item>
     <v-divider></v-divider>
-    <v-list-item>
+    <v-list-item link>
       <v-list-item-content>
-        {{ $t('fdbs.portionSizeMethods.methods.as-served.leftoverImageSet') }}
+        {{ $t('fdbs.portionSizes.methods.as-served.leftoverImageSet') }}
       </v-list-item-content>
       <v-list-item-action>
         <select-resource-dialog resource="as-served" @add="setLeftoverImageSet">
@@ -38,7 +34,7 @@
         <v-btn
           icon
           color="error"
-          :title="$t('fdbs.portionSizeMethods.methods.as-served.removeLeftoverImageSet')"
+          :title="$t('fdbs.portionSizes.methods.as-served.removeLeftoverImageSet')"
           @click.stop="removeLeftoverImageSet"
         >
           <v-icon>$cancel</v-icon>
@@ -49,30 +45,16 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 
 import type { AsServedImagesResponse } from '@intake24/common/types/http/admin';
 
-import type { PortionSizeMethodParameterItem } from '..';
-import SelectResourceDialog from '../select-resource-dialog.vue';
+import selectsResource from './selectsResource';
 
 export default defineComponent({
   name: 'AsServedParameters',
 
-  props: {
-    value: {
-      type: Array as PropType<PortionSizeMethodParameterItem[]>,
-      required: true,
-    },
-  },
-
-  components: { SelectResourceDialog },
-
-  data() {
-    return { items: [...this.value] };
-  },
+  mixins: [selectsResource],
 
   computed: {
     selectedServingSet(): string | undefined {
@@ -83,40 +65,17 @@ export default defineComponent({
     },
   },
 
-  watch: {
-    value(val) {
-      if (isEqual(val, this.items)) return;
-
-      this.items = [...val];
-    },
-    items() {
-      this.$emit('input', this.items);
-    },
-  },
-
   methods: {
     setServingImageSet(image: AsServedImagesResponse['data'][number]) {
-      this.setImageSet(image, 'serving-image-set');
+      this.setParameter('serving-image-set', image.id);
     },
     setLeftoverImageSet(image: AsServedImagesResponse['data'][number]) {
-      this.setImageSet(image, 'leftovers-image-set');
-    },
-    setImageSet(
-      image: AsServedImagesResponse['data'][number],
-      name: 'serving-image-set' | 'leftovers-image-set'
-    ) {
-      const imageSet = this.items.find((item) => item.name === name);
-      if (imageSet) {
-        imageSet.value = image.id;
-        return;
-      }
-
-      this.items.push({ name, value: image.id });
+      this.setParameter('leftovers-image-set', image.id);
     },
     removeLeftoverImageSet() {
       if (!this.selectedLeftoverSet) return;
 
-      this.items = this.items.filter((item) => item.name !== 'leftovers-image-set');
+      this.removeParameter('leftovers-image-set');
     },
   },
 });

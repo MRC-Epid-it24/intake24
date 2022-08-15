@@ -3,10 +3,9 @@ import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-t
 import type { DrinkwareSetAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
-import { DrinkwareScale, GuideImage } from '.';
+import { DrinkwareScale, ImageMap } from '.';
 
 @Scopes(() => ({
-  guideImage: { include: [{ model: GuideImage }] },
   scales: { include: [{ model: DrinkwareScale }] },
 }))
 @Table({
@@ -39,8 +38,8 @@ export default class DrinkwareSet
   })
   public guideImageId!: string;
 
-  @BelongsTo(() => GuideImage, 'guideImageId')
-  public guideImage?: GuideImage;
+  @BelongsTo(() => ImageMap, 'guideImageId')
+  public imageMap?: ImageMap;
 
   @HasMany(() => DrinkwareScale, 'drinkwareSetId')
   public scales?: DrinkwareScale[];

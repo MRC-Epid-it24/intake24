@@ -3,6 +3,7 @@ import type { LocaleMessages } from 'vue-i18n';
 import asServed from './as-served';
 import common from './common';
 import dashboard from './dashboard';
+import drinkwareSets from './drinkware-sets';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
 import flags from './flags';
@@ -27,6 +28,7 @@ import users from './users';
 const messages: LocaleMessages = {
   common,
   dashboard,
+  'drinkware-sets': drinkwareSets,
   fdbs,
   'feedback-schemes': feedbackSchemes,
   'food-groups': foodGroups,

@@ -1,12 +1,8 @@
 <template>
-  <v-list subheader>
-    <v-subheader>
-      {{ $t('fdbs.portionSizeMethods.methods.guide-image._') }}
-      {{ $t('fdbs.portionSizeMethods.methods.parameters') }}
-    </v-subheader>
+  <v-list>
     <v-list-item link>
       <v-list-item-content>
-        {{ $t('fdbs.portionSizeMethods.methods.guide-image._') }}
+        {{ $t('fdbs.portionSizes.methods.guide-image._') }}
       </v-list-item-content>
       <v-list-item-action>
         <select-resource-dialog resource="guide-images" @add="setGuideImage">
@@ -23,30 +19,16 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 
 import type { GuideImagesResponse } from '@intake24/common/types/http/admin';
 
-import type { PortionSizeMethodParameterItem } from '..';
-import SelectResourceDialog from '../select-resource-dialog.vue';
+import selectsResource from './selectsResource';
 
 export default defineComponent({
   name: 'GuideImageParameters',
 
-  props: {
-    value: {
-      type: Array as PropType<PortionSizeMethodParameterItem[]>,
-      required: true,
-    },
-  },
-
-  components: { SelectResourceDialog },
-
-  data() {
-    return { items: [...this.value] };
-  },
+  mixins: [selectsResource],
 
   computed: {
     selectedGuideImage(): string | undefined {
@@ -54,26 +36,9 @@ export default defineComponent({
     },
   },
 
-  watch: {
-    value(val) {
-      if (isEqual(val, this.items)) return;
-
-      this.items = [...val];
-    },
-    items() {
-      this.$emit('input', this.items);
-    },
-  },
-
   methods: {
     setGuideImage(image: GuideImagesResponse['data'][number]) {
-      const imageSet = this.items.find((item) => item.name === 'guide-image-id');
-      if (imageSet) {
-        imageSet.value = image.id;
-        return;
-      }
-
-      this.items.push({ name: 'guide-image-id', value: image.id });
+      this.setParameter('guide-image-id', image.id);
     },
   },
 });

@@ -2,7 +2,7 @@
   <v-card outlined>
     <v-toolbar color="grey lighten-4" flat>
       <v-toolbar-title class="font-weight-medium">
-        {{ $t('fdbs.portionSizeMethods.title') }}
+        {{ $t('fdbs.portionSizes.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
@@ -10,7 +10,7 @@
         small
         class="mx-3"
         color="secondary"
-        :title="$t('fdbs.portionSizeMethods.add')"
+        :title="$t('fdbs.portionSizes.add')"
         @click.stop="add"
       >
         <v-icon small>$add</v-icon>
@@ -34,17 +34,13 @@
               <v-list-item-subtitle>{{ item.method }} </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action v-if="!disabled">
-              <v-btn
-                icon
-                :title="$t('fdbs.portionSizeMethods.edit')"
-                @click.stop="edit({ item, index })"
-              >
+              <v-btn icon :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })">
                 <v-icon color="primary lighten-1">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action v-if="!disabled">
               <confirm-dialog
-                :label="$t('fdbs.portionSizeMethods.remove').toString()"
+                :label="$t('fdbs.portionSizes.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"

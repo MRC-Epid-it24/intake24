@@ -1,5 +1,21 @@
 <template>
   <layout v-bind="{ id, entry }" v-if="entryLoaded">
+    <v-row>
+      <v-col cols="12">
+        <v-simple-table>
+          <tbody>
+            <tr>
+              <th>{{ $t('image-maps.id') }}</th>
+              <td>{{ entry.id }}</td>
+            </tr>
+            <tr>
+              <th>{{ $t('common.description') }}</th>
+              <td>{{ entry.description }}</td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </v-col>
+    </v-row>
     <guide-drawer :entry="entry" disabled></guide-drawer>
   </layout>
 </template>

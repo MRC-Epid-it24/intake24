@@ -1,5 +1,5 @@
-import type { ImageMapAttributes, Pagination } from '../../models';
-import type { ImageMapEntry, ImageMapEntryObject, ImageMapListEntry } from './image-maps';
+import type { GuideImageAttributes, ImageMapAttributes, Pagination } from '../../models';
+import type { ImageMapEntry, ImageMapEntryObject } from './image-maps';
 
 export interface GuideImageEntryObject extends ImageMapEntryObject {
   weight: number;
@@ -18,7 +18,9 @@ export type UpdateGuideImageInput = {
   objects: GuideImageInputObjects;
 };
 
-export type GuideImageListEntry = ImageMapListEntry;
+export interface GuideImageListEntry extends Pick<GuideImageAttributes, 'id' | 'description'> {
+  imageUrl: string;
+}
 
 export type GuideImagesResponse = Pagination<GuideImageListEntry>;
 

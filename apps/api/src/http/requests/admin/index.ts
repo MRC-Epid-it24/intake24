@@ -1,6 +1,7 @@
 import authentication from './authentication';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
+import images from './images';
 import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
@@ -19,6 +20,7 @@ export default {
   authentication,
   fdbs,
   feedbackSchemes,
+  images,
   jobs,
   languages,
   locales,

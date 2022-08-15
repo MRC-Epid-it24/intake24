@@ -8,7 +8,7 @@
               <v-text-field
                 v-model="form.id"
                 :error-messages="form.errors.get('id')"
-                :label="$t('guide-images.id')"
+                :label="$t('drinkware-sets.id')"
                 hide-details="auto"
                 name="id"
                 outlined
@@ -16,16 +16,16 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.imageMapId"
-                :items="refs.imageMaps"
-                :label="$t('image-maps._')"
-                :error-messages="form.errors.get('imageMapId')"
+                v-model="form.guideImageId"
+                :items="refs.guideImages"
+                :label="$t('guide-images._')"
+                :error-messages="form.errors.get('guideImageId')"
                 item-value="id"
                 item-text="description"
                 hide-details="auto"
-                name="imageMapId"
+                name="guideImageId"
                 outlined
-                @change="form.errors.clear('imageMapId')"
+                @change="form.errors.clear('guideImageId')"
               >
                 <template v-slot:item="{ item }">
                   {{ `${item.id} (${item.description})` }}
@@ -56,35 +56,33 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { GuideImageEntry, GuideImageRefs } from '@intake24/common/types/http/admin';
+import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
 
-type CreateGuideImageForm = {
+type CreateDrinkwareSetForm = {
   id: string | null;
-  imageMapId: string | null;
   description: string | null;
+  guideImageId: string | null;
 };
 
 export default defineComponent({
-  name: 'CreateGuideImageForm',
+  name: 'CreateDrinkwareSetForm',
 
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<GuideImageEntry, GuideImageRefs>(
-      props.id
-    );
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<DrinkwareSetEntry>(props.id);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },
 
   data() {
     return {
-      form: form<CreateGuideImageForm>({
+      form: form<CreateDrinkwareSetForm>({
         id: null,
         description: null,
-        imageMapId: null,
+        guideImageId: null,
       }),
     };
   },

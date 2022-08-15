@@ -8,32 +8,23 @@
               <v-text-field
                 v-model="form.id"
                 :error-messages="form.errors.get('id')"
-                :label="$t('guide-images.id')"
+                :label="$t('drinkware-sets.id')"
+                disabled
                 hide-details="auto"
                 name="id"
                 outlined
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-select
-                v-model="form.imageMapId"
-                :items="refs.imageMaps"
-                :label="$t('image-maps._')"
-                :error-messages="form.errors.get('imageMapId')"
-                item-value="id"
-                item-text="description"
+              <v-text-field
+                v-model="form.guideImageId"
+                :error-messages="form.errors.get('guideImageId')"
+                :label="$t('guide-images._')"
+                disabled
                 hide-details="auto"
-                name="imageMapId"
+                name="guideImageId"
                 outlined
-                @change="form.errors.clear('imageMapId')"
-              >
-                <template v-slot:item="{ item }">
-                  {{ `${item.id} (${item.description})` }}
-                </template>
-                <template v-slot:selection="{ item }">
-                  {{ `${item.id} (${item.description})` }}
-                </template>
-              </v-select>
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -46,6 +37,8 @@
               ></v-text-field>
             </v-col>
           </v-row>
+        </v-card-text>
+        <v-card-text>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
       </v-form>
@@ -56,35 +49,33 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { GuideImageEntry, GuideImageRefs } from '@intake24/common/types/http/admin';
+import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
 
-type CreateGuideImageForm = {
+type EditDrinkwareSetForm = {
   id: string | null;
-  imageMapId: string | null;
   description: string | null;
+  guideImageId: string | null;
 };
 
 export default defineComponent({
-  name: 'CreateGuideImageForm',
+  name: 'EditDrinkwareSetForm',
 
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<GuideImageEntry, GuideImageRefs>(
-      props.id
-    );
+    const { entry, entryLoaded } = useStoreEntry<DrinkwareSetEntry>(props.id);
 
-    return { entry, entryLoaded, refs, refsLoaded };
+    return { entry, entryLoaded };
   },
 
   data() {
     return {
-      form: form<CreateGuideImageForm>({
+      form: form<EditDrinkwareSetForm>({
         id: null,
+        guideImageId: null,
         description: null,
-        imageMapId: null,
       }),
     };
   },

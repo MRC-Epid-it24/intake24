@@ -38,6 +38,7 @@ export default (container: AwilixContainer): void => {
     // Images
     asServedSetController: asFunction(controllers.admin.images.asServedSet),
     asServedImageController: asFunction(controllers.admin.images.asServedImage),
+    drinkwareSetController: asFunction(controllers.admin.images.drinkwareSet),
     guideImageController: asFunction(controllers.admin.images.guide),
     imageMapController: asFunction(controllers.admin.images.map),
 

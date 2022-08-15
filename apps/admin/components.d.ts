@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     FdbsFoodExplorer: typeof import('./src/components/fdbs/food-explorer.vue')['default']
     FdbsNutrientList: typeof import('./src/components/fdbs/nutrient-list.vue')['default']
     FdbsPortionSizesParametersAsServed: typeof import('./src/components/fdbs/portion-sizes/parameters/as-served.vue')['default']
+    FdbsPortionSizesParametersDrinkScale: typeof import('./src/components/fdbs/portion-sizes/parameters/drink-scale.vue')['default']
     FdbsPortionSizesParametersGuideImage: typeof import('./src/components/fdbs/portion-sizes/parameters/guide-image.vue')['default']
     FdbsPortionSizesParametersNoParameters: typeof import('./src/components/fdbs/portion-sizes/parameters/no-parameters.vue')['default']
     FdbsPortionSizesPortionSizeMethodList: typeof import('./src/components/fdbs/portion-sizes/portion-size-method-list.vue')['default']

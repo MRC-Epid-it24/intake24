@@ -30,6 +30,7 @@ import type {
   AsServedSetController,
   AuthenticationController,
   CategoriesController,
+  DrinkwareSetController,
   FeedbackController,
   FeedbackSchemeController,
   FoodController,
@@ -170,6 +171,7 @@ export interface IoC extends Jobs {
   // Images
   asServedSetController: AsServedSetController;
   asServedImageController: AsServedImageController;
+  drinkwareSetController: DrinkwareSetController;
   guideImageController: GuideImageController;
   imageMapController: ImageMapController;
 
