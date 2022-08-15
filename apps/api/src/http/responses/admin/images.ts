@@ -95,16 +95,12 @@ const imageResponseCollection = (baseUrl: string) => {
    * @returns {DrinkwareSetListEntry}
    */
   const drinkwareListResponse = (item: DrinkwareSet): DrinkwareSetListEntry => {
-    const { id, description, guideImage, imageMap } = item;
-
-    let imageUrl: string | null = null;
-    if (guideImage?.selectionImage) imageUrl = `${baseUrl}/${guideImage.selectionImage.path}`;
-    else if (imageMap?.baseImage) imageUrl = `${baseUrl}/${imageMap.baseImage.path}`;
+    const { id, description, imageMap } = item;
 
     return {
       id,
       description,
-      imageUrl,
+      imageUrl: imageMap?.baseImage ? `${baseUrl}/${imageMap.baseImage.path}` : null,
     };
   };
 
