@@ -500,6 +500,10 @@ export const sidebar = {
           link: '/developer/testing',
         },
         {
+          text: 'Versioning',
+          link: '/developer/versioning',
+        },
+        {
           text: 'Development virtual machine',
           link: '/developer/vm',
         },
