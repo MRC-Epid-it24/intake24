@@ -1,6 +1,6 @@
 <template>
   <div class="ma-4">
-    <v-card-title>{{ $t('as-served.images.title') }}</v-card-title>
+    <v-card-title>{{ $t('as-served-sets.images.title') }}</v-card-title>
     <v-row>
       <v-col v-for="image in images" :key="image.id" cols="12" sm="6" md="4">
         <v-card min-height="200px" flat outlined>
@@ -11,7 +11,7 @@
               <v-col cols="9">
                 <v-text-field
                   v-model.number="image.weight"
-                  :label="$t('as-served.weight')"
+                  :label="$t('as-served-sets.weight')"
                   :disabled="disabled"
                   hide-details="auto"
                   name="description"
@@ -22,7 +22,7 @@
               <v-col cols="3" align-self="center" class="d-flex justify-end">
                 <confirm-dialog
                   v-if="!disabled"
-                  :label="$t('as-served.images.delete')"
+                  :label="$t('as-served-sets.images.delete')"
                   color="error"
                   icon
                   icon-left="$delete"
@@ -42,7 +42,7 @@
       </v-col>
       <v-col cols="12" sm="6" md="4" v-if="!disabled">
         <v-card
-          :title="$t('as-served.images.add')"
+          :title="$t('as-served-sets.images.add')"
           height="100%"
           flat
           outlined
@@ -150,7 +150,7 @@ export default defineComponent({
 
       try {
         const data = await this.form.post<AsServedImageEntry>(
-          `admin/images/as-served/${this.setId}/images`
+          `admin/images/as-served-sets/${this.setId}/images`
         );
         this.images.push(data);
       } finally {
@@ -160,7 +160,7 @@ export default defineComponent({
     },
 
     async removeImage(imageId: string) {
-      await this.$http.delete(`admin/images/as-served/${this.setId}/images/${imageId}`);
+      await this.$http.delete(`admin/images/as-served-sets/${this.setId}/images/${imageId}`);
       this.images = this.images.filter((image) => image.id !== imageId);
     },
   },

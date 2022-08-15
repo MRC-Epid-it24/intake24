@@ -9,7 +9,7 @@ const permissions = [
   { name: 'users', display_name: 'Users resource access' },
   { name: 'roles', display_name: 'Roles resource access' },
   { name: 'permissions', display_name: 'Permissions resource access' },
-  { name: 'as-served', display_name: 'As served images resource access' },
+  { name: 'as-served', display_name: 'As served sets resource access' },
   { name: 'fdbs', display_name: 'Food databases resource access' },
   { name: 'feedback-schemes', display_name: 'Feedback schemes resource access' },
   { name: 'food-groups', display_name: 'Food groups resource access' },

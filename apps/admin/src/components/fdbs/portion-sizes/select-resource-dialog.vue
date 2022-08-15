@@ -78,7 +78,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import { getResource } from '@intake24/admin/router/resources';
 import { copy } from '@intake24/common/util';
 
 import { useFetchList } from '../../lists';
@@ -104,11 +103,8 @@ export default defineComponent({
   setup(props) {
     const selectedItemId = ref<string | null>(null);
 
-    const resource = getResource(props.resource);
-    if (!resource) throw Error('Invalid resource');
-
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<any>(
-      resource.api
+      `/admin/references/${props.resource}`
     );
 
     return {

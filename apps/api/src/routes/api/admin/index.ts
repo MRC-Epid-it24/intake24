@@ -12,6 +12,7 @@ import languages from './languages';
 import locales from './locales';
 import nutrientTables from './nutrient-tables';
 import permissions from './permissions';
+import references from './references';
 import roles from './roles';
 import signInLogs from './sign-in-logs';
 import surveySchemeQuestions from './survey-scheme-questions';
@@ -37,6 +38,7 @@ export default () => {
   router.use('/locales', locales());
   router.use('/nutrient-tables', nutrientTables());
   router.use('/permissions', permissions());
+  router.use('/references', references());
   router.use('/roles', roles());
   router.use('/survey-schemes', surveySchemes());
   router.use('/survey-scheme-questions', surveySchemeQuestions());

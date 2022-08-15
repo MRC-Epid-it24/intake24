@@ -14,21 +14,21 @@ export default () => {
   router
     .route('')
     .post(
-      permission('as-served|create'),
+      permission('as-served-sets|create'),
       upload.single('image'),
       validation.store,
       wrapAsync(asServedImageController.store)
     )
     .get(
-      permission('as-served|browse'),
+      permission('as-served-sets|browse'),
       validation.browse,
       wrapAsync(asServedImageController.browse)
     );
 
   router
     .route('/:asServedImageId')
-    .get(permission('as-served|read'), wrapAsync(asServedImageController.read))
-    .delete(permission('as-served|delete'), wrapAsync(asServedImageController.destroy));
+    .get(permission('as-served-sets|read'), wrapAsync(asServedImageController.read))
+    .delete(permission('as-served-sets|delete'), wrapAsync(asServedImageController.destroy));
 
   return router;
 };

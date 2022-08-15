@@ -8,6 +8,7 @@ import language from './language.controller';
 import languageTranslation from './language-translation.controller';
 import locales from './locales';
 import nutrientTable from './nutrient-table.controller';
+import reference from './reference.controller';
 import signInLog from './sign-in-log.controller';
 import surveyScheme from './survey-scheme.controller';
 import surveySchemeQuestion from './survey-scheme-question.controller';
@@ -25,6 +26,7 @@ export * from './language.controller';
 export * from './language-translation.controller';
 export * from './locales';
 export * from './nutrient-table.controller';
+export * from './reference.controller';
 export * from './securable.controller';
 export * from './sign-in-log.controller';
 export * from './survey-scheme.controller';
@@ -46,6 +48,7 @@ export default {
   languageTranslation,
   locales,
   nutrientTable,
+  reference,
   surveyScheme,
   surveySchemeQuestion,
   signInLog,

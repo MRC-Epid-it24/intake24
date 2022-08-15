@@ -48,6 +48,7 @@ import type {
   PasswordController,
   PermissionController,
   PortionSizeController,
+  ReferenceController,
   RoleController,
   SignInLogController,
   SubscriptionController,
@@ -159,6 +160,8 @@ export interface IoC extends Jobs {
   feedbackController: FeedbackController;
 
   // Admin controllers
+  referenceController: ReferenceController;
+
   adminAuthenticationController: AdminAuthenticationController;
   adminUserProfileController: AdminUserProfileController;
   adminUserJobController: AdminUserJobController;

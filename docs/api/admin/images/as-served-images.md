@@ -7,7 +7,7 @@ Browse paginated as served image list
 ### Request
 
 ```json
-GET /api/admin/images/as-served/:asServedSetId/images
+GET /api/admin/images/as-served-sets/:asServedSetId/images
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -42,7 +42,7 @@ Create new as served image entry
 ### Request
 
 ```json
-POST /api/admin/images/as-served/:asServedSetId/images
+POST /api/admin/images/as-served-sets/:asServedSetId/images
 
 Authorization: Bearer {accessToken}
 Content-Type: multipart/form-data
@@ -73,7 +73,7 @@ Get as served image entry
 ### Request
 
 ```json
-GET /api/admin/images/as-served/:asServedSetId/images/:asServedImageId
+GET /api/admin/images/as-served-sets/:asServedSetId/images/:asServedImageId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -99,7 +99,7 @@ Delete as served image entry
 ### Request
 
 ```json
-DELETE /api/admin/images/as-served/:asServedSetId/images/:asServedImageId
+DELETE /api/admin/images/as-served-sets/:asServedSetId/images/:asServedImageId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

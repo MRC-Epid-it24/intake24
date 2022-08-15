@@ -1,6 +1,6 @@
 import type { LocaleMessages } from 'vue-i18n';
 
-import asServed from './as-served';
+import asServedSets from './as-served-sets';
 import common from './common';
 import dashboard from './dashboard';
 import drinkwareSets from './drinkware-sets';
@@ -33,7 +33,7 @@ const messages: LocaleMessages = {
   'feedback-schemes': feedbackSchemes,
   'food-groups': foodGroups,
   flags,
-  'as-served': asServed,
+  'as-served-sets': asServedSets,
   'guide-images': guideImages,
   'image-maps': imageMaps,
   jobs,

@@ -1,9 +1,9 @@
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const url = '/api/admin/images/as-served/asServedSetForImages/images';
-  const invalidUrl = '/api/admin/images/as-served/InvalidAsServedSetForImages/images';
-  const permissions = ['as-served', 'as-served|browse'];
+  const url = '/api/admin/images/as-served-sets/asServedSetForImages/images';
+  const invalidUrl = '/api/admin/images/as-served-sets/InvalidAsServedSetForImages/images';
+  const permissions = ['as-served-sets', 'as-served-sets|browse'];
 
   test('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });

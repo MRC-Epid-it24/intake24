@@ -1,13 +1,13 @@
-# Guide images
+# Image maps
 
-## Browse guide images
+## Browse image maps
 
-Browse paginated guide image list
+Browse paginated image map list
 
 ### Request
 
 ```json
-GET /api/admin/images/guides
+GET /api/admin/images/image-maps
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -34,22 +34,22 @@ Content-Type: application/json
 }
 ```
 
-## Create guide image
+## Create image map
 
-Create new guide image entry
+Create new image map entry
 
 ### Request
 
 ```json
-POST /api/admin/images/guides
+POST /api/admin/images/image-maps
 
 Authorization: Bearer {accessToken}
-Content-Type: application/json
+Content-Type: multipart/form-data
 
 {
     "id": string,
-    "imageMapId": string,
-    "description": string
+    "description": string,
+    "baseImage": File
 }
 ```
 
@@ -62,27 +62,25 @@ Content-Type: application/json
     "id": string,
     "description": string,
     "baseImageUrl": string,
-    "imageMapId": string,
     "objects": [
         {
             "id": string,
             "description": string,
-            "outlineCoordinates": number[],
-            "weight": number
+            "outlineCoordinates": number[]
         },
         ...
     ],
 }
 ```
 
-## Get guide image
+## Get image map
 
-Get guide image entry
+Get image map entry
 
 ### Request
 
 ```json
-GET /api/admin/images/guides/:guideImageId
+GET /api/admin/images/image-maps/:imageMapId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -97,27 +95,25 @@ Content-Type: application/json
     "id": string,
     "description": string,
     "baseImageUrl": string,
-    "imageMapId": string,
     "objects": [
         {
             "id": string,
             "description": string,
-            "outlineCoordinates": number[],
-            "weight": number
+            "outlineCoordinates": number[]
         },
         ...
     ],
 }
 ```
 
-## Update guide image
+## Update image map
 
-Update guide image entry
+Update image map entry
 
 ### Request
 
 ```json
-PUT /api/admin/images/guides/:guideImageId
+PUT /api/admin/images/image-maps/:imageMapId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -127,7 +123,8 @@ Content-Type: application/json
     "objects": [
         {
             "id": number,
-            "weight": number
+            "description": string,
+            "outlineCoordinates": number[]
         },
         ...
     ]
@@ -143,27 +140,25 @@ Content-Type: application/json
     "id": string,
     "description": string,
     "baseImageUrl": string,
-    "imageMapId": string,
     "objects": [
         {
             "id": string,
             "description": string,
-            "outlineCoordinates": number[],
-            "weight": number
+            "outlineCoordinates": number[]
         },
         ...
     ],
 }
 ```
 
-## Delete guide image
+## Delete image map
 
-Delete guide image entry
+Delete image map entry
 
 ### Request
 
 ```json
-DELETE /api/admin/images/guides/:guideImageId
+DELETE /api/admin/images/image-maps/:imageMapId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -173,33 +168,4 @@ Content-Type: application/json
 
 ```json
 204 No Content
-```
-
-## Guide image references
-
-Get guide image references
-
-### Request
-
-```json
-GET /api/admin/images/guides/refs
-
-Authorization: Bearer {accessToken}
-Content-Type: application/json
-```
-
-### Response
-
-```json
-200 OK
-
-{
-    "imageMaps": [
-        {
-            "id": string,
-            "description": string
-        },
-        ...
-    ]
-}
 ```

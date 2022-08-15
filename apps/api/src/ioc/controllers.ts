@@ -26,6 +26,8 @@ export default (container: AwilixContainer): void => {
     feedbackController: asFunction(controllers.feedback),
 
     // Admin
+    referenceController: asFunction(controllers.admin.reference),
+
     adminAuthenticationController: asFunction(controllers.admin.authentication),
     adminUserProfileController: asFunction(controllers.admin.user.profile),
     adminUserJobController: asFunction(controllers.admin.user.job),

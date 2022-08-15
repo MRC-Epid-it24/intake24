@@ -5,7 +5,7 @@ import type { GuideImageEntry } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const url = '/api/admin/images/guides';
+  const url = '/api/admin/images/guide-images';
   const permissions = ['guide-images', 'guide-images|create'];
 
   const input = {
@@ -18,7 +18,7 @@ export default () => {
 
   beforeAll(async () => {
     await request(suite.app)
-      .post('/api/admin/images/maps')
+      .post('/api/admin/images/image-maps')
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .field('id', 'imageMapForGuide')

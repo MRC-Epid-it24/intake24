@@ -1,29 +1,30 @@
+import fs from 'fs-extra';
 import request from 'supertest';
 
-import type { GuideImageEntry } from '@intake24/common/types/http/admin';
+import type { ImageMapEntry } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const baseUrl = '/api/admin/images/guides';
-  const permissions = ['guide-images', 'guide-images|read'];
+  const baseUrl = '/api/admin/images/image-maps';
+  const permissions = ['image-maps', 'image-maps|read'];
 
-  const input = {
-    id: 'guideImage_002',
-    description: 'guideImage_002_description',
-    imageMapId: 'imageMapForGuide',
-  };
+  const fileName = 'imageMap_002.jpg';
+  const id = 'imageMap_002';
+  const description = 'imageMap_002_description';
 
-  let output: GuideImageEntry;
-
-  const url = `${baseUrl}/${input.id}`;
+  const url = `${baseUrl}/${id}`;
   const invalidUrl = `${baseUrl}/999999`;
+
+  let output: ImageMapEntry;
 
   beforeAll(async () => {
     const { body } = await request(suite.app)
       .post(baseUrl)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
-      .send(input);
+      .field('id', id)
+      .field('description', description)
+      .attach('baseImage', fs.createReadStream(suite.files.images.jpg), fileName);
 
     output = { ...body };
   });

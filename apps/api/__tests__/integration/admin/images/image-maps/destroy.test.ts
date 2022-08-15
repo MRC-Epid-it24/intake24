@@ -4,12 +4,12 @@ import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const baseUrl = '/api/admin/images/as-served-sets';
-  const permissions = ['as-served-sets', 'as-served-sets|delete'];
+  const baseUrl = '/api/admin/images/image-maps';
+  const permissions = ['image-maps', 'image-maps|delete'];
 
-  const fileName = 'asServedSet_005.jpg';
-  const id = 'asServedSet_005';
-  const description = 'asServedSet_005_description';
+  const fileName = 'imageMap_005.jpg';
+  const id = 'imageMap_005';
+  const description = 'imageMap_005_description';
 
   const url = `${baseUrl}/${id}`;
   const invalidUrl = `${baseUrl}/999999`;
@@ -21,7 +21,7 @@ export default () => {
       .set('Authorization', suite.bearer.superuser)
       .field('id', id)
       .field('description', description)
-      .attach('selectionImage', fs.createReadStream(suite.files.images.jpg), fileName);
+      .attach('baseImage', fs.createReadStream(suite.files.images.jpg), fileName);
   });
 
   test('missing authentication / authorization', async () => {

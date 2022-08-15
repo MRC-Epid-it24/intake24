@@ -8,7 +8,7 @@
               <v-text-field
                 v-model="form.id"
                 :error-messages="form.errors.get('id')"
-                :label="$t('as-served.id')"
+                :label="$t('as-served-sets.id')"
                 hide-details="auto"
                 name="id"
                 outlined
@@ -18,7 +18,7 @@
               <v-file-input
                 v-model="form.selectionImage"
                 :error-messages="form.errors.get('selectionImage')"
-                :label="$t('as-served.selectionImage')"
+                :label="$t('as-served-sets.selectionImage')"
                 hide-details="auto"
                 name="selectionImage"
                 outlined

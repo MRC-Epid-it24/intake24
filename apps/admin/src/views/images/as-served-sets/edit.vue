@@ -8,7 +8,7 @@
               <v-text-field
                 v-model="form.id"
                 :error-messages="form.errors.get('id')"
-                :label="$t('as-served.id')"
+                :label="$t('as-served-sets.id')"
                 disabled
                 hide-details="auto"
                 name="id"

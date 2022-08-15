@@ -1,7 +1,7 @@
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const url = '/api/admin/images/guides/refs';
+  const url = '/api/admin/images/guide-images/refs';
   const permissions = ['guide-images'];
 
   test('missing authentication / authorization', async () => {

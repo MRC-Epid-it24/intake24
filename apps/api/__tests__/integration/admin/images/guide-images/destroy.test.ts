@@ -3,7 +3,7 @@ import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const baseUrl = '/api/admin/images/guides';
+  const baseUrl = '/api/admin/images/guide-images';
   const permissions = ['guide-images', 'guide-images|delete'];
 
   const input = {

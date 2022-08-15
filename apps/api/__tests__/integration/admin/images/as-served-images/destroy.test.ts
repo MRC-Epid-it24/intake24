@@ -4,9 +4,9 @@ import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const baseUrl = '/api/admin/images/as-served/asServedSetForImages/images';
-  const invalidBaseUrl = '/api/admin/images/as-served/InvalidAsServedSetForImages/images';
-  const permissions = ['as-served', 'as-served|delete'];
+  const baseUrl = '/api/admin/images/as-served-sets/asServedSetForImages/images';
+  const invalidBaseUrl = '/api/admin/images/as-served-sets/InvalidAsServedSetForImages/images';
+  const permissions = ['as-served-sets', 'as-served-sets|delete'];
 
   const fileName = 'asServedImage_003.jpg';
   const weight = 10;

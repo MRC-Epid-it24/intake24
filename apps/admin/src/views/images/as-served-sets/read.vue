@@ -5,7 +5,7 @@
         <v-simple-table>
           <tbody>
             <tr>
-              <th>{{ $t('as-served.id') }}</th>
+              <th>{{ $t('as-served-sets.id') }}</th>
               <td>{{ entry.id }}</td>
             </tr>
             <tr>
@@ -16,7 +16,7 @@
         </v-simple-table>
       </v-col>
       <v-col cols="12" md="6">
-        <v-card-title>{{ $t('as-served.selectionImage') }}</v-card-title>
+        <v-card-title>{{ $t('as-served-sets.selectionImage') }}</v-card-title>
         <v-img class="ma-2" :src="entry.selectionImageUrl"></v-img>
       </v-col>
     </v-row>

@@ -1,36 +1,35 @@
-import fs from 'fs-extra';
 import request from 'supertest';
 
-import type { ImageMapEntry } from '@intake24/common/types/http/admin';
+import type { GuideImageEntry } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const baseUrl = '/api/admin/images/maps';
-  const permissions = ['image-maps', 'image-maps|read'];
+  const baseUrl = '/api/admin/images/guide-images';
+  const permissions = ['guide-images', 'guide-images|edit'];
 
-  const fileName = 'imageMap_002.jpg';
-  const id = 'imageMap_002';
-  const description = 'imageMap_002_description';
+  const input = {
+    id: 'guideImage_003',
+    description: 'guideImage_003_description',
+    imageMapId: 'imageMapForGuide',
+  };
 
-  const url = `${baseUrl}/${id}`;
-  const invalidUrl = `${baseUrl}/999999`;
+  let output: GuideImageEntry;
 
-  let output: ImageMapEntry;
+  const url = `${baseUrl}/${input.id}/edit`;
+  const invalidUrl = `${baseUrl}/999999/edit`;
 
   beforeAll(async () => {
     const { body } = await request(suite.app)
       .post(baseUrl)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
-      .field('id', id)
-      .field('description', description)
-      .attach('baseImage', fs.createReadStream(suite.files.images.jpg), fileName);
+      .send(input);
 
     output = { ...body };
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url, { permissions });
+    await suite.sharedTests.assert401and403('get', url);
   });
 
   describe('authenticated / resource authorized', () => {

@@ -6,9 +6,9 @@ import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const url = '/api/admin/images/as-served/asServedSetForImages/images';
-  const invalidUrl = '/api/admin/images/as-served/invalidAsServedSetForImages/images';
-  const permissions = ['as-served', 'as-served|create'];
+  const url = '/api/admin/images/as-served-sets/asServedSetForImages/images';
+  const invalidUrl = '/api/admin/images/as-served-sets/invalidAsServedSetForImages/images';
+  const permissions = ['as-served-sets', 'as-served-sets|create'];
 
   const fileName = 'asServedImage_001.jpg';
   const weight = 10;

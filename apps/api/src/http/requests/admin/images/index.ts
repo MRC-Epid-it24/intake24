@@ -1,13 +1,13 @@
-import asServed from './as-served';
 import asServedImages from './as-served-images';
-import drinkware from './drinkware';
-import guides from './guides';
-import maps from './maps';
+import asServedSets from './as-served-sets';
+import drinkwareSets from './drinkware-sets';
+import guideImages from './guide-images';
+import imageMaps from './image-maps';
 
 export default {
-  asServed,
+  asServedSets,
   asServedImages,
-  drinkware,
-  guides,
-  maps,
+  drinkwareSets,
+  guideImages,
+  imageMaps,
 };

@@ -81,7 +81,7 @@ Get as served set entry
 ### Request
 
 ```json
-GET /api/admin/images/as-served/:asServedSetId
+GET /api/admin/images/as-served-sets/:asServedSetId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -115,7 +115,7 @@ Update as served set entry
 ### Request
 
 ```json
-PUT /api/admin/images/as-served/:asServedSetId
+PUT /api/admin/images/as-served-sets/:asServedSetId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -160,7 +160,7 @@ Delete as served set entry
 ### Request
 
 ```json
-DELETE /api/admin/images/as-served/:asServedSetId
+DELETE /api/admin/images/as-served-sets/:asServedSetId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

@@ -166,11 +166,11 @@ export const sidebar = {
         },
         {
           text: 'Guide images',
-          link: '/api/admin/images/guides',
+          link: '/api/admin/images/guide-images',
         },
         {
           text: 'Image maps',
-          link: '/api/admin/images/maps',
+          link: '/api/admin/images/image-maps',
         },
         {
           text: 'Jobs',

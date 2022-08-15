@@ -6,8 +6,8 @@ import type { AsServedSetEntry } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const url = '/api/admin/images/as-served';
-  const permissions = ['as-served', 'as-served|create'];
+  const url = '/api/admin/images/as-served-sets';
+  const permissions = ['as-served-sets', 'as-served-sets|create'];
 
   const fileName = 'asServedSet_001.jpg';
   const id = 'asServedSet_001';
