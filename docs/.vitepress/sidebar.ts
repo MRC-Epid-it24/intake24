@@ -13,6 +13,18 @@ export const sidebar = {
           link: '/overview/requirements',
         },
         {
+          text: 'Technology Stack',
+          link: '/overview/technology-stack',
+        },
+        {
+          text: 'Source code',
+          link: '/overview/source-code',
+        },
+        {
+          text: 'Versioning',
+          link: '/overview/versioning',
+        },
+        {
           text: 'Get started',
           link: '/overview/get-started',
         },
@@ -483,25 +495,14 @@ export const sidebar = {
           text: 'Introduction',
           link: '/developer/',
         },
-        {
-          text: 'Source code',
-          link: '/developer/source-code',
-        },
+
         {
           text: 'Getting started',
           link: '/developer/getting-started',
         },
         {
-          text: 'Technology Stack',
-          link: '/developer/technology-stack',
-        },
-        {
           text: 'Testing',
           link: '/developer/testing',
-        },
-        {
-          text: 'Versioning',
-          link: '/developer/versioning',
         },
         {
           text: 'Development virtual machine',
