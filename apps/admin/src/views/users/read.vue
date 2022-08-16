@@ -33,7 +33,7 @@
         <tr>
           <th>{{ $t('users.roles') }}</th>
           <td v-if="entry.roles">
-            <div v-for="role in entry.roles" :key="role.userId">{{ role.role }}</div>
+            <div v-for="role in entry.roles" :key="role.id">{{ role.name }}</div>
           </td>
         </tr>
       </tbody>
@@ -72,7 +72,7 @@
         </tr>
       </thead>
       <tbody v-if="entry.aliases.length">
-        <tr v-for="alias in entry.aliases" :key="alias.name">
+        <tr v-for="alias in entry.aliases" :key="alias.username">
           <th>{{ alias.surveyId }}</th>
           <th>{{ alias.username }}</th>
           <td>{{ alias.urlAuthToken }}</td>

@@ -93,7 +93,7 @@ export default defineComponent({
       required: true,
     },
     owner: {
-      type: Object as PropType<Pick<UserAttributes, 'id' | 'name' | 'email'>>,
+      type: Object as PropType<Owner>,
     },
   },
 

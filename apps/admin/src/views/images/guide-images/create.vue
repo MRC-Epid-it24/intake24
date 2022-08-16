@@ -57,7 +57,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { GuideImageEntry, GuideImageRefs } from '@intake24/common/types/http/admin';
+import type { GuideImageEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { SelectResource } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
@@ -76,11 +76,9 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<GuideImageEntry, GuideImageRefs>(
-      props.id
-    );
+    const { entry, entryLoaded } = useStoreEntry<GuideImageEntry>(props.id);
 
-    return { entry, entryLoaded, refs, refsLoaded };
+    return { entry, entryLoaded };
   },
 
   data() {
