@@ -2,12 +2,7 @@ import type { DrinkwareScaleResponse, DrinkwareSetResponse } from '@intake24/com
 import type { DrinkwareScale, DrinkwareSet } from '@intake24/db';
 import { InternalServerError } from '@intake24/api/http/errors';
 
-export interface DrinkwareResponse {
-  scaleResponse: (item: DrinkwareScale) => DrinkwareScaleResponse;
-  setResponse: (item: DrinkwareSet) => DrinkwareSetResponse;
-}
-
-export default (baseUrl: string): DrinkwareResponse => {
+export const drinkwareResponse = (baseUrl: string) => {
   const scaleResponse = (item: DrinkwareScale): DrinkwareScaleResponse => {
     const { baseImageUrl, overlayImageUrl, volumeSamples } = item;
 
@@ -36,3 +31,7 @@ export default (baseUrl: string): DrinkwareResponse => {
 
   return { setResponse, scaleResponse };
 };
+
+export default drinkwareResponse;
+
+export type DrinkwareResponse = ReturnType<typeof drinkwareResponse>;

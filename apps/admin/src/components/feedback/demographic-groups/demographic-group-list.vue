@@ -15,12 +15,21 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
-      <load-section-dialog
-        :schemeId="schemeId"
-        schemeType="feedback"
-        section="demographicGroups"
-        @load="load"
-      ></load-section-dialog>
+      <select-resource resource="feedback-schemes" return-object="demographicGroups" @input="load">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            class="ml-3"
+            color="secondary"
+            fab
+            small
+            :title="$t(`feedback-schemes.load`)"
+          >
+            <v-icon>fa-download</v-icon>
+          </v-btn>
+        </template>
+      </select-resource>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="items" handle=".drag-and-drop__handle">
@@ -202,8 +211,8 @@ import draggable from 'vuedraggable';
 import type { DemographicGroup } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
+import { SelectResource } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/components/lists';
-import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { useEntry } from '@intake24/admin/stores';
 import { nutrientRuleTypes, sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
@@ -231,7 +240,7 @@ export default defineComponent({
     draggable,
     DemographicGroupRange,
     DemographicGroupSectors,
-    LoadSectionDialog,
+    SelectResource,
   },
 
   setup(props, context) {

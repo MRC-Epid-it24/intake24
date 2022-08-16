@@ -13,12 +13,21 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
-      <load-section-dialog
-        schemeType="survey"
-        :schemeId="schemeId"
-        section="meals"
-        @load="load"
-      ></load-section-dialog>
+      <select-resource resource="survey-schemes" return-object="meals" @input="load">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            class="ml-3"
+            color="secondary"
+            fab
+            small
+            :title="$t(`survey-schemes.load`)"
+          >
+            <v-icon>fa-download</v-icon>
+          </v-btn>
+        </template>
+      </select-resource>
       <confirm-dialog
         color="error"
         :label="$t('survey-schemes.meals.reset._').toString()"
@@ -133,8 +142,7 @@ import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Meal, Meals } from '@intake24/common/types';
-import { LanguageSelector } from '@intake24/admin/components/forms';
-import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { LanguageSelector, SelectResource } from '@intake24/admin/components/forms';
 import { defaultMeals } from '@intake24/common/schemes';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
@@ -163,7 +171,7 @@ export default defineComponent({
     },
   },
 
-  components: { ConfirmDialog, draggable, LanguageSelector, LoadSectionDialog },
+  components: { ConfirmDialog, draggable, LanguageSelector, SelectResource },
 
   setup() {
     const form = ref<InstanceType<typeof HTMLFormElement>>();

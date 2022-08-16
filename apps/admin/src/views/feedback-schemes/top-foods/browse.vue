@@ -2,7 +2,7 @@
   <layout
     v-bind="{ id, entry }"
     :routeLeave.sync="routeLeave"
-    v-if="entryLoaded & refsLoaded"
+    v-if="entryLoaded && refsLoaded"
     @save="submit"
   >
     <template v-slot:actions>
@@ -14,12 +14,21 @@
         {{ $t('feedback-schemes.top-foods.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <load-section-dialog
-        :schemeId="id"
-        schemeType="feedback"
-        section="topFoods"
-        @load="loadFromScheme"
-      ></load-section-dialog>
+      <select-resource resource="feedback-schemes" return-object="topFoods" @input="load">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            class="ml-3"
+            color="secondary"
+            fab
+            small
+            :title="$t(`feedback-schemes.load`)"
+          >
+            <v-icon>fa-download</v-icon>
+          </v-btn>
+        </template>
+      </select-resource>
     </v-toolbar>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container fluid>
@@ -85,7 +94,7 @@ import type { TopFoods } from '@intake24/common/feedback';
 import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { ColorList, NutrientList, Preview } from '@intake24/admin/components/feedback';
-import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { SelectResource } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
 import { defaultTopFoods } from '@intake24/common/feedback';
 
@@ -96,7 +105,7 @@ export type FeedbackSchemeTopFoodsForm = Pick<FeedbackSchemeForm, 'topFoods'>;
 export default defineComponent({
   name: 'FeedbackSchemeTopFoods',
 
-  components: { ColorList, NutrientList, LoadSectionDialog, Preview },
+  components: { ColorList, NutrientList, Preview, SelectResource },
 
   mixins: [formMixin],
 
@@ -162,7 +171,7 @@ export default defineComponent({
       }
     },
 
-    loadFromScheme(topFoods: TopFoods) {
+    load(topFoods: TopFoods) {
       this.form.topFoods = { ...topFoods };
     },
   },

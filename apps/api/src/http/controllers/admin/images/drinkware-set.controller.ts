@@ -2,17 +2,16 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type {
-  DrinkwareSetEntry,
-  DrinkwareSetRefs,
-  DrinkwareSetsResponse,
-} from '@intake24/common/types/http/admin';
+import type { DrinkwareSetEntry, DrinkwareSetsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
-import { DrinkwareSet, GuideImage, Task } from '@intake24/db';
+import { DrinkwareSet } from '@intake24/db';
 
-const drinkwareSetController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
+const drinkwareSetController = ({
+  imagesBaseUrl,
+  portionSizeService,
+}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService'>) => {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const entry = async (
@@ -21,17 +20,17 @@ const drinkwareSetController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) =
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
-    const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId);
+    const drinkwareSet = await portionSizeService.getDrinkwareSet(drinkwareSetId);
     if (!drinkwareSet) throw new NotFoundError();
 
-    res.json(drinkwareSet);
+    res.json(responseCollection.drinkwareEntryResponse(drinkwareSet));
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<DrinkwareSetsResponse>
   ): Promise<void> => {
-    const tasks = await DrinkwareSet.paginate({
+    const drinkwareSets = await DrinkwareSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
       order: [['id', 'ASC']],
@@ -39,15 +38,18 @@ const drinkwareSetController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) =
       transform: responseCollection.drinkwareListResponse,
     });
 
-    res.json(tasks);
+    res.json(drinkwareSets);
   };
 
   const store = async (req: Request, res: Response<DrinkwareSetEntry>): Promise<void> => {
     const { id, description, guideImageId } = req.body;
 
-    const drinkwareSet = await DrinkwareSet.create({ id, description, guideImageId });
+    await DrinkwareSet.create({ id, description, guideImageId });
 
-    res.status(201).json(drinkwareSet);
+    const drinkwareSet = await portionSizeService.getDrinkwareSet(id);
+    if (!drinkwareSet) throw new NotFoundError();
+
+    res.status(201).json(responseCollection.drinkwareEntryResponse(drinkwareSet));
   };
 
   const read = async (
@@ -73,7 +75,7 @@ const drinkwareSetController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) =
 
     await drinkwareSet.update({ description, guideImageId });
 
-    res.json(drinkwareSet);
+    res.json(responseCollection.drinkwareEntryResponse(drinkwareSet));
   };
 
   const destroy = async (
@@ -82,7 +84,7 @@ const drinkwareSetController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) =
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
-    const drinkwareSet = await Task.findByPk(drinkwareSetId);
+    const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId);
     if (!drinkwareSet) throw new NotFoundError();
 
     await drinkwareSet.destroy();
@@ -90,13 +92,8 @@ const drinkwareSetController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) =
     res.status(204).json();
   };
 
-  const refs = async (req: Request, res: Response<DrinkwareSetRefs>): Promise<void> => {
-    const guideImages = await GuideImage.findAll({
-      attributes: ['id', 'description'],
-      order: [['id', 'ASC']],
-    });
-
-    res.json({ guideImages: guideImages.map(({ id, description }) => ({ id, description })) });
+  const refs = async (): Promise<void> => {
+    throw new NotFoundError();
   };
 
   return {

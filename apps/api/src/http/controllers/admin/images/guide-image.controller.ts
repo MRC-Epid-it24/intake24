@@ -2,15 +2,11 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type {
-  GuideImageEntry,
-  GuideImageRefs,
-  GuideImagesResponse,
-} from '@intake24/common/types/http/admin';
+import type { GuideImageEntry, GuideImagesResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
-import { GuideImage, ImageMap } from '@intake24/db';
+import { GuideImage } from '@intake24/db';
 
 const guideImageController = ({
   imagesBaseUrl,
@@ -93,13 +89,8 @@ const guideImageController = ({
     res.status(204).json();
   };
 
-  const refs = async (req: Request, res: Response<GuideImageRefs>): Promise<void> => {
-    const imageMaps = await ImageMap.findAll({
-      attributes: ['id', 'description'],
-      order: [['id', 'ASC']],
-    });
-
-    res.json({ imageMaps: imageMaps.map(({ id, description }) => ({ id, description })) });
+  const refs = async (): Promise<void> => {
+    throw new NotFoundError();
   };
 
   return {

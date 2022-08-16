@@ -28,7 +28,3 @@ export interface GuideImageEntry extends ImageMapEntry {
   imageMapId: string;
   objects: GuideImageEntryObject[];
 }
-
-export type GuideImageRefs = {
-  imageMaps: Pick<ImageMapAttributes, 'id' | 'description'>[];
-};

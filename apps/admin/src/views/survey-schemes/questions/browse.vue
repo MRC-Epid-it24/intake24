@@ -5,12 +5,21 @@
         {{ $t(`survey-schemes.questions.title`) }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <load-section-dialog
-        schemeType="survey"
-        :schemeId="id"
-        section="questions"
-        @load="loadFromScheme"
-      ></load-section-dialog>
+      <select-resource resource="survey-schemes" return-object="questions" @input="load">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            class="ml-3"
+            color="secondary"
+            fab
+            small
+            :title="$t(`survey-schemes.load`)"
+          >
+            <v-icon>fa-download</v-icon>
+          </v-btn>
+        </template>
+      </select-resource>
     </v-toolbar>
     <v-container>
       <v-item-group v-model="section" mandatory active-class="secondary">
@@ -68,8 +77,8 @@ import type { MealSection, RecallQuestions, SurveyQuestionSection } from '@intak
 import type { Dictionary } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { SelectResource } from '@intake24/admin/components/forms';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
-import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { form } from '@intake24/admin/helpers';
 import {
   defaultQuestions,
@@ -86,7 +95,7 @@ export type SurveySchemeQuestionsForm = Pick<SurveySchemeForm, 'questions'>;
 export default defineComponent({
   name: 'SurveySchemeQuestions',
 
-  components: { LoadSectionDialog, PromptList },
+  components: { PromptList, SelectResource },
 
   mixins: [formMixin],
 
@@ -166,7 +175,7 @@ export default defineComponent({
       this.form.questions[section].push(question);
     },
 
-    loadFromScheme(questions: RecallQuestions) {
+    load(questions: RecallQuestions) {
       this.form.questions = { ...questions };
     },
   },

@@ -16,12 +16,21 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
-      <load-section-dialog
-        :schemeId="schemeId"
-        schemeType="feedback"
-        section="cards"
-        @load="load"
-      ></load-section-dialog>
+      <select-resource resource="feedback-schemes" return-object="cards" @input="load">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            class="ml-3"
+            color="secondary"
+            fab
+            small
+            :title="$t(`feedback-schemes.load`)"
+          >
+            <v-icon>fa-download</v-icon>
+          </v-btn>
+        </template>
+      </select-resource>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="cards" handle=".drag-and-drop__handle">
@@ -78,7 +87,7 @@ import draggable from 'vuedraggable';
 
 import type { Card } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
-import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { SelectResource } from '@intake24/admin/components/forms';
 import { useEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -107,7 +116,7 @@ export default defineComponent({
     draggable,
     CardSelector,
     ConfirmDialog,
-    LoadSectionDialog,
+    SelectResource,
   },
 
   setup(props) {

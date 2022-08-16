@@ -20,7 +20,7 @@
             <v-select
               v-model="selectedTableId"
               :items="nutrientTables"
-              :label="$t('feedback-schemes.characterTypes._')"
+              :label="$t('nutrient-tables._')"
               hide-details="auto"
               item-value="id"
               item-text="description"

@@ -21,8 +21,8 @@ const portionSizeService = () => {
   const getAsServedImages = async (
     asServedSetId: string,
     id: string | string[]
-  ): Promise<AsServedImage[]> => {
-    return AsServedImage.findAll({
+  ): Promise<AsServedImage[]> =>
+    AsServedImage.findAll({
       where: { asServedSetId, id },
       order: [['weight', 'ASC']],
       include: [
@@ -30,7 +30,6 @@ const portionSizeService = () => {
         { association: 'thumbnailImage', required: true },
       ],
     });
-  };
 
   /**
    * Get single record of as-served-images data
@@ -53,15 +52,14 @@ const portionSizeService = () => {
    * @param {(string | string[])} id
    * @returns {Promise<AsServedSet[]>}
    */
-  const getAsServedSets = async (id: string | string[]): Promise<AsServedSet[]> => {
-    return AsServedSet.findAll({
+  const getAsServedSets = async (id: string | string[]): Promise<AsServedSet[]> =>
+    AsServedSet.findAll({
       where: { id },
       include: [
         { association: 'selectionImage', required: true },
         {
           association: 'asServedImages',
           order: [['weight', 'ASC']],
-          separate: true,
           include: [
             { association: 'image', required: true },
             { association: 'thumbnailImage', required: true },
@@ -69,7 +67,6 @@ const portionSizeService = () => {
         },
       ],
     });
-  };
 
   /**
    * Get single record of as-served-set data
@@ -91,7 +88,6 @@ const portionSizeService = () => {
     {
       association: 'objects',
       order: [['navigationIndex', 'ASC']],
-      separate: true,
       include: [{ association: 'overlayImage' }],
     },
   ];
@@ -102,15 +98,14 @@ const portionSizeService = () => {
    * @param {(string | string[])} id
    * @returns {Promise<GuideImage[]>}
    */
-  const getGuideImages = async (id: string | string[]): Promise<GuideImage[]> => {
-    return GuideImage.findAll({
+  const getGuideImages = async (id: string | string[]): Promise<GuideImage[]> =>
+    GuideImage.findAll({
       where: { id },
       include: [
         { association: 'imageMap', required: true, include: imageMapScope },
-        { association: 'objects', separate: true },
+        { association: 'objects' },
       ],
     });
-  };
 
   /**
    * Get single record of guide image data
@@ -132,12 +127,8 @@ const portionSizeService = () => {
    * @param {(string | string[])} id
    * @returns {Promise<ImageMap[]>}
    */
-  const getImageMaps = async (id: string | string[]): Promise<ImageMap[]> => {
-    return ImageMap.findAll({
-      where: { id },
-      include: imageMapScope,
-    });
-  };
+  const getImageMaps = async (id: string | string[]): Promise<ImageMap[]> =>
+    ImageMap.findAll({ where: { id }, include: imageMapScope });
 
   /**
    * Get single record of image map data
@@ -159,19 +150,18 @@ const portionSizeService = () => {
    * @param {(string | string[])} id
    * @returns {Promise<DrinkwareSet[]>}
    */
-  const getDrinkwareSets = async (id: string | string[]): Promise<DrinkwareSet[]> => {
-    return DrinkwareSet.findAll({
+  const getDrinkwareSets = async (id: string | string[]): Promise<DrinkwareSet[]> =>
+    DrinkwareSet.findAll({
       where: { id },
       include: [
         {
           model: DrinkwareScale,
           order: [['id', 'ASC']],
-          separate: true,
-          include: [{ model: DrinkwareVolumeSample, order: [['fill', 'ASC']], separate: true }],
+          include: [{ model: DrinkwareVolumeSample, order: [['fill', 'ASC']] }],
         },
+        { association: 'imageMap', include: [{ association: 'baseImage' }] },
       ],
     });
-  };
 
   /**
    * Get single record of drinkware data

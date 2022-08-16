@@ -38,9 +38,7 @@
                       <v-icon>fa-list</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title>
-                        {{ item[itemId] }} | {{ item[itemName] }}
-                      </v-list-item-title>
+                      <v-list-item-title>{{ item[itemName] }}</v-list-item-title>
                     </v-list-item-content>
                   </template>
                 </v-list-item>
@@ -78,6 +76,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
+import type { Dictionary } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
 import { useFetchList } from '../lists';
@@ -92,14 +91,14 @@ export default defineComponent({
     },
     itemName: {
       type: String,
-      default: 'description',
+      default: 'name',
     },
     resource: {
       type: String,
       required: true,
     },
     returnObject: {
-      type: Boolean,
+      type: [Boolean, String],
       default: false,
     },
     value: {
@@ -110,7 +109,7 @@ export default defineComponent({
   setup(props) {
     const selectedItemId = ref<string | null>(null);
 
-    const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<any>(
+    const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
       `/admin/references/${props.resource}`
     );
 
@@ -127,7 +126,7 @@ export default defineComponent({
   },
 
   computed: {
-    selectedItem(): any | null {
+    selectedItem(): Dictionary | null {
       const { selectedItemId } = this;
       if (!selectedItemId) return null;
 
@@ -144,7 +143,15 @@ export default defineComponent({
     confirm() {
       if (!this.selectedItem) return;
 
-      this.$emit('input', this.returnObject ? copy(this.selectedItem) : this.selectedItemId);
+      const { returnObject } = this;
+
+      let returnValue: Dictionary | string | null = this.selectedItemId;
+
+      if (typeof returnObject === 'boolean')
+        returnValue = returnObject ? copy(this.selectedItem) : this.selectedItemId;
+      else returnValue = this.selectedItem[returnObject];
+
+      this.$emit('input', returnValue);
       this.close();
     },
   },

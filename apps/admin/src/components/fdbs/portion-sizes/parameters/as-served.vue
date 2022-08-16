@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <select-resource resource="as-served-sets" v-model="servingSetId">
+      <select-resource v-model="servingSetId" itemName="description" resource="as-served-sets">
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
@@ -27,6 +27,8 @@
             :value="leftoverSetId"
             clearable
             hide-details="auto"
+            itemName="description"
+            listName="id"
             name="leftover-set-id"
             prepend-inner-icon="fas fa-image"
             outlined

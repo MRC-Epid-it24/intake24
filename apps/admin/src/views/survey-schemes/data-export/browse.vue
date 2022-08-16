@@ -13,12 +13,21 @@
         {{ $t(`survey-schemes.data-export.sections._`) }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <load-section-dialog
-        schemeType="survey"
-        :schemeId="id"
-        section="dataExport"
-        @load="loadFromScheme"
-      ></load-section-dialog>
+      <select-resource resource="survey-schemes" return-object="dataExport" @input="load">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            class="ml-3"
+            color="secondary"
+            fab
+            small
+            :title="$t(`survey-schemes.load`)"
+          >
+            <v-icon>fa-download</v-icon>
+          </v-btn>
+        </template>
+      </select-resource>
     </v-toolbar>
     <data-export-section
       :section="selected"
@@ -70,7 +79,7 @@ import type {
   SurveySchemeExportRefsResponse,
 } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { LoadSectionDialog } from '@intake24/admin/components/schemes';
+import { SelectResource } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
 import { defaultExport } from '@intake24/common/schemes';
 
@@ -82,7 +91,7 @@ export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;
 export default defineComponent({
   name: 'SurveySchemeDataExport',
 
-  components: { draggable, DataExportSection, LoadSectionDialog },
+  components: { draggable, DataExportSection, SelectResource },
 
   mixins: [formMixin],
 
@@ -141,7 +150,7 @@ export default defineComponent({
       this.selected = null;
     },
 
-    loadFromScheme(exportSections: ExportSection[]) {
+    load(exportSections: ExportSection[]) {
       this.form.dataExport = [...exportSections];
     },
   },

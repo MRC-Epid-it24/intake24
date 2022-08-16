@@ -15,12 +15,21 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
-      <load-section-dialog
-        :schemeId="schemeId"
-        schemeType="feedback"
-        section="henryCoefficients"
-        @load="load"
-      ></load-section-dialog>
+      <select-resource resource="feedback-schemes" return-object="henryCoefficients" @input="load">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            class="ml-3"
+            color="secondary"
+            fab
+            small
+            :title="$t(`feedback-schemes.load`)"
+          >
+            <v-icon>fa-download</v-icon>
+          </v-btn>
+        </template>
+      </select-resource>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="items" handle=".drag-and-drop__handle">
@@ -175,8 +184,8 @@ import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
+import { SelectResource } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/components/lists';
-import { LoadSectionDialog } from '@intake24/admin/components/schemes';
 import { sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -196,7 +205,7 @@ export default defineComponent({
     },
   },
 
-  components: { ConfirmDialog, draggable, LoadSectionDialog },
+  components: { ConfirmDialog, draggable, SelectResource },
 
   setup(props, context) {
     const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } =
