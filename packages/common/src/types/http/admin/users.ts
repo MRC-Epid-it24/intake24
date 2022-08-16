@@ -43,6 +43,8 @@ export type UserEntry = UserAttributes &
 
 export type UserListEntry = Pick<UserAttributes, 'id' | 'name' | 'email'>;
 
+export type Owner = Pick<UserAttributes, 'id' | 'name' | 'email'>;
+
 export type UserRefs = {
   permissions: PermissionListEntry[];
   roles: RoleListEntry[];

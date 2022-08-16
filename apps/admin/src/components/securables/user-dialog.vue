@@ -39,7 +39,7 @@
             <v-card-text>
               <v-row>
                 <v-col cols="12">
-                  <template v-if="isEdit">
+                  <template v-if="isEdit && selected">
                     <v-text-field
                       :error-messages="form.errors.get('userId')"
                       :label="$t('users.email')"

@@ -10,7 +10,7 @@ export default class UserDemographic {
 
   private readonly henryCoefficients: HenryCoefficient[];
 
-  private readonly physicalActivityLevel?: PhysicalActivityLevelAttributes;
+  readonly physicalActivityLevel?: PhysicalActivityLevelAttributes;
 
   private readonly weightTarget?: WeightTargetCoefficient;
 

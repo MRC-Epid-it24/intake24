@@ -10,6 +10,7 @@ import type {
 import type { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
 import type { PaginateOptions, PaginateQuery } from '@intake24/db';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import { feedbackSchemeResponse } from '@intake24/api/http/responses/admin';
 import {
   createFeedbackSchemeFields,
   perCardFeedbackSchemeFields,
@@ -88,7 +89,7 @@ const feedbackSchemeController = (ioc: IoC) => {
       ownerId: userId,
     });
 
-    res.status(201).json(feedbackScheme);
+    res.status(201).json(feedbackSchemeResponse(feedbackScheme));
   };
 
   const read = async (
@@ -97,7 +98,7 @@ const feedbackSchemeController = (ioc: IoC) => {
   ): Promise<void> => {
     const feedbackScheme = await getAndCheckAccess(req, 'read');
 
-    res.json(feedbackScheme);
+    res.json(feedbackSchemeResponse(feedbackScheme));
   };
 
   const edit = async (
@@ -106,7 +107,7 @@ const feedbackSchemeController = (ioc: IoC) => {
   ): Promise<void> => {
     const feedbackScheme = await getAndCheckAccess(req, 'edit');
 
-    res.json(feedbackScheme);
+    res.json(feedbackSchemeResponse(feedbackScheme));
   };
 
   const update = async (
@@ -117,7 +118,7 @@ const feedbackSchemeController = (ioc: IoC) => {
 
     await feedbackScheme.update(pick(req.body, createFeedbackSchemeFields));
 
-    res.json(feedbackScheme);
+    res.json(feedbackSchemeResponse(feedbackScheme));
   };
 
   const patch = async (
@@ -149,7 +150,7 @@ const feedbackSchemeController = (ioc: IoC) => {
 
     await feedbackScheme.update(updateInput);
 
-    res.json(feedbackScheme);
+    res.json(feedbackSchemeResponse(feedbackScheme));
   };
 
   const put = async (
@@ -207,7 +208,7 @@ const feedbackSchemeController = (ioc: IoC) => {
       ownerId: userId,
     });
 
-    res.json(feedbackSchemeCopy);
+    res.json(feedbackSchemeResponse(feedbackSchemeCopy));
   };
 
   const refs = async (req: Request, res: Response<FeedbackSchemeRefs>): Promise<void> => {

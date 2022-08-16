@@ -1,5 +1,7 @@
-import type { JobAttributes, Pagination } from '../../models';
+import type { JobAttributes, Pagination, UserAttributes } from '../../models';
 
 export type JobsResponse = Pagination<JobAttributes>;
 
-export type JobEntry = JobAttributes;
+export interface JobEntry extends JobAttributes {
+  user?: UserAttributes;
+}

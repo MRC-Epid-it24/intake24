@@ -8,7 +8,7 @@ import PromptConditions from './prompt-conditions.vue';
 import PromptContent from './prompt-content.vue';
 import PromptValidation from './prompt-validation.vue';
 
-export type LocaleTranslationKeys = 'name' | 'text' | 'description';
+export type LocaleTranslationKeys = 'name' | 'text' | 'description' | 'label' | 'options';
 
 export default defineComponent({
   name: 'BasePrompt',

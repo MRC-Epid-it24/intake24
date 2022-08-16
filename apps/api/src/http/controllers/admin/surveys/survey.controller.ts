@@ -80,7 +80,16 @@ const adminSurveyController = (ioc: IoC) => {
   const store = async (req: Request, res: Response<SurveyEntry>): Promise<void> => {
     const { userId } = req.scope.cradle;
 
-    const survey = await Survey.create({ ...pick(req.body, createSurveyFields), ownerId: userId });
+    let survey: Survey | null = await Survey.create({
+      ...pick(req.body, createSurveyFields),
+      ownerId: userId,
+    });
+
+    survey = await Survey.scope(['locale', 'feedbackScheme', 'surveyScheme']).findByPk(
+      survey.id,
+      securableScope(userId)
+    );
+    if (!survey) throw new NotFoundError();
 
     res.status(201).json(surveyResponse(survey));
   };
@@ -127,7 +136,11 @@ const adminSurveyController = (ioc: IoC) => {
   ): Promise<void> => {
     const { aclService, userId } = req.scope.cradle;
 
-    const survey = await getAndCheckSurveyAccess(req, 'edit');
+    const survey = await getAndCheckSurveyAccess(req, 'edit', [
+      'locale',
+      'feedbackScheme',
+      'surveyScheme',
+    ]);
 
     const keysToUpdate: string[] = [];
     const [resourceActions, securableActions] = await Promise.all([

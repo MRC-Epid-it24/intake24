@@ -1,13 +1,17 @@
 import type {
+  LocaleAttributes,
   Pagination,
   SurveyAttributes,
   SurveyCreationAttributes,
   UserSecurableAttributes,
 } from '../../models';
-import type { FeedbackSchemeEntry } from './feedback-schemes';
+import type { FeedbackSchemeAttributes } from './../../models/system/feedback-schemes';
+import type { SurveySchemeAttributes } from './../../models/system/survey-schemes';
+import type { FeedbackSchemeRefEntry } from './feedback-schemes';
 import type { LanguageListEntry } from './languages';
 import type { LocaleListEntry } from './locales';
-import type { SurveySchemeEntry } from './survey-schemes';
+import type { SurveySchemeRefEntry } from './survey-schemes';
+import type { Owner } from './users';
 
 export interface SurveyRequest extends Omit<SurveyCreationAttributes, 'startDate' | 'endDate'> {
   startDate: string;
@@ -28,11 +32,15 @@ export type SurveysResponse = Pagination<SurveyListEntry>;
 export interface SurveyEntry extends Omit<SurveyAttributes, 'startDate' | 'endDate'> {
   startDate: string;
   endDate: string;
+  locale: LocaleAttributes;
+  feedbackScheme?: FeedbackSchemeAttributes;
+  surveyScheme: SurveySchemeAttributes;
+  owner?: Owner;
 }
 
 export type SurveyRefs = {
   languages: LanguageListEntry[];
   locales: LocaleListEntry[];
-  surveySchemes: SurveySchemeEntry[];
-  feedbackSchemes: FeedbackSchemeEntry[];
+  surveySchemes: SurveySchemeRefEntry[];
+  feedbackSchemes: FeedbackSchemeRefEntry[];
 };

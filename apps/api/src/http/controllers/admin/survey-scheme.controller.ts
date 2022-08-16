@@ -13,6 +13,7 @@ import type {
 import type { SurveySchemeCreationAttributes } from '@intake24/common/types/models';
 import type { FindOptions, PaginateOptions, PaginateQuery } from '@intake24/db';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import { surveySchemeResponse } from '@intake24/api/http/responses/admin';
 import {
   createSurveySchemeFields,
   perCardSurveySchemeFields,
@@ -92,7 +93,7 @@ const surveySchemeController = (ioc: IoC) => {
       ownerId: userId,
     });
 
-    res.status(201).json(surveyScheme);
+    res.status(201).json(surveySchemeResponse(surveyScheme));
   };
 
   const read = async (
@@ -101,7 +102,7 @@ const surveySchemeController = (ioc: IoC) => {
   ): Promise<void> => {
     const surveyScheme = await getAndCheckAccess(req, 'read');
 
-    res.json(surveyScheme);
+    res.json(surveySchemeResponse(surveyScheme));
   };
 
   const edit = async (
@@ -110,7 +111,7 @@ const surveySchemeController = (ioc: IoC) => {
   ): Promise<void> => {
     const surveyScheme = await getAndCheckAccess(req, 'edit');
 
-    res.json(surveyScheme);
+    res.json(surveySchemeResponse(surveyScheme));
   };
 
   const update = async (
@@ -121,7 +122,7 @@ const surveySchemeController = (ioc: IoC) => {
 
     await surveyScheme.update(pick(req.body, createSurveySchemeFields));
 
-    res.json(surveyScheme);
+    res.json(surveySchemeResponse(surveyScheme));
   };
 
   const patch = async (
@@ -153,7 +154,7 @@ const surveySchemeController = (ioc: IoC) => {
 
     await surveyScheme.update(updateInput);
 
-    res.json(surveyScheme);
+    res.json(surveySchemeResponse(surveyScheme));
   };
 
   const put = async (
@@ -198,7 +199,7 @@ const surveySchemeController = (ioc: IoC) => {
       ownerId: userId,
     });
 
-    res.json(surveySchemeCopy);
+    res.json(surveySchemeResponse(surveySchemeCopy));
   };
 
   const refs = async (req: Request, res: Response<SurveySchemeRefs>): Promise<void> => {

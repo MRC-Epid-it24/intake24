@@ -4,7 +4,7 @@ import type {
   SurveySchemeQuestionCreationAttributes,
 } from '../../models';
 import type { LanguageListEntry } from './languages';
-import type { SurveySchemeEntry } from './survey-schemes';
+import type { SurveySchemeRefEntry } from './survey-schemes';
 
 export type SurveySchemeQuestionRequest = SurveySchemeQuestionCreationAttributes;
 
@@ -18,6 +18,6 @@ export type SurveySchemeQuestionEntry = SurveySchemeQuestionAttributes;
 
 export type SurveySchemeQuestionRefs = {
   languages: LanguageListEntry[];
-  schemes: SurveySchemeEntry[];
+  schemes: SurveySchemeRefEntry[];
   questionIds: string[];
 };

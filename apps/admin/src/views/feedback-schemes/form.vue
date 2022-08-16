@@ -201,7 +201,7 @@ export default defineComponent({
     currentFeedbackScheme(): FeedbackSchemeEntry {
       return { ...this.entry, ...this.form.getData(true) } as FeedbackSchemeEntry;
     },
-    requiredPhysicalDataFields(): any {
+    requiredPhysicalDataFields(): Record<FeedbackPhysicalDataField, boolean> {
       const flags: Record<FeedbackPhysicalDataField, boolean> = {
         sex: false,
         weightKg: false,

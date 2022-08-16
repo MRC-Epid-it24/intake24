@@ -48,6 +48,7 @@ import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
+import type { PaginationMeta } from '@intake24/common/types/models';
 
 export default defineComponent({
   name: 'SurveyDataTable',
@@ -75,7 +76,7 @@ export default defineComponent({
     return {
       search: '',
       items: [] as Dictionary[],
-      meta: {},
+      meta: {} as PaginationMeta,
       options: {} as DataOptions,
       selected: [] as Dictionary[],
       tracked: [] as string[] | number[],

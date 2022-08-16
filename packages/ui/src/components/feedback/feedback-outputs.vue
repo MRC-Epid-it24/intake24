@@ -195,7 +195,7 @@ export default defineComponent({
         dialog: false,
       },
       email: {
-        emailDialog: false,
+        dialog: false,
         form: {
           email: '',
           emailConfirm: '',

@@ -98,12 +98,6 @@ export default defineComponent({
       })),
     };
   },
-
-  methods: {
-    resetMeals() {
-      this.form.meals = this.refs.meals;
-    },
-  },
 });
 </script>
 

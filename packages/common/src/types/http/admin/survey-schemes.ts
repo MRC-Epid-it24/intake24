@@ -6,6 +6,7 @@ import type {
   SurveySchemeCreationAttributes,
 } from '../../models';
 import type { LanguageListEntry } from './languages';
+import type { Owner } from './users';
 
 export type SurveySchemeRequest = SurveySchemeCreationAttributes;
 
@@ -15,7 +16,11 @@ export type UpdateSurveySchemeRequest = Omit<SurveySchemeRequest, 'id'>;
 
 export type SurveySchemesResponse = Pagination<SurveySchemeAttributes>;
 
-export type SurveySchemeEntry = SurveySchemeAttributes;
+export interface SurveySchemeEntry extends SurveySchemeAttributes {
+  owner?: Owner;
+}
+
+export type SurveySchemeRefEntry = SurveySchemeAttributes;
 
 export type SurveySchemeListEntry = Pick<SurveySchemeAttributes, 'id' | 'name'>;
 

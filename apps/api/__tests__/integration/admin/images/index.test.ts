@@ -57,7 +57,6 @@ export default () => {
   // Guided images
   describe('GET /api/admin/images/guide-images', guideImages.browse);
   describe('POST /api/admin/images/guide-images', guideImages.store);
-  describe('GET /api/admin/images/guide-images/refs', guideImages.refs);
   describe('GET /api/admin/images/guide-images/:guideImageId', guideImages.read);
   describe('GET /api/admin/images/guide-images/:guideImageId/edit', guideImages.edit);
   describe('PUT /api/admin/images/guide-images/:guideImageId', guideImages.update);

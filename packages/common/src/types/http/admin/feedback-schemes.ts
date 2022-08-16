@@ -6,6 +6,7 @@ import type {
 } from '../../models/system/feedback-schemes';
 import type { LanguageListEntry } from './languages';
 import type { NutrientTypeEntry } from './nutrient-types';
+import type { Owner } from './users';
 
 /* export type FeedbackSchemeRequest = FeedbackSchemeCreationAttributes;
 
@@ -15,7 +16,11 @@ export type UpdateFeedbackSchemeRequest = Omit<FeedbackSchemeRequest, 'id'>; */
 
 export type FeedbackSchemesResponse = Pagination<FeedbackSchemeAttributes>;
 
-export type FeedbackSchemeEntry = FeedbackSchemeAttributes;
+export type FeedbackSchemeRefEntry = FeedbackSchemeAttributes;
+
+export interface FeedbackSchemeEntry extends FeedbackSchemeAttributes {
+  owner?: Owner;
+}
 
 export type FeedbackSchemeListEntry = Pick<FeedbackSchemeAttributes, 'id' | 'name'>;
 
