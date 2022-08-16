@@ -165,6 +165,10 @@ export const sidebar = {
           link: '/api/admin/user/jobs',
         },
         {
+          text: 'Food databases',
+          link: '/api/admin/fdbs',
+        },
+        {
           text: 'Food groups',
           link: '/api/admin/food-groups',
         },
@@ -177,12 +181,20 @@ export const sidebar = {
           link: '/api/admin/images/as-served-images',
         },
         {
+          text: 'Drinkware sets',
+          link: '/api/admin/images/drinkware-sets',
+        },
+        {
           text: 'Guide images',
           link: '/api/admin/images/guide-images',
         },
         {
           text: 'Image maps',
           link: '/api/admin/images/image-maps',
+        },
+        {
+          text: 'Feedback schemes',
+          link: '/api/admin/feedback-schemes',
         },
         {
           text: 'Jobs',
@@ -201,12 +213,12 @@ export const sidebar = {
           link: '/api/admin/nutrient-tables',
         },
         {
-          text: 'Feedback schemes',
-          link: '/api/admin/feedback-schemes',
-        },
-        {
           text: 'Permissions',
           link: '/api/admin/permissions',
+        },
+        {
+          text: 'References',
+          link: '/api/admin/references',
         },
         {
           text: 'Roles',
