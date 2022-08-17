@@ -56,8 +56,8 @@ export default () => {
     expect(body).toContainAllKeys([
       'userId',
       'name',
-      'recallNumber',
-      'redirectToFeedback',
+      'submissions',
+      'showFeedback',
       'maximumTotalSubmissionsReached',
       'maximumDailySubmissionsReached',
     ]);

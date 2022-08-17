@@ -10,6 +10,7 @@ import type {
 } from '@intake24/common/types';
 import type { SurveyFollowUpResponse } from '@intake24/common/types/http';
 import type { SurveySubmissionFoodCreationAttributes } from '@intake24/common/types/models';
+import type { User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
   FeedbackScheme,
@@ -186,14 +187,16 @@ const surveySubmissionService = ({
    * Process survey state and submit recall
    *
    * @param {string} slug
-   * @param {string} userId
+   * @param {User} user
    * @param {SurveyState} surveyState
-   * @returns {Promise<void>}
+   * @param {number} tzOffset
+   * @returns {Promise<SurveyFollowUpResponse>}
    */
   const submit = async (
     slug: string,
-    userId: string,
-    surveyState: SurveyState
+    user: User,
+    surveyState: SurveyState,
+    tzOffset: number
   ): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.findOne({
       where: { slug },
@@ -213,6 +216,8 @@ const surveySubmissionService = ({
       },
       submissionNotificationUrl,
     } = survey;
+
+    const { id: userId } = user;
 
     const surveyCustomQuestions = [...preMeals, ...postMeals]
       .filter((question) => question.type === 'custom')
@@ -357,12 +362,12 @@ const surveySubmissionService = ({
       ].map(Boolean)
     );
 
-    const [followUpUrl, showFeedback] = await Promise.all([
+    const [followUpUrl, userInfo] = await Promise.all([
       surveyService.getFollowUpUrl(survey, userId),
-      surveyService.canShowFeedback(survey, userId),
+      surveyService.userInfo(survey, user, tzOffset),
     ]);
 
-    return { followUpUrl, showFeedback };
+    return { ...userInfo, followUpUrl };
   };
 
   return {

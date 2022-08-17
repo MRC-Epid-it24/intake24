@@ -4,7 +4,12 @@ import VueRouter from 'vue-router';
 
 import views from '@intake24/survey/views';
 
-import { globalGuard, surveyParametersErrorGuard, surveyParametersGuard } from './guards';
+import {
+  feedbackParametersGuard,
+  globalGuard,
+  surveyParametersErrorGuard,
+  surveyParametersGuard,
+} from './guards';
 
 Vue.use(VueRouter);
 
@@ -67,7 +72,7 @@ const routes: RouteConfig[] = [
     name: 'feedback-home',
     component: views.feedback.home,
     meta: { module: 'feedback', title: 'feedback._' },
-    beforeEnter: surveyParametersGuard,
+    beforeEnter: feedbackParametersGuard,
     props: true,
   },
   {
@@ -83,7 +88,7 @@ const routes: RouteConfig[] = [
     name: 'feedback-physical-data',
     component: views.feedback.physicalData,
     meta: { module: 'feedback', title: 'feedback._' },
-    beforeEnter: surveyParametersGuard,
+    beforeEnter: feedbackParametersGuard,
     props: true,
   },
 

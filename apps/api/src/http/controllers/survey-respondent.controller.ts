@@ -129,27 +129,18 @@ const surveyRespondentController = ({
     res.json();
   };
 
-  const submissions = async (
-    req: Request<{ slug: string }>,
+  const submission = async (
+    req: Request<{ slug: string }, any, any, { tzOffset: number }>,
     res: Response<SurveyFollowUpResponse>
   ): Promise<void> => {
-    const { slug } = req.params;
-    const { id: userId } = req.user as User;
+    const {
+      params: { slug },
+      query: { tzOffset },
+    } = req;
+    const user = req.user as User;
     const { submission } = req.body;
 
-    const followUpInfo = await surveySubmissionService.submit(slug, userId, submission);
-
-    res.json(followUpInfo);
-  };
-
-  const followUp = async (
-    req: Request<{ slug: string }>,
-    res: Response<SurveyFollowUpResponse>
-  ): Promise<void> => {
-    const { slug } = req.params;
-    const { id: userId } = req.user as User;
-
-    const followUpInfo = await surveyService.followUp(slug, userId);
+    const followUpInfo = await surveySubmissionService.submit(slug, user, submission, tzOffset);
 
     res.json(followUpInfo);
   };
@@ -160,8 +151,7 @@ const surveyRespondentController = ({
     getSession,
     setSession,
     requestHelp,
-    submissions,
-    followUp,
+    submission,
   };
 };
 

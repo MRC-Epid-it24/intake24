@@ -42,15 +42,14 @@ export type SurveyEntryResponse = {
 export type SurveyUserInfoResponse = {
   userId: string;
   name: string | null;
-  recallNumber: number;
-  redirectToFeedback: boolean;
+  submissions: number;
+  showFeedback: boolean;
   maximumTotalSubmissionsReached: boolean;
   maximumDailySubmissionsReached: boolean;
 };
 
 export type SurveyUserSessionResponse = UserSurveySessionAttributes;
 
-export type SurveyFollowUpResponse = {
+export interface SurveyFollowUpResponse extends SurveyUserInfoResponse {
   followUpUrl: string | null;
-  showFeedback: boolean;
-};
+}

@@ -17,8 +17,11 @@ export default () => {
   router.get('/user-info', validation.userInfo, wrapAsync(surveyRespondentController.userInfo));
   router.get('/session', wrapAsync(surveyRespondentController.getSession));
   router.post('/session', validation.setSession, wrapAsync(surveyRespondentController.setSession));
-  router.post('/submissions', wrapAsync(surveyRespondentController.submissions));
-  router.get('/follow-up', wrapAsync(surveyRespondentController.followUp));
+  router.post(
+    '/submission',
+    validation.submission,
+    wrapAsync(surveyRespondentController.submission)
+  );
   router.post('/request-help', wrapAsync(surveyRespondentController.requestHelp));
   return router;
 };

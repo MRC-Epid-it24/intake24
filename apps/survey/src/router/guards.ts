@@ -2,6 +2,29 @@ import type { NavigationGuard } from 'vue-router';
 
 import { useAuth, useSurvey } from '../stores';
 
+export const feedbackParametersGuard: NavigationGuard = async (to, from, next) => {
+  const {
+    meta: { module } = {},
+    params: { surveyId },
+  } = to;
+
+  const survey = useSurvey();
+
+  if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
+
+  if (!survey.parametersLoaded) {
+    next({ name: `${module}-error`, params: { surveyId } });
+    return;
+  }
+
+  if (!survey.user?.showFeedback) {
+    next({ name: 'survey-home', params: { surveyId } });
+    return;
+  }
+
+  next();
+};
+
 export const surveyParametersGuard: NavigationGuard = async (to, from, next) => {
   const {
     meta: { module } = {},

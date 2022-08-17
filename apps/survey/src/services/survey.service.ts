@@ -3,6 +3,7 @@ import type {
   GenerateUserResponse,
   PublicSurveyEntry,
   SurveyEntryResponse,
+  SurveyFollowUpResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
@@ -70,7 +71,15 @@ export default {
     return data;
   },
 
-  submit: async (surveyId: string, submission: SurveyState): Promise<void> => {
-    await http.post(`surveys/${surveyId}/submissions`, { submission });
+  submit: async (surveyId: string, submission: SurveyState): Promise<SurveyFollowUpResponse> => {
+    const tzOffset = new Date().getTimezoneOffset();
+
+    const { data } = await http.post<SurveyFollowUpResponse>(
+      `surveys/${surveyId}/submission`,
+      { submission },
+      { params: { tzOffset } }
+    );
+
+    return data;
   },
 };

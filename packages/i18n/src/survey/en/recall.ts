@@ -5,6 +5,8 @@ const recall: LocaleMessageObject = {
   dynamic: 'Dynamic recall flow',
   dynamicTitle: 'Intake24 dietary recall',
   submit: 'Submit the recall',
+  restart: 'New recall',
+  feedback: 'Go to feedback',
   menu: {
     meal: {
       editFoodInMeal: 'Edit/Change Foods',

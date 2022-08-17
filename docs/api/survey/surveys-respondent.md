@@ -61,8 +61,8 @@ Content-Type: application/json
 {
    "id" : string,
    "name": string | null,
-   "recallNumber": number,
-   "redirectToFeedback": boolean,
+   "submissions": number,
+   "showFeedback": boolean,
    "maximumTotalSubmissionsReached": boolean,
    "maximumDailySubmissionsReached": boolean
 }
@@ -74,9 +74,9 @@ where:
 
 **name** is optional first name of the respondent (used to confirm that the right person is completing the recall),
 
-**recallNumber** is the current recall number, i.e. the number of previous submissions + 1,
+**submissions** is the number of collected submissions,
 
-**redirectToFeedback** means that the user should be redirected to dietary feedback and not allowed to complete, any more recalls
+**showFeedback** means if user can be offered feedback,
 
 **maximumTotalSubmissionsReached** means that the user is not allowed to complete any more recalls (used to display the correct error page in case the dietary feedback redirect is disabled),
 
@@ -136,59 +136,36 @@ Content-Type: application/json
 }
 ```
 
-## Survey follow-up
-
-Returns actions available at the end of the recall which can be a link to the next (external) stage of the survey and/or a link to the dietary feedback.
-
-### Request
-
-```json
-GET /api/surveys/{survey-slug}/follow-up
-
-Authorization: Bearer {accessToken}
-Content-Type: application/json
-```
-
-### Response
-
-```json
-200 OK
-
-{
-  "followUpUrl": string | null,
-  "showFeedback": boolean
-}
-```
-
 ## Submit recall
 
 Submit a completed recall.
 
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/system/user/SurveyController.scala#L181-L290)
-
 ### Request
 
 ```json
-POST /api/surveys/{survey-slug}/submissions
+POST /api/surveys/{survey-slug}/submission?tzOffset={tzOffset}
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-  "recall": {...}
+  "submission": {...}
 }
 ```
 
 ### Response
 
-Same as survey follow-up:
-
 ```json
 200 OK
 
 {
-  "followUpUrl": string | null,
-  "showFeedback": boolean
+   "id" : string,
+   "name": string | null,
+   "submissions": number,
+   "showFeedback": boolean,
+   "maximumTotalSubmissionsReached": boolean,
+   "maximumDailySubmissionsReached": boolean,
+   "followUpUrl": string | null,
 }
 ```
 

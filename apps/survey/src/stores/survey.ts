@@ -14,7 +14,11 @@ import type {
   Selection,
   SurveyState as CurrentSurveyState,
 } from '@intake24/common/types';
-import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
+import type {
+  SurveyEntryResponse,
+  SurveyFollowUpResponse,
+  SurveyUserInfoResponse,
+} from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import {
@@ -51,7 +55,7 @@ export type SurveyStateSnapshot = {
 
 export interface SurveyState {
   parameters: SurveyEntryResponse | null;
-  user: SurveyUserInfoResponse | null;
+  user: SurveyUserInfoResponse | SurveyFollowUpResponse | null;
   data: CurrentSurveyState;
   history: SurveyStateSnapshot[];
   undo: MealUndo | FoodUndo | null;
@@ -183,7 +187,7 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      await surveyService.submit(surveyId, this.data);
+      this.user = await surveyService.submit(surveyId, this.data);
       // TODO: do the submitted state cleanup and user has landed on final page and doesn't need that anymore
     },
 

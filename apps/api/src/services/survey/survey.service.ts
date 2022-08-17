@@ -119,17 +119,17 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
   /**
    * User information for survey
    *
-   * @param {string} slug
+   * @param {(string | Survey)} slug
    * @param {User} user
    * @param {number} tzOffset
    * @returns {Promise<SurveyUserInfoResponse>}
    */
   const userInfo = async (
-    slug: string,
-    { id: userId, name }: User,
+    slug: string | Survey,
+    user: User,
     tzOffset: number
   ): Promise<SurveyUserInfoResponse> => {
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = typeof slug === 'string' ? await Survey.findOne({ where: { slug } }) : slug;
     if (!survey) throw new NotFoundError();
 
     const {
@@ -138,6 +138,7 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
       maximumTotalSubmissions,
       maximumDailySubmissions,
     } = survey;
+    const { id: userId, name } = user;
 
     const clientStartOfDay = addMinutes(startOfDay(new Date()), tzOffset * -1);
     const clientEndOfDay = addDays(clientStartOfDay, 1);
@@ -156,8 +157,8 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
     return {
       userId,
       name,
-      recallNumber: totalSubmissions + 1,
-      redirectToFeedback: !!(
+      submissions: totalSubmissions,
+      showFeedback: !!(
         feedbackSchemeId && totalSubmissions >= survey.numberOfSubmissionsForFeedback
       ),
       maximumTotalSubmissionsReached:
@@ -282,23 +283,11 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
     return url?.replace('{identifier}', identifierValue) ?? null;
   };
 
-  /**
-   * Verify that user can be offered a feedback
-   *
-   * @param {Survey} survey
-   * @param {string} userId
-   * @returns {Promise<boolean>}
-   */
-  const canShowFeedback = async (survey: Survey, userId: string): Promise<boolean> => {
-    const { id: surveyId, feedbackSchemeId, numberOfSubmissionsForFeedback } = survey;
-    if (!feedbackSchemeId) return false;
-
-    const submissions = await SurveySubmission.count({ where: { surveyId, userId } });
-
-    return submissions >= numberOfSubmissionsForFeedback;
-  };
-
-  const followUp = async (slug: string, userId: string): Promise<SurveyFollowUpResponse> => {
+  const followUp = async (
+    slug: string,
+    user: User,
+    tzOffset: number
+  ): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.findOne({
       where: { slug },
       include: [{ model: SurveyScheme, required: true }],
@@ -306,11 +295,11 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
 
     const [followUpUrl, showFeedback] = await Promise.all([
-      getFollowUpUrl(survey, userId),
-      canShowFeedback(survey, userId),
+      getFollowUpUrl(survey, user.id),
+      userInfo(survey, user, tzOffset),
     ]);
 
-    return { followUpUrl, showFeedback };
+    return { ...showFeedback, followUpUrl };
   };
 
   return {
@@ -321,7 +310,6 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
     setSession,
     getSubmissions,
     getFollowUpUrl,
-    canShowFeedback,
     followUp,
   };
 };

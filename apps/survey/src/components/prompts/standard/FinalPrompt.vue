@@ -1,7 +1,21 @@
 <template>
   <prompt-layout :text="text" :description="description">
     <template v-slot:actions>
-      <v-btn class="px-5" color="success" large @click="restart">New recall</v-btn>
+      <v-btn
+        v-if="canShowFeedback"
+        class="px-5"
+        color="success"
+        large
+        :to="{ name: 'feedback-home', params: { surveyId } }"
+      >
+        <v-icon left>fas fa-comments</v-icon>
+        {{ $t('recall.feedback') }}
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn v-if="canRestart" class="px-5" color="success" large @click="restart">
+        <v-icon left>fas fa-tachometer-alt</v-icon>
+        {{ $t('recall.restart') }}
+      </v-btn>
     </template>
   </prompt-layout>
 </template>
@@ -22,8 +36,20 @@ export default defineComponent({
   mixins: [BasePrompt],
 
   props: {
+    canRestart: {
+      type: Boolean,
+      default: false,
+    },
+    canShowFeedback: {
+      type: Boolean,
+      default: false,
+    },
     promptProps: {
       type: Object as PropType<BasePromptProps>,
+      required: true,
+    },
+    surveyId: {
+      type: String,
       required: true,
     },
   },

@@ -29,7 +29,7 @@ const checkRecallNumber = (state: SurveyState, condition: Condition) => {
     console.error('User information should not be null at this point');
     return false;
   }
-  return conditionOps[condition.op]([condition.value, state.user.recallNumber]);
+  return conditionOps[condition.op]([condition.value, state.user.submissions + 1]);
 };
 
 const showPrompt = (state: SurveyState, prompt: PromptQuestion, component: ComponentType) =>

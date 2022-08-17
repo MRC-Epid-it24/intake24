@@ -86,7 +86,7 @@ const createFeedbackService = (httpClient: HttpClient) => {
       return acc;
     }, []);
 
-    const cardsWithCharacterRules = cards.map((card) => {
+    const cardsWithCharacterRules: CardWithCharRules[] = cards.map((card) => {
       if (card.type !== 'character') return card;
 
       const { nutrientTypeIds } = card;

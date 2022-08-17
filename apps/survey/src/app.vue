@@ -48,7 +48,7 @@
             </v-list-item>
             <v-list-item v-if="surveyId" :to="{ name: 'feedback-home', params: { surveyId } }" link>
               <v-list-item-action>
-                <v-icon>fas fa-comments</v-icon>
+                <v-icon>fas fa-fw fa-comments</v-icon>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('feedback._') }}</v-list-item-title>
