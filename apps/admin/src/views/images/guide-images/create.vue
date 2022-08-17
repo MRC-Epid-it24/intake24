@@ -16,8 +16,9 @@
             </v-col>
             <v-col cols="12" md="6">
               <select-resource
-                resource="image-maps"
                 v-model="form.imageMapId"
+                itemName="id"
+                resource="image-maps"
                 @input="form.errors.clear('imageMapId')"
               >
                 <template v-slot:activator="{ on, attrs }">
@@ -25,14 +26,15 @@
                     v-bind="attrs"
                     v-on="on"
                     :error-messages="form.errors.get('imageMapId')"
-                    :label="$t('guide-images.id')"
+                    :label="$t('image-maps.id')"
                     :value="form.imageMapId"
                     hide-details="auto"
                     name="imageMapId"
                     clearable
                     outlined
                     readonly
-                  ></v-text-field>
+                  >
+                  </v-text-field>
                 </template>
               </select-resource>
             </v-col>

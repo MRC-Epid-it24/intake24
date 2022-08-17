@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <select-resource v-model="servingSetId" itemName="description" resource="as-served-sets">
+      <select-resource v-model="servingSetId" itemName="id" resource="as-served-sets">
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
@@ -18,7 +18,7 @@
       </select-resource>
     </v-col>
     <v-col cols="12">
-      <select-resource resource="as-served-sets" v-model="leftoverSetId">
+      <select-resource v-model="leftoverSetId" itemName="id" resource="as-served-sets">
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"

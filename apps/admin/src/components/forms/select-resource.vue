@@ -35,10 +35,12 @@
                       <v-checkbox :input-value="active"></v-checkbox>
                     </v-list-item-action>
                     <v-list-item-avatar>
-                      <v-icon>fa-list</v-icon>
+                      <v-icon>{{ itemIcon }}</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title>{{ item[itemName] }}</v-list-item-title>
+                      <v-list-item-title>
+                        <slot name="item" v-bind="{ item }">{{ item[itemName] }}</slot>
+                      </v-list-item-title>
                     </v-list-item-content>
                   </template>
                 </v-list-item>
@@ -77,6 +79,7 @@
 import { defineComponent, ref } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
+import { getResource } from '@intake24/admin/router/resources';
 import { copy } from '@intake24/common/util';
 
 import { useFetchList } from '../lists';
@@ -126,6 +129,9 @@ export default defineComponent({
   },
 
   computed: {
+    itemIcon() {
+      return getResource(this.resource)?.icon ?? 'fa-list';
+    },
     selectedItem(): Dictionary | null {
       const { selectedItemId } = this;
       if (!selectedItemId) return null;

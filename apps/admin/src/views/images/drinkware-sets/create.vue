@@ -15,25 +15,27 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-select
+              <select-resource
                 v-model="form.guideImageId"
-                :items="refs.guideImages"
-                :label="$t('guide-images._')"
-                :error-messages="form.errors.get('guideImageId')"
-                item-value="id"
-                item-text="description"
-                hide-details="auto"
-                name="guideImageId"
-                outlined
-                @change="form.errors.clear('guideImageId')"
+                itemName="id"
+                resource="image-maps"
+                @input="form.errors.clear('guideImageId')"
               >
-                <template v-slot:item="{ item }">
-                  {{ `${item.id} (${item.description})` }}
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-bind="attrs"
+                    v-on="on"
+                    :error-messages="form.errors.get('guideImageId')"
+                    :label="$t('image-maps._')"
+                    :value="form.guideImageId"
+                    hide-details="auto"
+                    name="guideImageId"
+                    clearable
+                    outlined
+                    readonly
+                  ></v-text-field>
                 </template>
-                <template v-slot:selection="{ item }">
-                  {{ `${item.id} (${item.description})` }}
-                </template>
-              </v-select>
+              </select-resource>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -58,6 +60,7 @@ import { defineComponent } from 'vue';
 
 import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { SelectResource } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
 
 type CreateDrinkwareSetForm = {
@@ -69,12 +72,14 @@ type CreateDrinkwareSetForm = {
 export default defineComponent({
   name: 'CreateDrinkwareSetForm',
 
+  components: { SelectResource },
+
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<DrinkwareSetEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<DrinkwareSetEntry>(props.id);
 
-    return { entry, entryLoaded, refs, refsLoaded };
+    return { entry, entryLoaded };
   },
 
   data() {

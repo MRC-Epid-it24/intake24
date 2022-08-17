@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <select-resource v-model="drinkwareSetId" itemName="description" resource="drinkware-sets">
+      <select-resource v-model="drinkwareSetId" itemName="id" resource="drinkware-sets">
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
