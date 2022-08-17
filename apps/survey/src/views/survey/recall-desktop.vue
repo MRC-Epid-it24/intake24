@@ -30,6 +30,7 @@
           @validation-update="onValidationUpdate"
           @complete="onComplete"
           @continue="onContinue"
+          @restart="restart"
         ></component>
       </transition>
     </v-col>

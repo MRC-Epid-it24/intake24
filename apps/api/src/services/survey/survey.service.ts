@@ -132,7 +132,12 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
     const survey = await Survey.findOne({ where: { slug } });
     if (!survey) throw new NotFoundError();
 
-    const { id: surveyId, maximumTotalSubmissions, maximumDailySubmissions } = survey;
+    const {
+      id: surveyId,
+      feedbackSchemeId,
+      maximumTotalSubmissions,
+      maximumDailySubmissions,
+    } = survey;
 
     const clientStartOfDay = addMinutes(startOfDay(new Date()), tzOffset * -1);
     const clientEndOfDay = addDays(clientStartOfDay, 1);
@@ -152,7 +157,9 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
       userId,
       name,
       recallNumber: totalSubmissions + 1,
-      redirectToFeedback: totalSubmissions >= survey.numberOfSubmissionsForFeedback,
+      redirectToFeedback: !!(
+        feedbackSchemeId && totalSubmissions >= survey.numberOfSubmissionsForFeedback
+      ),
       maximumTotalSubmissionsReached:
         maximumTotalSubmissions !== null && totalSubmissions >= maximumTotalSubmissions,
       maximumDailySubmissionsReached:
@@ -283,18 +290,18 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
    * @returns {Promise<boolean>}
    */
   const canShowFeedback = async (survey: Survey, userId: string): Promise<boolean> => {
-    const { id: surveyId, feedbackScheme, numberOfSubmissionsForFeedback } = survey;
-    if (!feedbackScheme) return false;
+    const { id: surveyId, feedbackSchemeId, numberOfSubmissionsForFeedback } = survey;
+    if (!feedbackSchemeId) return false;
 
     const submissions = await SurveySubmission.count({ where: { surveyId, userId } });
 
-    return numberOfSubmissionsForFeedback >= submissions;
+    return submissions >= numberOfSubmissionsForFeedback;
   };
 
   const followUp = async (slug: string, userId: string): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.findOne({
       where: { slug },
-      include: [{ model: SurveyScheme, required: true }, { model: FeedbackScheme }],
+      include: [{ model: SurveyScheme, required: true }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
 

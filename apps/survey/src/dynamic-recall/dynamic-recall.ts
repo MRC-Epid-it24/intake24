@@ -19,7 +19,7 @@ export const parseMealTime = (time: string): MealTime => {
   return { hours: parseInt(hours, 10), minutes: parseInt(minutes, 10) };
 };
 
-export const surveyInitialState: CurrentSurveyState = {
+export const surveyInitialState = (): CurrentSurveyState => ({
   schemeId: null,
   startTime: null,
   endTime: null,
@@ -42,7 +42,7 @@ export const surveyInitialState: CurrentSurveyState = {
   meals: [],
   nextFoodId: 0,
   nextMealId: 0,
-};
+});
 
 export default class DynamicRecall {
   private store;
@@ -65,7 +65,7 @@ export default class DynamicRecall {
       console.debug('Current survey data is null, starting new survey');
 
       const initialState: CurrentSurveyState = {
-        ...surveyInitialState,
+        ...surveyInitialState(),
         schemeId: this.surveyScheme.id,
         startTime: new Date(),
         meals: this.surveyScheme.meals.map((meal) => ({

@@ -308,5 +308,11 @@ export default defineComponent({
         this.currentPrompt = nextPrompt;
       }
     },
+
+    async restart() {
+      useSurvey().clearState();
+      await this.recallController?.initialiseSurvey();
+      await this.nextPrompt();
+    },
   },
 });

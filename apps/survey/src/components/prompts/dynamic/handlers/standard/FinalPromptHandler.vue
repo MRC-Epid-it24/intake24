@@ -1,5 +1,5 @@
 <template>
-  <component :is="promptComponent" v-bind="{ promptProps }"></component>
+  <component :is="promptComponent" v-bind="{ promptProps }" @restart="restart"></component>
 </template>
 
 <script lang="ts">
@@ -23,6 +23,12 @@ export default defineComponent({
     promptComponent: {
       type: String,
       required: true,
+    },
+  },
+
+  methods: {
+    async restart() {
+      this.$emit('restart');
     },
   },
 });

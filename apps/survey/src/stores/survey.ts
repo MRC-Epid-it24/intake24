@@ -73,7 +73,7 @@ export const useSurvey = defineStore('survey', {
   state: (): SurveyState => ({
     parameters: null,
     user: null,
-    data: surveyInitialState,
+    data: surveyInitialState(),
     history: [],
     undo: null,
     error: null,
@@ -157,7 +157,7 @@ export const useSurvey = defineStore('survey', {
     },
 
     async clearState() {
-      this.setState(surveyInitialState);
+      this.setState(surveyInitialState());
     },
 
     async clearUndo() {

@@ -35,6 +35,7 @@
           :submitTrigger="submitTrigger"
           @validation-update="onValidationUpdate"
           @continue="onContinue"
+          @restart="restart"
           @resetPromptTrigger="resetTrigger"
           @meal-food-selected="onMealFoodMobileClick"
         ></component>

@@ -1,5 +1,9 @@
 <template>
-  <prompt-layout :text="text" :description="description"> </prompt-layout>
+  <prompt-layout :text="text" :description="description">
+    <template v-slot:actions>
+      <v-btn class="px-5" color="success" large @click="restart">New recall</v-btn>
+    </template>
+  </prompt-layout>
 </template>
 
 <script lang="ts">
@@ -29,8 +33,8 @@ export default defineComponent({
   },
 
   methods: {
-    submit() {
-      this.$emit('submit');
+    restart() {
+      this.$emit('restart');
     },
   },
 });
