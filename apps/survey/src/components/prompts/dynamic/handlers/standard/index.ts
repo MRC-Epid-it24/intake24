@@ -1,5 +1,6 @@
 import AssociatedFoodsPromptHandler from './AssociatedFoodsPromptHandler.vue';
 import EditMealPromptHandler from './EditMealPromptHandler.vue';
+import FinalPromptHandler from './FinalPromptHandler.vue';
 import FoodSearchPromptHandler from './FoodSearchPromptHandler.vue';
 import MealAddPromptHandler from './MealAddPromptHandler.vue';
 import MealTimePromptHandler from './MealTimePromptHandler.vue';
@@ -12,6 +13,7 @@ export default {
   MealAddPromptHandler,
   EditMealPromptHandler,
   SubmitPromptHandler,
+  FinalPromptHandler,
   ReviewConfirmPromptHandler,
   AssociatedFoodsPromptHandler,
 };

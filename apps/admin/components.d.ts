@@ -89,6 +89,7 @@ declare module '@vue/runtime-core' {
     PromptsPromptTypeSelector: typeof import('./src/components/prompts/prompt-type-selector.vue')['default']
     PromptsStandardAssociatedFoodsPrompt: typeof import('./src/components/prompts/standard/associated-foods-prompt.vue')['default']
     PromptsStandardEditMealPrompt: typeof import('./src/components/prompts/standard/edit-meal-prompt.vue')['default']
+    PromptsStandardFinalPrompt: typeof import('./src/components/prompts/standard/final-prompt.vue')['default']
     PromptsStandardFoodSearchPrompt: typeof import('./src/components/prompts/standard/food-search-prompt.vue')['default']
     PromptsStandardMealAddPrompt: typeof import('./src/components/prompts/standard/meal-add-prompt.vue')['default']
     PromptsStandardMealTimePrompt: typeof import('./src/components/prompts/standard/meal-time-prompt.vue')['default']

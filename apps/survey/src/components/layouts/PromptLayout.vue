@@ -1,7 +1,7 @@
 <template>
   <v-card :flat="isMobile" :tile="isMobile">
     <slot name="header">
-      <v-sheet class="pt-5 px-5">
+      <v-sheet class="pa-4">
         <h3 class="mb-4">{{ localeText }}</h3>
         <div v-if="localeDescription" v-html="localeDescription"></div>
       </v-sheet>

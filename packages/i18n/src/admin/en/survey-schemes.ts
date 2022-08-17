@@ -257,17 +257,21 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Food list',
       subtitle: 'List or edit foods in this meal as free text descriptions',
     },
-    'submit-prompt': {
-      title: 'Submit',
-      subtitle: 'Confirm completion and submit recall',
-    },
     'review-confirm-prompt': {
       title: 'Review and Confirm',
       subtitle: 'Review and Confirm completion and progress of the recall',
     },
+    'submit-prompt': {
+      title: 'Submit',
+      subtitle: 'Confirm completion and submit recall',
+    },
+    'final-prompt': {
+      title: 'Final',
+      subtitle: 'Final page after submission',
+    },
     'redirect-prompt': {
       title: 'Redirect',
-      subtitle: 'Redirect user to external site',
+      subtitle: 'Final page for user redirect to external site',
     },
     'info-prompt': {
       title: 'Information',

@@ -18,6 +18,14 @@ const allSection: (SurveyQuestionSection | MealSection)[] = [
   'postFoods',
 ];
 
+const allExceptSubmission: (SurveyQuestionSection | MealSection)[] = [
+  'preMeals',
+  'postMeals',
+  'preFoods',
+  'foods',
+  'postFoods',
+];
+
 export type PromptSettingsRecord = {
   tabs: string[];
   sections: (SurveyQuestionSection | MealSection)[];
@@ -29,49 +37,36 @@ export const promptSettings: PromptSettings = {
   // Custom
   'info-prompt': {
     tabs: [...baseTab],
-    sections: [...allSection],
+    sections: [...allExceptSubmission],
   },
   'date-picker-prompt': {
     tabs: [...validatedTab],
-    sections: [...allSection],
+    sections: [...allExceptSubmission],
   },
   'time-picker-prompt': {
     tabs: [...validatedTab],
-    sections: [...allSection],
+    sections: [...allExceptSubmission],
   },
   'checkbox-list-prompt': {
     tabs: [...listTab],
-    sections: [...allSection],
+    sections: [...allExceptSubmission],
   },
   'radio-list-prompt': {
     tabs: [...listTab],
-    sections: [...allSection],
+    sections: [...allExceptSubmission],
   },
   'textarea-prompt': {
     tabs: [...validatedTab],
-    sections: [...allSection],
+    sections: [...allExceptSubmission],
   },
   'yes-no-prompt': {
     tabs: [...baseTab],
-    sections: [...allSection],
+    sections: [...allExceptSubmission],
   },
   // Standard
-  'meal-time-prompt': {
+  'associated-foods-prompt': {
     tabs: [...baseTab],
-    sections: ['preFoods'],
-  },
-  'submit-prompt': {
-    tabs: [...baseTab],
-    // sections: ['submission'],
-    sections: [...allSection],
-  },
-  'review-confirm-prompt': {
-    tabs: [...baseTab],
-    sections: ['submission'],
-  },
-  'redirect-prompt': {
-    tabs: [...baseTab, 'options'],
-    sections: ['submission'],
+    sections: ['foods'],
   },
   'food-search-prompt': {
     tabs: [...baseTab, 'options'],
@@ -85,9 +80,25 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['preFoods'],
   },
-  'associated-foods-prompt': {
+  'meal-time-prompt': {
     tabs: [...baseTab],
-    sections: ['foods'],
+    sections: ['preFoods'],
+  },
+  'submit-prompt': {
+    tabs: [...baseTab],
+    sections: ['submission'],
+  },
+  'final-prompt': {
+    tabs: [...baseTab],
+    sections: ['submission'],
+  },
+  'review-confirm-prompt': {
+    tabs: [...baseTab],
+    sections: ['submission'],
+  },
+  'redirect-prompt': {
+    tabs: [...baseTab, 'options'],
+    sections: ['submission'],
   },
   // Portion size
   'portion-size-option-prompt': {
