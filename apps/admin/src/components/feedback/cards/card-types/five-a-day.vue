@@ -38,9 +38,11 @@ export default defineComponent({
     },
     high: {
       type: Object as PropType<FiveADay['high']>,
+      default: null,
     },
     low: {
       type: Object as PropType<FiveADay['low']>,
+      default: null,
     },
     unit: {
       type: Object as PropType<FiveADay['unit']>,
