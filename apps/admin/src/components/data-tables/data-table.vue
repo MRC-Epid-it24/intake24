@@ -102,8 +102,8 @@ export default defineComponent({
 
   watch: {
     options: {
-      handler(val, oldVal) {
-        if (!isEqual(val, oldVal)) this.fetch();
+      async handler(val, oldVal) {
+        if (!isEqual(val, oldVal)) await this.fetch();
       },
       deep: true,
     },
@@ -114,6 +114,7 @@ export default defineComponent({
       setResourceFilter: 'setFilter',
       resetResourceFilter: 'resetFilter',
     }),
+
     async fetch() {
       const {
         page,
@@ -124,18 +125,14 @@ export default defineComponent({
 
       const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : null;
 
-      try {
-        const {
-          data: { data, meta },
-        } = await this.$http.get<Pagination>(this.api, {
-          params: { limit, page, sort, ...this.filter },
-          withLoading: true,
-        });
-        this.items = data;
-        this.meta = { ...meta };
-      } catch {
-        // continue
-      }
+      const {
+        data: { data, meta },
+      } = await this.$http.get<Pagination>(this.api, {
+        params: { limit, page, sort, ...this.filter },
+        withLoading: true,
+      });
+      this.items = data;
+      this.meta = { ...meta };
     },
 
     async setFilter(data: Dictionary) {

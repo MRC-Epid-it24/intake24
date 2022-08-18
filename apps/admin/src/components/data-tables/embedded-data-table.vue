@@ -107,19 +107,15 @@ export default defineComponent({
 
       const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : null;
 
-      try {
-        const {
-          data: { data, meta },
-        } = await this.$http.get(this.api, {
-          params: { limit, page, search, sort },
-          withLoading: true,
-        });
+      const {
+        data: { data, meta },
+      } = await this.$http.get(this.api, {
+        params: { limit, page, search, sort },
+        withLoading: true,
+      });
 
-        this.items = data;
-        this.meta = { ...meta };
-      } catch {
-        // continue
-      }
+      this.items = data;
+      this.meta = { ...meta };
     },
 
     updateTracked() {

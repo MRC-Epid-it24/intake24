@@ -114,7 +114,7 @@ export default defineComponent({
         if (this.form.errors.has('captcha')) {
           this.form.errors.clear('captcha');
           useMessages().error(this.$t('users.password.reset.captcha').toString());
-        }
+        } else throw err;
       } finally {
         this.resetCaptcha();
       }

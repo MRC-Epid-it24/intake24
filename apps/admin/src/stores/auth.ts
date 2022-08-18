@@ -9,14 +9,12 @@ import { useUser } from './user';
 export type AuthState = {
   accessToken: string | null;
   mfaRequestUrl: string | null;
-  error: Error | null;
 };
 
 export const useAuth = defineStore('auth', {
   state: (): AuthState => ({
     accessToken: null,
     mfaRequestUrl: null,
-    error: null,
   }),
   getters: {
     loggedIn: (state) => !!state.accessToken,
@@ -29,7 +27,6 @@ export const useAuth = defineStore('auth', {
 
     async successfulLogin(accessToken: string) {
       this.setAccessToken(accessToken);
-      this.error = null;
       this.mfaRequestUrl = null;
 
       const userState = useUser();
@@ -37,7 +34,6 @@ export const useAuth = defineStore('auth', {
     },
 
     mfaRequest(url: string) {
-      this.error = null;
       this.accessToken = null;
       this.mfaRequestUrl = url;
     },
@@ -51,12 +47,6 @@ export const useAuth = defineStore('auth', {
 
         if ('accessToken' in data) await this.successfulLogin(data.accessToken);
         else this.mfaRequest(data.mfaRequestUrl);
-
-        return Promise.resolve();
-      } catch (err) {
-        if (err instanceof Error) this.error = err;
-
-        return Promise.reject(err);
       } finally {
         loading.removeItem('login');
       }
@@ -69,12 +59,6 @@ export const useAuth = defineStore('auth', {
       try {
         const accessToken = await authService.verify(request);
         await this.successfulLogin(accessToken);
-
-        return Promise.resolve();
-      } catch (err) {
-        if (err instanceof Error) this.error = err;
-
-        return Promise.reject(err);
       } finally {
         loading.removeItem('verify');
       }
@@ -84,12 +68,8 @@ export const useAuth = defineStore('auth', {
       try {
         const accessToken = await authService.refresh();
         await this.successfulLogin(accessToken);
-
-        return Promise.resolve();
       } catch (err) {
-        if (err instanceof Error) this.error = err;
-
-        return withErr ? Promise.reject(err) : Promise.resolve();
+        if (withErr) throw err;
       }
     },
 

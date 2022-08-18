@@ -71,10 +71,6 @@ export const useUser = defineStore('user', {
         this.profile = { ...profile };
         this.permissions = [...permissions];
         this.roles = [...roles];
-
-        return Promise.resolve();
-      } catch (err) {
-        return Promise.reject(err);
       } finally {
         loading.removeItem('user');
       }

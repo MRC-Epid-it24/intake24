@@ -89,6 +89,7 @@ export default defineComponent({
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 401)
         useMessages().error('Invalid MFA authentication.');
+      else throw err;
     }
   },
 
@@ -112,10 +113,18 @@ export default defineComponent({
         if (axios.isAxiosError(err)) {
           const { response: { status, data = {} } = {} } = err as AxiosError<any>;
 
-          if (status === 422 && 'errors' in data) this.errors.record(data.errors);
+          if (status === 422 && 'errors' in data) {
+            this.errors.record(data.errors);
+            return;
+          }
 
-          if (status === 401) useMessages().error('Invalid authentication credentials provided.');
+          if (status === 401) {
+            useMessages().error('Invalid authentication credentials provided.');
+            return;
+          }
         }
+
+        throw err;
       }
     },
   },

@@ -148,18 +148,14 @@ export default defineComponent({
     async fetch() {
       const { page, limit } = this;
 
-      try {
-        const {
-          data: { data, meta },
-        } = await this.$http.get<Pagination>(this.resource.api, {
-          params: { limit, page, ...this.filter },
-          withLoading: true,
-        });
-        this.items = data;
-        this.meta = { ...meta };
-      } catch {
-        // continue
-      }
+      const {
+        data: { data, meta },
+      } = await this.$http.get<Pagination>(this.resource.api, {
+        params: { limit, page, ...this.filter },
+        withLoading: true,
+      });
+      this.items = data;
+      this.meta = { ...meta };
     },
 
     async setFilter(data: Dictionary) {

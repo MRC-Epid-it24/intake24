@@ -10,7 +10,6 @@ import { useEntry, useMessages } from '@intake24/admin/stores';
 import { copy } from '@intake24/common/util';
 
 import fetchEntry from './fetch-entry';
-import hasEntry from './has-entry';
 import Layout from './layout.vue';
 import watchEntry from './watch-entry';
 
@@ -21,7 +20,7 @@ export default defineComponent({
 
   components: { Layout, SubmitFooter },
 
-  mixins: [fetchEntry, hasEntry, watchEntry],
+  mixins: [fetchEntry, watchEntry],
 
   provide: () => ({
     editsResource: true,

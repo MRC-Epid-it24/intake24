@@ -181,12 +181,8 @@ export default defineComponent({
       // MFA verification -> do not refresh yet
       if ([state, code].every((item) => typeof item === 'string' && item.length)) return;
 
-      try {
-        await useAuth().refresh();
-        await this.$router.push({ name: 'dashboard' });
-      } catch (err) {
-        // continue
-      }
+      await useAuth().refresh();
+      await this.$router.push({ name: 'dashboard' });
     }
 
     if (!this.loggedIn) return;

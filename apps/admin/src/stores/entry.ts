@@ -1,4 +1,3 @@
-import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { defineStore } from 'pinia';
 
@@ -11,14 +10,12 @@ import { useResource } from './resource';
 export type EntryState = {
   data: Dictionary;
   refs: Dictionary;
-  error: AxiosError | null;
 };
 
 export const useEntry = defineStore('entry', {
   state: (): EntryState => ({
     data: {},
     refs: {},
-    error: null,
   }),
   getters: {
     getEntry: <T>(state: EntryState): T => state.data as T,
@@ -44,12 +41,11 @@ export const useEntry = defineStore('entry', {
       try {
         const { data } = await http.get(`${api}/${id}`, { params: query });
         this.setEntry(data);
-        await this.requestRefs();
-      } catch (err: any) {
-        this.error = err;
       } finally {
         loading.removeItem(`${name}/entry`);
       }
+
+      await this.requestRefs();
     },
 
     async requestRefs() {
@@ -57,15 +53,15 @@ export const useEntry = defineStore('entry', {
       const loading = useLoading();
 
       this.clearRefs();
-      loading.addItem(`${name}/entry/refs`);
+      loading.addItem(`${name}/refs`);
 
       try {
         const { data } = await http.get(`${api}/refs`);
         this.setRefs(data);
       } catch (err) {
-        if (axios.isAxiosError(err) && err.response?.status !== 404) this.error = err;
+        if (axios.isAxiosError(err) && err.response?.status !== 404) throw err;
       } finally {
-        loading.removeItem(`${name}/entry/refs`);
+        loading.removeItem(`${name}/refs`);
       }
     },
 

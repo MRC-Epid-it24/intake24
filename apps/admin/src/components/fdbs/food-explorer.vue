@@ -94,17 +94,13 @@ export default defineComponent({
     },
 
     async fetchCategoryContent(category: CategoryListEntryItem) {
-      try {
-        const {
-          data: { categories, foods },
-        } = await this.$http.get<CategoryContentsResponse>(
-          `admin/fdbs/${this.localeId}/categories/${category.id}/contents`
-        );
+      const {
+        data: { categories, foods },
+      } = await this.$http.get<CategoryContentsResponse>(
+        `admin/fdbs/${this.localeId}/categories/${category.id}/contents`
+      );
 
-        category.children.push(...categories.map((item) => ({ ...item, children: [] })), ...foods);
-      } catch (err) {
-        //
-      }
+      category.children.push(...categories.map((item) => ({ ...item, children: [] })), ...foods);
     },
   },
 });

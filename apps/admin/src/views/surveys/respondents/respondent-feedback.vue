@@ -159,8 +159,6 @@ export default defineComponent({
             .toISOString()
             .substring(0, 10)}.pdf`
         );
-      } catch (err) {
-        //
       } finally {
         loading.removeItem('respondent-feedback-download');
       }
