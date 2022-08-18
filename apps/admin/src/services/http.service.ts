@@ -6,7 +6,7 @@ import type { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24
 import { randomString } from '@intake24/common/util';
 
 import type { AuthStoreDef } from '../stores';
-import { useLoading, useMessages } from '../stores';
+import { useLoading } from '../stores';
 
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];
@@ -50,29 +50,19 @@ const httpClient: HttpClient = {
   },
 
   async request<T = any, R = AxiosResponse<T>, D = any>(config: HttpRequestConfig<D>): Promise<R> {
-    const { withErr, withLoading, ...rest } = config;
+    const { withLoading, ...rest } = config;
 
-    const loading = useLoading();
-    const loadingId = `request-${randomString(6)}`;
-    if (withLoading) loading.addItem(loadingId);
+    let loading, loadingId;
+    if (withLoading) {
+      loading = useLoading();
+      loadingId = `request-${randomString(6)}`;
+      loading.addItem(loadingId);
+    }
 
     try {
-      const res = await this.axios.request<T, R, D>(rest);
-      return res;
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        const { response } = err as AxiosError<T, D>;
-        if (response && ![401, 404, 422].includes(response.status)) {
-          const {
-            data: { message },
-          } = response;
-          useMessages().error(message ?? err.message);
-        }
-      }
-
-      throw err;
+      return await this.axios.request<T, R, D>(rest);
     } finally {
-      if (withLoading) loading.removeItem(loadingId);
+      if (loading && loadingId) loading.removeItem(loadingId);
     }
   },
 

@@ -48,24 +48,7 @@ const httpClient: HttpClient = {
   },
 
   async request<T = any, R = AxiosResponse<T>, D = any>(config: HttpRequestConfig<D>): Promise<R> {
-    // const { withErr, ...rest } = config;
-
-    return new Promise((resolve, reject) => {
-      this.axios
-        .request<T, R, D>(config)
-        .then((res) => resolve(res))
-        .catch((err) => {
-          /* const { response } = err;
-          if (response && ![401, 422].includes(response.status)) {
-            const {
-              data: { message },
-            } = response;
-            useMessages().error(message ?? err.message);
-          } */
-
-          return reject(err);
-        });
-    });
+    return this.axios.request<T, R, D>(config);
   },
 
   mountInterceptors(router, useAuth: AuthStoreDef) {

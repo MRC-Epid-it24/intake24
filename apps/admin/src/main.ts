@@ -9,12 +9,14 @@ import i18n from './i18n';
 import vuetify from './plugins/vuetify';
 import router from './router';
 import guards from './router/guards';
-import http from './services/http.service';
+import { errorHandler, httpService, warnHandler } from './services';
 
 guards(router);
 
 Vue.config.productionTip = false;
-Vue.prototype.$http = http;
+Vue.config.errorHandler = errorHandler;
+Vue.config.warnHandler = warnHandler;
+Vue.prototype.$http = httpService;
 
 new Vue({
   i18n,

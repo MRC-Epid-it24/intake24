@@ -1,4 +1,5 @@
 import type { AxiosError } from 'axios';
+import axios from 'axios';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 
@@ -33,7 +34,7 @@ export interface FormDef<T = Dictionary> {
   patch<R>(url: string, config?: HttpRequestConfig): Promise<R>;
   put<R>(url: string, config?: HttpRequestConfig): Promise<R>;
   onSuccess(): void;
-  onFail(err: AxiosError): void;
+  onFail(err: unknown): void;
 }
 
 export type FormFields<T = Dictionary> = { [P in keyof T]: T[P] };
@@ -82,26 +83,24 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
     },
 
     async submit<R>(config: HttpRequestConfig): Promise<R> {
-      const { withErr, ...rest } = config;
-
       const { transform } = this.config;
       const output =
         transform && !this.config.multipart ? transform(this.getData() as T) : this.getData();
 
-      return new Promise((resolve, reject) => {
-        httpService
-          .request<R>({ data: output, withErr: true, withLoading: true, ...rest })
-          .then((res) => {
-            const { data } = res;
-            this.onSuccess();
-            resolve(data);
-          })
-          .catch((err) => {
-            this.onFail(err);
+      try {
+        const { data } = await httpService.request<R>({
+          data: output,
+          withLoading: true,
+          ...config,
+        });
 
-            if (withErr) reject(err);
-          });
-      });
+        this.onSuccess();
+        return data;
+      } catch (err) {
+        this.onFail(err);
+
+        throw err;
+      }
     },
 
     async post<R>(url: string, config?: HttpRequestConfig): Promise<R> {
@@ -124,9 +123,11 @@ export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Fo
       if (this.config.resetOnSubmit === true) this.reset();
     },
 
-    onFail(err: AxiosError<any>): void {
-      const { response: { status, data = {} } = {} } = err;
-      if (status === 422 && 'errors' in data) this.errors.record(data.errors);
+    onFail(err): void {
+      if (axios.isAxiosError(err)) {
+        const { response: { status, data = {} } = {} } = err as AxiosError<any>;
+        if (status === 422 && 'errors' in data) this.errors.record(data.errors);
+      }
     },
   };
 

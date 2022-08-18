@@ -108,7 +108,7 @@ export default defineComponent({
 
     async sendRequest() {
       try {
-        await this.form.post('password', { withErr: true });
+        await this.form.post('password');
         this.submitted = true;
       } catch (err) {
         if (this.form.errors.has('captcha')) {

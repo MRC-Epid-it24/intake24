@@ -43,7 +43,7 @@ export const useResource = defineStore('resource', {
       loading.addItem(`${name}/refs`);
 
       try {
-        const { data } = await httpService.get(`${name}/refs`, { withErr: true });
+        const { data } = await httpService.get(`${name}/refs`);
         this.refs = data;
       } catch (err: any) {
         this.error = err;
