@@ -23,10 +23,10 @@ export type FeedbackDetails = {
   readonly warning?: string | null;
 };
 
-export const getLocaleContent = <T>(
-  content: RequiredLocaleTranslation | LocaleTranslation<T>,
+export const getLocaleContent = (
+  content: RequiredLocaleTranslation | LocaleTranslation,
   locale: string
-): string | T => content[locale] ?? content.en;
+): string => content[locale] ?? content.en;
 
 export const getTextClass = (sentiment: Sentiment | null): string | undefined => {
   if (!sentiment) return undefined;
@@ -93,7 +93,7 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
     ];
 
     return {
-      name: getLocaleContent<string>(name, lang),
+      name: getLocaleContent(name, lang),
       description: getLocaleContent(description, lang),
       intake: round(intake),
       recommendedIntake: showRecommendations
@@ -117,13 +117,13 @@ const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
   const { lang } = useApp();
 
   return {
-    name: getLocaleContent<string>(name, lang),
+    name: getLocaleContent(name, lang),
     description: getLocaleContent(description, lang),
     intake: portions,
     recommendedIntake: showRecommendations
       ? new DemographicRange(high?.threshold ?? 5, high?.threshold ?? 5)
       : null,
-    unit: getLocaleContent<string>(unit.name, lang),
+    unit: getLocaleContent(unit.name, lang),
     unitDescription: getLocaleContent(unit.description, lang),
     sentiment,
     iconClass: getIconClass(sentiment),
@@ -144,13 +144,13 @@ const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDe
   else if (high && intake > high.threshold) warning = getLocaleContent(high.message, lang);
 
   return {
-    name: getLocaleContent<string>(name, lang),
+    name: getLocaleContent(name, lang),
     description: getLocaleContent(description, lang),
     intake: round(intake),
     recommendedIntake: showRecommendations
       ? new DemographicRange(round(recommendedIntake.start), round(recommendedIntake.end))
       : null,
-    unit: getLocaleContent<string>(unit.name, lang),
+    unit: getLocaleContent(unit.name, lang),
     unitDescription: getLocaleContent(unit.description, lang),
     sentiment,
     iconClass: getIconClass(sentiment),

@@ -7,7 +7,12 @@
       <v-row v-else>
         <v-col v-for="question in questions" :key="question.id" cols="12" md="3">
           <v-item v-slot:default="{ active, toggle }" :value="question.component">
-            <v-card :color="active ? 'primary' : ''" dark height="180" @click.stop="toggle">
+            <v-card
+              :color="active ? 'primary' : ''"
+              dark
+              height="180"
+              @click.stop="tryToggle(active, toggle)"
+            >
               <v-card-title class="justify-center">
                 {{ $t(`survey-schemes.prompts.${question.id}.title`) }}
               </v-card-title>
@@ -41,6 +46,14 @@ export default defineComponent({
     questions: {
       type: Array as PropType<PromptQuestion[]>,
       default: () => [],
+    },
+  },
+
+  methods: {
+    tryToggle(active: boolean, toggle: () => void) {
+      if (active) return;
+
+      toggle();
     },
   },
 });

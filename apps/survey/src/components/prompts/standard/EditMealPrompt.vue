@@ -57,6 +57,10 @@ const component = defineComponent({
   mixins: [BasePrompt],
 
   props: {
+    promptComponent: {
+      type: String,
+      required: true,
+    },
     promptProps: {
       type: Object as PropType<BasePromptProps>,
       required: true,
@@ -73,10 +77,6 @@ const component = defineComponent({
       type: Boolean,
       required: true,
     },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
   },
 
   setup() {
@@ -87,17 +87,20 @@ const component = defineComponent({
 
   computed: {
     getLocalMealName(): string {
-      return this.getLocaleContent<string>(this.mealName);
+      return this.getLocaleContent(this.mealName);
     },
 
     promptText(): string {
-      return this.getLocaleString(this.promptProps.text, 'prompts.editMeal.text', {
-        meal: this.getLocalMealName.toLocaleLowerCase(),
+      return this.getLocaleContent(this.promptProps.text, {
+        path: 'prompts.editMeal.text',
+        params: { meal: this.getLocalMealName.toLocaleLowerCase() },
       });
     },
 
     promptDescription(): string {
-      return this.getLocaleString(this.promptProps.description, 'prompts.editMeal.description');
+      return this.getLocaleContent(this.promptProps.description, {
+        path: 'prompts.editMeal.description',
+      });
     },
   },
 

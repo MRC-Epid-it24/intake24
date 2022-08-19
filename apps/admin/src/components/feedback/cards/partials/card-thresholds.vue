@@ -89,7 +89,7 @@ export default defineComponent({
 
   methods: {
     toggleThreshold(key: 'high' | 'low', value: boolean) {
-      this[key] = value ? { threshold: 0, message: { en: null } } : null;
+      this[key] = value ? { threshold: 0, message: { en: '' } } : null;
     },
   },
 });

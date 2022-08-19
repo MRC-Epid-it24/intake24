@@ -22,9 +22,11 @@ import { defineComponent } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { AssociatedFoodsState, EncodedFood } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
-import FoodPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/food-prompt-utils';
-import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
-import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
+import {
+  createPromptHandlerStoreMixin,
+  foodPromptUtils,
+  mealPromptUtils,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
@@ -46,8 +48,8 @@ export default defineComponent({
 
   mixins: [
     createPromptHandlerStoreMixin<AssociatedFoodsState>('associated-foods-prompt'),
-    FoodPromptUtils,
-    MealPromptUtils,
+    foodPromptUtils,
+    mealPromptUtils,
   ],
 
   components: { AssociatedFoodsPrompt },

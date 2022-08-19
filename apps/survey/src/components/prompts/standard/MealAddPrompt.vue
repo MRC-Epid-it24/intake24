@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout :text="text" :description="description">
+  <prompt-layout v-bind="{ description, text }">
     <v-col md="8" sm="12" v-show="hasMeals === 0">
       <h4>{{ $t('prompts.mealAdding.noMeal') }}</h4>
     </v-col>

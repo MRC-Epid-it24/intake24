@@ -2,6 +2,7 @@
   <v-tab-item key="content">
     <language-selector
       :label="$t('survey-schemes.questions.name._').toString()"
+      :required="nameRequired"
       :value="name"
       @input="update('name', $event)"
     >
@@ -19,6 +20,7 @@
     </language-selector>
     <language-selector
       :label="$t('survey-schemes.questions.text._').toString()"
+      :required="textRequired"
       :value="text"
       @input="update('text', $event)"
     >
@@ -36,6 +38,7 @@
     </language-selector>
     <language-selector
       :label="$t('survey-schemes.questions.description._').toString()"
+      :required="descriptionRequired"
       :value="description"
       @input="update('description', $event)"
     >
@@ -74,38 +77,51 @@ export default defineComponent({
       type: Object as PropType<LocaleTranslation>,
       required: true,
     },
+    nameRequired: {
+      type: Boolean,
+      default: true,
+    },
     text: {
       type: Object as PropType<LocaleTranslation>,
       required: true,
     },
     textRequired: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     description: {
       type: Object as PropType<LocaleTranslation>,
       required: true,
     },
+    descriptionRequired: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
     nameRules(): RuleCallback[] {
-      return [
-        (value: string | null): boolean | string =>
-          !!value || this.$t('survey-schemes.questions.name.required').toString(),
-      ];
+      if (!this.nameRequired) return [];
+
+      return [this.valueRequiredCallBack('name')];
     },
     textRules(): RuleCallback[] {
-      return this.textRequired
-        ? [
-            (value: string | null): boolean | string =>
-              !!value || this.$t('survey-schemes.questions.text.required').toString(),
-          ]
-        : [];
+      if (!this.textRequired) return [];
+
+      return [this.valueRequiredCallBack('text')];
+    },
+    descriptionRules(): RuleCallback[] {
+      if (!this.descriptionRequired) return [];
+
+      return [this.valueRequiredCallBack('description')];
     },
   },
 
   methods: {
+    valueRequiredCallBack(field: 'name' | 'text' | 'description') {
+      return (value: string | null): boolean | string =>
+        !!value || this.$t(`survey-schemes.questions.${field}.required`).toString();
+    },
     update(field: string, value: any) {
       this.$emit(`update:${field}`, value);
     },

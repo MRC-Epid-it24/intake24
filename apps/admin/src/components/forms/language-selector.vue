@@ -88,12 +88,16 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    required: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
       selected: null as number | null,
-      doNotRemove: ['en'],
+      doNotRemove: this.required ? ['en'] : [],
     };
   },
 

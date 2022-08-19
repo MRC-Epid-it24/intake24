@@ -6,28 +6,33 @@ import type {
   RequiredLocaleTranslation,
 } from '@intake24/common/types';
 
+export type LocaleContentOptions = {
+  path?: string;
+  params?: Dictionary<string>;
+};
+
+export const replaceParams = (content: string, params: Dictionary<string> = {}) =>
+  Object.entries(params).reduce((acc, [key, value]) => {
+    acc = acc.replace(`{${key}}`, value);
+    return acc;
+  }, content);
+
 export default defineComponent({
   methods: {
-    getLocaleContent<T>(
-      content: LocaleTranslation<T> | RequiredLocaleTranslation | string
-    ): T | string {
-      if (typeof content === 'string') return content;
-      return content[this.$i18n.locale] ?? content.en;
-    },
-    getLocaleString(
-      content: LocaleTranslation<string | null>,
-      fallbackPath: string,
-      replace: Dictionary<string> = {}
+    getLocaleContent(
+      content: LocaleTranslation | RequiredLocaleTranslation | string,
+      options: LocaleContentOptions = {}
     ): string {
-      let str = this.getLocaleContent(content);
+      const { path, params = {} } = options;
 
-      if (str == null) return this.$t(fallbackPath, replace).toString();
+      if (typeof content === 'string') return replaceParams(content, params);
 
-      for (const [key, value] of Object.entries(replace)) {
-        str = str.replace(`{${key}}`, value);
-      }
+      const localeContent = content[this.$i18n.locale];
+      if (localeContent) return replaceParams(localeContent, params);
 
-      return str;
+      if (path) return this.$t(path, params).toString();
+
+      return content.en ? replaceParams(content.en, params) : '';
     },
   },
 });

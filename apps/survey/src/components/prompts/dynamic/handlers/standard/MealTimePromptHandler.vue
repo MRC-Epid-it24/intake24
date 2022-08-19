@@ -16,8 +16,10 @@ import { defineComponent } from 'vue';
 
 import type { MealTimePromptProps } from '@intake24/common/prompts';
 import type { MealTime } from '@intake24/common/types';
-import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
-import { createPromptHandlerNoStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-no-store';
+import {
+  createPromptHandlerNoStoreMixin,
+  mealPromptUtils,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -26,7 +28,7 @@ export default defineComponent({
 
   components: { MealTimePrompt },
 
-  mixins: [MealPromptUtils, createPromptHandlerNoStoreMixin<MealTime>()],
+  mixins: [mealPromptUtils, createPromptHandlerNoStoreMixin<MealTime>()],
 
   props: {
     promptProps: {

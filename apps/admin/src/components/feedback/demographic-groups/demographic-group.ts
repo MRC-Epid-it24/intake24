@@ -3,7 +3,7 @@ import { copy, randomString } from '@intake24/common/util';
 
 export const demographicGroupScaleSectorDefaults: DemographicGroupScaleSector = {
   name: { en: 'Energy' },
-  description: { en: null },
+  description: { en: '' },
   range: { start: 0, end: 10 },
   sentiment: 'good',
 };

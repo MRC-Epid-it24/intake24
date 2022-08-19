@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout :text="text" :description="description">
+  <prompt-layout v-bind="{ description, text, meal }">
     <template v-slot:actions>
       <v-btn
         :block="isMobile"

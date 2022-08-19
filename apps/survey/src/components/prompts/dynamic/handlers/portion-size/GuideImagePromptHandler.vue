@@ -22,12 +22,13 @@ import { defineComponent } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { GuideImageParameters } from '@intake24/common/types/http';
 import type { GuideImagePromptState } from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
-import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
-import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
+import {
+  createPromptHandlerStoreMixin,
+  foodPromptUtils,
+  mealPromptUtils,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-
-import FoodPromptUtils from '../mixins/food-prompt-utils';
 
 export default defineComponent({
   name: 'GuideImagePromptHandler',
@@ -35,8 +36,8 @@ export default defineComponent({
   components: { GuideImagePrompt },
 
   mixins: [
-    FoodPromptUtils,
-    MealPromptUtils,
+    foodPromptUtils,
+    mealPromptUtils,
     createPromptHandlerStoreMixin<GuideImagePromptState>('guide-image-prompt'),
   ],
 

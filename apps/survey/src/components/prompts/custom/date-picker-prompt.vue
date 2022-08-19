@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout :text="text" :description="description">
+  <prompt-layout v-bind="{ description, text, meal }">
     <v-form ref="form" @submit.prevent="submit">
       <v-date-picker
         v-model="currentValue"
@@ -63,8 +63,9 @@ export default defineComponent({
     submit() {
       if (this.validation.required && !this.currentValue) {
         this.errors = [
-          this.getLocaleContent(this.validation.message) ??
-            this.$t('prompts.datepicker.validation.required').toString(),
+          this.getLocaleContent(this.validation.message, {
+            path: 'prompts.datepicker.validation.required',
+          }),
         ];
         return;
       }

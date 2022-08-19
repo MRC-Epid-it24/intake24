@@ -1,7 +1,7 @@
 <template>
   <component
     :is="promptComponent"
-    v-bind="{ promptComponent, promptProps }"
+    v-bind="{ promptComponent, promptProps, meal: selectedMealOptional }"
     @answer="onAnswer"
   ></component>
 </template>
@@ -14,15 +14,17 @@ import { defineComponent } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import customPrompts from '@intake24/survey/components/prompts/custom';
-import FoodPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/food-prompt-utils';
-import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
-import PromptHandlerStateless from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-stateless';
+import {
+  foodPromptUtils,
+  mealPromptUtils,
+  promptHandlerStateless,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'CustomPromptHandler',
 
-  mixins: [FoodPromptUtils, MealPromptUtils, PromptHandlerStateless],
+  mixins: [foodPromptUtils, mealPromptUtils, promptHandlerStateless],
 
   components: { ...customPrompts },
 

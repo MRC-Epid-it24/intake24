@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout :text="text" :description="description">
+  <prompt-layout v-bind="{ description, text }">
     <v-card-actions :class="isNotDesktop && 'justify-center'">
       <v-row>
         <v-col>

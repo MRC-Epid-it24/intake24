@@ -1,10 +1,10 @@
 <template>
-  <prompt-layout :text="text" :description="description">
+  <prompt-layout v-bind="{ description, text, meal }">
     <v-form ref="form" @submit.prevent="submit">
-      <v-label>{{ getLocaleContent(label) }}</v-label>
+      <v-label v-if="label">{{ getLocaleContent(label) }}</v-label>
       <v-checkbox
         v-model="selected"
-        v-for="option in getLocaleContent(options)"
+        v-for="option in localeOptions"
         :key="option.value"
         :error="hasErrors"
         :label="option.label"
@@ -35,7 +35,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { CheckboxListPromptProps } from '@intake24/common/prompts';
+import type { CheckboxListPromptProps, ListOption } from '@intake24/common/prompts';
 import { checkboxListPromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 
@@ -68,6 +68,9 @@ export default defineComponent({
   },
 
   computed: {
+    localeOptions(): ListOption[] {
+      return this.options[this.$i18n.locale] ?? this.options.en;
+    },
     currentValue(): string[] {
       return [...this.selected, this.otherValue].filter((item) => item);
     },
@@ -90,8 +93,9 @@ export default defineComponent({
     submit() {
       if (this.validation.required && !this.currentValue.length) {
         this.errors = [
-          this.getLocaleContent(this.validation.message) ??
-            this.$t('prompts.checkbox.validation.required').toString(),
+          this.getLocaleContent(this.validation.message, {
+            path: 'prompts.checkbox.validation.required',
+          }),
         ];
         return;
       }

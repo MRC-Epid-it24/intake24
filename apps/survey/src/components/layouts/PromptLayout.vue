@@ -20,9 +20,15 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { LocaleTranslation } from '@intake24/common/types';
+import type {
+  Dictionary,
+  LocaleTranslation,
+  MealState,
+  RequiredLocaleTranslation,
+} from '@intake24/common/types';
 import { localeContent } from '@intake24/survey/components/mixins';
 
 export default defineComponent({
@@ -32,25 +38,32 @@ export default defineComponent({
 
   props: {
     text: {
-      type: [Object as () => LocaleTranslation<string>, String],
+      type: [Object as () => RequiredLocaleTranslation, String],
       required: true,
     },
     description: {
       type: [Object as () => LocaleTranslation, String],
       default: null,
     },
+    meal: {
+      type: Object as PropType<MealState>,
+    },
   },
 
   computed: {
-    localeText(): string {
-      const { text } = this;
-      return typeof text === 'string' ? text : this.getLocaleContent(text);
+    localeMealName(): string | undefined {
+      return this.meal ? this.getLocaleContent(this.meal.name).toLocaleLowerCase() : undefined;
     },
 
-    localeDescription(): string | null {
-      const { description } = this;
-      if (!description) return null;
-      return typeof description === 'string' ? description : this.getLocaleContent(description);
+    localeText(): string {
+      const params: Dictionary<string> = {};
+      if (this.localeMealName) params.meal = this.localeMealName;
+
+      return this.getLocaleContent(this.text, { params });
+    },
+
+    localeDescription(): string {
+      return this.getLocaleContent(this.description);
     },
 
     hasDefaultSlot(): boolean {

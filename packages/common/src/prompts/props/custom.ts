@@ -3,7 +3,7 @@ import { copy } from '@intake24/common/util';
 import type { LocaleTranslation } from '../../types';
 import type { PromptQuestion } from '..';
 import type { BasePromptProps, ValidatedPromptProps } from './base';
-import { basePromptProps, promptValidation } from './base';
+import { promptValidation } from './base';
 
 export type DatePickerPromptProps = ValidatedPromptProps;
 
@@ -22,7 +22,10 @@ export type ListOption = {
   value: string;
 };
 
-export type LocaleOptionList = { [locale: string]: ListOption[] };
+export type LocaleOptionList = {
+  en: ListOption[];
+  [locale: string]: ListOption[];
+};
 
 export type RadioOrientation = 'column' | 'row';
 
@@ -42,51 +45,61 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
 export type InfoPromptProps = BasePromptProps;
 export type YesNoPromptProps = BasePromptProps;
 
+export const baseCustomPromptProps: BasePromptProps = {
+  name: { en: 'Enter name' },
+  text: { en: 'Enter text' },
+  description: { en: 'Enter description' },
+  conditions: [],
+};
+
 export const infoPromptProps: InfoPromptProps = copy({
-  ...basePromptProps,
+  ...baseCustomPromptProps,
   name: { en: 'Info / confirmation' },
 });
 
-export const yesNoPromptProps: YesNoPromptProps = copy(basePromptProps);
+export const yesNoPromptProps: YesNoPromptProps = copy({
+  ...baseCustomPromptProps,
+  name: { en: 'Yes / No confirmation' },
+});
 
 export const datePickerPromptProps: DatePickerPromptProps = copy({
-  ...basePromptProps,
+  ...baseCustomPromptProps,
   ...promptValidation,
   name: { en: 'Pick Date' },
 });
 
 export const timePickerPromptProps: TimePickerPromptProps = copy({
-  ...basePromptProps,
+  ...baseCustomPromptProps,
   ...promptValidation,
   name: { en: 'Pick Time' },
   format: '24hr',
 });
 
 export const checkboxListPromptProps: CheckboxListPromptProps = copy({
-  ...basePromptProps,
+  ...baseCustomPromptProps,
   ...promptValidation,
   name: { en: 'Checkbox List' },
-  label: { en: null },
+  label: {},
   options: { en: [] },
   other: false,
 });
 
 export const radioListPromptProps: RadioListPromptProps = copy({
-  ...basePromptProps,
+  ...baseCustomPromptProps,
   ...promptValidation,
   name: { en: 'Radio List' },
-  label: { en: null },
+  label: {},
   options: { en: [] },
   orientation: 'column',
   other: false,
 });
 
 export const textareaPromptProps: TextareaPromptProps = copy({
-  ...basePromptProps,
+  ...baseCustomPromptProps,
   ...promptValidation,
   name: { en: 'Fill Text' },
-  label: { en: null },
-  hint: { en: null },
+  label: {},
+  hint: {},
 });
 
 export const customPromptQuestions: PromptQuestion[] = [

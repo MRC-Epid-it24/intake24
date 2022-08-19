@@ -30,7 +30,7 @@ export default defineComponent({
 
   props: {
     text: {
-      type: Object as PropType<LocaleTranslation<string>>,
+      type: Object as PropType<LocaleTranslation>,
       required: true,
     },
     description: {
@@ -44,7 +44,7 @@ export default defineComponent({
       return this.getLocaleContent(this.text);
     },
 
-    localeDescription(): string | null {
+    localeDescription(): string {
       return this.getLocaleContent(this.description);
     },
   },

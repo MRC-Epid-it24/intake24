@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout :text="text" :description="description">
+  <prompt-layout v-bind="{ description, text }">
     <v-form ref="form" @submit.prevent="submit">
       <v-time-picker
         :value="initialTimeString"
@@ -84,8 +84,9 @@ export default defineComponent({
 
   computed: {
     getLocalMealName(): string {
-      return this.getLocaleContent<string>(this.mealName);
+      return this.getLocaleContent(this.mealName);
     },
+
     initialTimeString(): string {
       return mealTimeToString(this.initialTime);
     },
@@ -93,17 +94,19 @@ export default defineComponent({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+
     text(): string {
-      const text = this.promptProps.text[this.$i18n.locale];
-      return text
-        ? text.replace('{meal}', this.getLocalMealName ?? '')
-        : this.$t('prompts.mealTime.text', { meal: this.getLocalMealName }).toString();
+      return this.getLocaleContent(this.promptProps.text, {
+        path: 'prompts.mealTime.text',
+        params: { meal: this.getLocalMealName },
+      });
     },
+
     description(): string {
-      const description = this.promptProps.description[this.$i18n.locale];
-      return description
-        ? description.replace('{meal}', this.getLocalMealName ?? '')
-        : this.$t('prompts.mealTime.description', { meal: this.getLocalMealName }).toString();
+      return this.getLocaleContent(this.promptProps.description, {
+        path: 'prompts.mealTime.description',
+        params: { meal: this.getLocalMealName },
+      });
     },
   },
 
@@ -123,8 +126,9 @@ export default defineComponent({
     submit() {
       if (this.validation.required && !this.currentValue) {
         this.errors = [
-          this.getLocaleContent(this.validation.message) ??
-            this.$t('prompts.mealTime.validation.required').toString(),
+          this.getLocaleContent(this.validation.message, {
+            path: 'prompts.mealTime.validation.required',
+          }),
         ];
         return;
       }

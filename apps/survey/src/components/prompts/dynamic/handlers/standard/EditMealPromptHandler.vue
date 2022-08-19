@@ -21,8 +21,10 @@ import { defineComponent, ref } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import type { EditMealPromptType } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
-import MealPromptUtils from '@intake24/survey/components/prompts/dynamic/handlers/mixins/meal-prompt-utils';
-import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
+import {
+  createPromptHandlerStoreMixin,
+  mealPromptUtils,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -33,7 +35,7 @@ interface EditMealState {
 export default defineComponent({
   name: 'EditMealPromptHandler',
 
-  mixins: [MealPromptUtils, createPromptHandlerStoreMixin<EditMealState>('edit-meal-prompt')],
+  mixins: [mealPromptUtils, createPromptHandlerStoreMixin<EditMealState>('edit-meal-prompt')],
 
   components: { EditMealPrompt },
 

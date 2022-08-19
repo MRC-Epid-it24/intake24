@@ -162,6 +162,7 @@ const surveySchemes: LocaleMessageObject = {
     description: {
       _: 'Question description',
       hint: 'Additional question information',
+      required: 'Question description is required.',
     },
     custom: {
       _: 'Custom',

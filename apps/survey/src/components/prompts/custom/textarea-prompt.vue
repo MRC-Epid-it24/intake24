@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout :text="text" :description="description">
+  <prompt-layout v-bind="{ description, text, meal }">
     <v-form ref="form" @submit.prevent="submit">
       <v-textarea
         v-model.trim="currentValue"

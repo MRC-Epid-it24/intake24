@@ -19,18 +19,19 @@ import { defineComponent } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { AsServedParameters } from '@intake24/common/types/http';
 import type { AsServedPromptState } from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
-import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins/prompt-handler-store';
+import {
+  createPromptHandlerStoreMixin,
+  foodPromptUtils,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-
-import FoodPromptUtils from '../mixins/food-prompt-utils';
 
 export default defineComponent({
   name: 'AsServedPromptHandler',
 
   components: { AsServedPrompt },
 
-  mixins: [FoodPromptUtils, createPromptHandlerStoreMixin<AsServedPromptState>('as-served-prompt')],
+  mixins: [foodPromptUtils, createPromptHandlerStoreMixin<AsServedPromptState>('as-served-prompt')],
 
   props: {
     promptProps: {

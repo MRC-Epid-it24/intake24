@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout :text="text" :description="description">
+  <prompt-layout v-bind="{ description, text, meal }">
     <v-form ref="form" @submit.prevent="submit">
       <v-radio-group
         v-model="selected"
@@ -11,7 +11,7 @@
         @change="clearErrors"
       >
         <v-radio
-          v-for="option in getLocaleContent(options)"
+          v-for="option in localeOptions"
           :key="option.value"
           :label="option.label"
           :value="option.value"
@@ -39,7 +39,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { RadioListPromptProps } from '@intake24/common/prompts';
+import type { ListOption, RadioListPromptProps } from '@intake24/common/prompts';
 import { radioListPromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 
@@ -71,6 +71,9 @@ export default defineComponent({
   },
 
   computed: {
+    localeOptions(): ListOption[] {
+      return this.options[this.$i18n.locale] ?? this.options.en;
+    },
     currentValue(): string {
       return this.selected !== 'other' ? this.selected : this.otherValue;
     },
@@ -87,8 +90,9 @@ export default defineComponent({
     submit() {
       if (this.validation.required && !this.currentValue) {
         this.errors = [
-          this.getLocaleContent(this.validation.message) ??
-            this.$t('prompts.radio.validation.required').toString(),
+          this.getLocaleContent(this.validation.message, {
+            path: 'prompts.radio.validation.required',
+          }),
         ];
         return;
       }
