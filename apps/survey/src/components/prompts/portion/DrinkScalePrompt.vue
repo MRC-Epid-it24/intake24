@@ -98,7 +98,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { DrinkScalePromptProps } from '@intake24/common/prompts';
 import type { DrinkScaleState, LocaleTranslation } from '@intake24/common/types';

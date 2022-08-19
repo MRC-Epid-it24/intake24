@@ -9,7 +9,6 @@ import { ApplicationError, ForbiddenError, NotFoundError } from '@intake24/api/h
 import { jwt } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
 import {
-  FeedbackScheme,
   GenUserCounter,
   Op,
   submissionScope,

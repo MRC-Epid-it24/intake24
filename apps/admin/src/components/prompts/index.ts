@@ -9,14 +9,14 @@ const baseTab = ['general', 'content', 'conditions'];
 const validatedTab = [...baseTab, 'validation'];
 const listTab = [...validatedTab, 'options'];
 
-const allSection: (SurveyQuestionSection | MealSection)[] = [
+/* const allSection: (SurveyQuestionSection | MealSection)[] = [
   'preMeals',
   'postMeals',
   'submission',
   'preFoods',
   'foods',
   'postFoods',
-];
+]; */
 
 const allExceptSubmission: (SurveyQuestionSection | MealSection)[] = [
   'preMeals',

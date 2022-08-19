@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
-    "@types/lodash": "^4.14.182",
+    "@types/lodash": "^4.14.184",
     "@types/web-push": "^3.3.2",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
     "ts-loader": "^9.3.1",
