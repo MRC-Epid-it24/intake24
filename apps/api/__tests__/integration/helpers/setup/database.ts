@@ -41,8 +41,7 @@ export type MockData = {
 };
 
 export const wipeRedis = async (): Promise<void> => {
-  const { host, port } = ioc.cradle.config.queue.redis;
-  const redis = new Redis(port, host);
+  const redis = new Redis(ioc.cradle.config.queue.redis);
   await redis.flushall();
   redis.disconnect();
 };

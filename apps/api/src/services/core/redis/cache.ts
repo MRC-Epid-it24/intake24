@@ -45,11 +45,17 @@ export default class Cache extends HasRedisClient {
    * @memberof Cache
    */
   async set(key: string, value: any, expiresIn?: number | string): Promise<boolean> {
-    const args: [string, string, string?, number?] = [key, stringify(value)];
-    if (expiresIn)
-      args.push('px', typeof expiresIn === 'string' ? ms(expiresIn) : expiresIn * 1000);
+    if (!expiresIn) {
+      const result = await this.redis.set(key, stringify(value));
+      return !!result;
+    }
 
-    const result = this.redis.set(...args);
+    const result = await this.redis.set(
+      key,
+      stringify(value),
+      'PX',
+      typeof expiresIn === 'string' ? ms(expiresIn) : expiresIn * 1000
+    );
 
     return !!result;
   }

@@ -37,6 +37,7 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
 
   app.use(
     expressSession({
+      //@ts-expect-error - incorrect connect-redis types for ioredis v5 client
       store: new RedisStore({ client, prefix: '', ttl: cookie.maxAge / 1000 }),
       name: cookie.name,
       cookie,

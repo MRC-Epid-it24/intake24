@@ -3,6 +3,7 @@ import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { User } from '@intake24/db';
 
 import HasRedisClient from './redis-store';
 
