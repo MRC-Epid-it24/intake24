@@ -19,5 +19,11 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
   app.set('etag', false);
 
   // CORS
-  app.use(cors({ origin, credentials: true }));
+  app.use(
+    cors({
+      origin,
+      credentials: true,
+      exposedHeaders: ['RateLimit-Limit', 'RateLimit-Remaining', 'RateLimit-Reset'],
+    })
+  );
 };
