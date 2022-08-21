@@ -6,21 +6,16 @@
           ><span :class="{ 'linked-food-title': linked }"> {{ foodDisplayName(food) }}</span>
         </v-list-item-title>
         <v-list-item-action>
-          <v-icon x-small v-if="food.code" color="green darken-2">fa-check</v-icon>
+          <v-icon v-if="food.code" x-small color="green darken-2">fa-check</v-icon>
         </v-list-item-action>
         <v-list-item-action>
-          <v-icon x-small v-if="food.portionSizeMethod" color="green darken-2">fa-check</v-icon>
+          <v-icon v-if="food.portionSizeMethod" x-small color="green darken-2">fa-check</v-icon>
         </v-list-item-action>
       </v-list-item>
-      <food-item :foods="food.linkedFoods" @food-selected="onLinkedFoodSelected" linked></food-item>
+      <food-item :foods="food.linkedFoods" linked @food-selected="onLinkedFoodSelected"></food-item>
     </div>
   </v-list>
 </template>
-
-<style>
-.linked-food-title {
-}
-</style>
 
 <script lang="ts">
 import type { PropType } from 'vue';
@@ -33,9 +28,14 @@ export default defineComponent({
 
   props: {
     // FIXME: Should be an array of objects of type UserFoodData or EncodedUserFoodData ???
-    foods: Array as PropType<FoodState[]>,
-
-    linked: Boolean,
+    foods: {
+      type: Array as PropType<FoodState[]>,
+      required: true,
+    },
+    linked: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -59,3 +59,8 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+.linked-food-title {
+}
+</style>

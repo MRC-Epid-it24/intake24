@@ -1,11 +1,11 @@
 <template>
   <v-bottom-navigation
+    v-model="tabIndex"
     app
     fixed
     grow
     :color="color"
     background-color="secondary"
-    v-model="tabIndex"
   >
     <v-btn @click="onItemClick(0)">
       <span>Add meal</span>
@@ -19,8 +19,8 @@
 
     <v-btn
       :disabled="!isContinueEnabled()"
+      :color="canContinue ? 'success' : 'primary'"
       @click="onItemClick(2)"
-      :color="this.continue ? 'success' : 'primary'"
     >
       <span>{{ $t('common.action.continue') }}</span>
       <v-icon>$next</v-icon>
@@ -29,11 +29,9 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { PromptAnswer } from '@intake24/common/types';
-import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'BottomNavigationMobile',
@@ -46,36 +44,17 @@ export default defineComponent({
     },
   },
 
-  data(): {
-    tabIndex: number;
-    activeItem: string;
-    color: string;
-    promptAnswer: PromptAnswer | null;
-    continue: boolean;
-  } {
+  data() {
     return {
       tabIndex: 2,
       activeItem: 'meal',
       color: '#ffffff',
-      promptAnswer: null,
+      promptAnswer: null as PromptAnswer | null,
       // TODO: change default to false once  all prompts will be changed to work with the tempPromptAnswer State.
-      continue: true,
+      canContinue: true,
     };
   },
 
-  computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedFood']),
-  },
-
-  methods: {
-    onItemClick(tab: number) {
-      if (!tab) this.$emit('navigation-item-click', this.$props.bottomNavigation);
-      this.$emit('navigation-item-click', tab);
-    },
-    isContinueEnabled() {
-      return this.continueButtonEnabled || this.tabIndex !== 2;
-    },
-  },
   watch: {
     currentTempPromptAnswer: {
       immediate: true,
@@ -85,6 +64,16 @@ export default defineComponent({
         // TODO: Switch it ON once all prompts will be changed to work with the tempPromptAnswer State.
         // if (this.promptAnswer.response) this.continue = true;
       },
+    },
+  },
+
+  methods: {
+    onItemClick(tab: number) {
+      if (!tab) this.$emit('navigation-item-click', this.$props.bottomNavigation);
+      this.$emit('navigation-item-click', tab);
+    },
+    isContinueEnabled() {
+      return this.continueButtonEnabled || this.tabIndex !== 2;
     },
   },
 });

@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="save">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="save">
     <v-toolbar flat tile color="grey lighten-5" bottom>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.split-lists.title') }}

@@ -24,9 +24,9 @@ import { useSurvey } from '@intake24/survey/stores';
 export default defineComponent({
   name: 'CustomPromptHandler',
 
-  mixins: [foodPromptUtils, mealPromptUtils, promptHandlerStateless],
-
   components: { ...customPrompts },
+
+  mixins: [foodPromptUtils, mealPromptUtils, promptHandlerStateless],
 
   props: {
     promptProps: {

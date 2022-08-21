@@ -16,7 +16,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'Continue',
+  name: 'PromptActionContinue',
 
   props: {
     label: {

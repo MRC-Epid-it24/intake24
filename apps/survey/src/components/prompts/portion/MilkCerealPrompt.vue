@@ -1,9 +1,7 @@
 <template>
   <v-container>
     <portion-layout :text="text" :description="description">
-      <template v-slot:headerText>
-        [Associated prompt] {{ $t('portion.milkCereal.label') }}
-      </template>
+      <template #headerText> [Associated prompt] {{ $t('portion.milkCereal.label') }} </template>
       <v-row>
         <v-col>
           <v-card>
@@ -11,10 +9,10 @@
               {{ $t('portion.milkCereal.question') }}
             </v-card-text>
             <v-card-actions>
-              <v-btn @click="setDisplayQuestions(true)" :color="displayQuestionStyle('yes')">
+              <v-btn :color="displayQuestionStyle('yes')" @click="setDisplayQuestions(true)">
                 {{ $t('common.action.confirm.yes') }}
               </v-btn>
-              <v-btn @click="setDisplayQuestions(false)" :color="displayQuestionStyle('no')">
+              <v-btn :color="displayQuestionStyle('no')" @click="setDisplayQuestions(false)">
                 {{ $t('common.action.confirm.no') }}
               </v-btn>
             </v-card-actions>
@@ -27,7 +25,7 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 Please select the milk you had:
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon :valid="foodSelected"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
@@ -48,7 +46,7 @@
             <v-expansion-panel v-if="foodSelected">
               <v-expansion-panel-header disable-icon-rotate>
                 How would you like to measure the milk?
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon :valid="portionMethodSelected"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
@@ -80,7 +78,7 @@
             <v-expansion-panel v-if="foodSelected">
               <v-expansion-panel-header disable-icon-rotate>
                 Select how much milk you had:
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon :valid="portionSelected"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
@@ -99,7 +97,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-btn @click="submit()" :color="submitButtonStyle()">
+          <v-btn :color="submitButtonStyle()" @click="submit()">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-col>

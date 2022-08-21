@@ -18,10 +18,10 @@
       </v-list-item>
       <v-card-text>
         <v-list-item
+          v-for="(meal, idx) in meals"
+          :key="meal.id"
           :ripple="false"
           :inactive="true"
-          v-for="(meal, idx) in meals"
-          :key="meal.name + idx"
           link
         >
           <v-list-item-content>
@@ -31,7 +31,7 @@
               :active="activeMealIndex === idx"
               @meal-action="onMealAction"
               @food-selected="onFoodSelected"
-              @breadcrumbMeal="chooseMealUp(meal.name)"
+              @breadcrumbMeal="chooseMealUp(meal.name.en)"
               @breadcrumbFood="chooseFoodUp"
             ></review-meal>
           </v-list-item-content>
@@ -42,8 +42,10 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { MealState } from '@intake24/common/types';
 import ReviewMeal from '@intake24/survey/components/recall/mobile/review/ReviewMeal.vue';
 import SurveyProgress from '@intake24/survey/components/recall/mobile/review/SurveyProgress.vue';
 // import ContextMenu from '@intake24/survey/components/elements/ContextMenu.vue';
@@ -59,10 +61,18 @@ export default defineComponent({
     SurveyProgress,
   },
   props: {
-    surveyName: String,
-    surveyId: String,
-    meals: Array,
-    activeMealIndex: Number,
+    surveyName: {
+      type: String,
+    },
+    surveyId: {
+      type: String,
+    },
+    meals: {
+      type: Array as PropType<MealState[]>,
+    },
+    activeMealIndex: {
+      type: Number,
+    },
   },
   data() {
     return {

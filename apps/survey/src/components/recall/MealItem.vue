@@ -1,6 +1,6 @@
 <template>
   <v-list-group :value="mealTimeString.length > 0 ? true : false">
-    <template v-slot:activator>
+    <template #activator>
       <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal">
         {{ getLocaleContent(meal.name) }}
       </v-list-item-title>
@@ -14,7 +14,7 @@
         <v-list-item-action-text v-if="mealTimeString.length > 0">
           {{ mealTimeString }}
         </v-list-item-action-text>
-        <v-icon x-small v-else>far fa-question-circle </v-icon>
+        <v-icon v-else x-small>far fa-question-circle </v-icon>
       </v-list-item-action>
     </template>
     <food-item :foods="meal.foods" @food-selected="onFoodSelected"></food-item>

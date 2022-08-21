@@ -1,6 +1,6 @@
 <template>
   <v-menu offset-y :close-on-click="true" :close-on-content-click="true">
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <v-btn icon v-bind="attrs" v-on="on">
         <v-icon x-small>{{ icon }}</v-icon>
       </v-btn>
@@ -18,8 +18,8 @@
                 :label="$t('prompts.editMeal.deleteMeal', { meal: entityName })"
                 @confirm="onClick(item.action)"
               >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn text color="red" v-bind="attrs" v-on="on" small>
+                <template #activator="{ on, attrs }">
+                  <v-btn text color="red" v-bind="attrs" small v-on="on">
                     {{ $t('prompts.editMeal.deleteMeal', { meal: entityName }) }}
                   </v-btn>
                 </template>
@@ -44,9 +44,14 @@ export default defineComponent({
   components: { ConfirmDialog },
 
   props: {
-    icon: String,
-    menu: Array,
-    dialog: Boolean,
+    icon: {
+      type: String,
+      required: true,
+    },
+    menu: {
+      type: Array,
+      required: true,
+    },
     entityName: {
       type: String,
       default: '',

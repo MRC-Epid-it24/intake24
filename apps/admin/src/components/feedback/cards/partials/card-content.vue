@@ -5,7 +5,7 @@
       :value="name"
       @input="update('name', $event)"
     >
-      <template v-for="lang in Object.keys(name)" v-slot:[`lang.${lang}`]>
+      <template v-for="lang in Object.keys(name)" #[`lang.${lang}`]>
         <v-text-field
           :key="lang"
           :label="$t('feedback-schemes.cards.name')"
@@ -22,10 +22,10 @@
       :value="description"
       @input="update('description', $event)"
     >
-      <template v-for="lang in Object.keys(description)" v-slot:[`lang.${lang}`]>
+      <template v-for="lang in Object.keys(description)" #[`lang.${lang}`]>
         <editor
-          :init="tinymceInit"
           :key="lang"
+          :init="tinymceInit"
           :value="description[lang]"
           @input="updateLanguage('description', lang, $event)"
         />

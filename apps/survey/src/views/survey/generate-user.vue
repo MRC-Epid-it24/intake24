@@ -52,7 +52,7 @@
             </p>
           </v-card-text>
           <v-card-actions class="px-6 pb-6">
-            <v-btn block color="secondary" xLarge :disabled="!canContinue" @click="login">
+            <v-btn block color="secondary" x-large :disabled="!canContinue" @click="login">
               {{ $t('common.action.continue') }}
             </v-btn>
           </v-card-actions>
@@ -60,8 +60,8 @@
             <v-divider class="mx-6 mt-3"></v-divider>
             <component
               :is="captcha.provider"
-              :sitekey="captcha.sitekey"
               ref="captchaRef"
+              :sitekey="captcha.sitekey"
               @verified="verified"
               @expired="expired"
             ></component>

@@ -1,12 +1,12 @@
 <template>
-  <layout v-bind="{ id, entry }" v-if="entryLoaded">
-    <template v-slot:actions>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+    <template #actions>
       <confirm-dialog
         v-if="can({ action: 'edit' })"
         :label="$t('tasks.run._')"
-        :activatorClass="['ml-2']"
+        :activator-class="['ml-2']"
         color="secondary"
-        iconLeft="fas fa-play"
+        icon-left="fas fa-play"
         @confirm="triggerJob"
       >
         {{ $t('tasks.run.confirm') }}

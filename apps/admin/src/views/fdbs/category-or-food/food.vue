@@ -36,7 +36,7 @@
                   :error-messages="form.errors.get('main.foodGroupId')"
                   :selected="entry?.main?.foodGroup"
                   :label="$t('fdbs.foods.global.foodGroup').toString()"
-                  responseObject="data"
+                  response-object="data"
                   api="admin/food-groups"
                   name="main.foodGroup"
                   @input="form.errors.clear('main.foodGroupId')"
@@ -76,21 +76,21 @@
           v-model="form.main.parentCategories"
           :disabled="disabled"
           :errors="form.errors"
-          :localeId="id"
+          :locale-id="id"
           class="mb-6"
         ></category-list>
         <nutrient-list
           v-model="form.nutrientRecords"
           :disabled="disabled"
           :errors="form.errors"
-          :nutrientTables="refs?.nutrientTables ?? []"
+          :nutrient-tables="refs?.nutrientTables ?? []"
           class="mb-6"
         ></nutrient-list>
         <portion-size-method-list
           v-model="form.portionSizeMethods"
           :disabled="disabled"
           :errors="form.errors"
-          :localeId="id"
+          :locale-id="id"
           class="mb-6"
         ></portion-size-method-list>
       </v-form>

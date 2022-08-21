@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" @save="save">
+  <layout v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="save">
     <v-toolbar flat tile color="grey lighten-5" bottom>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('languages.translations.title') }}
@@ -89,13 +89,13 @@ import TranslationSection from './translation-section.vue';
 export default defineComponent({
   name: 'LanguageTranslations',
 
-  provide: () => ({
-    editsResource: true,
-  }),
-
   components: { ConfirmDialog, TranslationSection },
 
   mixins: [detailMixin, watchEntry],
+
+  provide: () => ({
+    editsResource: true,
+  }),
 
   setup(props) {
     const { entry, entryLoaded } = useStoreEntry<LanguageEntry>(props.id);

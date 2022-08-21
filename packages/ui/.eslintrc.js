@@ -5,7 +5,7 @@ module.exports = {
     'vue/setup-compiler-macros': true,
   },
   extends: [
-    'plugin:vue/essential',
+    'plugin:vue/recommended',
     'eslint:recommended',
     '@vue/eslint-config-typescript/recommended',
     '@vue/eslint-config-prettier',
@@ -28,6 +28,7 @@ module.exports = {
     ],
     'simple-import-sort/exports': 'error',
     'vue/multi-word-component-names': 'warn',
+    'vue/require-default-prop': 'off',
     '@typescript-eslint/consistent-type-imports': [
       'error',
       { prefer: 'type-imports', disallowTypeAnnotations: false },

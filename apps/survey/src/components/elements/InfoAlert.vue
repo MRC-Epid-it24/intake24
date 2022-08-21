@@ -20,8 +20,14 @@ export default defineComponent({
   name: 'InfoAlert',
 
   props: {
-    info: String,
-    status: Boolean,
+    info: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data() {

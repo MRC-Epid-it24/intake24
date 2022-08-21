@@ -6,11 +6,11 @@
         :label="$t(`feedback-schemes.${type}._`)"
         class="my-4"
         hide-details="auto"
-        @change="toggleRange($event)"
         :prepend-icon="getIcon(type)"
+        @change="toggleRange($event)"
       ></v-switch>
     </v-col>
-    <v-col cols="12" md="6" v-if="value">
+    <v-col v-if="value" cols="12" md="6">
       <v-text-field
         :label="$t('feedback-schemes.ranges.start')"
         :value="value.start"

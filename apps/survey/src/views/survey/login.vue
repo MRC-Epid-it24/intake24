@@ -15,9 +15,9 @@
             {{ $t('login.subtitle') }}
           </v-card-subtitle>
           <v-form
+            :disabled="invalidSurvey"
             @keydown.native="errors.clear($event.target.name)"
             @submit.prevent="login"
-            :disabled="invalidSurvey"
           >
             <v-card-text class="px-6">
               <v-row>
@@ -48,7 +48,7 @@
               </v-row>
             </v-card-text>
             <v-card-actions class="px-6 pb-6">
-              <v-btn :disabled="invalidSurvey" type="submit" color="secondary" xLarge width="100%">
+              <v-btn :disabled="invalidSurvey" type="submit" color="secondary" x-large width="100%">
                 {{ $t('common.login') }}
               </v-btn>
             </v-card-actions>

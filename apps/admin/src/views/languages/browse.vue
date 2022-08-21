@@ -1,6 +1,6 @@
 <template>
   <data-table :headers="headers">
-    <template v-slot:[`item.id`]="{ item }">
+    <template #[`item.id`]="{ item }">
       <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
       {{ item.id }}
     </template>

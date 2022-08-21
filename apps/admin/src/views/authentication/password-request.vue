@@ -36,7 +36,7 @@
             </v-row>
           </v-card-text>
           <v-card-actions class="px-6 pb-6">
-            <v-btn type="submit" block color="secondary" xLarge>
+            <v-btn type="submit" block color="secondary" x-large>
               {{ $t('users.password.reset.send') }}
             </v-btn>
           </v-card-actions>
@@ -44,8 +44,8 @@
             <v-divider class="mx-6 mt-3"></v-divider>
             <component
               :is="captcha.provider"
-              :sitekey="captcha.sitekey"
               ref="captchaRef"
+              :sitekey="captcha.sitekey"
               @verified="verified"
               @expired="expired"
             ></component>

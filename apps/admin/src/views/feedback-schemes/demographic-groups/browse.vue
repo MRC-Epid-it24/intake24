@@ -1,7 +1,7 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
-    <template v-slot:actions>
-      <preview :feedbackScheme="currentFeedbackScheme"></preview>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+    <template #actions>
+      <preview :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
     <demographic-group-list
       v-model="form.demographicGroups"

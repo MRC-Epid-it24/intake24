@@ -7,8 +7,8 @@
       <v-spacer></v-spacer>
       <add-category-dialog
         v-if="!disabled"
-        :localeId="localeId"
-        :currentItems="items"
+        :locale-id="localeId"
+        :current-items="items"
         @add="add"
       ></add-category-dialog>
     </v-toolbar>

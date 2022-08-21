@@ -1,14 +1,14 @@
 <template>
-  <layout v-bind="{ id, entry }" v-if="entryLoaded">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <embedded-data-table
+      ref="table"
       :headers="headers"
       :api="`admin/surveys/${id}/respondents`"
-      ref="table"
       track-by="userId"
     >
-      <template v-slot:header-add>
+      <template #header-add>
         <v-dialog v-model="dialog" max-width="600px">
-          <template v-slot:activator="{ attrs, on }">
+          <template #activator="{ attrs, on }">
             <v-btn class="font-weight-bold" color="primary" text v-bind="attrs" v-on="on">
               <v-icon left>fa-user-plus</v-icon> {{ $t('surveys.respondents.add') }}
             </v-btn>
@@ -121,18 +121,18 @@
           </v-card>
         </v-dialog>
         <v-menu close-on-content-click close-on-click offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn class="font-weight-bold" color="primary" v-bind="attrs" v-on="on" icon>
+          <template #activator="{ on, attrs }">
+            <v-btn class="font-weight-bold" color="primary" v-bind="attrs" icon v-on="on">
               <v-icon>fa-ellipsis-v</v-icon>
             </v-btn>
           </template>
           <v-list>
-            <respondents-upload :surveyId="id"></respondents-upload>
-            <respondents-auth-url-export :surveyId="id"></respondents-auth-url-export>
+            <respondents-upload :survey-id="id"></respondents-upload>
+            <respondents-auth-url-export :survey-id="id"></respondents-auth-url-export>
           </v-list>
         </v-menu>
       </template>
-      <template v-slot:[`item.surveyAuthUrl`]="{ item }">
+      <template #[`item.surveyAuthUrl`]="{ item }">
         <v-btn icon link :href="item.surveyAuthUrl" target="_blank">
           <v-icon>fas fa-arrow-up-right-from-square</v-icon>
         </v-btn>
@@ -140,7 +140,7 @@
           <v-icon>fas fa-clipboard</v-icon>
         </v-btn>
       </template>
-      <template v-slot:[`item.feedbackAuthUrl`]="{ item }">
+      <template #[`item.feedbackAuthUrl`]="{ item }">
         <v-btn icon link :href="item.feedbackAuthUrl" target="_blank">
           <v-icon>fas fa-arrow-up-right-from-square</v-icon>
         </v-btn>
@@ -148,15 +148,15 @@
           <v-icon>fas fa-clipboard</v-icon>
         </v-btn>
       </template>
-      <template v-slot:[`item.action`]="{ item }">
+      <template #[`item.action`]="{ item }">
         <v-menu close-on-content-click close-on-click offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn class="font-weight-bold" color="primary" v-bind="attrs" v-on="on" icon>
+          <template #activator="{ on, attrs }">
+            <v-btn class="font-weight-bold" color="primary" v-bind="attrs" icon v-on="on">
               <v-icon>fa-ellipsis-v</v-icon>
             </v-btn>
           </template>
           <v-list>
-            <respondent-feedback :surveyId="id" :user="item"></respondent-feedback>
+            <respondent-feedback :survey-id="id" :user="item"></respondent-feedback>
           </v-list>
         </v-menu>
         <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">

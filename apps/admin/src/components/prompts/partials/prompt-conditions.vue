@@ -7,7 +7,7 @@
             {{ $t(`survey-schemes.conditions.${isCreate ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn class="font-weight-bold" color="error" @click.stop="cancel" text>
+          <v-btn class="font-weight-bold" color="error" text @click.stop="cancel">
             <v-icon>$cancel</v-icon>
           </v-btn>
         </v-toolbar>
@@ -33,11 +33,11 @@
                 item-value="op"
                 outlined
               >
-                <template v-slot:item="{ item }">
+                <template #item="{ item }">
                   <span :class="`fas fa-${opToIconMap[item.op]} mr-3`"></span>
                   {{ item.text }}
                 </template>
-                <template v-slot:selection="{ item }">
+                <template #selection="{ item }">
                   <span :class="`fas fa-${opToIconMap[item.op]} mr-3`"></span>
                   {{ item.text }}
                 </template>

@@ -7,7 +7,7 @@
             <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
               <v-expansion-panel-header color="#f5f5f5" disable-icon-rotate class="text-body-1">
                 {{ associatedFoodPrompts[index].promptText }}
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon
                     :valid="
                       prompt.confirmed === false ||
@@ -23,7 +23,7 @@
                     <v-btn :value="true">{{ $t('prompts.associatedFoods.yes') }}</v-btn>
                   </v-btn-toggle>
                 </v-container>
-                <v-card flat v-if="prompt.confirmed === true && prompt.selectedFood !== undefined">
+                <v-card v-if="prompt.confirmed === true && prompt.selectedFood !== undefined" flat>
                   <v-card-title
                     ><span class="fa fa-check mr-2"></span
                     >{{ prompt.selectedFood.description }}</v-card-title
@@ -34,8 +34,8 @@
                 </v-card>
                 <v-expand-transition>
                   <v-card
-                    flat
                     v-show="prompt.confirmed === true && prompt.selectedFood === undefined"
+                    flat
                   >
                     <v-card-title class="pl-0 pa-2" style="border-bottom: 1px solid lightgray"
                       >Please select an item from this category:</v-card-title
@@ -57,7 +57,7 @@
     </v-card-actions>
     <v-row class="mt-2">
       <v-col>
-        <continue @click="onContinue" :disabled="!continueEnabled" class="px-2"></continue>
+        <continue :disabled="!continueEnabled" class="px-2" @click="onContinue"></continue>
       </v-col>
     </v-row>
   </prompt-layout>

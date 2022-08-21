@@ -1,9 +1,9 @@
 <template>
-  <layout v-bind="{ id, entry }" v-if="entryLoaded">
-    <template v-slot:actions>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+    <template #actions>
       <copy-scheme-dialog
         v-if="canHandleEntry('copy')"
-        :schemeId="id"
+        :scheme-id="id"
         resource="survey-schemes"
       ></copy-scheme-dialog>
     </template>

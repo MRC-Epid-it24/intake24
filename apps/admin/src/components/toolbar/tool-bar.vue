@@ -5,8 +5,8 @@
         <component
           :is="action"
           v-if="currentActions.includes(action)"
-          :action="action"
           :key="action"
+          :action="action"
           :disabled="selected.length !== 1"
           class="mr-2"
           @action="onAction"

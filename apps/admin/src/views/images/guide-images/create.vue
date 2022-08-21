@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -17,14 +17,13 @@
             <v-col cols="12" md="6">
               <select-resource
                 v-model="form.imageMapId"
-                itemName="id"
+                item-name="id"
                 resource="image-maps"
                 @input="form.errors.clear('imageMapId')"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-text-field
                     v-bind="attrs"
-                    v-on="on"
                     :error-messages="form.errors.get('imageMapId')"
                     :label="$t('image-maps.id')"
                     :value="form.imageMapId"
@@ -33,6 +32,7 @@
                     clearable
                     outlined
                     readonly
+                    v-on="on"
                   >
                   </v-text-field>
                 </template>

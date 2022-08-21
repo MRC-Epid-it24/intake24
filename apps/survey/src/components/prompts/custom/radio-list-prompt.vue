@@ -29,7 +29,7 @@
       </v-radio-group>
       <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
     </v-form>
-    <template v-slot:actions>
+    <template #actions>
       <continue @click.native="submit"></continue>
     </template>
   </prompt-layout>

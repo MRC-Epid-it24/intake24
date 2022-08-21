@@ -1,7 +1,7 @@
 <template>
   <v-card flat class="sticky_toolbar_card">
     <v-toolbar flat bottom class="sticky_toolbar">
-      <v-tabs slider-size="4" icons-and-text center-active touch v-model="activeTab" height="56px">
+      <v-tabs v-model="activeTab" slider-size="4" icons-and-text center-active touch height="56px">
         <v-tabs-slider color="success"></v-tabs-slider>
         <v-tab
           v-for="(meal, idx) in meals"
@@ -41,6 +41,8 @@ export default defineComponent({
   // components: { MealItemMobile },
   name: 'MealListMobileBottom',
 
+  mixins: [localeContent],
+
   props: {
     meals: {
       type: Array as PropType<MealState[]>,
@@ -51,8 +53,6 @@ export default defineComponent({
     //   default: 0,
     // },
   },
-
-  mixins: [localeContent],
 
   data() {
     return {
@@ -73,6 +73,14 @@ export default defineComponent({
       },
     },
   },
+  watch: {
+    selectedMealIndex: {
+      handler(value: number) {
+        console.log('Meal Index changed', value);
+        this.activeTab = value;
+      },
+    },
+  },
 
   methods: {
     emitFoodsList(mealIndex: number, name: string, foods: FoodState[], entity: string) {
@@ -88,14 +96,6 @@ export default defineComponent({
             .concat(':')
             .concat(timeDoubleDigitsConvertor(time.minutes))
         : '';
-    },
-  },
-  watch: {
-    selectedMealIndex: {
-      handler(value: number) {
-        console.log('Meal Index changed', value);
-        this.activeTab = value;
-      },
     },
   },
 });

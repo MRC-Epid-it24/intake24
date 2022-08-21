@@ -2,8 +2,8 @@
   <v-row :no-gutters="isNotDesktop" class="pt-2" justify="center">
     <v-col v-if="showMealList" cols="3" lg="3" min-height="30rem" height="45rem">
       <meal-list
-        :surveyName="surveyName"
-        :surveyId="surveyId"
+        :survey-name="surveyName"
+        :survey-id="surveyId"
         :meals="meals"
         @meal-action="onMealAction"
         @recall-action="onRecallAction"
@@ -14,19 +14,19 @@
     </v-col>
 
     <v-col cols="12" lg="9" class="content mt-0">
-      <recall-bread-crumbs v-if="showMealList" :promptName="activePrompt"></recall-bread-crumbs>
+      <recall-bread-crumbs v-if="showMealList" :prompt-name="activePrompt"></recall-bread-crumbs>
       <transition name="component-fade" mode="out-in">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
         even if the next prompt uses the same component type, probably should be something like an internal counter,
         or maybe not  ¯\_(ツ)_/¯  -->
         <component
-          v-if="currentPrompt && !hideCurrentPrompt"
           :is="handlerComponent"
+          v-if="currentPrompt && !hideCurrentPrompt"
           ref="promptHandle"
-          :promptComponent="currentPrompt.prompt.component"
-          :promptId="currentPrompt.prompt.id"
-          :promptProps="currentPrompt.prompt.props"
           :key="Math.random()"
+          :prompt-component="currentPrompt.prompt.component"
+          :prompt-id="currentPrompt.prompt.id"
+          :prompt-props="currentPrompt.prompt.props"
           @validation-update="onValidationUpdate"
           @complete="onComplete"
           @continue="onContinue"
@@ -56,14 +56,14 @@ import Recall from './recall';
 export default defineComponent({
   name: 'DynamicRecallDesktop',
 
-  mixins: [Recall],
-
   components: {
     MealListDesktop,
     RecallBreadCrumbs,
     CustomPromptHandler,
     InfoAlert,
   },
+
+  mixins: [Recall],
 
   data: () => {
     return {

@@ -36,7 +36,7 @@
             </v-row>
           </v-card-text>
           <v-card-actions class="px-6 pb-6">
-            <v-btn type="submit" color="secondary" xLarge width="100%">
+            <v-btn type="submit" color="secondary" x-large width="100%">
               {{ $t('common.login') }}
             </v-btn>
           </v-card-actions>

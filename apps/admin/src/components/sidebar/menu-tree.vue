@@ -1,7 +1,7 @@
 <template>
   <v-list dense nav>
     <v-list-group value="true" color="grey lighten-1" :prepend-icon="icon">
-      <template v-slot:activator>
+      <template #activator>
         <v-list-item-title>{{ $t(`common.${name}`) }}</v-list-item-title>
       </template>
       <v-list-item-group>
@@ -31,6 +31,7 @@ export default defineComponent({
     },
     icon: {
       type: String,
+      required: true,
     },
     name: {
       type: String,

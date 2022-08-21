@@ -7,13 +7,13 @@ import { localeContent } from '@intake24/survey/components/mixins';
 import Continue from '@intake24/survey/components/prompts/actions/Continue.vue';
 
 export default defineComponent({
+  components: { Continue, PromptLayout },
+
+  mixins: [localeContent],
+
   props: {
     meal: {
       type: Object as PropType<MealState>,
     },
   },
-
-  components: { Continue, PromptLayout },
-
-  mixins: [localeContent],
 });

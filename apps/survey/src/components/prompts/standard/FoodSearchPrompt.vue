@@ -1,19 +1,19 @@
 <template>
   <prompt-layout :text="promptTitle" :description="promptProps.description">
     <v-text-field v-model="searchTerm" @change="search"></v-text-field>
-    <v-progress-circular indeterminate v-if="requestInProgress"></v-progress-circular>
-    <v-alert type="error" prominent v-if="requestFailed">Something went wrong :(</v-alert>
+    <v-progress-circular v-if="requestInProgress" indeterminate></v-progress-circular>
+    <v-alert v-if="requestFailed" type="error" prominent>Something went wrong :(</v-alert>
     <v-alert
+      v-if="searchResults != null && searchResults.foods.length === 0"
       type="warning"
       prominent
-      v-if="searchResults != null && searchResults.foods.length === 0"
     >
       <p>There is nothing in our database that matches "{{ searchTerm }}".</p>
       <p>Please try re-wording your description.</p></v-alert
     >
     <food-search-results
-      :results="searchResults"
       v-if="searchResults != null"
+      :results="searchResults"
       @food-selected="onFoodSelected"
     ></food-search-results>
   </prompt-layout>
@@ -55,6 +55,16 @@ export default defineComponent({
     },
   },
 
+  data() {
+    return {
+      ...merge(submitPromptProps, this.promptProps),
+      requestInProgress: true,
+      requestFailed: false,
+      searchTerm: this.initialSearchTerm,
+      searchResults: null as FoodSearchResponse | null,
+    };
+  },
+
   computed: {
     promptTitle(): string {
       const { searchTerm } = this;
@@ -64,16 +74,6 @@ export default defineComponent({
 
   mounted() {
     this.search();
-  },
-
-  data() {
-    return {
-      ...merge(submitPromptProps, this.promptProps),
-      requestInProgress: true,
-      requestFailed: false,
-      searchTerm: this.initialSearchTerm,
-      searchResults: null as FoodSearchResponse | null,
-    };
   },
 
   methods: {

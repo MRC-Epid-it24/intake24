@@ -18,6 +18,7 @@ import trimEnd from 'lodash/trimEnd';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+  components: { Editor },
   data() {
     const baseUrl = trimEnd(import.meta.env.VITE_APP_BASE_URL ?? '', '/');
 
@@ -47,6 +48,4 @@ export default defineComponent({
       },
     };
   },
-
-  components: { Editor },
 });

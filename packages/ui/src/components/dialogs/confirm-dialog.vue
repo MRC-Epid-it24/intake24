@@ -1,17 +1,17 @@
 <template>
   <v-dialog v-model="dialog" :persistent="persistent" :max-width="maxWidth">
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }">
         <v-btn
           v-if="show"
           v-bind="attrs"
-          v-on="on"
           :class="activatorClass"
           :color="iconColor ? iconColor : color"
           :disabled="disabled"
           :fab="fab"
           :icon="icon"
           :title="label"
+          v-on="on"
         >
           <v-icon :left="!icon && !!iconLeft">{{ iconLeft }}</v-icon>
           <template v-if="!icon">{{ label }}</template>

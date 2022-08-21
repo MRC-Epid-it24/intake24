@@ -1,7 +1,7 @@
 <template>
-  <layout v-bind="{ id, entry }" v-if="entryLoaded">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @submit.prevent="submit">
         <v-card-title>{{ $t('surveys.data-export.title') }}</v-card-title>
         <v-card-text>
           <v-row>
@@ -15,7 +15,7 @@
                     persistent
                     width="290px"
                   >
-                    <template v-slot:activator="{ on, attrs }">
+                    <template #activator="{ on, attrs }">
                       <v-text-field
                         v-model="form.startDate"
                         :error-messages="form.errors.get('startDate')"
@@ -50,7 +50,7 @@
                     persistent
                     width="290px"
                   >
-                    <template v-slot:activator="{ on, attrs }">
+                    <template #activator="{ on, attrs }">
                       <v-text-field
                         v-model="form.endDate"
                         :error-messages="form.errors.get('endDate')"

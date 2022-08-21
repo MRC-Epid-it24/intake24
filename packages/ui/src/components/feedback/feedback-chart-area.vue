@@ -16,7 +16,7 @@
       </v-col>
     </v-row>
     <div class="d-none d-print-block">
-      <div class="chart-print-wrapper" v-for="chart in charts" :key="`print-${chart.id}`">
+      <div v-for="chart in charts" :key="`print-${chart.id}`" class="chart-print-wrapper">
         <chart class="chart-print" autoresize :option="chart"></chart>
       </div>
     </div>

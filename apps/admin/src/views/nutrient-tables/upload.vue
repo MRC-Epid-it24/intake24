@@ -1,7 +1,7 @@
 <template>
   <layout v-bind="{ id, entry }">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @submit.prevent="submit">
         <v-card-title>{{ $t('nutrient-tables.upload.title') }}</v-card-title>
         <v-card-text>
           <v-row>

@@ -8,10 +8,10 @@
       <v-card flat dense>
         <v-list dense class="flex-grow-1 flex-shrink-0">
           <v-list-item
-            :ripple="false"
-            :inactive="true"
             v-for="(meal, idx) in meals"
             :key="meal.id"
+            :ripple="false"
+            :inactive="true"
             link
           >
             <v-list-item-icon>
@@ -19,7 +19,7 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-group :value="meal.time ? true : false">
-                <template v-slot:activator>
+                <template #activator>
                   <v-list-item-title
                     class="font-weight-bold text-wrap"
                     @click="chooseMeal(idx, meal.name.en, meal.foods, 'meal')"
@@ -30,7 +30,7 @@
                     <v-list-item-action-text v-if="meal.time">
                       {{ stringTime(meal.time) }}
                     </v-list-item-action-text>
-                    <v-icon x-small v-else>far fa-question-circle </v-icon>
+                    <v-icon v-else x-small>far fa-question-circle </v-icon>
                   </v-list-item-action>
                 </template>
                 <v-list v-if="meal.foods.length > 0 && meal.time ? true : false">
@@ -42,10 +42,10 @@
                       {{ foodDisplayName(food) }}
                     </v-list-item-title>
                     <v-list-item-action>
-                      <v-icon x-small v-if="food.data" color="sucess">fa-check</v-icon>
+                      <v-icon v-if="food.data" x-small color="sucess">fa-check</v-icon>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-icon x-small v-if="food.portionSizeMethod" color="sucess">fa-check</v-icon>
+                      <v-icon v-if="food.portionSizeMethod" x-small color="sucess">fa-check</v-icon>
                     </v-list-item-action>
                   </v-list-item>
                 </v-list>
@@ -55,7 +55,7 @@
         </v-list>
       </v-card>
     </v-col>
-    <template v-slot:actions> </template>
+    <template #actions> </template>
   </prompt-layout>
 </template>
 

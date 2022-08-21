@@ -5,8 +5,8 @@ import type { ComponentType } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import type {
   FoodState,
-  LocaleTranslation,
   RecallPromptHandler,
+  RequiredLocaleTranslation,
   Selection,
 } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
@@ -120,11 +120,8 @@ export default defineComponent({
       return this.selectedMealOptional ? this.selectedMealOptional.foods : [];
     },
 
-    activePrompt(): string | LocaleTranslation {
-      if (this.currentPrompt)
-        return this.currentPrompt.prompt.props.name ?? this.currentPrompt.prompt.name;
-
-      return '';
+    activePrompt(): RequiredLocaleTranslation | undefined {
+      return this.currentPrompt?.prompt.props.name;
     },
   },
 

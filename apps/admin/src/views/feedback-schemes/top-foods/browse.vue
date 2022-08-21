@@ -1,12 +1,12 @@
 <template>
   <layout
-    v-bind="{ id, entry }"
-    :routeLeave.sync="routeLeave"
     v-if="entryLoaded && refsLoaded"
+    v-bind="{ id, entry }"
+    :route-leave.sync="routeLeave"
     @save="submit"
   >
-    <template v-slot:actions>
-      <preview :feedbackScheme="currentFeedbackScheme"></preview>
+    <template #actions>
+      <preview :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
     <v-toolbar flat tile color="grey lighten-5">
       <v-icon left color="primary">fas fa-sort-amount-down</v-icon>
@@ -15,15 +15,15 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <select-resource resource="feedback-schemes" return-object="topFoods" @input="load">
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
-            v-on="on"
             class="ml-3"
             color="secondary"
             fab
             small
             :title="$t(`feedback-schemes.load`)"
+            v-on="on"
           >
             <v-icon>fa-download</v-icon>
           </v-btn>

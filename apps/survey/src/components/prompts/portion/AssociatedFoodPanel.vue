@@ -5,7 +5,7 @@
         <v-expansion-panel>
           <v-expansion-panel-header disable-icon-rotate>
             {{ $t('portion.common.completeBelow') }}
-            <template v-slot:actions>
+            <template #actions>
               <valid-invalid-icon :valid="foodSearchComplete"></valid-invalid-icon>
             </template>
           </v-expansion-panel-header>
@@ -22,15 +22,15 @@
         <v-expansion-panel>
           <v-expansion-panel-header disable-icon-rotate>
             Option select portion method (if applicable)
-            <template v-slot:actions>
+            <template #actions>
               <valid-invalid-icon :valid="portionMethodSelected"></valid-invalid-icon>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <portion-size-option-prompt
-              :promptProps="portionOptionProps"
-              :foodName="selectedFoodData.localDescription"
-              :availableMethods="selectedFoodData.portionSizeMethods"
+              :prompt-props="portionOptionProps"
+              :food-name="selectedFoodData.localDescription"
+              :available-methods="selectedFoodData.portionSizeMethods"
               @option-selected="selectPortionMethod($event)"
             ></portion-size-option-prompt>
           </v-expansion-panel-content>
@@ -39,7 +39,7 @@
         <v-expansion-panel>
           <v-expansion-panel-header disable-icon-rotate>
             Select how much {associated food} you had:
-            <template v-slot:actions>
+            <template #actions>
               <valid-invalid-icon :valid="portionSelected"></valid-invalid-icon>
             </template>
           </v-expansion-panel-header>
@@ -121,8 +121,10 @@ export default defineComponent({
       } as FoodSearchPromptProps,
       assocFoodDescription: '',
       portionOptionProps: {
+        name: { en: '' },
         text: { en: '' },
         description: { en: '' },
+        conditions: [],
       } as BasePromptProps,
     };
   },

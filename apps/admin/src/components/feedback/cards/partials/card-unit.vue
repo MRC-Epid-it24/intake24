@@ -1,13 +1,13 @@
 <template>
   <v-tab-item key="unit">
     <language-selector
-      :label="$t('feedback-schemes.cards.unit.name').toString()"
       v-model="internalUnit.name"
+      :label="$t('feedback-schemes.cards.unit.name').toString()"
     >
-      <template v-for="lang in Object.keys(internalUnit.name)" v-slot:[`lang.${lang}`]>
+      <template v-for="lang in Object.keys(internalUnit.name)" #[`lang.${lang}`]>
         <v-text-field
-          v-model="internalUnit.name[lang]"
           :key="lang"
+          v-model="internalUnit.name[lang]"
           :label="$t('feedback-schemes.cards.unit.name')"
           :rules="nameRules"
           hide-details="auto"
@@ -16,11 +16,11 @@
       </template>
     </language-selector>
     <language-selector
-      :label="$t('feedback-schemes.cards.unit.description').toString()"
       v-model="internalUnit.name"
+      :label="$t('feedback-schemes.cards.unit.description').toString()"
     >
-      <template v-for="lang in Object.keys(internalUnit.description)" v-slot:[`lang.${lang}`]>
-        <editor v-model="internalUnit.description[lang]" :init="tinymceInit" :key="lang" />
+      <template v-for="lang in Object.keys(internalUnit.description)" #[`lang.${lang}`]>
+        <editor :key="lang" v-model="internalUnit.description[lang]" :init="tinymceInit" />
       </template>
     </language-selector>
   </v-tab-item>

@@ -1,6 +1,6 @@
 <template>
   <prompt-layout v-bind="{ description, text }">
-    <template v-slot:actions>
+    <template #actions>
       <v-btn
         v-if="canShowFeedback"
         class="px-5"

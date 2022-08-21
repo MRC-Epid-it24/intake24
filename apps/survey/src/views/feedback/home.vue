@@ -9,8 +9,8 @@
         <v-col cols="12" md="7">
           <v-row justify="space-around">
             <feedback-user-info
-              v-bind="{ surveyId, userDemographic }"
               v-if="userDemographic"
+              v-bind="{ surveyId, userDemographic }"
             ></feedback-user-info>
             <v-divider
               v-if="userDemographic && !!outputs.length"
@@ -18,6 +18,7 @@
               class="d-none d-sm-block"
             ></v-divider>
             <feedback-outputs
+              v-if="!!outputs.length"
               v-bind="{
                 outputs,
                 submissions:
@@ -26,7 +27,6 @@
                     : undefined,
                 surveyId,
               }"
-              v-if="!!outputs.length"
             ></feedback-outputs>
           </v-row>
         </v-col>
@@ -54,7 +54,7 @@
                       active-class="blue--text text--darken-3"
                       dense
                     >
-                      <template v-slot:default="{ active }">
+                      <template #default="{ active }">
                         <v-list-item-action class="my-0">
                           <v-checkbox :input-value="active" color="blue darken-3"></v-checkbox>
                         </v-list-item-action>
@@ -86,7 +86,7 @@
       v-bind="{ cards }"
       class="feedback-area"
     ></feedback-card-area>
-    <v-sheet color="white" v-if="topFoods.nutrients.length">
+    <v-sheet v-if="topFoods.nutrients.length" color="white">
       <feedback-chart-area v-bind="{ topFoods }" class="feedback-area"></feedback-chart-area>
     </v-sheet>
   </v-container>
@@ -195,8 +195,9 @@ export default defineComponent({
       this.initSelectedSubmissions();
       this.buildFeedback();
     } catch (err) {
-      console.log(err);
-      this.$router.push({ name: 'feedback-error', params: { surveyId } });
+      await this.$router.push({ name: 'feedback-error', params: { surveyId } });
+
+      throw err;
     } finally {
       loading.removeItem('feedback-initial-load');
     }

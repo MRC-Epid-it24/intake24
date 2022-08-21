@@ -1,10 +1,10 @@
 <template>
   <data-table :actions="['read', 'delete']" :headers="headers">
-    <template v-slot:[`item.successful`]="{ item }">
+    <template #[`item.successful`]="{ item }">
       <v-icon v-if="item.successful" color="success">fa-check-circle</v-icon>
       <v-icon v-else color="error">fa-times-circle</v-icon>
     </template>
-    <template v-slot:[`item.date`]="{ item }">
+    <template #[`item.date`]="{ item }">
       {{ formatDate(item.date) }}
     </template>
   </data-table>

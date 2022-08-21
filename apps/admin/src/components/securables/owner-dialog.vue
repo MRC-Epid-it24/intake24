@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <v-btn link text class="ml-3" v-bind="attrs" v-on="on">
         <v-icon class="mr-2">fas fa-user-shield</v-icon>
         {{ owner ? owner.name : $t('common.none') }}
@@ -14,7 +14,7 @@
         <v-toolbar-title>
           {{ $t(`${resource}.securables.owner.title`) }}
         </v-toolbar-title>
-        <template v-slot:extension>
+        <template #extension>
           <div class="mx-auto">
             <v-icon left>fa-search</v-icon>{{ $t(`${resource}.securables.search`) }}
           </div>
@@ -83,6 +83,8 @@ export type Owner = Pick<UserAttributes, 'id' | 'name' | 'email'>;
 export default defineComponent({
   name: 'OwnerDialog',
 
+  components: { AutoComplete },
+
   props: {
     api: {
       type: String,
@@ -96,8 +98,6 @@ export default defineComponent({
       type: Object as PropType<Owner>,
     },
   },
-
-  components: { AutoComplete },
 
   data() {
     return {

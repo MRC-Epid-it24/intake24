@@ -3,8 +3,8 @@
     v-bind="{ promptProps, availableMethods }"
     :food-name="foodName()"
     :prompt-component="promptComponent"
-    :initial-value="this.initialState"
-    :continue-enabled="this.continueEnabled"
+    :initial-value="initialState"
+    :continue-enabled="continueEnabled"
     @continue="$emit('continue')"
     @update="onUpdate"
   >

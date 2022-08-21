@@ -1,11 +1,10 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <select-resource v-model="drinkwareSetId" itemName="id" resource="drinkware-sets">
-        <template v-slot:activator="{ on, attrs }">
+      <select-resource v-model="drinkwareSetId" item-name="id" resource="drinkware-sets">
+        <template #activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
-            v-on="on"
             :label="$t('fdbs.portionSizes.methods.drink-scale.drinkwareSet')"
             :value="drinkwareSetId"
             hide-details="auto"
@@ -13,6 +12,7 @@
             prepend-inner-icon="fas fa-mug-saucer"
             outlined
             readonly
+            v-on="on"
           ></v-text-field>
         </template>
       </select-resource>

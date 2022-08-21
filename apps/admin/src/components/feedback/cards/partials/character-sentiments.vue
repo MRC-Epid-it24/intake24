@@ -37,10 +37,10 @@
             </v-col>
             <v-col cols="12">
               <language-selector v-model="sentiment.name" :label="$t('common.name').toString()">
-                <template v-for="lang in Object.keys(sentiment.name)" v-slot:[`lang.${lang}`]>
+                <template v-for="lang in Object.keys(sentiment.name)" #[`lang.${lang}`]>
                   <v-text-field
-                    v-model="sentiment.name[lang]"
                     :key="lang"
+                    v-model="sentiment.name[lang]"
                     :label="$t('common.name')"
                     hide-details="auto"
                     outlined
@@ -80,7 +80,7 @@ import { copy } from '@intake24/common/util';
 export const characterSentimentDefaults: CharacterSentiment = {
   sentiment: [],
   sentimentType: 'happy',
-  name: { en: null },
+  name: {},
 };
 
 export default defineComponent({

@@ -1,13 +1,13 @@
 <template>
   <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }">
         <v-btn
           v-bind="attrs"
-          v-on="on"
           class="ml-3"
           color="primary"
           :title="$t('feedback-schemes.preview.title')"
+          v-on="on"
         >
           <v-icon left>fas fa-magnifying-glass</v-icon>
           {{ $t('feedback-schemes.preview._') }}

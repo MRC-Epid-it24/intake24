@@ -1,11 +1,10 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <select-resource v-model="servingSetId" itemName="id" resource="as-served-sets">
-        <template v-slot:activator="{ on, attrs }">
+      <select-resource v-model="servingSetId" item-name="id" resource="as-served-sets">
+        <template #activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
-            v-on="on"
             :label="$t('fdbs.portionSizes.methods.as-served.servingImageSet')"
             :value="servingSetId"
             hide-details="auto"
@@ -13,26 +12,27 @@
             prepend-inner-icon="fas fa-image"
             outlined
             readonly
+            v-on="on"
           ></v-text-field>
         </template>
       </select-resource>
     </v-col>
     <v-col cols="12">
-      <select-resource v-model="leftoverSetId" itemName="id" resource="as-served-sets">
-        <template v-slot:activator="{ on, attrs }">
+      <select-resource v-model="leftoverSetId" item-name="id" resource="as-served-sets">
+        <template #activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
-            v-on="on"
             :label="$t('fdbs.portionSizes.methods.as-served.leftoverImageSet')"
             :value="leftoverSetId"
             clearable
             hide-details="auto"
-            itemName="description"
-            listName="id"
+            item-name="description"
+            list-name="id"
             name="leftover-set-id"
             prepend-inner-icon="fas fa-image"
             outlined
             readonly
+            v-on="on"
             @click:clear="removeParameter('leftovers-image-set')"
           ></v-text-field>
         </template>

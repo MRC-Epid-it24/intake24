@@ -16,15 +16,15 @@
       {{ $t('feedback.outputs.print') }}
     </v-btn>
     <v-dialog v-if="outputs.includes('email')" v-model="email.dialog" max-width="450px">
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <v-btn
           v-bind="attrs"
-          v-on="on"
           link
           class="mb-3"
           color="primary"
           outlined
           :title="$t('feedback.outputs.email._')"
+          v-on="on"
         >
           <v-icon left>fas fa-envelope</v-icon>
           {{ $t('feedback.outputs.email._') }}
@@ -35,7 +35,7 @@
           <v-toolbar-title>{{ $t('feedback.outputs.email.title') }}</v-toolbar-title>
         </v-toolbar>
         <v-card-text class="pa-4">
-          <v-form ref="form" @submit.prevent="emailFeedback" autocomplete="off">
+          <v-form ref="form" autocomplete="off" @submit.prevent="emailFeedback">
             <v-container>
               <v-row>
                 <v-col cols="12">
@@ -98,15 +98,15 @@
       </v-card>
     </v-dialog>
     <v-dialog v-if="outputs.includes('download')" v-model="download.dialog" max-width="450px">
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <v-btn
           v-bind="attrs"
-          v-on="on"
           link
           class="mb-3"
           color="primary"
           outlined
           :title="$t('feedback.outputs.download._')"
+          v-on="on"
         >
           <v-icon left>fas fa-download</v-icon>
           {{ $t('feedback.outputs.download._') }}

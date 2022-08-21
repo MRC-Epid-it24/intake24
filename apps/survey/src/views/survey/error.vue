@@ -22,7 +22,7 @@
           class="text-decoration-none"
           :to="{ name: 'survey-home', params: { surveyId } }"
         >
-          <div class="d-flex flex-column flex-sm-row justify-center align-center py-6" v-ripple>
+          <div v-ripple class="d-flex flex-column flex-sm-row justify-center align-center py-6">
             <v-icon class="py-3 mr-sm-6" size="100">fa-sync-alt</v-icon>
             <span class="py-3 text-h3 font-weight-bold text--secondary text-uppercase">
               {{ $t('common.action.reload') }}

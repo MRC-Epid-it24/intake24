@@ -1,8 +1,8 @@
 <template>
-  <v-list-group :value="meal.time.length > 0 ? true : false">
-    <template v-slot:activator>
+  <v-list-group :value="meal.time">
+    <template #activator>
       <v-list-item-icon>
-        <v-icon :color="active ? 'success' : 'grey'"> $meal</v-icon>
+        <v-icon :color="active ? 'success' : 'grey'">$meal</v-icon>
       </v-list-item-icon>
       <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal">
         {{ meal.name }}
@@ -13,10 +13,10 @@
         @context-menu-action="onContextMenuAction"
       ></context-menu>
       <v-list-item-action>
-        <v-list-item-action-text v-if="meal.time.length > 0">
+        <v-list-item-action-text v-if="meal.time">
           {{ meal.time }}
         </v-list-item-action-text>
-        <v-icon x-small v-else>far fa-question-circle </v-icon>
+        <v-icon v-else x-small>far fa-question-circle</v-icon>
       </v-list-item-action>
     </template>
     <review-food :foods="meal.foods" @food-selected="onFoodSelected"></review-food>
@@ -43,8 +43,12 @@ export default defineComponent({
       type: Object as PropType<MealState>,
       required: true,
     },
-    mealIndex: Number,
-    active: Boolean,
+    mealIndex: {
+      type: Number,
+    },
+    active: {
+      type: Boolean,
+    },
   },
 
   data() {

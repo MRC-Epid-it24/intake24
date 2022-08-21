@@ -16,9 +16,9 @@
         <v-icon small>$add</v-icon>
       </v-btn>
       <load-prompt-dialog
-        :schemeId="$route.params.id"
+        :scheme-id="$route.params.id"
         :items="isOverrideMode ? templates : undefined"
-        :questionIds="questionIds"
+        :question-ids="questionIds"
         @load="load"
       ></load-prompt-dialog>
     </v-toolbar>
@@ -29,7 +29,7 @@
             v-for="(question, index) in questions"
             :key="question.id"
             v-bind="{ mode, question, index, templates }"
-            :moveSections="moveSections(question)"
+            :move-sections="moveSections(question)"
             @question:edit="edit"
             @question:move="move"
             @question:remove="remove"
@@ -72,6 +72,13 @@ export interface PromptQuestionMoveEvent extends PromptQuestionEvent {
 export default defineComponent({
   name: 'PromptList',
 
+  components: {
+    draggable,
+    LoadPromptDialog,
+    PromptListItem,
+    PromptSelector,
+  },
+
   props: {
     mode: {
       type: String as PropType<'full' | 'override'>,
@@ -92,13 +99,6 @@ export default defineComponent({
       type: Array as PropType<PromptQuestion[]>,
       required: true,
     },
-  },
-
-  components: {
-    draggable,
-    LoadPromptDialog,
-    PromptListItem,
-    PromptSelector,
   },
 
   setup() {

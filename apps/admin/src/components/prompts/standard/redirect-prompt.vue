@@ -87,15 +87,6 @@ export default defineComponent({
     },
   },
 
-  computed: {
-    timerRules(): RuleCallback[] {
-      return [
-        (value: string | null): boolean | string =>
-          isInteger(value) || 'Timer value needs to be a number.',
-      ];
-    },
-  },
-
   data() {
     return {
       identifiers: ['userId', 'username', 'token', 'custom'].map((value) => ({
@@ -103,6 +94,15 @@ export default defineComponent({
         value,
       })),
     };
+  },
+
+  computed: {
+    timerRules(): RuleCallback[] {
+      return [
+        (value: string | null): boolean | string =>
+          isInteger(value) || 'Timer value needs to be a number.',
+      ];
+    },
   },
 
   methods: {

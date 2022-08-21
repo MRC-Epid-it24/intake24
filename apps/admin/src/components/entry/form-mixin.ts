@@ -34,21 +34,6 @@ export default defineComponent({
     };
   },
 
-  watch: {
-    entry(val) {
-      if (!Object.keys(val).length) return;
-
-      // Creating new record
-      // TODO: might be better to load full blank templates directly in store
-      if (isEqual(val, { id: null })) {
-        this.originalEntry = copy(this.form.getData(true));
-        return;
-      }
-
-      this.toForm(val);
-    },
-  },
-
   computed: {
     entryChanged(): boolean {
       const formKeys = this.form.keys;
@@ -62,6 +47,21 @@ export default defineComponent({
     },
     nonInputErrors(): ValidationError[] {
       return Object.values(pick(this.form.errors.all(), this.nonInputErrorKeys));
+    },
+  },
+
+  watch: {
+    entry(val) {
+      if (!Object.keys(val).length) return;
+
+      // Creating new record
+      // TODO: might be better to load full blank templates directly in store
+      if (isEqual(val, { id: null })) {
+        this.originalEntry = copy(this.form.getData(true));
+        return;
+      }
+
+      this.toForm(val);
     },
   },
 

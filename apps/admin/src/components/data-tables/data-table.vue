@@ -22,10 +22,10 @@
           :loading="isAppLoading"
           :server-items-length="meta.total"
         >
-          <template v-for="(_, scopedSlotName) in $scopedSlots" v-slot:[scopedSlotName]="slotData">
+          <template v-for="(_, scopedSlotName) in $scopedSlots" #[scopedSlotName]="slotData">
             <slot :name="scopedSlotName" v-bind="slotData" />
           </template>
-          <template v-slot:[`item.action`]="{ item }">
+          <template #[`item.action`]="{ item }">
             <action-bar
               :actions="actions.filter((action) => action !== 'create')"
               :api="api"

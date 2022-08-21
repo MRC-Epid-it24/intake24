@@ -94,7 +94,7 @@
                   outlined
                   @change="updateLanguage"
                 >
-                  <template v-slot:item="{ item }">
+                  <template #item="{ item }">
                     <span
                       :class="`fi fi-${
                         item.countryFlagCode === 'en' ? 'gb' : item.countryFlagCode
@@ -103,7 +103,7 @@
                     </span>
                     {{ item.englishName }}
                   </template>
-                  <template v-slot:selection="{ item }">
+                  <template #selection="{ item }">
                     <span
                       :class="`fi fi-${
                         item.countryFlagCode === 'en' ? 'gb' : item.countryFlagCode

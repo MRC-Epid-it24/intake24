@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -48,8 +48,8 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
-                  type="password"
                   v-model="form.passwordConfirm"
+                  type="password"
                   :error-messages="form.errors.get('passwordConfirm')"
                   :label="$t('users.password.confirm')"
                   hide-details="auto"
@@ -72,7 +72,7 @@
                 outlined
                 @change="form.errors.clear('roles')"
               >
-                <template v-slot:selection="{ item, index }">
+                <template #selection="{ item, index }">
                   <template v-if="index === 0">
                     <span v-if="form.roles.length === 1">{{ item.displayName }}</span>
                     <span v-if="form.roles.length > 1">{{ form.roles.length }} selected </span>
@@ -95,7 +95,7 @@
                 outlined
                 @change="form.errors.clear('permissions')"
               >
-                <template v-slot:selection="{ item, index }">
+                <template #selection="{ item, index }">
                   <template v-if="index === 0">
                     <span v-if="form.permissions.length === 1">{{ item.displayName }}</span>
                     <span v-if="form.permissions.length > 1"

@@ -3,7 +3,7 @@
     ref="prompt"
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
-    :food-list="initialState.foods || []"
+    :food-list="initialState?.foods || []"
     :prompt-component="promptComponent"
     :continue-enabled="continueEnabled"
     @continue="$emit('continue')"
@@ -35,9 +35,9 @@ interface EditMealState {
 export default defineComponent({
   name: 'EditMealPromptHandler',
 
-  mixins: [mealPromptUtils, createPromptHandlerStoreMixin<EditMealState>('edit-meal-prompt')],
-
   components: { EditMealPrompt },
+
+  mixins: [mealPromptUtils, createPromptHandlerStoreMixin<EditMealState>('edit-meal-prompt')],
 
   props: {
     promptProps: {

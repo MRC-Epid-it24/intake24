@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <v-card-title>{{ $t('survey-schemes.overrides.questions.title') }}</v-card-title>
     <v-card-subtitle>
       {{ $t('survey-schemes.overrides.questions.subtitle') }}
@@ -13,8 +13,8 @@
       {{ $t('survey-schemes.overrides.meals.subtitle') }}
     </v-card-subtitle>
     <meal-list
-      :schemeId="entry.surveySchemeId"
       v-model="form.surveySchemeOverrides.meals"
+      :scheme-id="entry.surveySchemeId"
       mode="override"
     ></meal-list>
     <v-container fluid>

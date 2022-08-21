@@ -10,9 +10,6 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    selected: {
-      type: Array,
-    },
     routePrefix: {
       type: String,
     },

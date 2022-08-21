@@ -3,14 +3,13 @@ import { defineComponent } from 'vue';
 import { resource } from '@intake24/admin/mixins';
 
 export default defineComponent({
+  mixins: [resource],
   props: {
     id: {
       type: String,
       default: 'create',
     },
   },
-
-  mixins: [resource],
 
   computed: {
     isCreate(): boolean {

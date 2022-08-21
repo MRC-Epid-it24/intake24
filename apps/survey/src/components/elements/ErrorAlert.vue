@@ -5,13 +5,17 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'ErrorAlert',
 
   props: {
-    errors: [],
+    errors: {
+      type: Array as PropType<string[]>,
+      required: true,
+    },
   },
 });
 </script>

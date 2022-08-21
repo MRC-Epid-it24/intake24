@@ -6,7 +6,7 @@
       </v-alert>
       <v-row v-else>
         <v-col v-for="question in questions" :key="question.id" cols="12" md="3">
-          <v-item v-slot:default="{ active, toggle }" :value="question.component">
+          <v-item v-slot="{ active, toggle }" :value="question.component">
             <v-card
               :color="active ? 'primary' : ''"
               dark

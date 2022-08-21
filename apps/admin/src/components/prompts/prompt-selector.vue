@@ -20,7 +20,7 @@
             <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
-        <template v-slot:extension>
+        <template #extension>
           <v-container>
             <v-tabs v-model="tab" background-color="primary" dark>
               <v-tab v-for="item in promptSettings[dialog.question.component].tabs" :key="item">
@@ -72,14 +72,14 @@
                     </v-container>
                   </v-card>
                 </v-col>
-                <v-col cols="12" v-if="!isOverrideMode">
+                <v-col v-if="!isOverrideMode" cols="12">
                   <v-card outlined>
                     <v-toolbar color="grey lighten-4" flat>
                       <v-toolbar-title>
                         <v-icon left>fas fa-circle-question</v-icon>
                         {{ $t(`survey-schemes.questions.type`) }}
                       </v-toolbar-title>
-                      <template v-slot:extension>
+                      <template #extension>
                         <v-tabs v-model="questionTypeTab">
                           <v-tab
                             v-for="type in Object.keys(availablePromptQuestions)"
@@ -92,8 +92,8 @@
                       </template>
                     </v-toolbar>
                     <v-item-group
-                      active-class="secondary"
                       v-model="dialog.question.component"
+                      active-class="secondary"
                       @change="updatePromptProps"
                     >
                       <v-tabs-items v-model="questionTypeTab">
@@ -166,6 +166,14 @@ export type PromptQuestionDialog = {
 export default defineComponent({
   name: 'QuestionListDialog',
 
+  components: {
+    LanguageSelector,
+    PromptTypeSelector,
+    ...customPrompts,
+    ...standardPrompts,
+    ...portionSizePrompts,
+  },
+
   props: {
     mode: {
       type: String as PropType<'full' | 'override'>,
@@ -178,14 +186,6 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       default: () => [],
     },
-  },
-
-  components: {
-    LanguageSelector,
-    PromptTypeSelector,
-    ...customPrompts,
-    ...standardPrompts,
-    ...portionSizePrompts,
   },
 
   setup() {

@@ -20,8 +20,8 @@
           </v-col>
           <v-col cols="12" md="6">
             <component
-              v-if="Object.keys(form.params).length"
               :is="form.job"
+              v-if="Object.keys(form.params).length"
               v-model="form.params"
               :error="form.errors.get('params')"
               :refs="refs"
@@ -68,9 +68,9 @@ type LocaleTasksForm = {
 export default defineComponent({
   name: 'LocaleTasks',
 
-  mixins: [formMixin, PollsForJobs],
-
   components: { ...jobParams },
+
+  mixins: [formMixin, PollsForJobs],
 
   setup(props) {
     const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<LocaleEntry>(props.id);

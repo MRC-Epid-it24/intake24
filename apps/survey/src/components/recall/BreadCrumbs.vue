@@ -7,17 +7,23 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { RequiredLocaleTranslation } from '@intake24/common/types';
 import type { BrdCrumbs } from '@intake24/survey/components/mixins/breadcrumbs';
 import { breadcrumbs } from '@intake24/survey/components/mixins';
 
 export default defineComponent({
   name: 'RecallBreadCrumbs',
 
-  props: ['promptName'],
-
   mixins: [breadcrumbs],
+
+  props: {
+    promptName: {
+      type: Object as PropType<RequiredLocaleTranslation>,
+    },
+  },
 
   computed: {
     brds(): BrdCrumbs[] {

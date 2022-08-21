@@ -66,10 +66,10 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateFood', 'setTempPromptAnswer', 'clearTempPromptAnswer']),
+    ...mapActions(useSurvey, ['updateFood']),
 
     onTempChange(tempStandardPortion: PromptAnswer) {
-      this.setTempPromptAnswer(tempStandardPortion);
+      // this.setTempPromptAnswer(tempStandardPortion);
     },
 
     onAnswer(data: StandardPortionData) {
@@ -97,7 +97,7 @@ export default defineComponent({
       });
 
       this.$emit('complete');
-      this.clearTempPromptAnswer();
+      // this.clearTempPromptAnswer();
     },
 
     onPartialAnswer(data: StandardPortionData) {

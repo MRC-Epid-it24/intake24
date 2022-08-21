@@ -65,13 +65,13 @@
         <v-img class="mx-2" :src="logo" max-height="30" max-width="150" contain></v-img>
         <v-spacer></v-spacer>
         <v-btn v-if="surveyId" text :to="{ name: 'survey-profile', params: { surveyId } }">
-          <span class="mr-2" v-if="!isNotDesktop">{{ $t('profile._') }}</span>
+          <span v-if="!isNotDesktop" class="mr-2">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
         <confirm-dialog :label="$t('common.logout._')" @confirm="logout">
-          <template v-slot:activator="{ attrs, on }">
+          <template #activator="{ attrs, on }">
             <v-btn text v-bind="attrs" v-on="on">
-              <span class="mr-2" v-if="!isNotDesktop">{{ $t('common.logout._') }}</span>
+              <span v-if="!isNotDesktop" class="mr-2">{{ $t('common.logout._') }}</span>
               <v-icon right>$logout</v-icon>
             </v-btn>
           </template>

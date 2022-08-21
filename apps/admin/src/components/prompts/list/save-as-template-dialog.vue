@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-list-item link v-bind="attrs" v-on="on" :disabled="disabled">
+    <template #activator="{ on, attrs }">
+      <v-list-item link v-bind="attrs" :disabled="disabled" v-on="on">
         <v-list-item-title>
           <v-icon left :disabled="disabled">fa-save</v-icon>
           {{ $t('survey-schemes.questions.templates.saveAs._') }}

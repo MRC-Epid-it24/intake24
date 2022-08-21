@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <portion-layout :text="text" :description="description">
-      <template v-slot:headerText>
+      <template #headerText>
         {{ localeDescription }}
       </template>
       <v-card>

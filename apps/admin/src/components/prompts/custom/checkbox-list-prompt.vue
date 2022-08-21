@@ -28,10 +28,10 @@
             :value="label"
             @input="update('label', $event)"
           >
-            <template v-for="lang in Object.keys(label)" v-slot:[`lang.${lang}`]>
+            <template v-for="lang in Object.keys(label)" #[`lang.${lang}`]>
               <v-text-field
-                :label="$t('survey-schemes.questions.label')"
                 :key="lang"
+                :label="$t('survey-schemes.questions.label')"
                 :value="label[lang]"
                 hide-details="auto"
                 outlined
@@ -48,7 +48,7 @@
         :value="options"
         @input="update('options', $event)"
       >
-        <template v-for="lang in Object.keys(options)" v-slot:[`lang.${lang}`]>
+        <template v-for="lang in Object.keys(options)" #[`lang.${lang}`]>
           <prompt-list-options
             :key="lang"
             :options="options[lang]"

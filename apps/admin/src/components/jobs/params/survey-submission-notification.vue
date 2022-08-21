@@ -5,7 +5,7 @@
       <v-row>
         <v-col cols="12">
           <v-text-field
-            :value="surveyId"
+            :value="value.surveyId"
             :label="$t('surveys.id')"
             hide-details="auto"
             name="surveyId"
@@ -15,7 +15,7 @@
         </v-col>
         <v-col cols="12">
           <v-text-field
-            :value="submissionId"
+            :value="value.submissionId"
             :label="$t('surveys.submissions.id')"
             hide-details="auto"
             name="submissionId"

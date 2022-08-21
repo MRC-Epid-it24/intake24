@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <portion-layout :text="promptProps.text" :description="description">
-      <template v-slot:headerText>
+      <template #headerText>
         {{ localeDescription }}
       </template>
       <v-row>
@@ -11,16 +11,16 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.drinkScale.label', { food: localeDescription }) }}
-                <template v-slot:actions>
-                  <v-icon color="success" v-if="selectedGuide">fas fa-fw fa-check</v-icon>
-                  <v-icon color="error" v-if="!selectedGuide">fas fa-fw fa-exclamation</v-icon>
+                <template #actions>
+                  <v-icon v-if="selectedGuide" color="success">fas fa-fw fa-check</v-icon>
+                  <v-icon v-if="!selectedGuide" color="error">fas fa-fw fa-exclamation</v-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <guide-image-panel
                   v-if="dataLoaded"
                   :guide-image-api-response="guideImageData"
-                  :selectedIndex="selectedObjectIdx"
+                  :selected-index="selectedObjectIdx"
                   @guide-object="selectObject"
                 ></guide-image-panel>
                 <v-row>
@@ -36,9 +36,9 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.drinkScale.sliderLabel', { food: localeDescription }) }}
-                <template v-slot:actions>
-                  <v-icon color="success" v-if="selectedDrink">fas fa-fw fa-check</v-icon>
-                  <v-icon color="error" v-if="!selectedDrink">fas fa-fw fa-exclamation</v-icon>
+                <template #actions>
+                  <v-icon v-if="selectedDrink" color="success">fas fa-fw fa-check</v-icon>
+                  <v-icon v-if="!selectedDrink" color="error">fas fa-fw fa-exclamation</v-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
@@ -88,7 +88,7 @@
         <v-col>
           <v-form ref="form" @submit.prevent="submit">
             <!-- Should be disabled if nothing selected? -->
-            <continue @click="submit" :disabled="!continueEnabled" class="px-2"></continue>
+            <continue :disabled="!continueEnabled" class="px-2" @click="submit"></continue>
           </v-form>
         </v-col>
       </v-row>
@@ -128,9 +128,9 @@ export interface DrinkScalePromptState {
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  mixins: [BasePortion, localeContent],
-
   components: { GuideImagePanel, DrinkScalePanel },
+
+  mixins: [BasePortion, localeContent],
 
   props: {
     // Generic object 'props' used to store all props for each prompt
@@ -203,10 +203,6 @@ export default defineComponent({
     };
   },
 
-  mounted() {
-    this.fetchDrinkScaleData();
-  },
-
   computed: {
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
@@ -217,6 +213,10 @@ export default defineComponent({
     dataLoaded(): boolean {
       return !!Object.keys(this.guideImageData).length;
     },
+  },
+
+  mounted() {
+    this.fetchDrinkScaleData();
   },
 
   methods: {

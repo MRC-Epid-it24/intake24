@@ -1,12 +1,12 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <v-btn
         v-bind="attrs"
-        v-on="on"
         :title="$t(`${resource}.copy._`)"
         class="ml-3"
         color="primary"
+        v-on="on"
       >
         <v-icon left>fa-copy</v-icon> {{ $t(`${resource}.copy._`) }}
       </v-btn>

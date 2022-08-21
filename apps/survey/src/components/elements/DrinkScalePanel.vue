@@ -7,7 +7,7 @@
           v-resize="onImgResize"
           :src="selectedImageUrl.replace('http://localhost:3100', 'https://api.intake24.org')"
         >
-          <template v-slot:placeholder>
+          <template #placeholder>
             <image-placeholder></image-placeholder>
           </template>
         </v-img>
@@ -27,8 +27,8 @@
             <v-col xs="2" sm="1" class="d-flex justify-end mr-auto">
               <!-- TODO: Height of this -->
               <v-slider
-                class="full-height-slider ma-0"
                 v-model="sliderValue"
+                class="full-height-slider ma-0"
                 :hint="$t('portion.drinkScale.lessFullButton')"
                 :max="maxSliderValue"
                 min="0"
@@ -121,12 +121,6 @@ export default defineComponent({
     };
   },
 
-  created() {
-    this.debouncedDrinkScaleImgResize = debounce(() => {
-      this.updateOverlayDimensions();
-    }, 500);
-  },
-
   computed: {
     drinkMilliliters(): string {
       return `${this.sliderValue} ml`;
@@ -139,6 +133,12 @@ export default defineComponent({
         this.$emit('drink-scale-value', newValue);
       },
     },
+  },
+
+  created() {
+    this.debouncedDrinkScaleImgResize = debounce(() => {
+      this.updateOverlayDimensions();
+    }, 500);
   },
 
   methods: {

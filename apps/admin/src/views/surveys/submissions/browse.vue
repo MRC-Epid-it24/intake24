@@ -1,13 +1,13 @@
 <template>
-  <layout v-bind="{ id, entry }" v-if="entryLoaded">
-    <embedded-data-table :headers="headers" :api="baseAPI" ref="table">
-      <template v-slot:[`item.startTime`]="{ item }">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+    <embedded-data-table ref="table" :headers="headers" :api="baseAPI">
+      <template #[`item.startTime`]="{ item }">
         {{ formatDate(item.startTime) }}
       </template>
-      <template v-slot:[`item.endTime`]="{ item }">
+      <template #[`item.endTime`]="{ item }">
         {{ formatDate(item.endTime) }}
       </template>
-      <template v-slot:[`item.action`]="{ item }">
+      <template #[`item.action`]="{ item }">
         <v-btn :title="$t('common.action.read')" color="primary" icon @click.stop="detail(item.id)">
           <v-icon>$read</v-icon>
         </v-btn>

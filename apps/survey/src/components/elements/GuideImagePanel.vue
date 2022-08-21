@@ -12,7 +12,7 @@
             )
           "
         >
-          <template v-slot:placeholder>
+          <template #placeholder>
             <image-placeholder></image-placeholder>
           </template>
         </v-img>
@@ -78,12 +78,6 @@ export default defineComponent({
     };
   },
 
-  created() {
-    this.debouncedGuideImgResize = debounce(() => {
-      this.updateSvgDimensions();
-    }, 500);
-  },
-
   computed: {
     dataLoaded(): boolean {
       return !!Object.keys(this.guideImageData).length;
@@ -102,6 +96,12 @@ export default defineComponent({
           .join(' ');
       });
     },
+  },
+
+  created() {
+    this.debouncedGuideImgResize = debounce(() => {
+      this.updateSvgDimensions();
+    }, 500);
   },
 
   methods: {

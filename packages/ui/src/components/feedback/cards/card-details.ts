@@ -72,7 +72,7 @@ export const getUnitFromNutrientRule = (
   }
 };
 
-export const formatOutput = (value: number, unit: string): string => `${value} ${unit}`;
+export const formatOutput = (value: number | string, unit: string): string => `${value} ${unit}`;
 
 const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails => {
   const { sentiment: charSentiment, results, showRecommendations } = parameters;

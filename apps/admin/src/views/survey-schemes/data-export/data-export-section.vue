@@ -6,7 +6,7 @@
     persistent
     transition="dialog-bottom-transition"
   >
-    <v-card tile v-if="dialog">
+    <v-card v-if="dialog" tile>
       <v-toolbar dark color="primary">
         <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="cancel">
           <v-icon>$cancel</v-icon>
@@ -150,17 +150,18 @@ import type { ExportField, ExportSection } from '@intake24/common/schemes';
 export default defineComponent({
   name: 'DataExportSection',
 
+  components: { draggable },
+
   props: {
     section: {
       type: Object as PropType<ExportSection>,
+      default: null,
     },
     refFields: {
       type: Array as PropType<ExportField[]>,
       default: () => [],
     },
   },
-
-  components: { draggable },
 
   data() {
     const newEditDialog = () => ({ show: false, field: { id: '', label: '' } });

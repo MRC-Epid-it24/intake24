@@ -1,6 +1,6 @@
 <template>
   <prompt-layout v-bind="{ description, text }">
-    <template v-slot:actions>
+    <template #actions>
       <submit @click.native="submit"></submit>
     </template>
   </prompt-layout>
@@ -20,9 +20,9 @@ import BasePrompt from '../BasePrompt';
 export default defineComponent({
   name: 'SubmitPrompt',
 
-  mixins: [BasePrompt],
-
   components: { submit: Submit },
+
+  mixins: [BasePrompt],
 
   props: {
     promptProps: {

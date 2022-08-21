@@ -20,7 +20,7 @@
             <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
-        <template v-slot:extension>
+        <template #extension>
           <v-container>
             <v-tabs v-model="tab" background-color="primary" dark>
               <v-tab v-for="item in cardSettings[dialog.card.type].tabs" :key="item">
@@ -45,14 +45,14 @@
                         </v-toolbar-title>
                       </v-toolbar>
                       <v-item-group
-                        active-class="secondary"
                         v-model="dialog.card.type"
+                        active-class="secondary"
                         @change="updateCardProps"
                       >
                         <v-container>
                           <v-row>
                             <v-col v-for="card in cardDefaults" :key="card.type" cols="12" md="3">
-                              <v-item v-slot:default="{ active, toggle }" :value="card.type">
+                              <v-item v-slot="{ active, toggle }" :value="card.type">
                                 <v-card
                                   :color="active ? 'primary' : ''"
                                   dark
@@ -138,19 +138,19 @@ export type CardDialog = {
 export default defineComponent({
   name: 'CardSelector',
 
-  props: {
-    textRequired: {
-      type: Boolean,
-      default: true,
-    },
-  },
-
   components: {
     LanguageSelector,
     ...cardTypes,
   },
 
   mixins: [tinymce],
+
+  props: {
+    textRequired: {
+      type: Boolean,
+      default: true,
+    },
+  },
 
   setup() {
     const form = ref<InstanceType<typeof HTMLFormElement>>();

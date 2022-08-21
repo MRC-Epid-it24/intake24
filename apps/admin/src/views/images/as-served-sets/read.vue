@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" v-if="entryLoaded">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-row>
       <v-col cols="12" md="6">
         <v-simple-table>
@@ -20,7 +20,7 @@
         <v-img class="ma-2" :src="entry.selectionImageUrl"></v-img>
       </v-col>
     </v-row>
-    <as-served-images :setId="entry.id" :items="entry.images" disabled></as-served-images>
+    <as-served-images :set-id="entry.id" :items="entry.images" disabled></as-served-images>
   </layout>
 </template>
 

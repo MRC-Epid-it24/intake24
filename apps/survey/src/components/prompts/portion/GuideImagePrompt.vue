@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <portion-layout :text="promptProps.text" :description="promptProps.description">
-      <template v-slot:headerText>
+      <template #headerText>
         {{ localeDescription }}
       </template>
       <v-row>
@@ -11,15 +11,15 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.guideImage.label') }}
-                <template v-slot:actions>
-                  <v-icon color="success" v-if="selectedGuide">fas fa-fw fa-check</v-icon>
-                  <v-icon color="error" v-if="!selectedGuide">fas fa-fw fa-exclamation</v-icon>
+                <template #actions>
+                  <v-icon v-if="selectedGuide" color="success">fas fa-fw fa-check</v-icon>
+                  <v-icon v-if="!selectedGuide" color="error">fas fa-fw fa-exclamation</v-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-row>
                   <v-col>
-                    <div class="guides-drawer" v-if="dataLoaded">
+                    <div v-if="dataLoaded" class="guides-drawer">
                       <v-img
                         ref="img"
                         v-resize="onImgResize"
@@ -30,7 +30,7 @@
                           )
                         "
                       >
-                        <template v-slot:placeholder>
+                        <template #placeholder>
                           <image-placeholder></image-placeholder>
                         </template>
                       </v-img>
@@ -62,9 +62,9 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.guideImage.quantity') }}
-                <template v-slot:actions>
-                  <v-icon color="success" v-if="selectedQuantity">fas fa-fw fa-check</v-icon>
-                  <v-icon color="error" v-if="!selectedQuantity">fas fa-fw fa-exclamation</v-icon>
+                <template #actions>
+                  <v-icon v-if="selectedQuantity" color="success">fas fa-fw fa-check</v-icon>
+                  <v-icon v-if="!selectedQuantity" color="error">fas fa-fw fa-exclamation</v-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
@@ -76,10 +76,10 @@
                 </v-row>
                 <v-row>
                   <v-col>
-                    <v-alert color="error" v-if="hasErrors">
+                    <v-alert v-if="hasErrors" color="error">
                       <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
                     </v-alert>
-                    <v-btn color="success" @click="confirmQuantity" block>
+                    <v-btn color="success" block @click="confirmQuantity">
                       {{ $t('portion.common.confirmButton') }}
                     </v-btn>
                   </v-col>
@@ -93,7 +93,7 @@
         <v-col>
           <v-form ref="form" @submit.prevent="submit">
             <!-- Should be disabled if nothing selected? -->
-            <continue @click="submit" :disabled="!continueEnabled" class="px-2"></continue>
+            <continue :disabled="!continueEnabled" class="px-2" @click="submit"></continue>
           </v-form>
         </v-col>
       </v-row>
@@ -136,11 +136,11 @@ export interface GuideImageEncodedFood {
 export default defineComponent({
   name: 'GuideImagePrompt',
 
-  mixins: [BasePortion, localeContent],
-
   components: { ImagePlaceholder, QuantityCard },
 
   directives: { Resize },
+
+  mixins: [BasePortion, localeContent],
 
   props: {
     // Generic object 'props' used to store all props for each prompt

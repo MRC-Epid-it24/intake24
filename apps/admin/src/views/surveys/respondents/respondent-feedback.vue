@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-list-item key="respondentsUpload" v-bind="attrs" v-on="on" link>
+    <template #activator="{ on, attrs }">
+      <v-list-item key="respondentsUpload" v-bind="attrs" link v-on="on">
         <v-list-item-title>
           <v-icon left>fas fa-comments</v-icon>
           {{ $t('surveys.respondents.feedback._') }}

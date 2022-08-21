@@ -10,7 +10,7 @@
         outlined
       ></v-textarea>
     </v-form>
-    <template v-slot:actions>
+    <template #actions>
       <continue @click.native="submit"></continue>
     </template>
   </prompt-layout>

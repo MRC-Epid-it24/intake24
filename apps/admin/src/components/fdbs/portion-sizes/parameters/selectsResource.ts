@@ -9,14 +9,14 @@ import type { PortionSizeMethodParameterItem } from '..';
 export default defineComponent({
   name: 'SelectsResource',
 
+  components: { SelectResource },
+
   props: {
     value: {
       type: Array as PropType<PortionSizeMethodParameterItem[]>,
       required: true,
     },
   },
-
-  components: { SelectResource },
 
   data() {
     return { items: [...this.value] };

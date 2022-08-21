@@ -26,62 +26,62 @@
       <v-col>
         <portion-size-option-prompt
           v-show="componentView == 0"
-          :promptProps="testProps"
-          :foodName="foodName"
-          :availableMethods="portionMethods"
+          :prompt-props="testProps"
+          :food-name="foodName"
+          :available-methods="portionMethods"
         ></portion-size-option-prompt>
 
         <as-served-prompt
           v-show="componentView == 1"
-          :promptProps="asServedProps"
-          :foodName="foodName"
-          :asServedSetId="asServedSetId"
+          :prompt-props="asServedProps"
+          :food-name="foodName"
+          :as-served-set-id="asServedSetId"
         ></as-served-prompt>
 
         <guideImagePrompt
           v-if="componentView == 3"
-          :promptProps="asServedProps"
-          :foodName="foodName"
-          guideImageId="Gcans"
+          :prompt-props="asServedProps"
+          :food-name="foodName"
+          guide-image-id="Gcans"
         ></guideImagePrompt>
 
         <drink-scale-prompt
           v-show="componentView == 4"
-          :promptProps="asServedProps"
-          :foodName="'cream soda'"
+          :prompt-props="asServedProps"
+          :food-name="'cream soda'"
         ></drink-scale-prompt>
 
         <standard-portion-prompt
           v-show="componentView == 5"
-          :promptProps="asServedProps"
-          :foodName="foodName"
+          :prompt-props="asServedProps"
+          :food-name="foodName"
         ></standard-portion-prompt>
 
         <cereal-prompt
           v-show="componentView == 6"
-          :promptProps="asServedPropsCereal"
-          :foodName="foodName"
-          :foodCode="cerealFoodCode"
-          :imageMapId="bowlGuideImageId"
-          localeTEMP="en_GB"
+          :prompt-props="asServedPropsCereal"
+          :food-name="foodName"
+          :food-code="cerealFoodCode"
+          :image-map-id="bowlGuideImageId"
+          locale-t-e-m-p="en_GB"
         ></cereal-prompt>
 
         <pizza-prompt
           v-show="componentView == 8"
-          :promptProps="asServedProps"
-          :foodName="foodName"
+          :prompt-props="asServedProps"
+          :food-name="foodName"
         ></pizza-prompt>
 
         <milk-hot-drink-prompt
           v-show="componentView == 9"
-          :promptProps="asServedProps"
-          :foodName="foodName"
+          :prompt-props="asServedProps"
+          :food-name="foodName"
         ></milk-hot-drink-prompt>
 
         <direct-weight-prompt
           v-show="componentView == 10"
-          :promptProps="asServedProps"
-          :foodName="foodName"
+          :prompt-props="asServedProps"
+          :food-name="foodName"
         ></direct-weight-prompt>
       </v-col>
     </v-row>

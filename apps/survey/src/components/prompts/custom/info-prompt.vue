@@ -1,6 +1,6 @@
 <template>
   <prompt-layout v-bind="{ description, text, meal }">
-    <template v-slot:actions>
+    <template #actions>
       <continue @click.native="submit"></continue>
     </template>
   </prompt-layout>

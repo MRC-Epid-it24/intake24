@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <portion-layout :text="text" :description="description">
-      <template v-slot:headerText>
+      <template #headerText>
         {{ $t('portion.common.completeBelow') }}
       </template>
       <v-row>
@@ -10,13 +10,13 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.pizza.label') }}
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon :valid="typeComplete"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <image-map-selector
-                  :promptProps="typePromptProps"
+                  :prompt-props="typePromptProps"
                   @image-map-selector-submit="selectPizza($event)"
                 ></image-map-selector>
               </v-expansion-panel-content>
@@ -24,13 +24,13 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.pizza.thicknessLabel') }}
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon :valid="thicknessComplete"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <image-map-selector
-                  :promptProps="thickPromptProps"
+                  :prompt-props="thickPromptProps"
                   @image-map-selector-submit="selectThickness($event)"
                 ></image-map-selector>
                 <!-- <v-img :src="pizzaThicknessMapData.baseImageUrl" @click="selectThickness()"></v-img> -->
@@ -39,7 +39,7 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.pizza.sizeLabel') }}
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon :valid="sizeComplete"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
@@ -48,11 +48,11 @@
                   {{ $t('portion.common.completePreviousStep') }}
                 </template>
                 <template v-if="sizePromptProps.imageMapId">
-                  <v-btn @click="selectWhole()" :color="wholeSelected === true ? 'success' : ''">
+                  <v-btn :color="wholeSelected === true ? 'success' : ''" @click="selectWhole()">
                     {{ $t('portion.pizza.wholePizzaButton') }}
                   </v-btn>
                   <image-map-selector
-                    :promptProps="sizePromptProps"
+                    :prompt-props="sizePromptProps"
                     @image-map-selector-submit="selectSlice($event)"
                   ></image-map-selector>
                 </template>
@@ -67,7 +67,7 @@
                 <template v-if="wholeSelected">{{
                   $t('portion.pizza.wholeQuantityLabel')
                 }}</template>
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon :valid="quantityComplete"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
@@ -87,7 +87,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-btn @click="submit()" :color="submitButtonStyle()">
+          <v-btn :color="submitButtonStyle()" @click="submit()">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-col>
@@ -127,6 +127,7 @@ export default defineComponent({
     // Generic object 'props' used to store all props for each prompt
     promptProps: {
       type: Object as PropType<PizzaPromptProps>,
+      required: true,
     },
   },
 

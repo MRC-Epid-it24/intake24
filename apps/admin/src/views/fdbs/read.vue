@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" v-if="entryLoaded">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-row class="pa-4" justify="space-between">
       <v-col cols="5" lg="4" xl="3">
         <food-explorer :locale-id="id"></food-explorer>

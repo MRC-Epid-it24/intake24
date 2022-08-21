@@ -5,22 +5,22 @@
     <v-row>
       <v-col cols="8">
         <v-text-field
-          :placeholder="$t('prompts.editMeal.food')"
-          @keypress.enter.stop="addFood"
           ref="foodsDrinksInput"
-          outlined
-          @focusout="onEditFocusLost"
           v-model="newFoodDescription"
+          :placeholder="$t('prompts.editMeal.food')"
+          outlined
           hide-details
+          @keypress.enter.stop="addFood"
+          @focusout="onEditFocusLost"
         ></v-text-field>
       </v-col>
       <v-col cols="4">
         <v-btn
-          @click="addFood"
           color="success"
           elevation="2"
           x-large
           :disabled="newFoodDescription.length === 0"
+          @click="addFood"
         >
           <v-icon style="transform: scaleX(-1)" class="mr-2">fa-arrow-turn-down</v-icon>
           {{ drinks ? $t('prompts.editMeal.addDrink') : $t('prompts.editMeal.addFood') }}
@@ -30,9 +30,9 @@
 
     <v-list v-if="editableList.length > 0">
       <v-list-item
-        :ripple="false"
         v-for="(food, idx) in editableList"
         :key="idx"
+        :ripple="false"
         @click="edit(idx)"
       >
         <v-text-field

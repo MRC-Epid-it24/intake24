@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -48,7 +48,7 @@
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
       </v-form>
-      <prompt-selector ref="selector" :questionIds="questionIds" @save="save"></prompt-selector>
+      <prompt-selector ref="selector" :question-ids="questionIds" @save="save"></prompt-selector>
     </v-container>
   </layout>
 </template>

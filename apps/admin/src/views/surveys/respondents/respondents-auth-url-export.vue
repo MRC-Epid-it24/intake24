@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-list-item key="authUrls" v-bind="attrs" v-on="on" link>
+    <template #activator="{ on, attrs }">
+      <v-list-item key="authUrls" v-bind="attrs" link v-on="on">
         <v-list-item-title>
           <v-icon left>fa-download</v-icon>
           {{ $t('surveys.respondents.authUrls._') }}
@@ -19,7 +19,7 @@
         <v-container>
           <v-row justify="center">
             <v-col cols="12" sm="8" md="6">
-              <v-btn color="secondary" x-large block @click="submit" :disabled="jobInProgress">
+              <v-btn color="secondary" x-large block :disabled="jobInProgress" @click="submit">
                 <v-icon left>fa-download</v-icon>
                 {{ $t('surveys.respondents.authUrls.submit') }}
               </v-btn>

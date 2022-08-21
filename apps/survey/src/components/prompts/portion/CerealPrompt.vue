@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <portion-layout :text="text" :description="description">
-      <template v-slot:headerText>
+      <template #headerText>
         {{ $t('portion.common.completeBelow') }}
       </template>
       <v-row>
@@ -10,7 +10,7 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.cereal.label') }}
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon :valid="bowlComplete"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
@@ -18,7 +18,7 @@
                 <!-- <v-img :src="bowlImageMapData.baseImageUrl" @click="selectBowlType()"></v-img>
                 Image_maps gbowl -->
                 <image-map-selector
-                  :promptProps="{ imageMapId }"
+                  :prompt-props="{ imageMapId }"
                   @image-map-selector-submit="selectBowlType($event)"
                 ></image-map-selector>
               </v-expansion-panel-content>
@@ -26,13 +26,13 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.asServed.portionLabel', { food: localeDescription }) }}
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon :valid="asServedComplete"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <as-served-selector
-                  :asServedSetId="cerealType"
+                  :as-served-set-id="cerealType"
                   @as-served-selector-submit="setAsServedStatus($event)"
                 ></as-served-selector>
                 <!-- cereal_hoopA -->
@@ -41,7 +41,7 @@
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
-                <template v-slot:actions>
+                <template #actions>
                   <valid-invalid-icon :valid="leftoverComplete"></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
@@ -49,14 +49,14 @@
                 <v-row>
                   <v-col>
                     <v-btn
-                      @click="leftoverAnswer(true)"
                       :color="toggleLeftoverAnswer === true ? 'success' : ''"
+                      @click="leftoverAnswer(true)"
                     >
                       {{ $t('common.action.confirm.yes') }}
                     </v-btn>
                     <v-btn
-                      @click="leftoverAnswer(false)"
                       :color="toggleLeftoverAnswer === false ? 'success' : ''"
+                      @click="leftoverAnswer(false)"
                     >
                       {{ $t('common.action.confirm.no') }}
                     </v-btn>
@@ -66,7 +66,7 @@
                 <v-row v-show="displayLeftovers">
                   <v-col>
                     <as-served-selector
-                      :asServedSetId="cerealType"
+                      :as-served-set-id="cerealType"
                       @as-served-selector-submit="setLeftoverStatus($event)"
                     ></as-served-selector>
                   </v-col>
@@ -78,10 +78,10 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-alert color="error" v-if="hasErrors">
+          <v-alert v-if="hasErrors" color="error">
             <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
           </v-alert>
-          <v-btn @click="submit()" :color="submitButtonStyle()">
+          <v-btn :color="submitButtonStyle()" @click="submit()">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-col>

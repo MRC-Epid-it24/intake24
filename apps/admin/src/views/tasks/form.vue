@@ -1,12 +1,12 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
-    <template v-slot:actions>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+    <template #actions>
       <confirm-dialog
         v-if="!isCreate && can({ action: 'edit' })"
         :label="$t('tasks.run._').toString()"
-        :activatorClass="['ml-2']"
+        :activator-class="['ml-2']"
         color="secondary"
-        iconLeft="fas fa-play"
+        icon-left="fas fa-play"
         @confirm="triggerJob"
       >
         {{ $t('tasks.run.confirm') }}
@@ -48,7 +48,7 @@
                 name="cron"
                 outlined
               >
-                <template v-slot:append>
+                <template #append>
                   <pre>{{ readableCron }}</pre>
                 </template>
               </v-text-field>
@@ -81,8 +81,8 @@
             </v-col>
           </v-row>
           <component
-            v-if="Object.keys(form.params).length"
             :is="form.job"
+            v-if="Object.keys(form.params).length"
             v-model="form.params"
             :error="form.errors.get('params')"
             :refs="refs"

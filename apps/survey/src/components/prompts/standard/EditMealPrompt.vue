@@ -2,20 +2,20 @@
   <prompt-layout :text="promptText" :description="promptDescription">
     <v-col xs="12" sm="10" md="8" class="px-0 px-sm-3">
       <editable-food-list
+        ref="editableFoodList"
         :food-list="foodList"
         :drinks="false"
-        ref="editableFoodList"
         @food-added="onUpdate"
         @food-deleted="onUpdate"
       />
     </v-col>
-    <template v-slot:actions>
+    <template #actions>
       <confirm-dialog
         color="warning"
         :label="$t('prompts.editMeal.deleteMeal', { meal: getLocalMealName })"
         @confirm="onDeleteMeal"
       >
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn :block="isMobile" class="px-5" large v-bind="attrs" v-on="on">
             {{ $t('prompts.editMeal.deleteMeal', { meal: getLocalMealName }) }}
           </v-btn>

@@ -1,6 +1,6 @@
 <template>
   <v-row :no-gutters="isMobile" class="pt-0" justify="center">
-    <recall-bread-crumbs-mobile :promptName="activePrompt"></recall-bread-crumbs-mobile>
+    <recall-bread-crumbs-mobile :prompt-name="activePrompt"></recall-bread-crumbs-mobile>
     <transition type="fade" mode="out-in">
       <v-alert
         elevation="2"
@@ -18,21 +18,21 @@
         </span>
       </v-alert>
     </transition>
-    <v-col cols="12" lg="9" class="content mt-0" v-if="bottomNavTab !== 1">
+    <v-col v-if="bottomNavTab !== 1" cols="12" lg="9" class="content mt-0">
       <transition name="component-fade" mode="out-in">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
         even if the next prompt uses the same component type, probably should be something like an internal counter,
         or maybe not  ¯\_(ツ)_/¯  -->
 
         <component
-          v-if="currentPrompt"
           :is="handlerComponent"
+          v-if="currentPrompt"
           ref="promptHandle"
-          :promptComponent="currentPrompt.prompt.component"
-          :promptId="currentPrompt.prompt.id"
-          :promptProps="currentPrompt.prompt.props"
           :key="Math.random()"
-          :submitTrigger="submitTrigger"
+          :prompt-component="currentPrompt.prompt.component"
+          :prompt-id="currentPrompt.prompt.id"
+          :prompt-props="currentPrompt.prompt.props"
+          :submit-trigger="submitTrigger"
           @validation-update="onValidationUpdate"
           @continue="onContinue"
           @restart="restart"
@@ -42,15 +42,15 @@
       </transition>
     </v-col>
 
-    <v-col cols="12" lg="9" class="content" v-if="bottomNavTab === 1">
-      <review :meals="meals" :surveyName="surveyName" :activeMealIndex="mealIndex"></review>
+    <v-col v-if="bottomNavTab === 1" cols="12" lg="9" class="content">
+      <review :meals="meals" :survey-name="surveyName" :active-meal-index="mealIndex"></review>
     </v-col>
 
-    <v-col cols="12" class="stickybottom" v-show="showMealList && bottomNavTab === 2">
+    <v-col v-show="showMealList && bottomNavTab === 2" cols="12" class="stickybottom">
       <meal-list-mobile-bottom
         v-show="meals.length > 0"
         :meals="meals"
-        :selectedMealIndex="selectedMealIndex"
+        :selected-meal-index="selectedMealIndex"
         @meal-selected="onMealFoodMobileClick"
         @recall-action="onRecallAction"
       >
@@ -60,22 +60,22 @@
     <transition type="fade">
       <bottom-navigation-mobile
         v-if="showMealList"
-        @navigation-item-click="onBottomNavChange"
         :continue-button-enabled="continueButtonEnabled"
+        @navigation-item-click="onBottomNavChange"
       />
     </transition>
 
     <!-- Context menu for Meal or Food with actions options -->
     <meal-food-mobile-context-menu
       :show="mobileMealFoodContextMenu.show"
-      :entityName="mobileMealFoodContextMenu.foodContext ? activeFood : activeMeal"
-      :entityIndex="
+      :entity-name="mobileMealFoodContextMenu.foodContext ? activeFood : activeMeal"
+      :entity-index="
         mobileMealFoodContextMenu.foodContext
           ? mobileMealFoodContextMenu.foodIndex
           : mobileMealFoodContextMenu.mealIndex
       "
-      :mealIndex="mobileMealFoodContextMenu.mealIndex"
-      :entityType="mobileMealFoodContextMenu.foodContext"
+      :meal-index="mobileMealFoodContextMenu.mealIndex"
+      :entity-type="mobileMealFoodContextMenu.foodContext"
       @toggleMobileMealContext="onMobileMealFoodContextMenu"
       @meal-action="onMealAction"
       @continue="onContinue"
@@ -108,8 +108,6 @@ import Recall from './recall';
 export default defineComponent({
   name: 'RecallMobile',
 
-  mixins: [Recall],
-
   components: {
     Review,
     MealListMobileBottom,
@@ -119,6 +117,8 @@ export default defineComponent({
     CustomPromptHandler,
     BottomNavigationMobile,
   },
+
+  mixins: [Recall],
 
   data: () => {
     return {

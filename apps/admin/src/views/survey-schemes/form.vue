@@ -1,9 +1,9 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
-    <template v-slot:actions>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+    <template #actions>
       <copy-scheme-dialog
         v-if="canHandleEntry('copy')"
-        :schemeId="id"
+        :scheme-id="id"
         resource="survey-schemes"
       ></copy-scheme-dialog>
     </template>
@@ -37,7 +37,7 @@
         </v-card-text>
       </v-container>
       <v-divider></v-divider>
-      <meal-list :schemeId="id" v-model="form.meals"></meal-list>
+      <meal-list v-model="form.meals" :scheme-id="id"></meal-list>
       <v-card-text>
         <submit-footer :disabled="form.errors.any()"></submit-footer>
       </v-card-text>

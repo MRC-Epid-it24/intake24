@@ -67,7 +67,7 @@
           <v-icon>$user</v-icon>
         </v-btn>
         <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">
-          <template v-slot:activator="{ attrs, on }">
+          <template #activator="{ attrs, on }">
             <v-btn text v-bind="attrs" v-on="on">
               <span>{{ $t('common.logout._') }}</span>
               <v-icon right>$logout</v-icon>
@@ -84,7 +84,7 @@
     <v-main>
       <v-container :class="{ 'pa-0': isMobile }" fluid>
         <v-breadcrumbs v-if="breadcrumbs.length" :items="breadcrumbs" large>
-          <template v-slot:divider>
+          <template #divider>
             <v-icon>fas fa-caret-right</v-icon>
           </template>
         </v-breadcrumbs>

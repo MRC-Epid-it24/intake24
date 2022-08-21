@@ -12,14 +12,14 @@
       </div>
     </v-toolbar>
     <embedded-data-table v-bind="{ api, headers }" ref="table">
-      <template v-slot:header-add>
+      <template #header-add>
         <user-dialog
           v-bind="{ api, actions, resource }"
           ref="userDialog"
           @update:table="updateTable"
         ></user-dialog>
       </template>
-      <template v-slot:[`item.securables`]="{ item }">
+      <template #[`item.securables`]="{ item }">
         {{
           item.securables
             .map(({ action }) => action)
@@ -27,7 +27,7 @@
             .join(' | ')
         }}
       </template>
-      <template v-slot:[`item.action`]="{ item }">
+      <template #[`item.action`]="{ item }">
         <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="editUser(item)">
           <v-icon dark>$edit</v-icon>
         </v-btn>
@@ -63,6 +63,8 @@ import UserDialog from './user-dialog.vue';
 export default defineComponent({
   name: 'ResourceSecurables',
 
+  components: { ConfirmDialog, EmbeddedDataTable, OwnerDialog, UserDialog },
+
   props: {
     resourceId: {
       type: String,
@@ -76,8 +78,6 @@ export default defineComponent({
       type: Object as PropType<Owner>,
     },
   },
-
-  components: { ConfirmDialog, EmbeddedDataTable, OwnerDialog, UserDialog },
 
   setup() {
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();

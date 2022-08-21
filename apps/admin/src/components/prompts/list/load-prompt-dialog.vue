@@ -1,14 +1,14 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }">
         <v-btn
           v-bind="attrs"
-          v-on="on"
           color="secondary"
           fab
           small
           :title="$t('survey-schemes.questions.templates.add')"
+          v-on="on"
         >
           <v-icon>fa-download</v-icon>
         </v-btn>
@@ -49,7 +49,7 @@
           <v-list-item-group v-model="selectedId">
             <template v-for="(question, idx) in questions">
               <v-list-item :key="question.id" :value="question.id">
-                <template v-slot:default="{ active }">
+                <template #default="{ active }">
                   <v-list-item-action>
                     <v-checkbox :input-value="active"></v-checkbox>
                   </v-list-item-action>
@@ -112,7 +112,7 @@ export default defineComponent({
       default: () => [],
     },
     items: {
-      type: Array as PropType<PromptQuestion[]> | undefined,
+      type: Array as PropType<PromptQuestion[]>,
     },
   },
 

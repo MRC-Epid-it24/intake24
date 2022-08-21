@@ -3,14 +3,13 @@ import { defineComponent } from 'vue';
 import { PollsForJobs } from '@intake24/admin/components/jobs';
 
 export default defineComponent({
+  mixins: [PollsForJobs],
   props: {
     surveyId: {
       type: String,
       required: true,
     },
   },
-
-  mixins: [PollsForJobs],
 
   data() {
     return {

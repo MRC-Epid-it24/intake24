@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col class="pl-0 pr-0">
-      <v-card flat v-if="requestFailed">
+      <v-card v-if="requestFailed" flat>
         <v-card-text>
           <v-alert type="error">Something went wrong :(</v-alert>
         </v-card-text>
@@ -18,13 +18,13 @@
         >
       </v-container>
 
-      <v-container class="text-center" v-if="requestInProgress">
+      <v-container v-if="requestInProgress" class="text-center">
         <v-progress-circular indeterminate></v-progress-circular>
       </v-container>
 
       <CategoryContentsView
-        :contents="currentCategoryContents"
         v-if="currentCategoryContents && !requestInProgress"
+        :contents="currentCategoryContents"
         @category-selected="onCategorySelected"
         @food-selected="onFoodSelected"
       ></CategoryContentsView>
@@ -49,7 +49,9 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    rootCategory: String,
+    rootCategory: {
+      type: String,
+    },
   },
 
   data() {

@@ -17,15 +17,15 @@
         <v-icon small>$add</v-icon>
       </v-btn>
       <select-resource resource="feedback-schemes" return-object="cards" @input="load">
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
-            v-on="on"
             class="ml-3"
             color="secondary"
             fab
             small
             :title="$t(`feedback-schemes.load`)"
+            v-on="on"
           >
             <v-icon>fa-download</v-icon>
           </v-btn>
@@ -101,6 +101,13 @@ export type CardEvent = {
 export default defineComponent({
   name: 'CardList',
 
+  components: {
+    draggable,
+    CardSelector,
+    ConfirmDialog,
+    SelectResource,
+  },
+
   props: {
     schemeId: {
       type: String,
@@ -110,13 +117,6 @@ export default defineComponent({
       type: Array as PropType<Card[]>,
       required: true,
     },
-  },
-
-  components: {
-    draggable,
-    CardSelector,
-    ConfirmDialog,
-    SelectResource,
   },
 
   setup(props) {

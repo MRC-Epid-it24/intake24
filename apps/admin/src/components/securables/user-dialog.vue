@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <v-btn
         class="font-weight-bold"
         color="primary"
@@ -20,7 +20,7 @@
         <v-toolbar-title>
           {{ $t(`${resource}.securables.${isEdit ? 'edit' : 'add'}`) }}
         </v-toolbar-title>
-        <template v-slot:extension v-if="!isEdit">
+        <template v-if="!isEdit" #extension>
           <v-tabs v-model="tab" grow>
             <v-tab key="search">
               <v-icon left>fa-search</v-icon>
@@ -182,6 +182,8 @@ export type UserDialogForm = {
 export default defineComponent({
   name: 'UserDialog',
 
+  components: { AutoComplete },
+
   props: {
     api: {
       type: String,
@@ -196,8 +198,6 @@ export default defineComponent({
       required: true,
     },
   },
-
-  components: { AutoComplete },
 
   data() {
     return {

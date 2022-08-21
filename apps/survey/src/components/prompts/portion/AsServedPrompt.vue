@@ -1,15 +1,15 @@
 <template>
-  <portion-layout :text="promptProps.text" :description="promptProps.description" id="test">
-    <template v-slot:headerText>
+  <portion-layout id="test" :text="promptProps.text" :description="promptProps.description">
+    <template #headerText>
       {{ $t('portion.asServed.promptLabel', { food: localeDescription }) }}
     </template>
     <v-row>
       <v-col>
-        <v-expansion-panels v-model="panelOpen" @change="onActivePanelChanged" flat>
+        <v-expansion-panels v-model="panelOpen" flat @change="onActivePanelChanged">
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t('portion.asServed.portionHeader') }}
-              <template v-slot:actions>
+              <template #actions>
                 <as-served-weight
                   :weight="asServedData?.weight"
                   :valid="servingCompleteStatus"
@@ -26,7 +26,7 @@
               <v-row>
                 <v-col>
                   <as-served-selector
-                    :asServedSetId="asServedSetId"
+                    :as-served-set-id="asServedSetId"
                     :initial-state="initialState.servingImage?.index"
                     @update="onServingUpdate"
                     @confirm="onServingConfirmed"
@@ -38,7 +38,7 @@
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
-              <template v-slot:actions>
+              <template #actions>
                 <as-served-weight
                   :weight="leftoverPromptAnswer ? leftoverData?.weight : 0"
                   :valid="leftoverCompleteStatus"
@@ -52,10 +52,10 @@
                   <p>
                     {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
                   </p>
-                  <v-btn @click="leftoverAnswer(true)" :color="leftoverButtonStyle('yes')">
+                  <v-btn :color="leftoverButtonStyle('yes')" @click="leftoverAnswer(true)">
                     {{ $t('common.action.confirm.yes') }}
                   </v-btn>
-                  <v-btn @click="leftoverAnswer(false)" :color="leftoverButtonStyle('no')">
+                  <v-btn :color="leftoverButtonStyle('no')" @click="leftoverAnswer(false)">
                     {{ $t('common.action.confirm.no') }}
                   </v-btn>
                 </v-col>
@@ -69,7 +69,7 @@
                 <v-col>
                   <!-- This currently is taking asServed data, not the leftover data -->
                   <as-served-selector
-                    :asServedSetId="asServedSetId"
+                    :as-served-set-id="asServedSetId"
                     :initial-state="initialState.leftoversImage?.index"
                     @update="onLeftoversUpdate"
                     @confirm="onLeftoversConfirmed"
@@ -90,7 +90,7 @@
     </v-row>
     <v-row>
       <v-col xs="12" md="3">
-        <continue @click="submit()" :disabled="!continueEnabled">
+        <continue :disabled="!continueEnabled" @click="submit()">
           {{ $t('common.action.continue') }}
         </continue>
       </v-col>

@@ -1,10 +1,10 @@
 <template>
   <data-table :headers="headers">
-    <template v-slot:[`item.active`]="{ item }">
+    <template #[`item.active`]="{ item }">
       <v-icon v-if="item.active" color="success">fa-check-circle</v-icon>
       <v-icon v-else color="error">fa-times-circle</v-icon>
     </template>
-    <template v-slot:[`item.schedule`]="{ item }">
+    <template #[`item.schedule`]="{ item }">
       {{ readableCron(item.cron) }}
     </template>
   </data-table>

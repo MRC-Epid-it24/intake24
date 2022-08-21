@@ -5,7 +5,7 @@
     :food-name="foodName()"
     :guide-image-id="parameters['guide-image-id']"
     :prompt-component="promptComponent"
-    :conversionFactor="selectedPortionSize().conversionFactor"
+    :conversion-factor="selectedPortionSize().conversionFactor"
     :initial-state="initialStateNotNull"
     :continue-enabled="continueEnabled"
     @continue="$emit('continue')"

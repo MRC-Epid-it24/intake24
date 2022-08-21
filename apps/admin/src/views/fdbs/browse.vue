@@ -1,6 +1,6 @@
 <template>
-  <data-table :actions="['read']" :headers="headers" :apiUrl="`admin/locales`">
-    <template v-slot:[`item.id`]="{ item }">
+  <data-table :actions="['read']" :headers="headers" :api-url="`admin/locales`">
+    <template #[`item.id`]="{ item }">
       <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
       {{ item.id }}
     </template>

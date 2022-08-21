@@ -50,7 +50,6 @@ declare module '@vue/runtime-core' {
     FormsSelectResource: typeof import('./src/components/forms/select-resource.vue')['default']
     FormsSubmitFooter: typeof import('./src/components/forms/submit-footer.vue')['default']
     GalleryGallery: typeof import('./src/components/gallery/gallery.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     JobsParamsCleanRedisStore: typeof import('./src/components/jobs/params/clean-redis-store.vue')['default']
     JobsParamsLocaleCopyPairwiseAssociations: typeof import('./src/components/jobs/params/locale-copy-pairwise-associations.vue')['default']
     JobsParamsSurveyDataExport: typeof import('./src/components/jobs/params/survey-data-export.vue')['default']

@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-sheet persistent v-model="showMenu">
+  <v-bottom-sheet v-model="showMenu" persistent>
     <v-sheet class="text-center pa-3" height="20rem">
       <v-btn class="mt-6 mb-3" text color="red" @click="toggleMenu"> close </v-btn>
       <v-btn v-if="!entityType" block class="mb-3" large @click="onContextMenuAction('edit-foods')">
@@ -13,7 +13,7 @@
         :label="$t('prompts.editMeal.deleteMeal', { meal: name })"
         @confirm="deleteEntity"
       >
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn block class="px-5" large color="error" v-bind="attrs" v-on="on">
             {{ $t('prompts.editMeal.deleteMeal', { meal: name }) }}
           </v-btn>

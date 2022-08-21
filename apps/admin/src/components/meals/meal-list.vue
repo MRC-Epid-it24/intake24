@@ -14,15 +14,15 @@
         <v-icon small>$add</v-icon>
       </v-btn>
       <select-resource resource="survey-schemes" return-object="meals" @input="load">
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
-            v-on="on"
             class="ml-3"
             color="secondary"
             fab
             small
             :title="$t(`survey-schemes.load`)"
+            v-on="on"
           >
             <v-icon>fa-download</v-icon>
           </v-btn>
@@ -33,7 +33,7 @@
         :label="$t('survey-schemes.meals.reset._').toString()"
         @confirm="resetList"
       >
-        <template v-slot:activator="{ attrs, on }">
+        <template #activator="{ attrs, on }">
           <v-btn
             class="ml-3"
             color="error"
@@ -97,15 +97,15 @@
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
           <language-selector
-            :label="$t('survey-schemes.meals.name').toString()"
             v-model="dialog.meal.name"
+            :label="$t('survey-schemes.meals.name').toString()"
             flat
             :outlined="false"
           >
-            <template v-for="lang in Object.keys(dialog.meal.name)" v-slot:[`lang.${lang}`]>
+            <template v-for="lang in Object.keys(dialog.meal.name)" #[`lang.${lang}`]>
               <v-text-field
-                v-model="dialog.meal.name[lang]"
                 :key="lang"
+                v-model="dialog.meal.name[lang]"
                 :label="$t('survey-schemes.meals.name')"
                 :rules="rules(lang)"
                 hide-details="auto"
@@ -156,6 +156,8 @@ export type MealDialog = {
 export default defineComponent({
   name: 'MealList',
 
+  components: { ConfirmDialog, draggable, LanguageSelector, SelectResource },
+
   props: {
     schemeId: {
       type: String,
@@ -170,8 +172,6 @@ export default defineComponent({
       required: true,
     },
   },
-
-  components: { ConfirmDialog, draggable, LanguageSelector, SelectResource },
 
   setup() {
     const form = ref<InstanceType<typeof HTMLFormElement>>();

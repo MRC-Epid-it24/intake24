@@ -16,15 +16,15 @@
         <v-icon small>$add</v-icon>
       </v-btn>
       <select-resource resource="feedback-schemes" return-object="henryCoefficients" @input="load">
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
-            v-on="on"
             class="ml-3"
             color="secondary"
             fab
             small
             :title="$t(`feedback-schemes.load`)"
+            v-on="on"
           >
             <v-icon>fa-download</v-icon>
           </v-btn>
@@ -100,11 +100,11 @@
                     name="sex"
                     outlined
                   >
-                    <template v-slot:item="{ item }">
+                    <template #item="{ item }">
                       <span :class="`${item.icon} mr-3`"></span>
                       {{ item.text }}
                     </template>
-                    <template v-slot:selection="{ item }">
+                    <template #selection="{ item }">
                       <span :class="`${item.icon} mr-3`"></span>
                       {{ item.text }}
                     </template>
@@ -194,6 +194,8 @@ import { getHenryCoefficientDefaults } from './henry-coefficient';
 export default defineComponent({
   name: 'HenryCoefficientList',
 
+  components: { ConfirmDialog, draggable, SelectResource },
+
   props: {
     schemeId: {
       type: String,
@@ -204,8 +206,6 @@ export default defineComponent({
       required: true,
     },
   },
-
-  components: { ConfirmDialog, draggable, SelectResource },
 
   setup(props, context) {
     const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } =

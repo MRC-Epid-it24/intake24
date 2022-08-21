@@ -16,10 +16,10 @@
           :value="message"
           @input="update('message', $event)"
         >
-          <template v-for="lang in Object.keys(message)" v-slot:[`lang.${lang}`]>
+          <template v-for="lang in Object.keys(message)" #[`lang.${lang}`]>
             <v-text-field
-              :disabled="!required"
               :key="lang"
+              :disabled="!required"
               :label="$t('survey-schemes.questions.validation.message')"
               :value="message[lang]"
               hide-details="auto"

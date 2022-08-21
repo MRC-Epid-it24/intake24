@@ -75,14 +75,14 @@
           v-model="form.main.parentCategories"
           :disabled="disabled"
           :errors="form.errors"
-          :localeId="id"
+          :locale-id="id"
           class="mb-6"
         ></category-list>
         <portion-size-method-list
           v-model="form.portionSizeMethods"
           :disabled="disabled"
           :errors="form.errors"
-          :localeId="id"
+          :locale-id="id"
           class="mb-6"
         ></portion-size-method-list>
       </v-form>

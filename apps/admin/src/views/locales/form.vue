@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -28,11 +28,11 @@
                 outlined
                 @change="form.errors.clear('prototypeLocaleId')"
               >
-                <template v-slot:item="{ item }">
+                <template #item="{ item }">
                   <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
-                <template v-slot:selection="{ item }">
+                <template #selection="{ item }">
                   <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
@@ -71,11 +71,11 @@
                 outlined
                 @change="form.errors.clear('respondentLanguageId')"
               >
-                <template v-slot:item="{ item }">
+                <template #item="{ item }">
                   <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
-                <template v-slot:selection="{ item }">
+                <template #selection="{ item }">
                   <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
@@ -94,11 +94,11 @@
                 outlined
                 @change="form.errors.clear('adminLanguageId')"
               >
-                <template v-slot:item="{ item }">
+                <template #item="{ item }">
                   <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
-                <template v-slot:selection="{ item }">
+                <template #selection="{ item }">
                   <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
@@ -115,11 +115,11 @@
                 outlined
                 @change="form.errors.clear('countryFlagCode')"
               >
-                <template v-slot:item="{ item }">
+                <template #item="{ item }">
                   <span :class="`fi fi-${item.value} mr-3`"></span>
                   {{ item.text }}
                 </template>
-                <template v-slot:selection="{ item }">
+                <template #selection="{ item }">
                   <span :class="`fi fi-${item.value} mr-3`"></span>
                   {{ item.text }}
                 </template>

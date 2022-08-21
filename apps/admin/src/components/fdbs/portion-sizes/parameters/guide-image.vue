@@ -1,11 +1,10 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <select-resource v-model="guideImageId" itemName="id" resource="guide-images">
-        <template v-slot:activator="{ on, attrs }">
+      <select-resource v-model="guideImageId" item-name="id" resource="guide-images">
+        <template #activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
-            v-on="on"
             :label="$t('fdbs.portionSizes.methods.guide-image._')"
             :value="guideImageId"
             hide-details="auto"
@@ -13,6 +12,7 @@
             prepend-inner-icon="fas fa-image"
             outlined
             readonly
+            v-on="on"
           ></v-text-field>
         </template>
       </select-resource>

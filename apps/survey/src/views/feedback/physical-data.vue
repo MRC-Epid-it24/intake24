@@ -8,7 +8,7 @@
           <v-card-text class="pa-4">
             <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="submit">
               <v-row>
-                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('sex')">
+                <v-col v-if="collectPhysicalDataField('sex')" cols="12" lg="6">
                   <v-select
                     v-model="form.sex"
                     :error-messages="errors.get('sex')"
@@ -20,17 +20,17 @@
                     prepend-icon="fa-genderless"
                     @change="errors.clear('sex')"
                   >
-                    <template v-slot:item="{ item }">
+                    <template #item="{ item }">
                       <span :class="`${item.icon} mr-3`"></span>
                       {{ item.text }}
                     </template>
-                    <template v-slot:selection="{ item }">
+                    <template #selection="{ item }">
                       <span :class="`${item.icon} mr-3`"></span>
                       {{ item.text }}
                     </template>
                   </v-select>
                 </v-col>
-                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('birthdate')">
+                <v-col v-if="collectPhysicalDataField('birthdate')" cols="12" lg="6">
                   <v-text-field
                     v-model="form.birthdate"
                     :error-messages="errors.get('birthdate')"
@@ -41,7 +41,7 @@
                     prepend-icon="fa-birthday-cake"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('heightCm')">
+                <v-col v-if="collectPhysicalDataField('heightCm')" cols="12" lg="6">
                   <v-text-field
                     v-model="form.heightCm"
                     :error-messages="errors.get('heightCm')"
@@ -52,7 +52,7 @@
                     prepend-icon="fa-arrows-alt-v"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('weightKg')">
+                <v-col v-if="collectPhysicalDataField('weightKg')" cols="12" lg="6">
                   <v-text-field
                     v-model="form.weightKg"
                     :error-messages="errors.get('weightKg')"
@@ -63,7 +63,7 @@
                     prepend-icon="fa-weight"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('physicalActivityLevelId')">
+                <v-col v-if="collectPhysicalDataField('physicalActivityLevelId')" cols="12" lg="6">
                   <v-select
                     v-model="form.physicalActivityLevelId"
                     :error-messages="errors.get('physicalActivityLevelId')"
@@ -78,7 +78,7 @@
                     @change="errors.clear('physicalActivityLevelId')"
                   ></v-select>
                 </v-col>
-                <v-col cols="12" lg="6" v-if="collectPhysicalDataField('weightTarget')">
+                <v-col v-if="collectPhysicalDataField('weightTarget')" cols="12" lg="6">
                   <v-select
                     v-model="form.weightTarget"
                     :error-messages="errors.get('weightTarget')"

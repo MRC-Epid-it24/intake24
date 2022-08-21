@@ -12,7 +12,7 @@
             outlined
             @change="update('characterType', $event)"
           >
-            <template v-slot:item="{ item }">
+            <template #item="{ item }">
               <v-avatar tile class="mr-4 my-2">
                 <v-img :src="characterImageMap[item.value]" :alt="item.value"></v-img>
               </v-avatar>

@@ -3,9 +3,9 @@
     <v-form ref="form" @submit.prevent="submit">
       <v-label v-if="label">{{ getLocaleContent(label) }}</v-label>
       <v-checkbox
-        v-model="selected"
         v-for="option in localeOptions"
         :key="option.value"
+        v-model="selected"
         :error="hasErrors"
         :label="option.label"
         :value="option.value"
@@ -25,7 +25,7 @@
       </v-row>
       <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
     </v-form>
-    <template v-slot:actions>
+    <template #actions>
       <continue @click.native="submit"></continue>
     </template>
   </prompt-layout>

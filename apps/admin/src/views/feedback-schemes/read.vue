@@ -1,12 +1,12 @@
 <template>
-  <layout v-bind="{ id, entry }" v-if="entryLoaded">
-    <template v-slot:actions>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+    <template #actions>
       <copy-scheme-dialog
         v-if="canHandleEntry('copy')"
-        :schemeId="id"
+        :scheme-id="id"
         resource="feedback-schemes"
       ></copy-scheme-dialog>
-      <preview :feedbackScheme="entry"></preview>
+      <preview :feedback-scheme="entry"></preview>
     </template>
     <v-simple-table>
       <tbody>

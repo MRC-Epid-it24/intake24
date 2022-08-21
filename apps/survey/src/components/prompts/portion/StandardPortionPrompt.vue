@@ -1,16 +1,16 @@
 <template>
   <v-container>
     <portion-layout :text="promptProps.text" :description="promptProps.description">
-      <template v-slot:headerText>
+      <template #headerText>
         {{ localeDescription }}
       </template>
       <v-expansion-panels v-model="panelOpen">
         <v-expansion-panel>
           <v-expansion-panel-header disable-icon-rotate>
             {{ $t('portion.standardPortion.portionMethodLabel', { food: localeDescription }) }}
-            <template v-slot:actions>
-              <v-icon color="success" v-if="unitValid()">fas fa-fw fa-check</v-icon>
-              <v-icon color="error" v-if="!unitValid()">fas fa-fw fa-exclamation</v-icon>
+            <template #actions>
+              <v-icon v-if="unitValid()" color="success">fas fa-fw fa-check</v-icon>
+              <v-icon v-if="!unitValid()" color="error">fas fa-fw fa-exclamation</v-icon>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -31,9 +31,9 @@
         <v-expansion-panel>
           <v-expansion-panel-header disable-icon-rotate>
             {{ $t('portion.standardPortion.label', { food: localeDescription }) }}
-            <template v-slot:actions>
-              <v-icon color="success" v-if="selectedQuantity">fas fa-fw fa-check</v-icon>
-              <v-icon color="error" v-if="!selectedQuantity">fas fa-fw fa-exclamation</v-icon>
+            <template #actions>
+              <v-icon v-if="selectedQuantity" color="success">fas fa-fw fa-check</v-icon>
+              <v-icon v-if="!selectedQuantity" color="error">fas fa-fw fa-exclamation</v-icon>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -67,7 +67,6 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { QuantityValues, ValidatedPromptProps } from '@intake24/common/prompts';
@@ -75,16 +74,15 @@ import type { LocaleTranslation, StandardPortionUnit } from '@intake24/common/ty
 import ErrorAlert from '@intake24/survey/components/elements/ErrorAlert.vue';
 import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
 import { localeContent } from '@intake24/survey/components/mixins';
-import { useSurvey } from '@intake24/survey/stores';
 
 import BasePortion from './BasePortion';
 
 export default defineComponent({
   name: 'StandardPortionPrompt',
 
-  mixins: [BasePortion, localeContent],
-
   components: { ErrorAlert, QuantityCard },
+
+  mixins: [BasePortion, localeContent],
 
   props: {
     // Generic object 'props' used to store all props for each prompt
@@ -120,8 +118,6 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealIndex', 'selectedFoodIndex', 'currentTempPromptAnswer']),
-
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
@@ -141,7 +137,7 @@ export default defineComponent({
       this.panelOpen = 1;
       console.log(unit, event);
       this.selectedUnitIndex = event;
-      this.$emit('tempChanging', {
+      /* this.$emit('tempChanging', {
         response: {
           method: 'standard-portion',
           unit: this.standardUnits[this.selectedUnitIndex],
@@ -153,7 +149,7 @@ export default defineComponent({
         mealIndex: this.selectedMealIndex,
         foodIndex: this.selectedFoodIndex,
         prompt: this.promptComponent,
-      });
+      }); */
     },
     clearErrors() {
       this.errors = [];
@@ -166,7 +162,7 @@ export default defineComponent({
     },
     onUpdateQuantity(value: QuantityValues) {
       this.quantityValue = value;
-      this.$emit('tempChanging', {
+      /* this.$emit('tempChanging', {
         response: {
           method: 'standard-portion',
           unit: this.standardUnits[this.selectedUnitIndex],
@@ -178,7 +174,7 @@ export default defineComponent({
         mealIndex: this.selectedMealIndex,
         foodIndex: this.selectedFoodIndex,
         prompt: this.promptComponent,
-      });
+      }); */
     },
     submit() {
       if (!this.isValid()) {

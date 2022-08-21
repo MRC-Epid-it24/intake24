@@ -1,5 +1,5 @@
 <template>
-  <div class="guides-drawer" v-if="dataLoaded">
+  <div v-if="dataLoaded" class="guides-drawer">
     <v-img ref="img" v-resize="onImgResize" :src="imageMapData.baseImageUrl"> </v-img>
     <svg ref="svg" :height="height" :width="width">
       <polygon

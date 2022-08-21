@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <portion-layout :text="text" :description="description">
-      <template v-slot:headerText>
-        {{ $t('portion.milkHotDrink.label') }} - {{ localDescription }}
+      <template #headerText>
+        {{ $t('portion.milkHotDrink.label') }} - {{ localeDescription }}
       </template>
       <v-row>
         <v-col>
@@ -45,7 +45,7 @@ export default defineComponent({
   },
 
   computed: {
-    localeDescription(): string | null {
+    localeDescription(): string {
       return this.getLocaleContent(this.description);
     },
     hasErrors(): boolean {

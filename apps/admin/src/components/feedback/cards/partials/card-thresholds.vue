@@ -2,7 +2,7 @@
   <v-tab-item key="thresholds">
     <v-container>
       <v-row>
-        <v-col v-for="(item, key) in { low, high }" cols="12" md="6" :key="key">
+        <v-col v-for="(item, key) in { low, high }" :key="key" cols="12" md="6">
           <v-card-title>
             {{ $t(`feedback-schemes.cards.thresholds.${key}`) }}
           </v-card-title>
@@ -16,19 +16,19 @@
             ></v-switch>
             <template v-if="item">
               <v-slider
+                v-model.number="item.threshold"
                 :label="$t('feedback-schemes.cards.thresholds._')"
                 class="mt-12"
                 max="100"
                 min="0"
                 thumb-label="always"
-                v-model.number="item.threshold"
               ></v-slider>
               <language-selector
-                :label="$t('feedback-schemes.cards.thresholds.message').toString()"
                 v-model="item.message"
+                :label="$t('feedback-schemes.cards.thresholds.message').toString()"
               >
-                <template v-for="lang in Object.keys(item.message)" v-slot:[`lang.${lang}`]>
-                  <editor :init="tinymceInit" :key="lang" v-model="item.message[lang]" />
+                <template v-for="lang in Object.keys(item.message)" #[`lang.${lang}`]>
+                  <editor :key="lang" v-model="item.message[lang]" :init="tinymceInit" />
                 </template>
               </language-selector>
             </template>

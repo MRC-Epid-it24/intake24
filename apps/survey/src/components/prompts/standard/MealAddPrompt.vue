@@ -1,6 +1,6 @@
 <template>
   <prompt-layout v-bind="{ description, text }">
-    <v-col md="8" sm="12" v-show="hasMeals === 0">
+    <v-col v-show="hasMeals === 0" md="8" sm="12">
       <h4>{{ $t('prompts.mealAdding.noMeal') }}</h4>
     </v-col>
     <v-col md="8" sm="12">
@@ -16,7 +16,7 @@
         </v-combobox>
       </v-form>
     </v-col>
-    <template v-slot:actions>
+    <template #actions>
       <v-btn :block="isMobile" class="px-5" large @click="abortMeal">
         {{ $t('prompts.mealAdding.no') }}
       </v-btn>
@@ -55,11 +55,12 @@ export default defineComponent({
       type: Object as PropType<BasePromptProps>,
       required: true,
     },
-    list: {
-      type: Array as PropType<string[]>,
-    },
     promptComponent: {
       type: String,
+      required: true,
+    },
+    list: {
+      type: Array as PropType<string[]>,
       required: true,
     },
   },
@@ -71,12 +72,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, [
-      'selectedMealIndex',
-      'selectedFoodIndex',
-      'currentTempPromptAnswer',
-      'hasMeals',
-    ]),
+    ...mapState(useSurvey, ['hasMeals']),
 
     text(): string {
       const text = this.promptProps.text[this.$i18n.locale];
@@ -95,17 +91,7 @@ export default defineComponent({
       return [];
     },
   },
-
-  methods: {
-    submit() {
-      this.$emit('addMeal', this.currentValue);
-    },
-
-    abortMeal() {
-      this.$emit('abortMeal');
-    },
-  },
-  watch: {
+  /* watch: {
     currentValue: {
       handler(value: string) {
         this.$emit('tempChanging', {
@@ -117,6 +103,16 @@ export default defineComponent({
           prompt: this.promptComponent,
         });
       },
+    },
+  }, */
+
+  methods: {
+    submit() {
+      this.$emit('addMeal', this.currentValue);
+    },
+
+    abortMeal() {
+      this.$emit('abortMeal');
     },
   },
 });

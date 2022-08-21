@@ -30,7 +30,7 @@
         close-on-content-click
         close-on-click
       >
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon color="primary lighten-1">fa-ellipsis-v</v-icon>
           </v-btn>
@@ -43,7 +43,7 @@
             @close="clearMoveToSection"
             @confirm="move"
           >
-            <template v-slot:activator="{ on, attrs }">
+            <template #activator="{ on, attrs }">
               <v-list-item link v-bind="attrs" v-on="on">
                 <v-list-item-title>
                   <v-icon left>fa-exchange-alt</v-icon>
@@ -70,12 +70,12 @@
             max-width="450px"
             @confirm="sync"
           >
-            <template v-slot:activator="{ on, attrs }">
+            <template #activator="{ on, attrs }">
               <v-list-item
                 v-bind="attrs"
-                v-on="on"
                 link
                 :disabled="!hasTemplate || isInSyncWithTemplate"
+                v-on="on"
               >
                 <v-list-item-title>
                   <v-icon left :disabled="!hasTemplate || isInSyncWithTemplate">fa-sync</v-icon>
@@ -117,6 +117,11 @@ import SaveAsTemplateDialog from './save-as-template-dialog.vue';
 export default defineComponent({
   name: 'QuestionListItem',
 
+  components: {
+    ConfirmDialog,
+    SaveAsTemplateDialog,
+  },
+
   props: {
     mode: {
       type: String as PropType<'full' | 'override'>,
@@ -138,11 +143,6 @@ export default defineComponent({
       type: Array as PropType<PromptQuestion[]>,
       default: () => [],
     },
-  },
-
-  components: {
-    ConfirmDialog,
-    SaveAsTemplateDialog,
   },
 
   data() {

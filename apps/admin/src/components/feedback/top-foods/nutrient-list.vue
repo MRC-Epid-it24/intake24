@@ -14,7 +14,7 @@
         :label="$t('feedback-schemes.top-foods.nutrientTypes.reset._').toString()"
         @confirm="resetList"
       >
-        <template v-slot:activator="{ attrs, on }">
+        <template #activator="{ attrs, on }">
           <v-btn
             class="ml-3"
             color="error"
@@ -93,15 +93,15 @@
             </v-autocomplete>
           </v-card-text>
           <language-selector
-            :label="$t('nutrient-types.label').toString()"
             v-model="dialog.item.name"
+            :label="$t('nutrient-types.label').toString()"
             flat
             :outlined="false"
           >
-            <template v-for="lang in Object.keys(dialog.item.name)" v-slot:[`lang.${lang}`]>
+            <template v-for="lang in Object.keys(dialog.item.name)" #[`lang.${lang}`]>
               <v-text-field
-                v-model="dialog.item.name[lang]"
                 :key="lang"
+                v-model="dialog.item.name[lang]"
                 :label="$t('nutrient-types._')"
                 hide-details="auto"
                 outlined
@@ -139,6 +139,8 @@ import { ConfirmDialog } from '@intake24/ui';
 export default defineComponent({
   name: 'TopFoodsNutrientTypeList',
 
+  components: { ConfirmDialog, draggable, LanguageSelector },
+
   props: {
     schemeId: {
       type: String,
@@ -153,8 +155,6 @@ export default defineComponent({
       required: true,
     },
   },
-
-  components: { ConfirmDialog, draggable, LanguageSelector },
 
   setup(props, context) {
     const defaultItem = () => ({

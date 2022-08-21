@@ -1,9 +1,9 @@
 <template>
   <data-table :headers="headers">
-    <template v-slot:[`item.type`]="{ item }">
+    <template #[`item.type`]="{ item }">
       {{ $t(`survey-schemes.questions.${item.question.type}._`) }}
     </template>
-    <template v-slot:[`item.component`]="{ item }">
+    <template #[`item.component`]="{ item }">
       {{ $t(`survey-schemes.prompts.${item.question.component}.title`) }}
     </template>
   </data-table>

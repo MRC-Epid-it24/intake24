@@ -46,13 +46,13 @@ function initialPromptState(): AssociatedFoodPromptState {
 export default defineComponent({
   name: 'AssociatedFoodsPromptHandler',
 
+  components: { AssociatedFoodsPrompt },
+
   mixins: [
     createPromptHandlerStoreMixin<AssociatedFoodsState>('associated-foods-prompt'),
     foodPromptUtils,
     mealPromptUtils,
   ],
-
-  components: { AssociatedFoodsPrompt },
 
   props: {
     promptProps: {

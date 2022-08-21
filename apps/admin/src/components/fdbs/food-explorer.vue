@@ -11,10 +11,10 @@
       dense
       transition
     >
-      <template v-slot:prepend="{ item }">
+      <template #prepend="{ item }">
         <v-icon v-if="!item.children">fa-drumstick-bite</v-icon>
       </template>
-      <template v-slot:label="{ item }">
+      <template #label="{ item }">
         <router-link
           :to="{
             name: `fdbs-${item.children ? 'categories' : 'foods'}`,

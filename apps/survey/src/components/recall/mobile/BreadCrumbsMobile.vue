@@ -1,7 +1,7 @@
 <template>
   <v-toolbar flat dense class="brdcrmbs" style="overflow-y: hidden; white-space: nowrap">
     <v-breadcrumbs :items="brds" class="pl-1">
-      <template v-slot:divider>
+      <template #divider>
         <v-icon>{{ forwardIcon }}</v-icon>
       </template>
     </v-breadcrumbs>
@@ -9,19 +9,23 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { RequiredLocaleTranslation } from '@intake24/common/types';
 import type { BrdCrumbs } from '@intake24/survey/components/mixins/breadcrumbs';
 import { breadcrumbs } from '@intake24/survey/components/mixins';
-import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'RecallBreadCrumbsMobile',
 
-  props: ['promptName'],
-
   mixins: [breadcrumbs],
+
+  props: {
+    promptName: {
+      type: Object as PropType<RequiredLocaleTranslation>,
+    },
+  },
 
   data: () => {
     return {
@@ -30,8 +34,6 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMeal', 'selectedMealIndex', 'selectedFood']),
-
     brds(): BrdCrumbs[] {
       return this.getBreadCrumbs(this.promptName).filter((el) => !el.disabled);
     },

@@ -7,8 +7,8 @@
       <v-spacer></v-spacer>
       <add-nutrient-dialog
         v-if="!disabled"
-        :currentItems="items"
-        :nutrientTables="nutrientTables"
+        :current-items="items"
+        :nutrient-tables="nutrientTables"
         @add="add"
       ></add-nutrient-dialog>
     </v-toolbar>

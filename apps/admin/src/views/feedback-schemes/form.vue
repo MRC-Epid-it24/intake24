@@ -1,12 +1,12 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
-    <template v-slot:actions>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+    <template #actions>
       <copy-scheme-dialog
         v-if="canHandleEntry('copy')"
-        :schemeId="id"
+        :scheme-id="id"
         resource="feedback-schemes"
       ></copy-scheme-dialog>
-      <preview v-if="!isCreate" :feedbackScheme="currentFeedbackScheme"></preview>
+      <preview v-if="!isCreate" :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container>
@@ -46,7 +46,7 @@
                 outlined
                 @change="form.errors.clear('outputs')"
               >
-                <template v-slot:selection="{ item, index }">
+                <template #selection="{ item, index }">
                   <template v-if="index === 0">
                     <span v-if="form.outputs.length === 1">{{ item.text }}</span>
                     <span v-if="form.outputs.length > 1">
@@ -68,7 +68,7 @@
                 outlined
                 @change="form.errors.clear('physicalDataFields')"
               >
-                <template v-slot:selection="{ item, index }">
+                <template #selection="{ item, index }">
                   <template v-if="index === 0">
                     <span v-if="form.physicalDataFields.length === 1">{{ item.text }}</span>
                     <span v-if="form.physicalDataFields.length > 1">
@@ -87,7 +87,7 @@
                   type="info"
                 >
                   <i18n path="feedback-schemes.physicalDataFields.notRequired" tag="div">
-                    <template v-slot:field>
+                    <template #field>
                       <span class="font-weight-medium">
                         "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
                       </span>
@@ -101,7 +101,7 @@
                   type="warning"
                 >
                   <i18n path="feedback-schemes.physicalDataFields.required" tag="div">
-                    <template v-slot:field>
+                    <template #field>
                       <span class="font-weight-medium">
                         "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
                       </span>

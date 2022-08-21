@@ -2,7 +2,7 @@ import type { TranslateResult } from 'vue-i18n';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { FoodState, LocaleTranslation } from '@intake24/common/types';
+import type { FoodState, RequiredLocaleTranslation } from '@intake24/common/types';
 import { useSurvey } from '@intake24/survey/stores';
 
 import localeContent from './localeContent';
@@ -28,20 +28,20 @@ export default defineComponent({
       return '';
     },
 
-    getBreadCrumbs(promptName: LocaleTranslation): BrdCrumbs[] {
+    getBreadCrumbs(promptName?: RequiredLocaleTranslation): BrdCrumbs[] {
       const localMealName: string | null = this.selectedMealOptional
         ? this.getLocaleContent(this.selectedMealOptional.name)
         : null;
       return [
         {
           text: localMealName !== null ? localMealName : this.$t('breadcrumbs.meal'),
-          disabled: !this.selectedMeal,
+          disabled: !this.selectedMealOptional,
         },
         {
           text: this.selectedFoodOptional
             ? this.getFood(this.selectedFoodOptional)
             : this.$t('breadcrumbs.food'),
-          disabled: !this.selectedFood,
+          disabled: !this.selectedFoodOptional,
         },
         {
           text: promptName ? this.getLocaleContent(promptName) : this.$t('breadcrumbs.prompt'),

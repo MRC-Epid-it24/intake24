@@ -1,7 +1,7 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit" autocomplete="off">
+      <v-form autocomplete="off" @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -38,11 +38,11 @@
                 outlined
                 @change="form.errors.clear('localeId')"
               >
-                <template v-slot:item="{ item }">
+                <template #item="{ item }">
                   <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
-                <template v-slot:selection="{ item }">
+                <template #selection="{ item }">
                   <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
                   {{ item.englishName }}
                 </template>
@@ -70,7 +70,7 @@
                 persistent
                 width="290px"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-text-field
                     v-model="form.startDate"
                     :error-messages="form.errors.get('startDate')"
@@ -105,7 +105,7 @@
                 persistent
                 width="290px"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-text-field
                     v-model="form.endDate"
                     :error-messages="form.errors.get('endDate')"
@@ -154,7 +154,7 @@
                 @change="form.errors.clear('state')"
               ></v-select>
             </v-col>
-            <v-col cols="12" v-show="form.state === 'suspended'">
+            <v-col v-show="form.state === 'suspended'" cols="12">
               <v-text-field
                 v-model="form.suspensionReason"
                 :error-messages="form.errors.get('suspensionReason')"

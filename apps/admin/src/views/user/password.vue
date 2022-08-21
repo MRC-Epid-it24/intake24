@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="500px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn v-bind="attrs" v-on="on" :title="$t('user.password.change')" outlined>
+    <template #activator="{ on, attrs }">
+      <v-btn v-bind="attrs" :title="$t('user.password.change')" outlined v-on="on">
         {{ $t('user.password.change') }}
       </v-btn>
     </template>
@@ -65,7 +65,7 @@
           </v-row>
         </v-card-text>
         <v-card-actions class="px-6 pb-6">
-          <v-btn type="submit" color="secondary" xLarge width="100%">
+          <v-btn type="submit" color="secondary" x-large width="100%">
             {{ $t('user.password.update') }}
           </v-btn>
         </v-card-actions>

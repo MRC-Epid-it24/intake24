@@ -4,7 +4,7 @@
       <v-toolbar-title>{{ label }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu bottom left>
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             :disabled="!availableLanguages.length"
             color="secondary"
@@ -23,7 +23,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <template v-slot:extension>
+      <template #extension>
         <v-tabs v-model="selected" background-color="grey lighten-4">
           <v-tabs-slider></v-tabs-slider>
           <v-tab v-for="lang in languages" :key="lang">
@@ -36,7 +36,7 @@
     <v-tabs-items v-model="selected">
       <v-tab-item v-for="lang in languages" :key="lang">
         <v-card-text>
-          <slot :name="`lang.${lang}`" v-bind:lang="lang"></slot>
+          <slot :name="`lang.${lang}`" :lang="lang"></slot>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -68,12 +68,14 @@ export default defineComponent({
   props: {
     label: {
       type: String,
+      required: true,
     },
     value: {
       type: Object as PropType<LocaleTranslation>,
       required: true,
     },
     default: {
+      type: [String, Array],
       default: '',
     },
     disabled: {
@@ -82,7 +84,6 @@ export default defineComponent({
     },
     flat: {
       type: Boolean,
-      default: undefined,
     },
     outlined: {
       type: Boolean,

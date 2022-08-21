@@ -9,6 +9,13 @@ export function createPromptHandlerNoStoreMixin<T extends object>() {
       };
     },
 
+    computed: {
+      currentStateNotNull(): T {
+        if (this.currentState === null) throw new Error('Current state is null');
+        return this.currentState as T;
+      },
+    },
+
     mounted() {
       const initialState = this.getInitialState();
       this.currentState = reactive(initialState) as UnwrapRef<T>;
@@ -16,13 +23,6 @@ export function createPromptHandlerNoStoreMixin<T extends object>() {
       const initialStateValid = this.isValid(initialState);
       this.setValidationState(initialStateValid);
       this.continueEnabled = initialStateValid;
-    },
-
-    computed: {
-      currentStateNotNull(): T {
-        if (this.currentState === null) throw new Error('Current state is null');
-        return this.currentState as T;
-      },
     },
 
     methods: {

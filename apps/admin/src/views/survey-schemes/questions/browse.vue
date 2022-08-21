@@ -1,20 +1,20 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <v-toolbar flat tile color="grey lighten-5">
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.questions.title`) }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <select-resource resource="survey-schemes" return-object="questions" @input="load">
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
-            v-on="on"
             class="ml-3"
             color="secondary"
             fab
             small
             :title="$t(`survey-schemes.load`)"
+            v-on="on"
           >
             <v-icon>fa-download</v-icon>
           </v-btn>
@@ -25,7 +25,7 @@
       <v-item-group v-model="section" mandatory active-class="secondary">
         <v-row>
           <v-col v-for="item in sections.survey" :key="item" cols="12" md="4">
-            <v-item v-slot:default="{ active, toggle }" :value="item">
+            <v-item v-slot="{ active, toggle }" :value="item">
               <v-card :color="active ? 'primary' : ''" dark height="180" @click.stop="toggle">
                 <v-card-title class="justify-center">
                   {{ $t(`survey-schemes.questions.${item}.title`) }}
@@ -43,7 +43,7 @@
         <v-divider class="my-3"></v-divider>
         <v-row>
           <v-col v-for="item in sections.meal" :key="item" cols="12" md="4">
-            <v-item v-slot:default="{ active, toggle }" :value="item">
+            <v-item v-slot="{ active, toggle }" :value="item">
               <v-card :color="active ? 'primary' : ''" dark height="180" @click.stop="toggle">
                 <v-card-title class="justify-center">
                   {{ $t(`survey-schemes.questions.${item}.title`) }}

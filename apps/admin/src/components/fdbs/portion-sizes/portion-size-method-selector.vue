@@ -122,15 +122,15 @@ import { portionSizeSelectionImages, psmDefaults } from './portion-sizes';
 export default defineComponent({
   name: 'PortionSizeMethodSelector',
 
+  components: {
+    ...portionSizeParams,
+  },
+
   props: {
     textRequired: {
       type: Boolean,
       default: true,
     },
-  },
-
-  components: {
-    ...portionSizeParams,
   },
 
   setup() {

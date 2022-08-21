@@ -4,16 +4,16 @@
     <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div>
     <v-card-subtitle class="font-weight-medium">
       <i18n path="feedback.intake.your" tag="div" class="mb-2">
-        <template v-slot:nutrient>
+        <template #nutrient>
           <span>{{ detail.name.toLowerCase() }}</span>
         </template>
-        <template v-slot:amount>
+        <template #amount>
           <span :class="detail.textClass">{{ formatOutput(detail.intake, detail.unit) }}</span>
         </template>
       </i18n>
       <div v-if="detail.recommendedIntake" :class="detail.textClass">
         <v-icon left>{{ detail.iconClass }}</v-icon>
-        <span>{{ formatOutput(detail.recommendedIntake, detail.unit) }}</span>
+        <span>{{ formatOutput(detail.recommendedIntake.toString(), detail.unit) }}</span>
       </div>
     </v-card-subtitle>
     <tell-me-more v-bind="{ detail }" class="mt-auto"></tell-me-more>

@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-img class="align-end" :src="getMainImage()" :aspect-ratio="16 / 9">
-        <template v-slot:placeholder>
+        <template #placeholder>
           <image-placeholder></image-placeholder>
         </template>
         <v-row>
@@ -27,7 +27,7 @@
         </v-card>
       </v-col>
       <template v-for="(images, idx) in asServedData.images">
-        <v-col v-bind:key="idx" class="pa-1" cols="3" sm="2" lg="1" :class="isSelected(idx)">
+        <v-col :key="idx" class="pa-1" cols="3" sm="2" lg="1" :class="isSelected(idx)">
           <v-card @click="setSelection(idx)">
             <v-img :src="images.thumbnailUrl"></v-img>
           </v-card>
@@ -56,7 +56,7 @@
         </v-btn>
       </v-col>
       <v-col align="center" xs="12" md="4" class="ma-2">
-        <v-btn color="success" @click="emitConfirm()" block>
+        <v-btn color="success" block @click="emitConfirm()">
           {{ $t('portion.common.confirmButton') }}
         </v-btn>
       </v-col>
@@ -81,6 +81,7 @@ export default defineComponent({
   props: {
     asServedSetId: {
       type: String,
+      required: true,
     },
     initialState: {
       type: Number,

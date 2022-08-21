@@ -8,16 +8,16 @@
         <v-card-title class="font-weight-medium py-0">{{ detail.name }}</v-card-title>
         <v-card-text class="d-flex flex-column py-0 font-weight-medium">
           <i18n path="feedback.intake.your" tag="div" class="mb-2">
-            <template v-slot:nutrient>
+            <template #nutrient>
               <span>{{ detail.name.toLowerCase() }}</span>
             </template>
-            <template v-slot:amount>
+            <template #amount>
               <span :class="detail.textClass">{{ formatOutput(detail.intake, detail.unit) }}</span>
             </template>
           </i18n>
           <div v-if="detail.recommendedIntake" :class="detail.textClass">
             <v-icon left>{{ detail.iconClass }}</v-icon>
-            <span>{{ formatOutput(detail.recommendedIntake, detail.unit) }}</span>
+            <span>{{ formatOutput(detail.recommendedIntake.toString(), detail.unit) }}</span>
           </div>
           <div class="mt-auto" v-html="detail.unitDescription"></div>
         </v-card-text>

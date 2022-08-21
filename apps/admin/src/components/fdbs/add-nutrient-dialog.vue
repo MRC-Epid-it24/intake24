@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn v-bind="attrs" v-on="on" color="secondary" fab small :title="$t('fdbs.nutrients.add')">
+    <template #activator="{ on, attrs }">
+      <v-btn v-bind="attrs" color="secondary" fab small :title="$t('fdbs.nutrients.add')" v-on="on">
         <v-icon>$add</v-icon>
       </v-btn>
     </template>
@@ -53,7 +53,7 @@
             <v-list-item-group v-model="selectedRecordId">
               <template v-for="(item, idx) in items">
                 <v-list-item :key="item.id" :value="item.id">
-                  <template v-slot:default="{ active }">
+                  <template #default="{ active }">
                     <v-list-item-action>
                       <v-checkbox :input-value="active"></v-checkbox>
                     </v-list-item-action>

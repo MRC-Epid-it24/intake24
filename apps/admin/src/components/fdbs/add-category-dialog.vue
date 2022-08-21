@@ -1,13 +1,13 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <v-btn
         v-bind="attrs"
-        v-on="on"
         color="secondary"
         fab
         small
         :title="$t('fdbs.categories.add')"
+        v-on="on"
       >
         <v-icon>$add</v-icon>
       </v-btn>
@@ -42,7 +42,7 @@
             <v-list-item-group v-model="selected" multiple>
               <template v-for="(item, idx) in items">
                 <v-list-item :key="item.code" :value="item.code">
-                  <template v-slot:default="{ active }">
+                  <template #default="{ active }">
                     <v-list-item-action>
                       <v-checkbox :input-value="active"></v-checkbox>
                     </v-list-item-action>

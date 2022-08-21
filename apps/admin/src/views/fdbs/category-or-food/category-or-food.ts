@@ -27,6 +27,11 @@ export default defineComponent({
 
   mixins: [watchEntry],
 
+  async beforeRouteUpdate(to, from, next) {
+    await this.fetchCategoryOrFood(to.params.entryId);
+    next();
+  },
+
   props: {
     id: {
       type: String,
@@ -70,11 +75,6 @@ export default defineComponent({
 
       return !isEqual(original, updated);
     },
-  },
-
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchCategoryOrFood(to.params.entryId);
-    next();
   },
 
   async mounted() {

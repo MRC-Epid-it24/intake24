@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" v-if="entryLoaded">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-card-title>{{
       $t(`survey-scheme-questions.sync.title`, { id: entry.question.id })
     }}</v-card-title>
@@ -42,12 +42,12 @@
             icon-left="fa-sync"
             @confirm="sync(scheme)"
           >
-            <template v-slot:activator="{ attrs, on }">
+            <template #activator="{ attrs, on }">
               <v-btn
                 v-bind="attrs"
-                v-on="on"
                 :title="$t('survey-scheme-questions.sync.false')"
                 icon
+                v-on="on"
               >
                 <v-icon color="warning" large>fa-sync</v-icon>
               </v-btn>

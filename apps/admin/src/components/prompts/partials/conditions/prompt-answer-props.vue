@@ -3,9 +3,9 @@
     <v-text-field
       :label="$t('survey-schemes.conditions.promptId')"
       :value="promptId"
-      @input="update('promptId', $event)"
       hide-details="auto"
       outlined
+      @input="update('promptId', $event)"
     ></v-text-field>
   </v-col>
 </template>

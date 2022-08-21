@@ -76,6 +76,18 @@ export function createPromptHandlerStoreMixin<T extends object>(promptType: Comp
       };
     },
 
+    computed: {
+      initialStateNotNull(): T {
+        if (this.initialState === null) throw new Error('Initial state is null');
+        return this.initialState as T;
+      },
+
+      currentStateNotNull(): T {
+        if (this.currentState === null) throw new Error('Current state is null');
+        return this.currentState as T;
+      },
+    },
+
     created() {
       // store definition function erases types
       const storedState = this.stateStore.prompts[this.getFoodOrMealId()]?.[this.promptId] as T;
@@ -92,18 +104,6 @@ export function createPromptHandlerStoreMixin<T extends object>(promptType: Comp
       const initialStateValid = this.isValid(this.initialState as T);
       this.setValidationState(initialStateValid);
       this.continueEnabled = initialStateValid;
-    },
-
-    computed: {
-      initialStateNotNull(): T {
-        if (this.initialState === null) throw new Error('Initial state is null');
-        return this.initialState as T;
-      },
-
-      currentStateNotNull(): T {
-        if (this.currentState === null) throw new Error('Current state is null');
-        return this.currentState as T;
-      },
     },
 
     methods: {

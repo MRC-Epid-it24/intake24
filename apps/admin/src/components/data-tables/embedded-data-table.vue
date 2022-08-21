@@ -35,7 +35,7 @@
       :server-items-length="meta.total"
       @item-selected="updateTracked"
     >
-      <template v-for="(_, scopedSlotName) in $scopedSlots" v-slot:[scopedSlotName]="slotData">
+      <template v-for="(_, scopedSlotName) in $scopedSlots" #[scopedSlotName]="slotData">
         <slot :name="scopedSlotName" v-bind="slotData" />
       </template>
     </v-data-table>

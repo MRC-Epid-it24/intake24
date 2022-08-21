@@ -29,7 +29,7 @@
                   @confirm="removeImage(image.id)"
                 >
                   {{ $t('common.action.confirm.delete', { name: 'selected image' }) }}
-                  <template v-slot:activator="{ on, attrs }">
+                  <template #activator="{ on, attrs }">
                     <v-btn icon large class="ml-auto" v-bind="attrs" v-on="on">
                       <v-icon color="error">$delete</v-icon>
                     </v-btn>
@@ -40,7 +40,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="4" v-if="!disabled">
+      <v-col v-if="!disabled" cols="12" sm="6" md="4">
         <v-card
           :title="$t('as-served-sets.images.add')"
           height="100%"
@@ -58,9 +58,9 @@
         </v-card>
         <label for="fileInput" class="d-none">
           <input
+            id="fileInput"
             ref="fileInput"
             class="d-none"
-            id="fileInput"
             type="file"
             accept="image/jpeg"
             @change="onFileChanged"

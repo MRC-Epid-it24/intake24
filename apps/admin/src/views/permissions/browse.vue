@@ -1,6 +1,6 @@
 <template>
   <data-table :headers="headers">
-    <template v-slot:[`item.createdAt`]="{ item }">
+    <template #[`item.createdAt`]="{ item }">
       {{ new Date(item.createdAt).toLocaleString() }}
     </template>
   </data-table>

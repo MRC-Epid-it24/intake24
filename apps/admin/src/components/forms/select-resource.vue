@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }"></slot>
     </template>
     <v-card :loading="loading">
@@ -30,7 +30,7 @@
             <v-list-item-group v-model="selectedItemId">
               <template v-for="(item, idx) in items">
                 <v-list-item :key="item[itemId]" :value="item[itemId]">
-                  <template v-slot:default="{ active }">
+                  <template #default="{ active }">
                     <v-list-item-action>
                       <v-checkbox :input-value="active"></v-checkbox>
                     </v-list-item-action>

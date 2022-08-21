@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -57,7 +57,7 @@
             </v-col>
           </v-row>
           <template v-for="group in ['resources', 'surveys', 'fdbs']">
-            <v-card-title cols="12" :key="`${group}-title`">
+            <v-card-title :key="`${group}-title`" cols="12">
               <v-card-title>{{ $t(`permissions.groups.${group}`) }}</v-card-title>
             </v-card-title>
             <v-row :key="`${group}-content`">

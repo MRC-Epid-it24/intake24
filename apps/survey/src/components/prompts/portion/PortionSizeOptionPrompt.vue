@@ -1,6 +1,6 @@
 <template>
   <portion-layout :text="promptProps.text" :description="promptProps.description">
-    <template v-slot:headerText>
+    <template #headerText>
       {{ $t('portion.option.label', { food: localeDescription }) }}
     </template>
     <v-sheet class="ma-2">
@@ -11,15 +11,15 @@
           cols="6"
           md="4"
           lg="3"
-          @click="selectMethod(index)"
           class="mx-auto"
+          @click="selectMethod(index)"
         >
           <v-card :elevation="returnSelectElevation(index)">
             <v-img class="align-end" :src="method.imageUrl" contain aspect-ratio="1">
               <v-chip class="ma-2" :color="returnSelectedStyle(index)">
                 {{ $t(`portion.option.description.${method.description}`) }}
               </v-chip>
-              <template v-slot:placeholder>
+              <template #placeholder>
                 <v-alert outlined text>
                   <v-progress-circular
                     indeterminate
@@ -42,7 +42,7 @@
         <v-col>
           <v-form ref="form" @submit.prevent="submit">
             <!-- Should be disabled if nothing selected? -->
-            <continue @click="submit" :disabled="!continueEnabled" class="px-2"></continue>
+            <continue :disabled="!continueEnabled" class="px-2" @click="submit"></continue>
           </v-form>
         </v-col>
       </v-row>
@@ -95,7 +95,7 @@ export default defineComponent({
     },
     initialValue: {
       type: Object as PropType<PortionSizeOptionState>,
-      required: false,
+      default: null,
     },
     continueEnabled: {
       type: Boolean,

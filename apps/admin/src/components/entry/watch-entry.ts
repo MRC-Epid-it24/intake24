@@ -6,6 +6,14 @@ import { copy } from '@intake24/common/util';
 export default defineComponent({
   name: 'WatchEntry',
 
+  beforeRouteUpdate(to, from, next) {
+    this.beforeRouteCheck(to, from, next);
+  },
+
+  beforeRouteLeave(to, from, next) {
+    this.beforeRouteCheck(to, from, next);
+  },
+
   data() {
     return {
       originalEntry: null as any,
@@ -15,14 +23,6 @@ export default defineComponent({
         confirmed: false,
       },
     };
-  },
-
-  beforeRouteUpdate(to, from, next) {
-    this.beforeRouteCheck(to, from, next);
-  },
-
-  beforeRouteLeave(to, from, next) {
-    this.beforeRouteCheck(to, from, next);
   },
 
   computed: {

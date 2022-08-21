@@ -16,15 +16,15 @@
         <v-icon small>$add</v-icon>
       </v-btn>
       <select-resource resource="feedback-schemes" return-object="demographicGroups" @input="load">
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
-            v-on="on"
             class="ml-3"
             color="secondary"
             fab
             small
             :title="$t(`feedback-schemes.load`)"
+            v-on="on"
           >
             <v-icon>fa-download</v-icon>
           </v-btn>
@@ -97,7 +97,7 @@
               <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
-          <template v-slot:extension>
+          <template #extension>
             <v-container>
               <v-tabs v-model="tab" background-color="primary" dark>
                 <v-tab v-for="item in ['general', 'sectors']" :key="item">
@@ -147,11 +147,11 @@
                         outlined
                         prepend-icon="fas fa-genderless"
                       >
-                        <template v-slot:item="{ item }">
+                        <template #item="{ item }">
                           <span :class="`${item.icon} mr-3`"></span>
                           {{ item.text }}
                         </template>
-                        <template v-slot:selection="{ item }">
+                        <template #selection="{ item }">
                           <span :class="`${item.icon} mr-3`"></span>
                           {{ item.text }}
                         </template>
@@ -224,6 +224,14 @@ import DemographicGroupSectors from './demographic-group-sectors.vue';
 export default defineComponent({
   name: 'DemographicGroupList',
 
+  components: {
+    ConfirmDialog,
+    draggable,
+    DemographicGroupRange,
+    DemographicGroupSectors,
+    SelectResource,
+  },
+
   props: {
     schemeId: {
       type: String,
@@ -233,14 +241,6 @@ export default defineComponent({
       type: Array as PropType<DemographicGroup[]>,
       required: true,
     },
-  },
-
-  components: {
-    ConfirmDialog,
-    draggable,
-    DemographicGroupRange,
-    DemographicGroupSectors,
-    SelectResource,
   },
 
   setup(props, context) {

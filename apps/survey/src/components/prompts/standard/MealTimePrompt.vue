@@ -12,13 +12,13 @@
       ></v-time-picker>
       <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
     </v-form>
-    <template v-slot:actions>
+    <template #actions>
       <confirm-dialog
         color="warning"
         :label="$t('prompts.editMeal.deleteMeal', { meal: getLocalMealName }).toString()"
         @confirm="removeMeal"
       >
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn :block="isMobile" class="px-5" large v-bind="attrs" v-on="on">
             {{ $t('prompts.mealTime.no', { meal: getLocalMealName }) }}
           </v-btn>

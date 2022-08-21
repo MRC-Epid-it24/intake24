@@ -1,8 +1,8 @@
 <template>
   <v-card-text class="pa-6 text-caption">
     <vue-recaptcha
-      :sitekey="sitekey"
       ref="captcha"
+      :sitekey="sitekey"
       size="invisible"
       @verify="verified"
       @expired="expired"

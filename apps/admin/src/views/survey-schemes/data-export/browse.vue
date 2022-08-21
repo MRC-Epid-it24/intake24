@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }" :routeLeave.sync="routeLeave" v-if="entryLoaded" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <v-card-title>{{ $t('survey-schemes.data-export.title') }}</v-card-title>
     <v-card-text>
       <ul>
@@ -14,15 +14,15 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <select-resource resource="survey-schemes" return-object="dataExport" @input="load">
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
-            v-on="on"
             class="ml-3"
             color="secondary"
             fab
             small
             :title="$t(`survey-schemes.load`)"
+            v-on="on"
           >
             <v-icon>fa-download</v-icon>
           </v-btn>
@@ -31,7 +31,7 @@
     </v-toolbar>
     <data-export-section
       :section="selected"
-      :refFields="sectionRefFields"
+      :ref-fields="sectionRefFields"
       @close="close"
       @update="update"
     ></data-export-section>

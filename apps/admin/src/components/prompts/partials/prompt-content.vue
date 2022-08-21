@@ -6,7 +6,7 @@
       :value="name"
       @input="update('name', $event)"
     >
-      <template v-for="lang in Object.keys(name)" v-slot:[`lang.${lang}`]>
+      <template v-for="lang in Object.keys(name)" #[`lang.${lang}`]>
         <v-text-field
           :key="lang"
           :label="$t('survey-schemes.questions.name._')"
@@ -24,7 +24,7 @@
       :value="text"
       @input="update('text', $event)"
     >
-      <template v-for="lang in Object.keys(text)" v-slot:[`lang.${lang}`]>
+      <template v-for="lang in Object.keys(text)" #[`lang.${lang}`]>
         <v-text-field
           :key="lang"
           :label="$t('survey-schemes.questions.text._')"
@@ -42,10 +42,10 @@
       :value="description"
       @input="update('description', $event)"
     >
-      <template v-for="lang in Object.keys(description)" v-slot:[`lang.${lang}`]>
+      <template v-for="lang in Object.keys(description)" #[`lang.${lang}`]>
         <editor
-          :init="tinymceInit"
           :key="lang"
+          :init="tinymceInit"
           :value="description[lang]"
           @input="updateLanguage('description', lang, $event)"
         />

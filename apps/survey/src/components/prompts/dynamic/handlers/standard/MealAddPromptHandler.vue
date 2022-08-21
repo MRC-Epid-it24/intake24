@@ -49,16 +49,16 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['addMeal', 'setTempPromptAnswer', 'clearTempPromptAnswer']),
+    ...mapActions(useSurvey, ['addMeal']),
 
     onTempChange(tempNewMeal: PromptAnswer) {
-      this.setTempPromptAnswer(tempNewMeal);
+      // this.setTempPromptAnswer(tempNewMeal);
     },
 
     onAnswer(newMeal: string) {
       this.addMeal(newMeal, this.$i18n.locale);
       this.$emit('complete');
-      this.clearTempPromptAnswer();
+      // this.clearTempPromptAnswer();
     },
 
     onPartialAnswer(newMeal: string) {
@@ -68,7 +68,7 @@ export default defineComponent({
 
     onAbort() {
       this.$emit('complete');
-      this.clearTempPromptAnswer();
+      // this.clearTempPromptAnswer();
     },
   },
 });

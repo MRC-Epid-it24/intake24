@@ -76,6 +76,8 @@ import { useListWithDialog } from '@intake24/admin/components/lists';
 export default defineComponent({
   name: 'TopFoodsColorList',
 
+  components: { draggable },
+
   props: {
     schemeId: {
       type: String,
@@ -86,8 +88,6 @@ export default defineComponent({
       required: true,
     },
   },
-
-  components: { draggable },
 
   setup(props, context) {
     const { dialog, form, items, newDialog, edit, reset, save } = useListWithDialog(

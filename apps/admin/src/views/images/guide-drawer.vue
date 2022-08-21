@@ -16,7 +16,7 @@
           @click.stop="selectObject(objectIdx)"
           @keypress.stop="selectObject(objectIdx)"
         ></polygon>
-        <g class="guides-drawer-node-group" v-if="isImageMap && !disabled">
+        <g v-if="isImageMap && !disabled" class="guides-drawer-node-group">
           <circle
             v-for="([x, y], nodeIdx) in object.coords"
             :key="nodeIdx"
@@ -72,7 +72,7 @@
                         outlined
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" v-if="isGuideImage">
+                    <v-col v-if="isGuideImage" cols="12">
                       <v-text-field
                         v-model.number="object.weight"
                         :disabled="isImageMap || disabled"
