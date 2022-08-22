@@ -6,6 +6,7 @@
     - deps-os
     - deps-nodejs
     - deps-nginx
+    - deps-puppeteer
 
 - hosts: redis
   remote_user: deploy
