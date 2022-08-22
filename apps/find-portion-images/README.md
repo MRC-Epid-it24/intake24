@@ -5,17 +5,17 @@ target value.
 
 ## Usage
 
-1) Run the Webpack build:`npx webpack`
+1. Run the Webpack build:`npx webpack`
 
-2) Copy `config.json.example` to any location and edit the configuration.
+2. Copy `config.json.example` to any location and edit the configuration.
 
-3) Run the tool: `npm run find -- -c <config file path> -o <output file path>`
+3. Run the tool: `npm run find -- -c <config file path> -o <output file path>`
 
 Output file name is optional and will be automatically generated in the current directory if omitted.
 
 ## Configuration
 
-```json 
+```json
 {
   "locale": "NDNSv1",
   "energyValueKcal": 240,
@@ -23,7 +23,7 @@ Output file name is optional and will be automatically generated in the current 
   "portionSizeFilter": [],
   "batchSize": 500,
   "guideImageWidth": 654
-} 
+}
 ```
 
 **locale** is the food database locale that determines the list of foods that will be considered and also the list of
@@ -47,7 +47,7 @@ The output is a CSV file. The file includes only those foods that have portion s
 descriptive "standard portions" are not in this data set, but those that use as served and guide images are in.
 
 Each row of the spreadsheet represents a combination of a food and a portion size image linked to that food, such
-that the image represents the amount of food closest to the target energy value. Some foods have images for portion 
+that the image represents the amount of food closest to the target energy value. Some foods have images for portion
 sizes that are indeed very close to that value, but many do not; however they are still included.
 
 The columns are as follows (using Excel column references):
