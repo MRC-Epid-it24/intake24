@@ -26,7 +26,7 @@
     "express": "^4.18.1",
     "helmet": "^5.1.1",
     "lodash": "^4.17.21",
-    "pinia": "^2.0.19",
+    "pinia": "^2.0.20",
     "pinia-plugin-persistedstate": "^2.1.1",
     "vue": "^2.7.9",
     "vue-i18n": "^8.27.2",
