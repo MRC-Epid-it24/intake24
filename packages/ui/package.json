@@ -22,7 +22,7 @@
     "js-file-download": "^0.4.12",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
-    "pinia": "^2.0.19",
+    "pinia": "^2.0.20",
     "pinia-plugin-persistedstate": "^2.1.1",
     "svg-gauge": "^1.0.7",
     "vue": "^2.7.9",
