@@ -38,9 +38,9 @@
     "pinia-plugin-persistedstate": "^2.1.1",
     "pluralize": "^8.0.0",
     "tinymce": "^6.1.2",
-    "vue": "^2.7.9",
+    "vue": "^2.7.10",
     "vue-i18n": "^8.27.2",
-    "vue-router": "^3.5.4",
+    "vue-router": "^3.6.1",
     "vuedraggable": "2.24.3",
     "vuetify": "^2.6.9"
   },
