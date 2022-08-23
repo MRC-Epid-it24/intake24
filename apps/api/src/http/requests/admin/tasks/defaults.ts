@@ -12,8 +12,8 @@ const defaults: Schema = {
   name: {
     in: ['body'],
     errorMessage: 'Name must be filled in.',
-    isString: true,
-    isEmpty: { negated: true },
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { taskId } = (req as Request).params;

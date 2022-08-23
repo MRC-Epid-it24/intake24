@@ -23,7 +23,7 @@ export default (securable: SecurableType): ValidationMiddleware[] =>
       email: {
         in: ['body'],
         errorMessage: 'Enter valid unique email address.',
-        isEmail: true,
+        isEmail: { bail: true },
         custom: {
           options: async (value, { req }): Promise<void> => {
             const { userId } = (req as Request).params;

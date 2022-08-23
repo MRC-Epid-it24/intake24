@@ -12,8 +12,8 @@ export default validate(
     id: {
       in: ['body'],
       errorMessage: 'Drinkware set ID must be unique code (charset [a-zA-Z0-9-_]).',
-      isEmpty: { negated: true },
-      isWhitelisted: { options: identifierSafeChars },
+      isEmpty: { negated: true, bail: true },
+      isWhitelisted: { options: identifierSafeChars, bail: true },
       custom: {
         options: async (value): Promise<void> =>
           unique({ model: DrinkwareSet, condition: { field: 'id', value } }),
@@ -22,8 +22,8 @@ export default validate(
     guideImageId: {
       in: ['body'],
       errorMessage: 'Enter valid Guide image ID.',
-      isString: true,
-      isEmpty: { negated: true },
+      isString: { bail: true },
+      isEmpty: { negated: true, bail: true },
       custom: {
         options: async (value): Promise<void> => {
           const guideImage = await GuideImage.findOne({ where: { id: value } });

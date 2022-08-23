@@ -12,8 +12,8 @@ export default validate(
     id: {
       in: ['body'],
       errorMessage: 'Language ID must be unique locale code.',
-      isLocale: true,
-      isEmpty: { negated: true },
+      isLocale: { bail: true },
+      isEmpty: { negated: true, bail: true },
       custom: {
         options: async (value): Promise<void> =>
           unique({ model: Language, condition: { field: 'id', value } }),

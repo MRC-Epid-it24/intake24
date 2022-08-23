@@ -19,7 +19,7 @@ export const identifiers: Schema = {
   email: {
     in: ['body'],
     errorMessage: 'Enter valid unique email address.',
-    isEmail: true,
+    isEmail: { bail: true },
     optional: { options: { nullable: true } },
     custom: {
       options: async (value, { req }): Promise<void> => {

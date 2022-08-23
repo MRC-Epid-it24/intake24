@@ -12,8 +12,8 @@ export default validate(
     id: {
       in: ['body'],
       errorMessage: 'As Served set ID must be unique code (charset [a-zA-Z0-9-_]).',
-      isEmpty: { negated: true },
-      isWhitelisted: { options: identifierSafeChars },
+      isEmpty: { negated: true, bail: true },
+      isWhitelisted: { options: identifierSafeChars, bail: true },
       custom: {
         options: async (value): Promise<void> =>
           unique({ model: AsServedSet, condition: { field: 'id', value } }),

@@ -46,13 +46,14 @@ export default validate(
     physicalActivityLevelId: {
       in: ['body'],
       errorMessage: 'Enter valid physical activity Level id.',
+      isString: { bail: true },
+      optional: { options: { nullable: true } },
       custom: {
         options: async (value): Promise<void> => {
           const level = await PhysicalActivityLevel.findOne({ where: { id: value } });
           if (!level) throw new Error('Enter valid physical activity Level id.');
         },
       },
-      optional: { options: { nullable: true } },
     },
     weightTarget: {
       in: ['body'],

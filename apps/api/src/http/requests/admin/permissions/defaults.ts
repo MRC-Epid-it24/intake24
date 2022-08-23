@@ -10,9 +10,9 @@ const defaults: Schema = {
   name: {
     in: ['body'],
     errorMessage: 'Name must be filled in (charset [a-zA-Z0-9-_]).',
-    isString: true,
-    isEmpty: { negated: true },
-    isWhitelisted: { options: `${identifierSafeChars}|` },
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
+    isWhitelisted: { options: `${identifierSafeChars}|`, bail: true },
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { permissionId } = (req as Request).params;

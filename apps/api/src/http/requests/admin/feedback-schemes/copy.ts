@@ -9,8 +9,8 @@ export default validate(
     name: {
       in: ['body'],
       errorMessage: 'Feedback scheme name must be unique.',
-      isString: true,
-      isEmpty: { negated: true },
+      isString: { bail: true },
+      isEmpty: { negated: true, bail: true },
       custom: {
         options: async (value): Promise<void> =>
           unique({ model: FeedbackScheme, condition: { field: 'name', value } }),

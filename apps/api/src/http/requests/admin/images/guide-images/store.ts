@@ -12,8 +12,8 @@ export default validate(
     id: {
       in: ['body'],
       errorMessage: 'Guide image ID must be unique code (charset [a-zA-Z0-9-_]).',
-      isEmpty: { negated: true },
-      isWhitelisted: { options: identifierSafeChars },
+      isEmpty: { negated: true, bail: true },
+      isWhitelisted: { options: identifierSafeChars, bail: true },
       custom: {
         options: async (value): Promise<void> =>
           unique({ model: GuideImage, condition: { field: 'id', value } }),
@@ -22,8 +22,8 @@ export default validate(
     imageMapId: {
       in: ['body'],
       errorMessage: 'Enter valid Image map ID.',
-      isString: true,
-      isEmpty: { negated: true },
+      isString: { bail: true },
+      isEmpty: { negated: true, bail: true },
       custom: {
         options: async (value): Promise<void> => {
           const imageMap = await ImageMap.findOne({ where: { id: value } });

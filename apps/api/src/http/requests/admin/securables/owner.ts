@@ -8,7 +8,7 @@ export default validate(
     ownerId: {
       in: ['body'],
       errorMessage: 'Invalid userId.',
-      isString: true,
+      isString: { bail: true },
       optional: { options: { nullable: true } },
       custom: {
         options: async (value): Promise<void> => {

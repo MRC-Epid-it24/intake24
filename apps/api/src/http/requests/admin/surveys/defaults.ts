@@ -13,8 +13,8 @@ export const defaults: Schema = {
   name: {
     in: ['body'],
     errorMessage: 'Name must be filled in.',
-    isString: true,
-    isEmpty: { negated: true },
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { surveyId } = (req as Request).params;
@@ -47,8 +47,8 @@ export const defaults: Schema = {
   surveySchemeId: {
     in: ['body'],
     errorMessage: 'Enter valid survey scheme.',
-    isString: true,
-    isEmpty: { negated: true },
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value): Promise<void> => {
         const scheme = await SurveyScheme.findOne({ where: { id: value } });
@@ -59,8 +59,8 @@ export const defaults: Schema = {
   localeId: {
     in: ['body'],
     errorMessage: 'Enter valid locale.',
-    isString: true,
-    isEmpty: { negated: true },
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value): Promise<void> => {
         const locale = await SystemLocale.findOne({ where: { id: value } });
@@ -88,7 +88,7 @@ export const defaults: Schema = {
   authUrlTokenCharset: {
     in: ['body'],
     errorMessage: 'Authentication URL Token charset must be a string of unique characters.',
-    isString: true,
+    isString: { bail: true },
     optional: { options: { nullable: true } },
     custom: {
       options: async (value: any): Promise<void> => {
@@ -134,7 +134,7 @@ export const defaults: Schema = {
   feedbackSchemeId: {
     in: ['body'],
     errorMessage: 'Enter valid feedback scheme.',
-    isString: true,
+    isString: { bail: true },
     optional: { options: { nullable: true } },
     custom: {
       options: async (value): Promise<void> => {

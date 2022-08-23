@@ -12,15 +12,16 @@ export default validate(
     slug: {
       in: ['body'],
       errorMessage: 'Survey ID must be unique string (charset [a-zA-Z0-9-_]).',
-      isString: true,
-      isEmpty: { negated: true },
-      isWhitelisted: { options: identifierSafeChars },
+      isString: { bail: true },
+      isEmpty: { negated: true, bail: true },
+      isWhitelisted: { options: identifierSafeChars, bail: true },
       custom: {
         options: async (value): Promise<void> =>
           unique({
             model: Survey,
             condition: { field: 'slug', value: slugify(value, { strict: true }) },
           }),
+        bail: true,
       },
       customSanitizer: {
         options: (value) => (typeof value === 'string' ? slugify(value, { strict: true }) : value),

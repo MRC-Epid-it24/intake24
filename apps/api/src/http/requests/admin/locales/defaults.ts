@@ -10,8 +10,8 @@ const defaults: Schema = {
   englishName: {
     in: ['body'],
     errorMessage: 'Enter unique english name.',
-    isString: true,
-    isEmpty: { negated: true },
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { localeId } = (req as Request).params;
@@ -28,8 +28,8 @@ const defaults: Schema = {
   localName: {
     in: ['body'],
     errorMessage: 'Enter unique local name.',
-    isString: true,
-    isEmpty: { negated: true },
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { localeId } = (req as Request).params;
@@ -46,8 +46,8 @@ const defaults: Schema = {
   respondentLanguageId: {
     in: ['body'],
     errorMessage: 'Enter valid language id.',
-    isString: true,
-    isEmpty: { negated: true },
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value): Promise<void> => {
         const language = await Language.findByPk(value);
@@ -58,8 +58,8 @@ const defaults: Schema = {
   adminLanguageId: {
     in: ['body'],
     errorMessage: 'Enter valid language id.',
-    isString: true,
-    isEmpty: { negated: true },
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value): Promise<void> => {
         const language = await Language.findByPk(value);
@@ -75,7 +75,7 @@ const defaults: Schema = {
   prototypeLocaleId: {
     in: ['body'],
     errorMessage: 'Enter valid locale.',
-    isString: true,
+    isString: { bail: true },
     optional: { options: { nullable: true } },
     custom: {
       options: async (value): Promise<void> => {

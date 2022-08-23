@@ -16,8 +16,8 @@ import { Op, SurveyScheme } from '@intake24/db';
 export const name: ParamSchema = {
   in: ['body'],
   errorMessage: 'Survey scheme name must be unique.',
-  isString: true,
-  isEmpty: { negated: true },
+  isString: { bail: true },
+  isEmpty: { negated: true, bail: true },
   custom: {
     options: async (value, { req }): Promise<void> => {
       const { surveySchemeId } = (req as Request).params;

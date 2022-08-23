@@ -13,8 +13,8 @@ export default validate(
     username: {
       in: ['body'],
       errorMessage: 'Username must be a unique string (no emails).',
-      isString: true,
-      isEmail: { negated: true },
+      isString: { bail: true },
+      isEmail: { negated: true, bail: true },
       custom: {
         options: async (value, { req }): Promise<void> => {
           const { surveyId } = (req as Request).params;

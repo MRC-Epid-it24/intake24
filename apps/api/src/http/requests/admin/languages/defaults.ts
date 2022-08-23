@@ -11,8 +11,8 @@ const defaults: Schema = {
   englishName: {
     in: ['body'],
     errorMessage: 'Enter unique english name.',
-    isString: true,
-    isEmpty: { negated: true },
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, { req }): Promise<void> => {
         const { languageId } = (req as Request).params;
