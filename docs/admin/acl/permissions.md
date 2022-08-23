@@ -3,7 +3,7 @@
 Permissions resource defines system-level implemented access control.
 
 ::: warning
-Usually, there is no need to create / edit / delete permissions as they are distributes as database migrations to ensure system functionality.
+Usually, there is no need to create / edit / delete permissions as they are distributed as database migrations to ensure system functionality.
 :::
 
 ## Detail

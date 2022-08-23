@@ -54,7 +54,9 @@ pnpm install
 
 Commit messages are restricted to follow `conventional-changelog` convention, adapted from [Angular's commit convention](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
 
-Please see [./github/commit-convention.md](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/commit-convention.md) for more details.
+Please see [`.github/commit-convention.md`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/commit-convention.md) for more details.
+
+Please see [`scripts/verify-commit.ts`](https://github.com/MRC-Epid-it24/intake24/blob/master/scripts/verify-commit.ts) for implementation.
 
 ## Code style
 

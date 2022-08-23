@@ -6,7 +6,7 @@ Generate random key (64 chars default length).
 pnpm cli -- generate-key
 ```
 
-Specific optional length of the key.
+Specify optional length of the key.
 
 ```sh
 pnpm cli -- generate-key --length 128

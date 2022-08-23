@@ -1,15 +1,18 @@
 <p align='center'>
+    <a href="https://github.com/MRC-Epid-it24/intake24/releases">
+        <img src="https://img.shields.io/github/package-json/version/MRC-Epid-it24/intake24/master?label=release&color=EF6C00" alt="release">
+    </a>
     <a href="https://nodejs.org/en/about/releases">
         <img src="https://img.shields.io/badge/node-%3E%3D%2014.20.0-success" alt="node compatibility">
     </a>
     <a href='https://github.com/MRC-Epid-it24/intake24/actions' target="__blank">
-        <img alt="Build Status" src='https://github.com/MRC-Epid-it24/intake24/workflows/CI/badge.svg' >
+        <img src='https://github.com/MRC-Epid-it24/intake24/workflows/CI/badge.svg' alt="Build Status">
     </a>
     <a href="https://github.com/MRC-Epid-it24/intake24/blob/master/LICENSE" target="__blank">
-        <img alt="License" src="https://img.shields.io/github/license/MRC-Epid-it24/intake24">
+        <img src="https://img.shields.io/github/license/MRC-Epid-it24/intake24" alt="License">
     </a>
     <a href="https://docs.intake24.org" target="__blank">
-        <img alt="Docs & Guides" src="https://img.shields.io/static/v1?label=&message=Docs%20%26%20Guides&color=EF6C00">
+        <img src="https://img.shields.io/static/v1?label=web&message=Docs%20%26%20Guides&color=EF6C00" alt="Docs & Guides">
     </a>
 </p>
 <br/>

@@ -13,16 +13,20 @@ export const sidebar = {
           link: '/overview/requirements',
         },
         {
-          text: 'Technology Stack',
-          link: '/overview/technology-stack',
-        },
-        {
           text: 'Source code',
           link: '/overview/source-code',
         },
         {
           text: 'Versioning',
           link: '/overview/versioning',
+        },
+        {
+          text: 'Releases',
+          link: '/overview/releases',
+        },
+        {
+          text: 'Technology Stack',
+          link: '/overview/technology-stack',
         },
         {
           text: 'Get started',
