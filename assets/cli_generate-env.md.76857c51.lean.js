@@ -1,0 +1,1 @@
+import{_ as e,c as a,o as n,a as s}from"./app.2868fdac.js";const v=JSON.parse('{"title":"Generate .env files","description":"","frontmatter":{},"headers":[],"relativePath":"cli/generate-env.md"}'),t={name:"cli/generate-env.md"},o=s("",6),c=[o];function i(p,l,r,d,_,f){return n(),a("div",null,c)}const m=e(t,[["render",i]]);export{v as __pageData,m as default};
