@@ -107,7 +107,6 @@ import type { VImg } from 'vuetify/lib';
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
-import { Resize } from 'vuetify/lib/directives';
 
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { EncodedFood, GuideImageState, LocaleTranslation } from '@intake24/common/types';
@@ -137,8 +136,6 @@ export default defineComponent({
   name: 'GuideImagePrompt',
 
   components: { ImagePlaceholder, QuantityCard },
-
-  directives: { Resize },
 
   mixins: [BasePortion, localeContent],
 

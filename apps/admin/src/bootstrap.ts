@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Intersect, Resize } from 'vuetify/lib/directives';
+import { Intersect, Resize, Ripple } from 'vuetify/lib/directives';
 
 import { auth, isMobile, loading, module } from './mixins';
 
@@ -14,3 +14,4 @@ Vue.mixin(module);
 
 Vue.directive('intersect', Intersect);
 Vue.directive('resize', Resize);
+Vue.directive('ripple', Ripple);

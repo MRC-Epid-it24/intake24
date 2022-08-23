@@ -56,15 +56,12 @@ import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
 import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
-import { Resize } from 'vuetify/lib/directives';
 
 import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 
 export default defineComponent({
   name: 'DrinkScalePanel',
-
-  directives: { Resize },
 
   components: { ImagePlaceholder },
 

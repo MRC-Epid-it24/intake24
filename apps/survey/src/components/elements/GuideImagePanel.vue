@@ -38,15 +38,12 @@ import type { VImg } from 'vuetify/lib';
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
-import { Resize } from 'vuetify/lib/directives';
 
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
 
 export default defineComponent({
   name: 'GuideImagePanel',
-
-  directives: { Resize },
 
   components: { ImagePlaceholder },
 
