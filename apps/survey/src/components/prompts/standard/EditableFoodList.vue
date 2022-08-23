@@ -7,22 +7,22 @@
         <v-text-field
           ref="foodsDrinksInput"
           v-model="newFoodDescription"
-          :placeholder="$t('prompts.editMeal.food')"
-          outlined
           hide-details
-          @keypress.enter.stop="addFood"
+          outlined
+          :placeholder="$t('prompts.editMeal.food')"
           @focusout="onEditFocusLost"
+          @keypress.enter.stop="addFood"
         ></v-text-field>
       </v-col>
       <v-col cols="4">
         <v-btn
           color="success"
+          :disabled="newFoodDescription.length === 0"
           elevation="2"
           x-large
-          :disabled="newFoodDescription.length === 0"
           @click="addFood"
         >
-          <v-icon style="transform: scaleX(-1)" class="mr-2">fa-arrow-turn-down</v-icon>
+          <v-icon class="mr-2" style="transform: scaleX(-1)">fa-arrow-turn-down</v-icon>
           {{ drinks ? $t('prompts.editMeal.addDrink') : $t('prompts.editMeal.addFood') }}
         </v-btn>
       </v-col>
@@ -38,8 +38,8 @@
         <v-text-field
           v-if="editIndex === idx"
           :value="foodDisplayName(editableList[idx])"
-          @keypress.enter.stop="addFood"
           @focusout="onEditFocusLost"
+          @keypress.enter.stop="addFood"
         ></v-text-field>
         <v-list-item-icon v-if="editIndex === idx">
           <v-btn icon @click="deleteFood">

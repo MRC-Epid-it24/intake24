@@ -7,10 +7,10 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.id"
-                :error-messages="form.errors.get('id')"
-                :label="$t('image-maps.id')"
                 disabled
+                :error-messages="form.errors.get('id')"
                 hide-details="auto"
+                :label="$t('image-maps.id')"
                 name="id"
                 outlined
               ></v-text-field>
@@ -19,8 +19,8 @@
               <v-text-field
                 v-model="form.description"
                 :error-messages="form.errors.get('description')"
-                :label="$t('common.description')"
                 hide-details="auto"
+                :label="$t('common.description')"
                 name="description"
                 outlined
               ></v-text-field>
@@ -32,10 +32,10 @@
           <v-alert
             v-for="error in nonInputErrors"
             :key="error.param"
-            outlined
-            type="error"
-            prominent
             border="left"
+            outlined
+            prominent
+            type="error"
           >
             {{ error.msg }}
           </v-alert>

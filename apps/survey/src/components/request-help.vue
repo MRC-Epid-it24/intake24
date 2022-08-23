@@ -4,9 +4,9 @@
       <slot name="activator" v-bind="{ on, attrs }">
         <v-btn
           v-bind="attrs"
-          :disabled="disabled"
           color="grey"
           dark
+          :disabled="disabled"
           :title="$t('common.help.title')"
           v-on="on"
         >
@@ -34,8 +34,8 @@
                 <v-text-field
                   v-model="form.name"
                   :error-messages="errors.get('name')"
-                  :label="$t('common.name')"
                   hide-details="auto"
+                  :label="$t('common.name')"
                   name="name"
                   outlined
                   prepend-icon="fas fa-user"
@@ -45,8 +45,8 @@
                 <v-text-field
                   v-model="form.phone"
                   :error-messages="errors.get('phone')"
-                  :label="$t('common.phone')"
                   hide-details="auto"
+                  :label="$t('common.phone')"
                   name="phone"
                   outlined
                   prepend-icon="fas fa-phone"
@@ -59,21 +59,21 @@
           <v-btn
             class="font-weight-bold"
             color="error"
-            :title="$t('common.action.cancel')"
             large
             text
+            :title="$t('common.action.cancel')"
             @click.stop="cancel"
           >
             <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
-            :disabled="errors.any()"
-            :title="$t('common.help.title')"
             class="font-weight-bold"
             color="blue darken-3"
+            :disabled="errors.any()"
             large
             text
+            :title="$t('common.help.title')"
             type="submit"
           >
             <v-icon left>fas fa-circle-question</v-icon>{{ $t('common.help.title') }}

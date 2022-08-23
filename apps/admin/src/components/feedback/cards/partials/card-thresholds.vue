@@ -8,17 +8,17 @@
           </v-card-title>
           <v-card-text>
             <v-switch
-              :input-value="!!item"
-              :label="$t('feedback-schemes.cards.thresholds.enabled')"
               class="my-4"
               hide-details="auto"
+              :input-value="!!item"
+              :label="$t('feedback-schemes.cards.thresholds.enabled')"
               @change="toggleThreshold(key, $event)"
             ></v-switch>
             <template v-if="item">
               <v-slider
                 v-model.number="item.threshold"
-                :label="$t('feedback-schemes.cards.thresholds._')"
                 class="mt-12"
+                :label="$t('feedback-schemes.cards.thresholds._')"
                 max="100"
                 min="0"
                 thumb-label="always"

@@ -2,12 +2,12 @@
   <guide-image-prompt
     ref="promptHandleChild"
     v-bind="{ promptProps }"
+    :continue-enabled="continueEnabled"
+    :conversion-factor="selectedPortionSize().conversionFactor"
     :food-name="foodName()"
     :guide-image-id="parameters['guide-image-id']"
-    :prompt-component="promptComponent"
-    :conversion-factor="selectedPortionSize().conversionFactor"
     :initial-state="initialStateNotNull"
-    :continue-enabled="continueEnabled"
+    :prompt-component="promptComponent"
     @continue="$emit('continue')"
     @update="onUpdate"
   >

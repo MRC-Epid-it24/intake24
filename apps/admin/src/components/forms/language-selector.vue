@@ -6,8 +6,8 @@
       <v-menu bottom left>
         <template #activator="{ on, attrs }">
           <v-btn
-            :disabled="!availableLanguages.length"
             color="secondary"
+            :disabled="!availableLanguages.length"
             fab
             small
             v-bind="attrs"
@@ -36,13 +36,13 @@
     <v-tabs-items v-model="selected">
       <v-tab-item v-for="lang in languages" :key="lang">
         <v-card-text>
-          <slot :name="`lang.${lang}`" :lang="lang"></slot>
+          <slot :lang="lang" :name="`lang.${lang}`"></slot>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            :disabled="doNotRemove.includes(languages[selected])"
             color="error"
+            :disabled="doNotRemove.includes(languages[selected])"
             text
             @click.stop="remove(languages[selected])"
           >

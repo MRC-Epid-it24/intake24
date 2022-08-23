@@ -26,62 +26,62 @@
       <v-col>
         <portion-size-option-prompt
           v-show="componentView == 0"
-          :prompt-props="testProps"
-          :food-name="foodName"
           :available-methods="portionMethods"
+          :food-name="foodName"
+          :prompt-props="testProps"
         ></portion-size-option-prompt>
 
         <as-served-prompt
           v-show="componentView == 1"
-          :prompt-props="asServedProps"
-          :food-name="foodName"
           :as-served-set-id="asServedSetId"
+          :food-name="foodName"
+          :prompt-props="asServedProps"
         ></as-served-prompt>
 
         <guideImagePrompt
           v-if="componentView == 3"
-          :prompt-props="asServedProps"
           :food-name="foodName"
           guide-image-id="Gcans"
+          :prompt-props="asServedProps"
         ></guideImagePrompt>
 
         <drink-scale-prompt
           v-show="componentView == 4"
-          :prompt-props="asServedProps"
           :food-name="'cream soda'"
+          :prompt-props="asServedProps"
         ></drink-scale-prompt>
 
         <standard-portion-prompt
           v-show="componentView == 5"
-          :prompt-props="asServedProps"
           :food-name="foodName"
+          :prompt-props="asServedProps"
         ></standard-portion-prompt>
 
         <cereal-prompt
           v-show="componentView == 6"
-          :prompt-props="asServedPropsCereal"
-          :food-name="foodName"
           :food-code="cerealFoodCode"
+          :food-name="foodName"
           :image-map-id="bowlGuideImageId"
           locale-t-e-m-p="en_GB"
+          :prompt-props="asServedPropsCereal"
         ></cereal-prompt>
 
         <pizza-prompt
           v-show="componentView == 8"
-          :prompt-props="asServedProps"
           :food-name="foodName"
+          :prompt-props="asServedProps"
         ></pizza-prompt>
 
         <milk-hot-drink-prompt
           v-show="componentView == 9"
-          :prompt-props="asServedProps"
           :food-name="foodName"
+          :prompt-props="asServedProps"
         ></milk-hot-drink-prompt>
 
         <direct-weight-prompt
           v-show="componentView == 10"
-          :prompt-props="asServedProps"
           :food-name="foodName"
+          :prompt-props="asServedProps"
         ></direct-weight-prompt>
       </v-col>
     </v-row>

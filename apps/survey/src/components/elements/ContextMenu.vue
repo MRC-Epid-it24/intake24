@@ -1,5 +1,5 @@
 <template>
-  <v-menu offset-y :close-on-click="true" :close-on-content-click="true">
+  <v-menu :close-on-click="true" :close-on-content-click="true" offset-y>
     <template #activator="{ on, attrs }">
       <v-btn icon v-bind="attrs" v-on="on">
         <v-icon x-small>{{ icon }}</v-icon>
@@ -19,7 +19,7 @@
                 @confirm="onClick(item.action)"
               >
                 <template #activator="{ on, attrs }">
-                  <v-btn text color="red" v-bind="attrs" small v-on="on">
+                  <v-btn color="red" v-bind="attrs" small text v-on="on">
                     {{ $t('prompts.editMeal.deleteMeal', { meal: entityName }) }}
                   </v-btn>
                 </template>

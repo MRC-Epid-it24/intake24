@@ -1,13 +1,13 @@
 <template>
   <v-card flat tile>
-    <v-toolbar flat tile color="grey lighten-2">
-      <v-icon left color="primary">fa-hamburger</v-icon>
+    <v-toolbar color="grey lighten-2" flat tile>
+      <v-icon color="primary" left>fa-hamburger</v-icon>
       <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
+        color="secondary"
         fab
         small
-        color="secondary"
         :title="$t('survey-schemes.meals.create')"
         @click.stop="add"
       >
@@ -51,13 +51,13 @@
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="meals" handle=".drag-and-drop__handle">
-        <transition-group type="transition" name="drag-and-drop">
+        <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(meal, index) in meals"
             :key="meal.name.en"
-            link
-            draggable
             class="drag-and-drop__item"
+            draggable
+            link
           >
             <v-list-item-avatar class="drag-and-drop__handle">
               <v-icon>fa-grip-vertical</v-icon>
@@ -73,10 +73,10 @@
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
-                :label="$t('survey-schemes.meals.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"
+                :label="$t('survey-schemes.meals.remove').toString()"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: meal.name.en }) }}
@@ -89,7 +89,7 @@
     <v-dialog v-model="dialog.show" max-width="600px" persistent>
       <v-card>
         <v-toolbar color="primary" dark flat>
-          <v-icon left dark>fa-hamburger</v-icon>
+          <v-icon dark left>fa-hamburger</v-icon>
           <v-toolbar-title>
             {{ $t(`survey-schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
@@ -98,27 +98,27 @@
         <v-form ref="form" @submit.prevent="save">
           <language-selector
             v-model="dialog.meal.name"
-            :label="$t('survey-schemes.meals.name').toString()"
             flat
+            :label="$t('survey-schemes.meals.name').toString()"
             :outlined="false"
           >
             <template v-for="lang in Object.keys(dialog.meal.name)" #[`lang.${lang}`]>
               <v-text-field
                 :key="lang"
                 v-model="dialog.meal.name[lang]"
-                :label="$t('survey-schemes.meals.name')"
-                :rules="rules(lang)"
                 hide-details="auto"
+                :label="$t('survey-schemes.meals.name')"
                 outlined
+                :rules="rules(lang)"
               ></v-text-field>
             </template>
           </language-selector>
           <v-card-text>
             <v-time-picker
               v-model="dialog.meal.time"
-              :landscape="$vuetify.breakpoint.smAndUp"
               format="24hr"
               full-width
+              :landscape="$vuetify.breakpoint.smAndUp"
             ></v-time-picker>
           </v-card-text>
           <v-card-actions>

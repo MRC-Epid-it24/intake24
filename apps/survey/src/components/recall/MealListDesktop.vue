@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-list dense nav class="flex-grow-1 flex-shrink-0">
+    <v-list class="flex-grow-1 flex-shrink-0" dense nav>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title"> {{ $t('recall._') }} </v-list-item-title>
@@ -9,23 +9,23 @@
           </v-list-item-subtitle>
         </v-list-item-content>
         <context-menu
-          :menu="menuRecall"
           :icon="menuRecallIcon"
+          :menu="menuRecall"
           @context-menu-action="onRecallAction"
         >
         </context-menu>
       </v-list-item>
       <v-divider></v-divider>
       <v-card-text class="scroll-y" style="height: 40rem">
-        <v-list-item v-for="meal in meals" :key="meal.id" :ripple="false" :inactive="true" link>
+        <v-list-item v-for="meal in meals" :key="meal.id" :inactive="true" link :ripple="false">
           <v-list-item-content>
             <meal-item
               :meal="meal"
-              @meal-action="onMealAction"
-              @food-selected="onFoodSelected"
-              @meal-selected="onMealSelected"
-              @breadcrumbMeal="chooseMealUp(meal.name.en)"
               @breadcrumbFood="chooseFoodUp"
+              @breadcrumbMeal="chooseMealUp(meal.name.en)"
+              @food-selected="onFoodSelected"
+              @meal-action="onMealAction"
+              @meal-selected="onMealSelected"
             ></meal-item>
           </v-list-item-content>
         </v-list-item>
@@ -34,9 +34,9 @@
     <v-card-actions>
       <v-hover v-slot="{ hover }">
         <v-btn
+          block
           :color="hover ? 'success' : 'inherit'"
           elevation="0"
-          block
           @click="onRecallAction('add-meal')"
         >
           {{ $t('recall.menu.recall.addMeal') }}

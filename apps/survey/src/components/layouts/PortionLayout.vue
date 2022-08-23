@@ -7,7 +7,7 @@
             <slot name="headerText"></slot>
           </v-card-text>
         </v-col>
-        <v-col cols="auto" class="mx-2">
+        <v-col class="mx-2" cols="auto">
           <v-btn color="primary">{{ $t('common.help') }}</v-btn>
         </v-col>
       </v-row>

@@ -28,25 +28,25 @@
         <v-list-item-action>
           <v-icon
             v-if="scheme.synced"
-            :title="$t('survey-scheme-questions.sync.true')"
             color="success"
             large
+            :title="$t('survey-scheme-questions.sync.true')"
           >
             fa-check-circle
           </v-icon>
           <confirm-dialog
             v-else
-            :label="$t('survey-scheme-questions.sync.synchronize')"
             color="warning"
             icon
             icon-left="fa-sync"
+            :label="$t('survey-scheme-questions.sync.synchronize')"
             @confirm="sync(scheme)"
           >
             <template #activator="{ attrs, on }">
               <v-btn
                 v-bind="attrs"
-                :title="$t('survey-scheme-questions.sync.false')"
                 icon
+                :title="$t('survey-scheme-questions.sync.false')"
                 v-on="on"
               >
                 <v-icon color="warning" large>fa-sync</v-icon>

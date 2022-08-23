@@ -2,10 +2,10 @@
   <v-bottom-navigation
     v-model="tabIndex"
     app
+    background-color="secondary"
+    :color="color"
     fixed
     grow
-    :color="color"
-    background-color="secondary"
   >
     <v-btn @click="onItemClick(0)">
       <span>Add meal</span>
@@ -18,8 +18,8 @@
     </v-btn>
 
     <v-btn
-      :disabled="!isContinueEnabled()"
       :color="canContinue ? 'success' : 'primary'"
+      :disabled="!isContinueEnabled()"
       @click="onItemClick(2)"
     >
       <span>{{ $t('common.action.continue') }}</span>

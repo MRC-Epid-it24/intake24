@@ -2,9 +2,9 @@
   <div>
     <prompt-content
       v-bind="{ name, text, description }"
+      @update:description="update('description', $event)"
       @update:name="update('name', $event)"
       @update:text="update('text', $event)"
-      @update:description="update('description', $event)"
     ></prompt-content>
     <prompt-conditions
       :conditions="conditions"
@@ -14,17 +14,17 @@
       <v-row>
         <v-col cols="12">
           <v-switch
+            hide-details="auto"
             :input-value="allowBrowsing"
             :label="$t('survey-schemes.foodSearch.allowBrowsing')"
-            hide-details="auto"
             @change="update('allowBrowsing', $event)"
           ></v-switch>
         </v-col>
         <v-col cols="12">
           <v-switch
+            hide-details="auto"
             :input-value="dualLanguage"
             :label="$t('survey-schemes.foodSearch.dualLanguage')"
-            hide-details="auto"
             @change="update('dualLanguage', $event)"
           ></v-switch>
         </v-col>

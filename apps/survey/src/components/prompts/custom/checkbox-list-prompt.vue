@@ -6,24 +6,24 @@
         v-for="option in localeOptions"
         :key="option.value"
         v-model="selected"
+        class="mt-2"
         :error="hasErrors"
+        hide-details="auto"
         :label="option.label"
         :value="option.value"
-        class="mt-2"
-        hide-details="auto"
         @change="clearErrors"
       ></v-checkbox>
       <v-row v-if="other" align="center" no-gutters>
-        <v-checkbox v-model="otherEnabled" hide-details class="mt-0 pb-2"></v-checkbox>
+        <v-checkbox v-model="otherEnabled" class="mt-0 pb-2" hide-details></v-checkbox>
         <v-text-field
           v-model.trim="otherValue"
-          :error="hasErrors && otherEnabled"
           :disabled="!otherEnabled"
+          :error="hasErrors && otherEnabled"
           :label="$t('prompts.checkbox.other')"
           @input="clearErrors"
         ></v-text-field>
       </v-row>
-      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+      <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
       <continue @click.native="submit"></continue>

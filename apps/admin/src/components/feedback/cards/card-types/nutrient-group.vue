@@ -2,8 +2,8 @@
   <div>
     <card-content
       v-bind="{ name, description }"
-      @update:name="update('name', $event)"
       @update:description="update('description', $event)"
+      @update:name="update('name', $event)"
     ></card-content>
     <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)"></card-unit>
     <card-thresholds
@@ -17,7 +17,7 @@
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('nutrient-types.current') }}</v-card-title>
             <v-list>
-              <transition-group type="transition" name="drag-and-drop">
+              <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
                   v-for="(nutrientType, idx) in currentNutrientTypes"
                   :key="nutrientType.id"
@@ -44,14 +44,14 @@
             <v-card-title>{{ $t('nutrient-types.available') }}</v-card-title>
             <v-text-field
               v-model="search"
-              :label="$t('nutrient-types._')"
               clearable
               hide-details="auto"
-              prepend-inner-icon="fas fa-search"
+              :label="$t('nutrient-types._')"
               outlined
+              prepend-inner-icon="fas fa-search"
             ></v-text-field>
             <v-list>
-              <transition-group type="transition" name="drag-and-drop">
+              <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
                   v-for="nutrientType in visibleNutrientTypes"
                   :key="nutrientType.id"

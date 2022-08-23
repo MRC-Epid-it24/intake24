@@ -5,9 +5,9 @@
         <v-card
           :class="{ 'mt-10': !isMobile }"
           :flat="isMobile"
-          :tile="isMobile"
           :loading="loading"
           max-width="32rem"
+          :tile="isMobile"
         >
           <v-sheet class="d-flex justify-center" color="deep-orange lighten-5" tile>
             <v-card-title>
@@ -38,7 +38,7 @@
                 <h4 class="my-2">{{ $t('common.username') }}: {{ username }}</h4>
                 <h4 class="my-2">{{ $t('common.password') }}: {{ password }}</h4>
               </v-sheet>
-              <v-alert v-else type="error" dark>
+              <v-alert v-else dark type="error">
                 {{ $t(`survey.generateUser.${status}`, { surveyId: survey?.name ?? surveyId }) }}
               </v-alert>
             </template>
@@ -52,7 +52,7 @@
             </p>
           </v-card-text>
           <v-card-actions class="px-6 pb-6">
-            <v-btn block color="secondary" x-large :disabled="!canContinue" @click="login">
+            <v-btn block color="secondary" :disabled="!canContinue" x-large @click="login">
               {{ $t('common.action.continue') }}
             </v-btn>
           </v-card-actions>
@@ -62,8 +62,8 @@
               :is="captcha.provider"
               ref="captchaRef"
               :sitekey="captcha.sitekey"
-              @verified="verified"
               @expired="expired"
+              @verified="verified"
             ></component>
           </div>
         </v-card>

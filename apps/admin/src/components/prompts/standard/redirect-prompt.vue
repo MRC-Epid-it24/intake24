@@ -2,9 +2,9 @@
   <div>
     <prompt-content
       v-bind="{ name, text, description, textRequired: true }"
+      @update:description="update('description', $event)"
       @update:name="update('name', $event)"
       @update:text="update('text', $event)"
-      @update:description="update('description', $event)"
     ></prompt-content>
     <prompt-conditions
       :conditions="conditions"
@@ -17,23 +17,23 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field
-              :value="url"
-              :label="$t('survey-schemes.redirect.url._')"
-              :hint="$t('survey-schemes.redirect.url.hint')"
-              persistent-hint
               hide-details="auto"
+              :hint="$t('survey-schemes.redirect.url.hint')"
+              :label="$t('survey-schemes.redirect.url._')"
               name="url"
               outlined
+              persistent-hint
+              :value="url"
               @input="update('url', $event)"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
             <v-select
-              :value="identifier"
+              hide-details="auto"
               :items="identifiers"
               :label="$t('survey-schemes.redirect.identifier._')"
-              hide-details="auto"
               outlined
+              :value="identifier"
               @change="update('identifier', $event)"
             ></v-select>
           </v-col>
@@ -44,12 +44,12 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field
-              :value="timer"
-              :label="$t('survey-schemes.redirect.timer._')"
-              :rules="timerRules"
               hide-details="auto"
+              :label="$t('survey-schemes.redirect.timer._')"
               name="timer"
               outlined
+              :rules="timerRules"
+              :value="timer"
               @input="updateTimerValue"
             ></v-text-field>
           </v-col>

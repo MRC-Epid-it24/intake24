@@ -7,8 +7,8 @@
     transition="dialog-bottom-transition"
   >
     <v-card tile>
-      <v-toolbar dark color="primary">
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
+      <v-toolbar color="primary" dark>
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -16,7 +16,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-btn :title="$t('common.action.ok')" dark text @click.stop="save">
+          <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
             <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
@@ -50,20 +50,20 @@
                           <v-text-field
                             v-model="dialog.question.id"
                             :disabled="isOverrideMode"
-                            :readonly="dialog.question.type !== 'custom'"
-                            :label="$t('survey-schemes.questions.internal.id._')"
-                            :rules="questionIdRules"
                             hide-details="auto"
+                            :label="$t('survey-schemes.questions.internal.id._')"
                             :messages="$t('survey-schemes.questions.internal.id.hint')"
                             outlined
+                            :readonly="dialog.question.type !== 'custom'"
+                            :rules="questionIdRules"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" md="6">
                           <v-text-field
                             v-model="dialog.question.name"
                             :disabled="isOverrideMode"
-                            :label="$t('survey-schemes.questions.internal.name._')"
                             hide-details="auto"
+                            :label="$t('survey-schemes.questions.internal.name._')"
                             :messages="$t('survey-schemes.questions.internal.name.hint')"
                             outlined
                           ></v-text-field>
@@ -100,8 +100,8 @@
                         <prompt-type-selector
                           v-for="(questions, type) in availablePromptQuestions"
                           :key="type"
-                          :type="type"
                           :questions="questions"
+                          :type="type"
                         ></prompt-type-selector>
                       </v-tabs-items>
                     </v-item-group>

@@ -1,9 +1,9 @@
 <template>
   <v-container :class="{ 'pa-0': isMobile }">
     <v-row justify="center" :no-gutters="isMobile">
-      <v-col cols="12" sm="9" md="8">
+      <v-col cols="12" md="8" sm="9">
         <v-card v-if="profile" :flat="isMobile" :tile="isMobile">
-          <v-list two-line subheader>
+          <v-list subheader two-line>
             <v-subheader>{{ $t('profile.info') }}</v-subheader>
             <v-list-item>
               <v-list-item-avatar>
@@ -29,7 +29,7 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-list subheader two-line flat>
+          <v-list flat subheader two-line>
             <v-subheader>{{ $t('profile.settings') }}</v-subheader>
             <v-list-item>
               <v-list-item-avatar>
@@ -38,11 +38,11 @@
               <v-list-item-content>
                 <v-select
                   v-model="language"
-                  :items="languages"
-                  :label="$t('profile.languages._')"
+                  hide-details="auto"
                   item-text="englishName"
                   item-value="id"
-                  hide-details="auto"
+                  :items="languages"
+                  :label="$t('profile.languages._')"
                   outlined
                   @change="updateLanguage"
                 ></v-select>

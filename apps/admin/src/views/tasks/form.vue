@@ -3,10 +3,10 @@
     <template #actions>
       <confirm-dialog
         v-if="!isCreate && can({ action: 'edit' })"
-        :label="$t('tasks.run._').toString()"
         :activator-class="['ml-2']"
         color="secondary"
         icon-left="fas fa-play"
+        :label="$t('tasks.run._').toString()"
         @confirm="triggerJob"
       >
         {{ $t('tasks.run.confirm') }}
@@ -21,8 +21,8 @@
                 v-model="form.name"
                 :disabled="isEdit"
                 :error-messages="form.errors.get('name')"
-                :label="$t('common.name')"
                 hide-details="auto"
+                :label="$t('common.name')"
                 name="name"
                 outlined
               ></v-text-field>
@@ -30,10 +30,10 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="form.job"
-                :items="jobs"
                 :error-messages="form.errors.get('job')"
-                :label="$t('tasks.job')"
                 hide-details="auto"
+                :items="jobs"
+                :label="$t('tasks.job')"
                 name="job"
                 outlined
                 @change="jobChanged"
@@ -43,8 +43,8 @@
               <v-text-field
                 v-model="form.cron"
                 :error-messages="form.errors.get('cron')"
-                :label="$t('tasks.cron')"
                 hide-details="auto"
+                :label="$t('tasks.cron')"
                 name="cron"
                 outlined
               >
@@ -64,8 +64,8 @@
               <v-switch
                 v-model="form.active"
                 :error-messages="form.errors.get('active')"
-                :label="$t('common.action.active')"
                 hide-details="auto"
+                :label="$t('common.action.active')"
                 name="active"
               ></v-switch>
             </v-col>
@@ -73,8 +73,8 @@
               <v-textarea
                 v-model="form.description"
                 :error-messages="form.errors.get('description')"
-                :label="$t('common.description')"
                 hide-details="auto"
+                :label="$t('common.description')"
                 name="description"
                 outlined
               ></v-textarea>
@@ -85,8 +85,8 @@
             v-if="Object.keys(form.params).length"
             v-model="form.params"
             :error="form.errors.get('params')"
-            :refs="refs"
             name="params"
+            :refs="refs"
             @input="form.errors.clear('params')"
           ></component>
           <submit-footer :disabled="form.errors.any()"></submit-footer>

@@ -1,15 +1,15 @@
 <template>
   <div>
-    <v-toolbar flat tile color="grey lighten-5">
-      <v-icon left color="primary">fas fa-people-arrows</v-icon>
+    <v-toolbar color="grey lighten-5" flat tile>
+      <v-icon color="primary" left>fas fa-people-arrows</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.demographic-groups.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
+        color="secondary"
         fab
         small
-        color="secondary"
         :title="$t('feedback-schemes.demographic-groups.create')"
         @click.stop="add"
       >
@@ -33,13 +33,13 @@
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="items" handle=".drag-and-drop__handle">
-        <transition-group type="transition" name="drag-and-drop">
+        <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(group, index) in items"
             :key="group.id"
-            link
-            draggable
             class="drag-and-drop__item"
+            draggable
+            link
           >
             <v-list-item-avatar class="drag-and-drop__handle">
               <v-icon>fa-grip-vertical</v-icon>
@@ -60,10 +60,10 @@
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
-                :label="$t('feedback-schemes.demographic-groups.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"
+                :label="$t('feedback-schemes.demographic-groups.remove').toString()"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: getListItemTitle(group) }) }}
@@ -82,7 +82,7 @@
     >
       <v-card>
         <v-toolbar color="primary" dark>
-          <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
+          <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
             <v-icon>$cancel</v-icon>
           </v-btn>
           <v-toolbar-title>
@@ -93,7 +93,7 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn :title="$t('common.action.ok')" dark text @click.stop="save">
+            <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
               <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
@@ -116,11 +116,11 @@
                     <v-col cols="12" md="6">
                       <v-autocomplete
                         v-model="dialog.item.nutrientTypeId"
-                        :items="nutrientTypes"
-                        :label="$t('nutrient-types._')"
                         hide-details="auto"
                         item-text="description"
                         item-value="id"
+                        :items="nutrientTypes"
+                        :label="$t('nutrient-types._')"
                         name="nutrientTypeId"
                         outlined
                         prepend-icon="fas fa-seedling"
@@ -129,9 +129,9 @@
                     <v-col cols="12" md="6">
                       <v-select
                         v-model="dialog.item.nutrientRuleType"
+                        hide-details="auto"
                         :items="nutrientRuleTypes"
                         :label="$t('feedback-schemes.nutrientRuleTypes._')"
-                        hide-details="auto"
                         name="nutrientRuleType"
                         outlined
                         prepend-icon="fas fa-divide"
@@ -140,9 +140,9 @@
                     <v-col cols="12" md="6">
                       <v-select
                         v-model="dialog.item.sex"
+                        hide-details="auto"
                         :items="sexes"
                         :label="$t('feedback-schemes.sexes._')"
-                        hide-details="auto"
                         name="sex"
                         outlined
                         prepend-icon="fas fa-genderless"
@@ -160,11 +160,11 @@
                     <v-col cols="12" md="6">
                       <v-select
                         v-model="dialog.item.physicalActivityLevelId"
-                        :items="physicalActivityLevels"
-                        :label="$t('feedback-schemes.physicalActivityLevels._')"
                         hide-details="auto"
                         item-text="name"
                         item-value="id"
+                        :items="physicalActivityLevels"
+                        :label="$t('feedback-schemes.physicalActivityLevels._')"
                         name="physicalActivityLevelId"
                         outlined
                         prepend-icon="fas fa-running"

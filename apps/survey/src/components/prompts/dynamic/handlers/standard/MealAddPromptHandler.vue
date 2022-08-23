@@ -1,10 +1,10 @@
 <template>
   <meal-add-prompt
-    :prompt-props="promptProps"
-    :prompt-component="promptComponent"
     :list="mealsList"
-    @addMeal="onAnswer"
+    :prompt-component="promptComponent"
+    :prompt-props="promptProps"
     @abortMeal="onAbort"
+    @addMeal="onAnswer"
     @tempChanging="onTempChange"
   >
   </meal-add-prompt>

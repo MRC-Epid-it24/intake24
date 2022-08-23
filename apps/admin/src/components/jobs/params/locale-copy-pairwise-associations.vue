@@ -5,21 +5,21 @@
       <v-row>
         <v-col cols="12">
           <v-text-field
-            :value="value.sourceLocaleId"
-            :label="$t('jobs.types.LocaleCopyPairwiseAssociations.sourceLocaleId')"
             hide-details="auto"
+            :label="$t('jobs.types.LocaleCopyPairwiseAssociations.sourceLocaleId')"
             name="sourceLocaleId"
             outlined
+            :value="value.sourceLocaleId"
             @input="input('sourceLocaleId', $event)"
           ></v-text-field>
         </v-col>
         <v-col cols="12">
           <v-text-field
-            :value="value.targetLocaleId"
-            :label="$t('jobs.types.LocaleCopyPairwiseAssociations.targetLocaleId')"
             hide-details="auto"
+            :label="$t('jobs.types.LocaleCopyPairwiseAssociations.targetLocaleId')"
             name="targetLocaleId"
             outlined
+            :value="value.targetLocaleId"
             @input="input('targetLocaleId', $event)"
           ></v-text-field>
         </v-col>

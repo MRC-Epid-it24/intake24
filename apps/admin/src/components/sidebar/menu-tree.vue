@@ -1,6 +1,6 @@
 <template>
   <v-list dense nav>
-    <v-list-group value="true" color="grey lighten-1" :prepend-icon="icon">
+    <v-list-group color="grey lighten-1" :prepend-icon="icon" value="true">
       <template #activator>
         <v-list-item-title>{{ $t(`common.${name}`) }}</v-list-item-title>
       </template>

@@ -14,7 +14,7 @@
     </template>
     <v-card :loading="isLoading">
       <v-toolbar color="primary" dark flat>
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -41,27 +41,27 @@
                 <v-col cols="12">
                   <template v-if="isEdit && selected">
                     <v-text-field
-                      :error-messages="form.errors.get('userId')"
-                      :label="$t('users.email')"
-                      :value="`${selected.email} / ${selected.name}`"
-                      name="userId"
                       disabled
+                      :error-messages="form.errors.get('userId')"
                       hide-details="auto"
+                      :label="$t('users.email')"
+                      name="userId"
                       outlined
                       prepend-icon="fas fa-user"
+                      :value="`${selected.email} / ${selected.name}`"
                     ></v-text-field>
                   </template>
                   <template v-else>
                     <auto-complete
                       v-model="form.userId"
-                      :error-messages="form.errors.get('userId')"
-                      :label="$t('users.email')"
                       :api="`${api}/users`"
                       clearable
+                      :error-messages="form.errors.get('userId')"
                       hide-no-data
                       hide-selected
                       item-text="email"
                       item-value="id"
+                      :label="$t('users.email')"
                       name="userId"
                       prepend-icon="fas fa-users"
                       @input="form.errors.clear('userId')"
@@ -79,8 +79,8 @@
                     <v-text-field
                       v-model="form.email"
                       :error-messages="form.errors.get('email')"
-                      :label="$t('users.email')"
                       hide-details="auto"
+                      :label="$t('users.email')"
                       name="email"
                       outlined
                       prepend-icon="fa-at"
@@ -90,8 +90,8 @@
                     <v-text-field
                       v-model="form.name"
                       :error-messages="form.errors.get('name')"
-                      :label="$t('users.name')"
                       hide-details="auto"
+                      :label="$t('users.name')"
                       name="name"
                       outlined
                       prepend-icon="fa-user"
@@ -101,8 +101,8 @@
                     <v-text-field
                       v-model="form.phone"
                       :error-messages="form.errors.get('phone')"
-                      :label="$t('users.phone')"
                       hide-details="auto"
+                      :label="$t('users.phone')"
                       name="phone"
                       outlined
                       prepend-icon="fa-phone"
@@ -119,10 +119,10 @@
             <v-col v-for="action in actions" :key="action" cols="12" sm="6">
               <v-checkbox
                 v-model="form.actions"
-                :label="$t(`${resource}.securables.actions.${action}`)"
-                :value="action"
                 dense
+                :label="$t(`${resource}.securables.actions.${action}`)"
                 :prepend-icon="form.actions.includes(action) ? `fas fa-unlock` : `fas fa-lock`"
+                :value="action"
                 @change="form.errors.clear('actions')"
               >
               </v-checkbox>
@@ -147,9 +147,9 @@
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
-            :disabled="form.errors.any()"
             class="font-weight-bold"
             color="blue darken-3"
+            :disabled="form.errors.any()"
             text
             type="submit"
           >

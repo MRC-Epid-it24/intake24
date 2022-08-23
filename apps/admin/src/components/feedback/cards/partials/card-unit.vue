@@ -8,10 +8,10 @@
         <v-text-field
           :key="lang"
           v-model="internalUnit.name[lang]"
-          :label="$t('feedback-schemes.cards.unit.name')"
-          :rules="nameRules"
           hide-details="auto"
+          :label="$t('feedback-schemes.cards.unit.name')"
           outlined
+          :rules="nameRules"
         ></v-text-field>
       </template>
     </language-selector>

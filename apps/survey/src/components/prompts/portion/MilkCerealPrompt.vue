@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <portion-layout :text="text" :description="description">
+    <portion-layout :description="description" :text="text">
       <template #headerText> [Associated prompt] {{ $t('portion.milkCereal.label') }} </template>
       <v-row>
         <v-col>

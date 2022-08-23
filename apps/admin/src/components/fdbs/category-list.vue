@@ -7,8 +7,8 @@
       <v-spacer></v-spacer>
       <add-category-dialog
         v-if="!disabled"
-        :locale-id="localeId"
         :current-items="items"
+        :locale-id="localeId"
         @add="add"
       ></add-category-dialog>
     </v-toolbar>
@@ -23,10 +23,10 @@
           </v-list-item-content>
           <v-list-item-action v-if="!disabled">
             <confirm-dialog
-              :label="$t('fdbs.categories.remove').toString()"
               color="error"
               icon
               icon-left="$delete"
+              :label="$t('fdbs.categories.remove').toString()"
               @confirm="remove(item.code)"
             >
               {{ $t('common.action.confirm.delete', { name: item.name }) }}

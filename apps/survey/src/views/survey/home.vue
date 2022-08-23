@@ -4,10 +4,10 @@
     <v-row justify="center">
       <v-col cols="auto">
         <v-btn
-          x-large
           class="pa-6"
           color="success"
           :to="{ name: 'survey-recall', params: { surveyId } }"
+          x-large
         >
           Dynamic recall
         </v-btn>
@@ -16,10 +16,10 @@
     <v-row justify="center">
       <v-col cols="auto">
         <v-btn
-          x-large
           class="pa-6"
           color="success"
           :to="{ name: 'survey-portion-test', params: { surveyId } }"
+          x-large
         >
           Portions test
         </v-btn>

@@ -30,7 +30,7 @@
         <v-card-text>
           <v-row>
             <v-col cols="12" sm="6">
-              <v-btn block outlined x-large :href="user.feedbackAuthUrl" target="_blank">
+              <v-btn block :href="user.feedbackAuthUrl" outlined target="_blank" x-large>
                 <v-icon left>fas fa-up-right-from-square</v-icon>
                 {{ $t(`surveys.respondents.feedback.open`) }}
               </v-btn>
@@ -56,8 +56,8 @@
                 <v-text-field
                   v-model="form.email"
                   :error-messages="form.errors.get('email')"
-                  :label="$t('users.email')"
                   hide-details="auto"
+                  :label="$t('users.email')"
                   name="email"
                   outlined
                   prepend-icon="fas fa-envelope"
@@ -82,8 +82,8 @@
                   </v-radio>
                 </v-radio-group>
               </v-col>
-              <v-col cols="12" sm="auto" class="ml-auto">
-                <v-btn type="submit" color="secondary" x-large block :disabled="form.errors.any()">
+              <v-col class="ml-auto" cols="12" sm="auto">
+                <v-btn block color="secondary" :disabled="form.errors.any()" type="submit" x-large>
                   <v-icon left>fas fa-envelope</v-icon>
                   {{ $t('surveys.respondents.feedback.email.sent') }}
                 </v-btn>

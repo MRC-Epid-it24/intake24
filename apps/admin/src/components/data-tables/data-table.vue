@@ -1,12 +1,12 @@
 <template>
   <div>
     <tool-bar :actions="actions" :api="api" :selected="tracked" @refresh="onRefresh"></tool-bar>
-    <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
+    <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
       <v-card-text>
         <data-table-filter
           :count="meta.total"
-          @filter-set="setFilter"
           @filter-reset="resetFilter"
+          @filter-set="setFilter"
         ></data-table-filter>
         <v-data-table
           v-model="selected"
@@ -14,13 +14,13 @@
             'items-per-page-options': [25, 50, 100],
           }"
           :headers="headers"
-          :items="items"
           item-key="id"
+          :items="items"
           :items-per-page="50"
-          :options.sync="options"
-          show-select
           :loading="isAppLoading"
+          :options.sync="options"
           :server-items-length="meta.total"
+          show-select
         >
           <template v-for="(_, scopedSlotName) in $scopedSlots" #[scopedSlotName]="slotData">
             <slot :name="scopedSlotName" v-bind="slotData" />
@@ -29,8 +29,8 @@
             <action-bar
               :actions="actions.filter((action) => action !== 'create')"
               :api="api"
-              :item="item"
               class="text-right"
+              :item="item"
               @refresh="onRefresh"
             ></action-bar>
           </template>

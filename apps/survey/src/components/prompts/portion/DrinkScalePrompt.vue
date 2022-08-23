@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <portion-layout :text="promptProps.text" :description="description">
+    <portion-layout :description="description" :text="promptProps.text">
       <template #headerText>
         {{ localeDescription }}
       </template>
@@ -45,19 +45,19 @@
                 <drink-scale-panel
                   v-if="dataLoaded"
                   :drinkware-set-api-response="drinkwareSetData"
-                  :selected-image-url="selectionImageUrl"
                   :selected-image-overlay-url="selectedImageOverlayUrl"
-                  :selected-slider-value="sliderValue"
+                  :selected-image-url="selectionImageUrl"
                   :selected-max-slider-value="maxSliderValue"
                   :selected-min-slider-value="minFillLevel"
                   :selected-origin-image-height="originalImageUrlHeight"
                   :selected-origin-image-width="originalImageUrlWidth"
+                  :selected-slider-value="sliderValue"
                   @drink-scale-value="dragSlider"
                 >
                 </drink-scale-panel>
                 <v-row v-if="hasErrors">
                   <v-col>
-                    <v-alert color="error" class="ma-0">
+                    <v-alert class="ma-0" color="error">
                       <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
                     </v-alert>
                   </v-col>
@@ -88,7 +88,7 @@
         <v-col>
           <v-form ref="form" @submit.prevent="submit">
             <!-- Should be disabled if nothing selected? -->
-            <continue :disabled="!continueEnabled" class="px-2" @click="submit"></continue>
+            <continue class="px-2" :disabled="!continueEnabled" @click="submit"></continue>
           </v-form>
         </v-col>
       </v-row>

@@ -1,8 +1,8 @@
 <template>
   <div>
     <h2 class="mb-4">{{ $t('user._') }}</h2>
-    <v-card v-if="profile" :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
-      <v-list two-line subheader>
+    <v-card v-if="profile" :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
+      <v-list subheader two-line>
         <v-subheader>{{ $t('user.info') }}</v-subheader>
         <v-list-item>
           <v-list-item-avatar>
@@ -49,7 +49,7 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <v-list two-line subheader>
+      <v-list subheader two-line>
         <v-subheader>{{ $t('user.access') }}</v-subheader>
         <v-list-item>
           <v-list-item-avatar>
@@ -77,7 +77,7 @@
       <v-divider></v-divider>
       <v-row no-gutters>
         <v-col cols="12" md="6">
-          <v-list subheader two-line flat>
+          <v-list flat subheader two-line>
             <v-subheader>{{ $t('user.settings') }}</v-subheader>
             <v-list-item>
               <v-list-item-avatar>
@@ -86,11 +86,11 @@
               <v-list-item-content>
                 <v-select
                   v-model="language"
-                  :items="languages"
-                  :label="$t('user.languages._')"
+                  hide-details="auto"
                   item-text="englishName"
                   item-value="id"
-                  hide-details="auto"
+                  :items="languages"
+                  :label="$t('user.languages._')"
                   outlined
                   @change="updateLanguage"
                 >

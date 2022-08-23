@@ -2,8 +2,8 @@
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <embedded-data-table
       ref="table"
-      :headers="headers"
       :api="`admin/surveys/${id}/respondents`"
+      :headers="headers"
       track-by="userId"
     >
       <template #header-add>
@@ -15,7 +15,7 @@
           </template>
           <v-card :loading="loading">
             <v-toolbar color="primary" dark flat>
-              <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
+              <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
                 <v-icon>$cancel</v-icon>
               </v-btn>
               <v-toolbar-title>
@@ -34,11 +34,11 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="form.username"
+                        autocomplete="username"
                         :disabled="!isCreate"
                         :error-messages="form.errors.get('username')"
-                        :label="$t('users.username')"
-                        autocomplete="username"
                         hide-details="auto"
+                        :label="$t('users.username')"
                         name="username"
                         outlined
                         prepend-icon="fas fa-user-secret"
@@ -47,10 +47,10 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="form.password"
-                        :error-messages="form.errors.get('password')"
-                        :label="$t('users.password._')"
                         autocomplete="new-password"
+                        :error-messages="form.errors.get('password')"
                         hide-details="auto"
+                        :label="$t('users.password._')"
                         name="password"
                         outlined
                         prepend-icon="fas fa-unlock"
@@ -60,10 +60,10 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="form.passwordConfirm"
-                        :error-messages="form.errors.get('passwordConfirm')"
-                        :label="$t('users.password.confirm')"
                         autocomplete="new-password"
+                        :error-messages="form.errors.get('passwordConfirm')"
                         hide-details="auto"
+                        :label="$t('users.password.confirm')"
                         name="passwordConfirm"
                         outlined
                         prepend-icon="fas fa-unlock"
@@ -75,8 +75,8 @@
                         <v-text-field
                           v-model="form.name"
                           :error-messages="form.errors.get('name')"
-                          :label="$t('users.name')"
                           hide-details="auto"
+                          :label="$t('users.name')"
                           name="name"
                           outlined
                           prepend-icon="fas fa-user"
@@ -86,8 +86,8 @@
                         <v-text-field
                           v-model="form.email"
                           :error-messages="form.errors.get('email')"
-                          :label="$t('users.email')"
                           hide-details="auto"
+                          :label="$t('users.email')"
                           name="email"
                           outlined
                           prepend-icon="fas fa-at"
@@ -97,8 +97,8 @@
                         <v-text-field
                           v-model="form.phone"
                           :error-messages="form.errors.get('phone')"
-                          :label="$t('users.phone')"
                           hide-details="auto"
+                          :label="$t('users.phone')"
                           name="phone"
                           outlined
                           prepend-icon="fas fa-phone"
@@ -120,7 +120,7 @@
             </v-form>
           </v-card>
         </v-dialog>
-        <v-menu close-on-content-click close-on-click offset-y>
+        <v-menu close-on-click close-on-content-click offset-y>
           <template #activator="{ on, attrs }">
             <v-btn class="font-weight-bold" color="primary" v-bind="attrs" icon v-on="on">
               <v-icon>fa-ellipsis-v</v-icon>
@@ -133,7 +133,7 @@
         </v-menu>
       </template>
       <template #[`item.surveyAuthUrl`]="{ item }">
-        <v-btn icon link :href="item.surveyAuthUrl" target="_blank">
+        <v-btn :href="item.surveyAuthUrl" icon link target="_blank">
           <v-icon>fas fa-arrow-up-right-from-square</v-icon>
         </v-btn>
         <v-btn icon @click="toClipboard(item.surveyAuthUrl)">
@@ -141,7 +141,7 @@
         </v-btn>
       </template>
       <template #[`item.feedbackAuthUrl`]="{ item }">
-        <v-btn icon link :href="item.feedbackAuthUrl" target="_blank">
+        <v-btn :href="item.feedbackAuthUrl" icon link target="_blank">
           <v-icon>fas fa-arrow-up-right-from-square</v-icon>
         </v-btn>
         <v-btn icon @click="toClipboard(item.feedbackAuthUrl)">
@@ -149,7 +149,7 @@
         </v-btn>
       </template>
       <template #[`item.action`]="{ item }">
-        <v-menu close-on-content-click close-on-click offset-y>
+        <v-menu close-on-click close-on-content-click offset-y>
           <template #activator="{ on, attrs }">
             <v-btn class="font-weight-bold" color="primary" v-bind="attrs" icon v-on="on">
               <v-icon>fa-ellipsis-v</v-icon>
@@ -163,10 +163,10 @@
           <v-icon dark>$edit</v-icon>
         </v-btn>
         <confirm-dialog
-          :label="$t('common.action.delete')"
           color="error"
           icon
           icon-left="$delete"
+          :label="$t('common.action.delete')"
           @confirm="remove(item)"
         >
           {{ $t('common.action.confirm.delete', { name: item.username }) }}

@@ -1,10 +1,10 @@
 <template>
   <v-row align="center" justify="center">
     <v-col v-if="whole" md="auto">
-      <v-card align="center" justify="center" class="px-4">
+      <v-card align="center" class="px-4" justify="center">
         <v-row>
           <v-col>
-            <v-btn text icon @click="modifyWhole(1)">
+            <v-btn icon text @click="modifyWhole(1)">
               <v-icon aria-hidden="false">fas fa-fw fa-plus</v-icon>
             </v-btn>
           </v-col>
@@ -14,7 +14,7 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-btn text icon @click="modifyWhole(-1)">
+            <v-btn icon text @click="modifyWhole(-1)">
               <v-icon aria-hidden="false">fas fa-fw fa-minus</v-icon>
             </v-btn>
           </v-col>
@@ -25,10 +25,10 @@
       {{ $t('portion.common.quantityAnd') }}
     </v-col>
     <v-col v-if="fraction" md="auto">
-      <v-card align="center" justify="center" class="px-4">
+      <v-card align="center" class="px-4" justify="center">
         <v-row>
           <v-col>
-            <v-btn text icon @click="modifyFrac(0.25)">
+            <v-btn icon text @click="modifyFrac(0.25)">
               <v-icon aria-hidden="false">fas fa-fw fa-plus</v-icon>
             </v-btn>
           </v-col>
@@ -38,7 +38,7 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-btn text icon @click="modifyFrac(-0.25)">
+            <v-btn icon text @click="modifyFrac(-0.25)">
               <v-icon aria-hidden="false">fas fa-fw fa-minus</v-icon>
             </v-btn>
           </v-col>

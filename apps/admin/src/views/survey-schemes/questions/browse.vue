@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
-    <v-toolbar flat tile color="grey lighten-5">
+    <v-toolbar color="grey lighten-5" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.questions.title`) }}
       </v-toolbar-title>
@@ -22,7 +22,7 @@
       </select-resource>
     </v-toolbar>
     <v-container>
-      <v-item-group v-model="section" mandatory active-class="secondary">
+      <v-item-group v-model="section" active-class="secondary" mandatory>
         <v-row>
           <v-col v-for="item in sections.survey" :key="item" cols="12" md="4">
             <v-item v-slot="{ active, toggle }" :value="item">

@@ -1,11 +1,11 @@
 <template>
   <edit-meal-prompt
     ref="prompt"
-    :meal-name="selectedMeal.name"
-    :prompt-props="promptProps"
-    :food-list="initialState?.foods || []"
-    :prompt-component="promptComponent"
     :continue-enabled="continueEnabled"
+    :food-list="initialState?.foods || []"
+    :meal-name="selectedMeal.name"
+    :prompt-component="promptComponent"
+    :prompt-props="promptProps"
     @continue="$emit('continue')"
     @delete-meal="onDeleteMeal"
     @update="onUpdate"

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <portion-layout :text="text" :description="description">
+    <portion-layout :description="description" :text="text">
       <template #headerText>
         {{ $t('portion.common.completeBelow') }}
       </template>

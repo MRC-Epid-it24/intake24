@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <portion-layout :text="promptProps.text" :description="promptProps.description">
+    <portion-layout :description="promptProps.description" :text="promptProps.text">
       <template #headerText>
         {{ localeDescription }}
       </template>
@@ -22,8 +22,8 @@
               <v-radio
                 v-for="(opt, i) in standardUnits"
                 :key="i"
-                :value="i"
                 :label="optionLabel(opt.name)"
+                :value="i"
               ></v-radio>
             </v-radio-group>
           </v-expansion-panel-content>
@@ -38,8 +38,8 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <quantity-card
-              :whole="true"
               :fraction="true"
+              :whole="true"
               @update-quantity="onUpdateQuantity"
             ></quantity-card>
           </v-expansion-panel-content>
@@ -55,7 +55,7 @@
 
         <v-row class="pa-2 mt-0">
           <v-col>
-            <v-btn color="success" block @click="submit()">
+            <v-btn block color="success" @click="submit()">
               {{ $t('common.action.continue') }}
             </v-btn>
           </v-col>

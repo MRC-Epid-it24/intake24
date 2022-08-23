@@ -1,10 +1,10 @@
 <template>
-  <prompt-layout :text="promptText" :description="promptDescription">
-    <v-col xs="12" sm="10" md="8" class="px-0 px-sm-3">
+  <prompt-layout :description="promptDescription" :text="promptText">
+    <v-col class="px-0 px-sm-3" md="8" sm="10" xs="12">
       <editable-food-list
         ref="editableFoodList"
-        :food-list="foodList"
         :drinks="false"
+        :food-list="foodList"
         @food-added="onUpdate"
         @food-deleted="onUpdate"
       />
@@ -24,10 +24,10 @@
       </confirm-dialog>
       <v-btn
         :block="isMobile"
-        :disabled="!continueEnabled"
+        class="px-5"
         :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
         color="success"
-        class="px-5"
+        :disabled="!continueEnabled"
         large
         @click="onContinue"
       >

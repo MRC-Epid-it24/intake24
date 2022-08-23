@@ -1,27 +1,27 @@
 <template>
   <layout v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="save">
-    <v-toolbar flat tile color="grey lighten-5" bottom>
+    <v-toolbar bottom color="grey lighten-5" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('languages.translations.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <template v-if="translations.length">
         <confirm-dialog
-          :label="$t('common.action.sync').toString()"
           color="secondary"
           fab
           icon
           icon-left="fas fa-rotate"
+          :label="$t('common.action.sync').toString()"
           @confirm="sync"
         >
           {{ $t('languages.translations.sync') }}
         </confirm-dialog>
         <confirm-dialog
-          :label="$t('common.action.delete').toString()"
           color="error"
           fab
           icon
           icon-left="$delete"
+          :label="$t('common.action.delete').toString()"
           @confirm="remove"
         >
           {{ $t('languages.translations.delete') }}
@@ -51,12 +51,12 @@
         </v-list-item-action>
       </v-list-item>
     </v-list>
-    <v-card v-else flat min-height="100px" link @click="create">
+    <v-card v-else flat link min-height="100px" @click="create">
       <v-card-title class="d-flex justify-center font-weight-medium">
         {{ $t('languages.translations.create') }}
       </v-card-title>
       <v-card-text class="d-flex justify-center align-center">
-        <v-btn fab x-large color="primary">
+        <v-btn color="primary" fab x-large>
           <v-icon>$add</v-icon>
         </v-btn>
       </v-card-text>

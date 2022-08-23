@@ -2,15 +2,15 @@
   <prompt-layout v-bind="{ description, text }">
     <v-form ref="form" @submit.prevent="submit">
       <v-time-picker
-        :value="initialTimeString"
-        :v-model="currentValue"
         :format="promptProps.format"
-        :landscape="!isMobile"
         full-width
+        :landscape="!isMobile"
+        :v-model="currentValue"
+        :value="initialTimeString"
         @change="onTimeChanged"
         @input="clearErrors"
       ></v-time-picker>
-      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+      <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
       <confirm-dialog
@@ -27,8 +27,8 @@
       </confirm-dialog>
       <v-btn
         :block="isMobile"
-        :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
         class="px-5"
+        :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
         color="success"
         large
         @click="submit"

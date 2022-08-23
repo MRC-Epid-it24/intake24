@@ -1,10 +1,10 @@
 <template>
   <v-col cols="12" md="6">
     <v-text-field
-      :label="$t('survey-schemes.conditions.promptId')"
-      :value="promptId"
       hide-details="auto"
+      :label="$t('survey-schemes.conditions.promptId')"
       outlined
+      :value="promptId"
       @input="update('promptId', $event)"
     ></v-text-field>
   </v-col>

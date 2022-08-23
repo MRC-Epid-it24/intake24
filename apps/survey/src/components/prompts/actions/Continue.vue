@@ -1,11 +1,11 @@
 <template>
   <v-btn
+    :block="isMobile"
     class="px-5"
     color="success"
-    large
-    :block="isMobile"
-    :title="label"
     :disabled="disabled"
+    large
+    :title="label"
     v-on="$listeners"
   >
     {{ label }}

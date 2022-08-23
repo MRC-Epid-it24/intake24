@@ -10,7 +10,7 @@
           <v-toolbar-title>{{ detail.name }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn :title="$t('common.action.ok')" icon @click.stop="close">
+            <v-btn icon :title="$t('common.action.ok')" @click.stop="close">
               <v-icon>$close</v-icon>
             </v-btn>
           </v-toolbar-items>

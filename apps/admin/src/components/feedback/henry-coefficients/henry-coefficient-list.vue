@@ -1,15 +1,15 @@
 <template>
   <div>
-    <v-toolbar flat tile color="grey lighten-5">
-      <v-icon left color="primary">fas fa-square-root-alt</v-icon>
+    <v-toolbar color="grey lighten-5" flat tile>
+      <v-icon color="primary" left>fas fa-square-root-alt</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.henry-coefficients.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
+        color="secondary"
         fab
         small
-        color="secondary"
         :title="$t('feedback-schemes.henry-coefficients.create')"
         @click.stop="add"
       >
@@ -33,13 +33,13 @@
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="items" handle=".drag-and-drop__handle">
-        <transition-group type="transition" name="drag-and-drop">
+        <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(coefficient, index) in items"
             :key="coefficient.id"
-            link
-            draggable
             class="drag-and-drop__item"
+            draggable
+            link
           >
             <v-list-item-avatar class="drag-and-drop__handle">
               <v-icon>fa-grip-vertical</v-icon>
@@ -63,10 +63,10 @@
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
-                :label="$t('feedback-schemes.henry-coefficients.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"
+                :label="$t('feedback-schemes.henry-coefficients.remove').toString()"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: getListItemTitle(coefficient) }) }}
@@ -94,9 +94,9 @@
                 <v-col cols="12" md="6">
                   <v-select
                     v-model="dialog.item.sex"
+                    hide-details="auto"
                     :items="sexes"
                     :label="$t('feedback-schemes.sexes._')"
-                    hide-details="auto"
                     name="sex"
                     outlined
                   >
@@ -118,8 +118,8 @@
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model.number="dialog.item.age.start"
-                    :label="$t('feedback-schemes.age.start')"
                     hide-details="auto"
+                    :label="$t('feedback-schemes.age.start')"
                     name="age.start"
                     outlined
                   ></v-text-field>
@@ -127,8 +127,8 @@
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model.number="dialog.item.age.end"
-                    :label="$t('feedback-schemes.age.end')"
                     hide-details="auto"
+                    :label="$t('feedback-schemes.age.end')"
                     name="age.end"
                     outlined
                   ></v-text-field>
@@ -136,8 +136,8 @@
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model.number="dialog.item.weightCoefficient"
-                    :label="$t('feedback-schemes.henry-coefficients.weightCoefficient')"
                     hide-details="auto"
+                    :label="$t('feedback-schemes.henry-coefficients.weightCoefficient')"
                     name="weightCoefficient"
                     outlined
                   ></v-text-field>
@@ -145,8 +145,8 @@
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model.number="dialog.item.heightCoefficient"
-                    :label="$t('feedback-schemes.henry-coefficients.heightCoefficient')"
                     hide-details="auto"
+                    :label="$t('feedback-schemes.henry-coefficients.heightCoefficient')"
                     name="heightCoefficient"
                     outlined
                   ></v-text-field>
@@ -154,8 +154,8 @@
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model.number="dialog.item.constant"
-                    :label="$t('feedback-schemes.henry-coefficients.constant')"
                     hide-details="auto"
+                    :label="$t('feedback-schemes.henry-coefficients.constant')"
                     name="constant"
                     outlined
                   ></v-text-field>

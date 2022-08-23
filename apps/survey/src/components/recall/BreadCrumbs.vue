@@ -1,6 +1,6 @@
 <template>
   <v-toolbar class="mb-4">
-    <v-breadcrumbs v-if="!isNotDesktop" :items="brds" divider="/"></v-breadcrumbs>
+    <v-breadcrumbs v-if="!isNotDesktop" divider="/" :items="brds"></v-breadcrumbs>
     <v-spacer v-if="!isNotDesktop"></v-spacer>
     <request-help :survey-id="$route.params.surveyId"></request-help>
   </v-toolbar>

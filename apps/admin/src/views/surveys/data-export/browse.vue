@@ -11,16 +11,16 @@
                   <v-dialog
                     ref="startDate"
                     v-model="menus.startDate"
-                    :return-value.sync="form.startDate"
                     persistent
+                    :return-value.sync="form.startDate"
                     width="290px"
                   >
                     <template #activator="{ on, attrs }">
                       <v-text-field
                         v-model="form.startDate"
                         :error-messages="form.errors.get('startDate')"
-                        :label="$t('surveys.startDate')"
                         hide-details="auto"
+                        :label="$t('surveys.startDate')"
                         outlined
                         readonly
                         v-bind="attrs"
@@ -33,10 +33,10 @@
                       @change="form.errors.clear('startDate')"
                     >
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menus.startDate = false">
+                      <v-btn color="primary" text @click="menus.startDate = false">
                         {{ $t('common.action.cancel') }}
                       </v-btn>
-                      <v-btn text color="primary" @click="$refs.startDate.save(form.startDate)">
+                      <v-btn color="primary" text @click="$refs.startDate.save(form.startDate)">
                         {{ $t('common.action.ok') }}
                       </v-btn>
                     </v-date-picker>
@@ -46,16 +46,16 @@
                   <v-dialog
                     ref="endDate"
                     v-model="menus.endDate"
-                    :return-value.sync="form.endDate"
                     persistent
+                    :return-value.sync="form.endDate"
                     width="290px"
                   >
                     <template #activator="{ on, attrs }">
                       <v-text-field
                         v-model="form.endDate"
                         :error-messages="form.errors.get('endDate')"
-                        :label="$t('surveys.endDate')"
                         hide-details="auto"
+                        :label="$t('surveys.endDate')"
                         outlined
                         readonly
                         v-bind="attrs"
@@ -68,10 +68,10 @@
                       @change="form.errors.clear('endDate')"
                     >
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menus.endDate = false">
+                      <v-btn color="primary" text @click="menus.endDate = false">
                         {{ $t('common.action.cancel') }}
                       </v-btn>
-                      <v-btn text color="primary" @click="$refs.endDate.save(form.endDate)">
+                      <v-btn color="primary" text @click="$refs.endDate.save(form.endDate)">
                         {{ $t('common.action.ok') }}
                       </v-btn>
                     </v-date-picker>
@@ -81,12 +81,12 @@
               <v-row>
                 <v-col>
                   <v-btn
-                    :disabled="form.errors.any() || isAppLoading"
-                    x-large
-                    type="submit"
                     block
                     color="secondary"
+                    :disabled="form.errors.any() || isAppLoading"
                     :title="$t('common.action.export')"
+                    type="submit"
+                    x-large
                   >
                     <v-icon left>fa-download</v-icon> {{ $t('common.action.export') }}
                   </v-btn>

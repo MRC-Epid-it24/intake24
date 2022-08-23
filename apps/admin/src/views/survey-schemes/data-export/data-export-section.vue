@@ -7,8 +7,8 @@
     transition="dialog-bottom-transition"
   >
     <v-card v-if="dialog" tile>
-      <v-toolbar dark color="primary">
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="cancel">
+      <v-toolbar color="primary" dark>
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -16,7 +16,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-btn :title="$t('common.action.ok')" dark text @click.stop="save">
+          <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
             <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
@@ -27,7 +27,7 @@
             <v-card-title>{{ $t('survey-schemes.data-export.current') }}</v-card-title>
             <v-list two-line>
               <draggable v-model="fields" handle=".drag-and-drop__handle">
-                <transition-group type="transition" name="drag-and-drop">
+                <transition-group name="drag-and-drop" type="transition">
                   <v-list-item
                     v-for="(field, idx) in fields"
                     :key="field.id"
@@ -35,7 +35,7 @@
                     draggable
                     link
                   >
-                    <v-list-item-avatar size="32" class="drag-and-drop__handle">
+                    <v-list-item-avatar class="drag-and-drop__handle" size="32">
                       <v-icon>fa-grip-vertical</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
@@ -71,7 +71,7 @@
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('survey-schemes.data-export.available') }}</v-card-title>
             <v-list two-line>
-              <transition-group type="transition" name="drag-and-drop">
+              <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
                   v-for="field in availableFields"
                   :key="field.id"
@@ -111,9 +111,9 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="editDialog.field.id"
-                  :label="$t('survey-schemes.data-export.fields.id')"
                   disabled
                   hide-details="auto"
+                  :label="$t('survey-schemes.data-export.fields.id')"
                   name="id"
                   outlined
                 ></v-text-field>
@@ -121,8 +121,8 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="editDialog.field.label"
-                  :label="$t('survey-schemes.data-export.fields.label')"
                   hide-details="auto"
+                  :label="$t('survey-schemes.data-export.fields.label')"
                   name="label"
                   outlined
                 ></v-text-field>

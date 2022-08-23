@@ -1,11 +1,11 @@
 <template>
   <meal-time-prompt
+    :initial-time="getInitialState()"
     :meal-name="selectedMeal.name"
     :prompt-props="promptProps"
-    :initial-time="getInitialState()"
     @continue="$emit('continue')"
-    @update="onUpdate"
     @remove-meal="onRemoveMeal"
+    @update="onUpdate"
   ></meal-time-prompt>
 </template>
 

@@ -1,10 +1,10 @@
 <template>
   <portion-size-option-prompt
     v-bind="{ promptProps, availableMethods }"
-    :food-name="foodName()"
-    :prompt-component="promptComponent"
-    :initial-value="initialState"
     :continue-enabled="continueEnabled"
+    :food-name="foodName()"
+    :initial-value="initialState"
+    :prompt-component="promptComponent"
     @continue="$emit('continue')"
     @update="onUpdate"
   >

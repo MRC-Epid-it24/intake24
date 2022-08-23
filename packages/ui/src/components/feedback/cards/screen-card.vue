@@ -1,9 +1,9 @@
 <template>
-  <v-card width="320px" height="100%" class="d-flex flex-column">
-    <v-img :src="backgroundImage" :aspect-ratio="16 / 9"></v-img>
+  <v-card class="d-flex flex-column" height="100%" width="320px">
+    <v-img :aspect-ratio="16 / 9" :src="backgroundImage"></v-img>
     <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div>
     <v-card-subtitle class="font-weight-medium">
-      <i18n path="feedback.intake.your" tag="div" class="mb-2">
+      <i18n class="mb-2" path="feedback.intake.your" tag="div">
         <template #nutrient>
           <span>{{ detail.name.toLowerCase() }}</span>
         </template>

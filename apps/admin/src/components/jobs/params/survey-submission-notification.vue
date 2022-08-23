@@ -5,21 +5,21 @@
       <v-row>
         <v-col cols="12">
           <v-text-field
-            :value="value.surveyId"
-            :label="$t('surveys.id')"
             hide-details="auto"
+            :label="$t('surveys.id')"
             name="surveyId"
             outlined
+            :value="value.surveyId"
             @input="input('surveyId', $event)"
           ></v-text-field>
         </v-col>
         <v-col cols="12">
           <v-text-field
-            :value="value.submissionId"
-            :label="$t('surveys.submissions.id')"
             hide-details="auto"
+            :label="$t('surveys.submissions.id')"
             name="submissionId"
             outlined
+            :value="value.submissionId"
             @input="input('submissionId', $event)"
           ></v-text-field>
         </v-col>

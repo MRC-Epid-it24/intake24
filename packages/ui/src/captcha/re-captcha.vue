@@ -4,8 +4,8 @@
       ref="captcha"
       :sitekey="sitekey"
       size="invisible"
-      @verify="verified"
       @expired="expired"
+      @verify="verified"
     >
     </vue-recaptcha>
     This site is protected by

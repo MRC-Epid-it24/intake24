@@ -9,8 +9,8 @@
                 v-model="form.slug"
                 :disabled="isEdit"
                 :error-messages="form.errors.get('slug')"
-                :label="$t('surveys.id')"
                 hide-details="auto"
+                :label="$t('surveys.id')"
                 name="slug"
                 outlined
               ></v-text-field>
@@ -19,8 +19,8 @@
               <v-text-field
                 v-model="form.name"
                 :error-messages="form.errors.get('name')"
-                :label="$t('surveys.name')"
                 hide-details="auto"
+                :label="$t('surveys.name')"
                 name="name"
                 outlined
               ></v-text-field>
@@ -28,12 +28,12 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="form.localeId"
-                :items="refs.locales"
                 :error-messages="form.errors.get('localeId')"
-                :label="$t('locales._')"
                 hide-details="auto"
-                item-value="id"
                 item-text="englishName"
+                item-value="id"
+                :items="refs.locales"
+                :label="$t('locales._')"
                 name="localeId"
                 outlined
                 @change="form.errors.clear('localeId')"
@@ -52,11 +52,11 @@
               <v-select
                 v-model="form.surveySchemeId"
                 :error-messages="form.errors.get('surveySchemeId')"
+                hide-details="auto"
+                item-text="name"
+                item-value="id"
                 :items="refs.surveySchemes"
                 :label="$t('survey-schemes._')"
-                hide-details="auto"
-                item-value="id"
-                item-text="name"
                 name="surveySchemeId"
                 outlined
                 @change="form.errors.clear('surveySchemeId')"
@@ -66,16 +66,16 @@
               <v-dialog
                 ref="startDate"
                 v-model="menus.startDate"
-                :return-value.sync="form.startDate"
                 persistent
+                :return-value.sync="form.startDate"
                 width="290px"
               >
                 <template #activator="{ on, attrs }">
                   <v-text-field
                     v-model="form.startDate"
                     :error-messages="form.errors.get('startDate')"
-                    :label="$t('surveys.startDate')"
                     hide-details="auto"
+                    :label="$t('surveys.startDate')"
                     outlined
                     readonly
                     v-bind="attrs"
@@ -88,10 +88,10 @@
                   @change="form.errors.clear('startDate')"
                 >
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="menus.startDate = false">
+                  <v-btn color="primary" text @click="menus.startDate = false">
                     {{ $t('common.action.cancel') }}
                   </v-btn>
-                  <v-btn text color="primary" @click="$refs.startDate.save(form.startDate)">
+                  <v-btn color="primary" text @click="$refs.startDate.save(form.startDate)">
                     {{ $t('common.action.ok') }}
                   </v-btn>
                 </v-date-picker>
@@ -101,16 +101,16 @@
               <v-dialog
                 ref="endDate"
                 v-model="menus.endDate"
-                :return-value.sync="form.endDate"
                 persistent
+                :return-value.sync="form.endDate"
                 width="290px"
               >
                 <template #activator="{ on, attrs }">
                   <v-text-field
                     v-model="form.endDate"
                     :error-messages="form.errors.get('endDate')"
-                    :label="$t('surveys.endDate')"
                     hide-details="auto"
+                    :label="$t('surveys.endDate')"
                     outlined
                     readonly
                     v-bind="attrs"
@@ -123,10 +123,10 @@
                   @change="form.errors.clear('endDate')"
                 >
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="menus.endDate = false">
+                  <v-btn color="primary" text @click="menus.endDate = false">
                     {{ $t('common.action.cancel') }}
                   </v-btn>
-                  <v-btn text color="primary" @click="$refs.endDate.save(form.endDate)">
+                  <v-btn color="primary" text @click="$refs.endDate.save(form.endDate)">
                     {{ $t('common.action.ok') }}
                   </v-btn>
                 </v-date-picker>
@@ -136,8 +136,8 @@
               <v-text-field
                 v-model="form.supportEmail"
                 :error-messages="form.errors.get('supportEmail')"
-                :label="$t('surveys.supportEmail')"
                 hide-details="auto"
+                :label="$t('surveys.supportEmail')"
                 name="supportEmail"
                 outlined
               ></v-text-field>
@@ -146,9 +146,9 @@
               <v-select
                 v-model="form.state"
                 :error-messages="form.errors.get('state')"
+                hide-details="auto"
                 :items="surveyStates"
                 :label="$t('surveys.states._')"
-                hide-details="auto"
                 name="state"
                 outlined
                 @change="form.errors.clear('state')"
@@ -158,19 +158,19 @@
               <v-text-field
                 v-model="form.suspensionReason"
                 :error-messages="form.errors.get('suspensionReason')"
-                :label="$t('surveys.suspensionReason')"
                 hide-details="auto"
+                :label="$t('surveys.suspensionReason')"
                 name="suspensionReason"
                 outlined
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6" align-self="center">
+            <v-col align-self="center" cols="12" md="6">
               <v-switch
                 v-model="form.storeUserSessionOnServer"
-                :error-messages="form.errors.get('storeUserSessionOnServer')"
-                :label="$t('surveys.storeUserSessionOnServer')"
                 class="mt-0"
+                :error-messages="form.errors.get('storeUserSessionOnServer')"
                 hide-details="auto"
+                :label="$t('surveys.storeUserSessionOnServer')"
                 name="storeUserSessionOnServer"
                 @change="form.errors.clear('storeUserSessionOnServer')"
               ></v-switch>
@@ -179,8 +179,8 @@
               <v-text-field
                 v-model="form.submissionNotificationUrl"
                 :error-messages="form.errors.get('submissionNotificationUrl')"
-                :label="$t('surveys.submissionNotificationUrl')"
                 hide-details="auto"
+                :label="$t('surveys.submissionNotificationUrl')"
                 name="submissionNotificationUrl"
                 outlined
               ></v-text-field>
@@ -192,18 +192,18 @@
             <v-col cols="12" md="6">
               <v-switch
                 v-model="form.userPersonalIdentifiers"
-                :error-messages="form.errors.get('userPersonalIdentifiers')"
-                :label="$t('surveys.users.personalIdentifiers')"
                 class="mt-0"
+                :error-messages="form.errors.get('userPersonalIdentifiers')"
                 hide-details="auto"
+                :label="$t('surveys.users.personalIdentifiers')"
                 name="userPersonalIdentifiers"
                 @change="form.errors.clear('userPersonalIdentifiers')"
               ></v-switch>
               <v-switch
                 v-model="form.userCustomFields"
                 :error-messages="form.errors.get('userCustomFields')"
-                :label="$t('surveys.users.customFields')"
                 hide-details="auto"
+                :label="$t('surveys.users.customFields')"
                 name="userCustomFields"
                 @change="form.errors.clear('userCustomFields')"
               ></v-switch>
@@ -211,25 +211,25 @@
             <v-col cols="12" md="6">
               <v-switch
                 v-model="form.allowGenUsers"
-                :error-messages="form.errors.get('allowGenUsers')"
-                :label="$t('surveys.users.allowGenUsers')"
                 class="mt-0"
+                :error-messages="form.errors.get('allowGenUsers')"
                 hide-details="auto"
+                :label="$t('surveys.users.allowGenUsers')"
                 name="allowGenUsers"
                 @change="form.errors.clear('allowGenUsers')"
               ></v-switch>
               <v-text-field
                 v-model="form.genUserKey"
                 :append-icon="showGenUserKey ? 'fa-eye' : 'fa-eye-slash'"
-                :disabled="!form.allowGenUsers"
-                :error-messages="form.errors.get('genUserKey')"
-                :label="$t('surveys.users.genUserKey')"
-                :type="showGenUserKey ? 'text' : 'password'"
                 autocomplete="new-password"
                 class="mt-4"
+                :disabled="!form.allowGenUsers"
+                :error-messages="form.errors.get('genUserKey')"
                 hide-details="auto"
+                :label="$t('surveys.users.genUserKey')"
                 name="genUserKey"
                 outlined
+                :type="showGenUserKey ? 'text' : 'password'"
                 @click:append="showGenUserKey = !showGenUserKey"
               ></v-text-field>
             </v-col>
@@ -241,20 +241,20 @@
               <v-select
                 v-model="form.searchSortingAlgorithm"
                 :error-messages="form.errors.get('searchSortingAlgorithm')"
+                hide-details="auto"
                 :items="searchSortingAlgorithms"
                 :label="$t('surveys.search.sortingAlgorithm')"
-                hide-details="auto"
                 name="searchSortingAlgorithm"
                 outlined
                 @change="form.errors.clear('searchSortingAlgorithm')"
               ></v-select>
             </v-col>
-            <v-col cols="12" md="6" align-self="center">
+            <v-col align-self="center" cols="12" md="6">
               <v-slider
                 v-model.number="form.searchMatchScoreWeight"
                 :error-messages="form.errors.get('searchMatchScoreWeight')"
-                :label="$t('surveys.search.matchScoreWeight')"
                 hide-details="auto"
+                :label="$t('surveys.search.matchScoreWeight')"
                 max="100"
                 min="0"
                 name="searchMatchScoreWeight"
@@ -269,8 +269,8 @@
               <v-text-field
                 v-model="form.authUrlTokenCharset"
                 :error-messages="form.errors.get('authUrlTokenCharset')"
-                :label="$t('surveys.authUrl.tokenCharset')"
                 hide-details="auto"
+                :label="$t('surveys.authUrl.tokenCharset')"
                 name="authUrlTokenCharset"
                 outlined
               ></v-text-field>
@@ -279,8 +279,8 @@
               <v-text-field
                 v-model.number="form.authUrlTokenLength"
                 :error-messages="form.errors.get('authUrlTokenLength')"
-                :label="$t('surveys.authUrl.tokenLength')"
                 hide-details="auto"
+                :label="$t('surveys.authUrl.tokenLength')"
                 name="authUrlTokenLength"
                 outlined
               ></v-text-field>
@@ -289,8 +289,8 @@
               <v-text-field
                 v-model="form.authUrlDomainOverride"
                 :error-messages="form.errors.get('authUrlDomainOverride')"
-                :label="$t('surveys.authUrl.domainOverride')"
                 hide-details="auto"
+                :label="$t('surveys.authUrl.domainOverride')"
                 name="authUrlDomainOverride"
                 outlined
               ></v-text-field>
@@ -302,31 +302,31 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model.number="form.maximumDailySubmissions"
-                outlined
                 :error-messages="form.errors.get('maximumDailySubmissions')"
+                hide-details="auto"
                 :label="$t('surveys.submissionLimits.maxDaily')"
                 name="maximumDailySubmissions"
-                hide-details="auto"
+                outlined
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 v-model.number="form.maximumTotalSubmissions"
-                outlined
                 :error-messages="form.errors.get('maximumTotalSubmissions')"
+                hide-details="auto"
                 :label="$t('surveys.submissionLimits.maxTotal')"
                 name="maximumTotalSubmissions"
-                hide-details="auto"
+                outlined
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 v-model.number="form.minimumSubmissionInterval"
-                outlined
                 :error-messages="form.errors.get('minimumSubmissionInterval')"
+                hide-details="auto"
                 :label="$t('surveys.submissionLimits.minInterval')"
                 name="minimumSubmissionInterval"
-                hide-details="auto"
+                outlined
               ></v-text-field>
             </v-col>
           </v-row>
@@ -337,11 +337,11 @@
               <v-select
                 v-model="form.feedbackSchemeId"
                 :error-messages="form.errors.get('feedbackSchemeId')"
+                hide-details="auto"
+                item-text="name"
+                item-value="id"
                 :items="availableFeedbackSchemes"
                 :label="$t('feedback-schemes._')"
-                hide-details="auto"
-                item-value="id"
-                item-text="name"
                 name="feedbackSchemeId"
                 outlined
                 @change="form.errors.clear('feedbackSchemeId')"
@@ -350,12 +350,12 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model.number="form.numberOfSubmissionsForFeedback"
-                outlined
                 :disabled="!form.feedbackSchemeId"
                 :error-messages="form.errors.get('numberOfSubmissionsForFeedback')"
+                hide-details="auto"
                 :label="$t('surveys.feedback.numberOfSubmissions')"
                 name="numberOfSubmissionsForFeedback"
-                hide-details="auto"
+                outlined
               ></v-text-field>
             </v-col>
           </v-row>

@@ -8,8 +8,8 @@
         {{ meal.name }}
       </v-list-item-title>
       <context-menu
-        :menu="menuMeal"
         :icon="menuMealIcon"
+        :menu="menuMeal"
         @context-menu-action="onContextMenuAction"
       ></context-menu>
       <v-list-item-action>

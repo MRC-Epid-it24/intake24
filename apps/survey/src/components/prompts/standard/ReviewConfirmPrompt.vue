@@ -1,18 +1,18 @@
 <template>
   <prompt-layout v-bind="{ description, text }">
-    <v-col md="8" sm="12" class="px-0 px-sm-3 align-center text-center justify-center">
+    <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
       <survey-progress-bar :meals="meals"></survey-progress-bar>
       <v-divider></v-divider>
     </v-col>
-    <v-col md="8" sm="12" class="px-0 px-sm-3 align-center text-center justify-center">
-      <v-card flat dense>
-        <v-list dense class="flex-grow-1 flex-shrink-0">
+    <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
+      <v-card dense flat>
+        <v-list class="flex-grow-1 flex-shrink-0" dense>
           <v-list-item
             v-for="(meal, idx) in meals"
             :key="meal.id"
-            :ripple="false"
             :inactive="true"
             link
+            :ripple="false"
           >
             <v-list-item-icon>
               <v-icon> $meal</v-icon>
@@ -42,10 +42,10 @@
                       {{ foodDisplayName(food) }}
                     </v-list-item-title>
                     <v-list-item-action>
-                      <v-icon v-if="food.data" x-small color="sucess">fa-check</v-icon>
+                      <v-icon v-if="food.data" color="sucess" x-small>fa-check</v-icon>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-icon v-if="food.portionSizeMethod" x-small color="sucess">fa-check</v-icon>
+                      <v-icon v-if="food.portionSizeMethod" color="sucess" x-small>fa-check</v-icon>
                     </v-list-item-action>
                   </v-list-item>
                 </v-list>

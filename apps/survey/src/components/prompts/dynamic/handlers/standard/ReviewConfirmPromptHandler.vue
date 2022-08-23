@@ -1,10 +1,10 @@
 <template>
   <review-confirm-prompt
-    :prompt-props="promptProps"
-    :prompt-component="promptComponent"
     :meals="meals"
-    @meal-selected="onMealClick"
+    :prompt-component="promptComponent"
+    :prompt-props="promptProps"
     @food-selected="onFoodClick"
+    @meal-selected="onMealClick"
   ></review-confirm-prompt>
 </template>
 

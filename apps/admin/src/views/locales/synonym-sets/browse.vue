@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="save">
-    <v-toolbar flat tile color="grey lighten-5" bottom>
+    <v-toolbar bottom color="grey lighten-5" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.synonym-sets.title') }}
       </v-toolbar-title>
@@ -24,8 +24,8 @@
         <v-list-item-content>
           <v-text-field
             v-model.trim="item.synonyms"
-            :label="$t('locales.synonym-sets.synonyms')"
             hide-details="auto"
+            :label="$t('locales.synonym-sets.synonyms')"
             name="synonyms"
             outlined
           ></v-text-field>

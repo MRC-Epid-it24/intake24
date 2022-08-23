@@ -16,7 +16,7 @@
         </v-simple-table>
       </v-col>
     </v-row>
-    <guide-drawer :entry="entry" disabled></guide-drawer>
+    <guide-drawer disabled :entry="entry"></guide-drawer>
   </layout>
 </template>
 

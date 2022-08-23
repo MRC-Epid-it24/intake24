@@ -1,6 +1,6 @@
 <template>
   <div class="loader" :class="{ show: show }">
-    <img src="@intake24/survey/assets/loader.svg" alt="loader" />
+    <img alt="loader" src="@intake24/survey/assets/loader.svg" />
   </div>
 </template>
 

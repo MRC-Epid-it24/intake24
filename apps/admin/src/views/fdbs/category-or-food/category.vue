@@ -14,8 +14,8 @@
                 <v-text-field
                   v-model="form.main.code"
                   :error-messages="form.errors.get('main.code')"
-                  :label="$t('fdbs.categories.global.code')"
                   hide-details="auto"
+                  :label="$t('fdbs.categories.global.code')"
                   name="main.code"
                   outlined
                 ></v-text-field>
@@ -24,19 +24,19 @@
                 <v-text-field
                   v-model="form.main.name"
                   :error-messages="form.errors.get('main.name')"
-                  :label="$t('fdbs.categories.global.name')"
                   hide-details="auto"
+                  :label="$t('fdbs.categories.global.name')"
                   name="main.name"
                   outlined
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" md="6" align-self="center">
+              <v-col align-self="center" cols="12" md="6">
                 <v-switch
                   v-model="form.main.isHidden"
-                  :error-messages="form.errors.get('main.isHidden')"
-                  :label="$t('fdbs.categories.global.isHidden')"
                   class="mt-0"
+                  :error-messages="form.errors.get('main.isHidden')"
                   hide-details="auto"
+                  :label="$t('fdbs.categories.global.isHidden')"
                   name="main.isHidden"
                   @change="form.errors.clear('allowGenUsers')"
                 ></v-switch>
@@ -56,8 +56,8 @@
                 <v-text-field
                   v-model="form.name"
                   :error-messages="form.errors.get('name')"
-                  :label="$t('fdbs.categories.local.name')"
                   hide-details="auto"
+                  :label="$t('fdbs.categories.local.name')"
                   name="name"
                   outlined
                 ></v-text-field>
@@ -67,28 +67,28 @@
         </v-card>
         <attribute-list
           v-model="form.main.attributes"
+          class="mb-6"
           :disabled="disabled"
           :errors="form.errors"
-          class="mb-6"
         ></attribute-list>
         <category-list
           v-model="form.main.parentCategories"
+          class="mb-6"
           :disabled="disabled"
           :errors="form.errors"
           :locale-id="id"
-          class="mb-6"
         ></category-list>
         <portion-size-method-list
           v-model="form.portionSizeMethods"
+          class="mb-6"
           :disabled="disabled"
           :errors="form.errors"
           :locale-id="id"
-          class="mb-6"
         ></portion-size-method-list>
       </v-form>
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
-        <v-btn outlined color="primary" @click="submit">
+        <v-btn color="primary" outlined @click="submit">
           <v-icon left>$save</v-icon> {{ $t(`common.action.save`) }}
         </v-btn>
       </v-card-actions>

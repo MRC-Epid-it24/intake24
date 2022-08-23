@@ -3,8 +3,8 @@
     <template #actions>
       <copy-scheme-dialog
         v-if="canHandleEntry('copy')"
-        :scheme-id="id"
         resource="feedback-schemes"
+        :scheme-id="id"
       ></copy-scheme-dialog>
       <preview :feedback-scheme="entry"></preview>
     </template>

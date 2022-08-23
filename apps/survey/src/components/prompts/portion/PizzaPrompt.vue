@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <portion-layout :text="text" :description="description">
+    <portion-layout :description="description" :text="text">
       <template #headerText>
         {{ $t('portion.common.completeBelow') }}
       </template>
@@ -74,7 +74,7 @@
               <v-expansion-panel-content>
                 <v-row>
                   <v-col>
-                    <quantity-card whole fraction></quantity-card>
+                    <quantity-card fraction whole></quantity-card>
                   </v-col>
                 </v-row>
                 <v-btn @click="selectQuantity()">

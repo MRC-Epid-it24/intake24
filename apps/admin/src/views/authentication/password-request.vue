@@ -11,7 +11,7 @@
             Please check your inbox (including spam / junk folder).
           </p>
           <v-card-actions class="d-flex justify-center">
-            <v-btn :to="{ name: 'login' }" color="blue darken-3" exact text>
+            <v-btn color="blue darken-3" exact text :to="{ name: 'login' }">
               Back to login screen
             </v-btn>
           </v-card-actions>
@@ -27,16 +27,16 @@
                 <v-text-field
                   v-model="form.email"
                   :error-messages="form.errors.get('email')"
-                  :label="$t('users.email')"
                   hide-details="auto"
-                  required
+                  :label="$t('users.email')"
                   outlined
+                  required
                 ></v-text-field>
               </v-col>
             </v-row>
           </v-card-text>
           <v-card-actions class="px-6 pb-6">
-            <v-btn type="submit" block color="secondary" x-large>
+            <v-btn block color="secondary" type="submit" x-large>
               {{ $t('users.password.reset.send') }}
             </v-btn>
           </v-card-actions>
@@ -46,8 +46,8 @@
               :is="captcha.provider"
               ref="captchaRef"
               :sitekey="captcha.sitekey"
-              @verified="verified"
               @expired="expired"
+              @verified="verified"
             ></component>
           </div>
         </v-form>

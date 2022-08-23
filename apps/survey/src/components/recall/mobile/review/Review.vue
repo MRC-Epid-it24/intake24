@@ -1,7 +1,7 @@
 <template>
-  <v-card flat denses>
+  <v-card denses flat>
     <survey-progress :items="meals"></survey-progress>
-    <v-list flat dense nav class="flex-grow-1 flex-shrink-0">
+    <v-list class="flex-grow-1 flex-shrink-0" dense flat nav>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title"> Recall</v-list-item-title>
@@ -20,19 +20,19 @@
         <v-list-item
           v-for="(meal, idx) in meals"
           :key="meal.id"
-          :ripple="false"
           :inactive="true"
           link
+          :ripple="false"
         >
           <v-list-item-content>
             <review-meal
+              :active="activeMealIndex === idx"
               :meal="meal"
               :meal-index="idx"
-              :active="activeMealIndex === idx"
-              @meal-action="onMealAction"
-              @food-selected="onFoodSelected"
-              @breadcrumbMeal="chooseMealUp(meal.name.en)"
               @breadcrumbFood="chooseFoodUp"
+              @breadcrumbMeal="chooseMealUp(meal.name.en)"
+              @food-selected="onFoodSelected"
+              @meal-action="onMealAction"
             ></review-meal>
           </v-list-item-content>
         </v-list-item>

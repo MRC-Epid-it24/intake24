@@ -14,8 +14,8 @@
     </v-card-subtitle>
     <meal-list
       v-model="form.surveySchemeOverrides.meals"
-      :scheme-id="entry.surveySchemeId"
       mode="override"
+      :scheme-id="entry.surveySchemeId"
     ></meal-list>
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">

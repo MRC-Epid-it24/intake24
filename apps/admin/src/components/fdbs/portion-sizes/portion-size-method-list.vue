@@ -6,10 +6,10 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
-        fab
-        small
         class="mx-3"
         color="secondary"
+        fab
+        small
         :title="$t('fdbs.portionSizes.add')"
         @click.stop="add"
       >
@@ -18,7 +18,7 @@
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="items" handle=".drag-and-drop__handle">
-        <transition-group type="transition" name="drag-and-drop">
+        <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(item, index) in items"
             :key="item._id"
@@ -40,10 +40,10 @@
             </v-list-item-action>
             <v-list-item-action v-if="!disabled">
               <confirm-dialog
-                :label="$t('fdbs.portionSizes.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"
+                :label="$t('fdbs.portionSizes.remove').toString()"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: item.description }) }}

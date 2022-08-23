@@ -29,10 +29,10 @@
           </v-list-item-content>
           <v-list-item-action v-if="!disabled">
             <confirm-dialog
-              :label="$t('fdbs.nutrients.remove').toString()"
               color="error"
               icon
               icon-left="$delete"
+              :label="$t('fdbs.nutrients.remove').toString()"
               @confirm="remove(item.id)"
             >
               {{ $t('common.action.confirm.delete', { name: item.name }) }}

@@ -2,7 +2,7 @@
   <v-container :class="{ 'pa-0': isMobile }">
     <v-row justify="center" :no-gutters="isMobile">
       <v-col cols="auto">
-        <v-card :class="{ 'mt-10': !isMobile }" :flat="isMobile" :tile="isMobile" max-width="32rem">
+        <v-card :class="{ 'mt-10': !isMobile }" :flat="isMobile" max-width="32rem" :tile="isMobile">
           <v-sheet class="d-flex justify-center flex-column" color="deep-orange lighten-5" tile>
             <div class="text-center text-h2 font-weight-medium py-2">
               {{ $t('common._') }}
@@ -21,34 +21,34 @@
           >
             <v-card-text class="px-6">
               <v-row>
-                <v-col cols="12" class="mb-3">
+                <v-col class="mb-3" cols="12">
                   <v-text-field
                     v-model="username"
-                    :error-messages="errors.get('username')"
-                    :label="$t('common.username')"
                     autocomplete="username"
+                    :error-messages="errors.get('username')"
                     hide-details="auto"
-                    required
+                    :label="$t('common.username')"
                     outlined
+                    required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" class="mb-3">
+                <v-col class="mb-3" cols="12">
                   <v-text-field
                     v-model="password"
                     :append-icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
-                    :error-messages="errors.get('password')"
-                    :label="$t('common.password')"
-                    :type="showPassword ? 'text' : 'password'"
                     autocomplete="current-password"
+                    :error-messages="errors.get('password')"
                     hide-details="auto"
-                    required
+                    :label="$t('common.password')"
                     outlined
+                    required
+                    :type="showPassword ? 'text' : 'password'"
                   ></v-text-field>
                 </v-col>
               </v-row>
             </v-card-text>
             <v-card-actions class="px-6 pb-6">
-              <v-btn :disabled="invalidSurvey" type="submit" color="secondary" x-large width="100%">
+              <v-btn color="secondary" :disabled="invalidSurvey" type="submit" width="100%" x-large>
                 {{ $t('common.login') }}
               </v-btn>
             </v-card-actions>

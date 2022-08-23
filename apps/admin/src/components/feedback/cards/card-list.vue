@@ -1,16 +1,16 @@
 <template>
   <v-card flat tile>
-    <v-toolbar flat tile color="grey lighten-5">
-      <v-icon left color="primary">fas fa-cloud-meatball</v-icon>
+    <v-toolbar color="grey lighten-5" flat tile>
+      <v-icon color="primary" left>fas fa-cloud-meatball</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.cards.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
-        fab
-        small
         class="mx-3"
         color="secondary"
+        fab
+        small
         :title="$t('feedback-schemes.cards.add')"
         @click.stop="add"
       >
@@ -34,7 +34,7 @@
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="cards" handle=".drag-and-drop__handle">
-        <transition-group type="transition" name="drag-and-drop">
+        <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(card, index) in cards"
             :key="card.id"
@@ -62,10 +62,10 @@
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
-                :label="$t('feedback-schemes.cards.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"
+                :label="$t('feedback-schemes.cards.remove').toString()"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: getListItemTitle(card) }) }}

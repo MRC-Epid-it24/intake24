@@ -4,11 +4,11 @@
       <v-time-picker
         v-model="currentValue"
         :format="format"
-        :landscape="!isMobile"
         full-width
+        :landscape="!isMobile"
         @input="clearErrors"
       ></v-time-picker>
-      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+      <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
       <continue @click.native="submit"></continue>

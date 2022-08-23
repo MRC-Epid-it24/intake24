@@ -3,8 +3,8 @@
     <template #actions>
       <copy-scheme-dialog
         v-if="canHandleEntry('copy')"
-        :scheme-id="id"
         resource="feedback-schemes"
+        :scheme-id="id"
       ></copy-scheme-dialog>
       <preview v-if="!isCreate" :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
@@ -16,8 +16,8 @@
               <v-text-field
                 v-model="form.name"
                 :error-messages="form.errors.get('name')"
-                :label="$t('common.name')"
                 hide-details="auto"
+                :label="$t('common.name')"
                 name="name"
                 outlined
               ></v-text-field>
@@ -25,10 +25,10 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="form.type"
-                :items="feedbackTypes"
                 :error-messages="form.errors.get('type')"
-                :label="$t('feedback-schemes.types._')"
                 hide-details="auto"
+                :items="feedbackTypes"
+                :label="$t('feedback-schemes.types._')"
                 name="type"
                 outlined
                 @change="form.errors.clear('type')"
@@ -37,10 +37,10 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="form.outputs"
-                :items="feedbackOutputs"
                 :error-messages="form.errors.get('outputs')"
-                :label="$t('feedback-schemes.outputs.title')"
                 hide-details="auto"
+                :items="feedbackOutputs"
+                :label="$t('feedback-schemes.outputs.title')"
                 multiple
                 name="outputs"
                 outlined
@@ -59,10 +59,10 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="form.physicalDataFields"
-                :items="feedbackPhysicalDataFields"
                 :error-messages="form.errors.get('physicalDataFields')"
-                :label="$t('feedback-schemes.physicalDataFields.title')"
                 hide-details="auto"
+                :items="feedbackPhysicalDataFields"
+                :label="$t('feedback-schemes.physicalDataFields.title')"
                 multiple
                 name="physicalDataFields"
                 outlined

@@ -1,12 +1,12 @@
 <template>
-  <prompt-layout :text="promptTitle" :description="promptProps.description">
+  <prompt-layout :description="promptProps.description" :text="promptTitle">
     <v-text-field v-model="searchTerm" @change="search"></v-text-field>
     <v-progress-circular v-if="requestInProgress" indeterminate></v-progress-circular>
-    <v-alert v-if="requestFailed" type="error" prominent>Something went wrong :(</v-alert>
+    <v-alert v-if="requestFailed" prominent type="error">Something went wrong :(</v-alert>
     <v-alert
       v-if="searchResults != null && searchResults.foods.length === 0"
-      type="warning"
       prominent
+      type="warning"
     >
       <p>There is nothing in our database that matches "{{ searchTerm }}".</p>
       <p>Please try re-wording your description.</p></v-alert

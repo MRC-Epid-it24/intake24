@@ -1,13 +1,13 @@
 <template>
   <v-item-group>
-    <v-row justify-center dense style="flex-wrap: nowrap">
+    <v-row dense justify-center style="flex-wrap: nowrap">
       <v-col v-for="(item, idx) in meals" :key="idx" class="flex-grow-1 text-center justify-center">
         <v-item>
           <v-card
-            flat
-            dense
             class="d-flex align-center text-center justify-center"
             :color="color(item)"
+            dense
+            flat
             height="1.2rem"
             width="100%"
           >

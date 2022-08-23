@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined class="mb-5">
+  <v-card class="mb-5" outlined>
     <v-toolbar>
       <template v-for="action in ['create', 'read', 'edit']">
         <component
@@ -7,18 +7,18 @@
           v-if="currentActions.includes(action)"
           :key="action"
           :action="action"
-          :disabled="selected.length !== 1"
           class="mr-2"
+          :disabled="selected.length !== 1"
           @action="onAction"
         ></component>
       </template>
       <v-spacer></v-spacer>
       <confirm-dialog
         v-if="currentActions.includes('delete')"
-        :disabled="!selected.length"
-        :label="$t('common.action.delete').toString()"
         color="error"
+        :disabled="!selected.length"
         icon-left="$delete"
+        :label="$t('common.action.delete').toString()"
         @confirm="onDelete"
       >
         {{ $t('common.action.confirm.multi.delete', { count: selected.length }) }}

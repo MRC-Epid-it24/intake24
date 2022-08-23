@@ -13,28 +13,28 @@
         </v-img>
         <v-img
           ref="imgOverlay"
-          :height="heightOverlay"
-          :width="widthOverlay"
           class="overlay"
+          :height="heightOverlay"
           :src="
             selectedImageOverlayUrl.replace('http://localhost:3100', 'https://api.intake24.org')
           "
+          :width="widthOverlay"
         >
         </v-img>
         <v-container class="overlay slider-container">
           <v-row class="drink-slider">
             <v-spacer></v-spacer>
-            <v-col xs="2" sm="1" class="d-flex justify-end mr-auto">
+            <v-col class="d-flex justify-end mr-auto" sm="1" xs="2">
               <!-- TODO: Height of this -->
               <v-slider
                 v-model="sliderValue"
                 class="full-height-slider ma-0"
+                color="#0d47a1"
                 :hint="$t('portion.drinkScale.lessFullButton')"
                 :max="maxSliderValue"
                 min="0"
-                vertical
-                color="#0d47a1"
                 thumb-color="primary"
+                vertical
               ></v-slider>
             </v-col>
           </v-row>

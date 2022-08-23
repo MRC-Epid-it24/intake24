@@ -7,7 +7,7 @@
     </template>
     <v-card :loading="loading">
       <v-toolbar color="primary" dark flat>
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="close">
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -19,11 +19,11 @@
           <v-col cols="12">
             <v-select
               v-model="selectedTableId"
+              hide-details="auto"
+              item-text="description"
+              item-value="id"
               :items="nutrientTables"
               :label="$t('nutrient-tables._')"
-              hide-details="auto"
-              item-value="id"
-              item-text="description"
               name="selectedTableId"
               outlined
               @change="fetch"
@@ -33,12 +33,12 @@
           <v-col cols="12">
             <v-text-field
               v-model="search"
-              :label="$t('common.search._')"
-              :loading="loading"
               append-icon="fas fa-search"
               class="mb-4"
               clearable
               hide-details="auto"
+              :label="$t('common.search._')"
+              :loading="loading"
               outlined
               @click:clear="clear"
             >
@@ -49,7 +49,7 @@
           {{ $t('fdbs.nutrients.alreadyIncluded', { id: selectedRecord?.id }) }}
         </v-alert>
         <template v-if="items.length">
-          <v-list min-height="350px" dense>
+          <v-list dense min-height="350px">
             <v-list-item-group v-model="selectedRecordId">
               <template v-for="(item, idx) in items">
                 <v-list-item :key="item.id" :value="item.id">
@@ -72,7 +72,7 @@
             </v-list-item-group>
           </v-list>
           <div class="text-center">
-            <v-pagination v-model="page" :length="lastPage" circle></v-pagination>
+            <v-pagination v-model="page" circle :length="lastPage"></v-pagination>
           </div>
         </template>
         <v-alert v-else color="primary" text type="info">

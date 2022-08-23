@@ -2,9 +2,9 @@
   <div>
     <prompt-content
       v-bind="{ name, text, description, textRequired: true }"
+      @update:description="update('description', $event)"
       @update:name="update('name', $event)"
       @update:text="update('text', $event)"
-      @update:description="update('description', $event)"
     ></prompt-content>
     <prompt-conditions
       :conditions="conditions"
@@ -15,9 +15,9 @@
       <v-row>
         <v-col cols="12">
           <v-switch
+            hide-details="auto"
             :input-value="other"
             :label="$t('survey-schemes.questions.other')"
-            hide-details="auto"
             @change="update('other', $event)"
           ></v-switch>
         </v-col>
@@ -31,10 +31,10 @@
             <template v-for="lang in Object.keys(label)" #[`lang.${lang}`]>
               <v-text-field
                 :key="lang"
-                :label="$t('survey-schemes.questions.label')"
-                :value="label[lang]"
                 hide-details="auto"
+                :label="$t('survey-schemes.questions.label')"
                 outlined
+                :value="label[lang]"
                 @input="updateLanguage('label', lang, $event)"
               ></v-text-field>
             </template>

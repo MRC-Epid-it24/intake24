@@ -1,12 +1,12 @@
 <template>
   <v-card flat tile>
-    <v-toolbar flat tile color="grey lighten-2">
-      <v-icon left color="primary">fa-seedling</v-icon>
+    <v-toolbar color="grey lighten-2" flat tile>
+      <v-icon color="primary" left>fa-seedling</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('nutrient-types.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn fab small color="secondary" :title="$t('nutrient-types.create')" @click.stop="add">
+      <v-btn color="secondary" fab small :title="$t('nutrient-types.create')" @click.stop="add">
         <v-icon small>$add</v-icon>
       </v-btn>
       <confirm-dialog
@@ -32,7 +32,7 @@
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="items" handle=".drag-and-drop__handle">
-        <transition-group type="transition" name="drag-and-drop">
+        <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(nutrientType, idx) in items"
             :key="nutrientType.id"
@@ -53,10 +53,10 @@
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
-                :label="$t('nutrient-types.remove').toString()"
                 color="error"
                 icon
                 icon-left="$delete"
+                :label="$t('nutrient-types.remove').toString()"
                 @confirm="remove(idx)"
               >
                 {{ $t('common.action.confirm.delete', { name: nutrientType.name.en }) }}
@@ -69,7 +69,7 @@
     <v-dialog v-model="dialog.show" max-width="600px" persistent>
       <v-card>
         <v-toolbar color="primary" dark flat>
-          <v-icon left dark>fa-seedling</v-icon>
+          <v-icon dark left>fa-seedling</v-icon>
           <v-toolbar-title>
             {{ $t(`nutrient-types.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
@@ -79,31 +79,31 @@
           <v-card-text>
             <v-autocomplete
               v-model="dialog.item.id"
-              :items="availableNutrientTypes"
-              :label="$t('nutrient-types._')"
-              :rules="rules"
               hide-details="auto"
               item-text="description"
               item-value="id"
+              :items="availableNutrientTypes"
+              :label="$t('nutrient-types._')"
               name="nutrientTypeId"
               outlined
               prepend-icon="fas fa-seedling"
+              :rules="rules"
               @change="updateNutrientLabel"
             >
             </v-autocomplete>
           </v-card-text>
           <language-selector
             v-model="dialog.item.name"
-            :label="$t('nutrient-types.label').toString()"
             flat
+            :label="$t('nutrient-types.label').toString()"
             :outlined="false"
           >
             <template v-for="lang in Object.keys(dialog.item.name)" #[`lang.${lang}`]>
               <v-text-field
                 :key="lang"
                 v-model="dialog.item.name[lang]"
-                :label="$t('nutrient-types._')"
                 hide-details="auto"
+                :label="$t('nutrient-types._')"
                 outlined
               ></v-text-field>
             </template>

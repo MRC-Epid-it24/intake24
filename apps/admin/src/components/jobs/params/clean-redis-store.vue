@@ -5,11 +5,11 @@
       <v-row>
         <v-col cols="12">
           <v-select
-            :value="value.store"
             :items="stores"
             :label="$t('jobs.types.CleanRedisStore.stores._')"
             name="store"
             outlined
+            :value="value.store"
             @change="input('store', $event)"
           ></v-select>
         </v-col>

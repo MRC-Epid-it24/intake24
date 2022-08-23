@@ -8,8 +8,8 @@
               <v-text-field
                 v-model="form.id"
                 :error-messages="form.errors.get('id')"
-                :label="$t('drinkware-sets.id')"
                 hide-details="auto"
+                :label="$t('drinkware-sets.id')"
                 name="id"
                 outlined
               ></v-text-field>
@@ -24,14 +24,14 @@
                 <template #activator="{ on, attrs }">
                   <v-text-field
                     v-bind="attrs"
-                    :error-messages="form.errors.get('guideImageId')"
-                    :label="$t('image-maps._')"
-                    :value="form.guideImageId"
-                    hide-details="auto"
-                    name="guideImageId"
                     clearable
+                    :error-messages="form.errors.get('guideImageId')"
+                    hide-details="auto"
+                    :label="$t('image-maps._')"
+                    name="guideImageId"
                     outlined
                     readonly
+                    :value="form.guideImageId"
                     v-on="on"
                   ></v-text-field>
                 </template>
@@ -41,8 +41,8 @@
               <v-text-field
                 v-model="form.description"
                 :error-messages="form.errors.get('description')"
-                :label="$t('common.description')"
                 hide-details="auto"
+                :label="$t('common.description')"
                 name="description"
                 outlined
               ></v-text-field>

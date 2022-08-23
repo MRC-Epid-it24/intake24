@@ -1,5 +1,5 @@
 <template>
-  <portion-layout :text="promptProps.text" :description="promptProps.description">
+  <portion-layout :description="promptProps.description" :text="promptProps.text">
     <template #headerText>
       {{ $t('portion.option.label', { food: localeDescription }) }}
     </template>
@@ -8,23 +8,23 @@
         <v-col
           v-for="(method, index) in availableMethods"
           :key="index"
-          cols="6"
-          md="4"
-          lg="3"
           class="mx-auto"
+          cols="6"
+          lg="3"
+          md="4"
           @click="selectMethod(index)"
         >
           <v-card :elevation="returnSelectElevation(index)">
-            <v-img class="align-end" :src="method.imageUrl" contain aspect-ratio="1">
+            <v-img aspect-ratio="1" class="align-end" contain :src="method.imageUrl">
               <v-chip class="ma-2" :color="returnSelectedStyle(index)">
                 {{ $t(`portion.option.description.${method.description}`) }}
               </v-chip>
               <template #placeholder>
                 <v-alert outlined text>
                   <v-progress-circular
-                    indeterminate
-                    color="primary"
                     class="mr-2"
+                    color="primary"
+                    indeterminate
                   ></v-progress-circular>
                   {{ $t('portion.option.imageInvalid') }}
                 </v-alert>
@@ -35,14 +35,14 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+          <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
         </v-col>
       </v-row>
       <v-row class="ma-2">
         <v-col>
           <v-form ref="form" @submit.prevent="submit">
             <!-- Should be disabled if nothing selected? -->
-            <continue :disabled="!continueEnabled" class="px-2" @click="submit"></continue>
+            <continue class="px-2" :disabled="!continueEnabled" @click="submit"></continue>
           </v-form>
         </v-col>
       </v-row>

@@ -1,33 +1,33 @@
 <template>
   <v-row>
-    <v-col cols="12" md="6" align-self="start">
+    <v-col align-self="start" cols="12" md="6">
       <v-switch
-        :input-value="!!value"
-        :label="$t(`feedback-schemes.${type}._`)"
         class="my-4"
         hide-details="auto"
+        :input-value="!!value"
+        :label="$t(`feedback-schemes.${type}._`)"
         :prepend-icon="getIcon(type)"
         @change="toggleRange($event)"
       ></v-switch>
     </v-col>
     <v-col v-if="value" cols="12" md="6">
       <v-text-field
-        :label="$t('feedback-schemes.ranges.start')"
-        :value="value.start"
         class="mb-4"
         dense
         hide-details="auto"
+        :label="$t('feedback-schemes.ranges.start')"
         name="range.start"
         outlined
+        :value="value.start"
         @input="updateRange('start', $event)"
       ></v-text-field>
       <v-text-field
-        :label="$t('feedback-schemes.ranges.end')"
-        :value="value.end"
         dense
         hide-details="auto"
+        :label="$t('feedback-schemes.ranges.end')"
         name="range.end"
         outlined
+        :value="value.end"
         @input="updateRange('end', $event)"
       ></v-text-field>
     </v-col>

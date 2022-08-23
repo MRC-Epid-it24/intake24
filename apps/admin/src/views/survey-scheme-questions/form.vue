@@ -7,10 +7,10 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.question.id"
-                :label="$t('survey-schemes.questions.internal.id._')"
-                :messages="$t('survey-schemes.questions.internal.id.hint')"
                 disabled
                 hide-details="auto"
+                :label="$t('survey-schemes.questions.internal.id._')"
+                :messages="$t('survey-schemes.questions.internal.id.hint')"
                 name="id"
                 outlined
               ></v-text-field>
@@ -18,10 +18,10 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.question.name"
-                :label="$t('survey-schemes.questions.internal.name._')"
-                :messages="$t('survey-schemes.questions.internal.name.hint')"
                 disabled
                 hide-details="auto"
+                :label="$t('survey-schemes.questions.internal.name._')"
+                :messages="$t('survey-schemes.questions.internal.name.hint')"
                 name="name"
                 outlined
               ></v-text-field>

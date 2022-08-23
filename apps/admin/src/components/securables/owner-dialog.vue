@@ -1,14 +1,14 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
     <template #activator="{ on, attrs }">
-      <v-btn link text class="ml-3" v-bind="attrs" v-on="on">
+      <v-btn class="ml-3" link text v-bind="attrs" v-on="on">
         <v-icon class="mr-2">fas fa-user-shield</v-icon>
         {{ owner ? owner.name : $t('common.none') }}
       </v-btn>
     </template>
     <v-card :loading="isLoading">
       <v-toolbar color="primary" dark flat>
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -27,14 +27,14 @@
               <v-col cols="12">
                 <auto-complete
                   v-model="form.userId"
-                  :error-messages="form.errors.get('userId')"
-                  :label="$t('users.email')"
                   :api="`${api}/users`"
                   clearable
+                  :error-messages="form.errors.get('userId')"
                   hide-no-data
                   hide-selected
                   item-text="email"
                   item-value="id"
+                  :label="$t('users.email')"
                   name="userId"
                   prepend-icon="fas fa-user-shield"
                   :selected="owner"
@@ -51,9 +51,9 @@
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
-            :disabled="form.errors.any()"
             class="font-weight-bold"
             color="blue darken-3"
+            :disabled="form.errors.any()"
             text
             type="submit"
           >

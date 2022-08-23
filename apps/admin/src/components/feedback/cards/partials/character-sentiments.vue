@@ -19,9 +19,9 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="sentiment.sentiment"
+                hide-details="auto"
                 :items="availableSentiments"
                 :label="$t('feedback-schemes.sentiments._')"
-                hide-details="auto"
                 multiple
                 outlined
               ></v-select>
@@ -29,9 +29,9 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="sentiment.sentimentType"
+                hide-details="auto"
                 :items="availableCharacterSentimentTypes"
                 :label="$t('feedback-schemes.characterSentimentTypes._')"
-                hide-details="auto"
                 outlined
               ></v-select>
             </v-col>
@@ -41,8 +41,8 @@
                   <v-text-field
                     :key="lang"
                     v-model="sentiment.name[lang]"
-                    :label="$t('common.name')"
                     hide-details="auto"
+                    :label="$t('common.name')"
                     outlined
                   ></v-text-field>
                 </template>

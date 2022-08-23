@@ -1,5 +1,5 @@
 <template>
-  <v-btn class="px-5" color="success" x-large :block="isMobile" :title="label">
+  <v-btn :block="isMobile" class="px-5" color="success" :title="label" x-large>
     {{ label }}
   </v-btn>
 </template>

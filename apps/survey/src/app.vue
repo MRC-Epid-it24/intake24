@@ -11,12 +11,12 @@
       <v-list dense nav>
         <v-list-item-group>
           <v-list-item
+            link
             :to="
               loggedIn && surveyId
                 ? { name: 'survey-home', params: { surveyId } }
                 : { name: 'home' }
             "
-            link
           >
             <v-list-item-action>
               <v-icon>fas fa-fw fa-home</v-icon>
@@ -26,7 +26,7 @@
             </v-list-item-content>
           </v-list-item>
           <template v-if="loggedIn">
-            <v-list-item v-if="surveyId" :to="{ name: 'survey-recall', params: { surveyId } }" link>
+            <v-list-item v-if="surveyId" link :to="{ name: 'survey-recall', params: { surveyId } }">
               <v-list-item-action>
                 <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
               </v-list-item-action>
@@ -36,8 +36,8 @@
             </v-list-item>
             <v-list-item
               v-if="surveyId"
-              :to="{ name: 'survey-portion-test', params: { surveyId } }"
               link
+              :to="{ name: 'survey-portion-test', params: { surveyId } }"
             >
               <v-list-item-action>
                 <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
@@ -46,7 +46,7 @@
                 <v-list-item-title>Portions test</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item v-if="surveyId" :to="{ name: 'feedback-home', params: { surveyId } }" link>
+            <v-list-item v-if="surveyId" link :to="{ name: 'feedback-home', params: { surveyId } }">
               <v-list-item-action>
                 <v-icon>fas fa-fw fa-comments</v-icon>
               </v-list-item-action>
@@ -59,10 +59,10 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app flat dark color="secondary" permanent hide-on-scroll>
+    <v-app-bar app color="secondary" dark flat hide-on-scroll permanent>
       <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
       <template v-if="loggedIn">
-        <v-img class="mx-2" :src="logo" max-height="30" max-width="150" contain></v-img>
+        <v-img class="mx-2" contain max-height="30" max-width="150" :src="logo"></v-img>
         <v-spacer></v-spacer>
         <v-btn v-if="surveyId" text :to="{ name: 'survey-profile', params: { surveyId } }">
           <span v-if="!isNotDesktop" class="mr-2">{{ $t('profile._') }}</span>

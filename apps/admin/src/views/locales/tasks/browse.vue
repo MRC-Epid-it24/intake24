@@ -8,9 +8,9 @@
             <v-card-text>
               <v-select
                 v-model="form.job"
+                hide-details="auto"
                 :items="jobTypeList"
                 :label="$t('locales.tasks._')"
-                hide-details="auto"
                 name="job"
                 outlined
                 prepend-icon="fa-running"
@@ -24,21 +24,21 @@
               v-if="Object.keys(form.params).length"
               v-model="form.params"
               :error="form.errors.get('params')"
-              :refs="refs"
               name="params"
+              :refs="refs"
               @input="form.errors.clear('params')"
             ></component>
           </v-col>
         </v-row>
         <v-row justify="center">
-          <v-col cols="12" sm="6" md="4">
+          <v-col cols="12" md="4" sm="6">
             <v-btn
-              :disabled="form.errors.any() || jobInProgress || isAppLoading"
               block
-              x-large
-              type="submit"
               color="secondary"
+              :disabled="form.errors.any() || jobInProgress || isAppLoading"
               :title="$t('common.action.upload')"
+              type="submit"
+              x-large
             >
               <v-icon left>fa-play</v-icon> {{ $t('common.action.submit') }}
             </v-btn>

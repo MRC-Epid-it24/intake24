@@ -11,35 +11,35 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="form.email"
-                  :error-messages="form.errors.get('email')"
-                  :label="$t('users.email')"
                   autocomplete="current-password"
+                  :error-messages="form.errors.get('email')"
                   hide-details="auto"
-                  required
+                  :label="$t('users.email')"
                   outlined
+                  required
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="form.password"
-                  :error-messages="form.errors.get('password')"
-                  :label="$t('users.password._')"
                   autocomplete="new-password"
+                  :error-messages="form.errors.get('password')"
                   hide-details="auto"
-                  required
+                  :label="$t('users.password._')"
                   outlined
+                  required
                   type="password"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="form.passwordConfirm"
-                  :error-messages="form.errors.get('passwordConfirm')"
-                  :label="$t('users.password.confirm')"
                   autocomplete="new-password"
+                  :error-messages="form.errors.get('passwordConfirm')"
                   hide-details="auto"
-                  required
+                  :label="$t('users.password.confirm')"
                   outlined
+                  required
                   type="password"
                 ></v-text-field>
               </v-col>
@@ -47,8 +47,8 @@
                 <v-alert
                   v-for="error in nonInputErrors"
                   :key="error.param"
-                  :icon="false"
                   border="left"
+                  :icon="false"
                   text
                   type="error"
                 >
@@ -58,7 +58,7 @@
             </v-row>
           </v-card-text>
           <v-card-actions class="px-6 pb-6">
-            <v-btn type="submit" color="secondary" x-large width="100%">
+            <v-btn color="secondary" type="submit" width="100%" x-large>
               {{ $t('users.password.reset._') }}
             </v-btn>
           </v-card-actions>

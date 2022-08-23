@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :value="value.dialog" max-width="350px" @input="handleLeave">
+  <v-dialog max-width="350px" :value="value.dialog" @input="handleLeave">
     <v-card>
       <v-card-title class="h2 justify-center">
         {{ $t('common.action.confirm.title') }}
@@ -11,22 +11,22 @@
       </v-card-text>
       <v-container class="pa-6">
         <v-btn
-          color="warning"
-          :title="$t('common.action.continue')"
           block
           class="mb-2"
+          color="warning"
           dark
           large
+          :title="$t('common.action.continue')"
           @click.stop="confirmLeave"
         >
           {{ $t('common.action.continue') }}
         </v-btn>
         <v-btn
-          color="warning"
-          :title="$t('common.action.cancel')"
           block
-          outlined
+          color="warning"
           large
+          outlined
+          :title="$t('common.action.cancel')"
           @click.stop="cancelLeave"
         >
           {{ $t('common.action.cancel') }}

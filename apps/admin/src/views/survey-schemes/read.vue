@@ -3,8 +3,8 @@
     <template #actions>
       <copy-scheme-dialog
         v-if="canHandleEntry('copy')"
-        :scheme-id="id"
         resource="survey-schemes"
+        :scheme-id="id"
       ></copy-scheme-dialog>
     </template>
     <v-simple-table>

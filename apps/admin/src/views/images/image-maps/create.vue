@@ -8,8 +8,8 @@
               <v-text-field
                 v-model="form.id"
                 :error-messages="form.errors.get('id')"
-                :label="$t('image-maps.id')"
                 hide-details="auto"
+                :label="$t('image-maps.id')"
                 name="id"
                 outlined
               ></v-text-field>
@@ -18,8 +18,8 @@
               <v-file-input
                 v-model="form.baseImage"
                 :error-messages="form.errors.get('baseImage')"
-                :label="$t('image-maps.baseImage')"
                 hide-details="auto"
+                :label="$t('image-maps.baseImage')"
                 name="baseImage"
                 outlined
                 @change="form.errors.clear('baseImage')"
@@ -29,8 +29,8 @@
               <v-text-field
                 v-model="form.description"
                 :error-messages="form.errors.get('description')"
-                :label="$t('common.description')"
                 hide-details="auto"
+                :label="$t('common.description')"
                 name="description"
                 outlined
               ></v-text-field>

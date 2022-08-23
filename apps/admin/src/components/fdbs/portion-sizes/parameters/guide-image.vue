@@ -5,13 +5,13 @@
         <template #activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
-            :label="$t('fdbs.portionSizes.methods.guide-image._')"
-            :value="guideImageId"
             hide-details="auto"
+            :label="$t('fdbs.portionSizes.methods.guide-image._')"
             name="guide-image-id"
-            prepend-inner-icon="fas fa-image"
             outlined
+            prepend-inner-icon="fas fa-image"
             readonly
+            :value="guideImageId"
             v-on="on"
           ></v-text-field>
         </template>

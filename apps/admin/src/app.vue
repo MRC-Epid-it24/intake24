@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-if="loggedIn" v-model="sidebar" app dark color="primary">
+    <v-navigation-drawer v-if="loggedIn" v-model="sidebar" app color="primary" dark>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="my-1 title">{{ $t('common._') }}</v-list-item-title>
@@ -10,7 +10,7 @@
       <v-divider></v-divider>
       <v-list dense nav>
         <v-list-item-group>
-          <v-list-item :to="{ name: 'dashboard' }" link>
+          <v-list-item link :to="{ name: 'dashboard' }">
             <v-list-item-action>
               <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
             </v-list-item-action>
@@ -58,7 +58,7 @@
       ></menu-tree>
     </v-navigation-drawer>
 
-    <v-app-bar app dark color="secondary" fixed>
+    <v-app-bar app color="secondary" dark fixed>
       <template v-if="loggedIn">
         <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>

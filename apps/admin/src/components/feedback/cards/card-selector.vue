@@ -7,8 +7,8 @@
     transition="dialog-bottom-transition"
   >
     <v-card tile>
-      <v-toolbar dark color="primary">
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
+      <v-toolbar color="primary" dark>
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -16,7 +16,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-btn :title="$t('common.action.ok')" dark text @click.stop="save">
+          <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
             <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
@@ -87,8 +87,8 @@
                       <v-card-text>
                         <v-switch
                           v-model="dialog.card.showRecommendations"
-                          :label="$t('feedback-schemes.cards.showRecommendations')"
                           hide-details="auto"
+                          :label="$t('feedback-schemes.cards.showRecommendations')"
                         ></v-switch>
                       </v-card-text>
                     </v-card>

@@ -7,9 +7,9 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
+          color="secondary"
           fab
           small
-          color="secondary"
           :title="$t('survey-schemes.questions.options.add')"
           @click.stop="add"
         >
@@ -19,14 +19,14 @@
       <v-divider></v-divider>
       <v-list dense>
         <draggable v-model="currentOptions" handle=".drag-and-drop__handle" @end="update">
-          <transition-group type="transition" name="drag-and-drop">
+          <transition-group name="drag-and-drop" type="transition">
             <v-list-item
               v-for="(option, idx) in currentOptions"
               :key="option.id"
-              :ripple="false"
               class="drag-and-drop__item"
               draggable
               link
+              :ripple="false"
             >
               <v-list-item-avatar class="drag-and-drop__handle">
                 <v-icon>fa-grip-vertical</v-icon>
@@ -34,19 +34,19 @@
               <v-list-item-content>
                 <v-text-field
                   v-model="option.label"
-                  :label="$t('survey-schemes.questions.options.label')"
                   class="mr-3"
                   dense
                   hide-details="auto"
+                  :label="$t('survey-schemes.questions.options.label')"
                   outlined
                 ></v-text-field>
                 <v-text-field
                   v-model="option.value"
-                  :label="$t('survey-schemes.questions.options.value')"
-                  :rules="optionValueRules"
                   dense
                   hide-details="auto"
+                  :label="$t('survey-schemes.questions.options.value')"
                   outlined
+                  :rules="optionValueRules"
                 ></v-text-field>
               </v-list-item-content>
               <v-list-item-action>

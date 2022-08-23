@@ -9,8 +9,8 @@
                 v-model="form.id"
                 :disabled="isEdit"
                 :error-messages="form.errors.get('id')"
-                :label="$t('locales.id')"
                 hide-details="auto"
+                :label="$t('locales.id')"
                 name="id"
                 outlined
               ></v-text-field>
@@ -18,12 +18,12 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="form.prototypeLocaleId"
-                :items="locales"
                 :error-messages="form.errors.get('prototypeLocaleId')"
-                :label="$t('locales.prototypeLocaleId')"
                 hide-details="auto"
-                item-value="id"
                 item-text="englishName"
+                item-value="id"
+                :items="locales"
+                :label="$t('locales.prototypeLocaleId')"
                 name="locale"
                 outlined
                 @change="form.errors.clear('prototypeLocaleId')"
@@ -42,8 +42,8 @@
               <v-text-field
                 v-model="form.englishName"
                 :error-messages="form.errors.get('englishName')"
-                :label="$t('locales.englishName')"
                 hide-details="auto"
+                :label="$t('locales.englishName')"
                 name="englishName"
                 outlined
               ></v-text-field>
@@ -52,8 +52,8 @@
               <v-text-field
                 v-model="form.localName"
                 :error-messages="form.errors.get('localName')"
-                :label="$t('locales.localName')"
                 hide-details="auto"
+                :label="$t('locales.localName')"
                 name="localName"
                 outlined
               ></v-text-field>
@@ -62,11 +62,11 @@
               <v-select
                 v-model="form.respondentLanguageId"
                 :error-messages="form.errors.get('respondentLanguageId')"
+                hide-details="auto"
+                item-text="englishName"
+                item-value="id"
                 :items="refs.languages"
                 :label="$t('locales.respondentLanguageId')"
-                hide-details="auto"
-                item-value="id"
-                item-text="englishName"
                 name="respondentLanguageId"
                 outlined
                 @change="form.errors.clear('respondentLanguageId')"
@@ -85,11 +85,11 @@
               <v-select
                 v-model="form.adminLanguageId"
                 :error-messages="form.errors.get('adminLanguageId')"
+                hide-details="auto"
+                item-text="englishName"
+                item-value="id"
                 :items="refs.languages"
                 :label="$t('locales.adminLanguageId')"
-                hide-details="auto"
-                item-value="id"
-                item-text="englishName"
                 name="adminLanguageId"
                 outlined
                 @change="form.errors.clear('adminLanguageId')"
@@ -108,9 +108,9 @@
               <v-select
                 v-model="form.countryFlagCode"
                 :error-messages="form.errors.get('countryFlagCode')"
+                hide-details="auto"
                 :items="flags"
                 :label="$t('locales.countryFlagCode')"
-                hide-details="auto"
                 name="countryFlagCode"
                 outlined
                 @change="form.errors.clear('countryFlagCode')"
@@ -129,9 +129,9 @@
               <v-select
                 v-model="form.textDirection"
                 :error-messages="form.errors.get('textDirection')"
+                hide-details="auto"
                 :items="textDirections"
                 :label="$t('languages.textDirections._')"
-                hide-details="auto"
                 name="textDirection"
                 outlined
                 @change="form.errors.clear('textDirection')"

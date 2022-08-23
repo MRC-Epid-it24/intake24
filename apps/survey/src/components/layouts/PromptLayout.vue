@@ -11,8 +11,8 @@
     </v-card-text>
     <v-card-actions
       v-if="hasActionsSlot"
-      :class="{ 'flex-column-reverse': isMobile }"
       class="pa-4 d-flex"
+      :class="{ 'flex-column-reverse': isMobile }"
     >
       <slot name="actions"></slot>
     </v-card-actions>

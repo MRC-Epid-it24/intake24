@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <embedded-data-table ref="table" :headers="headers" :api="baseAPI">
+    <embedded-data-table ref="table" :api="baseAPI" :headers="headers">
       <template #[`item.startTime`]="{ item }">
         {{ formatDate(item.startTime) }}
       </template>
@@ -8,14 +8,14 @@
         {{ formatDate(item.endTime) }}
       </template>
       <template #[`item.action`]="{ item }">
-        <v-btn :title="$t('common.action.read')" color="primary" icon @click.stop="detail(item.id)">
+        <v-btn color="primary" icon :title="$t('common.action.read')" @click.stop="detail(item.id)">
           <v-icon>$read</v-icon>
         </v-btn>
         <confirm-dialog
-          :label="$t('common.action.delete')"
           color="error"
           icon
           icon-left="$delete"
+          :label="$t('common.action.delete')"
           @confirm="remove(item.id)"
         >
           {{ $t('common.action.confirm.delete', { name: item.id }) }}
@@ -24,8 +24,8 @@
     </embedded-data-table>
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card tile>
-        <v-toolbar dark color="primary">
-          <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="close">
+        <v-toolbar color="primary" dark>
+          <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
             <v-icon>$cancel</v-icon>
           </v-btn>
           <v-toolbar-title>

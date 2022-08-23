@@ -5,13 +5,13 @@
         <template #activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
-            :label="$t('fdbs.portionSizes.methods.as-served.servingImageSet')"
-            :value="servingSetId"
             hide-details="auto"
+            :label="$t('fdbs.portionSizes.methods.as-served.servingImageSet')"
             name="serving-set-id"
-            prepend-inner-icon="fas fa-image"
             outlined
+            prepend-inner-icon="fas fa-image"
             readonly
+            :value="servingSetId"
             v-on="on"
           ></v-text-field>
         </template>
@@ -22,16 +22,16 @@
         <template #activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
-            :label="$t('fdbs.portionSizes.methods.as-served.leftoverImageSet')"
-            :value="leftoverSetId"
             clearable
             hide-details="auto"
             item-name="description"
+            :label="$t('fdbs.portionSizes.methods.as-served.leftoverImageSet')"
             list-name="id"
             name="leftover-set-id"
-            prepend-inner-icon="fas fa-image"
             outlined
+            prepend-inner-icon="fas fa-image"
             readonly
+            :value="leftoverSetId"
             v-on="on"
             @click:clear="removeParameter('leftovers-image-set')"
           ></v-text-field>

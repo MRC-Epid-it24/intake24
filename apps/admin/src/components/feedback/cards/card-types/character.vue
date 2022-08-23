@@ -4,17 +4,17 @@
       <v-row>
         <v-col cols="12" md="6">
           <v-select
+            hide-details="auto"
             :items="characterTypes"
             :label="$t('feedback-schemes.characterTypes._')"
-            :value="characterType"
-            hide-details="auto"
             name="characterType"
             outlined
+            :value="characterType"
             @change="update('characterType', $event)"
           >
             <template #item="{ item }">
-              <v-avatar tile class="mr-4 my-2">
-                <v-img :src="characterImageMap[item.value]" :alt="item.value"></v-img>
+              <v-avatar class="mr-4 my-2" tile>
+                <v-img :alt="item.value" :src="characterImageMap[item.value]"></v-img>
               </v-avatar>
               {{ $t(`feedback-schemes.characterTypes.${item.value}`) }}
             </template>
@@ -22,17 +22,17 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-autocomplete
-            :items="nutrientTypes"
-            :label="$t('nutrient-types._')"
-            :value="nutrientTypeIds"
             hide-details="auto"
             item-text="description"
             item-value="id"
+            :items="nutrientTypes"
+            :label="$t('nutrient-types._')"
             multiple
             name="nutrientTypeIds"
             outlined
             prepend-icon="fas fa-seedling"
             :search-input.sync="nutrientTypeIdSearchInput"
+            :value="nutrientTypeIds"
             @change="updateNutrientTypeId($event)"
           >
           </v-autocomplete>

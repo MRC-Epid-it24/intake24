@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="auto" class="d-flex flex-column">
+  <v-col class="d-flex flex-column" cols="auto">
     <div class="text-subtitle-1 font-weight-medium text-uppercase">
       {{ $t('feedback.physicalData.title') }}
     </div>
@@ -22,9 +22,9 @@
       }}
     </div>
     <v-btn
-      link
       class="mt-2"
       color="primary"
+      link
       outlined
       :title="$t('feedback.physicalData.change')"
       :to="{ name: 'feedback-physical-data', params: { surveyId } }"
@@ -33,9 +33,9 @@
       {{ $t('feedback.physicalData.change') }}
     </v-btn>
     <v-btn
-      link
       class="mt-2"
       color="primary"
+      link
       outlined
       :title="$t('feedback.physicalData.recall')"
       :to="{ name: 'survey-home', params: { surveyId } }"

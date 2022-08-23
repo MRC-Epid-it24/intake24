@@ -10,9 +10,9 @@
                 <v-col cols="12">
                   <v-select
                     v-model="form.type"
+                    hide-details="auto"
                     :items="jobTypeList"
                     :label="$t('nutrient-tables.upload.type')"
-                    hide-details="auto"
                     name="type"
                     outlined
                     prepend-icon="fa-running"
@@ -23,8 +23,8 @@
                   <v-file-input
                     v-model="form.file"
                     :error-messages="form.errors.get('file')"
-                    :label="$t('nutrient-tables.upload.file')"
                     hide-details="auto"
+                    :label="$t('nutrient-tables.upload.file')"
                     name="file"
                     outlined
                     prepend-icon="fa-file-csv"
@@ -33,14 +33,14 @@
                 </v-col>
               </v-row>
               <v-row justify="center">
-                <v-col cols="12" sm="10" md="8" lg="6">
+                <v-col cols="12" lg="6" md="8" sm="10">
                   <v-btn
-                    :disabled="form.errors.any() || jobInProgress || isAppLoading"
                     block
-                    x-large
-                    type="submit"
                     color="secondary"
+                    :disabled="form.errors.any() || jobInProgress || isAppLoading"
                     :title="$t('common.action.upload')"
+                    type="submit"
+                    x-large
                   >
                     <v-icon left>fa-upload</v-icon> {{ $t('common.action.upload') }}
                   </v-btn>

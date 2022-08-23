@@ -5,13 +5,13 @@
         <template #activator="{ on, attrs }">
           <v-text-field
             v-bind="attrs"
-            :label="$t('fdbs.portionSizes.methods.drink-scale.drinkwareSet')"
-            :value="drinkwareSetId"
             hide-details="auto"
+            :label="$t('fdbs.portionSizes.methods.drink-scale.drinkwareSet')"
             name="drinkware-set-id"
-            prepend-inner-icon="fas fa-mug-saucer"
             outlined
+            prepend-inner-icon="fas fa-mug-saucer"
             readonly
+            :value="drinkwareSetId"
             v-on="on"
           ></v-text-field>
         </template>
@@ -20,19 +20,19 @@
     <v-col cols="12"
       ><v-slider
         v-model="initialFillLevel"
-        :label="$t('fdbs.portionSizes.methods.drink-scale.initialLevel')"
-        :min="0"
-        :max="1"
-        :step="0.05"
         class="mt-5"
+        :label="$t('fdbs.portionSizes.methods.drink-scale.initialLevel')"
+        :max="1"
+        :min="0"
+        :step="0.05"
         thumb-label="always"
       ></v-slider>
     </v-col>
     <v-col cols="12">
       <v-switch
         v-model="skipFillLevel"
-        :label="$t('fdbs.portionSizes.methods.drink-scale.skipFillLevelPrompt')"
         hide-details="auto"
+        :label="$t('fdbs.portionSizes.methods.drink-scale.skipFillLevelPrompt')"
       ></v-switch>
     </v-col>
   </v-row>

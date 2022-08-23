@@ -1,48 +1,48 @@
 <template>
   <v-row justify="center" no-gutters>
     <v-col cols="auto">
-      <v-card class="mt-10" outlined raised max-width="30rem">
+      <v-card class="mt-10" max-width="30rem" outlined raised>
         <v-card-title class="justify-center pt-6">
           <h2>{{ $t('common._') }}</h2>
         </v-card-title>
         <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="onLogin">
           <v-card-text class="px-6">
             <v-row>
-              <v-col cols="12" class="mb-3">
+              <v-col class="mb-3" cols="12">
                 <v-text-field
                   v-model="email"
-                  :error-messages="errors.get('email')"
-                  :label="$t('users.email')"
                   autocomplete="email"
+                  :error-messages="errors.get('email')"
                   hide-details="auto"
-                  required
+                  :label="$t('users.email')"
                   outlined
+                  required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" class="mb-3">
+              <v-col class="mb-3" cols="12">
                 <v-text-field
                   v-model="password"
                   :append-icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
-                  :error-messages="errors.get('password')"
-                  :label="$t('users.password._')"
-                  :type="showPassword ? 'text' : 'password'"
                   autocomplete="current-password"
+                  :error-messages="errors.get('password')"
                   hide-details="auto"
-                  required
+                  :label="$t('users.password._')"
                   outlined
+                  required
+                  :type="showPassword ? 'text' : 'password'"
                   @click:append="showPassword = !showPassword"
                 ></v-text-field>
               </v-col>
             </v-row>
           </v-card-text>
           <v-card-actions class="px-6 pb-6">
-            <v-btn type="submit" color="secondary" x-large width="100%">
+            <v-btn color="secondary" type="submit" width="100%" x-large>
               {{ $t('common.login') }}
             </v-btn>
           </v-card-actions>
           <v-divider class="mx-6"></v-divider>
           <v-card-actions class="d-flex justify-end px-6 pb-6">
-            <v-btn :to="{ name: 'password-request' }" color="blue darken-3" text>
+            <v-btn color="blue darken-3" text :to="{ name: 'password-request' }">
               {{ $t('users.password.forgot') }}
             </v-btn>
           </v-card-actions>

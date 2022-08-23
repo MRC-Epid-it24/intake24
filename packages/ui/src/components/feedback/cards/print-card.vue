@@ -1,13 +1,13 @@
 <template>
-  <v-container fluid class="print-card pa-0">
-    <v-row no-gutters class="print-card-header mt-2">
+  <v-container class="print-card pa-0" fluid>
+    <v-row class="print-card-header mt-2" no-gutters>
       <v-col cols="4">
-        <v-img :src="backgroundImage" class="ml-4" :aspect-ratio="4 / 3" eager></v-img>
+        <v-img :aspect-ratio="4 / 3" class="ml-4" eager :src="backgroundImage"></v-img>
       </v-col>
-      <v-col cols class="d-flex flex-column">
+      <v-col class="d-flex flex-column" cols>
         <v-card-title class="font-weight-medium py-0">{{ detail.name }}</v-card-title>
         <v-card-text class="d-flex flex-column py-0 font-weight-medium">
-          <i18n path="feedback.intake.your" tag="div" class="mb-2">
+          <i18n class="mb-2" path="feedback.intake.your" tag="div">
             <template #nutrient>
               <span>{{ detail.name.toLowerCase() }}</span>
             </template>

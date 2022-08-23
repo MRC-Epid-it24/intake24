@@ -27,6 +27,7 @@ module.exports = {
       },
     ],
     'simple-import-sort/exports': 'error',
+    'vue/attributes-order': ['error', { alphabetical: true }],
     'vue/multi-word-component-names': 'warn',
     'vue/require-default-prop': 'off',
     '@typescript-eslint/consistent-type-imports': [

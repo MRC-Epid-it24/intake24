@@ -4,8 +4,8 @@
     <svg
       ref="svg"
       :height="height"
-      :width="width"
       :style="svgCursor"
+      :width="width"
       @dblclick.stop="isGuideImage || disabled ? undefined : addNode($event)"
     >
       <g v-for="(object, objectIdx) in scaled" :key="objectIdx" class="guides-drawer-group">
@@ -20,10 +20,10 @@
           <circle
             v-for="([x, y], nodeIdx) in object.coords"
             :key="nodeIdx"
+            class="guides-drawer-node"
             :cx="x"
             :cy="y"
             :style="nodeCursor"
-            class="guides-drawer-node"
             @dblclick.stop="removeNode(nodeIdx)"
             @mousedown="dragNode($event, nodeIdx)"
             @mouseup="dropNode()"
@@ -34,13 +34,13 @@
     <v-item-group v-model="selectedObjectIdx">
       <v-container>
         <v-row>
-          <v-col v-for="(object, idx) in objects" :key="object.id" cols="12" sm="6" md="4">
+          <v-col v-for="(object, idx) in objects" :key="object.id" cols="12" md="4" sm="6">
             <v-item v-slot="{ active }">
-              <v-card min-height="200px" flat outlined>
+              <v-card flat min-height="200px" outlined>
                 <v-toolbar
-                  flat
                   :color="active ? `secondary` : `orange lighten-4`"
                   :dark="active"
+                  flat
                   :style="{ cursor: 'pointer' }"
                   @click="selectObject(idx)"
                 >
@@ -49,11 +49,11 @@
                   <v-spacer></v-spacer>
                   <confirm-dialog
                     v-if="isImageMap && !disabled"
-                    :label="$t('guide-images.objects.delete').toString()"
                     color="error"
                     icon
                     :icon-color="active ? `white` : `error`"
                     icon-left="$delete"
+                    :label="$t('guide-images.objects.delete').toString()"
                     @confirm="removeObject(idx)"
                   >
                     {{ $t('common.action.confirm.delete', { name: entry.id }) }}
@@ -66,8 +66,8 @@
                       <v-text-field
                         v-model.trim="object.description"
                         :disabled="isGuideImage || disabled"
-                        :label="$t('common.description')"
                         hide-details="auto"
+                        :label="$t('common.description')"
                         name="description"
                         outlined
                       ></v-text-field>
@@ -76,8 +76,8 @@
                       <v-text-field
                         v-model.number="object.weight"
                         :disabled="isImageMap || disabled"
-                        :label="$t('guide-images.objects.weight')"
                         hide-details="auto"
+                        :label="$t('guide-images.objects.weight')"
                         name="weight"
                         outlined
                       ></v-text-field>
@@ -87,15 +87,15 @@
               </v-card>
             </v-item>
           </v-col>
-          <v-col v-if="isImageMap && !disabled" cols="12" sm="6" md="4">
+          <v-col v-if="isImageMap && !disabled" cols="12" md="4" sm="6">
             <v-card
-              :title="$t('guide-images.objects.add')"
               class="d-flex justify-center align-center"
-              min-height="200px"
-              height="100%"
               flat
-              outlined
+              height="100%"
               link
+              min-height="200px"
+              outlined
+              :title="$t('guide-images.objects.add')"
               @click.stop="addObject"
             >
               <v-btn color="secondary" fab x-large>

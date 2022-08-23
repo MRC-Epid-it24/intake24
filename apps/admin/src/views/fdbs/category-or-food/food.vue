@@ -14,8 +14,8 @@
                 <v-text-field
                   v-model="form.main.code"
                   :error-messages="form.errors.get('main.code')"
-                  :label="$t('fdbs.foods.global.code')"
                   hide-details="auto"
+                  :label="$t('fdbs.foods.global.code')"
                   name="main.code"
                   outlined
                 ></v-text-field>
@@ -24,8 +24,8 @@
                 <v-text-field
                   v-model="form.main.name"
                   :error-messages="form.errors.get('main.name')"
-                  :label="$t('fdbs.foods.global.name')"
                   hide-details="auto"
+                  :label="$t('fdbs.foods.global.name')"
                   name="main.name"
                   outlined
                 ></v-text-field>
@@ -33,12 +33,12 @@
               <v-col cols="12">
                 <auto-complete
                   v-model="form.main.foodGroupId"
-                  :error-messages="form.errors.get('main.foodGroupId')"
-                  :selected="entry?.main?.foodGroup"
-                  :label="$t('fdbs.foods.global.foodGroup').toString()"
-                  response-object="data"
                   api="admin/food-groups"
+                  :error-messages="form.errors.get('main.foodGroupId')"
+                  :label="$t('fdbs.foods.global.foodGroup').toString()"
                   name="main.foodGroup"
+                  response-object="data"
+                  :selected="entry?.main?.foodGroup"
                   @input="form.errors.clear('main.foodGroupId')"
                 ></auto-complete>
               </v-col>
@@ -57,8 +57,8 @@
                 <v-text-field
                   v-model="form.name"
                   :error-messages="form.errors.get('name')"
-                  :label="$t('fdbs.foods.local.name')"
                   hide-details="auto"
+                  :label="$t('fdbs.foods.local.name')"
                   name="name"
                   outlined
                 ></v-text-field>
@@ -68,35 +68,35 @@
         </v-card>
         <attribute-list
           v-model="form.main.attributes"
+          class="mb-6"
           :disabled="disabled"
           :errors="form.errors"
-          class="mb-6"
         ></attribute-list>
         <category-list
           v-model="form.main.parentCategories"
+          class="mb-6"
           :disabled="disabled"
           :errors="form.errors"
           :locale-id="id"
-          class="mb-6"
         ></category-list>
         <nutrient-list
           v-model="form.nutrientRecords"
+          class="mb-6"
           :disabled="disabled"
           :errors="form.errors"
           :nutrient-tables="refs?.nutrientTables ?? []"
-          class="mb-6"
         ></nutrient-list>
         <portion-size-method-list
           v-model="form.portionSizeMethods"
+          class="mb-6"
           :disabled="disabled"
           :errors="form.errors"
           :locale-id="id"
-          class="mb-6"
         ></portion-size-method-list>
       </v-form>
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
-        <v-btn outlined color="primary" type="submit" @click="submit">
+        <v-btn color="primary" outlined type="submit" @click="submit">
           <v-icon left>$save</v-icon> {{ $t(`common.action.save`) }}
         </v-btn>
       </v-card-actions>

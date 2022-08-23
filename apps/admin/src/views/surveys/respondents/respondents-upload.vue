@@ -23,8 +23,8 @@
                 <v-file-input
                   v-model="form.file"
                   :error-messages="form.errors.get('file')"
-                  :label="$t('surveys.respondents.upload.file')"
                   hide-details="auto"
+                  :label="$t('surveys.respondents.upload.file')"
                   name="file"
                   outlined
                   prepend-icon="fa-file-excel"
@@ -32,7 +32,7 @@
                 ></v-file-input>
               </v-col>
               <v-col cols="12" sm="auto">
-                <v-btn type="submit" color="secondary" x-large block :disabled="jobInProgress">
+                <v-btn block color="secondary" :disabled="jobInProgress" type="submit" x-large>
                   <v-icon left>fa-upload</v-icon>
                   {{ $t('surveys.respondents.upload.submit') }}
                 </v-btn>

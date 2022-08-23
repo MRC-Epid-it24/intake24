@@ -1,15 +1,15 @@
 <template>
-  <v-row :no-gutters="isMobile" class="pt-0" justify="center">
+  <v-row class="pt-0" justify="center" :no-gutters="isMobile">
     <recall-bread-crumbs-mobile :prompt-name="activePrompt"></recall-bread-crumbs-mobile>
-    <transition type="fade" mode="out-in">
+    <transition mode="out-in" type="fade">
       <v-alert
+        border="left"
+        class="alert ma-2"
+        color="bisque"
+        dense
         elevation="2"
         transition="slide-x-reverse-transition"
-        dense
-        color="bisque"
-        border="left"
         type="warning"
-        class="alert ma-2"
         :value="alert"
       >
         <span class="alert-text">
@@ -18,8 +18,8 @@
         </span>
       </v-alert>
     </transition>
-    <v-col v-if="bottomNavTab !== 1" cols="12" lg="9" class="content mt-0">
-      <transition name="component-fade" mode="out-in">
+    <v-col v-if="bottomNavTab !== 1" class="content mt-0" cols="12" lg="9">
+      <transition mode="out-in" name="component-fade">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
         even if the next prompt uses the same component type, probably should be something like an internal counter,
         or maybe not  ¯\_(ツ)_/¯  -->
@@ -27,26 +27,26 @@
         <component
           :is="handlerComponent"
           v-if="currentPrompt"
-          ref="promptHandle"
           :key="Math.random()"
+          ref="promptHandle"
           :prompt-component="currentPrompt.prompt.component"
           :prompt-id="currentPrompt.prompt.id"
           :prompt-props="currentPrompt.prompt.props"
           :submit-trigger="submitTrigger"
-          @validation-update="onValidationUpdate"
           @continue="onContinue"
-          @restart="restart"
-          @resetPromptTrigger="resetTrigger"
           @meal-food-selected="onMealFoodMobileClick"
+          @resetPromptTrigger="resetTrigger"
+          @restart="restart"
+          @validation-update="onValidationUpdate"
         ></component>
       </transition>
     </v-col>
 
-    <v-col v-if="bottomNavTab === 1" cols="12" lg="9" class="content">
-      <review :meals="meals" :survey-name="surveyName" :active-meal-index="mealIndex"></review>
+    <v-col v-if="bottomNavTab === 1" class="content" cols="12" lg="9">
+      <review :active-meal-index="mealIndex" :meals="meals" :survey-name="surveyName"></review>
     </v-col>
 
-    <v-col v-show="showMealList && bottomNavTab === 2" cols="12" class="stickybottom">
+    <v-col v-show="showMealList && bottomNavTab === 2" class="stickybottom" cols="12">
       <meal-list-mobile-bottom
         v-show="meals.length > 0"
         :meals="meals"
@@ -67,23 +67,23 @@
 
     <!-- Context menu for Meal or Food with actions options -->
     <meal-food-mobile-context-menu
-      :show="mobileMealFoodContextMenu.show"
-      :entity-name="mobileMealFoodContextMenu.foodContext ? activeFood : activeMeal"
       :entity-index="
         mobileMealFoodContextMenu.foodContext
           ? mobileMealFoodContextMenu.foodIndex
           : mobileMealFoodContextMenu.mealIndex
       "
-      :meal-index="mobileMealFoodContextMenu.mealIndex"
+      :entity-name="mobileMealFoodContextMenu.foodContext ? activeFood : activeMeal"
       :entity-type="mobileMealFoodContextMenu.foodContext"
-      @toggleMobileMealContext="onMobileMealFoodContextMenu"
-      @meal-action="onMealAction"
+      :meal-index="mobileMealFoodContextMenu.mealIndex"
+      :show="mobileMealFoodContextMenu.show"
       @continue="onContinue"
+      @meal-action="onMealAction"
+      @toggleMobileMealContext="onMobileMealFoodContextMenu"
     ></meal-food-mobile-context-menu>
 
     <info-alert
-      :status="undo ? true : false"
       :info="undo ? 'Undo deletion of ' + undo.type : ''"
+      :status="undo ? true : false"
       @alert-dismissed="clearUndo"
     ></info-alert>
   </v-row>

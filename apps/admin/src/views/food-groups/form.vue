@@ -8,8 +8,8 @@
               <v-text-field
                 v-model="form.name"
                 :error-messages="form.errors.get('name')"
-                :label="$t('common.name')"
                 hide-details="auto"
+                :label="$t('common.name')"
                 name="name"
                 outlined
               ></v-text-field>

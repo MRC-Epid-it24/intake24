@@ -10,8 +10,8 @@
                 v-model="form.id"
                 :disabled="isEdit"
                 :error-messages="form.errors.get('id')"
-                :label="$t('common.id')"
                 hide-details="auto"
+                :label="$t('common.id')"
                 name="id"
                 outlined
               ></v-text-field>
@@ -20,8 +20,8 @@
               <v-text-field
                 v-model="form.description"
                 :error-messages="form.errors.get('description')"
-                :label="$t('common.description')"
                 hide-details="auto"
+                :label="$t('common.description')"
                 name="description"
                 outlined
               ></v-text-field>
@@ -35,8 +35,8 @@
               <v-text-field
                 v-model="form.csvMapping.idColumnOffset"
                 :error-messages="form.errors.get('csvMapping.idColumnOffset')"
-                :label="$t('nutrient-tables.mapping.source.idColumnOffset')"
                 hide-details="auto"
+                :label="$t('nutrient-tables.mapping.source.idColumnOffset')"
                 name="csvMapping.idColumnOffset"
                 outlined
               ></v-text-field>
@@ -45,8 +45,8 @@
               <v-text-field
                 v-model="form.csvMapping.descriptionColumnOffset"
                 :error-messages="form.errors.get('csvMapping.descriptionColumnOffset')"
-                :label="$t('nutrient-tables.mapping.source.descriptionColumnOffset')"
                 hide-details="auto"
+                :label="$t('nutrient-tables.mapping.source.descriptionColumnOffset')"
                 name="csvMapping.descriptionColumnOffset"
                 outlined
               ></v-text-field>
@@ -55,8 +55,8 @@
               <v-text-field
                 v-model="form.csvMapping.localDescriptionColumnOffset"
                 :error-messages="form.errors.get('csvMapping.localDescriptionColumnOffset')"
-                :label="$t('nutrient-tables.mapping.source.localDescriptionColumnOffset')"
                 hide-details="auto"
+                :label="$t('nutrient-tables.mapping.source.localDescriptionColumnOffset')"
                 name="csvMapping.localDescriptionColumnOffset"
                 outlined
               ></v-text-field>
@@ -65,8 +65,8 @@
               <v-text-field
                 v-model="form.csvMapping.rowOffset"
                 :error-messages="form.errors.get('csvMapping.rowOffset')"
-                :label="$t('nutrient-tables.mapping.source.rowOffset')"
                 hide-details="auto"
+                :label="$t('nutrient-tables.mapping.source.rowOffset')"
                 name="csvMapping.rowOffset"
                 outlined
               ></v-text-field>
@@ -79,10 +79,10 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn
-            :title="$t('nutrient-tables.mapping.fields.create')"
             color="secondary"
             outlined
             rounded
+            :title="$t('nutrient-tables.mapping.fields.create')"
             @click.stop="addField"
           >
             <v-icon left>$add</v-icon> {{ $t('nutrient-tables.mapping.fields.create') }}
@@ -105,9 +105,9 @@
                 <td class="py-2">
                   <v-text-field
                     v-model="field.fieldName"
-                    :label="$t('nutrient-tables.mapping.fields.fieldName')"
                     dense
                     hide-details="auto"
+                    :label="$t('nutrient-tables.mapping.fields.fieldName')"
                     name="fieldName"
                     outlined
                   >
@@ -116,9 +116,9 @@
                 <td class="py-2">
                   <v-text-field
                     v-model="field.columnOffset"
-                    :label="$t('nutrient-tables.mapping.fields.columnOffset')"
                     dense
                     hide-details="auto"
+                    :label="$t('nutrient-tables.mapping.fields.columnOffset')"
                     name="columnOffset"
                     outlined
                   >
@@ -126,8 +126,8 @@
                 </td>
                 <td class="py-2">
                   <v-btn
-                    :title="$t('nutrient-tables.mapping.fields.delete')"
                     icon
+                    :title="$t('nutrient-tables.mapping.fields.delete')"
                     @click="removeField(idx)"
                   >
                     <v-icon color="error">$delete</v-icon>
@@ -143,10 +143,10 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn
-            :title="$t('nutrient-tables.mapping.nutrients.create')"
             color="secondary"
             outlined
             rounded
+            :title="$t('nutrient-tables.mapping.nutrients.create')"
             @click.stop="addNutrient"
           >
             <v-icon left>$add</v-icon> {{ $t('nutrient-tables.mapping.nutrients.create') }}
@@ -174,12 +174,12 @@
                 <td class="py-2">
                   <v-select
                     v-model="nutrient.nutrientTypeId"
+                    dense
+                    hide-details="auto"
+                    item-text="description"
+                    item-value="id"
                     :items="refs.nutrientTypes"
                     :label="$t('nutrient-tables.mapping.nutrients.nutrient')"
-                    dense
-                    item-value="id"
-                    item-text="description"
-                    hide-details="auto"
                     name="nutrient"
                     outlined
                   >
@@ -188,9 +188,9 @@
                 <td class="py-2">
                   <v-text-field
                     v-model="nutrient.columnOffset"
-                    :label="$t('nutrient-tables.mapping.nutrients.columnOffset')"
                     dense
                     hide-details="auto"
+                    :label="$t('nutrient-tables.mapping.nutrients.columnOffset')"
                     name="columnOffset"
                     outlined
                   >
@@ -198,8 +198,8 @@
                 </td>
                 <td class="py-2">
                   <v-btn
-                    :title="$t('nutrient-tables.mapping.nutrients.delete')"
                     icon
+                    :title="$t('nutrient-tables.mapping.nutrients.delete')"
                     @click="removeNutrient(idx)"
                   >
                     <v-icon color="error">$delete</v-icon>

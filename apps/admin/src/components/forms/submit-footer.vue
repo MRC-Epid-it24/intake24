@@ -1,13 +1,13 @@
 <template>
-  <v-row :justify="justify" class="mt-3">
-    <v-col cols="12" sm="6" md="4" lg="3">
+  <v-row class="mt-3" :justify="justify">
+    <v-col cols="12" lg="3" md="4" sm="6">
       <v-btn
-        x-large
-        type="submit"
-        :color="color"
         block
-        :title="label"
+        :color="color"
         :disabled="disabled || isAppLoading"
+        :title="label"
+        type="submit"
+        x-large
       >
         <v-icon left>{{ icon }}</v-icon> {{ label }}
       </v-btn>

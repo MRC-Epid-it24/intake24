@@ -25,10 +25,10 @@
     <v-list-item-action v-if="!isOverrideMode">
       <v-menu
         v-model="contextMenu"
+        close-on-click
+        close-on-content-click
         max-width="600px"
         offset-y
-        close-on-content-click
-        close-on-click
       >
         <template #activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
@@ -37,8 +37,8 @@
         </template>
         <v-list>
           <confirm-dialog
-            :label="$t('survey-schemes.questions.move').toString()"
             color="primary lighten-1"
+            :label="$t('survey-schemes.questions.move').toString()"
             max-width="450px"
             @close="clearMoveToSection"
             @confirm="move"
@@ -53,9 +53,9 @@
             </template>
             <v-select
               v-model="moveToSection"
+              hide-details="auto"
               :items="moveSections"
               :label="$t('survey-schemes.questions.section')"
-              hide-details="auto"
               outlined
             ></v-select>
           </confirm-dialog>
@@ -65,20 +65,20 @@
             :question="question"
           ></save-as-template-dialog>
           <confirm-dialog
-            :label="$t('survey-scheme-questions.sync.synchronize').toString()"
             color="primary lighten-1"
+            :label="$t('survey-scheme-questions.sync.synchronize').toString()"
             max-width="450px"
             @confirm="sync"
           >
             <template #activator="{ on, attrs }">
               <v-list-item
                 v-bind="attrs"
-                link
                 :disabled="!hasTemplate || isInSyncWithTemplate"
+                link
                 v-on="on"
               >
                 <v-list-item-title>
-                  <v-icon left :disabled="!hasTemplate || isInSyncWithTemplate">fa-sync</v-icon>
+                  <v-icon :disabled="!hasTemplate || isInSyncWithTemplate" left>fa-sync</v-icon>
                   {{ $t('survey-scheme-questions.sync.synchronize') }}
                 </v-list-item-title>
               </v-list-item>
@@ -90,10 +90,10 @@
     </v-list-item-action>
     <v-list-item-action>
       <confirm-dialog
-        :label="$t('survey-schemes.questions.remove').toString()"
         color="error"
         icon
         icon-left="$delete"
+        :label="$t('survey-schemes.questions.remove').toString()"
         @confirm="remove"
       >
         {{ $t('common.action.confirm.delete', { name: question.name }) }}

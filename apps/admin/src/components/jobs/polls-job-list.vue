@@ -1,7 +1,7 @@
 <template>
   <v-row v-if="jobs.length">
     <v-col cols="12">
-      <v-list two-line class>
+      <v-list class two-line>
         <template v-for="(job, idx) in jobs">
           <v-list-item :key="job.id">
             <v-list-item-avatar>
@@ -20,18 +20,18 @@
               <p v-if="job.message">{{ job.message }}</p>
             </v-list-item-content>
             <v-list-item-action v-if="job.downloadUrl">
-              <v-btn :title="$t('common.action.download')" icon large link @click="download(job)">
+              <v-btn icon large link :title="$t('common.action.download')" @click="download(job)">
                 <v-icon color="primary">fa-download</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
               <v-progress-circular
                 v-if="(job.progress || 0) !== 1"
+                color="orange darken-3"
                 :rotate="-90"
                 :size="45"
-                :width="6"
                 :value="Math.ceil((job.progress || 0) * 100)"
-                color="orange darken-3"
+                :width="6"
               >
                 <span class="font-weight-bold text--secondary">
                   {{ Math.ceil((job.progress || 0) * 100) }}

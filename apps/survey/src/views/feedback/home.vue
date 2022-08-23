@@ -5,7 +5,7 @@
         {{ surveyName }}
       </h1>
       <h2 class="text-h2 font-weight-medium text-center mb-4">{{ $t('feedback.title') }}</h2>
-      <v-row no-gutters justify="center" class="pa-4 d-print-none">
+      <v-row class="pa-4 d-print-none" justify="center" no-gutters>
         <v-col cols="12" md="7">
           <v-row justify="space-around">
             <feedback-user-info
@@ -14,8 +14,8 @@
             ></feedback-user-info>
             <v-divider
               v-if="userDemographic && !!outputs.length"
-              vertical
               class="d-none d-sm-block"
+              vertical
             ></v-divider>
             <feedback-outputs
               v-if="!!outputs.length"
@@ -31,7 +31,7 @@
           </v-row>
         </v-col>
       </v-row>
-      <v-row no-gutters justify="center" class="pa-4 d-print-none">
+      <v-row class="pa-4 d-print-none" justify="center" no-gutters>
         <v-col cols="12" md="6">
           <v-divider></v-divider>
           <v-expansion-panels flat focusable tile>
@@ -50,13 +50,13 @@
                     <v-list-item
                       v-for="(submission, idx) in submissions"
                       :key="submission.id"
-                      :value="submission.id"
                       active-class="blue--text text--darken-3"
                       dense
+                      :value="submission.id"
                     >
                       <template #default="{ active }">
                         <v-list-item-action class="my-0">
-                          <v-checkbox :input-value="active" color="blue darken-3"></v-checkbox>
+                          <v-checkbox color="blue darken-3" :input-value="active"></v-checkbox>
                         </v-list-item-action>
                         <v-list-item-content>
                           <v-list-item-title>
@@ -73,9 +73,9 @@
           </v-expansion-panels>
         </v-col>
       </v-row>
-      <v-row no-gutters justify="center" class="px-4">
+      <v-row class="px-4" justify="center" no-gutters>
         <v-col cols="auto">
-          <v-alert text class="mb-0" color="blue darken-3" icon="fas fa-circle-exclamation">
+          <v-alert class="mb-0" color="blue darken-3" icon="fas fa-circle-exclamation" text>
             {{ $t('feedback.missingFoods') }}
           </v-alert>
         </v-col>

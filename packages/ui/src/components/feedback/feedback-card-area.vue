@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row justify="center" no-gutters class="d-print-none">
+    <v-row class="d-print-none" justify="center" no-gutters>
       <v-col v-for="card in cards" :key="`screen-${card.id}`" class="pa-4" cols="auto">
         <screen-card :parameters="card"></screen-card>
       </v-col>

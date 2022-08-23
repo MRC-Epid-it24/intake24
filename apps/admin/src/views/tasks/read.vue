@@ -3,10 +3,10 @@
     <template #actions>
       <confirm-dialog
         v-if="can({ action: 'edit' })"
-        :label="$t('tasks.run._')"
         :activator-class="['ml-2']"
         color="secondary"
         icon-left="fas fa-play"
+        :label="$t('tasks.run._')"
         @confirm="triggerJob"
       >
         {{ $t('tasks.run.confirm') }}

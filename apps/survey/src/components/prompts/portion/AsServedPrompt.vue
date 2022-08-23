@@ -1,5 +1,5 @@
 <template>
-  <portion-layout id="test" :text="promptProps.text" :description="promptProps.description">
+  <portion-layout id="test" :description="promptProps.description" :text="promptProps.text">
     <template #headerText>
       {{ $t('portion.asServed.promptLabel', { food: localeDescription }) }}
     </template>
@@ -11,8 +11,8 @@
               {{ $t('portion.asServed.portionHeader') }}
               <template #actions>
                 <as-served-weight
-                  :weight="asServedData?.weight"
                   :valid="servingCompleteStatus"
+                  :weight="asServedData?.weight"
                 ></as-served-weight>
                 <valid-invalid-icon :valid="servingCompleteStatus"></valid-invalid-icon>
               </template>
@@ -28,8 +28,8 @@
                   <as-served-selector
                     :as-served-set-id="asServedSetId"
                     :initial-state="initialState.servingImage?.index"
-                    @update="onServingUpdate"
                     @confirm="onServingConfirmed"
+                    @update="onServingUpdate"
                   ></as-served-selector>
                 </v-col>
               </v-row>
@@ -40,8 +40,8 @@
               {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
               <template #actions>
                 <as-served-weight
-                  :weight="leftoverPromptAnswer ? leftoverData?.weight : 0"
                   :valid="leftoverCompleteStatus"
+                  :weight="leftoverPromptAnswer ? leftoverData?.weight : 0"
                 ></as-served-weight>
                 <valid-invalid-icon :valid="leftoverCompleteStatus"></valid-invalid-icon>
               </template>
@@ -71,8 +71,8 @@
                   <as-served-selector
                     :as-served-set-id="asServedSetId"
                     :initial-state="initialState.leftoversImage?.index"
-                    @update="onLeftoversUpdate"
                     @confirm="onLeftoversConfirmed"
+                    @update="onLeftoversUpdate"
                   ></as-served-selector>
                 </v-col>
               </v-row>
@@ -89,7 +89,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col xs="12" md="3">
+      <v-col md="3" xs="12">
         <continue :disabled="!continueEnabled" @click="submit()">
           {{ $t('common.action.continue') }}
         </continue>

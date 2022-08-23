@@ -19,13 +19,13 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="sector.sentiment"
+                hide-details="auto"
                 :items="sentiments"
                 :label="$t('feedback-schemes.sentiments._')"
-                hide-details="auto"
                 outlined
               ></v-select>
             </v-col>
-            <v-col cols="12" md="6" class="d-flex justify-end">
+            <v-col class="d-flex justify-end" cols="12" md="6">
               <div class="mr-4 subtitle-1">
                 <v-icon left>fas fa-left-right</v-icon>
                 {{ $t('feedback-schemes.ranges._') }}
@@ -33,17 +33,17 @@
               <div>
                 <v-text-field
                   v-model.number="sector.range.start"
-                  :label="$t('feedback-schemes.ranges.start')"
                   class="mb-4"
                   dense
                   hide-details="auto"
+                  :label="$t('feedback-schemes.ranges.start')"
                   outlined
                 ></v-text-field>
                 <v-text-field
                   v-model.number="sector.range.end"
-                  :label="$t('feedback-schemes.ranges.end')"
                   dense
                   hide-details="auto"
+                  :label="$t('feedback-schemes.ranges.end')"
                   outlined
                 ></v-text-field>
               </div>
@@ -54,10 +54,10 @@
                   <v-text-field
                     :key="lang"
                     v-model="sector.name[lang]"
-                    :label="$t('common.name')"
-                    :rules="nameRules"
                     hide-details="auto"
+                    :label="$t('common.name')"
                     outlined
+                    :rules="nameRules"
                   ></v-text-field>
                 </template>
               </language-selector>

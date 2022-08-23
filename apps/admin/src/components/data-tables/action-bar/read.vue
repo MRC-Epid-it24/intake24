@@ -2,8 +2,8 @@
   <v-btn
     color="primary"
     icon
-    :to="{ name: `${route}-read`, params: { id: item.id } }"
     :title="$t('common.action.read')"
+    :to="{ name: `${route}-read`, params: { id: item.id } }"
   >
     <v-icon dark>{{ icon }}</v-icon>
   </v-btn>

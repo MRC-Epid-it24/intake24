@@ -1,13 +1,13 @@
 <template>
   <v-alert
-    class="undoAlert ma-0"
-    elevation="5"
     border="left"
+    class="undoAlert ma-0"
     color="grey"
     dismissible
+    elevation="5"
+    transition="slide-x-transition"
     type="info"
     :value="alert"
-    transition="slide-x-transition"
   >
     <span>{{ info }}</span>
   </v-alert>

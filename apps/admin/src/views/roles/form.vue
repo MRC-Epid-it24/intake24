@@ -9,8 +9,8 @@
                 v-model="form.name"
                 :disabled="isEdit"
                 :error-messages="form.errors.get('name')"
-                :label="$t('common.name')"
                 hide-details="auto"
+                :label="$t('common.name')"
                 name="name"
                 outlined
               ></v-text-field>
@@ -19,8 +19,8 @@
               <v-text-field
                 v-model="form.displayName"
                 :error-messages="form.errors.get('displayName')"
-                :label="$t('common.displayName')"
                 hide-details="auto"
+                :label="$t('common.displayName')"
                 name="displayName"
                 outlined
               ></v-text-field>
@@ -29,8 +29,8 @@
               <v-textarea
                 v-model="form.description"
                 :error-messages="form.errors.get('description')"
-                :label="$t('common.description')"
                 hide-details="auto"
+                :label="$t('common.description')"
                 name="description"
                 outlined
               ></v-textarea>
@@ -48,9 +48,9 @@
                     v-for="perm in permissions.global"
                     :key="perm.id"
                     v-model="form.permissions"
+                    :disabled="!can(perm.name)"
                     :label="perm.displayName"
                     :value="perm.id"
-                    :disabled="!can(perm.name)"
                   ></v-switch>
                 </v-card-text>
               </v-card>
@@ -72,9 +72,9 @@
                       v-for="perm in pModule"
                       :key="perm.id"
                       v-model="form.permissions"
+                      :disabled="!can(perm.name)"
                       :label="perm.displayName"
                       :value="perm.id"
-                      :disabled="!can(perm.name)"
                     ></v-switch>
                   </v-card-text>
                 </v-card>

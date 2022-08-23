@@ -2,17 +2,17 @@
   <div>
     <v-container fluid>
       <v-row justify="center">
-        <v-col cols="12" sm="auto" align-self="center">
+        <v-col align-self="center" cols="12" sm="auto">
           <slot name="header-add"></slot>
         </v-col>
         <v-col cols="12" sm>
           <v-text-field
             v-model="search"
-            :label="$t('common.search._')"
             append-icon="fas fa-search"
             clearable
             dense
             hide-details="auto"
+            :label="$t('common.search._')"
             outlined
             @click:append="setFilter"
             @click:clear="resetFilter"
@@ -26,13 +26,13 @@
       v-model="selected"
       :footer-props="{ 'items-per-page-options': [25, 50, 100] }"
       :headers="headers"
-      :items="items"
       :item-key="trackBy"
+      :items="items"
       :items-per-page="50"
-      :options.sync="options"
-      :show-select="showSelect"
       :loading="isAppLoading"
+      :options.sync="options"
       :server-items-length="meta.total"
+      :show-select="showSelect"
       @item-selected="updateTracked"
     >
       <template v-for="(_, scopedSlotName) in $scopedSlots" #[scopedSlotName]="slotData">

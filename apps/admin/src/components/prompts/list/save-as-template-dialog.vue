@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
     <template #activator="{ on, attrs }">
-      <v-list-item link v-bind="attrs" :disabled="disabled" v-on="on">
+      <v-list-item v-bind="attrs" :disabled="disabled" link v-on="on">
         <v-list-item-title>
-          <v-icon left :disabled="disabled">fa-save</v-icon>
+          <v-icon :disabled="disabled" left>fa-save</v-icon>
           {{ $t('survey-schemes.questions.templates.saveAs._') }}
         </v-list-item-title>
       </v-list-item>
@@ -15,10 +15,10 @@
           <v-col cols="12">
             <v-text-field
               v-model="form.question.id"
-              :label="$t('survey-schemes.questions.internal.id._')"
-              :messages="$t('survey-schemes.questions.internal.id.hint')"
               disabled
               hide-details="auto"
+              :label="$t('survey-schemes.questions.internal.id._')"
+              :messages="$t('survey-schemes.questions.internal.id.hint')"
               name="id"
               outlined
             >
@@ -27,10 +27,10 @@
           <v-col cols="12">
             <v-text-field
               v-model="form.question.name"
-              :label="$t('survey-schemes.questions.internal.name._')"
-              :messages="$t('survey-schemes.questions.internal.name.hint')"
               disabled
               hide-details="auto"
+              :label="$t('survey-schemes.questions.internal.name._')"
+              :messages="$t('survey-schemes.questions.internal.name.hint')"
               name="name"
               outlined
             ></v-text-field>

@@ -3,9 +3,9 @@
     <template #activator="{ on, attrs }">
       <v-btn
         v-bind="attrs"
-        :title="$t(`${resource}.copy._`)"
         class="ml-3"
         color="primary"
+        :title="$t(`${resource}.copy._`)"
         v-on="on"
       >
         <v-icon left>fa-copy</v-icon> {{ $t(`${resource}.copy._`) }}
@@ -13,7 +13,7 @@
     </template>
     <v-card>
       <v-toolbar color="primary" dark flat>
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="cancel">
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -26,8 +26,8 @@
             <v-text-field
               v-model="form.name"
               :error-messages="form.errors.get('name')"
-              :label="$t(`${resource}.copy.name`)"
               hide-details="auto"
+              :label="$t(`${resource}.copy.name`)"
               name="name"
               outlined
             ></v-text-field>

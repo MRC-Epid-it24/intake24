@@ -11,8 +11,8 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <food-search-prompt
-              :prompt-props="searchTestPromptProps"
               :initial-search-term="genericName"
+              :prompt-props="searchTestPromptProps"
               @food-selected="selectFood($event)"
             ></food-search-prompt>
             <v-btn>{{ $t('portion.milkCereal.foodSelectButton') }}</v-btn>
@@ -28,9 +28,9 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <portion-size-option-prompt
-              :prompt-props="portionOptionProps"
-              :food-name="selectedFoodData.localDescription"
               :available-methods="selectedFoodData.portionSizeMethods"
+              :food-name="selectedFoodData.localDescription"
+              :prompt-props="portionOptionProps"
               @option-selected="selectPortionMethod($event)"
             ></portion-size-option-prompt>
           </v-expansion-panel-content>

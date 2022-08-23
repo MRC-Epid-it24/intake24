@@ -1,13 +1,13 @@
 <template>
   <v-dialog v-model="dialog" max-width="500px">
     <template #activator="{ on, attrs }">
-      <v-btn v-bind="attrs" :title="$t('user.password.change')" outlined v-on="on">
+      <v-btn v-bind="attrs" outlined :title="$t('user.password.change')" v-on="on">
         {{ $t('user.password.change') }}
       </v-btn>
     </template>
     <v-card :loading="loading">
       <v-toolbar color="primary" dark flat>
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="cancel">
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -21,14 +21,14 @@
               <v-text-field
                 v-model="form.passwordCurrent"
                 :append-icon="showPassword.current ? 'fa-eye' : 'fa-eye-slash'"
-                :error-messages="form.errors.get('passwordCurrent')"
-                :label="$t('users.password.current')"
-                :type="showPassword.current ? 'text' : 'password'"
                 autocomplete="current-password"
+                :error-messages="form.errors.get('passwordCurrent')"
                 hide-details="auto"
+                :label="$t('users.password.current')"
                 name="passwordCurrent"
-                required
                 outlined
+                required
+                :type="showPassword.current ? 'text' : 'password'"
                 @click:append="showPassword.current = !showPassword.current"
               ></v-text-field>
             </v-col>
@@ -36,14 +36,14 @@
               <v-text-field
                 v-model="form.password"
                 :append-icon="showPassword.password ? 'fa-eye' : 'fa-eye-slash'"
-                :error-messages="form.errors.get('password')"
-                :label="$t('users.password.new')"
-                :type="showPassword.password ? 'text' : 'password'"
                 autocomplete="new-password"
+                :error-messages="form.errors.get('password')"
                 hide-details="auto"
+                :label="$t('users.password.new')"
                 name="password"
-                required
                 outlined
+                required
+                :type="showPassword.password ? 'text' : 'password'"
                 @click:append="showPassword.password = !showPassword.password"
               ></v-text-field>
             </v-col>
@@ -51,21 +51,21 @@
               <v-text-field
                 v-model="form.passwordConfirm"
                 :append-icon="showPassword.confirm ? 'fa-eye' : 'fa-eye-slash'"
-                :error-messages="form.errors.get('passwordConfirm')"
-                :label="$t('users.password.confirm')"
-                :type="showPassword.confirm ? 'text' : 'password'"
                 autocomplete="new-password"
+                :error-messages="form.errors.get('passwordConfirm')"
                 hide-details="auto"
+                :label="$t('users.password.confirm')"
                 name="passwordConfirm"
-                required
                 outlined
+                required
+                :type="showPassword.confirm ? 'text' : 'password'"
                 @click:append="showPassword.confirm = !showPassword.confirm"
               ></v-text-field>
             </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions class="px-6 pb-6">
-          <v-btn type="submit" color="secondary" x-large width="100%">
+          <v-btn color="secondary" type="submit" width="100%" x-large>
             {{ $t('user.password.update') }}
           </v-btn>
         </v-card-actions>

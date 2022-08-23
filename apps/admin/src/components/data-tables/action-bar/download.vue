@@ -1,8 +1,8 @@
 <template>
   <v-btn
     color="primary"
-    icon
     :href="`${app.api}/${route}/${item.id}`"
+    icon
     target="_blank"
     :title="$t('common.action.read')"
   >

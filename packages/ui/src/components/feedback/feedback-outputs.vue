@@ -1,13 +1,13 @@
 <template>
-  <v-col cols="auto" class="d-flex flex-column">
+  <v-col class="d-flex flex-column" cols="auto">
     <div class="text-subtitle-1 font-weight-medium text-uppercase text-center mb-2">
       {{ $t('feedback.outputs.title') }}
     </div>
     <v-btn
       v-if="outputs.includes('print')"
-      link
       class="mb-3"
       color="primary"
+      link
       outlined
       :title="$t('feedback.outputs.print')"
       @click="printFeedback"
@@ -19,9 +19,9 @@
       <template #activator="{ on, attrs }">
         <v-btn
           v-bind="attrs"
-          link
           class="mb-3"
           color="primary"
+          link
           outlined
           :title="$t('feedback.outputs.email._')"
           v-on="on"
@@ -42,8 +42,8 @@
                   <v-text-field
                     v-model="email.form.email"
                     :error-messages="email.errors.get('email')"
-                    :label="$t('common.email')"
                     hide-details="auto"
+                    :label="$t('common.email')"
                     name="email"
                     outlined
                     prepend-inner-icon="fas fa-envelope"
@@ -54,8 +54,8 @@
                   <v-text-field
                     v-model="email.form.emailConfirm"
                     :error-messages="email.errors.get('emailConfirm')"
-                    :label="$t('common.emailConfirm')"
                     hide-details="auto"
+                    :label="$t('common.emailConfirm')"
                     name="emailConfirm"
                     outlined
                     prepend-inner-icon="fas fa-envelope"
@@ -63,18 +63,18 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-alert v-if="message" type="success" outlined>
+                  <v-alert v-if="message" outlined type="success">
                     {{ message }}
                   </v-alert>
-                  <v-alert v-if="retry.retryIn" type="warning" outlined>
+                  <v-alert v-if="retry.retryIn" outlined type="warning">
                     {{ retryMessage }}
                   </v-alert>
                   <v-btn
-                    type="submit"
-                    color="secondary"
-                    x-large
                     block
+                    color="secondary"
                     :disabled="!!retry.retryIn || email.errors.any()"
+                    type="submit"
+                    x-large
                   >
                     <v-icon left>fas fa-paper-plane</v-icon>
                     {{ $t('feedback.outputs.email.send') }}
@@ -101,9 +101,9 @@
       <template #activator="{ on, attrs }">
         <v-btn
           v-bind="attrs"
-          link
           class="mb-3"
           color="primary"
+          link
           outlined
           :title="$t('feedback.outputs.download._')"
           v-on="on"
@@ -125,17 +125,17 @@
                 </div>
               </v-col>
               <v-col cols="12">
-                <v-alert v-if="message" type="success" outlined>
+                <v-alert v-if="message" outlined type="success">
                   {{ message }}
                 </v-alert>
-                <v-alert v-if="retry.retryIn" type="warning" outlined>
+                <v-alert v-if="retry.retryIn" outlined type="warning">
                   {{ retryMessage }}
                 </v-alert>
                 <v-btn
-                  color="secondary"
-                  x-large
                   block
+                  color="secondary"
                   :disabled="!!retry.retryIn"
+                  x-large
                   @click.stop="downloadFeedback"
                 >
                   <v-icon left>fas fa-paper-plane</v-icon>

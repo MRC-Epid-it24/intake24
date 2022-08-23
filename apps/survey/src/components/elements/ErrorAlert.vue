@@ -1,5 +1,5 @@
 <template>
-  <v-alert color="error" class="ma-0">
+  <v-alert class="ma-0" color="error">
     <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
   </v-alert>
 </template>

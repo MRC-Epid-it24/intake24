@@ -8,8 +8,8 @@
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
-    <v-toolbar flat tile color="grey lighten-5">
-      <v-icon left color="primary">fas fa-sort-amount-down</v-icon>
+    <v-toolbar color="grey lighten-5" flat tile>
+      <v-icon color="primary" left>fas fa-sort-amount-down</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.top-foods.title') }}
       </v-toolbar-title>
@@ -34,22 +34,22 @@
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="6">
-            <v-toolbar flat tile color="grey lighten-2">
-              <v-icon left color="primary">fa-palette</v-icon>
+            <v-toolbar color="grey lighten-2" flat tile>
+              <v-icon color="primary" left>fa-palette</v-icon>
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.top-foods.max.title') }}
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <v-text-field
                 v-model.number="form.topFoods.max"
-                :error-messages="form.errors.get('topFoods.max')"
-                :label="$t('feedback-schemes.top-foods.max._')"
-                :rules="topFoodsMaxRules"
                 background-color="grey lighten-5"
                 dense
+                :error-messages="form.errors.get('topFoods.max')"
                 hide-details
+                :label="$t('feedback-schemes.top-foods.max._')"
                 name="topFoods.max"
                 outlined
+                :rules="topFoodsMaxRules"
                 single-line
                 :style="{ maxWidth: '75px' }"
               ></v-text-field>
@@ -72,8 +72,8 @@
           <v-col cols="12" md="6">
             <nutrient-list
               v-model="form.topFoods.nutrientTypes"
-              :scheme-id="id"
               :available-nutrient-types="refs.nutrientTypes"
+              :scheme-id="id"
             ></nutrient-list>
           </v-col>
         </v-row>

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-img class="align-end" :src="getMainImage()" :aspect-ratio="16 / 9">
+      <v-img :aspect-ratio="16 / 9" class="align-end" :src="getMainImage()">
         <template #placeholder>
           <image-placeholder></image-placeholder>
         </template>
@@ -16,7 +16,7 @@
       </v-img>
     </v-row>
     <v-row>
-      <v-col class="pa-1" cols="3" sm="2" lg="1">
+      <v-col class="pa-1" cols="3" lg="1" sm="2">
         <v-card @click="hadLessInput()">
           <v-img :src="getFirstThumbnail()">-</v-img>
           <v-overlay absolute>
@@ -27,13 +27,13 @@
         </v-card>
       </v-col>
       <template v-for="(images, idx) in asServedData.images">
-        <v-col :key="idx" class="pa-1" cols="3" sm="2" lg="1" :class="isSelected(idx)">
+        <v-col :key="idx" class="pa-1" :class="isSelected(idx)" cols="3" lg="1" sm="2">
           <v-card @click="setSelection(idx)">
             <v-img :src="images.thumbnailUrl"></v-img>
           </v-card>
         </v-col>
       </template>
-      <v-col class="pa-1 mr-auto" cols="3" sm="2" lg="1">
+      <v-col class="pa-1 mr-auto" cols="3" lg="1" sm="2">
         <v-card @click="hadMoreInput()">
           <v-img :src="getLastThumbnail()">-</v-img>
           <v-overlay absolute>
@@ -55,8 +55,8 @@
           {{ $t('portion.common.moreButton') }}
         </v-btn>
       </v-col>
-      <v-col align="center" xs="12" md="4" class="ma-2">
-        <v-btn color="success" block @click="emitConfirm()">
+      <v-col align="center" class="ma-2" md="4" xs="12">
+        <v-btn block color="success" @click="emitConfirm()">
           {{ $t('portion.common.confirmButton') }}
         </v-btn>
       </v-col>

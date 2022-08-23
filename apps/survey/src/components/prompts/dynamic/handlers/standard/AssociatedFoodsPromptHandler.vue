@@ -6,8 +6,8 @@
       promptComponent,
       food: encodedSelectedFood(),
     }"
-    :initial-state="initialStateNotNull"
     :continue-enabled="continueEnabled"
+    :initial-state="initialStateNotNull"
     @continue="$emit('continue')"
     @update="onUpdate"
   >

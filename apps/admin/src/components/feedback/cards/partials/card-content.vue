@@ -8,11 +8,11 @@
       <template v-for="lang in Object.keys(name)" #[`lang.${lang}`]>
         <v-text-field
           :key="lang"
+          hide-details="auto"
           :label="$t('feedback-schemes.cards.name')"
+          outlined
           :rules="nameRules"
           :value="name[lang]"
-          hide-details="auto"
-          outlined
           @input="updateLanguage('name', lang, $event)"
         ></v-text-field>
       </template>

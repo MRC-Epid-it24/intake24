@@ -1,7 +1,7 @@
 <template>
-  <v-card flat class="sticky_toolbar_card">
-    <v-toolbar flat bottom class="sticky_toolbar">
-      <v-tabs v-model="activeTab" slider-size="4" icons-and-text center-active touch height="56px">
+  <v-card class="sticky_toolbar_card" flat>
+    <v-toolbar bottom class="sticky_toolbar" flat>
+      <v-tabs v-model="activeTab" center-active height="56px" icons-and-text slider-size="4" touch>
         <v-tabs-slider color="success"></v-tabs-slider>
         <v-tab
           v-for="(meal, idx) in meals"
@@ -9,12 +9,12 @@
           @click="emitFoodsList(idx, meal.name.en, meal.foods, entity)"
         >
           <v-badge
+            bordered
             class="meail_badge"
             color="grey"
             :content="meal.foods.length"
-            :value="meal.foods.length > 0"
             left
-            bordered
+            :value="meal.foods.length > 0"
           >
             <p v-if="mealTimeString(meal.time).length === 0">
               <v-icon x-small>far fa-question-circle </v-icon>

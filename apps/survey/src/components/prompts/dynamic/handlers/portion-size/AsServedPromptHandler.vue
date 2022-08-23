@@ -1,13 +1,13 @@
 <template>
   <as-served-prompt
-    :food-name="foodName()"
-    :prompt-props="promptProps"
     :as-served-set-id="parameters['serving-image-set']"
-    :prompt-component="promptComponent"
-    :initial-state="initialStateNotNull"
     :continue-enabled="continueEnabled"
-    @update="onUpdate"
+    :food-name="foodName()"
+    :initial-state="initialStateNotNull"
+    :prompt-component="promptComponent"
+    :prompt-props="promptProps"
     @continue="$emit('continue')"
+    @update="onUpdate"
   ></as-served-prompt>
 </template>
 

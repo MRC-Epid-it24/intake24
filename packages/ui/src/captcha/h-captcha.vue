@@ -4,9 +4,9 @@
       ref="captcha"
       :sitekey="sitekey"
       size="invisible"
-      @verify="verified"
-      @expired="expired"
       @challengeExpired="expired"
+      @expired="expired"
+      @verify="verified"
     >
     </vue-hcaptcha>
     This site is protected by <a href="https://hCaptcha.com" target="_blank">hCaptcha</a>

@@ -16,10 +16,10 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="dialog.condition.type"
-                :items="conditionSelectList"
-                :label="$t('survey-schemes.conditions.types._', {})"
                 hide-details="auto"
                 item-value="type"
+                :items="conditionSelectList"
+                :label="$t('survey-schemes.conditions.types._', {})"
                 outlined
                 @change="updatePromptCondition"
               ></v-select>
@@ -27,10 +27,10 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="dialog.condition.op"
-                :items="operationSelectList"
-                :label="$t('survey-schemes.conditions.ops._')"
                 hide-details="auto"
                 item-value="op"
+                :items="operationSelectList"
+                :label="$t('survey-schemes.conditions.ops._')"
                 outlined
               >
                 <template #item="{ item }">
@@ -46,8 +46,8 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="dialog.condition.value"
-                :label="$t('survey-schemes.conditions.value')"
                 hide-details="auto"
+                :label="$t('survey-schemes.conditions.value')"
                 outlined
               ></v-text-field>
             </v-col>
@@ -71,9 +71,9 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn
+            color="secondary"
             fab
             small
-            color="secondary"
             :title="$t('survey-schemes.conditions.create')"
             @click.stop="add"
           >
@@ -83,14 +83,14 @@
         <v-divider></v-divider>
         <v-list dense>
           <draggable v-model="currentConditions" handle=".drag-and-drop__handle" @end="update">
-            <transition-group type="transition" name="drag-and-drop">
+            <transition-group name="drag-and-drop" type="transition">
               <v-list-item
                 v-for="(condition, idx) in currentConditions"
                 :key="condition.id"
-                :ripple="false"
                 class="drag-and-drop__item"
                 draggable
                 link
+                :ripple="false"
               >
                 <v-list-item-avatar class="drag-and-drop__handle">
                   <v-icon>fa-grip-vertical</v-icon>

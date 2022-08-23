@@ -1,5 +1,5 @@
 <template>
-  <v-list-item :to="{ name: item.name }" link>
+  <v-list-item link :to="{ name: item.name }">
     <v-list-item-action>
       <v-icon>{{ item.icon }}</v-icon>
     </v-list-item-action>

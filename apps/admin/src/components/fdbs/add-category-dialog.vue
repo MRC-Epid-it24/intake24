@@ -14,7 +14,7 @@
     </template>
     <v-card :loading="loading">
       <v-toolbar color="primary" dark flat>
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="close">
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -24,12 +24,12 @@
       <v-card-text class="pa-6">
         <v-text-field
           v-model="search"
-          :label="$t('common.search._')"
-          :loading="loading"
           append-icon="fas fa-search"
           class="mb-4"
           clearable
           hide-details="auto"
+          :label="$t('common.search._')"
+          :loading="loading"
           outlined
           @click:clear="clear"
         >
@@ -38,7 +38,7 @@
           {{ $t('fdbs.categories.alreadyIncluded', { code: selectedItems[0].code }) }}
         </v-alert>
         <template v-if="items.length">
-          <v-list min-height="350px" dense>
+          <v-list dense min-height="350px">
             <v-list-item-group v-model="selected" multiple>
               <template v-for="(item, idx) in items">
                 <v-list-item :key="item.code" :value="item.code">
@@ -59,7 +59,7 @@
             </v-list-item-group>
           </v-list>
           <div class="text-center">
-            <v-pagination v-model="page" :length="lastPage" circle></v-pagination>
+            <v-pagination v-model="page" circle :length="lastPage"></v-pagination>
           </div>
         </template>
         <v-alert v-else color="primary" text type="info">

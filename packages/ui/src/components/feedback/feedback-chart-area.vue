@@ -12,12 +12,12 @@
         md="6"
         xl="4"
       >
-        <chart class="chart" autoresize :option="chart"></chart>
+        <chart autoresize class="chart" :option="chart"></chart>
       </v-col>
     </v-row>
     <div class="d-none d-print-block">
       <div v-for="chart in charts" :key="`print-${chart.id}`" class="chart-print-wrapper">
-        <chart class="chart-print" autoresize :option="chart"></chart>
+        <chart autoresize class="chart-print" :option="chart"></chart>
       </div>
     </div>
   </div>

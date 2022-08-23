@@ -6,22 +6,22 @@
       :selected="tracked"
       @refresh="refresh"
     ></tool-bar>
-    <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
+    <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
       <v-card-text>
         <data-table-filter
           :count="meta.total"
-          @filter-set="setFilter"
           @filter-reset="resetFilter"
+          @filter-set="setFilter"
         ></data-table-filter>
       </v-card-text>
     </v-card>
     <div v-show="meta.total" class="py-4 text-center">
-      <v-pagination v-model="page" :length="meta.lastPage" circle></v-pagination>
+      <v-pagination v-model="page" circle :length="meta.lastPage"></v-pagination>
     </div>
     <v-container class="px-0">
       <v-row>
-        <v-col v-for="item in items" :key="item.id" cols="12" sm="6" md="4" lg="3">
-          <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile" height="100%">
+        <v-col v-for="item in items" :key="item.id" cols="12" lg="3" md="4" sm="6">
+          <v-card :flat="isMobile" height="100%" :outlined="!isMobile" :tile="isMobile">
             <router-link :to="{ name: `${module}-read`, params: { id: item.id } }">
               <v-img :src="item[imageUrl]"></v-img>
             </router-link>
@@ -40,20 +40,20 @@
             <v-card-actions>
               <v-btn
                 v-if="can({ action: 'edit' })"
-                :to="{ name: `${module}-edit`, params: { id: item.id } }"
                 class="font-weight-bold"
                 color="blue darken-3"
                 text
+                :to="{ name: `${module}-edit`, params: { id: item.id } }"
               >
                 <v-icon left>$edit</v-icon> {{ $t(`common.action.edit`) }}
               </v-btn>
               <v-spacer></v-spacer>
               <confirm-dialog
                 v-if="can({ action: 'delete' })"
-                :label="$t('common.action.delete').toString()"
                 color="error"
                 icon
                 icon-left="$delete"
+                :label="$t('common.action.delete').toString()"
                 @confirm="remove(item)"
               >
                 {{ $t('common.action.confirm.delete', { name: item.id }) }}
@@ -63,7 +63,7 @@
         </v-col>
       </v-row>
       <div v-show="meta.total" class="py-4 text-center">
-        <v-pagination v-model="page" :length="meta.lastPage" circle></v-pagination>
+        <v-pagination v-model="page" circle :length="meta.lastPage"></v-pagination>
       </div>
     </v-container>
   </div>

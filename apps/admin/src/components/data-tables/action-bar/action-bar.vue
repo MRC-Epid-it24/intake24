@@ -4,8 +4,8 @@
       :is="action"
       v-for="action in currentActions"
       :key="`${action}-${item.id}`"
-      :item="item"
       :action="action"
+      :item="item"
       :route="route"
       @action="onAction"
     >

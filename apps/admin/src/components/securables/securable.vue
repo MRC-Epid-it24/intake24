@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-toolbar flat tile color="grey lighten-5">
-      <v-icon left color="primary">fas fa-shield-halved</v-icon>
+    <v-toolbar color="grey lighten-5" flat tile>
+      <v-icon color="primary" left>fas fa-shield-halved</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`${resource}.securables.title`) }}
       </v-toolbar-title>
@@ -32,10 +32,10 @@
           <v-icon dark>$edit</v-icon>
         </v-btn>
         <confirm-dialog
-          :label="$t('common.action.delete').toString()"
           color="error"
           icon
           icon-left="$delete"
+          :label="$t('common.action.delete').toString()"
           @confirm="removeUser(item.id)"
         >
           {{ $t('common.action.confirm.delete', { name: item.name ? item.name : item.id }) }}

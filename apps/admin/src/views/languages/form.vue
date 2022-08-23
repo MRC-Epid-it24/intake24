@@ -9,8 +9,8 @@
                 v-model="form.id"
                 :disabled="isEdit"
                 :error-messages="form.errors.get('id')"
-                :label="$t('languages.id')"
                 hide-details="auto"
+                :label="$t('languages.id')"
                 name="id"
                 outlined
               ></v-text-field>
@@ -19,9 +19,9 @@
               <v-select
                 v-model="form.countryFlagCode"
                 :error-messages="form.errors.get('countryFlagCode')"
+                hide-details="auto"
                 :items="flags"
                 :label="$t('languages.countryFlagCode')"
-                hide-details="auto"
                 name="countryFlagCode"
                 outlined
                 @change="form.errors.clear('countryFlagCode')"
@@ -40,8 +40,8 @@
               <v-text-field
                 v-model="form.englishName"
                 :error-messages="form.errors.get('englishName')"
-                :label="$t('languages.englishName')"
                 hide-details="auto"
+                :label="$t('languages.englishName')"
                 name="englishName"
                 outlined
               ></v-text-field>
@@ -50,8 +50,8 @@
               <v-text-field
                 v-model="form.localName"
                 :error-messages="form.errors.get('localName')"
-                :label="$t('languages.localName')"
                 hide-details="auto"
+                :label="$t('languages.localName')"
                 name="localName"
                 outlined
               ></v-text-field>
@@ -60,9 +60,9 @@
               <v-select
                 v-model="form.textDirection"
                 :error-messages="form.errors.get('textDirection')"
+                hide-details="auto"
                 :items="textDirections"
                 :label="$t('languages.textDirections._')"
-                hide-details="auto"
                 name="textDirection"
                 outlined
                 @change="form.errors.clear('textDirection')"

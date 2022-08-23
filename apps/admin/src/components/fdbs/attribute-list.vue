@@ -15,18 +15,18 @@
         <v-col align-self="center">
           <v-switch
             v-model="attributes.sameAsBeforeOption"
+            class="mt-0"
             :disabled="isInherited('sameAsBeforeOption')"
             :error-messages="errors.get('main.attributes.sameAsBeforeOption')"
-            :label="$t('fdbs.attributes.sameAsBeforeOption')"
-            class="mt-0"
             hide-details="auto"
+            :label="$t('fdbs.attributes.sameAsBeforeOption')"
             name="attributes.sameAsBeforeOption"
             @change="errors.clear('main.attributes.sameAsBeforeOption')"
           ></v-switch>
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="auto" align-self="center">
+        <v-col align-self="center" cols="auto">
           <v-btn :disabled="disabled" outlined @click="toggleInherit('readyMealOption')">
             {{ title('readyMealOption') }}
           </v-btn>
@@ -34,18 +34,18 @@
         <v-col align-self="center">
           <v-switch
             v-model="attributes.readyMealOption"
+            class="mt-0"
             :disabled="isInherited('readyMealOption')"
             :error-messages="errors.get('main.attributes.readyMealOption')"
-            :label="$t('fdbs.attributes.readyMealOption')"
-            class="mt-0"
             hide-details="auto"
+            :label="$t('fdbs.attributes.readyMealOption')"
             name="attributes.readyMealOption"
             @change="errors.clear('main.attributes.readyMealOption')"
           ></v-switch>
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="auto" align-self="center">
+        <v-col align-self="center" cols="auto">
           <v-btn :disabled="disabled" outlined @click="toggleInherit('reasonableAmount')">
             {{ title('reasonableAmount') }}
           </v-btn>
@@ -53,11 +53,11 @@
         <v-col align-self="center">
           <v-text-field
             v-model.number="attributes.reasonableAmount"
+            dense
             :disabled="isInherited('reasonableAmount')"
             :error-messages="errors.get('main.attributes.reasonableAmount')"
-            :label="$t('fdbs.attributes.reasonableAmount')"
-            dense
             hide-details="auto"
+            :label="$t('fdbs.attributes.reasonableAmount')"
             name="attributes.reasonableAmount"
             outlined
             @input="errors.clear('main.attributes.reasonableAmount')"
@@ -65,20 +65,20 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="auto" align-self="center">
+        <v-col align-self="center" cols="auto">
           <v-btn :disabled="disabled" outlined @click="toggleInherit('useInRecipes')">
             {{ title('useInRecipes') }}
           </v-btn>
         </v-col>
-        <v-col cols align-self="center">
+        <v-col align-self="center" cols>
           <v-select
             v-model="attributes.useInRecipes"
+            dense
             :disabled="isInherited('useInRecipes')"
             :error-messages="errors.get('main.attributes.useInRecipes')"
-            :label="$t('fdbs.attributes.useInRecipes._')"
-            :items="useInRecipeTypes"
-            dense
             hide-details="auto"
+            :items="useInRecipeTypes"
+            :label="$t('fdbs.attributes.useInRecipes._')"
             name="attributes.useInRecipes"
             outlined
             @change="errors.clear('main.attributes.useInRecipes')"

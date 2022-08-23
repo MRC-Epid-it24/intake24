@@ -8,8 +8,8 @@
               <v-text-field
                 v-model="form.name"
                 :error-messages="form.errors.get('name')"
-                :label="$t('users.name')"
                 hide-details="auto"
+                :label="$t('users.name')"
                 name="name"
                 outlined
               ></v-text-field>
@@ -18,8 +18,8 @@
               <v-text-field
                 v-model="form.email"
                 :error-messages="form.errors.get('email')"
-                :label="$t('users.email')"
                 hide-details="auto"
+                :label="$t('users.email')"
                 name="email"
                 outlined
               ></v-text-field>
@@ -28,8 +28,8 @@
               <v-text-field
                 v-model="form.phone"
                 :error-messages="form.errors.get('phone')"
-                :label="$t('users.phone')"
                 hide-details="auto"
+                :label="$t('users.phone')"
                 name="phone"
                 outlined
               ></v-text-field>
@@ -38,35 +38,35 @@
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="form.password"
-                  type="password"
                   :error-messages="form.errors.get('password')"
-                  :label="$t('users.password._')"
                   hide-details="auto"
+                  :label="$t('users.password._')"
                   name="password"
                   outlined
+                  type="password"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="form.passwordConfirm"
-                  type="password"
                   :error-messages="form.errors.get('passwordConfirm')"
-                  :label="$t('users.password.confirm')"
                   hide-details="auto"
+                  :label="$t('users.password.confirm')"
                   name="passwordConfirm"
                   outlined
+                  type="password"
                 ></v-text-field>
               </v-col>
             </template>
             <v-col cols="12" md="6">
               <v-select
                 v-model="form.roles"
+                :error-messages="form.errors.get('roles')"
+                hide-details="auto"
+                item-text="displayName"
+                item-value="id"
                 :items="refs.roles"
                 :label="$t('users.roles')"
-                :error-messages="form.errors.get('roles')"
-                item-value="id"
-                item-text="displayName"
-                hide-details="auto"
                 multiple
                 name="roles"
                 outlined
@@ -83,13 +83,13 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="form.permissions"
+                :error-messages="form.errors.get('permissions')"
+                hide-details="auto"
+                item-text="displayName"
+                item-value="id"
                 :items="refs.permissions"
                 :label="$t('users.permissions._')"
                 :messages="$t('users.permissions.hint')"
-                :error-messages="form.errors.get('permissions')"
-                item-value="id"
-                item-text="displayName"
-                hide-details="auto"
                 multiple
                 name="permissions"
                 outlined
@@ -109,8 +109,8 @@
               <v-switch
                 v-model="form.multiFactorAuthentication"
                 :error-messages="form.errors.get('multiFactorAuthentication')"
-                :label="$t('users.mfa._')"
                 hide-details="auto"
+                :label="$t('users.mfa._')"
                 name="multiFactorAuthentication"
                 @change="form.errors.clear('multiFactorAuthentication')"
               ></v-switch>
@@ -119,8 +119,8 @@
               <v-switch
                 v-model="form.emailNotifications"
                 :error-messages="form.errors.get('emailNotifications')"
-                :label="$t('users.notifications.email')"
                 hide-details="auto"
+                :label="$t('users.notifications.email')"
                 name="emailNotifications"
                 @change="form.errors.clear('emailNotifications')"
               ></v-switch>
@@ -129,8 +129,8 @@
               <v-switch
                 v-model="form.smsNotifications"
                 :error-messages="form.errors.get('smsNotifications')"
-                :label="$t('users.notifications.sms')"
                 hide-details="auto"
+                :label="$t('users.notifications.sms')"
                 name="smsNotifications"
                 @change="form.errors.clear('smsNotifications')"
               ></v-switch>

@@ -3,9 +3,9 @@
     <template #actions>
       <v-btn
         :block="isMobile"
-        :title="$t('common.action.no')"
         class="px-10 ml-0"
         color="error"
+        :title="$t('common.action.no')"
         x-large
         @click.stop="answer(false)"
       >
@@ -14,10 +14,10 @@
       </v-btn>
       <v-btn
         :block="isMobile"
-        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        :title="$t('common.action.yes')"
         class="px-10"
+        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
         color="success"
+        :title="$t('common.action.yes')"
         x-large
         @click.stop="answer(true)"
       >

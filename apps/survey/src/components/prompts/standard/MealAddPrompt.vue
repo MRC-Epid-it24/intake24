@@ -9,9 +9,9 @@
           v-model="currentValue"
           clearable
           hide-selected
-          small-chips
-          outlined
           :items="listofmeals"
+          outlined
+          small-chips
         >
         </v-combobox>
       </v-form>
@@ -22,10 +22,10 @@
       </v-btn>
       <v-btn
         :block="isMobile"
-        :class="{ 'ma-0': isMobile, 'mb-2': isMobile }"
-        :disabled="!currentValue"
         class="px-5"
+        :class="{ 'ma-0': isMobile, 'mb-2': isMobile }"
         color="success"
+        :disabled="!currentValue"
         large
         @click="submit"
       >

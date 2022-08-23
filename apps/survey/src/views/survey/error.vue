@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" align="center" class="pt-2">
+  <v-row align="center" class="pt-2" justify="center">
     <v-col cols="12" md="6">
       <v-card>
         <v-sheet class="d-flex justify-center" color="deep-orange lighten-5" tile>

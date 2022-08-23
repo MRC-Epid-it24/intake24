@@ -3,10 +3,10 @@
     <v-form ref="form" @submit.prevent="submit">
       <v-radio-group
         v-model="selected"
-        :error="hasErrors"
-        :label="getLocaleContent(label)"
-        hide-details="auto"
         :column="orientation === 'column'"
+        :error="hasErrors"
+        hide-details="auto"
+        :label="getLocaleContent(label)"
         :row="orientation === 'row'"
         @change="clearErrors"
       >
@@ -17,17 +17,17 @@
           :value="option.value"
         ></v-radio>
         <v-row v-if="other" align="center" no-gutters>
-          <v-radio value="other" hide-details></v-radio>
+          <v-radio hide-details value="other"></v-radio>
           <v-text-field
             v-model.trim="otherValue"
             :error="hasErrors"
             :label="$t('prompts.radio.other')"
-            @input="clearErrors"
             @focus="selected = 'other'"
+            @input="clearErrors"
           ></v-text-field>
         </v-row>
       </v-radio-group>
-      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+      <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
       <continue @click.native="submit"></continue>

@@ -1,30 +1,30 @@
 <template>
   <v-card flat tile>
-    <v-toolbar flat tile color="grey lighten-2">
-      <v-icon left color="primary">far fa-question-circle</v-icon>
+    <v-toolbar color="grey lighten-2" flat tile>
+      <v-icon color="primary" left>far fa-question-circle</v-icon>
       <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         v-if="!isOverrideMode"
-        fab
-        small
         class="mx-3"
         color="secondary"
+        fab
+        small
         :title="$t('survey-schemes.questions.create')"
         @click.stop="create"
       >
         <v-icon small>$add</v-icon>
       </v-btn>
       <load-prompt-dialog
-        :scheme-id="$route.params.id"
         :items="isOverrideMode ? templates : undefined"
         :question-ids="questionIds"
+        :scheme-id="$route.params.id"
         @load="load"
       ></load-prompt-dialog>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="questions" handle=".drag-and-drop__handle" @end="update">
-        <transition-group type="transition" name="drag-and-drop">
+        <transition-group name="drag-and-drop" type="transition">
           <prompt-list-item
             v-for="(question, index) in questions"
             :key="question.id"

@@ -3,9 +3,9 @@
     <v-row>
       <v-col cols="12">
         <v-switch
+          hide-details="auto"
           :input-value="required"
           :label="$t('survey-schemes.questions.validation.required')"
-          hide-details="auto"
           @change="update('required', $event)"
         ></v-switch>
       </v-col>
@@ -20,10 +20,10 @@
             <v-text-field
               :key="lang"
               :disabled="!required"
-              :label="$t('survey-schemes.questions.validation.message')"
-              :value="message[lang]"
               hide-details="auto"
+              :label="$t('survey-schemes.questions.validation.message')"
               outlined
+              :value="message[lang]"
               @input="updateLanguage('message', lang, $event)"
             ></v-text-field>
           </template>

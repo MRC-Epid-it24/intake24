@@ -2,8 +2,8 @@
   <div>
     <card-content
       v-bind="{ name, description }"
-      @update:name="update('name', $event)"
       @update:description="update('description', $event)"
+      @update:name="update('name', $event)"
     ></card-content>
     <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)"></card-unit>
     <card-thresholds

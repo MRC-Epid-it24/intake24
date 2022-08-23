@@ -18,8 +18,8 @@
       <v-card-text>
         <v-container>
           <v-row justify="center">
-            <v-col cols="12" sm="8" md="6">
-              <v-btn color="secondary" x-large block :disabled="jobInProgress" @click="submit">
+            <v-col cols="12" md="6" sm="8">
+              <v-btn block color="secondary" :disabled="jobInProgress" x-large @click="submit">
                 <v-icon left>fa-download</v-icon>
                 {{ $t('surveys.respondents.authUrls.submit') }}
               </v-btn>

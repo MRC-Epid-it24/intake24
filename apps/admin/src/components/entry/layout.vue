@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card outlined class="mb-5">
+    <v-card class="mb-5" outlined>
       <v-toolbar flat>
         <v-btn color="white" :title="$t(`common.action.back`)" :to="{ name: resource.name }">
           <v-icon left>$back</v-icon> {{ $t(`common.action.back`) }}
@@ -18,22 +18,22 @@
         <v-spacer></v-spacer>
         <confirm-dialog
           v-if="canHandleEntry('delete')"
-          :label="$t('common.action.delete').toString()"
           color="error"
           icon-left="$delete"
+          :label="$t('common.action.delete').toString()"
           @confirm="remove"
         >
           {{ $t('common.action.confirm.delete', { name: entry.name ? entry.name : entry.id }) }}
         </confirm-dialog>
       </v-toolbar>
     </v-card>
-    <v-card :flat="isMobile" :tile="isMobile" :outlined="!isMobile">
-      <v-tabs dark background-color="secondary">
+    <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
+      <v-tabs background-color="secondary" dark>
         <v-tab
           v-for="tab in tabs"
           :key="tab"
-          :to="{ name: `${resource.name}-${tab}`, params: { id } }"
           :title="tabTitle(tab)"
+          :to="{ name: `${resource.name}-${tab}`, params: { id } }"
         >
           {{ tabTitle(tab) }}
         </v-tab>

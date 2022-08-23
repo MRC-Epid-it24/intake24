@@ -1,5 +1,5 @@
 <template>
-  <v-list subheader two-line flat>
+  <v-list flat subheader two-line>
     <v-subheader>{{ 'App Info' }}</v-subheader>
     <v-list-item>
       <v-list-item-avatar>

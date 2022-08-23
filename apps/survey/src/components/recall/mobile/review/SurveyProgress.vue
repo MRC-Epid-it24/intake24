@@ -1,8 +1,8 @@
 <template>
   <v-item-group class="ma-2">
     <v-row
-      justify-center
       dense
+      justify-center
       style="flex-wrap: nowrap font-size: x-small;
   font-weight: bold"
     >
@@ -10,10 +10,10 @@
         {{ item.time.length !== 0 ? item.time : '_:_' }}
         <v-item>
           <v-card
-            flat
-            dense
             class="d-flex align-center"
             :color="colourPicker(item)"
+            dense
+            flat
             height="1rem"
             width="100%"
           >

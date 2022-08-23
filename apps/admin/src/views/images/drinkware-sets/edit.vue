@@ -7,10 +7,10 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.id"
-                :error-messages="form.errors.get('id')"
-                :label="$t('drinkware-sets.id')"
                 disabled
+                :error-messages="form.errors.get('id')"
                 hide-details="auto"
+                :label="$t('drinkware-sets.id')"
                 name="id"
                 outlined
               ></v-text-field>
@@ -18,10 +18,10 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.guideImageId"
-                :error-messages="form.errors.get('guideImageId')"
-                :label="$t('guide-images._')"
                 disabled
+                :error-messages="form.errors.get('guideImageId')"
                 hide-details="auto"
+                :label="$t('guide-images._')"
                 name="guideImageId"
                 outlined
               ></v-text-field>
@@ -30,8 +30,8 @@
               <v-text-field
                 v-model="form.description"
                 :error-messages="form.errors.get('description')"
-                :label="$t('common.description')"
                 hide-details="auto"
+                :label="$t('common.description')"
                 name="description"
                 outlined
               ></v-text-field>

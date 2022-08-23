@@ -7,8 +7,8 @@
     transition="dialog-bottom-transition"
   >
     <v-card tile>
-      <v-toolbar dark color="primary">
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="reset">
+      <v-toolbar color="primary" dark>
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -16,7 +16,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-btn :title="$t('common.action.ok')" dark text @click.stop="save">
+          <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
             <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
@@ -32,9 +32,9 @@
                 <v-col cols="12">
                   <v-select
                     v-model="dialog.item.description"
+                    hide-details="auto"
                     :items="selections"
                     :label="$t('fdbs.portionSizes.description')"
-                    hide-details="auto"
                     name="method"
                     outlined
                   >
@@ -43,9 +43,9 @@
                 <v-col cols="12">
                   <v-text-field
                     v-model="dialog.item.imageUrl"
-                    :label="$t('fdbs.portionSizes.imageUrl')"
                     clearable
                     hide-details="auto"
+                    :label="$t('fdbs.portionSizes.imageUrl')"
                     outlined
                   >
                   </v-text-field>
@@ -53,27 +53,27 @@
                 <v-col cols="12">
                   <v-switch
                     v-model="dialog.item.useForRecipes"
-                    :label="$t('fdbs.portionSizes.useForRecipes')"
                     hide-details="auto"
+                    :label="$t('fdbs.portionSizes.useForRecipes')"
                   ></v-switch>
                 </v-col>
                 <v-col cols="12">
                   <v-slider
                     v-model="dialog.item.conversionFactor"
-                    :label="$t('fdbs.portionSizes.conversionFactor')"
-                    :min="0.2"
-                    :max="10"
-                    :step="0.1"
                     class="mt-5"
+                    :label="$t('fdbs.portionSizes.conversionFactor')"
+                    :max="10"
+                    :min="0.2"
+                    :step="0.1"
                     thumb-label="always"
                   ></v-slider>
                 </v-col>
                 <v-col cols="12">
                   <v-select
                     v-model="dialog.item.method"
+                    hide-details="auto"
                     :items="estimationMethods"
                     :label="$t('fdbs.portionSizes.methods._')"
-                    hide-details="auto"
                     name="method"
                     outlined
                     @change="updateItemProps"

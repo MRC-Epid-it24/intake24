@@ -3,11 +3,11 @@
     <v-form ref="form" @submit.prevent="submit">
       <v-textarea
         v-model.trim="currentValue"
+        hide-details="auto"
         :hint="getLocaleContent(hint)"
         :label="getLocaleContent(label)"
-        :rules="rules"
-        hide-details="auto"
         outlined
+        :rules="rules"
       ></v-textarea>
     </v-form>
     <template #actions>

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <portion-layout :text="promptProps.text" :description="promptProps.description">
+    <portion-layout :description="promptProps.description" :text="promptProps.text">
       <template #headerText>
         {{ localeDescription }}
       </template>
@@ -51,7 +51,7 @@
                 <v-row>
                   <v-col>
                     <!-- TODO: Value from image map/canvas -->
-                    <v-btn color="success" block @click="onSelectGuide()">
+                    <v-btn block color="success" @click="onSelectGuide()">
                       {{ $t('common.action.continue') }}
                     </v-btn>
                   </v-col>
@@ -70,7 +70,7 @@
               <v-expansion-panel-content>
                 <v-row align="center" justify="center">
                   <v-col>
-                    <quantity-card :whole="true" :fraction="true" @update-quantity="updateQuantity">
+                    <quantity-card :fraction="true" :whole="true" @update-quantity="updateQuantity">
                     </quantity-card>
                   </v-col>
                 </v-row>
@@ -79,7 +79,7 @@
                     <v-alert v-if="hasErrors" color="error">
                       <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
                     </v-alert>
-                    <v-btn color="success" block @click="confirmQuantity">
+                    <v-btn block color="success" @click="confirmQuantity">
                       {{ $t('portion.common.confirmButton') }}
                     </v-btn>
                   </v-col>
@@ -93,7 +93,7 @@
         <v-col>
           <v-form ref="form" @submit.prevent="submit">
             <!-- Should be disabled if nothing selected? -->
-            <continue :disabled="!continueEnabled" class="px-2" @click="submit"></continue>
+            <continue class="px-2" :disabled="!continueEnabled" @click="submit"></continue>
           </v-form>
         </v-col>
       </v-row>

@@ -3,11 +3,11 @@
     <v-form ref="form" @submit.prevent="submit">
       <v-date-picker
         v-model="currentValue"
-        :landscape="!isMobile"
         full-width
+        :landscape="!isMobile"
         @input="clearErrors"
       ></v-date-picker>
-      <v-messages v-show="hasErrors" v-model="errors" color="error" class="mt-3"></v-messages>
+      <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
       <continue @click.native="submit"></continue>

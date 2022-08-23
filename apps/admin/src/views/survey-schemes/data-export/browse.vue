@@ -8,7 +8,7 @@
         <li>Each section can be modified to define specific fields and order for export</li>
       </ul>
     </v-card-text>
-    <v-toolbar flat tile color="grey lighten-2">
+    <v-toolbar color="grey lighten-2" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.data-export.sections._`) }}
       </v-toolbar-title>
@@ -30,20 +30,20 @@
       </select-resource>
     </v-toolbar>
     <data-export-section
-      :section="selected"
       :ref-fields="sectionRefFields"
+      :section="selected"
       @close="close"
       @update="update"
     ></data-export-section>
     <v-list two-line>
       <draggable v-model="form.dataExport" handle=".drag-and-drop__handle">
-        <transition-group type="transition" name="drag-and-drop">
+        <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="section in form.dataExport"
             :key="section.id"
-            link
-            draggable
             class="drag-and-drop__item"
+            draggable
+            link
           >
             <v-list-item-avatar class="drag-and-drop__handle">
               <v-icon>fa-grip-vertical</v-icon>

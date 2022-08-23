@@ -5,7 +5,7 @@
         <v-col>
           <v-expansion-panels v-model="activePrompt" @change="updatePrompts">
             <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
-              <v-expansion-panel-header color="#f5f5f5" disable-icon-rotate class="text-body-1">
+              <v-expansion-panel-header class="text-body-1" color="#f5f5f5" disable-icon-rotate>
                 {{ associatedFoodPrompts[index].promptText }}
                 <template #actions>
                   <valid-invalid-icon
@@ -57,7 +57,7 @@
     </v-card-actions>
     <v-row class="mt-2">
       <v-col>
-        <continue :disabled="!continueEnabled" class="px-2" @click="onContinue"></continue>
+        <continue class="px-2" :disabled="!continueEnabled" @click="onContinue"></continue>
       </v-col>
     </v-row>
   </prompt-layout>

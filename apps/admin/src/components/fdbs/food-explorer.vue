@@ -1,14 +1,14 @@
 <template>
   <div>
-    <v-switch v-model="showGlobalName" :label="$t('fdbs.showGlobalName')" class="mt-0"> </v-switch>
+    <v-switch v-model="showGlobalName" class="mt-0" :label="$t('fdbs.showGlobalName')"> </v-switch>
     <v-treeview
+      activatable
       :active.sync="active"
+      color="secondary"
+      dense
       :items="items"
       :load-children="fetchCategoryContent"
       :open.sync="open"
-      activatable
-      color="secondary"
-      dense
       transition
     >
       <template #prepend="{ item }">
@@ -16,11 +16,11 @@
       </template>
       <template #label="{ item }">
         <router-link
+          class="text-decoration-none"
           :to="{
             name: `fdbs-${item.children ? 'categories' : 'foods'}`,
             params: { id: localeId, entryId: item.id },
           }"
-          class="text-decoration-none"
         >
           {{ item[itemText] }}
         </router-link>

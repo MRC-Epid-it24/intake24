@@ -3,8 +3,8 @@
     <template #actions>
       <copy-scheme-dialog
         v-if="canHandleEntry('copy')"
-        :scheme-id="id"
         resource="survey-schemes"
+        :scheme-id="id"
       ></copy-scheme-dialog>
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
@@ -15,8 +15,8 @@
               <v-text-field
                 v-model="form.name"
                 :error-messages="form.errors.get('name')"
-                :label="$t('common.name')"
                 hide-details="auto"
+                :label="$t('common.name')"
                 name="name"
                 outlined
               ></v-text-field>
@@ -24,10 +24,10 @@
             <v-col cols="12" md="6">
               <v-select
                 v-model="form.type"
-                :items="schemeTypes"
                 :error-messages="form.errors.get('type')"
-                :label="$t('survey-schemes.types._')"
                 hide-details="auto"
+                :items="schemeTypes"
+                :label="$t('survey-schemes.types._')"
                 name="type"
                 outlined
                 @change="form.errors.clear('type')"

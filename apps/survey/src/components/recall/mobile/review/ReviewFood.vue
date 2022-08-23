@@ -5,10 +5,10 @@
         {{ foodDisplayName(food) }}
       </v-list-item-title>
       <v-list-item-action>
-        <v-icon v-if="food.code" x-small color="green darken-2">fa-check</v-icon>
+        <v-icon v-if="food.code" color="green darken-2" x-small>fa-check</v-icon>
       </v-list-item-action>
       <v-list-item-action>
-        <v-icon v-if="food.portionSizeMethod" x-small color="green darken-2">fa-check</v-icon>
+        <v-icon v-if="food.portionSizeMethod" color="green darken-2" x-small>fa-check</v-icon>
       </v-list-item-action>
     </v-list-item>
   </v-list>

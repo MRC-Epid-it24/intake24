@@ -1,7 +1,7 @@
 <template>
   <v-card flat :loading="loading">
-    <v-toolbar flat dense>
-      <v-tabs v-model="active_tab" center-active touch show-arrows icons-and-text>
+    <v-toolbar dense flat>
+      <v-tabs v-model="active_tab" center-active icons-and-text show-arrows touch>
         <v-tab class="add_button" @click="onAddFood('edit-foods')">
           <span>FOOD</span>
           <span>ADD</span>
@@ -12,7 +12,7 @@
           @click="selectedFood(i, mealIndex, foodDisplayName(food), entity)"
         >
           {{ foodDisplayName(food) }}
-          <v-icon v-if="food.code" x-small color="green darken-2">fa-check</v-icon>
+          <v-icon v-if="food.code" color="green darken-2" x-small>fa-check</v-icon>
         </v-tab>
       </v-tabs>
     </v-toolbar>

@@ -5,9 +5,9 @@
         {{ getLocaleContent(meal.name) }}
       </v-list-item-title>
       <context-menu
-        :menu="menuMeal"
         :entity-name="meal.name.en"
         :icon="menuMealIcon"
+        :menu="menuMeal"
         @context-menu-action="onContextMenuAction"
       ></context-menu>
       <v-list-item-action>

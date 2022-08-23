@@ -2,13 +2,13 @@
   <div>
     <v-list two-line>
       <draggable v-model="items" handle=".drag-and-drop__handle">
-        <transition-group type="transition" name="drag-and-drop">
+        <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(color, idx) in items"
             :key="`${color}-${idx}`"
-            link
-            draggable
             class="drag-and-drop__item"
+            draggable
+            link
           >
             <v-list-item-avatar class="drag-and-drop__handle">
               <v-icon>fa-grip-vertical</v-icon>

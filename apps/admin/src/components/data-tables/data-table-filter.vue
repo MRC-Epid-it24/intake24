@@ -4,10 +4,10 @@
       <v-col cols="12">
         <v-text-field
           v-model="filter.search"
-          :label="$t('common.search._')"
           append-icon="fas fa-search"
           clearable
           hide-details="auto"
+          :label="$t('common.search._')"
           outlined
           @click:append="setFilter"
           @click:clear="resetFilter"
@@ -19,7 +19,7 @@
     <v-row justify="space-between">
       <v-col col="12" sm="auto">
         {{ $t('common.search.filter') }}:
-        <v-chip v-for="item in items" :key="item" pill color="orange darken-2" class="mr-1">
+        <v-chip v-for="item in items" :key="item" class="mr-1" color="orange darken-2" pill>
           {{ item }}
         </v-chip>
       </v-col>

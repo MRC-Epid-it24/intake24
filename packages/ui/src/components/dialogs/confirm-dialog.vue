@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" :persistent="persistent" :max-width="maxWidth">
+  <v-dialog v-model="dialog" :max-width="maxWidth" :persistent="persistent">
     <template #activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }">
         <v-btn
@@ -30,17 +30,17 @@
       </v-card-text>
       <v-container class="pa-6">
         <v-btn
-          :color="color"
-          :title="confirmLabel"
           block
           class="mb-2"
+          :color="color"
           dark
           large
+          :title="confirmLabel"
           @click.stop="confirm"
         >
           <v-icon v-if="confirmIcon" left>{{ confirmIcon }}</v-icon> {{ confirmLabel }}
         </v-btn>
-        <v-btn :color="color" :title="cancelLabel" block outlined large @click.stop="cancel">
+        <v-btn block :color="color" large outlined :title="cancelLabel" @click.stop="cancel">
           <v-icon v-if="cancelIcon" left>{{ cancelIcon }}</v-icon> {{ cancelLabel }}
         </v-btn>
       </v-container>

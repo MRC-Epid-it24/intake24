@@ -16,7 +16,7 @@
     </template>
     <v-card :loading="loading">
       <v-toolbar color="primary" dark flat>
-        <v-btn :title="$t('common.action.cancel')" icon dark @click.stop="cancel">
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -26,12 +26,12 @@
       <v-card-text class="pa-6">
         <v-text-field
           v-model="search"
-          :label="$t('common.search._')"
-          :loading="loading"
           append-icon="fas fa-search"
           class="mb-4"
           clearable
           hide-details="auto"
+          :label="$t('common.search._')"
+          :loading="loading"
           outlined
           @click:append="fetch"
           @click:clear="clear"

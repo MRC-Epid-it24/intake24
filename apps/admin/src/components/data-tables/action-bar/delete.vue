@@ -1,9 +1,9 @@
 <template>
   <confirm-dialog
-    :label="$t('common.action.delete').toString()"
     color="error"
     icon
     icon-left="$delete"
+    :label="$t('common.action.delete').toString()"
     @confirm="onClick"
   >
     {{ $t('common.action.confirm.delete', { name: item.name ? item.name : item.id }) }}

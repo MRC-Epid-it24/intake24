@@ -1,5 +1,5 @@
 <template>
-  <data-table :actions="['read']" :headers="headers" :api-url="`admin/locales`">
+  <data-table :actions="['read']" :api-url="`admin/locales`" :headers="headers">
     <template #[`item.id`]="{ item }">
       <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
       {{ item.id }}
