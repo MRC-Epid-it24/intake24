@@ -4,7 +4,6 @@ import fs from 'fs-extra';
 import path from 'node:path';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { JobParams } from '@intake24/common/types';
 import {
   NutrientTable,
   NutrientTableCsvMapping,
@@ -25,9 +24,7 @@ export type Mappings = {
   nutrients: NutrientTableCsvMappingNutrient[];
 };
 
-export default class NutrientTableImportData extends StreamLockJob<
-  JobParams['NutrientTableImportData']
-> {
+export default class NutrientTableImportData extends StreamLockJob<'NutrientTableImportData'> {
   readonly name = 'NutrientTableImportData';
 
   private file!: string;

@@ -230,13 +230,15 @@ export default defineComponent({
         await userService.savePhysicalData(surveyId, this.form);
         this.$router.push({ name: 'feedback-home', params: { surveyId } });
       } catch (err) {
-        if (!axios.isAxiosError(err)) {
-          console.error(err);
-          return;
+        if (axios.isAxiosError(err)) {
+          const { response: { status = 0, data = {} } = {} } = err as AxiosError<any>;
+          if (status === 422 && 'errors' in data) {
+            this.errors.record(data.errors);
+            return;
+          }
         }
 
-        const { response: { status = 0, data = {} } = {} } = err as AxiosError<any>;
-        if (status === 422 && 'errors' in data) this.errors.record(data.errors);
+        throw err;
       }
     },
   },

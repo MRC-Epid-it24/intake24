@@ -12,34 +12,28 @@ export default () => {
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    const { status } = await request(suite.app)
-      .post(invalidUrl)
-      .set('Accept', 'application/json')
-      .send({ captcha: 'captchaToken' });
-
-    expect(status).toBe(404);
+    await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
+      bearer: null,
+      input: { captcha: 'captchaToken' },
+    });
   });
 
   it(`should return 403 when user generation disabled`, async () => {
     await suite.data.system.survey.update({ allowGenUsers: false });
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .send({ captcha: 'captchaToken' });
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url, {
+      bearer: null,
+      input: { captcha: 'captchaToken' },
+    });
   });
 
   it(`should return 403 when user generation enabled and JWT secret set`, async () => {
     await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: 'aSuperSecret' });
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .send({ captcha: 'captchaToken' });
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url, {
+      bearer: null,
+      input: { captcha: 'captchaToken' },
+    });
   });
 
   it('should return 200 and public survey record', async () => {

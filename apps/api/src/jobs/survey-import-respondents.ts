@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import path from 'node:path';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { CustomField, JobParams } from '@intake24/common/types';
+import type { CustomField } from '@intake24/common/types';
 import { User, UserSurveyAlias } from '@intake24/db';
 
 import StreamLockJob from './stream-lock-job';
@@ -20,9 +20,7 @@ export type CSVRow = {
 
 const requiredFields = ['username', 'password'];
 
-export default class SurveyImportRespondents extends StreamLockJob<
-  JobParams['SurveyImportRespondents']
-> {
+export default class SurveyImportRespondents extends StreamLockJob<'SurveyImportRespondents'> {
   readonly name = 'SurveyImportRespondents';
 
   private readonly adminSurveyService;

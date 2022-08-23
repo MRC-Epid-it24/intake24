@@ -1,9 +1,11 @@
 import type { SurveyState } from '@intake24/common/types';
 import type {
+  CreateUserResponse,
   GenerateUserResponse,
   PublicSurveyEntry,
   SurveyEntryResponse,
   SurveyFollowUpResponse,
+  SurveyRequestHelpInput,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
@@ -15,15 +17,24 @@ export type GenerateUserPayload = {
 };
 
 export default {
+  createUser: async (surveyId: string, params: string): Promise<CreateUserResponse> => {
+    const { data } = await http.get<CreateUserResponse>(`surveys/${surveyId}/create-user`, {
+      params: { params },
+    });
+
+    return data;
+  },
+
   generateUser: async (
     surveyId: string,
     payload: GenerateUserPayload
   ): Promise<GenerateUserResponse> => {
-    const {
-      data: { username, password },
-    } = await http.post<GenerateUserResponse>(`surveys/${surveyId}/generate-user`, payload);
+    const { data } = await http.post<GenerateUserResponse>(
+      `surveys/${surveyId}/generate-user`,
+      payload
+    );
 
-    return { username, password };
+    return data;
   },
 
   surveyPublicList: async (): Promise<PublicSurveyEntry[]> => {
@@ -82,4 +93,7 @@ export default {
 
     return data;
   },
+
+  requestHelp: async (surveyId: string, payload: SurveyRequestHelpInput): Promise<void> =>
+    http.post(`surveys/${surveyId}/request-help`, payload),
 };

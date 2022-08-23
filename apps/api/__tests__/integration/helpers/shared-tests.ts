@@ -6,7 +6,7 @@ import type Suite from './integration-suite';
 type Method = 'get' | 'post' | 'patch' | 'put' | 'delete';
 
 type Options = {
-  bearer?: 'superuser' | 'user' | 'respondent';
+  bearer?: 'superuser' | 'user' | 'respondent' | null;
   code?: number;
   permissions?: string[];
   input?: any;

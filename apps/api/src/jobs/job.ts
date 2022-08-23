@@ -1,18 +1,18 @@
 import type { Job as BullJob } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { JobData } from '@intake24/common/types';
+import type { JobData, JobParams, JobType } from '@intake24/common/types';
 
 export type JobProgress = { done: number; all: number };
 
-export default abstract class Job<T = any> {
-  abstract readonly name: string;
+export default abstract class Job<T extends JobType> {
+  abstract readonly name: T;
 
   protected id!: string;
 
   protected job!: BullJob;
 
-  protected params!: T;
+  protected params!: JobParams[T];
 
   protected isRepeatable!: boolean;
 
@@ -24,7 +24,7 @@ export default abstract class Job<T = any> {
     this.logger = logger;
   }
 
-  protected init(job: BullJob<JobData<T>>): void {
+  protected init(job: BullJob<JobData<JobParams[T]>>): void {
     const {
       id,
       data: { params },
@@ -44,11 +44,11 @@ export default abstract class Job<T = any> {
    * To be implemented by each job
    *
    * @abstract
-   * @param {BullJob<JobData<T>>} job
+   * @param {BullJob<JobData<JobParams[T]>>} job
    * @returns {Promise<void>}
    * @memberof Job
    */
-  abstract run(job: BullJob<JobData<T>>): Promise<void>;
+  abstract run(job: BullJob<JobData<JobParams[T]>>): Promise<void>;
 
   /**
    * Get current progress
@@ -109,5 +109,5 @@ export default abstract class Job<T = any> {
 }
 
 export interface JobConstructor {
-  new (...args: any[]): Job;
+  new (...args: any[]): Job<any>;
 }

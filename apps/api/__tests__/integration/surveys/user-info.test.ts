@@ -16,34 +16,24 @@ export default () => {
   });
 
   it(`should return 403 when survey record (+survey permissions) doesn't exist`, async () => {
-    const { status } = await request(suite.app)
-      .get(invalidUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('get', invalidUrl, {
+      bearer: 'respondent',
+    });
   });
 
   it('should return 422 for missing timezone offset', async () => {
-    const { status, body } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
-
-    expect(status).toBe(422);
-    expect(body).toContainAllKeys(['success', 'errors']);
-    expect(body.errors).toContainAllKeys(['tzOffset']);
+    await suite.sharedTests.assertInvalidInput('get', url, ['tzOffset'], {
+      bearer: 'respondent',
+    });
   });
 
   it('should return 422 for invalid timezone offset', async () => {
-    const { status, body } = await request(suite.app)
-      .get(`${url}?tzOffset=invalidTzOffset`)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
-
-    expect(status).toBe(422);
-    expect(body).toContainAllKeys(['success', 'errors']);
-    expect(body.errors).toContainAllKeys(['tzOffset']);
+    await suite.sharedTests.assertInvalidInput(
+      'get',
+      `${url}?tzOffset=invalidTzOffset`,
+      ['tzOffset'],
+      { bearer: 'respondent' }
+    );
   });
 
   it('should return 200 and public survey record', async () => {

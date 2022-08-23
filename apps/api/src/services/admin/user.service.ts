@@ -5,7 +5,7 @@ import type { UserPasswordAttributes } from '@intake24/common/types/models';
 import type { Transaction } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
-import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
+import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport } from '@intake24/common/security';
 import { defaultAlgorithm } from '@intake24/common-backend/util/passwords';
 import { Op, Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
 
@@ -277,6 +277,54 @@ const adminUserService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     await Promise.all([user.$remove('permissions', permission), flushUserACLCache(user.id)]);
   };
 
+  const getSurveySupportUsers = async (surveyId: string): Promise<User[]> =>
+    User.findAll({
+      where: { email: { [Op.ne]: null } },
+      include: [
+        {
+          association: 'securables',
+          where: { securableType: 'Survey', securableId: surveyId, action: 'support' },
+          required: true,
+        },
+      ],
+    });
+
+  const getGlobalSupportUsers = async (): Promise<User[]> => {
+    const users = await Promise.all([
+      User.findAll({
+        where: { email: { [Op.ne]: null } },
+        include: [
+          {
+            association: 'permissions',
+            required: true,
+            through: { attributes: [] },
+            where: { name: globalSupport },
+          },
+        ],
+      }),
+      User.findAll({
+        where: { email: { [Op.ne]: null } },
+        include: [
+          {
+            association: 'roles',
+            required: true,
+            through: { attributes: [] },
+            include: [
+              {
+                association: 'permissions',
+                required: true,
+                through: { attributes: [] },
+                where: { name: globalSupport },
+              },
+            ],
+          },
+        ],
+      }),
+    ]);
+
+    return users.flat();
+  };
+
   return {
     flushUserACLCache,
     flushRoleACLCache,
@@ -289,6 +337,8 @@ const adminUserService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     destroy,
     addPermissionByName,
     removePermissionByName,
+    getSurveySupportUsers,
+    getGlobalSupportUsers,
   };
 };
 

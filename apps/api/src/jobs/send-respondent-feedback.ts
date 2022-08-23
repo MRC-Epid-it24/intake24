@@ -3,11 +3,10 @@ import fs from 'fs-extra';
 import nunjucks from 'nunjucks';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { JobParams } from '@intake24/common/types';
 
 import BaseJob from './job';
 
-export default class SendRespondentFeedback extends BaseJob<JobParams['SendRespondentFeedback']> {
+export default class SendRespondentFeedback extends BaseJob<'SendRespondentFeedback'> {
   readonly name = 'SendRespondentFeedback';
 
   private readonly feedbackService;
@@ -41,7 +40,7 @@ export default class SendRespondentFeedback extends BaseJob<JobParams['SendRespo
     const subject = 'Intake24: My dietary feedback';
     const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
     const { path, url } = await this.feedbackService.getFeedbackFile(surveyId, userId, submissions);
-    const html = nunjucks.render('mail/feedback.njk', {
+    const html = nunjucks.render('mail/surveys/respondent-feedback.njk', {
       title: subject,
       action: { url, text: 'Download feedback' },
     });

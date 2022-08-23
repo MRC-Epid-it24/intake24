@@ -12,6 +12,7 @@ import SendRespondentFeedback from './send-respondent-feedback';
 import SurveyDataExport from './survey-data-export';
 import SurveyExportRespondentAuthUrls from './survey-export-respondent-auth-urls';
 import SurveyImportRespondents from './survey-import-respondents';
+import SurveyRequestHelp from './survey-request-help';
 import SurveySubmissionNotification from './survey-submission-notification';
 
 export * from './job';
@@ -36,6 +37,7 @@ const jobs = {
   SurveyDataExport,
   SurveyExportRespondentAuthUrls,
   SurveyImportRespondents,
+  SurveyRequestHelp,
   SurveySubmissionNotification,
 };
 

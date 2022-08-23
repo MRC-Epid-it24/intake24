@@ -1,0 +1,17 @@
+{% extends "mail/layouts/layout.njk" %}
+{% block body %}
+<p>Hello,</p>
+<p>Someone has requested your help with recall, please see details below.</p>
+<p>
+  Study: {{ surveyName }}<br>
+  Username: {{ username }}
+</p>
+<p>
+  Name: {{ name }}<br>
+  Phone: {{ phone }}
+</p>
+<p>
+Kind regards,<br />
+Intake24 Team
+</p>
+{% endblock %}

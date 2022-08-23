@@ -4,7 +4,6 @@ import fs from 'fs-extra';
 import path from 'node:path';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { JobParams } from '@intake24/common/types';
 import { excelColumnToOffset } from '@intake24/common/util/strings';
 import { FoodsNutrientType, NutrientTable, NutrientTableCsvMappingNutrient } from '@intake24/db';
 
@@ -17,9 +16,7 @@ export type CSVRow = {
 
 const requiredFields = ['Intake24 nutrient ID', 'NDB spreadsheet column index'];
 
-export default class NutrientTableImportMapping extends StreamLockJob<
-  JobParams['NutrientTableImportMapping']
-> {
+export default class NutrientTableImportMapping extends StreamLockJob<'NutrientTableImportMapping'> {
   readonly name = 'NutrientTableImportMapping';
 
   private file!: string;

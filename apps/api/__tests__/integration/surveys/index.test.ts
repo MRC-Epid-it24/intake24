@@ -4,6 +4,7 @@ import generateUser from './generate-user.test';
 import getSession from './get-session.test';
 import parameters from './parameters.test';
 import read from './read.test';
+import requestHelp from './request-help.test';
 import setSession from './set-session.test';
 import userInfo from './user-info.test';
 
@@ -18,5 +19,5 @@ export default () => {
   describe('GET /api/surveys/:slug/session', getSession);
   describe('POST /api/surveys/:slug/session', setSession);
   // describe('POST /api/surveys/:slug/submission', submission);
-  // describe('POST /api/surveys/:slug/request-help', requestHelp);
+  describe('POST /api/surveys/:slug/request-help', requestHelp);
 };

@@ -39,24 +39,18 @@ export default () => {
   });
 
   it(`should return 403 when survey record (+survey permissions) doesn't exist`, async () => {
-    const { status } = await request(suite.app)
-      .post(invalidUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', invalidUrl, {
+      bearer: 'respondent',
+    });
   });
 
   it(`should return 403 when user session disabled`, async () => {
     await suite.data.system.survey.update({ storeUserSessionOnServer: false });
 
-    const { status } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent)
-      .send(input);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', url, {
+      bearer: 'respondent',
+      input,
+    });
   });
 
   describe('user session enabled', () => {
@@ -65,26 +59,16 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.respondent);
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['sessionData']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['sessionData'], {
+        bearer: 'respondent',
+      });
     });
 
     it('should return 422 for invalid input data', async () => {
-      const { status, body } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.respondent)
-        .send({ sessionData: 'InvalidSurveyState' });
-
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
-      expect(body.errors).toContainAllKeys(['sessionData']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['sessionData'], {
+        bearer: 'respondent',
+        input: { sessionData: 'InvalidSurveyState' },
+      });
     });
 
     it('should return 200 and survey session data', async () => {

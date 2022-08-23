@@ -54,7 +54,7 @@ This needs to be run if object structure changes, so all database records are sy
 
 | Column   | Description | Record          |
 | -------- | ----------- | --------------- |
-| userName | Required    | UserSurveyAlias |
+| username | Required    | UserSurveyAlias |
 | password | Required    | UserSurveyAlias |
 | name     | Optional    | User            |
 | email    | Optional    | User            |

@@ -4,7 +4,7 @@ export const ACL_ROLES_KEY = 'acl:roles';
 export const respondentSuffix = '/respondent';
 export const foodDatabaseMaintainerPrefix = 'fdbm/';
 
-export const globalsupport = 'globalsupport';
+export const globalSupport = 'globalsupport';
 export const foodsAdmin = 'foodsadmin';
 
 export const surveyRespondent = (surveySlug: string): string => `${surveySlug}${respondentSuffix}`;

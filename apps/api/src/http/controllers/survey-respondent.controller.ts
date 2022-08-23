@@ -4,6 +4,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type {
   SurveyEntryResponse,
   SurveyFollowUpResponse,
+  SurveyRequestHelpInput,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
@@ -122,9 +123,15 @@ const surveyRespondentController = ({
     res.json(session);
   };
 
-  // TODO: implement
-  const requestHelp = async (req: Request<{ slug: string }>, res: Response): Promise<void> => {
-    // const { slug } = req.params;
+  const requestHelp = async (
+    req: Request<{ slug: string }, any, SurveyRequestHelpInput>,
+    res: Response<undefined>
+  ): Promise<void> => {
+    const { id: userId } = req.user as User;
+    const { slug: surveySlug } = req.params;
+    const { name, phone } = req.body;
+
+    await surveyService.requestHelp({ surveySlug, userId, name, phone });
 
     res.json();
   };

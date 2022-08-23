@@ -1,4 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
+import type { JobType } from '@intake24/common/types';
 import { sleep } from '@intake24/api/util';
 
 import BaseJob from './job';
@@ -8,7 +9,7 @@ import BaseJob from './job';
  * - use for locking when back fo data is processed
  * - prevents race conditions between `data`/`end` event at the end of csv stream
  */
-export default abstract class StreamLockJob<T> extends BaseJob<T> {
+export default abstract class StreamLockJob<T extends JobType> extends BaseJob<T> {
   private locked = false;
 
   private unlockInterval = 500;

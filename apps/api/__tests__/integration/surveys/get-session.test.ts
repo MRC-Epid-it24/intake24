@@ -19,23 +19,17 @@ export default () => {
   });
 
   it(`should return 403 when survey record (+survey permissions) doesn't exist`, async () => {
-    const { status } = await request(suite.app)
-      .get(invalidUrl)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('get', invalidUrl, {
+      bearer: 'respondent',
+    });
   });
 
   it(`should return 403 when user session disabled`, async () => {
     await suite.data.system.survey.update({ storeUserSessionOnServer: false });
 
-    const { status } = await request(suite.app)
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('get', url, {
+      bearer: 'respondent',
+    });
   });
 
   describe('user session enabled', () => {

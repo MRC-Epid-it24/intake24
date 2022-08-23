@@ -4,12 +4,11 @@ import path from 'node:path';
 
 import type { LocalLocation } from '@intake24/api/config/filesystem';
 import type { IoC } from '@intake24/api/ioc';
-import type { JobParams } from '@intake24/common/types';
 import { addTime } from '@intake24/api/util';
 
 import BaseJob from './job';
 
-export default class CleanStorageFiles extends BaseJob<JobParams['CleanStorageFiles']> {
+export default class CleanStorageFiles extends BaseJob<'CleanStorageFiles'> {
   readonly name = 'CleanStorageFiles';
 
   private readonly config;

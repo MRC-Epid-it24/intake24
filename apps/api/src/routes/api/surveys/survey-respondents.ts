@@ -22,6 +22,11 @@ export default () => {
     validation.submission,
     wrapAsync(surveyRespondentController.submission)
   );
-  router.post('/request-help', wrapAsync(surveyRespondentController.requestHelp));
+  router.post(
+    '/request-help',
+    validation.requestHelp,
+    wrapAsync(surveyRespondentController.requestHelp)
+  );
+
   return router;
 };

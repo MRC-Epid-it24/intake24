@@ -13,26 +13,6 @@ export type RepeatableBullJob = {
 
 export type JobData<T = any> = { params: T };
 
-export const jobTypes = [
-  'CleanRedisStore',
-  'CleanStorageFiles',
-  'LanguageSyncTranslations',
-  'LocaleCopyPairwiseAssociations',
-  'NutrientTableImportMapping',
-  'NutrientTableImportData',
-  'PurgeRefreshTokens',
-  'SendPasswordReset',
-  'SendRespondentFeedback',
-  'SurveyDataExport',
-  'SurveyExportRespondentAuthUrls',
-  'SurveyImportRespondents',
-  'SurveySubmissionNotification',
-] as const;
-
-export type JobType = typeof jobTypes[number];
-
-export const isValidJob = (job: any): boolean => jobTypes.includes(job);
-
 export type EmptyJobParams = Record<string, never>;
 
 export type JobParams = {
@@ -80,11 +60,19 @@ export type JobParams = {
     surveyId: string;
     file: string;
   };
+  SurveyRequestHelp: {
+    surveySlug: string;
+    userId: string;
+    name: string;
+    phone: string;
+  };
   SurveySubmissionNotification: {
     surveyId: string;
     submissionId: string;
   };
 };
+
+export type JobType = keyof JobParams;
 
 export type JobTypeParams = JobParams[keyof JobParams];
 
@@ -125,11 +113,21 @@ export const defaultJobsParams: JobParams = {
     surveyId: '',
     file: '',
   },
+  SurveyRequestHelp: {
+    surveySlug: '',
+    userId: '',
+    name: '',
+    phone: '',
+  },
   SurveySubmissionNotification: {
     surveyId: '',
     submissionId: '',
   },
 };
+
+export const jobTypes = Object.keys(defaultJobsParams) as JobType[];
+
+export const isValidJob = (job: any): boolean => jobTypes.includes(job);
 
 export const pickJobParams = <T extends keyof JobParams>(object: object, job: T): JobParams[T] =>
   pick(object, Object.keys(defaultJobsParams[job])) as JobParams[T];

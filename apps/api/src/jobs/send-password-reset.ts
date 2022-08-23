@@ -5,7 +5,6 @@ import { Op } from 'sequelize';
 import parser from 'ua-parser-js';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { JobParams } from '@intake24/common/types';
 import { getFrontEndUrl } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
 import { User, UserPasswordReset } from '@intake24/db';
@@ -16,7 +15,7 @@ const getAgentInfo = (agent: { name?: string; version?: string }): string | unde
   return agent.name && agent.version ? `${agent.name} (${agent.version})` : undefined;
 };
 
-export default class SendPasswordReset extends BaseJob<JobParams['SendPasswordReset']> {
+export default class SendPasswordReset extends BaseJob<'SendPasswordReset'> {
   readonly name = 'SendPasswordReset';
 
   private readonly appConfig;

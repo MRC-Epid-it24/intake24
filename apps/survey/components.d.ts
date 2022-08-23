@@ -83,6 +83,7 @@ declare module '@vue/runtime-core' {
     RecallMobileReviewReviewFood: typeof import('./src/components/recall/mobile/review/ReviewFood.vue')['default']
     RecallMobileReviewReviewMeal: typeof import('./src/components/recall/mobile/review/ReviewMeal.vue')['default']
     RecallMobileReviewSurveyProgress: typeof import('./src/components/recall/mobile/review/SurveyProgress.vue')['default']
+    RequestHelp: typeof import('./src/components/request-help.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VAlert: typeof import('vuetify/lib')['VAlert']

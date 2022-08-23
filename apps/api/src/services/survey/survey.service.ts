@@ -2,8 +2,12 @@ import { addDays, addMinutes, startOfDay } from 'date-fns';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { PromptQuestion, RedirectPromptProps } from '@intake24/common/prompts';
-import type { SurveyState } from '@intake24/common/types';
-import type { SurveyFollowUpResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
+import type { JobParams, SurveyState } from '@intake24/common/types';
+import type {
+  CreateUserResponse,
+  SurveyFollowUpResponse,
+  SurveyUserInfoResponse,
+} from '@intake24/common/types/http';
 import type { FindOptions, SubmissionScope } from '@intake24/db';
 import { ApplicationError, ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
@@ -26,13 +30,10 @@ export type RespondentWithPassword = {
   password: string;
 };
 
-export type RespondentFromJWT = {
-  userId: string;
-  redirect: string;
-  authToken: string;
-};
-
-const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) => {
+const surveyService = ({
+  adminSurveyService,
+  scheduler,
+}: Pick<IoC, 'adminSurveyService' | 'scheduler'>) => {
   /**
    * Generate random survey respondent
    *
@@ -64,12 +65,12 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
    *
    * @param {string} slug
    * @param {string} params
-   * @returns {Promise<RespondentFromJWT>}
+   * @returns {Promise<CreateUserResponse>}
    */
   const createRespondentWithJWT = async (
     slug: string,
     params: string
-  ): Promise<RespondentFromJWT> => {
+  ): Promise<CreateUserResponse> => {
     const survey = await Survey.findOne({ where: { slug } });
     if (!survey) throw new NotFoundError();
 
@@ -301,6 +302,12 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
     return { ...showFeedback, followUpUrl };
   };
 
+  const requestHelp = async (params: JobParams['SurveyRequestHelp']) => {
+    const { userId } = params;
+
+    await scheduler.jobs.addJob({ type: 'SurveyRequestHelp', userId }, params);
+  };
+
   return {
     generateRespondent,
     createRespondentWithJWT,
@@ -310,6 +317,7 @@ const surveyService = ({ adminSurveyService }: Pick<IoC, 'adminSurveyService'>) 
     getSubmissions,
     getFollowUpUrl,
     followUp,
+    requestHelp,
   };
 };
 

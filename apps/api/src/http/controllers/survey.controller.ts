@@ -1,8 +1,11 @@
 import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { RespondentFromJWT } from '@intake24/api/services';
-import type { GenerateUserResponse, PublicSurveyEntry } from '@intake24/common/types/http';
+import type {
+  CreateUserResponse,
+  GenerateUserResponse,
+  PublicSurveyEntry,
+} from '@intake24/common/types/http';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Survey } from '@intake24/db';
 
@@ -46,7 +49,7 @@ const surveyController = ({ surveyService }: Pick<IoC, 'surveyService'>) => {
 
   const createUser = async (
     req: Request<{ slug: string }, any, any, { params: string }>,
-    res: Response<RespondentFromJWT>
+    res: Response<CreateUserResponse>
   ): Promise<void> => {
     const {
       params: { slug },

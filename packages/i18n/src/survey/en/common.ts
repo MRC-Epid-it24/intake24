@@ -17,13 +17,17 @@ const common: LocaleMessageObject = {
   },
 
   username: 'Username',
+  name: 'Name',
   email: 'Email',
   emailConfirm: 'Confirm email',
   password: 'Password',
+  phone: 'Phone',
 
-  help: 'Help',
-
-  nullString: '# Missing translation!',
+  help: {
+    _: 'Help',
+    title: 'Request help',
+    sent: 'Your help request has been sent.',
+  },
 
   sw: {
     check: 'Content update is available',

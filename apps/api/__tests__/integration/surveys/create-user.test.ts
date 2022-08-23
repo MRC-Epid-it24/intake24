@@ -20,56 +20,40 @@ export default () => {
   });
 
   it(`should return 422 for missing JWT in query params`, async () => {
-    const { status, body } = await request(suite.app)
-      .post(url)
-      .set('Accept', 'application/json')
-      .send();
-
-    expect(status).toBe(422);
-    expect(body).toContainAllKeys(['errors', 'success']);
-    expect(body.errors).toContainAllKeys(['params']);
+    await suite.sharedTests.assertInvalidInput('post', url, ['params'], {
+      bearer: null,
+    });
   });
 
   it(`should return 422 for malformed JWT in query params`, async () => {
-    const { status, body } = await request(suite.app)
-      .post(`${url}?params=this-is-not-a-jwt-token`)
-      .set('Accept', 'application/json')
-      .send();
-
-    expect(status).toBe(422);
-    expect(body).toContainAllKeys(['errors', 'success']);
-    expect(body.errors).toContainAllKeys(['params']);
+    await suite.sharedTests.assertInvalidInput(
+      'post',
+      `${url}?params=this-is-not-a-jwt-token`,
+      ['params'],
+      { bearer: null }
+    );
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    const { status } = await request(suite.app)
-      .post(`${invalidUrl}?params=${token}`)
-      .set('Accept', 'application/json')
-      .send();
-
-    expect(status).toBe(404);
+    await suite.sharedTests.assertMissingRecord('post', `${invalidUrl}?params=${token}`, {
+      bearer: null,
+    });
   });
 
   it(`should return 403 when user generation disabled`, async () => {
     await suite.data.system.survey.update({ allowGenUsers: false, genUserKey: null });
 
-    const { status } = await request(suite.app)
-      .post(`${url}?params=${token}`)
-      .set('Accept', 'application/json')
-      .send();
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', `${url}?params=${token}`, {
+      bearer: null,
+    });
   });
 
   it(`should return 403 when JWT secret is not set in survey settings`, async () => {
     await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: null });
 
-    const { status } = await request(suite.app)
-      .post(`${url}?params=${token}`)
-      .set('Accept', 'application/json')
-      .send();
-
-    expect(status).toBe(403);
+    await suite.sharedTests.assertMissingAuthorization('post', `${url}?params=${token}`, {
+      bearer: null,
+    });
   });
 
   describe('for correct survey settings', () => {
@@ -80,12 +64,9 @@ export default () => {
     it(`should return 403 for invalid JWT secret`, async () => {
       const invalidToken = jwt.sign(payload, 'invalidSecret', { expiresIn: '5m' });
 
-      const { status } = await request(suite.app)
-        .post(`${url}?params=${invalidToken}`)
-        .set('Accept', 'application/json')
-        .send();
-
-      expect(status).toBe(403);
+      await suite.sharedTests.assertMissingAuthorization('post', `${url}?params=${invalidToken}`, {
+        bearer: null,
+      });
     });
 
     it(`should return 400 when payload is not an object`, async () => {

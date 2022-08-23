@@ -10,6 +10,12 @@ export type GenerateUserResponse = {
   password: string;
 };
 
+export type CreateUserResponse = {
+  userId: string;
+  redirect: string;
+  authToken: string;
+};
+
 export type PublicSurveyEntry = {
   id: string;
   slug: string;
@@ -53,3 +59,8 @@ export type SurveyUserSessionResponse = UserSurveySessionAttributes;
 export interface SurveyFollowUpResponse extends SurveyUserInfoResponse {
   followUpUrl: string | null;
 }
+
+export type SurveyRequestHelpInput = {
+  name: string;
+  phone: string;
+};

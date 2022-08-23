@@ -4,7 +4,6 @@ import { Transform } from 'json2csv';
 import path from 'node:path';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { JobParams } from '@intake24/common/types';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { EMPTY } from '@intake24/api/services/admin/data-export';
 import { addTime } from '@intake24/api/util';
@@ -12,7 +11,7 @@ import { Job as DbJob } from '@intake24/db';
 
 import BaseJob from './job';
 
-export default class SurveyDataExport extends BaseJob<JobParams['SurveyDataExport']> {
+export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
   readonly name = 'SurveyDataExport';
 
   private dbJob!: DbJob;

@@ -94,7 +94,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
       return;
     }
 
-    const newJob = ioc.resolve<Job>(name);
+    const newJob = ioc.resolve<Job<any>>(name);
     await newJob.run(job);
   }
 

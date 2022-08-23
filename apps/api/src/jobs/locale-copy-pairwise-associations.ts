@@ -1,13 +1,10 @@
 import type { Job } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { JobParams } from '@intake24/common/types';
 
 import BaseJob from './job';
 
-export default class LocaleCopyPairwiseAssociations extends BaseJob<
-  JobParams['LocaleCopyPairwiseAssociations']
-> {
+export default class LocaleCopyPairwiseAssociations extends BaseJob<'LocaleCopyPairwiseAssociations'> {
   readonly name = 'LocaleCopyPairwiseAssociations';
 
   private readonly localeService;

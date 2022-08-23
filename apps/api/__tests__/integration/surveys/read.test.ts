@@ -1,5 +1,3 @@
-import request from 'supertest';
-
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import { publicSurveyEntryResponse } from '@intake24/api/http/responses';
 import { suite } from '@intake24/api-tests/integration/helpers';
@@ -18,15 +16,10 @@ export default () => {
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    const { status } = await request(suite.app).get(invalidUrl).set('Accept', 'application/json');
-
-    expect(status).toBe(404);
+    await suite.sharedTests.assertMissingRecord('get', invalidUrl, { bearer: null });
   });
 
   it('should return 200 and public survey record', async () => {
-    const { status, body } = await request(suite.app).get(url).set('Accept', 'application/json');
-
-    expect(status).toBe(200);
-    expect(body).toEqual(output);
+    await suite.sharedTests.assertRecord('get', url, output, { bearer: null });
   });
 };
