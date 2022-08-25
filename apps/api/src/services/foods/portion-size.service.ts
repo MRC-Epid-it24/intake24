@@ -59,13 +59,13 @@ const portionSizeService = () => {
         { association: 'selectionImage', required: true },
         {
           association: 'asServedImages',
-          order: [['weight', 'ASC']],
           include: [
             { association: 'image', required: true },
             { association: 'thumbnailImage', required: true },
           ],
         },
       ],
+      order: [['asServedImages', 'weight', 'ASC']],
     });
 
   /**
@@ -87,7 +87,6 @@ const portionSizeService = () => {
     { association: 'baseImage', required: true },
     {
       association: 'objects',
-      order: [['navigationIndex', 'ASC']],
       include: [{ association: 'overlayImage' }],
     },
   ];
@@ -105,6 +104,7 @@ const portionSizeService = () => {
         { association: 'imageMap', required: true, include: imageMapScope },
         { association: 'objects' },
       ],
+      order: [['imageMap', 'objects', 'navigationIndex', 'ASC']],
     });
 
   /**
@@ -128,7 +128,11 @@ const portionSizeService = () => {
    * @returns {Promise<ImageMap[]>}
    */
   const getImageMaps = async (id: string | string[]): Promise<ImageMap[]> =>
-    ImageMap.findAll({ where: { id }, include: imageMapScope });
+    ImageMap.findAll({
+      where: { id },
+      include: imageMapScope,
+      order: [['objects', 'navigationIndex', 'ASC']],
+    });
 
   /**
    * Get single record of image map data
@@ -154,12 +158,12 @@ const portionSizeService = () => {
     DrinkwareSet.findAll({
       where: { id },
       include: [
-        {
-          model: DrinkwareScale,
-          order: [['id', 'ASC']],
-          include: [{ model: DrinkwareVolumeSample, order: [['fill', 'ASC']] }],
-        },
+        { association: 'scales', include: [{ association: 'volumeSamples' }] },
         { association: 'imageMap', include: [{ association: 'baseImage' }] },
+      ],
+      order: [
+        ['scales', 'id', 'ASC'],
+        ['scales', 'volumeSamples', 'fill', 'ASC'],
       ],
     });
 
