@@ -13,27 +13,9 @@ const user: LocaleMessageObject = {
   permissions: 'Assigned permissions',
   roles: 'Assigned roles',
 
-  password: {
-    _: 'Password',
-    change: 'Change password',
-    current: 'Current password',
-    new: 'New password',
-    confirm: 'Confirm new password',
-    update: 'Update password',
-    updated: 'Your password has been successfully updated.',
-  },
-
   languages: {
     _: 'Language',
     title: 'Languages',
-
-    ar: 'Arabic',
-    de: 'German',
-    dk: 'Danish',
-    en: 'English',
-    es: 'Spanish',
-    fr: 'French',
-    pt: 'Portuguese',
   },
 };
 
