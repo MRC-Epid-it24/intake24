@@ -5,17 +5,12 @@ import type {
   LocaleTranslation,
   RequiredLocaleTranslation,
 } from '@intake24/common/types';
+import { replaceParams } from '@intake24/i18n/util';
 
 export type LocaleContentOptions = {
   path?: string;
   params?: Dictionary<string>;
 };
-
-export const replaceParams = (content: string, params: Dictionary<string> = {}) =>
-  Object.entries(params).reduce((acc, [key, value]) => {
-    acc = acc.replace(`{${key}}`, value);
-    return acc;
-  }, content);
 
 export default defineComponent({
   methods: {

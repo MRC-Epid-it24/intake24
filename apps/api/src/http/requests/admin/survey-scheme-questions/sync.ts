@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 
-import validate from '@intake24/api/http/requests/validate';
+import { validate } from '@intake24/api/http/requests/util';
 import { isMealSection, isSurveySection } from '@intake24/common/schemes';
 
 export default validate(

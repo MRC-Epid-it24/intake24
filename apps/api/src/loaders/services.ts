@@ -25,4 +25,7 @@ export default async (): Promise<void> => {
 
   // Food indexing and searching
   await foodIndex.init();
+
+  // i18n translations
+  await ioc.cradle.i18nStore.init();
 };

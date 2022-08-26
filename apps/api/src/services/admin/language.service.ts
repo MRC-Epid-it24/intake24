@@ -10,11 +10,15 @@ import type {
   LanguageTranslationCreationAttributes,
 } from '@intake24/common/types/models';
 import type { WhereOptions } from '@intake24/db';
+import type { LocaleMessages } from '@intake24/i18n';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { Language, LanguageTranslation } from '@intake24/db';
-import { admin, compareMessageKeys, mergeTranslations, shared, survey } from '@intake24/i18n';
+import { admin, api, compareMessageKeys, mergeTranslations, shared, survey } from '@intake24/i18n';
 
-const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
+const languageService = ({
+  i18nStore,
+  logger: globalLogger,
+}: Pick<IoC, 'i18nStore' | 'logger'>) => {
   const logger = globalLogger.child({ service: 'languageService' });
 
   /**
@@ -51,41 +55,31 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
    * @param {string} languageId
    * @returns {Promise<void>}
    */
-  const createLanguageTranslations = async (languageId: string): Promise<void> => {
-    const adminLanguageTranslations: LanguageTranslationCreationAttributes[] = Object.keys(
-      admin.en
-    ).map((section) => ({
-      languageId,
-      application: 'admin',
-      section,
-      messages: admin.en[section],
-    }));
-
-    const surveyLanguageTranslations: LanguageTranslationCreationAttributes[] = Object.keys(
-      survey.en
-    ).map((section) => ({
-      languageId,
-      application: 'survey',
-      section,
-      messages: survey.en[section],
-    }));
-
-    const sharedLanguageTranslations: LanguageTranslationCreationAttributes[] = Object.keys(
-      shared.en
-    ).map((section) => ({
-      languageId,
-      application: 'shared',
-      section,
-      messages: shared.en[section],
-    }));
-
-    const languageMessages = [
-      ...adminLanguageTranslations,
-      ...surveyLanguageTranslations,
-      ...sharedLanguageTranslations,
+  const createLanguageTranslations = async (languageId: string, reload = false): Promise<void> => {
+    const inBuildMessages: {
+      application: Application;
+      messages: Record<string, LocaleMessages>;
+    }[] = [
+      { application: 'admin', messages: admin },
+      { application: 'api', messages: api },
+      { application: 'survey', messages: survey },
+      { application: 'shared', messages: shared },
     ];
 
+    const languageMessages: LanguageTranslationCreationAttributes[] = inBuildMessages
+      .map(({ application, messages: { en } }) =>
+        Object.keys(en).map((section) => ({
+          languageId,
+          application,
+          section,
+          messages: en[section],
+        }))
+      )
+      .flat();
+
     if (languageMessages.length) await LanguageTranslation.bulkCreate(languageMessages);
+
+    if (reload) await i18nStore.reload();
   };
 
   /**
@@ -100,7 +94,7 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
     const translations = await getLanguageTranslations(languageId);
     if (translations.length) return translations;
 
-    await createLanguageTranslations(languageId);
+    await createLanguageTranslations(languageId, true);
 
     return getLanguageTranslations(languageId);
   };
@@ -113,7 +107,6 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
    */
   const createLanguage = async (input: CreateLanguageRequest): Promise<LanguageEntry> => {
     const language = await Language.create(input);
-    await createLanguageTranslations(language.id);
 
     return language;
   };
@@ -193,6 +186,8 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
       await translation.update({ messages });
     }
 
+    await i18nStore.reload();
+
     return translations;
   };
 
@@ -200,10 +195,12 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
    * Delete language translations set
    *
    * @param {string} languageId
-   * @returns {Promise<number>}
+   * @returns {Promise<void>}
    */
-  const deleteLanguageTranslations = async (languageId: string): Promise<number> =>
-    LanguageTranslation.destroy({ where: { languageId } });
+  const deleteLanguageTranslations = async (languageId: string): Promise<void> => {
+    await LanguageTranslation.destroy({ where: { languageId } });
+    await i18nStore.reload();
+  };
 
   /**
    * Synchronize language translations
@@ -263,6 +260,8 @@ const languageService = ({ logger: globalLogger }: Pick<IoC, 'logger'>) => {
 
       if (promises.length) await Promise.all(promises);
     }
+
+    await i18nStore.reload();
   };
 
   return {

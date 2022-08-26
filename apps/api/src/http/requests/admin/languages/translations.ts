@@ -1,9 +1,16 @@
 import { checkSchema } from 'express-validator';
 
-import validate from '@intake24/api/http/requests/validate';
-import { admin, compareMessageKeys, shared, survey, validateTranslations } from '@intake24/i18n';
+import { validate } from '@intake24/api/http/requests/util';
+import {
+  admin,
+  api,
+  compareMessageKeys,
+  shared,
+  survey,
+  validateTranslations,
+} from '@intake24/i18n';
 
-const defaultMessages = { admin, survey, shared } as any;
+const defaultMessages = { admin, api, survey, shared } as any;
 
 export default validate(
   checkSchema({

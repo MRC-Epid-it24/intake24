@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 
+import { registerI18nScope, registerIoC } from '@intake24/api/http/middleware';
+
 import admin from './admin';
 import authentication from './authentication';
 import categories from './categories';
@@ -15,6 +17,9 @@ import user from './user';
 
 export default () => {
   const router = Router();
+
+  router.use(registerIoC);
+  router.use(registerI18nScope);
 
   // Unauthenticated
   router.use('/auth', authentication());

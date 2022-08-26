@@ -30,6 +30,7 @@ const languages: LocaleMessageObject = {
     path: 'Key path',
     applications: {
       admin: 'Admin',
+      api: 'API',
       survey: 'Survey',
       shared: 'Shared',
     },
@@ -44,6 +45,7 @@ const languages: LocaleMessageObject = {
       recall: 'Recall',
       'standard-units': 'Standard units',
       survey: 'Survey',
+      validation: 'Validation',
     },
   },
 };

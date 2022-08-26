@@ -18,6 +18,8 @@ import {
   Filesystem,
   foodDataService,
   guideImageService,
+  i18nService,
+  i18nStore,
   imageMapService,
   jwtRotationService,
   jwtService,
@@ -79,6 +81,8 @@ export default (container: AwilixContainer): void => {
 
     cache: asClass(Cache).singleton(),
     filesystem: asClass(Filesystem).singleton(),
+    i18nService: asFunction(i18nService).scoped(),
+    i18nStore: asFunction(i18nStore).singleton(),
     logger: asValue(logger),
     mailer: asClass(Mailer).singleton(),
     pusher: asClass(Pusher).singleton(),

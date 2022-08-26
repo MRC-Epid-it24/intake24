@@ -2,7 +2,7 @@ export const frontEnds = ['admin', 'survey'] as const;
 
 export type FrontEnd = typeof frontEnds[number];
 
-export const applications = [...frontEnds, 'shared'] as const;
+export const applications = [...frontEnds, 'api', 'shared'] as const;
 
 export type Application = typeof applications[number];
 

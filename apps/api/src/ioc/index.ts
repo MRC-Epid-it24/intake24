@@ -82,12 +82,13 @@ import type {
   Filesystem,
   FoodDataService,
   GuideImageService,
+  I18nService,
+  I18nStore,
   ImageMapService,
   JwtRotationService,
   JwtService,
   LanguageService,
   LocaleService,
-  // MFA Providers
   MFAProvider,
   NutrientTableService,
   PortionSizeService,
@@ -213,6 +214,8 @@ export interface IoC extends Jobs {
   models: typeof models;
   cache: Cache;
   filesystem: Filesystem;
+  i18nService: I18nService;
+  i18nStore: I18nStore;
   logger: Logger;
   mailer: Mailer;
   pusher: Pusher;
@@ -274,6 +277,7 @@ export interface RequestIoC extends IoC {
   currentUser: User;
   userId: string;
   aclService: ACLService;
+  clientLanguages: string[];
 }
 
 const configureContainer = () => {

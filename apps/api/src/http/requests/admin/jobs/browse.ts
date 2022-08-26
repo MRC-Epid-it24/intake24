@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator';
 
 import { paginate } from '@intake24/api/http/requests/admin/generic';
-import validate from '@intake24/api/http/requests/validate';
+import { validate } from '@intake24/api/http/requests/util';
 import { jobExists } from '@intake24/api/http/rules';
 
 export default validate(

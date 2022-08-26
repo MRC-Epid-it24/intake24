@@ -104,7 +104,7 @@ export default defineComponent({
 
     description(): string {
       return this.getLocaleContent(this.promptProps.description, {
-        path: 'prompts.mealTime.description',
+        // path: 'prompts.mealTime.description',
         params: { meal: this.getLocalMealName },
       });
     },

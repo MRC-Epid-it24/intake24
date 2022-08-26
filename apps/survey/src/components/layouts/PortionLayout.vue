@@ -8,7 +8,7 @@
           </v-card-text>
         </v-col>
         <v-col class="mx-2" cols="auto">
-          <v-btn color="primary">{{ $t('common.help') }}</v-btn>
+          <v-btn color="primary">{{ $t('common.help._') }}</v-btn>
         </v-col>
       </v-row>
     </v-card>

@@ -3,7 +3,7 @@ import { getObjectNestedKeys } from '@intake24/common/util';
 
 /**
  * Merges two translations files together
- * - this used to merge default in-built translation with database message object
+ * - merge default built-in translation with database message object
  *
  * @param {*} target
  * @param {*} source
@@ -58,3 +58,15 @@ export const validateTranslations = (translation: string | Record<string, any>):
 
   return typeof translation === 'string';
 };
+
+/**
+ * Replace parameters in i18n message
+ *
+ * @param {string} message
+ * @param {(Record<string, string | number>)} [params={}]
+ */
+export const replaceParams = (message: string, params: Record<string, string | number> = {}) =>
+  Object.entries(params).reduce((acc, [key, value]) => {
+    acc = acc.replace(`{${key}}`, value.toString());
+    return acc;
+  }, message);

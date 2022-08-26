@@ -33,7 +33,7 @@ const prompts: LocaleMessageObject = {
   },
   mealTime: {
     text: 'Did you have {meal}? If so, when was this?',
-    description: '',
+    // description: 'Placeholder',
     yes: 'Around that time',
     no: 'I did not have {meal}',
     validation: {

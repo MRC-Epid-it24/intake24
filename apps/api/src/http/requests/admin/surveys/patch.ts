@@ -1,7 +1,7 @@
 import type { Schema } from 'express-validator';
 import { checkSchema } from 'express-validator';
 
-import validate from '@intake24/api/http/requests/validate';
+import { validate } from '@intake24/api/http/requests/util';
 
 import { defaults, surveySchemeOverrides } from './defaults';
 
