@@ -15,6 +15,13 @@ import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { Language, LanguageTranslation } from '@intake24/db';
 import { admin, api, compareMessageKeys, mergeTranslations, shared, survey } from '@intake24/i18n';
 
+export const defaultI18nMessages: Record<Application, LocaleMessages> = {
+  admin: admin.en,
+  api: api.en,
+  shared: shared.en,
+  survey: survey.en,
+};
+
 const languageService = ({
   i18nStore,
   logger: globalLogger,
@@ -56,23 +63,15 @@ const languageService = ({
    * @returns {Promise<void>}
    */
   const createLanguageTranslations = async (languageId: string, reload = false): Promise<void> => {
-    const inBuildMessages: {
-      application: Application;
-      messages: Record<string, LocaleMessages>;
-    }[] = [
-      { application: 'admin', messages: admin },
-      { application: 'api', messages: api },
-      { application: 'survey', messages: survey },
-      { application: 'shared', messages: shared },
-    ];
-
-    const languageMessages: LanguageTranslationCreationAttributes[] = inBuildMessages
-      .map(({ application, messages: { en } }) =>
-        Object.keys(en).map((section) => ({
+    const languageMessages: LanguageTranslationCreationAttributes[] = Object.entries(
+      defaultI18nMessages
+    )
+      .map(([application, messages]) =>
+        Object.keys(messages).map((section) => ({
           languageId,
-          application,
+          application: application as Application,
           section,
-          messages: en[section],
+          messages: messages[section],
         }))
       )
       .flat();
@@ -230,12 +229,10 @@ const languageService = ({
       const inserts: LanguageTranslationCreationAttributes[] = [];
       const promises: PromiseLike<any>[] = [];
 
-      const defaultAppMessages = { admin, survey, shared };
-
-      for (const [app, appMessages] of Object.entries(defaultAppMessages)) {
+      for (const [app, appMessages] of Object.entries(defaultI18nMessages)) {
         const application = app as Application;
 
-        for (const [section, messages] of Object.entries(appMessages.en)) {
+        for (const [section, messages] of Object.entries(appMessages)) {
           const translation = translations.find(
             (item) => item.application === application && item.section === section
           );

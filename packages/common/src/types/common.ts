@@ -6,6 +6,8 @@ export const applications = [...frontEnds, 'api', 'shared'] as const;
 
 export type Application = typeof applications[number];
 
+export const isApplication = (app: any): app is Application => applications.includes(app);
+
 export const captchaProviders = ['h-captcha', 're-captcha'] as const;
 
 export type CaptchaProvider = typeof captchaProviders[number];

@@ -1,16 +1,9 @@
 import { checkSchema } from 'express-validator';
 
 import { validate } from '@intake24/api/http/requests/util';
-import {
-  admin,
-  api,
-  compareMessageKeys,
-  shared,
-  survey,
-  validateTranslations,
-} from '@intake24/i18n';
-
-const defaultMessages = { admin, api, survey, shared } as any;
+import { defaultI18nMessages } from '@intake24/api/services';
+import { isApplication } from '@intake24/common/types';
+import { compareMessageKeys, validateTranslations } from '@intake24/i18n';
 
 export default validate(
   checkSchema({
@@ -27,12 +20,14 @@ export default validate(
             if ([id, application, section].some((item) => !item || typeof item !== 'string'))
               throw new Error();
 
+            if (!isApplication(application)) throw new Error();
+
             if (!messages || Object.prototype.toString.call(messages) !== '[object Object]')
               throw new Error();
 
             if (!validateTranslations(messages)) throw new Error();
 
-            const defMessages = defaultMessages[application]?.en[section];
+            const defMessages = defaultI18nMessages[application][section];
             if (!defMessages) throw new Error();
 
             if (!compareMessageKeys(defMessages, messages)) throw new Error();
