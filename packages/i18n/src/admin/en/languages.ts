@@ -47,6 +47,11 @@ const languages: LocaleMessageObject = {
       survey: 'Survey',
       validation: 'Validation',
     },
+
+    created: 'Language translations ({name}) has been created.',
+    updated: 'Language translations ({name}) has been updated.',
+    deleted: 'Language translations ({name}) has been deleted.',
+    synced: 'Language translations ({name}) has been synchronized.',
   },
 };
 

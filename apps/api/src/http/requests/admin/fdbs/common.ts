@@ -1,30 +1,31 @@
 import type { Schema } from 'express-validator';
 
+import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { useInRecipeTypes } from '@intake24/common/types/models';
 import { Category, NutrientTableRecord } from '@intake24/db';
 
 export const attributes: Schema = {
   'main.attributes.readyMealOption': {
     in: ['body'],
-    errorMessage: 'Ready meal option has to be true or false.',
+    errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
   'main.attributes.reasonableAmount': {
     in: ['body'],
-    errorMessage: 'Reasonable amount has to be a number',
+    errorMessage: typeErrorMessage('int._'),
     isInt: true,
     optional: { options: { nullable: true } },
   },
   'main.attributes.sameAsBeforeOption': {
     in: ['body'],
-    errorMessage: 'Same as before option has to be true or false.',
+    errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
   'main.attributes.useInRecipes': {
     in: ['body'],
-    errorMessage: 'Enter valid use in recipes type.',
+    errorMessage: typeErrorMessage('in.options', { options: Object.values(useInRecipeTypes) }),
     isIn: { options: [Object.values(useInRecipeTypes)] },
     optional: { options: { nullable: true } },
   },
@@ -33,11 +34,12 @@ export const attributes: Schema = {
 export const categories: Schema = {
   'main.parentCategories': {
     in: ['body'],
-    errorMessage: 'Enter valid list of categories',
+    errorMessage: typeErrorMessage('array._'),
+    isArray: { bail: true },
     custom: {
-      options: async (value): Promise<void> => {
-        if (!Array.isArray(value) || value.some(({ code }) => !code || typeof code !== 'string'))
-          throw new Error('Enter valid list of categories.');
+      options: async (value: any[], meta): Promise<void> => {
+        if (value.some(({ code }) => !code || typeof code !== 'string'))
+          throw new Error(customTypeErrorMessage('array.string', meta));
 
         if (!value.length) return;
 
@@ -45,7 +47,7 @@ export const categories: Schema = {
 
         const availableCategories = await Category.count({ where: { code } });
         if (availableCategories !== value.length)
-          throw new Error('Enter valid list of categories.');
+          throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },
@@ -54,11 +56,12 @@ export const categories: Schema = {
 export const nutrients: Schema = {
   nutrientRecords: {
     in: ['body'],
-    errorMessage: 'Enter valid list of nutrient records',
+    errorMessage: typeErrorMessage('array._'),
+    isArray: { bail: true },
     custom: {
-      options: async (value): Promise<void> => {
-        if (!Array.isArray(value) || value.some(({ id }) => !id || typeof id !== 'string'))
-          throw new Error('Enter valid list of nutrient records');
+      options: async (value: any[], meta): Promise<void> => {
+        if (value.some(({ id }) => !id || typeof id !== 'string'))
+          throw new Error(customTypeErrorMessage('array.string', meta));
 
         if (!value.length) return;
 
@@ -66,7 +69,7 @@ export const nutrients: Schema = {
 
         const availableRecords = await NutrientTableRecord.count({ where: { id } });
         if (availableRecords !== value.length)
-          throw new Error('Enter valid list of nutrient records');
+          throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },

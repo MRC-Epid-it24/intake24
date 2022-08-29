@@ -1,9 +1,14 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import {
+  customTypeErrorMessage,
+  typeErrorMessage,
+  validate,
+} from '@intake24/api/http/requests/util';
 import { identifierSafeChars, unique } from '@intake24/api/http/rules';
 import { ImageMap } from '@intake24/db';
 
+import { imageFile } from '../../generic';
 import defaults from './defaults';
 
 export default validate(
@@ -11,24 +16,20 @@ export default validate(
     ...defaults,
     id: {
       in: ['body'],
-      errorMessage: 'Image map ID must be unique code (charset [a-zA-Z0-9-_]).',
+      errorMessage: typeErrorMessage('string._'),
       isEmpty: { negated: true, bail: true },
-      isWhitelisted: { options: identifierSafeChars, bail: true },
-      custom: {
-        options: async (value): Promise<void> =>
-          unique({ model: ImageMap, condition: { field: 'id', value } }),
+      isWhitelisted: {
+        options: identifierSafeChars,
+        bail: true,
+        errorMessage: typeErrorMessage('safeChars._'),
       },
-    },
-    baseImage: {
-      in: ['body'],
       custom: {
-        options: async (value, { req: { file } }): Promise<void> => {
-          if (!file) throw new Error('Missing base image map file.');
-
-          if (file.mimetype.toLowerCase() !== 'image/jpeg')
-            throw new Error('Invalid image file type.');
+        options: async (value, meta): Promise<void> => {
+          if (!(await unique({ model: ImageMap, condition: { field: 'id', value } })))
+            throw new Error(customTypeErrorMessage('unique._', meta));
         },
       },
     },
+    baseImage: imageFile,
   })
 );

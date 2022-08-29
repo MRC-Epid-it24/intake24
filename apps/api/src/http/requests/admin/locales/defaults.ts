@@ -3,73 +3,81 @@ import type { Schema } from 'express-validator';
 
 import type { LocaleAttributes } from '@intake24/common/types/models';
 import type { WhereOptions } from '@intake24/db';
+import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
+import { textDirections } from '@intake24/common/types';
 import { Language, Op, SystemLocale } from '@intake24/db';
 
 const defaults: Schema = {
   englishName: {
     in: ['body'],
-    errorMessage: 'Enter unique english name.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
     custom: {
-      options: async (value, { req }): Promise<void> => {
-        const { localeId } = (req as Request).params;
+      options: async (value, meta): Promise<void> => {
+        const { localeId } = (meta.req as Request).params;
         const where: WhereOptions<LocaleAttributes> = localeId ? { id: { [Op.ne]: localeId } } : {};
 
-        return unique({
-          model: SystemLocale,
-          condition: { field: 'englishName', value },
-          options: { where },
-        });
+        if (
+          !(await unique({
+            model: SystemLocale,
+            condition: { field: 'englishName', value },
+            options: { where },
+          }))
+        )
+          throw new Error(customTypeErrorMessage('unique._', meta));
       },
     },
   },
   localName: {
     in: ['body'],
-    errorMessage: 'Enter unique local name.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
     custom: {
-      options: async (value, { req }): Promise<void> => {
-        const { localeId } = (req as Request).params;
+      options: async (value, meta): Promise<void> => {
+        const { localeId } = (meta.req as Request).params;
         const where: WhereOptions<LocaleAttributes> = localeId ? { id: { [Op.ne]: localeId } } : {};
 
-        return unique({
-          model: SystemLocale,
-          condition: { field: 'localName', value },
-          options: { where },
-        });
+        if (
+          !(await unique({
+            model: SystemLocale,
+            condition: { field: 'localName', value },
+            options: { where },
+          }))
+        )
+          throw new Error(customTypeErrorMessage('unique._', meta));
       },
     },
   },
   respondentLanguageId: {
     in: ['body'],
-    errorMessage: 'Enter valid language id.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
     custom: {
-      options: async (value): Promise<void> => {
+      options: async (value, meta): Promise<void> => {
         const language = await Language.findByPk(value);
-        if (!language) throw new Error('Enter valid language id.');
+        if (!language) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },
   adminLanguageId: {
     in: ['body'],
-    errorMessage: 'Enter valid language id.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
     custom: {
-      options: async (value): Promise<void> => {
+      options: async (value, meta): Promise<void> => {
         const language = await Language.findByPk(value);
-        if (!language) throw new Error('Enter valid language id.');
+        if (!language) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },
   countryFlagCode: {
     in: ['body'],
-    errorMessage: 'Enter valid locale code.',
+    errorMessage: typeErrorMessage('locale._'),
     isLocale: true,
   },
   prototypeLocaleId: {
@@ -78,18 +86,21 @@ const defaults: Schema = {
     isString: { bail: true },
     optional: { options: { nullable: true } },
     custom: {
-      options: async (value): Promise<void> => {
+      options: async (value, meta): Promise<void> => {
         const locale = await SystemLocale.findByPk(value);
-        if (!locale) throw new Error('Enter valid llocale.');
+        if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },
   textDirection: {
     in: ['body'],
-    errorMessage: `Enter 'ltr' ot 'rlt' values.`,
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     isEmpty: { negated: true },
-    isIn: { options: [['rtl', 'ltr']] },
+    isIn: {
+      options: [textDirections],
+      errorMessage: typeErrorMessage('in.options', { options: textDirections }),
+    },
   },
 };
 

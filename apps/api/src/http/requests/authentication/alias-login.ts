@@ -1,24 +1,24 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 
 export default validate(
   checkSchema({
     username: {
       in: ['body'],
-      errorMessage: 'Username must be filled in.',
+      errorMessage: typeErrorMessage('string._'),
       isString: true,
       isEmpty: { negated: true },
     },
     password: {
       in: ['body'],
-      errorMessage: 'Password must be filled in.',
+      errorMessage: typeErrorMessage('string._'),
       isString: true,
       isEmpty: { negated: true },
     },
     survey: {
       in: ['body'],
-      errorMessage: 'Survey must be selected.',
+      errorMessage: typeErrorMessage('string._'),
       isString: true,
       isEmpty: { negated: true },
     },

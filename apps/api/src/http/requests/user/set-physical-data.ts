@@ -1,6 +1,10 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import {
+  customTypeErrorMessage,
+  typeErrorMessage,
+  validate,
+} from '@intake24/api/http/requests/util';
 import { sexes, weightTargets } from '@intake24/common/feedback';
 import { PhysicalActivityLevel } from '@intake24/db';
 
@@ -12,52 +16,52 @@ export default validate(
   checkSchema({
     survey: {
       in: ['query'],
-      errorMessage: 'Invalid survey parameter.',
+      errorMessage: typeErrorMessage('string._'),
       isString: true,
       optional: true,
     },
     sex: {
       in: ['body'],
-      errorMessage: 'Enter valid gender.',
+      errorMessage: typeErrorMessage('in.options', { options: sexes }),
       isIn: { options: [sexes] },
       optional: { options: { nullable: true } },
     },
     weightKg: {
       in: ['body'],
-      errorMessage: 'Weight must be in 0-300 range.',
+      errorMessage: typeErrorMessage('float.minMax', { min: 0, max: 300 }),
       isFloat: { options: { min: 0, max: 300 } },
       toFloat: true,
       optional: { options: { nullable: true } },
     },
     heightCm: {
       in: ['body'],
-      errorMessage: 'Height must be in 0-300 range.',
+      errorMessage: typeErrorMessage('float.minMax', { min: 0, max: 300 }),
       isFloat: { options: { min: 0, max: 300 } },
       toFloat: true,
       optional: { options: { nullable: true } },
     },
     birthdate: {
       in: ['body'],
-      errorMessage: `Birth date must be year between ${yearMin} and ${yearMax}.`,
+      errorMessage: typeErrorMessage('int.minMax', { min: yearMin, max: yearMax }),
       isInt: { options: { min: yearMin, max: yearMax } },
       toInt: true,
       optional: { options: { nullable: true } },
     },
     physicalActivityLevelId: {
       in: ['body'],
-      errorMessage: 'Enter valid physical activity Level id.',
+      errorMessage: typeErrorMessage('string._'),
       isString: { bail: true },
       optional: { options: { nullable: true } },
       custom: {
-        options: async (value): Promise<void> => {
+        options: async (value, meta): Promise<void> => {
           const level = await PhysicalActivityLevel.findOne({ where: { id: value } });
-          if (!level) throw new Error('Enter valid physical activity Level id.');
+          if (!level) throw new Error(customTypeErrorMessage('exists._', meta));
         },
       },
     },
     weightTarget: {
       in: ['body'],
-      errorMessage: 'Enter valid weight target.',
+      errorMessage: typeErrorMessage('in.options', { options: weightTargets }),
       isIn: { options: [weightTargets] },
       optional: { options: { nullable: true } },
     },

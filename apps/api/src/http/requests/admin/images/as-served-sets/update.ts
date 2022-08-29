@@ -1,6 +1,10 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import {
+  customTypeErrorMessage,
+  typeErrorMessage,
+  validate,
+} from '@intake24/api/http/requests/util';
 
 import defaults from './defaults';
 
@@ -9,13 +13,11 @@ export default validate(
     ...defaults,
     images: {
       in: ['body'],
+      isArray: { bail: true, errorMessage: typeErrorMessage('array._') },
       custom: {
-        options: async (value): Promise<void> => {
-          if (
-            !Array.isArray(value) ||
-            value.some(({ id, weight }) => typeof id !== 'string' || typeof weight !== 'number')
-          )
-            throw new Error('Please enter a list of as served image IDs and weights.');
+        options: async (value: any[], meta): Promise<void> => {
+          if (value.some(({ id, weight }) => typeof id !== 'string' || typeof weight !== 'number'))
+            throw new Error(customTypeErrorMessage('structure._', meta));
         },
       },
     },

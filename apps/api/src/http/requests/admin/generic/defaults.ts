@@ -1,8 +1,11 @@
 import type { Schema } from 'express-validator';
 
+import { typeErrorMessage } from '@intake24/api/http/requests/util';
+
 export const paginate: Schema = {
   page: {
     in: ['query'],
+    errorMessage: typeErrorMessage('int.min', { min: 1 }),
     isInt: {
       options: {
         min: 1,
@@ -13,23 +16,21 @@ export const paginate: Schema = {
   },
   limit: {
     in: ['query'],
-    isInt: {
-      options: {
-        min: 1,
-        max: 1000,
-      },
-    },
+    errorMessage: typeErrorMessage('int.minMax', { min: 1, max: 1000 }),
+    isInt: { options: { min: 1, max: 1000 } },
     toInt: true,
     optional: true,
   },
   sort: {
     in: ['query'],
+    errorMessage: typeErrorMessage('regEx._'),
     isString: true,
     optional: true,
     matches: { options: /^\w+\|(asc|desc)$/ },
   },
   search: {
     in: ['query'],
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     optional: { options: { nullable: true } },
   },

@@ -1,6 +1,10 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import {
+  customTypeErrorMessage,
+  typeErrorMessage,
+  validate,
+} from '@intake24/api/http/requests/util';
 import { identifierSafeChars, unique } from '@intake24/api/http/rules';
 import { DrinkwareSet, GuideImage } from '@intake24/db';
 
@@ -11,23 +15,29 @@ export default validate(
     ...defaults,
     id: {
       in: ['body'],
-      errorMessage: 'Drinkware set ID must be unique code (charset [a-zA-Z0-9-_]).',
+      errorMessage: typeErrorMessage('string._'),
       isEmpty: { negated: true, bail: true },
-      isWhitelisted: { options: identifierSafeChars, bail: true },
+      isWhitelisted: {
+        options: identifierSafeChars,
+        bail: true,
+        errorMessage: typeErrorMessage('safeChars._'),
+      },
       custom: {
-        options: async (value): Promise<void> =>
-          unique({ model: DrinkwareSet, condition: { field: 'id', value } }),
+        options: async (value, meta): Promise<void> => {
+          if (!(await unique({ model: DrinkwareSet, condition: { field: 'id', value } })))
+            throw new Error(customTypeErrorMessage('unique._', meta));
+        },
       },
     },
     guideImageId: {
       in: ['body'],
-      errorMessage: 'Enter valid Guide image ID.',
+      errorMessage: typeErrorMessage('string._'),
       isString: { bail: true },
       isEmpty: { negated: true, bail: true },
       custom: {
-        options: async (value): Promise<void> => {
+        options: async (value, meta): Promise<void> => {
           const guideImage = await GuideImage.findOne({ where: { id: value } });
-          if (!guideImage) throw new Error();
+          if (!guideImage) throw new Error(customTypeErrorMessage('exists._', meta));
         },
       },
     },

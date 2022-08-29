@@ -84,7 +84,7 @@ const common: LocaleMessageObject = {
   },
 
   msg: {
-    stored: 'Record ({name}) has been stored.',
+    created: 'Record ({name}) has been created.',
     updated: 'Record ({name}) has been updated.',
     deleted: 'Record ({name}) has been deleted.',
     multi: {

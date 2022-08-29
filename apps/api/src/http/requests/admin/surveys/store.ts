@@ -1,7 +1,11 @@
 import { checkSchema } from 'express-validator';
 import slugify from 'slugify';
 
-import { validate } from '@intake24/api/http/requests/util';
+import {
+  customTypeErrorMessage,
+  typeErrorMessage,
+  validate,
+} from '@intake24/api/http/requests/util';
 import { identifierSafeChars, unique } from '@intake24/api/http/rules';
 import { Survey } from '@intake24/db';
 
@@ -11,16 +15,24 @@ export default validate(
   checkSchema({
     slug: {
       in: ['body'],
-      errorMessage: 'Survey ID must be unique string (charset [a-zA-Z0-9-_]).',
+      errorMessage: typeErrorMessage('string._'),
       isString: { bail: true },
       isEmpty: { negated: true, bail: true },
-      isWhitelisted: { options: identifierSafeChars, bail: true },
+      isWhitelisted: {
+        options: identifierSafeChars,
+        bail: true,
+        errorMessage: typeErrorMessage('safeChars._'),
+      },
       custom: {
-        options: async (value): Promise<void> =>
-          unique({
-            model: Survey,
-            condition: { field: 'slug', value: slugify(value, { strict: true }) },
-          }),
+        options: async (value, meta): Promise<void> => {
+          if (
+            !(await unique({
+              model: Survey,
+              condition: { field: 'slug', value: slugify(value, { strict: true }) },
+            }))
+          )
+            throw new Error(customTypeErrorMessage('unique._', meta));
+        },
         bail: true,
       },
       customSanitizer: {

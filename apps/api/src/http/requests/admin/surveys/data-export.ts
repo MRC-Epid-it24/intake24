@@ -1,19 +1,19 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 
 export default validate(
   checkSchema({
     startDate: {
       in: ['body'],
-      errorMessage: 'Enter valid survey start date.',
+      errorMessage: typeErrorMessage('date._'),
       isDate: true,
       isEmpty: { negated: true },
       toDate: true,
     },
     endDate: {
       in: ['body'],
-      errorMessage: 'Enter valid survey end date.',
+      errorMessage: typeErrorMessage('date._'),
       isDate: true,
       isEmpty: { negated: true },
       toDate: true,

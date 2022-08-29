@@ -20,11 +20,13 @@ export default () => {
 
     translations = await ioc.cradle.languageService.getOrCreateLanguageTranslations(languageId);
 
+    const key = Object.keys(translations[0].messages)[0];
+
     translation = {
       ...translations[0].get(),
       messages: {
         ...translations[0].messages,
-        _: 'new title',
+        [key]: 'new value',
       },
     };
 

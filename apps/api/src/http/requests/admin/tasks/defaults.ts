@@ -4,6 +4,7 @@ import { isPlainObject } from 'lodash';
 
 import type { TaskAttributes } from '@intake24/common/types/models';
 import type { WhereOptions } from '@intake24/db';
+import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { cron, unique } from '@intake24/api/http/rules';
 import { jobTypes } from '@intake24/common/types';
 import { Op, Task } from '@intake24/db';
@@ -11,41 +12,44 @@ import { Op, Task } from '@intake24/db';
 const defaults: Schema = {
   name: {
     in: ['body'],
-    errorMessage: 'Name must be filled in.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
     custom: {
-      options: async (value, { req }): Promise<void> => {
-        const { taskId } = (req as Request).params;
+      options: async (value, meta): Promise<void> => {
+        const { taskId } = (meta.req as Request).params;
         const where: WhereOptions<TaskAttributes> = taskId ? { id: { [Op.ne]: taskId } } : {};
 
-        return unique({ model: Task, condition: { field: 'name', value }, options: { where } });
+        if (
+          !(await unique({ model: Task, condition: { field: 'name', value }, options: { where } }))
+        )
+          throw new Error(customTypeErrorMessage('unique._', meta));
       },
     },
   },
   job: {
     in: ['body'],
-    errorMessage: 'Invalid JOB entry.',
+    errorMessage: typeErrorMessage('string._'),
     isEmpty: { negated: true },
     isString: true,
-    isIn: { options: [jobTypes] },
+    isIn: { options: [jobTypes], errorMessage: typeErrorMessage('in._') },
   },
   cron: {
     in: ['body'],
-    errorMessage: 'Invalid CRON entry.',
+    errorMessage: typeErrorMessage('string._'),
     isEmpty: { negated: true },
     isString: true,
     custom: { options: cron },
   },
   active: {
     in: ['body'],
-    errorMessage: 'Active field needs can only be true/false.',
+    errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     toBoolean: true,
   },
   description: {
     in: ['body'],
-    errorMessage: 'Enter a valid string.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     optional: { options: { nullable: true } },
   },

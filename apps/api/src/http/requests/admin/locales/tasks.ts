@@ -1,15 +1,21 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 import { pickJobParams } from '@intake24/common/types';
+
+const jobOptions = ['LocaleCopyPairwiseAssociations'];
 
 export default validate(
   checkSchema({
     job: {
       in: ['body'],
-      errorMessage: 'Invalid job type.',
+      errorMessage: typeErrorMessage('string._'),
       isString: true,
-      isIn: { options: [['LocaleCopyPairwiseAssociations']], bail: true },
+      isIn: {
+        options: [jobOptions],
+        bail: true,
+        errorMessage: typeErrorMessage('in.options', { options: jobOptions }),
+      },
     },
     params: {
       in: ['body'],

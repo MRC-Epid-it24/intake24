@@ -3,14 +3,15 @@ import type { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 
 import type { WhereOptions } from '@intake24/db';
+import { customTypeErrorMessage } from '@intake24/api/http/requests/util';
 import { Op, SurveySchemeQuestion } from '@intake24/db';
 
 const defaults: Schema = {
   question: {
     in: ['body'],
     custom: {
-      options: async (value, { req }): Promise<void> => {
-        const { schemeQuestionId } = (req as Request).params;
+      options: async (value, meta): Promise<void> => {
+        const { schemeQuestionId } = (meta.req as Request).params;
         const except: WhereOptions = schemeQuestionId ? { id: { [Op.ne]: schemeQuestionId } } : {};
 
         if (
@@ -18,7 +19,7 @@ const defaults: Schema = {
           ['id', 'name', 'type', 'component', 'props'].some((key) => !(key in value)) ||
           ['id', 'name', 'type', 'component'].some((key) => typeof value[key] !== 'string')
         )
-          throw new Error('Invalid scheme question properties.');
+          throw new Error(customTypeErrorMessage('structure._', meta));
 
         const questions = await SurveySchemeQuestion.findAll({ where: except });
         const match = questions.find((q) => q.question.id === value.id);

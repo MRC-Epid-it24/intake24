@@ -1,9 +1,11 @@
 import type { Schema } from 'express-validator';
 
+import { typeErrorMessage } from '@intake24/api/http/requests/util';
+
 const defaults: Schema = {
   description: {
     in: ['body'],
-    errorMessage: 'Enter a description.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     isEmpty: { negated: true },
   },

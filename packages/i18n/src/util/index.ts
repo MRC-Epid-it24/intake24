@@ -59,13 +59,18 @@ export const validateTranslations = (translation: string | Record<string, any>):
   return typeof translation === 'string';
 };
 
+export type I18nParams = Record<
+  string,
+  string | string[] | readonly string[] | number | number[] | readonly number[]
+>;
+
 /**
  * Replace parameters in i18n message
  *
  * @param {string} message
- * @param {(Record<string, string | number>)} [params={}]
+ * @param {I18nParams} [params={}]
  */
-export const replaceParams = (message: string, params: Record<string, string | number> = {}) =>
+export const replaceParams = (message: string, params: I18nParams = {}) =>
   Object.entries(params).reduce((acc, [key, value]) => {
     acc = acc.replace(`{${key}}`, value.toString());
     return acc;

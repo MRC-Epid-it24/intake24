@@ -3,6 +3,7 @@ import type { Schema } from 'express-validator';
 
 import type { LanguageAttributes } from '@intake24/common/types/models';
 import type { WhereOptions } from '@intake24/db';
+import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { textDirections } from '@intake24/common/types';
 import { Language, Op } from '@intake24/db';
@@ -10,55 +11,64 @@ import { Language, Op } from '@intake24/db';
 const defaults: Schema = {
   englishName: {
     in: ['body'],
-    errorMessage: 'Enter unique english name.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
     custom: {
-      options: async (value, { req }): Promise<void> => {
-        const { languageId } = (req as Request).params;
+      options: async (value, meta): Promise<void> => {
+        const { languageId } = (meta.req as Request).params;
         const where: WhereOptions<LanguageAttributes> = languageId
           ? { id: { [Op.ne]: languageId } }
           : {};
 
-        return unique({
-          model: Language,
-          condition: { field: 'englishName', value },
-          options: { where },
-        });
+        if (
+          !(await unique({
+            model: Language,
+            condition: { field: 'englishName', value },
+            options: { where },
+          }))
+        )
+          throw new Error(customTypeErrorMessage('unique._', meta));
       },
     },
   },
   localName: {
     in: ['body'],
-    errorMessage: 'Enter unique local name.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     isEmpty: { negated: true },
     custom: {
-      options: async (value, { req }): Promise<void> => {
-        const { languageId } = (req as Request).params;
+      options: async (value, meta): Promise<void> => {
+        const { languageId } = (meta.req as Request).params;
         const where: WhereOptions<LanguageAttributes> = languageId
           ? { id: { [Op.ne]: languageId } }
           : {};
 
-        return unique({
-          model: Language,
-          condition: { field: 'localName', value },
-          options: { where },
-        });
+        if (
+          !(await unique({
+            model: Language,
+            condition: { field: 'localName', value },
+            options: { where },
+          }))
+        )
+          throw new Error(customTypeErrorMessage('unique._', meta));
       },
     },
   },
   countryFlagCode: {
     in: ['body'],
-    errorMessage: 'Enter valid locale code.',
+    errorMessage: typeErrorMessage('locale._'),
     isLocale: true,
   },
   textDirection: {
     in: ['body'],
-    errorMessage: `Enter 'ltr' ot 'rlt' values.`,
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     isEmpty: { negated: true },
-    isIn: { options: [textDirections] },
+    isIn: {
+      options: [textDirections],
+      errorMessage: typeErrorMessage('in.options', { options: textDirections }),
+    },
   },
 };
 

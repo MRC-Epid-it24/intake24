@@ -5,6 +5,7 @@ import validator from 'validator';
 
 import type { FeedbackSchemeAttributes } from '@intake24/common/types/models';
 import type { WhereOptions } from '@intake24/db';
+import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import {
   feedbackOutputs,
@@ -16,21 +17,24 @@ import { FeedbackScheme, Op } from '@intake24/db';
 
 export const name: ParamSchema = {
   in: ['body'],
-  errorMessage: 'Feedback scheme name must be unique.',
-  isString: true,
-  isEmpty: { negated: true },
+  errorMessage: typeErrorMessage('string._'),
+  isString: { bail: true },
+  isEmpty: { negated: true, bail: true },
   custom: {
-    options: async (value, { req }): Promise<void> => {
-      const { feedbackSchemeId } = (req as Request).params;
+    options: async (value, meta): Promise<void> => {
+      const { feedbackSchemeId } = (meta.req as Request).params;
       const where: WhereOptions<FeedbackSchemeAttributes> = feedbackSchemeId
         ? { id: { [Op.ne]: feedbackSchemeId } }
         : {};
 
-      return unique({
-        model: FeedbackScheme,
-        condition: { field: 'name', value },
-        options: { where },
-      });
+      if (
+        !(await unique({
+          model: FeedbackScheme,
+          condition: { field: 'name', value },
+          options: { where },
+        }))
+      )
+        throw new Error(customTypeErrorMessage('unique._', meta));
     },
   },
 };
@@ -38,71 +42,77 @@ export const name: ParamSchema = {
 export const defaults: Schema = {
   type: {
     in: ['body'],
-    errorMessage: 'Enter valid feedback scheme type.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     isEmpty: { negated: true },
-    isIn: { options: [feedbackTypes] },
+    isIn: {
+      options: [feedbackTypes],
+      errorMessage: typeErrorMessage('in.options', { options: feedbackTypes }),
+    },
   },
   outputs: {
     in: ['body'],
+    errorMessage: typeErrorMessage('array._'),
+    isArray: { bail: true },
     custom: {
-      options: async (value): Promise<void> => {
-        if (!Array.isArray(value) || value.some((action) => !feedbackOutputs.includes(action)))
-          throw new Error('Invalid feedback output.');
+      options: async (value: any[], meta): Promise<void> => {
+        if (value.some((action) => !feedbackOutputs.includes(action)))
+          throw new Error(customTypeErrorMessage('in.options', meta, { options: feedbackOutputs }));
       },
     },
   },
   physicalDataFields: {
     in: ['body'],
+    errorMessage: typeErrorMessage('array._'),
+    isArray: { bail: true },
     custom: {
-      options: async (value): Promise<void> => {
-        if (
-          !Array.isArray(value) ||
-          value.some((action) => !feedbackPhysicalDataFields.includes(action))
-        )
-          throw new Error('Invalid feedback physical data fields.');
+      options: async (value: any[], meta): Promise<void> => {
+        if (value.some((action) => !feedbackPhysicalDataFields.includes(action)))
+          throw new Error(
+            customTypeErrorMessage('in.options', meta, { options: feedbackPhysicalDataFields })
+          );
       },
     },
   },
   'topFoods.max': {
     in: ['body'],
-    errorMessage: 'Top foods number must be integer.',
+    errorMessage: typeErrorMessage('int._'),
     isInt: true,
     toInt: true,
   },
   'topFoods.colors': {
     in: ['body'],
+    errorMessage: typeErrorMessage('array._'),
+    isArray: { bail: true },
     custom: {
-      options: async (value): Promise<void> => {
-        if (
-          !Array.isArray(value) ||
-          value.some((item) => typeof item !== 'string' || !validator.isHexColor(item))
-        )
-          throw new Error('Colors must be a list of valid color codes.');
+      options: async (value: any[], meta): Promise<void> => {
+        if (value.some((item) => typeof item !== 'string' || !validator.isHexColor(item)))
+          throw new Error(customTypeErrorMessage('array.colors', meta));
       },
     },
   },
   'topFoods.nutrientTypes': {
     in: ['body'],
+    errorMessage: typeErrorMessage('array._'),
+    isArray: { bail: true },
     custom: {
-      options: async (value): Promise<void> => {
+      options: async (value: any[], meta): Promise<void> => {
         if (
-          !Array.isArray(value) ||
           value.some(
             (item) => !has(item, 'id') || !has(item, 'name.en') || typeof item.id !== 'string'
           )
         )
-          throw new Error('Invalid nutrient types list.');
+          throw new Error(customTypeErrorMessage('structure._', meta));
 
         const nutrientTypeIds = value.map(({ id }) => id);
         if (nutrientTypeIds.length !== [...new Set(nutrientTypeIds)].length)
-          throw new Error('Duplicate nutrient types Ids in the list.');
+          throw new Error(customTypeErrorMessage('duplicate._', meta));
       },
     },
   },
   henryCoefficients: {
     in: ['body'],
-    errorMessage: 'Enter valid henry coefficients list.',
+    errorMessage: typeErrorMessage('structure._'),
     custom: {
       options: (value): boolean => {
         try {
@@ -116,7 +126,7 @@ export const defaults: Schema = {
   },
   demographicGroups: {
     in: ['body'],
-    errorMessage: 'Enter valid demographic groups list.',
+    errorMessage: typeErrorMessage('structure._'),
     custom: {
       options: (value): boolean => {
         try {

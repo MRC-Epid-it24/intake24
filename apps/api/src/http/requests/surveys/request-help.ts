@@ -1,18 +1,18 @@
 import { checkSchema } from 'express-validator';
 
-import { errorMessage, validate } from '@intake24/api/http/requests/util';
+import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 
 export default validate(
   checkSchema({
     name: {
       in: ['body'],
-      errorMessage: errorMessage('validation.surveys.requestHelp.name'),
+      errorMessage: typeErrorMessage('string._'),
       isString: true,
       isEmpty: { negated: true },
     },
     phone: {
       in: ['body'],
-      errorMessage: errorMessage('validation.surveys.requestHelp.phone'),
+      errorMessage: typeErrorMessage('string._'),
       isString: true,
       isEmpty: { negated: true },
     },

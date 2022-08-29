@@ -1,6 +1,10 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import {
+  customTypeErrorMessage,
+  typeErrorMessage,
+  validate,
+} from '@intake24/api/http/requests/util';
 import { identifierSafeChars, unique } from '@intake24/api/http/rules';
 import { NutrientTable } from '@intake24/db';
 
@@ -11,12 +15,18 @@ export default validate(
     ...defaults,
     id: {
       in: ['body'],
-      errorMessage: 'Nutrient table ID must be unique code (charset [a-zA-Z0-9-_]).',
+      errorMessage: typeErrorMessage('string._'),
       isEmpty: { negated: true, bail: true },
-      isWhitelisted: { options: identifierSafeChars, bail: true },
+      isWhitelisted: {
+        options: identifierSafeChars,
+        bail: true,
+        errorMessage: typeErrorMessage('safeChars._'),
+      },
       custom: {
-        options: async (value): Promise<void> =>
-          unique({ model: NutrientTable, condition: { field: 'id', value } }),
+        options: async (value, meta): Promise<void> => {
+          if (!(await unique({ model: NutrientTable, condition: { field: 'id', value } })))
+            throw new Error(customTypeErrorMessage('unique._', meta));
+        },
       },
     },
   })

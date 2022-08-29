@@ -1,6 +1,10 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import {
+  customTypeErrorMessage,
+  typeErrorMessage,
+  validate,
+} from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { Language } from '@intake24/db';
 
@@ -11,12 +15,13 @@ export default validate(
     ...defaults,
     id: {
       in: ['body'],
-      errorMessage: 'Language ID must be unique locale code.',
+      errorMessage: typeErrorMessage('locale._'),
       isLocale: { bail: true },
-      isEmpty: { negated: true, bail: true },
       custom: {
-        options: async (value): Promise<void> =>
-          unique({ model: Language, condition: { field: 'id', value } }),
+        options: async (value, meta): Promise<void> => {
+          if (!(await unique({ model: Language, condition: { field: 'id', value } })))
+            throw new Error(customTypeErrorMessage('unique._', meta));
+        },
       },
     },
   })

@@ -14,7 +14,7 @@ export type UniqueOptions<TAttributes = any> = {
   options?: FindOptions<TAttributes>;
 };
 
-export default async ({ model, condition, options = {} }: UniqueOptions): Promise<void> => {
+export default async ({ model, condition, options = {} }: UniqueOptions): Promise<boolean> => {
   const mergedCondition = { ci: true, ...condition };
 
   const cModel = model as BaseModelCtor<BaseModel>;
@@ -24,6 +24,5 @@ export default async ({ model, condition, options = {} }: UniqueOptions): Promis
 
   const findOptions: FindOptions = merge(options, { where: { [field]: { [op]: value } } });
 
-  const entry = await cModel.findOne(findOptions);
-  if (entry) throw new Error('Current value is already in use.');
+  return !(await cModel.findOne(findOptions));
 };

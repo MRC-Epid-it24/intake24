@@ -338,7 +338,7 @@ export default defineComponent({
           `admin/surveys/${this.id}/respondents`
         );
 
-        useMessages().success(this.$t('common.msg.stored', { name }).toString());
+        useMessages().success(this.$t('common.msg.created', { name }).toString());
       }
 
       this.dialog = false;

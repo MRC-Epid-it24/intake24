@@ -4,6 +4,7 @@ import { isPlainObject } from 'lodash';
 
 import type { SurveyAttributes } from '@intake24/common/types/models';
 import type { WhereOptions } from '@intake24/db';
+import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { searchSortingAlgorithms, surveyStates } from '@intake24/common/types/models';
 import { validateMeals } from '@intake24/common/validators';
@@ -12,34 +13,44 @@ import { FeedbackScheme, Op, Survey, SurveyScheme, SystemLocale } from '@intake2
 export const defaults: Schema = {
   name: {
     in: ['body'],
-    errorMessage: 'Name must be filled in.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
     custom: {
-      options: async (value, { req }): Promise<void> => {
-        const { surveyId } = (req as Request).params;
+      options: async (value, meta): Promise<void> => {
+        const { surveyId } = (meta.req as Request).params;
         const where: WhereOptions<SurveyAttributes> = surveyId ? { id: { [Op.ne]: surveyId } } : {};
 
-        return unique({ model: Survey, condition: { field: 'name', value }, options: { where } });
+        if (
+          !(await unique({
+            model: Survey,
+            condition: { field: 'name', value },
+            options: { where },
+          }))
+        )
+          throw new Error(customTypeErrorMessage('unique._', meta));
       },
     },
   },
   state: {
     in: ['body'],
-    errorMessage: 'Enter valid survey state.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
-    isIn: { options: [surveyStates] },
+    isIn: {
+      options: [surveyStates],
+      errorMessage: typeErrorMessage('in.options', { options: surveyStates }),
+    },
   },
   startDate: {
     in: ['body'],
-    errorMessage: 'Enter valid survey start date.',
+    errorMessage: typeErrorMessage('date._'),
     isDate: true,
     isEmpty: { negated: true },
     toDate: true,
   },
   endDate: {
     in: ['body'],
-    errorMessage: 'Enter valid survey end date.',
+    errorMessage: typeErrorMessage('date._'),
     isDate: true,
     isEmpty: { negated: true },
     toDate: true,
@@ -58,146 +69,144 @@ export const defaults: Schema = {
   },
   localeId: {
     in: ['body'],
-    errorMessage: 'Enter valid locale.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
     custom: {
-      options: async (value): Promise<void> => {
+      options: async (value, meta): Promise<void> => {
         const locale = await SystemLocale.findOne({ where: { id: value } });
-        if (!locale) throw new Error('Enter valid locale.');
+        if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },
   allowGenUsers: {
     in: ['body'],
-    errorMessage: 'Enter true/false value.',
+    errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
   },
   genUserKey: {
     in: ['body'],
-    errorMessage: 'JWT token/secret must be a string.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     optional: { options: { nullable: true } },
   },
   authUrlDomainOverride: {
     in: ['body'],
-    errorMessage: 'Authentication URL domain must be a string.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     optional: { options: { nullable: true } },
   },
   authUrlTokenCharset: {
     in: ['body'],
-    errorMessage: 'Authentication URL Token charset must be a string of unique characters.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     optional: { options: { nullable: true } },
     custom: {
-      options: async (value: any): Promise<void> => {
-        if (typeof value !== 'string') throw new Error('Charset must be a string.');
-
+      options: async (value: string, meta): Promise<void> => {
         if (value.split('').length !== [...new Set(value.split(''))].length)
-          throw new Error('Charset must be a string of unique characters.');
+          throw new Error(customTypeErrorMessage('string.unique', meta));
       },
     },
   },
   authUrlTokenLength: {
     in: ['body'],
-    errorMessage: 'Authentication URL Token length must be at least 8 or longer.',
+    errorMessage: typeErrorMessage('int.min', { min: 8 }),
     isInt: { options: { min: 8 } },
     toInt: true,
     optional: { options: { nullable: true } },
   },
   suspensionReason: {
     in: ['body'],
-    errorMessage: 'Suspension reason must be a string.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     optional: { options: { nullable: true } },
   },
   /* surveyMonkeyUrl: {
     in: ['body'],
-    errorMessage: 'URL must be a string.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     optional: { options: { nullable: true } },
   }, */
   supportEmail: {
     in: ['body'],
-    errorMessage: 'Enter valid email address.',
+    errorMessage: typeErrorMessage('email._'),
     isEmail: true,
     isEmpty: { negated: true },
     toLowerCase: true,
   },
   /* originatingUrl: {
     in: ['body'],
-    errorMessage: 'URL must be a string.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     optional: { options: { nullable: true } },
   }, */
   feedbackSchemeId: {
     in: ['body'],
-    errorMessage: 'Enter valid feedback scheme.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     optional: { options: { nullable: true } },
     custom: {
-      options: async (value): Promise<void> => {
+      options: async (value, meta): Promise<void> => {
         const feedbackScheme = await FeedbackScheme.findOne({ where: { id: value } });
-        if (!feedbackScheme) throw new Error('Enter valid feedback scheme.');
+        if (!feedbackScheme) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },
   submissionNotificationUrl: {
     in: ['body'],
-    errorMessage: 'Submission notification URL must be valid URL',
+    errorMessage: typeErrorMessage('url._'),
     isURL: { options: { require_tld: false } },
     optional: { options: { nullable: true } },
   },
   storeUserSessionOnServer: {
     in: ['body'],
-    errorMessage: 'Enter true/false value.',
+    errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
   },
   numberOfSubmissionsForFeedback: {
-    errorMessage: 'Value has to be a number.',
+    errorMessage: typeErrorMessage('int._'),
     isInt: true,
     toInt: true,
     optional: true,
   },
   maximumDailySubmissions: {
-    errorMessage: 'Value has to be a number.',
+    errorMessage: typeErrorMessage('int._'),
     isInt: true,
     toInt: true,
     optional: true,
   },
   maximumTotalSubmissions: {
-    errorMessage: 'Value has to be a number.',
+    errorMessage: typeErrorMessage('int._'),
     isInt: true,
     toInt: true,
     optional: { options: { nullable: true } },
   },
   minimumSubmissionInterval: {
-    errorMessage: 'Value has to be a number.',
+    errorMessage: typeErrorMessage('int._'),
     isInt: true,
     toInt: true,
     optional: true,
   },
   searchSortingAlgorithm: {
-    errorMessage: 'Select valid search sorting algorithm.',
+    errorMessage: typeErrorMessage('in.options', { options: searchSortingAlgorithms }),
     isIn: { options: [searchSortingAlgorithms] },
     optional: true,
   },
   searchMatchScoreWeight: {
-    errorMessage: 'Search match score weight has to be between 0-100.',
+    errorMessage: typeErrorMessage('int.minMax', { min: 0, max: 100 }),
     isInt: { options: { min: 0, max: 100 } },
     toInt: true,
     optional: true,
   },
   userPersonalIdentifiers: {
     in: ['body'],
-    errorMessage: 'Enter true/false value.',
+    errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: true,
   },
   userCustomFields: {
     in: ['body'],
-    errorMessage: 'Enter true/false value.',
+    errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: true,
   },
@@ -205,14 +214,14 @@ export const defaults: Schema = {
 
 export const surveySchemeOverrides: ParamSchema = {
   in: ['body'],
-  errorMessage: 'Enter valid scheme overrides.',
+  errorMessage: typeErrorMessage('structure._'),
   custom: {
     options: async (value): Promise<void> => {
       if (
         typeof value !== 'object' ||
         Object.keys(value).some((key) => !['meals', 'questions'].includes(key))
       )
-        throw new Error('Invalid override object. Not and object or missing properties');
+        throw new Error();
 
       // Meals
       try {
@@ -226,7 +235,7 @@ export const surveySchemeOverrides: ParamSchema = {
         !Array.isArray(value.questions) ||
         value.questions.some((item: any) => !isPlainObject(item))
       )
-        throw new Error('Invalid questions. Should be array of PromptQuestions.');
+        throw new Error();
     },
   },
 };

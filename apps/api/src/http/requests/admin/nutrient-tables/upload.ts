@@ -1,27 +1,23 @@
 import { checkSchema } from 'express-validator';
-import path from 'node:path';
 
-import { validate } from '@intake24/api/http/requests/util';
+import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
+
+import { csvFile } from '../generic';
+
+const typeOptions = ['NutrientTableImportData', 'NutrientTableImportMapping'];
 
 export default validate(
   checkSchema({
     type: {
       in: ['body'],
-      errorMessage: 'Invalid job type.',
+      errorMessage: typeErrorMessage('string._'),
       isString: true,
       isEmpty: { negated: true },
-      isIn: { options: [['NutrientTableImportData', 'NutrientTableImportMapping']] },
-    },
-    file: {
-      in: ['body'],
-      custom: {
-        options: async (value, { req: { file } }): Promise<void> => {
-          if (!file) throw new Error(`Missing CSV file.`);
-
-          if (path.extname(file.originalname).toLowerCase() !== '.csv')
-            throw new Error(`Invalid file type - expecting CSV (comma-delimited) file.`);
-        },
+      isIn: {
+        options: [typeOptions],
+        errorMessage: typeErrorMessage('in.options', { options: typeOptions }),
       },
     },
+    file: csvFile,
   })
 );

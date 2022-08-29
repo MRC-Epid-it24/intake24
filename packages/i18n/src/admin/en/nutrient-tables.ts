@@ -17,14 +17,14 @@ const nutrientTables: LocaleMessageObject = {
       rowOffset: 'Number of rows to skip (e.g. header or blank rows)',
     },
     fields: {
-      _: 'Field column mapping',
+      _: 'Field column mappings',
       create: 'Add field',
       delete: 'Remove field',
       fieldName: 'Field name',
       columnOffset: 'CSV column',
     },
     nutrients: {
-      _: 'Nutrient column mapping',
+      _: 'Nutrient column mappings',
       create: 'Add nutrient',
       delete: 'Remove nutrient',
       nutrient: 'Nutrient',

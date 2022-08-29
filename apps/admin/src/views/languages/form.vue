@@ -84,6 +84,7 @@ import { defineComponent } from 'vue';
 import type { LanguageEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
+import { textDirections } from '@intake24/common/types';
 
 type LanguageForm = {
   id: string | null;
@@ -110,7 +111,7 @@ export default defineComponent({
         id: null,
         englishName: null,
         localName: null,
-        countryFlagCode: 'en',
+        countryFlagCode: 'gb',
         textDirection: 'ltr',
       }),
       flags: orderBy(
@@ -120,7 +121,7 @@ export default defineComponent({
         })),
         'text'
       ),
-      textDirections: ['ltr', 'rtl'].map((value) => ({
+      textDirections: textDirections.map((value) => ({
         value,
         text: this.$t(`languages.textDirections.${value}`),
       })),

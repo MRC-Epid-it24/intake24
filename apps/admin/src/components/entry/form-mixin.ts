@@ -87,7 +87,7 @@ export default defineComponent({
         const { id, name } = data;
         this.$router.push({ name: `${this.resource.name}-edit`, params: { id } });
 
-        useMessages().success(this.$t('common.msg.stored', { name: name ?? id }).toString());
+        useMessages().success(this.$t('common.msg.created', { name: name ?? id }).toString());
       }
 
       this.setEntry(data);

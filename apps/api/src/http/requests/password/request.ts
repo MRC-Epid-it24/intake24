@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 import { captcha } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';
 
@@ -10,7 +10,7 @@ export default validate(
   checkSchema({
     email: {
       in: ['body'],
-      errorMessage: 'Email must be filled in.',
+      errorMessage: typeErrorMessage('email._'),
       isEmail: true,
       isEmpty: { negated: true },
       toLowerCase: true,

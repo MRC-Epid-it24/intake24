@@ -1,7 +1,11 @@
 import type { Request } from 'express';
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import {
+  customTypeErrorMessage,
+  typeErrorMessage,
+  validate,
+} from '@intake24/api/http/requests/util';
 import { UserSurveyAlias } from '@intake24/db';
 
 import { identifiers, password } from '../../users/defaults';
@@ -12,15 +16,15 @@ export default validate(
     ...password,
     username: {
       in: ['body'],
-      errorMessage: 'Username must be a unique string (no emails).',
+      errorMessage: typeErrorMessage('string._'),
       isString: { bail: true },
       isEmail: { negated: true, bail: true },
       custom: {
-        options: async (value, { req }): Promise<void> => {
-          const { surveyId } = (req as Request).params;
+        options: async (value, meta): Promise<void> => {
+          const { surveyId } = (meta.req as Request).params;
 
           const entry = await UserSurveyAlias.findOne({ where: { surveyId, username: value } });
-          if (entry) throw new Error('Current username is already in use within this study.');
+          if (entry) throw new Error(customTypeErrorMessage('unique._', meta));
         },
       },
     },

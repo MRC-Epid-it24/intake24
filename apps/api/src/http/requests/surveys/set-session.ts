@@ -1,13 +1,13 @@
 import { checkSchema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 
-import { validate } from '@intake24/api/http/requests/util';
+import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 
 export default validate(
   checkSchema({
     sessionData: {
       in: ['body'],
-      errorMessage: 'Missing session data.',
+      errorMessage: typeErrorMessage('structure._'),
       custom: {
         options: async (value: any): Promise<void> => {
           // TODO: add proper validator once SurveyState implementation finalized in frontend

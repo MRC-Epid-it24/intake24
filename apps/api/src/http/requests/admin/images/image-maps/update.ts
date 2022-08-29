@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 import { validateImageMapObjects } from '@intake24/common/validators';
 
 import defaults from './defaults';
@@ -10,7 +10,7 @@ export default validate(
     ...defaults,
     objects: {
       in: ['body'],
-      errorMessage: 'Image map objects are invalid.',
+      errorMessage: typeErrorMessage('structure._'),
       custom: {
         options: (value): boolean => {
           try {

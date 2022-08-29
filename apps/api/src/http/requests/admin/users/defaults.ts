@@ -4,6 +4,7 @@ import { has, isPlainObject } from 'lodash';
 
 import type { UserAttributes } from '@intake24/common/types/models';
 import type { WhereOptions } from '@intake24/db';
+import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { Op, User } from '@intake24/db';
 
@@ -12,34 +13,37 @@ import { permissions, roles } from '../acl';
 export const identifiers: Schema = {
   name: {
     in: ['body'],
-    errorMessage: 'Name must be a string.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     optional: { options: { nullable: true } },
   },
   email: {
     in: ['body'],
-    errorMessage: 'Enter valid unique email address.',
+    errorMessage: typeErrorMessage('email._'),
     isEmail: { bail: true },
     optional: { options: { nullable: true } },
     custom: {
-      options: async (value, { req }): Promise<void> => {
-        const { userId } = (req as Request).params;
+      options: async (value, meta): Promise<void> => {
+        const { userId } = (meta.req as Request).params;
         const where: WhereOptions<UserAttributes> = userId ? { id: { [Op.ne]: userId } } : {};
 
-        return unique({ model: User, condition: { field: 'email', value }, options: { where } });
+        if (
+          !(await unique({ model: User, condition: { field: 'email', value }, options: { where } }))
+        )
+          throw new Error(customTypeErrorMessage('unique._', meta));
       },
     },
     toLowerCase: true,
   },
   phone: {
     in: ['body'],
-    errorMessage: 'Phone must be a string.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     optional: { options: { nullable: true } },
   },
   customFields: {
     in: ['body'],
-    errorMessage: 'Enter valid custom field object.',
+    errorMessage: typeErrorMessage('structure._'),
     optional: { options: { nullable: true } },
     custom: {
       options: async (value: any): Promise<void> => {
@@ -47,7 +51,7 @@ export const identifiers: Schema = {
           !Array.isArray(value) ||
           value.some((item) => !isPlainObject(item) || !has(item, 'name') || !has(item, 'value'))
         )
-          throw new Error('Enter valid custom field object.');
+          throw new Error();
       },
     },
   },
@@ -56,22 +60,25 @@ export const identifiers: Schema = {
 export const password: Schema = {
   password: {
     in: ['body'],
-    errorMessage: 'Password must contain at least 10 chars of lower/upper chars and numbers.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     isStrongPassword: {
       options: { minLength: 10, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 },
+      errorMessage: typeErrorMessage('password._'),
     },
   },
   passwordConfirm: {
     in: ['body'],
-    errorMessage: 'Password must contain at least 10 chars of lower/upper chars and numbers.',
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     isStrongPassword: {
       options: { minLength: 10, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 },
+      errorMessage: typeErrorMessage('password._'),
     },
     custom: {
-      options: async (value, { req }): Promise<void> => {
-        if (value !== req.body.password) throw new Error(`Passwords don't match.`);
+      options: async (value, meta): Promise<void> => {
+        if (value !== meta.req.body.password)
+          throw new Error(customTypeErrorMessage('match._', meta, { match: 'password' }));
       },
     },
   },
@@ -82,19 +89,19 @@ export const user: Schema = {
   roles,
   emailNotifications: {
     in: ['body'],
-    errorMessage: 'Enter true/false value.',
+    errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
   smsNotifications: {
     in: ['body'],
-    errorMessage: 'Enter true/false value.',
+    errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
   multiFactorAuthentication: {
     in: ['body'],
-    errorMessage: 'Enter true/false value.',
+    errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },

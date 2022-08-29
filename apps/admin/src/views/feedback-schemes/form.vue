@@ -211,23 +211,25 @@ export default defineComponent({
         weightTarget: false,
       };
 
-      return this.entry.demographicGroups.reduce((acc, group) => {
-        if (group.nutrientRuleType === 'energy_divided_by_bmr') {
-          Object.keys(acc).forEach((key) => {
-            acc[key as FeedbackPhysicalDataField] = true;
-          });
+      return (
+        this.entry.demographicGroups?.reduce((acc, group) => {
+          if (group.nutrientRuleType === 'energy_divided_by_bmr') {
+            Object.keys(acc).forEach((key) => {
+              acc[key as FeedbackPhysicalDataField] = true;
+            });
+            return acc;
+          }
+
+          if (group.age) acc.birthdate = true;
+          if (group.sex) acc.sex = true;
+          if (group.weight) acc.weightKg = true;
+          if (group.height) acc.heightCm = true;
+          if (group.physicalActivityLevelId) acc.physicalActivityLevelId = true;
+          if (group.nutrientRuleType === 'per_unit_of_weight') acc.weightKg = true;
+
           return acc;
-        }
-
-        if (group.age) acc.birthdate = true;
-        if (group.sex) acc.sex = true;
-        if (group.weight) acc.weightKg = true;
-        if (group.height) acc.heightCm = true;
-        if (group.physicalActivityLevelId) acc.physicalActivityLevelId = true;
-        if (group.nutrientRuleType === 'per_unit_of_weight') acc.weightKg = true;
-
-        return acc;
-      }, flags);
+        }, flags) ?? flags
+      );
     },
   },
 });

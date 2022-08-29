@@ -1,4 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
+import type { I18nParams } from '@intake24/i18n';
 import { api, replaceParams } from '@intake24/i18n';
 
 export type TranslationObject = { [key: string]: TranslationObject } | string;
@@ -63,20 +64,18 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
     const message = key.split('.').reduce((acc, seg) => {
       if (typeof acc === 'string') return acc;
 
-      if (!acc[seg]) throw new Error('Invalid translation path');
+      if (!acc[seg]) return key;
 
       return acc[seg];
     }, messages);
 
-    if (typeof message !== 'string') throw new Error('Non-terminal translation path');
-
-    return message;
+    return message.toString();
   };
 
-  const translate = (key: string, locale: string, values?: Record<string, string>) => {
+  const translate = (key: string, locale: string, params?: I18nParams) => {
     const message = resolvePath(key, locale);
 
-    return values ? replaceParams(message, values) : message;
+    return params ? replaceParams(message, params) : message;
   };
 
   return { init, reload, getAvailableLanguages, translate };
