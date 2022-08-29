@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express';
 import type { Meta, ValidationChain } from 'express-validator';
 
-import type { I18nParams } from '@intake24/i18n/util';
+import type { I18nParams } from '@intake24/i18n';
 import { validation } from '@intake24/api/http/middleware';
 
 export type ValidationMiddleware = RequestHandler | ValidationChain;

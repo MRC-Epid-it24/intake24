@@ -5,7 +5,7 @@ import type {
   LocaleTranslation,
   RequiredLocaleTranslation,
 } from '@intake24/common/types';
-import { replaceParams } from '@intake24/i18n/util';
+import { replaceParams } from '@intake24/i18n';
 
 export type LocaleContentOptions = {
   path?: string;

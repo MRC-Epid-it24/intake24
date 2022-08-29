@@ -1,5 +1,5 @@
 import type { RequestIoC } from '@intake24/api/ioc';
-import type { I18nParams } from '@intake24/i18n/util';
+import type { I18nParams } from '@intake24/i18n';
 
 const i18nService = ({
   i18nStore,
