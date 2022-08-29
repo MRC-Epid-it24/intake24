@@ -16,6 +16,6 @@ set $FORM_ACTION "form-action 'self'";
 set $FRAME_ANC "frame-ancestors 'self'";
 set $OBJECT_SRC "object-src 'none'";
 set $SCRIPT_SRC_ATTR "script-src-attr 'none'";
-set $ADDONS "block-all-mixed-content;upgrade-insecure-requests";
+set $ADDONS "upgrade-insecure-requests";
 
 add_header Content-Security-Policy "${DEFAULT}; ${FONT}; ${FRAME}; ${IMG}; ${SCRIPT}; ${STYLE}; ${BASE_URI}; ${CONNECT}; ${FORM_ACTION}; ${FRAME_ANC}; ${OBJECT_SRC}; ${SCRIPT_SRC_ATTR}; ${ADDONS}";

@@ -35,7 +35,13 @@ export const mergeTranslations = (target: any, source: any) => {
  * @param {T2} y
  * @returns {boolean}
  */
-export const compareMessageKeys = <T1 = Dictionary, T2 = Dictionary>(x: T1, y: T2): boolean => {
+export const compareMessageKeys = <
+  T1 extends Dictionary = Dictionary,
+  T2 extends Dictionary = Dictionary
+>(
+  x: T1,
+  y: T2
+): boolean => {
   const xKeys = getObjectNestedKeys(x);
   const yKeys = getObjectNestedKeys(y);
 
