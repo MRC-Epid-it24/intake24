@@ -8,6 +8,7 @@ import type {
   EncodedFood,
   FoodState,
   FreeTextFood,
+  MealFlag,
   MealState,
   MealTime,
   PromptAnswer,
@@ -96,6 +97,9 @@ export const useSurvey = defineStore('survey', {
     hasMeals: (state) => state.data.meals.length,
     defaultSchemeMeals: (state) => state.parameters?.surveyScheme.meals,
     selection: (state) => state.data.selection,
+    freeEntryComplete: (state) =>
+      state.data.meals.length > 0 &&
+      state.data.meals.every((meal) => meal.flags.includes('free-entry-complete')),
     currentTempPromptAnswer: (state): PromptAnswer | undefined => {
       return state.data.tempPromptAnswer;
     },
@@ -296,7 +300,7 @@ export const useSurvey = defineStore('survey', {
       });
     },
 
-    setMealFlag(data: { mealId: number; flag: string }) {
+    setMealFlag(data: { mealId: number; flag: MealFlag }) {
       const meal = findMeal(this.data.meals, data.mealId);
 
       if (meal.flags.includes(data.flag)) return;

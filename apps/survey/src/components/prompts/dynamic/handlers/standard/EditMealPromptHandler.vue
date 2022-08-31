@@ -65,7 +65,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['setFoods', 'deleteMeal']),
+    ...mapActions(useSurvey, ['setFoods', 'setMealFlag', 'deleteMeal']),
 
     getInitialState(): EditMealState {
       return {
@@ -88,8 +88,10 @@ export default defineComponent({
 
     async commitAnswer() {
       const foods = this.prompt!.foodsDrinks();
+      const mealId = this.selectedMeal.id;
 
-      this.setFoods({ mealId: this.selectedMeal.id, foods });
+      this.setFoods({ mealId: mealId, foods });
+      this.setMealFlag({ mealId: mealId, flag: 'free-entry-complete' });
       this.clearStoredState();
     },
   },

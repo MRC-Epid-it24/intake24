@@ -130,18 +130,22 @@ const checkFoodStandardConditions = (
     }
 
     case 'food-search-prompt': {
-      if (foodState.type === 'free-text') {
+      const freeEntryComplete =
+        surveyState.data.meals.length > 0 &&
+        surveyState.data.meals.every((meal) => meal.flags.includes('free-entry-complete'));
+
+      if (foodState.type === 'free-text' && freeEntryComplete) {
         recallLog().promptCheck(
           'food-search-prompt',
           true,
-          'Selected food entry type is free-text'
+          'Selected food entry type is free-text and all meals have free-entry-complete flag set'
         );
         return true;
       }
       recallLog().promptCheck(
         'food-search-prompt',
         false,
-        `Selected food entry type is ${foodState.type}`
+        `Selected food entry type is ${foodState.type}, free entry complete: ${freeEntryComplete}`
       );
       return false;
     }

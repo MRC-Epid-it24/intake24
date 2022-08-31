@@ -3,6 +3,17 @@ import type { Dictionary, RequiredLocaleTranslation } from '@intake24/common/typ
 import type { ComponentType, QuantityValues } from '../prompts';
 import type { FoodHeader, UserFoodData } from './http';
 
+/*
+Not currently used:
+
+private static final String FLAG_NO_MEALS_AFTER = "no-meals-after";
+private static final String FLAG_NO_MEALS_BEFORE = "no-meals-before";
+private static final String FLAG_CONFIRMED_NO_DRINKS = "confirmed-no-drinks";
+private static final String FLAG_READY_MEALS_COMPLETE = "ready-meals-complete";
+private static final String FLAG_ASSOCIATED_FOODS_COMPLETE = "associated-foods-complete";
+*/
+export type MealFlag = 'free-entry-complete';
+
 export type CustomPromptAnswer = string | string[] | number | number[];
 
 export const portionSizeMethods = [

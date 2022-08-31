@@ -14,7 +14,6 @@ import { defineComponent } from 'vue';
 import type { FoodSearchPromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
-import { whyDidYouRender } from '@intake24/survey/components/mixins';
 import {
   foodPromptUtils,
   promptHandlerStateless,
@@ -27,7 +26,7 @@ export default defineComponent({
 
   components: { FoodSearchPrompt },
 
-  mixins: [promptHandlerStateless, foodPromptUtils, whyDidYouRender],
+  mixins: [promptHandlerStateless, foodPromptUtils],
 
   props: {
     promptProps: {
