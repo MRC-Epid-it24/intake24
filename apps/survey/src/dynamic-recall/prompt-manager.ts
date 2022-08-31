@@ -11,6 +11,8 @@ import {
   findMeal,
   getFoodByIndex,
   getFoodIndexRequired,
+  mealAssociatedFoodsComplete,
+  mealPortionSizeComplete,
 } from '@intake24/survey/stores/meal-food-utils';
 
 import type { SurveyState } from '../stores';
@@ -367,6 +369,13 @@ export default class PromptManager {
     mealId: number
   ): PromptQuestion | undefined {
     const mealState = findMeal(state.data.meals, mealId);
+
+    // Post foods prompts should only be triggered when all food data is collected
+    // TODO: Probably should include food custom questions as well
+    if (section === 'postFoods') {
+      const meal = findMeal(state.data.meals, mealId);
+      if (!(mealPortionSizeComplete(meal) && mealAssociatedFoodsComplete(meal))) return undefined;
+    }
 
     return this.scheme.questions.meals[section].find((question) => {
       return (

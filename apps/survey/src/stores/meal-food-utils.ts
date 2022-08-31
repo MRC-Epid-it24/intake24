@@ -76,6 +76,22 @@ export function findMeal(meals: MealState[], id: number): MealState {
   return meals[mealIndex];
 }
 
+export function foodPortionSizeComplete(food: FoodState) {
+  return food.type === 'encoded-food' && food.portionSize !== null;
+}
+
+export function associatedFoodPromptsComplete(food: FoodState) {
+  return food.type === 'encoded-food' && food.associatedFoodsComplete;
+}
+
+export function mealPortionSizeComplete(meal: MealState) {
+  return meal.foods.length > 0 && meal.foods.every(foodPortionSizeComplete);
+}
+
+export function mealAssociatedFoodsComplete(meal: MealState) {
+  return meal.foods.length > 0 && meal.foods.every(associatedFoodPromptsComplete);
+}
+
 export function getMealIndexForSelection(
   meals: MealState[],
   selection: Selection
