@@ -19,9 +19,9 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.1.2",
+    "@fortawesome/fontawesome-free": "^6.2.0",
     "axios": "^0.27.2",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.2",
     "dotenv-expand": "^8.0.3",
     "express": "^4.18.1",
     "helmet": "^6.0.0",
@@ -53,9 +53,9 @@
     "vite": "^3.0.9",
     "vite-plugin-fonts": "^0.6.0",
     "vite-plugin-html": "^3.2.0",
-    "vite-plugin-pwa": "^0.12.3",
+    "vite-plugin-pwa": "^0.12.4",
     "vitest": "^0.22.1",
-    "vue-tsc": "^0.40.4",
+    "vue-tsc": "^0.40.5",
     "workbox-window": "^6.5.4"
   },
   "bundledDependencies": [
