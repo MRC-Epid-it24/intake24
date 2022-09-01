@@ -1,7 +1,7 @@
 <template>
   <v-list v-if="foods.length > 0" :class="{ 'pa-0': linked }">
     <div v-for="(food, i) in foods" :key="i" :class="{ 'ml-4': linked }">
-      <v-list-item class="ma-0 small" link>
+      <v-list-item class="ma-0 small" :class="{ selected: food.id === selectedFoodId }" link>
         <v-list-item-title class="text-wrap" @click="emitFoodSelected(food.id)"
           ><span :class="{ 'linked-food-title': linked }"> {{ foodDisplayName(food) }}</span>
         </v-list-item-title>
@@ -36,6 +36,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    selectedFoodId: {
+      type: Number,
+      required: false,
+    },
   },
 
   data() {
@@ -62,5 +66,8 @@ export default defineComponent({
 
 <style>
 .linked-food-title {
+}
+.selected {
+  background: #f5f5f5;
 }
 </style>

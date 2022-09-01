@@ -1,5 +1,8 @@
 <template>
-  <v-list-group :value="mealTimeString.length > 0 ? true : false">
+  <v-list-group
+    :class="{ selected: selected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
+    :value="mealTimeString.length > 0 ? true : false"
+  >
     <template #activator>
       <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal">
         {{ getLocaleContent(meal.name) }}
@@ -17,7 +20,11 @@
         <v-icon v-else x-small>far fa-question-circle </v-icon>
       </v-list-item-action>
     </template>
-    <food-item :foods="meal.foods" @food-selected="onFoodSelected"></food-item>
+    <food-item
+      :foods="meal.foods"
+      :selected-food-id="selectedFoodId"
+      @food-selected="onFoodSelected"
+    ></food-item>
   </v-list-group>
 </template>
 
@@ -44,6 +51,18 @@ export default defineComponent({
     meal: {
       type: Object as PropType<MealState>,
       required: true,
+    },
+    selected: {
+      type: Boolean,
+      required: true,
+    },
+    selectedFoodInMeal: {
+      type: Boolean,
+      required: true,
+    },
+    selectedFoodId: {
+      type: Number,
+      required: false,
     },
   },
 
@@ -99,3 +118,19 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.selected {
+  box-sizing: border-box;
+
+  background: #f5f5f5;
+  border-radius: 4px;
+
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.selected-food {
+  background: #f9f9f9;
+}
+</style>
