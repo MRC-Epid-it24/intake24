@@ -5,14 +5,41 @@
         <v-list-item-title class="text-wrap" @click="emitFoodSelected(food.id)"
           ><span :class="{ 'linked-food-title': linked }"> {{ foodDisplayName(food) }}</span>
         </v-list-item-title>
-        <v-list-item-action>
-          <v-icon v-if="food.code" color="green darken-2" x-small>fa-check</v-icon>
+        <v-list-item-action class="list-item">
+          <v-tooltip v-if="food.type === 'encoded-food'" bottom>
+            <template #activator="{ on, attrs }">
+              <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
+            </template>
+            <span>{{ $t('recall.menu.foodSearchCompleteTooltip') }}</span>
+          </v-tooltip>
+          <v-tooltip v-if="food.type === 'free-text'" bottom>
+            <template #activator="{ on, attrs }">
+              <v-icon v-bind="attrs" color="grey" small v-on="on">fa-question-circle</v-icon>
+            </template>
+            <span>{{ $t('recall.menu.foodSearchTooltip') }}</span>
+          </v-tooltip>
         </v-list-item-action>
-        <v-list-item-action>
-          <v-icon v-if="food.portionSizeMethod" color="green darken-2" x-small>fa-check</v-icon>
+        <v-list-item-action class="list-item">
+          <v-tooltip v-if="food.portionSize" bottom>
+            <template #activator="{ on, attrs }">
+              <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
+            </template>
+            <span>{{ $t('recall.menu.portionSizeCompleteTooltip') }}</span>
+          </v-tooltip>
+          <v-tooltip v-if="!food.portionSize" bottom>
+            <template #activator="{ on, attrs }">
+              <v-icon v-bind="attrs" color="grey" small v-on="on">fa-question-circle</v-icon>
+            </template>
+            <span>{{ $t('recall.menu.portionSizeTooltip') }}</span>
+          </v-tooltip>
         </v-list-item-action>
       </v-list-item>
-      <food-item :foods="food.linkedFoods" linked @food-selected="onLinkedFoodSelected"></food-item>
+      <food-item
+        :foods="food.linkedFoods"
+        linked
+        :selected-food-id="selectedFoodId"
+        @food-selected="onLinkedFoodSelected"
+      ></food-item>
     </div>
   </v-list>
 </template>
@@ -22,9 +49,12 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { FoodState } from '@intake24/common/types';
+import LocaleContent from '@intake24/survey/components/mixins/localeContent';
 
 export default defineComponent({
   name: 'FoodItem',
+
+  mixins: [LocaleContent],
 
   props: {
     // FIXME: Should be an array of objects of type UserFoodData or EncodedUserFoodData ???
@@ -64,10 +94,13 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .linked-food-title {
 }
 .selected {
   background: #f5f5f5;
+}
+.list-item {
+  min-width: 0;
 }
 </style>

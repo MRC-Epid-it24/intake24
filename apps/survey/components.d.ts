@@ -157,5 +157,6 @@ declare module '@vue/runtime-core' {
     VToolbar: typeof import('vuetify/lib')['VToolbar']
     VToolbarItems: typeof import('vuetify/lib')['VToolbarItems']
     VToolbarTitle: typeof import('vuetify/lib')['VToolbarTitle']
+    VTooltip: typeof import('vuetify/lib')['VTooltip']
   }
 }
