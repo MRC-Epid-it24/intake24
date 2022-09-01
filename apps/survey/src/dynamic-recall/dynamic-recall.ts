@@ -4,9 +4,15 @@ import type { MealTime, SurveyState as CurrentSurveyState } from '@intake24/comm
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
 import SelectionManager from '@intake24/survey/dynamic-recall/selection-manager';
-import { findMeal } from '@intake24/survey/stores/meal-food-utils';
+import {
+  findMeal,
+  getFoodIndexRequired,
+  mealPortionSizeComplete,
+  surveyFreeEntryComplete,
+} from '@intake24/survey/stores/meal-food-utils';
 
 import type { SurveyState, SurveyStore } from '../stores';
+import { recallLog } from '../stores';
 
 export interface PromptInstance {
   prompt: PromptQuestion;
@@ -58,6 +64,65 @@ export default class DynamicRecall {
     this.store = store;
     this.promptManager = new PromptManager(surveyScheme);
     this.selectionManager = new SelectionManager(store, this.promptManager);
+    this.resetSelectionOnFreeEntryComplete();
+    this.resetSelectionOnPortionSizeComplete();
+  }
+
+  /*
+    $onAction handlers below will execute after every action which is not optimal, but also safer
+    than relying on correct actions being used throughout the code, for example updateFood instead
+    of replaceFood.
+
+    $subscribe could be more appropriate to detect all changes (e.g., ones not made through actions)
+    but it does not provide before/after hooks.
+  */
+
+  // Detect when the free text entry pass is complete and reset the current selection
+  // to the first food/meal for the next pass.
+  private resetSelectionOnFreeEntryComplete() {
+    this.store.$onAction((context) => {
+      const store = context.store;
+      const survey = store.$state.data;
+      const completeBefore = surveyFreeEntryComplete(survey);
+
+      context.after(() => {
+        const completeAfter = surveyFreeEntryComplete(survey);
+
+        if (!completeBefore && completeAfter) {
+          store.setSelection(this.selectionManager.firstAvailableSelection());
+        }
+      });
+    });
+  }
+
+  // Detect when portion size estimation for a given meal is complete and reset the selection
+  // to the first food for next pass such as the associated foods questions.
+  private resetSelectionOnPortionSizeComplete() {
+    this.store.$onAction((context) => {
+      const store = context.store;
+      const survey = store.$state.data;
+
+      if (survey.selection.element === null || survey.selection.element.type === 'meal') return;
+
+      const selectionBefore = getFoodIndexRequired(survey.meals, survey.selection.element.foodId);
+      const mealIdBefore = survey.meals[selectionBefore.mealIndex].id;
+      const completeBefore = mealPortionSizeComplete(survey.meals[selectionBefore.mealIndex]);
+
+      context.after(() => {
+        if (survey.selection.element === null || survey.selection.element.type === 'meal') return;
+        const selectionAfter = getFoodIndexRequired(survey.meals, survey.selection.element.foodId);
+        const mealIdAfter = survey.meals[selectionAfter.mealIndex].id;
+
+        if (mealIdBefore !== mealIdAfter) return;
+
+        const completeAfter = mealPortionSizeComplete(survey.meals[selectionAfter.mealIndex]);
+
+        if (!completeBefore && completeAfter) {
+          const newSelection = this.selectionManager.tryAnyFoodInMeal(mealIdAfter);
+          if (newSelection !== undefined) store.setSelection(newSelection);
+        }
+      });
+    });
   }
 
   async initialiseSurvey() {

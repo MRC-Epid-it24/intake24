@@ -1,4 +1,4 @@
-import type { FoodState, MealState, Selection } from '@intake24/common/types';
+import type { FoodState, MealState, Selection, SurveyState } from '@intake24/common/types';
 import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
 
 export function getFoodIndexInMeal(meal: MealState, id: number): FoodIndex | undefined {
@@ -90,6 +90,13 @@ export function mealPortionSizeComplete(meal: MealState) {
 
 export function mealAssociatedFoodsComplete(meal: MealState) {
   return meal.foods.length > 0 && meal.foods.every(associatedFoodPromptsComplete);
+}
+
+export function surveyFreeEntryComplete(survey: SurveyState) {
+  return (
+    survey.meals.length > 0 &&
+    survey.meals.every((meal) => meal.flags.includes('free-entry-complete'))
+  );
 }
 
 export function getMealIndexForSelection(

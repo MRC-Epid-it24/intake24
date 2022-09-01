@@ -55,7 +55,7 @@ export default class SelectionManager {
     return this.foodPromptsAvailable(foodId) ? makeFoodSelection(foodId) : undefined;
   }
 
-  private tryAnyFoodInMeal(mealId: number): Selection | undefined {
+  public tryAnyFoodInMeal(mealId: number): Selection | undefined {
     const meals = this.store.meals;
     const mealIndex = getMealIndexRequired(meals, mealId);
 

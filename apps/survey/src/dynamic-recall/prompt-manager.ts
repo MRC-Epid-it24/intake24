@@ -9,6 +9,7 @@ import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import { conditionOps } from '@intake24/common/prompts';
 import {
   findMeal,
+  foodPortionSizeComplete,
   getFoodByIndex,
   getFoodIndexRequired,
   mealAssociatedFoodsComplete,
@@ -277,6 +278,7 @@ const checkFoodStandardConditions = (
 
     case 'associated-foods-prompt': {
       if (foodState.type !== 'encoded-food') return false;
+      if (!foodPortionSizeComplete(foodState)) return false;
 
       return (
         foodState.data.associatedFoodPrompts.length !== 0 && !foodState.associatedFoodsComplete
