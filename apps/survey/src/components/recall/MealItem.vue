@@ -1,7 +1,7 @@
 <template>
   <v-list-group
     :class="{ selected: selected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
-    :value="mealTimeString.length > 0 ? true : false"
+    :value="selected || selectedFoodInMeal"
   >
     <template #activator>
       <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal">
@@ -126,11 +126,11 @@ export default defineComponent({
   background: #f5f5f5;
   border-radius: 4px;
 
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
 .selected-food {
-  background: #f9f9f9;
+  background: #f7f7f7;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-list class="flex-grow-1 flex-shrink-0" dense nav>
+    <v-list class="flex-grow-1 flex-shrink-0" dense>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title"> {{ $t('recall._') }} </v-list-item-title>
@@ -20,7 +20,7 @@
         <v-list-item
           v-for="meal in meals"
           :key="meal.id"
-          class="pl-0 pr-0"
+          class="pl-1 pr-1"
           :inactive="true"
           link
           :ripple="false"
