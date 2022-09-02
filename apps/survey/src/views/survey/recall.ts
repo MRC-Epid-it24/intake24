@@ -121,7 +121,7 @@ export default defineComponent({
     },
 
     activePrompt(): RequiredLocaleTranslation | undefined {
-      return this.currentPrompt?.prompt.props.name;
+      return this.currentPrompt?.prompt.props.name || { en: 'Prompt name missing!' };
     },
   },
 

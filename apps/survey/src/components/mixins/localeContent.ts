@@ -1,3 +1,4 @@
+import type { TranslateResult } from 'vue-i18n';
 import { defineComponent } from 'vue';
 
 import type {
@@ -28,6 +29,16 @@ export default defineComponent({
       if (path) return this.$t(path, params).toString();
 
       return content.en ? replaceParams(content.en, params) : '';
+    },
+
+    /* TranslateResult has a rather convoluted type hierarchy as it represents both
+     actual localised strings and the message file structure.
+
+     This function will throw an error if the TranslateResult argument is not a plain message. */
+    asPlainString(result: TranslateResult): string {
+      if (typeof result === 'string') return result;
+
+      throw new Error('Expected the translation result to be a plain string');
     },
   },
 });

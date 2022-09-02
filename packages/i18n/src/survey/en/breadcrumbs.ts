@@ -4,6 +4,7 @@ const breadcrumbs: LocaleMessageObject = {
   meal: 'Meal',
   food: 'Food',
   prompt: 'Prompt',
+  general: 'Recall',
 };
 
 export default breadcrumbs;

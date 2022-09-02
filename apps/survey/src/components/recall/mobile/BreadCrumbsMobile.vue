@@ -13,7 +13,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
-import type { BrdCrumbs } from '@intake24/survey/components/mixins/breadcrumbs';
+import type { BreadcrumbsElement } from '@intake24/survey/components/mixins/breadcrumbs';
 import { breadcrumbs } from '@intake24/survey/components/mixins';
 
 export default defineComponent({
@@ -34,7 +34,7 @@ export default defineComponent({
   },
 
   computed: {
-    brds(): BrdCrumbs[] {
+    breadcrumbs(): BreadcrumbsElement[] {
       return this.getBreadCrumbs(this.promptName).filter((el) => !el.disabled);
     },
   },

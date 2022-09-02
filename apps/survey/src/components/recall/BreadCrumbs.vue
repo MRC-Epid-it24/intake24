@@ -1,6 +1,10 @@
 <template>
   <v-toolbar class="mb-4">
-    <v-breadcrumbs v-if="!isNotDesktop" divider="/" :items="brds"></v-breadcrumbs>
+    <v-breadcrumbs v-if="!isNotDesktop" class="pl-0" divider="/" :items="breadcrumbs">
+      <template #divider>
+        <v-icon x-small>fa-chevron-right</v-icon>
+      </template>
+    </v-breadcrumbs>
     <v-spacer v-if="!isNotDesktop"></v-spacer>
     <request-help :survey-id="$route.params.surveyId"></request-help>
   </v-toolbar>
@@ -11,7 +15,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
-import type { BrdCrumbs } from '@intake24/survey/components/mixins/breadcrumbs';
+import type { BreadcrumbsElement } from '@intake24/survey/components/mixins/breadcrumbs';
 import { breadcrumbs } from '@intake24/survey/components/mixins';
 import RequestHelp from '@intake24/survey/components/request-help.vue';
 
@@ -25,12 +29,13 @@ export default defineComponent({
   props: {
     promptName: {
       type: Object as PropType<RequiredLocaleTranslation>,
+      required: true,
     },
   },
 
   computed: {
-    brds(): BrdCrumbs[] {
-      return this.getBreadCrumbs(this.promptName).filter((el) => !el.disabled);
+    breadcrumbs(): BreadcrumbsElement[] {
+      return this.getBreadCrumbs(this.promptName);
     },
   },
 });
