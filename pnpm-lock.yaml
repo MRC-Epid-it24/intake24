@@ -682,6 +682,7 @@ importers:
   packages/ui:
     specifiers:
       '@hcaptcha/vue-hcaptcha': 0.3.2
+      '@pinia/plugin-debounce': ^0.1.0
       '@types/lodash': ^4.14.184
       '@types/node': ^18.7.13
       axios: ^0.27.2
@@ -703,6 +704,7 @@ importers:
       workbox-window: ^6.5.4
     dependencies:
       '@hcaptcha/vue-hcaptcha': 0.3.2_vue@2.7.10
+      '@pinia/plugin-debounce': 0.1.0
       axios: 0.27.2
       echarts: 5.3.3
       js-file-download: 0.4.12
@@ -2762,6 +2764,10 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
+
+  /@pinia/plugin-debounce/0.1.0:
+    resolution: {integrity: sha512-iaeu2Vj99ARCCk47zrc33VBuurSl0i7TR/jsZR8w2SL3WyM1sw+UcmeSji+5JIzuN85pwe05uJsUe+1zbnii+g==}
+    dev: false
 
   /@popperjs/core/2.11.6:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}

@@ -17,6 +17,7 @@
   "scripts": {},
   "dependencies": {
     "@hcaptcha/vue-hcaptcha": "0.3.2",
+    "@pinia/plugin-debounce": "^0.1.0",
     "axios": "^0.27.2",
     "echarts": "^5.3.3",
     "js-file-download": "^0.4.12",

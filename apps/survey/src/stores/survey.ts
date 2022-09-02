@@ -1,5 +1,6 @@
 import type { AxiosError } from 'axios';
 import axios from 'axios';
+import debounce from 'lodash/debounce';
 import { defineStore } from 'pinia';
 import Vue from 'vue';
 
@@ -83,6 +84,9 @@ export const useSurvey = defineStore('survey', {
     undo: null,
     error: null,
   }),
+  debounce: {
+    storeUserSession: 2500,
+  },
   persist: {
     key: `${import.meta.env.VITE_APP_PREFIX ?? ''}survey`,
     paths: ['data', 'history'],
@@ -180,6 +184,17 @@ export const useSurvey = defineStore('survey', {
       oldValue: CurrentSurveyState;
     }) {
       this.history.unshift({ timestamp: new Date(), data: copy(oldValue) });
+    },
+
+    async storeUserSession() {
+      const surveyId = this.parameters?.slug;
+
+      if (!surveyId) {
+        console.error(`Survey parameters not loaded. Cannot submit the survey.`);
+        return;
+      }
+
+      await surveyService.setUserSession(surveyId, this.data);
     },
 
     async submitRecall() {

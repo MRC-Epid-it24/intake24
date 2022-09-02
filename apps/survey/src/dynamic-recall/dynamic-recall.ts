@@ -12,7 +12,6 @@ import {
 } from '@intake24/survey/stores/meal-food-utils';
 
 import type { SurveyState, SurveyStore } from '../stores';
-import { recallLog } from '../stores';
 
 export interface PromptInstance {
   prompt: PromptQuestion;
@@ -66,6 +65,7 @@ export default class DynamicRecall {
     this.selectionManager = new SelectionManager(store, this.promptManager);
     this.resetSelectionOnFreeEntryComplete();
     this.resetSelectionOnPortionSizeComplete();
+    this.registerStoreUserSession();
   }
 
   /*
@@ -121,6 +121,18 @@ export default class DynamicRecall {
           const newSelection = this.selectionManager.tryAnyFoodInMeal(mealIdAfter);
           if (newSelection !== undefined) store.setSelection(newSelection);
         }
+      });
+    });
+  }
+
+  private registerStoreUserSession() {
+    if (!this.store.parameters?.storeUserSessionOnServer) return;
+
+    this.store.$onAction((context) => {
+      if (context.name === 'storeUserSession') return;
+
+      context.after(async () => {
+        await context.store.storeUserSession();
       });
     });
   }
