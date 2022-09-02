@@ -138,18 +138,18 @@ export default defineComponent({
     async setFilter(data: Dictionary) {
       // this.clearSelected();
       await this.setResourceFilter(data);
-      this.fetch();
+      await this.fetch();
     },
 
     async resetFilter() {
       // this.clearSelected();
       await this.resetResourceFilter();
-      this.fetch();
+      await this.fetch();
     },
 
     async onRefresh() {
       // this.clearSelected();
-      this.fetch();
+      await this.fetch();
     },
   },
 });

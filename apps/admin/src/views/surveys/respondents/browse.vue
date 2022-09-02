@@ -352,8 +352,8 @@ export default defineComponent({
       await this.updateTable();
     },
 
-    toClipboard(data: string) {
-      navigator.clipboard.writeText(data);
+    async toClipboard(data: string) {
+      await navigator.clipboard.writeText(data);
       useMessages().info(this.$t('surveys.respondents.authUrls.copiedToClipboard').toString());
     },
   },
