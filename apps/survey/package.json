@@ -36,13 +36,13 @@
   "devDependencies": {
     "@types/jsdom": "^20.0.0",
     "@types/lodash": "^4.14.184",
-    "@types/node": "^18.7.13",
+    "@types/node": "^18.7.15",
     "@vitejs/plugin-vue2": "1.1.2",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
     "eslint": "^8.23.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
     "eslint-plugin-vue": "^9.4.0",
     "jsdom": "^20.0.0",
     "npm-run-all": "^4.1.5",
@@ -53,9 +53,9 @@
     "vite": "^3.0.9",
     "vite-plugin-fonts": "^0.6.0",
     "vite-plugin-html": "^3.2.0",
-    "vite-plugin-pwa": "^0.12.4",
+    "vite-plugin-pwa": "^0.12.6",
     "vitest": "^0.22.1",
-    "vue-tsc": "^0.40.5",
+    "vue-tsc": "^0.40.7",
     "workbox-window": "^6.5.4"
   },
   "bundledDependencies": [
