@@ -1,5 +1,6 @@
-import fs from 'fs-extra';
 import path from 'node:path';
+
+import fs from 'fs-extra';
 import request from 'supertest';
 
 import fsConfig from '@intake24/api/config/filesystem';

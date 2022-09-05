@@ -1,6 +1,7 @@
-import fs from 'fs-extra';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
+
+import fs from 'fs-extra';
 import sharp from 'sharp';
 
 import type { IoC } from '@intake24/api/ioc';

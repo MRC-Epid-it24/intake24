@@ -1,9 +1,10 @@
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import type { Options } from 'execa';
 //@ts-expect-error missing types
 import calver from 'calver';
 import execa from 'execa';
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 import colors from 'picocolors';
 import prompts from 'prompts';
 

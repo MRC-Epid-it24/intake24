@@ -1,6 +1,7 @@
+import { resolve } from 'node:path';
+
 import type { Express } from 'express';
 import morgan from 'morgan';
-import { resolve } from 'node:path';
 import { Environment, FileSystemLoader } from 'nunjucks';
 
 import { httpLogger as stream } from '@intake24/services';

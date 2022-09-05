@@ -1,5 +1,6 @@
-import { faker } from '@faker-js/faker';
 import { randomUUID } from 'node:crypto';
+
+import { faker } from '@faker-js/faker';
 import slugify from 'slugify';
 
 import type {

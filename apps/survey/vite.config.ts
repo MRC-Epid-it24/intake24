@@ -1,6 +1,7 @@
-import vue from '@vitejs/plugin-vue2';
 import childProcess from 'node:child_process';
 import { fileURLToPath, URL } from 'node:url';
+
+import vue from '@vitejs/plugin-vue2';
 import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig, loadEnv } from 'vite';

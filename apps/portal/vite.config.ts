@@ -1,5 +1,6 @@
-import laravel from 'laravel-vite-plugin';
 import path from 'node:path';
+
+import laravel from 'laravel-vite-plugin';
 import { defineConfig, loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {

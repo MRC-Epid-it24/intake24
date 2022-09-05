@@ -1,6 +1,7 @@
+import path from 'node:path';
+
 import type { Job } from 'bullmq';
 import fs from 'fs-extra';
-import path from 'node:path';
 
 import type { LocalLocation } from '@intake24/api/config/filesystem';
 import type { IoC } from '@intake24/api/ioc';

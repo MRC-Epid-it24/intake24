@@ -1,8 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import * as fs from 'node:fs';
+
 import commandLineArgs from 'command-line-args';
 import { createArrayCsvWriter } from 'csv-writer';
 import dotenv from 'dotenv';
-import * as fs from 'fs';
 
 import {
   AsServedImage,
