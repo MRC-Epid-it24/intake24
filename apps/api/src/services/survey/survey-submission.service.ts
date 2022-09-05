@@ -40,10 +40,11 @@ export type FoodCodes = { foodCodes: string[]; groupCodes: string[] };
 
 const surveySubmissionService = ({
   cache,
+  db,
   logger: globalLogger,
   scheduler,
   surveyService,
-}: Pick<IoC, 'cache' | 'logger' | 'scheduler' | 'surveyService'>) => {
+}: Pick<IoC, 'cache' | 'db' | 'logger' | 'scheduler' | 'surveyService'>) => {
   const logger = globalLogger.child({ service: 'surveySubmissionsService' });
 
   /**
@@ -86,70 +87,73 @@ const surveySubmissionService = ({
    */
   const collectFoods = (mealId: string, foods: FoodLocal[], foodGroups: FoodGroup[]) => {
     return (collectedFoods: CollectedFoods, foodState: FoodState) => {
-      if (foodState.type === 'encoded-food') {
-        const {
-          data: { code, groupCode, readyMealOption, brandNames },
-          linkedFoods,
-          portionSize,
-        } = foodState;
+      if (foodState.type === 'free-text') {
+        logger.error(`Submission: Free-text food record present in submission, skipping...`);
+        return collectedFoods;
+      }
 
-        const foodRecord = foods.find((foodRecord) => foodRecord.foodCode === code);
-        if (!foodRecord) {
-          logger.error(`Submission: food code not found (${code}), skipping...`);
-          return collectedFoods;
-        }
+      const {
+        data: { code, groupCode, readyMealOption, brandNames },
+        linkedFoods,
+        portionSize,
+      } = foodState;
 
-        const foodGroupRecord = foodGroups.find(
-          (foodGroupRecord) => foodGroupRecord.id === groupCode
-        );
-        if (!foodGroupRecord) {
-          logger.error(`Submission: food group code not found (${groupCode}), skipping...`);
-          return collectedFoods;
-        }
+      const foodRecord = foods.find((foodRecord) => foodRecord.foodCode === code);
+      if (!foodRecord) {
+        logger.error(`Submission: food code not found (${code}), skipping...`);
+        return collectedFoods;
+      }
 
-        if (!foodRecord.main || !foodRecord.nutrientRecords || !foodGroupRecord.localGroups)
-          throw new Error('Submission: not loaded relationships');
+      const foodGroupRecord = foodGroups.find(
+        (foodGroupRecord) => foodGroupRecord.id === groupCode
+      );
+      if (!foodGroupRecord) {
+        logger.error(`Submission: food group code not found (${groupCode}), skipping...`);
+        return collectedFoods;
+      }
 
-        const {
-          nutrientRecords,
-          name: localName,
-          main: { name: englishName },
-        } = foodRecord;
-        const { id: foodGroupId, name: foodGroupEnglishName, localGroups } = foodGroupRecord;
+      if (!foodRecord.main || !foodRecord.nutrientRecords || !foodGroupRecord.localGroups)
+        throw new Error('Submission: not loaded relationships');
 
-        if (!nutrientRecords.length) {
-          logger.error(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
-          return collectedFoods;
-        }
+      const {
+        nutrientRecords,
+        name: localName,
+        main: { name: englishName },
+      } = foodRecord;
+      const { id: foodGroupId, name: foodGroupEnglishName, localGroups } = foodGroupRecord;
 
-        const [nutrient] = nutrientRecords;
+      if (!nutrientRecords.length) {
+        logger.error(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
+        return collectedFoods;
+      }
 
-        collectedFoods.inputs.push({
-          mealId,
-          code,
-          englishName,
-          localName,
-          readyMeal: readyMealOption,
-          searchTerm: '???', // TODO
-          portionSizeMethodId: portionSize ? portionSize.method : '???', // TODO
-          reasonableAmount: true, // TODO
-          foodGroupId,
-          foodGroupEnglishName,
-          foodGroupLocalName: localGroups[0]?.name ?? foodGroupEnglishName,
-          brand: brandNames.join(' '),
-          nutrientTableId: nutrient.nutrientTableId,
-          nutrientTableCode: nutrient.nutrientTableRecordId,
+      const [nutrient] = nutrientRecords;
+
+      collectedFoods.inputs.push({
+        mealId,
+        code,
+        englishName,
+        localName,
+        readyMeal: readyMealOption,
+        searchTerm: '???', // TODO
+        portionSizeMethodId: portionSize ? portionSize.method : '???', // TODO
+        reasonableAmount: true, // TODO
+        foodGroupId,
+        foodGroupEnglishName,
+        foodGroupLocalName: localGroups[0]?.name ?? foodGroupEnglishName,
+        brand: brandNames.join(' '),
+        nutrientTableId: nutrient.nutrientTableId,
+        nutrientTableCode: nutrient.nutrientTableRecordId,
+      });
+      collectedFoods.states.push(foodState);
+
+      if (linkedFoods.length) {
+        const { states, inputs } = linkedFoods.reduce(collectFoods(mealId, foods, foodGroups), {
+          inputs: [],
+          states: [],
         });
-        collectedFoods.states.push(foodState);
-
-        if (linkedFoods.length) {
-          const { states, inputs } = linkedFoods.reduce(collectFoods(mealId, foods, foodGroups), {
-            inputs: [],
-            states: [],
-          });
-          collectedFoods.inputs.push(...inputs);
-          collectedFoods.states.push(...states);
-        }
+        collectedFoods.inputs.push(...inputs);
+        collectedFoods.states.push(...states);
       }
 
       return collectedFoods;
@@ -240,134 +244,151 @@ const surveySubmissionService = ({
      * - critical data (inserted in DB) should be also validated in backend
      */
 
-    // Survey submission
-    const { id: surveySubmissionId } = await SurveySubmission.create({
-      id: randomUUID(),
-      surveyId,
-      userId,
-      startTime: surveyState.startTime ?? new Date(),
-      endTime: surveyState.endTime ?? new Date(),
-      uxSessionId: randomUUID(), // TODO: verify this
-      submissionTime: new Date(),
-    });
-
-    // Survey custom fields - top-level questions
-    const surveyCustomFieldInputs = collectCustomAnswers(
-      'surveySubmissionId',
-      surveySubmissionId,
-      surveyState.customPromptAnswers,
-      surveyCustomQuestions
-    );
-
-    // Survey meals
-    const mealInputs = surveyState.meals.map(({ name: { en: name }, time }) => ({
-      surveySubmissionId,
-      name,
-      hours: time?.hours ?? 8,
-      minutes: time?.minutes ?? 0,
-    }));
-
-    await Promise.all([
-      SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs),
-      SurveySubmissionMeal.bulkCreate(mealInputs),
-    ]);
-
-    const meals = await SurveySubmissionMeal.findAll({
-      where: { surveySubmissionId },
-      order: [['id', 'ASC']],
-    });
-
-    const { foodCodes, groupCodes } = surveyState.meals.reduce<FoodCodes>(
-      (acc, meal) => {
-        const { foodCodes, groupCodes } = collectFoodCodes(meal.foods);
-        acc.foodCodes.push(...foodCodes);
-        acc.groupCodes.push(...groupCodes);
-
-        return acc;
-      },
-      { foodCodes: [], groupCodes: [] }
-    );
-
-    const [foodRecords, foodGroups] = await Promise.all([
-      FoodLocal.findAll({
-        where: { foodCode: foodCodes, localeId },
-        include: [
-          { association: 'main' },
-          { association: 'nutrientRecords', through: { attributes: [] } },
-        ],
-      }),
-      FoodGroup.findAll({
-        where: { id: groupCodes },
-        include: [{ association: 'localGroups', where: { localeId }, required: false }],
-      }),
-    ]);
-
-    for (const [idx, mealState] of surveyState.meals.entries()) {
-      const { id: mealId } = meals[idx];
-
-      // Meal custom fields - meal-level questions
-      const mealCustomFieldInputs = collectCustomAnswers(
-        'mealId',
-        mealId,
-        mealState.customPromptAnswers,
-        mealCustomQuestions
-      );
-
-      // Meal foods
-      const collectedFoods = mealState.foods.reduce(collectFoods(mealId, foodRecords, foodGroups), {
-        inputs: [],
-        states: [],
+    return db.system.transaction(async (transaction) => {
+      // Survey submission
+      const { id: surveySubmissionId } = await SurveySubmission.create({
+        id: randomUUID(),
+        surveyId,
+        userId,
+        startTime: surveyState.startTime ?? new Date(),
+        endTime: surveyState.endTime ?? new Date(),
+        uxSessionId: randomUUID(), // TODO: verify this (assigned in UI?)
+        submissionTime: new Date(),
       });
 
+      // Collect survey custom fields
+      const surveyCustomFieldInputs = collectCustomAnswers(
+        'surveySubmissionId',
+        surveySubmissionId,
+        surveyState.customPromptAnswers,
+        surveyCustomQuestions
+      );
+
+      // Collect meals
+      const mealInputs = surveyState.meals.map(({ name: { en: name }, time }) => ({
+        surveySubmissionId,
+        name,
+        hours: time?.hours ?? 8,
+        minutes: time?.minutes ?? 0,
+      }));
+
+      // Store survey custom fields & meals
       await Promise.all([
-        SurveySubmissionMealCustomField.bulkCreate(mealCustomFieldInputs),
-        SurveySubmissionFood.bulkCreate(collectedFoods.inputs),
+        SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs, { transaction }),
+        SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
       ]);
 
-      const foods = await SurveySubmissionFood.findAll({
-        where: { mealId },
+      // Fetch created meal records
+      const meals = await SurveySubmissionMeal.findAll({
+        where: { surveySubmissionId },
         order: [['id', 'ASC']],
       });
 
-      for (const [idx, foodState] of collectedFoods.states.entries()) {
-        const { id: foodId } = foods[idx];
+      // Collect food & group codes
+      const { foodCodes, groupCodes } = surveyState.meals.reduce<FoodCodes>(
+        (acc, meal) => {
+          const { foodCodes, groupCodes } = collectFoodCodes(meal.foods);
+          acc.foodCodes.push(...foodCodes);
+          acc.groupCodes.push(...groupCodes);
 
-        // Food custom fields - food-level questions
-        const foodCustomFieldInputs = collectCustomAnswers(
-          'foodId',
-          foodId,
-          foodState.customPromptAnswers,
-          foodCustomQuestions
+          return acc;
+        },
+        { foodCodes: [], groupCodes: [] }
+      );
+
+      // Fetch food & group records
+      const [foodRecords, foodGroups] = await Promise.all([
+        FoodLocal.findAll({
+          where: { foodCode: foodCodes, localeId },
+          include: [
+            { association: 'main' },
+            { association: 'nutrientRecords', through: { attributes: [] } },
+          ],
+        }),
+        FoodGroup.findAll({
+          where: { id: groupCodes },
+          include: [{ association: 'localGroups', where: { localeId }, required: false }],
+        }),
+      ]);
+
+      // Process meals
+      for (const [idx, mealState] of surveyState.meals.entries()) {
+        const { id: mealId } = meals[idx];
+
+        // Collect meal custom fields
+        const mealCustomFieldInputs = collectCustomAnswers(
+          'mealId',
+          mealId,
+          mealState.customPromptAnswers,
+          mealCustomQuestions
         );
 
+        // Collect meal foods
+        const collectedFoods = mealState.foods.reduce(
+          collectFoods(mealId, foodRecords, foodGroups),
+          { inputs: [], states: [] }
+        );
+
+        // Store meal custom fields & foods
         await Promise.all([
-          SurveySubmissionFoodCustomField.bulkCreate(foodCustomFieldInputs),
-          // TODO: PSMs
-          // TODO: Nutrients
-          // TODO: Fields
+          SurveySubmissionMealCustomField.bulkCreate(mealCustomFieldInputs, { transaction }),
+          SurveySubmissionFood.bulkCreate(collectedFoods.inputs, { transaction }),
         ]);
+
+        // Fetch created food records
+        const foods = await SurveySubmissionFood.findAll({
+          where: { mealId },
+          order: [['id', 'ASC']],
+        });
+
+        // Process foods
+        for (const [idx, foodState] of collectedFoods.states.entries()) {
+          const { id: foodId } = foods[idx];
+
+          // Collect food custom fields
+          const foodCustomFieldInputs = collectCustomAnswers(
+            'foodId',
+            foodId,
+            foodState.customPromptAnswers,
+            foodCustomQuestions
+          );
+
+          if (foodState.type === 'free-text') {
+            logger.error(
+              `Submission: Free-text food record present in submission (${surveySubmissionId}), skipping...`
+            );
+            continue;
+          }
+
+          await Promise.all([
+            SurveySubmissionFoodCustomField.bulkCreate(foodCustomFieldInputs, { transaction }),
+            // TODO: PSMs
+            // TODO: Nutrients
+            // TODO: Fields
+          ]);
+        }
       }
-    }
 
-    // Clean user submissions cache and dispatch submission webhook if any
-    await Promise.all(
-      [
-        cache.forget(`user:submissions:${userId}`),
-        submissionNotificationUrl
-          ? scheduler.jobs.addJob(
-              { type: 'SurveySubmissionNotification', userId },
-              { surveyId, submissionId: surveySubmissionId }
-            )
-          : null,
-      ].map(Boolean)
-    );
+      // Clean user submissions cache and dispatch submission webhook if any
+      await Promise.all(
+        [
+          cache.forget(`user:submissions:${userId}`),
+          submissionNotificationUrl
+            ? scheduler.jobs.addJob(
+                { type: 'SurveySubmissionNotification', userId },
+                { surveyId, submissionId: surveySubmissionId }
+              )
+            : null,
+        ].map(Boolean)
+      );
 
-    const [followUpUrl, userInfo] = await Promise.all([
-      surveyService.getFollowUpUrl(survey, userId),
-      surveyService.userInfo(survey, user, tzOffset),
-    ]);
+      const [followUpUrl, userInfo] = await Promise.all([
+        surveyService.getFollowUpUrl(survey, userId),
+        surveyService.userInfo(survey, user, tzOffset),
+      ]);
 
-    return { ...userInfo, followUpUrl };
+      return { ...userInfo, followUpUrl };
+    });
   };
 
   return {

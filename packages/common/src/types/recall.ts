@@ -106,6 +106,7 @@ export interface AbstractFoodState {
   // eslint-disable-next-line no-use-before-define
   linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
+  type: 'free-text' | 'encoded-food';
 }
 
 export interface FreeTextFood extends AbstractFoodState {
