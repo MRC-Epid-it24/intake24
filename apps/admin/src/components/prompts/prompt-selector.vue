@@ -82,7 +82,7 @@
                       <template #extension>
                         <v-tabs v-model="questionTypeTab">
                           <v-tab
-                            v-for="type in Object.keys(availablePromptQuestions)"
+                            v-for="type in Object.keys(availableGroupedPromptQuestions)"
                             :key="type"
                             class="font-weight-medium"
                           >
@@ -98,7 +98,7 @@
                     >
                       <v-tabs-items v-model="questionTypeTab">
                         <prompt-type-selector
-                          v-for="(questions, type) in availablePromptQuestions"
+                          v-for="(questions, type) in availableGroupedPromptQuestions"
                           :key="type"
                           :questions="questions"
                           :type="type"
@@ -164,7 +164,7 @@ export type PromptQuestionDialog = {
 };
 
 export default defineComponent({
-  name: 'QuestionListDialog',
+  name: 'PromptSelector',
 
   components: {
     LanguageSelector,
@@ -207,15 +207,14 @@ export default defineComponent({
       'portion-size': portionSizePromptQuestions,
     };
 
-    const dialog = (show = false): PromptQuestionDialog => ({
-      show,
+    const dialog: PromptQuestionDialog = {
+      show: false,
       index: -1,
       question: copy(promptQuestions[0]),
-    });
+    };
 
     return {
-      dialog: dialog(),
-      newDialog: dialog,
+      dialog,
       promptQuestions,
       groupedPromptQuestions,
       promptSettings,
@@ -228,7 +227,15 @@ export default defineComponent({
     isOverrideMode(): boolean {
       return this.mode === 'override';
     },
-    availablePromptQuestions(): Record<QuestionType, PromptQuestion[]> {
+    availablePromptQuestions(): PromptQuestion[] {
+      const { section } = this;
+      if (!section) return this.promptQuestions;
+
+      return this.promptQuestions.filter((prompt) =>
+        this.promptSettings[prompt.component].sections.includes(section)
+      );
+    },
+    availableGroupedPromptQuestions(): Record<QuestionType, PromptQuestion[]> {
       const { section } = this;
       if (!section) return this.groupedPromptQuestions;
 
@@ -261,6 +268,14 @@ export default defineComponent({
   },
 
   methods: {
+    newDialog(show = false): PromptQuestionDialog {
+      return {
+        show,
+        index: -1,
+        question: copy(this.availablePromptQuestions[0]),
+      };
+    },
+
     focusInTox(event: FocusEvent) {
       const toxDialog = (event.target as HTMLElement).closest('.tox-dialog');
       if (!toxDialog) return;
@@ -275,24 +290,16 @@ export default defineComponent({
         question: { id, component },
       } = this.dialog;
 
-      const question = this.promptQuestions.find((item) => item.component === component);
+      const question =
+        this.availablePromptQuestions.find((item) => item.component === component) ??
+        this.availablePromptQuestions[0];
       if (!question) return;
 
       this.dialog = { show, index, question: { origId: id, ...copy(question) } };
     },
 
-    create() {
-      this.dialog = this.newDialog(true);
-    },
-
-    edit(index: number, question: PromptQuestion) {
-      const promptDefaults = this.promptQuestions.find((q) => q.component === question.component);
-      if (!promptDefaults) {
-        console.warn(`Prompt defaults for question type '${question.component}' not found.`);
-        return;
-      }
-
-      switch (question.type) {
+    updateQuestionTypeTab(type: PromptQuestion['type']) {
+      switch (type) {
         case 'standard':
           this.questionTypeTab = 1;
           break;
@@ -302,6 +309,21 @@ export default defineComponent({
         default:
           this.questionTypeTab = 0;
       }
+    },
+
+    create() {
+      this.dialog = this.newDialog(true);
+      this.updateQuestionTypeTab(this.dialog.question.type);
+    },
+
+    edit(index: number, question: PromptQuestion) {
+      const promptDefaults = this.promptQuestions.find((q) => q.component === question.component);
+      if (!promptDefaults) {
+        console.warn(`Prompt defaults for question type '${question.component}' not found.`);
+        return;
+      }
+
+      this.updateQuestionTypeTab(question.type);
 
       this.dialog = {
         show: true,
