@@ -10,6 +10,7 @@
           clearable
           hide-selected
           :items="listofmeals"
+          :label="$t('prompts.addMeal.label')"
           outlined
           small-chips
         >
@@ -17,9 +18,6 @@
       </v-form>
     </v-col>
     <template #actions>
-      <v-btn :block="isMobile" class="px-5" large @click="abortMeal">
-        {{ $t('prompts.mealAdding.no') }}
-      </v-btn>
       <v-btn
         :block="isMobile"
         class="px-5"
@@ -29,7 +27,7 @@
         large
         @click="submit"
       >
-        {{ $t('prompts.mealAdding.yes') }}
+        {{ $t('prompts.addMeal.yes') }}
       </v-btn>
     </template>
   </prompt-layout>

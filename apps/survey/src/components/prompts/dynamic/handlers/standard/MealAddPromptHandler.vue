@@ -69,6 +69,9 @@ export default defineComponent({
       this.$emit('complete');
       // this.clearTempPromptAnswer();
     },
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    async commitAnswer() {},
   },
 });
 </script>

@@ -69,6 +69,8 @@ export default defineComponent({
 
   methods: {
     onItemClick(tab: number) {
+      // Prevent extra switching if active tab is clicked again, but allow continuing
+      if (this.tabIndex == tab && tab !== 2) return;
       if (!tab) this.$emit('navigation-item-click', this.$props.bottomNavigation);
       this.$emit('navigation-item-click', tab);
     },

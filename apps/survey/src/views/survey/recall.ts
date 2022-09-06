@@ -29,6 +29,11 @@ import MealFoodMobileContextMenu from '@intake24/survey/components/recall/Mobile
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 
+interface SavedState {
+  prompt: PromptInstance | null;
+  selection: Selection;
+}
+
 export default defineComponent({
   name: 'Recall',
 
@@ -70,6 +75,7 @@ export default defineComponent({
       activeFood: '',
       activeItem: 'meal',
       alert: false,
+      savedState: null as SavedState | null,
     };
   },
 
@@ -178,6 +184,16 @@ export default defineComponent({
       };
     },
 
+    saveCurrentState() {
+      // Don't save state if switching between special prompts
+      if (this.savedState !== null) return;
+
+      this.savedState = {
+        selection: this.survey.selection,
+        prompt: this.currentPrompt,
+      };
+    },
+
     showSurveyPrompt(promptSection: SurveyQuestionSection, promptType: ComponentType) {
       this.setSelection({
         element: null,
@@ -251,9 +267,11 @@ export default defineComponent({
       // eslint-disable-next-line default-case
       switch (action) {
         case 'add-meal':
+          this.saveCurrentState();
           this.showSurveyPrompt('preMeals', 'meal-add-prompt');
           break;
         case 'review-confirm':
+          this.saveCurrentState();
           this.showSurveyPrompt('submission', 'review-confirm-prompt');
           break;
       }
@@ -289,20 +307,34 @@ export default defineComponent({
     },
 
     async nextPrompt() {
-      const nextPrompt = this.recallController ? this.recallController.getNextPrompt() : undefined;
+      // Special-case prompts like the mobile review save the current state when they are triggered
+      // by user actions.
 
-      if (nextPrompt === undefined) {
-        // TODO: handle completion
-        console.log('No prompts remaining');
-        if (this.hasMeals === 0) {
-          this.onRecallAction('add-meal');
-        } else {
-          this.currentPrompt = null;
-        }
+      // If a saved state exists, then use it as the next prompt (i.e., go back to the prompt that
+      // was active before.
+      if (this.savedState != null) {
+        console.debug(`Using saved state ${this.savedState.prompt?.prompt.component}`);
+        this.setSelection(this.savedState.selection);
+        this.currentPrompt = this.savedState.prompt;
+        this.savedState = null;
       } else {
-        this.setContinueButtonEnabled(false);
-        console.debug(`Switching prompt to ${nextPrompt.prompt.component}`);
-        this.currentPrompt = nextPrompt;
+        const nextPrompt = this.recallController
+          ? this.recallController.getNextPrompt()
+          : undefined;
+
+        if (nextPrompt === undefined) {
+          // TODO: handle completion
+          console.log('No prompts remaining');
+          if (this.hasMeals === 0) {
+            this.onRecallAction('add-meal');
+          } else {
+            this.currentPrompt = null;
+          }
+        } else {
+          this.setContinueButtonEnabled(false);
+          console.debug(`Switching prompt to ${nextPrompt.prompt.component}`);
+          this.currentPrompt = nextPrompt;
+        }
       }
     },
 

@@ -1,6 +1,6 @@
 <template>
   <v-toolbar class="brdcrmbs" dense flat style="overflow-y: hidden; white-space: nowrap">
-    <v-breadcrumbs class="pl-1" :items="brds">
+    <v-breadcrumbs class="pl-1" :items="breadcrumbs">
       <template #divider>
         <v-icon>{{ forwardIcon }}</v-icon>
       </template>
@@ -24,6 +24,7 @@ export default defineComponent({
   props: {
     promptName: {
       type: Object as PropType<RequiredLocaleTranslation>,
+      required: true,
     },
   },
 
@@ -50,6 +51,7 @@ export default defineComponent({
   left: 0;
   width: 100%;
   z-index: 1;
+  border-bottom: 1px solid #cecdcdde;
   //padding-top: 5px;
 }
 </style>

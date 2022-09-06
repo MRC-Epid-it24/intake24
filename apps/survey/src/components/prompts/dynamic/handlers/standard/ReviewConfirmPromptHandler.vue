@@ -48,6 +48,9 @@ export default defineComponent({
     onFoodClick(payload: { foodIndex: number; mealIndex: number; name: string; entity: 'food' }) {
       this.$emit('meal-food-selected', payload);
     },
+    // Method required and intentionally empty
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    async commitAnswer() {},
   },
 });
 </script>

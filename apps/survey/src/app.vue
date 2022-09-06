@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :class="{ mobile: isMobile }">
     <loader :show="isAppLoading" />
     <v-navigation-drawer v-model="sidebar" app>
       <v-list-item>

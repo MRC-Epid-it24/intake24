@@ -9,7 +9,7 @@
         @food-deleted="onUpdate"
       />
     </v-col>
-    <template #actions>
+    <template v-if="!isMobile" #actions>
       <confirm-dialog
         color="warning"
         :label="$t('prompts.editMeal.deleteMeal', { meal: getLocalMealName })"
