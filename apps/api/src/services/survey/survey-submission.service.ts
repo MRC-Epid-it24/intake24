@@ -9,7 +9,11 @@ import type {
   WithKey,
 } from '@intake24/common/types';
 import type { SurveyFollowUpResponse } from '@intake24/common/types/http';
-import type { SurveySubmissionFoodCreationAttributes } from '@intake24/common/types/models';
+import type {
+  SurveySubmissionFieldCreationAttributes,
+  SurveySubmissionFoodCreationAttributes,
+  SurveySubmissionNutrientCreationAttributes,
+} from '@intake24/common/types/models';
 import type { User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
@@ -20,10 +24,12 @@ import {
   SurveyScheme,
   SurveySubmission,
   SurveySubmissionCustomField,
+  SurveySubmissionField,
   SurveySubmissionFood,
   SurveySubmissionFoodCustomField,
   SurveySubmissionMeal,
   SurveySubmissionMealCustomField,
+  SurveySubmissionNutrient,
 } from '@intake24/db';
 
 export type CustomAnswers<K extends string | number | symbol> = WithKey<K> & {
@@ -35,6 +41,14 @@ export type CollectedFoods = {
   states: FoodState[];
   inputs: SurveySubmissionFoodCreationAttributes[];
 };
+
+export type CollectedNutrientInfo = {
+  nutrients: SurveySubmissionNutrientCreationAttributes[];
+  fields: SurveySubmissionFieldCreationAttributes[];
+};
+
+export type FoodLocalMap = Record<string, FoodLocal>;
+export type FoodGroupMap = Record<string, FoodGroup>;
 
 export type FoodCodes = { foodCodes: string[]; groupCodes: string[] };
 
@@ -55,19 +69,21 @@ const surveySubmissionService = ({
   const collectFoodCodes = (foods: FoodState[]) =>
     foods.reduce<FoodCodes>(
       (acc, food) => {
-        if (food.type === 'encoded-food') {
-          const {
-            data: { code, groupCode },
-          } = food;
-
-          acc.foodCodes.push(code);
-          acc.groupCodes.push(groupCode);
+        if (food.type === 'free-text') {
+          logger.error(`Submission: Free-text food record present in submission, skipping...`);
+          return acc;
         }
 
-        // TODO: free-text food
+        const {
+          data: { code, groupCode },
+          linkedFoods,
+        } = food;
 
-        if (food.linkedFoods.length) {
-          const { foodCodes, groupCodes } = collectFoodCodes(food.linkedFoods);
+        acc.foodCodes.push(code);
+        acc.groupCodes.push(groupCode);
+
+        if (linkedFoods.length) {
+          const { foodCodes, groupCodes } = collectFoodCodes(linkedFoods);
           acc.foodCodes.push(...foodCodes);
           acc.groupCodes.push(...groupCodes);
         }
@@ -81,39 +97,39 @@ const surveySubmissionService = ({
    * Collect foods from submissions state
    *
    * @param {string} mealId
-   * @param {FoodLocal[]} foods
-   * @param {FoodGroup[]} foodGroups
+   * @param {FoodLocalMap} foods
+   * @param {FoodGroupMap} foodGroups
    * @returns
    */
-  const collectFoods = (mealId: string, foods: FoodLocal[], foodGroups: FoodGroup[]) => {
-    return (collectedFoods: CollectedFoods, foodState: FoodState) => {
+  const collectFoods =
+    (mealId: string, foods: FoodLocalMap, foodGroups: FoodGroupMap) =>
+    (collectedFoods: CollectedFoods, foodState: FoodState) => {
       if (foodState.type === 'free-text') {
         logger.error(`Submission: Free-text food record present in submission, skipping...`);
         return collectedFoods;
       }
 
       const {
-        data: { code, groupCode, readyMealOption, brandNames },
+        data: { code, groupCode, readyMealOption, reasonableAmount, brandNames },
         linkedFoods,
         portionSize,
       } = foodState;
 
-      const foodRecord = foods.find((foodRecord) => foodRecord.foodCode === code);
+      const foodRecord = foods[code];
+      const foodGroupRecord = foodGroups[groupCode];
+
       if (!foodRecord) {
         logger.error(`Submission: food code not found (${code}), skipping...`);
         return collectedFoods;
       }
 
-      const foodGroupRecord = foodGroups.find(
-        (foodGroupRecord) => foodGroupRecord.id === groupCode
-      );
       if (!foodGroupRecord) {
         logger.error(`Submission: food group code not found (${groupCode}), skipping...`);
         return collectedFoods;
       }
 
       if (!foodRecord.main || !foodRecord.nutrientRecords || !foodGroupRecord.localGroups)
-        throw new Error('Submission: not loaded relationships');
+        throw new Error('Submission: not loaded foodRecord relationships');
 
       const {
         nutrientRecords,
@@ -127,7 +143,16 @@ const surveySubmissionService = ({
         return collectedFoods;
       }
 
-      const [nutrient] = nutrientRecords;
+      const [nutrientTableRecord] = nutrientRecords;
+
+      if (!portionSize) {
+        logger.error(`Submission: Missing portion size data for food code (${code}), skipping...`);
+        return collectedFoods;
+      }
+
+      // TODO: verify
+      const portionSizeWeight =
+        (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
 
       collectedFoods.inputs.push({
         mealId,
@@ -136,14 +161,14 @@ const surveySubmissionService = ({
         localName,
         readyMeal: readyMealOption,
         searchTerm: '???', // TODO
-        portionSizeMethodId: portionSize ? portionSize.method : '???', // TODO
-        reasonableAmount: true, // TODO
+        portionSizeMethodId: portionSize ? portionSize.method : '???', // TODO: can be null?
+        reasonableAmount: reasonableAmount >= portionSizeWeight, // TODO: verify
         foodGroupId,
         foodGroupEnglishName,
         foodGroupLocalName: localGroups[0]?.name ?? foodGroupEnglishName,
         brand: brandNames.join(' '),
-        nutrientTableId: nutrient.nutrientTableId,
-        nutrientTableCode: nutrient.nutrientTableRecordId,
+        nutrientTableId: nutrientTableRecord.nutrientTableId,
+        nutrientTableCode: nutrientTableRecord.nutrientTableRecordId,
       });
       collectedFoods.states.push(foodState);
 
@@ -158,6 +183,69 @@ const surveySubmissionService = ({
 
       return collectedFoods;
     };
+
+  const collectFoodCompositionData = (
+    foodId: string,
+    foodState: FoodState,
+    foods: FoodLocalMap
+  ) => {
+    const collectedData: CollectedNutrientInfo = { fields: [], nutrients: [] };
+
+    if (foodState.type === 'free-text') {
+      logger.error(`Submission: Free-text food record present in submission, skipping...`);
+      return collectedData;
+    }
+
+    const {
+      portionSize,
+      data: { code },
+    } = foodState;
+
+    const foodRecord = foods[code];
+
+    if (!foodRecord) {
+      logger.error(`Submission: food code not found (${code}), skipping...`);
+      return collectedData;
+    }
+
+    if (!foodRecord.main || !foodRecord.nutrientRecords)
+      throw new Error('Submission: not loaded foodRecord relationships');
+
+    if (!foodRecord.nutrientRecords.length) {
+      logger.error(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
+      return collectedData;
+    }
+
+    const [nutrientTableRecord] = foodRecord.nutrientRecords;
+
+    if (!portionSize) {
+      logger.error(`Submission: Missing portion size data for food code (${code}), skipping...`);
+      return collectedData;
+    }
+
+    // TODO: verify
+    const portionSizeWeight = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
+
+    if (!nutrientTableRecord.nutrients || !nutrientTableRecord.fields)
+      throw new Error('Submission: not loaded nutrient relationships');
+
+    // Collect food composition fields
+    collectedData.fields = nutrientTableRecord.fields.map(({ name, value }) => ({
+      foodId,
+      fieldName: name,
+      value,
+    }));
+
+    // Collect food composition nutrients
+    collectedData.nutrients = nutrientTableRecord.nutrients.map(
+      ({ nutrientTypeId, unitsPer100g }) => ({
+        foodId,
+        nutrientTypeId,
+        amount: (unitsPer100g * portionSizeWeight) / 100.0,
+      })
+    );
+
+    return collectedData;
   };
 
   /**
@@ -246,15 +334,18 @@ const surveySubmissionService = ({
 
     return db.system.transaction(async (transaction) => {
       // Survey submission
-      const { id: surveySubmissionId } = await SurveySubmission.create({
-        id: randomUUID(),
-        surveyId,
-        userId,
-        startTime: surveyState.startTime ?? new Date(),
-        endTime: surveyState.endTime ?? new Date(),
-        uxSessionId: randomUUID(), // TODO: verify this (assigned in UI?)
-        submissionTime: new Date(),
-      });
+      const { id: surveySubmissionId } = await SurveySubmission.create(
+        {
+          id: randomUUID(),
+          surveyId,
+          userId,
+          startTime: surveyState.startTime ?? new Date(),
+          endTime: surveyState.endTime ?? new Date(),
+          uxSessionId: randomUUID(), // TODO: verify this (assigned in UI?)
+          submissionTime: new Date(),
+        },
+        { transaction }
+      );
 
       // Collect survey custom fields
       const surveyCustomFieldInputs = collectCustomAnswers(
@@ -282,6 +373,7 @@ const surveySubmissionService = ({
       const meals = await SurveySubmissionMeal.findAll({
         where: { surveySubmissionId },
         order: [['id', 'ASC']],
+        transaction,
       });
 
       // Collect food & group codes
@@ -297,12 +389,17 @@ const surveySubmissionService = ({
       );
 
       // Fetch food & group records
+      // TODO: if food record not found, look for prototype?
       const [foodRecords, foodGroups] = await Promise.all([
         FoodLocal.findAll({
           where: { foodCode: foodCodes, localeId },
           include: [
             { association: 'main' },
-            { association: 'nutrientRecords', through: { attributes: [] } },
+            {
+              association: 'nutrientRecords',
+              through: { attributes: [] },
+              include: [{ association: 'fields' }, { association: 'nutrients' }],
+            },
           ],
         }),
         FoodGroup.findAll({
@@ -310,6 +407,16 @@ const surveySubmissionService = ({
           include: [{ association: 'localGroups', where: { localeId }, required: false }],
         }),
       ]);
+
+      const foodRecordMap = foodRecords.reduce<Record<string, FoodLocal>>((acc, item) => {
+        acc[item.foodCode] = item;
+        return acc;
+      }, {});
+
+      const foodGroupMap = foodGroups.reduce<Record<string, FoodGroup>>((acc, item) => {
+        acc[item.id] = item;
+        return acc;
+      }, {});
 
       // Process meals
       for (const [idx, mealState] of surveyState.meals.entries()) {
@@ -325,9 +432,11 @@ const surveySubmissionService = ({
 
         // Collect meal foods
         const collectedFoods = mealState.foods.reduce(
-          collectFoods(mealId, foodRecords, foodGroups),
+          collectFoods(mealId, foodRecordMap, foodGroupMap),
           { inputs: [], states: [] }
         );
+
+        // TODO: missing foods
 
         // Store meal custom fields & foods
         await Promise.all([
@@ -339,33 +448,41 @@ const surveySubmissionService = ({
         const foods = await SurveySubmissionFood.findAll({
           where: { mealId },
           order: [['id', 'ASC']],
+          transaction,
         });
 
         // Process foods
         for (const [idx, foodState] of collectedFoods.states.entries()) {
           const { id: foodId } = foods[idx];
 
+          const { customPromptAnswers } = foodState;
+
           // Collect food custom fields
           const foodCustomFieldInputs = collectCustomAnswers(
             'foodId',
             foodId,
-            foodState.customPromptAnswers,
+            customPromptAnswers,
             foodCustomQuestions
           );
 
-          if (foodState.type === 'free-text') {
-            logger.error(
-              `Submission: Free-text food record present in submission (${surveySubmissionId}), skipping...`
-            );
-            continue;
-          }
+          // Collect food composition fields & food composition nutrients
+          const { fields, nutrients } = collectFoodCompositionData(
+            foodId,
+            foodState,
+            foodRecordMap
+          );
 
-          await Promise.all([
-            SurveySubmissionFoodCustomField.bulkCreate(foodCustomFieldInputs, { transaction }),
-            // TODO: PSMs
-            // TODO: Nutrients
-            // TODO: Fields
-          ]);
+          // Store food custom fields, food composition fields, food composition nutrients, PSMs
+          await Promise.all(
+            [
+              SurveySubmissionFoodCustomField.bulkCreate(foodCustomFieldInputs, { transaction }),
+              fields.length ? SurveySubmissionField.bulkCreate(fields, { transaction }) : null,
+              nutrients.length
+                ? SurveySubmissionNutrient.bulkCreate(nutrients, { transaction })
+                : null,
+              // TODO: PSMs
+            ].map(Boolean)
+          );
         }
       }
 
@@ -391,9 +508,7 @@ const surveySubmissionService = ({
     });
   };
 
-  return {
-    submit,
-  };
+  return { submit };
 };
 
 export default surveySubmissionService;
