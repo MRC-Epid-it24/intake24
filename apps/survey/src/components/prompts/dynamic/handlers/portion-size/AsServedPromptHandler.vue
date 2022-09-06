@@ -1,11 +1,8 @@
 <template>
   <as-served-prompt
-    :as-served-set-id="parameters['serving-image-set']"
-    :continue-enabled="continueEnabled"
+    v-bind="{ continueEnabled, parameters, promptComponent, promptProps }"
     :food-name="foodName()"
     :initial-state="initialStateNotNull"
-    :prompt-component="promptComponent"
-    :prompt-props="promptProps"
     @continue="$emit('continue')"
     @update="onUpdate"
   ></as-served-prompt>

@@ -26,7 +26,7 @@
               <v-row>
                 <v-col>
                   <as-served-selector
-                    :as-served-set-id="asServedSetId"
+                    :as-served-set-id="parameters['serving-image-set']"
                     :initial-state="initialState.servingImage?.index"
                     @confirm="onServingConfirmed"
                     @update="onServingUpdate"
@@ -67,9 +67,8 @@
               </v-row>
               <v-row v-if="leftoverPromptAnswer">
                 <v-col>
-                  <!-- This currently is taking asServed data, not the leftover data -->
                   <as-served-selector
-                    :as-served-set-id="asServedSetId"
+                    :as-served-set-id="parameters['leftovers-image-set']"
                     :initial-state="initialState.leftoversImage?.index"
                     @confirm="onLeftoversConfirmed"
                     @update="onLeftoversUpdate"
@@ -104,6 +103,7 @@ import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { LocaleTranslation, SelectedAsServedImage } from '@intake24/common/types';
+import type { AsServedParameters } from '@intake24/common/types/http';
 import { basePromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import AsServedWeight from '@intake24/survey/components/elements/AsServedWeight.vue';
@@ -125,38 +125,33 @@ export interface AsServedPromptState {
 export default defineComponent({
   name: 'AsServedPrompt',
 
-  components: {
-    ValidInvalidIcon,
-    AsServedSelector,
-    AsServedWeight,
-  },
+  components: { AsServedSelector, AsServedWeight, ValidInvalidIcon },
 
   mixins: [BasePortion, localeContent],
 
   props: {
-    // Generic object 'props' used to store all props for each prompt
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
-    foodName: {
-      type: Object as PropType<LocaleTranslation>,
-      required: true,
-    },
-    asServedSetId: {
-      type: String,
-      required: true,
-    },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
     initialState: {
       type: Object as PropType<AsServedPromptState>,
       required: true,
     },
     continueEnabled: {
       type: Boolean,
+      required: true,
+    },
+    foodName: {
+      type: Object as PropType<LocaleTranslation>,
+      required: true,
+    },
+    parameters: {
+      type: Object as PropType<AsServedParameters>,
+      required: true,
+    },
+    promptComponent: {
+      type: String,
+      required: true,
+    },
+    promptProps: {
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
   },
@@ -174,7 +169,7 @@ export default defineComponent({
       servingCompleteStatus: this.initialState.servingImageSelected,
       leftoverCompleteStatus:
         this.initialState.leftoversConfirmed === false || this.initialState.leftoversImageSelected,
-      dataLoaded: false as boolean,
+      dataLoaded: false,
       finished: false,
     };
   },
@@ -228,7 +223,6 @@ export default defineComponent({
     },
     onServingUpdate(update: SelectedAsServedImage | null) {
       this.asServedData = update;
-      this.servingWeight = this.asServedData?.weight || 0;
       if (this.isValid()) this.clearErrors();
       this.emitUpdate();
     },
@@ -241,7 +235,6 @@ export default defineComponent({
 
     onLeftoversUpdate(update: SelectedAsServedImage | null) {
       this.leftoverData = update;
-      this.leftoversWeight = this.leftoverData?.weight || 0;
       if (this.isValid()) this.clearErrors();
       this.emitUpdate();
     },

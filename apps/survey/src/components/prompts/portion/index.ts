@@ -1,4 +1,3 @@
-import AsServedLeftoverPrompt from './AsServedLeftoverPrompt.vue';
 import AsServedPrompt from './AsServedPrompt.vue';
 import CerealPrompt from './CerealPrompt.vue';
 import DirectWeightPrompt from './DirectWeightPrompt.vue';
@@ -14,7 +13,6 @@ import StandardPortionPrompt from './StandardPortionPrompt.vue';
 export default {
   PortionSizeOptionPrompt,
   AsServedPrompt,
-  AsServedLeftoverPrompt,
   GuideImagePrompt,
   DrinkScalePrompt,
   StandardPortionPrompt,
