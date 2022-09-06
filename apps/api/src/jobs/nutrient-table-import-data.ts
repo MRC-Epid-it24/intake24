@@ -5,11 +5,13 @@ import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 
 import type { IoC } from '@intake24/api/ioc';
-import {
-  NutrientTable,
+import type {
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
+} from '@intake24/db';
+import {
+  NutrientTable,
   NutrientTableRecord,
   NutrientTableRecordField,
   NutrientTableRecordNutrient,
@@ -57,9 +59,9 @@ export default class NutrientTableImportData extends StreamLockJob<'NutrientTabl
 
     const nutrientTable = await NutrientTable.findByPk(this.params.nutrientTableId, {
       include: [
-        { model: NutrientTableCsvMapping, required: true },
-        { model: NutrientTableCsvMappingField, separate: true },
-        { model: NutrientTableCsvMappingNutrient, separate: true },
+        { association: 'csvMapping', required: true },
+        { association: 'csvMappingFields', separate: true },
+        { association: 'csvMappingNutrients', separate: true },
       ],
     });
 

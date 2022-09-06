@@ -199,7 +199,7 @@ const adminSurveyService = ({
     const [survey, user] = await Promise.all([
       Survey.findByPk(surveyId),
       User.scope('customFields').findOne({
-        include: [{ model: UserSurveyAlias, where: { userId, surveyId } }],
+        include: [{ association: 'aliases', where: { userId, surveyId } }],
       }),
     ]);
 
@@ -243,7 +243,7 @@ const adminSurveyService = ({
       Survey.findByPk(surveyId),
       User.scope('submissions').findOne({
         where: { id: userId },
-        include: [{ model: UserSurveyAlias, where: { surveyId } }],
+        include: [{ association: 'aliases', where: { surveyId } }],
       }),
     ]);
 

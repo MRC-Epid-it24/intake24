@@ -31,7 +31,7 @@ export async function getCategoryParentCategories(categoryCodes: string[]): Prom
 export async function getParentLocale(localeId: string): Promise<FoodsLocale | null> {
   const locale = await FoodsLocale.findOne({
     where: { id: localeId },
-    include: [{ model: FoodsLocale, as: 'parent' }],
+    include: [{ association: 'parent' }],
   });
 
   if (locale == null) throw new InvalidIdError(`Invalid locale ID: ${localeId}`);

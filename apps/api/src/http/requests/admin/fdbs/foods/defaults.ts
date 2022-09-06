@@ -4,7 +4,7 @@ import type { Schema } from 'express-validator';
 import type { FindOptions, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
-import { Food, FoodGroup, FoodLocal, Op } from '@intake24/db';
+import { FoodGroup, FoodLocal, Op } from '@intake24/db';
 
 const defaults: Schema = {
   name: {
@@ -36,7 +36,7 @@ const defaults: Schema = {
 
         const options: FindOptions<FoodLocal> = {
           where,
-          include: [{ model: Food, attributes: [], required: true }],
+          include: [{ association: 'main', attributes: [], required: true }],
         };
 
         if (!(await unique({ model: FoodLocal, condition: { field: 'foodCode', value }, options })))

@@ -30,7 +30,7 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
     const users = await User.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'email', 'simpleName'],
-      include: [{ model: Role }],
+      include: [{ association: 'roles' }],
       order: [['name', 'ASC']],
     });
 

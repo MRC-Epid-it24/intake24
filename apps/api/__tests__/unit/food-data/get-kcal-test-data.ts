@@ -7,8 +7,6 @@ import {
   FoodsNutrientType,
   FoodsNutrientUnit,
   NutrientTable,
-  NutrientTableRecord,
-  NutrientTableRecordNutrient,
 } from '@intake24/db';
 
 export default async (foodDatabase: SequelizeTS) => {
@@ -45,8 +43,8 @@ export default async (foodDatabase: SequelizeTS) => {
     {
       include: [
         {
-          model: NutrientTableRecord,
-          include: [NutrientTableRecordNutrient],
+          association: 'records',
+          include: [{ association: 'nutrients' }],
         },
       ],
     }

@@ -32,10 +32,10 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
   const getTable = async (nutrientTableId: string): Promise<NutrientTableEntry> => {
     const nutrientTable = await NutrientTable.findByPk(nutrientTableId, {
       include: [
-        { model: NutrientTableCsvMapping, required: true },
-        { model: NutrientTableCsvMappingField, separate: true, order: [['columnOffset', 'ASC']] },
+        { association: 'csvMapping', required: true },
+        { association: 'csvMappingFields', separate: true, order: [['columnOffset', 'ASC']] },
         {
-          model: NutrientTableCsvMappingNutrient,
+          association: 'csvMappingNutrients',
           separate: true,
           order: [['columnOffset', 'ASC']],
         },
@@ -196,7 +196,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
     const { description } = input;
 
     const nutrientTable = await NutrientTable.findByPk(nutrientTableId, {
-      include: [{ model: NutrientTableCsvMapping, required: true }],
+      include: [{ association: 'csvMapping', required: true }],
     });
     if (!nutrientTable || !nutrientTable.csvMapping) throw new NotFoundError();
 

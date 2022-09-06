@@ -6,23 +6,13 @@ import type { CategoryLocalAttributes } from '@intake24/common/types/models';
 import type { FindOptions, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { categoryResponse } from '@intake24/api/http/responses/admin';
-import {
-  Category,
-  CategoryAttribute,
-  CategoryLocal,
-  CategoryPortionSizeMethod,
-  CategoryPortionSizeMethodParameter,
-  Food,
-  FoodLocal,
-  Op,
-  QueryTypes,
-} from '@intake24/db';
+import { Category, CategoryLocal, FoodLocal, Op, QueryTypes } from '@intake24/db';
 
 const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   const browseCategories = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<CategoryLocalAttributes> = {
       where: { localeId },
-      include: [{ model: Category, required: true }],
+      include: [{ association: 'main', required: true }],
     };
     const { search } = query;
 
@@ -87,7 +77,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
         where: localeId ? { localeId } : {},
         include: [
           {
-            model: Category,
+            association: 'main',
             attributes: ['name', 'isHidden'],
             required: true,
             include: [
@@ -105,7 +95,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
         where: { localeId },
         include: [
           {
-            model: Food,
+            association: 'main',
             attributes: ['name'],
             required: true,
             include: [
@@ -128,7 +118,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
       },
       include: [
         {
-          model: Food,
+          association: 'main',
           attributes: ['name'],
           required: true,
           include: [
@@ -150,10 +140,10 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
       where: { ...where, id: categoryId },
       include: [
         {
-          model: Category,
+          association: 'main',
           required: true,
           include: [
-            { model: CategoryAttribute },
+            { association: 'attributes' },
             {
               association: 'parentCategories',
               through: { attributes: [] },
@@ -162,9 +152,9 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
           ],
         },
         {
-          model: CategoryPortionSizeMethod,
+          association: 'portionSizeMethods',
           separate: true,
-          include: [{ model: CategoryPortionSizeMethodParameter, separate: true }],
+          include: [{ association: 'parameters', separate: true }],
         },
       ],
     });

@@ -17,11 +17,9 @@ import type {
 import type { User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
-  FeedbackScheme,
   FoodGroup,
   FoodLocal,
   Survey,
-  SurveyScheme,
   SurveySubmission,
   SurveySubmissionCustomField,
   SurveySubmissionField,
@@ -292,7 +290,7 @@ const surveySubmissionService = ({
   ): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.findOne({
       where: { slug },
-      include: [{ model: SurveyScheme, required: true }, { model: FeedbackScheme }],
+      include: [{ association: 'surveyScheme', required: true }, { association: 'feedbackScheme' }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
 

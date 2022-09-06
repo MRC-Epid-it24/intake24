@@ -5,7 +5,7 @@ import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/
 import type { FindOptions } from '@intake24/db';
 import type { LocaleMessageObject } from '@intake24/i18n';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { Language, LanguageTranslation } from '@intake24/db';
+import { Language } from '@intake24/db';
 
 const userI18nController = () => {
   const browse = async (req: Request, res: Response<I18nLanguageListEntry[]>): Promise<void> => {
@@ -25,7 +25,7 @@ const userI18nController = () => {
 
     const options: FindOptions = {
       include: [
-        { model: LanguageTranslation, where: { application: [app, 'shared'] }, required: false },
+        { association: 'translations', where: { application: [app, 'shared'] }, required: false },
       ],
     };
 

@@ -2,7 +2,7 @@ import type { Job } from 'bullmq';
 import nunjucks from 'nunjucks';
 
 import type { IoC } from '@intake24/api/ioc';
-import { Survey, UserSurveyAlias } from '@intake24/db';
+import { UserSurveyAlias } from '@intake24/db';
 
 import BaseJob from './job';
 
@@ -62,7 +62,7 @@ export default class SurveyRequestHelp extends BaseJob<'SurveyRequestHelp'> {
 
     const alias = await UserSurveyAlias.findOne({
       where: { userId },
-      include: [{ model: Survey, where: { slug: surveySlug }, required: true }],
+      include: [{ association: 'survey', where: { slug: surveySlug }, required: true }],
     });
 
     if (!alias || !alias.survey) {

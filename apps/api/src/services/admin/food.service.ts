@@ -5,23 +5,13 @@ import type { FoodInput } from '@intake24/common/types/http/admin';
 import type { FoodLocalAttributes } from '@intake24/common/types/models';
 import type { FindOptions, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import {
-  Brand,
-  Food,
-  FoodAttribute,
-  FoodGroup,
-  FoodLocal,
-  FoodPortionSizeMethod,
-  FoodPortionSizeMethodParameter,
-  NutrientTableRecord,
-  Op,
-} from '@intake24/db';
+import { Food, FoodLocal, Op } from '@intake24/db';
 
 const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<FoodLocalAttributes> = {
       where: { localeId },
-      include: [{ model: Food, required: true }],
+      include: [{ association: 'main', required: true }],
     };
     const { search } = query;
 
@@ -46,12 +36,12 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
       where: { ...where, id: foodId },
       include: [
         {
-          model: Food,
+          association: 'main',
           required: true,
           include: [
-            { model: FoodAttribute },
-            { model: FoodGroup },
-            { model: Brand, where, required: false, separate: true },
+            { association: 'attributes' },
+            { association: 'foodGroup' },
+            { association: 'brands', where, required: false, separate: true },
             {
               association: 'parentCategories',
               through: { attributes: [] },
@@ -59,11 +49,11 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
             },
           ],
         },
-        { model: NutrientTableRecord, through: { attributes: [] } },
+        { association: 'nutrientRecords', through: { attributes: [] } },
         {
-          model: FoodPortionSizeMethod,
+          association: 'portionSizeMethods',
           separate: true,
-          include: [{ model: FoodPortionSizeMethodParameter, separate: true }],
+          include: [{ association: 'parameters', separate: true }],
         },
       ],
     });

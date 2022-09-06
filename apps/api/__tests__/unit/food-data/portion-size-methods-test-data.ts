@@ -38,8 +38,6 @@ import {
   FoodCategory,
   FoodGroup,
   FoodLocal,
-  FoodPortionSizeMethod,
-  FoodPortionSizeMethodParameter,
 } from '@intake24/db';
 
 import createLocales from './test-data-locales';
@@ -244,7 +242,7 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
       },
       {
         transaction: t,
-        include: [{ model: FoodPortionSizeMethod, include: [FoodPortionSizeMethodParameter] }],
+        include: [{ association: 'portionSizeMethods', include: [{ association: 'parameters' }] }],
       }
     )
   );
@@ -339,7 +337,7 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
       },
       {
         transaction: t,
-        include: [{ model: FoodPortionSizeMethod, include: [FoodPortionSizeMethodParameter] }],
+        include: [{ association: 'portionSizeMethods', include: [{ association: 'parameters' }] }],
       }
     )
   );

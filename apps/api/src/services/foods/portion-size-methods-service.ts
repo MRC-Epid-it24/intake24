@@ -4,14 +4,7 @@ import {
   getFoodParentCategories,
   getParentLocale,
 } from '@intake24/api/services/foods/common';
-import {
-  CategoryLocal,
-  CategoryPortionSizeMethod,
-  CategoryPortionSizeMethodParameter,
-  FoodLocal,
-  FoodPortionSizeMethod,
-  FoodPortionSizeMethodParameter,
-} from '@intake24/db';
+import { CategoryPortionSizeMethod, FoodLocal } from '@intake24/db';
 
 import {
   toUserCategoryPortionSizeMethod,
@@ -34,15 +27,8 @@ const portionSizeMethodsService = () => {
       attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
       order: [['id', 'ASC']],
       include: [
-        {
-          model: CategoryLocal,
-          where: { localeId, categoryCode },
-        },
-        {
-          model: CategoryPortionSizeMethodParameter,
-          as: 'parameters',
-          attributes: ['name', 'value'],
-        },
+        { association: 'categoryLocal', where: { localeId, categoryCode } },
+        { association: 'parameters', attributes: ['name', 'value'] },
       ],
     });
 
@@ -82,19 +68,12 @@ const portionSizeMethodsService = () => {
       where: { localeId, foodCode },
       include: [
         {
-          model: FoodPortionSizeMethod,
-          as: 'portionSizeMethods',
+          association: 'portionSizeMethods',
           attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
-          include: [
-            {
-              model: FoodPortionSizeMethodParameter,
-              as: 'parameters',
-              attributes: ['name', 'value'],
-            },
-          ],
+          include: [{ association: 'parameters', attributes: ['name', 'value'] }],
         },
       ],
-      order: [[{ model: FoodPortionSizeMethod, as: 'portionSizeMethods' }, 'id', 'ASC']],
+      order: [['portionSizeMethods', 'id', 'ASC']],
     });
 
     return food;

@@ -17,10 +17,8 @@ import {
   Op,
   submissionScope,
   Survey,
-  SurveyScheme,
   SurveySubmission,
   User,
-  UserCustomField,
   UserSurveyAlias,
   UserSurveySession,
 } from '@intake24/db';
@@ -248,8 +246,8 @@ const surveyService = ({
 
     const user = await User.findByPk(userId, {
       include: [
-        { model: UserSurveyAlias, where: { surveyId }, required: false },
-        { model: UserCustomField, where: { name: 'redirect url' }, required: false },
+        { association: 'aliases', where: { surveyId }, required: false },
+        { association: 'customFields', where: { name: 'redirect url' }, required: false },
       ],
     });
 
@@ -290,7 +288,7 @@ const surveyService = ({
   ): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.findOne({
       where: { slug },
-      include: [{ model: SurveyScheme, required: true }],
+      include: [{ association: 'surveyScheme', required: true }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
 

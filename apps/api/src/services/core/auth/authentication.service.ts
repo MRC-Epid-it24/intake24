@@ -8,10 +8,11 @@ import type {
   EmailLoginRequest,
   TokenLoginRequest,
 } from '@intake24/common/types/http';
+import type { UserPassword } from '@intake24/db';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import { surveyRespondent } from '@intake24/common/security';
 import { supportedAlgorithms } from '@intake24/common-backend/util/passwords';
-import { Op, Permission, Survey, User, UserPassword, UserSurveyAlias } from '@intake24/db';
+import { Op, Survey, User } from '@intake24/db';
 
 import type { Tokens } from '.';
 import type { MFARequest } from './mfa';
@@ -137,7 +138,7 @@ const authenticationService = ({
     const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
     const user = await User.findOne({
       where: { email: { [op]: email } },
-      include: [{ model: UserPassword, required: true }],
+      include: [{ association: 'password', required: true }],
     });
 
     if (securityConfig.mfa.enabled && user?.multiFactorAuthentication)
@@ -161,7 +162,7 @@ const authenticationService = ({
     const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
     const user = await User.findOne({
       where: { email: { [op]: email } },
-      include: [{ model: UserPassword, required: true }],
+      include: [{ association: 'password', required: true }],
     });
 
     const subject: Subject = { provider: 'email', providerKey: email };
@@ -184,9 +185,9 @@ const authenticationService = ({
 
     const user = await User.findOne({
       include: [
-        { model: Permission, where: { name: surveyRespondent(slug) } },
-        { model: UserPassword },
-        { model: UserSurveyAlias, where: { username, surveyId: survey.id } },
+        { association: 'permissions', where: { name: surveyRespondent(slug) } },
+        { association: 'password' },
+        { association: 'aliases', where: { username, surveyId: survey.id } },
       ],
     });
 
@@ -205,8 +206,8 @@ const authenticationService = ({
   const tokenLogin = async ({ token }: TokenLoginRequest, meta: LoginMeta): Promise<Tokens> => {
     const user = await User.findOne({
       include: [
-        { model: UserSurveyAlias, where: { urlAuthToken: token } },
-        { model: UserPassword },
+        { association: 'aliases', where: { urlAuthToken: token } },
+        { association: 'password' },
       ],
     });
 

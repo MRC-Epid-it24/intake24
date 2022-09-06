@@ -4,16 +4,7 @@ import type {
 } from '@intake24/common/types/http/foods/user-food-data';
 import { getParentLocale } from '@intake24/api/services/foods/common';
 import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
-import {
-  AssociatedFood,
-  Brand,
-  Food,
-  FoodLocal,
-  FoodLocalList,
-  FoodsLocale,
-  NutrientTableRecord,
-  NutrientTableRecordNutrient,
-} from '@intake24/db';
+import { AssociatedFood, Brand, Food, FoodLocal, FoodLocalList, FoodsLocale } from '@intake24/db';
 
 import InheritableAttributesImpl from './inheritable-attributes-service';
 import PortionSizeMethodsImpl from './portion-size-methods-service';
@@ -31,13 +22,13 @@ const foodDataService = () => {
       attributes: [],
       include: [
         {
-          model: NutrientTableRecord,
+          association: 'nutrientRecords',
           attributes: ['id'], // these attributes should be empty, but sequelize crashes if that is the case
           through: { attributes: [] },
           duplicating: true,
           include: [
             {
-              model: NutrientTableRecordNutrient,
+              association: 'nutrients',
               where: { nutrientTypeId: KCAL_NUTRIENT_TYPE_ID },
               attributes: ['unitsPer100g'],
             },
@@ -121,7 +112,7 @@ const foodDataService = () => {
 
     const locale = await FoodsLocale.findOne({
       where: { id: localeId },
-      include: [{ model: FoodsLocale, as: 'parent' }],
+      include: [{ association: 'parent' }],
     });
 
     if (!locale) throw new InvalidIdError(`Unknown locale ID: ${localeId}`);

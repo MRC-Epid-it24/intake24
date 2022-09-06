@@ -1,11 +1,6 @@
 import type { NutrientTableInput } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import {
-  NutrientTable,
-  NutrientTableCsvMapping,
-  NutrientTableCsvMappingField,
-  NutrientTableCsvMappingNutrient,
-} from '@intake24/db';
+import { NutrientTable } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/nutrient-tables';
@@ -22,9 +17,9 @@ export default () => {
 
     nutrientTable = await NutrientTable.create(input, {
       include: [
-        { model: NutrientTableCsvMapping },
-        { model: NutrientTableCsvMappingField },
-        { model: NutrientTableCsvMappingNutrient },
+        { association: 'csvMapping' },
+        { association: 'csvMappingFields' },
+        { association: 'csvMappingNutrients' },
       ],
     });
 

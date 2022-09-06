@@ -7,10 +7,10 @@ import type {
   SurveyRespondentEntry,
   SurveyRespondentsResponse,
 } from '@intake24/common/types/http/admin';
-import type { PaginateQuery } from '@intake24/db';
+import type { PaginateQuery, User } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { respondentResponse } from '@intake24/api/http/responses/admin';
-import { User, UserCustomField, UserSurveyAlias } from '@intake24/db';
+import { UserSurveyAlias } from '@intake24/db';
 
 import { getAndCheckSurveyAccess } from './survey.controller';
 
@@ -33,7 +33,7 @@ const adminSurveyRespondentController = ({
 
     const respondent = await UserSurveyAlias.findOne({
       where: { userId, surveyId },
-      include: [{ model: User, include: [{ model: UserCustomField }] }],
+      include: [{ association: 'user', include: [{ association: 'customFields' }] }],
     });
     if (!respondent) throw new NotFoundError();
 
@@ -81,7 +81,7 @@ const adminSurveyRespondentController = ({
     );
 
     await respondent.reload({
-      include: [{ model: User, include: [{ model: UserCustomField }] }],
+      include: [{ association: 'user', include: [{ association: 'customFields' }] }],
     });
 
     const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);
@@ -117,7 +117,7 @@ const adminSurveyRespondentController = ({
     );
 
     await respondent.reload({
-      include: [{ model: User, include: [{ model: UserCustomField }] }],
+      include: [{ association: 'user', include: [{ association: 'customFields' }] }],
     });
 
     const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);

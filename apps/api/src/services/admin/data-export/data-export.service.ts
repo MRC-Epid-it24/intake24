@@ -6,27 +6,9 @@ import { Readable } from 'stream';
 import type { IoC } from '@intake24/api/ioc';
 import type { ExportSection } from '@intake24/common/schemes';
 import type { JobParams } from '@intake24/common/types';
-import type { Job, Order, StreamFindOptions, WhereOptions } from '@intake24/db';
+import type { IncludeOptions, Job, Order, StreamFindOptions, WhereOptions } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import {
-  Op,
-  Survey,
-  SurveyScheme,
-  SurveySubmission,
-  SurveySubmissionCustomField,
-  SurveySubmissionField,
-  SurveySubmissionFood,
-  SurveySubmissionFoodCustomField,
-  SurveySubmissionMeal,
-  SurveySubmissionMealCustomField,
-  SurveySubmissionMissingFood,
-  SurveySubmissionNutrient,
-  SurveySubmissionPortionSizeField,
-  SystemNutrientType,
-  User,
-  UserCustomField,
-  UserSurveyAlias,
-} from '@intake24/db';
+import { Op, Survey, SurveySubmissionFood, SurveySubmissionMissingFood } from '@intake24/db';
 
 import type { ExportFieldInfo } from './data-export-mapper';
 import { EMPTY } from './data-export-fields';
@@ -68,28 +50,28 @@ const dataExportService = ({
     if (startDate) surveySubmissionConditions.startTime = { [Op.gte]: startDate };
     if (endDate) surveySubmissionConditions.endTime = { [Op.lte]: endDate };
 
-    const include = {
-      model: SurveySubmissionMeal,
+    const include: IncludeOptions = {
+      association: 'meal',
       required: true,
       include: [
         {
-          model: SurveySubmission,
+          association: 'submission',
           required: true,
           where: surveySubmissionConditions,
           include: [
-            { model: Survey, required: true },
-            { model: SurveySubmissionCustomField, separate: true },
+            { association: 'survey', required: true },
+            { association: 'customFields', separate: true },
             {
-              model: User,
+              association: 'user',
               required: true,
               include: [
-                { model: UserSurveyAlias, where: { surveyId }, separate: true },
-                { model: UserCustomField, separate: true },
+                { association: 'aliases', where: { surveyId }, separate: true },
+                { association: 'customFields', separate: true },
               ],
             },
           ],
         },
-        { model: SurveySubmissionMealCustomField, separate: true },
+        { association: 'customFields', separate: true },
       ],
     };
     const order: Order = [['id', 'ASC']];
@@ -97,14 +79,14 @@ const dataExportService = ({
     const foods = {
       include: [
         include,
-        { model: SurveySubmissionFoodCustomField, separate: true },
-        { model: SurveySubmissionField, separate: true },
+        { association: 'customFields', separate: true },
+        { association: 'fields', separate: true },
         {
-          model: SurveySubmissionNutrient,
+          association: 'nutrients',
           separate: true,
-          include: [{ model: SystemNutrientType, required: true }],
+          include: [{ association: 'nutrientType', required: true }],
         },
-        { model: SurveySubmissionPortionSizeField, separate: true },
+        { association: 'portionSizes', separate: true },
       ],
       order,
     };
@@ -209,7 +191,7 @@ const dataExportService = ({
     const { surveyId } = input;
 
     const survey = await Survey.findByPk(surveyId, {
-      include: [{ model: SurveyScheme, required: true }],
+      include: [{ association: 'surveyScheme', required: true }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
 

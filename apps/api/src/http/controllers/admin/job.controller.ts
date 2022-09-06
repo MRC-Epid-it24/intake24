@@ -8,7 +8,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type { JobEntry, JobsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { Job, Op, User } from '@intake24/db';
+import { Job, Op } from '@intake24/db';
 
 const jobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
   const browse = async (
@@ -19,7 +19,7 @@ const jobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['type'],
       order: [['startedAt', 'DESC']],
-      include: [{ model: User, attributes: ['name', 'email'], required: false }],
+      include: [{ association: 'user', attributes: ['name', 'email'], required: false }],
     });
 
     res.json(jobs);
@@ -29,7 +29,7 @@ const jobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
     const { jobId } = req.params;
 
     const job = await Job.findByPk(jobId, {
-      include: [{ model: User, attributes: ['name', 'email'], required: false }],
+      include: [{ association: 'user', attributes: ['name', 'email'], required: false }],
     });
     if (!job) throw new NotFoundError();
 

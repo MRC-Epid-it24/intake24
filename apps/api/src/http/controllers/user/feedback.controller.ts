@@ -3,7 +3,7 @@ import type { Request, Response } from 'express';
 import type { IoC } from '@intake24/api/ioc';
 import type { User } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { FeedbackScheme, Survey } from '@intake24/db';
+import { Survey } from '@intake24/db';
 
 const userFeedbackController = ({
   feedbackService,
@@ -16,7 +16,10 @@ const userFeedbackController = ({
     const { survey: slug, submissions } = req.query;
     const { id: userId } = req.user as User;
 
-    const survey = await Survey.findOne({ where: { slug }, include: [{ model: FeedbackScheme }] });
+    const survey = await Survey.findOne({
+      where: { slug },
+      include: [{ association: 'feedbackScheme' }],
+    });
     if (!survey) throw new NotFoundError();
 
     if (!survey.feedbackScheme?.outputs.includes('download')) throw new ForbiddenError();
@@ -39,7 +42,10 @@ const userFeedbackController = ({
     } = req;
     const { id: userId } = req.user as User;
 
-    const survey = await Survey.findOne({ where: { slug }, include: [{ model: FeedbackScheme }] });
+    const survey = await Survey.findOne({
+      where: { slug },
+      include: [{ association: 'feedbackScheme' }],
+    });
     if (!survey) throw new NotFoundError();
 
     if (!survey.feedbackScheme?.outputs.includes('email')) throw new ForbiddenError();

@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapGetters, mapState } from 'pinia';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';

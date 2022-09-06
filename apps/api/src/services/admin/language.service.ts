@@ -161,7 +161,7 @@ const languageService = ({
     const language = await Language.findByPk(languageId, {
       include: [
         {
-          model: LanguageTranslation,
+          association: 'translations',
           order: [
             ['application', 'ASC'],
             ['section', 'ASC'],
@@ -213,7 +213,7 @@ const languageService = ({
     const where: WhereOptions<LanguageTranslationAttributes> = {};
     if (id) where.id = id;
 
-    const languages = await Language.findAll({ where, include: [{ model: LanguageTranslation }] });
+    const languages = await Language.findAll({ where, include: [{ association: 'translations' }] });
     if (!languages.length) return;
 
     for (const language of languages) {

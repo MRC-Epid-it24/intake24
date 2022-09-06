@@ -12,7 +12,7 @@ import type { User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { flattenSchemeWithSection, isMealSection } from '@intake24/common/schemes';
 import { merge } from '@intake24/common/util';
-import { FeedbackScheme, Survey, SurveyScheme } from '@intake24/db';
+import { Survey } from '@intake24/db';
 
 const surveyRespondentController = ({
   surveyService,
@@ -26,7 +26,7 @@ const surveyRespondentController = ({
 
     const survey = await Survey.findOne({
       where: { slug },
-      include: [{ model: SurveyScheme }, { model: FeedbackScheme }],
+      include: [{ association: 'surveyScheme' }, { association: 'feedbackScheme' }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
 

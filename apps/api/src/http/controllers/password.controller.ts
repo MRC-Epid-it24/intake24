@@ -26,7 +26,7 @@ const passwordController = ({
 
     const passwordReset = await UserPasswordReset.findOne({
       where: { token, createdAt: { [Op.gt]: expiredAt } },
-      include: [{ model: User, where: { email: { [op]: email } } }],
+      include: [{ association: 'user', where: { email: { [op]: email } } }],
     });
 
     if (!passwordReset)

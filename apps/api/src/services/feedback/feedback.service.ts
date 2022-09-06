@@ -8,21 +8,14 @@ import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/mod
 import { NotFoundError } from '@intake24/api/http/errors';
 import { getFrontEndUrl } from '@intake24/api/util';
 import { weightTargetsData } from '@intake24/common/feedback';
-import {
-  FoodsNutrientType,
-  FoodsNutrientUnit,
-  NutrientTypeInKcal,
-  PhysicalActivityLevel,
-  Survey,
-  UserSurveyAlias,
-} from '@intake24/db';
+import { FoodsNutrientType, PhysicalActivityLevel, UserSurveyAlias } from '@intake24/db';
 
 import FeedbackPdfGenerator from './feedback-pdf-generator';
 
 const feedbackService = ({ appConfig, fsConfig }: Pick<IoC, 'appConfig' | 'fsConfig'>) => {
   const getNutrientTypes = async (): Promise<NutrientType[]> => {
     const nutrients = await FoodsNutrientType.findAll({
-      include: [{ model: FoodsNutrientUnit }, { model: NutrientTypeInKcal }],
+      include: [{ association: 'unit' }, { association: 'inKcal' }],
       order: [['id', 'ASC']],
     });
 
@@ -42,7 +35,7 @@ const feedbackService = ({ appConfig, fsConfig }: Pick<IoC, 'appConfig' | 'fsCon
   const getFeedbackLinks = async (surveyId: string, userId: string, submissions: string[] = []) => {
     const alias = await UserSurveyAlias.findOne({
       where: { surveyId, userId },
-      include: [{ model: Survey, attributes: ['id', 'slug'] }],
+      include: [{ association: 'survey', attributes: ['id', 'slug'] }],
     });
     if (!alias || !alias.survey) throw new NotFoundError();
 

@@ -43,7 +43,7 @@ const roleController = ({
     await role.$set('permissions', permissions);
 
     await Promise.all([
-      role.reload({ include: [{ model: Permission }] }),
+      role.reload({ include: [{ association: 'permissions' }] }),
       adminUserService.flushRoleACLCache(role.id),
     ]);
 
@@ -76,7 +76,7 @@ const roleController = ({
     );
 
     await Promise.all([
-      role.reload({ include: [{ model: Permission }] }),
+      role.reload({ include: [{ association: 'permissions' }] }),
       adminUserService.flushRoleACLCache(role.id),
     ]);
 

@@ -67,7 +67,9 @@ const imageMapService = ({
   };
 
   const destroy = async (imageMapId: string): Promise<void> => {
-    const imageMap = await ImageMap.findByPk(imageMapId, { include: [{ model: GuideImage }] });
+    const imageMap = await ImageMap.findByPk(imageMapId, {
+      include: [{ association: 'guideImages' }],
+    });
     if (!imageMap || !imageMap.guideImages) throw new NotFoundError();
 
     if (imageMap.guideImages.length)

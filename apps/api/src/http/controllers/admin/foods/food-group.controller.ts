@@ -4,7 +4,7 @@ import { pick } from 'lodash';
 import type { FoodGroupEntry, FoodGroupsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { Food, FoodGroup } from '@intake24/db';
+import { FoodGroup } from '@intake24/db';
 
 const adminFoodGroupController = () => {
   const entry = async (req: Request, res: Response<FoodGroupEntry>): Promise<void> => {
@@ -70,7 +70,9 @@ const adminFoodGroupController = () => {
   ): Promise<void> => {
     const { foodGroupId } = req.params;
 
-    const foodGroup = await FoodGroup.findByPk(foodGroupId, { include: [{ model: Food }] });
+    const foodGroup = await FoodGroup.findByPk(foodGroupId, {
+      include: [{ association: 'foods' }],
+    });
     if (!foodGroup) throw new NotFoundError();
 
     if (!foodGroup.foods || foodGroup.foods.length)

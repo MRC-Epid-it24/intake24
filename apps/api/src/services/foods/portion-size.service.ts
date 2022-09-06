@@ -1,14 +1,6 @@
 import type { Includeable } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import {
-  AsServedImage,
-  AsServedSet,
-  DrinkwareScale,
-  DrinkwareSet,
-  DrinkwareVolumeSample,
-  GuideImage,
-  ImageMap,
-} from '@intake24/db';
+import { AsServedImage, AsServedSet, DrinkwareSet, GuideImage, ImageMap } from '@intake24/db';
 
 const portionSizeService = () => {
   /**

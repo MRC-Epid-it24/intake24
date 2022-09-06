@@ -1,13 +1,6 @@
 import type { CategoryContents, CategoryHeader } from '@intake24/common/types/http';
 import { NotFoundError } from '@intake24/api/http/errors';
-import {
-  Category,
-  CategoryLocal,
-  Food,
-  FoodCategory,
-  FoodLocal,
-  FoodsLocale as Locale,
-} from '@intake24/db';
+import { Category, FoodCategory, FoodsLocale as Locale } from '@intake24/db';
 
 const categoryContentsService = () => {
   function filterUndefined(
@@ -47,14 +40,12 @@ const categoryContentsService = () => {
         attributes: ['code'],
         include: [
           {
-            model: CategoryLocal,
-            as: 'locals',
+            association: 'locals',
             where: { localeId },
             required: false,
           },
           {
-            model: CategoryLocal,
-            as: 'prototypeLocals',
+            association: 'prototypeLocals',
             where: { localeId: prototypeLocaleId },
             required: false,
           },
@@ -100,20 +91,13 @@ const categoryContentsService = () => {
         attributes: ['code'],
         include: [
           {
-            model: Category,
-            as: 'subCategories',
+            association: 'subCategories',
             required: true,
             attributes: ['code'],
             include: [
+              { association: 'locals', where: { localeId }, required: false },
               {
-                model: CategoryLocal,
-                as: 'locals',
-                where: { localeId },
-                required: false,
-              },
-              {
-                model: CategoryLocal,
-                as: 'prototypeLocals',
+                association: 'prototypeLocals',
                 where: { localeId: prototypeLocaleId },
                 required: false,
               },
@@ -126,24 +110,22 @@ const categoryContentsService = () => {
         where: { categoryCode },
         include: [
           {
-            model: Food,
+            association: 'food',
             required: true,
             include: [
               {
-                model: Locale,
+                association: 'locales',
                 attributes: [],
                 where: { id: localeId },
                 required: true,
               },
               {
-                model: FoodLocal,
-                as: 'locals',
+                association: 'locals',
                 where: { localeId },
                 required: false,
               },
               {
-                model: FoodLocal,
-                as: 'prototypeLocals',
+                association: 'prototypeLocals',
                 where: { localeId: prototypeLocaleId },
                 required: false,
               },
