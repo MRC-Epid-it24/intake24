@@ -174,21 +174,21 @@ const dataExportFields = () => {
   const food = async (): Promise<ExportField[]> => [
     { id: 'foodId', label: 'Food ID', value: 'id' },
     { id: 'code', label: 'Food code', value: 'code' },
-    { id: 'englishDescription', label: 'Description (en)', value: 'englishDescription' },
-    { id: 'localDescription', label: 'Description (local)', value: 'localDescription' },
+    { id: 'englishName', label: 'Name (en)', value: 'englishName' },
+    { id: 'localName', label: 'Name (local)', value: 'localName' },
     { id: 'readyMeal', label: 'Ready meal', value: 'readyMeal' },
     { id: 'searchTerm', label: 'Search term', value: 'searchTerm' },
     { id: 'reasonableAmount', label: 'Food code', value: 'reasonableAmount' },
     { id: 'foodGroupId', label: 'Food group code', value: 'foodGroupId' },
     {
-      id: 'foodGroupEnglishDescription',
+      id: 'foodGroupEnglishName',
       label: 'Food group (en)',
-      value: 'foodGroupEnglishDescription',
+      value: 'foodGroupEnglishName',
     },
     {
-      id: 'foodGroupLocalDescription',
+      id: 'foodGroupLocalName',
       label: 'Food group (local)',
-      value: 'foodGroupLocalDescription',
+      value: 'foodGroupLocalName',
     },
     { id: 'brand', label: 'Brand', value: 'brand' },
     { id: 'nutrientTableId', label: 'Nutrient table name', value: 'nutrientTableId' },
@@ -197,7 +197,7 @@ const dataExportFields = () => {
     /*
      * Missing food fields
      * - this is actually different record / table
-     *
+     * - TODO: overlapping fields will populate both, e.g. ID
      */
     { id: 'missingId', label: 'Missing ID', value: 'id' },
     { id: 'missingName', label: 'Missing name', value: 'name' },
