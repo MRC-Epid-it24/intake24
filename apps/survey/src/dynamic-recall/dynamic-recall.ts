@@ -145,8 +145,8 @@ export default class DynamicRecall {
         ...surveyInitialState(),
         schemeId: this.surveyScheme.id,
         startTime: new Date(),
-        meals: this.surveyScheme.meals.map((meal) => ({
-          id: this.store.getNextMealId(),
+        meals: this.surveyScheme.meals.map((meal, index) => ({
+          id: index,
           name: meal.name,
           defaultTime: parseMealTime(meal.time),
           time: undefined,
@@ -154,6 +154,7 @@ export default class DynamicRecall {
           customPromptAnswers: {},
           foods: [],
         })),
+        nextMealId: this.surveyScheme.meals.length++,
       };
 
       await this.store.setState(initialState);
