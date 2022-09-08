@@ -129,7 +129,7 @@ export default defineComponent({
   methods: {
     optionLabel(unit: string) {
       return this.$t('portion.standardPortion.optionLabel', {
-        unit: this.$t(`portion.standardUnits.${unit}_estimate_in`),
+        unit: this.$t(`standard-units.${unit}_estimate_in`),
       });
     },
     onSelectMethod(unit: number, event: number) {

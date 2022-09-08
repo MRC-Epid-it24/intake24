@@ -1,12 +1,12 @@
 <template>
   <associated-foods-prompt
     v-bind="{
+      continueEnabled,
       localeId,
-      promptProps,
       promptComponent,
+      promptProps,
       food: encodedSelectedFood(),
     }"
-    :continue-enabled="continueEnabled"
     :initial-state="initialStateNotNull"
     @continue="$emit('continue')"
     @update="onUpdate"

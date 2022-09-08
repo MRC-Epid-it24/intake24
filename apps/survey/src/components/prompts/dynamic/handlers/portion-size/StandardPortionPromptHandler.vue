@@ -1,7 +1,7 @@
 <template>
   <standard-portion-prompt
-    v-bind="{ foodName, promptProps, standardUnits }"
-    :prompt-component="promptComponent"
+    v-bind="{ promptComponent, promptProps, standardUnits }"
+    :food-name="foodName()"
     @standard-portion-selected="onAnswer"
     @tempChanging="onTempChange"
   >
@@ -45,19 +45,19 @@ export default defineComponent({
 
   computed: {
     standardUnits(): StandardPortionUnit[] {
-      if (this.selectedPortionSize.method !== 'standard-portion')
+      const { method, parameters } = this.selectedPortionSize();
+      if (method !== 'standard-portion')
         throw new Error('Selected portion size method must be "standard-portion"');
 
       const units: StandardPortionUnit[] = [];
 
-      const unitsCount = parseInt(this.selectedPortionSize.parameters['units-count'], 10);
+      const unitsCount = parseInt(parameters['units-count'], 10);
 
       for (let i = 0; i < unitsCount; ++i) {
         units.push({
-          name: this.selectedPortionSize.parameters[`unit${i}-name`],
-          weight: parseFloat(this.selectedPortionSize.parameters[`unit${i}-weight`]),
-          omitFoodDescription:
-            this.selectedPortionSize.parameters[`unit${i}-omit-food-description`] === 'true',
+          name: parameters[`unit${i}-name`],
+          weight: parseFloat(parameters[`unit${i}-weight`]),
+          omitFoodDescription: parameters[`unit${i}-omit-food-description`] === 'true',
         });
       }
 
@@ -73,18 +73,11 @@ export default defineComponent({
     },
 
     onAnswer(data: StandardPortionData) {
-      const { conversionFactor } = this.selectedPortionSize;
-
-      const { selectedMealIndex: mealIndex, selectedFoodIndex: foodIndex } = this;
-      if (mealIndex === undefined || foodIndex === undefined) {
-        console.warn('No selected meal/food, meal/food index undefined');
-        return;
-      }
+      const { conversionFactor } = this.selectedPortionSize();
 
       this.updateFood({
-        mealIndex,
-        foodIndex,
-        food: {
+        foodId: this.selectedFood().id,
+        update: {
           portionSize: {
             method: 'standard-portion',
             unit: data.unit,

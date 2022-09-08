@@ -1,13 +1,11 @@
 <template>
   <drink-scale-prompt
     ref="promptHandleChild"
-    v-bind="{ promptProps }"
-    :continue-enabled="continueEnabled"
+    v-bind="{ continueEnabled, promptComponent, promptProps }"
     :drinkware-id="parameters['drinkware-id']"
     :food-name="foodName()"
     :initial-fill-level="parameters['initial-fill-level']"
     :initial-state="initialStateNotNull"
-    :prompt-component="promptComponent"
     :skip-fill-level="parameters['skip-fill-level']"
     @continue="$emit('continue')"
     @update="onUpdate"

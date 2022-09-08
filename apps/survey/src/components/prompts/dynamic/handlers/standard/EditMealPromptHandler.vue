@@ -1,11 +1,9 @@
 <template>
   <edit-meal-prompt
     ref="prompt"
-    :continue-enabled="continueEnabled"
+    v-bind="{ continueEnabled, promptComponent, promptProps }"
     :food-list="initialState?.foods || []"
     :meal-name="selectedMeal.name"
-    :prompt-component="promptComponent"
-    :prompt-props="promptProps"
     @continue="$emit('continue')"
     @delete-meal="onDeleteMeal"
     @update="onUpdate"

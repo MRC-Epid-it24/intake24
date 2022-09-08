@@ -1,8 +1,7 @@
 <template>
   <meal-add-prompt
+    v-bind="{ promptComponent, promptProps }"
     :list="mealsList"
-    :prompt-component="promptComponent"
-    :prompt-props="promptProps"
     @abortMeal="onAbort"
     @addMeal="onAnswer"
     @tempChanging="onTempChange"

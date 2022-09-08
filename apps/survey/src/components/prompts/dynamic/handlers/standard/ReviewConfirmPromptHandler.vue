@@ -1,8 +1,6 @@
 <template>
   <review-confirm-prompt
-    :meals="meals"
-    :prompt-component="promptComponent"
-    :prompt-props="promptProps"
+    v-bind="{ meals, promptComponent, promptProps }"
     @food-selected="onFoodClick"
     @meal-selected="onMealClick"
   ></review-confirm-prompt>

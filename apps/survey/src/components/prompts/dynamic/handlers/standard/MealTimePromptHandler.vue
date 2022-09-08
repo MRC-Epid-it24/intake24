@@ -1,8 +1,8 @@
 <template>
   <meal-time-prompt
+    v-bind="{ promptProps }"
     :initial-time="getInitialState()"
     :meal-name="selectedMeal.name"
-    :prompt-props="promptProps"
     @continue="$emit('continue')"
     @remove-meal="onRemoveMeal"
     @update="onUpdate"

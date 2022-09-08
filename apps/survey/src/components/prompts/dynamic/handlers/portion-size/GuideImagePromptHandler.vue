@@ -1,13 +1,11 @@
 <template>
   <guide-image-prompt
     ref="promptHandleChild"
-    v-bind="{ promptProps }"
-    :continue-enabled="continueEnabled"
+    v-bind="{ continueEnabled, promptComponent, promptProps }"
     :conversion-factor="selectedPortionSize().conversionFactor"
     :food-name="foodName()"
     :guide-image-id="parameters['guide-image-id']"
     :initial-state="initialStateNotNull"
-    :prompt-component="promptComponent"
     @continue="$emit('continue')"
     @update="onUpdate"
   >
