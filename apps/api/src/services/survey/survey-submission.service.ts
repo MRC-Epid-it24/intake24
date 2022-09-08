@@ -13,6 +13,7 @@ import type {
   SurveySubmissionFieldCreationAttributes,
   SurveySubmissionFoodCreationAttributes,
   SurveySubmissionNutrientCreationAttributes,
+  SurveySubmissionPortionSizeFieldCreationAttributes,
 } from '@intake24/common/types/models';
 import type { User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -28,7 +29,10 @@ import {
   SurveySubmissionMeal,
   SurveySubmissionMealCustomField,
   SurveySubmissionNutrient,
+  SurveySubmissionPortionSizeField,
 } from '@intake24/db';
+
+import { portionSizeMappers } from './portion-size-mapper';
 
 export type CustomAnswers<K extends string | number | symbol> = WithKey<K> & {
   name: string;
@@ -43,6 +47,7 @@ export type CollectedFoods = {
 export type CollectedNutrientInfo = {
   nutrients: SurveySubmissionNutrientCreationAttributes[];
   fields: SurveySubmissionFieldCreationAttributes[];
+  portionSizes: SurveySubmissionPortionSizeFieldCreationAttributes[];
 };
 
 export type FoodLocalMap = Record<string, FoodLocal>;
@@ -159,7 +164,7 @@ const surveySubmissionService = ({
         localName,
         readyMeal: readyMealOption,
         searchTerm: '???', // TODO
-        portionSizeMethodId: portionSize ? portionSize.method : '???', // TODO: can be null?
+        portionSizeMethodId: portionSize.method,
         reasonableAmount: reasonableAmount >= portionSizeWeight, // TODO: verify
         foodGroupId,
         foodGroupEnglishName,
@@ -187,7 +192,7 @@ const surveySubmissionService = ({
     foodState: FoodState,
     foods: FoodLocalMap
   ) => {
-    const collectedData: CollectedNutrientInfo = { fields: [], nutrients: [] };
+    const collectedData: CollectedNutrientInfo = { fields: [], nutrients: [], portionSizes: [] };
 
     if (foodState.type === 'free-text') {
       logger.error(`Submission: Free-text food record present in submission, skipping...`);
@@ -242,6 +247,9 @@ const surveySubmissionService = ({
         amount: (unitsPer100g * portionSizeWeight) / 100.0,
       })
     );
+
+    // Collect portion sizes data
+    collectedData.portionSizes = portionSizeMappers[portionSize.method](foodId, portionSize);
 
     return collectedData;
   };
@@ -464,7 +472,7 @@ const surveySubmissionService = ({
           );
 
           // Collect food composition fields & food composition nutrients
-          const { fields, nutrients } = collectFoodCompositionData(
+          const { fields, nutrients, portionSizes } = collectFoodCompositionData(
             foodId,
             foodState,
             foodRecordMap
@@ -478,7 +486,9 @@ const surveySubmissionService = ({
               nutrients.length
                 ? SurveySubmissionNutrient.bulkCreate(nutrients, { transaction })
                 : null,
-              // TODO: PSMs
+              portionSizes.length
+                ? SurveySubmissionPortionSizeField.bulkCreate(portionSizes, { transaction })
+                : null,
             ].map(Boolean)
           );
         }

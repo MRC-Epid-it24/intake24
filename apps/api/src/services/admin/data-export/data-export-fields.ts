@@ -9,8 +9,8 @@ export type ExportFieldTransform<T = SurveySubmissionFood> = (
   food: T
 ) => string | number | null | undefined;
 
-export interface ExportField extends BaseExportField {
-  value?: string | ExportFieldTransform;
+export interface ExportField<T = SurveySubmissionFood> extends BaseExportField {
+  value?: string | ExportFieldTransform<T>;
 }
 
 export const EMPTY = 'N/A';

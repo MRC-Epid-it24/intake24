@@ -1,5 +1,6 @@
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
+import type { PortionSizeMethodId } from '@intake24/common/types';
 import type {
   SurveySubmissionFoodAttributes,
   SurveySubmissionFoodCreationAttributes,
@@ -79,7 +80,7 @@ export default class SurveySubmissionFood
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public portionSizeMethodId!: string;
+  public portionSizeMethodId!: PortionSizeMethodId;
 
   @Column({
     allowNull: false,

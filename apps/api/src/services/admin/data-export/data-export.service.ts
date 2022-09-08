@@ -50,35 +50,37 @@ const dataExportService = ({
     if (startDate) surveySubmissionConditions.startTime = { [Op.gte]: startDate };
     if (endDate) surveySubmissionConditions.endTime = { [Op.lte]: endDate };
 
-    const include: IncludeOptions = {
-      association: 'meal',
-      required: true,
-      include: [
-        {
-          association: 'submission',
-          required: true,
-          where: surveySubmissionConditions,
-          include: [
-            { association: 'survey', required: true },
-            { association: 'customFields', separate: true },
-            {
-              association: 'user',
-              required: true,
-              include: [
-                { association: 'aliases', where: { surveyId }, separate: true },
-                { association: 'customFields', separate: true },
-              ],
-            },
-          ],
-        },
-        { association: 'customFields', separate: true },
-      ],
-    };
+    const include: IncludeOptions[] = [
+      {
+        association: 'meal',
+        required: true,
+        include: [
+          {
+            association: 'submission',
+            required: true,
+            where: surveySubmissionConditions,
+            include: [
+              { association: 'survey', required: true },
+              { association: 'customFields', separate: true },
+              {
+                association: 'user',
+                required: true,
+                include: [
+                  { association: 'aliases', where: { surveyId }, separate: true },
+                  { association: 'customFields', separate: true },
+                ],
+              },
+            ],
+          },
+          { association: 'customFields', separate: true },
+        ],
+      },
+    ];
     const order: Order = [['id', 'ASC']];
 
     const foods = {
       include: [
-        include,
+        ...include,
         { association: 'customFields', separate: true },
         { association: 'fields', separate: true },
         {
@@ -91,7 +93,7 @@ const dataExportService = ({
       order,
     };
 
-    const missingFoods = { include: [include], order };
+    const missingFoods = { include, order };
 
     return { foods, missingFoods };
   };

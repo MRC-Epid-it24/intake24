@@ -16,7 +16,74 @@ export type MealFlag = 'free-entry-complete';
 
 export type CustomPromptAnswer = string | string[] | number | number[];
 
-export const portionSizeMethods = [
+export interface PortionSizeStateBase {
+  servingWeight: number | null;
+  leftoversWeight: number | null;
+}
+
+export interface SelectedAsServedImage {
+  index: number;
+  weight: number;
+}
+
+export interface SelectedGuideImageObject {
+  id: number;
+  weight: number;
+}
+
+export interface StandardPortionUnit {
+  name: string;
+  weight: number;
+  omitFoodDescription: boolean;
+}
+
+export type PortionSizeStates = {
+  'as-served': PortionSizeStateBase & {
+    method: 'as-served';
+    serving: SelectedAsServedImage | null;
+    leftovers: SelectedAsServedImage | null;
+  };
+  'guide-image': PortionSizeStateBase & {
+    method: 'guide-image';
+    object: SelectedGuideImageObject | null;
+    quantity: QuantityValues;
+  };
+  'drink-scale': PortionSizeStateBase & {
+    method: 'drink-scale';
+    leftoversLevel: number;
+    initialFillLevel: string;
+    fillLevel: number;
+    skipFillLevel: string;
+    imageUrl: string;
+    leftoversWeight: number;
+    drinkwareId: string;
+    containerIndex: number;
+    leftovers: boolean;
+    servingWeight: number;
+  };
+  'standard-portion': PortionSizeStateBase & {
+    method: 'standard-portion';
+    unit: StandardPortionUnit | null;
+    quantity: QuantityValues | null;
+  };
+  cereal: PortionSizeStateBase & { method: 'cereal' };
+  'milk-on-cereal': PortionSizeStateBase & { method: 'milk-on-cereal' };
+  pizza: PortionSizeStateBase & { method: 'pizza' };
+  'milk-in-a-hot-drink': PortionSizeStateBase & { method: 'milk-in-a-hot-drink' };
+  weight: PortionSizeStateBase & { method: 'weight' };
+};
+
+export type AsServedState = PortionSizeStates['as-served'];
+export type GuideImageState = PortionSizeStates['guide-image'];
+export type DrinkScaleState = PortionSizeStates['drink-scale'];
+export type StandardPortionState = PortionSizeStates['standard-portion'];
+
+export type PortionSizeMethodId = keyof PortionSizeStates;
+export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];
+
+export type GetPortionSizeState<P extends keyof PortionSizeStates> = PortionSizeStates[P];
+
+export const portionSizeMethods: PortionSizeMethodId[] = [
   'as-served',
   'guide-image',
   'drink-scale',
@@ -27,68 +94,6 @@ export const portionSizeMethods = [
   'milk-in-a-hot-drink',
   'weight',
 ];
-
-export type PortionSizeMethodId = typeof portionSizeMethods[number];
-
-export interface PortionSizeStateBase {
-  method: PortionSizeMethodId;
-  servingWeight: number | null;
-  leftoversWeight: number | null;
-}
-
-export interface SelectedAsServedImage {
-  index: number;
-  weight: number;
-}
-
-export interface AsServedState extends PortionSizeStateBase {
-  method: 'as-served';
-  serving: SelectedAsServedImage | null;
-  leftovers: SelectedAsServedImage | null;
-}
-
-export interface SelectedGuideImageObject {
-  id: number;
-  weight: number;
-}
-
-export interface GuideImageState extends PortionSizeStateBase {
-  method: 'guide-image';
-  object: SelectedGuideImageObject | null;
-  quantity: QuantityValues;
-}
-
-export interface DrinkScaleState extends PortionSizeStateBase {
-  method: 'drink-scale';
-  leftoversLevel: number;
-  initialFillLevel: string;
-  fillLevel: number;
-  skipFillLevel: string;
-  imageUrl: string;
-  leftoversWeight: number;
-  drinkwareId: string;
-  containerIndex: number;
-  leftovers: boolean;
-  servingWeight: number;
-}
-
-export interface StandardPortionUnit {
-  name: string;
-  weight: number;
-  omitFoodDescription: boolean;
-}
-
-export interface StandardPortionState extends PortionSizeStateBase {
-  method: 'standard-portion';
-  unit: StandardPortionUnit | null;
-  quantity: QuantityValues | null;
-}
-
-export type PortionSizeState =
-  | AsServedState
-  | GuideImageState
-  | StandardPortionState
-  | DrinkScaleState;
 
 export interface AssociatedFoodPromptState {
   confirmed: boolean | undefined;
