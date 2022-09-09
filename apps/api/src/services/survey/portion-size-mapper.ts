@@ -17,15 +17,15 @@ export const asServedMapper = (
   const { leftoversWeight, servingWeight, serving, leftovers } = state;
 
   return [
-    // { foodId, name: 'serving-image-set', value: '' },
-    // { foodId, name: 'servingImage', value: '' },
-    // { foodId, name: 'leftovers-image-set', value: '' },
-    // { foodId, name: 'leftoversImage', value: '' },
-    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { foodId, name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '0' },
     { foodId, name: 'leftovers', value: (!!leftovers).toString() },
+    // { foodId, name: 'leftoversImage', value: '' },
+    // { foodId, name: 'leftovers-image-set', value: '' },
     { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { foodId, name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '0' },
+    // { foodId, name: 'servingImage', value: '' },
+    // { foodId, name: 'serving-image-set', value: '' },
+    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+    { foodId, name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '0' },
   ];
 };
 
@@ -43,11 +43,42 @@ export const guideImageMapper = (
   return [
     // { foodId, name: 'guide-image-id', value: '' },
     // { foodId, name: 'imageUrl', value: '' },
-    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
     { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { foodId, name: 'objectIndex', value: object?.id?.toString() ?? '0' },
     { foodId, name: 'objectWeight', value: object?.weight?.toString() ?? '0' },
     { foodId, name: 'quantity', value: (whole + fraction).toString() },
+    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ];
+};
+
+export const drinkScaleMapper = (
+  foodId: string,
+  state: PortionSizeStates['drink-scale']
+): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
+  const {
+    containerIndex,
+    drinkwareId,
+    fillLevel,
+    imageUrl,
+    initialFillLevel,
+    leftovers,
+    leftoversWeight,
+    leftoversLevel,
+    servingWeight,
+    skipFillLevel,
+  } = state;
+
+  return [
+    { foodId, name: 'containerIndex', value: containerIndex.toString() },
+    { foodId, name: 'drinkware-id', value: drinkwareId },
+    { foodId, name: 'fillLevel', value: fillLevel.toString() },
+    { foodId, name: 'imageUrl', value: imageUrl },
+    { foodId, name: 'initial-fill-level', value: initialFillLevel },
+    { foodId, name: 'leftovers', value: leftovers.toString() },
+    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { foodId, name: 'leftoversLevel', value: leftoversLevel.toString() },
+    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+    { foodId, name: 'skip-fill-level', value: skipFillLevel },
   ];
 };
 
@@ -57,7 +88,7 @@ export const portionSizeMappers: Record<
 > = {
   'as-served': asServedMapper,
   cereal: genericMapper,
-  'drink-scale': genericMapper,
+  'drink-scale': drinkScaleMapper,
   'guide-image': guideImageMapper,
   'milk-in-a-hot-drink': genericMapper,
   'milk-on-cereal': genericMapper,

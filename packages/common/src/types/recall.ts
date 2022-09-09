@@ -55,11 +55,9 @@ export type PortionSizeStates = {
     fillLevel: number;
     skipFillLevel: string;
     imageUrl: string;
-    leftoversWeight: number;
     drinkwareId: string;
     containerIndex: number;
     leftovers: boolean;
-    servingWeight: number;
   };
   'standard-portion': PortionSizeStateBase & {
     method: 'standard-portion';
