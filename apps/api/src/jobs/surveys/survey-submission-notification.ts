@@ -6,7 +6,7 @@ import type { Dictionary } from '@intake24/common/types';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { submissionScope, Survey, SurveySubmission } from '@intake24/db';
 
-import BaseJob from './job';
+import BaseJob from '../job';
 
 export default class SurveySubmissionNotification extends BaseJob<'SurveySubmissionNotification'> {
   readonly name = 'SurveySubmissionNotification';

@@ -107,7 +107,3 @@ export default abstract class Job<T extends JobType> {
     await this.job.updateProgress(current);
   }
 }
-
-export interface JobConstructor {
-  new (...args: any[]): Job<any>;
-}

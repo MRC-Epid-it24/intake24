@@ -45,8 +45,8 @@ const jobs: LocaleMessageObject = {
     SendPasswordReset: {
       _: 'Send password reset',
     },
-    SendRespondentFeedback: {
-      _: 'Send respondent feedback',
+    SurveyRespondentFeedback: {
+      _: 'Survey - send respondent feedback',
     },
     SurveyDataExport: {
       _: 'Survey - data export',
@@ -56,6 +56,9 @@ const jobs: LocaleMessageObject = {
     },
     SurveyImportRespondents: {
       _: 'Survey - import respondents',
+    },
+    SurveySubmission: {
+      _: 'Survey - process submission',
     },
     SurveySubmissionNotification: {
       _: 'Survey - submission notification',

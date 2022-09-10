@@ -3,7 +3,7 @@ import type { Job } from 'bullmq';
 import type { IoC } from '@intake24/api/ioc';
 import type { RedisStore } from '@intake24/api/services';
 
-import BaseJob from './job';
+import BaseJob from '../job';
 
 export default class CleanRedisStore extends BaseJob<'CleanRedisStore'> {
   readonly name = 'CleanRedisStore';

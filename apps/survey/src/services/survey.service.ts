@@ -65,10 +65,13 @@ export default {
     return data;
   },
 
-  getUserSession: async (surveyId: string): Promise<SurveyUserSessionResponse> => {
-    const { data } = await http.get<SurveyUserSessionResponse>(`surveys/${surveyId}/session`);
-
-    return data;
+  getUserSession: async (surveyId: string): Promise<SurveyUserSessionResponse | null> => {
+    try {
+      const { data } = await http.get<SurveyUserSessionResponse>(`surveys/${surveyId}/session`);
+      return data;
+    } catch (err) {
+      return null;
+    }
   },
 
   setUserSession: async (
@@ -81,6 +84,9 @@ export default {
 
     return data;
   },
+
+  clearUserSession: async (surveyId: string): Promise<void> =>
+    http.delete(`surveys/${surveyId}/session`),
 
   submit: async (surveyId: string, submission: SurveyState): Promise<SurveyFollowUpResponse> => {
     const tzOffset = new Date().getTimezoneOffset();

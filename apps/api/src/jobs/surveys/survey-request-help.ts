@@ -4,7 +4,7 @@ import nunjucks from 'nunjucks';
 import type { IoC } from '@intake24/api/ioc';
 import { UserSurveyAlias } from '@intake24/db';
 
-import BaseJob from './job';
+import BaseJob from '../job';
 
 export default class SurveyRequestHelp extends BaseJob<'SurveyRequestHelp'> {
   readonly name = 'SurveyRequestHelp';

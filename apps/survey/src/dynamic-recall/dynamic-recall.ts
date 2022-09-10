@@ -1,3 +1,5 @@
+import { v4 } from 'uuid';
+
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection, SurveySection } from '@intake24/common/schemes';
 import type { MealTime, SurveyState as CurrentSurveyState } from '@intake24/common/types';
@@ -28,6 +30,8 @@ export const surveyInitialState = (): CurrentSurveyState => ({
   schemeId: null,
   startTime: null,
   endTime: null,
+  submissionTime: null,
+  uxSessionId: v4(),
   flags: [],
   customPromptAnswers: {},
   continueButtonEnabled: false,

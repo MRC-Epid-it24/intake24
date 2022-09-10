@@ -1,6 +1,7 @@
+import 'lodash/debounce';
+
 import type { AxiosError } from 'axios';
 import axios from 'axios';
-import debounce from 'lodash/debounce';
 import { defineStore } from 'pinia';
 import Vue from 'vue';
 
@@ -21,8 +22,8 @@ import type {
   SurveyFollowUpResponse,
   SurveyUserInfoResponse,
 } from '@intake24/common/types/http';
-import { copy } from '@intake24/common/util';
 import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import { recallLog } from '@intake24/survey/stores';
 import {
   findFood,
   findMeal,
@@ -32,7 +33,6 @@ import {
   getMealIndexForSelection,
   getMealIndexRequired,
 } from '@intake24/survey/stores/meal-food-utils';
-import { recallLog } from '@intake24/survey/stores/recall-log';
 import { useLoading } from '@intake24/ui/stores';
 
 import { surveyService } from '../services';
@@ -50,16 +50,11 @@ export type FoodUndo = {
   value: FoodState;
 };
 
-export type SurveyStateSnapshot = {
-  timestamp: Date;
-  data: CurrentSurveyState;
-};
-
 export interface SurveyState {
   parameters: SurveyEntryResponse | null;
   user: SurveyUserInfoResponse | SurveyFollowUpResponse | null;
   data: CurrentSurveyState;
-  history: SurveyStateSnapshot[];
+  isSubmitting: boolean;
   undo: MealUndo | FoodUndo | null;
   error: AxiosError | null;
 }
@@ -75,12 +70,23 @@ export interface FoodIndex {
   linkedFoodIndex: number | undefined;
 }
 
+const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryResponse) => {
+  if (parameters && !parameters.storeUserSessionOnServer) return false;
+
+  const { startTime, submissionTime } = state;
+  if (!startTime || submissionTime) return false;
+
+  // TODO: check old stale data
+
+  return true;
+};
+
 export const useSurvey = defineStore('survey', {
   state: (): SurveyState => ({
     parameters: null,
     user: null,
     data: surveyInitialState(),
-    history: [],
+    isSubmitting: false,
     undo: null,
     error: null,
   }),
@@ -89,7 +95,12 @@ export const useSurvey = defineStore('survey', {
   },
   persist: {
     key: `${import.meta.env.VITE_APP_PREFIX ?? ''}survey`,
-    paths: ['data', 'history'],
+    paths: ['data'],
+    afterRestore(context) {
+      context.store.reCreateStoreAfterDeserialization();
+
+      if (!canUseUserSession(context.store.$state.data)) context.store.clearState();
+    },
   },
   getters: {
     parametersLoaded: (state) => !!state.parameters && !!state.user,
@@ -149,12 +160,15 @@ export const useSurvey = defineStore('survey', {
       loading.addItem('loadParameters');
 
       try {
-        const [surveyInfo, userInfo] = await Promise.all([
+        const [surveyInfo, userInfo, userSession] = await Promise.all([
           surveyService.surveyInfo(surveyId),
           surveyService.userInfo(surveyId),
+          surveyService.getUserSession(surveyId),
         ]);
-        this.parameters = surveyInfo;
-        this.user = userInfo;
+
+        this.setParameters(surveyInfo);
+        this.setUserInfo(userInfo);
+        if (userSession) this.loadUserSession(userSession.sessionData);
       } catch (err) {
         if (axios.isAxiosError(err)) this.error = err;
         else console.error(err);
@@ -176,46 +190,68 @@ export const useSurvey = defineStore('survey', {
       this.undo = null;
     },
 
-    async recordSnapshot({
-      value,
-      oldValue,
-    }: {
-      value: CurrentSurveyState;
-      oldValue: CurrentSurveyState;
-    }) {
-      this.history.unshift({ timestamp: new Date(), data: copy(oldValue) });
+    setParameters(parameters: SurveyEntryResponse) {
+      this.parameters = parameters;
+    },
+
+    setUserInfo(user: SurveyUserInfoResponse) {
+      this.user = user;
+    },
+
+    reCreateStoreAfterDeserialization() {
+      ['startTime', 'endTime', 'submissionTime'].forEach((item) => {
+        const key = item as keyof Pick<
+          CurrentSurveyState,
+          'startTime' | 'endTime' | 'submissionTime'
+        >;
+
+        const currentValue = this.data[key];
+        if (typeof currentValue === 'string') this.data[key] = new Date(currentValue);
+      });
+    },
+
+    loadState(state: CurrentSurveyState) {
+      this.setState(state);
+      this.reCreateStoreAfterDeserialization();
+    },
+
+    loadUserSession(state: CurrentSurveyState) {
+      if (!this.parameters) {
+        console.error(`Survey parameters not loaded. Cannot load user session.`);
+        return;
+      }
+
+      if (!canUseUserSession(state, this.parameters)) return;
+
+      this.loadState(state);
     },
 
     async storeUserSession() {
-      const surveyId = this.parameters?.slug;
-
-      if (!surveyId) {
-        console.error(`Survey parameters not loaded. Cannot submit the survey.`);
+      if (!this.parameters) {
+        console.error(`Survey parameters not loaded. Cannot store user session.`);
         return;
       }
 
-      await surveyService.setUserSession(surveyId, this.data);
+      if (this.isSubmitting || !canUseUserSession(this.data, this.parameters)) return;
+
+      await surveyService.setUserSession(this.parameters.slug, this.data);
     },
 
     async submitRecall() {
-      this.data.endTime = new Date();
-      const surveyId = this.parameters?.slug;
-
-      if (!surveyId) {
+      if (!this.parameters) {
         console.error(`Survey parameters not loaded. Cannot submit the survey.`);
         return;
       }
 
-      this.user = await surveyService.submit(surveyId, this.data);
-      // TODO: do the submitted state cleanup and user has landed on final page and doesn't need that anymore
-    },
+      this.data.endTime = new Date();
+      this.isSubmitting = true;
 
-    setParameters(data: SurveyEntryResponse) {
-      this.parameters = data;
-    },
-
-    setUserInfo(data: SurveyUserInfoResponse) {
-      this.user = data;
+      try {
+        this.user = await surveyService.submit(this.parameters.slug, this.data);
+        this.data.submissionTime = new Date();
+      } finally {
+        this.isSubmitting = false;
+      }
     },
 
     setSelection(selection: Selection) {
@@ -408,11 +444,6 @@ export const useSurvey = defineStore('survey', {
       };
     },
 
-    updateFoodCallback(data: { foodId: number; update: (state: FoodState) => FoodState }) {
-      const food = findFood(this.data.meals, data.foodId);
-      this.replaceFood({ foodId: data.foodId, food: data.update(food) });
-    },
-
     addFood(data: { mealId: number; food: FoodState }) {
       const mealIndex = getMealIndexRequired(this.data.meals, data.mealId);
       this.data.meals[mealIndex].foods.push(data.food);
@@ -422,12 +453,15 @@ export const useSurvey = defineStore('survey', {
       const mealIndex = getMealIndexRequired(this.data.meals, data.mealId);
       this.data.meals[mealIndex].foods = data.foods;
     },
+
     getNextFoodId(): number {
       return this.data.nextFoodId++;
     },
+
     getNextMealId(): number {
       return this.data.nextMealId++;
     },
+
     setContinueButtonEnabled(enabled: boolean): void {
       this.data.continueButtonEnabled = enabled;
     },

@@ -15,8 +15,11 @@ export default () => {
 
   router.get('/parameters', wrapAsync(surveyRespondentController.parameters));
   router.get('/user-info', validation.userInfo, wrapAsync(surveyRespondentController.userInfo));
-  router.get('/session', wrapAsync(surveyRespondentController.getSession));
-  router.post('/session', validation.setSession, wrapAsync(surveyRespondentController.setSession));
+  router
+    .route('/session')
+    .post(validation.setSession, wrapAsync(surveyRespondentController.setSession))
+    .get(wrapAsync(surveyRespondentController.getSession))
+    .delete(wrapAsync(surveyRespondentController.clearSession));
   router.post(
     '/submission',
     validation.submission,

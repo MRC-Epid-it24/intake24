@@ -2,9 +2,22 @@
 
 Jobs types available in system.
 
-Available jobs:
-
-- CleanRedisStore
+<!-- prettier-ignore -->
+  - [CleanRedisStore](#cleanredisstore)
+  - [CleanStorageFiles](#cleanstoragefiles)
+  - [LanguageSyncTranslations](#languagesynctranslations)
+  - [LocaleCopyPairwiseAssociations](#localecopypairwiseassociations)
+  - [NutrientTableImportData](#nutrienttableimportdata)
+  - [NutrientTableImportMapping](#nutrienttableimportmapping)
+  - [PurgeRefreshTokens](#purgerefreshtokens)
+  - [SendPasswordReset](#sendpasswordreset)
+  - [SurveyDataExport](#surveydataexport)
+  - [SurveyExportRespondentAuthUrls](#surveyexportrespondentauthurls)
+  - [SurveyImportRespondents](#surveyimportrespondents)
+  - [SurveyRequestHelp](#surveyrequesthelp)
+  - [SurveyRespondentFeedback](#surveyrespondentfeedback)
+  - [SurveySubmission](#surveysubmission)
+  - [SurveySubmissionNotification](#surveysubmissionnotification)
 
 ## CleanRedisStore
 
@@ -14,21 +27,17 @@ Available jobs:
 
 `CleanStorageFiles` wipes temporary storage files, e.g. `downloads` and `uploads` folders.
 
-## PurgeRefreshTokens
+## LanguageSyncTranslations
 
-`PurgeRefreshTokens` clean expired refresh tokens, that don't need to be hold in database store anymore.
-
-## SendPasswordReset
-
-`SendPasswordReset` is triggered when user requests password reset.
-
-## SyncLanguageTranslations
-
-`SyncLanguageTranslations` synchronizes database language translation records with built-in English translation.
+`LanguageSyncTranslations` synchronizes database language translation records with built-in English translation.
 
 :::tip Built-in translations update
 This needs to be run if object structure changes, so all database records are synced to use same structure.
 :::
+
+## LocaleCopyPairwiseAssociations
+
+`LocaleCopyPairwiseAssociations` copies pairwise associations data from source locale to target locale.
 
 ## NutrientTableImportData
 
@@ -37,6 +46,14 @@ This needs to be run if object structure changes, so all database records are sy
 ## NutrientTableImportMapping
 
 `NutrientTableImportMapping` imports Excel-based nutrient mappings from CSV file.
+
+## PurgeRefreshTokens
+
+`PurgeRefreshTokens` clean expired refresh tokens, that don't need to be hold in database store anymore.
+
+## SendPasswordReset
+
+`SendPasswordReset` is triggered when user requests password reset.
 
 ## SurveyDataExport
 
@@ -55,7 +72,7 @@ This needs to be run if object structure changes, so all database records are sy
 | Column   | Description | Record          |
 | -------- | ----------- | --------------- |
 | username | Required    | UserSurveyAlias |
-| password | Required    | UserSurveyAlias |
+| password | Required    | UserPassword    |
 | name     | Optional    | User            |
 | email    | Optional    | User            |
 | phone    | Optional    | User            |
@@ -65,6 +82,18 @@ This needs to be run if object structure changes, so all database records are sy
 Any additional column not listed above, will get stored as `UserCustomField` record, which is `key` -> `value` record in database table.
 :::
 
+## SurveyRequestHelp
+
+`SurveyRequestHelp` sends request help email to study support users.
+
+## SurveyRespondentFeedback
+
+`SurveyRespondentFeedback` sends email with attached survey feedback PDF file to provided email address.
+
+## SurveySubmission
+
+`SurveySubmission` processes submission state and saves to data.
+
 ## SurveySubmissionNotification
 
 `SurveySubmissionNotification` is used with webhook to dispatch survey submission notification.
@@ -73,7 +102,7 @@ When valid `Submission notification URL` is set in survey settings, webhook is a
 
 If survey settings specify JWT secret, signed JWT token is attached as Bearer in `Authorization` header of the request.
 
-#### Request
+Request
 
 ```json
 POST https://my-submission-notification-url.example.com

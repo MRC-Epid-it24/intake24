@@ -7,7 +7,7 @@ import type { LocalLocation } from '@intake24/api/config/filesystem';
 import type { IoC } from '@intake24/api/ioc';
 import { addTime } from '@intake24/api/util';
 
-import BaseJob from './job';
+import BaseJob from '../job';
 
 export default class CleanStorageFiles extends BaseJob<'CleanStorageFiles'> {
   readonly name = 'CleanStorageFiles';

@@ -1,5 +1,7 @@
 import pick from 'lodash/pick';
 
+import type { SurveyState } from './recall';
+
 // Not defined in bull-mq
 export type RepeatableBullJob = {
   key: string;
@@ -25,11 +27,11 @@ export type JobParams = {
     sourceLocaleId: string;
     targetLocaleId: string;
   };
-  NutrientTableImportMapping: {
+  NutrientTableImportData: {
     nutrientTableId: string;
     file: string;
   };
-  NutrientTableImportData: {
+  NutrientTableImportMapping: {
     nutrientTableId: string;
     file: string;
   };
@@ -37,14 +39,6 @@ export type JobParams = {
   SendPasswordReset: {
     email: string;
     userAgent?: string;
-  };
-  SendRespondentFeedback: {
-    surveyId: string;
-    userId: string;
-    submissions?: string[];
-    to: string;
-    cc?: string;
-    bcc?: string;
   };
   SurveyDataExport: {
     id?: string | string[];
@@ -66,6 +60,19 @@ export type JobParams = {
     name: string;
     phone: string;
   };
+  SurveyRespondentFeedback: {
+    surveyId: string;
+    userId: string;
+    submissions?: string[];
+    to: string;
+    cc?: string;
+    bcc?: string;
+  };
+  SurveySubmission: {
+    surveyId: string;
+    userId: string;
+    state: SurveyState;
+  };
   SurveySubmissionNotification: {
     surveyId: string;
     submissionId: string;
@@ -86,20 +93,15 @@ export const defaultJobsParams: JobParams = {
     sourceLocaleId: '',
     targetLocaleId: '',
   },
-  NutrientTableImportMapping: {
-    nutrientTableId: '',
-    file: '',
-  },
   NutrientTableImportData: {
     nutrientTableId: '',
     file: '',
   },
-  PurgeRefreshTokens: {},
-  SendRespondentFeedback: {
-    surveyId: '',
-    userId: '',
-    to: '',
+  NutrientTableImportMapping: {
+    nutrientTableId: '',
+    file: '',
   },
+  PurgeRefreshTokens: {},
   SendPasswordReset: {
     email: '',
   },
@@ -118,6 +120,16 @@ export const defaultJobsParams: JobParams = {
     userId: '',
     name: '',
     phone: '',
+  },
+  SurveyRespondentFeedback: {
+    surveyId: '',
+    userId: '',
+    to: '',
+  },
+  SurveySubmission: {
+    surveyId: '',
+    userId: '',
+    state: {} as SurveyState,
   },
   SurveySubmissionNotification: {
     surveyId: '',

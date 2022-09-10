@@ -4,10 +4,10 @@ import nunjucks from 'nunjucks';
 
 import type { IoC } from '@intake24/api/ioc';
 
-import BaseJob from './job';
+import BaseJob from '../job';
 
-export default class SendRespondentFeedback extends BaseJob<'SendRespondentFeedback'> {
-  readonly name = 'SendRespondentFeedback';
+export default class SurveyRespondentFeedback extends BaseJob<'SurveyRespondentFeedback'> {
+  readonly name = 'SurveyRespondentFeedback';
 
   private readonly feedbackService;
 

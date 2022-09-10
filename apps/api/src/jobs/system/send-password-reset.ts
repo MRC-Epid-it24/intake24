@@ -9,7 +9,7 @@ import { getFrontEndUrl } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
 import { User, UserPasswordReset } from '@intake24/db';
 
-import BaseJob from './job';
+import BaseJob from '../job';
 
 const getAgentInfo = (agent: { name?: string; version?: string }): string | undefined => {
   return agent.name && agent.version ? `${agent.name} (${agent.version})` : undefined;

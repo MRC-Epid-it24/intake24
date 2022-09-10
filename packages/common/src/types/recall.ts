@@ -187,6 +187,8 @@ export type SurveyState = {
   schemeId: string | null;
   startTime: Date | null;
   endTime: Date | null;
+  submissionTime: Date | null;
+  uxSessionId: string;
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
   continueButtonEnabled: boolean;

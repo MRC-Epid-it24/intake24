@@ -286,24 +286,70 @@ const surveySubmissionService = ({
    *
    * @param {string} slug
    * @param {User} user
-   * @param {SurveyState} surveyState
+   * @param {SurveyState} state
    * @param {number} tzOffset
    * @returns {Promise<SurveyFollowUpResponse>}
    */
   const submit = async (
     slug: string,
     user: User,
-    surveyState: SurveyState,
+    state: SurveyState,
     tzOffset: number
   ): Promise<SurveyFollowUpResponse> => {
     const survey = await Survey.findOne({
       where: { slug },
-      include: [{ association: 'surveyScheme', required: true }, { association: 'feedbackScheme' }],
+      include: [{ association: 'surveyScheme', required: true }],
     });
+    if (!survey) throw new NotFoundError();
+
+    const { id: surveyId } = survey;
+    const { id: userId } = user;
+
+    const [userInfo, followUpUrl] = await Promise.all([
+      surveyService.userInfo(survey, user, tzOffset, 1),
+      surveyService.getFollowUpUrl(survey, userId),
+      surveyService.clearSession(slug, userId),
+    ]);
+
+    await scheduler.jobs.addJob({ type: 'SurveySubmission', userId }, { surveyId, userId, state });
+
+    return { ...userInfo, followUpUrl };
+  };
+
+  /**
+   * Process survey submission
+   *
+   * @param {string} surveyId
+   * @param {string} userId
+   * @param {SurveyState} state
+   * @returns {Promise<void>}
+   */
+  const processSubmission = async (
+    surveyId: string,
+    userId: string,
+    state: SurveyState
+  ): Promise<void> => {
+    const { uxSessionId } = state;
+
+    const [survey, submission] = await Promise.all([
+      Survey.findOne({
+        where: { id: surveyId },
+        include: [
+          { association: 'surveyScheme', required: true },
+          { association: 'feedbackScheme' },
+        ],
+      }),
+      SurveySubmission.findOne({ where: { surveyId, userId, uxSessionId } }),
+    ]);
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
 
+    if (submission) {
+      throw new Error(
+        `Duplicate submission for surveyId: ${surveyId}, userId: ${userId}, uxSessionId: ${uxSessionId}`
+      );
+    }
+
     const {
-      id: surveyId,
       localeId,
       surveyScheme: {
         questions: {
@@ -315,40 +361,38 @@ const surveySubmissionService = ({
       submissionNotificationUrl,
     } = survey;
 
-    const { id: userId } = user;
-
     const surveyCustomQuestions = [...preMeals, ...postMeals]
-      .filter((question) => question.type === 'custom')
-      .map((question) => question.id);
+      .filter(({ type }) => type === 'custom')
+      .map(({ id }) => id);
 
     const mealCustomQuestions = [...preFoods, ...postFoods]
-      .filter((question) => question.type === 'custom')
-      .map((question) => question.id);
+      .filter(({ type }) => type === 'custom')
+      .map(({ id }) => id);
 
-    const foodCustomQuestions = foods
-      .filter((question) => question.type === 'custom')
-      .map((question) => question.id);
+    const foodCustomQuestions = foods.filter(({ type }) => type === 'custom').map(({ id }) => id);
 
-    /*
-     * TODO: this could be pushed to background job
-     * - store state in DB for processing, processed as job, deleted successfully process data or mark as an issue in Admin Tool to reconcile
-     * - response to user is not delayed by processing bigger amount of data
-     * - it depends, whether we want to throw any errors / discrepancies back to user
-     * - all submission data should be validated in frontend, user probably won't be able to do any corrections unless specifically allowed?
-     * - critical data (inserted in DB) should be also validated in backend
-     */
+    await db.system.transaction(async (transaction) => {
+      const { startTime, endTime } = state;
+      const submissionTime = new Date();
 
-    return db.system.transaction(async (transaction) => {
+      if (!startTime || !endTime) {
+        logger.warn('Submission: missing startTime / endTime on submission state.', {
+          surveyId,
+          userId,
+          submissionTime,
+        });
+      }
+
       // Survey submission
       const { id: surveySubmissionId } = await SurveySubmission.create(
         {
           id: randomUUID(),
           surveyId,
           userId,
-          startTime: surveyState.startTime ?? new Date(),
-          endTime: surveyState.endTime ?? new Date(),
-          uxSessionId: randomUUID(), // TODO: verify this (assigned in UI?)
-          submissionTime: new Date(),
+          startTime: startTime ?? submissionTime,
+          endTime: endTime ?? submissionTime,
+          submissionTime,
+          uxSessionId,
         },
         { transaction }
       );
@@ -357,12 +401,12 @@ const surveySubmissionService = ({
       const surveyCustomFieldInputs = collectCustomAnswers(
         'surveySubmissionId',
         surveySubmissionId,
-        surveyState.customPromptAnswers,
+        state.customPromptAnswers,
         surveyCustomQuestions
       );
 
       // Collect meals
-      const mealInputs = surveyState.meals.map(({ name: { en: name }, time }) => ({
+      const mealInputs = state.meals.map(({ name: { en: name }, time }) => ({
         surveySubmissionId,
         name,
         hours: time?.hours ?? 8,
@@ -383,7 +427,7 @@ const surveySubmissionService = ({
       });
 
       // Collect food & group codes
-      const { foodCodes, groupCodes } = surveyState.meals.reduce<FoodCodes>(
+      const { foodCodes, groupCodes } = state.meals.reduce<FoodCodes>(
         (acc, meal) => {
           const { foodCodes, groupCodes } = collectFoodCodes(meal.foods);
           acc.foodCodes.push(...foodCodes);
@@ -425,7 +469,7 @@ const surveySubmissionService = ({
       }, {});
 
       // Process meals
-      for (const [idx, mealState] of surveyState.meals.entries()) {
+      for (const [idx, mealState] of state.meals.entries()) {
         const { id: mealId } = meals[idx];
 
         // Collect meal custom fields
@@ -506,17 +550,10 @@ const surveySubmissionService = ({
             : null,
         ].map(Boolean)
       );
-
-      const [followUpUrl, userInfo] = await Promise.all([
-        surveyService.getFollowUpUrl(survey, userId),
-        surveyService.userInfo(survey, user, tzOffset),
-      ]);
-
-      return { ...userInfo, followUpUrl };
     });
   };
 
-  return { submit };
+  return { processSubmission, submit };
 };
 
 export default surveySubmissionService;

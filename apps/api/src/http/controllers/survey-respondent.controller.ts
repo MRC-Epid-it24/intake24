@@ -123,6 +123,18 @@ const surveyRespondentController = ({
     res.json(session);
   };
 
+  const clearSession = async (
+    req: Request<{ slug: string }>,
+    res: Response<void>
+  ): Promise<void> => {
+    const { id: userId } = req.user as User;
+    const { slug } = req.params;
+
+    await surveyService.clearSession(slug, userId);
+
+    res.json();
+  };
+
   const requestHelp = async (
     req: Request<{ slug: string }, any, SurveyRequestHelpInput>,
     res: Response<undefined>
@@ -157,6 +169,7 @@ const surveyRespondentController = ({
     userInfo,
     getSession,
     setSession,
+    clearSession,
     requestHelp,
     submission,
   };

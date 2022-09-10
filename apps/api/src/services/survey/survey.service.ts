@@ -1,4 +1,5 @@
 import { addDays, addMinutes, startOfDay } from 'date-fns';
+import ms from 'ms';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { PromptQuestion, RedirectPromptProps } from '@intake24/common/prompts';
@@ -80,9 +81,7 @@ const surveyService = ({
     let decoded;
 
     try {
-      decoded = await jwt.verify(params, genUserKey, {
-        algorithms: ['HS256', 'HS512'],
-      });
+      decoded = await jwt.verify(params, genUserKey, { algorithms: ['HS256', 'HS512'] });
     } catch (err) {
       throw new ForbiddenError(err instanceof Error ? err.message : undefined);
     }
@@ -120,12 +119,14 @@ const surveyService = ({
    * @param {(string | Survey)} slug
    * @param {User} user
    * @param {number} tzOffset
+   * @param {number} [increment=0] (increment submission count, e.g. during queued submission, thus not included in stats)
    * @returns {Promise<SurveyUserInfoResponse>}
    */
   const userInfo = async (
     slug: string | Survey,
     user: User,
-    tzOffset: number
+    tzOffset: number,
+    increment = 0
   ): Promise<SurveyUserInfoResponse> => {
     const survey = typeof slug === 'string' ? await Survey.findOne({ where: { slug } }) : slug;
     if (!survey) throw new NotFoundError();
@@ -141,7 +142,7 @@ const surveyService = ({
     const clientStartOfDay = addMinutes(startOfDay(new Date()), tzOffset * -1);
     const clientEndOfDay = addDays(clientStartOfDay, 1);
 
-    const [totalSubmissions, daySubmissions] = await Promise.all([
+    let [totalSubmissions, daySubmissions] = await Promise.all([
       SurveySubmission.count({ where: { surveyId, userId } }),
       SurveySubmission.count({
         where: {
@@ -151,6 +152,11 @@ const surveyService = ({
         },
       }),
     ]);
+
+    if (increment) {
+      totalSubmissions = totalSubmissions + increment;
+      daySubmissions = daySubmissions + increment;
+    }
 
     return {
       userId,
@@ -184,6 +190,13 @@ const surveyService = ({
     const session = await UserSurveySession.findOne({ where: { userId, surveyId } });
     if (!session) throw new NotFoundError();
 
+    // TODO: should be configurable in scheme / survey settings
+    const expiredAt = new Date(Date.now() - ms('12h'));
+    if (session.updatedAt < expiredAt) {
+      await session.destroy();
+      throw new NotFoundError();
+    }
+
     return session;
   };
 
@@ -213,6 +226,20 @@ const surveyService = ({
     );
 
     return session;
+  };
+
+  /**
+   * Clear user survey session data
+   *
+   * @param {string} slug
+   * @param {string} userId
+   * @returns {Promise<void>}
+   */
+  const clearSession = async (slug: string, userId: string): Promise<void> => {
+    const survey = await Survey.findOne({ where: { slug } });
+    if (!survey) throw new NotFoundError();
+
+    await UserSurveySession.destroy({ where: { surveyId: survey.id, userId } });
   };
 
   /**
@@ -312,6 +339,7 @@ const surveyService = ({
     userInfo,
     getSession,
     setSession,
+    clearSession,
     getSubmissions,
     getFollowUpUrl,
     followUp,

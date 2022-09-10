@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto';
+
 import { pick } from 'lodash';
 import request from 'supertest';
 
@@ -57,6 +59,8 @@ export default () => {
           schemeId: 'SurveyState',
           startTime: new Date(),
           endTime: new Date(),
+          submissionTime: null,
+          uxSessionId: randomUUID(),
           flags: [],
           meals: [],
           nextFoodId: 0,

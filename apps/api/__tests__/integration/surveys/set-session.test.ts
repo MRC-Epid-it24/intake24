@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto';
+
 import { pick } from 'lodash';
 import request from 'supertest';
 
@@ -19,6 +21,8 @@ export default () => {
       schemeId: 'schemeId',
       startTime: new Date(),
       endTime: new Date(),
+      submissionTime: null,
+      uxSessionId: randomUUID(),
       flags: ['flag-1', 'flag-2'],
       customPromptAnswers: {},
       continueButtonEnabled: false,

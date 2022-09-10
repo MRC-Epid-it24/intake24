@@ -4,7 +4,7 @@ import validation from '@intake24/api/http/requests/surveys';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
-import surveyRespondents from './survey-respondents';
+import respondents from './respondents';
 
 export default () => {
   const { rateLimiter, surveyController } = ioc.cradle;
@@ -26,7 +26,7 @@ export default () => {
   );
   router.post('/:slug/create-user', validation.createUser, wrapAsync(surveyController.createUser));
 
-  router.use('/:slug', surveyRespondents());
+  router.use('/:slug', respondents());
 
   return router;
 };

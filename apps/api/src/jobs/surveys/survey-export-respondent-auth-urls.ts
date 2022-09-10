@@ -12,7 +12,7 @@ import { surveyUrlService } from '@intake24/api/services';
 import { addTime } from '@intake24/api/util';
 import { Job as DbJob, Survey, UserSurveyAlias } from '@intake24/db';
 
-import BaseJob from './job';
+import BaseJob from '../job';
 
 export default class SurveyExportRespondentAuthUrls extends BaseJob<'SurveyExportRespondentAuthUrls'> {
   readonly name = 'SurveyExportRespondentAuthUrls';

@@ -1,31 +1,17 @@
 import type { JobType } from '@intake24/common/types';
 
-import CleanRedisStore from './clean-redis-store';
-import CleanStorageFiles from './clean-storage-files';
 import LanguageSyncTranslations from './language-sync-translations';
 import LocaleCopyPairwiseAssociations from './locale-copy-pairwise-associations';
 import NutrientTableImportData from './nutrient-table-import-data';
 import NutrientTableImportMapping from './nutrient-table-import-mapping';
-import PurgeRefreshTokens from './purge-refresh-tokens';
-import SendPasswordReset from './send-password-reset';
-import SendRespondentFeedback from './send-respondent-feedback';
-import SurveyDataExport from './survey-data-export';
-import SurveyExportRespondentAuthUrls from './survey-export-respondent-auth-urls';
-import SurveyImportRespondents from './survey-import-respondents';
-import SurveyRequestHelp from './survey-request-help';
-import SurveySubmissionNotification from './survey-submission-notification';
+import surveys from './surveys';
+import system from './system';
 
 export * from './job';
 export { default as Job } from './job';
 export { default as StreamLockJob } from './stream-lock-job';
 
 const jobs = {
-  // System
-  CleanRedisStore,
-  CleanStorageFiles,
-  PurgeRefreshTokens,
-  SendRespondentFeedback,
-  SendPasswordReset,
   // Languages
   LanguageSyncTranslations,
   // Locales
@@ -33,12 +19,8 @@ const jobs = {
   // Nutrient tables
   NutrientTableImportData,
   NutrientTableImportMapping,
-  // Surveys
-  SurveyDataExport,
-  SurveyExportRespondentAuthUrls,
-  SurveyImportRespondents,
-  SurveyRequestHelp,
-  SurveySubmissionNotification,
+  ...surveys,
+  ...system,
 };
 
 export type Jobs = {

@@ -8,7 +8,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type { CustomField } from '@intake24/common/types';
 import { User, UserSurveyAlias } from '@intake24/db';
 
-import StreamLockJob from './stream-lock-job';
+import StreamLockJob from '../stream-lock-job';
 
 export type CSVRow = {
   username: string;
