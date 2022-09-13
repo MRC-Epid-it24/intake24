@@ -202,3 +202,19 @@ export type SurveyState = {
 export interface RecallPromptHandler {
   commitAnswer(): Promise<void>;
 }
+
+export function isSelectionEqual(s1: Selection, s2: Selection): boolean {
+  if (s1.mode === s2.mode) {
+    if (s1.element !== null) {
+      if (s2.element === null) return false;
+
+      if (s1.element.type === 'food' && s2.element.type === 'food')
+        return s1.element.foodId === s2.element.foodId;
+
+      if (s1.element.type === 'meal' && s2.element.type === 'meal')
+        return s1.element.mealId === s2.element.mealId;
+
+      return false;
+    } else return s2.element === null;
+  } else return false;
+}

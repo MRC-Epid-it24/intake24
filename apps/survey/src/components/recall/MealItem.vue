@@ -2,9 +2,10 @@
   <v-list-group
     :class="{ selected: selected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
     :value="selected || selectedFoodInMeal"
+    @click="chooseMeal"
   >
     <template #activator>
-      <v-list-item-title class="font-weight-bold text-wrap" @click="chooseMeal">
+      <v-list-item-title class="font-weight-bold text-wrap">
         {{ getLocaleContent(meal.name) }}
       </v-list-item-title>
       <context-menu

@@ -14,6 +14,7 @@ import type { MealAction } from '@intake24/survey/components/recall/MealItem.vue
 import type { RecallAction } from '@intake24/survey/components/recall/MealListDesktop.vue';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
+import { isSelectionEqual } from '@intake24/common/types';
 import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
 import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import portionSizeHandlers from '@intake24/survey/components/prompts/dynamic/handlers/portion-size';
@@ -150,6 +151,8 @@ export default defineComponent({
     ...mapActions(useSurvey, ['deleteMeal', 'setContinueButtonEnabled']),
 
     setSelection(newSelection: Selection) {
+      if (isSelectionEqual(this.survey.data.selection, newSelection)) return;
+
       // Prevent the currently active prompt from crashing if it expects a different selection type
       this.currentPrompt = null;
       this.survey.setSelection(newSelection);
@@ -294,7 +297,6 @@ export default defineComponent({
     },
 
     async onFoodSelected(foodId: number) {
-      console.log(foodId);
       this.setSelection({
         element: {
           type: 'food',

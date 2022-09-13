@@ -1,8 +1,13 @@
 <template>
   <v-list v-if="foods.length > 0" :class="{ 'pa-0': linked }">
     <div v-for="(food, i) in foods" :key="i" :class="{ 'ml-4': linked }">
-      <v-list-item class="ma-0 small" :class="{ selected: food.id === selectedFoodId }" link>
-        <v-list-item-title class="text-wrap" @click="emitFoodSelected(food.id)"
+      <v-list-item
+        class="ma-0 small"
+        :class="{ selected: food.id === selectedFoodId }"
+        link
+        @click="emitFoodSelected(food.id)"
+      >
+        <v-list-item-title class="text-wrap"
           ><span :class="{ 'linked-food-title': linked }"> {{ foodDisplayName(food) }}</span>
         </v-list-item-title>
         <v-list-item-action class="list-item">
