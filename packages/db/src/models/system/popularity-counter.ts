@@ -17,6 +17,7 @@ export default class PopularityCounter
 {
   @Column({
     allowNull: false,
+    primaryKey: true,
     type: DataType.STRING(8),
   })
   public foodCode!: string;

@@ -17,7 +17,7 @@ export default () => {
     localeId = suite.data.system.locale.id;
 
     input = {
-      job: 'LocaleCopyPairwiseAssociations',
+      job: 'PairwiseSearchCopyAssociations',
       params: {
         sourceLocaleId: localeId,
         targetLocaleId: 'some-locale',

@@ -23,10 +23,6 @@ export type JobParams = {
   };
   CleanStorageFiles: EmptyJobParams;
   LanguageSyncTranslations: EmptyJobParams;
-  LocaleCopyPairwiseAssociations: {
-    sourceLocaleId: string;
-    targetLocaleId: string;
-  };
   NutrientTableImportData: {
     nutrientTableId: string;
     file: string;
@@ -34,6 +30,13 @@ export type JobParams = {
   NutrientTableImportMapping: {
     nutrientTableId: string;
     file: string;
+  };
+  PairwiseSearchCopyAssociations: {
+    sourceLocaleId: string;
+    targetLocaleId: string;
+  };
+  PopularitySearchUpdateCounters: {
+    foodCodes: string[];
   };
   PurgeRefreshTokens: EmptyJobParams;
   SendPasswordReset: {
@@ -89,10 +92,6 @@ export const defaultJobsParams: JobParams = {
   CleanRedisStore: { store: 'cache' },
   CleanStorageFiles: {},
   LanguageSyncTranslations: {},
-  LocaleCopyPairwiseAssociations: {
-    sourceLocaleId: '',
-    targetLocaleId: '',
-  },
   NutrientTableImportData: {
     nutrientTableId: '',
     file: '',
@@ -100,6 +99,13 @@ export const defaultJobsParams: JobParams = {
   NutrientTableImportMapping: {
     nutrientTableId: '',
     file: '',
+  },
+  PairwiseSearchCopyAssociations: {
+    sourceLocaleId: '',
+    targetLocaleId: '',
+  },
+  PopularitySearchUpdateCounters: {
+    foodCodes: [],
   },
   PurgeRefreshTokens: {},
   SendPasswordReset: {

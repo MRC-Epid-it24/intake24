@@ -258,23 +258,23 @@ const surveySubmissionService = ({
    * Collect custom prompt answers as custom fields
    *
    * @template T
-   * @param {T} idName
+   * @param {T} propId
    * @param {string} id
    * @param {Dictionary<CustomPromptAnswer>} promptAnswers
    * @param {string[]} promptQuestions
    * @returns {CustomAnswers<T>[]}
    */
   const collectCustomAnswers = <T extends 'surveySubmissionId' | 'mealId' | 'foodId'>(
-    idName: T,
+    propId: T,
     id: string,
     promptAnswers: Dictionary<CustomPromptAnswer>,
     promptQuestions: string[]
   ): CustomAnswers<T>[] => {
     const customAnswers = Object.entries(promptAnswers)
-      .filter(([questionId]) => promptQuestions.includes(questionId))
-      .map(([questionId, answer]) => ({
-        [idName]: id,
-        name: questionId,
+      .filter(([name]) => promptQuestions.includes(name))
+      .map(([name, answer]) => ({
+        [propId]: id,
+        name,
         value: Array.isArray(answer) ? answer.join(', ') : answer.toString(),
       }));
 
@@ -413,19 +413,6 @@ const surveySubmissionService = ({
         minutes: time?.minutes ?? 0,
       }));
 
-      // Store survey custom fields & meals
-      await Promise.all([
-        SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs, { transaction }),
-        SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
-      ]);
-
-      // Fetch created meal records
-      const meals = await SurveySubmissionMeal.findAll({
-        where: { surveySubmissionId },
-        order: [['id', 'ASC']],
-        transaction,
-      });
-
       // Collect food & group codes
       const { foodCodes, groupCodes } = state.meals.reduce<FoodCodes>(
         (acc, meal) => {
@@ -437,6 +424,20 @@ const surveySubmissionService = ({
         },
         { foodCodes: [], groupCodes: [] }
       );
+
+      // Store survey custom fields & meals
+      await Promise.all([
+        scheduler.jobs.addJob({ type: 'PopularitySearchUpdateCounters', userId }, { foodCodes }),
+        SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs, { transaction }),
+        SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
+      ]);
+
+      // Fetch created meal records
+      const meals = await SurveySubmissionMeal.findAll({
+        where: { surveySubmissionId },
+        order: [['id', 'ASC']],
+        transaction,
+      });
 
       // Fetch food & group records
       // TODO: if food record not found, look for prototype?

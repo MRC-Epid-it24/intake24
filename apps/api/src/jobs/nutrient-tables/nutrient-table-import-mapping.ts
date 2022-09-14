@@ -8,7 +8,7 @@ import type { IoC } from '@intake24/api/ioc';
 import { excelColumnToOffset } from '@intake24/common/util/strings';
 import { FoodsNutrientType, NutrientTable, NutrientTableCsvMappingNutrient } from '@intake24/db';
 
-import StreamLockJob from './stream-lock-job';
+import StreamLockJob from '../stream-lock-job';
 
 export type CSVRow = {
   'Intake24 nutrient ID': string;

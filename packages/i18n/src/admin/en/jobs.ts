@@ -31,16 +31,20 @@ const jobs: LocaleMessageObject = {
     LanguageSyncTranslations: {
       _: 'Language - Synchronize translations',
     },
-    LocaleCopyPairwiseAssociations: {
-      _: 'Locale - Copy pairwise associations',
-      sourceLocaleId: 'Source Locale ID',
-      targetLocaleId: 'Target Locale ID',
-    },
     NutrientTableImportMapping: {
       _: 'Nutrient table - import NDB mapping',
     },
     NutrientTableImportData: {
       _: 'Nutrient table - import NDB data',
+    },
+    PairwiseSearchCopyAssociations: {
+      _: 'Search - Copy pairwise associations',
+      sourceLocaleId: 'Source Locale ID',
+      targetLocaleId: 'Target Locale ID',
+    },
+    PopularitySearchUpdateCounters: {
+      _: 'Search - Update popularity counters',
+      foodCodes: 'Food codes',
     },
     SendPasswordReset: {
       _: 'Send password reset',

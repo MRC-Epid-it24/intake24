@@ -1,9 +1,8 @@
 import type { JobType } from '@intake24/common/types';
 
 import LanguageSyncTranslations from './language-sync-translations';
-import LocaleCopyPairwiseAssociations from './locale-copy-pairwise-associations';
-import NutrientTableImportData from './nutrient-table-import-data';
-import NutrientTableImportMapping from './nutrient-table-import-mapping';
+import nutrientTables from './nutrient-tables';
+import search from './search';
 import surveys from './surveys';
 import system from './system';
 
@@ -14,11 +13,8 @@ export { default as StreamLockJob } from './stream-lock-job';
 const jobs = {
   // Languages
   LanguageSyncTranslations,
-  // Locales
-  LocaleCopyPairwiseAssociations,
-  // Nutrient tables
-  NutrientTableImportData,
-  NutrientTableImportMapping,
+  ...nutrientTables,
+  ...search,
   ...surveys,
   ...system,
 };

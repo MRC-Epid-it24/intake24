@@ -1,33 +1,20 @@
 import type { IoC } from '@intake24/api/ioc';
-import type { JobParams, JobType, JobTypeParams } from '@intake24/common/types';
+import type { GetJobParams, JobType } from '@intake24/common/types';
 import type {
   LocaleSplitListInput,
   LocaleSplitWordInput,
   LocaleSynonymSetInput,
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
-import {
-  copyPairwiseAssociationsQueries,
-  FoodsLocale,
-  Op,
-  PACoOccurrence,
-  PAOccurrence,
-  PAOccurrenceTransactionCount,
-  SplitList,
-  SplitWord,
-  SynonymSet,
-  SystemLocale,
-} from '@intake24/db';
-
-export type CopyPairwiseAssociationsOps = JobParams['LocaleCopyPairwiseAssociations'];
+import { FoodsLocale, Op, SplitList, SplitWord, SynonymSet } from '@intake24/db';
 
 export type QueueLocaleTaskInput = {
   userId: string;
   job: JobType;
-  params: JobTypeParams;
+  params: GetJobParams<JobType>;
 };
 
-const localeService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) => {
+const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   const getSplitLists = async (localeId: string) => {
     const locale = await FoodsLocale.findByPk(localeId, {
       include: { association: 'splitLists', order: [['id', 'ASC']] },
@@ -152,34 +139,6 @@ const localeService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) => {
   };
 
   /**
-   * Copy Pairwise associations data from one locale to another
-   *
-   * @param {CopyPairwiseAssociationsOps} options
-   */
-  const copyPairwiseAssociations = async (options: CopyPairwiseAssociationsOps) => {
-    const { sourceLocaleId, targetLocaleId } = options;
-
-    const locales = await SystemLocale.findAll({ where: { id: [sourceLocaleId, targetLocaleId] } });
-    if (locales.length !== 2) throw new NotFoundError();
-
-    await db.system.transaction(async (transaction) => {
-      await Promise.all([
-        PAOccurrence.destroy({ where: { localeId: targetLocaleId }, transaction }),
-        PACoOccurrence.destroy({ where: { localeId: targetLocaleId }, transaction }),
-        PAOccurrenceTransactionCount.destroy({ where: { localeId: targetLocaleId }, transaction }),
-      ]);
-
-      const { occurrences, coOccurrences, transactionsCount } = copyPairwiseAssociationsQueries();
-
-      await Promise.all(
-        [occurrences, coOccurrences, transactionsCount].map((query) =>
-          db.system.query(query, { replacements: { sourceLocaleId, targetLocaleId }, transaction })
-        )
-      );
-    });
-  };
-
-  /**
    * Queue locale tasks
    *
    * @param {QueueLocaleTaskInput} input
@@ -198,7 +157,6 @@ const localeService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) => {
     setSplitWords,
     getSynonymSets,
     setSynonymSets,
-    copyPairwiseAssociations,
     queueLocaleTask,
   };
 };

@@ -26,6 +26,8 @@ import {
   languageService,
   localeService,
   nutrientTableService,
+  pairwiseSearchService,
+  popularitySearchService,
   portionSizeService,
   processedImageService,
   Pusher,
@@ -61,6 +63,9 @@ export default (container: AwilixContainer): void => {
     foodDataService: asFunction(foodDataService),
     portionSizeService: asFunction(portionSizeService),
     categoryContentsService: asFunction(categoryContentsService),
+
+    pairwiseSearchService: asFunction(pairwiseSearchService),
+    popularitySearchService: asFunction(popularitySearchService),
 
     adminCategoryService: asFunction(adminCategoryService),
     adminFoodService: asFunction(adminFoodService),

@@ -17,7 +17,7 @@ import {
   NutrientTableRecordNutrient,
 } from '@intake24/db';
 
-import StreamLockJob from './stream-lock-job';
+import StreamLockJob from '../stream-lock-job';
 
 export type CSVRow = string[];
 

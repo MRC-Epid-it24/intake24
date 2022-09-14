@@ -91,6 +91,8 @@ import type {
   LocaleService,
   MFAProvider,
   NutrientTableService,
+  PairwiseSearchService,
+  PopularitySearchService,
   PortionSizeService,
   ProcessedImageService,
   Pusher,
@@ -256,6 +258,10 @@ export interface IoC extends Jobs {
 
   // Categories
   categoryContentsService: CategoryContentsService;
+
+  // Search
+  pairwiseSearchService: PairwiseSearchService;
+  popularitySearchService: PopularitySearchService;
 
   // Images
   processedImageService: ProcessedImageService;

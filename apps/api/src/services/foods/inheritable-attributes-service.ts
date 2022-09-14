@@ -5,10 +5,6 @@ import {
 } from '@intake24/api/services/foods/common';
 import { AttributeDefaults, CategoryAttribute, FoodAttribute } from '@intake24/db';
 
-export interface InheritableAttributesService {
-  resolveInheritableAttributes(foodCode: string): Promise<InheritableAttributes>;
-}
-
 interface InheritableAttributesTemp {
   reasonableAmount: number | null;
   readyMealOption: boolean | null;
@@ -16,7 +12,7 @@ interface InheritableAttributesTemp {
   useInRecipes: number | null;
 }
 
-export default (): InheritableAttributesService => {
+const inheritableAttributesService = () => {
   const completeAttributes = (
     attributes: InheritableAttributesTemp
   ): InheritableAttributes | undefined => {
@@ -123,3 +119,7 @@ export default (): InheritableAttributesService => {
     resolveInheritableAttributes,
   };
 };
+
+export default inheritableAttributesService;
+
+export type InheritableAttributesService = ReturnType<typeof inheritableAttributesService>;

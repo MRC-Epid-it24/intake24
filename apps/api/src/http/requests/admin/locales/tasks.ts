@@ -3,7 +3,7 @@ import { checkSchema } from 'express-validator';
 import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 import { pickJobParams } from '@intake24/common/types';
 
-const jobOptions = ['LocaleCopyPairwiseAssociations'];
+const jobOptions = ['PairwiseSearchCopyAssociations'];
 
 export default validate(
   checkSchema({
@@ -23,7 +23,7 @@ export default validate(
       custom: {
         options: async (value, { req }): Promise<void> => {
           switch (req.body.job) {
-            case 'LocaleCopyPairwiseAssociations':
+            case 'PairwiseSearchCopyAssociations':
               if (
                 typeof value?.sourceLocaleId !== 'string' ||
                 typeof value?.targetLocaleId !== 'string'
