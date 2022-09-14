@@ -200,8 +200,10 @@ export default defineComponent({
         this.selectedObjectIdx === undefined
           ? null
           : {
+              asServedSetId: this.asServedSetId,
               index: this.selectedObjectIdx,
               weight: this.asServedData.images[this.selectedObjectIdx].weight,
+              imageUrl: this.asServedData.images[this.selectedObjectIdx].mainImageUrl,
             };
 
       this.$emit('update', newState);

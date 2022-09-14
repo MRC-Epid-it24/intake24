@@ -282,6 +282,8 @@ export default defineComponent({
           this.conversionFactor,
         leftoversWeight: 0, // Guide image does not allow estimating leftovers
         object: {
+          guideImageId: this.guideImageId,
+          imageUrl: this.guideImageData.imageMap.baseImageUrl,
           id: idx + 1,
           weight: this.guideImageData.weights[idx + 1],
         },

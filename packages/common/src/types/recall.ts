@@ -22,11 +22,15 @@ export interface PortionSizeStateBase {
 }
 
 export interface SelectedAsServedImage {
+  asServedSetId: string;
+  imageUrl: string;
   index: number;
   weight: number;
 }
 
 export interface SelectedGuideImageObject {
+  guideImageId: string;
+  imageUrl: string;
   id: number;
   weight: number;
 }

@@ -18,12 +18,12 @@ export const asServedMapper = (
 
   return [
     { foodId, name: 'leftovers', value: (!!leftovers).toString() },
-    // { foodId, name: 'leftoversImage', value: '' },
-    // { foodId, name: 'leftovers-image-set', value: '' },
+    { foodId, name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
+    { foodId, name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
     { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { foodId, name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '0' },
-    // { foodId, name: 'servingImage', value: '' },
-    // { foodId, name: 'serving-image-set', value: '' },
+    { foodId, name: 'servingImage', value: serving?.imageUrl ?? '' },
+    { foodId, name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
     { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
     { foodId, name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '0' },
   ];
@@ -41,8 +41,8 @@ export const guideImageMapper = (
   } = state;
 
   return [
-    // { foodId, name: 'guide-image-id', value: '' },
-    // { foodId, name: 'imageUrl', value: '' },
+    { foodId, name: 'guide-image-id', value: object?.guideImageId ?? '' },
+    { foodId, name: 'imageUrl', value: object?.imageUrl ?? '' },
     { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { foodId, name: 'objectIndex', value: object?.id?.toString() ?? '0' },
     { foodId, name: 'objectWeight', value: object?.weight?.toString() ?? '0' },
