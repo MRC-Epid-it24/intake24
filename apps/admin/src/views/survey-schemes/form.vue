@@ -52,7 +52,7 @@ import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/commo
 import type { Meal } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import MealList from '@intake24/admin/components/meals/meal-list.vue';
+import { MealList } from '@intake24/admin/components/lists';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { form } from '@intake24/admin/helpers';
 import { defaultMeals, schemeTypes } from '@intake24/common/schemes';

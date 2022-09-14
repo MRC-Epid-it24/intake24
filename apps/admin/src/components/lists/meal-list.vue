@@ -13,21 +13,6 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
-      <select-resource resource="survey-schemes" return-object="meals" @input="load">
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            class="ml-3"
-            color="secondary"
-            fab
-            small
-            :title="$t(`survey-schemes.load`)"
-            v-on="on"
-          >
-            <v-icon>fa-download</v-icon>
-          </v-btn>
-        </template>
-      </select-resource>
       <confirm-dialog
         color="error"
         :label="$t('survey-schemes.meals.reset._').toString()"
@@ -48,6 +33,19 @@
         </template>
         {{ $t('survey-schemes.meals.reset.text') }}
       </confirm-dialog>
+      <options-menu>
+        <select-resource resource="survey-schemes" return-object="meals" @input="load">
+          <template #activator="{ on, attrs }">
+            <v-list-item v-bind="attrs" link v-on="on">
+              <v-list-item-title>
+                <v-icon left>fas fa-download</v-icon>
+                {{ $t('survey-schemes.load') }}
+              </v-list-item-title>
+            </v-list-item>
+          </template>
+        </select-resource>
+        <json-editor v-model="meals"></json-editor>
+      </options-menu>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="meals" handle=".drag-and-drop__handle">
@@ -142,10 +140,14 @@ import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Meal, Meals } from '@intake24/common/types';
-import { LanguageSelector, SelectResource } from '@intake24/admin/components/forms';
+import { SelectResource } from '@intake24/admin/components/dialogs';
+import { LanguageSelector } from '@intake24/admin/components/forms';
 import { defaultMeals } from '@intake24/common/schemes';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
+
+import { OptionsMenu } from '../dialogs';
+import { JsonEditor } from '../editors';
 
 export type MealDialog = {
   show: boolean;
@@ -156,7 +158,14 @@ export type MealDialog = {
 export default defineComponent({
   name: 'MealList',
 
-  components: { ConfirmDialog, draggable, LanguageSelector, SelectResource },
+  components: {
+    ConfirmDialog,
+    draggable,
+    JsonEditor,
+    LanguageSelector,
+    OptionsMenu,
+    SelectResource,
+  },
 
   props: {
     schemeId: {

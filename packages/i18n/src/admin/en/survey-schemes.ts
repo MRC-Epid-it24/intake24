@@ -10,7 +10,7 @@ const surveySchemes: LocaleMessageObject = {
   create: 'Add survey scheme',
   edit: 'Edit survey scheme',
   delete: 'Delete survey scheme',
-  load: 'Load section from survey scheme',
+  load: 'Load from scheme',
   none: 'No survey scheme found',
 
   copy: {

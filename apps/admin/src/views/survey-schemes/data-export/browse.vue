@@ -13,21 +13,19 @@
         {{ $t(`survey-schemes.data-export.sections._`) }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <select-resource resource="survey-schemes" return-object="dataExport" @input="load">
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            class="ml-3"
-            color="secondary"
-            fab
-            small
-            :title="$t(`survey-schemes.load`)"
-            v-on="on"
-          >
-            <v-icon>fa-download</v-icon>
-          </v-btn>
-        </template>
-      </select-resource>
+      <options-menu>
+        <select-resource resource="survey-schemes" return-object="dataExport" @input="load">
+          <template #activator="{ on, attrs }">
+            <v-list-item v-bind="attrs" link v-on="on">
+              <v-list-item-title>
+                <v-icon left>fas fa-download</v-icon>
+                {{ $t('survey-schemes.load') }}
+              </v-list-item-title>
+            </v-list-item>
+          </template>
+        </select-resource>
+        <json-editor v-model="form.dataExport"></json-editor>
+      </options-menu>
     </v-toolbar>
     <data-export-section
       :ref-fields="sectionRefFields"
@@ -78,8 +76,9 @@ import type {
   SurveySchemeEntry,
   SurveySchemeExportRefsResponse,
 } from '@intake24/common/types/http/admin';
+import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { SelectResource } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
 import { defaultExport } from '@intake24/common/schemes';
 
@@ -91,7 +90,7 @@ export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;
 export default defineComponent({
   name: 'SurveySchemeDataExport',
 
-  components: { draggable, DataExportSection, SelectResource },
+  components: { draggable, DataExportSection, JsonEditor, OptionsMenu, SelectResource },
 
   mixins: [formMixin],
 

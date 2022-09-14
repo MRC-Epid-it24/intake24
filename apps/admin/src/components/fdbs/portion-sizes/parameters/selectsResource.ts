@@ -2,7 +2,7 @@ import type { PropType } from 'vue';
 import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 
-import { SelectResource } from '@intake24/admin/components/forms';
+import { SelectResource } from '@intake24/admin/components/dialogs';
 
 import type { PortionSizeMethodParameterItem } from '..';
 

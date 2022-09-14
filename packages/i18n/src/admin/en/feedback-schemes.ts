@@ -9,7 +9,7 @@ const feedbackSchemes: LocaleMessageObject = {
   create: 'Add feedback scheme',
   edit: 'Edit feedback scheme',
   delete: 'Delete feedback scheme',
-  load: 'Load section from feedback scheme',
+  load: 'Load from scheme',
   none: 'No feedback scheme found',
 
   types: {

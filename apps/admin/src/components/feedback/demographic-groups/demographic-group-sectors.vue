@@ -98,8 +98,8 @@ import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { DemographicGroupScaleSector } from '@intake24/common/feedback';
+import { tinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { tinymce } from '@intake24/admin/components/tinymce';
 import { sentiments } from '@intake24/common/feedback';
 import { copy } from '@intake24/common/util';
 

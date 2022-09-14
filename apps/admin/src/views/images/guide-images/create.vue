@@ -60,8 +60,8 @@
 import { defineComponent } from 'vue';
 
 import type { GuideImageEntry } from '@intake24/common/types/http/admin';
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { SelectResource } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
 
 type CreateGuideImageForm = {

@@ -7,7 +7,6 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
-        class="mx-3"
         color="secondary"
         fab
         small
@@ -16,21 +15,19 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
-      <select-resource resource="feedback-schemes" return-object="cards" @input="load">
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            class="ml-3"
-            color="secondary"
-            fab
-            small
-            :title="$t(`feedback-schemes.load`)"
-            v-on="on"
-          >
-            <v-icon>fa-download</v-icon>
-          </v-btn>
-        </template>
-      </select-resource>
+      <options-menu>
+        <select-resource resource="feedback-schemes" return-object="cards" @input="load">
+          <template #activator="{ on, attrs }">
+            <v-list-item v-bind="attrs" link v-on="on">
+              <v-list-item-title>
+                <v-icon left>fas fa-download</v-icon>
+                {{ $t('feedback-schemes.load') }}
+              </v-list-item-title>
+            </v-list-item>
+          </template>
+        </select-resource>
+        <json-editor v-model="cards"></json-editor>
+      </options-menu>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="cards" handle=".drag-and-drop__handle">
@@ -87,7 +84,8 @@ import draggable from 'vuedraggable';
 
 import type { Card } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
-import { SelectResource } from '@intake24/admin/components/forms';
+import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { useEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -105,6 +103,8 @@ export default defineComponent({
     draggable,
     CardSelector,
     ConfirmDialog,
+    JsonEditor,
+    OptionsMenu,
     SelectResource,
   },
 

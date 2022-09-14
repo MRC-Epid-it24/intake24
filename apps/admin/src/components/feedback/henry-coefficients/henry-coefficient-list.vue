@@ -15,21 +15,23 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
-      <select-resource resource="feedback-schemes" return-object="henryCoefficients" @input="load">
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            class="ml-3"
-            color="secondary"
-            fab
-            small
-            :title="$t(`feedback-schemes.load`)"
-            v-on="on"
-          >
-            <v-icon>fa-download</v-icon>
-          </v-btn>
-        </template>
-      </select-resource>
+      <options-menu>
+        <select-resource
+          resource="feedback-schemes"
+          return-object="henryCoefficients"
+          @input="load"
+        >
+          <template #activator="{ on, attrs }">
+            <v-list-item v-bind="attrs" link v-on="on">
+              <v-list-item-title>
+                <v-icon left>fas fa-download</v-icon>
+                {{ $t('feedback-schemes.load') }}
+              </v-list-item-title>
+            </v-list-item>
+          </template>
+        </select-resource>
+        <json-editor v-model="items"></json-editor>
+      </options-menu>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="items" handle=".drag-and-drop__handle">
@@ -184,7 +186,8 @@ import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
-import { SelectResource } from '@intake24/admin/components/forms';
+import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/components/lists';
 import { sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
@@ -194,7 +197,7 @@ import { getHenryCoefficientDefaults } from './henry-coefficient';
 export default defineComponent({
   name: 'HenryCoefficientList',
 
-  components: { ConfirmDialog, draggable, SelectResource },
+  components: { ConfirmDialog, draggable, JsonEditor, OptionsMenu, SelectResource },
 
   props: {
     schemeId: {

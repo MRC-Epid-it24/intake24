@@ -14,21 +14,19 @@
         {{ $t('feedback-schemes.top-foods.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <select-resource resource="feedback-schemes" return-object="topFoods" @input="load">
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            class="ml-3"
-            color="secondary"
-            fab
-            small
-            :title="$t(`feedback-schemes.load`)"
-            v-on="on"
-          >
-            <v-icon>fa-download</v-icon>
-          </v-btn>
-        </template>
-      </select-resource>
+      <options-menu>
+        <select-resource resource="feedback-schemes" return-object="topFoods" @input="load">
+          <template #activator="{ on, attrs }">
+            <v-list-item v-bind="attrs" link v-on="on">
+              <v-list-item-title>
+                <v-icon left>fas fa-download</v-icon>
+                {{ $t('feedback-schemes.load') }}
+              </v-list-item-title>
+            </v-list-item>
+          </template>
+        </select-resource>
+        <json-editor v-model="form.topFoods"></json-editor>
+      </options-menu>
     </v-toolbar>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container fluid>
@@ -92,9 +90,10 @@ import { defineComponent } from 'vue';
 import type { RuleCallback } from '@intake24/admin/types';
 import type { TopFoods } from '@intake24/common/feedback';
 import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
+import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { ColorList, NutrientList, Preview } from '@intake24/admin/components/feedback';
-import { SelectResource } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
 import { defaultTopFoods } from '@intake24/common/feedback';
 
@@ -105,7 +104,7 @@ export type FeedbackSchemeTopFoodsForm = Pick<FeedbackSchemeForm, 'topFoods'>;
 export default defineComponent({
   name: 'FeedbackSchemeTopFoods',
 
-  components: { ColorList, NutrientList, Preview, SelectResource },
+  components: { ColorList, JsonEditor, NutrientList, OptionsMenu, Preview, SelectResource },
 
   mixins: [formMixin],
 
@@ -120,6 +119,7 @@ export default defineComponent({
 
   data() {
     return {
+      menu: false,
       editMethod: 'patch',
       form: form<FeedbackSchemeTopFoodsForm>({ topFoods: defaultTopFoods }),
       nonInputErrorKeys: ['topFoods.max', 'topFoods.colors', 'topFoods.nutrientTypes'],

@@ -60,8 +60,8 @@ import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { LocaleTranslation } from '@intake24/common/types';
+import { tinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { tinymce } from '@intake24/admin/components/tinymce';
 
 export type LocaleTranslationKeys = 'name' | 'text' | 'description';
 

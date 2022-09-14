@@ -2,16 +2,12 @@
   <v-dialog v-model="dialog" max-width="600px">
     <template #activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }">
-        <v-btn
-          v-bind="attrs"
-          color="secondary"
-          fab
-          small
-          :title="$t('survey-schemes.questions.templates.add')"
-          v-on="on"
-        >
-          <v-icon>fa-download</v-icon>
-        </v-btn>
+        <v-list-item v-bind="attrs" link v-on="on">
+          <v-list-item-title>
+            <v-icon left>fas fa-download</v-icon>
+            {{ $t('survey-schemes.questions.templates.add') }}
+          </v-list-item-title>
+        </v-list-item>
       </slot>
     </template>
     <v-card :loading="loading">

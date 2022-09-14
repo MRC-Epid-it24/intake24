@@ -31,6 +31,7 @@ const common: LocaleMessageObject = {
   id: 'ID',
   type: 'Type',
   status: 'Status',
+  options: 'Options',
 
   date: 'Date',
   expiredAt: 'Expired at',
@@ -110,6 +111,11 @@ const common: LocaleMessageObject = {
     found: 'Not found',
     provided: 'Not provided',
     selected: 'Not selected',
+  },
+
+  json: {
+    _: 'Raw JSON',
+    title: 'JSON Content editor',
   },
 };
 

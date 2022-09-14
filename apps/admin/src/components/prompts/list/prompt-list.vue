@@ -6,7 +6,6 @@
       <v-spacer></v-spacer>
       <v-btn
         v-if="!isOverrideMode"
-        class="mx-3"
         color="secondary"
         fab
         small
@@ -15,12 +14,15 @@
       >
         <v-icon small>$add</v-icon>
       </v-btn>
-      <load-prompt-dialog
-        :items="isOverrideMode ? templates : undefined"
-        :question-ids="questionIds"
-        :scheme-id="$route.params.id"
-        @load="load"
-      ></load-prompt-dialog>
+      <options-menu>
+        <load-prompt-dialog
+          :items="isOverrideMode ? templates : undefined"
+          :question-ids="questionIds"
+          :scheme-id="$route.params.id"
+          @load="load"
+        ></load-prompt-dialog>
+        <json-editor v-model="questions"></json-editor>
+      </options-menu>
     </v-toolbar>
     <v-list two-line>
       <draggable v-model="questions" handle=".drag-and-drop__handle" @end="update">
@@ -52,6 +54,8 @@ import draggable from 'vuedraggable';
 
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import { OptionsMenu } from '@intake24/admin/components/dialogs';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';
 
 import PromptSelector from '../prompt-selector.vue';
@@ -74,7 +78,9 @@ export default defineComponent({
 
   components: {
     draggable,
+    JsonEditor,
     LoadPromptDialog,
+    OptionsMenu,
     PromptListItem,
     PromptSelector,
   },

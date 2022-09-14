@@ -122,8 +122,8 @@ import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Card } from '@intake24/common/feedback';
+import { tinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { tinymce } from '@intake24/admin/components/tinymce';
 import { copy, merge, randomString } from '@intake24/common/util';
 
 import { cardDefaults, cardSettings } from './card';
