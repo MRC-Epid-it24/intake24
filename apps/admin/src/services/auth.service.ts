@@ -19,6 +19,7 @@ export default {
   async login(request: EmailLoginRequest): Promise<AuthResponse> {
     const { data } = await http.post<AuthResponse>('admin/auth/login', request, {
       withCredentials: true,
+      withLoading: true,
     });
 
     return data;
@@ -36,7 +37,7 @@ export default {
     } = await http.post<LoginResponse>(
       'admin/auth/verify',
       { code, state },
-      { withCredentials: true }
+      { withCredentials: true, withLoading: true }
     );
 
     return accessToken;

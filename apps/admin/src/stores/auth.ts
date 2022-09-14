@@ -39,29 +39,15 @@ export const useAuth = defineStore('auth', {
     },
 
     async login(payload: EmailLoginRequest) {
-      const loading = useLoading();
-      loading.addItem('login');
+      const data = await authService.login(payload);
 
-      try {
-        const data = await authService.login(payload);
-
-        if ('accessToken' in data) await this.successfulLogin(data.accessToken);
-        else this.mfaRequest(data.mfaRequestUrl);
-      } finally {
-        loading.removeItem('login');
-      }
+      if ('accessToken' in data) await this.successfulLogin(data.accessToken);
+      else this.mfaRequest(data.mfaRequestUrl);
     },
 
     async verify(request: MFAVerifyRequest) {
-      const loading = useLoading();
-      loading.addItem('verify');
-
-      try {
-        const accessToken = await authService.verify(request);
-        await this.successfulLogin(accessToken);
-      } finally {
-        loading.removeItem('verify');
-      }
+      const accessToken = await authService.verify(request);
+      await this.successfulLogin(accessToken);
     },
 
     async refresh(withErr = true) {

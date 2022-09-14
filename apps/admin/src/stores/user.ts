@@ -5,7 +5,6 @@ import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin
 import type { Permission } from '@intake24/ui/types';
 import { httpService } from '@intake24/admin/services';
 import { tokenService } from '@intake24/ui/services';
-import { useLoading } from '@intake24/ui/stores';
 
 import { useResource } from './resource';
 
@@ -60,20 +59,13 @@ export const useUser = defineStore('user', {
     },
 
     async request() {
-      const loading = useLoading();
-      loading.addItem('user');
+      const {
+        data: { profile, permissions, roles },
+      } = await httpService.get<AdminUserProfileResponse>('admin/user', { withLoading: true });
 
-      try {
-        const {
-          data: { profile, permissions, roles },
-        } = await httpService.get<AdminUserProfileResponse>('admin/user');
-
-        this.profile = { ...profile };
-        this.permissions = [...permissions];
-        this.roles = [...roles];
-      } finally {
-        loading.removeItem('user');
-      }
+      this.profile = { ...profile };
+      this.permissions = [...permissions];
+      this.roles = [...roles];
     },
 
     loadPayload(accessToken: string) {

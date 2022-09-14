@@ -2,9 +2,8 @@ import axios from 'axios';
 import { defineStore } from 'pinia';
 
 import type { Dictionary } from '@intake24/common/types';
-import { useLoading } from '@intake24/ui/stores';
 
-import http from '../services/http.service';
+import { httpService } from '../services';
 import { useResource } from './resource';
 
 export type EntryState = {
@@ -25,43 +24,32 @@ export const useEntry = defineStore('entry', {
   },
   actions: {
     async requestEntry({ id, query }: { id: string; query?: any }) {
-      const { name, api } = useResource();
-      const loading = useLoading();
+      const { api } = useResource();
 
       this.clearEntry();
-      loading.addItem(`${name}/entry`);
 
       if (id === 'create') {
         this.initEntry();
         await this.requestRefs();
-        loading.removeItem(`${name}/entry`);
         return;
       }
 
-      try {
-        const { data } = await http.get(`${api}/${id}`, { params: query });
-        this.setEntry(data);
-      } finally {
-        loading.removeItem(`${name}/entry`);
-      }
+      const { data } = await httpService.get(`${api}/${id}`, { params: query, withLoading: true });
+      this.setEntry(data);
 
       await this.requestRefs();
     },
 
     async requestRefs() {
-      const { name, api } = useResource();
-      const loading = useLoading();
+      const { api } = useResource();
 
       this.clearRefs();
-      loading.addItem(`${name}/refs`);
 
       try {
-        const { data } = await http.get(`${api}/refs`);
+        const { data } = await httpService.get(`${api}/refs`, { withLoading: true });
         this.setRefs(data);
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status !== 404) throw err;
-      } finally {
-        loading.removeItem(`${name}/refs`);
       }
     },
 
