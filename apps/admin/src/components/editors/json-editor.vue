@@ -39,13 +39,15 @@
 </template>
 
 <script lang="ts">
-import JsonEditorVue from 'json-editor-vue';
+import type JsonEditorVue from 'json-editor-vue';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'JsonEditor',
 
-  components: { JsonEditorVue },
+  components: {
+    JsonEditorVue: () => import('json-editor-vue'),
+  },
 
   props: {
     value: {
