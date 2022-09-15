@@ -1,3 +1,5 @@
+import { uniqBy } from 'lodash';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { CustomField } from '@intake24/common/types';
 import type { CreateUserInput, UpdateUserInput } from '@intake24/common/types/http/admin';
@@ -322,7 +324,7 @@ const adminUserService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       }),
     ]);
 
-    return users.flat();
+    return uniqBy(users.flat(), 'id');
   };
 
   return {
