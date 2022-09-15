@@ -34,7 +34,7 @@
       </options-menu>
     </v-toolbar>
     <v-list two-line>
-      <draggable v-model="items" handle=".drag-and-drop__handle">
+      <draggable v-model="items" handle=".drag-and-drop__handle" @end="update">
         <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(coefficient, index) in items"
@@ -211,10 +211,10 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } =
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update } =
       useListWithDialog(props, context, getHenryCoefficientDefaults);
 
-    return { dialog, form, items, newDialog, add, edit, load, remove, reset, save };
+    return { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update };
   },
 
   data() {

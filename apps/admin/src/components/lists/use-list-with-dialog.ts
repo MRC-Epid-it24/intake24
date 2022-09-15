@@ -9,7 +9,7 @@ export type ListProps<T> = {
   value: T[];
 };
 
-// TODO: fix generic types
+// TODO: fix generic types casting
 
 export const useListWithDialog = <T>(
   props: ListProps<T>,
@@ -38,10 +38,6 @@ export const useListWithDialog = <T>(
     items.value = [...(val as any)];
   });
 
-  watch(items, () => {
-    context.emit('input', items.value);
-  });
-
   const add = () => {
     dialog.value = newDialog(true);
   };
@@ -52,10 +48,12 @@ export const useListWithDialog = <T>(
 
   const load = (list: UnwrapRef<T>[]) => {
     items.value = [...list];
+    update();
   };
 
   const remove = (index: number) => {
     items.value.splice(index, 1);
+    update();
   };
 
   const reset = () => {
@@ -73,6 +71,11 @@ export const useListWithDialog = <T>(
     else items.value.splice(index, 1, item);
 
     reset();
+    update();
+  };
+
+  const update = () => {
+    context.emit('input', items.value);
   };
 
   return {
@@ -86,5 +89,6 @@ export const useListWithDialog = <T>(
     remove,
     reset,
     save,
+    update,
   };
 };

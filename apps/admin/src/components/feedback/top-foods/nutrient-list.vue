@@ -31,7 +31,7 @@
       </confirm-dialog>
     </v-toolbar>
     <v-list two-line>
-      <draggable v-model="items" handle=".drag-and-drop__handle">
+      <draggable v-model="items" handle=".drag-and-drop__handle" @end="update">
         <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(nutrientType, idx) in items"
@@ -163,7 +163,7 @@ export default defineComponent({
       name: { en: props.availableNutrientTypes[0].description },
     });
 
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } =
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update } =
       useListWithDialog(props, context, defaultItem);
 
     return {
@@ -178,6 +178,7 @@ export default defineComponent({
       remove,
       reset,
       save,
+      update,
     };
   },
 
@@ -206,6 +207,7 @@ export default defineComponent({
   methods: {
     resetList() {
       this.items = [...this.defaultNutrientTypes];
+      this.update();
     },
 
     updateNutrientLabel(nutrientTypeId: string) {
