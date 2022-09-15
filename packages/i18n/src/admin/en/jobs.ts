@@ -10,6 +10,7 @@ const jobs: LocaleMessageObject = {
   progress: 'Progress',
   successful: 'Successful',
   message: 'Message',
+  params: 'Job parameters',
   stackTrace: 'Error message',
 
   types: {

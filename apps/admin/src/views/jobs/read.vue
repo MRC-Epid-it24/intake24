@@ -11,7 +11,7 @@
         <tr>
           <th>{{ $t('users._') }}</th>
           <td colspan="3">
-            {{ entry.user ? `${entry.user.name} (${entry.user.email})` : null }}
+            {{ [entry.user?.name, entry.user?.email, entry.userId].filter(Boolean).join(', ') }}
           </td>
         </tr>
         <tr>
@@ -53,6 +53,12 @@
           <td>{{ formatDate(entry.createdAt) }}</td>
           <th>{{ $t('common.updatedAt') }}</th>
           <td>{{ formatDate(entry.updatedAt) }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('jobs.params') }}</th>
+          <td colspan="3">
+            <pre class="my-3">{{ JSON.stringify(entry.params, null, '\t') }}</pre>
+          </td>
         </tr>
       </tbody>
     </v-simple-table>

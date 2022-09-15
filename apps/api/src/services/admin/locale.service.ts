@@ -147,7 +147,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   const queueLocaleTask = async (input: QueueLocaleTaskInput) => {
     const { userId, job, params } = input;
 
-    return scheduler.jobs.addJob({ type: job, userId }, params);
+    return scheduler.jobs.addJob({ type: job, userId, params });
   };
 
   return {

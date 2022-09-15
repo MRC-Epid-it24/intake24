@@ -311,7 +311,11 @@ const surveySubmissionService = ({
       surveyService.clearSession(slug, userId),
     ]);
 
-    await scheduler.jobs.addJob({ type: 'SurveySubmission', userId }, { surveyId, userId, state });
+    await scheduler.jobs.addJob({
+      type: 'SurveySubmission',
+      userId,
+      params: { surveyId, userId, state },
+    });
 
     return { ...userInfo, followUpUrl };
   };
@@ -427,7 +431,11 @@ const surveySubmissionService = ({
 
       // Store survey custom fields & meals
       await Promise.all([
-        scheduler.jobs.addJob({ type: 'PopularitySearchUpdateCounters', userId }, { foodCodes }),
+        scheduler.jobs.addJob({
+          type: 'PopularitySearchUpdateCounters',
+          userId,
+          params: { foodCodes },
+        }),
         SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs, { transaction }),
         SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
       ]);
@@ -544,10 +552,11 @@ const surveySubmissionService = ({
         [
           cache.forget(`user:submissions:${userId}`),
           submissionNotificationUrl
-            ? scheduler.jobs.addJob(
-                { type: 'SurveySubmissionNotification', userId },
-                { surveyId, submissionId: surveySubmissionId }
-              )
+            ? scheduler.jobs.addJob({
+                type: 'SurveySubmissionNotification',
+                userId,
+                params: { surveyId, submissionId: surveySubmissionId },
+              })
             : null,
         ].map(Boolean)
       );

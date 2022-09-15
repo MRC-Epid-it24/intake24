@@ -19,6 +19,7 @@ const jobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['type'],
       order: [['startedAt', 'DESC']],
+      attributes: ['id', 'type', 'userId', 'startedAt', 'completedAt', 'successful'],
       include: [{ association: 'user', attributes: ['name', 'email'], required: false }],
     });
 

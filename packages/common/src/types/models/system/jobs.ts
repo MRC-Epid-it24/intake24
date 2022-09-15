@@ -1,5 +1,5 @@
 import type { OmitAndOptional } from '../../common';
-import type { JobType } from '../../jobs';
+import type { JobType, JobTypeParams } from '../../jobs';
 
 export type JobAttributes = {
   id: string;
@@ -10,6 +10,7 @@ export type JobAttributes = {
   progress: number | null;
   successful: boolean | null;
   message: string | null;
+  params: JobTypeParams;
   stackTrace: string[] | null;
   startedAt: Date | null;
   completedAt: Date | null;

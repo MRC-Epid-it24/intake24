@@ -246,7 +246,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
   ): Promise<Job> => {
     const { type, file, userId } = input;
 
-    return scheduler.jobs.addJob({ type, userId }, { nutrientTableId, file });
+    return scheduler.jobs.addJob({ type, userId, params: { nutrientTableId, file } });
   };
 
   return {

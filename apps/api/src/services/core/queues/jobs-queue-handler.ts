@@ -12,6 +12,7 @@ import type { QueueHandler } from './queue-handler';
 
 export type JobInput<T extends JobType> = {
   type: T;
+  params: JobParams[T];
   userId?: string | null;
 };
 
@@ -205,17 +206,12 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    *
    * @private
    * @param {DbJob} job
-   * @param {JobTypeParams} [params]
    * @param {JobsOptions} [options={}]
    * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
-  private async queueJob(
-    job: DbJob,
-    params?: JobTypeParams,
-    options: JobsOptions = {}
-  ): Promise<void> {
-    const { id, type } = job;
+  private async queueJob(job: DbJob, options: JobsOptions = {}): Promise<void> {
+    const { id, type, params } = job;
 
     await this.queue.add(type, { params }, { ...options, jobId: id });
 
@@ -227,18 +223,16 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    *
    * @template T
    * @param {JobInput<T>} input
-   * @param {JobTypeParams} [params]
    * @param {JobsOptions} [options={}]
    * @returns {Promise<DbJob>}
    * @memberof JobsQueueHandler
    */
   public async addJob<T extends JobType>(
     input: JobInput<T>,
-    params?: JobParams[T],
     options: JobsOptions = {}
   ): Promise<DbJob> {
     const job = await DbJob.create(input);
-    await this.queueJob(job, params, options);
+    await this.queueJob(job, options);
 
     return job;
   }

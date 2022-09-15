@@ -1,7 +1,7 @@
 <template>
   <data-table :actions="['read', 'delete']" :headers="headers">
-    <template #[`item.user`]="{ item }">
-      {{ item.user ? item.user.email : null }}
+    <template #[`item.userId`]="{ item }">
+      {{ item.user?.email ?? item.userId }}
     </template>
     <template #[`item.successful`]="{ item }">
       <v-icon v-if="item.successful" color="success">fa-check-circle</v-icon>
@@ -42,7 +42,7 @@ export default defineComponent({
         {
           text: this.$t('users._'),
           sortable: true,
-          value: 'user',
+          value: 'userId',
         },
         {
           text: this.$t('common.startedAt'),

@@ -192,16 +192,17 @@ const adminSurveyRespondentController = ({
     } = req;
     const user = req.user as User;
 
-    await scheduler.jobs.addJob(
-      { type: 'SurveyRespondentFeedback', userId },
-      {
+    await scheduler.jobs.addJob({
+      type: 'SurveyRespondentFeedback',
+      userId,
+      params: {
         surveyId,
         userId,
         to: email,
         cc: copy === 'cc' && user.email ? user.email : undefined,
         bcc: copy === 'bcc' && user.email ? user.email : undefined,
-      }
-    );
+      },
+    });
 
     res.json();
   };

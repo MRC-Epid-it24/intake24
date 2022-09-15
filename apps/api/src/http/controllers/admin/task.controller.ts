@@ -99,7 +99,7 @@ const taskController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
 
     const { job, params } = task;
 
-    await scheduler.jobs.addJob({ userId, type: job }, params, { delay: 500 });
+    await scheduler.jobs.addJob({ userId, type: job, params }, { delay: 500 });
 
     res.json();
   };

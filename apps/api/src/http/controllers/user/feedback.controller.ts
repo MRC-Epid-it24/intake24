@@ -50,10 +50,11 @@ const userFeedbackController = ({
 
     if (!survey.feedbackScheme?.outputs.includes('email')) throw new ForbiddenError();
 
-    await scheduler.jobs.addJob(
-      { type: 'SurveyRespondentFeedback', userId },
-      { surveyId: survey.id, userId, to, submissions }
-    );
+    await scheduler.jobs.addJob({
+      type: 'SurveyRespondentFeedback',
+      userId,
+      params: { surveyId: survey.id, userId, to, submissions },
+    });
 
     res.json();
   };

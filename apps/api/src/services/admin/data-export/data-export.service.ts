@@ -218,9 +218,9 @@ const dataExportService = ({
    * @returns {Promise<Job>}
    */
   const queueExportJob = async (input: DataExportInput): Promise<Job> => {
-    const { userId, ...rest } = input;
+    const { userId, ...params } = input;
 
-    return scheduler.jobs.addJob({ type: 'SurveyDataExport', userId }, rest);
+    return scheduler.jobs.addJob({ type: 'SurveyDataExport', userId, params });
   };
 
   /**

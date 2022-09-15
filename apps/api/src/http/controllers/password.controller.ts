@@ -13,7 +13,7 @@ const passwordController = ({
     const { email } = req.body;
     const userAgent = req.headers['user-agent'];
 
-    await scheduler.jobs.addJob({ type: 'SendPasswordReset' }, { email, userAgent });
+    await scheduler.jobs.addJob({ type: 'SendPasswordReset', params: { email, userAgent } });
 
     res.json();
   };

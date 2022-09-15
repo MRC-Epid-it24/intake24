@@ -330,7 +330,7 @@ const surveyService = ({
   const requestHelp = async (params: JobParams['SurveyRequestHelp']) => {
     const { userId } = params;
 
-    await scheduler.jobs.addJob({ type: 'SurveyRequestHelp', userId }, params);
+    await scheduler.jobs.addJob({ type: 'SurveyRequestHelp', userId, params });
   };
 
   return {

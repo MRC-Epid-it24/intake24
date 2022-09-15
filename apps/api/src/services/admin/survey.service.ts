@@ -286,10 +286,11 @@ const adminSurveyService = ({
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    return scheduler.jobs.addJob(
-      { type: 'SurveyImportRespondents', userId },
-      { surveyId, file: file.path }
-    );
+    return scheduler.jobs.addJob({
+      type: 'SurveyImportRespondents',
+      userId,
+      params: { surveyId, file: file.path },
+    });
   };
 
   /**
@@ -304,7 +305,11 @@ const adminSurveyService = ({
     const survey = await Survey.findByPk(surveyId);
     if (!survey) throw new NotFoundError();
 
-    return scheduler.jobs.addJob({ type: 'SurveyExportRespondentAuthUrls', userId }, { surveyId });
+    return scheduler.jobs.addJob({
+      type: 'SurveyExportRespondentAuthUrls',
+      userId,
+      params: { surveyId },
+    });
   };
 
   return {
