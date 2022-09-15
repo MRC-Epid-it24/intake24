@@ -122,7 +122,6 @@ import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Card } from '@intake24/common/feedback';
-import { tinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { copy, merge, randomString } from '@intake24/common/util';
 
@@ -138,12 +137,7 @@ export type CardDialog = {
 export default defineComponent({
   name: 'CardSelector',
 
-  components: {
-    LanguageSelector,
-    ...cardTypes,
-  },
-
-  mixins: [tinymce],
+  components: { LanguageSelector, ...cardTypes },
 
   props: {
     textRequired: {

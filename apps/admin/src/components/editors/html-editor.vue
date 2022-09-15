@@ -1,3 +1,8 @@
+<template>
+  <editor v-bind="{ init, value }" @input="$emit('input', $event)"></editor>
+</template>
+
+<script lang="ts">
 import 'tinymce/tinymce';
 import 'tinymce/icons/default';
 import 'tinymce/themes/silver';
@@ -18,12 +23,25 @@ import trimEnd from 'lodash/trimEnd';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+  name: 'HtmlEditor',
+
   components: { Editor },
+
+  props: {
+    initProps: {
+      type: Object,
+    },
+    value: {
+      type: String,
+      default: '',
+    },
+  },
+
   data() {
     const baseUrl = trimEnd(import.meta.env.VITE_APP_BASE_URL ?? '', '/');
 
     return {
-      tinymceInit: {
+      tinymceDefaults: {
         skin_url: `${baseUrl}/css/tinymce/ui/oxide`,
         // TODO: this should point to frontend stylesheet
         content_css: `${baseUrl}/css/tinymce/content/default/content.min.css`,
@@ -48,4 +66,14 @@ export default defineComponent({
       },
     };
   },
+
+  computed: {
+    init() {
+      return {
+        ...this.tinymceDefaults,
+        ...(this.initProps ?? {}),
+      };
+    },
+  },
 });
+</script>

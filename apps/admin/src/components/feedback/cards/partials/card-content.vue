@@ -1,7 +1,7 @@
 <template>
   <v-tab-item key="content">
     <language-selector
-      :label="$t('feedback-schemes.cards.name')"
+      :label="$t('feedback-schemes.cards.name').toString()"
       :value="name"
       @input="update('name', $event)"
     >
@@ -23,12 +23,11 @@
       @input="update('description', $event)"
     >
       <template v-for="lang in Object.keys(description)" #[`lang.${lang}`]>
-        <editor
+        <html-editor
           :key="lang"
-          :init="tinymceInit"
           :value="description[lang]"
           @input="updateLanguage('description', lang, $event)"
-        />
+        ></html-editor>
       </template>
     </language-selector>
   </v-tab-item>
@@ -40,7 +39,7 @@ import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { CustomCard } from '@intake24/common/feedback';
-import { tinymce } from '@intake24/admin/components/editors';
+import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 
 export type LocaleTranslationKeys = 'name' | 'description';
@@ -48,9 +47,7 @@ export type LocaleTranslationKeys = 'name' | 'description';
 export default defineComponent({
   name: 'CardContent',
 
-  components: { LanguageSelector },
-
-  mixins: [tinymce],
+  components: { HtmlEditor, LanguageSelector },
 
   props: {
     name: {

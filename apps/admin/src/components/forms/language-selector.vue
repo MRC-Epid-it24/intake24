@@ -40,12 +40,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="error"
-            :disabled="doNotRemove.includes(languages[selected])"
-            text
-            @click.stop="remove(languages[selected])"
-          >
+          <v-btn color="error" :disabled="isRemoveDisabled" text @click.stop="remove">
             <v-icon left>$delete</v-icon> {{ $t('common.action.delete') }}
           </v-btn>
         </v-card-actions>
@@ -58,7 +53,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { LocaleTranslation } from '@intake24/common/types';
+import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
 import type { LanguageListEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
 
@@ -71,7 +66,7 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: Object as PropType<LocaleTranslation>,
+      type: Object as PropType<LocaleTranslation | RequiredLocaleTranslation>,
       required: true,
     },
     default: {
@@ -97,7 +92,7 @@ export default defineComponent({
 
   data() {
     return {
-      selected: null as number | null,
+      selected: undefined as number | undefined,
       doNotRemove: this.required ? ['en'] : [],
     };
   },
@@ -115,6 +110,11 @@ export default defineComponent({
     },
     availableLanguages(): LanguageListEntry[] {
       return this.allLanguages.filter((lang) => !this.languages.includes(lang.id));
+    },
+    isRemoveDisabled(): boolean {
+      if (this.selected === undefined) return true;
+
+      return this.doNotRemove.includes(this.languages[this.selected]);
     },
   },
 
@@ -136,7 +136,10 @@ export default defineComponent({
       this.selected = this.languages.length - 1;
     },
 
-    remove(langId: string) {
+    remove() {
+      if (this.selected === undefined) return;
+
+      const langId = this.languages[this.selected];
       const { [langId]: remove, ...rest } = this.value;
       this.$emit('input', { ...rest });
     },

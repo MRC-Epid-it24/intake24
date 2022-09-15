@@ -20,7 +20,7 @@
       :label="$t('feedback-schemes.cards.unit.description').toString()"
     >
       <template v-for="lang in Object.keys(internalUnit.description)" #[`lang.${lang}`]>
-        <editor :key="lang" v-model="internalUnit.description[lang]" :init="tinymceInit" />
+        <html-editor :key="lang" v-model="internalUnit.description[lang]"></html-editor>
       </template>
     </language-selector>
   </v-tab-item>
@@ -33,16 +33,14 @@ import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { CustomCard } from '@intake24/common/feedback';
-import { tinymce } from '@intake24/admin/components/editors';
+import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { copy } from '@intake24/common/util';
 
 export default defineComponent({
   name: 'CardUnit',
 
-  components: { LanguageSelector },
-
-  mixins: [tinymce],
+  components: { HtmlEditor, LanguageSelector },
 
   props: {
     unit: {

@@ -28,7 +28,7 @@
                 :label="$t('feedback-schemes.cards.thresholds.message').toString()"
               >
                 <template v-for="lang in Object.keys(item.message)" #[`lang.${lang}`]>
-                  <editor :key="lang" v-model="item.message[lang]" :init="tinymceInit" />
+                  <html-editor :key="lang" v-model="item.message[lang]"></html-editor>
                 </template>
               </language-selector>
             </template>
@@ -45,15 +45,13 @@ import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 
 import type { CustomCard } from '@intake24/common/feedback';
-import { tinymce } from '@intake24/admin/components/editors';
+import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 
 export default defineComponent({
   name: 'CardThresholds',
 
-  components: { LanguageSelector },
-
-  mixins: [tinymce],
+  components: { HtmlEditor, LanguageSelector },
 
   props: {
     thresholds: {

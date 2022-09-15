@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     DataTablesEmbeddedDataTable: typeof import('./src/components/data-tables/embedded-data-table.vue')['default']
     DialogsOptionsMenu: typeof import('./src/components/dialogs/options-menu.vue')['default']
     DialogsSelectResource: typeof import('./src/components/dialogs/select-resource.vue')['default']
+    EditorsHtmlEditor: typeof import('./src/components/editors/html-editor.vue')['default']
     EditorsJsonEditor: typeof import('./src/components/editors/json-editor.vue')['default']
     EntryConfirmLeaveDialog: typeof import('./src/components/entry/confirm-leave-dialog.vue')['default']
     EntryLayout: typeof import('./src/components/entry/layout.vue')['default']

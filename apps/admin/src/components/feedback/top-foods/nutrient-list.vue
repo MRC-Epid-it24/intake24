@@ -97,6 +97,7 @@
             flat
             :label="$t('nutrient-types.label').toString()"
             :outlined="false"
+            required
           >
             <template v-for="lang in Object.keys(dialog.item.name)" #[`lang.${lang}`]>
               <v-text-field
@@ -165,12 +166,18 @@ export default defineComponent({
     const { dialog, form, items, newDialog, add, edit, load, remove, reset, save } =
       useListWithDialog(props, context, defaultItem);
 
-    return { dialog, form, items, newDialog, add, edit, load, remove, reset, save };
-  },
-
-  data() {
     return {
       defaultNutrientTypes: defaultTopFoods.nutrientTypes,
+      dialog,
+      form,
+      items,
+      newDialog,
+      add,
+      edit,
+      load,
+      remove,
+      reset,
+      save,
     };
   },
 

@@ -68,7 +68,7 @@
                 :label="$t('common.description').toString()"
               >
                 <template v-for="lang in Object.keys(sector.description)" #[`lang.${lang}`]>
-                  <editor :key="lang" v-model="sector.description[lang]" :init="tinymceInit" />
+                  <html-editor :key="lang" v-model="sector.description[lang]"></html-editor>
                 </template>
               </language-selector>
             </v-col>
@@ -98,7 +98,7 @@ import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { DemographicGroupScaleSector } from '@intake24/common/feedback';
-import { tinymce } from '@intake24/admin/components/editors';
+import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { sentiments } from '@intake24/common/feedback';
 import { copy } from '@intake24/common/util';
@@ -108,9 +108,7 @@ import { demographicGroupScaleSectorDefaults } from './demographic-group';
 export default defineComponent({
   name: 'DemographicGroupSectors',
 
-  components: { LanguageSelector },
-
-  mixins: [tinymce],
+  components: { HtmlEditor, LanguageSelector },
 
   props: {
     value: {

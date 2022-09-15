@@ -43,12 +43,11 @@
       @input="update('description', $event)"
     >
       <template v-for="lang in Object.keys(description)" #[`lang.${lang}`]>
-        <editor
+        <html-editor
           :key="lang"
-          :init="tinymceInit"
           :value="description[lang]"
           @input="updateLanguage('description', lang, $event)"
-        />
+        ></html-editor>
       </template>
     </language-selector>
   </v-tab-item>
@@ -60,7 +59,7 @@ import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { LocaleTranslation } from '@intake24/common/types';
-import { tinymce } from '@intake24/admin/components/editors';
+import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 
 export type LocaleTranslationKeys = 'name' | 'text' | 'description';
@@ -68,9 +67,7 @@ export type LocaleTranslationKeys = 'name' | 'text' | 'description';
 export default defineComponent({
   name: 'PromptContent',
 
-  components: { LanguageSelector },
-
-  mixins: [tinymce],
+  components: { HtmlEditor, LanguageSelector },
 
   props: {
     name: {
