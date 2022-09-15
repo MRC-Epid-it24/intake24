@@ -1,4 +1,5 @@
 import type { SecurableType } from '../../../security';
+import type { OmitAndOptional } from '../../common';
 
 export type UserSecurableAttributes = {
   userId: string;
@@ -10,7 +11,8 @@ export type UserSecurableAttributes = {
   updatedAt: Date;
 };
 
-export type UserSecurableCreationAttributes = Omit<
+export type UserSecurableCreationAttributes = OmitAndOptional<
   UserSecurableAttributes,
-  'createdAt' | 'updatedAt'
+  'createdAt' | 'updatedAt',
+  'fields'
 >;

@@ -8,6 +8,10 @@ import type {
   UpdateSecurableOwnerRequest,
   UsersWithSecurablesResponse,
 } from '@intake24/common/types/http/admin';
+import type {
+  UserSecurableAttributes,
+  UserSecurableCreationAttributes,
+} from '@intake24/common/types/models';
 import type { ModelStatic, PaginateQuery, Securable } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
@@ -42,6 +46,38 @@ const securableController = ({
       return record;
 
     throw new ForbiddenError();
+  };
+
+  const addSecurableAccess = async (
+    user: User,
+    resource: string,
+    records: UserSecurableCreationAttributes[],
+    removeSecurable?: Pick<UserSecurableAttributes, 'userId' | 'securableType' | 'securableId'>
+  ) => {
+    if (removeSecurable) await UserSecurable.destroy({ where: removeSecurable });
+
+    await Promise.all([
+      UserSecurable.bulkCreate(records),
+      adminUserService.addPermissionByName(user, resource),
+    ]);
+  };
+
+  const removeSecurableAccess = async (
+    user: User,
+    resource: string,
+    securable: Pick<UserSecurableAttributes, 'userId' | 'securableType' | 'securableId'>
+  ) => {
+    const { userId, securableType, securableId } = securable;
+    const otherSecurables = await UserSecurable.findAll({
+      where: { userId, securableType, securableId: { [Op.ne]: securableId } },
+    });
+
+    await Promise.all(
+      [
+        UserSecurable.destroy({ where: securable }),
+        otherSecurables.length ? null : adminUserService.removePermissionByName(user, resource),
+      ].filter(Boolean)
+    );
   };
 
   const browse = async (
@@ -90,10 +126,7 @@ const securableController = ({
         action,
       }));
 
-      await Promise.all([
-        UserSecurable.bulkCreate(records),
-        adminUserService.addPermissionByName(user, resource),
-      ]);
+      await addSecurableAccess(user, resource, records);
     }
 
     res.status(201).json();
@@ -119,24 +152,18 @@ const securableController = ({
     ]);
     if (!user) throw new NotFoundError();
 
+    const securableInput = { userId, securableId, securableType };
+
     if (actions.length) {
       const currentActions = user.securables?.map((sec) => sec.action).sort() ?? [];
       const actionsMatch = actions.sort().every((action, idx) => action === currentActions[idx]);
 
       if (!actionsMatch) {
-        const records = actions.map((action) => ({ userId, securableId, securableType, action }));
-
-        await UserSecurable.destroy({ where: { userId, securableId, securableType } });
-        await Promise.all([
-          UserSecurable.bulkCreate(records),
-          adminUserService.addPermissionByName(user, resource),
-        ]);
+        const records = actions.map((action) => ({ ...securableInput, action }));
+        await addSecurableAccess(user, resource, records, securableInput);
       }
     } else {
-      await Promise.all([
-        UserSecurable.destroy({ where: { userId, securableId, securableType } }),
-        adminUserService.removePermissionByName(user, resource),
-      ]);
+      await removeSecurableAccess(user, resource, securableInput);
     }
 
     res.json();
@@ -153,10 +180,7 @@ const securableController = ({
     ]);
     if (!user) throw new NotFoundError();
 
-    await Promise.all([
-      UserSecurable.destroy({ where: { userId, securableId, securableType } }),
-      adminUserService.removePermissionByName(user, resource),
-    ]);
+    await removeSecurableAccess(user, resource, { userId, securableId, securableType });
 
     res.json();
   };
