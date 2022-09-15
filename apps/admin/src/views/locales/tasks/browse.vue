@@ -79,7 +79,7 @@ export default defineComponent({
   },
 
   data() {
-    const jobType: JobType[] = ['LocaleCopyPairwiseAssociations'];
+    const jobType: JobType[] = ['PairwiseSearchCopyAssociations'];
     const jobTypeList = jobType.map((value) => ({ value, text: this.$t(`jobs.types.${value}._`) }));
 
     return {

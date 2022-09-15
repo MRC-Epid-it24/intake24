@@ -6,7 +6,7 @@
         <v-col cols="12">
           <v-text-field
             hide-details="auto"
-            :label="$t('jobs.types.LocaleCopyPairwiseAssociations.sourceLocaleId')"
+            :label="$t('jobs.types.PairwiseSearchCopyAssociations.sourceLocaleId')"
             name="sourceLocaleId"
             outlined
             :value="value.sourceLocaleId"
@@ -16,7 +16,7 @@
         <v-col cols="12">
           <v-text-field
             hide-details="auto"
-            :label="$t('jobs.types.LocaleCopyPairwiseAssociations.targetLocaleId')"
+            :label="$t('jobs.types.PairwiseSearchCopyAssociations.targetLocaleId')"
             name="targetLocaleId"
             outlined
             :value="value.targetLocaleId"
@@ -42,13 +42,13 @@ import type { JobParams } from '@intake24/common/types';
 import jobParams from './job-params';
 
 export default defineComponent({
-  name: 'LocaleCopyPairwiseAssociations',
+  name: 'PairwiseSearchCopyAssociations',
 
   mixins: [jobParams],
 
   props: {
     value: {
-      type: Object as PropType<JobParams['LocaleCopyPairwiseAssociations']>,
+      type: Object as PropType<JobParams['PairwiseSearchCopyAssociations']>,
       required: true,
     },
   },
