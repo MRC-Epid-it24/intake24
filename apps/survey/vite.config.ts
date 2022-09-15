@@ -63,6 +63,19 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: true,
       outDir,
       sourcemap,
+      rollupOptions: {
+        output: {
+          assetFileNames({ name }) {
+            if (name?.includes('@fortawesome')) return `assets/fonts/[name].[hash].[ext]`;
+
+            if (name?.includes('flag-icons')) return `assets/flags/[name].[hash].[ext]`;
+
+            if (name?.includes('feedback')) return `assets/feedback/[name].[hash].[ext]`;
+
+            return `assets/[name].[hash].[ext]`;
+          },
+        },
+      },
     },
     server: {
       port: 8200,
