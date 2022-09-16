@@ -14,7 +14,7 @@
                 name="job"
                 outlined
                 prepend-icon="fa-running"
-                @change="form.errors.clear('job')"
+                @change="updateJob"
               ></v-select>
             </v-card-text>
           </v-col>
@@ -53,15 +53,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { JobType, JobTypeParams } from '@intake24/common/types';
+import type { JobParams, JobType, JobTypeParams } from '@intake24/common/types';
 import type { JobEntry, LocaleEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { jobParams, PollsForJobs } from '@intake24/admin/components/jobs';
 import { form } from '@intake24/admin/helpers';
-import { defaultJobsParams } from '@intake24/common/types';
+
+type LocaleJobType = Extract<
+  JobType,
+  'LocaleFoodNutrientMapping' | 'PairwiseSearchCopyAssociations'
+>;
 
 type LocaleTasksForm = {
-  job: string;
+  job: LocaleJobType;
   params: JobTypeParams;
 };
 
@@ -79,14 +83,29 @@ export default defineComponent({
   },
 
   data() {
-    const jobType: JobType[] = ['PairwiseSearchCopyAssociations'];
+    const jobType: LocaleJobType[] = [
+      'LocaleFoodNutrientMapping',
+      'PairwiseSearchCopyAssociations',
+    ];
     const jobTypeList = jobType.map((value) => ({ value, text: this.$t(`jobs.types.${value}._`) }));
 
+    const defaultJobsParams: Pick<
+      JobParams,
+      'LocaleFoodNutrientMapping' | 'PairwiseSearchCopyAssociations'
+    > = {
+      LocaleFoodNutrientMapping: { localeId: this.id },
+      PairwiseSearchCopyAssociations: { sourceLocaleId: '', targetLocaleId: this.id },
+    };
+
     return {
-      form: form<LocaleTasksForm>({
-        job: jobTypeList[0].value,
-        params: defaultJobsParams[jobTypeList[0].value],
-      }),
+      defaultJobsParams,
+      form: form<LocaleTasksForm>(
+        {
+          job: jobType[0],
+          params: defaultJobsParams.LocaleFoodNutrientMapping,
+        },
+        { resetOnSubmit: false }
+      ),
       jobType,
       jobTypeList,
     };
@@ -97,6 +116,11 @@ export default defineComponent({
   },
 
   methods: {
+    updateJob() {
+      this.form.errors.clear('job');
+      this.form.params = this.defaultJobsParams[this.form.job];
+    },
+
     async submit() {
       if (this.jobInProgress) return;
 

@@ -23,6 +23,9 @@ export type JobParams = {
   };
   CleanStorageFiles: EmptyJobParams;
   LanguageSyncTranslations: EmptyJobParams;
+  LocaleFoodNutrientMapping: {
+    localeId: string;
+  };
   NutrientTableImportData: {
     nutrientTableId: string;
     file: string;
@@ -92,6 +95,9 @@ export const defaultJobsParams: JobParams = {
   CleanRedisStore: { store: 'cache' },
   CleanStorageFiles: {},
   LanguageSyncTranslations: {},
+  LocaleFoodNutrientMapping: {
+    localeId: '',
+  },
   NutrientTableImportData: {
     nutrientTableId: '',
     file: '',

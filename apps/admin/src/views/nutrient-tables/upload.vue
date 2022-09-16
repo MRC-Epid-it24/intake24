@@ -48,7 +48,7 @@
               </v-row>
             </v-col>
           </v-row>
-          <polls-job-list v-bind="{ jobs }" @download="download"></polls-job-list>
+          <polls-job-list v-bind="{ jobs }"></polls-job-list>
         </v-card-text>
       </v-form>
     </v-container>

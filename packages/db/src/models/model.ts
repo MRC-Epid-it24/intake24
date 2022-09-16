@@ -129,7 +129,7 @@ export default class Model<
     inputStream: Readable,
     options: StreamFindOptions<M['_attributes']>
   ): Promise<void> {
-    const { batchSize = 100, limit, offset: startOffset = 0, ...params } = options;
+    const { batchSize = 100, limit, offset: startOffset = 0, include, ...params } = options;
 
     try {
       const max = limit ?? (await this.count(params));
@@ -146,6 +146,7 @@ export default class Model<
         const difference = batchSize + offset - max;
         const items = await this.findAll<M>({
           ...params,
+          include,
           offset,
           limit: difference > 0 ? batchSize - difference : batchSize,
         });

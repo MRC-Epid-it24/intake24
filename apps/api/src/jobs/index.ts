@@ -1,6 +1,7 @@
 import type { JobType } from '@intake24/common/types';
 
 import LanguageSyncTranslations from './language-sync-translations';
+import locales from './locales';
 import nutrientTables from './nutrient-tables';
 import search from './search';
 import surveys from './surveys';
@@ -11,8 +12,8 @@ export { default as Job } from './job';
 export { default as StreamLockJob } from './stream-lock-job';
 
 const jobs = {
-  // Languages
   LanguageSyncTranslations,
+  ...locales,
   ...nutrientTables,
   ...search,
   ...surveys,

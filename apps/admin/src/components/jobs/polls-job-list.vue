@@ -55,6 +55,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { JobEntry } from '@intake24/common/types/http/admin';
+import { downloadFile } from '@intake24/ui/util';
 
 export default defineComponent({
   name: 'PollsJobList',
@@ -67,8 +68,11 @@ export default defineComponent({
   },
 
   methods: {
-    download(job: JobEntry) {
-      this.$emit('download', job);
+    async download(job: JobEntry) {
+      const res = await this.$http.get(`admin/user/jobs/${job.id}/download`, {
+        responseType: 'blob',
+      });
+      downloadFile(res, job.downloadUrl);
     },
   },
 });

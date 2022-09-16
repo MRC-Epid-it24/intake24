@@ -2,7 +2,6 @@ import { defineComponent } from 'vue';
 
 import type { JobType } from '@intake24/common/types';
 import type { JobEntry } from '@intake24/common/types/http/admin';
-import { downloadFile } from '@intake24/ui/util';
 
 import PollsJobList from './polls-job-list.vue';
 
@@ -59,13 +58,6 @@ export default defineComponent({
         clearInterval(this.polling);
         this.polling = null;
       }
-    },
-
-    async download(job: JobEntry) {
-      const res = await this.$http.get(`admin/user/jobs/${job.id}/download`, {
-        responseType: 'blob',
-      });
-      downloadFile(res, job.downloadUrl);
     },
   },
 });
