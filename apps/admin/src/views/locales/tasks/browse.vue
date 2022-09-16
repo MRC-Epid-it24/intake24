@@ -23,6 +23,7 @@
               :is="form.job"
               v-if="Object.keys(form.params).length"
               v-model="form.params"
+              :disabled="disabledJobParams[form.job]"
               :error="form.errors.get('params')"
               name="params"
               :refs="refs"
@@ -54,7 +55,7 @@
 import { defineComponent } from 'vue';
 
 import type { JobParams, JobType, JobTypeParams } from '@intake24/common/types';
-import type { JobEntry, LocaleEntry } from '@intake24/common/types/http/admin';
+import type { JobEntry, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { jobParams, PollsForJobs } from '@intake24/admin/components/jobs';
 import { form } from '@intake24/admin/helpers';
@@ -77,7 +78,9 @@ export default defineComponent({
   mixins: [formMixin, PollsForJobs],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<LocaleEntry>(props.id);
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<LocaleEntry, LocaleRefs>(
+      props.id
+    );
 
     return { entry, entryLoaded, refs, refsLoaded };
   },
@@ -97,8 +100,14 @@ export default defineComponent({
       PairwiseSearchCopyAssociations: { sourceLocaleId: '', targetLocaleId: this.id },
     };
 
+    const disabledJobParams = {
+      LocaleFoodNutrientMapping: { localeId: true },
+      PairwiseSearchCopyAssociations: { targetLocaleId: true },
+    };
+
     return {
       defaultJobsParams,
+      disabledJobParams,
       form: form<LocaleTasksForm>(
         {
           job: jobType[0],

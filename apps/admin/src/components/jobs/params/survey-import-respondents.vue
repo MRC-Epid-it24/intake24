@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card-title>{{ $t('tasks.params') }}</v-card-title>
+    <v-card-title>{{ $t('jobs.params') }}</v-card-title>
     <v-card-text>
       <v-row>
         <v-col cols="12">
@@ -34,7 +34,6 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { JobParams } from '@intake24/common/types';
@@ -44,14 +43,7 @@ import jobParams from './job-params';
 export default defineComponent({
   name: 'SurveyImportRespondents',
 
-  mixins: [jobParams],
-
-  props: {
-    value: {
-      type: Object as PropType<JobParams['SurveyImportRespondents']>,
-      required: true,
-    },
-  },
+  mixins: [jobParams<JobParams['SurveyImportRespondents']>()],
 });
 </script>
 

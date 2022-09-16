@@ -1,10 +1,11 @@
 <template>
   <div>
-    <v-card-title>{{ $t('tasks.params') }}</v-card-title>
+    <v-card-title>{{ $t('jobs.params') }}</v-card-title>
     <v-card-text>
       <v-row>
         <v-col cols="12">
           <v-text-field
+            :disabled="disabled.localeId"
             hide-details="auto"
             :label="$t('jobs.types.LocaleFoodNutrientMapping.localeId')"
             name="localeId"
@@ -24,7 +25,6 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { JobParams } from '@intake24/common/types';
@@ -34,14 +34,7 @@ import jobParams from './job-params';
 export default defineComponent({
   name: 'PairwiseSearchCopyAssociations',
 
-  mixins: [jobParams],
-
-  props: {
-    value: {
-      type: Object as PropType<JobParams['LocaleFoodNutrientMapping']>,
-      required: true,
-    },
-  },
+  mixins: [jobParams<JobParams['LocaleFoodNutrientMapping']>()],
 });
 </script>
 

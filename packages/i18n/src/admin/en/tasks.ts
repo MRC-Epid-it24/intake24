@@ -17,7 +17,6 @@ const tasks: LocaleMessageObject = {
     confirm: 'Push the job to the queue',
     next: 'Next job run',
   },
-  params: 'Task parameters',
   bullJob: 'Bull job (Queue entry)',
   file: 'File location',
 };
