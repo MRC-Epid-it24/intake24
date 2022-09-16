@@ -1,7 +1,8 @@
 import request from 'supertest';
 
 import type { QueueLocaleTaskInput } from '@intake24/api/services';
-import { suite } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import { FoodsLocale, SystemLocale } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
@@ -9,22 +10,27 @@ export default () => {
 
   let url: string;
   let invalidUrl: string;
-  let localeId: string;
+  let sourceLocaleId: string;
 
   let input: Omit<QueueLocaleTaskInput, 'userId'>;
 
   beforeAll(async () => {
-    localeId = suite.data.system.locale.id;
+    sourceLocaleId = suite.data.system.locale.id;
+    const langId = suite.data.system.language.id;
+
+    const localeInput = mocker.system.locale(langId, langId);
+
+    await Promise.all([FoodsLocale.create(localeInput), SystemLocale.create(localeInput)]);
 
     input = {
       job: 'PairwiseSearchCopyAssociations',
       params: {
-        sourceLocaleId: localeId,
-        targetLocaleId: 'some-locale',
+        sourceLocaleId,
+        targetLocaleId: localeInput.id,
       },
     };
 
-    url = `${baseUrl}/${localeId}/tasks`;
+    url = `${baseUrl}/${sourceLocaleId}/tasks`;
     invalidUrl = `${baseUrl}/invalid-locale/tasks`;
   });
 

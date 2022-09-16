@@ -38,13 +38,10 @@ export const getAndCheckSurveyAccess = async (
   const { surveyId } = req.params;
   const { aclService, userId } = req.scope.cradle;
 
-  const survey = await Survey.scope(scope).findByPk(surveyId, securableScope(userId));
-  if (!survey) throw new NotFoundError();
-
-  const hasAccess = await aclService.canAccessRecord(survey, action);
-  if (!hasAccess) throw new ForbiddenError();
-
-  return survey;
+  return aclService.getAndCheckRecordAccess(
+    Survey.scope(scope).findByPk(surveyId, securableScope(userId)),
+    action
+  );
 };
 
 const adminSurveyController = (ioc: IoC) => {

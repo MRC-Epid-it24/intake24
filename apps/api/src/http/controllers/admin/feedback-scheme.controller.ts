@@ -38,16 +38,10 @@ const feedbackSchemeController = (ioc: IoC) => {
     const { feedbackSchemeId } = req.params;
     const { aclService, userId } = req.scope.cradle;
 
-    const feedbackScheme = await FeedbackScheme.scope(scope).findByPk(
-      feedbackSchemeId,
-      securableScope(userId)
+    return aclService.getAndCheckRecordAccess(
+      FeedbackScheme.scope(scope).findByPk(feedbackSchemeId, securableScope(userId)),
+      action
     );
-    if (!feedbackScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(feedbackScheme, action);
-    if (!hasAccess) throw new ForbiddenError();
-
-    return feedbackScheme;
   };
 
   const browse = async (

@@ -1,5 +1,6 @@
 import type { RequestIoC } from '@intake24/api/ioc';
 import type { Permission, Role, Securable } from '@intake24/db';
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import { securableToResource } from '@intake24/common/util';
 import { User } from '@intake24/db';
@@ -164,6 +165,27 @@ const aclService = ({
   };
 
   /**
+   * Retrieve securable record and check if user has access to it
+   *
+   * @template T
+   * @param {Promise<T>} recordPromise
+   * @param {string} action
+   * @returns {Promise<T>}
+   */
+  const getAndCheckRecordAccess = async <T extends Securable>(
+    recordPromise: Promise<T | null>,
+    action: string
+  ): Promise<T> => {
+    const record = await recordPromise;
+    if (!record) throw new NotFoundError();
+
+    const hasAccess = await canAccessRecord(record, action);
+    if (!hasAccess) throw new ForbiddenError();
+
+    return record;
+  };
+
+  /**
    * Get user's list of resource-based access actions
    *
    * @param {string} resource
@@ -211,6 +233,7 @@ const aclService = ({
     hasRole,
     hasAnyRole,
     canAccessRecord,
+    getAndCheckRecordAccess,
     getResourceAccessActions,
     getSecurableAccessActions,
     getAccessActions,

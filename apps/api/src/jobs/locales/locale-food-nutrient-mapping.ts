@@ -10,8 +10,7 @@ import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { EMPTY } from '@intake24/api/services/admin/data-export';
 import { addTime } from '@intake24/api/util';
-import { FoodLocal, Job as DbJob } from '@intake24/db';
-import NutrientType from '@intake24/db/models/foods/nutrient-type';
+import { FoodLocal, FoodsNutrientType, Job as DbJob } from '@intake24/db';
 
 import BaseJob from '../job';
 
@@ -56,7 +55,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
     const filename = `${slugify(this.name)}-${localeId}-${timestamp}.csv`;
 
     const [nutrients, total] = await Promise.all([
-      NutrientType.findAll({ include: [{ association: 'unit' }], order: [['id', 'asc']] }),
+      FoodsNutrientType.findAll({ include: [{ association: 'unit' }], order: [['id', 'asc']] }),
       FoodLocal.count({
         where: { localeId },
         include: [{ association: 'main' }],

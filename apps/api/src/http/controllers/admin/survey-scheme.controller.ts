@@ -42,16 +42,10 @@ const surveySchemeController = (ioc: IoC) => {
     const { surveySchemeId } = req.params;
     const { aclService, userId } = req.scope.cradle;
 
-    const surveyScheme = await SurveyScheme.scope(scope).findByPk(
-      surveySchemeId,
-      securableScope(userId)
+    return aclService.getAndCheckRecordAccess(
+      SurveyScheme.scope(scope).findByPk(surveySchemeId, securableScope(userId)),
+      action
     );
-    if (!surveyScheme) throw new NotFoundError();
-
-    const hasAccess = await aclService.canAccessRecord(surveyScheme, action);
-    if (!hasAccess) throw new ForbiddenError();
-
-    return surveyScheme;
   };
 
   const browse = async (

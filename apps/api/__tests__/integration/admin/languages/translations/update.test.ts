@@ -1,7 +1,7 @@
 import request from 'supertest';
 
 import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
-import type { LanguageTranslation } from '@intake24/db/models';
+import type { LanguageTranslation } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
