@@ -29,7 +29,7 @@
               <draggable v-model="fields" handle=".drag-and-drop__handle">
                 <transition-group name="drag-and-drop" type="transition">
                   <v-list-item
-                    v-for="(field, idx) in fields"
+                    v-for="(field, index) in fields"
                     :key="field.id"
                     class="drag-and-drop__item"
                     draggable
@@ -53,12 +53,16 @@
                       </v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-btn icon :title="$t('common.action.edit')" @click.stop="edit(field)">
+                      <v-btn
+                        icon
+                        :title="$t('common.action.edit')"
+                        @click.stop="editOpen(index, field)"
+                      >
                         <v-icon color="primary lighten-2">$edit</v-icon>
                       </v-btn>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-btn icon :title="$t('common.action.remove')" @click.stop="remove(idx)">
+                      <v-btn icon :title="$t('common.action.remove')" @click.stop="remove(index)">
                         <v-icon color="error">$delete</v-icon>
                       </v-btn>
                     </v-list-item-action>
@@ -70,10 +74,18 @@
           <v-divider vertical></v-divider>
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('survey-schemes.data-export.available') }}</v-card-title>
+            <v-text-field
+              v-model="search"
+              clearable
+              hide-details="auto"
+              :label="$t('survey-schemes.data-export.fields.label')"
+              outlined
+              prepend-inner-icon="fas fa-search"
+            ></v-text-field>
             <v-list two-line>
               <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
-                  v-for="field in availableFields"
+                  v-for="field in visibleFields"
                   :key="field.id"
                   class="list-item-border"
                   link
@@ -99,6 +111,11 @@
                   </v-list-item-action>
                 </v-list-item>
               </transition-group>
+              <v-skeleton-loader
+                v-if="fieldsAvailableToLoad"
+                v-intersect="tryLoadMoreFields"
+                type="list-item"
+              />
             </v-list>
           </v-col>
         </v-row>
@@ -130,8 +147,12 @@
             </v-row>
           </v-card-text>
           <v-card-actions>
-            <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="confirm">
-              {{ $t('common.action.ok') }}
+            <v-btn class="font-weight-bold" color="error" text @click.stop="editReset">
+              <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="editConfirm">
+              <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -142,7 +163,8 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { watchDebounced } from '@vueuse/core';
+import { computed, defineComponent, ref, toRefs, watch } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { ExportField, ExportSection } from '@intake24/common/schemes';
@@ -163,22 +185,82 @@ export default defineComponent({
     },
   },
 
-  data() {
-    const newEditDialog = () => ({ show: false, field: { id: '', label: '' } });
+  setup(props) {
+    const { refFields } = toRefs(props);
+
+    const newEditDialog = () => ({ show: false, index: -1, field: { id: '', label: '' } });
+    const editDialog = ref(newEditDialog());
+
+    const dialog = ref(false);
+    const search = ref<string | null>(null);
+    const fields = ref<ExportField[]>([]);
+    const filteredFields = ref<ExportField[]>([]);
+    const visibleFields = ref<ExportField[]>([]);
+
+    const availableFields = computed(() => {
+      const fieldIds = fields.value.map((field) => field.id);
+      return refFields.value.filter((field) => !fieldIds.includes(field.id));
+    });
+
+    const loadFilteredFields = () => {
+      filteredFields.value = search.value
+        ? availableFields.value.filter(
+            (field) => !!field.label.match(new RegExp(search.value, 'i'))
+          )
+        : [...availableFields.value];
+
+      visibleFields.value = [];
+      loadMoreFields();
+    };
+
+    const fieldsAvailableToLoad = computed(
+      () => visibleFields.value.length < filteredFields.value.length
+    );
+
+    const loadMoreFields = () => {
+      const startIndex = visibleFields.value.length;
+      const endIndex =
+        startIndex + 15 > filteredFields.value.length
+          ? filteredFields.value.length
+          : startIndex + 15;
+
+      const items = filteredFields.value.slice(startIndex, endIndex);
+      visibleFields.value.push(...items);
+    };
+
+    const tryLoadMoreFields = (entries: IntersectionObserverEntry[]) => {
+      if (entries[0].isIntersecting && fieldsAvailableToLoad) loadMoreFields();
+    };
+
+    watch(
+      availableFields,
+      () => {
+        loadFilteredFields();
+      },
+      { immediate: true }
+    );
+
+    watchDebounced(
+      search,
+      () => {
+        loadFilteredFields();
+      },
+      { debounce: 500, maxWait: 1000 }
+    );
 
     return {
-      dialog: false,
-      fields: [] as ExportField[],
+      dialog,
+      editDialog,
       newEditDialog,
-      editDialog: newEditDialog(),
+      fields,
+      availableFields,
+      fieldsAvailableToLoad,
+      search,
+      visibleFields,
+      loadFilteredFields,
+      loadMoreFields,
+      tryLoadMoreFields,
     };
-  },
-
-  computed: {
-    availableFields(): ExportField[] {
-      const currentFieldIds = this.fields.map((field) => field.id);
-      return this.refFields.filter((field) => !currentFieldIds.includes(field.id));
-    },
   },
 
   watch: {
@@ -198,11 +280,19 @@ export default defineComponent({
       this.fields.push(field);
     },
 
-    edit(field: ExportField) {
-      this.editDialog = { show: true, field };
+    editOpen(index: number, field: ExportField) {
+      this.editDialog = { show: true, index, field: { ...field } };
     },
 
-    confirm() {
+    editConfirm() {
+      const { index, field } = this.editDialog;
+
+      if (index !== -1) this.fields.splice(index, 1, field);
+
+      this.editReset();
+    },
+
+    editReset() {
       this.editDialog = this.newEditDialog();
     },
 
