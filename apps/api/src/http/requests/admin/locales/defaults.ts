@@ -82,7 +82,7 @@ const defaults: Schema = {
   },
   prototypeLocaleId: {
     in: ['body'],
-    errorMessage: 'Enter valid locale.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     optional: { options: { nullable: true } },
     custom: {

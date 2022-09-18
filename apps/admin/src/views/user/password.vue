@@ -114,7 +114,7 @@ export default defineComponent({
       this.loading = true;
 
       try {
-        await this.form.post('/user/password');
+        await this.form.post('user/password');
         this.close();
         useMessages().success(this.$t('users.password.updated').toString());
       } finally {

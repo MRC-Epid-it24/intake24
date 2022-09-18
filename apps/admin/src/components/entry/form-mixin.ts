@@ -85,7 +85,7 @@ export default defineComponent({
         data = await this.form.post(`${this.resource.api}`);
 
         const { id, name } = data;
-        this.$router.push({ name: `${this.resource.name}-edit`, params: { id } });
+        await this.$router.push({ name: `${this.resource.name}-edit`, params: { id } });
 
         useMessages().success(this.$t('common.msg.created', { name: name ?? id }).toString());
       }

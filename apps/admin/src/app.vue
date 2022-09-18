@@ -131,7 +131,7 @@ export default defineComponent({
   data() {
     return {
       resources: groupBy(resources, 'group'),
-      sidebar: true,
+      sidebar: this.$vuetify.breakpoint.lgAndUp,
     };
   },
 

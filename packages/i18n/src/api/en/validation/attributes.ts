@@ -31,6 +31,7 @@ const attributes: LocaleMessageObject = {
   displayName: 'Display name',
   endDate: 'End date',
   email: 'Email',
+  emailConfirm: 'Confirm email',
   emailNotifications: 'Email notifications',
   englishName: 'English name',
   feedbackSchemeId: 'Feedback scheme ID',
@@ -96,6 +97,7 @@ const attributes: LocaleMessageObject = {
   sort: 'Sort',
   startDate: 'Start date',
   state: 'State',
+  submissions: 'Submissions',
   submissionNotificationUrl: 'Submission notification URL',
   supportEmail: 'Support email',
   survey: 'Survey',
@@ -104,6 +106,7 @@ const attributes: LocaleMessageObject = {
   suspensionReason: 'Suspension reason',
   storeUserSessionOnServer: 'Store user session on server',
   textDirection: 'Text direction',
+  terms: 'Terms',
   token: 'Token',
   topFoods: {
     max: 'Max number of foods',

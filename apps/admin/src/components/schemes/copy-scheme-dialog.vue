@@ -98,7 +98,8 @@ export default defineComponent({
 
       this.close();
 
-      if (this.redirect) this.$router.push({ name: name ?? `${resource}-read`, params: { id } });
+      if (this.redirect)
+        await this.$router.push({ name: name ?? `${resource}-read`, params: { id } });
     },
   },
 });

@@ -63,14 +63,14 @@ export default defineComponent({
       this.$emit('input', { dialog: false, to: null, confirmed: false });
     },
 
-    confirmLeave() {
+    async confirmLeave() {
       const { dialog, to } = this.value;
 
       if (!to) return;
 
       this.$emit('input', { dialog, to, confirmed: true });
       // TODO: vue-router RawLocation and Route types are incompatible (RawLocation:name cannot be null)
-      this.$router.push({ ...to, name: to.name ?? undefined });
+      await this.$router.push({ ...to, name: to.name ?? undefined });
     },
   },
 });

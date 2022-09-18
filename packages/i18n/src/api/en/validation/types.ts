@@ -74,8 +74,11 @@ const attributes: LocaleMessageObject = {
   structure: {
     _: '{attribute} must have valid structure.',
   },
+  terms: {
+    _: '{attribute} must be accepted.',
+  },
   unique: {
-    _: '{attribute} must be unique value.',
+    _: 'Record with this {attribute} value already exists.',
   },
   url: {
     _: '{attribute} must be valid URL.',

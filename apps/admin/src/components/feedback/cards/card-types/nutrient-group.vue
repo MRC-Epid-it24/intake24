@@ -141,7 +141,7 @@ export default defineComponent({
       () => useEntry().refs.nutrientTypes ?? []
     );
 
-    const availableNutrientTypes = computed<NutrientTypeEntry[]>(() =>
+    const availableNutrientTypes = computed(() =>
       allNutrientTypes.value.filter(
         (nutrient) => !currentNutrientTypeIds.value.includes(nutrient.id)
       )

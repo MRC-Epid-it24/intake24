@@ -137,7 +137,7 @@ export default defineComponent({
       this.close();
 
       if (this.redirect)
-        this.$router.push({ name: 'survey-scheme-questions-read', params: { id } });
+        await this.$router.push({ name: 'survey-scheme-questions-read', params: { id } });
     },
   },
 });

@@ -4,7 +4,6 @@ const common: LocaleMessageObject = {
   _: 'Intake24',
   home: 'Home',
   dashboard: 'Dashboard',
-  register: 'Registration',
   welcome: {
     _: 'Welcome to Intake24',
     subtitle:

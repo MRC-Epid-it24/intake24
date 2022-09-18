@@ -57,13 +57,13 @@ export const defaults: Schema = {
   },
   surveySchemeId: {
     in: ['body'],
-    errorMessage: 'Enter valid survey scheme.',
+    errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
     custom: {
-      options: async (value): Promise<void> => {
+      options: async (value, meta): Promise<void> => {
         const scheme = await SurveyScheme.findOne({ where: { id: value } });
-        if (!scheme) throw new Error('Enter valid survey scheme.');
+        if (!scheme) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },

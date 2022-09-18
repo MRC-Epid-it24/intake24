@@ -1,19 +1,17 @@
 import { checkSchema } from 'express-validator';
 
-import { validate } from '@intake24/api/http/requests/util';
+import { customTypeErrorMessage, validate } from '@intake24/api/http/requests/util';
 
 export default validate(
   checkSchema({
     survey: {
       in: ['query'],
-      errorMessage: 'Missing survey parameter.',
       custom: {
-        options: async (value): Promise<void> => {
-          if (typeof value !== 'string' && !Array.isArray(value))
-            throw new Error('Survey parameter must be string or array of strings.');
+        options: async (value, meta): Promise<void> => {
+          if (typeof value !== 'string') throw new Error(customTypeErrorMessage('string._', meta));
 
-          if (Array.isArray(value) && value.some((item) => typeof item !== 'string'))
-            throw new Error('Survey parameter must be string or array of strings.');
+          if (!Array.isArray(value) || value.some((item) => typeof item !== 'string'))
+            throw new Error(customTypeErrorMessage('array.string', meta));
         },
       },
     },
