@@ -7,7 +7,9 @@ export type DatabaseType = 'foods' | 'system';
 export type DBConnectionInfo = Record<DatabaseType, Options>;
 export type DatabaseConfig = Record<Environment, DBConnectionInfo>;
 
-const dialectOptions: Record<Dialect, Dictionary> = {
+export type OpsDialect = Extract<Dialect, 'mariadb' | 'mysql' | 'mssql' | 'postgres'>;
+
+const dialectOptions: Record<OpsDialect, Dictionary> = {
   mariadb: {
     supportBigNumbers: true,
     bigNumberStrings: true,
@@ -18,9 +20,6 @@ const dialectOptions: Record<Dialect, Dictionary> = {
   },
   mssql: {},
   postgres: {},
-  sqlite: {},
-  db2: {},
-  snowflake: {},
 };
 
 const foods = {
@@ -30,7 +29,7 @@ const foods = {
   username: process.env.DB_FOODS_USERNAME || 'intake24',
   password: process.env.DB_FOODS_PASSWORD ?? '',
   dialect: (process.env.DB_FOODS_DRIVER || 'postgres') as Dialect,
-  dialectOptions: dialectOptions[process.env.DB_FOODS_DRIVER as Dialect],
+  dialectOptions: dialectOptions[process.env.DB_FOODS_DRIVER as OpsDialect],
 };
 
 const system = {
@@ -40,7 +39,7 @@ const system = {
   username: process.env.DB_SYSTEM_USERNAME || 'intake24',
   password: process.env.DB_SYSTEM_PASSWORD ?? '',
   dialect: (process.env.DB_SYSTEM_DRIVER || 'postgres') as Dialect,
-  dialectOptions: dialectOptions[process.env.DB_SYSTEM_DRIVER as Dialect],
+  dialectOptions: dialectOptions[process.env.DB_SYSTEM_DRIVER as OpsDialect],
 };
 
 export const databaseConfig: DatabaseConfig = {
