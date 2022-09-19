@@ -129,7 +129,7 @@ jobs:
         run: cp ./__tests__/.env-test-gh ./__tests__/.env-test
       
       - name: Portal - use Github test environment file
-        working-directory: apps/[portal]
+        working-directory: apps/portal
         run: cp ./__tests__/.env-test-gh ./__tests__/.env-test
 
       - name: Repo - unit tests
